@@ -1,7 +1,36 @@
+export type CraftItems =
+  | "alloy"
+  | "beam"
+  | "blueprint"
+  | "catnip"
+  | "compedium"
+  | "concrate"
+  | "eludium"
+  | "gear"
+  | "iron"
+  | "kerosene"
+  | "manuscript"
+  | "megalith"
+  | "parchment"
+  | "plate"
+  | "scaffold"
+  | "ship"
+  | "slab"
+  | "steel"
+  | "tanker"
+  | "thorium"
+  | "wood";
+
 export type TabId = "Religion" | "Time" | "Village";
+
+export type BuildButton = { model: { enabled: boolean; metadata: unknown; name: string } };
+
 export type GameTab = {
+  children: Array<{ children: Array<{ children: Array<BuildButton> }> }>;
   render: () => void;
+  rUpgradeButtons: Array<BuildButton>;
   tabId: TabId;
+  zgUpgradeButtons: Array<BuildButton>;
 };
 
 export type GamePage = {
@@ -51,7 +80,10 @@ export type GamePage = {
     meta: Array<{ meta: Array<{ researched: boolean }> }>;
   };
   religion: {
+    getRU: (name: string) => unknown;
     getSolarRevolutionRatio: () => number;
+    getTU: (name: string) => unknown;
+    getZU: (name: string) => unknown;
   };
   resPool: {
     get: (
@@ -102,6 +134,6 @@ export type GamePage = {
   workshop: {
     get: (technology: "goldOre") => { researched: boolean };
     getCraft: (name: string) => { name: string; unlocked: boolean };
-    getCraftPrice: (craft: unknown) => Array<{ name: string; val: number }>;
+    getCraftPrice: (craft: unknown) => Array<{ name: CraftItems; val: number }>;
   };
 };

@@ -14,7 +14,6 @@ declare global {
   }
 }
 
-
 export type I18nEngine = (key: string) => string;
 
 export type SupportedLanguages = keyof typeof i18nData;
@@ -85,39 +84,39 @@ export class UserScript {
   }
 
   private _printOutput(...args: Array<string>): void {
-    if (this._options.auto.filter.enabled) {
-      for (const filterItem of Object.values(this._options.auto.filter.items)) {
+    if (this.options.auto.filter.enabled) {
+      for (const filterItem of Object.values(this.options.auto.filter.items)) {
         if (filterItem.enabled && filterItem.variant === args[1]) {
           return;
         }
       }
     }
-    var color = args.pop();
+    const color = args.pop();
     args[1] = args[1] || "ks-default";
 
     // update the color of the message immediately after adding
-    var msg = this.gamePage.msg.apply(this.gamePage, args);
+    const msg = this.gamePage.msg.apply(this.gamePage, args);
     $(msg.span).css("color", color);
 
-    if (this._options.debug && console) console.log(args);
+    if (this.options.debug && console) console.log(args);
   }
 
   private _message(...args: Array<string>): void {
     args.push("ks-default");
-    args.push(this._options.msgcolor);
+    args.push(this.options.msgcolor);
     this._printOutput(...args);
   }
 
   private _activity(...args: Array<string>): void {
     const activityClass = args.length > 1 ? " type_" + args.pop() : "";
     args.push("ks-activity" + activityClass);
-    args.push(this._options.activitycolor);
+    args.push(this.options.activitycolor);
     this._printOutput(...args);
   }
 
   private _summary(...args: Array<string>): void {
     args.push("ks-summary");
-    args.push(this._options.summarycolor);
+    args.push(this.options.summarycolor);
     this._printOutput(...args);
   }
 

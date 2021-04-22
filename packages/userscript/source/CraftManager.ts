@@ -1,6 +1,6 @@
 import { CacheManager } from "./CacheManager";
-import { CraftItems } from "./Options";
 import { isNil } from "./tools/Maybe";
+import { CraftItems } from "./types";
 import { UserScript } from "./UserScript";
 
 export class CraftManager {
