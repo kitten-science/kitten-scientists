@@ -7,7 +7,7 @@ export type GameTab = {
 export type GamePage = {
   bld: {
     getBuildingExt: (
-      building: "aqueduct" | "pasture" | "unicornPasture"
+      building: "aqueduct" | "chronosphere" | "pasture" | "unicornPasture"
     ) => { meta: { stage: number; val: number } };
   };
   calendar: {
@@ -23,10 +23,18 @@ export type GamePage = {
     maxMessages: number;
   };
   craft: (name: string, amount: number) => void;
+  devMode: boolean;
   getCMBRBonus: () => number;
   getDisplayValueExt: (value: number) => string;
   getEffect: (
-    effect: "catnipDemandWorkerRatioGlobal" | "catnipJobRatio" | "catnipPerTickBase" | "hunterRatio"
+    effect:
+      | "catnipDemandWorkerRatioGlobal"
+      | "catnipJobRatio"
+      | "catnipPerTickBase"
+      | "hunterRatio"
+      | "mapPriceReduction"
+      | "oilReductionRatio"
+      | "priceRatio"
   ) => number;
   getLimitedDR: (value0: number, value1: number) => number;
   getResCraftRatio: (name: string) => number;
@@ -37,6 +45,7 @@ export type GamePage = {
     disableCMBR: boolean;
   };
   prestige: {
+    getBurnedParagonRatio: () => number;
     getParagonProductionRatio: () => number;
     meta: Array<{ meta: Array<{ researched: boolean }> }>;
   };
@@ -50,9 +59,14 @@ export type GamePage = {
     getBuilding: (building: "hydroponics") => { val: number };
   };
   tabs: Array<GameTab>;
+  time: {
+    getVSU: (name: "usedCryochambers") => { val: number };
+  };
   timer: {
     ticksTotal: number;
   };
+  unlock: (value: unknown) => void;
+  upgrade: (value: unknown) => void;
   ui: {
     activeTabId: TabId;
   };
