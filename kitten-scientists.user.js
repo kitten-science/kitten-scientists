@@ -35,22 +35,7 @@ var run = function() {
     // GameLog Modification
     // ====================
 
-    var printoutput = function (args) {
-        if (options.auto.filter.enabled) {
-            for (var filt in options.auto.filter.items) {
-                var filter = options.auto.filter.items[filt]
-                if (filter.enabled && filter.variant === args[1]) {return;}
-            }
-        }
-        var color = args.pop();
-        args[1] = args[1] || 'ks-default';
-
-        // update the color of the message immediately after adding
-        var msg = game.msg.apply(game, args);
-        $(msg.span).css('color', color);
-
-        if (options.debug && console) console.log(args);
-    };
+    var printoutput = function (args) {/*snipped*/};
 
     // Used for option change messages and other special notifications
     var message = function () {
