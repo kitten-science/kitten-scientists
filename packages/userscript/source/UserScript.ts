@@ -90,9 +90,8 @@ export class UserScript {
 
   private _printOutput(...args: Array<string>): void {
     if (this._options.auto.filter.enabled) {
-      for (var filt in this._options.auto.filter.items) {
-        var filter = this._options.auto.filter.items[filt];
-        if (filter.enabled && filter.variant === args[1]) {
+      for (const filterItem of Object.values(this._options.auto.filter.items)) {
+        if (filterItem.enabled && filterItem.variant === args[1]) {
           return;
         }
       }
