@@ -1,6 +1,6 @@
 import JQuery from "jquery";
 import i18nData from "./i18n/i18nData.json";
-import { Options } from "./Options";
+import { DefaultOptions, Options } from "./Options";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
 import { GamePage } from "./types";
@@ -26,7 +26,7 @@ export class UserScript {
   private _language: SupportedLanguages;
 
   private readonly _i18nData: typeof i18nData;
-  private _options: Options;
+  options: Options = DefaultOptions;
 
   constructor(
     gamePage: GamePage,
