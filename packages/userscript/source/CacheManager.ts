@@ -8,9 +8,9 @@ export class CacheManager {
   }
 
   pushToCache(data: unknown): void {
-    var cache = this._host.options.auto.cache.cache;
-    var cacheSum = this._host.options.auto.cache.cacheSum;
-    var materials = data["materials"];
+    const cache = this._host.options.auto.cache.cache;
+    const cacheSum = this._host.options.auto.cache.cacheSum;
+    const materials = data["materials"];
     //var currentTick = this._host.gamePage.timer.ticksTotal;
 
     cache.push(data);
@@ -21,10 +21,10 @@ export class CacheManager {
       cacheSum[mat] += materials[mat];
     }
 
-    for (var i = 0; i < cache.length; i++) {
-      var oldData = cache[i];
+    for (let i = 0; i < cache.length; i++) {
+      const oldData = cache[i];
       if (cache.length > 10000) {
-        var oldMaterials = oldData["materials"];
+        const oldMaterials = oldData["materials"];
         for (var mat in oldMaterials) {
           if (!cacheSum[mat]) {
             cacheSum[mat] = 0;
@@ -39,7 +39,7 @@ export class CacheManager {
     }
   }
 
-  getResValue(res: unknown): unknown {
+  getResValue(res: string): number {
     const cache = this._host.options.auto.cache.cache;
     if (cache.length === 0) {
       return 0;
@@ -48,8 +48,8 @@ export class CacheManager {
     if (!cacheSum[res]) {
       return 0;
     }
-    var currentTick = this._host.gamePage.timer.ticksTotal;
-    var startingTick = cache[0].timeStamp;
+    const currentTick = this._host.gamePage.timer.ticksTotal;
+    const startingTick = cache[0].timeStamp;
 
     return cacheSum[res] / (currentTick - startingTick);
   }

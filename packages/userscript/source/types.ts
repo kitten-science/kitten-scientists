@@ -38,6 +38,7 @@ export type GamePage = {
   ) => number;
   getLimitedDR: (value0: number, value1: number) => number;
   getResCraftRatio: (name: string) => number;
+  getResourcePerTick: (name: string, value: boolean) => number;
   getResourcePerTickConvertion: (name: "catnip") => number;
   ironWill: boolean;
   msg: (...args: Array<string>) => { span: HTMLElement };
@@ -53,7 +54,11 @@ export type GamePage = {
     getSolarRevolutionRatio: () => number;
   };
   resPool: {
-    get: (name: string) => { title: string };
+    get: (
+      name: string
+    ) =>
+      | { craftable: boolean; maxValue: number; name: string; title: string; value: number }
+      | undefined;
   };
   space: {
     getBuilding: (building: "hydroponics") => { val: number };
@@ -71,6 +76,7 @@ export type GamePage = {
     activeTabId: TabId;
   };
   village: {
+    getEffectLeader: (role: "manager", value: number) => number;
     getFreeKittens: () => number;
     getResConsumption: () => { catnip: number };
     getResProduction: () => { catnip: number };
@@ -94,7 +100,7 @@ export type GamePage = {
   };
   workshop: {
     get: (technology: "goldOre") => { researched: boolean };
-    getCraft: (name: string) => unknown;
+    getCraft: (name: string) => { name: string; unlocked: boolean };
     getCraftPrice: (craft: unknown) => Array<{ name: string; val: number }>;
   };
 };

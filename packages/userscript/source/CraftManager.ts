@@ -1,5 +1,6 @@
 import { CacheManager } from "./CacheManager";
 import { CraftItems } from "./Options";
+import { isNil } from "./tools/Maybe";
 import { UserScript } from "./UserScript";
 
 export class CraftManager {
@@ -11,7 +12,7 @@ export class CraftManager {
     this._cacheManager = new CacheManager(this._host);
   }
 
-  craft(name: string, amount: number): void {
+  craft(name: CraftItems, amount: number): void {
     amount = Math.floor(amount);
 
     if (!name || 1 > amount) return;
@@ -57,7 +58,7 @@ export class CraftManager {
     return result;
   }
 
-  getCraft(name: string): unknown {
+  getCraft(name: string): { name: string; unlocked: boolean } {
     return this._host.gamePage.workshop.getCraft(name);
   }
 
@@ -108,7 +109,7 @@ export class CraftManager {
         ) {
           const ironInTime =
             ((this.getResource("coal").maxValue * trigger - this.getValue("coal")) /
-            this._host.gamePage.getResourcePerTick("coal", true)) *
+              this._host.gamePage.getResourcePerTick("coal", true)) *
             Math.max(this._host.gamePage.getResourcePerTick("iron", true), 0);
           plateMax =
             (this.getValueAvailable("iron") -
@@ -172,7 +173,10 @@ export class CraftManager {
     return materials;
   }
 
-  getTickVal(res: string, preTrade: unknown): number {
+  getTickVal(
+    res: { craftable: boolean; name: string },
+    preTrade: boolean | undefined = undefined
+  ): number | "ignore" {
     let prod = this._host.gamePage.getResourcePerTick(res.name, true);
     if (res.craftable) {
       let minProd = Number.MAX_VALUE;
@@ -219,17 +223,20 @@ export class CraftManager {
     return output;
   }
 
-  getResource(name: string): unknown | null {
+  getResource(
+    name: string
+  ): { craftable: boolean; maxValue: number; name: string; title: string; value: number } {
     if (name === "slabs") {
       name = "slab";
     }
     const res = this._host.gamePage.resPool.get(name);
-    if (res) return res;
-    this._host.warning("unable to find resource " + name);
-    return null;
+    if (isNil(res)) {
+      throw new Error(`Unable to find resource ${name}`);
+    }
+    return res;
   }
 
-  getValue(name: string): string {
+  getValue(name: string): number {
     return this.getResource(name).value;
   }
 
@@ -240,23 +247,28 @@ export class CraftManager {
     return !stock ? 0 : stock;
   }
 
-  getValueAvailable(name: string, all: boolean, typeTrigger: unknown): number {
+  getValueAvailable(
+    name: CraftItems,
+    all: boolean | undefined = undefined,
+    typeTrigger: number | undefined = undefined
+  ): number {
     let value = this.getValue(name);
     let stock = this.getStock(name);
+    let trigger: number;
 
     if (!typeTrigger && typeTrigger !== 0) {
-      var trigger = this._host.options.auto.craft.trigger;
+      trigger = this._host.options.auto.craft.trigger;
     } else {
-      var trigger = typeTrigger;
+      trigger = typeTrigger;
     }
 
     if ("catnip" === name) {
       const pastures =
-      this._host.gamePage.bld.getBuildingExt("pasture").meta.stage === 0
+        this._host.gamePage.bld.getBuildingExt("pasture").meta.stage === 0
           ? this._host.gamePage.bld.getBuildingExt("pasture").meta.val
           : 0;
       const aqueducts =
-      this._host.gamePage.bld.getBuildingExt("aqueduct").meta.stage === 0
+        this._host.gamePage.bld.getBuildingExt("aqueduct").meta.stage === 0
           ? this._host.gamePage.bld.getBuildingExt("aqueduct").meta.val
           : 0;
       const resPerTick = this.getPotentialCatnip(true, pastures, aqueducts);
