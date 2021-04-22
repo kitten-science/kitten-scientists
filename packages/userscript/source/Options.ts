@@ -58,25 +58,27 @@ export type TimeItemOptions = {
 };
 
 export type CraftItems =
-  | "wood"
-  | "beam"
-  | "slab"
-  | "steel"
-  | "plate"
   | "alloy"
+  | "beam"
+  | "blueprint"
+  | "catnip"
+  | "compedium"
   | "concrate"
+  | "eludium"
   | "gear"
+  | "iron"
+  | "kerosene"
+  | "manuscript"
+  | "megalith"
+  | "parchment"
+  | "plate"
   | "scaffold"
   | "ship"
+  | "slab"
+  | "steel"
   | "tanker"
-  | "parchment"
-  | "manuscript"
-  | "compedium"
-  | "blueprint"
-  | "kerosene"
-  | "megalith"
-  | "eludium"
-  | "thorium";
+  | "thorium"
+  | "wood";
 export type CraftItemOptions = {
   require: Requirement;
   max: number;
@@ -630,6 +632,7 @@ export type Options = {
         stock: number;
         checkForReset: boolean;
         stockForReset: number;
+        consume?: number;
       };
     };
     cache: {
