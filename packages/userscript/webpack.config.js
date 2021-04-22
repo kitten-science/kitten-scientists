@@ -1,6 +1,7 @@
-const path = require('path')
+const path = require('path');
 const WebpackUserscript = require('webpack-userscript');
-const dev = process.env.NODE_ENV === 'development'
+const dev = process.env.NODE_ENV === 'development';
+const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
 module.exports = {
   mode: dev ? 'development' : 'production',
@@ -17,5 +18,15 @@ module.exports = {
   },
   plugins: [
     new WebpackUserscript()
-  ]
+  ],
+  resolve: {
+    plugins: [
+      PnpWebpackPlugin,
+    ],
+  },
+  resolveLoader: {
+    plugins: [
+      PnpWebpackPlugin.moduleLoader(module),
+    ],
+  },
 }

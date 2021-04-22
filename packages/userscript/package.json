@@ -31,6 +31,7 @@
     "webpack-userscript": "^2.5.7"
   },
   "dependencies": {
+    "pnp-webpack-plugin": "^1.6.4",
     "tslib": "^2.2.0"
   }
 }
