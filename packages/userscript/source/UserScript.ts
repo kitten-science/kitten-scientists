@@ -135,7 +135,7 @@ export class UserScript {
   ): void {
     this._message(this._i18n(key, args), ...templateArgs);
   }
-  private _iactivity(
+  iactivity(
     key: keyof typeof i18nData[SupportedLanguages],
     args: Array<string>,
     templateArgs: Array<string>

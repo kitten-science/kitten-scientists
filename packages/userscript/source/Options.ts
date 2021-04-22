@@ -57,6 +57,26 @@ export type TimeItemOptions = {
   triggerForReset: number;
 };
 
+export type CraftItems =
+  | "wood"
+  | "beam"
+  | "slab"
+  | "steel"
+  | "plate"
+  | "alloy"
+  | "concrate"
+  | "gear"
+  | "scaffold"
+  | "ship"
+  | "tanker"
+  | "parchment"
+  | "manuscript"
+  | "compedium"
+  | "blueprint"
+  | "kerosene"
+  | "megalith"
+  | "eludium"
+  | "thorium";
 export type CraftItemOptions = {
   require: Requirement;
   max: number;
@@ -485,25 +505,7 @@ export type Options = {
        * across all crafted resources without wasting raw materials.
        */
       items: {
-        wood: CraftItemOptions;
-        beam: CraftItemOptions;
-        slab: CraftItemOptions;
-        steel: CraftItemOptions;
-        plate: CraftItemOptions;
-        alloy: CraftItemOptions;
-        concrate: CraftItemOptions;
-        gear: CraftItemOptions;
-        scaffold: CraftItemOptions;
-        ship: CraftItemOptions;
-        tanker: CraftItemOptions;
-        parchment: CraftItemOptions;
-        manuscript: CraftItemOptions;
-        compedium: CraftItemOptions;
-        blueprint: CraftItemOptions;
-        kerosene: CraftItemOptions;
-        megalith: CraftItemOptions;
-        eludium: CraftItemOptions;
-        thorium: CraftItemOptions;
+        [item in CraftItems]: CraftItemOptions;
       };
     };
     trade: {
