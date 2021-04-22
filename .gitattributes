@@ -1,0 +1,31 @@
+.yarn/cache/*.zip binary
+.yarn linguist-vendored
+
+# In general, use LF for text
+* text eol=lf
+
+# Windows CMD does not like LF in batch files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Visual Studio solutions like to switch to CRLF at times
+*.sln text eol=crlf
+
+*.aar binary
+*.ai binary
+*.aiff binary
+*.dll binary
+*.docx binary
+*.eot binary
+*.exe binary
+*.jar binary
+*.jpg binary
+*.mp3 binary
+*.o binary
+*.pdf binary
+*.png binary
+*.psd binary
+*.so binary
+*.ttf binary
+*.winmd binary
+*.zip binary

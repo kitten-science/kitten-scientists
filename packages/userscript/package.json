@@ -1,9 +1,10 @@
 {
-  "name": "kitten-scientists",
-  "description": "Contains packages relating to the Kitten Game: http://bloodrizer.ru/games/kittens/",
-  "version": "latest",
-  "private": true,
+  "name": "userscript",
+  "description": "Add-on for the wonderful incremental browser game: http://bloodrizer.ru/games/kittens/",
+  "version": "2.0.0",
   "license": "MIT",
+  "main": "./output/index.js",
+  "types": "./output/index.ts",
   "bugs": {
     "url": "https://github.com/oliversalzburg/cbc-kitten-scientists/issues"
   },
@@ -16,29 +17,19 @@
     "name": "Oliver Salzburg",
     "email": "oliver.salzburg@gmail.com"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "scripts": {
+    "build": "tsc",
+    "whoami": "echo userscript"
+  },
   "keywords": [
     "kitten",
     "kittens",
     "scientists"
   ],
   "devDependencies": {
-    "@types/eslint": "^7.2.10",
-    "@types/node": "^14.14.41",
-    "@types/prettier": "^2.2.3",
-    "@yarnpkg/pnpify": "^2.4.0",
-    "eslint": "^7.24.0",
-    "lint-staged": "^10.5.4",
-    "prettier": "^2.2.1",
-    "prettier-plugin-organize-imports": "^1.1.1",
     "typescript": "~4.2.4"
   },
   "dependencies": {
     "tslib": "^2.2.0"
-  },
-  "lint-staged": {
-    "*.{js,json,md,ts,yml}": "prettier --write"
   }
 }
