@@ -3,6 +3,7 @@ import i18nData from "./i18n/i18nData.json";
 import { Options } from "./Options";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
+import { GamePage } from "./types";
 
 declare global {
   const unsafeWindow: Window;
@@ -13,19 +14,14 @@ declare global {
   }
 }
 
-export interface GamePage {
-  console: {
-    maxMessages: number;
-  };
-  msg: (...args: Array<string>) => { span: HTMLElement };
-}
+
 export type I18nEngine = (key: string) => string;
 
 export type SupportedLanguages = keyof typeof i18nData;
 export const DefaultLanguage: SupportedLanguages = "en";
 
 export class UserScript {
-  private readonly _gamePage: GamePage;
+  readonly gamePage: GamePage;
   private readonly _i18nEngine: I18nEngine;
   private _language: SupportedLanguages;
 
@@ -39,7 +35,7 @@ export class UserScript {
   ) {
     console.info("Kitten Scientists constructed.");
 
-    this._gamePage = gamePage;
+    this.gamePage = gamePage;
     this._i18nEngine = i18nEngine;
     this._language = language;
 
@@ -55,7 +51,7 @@ export class UserScript {
     }
 
     // Increase messages displayed in log
-    this._gamePage.console.maxMessages = 1000;
+    this.gamePage.console.maxMessages = 1000;
   }
 
   /**
@@ -100,7 +96,7 @@ export class UserScript {
     args[1] = args[1] || "ks-default";
 
     // update the color of the message immediately after adding
-    var msg = this._gamePage.msg.apply(this._gamePage, args);
+    var msg = this.gamePage.msg.apply(this.gamePage, args);
     $(msg.span).css("color", color);
 
     if (this._options.debug && console) console.log(args);
@@ -125,7 +121,7 @@ export class UserScript {
     this._printOutput(...args);
   }
 
-  private _warning(...args: Array<string>): void {
+  warning(...args: Array<string>): void {
     args.unshift("Warning!");
     if (console) {
       console.log(args);
@@ -158,7 +154,7 @@ export class UserScript {
     args: Array<string>,
     templateArgs: Array<string>
   ): void {
-    this._warning(this._i18n(key, args), ...templateArgs);
+    this.warning(this._i18n(key, args), ...templateArgs);
   }
 
   static async waitForGame(timeout: number = 30000): Promise<void> {
