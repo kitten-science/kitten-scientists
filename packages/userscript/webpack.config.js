@@ -9,6 +9,9 @@ module.exports = {
     path: path.resolve(__dirname, 'output'),
     filename: 'kitten-scientists.user.js'
   },
+  optimization: {
+    minimize: false
+  },
   devServer: {
     contentBase: path.join(__dirname, 'dist')
   },
