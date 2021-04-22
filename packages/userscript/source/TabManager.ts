@@ -1,12 +1,12 @@
 import { Maybe } from "./tools/Maybe";
-import { GameTab } from "./types";
+import { GameTab, TabId } from "./types";
 import { UserScript } from "./UserScript";
 
 export class TabManager {
   private readonly _host: UserScript;
   private _tab: Maybe<GameTab>;
 
-  constructor(host: UserScript, name: string) {
+  constructor(host: UserScript, name: TabId) {
     this._host = host;
     this.setTab(name);
   }
