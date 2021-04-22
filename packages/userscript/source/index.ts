@@ -2,5 +2,6 @@ import { UserScript } from "./UserScript";
 
 (async () => {
   await UserScript.waitForGame();
-  const userScript = UserScript.install();
+  const userScript = await UserScript.getDefaultInstance();
+  userScript.run();
 })();
