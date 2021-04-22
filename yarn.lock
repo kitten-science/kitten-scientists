@@ -184,6 +184,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jquery@npm:^3.5.5":
+  version: 3.5.5
+  resolution: "@types/jquery@npm:3.5.5"
+  dependencies:
+    "@types/sizzle": "*"
+  checksum: 9e3c34451577c6916ac9de8a26fd8bce2831cb5861116514cba4a984189067635a3e084039308324d8e20bfa5f2e1ce7725a509110e5e05487b91f9369b1ae43
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:*":
   version: 7.0.7
   resolution: "@types/json-schema@npm:7.0.7"
@@ -241,6 +250,13 @@ __metadata:
   version: 7.3.4
   resolution: "@types/semver@npm:7.3.4"
   checksum: 7e8588aa55ecb344eda6954674b83a3c568d97d478e70e4617bd3ab22902590ac416ccf2cea48b58fb2f0fbd80f9ad1896332c9b3c3189ffd24e4350ff22094a
+  languageName: node
+  linkType: hard
+
+"@types/sizzle@npm:*":
+  version: 2.3.2
+  resolution: "@types/sizzle@npm:2.3.2"
+  checksum: 447a1c3f39f0e47ffdbccd1df58d63e8b67dc001f44f26f43ac8243db7834a3d956cebc8abe9272ecbdccfc8f4ec0ae74b811ccdad5b6cddaf8f0968513d618a
   languageName: node
   linkType: hard
 
@@ -6189,6 +6205,7 @@ typescript@~4.2.4:
   version: 0.0.0-use.local
   resolution: "userscript@workspace:packages/userscript"
   dependencies:
+    "@types/jquery": ^3.5.5
     pnp-webpack-plugin: ^1.6.4
     tslib: ^2.2.0
     typescript: ~4.2.4
