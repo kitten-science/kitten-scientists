@@ -106,6 +106,61 @@ export class UserScript {
     if (this._options.debug && console) console.log(args);
   }
 
+  private _message(...args: Array<string>): void {
+    args.push("ks-default");
+    args.push(this._options.msgcolor);
+    this._printOutput(...args);
+  }
+
+  private _activity(...args: Array<string>): void {
+    const activityClass = args.length > 1 ? " type_" + args.pop() : "";
+    args.push("ks-activity" + activityClass);
+    args.push(this._options.activitycolor);
+    this._printOutput(...args);
+  }
+
+  private _summary(...args: Array<string>): void {
+    args.push("ks-summary");
+    args.push(this._options.summarycolor);
+    this._printOutput(...args);
+  }
+
+  private _warning(...args: Array<string>): void {
+    args.unshift("Warning!");
+    if (console) {
+      console.log(args);
+    }
+  }
+
+  private _imessage(
+    key: keyof typeof i18nData[SupportedLanguages],
+    args: Array<string>,
+    templateArgs: Array<string>
+  ): void {
+    this._message(this._i18n(key, args), ...templateArgs);
+  }
+  private _iactivity(
+    key: keyof typeof i18nData[SupportedLanguages],
+    args: Array<string>,
+    templateArgs: Array<string>
+  ): void {
+    this._activity(this._i18n(key, args), ...templateArgs);
+  }
+  private _isummary(
+    key: keyof typeof i18nData[SupportedLanguages],
+    args: Array<string>,
+    templateArgs: Array<string>
+  ): void {
+    this._summary(this._i18n(key, args), ...templateArgs);
+  }
+  private _iwarning(
+    key: keyof typeof i18nData[SupportedLanguages],
+    args: Array<string>,
+    templateArgs: Array<string>
+  ): void {
+    this._warning(this._i18n(key, args), ...templateArgs);
+  }
+
   static async waitForGame(timeout: number = 30000): Promise<void> {
     console.debug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
 
