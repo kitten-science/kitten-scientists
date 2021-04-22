@@ -1,3 +1,5 @@
+import { CraftItems } from "./types";
+
 export type Requirement =
   | "antimatter"
   | "bloodstone"
@@ -57,28 +59,6 @@ export type TimeItemOptions = {
   triggerForReset: number;
 };
 
-export type CraftItems =
-  | "alloy"
-  | "beam"
-  | "blueprint"
-  | "catnip"
-  | "compedium"
-  | "concrate"
-  | "eludium"
-  | "gear"
-  | "iron"
-  | "kerosene"
-  | "manuscript"
-  | "megalith"
-  | "parchment"
-  | "plate"
-  | "scaffold"
-  | "ship"
-  | "slab"
-  | "steel"
-  | "tanker"
-  | "thorium"
-  | "wood";
 export type CraftItemOptions = {
   require: Requirement;
   max: number;

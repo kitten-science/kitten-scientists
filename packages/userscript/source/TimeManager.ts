@@ -1,6 +1,7 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
+import { BuildButton } from "./types";
 import { UserScript } from "./UserScript";
 
 export class TimeManager {
@@ -26,7 +27,9 @@ export class TimeManager {
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.warning(label + " Amount ordered: " + amountTemp + " Amount Constructed: " + amount);
+      this._host.warning(
+        label + " Amount ordered: " + amountTemp + " Amount Constructed: " + amount
+      );
     }
     storeForSummary(label, amount, "build");
 
@@ -45,12 +48,12 @@ export class TimeManager {
     }
   }
 
-  getBuildButton(name: string, variant: unknown): unknown {
+  getBuildButton(name: string, variant: unknown): BuildButton | null {
     let buttons;
     if (variant === "chrono") {
-       buttons = this._manager.tab.children[2].children[0].children;
+      buttons = this._manager.tab.children[2].children[0].children;
     } else {
-       buttons = this._manager.tab.children[3].children[0].children;
+      buttons = this._manager.tab.children[3].children[0].children;
     }
     const build = this.getBuild(name, variant);
     for (const i in buttons) {
@@ -59,5 +62,6 @@ export class TimeManager {
         return buttons[i];
       }
     }
+    return null;
   }
 }

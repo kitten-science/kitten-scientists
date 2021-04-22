@@ -1,6 +1,7 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
+import { BuildButton } from "./types";
 import { UserScript } from "./UserScript";
 
 export class ReligionManager {
@@ -16,7 +17,7 @@ export class ReligionManager {
     this._bulkManager = new BulkManager(this._host);
   }
 
-  build(name: string, variant: unknown, amount: number): void {
+  build(name: string, variant: "c" | "s" | "z", amount: number): void {
     const build = this.getBuild(name, variant);
     const button = this.getBuildButton(name, variant);
 
@@ -26,7 +27,9 @@ export class ReligionManager {
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.warning(label + " Amount ordered: " + amountTemp + " Amount Constructed: " + amount);
+      this._host.warning(
+        label + " Amount ordered: " + amountTemp + " Amount Constructed: " + amount
+      );
     }
 
     if (variant === "s") {
@@ -46,7 +49,7 @@ export class ReligionManager {
     }
   }
 
-  getBuild(name: string, variant: unknown): unknown {
+  getBuild(name: string, variant: "c" | "s" | "z"): unknown {
     switch (variant) {
       case "z":
         return this._host.gamePage.religion.getZU(name);
@@ -57,7 +60,7 @@ export class ReligionManager {
     }
   }
 
-  getBuildButton(name: string, variant: unknown): unknown {
+  getBuildButton(name: string, variant: "c" | "s" | "z"): BuildButton | null {
     let buttons;
     switch (variant) {
       case "z":
@@ -76,5 +79,6 @@ export class ReligionManager {
         return buttons[i];
       }
     }
+    return null;
   }
 }

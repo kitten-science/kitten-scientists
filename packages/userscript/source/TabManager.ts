@@ -1,32 +1,28 @@
-import { Maybe } from "./tools/Maybe";
+import { isNil } from "./tools/Maybe";
 import { GameTab, TabId } from "./types";
 import { UserScript } from "./UserScript";
 
 export class TabManager {
   private readonly _host: UserScript;
-  private _tab: Maybe<GameTab>;
+  tab: GameTab;
 
   constructor(host: UserScript, name: TabId) {
     this._host = host;
-    this.setTab(name);
+
+    const tab = this._host.gamePage.tabs.find(subject => subject.tabId === name);
+    if (isNil(tab)) {
+      throw new Error(`Unable to find tab ${name}`);
+    }
+
+    this.tab = tab;
+    this.render();
   }
 
   render(): this {
-    if (this._tab && this._host.gamePage.ui.activeTabId !== this._tab.tabId) {
-      this._tab.render();
+    if ( this._host.gamePage.ui.activeTabId !== this.tab.tabId) {
+      this.tab.render();
     }
 
     return this;
-  }
-
-  setTab(name: string): void {
-    for (const tab of this._host.gamePage.tabs) {
-      if (tab.tabId === name) {
-        this._tab = tab;
-        break;
-      }
-    }
-
-    this._tab ? this.render() : this._host.warning("unable to find tab " + name);
   }
 }
