@@ -13,12 +13,10 @@
     "type": "git",
     "url": "git+https://github.com/oliversalzburg/cbc-kitten-scientists.git"
   },
-  "author": {
-    "name": "Oliver Salzburg",
-    "email": "oliver.salzburg@gmail.com"
-  },
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "scripts": {
     "build": "tsc",
+    "package": "webpack",
     "whoami": "echo userscript"
   },
   "keywords": [
@@ -27,7 +25,10 @@
     "scientists"
   ],
   "devDependencies": {
-    "typescript": "~4.2.4"
+    "typescript": "~4.2.4",
+    "webpack": "^4",
+    "webpack-cli": "^4",
+    "webpack-userscript": "^2.5.7"
   },
   "dependencies": {
     "tslib": "^2.2.0"

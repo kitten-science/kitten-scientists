@@ -19,6 +19,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "userscript:package": "yarn workspace userscript package"
+  },
   "keywords": [
     "kitten",
     "kittens",
