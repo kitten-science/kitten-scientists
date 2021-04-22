@@ -1,31 +1,18 @@
 {
   "compilerOptions": {
-    // Allow us to easily import modules that have no default export.
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    // Allow us to use decorators.
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    // Import helper functions at runtime instead of putting them in each
-    // code unit. This required `tslib` to be available.
     "importHelpers": true,
-    "lib": ["ES2020"],
-    // Produce modules that load each other with `require()`.
+    "lib": ["DOM", "ES2018"],
     "module": "CommonJS",
-    // Generate source maps for the compiled code units.
     "sourceMap": true,
-    // Enable extended type checking, increased strictness.
     "strict": true,
-    // Targetting Node 14+.
-    "target": "ES2020",
-    // Enable incremental builds for faster building. (Doesn't work though)
-    "incremental": false,
-    // We specifically no longer want declarations, as they are causing problems
-    // with the export of mixins. We're just using the reflect-metadata approach
-    // for our ORM now (we used to do this differently in the past).
+    "target": "ES2017",
+    "incremental": true,
     "declaration": false,
-    // Don't check dependencies for correctness. It's a pointless endevour.
     "skipLibCheck": true,
     "types": []
   },
