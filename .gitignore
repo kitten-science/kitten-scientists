@@ -3,9 +3,13 @@
 !.yarn/releases
 !.yarn/plugins
 !.yarn/sdks
+.yarn/unplugged
 !.yarn/versions
 .pnp.*
 
 tsconfig.tsbuildinfo
 
 /packages/*/output/*
+
+# Created by WebPack and/or plugins
+/packages/userscript/node_modules
