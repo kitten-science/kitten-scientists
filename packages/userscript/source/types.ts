@@ -1,6 +1,7 @@
+export type TabId = "Village";
 export type GameTab = {
   render: () => void;
-  tabId: string;
+  tabId: TabId;
 };
 
 export type GamePage = {
@@ -10,6 +11,21 @@ export type GamePage = {
   msg: (...args: Array<string>) => { span: HTMLElement };
   tabs: Array<GameTab>;
   ui: {
-    activeTabId: string;
+    activeTabId: TabId;
+  };
+  village: {
+    /**
+     * @deprecated
+     */
+    map: {
+      expeditionNode: {
+        x: number;
+        y: number;
+      };
+      explore: (x: number, y: number) => void;
+      toLevel: (x: number, y: number) => number;
+      getExplorationPrice: (x: number, y: number) => number;
+      villageData:Record<string,unknown>;
+    };
   };
 };
