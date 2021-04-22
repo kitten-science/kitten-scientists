@@ -1,4 +1,4 @@
-export type TabId = "Religion" | "Village";
+export type TabId = "Religion" | "Time" | "Village";
 export type GameTab = {
   render: () => void;
   tabId: TabId;
@@ -65,6 +65,7 @@ export type GamePage = {
   };
   tabs: Array<GameTab>;
   time: {
+    getCFU: (name: string) => unknown;
     getVSU: (name: "usedCryochambers") => { val: number };
   };
   timer: {

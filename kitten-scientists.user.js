@@ -1381,21 +1381,8 @@ var run = function() {
 
     TabManager.prototype = {
         tab: undefined,
-        render: function () {
-            if (this.tab && game.ui.activeTabId !== this.tab.tabId) this.tab.render();
-
-            return this;
-        },
-        setTab: function (name) {
-            for (var tab in game.tabs) {
-                if (game.tabs[tab].tabId === name) {
-                    this.tab = game.tabs[tab];
-                    break;
-                }
-            }
-
-            this.tab ? this.render() : warning('unable to find tab ' + name);
-        }
+        render: function () {},
+        setTab: function (name) {}
     };
 
     // Exploration Manager
@@ -1411,54 +1398,9 @@ var run = function() {
         currentCheapestNodeValue: null,
         cheapestNodeX: null,
         cheapestNodeY: null,
-        explore: function(x, y) {
-            game.village.map.expeditionNode = {x, y};
-            game.village.map.explore(x, y);
-        },
-        getCheapestNode: function () {
-            var tileArray = game.village.map.villageData;
-            var tileKey = "";
-
-            this.currentCheapestNode = null;
-
-            for (var i in tileArray) {
-                tileKey = i;
-
-                // Discards locked nodes
-                if (i.unlocked == false) { break; }
-
-                // Discards junk nodes
-                if (tileKey.includes('-')) { break; }
-
-                // Acquire node coordinates
-                var regex = /(\d).(\d*)/g;
-                var keyMatch = regex.exec(tileKey);
-                var xCoord = parseInt(keyMatch[1]);
-                var yCoord = parseInt(keyMatch[2]);
-
-                if (this.currentCheapestNode == null) {
-                    this.currentCheapestNodeValue = this.getNodeValue(xCoord, yCoord)
-                    this.currentCheapestNode = i;
-                    this.cheapestNodeX = xCoord;
-                    this.cheapestNodeY = yCoord;
-                }
-
-                if (this.currentCheapestNode != null && this.getNodeValue(xCoord, yCoord) < this.currentCheapestNodeValue) {
-                    this.currentCheapestNodeValue = this.getNodeValue(xCoord, yCoord)
-                    this.currentCheapestNode = i;
-                    this.cheapestNodeX = xCoord;
-                    this.cheapestNodeY = yCoord;
-                }
-            }
-        },
-        getNodeValue: function (x, y){
-            var nodePrice = game.village.map.toLevel(x, y);
-            var exploreCost = game.village.map.getExplorationPrice(x,y);
-
-            var tileValue = nodePrice / exploreCost;
-
-            return tileValue;
-        }
+        explore: function(x, y) {},
+        getCheapestNode: function () {},
+        getNodeValue: function (x, y){}
     };
 
     // Religion manager
@@ -1474,62 +1416,9 @@ var run = function() {
         manager: undefined,
         crafts: undefined,
         bulkManager: undefined,
-        build: function (name, variant, amount) {
-            var build = this.getBuild(name, variant);
-            var button = this.getBuildButton(name, variant);
-
-            if (!button || !button.model.enabled) return;
-
-            var amountTemp = amount;
-            var label = build.label;
-            amount=this.bulkManager.construct(button.model, button, amount);
-            if (amount !== amountTemp) {warning(label + ' Amount ordered: '+amountTemp+' Amount Constructed: '+amount);}
-
-            if (variant === "s") {
-                storeForSummary(label, amount, 'faith');
-                if (amount === 1) {
-                    iactivity('act.sun.discover', [label], 'ks-faith');
-                } else {
-                    iactivity('act.sun.discovers', [label, amount], 'ks-faith');
-                }
-            } else {
-                storeForSummary(label, amount, 'build');
-                if (amount === 1) {
-                    iactivity('act.build', [label], 'ks-build');
-                } else {
-                    iactivity('act.builds', [label, amount], 'ks-build');
-                }
-            }
-        },
-        getBuild: function (name, variant) {
-            switch (variant) {
-                case 'z':
-                    return game.religion.getZU(name);
-                case 's':
-                    return game.religion.getRU(name);
-                case 'c':
-                    return game.religion.getTU(name);
-            }
-        },
-        getBuildButton: function (name, variant) {
-            switch (variant) {
-                case 'z':
-                    var buttons = this.manager.tab.zgUpgradeButtons;
-                    break;
-                case 's':
-                    var buttons = this.manager.tab.rUpgradeButtons;
-                    break;
-                case 'c':
-                    var buttons = this.manager.tab.children[0].children[0].children;
-            }
-            var build = this.getBuild(name, variant);
-            for (var i in buttons) {
-                var haystack = buttons[i].model.name;
-                if (haystack.indexOf(build.label) !== -1) {
-                    return buttons[i];
-                }
-            }
-        }
+        build: function (name, variant, amount) {},
+        getBuild: function (name, variant) {},
+        getBuildButton: function (name, variant) {}
     };
 
     // Time manager
@@ -1545,46 +1434,9 @@ var run = function() {
         manager: undefined,
         crafts: undefined,
         bulkManager: undefined,
-        build: function (name, variant, amount) {
-            var build = this.getBuild(name, variant);
-            var button = this.getBuildButton(name, variant);
-
-            if (!button || !button.model.enabled) return;
-
-            var amountTemp = amount;
-            var label = build.label;
-            amount=this.bulkManager.construct(button.model, button, amount);
-            if (amount !== amountTemp) {warning(label + ' Amount ordered: '+amountTemp+' Amount Constructed: '+amount);}
-            storeForSummary(label, amount, 'build');
-
-
-            if (amount === 1) {
-                iactivity('act.build', [label], 'ks-build');
-            } else {
-                iactivity('act.builds', [label, amount], 'ks-build');
-            }
-        },
-        getBuild: function (name, variant) {
-            if (variant === 'chrono') {
-                return game.time.getCFU(name);
-            } else {
-                return game.time.getVSU(name);
-            }
-        },
-        getBuildButton: function (name, variant) {
-            if (variant === 'chrono') {
-                var buttons = this.manager.tab.children[2].children[0].children;
-            } else {
-                var buttons = this.manager.tab.children[3].children[0].children;
-            }
-            var build = this.getBuild(name, variant);
-            for (var i in buttons) {
-                var haystack = buttons[i].model.name;
-                if (haystack.indexOf(build.label) !== -1) {
-                    return buttons[i];
-                }
-            }
-        }
+        build: function (name, variant, amount) {},
+        getBuild: function (name, variant) {},
+        getBuildButton: function (name, variant) {}
     };
 
     // Upgrade manager
@@ -1967,43 +1819,8 @@ var run = function() {
     var CacheManager = function () {};
 
     CacheManager.prototype = {
-        pushToCache: function (data) {
-            var cache = options.auto.cache.cache;
-            var cacheSum = options.auto.cache.cacheSum;
-            var materials = data['materials'];
-            var currentTick = game.timer.ticksTotal;
-
-            cache.push(data);
-            for (var mat in materials) {
-                if (!cacheSum[mat]) {cacheSum[mat] = 0;}
-                cacheSum[mat] += materials[mat];
-            }
-
-            for (var i = 0; i < cache.length; i++) {
-                var oldData = cache[i];
-                if (cache.length > 10000) {
-                    var oldMaterials = oldData['materials'];
-                    for (var mat in oldMaterials) {
-                        if (!cacheSum[mat]) {cacheSum[mat] = 0;}
-                        cacheSum[mat] -= oldMaterials[mat];
-                    }
-                    cache.shift();
-                    i--;
-                } else {
-                    return;
-                }
-            }
-        },
-        getResValue: function (res) {
-            var cache = options.auto.cache.cache;
-            if (cache.length === 0) {return 0;}
-            var cacheSum = options.auto.cache.cacheSum;
-            if (!cacheSum[res]) {return 0;}
-            var currentTick = game.timer.ticksTotal;
-            var startingTick = cache[0].timeStamp;
-
-            return (cacheSum[res] / (currentTick - startingTick));
-        }
+        pushToCache: function (data) {},
+        getResValue: function (res) {}
     };
 
     // ==============================
