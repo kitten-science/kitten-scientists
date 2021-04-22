@@ -1,0 +1,5 @@
+/packages/*/output/
+
+# yarn internals are already pretty enough
+.yarn/
+.pnp.js
