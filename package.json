@@ -20,6 +20,7 @@
     "packages/*"
   ],
   "scripts": {
+    "userscript:build": "yarn workspace userscript build",
     "userscript:package": "yarn workspace userscript package"
   },
   "keywords": [

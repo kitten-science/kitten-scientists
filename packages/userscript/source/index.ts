@@ -1,6 +1,6 @@
 import { UserScript } from "./UserScript";
 
-const userScript = new UserScript();
 (async () => {
-  await userScript.waitForGame();
+  await UserScript.waitForGame();
+  const userScript = UserScript.install();
 })();
