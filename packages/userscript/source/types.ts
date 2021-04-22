@@ -5,10 +5,50 @@ export type GameTab = {
 };
 
 export type GamePage = {
+  bld: {
+    getBuildingExt: (
+      building: "aqueduct" | "pasture" | "unicornPasture"
+    ) => { meta: { stage: number; val: number } };
+  };
+  calendar: {
+    cycle: number;
+    cycleEffectsFestival: (options: { catnip: number }) => { catnip: number };
+    getCurSeason: () => { modifiers: { catnip: number } };
+    getWeatherMod: () => number;
+  };
+  challenges: {
+    currentChallenge: "anarchy" | "winterIsComing";
+  };
   console: {
     maxMessages: number;
   };
+  craft: (name: string, amount: number) => void;
+  getCMBRBonus: () => number;
+  getDisplayValueExt: (value: number) => string;
+  getEffect: (
+    effect: "catnipDemandWorkerRatioGlobal" | "catnipJobRatio" | "catnipPerTickBase" | "hunterRatio"
+  ) => number;
+  getLimitedDR: (value0: number, value1: number) => number;
+  getResCraftRatio: (name: string) => number;
+  getResourcePerTickConvertion: (name: "catnip") => number;
+  ironWill: boolean;
   msg: (...args: Array<string>) => { span: HTMLElement };
+  opts: {
+    disableCMBR: boolean;
+  };
+  prestige: {
+    getParagonProductionRatio: () => number;
+    meta: Array<{ meta: Array<{ researched: boolean }> }>;
+  };
+  religion: {
+    getSolarRevolutionRatio: () => number;
+  };
+  resPool: {
+    get: (name: string) => { title: string };
+  };
+  space: {
+    getBuilding: (building: "hydroponics") => { val: number };
+  };
   tabs: Array<GameTab>;
   timer: {
     ticksTotal: number;
@@ -17,6 +57,10 @@ export type GamePage = {
     activeTabId: TabId;
   };
   village: {
+    getFreeKittens: () => number;
+    getResConsumption: () => { catnip: number };
+    getResProduction: () => { catnip: number };
+    happiness: number;
     /**
      * @deprecated
      */
@@ -30,5 +74,13 @@ export type GamePage = {
       getExplorationPrice: (x: number, y: number) => number;
       villageData: Record<string, unknown>;
     };
+    sim: {
+      kittens: Array<unknown>;
+    };
+  };
+  workshop: {
+    get: (technology: "goldOre") => { researched: boolean };
+    getCraft: (name: string) => unknown;
+    getCraftPrice: (craft: unknown) => Array<{ name: string; val: number }>;
   };
 };
