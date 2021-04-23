@@ -3,11 +3,12 @@ import { BulkManager } from "./BulkManager";
 import { CacheManager } from "./CacheManager";
 import { CraftManager } from "./CraftManager";
 import { ExplorationManager } from "./ExplorationManager";
-import { BuildItemOptions, BuildMenuOption } from "./Options";
+import { BuildItemOptions, BuildMenuOption, FaithItems, UnicornFaithItemOptions } from "./Options";
 import { ReligionManager } from "./ReligionManager";
 import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
 import { TimeManager } from "./TimeManager";
+import { objectEntries } from "./tools/Entries";
 import { TradeManager } from "./TradeManager";
 import { Building } from "./types";
 import { UpgradeManager } from "./UpgradeManager";
@@ -246,8 +247,8 @@ export class Engine {
       return;
 
     // check resources
-    opt = options.auto.resources;
-    for (var name in opt)
+    opt = this._host.options.auto.resources;
+    for (const name in opt)
       if (opt[name].checkForReset) {
         const res = this._host.gamePage.resPool.get(name);
         checkedList.push({ name: res.title, trigger: opt[name].stockForReset, val: res.value });
@@ -657,9 +658,9 @@ export class Engine {
           this._host.gamePage.religion.tcratio += needNextLevel;
           this._host.gamePage.religion.transcendenceTier += 1;
           const atheism = this._host.gamePage.challenges.getChallenge("atheism");
-          atheism.calculateEffects(atheism, game);
+          atheism.calculateEffects(atheism, this._host.gamePage);
           const blackObelisk = this._host.gamePage.religion.getTU("blackObelisk");
-          blackObelisk.calculateEffects(blackObelisk, game);
+          blackObelisk.calculateEffects(blackObelisk, this._host.gamePage);
           this._host.gamePage.msg(
             this._host.i18nEngine("religion.transcend.msg.success", [
               this._host.gamePage.religion.transcendenceTier,
@@ -713,10 +714,11 @@ export class Engine {
     }
     // Praise
     if (option.autoPraise.enabled && rate >= option.autoPraise.subTrigger) {
+      let apocryphaBonus;
       if (!this._host.gamePage.religion.getFaithBonus) {
-        var apocryphaBonus = this._host.gamePage.religion.getApocryphaBonus();
+        apocryphaBonus = this._host.gamePage.religion.getApocryphaBonus();
       } else {
-        var apocryphaBonus = this._host.gamePage.religion.getFaithBonus();
+        apocryphaBonus = this._host.gamePage.religion.getFaithBonus();
       }
       const worshipInc = faith.value * (1 + apocryphaBonus);
       storeForSummary("praise", worshipInc);
@@ -732,8 +734,10 @@ export class Engine {
     }
   }
 
-  private _worship(builds: unknown): void {
-    var builds = builds || this._host.options.auto.faith.items;
+  private _worship(
+    builds: Partial<Record<FaithItems, UnicornFaithItemOptions>> = this._host.options.auto.faith
+      .items
+  ): void {
     const buildManager = this._religionManager;
     const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;
@@ -743,8 +747,7 @@ export class Engine {
     buildManager.manager.render();
 
     const metaData = {};
-    for (const name in builds) {
-      const build = builds[name];
+    for (const [name, build] of objectEntries<FaithItems, UnicornFaithItemOptions>(builds)) {
       metaData[name] = buildManager.getBuild(name, build.variant);
       if (!buildManager.getBuildButton(name, build.variant)) {
         metaData[name].rHidden = true;
@@ -1107,7 +1110,9 @@ export class Engine {
     }
   }
 
-  build(builds: Record<BuildMenuOption, BuildItemOptions> = this._host.options.auto.build.items): void {
+  build(
+    builds: Record<BuildMenuOption, BuildItemOptions> = this._host.options.auto.build.items
+  ): void {
     const buildManager = this._buildManager;
     const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;
@@ -1118,7 +1123,7 @@ export class Engine {
 
     const metaData = {};
     for (const [name, build] of Object.entries(builds)) {
-      metaData[name] = buildManager.getBuild(build.name || name as Building).meta;
+      metaData[name] = buildManager.getBuild(build.name || (name as Building)).meta;
     }
 
     const buildList = bulkManager.bulk(builds, metaData, trigger, "bonfire");
