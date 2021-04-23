@@ -1,20 +1,21 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
-import { UnicornItemVariant } from "./Options";
 import { TabManager } from "./TabManager";
 import { mustExist } from "./tools/Maybe";
 import {
   AbstractReligionUpgradeInfo,
   BuildButton,
+  ReligionTab,
   ReligionUpgrades,
   TranscendenceUpgrades,
+  UnicornItemVariant,
   ZiggurathUpgrades,
 } from "./types";
 import { UserScript } from "./UserScript";
 
 export class ReligionManager {
   private readonly _host: UserScript;
-  readonly manager: TabManager;
+  readonly manager: TabManager<ReligionTab>;
   private readonly _crafts: CraftManager;
   private readonly _bulkManager: BulkManager;
 
@@ -96,10 +97,10 @@ export class ReligionManager {
     let buttons: Array<BuildButton>;
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
-        buttons = mustExist(this.manager.tab.zgUpgradeButtons);
+        buttons = this.manager.tab.zgUpgradeButtons;
         break;
       case UnicornItemVariant.OrderOfTheSun:
-        buttons = mustExist(this.manager.tab.rUpgradeButtons);
+        buttons = this.manager.tab.rUpgradeButtons;
         break;
       case UnicornItemVariant.Cryptotheology:
         buttons = this.manager.tab.children[0].children[0].children;
