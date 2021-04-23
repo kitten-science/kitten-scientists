@@ -2,6 +2,7 @@ import {
   BuildButton,
   Building,
   BuildingExt,
+  BuildingInfo,
   Challenge,
   GameTab,
   Price,
@@ -24,10 +25,11 @@ import {
   VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
 } from "./time";
+import { TradingTab } from "./trading";
 
 export type GamePage = {
   bld: {
-    get: (build: "aiCore" | "biolab" | "steamworks") => unknown;
+    get: (build: Building) => BuildingInfo;
     getBuildingExt: (building: Building) => BuildingExt;
   };
   calendar: {
@@ -41,6 +43,8 @@ export type GamePage = {
     festivalDays: number;
     getCurSeason: () => { modifiers: { catnip: number }; name: Season };
     getWeatherMod: () => number;
+    observeBtn: BuildButton | null;
+    observeHandler:()=>void;
     season: number;
     year: number;
     yearsPerCycle: number;
@@ -66,6 +70,7 @@ export type GamePage = {
     getMarkerCap: () => number;
     calculateTradeBonusFromPolicies: (race: Race, host: GamePage) => number;
     getTradeRatio: () => number;
+    races: Array<RaceInfo>;
     sellBcoin: () => void;
     /**
      * @deprecated Use `sellBcoin` instead.
@@ -74,7 +79,7 @@ export type GamePage = {
     tradeMultiple: (race: RaceInfo, amount: number) => void;
     unlockRandomRace: () => { title: string };
   };
-  diplomacyTab: GameTab;
+  diplomacyTab: TradingTab;
   getCMBRBonus: () => number;
   getDisplayValueExt: (value: number) => string;
   getEffect: (
@@ -245,6 +250,7 @@ export type GamePage = {
     getResConsumption: () => { catnip: number };
     getResProduction: () => { catnip: number };
     happiness: number;
+    huntAll: () => void;
     jobs: Array<{ name: string; unlocked: boolean; value: number }>;
     leader: { rank: number };
     /**

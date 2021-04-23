@@ -1,6 +1,9 @@
+import { GamePage } from "./gamePage";
+
 export type Season = "autumn" | "spring" | "summer" | "winter";
 export type Resource =
   | "alloy"
+  | "antimatter"
   | "beam"
   | "blackcoin"
   | "bloodstone"
@@ -11,6 +14,7 @@ export type Resource =
   | "concrate"
   | "culture"
   | "eludium"
+  | "faith"
   | "furs"
   | "gear"
   | "gold"
@@ -21,6 +25,7 @@ export type Resource =
   | "manpower"
   | "manuscript"
   | "megalith"
+  | "minerals"
   | "necrocorn"
   | "oil"
   | "parchment"
@@ -40,6 +45,7 @@ export type Resource =
   | "timeCrystal"
   | "titanium"
   | "unicorns"
+  | "unobtainium"
   | "uranium"
   | "wood"
   | "zebras";
@@ -66,7 +72,9 @@ export type BuildButton<T = string> = {
   children: Array<BuildButton>;
   controller: {
     _transform: (model: unknown, value: unknown) => void;
+    doFixCryochamber: (model: unknown) => boolean; // Fix broken cryochambers
     doShatterAmt: (model: unknown, willSkip: boolean) => void; // Shatter TC button
+    onAll: (model: unknown) => void; // Turn on all (steamworks)
     sellInternal: (model: unknown, count: number) => void; // Sell button
   };
   domNode: HTMLDivElement;
@@ -83,12 +91,10 @@ export type BuildButton<T = string> = {
 export type GameTab = {
   buttons: Array<BuildButton>;
   censusPanel?: BuildButton; // Probably village tab specific.
-  cfPanel?: BuildButton; // Chronoforge?
   children: Array<BuildButton>;
   render: () => void;
   tabId: TabId;
   visible: boolean;
-  vsPanel?: BuildButton;
 };
 
 /**
@@ -147,6 +153,23 @@ export type Building =
   | "zebraOutpost"
   | "zebraWorkshop"
   | "ziggurat";
+
+export type BuildingInfo = {
+  calculateEffects: (self: unknown, game: GamePage) => void;
+  description: string;
+  effects: Record<string, unknown>;
+  flavor: string;
+  isAutomationEnabled: boolean;
+  jammed: boolean;
+  label: string;
+  name: Building;
+  on: number;
+  priceRatio: number;
+  prices: Array<Price>;
+  unlockable: boolean;
+  unlocked: boolean;
+  val: number;
+};
 
 export type BuildingExt = {
   meta: {

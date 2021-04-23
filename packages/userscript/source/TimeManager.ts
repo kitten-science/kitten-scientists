@@ -5,13 +5,14 @@ import {
   AbstractTimeUpgradeInfo,
   BuildButton,
   ChronoForgeUpgrades,
+  TimeTab,
   VoidSpaceUpgrades,
 } from "./types";
 import { UserScript } from "./UserScript";
 
 export class TimeManager {
   private readonly _host: UserScript;
-  readonly manager: TabManager;
+  readonly manager: TabManager<TimeTab>;
   private readonly _crafts: CraftManager;
   private readonly _bulkManager: BulkManager;
 
