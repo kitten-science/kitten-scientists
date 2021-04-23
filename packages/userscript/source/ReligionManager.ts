@@ -6,13 +6,13 @@ import { UserScript } from "./UserScript";
 
 export class ReligionManager {
   private readonly _host: UserScript;
-  private readonly _manager: TabManager;
+  readonly manager: TabManager;
   private readonly _crafts: CraftManager;
   private readonly _bulkManager: BulkManager;
 
   constructor(host: UserScript) {
     this._host = host;
-    this._manager = new TabManager(this._host, "Religion");
+    this.manager = new TabManager(this._host, "Religion");
     this._crafts = new CraftManager(this._host);
     this._bulkManager = new BulkManager(this._host);
   }
@@ -64,13 +64,13 @@ export class ReligionManager {
     let buttons;
     switch (variant) {
       case "z":
-        buttons = this._manager.tab.zgUpgradeButtons;
+        buttons = this.manager.tab.zgUpgradeButtons;
         break;
       case "s":
-        buttons = this._manager.tab.rUpgradeButtons;
+        buttons = this.manager.tab.rUpgradeButtons;
         break;
       case "c":
-        buttons = this._manager.tab.children[0].children[0].children;
+        buttons = this.manager.tab.children[0].children[0].children;
     }
     const build = this.getBuild(name, variant);
     for (const i in buttons) {

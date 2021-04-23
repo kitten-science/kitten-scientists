@@ -11,6 +11,13 @@ export class ExplorationManager {
   private _cheapestNodeX: number | null = null;
   private _cheapestNodeY: number | null = null;
 
+  get cheapestNodeX(): number | null {
+    return this.cheapestNodeX;
+  }
+  get cheapestNodeY(): number | null {
+    return this.cheapestNodeY;
+  }
+
   constructor(host: UserScript) {
     this._host = host;
     this._manager = new TabManager(host, "Village");
