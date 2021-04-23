@@ -1,4 +1,5 @@
 import JQuery from "jquery";
+import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
 import { DefaultOptions, Options } from "./Options";
 import { objectEntries } from "./tools/Entries";
@@ -99,6 +100,9 @@ export class UserScript {
     this.gamePage.console.maxMessages = 1000;
 
     this.resetActivitySummary();
+
+    const engine = new Engine(this);
+    engine.start();
   }
 
   /**
