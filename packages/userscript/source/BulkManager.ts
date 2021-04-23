@@ -15,6 +15,7 @@ import {
   AbstractTimeUpgradeInfo,
   BuildButton,
   BuildingExt,
+  Price,
   Resource,
   SpaceBuildingInfo,
 } from "./types";
@@ -52,8 +53,22 @@ export class BulkManager {
     >,
     trigger: number,
     source?: "bonfire" | "space"
-  ): void {
-    const bList = [];
+  ): Array<{
+    count: number;
+    id: string;
+    label: string;
+    name: string;
+    stage: number;
+    variant: unknown;
+  }> {
+    const bList: Array<{
+      count: number;
+      id: string;
+      label: string;
+      name: string;
+      stage: number;
+      variant: unknown;
+    }> = [];
     const countList = [];
     let counter = 0;
     for (const [name, build] of objectEntries(builds)) {
@@ -92,6 +107,7 @@ export class BulkManager {
           continue;
         }
         bList.push({
+          count: 0,
           id: name,
           label: build.label,
           name: build.name,
@@ -134,7 +150,7 @@ export class BulkManager {
     }
 
     if (countList.length === 0) {
-      return;
+      return [];
     }
 
     const tempPool: Partial<Record<Resource, number>> = {};
@@ -149,7 +165,7 @@ export class BulkManager {
     while (countList.length !== 0) {
       bulkLoop: for (let j = 0; j < countList.length; j++) {
         const build = countList[j];
-        const data = metaData[build.id];
+        const data = mustExist(metaData[build.id]);
         const prices = build.prices;
         const priceRatio = build.priceRatio;
         const source = build.source;
@@ -205,7 +221,8 @@ export class BulkManager {
                       this._host.gamePage.getEffect("oilReductionRatio"),
                       0.75
                     ));
-                tempPool["oil"] += oilPriceRefund * Math.pow(1.05, k + data.val);
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                tempPool["oil"]! += oilPriceRefund * Math.pow(1.05, k + data.val);
               } else if (build.id === "cryochambers" && prices[p2].name === "karma") {
                 const karmaPriceRefund =
                   prices[p2].val *
@@ -214,7 +231,8 @@ export class BulkManager {
                       0.01 * this._host.gamePage.prestige.getBurnedParagonRatio(),
                       1.0
                     ));
-                tempPool["karma"] += karmaPriceRefund * Math.pow(priceRatio, k + data.val);
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                tempPool["karma"]! += karmaPriceRefund * Math.pow(priceRatio, k + data.val);
               } else {
                 const refundVal = prices[p2].val * Math.pow(priceRatio, k + data.val);
                 tempPool[prices[p2].name] +=
@@ -274,7 +292,15 @@ export class BulkManager {
     return counter;
   }
 
-  getPriceRatio(data: unknown, source?: "bonfire" | "space"): number {
+  getPriceRatio(
+    data: {
+      name: string;
+      priceRatio: number;
+      stage: number;
+      stages?: Array<{ priceRatio: number }>;
+    },
+    source?: "bonfire" | "space"
+  ): number {
     const ratio = !data.stages
       ? data.priceRatio
       : data.priceRatio || data.stages[data.stage].priceRatio;
@@ -292,8 +318,8 @@ export class BulkManager {
   }
 
   singleBuildPossible(
-    data: unknown,
-    prices: Array<unknown>,
+    data: { name: string; val: number },
+    prices: Array<Price>,
     priceRatio: number,
     source?: "bonfire" | "space"
   ): boolean {

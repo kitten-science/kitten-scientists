@@ -28,6 +28,7 @@ export type Resource =
   | "minerals"
   | "necrocorn"
   | "oil"
+  | "paragon"
   | "parchment"
   | "plate"
   | "relic"
@@ -59,6 +60,16 @@ export type TabId =
   | "Trade"
   | "Village"
   | "Workshop";
+
+export type Jobs =
+  | "engineer"
+  | "farmer"
+  | "geologist"
+  | "hunter"
+  | "miner"
+  | "priest"
+  | "scholar"
+  | "woodcutter";
 
 /**
  * A combination of a resource and an amount.
@@ -187,9 +198,16 @@ export type BuildingExt = {
     calculateEffects: (model: unknown, game: GamePage) => void;
     effects: { unicornsPerTickBase: number };
     label: string;
+    name: string;
     on: number;
+    priceRatio: number;
     stage: number;
-    stages: Array<{ label: string; prices: Array<unknown>; stageUnlocked: boolean }>;
+    stages: Array<{
+      label: string;
+      priceRatio: number;
+      prices: Array<Price>;
+      stageUnlocked: boolean;
+    }>;
     unlocked: boolean;
     val: number;
   };

@@ -1,6 +1,7 @@
 import {
   Building,
   ChronoForgeUpgrades,
+  Jobs,
   Resource,
   SpaceUpgrades,
   UnicornItemVariant,
@@ -131,6 +132,8 @@ export type CraftItemOptions = {
   limRat: number;
   enabled: boolean;
 };
+
+export type DistributeItems = Jobs;
 
 export type TradeItemOptions = {
   enabled: boolean;
@@ -505,14 +508,7 @@ export type Options = {
        * if all jobs reach the max, then distribute kittens to unlimited job.
        */
       items: {
-        woodcutter: DistributeItemOptions;
-        farmer: DistributeItemOptions;
-        scholar: DistributeItemOptions;
-        hunter: DistributeItemOptions;
-        miner: DistributeItemOptions;
-        priest: DistributeItemOptions;
-        geologist: DistributeItemOptions;
-        engineer: DistributeItemOptions;
+        [item in DistributeItems]: DistributeItemOptions;
       };
     };
     filter: {
