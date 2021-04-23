@@ -22,6 +22,9 @@ import {
   BuildButton,
   Building,
   BuildingExt,
+  Race,
+  RaceInfo,
+  Resource,
   SpaceBuildingInfo,
   UnicornItemVariant,
   ZiggurathUpgrades,
@@ -1270,7 +1273,7 @@ export class Engine {
   }
 
   observeStars(): void {
-    if (this._host.gamePage.calendar.observeBtn != null) {
+    if (this._host.gamePage.calendar.observeBtn !== null) {
       this._host.gamePage.calendar.observeHandler();
       this._host.iactivity("act.observe", [], "ks-star");
       this._host.storeForSummary("stars", 1);
@@ -1315,25 +1318,23 @@ export class Engine {
     const tradeManager = this._tradeManager;
     const cacheManager = this._cacheManager;
     const gold = craftManager.getResource("gold");
-    const trades = [];
+    const trades: Array<Race> = [];
     const requireTrigger = this._host.options.auto.trade.trigger;
 
     tradeManager.manager.render();
 
-    if (!tradeManager.singleTradePossible(undefined)) {
+    if (!tradeManager.singleTradePossible()) {
       return;
     }
 
     const season = this._host.gamePage.calendar.getCurSeason().name;
 
     // Determine how many races we will trade this cycle
-    for (var name in this._host.options.auto.trade.items) {
-      var trade = this._host.options.auto.trade.items[name];
-
+    for (const [name, trade] of objectEntries(this._host.options.auto.trade.items)) {
       // Check if the race is in season, enabled, unlocked, and can actually afford it
       if (!trade.enabled) continue;
       if (!trade[season]) continue;
-      var race = tradeManager.getRace(name);
+      const race = tradeManager.getRace(name);
       if (!race.unlocked) {
         continue;
       }
@@ -1345,7 +1346,7 @@ export class Engine {
         continue;
       }
 
-      var require = !trade.require ? false : craftManager.getResource(trade.require);
+      const require = !trade.require ? false : craftManager.getResource(trade.require);
 
       // If we have enough to trigger the check, then attempt to trade
       const prof = tradeManager.getProfitability(name);
@@ -1364,7 +1365,7 @@ export class Engine {
     }
 
     // Figure out how much we can currently trade
-    let maxTrades = tradeManager.getLowestTradeAmount(undefined, true, false);
+    let maxTrades = tradeManager.getLowestTradeAmount(null, true, false);
 
     // Distribute max trades without starving any race
 
@@ -1373,10 +1374,10 @@ export class Engine {
     }
 
     const maxByRace = [];
-    for (var i = 0; i < trades.length; i++) {
-      var name = trades[i];
-      var trade = this._host.options.auto.trade.items[name];
-      var require = !trade.require ? false : craftManager.getResource(trade.require);
+    for (let i = 0; i < trades.length; i++) {
+      const name = trades[i];
+      const trade = this._host.options.auto.trade.items[name];
+      const require = !trade.require ? false : craftManager.getResource(trade.require);
       const trigConditions =
         (!require || requireTrigger <= require.value / require.maxValue) &&
         requireTrigger <= gold.value / gold.maxValue;
@@ -1393,14 +1394,15 @@ export class Engine {
       return;
     }
 
-    const tradesDone = {};
+    const tradesDone: Partial<Record<Race, number>> = {};
     while (trades.length > 0 && maxTrades >= 1) {
       if (maxTrades < trades.length) {
         const j = Math.floor(Math.random() * trades.length);
         if (!tradesDone[trades[j]]) {
           tradesDone[trades[j]] = 0;
         }
-        tradesDone[trades[j]] += 1;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        tradesDone[trades[j]]! += 1;
         maxTrades -= 1;
         trades.splice(j, 1);
         maxByRace.splice(j, 1);
@@ -1408,7 +1410,7 @@ export class Engine {
       }
       let minTrades = Math.floor(maxTrades / trades.length);
       let minTradePos = 0;
-      for (var i = 0; i < trades.length; i++) {
+      for (let i = 0; i < trades.length; i++) {
         if (maxByRace[i] < minTrades) {
           minTrades = maxByRace[i];
           minTradePos = i;
@@ -1417,7 +1419,8 @@ export class Engine {
       if (!tradesDone[trades[minTradePos]]) {
         tradesDone[trades[minTradePos]] = 0;
       }
-      tradesDone[trades[minTradePos]] += minTrades;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      tradesDone[trades[minTradePos]]! += minTrades;
       maxTrades -= minTrades;
       trades.splice(minTradePos, 1);
       maxByRace.splice(minTradePos, 1);
@@ -1426,28 +1429,33 @@ export class Engine {
       return;
     }
 
-    const tradeNet = {};
-    for (var name in tradesDone) {
-      var race = tradeManager.getRace(name);
+    const tradeNet: Partial<Record<Resource, number>> = {};
+    for (const [name, amount] of objectEntries(tradesDone)) {
+      const race = tradeManager.getRace(name);
 
       const materials = tradeManager.getMaterials(name);
-      for (const mat in materials) {
+      for (const [mat, matAmount] of objectEntries(materials)) {
         if (!tradeNet[mat]) {
           tradeNet[mat] = 0;
         }
-        tradeNet[mat] -= materials[mat] * tradesDone[name];
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        tradeNet[mat]! -= matAmount * amount;
       }
 
       const meanOutput = tradeManager.getAverageTrade(race);
-      for (const out in meanOutput) {
+      for (const [out, outValue] of objectEntries(meanOutput)) {
         const res = craftManager.getResource(out);
         if (!tradeNet[out]) {
           tradeNet[out] = 0;
         }
-        tradeNet[out] +=
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        tradeNet[out]! +=
           res.maxValue > 0
-            ? Math.min(meanOutput[out] * tradesDone[name], Math.max(res.maxValue - res.value, 0))
-            : meanOutput[out] * tradesDone[name];
+            ? Math.min(
+                mustExist(meanOutput[out]) * mustExist(tradesDone[name]),
+                Math.max(res.maxValue - res.value, 0)
+              )
+            : outValue * mustExist(tradesDone[name]);
       }
     }
 
@@ -1456,9 +1464,9 @@ export class Engine {
       timeStamp: this._host.gamePage.timer.ticksTotal,
     });
 
-    for (var name in tradesDone) {
-      if (tradesDone[name] > 0) {
-        tradeManager.trade(name, tradesDone[name]);
+    for (const [name, count] of objectEntries(tradesDone)) {
+      if (count > 0) {
+        tradeManager.trade(name, count);
       }
     }
   }
@@ -1473,18 +1481,30 @@ export class Engine {
       !!this._host.gamePage.diplomacy.races[0].embassyPrices
     ) {
       const culture = craftManager.getResource("culture");
+      let cultureVal = 0;
       if (optionVals.buildEmbassies.subTrigger <= culture.value / culture.maxValue) {
         const racePanels = this._host.gamePage.diplomacyTab.racePanels;
-        var cultureVal = craftManager.getValueAvailable("culture", true);
+        cultureVal = craftManager.getValueAvailable("culture", true);
 
-        const embassyBulk = {};
-        const bulkTracker = [];
+        const embassyBulk: Partial<
+          Record<
+            Race,
+            {
+              val: number;
+              basePrice: number;
+              currentEm: number;
+              priceSum: number;
+              race: RaceInfo;
+            }
+          >
+        > = {};
+        const bulkTracker: Array<Race> = [];
 
-        for (var i = 0; i < racePanels.length; i++) {
+        for (let i = 0; i < racePanels.length; i++) {
           if (!racePanels[i].embassyButton) {
             continue;
           }
-          var name = racePanels[i].race.name;
+          const name = racePanels[i].race.name;
           const race = this._host.gamePage.diplomacy.get(name);
           embassyBulk[name] = {
             val: 0,
@@ -1503,9 +1523,9 @@ export class Engine {
         let refreshRequired = false;
 
         while (bulkTracker.length > 0) {
-          for (var i = 0; i < bulkTracker.length; i++) {
-            var name = bulkTracker[i];
-            var emBulk = embassyBulk[name];
+          for (let i = 0; i < bulkTracker.length; i++) {
+            const name = bulkTracker[i];
+            const emBulk = mustExist(embassyBulk[name]);
             const nextPrice = emBulk.basePrice * Math.pow(1.15, emBulk.currentEm + emBulk.val);
             if (nextPrice <= cultureVal) {
               cultureVal -= nextPrice;
@@ -1519,12 +1539,11 @@ export class Engine {
           }
         }
 
-        for (var name in embassyBulk) {
-          var emBulk = embassyBulk[name];
+        for (const [name, emBulk] of objectEntries(embassyBulk)) {
           if (emBulk.val === 0) {
             continue;
           }
-          var cultureVal = craftManager.getValueAvailable("culture", true);
+          cultureVal = craftManager.getValueAvailable("culture", true);
           if (emBulk.priceSum > cultureVal) {
             this._host.warning(
               "Something has gone horribly wrong." + [emBulk.priceSum, cultureVal]
@@ -1547,7 +1566,10 @@ export class Engine {
     }
 
     // fix Cryochamber
-    if (optionVals.fixCry.enabled && this._host.gamePage.time.getVSU("usedCryochambers").val > 0) {
+    if (
+      optionVals.fixCry.enabled &&
+      mustExist(this._host.gamePage.time.getVSU("usedCryochambers")).val > 0
+    ) {
       let fixed = 0;
       const btn = this._timeManager.manager.tab.vsPanel.children[0].children[0]; //check?
       // doFixCryochamber will check resources
@@ -1562,7 +1584,7 @@ export class Engine {
     if (optionVals._steamworks.enabled) {
       const st = this._host.gamePage.bld.get("steamworks");
       if (st.val && st.on == 0) {
-        const button = buildManager.getBuildButton("steamworks");
+        const button = mustExist(buildManager.getBuildButton("steamworks"));
         button.controller.onAll(button.model);
       }
     }

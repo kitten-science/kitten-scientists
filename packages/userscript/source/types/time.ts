@@ -1,4 +1,9 @@
-import { Price } from ".";
+import { BuildButton, GameTab, Price } from ".";
+
+export type TimeTab = GameTab & {
+  cfPanel: BuildButton; // Chronoforge
+  vsPanel: BuildButton; // Void space
+};
 
 export type ChronoForgeUpgrades =
   | "blastFurnace"
@@ -59,4 +64,5 @@ export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
   upgrades: {
     voidSpace: Array<"cryochambers">;
   };
+  val: number;
 };

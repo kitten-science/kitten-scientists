@@ -7,12 +7,12 @@ import { UserScript } from "./UserScript";
 
 export class TradeManager {
   private readonly _host: UserScript;
-  private readonly _manager: TabManager<TradingTab>;
+  readonly manager: TabManager<TradingTab>;
   private readonly _craftManager: CraftManager;
 
   constructor(host: UserScript) {
     this._host = host;
-    this._manager = new TabManager(this._host, "Trade");
+    this.manager = new TabManager(this._host, "Trade");
     this._craftManager = new CraftManager(this._host);
   }
 
@@ -141,7 +141,7 @@ export class TradeManager {
     );
   }
 
-  getLowestTradeAmount(name: Race | null, limited: boolean, trigConditions: unknown): unknown {
+  getLowestTradeAmount(name: Race | null, limited: boolean, trigConditions: unknown): number {
     let amount: number | undefined = undefined;
     const materials = this.getMaterials(name);
 
@@ -213,7 +213,7 @@ export class TradeManager {
     return Math.floor(amount);
   }
 
-  getMaterials(race: Maybe<Race>): Partial<Record<Resource, number>> {
+  getMaterials(race: Maybe<Race> = null): Partial<Record<Resource, number>> {
     const materials: Partial<Record<Resource, number>> = {
       manpower: 50 - this._host.gamePage.getEffect("tradeCatpowerDiscount"),
       gold: 15 - this._host.gamePage.getEffect("tradeGoldDiscount"),
@@ -241,14 +241,14 @@ export class TradeManager {
   }
 
   getTradeButton(race: string): BuildButton {
-    const panel = this._manager.tab.racePanels.find(subject => subject.race.name === race);
+    const panel = this.manager.tab.racePanels.find(subject => subject.race.name === race);
     if (isNil(panel)) {
       throw new Error(`Unable to find trade button for '${race}'`);
     }
     return panel.tradeBtn;
   }
 
-  singleTradePossible(name: Race): boolean {
+  singleTradePossible(name?: Race): boolean {
     const materials = this.getMaterials(name);
     for (const [resource, amount] of objectEntries<Resource, number>(materials)) {
       if (this._craftManager.getValueAvailable(resource, true) < amount) {

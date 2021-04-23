@@ -2,9 +2,8 @@ import { BuildButton, GameTab, Price, Resource, Season } from ".";
 
 export type TradingTab = GameTab & {
   racePanels: Array<{
-    race: {
-      name: string;
-    };
+    embassyButton: BuildButton;
+    race: RaceInfo;
     tradeBtn: BuildButton;
   }>;
 };

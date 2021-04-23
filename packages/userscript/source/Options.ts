@@ -8,25 +8,7 @@ import {
 } from "./types";
 
 export type Requirement =
-  | "antimatter"
-  | "bloodstone"
-  | "catnip"
-  | "coal"
-  | "culture"
-  | "eludium"
-  | "faith"
-  | "gold"
-  | "iron"
-  | "kerosene"
-  | "minerals"
-  | "oil"
-  | "science"
-  | "temporalFlux"
-  | "thorium"
-  | "titanium"
-  | "unobtainium"
-  | "uranium"
-  | "wood"
+  | Resource
   | false;
 
 export type FaithItem =
