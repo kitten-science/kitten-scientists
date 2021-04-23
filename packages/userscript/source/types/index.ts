@@ -6,6 +6,7 @@ export type Resource =
   | "bloodstone"
   | "blueprint"
   | "catnip"
+  | "coal"
   | "compedium"
   | "concrate"
   | "culture"
@@ -143,4 +144,5 @@ export type Challenge = "1000Years" | "anarchy" | "atheism" | "energy" | "winter
 export * from "./gamePage";
 export * from "./religion";
 export * from "./space";
+export * from "./time";
 export * from "./trading";

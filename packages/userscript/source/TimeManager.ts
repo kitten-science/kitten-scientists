@@ -1,7 +1,12 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
-import { BuildButton } from "./types";
+import {
+  AbstractTimeUpgradeInfo,
+  BuildButton,
+  ChronoForgeUpgrades,
+  VoidSpaceUpgrades,
+} from "./types";
 import { UserScript } from "./UserScript";
 
 export class TimeManager {
@@ -17,19 +22,24 @@ export class TimeManager {
     this._bulkManager = new BulkManager(this._host);
   }
 
-  build(name: string, variant: unknown, amount: number): void {
+  build(
+    name: ChronoForgeUpgrades | VoidSpaceUpgrades,
+    variant: "chrono" | "void",
+    amount: number
+  ): void {
     const build = this.getBuild(name, variant);
-    const button = this.getBuildButton(name, variant);
+    if (build === null) {
+      throw new Error(`Unable to build '${name}'. Build information not available.`);
+    }
 
+    const button = this.getBuildButton(name, variant);
     if (!button || !button.model.enabled) return;
 
     const amountTemp = amount;
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.warning(
-        label + " Amount ordered: " + amountTemp + " Amount Constructed: " + amount
-      );
+      this._host.warning(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
     }
     this._host.storeForSummary(label, amount, "build");
 
@@ -40,28 +50,40 @@ export class TimeManager {
     }
   }
 
-  getBuild(name: string, variant: unknown): unknown {
+  getBuild(
+    name: ChronoForgeUpgrades | VoidSpaceUpgrades,
+    variant: "chrono" | "void"
+  ): AbstractTimeUpgradeInfo | null {
     if (variant === "chrono") {
-      return this._host.gamePage.time.getCFU(name);
+      return this._host.gamePage.time.getCFU(name as ChronoForgeUpgrades) ?? null;
     } else {
-      return this._host.gamePage.time.getVSU(name);
+      return this._host.gamePage.time.getVSU(name as VoidSpaceUpgrades) ?? null;
     }
   }
 
-  getBuildButton(name: string, variant: unknown): BuildButton | null {
-    let buttons;
+  getBuildButton(
+    name: ChronoForgeUpgrades | VoidSpaceUpgrades,
+    variant: "chrono" | "void"
+  ): BuildButton | null {
+    let buttons: Array<BuildButton>;
     if (variant === "chrono") {
       buttons = this.manager.tab.children[2].children[0].children;
     } else {
       buttons = this.manager.tab.children[3].children[0].children;
     }
+
     const build = this.getBuild(name, variant);
-    for (const i in buttons) {
-      const haystack = buttons[i].model.name;
+    if (build === null) {
+      throw new Error(`Unable to retrieve build information for '${name}'`);
+    }
+
+    for (const button of buttons) {
+      const haystack = button.model.name;
       if (haystack.indexOf(build.label) !== -1) {
-        return buttons[i];
+        return button;
       }
     }
+
     return null;
   }
 }

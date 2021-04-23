@@ -17,6 +17,12 @@ import {
   ZiggurathUpgrades,
 } from ".";
 import { SpaceItem } from "../Options";
+import {
+  ChronoForgeUpgradeInfo,
+  ChronoForgeUpgrades,
+  VoidSpaceUpgradeInfo,
+  VoidSpaceUpgrades,
+} from "./time";
 
 export type GamePage = {
   bld: {
@@ -119,19 +125,19 @@ export type GamePage = {
     /**
      * Get religion upgrades.
      */
-    getRU: (name: ReligionUpgrades) => ReligionUpgradeInfo;
+    getRU: (name: ReligionUpgrades) => ReligionUpgradeInfo | undefined;
 
     getSolarRevolutionRatio: () => number;
 
     /**
      * Get transcendence upgrades.
      */
-    getTU: (name: TranscendenceUpgrades) => TranscendenceUpgradeInfo;
+    getTU: (name: TranscendenceUpgrades) => TranscendenceUpgradeInfo | undefined;
 
     /**
      * Get ziggurath upgrades.
      */
-    getZU: (name: ZiggurathUpgrades) => ZiggurathUpgradeInfo;
+    getZU: (name: ZiggurathUpgrades) => ZiggurathUpgradeInfo | undefined;
 
     praise: () => void;
 
@@ -205,8 +211,8 @@ export type GamePage = {
   };
   tabs: Array<GameTab>;
   time: {
-    getCFU: (name: string) => unknown;
-    getVSU: (name: "usedCryochambers") => { val: number };
+    getCFU: (name: ChronoForgeUpgrades) => ChronoForgeUpgradeInfo | undefined;
+    getVSU: (name: VoidSpaceUpgrades) => VoidSpaceUpgradeInfo | undefined;
     heat: number;
     isAccelerated: boolean;
   };
