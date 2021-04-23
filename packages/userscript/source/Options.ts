@@ -328,7 +328,8 @@ export type Options = {
        * property. For other buildings, the key of the item itself is used.
        */
       items: {
-        [item in BuildItem]: BuildItemOptions;
+        // unicornPasture is handled in the Religion section.
+        [item in Exclude<BuildItem, "unicornPasture">]: BuildItemOptions;
       };
     };
     space: {

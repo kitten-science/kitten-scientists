@@ -6,6 +6,7 @@ import {
   Challenge,
   GameTab,
   Jobs,
+  Panel,
   Price,
   Race,
   RaceInfo,
@@ -21,7 +22,7 @@ import {
 } from ".";
 import { DistributeItems, SpaceItem } from "../Options";
 import { ReligionTab } from "./religion";
-import { SpaceTab } from "./space";
+import { SpaceTab, SpaceUpgrades } from "./space";
 import {
   ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
@@ -228,7 +229,7 @@ export type GamePage = {
        * An internationalized label for this space building.
        */
       label: string;
-      name: string;
+      name: SpaceUpgrades;
       priceRatio: number;
       prices: Array<Price>;
       requiredTech: Array<"sattelites">;
@@ -267,10 +268,7 @@ export type GamePage = {
   timer: {
     ticksTotal: number;
   };
-  timeTab: {
-    cfPanel: BuildButton;
-    visible: boolean;
-  };
+  timeTab: TimeTab;
   unlock: (value: unknown) => void;
   upgrade: (value: unknown) => void;
   ui: {
