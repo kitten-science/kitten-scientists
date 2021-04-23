@@ -34,6 +34,8 @@ export type SpaceBuildingInfo = {
    * An internationalized label for this space building.
    */
   label: string;
+  name:SpaceUpgrades;
+  priceRatio:number;
   prices: Array<Price>;
 
   unlocked: boolean;
