@@ -1,5 +1,6 @@
 import { CraftManager } from "./CraftManager";
 import {
+  BuildItem,
   BuildItemOptions,
   FaithItem,
   SpaceItem,
@@ -12,6 +13,8 @@ import { mustExist } from "./tools/Maybe";
 import {
   AbstractReligionUpgradeInfo,
   AbstractTimeUpgradeInfo,
+  BuildButton,
+  BuildingExt,
   Resource,
   SpaceBuildingInfo,
 } from "./types";
@@ -29,14 +32,22 @@ export class BulkManager {
   bulk(
     builds: Partial<
       Record<
-        FaithItem | SpaceItem | TimeItem,
+        BuildItem | FaithItem | SpaceItem | TimeItem,
         BuildItemOptions | TimeItemOptions | UnicornFaithItemOptions
       >
     >,
     metaData: Partial<
       Record<
-        FaithItem | SpaceItem | TimeItem,
-        AbstractReligionUpgradeInfo | AbstractTimeUpgradeInfo | SpaceBuildingInfo
+        BuildItem | FaithItem | SpaceItem | TimeItem,
+        (
+          | AbstractReligionUpgradeInfo
+          | AbstractTimeUpgradeInfo
+          | BuildingExt["meta"]
+          | SpaceBuildingInfo
+        ) & {
+          rHidden?: boolean;
+          tHidden?: boolean;
+        }
       >
     >,
     trigger: number,
@@ -69,7 +80,8 @@ export class BulkManager {
       if (name === "ressourceRetrieval" && data.val >= 100) {
         continue;
       }
-      const prices = data.stages ? data.stages[data.stage].prices : data.prices;
+      const prices =
+        typeof data.stages !== "undefined" ? data.stages[data.stage].prices : data.prices;
       const priceRatio = this.getPriceRatio(data, source);
       if (!this.singleBuildPossible(data, prices, priceRatio, source)) {
         continue;
@@ -235,7 +247,7 @@ export class BulkManager {
     return bList;
   }
 
-  construct(model: { metadata: unknown }, button: unknown, amount: number): number {
+  construct(model: BuildButton["model"], button: BuildButton, amount: number): number {
     const meta = model.metadata;
     let counter = 0;
     if (typeof meta.limitBuild == "number" && meta.limitBuild - meta.val < amount) {

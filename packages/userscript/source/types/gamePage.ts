@@ -192,7 +192,17 @@ export type GamePage = {
   };
   science: {
     get: (name: "civil" | "cryptotheology" | "drama" | "nuclearFission") => { researched: boolean };
-    techs: unknown;
+    techs: Array<{
+      description: string;
+      effectDesdc: string;
+      flavor: string;
+      label: string;
+      name: string;
+      prices: Array<Price>;
+      researched: boolean;
+      unlocked: boolean;
+      unlocks: { upgrades: Array<unknown> };
+    }>;
   };
   space: {
     getBuilding: (
@@ -230,7 +240,7 @@ export type GamePage = {
       };
       val: number;
     };
-    meta: Array<{ meta: unknown }>;
+    meta: Array<{ meta: Array<{ label: string; name: string; unlocked: boolean; val: number }> }>;
   };
   tabs: [
     GameTab,
@@ -302,6 +312,15 @@ export type GamePage = {
     ) => { researched: boolean };
     getCraft: (name: string) => { name: string; unlocked: boolean } | undefined;
     getCraftPrice: (craft: unknown) => Array<Price>;
-    upgrades: unknown;
+    upgrades: Array<{
+      description: string;
+      effects: Record<string, number>;
+      label: string;
+      name: string;
+      prices: Array<Price>;
+      researched: boolean;
+      unlocked: boolean;
+      unlocks: { upgrades: Array<unknown> };
+    }>;
   };
 };
