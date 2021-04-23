@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-export type I18nEngine = (key: string) => string;
+export type I18nEngine = (key: string, args: Array<number | string>) => string;
 
 export type SupportedLanguages = keyof typeof i18nData;
 export const DefaultLanguage: SupportedLanguages = "en";
@@ -126,15 +126,15 @@ export class UserScript {
 
   imessage(
     key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<number | string>,
-    templateArgs: Array<string>
+    args: Array<number | string> = [],
+    ...templateArgs: Array<string>
   ): void {
     this._message(this.i18n(key, args), ...templateArgs);
   }
   iactivity(
     key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<number | string>,
-    templateArgs: Array<string>
+    args: Array<number | string> = [],
+    ...templateArgs: Array<string>
   ): void {
     this._activity(this.i18n(key, args), ...templateArgs);
   }

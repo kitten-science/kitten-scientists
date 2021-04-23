@@ -1,6 +1,8 @@
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
-import { BuildButton, Race } from "./types";
+import { objectEntries } from "./tools/Entries";
+import { isNil, Maybe } from "./tools/Maybe";
+import { BuildButton, Race, RaceInfo, Resource } from "./types";
 import { UserScript } from "./UserScript";
 
 export class TradeManager {
@@ -14,7 +16,7 @@ export class TradeManager {
     this._craftManager = new CraftManager(this._host);
   }
 
-  trade(name: string, amount: number): void {
+  trade(name: Race, amount: number): void {
     if (!name || 1 > amount) {
       this._host.warning(
         "KS trade checks are not functioning properly, please create an issue on the github page."
@@ -22,7 +24,6 @@ export class TradeManager {
     }
 
     const race = this.getRace(name);
-
     const button = this.getTradeButton(race.name);
 
     if (!button.model.enabled || !options.auto.trade.items[name].enabled) {
@@ -68,12 +69,17 @@ export class TradeManager {
     return cost <= profit;
   }
 
-  getAverageTrade(race: string): unknown {
+  getAverageTrade(
+    race: RaceInfo
+  ): {
+    blueprint: number;
+    spice: number;
+  } {
     // standingRatio
     // var standRat = this._host.gamePage.getEffect("standingRatio");
     const standRat =
       this._host.gamePage.getEffect("standingRatio") +
-      this._host.gamePage.diplomacy.calculateStandingFromPolicies(race.name, game);
+      this._host.gamePage.diplomacy.calculateStandingFromPolicies(race.name, this._host.gamePage);
     // standRat += (this._host.gamePage.prestige.getPerk("diplomacy").researched) ? 10 : 0;
     // raceRatio
     const rRatio = 1 + race.energy * 0.02;
@@ -82,7 +88,7 @@ export class TradeManager {
     const tRatio =
       1 +
       this._host.gamePage.diplomacy.getTradeRatio() +
-      this._host.gamePage.diplomacy.calculateTradeBonusFromPolicies(race.name, game);
+      this._host.gamePage.diplomacy.calculateTradeBonusFromPolicies(race.name, this._host.gamePage);
     // var successRat = (race.attitude === "hostile") ? Math.min(race.standing + standRat/100, 1) : 1;
     // var bonusRat = (race.attitude === "friendly") ? Math.min(race.standing + standRat/200, 1) : 0;
     // ref: var failedTradeAmount = race.standing < 0 ? this.this._host.gamePage.math.binominalRandomInteger(totalTradeAmount, -(race.standing + standingRatio)) : 0;
@@ -91,7 +97,7 @@ export class TradeManager {
     const successRat = failedRat < 0 ? 1 + failedRat : 1;
     const bonusRat = race.standing > 0 ? Math.min(race.standing + standRat / 2, 1) : 0;
 
-    const output = {};
+    const output: Partial<Record<Resource, number>> = {};
     for (const s in race.sells) {
       const item = race.sells[s];
       if (!this.isValidTrade(item, race)) {
@@ -127,7 +133,10 @@ export class TradeManager {
     return output;
   }
 
-  isValidTrade(item: string, race: string): unknown {
+  isValidTrade(
+    item: { minLevel: number; name: Resource },
+    race: { embassyLevel: number; name: "leviathans" | "titanium" | "uranium" }
+  ): unknown {
     return (
       !(item.minLevel && race.embassyLevel < item.minLevel) &&
       (this._host.gamePage.resPool.get(item.name).unlocked ||
@@ -137,38 +146,42 @@ export class TradeManager {
     );
   }
 
-  getLowestTradeAmount(name: string, limited: boolean, trigConditions: unknown): unknown {
-    let amount = undefined;
-    let highestCapacity = undefined;
+  getLowestTradeAmount(name: Race | null, limited: boolean, trigConditions: unknown): unknown {
+    let amount: number | undefined = undefined;
     const materials = this.getMaterials(name);
-    const race = this.getRace(name);
 
     let total;
-    for (const i in materials) {
-      if (i === "manpower") {
-        total = this._craftManager.getValueAvailable(i, true) / materials[i];
+    for (const [resource, required] of objectEntries<Resource, number>(materials)) {
+      if (resource === "manpower") {
+        total = this._craftManager.getValueAvailable(resource, true) / required;
       } else {
         total =
-          this._craftManager.getValueAvailable(i, limited, options.auto.trade.trigger) /
-          materials[i];
+          this._craftManager.getValueAvailable(
+            resource as Resource,
+            limited,
+            this._host.options.auto.trade.trigger
+          ) / required;
       }
 
       amount = amount === undefined || total < amount ? total : amount;
     }
 
-    amount = Math.floor(amount);
+    amount = Math.floor(amount ?? 0);
 
     if (amount === 0) {
       return 0;
     }
 
-    if (race === null || this._host.options.auto.trade.items[name].allowcapped) return amount;
+    if (name === null || this._host.options.auto.trade.items[name].allowcapped) return amount;
+
+    const race = this.getRace(name);
 
     // Loop through the items obtained by the race, and determine
     // which good has the most space left. Once we've determined this,
     // reduce the amount by this capacity. This ensures that we continue to trade
     // as long as at least one resource has capacity, and we never over-trade.
 
+    let highestCapacity = 0;
     const tradeOutput = this.getAverageTrade(race);
     for (const s in race.sells) {
       const item = race.sells[s];
@@ -205,15 +218,15 @@ export class TradeManager {
     return Math.floor(amount);
   }
 
-  getMaterials(name: string | undefined): { gold: number; manpower: number } {
-    const materials = {
+  getMaterials(race: Maybe<Race>): Partial<Record<Resource, number>> {
+    const materials: Partial<Record<Resource, number>> = {
       manpower: 50 - this._host.gamePage.getEffect("tradeCatpowerDiscount"),
       gold: 15 - this._host.gamePage.getEffect("tradeGoldDiscount"),
     };
 
-    if (name === undefined) return materials;
+    if (isNil(race)) return materials;
 
-    const prices = this.getRace(name).buys;
+    const prices = this.getRace(race).buys;
 
     for (const i in prices) {
       const price = prices[i];
@@ -224,23 +237,26 @@ export class TradeManager {
     return materials;
   }
 
-  getRace(name: Race): { buys: unknown } | null {
-    if (name === undefined) return null;
-    else return this._host.gamePage.diplomacy.get(name);
-  }
-
-  getTradeButton(race: string): BuildButton | void {
-    for (const i in this._manager.tab.racePanels) {
-      const panel = this._manager.tab.racePanels[i];
-
-      if (panel.race.name === race) return panel.tradeBtn;
+  getRace(name: Race): RaceInfo {
+    const raceInfo = this._host.gamePage.diplomacy.get(name);
+    if (isNil(raceInfo)) {
+      throw new Error(`Unable to retrieve race '${name}'`);
     }
+    return raceInfo;
   }
 
-  singleTradePossible(name: string | undefined): unknown {
+  getTradeButton(race: string): BuildButton {
+    const panel = this._manager.tab.racePanels.find(subject => subject.race.name === race);
+    if (isNil(panel)) {
+      throw new Error(`Unable to find trade button for '${race}'`);
+    }
+    return panel.tradeBtn;
+  }
+
+  singleTradePossible(name: Race): boolean {
     const materials = this.getMaterials(name);
-    for (const mat in materials) {
-      if (this._craftManager.getValueAvailable(mat, true) < materials[mat]) {
+    for (const [resource, amount] of objectEntries<Resource, number>(materials)) {
+      if (this._craftManager.getValueAvailable(resource, true) < amount) {
         return false;
       }
     }

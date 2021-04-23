@@ -1,5 +1,6 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
+import { UnicornItemVariant } from "./Options";
 import { TabManager } from "./TabManager";
 import { BuildButton } from "./types";
 import { UserScript } from "./UserScript";
@@ -17,7 +18,7 @@ export class ReligionManager {
     this._bulkManager = new BulkManager(this._host);
   }
 
-  build(name: string, variant: "c" | "s" | "z", amount: number): void {
+  build(name: string, variant: UnicornItemVariant, amount: number): void {
     const build = this.getBuild(name, variant);
     const button = this.getBuildButton(name, variant);
 
@@ -49,7 +50,7 @@ export class ReligionManager {
     }
   }
 
-  getBuild(name: string, variant: "c" | "s" | "z"): unknown {
+  getBuild(name: string, variant: UnicornItemVariant): unknown {
     switch (variant) {
       case "z":
         return this._host.gamePage.religion.getZU(name);
@@ -60,7 +61,7 @@ export class ReligionManager {
     }
   }
 
-  getBuildButton(name: string, variant: "c" | "s" | "z"): BuildButton | null {
+  getBuildButton(name: string, variant: UnicornItemVariant): BuildButton | null {
     let buttons;
     switch (variant) {
       case "z":

@@ -12,6 +12,7 @@ export type Resource =
   | "culture"
   | "eludium"
   | "gear"
+  | "gold"
   | "iron"
   | "kerosene"
   | "manpower"
@@ -27,7 +28,11 @@ export type Resource =
   | "slabs" // deprecated: Use `slab` instead
   | "steel"
   | "tanker"
+  | "temporalFlux"
   | "thorium"
+  | "timeCrystal"
+  | "titanium"
+  | "uranium"
   | "wood";
 
 export type TabId =
@@ -45,7 +50,10 @@ export type TabId =
  */
 export type BuildButton = {
   children: Array<BuildButton>;
-  controller: { sellInternal: (model: unknown, count: number) => void };
+  controller: {
+    doShatterAmt: (model: unknown, willSkip: boolean) => void; // Shatter TC button
+    sellInternal: (model: unknown, count: number) => void; // Sell button
+  };
   domNode: HTMLDivElement;
   id: string;
   model: {
@@ -59,6 +67,7 @@ export type BuildButton = {
 
 export type GameTab = {
   buttons: Array<BuildButton>;
+  censusPanel: BuildButton; // Probably village tab specific.
   children: Array<BuildButton>;
   planetPanels: Array<BuildButton>; // Probably space tab specific
   racePanels: Array<{
@@ -141,6 +150,18 @@ export type Race =
   | "sharks"
   | "spiders"
   | "zebras";
+export type RaceInfo = {
+  buys: Array<{ name: Resource; val: number }>;
+  embassyLevel: number;
+  embassyPrices: unknown;
+  energy: number;
+  name: Race;
+  sells: Array<{ chance: number; name: Resource; seasons: Record<string, number>; value: number }>;
+  standing: number;
+  unlocked: boolean;
+};
+
+export type Challenge = "1000Years" | "anarchy" | "atheism" | "energy" | "winterIsComing";
 
 export type GamePage = {
   bld: {
@@ -151,12 +172,18 @@ export type GamePage = {
     cycle: number;
     cycleEffectsFestival: (options: { catnip: number }) => { catnip: number };
     cycles: Array<{ festivalEffects: { unicorns: number } }>;
+    cyclesPerEra: number;
+    cycleYear: number;
+    day: number;
     festivalDays: unknown;
-    getCurSeason: () => { modifiers: { catnip: number } };
+    getCurSeason: () => { modifiers: { catnip: number }; name: string };
     getWeatherMod: () => number;
+    season: number;
+    yearsPerCycle: number;
   };
   challenges: {
-    currentChallenge: "anarchy" | "energy" | "winterIsComing";
+    currentChallenge: Challenge;
+    getChallenge: (challenge: Challenge) => { researched: number };
   };
   console: {
     maxMessages: number;
@@ -169,9 +196,12 @@ export type GamePage = {
      * @deprecated Use `buyBcoin` instead.
      */
     buyEcoin: () => void;
+    calculateStandingFromPolicies: (race: Race, host: GamePage) => number;
     feedElders: () => void;
-    get: (race: Race) => { buys: unknown; unlocked: boolean };
+    get: (race: Race) => RaceInfo;
     getMarkerCap: () => number;
+    calculateTradeBonusFromPolicies: (race: Race, host: GamePage) => number;
+    getTradeRatio: () => number;
     sellBcoin: () => void;
     /**
      * @deprecated Use `sellBcoin` instead.
@@ -189,11 +219,14 @@ export type GamePage = {
       | "catnipPerTickBase"
       | "corruptionBoostRatio"
       | "dataCenterAIRatio"
+      | "heatMax"
       | "hunterRatio"
       | "mapPriceReduction"
       | "oilReductionRatio"
       | "priceRatio"
       | "riftChance"
+      | "solarRevolutionLimit"
+      | "standingRatio"
       | "tradeCatpowerDiscount"
       | "tradeGoldDiscount"
       | "unicornsGlobalRatio"
@@ -206,6 +239,7 @@ export type GamePage = {
   getResourcePerTick: (name: string, value: boolean) => number;
   getResourcePerTickConvertion: (name: "catnip") => number;
   getTicksPerSecondUI: () => number;
+  getUnlimitedDR: (value0: number, value1: number) => number;
   ironWill: boolean;
   msg: (...args: Array<number | string>) => { span: HTMLElement };
   opts: {
@@ -218,6 +252,12 @@ export type GamePage = {
     meta: Array<{ meta: Array<{ researched: boolean }> }>;
   };
   religion: {
+    faith: number;
+    faithRatio: number;
+
+    getApocryphaBonus: () => number;
+    getFaithBonus: () => number;
+
     /**
      * Get religion upgrades.
      */
@@ -234,19 +274,31 @@ export type GamePage = {
      * Get ziggurath upgrades.
      */
     getZU: (name: string) => unknown;
+
+    transcendenceTier: number;
+
+    _resetFaithInternal: (value: number) => void;
   };
+  resetAutomatic: () => void;
   resPool: {
     get: (
       name: Resource
     ) =>
-      | { craftable: boolean; maxValue: number; name: string; title: string; value: number }
+      | {
+          craftable: boolean;
+          maxValue: number;
+          name: string;
+          title: string;
+          unlocked: boolean;
+          value: number;
+        }
       | undefined;
     energyCons: number;
     energyProd: number;
     resources: Array<{ value: number }>;
   };
   science: {
-    get: (name: "nuclearFission") => { researched: boolean };
+    get: (name: "civil" | "cryptotheology" | "nuclearFission") => { researched: boolean };
   };
   space: {
     getBuilding: (building: SpaceItems) => { label: string; unlocked: boolean; val: number };
@@ -256,9 +308,14 @@ export type GamePage = {
   time: {
     getCFU: (name: string) => unknown;
     getVSU: (name: "usedCryochambers") => { val: number };
+    heat: number;
+    isAccelerated: boolean;
   };
   timer: {
     ticksTotal: number;
+  };
+  timeTab: {
+    cfPanel: BuildButton;
   };
   unlock: (value: unknown) => void;
   upgrade: (value: unknown) => void;
@@ -276,6 +333,7 @@ export type GamePage = {
     getResProduction: () => { catnip: number };
     happiness: number;
     jobs: Array<{ name: string; unlocked: boolean; value: number }>;
+    leader: unknown;
     /**
      * @deprecated
      */
@@ -290,12 +348,14 @@ export type GamePage = {
       villageData: Record<string, unknown>;
     };
     sim: {
+      goldToPromote: (rank: number, value0: number, value1: number) => Array<unknown>;
       kittens: Array<unknown>;
+      promote: (leader: unknown, rank: number) => number;
     };
   };
   workshop: {
     get: (
-      technology: "cryocomputing" | "goldOre" | "machineLearning" | "uplink"
+      technology: "chronoforge" | "cryocomputing" | "goldOre" | "machineLearning" | "uplink"
     ) => { researched: boolean };
     getCraft: (name: string) => { name: string; unlocked: boolean } | undefined;
     getCraftPrice: (craft: unknown) => Array<{ name: Resource; val: number }>;
