@@ -1,8 +1,8 @@
-import { BuildButton, GameTab, Price } from ".";
+import { BuildButton, GameTab, Panel, Price } from ".";
 
 export type TimeTab = GameTab & {
-  cfPanel: BuildButton; // Chronoforge
-  vsPanel: BuildButton; // Void space
+  cfPanel: Panel; // Chronoforge
+  vsPanel: Panel; // Void space
 };
 
 export type ChronoForgeUpgrades =

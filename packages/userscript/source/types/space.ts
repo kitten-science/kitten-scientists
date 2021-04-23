@@ -1,8 +1,8 @@
-import { BuildButton, GameTab, Price } from ".";
+import { BuildButton, GameTab, Panel, Price } from ".";
 
 export type SpaceTab = GameTab & {
-  GCPanel: BuildButton;
-  planetPanels: Array<BuildButton>;
+  GCPanel: Panel;
+  planetPanels: Array<Panel>;
 };
 
 export type SpaceUpgrades =

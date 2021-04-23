@@ -76,6 +76,11 @@ export type Jobs =
  */
 export type Price = { name: Resource; val: number };
 
+export type Panel = {
+  children: Array<BuildButton>;
+  visible: boolean;
+};
+
 /**
  * Not necessarily a button, but a KG UI element.
  */

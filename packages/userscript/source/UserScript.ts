@@ -34,7 +34,19 @@ export type ActivitySummarySection =
 export type ActivitySectionBuild = "";
 export type ActivitySectionCraft = "";
 export type ActivitySectionFaith = "";
-export type ActivitySectionOther = "accelerate" | "adore" | "distribute" | "promote" | "transcend";
+export type ActivitySectionOther =
+  | "accelerate"
+  | "adore"
+  | "distribute"
+  | "embassy"
+  | "feed"
+  | "festival"
+  | "fix.cry"
+  | "hunt"
+  | "praise"
+  | "promote"
+  | "stars"
+  | "transcend";
 export type ActivitySectionResearch = "";
 export type ActivitySectionTrade = "";
 export type ActivitySummary = {
@@ -214,8 +226,7 @@ export class UserScript {
       | ActivitySectionFaith
       | ActivitySectionOther
       | ActivitySectionResearch
-      | ActivitySectionTrade
-      | string,
+      | ActivitySectionTrade,
     amount = 1,
     section: ActivitySummarySection = "other"
   ): void {
