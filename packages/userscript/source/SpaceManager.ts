@@ -2,12 +2,12 @@ import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { SpaceItem } from "./Options";
 import { TabManager } from "./TabManager";
-import { BuildButton } from "./types";
+import { BuildButton, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
 
 export class SpaceManager {
   private readonly _host: UserScript;
-  readonly manager: TabManager;
+  readonly manager: TabManager<SpaceTab>;
   private readonly _crafts: CraftManager;
   private readonly _bulkManager: BulkManager;
 
@@ -27,15 +27,15 @@ export class SpaceManager {
       !button ||
       !button.model.enabled ||
       !this._host.options.auto.space.items[name].enabled
-    )
+    ) {
       return;
+    }
+    
     const amountTemp = amount;
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.warning(
-        label + " Amount ordered: " + amountTemp + " Amount Constructed: " + amount
-      );
+      this._host.warning(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
     }
     this._host.storeForSummary(label, amount, "build");
 

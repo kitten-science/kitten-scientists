@@ -72,8 +72,6 @@ export type GameTab = {
   censusPanel?: BuildButton; // Probably village tab specific.
   cfPanel?: BuildButton; // Chronoforge?
   children: Array<BuildButton>;
-  GCPanel?: BuildButton; // Something in space
-  planetPanels?: Array<BuildButton>; // Probably space tab specific
   racePanels?: Array<{
     race: {
       name: string;
@@ -168,3 +166,4 @@ export type Challenge = "1000Years" | "anarchy" | "atheism" | "energy" | "winter
 
 export * from "./gamePage";
 export * from "./religion";
+export * from "./space";
