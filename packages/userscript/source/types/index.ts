@@ -62,7 +62,7 @@ export type Price = { name: Resource; val: number };
 /**
  * Not necessarily a button, but a KG UI element.
  */
-export type BuildButton = {
+export type BuildButton<T = string> = {
   children: Array<BuildButton>;
   controller: {
     _transform: (model: unknown, value: unknown) => void;
@@ -70,7 +70,7 @@ export type BuildButton = {
     sellInternal: (model: unknown, count: number) => void; // Sell button
   };
   domNode: HTMLDivElement;
-  id: string;
+  id: T;
   model: {
     enabled: boolean;
     metadata: { name: string };
@@ -102,6 +102,7 @@ export type Building =
   | "aqueduct"
   | "barn"
   | "biolab"
+  | "blackPyramid"
   | "brewery"
   | "broadcastTower"
   | "calciner"
@@ -113,11 +114,14 @@ export type Building =
   | "harbor"
   | "hut"
   | "hydroPlant"
+  | "ivoryCitadel"
+  | "ivoryTower"
   | "library"
   | "logHouse"
   | "lumberMill"
   | "magneto"
   | "mansion"
+  | "marker"
   | "mine"
   | "mint"
   | "observatory"
@@ -125,12 +129,18 @@ export type Building =
   | "pasture"
   | "quarry"
   | "reactor"
+  | "skyPalace"
   | "smelter"
   | "solarFarm"
   | "steamworks"
+  | "sunspire"
   | "temple"
   | "tradepost"
+  | "unicornGraveyard"
+  | "unicornNecropolis"
   | "unicornPasture"
+  | "unicornTomb"
+  | "unicornUtopia"
   | "warehouse"
   | "workshop"
   | "zebraForge"
