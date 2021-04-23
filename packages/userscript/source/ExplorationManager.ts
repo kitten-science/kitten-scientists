@@ -28,13 +28,13 @@ export class ExplorationManager {
     this._host.gamePage.village.map.explore(x, y);
   }
 
-  getCheapestNode() {
+  getCheapestNode(): void {
     const tileArray = this._host.gamePage.village.map.villageData;
     let tileKey = "";
 
     this._currentCheapestNode = null;
 
-    for (let tileIndex in tileArray) {
+    for (const tileIndex in tileArray) {
       tileKey = tileIndex;
 
       // Discards locked nodes

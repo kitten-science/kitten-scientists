@@ -1,5 +1,6 @@
 import { CacheManager } from "./CacheManager";
-import { isNil } from "./tools/Maybe";
+import { objectEntries } from "./tools/Entries";
+import { isNil, mustExist } from "./tools/Maybe";
 import { Resource } from "./types";
 import { UserScript } from "./UserScript";
 
@@ -23,10 +24,10 @@ export class CraftManager {
 
     this._host.gamePage.craft(craft.name, amount);
 
-    const iname = this._host.gamePage.resPool.get(name).title;
+    const iname = mustExist(this._host.gamePage.resPool.get(name)).title;
 
     // determine actual amount after crafting upgrades
-    amount = (amount * (1 + ratio)).toFixed(2);
+    amount = parseFloat((amount * (1 + ratio)).toFixed(2));
 
     this._host.storeForSummary(iname, amount, "craft");
     this._host.iactivity(
@@ -38,7 +39,7 @@ export class CraftManager {
 
   canCraft(name: Resource, amount: number): boolean {
     const craft = this.getCraft(name);
-    const enabled = this._host.options.auto.craft.items[name].enabled;
+    const enabled = mustExist(this._host.options.auto.craft.items[name]).enabled;
     let result = false;
 
     if (craft.unlocked && enabled) {
@@ -68,8 +69,8 @@ export class CraftManager {
 
   singleCraftPossible(name: string): boolean {
     const materials = this.getMaterials(name);
-    for (const mat in materials) {
-      if (this.getValueAvailable(mat, true) < materials[mat]) {
+    for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
+      if (this.getValueAvailable(mat, true) < amount) {
         return false;
       }
     }
@@ -77,7 +78,7 @@ export class CraftManager {
   }
 
   getLowestCraftAmount(
-    name: string,
+    name: Resource,
     limited: boolean,
     limRat: number,
     aboveTrigger: boolean
@@ -125,7 +126,7 @@ export class CraftManager {
 
     const res = this.getResource(name);
 
-    for (const i in materials) {
+    for (const [i, materialAmount] of objectEntries<Resource, number>(materials)) {
       let delta = undefined;
       if (
         !limited ||
@@ -133,7 +134,7 @@ export class CraftManager {
         (name === "ship" && optionVal && this.getResource("ship").value < 243)
       ) {
         // If there is a storage limit, we can just use everything returned by getValueAvailable, since the regulation happens there
-        delta = this.getValueAvailable(i) / materials[i];
+        delta = this.getValueAvailable(i) / materialAmount;
       } else {
         // Take the currently present amount of material to craft into account
         // Currently this determines the amount of resources that can be crafted such that base materials are proportionally distributed across limited resources.
@@ -142,8 +143,8 @@ export class CraftManager {
         delta =
           limRat *
             ((this.getValueAvailable(i, true) +
-              (materials[i] / (1 + ratio)) * this.getValueAvailable(res.name, true)) /
-              materials[i]) -
+              (materialAmount / (1 + ratio)) * this.getValueAvailable(res.name, true)) /
+              materialAmount) -
           this.getValueAvailable(res.name, true) / (1 + ratio);
       }
 
@@ -159,8 +160,8 @@ export class CraftManager {
     return Math.floor(amount);
   }
 
-  getMaterials(name: string): Record<string, number> {
-    const materials: Record<string, number> = {};
+  getMaterials(name: string): Partial<Record<Resource, number>> {
+    const materials: Partial<Record<Resource, number>> = {};
     const craft = this.getCraft(name);
 
     const prices = this._host.gamePage.workshop.getCraftPrice(craft);
@@ -182,10 +183,11 @@ export class CraftManager {
     if (res.craftable) {
       let minProd = Number.MAX_VALUE;
       const materials = this.getMaterials(res.name);
-      for (const mat in materials) {
-        const rat = (1 + this._host.gamePage.getResCraftRatio(res.name)) / materials[mat];
+      for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
+        const rat = (1 + this._host.gamePage.getResCraftRatio(res.name)) / amount;
         //Currently preTrade is only true for the festival stuff, so including furs from hunting is ideal.
         const addProd = this.getTickVal(this.getResource(mat));
+        if (addProd === "ignore") continue;
         minProd = Math.min(addProd * rat, minProd);
       }
       prod += minProd !== Number.MAX_VALUE ? minProd : 0;
@@ -199,8 +201,8 @@ export class CraftManager {
     return prod;
   }
 
-  getAverageHunt(): unknown {
-    const output = {};
+  getAverageHunt(): Partial<Record<Resource, number>> {
+    const output: Partial<Record<Resource, number>> = {};
     const hunterRatio =
       this._host.gamePage.getEffect("hunterRatio") +
       this._host.gamePage.village.getEffectLeader("manager", 0);
@@ -226,7 +228,7 @@ export class CraftManager {
 
   getResource(
     name: Resource
-  ): { craftable: boolean; maxValue: number; name: string; title: string; value: number } {
+  ): { craftable: boolean; maxValue: number; name: Resource; title: string; value: number } {
     if (name === "slabs") {
       name = "slab";
     }

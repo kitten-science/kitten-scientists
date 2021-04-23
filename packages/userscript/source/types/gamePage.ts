@@ -158,7 +158,7 @@ export type GamePage = {
       | {
           craftable: boolean;
           maxValue: number;
-          name: string;
+          name: Resource;
           title: string;
           unlocked: boolean;
           value: number;
