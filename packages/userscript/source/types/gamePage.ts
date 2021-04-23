@@ -26,6 +26,7 @@ import {
   VoidSpaceUpgrades,
 } from "./time";
 import { TradingTab } from "./trading";
+import { VillageTab } from "./village";
 
 export type GamePage = {
   bld: {
@@ -44,7 +45,7 @@ export type GamePage = {
     getCurSeason: () => { modifiers: { catnip: number }; name: Season };
     getWeatherMod: () => number;
     observeBtn: BuildButton | null;
-    observeHandler:()=>void;
+    observeHandler: () => void;
     season: number;
     year: number;
     yearsPerCycle: number;
@@ -180,6 +181,7 @@ export type GamePage = {
       value: number;
       visible: boolean;
     }>;
+    hasRes: (resources: Array<Price>) => boolean;
   };
   science: {
     get: (name: "civil" | "cryptotheology" | "drama" | "nuclearFission") => { researched: boolean };
@@ -272,6 +274,7 @@ export type GamePage = {
       promote: (leader: unknown, rank: number) => number;
     };
   };
+  villageTab: VillageTab;
   workshop: {
     get: (
       technology: "chronoforge" | "cryocomputing" | "goldOre" | "machineLearning" | "uplink"

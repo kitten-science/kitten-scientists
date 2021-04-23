@@ -26,6 +26,8 @@ export type AbstractTimeUpgradeInfo = {
    * An internationalized label for this time upgrade.
    */
   label: string;
+
+  val: number;
 };
 
 export type ChronoForgeUpgradeInfo = AbstractTimeUpgradeInfo & {
