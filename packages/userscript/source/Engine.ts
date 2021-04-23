@@ -3,14 +3,28 @@ import { BulkManager } from "./BulkManager";
 import { CacheManager } from "./CacheManager";
 import { CraftManager } from "./CraftManager";
 import { ExplorationManager } from "./ExplorationManager";
-import { BuildItemOptions, BuildItem, FaithItem, UnicornFaithItemOptions } from "./Options";
+import {
+  BuildItem,
+  BuildItemOptions,
+  FaithItem,
+  SpaceItem,
+  UnicornFaithItemOptions,
+} from "./Options";
 import { ReligionManager } from "./ReligionManager";
 import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
 import { TimeManager } from "./TimeManager";
 import { objectEntries } from "./tools/Entries";
+import { mustExist } from "./tools/Maybe";
 import { TradeManager } from "./TradeManager";
-import { BuildButton, Building } from "./types";
+import {
+  AbstractReligionUpgradeInfo,
+  BuildButton,
+  Building,
+  BuildingExt,
+  SpaceBuildingInfo,
+  UnicornItemVariant,
+} from "./types";
 import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 
@@ -126,8 +140,8 @@ export class Engine {
     if (this._host.gamePage.challenges.currentChallenge) return;
 
     const checkedList = [];
-    const checkList:Array<string> = [];
-    const check = function (buttons:Array<BuildButton>) {
+    const checkList: Array<string> = [];
+    const check = function (buttons: Array<BuildButton>) {
       if (checkList.length != 0) {
         for (const i in buttons) {
           if (!buttons[i].model.metadata) continue;
@@ -746,15 +760,20 @@ export class Engine {
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     buildManager.manager.render();
 
-    const metaData = {};
+    const metaData: Partial<Record<FaithItem, AbstractReligionUpgradeInfo>> = {};
     for (const [name, build] of objectEntries<FaithItem, UnicornFaithItemOptions>(builds)) {
-      metaData[name] = buildManager.getBuild(name, build.variant);
+      const buildInfo = buildManager.getBuild(name, build.variant);
+      if (buildInfo === null) {
+        continue;
+      }
+      metaData[name] = buildInfo;
+
       if (!buildManager.getBuildButton(name, build.variant)) {
         metaData[name].rHidden = true;
       } else {
-        const model = buildManager.getBuildButton(name, build.variant).model;
+        const model = mustExist(buildManager.getBuildButton(name, build.variant)).model;
         const panel =
-          build.variant === "c"
+          build.variant === UnicornItemVariant.Cryptotheology
             ? this._host.gamePage.science.get("cryptotheology").researched
             : true;
         metaData[name].rHidden = !(model.visible && model.enabled && panel);
@@ -790,15 +809,14 @@ export class Engine {
     buildManager.manager.render();
 
     const metaData = {};
-    for (const name in builds) {
-      const build = builds[name];
+    for (const [name, build] of objectEntries(builds)) {
       metaData[name] = buildManager.getBuild(name, build.variant);
-      const model = buildManager.getBuildButton(name, build.variant).model;
+      const model = mustExist(buildManager.getBuildButton(name, build.variant)).model;
       const panel =
         build.variant === "chrono"
           ? buildManager.manager.tab.cfPanel
           : buildManager.manager.tab.vsPanel;
-      metaData[name].tHidden = !model.visible || !model.enabled || !panel.visible;
+      metaData[name].tHidden = !model.visible || !model.enabled || !panel?.visible;
     }
 
     const buildList = bulkManager.bulk(builds, metaData, trigger);
@@ -1110,9 +1128,7 @@ export class Engine {
     }
   }
 
-  build(
-    builds: Record<BuildItem, BuildItemOptions> = this._host.options.auto.build.items
-  ): void {
+  build(builds: Record<BuildItem, BuildItemOptions> = this._host.options.auto.build.items): void {
     const buildManager = this._buildManager;
     const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;
@@ -1121,8 +1137,8 @@ export class Engine {
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     buildManager.manager.render();
 
-    const metaData = {};
-    for (const [name, build] of Object.entries(builds)) {
+    const metaData: Partial<Record<BuildItem, BuildingExt["meta"]>> = {};
+    for (const [name, build] of objectEntries(builds)) {
       metaData[name] = buildManager.getBuild(build.name || (name as Building)).meta;
     }
 
@@ -1154,9 +1170,8 @@ export class Engine {
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     buildManager.manager.render();
 
-    const metaData = {};
-    for (const name in builds) {
-      const build = builds[name];
+    const metaData: Partial<Record<SpaceItem, SpaceBuildingInfo>> = {};
+    for (const [name, build] of objectEntries(builds)) {
       metaData[name] = buildManager.getBuild(name);
     }
 
@@ -1273,7 +1288,7 @@ export class Engine {
       this._host.storeForSummary("hunt", huntCount);
       this._host.iactivity("act.hunt", [huntCount], "ks-hunt");
 
-       huntCount = Math.floor(manpower.value / 100);
+      huntCount = Math.floor(manpower.value / 100);
       const aveOutput = this._craftManager.getAverageHunt();
       const trueOutput = {};
 

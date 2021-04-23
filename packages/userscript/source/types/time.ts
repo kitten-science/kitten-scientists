@@ -1,4 +1,4 @@
-import { Resource } from ".";
+import { Price } from ".";
 
 export type ChronoForgeUpgrades =
   | "blastFurnace"
@@ -35,7 +35,7 @@ export type ChronoForgeUpgradeInfo = AbstractTimeUpgradeInfo & {
 
   name: ChronoForgeUpgrades;
   priceRatio: number;
-  prices: Array<{ name: Resource; val: number }>;
+  prices: Array<Price>;
   unlocked: boolean;
 };
 
@@ -54,7 +54,7 @@ export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
   limitBuild: 0;
   name: VoidSpaceUpgrades;
   priceRatio: number;
-  prices: Array<{ name: Resource; val: number }>;
+  prices: Array<Price>;
   unlocked: boolean;
   upgrades: {
     voidSpace: Array<"cryochambers">;

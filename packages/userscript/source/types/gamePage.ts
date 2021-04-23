@@ -4,6 +4,7 @@ import {
   BuildingExt,
   Challenge,
   GameTab,
+  Price,
   Race,
   RaceInfo,
   ReligionUpgradeInfo,
@@ -166,7 +167,14 @@ export type GamePage = {
       | undefined;
     energyCons: number;
     energyProd: number;
-    resources: Array<{ value: number }>;
+    resources: Array<{
+      craftable: boolean;
+      name: Resource;
+      title: string;
+      type: "common" | "uncommon";
+      value: number;
+      visible: boolean;
+    }>;
   };
   science: {
     get: (name: "civil" | "cryptotheology" | "drama" | "nuclearFission") => { researched: boolean };
@@ -194,7 +202,7 @@ export type GamePage = {
       label: string;
       name: string;
       priceRatio: number;
-      prices: Array<{ name: Resource; val: number }>;
+      prices: Array<Price>;
       requiredTech: Array<"sattelites">;
       unlocked: boolean;
       unlocks: { policies: Array<"militarizeSpace" | "outerSpaceTreaty"> };
@@ -263,6 +271,6 @@ export type GamePage = {
       technology: "chronoforge" | "cryocomputing" | "goldOre" | "machineLearning" | "uplink"
     ) => { researched: boolean };
     getCraft: (name: string) => { name: string; unlocked: boolean } | undefined;
-    getCraftPrice: (craft: unknown) => Array<{ name: Resource; val: number }>;
+    getCraftPrice: (craft: unknown) => Array<Price>;
   };
 };

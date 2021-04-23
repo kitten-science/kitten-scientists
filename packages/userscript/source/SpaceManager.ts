@@ -2,7 +2,7 @@ import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { SpaceItem } from "./Options";
 import { TabManager } from "./TabManager";
-import { BuildButton, SpaceTab } from "./types";
+import { BuildButton, SpaceBuildingInfo, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
 
 export class SpaceManager {
@@ -30,7 +30,7 @@ export class SpaceManager {
     ) {
       return;
     }
-    
+
     const amountTemp = amount;
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
@@ -46,7 +46,7 @@ export class SpaceManager {
     }
   }
 
-  getBuild(name: SpaceItem): { label: string; unlocked: boolean; val: number } {
+  getBuild(name: SpaceItem): SpaceBuildingInfo {
     return this._host.gamePage.space.getBuilding(name);
   }
 

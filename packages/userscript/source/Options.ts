@@ -1,4 +1,11 @@
-import { Building, Resource, ChronoForgeUpgrades, UnicornItemVariant, VoidSpaceUpgrades } from "./types";
+import {
+  Building,
+  ChronoForgeUpgrades,
+  Resource,
+  SpaceUpgrades,
+  UnicornItemVariant,
+  VoidSpaceUpgrades,
+} from "./types";
 
 export type Requirement =
   | "antimatter"
@@ -112,29 +119,7 @@ export type BuildItemOptions = {
   triggerForReset: number;
 };
 
-export type SpaceItem =
-  | "containmentChamber"
-  | "cryostation"
-  | "entangler"
-  | "heatsink"
-  | "hrHarvester"
-  | "hydrofracturer"
-  | "hydroponics"
-  | "moltenCore"
-  | "moonBase"
-  | "moonOutpost"
-  | "orbitalArray"
-  | "planetCracker"
-  | "researchVessel"
-  | "sattelite"
-  | "spaceBeacon"
-  | "spaceElevator"
-  | "spaceStation"
-  | "spiceRefinery"
-  | "sunforge"
-  | "sunlifter"
-  | "tectonic"
-  | "terraformingStation";
+export type SpaceItem = SpaceUpgrades;
 
 export enum TimeItemVariant {
   Unknown_chrone = "chrono",
@@ -167,7 +152,13 @@ export type TradeItemOptions = {
   spring: boolean;
 };
 
-export type TimeItem = ChronoForgeUpgrades | VoidSpaceUpgrades;
+/**
+ * The upgrades on the Time tab that we have options for.
+ */
+export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCryochambers">;
+/**
+ * Options for an automation of the Time tab.
+ */
 export type OptionsItemOptions = {
   enabled: boolean;
   misc: boolean;
