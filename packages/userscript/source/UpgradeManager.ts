@@ -21,7 +21,7 @@ export class UpgradeManager {
     this._bulkManager = new BulkManager(this._host);
   }
 
-  build(name: string, variant: unknown): void {
+  build(upgrade: { label: string }, variant: "science" | "workshop"): void {
     const button = this.getBuildButton(upgrade, variant);
 
     if (!button || !button.model.enabled) return;
@@ -39,13 +39,16 @@ export class UpgradeManager {
     }
   }
 
-  getBuildButton(name: string, variant: unknown): BuildButton | null {
+  getBuildButton(upgrade: { label: string }, variant: "science" | "workshop"): BuildButton | null {
     let buttons;
     if (variant === "workshop") {
-      buttons = this.workManager.tab.buttons;
+      buttons = this._workManager.tab.buttons;
     } else if (variant === "science") {
-      buttons = this.sciManager.tab.buttons;
+      buttons = this._sciManager.tab.buttons;
+    } else {
+      throw new Error(`Unexpected variant '${variant}'`);
     }
+    
     for (const i in buttons) {
       const haystack = buttons[i].model.name;
       if (haystack === upgrade.label) {

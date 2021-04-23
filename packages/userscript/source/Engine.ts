@@ -3,11 +3,13 @@ import { BulkManager } from "./BulkManager";
 import { CacheManager } from "./CacheManager";
 import { CraftManager } from "./CraftManager";
 import { ExplorationManager } from "./ExplorationManager";
+import { BuildItemOptions, BuildMenuOption } from "./Options";
 import { ReligionManager } from "./ReligionManager";
 import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
 import { TimeManager } from "./TimeManager";
 import { TradeManager } from "./TradeManager";
+import { Building } from "./types";
 import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 
@@ -476,7 +478,11 @@ export class Engine {
     if (jobName) {
       this._host.gamePage.village.assignJob(this._host.gamePage.village.getJob(jobName), 1);
       this._villageManager.render();
-      this._host.iactivity("act.distribute", [this._host.i18n("$village.job." + jobName)], "ks-distribute");
+      this._host.iactivity(
+        "act.distribute",
+        [this._host.i18n("$village.job." + jobName)],
+        "ks-distribute"
+      );
       storeForSummary("distribute", 1);
     }
   }
@@ -605,7 +611,9 @@ export class Engine {
         {},
         builds,
         Object.fromEntries(
-          Object.entries(this._host.options.auto.unicorn.items).filter(([k, v]) => v.variant != "zp")
+          Object.entries(this._host.options.auto.unicorn.items).filter(
+            ([k, v]) => v.variant != "zp"
+          )
         )
       );
       if (this._host.options.auto.unicorn.items.unicornPasture.enabled)
@@ -653,7 +661,9 @@ export class Engine {
           const blackObelisk = this._host.gamePage.religion.getTU("blackObelisk");
           blackObelisk.calculateEffects(blackObelisk, game);
           this._host.gamePage.msg(
-            this._host.i18nEngine("religion.transcend.msg.success", [this._host.gamePage.religion.transcendenceTier])
+            this._host.i18nEngine("religion.transcend.msg.success", [
+              this._host.gamePage.religion.transcendenceTier,
+            ])
           );
           // ========================================================================================================
           // DO TRANSCEND END
@@ -858,8 +868,8 @@ export class Engine {
         }
 
         const model = this._spaceManager.manager.tab.GCPanel.children[i];
-        var prices = model.model.prices;
-        for (var resource in prices) {
+        const prices = model.model.prices;
+        for (const resource in prices) {
           if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
             continue missionLoop;
           }
@@ -991,10 +1001,10 @@ export class Engine {
       if (pastureMeta.stage === 0) {
         if (pastureMeta.stages[1].stageUnlocked) {
           if (craftManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
-            var prices = pastureMeta.stages[1].prices;
-            var priceRatio = bulkManager.getPriceRatio(pastureMeta, true);
+            const prices = pastureMeta.stages[1].prices;
+            const priceRatio = bulkManager.getPriceRatio(pastureMeta, true);
             if (bulkManager.singleBuildPossible(pastureMeta, prices, 1)) {
-              var button = buildManager.getBuildButton("pasture", 0);
+              const button = buildManager.getBuildButton("pasture", 0);
               button.controller.sellInternal(button.model, 0);
               pastureMeta.on = 0;
               pastureMeta.val = 0;
@@ -1013,15 +1023,15 @@ export class Engine {
       if (aqueductMeta.stage === 0) {
         if (aqueductMeta.stages[1].stageUnlocked) {
           if (craftManager.getPotentialCatnip(true, pastures, 0) > 0) {
-            var prices = aqueductMeta.stages[1].prices;
-            var priceRatio = bulkManager.getPriceRatio(aqueductMeta, true);
+            const prices = aqueductMeta.stages[1].prices;
+            const priceRatio = bulkManager.getPriceRatio(aqueductMeta, true);
             if (bulkManager.singleBuildPossible(aqueductMeta, prices, 1)) {
-              var button = buildManager.getBuildButton("aqueduct", 0);
+              const button = buildManager.getBuildButton("aqueduct", 0);
               button.controller.sellInternal(button.model, 0);
               aqueductMeta.on = 0;
               aqueductMeta.val = 0;
               aqueductMeta.stage = 1;
-              aqueductMeta.calculateEffects(aqueductMeta, game);
+              aqueductMeta.calculateEffects(aqueductMeta, this._host.gamePage);
               this._host.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
               this._host.gamePage.ui.render();
               buildManager.build("aqueduct", 1, 1);
@@ -1056,10 +1066,10 @@ export class Engine {
             this._host.gamePage.resPool.energyProd >=
             this._host.gamePage.resPool.energyCons + (enCon * libraryMeta.val) / libToDat
           ) {
-            var prices = libraryMeta.stages[1].prices;
-            var priceRatio = bulkManager.getPriceRatio(libraryMeta, true);
+            const prices = libraryMeta.stages[1].prices;
+            const priceRatio = bulkManager.getPriceRatio(libraryMeta, true);
             if (bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
-              var button = buildManager.getBuildButton("library", 0);
+              const button = buildManager.getBuildButton("library", 0);
               button.controller.sellInternal(button.model, 0);
               libraryMeta.on = 0;
               libraryMeta.val = 0;
@@ -1078,10 +1088,10 @@ export class Engine {
       const amphitheatreMeta = this._host.gamePage.bld.getBuildingExt("amphitheatre").meta;
       if (amphitheatreMeta.stage === 0) {
         if (amphitheatreMeta.stages[1].stageUnlocked) {
-          var prices = amphitheatreMeta.stages[1].prices;
-          var priceRatio = bulkManager.getPriceRatio(amphitheatreMeta, true);
+          const prices = amphitheatreMeta.stages[1].prices;
+          const priceRatio = bulkManager.getPriceRatio(amphitheatreMeta, true);
           if (bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
-            var button = buildManager.getBuildButton("amphitheatre", 0);
+            const button = buildManager.getBuildButton("amphitheatre", 0);
             button.controller.sellInternal(button.model, 0);
             amphitheatreMeta.on = 0;
             amphitheatreMeta.val = 0;
@@ -1097,8 +1107,7 @@ export class Engine {
     }
   }
 
-  build(builds: unknown): void {
-    var builds = builds || this._host.options.auto.build.items;
+  build(builds: Record<BuildMenuOption, BuildItemOptions> = this._host.options.auto.build.items): void {
     const buildManager = this._buildManager;
     const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;
@@ -1108,9 +1117,8 @@ export class Engine {
     buildManager.manager.render();
 
     const metaData = {};
-    for (const name in builds) {
-      const build = builds[name];
-      metaData[name] = buildManager.getBuild(build.name || name).meta;
+    for (const [name, build] of Object.entries(builds)) {
+      metaData[name] = buildManager.getBuild(build.name || name as Building).meta;
     }
 
     const buildList = bulkManager.bulk(builds, metaData, trigger, "bonfire");
@@ -1497,7 +1505,9 @@ export class Engine {
           }
           var cultureVal = craftManager.getValueAvailable("culture", true);
           if (emBulk.priceSum > cultureVal) {
-            this._host.warning("Something has gone horribly wrong." + [emBulk.priceSum, cultureVal]);
+            this._host.warning(
+              "Something has gone horribly wrong." + [emBulk.priceSum, cultureVal]
+            );
           }
           this._host.gamePage.resPool.resources[13].value -= emBulk.priceSum;
           emBulk.race.embassyLevel += emBulk.val;

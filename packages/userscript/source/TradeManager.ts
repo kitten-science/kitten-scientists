@@ -1,5 +1,6 @@
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
+import { BuildButton, Race } from "./types";
 import { UserScript } from "./UserScript";
 
 export class TradeManager {
@@ -71,8 +72,8 @@ export class TradeManager {
     // standingRatio
     // var standRat = this._host.gamePage.getEffect("standingRatio");
     const standRat =
-    this._host.gamePage.getEffect("standingRatio") +
-    this._host.gamePage.diplomacy.calculateStandingFromPolicies(race.name, game);
+      this._host.gamePage.getEffect("standingRatio") +
+      this._host.gamePage.diplomacy.calculateStandingFromPolicies(race.name, game);
     // standRat += (this._host.gamePage.prestige.getPerk("diplomacy").researched) ? 10 : 0;
     // raceRatio
     const rRatio = 1 + race.energy * 0.02;
@@ -107,7 +108,9 @@ export class TradeManager {
         const titanRat = 1 + shipCount / 50;
         mean = 1.5 * titanRat * (successRat * titanProb);
       } else {
-        const sRatio = !item.seasons ? 1 : 1 + item.seasons[this._host.gamePage.calendar.getCurSeason().name];
+        const sRatio = !item.seasons
+          ? 1
+          : 1 + item.seasons[this._host.gamePage.calendar.getCurSeason().name];
         const normBought = (successRat - bonusRat) * Math.min(tradeChance / 100, 1);
         const normBonus = bonusRat * Math.min(tradeChance / 100, 1);
         mean = (normBought + 1.25 * normBonus) * item.value * rRatio * sRatio * tRatio;
@@ -143,9 +146,9 @@ export class TradeManager {
     let total;
     for (const i in materials) {
       if (i === "manpower") {
-         total = this._craftManager.getValueAvailable(i, true) / materials[i];
+        total = this._craftManager.getValueAvailable(i, true) / materials[i];
       } else {
-         total =
+        total =
           this._craftManager.getValueAvailable(i, limited, options.auto.trade.trigger) /
           materials[i];
       }
@@ -202,7 +205,7 @@ export class TradeManager {
     return Math.floor(amount);
   }
 
-  getMaterials(name: string): unknown {
+  getMaterials(name: string | undefined): { gold: number; manpower: number } {
     const materials = {
       manpower: 50 - this._host.gamePage.getEffect("tradeCatpowerDiscount"),
       gold: 15 - this._host.gamePage.getEffect("tradeGoldDiscount"),
@@ -221,12 +224,12 @@ export class TradeManager {
     return materials;
   }
 
-  getRace(name: string): unknown {
+  getRace(name: Race): { buys: unknown } | null {
     if (name === undefined) return null;
     else return this._host.gamePage.diplomacy.get(name);
   }
 
-  getTradeButton(race: string): unknown {
+  getTradeButton(race: string): BuildButton | void {
     for (const i in this._manager.tab.racePanels) {
       const panel = this._manager.tab.racePanels[i];
 
@@ -234,7 +237,7 @@ export class TradeManager {
     }
   }
 
-  singleTradePossible(race: string): unknown {
+  singleTradePossible(name: string | undefined): unknown {
     const materials = this.getMaterials(name);
     for (const mat in materials) {
       if (this._craftManager.getValueAvailable(mat, true) < materials[mat]) {

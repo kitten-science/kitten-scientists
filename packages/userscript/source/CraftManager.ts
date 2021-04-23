@@ -1,6 +1,6 @@
 import { CacheManager } from "./CacheManager";
 import { isNil } from "./tools/Maybe";
-import { CraftItems } from "./types";
+import { Resource } from "./types";
 import { UserScript } from "./UserScript";
 
 export class CraftManager {
@@ -12,7 +12,7 @@ export class CraftManager {
     this._cacheManager = new CacheManager(this._host);
   }
 
-  craft(name: CraftItems, amount: number): void {
+  craft(name: Resource, amount: number): void {
     amount = Math.floor(amount);
 
     if (!name || 1 > amount) return;
@@ -36,7 +36,7 @@ export class CraftManager {
     );
   }
 
-  canCraft(name: CraftItems, amount: number): boolean {
+  canCraft(name: Resource, amount: number): boolean {
     const craft = this.getCraft(name);
     const enabled = this._host.options.auto.craft.items[name].enabled;
     let result = false;
@@ -59,7 +59,11 @@ export class CraftManager {
   }
 
   getCraft(name: string): { name: string; unlocked: boolean } {
-    return this._host.gamePage.workshop.getCraft(name);
+    const craft = this._host.gamePage.workshop.getCraft(name);
+    if (!craft) {
+      throw new Error(`Unable to find craft '${name}'`);
+    }
+    return craft;
   }
 
   singleCraftPossible(name: string): boolean {
@@ -155,12 +159,9 @@ export class CraftManager {
     return Math.floor(amount);
   }
 
-  getMaterials(name: string): Record<string, number> | void {
+  getMaterials(name: string): Record<string, number> {
     const materials: Record<string, number> = {};
     const craft = this.getCraft(name);
-
-    // Safeguard against craft items that aren't actually available yet.
-    if (!craft) return;
 
     const prices = this._host.gamePage.workshop.getCraftPrice(craft);
 
@@ -224,7 +225,7 @@ export class CraftManager {
   }
 
   getResource(
-    name: string
+    name: Resource
   ): { craftable: boolean; maxValue: number; name: string; title: string; value: number } {
     if (name === "slabs") {
       name = "slab";
@@ -236,7 +237,7 @@ export class CraftManager {
     return res;
   }
 
-  getValue(name: string): number {
+  getValue(name: Resource): number {
     return this.getResource(name).value;
   }
 
@@ -248,7 +249,7 @@ export class CraftManager {
   }
 
   getValueAvailable(
-    name: CraftItems,
+    name: Resource,
     all: boolean | undefined = undefined,
     typeTrigger: number | undefined = undefined
   ): number {
