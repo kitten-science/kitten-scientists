@@ -214,7 +214,8 @@ export class UserScript {
       | ActivitySectionFaith
       | ActivitySectionOther
       | ActivitySectionResearch
-      | ActivitySectionTrade,
+      | ActivitySectionTrade
+      | string,
     amount = 1,
     section: ActivitySummarySection = "other"
   ): void {

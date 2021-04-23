@@ -2,6 +2,7 @@ import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { UnicornItemVariant } from "./Options";
 import { TabManager } from "./TabManager";
+import { mustExist } from "./tools/Maybe";
 import {
   AbstractReligionUpgradeInfo,
   BuildButton,
@@ -24,22 +25,27 @@ export class ReligionManager {
     this._bulkManager = new BulkManager(this._host);
   }
 
-  build(name: string, variant: UnicornItemVariant, amount: number): void {
+  build(
+    name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
+    variant: UnicornItemVariant,
+    amount: number
+  ): void {
     const build = this.getBuild(name, variant);
-    const button = this.getBuildButton(name, variant);
+    if (build === null) {
+      throw new Error(`Unable to build '${name}'. Build information not available.`);
+    }
 
+    const button = this.getBuildButton(name, variant);
     if (!button || !button.model.enabled) return;
 
     const amountTemp = amount;
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.warning(
-        label + " Amount ordered: " + amountTemp + " Amount Constructed: " + amount
-      );
+      this._host.warning(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
     }
 
-    if (variant === "s") {
+    if (variant === UnicornItemVariant.OrderOfTheSun) {
       this._host.storeForSummary(label, amount, "faith");
       if (amount === 1) {
         this._host.iactivity("act.sun.discover", [label], "ks-faith");
@@ -56,6 +62,12 @@ export class ReligionManager {
     }
   }
 
+  /**
+   * Retrieve information about an upgrade.
+   * @param name The name of the upgrade.
+   * @param variant The variant of the upgrade.
+   * @returns The build information for the upgrade.
+   */
   getBuild(
     name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
     variant: UnicornItemVariant
@@ -71,25 +83,43 @@ export class ReligionManager {
     return null;
   }
 
-  getBuildButton(name: string, variant: UnicornItemVariant): BuildButton | null {
-    let buttons;
+  /**
+   * Find the button that allows purchasing a given upgrade.
+   * @param name The name of the upgrade.
+   * @param variant The variant of the upgrade.
+   * @returns The button to buy the upgrade, or `null`.
+   */
+  getBuildButton(
+    name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
+    variant: UnicornItemVariant
+  ): BuildButton | null {
+    let buttons: Array<BuildButton>;
     switch (variant) {
-      case "z":
-        buttons = this.manager.tab.zgUpgradeButtons;
+      case UnicornItemVariant.Ziggurat:
+        buttons = mustExist(this.manager.tab.zgUpgradeButtons);
         break;
-      case "s":
-        buttons = this.manager.tab.rUpgradeButtons;
+      case UnicornItemVariant.OrderOfTheSun:
+        buttons = mustExist(this.manager.tab.rUpgradeButtons);
         break;
-      case "c":
+      case UnicornItemVariant.Cryptotheology:
         buttons = this.manager.tab.children[0].children[0].children;
+        break;
+      default:
+        throw new Error(`Invalid variant '${variant}'`);
     }
+
     const build = this.getBuild(name, variant);
-    for (const i in buttons) {
-      const haystack = buttons[i].model.name;
+    if (build === null) {
+      throw new Error(`Unable to retrieve build information for '${name}'`);
+    }
+
+    for (const button of buttons) {
+      const haystack = button.model.name;
       if (haystack.indexOf(build.label) !== -1) {
-        return buttons[i];
+        return button;
       }
     }
+
     return null;
   }
 }
