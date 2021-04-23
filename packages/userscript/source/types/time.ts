@@ -26,7 +26,9 @@ export type AbstractTimeUpgradeInfo = {
    * An internationalized label for this time upgrade.
    */
   label: string;
+  prices: Array<Price>;
 
+  unlocked: boolean;
   val: number;
 };
 
@@ -42,8 +44,6 @@ export type ChronoForgeUpgradeInfo = AbstractTimeUpgradeInfo & {
 
   name: ChronoForgeUpgrades;
   priceRatio: number;
-  prices: Array<Price>;
-  unlocked: boolean;
 };
 
 export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
@@ -61,8 +61,6 @@ export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
   limitBuild: 0;
   name: VoidSpaceUpgrades;
   priceRatio: number;
-  prices: Array<Price>;
-  unlocked: boolean;
   upgrades: {
     voidSpace: Array<"cryochambers">;
   };

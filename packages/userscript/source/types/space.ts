@@ -1,4 +1,4 @@
-import { BuildButton, GameTab } from ".";
+import { BuildButton, GameTab, Price } from ".";
 
 export type SpaceTab = GameTab & {
   GCPanel: BuildButton;
@@ -34,6 +34,9 @@ export type SpaceBuildingInfo = {
    * An internationalized label for this space building.
    */
   label: string;
+  prices: Array<Price>;
+
   unlocked: boolean;
+
   val: number;
 };

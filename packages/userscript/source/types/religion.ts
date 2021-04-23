@@ -51,7 +51,8 @@ export type AbstractReligionUpgradeInfo = {
    * An internationalized label for this religion upgrade.
    */
   label: string;
-
+  prices: Array<Price>;
+  unlocked: boolean;
   val: number;
 };
 
@@ -90,8 +91,7 @@ export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
 
   name: ZiggurathUpgrades;
   priceRatio: number;
-  prices: Array<Price>;
-  unlocked: boolean;
+  
   unlocks: {
     zigguratUpgrades: Array<"ivoryTower">;
   };
@@ -113,9 +113,7 @@ export type TranscendenceUpgradeInfo = AbstractReligionUpgradeInfo & {
 
   name: TranscendenceUpgrades;
   priceRatio: number;
-  prices: Array<Price>;
   tier: number;
-  unlocked: boolean;
   unlocks: {
     zigguratUpgrades: Array<"ivoryTower">;
   };
