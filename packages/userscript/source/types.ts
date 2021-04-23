@@ -1,4 +1,4 @@
-import { SpaceItems } from "./Options";
+import { SpaceItem } from "./Options";
 
 export type Resource =
   | "alloy"
@@ -18,6 +18,7 @@ export type Resource =
   | "manpower"
   | "manuscript"
   | "megalith"
+  | "necrocorn"
   | "parchment"
   | "plate"
   | "relic"
@@ -28,10 +29,12 @@ export type Resource =
   | "slabs" // deprecated: Use `slab` instead
   | "steel"
   | "tanker"
+  | "tears"
   | "temporalFlux"
   | "thorium"
   | "timeCrystal"
   | "titanium"
+  | "unicorns"
   | "uranium"
   | "wood";
 
@@ -51,6 +54,7 @@ export type TabId =
 export type BuildButton = {
   children: Array<BuildButton>;
   controller: {
+    _transform: (model: unknown, value: unknown) => void;
     doShatterAmt: (model: unknown, willSkip: boolean) => void; // Shatter TC button
     sellInternal: (model: unknown, count: number) => void; // Sell button
   };
@@ -58,7 +62,7 @@ export type BuildButton = {
   id: string;
   model: {
     enabled: boolean;
-    metadata: unknown;
+    metadata: { name: string };
     name: string;
     prices: Array<{ name: "tears" | "unicorns"; val: number }>;
     visible: boolean;
@@ -67,20 +71,23 @@ export type BuildButton = {
 
 export type GameTab = {
   buttons: Array<BuildButton>;
-  censusPanel: BuildButton; // Probably village tab specific.
+  censusPanel?: BuildButton; // Probably village tab specific.
+  cfPanel?: BuildButton; // Chronoforge?
   children: Array<BuildButton>;
-  planetPanels: Array<BuildButton>; // Probably space tab specific
-  racePanels: Array<{
+  GCPanel?: BuildButton; // Something in space
+  planetPanels?: Array<BuildButton>; // Probably space tab specific
+  racePanels?: Array<{
     race: {
       name: string;
     };
     tradeBtn: BuildButton;
   }>; // Probably trading tab specific
   render: () => void;
-  rUpgradeButtons: Array<BuildButton>;
+  rUpgradeButtons?: Array<BuildButton>;
   tabId: TabId;
   visible: boolean;
-  zgUpgradeButtons: Array<BuildButton>;
+  vsPanel?: BuildButton;
+  zgUpgradeButtons?: Array<BuildButton>;
 };
 
 /**
@@ -162,6 +169,109 @@ export type RaceInfo = {
 };
 
 export type Challenge = "1000Years" | "anarchy" | "atheism" | "energy" | "winterIsComing";
+export type ReligionUpgrades =
+  | "apocripha"
+  | "basilica"
+  | "goldenSpire"
+  | "scholasticism"
+  | "solarchant"
+  | "solarRevolution"
+  | "stainedGlass"
+  | "sunAltar"
+  | "templars"
+  | "transcendence";
+export type TranscendenceUpgrades =
+  | "blackCore"
+  | "blackLibrary"
+  | "blackNexus"
+  | "blackObelisk"
+  | "blackRadiance"
+  | "blazar"
+  | "darkNova"
+  | "holyGenocide"
+  | "singularity";
+export type ZiggurathUpgrades =
+  | "blackPyramid"
+  | "ivoryCitadel"
+  | "ivoryTower"
+  | "marker"
+  | "skyPalace"
+  | "sunspire"
+  | "unicornGraveyard"
+  | "unicornNecropolis"
+  | "unicornTomb"
+  | "unicornUtopia";
+
+export type AbstractReligionUpgradeInfo = {
+  /**
+   * An internationalized label for this space building.
+   */
+  label: string;
+};
+
+export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
+  calculateEffects: (self: unknown, game: GamePage) => void;
+  /**
+   * An internationalized description for this space building.
+   */
+  description: string;
+
+  effects: {
+    faithRatioReligion?: number;
+  };
+
+  faith: number;
+
+  name: ReligionUpgrades;
+  noStackable: boolean;
+  priceRatio: number;
+};
+
+export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
+  calculateEffects: (self: unknown, game: GamePage) => void;
+  defaultUnlocked: boolean;
+
+  /**
+   * An internationalized description for this space building.
+   */
+  description: string;
+
+  effects: {
+    unicornsRatioReligion?: number;
+  };
+
+  name: ZiggurathUpgrades;
+  priceRatio: number;
+  prices: Array<{ name: Resource; val: number }>;
+  unlocked: boolean;
+  unlocks: {
+    zigguratUpgrades: Array<"ivoryTower">;
+  };
+};
+
+export type TranscendenceUpgradeInfo = AbstractReligionUpgradeInfo & {
+  calculateEffects: (self: unknown, game: GamePage) => void;
+
+  /**
+   * An internationalized description for this space building.
+   */
+  description: string;
+
+  effects: {
+    solarRevolutionLimit?: number;
+  };
+
+  flavor: string;
+
+  name: TranscendenceUpgrades;
+  priceRatio: number;
+  prices: Array<{ name: Resource; val: number }>;
+  tier: number;
+  unlocked: boolean;
+  unlocks: {
+    zigguratUpgrades: Array<"ivoryTower">;
+  };
+};
 
 export type GamePage = {
   bld: {
@@ -169,16 +279,18 @@ export type GamePage = {
     getBuildingExt: (building: Building) => BuildingExt;
   };
   calendar: {
+    cryptoPrice: number;
     cycle: number;
     cycleEffectsFestival: (options: { catnip: number }) => { catnip: number };
     cycles: Array<{ festivalEffects: { unicorns: number } }>;
     cyclesPerEra: number;
     cycleYear: number;
     day: number;
-    festivalDays: unknown;
+    festivalDays: number;
     getCurSeason: () => { modifiers: { catnip: number }; name: string };
     getWeatherMod: () => number;
     season: number;
+    year: number;
     yearsPerCycle: number;
   };
   challenges: {
@@ -248,7 +360,7 @@ export type GamePage = {
   prestige: {
     getBurnedParagonRatio: () => number;
     getParagonProductionRatio: () => number;
-    getPerk: (name: "numeromancy" | "unicornmancy") => { researched: boolean };
+    getPerk: (name: "carnivals" | "numeromancy" | "unicornmancy") => { researched: boolean };
     meta: Array<{ meta: Array<{ researched: boolean }> }>;
   };
   religion: {
@@ -261,23 +373,30 @@ export type GamePage = {
     /**
      * Get religion upgrades.
      */
-    getRU: (name: string) => unknown;
+    getRU: (name: ReligionUpgrades) => ReligionUpgradeInfo;
 
     getSolarRevolutionRatio: () => number;
 
     /**
      * Get transcendence upgrades.
      */
-    getTU: (name: string) => unknown;
+    getTU: (name: TranscendenceUpgrades) => TranscendenceUpgradeInfo;
 
     /**
      * Get ziggurath upgrades.
      */
-    getZU: (name: string) => unknown;
+    getZU: (name: ZiggurathUpgrades) => ZiggurathUpgradeInfo;
 
+    praise: () => void;
+
+    tcratio: number;
     transcendenceTier: number;
 
+    _getTranscendTotalPrice: (value: number) => number;
     _resetFaithInternal: (value: number) => void;
+  };
+  religionTab: {
+    sacrificeBtn: BuildButton;
   };
   resetAutomatic: () => void;
   resPool: {
@@ -298,10 +417,44 @@ export type GamePage = {
     resources: Array<{ value: number }>;
   };
   science: {
-    get: (name: "civil" | "cryptotheology" | "nuclearFission") => { researched: boolean };
+    get: (name: "civil" | "cryptotheology" | "drama" | "nuclearFission") => { researched: boolean };
   };
   space: {
-    getBuilding: (building: SpaceItems) => { label: string; unlocked: boolean; val: number };
+    getBuilding: (
+      building: SpaceItem
+    ) => {
+      calculateEffects: (self: unknown, game: GamePage) => void;
+      /**
+       * An internationalized description for this space building.
+       */
+      description: string;
+
+      effects: {
+        energyConsumption?: number;
+        energyProduction?: number;
+        observatoryRatio?: number;
+        starchartPerTickBaseSpace?: number;
+      };
+
+      /**
+       * An internationalized label for this space building.
+       */
+      label: string;
+      name: string;
+      priceRatio: number;
+      prices: Array<{ name: Resource; val: number }>;
+      requiredTech: Array<"sattelites">;
+      unlocked: boolean;
+      unlocks: { policies: Array<"militarizeSpace" | "outerSpaceTreaty"> };
+      unlockScheme: {
+        name: "space";
+        threshold: number;
+      };
+      upgrades: {
+        buildings: Array<"observatory">;
+      };
+      val: number;
+    };
     meta: Array<{ meta: unknown }>;
   };
   tabs: Array<GameTab>;
@@ -325,7 +478,7 @@ export type GamePage = {
   };
   village: {
     assignJob: (job: unknown, count: number) => void;
-    getEffectLeader: (role: "manager", value: number) => number;
+    getEffectLeader: (role: "manager" | "scientist", value: number) => number;
     getFreeKittens: () => number;
     getJob: (name: string) => unknown;
     getJobLimit: (name: string) => number;
@@ -333,7 +486,7 @@ export type GamePage = {
     getResProduction: () => { catnip: number };
     happiness: number;
     jobs: Array<{ name: string; unlocked: boolean; value: number }>;
-    leader: unknown;
+    leader: { rank: number };
     /**
      * @deprecated
      */

@@ -28,7 +28,7 @@ export class BuildManager {
     if (amount !== amountTemp) {
       this._host.warning(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
     }
-    storeForSummary(label, amount, "build");
+    this._host.storeForSummary(label, amount, "build");
 
     if (amount === 1) {
       this._host.iactivity("act.build", [label], "ks-build");

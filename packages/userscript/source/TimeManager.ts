@@ -6,13 +6,13 @@ import { UserScript } from "./UserScript";
 
 export class TimeManager {
   private readonly _host: UserScript;
-  private readonly _manager: TabManager;
+  readonly manager: TabManager;
   private readonly _crafts: CraftManager;
   private readonly _bulkManager: BulkManager;
 
   constructor(host: UserScript) {
     this._host = host;
-    this._manager = new TabManager(this._host, "Time");
+    this.manager = new TabManager(this._host, "Time");
     this._crafts = new CraftManager(this._host);
     this._bulkManager = new BulkManager(this._host);
   }
@@ -31,7 +31,7 @@ export class TimeManager {
         label + " Amount ordered: " + amountTemp + " Amount Constructed: " + amount
       );
     }
-    storeForSummary(label, amount, "build");
+    this._host.storeForSummary(label, amount, "build");
 
     if (amount === 1) {
       this._host.iactivity("act.build", [label], "ks-build");
@@ -51,9 +51,9 @@ export class TimeManager {
   getBuildButton(name: string, variant: unknown): BuildButton | null {
     let buttons;
     if (variant === "chrono") {
-      buttons = this._manager.tab.children[2].children[0].children;
+      buttons = this.manager.tab.children[2].children[0].children;
     } else {
-      buttons = this._manager.tab.children[3].children[0].children;
+      buttons = this.manager.tab.children[3].children[0].children;
     }
     const build = this.getBuild(name, variant);
     for (const i in buttons) {

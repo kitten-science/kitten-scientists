@@ -28,7 +28,7 @@ export class CraftManager {
     // determine actual amount after crafting upgrades
     amount = (amount * (1 + ratio)).toFixed(2);
 
-    storeForSummary(iname, amount, "craft");
+    this._host.storeForSummary(iname, amount, "craft");
     this._host.iactivity(
       "act.craft",
       [this._host.gamePage.getDisplayValueExt(amount), iname],

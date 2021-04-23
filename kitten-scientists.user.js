@@ -38,34 +38,13 @@ var run = function() {
     var printoutput = function (args) {/*snipped*/};
 
     // Used for option change messages and other special notifications
-    var message = function () {
-        var args = Array.prototype.slice.call(arguments);
-        args.push('ks-default');
-        args.push(options.msgcolor);
-        printoutput(args);
-    };
+    var message = function () {};
 
-    var activity = function () {
-        var args = Array.prototype.slice.call(arguments);
-        var activityClass = args.length > 1 ? ' type_' + args.pop() : '';
-        args.push('ks-activity' + activityClass);
-        args.push(options.activitycolor);
-        printoutput(args);
-    };
+    var activity = function () {};
 
-    var summary = function () {
-        var args = Array.prototype.slice.call(arguments);
-        args.push('ks-summary');
-        args.push(options.summarycolor);
-        printoutput(args);
-    };
+    var summary = function () {};
 
-    var warning = function () {
-        var args = Array.prototype.slice.call(arguments);
-        args.unshift('Warning!');
-
-        if (console) console.log(args);
-    };
+    var warning = function () {};
 
     // i18n support
     var imessage = function(key, args, t) { message(i18n(key, args), t); }
@@ -607,13 +586,9 @@ var run = function() {
     // Add options element
     // ===================
 
-    var ucfirst = function (string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    };
+    var ucfirst = function (string) {};
 
-    var roundToTwo = function (n) {
-        return +(Math.round(n + "e+2") + "e-2")
-    };
+    var roundToTwo = function (n) {};
 
     var setStockWarning = function(name, value, forReset=false) {
         // simplest way to ensure it doesn't stick around too often; always do
@@ -1950,96 +1925,11 @@ var run = function() {
     // ===================
 
     var activitySummary = {};
-    var resetActivitySummary = function () {
-        activitySummary = {
-            lastyear: game.calendar.year,
-            lastday:  game.calendar.day,
-            craft:    {},
-            trade:    {},
-            build:    {},
-            other:    {}
-        };
-    };
+    var resetActivitySummary = function () { };
 
-    var storeForSummary = function (name, amount, section) {
-        if (amount === undefined) amount = 1;
-        if (section === undefined) section = 'other';
+    var storeForSummary = function (name, amount, section) {};
 
-        if (activitySummary[section] === undefined)
-            activitySummary[section] = {};
-
-        if (activitySummary[section][name] === undefined) {
-            activitySummary[section][name] = parseFloat(amount);
-        } else {
-            activitySummary[section][name] += parseFloat(amount);
-        }
-    };
-
-    var displayActivitySummary = function () {
-
-        for (var i in activitySummary.other) {
-            if (activitySummary.other[i])
-                isummary('summary.' + i , [game.getDisplayValueExt(activitySummary.other[i])]);
-        }
-
-        // Techs
-        for (var name in activitySummary.research) {
-            isummary('summary.tech', [ucfirst(name)]);
-        }
-
-        // Upgrades
-        for (var name in activitySummary.upgrade) {
-            isummary('summary.upgrade', [ucfirst(name)]);
-        }
-
-        // Buildings
-        for (var name in activitySummary.build) {
-            isummary('summary.building', [game.getDisplayValueExt(activitySummary.build[name]), ucfirst(name)]);
-        }
-
-        // Order of the Sun
-        for (var name in activitySummary.faith) {
-            isummary('summary.sun', [game.getDisplayValueExt(activitySummary.faith[name]), ucfirst(name)]);
-        }
-
-        // Crafts
-        for (var name in activitySummary.craft) {
-            isummary('summary.craft', [game.getDisplayValueExt(activitySummary.craft[name]), ucfirst(name)]);
-        }
-
-        // Trading
-        for (var name in activitySummary.trade) {
-            isummary('summary.trade', [game.getDisplayValueExt(activitySummary.trade[name]), ucfirst(name)]);
-        }
-
-        // Show time since last run. Assumes that the day and year are always higher.
-        if (activitySummary.lastyear && activitySummary.lastday) {
-            var years = game.calendar.year - activitySummary.lastyear;
-            var days = game.calendar.day - activitySummary.lastday;
-
-            if (days < 0) {
-                years -= 1;
-                days += 400;
-            }
-
-            var duration = '';
-            if (years > 0) {
-                duration += years + ' ';
-                duration += (years == 1) ? i18n('summary.year') : i18n('summary.years');
-            }
-
-            if (days >= 0) {
-                if (years > 0) duration += i18n('summary.separator');
-                duration += roundToTwo(days) + ' ';
-                duration += (days == 1) ? i18n('summary.day') : i18n('summary.days');
-            }
-
-            isummary('summary.head', [duration]);
-        }
-
-        // Clear out the old activity
-        resetActivitySummary()
-    };
+    var displayActivitySummary = function () {};
 
     resetActivitySummary();
 

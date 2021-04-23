@@ -1,12 +1,16 @@
 import JQuery from "jquery";
 import i18nData from "./i18n/i18nData.json";
 import { DefaultOptions, Options } from "./Options";
+import { objectEntries } from "./tools/Entries";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
 import { GamePage } from "./types";
 
 declare global {
   const unsafeWindow: Window;
+  const dojo: {
+    clone: <T>(subject: T) => T;
+  };
   interface Window {
     gamePage?: Maybe<GamePage>;
     $: JQuery;
@@ -14,10 +18,38 @@ declare global {
   }
 }
 
-export type I18nEngine = (key: string, args: Array<number | string>) => string;
+export type I18nEngine = (key: string, args?: Array<number | string>) => string;
 
 export type SupportedLanguages = keyof typeof i18nData;
 export const DefaultLanguage: SupportedLanguages = "en";
+
+export type ActivitySummarySection =
+  | "build"
+  | "craft"
+  | "faith"
+  | "other"
+  | "research"
+  | "trade"
+  | "upgrade";
+export type ActivitySectionBuild = "";
+export type ActivitySectionCraft = "";
+export type ActivitySectionFaith = "";
+export type ActivitySectionOther = "accelerate" | "adore" | "distribute" | "promote" | "transcend";
+export type ActivitySectionResearch = "";
+export type ActivitySectionTrade = "";
+export type ActivitySummary = {
+  lastyear?: number;
+  lastday?: number;
+  build?: Record<string, number>;
+  craft?: Record<string, number>;
+  faith?: Record<string, number>;
+  other?: {
+    [key in ActivitySectionOther]?: number;
+  };
+  research?: Record<string, number>;
+  trade?: Record<string, number>;
+  upgrade?: Record<string, number>;
+};
 
 export class UserScript {
   readonly gamePage: GamePage;
@@ -26,6 +58,8 @@ export class UserScript {
 
   private readonly _i18nData: typeof i18nData;
   options: Options = DefaultOptions;
+
+  private _activitySummary: ActivitySummary = {};
 
   constructor(
     gamePage: GamePage,
@@ -51,6 +85,8 @@ export class UserScript {
 
     // Increase messages displayed in log
     this.gamePage.console.maxMessages = 1000;
+
+    this.resetActivitySummary();
   }
 
   /**
@@ -59,7 +95,7 @@ export class UserScript {
    * @param args Variable arguments to render into the string.
    * @returns The translated string.
    */
-  i18n(key: keyof typeof i18nData[SupportedLanguages], args: Array<number | string>): string {
+  i18n(key: keyof typeof i18nData[SupportedLanguages], args: Array<number | string> = []): string {
     if (key.startsWith("$")) {
       return this.i18nEngine(key.slice(1));
     }
@@ -141,16 +177,134 @@ export class UserScript {
   private _isummary(
     key: keyof typeof i18nData[SupportedLanguages],
     args: Array<number | string>,
-    templateArgs: Array<string>
+    ...templateArgs: Array<string>
   ): void {
     this._summary(this.i18n(key, args), ...templateArgs);
   }
   private _iwarning(
     key: keyof typeof i18nData[SupportedLanguages],
     args: Array<number | string>,
-    templateArgs: Array<string>
+    ...templateArgs: Array<string>
   ): void {
     this.warning(this.i18n(key, args), ...templateArgs);
+  }
+
+  ucfirst(input: string): string {
+    return input.charAt(0).toUpperCase() + input.slice(1);
+  }
+  private _roundToTwo(input: number): number {
+    return +(Math.round(input + "e+2") + "e-2");
+  }
+
+  resetActivitySummary(): void {
+    this._activitySummary = {
+      lastyear: this.gamePage.calendar.year,
+      lastday: this.gamePage.calendar.day,
+      craft: {},
+      trade: {},
+      build: {},
+      other: {},
+    };
+  }
+
+  storeForSummary(
+    name:
+      | ActivitySectionBuild
+      | ActivitySectionCraft
+      | ActivitySectionFaith
+      | ActivitySectionOther
+      | ActivitySectionResearch
+      | ActivitySectionTrade,
+    amount = 1,
+    section: ActivitySummarySection = "other"
+  ): void {
+    let summarySection = this._activitySummary[section];
+    if (summarySection === undefined) {
+      summarySection = this._activitySummary[section] = {};
+    }
+
+    if (summarySection[name] === undefined) {
+      summarySection[name] = 0;
+    }
+    (summarySection[name] as number) += amount;
+  }
+
+  displayActivitySummary(): void {
+    for (const [i, value] of objectEntries<ActivitySectionOther, number>(
+      this._activitySummary.other
+    )) {
+      this._isummary(`summary.${i}`, [this.gamePage.getDisplayValueExt(value)]);
+    }
+
+    // Techs
+    for (const name in this._activitySummary.research) {
+      this._isummary("summary.tech", [this.ucfirst(name)]);
+    }
+
+    // Upgrades
+    for (const name in this._activitySummary.upgrade) {
+      this._isummary("summary.upgrade", [this.ucfirst(name)]);
+    }
+
+    // Buildings
+    for (const name in this._activitySummary.build) {
+      this._isummary("summary.building", [
+        this.gamePage.getDisplayValueExt(this._activitySummary.build[name]),
+        this.ucfirst(name),
+      ]);
+    }
+
+    // Order of the Sun
+    for (const name in this._activitySummary.faith) {
+      this._isummary("summary.sun", [
+        this.gamePage.getDisplayValueExt(this._activitySummary.faith[name]),
+        this.ucfirst(name),
+      ]);
+    }
+
+    // Crafts
+    for (const name in this._activitySummary.craft) {
+      this._isummary("summary.craft", [
+        this.gamePage.getDisplayValueExt(this._activitySummary.craft[name]),
+        this.ucfirst(name),
+      ]);
+    }
+
+    // Trading
+    for (const name in this._activitySummary.trade) {
+      this._isummary("summary.trade", [
+        this.gamePage.getDisplayValueExt(this._activitySummary.trade[name]),
+        this.ucfirst(name),
+      ]);
+    }
+
+    // Show time since last run. Assumes that the day and year are always higher.
+    if (this._activitySummary.lastyear && this._activitySummary.lastday) {
+      let years = this.gamePage.calendar.year - this._activitySummary.lastyear;
+      let days = this.gamePage.calendar.day - this._activitySummary.lastday;
+
+      if (days < 0) {
+        years -= 1;
+        days += 400;
+      }
+
+      let duration = "";
+      if (years > 0) {
+        duration += years + " ";
+        duration += years == 1 ? this.i18n("summary.year") : this.i18n("summary.years");
+      }
+
+      if (days >= 0) {
+        if (years > 0) duration += this.i18n("summary.separator");
+        duration += this._roundToTwo(days) + " ";
+        duration += days == 1 ? this.i18n("summary.day") : this.i18n("summary.days");
+      }
+
+      this._isummary("summary.head", [duration]);
+    }
+
+    // Clear out the old activity
+    this.resetActivitySummary();
   }
 
   static async waitForGame(timeout = 30000): Promise<void> {

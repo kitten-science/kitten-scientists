@@ -22,7 +22,7 @@ export type Requirement =
   | "wood"
   | false;
 
-export type FaithItems =
+export type FaithItem =
   | "apocripha"
   | "basilica"
   | "blackCore"
@@ -65,7 +65,7 @@ export type UnicornFaithItemOptions = {
  * One of the building options in the KG menu.
  * These are not identical to `Building`!
  */
-export type BuildMenuOption =
+export type BuildItem =
   | "academy"
   | "accelerator"
   | "aiCore"
@@ -118,7 +118,7 @@ export type BuildItemOptions = {
   triggerForReset: number;
 };
 
-export type SpaceItems =
+export type SpaceItem =
   | "containmentChamber"
   | "cryostation"
   | "entangler"
@@ -173,6 +173,18 @@ export type TradeItemOptions = {
   spring: boolean;
 };
 
+export type TimeItem =
+| "blastFurnace"
+| "chronocontrol"
+| "cryochambers"
+| "ressourceRetrieval"
+| "temporalAccelerator"
+| "temporalBattery"
+| "temporalImpedance"
+| "timeBoiler"
+| "voidHoover"
+| "voidResonator"
+| "voidRift";
 export type OptionsItemOptions = {
   enabled: boolean;
   misc: boolean;
@@ -328,7 +340,7 @@ export type Options = {
        * UNICORN BUILDING END
        */
       items: {
-        [item in FaithItems]: UnicornFaithItemOptions;
+        [item in FaithItem]: UnicornFaithItemOptions;
       };
     };
     build: {
@@ -353,7 +365,7 @@ export type Options = {
        * property. For other buildings, the key of the item itself is used.
        */
       items: {
-        [item in BuildMenuOption]: BuildItemOptions;
+        [item in BuildItem]: BuildItemOptions;
       };
     };
     space: {
@@ -369,7 +381,7 @@ export type Options = {
       trigger: number;
 
       items: {
-        [item in SpaceItems]: BuildItemOptions;
+        [item in SpaceItem]: BuildItemOptions;
       };
     };
     time: {
@@ -381,19 +393,7 @@ export type Options = {
       trigger: number;
 
       items: {
-        temporalBattery: TimeItemOptions;
-        blastFurnace: TimeItemOptions;
-        timeBoiler: TimeItemOptions;
-        temporalAccelerator: TimeItemOptions;
-        temporalImpedance: TimeItemOptions;
-        ressourceRetrieval: TimeItemOptions;
-
-        // Void space
-        cryochambers: TimeItemOptions;
-        voidHoover: TimeItemOptions;
-        voidRift: TimeItemOptions;
-        chronocontrol: TimeItemOptions;
-        voidResonator: TimeItemOptions;
+        [item in TimeItem]: TimeItemOptions;
       };
     };
     timeCtrl: {

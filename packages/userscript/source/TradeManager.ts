@@ -26,15 +26,15 @@ export class TradeManager {
     const race = this.getRace(name);
     const button = this.getTradeButton(race.name);
 
-    if (!button.model.enabled || !options.auto.trade.items[name].enabled) {
+    if (!button.model.enabled || !this._host.options.auto.trade.items[name].enabled) {
       this._host.warning(
         "KS trade checks are not functioning properly, please create an issue on the github page."
       );
     }
 
     this._host.gamePage.diplomacy.tradeMultiple(race, amount);
-    storeForSummary(race.title, amount, "trade");
-    this._host.iactivity("act.trade", [amount, ucfirst(race.title)], "ks-trade");
+    this._host.storeForSummary(race.title, amount, "trade");
+    this._host.iactivity("act.trade", [amount, this._host.ucfirst(race.title)], "ks-trade");
   }
 
   getProfitability(name: string): unknown {
