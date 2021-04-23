@@ -75,11 +75,11 @@ export class ReligionManager {
   ): AbstractReligionUpgradeInfo | null {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
-        return this._host.gamePage.religion.getZU(name as ZiggurathUpgrades);
+        return this._host.gamePage.religion.getZU(name as ZiggurathUpgrades) ?? null;
       case UnicornItemVariant.OrderOfTheSun:
-        return this._host.gamePage.religion.getRU(name as ReligionUpgrades);
+        return this._host.gamePage.religion.getRU(name as ReligionUpgrades) ?? null;
       case UnicornItemVariant.Cryptotheology:
-        return this._host.gamePage.religion.getTU(name as TranscendenceUpgrades);
+        return this._host.gamePage.religion.getTU(name as TranscendenceUpgrades) ?? null;
     }
     return null;
   }

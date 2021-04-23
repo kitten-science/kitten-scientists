@@ -1,4 +1,4 @@
-import { Building, Resource, UnicornItemVariant } from "./types";
+import { Building, Resource, ChronoForgeUpgrades, UnicornItemVariant, VoidSpaceUpgrades } from "./types";
 
 export type Requirement =
   | "antimatter"
@@ -167,18 +167,7 @@ export type TradeItemOptions = {
   spring: boolean;
 };
 
-export type TimeItem =
-| "blastFurnace"
-| "chronocontrol"
-| "cryochambers"
-| "ressourceRetrieval"
-| "temporalAccelerator"
-| "temporalBattery"
-| "temporalImpedance"
-| "timeBoiler"
-| "voidHoover"
-| "voidResonator"
-| "voidRift";
+export type TimeItem = ChronoForgeUpgrades | VoidSpaceUpgrades;
 export type OptionsItemOptions = {
   enabled: boolean;
   misc: boolean;
