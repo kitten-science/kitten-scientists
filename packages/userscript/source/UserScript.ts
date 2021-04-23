@@ -21,7 +21,7 @@ export const DefaultLanguage: SupportedLanguages = "en";
 
 export class UserScript {
   readonly gamePage: GamePage;
-  private readonly _i18nEngine: I18nEngine;
+  readonly i18nEngine: I18nEngine;
   private _language: SupportedLanguages;
 
   private readonly _i18nData: typeof i18nData;
@@ -35,7 +35,7 @@ export class UserScript {
     console.info("Kitten Scientists constructed.");
 
     this.gamePage = gamePage;
-    this._i18nEngine = i18nEngine;
+    this.i18nEngine = i18nEngine;
     this._language = language;
 
     this._i18nData = i18nData;
@@ -59,12 +59,9 @@ export class UserScript {
    * @param args Variable arguments to render into the string.
    * @returns The translated string.
    */
-  private _i18n(
-    key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<number | string>
-  ): string {
+  i18n(key: keyof typeof i18nData[SupportedLanguages], args: Array<number | string>): string {
     if (key.startsWith("$")) {
-      return this._i18nEngine(key.slice(1));
+      return this.i18nEngine(key.slice(1));
     }
     let value = this._i18nData[this._language][key];
     if (typeof value === "undefined") {
@@ -83,7 +80,7 @@ export class UserScript {
     return value;
   }
 
-  private _printOutput(...args: Array<string>): void {
+  private _printOutput(...args: Array<number | string>): void {
     if (this.options.auto.filter.enabled) {
       for (const filterItem of Object.values(this.options.auto.filter.items)) {
         if (filterItem.enabled && filterItem.variant === args[1]) {
@@ -101,62 +98,62 @@ export class UserScript {
     if (this.options.debug && console) console.log(args);
   }
 
-  private _message(...args: Array<string>): void {
+  private _message(...args: Array<number | string>): void {
     args.push("ks-default");
     args.push(this.options.msgcolor);
     this._printOutput(...args);
   }
 
-  private _activity(...args: Array<string>): void {
+  private _activity(...args: Array<number | string>): void {
     const activityClass = args.length > 1 ? " type_" + args.pop() : "";
     args.push("ks-activity" + activityClass);
     args.push(this.options.activitycolor);
     this._printOutput(...args);
   }
 
-  private _summary(...args: Array<string>): void {
+  private _summary(...args: Array<number | string>): void {
     args.push("ks-summary");
     args.push(this.options.summarycolor);
     this._printOutput(...args);
   }
 
-  warning(...args: Array<string>): void {
+  warning(...args: Array<number | string>): void {
     args.unshift("Warning!");
     if (console) {
       console.log(args);
     }
   }
 
-  private _imessage(
+  imessage(
     key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<string>,
+    args: Array<number | string>,
     templateArgs: Array<string>
   ): void {
-    this._message(this._i18n(key, args), ...templateArgs);
+    this._message(this.i18n(key, args), ...templateArgs);
   }
   iactivity(
     key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<string>,
+    args: Array<number | string>,
     templateArgs: Array<string>
   ): void {
-    this._activity(this._i18n(key, args), ...templateArgs);
+    this._activity(this.i18n(key, args), ...templateArgs);
   }
   private _isummary(
     key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<string>,
+    args: Array<number | string>,
     templateArgs: Array<string>
   ): void {
-    this._summary(this._i18n(key, args), ...templateArgs);
+    this._summary(this.i18n(key, args), ...templateArgs);
   }
   private _iwarning(
     key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<string>,
+    args: Array<number | string>,
     templateArgs: Array<string>
   ): void {
-    this.warning(this._i18n(key, args), ...templateArgs);
+    this.warning(this.i18n(key, args), ...templateArgs);
   }
 
-  static async waitForGame(timeout: number = 30000): Promise<void> {
+  static async waitForGame(timeout = 30000): Promise<void> {
     console.debug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
 
     if (timeout < 0) {
