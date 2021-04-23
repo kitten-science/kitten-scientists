@@ -92,7 +92,7 @@ export class UserScript {
     args[1] = args[1] || "ks-default";
 
     // update the color of the message immediately after adding
-    const msg = this.gamePage.msg.apply(this.gamePage, args);
+    const msg = this.gamePage.msg(...args);
     $(msg.span).css("color", color);
 
     if (this.options.debug && console) console.log(args);

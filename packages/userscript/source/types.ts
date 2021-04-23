@@ -1,6 +1,10 @@
-export type CraftItems =
+import { SpaceItems } from "./Options";
+
+export type Resource =
   | "alloy"
   | "beam"
+  | "blackcoin"
+  | "bloodstone"
   | "blueprint"
   | "catnip"
   | "compedium"
@@ -10,13 +14,17 @@ export type CraftItems =
   | "gear"
   | "iron"
   | "kerosene"
+  | "manpower"
   | "manuscript"
   | "megalith"
   | "parchment"
   | "plate"
+  | "relic"
   | "scaffold"
+  | "science"
   | "ship"
   | "slab"
+  | "slabs" // deprecated: Use `slab` instead
   | "steel"
   | "tanker"
   | "thorium"
@@ -32,8 +40,13 @@ export type TabId =
   | "Village"
   | "Workshop";
 
+/**
+ * Not necessarily a button, but a KG UI element.
+ */
 export type BuildButton = {
   children: Array<BuildButton>;
+  controller: { sellInternal: (model: unknown, count: number) => void };
+  domNode: HTMLDivElement;
   id: string;
   model: {
     enabled: boolean;
@@ -45,28 +58,93 @@ export type BuildButton = {
 };
 
 export type GameTab = {
+  buttons: Array<BuildButton>;
   children: Array<BuildButton>;
+  planetPanels: Array<BuildButton>; // Probably space tab specific
+  racePanels: Array<{
+    race: {
+      name: string;
+    };
+    tradeBtn: BuildButton;
+  }>; // Probably trading tab specific
   render: () => void;
   rUpgradeButtons: Array<BuildButton>;
   tabId: TabId;
+  visible: boolean;
   zgUpgradeButtons: Array<BuildButton>;
 };
 
-export type Building = "aqueduct" | "chronosphere" | "pasture" | "unicornPasture" | "ziggurat";
+/**
+ * The type names of all supported buildings.
+ */
+export type Building =
+  | "academy"
+  | "accelerator"
+  | "aiCore"
+  | "amphitheatre"
+  | "aqueduct"
+  | "barn"
+  | "biolab"
+  | "brewery"
+  | "broadcastTower"
+  | "calciner"
+  | "chapel"
+  | "chronosphere"
+  | "dataCenter"
+  | "factory"
+  | "field"
+  | "harbor"
+  | "hut"
+  | "hydroPlant"
+  | "library"
+  | "logHouse"
+  | "lumberMill"
+  | "magneto"
+  | "mansion"
+  | "mine"
+  | "mint"
+  | "observatory"
+  | "oilWell"
+  | "pasture"
+  | "quarry"
+  | "reactor"
+  | "smelter"
+  | "solarFarm"
+  | "steamworks"
+  | "temple"
+  | "tradepost"
+  | "unicornPasture"
+  | "warehouse"
+  | "workshop"
+  | "zebraForge"
+  | "zebraOutpost"
+  | "zebraWorkshop"
+  | "ziggurat";
+
 export type BuildingExt = {
   meta: {
     effects: { unicornsPerTickBase: number };
     label: string;
     on: number;
     stage: number;
-    stages: Array<{ label: string }>;
+    stages: Array<{ label: string; prices: Array<unknown>; stageUnlocked: boolean }>;
     val: number;
   };
 };
 
+export type Race =
+  | "dragons"
+  | "griffins"
+  | "nagas"
+  | "leviathans"
+  | "lizards"
+  | "sharks"
+  | "spiders"
+  | "zebras";
+
 export type GamePage = {
   bld: {
-    get: (build: "steamworks") => unknown;
+    get: (build: "aiCore" | "biolab" | "steamworks") => unknown;
     getBuildingExt: (building: Building) => BuildingExt;
   };
   calendar: {
@@ -78,7 +156,7 @@ export type GamePage = {
     getWeatherMod: () => number;
   };
   challenges: {
-    currentChallenge: "anarchy" | "winterIsComing";
+    currentChallenge: "anarchy" | "energy" | "winterIsComing";
   };
   console: {
     maxMessages: number;
@@ -92,14 +170,16 @@ export type GamePage = {
      */
     buyEcoin: () => void;
     feedElders: () => void;
-    get: (race: "leviathans") => unknown;
+    get: (race: Race) => { buys: unknown; unlocked: boolean };
     getMarkerCap: () => number;
     sellBcoin: () => void;
     /**
      * @deprecated Use `sellBcoin` instead.
      */
     sellEcoin: () => void;
+    unlockRandomRace: () => { title: string };
   };
+  diplomacyTab: GameTab;
   getCMBRBonus: () => number;
   getDisplayValueExt: (value: number) => string;
   getEffect: (
@@ -108,6 +188,7 @@ export type GamePage = {
       | "catnipJobRatio"
       | "catnipPerTickBase"
       | "corruptionBoostRatio"
+      | "dataCenterAIRatio"
       | "hunterRatio"
       | "mapPriceReduction"
       | "oilReductionRatio"
@@ -118,6 +199,7 @@ export type GamePage = {
       | "unicornsGlobalRatio"
       | "unicornsPerTickBase"
       | "unicornsRatioReligion"
+      | "uplinkDCRatio"
   ) => number;
   getLimitedDR: (value0: number, value1: number) => number;
   getResCraftRatio: (name: string) => number;
@@ -125,7 +207,7 @@ export type GamePage = {
   getResourcePerTickConvertion: (name: "catnip") => number;
   getTicksPerSecondUI: () => number;
   ironWill: boolean;
-  msg: (...args: Array<string>) => { span: HTMLElement };
+  msg: (...args: Array<number | string>) => { span: HTMLElement };
   opts: {
     disableCMBR: boolean;
   };
@@ -136,21 +218,39 @@ export type GamePage = {
     meta: Array<{ meta: Array<{ researched: boolean }> }>;
   };
   religion: {
+    /**
+     * Get religion upgrades.
+     */
     getRU: (name: string) => unknown;
+
     getSolarRevolutionRatio: () => number;
+
+    /**
+     * Get transcendence upgrades.
+     */
     getTU: (name: string) => unknown;
+
+    /**
+     * Get ziggurath upgrades.
+     */
     getZU: (name: string) => unknown;
   };
   resPool: {
     get: (
-      name: "blackcoin" | "relic"
+      name: Resource
     ) =>
       | { craftable: boolean; maxValue: number; name: string; title: string; value: number }
       | undefined;
+    energyCons: number;
+    energyProd: number;
     resources: Array<{ value: number }>;
   };
+  science: {
+    get: (name: "nuclearFission") => { researched: boolean };
+  };
   space: {
-    getBuilding: (building: "hydroponics") => { val: number };
+    getBuilding: (building: SpaceItems) => { label: string; unlocked: boolean; val: number };
+    meta: Array<{ meta: unknown }>;
   };
   tabs: Array<GameTab>;
   time: {
@@ -194,8 +294,10 @@ export type GamePage = {
     };
   };
   workshop: {
-    get: (technology: "goldOre") => { researched: boolean };
-    getCraft: (name: string) => { name: string; unlocked: boolean };
-    getCraftPrice: (craft: unknown) => Array<{ name: CraftItems; val: number }>;
+    get: (
+      technology: "cryocomputing" | "goldOre" | "machineLearning" | "uplink"
+    ) => { researched: boolean };
+    getCraft: (name: string) => { name: string; unlocked: boolean } | undefined;
+    getCraftPrice: (craft: unknown) => Array<{ name: Resource; val: number }>;
   };
 };

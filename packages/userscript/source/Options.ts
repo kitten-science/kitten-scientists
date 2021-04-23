@@ -1,4 +1,4 @@
-import { CraftItems } from "./types";
+import { Building, Resource } from "./types";
 
 export type Requirement =
   | "antimatter"
@@ -22,6 +22,30 @@ export type Requirement =
   | "wood"
   | false;
 
+export type FaithItems =
+  | "apocripha"
+  | "basilica"
+  | "blackCore"
+  | "blackLibrary"
+  | "blackNexus"
+  | "blackObelisk"
+  | "blackPyramid"
+  | "blackRadiance"
+  | "blazar"
+  | "darkNova"
+  | "goldenSpire"
+  | "holyGenocide"
+  | "marker"
+  | "scholasticism"
+  | "singularity"
+  | "solarchant"
+  | "solarRevolution"
+  | "stainedGlass"
+  | "sunAltar"
+  | "templars"
+  | "transcendence"
+  | "unicornGraveyard"
+  | "unicornNecropolis";
 export enum UnicornItemVariant {
   Cryptotheology = "c",
   OrderOfTheSun = "s",
@@ -37,15 +61,86 @@ export type UnicornFaithItemOptions = {
   triggerForReset: number;
 };
 
+/**
+ * One of the building options in the KG menu.
+ * These are not identical to `Building`!
+ */
+export type BuildMenuOption =
+  | "academy"
+  | "accelerator"
+  | "aiCore"
+  | "amphitheatre"
+  | "aqueduct"
+  | "barn"
+  | "biolab"
+  | "brewery"
+  | "broadcastTower"
+  | "calciner"
+  | "chapel"
+  | "chronosphere"
+  | "dataCenter"
+  | "factory"
+  | "field"
+  | "harbor"
+  | "hut"
+  | "hydroPlant"
+  | "library"
+  | "logHouse"
+  | "lumberMill"
+  | "magneto"
+  | "mansion"
+  | "mine"
+  | "mint"
+  | "observatory"
+  | "oilWell"
+  | "pasture"
+  | "quarry"
+  | "reactor"
+  | "smelter"
+  | "solarFarm"
+  | "steamworks"
+  | "temple"
+  | "tradepost"
+  | "warehouse"
+  | "workshop"
+  | "zebraForge"
+  | "zebraOutpost"
+  | "zebraWorkshop"
+  | "ziggurat";
+
 export type BuildItemOptions = {
   require: Requirement;
   enabled: boolean;
   max: number;
   checkForReset: boolean;
-  name?: string;
+  name?: Building;
   stage?: number;
   triggerForReset: number;
 };
+
+export type SpaceItems =
+  | "containmentChamber"
+  | "cryostation"
+  | "entangler"
+  | "heatsink"
+  | "hrHarvester"
+  | "hydrofracturer"
+  | "hydroponics"
+  | "moltenCore"
+  | "moonBase"
+  | "moonOutpost"
+  | "orbitalArray"
+  | "planetCracker"
+  | "researchVessel"
+  | "sattelite"
+  | "spaceBeacon"
+  | "spaceElevator"
+  | "spaceStation"
+  | "spiceRefinery"
+  | "sunforge"
+  | "sunlifter"
+  | "tectonic"
+  | "terraformingStation";
 
 export enum TimeItemVariant {
   Unknown_chrone = "chrono",
@@ -233,29 +328,7 @@ export type Options = {
        * UNICORN BUILDING END
        */
       items: {
-        marker: UnicornFaithItemOptions;
-        unicornGraveyard: UnicornFaithItemOptions;
-        unicornNecropolis: UnicornFaithItemOptions;
-        blackPyramid: UnicornFaithItemOptions;
-        solarchant: UnicornFaithItemOptions;
-        scholasticism: UnicornFaithItemOptions;
-        goldenSpire: UnicornFaithItemOptions;
-        sunAltar: UnicornFaithItemOptions;
-        stainedGlass: UnicornFaithItemOptions;
-        solarRevolution: UnicornFaithItemOptions;
-        basilica: UnicornFaithItemOptions;
-        templars: UnicornFaithItemOptions;
-        apocripha: UnicornFaithItemOptions;
-        transcendence: UnicornFaithItemOptions;
-        blackObelisk: UnicornFaithItemOptions;
-        blackNexus: UnicornFaithItemOptions;
-        blackCore: UnicornFaithItemOptions;
-        singularity: UnicornFaithItemOptions;
-        blackLibrary: UnicornFaithItemOptions;
-        blackRadiance: UnicornFaithItemOptions;
-        blazar: UnicornFaithItemOptions;
-        darkNova: UnicornFaithItemOptions;
-        holyGenocide: UnicornFaithItemOptions;
+        [item in FaithItems]: UnicornFaithItemOptions;
       };
     };
     build: {
@@ -280,62 +353,7 @@ export type Options = {
        * property. For other buildings, the key of the item itself is used.
        */
       items: {
-        // Housing
-        hut: BuildItemOptions;
-        logHouse: BuildItemOptions;
-        mansion: BuildItemOptions;
-
-        // Craft bonuses
-        workshop: BuildItemOptions;
-        factory: BuildItemOptions;
-
-        // Production
-        field: BuildItemOptions;
-        pasture: BuildItemOptions;
-        solarFarm: BuildItemOptions;
-        mine: BuildItemOptions;
-        lumberMill: BuildItemOptions;
-        aqueduct: BuildItemOptions;
-        hydroPlant: BuildItemOptions;
-        oilWell: BuildItemOptions;
-        quarry: BuildItemOptions;
-
-        // Conversion
-        smelter: BuildItemOptions;
-        biolab: BuildItemOptions;
-        calciner: BuildItemOptions;
-        reactor: BuildItemOptions;
-        accelerator: BuildItemOptions;
-        steamworks: BuildItemOptions;
-        magneto: BuildItemOptions;
-
-        // Science
-        library: BuildItemOptions;
-        dataCenter: BuildItemOptions;
-        academy: BuildItemOptions;
-        observatory: BuildItemOptions;
-
-        // Other
-        amphitheatre: BuildItemOptions;
-        broadcastTower: BuildItemOptions;
-        tradepost: BuildItemOptions;
-        chapel: BuildItemOptions;
-        temple: BuildItemOptions;
-        mint: BuildItemOptions;
-        ziggurat: BuildItemOptions;
-        chronosphere: BuildItemOptions;
-        aiCore: BuildItemOptions;
-        brewery: BuildItemOptions;
-
-        // Storage
-        barn: BuildItemOptions;
-        harbor: BuildItemOptions;
-        warehouse: BuildItemOptions;
-
-        // Zebras
-        zebraOutpost: BuildItemOptions;
-        zebraWorkshop: BuildItemOptions;
-        zebraForge: BuildItemOptions;
+        [item in BuildMenuOption]: BuildItemOptions;
       };
     };
     space: {
@@ -351,49 +369,7 @@ export type Options = {
       trigger: number;
 
       items: {
-        // Cath
-        spaceElevator: BuildItemOptions;
-        sattelite: BuildItemOptions;
-        spaceStation: BuildItemOptions;
-
-        // Moon
-        moonOutpost: BuildItemOptions;
-        moonBase: BuildItemOptions;
-
-        // Dune
-        planetCracker: BuildItemOptions;
-        hydrofracturer: BuildItemOptions;
-        spiceRefinery: BuildItemOptions;
-
-        // Piscine
-        researchVessel: BuildItemOptions;
-        orbitalArray: BuildItemOptions;
-
-        // Helios
-        sunlifter: BuildItemOptions;
-        containmentChamber: BuildItemOptions;
-        heatsink: BuildItemOptions;
-        sunforge: BuildItemOptions;
-
-        // T-Minus
-        cryostation: BuildItemOptions;
-
-        // Kairo
-        spaceBeacon: BuildItemOptions;
-
-        // Yarn
-        terraformingStation: BuildItemOptions;
-        hydroponics: BuildItemOptions;
-
-        // Umbra
-        hrHarvester: BuildItemOptions;
-
-        // Charon
-        entangler: BuildItemOptions;
-
-        // Centaurus
-        tectonic: BuildItemOptions;
-        moltenCore: BuildItemOptions;
+        [item in SpaceItems]: BuildItemOptions;
       };
     };
     time: {
@@ -487,7 +463,7 @@ export type Options = {
        * across all crafted resources without wasting raw materials.
        */
       items: {
-        [item in CraftItems]: CraftItemOptions;
+        [item in Resource]?: CraftItemOptions;
       };
     };
     trade: {
@@ -617,7 +593,7 @@ export type Options = {
     };
     cache: {
       cache: Array<unknown>;
-      cacheSum: {};
+      cacheSum: Record<string, unknown>;
     };
   };
 };
@@ -893,7 +869,7 @@ export const DefaultOptions: Options = {
       // For upgraded buildings, the ID (or internal name) of the building can be controlled through the *name*
       // property. For other buildings, the key of the item itself is used.
       items: {
-        // housing
+        // Housing
         hut: { require: "wood", enabled: false, max: -1, checkForReset: true, triggerForReset: -1 },
         logHouse: {
           require: "minerals",
@@ -910,7 +886,7 @@ export const DefaultOptions: Options = {
           triggerForReset: -1,
         },
 
-        // craft bonuses
+        // Craft bonuses
         workshop: {
           require: "minerals",
           enabled: true,
@@ -926,7 +902,7 @@ export const DefaultOptions: Options = {
           triggerForReset: -1,
         },
 
-        // production
+        // Production
         field: {
           require: "catnip",
           enabled: true,
@@ -991,7 +967,7 @@ export const DefaultOptions: Options = {
           triggerForReset: -1,
         },
 
-        // conversion
+        // Conversion
         smelter: {
           require: "minerals",
           enabled: true,
@@ -1042,7 +1018,7 @@ export const DefaultOptions: Options = {
           triggerForReset: -1,
         },
 
-        // science
+        // Science
         library: {
           require: "wood",
           enabled: true,
@@ -1075,7 +1051,7 @@ export const DefaultOptions: Options = {
           triggerForReset: -1,
         },
 
-        // other
+        // Other
         amphitheatre: {
           require: "minerals",
           enabled: true,
@@ -1145,7 +1121,7 @@ export const DefaultOptions: Options = {
           triggerForReset: -1,
         },
 
-        // storage
+        // Storage
         barn: { require: "wood", enabled: true, max: -1, checkForReset: true, triggerForReset: -1 },
         harbor: {
           require: false,
@@ -1162,7 +1138,7 @@ export const DefaultOptions: Options = {
           triggerForReset: -1,
         },
 
-        // zebras
+        // Zebras
         zebraOutpost: {
           require: "bloodstone",
           enabled: true,

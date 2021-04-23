@@ -6,13 +6,13 @@ import { UserScript } from "./UserScript";
 
 export class BuildManager {
   private readonly _host: UserScript;
-  private readonly _manager: TabManager;
+  readonly manager: TabManager;
   private readonly _crafts: CraftManager;
   private readonly _bulkManager: BulkManager;
 
   constructor(host: UserScript) {
     this._host = host;
-    this._manager = new TabManager(this._host, "Bonfire");
+    this.manager = new TabManager(this._host, "Bonfire");
     this._crafts = new CraftManager(this._host);
     this._bulkManager = new BulkManager(this._host);
   }
@@ -42,7 +42,7 @@ export class BuildManager {
   }
 
   getBuildButton(name: Building, stage: number | undefined = undefined): BuildButton | null {
-    const buttons = this._manager.tab.children;
+    const buttons = this.manager.tab.children;
     const build = this.getBuild(name);
     const label = typeof stage !== "undefined" ? build.meta.stages[stage].label : build.meta.label;
 
