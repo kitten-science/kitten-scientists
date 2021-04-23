@@ -17,7 +17,7 @@ export class BuildManager {
     this._bulkManager = new BulkManager(this._host);
   }
 
-  build(name: Building, stage: number, amount: number): void {
+  build(name: Building, stage: number , amount: number): void {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name, stage);
 

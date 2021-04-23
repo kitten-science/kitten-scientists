@@ -19,9 +19,12 @@ import {
   ZiggurathUpgrades,
 } from ".";
 import { SpaceItem } from "../Options";
+import { ReligionTab } from "./religion";
+import { SpaceTab } from "./space";
 import {
   ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
+  TimeTab,
   VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
 } from "./time";
@@ -52,7 +55,11 @@ export type GamePage = {
   };
   challenges: {
     currentChallenge: Challenge;
-    getChallenge: (challenge: Challenge) => { researched: number };
+    getChallenge: (
+      challenge: Challenge
+    ) =>
+      | { calculateEffects: (model: unknown, game: GamePage) => void; researched: number }
+      | undefined;
   };
   console: {
     maxMessages: number;
@@ -185,6 +192,7 @@ export type GamePage = {
   };
   science: {
     get: (name: "civil" | "cryptotheology" | "drama" | "nuclearFission") => { researched: boolean };
+    techs: unknown;
   };
   space: {
     getBuilding: (
@@ -224,7 +232,19 @@ export type GamePage = {
     };
     meta: Array<{ meta: unknown }>;
   };
-  tabs: Array<GameTab>;
+  tabs: [
+    GameTab,
+    VillageTab,
+    GameTab,
+    GameTab,
+    TradingTab,
+    ReligionTab,
+    SpaceTab,
+    TimeTab,
+    GameTab,
+    GameTab,
+    GameTab
+  ];
   time: {
     getCFU: (name: ChronoForgeUpgrades) => ChronoForgeUpgradeInfo | undefined;
     getVSU: (name: VoidSpaceUpgrades) => VoidSpaceUpgradeInfo | undefined;
@@ -236,6 +256,7 @@ export type GamePage = {
   };
   timeTab: {
     cfPanel: BuildButton;
+    visible: boolean;
   };
   unlock: (value: unknown) => void;
   upgrade: (value: unknown) => void;
@@ -281,5 +302,6 @@ export type GamePage = {
     ) => { researched: boolean };
     getCraft: (name: string) => { name: string; unlocked: boolean } | undefined;
     getCraftPrice: (craft: unknown) => Array<Price>;
+    upgrades: unknown;
   };
 };

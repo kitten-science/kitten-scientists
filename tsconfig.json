@@ -7,7 +7,7 @@
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "resolveJsonModule": true,
-    "lib": ["DOM", "ES2018"],
+    "lib": ["DOM", "ES2020"],
     "module": "CommonJS",
     "sourceMap": true,
     "strict": true,
