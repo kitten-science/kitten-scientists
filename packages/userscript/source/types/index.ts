@@ -86,6 +86,7 @@ export type BuildButton<T = string> = {
     prices: Array<Price>;
     visible: boolean;
   };
+  onClick: () => void;
 };
 
 export type GameTab = {

@@ -7,9 +7,7 @@ import {
   VoidSpaceUpgrades,
 } from "./types";
 
-export type Requirement =
-  | Resource
-  | false;
+export type Requirement = Resource | false;
 
 export type FaithItem =
   | "apocripha"
@@ -35,6 +33,16 @@ export type FaithItem =
   | "transcendence"
   | "unicornGraveyard"
   | "unicornNecropolis";
+
+export type UnicornItem =
+  | "ivoryCitadel"
+  | "ivoryTower"
+  | "skyPalace"
+  | "sunspire"
+  | "unicornPasture"
+  | "unicornTomb"
+  | "unicornUtopia";
+
 export type UnicornFaithItemOptions = {
   require: Requirement;
   enabled: boolean;
@@ -233,13 +241,7 @@ export type Options = {
     };
     unicorn: {
       items: {
-        unicornPasture: UnicornFaithItemOptions;
-        unicornTomb: UnicornFaithItemOptions;
-        ivoryTower: UnicornFaithItemOptions;
-        ivoryCitadel: UnicornFaithItemOptions;
-        skyPalace: UnicornFaithItemOptions;
-        unicornUtopia: UnicornFaithItemOptions;
-        sunspire: UnicornFaithItemOptions;
+        [item in UnicornItem]: UnicornFaithItemOptions;
       };
     };
     faith: {
@@ -538,15 +540,18 @@ export type Options = {
         miscFilter: FilterItemOptions;
       };
     };
-    resources: {
-      [key: string]: {
-        enabled: boolean;
-        stock: number;
-        checkForReset: boolean;
-        stockForReset: number;
-        consume?: number;
-      };
-    };
+    resources: Partial<
+      Record<
+        Resource,
+        {
+          enabled: boolean;
+          stock: number;
+          checkForReset: boolean;
+          stockForReset: number;
+          consume?: number;
+        }
+      >
+    >;
     cache: {
       cache: Array<unknown>;
       cacheSum: Record<string, unknown>;

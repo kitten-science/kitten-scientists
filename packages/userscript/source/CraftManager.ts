@@ -2,6 +2,7 @@ import { CacheManager } from "./CacheManager";
 import { objectEntries } from "./tools/Entries";
 import { isNil, mustExist } from "./tools/Maybe";
 import { Resource } from "./types";
+import { ResourceInfo } from "./types/craft";
 import { UserScript } from "./UserScript";
 
 export class CraftManager {
@@ -176,7 +177,7 @@ export class CraftManager {
   }
 
   getTickVal(
-    res: { craftable: boolean; name: string },
+    res:ResourceInfo,
     preTrade: boolean | undefined = undefined
   ): number | "ignore" {
     let prod = this._host.gamePage.getResourcePerTick(res.name, true);
@@ -228,7 +229,7 @@ export class CraftManager {
 
   getResource(
     name: Resource
-  ): { craftable: boolean; maxValue: number; name: Resource; title: string; value: number } {
+  ): ResourceInfo {
     if (name === "slabs") {
       name = "slab";
     }

@@ -161,24 +161,24 @@ export class Engine {
     };
 
     // check building
-    let opt = this._host.options.auto.build.items;
-    for (const name in opt)
-      if (opt[name].checkForReset) {
+    for (const [name, entry] of objectEntries(this._host.options.auto.build.items))
+      if (entry.checkForReset) {
         const bld = this._host.gamePage.bld.get(name);
-        checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
-        if (opt[name].triggerForReset > 0) {
-          if (opt[name].triggerForReset > bld.val) return;
+        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
+        if (entry.triggerForReset > 0) {
+          if (entry.triggerForReset > bld.val) return;
         } else {
           checkList.push(name);
         }
       }
+
     // unicornPasture
-    opt = this._host.options.auto.unicorn.items.unicornPasture;
-    if (opt.checkForReset) {
+    const unicornPasture = this._host.options.auto.unicorn.items.unicornPasture;
+    if (unicornPasture.checkForReset) {
       const bld = this._host.gamePage.bld.get("unicornPasture");
-      checkedList.push({ name: bld.label, trigger: opt.triggerForReset, val: bld.val });
-      if (opt.triggerForReset > 0) {
-        if (opt.triggerForReset > bld.val) return;
+      checkedList.push({ name: bld.label, trigger: unicornPasture.triggerForReset, val: bld.val });
+      if (unicornPasture.triggerForReset > 0) {
+        if (unicornPasture.triggerForReset > bld.val) return;
       } else {
         checkList.push("unicornPasture");
       }
@@ -186,17 +186,18 @@ export class Engine {
     if (check(this._buildManager.manager.tab.buttons) || checkList.length) return;
 
     // check space
-    opt = this._host.options.auto.space.items;
-    for (const name in opt)
-      if (opt[name].checkForReset) {
+    for (const [name, entry] of objectEntries(this._host.options.auto.space.items)) {
+      if (entry.checkForReset) {
         const bld = this._host.gamePage.space.getBuilding(name);
-        checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
-        if (opt[name].triggerForReset > 0) {
-          if (opt[name].triggerForReset > bld.val) return;
+        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
+        if (entry.triggerForReset > 0) {
+          if (entry.triggerForReset > bld.val) return;
         } else {
           checkList.push(name);
         }
       }
+    }
+
     if (checkList.length != 0) {
       const panels = this._spaceManager.manager.tab.planetPanels;
       for (const i in panels) {
@@ -214,24 +215,24 @@ export class Engine {
     if (checkList.length) return;
 
     // check religion
-    opt = this._host.options.auto.faith.items;
-    for (const name in opt)
-      if (opt[name].checkForReset) {
-        const bld = this._religionManager.getBuild(name, opt[name].variant);
-        checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
-        if (opt[name].triggerForReset > 0) {
-          if (opt[name].triggerForReset > bld.val) return;
+    for (const [name, entry] of objectEntries(this._host.options.auto.faith.items)) {
+      if (entry.checkForReset) {
+        const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
+        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
+        if (entry.triggerForReset > 0) {
+          if (entry.triggerForReset > bld.val) return;
         } else {
           checkList.push(name);
         }
       }
-    opt = this._host.options.auto.unicorn.items;
-    for (const name in opt)
-      if (opt[name].checkForReset && opt[name].variant == "z") {
-        const bld = this._religionManager.getBuild(name, "z");
-        checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
-        if (opt[name].triggerForReset > 0) {
-          if (opt[name].triggerForReset > bld.val) return;
+    }
+
+    for (const [name, entry] of objectEntries(this._host.options.auto.unicorn.items))
+      if (entry.checkForReset && entry.variant == UnicornItemVariant.Ziggurat) {
+        const bld = mustExist(this._religionManager.getBuild(name, UnicornItemVariant.Ziggurat));
+        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
+        if (entry.triggerForReset > 0) {
+          if (entry.triggerForReset > bld.val) return;
         } else {
           checkList.push(name);
         }
@@ -245,13 +246,12 @@ export class Engine {
       return;
 
     // check time
-    opt = this._host.options.auto.time.items;
-    for (const name in opt)
-      if (opt[name].checkForReset) {
-        const bld = this._timeManager.getBuild(name, opt[name].variant);
-        checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
-        if (opt[name].triggerForReset > 0) {
-          if (opt[name].triggerForReset > bld.val) return;
+    for (const [name, entry] of objectEntries(this._host.options.auto.time.items))
+      if (entry.checkForReset) {
+        const bld = mustExist(this._timeManager.getBuild(name, entry.variant));
+        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
+        if (entry.triggerForReset > 0) {
+          if (entry.triggerForReset > bld.val) return;
         } else {
           checkList.push(name);
         }
@@ -265,12 +265,11 @@ export class Engine {
       return;
 
     // check resources
-    opt = this._host.options.auto.resources;
-    for (const name in opt)
-      if (opt[name].checkForReset) {
-        const res = this._host.gamePage.resPool.get(name);
-        checkedList.push({ name: res.title, trigger: opt[name].stockForReset, val: res.value });
-        if (opt[name].stockForReset > res.value) return;
+    for (const [name,entry] of objectEntries(this._host.options.auto.resources))
+      if (entry.checkForReset) {
+        const res = mustExist(this._host.gamePage.resPool.get(name));
+        checkedList.push({ name: res.title, trigger: entry.stockForReset, val: res.value });
+        if (entry.stockForReset > res.value) return;
       }
 
     // stop!
@@ -914,7 +913,7 @@ export class Engine {
         let manpower = craftManager.getValueAvailable("manpower", true);
         if (!this._host.gamePage.diplomacy.get("lizards").unlocked) {
           if (manpower >= 1000) {
-            this._host.gamePage.resPool.get("manpower").value -= 1000;
+            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -926,7 +925,7 @@ export class Engine {
         }
         if (!this._host.gamePage.diplomacy.get("sharks").unlocked) {
           if (manpower >= 1000) {
-            this._host.gamePage.resPool.get("manpower").value -= 1000;
+            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -938,7 +937,7 @@ export class Engine {
         }
         if (!this._host.gamePage.diplomacy.get("griffins").unlocked) {
           if (manpower >= 1000) {
-            this._host.gamePage.resPool.get("manpower").value -= 1000;
+            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -950,10 +949,10 @@ export class Engine {
         }
         if (
           !this._host.gamePage.diplomacy.get("nagas").unlocked &&
-          this._host.gamePage.resPool.get("culture").value >= 1500
+          mustExist(this._host.gamePage.resPool.get("culture")).value >= 1500
         ) {
           if (manpower >= 1000) {
-            this._host.gamePage.resPool.get("manpower").value -= 1000;
+            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -1198,8 +1197,7 @@ export class Engine {
     const manager = this._craftManager;
     const trigger = this._host.options.auto.craft.trigger;
 
-    for (const name in crafts) {
-      const craft = crafts[name];
+    for (const [name, craft] of objectEntries(crafts)) {
       const current = !craft.max ? false : manager.getResource(name);
       const require = !craft.require ? false : manager.getResource(craft.require);
       const season = this._host.gamePage.calendar.season;
@@ -1247,11 +1245,12 @@ export class Engine {
     }
 
     const catpowProf =
-      4000 * craftManager.getTickVal(craftManager.getResource("manpower"), true) > 1500;
+      4000 * (craftManager.getTickVal(craftManager.getResource("manpower"), true) as number) > 1500;
     const cultureProf =
-      4000 * craftManager.getTickVal(craftManager.getResource("culture"), true) > 5000;
+      4000 * (craftManager.getTickVal(craftManager.getResource("culture"), true) as number) > 5000;
     const parchProf =
-      4000 * craftManager.getTickVal(craftManager.getResource("parchment"), true) > 2500;
+      4000 * (craftManager.getTickVal(craftManager.getResource("parchment"), true) as number) >
+      2500;
 
     if (!(catpowProf && cultureProf && parchProf)) {
       return;
@@ -1294,14 +1293,14 @@ export class Engine {
 
       huntCount = Math.floor(manpower.value / 100);
       const aveOutput = this._craftManager.getAverageHunt();
-      const trueOutput = {};
+      const trueOutput: Partial<Record<Resource, number>> = {};
 
-      for (const out in aveOutput) {
+      for (const [out, outValue] of objectEntries(aveOutput)) {
         const res = this._craftManager.getResource(out);
         trueOutput[out] =
           res.maxValue > 0
-            ? Math.min(aveOutput[out] * huntCount, Math.max(res.maxValue - res.value, 0))
-            : aveOutput[out] * huntCount;
+            ? Math.min(outValue * huntCount, Math.max(res.maxValue - res.value, 0))
+            : outValue * huntCount;
       }
 
       this._cacheManager.pushToCache({

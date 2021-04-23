@@ -40,6 +40,7 @@ export type ZiggurathUpgrades =
   | "marker"
   | "skyPalace"
   | "sunspire"
+  | "unicornPasture"
   | "unicornGraveyard"
   | "unicornNecropolis"
   | "unicornTomb"
@@ -50,6 +51,8 @@ export type AbstractReligionUpgradeInfo = {
    * An internationalized label for this religion upgrade.
    */
   label: string;
+
+  val: number;
 };
 
 export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
