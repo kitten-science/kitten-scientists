@@ -265,7 +265,7 @@ export class Engine {
       return;
 
     // check resources
-    for (const [name,entry] of objectEntries(this._host.options.auto.resources))
+    for (const [name, entry] of objectEntries(this._host.options.auto.resources))
       if (entry.checkForReset) {
         const res = mustExist(this._host.gamePage.resPool.get(name));
         checkedList.push({ name: res.title, trigger: entry.stockForReset, val: res.value });
@@ -528,8 +528,8 @@ export class Engine {
 
   crypto(): void {
     const coinPrice = this._host.gamePage.calendar.cryptoPrice;
-    const previousRelic = this._host.gamePage.resPool.get("relic").value;
-    const previousCoin = this._host.gamePage.resPool.get("blackcoin").value;
+    const previousRelic = mustExist(this._host.gamePage.resPool.get("relic")).value;
+    const previousCoin = mustExist(this._host.gamePage.resPool.get("blackcoin")).value;
     let exchangedCoin = 0.0;
     let exchangedRelic = 0.0;
     let waitForBestPrice = false;
@@ -545,8 +545,6 @@ export class Engine {
       coinPrice < 950.0 &&
       previousRelic > this._host.options.auto.options.items.crypto.subTrigger
     ) {
-      let currentCoin;
-
       // function name changed in v1.4.8.0
       if (typeof this._host.gamePage.diplomacy.buyEcoin === "function") {
         this._host.gamePage.diplomacy.buyEcoin();
@@ -554,12 +552,13 @@ export class Engine {
         this._host.gamePage.diplomacy.buyBcoin();
       }
 
-      currentCoin = this._host.gamePage.resPool.get("blackcoin").value;
+      const currentCoin = mustExist(this._host.gamePage.resPool.get("blackcoin")).value;
       exchangedCoin = Math.round(currentCoin - previousCoin);
       this._host.iactivity("blackcoin.buy", [exchangedCoin]);
-    } else if (coinPrice > 1050.0 && this._host.gamePage.resPool.get("blackcoin").value > 0) {
-      let currentRelic;
-
+    } else if (
+      coinPrice > 1050.0 &&
+      mustExist(this._host.gamePage.resPool.get("blackcoin")).value > 0
+    ) {
       waitForBestPrice = true;
 
       // function name changed in v1.4.8.0
@@ -569,7 +568,7 @@ export class Engine {
         this._host.gamePage.diplomacy.sellBcoin();
       }
 
-      currentRelic = this._host.gamePage.resPool.get("relic").value;
+      const currentRelic = mustExist(this._host.gamePage.resPool.get("relic")).value;
       exchangedRelic = Math.round(currentRelic - previousRelic);
 
       this._host.iactivity("blackcoin.sell", [exchangedRelic]);
@@ -583,9 +582,9 @@ export class Engine {
     if (expeditionNode == null) {
       manager.getCheapestNode();
 
-      manager.explore(manager.cheapestNodeX, manager.cheapestNodeY);
+      //manager.explore(manager.cheapestNodeX, manager.cheapestNodeY);
 
-      this._host.iactivity("act.explore", [manager.cheapestNodeX, manager.cheapestNodeY]);
+      //this._host.iactivity("act.explore", [manager.cheapestNodeX, manager.cheapestNodeY]);
     }
   }
 
@@ -599,12 +598,18 @@ export class Engine {
     if (option.bestUnicornBuilding.enabled) {
       const bestUnicornBuilding = this.getBestUnicornBuilding();
       if (bestUnicornBuilding) {
-        if (bestUnicornBuilding == "unicornPasture")
-          buildManager.build(bestUnicornBuilding, undefined, 1);
-        else {
-          const btn = manager.getBuildButton(bestUnicornBuilding, "z");
-          for (const i in btn.model.prices)
-            if (btn.model.prices[i].name == "tears") var tearNeed = btn.model.prices[i].val;
+        if (bestUnicornBuilding == "unicornPasture") {
+          buildManager.build(bestUnicornBuilding, 0, 1);
+        } else {
+          const btn = mustExist(
+            manager.getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat)
+          );
+          let tearNeed = 0;
+          for (const i in btn.model.prices) {
+            if (btn.model.prices[i].name == "tears") {
+              tearNeed = btn.model.prices[i].val;
+            }
+          }
           const tearHave = craftManager.getValue("tears") - craftManager.getStock("tears");
           if (tearNeed > tearHave) {
             // if no ziggurat, getBestUnicornBuilding will return unicornPasture
@@ -614,14 +619,15 @@ export class Engine {
             const needSacrifice = Math.ceil(
               (tearNeed - tearHave) / this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on
             );
-            if (needSacrifice < maxSacrifice)
+            if (needSacrifice < maxSacrifice) {
               this._host.gamePage.religionTab.sacrificeBtn.controller._transform(
                 this._host.gamePage.religionTab.sacrificeBtn.model,
                 needSacrifice
               );
-            // iactivity?
+              // iactivity?
+            }
           }
-          religionManager.build(bestUnicornBuilding, "z", 1);
+          this._religionManager.build(bestUnicornBuilding, UnicornItemVariant.Ziggurat, 1);
         }
       }
     } else {
@@ -646,7 +652,7 @@ export class Engine {
     if (0.98 <= rate) {
       let worship = this._host.gamePage.religion.faith;
       let epiphany = this._host.gamePage.religion.faithRatio;
-      const transcendenceReached = this._host.gamePage.religion.getRU("transcendence").on;
+      const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence")).on;
       let tt = transcendenceReached ? this._host.gamePage.religion.transcendenceTier : 0;
 
       // Transcend
@@ -674,9 +680,9 @@ export class Engine {
           this._host.gamePage.religion.faithRatio -= needNextLevel;
           this._host.gamePage.religion.tcratio += needNextLevel;
           this._host.gamePage.religion.transcendenceTier += 1;
-          const atheism = this._host.gamePage.challenges.getChallenge("atheism");
+          const atheism = mustExist(this._host.gamePage.challenges.getChallenge("atheism"));
           atheism.calculateEffects(atheism, this._host.gamePage);
-          const blackObelisk = this._host.gamePage.religion.getTU("blackObelisk");
+          const blackObelisk = mustExist(this._host.gamePage.religion.getTU("blackObelisk"));
           blackObelisk.calculateEffects(blackObelisk, this._host.gamePage);
           this._host.gamePage.msg(
             this._host.i18nEngine("religion.transcend.msg.success", [
@@ -699,7 +705,7 @@ export class Engine {
       }
 
       // Adore
-      if (option.adore.enabled && this._host.gamePage.religion.getRU("apocripha").on) {
+      if (option.adore.enabled && mustExist(this._host.gamePage.religion.getRU("apocripha")).on) {
         // game version: 1.4.8.1
         const maxSolarRevolution = 10 + this._host.gamePage.getEffect("solarRevolutionLimit");
         const triggerSolarRevolution = maxSolarRevolution * option.adore.subTrigger;
@@ -848,9 +854,9 @@ export class Engine {
     upgradeManager.sciManager.render();
     upgradeManager.spaManager.render();
 
-    if (upgrades.upgrades.enabled && gamePage.tabs[3].visible) {
+    if (upgrades.upgrades.enabled && this._host.gamePage.tabs[3].visible) {
       const work = this._host.gamePage.workshop.upgrades;
-      workLoop: for (var upg in work) {
+      workLoop: for (const upg in work) {
         if (work[upg].researched || !work[upg].unlocked) {
           continue;
         }
@@ -868,14 +874,14 @@ export class Engine {
 
     if (upgrades.techs.enabled && this._host.gamePage.tabs[2].visible) {
       const tech = this._host.gamePage.science.techs;
-      techLoop: for (var upg in tech) {
+      techLoop: for (const upg in tech) {
         if (tech[upg].researched || !tech[upg].unlocked) {
           continue;
         }
 
         let prices = dojo.clone(tech[upg].prices);
         prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
-        for (var resource in prices) {
+        for (const resource in prices) {
           if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
             continue techLoop;
           }
@@ -964,10 +970,10 @@ export class Engine {
         }
         if (
           !this._host.gamePage.diplomacy.get("zebras").unlocked &&
-          this._host.gamePage.resPool.get("ship").value >= 1
+          mustExist(this._host.gamePage.resPool.get("ship")).value >= 1
         ) {
           if (manpower >= 1000) {
-            this._host.gamePage.resPool.get("manpower").value -= 1000;
+            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -979,11 +985,11 @@ export class Engine {
         }
         if (
           !this._host.gamePage.diplomacy.get("spiders").unlocked &&
-          this._host.gamePage.resPool.get("ship").value >= 100 &&
-          this._host.gamePage.resPool.get("science").maxValue > 125000
+          mustExist(this._host.gamePage.resPool.get("ship")).value >= 100 &&
+          mustExist(this._host.gamePage.resPool.get("science")).maxValue > 125000
         ) {
           if (manpower >= 1000) {
-            this._host.gamePage.resPool.get("manpower").value -= 1000;
+            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -998,7 +1004,7 @@ export class Engine {
           this._host.gamePage.science.get("nuclearFission").researched
         ) {
           if (manpower >= 1000) {
-            this._host.gamePage.resPool.get("manpower").value -= 1000;
+            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -1028,7 +1034,7 @@ export class Engine {
             const prices = pastureMeta.stages[1].prices;
             const priceRatio = bulkManager.getPriceRatio(pastureMeta, true);
             if (bulkManager.singleBuildPossible(pastureMeta, prices, 1)) {
-              const button = buildManager.getBuildButton("pasture", 0);
+              const button = mustExist(buildManager.getBuildButton("pasture", 0));
               button.controller.sellInternal(button.model, 0);
               pastureMeta.on = 0;
               pastureMeta.val = 0;
@@ -1050,7 +1056,7 @@ export class Engine {
             const prices = aqueductMeta.stages[1].prices;
             const priceRatio = bulkManager.getPriceRatio(aqueductMeta, true);
             if (bulkManager.singleBuildPossible(aqueductMeta, prices, 1)) {
-              const button = buildManager.getBuildButton("aqueduct", 0);
+              const button = mustExist(buildManager.getBuildButton("aqueduct", 0));
               button.controller.sellInternal(button.model, 0);
               aqueductMeta.on = 0;
               aqueductMeta.val = 0;
@@ -1093,12 +1099,12 @@ export class Engine {
             const prices = libraryMeta.stages[1].prices;
             const priceRatio = bulkManager.getPriceRatio(libraryMeta, true);
             if (bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
-              const button = buildManager.getBuildButton("library", 0);
+              const button = mustExist(buildManager.getBuildButton("library", 0));
               button.controller.sellInternal(button.model, 0);
               libraryMeta.on = 0;
               libraryMeta.val = 0;
               libraryMeta.stage = 1;
-              libraryMeta.calculateEffects(libraryMeta, game);
+              libraryMeta.calculateEffects(libraryMeta, this._host.gamePage);
               this._host.iactivity("upgrade.building.library", [], "ks-upgrade");
               this._host.gamePage.ui.render();
               buildManager.build("library", 1, 1);
@@ -1115,7 +1121,7 @@ export class Engine {
           const prices = amphitheatreMeta.stages[1].prices;
           const priceRatio = bulkManager.getPriceRatio(amphitheatreMeta, true);
           if (bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
-            const button = buildManager.getBuildButton("amphitheatre", 0);
+            const button = mustExist(buildManager.getBuildButton("amphitheatre", 0));
             button.controller.sellInternal(button.model, 0);
             amphitheatreMeta.on = 0;
             amphitheatreMeta.val = 0;

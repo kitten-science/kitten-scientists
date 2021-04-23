@@ -92,6 +92,7 @@ export type BuildItem =
   | "steamworks"
   | "temple"
   | "tradepost"
+  | "unicornPasture"
   | "warehouse"
   | "workshop"
   | "zebraForge"

@@ -91,7 +91,6 @@ export type BuildButton<T = string> = {
 
 export type GameTab = {
   buttons: Array<BuildButton>;
-  censusPanel?: BuildButton; // Probably village tab specific.
   children: Array<BuildButton>;
   render: () => void;
   tabId: TabId;
@@ -174,6 +173,7 @@ export type BuildingInfo = {
 
 export type BuildingExt = {
   meta: {
+    calculateEffects: (model: unknown, game: GamePage) => void;
     effects: { unicornsPerTickBase: number };
     label: string;
     on: number;

@@ -70,6 +70,7 @@ export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
 
   name: ReligionUpgrades;
   noStackable: boolean;
+  on:boolean;
   priceRatio: number;
 };
 
