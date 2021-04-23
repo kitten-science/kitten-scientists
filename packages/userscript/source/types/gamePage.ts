@@ -9,6 +9,7 @@ import {
   ReligionUpgradeInfo,
   ReligionUpgrades,
   Resource,
+  Season,
   TabId,
   TranscendenceUpgradeInfo,
   TranscendenceUpgrades,
@@ -31,7 +32,7 @@ export type GamePage = {
     cycleYear: number;
     day: number;
     festivalDays: number;
-    getCurSeason: () => { modifiers: { catnip: number }; name: string };
+    getCurSeason: () => { modifiers: { catnip: number }; name: Season };
     getWeatherMod: () => number;
     season: number;
     year: number;
@@ -63,6 +64,7 @@ export type GamePage = {
      * @deprecated Use `sellBcoin` instead.
      */
     sellEcoin: () => void;
+    tradeMultiple: (race: RaceInfo, amount: number) => void;
     unlockRandomRace: () => { title: string };
   };
   diplomacyTab: GameTab;

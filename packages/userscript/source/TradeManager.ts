@@ -1,13 +1,13 @@
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
-import { isNil, Maybe } from "./tools/Maybe";
-import { BuildButton, Race, RaceInfo, Resource } from "./types";
+import { isNil, Maybe, mustExist } from "./tools/Maybe";
+import { BuildButton, Race, RaceInfo, Resource, TradingTab } from "./types";
 import { UserScript } from "./UserScript";
 
 export class TradeManager {
   private readonly _host: UserScript;
-  private readonly _manager: TabManager;
+  private readonly _manager: TabManager<TradingTab>;
   private readonly _craftManager: CraftManager;
 
   constructor(host: UserScript) {
@@ -37,22 +37,25 @@ export class TradeManager {
     this._host.iactivity("act.trade", [amount, this._host.ucfirst(race.title)], "ks-trade");
   }
 
-  getProfitability(name: string): unknown {
+  getProfitability(name: Race): unknown {
     const race = this.getRace(name);
 
     const materials = this.getMaterials(name);
     let cost = 0;
-    for (const mat in materials) {
+    for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
       const tick = this._craftManager.getTickVal(this._craftManager.getResource(mat));
+      if (tick === "ignore") {
+        continue;
+      }
       if (tick <= 0) {
         return false;
       }
-      cost += materials[mat] / tick;
+      cost += amount / tick;
     }
 
     const output = this.getAverageTrade(race);
     let profit = 0;
-    for (const prod in output) {
+    for (const [prod, amount] of objectEntries<Resource, number>(output)) {
       const res = this._craftManager.getResource(prod);
       const tick = this._craftManager.getTickVal(res);
       if (tick === "ignore") {
@@ -63,18 +66,13 @@ export class TradeManager {
       }
       profit +=
         res.maxValue > 0
-          ? Math.min(output[prod], Math.max(res.maxValue - res.value, 0)) / tick
-          : output[prod] / tick;
+          ? Math.min(amount, Math.max(res.maxValue - res.value, 0)) / tick
+          : amount / tick;
     }
     return cost <= profit;
   }
 
-  getAverageTrade(
-    race: RaceInfo
-  ): {
-    blueprint: number;
-    spice: number;
-  } {
+  getAverageTrade(race: RaceInfo): Partial<Record<Resource, number>> {
     // standingRatio
     // var standRat = this._host.gamePage.getEffect("standingRatio");
     const standRat =
@@ -109,7 +107,7 @@ export class TradeManager {
         ? item.chance * (1 + this._host.gamePage.getLimitedDR(0.01 * race.embassyLevel, 0.75))
         : item.chance;
       if (race.name == "zebras" && item.name == "titanium") {
-        const shipCount = this._host.gamePage.resPool.get("ship").value;
+        const shipCount = mustExist(this._host.gamePage.resPool.get("ship")).value;
         const titanProb = Math.min(0.15 + shipCount * 0.0035, 1);
         const titanRat = 1 + shipCount / 50;
         mean = 1.5 * titanRat * (successRat * titanProb);
@@ -133,13 +131,10 @@ export class TradeManager {
     return output;
   }
 
-  isValidTrade(
-    item: { minLevel: number; name: Resource },
-    race: { embassyLevel: number; name: "leviathans" | "titanium" | "uranium" }
-  ): unknown {
+  isValidTrade(item: { minLevel: number; name: Resource }, race: RaceInfo): unknown {
     return (
       !(item.minLevel && race.embassyLevel < item.minLevel) &&
-      (this._host.gamePage.resPool.get(item.name).unlocked ||
+      (mustExist(this._host.gamePage.resPool.get(item.name)).unlocked ||
         item.name === "titanium" ||
         item.name === "uranium" ||
         race.name === "leviathans")
@@ -191,7 +186,7 @@ export class TradeManager {
       // No need to process resources that don't cap
       if (!resource.maxValue) continue;
 
-      max = tradeOutput[item.name];
+      max = mustExist(tradeOutput[item.name]);
 
       const capacity = Math.max((resource.maxValue - resource.value) / max, 0);
 

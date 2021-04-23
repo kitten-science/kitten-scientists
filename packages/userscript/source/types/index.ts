@@ -1,3 +1,4 @@
+export type Season = "autumn" | "spring" | "summer" | "winter";
 export type Resource =
   | "alloy"
   | "beam"
@@ -25,6 +26,7 @@ export type Resource =
   | "ship"
   | "slab"
   | "slabs" // deprecated: Use `slab` instead
+  | "spice"
   | "steel"
   | "tanker"
   | "tears"
@@ -72,12 +74,6 @@ export type GameTab = {
   censusPanel?: BuildButton; // Probably village tab specific.
   cfPanel?: BuildButton; // Chronoforge?
   children: Array<BuildButton>;
-  racePanels?: Array<{
-    race: {
-      name: string;
-    };
-    tradeBtn: BuildButton;
-  }>; // Probably trading tab specific
   render: () => void;
   tabId: TabId;
   visible: boolean;
@@ -142,28 +138,9 @@ export type BuildingExt = {
   };
 };
 
-export type Race =
-  | "dragons"
-  | "griffins"
-  | "nagas"
-  | "leviathans"
-  | "lizards"
-  | "sharks"
-  | "spiders"
-  | "zebras";
-export type RaceInfo = {
-  buys: Array<{ name: Resource; val: number }>;
-  embassyLevel: number;
-  embassyPrices: unknown;
-  energy: number;
-  name: Race;
-  sells: Array<{ chance: number; name: Resource; seasons: Record<string, number>; value: number }>;
-  standing: number;
-  unlocked: boolean;
-};
-
 export type Challenge = "1000Years" | "anarchy" | "atheism" | "energy" | "winterIsComing";
 
 export * from "./gamePage";
 export * from "./religion";
 export * from "./space";
+export * from "./trading";
