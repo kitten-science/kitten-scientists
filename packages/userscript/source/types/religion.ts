@@ -1,8 +1,8 @@
 import { BuildButton, GamePage, GameTab, Price } from ".";
 
 export type ReligionTab = GameTab & {
-  rUpgradeButtons: Array<BuildButton>;
-  zgUpgradeButtons: Array<BuildButton>;
+  rUpgradeButtons: Array<BuildButton<ReligionUpgrades>>;
+  zgUpgradeButtons: Array<BuildButton<ZiggurathUpgrades>>;
 };
 
 export enum UnicornItemVariant {
@@ -80,6 +80,7 @@ export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
   description: string;
 
   effects: {
+    riftChance?: number;
     unicornsRatioReligion?: number;
   };
 

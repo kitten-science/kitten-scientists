@@ -24,6 +24,7 @@ import {
   BuildingExt,
   SpaceBuildingInfo,
   UnicornItemVariant,
+  ZiggurathUpgrades,
 } from "./types";
 import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
@@ -1572,10 +1573,11 @@ export class Engine {
    * @see https://github.com/Bioniclegenius/NummonCalc/blob/112f716e2fde9956dfe520021b0400cba7b7113e/NummonCalc.js#L490
    * @returns
    */
-  getBestUnicornBuilding(): unknown {
+  getBestUnicornBuilding(): "unicornPasture" | ZiggurathUpgrades | null {
     const unicornPasture = "unicornPasture";
     const pastureButton = this._buildManager.getBuildButton("unicornPasture");
-    if (typeof pastureButton === "undefined") return;
+    if (pastureButton === null) return null;
+
     const validBuildings = [
       "unicornTomb",
       "ivoryTower",
@@ -1614,7 +1616,7 @@ export class Engine {
       ((this._host.gamePage.getEffect("riftChance") * riftChanceRatio) / (10000 * 2)) *
       baseUnicornsPerRift;
     let bestAmoritization = Infinity;
-    let bestBuilding = "";
+    let bestBuilding: "unicornPasture" | ZiggurathUpgrades | null = null;
     let pastureAmor =
       this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"] *
       this._host.gamePage.getTicksPerSecondUI();
@@ -1629,17 +1631,18 @@ export class Engine {
       if (validBuildings.indexOf(btn.id) != -1) {
         if (btn.model.visible) {
           let unicornPrice = 0;
-          for (var j in btn.model.prices) {
+          for (const j in btn.model.prices) {
             if (btn.model.prices[j].name == "unicorns") unicornPrice += btn.model.prices[j].val;
             if (btn.model.prices[j].name == "tears")
               unicornPrice += (btn.model.prices[j].val * 2500) / onZig;
           }
-          const bld = this._host.gamePage.religion.getZU(btn.id);
+          const bld = mustExist(this._host.gamePage.religion.getZU(btn.id));
           let relBonus = religionRatio;
           let riftChance = this._host.gamePage.getEffect("riftChance");
-          for (var j in bld.effects) {
-            if (j == "unicornsRatioReligion") relBonus += bld.effects[j];
-            if (j == "riftChance") riftChance += bld.effects[j];
+          for (const j in bld.effects) {
+            if (j == "unicornsRatioReligion")
+              relBonus += mustExist(bld.effects.unicornsRatioReligion);
+            if (j == "riftChance") riftChance += mustExist(bld.effects.riftChance);
           }
           const unicornsPerRift = 500 * ((relBonus - 1) * 0.1 + 1);
           let riftBonus = ((riftChance * riftChanceRatio) / (10000 * 2)) * unicornsPerRift;
