@@ -11,9 +11,11 @@ export type Resource =
   | "concrate"
   | "culture"
   | "eludium"
+  | "furs"
   | "gear"
   | "gold"
   | "iron"
+  | "ivory"
   | "kerosene"
   | "manpower"
   | "manuscript"
@@ -37,7 +39,8 @@ export type Resource =
   | "titanium"
   | "unicorns"
   | "uranium"
-  | "wood";
+  | "wood"
+  | "zebras";
 
 export type TabId =
   | "Bonfire"
