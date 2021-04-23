@@ -5,6 +5,7 @@ import {
   BuildingInfo,
   Challenge,
   GameTab,
+  Jobs,
   Price,
   Race,
   RaceInfo,
@@ -18,7 +19,7 @@ import {
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from ".";
-import { SpaceItem } from "../Options";
+import { DistributeItems, SpaceItem } from "../Options";
 import { ReligionTab } from "./religion";
 import { SpaceTab } from "./space";
 import {
@@ -50,11 +51,13 @@ export type GamePage = {
     observeBtn: BuildButton | null;
     observeHandler: () => void;
     season: number;
+    seasons:Array<{name:Season}>;
     year: number;
     yearsPerCycle: number;
   };
   challenges: {
     currentChallenge: Challenge;
+    challenges: Array<{ pending: boolean }>;
     getChallenge: (
       challenge: Challenge
     ) =>
@@ -284,7 +287,7 @@ export type GamePage = {
     getResProduction: () => { catnip: number };
     happiness: number;
     huntAll: () => void;
-    jobs: Array<{ name: string; unlocked: boolean; value: number }>;
+    jobs: Array<{ name: Jobs; unlocked: boolean; value: number }>;
     leader: { rank: number };
     /**
      * @deprecated

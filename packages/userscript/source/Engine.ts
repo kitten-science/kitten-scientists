@@ -145,7 +145,7 @@ export class Engine {
 
     const checkedList = [];
     const checkList: Array<string> = [];
-    const check = function (buttons: Array<BuildButton>) {
+    const check = (buttons: Array<BuildButton>) => {
       if (checkList.length != 0) {
         for (const i in buttons) {
           if (!buttons[i].model.metadata) continue;
@@ -207,7 +207,7 @@ export class Engine {
           const index = checkList.indexOf(name);
           if (index != -1) {
             checkList.splice(index, 1);
-            if (this._host.gamePage.resPool.hasRes(model.prices)) this.return;
+            if (this._host.gamePage.resPool.hasRes(model.prices)) break;
           }
         }
       }
@@ -275,13 +275,13 @@ export class Engine {
     // stop!
     this.stop(false);
 
-    const sleep = function (time = 1500) {
+    const sleep =  (time = 1500) =>{
       return new Promise(resolve => {
         if (
           !(
-            options.auto.engine.enabled &&
-            options.auto.timeCtrl.enabled &&
-            options.auto.timeCtrl.items.reset.enabled
+            this._host.options.auto.engine.enabled &&
+            this._host.options.auto.timeCtrl.enabled &&
+            this._host.options.auto.timeCtrl.items.reset.enabled
           )
         )
           throw "canceled by player";
@@ -365,14 +365,14 @@ export class Engine {
 
     if (typeof kittenStorage.reset === "undefined") kittenStorage.reset = {};
 
-    kittenStorage.reset.karmaLastTime = this._host.gamePage.resPool.get("karma").value;
-    kittenStorage.reset.paragonLastTime = this._host.gamePage.resPool.get("paragon").value;
+    kittenStorage.reset.karmaLastTime = mustExist(this._host.gamePage.resPool.get("karma")).value;
+    kittenStorage.reset.paragonLastTime = mustExist(this._host.gamePage.resPool.get("paragon")).value;
     kittenStorage.reset.times += 1;
     kittenStorage.reset.reset = true;
     saveToKittenStorage();
 
     //=============================================================
-    for (const i = 0; i < this._host.gamePage.challenges.challenges.length; i++) {
+    for (let i = 0; i < this._host.gamePage.challenges.challenges.length; i++) {
       this._host.gamePage.challenges.challenges[i].pending = false;
     }
     this._host.gamePage.resetAutomatic();
@@ -384,7 +384,7 @@ export class Engine {
 
     // Tempus Fugit
     if (optionVals.accelerateTime.enabled && !this._host.gamePage.time.isAccelerated) {
-      const tf = this._host.gamePage.resPool.get("temporalFlux");
+      const tf = mustExist(this._host.gamePage.resPool.get("temporalFlux"));
       if (tf.value >= tf.maxValue * optionVals.accelerateTime.subTrigger) {
         this._host.gamePage.time.isAccelerated = true;
         this._host.iactivity("act.accelerate", [], "ks-accelerate");
@@ -399,7 +399,7 @@ export class Engine {
     ) {
       if (this._host.gamePage.calendar.day < 0) break TimeSkip;
 
-      const timeCrystal = this._host.gamePage.resPool.get("timeCrystal");
+      const timeCrystal = mustExist(this._host.gamePage.resPool.get("timeCrystal"));
       if (timeCrystal.value < optionVals.timeSkip.subTrigger) break TimeSkip;
 
       const season = this._host.gamePage.calendar.season;
@@ -415,7 +415,7 @@ export class Engine {
       const yearsPerCycle = this._host.gamePage.calendar.yearsPerCycle;
       const remainingYearsCurrentCycle = yearsPerCycle - this._host.gamePage.calendar.cycleYear;
       const cyclesPerEra = this._host.gamePage.calendar.cyclesPerEra;
-      const factor = this._host.gamePage.challenges.getChallenge("1000Years").researched ? 5 : 10;
+      const factor = mustExist(this._host.gamePage.challenges.getChallenge("1000Years")).researched ? 5 : 10;
       let canSkip = Math.min(Math.floor((heatMax - heatNow) / factor), optionVals.timeSkip.maximum);
       let willSkip = 0;
       if (canSkip < remainingYearsCurrentCycle) {
@@ -652,7 +652,8 @@ export class Engine {
     if (0.98 <= rate) {
       let worship = this._host.gamePage.religion.faith;
       let epiphany = this._host.gamePage.religion.faithRatio;
-      const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence")).on;
+      const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence"))
+        .on;
       let tt = transcendenceReached ? this._host.gamePage.religion.transcendenceTier : 0;
 
       // Transcend
