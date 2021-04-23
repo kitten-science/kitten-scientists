@@ -3,14 +3,14 @@ import { BulkManager } from "./BulkManager";
 import { CacheManager } from "./CacheManager";
 import { CraftManager } from "./CraftManager";
 import { ExplorationManager } from "./ExplorationManager";
-import { BuildItemOptions, BuildMenuOption, FaithItems, UnicornFaithItemOptions } from "./Options";
+import { BuildItemOptions, BuildItem, FaithItem, UnicornFaithItemOptions } from "./Options";
 import { ReligionManager } from "./ReligionManager";
 import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
 import { TimeManager } from "./TimeManager";
 import { objectEntries } from "./tools/Entries";
 import { TradeManager } from "./TradeManager";
-import { Building } from "./types";
+import { BuildButton, Building } from "./types";
 import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 
@@ -123,11 +123,11 @@ export class Engine {
 
   async reset(): Promise<void> {
     // check challenge
-    if (this._host.this._host.gamePage.challenges.currentChallenge) return;
+    if (this._host.gamePage.challenges.currentChallenge) return;
 
     const checkedList = [];
-    const checkList = [];
-    const check = function (buttons) {
+    const checkList:Array<string> = [];
+    const check = function (buttons:Array<BuildButton>) {
       if (checkList.length != 0) {
         for (let i in buttons) {
           if (!buttons[i].model.metadata) continue;
@@ -371,7 +371,7 @@ export class Engine {
       if (tf.value >= tf.maxValue * optionVals.accelerateTime.subTrigger) {
         this._host.gamePage.time.isAccelerated = true;
         this._host.iactivity("act.accelerate", [], "ks-accelerate");
-        storeForSummary("accelerate", 1);
+        this._host.storeForSummary("accelerate", 1);
       }
     }
 
@@ -422,7 +422,7 @@ export class Engine {
         const shatter = this._host.gamePage.timeTab.cfPanel.children[0].children[0]; // check?
         this._host.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
         shatter.controller.doShatterAmt(shatter.model, willSkip);
-        storeForSummary("time.skip", willSkip);
+        this._host.storeForSummary("time.skip", willSkip);
       }
     }
   }
@@ -448,7 +448,7 @@ export class Engine {
           this._host.gamePage.tabs[1].censusPanel.census
         );
         this._host.gamePage.tabs[1].censusPanel.census.update();
-        storeForSummary("promote", 1);
+        this._host.storeForSummary("promote", 1);
       }
     }
   }
@@ -484,7 +484,7 @@ export class Engine {
         [this._host.i18n("$village.job." + jobName)],
         "ks-distribute"
       );
-      storeForSummary("distribute", 1);
+      this._host.storeForSummary("distribute", 1);
     }
   }
 
@@ -498,11 +498,11 @@ export class Engine {
       if (levi.energy < this._host.gamePage.diplomacy.getMarkerCap()) {
         this._host.gamePage.diplomacy.feedElders();
         this._host.iactivity("act.feed");
-        storeForSummary("feed", 1);
+        this._host.storeForSummary("feed", 1);
       }
     } else {
       if (0.25 * (1 + this._host.gamePage.getEffect("corruptionBoostRatio")) < 1) {
-        storeForSummary("feed", nCorn.value);
+        this._host.storeForSummary("feed", nCorn.value);
         this._host.gamePage.diplomacy.feedElders();
         this._host.iactivity("dispose.necrocorn");
       }
@@ -677,7 +677,7 @@ export class Engine {
             [this._host.gamePage.getDisplayValueExt(needNextLevel), tt],
             "ks-transcend"
           );
-          storeForSummary("transcend", 1);
+          this._host.storeForSummary("transcend", 1);
         }
       }
 
@@ -706,7 +706,7 @@ export class Engine {
             ],
             "ks-adore"
           );
-          storeForSummary("adore", epiphanyInc);
+          this._host.storeForSummary("adore", epiphanyInc);
           epiphany = this._host.gamePage.religion.faithRatio;
           worship = this._host.gamePage.religion.faith;
         }
@@ -721,7 +721,7 @@ export class Engine {
         apocryphaBonus = this._host.gamePage.religion.getFaithBonus();
       }
       const worshipInc = faith.value * (1 + apocryphaBonus);
-      storeForSummary("praise", worshipInc);
+      this._host.storeForSummary("praise", worshipInc);
       this._host.iactivity(
         "act.praise",
         [
@@ -735,7 +735,7 @@ export class Engine {
   }
 
   private _worship(
-    builds: Partial<Record<FaithItems, UnicornFaithItemOptions>> = this._host.options.auto.faith
+    builds: Partial<Record<FaithItem, UnicornFaithItemOptions>> = this._host.options.auto.faith
       .items
   ): void {
     const buildManager = this._religionManager;
@@ -747,7 +747,7 @@ export class Engine {
     buildManager.manager.render();
 
     const metaData = {};
-    for (const [name, build] of objectEntries<FaithItems, UnicornFaithItemOptions>(builds)) {
+    for (const [name, build] of objectEntries<FaithItem, UnicornFaithItemOptions>(builds)) {
       metaData[name] = buildManager.getBuild(name, build.variant);
       if (!buildManager.getBuildButton(name, build.variant)) {
         metaData[name].rHidden = true;
@@ -834,9 +834,9 @@ export class Engine {
           continue;
         }
 
-        var prices = dojo.clone(work[upg].prices); // this._host.gamePage.village.getEffectLeader will override its argument
+        let prices = dojo.clone(work[upg].prices); // this._host.gamePage.village.getEffectLeader will override its argument
         prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
-        for (var resource in prices) {
+        for (const resource in prices) {
           if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
             continue workLoop;
           }
@@ -845,14 +845,14 @@ export class Engine {
       }
     }
 
-    if (upgrades.techs.enabled && gamePage.tabs[2].visible) {
+    if (upgrades.techs.enabled && this._host.gamePage.tabs[2].visible) {
       const tech = this._host.gamePage.science.techs;
       techLoop: for (var upg in tech) {
         if (tech[upg].researched || !tech[upg].unlocked) {
           continue;
         }
 
-        var prices = dojo.clone(tech[upg].prices);
+        let prices = dojo.clone(tech[upg].prices);
         prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
         for (var resource in prices) {
           if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
@@ -1111,7 +1111,7 @@ export class Engine {
   }
 
   build(
-    builds: Record<BuildMenuOption, BuildItemOptions> = this._host.options.auto.build.items
+    builds: Record<BuildItem, BuildItemOptions> = this._host.options.auto.build.items
   ): void {
     const buildManager = this._buildManager;
     const craftManager = this._craftManager;
@@ -1244,7 +1244,7 @@ export class Engine {
     if (this._host.gamePage.villageTab.festivalBtn.model.enabled) {
       const beforeDays = this._host.gamePage.calendar.festivalDays;
       this._host.gamePage.villageTab.festivalBtn.onClick();
-      storeForSummary("festival");
+      this._host.storeForSummary("festival");
       if (beforeDays > 0) {
         this._host.iactivity("festival.extend", [], "ks-festival");
       } else {
@@ -1257,7 +1257,7 @@ export class Engine {
     if (this._host.gamePage.calendar.observeBtn != null) {
       this._host.gamePage.calendar.observeHandler();
       this._host.iactivity("act.observe", [], "ks-star");
-      storeForSummary("stars", 1);
+      this._host.storeForSummary("stars", 1);
     }
   }
 
@@ -1269,11 +1269,11 @@ export class Engine {
       manpower.value >= 100
     ) {
       // No way to send only some hunters. Thus, we hunt with everything
-      var huntCount = Math.floor(manpower.value / 100);
-      storeForSummary("hunt", huntCount);
+      let huntCount = Math.floor(manpower.value / 100);
+      this._host.storeForSummary("hunt", huntCount);
       this._host.iactivity("act.hunt", [huntCount], "ks-hunt");
 
-      var huntCount = Math.floor(manpower.value / 100);
+       huntCount = Math.floor(manpower.value / 100);
       const aveOutput = this._craftManager.getAverageHunt();
       const trueOutput = {};
 
@@ -1516,7 +1516,7 @@ export class Engine {
           }
           this._host.gamePage.resPool.resources[13].value -= emBulk.priceSum;
           emBulk.race.embassyLevel += emBulk.val;
-          storeForSummary("embassy", emBulk.val);
+          this._host.storeForSummary("embassy", emBulk.val);
           if (emBulk.val !== 1) {
             this._host.iactivity("build.embassies", [emBulk.val, emBulk.race.title], "ks-trade");
           } else {
@@ -1538,7 +1538,7 @@ export class Engine {
       while (btn.controller.doFixCryochamber(btn.model)) fixed += 1;
       if (fixed > 0) {
         this._host.iactivity("act.fix.cry", [fixed], "ks-fixCry");
-        storeForSummary("fix.cry", fixed);
+        this._host.storeForSummary("fix.cry", fixed);
       }
     }
 

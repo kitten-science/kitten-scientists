@@ -246,7 +246,7 @@ export class BulkManager {
     data: unknown,
     prices: Array<unknown>,
     priceRatio: number,
-    source: unknown
+    source: unknown = undefined
   ): boolean {
     const pricesDiscount = this._host.gamePage.getLimitedDR(
       this._host.gamePage.getEffect(data.name + "CostReduction"),

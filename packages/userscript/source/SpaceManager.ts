@@ -1,6 +1,6 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
-import { SpaceItems } from "./Options";
+import { SpaceItem } from "./Options";
 import { TabManager } from "./TabManager";
 import { BuildButton } from "./types";
 import { UserScript } from "./UserScript";
@@ -18,7 +18,7 @@ export class SpaceManager {
     this._bulkManager = new BulkManager(this._host);
   }
 
-  build(name: SpaceItems, amount: number): void {
+  build(name: SpaceItem, amount: number): void {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name);
 
@@ -37,7 +37,7 @@ export class SpaceManager {
         label + " Amount ordered: " + amountTemp + " Amount Constructed: " + amount
       );
     }
-    storeForSummary(label, amount, "build");
+    this._host.storeForSummary(label, amount, "build");
 
     if (amount === 1) {
       this._host.iactivity("act.build", [label], "ks-build");
@@ -46,7 +46,7 @@ export class SpaceManager {
     }
   }
 
-  getBuild(name: SpaceItems): { label: string; unlocked: boolean; val: number } {
+  getBuild(name: SpaceItem): { label: string; unlocked: boolean; val: number } {
     return this._host.gamePage.space.getBuilding(name);
   }
 

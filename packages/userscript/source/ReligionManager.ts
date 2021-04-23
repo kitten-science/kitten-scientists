@@ -2,7 +2,13 @@ import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { UnicornItemVariant } from "./Options";
 import { TabManager } from "./TabManager";
-import { BuildButton } from "./types";
+import {
+  AbstractReligionUpgradeInfo,
+  BuildButton,
+  ReligionUpgrades,
+  TranscendenceUpgrades,
+  ZiggurathUpgrades,
+} from "./types";
 import { UserScript } from "./UserScript";
 
 export class ReligionManager {
@@ -34,14 +40,14 @@ export class ReligionManager {
     }
 
     if (variant === "s") {
-      storeForSummary(label, amount, "faith");
+      this._host.storeForSummary(label, amount, "faith");
       if (amount === 1) {
         this._host.iactivity("act.sun.discover", [label], "ks-faith");
       } else {
         this._host.iactivity("act.sun.discovers", [label, amount], "ks-faith");
       }
     } else {
-      storeForSummary(label, amount, "build");
+      this._host.storeForSummary(label, amount, "build");
       if (amount === 1) {
         this._host.iactivity("act.build", [label], "ks-build");
       } else {
@@ -50,15 +56,19 @@ export class ReligionManager {
     }
   }
 
-  getBuild(name: string, variant: UnicornItemVariant): unknown {
+  getBuild(
+    name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
+    variant: UnicornItemVariant
+  ): AbstractReligionUpgradeInfo | null {
     switch (variant) {
-      case "z":
-        return this._host.gamePage.religion.getZU(name);
-      case "s":
-        return this._host.gamePage.religion.getRU(name);
-      case "c":
-        return this._host.gamePage.religion.getTU(name);
+      case UnicornItemVariant.Ziggurat:
+        return this._host.gamePage.religion.getZU(name as ZiggurathUpgrades);
+      case UnicornItemVariant.OrderOfTheSun:
+        return this._host.gamePage.religion.getRU(name as ReligionUpgrades);
+      case UnicornItemVariant.Cryptotheology:
+        return this._host.gamePage.religion.getTU(name as TranscendenceUpgrades);
     }
+    return null;
   }
 
   getBuildButton(name: string, variant: UnicornItemVariant): BuildButton | null {

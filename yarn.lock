@@ -153,6 +153,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/dojo@npm:^1.9.43":
+  version: 1.9.43
+  resolution: "@types/dojo@npm:1.9.43"
+  checksum: 8ffeb594ff2f7f2eea896a905a6421e6e8942c6da0b348a83e43f254624cdff7f1bfa8085eaa4879aed5af9a3f30cdc45980d5fc5def0045d006196296b84307
+  languageName: node
+  linkType: hard
+
 "@types/emscripten@npm:^1.38.0":
   version: 1.39.4
   resolution: "@types/emscripten@npm:1.39.4"
@@ -6318,6 +6325,7 @@ typescript@~4.2.4:
   version: 0.0.0-use.local
   resolution: "userscript@workspace:packages/userscript"
   dependencies:
+    "@types/dojo": ^1.9.43
     "@types/jquery": ^3.5.5
     pnp-webpack-plugin: ^1.6.4
     tslib: ^2.2.0
