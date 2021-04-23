@@ -129,10 +129,10 @@ export class Engine {
     const checkList:Array<string> = [];
     const check = function (buttons:Array<BuildButton>) {
       if (checkList.length != 0) {
-        for (let i in buttons) {
+        for (const i in buttons) {
           if (!buttons[i].model.metadata) continue;
-          let name = buttons[i].model.metadata.name;
-          let index = checkList.indexOf(name);
+          const name = buttons[i].model.metadata.name;
+          const index = checkList.indexOf(name);
           if (index != -1) {
             checkList.splice(index, 1);
             if (this._host.gamePage.resPool.hasRes(buttons[i].model.prices)) return true;
@@ -144,9 +144,9 @@ export class Engine {
 
     // check building
     let opt = this._host.options.auto.build.items;
-    for (var name in opt)
+    for (const name in opt)
       if (opt[name].checkForReset) {
-        var bld = this._host.gamePage.bld.get(name);
+        const bld = this._host.gamePage.bld.get(name);
         checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
         if (opt[name].triggerForReset > 0) {
           if (opt[name].triggerForReset > bld.val) return;
@@ -157,7 +157,7 @@ export class Engine {
     // unicornPasture
     opt = this._host.options.auto.unicorn.items.unicornPasture;
     if (opt.checkForReset) {
-      var bld = this._host.gamePage.bld.get("unicornPasture");
+      const bld = this._host.gamePage.bld.get("unicornPasture");
       checkedList.push({ name: bld.label, trigger: opt.triggerForReset, val: bld.val });
       if (opt.triggerForReset > 0) {
         if (opt.triggerForReset > bld.val) return;
@@ -169,9 +169,9 @@ export class Engine {
 
     // check space
     opt = this._host.options.auto.space.items;
-    for (var name in opt)
+    for (const name in opt)
       if (opt[name].checkForReset) {
-        var bld = this._host.gamePage.space.getBuilding(name);
+        const bld = this._host.gamePage.space.getBuilding(name);
         checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
         if (opt[name].triggerForReset > 0) {
           if (opt[name].triggerForReset > bld.val) return;
@@ -181,10 +181,10 @@ export class Engine {
       }
     if (checkList.length != 0) {
       const panels = this._spaceManager.manager.tab.planetPanels;
-      for (var i in panels) {
+      for (const i in panels) {
         for (const j in panels[i].children) {
           const model = panels[i].children[j].model;
-          var name = model.metadata.name;
+          const name = model.metadata.name;
           const index = checkList.indexOf(name);
           if (index != -1) {
             checkList.splice(index, 1);
@@ -197,9 +197,9 @@ export class Engine {
 
     // check religion
     opt = this._host.options.auto.faith.items;
-    for (var name in opt)
+    for (const name in opt)
       if (opt[name].checkForReset) {
-        var bld = this._religionManager.getBuild(name, opt[name].variant);
+        const bld = this._religionManager.getBuild(name, opt[name].variant);
         checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
         if (opt[name].triggerForReset > 0) {
           if (opt[name].triggerForReset > bld.val) return;
@@ -208,9 +208,9 @@ export class Engine {
         }
       }
     opt = this._host.options.auto.unicorn.items;
-    for (var name in opt)
+    for (const name in opt)
       if (opt[name].checkForReset && opt[name].variant == "z") {
-        var bld = this._religionManager.getBuild(name, "z");
+        const bld = this._religionManager.getBuild(name, "z");
         checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
         if (opt[name].triggerForReset > 0) {
           if (opt[name].triggerForReset > bld.val) return;
@@ -228,9 +228,9 @@ export class Engine {
 
     // check time
     opt = this._host.options.auto.time.items;
-    for (var name in opt)
+    for (const name in opt)
       if (opt[name].checkForReset) {
-        var bld = this._timeManager.getBuild(name, opt[name].variant);
+        const bld = this._timeManager.getBuild(name, opt[name].variant);
         checkedList.push({ name: bld.label, trigger: opt[name].triggerForReset, val: bld.val });
         if (opt[name].triggerForReset > 0) {
           if (opt[name].triggerForReset > bld.val) return;
@@ -273,7 +273,7 @@ export class Engine {
     };
 
     try {
-      for (var i in checkedList) {
+      for (const i in checkedList) {
         await sleep(500);
         const checked = checkedList[i];
         this._host.imessage("reset.check", [
