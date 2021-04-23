@@ -1,4 +1,4 @@
-import { Building, Resource } from "./types";
+import { Building, Resource, UnicornItemVariant } from "./types";
 
 export type Requirement =
   | "antimatter"
@@ -46,12 +46,6 @@ export type FaithItem =
   | "transcendence"
   | "unicornGraveyard"
   | "unicornNecropolis";
-export enum UnicornItemVariant {
-  Cryptotheology = "c",
-  OrderOfTheSun = "s",
-  Ziggurat = "z",
-  Unknown_zp = "zp",
-}
 export type UnicornFaithItemOptions = {
   require: Requirement;
   enabled: boolean;
