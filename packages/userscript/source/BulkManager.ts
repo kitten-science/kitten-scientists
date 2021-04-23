@@ -1,4 +1,20 @@
 import { CraftManager } from "./CraftManager";
+import {
+  BuildItemOptions,
+  FaithItem,
+  SpaceItem,
+  TimeItem,
+  TimeItemOptions,
+  UnicornFaithItemOptions,
+} from "./Options";
+import { objectEntries } from "./tools/Entries";
+import { mustExist } from "./tools/Maybe";
+import {
+  AbstractReligionUpgradeInfo,
+  AbstractTimeUpgradeInfo,
+  Resource,
+  SpaceBuildingInfo,
+} from "./types";
 import { UserScript } from "./UserScript";
 
 export class BulkManager {
@@ -10,13 +26,27 @@ export class BulkManager {
     this._craftManager = new CraftManager(this._host);
   }
 
-  bulk(builds: Array<unknown>, metaData: unknown, trigger: number, source: unknown): void {
+  bulk(
+    builds: Partial<
+      Record<
+        FaithItem | SpaceItem | TimeItem,
+        BuildItemOptions | TimeItemOptions | UnicornFaithItemOptions
+      >
+    >,
+    metaData: Partial<
+      Record<
+        FaithItem | SpaceItem | TimeItem,
+        AbstractReligionUpgradeInfo | AbstractTimeUpgradeInfo | SpaceBuildingInfo
+      >
+    >,
+    trigger: number,
+    source?: "bonfire" | "space"
+  ): void {
     const bList = [];
     const countList = [];
     let counter = 0;
-    for (const name in builds) {
-      const build = builds[name];
-      const data = metaData[name];
+    for (const [name, build] of objectEntries(builds)) {
+      const data = mustExist(metaData[name]);
       if (!build.enabled) {
         continue;
       }
@@ -31,7 +61,7 @@ export class BulkManager {
       }
       if (
         name === "cryochambers" &&
-        (this._host.gamePage.time.getVSU("usedCryochambers").val > 0 ||
+        (mustExist(this._host.gamePage.time.getVSU("usedCryochambers")).val > 0 ||
           this._host.gamePage.bld.getBuildingExt("chronosphere").meta.val <= data.val)
       ) {
         continue;
@@ -49,20 +79,15 @@ export class BulkManager {
         if (typeof build.stage !== "undefined" && build.stage !== data.stage) {
           continue;
         }
-        bList.push(new Object());
-        bList[counter].id = name;
-        bList[counter].label = build.label;
-        bList[counter].name = build.name;
-        bList[counter].stage = build.stage;
-        bList[counter].variant = build.variant;
-        countList.push(new Object());
-        countList[counter].id = name;
-        countList[counter].name = build.name;
-        countList[counter].count = 0;
-        countList[counter].spot = counter;
+        bList.push({
+          id: name,
+          label: build.label,
+          name: build.name,
+          stage: build.stage,
+          variant: build.variant,
+        });
 
-        // countList[counter].prices = prices;
-        countList[counter].prices = [];
+        let itemPrices = [];
         const pricesDiscount = this._host.gamePage.getLimitedDR(
           this._host.gamePage.getEffect(name + "CostReduction"),
           1
@@ -74,16 +99,24 @@ export class BulkManager {
             1
           );
           const resPriceModifier = 1 - resPriceDiscount;
-          countList[counter].prices.push({
+          itemPrices.push({
             val: prices[i].val * priceModifier * resPriceModifier,
             name: prices[i].name,
           });
         }
 
-        countList[counter].priceRatio = priceRatio;
-        countList[counter].source = source;
-        countList[counter].limit = build.max || 0;
-        countList[counter].val = data.val;
+        countList.push({
+          id: name,
+          name: build.name,
+          count: 0,
+          spot: counter,
+          prices: itemPrices,
+          priceRatio: priceRatio,
+          source: source,
+          limit: build.max || 0,
+          val: data.val,
+        });
+
         counter++;
       }
     }
@@ -92,13 +125,11 @@ export class BulkManager {
       return;
     }
 
-    const tempPool = new Object();
-    for (const res in this._host.gamePage.resPool.resources) {
-      tempPool[
-        this._host.gamePage.resPool.resources[res].name
-      ] = this._host.gamePage.resPool.resources[res].value;
+    const tempPool: Partial<Record<Resource, number>> = {};
+    for (const res of this._host.gamePage.resPool.resources) {
+      tempPool[res.name] = res.value;
     }
-    for (const res in tempPool) {
+    for (const [res, resource] of objectEntries(tempPool)) {
       tempPool[res] = this._craftManager.getValueAvailable(res, true);
     }
 
@@ -109,13 +140,16 @@ export class BulkManager {
         const data = metaData[build.id];
         const prices = build.prices;
         const priceRatio = build.priceRatio;
-        var source = build.source;
+        const source = build.source;
+
         for (let p = 0; p < prices.length; p++) {
           let spaceOil = false;
           let cryoKarma = false;
+          let karmaPrice = Infinity;
+          let oilPrice = Infinity;
           if (source && source === "space" && prices[p].name === "oil") {
             spaceOil = true;
-            const oilPrice =
+            oilPrice =
               prices[p].val *
               (1 -
                 this._host.gamePage.getLimitedDR(
@@ -124,7 +158,7 @@ export class BulkManager {
                 ));
           } else if (build.id === "cryochambers" && prices[p].name === "karma") {
             cryoKarma = true;
-            const karmaPrice =
+            karmaPrice =
               prices[p].val *
               (1 -
                 this._host.gamePage.getLimitedDR(
@@ -135,9 +169,10 @@ export class BulkManager {
 
           let nextPriceCheck;
           if (spaceOil) {
-            nextPriceCheck = tempPool["oil"] < oilPrice * Math.pow(1.05, k + data.val);
+            nextPriceCheck = mustExist(tempPool["oil"]) < oilPrice * Math.pow(1.05, k + data.val);
           } else if (cryoKarma) {
-            nextPriceCheck = tempPool["karma"] < karmaPrice * Math.pow(priceRatio, k + data.val);
+            nextPriceCheck =
+              mustExist(tempPool["karma"]) < karmaPrice * Math.pow(priceRatio, k + data.val);
           } else {
             nextPriceCheck =
               tempPool[prices[p].name] < prices[p].val * Math.pow(priceRatio, k + data.val);
@@ -183,9 +218,11 @@ export class BulkManager {
             continue bulkLoop;
           }
           if (spaceOil) {
-            tempPool["oil"] -= oilPrice * Math.pow(1.05, k + data.val);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            tempPool["oil"]! -= oilPrice * Math.pow(1.05, k + data.val);
           } else if (cryoKarma) {
-            tempPool["karma"] -= karmaPrice * Math.pow(priceRatio, k + data.val);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            tempPool["karma"]! -= karmaPrice * Math.pow(priceRatio, k + data.val);
           } else {
             const pVal = prices[p].val * Math.pow(priceRatio, k + data.val);
             tempPool[prices[p].name] -= prices[p].name === "void" ? Math.ceil(pVal) : pVal;
@@ -225,7 +262,7 @@ export class BulkManager {
     return counter;
   }
 
-  getPriceRatio(data: unknown, source: unknown): number {
+  getPriceRatio(data: unknown, source?: "bonfire" | "space"): number {
     const ratio = !data.stages
       ? data.priceRatio
       : data.priceRatio || data.stages[data.stage].priceRatio;
@@ -246,7 +283,7 @@ export class BulkManager {
     data: unknown,
     prices: Array<unknown>,
     priceRatio: number,
-    source: unknown = undefined
+    source?: "bonfire" | "space"
   ): boolean {
     const pricesDiscount = this._host.gamePage.getLimitedDR(
       this._host.gamePage.getEffect(data.name + "CostReduction"),

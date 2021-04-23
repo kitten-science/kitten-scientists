@@ -1,4 +1,4 @@
-import { BuildButton, GamePage, GameTab, Resource } from ".";
+import { BuildButton, GamePage, GameTab, Price } from ".";
 
 export type ReligionTab = GameTab & {
   rUpgradeButtons: Array<BuildButton>;
@@ -47,7 +47,7 @@ export type ZiggurathUpgrades =
 
 export type AbstractReligionUpgradeInfo = {
   /**
-   * An internationalized label for this space building.
+   * An internationalized label for this religion upgrade.
    */
   label: string;
 };
@@ -55,7 +55,7 @@ export type AbstractReligionUpgradeInfo = {
 export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
   calculateEffects: (self: unknown, game: GamePage) => void;
   /**
-   * An internationalized description for this space building.
+   * An internationalized description for this religion upgrade.
    */
   description: string;
 
@@ -85,7 +85,7 @@ export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
 
   name: ZiggurathUpgrades;
   priceRatio: number;
-  prices: Array<{ name: Resource; val: number }>;
+  prices: Array<Price>;
   unlocked: boolean;
   unlocks: {
     zigguratUpgrades: Array<"ivoryTower">;
@@ -108,7 +108,7 @@ export type TranscendenceUpgradeInfo = AbstractReligionUpgradeInfo & {
 
   name: TranscendenceUpgrades;
   priceRatio: number;
-  prices: Array<{ name: Resource; val: number }>;
+  prices: Array<Price>;
   tier: number;
   unlocked: boolean;
   unlocks: {

@@ -16,11 +16,13 @@ export type Resource =
   | "gold"
   | "iron"
   | "ivory"
+  | "karma"
   | "kerosene"
   | "manpower"
   | "manuscript"
   | "megalith"
   | "necrocorn"
+  | "oil"
   | "parchment"
   | "plate"
   | "relic"
@@ -53,6 +55,11 @@ export type TabId =
   | "Workshop";
 
 /**
+ * A combination of a resource and an amount.
+ */
+export type Price = { name: Resource; val: number };
+
+/**
  * Not necessarily a button, but a KG UI element.
  */
 export type BuildButton = {
@@ -68,7 +75,7 @@ export type BuildButton = {
     enabled: boolean;
     metadata: { name: string };
     name: string;
-    prices: Array<{ name: "tears" | "unicorns"; val: number }>;
+    prices: Array<Price>;
     visible: boolean;
   };
 };

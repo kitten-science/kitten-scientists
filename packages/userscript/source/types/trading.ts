@@ -1,4 +1,4 @@
-import { BuildButton, GameTab, Resource, Season } from ".";
+import { BuildButton, GameTab, Price, Resource, Season } from ".";
 
 export type TradingTab = GameTab & {
   racePanels: Array<{
@@ -20,9 +20,9 @@ export type Race =
   | "zebras";
 
 export type RaceInfo = {
-  buys: Array<{ name: Resource; val: number }>;
+  buys: Array<Price>;
   embassyLevel: number;
-  embassyPrices: Array<{ name: Resource; val: number }>;
+  embassyPrices: Array<Price>;
   energy: number;
   name: Race;
   sells: Array<{
