@@ -1,24 +1,8 @@
 import { CraftManager } from "./CraftManager";
-import {
-  BuildItem,
-  BuildItemOptions,
-  FaithItem,
-  SpaceItem,
-  TimeItem,
-  TimeItemOptions,
-  UnicornFaithItemOptions,
-} from "./Options";
+import { BuildItem, FaithItem, Requirement, SpaceItem, TimeItem } from "./Options";
 import { objectEntries } from "./tools/Entries";
 import { mustExist } from "./tools/Maybe";
-import {
-  AbstractReligionUpgradeInfo,
-  AbstractTimeUpgradeInfo,
-  BuildButton,
-  BuildingExt,
-  Price,
-  Resource,
-  SpaceBuildingInfo,
-} from "./types";
+import { BuildButton, Price, Resource } from "./types";
 import { UserScript } from "./UserScript";
 
 export class BulkManager {
@@ -34,20 +18,35 @@ export class BulkManager {
     builds: Partial<
       Record<
         BuildItem | FaithItem | SpaceItem | TimeItem,
-        BuildItemOptions | TimeItemOptions | UnicornFaithItemOptions
+        {
+          enabled: boolean;
+          label: string;
+          max: number;
+          name: string;
+          require?: Requirement;
+          stage?: number;
+          variant?: unknown;
+        }
       >
     >,
     metaData: Partial<
       Record<
         BuildItem | FaithItem | SpaceItem | TimeItem,
-        (
-          | AbstractReligionUpgradeInfo
-          | AbstractTimeUpgradeInfo
-          | BuildingExt["meta"]
-          | SpaceBuildingInfo
-        ) & {
+        {
+          name: string;
+          noStackable?: unknown;
+          priceRatio: number;
+          prices: Array<Price>;
           rHidden?: boolean;
+          stackable?: boolean;
+          stage?: number;
+          stages?: Array<{
+            priceRatio: number;
+            prices: Array<Price>;
+          }>;
           tHidden?: boolean;
+          unlocked?: boolean;
+          val: number;
         }
       >
     >,
@@ -58,16 +57,16 @@ export class BulkManager {
     id: string;
     label: string;
     name: string;
-    stage: number;
-    variant: unknown;
+    stage?: number;
+    variant?: unknown;
   }> {
     const bList: Array<{
       count: number;
       id: string;
       label: string;
       name: string;
-      stage: number;
-      variant: unknown;
+      stage?: number;
+      variant?: unknown;
     }> = [];
     const countList = [];
     let counter = 0;
@@ -96,7 +95,9 @@ export class BulkManager {
         continue;
       }
       const prices =
-        typeof data.stages !== "undefined" ? data.stages[data.stage].prices : data.prices;
+        typeof data.stages !== "undefined"
+          ? data.stages[mustExist(data.stage)].prices
+          : data.prices;
       const priceRatio = this.getPriceRatio(data, source);
       if (!this.singleBuildPossible(data, prices, priceRatio, source)) {
         continue;
@@ -115,7 +116,7 @@ export class BulkManager {
           variant: build.variant,
         });
 
-        let itemPrices = [];
+        const itemPrices = [];
         const pricesDiscount = this._host.gamePage.getLimitedDR(
           this._host.gamePage.getEffect(name + "CostReduction"),
           1
@@ -296,14 +297,14 @@ export class BulkManager {
     data: {
       name: string;
       priceRatio: number;
-      stage: number;
+      stage?: number;
       stages?: Array<{ priceRatio: number }>;
     },
     source?: "bonfire" | "space"
   ): number {
     const ratio = !data.stages
       ? data.priceRatio
-      : data.priceRatio || data.stages[data.stage].priceRatio;
+      : data.priceRatio || data.stages[mustExist(data.stage)].priceRatio;
 
     let ratioDiff = 0;
     if (source && source === "bonfire") {
