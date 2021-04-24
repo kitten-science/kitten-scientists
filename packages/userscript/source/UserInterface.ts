@@ -1,3 +1,4 @@
+import { objectEntries } from "./tools/Entries";
 import { ucfirst } from "./tools/Format";
 import { mustExist } from "./tools/Maybe";
 import { Resource, Season } from "./types";
@@ -261,7 +262,7 @@ export class UserInterface {
       $(path).addClass("stockWarn");
   }
 
-  setStockValue(name: Resource, value: number, forReset = false): void {
+  setStockValue(name: Resource, value: string, forReset = false): void {
     let n = Number(value);
 
     if (isNaN(n) || n < 0) {
@@ -292,7 +293,7 @@ export class UserInterface {
     this.setStockWarning(name, n, forReset);
   }
 
-  setConsumeRate(name: Resource, value: number): void {
+  setConsumeRate(name: Resource, value: string): void {
     const n = parseFloat(value);
 
     if (isNaN(n) || n < 0.0 || n > 1.0) {
@@ -318,7 +319,7 @@ export class UserInterface {
     if (!opt.enabled && !opt.checkForReset) delete this._host.options.auto.resources[name];
   }
 
-  addNewResourceOption(name: Resource, title: string, forReset = false): unknown {
+  addNewResourceOption(name: Resource, title?: string, forReset = false): UiOptionElement {
     title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
     const res = this._host.options.auto.resources[name];
     let stock;
@@ -368,44 +369,45 @@ export class UserInterface {
       },
     });
 
-    if (forReset) container.append(label, stockElement, del);
-    else container.append(label, stockElement, consumeElement, del);
+    if (forReset) {
+      container.append(label, stockElement, del);
+    } else {
+      container.append(label, stockElement, consumeElement, del);
+    }
 
     // once created, set color if relevant
-    if (res != undefined && res.stock != undefined) this.setStockWarning(name, res.stock);
+    if (res != undefined && res.stock != undefined) {
+      this.setStockWarning(name, res.stock);
+    }
 
-    (function (stock, forReset) {
-      stock.on("click", function () {
-        const value = window.prompt(i18n("resources.stock.set", [title]));
-        if (value !== null) {
-          setStockValue(name, value, forReset);
-          saveToKittenStorage();
-        }
-      });
-    })(stock, forReset);
-
-    consume.on("click", function () {
-      const value = window.prompt(i18n("resources.consume.set", [title]));
+    stockElement.on("click", () => {
+      const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
       if (value !== null) {
-        setConsumeRate(name, value);
-        saveToKittenStorage();
+        this.setStockValue(name, value, forReset);
+        this._host.saveToKittenStorage();
       }
     });
 
-    (function (del, forReset) {
-      del.on("click", function () {
-        if (window.confirm(i18n("resources.del.confirm", [title]))) {
-          container.remove();
-          removeResourceControl(name, forReset);
-          saveToKittenStorage();
-        }
-      });
-    })(del, forReset);
+    consumeElement.on("click", () => {
+      const value = window.prompt(this._host.i18n("resources.consume.set", [title]));
+      if (value !== null) {
+        this.setConsumeRate(name, value);
+        this._host.saveToKittenStorage();
+      }
+    });
+
+    del.on("click", () => {
+      if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
+        container.remove();
+        this.removeResourceControl(name, forReset);
+        this._host.saveToKittenStorage();
+      }
+    });
 
     return container;
   }
 
-  getAvailableResourceOptions(forReset: boolean): unknown {
+  getAvailableResourceOptions(forReset: boolean): Array<UiOptionElement> {
     const items = [];
     const idPrefix = forReset ? "#resource-reset-" : "#resource-";
 
@@ -421,28 +423,27 @@ export class UserInterface {
           css: { cursor: "pointer", textShadow: "3px 3px 4px gray" },
         });
 
-        // Wrapper function needed to make closure work
-        (function (res, item, forReset) {
-          item.on("click", function () {
-            item.remove();
-            if (!options.auto.resources[res.name]) options.auto.resources[res.name] = {};
-            if (forReset) {
-              options.auto.resources[res.name].checkForReset = true;
-              options.auto.resources[res.name].stockForReset = Infinity;
-              $("#toggle-reset-list-resources").append(
-                addNewResourceOption(res.name, res.title, forReset)
-              );
-            } else {
-              options.auto.resources[res.name].enabled = true;
-              options.auto.resources[res.name].stock = 0;
-              options.auto.resources[res.name].consume = options.consume;
-              $("#toggle-list-resources").append(
-                addNewResourceOption(res.name, res.title, forReset)
-              );
-            }
-            saveToKittenStorage();
-          });
-        })(res, item, forReset);
+        item.on("click", () => {
+          item.remove();
+          if (!this._host.options.auto.resources[res.name]) {
+            this._host.options.auto.resources[res.name] = {};
+          }
+          if (forReset) {
+            this._host.options.auto.resources[res.name]!.checkForReset = true;
+            this._host.options.auto.resources[res.name]!.stockForReset = Infinity;
+            $("#toggle-reset-list-resources").append(
+              this.addNewResourceOption(res.name, res.title, forReset)
+            );
+          } else {
+            this._host.options.auto.resources[res.name]!.enabled = true;
+            this._host.options.auto.resources[res.name]!.stock = 0;
+            this._host.options.auto.resources[res.name]!.consume = this._host.options.consume;
+            $("#toggle-list-resources").append(
+              this.addNewResourceOption(res.name, res.title, forReset)
+            );
+          }
+          this._host.saveToKittenStorage();
+        });
 
         items.push(item);
       }
@@ -451,7 +452,7 @@ export class UserInterface {
     return items;
   }
 
-  getResourceOptions(forReset = false): unknown {
+  getResourceOptions(forReset = false): UiOptionElement {
     const list = $("<ul/>", {
       id: forReset ? "toggle-reset-list-resources" : "toggle-list-resources",
       css: { display: "none", paddingLeft: "20px" },
@@ -480,14 +481,15 @@ export class UserInterface {
       },
     });
 
-    clearunused.on("click", function () {
-      for (const name in options.auto.resources) {
+    clearunused.on("click", () => {
+      for (const name in this._host.options.auto.resources) {
         // Only delete resources with unmodified values. Require manual
         // removal of resources with non-standard values.
         if (
-          (!options.auto.resources[name].stock &&
-            options.auto.resources[name].consume == options.consume) ||
-          options.auto.resources[name].consume == undefined
+          (!this._host.options.auto.resources[name as Resource]!.stock &&
+            this._host.options.auto.resources[name as Resource]!.consume ==
+              this._host.options.consume) ||
+          this._host.options.auto.resources[name as Resource]!.consume == undefined
         ) {
           $("#resource-" + name).remove();
         }
@@ -499,28 +501,26 @@ export class UserInterface {
       css: { display: "none", paddingLeft: "20px" },
     });
 
-    (function (add, forReset) {
-      add.on("click", function () {
-        allresources.toggle();
-        allresources.empty();
-        allresources.append(getAvailableResourceOptions(forReset));
-      });
-    })(add, forReset);
+    add.on("click", () => {
+      allresources.toggle();
+      allresources.empty();
+      allresources.append(this.getAvailableResourceOptions(forReset));
+    });
 
     if (forReset) list.append(add, allresources);
     else list.append(add, clearunused, allresources);
 
     // Add all the current resources
-    for (const name in options.auto.resources) {
-      const res = options.auto.resources[name];
+    for (const [name] of objectEntries(this._host.options.auto.resources)) {
+      const res = mustExist(this._host.options.auto.resources[name]);
       if ((forReset && res.checkForReset) || (!forReset && res.enabled))
-        list.append(addNewResourceOption(name, undefined, forReset));
+        list.append(this.addNewResourceOption(name, undefined, forReset));
     }
 
     return list;
   }
 
-  getOptionHead(toggleName: string): unknown {
+  getOptionHead(toggleName: string): UiOptionElement {
     const list = $("<ul/>", {
       id: "items-list-" + toggleName,
       css: { display: "none", paddingLeft: "20px" },
@@ -575,25 +575,29 @@ export class UserInterface {
 
       if (itemName == "bestUnicornBuilding") {
         node.children("label").prop("title", this._host.i18n("option.faith.best.unicorn.desc"));
-        input = node.children("input");
+        const input = node.children("input");
         input.unbind("change");
-        var bub = addi.bestUnicornBuilding;
-        input.on("change", function () {
+        const bub = addi.bestUnicornBuilding;
+        input.on("change", () => {
           if (input.is(":checked") && !bub.enabled) {
             bub.enabled = true;
             // enable all unicorn buildings
-            for (const unicornName in options.auto.unicorn.items) {
+            for (const unicornName in this._host.options.auto.unicorn.items) {
               const building = $("#toggle-" + unicornName);
               building.prop("checked", true);
               building.trigger("change");
             }
-            imessage("status.sub.enable", [i18n("option.faith.best.unicorn")]);
+            this._host.imessage("status.sub.enable", [
+              this._host.i18n("option.faith.best.unicorn"),
+            ]);
           } else if (!input.is(":checked") && bub.enabled) {
             bub.enabled = false;
-            imessage("status.sub.disable", [i18n("option.faith.best.unicorn")]);
+            this._host.imessage("status.sub.disable", [
+              this._host.i18n("option.faith.best.unicorn"),
+            ]);
           }
           kittenStorage.items[input.attr("id")] = bub.enabled;
-          saveToKittenStorage();
+          this._host.saveToKittenStorage();
         });
       }
 
@@ -611,36 +615,36 @@ export class UserInterface {
           },
         }).data("option", addi[itemName]);
 
-        (function (itemName, triggerButton) {
-          if (itemName == "adore") {
-            triggerButton.on("click", function () {
-              let value;
-              value = window.prompt(i18n("adore.trigger.set"), addi[itemName].subTrigger);
+        if (itemName == "adore") {
+          triggerButton.on("click", () => {
+            const value = window.prompt(
+              this._host.i18n("adore.trigger.set"),
+              addi[itemName].subTrigger
+            );
 
-              if (value !== null) {
-                addi[itemName].subTrigger = parseFloat(value);
-                kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
-                saveToKittenStorage();
-                triggerButton[0].title = addi[itemName].subTrigger;
-              }
-            });
-          } else if (itemName == "autoPraise") {
-            triggerButton.on("click", function () {
-              let value;
-              value = window.prompt(
-                i18n("ui.trigger.set", [i18n("option.praise")]),
-                addi[itemName].subTrigger
-              );
+            if (value !== null) {
+              addi[itemName].subTrigger = parseFloat(value);
+              kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
+              this._host.saveToKittenStorage();
+              triggerButton[0].title = addi[itemName].subTrigger;
+            }
+          });
+        } else if (itemName == "autoPraise") {
+          triggerButton.on("click", () => {
+            const value = window.prompt(
+              this._host.i18n("ui.trigger.set", [this._host.i18n("option.praise")]),
+              addi[itemName].subTrigger
+            );
 
-              if (value !== null) {
-                addi[itemName].subTrigger = parseFloat(value);
-                kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
-                saveToKittenStorage();
-                triggerButton[0].title = addi[itemName].subTrigger;
-              }
-            });
-          }
-        })(itemName, triggerButton);
+            if (value !== null) {
+              addi[itemName].subTrigger = parseFloat(value);
+              kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
+              this._host.saveToKittenStorage();
+              triggerButton[0].title = addi[itemName].subTrigger;
+            }
+          });
+        }
+
         node.append(triggerButton);
       }
 
@@ -672,23 +676,23 @@ export class UserInterface {
 
     // engine needs a custom toggle
     if (toggleName !== "engine") {
-      input.on("change", function () {
+      input.on("change", () => {
         if (input.is(":checked") && auto.enabled == false) {
           auto.enabled = true;
           if (toggleName === "filter" || toggleName === "options") {
-            imessage("status.sub.enable", [itext]);
+            this._host.imessage("status.sub.enable", [itext]);
           } else {
-            imessage("status.auto.enable", [itext]);
+            this._host.imessage("status.auto.enable", [itext]);
           }
-          saveToKittenStorage();
+          this._host.saveToKittenStorage();
         } else if (!input.is(":checked") && auto.enabled == true) {
           auto.enabled = false;
           if (toggleName === "filter" || toggleName === "options") {
-            imessage("status.sub.disable", [itext]);
+            this._host.imessage("status.sub.disable", [itext]);
           } else {
-            imessage("status.auto.disable", [itext]);
+            this._host.imessage("status.auto.disable", [itext]);
           }
-          saveToKittenStorage();
+          this._host.saveToKittenStorage();
         }
       });
     }
@@ -699,13 +703,13 @@ export class UserInterface {
       // Add a border on the element
       element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
-      var toggle = $("<div/>", {
+      const toggle = $("<div/>", {
         css: { display: "inline-block", float: "right" },
       });
 
       const button = $("<div/>", {
         id: "toggle-items-" + toggleName,
-        text: i18n("ui.items"),
+        text: this._host.i18n("ui.items"),
         css: {
           cursor: "pointer",
           display: "inline-block",
@@ -717,12 +721,12 @@ export class UserInterface {
 
       element.append(button);
 
-      var list = getOptionHead(toggleName);
+      const list = this.getOptionHead(toggleName);
 
       // merge unicorn to faith
       if (toggleName == "faith") {
         for (const itemName in options.auto.unicorn.items) {
-          list.append(getOption(itemName, options.auto.unicorn.items[itemName]));
+          list.append(this.getOption(itemName, options.auto.unicorn.items[itemName]));
         }
       }
 
@@ -730,34 +734,40 @@ export class UserInterface {
       for (const itemName in auto.items) {
         switch (toggleName) {
           case "trade":
-            list.append(getTradeOption(itemName, auto.items[itemName]));
+            list.append(this.getTradeOption(itemName, auto.items[itemName]));
             break;
           case "craft":
-            list.append(getCraftOption(itemName, auto.items[itemName]));
+            list.append(this.getCraftOption(itemName, auto.items[itemName]));
             break;
           case "timeCtrl":
-            list.append(getTimeCtrlOption(itemName, auto.items[itemName]));
+            list.append(this.getTimeCtrlOption(itemName, auto.items[itemName]));
             break;
           case "options":
-            list.append(getOptionsOption(itemName, auto.items[itemName]));
+            list.append(this.getOptionsOption(itemName, auto.items[itemName]));
             break;
           case "upgrade":
-            list.append(getOption(itemName, auto.items[itemName], i18n("ui.upgrade." + itemName)));
+            list.append(
+              this.getOption(
+                itemName,
+                auto.items[itemName],
+                this._host.i18n("ui.upgrade." + itemName)
+              )
+            );
             break;
           case "distribute":
-            list.append(getDistributeOption(itemName, auto.items[itemName]));
+            list.append(this.getDistributeOption(itemName, auto.items[itemName]));
             break;
           case "build":
           case "space":
-            list.append(getLimitedOption(itemName, auto.items[itemName]));
+            list.append(this.getLimitedOption(itemName, auto.items[itemName]));
             break;
           default:
-            list.append(getOption(itemName, auto.items[itemName]));
+            list.append(this.getOption(itemName, auto.items[itemName]));
             break;
         }
       }
 
-      button.on("click", function () {
+      button.on("click", () => {
         list.toggle();
       });
 
@@ -778,11 +788,11 @@ export class UserInterface {
         const resourcesList = this.getResourceOptions();
 
         // When we click the items button, make sure we clear resources
-        button.on("click", function () {
+        button.on("click", () => {
           resourcesList.toggle(false);
         });
 
-        resources.on("click", function () {
+        resources.on("click", () => {
           list.toggle(false);
           resourcesList.toggle();
         });
@@ -806,11 +816,11 @@ export class UserInterface {
 
         const additionList = this.getAdditionOptions();
 
-        button.on("click", function () {
+        button.on("click", () => {
           additionList.toggle(false);
         });
 
-        addition.on("click", function () {
+        addition.on("click", () => {
           list.toggle(false);
           additionList.toggle();
         });
@@ -818,9 +828,9 @@ export class UserInterface {
         element.append(addition);
 
         // disable auto best unicorn building when unicorn building was disable
-        for (const unicornName in options.auto.unicorn.items) {
+        for (const unicornName in this._host.options.auto.unicorn.items) {
           const ub = list.children().children("#toggle-" + unicornName);
-          ub.on("change", function () {
+          ub.on("change", event => {
             if (!$(event.target).is(":checked")) {
               const b = $("#toggle-bestUnicornBuilding");
               b.prop("checked", false);
@@ -845,13 +855,12 @@ export class UserInterface {
         },
       });
 
-      triggerButton.on("click", function () {
-        let value;
-        value = window.prompt(i18n("ui.trigger.set", [itext]), auto.trigger);
+      triggerButton.on("click", () => {
+        const value = window.prompt(this._host.i18n("ui.trigger.set", [itext]), auto.trigger);
 
         if (value !== null) {
           auto.trigger = parseFloat(value);
-          saveToKittenStorage();
+          this._host.saveToKittenStorage();
           triggerButton[0].title = auto.trigger;
         }
       });
@@ -893,16 +902,16 @@ export class UserInterface {
       input.prop("checked", true);
     }
 
-    input.on("change", function () {
+    input.on("change", () => {
       if (input.is(":checked") && option.limited == false) {
         option.limited = true;
-        imessage("trade.limited", [iname]);
+        this._host.imessage("trade.limited", [iname]);
       } else if (!input.is(":checked") && option.limited == true) {
         option.limited = false;
-        imessage("trade.unlimited", [iname]);
+        this._host.imessage("trade.unlimited", [iname]);
       }
       kittenStorage.items[input.attr("id")] = option.limited;
-      saveToKittenStorage();
+      this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -910,7 +919,7 @@ export class UserInterface {
 
     const button = $("<div/>", {
       id: "toggle-seasons-" + name,
-      text: i18n("trade.seasons"),
+      text: this._host.i18n("trade.seasons"),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -940,7 +949,7 @@ export class UserInterface {
     return element;
   }
 
-  getSeason(name: string, season: Season, option: unknown): unknown {
+  getSeason(name: string, season: Season, option: unknown): UiOptionElement {
     const iname = ucfirst(this._host.i18n("$trade.race." + name));
     const iseason = ucfirst(this._host.i18n("$calendar.season." + season));
 
@@ -960,16 +969,16 @@ export class UserInterface {
       input.prop("checked", true);
     }
 
-    input.on("change", function () {
+    input.on("change", () => {
       if (input.is(":checked") && option[season] == false) {
         option[season] = true;
-        imessage("trade.season.enable", [iname, iseason]);
+        this._host.imessage("trade.season.enable", [iname, iseason]);
       } else if (!input.is(":checked") && option[season] == true) {
         option[season] = false;
-        imessage("trade.season.disable", [iname, iseason]);
+        this._host.imessage("trade.season.disable", [iname, iseason]);
       }
       kittenStorage.items[input.attr("id")] = option[season];
-      saveToKittenStorage();
+      this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -977,7 +986,7 @@ export class UserInterface {
     return element;
   }
 
-  getSeasonForTimeSkip(season: Season, option: unknown): unknown {
+  getSeasonForTimeSkip(season: Season, option: unknown): UiOptionElement {
     const iseason = ucfirst(this._host.i18n("$calendar.season." + season));
 
     const element = $("<li/>");
@@ -996,16 +1005,16 @@ export class UserInterface {
       input.prop("checked", true);
     }
 
-    input.on("change", function () {
+    input.on("change", () => {
       if (input.is(":checked") && option[season] == false) {
         option[season] = true;
-        imessage("time.skip.season.enable", [iseason]);
+        this._host.imessage("time.skip.season.enable", [iseason]);
       } else if (!input.is(":checked") && option[season] == true) {
         option[season] = false;
-        imessage("time.skip.season.disable", [iseason]);
+        this._host.imessage("time.skip.season.disable", [iseason]);
       }
       kittenStorage.items[input.attr("id")] = option[season];
-      saveToKittenStorage();
+      this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -1013,7 +1022,7 @@ export class UserInterface {
     return element;
   }
 
-  getOption(name: string, option: unknown, iname?: string): unknown {
+  getOption(name: string, option: unknown, iname?: string): UiOptionElement {
     const element = $("<li/>");
     const elementLabel = iname || option.label || ucfirst(name);
 
@@ -1032,28 +1041,28 @@ export class UserInterface {
       input.prop("checked", true);
     }
 
-    input.on("change", function () {
+    input.on("change", () => {
       if (input.is(":checked") && option.enabled == false) {
         option.enabled = true;
         if (option.filter) {
-          imessage("filter.enable", [elementLabel]);
+          this._host.imessage("filter.enable", [elementLabel]);
         } else if (option.misc) {
-          imessage("status.sub.enable", [elementLabel]);
+          this._host.imessage("status.sub.enable", [elementLabel]);
         } else {
-          imessage("status.auto.enable", [elementLabel]);
+          this._host.imessage("status.auto.enable", [elementLabel]);
         }
       } else if (!input.is(":checked") && option.enabled == true) {
         option.enabled = false;
         if (option.filter) {
-          imessage("filter.disable", [elementLabel]);
+          this._host.imessage("filter.disable", [elementLabel]);
         } else if (option.misc) {
-          imessage("status.sub.disable", [elementLabel]);
+          this._host.imessage("status.sub.disable", [elementLabel]);
         } else {
-          imessage("status.auto.disable", [elementLabel]);
+          this._host.imessage("status.auto.disable", [elementLabel]);
         }
       }
       kittenStorage.items[input.attr("id")] = option.enabled;
-      saveToKittenStorage();
+      this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -1061,7 +1070,7 @@ export class UserInterface {
     return element;
   }
 
-  getLimitedOption(name: string, option: unknown, iname: string): unknown {
+  getLimitedOption(name: string, option: unknown, iname: string): UiOptionElement {
     const element = $("<li/>");
     const elementLabel = iname || option.label || ucfirst(name);
 
@@ -1080,33 +1089,33 @@ export class UserInterface {
       input.prop("checked", true);
     }
 
-    input.on("change", function () {
+    input.on("change", () => {
       if (input.is(":checked") && option.enabled == false) {
         option.enabled = true;
         if (option.filter) {
-          imessage("filter.enable", [elementLabel]);
+          this._host.imessage("filter.enable", [elementLabel]);
         } else if (option.misc) {
-          imessage("status.sub.enable", [elementLabel]);
+          this._host.imessage("status.sub.enable", [elementLabel]);
         } else {
-          imessage("status.auto.enable", [elementLabel]);
+          this._host.imessage("status.auto.enable", [elementLabel]);
         }
       } else if (!input.is(":checked") && option.enabled == true) {
         option.enabled = false;
         if (option.filter) {
-          imessage("filter.disable", [elementLabel]);
+          this._host.imessage("filter.disable", [elementLabel]);
         } else if (option.misc) {
-          imessage("status.sub.disable", [elementLabel]);
+          this._host.imessage("status.sub.disable", [elementLabel]);
         } else {
-          imessage("status.auto.disable", [elementLabel]);
+          this._host.imessage("status.auto.disable", [elementLabel]);
         }
       }
       kittenStorage.items[input.attr("id")] = option.enabled;
-      saveToKittenStorage();
+      this._host.saveToKittenStorage();
     });
 
     const maxButton = $("<div/>", {
       id: "set-" + name + "-max",
-      text: i18n("ui.max", [option.max]),
+      text: this._host.i18n("ui.max", [option.max]),
       title: option.max,
       css: {
         cursor: "pointer",
@@ -1117,14 +1126,13 @@ export class UserInterface {
       },
     }).data("option", option);
 
-    maxButton.on("click", function () {
-      let value;
-      value = window.prompt(i18n("ui.max.set", [option.label]), option.max);
+    maxButton.on("click", () => {
+      const value = window.prompt(this._host.i18n("ui.max.set", [option.label]), option.max);
 
       if (value !== null) {
         option.max = parseInt(value);
         kittenStorage.items[maxButton.attr("id")] = option.max;
-        saveToKittenStorage();
+        this._host.saveToKittenStorage();
         maxButton[0].title = option.max;
         maxButton[0].innerText = i18n("ui.max", [option.max]);
       }
@@ -1135,14 +1143,14 @@ export class UserInterface {
     return element;
   }
 
-  getCraftOption(name: string, option: unknown): unknown {
-    const iname = ucfirst(i18n("$resources." + name + ".title"));
+  getCraftOption(name: string, option: unknown): UiOptionElement {
+    const iname = ucfirst(this._host.i18n("$resources." + name + ".title"));
 
-    const element = getOption(name, option, iname);
+    const element = this.getOption(name, option, iname);
 
     const label = $("<label/>", {
       for: "toggle-limited-" + name,
-      text: i18n("ui.limit"),
+      text: this._host.i18n("ui.limit"),
     });
 
     const input = $("<input/>", {
@@ -1154,16 +1162,16 @@ export class UserInterface {
       input.prop("checked", true);
     }
 
-    input.on("change", function () {
+    input.on("change", () => {
       if (input.is(":checked") && option.limited == false) {
         option.limited = true;
-        imessage("craft.limited", [iname]);
+        this._host.imessage("craft.limited", [iname]);
       } else if (!input.is(":checked") && option.limited == true) {
         option.limited = false;
-        imessage("craft.unlimited", [iname]);
+        this._host.imessage("craft.unlimited", [iname]);
       }
       kittenStorage.items[input.attr("id")] = option.limited;
-      saveToKittenStorage();
+      this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -1171,8 +1179,8 @@ export class UserInterface {
     return element;
   }
 
-  getCycle(index: number, option: unknown): unknown {
-    const cycle = game.calendar.cycles[index];
+  getCycle(index: number, option: unknown): UiOptionElement {
+    const cycle = this._host.gamePage.calendar.cycles[index];
 
     const element = $("<li/>");
 
@@ -1190,16 +1198,16 @@ export class UserInterface {
       input.prop("checked", true);
     }
 
-    input.on("change", function () {
+    input.on("change", () => {
       if (input.is(":checked") && option[index] == false) {
         option[index] = true;
-        imessage("time.skip.cycle.enable", [cycle.title]);
+        this._host.imessage("time.skip.cycle.enable", [cycle.title]);
       } else if (!input.is(":checked") && option[index] == true) {
         option[index] = false;
-        imessage("time.skip.cycle.disable", [cycle.title]);
+        this._host.imessage("time.skip.cycle.disable", [cycle.title]);
       }
       kittenStorage.items[input.attr("id")] = option[index];
-      saveToKittenStorage();
+      this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -1207,7 +1215,7 @@ export class UserInterface {
     return element;
   }
 
-  getResetOption(name: string, type: unknown, option: unknown): void {
+  getResetOption(name: string, type: unknown, option: unknown): UiOptionElement {
     const element = $("<li/>");
     const elementLabel = option.label;
 
@@ -1226,16 +1234,16 @@ export class UserInterface {
       input.prop("checked", true);
     }
 
-    input.on("change", function () {
+    input.on("change", () => {
       if (input.is(":checked") && option.checkForReset == false) {
         option.checkForReset = true;
-        imessage("status.reset.check.enable", [elementLabel]);
+        this._host.imessage("status.reset.check.enable", [elementLabel]);
       } else if (!input.is(":checked") && option.checkForReset == true) {
         option.checkForReset = false;
-        imessage("status.reset.check.disable", [elementLabel]);
+        this._host.imessage("status.reset.check.disable", [elementLabel]);
       }
       kittenStorage.items[input.attr("id")] = option.checkForReset;
-      saveToKittenStorage();
+      this._host.saveToKittenStorage();
     });
 
     const minButton = $("<div/>", {
@@ -1251,19 +1259,18 @@ export class UserInterface {
       },
     }).data("option", option);
 
-    minButton.on("click", function () {
-      let value;
-      value = window.prompt(
-        i18n("reset.check.trigger.set", [option.label]),
+    minButton.on("click", () => {
+      const value = window.prompt(
+        this._host.i18n("reset.check.trigger.set", [option.label]),
         option.triggerForReset
       );
 
       if (value !== null) {
         option.triggerForReset = parseInt(value);
         kittenStorage.items[minButton.attr("id")] = option.triggerForReset;
-        saveToKittenStorage();
+        this._host.saveToKittenStorage();
         minButton[0].title = option.triggerForReset;
-        minButton[0].innerText = i18n("ui.min", [option.triggerForReset]);
+        minButton[0].innerText = this._host.i18n("ui.min", [option.triggerForReset]);
       }
     });
 
@@ -1272,13 +1279,13 @@ export class UserInterface {
     return element;
   }
 
-  getTimeCtrlOption(name: string, option: unknown): unknown {
+  getTimeCtrlOption(name: string, option: unknown): UiOptionElement {
     const element = this.getOption(name, option);
 
     if (name == "timeSkip") {
-      var triggerButton = $("<div/>", {
+      const triggerButton = $("<div/>", {
         id: "set-timeSkip-subTrigger",
-        text: i18n("ui.trigger"),
+        text: this._host.i18n("ui.trigger"),
         title: option.subTrigger,
         css: {
           cursor: "pointer",
@@ -1288,21 +1295,23 @@ export class UserInterface {
           textShadow: "3px 3px 4px gray",
         },
       }).data("option", option);
-      triggerButton.on("click", function () {
-        let value;
-        value = window.prompt(i18n("time.skip.trigger.set", []), option.subTrigger);
+      triggerButton.on("click", () => {
+        const value = window.prompt(
+          this._host.i18n("time.skip.trigger.set", []),
+          option.subTrigger
+        );
 
         if (value !== null) {
           option.subTrigger = parseFloat(value);
           kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-          saveToKittenStorage();
+          this._host.saveToKittenStorage();
           triggerButton[0].title = option.subTrigger;
         }
       });
 
       const maximunButton = $("<div/>", {
         id: "set-timeSkip-maximum",
-        text: i18n("ui.maximum"),
+        text: this._host.i18n("ui.maximum"),
         title: option.max,
         css: {
           cursor: "pointer",
@@ -1312,21 +1321,23 @@ export class UserInterface {
           textShadow: "3px 3px 4px gray",
         },
       }).data("option", option);
-      maximunButton.on("click", function () {
-        let value;
-        value = window.prompt(i18n("ui.max.set", [i18n("option.time.skip")]), option.maximum);
+      maximunButton.on("click", () => {
+        const value = window.prompt(
+          this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
+          option.maximum
+        );
 
         if (value !== null) {
           option.maximum = parseFloat(value);
           kittenStorage.items[maximunButton.attr("id")] = option.maximum;
-          saveToKittenStorage();
+          this._host.saveToKittenStorage();
           maximunButton[0].title = option.maximum;
         }
       });
 
       const cyclesButton = $("<div/>", {
         id: "toggle-cycle-" + name,
-        text: i18n("ui.cycles"),
+        text: this._host.i18n("ui.cycles"),
         css: {
           cursor: "pointer",
           display: "inline-block",
@@ -1341,11 +1352,13 @@ export class UserInterface {
         css: { display: "none", paddingLeft: "20px" },
       });
 
-      for (const i in game.calendar.cycles) cyclesList.append(getCycle(i, option));
+      for (const i in this._host.gamePage.calendar.cycles) {
+        cyclesList.append(this.getCycle(i, option));
+      }
 
       const seasonsButton = $("<div/>", {
         id: "toggle-seasons-" + name,
-        text: i18n("trade.seasons"),
+        text: this._host.i18n("trade.seasons"),
         css: {
           cursor: "pointer",
           display: "inline-block",
@@ -1361,10 +1374,10 @@ export class UserInterface {
       });
 
       // fill out the list with seasons
-      seasonsList.append(getSeasonForTimeSkip("spring", option));
-      seasonsList.append(getSeasonForTimeSkip("summer", option));
-      seasonsList.append(getSeasonForTimeSkip("autumn", option));
-      seasonsList.append(getSeasonForTimeSkip("winter", option));
+      seasonsList.append(this.getSeasonForTimeSkip("spring", option));
+      seasonsList.append(this.getSeasonForTimeSkip("summer", option));
+      seasonsList.append(this.getSeasonForTimeSkip("autumn", option));
+      seasonsList.append(this.getSeasonForTimeSkip("winter", option));
 
       cyclesButton.on("click", function () {
         cyclesList.toggle();
@@ -1385,26 +1398,41 @@ export class UserInterface {
         seasonsList
       );
     } else if (name == "reset") {
-      const resetBuildList = getOptionHead("reset-build");
-      const resetSpaceList = getOptionHead("reset-space");
-      const resetResourcesList = getResourceOptions(true);
-      const resetReligionList = getOptionHead("reset-religion");
-      const resetTimeList = getOptionHead("reset-time");
+      const resetBuildList = this.getOptionHead("reset-build");
+      const resetSpaceList = this.getOptionHead("reset-space");
+      const resetResourcesList = this.getResourceOptions(true);
+      const resetReligionList = this.getOptionHead("reset-religion");
+      const resetTimeList = this.getOptionHead("reset-time");
 
-      for (var item in options.auto.build.items)
-        resetBuildList.append(getResetOption(item, "build", options.auto.build.items[item]));
-      for (var item in options.auto.space.items)
-        resetSpaceList.append(getResetOption(item, "space", options.auto.space.items[item]));
-      for (var item in options.auto.unicorn.items)
-        resetReligionList.append(getResetOption(item, "unicorn", options.auto.unicorn.items[item]));
-      for (var item in options.auto.faith.items)
-        resetReligionList.append(getResetOption(item, "faith", options.auto.faith.items[item]));
-      for (var item in options.auto.time.items)
-        resetTimeList.append(getResetOption(item, "time", options.auto.time.items[item]));
+      for (const item in this._host.options.auto.build.items) {
+        resetBuildList.append(
+          this.getResetOption(item, "build", this._host.options.auto.build.items[item])
+        );
+      }
+      for (const item in this._host.options.auto.space.items) {
+        resetSpaceList.append(
+          this.getResetOption(item, "space", this._host.options.auto.space.items[item])
+        );
+      }
+      for (const item in this._host.options.auto.unicorn.items) {
+        resetReligionList.append(
+          this.getResetOption(item, "unicorn", this._host.options.auto.unicorn.items[item])
+        );
+      }
+      for (const item in this._host.options.auto.faith.items) {
+        resetReligionList.append(
+          this.getResetOption(item, "faith", this._host.options.auto.faith.items[item])
+        );
+      }
+      for (const item in this._host.options.auto.time.items) {
+        resetTimeList.append(
+          this.getResetOption(item, "time", this._host.options.auto.time.items[item])
+        );
+      }
 
       const buildButton = $("<div/>", {
         id: "toggle-reset-build",
-        text: i18n("ui.build"),
+        text: this._host.i18n("ui.build"),
         css: {
           cursor: "pointer",
           display: "inline-block",
@@ -1415,7 +1443,7 @@ export class UserInterface {
       });
       const spaceButton = $("<div/>", {
         id: "toggle-reset-space",
-        text: i18n("ui.space"),
+        text: this._host.i18n("ui.space"),
         css: {
           cursor: "pointer",
           display: "inline-block",
@@ -1426,7 +1454,7 @@ export class UserInterface {
       });
       const resourcesButton = $("<div/>", {
         id: "toggle-reset-resources",
-        text: i18n("ui.craft.resources"),
+        text: this._host.i18n("ui.craft.resources"),
         css: {
           cursor: "pointer",
           display: "inline-block",
@@ -1437,7 +1465,7 @@ export class UserInterface {
       });
       const religionButton = $("<div/>", {
         id: "toggle-reset-religion",
-        text: i18n("ui.faith"),
+        text: this._host.i18n("ui.faith"),
         css: {
           cursor: "pointer",
           display: "inline-block",
@@ -1448,7 +1476,7 @@ export class UserInterface {
       });
       const timeButton = $("<div/>", {
         id: "toggle-reset-time",
-        text: i18n("ui.time"),
+        text: this._host.i18n("ui.time"),
         css: {
           cursor: "pointer",
           display: "inline-block",
@@ -1507,9 +1535,9 @@ export class UserInterface {
         resetTimeList
       );
     } else {
-      var triggerButton = $("<div/>", {
+      const triggerButton = $("<div/>", {
         id: "set-" + name + "-subTrigger",
-        text: i18n("ui.trigger"),
+        text: this._host.i18n("ui.trigger"),
         title: option.subTrigger,
         css: {
           cursor: "pointer",
@@ -1521,13 +1549,15 @@ export class UserInterface {
       }).data("option", option);
 
       triggerButton.on("click", function () {
-        let value;
-        value = window.prompt(i18n("ui.trigger.set", [option.label]), option.subTrigger);
+        const value = window.prompt(
+          this._host.i18n("ui.trigger.set", [option.label]),
+          option.subTrigger
+        );
 
         if (value !== null) {
           option.subTrigger = parseFloat(value);
           kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-          saveToKittenStorage();
+          this._host.saveToKittenStorage();
           triggerButton[0].title = option.subTrigger;
         }
       });
@@ -1545,10 +1575,10 @@ export class UserInterface {
     if (name == "style") {
       const input = element.children("input");
       input.unbind("change");
-      input.on("change", function () {
+      input.on("change", () => {
         option.enabled = input.prop("checked");
         kittenStorage.items[input.attr("id")] = option.enabled;
-        saveToKittenStorage();
+        this._host.saveToKittenStorage();
         if (option.enabled) {
           document.body.setAttribute("data-ks-style", "");
         } else {
@@ -1571,18 +1601,24 @@ export class UserInterface {
         },
       }).data("option", option);
 
-      triggerButton.on("click", function () {
+      triggerButton.on("click", () => {
         let value;
         if (name == "crypto") {
-          value = window.prompt(i18n("ui.trigger.crypto.set", [option.label]), option.subTrigger);
+          value = window.prompt(
+            this._host.i18n("ui.trigger.crypto.set", [option.label]),
+            option.subTrigger
+          );
         } else {
-          value = window.prompt(i18n("ui.trigger.set", [option.label]), option.subTrigger);
+          value = window.prompt(
+            this._host.i18n("ui.trigger.set", [option.label]),
+            option.subTrigger
+          );
         }
 
         if (value !== null) {
           option.subTrigger = parseFloat(value);
           kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-          saveToKittenStorage();
+          this._host.saveToKittenStorage();
           triggerButton[0].title = option.subTrigger;
         }
       });
@@ -1593,7 +1629,7 @@ export class UserInterface {
     return element;
   }
 
-  getDistributeOption(name: string, option: unknown): unknown {
+  getDistributeOption(name: string, option: unknown): UiOptionElement {
     const iname = ucfirst(this._host.i18n("$village.job." + name));
 
     const element = this.getOption(name, option, iname);
@@ -1614,23 +1650,23 @@ export class UserInterface {
       input.prop("checked", true);
     }
 
-    input.on("change", function () {
+    input.on("change", () => {
       if (input.is(":checked") && option.limited == false) {
         option.limited = true;
-        imessage("distribute.limited", [iname]);
+        this._host.imessage("distribute.limited", [iname]);
       } else if (!input.is(":checked") && option.limited == true) {
         option.limited = false;
-        imessage("distribute.unlimited", [iname]);
+        this._host.imessage("distribute.unlimited", [iname]);
       }
       kittenStorage.items[input.attr("id")] = option.limited;
-      saveToKittenStorage();
+      this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
 
     const maxButton = $("<div/>", {
       id: "set-" + name + "-max",
-      text: i18n("ui.max", [option.max]),
+      text: this._host.i18n("ui.max", [option.max]),
       title: option.max,
       css: {
         cursor: "pointer",
@@ -1641,20 +1677,17 @@ export class UserInterface {
       },
     }).data("option", option);
 
-    (function (iname) {
-      maxButton.on("click", function () {
-        let value;
-        value = window.prompt(i18n("ui.max.set", [iname]), option.max);
+    maxButton.on("click", () => {
+      const value = window.prompt(this._host.i18n("ui.max.set", [iname]), option.max);
 
-        if (value !== null) {
-          option.max = parseInt(value);
-          kittenStorage.items[maxButton.attr("id")] = option.max;
-          saveToKittenStorage();
-          maxButton[0].title = option.max;
-          maxButton[0].innerText = i18n("ui.max", [option.max]);
-        }
-      });
-    })(iname);
+      if (value !== null) {
+        option.max = parseInt(value);
+        kittenStorage.items[maxButton.attr("id")] = option.max;
+        this._host.saveToKittenStorage();
+        maxButton[0].title = option.max;
+        maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
+      }
+    });
 
     element.append(maxButton);
 

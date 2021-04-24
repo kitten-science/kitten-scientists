@@ -399,6 +399,10 @@ export class UserScript {
     }
   }
 
+  saveToKittenStorage():void {
+    this._kittenStorage.saveToKittenStorage(this.options);
+  }
+
   static async waitForGame(timeout = 30000): Promise<void> {
     console.debug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
 
