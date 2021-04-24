@@ -1,6 +1,7 @@
 import JQuery from "jquery";
 import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
+import { KittenStorage } from "./KittenStorage";
 import { DefaultOptions, Options } from "./Options";
 import { objectEntries } from "./tools/Entries";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
@@ -73,6 +74,7 @@ export class UserScript {
   options: Options = DefaultOptions;
 
   private _activitySummary: ActivitySummary = {};
+  private readonly _kittenStorage: KittenStorage = new KittenStorage();
 
   constructor(
     gamePage: GamePage,
@@ -100,6 +102,7 @@ export class UserScript {
     this.gamePage.console.maxMessages = 1000;
 
     this.resetActivitySummary();
+    this._kittenStorage.initializeKittenStorage();
 
     const engine = new Engine(this);
     engine.start();
@@ -203,13 +206,6 @@ export class UserScript {
     ...templateArgs: Array<string>
   ): void {
     this.warning(this.i18n(key, args), ...templateArgs);
-  }
-
-  ucfirst(input: string): string {
-    return input.charAt(0).toUpperCase() + input.slice(1);
-  }
-  private _roundToTwo(input: number): number {
-    return +(Math.round(input + "e+2") + "e-2");
   }
 
   resetActivitySummary(): void {
@@ -321,6 +317,86 @@ export class UserScript {
 
     // Clear out the old activity
     this.resetActivitySummary();
+  }
+
+  loadFromKittenStorage(): void {
+    this._kittenStorage.load();
+
+    for (const [item, value] of objectEntries(this._kittenStorage.data.items)) {
+      const el = $("#" + item);
+      const option = el.data("option");
+      const name = item.split("-");
+
+      if (option === undefined) {
+        delete kittenStorage.items[item];
+        continue;
+      }
+
+      if (name[0] == "set") {
+        el[0].title = value;
+        if (name[name.length - 1] == "max") {
+          el.text(this.i18n("ui.max", [value]));
+        } else if (name[name.length - 1] == "min") {
+          el.text(this.i18n("ui.min", [value]));
+        }
+      } else {
+        el.prop("checked", value);
+      }
+
+      if (name.length == 2) {
+        option.enabled = value;
+      } else if (name[1] == "reset" && name.length >= 4) {
+        const type = name[2];
+        const itemName = name[3];
+        switch (name[0]) {
+          case "toggle":
+            this.options.auto[type].items[itemName].checkForReset = value;
+            break;
+          case "set":
+            this.options.auto[type].items[itemName].triggerForReset = value;
+            break;
+        }
+      } else {
+        if (name[1] == "limited") {
+          option.limited = value;
+        } else {
+          option[name[2]] = value;
+        }
+      }
+    }
+
+    const resourcesList = $("#toggle-list-resources");
+    const resetList = $("#toggle-reset-list-resources");
+    for (const [resource, res] of objectEntries(this._kittenStorage.data.resources)) {
+      if (res.enabled) {
+        if ($("#resource-" + resource).length === 0)
+          resourcesList.append(addNewResourceOption(resource));
+        if ("stock" in res) setStockValue(resource, res.stock);
+        if ("consume" in res) setConsumeRate(resource, res.consume);
+      }
+      if (res.checkForReset) {
+        if ($("#resource-reset-" + resource).length === 0)
+          resetList.append(addNewResourceOption(resource, undefined, true));
+        if ("stockForReset" in res)
+          setStockValue(resource, res.stockForReset ? res.stockForReset : Infinity, true);
+      }
+    }
+
+    if (this._kittenStorage.data.triggers) {
+      this.options.auto.faith.trigger = this._kittenStorage.data.triggers.faith;
+      this.options.auto.time.trigger = this._kittenStorage.data.triggers.time;
+      this.options.auto.build.trigger = this._kittenStorage.data.triggers.build;
+      this.options.auto.space.trigger = this._kittenStorage.data.triggers.space;
+      this.options.auto.craft.trigger = this._kittenStorage.data.triggers.craft;
+      this.options.auto.trade.trigger = this._kittenStorage.data.triggers.trade;
+
+      $("#trigger-faith")[0].title = this.options.auto.faith.trigger;
+      $("#trigger-time")[0].title = this.options.auto.time.trigger;
+      $("#trigger-build")[0].title = this.options.auto.build.trigger;
+      $("#trigger-space")[0].title = this.options.auto.space.trigger;
+      $("#trigger-craft")[0].title = this.options.auto.craft.trigger;
+      $("#trigger-trade")[0].title = this.options.auto.trade.trigger;
+    }
   }
 
   static async waitForGame(timeout = 30000): Promise<void> {
