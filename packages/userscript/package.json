@@ -16,7 +16,8 @@
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "scripts": {
     "build": "tsc",
-    "package": "webpack",
+    "package": "webpack --config webpack.config.inject.js",
+    "release": "webpack --config webpack.config.userscript.js",
     "whoami": "echo userscript"
   },
   "keywords": [

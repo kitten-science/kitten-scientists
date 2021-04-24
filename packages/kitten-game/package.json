@@ -15,7 +15,6 @@
   },
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "scripts": {
-    "build": "docker build --tag kitten-game .",
-    "run": "docker run --detach --name kitten-game --publish 8080:8080 kitten-game"
+    "build": "docker build --tag kitten-game ."
   }
 }

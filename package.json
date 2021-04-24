@@ -20,6 +20,7 @@
     "packages/*"
   ],
   "scripts": {
+    "devcontainer:build": "yarn workspace kitten-game build",
     "typecheck:all": "tsc --noEmit --incremental false",
     "userscript:build": "yarn workspace userscript build",
     "userscript:package": "yarn workspace userscript package"
