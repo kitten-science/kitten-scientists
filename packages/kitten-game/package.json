@@ -1,0 +1,21 @@
+{
+  "name": "kitten-game",
+  "description": "Containerized version of the Kitten Game",
+  "version": "latest",
+  "private": true,
+  "license": "MIT",
+  "main": "Dockerfile",
+  "bugs": {
+    "url": "https://github.com/oliversalzburg/cbc-kitten-scientists/issues"
+  },
+  "homepage": "https://github.com/oliversalzburg/cbc-kitten-scientists",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oliversalzburg/cbc-kitten-scientists.git"
+  },
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
+  "scripts": {
+    "build": "docker build --tag kitten-game .",
+    "run": "docker run --detach --name kitten-game --publish 8080:8080 kitten-game"
+  }
+}
