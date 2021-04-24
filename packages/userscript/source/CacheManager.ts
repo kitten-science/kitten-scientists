@@ -1,3 +1,5 @@
+import { objectEntries } from "./tools/Entries";
+import { Resource } from "./types";
 import { UserScript } from "./UserScript";
 
 export class CacheManager {
@@ -7,29 +9,29 @@ export class CacheManager {
     this._host = host;
   }
 
-  pushToCache(data: unknown): void {
+  pushToCache(data: { materials: Record<Resource, number>, timeStamp: number }): void {
     const cache = this._host.options.auto.cache.cache;
     const cacheSum = this._host.options.auto.cache.cacheSum;
     const materials = data["materials"];
     //var currentTick = this._host.gamePage.timer.ticksTotal;
 
     cache.push(data);
-    for (var mat in materials) {
+    for (const [mat, amount] of objectEntries(materials)) {
       if (!cacheSum[mat]) {
         cacheSum[mat] = 0;
       }
-      cacheSum[mat] += materials[mat];
+      cacheSum[mat] += amount;
     }
 
     for (let i = 0; i < cache.length; i++) {
       const oldData = cache[i];
       if (cache.length > 10000) {
         const oldMaterials = oldData["materials"];
-        for (var mat in oldMaterials) {
+        for (const [mat, amount] of objectEntries(oldMaterials)) {
           if (!cacheSum[mat]) {
             cacheSum[mat] = 0;
           }
-          cacheSum[mat] -= oldMaterials[mat];
+          cacheSum[mat] -= amount;
         }
         cache.shift();
         i--;
@@ -39,7 +41,7 @@ export class CacheManager {
     }
   }
 
-  getResValue(res: string): number {
+  getResValue(res: Resource): number {
     const cache = this._host.options.auto.cache.cache;
     if (cache.length === 0) {
       return 0;

@@ -552,8 +552,8 @@ export type Options = {
       >
     >;
     cache: {
-      cache: Array<unknown>;
-      cacheSum: Record<string, unknown>;
+      cache: Array<{ materials: Record<Resource, number>; timeStamp: number }>;
+      cacheSum: Record<Resource, number>;
     };
   };
 };
