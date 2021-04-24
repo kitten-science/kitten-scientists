@@ -9,7 +9,6 @@
     "resolveJsonModule": true,
     "lib": ["DOM", "ES2020"],
     "module": "CommonJS",
-    "sourceMap": true,
     "strict": true,
     "target": "ES2017",
     "incremental": true,
