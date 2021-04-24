@@ -186,6 +186,7 @@ export type GamePage = {
     energyProd: number;
     resources: Array<{
       craftable: boolean;
+      maxValue:number;
       name: Resource;
       title: string;
       type: "common" | "uncommon";
