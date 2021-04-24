@@ -3,7 +3,9 @@
   "compilerOptions": {
     "rootDir": "source",
     "outDir": "output",
-    "incremental": true
+    "incremental": true,
+    "inlineSourceMap": true,
+    "tsBuildInfoFile": "output/.tsbuildinfo"
   },
   "include": ["../../@types", "source"]
 }
