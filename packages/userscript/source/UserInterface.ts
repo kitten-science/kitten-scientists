@@ -1,3 +1,4 @@
+import { Options } from "./Options";
 import { objectEntries } from "./tools/Entries";
 import { ucfirst } from "./tools/Format";
 import { mustExist } from "./tools/Maybe";
@@ -654,7 +655,7 @@ export class UserInterface {
     return list;
   }
 
-  getToggle(toggleName: string): UiOptionElement {
+  getToggle(toggleName: keyof Options["auto"]): UiOptionElement {
     const itext = ucfirst(this._host.i18n("ui." + toggleName));
 
     const auto = this._host.options.auto[toggleName];

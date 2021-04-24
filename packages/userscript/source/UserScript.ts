@@ -7,6 +7,7 @@ import { objectEntries } from "./tools/Entries";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
 import { GamePage } from "./types";
+import { UserInterface } from "./UserInterface";
 
 declare global {
   let unsafeWindow: Window | undefined;
@@ -78,6 +79,7 @@ export class UserScript {
 
   private _activitySummary: ActivitySummary = {};
   private readonly _kittenStorage: KittenStorage = new KittenStorage();
+  private readonly _userInterface = new UserInterface(this);
 
   constructor(
     gamePage: GamePage,
@@ -106,9 +108,11 @@ export class UserScript {
 
     this.resetActivitySummary();
     this._kittenStorage.initializeKittenStorage();
+    this._userInterface.configure();
 
     const engine = new Engine(this);
-    engine.start();
+    console.warn("Kitten Scientists initialized. Engine NOT started for now.");
+    //engine.start();
   }
 
   /**

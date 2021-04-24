@@ -55,7 +55,7 @@ export class KittenStorage {
         kittenStorage.items[id] = $(this).prop("checked");
       });
 
-    this.saveToKittenStorage();
+    //this.saveToKittenStorage();
   }
 
   saveToKittenStorage(options: Options): void {
