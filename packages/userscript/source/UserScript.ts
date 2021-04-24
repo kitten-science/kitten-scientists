@@ -8,8 +8,7 @@ import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
 import { GamePage } from "./types";
-import { UI } from "./ui/UI";
-import { UserInterface } from "./UserInterface";
+import { UserInterface } from "./ui/UserInterface";
 
 declare global {
   let unsafeWindow: Window | undefined;
@@ -110,9 +109,7 @@ export class UserScript {
 
     this.resetActivitySummary();
     this._kittenStorage.initializeKittenStorage();
-    //this._userInterface.configure();
-
-    new UI(this).construct();
+    this._userInterface.construct();
 
     const engine = new Engine(this);
     cwarn("Kitten Scientists initialized. Engine NOT started for now.");

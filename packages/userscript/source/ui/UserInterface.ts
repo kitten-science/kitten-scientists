@@ -2,6 +2,7 @@ import { UserScript } from "../UserScript";
 import { BonfireSettings } from "./BonfireSettings";
 import { CraftSettings } from "./CraftSettings";
 import { DistributeSettings } from "./DistributeSettings";
+import { EngineSettings } from "./EngineSettings";
 import { FiltersSettings } from "./FilterSettings";
 import { OptionsSettings } from "./OptionsSettings";
 import { ReligionSettings } from "./ReligionSettings";
@@ -11,7 +12,7 @@ import { TimeSettings } from "./TimeSettings";
 import { TradingSettings } from "./TradingSettings";
 import { UnlockingSettings } from "./UnlockingSettings";
 
-export class UI {
+export class UserInterface {
   private readonly _host: UserScript;
 
   constructor(host: UserScript) {
@@ -21,6 +22,7 @@ export class UI {
   construct(): void {
     this._installCss();
 
+    const engine = new EngineSettings(this._host);
     const bonfire = new BonfireSettings(this._host);
     const space = new SpaceSettings(this._host);
     const craft = new CraftSettings(this._host);
@@ -43,6 +45,7 @@ export class UI {
 
     optionsElement.append(optionsTitleElement);
 
+    optionsListElement.append(engine.element);
     optionsListElement.append(bonfire.element);
     optionsListElement.append(space.element);
     optionsListElement.append(craft.element);

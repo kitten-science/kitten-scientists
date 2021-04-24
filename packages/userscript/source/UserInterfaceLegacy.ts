@@ -7,14 +7,12 @@ import { UserScript } from "./UserScript";
 
 export type UiOptionElement = JQuery<HTMLElement> & {};
 
-export class UserInterface {
+export class UserInterfaceLegacy {
   private readonly _host: UserScript;
 
   constructor(host: UserScript) {
     this._host = host;
   }
-
-
 
   configure(): void {
     const right = $("#rightColumn");
