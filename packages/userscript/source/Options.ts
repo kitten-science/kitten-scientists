@@ -287,21 +287,6 @@ export type Options = {
           label: string;
         };
       };
-      /**
-       * Which religious upgrades should be researched?
-       *
-       * Variant denotes which category the building or upgrade falls within in the Religion tab.
-       * Ziggurats are variant z.
-       * UNICORN BUILDING START
-       * unicornPasture:     {require: false,         enabled: true,  variant: 'zp', label: i18n('$buildings.unicornPasture.label')},
-       * unicornTomb:        {require: false,         enabled: false, variant: 'z'},
-       * ivoryTower:         {require: false,         enabled: false, variant: 'z'},
-       * ivoryCitadel:       {require: false,         enabled: false, variant: 'z'},
-       * skyPalace:          {require: false,         enabled: false, variant: 'z'},
-       * unicornUtopia:      {require: 'gold',        enabled: false, variant: 'z'},
-       * sunspire:           {require: 'gold',        enabled: false, variant: 'z'},
-       * UNICORN BUILDING END
-       */
       items: {
         [item in FaithItem]: UnicornFaithItemOptions;
       };
