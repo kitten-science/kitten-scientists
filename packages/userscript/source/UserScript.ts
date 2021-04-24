@@ -4,9 +4,11 @@ import i18nData from "./i18n/i18nData.json";
 import { KittenStorage } from "./KittenStorage";
 import { DefaultOptions, Options } from "./Options";
 import { objectEntries } from "./tools/Entries";
+import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
 import { GamePage } from "./types";
+import { UI } from "./ui/UI";
 import { UserInterface } from "./UserInterface";
 
 declare global {
@@ -86,7 +88,7 @@ export class UserScript {
     i18nEngine: I18nEngine,
     language: SupportedLanguages = DefaultLanguage
   ) {
-    console.info("Kitten Scientists constructed.");
+    cinfo("Kitten Scientists constructed.");
 
     this.gamePage = gamePage;
     this.i18nEngine = i18nEngine;
@@ -97,7 +99,7 @@ export class UserScript {
 
   async run(): Promise<void> {
     if (this._language in this._i18nData === false) {
-      console.warn(
+      cwarn(
         `Requested language '${this._language}' is not available. Falling back to '${DefaultLanguage}'.`
       );
       this._language = DefaultLanguage;
@@ -108,10 +110,12 @@ export class UserScript {
 
     this.resetActivitySummary();
     this._kittenStorage.initializeKittenStorage();
-    this._userInterface.configure();
+    //this._userInterface.configure();
+
+    new UI(this).construct();
 
     const engine = new Engine(this);
-    console.warn("Kitten Scientists initialized. Engine NOT started for now.");
+    cwarn("Kitten Scientists initialized. Engine NOT started for now.");
     //engine.start();
   }
 
@@ -129,10 +133,10 @@ export class UserScript {
     if (typeof value === "undefined") {
       value = i18nData[DefaultLanguage][key];
       if (!value) {
-        console.warn(`i18n key '${key}' not found in default language.`);
+        cwarn(`i18n key '${key}' not found in default language.`);
         return "$" + key;
       }
-      console.warn(`i18n key '${key}' not found in selected language.`);
+      cwarn(`i18n key '${key}' not found in selected language.`);
     }
     if (args) {
       for (let argIndex = 0; argIndex < args.length; ++argIndex) {
@@ -157,7 +161,9 @@ export class UserScript {
     const msg = this.gamePage.msg(...args);
     $(msg.span).css("color", color);
 
-    if (this.options.debug && console) console.log(args);
+    if (this.options.debug && console) {
+      clog(args);
+    }
   }
 
   private _message(...args: Array<number | string>): void {
@@ -182,7 +188,7 @@ export class UserScript {
   warning(...args: Array<number | string>): void {
     args.unshift("Warning!");
     if (console) {
-      console.log(args);
+      clog(args);
     }
   }
 
@@ -401,7 +407,7 @@ export class UserScript {
   }
 
   static async waitForGame(timeout = 30000): Promise<void> {
-    console.debug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
+    cdebug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
 
     if (timeout < 0) {
       throw new Error("Unable to find game page.");

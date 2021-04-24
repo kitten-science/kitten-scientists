@@ -6,7 +6,6 @@ import {
   Challenge,
   GameTab,
   Jobs,
-  Panel,
   Price,
   Race,
   RaceInfo,
@@ -20,7 +19,7 @@ import {
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from ".";
-import { DistributeItems, SpaceItem } from "../Options";
+import { SpaceItem } from "../Options";
 import { ReligionTab } from "./religion";
 import { SpaceTab, SpaceUpgrades } from "./space";
 import {
@@ -42,7 +41,7 @@ export type GamePage = {
     cryptoPrice: number;
     cycle: number;
     cycleEffectsFestival: (options: { catnip: number }) => { catnip: number };
-    cycles: Array<{ festivalEffects: { unicorns: number } }>;
+    cycles: Array<{ festivalEffects: { unicorns: number }; title: string }>;
     cyclesPerEra: number;
     cycleYear: number;
     day: number;
@@ -52,7 +51,7 @@ export type GamePage = {
     observeBtn: BuildButton | null;
     observeHandler: () => void;
     season: number;
-    seasons:Array<{name:Season}>;
+    seasons: Array<{ name: Season }>;
     year: number;
     yearsPerCycle: number;
   };
@@ -186,7 +185,7 @@ export type GamePage = {
     energyProd: number;
     resources: Array<{
       craftable: boolean;
-      maxValue:number;
+      maxValue: number;
       name: Resource;
       title: string;
       type: "common" | "uncommon";

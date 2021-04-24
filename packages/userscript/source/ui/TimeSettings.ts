@@ -1,0 +1,161 @@
+import { Options } from "../Options";
+import { ucfirst } from "../tools/Format";
+import { UserScript } from "../UserScript";
+import { SettingsSection } from "./SettingsSection";
+
+export class TimeSettings extends SettingsSection {
+  readonly element: JQuery<HTMLElement>;
+
+  private readonly _options: Options["auto"]["time"];
+
+  private readonly _itemsButton: JQuery<HTMLElement>;
+  private readonly _triggerButton: JQuery<HTMLElement>;
+
+  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+
+  constructor(host: UserScript, religionOptions: Options["auto"]["time"] = host.options.auto.time) {
+    super(host);
+
+    this._options = religionOptions;
+
+    const toggleName = "time";
+
+    const itext = ucfirst(this._host.i18n("ui.time"));
+
+    // Our main element is a list item.
+    const element = $("<li/>", { id: "ks-" + toggleName });
+
+    const label = $("<label/>", {
+      for: "toggle-" + toggleName,
+      text: itext,
+    });
+
+    const input = $("<input/>", {
+      id: "toggle-" + toggleName,
+      type: "checkbox",
+    });
+
+    element.append(input, label);
+
+    // Create "trigger" button in the item.
+    this._triggerButton = $("<div/>", {
+      id: "trigger-" + toggleName,
+      text: this._host.i18n("ui.trigger"),
+      title: this._options.trigger,
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+
+    this._triggerButton.on("click", () => {
+      const value = window.prompt(
+        this._host.i18n("ui.trigger.set", [itext]),
+        this._options.trigger
+      );
+
+      if (value !== null) {
+        this._options.trigger = parseFloat(value);
+        this._host.saveToKittenStorage();
+        this._triggerButton[0].title = this._options.trigger;
+      }
+    });
+
+    // Create build items.
+    // We create these in a list that is displayed when the user clicks the "items" button.
+    const list = this.getOptionHead(toggleName);
+
+    // Add a border on the element
+    element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
+
+    this._itemsButton = $("<div/>", {
+      id: "toggle-items-" + toggleName,
+      text: this._host.i18n("ui.items"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+
+    this._itemsButton.on("click", () => {
+      list.toggle();
+    });
+
+    this._buildingButtons = [
+      this.getOption(
+        "temporalBattery",
+        this._options.items.temporalBattery,
+        this._host.i18n("$time.cfu.temporalBattery.label")
+      ),
+      this.getOption(
+        "blastFurnace",
+        this._options.items.blastFurnace,
+        this._host.i18n("$time.cfu.blastFurnace.label")
+      ),
+      this.getOption(
+        "timeBoiler",
+        this._options.items.timeBoiler,
+        this._host.i18n("$time.cfu.timeBoiler.label")
+      ),
+      this.getOption(
+        "temporalAccelerator",
+        this._options.items.temporalAccelerator,
+        this._host.i18n("$time.cfu.temporalAccelerator.label")
+      ),
+      this.getOption(
+        "temporalImpedance",
+        this._options.items.temporalImpedance,
+        this._host.i18n("$time.cfu.temporalImpedance.label")
+      ),
+      this.getOption(
+        "ressourceRetrieval",
+        this._options.items.ressourceRetrieval,
+        this._host.i18n("$time.cfu.ressourceRetrieval.label"), true
+      ),
+
+      this.getOption(
+        "cryochambers",
+        this._options.items.cryochambers,
+        this._host.i18n("$time.vsu.cryochambers.label")
+      ),
+      this.getOption(
+        "voidHoover",
+        this._options.items.voidHoover,
+        this._host.i18n("$time.vsu.voidHoover.label")
+      ),
+      this.getOption(
+        "voidRift",
+        this._options.items.voidRift,
+        this._host.i18n("$time.vsu.voidRift.label")
+      ),
+      this.getOption(
+        "chronocontrol",
+        this._options.items.chronocontrol,
+        this._host.i18n("$time.vsu.chronocontrol.label")
+      ),
+      this.getOption(
+        "voidResonator",
+        this._options.items.voidResonator,
+        this._host.i18n("$time.vsu.voidResonator.label")
+      ),
+    ];
+
+    list.append(...this._buildingButtons);
+
+    element.append(this._itemsButton);
+    element.append(this._triggerButton);
+    element.append(list);
+
+    this.element = element;
+  }
+
+  setState(state: { trigger: number }): void {
+    this._triggerButton[0].title = state.trigger;
+  }
+}

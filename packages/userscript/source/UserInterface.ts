@@ -14,135 +14,10 @@ export class UserInterface {
     this._host = host;
   }
 
-  private _addRule(rule: string) {
-    const sheets = document.styleSheets;
-    sheets[0].insertRule(rule, 0);
-  }
+
 
   configure(): void {
     const right = $("#rightColumn");
-
-    const defaultSelector = "body[data-ks-style]:not(.scheme_sleek)";
-
-    this._addRule(
-      "body {" + // low priority. make sure it can be covered by the theme
-        "font-family: monospace;" +
-        "font-size: 12px;" +
-        "}"
-    );
-
-    this._addRule(
-      defaultSelector +
-        " #game {" +
-        // + 'font-family: monospace;'
-        // + 'font-size: 12px;'
-        "min-width: 1300px;" +
-        "top: 32px;" +
-        "}"
-    );
-
-    // this._addRule(defaultSelector + ' {'
-    //     + 'font-family: monospace;'
-    //     + 'font-size: 12px;'
-    //     + '}');
-
-    this._addRule(
-      defaultSelector +
-        " .column {" +
-        "min-height: inherit;" +
-        "max-width: inherit !important;" +
-        "padding: 1%;" +
-        "margin: 0;" +
-        "overflow-y: auto;" +
-        "}"
-    );
-
-    this._addRule(defaultSelector + " #leftColumn {" + "height: 92%;" + "width: 26%;" + "}");
-
-    this._addRule(
-      defaultSelector +
-        " #midColumn {" +
-        "margin-top: 1% !important;" +
-        "height: 90%;" +
-        "width: 48%;" +
-        "}"
-    );
-
-    this._addRule(
-      defaultSelector +
-        " #rightColumn {" +
-        "overflow-y: auto;" +
-        "height: 92%;" +
-        "width: 19%;" +
-        "}"
-    );
-
-    this._addRule("body #gamePageContainer #game #rightColumn {" + "overflow-y: auto" + "}");
-
-    // this._addRule(defaultSelector + ' #gameLog .msg {'
-    //     + 'display: block;'
-    //     + '}');
-
-    this._addRule(
-      defaultSelector +
-        " #gameLog {" +
-        "overflow-y: hidden !important;" +
-        "width: 100% !important;" +
-        "padding-top: 5px !important;" +
-        "}"
-    );
-
-    this._addRule(defaultSelector + " #resContainer .maxRes {" + "color: #676766;" + "}");
-
-    this._addRule(
-      defaultSelector +
-        " #game .btn {" +
-        "border-radius: 0px;" +
-        "font-family: monospace;" +
-        "font-size: 12px !important;" +
-        "margin: 0 5px 7px 0;" +
-        "width: 290px;" +
-        "}"
-    );
-
-    this._addRule(
-      defaultSelector +
-        " #game .map-viewport {" +
-        "height: 340px;" +
-        "max-width: 500px;" +
-        "overflow: visible;" +
-        "}"
-    );
-
-    this._addRule(" #game .map-dashboard {" + "height: 120px;" + "width: 292px;" + "}");
-
-    this._addRule(
-      "#ks-options ul {" + "list-style: none;" + "margin: 0 0 5px;" + "padding: 0;" + "}"
-    );
-
-    this._addRule(
-      "#ks-options ul:after {" +
-        "clear: both;" +
-        'content: " ";' +
-        "display: block;" +
-        "height: 0;" +
-        "}"
-    );
-
-    this._addRule(
-      "#ks-options ul li {" + "display: block;" + "float: left;" + "width: 100%;" + "}"
-    );
-
-    this._addRule(
-      "#ks-options #toggle-list-resources .stockWarn *," +
-        "#ks-options #toggle-reset-list-resources .stockWarn * {" +
-        "color: " +
-        this._host.options.stockwarncolor +
-        ";" +
-        "}"
-    );
-
-    this._addRule(".right-tab {" + "height: unset !important;" + "}");
 
     const activityBox = $("<div/>", {
       id: "activity-box",
@@ -222,7 +97,7 @@ export class UserInterface {
     // Add some padding above the donation item
     donate.css("padding", "5px");
 
-    const kg_version = "Kitten Scientists version 1.5.0";
+    const kg_version = "Kitten Scientists v2.0.0-alpha0";
 
     const optionsElement = $("<div/>", { id: "ks-options", css: { marginBottom: "10px" } });
     const optionsListElement = $("<ul/>");
@@ -700,11 +575,15 @@ export class UserInterface {
 
     element.append(input, label);
 
+    let list: UiOptionElement;
+    let toggle: UiOptionElement;
+    let resourcesList: UiOptionElement;
+    let additionList: UiOptionElement;
     if (auto.items) {
       // Add a border on the element
       element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
-      const toggle = $("<div/>", {
+      toggle = $("<div/>", {
         css: { display: "inline-block", float: "right" },
       });
 
@@ -722,12 +601,12 @@ export class UserInterface {
 
       element.append(button);
 
-      const list = this.getOptionHead(toggleName);
+      list = this.getOptionHead(toggleName);
 
       // merge unicorn to faith
       if (toggleName == "faith") {
-        for (const itemName in options.auto.unicorn.items) {
-          list.append(this.getOption(itemName, options.auto.unicorn.items[itemName]));
+        for (const itemName in this._host.options.auto.unicorn.items) {
+          list.append(this.getOption(itemName, this._host.options.auto.unicorn.items[itemName]));
         }
       }
 
@@ -786,7 +665,7 @@ export class UserInterface {
           },
         });
 
-        const resourcesList = this.getResourceOptions();
+        resourcesList = this.getResourceOptions();
 
         // When we click the items button, make sure we clear resources
         button.on("click", () => {
@@ -815,7 +694,7 @@ export class UserInterface {
           },
         });
 
-        const additionList = this.getAdditionOptions();
+        additionList = this.getAdditionOptions();
 
         button.on("click", () => {
           additionList.toggle(false);
@@ -882,7 +761,7 @@ export class UserInterface {
     return element;
   }
 
-  getTradeOption(name: string, option: unknown): unknown {
+  getTradeOption(name: string, option: unknown): UiOptionElement {
     const iname = ucfirst(this._host.i18n("$trade.race." + name));
 
     const element = this.getOption(name, option, iname);
@@ -1071,7 +950,11 @@ export class UserInterface {
     return element;
   }
 
-  getLimitedOption(name: string, option: unknown, iname: string): UiOptionElement {
+  getLimitedOption(
+    name: string,
+    option: { enabled: boolean; filter?: unknown; label: string; max: number; misc?: unknown },
+    iname?: string
+  ): UiOptionElement {
     const element = $("<li/>");
     const elementLabel = iname || option.label || ucfirst(name);
 
@@ -1135,7 +1018,7 @@ export class UserInterface {
         kittenStorage.items[maxButton.attr("id")] = option.max;
         this._host.saveToKittenStorage();
         maxButton[0].title = option.max;
-        maxButton[0].innerText = i18n("ui.max", [option.max]);
+        maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
       }
     });
 
@@ -1568,7 +1451,7 @@ export class UserInterface {
     return element;
   }
 
-  getOptionsOption(name: string, option: unknown): unknown {
+  getOptionsOption(name: string, option: unknown): UiOptionElement {
     const element = this.getOption(name, option);
 
     // hack for style.

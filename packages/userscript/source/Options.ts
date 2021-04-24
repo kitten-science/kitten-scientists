@@ -1,3 +1,4 @@
+import { cwarn } from "./tools/Log";
 import {
   Building,
   ChronoForgeUpgrades,
@@ -129,6 +130,7 @@ export type TimeItemOptions = {
 export type CraftItemOptions = {
   require: Requirement;
   max: number;
+  label: string;
   limited: boolean;
   limRat: number;
   enabled: boolean;
@@ -412,7 +414,7 @@ export type Options = {
        * across all crafted resources without wasting raw materials.
        */
       items: {
-        [item in Resource]?: CraftItemOptions;
+        [item in Resource]: CraftItemOptions;
       };
     };
     trade: {
@@ -544,7 +546,7 @@ export type Options = {
 };
 
 const i18n = (key: string) => {
-  console.warn(`DEPRECATED i18n usage in Options.ts`);
+  cwarn(`DEPRECATED i18n usage in Options.ts`);
   return key;
 };
 
