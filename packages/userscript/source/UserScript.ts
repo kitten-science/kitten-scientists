@@ -9,7 +9,7 @@ import { sleep } from "./tools/Sleep";
 import { GamePage } from "./types";
 
 declare global {
-  const unsafeWindow: Window;
+  let unsafeWindow: Window | undefined;
   const dojo: {
     clone: <T>(subject: T) => T;
   };
@@ -52,6 +52,8 @@ export type ActivitySectionOther =
 export type ActivitySectionResearch = "";
 export type ActivitySectionTrade = "";
 export type ActivitySummary = {
+  [key: string]: Record<string, number> | number | undefined;
+  /*
   lastyear?: number;
   lastday?: number;
   build?: Record<string, number>;
@@ -63,6 +65,7 @@ export type ActivitySummary = {
   research?: Record<string, number>;
   trade?: Record<string, number>;
   upgrade?: Record<string, number>;
+  */
 };
 
 export class UserScript {
@@ -219,17 +222,7 @@ export class UserScript {
     };
   }
 
-  storeForSummary(
-    name:
-      | ActivitySectionBuild
-      | ActivitySectionCraft
-      | ActivitySectionFaith
-      | ActivitySectionOther
-      | ActivitySectionResearch
-      | ActivitySectionTrade,
-    amount = 1,
-    section: ActivitySummarySection = "other"
-  ): void {
+  storeForSummary(name: string, amount = 1, section: ActivitySummarySection = "other"): void {
     let summarySection = this._activitySummary[section];
     if (summarySection === undefined) {
       summarySection = this._activitySummary[section] = {};
@@ -399,7 +392,7 @@ export class UserScript {
     }
   }
 
-  saveToKittenStorage():void {
+  saveToKittenStorage(): void {
     this._kittenStorage.saveToKittenStorage(this.options);
   }
 
@@ -420,13 +413,21 @@ export class UserScript {
 
   static async getDefaultInstance(): Promise<UserScript> {
     return new UserScript(
-      mustExist(unsafeWindow.gamePage),
-      mustExist(unsafeWindow.$I),
+      mustExist(UserScript._window.gamePage),
+      mustExist(UserScript._window.$I),
       localStorage["com.nuclearunicorn.kittengame.language"]
     );
   }
 
   private static _isGameLoaded(): boolean {
-    return !isNil(unsafeWindow.gamePage);
+    return !isNil(UserScript._window.gamePage);
+  }
+
+  private static get _window(): Window {
+    try {
+      return unsafeWindow as Window;
+    } catch (error) {
+      return window;
+    }
   }
 }
