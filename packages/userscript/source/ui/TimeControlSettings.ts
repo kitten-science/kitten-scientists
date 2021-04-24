@@ -92,293 +92,326 @@ export class TimeControlSettings extends SettingsSection {
   }
 
   private _getTimeCtrlOption(
+    name: "accelerateTime" | "reset" | "timeSkip",
+    option: { enabled: boolean; label: string; maximum: number; subTrigger: number },
+    label: string
+  ): JQuery<HTMLElement> {
+    let element;
+
+    if (name == "timeSkip") {
+      element = this._getOptionTimeSkip(name, option, label);
+    } else if (name == "reset") {
+      element = this._getOptionReset(name, option, label);
+    } else {
+      element = this._getOptionAccelerateTime(name, option, label);
+    }
+
+    return element;
+  }
+
+  private _getOptionTimeSkip(
     name: string,
     option: { enabled: boolean; label: string; maximum: number; subTrigger: number },
     label: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);
 
-    if (name == "timeSkip") {
-      const triggerButton = $("<div/>", {
-        id: "set-timeSkip-subTrigger",
-        text: this._host.i18n("ui.trigger"),
-        title: option.subTrigger,
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      }).data("option", option);
-      triggerButton.on("click", () => {
-        const value = window.prompt(
-          this._host.i18n("time.skip.trigger.set", []),
-          option.subTrigger
-        );
+    const triggerButton = $("<div/>", {
+      id: "set-timeSkip-subTrigger",
+      text: this._host.i18n("ui.trigger"),
+      title: option.subTrigger,
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    }).data("option", option);
+    triggerButton.on("click", () => {
+      const value = window.prompt(this._host.i18n("time.skip.trigger.set", []), option.subTrigger);
 
-        if (value !== null) {
-          option.subTrigger = parseFloat(value);
-          kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-          this._host.saveToKittenStorage();
-          triggerButton[0].title = option.subTrigger;
-        }
-      });
-
-      const maximunButton = $("<div/>", {
-        id: "set-timeSkip-maximum",
-        text: this._host.i18n("ui.maximum"),
-        title: option.max,
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      }).data("option", option);
-      maximunButton.on("click", () => {
-        const value = window.prompt(
-          this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
-          option.maximum
-        );
-
-        if (value !== null) {
-          option.maximum = parseFloat(value);
-          kittenStorage.items[maximunButton.attr("id")] = option.maximum;
-          this._host.saveToKittenStorage();
-          maximunButton[0].title = option.maximum;
-        }
-      });
-
-      const cyclesButton = $("<div/>", {
-        id: "toggle-cycle-" + name,
-        text: this._host.i18n("ui.cycles"),
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      });
-
-      const cyclesList = $("<ul/>", {
-        id: "cycles-list-" + name,
-        css: { display: "none", paddingLeft: "20px" },
-      });
-
-      for (const i in this._host.gamePage.calendar.cycles) {
-        cyclesList.append(this._getCycle(i, option));
+      if (value !== null) {
+        option.subTrigger = parseFloat(value);
+        kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
+        this._host.saveToKittenStorage();
+        triggerButton[0].title = option.subTrigger;
       }
+    });
 
-      const seasonsButton = $("<div/>", {
-        id: "toggle-seasons-" + name,
-        text: this._host.i18n("trade.seasons"),
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      });
-
-      const seasonsList = $("<ul/>", {
-        id: "seasons-list-" + name,
-        css: { display: "none", paddingLeft: "20px" },
-      });
-
-      // fill out the list with seasons
-      seasonsList.append(this._getSeasonForTimeSkip("spring", option));
-      seasonsList.append(this._getSeasonForTimeSkip("summer", option));
-      seasonsList.append(this._getSeasonForTimeSkip("autumn", option));
-      seasonsList.append(this._getSeasonForTimeSkip("winter", option));
-
-      cyclesButton.on("click", function () {
-        cyclesList.toggle();
-        seasonsList.toggle(false);
-      });
-
-      seasonsButton.on("click", function () {
-        cyclesList.toggle(false);
-        seasonsList.toggle();
-      });
-
-      element.append(
-        cyclesButton,
-        seasonsButton,
-        maximunButton,
-        triggerButton,
-        cyclesList,
-        seasonsList
+    const maximunButton = $("<div/>", {
+      id: "set-timeSkip-maximum",
+      text: this._host.i18n("ui.maximum"),
+      title: option.max,
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    }).data("option", option);
+    maximunButton.on("click", () => {
+      const value = window.prompt(
+        this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
+        option.maximum
       );
-    } else if (name == "reset") {
-      const resetBuildList = this.getOptionHead("reset-build");
-      const resetSpaceList = this.getOptionHead("reset-space");
-      const resetResourcesList = this._getResourceOptions(true);
-      const resetReligionList = this.getOptionHead("reset-religion");
-      const resetTimeList = this.getOptionHead("reset-time");
 
-      for (const item in this._host.options.auto.build.items) {
-        resetBuildList.append(
-          this._getResetOption(item, "build", this._host.options.auto.build.items[item])
-        );
+      if (value !== null) {
+        option.maximum = parseFloat(value);
+        kittenStorage.items[maximunButton.attr("id")] = option.maximum;
+        this._host.saveToKittenStorage();
+        maximunButton[0].title = option.maximum;
       }
-      for (const item in this._host.options.auto.space.items) {
-        resetSpaceList.append(
-          this._getResetOption(item, "space", this._host.options.auto.space.items[item])
-        );
-      }
-      for (const item in this._host.options.auto.unicorn.items) {
-        resetReligionList.append(
-          this._getResetOption(item, "unicorn", this._host.options.auto.unicorn.items[item])
-        );
-      }
-      for (const item in this._host.options.auto.faith.items) {
-        resetReligionList.append(
-          this._getResetOption(item, "faith", this._host.options.auto.faith.items[item])
-        );
-      }
-      for (const item in this._host.options.auto.time.items) {
-        resetTimeList.append(
-          this._getResetOption(item, "time", this._host.options.auto.time.items[item])
-        );
-      }
+    });
 
-      const buildButton = $("<div/>", {
-        id: "toggle-reset-build",
-        text: this._host.i18n("ui.build"),
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      });
-      const spaceButton = $("<div/>", {
-        id: "toggle-reset-space",
-        text: this._host.i18n("ui.space"),
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      });
-      const resourcesButton = $("<div/>", {
-        id: "toggle-reset-resources",
-        text: this._host.i18n("ui.craft.resources"),
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      });
-      const religionButton = $("<div/>", {
-        id: "toggle-reset-religion",
-        text: this._host.i18n("ui.faith"),
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      });
-      const timeButton = $("<div/>", {
-        id: "toggle-reset-time",
-        text: this._host.i18n("ui.time"),
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      });
+    const cyclesButton = $("<div/>", {
+      id: "toggle-cycle-" + name,
+      text: this._host.i18n("ui.cycles"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
 
-      buildButton.on("click", () => {
-        resetBuildList.toggle();
-        resetSpaceList.toggle(false);
-        resetResourcesList.toggle(false);
-        resetReligionList.toggle(false);
-        resetTimeList.toggle(false);
-      });
-      spaceButton.on("click", () => {
-        resetBuildList.toggle(false);
-        resetSpaceList.toggle();
-        resetResourcesList.toggle(false);
-        resetReligionList.toggle(false);
-        resetTimeList.toggle(false);
-      });
-      resourcesButton.on("click", () => {
-        resetBuildList.toggle(false);
-        resetSpaceList.toggle(false);
-        resetResourcesList.toggle();
-        resetReligionList.toggle(false);
-        resetTimeList.toggle(false);
-      });
-      religionButton.on("click", () => {
-        resetBuildList.toggle(false);
-        resetSpaceList.toggle(false);
-        resetResourcesList.toggle(false);
-        resetReligionList.toggle();
-        resetTimeList.toggle(false);
-      });
-      timeButton.on("click", () => {
-        resetBuildList.toggle(false);
-        resetSpaceList.toggle(false);
-        resetResourcesList.toggle(false);
-        resetReligionList.toggle(false);
-        resetTimeList.toggle();
-      });
+    const cyclesList = $("<ul/>", {
+      id: "cycles-list-" + name,
+      css: { display: "none", paddingLeft: "20px" },
+    });
 
-      element.append(
-        buildButton,
-        spaceButton,
-        resourcesButton,
-        religionButton,
-        timeButton,
-        resetBuildList,
-        resetSpaceList,
-        resetResourcesList,
-        resetReligionList,
-        resetTimeList
-      );
-    } else {
-      const triggerButton = $("<div/>", {
-        id: "set-" + name + "-subTrigger",
-        text: this._host.i18n("ui.trigger"),
-        title: option.subTrigger,
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
-        },
-      }).data("option", option);
-
-      triggerButton.on("click", () => {
-        const value = window.prompt(
-          this._host.i18n("ui.trigger.set", [option.label]),
-          option.subTrigger
-        );
-
-        if (value !== null) {
-          option.subTrigger = parseFloat(value);
-          kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-          this._host.saveToKittenStorage();
-          triggerButton[0].title = option.subTrigger;
-        }
-      });
-      element.append(triggerButton);
+    for (const i in this._host.gamePage.calendar.cycles) {
+      cyclesList.append(this._getCycle(i, option));
     }
+
+    const seasonsButton = $("<div/>", {
+      id: "toggle-seasons-" + name,
+      text: this._host.i18n("trade.seasons"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+
+    const seasonsList = $("<ul/>", {
+      id: "seasons-list-" + name,
+      css: { display: "none", paddingLeft: "20px" },
+    });
+
+    // fill out the list with seasons
+    seasonsList.append(this._getSeasonForTimeSkip("spring", option));
+    seasonsList.append(this._getSeasonForTimeSkip("summer", option));
+    seasonsList.append(this._getSeasonForTimeSkip("autumn", option));
+    seasonsList.append(this._getSeasonForTimeSkip("winter", option));
+
+    cyclesButton.on("click", function () {
+      cyclesList.toggle();
+      seasonsList.toggle(false);
+    });
+
+    seasonsButton.on("click", function () {
+      cyclesList.toggle(false);
+      seasonsList.toggle();
+    });
+
+    element.append(
+      cyclesButton,
+      seasonsButton,
+      maximunButton,
+      triggerButton,
+      cyclesList,
+      seasonsList
+    );
+
+    return element;
+  }
+
+  private _getOptionReset(
+    name: string,
+    option: { enabled: boolean; label: string; maximum: number; subTrigger: number },
+    label: string
+  ): JQuery<HTMLElement> {
+    const element = this.getOption(name, option, label);
+
+    const resetBuildList = this.getOptionHead("reset-build");
+    const resetSpaceList = this.getOptionHead("reset-space");
+    const resetResourcesList = this._getResourceOptions(true);
+    const resetReligionList = this.getOptionHead("reset-religion");
+    const resetTimeList = this.getOptionHead("reset-time");
+
+    for (const item in this._host.options.auto.build.items) {
+      resetBuildList.append(
+        this._getResetOption(item, "build", this._host.options.auto.build.items[item])
+      );
+    }
+    for (const item in this._host.options.auto.space.items) {
+      resetSpaceList.append(
+        this._getResetOption(item, "space", this._host.options.auto.space.items[item])
+      );
+    }
+    for (const item in this._host.options.auto.unicorn.items) {
+      resetReligionList.append(
+        this._getResetOption(item, "unicorn", this._host.options.auto.unicorn.items[item])
+      );
+    }
+    for (const item in this._host.options.auto.faith.items) {
+      resetReligionList.append(
+        this._getResetOption(item, "faith", this._host.options.auto.faith.items[item])
+      );
+    }
+    for (const item in this._host.options.auto.time.items) {
+      resetTimeList.append(
+        this._getResetOption(item, "time", this._host.options.auto.time.items[item])
+      );
+    }
+
+    const buildButton = $("<div/>", {
+      id: "toggle-reset-build",
+      text: this._host.i18n("ui.build"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+    const spaceButton = $("<div/>", {
+      id: "toggle-reset-space",
+      text: this._host.i18n("ui.space"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+    const resourcesButton = $("<div/>", {
+      id: "toggle-reset-resources",
+      text: this._host.i18n("ui.craft.resources"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+    const religionButton = $("<div/>", {
+      id: "toggle-reset-religion",
+      text: this._host.i18n("ui.faith"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+    const timeButton = $("<div/>", {
+      id: "toggle-reset-time",
+      text: this._host.i18n("ui.time"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+
+    buildButton.on("click", () => {
+      resetBuildList.toggle();
+      resetSpaceList.toggle(false);
+      resetResourcesList.toggle(false);
+      resetReligionList.toggle(false);
+      resetTimeList.toggle(false);
+    });
+    spaceButton.on("click", () => {
+      resetBuildList.toggle(false);
+      resetSpaceList.toggle();
+      resetResourcesList.toggle(false);
+      resetReligionList.toggle(false);
+      resetTimeList.toggle(false);
+    });
+    resourcesButton.on("click", () => {
+      resetBuildList.toggle(false);
+      resetSpaceList.toggle(false);
+      resetResourcesList.toggle();
+      resetReligionList.toggle(false);
+      resetTimeList.toggle(false);
+    });
+    religionButton.on("click", () => {
+      resetBuildList.toggle(false);
+      resetSpaceList.toggle(false);
+      resetResourcesList.toggle(false);
+      resetReligionList.toggle();
+      resetTimeList.toggle(false);
+    });
+    timeButton.on("click", () => {
+      resetBuildList.toggle(false);
+      resetSpaceList.toggle(false);
+      resetResourcesList.toggle(false);
+      resetReligionList.toggle(false);
+      resetTimeList.toggle();
+    });
+
+    element.append(
+      buildButton,
+      spaceButton,
+      resourcesButton,
+      religionButton,
+      timeButton,
+      resetBuildList,
+      resetSpaceList,
+      resetResourcesList,
+      resetReligionList,
+      resetTimeList
+    );
+
+    return element;
+  }
+
+  private _getOptionAccelerateTime(
+    name: string,
+    option: { enabled: boolean; label: string; maximum: number; subTrigger: number },
+    label: string
+  ): JQuery<HTMLElement> {
+    const element = this.getOption(name, option, label);
+
+    const triggerButton = $("<div/>", {
+      id: "set-" + name + "-subTrigger",
+      text: this._host.i18n("ui.trigger"),
+      title: option.subTrigger,
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    }).data("option", option);
+
+    triggerButton.on("click", () => {
+      const value = window.prompt(
+        this._host.i18n("ui.trigger.set", [option.label]),
+        option.subTrigger
+      );
+
+      if (value !== null) {
+        option.subTrigger = parseFloat(value);
+        kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
+        this._host.saveToKittenStorage();
+        triggerButton[0].title = option.subTrigger;
+      }
+    });
+    element.append(triggerButton);
 
     return element;
   }
