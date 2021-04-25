@@ -1,5 +1,4 @@
 import { Options } from "./Options";
-import { mustExist } from "./tools/Maybe";
 
 export type KittenStorageType = {
   version: number;

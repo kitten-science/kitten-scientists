@@ -1,5 +1,5 @@
 import { CraftManager } from "./CraftManager";
-import { BuildItem, FaithItem, Requirement, SpaceItem, TimeItem } from "./Options";
+import { BuildItem, FaithItem, Requirement, SpaceItem, TimeItem } from "./options/Options";
 import { objectEntries } from "./tools/Entries";
 import { mustExist } from "./tools/Maybe";
 import { BuildButton, Price, Resource } from "./types";

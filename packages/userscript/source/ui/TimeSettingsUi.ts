@@ -1,22 +1,22 @@
-import { Options } from "../Options";
+import { TimeSettings } from "../options/TimeSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class TimeSettings extends SettingsSection {
+export class TimeSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["time"];
+  private readonly _options: TimeSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, religionOptions: Options["auto"]["time"] = host.options.auto.time) {
+  constructor(host: UserScript, options: TimeSettings = host.options.auto.time) {
     super(host);
 
-    this._options = religionOptions;
+    this._options = options;
 
     const toggleName = "time";
 
@@ -116,7 +116,8 @@ export class TimeSettings extends SettingsSection {
       this.getOption(
         "ressourceRetrieval",
         this._options.items.ressourceRetrieval,
-        this._host.i18n("$time.cfu.ressourceRetrieval.label"), true
+        this._host.i18n("$time.cfu.ressourceRetrieval.label"),
+        true
       ),
 
       this.getOption(

@@ -1,24 +1,21 @@
-import { Options } from "../Options";
+import { OptionsSettings } from "../options/OptionsSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class OptionsSettings extends SettingsSection {
+export class OptionsSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["options"];
+  private readonly _options: OptionsSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(
-    host: UserScript,
-    religionOptions: Options["auto"]["options"] = host.options.auto.options
-  ) {
+  constructor(host: UserScript, options: OptionsSettings = host.options.auto.options) {
     super(host);
 
-    this._options = religionOptions;
+    this._options = options;
 
     const toggleName = "options";
 
@@ -83,11 +80,7 @@ export class OptionsSettings extends SettingsSection {
         this._options.items.autofeed,
         this._host.i18n("option.autofeed")
       ),
-      this._getOptionsOption(
-        "hunt",
-        this._options.items.hunt,
-        this._host.i18n("option.hunt")
-      ),
+      this._getOptionsOption("hunt", this._options.items.hunt, this._host.i18n("option.hunt")),
       this._getOptionsOption(
         "promote",
         this._options.items.promote,
@@ -108,11 +101,7 @@ export class OptionsSettings extends SettingsSection {
         this._options.items.buildEmbassies,
         this._host.i18n("option.embassies")
       ),
-      this._getOptionsOption(
-        "style",
-        this._options.items.style,
-        this._host.i18n("option.style")
-      ),
+      this._getOptionsOption("style", this._options.items.style, this._host.i18n("option.style")),
       this._getOptionsOption(
         "explore",
         this._options.items.explore,

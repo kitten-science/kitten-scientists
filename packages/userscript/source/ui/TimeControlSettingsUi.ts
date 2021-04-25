@@ -1,4 +1,4 @@
-import { Options } from "../Options";
+import { TimeControlSettings } from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -6,19 +6,16 @@ import { Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class TimeControlSettings extends SettingsSection {
+export class TimeControlSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["timeCtrl"];
+  private readonly _options: TimeControlSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(
-    host: UserScript,
-    religionOptions: Options["auto"]["timeCtrl"] = host.options.auto.timeCtrl
-  ) {
+  constructor(host: UserScript, religionOptions: TimeControlSettings = host.options.auto.timeCtrl) {
     super(host);
 
     this._options = religionOptions;
@@ -93,7 +90,7 @@ export class TimeControlSettings extends SettingsSection {
 
   private _getTimeCtrlOption(
     name: "accelerateTime" | "reset" | "timeSkip",
-    option: { enabled: boolean; label: string; maximum: number; subTrigger: number },
+    option: { enabled: boolean; maximum?: number; subTrigger: number },
     label: string
   ): JQuery<HTMLElement> {
     let element;
@@ -111,7 +108,7 @@ export class TimeControlSettings extends SettingsSection {
 
   private _getOptionTimeSkip(
     name: string,
-    option: { enabled: boolean; label: string; maximum: number; subTrigger: number },
+    option: { enabled: boolean; maximum: number; subTrigger: number },
     label: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);
@@ -233,7 +230,7 @@ export class TimeControlSettings extends SettingsSection {
 
   private _getOptionReset(
     name: string,
-    option: { enabled: boolean; label: string; maximum: number; subTrigger: number },
+    option: { enabled: boolean; subTrigger: number },
     label: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);
@@ -380,7 +377,7 @@ export class TimeControlSettings extends SettingsSection {
 
   private _getOptionAccelerateTime(
     name: string,
-    option: { enabled: boolean; label: string; maximum: number; subTrigger: number },
+    option: { enabled: boolean; subTrigger: number },
     label: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);

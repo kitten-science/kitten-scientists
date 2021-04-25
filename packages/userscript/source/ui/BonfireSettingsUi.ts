@@ -1,25 +1,22 @@
-import { Options } from "../Options";
+import { BonfireSettings } from "../options/BonfireSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class BonfireSettings extends SettingsSection {
+export class BonfireSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["build"];
+  private readonly _options: BonfireSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(
-    host: UserScript,
-    bonfireOptions: Options["auto"]["build"] = host.options.auto.build
-  ) {
+  constructor(host: UserScript, options: BonfireSettings = host.options.auto.build) {
     super(host);
 
-    this._options = bonfireOptions;
+    this._options = options;
 
     const toggleName = "build";
 
@@ -57,13 +54,13 @@ export class BonfireSettings extends SettingsSection {
     this._triggerButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [itext]),
-        this._options.trigger
+        this._options.trigger.toString()
       );
 
       if (value !== null) {
         this._options.trigger = parseFloat(value);
         this._host.saveToKittenStorage();
-        this._triggerButton[0].title = this._options.trigger;
+        this._triggerButton[0].title = this._options.trigger.toString();
       }
     });
 
@@ -317,11 +314,11 @@ export class BonfireSettings extends SettingsSection {
 
   private _getLimitedOption(
     name: string,
-    option: { enabled: boolean; filter?: unknown; label: string; max: number; misc?: unknown },
-    i18nName: string | undefined = undefined,
+    option: { enabled: boolean; max: number },
+    label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, i18nName, delimiter);
+    const element = this.getOption(name, option, label, delimiter);
 
     const maxButton = $("<div/>", {
       id: "set-" + name + "-max",
@@ -337,13 +334,13 @@ export class BonfireSettings extends SettingsSection {
     }).data("option", option);
 
     maxButton.on("click", () => {
-      const value = window.prompt(this._host.i18n("ui.max.set", [option.label]), option.max);
+      const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
 
       if (value !== null) {
         option.max = parseInt(value);
         kittenStorage.items[maxButton.attr("id")] = option.max;
         this._host.saveToKittenStorage();
-        maxButton[0].title = option.max;
+        maxButton[0].title = option.max.toString();
         maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
       }
     });

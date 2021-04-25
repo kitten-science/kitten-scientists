@@ -1,4 +1,4 @@
-import { cwarn } from "./tools/Log";
+import { cwarn } from "../tools/Log";
 import {
   Building,
   ChronoForgeUpgrades,
@@ -7,7 +7,7 @@ import {
   SpaceUpgrades,
   UnicornItemVariant,
   VoidSpaceUpgrades,
-} from "./types";
+} from "../types";
 
 export type Requirement = Resource | false;
 

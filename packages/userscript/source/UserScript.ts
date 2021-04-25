@@ -1,8 +1,9 @@
 import JQuery from "jquery";
 import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
-import { KittenStorage } from "./KittenStorage";
-import { DefaultOptions, Options } from "./Options";
+import { KittenStorage } from "./options/KittenStorage";
+import { DefaultOptions, Options } from "./options/Options";
+import { OptionsExt } from "./options/OptionsExt";
 import { objectEntries } from "./tools/Entries";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
@@ -95,6 +96,8 @@ export class UserScript {
 
     this._i18nData = i18nData;
   }
+
+  injectOptions(options:OptionsExt):void {}
 
   async run(): Promise<void> {
     if (this._language in this._i18nData === false) {

@@ -1,9 +1,9 @@
-import { Options } from "../Options";
+import { Options } from "../options/Options";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class EngineSettings extends SettingsSection {
+export class EngineSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: Options["auto"]["engine"];

@@ -1,13 +1,14 @@
-import { Options } from "../Options";
+import { Options } from "../options/Options";
+import { TradingSettings } from "../options/TradingSettings";
 import { ucfirst } from "../tools/Format";
 import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class TradingSettings extends SettingsSection {
+export class TradingSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["trade"];
+  private readonly _options: TradingSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
@@ -16,7 +17,7 @@ export class TradingSettings extends SettingsSection {
 
   constructor(
     host: UserScript,
-    upgradeOptions: Options["auto"]["trade"] = host.options.auto.trade
+    upgradeOptions: TradingSettings = host.options.auto.trade
   ) {
     super(host);
 
@@ -145,8 +146,8 @@ export class TradingSettings extends SettingsSection {
 
   getTradeOption(
     name: Race,
-    option: { enabled: boolean; label: string; limited: boolean },
-    i18nName: string | undefined = undefined,
+    option: { enabled: boolean; limited: boolean },
+    i18nName: string,
     delimiter = false
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, i18nName);

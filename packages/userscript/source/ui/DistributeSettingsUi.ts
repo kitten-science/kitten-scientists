@@ -1,21 +1,18 @@
-import { Options } from "../Options";
+import { DistributeSettings } from "../options/DistributeSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class DistributeSettings extends SettingsSection {
+export class DistributeSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["distribute"];
+  private readonly _options: DistributeSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(
-    host: UserScript,
-    options: Options["auto"]["distribute"] = host.options.auto.distribute
-  ) {
+  constructor(host: UserScript, options: DistributeSettings = host.options.auto.distribute) {
     super(host);
 
     this._options = options;
@@ -115,14 +112,14 @@ export class DistributeSettings extends SettingsSection {
 
   private getDistributeOption(
     name: string,
-    option: { enabled: boolean; label: string; limited: boolean; max: number },
-    iname: string
+    option: { enabled: boolean; limited: boolean; max: number },
+    label: string
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, iname);
+    const element = this.getOption(name, option, label);
     element.css("borderBottom", "1px solid rgba(185, 185, 185, 0.7)");
 
     //Limited Distribution
-    const label = $("<label/>", {
+    const labelElement = $("<label/>", {
       for: "toggle-limited-" + name,
       text: this._host.i18n("ui.limit"),
     });
@@ -139,16 +136,16 @@ export class DistributeSettings extends SettingsSection {
     input.on("change", () => {
       if (input.is(":checked") && option.limited == false) {
         option.limited = true;
-        this._host.imessage("distribute.limited", [iname]);
+        this._host.imessage("distribute.limited", [label]);
       } else if (!input.is(":checked") && option.limited == true) {
         option.limited = false;
-        this._host.imessage("distribute.unlimited", [iname]);
+        this._host.imessage("distribute.unlimited", [label]);
       }
       kittenStorage.items[input.attr("id")] = option.limited;
       this._host.saveToKittenStorage();
     });
 
-    element.append(input, label);
+    element.append(input, labelElement);
 
     const maxButton = $("<div/>", {
       id: "set-" + name + "-max",
@@ -164,13 +161,13 @@ export class DistributeSettings extends SettingsSection {
     }).data("option", option);
 
     maxButton.on("click", () => {
-      const value = window.prompt(this._host.i18n("ui.max.set", [iname]), option.max);
+      const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
 
       if (value !== null) {
         option.max = parseInt(value);
         kittenStorage.items[maxButton.attr("id")] = option.max;
         this._host.saveToKittenStorage();
-        maxButton[0].title = option.max;
+        maxButton[0].title = option.max.toString();
         maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
       }
     });

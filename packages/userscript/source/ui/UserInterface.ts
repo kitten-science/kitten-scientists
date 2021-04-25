@@ -1,16 +1,26 @@
+import { BonfireSettings } from "../options/BonfireSettings";
+import { CraftSettings } from "../options/CraftSettings";
+import { DistributeSettings } from "../options/DistributeSettings";
+import { EngineSettings } from "../options/EngineSettings";
+import { FilterSettings } from "../options/FilterSettings";
+import { OptionsSettings } from "../options/OptionsSettings";
+import { ReligionSettings } from "../options/ReligionSettings";
+import { SpaceSettings } from "../options/SpaceSettings";
+import { TimeControlSettings } from "../options/TimeControlSettings";
+import { TimeSettings } from "../options/TimeSettings";
 import { UserScript } from "../UserScript";
-import { BonfireSettings } from "./BonfireSettings";
-import { CraftSettings } from "./CraftSettings";
-import { DistributeSettings } from "./DistributeSettings";
-import { EngineSettings } from "./EngineSettings";
-import { FiltersSettings } from "./FilterSettings";
-import { OptionsSettings } from "./OptionsSettings";
-import { ReligionSettings } from "./ReligionSettings";
-import { SpaceSettings } from "./SpaceSettings";
-import { TimeControlSettings } from "./TimeControlSettings";
-import { TimeSettings } from "./TimeSettings";
-import { TradingSettings } from "./TradingSettings";
-import { UnlockingSettings } from "./UnlockingSettings";
+import { BonfireSettingsUi } from "./BonfireSettingsUi";
+import { CraftSettingsUi } from "./CraftSettingsUi";
+import { DistributeSettingsUi } from "./DistributeSettingsUi";
+import { EngineSettingsUi } from "./EngineSettingsUi";
+import { FiltersSettingsUi } from "./FilterSettingsUi";
+import { OptionsSettingsUi } from "./OptionsSettingsUi";
+import { ReligionSettingsUi } from "./ReligionSettingsUi";
+import { SpaceSettingsUi } from "./SpaceSettingsUi";
+import { TimeControlSettingsUi } from "./TimeControlSettingsUi";
+import { TimeSettingsUi } from "./TimeSettingsUi";
+import { TradingSettingsUi } from "./TradingSettingsUi";
+import { UnlockingSettingsUi } from "./UnlockingSettingsUi";
 
 export class UserInterface {
   private readonly _host: UserScript;
@@ -22,18 +32,18 @@ export class UserInterface {
   construct(): void {
     this._installCss();
 
-    const engine = new EngineSettings(this._host);
-    const bonfire = new BonfireSettings(this._host);
-    const space = new SpaceSettings(this._host);
-    const craft = new CraftSettings(this._host);
-    const unlock = new UnlockingSettings(this._host);
-    const trading = new TradingSettings(this._host);
-    const religion = new ReligionSettings(this._host);
-    const time = new TimeSettings(this._host);
-    const timeCtrl = new TimeControlSettings(this._host);
-    const distribute = new DistributeSettings(this._host);
-    const options = new OptionsSettings(this._host);
-    const filter = new FiltersSettings(this._host);
+    const engine = new EngineSettingsUi(this._host, new EngineSettings());
+    const bonfire = new BonfireSettingsUi(this._host, new BonfireSettings());
+    const space = new SpaceSettingsUi(this._host, new SpaceSettings());
+    const craft = new CraftSettingsUi(this._host, new CraftSettings());
+    const unlock = new UnlockingSettingsUi(this._host);
+    const trading = new TradingSettingsUi(this._host);
+    const religion = new ReligionSettingsUi(this._host, new ReligionSettings());
+    const time = new TimeSettingsUi(this._host, new TimeSettings());
+    const timeCtrl = new TimeControlSettingsUi(this._host, new TimeControlSettings());
+    const distribute = new DistributeSettingsUi(this._host, new DistributeSettings());
+    const options = new OptionsSettingsUi(this._host, new OptionsSettings());
+    const filter = new FiltersSettingsUi(this._host, new FilterSettings());
 
     const kg_version = "Kitten Scientists v2.0.0-alpha0";
     const optionsElement = $("<div/>", { id: "ks-options", css: { marginBottom: "10px" } });

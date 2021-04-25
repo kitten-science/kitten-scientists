@@ -9,7 +9,7 @@ import {
   FaithItem,
   SpaceItem,
   UnicornFaithItemOptions,
-} from "./Options";
+} from "./options/Options";
 import { ReligionManager } from "./ReligionManager";
 import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";

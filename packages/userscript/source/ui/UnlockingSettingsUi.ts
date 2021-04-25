@@ -1,18 +1,19 @@
-import { Options } from "../Options";
+import { Options } from "../options/Options";
+import { UnlockingSettings } from "../options/UnlockingSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class UnlockingSettings extends SettingsSection {
+export class UnlockingSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["upgrade"];
+  private readonly _options: UnlockingSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, upgradeOptions: Options["auto"]["upgrade"] = host.options.auto.upgrade) {
+  constructor(host: UserScript, upgradeOptions: UnlockingSettings = host.options.auto.upgrade) {
     super(host);
 
     this._options = upgradeOptions;

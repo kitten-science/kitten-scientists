@@ -57,12 +57,12 @@ export class SettingsSection {
 
   protected getOption(
     name: string,
-    option: { enabled: boolean; label: string },
-    i18nName: string | undefined = undefined,
+    option: { enabled: boolean; },
+    i18nName: string,
     delimiter = false
   ): JQuery<HTMLElement> {
     const element = $("<li/>");
-    const elementLabel = i18nName || option.label || ucfirst(name);
+    const elementLabel = i18nName;
 
     const label = $("<label/>", {
       for: "toggle-" + name,
