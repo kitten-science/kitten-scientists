@@ -1,24 +1,21 @@
-import { Options } from "../Options";
+import { FilterSettings } from "../options/FilterSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class FiltersSettings extends SettingsSection {
+export class FiltersSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["filter"];
+  private readonly _options: FilterSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(
-    host: UserScript,
-    religionOptions: Options["auto"]["filter"] = host.options.auto.filter
-  ) {
+  constructor(host: UserScript, options: FilterSettings = host.options.auto.filter) {
     super(host);
 
-    this._options = religionOptions;
+    this._options = options;
 
     const toggleName = "filter";
 
@@ -88,11 +85,7 @@ export class FiltersSettings extends SettingsSection {
         this._options.items.tradeFilter,
         this._host.i18n("filter.trade")
       ),
-      this.getOption(
-        "huntFilter",
-        this._options.items.huntFilter,
-        this._host.i18n("filter.hunt")
-      ),
+      this.getOption("huntFilter", this._options.items.huntFilter, this._host.i18n("filter.hunt")),
       this.getOption(
         "praiseFilter",
         this._options.items.praiseFilter,
@@ -128,11 +121,7 @@ export class FiltersSettings extends SettingsSection {
         this._options.items.festivalFilter,
         this._host.i18n("filter.festival")
       ),
-      this.getOption(
-        "starFilter",
-        this._options.items.starFilter,
-        this._host.i18n("filter.star")
-      ),
+      this.getOption("starFilter", this._options.items.starFilter, this._host.i18n("filter.star")),
       this.getOption(
         "distributeFilter",
         this._options.items.distributeFilter,
@@ -143,12 +132,7 @@ export class FiltersSettings extends SettingsSection {
         this._options.items.promoteFilter,
         this._host.i18n("filter.promote")
       ),
-      this.getOption(
-        "miscFilter",
-        this._options.items.miscFilter,
-        this._host.i18n("filter.misc")
-      ),
-      
+      this.getOption("miscFilter", this._options.items.miscFilter, this._host.i18n("filter.misc")),
     ];
 
     list.append(...this._buildingButtons);

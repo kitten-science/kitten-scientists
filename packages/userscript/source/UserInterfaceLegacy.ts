@@ -1,4 +1,4 @@
-import { Options } from "./Options";
+import { Options } from "./options/Options";
 import { objectEntries } from "./tools/Entries";
 import { ucfirst } from "./tools/Format";
 import { mustExist } from "./tools/Maybe";

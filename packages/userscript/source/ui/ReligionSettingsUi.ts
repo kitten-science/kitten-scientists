@@ -1,19 +1,20 @@
-import { Options } from "../Options";
+import { Options } from "../options/Options";
+import { ReligionSettings } from "../options/ReligionSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class ReligionSettings extends SettingsSection {
+export class ReligionSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["faith"];
+  private readonly _options: ReligionSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, religionOptions: Options["auto"]["faith"] = host.options.auto.faith) {
+  constructor(host: UserScript, religionOptions: ReligionSettings = host.options.auto.faith) {
     super(host);
 
     this._options = religionOptions;

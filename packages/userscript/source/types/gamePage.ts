@@ -19,7 +19,7 @@ import {
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from ".";
-import { SpaceItem } from "../Options";
+import { SpaceItem } from "../options/Options";
 import { ReligionTab } from "./religion";
 import { SpaceTab, SpaceUpgrades } from "./space";
 import {

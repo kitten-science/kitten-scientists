@@ -1,15 +1,15 @@
-import { Options } from "../Options";
+import { CraftSettings } from "../options/CraftSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
-import { Resource } from "../types";
+import { ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
 
-export class CraftSettings extends SettingsSection {
+export class CraftSettingsUi extends SettingsSection {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["craft"];
+  private readonly _options: CraftSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _resourcesButton: JQuery<HTMLElement>;
@@ -17,10 +17,10 @@ export class CraftSettings extends SettingsSection {
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, craftOptions: Options["auto"]["craft"] = host.options.auto.craft) {
+  constructor(host: UserScript, options: CraftSettings = host.options.auto.craft) {
     super(host);
 
-    this._options = craftOptions;
+    this._options = options;
 
     const toggleName = "craft";
 
@@ -58,13 +58,13 @@ export class CraftSettings extends SettingsSection {
     this._triggerButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [itext]),
-        this._options.trigger
+        this._options.trigger.toString()
       );
 
       if (value !== null) {
         this._options.trigger = parseFloat(value);
         this._host.saveToKittenStorage();
-        this._triggerButton[0].title = this._options.trigger;
+        this._triggerButton[0].title = this._options.trigger.toString();
       }
     });
 
@@ -230,13 +230,13 @@ export class CraftSettings extends SettingsSection {
 
   private _getCraftOption(
     name: string,
-    option: { enabled: boolean; label: string; limited: boolean },
-    iname: string,
+    option: { enabled: boolean; limited: boolean },
+    label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, iname, delimiter);
+    const element = this.getOption(name, option, label, delimiter);
 
-    const label = $("<label/>", {
+    const labelElement = $("<label/>", {
       for: "toggle-limited-" + name,
       text: this._host.i18n("ui.limit"),
     });
@@ -253,16 +253,16 @@ export class CraftSettings extends SettingsSection {
     input.on("change", () => {
       if (input.is(":checked") && option.limited == false) {
         option.limited = true;
-        this._host.imessage("craft.limited", [iname]);
+        this._host.imessage("craft.limited", [label]);
       } else if (!input.is(":checked") && option.limited == true) {
         option.limited = false;
-        this._host.imessage("craft.unlimited", [iname]);
+        this._host.imessage("craft.unlimited", [label]);
       }
       kittenStorage.items[input.attr("id")] = option.limited;
       this._host.saveToKittenStorage();
     });
 
-    element.append(input, label);
+    element.append(input, labelElement);
 
     return element;
   }
@@ -301,10 +301,10 @@ export class CraftSettings extends SettingsSection {
         // Only delete resources with unmodified values. Require manual
         // removal of resources with non-standard values.
         if (
-          (!this._host.options.auto.resources[name as Resource]!.stock &&
-            this._host.options.auto.resources[name as Resource]!.consume ==
+          (!this._host.options.auto.resources[name as ResourceCraftable]!.stock &&
+            this._host.options.auto.resources[name as ResourceCraftable]!.consume ==
               this._host.options.consume) ||
-          this._host.options.auto.resources[name as Resource]!.consume == undefined
+          this._host.options.auto.resources[name as ResourceCraftable]!.consume == undefined
         ) {
           $("#resource-" + name).remove();
         }
