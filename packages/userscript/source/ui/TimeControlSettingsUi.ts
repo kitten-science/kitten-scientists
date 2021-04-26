@@ -235,22 +235,27 @@ export class TimeControlSettingsUi extends SettingsSection {
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);
 
+    // Bonfire reset options
     const resetBuildList = this.getOptionHead("reset-build");
-    const resetSpaceList = this.getOptionHead("reset-space");
-    const resetResourcesList = this._getResourceOptions(true);
-    const resetReligionList = this.getOptionHead("reset-religion");
-    const resetTimeList = this.getOptionHead("reset-time");
-
-    for (const item in this._host.options.auto.build.items) {
+    for (const [item] of objectEntries(this._options.buildItems)) {
       resetBuildList.append(
-        this._getResetOption(item, "build", this._host.options.auto.build.items[item])
+        this._getResetOption(item, "build", this._options.buildItems[item], item)
       );
     }
-    for (const item in this._host.options.auto.space.items) {
+
+    // Space reset options
+    const resetSpaceList = this.getOptionHead("reset-space");
+    for (const [item] of objectEntries(this._options.spaceItems)) {
       resetSpaceList.append(
-        this._getResetOption(item, "space", this._host.options.auto.space.items[item])
+        this._getResetOption(item, "space", this._options.spaceItems[item], item)
       );
     }
+
+    // Resources list
+    const resetResourcesList = this._getResourceOptions(true);
+
+    // Religion reset options.
+    const resetReligionList = this.getOptionHead("reset-religion");
     /*
     for (const item in this._host.options.auto.unicorn.items) {
       resetReligionList.append(
@@ -258,15 +263,16 @@ export class TimeControlSettingsUi extends SettingsSection {
       );
     }
     */
-    for (const item in this._host.options.auto.religion.items) {
+    for (const [item] of objectEntries(this._options.religionItems)) {
       resetReligionList.append(
-        this._getResetOption(item, "faith", this._host.options.auto.religion.items[item])
+        this._getResetOption(item, "faith", this._options.religionItems[item], item)
       );
     }
-    for (const item in this._host.options.auto.time.items) {
-      resetTimeList.append(
-        this._getResetOption(item, "time", this._host.options.auto.time.items[item])
-      );
+
+    const resetTimeList = this.getOptionHead("reset-time");
+
+    for (const [item] of objectEntries(this._options.timeItems)) {
+      resetTimeList.append(this._getResetOption(item, "time", this._options.timeItems[item], item));
     }
 
     const buildButton = $("<div/>", {
@@ -453,11 +459,12 @@ export class TimeControlSettingsUi extends SettingsSection {
 
   private _getResetOption(
     name: string,
-    type: unknown,
-    option: { checkForReset: boolean; label: string }
+    type: "build" | "faith" | "space" | "time",
+    option: { checkForReset: boolean; triggerForReset: number },
+    i18nName: string
   ): JQuery<HTMLElement> {
     const element = $("<li/>");
-    const elementLabel = option.label;
+    const elementLabel = i18nName;
 
     const label = $("<label/>", {
       for: "toggle-reset-" + type + "-" + name,
