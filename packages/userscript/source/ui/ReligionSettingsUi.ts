@@ -3,7 +3,7 @@ import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class ReligionSettingsUi extends SettingsSectionUi {
+export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: ReligionSettings;

@@ -1,16 +1,28 @@
 import { Race } from "../types";
+import { SettingsSection } from "./SettingsSection";
 
 export type TradingSettingsItem = {
   enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
+
   limited: boolean;
+  $limited?: JQuery<HTMLElement>;
+
   summer: boolean;
+  $summer?: JQuery<HTMLElement>;
+
   autumn: boolean;
+  $autumn?: JQuery<HTMLElement>;
+
   winter: boolean;
+  $winter?: JQuery<HTMLElement>;
+
   spring: boolean;
+  $spring?: JQuery<HTMLElement>;
 };
-export class TradingSettings {
-  enabled = false;
+export class TradingSettings extends SettingsSection {
   trigger = 0.98;
+  $trigger?: JQuery<HTMLElement>;
 
   items: {
     [item in Race]: TradingSettingsItem;
