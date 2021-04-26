@@ -1,4 +1,4 @@
-export type FilterSettingsItem = { enabled: boolean };
+export type FilterSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
 export class FilterSettings {
   enabled = false;
 

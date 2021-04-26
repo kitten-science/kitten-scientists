@@ -6,7 +6,7 @@ import { Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class TimeControlSettingsUi extends SettingsSectionUi {
+export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings> {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: TimeControlSettings;

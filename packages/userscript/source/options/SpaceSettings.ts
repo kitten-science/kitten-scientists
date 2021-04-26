@@ -1,6 +1,11 @@
 import { SpaceItem } from "./Options";
 
-export type SpaceSettingsItem = { enabled: boolean; max: number };
+export type SpaceSettingsItem = {
+  enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
+  max: number;
+  $max?: JQuery<HTMLElement>;
+};
 export class SpaceSettings {
   enabled = false;
   trigger = 0;

@@ -1,4 +1,4 @@
-export type OptionsSettingsItem = { enabled: boolean };
+export type OptionsSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
 export class OptionsSettings {
   enabled = false;
 

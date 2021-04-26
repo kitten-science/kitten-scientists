@@ -1,7 +1,7 @@
-export type UnlockingSettingsItem = { enabled: boolean };
-export class UnlockingSettings {
-  enabled = false;
+import { SettingsSection } from "./SettingsSection";
 
+export type UnlockingSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
+export class UnlockingSettings extends SettingsSection {
   items: {
     upgrades: { enabled: boolean };
     techs: { enabled: boolean };

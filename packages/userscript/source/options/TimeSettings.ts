@@ -1,9 +1,10 @@
 import { TimeItem } from "./Options";
+import { SettingsSection } from "./SettingsSection";
 
-export type TimeSettingsItem = { enabled: boolean };
-export class TimeSettings {
-  enabled = false;
+export type TimeSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
+export class TimeSettings extends SettingsSection {
   trigger = 0;
+  $trigger?: JQuery<HTMLElement>;
 
   items: {
     [item in TimeItem]: TimeSettingsItem;

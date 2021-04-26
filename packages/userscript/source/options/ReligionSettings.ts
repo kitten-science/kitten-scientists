@@ -1,7 +1,11 @@
 import { UnicornItemVariant } from "../types";
 import { FaithItem, UnicornItem } from "./Options";
 
-export type ReligionSettingsItem = { enabled: boolean; variant: UnicornItemVariant };
+export type ReligionSettingsItem = {
+  enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
+  variant: UnicornItemVariant;
+};
 export class ReligionSettings {
   enabled = false;
   trigger = 0;

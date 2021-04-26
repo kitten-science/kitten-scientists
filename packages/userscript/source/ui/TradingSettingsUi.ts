@@ -5,7 +5,7 @@ import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class TradingSettingsUi extends SettingsSectionUi {
+export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: TradingSettings;

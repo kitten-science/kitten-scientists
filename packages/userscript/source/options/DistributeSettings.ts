@@ -1,9 +1,17 @@
 import { Jobs } from "../types";
+import { SettingsSection } from "./SettingsSection";
 
-export type DistributeSettingsItem = { enabled: boolean; limited: boolean; max: number };
-export class DistributeSettings {
-  enabled = false;
+export type DistributeSettingsItem = {
+  enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
 
+  limited: boolean;
+  $limited?: JQuery<HTMLElement>;
+
+  max: number;
+  $max?: JQuery<HTMLElement>;
+};
+export class DistributeSettings extends SettingsSection {
   items: {
     [item in Jobs]: DistributeSettingsItem;
   } = {
