@@ -64,7 +64,7 @@ export class TradingSettingsUi extends SettingsSection {
 
       if (value !== null) {
         this._options.trigger = parseFloat(value);
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
         this._triggerButton[0].title = this._options.trigger;
       }
     });
@@ -177,7 +177,7 @@ export class TradingSettingsUi extends SettingsSection {
         this._host.imessage("trade.unlimited", [i18nName]);
       }
       kittenStorage.items[input.attr("id")] = option.limited;
-      this._host.saveToKittenStorage();
+      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -244,7 +244,7 @@ export class TradingSettingsUi extends SettingsSection {
         this._host.imessage("trade.season.disable", [iname, iseason]);
       }
       kittenStorage.items[input.attr("id")] = option[season];
-      this._host.saveToKittenStorage();
+      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);

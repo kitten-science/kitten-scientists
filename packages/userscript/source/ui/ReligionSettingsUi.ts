@@ -1,4 +1,3 @@
-import { Options } from "../options/Options";
 import { ReligionSettings } from "../options/ReligionSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
@@ -14,7 +13,7 @@ export class ReligionSettingsUi extends SettingsSection {
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, religionOptions: ReligionSettings = host.options.auto.faith) {
+  constructor(host: UserScript, religionOptions: ReligionSettings = host.options.auto.religion) {
     super(host);
 
     this._options = religionOptions;
@@ -60,7 +59,7 @@ export class ReligionSettingsUi extends SettingsSection {
 
       if (value !== null) {
         this._options.trigger = parseFloat(value);
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
         this._triggerButton[0].title = this._options.trigger;
       }
     });
@@ -90,6 +89,43 @@ export class ReligionSettingsUi extends SettingsSection {
 
     this._buildingButtons = [
       this.getOption(
+        "unicornPasture",
+        this._options.items.unicornPasture,
+        this._host.i18n("$buildings.unicornPasture.label")
+      ),
+      this.getOption(
+        "unicornTomb",
+        this._options.items.unicornTomb,
+        this._host.i18n("$religion.zu.unicornTomb.label")
+      ),
+      this.getOption(
+        "ivoryTower",
+        this._options.items.ivoryTower,
+        this._host.i18n("$religion.zu.ivoryTower.label")
+      ),
+      this.getOption(
+        "ivoryCitadel",
+        this._options.items.ivoryCitadel,
+        this._host.i18n("$religion.zu.ivoryCitadel.label")
+      ),
+      this.getOption(
+        "skyPalace",
+        this._options.items.skyPalace,
+        this._host.i18n("$religion.zu.skyPalace.label")
+      ),
+      this.getOption(
+        "unicornUtopia",
+        this._options.items.unicornUtopia,
+        this._host.i18n("$religion.zu.unicornUtopia.label")
+      ),
+      this.getOption(
+        "sunspire",
+        this._options.items.sunspire,
+        this._host.i18n("$religion.zu.sunspire.label"),
+        true
+      ),
+
+      this.getOption(
         "marker",
         this._options.items.marker,
         this._host.i18n("$religion.zu.marker.label")
@@ -107,7 +143,8 @@ export class ReligionSettingsUi extends SettingsSection {
       this.getOption(
         "blackPyramid",
         this._options.items.blackPyramid,
-        this._host.i18n("$religion.zu.blackPyramid.label"),true
+        this._host.i18n("$religion.zu.blackPyramid.label"),
+        true
       ),
 
       this.getOption(
@@ -158,7 +195,8 @@ export class ReligionSettingsUi extends SettingsSection {
       this.getOption(
         "transcendence",
         this._options.items.transcendence,
-        this._host.i18n("$religion.ru.transcendence.label"),true
+        this._host.i18n("$religion.ru.transcendence.label"),
+        true
       ),
 
       this.getOption(
@@ -206,7 +244,6 @@ export class ReligionSettingsUi extends SettingsSection {
         this._options.items.holyGenocide,
         this._host.i18n("$religion.tu.holyGenocide.label")
       ),
-
     ];
 
     list.append(...this._buildingButtons);

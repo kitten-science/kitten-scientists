@@ -77,7 +77,7 @@ export class UserScript {
   private _language: SupportedLanguages;
 
   private readonly _i18nData: typeof i18nData;
-  options: Options = DefaultOptions;
+  options: OptionsExt = new OptionsExt();
 
   private _activitySummary: ActivitySummary = {};
   private readonly _kittenStorage: KittenStorage = new KittenStorage();
@@ -97,7 +97,9 @@ export class UserScript {
     this._i18nData = i18nData;
   }
 
-  injectOptions(options:OptionsExt):void {}
+  injectOptions(options: OptionsExt): void {
+    this.options = options;
+  }
 
   async run(): Promise<void> {
     if (this._language in this._i18nData === false) {
@@ -125,10 +127,14 @@ export class UserScript {
    * @param args Variable arguments to render into the string.
    * @returns The translated string.
    */
-  i18n(key: keyof typeof i18nData[SupportedLanguages], args: Array<number | string> = []): string {
+  i18n<TKittenGameLiteral extends `$${string}`>(
+    key: keyof typeof i18nData[SupportedLanguages] | TKittenGameLiteral,
+    args: Array<number | string> = []
+  ): string {
     if (key.startsWith("$")) {
       return this.i18nEngine(key.slice(1));
     }
+
     let value = this._i18nData[this._language][key];
     if (typeof value === "undefined") {
       value = i18nData[DefaultLanguage][key];

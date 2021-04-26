@@ -1,4 +1,3 @@
-import { Options } from "../options/Options";
 import { UnlockingSettings } from "../options/UnlockingSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
@@ -13,10 +12,10 @@ export class UnlockingSettingsUi extends SettingsSection {
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, upgradeOptions: UnlockingSettings = host.options.auto.upgrade) {
+  constructor(host: UserScript, options: UnlockingSettings = host.options.auto.unlock) {
     super(host);
 
-    this._options = upgradeOptions;
+    this._options = options;
 
     const toggleName = "upgrade";
 
@@ -66,16 +65,8 @@ export class UnlockingSettingsUi extends SettingsSection {
         this._options.items.upgrades,
         this._host.i18n("ui.upgrade.upgrades")
       ),
-      this.getOption(
-        "techs",
-        this._options.items.techs,
-        this._host.i18n("ui.upgrade.techs")
-      ),
-      this.getOption(
-        "races",
-        this._options.items.races,
-        this._host.i18n("ui.upgrade.races")
-      ),
+      this.getOption("techs", this._options.items.techs, this._host.i18n("ui.upgrade.techs")),
+      this.getOption("races", this._options.items.races, this._host.i18n("ui.upgrade.races")),
       this.getOption(
         "missions",
         this._options.items.missions,
@@ -86,7 +77,6 @@ export class UnlockingSettingsUi extends SettingsSection {
         this._options.items.buildings,
         this._host.i18n("ui.upgrade.buildings")
       ),
-
     ];
 
     list.append(...this._buildingButtons);

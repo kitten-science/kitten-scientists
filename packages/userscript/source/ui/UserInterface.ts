@@ -32,18 +32,18 @@ export class UserInterface {
   construct(): void {
     this._installCss();
 
-    const engine = new EngineSettingsUi(this._host, new EngineSettings());
-    const bonfire = new BonfireSettingsUi(this._host, new BonfireSettings());
-    const space = new SpaceSettingsUi(this._host, new SpaceSettings());
-    const craft = new CraftSettingsUi(this._host, new CraftSettings());
+    const engine = new EngineSettingsUi(this._host);
+    const bonfire = new BonfireSettingsUi(this._host);
+    const space = new SpaceSettingsUi(this._host);
+    const craft = new CraftSettingsUi(this._host);
     const unlock = new UnlockingSettingsUi(this._host);
     const trading = new TradingSettingsUi(this._host);
-    const religion = new ReligionSettingsUi(this._host, new ReligionSettings());
-    const time = new TimeSettingsUi(this._host, new TimeSettings());
-    const timeCtrl = new TimeControlSettingsUi(this._host, new TimeControlSettings());
-    const distribute = new DistributeSettingsUi(this._host, new DistributeSettings());
-    const options = new OptionsSettingsUi(this._host, new OptionsSettings());
-    const filter = new FiltersSettingsUi(this._host, new FilterSettings());
+    const religion = new ReligionSettingsUi(this._host);
+    const time = new TimeSettingsUi(this._host);
+    const timeCtrl = new TimeControlSettingsUi(this._host);
+    const distribute = new DistributeSettingsUi(this._host);
+    const options = new OptionsSettingsUi(this._host);
+    const filter = new FiltersSettingsUi(this._host);
 
     const kg_version = "Kitten Scientists v2.0.0-alpha0";
     const optionsElement = $("<div/>", { id: "ks-options", css: { marginBottom: "10px" } });

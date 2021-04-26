@@ -12,7 +12,7 @@ export class FiltersSettingsUi extends SettingsSection {
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, options: FilterSettings = host.options.auto.filter) {
+  constructor(host: UserScript, options: FilterSettings = host.options.auto.filters) {
     super(host);
 
     this._options = options;
