@@ -1,14 +1,16 @@
 import { BuildItem } from "./Options";
+import { SettingsSection } from "./SettingsSection";
 
 export type BonfireSettingsItem = {
   enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
+
   max: number;
-  uiElement?: JQuery<HTMLElement>;
-  uiMax?: JQuery<HTMLElement>;
+  $max?: JQuery<HTMLElement>;
 };
-export class BonfireSettings {
-  enabled = false;
+export class BonfireSettings extends SettingsSection {
   trigger = 0;
+  $trigger?: JQuery<HTMLElement>;
 
   items: {
     // unicornPasture is handled in the Religion section.
@@ -63,4 +65,5 @@ export class BonfireSettings {
     zebraWorkshop: { enabled: false, max: -1 },
     zebraForge: { enabled: false, max: -1 },
   };
+
 }

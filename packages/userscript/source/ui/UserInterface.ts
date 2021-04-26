@@ -78,7 +78,10 @@ export class UserInterface {
   }
 
   setState(state: OptionsExt): void {
+    this._engineUi.setState(state.auto.engine);
     this._bonfireUi.setState(state.auto.build);
+
+    this._craftUi.setState(state.auto.craft);
   }
 
   private _installCss(): void {

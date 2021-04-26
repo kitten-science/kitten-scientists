@@ -1,17 +1,16 @@
-import { Options } from "../options/Options";
+import { EngineSettings } from "../options/EngineSettings";
+import { OptionsExt } from "../options/OptionsExt";
 import { ucfirst } from "../tools/Format";
+import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class EngineSettingsUi extends SettingsSection {
+export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: Options["auto"]["engine"];
+  private readonly _options: EngineSettings;
 
-  constructor(
-    host: UserScript,
-    options: Options["auto"]["engine"] = host.options.auto.engine
-  ) {
+  constructor(host: UserScript, options: EngineSettings = host.options.auto.engine) {
     super(host);
 
     this._options = options;
@@ -32,6 +31,7 @@ export class EngineSettingsUi extends SettingsSection {
       id: "toggle-" + toggleName,
       type: "checkbox",
     });
+    this._options.$enabled = input;
 
     element.append(input, label);
 
@@ -48,7 +48,7 @@ export class EngineSettingsUi extends SettingsSection {
     this.element = element;
   }
 
-  setState(state: { trigger: number }): void {
-    this._triggerButton[0].title = state.trigger;
+  setState(state: EngineSettings): void {
+    mustExist(this._options.$enabled).prop("checked", state.enabled);
   }
 }

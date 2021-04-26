@@ -1,9 +1,9 @@
 import { DistributeSettings } from "../options/DistributeSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class DistributeSettingsUi extends SettingsSection {
+export class DistributeSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: DistributeSettings;

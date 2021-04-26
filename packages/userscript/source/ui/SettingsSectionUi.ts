@@ -1,14 +1,17 @@
 import { ucfirst } from "../tools/Format";
+import { clog } from "../tools/Log";
 import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 
-export class SettingsSection {
+export abstract class SettingsSectionUi<TState> {
   protected _host: UserScript;
 
   constructor(host: UserScript) {
     this._host = host;
   }
+
+  setState(state: TState): void;
 
   protected getOptionHead(toggleName: string): JQuery<HTMLElement> {
     const containerList = $("<ul/>", {
@@ -57,7 +60,7 @@ export class SettingsSection {
 
   protected getOption(
     name: string,
-    option: { enabled: boolean },
+    option: { enabled: boolean; $enabled?: JQuery<HTMLElement> },
     i18nName: string,
     delimiter = false
   ): JQuery<HTMLElement> {
@@ -78,6 +81,7 @@ export class SettingsSection {
       id: "toggle-" + name,
       type: "checkbox",
     }).data("option", option);
+    option.$enabled = input;
 
     // if (option.enabled) {
     //   input.prop("checked", true);
@@ -86,8 +90,10 @@ export class SettingsSection {
     input.on("change", () => {
       if (input.is(":checked") && option.enabled == false) {
         option.enabled = true;
+        clog("Unlogged action item");
       } else if (!input.is(":checked") && option.enabled == true) {
         option.enabled = false;
+        clog("Unlogged action item");
       }
       //kittenStorage.items[input.attr("id")] = option.enabled;
       //this._host.saveToKittenStorage();
@@ -267,10 +273,8 @@ export class SettingsSection {
       $(path).addClass("stockWarn");
   }
 
-  protected setStockValue(name: Resource, value: string, forReset = false): void {
-    let n = Number(value);
-
-    if (isNaN(n) || n < 0) {
+  protected setStockValue(name: Resource, value: number, forReset = false): void {
+    if (value < 0) {
       this._host.warning("ignoring non-numeric or invalid stock value " + value);
       return;
     }
@@ -280,36 +284,36 @@ export class SettingsSection {
     }
     let path;
     if (forReset) {
-      path = "#resource-reset-" + name + " #stock-value-" + name;
-      n = n < 0 ? Infinity : n;
+      //path = `#resource-reset-${name} #stock-value-${name}`;
+      value = value < 0 ? Infinity : value;
       this._host.options.auto.resources[name]!.checkForReset = true;
-      this._host.options.auto.resources[name]!.stockForReset = n;
+      this._host.options.auto.resources[name]!.stockForReset = value;
     } else {
-      path = "#resource-" + name + " #stock-value-" + name;
+      //path = `#resource-${name} #stock-value-${name}`;
       this._host.options.auto.resources[name]!.enabled = true;
-      this._host.options.auto.resources[name]!.stock = n;
+      this._host.options.auto.resources[name]!.stock = value;
     }
+    /*
     $(path).text(
       this._host.i18n("resources.stock", [
         n === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(n),
       ])
     );
+    */
 
-    this._setStockWarning(name, n, forReset);
+    //this._setStockWarning(name, n, forReset);
   }
 
-  setConsumeRate(name: Resource, value: string): void {
-    const n = parseFloat(value);
-
-    if (isNaN(n) || n < 0.0 || n > 1.0) {
-      this._host.warning("ignoring non-numeric or invalid consume rate " + value);
+  setConsumeRate(name: Resource, value: number): void {
+    if (value < 0.0 || 1.0 < value) {
+      this._host.warning(`ignoring non-numeric or invalid consume rate ${value}`);
       return;
     }
 
     if (!this._host.options.auto.resources[name]) {
       this._host.options.auto.resources[name] = {};
     }
-    this._host.options.auto.resources[name]!.consume = n;
-    $("#consume-rate-" + name).text(this._host.i18n("resources.consume", [n.toFixed(2)]));
+    this._host.options.auto.resources[name]!.consume = value;
+    //$("#consume-rate-" + name).text(this._host.i18n("resources.consume", [n.toFixed(2)]));
   }
 }

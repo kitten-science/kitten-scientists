@@ -1,11 +1,12 @@
-import { CraftSettings } from "../options/CraftSettings";
+import { CraftSettings, CraftSettingsItem } from "../options/CraftSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
+import { mustExist } from "../tools/Maybe";
 import { ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class CraftSettingsUi extends SettingsSection {
+export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: CraftSettings;
@@ -37,6 +38,7 @@ export class CraftSettingsUi extends SettingsSection {
       id: "toggle-" + toggleName,
       type: "checkbox",
     });
+    this._options.$enabled = input;
 
     element.append(input, label);
 
@@ -53,6 +55,7 @@ export class CraftSettingsUi extends SettingsSection {
         textShadow: "3px 3px 4px gray",
       },
     });
+    this._options.$trigger = this._triggerButton;
 
     this._triggerButton.on("click", () => {
       const value = window.prompt(
@@ -229,7 +232,7 @@ export class CraftSettingsUi extends SettingsSection {
 
   private _getCraftOption(
     name: string,
-    option: { enabled: boolean; limited: boolean },
+    option: CraftSettingsItem,
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
@@ -244,10 +247,13 @@ export class CraftSettingsUi extends SettingsSection {
       id: "toggle-limited-" + name,
       type: "checkbox",
     }).data("option", option);
+    option.$limited = input;
 
+    /*
     if (option.limited) {
       input.prop("checked", true);
     }
+    */
 
     input.on("change", () => {
       if (input.is(":checked") && option.limited == false) {
@@ -321,26 +327,39 @@ export class CraftSettingsUi extends SettingsSection {
       allresources.append(this.getAvailableResourceOptions(forReset));
     });
 
-    if (forReset) list.append(add, allresources);
-    else list.append(add, clearunused, allresources);
+    if (forReset) {
+      list.append(add, allresources);
+    } else {
+      list.append(add, clearunused, allresources);
+    }
 
     // Add all the current resources
     for (const [name, item] of objectEntries(this._host.options.auto.resources)) {
       list.append(this.addNewResourceOption(name, name, false));
-      this.setStockValue(name, item.stock);
-      this.setConsumeRate(name, item.consume);
+      //this.setStockValue(name, item.stock);
+      //this.setConsumeRate(name, item.consume);
     }
 
     return list;
   }
 
   setState(state: CraftSettings): void {
-    this._triggerButton[0].title = state.trigger;
+    mustExist(this._options.$enabled).prop("checked", state.enabled);
+    mustExist(this._options.$trigger)[0].title = state.trigger.toFixed(2);
 
-    // Add all the current resources
-    for (const [name, item] of objectEntries(this._host.options.auto.resources)) {
-      
-      $("#consume-rate-" + name).text(this._host.i18n("resources.consume", [item.consume.toFixed(2)]));
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+      mustExist(option.$limited).prop("checked", state.items[name].limited);
+    }
+    for (const [name, option] of objectEntries(this._options.resources)) {
+      mustExist(option.$consume).text(
+        this._host.i18n("resources.consume", [option.consume.toFixed(2)])
+      );
+      mustExist(option.$stock).text(
+        this._host.i18n("resources.stock", [
+          option.stock === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(option.stock),
+        ])
+      );
     }
   }
 }

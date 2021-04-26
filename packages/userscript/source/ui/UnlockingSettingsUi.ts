@@ -1,9 +1,9 @@
 import { UnlockingSettings } from "../options/UnlockingSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class UnlockingSettingsUi extends SettingsSection {
+export class UnlockingSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: UnlockingSettings;

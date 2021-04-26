@@ -1,9 +1,9 @@
 import { TimeSettings } from "../options/TimeSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class TimeSettingsUi extends SettingsSection {
+export class TimeSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: TimeSettings;
