@@ -2,7 +2,6 @@ import JQuery from "jquery";
 import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
 import { KittenStorage } from "./options/KittenStorage";
-import { DefaultOptions, Options } from "./options/Options";
 import { OptionsExt } from "./options/OptionsExt";
 import { objectEntries } from "./tools/Entries";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
@@ -81,7 +80,7 @@ export class UserScript {
 
   private _activitySummary: ActivitySummary = {};
   private readonly _kittenStorage: KittenStorage = new KittenStorage();
-  private readonly _userInterface = new UserInterface(this);
+  private _userInterface: UserInterface;
 
   constructor(
     gamePage: GamePage,
@@ -99,6 +98,7 @@ export class UserScript {
 
   injectOptions(options: OptionsExt): void {
     this.options = options;
+    this._userInterface?.setState(this.options);
   }
 
   async run(): Promise<void> {
@@ -114,6 +114,7 @@ export class UserScript {
 
     this.resetActivitySummary();
     this._kittenStorage.initializeKittenStorage();
+    this._userInterface = new UserInterface(this);
     this._userInterface.construct();
 
     const engine = new Engine(this);
@@ -326,57 +327,6 @@ export class UserScript {
 
     // Clear out the old activity
     this.resetActivitySummary();
-  }
-
-  loadFromKittenStorage(): void {
-    this._kittenStorage.load();
-
-    for (const [item, value] of objectEntries(this._kittenStorage.data.items)) {
-      const el = $("#" + item);
-      const option = el.data("option");
-      const name = item.split("-");
-
-      if (option === undefined) {
-        delete kittenStorage.items[item];
-        continue;
-      }
-
-      if (name[0] == "set") {
-        el[0].title = value;
-        if (name[name.length - 1] == "max") {
-          el.text(this.i18n("ui.max", [value]));
-        } else if (name[name.length - 1] == "min") {
-          el.text(this.i18n("ui.min", [value]));
-        }
-      } else {
-        el.prop("checked", value);
-      }
-
-      if (name.length == 2) {
-        option.enabled = value;
-      } else if (name[1] == "reset" && name.length >= 4) {
-        const type = name[2];
-        const itemName = name[3];
-        switch (name[0]) {
-          case "toggle":
-            this.options.auto[type].items[itemName].checkForReset = value;
-            break;
-          case "set":
-            this.options.auto[type].items[itemName].triggerForReset = value;
-            break;
-        }
-      } else {
-        if (name[1] == "limited") {
-          option.limited = value;
-        } else {
-          option[name[2]] = value;
-        }
-      }
-    }
-  }
-
-  saveToKittenStorage(): void {
-    this._kittenStorage.saveToKittenStorage(this.options);
   }
 
   static async waitForGame(timeout = 30000): Promise<void> {

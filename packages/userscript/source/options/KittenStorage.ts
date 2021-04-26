@@ -128,6 +128,10 @@ export type KittenStorageType = {
     Record<
       Resource,
       {
+        /**
+         * This indicates if the resource option relates to the timeControl.reset automation.
+         * If it's `false`, it's a resource option in the craft settings.
+         */
         checkForReset: boolean;
         consume?: number;
         enabled: boolean;

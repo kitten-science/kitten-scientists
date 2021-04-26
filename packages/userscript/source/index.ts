@@ -6,8 +6,8 @@ import { OptionsExt } from "./options/OptionsExt";
   await UserScript.waitForGame();
   const userScript = await UserScript.getDefaultInstance();
 
-  const options = OptionsExt.parse(testConfig);
-  userScript.injectOptions(options);
-  
+  const options = OptionsExt.parseLegacyOptions(testConfig);
   userScript.run();
+
+  userScript.injectOptions(options);
 })();

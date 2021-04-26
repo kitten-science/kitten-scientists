@@ -334,7 +334,13 @@ export class CraftSettingsUi extends SettingsSection {
     return list;
   }
 
-  setState(state: { trigger: number }): void {
+  setState(state: CraftSettings): void {
     this._triggerButton[0].title = state.trigger;
+
+    // Add all the current resources
+    for (const [name, item] of objectEntries(this._host.options.auto.resources)) {
+      
+      $("#consume-rate-" + name).text(this._host.i18n("resources.consume", [item.consume.toFixed(2)]));
+    }
   }
 }

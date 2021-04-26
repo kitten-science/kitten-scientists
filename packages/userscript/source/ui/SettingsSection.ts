@@ -79,9 +79,9 @@ export class SettingsSection {
       type: "checkbox",
     }).data("option", option);
 
-    if (option.enabled) {
-      input.prop("checked", true);
-    }
+    // if (option.enabled) {
+    //   input.prop("checked", true);
+    // }
 
     input.on("change", () => {
       if (input.is(":checked") && option.enabled == false) {
@@ -228,7 +228,8 @@ export class SettingsSection {
     consumeElement.on("click", () => {
       const value = window.prompt(this._host.i18n("resources.consume.set", [title]));
       if (value !== null) {
-        this.setConsumeRate(name, value);
+        this._host.options.auto.resources[name].consume = value;
+        //this.setConsumeRate(name, value);
         //this._host.saveToKittenStorage();
       }
     });

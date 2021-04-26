@@ -1,13 +1,4 @@
-import { BonfireSettings } from "../options/BonfireSettings";
-import { CraftSettings } from "../options/CraftSettings";
-import { DistributeSettings } from "../options/DistributeSettings";
-import { EngineSettings } from "../options/EngineSettings";
-import { FilterSettings } from "../options/FilterSettings";
-import { OptionsSettings } from "../options/OptionsSettings";
-import { ReligionSettings } from "../options/ReligionSettings";
-import { SpaceSettings } from "../options/SpaceSettings";
-import { TimeControlSettings } from "../options/TimeControlSettings";
-import { TimeSettings } from "../options/TimeSettings";
+import { OptionsExt } from "../options/OptionsExt";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
 import { CraftSettingsUi } from "./CraftSettingsUi";
@@ -25,25 +16,38 @@ import { UnlockingSettingsUi } from "./UnlockingSettingsUi";
 export class UserInterface {
   private readonly _host: UserScript;
 
+  private _engineUi: EngineSettingsUi;
+  private _bonfireUi: BonfireSettingsUi;
+  private _spaceUi: SpaceSettingsUi;
+  private _craftUi: CraftSettingsUi;
+  private _unlockUi: UnlockingSettingsUi;
+  private _tradingUi: TradingSettingsUi;
+  private _religionUi: ReligionSettingsUi;
+  private _timeUi: TimeSettingsUi;
+  private _timeCtrlUi: TimeControlSettingsUi;
+  private _distributeUi: DistributeSettingsUi;
+  private _optionsUi: OptionsSettingsUi;
+  private _filterUi: FiltersSettingsUi;
+
   constructor(host: UserScript) {
     this._host = host;
+
+    this._engineUi = new EngineSettingsUi(this._host);
+    this._bonfireUi = new BonfireSettingsUi(this._host);
+    this._spaceUi = new SpaceSettingsUi(this._host);
+    this._craftUi = new CraftSettingsUi(this._host);
+    this._unlockUi = new UnlockingSettingsUi(this._host);
+    this._tradingUi = new TradingSettingsUi(this._host);
+    this._religionUi = new ReligionSettingsUi(this._host);
+    this._timeUi = new TimeSettingsUi(this._host);
+    this._timeCtrlUi = new TimeControlSettingsUi(this._host);
+    this._distributeUi = new DistributeSettingsUi(this._host);
+    this._optionsUi = new OptionsSettingsUi(this._host);
+    this._filterUi = new FiltersSettingsUi(this._host);
   }
 
   construct(): void {
     this._installCss();
-
-    const engine = new EngineSettingsUi(this._host);
-    const bonfire = new BonfireSettingsUi(this._host);
-    const space = new SpaceSettingsUi(this._host);
-    const craft = new CraftSettingsUi(this._host);
-    const unlock = new UnlockingSettingsUi(this._host);
-    const trading = new TradingSettingsUi(this._host);
-    const religion = new ReligionSettingsUi(this._host);
-    const time = new TimeSettingsUi(this._host);
-    const timeCtrl = new TimeControlSettingsUi(this._host);
-    const distribute = new DistributeSettingsUi(this._host);
-    const options = new OptionsSettingsUi(this._host);
-    const filter = new FiltersSettingsUi(this._host);
 
     const kg_version = "Kitten Scientists v2.0.0-alpha0";
     const optionsElement = $("<div/>", { id: "ks-options", css: { marginBottom: "10px" } });
@@ -55,22 +59,26 @@ export class UserInterface {
 
     optionsElement.append(optionsTitleElement);
 
-    optionsListElement.append(engine.element);
-    optionsListElement.append(bonfire.element);
-    optionsListElement.append(space.element);
-    optionsListElement.append(craft.element);
-    optionsListElement.append(unlock.element);
-    optionsListElement.append(trading.element);
-    optionsListElement.append(religion.element);
-    optionsListElement.append(time.element);
-    optionsListElement.append(timeCtrl.element);
-    optionsListElement.append(distribute.element);
-    optionsListElement.append(options.element);
-    optionsListElement.append(filter.element);
+    optionsListElement.append(this._engineUi.element);
+    optionsListElement.append(this._bonfireUi.element);
+    optionsListElement.append(this._spaceUi.element);
+    optionsListElement.append(this._craftUi.element);
+    optionsListElement.append(this._unlockUi.element);
+    optionsListElement.append(this._tradingUi.element);
+    optionsListElement.append(this._religionUi.element);
+    optionsListElement.append(this._timeUi.element);
+    optionsListElement.append(this._timeCtrlUi.element);
+    optionsListElement.append(this._distributeUi.element);
+    optionsListElement.append(this._optionsUi.element);
+    optionsListElement.append(this._filterUi.element);
 
     // add the options above the game log
     const right = $("#rightColumn");
     right.prepend(optionsElement.append(optionsListElement));
+  }
+
+  setState(state: OptionsExt): void {
+    this._bonfireUi.setState(state.auto.build);
   }
 
   private _installCss(): void {
