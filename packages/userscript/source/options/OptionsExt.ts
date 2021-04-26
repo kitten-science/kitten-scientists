@@ -71,7 +71,7 @@ export class OptionsExt {
     karmaTotal: 0,
   };
 
-  static parse(optionsObject: unknown): OptionsExt {
+  static parseLegacyOptions(optionsObject: unknown): OptionsExt {
     const result = new OptionsExt();
 
     if (isNil(optionsObject)) {
@@ -118,7 +118,6 @@ export class OptionsExt {
     for (const [name, item] of objectEntries(subject.resources)) {
       if (item.checkForReset) {
         result.auto.timeCtrl.resources[name] = {
-          checkForReset: true,
           stockForReset: item.stockForReset,
         };
       } else {

@@ -1,4 +1,5 @@
 import { BonfireSettings } from "../options/BonfireSettings";
+import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
@@ -314,15 +315,21 @@ export class BonfireSettingsUi extends SettingsSection {
 
   private _getLimitedOption(
     name: string,
-    option: { enabled: boolean; max: number },
+    option: {
+      enabled: boolean;
+      max: number;
+      uiElement: JQuery<HTMLElement>;
+      uiMax: JQuery<HTMLElement>;
+    },
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label, delimiter);
+    option.uiElement = element;
 
     const maxButton = $("<div/>", {
       id: "set-" + name + "-max",
-      text: this._host.i18n("ui.max", [option.max]),
+      //text: this._host.i18n("ui.max", []),
       title: option.max,
       css: {
         cursor: "pointer",
@@ -332,6 +339,7 @@ export class BonfireSettingsUi extends SettingsSection {
         textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
+    option.uiMax = maxButton;
 
     maxButton.on("click", () => {
       const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
@@ -352,5 +360,9 @@ export class BonfireSettingsUi extends SettingsSection {
 
   setState(state: { trigger: number }): void {
     this._triggerButton[0].title = state.trigger;
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      $("input", option.uiElement).text(this._host.i18n("ui.max", [option.max]));
+    }
   }
 }

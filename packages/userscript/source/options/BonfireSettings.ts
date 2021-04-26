@@ -1,6 +1,11 @@
 import { BuildItem } from "./Options";
 
-export type BonfireSettingsItem = { enabled: boolean; max: number };
+export type BonfireSettingsItem = {
+  enabled: boolean;
+  max: number;
+  uiElement?: JQuery<HTMLElement>;
+  uiMax?: JQuery<HTMLElement>;
+};
 export class BonfireSettings {
   enabled = false;
   trigger = 0;

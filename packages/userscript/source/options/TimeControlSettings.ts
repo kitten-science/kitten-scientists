@@ -1,8 +1,8 @@
 import { Resource } from "../types";
 import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./Options";
 
-export type TimeControlBuildSettingsItem = { checkForReset: boolean; triggerForReset: number };
-export type TimeControlResourcesSettingsItem = { checkForReset: boolean; stockForReset: number };
+export type TimeControlBuildSettingsItem = {  triggerForReset: number };
+export type TimeControlResourcesSettingsItem = {  stockForReset: number };
 export class TimeControlSettings {
   enabled = false;
 
