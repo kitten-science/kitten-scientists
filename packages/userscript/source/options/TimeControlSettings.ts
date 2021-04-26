@@ -1,6 +1,8 @@
+import { Resource } from "../types";
 import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./Options";
 
 export type TimeControlBuildSettingsItem = { checkForReset: boolean; triggerForReset: number };
+export type TimeControlResourcesSettingsItem = { checkForReset: boolean; stockForReset: number };
 export class TimeControlSettings {
   enabled = false;
 
@@ -160,6 +162,10 @@ export class TimeControlSettings {
     chronocontrol: { checkForReset: true, triggerForReset: -1 },
     voidResonator: { checkForReset: true, triggerForReset: -1 },
   };
+
+  resources: {
+    [item in Resource]?: TimeControlResourcesSettingsItem;
+  } = {};
 
   items: {
     accelerateTime: {

@@ -1,5 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { isNil } from "../tools/Maybe";
+import { Resource } from "../types";
 import { BonfireSettings } from "./BonfireSettings";
 import { CraftSettings } from "./CraftSettings";
 import { DistributeSettings } from "./DistributeSettings";
@@ -7,7 +8,7 @@ import { FilterSettings } from "./FilterSettings";
 import { KittenStorageType } from "./KittenStorage";
 import { OptionsSettings } from "./OptionsSettings";
 import { ReligionSettings } from "./ReligionSettings";
-import { ResourceSettings } from "./ResourcesSettings";
+import { ResourcesSettingsItem } from "./ResourcesSettings";
 import { SpaceSettings } from "./SpaceSettings";
 import { TimeControlSettings } from "./TimeControlSettings";
 import { TimeSettings } from "./TimeSettings";
@@ -30,7 +31,9 @@ export class OptionsExt {
     distribute: DistributeSettings;
     options: OptionsSettings;
     filters: FilterSettings;
-    resources: ResourceSettings;
+    resources: {
+      [item in Resource]?: ResourcesSettingsItem;
+    };
   } = {
     engine: { enabled: false },
     build: new BonfireSettings(),
@@ -49,7 +52,6 @@ export class OptionsExt {
         enabled: true,
         stock: 1000,
       },
-      timeCrystal: { enabled: false, stock: 0 },
     },
   };
 
@@ -114,11 +116,18 @@ export class OptionsExt {
     }
 
     for (const [name, item] of objectEntries(subject.resources)) {
-      result.auto.resources[name] = {
-        consume: item.consume,
-        enabled: item.enabled,
-        stock: item.stock,
-      };
+      if (item.checkForReset) {
+        result.auto.timeCtrl.resources[name] = {
+          checkForReset: true,
+          stockForReset: item.stockForReset,
+        };
+      } else {
+        result.auto.resources[name] = {
+          consume: item.consume,
+          enabled: item.enabled,
+          stock: item.stock,
+        };
+      }
     }
 
     return result;

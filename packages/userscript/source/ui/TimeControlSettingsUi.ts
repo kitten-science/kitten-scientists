@@ -253,16 +253,13 @@ export class TimeControlSettingsUi extends SettingsSection {
 
     // Resources list
     const resetResourcesList = this._getResourceOptions(true);
+    for (const [item, itemValue] of objectEntries(this._options.resources)) {
+      resetResourcesList.append(this.addNewResourceOption(item, item, true));
+      this.setStockValue(item, itemValue.stockForReset, true);
+    }
 
     // Religion reset options.
     const resetReligionList = this.getOptionHead("reset-religion");
-    /*
-    for (const item in this._host.options.auto.unicorn.items) {
-      resetReligionList.append(
-        this._getResetOption(item, "unicorn", this._host.options.auto.unicorn.items[item])
-      );
-    }
-    */
     for (const [item] of objectEntries(this._options.religionItems)) {
       resetReligionList.append(
         this._getResetOption(item, "faith", this._options.religionItems[item], item)

@@ -1,7 +1,6 @@
 import { CraftSettings } from "../options/CraftSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { mustExist } from "../tools/Maybe";
 import { ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSection } from "./SettingsSection";
@@ -326,11 +325,10 @@ export class CraftSettingsUi extends SettingsSection {
     else list.append(add, clearunused, allresources);
 
     // Add all the current resources
-    for (const [name] of objectEntries(this._host.options.auto.resources)) {
-      const res = mustExist(this._host.options.auto.resources[name]);
-      if ((forReset && res.checkForReset) || (!forReset && res.enabled)) {
-        list.append(this.addNewResourceOption(name, name, forReset));
-      }
+    for (const [name, item] of objectEntries(this._host.options.auto.resources)) {
+      list.append(this.addNewResourceOption(name, name, false));
+      this.setStockValue(name, item.stock);
+      this.setConsumeRate(name, item.consume);
     }
 
     return list;
