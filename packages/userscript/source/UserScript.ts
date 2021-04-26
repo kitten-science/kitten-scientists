@@ -153,8 +153,8 @@ export class UserScript {
   }
 
   private _printOutput(...args: Array<number | string>): void {
-    if (this.options.auto.filter.enabled) {
-      for (const filterItem of Object.values(this.options.auto.filter.items)) {
+    if (this.options.auto.filters.enabled) {
+      for (const filterItem of Object.values(this.options.auto.filters.items)) {
         if (filterItem.enabled && filterItem.variant === args[1]) {
           return;
         }

@@ -141,8 +141,8 @@ export class DistributeSettingsUi extends SettingsSection {
         option.limited = false;
         this._host.imessage("distribute.unlimited", [label]);
       }
-      kittenStorage.items[input.attr("id")] = option.limited;
-      this._host.saveToKittenStorage();
+      //kittenStorage.items[input.attr("id")] = option.limited;
+      //this._host.saveToKittenStorage();
     });
 
     element.append(input, labelElement);
@@ -165,8 +165,8 @@ export class DistributeSettingsUi extends SettingsSection {
 
       if (value !== null) {
         option.max = parseInt(value);
-        kittenStorage.items[maxButton.attr("id")] = option.max;
-        this._host.saveToKittenStorage();
+        //kittenStorage.items[maxButton.attr("id")] = option.max;
+        //this._host.saveToKittenStorage();
         maxButton[0].title = option.max.toString();
         maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
       }

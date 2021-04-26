@@ -258,7 +258,7 @@ export class CraftSettingsUi extends SettingsSection {
         option.limited = false;
         this._host.imessage("craft.unlimited", [label]);
       }
-      kittenStorage.items[input.attr("id")] = option.limited;
+      //kittenStorage.items[input.attr("id")] = option.limited;
       //this._host.saveToKittenStorage();
     });
 
