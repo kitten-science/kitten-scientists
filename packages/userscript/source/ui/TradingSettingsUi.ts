@@ -3,9 +3,9 @@ import { TradingSettings } from "../options/TradingSettings";
 import { ucfirst } from "../tools/Format";
 import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class TradingSettingsUi extends SettingsSection {
+export class TradingSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: TradingSettings;

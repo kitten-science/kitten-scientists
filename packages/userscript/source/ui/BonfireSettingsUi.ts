@@ -1,10 +1,11 @@
-import { BonfireSettings } from "../options/BonfireSettings";
+import { BonfireSettings, BonfireSettingsItem } from "../options/BonfireSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
+import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class BonfireSettingsUi extends SettingsSection {
+export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: BonfireSettings;
@@ -35,6 +36,7 @@ export class BonfireSettingsUi extends SettingsSection {
       id: "toggle-" + toggleName,
       type: "checkbox",
     });
+    this._options.$enabled = input;
 
     element.append(input, label);
 
@@ -51,6 +53,7 @@ export class BonfireSettingsUi extends SettingsSection {
         textShadow: "3px 3px 4px gray",
       },
     });
+    this._options.$trigger = this._triggerButton;
 
     this._triggerButton.on("click", () => {
       const value = window.prompt(
@@ -137,6 +140,11 @@ export class BonfireSettingsUi extends SettingsSection {
         "mine",
         this._options.items.mine,
         this._host.i18n("$buildings.mine.label")
+      ),
+      this._getLimitedOption(
+        "lumberMill",
+        this._options.items.lumberMill,
+        this._host.i18n("$buildings.lumberMill.label")
       ),
       this._getLimitedOption(
         "aqueduct",
@@ -315,22 +323,16 @@ export class BonfireSettingsUi extends SettingsSection {
 
   private _getLimitedOption(
     name: string,
-    option: {
-      enabled: boolean;
-      max: number;
-      uiElement: JQuery<HTMLElement>;
-      uiMax: JQuery<HTMLElement>;
-    },
+    option: BonfireSettingsItem,
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label, delimiter);
-    option.uiElement = element;
 
     const maxButton = $("<div/>", {
       id: "set-" + name + "-max",
       //text: this._host.i18n("ui.max", []),
-      title: option.max,
+      //title: option.max,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -339,7 +341,7 @@ export class BonfireSettingsUi extends SettingsSection {
         textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
-    option.uiMax = maxButton;
+    option.$max = maxButton;
 
     maxButton.on("click", () => {
       const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
@@ -358,11 +360,13 @@ export class BonfireSettingsUi extends SettingsSection {
     return element;
   }
 
-  setState(state: { trigger: number }): void {
-    this._triggerButton[0].title = state.trigger;
+  setState(state: BonfireSettings): void {
+    mustExist(this._options.$enabled).prop("checked", state.enabled);
+    mustExist(this._options.$trigger)[0].title = state.trigger.toFixed(2);
 
     for (const [name, option] of objectEntries(this._options.items)) {
-      $("input", option.uiElement).text(this._host.i18n("ui.max", [option.max]));
+      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+      mustExist(option.$max).text(this._host.i18n("ui.max", [state.items[name].max]));
     }
   }
 }

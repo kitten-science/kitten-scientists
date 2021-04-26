@@ -1,3 +1,3 @@
-export class EngineSettings {
-  enabled = false;
-}
+import { SettingsSection } from "./SettingsSection";
+
+export class EngineSettings extends SettingsSection {}

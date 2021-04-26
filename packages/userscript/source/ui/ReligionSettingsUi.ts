@@ -1,9 +1,9 @@
 import { ReligionSettings } from "../options/ReligionSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class ReligionSettingsUi extends SettingsSection {
+export class ReligionSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: ReligionSettings;

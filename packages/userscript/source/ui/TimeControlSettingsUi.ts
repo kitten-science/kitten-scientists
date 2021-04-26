@@ -4,9 +4,9 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { Season } from "../types";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class TimeControlSettingsUi extends SettingsSection {
+export class TimeControlSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: TimeControlSettings;

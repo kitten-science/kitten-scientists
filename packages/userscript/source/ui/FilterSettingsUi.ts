@@ -1,9 +1,9 @@
 import { FilterSettings } from "../options/FilterSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class FiltersSettingsUi extends SettingsSection {
+export class FiltersSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: FilterSettings;

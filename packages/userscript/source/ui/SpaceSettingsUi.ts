@@ -1,9 +1,9 @@
 import { SpaceSettings } from "../options/SpaceSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class SpaceSettingsUi extends SettingsSection {
+export class SpaceSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _options: SpaceSettings;
