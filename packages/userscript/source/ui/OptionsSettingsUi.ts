@@ -124,8 +124,8 @@ export class OptionsSettingsUi extends SettingsSection {
 
   private _getOptionsOption(
     name: string,
-    option: { enabled: boolean; label: string; subTrigger?: number },
-    iname?: string
+    option: { enabled: boolean;subTrigger?: number },
+    iname: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, iname);
 

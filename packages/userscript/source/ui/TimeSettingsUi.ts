@@ -59,7 +59,7 @@ export class TimeSettingsUi extends SettingsSection {
 
       if (value !== null) {
         this._options.trigger = parseFloat(value);
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
         this._triggerButton[0].title = this._options.trigger;
       }
     });

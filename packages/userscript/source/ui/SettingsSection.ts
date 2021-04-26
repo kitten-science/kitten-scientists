@@ -57,7 +57,7 @@ export class SettingsSection {
 
   protected getOption(
     name: string,
-    option: { enabled: boolean; },
+    option: { enabled: boolean },
     i18nName: string,
     delimiter = false
   ): JQuery<HTMLElement> {
@@ -133,7 +133,7 @@ export class SettingsSection {
               this.addNewResourceOption(res.name, res.title, forReset)
             );
           }
-          this._host.saveToKittenStorage();
+          //this._host.saveToKittenStorage();
         });
 
         items.push(item);
@@ -145,32 +145,39 @@ export class SettingsSection {
 
   protected addNewResourceOption(
     name: Resource,
-    title?: string,
+    title: string,
     forReset = false
   ): JQuery<HTMLElement> {
-    title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
-    const res = this._host.options.auto.resources[name];
+    //title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
+
+    const resourceSettings = this._host.options.auto.resources[name];
     let stock;
-    if (forReset && res && res.stockForReset) {
-      stock = res.stockForReset;
-    } else if (!forReset && res && res.stock) {
-      stock = res.stock;
+    if (forReset && resourceSettings && resourceSettings.stockForReset) {
+      stock = resourceSettings.stockForReset;
+    } else if (!forReset && resourceSettings && resourceSettings.stock) {
+      stock = resourceSettings.stock;
     } else {
       stock = 0;
     }
-    const consume = res && res.consume != undefined ? res.consume : this._host.options.consume;
+    const consume =
+      resourceSettings && resourceSettings.consume != undefined
+        ? resourceSettings.consume
+        : this._host.options.consume;
 
+    // The overall container for this resource item.
     const container = $("<div/>", {
       id: (forReset ? "resource-reset-" : "resource-") + name,
       css: { display: "inline-block", width: "100%" },
     });
 
+    // The label with the name of the resource.
     const label = $("<div/>", {
       id: "resource-label-" + name,
       text: title,
       css: { display: "inline-block", width: "95px" },
     });
 
+    // How many items to stock.
     const stockElement = $("<div/>", {
       id: "stock-value-" + name,
       text: this._host.i18n("resources.stock", [
@@ -179,12 +186,14 @@ export class SettingsSection {
       css: { cursor: "pointer", display: "inline-block", width: "80px" },
     });
 
+    // The consume rate for the resource.
     const consumeElement = $("<div/>", {
       id: "consume-rate-" + name,
       text: this._host.i18n("resources.consume", [consume.toFixed(2)]),
       css: { cursor: "pointer", display: "inline-block" },
     });
 
+    // Delete the resource from the list.
     const del = $("<div/>", {
       id: "resource-delete-" + name,
       text: this._host.i18n("resources.del"),
@@ -204,15 +213,15 @@ export class SettingsSection {
     }
 
     // once created, set color if relevant
-    if (res != undefined && res.stock != undefined) {
-      this._setStockWarning(name, res.stock);
+    if (resourceSettings != undefined && resourceSettings.stock != undefined) {
+      this._setStockWarning(name, resourceSettings.stock);
     }
 
     stockElement.on("click", () => {
       const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
       if (value !== null) {
         this._setStockValue(name, value, forReset);
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
       }
     });
 
@@ -220,7 +229,7 @@ export class SettingsSection {
       const value = window.prompt(this._host.i18n("resources.consume.set", [title]));
       if (value !== null) {
         this._setConsumeRate(name, value);
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
       }
     });
 
@@ -228,7 +237,7 @@ export class SettingsSection {
       if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
         container.remove();
         this._removeResourceControl(name, forReset);
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
       }
     });
 

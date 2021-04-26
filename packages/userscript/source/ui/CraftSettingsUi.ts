@@ -63,7 +63,7 @@ export class CraftSettingsUi extends SettingsSection {
 
       if (value !== null) {
         this._options.trigger = parseFloat(value);
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
         this._triggerButton[0].title = this._options.trigger.toString();
       }
     });
@@ -259,7 +259,7 @@ export class CraftSettingsUi extends SettingsSection {
         this._host.imessage("craft.unlimited", [label]);
       }
       kittenStorage.items[input.attr("id")] = option.limited;
-      this._host.saveToKittenStorage();
+      //this._host.saveToKittenStorage();
     });
 
     element.append(input, labelElement);
@@ -328,8 +328,9 @@ export class CraftSettingsUi extends SettingsSection {
     // Add all the current resources
     for (const [name] of objectEntries(this._host.options.auto.resources)) {
       const res = mustExist(this._host.options.auto.resources[name]);
-      if ((forReset && res.checkForReset) || (!forReset && res.enabled))
-        list.append(this.addNewResourceOption(name, undefined, forReset));
+      if ((forReset && res.checkForReset) || (!forReset && res.enabled)) {
+        list.append(this.addNewResourceOption(name, name, forReset));
+      }
     }
 
     return list;

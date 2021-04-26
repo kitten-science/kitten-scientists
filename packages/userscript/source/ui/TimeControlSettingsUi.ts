@@ -251,14 +251,16 @@ export class TimeControlSettingsUi extends SettingsSection {
         this._getResetOption(item, "space", this._host.options.auto.space.items[item])
       );
     }
+    /*
     for (const item in this._host.options.auto.unicorn.items) {
       resetReligionList.append(
         this._getResetOption(item, "unicorn", this._host.options.auto.unicorn.items[item])
       );
     }
-    for (const item in this._host.options.auto.faith.items) {
+    */
+    for (const item in this._host.options.auto.religion.items) {
       resetReligionList.append(
-        this._getResetOption(item, "faith", this._host.options.auto.faith.items[item])
+        this._getResetOption(item, "faith", this._host.options.auto.religion.items[item])
       );
     }
     for (const item in this._host.options.auto.time.items) {

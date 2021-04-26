@@ -38,10 +38,10 @@ export class EngineSettingsUi extends SettingsSection {
     input.on("change", () => {
       if (input.is(":checked") && options.enabled == false) {
         options.enabled = true;
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
       } else if (!input.is(":checked") && options.enabled == true) {
         options.enabled = false;
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
       }
     });
 

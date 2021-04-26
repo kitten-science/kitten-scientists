@@ -59,7 +59,7 @@ export class BonfireSettingsUi extends SettingsSection {
 
       if (value !== null) {
         this._options.trigger = parseFloat(value);
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
         this._triggerButton[0].title = this._options.trigger.toString();
       }
     });
@@ -339,7 +339,7 @@ export class BonfireSettingsUi extends SettingsSection {
       if (value !== null) {
         option.max = parseInt(value);
         kittenStorage.items[maxButton.attr("id")] = option.max;
-        this._host.saveToKittenStorage();
+        //this._host.saveToKittenStorage();
         maxButton[0].title = option.max.toString();
         maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
       }
