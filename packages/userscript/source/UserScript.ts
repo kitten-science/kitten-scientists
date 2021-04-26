@@ -373,39 +373,6 @@ export class UserScript {
         }
       }
     }
-
-    const resourcesList = $("#toggle-list-resources");
-    const resetList = $("#toggle-reset-list-resources");
-    for (const [resource, res] of objectEntries(this._kittenStorage.data.resources)) {
-      if (res.enabled) {
-        if ($("#resource-" + resource).length === 0)
-          resourcesList.append(addNewResourceOption(resource));
-        if ("stock" in res) setStockValue(resource, res.stock);
-        if ("consume" in res) setConsumeRate(resource, res.consume);
-      }
-      if (res.checkForReset) {
-        if ($("#resource-reset-" + resource).length === 0)
-          resetList.append(addNewResourceOption(resource, undefined, true));
-        if ("stockForReset" in res)
-          setStockValue(resource, res.stockForReset ? res.stockForReset : Infinity, true);
-      }
-    }
-
-    if (this._kittenStorage.data.triggers) {
-      this.options.auto.faith.trigger = this._kittenStorage.data.triggers.faith;
-      this.options.auto.time.trigger = this._kittenStorage.data.triggers.time;
-      this.options.auto.build.trigger = this._kittenStorage.data.triggers.build;
-      this.options.auto.space.trigger = this._kittenStorage.data.triggers.space;
-      this.options.auto.craft.trigger = this._kittenStorage.data.triggers.craft;
-      this.options.auto.trade.trigger = this._kittenStorage.data.triggers.trade;
-
-      $("#trigger-faith")[0].title = this.options.auto.faith.trigger;
-      $("#trigger-time")[0].title = this.options.auto.time.trigger;
-      $("#trigger-build")[0].title = this.options.auto.build.trigger;
-      $("#trigger-space")[0].title = this.options.auto.space.trigger;
-      $("#trigger-craft")[0].title = this.options.auto.craft.trigger;
-      $("#trigger-trade")[0].title = this.options.auto.trade.trigger;
-    }
   }
 
   saveToKittenStorage(): void {

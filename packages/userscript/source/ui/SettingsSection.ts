@@ -220,7 +220,7 @@ export class SettingsSection {
     stockElement.on("click", () => {
       const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
       if (value !== null) {
-        this._setStockValue(name, value, forReset);
+        this.setStockValue(name, value, forReset);
         //this._host.saveToKittenStorage();
       }
     });
@@ -228,7 +228,7 @@ export class SettingsSection {
     consumeElement.on("click", () => {
       const value = window.prompt(this._host.i18n("resources.consume.set", [title]));
       if (value !== null) {
-        this._setConsumeRate(name, value);
+        this.setConsumeRate(name, value);
         //this._host.saveToKittenStorage();
       }
     });
@@ -266,7 +266,7 @@ export class SettingsSection {
       $(path).addClass("stockWarn");
   }
 
-  private _setStockValue(name: Resource, value: string, forReset = false): void {
+  protected setStockValue(name: Resource, value: string, forReset = false): void {
     let n = Number(value);
 
     if (isNaN(n) || n < 0) {
@@ -297,7 +297,7 @@ export class SettingsSection {
     this._setStockWarning(name, n, forReset);
   }
 
-  private _setConsumeRate(name: Resource, value: string): void {
+  setConsumeRate(name: Resource, value: string): void {
     const n = parseFloat(value);
 
     if (isNaN(n) || n < 0.0 || n > 1.0) {
