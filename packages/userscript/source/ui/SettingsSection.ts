@@ -89,8 +89,8 @@ export class SettingsSection {
       } else if (!input.is(":checked") && option.enabled == true) {
         option.enabled = false;
       }
-      kittenStorage.items[input.attr("id")] = option.enabled;
-      this._host.saveToKittenStorage();
+      //kittenStorage.items[input.attr("id")] = option.enabled;
+      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);

@@ -130,8 +130,8 @@ export class TimeControlSettingsUi extends SettingsSection {
 
       if (value !== null) {
         option.subTrigger = parseFloat(value);
-        kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-        this._host.saveToKittenStorage();
+        //kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
+        //this._host.saveToKittenStorage();
         triggerButton[0].title = option.subTrigger;
       }
     });
@@ -156,8 +156,8 @@ export class TimeControlSettingsUi extends SettingsSection {
 
       if (value !== null) {
         option.maximum = parseFloat(value);
-        kittenStorage.items[maximunButton.attr("id")] = option.maximum;
-        this._host.saveToKittenStorage();
+        //kittenStorage.items[maximunButton.attr("id")] = option.maximum;
+        //this._host.saveToKittenStorage();
         maximunButton[0].title = option.maximum;
       }
     });
@@ -405,8 +405,8 @@ export class TimeControlSettingsUi extends SettingsSection {
 
       if (value !== null) {
         option.subTrigger = parseFloat(value);
-        kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-        this._host.saveToKittenStorage();
+        //kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
+        //this._host.saveToKittenStorage();
         triggerButton[0].title = option.subTrigger;
       }
     });
@@ -442,8 +442,8 @@ export class TimeControlSettingsUi extends SettingsSection {
         option[index] = false;
         this._host.imessage("time.skip.cycle.disable", [cycle.title]);
       }
-      kittenStorage.items[input.attr("id")] = option[index];
-      this._host.saveToKittenStorage();
+      //kittenStorage.items[input.attr("id")] = option[index];
+      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -482,8 +482,8 @@ export class TimeControlSettingsUi extends SettingsSection {
         option.checkForReset = false;
         this._host.imessage("status.reset.check.disable", [elementLabel]);
       }
-      kittenStorage.items[input.attr("id")] = option.checkForReset;
-      this._host.saveToKittenStorage();
+      //kittenStorage.items[input.attr("id")] = option.checkForReset;
+      //this._host.saveToKittenStorage();
     });
 
     const minButton = $("<div/>", {
@@ -507,8 +507,8 @@ export class TimeControlSettingsUi extends SettingsSection {
 
       if (value !== null) {
         option.triggerForReset = parseInt(value);
-        kittenStorage.items[minButton.attr("id")] = option.triggerForReset;
-        this._host.saveToKittenStorage();
+        //kittenStorage.items[minButton.attr("id")] = option.triggerForReset;
+        //this._host.saveToKittenStorage();
         minButton[0].title = option.triggerForReset;
         minButton[0].innerText = this._host.i18n("ui.min", [option.triggerForReset]);
       }
@@ -549,8 +549,8 @@ export class TimeControlSettingsUi extends SettingsSection {
         option[season] = false;
         this._host.imessage("time.skip.season.disable", [iseason]);
       }
-      kittenStorage.items[input.attr("id")] = option[season];
-      this._host.saveToKittenStorage();
+      //kittenStorage.items[input.attr("id")] = option[season];
+      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);

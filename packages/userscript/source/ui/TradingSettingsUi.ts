@@ -148,7 +148,6 @@ export class TradingSettingsUi extends SettingsSection {
     name: Race,
     option: { enabled: boolean; limited: boolean },
     i18nName: string,
-    delimiter = false
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, i18nName);
     element.css("borderBottom", "1px solid rgba(185, 185, 185, 0.7)");
@@ -176,7 +175,7 @@ export class TradingSettingsUi extends SettingsSection {
         option.limited = false;
         this._host.imessage("trade.unlimited", [i18nName]);
       }
-      kittenStorage.items[input.attr("id")] = option.limited;
+      //kittenStorage.items[input.attr("id")] = option.limited;
       //this._host.saveToKittenStorage();
     });
 
@@ -243,7 +242,7 @@ export class TradingSettingsUi extends SettingsSection {
         option[season] = false;
         this._host.imessage("trade.season.disable", [iname, iseason]);
       }
-      kittenStorage.items[input.attr("id")] = option[season];
+      //kittenStorage.items[input.attr("id")] = option[season];
       //this._host.saveToKittenStorage();
     });
 
