@@ -81,6 +81,7 @@ export class UserScript {
   private _activitySummary: ActivitySummary = {};
   private readonly _kittenStorage: KittenStorage = new KittenStorage();
   private _userInterface: UserInterface;
+  engine: Engine;
 
   constructor(
     gamePage: GamePage,
@@ -115,11 +116,10 @@ export class UserScript {
     this.resetActivitySummary();
     this._kittenStorage.initializeKittenStorage();
     this._userInterface = new UserInterface(this);
+    this.engine = new Engine(this);
     this._userInterface.construct();
-
-    const engine = new Engine(this);
     cwarn("Kitten Scientists initialized. Engine NOT started for now.");
-    //engine.start();
+    //engine.start(false);
   }
 
   /**

@@ -111,8 +111,53 @@ export class OptionsExt {
     result.reset.karmaTotal = subject.reset.karmaTotal;
 
     for (const [name, item] of objectEntries(result.auto.build.items)) {
-      item.enabled = subject.items[`toggle-${name}`] ?? item.enabled;
-      item.max = subject.items[`set-${name}-max`] ?? item.max;
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
+    }
+    for (const [name, item] of objectEntries(result.auto.craft.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
+    }
+    for (const [name, item] of objectEntries(result.auto.distribute.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
+    }
+    for (const [name, item] of objectEntries(result.auto.distribute.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
+    }
+    for (const [name, item] of objectEntries(result.auto.filters.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
+    for (const [name, item] of objectEntries(result.auto.options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.subTrigger = subject.items[`set-${name}-subTrigger` as const] ?? item.subTrigger;
+    }
+    for (const [name, item] of objectEntries(result.auto.religion.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
+    for (const [name, item] of objectEntries(result.auto.space.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
+    }
+    for (const [name, item] of objectEntries(result.auto.time.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
+    for (const [name, item] of objectEntries(result.auto.timeCtrl.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
+    for (const [name, item] of objectEntries(result.auto.trade.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
+      item.autumn = subject.items[`toggle-${name}-autumn` as const] ?? item.autumn;
+      item.spring = subject.items[`toggle-${name}-spring` as const] ?? item.spring;
+      item.summer = subject.items[`toggle-${name}-summer` as const] ?? item.summer;
+      item.winter = subject.items[`toggle-${name}-winter` as const] ?? item.winter;
+    }
+    for (const [name, item] of objectEntries(result.auto.unlock.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }
 
     for (const [name, item] of objectEntries(subject.resources)) {
