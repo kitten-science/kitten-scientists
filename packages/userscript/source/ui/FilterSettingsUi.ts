@@ -1,5 +1,7 @@
 import { FilterSettings } from "../options/FilterSettings";
+import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
+import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -33,6 +35,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
       id: "toggle-" + toggleName,
       type: "checkbox",
     });
+    this._options.$enabled = input;
 
     element.append(input, label);
 
@@ -143,7 +146,11 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     this.element = element;
   }
 
-  setState(state: { trigger: number }): void {
-    this._triggerButton[0].title = state.trigger;
+  setState(state: FilterSettings): void {
+    mustExist(this._options.$enabled).prop("checked", state.enabled);
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+    }
   }
 }

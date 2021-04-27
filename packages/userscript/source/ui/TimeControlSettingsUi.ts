@@ -1,4 +1,4 @@
-import { TimeControlSettings } from "../options/TimeControlSettings";
+import { TimeControlBuildSettingsItem, TimeControlSettings } from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -36,6 +36,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       id: "toggle-" + toggleName,
       type: "checkbox",
     });
+    this._options.$enabled = input;
 
     element.append(input, label);
 
@@ -90,7 +91,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getTimeCtrlOption(
     name: "accelerateTime" | "reset" | "timeSkip",
-    option: { enabled: boolean; maximum?: number; subTrigger: number },
+    option: TimeControlSettings["items"]["accelerateTime" | "reset" | "timeSkip"],
     label: string
   ): JQuery<HTMLElement> {
     let element;
@@ -108,7 +109,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getOptionTimeSkip(
     name: string,
-    option: { enabled: boolean; maximum: number; subTrigger: number },
+    option: TimeControlSettings["items"]["timeSkip"],
     label: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);
@@ -116,7 +117,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const triggerButton = $("<div/>", {
       id: "set-timeSkip-subTrigger",
       text: this._host.i18n("ui.trigger"),
-      title: option.subTrigger,
+      //title: option.subTrigger,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -125,6 +126,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
+    option.$subTrigger = triggerButton;
+
     triggerButton.on("click", () => {
       const value = window.prompt(this._host.i18n("time.skip.trigger.set", []), option.subTrigger);
 
@@ -139,7 +142,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const maximunButton = $("<div/>", {
       id: "set-timeSkip-maximum",
       text: this._host.i18n("ui.maximum"),
-      title: option.max,
+      //title: option.max,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -148,6 +151,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
+    option.$maximum = maximunButton;
+
     maximunButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
@@ -230,7 +235,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getOptionReset(
     name: string,
-    option: { enabled: boolean; subTrigger: number },
+    option: TimeControlSettings["items"]["reset"],
     label: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);
@@ -382,7 +387,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getOptionAccelerateTime(
     name: string,
-    option: { enabled: boolean; subTrigger: number },
+    option: TimeControlSettings["items"]["accelerateTime"],
     label: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);
@@ -390,7 +395,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const triggerButton = $("<div/>", {
       id: "set-" + name + "-subTrigger",
       text: this._host.i18n("ui.trigger"),
-      title: option.subTrigger,
+      //title: option.subTrigger,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -399,11 +404,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
+    option.$subTrigger = triggerButton;
 
     triggerButton.on("click", () => {
       const value = window.prompt(
-        this._host.i18n("ui.trigger.set", [option.label]),
-        option.subTrigger
+        this._host.i18n("ui.trigger.set", [label]),
+        option.subTrigger.toFixed(2)
       );
 
       if (value !== null) {
@@ -418,7 +424,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     return element;
   }
 
-  private _getCycle(index: number, option: { [key: number]: boolean }): JQuery<HTMLElement> {
+  private _getCycle(
+    index: number,
+    option: TimeControlSettings["items"]["timeSkip"]
+  ): JQuery<HTMLElement> {
     const cycle = this._host.gamePage.calendar.cycles[index];
 
     const element = $("<li/>");
@@ -432,11 +441,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       id: "toggle-timeSkip-" + index,
       type: "checkbox",
     }).data("option", option);
+    option[`$${index}`] = input;
 
+    /*
     if (option[index]) {
       input.prop("checked", true);
     }
-
+    */
     input.on("change", () => {
       if (input.is(":checked") && option[index] == false) {
         option[index] = true;
@@ -457,7 +468,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   private _getResetOption(
     name: string,
     type: "build" | "faith" | "space" | "time",
-    option: { checkForReset: boolean; triggerForReset: number },
+    option: TimeControlBuildSettingsItem,
     i18nName: string
   ): JQuery<HTMLElement> {
     const element = $("<li/>");
@@ -473,10 +484,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       id: "toggle-reset-" + type + "-" + name,
       type: "checkbox",
     }).data("option", option);
+    option.$enabled = input;
 
+    /*
     if (option.checkForReset) {
       input.prop("checked", true);
     }
+    */
 
     input.on("change", () => {
       if (input.is(":checked") && option.checkForReset == false) {
@@ -493,7 +507,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const minButton = $("<div/>", {
       id: "set-reset-" + type + "-" + name + "-min",
       text: this._host.i18n("ui.min", [option.triggerForReset]),
-      title: option.triggerForReset,
+      //title: option.triggerForReset,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -502,6 +516,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
+    option.$triggerForReset = minButton;
 
     minButton.on("click", () => {
       const value = window.prompt(
@@ -525,7 +540,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getSeasonForTimeSkip(
     season: Season,
-    option: { [season in Season]: boolean }
+    option: TimeControlSettings["items"]["timeSkip"]
   ): JQuery<HTMLElement> {
     const iseason = ucfirst(this._host.i18n("$calendar.season." + season));
 
@@ -540,10 +555,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       id: "toggle-timeSkip-" + season,
       type: "checkbox",
     }).data("option", option);
+    option[`$${season}`] = input;
 
+    /*
     if (option[season]) {
       input.prop("checked", true);
     }
+    */
 
     input.on("change", () => {
       if (input.is(":checked") && option[season] == false) {
@@ -630,7 +648,55 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     return list;
   }
 
-  setState(state: { trigger: number }): void {
-    this._triggerButton[0].title = state.trigger;
+  setState(state: TimeControlSettings): void {
+    mustExist(this._options.$enabled).prop("checked", state.enabled);
+
+    mustExist(this._options.items.accelerateTime.$enabled).prop(
+      "checked",
+      this._options.items.accelerateTime.enabled
+    );
+    mustExist(
+      this._options.items.accelerateTime.$subTrigger
+    )[0].title = this._options.items.accelerateTime.subTrigger.toFixed(2);
+
+    mustExist(this._options.items.reset.$enabled).prop(
+      "checked",
+      this._options.items.reset.enabled
+    );
+
+    mustExist(this._options.items.timeSkip.$enabled).prop(
+      "checked",
+      this._options.items.timeSkip.enabled
+    );
+    mustExist(
+      this._options.items.timeSkip.$subTrigger
+    )[0].title = this._options.items.timeSkip.subTrigger.toFixed(2);
+
+    for (const [name, option] of objectEntries(this._options.buildItems)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$triggerForReset).text(this._host.i18n("ui.min", [option.triggerForReset]));
+    }
+    for (const [name, option] of objectEntries(this._options.religionItems)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$triggerForReset).text(this._host.i18n("ui.min", [option.triggerForReset]));
+    }
+    for (const [name, option] of objectEntries(this._options.spaceItems)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$triggerForReset).text(this._host.i18n("ui.min", [option.triggerForReset]));
+    }
+    for (const [name, option] of objectEntries(this._options.timeItems)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$triggerForReset).text(this._host.i18n("ui.min", [option.triggerForReset]));
+    }
+    for (const [name, option] of objectEntries(this._options.resources)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$stockForReset).text(
+        this._host.i18n("resources.stock", [
+          option.stockForReset === Infinity
+            ? "∞"
+            : this._host.gamePage.getDisplayValueExt(option.stockForReset),
+        ])
+      );
+    }
   }
 }

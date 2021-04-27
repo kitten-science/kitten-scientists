@@ -3,11 +3,11 @@ import { SettingsSection } from "./SettingsSection";
 export type UnlockingSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
 export class UnlockingSettings extends SettingsSection {
   items: {
-    upgrades: { enabled: boolean };
-    techs: { enabled: boolean };
-    races: { enabled: boolean };
-    missions: { enabled: boolean };
-    buildings: { enabled: boolean };
+    upgrades: UnlockingSettingsItem;
+    techs: UnlockingSettingsItem;
+    races: UnlockingSettingsItem;
+    missions: UnlockingSettingsItem;
+    buildings: UnlockingSettingsItem;
   } = {
     upgrades: { enabled: true },
     techs: { enabled: true },

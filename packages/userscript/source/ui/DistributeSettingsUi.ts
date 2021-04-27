@@ -1,5 +1,7 @@
-import { DistributeSettings } from "../options/DistributeSettings";
+import { DistributeSettings, DistributeSettingsItem } from "../options/DistributeSettings";
+import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
+import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -33,6 +35,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
       id: "toggle-" + toggleName,
       type: "checkbox",
     });
+    this._options.$enabled = input;
 
     element.append(input, label);
 
@@ -60,42 +63,42 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     });
 
     this._buildingButtons = [
-      this.getDistributeOption(
+      this._getDistributeOption(
         "woodcutter",
         this._options.items.woodcutter,
         this._host.i18n("$village.job.woodcutter")
       ),
-      this.getDistributeOption(
+      this._getDistributeOption(
         "farmer",
         this._options.items.farmer,
         this._host.i18n("$village.job.farmer")
       ),
-      this.getDistributeOption(
+      this._getDistributeOption(
         "scholar",
         this._options.items.scholar,
         this._host.i18n("$village.job.scholar")
       ),
-      this.getDistributeOption(
+      this._getDistributeOption(
         "hunter",
         this._options.items.hunter,
         this._host.i18n("$village.job.hunter")
       ),
-      this.getDistributeOption(
+      this._getDistributeOption(
         "miner",
         this._options.items.miner,
         this._host.i18n("$village.job.miner")
       ),
-      this.getDistributeOption(
+      this._getDistributeOption(
         "priest",
         this._options.items.priest,
         this._host.i18n("$village.job.priest")
       ),
-      this.getDistributeOption(
+      this._getDistributeOption(
         "geologist",
         this._options.items.geologist,
         this._host.i18n("$village.job.geologist")
       ),
-      this.getDistributeOption(
+      this._getDistributeOption(
         "engineer",
         this._options.items.engineer,
         this._host.i18n("$village.job.engineer")
@@ -110,9 +113,9 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     this.element = element;
   }
 
-  private getDistributeOption(
+  private _getDistributeOption(
     name: string,
-    option: { enabled: boolean; limited: boolean; max: number },
+    option: DistributeSettingsItem,
     label: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);
@@ -128,10 +131,13 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
       id: "toggle-limited-" + name,
       type: "checkbox",
     }).data("option", option);
+    option.$limited = input;
 
+    /*
     if (option.limited) {
       input.prop("checked", true);
     }
+    */
 
     input.on("change", () => {
       if (input.is(":checked") && option.limited == false) {
@@ -150,7 +156,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     const maxButton = $("<div/>", {
       id: "set-" + name + "-max",
       text: this._host.i18n("ui.max", [option.max]),
-      title: option.max,
+      //title: option.max,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -159,6 +165,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
         textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
+    option.$max = input;
 
     maxButton.on("click", () => {
       const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
@@ -177,7 +184,13 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     return element;
   }
 
-  setState(state: { trigger: number }): void {
-    this._triggerButton[0].title = state.trigger;
+  setState(state: DistributeSettings): void {
+    mustExist(this._options.$enabled).prop("checked", state.enabled);
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+      mustExist(option.$limited).prop("checked", state.items[name].limited);
+      mustExist(option.$max).text(this._host.i18n("ui.max", [state.items[name].max]));
+    }
   }
 }

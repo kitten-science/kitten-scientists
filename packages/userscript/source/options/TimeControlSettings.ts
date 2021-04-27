@@ -3,10 +3,16 @@ import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./Option
 import { SettingsSection } from "./SettingsSection";
 
 export type TimeControlBuildSettingsItem = {
+  enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
+
   triggerForReset: number;
   $triggerForReset?: JQuery<HTMLElement>;
 };
 export type TimeControlResourcesSettingsItem = {
+  enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
+
   stockForReset: number;
   $stockForReset?: JQuery<HTMLElement>;
 };
@@ -175,35 +181,80 @@ export class TimeControlSettings extends SettingsSection {
   items: {
     accelerateTime: {
       enabled: boolean;
+      $enabled?: JQuery<HTMLElement>;
+
       subTrigger: number;
+      $subTrigger?: JQuery<HTMLElement>;
     };
     timeSkip: {
       enabled: boolean;
+      $enabled?: JQuery<HTMLElement>;
+
       subTrigger: number;
+      $subTrigger?: JQuery<HTMLElement>;
+
       maximum: number;
+      $maximum?: JQuery<HTMLElement>;
+
       spring: boolean;
+      $spring?: JQuery<HTMLElement>;
       summer: boolean;
+      $summer?: JQuery<HTMLElement>;
       autumn: boolean;
+      $autumn?: JQuery<HTMLElement>;
       winter: boolean;
+      $winter?: JQuery<HTMLElement>;
+
+      0: boolean;
+      1: boolean;
+      2: boolean;
+      3: boolean;
+      4: boolean;
+      5: boolean;
+      6: boolean;
+      7: boolean;
+      8: boolean;
+      9: boolean;
+      $0?: boolean;
+      $1?: boolean;
+      $2?: boolean;
+      $3?: boolean;
+      $4?: boolean;
+      $5?: boolean;
+      $6?: boolean;
+      $7?: boolean;
+      $8?: boolean;
+      $9?: boolean;
     };
     reset: {
       enabled: boolean;
-      subTrigger: number;
+      $enabled?: JQuery<HTMLElement>;
     };
   } = {
     accelerateTime: { enabled: true, subTrigger: 1 },
     timeSkip: {
       enabled: false,
       subTrigger: 5,
+      maximum: 50,
+
       autumn: false,
       summer: false,
       spring: true,
-      maximum: 50,
       winter: false,
+
+      0: false,
+      1: false,
+      2: false,
+      3: false,
+      4: false,
+      5: false,
+      6: false,
+      7: false,
+      8: false,
+      9: false,
     },
     reset: {
       enabled: false,
-      subTrigger: 99999,
     },
   };
 }

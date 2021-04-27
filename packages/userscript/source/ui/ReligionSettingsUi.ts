@@ -1,5 +1,7 @@
 import { ReligionSettings } from "../options/ReligionSettings";
+import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
+import { mustExist, isNil } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -34,6 +36,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       id: "toggle-" + toggleName,
       type: "checkbox",
     });
+    this._options.$enabled = input;
 
     element.append(input, label);
 
@@ -41,7 +44,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     this._triggerButton = $("<div/>", {
       id: "trigger-" + toggleName,
       text: this._host.i18n("ui.trigger"),
-      title: this._options.trigger,
+      //title: this._options.trigger,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -50,17 +53,18 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         textShadow: "3px 3px 4px gray",
       },
     });
+    this._options.$trigger = this._triggerButton;
 
     this._triggerButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [itext]),
-        this._options.trigger
+        this._options.trigger.toFixed(2)
       );
 
       if (value !== null) {
         this._options.trigger = parseFloat(value);
         //this._host.saveToKittenStorage();
-        this._triggerButton[0].title = this._options.trigger;
+        this._triggerButton[0].title = this._options.trigger.toFixed(2);
       }
     });
 
@@ -255,7 +259,12 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     this.element = element;
   }
 
-  setState(state: { trigger: number }): void {
-    this._triggerButton[0].title = state.trigger;
+  setState(state: ReligionSettings): void {
+    mustExist(this._options.$enabled).prop("checked", state.enabled);
+    mustExist(this._options.$trigger)[0].title = state.trigger.toFixed(2);
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+    }
   }
 }

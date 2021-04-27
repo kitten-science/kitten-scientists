@@ -1,14 +1,16 @@
 import { SpaceItem } from "./Options";
+import { SettingsSection } from "./SettingsSection";
 
 export type SpaceSettingsItem = {
   enabled: boolean;
   $enabled?: JQuery<HTMLElement>;
+
   max: number;
   $max?: JQuery<HTMLElement>;
 };
-export class SpaceSettings {
-  enabled = false;
+export class SpaceSettings extends SettingsSection {
   trigger = 0;
+  $trigger?: JQuery<HTMLElement>;
 
   items: {
     [item in SpaceItem]: SpaceSettingsItem;
