@@ -1,7 +1,6 @@
 import JQuery from "jquery";
 import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
-import { KittenStorage } from "./options/KittenStorage";
 import { OptionsExt } from "./options/OptionsExt";
 import { objectEntries } from "./tools/Entries";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
@@ -79,7 +78,6 @@ export class UserScript {
   options: OptionsExt = new OptionsExt();
 
   private _activitySummary: ActivitySummary = {};
-  private readonly _kittenStorage: KittenStorage = new KittenStorage();
   private _userInterface: UserInterface;
   engine: Engine;
 
@@ -114,7 +112,6 @@ export class UserScript {
     this.gamePage.console.maxMessages = 1000;
 
     this.resetActivitySummary();
-    this._kittenStorage.initializeKittenStorage();
     this._userInterface = new UserInterface(this);
     this.engine = new Engine(this);
     this._userInterface.construct();
