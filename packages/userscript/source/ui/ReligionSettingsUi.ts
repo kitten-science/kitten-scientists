@@ -1,7 +1,8 @@
 import { ReligionSettings } from "../options/ReligionSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { mustExist, isNil } from "../tools/Maybe";
+import { mustExist } from "../tools/Maybe";
+import { UnicornItemVariant } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -252,16 +253,204 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     list.append(...this._buildingButtons);
 
+    const additionList = this.getAdditionOptions();
+    const addition = $("<div/>", {
+      id: "toggle-addition-controls",
+      text: this._host.i18n("ui.faith.addtion"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+    addition.on("click", () => {
+      list.toggle(false);
+      additionList.toggle();
+    });
+
     element.append(this._itemsButton);
+    element.append(addition);
     element.append(this._triggerButton);
     element.append(list);
+    element.append(additionList);
+
+    /*
+    button.on("click", () => {
+      additionList.toggle(false);
+    });
+    */
+
+    /*
+
+      The idea here, appears to be, to disable the "Build best unicorn building"
+      option, whenever _any_ unicorn-related building is disabled in the build
+      options.
+      This should be handled in state management.
+
+    // disable auto best unicorn building when unicorn building was disable
+    for (const unicornName in this._host.options.auto.unicorn.items) {
+      const ub = list.children().children("#toggle-" + unicornName);
+      ub.on("change", event => {
+        if (!$(event.target).is(":checked")) {
+          const b = $("#toggle-bestUnicornBuilding");
+          b.prop("checked", false);
+          b.trigger("change");
+        }
+      });
+    }
+    */
 
     this.element = element;
+  }
+
+  getAdditionOptions(): JQuery<HTMLElement> {
+    const toggleName = "faith-addition";
+    const list = this.getOptionHead(toggleName);
+
+    const addi = this._options.addition;
+
+    const nodeAdore = this.getOption("adore", addi.adore, this._host.i18n("option.faith.adore"));
+
+    const triggerButtonAdore = $("<div/>", {
+      id: "set-adore-subTrigger",
+      text: this._host.i18n("ui.trigger"),
+      //title: addi.adore.subTrigger,
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    }).data("option", addi.adore);
+    addi.adore.$subTrigger = triggerButtonAdore;
+
+    triggerButtonAdore.on("click", () => {
+      const value = window.prompt(this._host.i18n("adore.trigger.set"), addi.adore.subTrigger.toFixed(2));
+
+      if (value !== null) {
+        addi.adore.subTrigger = parseFloat(value);
+        //kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
+        //this._host.saveToKittenStorage();
+        triggerButtonAdore[0].title = addi.adore.subTrigger.toFixed(2);
+      }
+    });
+
+    nodeAdore.append(triggerButtonAdore);
+
+    const nodeAutoPraise = this.getOption(
+      "autoPraise",
+      addi.autoPraise,
+      this._host.i18n("option.praise")
+    );
+
+    const triggerButtonAutoPraise = $("<div/>", {
+      id: "set-autoPraise-subTrigger",
+      text: this._host.i18n("ui.trigger"),
+      title: addi.autoPraise.subTrigger,
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    }).data("option", addi.autoPraise);
+    addi.autoPraise.$subTrigger = triggerButtonAutoPraise;
+
+    triggerButtonAutoPraise.on("click", () => {
+      const value = window.prompt(
+        this._host.i18n("ui.trigger.set", [this._host.i18n("option.praise")]),
+        addi.autoPraise.subTrigger.toFixed(2)
+      );
+
+      if (value !== null) {
+        addi.autoPraise.subTrigger = parseFloat(value);
+        //kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
+        //this._host.saveToKittenStorage();
+        triggerButtonAutoPraise[0].title = addi.autoPraise.subTrigger.toFixed(2);
+      }
+    });
+
+    nodeAutoPraise.append(triggerButtonAutoPraise);
+
+    const nodeBestUnicornBuilding = this.getOption(
+      "bestUnicornBuilding",
+      addi.bestUnicornBuilding,
+      this._host.i18n("option.faith.best.unicorn")
+    );
+
+    nodeBestUnicornBuilding
+      .children("label")
+      .prop("title", this._host.i18n("option.faith.best.unicorn.desc"));
+    const input = nodeBestUnicornBuilding.children("input");
+    input.unbind("change");
+    const bub = addi.bestUnicornBuilding;
+    input.on("change", () => {
+      if (input.is(":checked") && !bub.enabled) {
+        bub.enabled = true;
+        // enable all unicorn buildings
+        for (const [unicornName, option] of objectEntries(this._options.items)) {
+          if (
+            option.variant !== UnicornItemVariant.Unknown_zp &&
+            option.variant !== UnicornItemVariant.Ziggurat
+          ) {
+            continue;
+          }
+
+          // This seems wrong to do here.
+          const building = $("#toggle-" + unicornName);
+          building.prop("checked", true);
+          building.trigger("change");
+        }
+        this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.best.unicorn")]);
+      } else if (!input.is(":checked") && bub.enabled) {
+        bub.enabled = false;
+        this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.best.unicorn")]);
+      }
+      //kittenStorage.items[input.attr("id")] = bub.enabled;
+      //this._host.saveToKittenStorage();
+    });
+
+    const nodeTranscend = this.getOption(
+      "transcend",
+      addi.transcend,
+      this._host.i18n("option.faith.transcend")
+    );
+
+    list.append(nodeBestUnicornBuilding);
+    list.append(nodeAutoPraise);
+    list.append(nodeAdore);
+    list.append(nodeTranscend);
+
+    return list;
   }
 
   setState(state: ReligionSettings): void {
     mustExist(this._options.$enabled).prop("checked", state.enabled);
     mustExist(this._options.$trigger)[0].title = state.trigger.toFixed(2);
+
+    mustExist(this._options.addition.adore.$enabled).prop("checked", state.addition.adore.enabled);
+    mustExist(
+      this._options.addition.adore.$subTrigger
+    )[0].title = state.addition.adore.subTrigger.toFixed(2);
+    mustExist(this._options.addition.autoPraise.$enabled).prop(
+      "checked",
+      state.addition.autoPraise.enabled
+    );
+    mustExist(
+      this._options.addition.autoPraise.$subTrigger
+    )[0].title = state.addition.autoPraise.subTrigger.toFixed(2);
+    mustExist(this._options.addition.bestUnicornBuilding.$enabled).prop(
+      "checked",
+      state.addition.bestUnicornBuilding.enabled
+    );
+    mustExist(this._options.addition.transcend.$enabled).prop(
+      "checked",
+      state.addition.transcend.enabled
+    );
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", state.items[name].enabled);
