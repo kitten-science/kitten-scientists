@@ -1,6 +1,7 @@
-import { Options } from "../options/Options";
-import { TradingSettings } from "../options/TradingSettings";
+import { TradingSettings, TradingSettingsItem } from "../options/TradingSettings";
+import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
+import { mustExist } from "../tools/Maybe";
 import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -15,10 +16,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
   private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(
-    host: UserScript,
-    upgradeOptions: TradingSettings = host.options.auto.trade
-  ) {
+  constructor(host: UserScript, upgradeOptions: TradingSettings = host.options.auto.trade) {
     super(host);
 
     this._options = upgradeOptions;
@@ -39,6 +37,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       id: "toggle-" + toggleName,
       type: "checkbox",
     });
+    this._options.$enabled = input;
 
     element.append(input, label);
 
@@ -46,7 +45,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     this._triggerButton = $("<div/>", {
       id: "trigger-" + toggleName,
       text: this._host.i18n("ui.trigger"),
-      title: this._options.trigger,
+      //title: this._options.trigger,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -55,17 +54,18 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
         textShadow: "3px 3px 4px gray",
       },
     });
+    this._options.$trigger = this._triggerButton;
 
     this._triggerButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [itext]),
-        this._options.trigger
+        this._options.trigger.toFixed(2)
       );
 
       if (value !== null) {
         this._options.trigger = parseFloat(value);
         //this._host.saveToKittenStorage();
-        this._triggerButton[0].title = this._options.trigger;
+        this._triggerButton[0].title = this._options.trigger.toFixed(2);
       }
     });
 
@@ -93,42 +93,42 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     });
 
     this._buildingButtons = [
-      this.getTradeOption(
+      this._getTradeOption(
         "dragons",
         this._options.items.dragons,
         this._host.i18n("$trade.race.dragons")
       ),
-      this.getTradeOption(
+      this._getTradeOption(
         "zebras",
         this._options.items.zebras,
         this._host.i18n("$trade.race.zebras")
       ),
-      this.getTradeOption(
+      this._getTradeOption(
         "lizards",
         this._options.items.lizards,
         this._host.i18n("$trade.race.lizards")
       ),
-      this.getTradeOption(
+      this._getTradeOption(
         "sharks",
         this._options.items.sharks,
         this._host.i18n("$trade.race.sharks")
       ),
-      this.getTradeOption(
+      this._getTradeOption(
         "griffins",
         this._options.items.griffins,
         this._host.i18n("$trade.race.griffins")
       ),
-      this.getTradeOption(
+      this._getTradeOption(
         "nagas",
         this._options.items.nagas,
         this._host.i18n("$trade.race.nagas")
       ),
-      this.getTradeOption(
+      this._getTradeOption(
         "spiders",
         this._options.items.spiders,
         this._host.i18n("$trade.race.spiders")
       ),
-      this.getTradeOption(
+      this._getTradeOption(
         "leviathans",
         this._options.items.leviathans,
         this._host.i18n("$trade.race.leviathans")
@@ -144,10 +144,10 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     this.element = element;
   }
 
-  getTradeOption(
+  private _getTradeOption(
     name: Race,
-    option: { enabled: boolean; limited: boolean },
-    i18nName: string,
+    option: TradingSettingsItem,
+    i18nName: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, i18nName);
     element.css("borderBottom", "1px solid rgba(185, 185, 185, 0.7)");
@@ -162,10 +162,13 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       id: "toggle-limited-" + name,
       type: "checkbox",
     }).data("option", option);
+    option.$limited = input;
 
+    /*
     if (option.limited) {
       input.prop("checked", true);
     }
+    */
 
     input.on("change", () => {
       if (input.is(":checked") && option.limited == false) {
@@ -214,7 +217,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     return element;
   }
 
-  private _getSeason(name: string, season: Season, option: unknown): JQuery<HTMLElement> {
+  private _getSeason(name: Race, season: Season, option: TradingSettingsItem): JQuery<HTMLElement> {
     const iname = ucfirst(this._host.i18n("$trade.race." + name));
     const iseason = ucfirst(this._host.i18n("$calendar.season." + season));
 
@@ -229,10 +232,13 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       id: "toggle-" + name + "-" + season,
       type: "checkbox",
     }).data("option", option);
+    option[`$${season}`] = input;
 
+    /*
     if (option[season]) {
       input.prop("checked", true);
     }
+    */
 
     input.on("change", () => {
       if (input.is(":checked") && option[season] == false) {
@@ -251,7 +257,18 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     return element;
   }
 
-  setState(state: { trigger: number }): void {
-    this._triggerButton[0].title = state.trigger;
+  setState(state: TradingSettings): void {
+    mustExist(this._options.$enabled).prop("checked", state.enabled);
+    mustExist(this._options.$trigger)[0].title = state.trigger.toFixed(2);
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+      mustExist(option.$limited).prop("checked", state.items[name].limited);
+      
+      mustExist(option.$autumn).prop("checked", state.items[name].autumn);
+      mustExist(option.$spring).prop("checked", state.items[name].spring);
+      mustExist(option.$summer).prop("checked", state.items[name].summer);
+      mustExist(option.$winter).prop("checked", state.items[name].winter);
+    }
   }
 }

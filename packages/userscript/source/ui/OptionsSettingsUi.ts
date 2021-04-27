@@ -1,5 +1,7 @@
-import { OptionsSettings } from "../options/OptionsSettings";
+import { OptionsSettings, OptionsSettingsItem } from "../options/OptionsSettings";
+import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
+import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -33,6 +35,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       id: "toggle-" + toggleName,
       type: "checkbox",
     });
+    this._options.$enabled = input;
 
     element.append(input, label);
 
@@ -124,7 +127,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
   private _getOptionsOption(
     name: string,
-    option: { enabled: boolean;subTrigger?: number },
+    option: OptionsSettingsItem,
     iname: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, iname);
@@ -136,8 +139,8 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       input.unbind("change");
       input.on("change", () => {
         option.enabled = input.prop("checked");
-        kittenStorage.items[input.attr("id")] = option.enabled;
-        this._host.saveToKittenStorage();
+        //kittenStorage.items[input.attr("id")] = option.enabled;
+        //this._host.saveToKittenStorage();
         if (option.enabled) {
           document.body.setAttribute("data-ks-style", "");
         } else {
@@ -150,7 +153,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       const triggerButton = $("<div/>", {
         id: "set-" + name + "-subTrigger",
         text: this._host.i18n("ui.trigger"),
-        title: option.subTrigger,
+        //title: option.subTrigger,
         css: {
           cursor: "pointer",
           display: "inline-block",
@@ -159,26 +162,27 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
           textShadow: "3px 3px 4px gray",
         },
       }).data("option", option);
+      option.$subTrigger = triggerButton;
 
       triggerButton.on("click", () => {
         let value;
         if (name == "crypto") {
           value = window.prompt(
-            this._host.i18n("ui.trigger.crypto.set", [option.label]),
-            option.subTrigger
+            this._host.i18n("ui.trigger.crypto.set", [iname]),
+            mustExist(option.subTrigger).toFixed(2)
           );
         } else {
           value = window.prompt(
-            this._host.i18n("ui.trigger.set", [option.label]),
-            option.subTrigger
+            this._host.i18n("ui.trigger.set", [iname]),
+            mustExist(option.subTrigger).toFixed(2)
           );
         }
 
         if (value !== null) {
           option.subTrigger = parseFloat(value);
-          kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-          this._host.saveToKittenStorage();
-          triggerButton[0].title = option.subTrigger;
+          //kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
+          //this._host.saveToKittenStorage();
+          triggerButton[0].title = option.subTrigger.toFixed(2);
         }
       });
 
@@ -188,7 +192,15 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     return element;
   }
 
-  setState(state: { trigger: number }): void {
-    this._triggerButton[0].title = state.trigger;
+  setState(state: OptionsSettings): void {
+    mustExist(this._options.$enabled).prop("checked", state.enabled);
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+
+      if (!isNil(option.$subTrigger)) {
+        option.$subTrigger[0].title = mustExist(state.items[name].subTrigger).toFixed(2);
+      }
+    }
   }
 }

@@ -72,16 +72,77 @@ export class UserInterface {
     optionsListElement.append(this._optionsUi.element);
     optionsListElement.append(this._filterUi.element);
 
+    // Set up the "show activity summary" area.
+    const activityBox = $("<div/>", {
+      id: "activity-box",
+      css: {
+        display: "inline-block",
+        verticalAlign: "top",
+      },
+    });
+
+    const showActivity = $("<a/>", {
+      id: "showActivityHref",
+      text: this._host.i18n("summary.show"),
+      href: "#",
+      css: {
+        verticalAlign: "top",
+      },
+    });
+
+    showActivity.on("click", () => this._host.displayActivitySummary());
+
+    activityBox.append(showActivity);
+
+    $("#clearLog").append(activityBox);
+
+    // Set up the message box.
+    const messageBox = $("<div/>", {
+      id: "important-msg-box",
+      class: "dialog help",
+      css: {
+        display: "none",
+        width: "auto",
+        height: "auto",
+      },
+    });
+    const mbClose = $("<a/>", {
+      text: this._host.i18n("ui.close"),
+      href: "#",
+      css: { position: "absolute", top: "10px", right: "15px" },
+    });
+    mbClose.on("click", function () {
+      messageBox.toggle();
+    });
+    const mbTitle = $("<h1/>", { id: "mb-title", text: "test text" });
+    const mbContent = $("<h1/>", { id: "mb-content", text: "test text" });
+    messageBox.append(mbClose, mbTitle, mbContent);
+    $("#gamePageContainer").append(messageBox);
+
     // add the options above the game log
     const right = $("#rightColumn");
     right.prepend(optionsElement.append(optionsListElement));
   }
 
+  showMessageBox(title: string, content: string): void {
+    mbTitle.html(title);
+    mbContent.html(content);
+    messageBox.toggle();
+  }
+
   setState(state: OptionsExt): void {
     this._engineUi.setState(state.auto.engine);
     this._bonfireUi.setState(state.auto.build);
-
+    this._spaceUi.setState(state.auto.space);
     this._craftUi.setState(state.auto.craft);
+    this._unlockUi.setState(state.auto.unlock);
+    this._tradingUi.setState(state.auto.trade);
+    this._religionUi.setState(state.auto.religion);
+    this._timeUi.setState(state.auto.time);
+    this._timeCtrlUi.setState(state.auto.timeCtrl);
+    this._distributeUi.setState(state.auto.distribute);
+    this._optionsUi.setState(state.auto.options);
+    this._filterUi.setState(state.auto.filters);
   }
 
   private _installCss(): void {

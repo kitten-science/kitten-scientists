@@ -1,7 +1,7 @@
-export type FilterSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
-export class FilterSettings {
-  enabled = false;
+import { SettingsSection } from "./SettingsSection";
 
+export type FilterSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
+export class FilterSettings extends SettingsSection {
   items: {
     buildFilter: FilterSettingsItem;
     craftFilter: FilterSettingsItem;

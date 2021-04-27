@@ -44,7 +44,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     this._triggerButton = $("<div/>", {
       id: "trigger-" + toggleName,
       text: this._host.i18n("ui.trigger"),
-      title: this._options.trigger,
+      //title: this._options.trigger,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -64,7 +64,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       if (value !== null) {
         this._options.trigger = parseFloat(value);
         //this._host.saveToKittenStorage();
-        this._triggerButton[0].title = this._options.trigger.toString();
+        this._triggerButton[0].title = this._options.trigger.toFixed(2);
       }
     });
 

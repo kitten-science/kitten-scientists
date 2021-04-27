@@ -1,7 +1,13 @@
-export type OptionsSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
-export class OptionsSettings {
-  enabled = false;
+import { SettingsSection } from "./SettingsSection";
 
+export type OptionsSettingsItem = {
+  enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
+
+  subTrigger?: number;
+  $subTrigger?: JQuery<HTMLElement>;
+};
+export class OptionsSettings extends SettingsSection {
   items: {
     observe: OptionsSettingsItem;
     festival: OptionsSettingsItem;
@@ -16,16 +22,16 @@ export class OptionsSettings {
     explore: OptionsSettingsItem;
     _steamworks: OptionsSettingsItem;
   } = {
-    observe: { enabled: false },
-    festival: { enabled: false },
-    shipOverride: { enabled: false },
-    autofeed: { enabled: false },
-    hunt: { enabled: false },
-    promote: { enabled: false },
-    crypto: { enabled: false },
+    observe: { enabled: true },
+    festival: { enabled: true },
+    shipOverride: { enabled: true },
+    autofeed: { enabled: true },
+    hunt: { enabled: true, subTrigger: 0.98 },
+    promote: { enabled: true },
+    crypto: { enabled: true, subTrigger: 10000 },
     fixCry: { enabled: false },
-    buildEmbassies: { enabled: false },
-    style: { enabled: false },
+    buildEmbassies: { enabled: true, subTrigger: 0.9 },
+    style: { enabled: true },
     explore: { enabled: false },
     _steamworks: { enabled: false },
   };
