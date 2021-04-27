@@ -1,129 +1,37 @@
 import { mustExist } from "../tools/Maybe";
-import { Resource } from "../types";
-import { Options } from "./Options";
+import { Building, Jobs, Race, Resource, Season } from "../types";
+import { FaithItem, Options, TimeItem, UnicornItem } from "./Options";
+
+type SetMaxBuildingItem = `set-${Building}-max`;
+type SetMaxJobItem = `set-${Jobs}-max`;
+type SetMaxResourceItem = `set-${Resource}-max`;
+type ToggleBuildingItem = `toggle-${Building}`;
+type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
+type ToggleJobItem = `toggle-${Jobs}`;
+type ToggleRaceItem = `toggle-${Race}`;
+type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
+type ToggleResourceItem = `toggle-${Resource}`;
+type ToggleTimeItem = `toggle-${TimeItem}`;
+type ToggleLimitedJobItem = `toggle-limited-${Jobs}`;
+type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
+type ToggleLimitedResourceItem = `toggle-limited-${Resource}`;
 
 export type KittenStorageType = {
   version: number;
   toggles: Record<string, boolean>;
-  items: {
-    "set-hut-max"?: number;
-    "set-hydroPlant-max"?: number;
-    "set-library-max"?: number;
-    "set-logHouse-max"?: number;
-    "set-lumberMill-max"?: number;
-    "set-magneto-max"?: number;
-    "set-mansion-max"?: number;
-    "set-mine-max"?: number;
-    "set-mint-max"?: number;
-    "set-observatory-max"?: number;
-    "set-oilWell-max"?: number;
-    "set-pasture-max"?: number;
-    "set-quarry-max"?: number;
-    "set-reactor-max"?: number;
-    "set-smelter-max"?: number;
-    "set-solarFarm-max"?: number;
-    "set-steamworks-max"?: number;
-    "set-temple-max"?: number;
-    "set-tradepost-max"?: number;
-    "set-warehouse-max"?: number;
-    "set-workshop-max"?: number;
-    "set-zebraForge-max"?: number;
-    "set-zebraOutpost-max"?: number;
-    "set-zebraWorkshop-max"?: number;
-    "set-ziggurat-max"?: number;
-    "toggle-academy"?: boolean;
-    "toggle-accelerator"?: boolean;
-    "toggle-aiCore"?: boolean;
-    "toggle-amphitheatre"?: boolean;
-    "toggle-apocripha"?: boolean;
-    "toggle-aqueduct"?: boolean;
-    "toggle-barn"?: boolean;
-    "toggle-biolab"?: boolean;
-    "toggle-blackCore"?: boolean;
-    "toggle-blackLibrary"?: boolean;
-    "toggle-blackNexus"?: boolean;
-    "toggle-blackObelisk"?: boolean;
-    "toggle-blackPyramid"?: boolean;
-    "toggle-blackRadiance"?: boolean;
-    "toggle-blazar"?: boolean;
-    "toggle-brewery"?: boolean;
-    "toggle-broadcastTower"?: boolean;
-    "toggle-calciner"?: boolean;
-    "toggle-chapel"?: boolean;
-    "toggle-chronosphere"?: boolean;
-    "toggle-craftFilter"?: boolean;
-    "toggle-darkNova"?: boolean;
-    "toggle-dataCenter"?: boolean;
-    "toggle-eludium"?: boolean;
-    "toggle-engineer"?: boolean;
-    "toggle-factory"?: boolean;
-    "toggle-festivalFilter"?: boolean;
-    "toggle-field"?: boolean;
-    "toggle-harbor"?: boolean;
-    "toggle-huntFilter"?: boolean;
-    "toggle-hut"?: boolean;
-    "toggle-hydrofracturer"?: boolean;
-    "toggle-hydroPlant"?: boolean;
-    "toggle-ivoryCitadel"?: boolean;
-    "toggle-ivoryTower"?: boolean;
-    "toggle-library"?: boolean;
-    "toggle-limited-engineer"?: boolean;
-    "toggle-limited-farmer"?: boolean;
-    "toggle-limited-geologist"?: boolean;
-    "toggle-limited-hunter"?: boolean;
-    "toggle-limited-miner"?: boolean;
-    "toggle-limited-priest"?: boolean;
-    "toggle-limited-scholar"?: boolean;
-    "toggle-limited-woodcutter"?: boolean;
-    "toggle-logHouse"?: boolean;
-    "toggle-lumberMill"?: boolean;
-    "toggle-magneto"?: boolean;
-    "toggle-mansion"?: boolean;
-    "toggle-marker"?: boolean;
-    "toggle-mine"?: boolean;
-    "toggle-mint"?: boolean;
-    "toggle-moltenCore"?: boolean;
-    "toggle-moonBase"?: boolean;
-    "toggle-moonOutpost"?: boolean;
-    "toggle-observatory"?: boolean;
-    "toggle-oilWell"?: boolean;
-    "toggle-orbitalArray"?: boolean;
-    "toggle-pasture"?: boolean;
-    "toggle-planetCracker"?: boolean;
-    "toggle-praiseFilter"?: boolean;
-    "toggle-quarry"?: boolean;
-    "toggle-reactor"?: boolean;
-    "toggle-researchVessel"?: boolean;
-    "toggle-sattelite"?: boolean;
-    "toggle-ship"?: boolean;
-    "toggle-singularity"?: boolean;
-    "toggle-skyPalace"?: boolean;
-    "toggle-smelter"?: boolean;
-    "toggle-solarFarm"?: boolean;
-    "toggle-spaceBeacon"?: boolean;
-    "toggle-spaceElevator"?: boolean;
-    "toggle-spaceStation"?: boolean;
-    "toggle-spiceRefinery"?: boolean;
-    "toggle-steamworks"?: boolean;
-    "toggle-style"?: boolean;
-    "toggle-sunlifter"?: boolean;
-    "toggle-sunspire"?: boolean;
-    "toggle-tectonic"?: boolean;
-    "toggle-temple"?: boolean;
-    "toggle-terraformingStation"?: boolean;
-    "toggle-tradeFilter"?: boolean;
-    "toggle-tradepost"?: boolean;
-    "toggle-unicornGraveyard"?: boolean;
-    "toggle-unicornNecropolis"?: boolean;
-    "toggle-unicornTomb"?: boolean;
-    "toggle-unicornUtopia"?: boolean;
-    "toggle-warehouse"?: boolean;
-    "toggle-workshop"?: boolean;
-    "toggle-zebraForge"?: boolean;
-    "toggle-zebraOutpost"?: boolean;
-    "toggle-zebraWorkshop"?: boolean;
-    "toggle-ziggurat"?: boolean;
-  };
+  items: Partial<Record<SetMaxBuildingItem, number>> &
+    Partial<Record<SetMaxJobItem, number>> &
+    Partial<Record<SetMaxResourceItem, number>> &
+    Partial<Record<ToggleBuildingItem, boolean>> &
+    Partial<Record<ToggleFaithUnicornItem, boolean>> &
+    Partial<Record<ToggleJobItem, boolean>> &
+    Partial<Record<ToggleLimitedJobItem, boolean>> &
+    Partial<Record<ToggleLimitedRaceItem, boolean>> &
+    Partial<Record<ToggleLimitedResourceItem, boolean>> &
+    Partial<Record<ToggleRaceItem, boolean>> &
+    Partial<Record<ToggleRaceSeasonItem, boolean>> &
+    Partial<Record<ToggleResourceItem, boolean>> &
+    Partial<Record<ToggleTimeItem, boolean>>;
   resources: Partial<
     Record<
       Resource,

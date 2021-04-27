@@ -1,5 +1,4 @@
 import { EngineSettings } from "../options/EngineSettings";
-import { OptionsExt } from "../options/OptionsExt";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
@@ -39,9 +38,11 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
       if (input.is(":checked") && options.enabled == false) {
         options.enabled = true;
         //this._host.saveToKittenStorage();
+        this._host.engine.start(true);
       } else if (!input.is(":checked") && options.enabled == true) {
         options.enabled = false;
         //this._host.saveToKittenStorage();
+        this._host.engine.stop(true);
       }
     });
 
