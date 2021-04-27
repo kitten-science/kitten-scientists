@@ -165,7 +165,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
         textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
-    option.$max = input;
+    option.$max = maxButton;
 
     maxButton.on("click", () => {
       const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
