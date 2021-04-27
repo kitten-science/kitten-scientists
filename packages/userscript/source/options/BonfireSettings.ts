@@ -65,5 +65,4 @@ export class BonfireSettings extends SettingsSection {
     zebraWorkshop: { enabled: false, max: -1 },
     zebraForge: { enabled: false, max: -1 },
   };
-
 }

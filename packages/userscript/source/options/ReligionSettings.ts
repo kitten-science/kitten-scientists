@@ -12,6 +12,46 @@ export class ReligionSettings extends SettingsSection {
   trigger = 0;
   $trigger?: JQuery<HTMLElement>;
 
+  addition: {
+    bestUnicornBuilding: {
+      enabled: boolean;
+      $enabled?: JQuery<HTMLElement>;
+    };
+    autoPraise: {
+      enabled: boolean;
+      $enabled?: JQuery<HTMLElement>;
+
+      subTrigger: number;
+      $subTrigger?: JQuery<HTMLElement>;
+    };
+    adore: {
+      enabled: boolean;
+      $enabled?: JQuery<HTMLElement>;
+
+      subTrigger: number;
+      $subTrigger?: JQuery<HTMLElement>;
+    };
+    transcend: {
+      enabled: boolean;
+      $enabled?: JQuery<HTMLElement>;
+    };
+  } = {
+    bestUnicornBuilding: {
+      enabled: true,
+    },
+    autoPraise: {
+      enabled: true,
+      subTrigger: 0.98,
+    },
+    adore: {
+      enabled: false,
+      subTrigger: 0.75,
+    },
+    transcend: {
+      enabled: false,
+    },
+  };
+
   items: {
     [item in FaithItem | UnicornItem]: ReligionSettingsItem;
   } = {
