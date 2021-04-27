@@ -1,15 +1,25 @@
 import { mustExist } from "../tools/Maybe";
 import { Building, Jobs, Race, Resource, Season } from "../types";
-import { FaithItem, Options, TimeItem, UnicornItem } from "./Options";
+import { FaithItem, Options, SpaceItem, TimeItem, UnicornItem } from "./Options";
 
 type SetMaxBuildingItem = `set-${Building}-max`;
 type SetMaxJobItem = `set-${Jobs}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
+type SetMinResetBuildingItem = `set-reset-build-${Building}-min`;
+type SetMinResetFaithItem = `set-reset-faith-${FaithItem}-min`;
+type SetMinResetSpaceItem = `set-reset-space-${SpaceItem}-min`;
+type SetMinResetTimeItem = `set-reset-time-${TimeItem}-min`;
+type SetMinResetUnicornItem = `set-reset-unicorn-${UnicornItem}-min`;
 type ToggleBuildingItem = `toggle-${Building}`;
 type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
 type ToggleJobItem = `toggle-${Jobs}`;
 type ToggleRaceItem = `toggle-${Race}`;
 type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
+type ToggleResetBuildingItem = `toggle-reset-build-${Building}`;
+type ToggleResetFaithItem = `toggle-reset-faith-${FaithItem}`;
+type ToggleResetSpaceItem = `toggle-reset-space-${SpaceItem}`;
+type ToggleResetTimeItem = `toggle-reset-time-${TimeItem}`;
+type ToggleResetUnicornItem = `toggle-reset-unicorn-${UnicornItem}`;
 type ToggleResourceItem = `toggle-${Resource}`;
 type ToggleTimeItem = `toggle-${TimeItem}`;
 type ToggleLimitedJobItem = `toggle-limited-${Jobs}`;
@@ -22,6 +32,11 @@ export type KittenStorageType = {
   items: Partial<Record<SetMaxBuildingItem, number>> &
     Partial<Record<SetMaxJobItem, number>> &
     Partial<Record<SetMaxResourceItem, number>> &
+    Partial<Record<SetMinResetBuildingItem, number>> &
+    Partial<Record<SetMinResetFaithItem, number>> &
+    Partial<Record<SetMinResetSpaceItem, number>> &
+    Partial<Record<SetMinResetTimeItem, number>> &
+    Partial<Record<SetMinResetUnicornItem, number>> &
     Partial<Record<ToggleBuildingItem, boolean>> &
     Partial<Record<ToggleFaithUnicornItem, boolean>> &
     Partial<Record<ToggleJobItem, boolean>> &
@@ -30,6 +45,11 @@ export type KittenStorageType = {
     Partial<Record<ToggleLimitedResourceItem, boolean>> &
     Partial<Record<ToggleRaceItem, boolean>> &
     Partial<Record<ToggleRaceSeasonItem, boolean>> &
+    Partial<Record<ToggleResetBuildingItem, boolean>> &
+    Partial<Record<ToggleResetFaithItem, boolean>> &
+    Partial<Record<ToggleResetSpaceItem, boolean>> &
+    Partial<Record<ToggleResetTimeItem, boolean>> &
+    Partial<Record<ToggleResetUnicornItem, boolean>> &
     Partial<Record<ToggleResourceItem, boolean>> &
     Partial<Record<ToggleTimeItem, boolean>>;
   resources: Partial<

@@ -119,7 +119,20 @@
     "toggle-moltenCore": true,
     "toggle-terraformingStation": true,
     "toggle-spaceBeacon": true,
-    "toggle-ship": true
+    "toggle-ship": true,
+    "toggle-unicornPasture": true,
+    "toggle-bestUnicornBuilding": false,
+    "toggle-reset-space-hydrofracturer": false,
+    "toggle-reset-space-spiceRefinery": false,
+    "toggle-reset-space-researchVessel": false,
+    "set-reset-space-cryostation-min": 5,
+    "toggle-reset-time-blastFurnace": false,
+    "set-reset-time-voidHoover-min": 4,
+    "toggle-reset-build-factory": false,
+    "toggle-reset-build-aqueduct": false,
+    "set-reset-build-steamworks-min": 99,
+    "toggle-reset-faith-solarchant": false,
+    "set-reset-faith-blackLibrary-min": 7
   },
   "resources": {
     "furs": {
