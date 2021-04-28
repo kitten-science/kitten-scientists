@@ -2,6 +2,11 @@ import { UnicornItemVariant } from "../types";
 import { FaithItem, UnicornItem } from "./Options";
 import { SettingsSection } from "./SettingsSection";
 
+export type ReligionAdditionItem =
+|"adore"
+|"autoPraise"
+|"bestUnicornBuilding"
+|"transcend";
 export type ReligionSettingsItem = {
   enabled: boolean;
   $enabled?: JQuery<HTMLElement>;

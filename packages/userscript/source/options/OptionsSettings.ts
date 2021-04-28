@@ -1,5 +1,19 @@
 import { SettingsSection } from "./SettingsSection";
 
+export type OptionsItem =
+  | "_steamworks"
+  | "autofeed"
+  | "buildEmbassies"
+  | "crypto"
+  | "explore"
+  | "festival"
+  | "fixCry"
+  | "hunt"
+  | "observe"
+  | "promote"
+  | "shipOverride"
+  | "style";
+
 export type OptionsSettingsItem = {
   enabled: boolean;
   $enabled?: JQuery<HTMLElement>;
@@ -9,18 +23,7 @@ export type OptionsSettingsItem = {
 };
 export class OptionsSettings extends SettingsSection {
   items: {
-    observe: OptionsSettingsItem;
-    festival: OptionsSettingsItem;
-    shipOverride: OptionsSettingsItem;
-    autofeed: OptionsSettingsItem;
-    hunt: OptionsSettingsItem;
-    promote: OptionsSettingsItem;
-    crypto: OptionsSettingsItem;
-    fixCry: OptionsSettingsItem;
-    buildEmbassies: OptionsSettingsItem;
-    style: OptionsSettingsItem;
-    explore: OptionsSettingsItem;
-    _steamworks: OptionsSettingsItem;
+    [key in OptionsItem]: OptionsSettingsItem;
   } = {
     observe: { enabled: true },
     festival: { enabled: true },
