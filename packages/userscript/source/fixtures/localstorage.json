@@ -121,7 +121,7 @@
     "toggle-spaceBeacon": true,
     "toggle-ship": true,
     "toggle-unicornPasture": true,
-    "toggle-bestUnicornBuilding": false,
+    "toggle-bestUnicornBuilding": true,
     "toggle-reset-space-hydrofracturer": false,
     "toggle-reset-space-spiceRefinery": false,
     "toggle-reset-space-researchVessel": false,
@@ -132,7 +132,9 @@
     "toggle-reset-build-aqueduct": false,
     "set-reset-build-steamworks-min": 99,
     "toggle-reset-faith-solarchant": false,
-    "set-reset-faith-blackLibrary-min": 7
+    "set-reset-faith-blackLibrary-min": 7,
+    "toggle-timeSkip-0": true,
+    "toggle-timeSkip-1": true
   },
   "resources": {
     "furs": {

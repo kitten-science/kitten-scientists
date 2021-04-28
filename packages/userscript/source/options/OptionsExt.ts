@@ -170,6 +170,36 @@ export class OptionsExt {
     for (const [name, item] of objectEntries(result.auto.timeCtrl.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }
+
+    // Time control items have almost no shared schema. Process individually.
+    result.auto.timeCtrl.items.accelerateTime.enabled =
+      subject.items["toggle-accelerateTime"] ?? result.auto.timeCtrl.items.accelerateTime.enabled;
+    result.auto.timeCtrl.items.accelerateTime.subTrigger =
+      subject.items["set-accelerateTime-subTrigger"] ??
+      result.auto.timeCtrl.items.accelerateTime.subTrigger;
+
+    result.auto.timeCtrl.items.reset.enabled =
+      subject.items["toggle-reset"] ?? result.auto.timeCtrl.items.reset.enabled;
+
+    result.auto.timeCtrl.items.timeSkip.enabled =
+      subject.items["toggle-timeSkip"] ?? result.auto.timeCtrl.items.timeSkip.enabled;
+    result.auto.timeCtrl.items.timeSkip.subTrigger =
+      subject.items["set-timeSkip-subTrigger"] ?? result.auto.timeCtrl.items.timeSkip.subTrigger;
+    result.auto.timeCtrl.items.timeSkip.autumn =
+      subject.items["toggle-timeSkip-autumn"] ?? result.auto.timeCtrl.items.timeSkip.autumn;
+    result.auto.timeCtrl.items.timeSkip.spring =
+      subject.items["toggle-timeSkip-spring"] ?? result.auto.timeCtrl.items.timeSkip.spring;
+    result.auto.timeCtrl.items.timeSkip.summer =
+      subject.items["toggle-timeSkip-summer"] ?? result.auto.timeCtrl.items.timeSkip.summer;
+    result.auto.timeCtrl.items.timeSkip.winter =
+      subject.items["toggle-timeSkip-winter"] ?? result.auto.timeCtrl.items.timeSkip.winter;
+
+    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
+      result.auto.timeCtrl.items.timeSkip[cycleIndex] =
+        subject.items[`toggle-timeSkip-${cycleIndex}` as const] ??
+        result.auto.timeCtrl.items.timeSkip[cycleIndex];
+    }
+
     for (const [name, item] of objectEntries(result.auto.timeCtrl.buildItems)) {
       item.checkForReset =
         subject.items[`toggle-reset-build-${name}` as const] ?? item.checkForReset;

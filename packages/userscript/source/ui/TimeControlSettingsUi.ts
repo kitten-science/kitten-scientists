@@ -665,6 +665,20 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     mustExist(
       this._options.items.timeSkip.$subTrigger
     )[0].title = state.items.timeSkip.subTrigger.toFixed(2);
+    mustExist(this._options.items.timeSkip.$autumn).prop("checked", state.items.timeSkip.autumn);
+    mustExist(this._options.items.timeSkip.$spring).prop("checked", state.items.timeSkip.spring);
+    mustExist(this._options.items.timeSkip.$summer).prop("checked", state.items.timeSkip.summer);
+    mustExist(this._options.items.timeSkip.$winter).prop("checked", state.items.timeSkip.winter);
+    mustExist(this._options.items.timeSkip.$0).prop("checked", state.items.timeSkip[0]);
+    mustExist(this._options.items.timeSkip.$1).prop("checked", state.items.timeSkip[1]);
+    mustExist(this._options.items.timeSkip.$2).prop("checked", state.items.timeSkip[2]);
+    mustExist(this._options.items.timeSkip.$3).prop("checked", state.items.timeSkip[3]);
+    mustExist(this._options.items.timeSkip.$4).prop("checked", state.items.timeSkip[4]);
+    mustExist(this._options.items.timeSkip.$5).prop("checked", state.items.timeSkip[5]);
+    mustExist(this._options.items.timeSkip.$6).prop("checked", state.items.timeSkip[6]);
+    mustExist(this._options.items.timeSkip.$7).prop("checked", state.items.timeSkip[7]);
+    mustExist(this._options.items.timeSkip.$8).prop("checked", state.items.timeSkip[8]);
+    mustExist(this._options.items.timeSkip.$9).prop("checked", state.items.timeSkip[9]);
 
     for (const [name, option] of objectEntries(this._options.buildItems)) {
       mustExist(option.$checkForReset).prop("checked", state.buildItems[name].checkForReset);
