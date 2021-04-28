@@ -1,13 +1,10 @@
 import { SettingsSection } from "./SettingsSection";
 
+export type UnlockItem = "buildings" | "missions" | "races" | "techs" | "upgrades";
 export type UnlockingSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
 export class UnlockingSettings extends SettingsSection {
   items: {
-    upgrades: UnlockingSettingsItem;
-    techs: UnlockingSettingsItem;
-    races: UnlockingSettingsItem;
-    missions: UnlockingSettingsItem;
-    buildings: UnlockingSettingsItem;
+    [key in UnlockItem]: UnlockingSettingsItem;
   } = {
     upgrades: { enabled: true },
     techs: { enabled: true },

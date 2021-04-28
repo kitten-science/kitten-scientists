@@ -1,25 +1,28 @@
 import { SettingsSection } from "./SettingsSection";
 
+export type FilterItem =
+  | "accelerateFilter"
+  | "adoreFilter"
+  | "buildFilter"
+  | "craftFilter"
+  | "distributeFilter"
+  | "faithFilter"
+  | "festivalFilter"
+  | "huntFilter"
+  | "miscFilter"
+  | "praiseFilter"
+  | "promoteFilter"
+  | "researchFilter"
+  | "starFilter"
+  | "timeSkipFilter"
+  | "tradeFilter"
+  | "transcendFilter"
+  | "upgradeFilter";
+
 export type FilterSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
 export class FilterSettings extends SettingsSection {
   items: {
-    buildFilter: FilterSettingsItem;
-    craftFilter: FilterSettingsItem;
-    upgradeFilter: FilterSettingsItem;
-    researchFilter: FilterSettingsItem;
-    tradeFilter: FilterSettingsItem;
-    huntFilter: FilterSettingsItem;
-    praiseFilter: FilterSettingsItem;
-    adoreFilter: FilterSettingsItem;
-    transcendFilter: FilterSettingsItem;
-    faithFilter: FilterSettingsItem;
-    accelerateFilter: FilterSettingsItem;
-    timeSkipFilter: FilterSettingsItem;
-    festivalFilter: FilterSettingsItem;
-    starFilter: FilterSettingsItem;
-    distributeFilter: FilterSettingsItem;
-    promoteFilter: FilterSettingsItem;
-    miscFilter: FilterSettingsItem;
+    [item in FilterItem]: FilterSettingsItem;
   } = {
     buildFilter: { enabled: false },
     craftFilter: { enabled: false },

@@ -138,6 +138,22 @@ export class OptionsExt {
     for (const [name, item] of objectEntries(result.auto.religion.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }
+    // Load remaining religion settings.
+    result.auto.religion.addition.adore.enabled =
+      subject.items["toggle-adore"] ?? result.auto.religion.addition.adore.enabled;
+    result.auto.religion.addition.autoPraise.enabled =
+      subject.items["toggle-autoPraise"] ?? result.auto.religion.addition.autoPraise.enabled;
+    result.auto.religion.addition.bestUnicornBuilding.enabled =
+      subject.items["toggle-bestUnicornBuilding"] ??
+      result.auto.religion.addition.bestUnicornBuilding.enabled;
+    result.auto.religion.addition.transcend.enabled =
+      subject.items["toggle-transcend"] ?? result.auto.religion.addition.transcend.enabled;
+    result.auto.religion.addition.adore.subTrigger =
+      subject.items["set-adore-subTrigger"] ?? result.auto.religion.addition.adore.subTrigger;
+    result.auto.religion.addition.autoPraise.subTrigger =
+      subject.items["set-autoPraise-subTrigger"] ??
+      result.auto.religion.addition.autoPraise.subTrigger;
+
     for (const [name, item] of objectEntries(result.auto.space.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
