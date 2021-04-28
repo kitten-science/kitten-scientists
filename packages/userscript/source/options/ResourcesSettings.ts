@@ -2,13 +2,13 @@ import { ResourceCraftable } from "../types";
 
 export type ResourcesSettingsItem = {
   consume?: number;
-  $consume: JQuery<HTMLElement>;
+  $consume?: JQuery<HTMLElement>;
 
   enabled: boolean;
-  $enabled: JQuery<HTMLElement>;
+  $enabled?: JQuery<HTMLElement>;
 
   stock: number;
-  $stock: JQuery<HTMLElement>;
+  $stock?: JQuery<HTMLElement>;
 };
 export type ResourceSettings = {
   [item in ResourceCraftable]?: ResourcesSettingsItem;

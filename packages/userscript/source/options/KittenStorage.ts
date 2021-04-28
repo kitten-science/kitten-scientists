@@ -1,15 +1,16 @@
 import { Building, Jobs, Race, Resource, Season } from "../types";
 import { FilterItem } from "./FilterSettings";
-import { FaithItem, SpaceItem, TimeItem, UnicornItem } from "./Options";
+import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./Options";
 import { OptionsItem } from "./OptionsSettings";
 import { ReligionAdditionItem } from "./ReligionSettings";
+import { TimeControlItem } from "./TimeControlSettings";
 import { UnlockItem } from "./UnlockingSettings";
 
 type SetMaxBuildingItem = `set-${Building}-max`;
 type SetMaxJobItem = `set-${Jobs}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
-type SetMinResetBuildingItem = `set-reset-build-${Building}-min`;
-type SetMinResetFaithItem = `set-reset-faith-${FaithItem}-min`;
+type SetMinResetBuildingItem = `set-reset-build-${Exclude<BuildItem, "unicornPasture">}-min`;
+type SetMinResetFaithItem = `set-reset-faith-${FaithItem | UnicornItem}-min`;
 type SetMinResetSpaceItem = `set-reset-space-${SpaceItem}-min`;
 type SetMinResetTimeItem = `set-reset-time-${TimeItem}-min`;
 type SetMinResetUnicornItem = `set-reset-unicorn-${UnicornItem}-min`;
@@ -26,12 +27,13 @@ type ToggleOptionsItem = `toggle-${OptionsItem}`;
 type ToggleRaceItem = `toggle-${Race}`;
 type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
 type ToggleReligionAdditionItem = `toggle-${ReligionAdditionItem}`;
-type ToggleResetBuildingItem = `toggle-reset-build-${Building}`;
-type ToggleResetFaithItem = `toggle-reset-faith-${FaithItem}`;
+type ToggleResetBuildingItem = `toggle-reset-build-${Exclude<BuildItem, "unicornPasture">}`;
+type ToggleResetFaithItem = `toggle-reset-faith-${FaithItem | UnicornItem}`;
 type ToggleResetSpaceItem = `toggle-reset-space-${SpaceItem}`;
 type ToggleResetTimeItem = `toggle-reset-time-${TimeItem}`;
 type ToggleResetUnicornItem = `toggle-reset-unicorn-${UnicornItem}`;
 type ToggleResourceItem = `toggle-${Resource}`;
+type ToggleTimeControlItem = `toggle-${TimeControlItem}`;
 type ToggleTimeItem = `toggle-${TimeItem}`;
 type ToggleUnlockItem = `toggle-${UnlockItem}`;
 
@@ -65,6 +67,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleResetTimeItem, boolean>> &
     Partial<Record<ToggleResetUnicornItem, boolean>> &
     Partial<Record<ToggleResourceItem, boolean>> &
+    Partial<Record<ToggleTimeControlItem, boolean>> &
     Partial<Record<ToggleTimeItem, boolean>> &
     Partial<Record<ToggleUnlockItem, boolean>>;
   resources: Partial<

@@ -138,18 +138,24 @@ export class OptionsExt {
     for (const [name, item] of objectEntries(result.auto.religion.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }
+
     // Load remaining religion settings.
     result.auto.religion.addition.adore.enabled =
       subject.items["toggle-adore"] ?? result.auto.religion.addition.adore.enabled;
+
     result.auto.religion.addition.autoPraise.enabled =
       subject.items["toggle-autoPraise"] ?? result.auto.religion.addition.autoPraise.enabled;
+
     result.auto.religion.addition.bestUnicornBuilding.enabled =
       subject.items["toggle-bestUnicornBuilding"] ??
       result.auto.religion.addition.bestUnicornBuilding.enabled;
+
     result.auto.religion.addition.transcend.enabled =
       subject.items["toggle-transcend"] ?? result.auto.religion.addition.transcend.enabled;
+
     result.auto.religion.addition.adore.subTrigger =
       subject.items["set-adore-subTrigger"] ?? result.auto.religion.addition.adore.subTrigger;
+
     result.auto.religion.addition.autoPraise.subTrigger =
       subject.items["set-autoPraise-subTrigger"] ??
       result.auto.religion.addition.autoPraise.subTrigger;
@@ -164,6 +170,31 @@ export class OptionsExt {
     for (const [name, item] of objectEntries(result.auto.timeCtrl.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }
+    for (const [name, item] of objectEntries(result.auto.timeCtrl.buildItems)) {
+      item.checkForReset =
+        subject.items[`toggle-reset-build-${name}` as const] ?? item.checkForReset;
+      item.triggerForReset =
+        subject.items[`set-reset-build-${name}-min` as const] ?? item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(result.auto.timeCtrl.religionItems)) {
+      item.checkForReset =
+        subject.items[`toggle-reset-faith-${name}` as const] ?? item.checkForReset;
+      item.triggerForReset =
+        subject.items[`set-reset-faith-${name}-min` as const] ?? item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(result.auto.timeCtrl.spaceItems)) {
+      item.checkForReset =
+        subject.items[`toggle-reset-space-${name}` as const] ?? item.checkForReset;
+      item.triggerForReset =
+        subject.items[`set-reset-space-${name}-min` as const] ?? item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(result.auto.timeCtrl.timeItems)) {
+      item.checkForReset =
+        subject.items[`toggle-reset-time-${name}` as const] ?? item.checkForReset;
+      item.triggerForReset =
+        subject.items[`set-reset-time-${name}-min` as const] ?? item.triggerForReset;
+    }
+
     for (const [name, item] of objectEntries(result.auto.trade.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
@@ -179,6 +210,7 @@ export class OptionsExt {
     for (const [name, item] of objectEntries(subject.resources)) {
       if (item.checkForReset) {
         result.auto.timeCtrl.resources[name] = {
+          checkForReset: true,
           stockForReset: item.stockForReset,
         };
       } else {
