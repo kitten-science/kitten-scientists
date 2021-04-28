@@ -484,7 +484,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       id: "toggle-reset-" + type + "-" + name,
       type: "checkbox",
     }).data("option", option);
-    option.$enabled = input;
+    option.$checkForReset = input;
 
     /*
     if (option.checkForReset) {
@@ -653,48 +653,55 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     mustExist(this._options.items.accelerateTime.$enabled).prop(
       "checked",
-      this._options.items.accelerateTime.enabled
+      state.items.accelerateTime.enabled
     );
     mustExist(
       this._options.items.accelerateTime.$subTrigger
-    )[0].title = this._options.items.accelerateTime.subTrigger.toFixed(2);
+    )[0].title = state.items.accelerateTime.subTrigger.toFixed(2);
 
-    mustExist(this._options.items.reset.$enabled).prop(
-      "checked",
-      this._options.items.reset.enabled
-    );
+    mustExist(this._options.items.reset.$enabled).prop("checked", state.items.reset.enabled);
 
-    mustExist(this._options.items.timeSkip.$enabled).prop(
-      "checked",
-      this._options.items.timeSkip.enabled
-    );
+    mustExist(this._options.items.timeSkip.$enabled).prop("checked", state.items.timeSkip.enabled);
     mustExist(
       this._options.items.timeSkip.$subTrigger
-    )[0].title = this._options.items.timeSkip.subTrigger.toFixed(2);
+    )[0].title = state.items.timeSkip.subTrigger.toFixed(2);
 
     for (const [name, option] of objectEntries(this._options.buildItems)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
-      mustExist(option.$triggerForReset).text(this._host.i18n("ui.min", [option.triggerForReset]));
+      mustExist(option.$checkForReset).prop("checked", state.buildItems[name].checkForReset);
+      mustExist(option.$triggerForReset).text(
+        this._host.i18n("ui.min", [state.buildItems[name].triggerForReset])
+      );
     }
     for (const [name, option] of objectEntries(this._options.religionItems)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
-      mustExist(option.$triggerForReset).text(this._host.i18n("ui.min", [option.triggerForReset]));
+      mustExist(option.$checkForReset).prop("checked", state.religionItems[name].checkForReset);
+      mustExist(option.$triggerForReset).text(
+        this._host.i18n("ui.min", [state.religionItems[name].triggerForReset])
+      );
     }
     for (const [name, option] of objectEntries(this._options.spaceItems)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
-      mustExist(option.$triggerForReset).text(this._host.i18n("ui.min", [option.triggerForReset]));
+      mustExist(option.$checkForReset).prop("checked", state.spaceItems[name].checkForReset);
+      mustExist(option.$triggerForReset).text(
+        this._host.i18n("ui.min", [state.spaceItems[name].triggerForReset])
+      );
     }
     for (const [name, option] of objectEntries(this._options.timeItems)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
-      mustExist(option.$triggerForReset).text(this._host.i18n("ui.min", [option.triggerForReset]));
+      mustExist(option.$checkForReset).prop("checked", state.timeItems[name].checkForReset);
+      mustExist(option.$triggerForReset).text(
+        this._host.i18n("ui.min", [state.timeItems[name].triggerForReset])
+      );
     }
     for (const [name, option] of objectEntries(this._options.resources)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$checkForReset).prop(
+        "checked",
+        mustExist(state.resources[name]).checkForReset
+      );
       mustExist(option.$stockForReset).text(
         this._host.i18n("resources.stock", [
           option.stockForReset === Infinity
             ? "∞"
-            : this._host.gamePage.getDisplayValueExt(option.stockForReset),
+            : this._host.gamePage.getDisplayValueExt(
+                mustExist(state.resources[name]).stockForReset
+              ),
         ])
       );
     }

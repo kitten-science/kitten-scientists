@@ -353,7 +353,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     }
     for (const [name, option] of objectEntries(this._options.resources)) {
       mustExist(option.$consume).text(
-        this._host.i18n("resources.consume", [option.consume.toFixed(2)])
+        this._host.i18n("resources.consume", [mustExist(option.consume).toFixed(2)])
       );
       mustExist(option.$stock).text(
         this._host.i18n("resources.stock", [

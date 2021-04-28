@@ -2,16 +2,17 @@ import { Resource } from "../types";
 import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./Options";
 import { SettingsSection } from "./SettingsSection";
 
+export type TimeControlItem = "accelerateTime" | "reset" | "timeSkip";
 export type TimeControlBuildSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
+  checkForReset: boolean;
+  $checkForReset?: JQuery<HTMLElement>;
 
   triggerForReset: number;
   $triggerForReset?: JQuery<HTMLElement>;
 };
 export type TimeControlResourcesSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
+  checkForReset: boolean;
+  $checkForReset?: JQuery<HTMLElement>;
 
   stockForReset: number;
   $stockForReset?: JQuery<HTMLElement>;
@@ -21,157 +22,157 @@ export class TimeControlSettings extends SettingsSection {
     // unicornPasture is handled in the Religion section.
     [item in Exclude<BuildItem, "unicornPasture">]: TimeControlBuildSettingsItem;
   } = {
-    hut: { triggerForReset: -1 },
-    logHouse: { triggerForReset: -1 },
-    mansion: { triggerForReset: -1 },
+    hut: { checkForReset: true, triggerForReset: -1 },
+    logHouse: { checkForReset: true, triggerForReset: -1 },
+    mansion: { checkForReset: true, triggerForReset: -1 },
 
-    workshop: { triggerForReset: -1 },
-    factory: { triggerForReset: -1 },
+    workshop: { checkForReset: true, triggerForReset: -1 },
+    factory: { checkForReset: true, triggerForReset: -1 },
 
-    field: { triggerForReset: -1 },
-    pasture: { triggerForReset: -1 },
-    solarFarm: { triggerForReset: -1 },
-    mine: { triggerForReset: -1 },
-    lumberMill: { triggerForReset: -1 },
-    aqueduct: { triggerForReset: -1 },
-    hydroPlant: { triggerForReset: -1 },
-    oilWell: { triggerForReset: -1 },
-    quarry: { triggerForReset: -1 },
+    field: { checkForReset: true, triggerForReset: -1 },
+    pasture: { checkForReset: true, triggerForReset: -1 },
+    solarFarm: { checkForReset: true, triggerForReset: -1 },
+    mine: { checkForReset: true, triggerForReset: -1 },
+    lumberMill: { checkForReset: true, triggerForReset: -1 },
+    aqueduct: { checkForReset: true, triggerForReset: -1 },
+    hydroPlant: { checkForReset: true, triggerForReset: -1 },
+    oilWell: { checkForReset: true, triggerForReset: -1 },
+    quarry: { checkForReset: true, triggerForReset: -1 },
 
-    smelter: { triggerForReset: -1 },
-    biolab: { triggerForReset: -1 },
-    calciner: { triggerForReset: -1 },
-    reactor: { triggerForReset: -1 },
-    accelerator: { triggerForReset: -1 },
-    steamworks: { triggerForReset: -1 },
-    magneto: { triggerForReset: -1 },
+    smelter: { checkForReset: true, triggerForReset: -1 },
+    biolab: { checkForReset: true, triggerForReset: -1 },
+    calciner: { checkForReset: true, triggerForReset: -1 },
+    reactor: { checkForReset: true, triggerForReset: -1 },
+    accelerator: { checkForReset: true, triggerForReset: -1 },
+    steamworks: { checkForReset: true, triggerForReset: -1 },
+    magneto: { checkForReset: true, triggerForReset: -1 },
 
-    library: { triggerForReset: -1 },
-    dataCenter: { triggerForReset: -1 },
-    academy: { triggerForReset: -1 },
-    observatory: { triggerForReset: -1 },
+    library: { checkForReset: true, triggerForReset: -1 },
+    dataCenter: { checkForReset: true, triggerForReset: -1 },
+    academy: { checkForReset: true, triggerForReset: -1 },
+    observatory: { checkForReset: true, triggerForReset: -1 },
 
-    amphitheatre: { triggerForReset: -1 },
-    broadcastTower: { triggerForReset: -1 },
-    tradepost: { triggerForReset: -1 },
-    chapel: { triggerForReset: -1 },
-    temple: { triggerForReset: -1 },
-    mint: { triggerForReset: -1 },
-    ziggurat: { triggerForReset: -1 },
-    chronosphere: { triggerForReset: -1 },
-    aiCore: { triggerForReset: -1 },
-    brewery: { triggerForReset: -1 },
+    amphitheatre: { checkForReset: true, triggerForReset: -1 },
+    broadcastTower: { checkForReset: true, triggerForReset: -1 },
+    tradepost: { checkForReset: true, triggerForReset: -1 },
+    chapel: { checkForReset: true, triggerForReset: -1 },
+    temple: { checkForReset: true, triggerForReset: -1 },
+    mint: { checkForReset: true, triggerForReset: -1 },
+    ziggurat: { checkForReset: true, triggerForReset: -1 },
+    chronosphere: { checkForReset: true, triggerForReset: -1 },
+    aiCore: { checkForReset: true, triggerForReset: -1 },
+    brewery: { checkForReset: true, triggerForReset: -1 },
 
-    barn: { triggerForReset: -1 },
-    harbor: { triggerForReset: -1 },
-    warehouse: { triggerForReset: -1 },
+    barn: { checkForReset: true, triggerForReset: -1 },
+    harbor: { checkForReset: true, triggerForReset: -1 },
+    warehouse: { checkForReset: true, triggerForReset: -1 },
 
-    zebraOutpost: { triggerForReset: -1 },
-    zebraWorkshop: { triggerForReset: -1 },
-    zebraForge: { triggerForReset: -1 },
+    zebraOutpost: { checkForReset: true, triggerForReset: -1 },
+    zebraWorkshop: { checkForReset: true, triggerForReset: -1 },
+    zebraForge: { checkForReset: true, triggerForReset: -1 },
   };
 
   religionItems: {
     [item in FaithItem | UnicornItem]: TimeControlBuildSettingsItem;
   } = {
-    unicornPasture: { triggerForReset: -1 },
-    unicornTomb: { triggerForReset: -1 },
-    ivoryTower: { triggerForReset: -1 },
-    ivoryCitadel: { triggerForReset: -1 },
-    skyPalace: { triggerForReset: -1 },
-    unicornUtopia: { triggerForReset: -1 },
-    sunspire: { triggerForReset: -1 },
+    unicornPasture: { checkForReset: true, triggerForReset: -1 },
+    unicornTomb: { checkForReset: true, triggerForReset: -1 },
+    ivoryTower: { checkForReset: true, triggerForReset: -1 },
+    ivoryCitadel: { checkForReset: true, triggerForReset: -1 },
+    skyPalace: { checkForReset: true, triggerForReset: -1 },
+    unicornUtopia: { checkForReset: true, triggerForReset: -1 },
+    sunspire: { checkForReset: true, triggerForReset: -1 },
 
-    marker: { triggerForReset: -1 },
-    unicornGraveyard: { triggerForReset: -1 },
-    unicornNecropolis: { triggerForReset: -1 },
-    blackPyramid: { triggerForReset: -1 },
+    marker: { checkForReset: true, triggerForReset: -1 },
+    unicornGraveyard: { checkForReset: true, triggerForReset: -1 },
+    unicornNecropolis: { checkForReset: true, triggerForReset: -1 },
+    blackPyramid: { checkForReset: true, triggerForReset: -1 },
 
-    solarchant: { triggerForReset: -1 },
-    scholasticism: { triggerForReset: -1 },
-    goldenSpire: { triggerForReset: -1 },
-    sunAltar: { triggerForReset: -1 },
-    stainedGlass: { triggerForReset: -1 },
-    solarRevolution: { triggerForReset: -1 },
-    basilica: { triggerForReset: -1 },
-    templars: { triggerForReset: -1 },
-    apocripha: { triggerForReset: -1 },
-    transcendence: { triggerForReset: -1 },
+    solarchant: { checkForReset: true, triggerForReset: -1 },
+    scholasticism: { checkForReset: true, triggerForReset: -1 },
+    goldenSpire: { checkForReset: true, triggerForReset: -1 },
+    sunAltar: { checkForReset: true, triggerForReset: -1 },
+    stainedGlass: { checkForReset: true, triggerForReset: -1 },
+    solarRevolution: { checkForReset: true, triggerForReset: -1 },
+    basilica: { checkForReset: true, triggerForReset: -1 },
+    templars: { checkForReset: true, triggerForReset: -1 },
+    apocripha: { checkForReset: true, triggerForReset: -1 },
+    transcendence: { checkForReset: true, triggerForReset: -1 },
 
-    blackObelisk: { triggerForReset: -1 },
-    blackNexus: { triggerForReset: -1 },
-    blackCore: { triggerForReset: -1 },
-    singularity: { triggerForReset: -1 },
-    blackLibrary: { triggerForReset: -1 },
-    blackRadiance: { triggerForReset: -1 },
-    blazar: { triggerForReset: -1 },
-    darkNova: { triggerForReset: -1 },
-    holyGenocide: { triggerForReset: -1 },
+    blackObelisk: { checkForReset: true, triggerForReset: -1 },
+    blackNexus: { checkForReset: true, triggerForReset: -1 },
+    blackCore: { checkForReset: true, triggerForReset: -1 },
+    singularity: { checkForReset: true, triggerForReset: -1 },
+    blackLibrary: { checkForReset: true, triggerForReset: -1 },
+    blackRadiance: { checkForReset: true, triggerForReset: -1 },
+    blazar: { checkForReset: true, triggerForReset: -1 },
+    darkNova: { checkForReset: true, triggerForReset: -1 },
+    holyGenocide: { checkForReset: true, triggerForReset: -1 },
   };
 
   spaceItems: {
     [item in SpaceItem]: TimeControlBuildSettingsItem;
   } = {
     // Cath
-    spaceElevator: { triggerForReset: -1 },
-    sattelite: { triggerForReset: -1 },
-    spaceStation: { triggerForReset: -1 },
+    spaceElevator: { checkForReset: true, triggerForReset: -1 },
+    sattelite: { checkForReset: true, triggerForReset: -1 },
+    spaceStation: { checkForReset: true, triggerForReset: -1 },
 
     // Moon
-    moonOutpost: { triggerForReset: -1 },
-    moonBase: { triggerForReset: -1 },
+    moonOutpost: { checkForReset: true, triggerForReset: -1 },
+    moonBase: { checkForReset: true, triggerForReset: -1 },
 
     // Dune
-    planetCracker: { triggerForReset: -1 },
-    hydrofracturer: { triggerForReset: -1 },
-    spiceRefinery: { triggerForReset: -1 },
+    planetCracker: { checkForReset: true, triggerForReset: -1 },
+    hydrofracturer: { checkForReset: true, triggerForReset: -1 },
+    spiceRefinery: { checkForReset: true, triggerForReset: -1 },
 
     // Piscine
-    researchVessel: { triggerForReset: -1 },
-    orbitalArray: { triggerForReset: -1 },
+    researchVessel: { checkForReset: true, triggerForReset: -1 },
+    orbitalArray: { checkForReset: true, triggerForReset: -1 },
 
     // Helios
-    sunlifter: { triggerForReset: -1 },
-    containmentChamber: { triggerForReset: -1 },
-    heatsink: { triggerForReset: -1 },
-    sunforge: { triggerForReset: -1 },
+    sunlifter: { checkForReset: true, triggerForReset: -1 },
+    containmentChamber: { checkForReset: true, triggerForReset: -1 },
+    heatsink: { checkForReset: true, triggerForReset: -1 },
+    sunforge: { checkForReset: true, triggerForReset: -1 },
 
     // T-Minus
-    cryostation: { triggerForReset: -1 },
+    cryostation: { checkForReset: true, triggerForReset: -1 },
 
     // Kairo
-    spaceBeacon: { triggerForReset: -1 },
+    spaceBeacon: { checkForReset: true, triggerForReset: -1 },
 
     // Yarn
-    terraformingStation: { triggerForReset: -1 },
-    hydroponics: { triggerForReset: -1 },
+    terraformingStation: { checkForReset: true, triggerForReset: -1 },
+    hydroponics: { checkForReset: true, triggerForReset: -1 },
 
     // Umbra
-    hrHarvester: { triggerForReset: -1 },
+    hrHarvester: { checkForReset: true, triggerForReset: -1 },
 
     // Charon
-    entangler: { triggerForReset: -1 },
+    entangler: { checkForReset: true, triggerForReset: -1 },
 
     // Centaurus
-    tectonic: { triggerForReset: -1 },
-    moltenCore: { triggerForReset: -1 },
+    tectonic: { checkForReset: true, triggerForReset: -1 },
+    moltenCore: { checkForReset: true, triggerForReset: -1 },
   };
 
   timeItems: {
     [item in TimeItem]: TimeControlBuildSettingsItem;
   } = {
-    temporalBattery: { triggerForReset: -1 },
-    blastFurnace: { triggerForReset: -1 },
-    timeBoiler: { triggerForReset: -1 },
-    temporalAccelerator: { triggerForReset: -1 },
-    temporalImpedance: { triggerForReset: -1 },
-    ressourceRetrieval: { triggerForReset: -1 },
+    temporalBattery: { checkForReset: true, triggerForReset: -1 },
+    blastFurnace: { checkForReset: true, triggerForReset: -1 },
+    timeBoiler: { checkForReset: true, triggerForReset: -1 },
+    temporalAccelerator: { checkForReset: true, triggerForReset: -1 },
+    temporalImpedance: { checkForReset: true, triggerForReset: -1 },
+    ressourceRetrieval: { checkForReset: true, triggerForReset: -1 },
 
-    cryochambers: { triggerForReset: -1 },
-    voidHoover: { triggerForReset: -1 },
-    voidRift: { triggerForReset: -1 },
-    chronocontrol: { triggerForReset: -1 },
-    voidResonator: { triggerForReset: -1 },
+    cryochambers: { checkForReset: true, triggerForReset: -1 },
+    voidHoover: { checkForReset: true, triggerForReset: -1 },
+    voidRift: { checkForReset: true, triggerForReset: -1 },
+    chronocontrol: { checkForReset: true, triggerForReset: -1 },
+    voidResonator: { checkForReset: true, triggerForReset: -1 },
   };
 
   resources: {
