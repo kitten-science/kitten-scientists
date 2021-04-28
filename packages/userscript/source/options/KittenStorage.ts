@@ -16,6 +16,7 @@ type SetMinResetTimeItem = `set-reset-time-${TimeItem}-min`;
 type SetMinResetUnicornItem = `set-reset-unicorn-${UnicornItem}-min`;
 type SetSubtriggerOptionItem = `set-${OptionsItem}-subTrigger`;
 type SetSubtriggerReligionItem = `set-${ReligionAdditionItem}-subTrigger`;
+type SetSubtriggerTimeCtrlItem = `set-${"accelerateTime" | "timeSkip"}-subTrigger`;
 type ToggleBuildingItem = `toggle-${Building}`;
 type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
 type ToggleFilterItem = `toggle-${FilterItem}`;
@@ -34,6 +35,8 @@ type ToggleResetTimeItem = `toggle-reset-time-${TimeItem}`;
 type ToggleResetUnicornItem = `toggle-reset-unicorn-${UnicornItem}`;
 type ToggleResourceItem = `toggle-${Resource}`;
 type ToggleTimeControlItem = `toggle-${TimeControlItem}`;
+type ToggleTimeControlCycleItem = `toggle-timeSkip-${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
+type ToggleTimeControlSeasonItem = `toggle-timeSkip-${Season}`;
 type ToggleTimeItem = `toggle-${TimeItem}`;
 type ToggleUnlockItem = `toggle-${UnlockItem}`;
 
@@ -50,6 +53,7 @@ export type KittenStorageType = {
     Partial<Record<SetMinResetUnicornItem, number>> &
     Partial<Record<SetSubtriggerOptionItem, number>> &
     Partial<Record<SetSubtriggerReligionItem, number>> &
+    Partial<Record<SetSubtriggerTimeCtrlItem, number>> &
     Partial<Record<ToggleBuildingItem, boolean>> &
     Partial<Record<ToggleFaithUnicornItem, boolean>> &
     Partial<Record<ToggleFilterItem, boolean>> &
@@ -67,7 +71,9 @@ export type KittenStorageType = {
     Partial<Record<ToggleResetTimeItem, boolean>> &
     Partial<Record<ToggleResetUnicornItem, boolean>> &
     Partial<Record<ToggleResourceItem, boolean>> &
+    Partial<Record<ToggleTimeControlCycleItem, boolean>> &
     Partial<Record<ToggleTimeControlItem, boolean>> &
+    Partial<Record<ToggleTimeControlSeasonItem, boolean>> &
     Partial<Record<ToggleTimeItem, boolean>> &
     Partial<Record<ToggleUnlockItem, boolean>>;
   resources: Partial<

@@ -1,6 +1,17 @@
 import { GamePage } from "./gamePage";
 
 export type Season = "autumn" | "spring" | "summer" | "winter";
+export type Cycle =
+  | "charon"
+  | "umbra"
+  | "yarn"
+  | "helios"
+  | "cath"
+  | "redmoon"
+  | "dune"
+  | "piscine"
+  | "t-minus"
+  | "kairo";
 export type ResourceCraftable =
   | "alloy"
   | "beam"

@@ -216,16 +216,16 @@ export class TimeControlSettings extends SettingsSection {
       7: boolean;
       8: boolean;
       9: boolean;
-      $0?: boolean;
-      $1?: boolean;
-      $2?: boolean;
-      $3?: boolean;
-      $4?: boolean;
-      $5?: boolean;
-      $6?: boolean;
-      $7?: boolean;
-      $8?: boolean;
-      $9?: boolean;
+      $0?: JQuery<HTMLElement>;
+      $1?: JQuery<HTMLElement>;
+      $2?: JQuery<HTMLElement>;
+      $3?: JQuery<HTMLElement>;
+      $4?: JQuery<HTMLElement>;
+      $5?: JQuery<HTMLElement>;
+      $6?: JQuery<HTMLElement>;
+      $7?: JQuery<HTMLElement>;
+      $8?: JQuery<HTMLElement>;
+      $9?: JQuery<HTMLElement>;
     };
     reset: {
       enabled: boolean;
