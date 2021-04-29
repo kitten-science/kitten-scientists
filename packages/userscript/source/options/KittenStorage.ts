@@ -1,6 +1,6 @@
 import { Building, Jobs, Race, Resource, Season } from "../types";
 import { FilterItem } from "./FilterSettings";
-import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./Options";
+import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./OptionsLegacy";
 import { OptionsItem } from "./OptionsSettings";
 import { ReligionAdditionItem } from "./ReligionSettings";
 import { TimeControlItem } from "./TimeControlSettings";

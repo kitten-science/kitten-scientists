@@ -1,5 +1,5 @@
 import { UnicornItemVariant } from "../types";
-import { FaithItem, UnicornItem } from "./Options";
+import { FaithItem, UnicornItem } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
 export type ReligionAdditionItem =

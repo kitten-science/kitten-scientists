@@ -1,4 +1,4 @@
-import { BuildItem } from "./Options";
+import { BuildItem } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
 export type BonfireSettingsItem = {

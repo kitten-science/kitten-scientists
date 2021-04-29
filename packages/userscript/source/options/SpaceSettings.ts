@@ -1,4 +1,4 @@
-import { SpaceItem } from "./Options";
+import { SpaceItem } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
 export type SpaceSettingsItem = {

@@ -1,5 +1,5 @@
 import { Building, Jobs, Race, Resource, Season } from "../types";
-import { FaithItem, SpaceItem, TimeItem, UnicornItem } from "./Options";
+import { FaithItem, SpaceItem, TimeItem, UnicornItem } from "./OptionsLegacy";
 
 type SetMaxBuildingItem = `set-${Building}-max`;
 type SetMaxJobItem = `set-${Jobs}-max`;
