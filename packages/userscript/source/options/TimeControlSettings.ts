@@ -1,5 +1,5 @@
 import { Resource } from "../types";
-import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./Options";
+import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
 export type TimeControlItem = "accelerateTime" | "reset" | "timeSkip";

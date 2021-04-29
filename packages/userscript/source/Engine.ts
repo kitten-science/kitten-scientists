@@ -9,7 +9,7 @@ import {
   FaithItem,
   SpaceItem,
   UnicornFaithItemOptions,
-} from "./options/Options";
+} from "./options/OptionsLegacy";
 import { ReligionManager } from "./ReligionManager";
 import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
@@ -83,7 +83,7 @@ export class Engine {
     if (subOptions.enabled && subOptions.items.observe.enabled) {
       this.observeStars();
     }
-    if (this._host.options.auto.upgrade.enabled) {
+    if (this._host.options.auto.unlock.enabled) {
       this.upgrade();
     }
     if (subOptions.enabled && subOptions.items.festival.enabled) {
@@ -104,7 +104,7 @@ export class Engine {
     if (this._host.options.auto.trade.enabled) {
       this.trade();
     }
-    if (this._host.options.auto.faith.enabled) {
+    if (this._host.options.auto.religion.enabled) {
       this.worship();
     }
     if (this._host.options.auto.time.enabled) {

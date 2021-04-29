@@ -1,7 +1,7 @@
 import JQuery from "jquery";
 import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
-import { OptionsExt } from "./options/OptionsExt";
+import { Options } from "./options/Options";
 import { objectEntries } from "./tools/Entries";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
@@ -75,7 +75,7 @@ export class UserScript {
   private _language: SupportedLanguages;
 
   private readonly _i18nData: typeof i18nData;
-  options: OptionsExt = new OptionsExt();
+  options: Options = new Options();
 
   private _activitySummary: ActivitySummary = {};
   private _userInterface: UserInterface;
@@ -95,7 +95,7 @@ export class UserScript {
     this._i18nData = i18nData;
   }
 
-  injectOptions(options: OptionsExt): void {
+  injectOptions(options: Options): void {
     this.options = options;
     this._userInterface?.setState(this.options);
   }

@@ -1,4 +1,4 @@
-import { TimeItem } from "./Options";
+import { TimeItem } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
 export type TimeSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };

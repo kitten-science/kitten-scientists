@@ -1,4 +1,4 @@
-import { OptionsExt } from "../options/OptionsExt";
+import { Options } from "../options/Options";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
 import { CraftSettingsUi } from "./CraftSettingsUi";
@@ -130,7 +130,7 @@ export class UserInterface {
     messageBox.toggle();
   }
 
-  setState(state: OptionsExt): void {
+  setState(state: Options): void {
     this._engineUi.setState(state.auto.engine);
     this._bonfireUi.setState(state.auto.build);
     this._spaceUi.setState(state.auto.space);
