@@ -13,7 +13,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: TimeSettings = host.options.auto.time) {
     super(host);
@@ -91,7 +91,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this.getOption(
         "temporalBattery",
         this._options.items.temporalBattery,
@@ -151,7 +151,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       ),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     element.append(this._itemsButton);
     element.append(this._triggerButton);

@@ -13,7 +13,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: SpaceSettings = host.options.auto.space) {
     super(host);
@@ -91,7 +91,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this._getLimitedOption(
         "spaceElevator",
         this._options.items.spaceElevator,
@@ -224,7 +224,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     element.append(this._itemsButton);
     element.append(this._triggerButton);

@@ -14,7 +14,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, religionOptions: ReligionSettings = host.options.auto.religion) {
     super(host);
@@ -92,7 +92,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this.getOption(
         "unicornPasture",
         this._options.items.unicornPasture,
@@ -251,7 +251,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       ),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     const additionList = this.getAdditionOptions();
     const addition = $("<div/>", {

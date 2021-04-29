@@ -12,7 +12,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: FilterSettings = host.options.auto.filters) {
     super(host);
@@ -62,7 +62,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this.getOption(
         "buildFilter",
         this._options.items.buildFilter,
@@ -138,7 +138,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
       this.getOption("miscFilter", this._options.items.miscFilter, this._host.i18n("filter.misc")),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     element.append(this._itemsButton);
     element.append(list);

@@ -113,13 +113,16 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option.$subTrigger = triggerButton;
 
     triggerButton.on("click", () => {
-      const value = window.prompt(this._host.i18n("time.skip.trigger.set", []), option.subTrigger);
+      const value = window.prompt(
+        this._host.i18n("time.skip.trigger.set", []),
+        option.subTrigger.toFixed(2)
+      );
 
       if (value !== null) {
         option.subTrigger = parseFloat(value);
         //kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
         //this._host.saveToKittenStorage();
-        triggerButton[0].title = option.subTrigger;
+        triggerButton[0].title = option.subTrigger.toFixed(2);
       }
     });
 
@@ -140,14 +143,14 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     maximunButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
-        option.maximum
+        option.maximum.toFixed(0)
       );
 
       if (value !== null) {
         option.maximum = parseFloat(value);
         //kittenStorage.items[maximunButton.attr("id")] = option.maximum;
         //this._host.saveToKittenStorage();
-        maximunButton[0].title = option.maximum;
+        maximunButton[0].title = option.maximum.toFixed(0);
       }
     });
 
@@ -168,7 +171,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       css: { display: "none", paddingLeft: "20px" },
     });
 
-    for (const i in this._host.gamePage.calendar.cycles) {
+    for (let i = 0; i < this._host.gamePage.calendar.cycles.length; ++i) {
       cyclesList.append(this._getCycle(i, option));
     }
 
@@ -226,19 +229,425 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     // Bonfire reset options
     const resetBuildList = this.getOptionHead("reset-build");
-    for (const [item] of objectEntries(this._options.buildItems)) {
-      resetBuildList.append(
-        this._getResetOption(item, "build", this._options.buildItems[item], item)
-      );
-    }
+    resetBuildList.append(
+      this._getResetOption(
+        "hut",
+        "build",
+        this._options.buildItems.hut,
+        this._host.i18n("$buildings.hut.label")
+      ),
+      this._getResetOption(
+        "logHouse",
+        "build",
+        this._options.buildItems.logHouse,
+        this._host.i18n("$buildings.logHouse.label")
+      ),
+      this._getResetOption(
+        "mansion",
+        "build",
+        this._options.buildItems.mansion,
+        this._host.i18n("$buildings.mansion.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "workshop",
+        "build",
+        this._options.buildItems.workshop,
+        this._host.i18n("$buildings.workshop.label")
+      ),
+      this._getResetOption(
+        "factory",
+        "build",
+        this._options.buildItems.factory,
+        this._host.i18n("$buildings.factory.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "field",
+        "build",
+        this._options.buildItems.field,
+        this._host.i18n("$buildings.field.label")
+      ),
+      this._getResetOption(
+        "pasture",
+        "build",
+        this._options.buildItems.pasture,
+        this._host.i18n("$buildings.pasture.label")
+      ),
+      this._getResetOption(
+        "solarFarm",
+        "build",
+        this._options.buildItems.solarFarm,
+        this._host.i18n("$buildings.solarfarm.label")
+      ),
+      this._getResetOption(
+        "mine",
+        "build",
+        this._options.buildItems.mine,
+        this._host.i18n("$buildings.mine.label")
+      ),
+      this._getResetOption(
+        "lumberMill",
+        "build",
+        this._options.buildItems.lumberMill,
+        this._host.i18n("$buildings.lumberMill.label")
+      ),
+      this._getResetOption(
+        "aqueduct",
+        "build",
+        this._options.buildItems.aqueduct,
+        this._host.i18n("$buildings.aqueduct.label")
+      ),
+      this._getResetOption(
+        "hydroPlant",
+        "build",
+        this._options.buildItems.hydroPlant,
+        this._host.i18n("$buildings.hydroplant.label")
+      ),
+      this._getResetOption(
+        "oilWell",
+        "build",
+        this._options.buildItems.oilWell,
+        this._host.i18n("$buildings.oilWell.label")
+      ),
+      this._getResetOption(
+        "quarry",
+        "build",
+        this._options.buildItems.quarry,
+        this._host.i18n("$buildings.quarry.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "smelter",
+        "build",
+        this._options.buildItems.smelter,
+        this._host.i18n("$buildings.smelter.label")
+      ),
+      this._getResetOption(
+        "biolab",
+        "build",
+        this._options.buildItems.biolab,
+        this._host.i18n("$buildings.biolab.label")
+      ),
+      this._getResetOption(
+        "calciner",
+        "build",
+        this._options.buildItems.calciner,
+        this._host.i18n("$buildings.calciner.label")
+      ),
+      this._getResetOption(
+        "reactor",
+        "build",
+        this._options.buildItems.reactor,
+        this._host.i18n("$buildings.reactor.label")
+      ),
+      this._getResetOption(
+        "accelerator",
+        "build",
+        this._options.buildItems.accelerator,
+        this._host.i18n("$buildings.accelerator.label")
+      ),
+      this._getResetOption(
+        "steamworks",
+        "build",
+        this._options.buildItems.steamworks,
+        this._host.i18n("$buildings.steamworks.label")
+      ),
+      this._getResetOption(
+        "magneto",
+        "build",
+        this._options.buildItems.magneto,
+        this._host.i18n("$buildings.magneto.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "library",
+        "build",
+        this._options.buildItems.library,
+        this._host.i18n("$buildings.library.label")
+      ),
+      this._getResetOption(
+        "dataCenter",
+        "build",
+        this._options.buildItems.dataCenter,
+        this._host.i18n("$buildings.dataCenter.label")
+      ),
+      this._getResetOption(
+        "academy",
+        "build",
+        this._options.buildItems.academy,
+        this._host.i18n("$buildings.academy.label")
+      ),
+      this._getResetOption(
+        "observatory",
+        "build",
+        this._options.buildItems.observatory,
+        this._host.i18n("$buildings.observatory.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "amphitheatre",
+        "build",
+        this._options.buildItems.amphitheatre,
+        this._host.i18n("$buildings.amphitheatre.label")
+      ),
+      this._getResetOption(
+        "broadcastTower",
+        "build",
+        this._options.buildItems.broadcastTower,
+        this._host.i18n("$buildings.broadcasttower.label")
+      ),
+      this._getResetOption(
+        "tradepost",
+        "build",
+        this._options.buildItems.tradepost,
+        this._host.i18n("$buildings.tradepost.label")
+      ),
+      this._getResetOption(
+        "chapel",
+        "build",
+        this._options.buildItems.chapel,
+        this._host.i18n("$buildings.chapel.label")
+      ),
+      this._getResetOption(
+        "temple",
+        "build",
+        this._options.buildItems.temple,
+        this._host.i18n("$buildings.temple.label")
+      ),
+      this._getResetOption(
+        "mint",
+        "build",
+        this._options.buildItems.mint,
+        this._host.i18n("$buildings.mint.label")
+      ),
+      this._getResetOption(
+        "ziggurat",
+        "build",
+        this._options.buildItems.ziggurat,
+        this._host.i18n("$buildings.ziggurat.label")
+      ),
+      this._getResetOption(
+        "chronosphere",
+        "build",
+        this._options.buildItems.chronosphere,
+        this._host.i18n("$buildings.chronosphere.label")
+      ),
+      this._getResetOption(
+        "aiCore",
+        "build",
+        this._options.buildItems.aiCore,
+        this._host.i18n("$buildings.aicore.label")
+      ),
+      this._getResetOption(
+        "brewery",
+        "build",
+        this._options.buildItems.brewery,
+        this._host.i18n("$buildings.brewery.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "barn",
+        "build",
+        this._options.buildItems.barn,
+        this._host.i18n("$buildings.barn.label")
+      ),
+      this._getResetOption(
+        "harbor",
+        "build",
+        this._options.buildItems.harbor,
+        this._host.i18n("$buildings.harbor.label")
+      ),
+      this._getResetOption(
+        "warehouse",
+        "build",
+        this._options.buildItems.warehouse,
+        this._host.i18n("$buildings.warehouse.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "zebraOutpost",
+        "build",
+        this._options.buildItems.zebraOutpost,
+        this._host.i18n("$buildings.zebraOutpost.label")
+      ),
+      this._getResetOption(
+        "zebraWorkshop",
+        "build",
+        this._options.buildItems.zebraWorkshop,
+        this._host.i18n("$buildings.zebraWorkshop.label")
+      ),
+      this._getResetOption(
+        "zebraForge",
+        "build",
+        this._options.buildItems.zebraForge,
+        this._host.i18n("$buildings.zebraForge.label")
+      )
+    );
 
     // Space reset options
     const resetSpaceList = this.getOptionHead("reset-space");
-    for (const [item] of objectEntries(this._options.spaceItems)) {
-      resetSpaceList.append(
-        this._getResetOption(item, "space", this._options.spaceItems[item], item)
-      );
-    }
+    resetSpaceList.append(
+      this._getResetOption(
+        "spaceElevator",
+        "space",
+        this._options.spaceItems.spaceElevator,
+        this._host.i18n("$space.planet.cath.spaceElevator.label")
+      ),
+      this._getResetOption(
+        "sattelite",
+        "space",
+        this._options.spaceItems.sattelite,
+        this._host.i18n("$space.planet.cath.sattelite.label")
+      ),
+      this._getResetOption(
+        "spaceStation",
+        "space",
+        this._options.spaceItems.spaceStation,
+        this._host.i18n("$space.planet.cath.spaceStation.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "moonOutpost",
+        "space",
+        this._options.spaceItems.moonOutpost,
+        this._host.i18n("$space.planet.moon.moonOutpost.label")
+      ),
+      this._getResetOption(
+        "moonBase",
+        "space",
+        this._options.spaceItems.moonBase,
+        this._host.i18n("$space.planet.moon.moonBase.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "planetCracker",
+        "space",
+        this._options.spaceItems.planetCracker,
+        this._host.i18n("$space.planet.dune.planetCracker.label")
+      ),
+      this._getResetOption(
+        "hydrofracturer",
+        "space",
+        this._options.spaceItems.hydrofracturer,
+        this._host.i18n("$space.planet.dune.hydrofracturer.label")
+      ),
+      this._getResetOption(
+        "spiceRefinery",
+        "space",
+        this._options.spaceItems.spiceRefinery,
+        this._host.i18n("$space.planet.dune.spiceRefinery.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "researchVessel",
+        "space",
+        this._options.spaceItems.researchVessel,
+        this._host.i18n("$space.planet.piscine.researchVessel.label")
+      ),
+      this._getResetOption(
+        "orbitalArray",
+        "space",
+        this._options.spaceItems.orbitalArray,
+        this._host.i18n("$space.planet.piscine.orbitalArray.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "sunlifter",
+        "space",
+        this._options.spaceItems.sunlifter,
+        this._host.i18n("$space.planet.helios.sunlifter.label")
+      ),
+      this._getResetOption(
+        "containmentChamber",
+        "space",
+        this._options.spaceItems.containmentChamber,
+        this._host.i18n("$space.planet.helios.containmentChamber.label")
+      ),
+      this._getResetOption(
+        "heatsink",
+        "space",
+        this._options.spaceItems.heatsink,
+        this._host.i18n("$space.planet.helios.heatsink.label")
+      ),
+      this._getResetOption(
+        "sunforge",
+        "space",
+        this._options.spaceItems.sunforge,
+        this._host.i18n("$space.planet.helios.sunforge.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "cryostation",
+        "space",
+        this._options.spaceItems.cryostation,
+        this._host.i18n("$space.planet.terminus.cryostation.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "spaceBeacon",
+        "space",
+        this._options.spaceItems.spaceBeacon,
+        this._host.i18n("$space.planet.kairo.spaceBeacon.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "terraformingStation",
+        "space",
+        this._options.spaceItems.terraformingStation,
+        this._host.i18n("$space.planet.yarn.terraformingStation.label")
+      ),
+      this._getResetOption(
+        "hydroponics",
+        "space",
+        this._options.spaceItems.hydroponics,
+        this._host.i18n("$space.planet.yarn.hydroponics.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "hrHarvester",
+        "space",
+        this._options.spaceItems.hrHarvester,
+        this._host.i18n("$space.planet.umbra.hrHarvester.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "entangler",
+        "space",
+        this._options.spaceItems.entangler,
+        this._host.i18n("$space.planet.charon.entangler.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "tectonic",
+        "space",
+        this._options.spaceItems.tectonic,
+        this._host.i18n("$space.planet.centaurusSystem.tectonic.label")
+      ),
+      this._getResetOption(
+        "moltenCore",
+        "space",
+        this._options.spaceItems.moltenCore,
+        this._host.i18n("$space.planet.centaurusSystem.moltenCore.label")
+      )
+    );
 
     // Resources list
     const resetResourcesList = this._getResourceOptions(true);
@@ -249,17 +658,266 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     // Religion reset options.
     const resetReligionList = this.getOptionHead("reset-religion");
-    for (const [item] of objectEntries(this._options.religionItems)) {
-      resetReligionList.append(
-        this._getResetOption(item, "faith", this._options.religionItems[item], item)
-      );
-    }
+    resetReligionList.append(
+      this._getResetOption(
+        "unicornPasture",
+        "faith",
+        this._options.religionItems.unicornPasture,
+        this._host.i18n("$buildings.unicornPasture.label")
+      ),
+      this._getResetOption(
+        "unicornTomb",
+        "faith",
+        this._options.religionItems.unicornTomb,
+        this._host.i18n("$religion.zu.unicornTomb.label")
+      ),
+      this._getResetOption(
+        "ivoryTower",
+        "faith",
+        this._options.religionItems.ivoryTower,
+        this._host.i18n("$religion.zu.ivoryTower.label")
+      ),
+      this._getResetOption(
+        "ivoryCitadel",
+        "faith",
+        this._options.religionItems.ivoryCitadel,
+        this._host.i18n("$religion.zu.ivoryCitadel.label")
+      ),
+      this._getResetOption(
+        "skyPalace",
+        "faith",
+        this._options.religionItems.skyPalace,
+        this._host.i18n("$religion.zu.skyPalace.label")
+      ),
+      this._getResetOption(
+        "unicornUtopia",
+        "faith",
+        this._options.religionItems.unicornUtopia,
+        this._host.i18n("$religion.zu.unicornUtopia.label")
+      ),
+      this._getResetOption(
+        "sunspire",
+        "faith",
+        this._options.religionItems.sunspire,
+        this._host.i18n("$religion.zu.sunspire.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "marker",
+        "faith",
+        this._options.religionItems.marker,
+        this._host.i18n("$religion.zu.marker.label")
+      ),
+      this._getResetOption(
+        "unicornGraveyard",
+        "faith",
+        this._options.religionItems.unicornGraveyard,
+        this._host.i18n("$religion.zu.unicornGraveyard.label")
+      ),
+      this._getResetOption(
+        "unicornNecropolis",
+        "faith",
+        this._options.religionItems.unicornNecropolis,
+        this._host.i18n("$religion.zu.unicornNecropolis.label")
+      ),
+      this._getResetOption(
+        "blackPyramid",
+        "faith",
+        this._options.religionItems.blackPyramid,
+        this._host.i18n("$religion.zu.blackPyramid.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "solarchant",
+        "faith",
+        this._options.religionItems.solarchant,
+        this._host.i18n("$religion.ru.solarchant.label")
+      ),
+      this._getResetOption(
+        "scholasticism",
+        "faith",
+        this._options.religionItems.scholasticism,
+        this._host.i18n("$religion.ru.scholasticism.label")
+      ),
+      this._getResetOption(
+        "goldenSpire",
+        "faith",
+        this._options.religionItems.goldenSpire,
+        this._host.i18n("$religion.ru.goldenSpire.label")
+      ),
+      this._getResetOption(
+        "sunAltar",
+        "faith",
+        this._options.religionItems.sunAltar,
+        this._host.i18n("$religion.ru.sunAltar.label")
+      ),
+      this._getResetOption(
+        "stainedGlass",
+        "faith",
+        this._options.religionItems.stainedGlass,
+        this._host.i18n("$religion.ru.stainedGlass.label")
+      ),
+      this._getResetOption(
+        "solarRevolution",
+        "faith",
+        this._options.religionItems.solarRevolution,
+        this._host.i18n("$religion.ru.solarRevolution.label")
+      ),
+      this._getResetOption(
+        "basilica",
+        "faith",
+        this._options.religionItems.basilica,
+        this._host.i18n("$religion.ru.basilica.label")
+      ),
+      this._getResetOption(
+        "templars",
+        "faith",
+        this._options.religionItems.templars,
+        this._host.i18n("$religion.ru.templars.label")
+      ),
+      this._getResetOption(
+        "apocripha",
+        "faith",
+        this._options.religionItems.apocripha,
+        this._host.i18n("$religion.ru.apocripha.label")
+      ),
+      this._getResetOption(
+        "transcendence",
+        "faith",
+        this._options.religionItems.transcendence,
+        this._host.i18n("$religion.ru.transcendence.label"),
+        true
+      ),
+
+      this._getResetOption(
+        "blackObelisk",
+        "faith",
+        this._options.religionItems.blackObelisk,
+        this._host.i18n("$religion.tu.blackObelisk.label")
+      ),
+      this._getResetOption(
+        "blackNexus",
+        "faith",
+        this._options.religionItems.blackNexus,
+        this._host.i18n("$religion.tu.blackNexus.label")
+      ),
+      this._getResetOption(
+        "blackCore",
+        "faith",
+        this._options.religionItems.blackCore,
+        this._host.i18n("$religion.tu.blackCore.label")
+      ),
+      this._getResetOption(
+        "singularity",
+        "faith",
+        this._options.religionItems.singularity,
+        this._host.i18n("$religion.tu.singularity.label")
+      ),
+      this._getResetOption(
+        "blackLibrary",
+        "faith",
+        this._options.religionItems.blackLibrary,
+        this._host.i18n("$religion.tu.blackLibrary.label")
+      ),
+      this._getResetOption(
+        "blackRadiance",
+        "faith",
+        this._options.religionItems.blackRadiance,
+        this._host.i18n("$religion.tu.blackRadiance.label")
+      ),
+      this._getResetOption(
+        "blazar",
+        "faith",
+        this._options.religionItems.blazar,
+        this._host.i18n("$religion.tu.blazar.label")
+      ),
+      this._getResetOption(
+        "darkNova",
+        "faith",
+        this._options.religionItems.darkNova,
+        this._host.i18n("$religion.tu.darkNova.label")
+      ),
+      this._getResetOption(
+        "holyGenocide",
+        "faith",
+        this._options.religionItems.holyGenocide,
+        this._host.i18n("$religion.tu.holyGenocide.label")
+      )
+    );
 
     const resetTimeList = this.getOptionHead("reset-time");
+    resetTimeList.append(
+      this._getResetOption(
+        "temporalBattery",
+        "time",
+        this._options.timeItems.temporalBattery,
+        this._host.i18n("$time.cfu.temporalBattery.label")
+      ),
+      this._getResetOption(
+        "blastFurnace",
+        "time",
+        this._options.timeItems.blastFurnace,
+        this._host.i18n("$time.cfu.blastFurnace.label")
+      ),
+      this._getResetOption(
+        "timeBoiler",
+        "time",
+        this._options.timeItems.timeBoiler,
+        this._host.i18n("$time.cfu.timeBoiler.label")
+      ),
+      this._getResetOption(
+        "temporalAccelerator",
+        "time",
+        this._options.timeItems.temporalAccelerator,
+        this._host.i18n("$time.cfu.temporalAccelerator.label")
+      ),
+      this._getResetOption(
+        "temporalImpedance",
+        "time",
+        this._options.timeItems.temporalImpedance,
+        this._host.i18n("$time.cfu.temporalImpedance.label")
+      ),
+      this._getResetOption(
+        "ressourceRetrieval",
+        "time",
+        this._options.timeItems.ressourceRetrieval,
+        this._host.i18n("$time.cfu.ressourceRetrieval.label"),
+        true
+      ),
 
-    for (const [item] of objectEntries(this._options.timeItems)) {
-      resetTimeList.append(this._getResetOption(item, "time", this._options.timeItems[item], item));
-    }
+      this._getResetOption(
+        "cryochambers",
+        "time",
+        this._options.timeItems.cryochambers,
+        this._host.i18n("$time.vsu.cryochambers.label")
+      ),
+      this._getResetOption(
+        "voidHoover",
+        "time",
+        this._options.timeItems.voidHoover,
+        this._host.i18n("$time.vsu.voidHoover.label")
+      ),
+      this._getResetOption(
+        "voidRift",
+        "time",
+        this._options.timeItems.voidRift,
+        this._host.i18n("$time.vsu.voidRift.label")
+      ),
+      this._getResetOption(
+        "chronocontrol",
+        "time",
+        this._options.timeItems.chronocontrol,
+        this._host.i18n("$time.vsu.chronocontrol.label")
+      ),
+      this._getResetOption(
+        "voidResonator",
+        "time",
+        this._options.timeItems.voidResonator,
+        this._host.i18n("$time.vsu.voidResonator.label")
+      )
+    );
 
     const buildButton = $("<div/>", {
       id: "toggle-reset-build",
@@ -400,7 +1058,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         option.subTrigger = parseFloat(value);
         //kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
         //this._host.saveToKittenStorage();
-        triggerButton[0].title = option.subTrigger;
+        triggerButton[0].title = option.subTrigger.toFixed(2);
       }
     });
     element.append(triggerButton);
@@ -409,7 +1067,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   }
 
   private _getCycle(
-    index: number,
+    index: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9,
     option: TimeControlSettings["items"]["timeSkip"]
   ): JQuery<HTMLElement> {
     const cycle = this._host.gamePage.calendar.cycles[index];
@@ -425,7 +1083,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       id: "toggle-timeSkip-" + index,
       type: "checkbox",
     }).data("option", option);
-    option[`$${index}`] = input;
+    option[`$${index}` as const] = input;
 
     /*
     if (option[index]) {
@@ -449,11 +1107,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     return element;
   }
 
+  // Ideally, this was replaced by using `getOption()`.
   private _getResetOption(
     name: string,
     type: "build" | "faith" | "space" | "time",
     option: TimeControlBuildSettingsItem,
-    i18nName: string
+    i18nName: string,
+    delimiter = false
   ): JQuery<HTMLElement> {
     const element = $("<li/>");
     const elementLabel = i18nName;
@@ -461,7 +1121,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const label = $("<label/>", {
       for: "toggle-reset-" + type + "-" + name,
       text: elementLabel,
-      css: { display: "inline-block", minWidth: "80px" },
+      css: {
+        display: "inline-block",
+        marginBottom: delimiter ? "10px" : undefined,
+        minWidth: "80px",
+      },
     });
 
     const input = $("<input/>", {
@@ -504,16 +1168,16 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     minButton.on("click", () => {
       const value = window.prompt(
-        this._host.i18n("reset.check.trigger.set", [option.label]),
-        option.triggerForReset
+        this._host.i18n("reset.check.trigger.set", [i18nName]),
+        option.triggerForReset.toFixed(2)
       );
 
       if (value !== null) {
         option.triggerForReset = parseInt(value);
         //kittenStorage.items[minButton.attr("id")] = option.triggerForReset;
         //this._host.saveToKittenStorage();
-        minButton[0].title = option.triggerForReset;
-        minButton[0].innerText = this._host.i18n("ui.min", [option.triggerForReset]);
+        //minButton[0].title = option.triggerForReset;
+        minButton.text(this._host.i18n("ui.min", [option.triggerForReset]));
       }
     });
 
@@ -526,7 +1190,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     season: Season,
     option: TimeControlSettings["items"]["timeSkip"]
   ): JQuery<HTMLElement> {
-    const iseason = ucfirst(this._host.i18n("$calendar.season." + season));
+    const iseason = ucfirst(this._host.i18n(`$calendar.season.${season}` as const));
 
     const element = $("<li/>");
 
@@ -539,7 +1203,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       id: "toggle-timeSkip-" + season,
       type: "checkbox",
     }).data("option", option);
-    option[`$${season}`] = input;
+    option[`$${season}` as const] = input;
 
     /*
     if (option[season]) {
@@ -564,9 +1228,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     return element;
   }
 
-  private _getResourceOptions(forReset = false): JQuery<HTMLElement> {
+  private _getResourceOptions(): JQuery<HTMLElement> {
     const list = $("<ul/>", {
-      id: forReset ? "toggle-reset-list-resources" : "toggle-list-resources",
+      id: "toggle-reset-list-resources",
       css: { display: "none", paddingLeft: "20px" },
     });
 
@@ -616,17 +1280,17 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     add.on("click", () => {
       allresources.toggle();
       allresources.empty();
-      allresources.append(this.getAvailableResourceOptions(forReset));
+      allresources.append(this.getAvailableResourceOptions(true));
     });
 
-    if (forReset) list.append(add, allresources);
-    else list.append(add, clearunused, allresources);
+    list.append(add, allresources);
 
     // Add all the current resources
-    for (const [name] of objectEntries(this._host.options.auto.resources)) {
-      const res = mustExist(this._host.options.auto.resources[name]);
-      if ((forReset && res.checkForReset) || (!forReset && res.enabled))
-        list.append(this.addNewResourceOption(name, undefined, forReset));
+    for (const [name, res] of objectEntries(this._host.options.auto.timeCtrl.resources)) {
+      //const res = mustExist(this._host.options.auto.resources[name]);
+      if (res.checkForReset) {
+        list.append(this.addNewResourceOption(name, undefined, true));
+      }
     }
 
     return list;

@@ -12,7 +12,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: OptionsSettings = host.options.auto.options) {
     super(host);
@@ -62,7 +62,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this._getOptionsOption(
         "observe",
         this._options.items.observe,
@@ -117,7 +117,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       ),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     element.append(this._itemsButton);
     element.append(list);

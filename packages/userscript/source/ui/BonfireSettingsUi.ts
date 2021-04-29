@@ -13,7 +13,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: BonfireSettings = host.options.auto.build) {
     super(host);
@@ -91,7 +91,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this._getLimitedOption(
         "hut",
         this._options.items.hut,
@@ -312,7 +312,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         this._host.i18n("$buildings.zebraForge.label")
       ),
     ];
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     element.append(this._itemsButton);
     element.append(this._triggerButton);
