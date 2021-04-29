@@ -12,7 +12,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: UnlockingSettings = host.options.auto.unlock) {
     super(host);
@@ -62,7 +62,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this.getOption(
         "upgrades",
         this._options.items.upgrades,
@@ -82,7 +82,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
       ),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     element.append(this._itemsButton);
     element.append(list);

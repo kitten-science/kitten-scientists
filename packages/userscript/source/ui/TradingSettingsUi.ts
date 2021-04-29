@@ -14,7 +14,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, upgradeOptions: TradingSettings = host.options.auto.trade) {
     super(host);
@@ -92,7 +92,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this._getTradeOption(
         "dragons",
         this._options.items.dragons,
@@ -135,7 +135,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       ),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     element.append(this._itemsButton);
     element.append(this._triggerButton);

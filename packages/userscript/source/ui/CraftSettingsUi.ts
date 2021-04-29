@@ -15,7 +15,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
   private readonly _resourcesButton: JQuery<HTMLElement>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: CraftSettings = host.options.auto.craft) {
     super(host);
@@ -93,7 +93,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this._getCraftOption(
         "wood",
         this._options.items.wood,
@@ -195,7 +195,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       ),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     this._resourcesButton = $("<div/>", {
       id: "toggle-resource-controls",
@@ -272,9 +272,9 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     return element;
   }
 
-  private _getResourceOptions(forReset = false): JQuery<HTMLElement> {
+  private _getResourceOptions(): JQuery<HTMLElement> {
     const list = $("<ul/>", {
-      id: forReset ? "toggle-reset-list-resources" : "toggle-list-resources",
+      id: "toggle-list-resources",
       css: { display: "none", paddingLeft: "20px" },
     });
 
@@ -324,14 +324,10 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     add.on("click", () => {
       allresources.toggle();
       allresources.empty();
-      allresources.append(this.getAvailableResourceOptions(forReset));
+      allresources.append(this.getAvailableResourceOptions(false));
     });
 
-    if (forReset) {
-      list.append(add, allresources);
-    } else {
-      list.append(add, clearunused, allresources);
-    }
+    list.append(add, clearunused, allresources);
 
     // Add all the current resources
     for (const [name, item] of objectEntries(this._host.options.auto.resources)) {

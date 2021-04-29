@@ -12,7 +12,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: DistributeSettings = host.options.auto.distribute) {
     super(host);
@@ -62,7 +62,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
       list.toggle();
     });
 
-    this._buildingButtons = [
+    this._optionButtons = [
       this._getDistributeOption(
         "woodcutter",
         this._options.items.woodcutter,
@@ -105,7 +105,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
       ),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     element.append(this._itemsButton);
     element.append(list);

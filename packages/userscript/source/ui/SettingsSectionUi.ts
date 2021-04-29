@@ -11,7 +11,9 @@ export abstract class SettingsSectionUi<TState> {
     this._host = host;
   }
 
-  setState(state: TState): void;
+  setState(state: TState): void {
+    throw new Error("not implemented");
+  }
 
   protected getOptionHead(toggleName: string): JQuery<HTMLElement> {
     const containerList = $("<ul/>", {
@@ -72,8 +74,8 @@ export abstract class SettingsSectionUi<TState> {
       text: elementLabel,
       css: {
         display: "inline-block",
-        minWidth: "80px",
         marginBottom: delimiter ? "10px" : undefined,
+        minWidth: "80px",
       },
     });
 
