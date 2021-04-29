@@ -13,7 +13,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private readonly _itemsButton: JQuery<HTMLElement>;
 
-  private readonly _buildingButtons = new Array<JQuery<HTMLElement>>();
+  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, religionOptions: TimeControlSettings = host.options.auto.timeCtrl) {
     super(host);
@@ -63,48 +63,32 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       list.toggle();
     });
 
-    this._buildingButtons = [
-      this._getTimeCtrlOption(
+    this._optionButtons = [
+      this._getOptionAccelerateTime(
         "accelerateTime",
         this._options.items.accelerateTime,
         this._host.i18n("option.accelerate")
       ),
-      this._getTimeCtrlOption(
+
+      this._getOptionTimeSkip(
         "timeSkip",
         this._options.items.timeSkip,
         this._host.i18n("option.time.skip")
       ),
-      this._getTimeCtrlOption(
+
+      this._getOptionReset(
         "reset",
         this._options.items.reset,
         this._host.i18n("option.time.reset")
       ),
     ];
 
-    list.append(...this._buildingButtons);
+    list.append(...this._optionButtons);
 
     element.append(this._itemsButton);
     element.append(list);
 
     this.element = element;
-  }
-
-  private _getTimeCtrlOption(
-    name: "accelerateTime" | "reset" | "timeSkip",
-    option: TimeControlSettings["items"]["accelerateTime" | "reset" | "timeSkip"],
-    label: string
-  ): JQuery<HTMLElement> {
-    let element;
-
-    if (name == "timeSkip") {
-      element = this._getOptionTimeSkip(name, option, label);
-    } else if (name == "reset") {
-      element = this._getOptionReset(name, option, label);
-    } else {
-      element = this._getOptionAccelerateTime(name, option, label);
-    }
-
-    return element;
   }
 
   private _getOptionTimeSkip(
