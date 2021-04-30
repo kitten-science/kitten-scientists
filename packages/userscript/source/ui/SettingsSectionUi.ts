@@ -107,7 +107,18 @@ export abstract class SettingsSectionUi<TState> {
     return element;
   }
 
-  protected getAvailableResourceOptions(forReset: boolean): Array<JQuery<HTMLElement>> {
+  protected getAllAvailableResourceOptions(
+    forReset: boolean,
+    onAddHandler: (res: {
+      craftable: boolean;
+      maxValue: number;
+      name: Resource;
+      title: string;
+      type: "common" | "uncommon";
+      value: number;
+      visible: boolean;
+    }) => void
+  ): Array<JQuery<HTMLElement>> {
     const items = [];
     const idPrefix = forReset ? "#resource-reset-" : "#resource-";
 
@@ -125,23 +136,7 @@ export abstract class SettingsSectionUi<TState> {
 
         item.on("click", () => {
           item.remove();
-          if (!this._host.options.auto.resources[res.name]) {
-            this._host.options.auto.resources[res.name] = {};
-          }
-          if (forReset) {
-            this._host.options.auto.resources[res.name]!.checkForReset = true;
-            this._host.options.auto.resources[res.name]!.stockForReset = Infinity;
-            $("#toggle-reset-list-resources").append(
-              this.addNewResourceOption(res.name, res.title, forReset)
-            );
-          } else {
-            this._host.options.auto.resources[res.name]!.enabled = true;
-            this._host.options.auto.resources[res.name]!.stock = 0;
-            this._host.options.auto.resources[res.name]!.consume = this._host.options.consume;
-            $("#toggle-list-resources").append(
-              this.addNewResourceOption(res.name, res.title, forReset)
-            );
-          }
+          onAddHandler(res);
           //this._host.saveToKittenStorage();
         });
 
@@ -155,25 +150,17 @@ export abstract class SettingsSectionUi<TState> {
   protected addNewResourceOption(
     name: Resource,
     title: string,
-    option: ResourcesSettingsItem | TimeControlResourcesSettingsItem,
-    forReset = false
+    option: ResourcesSettingsItem,
+    onDelHandler: (name: Resource, option: ResourcesSettingsItem) => void
   ): JQuery<HTMLElement> {
     //title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
 
-    let stock;
-    if (forReset && option && option.stockForReset) {
-      stock = option.stockForReset;
-    } else if (!forReset && option && option.stock) {
-      stock = option.stock;
-    } else {
-      stock = 0;
-    }
-    const consume =
-      option && option.consume != undefined ? option.consume : this._host.options.consume;
+    const stock = option.stock;
+    const consume = option.consume ?? this._host.options.consume;
 
     // The overall container for this resource item.
     const container = $("<div/>", {
-      id: (forReset ? "resource-reset-" : "resource-") + name,
+      id: `resource-${name}`,
       css: { display: "inline-block", width: "100%" },
     });
 
@@ -213,11 +200,7 @@ export abstract class SettingsSectionUi<TState> {
       },
     });
 
-    if (forReset) {
-      container.append(label, stockElement, del);
-    } else {
-      container.append(label, stockElement, consumeElement, del);
-    }
+    container.append(label, stockElement, consumeElement, del);
 
     // once created, set color if relevant
     if (option != undefined && option.stock != undefined) {
@@ -227,7 +210,7 @@ export abstract class SettingsSectionUi<TState> {
     stockElement.on("click", () => {
       const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
       if (value !== null) {
-        this.setStockValue(name, value, forReset);
+        this.setStockValue(name, value, false);
         //this._host.saveToKittenStorage();
       }
     });
@@ -244,21 +227,87 @@ export abstract class SettingsSectionUi<TState> {
     del.on("click", () => {
       if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
         container.remove();
-        this._removeResourceControl(name, forReset);
+        onDelHandler(name,option);
+        //this._removeResourceControl(name, false);
         //this._host.saveToKittenStorage();
       }
     });
 
-    if (forReset) {
-      (option as TimeControlResourcesSettingsItem).$stockForReset = stockElement;
-    } else {
-      (option as ResourcesSettingsItem).$consume = consumeElement;
-      (option as ResourcesSettingsItem).$stock = stockElement;
-    }
+    option.$consume = consumeElement;
+    option.$stock = stockElement;
 
     return container;
   }
 
+  protected addNewResourceOptionForReset(
+    name: Resource,
+    title: string,
+    option: TimeControlResourcesSettingsItem,
+    onDelHandler: (name: Resource, option: TimeControlResourcesSettingsItem) => void
+  ): JQuery<HTMLElement> {
+    //title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
+
+    const stock = option.stockForReset;
+
+    // The overall container for this resource item.
+    const container = $("<div/>", {
+      id: `resource-reset-${name}`,
+      css: { display: "inline-block", width: "100%" },
+    });
+
+    // The label with the name of the resource.
+    const label = $("<div/>", {
+      id: "resource-label-" + name,
+      text: title,
+      css: { display: "inline-block", width: "95px" },
+    });
+
+    // How many items to stock.
+    const stockElement = $("<div/>", {
+      id: "stock-value-" + name,
+      text: this._host.i18n("resources.stock", [
+        stock === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(stock),
+      ]),
+      css: { cursor: "pointer", display: "inline-block", width: "80px" },
+    });
+
+    // Delete the resource from the list.
+    const del = $("<div/>", {
+      id: "resource-delete-" + name,
+      text: this._host.i18n("resources.del"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+        textShadow: "3px 3px 4px gray",
+      },
+    });
+
+    container.append(label, stockElement, del);
+
+    stockElement.on("click", () => {
+      const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
+      if (value !== null) {
+        this.setStockValue(name, value, true);
+        //this._host.saveToKittenStorage();
+      }
+    });
+
+    del.on("click", () => {
+      if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
+        container.remove();
+        onDelHandler(name, option);
+        //this._removeResourceControl(name, true);
+        //this._host.saveToKittenStorage();
+      }
+    });
+
+    option.$stockForReset = stockElement;
+
+    return container;
+  }
+/*
   private _removeResourceControl(name: Resource, forReset = false): void {
     const opt = mustExist(this._host.options.auto.resources[name]);
     if (forReset) {
@@ -269,7 +318,7 @@ export abstract class SettingsSectionUi<TState> {
 
     if (!opt.enabled && !opt.checkForReset) delete this._host.options.auto.resources[name];
   }
-
+*/
   private _setStockWarning(name: Resource, value: number, forReset = false): void {
     // simplest way to ensure it doesn't stick around too often; always do
     // a remove first then re-add only if needed

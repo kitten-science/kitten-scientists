@@ -664,9 +664,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     );
 
     // Resources list
-    const resetResourcesList = this._getResourceOptions(true);
+    const resetResourcesList = this._getResourceOptions();
     for (const [item, resource] of objectEntries(this._options.resources)) {
-      resetResourcesList.append(this.addNewResourceOption(item, item, resource, true));
+      resetResourcesList.append(
+        this.addNewResourceOptionForReset(item, item, resource, (_name, _resource) => {
+          delete this._options.resources[_name];
+        })
+      );
       this.setStockValue(item, resource.stockForReset, true);
     }
 
@@ -1294,7 +1298,22 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     add.on("click", () => {
       allresources.toggle();
       allresources.empty();
-      allresources.append(this.getAvailableResourceOptions(true));
+      allresources.append(
+        this.getAllAvailableResourceOptions(true, res => {
+          if (!this._options.resources[res.name]) {
+            const option = {
+              checkForReset: true,
+              stockForReset: Infinity,
+            };
+            this._options.resources[res.name] = option;
+            $("#toggle-reset-list-resources").append(
+              this.addNewResourceOptionForReset(res.name, res.title, option, (_name, _resource) => {
+                delete this._options.resources[_name];
+              })
+            );
+          }
+        })
+      );
     });
 
     this._resourcesList.append(add, allresources);
@@ -1371,7 +1390,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
       // Add all the current resources
       for (const [name, res] of objectEntries(this._options.resources)) {
-        mustExist(this._resourcesList).append(this.addNewResourceOption(name, name, true));
+        mustExist(this._resourcesList).append(
+          this.addNewResourceOptionForReset(name, name, res, (_name, _resource) => {
+            delete this._options.resources[_name];
+          })
+        );
       }
     } else {
       // If both lists are the same, just copy the state.

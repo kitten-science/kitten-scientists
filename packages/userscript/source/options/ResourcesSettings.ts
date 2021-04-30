@@ -1,4 +1,4 @@
-import { ResourceCraftable } from "../types";
+import { Resource, ResourceCraftable } from "../types";
 
 export type ResourcesSettingsItem = {
   consume?: number;
@@ -11,5 +11,5 @@ export type ResourcesSettingsItem = {
   $stock?: JQuery<HTMLElement>;
 };
 export type ResourceSettings = {
-  [item in ResourceCraftable]?: ResourcesSettingsItem;
+  [item in Resource]?: ResourcesSettingsItem;
 };

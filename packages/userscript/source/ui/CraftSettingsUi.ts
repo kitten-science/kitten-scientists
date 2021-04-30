@@ -2,7 +2,7 @@ import { CraftSettings, CraftSettingsItem } from "../options/CraftSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { cwarn } from "../tools/Log";
-import { isNil, mustExist } from "../tools/Maybe";
+import { isNil, Maybe, mustExist } from "../tools/Maybe";
 import { ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -14,6 +14,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
   private readonly _itemsButton: JQuery<HTMLElement>;
   private readonly _resourcesButton: JQuery<HTMLElement>;
+  private _resourcesList: Maybe<JQuery<HTMLElement>>;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
@@ -287,7 +288,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
   }
 
   private _getResourceOptions(): JQuery<HTMLElement> {
-    const list = $("<ul/>", {
+    this._resourcesList = $("<ul/>", {
       id: "toggle-list-resources",
       css: { display: "none", paddingLeft: "20px" },
     });
@@ -338,19 +339,39 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     add.on("click", () => {
       allresources.toggle();
       allresources.empty();
-      allresources.append(this.getAvailableResourceOptions(false));
+      allresources.append(
+        this.getAllAvailableResourceOptions(false, res => {
+          if (!this._options.resources[res.name]) {
+            const option = {
+              consume: this._host.options.consume,
+              enabled: true,
+              stock: 0,
+            };
+            this._options.resources[res.name] = option;
+            mustExist(this._resourcesList).append(
+              this.addNewResourceOption(res.name, res.title, option, (_name, _resource) => {
+                delete this._options.resources[_name];
+              })
+            );
+          }
+        })
+      );
     });
 
-    list.append(add, clearunused, allresources);
+    this._resourcesList.append(add, clearunused, allresources);
 
     // Add all the current resources
     for (const [name, item] of objectEntries(this._host.options.auto.resources)) {
-      list.append(this.addNewResourceOption(name, name, item, false));
+      this._resourcesList.append(
+        this.addNewResourceOption(name, name, item, (_name, _resource) => {
+          delete this._options.resources[_name];
+        })
+      );
       //this.setStockValue(name, item.stock);
       //this.setConsumeRate(name, item.consume);
     }
 
-    return list;
+    return this._resourcesList;
   }
 
   setState(state: CraftSettings): void {
