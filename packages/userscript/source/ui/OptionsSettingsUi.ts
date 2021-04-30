@@ -206,13 +206,25 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
   }
 
   setState(state: OptionsSettings): void {
-    mustExist(this._options.$enabled).prop("checked", state.enabled);
+    this._options.enabled = state.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+      option.enabled = state.items[name].enabled;
 
       if (!isNil(option.$subTrigger)) {
-        option.$subTrigger[0].title = mustExist(state.items[name].subTrigger).toFixed(2);
+        option.subTrigger = state.items[name].subTrigger;
+      }
+    }
+  }
+
+  refreshUi(): void {
+    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+
+      if (!isNil(option.$subTrigger)) {
+        option.$subTrigger[0].title = mustExist(this._options.items[name].subTrigger).toFixed(2);
       }
     }
   }

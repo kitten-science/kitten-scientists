@@ -11,9 +11,8 @@ export abstract class SettingsSectionUi<TState> {
     this._host = host;
   }
 
-  setState(state: TState): void {
-    throw new Error("not implemented");
-  }
+  abstract setState(state: TState): void;
+  abstract refreshUi(): void;
 
   protected getOptionHead(toggleName: string): JQuery<HTMLElement> {
     const containerList = $("<ul/>", {

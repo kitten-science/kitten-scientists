@@ -50,6 +50,10 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
   }
 
   setState(state: EngineSettings): void {
-    mustExist(this._options.$enabled).prop("checked", state.enabled);
+    this._options.enabled = state.enabled;
+  }
+
+  refreshUi(): void {
+    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
   }
 }

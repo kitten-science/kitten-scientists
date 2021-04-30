@@ -145,6 +145,21 @@ export class UserInterface {
     this._filterUi.setState(state.auto.filters);
   }
 
+  refreshUi():void {
+    this._engineUi.refreshUi();
+    this._bonfireUi.refreshUi();
+    this._spaceUi.refreshUi();
+    this._craftUi.refreshUi();
+    this._unlockUi.refreshUi();
+    this._tradingUi.refreshUi();
+    this._religionUi.refreshUi();
+    this._timeUi.refreshUi();
+    this._timeCtrlUi.refreshUi();
+    this._distributeUi.refreshUi();
+    this._optionsUi.refreshUi();
+    this._filterUi.refreshUi();
+  }
+
   private _installCss(): void {
     const defaultSelector = "body[data-ks-style]:not(.scheme_sleek)";
 

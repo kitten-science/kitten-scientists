@@ -199,11 +199,22 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
 
   setState(state: DistributeSettings): void {
     mustExist(this._options.$enabled).prop("checked", state.enabled);
+    this._options.enabled = state.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
-      mustExist(option.$limited).prop("checked", state.items[name].limited);
-      mustExist(option.$max).text(this._host.i18n("ui.max", [state.items[name].max]));
+      option.enabled = state.items[name].enabled;
+      option.limited = state.items[name].limited;
+      option.max = state.items[name].max;
+    }
+  }
+
+  refreshUi(): void {
+    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+      mustExist(option.$limited).prop("checked", this._options.items[name].limited);
+      mustExist(option.$max).text(this._host.i18n("ui.max", [this._options.items[name].max]));
     }
   }
 }

@@ -7,7 +7,6 @@ import { Options } from "./options/Options";
   const userScript = await UserScript.getDefaultInstance();
 
   const options = Options.parseLegacyOptions(testConfig);
-  userScript.run();
-
   userScript.injectOptions(options);
+  userScript.run();
 })();

@@ -116,6 +116,8 @@ export class UserScript {
     this.engine = new Engine(this);
     this._userInterface.construct();
     cwarn("Kitten Scientists initialized. Engine NOT started for now.");
+
+    this._userInterface.refreshUi();
     //engine.start(false);
   }
 

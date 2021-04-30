@@ -1,7 +1,8 @@
 import { CraftSettings, CraftSettingsItem } from "../options/CraftSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { mustExist } from "../tools/Maybe";
+import { cwarn } from "../tools/Log";
+import { isNil, mustExist } from "../tools/Maybe";
 import { ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -353,12 +354,32 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
   }
 
   setState(state: CraftSettings): void {
-    mustExist(this._options.$enabled).prop("checked", state.enabled);
-    mustExist(this._options.$trigger)[0].title = state.trigger.toFixed(2);
+    this._options.enabled = state.enabled;
+    this._options.trigger = state.trigger;
 
     for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
-      mustExist(option.$limited).prop("checked", state.items[name].limited);
+      option.enabled = state.items[name].enabled;
+      option.limited = state.items[name].limited;
+    }
+    for (const [name, option] of objectEntries(this._options.resources)) {
+      const stateResource = state.resources[name];
+      if (isNil(stateResource)) {
+        cwarn("Existing resource was missing in state! This is a problem.");
+        continue;
+      }
+      option.consume = stateResource.consume;
+      option.enabled = stateResource.enabled;
+      option.stock = stateResource.stock;
+    }
+  }
+
+  refreshUi(): void {
+    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(2);
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$limited).prop("checked", option.limited);
     }
     for (const [name, option] of objectEntries(this._options.resources)) {
       mustExist(option.$consume).text(

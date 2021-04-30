@@ -231,8 +231,8 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   }
 
   private _getSeason(name: Race, season: Season, option: TradingSettingsItem): JQuery<HTMLElement> {
-    const iname = ucfirst(this._host.i18n("$trade.race." + name));
-    const iseason = ucfirst(this._host.i18n("$calendar.season." + season));
+    const iname = ucfirst(this._host.i18n(`$trade.race.${name}` as const));
+    const iseason = ucfirst(this._host.i18n(`$calendar.season.${season}` as const));
 
     const element = $("<li/>");
 
@@ -271,17 +271,32 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   }
 
   setState(state: TradingSettings): void {
-    mustExist(this._options.$enabled).prop("checked", state.enabled);
-    mustExist(this._options.$trigger)[0].title = state.trigger.toFixed(2);
+    this._options.enabled = state.enabled;
+    this._options.trigger = state.trigger;
 
     for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
-      mustExist(option.$limited).prop("checked", state.items[name].limited);
-      
-      mustExist(option.$autumn).prop("checked", state.items[name].autumn);
-      mustExist(option.$spring).prop("checked", state.items[name].spring);
-      mustExist(option.$summer).prop("checked", state.items[name].summer);
-      mustExist(option.$winter).prop("checked", state.items[name].winter);
+      option.enabled = state.items[name].enabled;
+      option.limited = state.items[name].limited;
+
+      option.autumn = state.items[name].autumn;
+      option.spring = state.items[name].spring;
+      option.summer = state.items[name].summer;
+      option.winter = state.items[name].winter;
+    }
+  }
+
+  refreshUi(): void {
+    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(2);
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+      mustExist(option.$limited).prop("checked", this._options.items[name].limited);
+
+      mustExist(option.$autumn).prop("checked", this._options.items[name].autumn);
+      mustExist(option.$spring).prop("checked", this._options.items[name].spring);
+      mustExist(option.$summer).prop("checked", this._options.items[name].summer);
+      mustExist(option.$winter).prop("checked", this._options.items[name].winter);
     }
   }
 }
