@@ -1,4 +1,4 @@
-import { FilterSettings } from "../options/FilterSettings";
+import { FilterItem, FilterSettings, FilterSettingsItem } from "../options/FilterSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -75,81 +75,109 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
       list.toggle();
     });
 
-    this._optionButtons = [
-      this.getOption(
-        "buildFilter",
-        this._options.items.buildFilter,
-        this._host.i18n("filter.build")
-      ),
-      this.getOption(
-        "craftFilter",
-        this._options.items.craftFilter,
-        this._host.i18n("filter.craft")
-      ),
-      this.getOption(
-        "upgradeFilter",
-        this._options.items.upgradeFilter,
-        this._host.i18n("filter.upgrade")
-      ),
-      this.getOption(
-        "researchFilter",
-        this._options.items.researchFilter,
-        this._host.i18n("filter.research")
-      ),
-      this.getOption(
-        "tradeFilter",
-        this._options.items.tradeFilter,
-        this._host.i18n("filter.trade")
-      ),
-      this.getOption("huntFilter", this._options.items.huntFilter, this._host.i18n("filter.hunt")),
-      this.getOption(
-        "praiseFilter",
-        this._options.items.praiseFilter,
-        this._host.i18n("filter.praise")
-      ),
-      this.getOption(
-        "adoreFilter",
-        this._options.items.adoreFilter,
-        this._host.i18n("filter.adore")
-      ),
-      this.getOption(
-        "transcendFilter",
-        this._options.items.transcendFilter,
-        this._host.i18n("filter.transcend")
-      ),
-      this.getOption(
-        "faithFilter",
-        this._options.items.faithFilter,
-        this._host.i18n("filter.faith")
-      ),
-      this.getOption(
-        "accelerateFilter",
-        this._options.items.accelerateFilter,
-        this._host.i18n("filter.accelerate")
-      ),
-      this.getOption(
-        "timeSkipFilter",
-        this._options.items.timeSkipFilter,
-        this._host.i18n("filter.time.skip")
-      ),
-      this.getOption(
-        "festivalFilter",
-        this._options.items.festivalFilter,
-        this._host.i18n("filter.festival")
-      ),
-      this.getOption("starFilter", this._options.items.starFilter, this._host.i18n("filter.star")),
-      this.getOption(
-        "distributeFilter",
-        this._options.items.distributeFilter,
-        this._host.i18n("filter.distribute")
-      ),
-      this.getOption(
-        "promoteFilter",
-        this._options.items.promoteFilter,
-        this._host.i18n("filter.promote")
-      ),
-      this.getOption("miscFilter", this._options.items.miscFilter, this._host.i18n("filter.misc")),
-    ];
+    const buttons = [
+      {
+        name: "buildFilter",
+        option: this._options.items.buildFilter,
+        label: this._host.i18n("filter.build"),
+      },
+      {
+        name: "craftFilter",
+        option: this._options.items.craftFilter,
+        label: this._host.i18n("filter.craft"),
+      },
+      {
+        name: "upgradeFilter",
+        option: this._options.items.upgradeFilter,
+        label: this._host.i18n("filter.upgrade"),
+      },
+      {
+        name: "researchFilter",
+        option: this._options.items.researchFilter,
+        label: this._host.i18n("filter.research"),
+      },
+      {
+        name: "tradeFilter",
+        option: this._options.items.tradeFilter,
+        label: this._host.i18n("filter.trade"),
+      },
+      {
+        name: "huntFilter",
+        option: this._options.items.huntFilter,
+        label: this._host.i18n("filter.hunt"),
+      },
+      {
+        name: "praiseFilter",
+        option: this._options.items.praiseFilter,
+        label: this._host.i18n("filter.praise"),
+      },
+      {
+        name: "adoreFilter",
+        option: this._options.items.adoreFilter,
+        label: this._host.i18n("filter.adore"),
+      },
+      {
+        name: "transcendFilter",
+        option: this._options.items.transcendFilter,
+        label: this._host.i18n("filter.transcend"),
+      },
+      {
+        name: "faithFilter",
+        option: this._options.items.faithFilter,
+        label: this._host.i18n("filter.faith"),
+      },
+      {
+        name: "accelerateFilter",
+        option: this._options.items.accelerateFilter,
+        label: this._host.i18n("filter.accelerate"),
+      },
+      {
+        name: "timeSkipFilter",
+        option: this._options.items.timeSkipFilter,
+        label: this._host.i18n("filter.time.skip"),
+      },
+      {
+        name: "festivalFilter",
+        option: this._options.items.festivalFilter,
+        label: this._host.i18n("filter.festival"),
+      },
+      {
+        name: "starFilter",
+        option: this._options.items.starFilter,
+        label: this._host.i18n("filter.star"),
+      },
+      {
+        name: "distributeFilter",
+        option: this._options.items.distributeFilter,
+        label: this._host.i18n("filter.distribute"),
+      },
+      {
+        name: "promoteFilter",
+        option: this._options.items.promoteFilter,
+        label: this._host.i18n("filter.promote"),
+      },
+      {
+        name: "miscFilter",
+        option: this._options.items.miscFilter,
+        label: this._host.i18n("filter.misc"),
+      },
+    ] as const;
+
+    const makeButton = (name: FilterItem, option: FilterSettingsItem, label: string) =>
+      this.getOption(name, option, label, false, {
+        onCheck: () => {
+          option.enabled = true;
+          this._host.imessage("filter.enable", [label]);
+        },
+        onUnCheck: () => {
+          option.enabled = false;
+          this._host.imessage("filter.disable", [label]);
+        },
+      });
+
+    this._optionButtons = buttons.map(button =>
+      makeButton(button.name, button.option, button.label)
+    );
 
     list.append(...this._optionButtons);
 
