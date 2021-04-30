@@ -2,7 +2,6 @@ import { ResourcesSettingsItem } from "../options/ResourcesSettings";
 import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
 import { clog } from "../tools/Log";
-import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 
@@ -208,7 +207,10 @@ export abstract class SettingsSectionUi<TState> {
     }
 
     stockElement.on("click", () => {
-      const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
+      const value = window.prompt(
+        this._host.i18n("resources.stock.set", [title]),
+        option.stock.toFixed(0)
+      );
       if (value !== null) {
         this.setStockValue(name, value, false);
         //this._host.saveToKittenStorage();
@@ -216,9 +218,12 @@ export abstract class SettingsSectionUi<TState> {
     });
 
     consumeElement.on("click", () => {
-      const value = window.prompt(this._host.i18n("resources.consume.set", [title]));
+      const value = window.prompt(
+        this._host.i18n("resources.consume.set", [title]),
+        option.consume?.toFixed(2)
+      );
       if (value !== null) {
-        option.consume = value;
+        option.consume = parseFloat(value);
         //this.setConsumeRate(name, value);
         //this._host.saveToKittenStorage();
       }
@@ -227,7 +232,7 @@ export abstract class SettingsSectionUi<TState> {
     del.on("click", () => {
       if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
         container.remove();
-        onDelHandler(name,option);
+        onDelHandler(name, option);
         //this._removeResourceControl(name, false);
         //this._host.saveToKittenStorage();
       }
@@ -257,14 +262,14 @@ export abstract class SettingsSectionUi<TState> {
 
     // The label with the name of the resource.
     const label = $("<div/>", {
-      id: "resource-label-" + name,
+      id: `resource-label-${name}`,
       text: title,
       css: { display: "inline-block", width: "95px" },
     });
 
     // How many items to stock.
     const stockElement = $("<div/>", {
-      id: "stock-value-" + name,
+      id: `stock-value-${name}`,
       text: this._host.i18n("resources.stock", [
         stock === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(stock),
       ]),
@@ -273,7 +278,7 @@ export abstract class SettingsSectionUi<TState> {
 
     // Delete the resource from the list.
     const del = $("<div/>", {
-      id: "resource-delete-" + name,
+      id: `resource-delete-${name}`,
       text: this._host.i18n("resources.del"),
       css: {
         cursor: "pointer",
@@ -307,7 +312,7 @@ export abstract class SettingsSectionUi<TState> {
 
     return container;
   }
-/*
+  /*
   private _removeResourceControl(name: Resource, forReset = false): void {
     const opt = mustExist(this._host.options.auto.resources[name]);
     if (forReset) {
