@@ -38,6 +38,19 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
     this._options.$enabled = input;
 
+    input.on("change", () => {
+      if (input.is(":checked") && this._options.enabled === false) {
+        this._options.enabled = true;
+
+        this._host.imessage("status.auto.enable", [itext]);
+        //saveToKittenStorage();
+      } else if (!input.is(":checked") && this._options.enabled === true) {
+        this._options.enabled = false;
+        this._host.imessage("status.auto.disable", [itext]);
+        //saveToKittenStorage();
+      }
+    });
+
     element.append(input, label);
 
     // Create build items.

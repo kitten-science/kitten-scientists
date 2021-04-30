@@ -38,6 +38,19 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     });
     this._options.$enabled = input;
 
+    input.on("change", () => {
+      if (input.is(":checked") && this._options.enabled === false) {
+        this._options.enabled = true;
+
+        this._host.imessage("status.auto.enable", [itext]);
+        //saveToKittenStorage();
+      } else if (!input.is(":checked") && this._options.enabled === true) {
+        this._options.enabled = false;
+        this._host.imessage("status.auto.disable", [itext]);
+        //saveToKittenStorage();
+      }
+    });
+
     element.append(input, label);
 
     // Create "trigger" button in the item.
@@ -362,11 +375,15 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
   setState(state: BonfireSettings): void {
     mustExist(this._options.$enabled).prop("checked", state.enabled);
+    this._options.enabled = state.enabled;
     mustExist(this._options.$trigger)[0].title = state.trigger.toFixed(2);
+    this._options.trigger = state.trigger;
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+      option.enabled = state.items[name].enabled;
       mustExist(option.$max).text(this._host.i18n("ui.max", [state.items[name].max]));
+      option.max = state.items[name].max;
     }
   }
 }
