@@ -252,7 +252,16 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     i18nName: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, i18nName, delimiter);
+    const element = this.getOption(name, option, i18nName, delimiter, {
+      onCheck: () => {
+        option.enabled = true;
+        this._host.imessage("status.auto.enable", [i18nName]);
+      },
+      onUnCheck: () => {
+        option.enabled = false;
+        this._host.imessage("status.auto.disable", [i18nName]);
+      },
+    });
 
     const maxButton = $("<div/>", {
       id: "set-" + name + "-max",
