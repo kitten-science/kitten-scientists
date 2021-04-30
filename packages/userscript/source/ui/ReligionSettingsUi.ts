@@ -324,7 +324,22 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const addi = this._options.addition;
 
-    const nodeAdore = this.getOption("adore", addi.adore, this._host.i18n("option.faith.adore"));
+    const nodeAdore = this.getOption(
+      "adore",
+      addi.adore,
+      this._host.i18n("option.faith.adore"),
+      false,
+      {
+        onCheck: () => {
+          addi.adore.enabled = true;
+          this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.adore")]);
+        },
+        onUnCheck: () => {
+          addi.adore.enabled = false;
+          this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.adore")]);
+        },
+      }
+    );
 
     const triggerButtonAdore = $("<div/>", {
       id: "set-adore-subTrigger",
@@ -359,7 +374,18 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     const nodeAutoPraise = this.getOption(
       "autoPraise",
       addi.autoPraise,
-      this._host.i18n("option.praise")
+      this._host.i18n("option.praise"),
+      false,
+      {
+        onCheck: () => {
+          addi.autoPraise.enabled = true;
+          this._host.imessage("status.sub.enable", [this._host.i18n("option.praise")]);
+        },
+        onUnCheck: () => {
+          addi.autoPraise.enabled = false;
+          this._host.imessage("status.sub.disable", [this._host.i18n("option.praise")]);
+        },
+      }
     );
 
     const triggerButtonAutoPraise = $("<div/>", {
@@ -395,7 +421,18 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     const nodeBestUnicornBuilding = this.getOption(
       "bestUnicornBuilding",
       addi.bestUnicornBuilding,
-      this._host.i18n("option.faith.best.unicorn")
+      this._host.i18n("option.faith.best.unicorn"),
+      false,
+      {
+        onCheck: () => {
+          addi.bestUnicornBuilding.enabled = true;
+          this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.best.unicorn")]);
+        },
+        onUnCheck: () => {
+          addi.bestUnicornBuilding.enabled = false;
+          this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.best.unicorn")]);
+        },
+      }
     );
 
     nodeBestUnicornBuilding
@@ -433,7 +470,18 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     const nodeTranscend = this.getOption(
       "transcend",
       addi.transcend,
-      this._host.i18n("option.faith.transcend")
+      this._host.i18n("option.faith.transcend"),
+      false,
+      {
+        onCheck: () => {
+          addi.transcend.enabled = true;
+          this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.transcend")]);
+        },
+        onUnCheck: () => {
+          addi.transcend.enabled = false;
+          this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.transcend")]);
+        },
+      }
     );
 
     list.append(nodeBestUnicornBuilding);
