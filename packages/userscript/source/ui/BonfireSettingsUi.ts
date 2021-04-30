@@ -340,7 +340,16 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, label, delimiter);
+    const element = this.getOption(name, option, label, delimiter, {
+      onCheck: () => {
+        option.enabled = true;
+        this._host.imessage("status.auto.enable", [label]);
+      },
+      onUnCheck: () => {
+        option.enabled = false;
+        this._host.imessage("status.auto.disable", [label]);
+      },
+    });
 
     const maxButton = $("<div/>", {
       id: "set-" + name + "-max",
