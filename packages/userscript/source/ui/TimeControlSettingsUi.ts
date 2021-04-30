@@ -1,8 +1,7 @@
 import { TimeControlBuildSettingsItem, TimeControlSettings } from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { cwarn } from "../tools/Log";
-import { isNil, mustExist } from "../tools/Maybe";
+import { isNil, Maybe, mustExist } from "../tools/Maybe";
 import { Resource, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -15,6 +14,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   private readonly _itemsButton: JQuery<HTMLElement>;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
+  private _resourcesList: Maybe<JQuery<HTMLElement>>;
 
   constructor(host: UserScript, religionOptions: TimeControlSettings = host.options.auto.timeCtrl) {
     super(host);
@@ -665,9 +665,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     // Resources list
     const resetResourcesList = this._getResourceOptions(true);
-    for (const [item, itemValue] of objectEntries(this._options.resources)) {
-      resetResourcesList.append(this.addNewResourceOption(item, item, true));
-      this.setStockValue(item, itemValue.stockForReset, true);
+    for (const [item, resource] of objectEntries(this._options.resources)) {
+      resetResourcesList.append(this.addNewResourceOption(item, item, resource, true));
+      this.setStockValue(item, resource.stockForReset, true);
     }
 
     // Religion reset options.
@@ -1243,7 +1243,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   }
 
   private _getResourceOptions(): JQuery<HTMLElement> {
-    const list = $("<ul/>", {
+    this._resourcesList = $("<ul/>", {
       id: "toggle-reset-list-resources",
       css: { display: "none", paddingLeft: "20px" },
     });
@@ -1297,17 +1297,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       allresources.append(this.getAvailableResourceOptions(true));
     });
 
-    list.append(add, allresources);
+    this._resourcesList.append(add, allresources);
 
-    // Add all the current resources
-    for (const [name, res] of objectEntries(this._host.options.auto.timeCtrl.resources)) {
-      //const res = mustExist(this._host.options.auto.resources[name]);
-      if (res.checkForReset) {
-        list.append(this.addNewResourceOption(name, undefined, true));
-      }
-    }
-
-    return list;
+    return this._resourcesList;
   }
 
   setState(state: TimeControlSettings): void {
@@ -1351,14 +1343,43 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       option.checkForReset = state.timeItems[name].checkForReset;
       option.triggerForReset = state.timeItems[name].triggerForReset;
     }
-    for (const [name, option] of objectEntries(this._options.resources)) {
-      const stateResource = state.resources[name];
-      if (isNil(stateResource)) {
-        cwarn("Existing resource was missing in state! This is a problem.");
-        continue;
+
+    // Resources are a dynamic list. We first do a primitive dirty check,
+    // then simply replace our entire stored list, if the state is dirty.
+    if (
+      Object.keys(this._options.resources).length !== Object.keys(state.resources).length ||
+      objectEntries(this._options.resources).some(
+        ([name, resource]) =>
+          resource.checkForReset !== state.resources[name]?.checkForReset ||
+          resource.stockForReset !== state.resources[name]?.stockForReset
+      )
+    ) {
+      // Remove existing elements.
+      for (const [name, resource] of objectEntries(this._options.resources)) {
+        if (!isNil(resource.$checkForReset)) {
+          resource.$checkForReset.remove();
+          resource.$checkForReset = undefined;
+        }
+        if (!isNil(resource.$stockForReset)) {
+          resource.$stockForReset.remove();
+          resource.$stockForReset = undefined;
+        }
       }
-      option.checkForReset = stateResource.checkForReset;
-      option.stockForReset = stateResource.stockForReset;
+
+      // Replace state.
+      this._options.resources = { ...state.resources };
+
+      // Add all the current resources
+      for (const [name, res] of objectEntries(this._options.resources)) {
+        mustExist(this._resourcesList).append(this.addNewResourceOption(name, name, true));
+      }
+    } else {
+      // If both lists are the same, just copy the state.
+      for (const [name, option] of objectEntries(this._options.resources)) {
+        const stateResource = mustExist(state.resources[name]);
+        option.checkForReset = stateResource.checkForReset;
+        option.stockForReset = stateResource.stockForReset;
+      }
     }
   }
 
@@ -1445,12 +1466,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         this._host.i18n("ui.min", [this._options.timeItems[name].triggerForReset])
       );
     }
-    /*
+
     for (const [name, option] of objectEntries(this._options.resources)) {
-      mustExist(option.$checkForReset).prop(
-        "checked",
-        mustExist(this._options.resources[name]).checkForReset
-      );
       mustExist(option.$stockForReset).text(
         this._host.i18n("resources.stock", [
           option.stockForReset === Infinity
@@ -1461,6 +1478,5 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         ])
       );
     }
-    */
   }
 }

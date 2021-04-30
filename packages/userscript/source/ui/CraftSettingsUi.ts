@@ -345,7 +345,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
     // Add all the current resources
     for (const [name, item] of objectEntries(this._host.options.auto.resources)) {
-      list.append(this.addNewResourceOption(name, name, false));
+      list.append(this.addNewResourceOption(name, name, item, false));
       //this.setStockValue(name, item.stock);
       //this.setConsumeRate(name, item.consume);
     }
