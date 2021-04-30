@@ -64,7 +64,11 @@ export abstract class SettingsSectionUi<TState> {
     name: string,
     option: { enabled: boolean; $enabled?: JQuery<HTMLElement> },
     i18nName: string,
-    delimiter = false
+    delimiter = false,
+    handler: {
+      onCheck?: () => void;
+      onUnCheck?: () => void;
+    } = {}
   ): JQuery<HTMLElement> {
     const element = $("<li/>");
     const elementLabel = i18nName;
@@ -91,11 +95,19 @@ export abstract class SettingsSectionUi<TState> {
 
     input.on("change", () => {
       if (input.is(":checked") && option.enabled == false) {
-        option.enabled = true;
-        clog("Unlogged action item");
+        if (handler.onCheck) {
+          handler.onCheck();
+        } else {
+          option.enabled = true;
+          clog("Unlogged action item");
+        }
       } else if (!input.is(":checked") && option.enabled == true) {
-        option.enabled = false;
-        clog("Unlogged action item");
+        if (handler.onUnCheck) {
+          handler.onUnCheck();
+        } else {
+          option.enabled = false;
+          clog("Unlogged action item");
+        }
       }
       //kittenStorage.items[input.attr("id")] = option.enabled;
       //this._host.saveToKittenStorage();
