@@ -341,7 +341,10 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     addi.adore.$subTrigger = triggerButtonAdore;
 
     triggerButtonAdore.on("click", () => {
-      const value = window.prompt(this._host.i18n("adore.trigger.set"), addi.adore.subTrigger.toFixed(2));
+      const value = window.prompt(
+        this._host.i18n("adore.trigger.set"),
+        addi.adore.subTrigger.toFixed(2)
+      );
 
       if (value !== null) {
         addi.adore.subTrigger = parseFloat(value);
@@ -442,31 +445,50 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   }
 
   setState(state: ReligionSettings): void {
-    mustExist(this._options.$enabled).prop("checked", state.enabled);
-    mustExist(this._options.$trigger)[0].title = state.trigger.toFixed(2);
+    this._options.enabled = state.enabled;
+    this._options.trigger = state.trigger;
 
-    mustExist(this._options.addition.adore.$enabled).prop("checked", state.addition.adore.enabled);
+    this._options.addition.adore.enabled = state.addition.adore.enabled;
+    this._options.addition.adore.subTrigger = state.addition.adore.subTrigger;
+    this._options.addition.autoPraise.enabled = state.addition.autoPraise.enabled;
+    this._options.addition.autoPraise.subTrigger = state.addition.autoPraise.subTrigger;
+    this._options.addition.bestUnicornBuilding.enabled = state.addition.bestUnicornBuilding.enabled;
+    this._options.addition.transcend.enabled = state.addition.transcend.enabled;
+
+    for (const [name, option] of objectEntries(this._options.items)) {
+      option.enabled = state.items[name].enabled;
+    }
+  }
+
+  refreshUi(): void {
+    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(2);
+
+    mustExist(this._options.addition.adore.$enabled).prop(
+      "checked",
+      this._options.addition.adore.enabled
+    );
     mustExist(
       this._options.addition.adore.$subTrigger
-    )[0].title = state.addition.adore.subTrigger.toFixed(2);
+    )[0].title = this._options.addition.adore.subTrigger.toFixed(2);
     mustExist(this._options.addition.autoPraise.$enabled).prop(
       "checked",
-      state.addition.autoPraise.enabled
+      this._options.addition.autoPraise.enabled
     );
     mustExist(
       this._options.addition.autoPraise.$subTrigger
-    )[0].title = state.addition.autoPraise.subTrigger.toFixed(2);
+    )[0].title = this._options.addition.autoPraise.subTrigger.toFixed(2);
     mustExist(this._options.addition.bestUnicornBuilding.$enabled).prop(
       "checked",
-      state.addition.bestUnicornBuilding.enabled
+      this._options.addition.bestUnicornBuilding.enabled
     );
     mustExist(this._options.addition.transcend.$enabled).prop(
       "checked",
-      state.addition.transcend.enabled
+      this._options.addition.transcend.enabled
     );
 
     for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", state.items[name].enabled);
+      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
     }
   }
 }

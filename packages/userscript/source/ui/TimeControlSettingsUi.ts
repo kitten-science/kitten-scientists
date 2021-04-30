@@ -1,8 +1,9 @@
 import { TimeControlBuildSettingsItem, TimeControlSettings } from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { mustExist } from "../tools/Maybe";
-import { Season } from "../types";
+import { cwarn } from "../tools/Log";
+import { isNil, mustExist } from "../tools/Maybe";
+import { Resource, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -1310,75 +1311,156 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   }
 
   setState(state: TimeControlSettings): void {
-    mustExist(this._options.$enabled).prop("checked", state.enabled);
+    this._options.enabled = state.enabled;
+
+    this._options.items.accelerateTime.enabled = state.items.accelerateTime.enabled;
+    this._options.items.accelerateTime.subTrigger = state.items.accelerateTime.subTrigger;
+
+    this._options.items.reset.enabled = state.items.reset.enabled;
+
+    this._options.items.timeSkip.enabled = state.items.timeSkip.enabled;
+    this._options.items.timeSkip.subTrigger = state.items.timeSkip.subTrigger;
+    this._options.items.timeSkip.autumn = state.items.timeSkip.autumn;
+    this._options.items.timeSkip.spring = state.items.timeSkip.spring;
+    this._options.items.timeSkip.summer = state.items.timeSkip.summer;
+    this._options.items.timeSkip.winter = state.items.timeSkip.winter;
+    this._options.items.timeSkip[0] = state.items.timeSkip[0];
+    this._options.items.timeSkip[1] = state.items.timeSkip[1];
+    this._options.items.timeSkip[2] = state.items.timeSkip[2];
+    this._options.items.timeSkip[3] = state.items.timeSkip[3];
+    this._options.items.timeSkip[4] = state.items.timeSkip[4];
+    this._options.items.timeSkip[5] = state.items.timeSkip[5];
+    this._options.items.timeSkip[6] = state.items.timeSkip[6];
+    this._options.items.timeSkip[7] = state.items.timeSkip[7];
+    this._options.items.timeSkip[8] = state.items.timeSkip[8];
+    this._options.items.timeSkip[9] = state.items.timeSkip[9];
+
+    for (const [name, option] of objectEntries(this._options.buildItems)) {
+      option.checkForReset = state.buildItems[name].checkForReset;
+      option.triggerForReset = state.buildItems[name].triggerForReset;
+    }
+    for (const [name, option] of objectEntries(this._options.religionItems)) {
+      option.checkForReset = state.religionItems[name].checkForReset;
+      option.triggerForReset = state.religionItems[name].triggerForReset;
+    }
+    for (const [name, option] of objectEntries(this._options.spaceItems)) {
+      option.checkForReset = state.spaceItems[name].checkForReset;
+      option.triggerForReset = state.spaceItems[name].triggerForReset;
+    }
+    for (const [name, option] of objectEntries(this._options.timeItems)) {
+      option.checkForReset = state.timeItems[name].checkForReset;
+      option.triggerForReset = state.timeItems[name].triggerForReset;
+    }
+    for (const [name, option] of objectEntries(this._options.resources)) {
+      const stateResource = state.resources[name];
+      if (isNil(stateResource)) {
+        cwarn("Existing resource was missing in state! This is a problem.");
+        continue;
+      }
+      option.checkForReset = stateResource.checkForReset;
+      option.stockForReset = stateResource.stockForReset;
+    }
+  }
+
+  refreshUi(): void {
+    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
 
     mustExist(this._options.items.accelerateTime.$enabled).prop(
       "checked",
-      state.items.accelerateTime.enabled
+      this._options.items.accelerateTime.enabled
     );
     mustExist(
       this._options.items.accelerateTime.$subTrigger
-    )[0].title = state.items.accelerateTime.subTrigger.toFixed(2);
+    )[0].title = this._options.items.accelerateTime.subTrigger.toFixed(2);
 
-    mustExist(this._options.items.reset.$enabled).prop("checked", state.items.reset.enabled);
+    mustExist(this._options.items.reset.$enabled).prop(
+      "checked",
+      this._options.items.reset.enabled
+    );
 
-    mustExist(this._options.items.timeSkip.$enabled).prop("checked", state.items.timeSkip.enabled);
+    mustExist(this._options.items.timeSkip.$enabled).prop(
+      "checked",
+      this._options.items.timeSkip.enabled
+    );
     mustExist(
       this._options.items.timeSkip.$subTrigger
-    )[0].title = state.items.timeSkip.subTrigger.toFixed(2);
-    mustExist(this._options.items.timeSkip.$autumn).prop("checked", state.items.timeSkip.autumn);
-    mustExist(this._options.items.timeSkip.$spring).prop("checked", state.items.timeSkip.spring);
-    mustExist(this._options.items.timeSkip.$summer).prop("checked", state.items.timeSkip.summer);
-    mustExist(this._options.items.timeSkip.$winter).prop("checked", state.items.timeSkip.winter);
-    mustExist(this._options.items.timeSkip.$0).prop("checked", state.items.timeSkip[0]);
-    mustExist(this._options.items.timeSkip.$1).prop("checked", state.items.timeSkip[1]);
-    mustExist(this._options.items.timeSkip.$2).prop("checked", state.items.timeSkip[2]);
-    mustExist(this._options.items.timeSkip.$3).prop("checked", state.items.timeSkip[3]);
-    mustExist(this._options.items.timeSkip.$4).prop("checked", state.items.timeSkip[4]);
-    mustExist(this._options.items.timeSkip.$5).prop("checked", state.items.timeSkip[5]);
-    mustExist(this._options.items.timeSkip.$6).prop("checked", state.items.timeSkip[6]);
-    mustExist(this._options.items.timeSkip.$7).prop("checked", state.items.timeSkip[7]);
-    mustExist(this._options.items.timeSkip.$8).prop("checked", state.items.timeSkip[8]);
-    mustExist(this._options.items.timeSkip.$9).prop("checked", state.items.timeSkip[9]);
+    )[0].title = this._options.items.timeSkip.subTrigger.toFixed(2);
+    mustExist(this._options.items.timeSkip.$autumn).prop(
+      "checked",
+      this._options.items.timeSkip.autumn
+    );
+    mustExist(this._options.items.timeSkip.$spring).prop(
+      "checked",
+      this._options.items.timeSkip.spring
+    );
+    mustExist(this._options.items.timeSkip.$summer).prop(
+      "checked",
+      this._options.items.timeSkip.summer
+    );
+    mustExist(this._options.items.timeSkip.$winter).prop(
+      "checked",
+      this._options.items.timeSkip.winter
+    );
+    mustExist(this._options.items.timeSkip.$0).prop("checked", this._options.items.timeSkip[0]);
+    mustExist(this._options.items.timeSkip.$1).prop("checked", this._options.items.timeSkip[1]);
+    mustExist(this._options.items.timeSkip.$2).prop("checked", this._options.items.timeSkip[2]);
+    mustExist(this._options.items.timeSkip.$3).prop("checked", this._options.items.timeSkip[3]);
+    mustExist(this._options.items.timeSkip.$4).prop("checked", this._options.items.timeSkip[4]);
+    mustExist(this._options.items.timeSkip.$5).prop("checked", this._options.items.timeSkip[5]);
+    mustExist(this._options.items.timeSkip.$6).prop("checked", this._options.items.timeSkip[6]);
+    mustExist(this._options.items.timeSkip.$7).prop("checked", this._options.items.timeSkip[7]);
+    mustExist(this._options.items.timeSkip.$8).prop("checked", this._options.items.timeSkip[8]);
+    mustExist(this._options.items.timeSkip.$9).prop("checked", this._options.items.timeSkip[9]);
 
     for (const [name, option] of objectEntries(this._options.buildItems)) {
-      mustExist(option.$checkForReset).prop("checked", state.buildItems[name].checkForReset);
+      mustExist(option.$checkForReset).prop(
+        "checked",
+        this._options.buildItems[name].checkForReset
+      );
       mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [state.buildItems[name].triggerForReset])
+        this._host.i18n("ui.min", [this._options.buildItems[name].triggerForReset])
       );
     }
     for (const [name, option] of objectEntries(this._options.religionItems)) {
-      mustExist(option.$checkForReset).prop("checked", state.religionItems[name].checkForReset);
+      mustExist(option.$checkForReset).prop(
+        "checked",
+        this._options.religionItems[name].checkForReset
+      );
       mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [state.religionItems[name].triggerForReset])
+        this._host.i18n("ui.min", [this._options.religionItems[name].triggerForReset])
       );
     }
     for (const [name, option] of objectEntries(this._options.spaceItems)) {
-      mustExist(option.$checkForReset).prop("checked", state.spaceItems[name].checkForReset);
+      mustExist(option.$checkForReset).prop(
+        "checked",
+        this._options.spaceItems[name].checkForReset
+      );
       mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [state.spaceItems[name].triggerForReset])
+        this._host.i18n("ui.min", [this._options.spaceItems[name].triggerForReset])
       );
     }
     for (const [name, option] of objectEntries(this._options.timeItems)) {
-      mustExist(option.$checkForReset).prop("checked", state.timeItems[name].checkForReset);
+      mustExist(option.$checkForReset).prop("checked", this._options.timeItems[name].checkForReset);
       mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [state.timeItems[name].triggerForReset])
+        this._host.i18n("ui.min", [this._options.timeItems[name].triggerForReset])
       );
     }
+    /*
     for (const [name, option] of objectEntries(this._options.resources)) {
       mustExist(option.$checkForReset).prop(
         "checked",
-        mustExist(state.resources[name]).checkForReset
+        mustExist(this._options.resources[name]).checkForReset
       );
       mustExist(option.$stockForReset).text(
         this._host.i18n("resources.stock", [
           option.stockForReset === Infinity
             ? "∞"
             : this._host.gamePage.getDisplayValueExt(
-                mustExist(state.resources[name]).stockForReset
+                mustExist(this._options.resources[name]).stockForReset
               ),
         ])
       );
     }
+    */
   }
 }
