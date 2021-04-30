@@ -1,3 +1,5 @@
+import { ResourcesSettingsItem } from "../options/ResourcesSettings";
+import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
 import { clog } from "../tools/Log";
 import { mustExist } from "../tools/Maybe";
@@ -153,23 +155,21 @@ export abstract class SettingsSectionUi<TState> {
   protected addNewResourceOption(
     name: Resource,
     title: string,
+    option: ResourcesSettingsItem | TimeControlResourcesSettingsItem,
     forReset = false
   ): JQuery<HTMLElement> {
     //title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
 
-    const resourceSettings = this._host.options.auto.resources[name];
     let stock;
-    if (forReset && resourceSettings && resourceSettings.stockForReset) {
-      stock = resourceSettings.stockForReset;
-    } else if (!forReset && resourceSettings && resourceSettings.stock) {
-      stock = resourceSettings.stock;
+    if (forReset && option && option.stockForReset) {
+      stock = option.stockForReset;
+    } else if (!forReset && option && option.stock) {
+      stock = option.stock;
     } else {
       stock = 0;
     }
     const consume =
-      resourceSettings && resourceSettings.consume != undefined
-        ? resourceSettings.consume
-        : this._host.options.consume;
+      option && option.consume != undefined ? option.consume : this._host.options.consume;
 
     // The overall container for this resource item.
     const container = $("<div/>", {
@@ -220,8 +220,8 @@ export abstract class SettingsSectionUi<TState> {
     }
 
     // once created, set color if relevant
-    if (resourceSettings != undefined && resourceSettings.stock != undefined) {
-      this._setStockWarning(name, resourceSettings.stock);
+    if (option != undefined && option.stock != undefined) {
+      this._setStockWarning(name, option.stock);
     }
 
     stockElement.on("click", () => {
@@ -235,7 +235,7 @@ export abstract class SettingsSectionUi<TState> {
     consumeElement.on("click", () => {
       const value = window.prompt(this._host.i18n("resources.consume.set", [title]));
       if (value !== null) {
-        this._host.options.auto.resources[name].consume = value;
+        option.consume = value;
         //this.setConsumeRate(name, value);
         //this._host.saveToKittenStorage();
       }
@@ -248,6 +248,13 @@ export abstract class SettingsSectionUi<TState> {
         //this._host.saveToKittenStorage();
       }
     });
+
+    if (forReset) {
+      (option as TimeControlResourcesSettingsItem).$stockForReset = stockElement;
+    } else {
+      (option as ResourcesSettingsItem).$consume = consumeElement;
+      (option as ResourcesSettingsItem).$stock = stockElement;
+    }
 
     return container;
   }
