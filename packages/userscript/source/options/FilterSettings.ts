@@ -1,3 +1,4 @@
+import { FilterItemVariant } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
 export type FilterItem =
@@ -19,27 +20,29 @@ export type FilterItem =
   | "transcendFilter"
   | "upgradeFilter";
 
-export type FilterSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
+export type FilterSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> } & {
+  variant: FilterItemVariant;
+};
 export class FilterSettings extends SettingsSection {
   items: {
     [item in FilterItem]: FilterSettingsItem;
   } = {
-    buildFilter: { enabled: false },
-    craftFilter: { enabled: false },
-    upgradeFilter: { enabled: false },
-    researchFilter: { enabled: false },
-    tradeFilter: { enabled: false },
-    huntFilter: { enabled: false },
-    praiseFilter: { enabled: false },
-    adoreFilter: { enabled: false },
-    transcendFilter: { enabled: false },
-    faithFilter: { enabled: false },
-    accelerateFilter: { enabled: false },
-    timeSkipFilter: { enabled: false },
-    festivalFilter: { enabled: false },
-    starFilter: { enabled: false },
-    distributeFilter: { enabled: false },
-    promoteFilter: { enabled: false },
-    miscFilter: { enabled: false },
+    buildFilter: { enabled: false, variant: FilterItemVariant.Build },
+    craftFilter: { enabled: false, variant: FilterItemVariant.Craft },
+    upgradeFilter: { enabled: false, variant: FilterItemVariant.Upgrade },
+    researchFilter: { enabled: false, variant: FilterItemVariant.Research },
+    tradeFilter: { enabled: false, variant: FilterItemVariant.Trade },
+    huntFilter: { enabled: false, variant: FilterItemVariant.Hunt },
+    praiseFilter: { enabled: false, variant: FilterItemVariant.Praise },
+    adoreFilter: { enabled: false, variant: FilterItemVariant.Adore },
+    transcendFilter: { enabled: false, variant: FilterItemVariant.Transcend },
+    faithFilter: { enabled: false, variant: FilterItemVariant.Faith },
+    accelerateFilter: { enabled: false, variant: FilterItemVariant.Accelerate },
+    timeSkipFilter: { enabled: false, variant: FilterItemVariant.TimeSkip },
+    festivalFilter: { enabled: false, variant: FilterItemVariant.Festival },
+    starFilter: { enabled: false, variant: FilterItemVariant.Star },
+    distributeFilter: { enabled: false, variant: FilterItemVariant.Distribute },
+    promoteFilter: { enabled: false, variant: FilterItemVariant.Promote },
+    miscFilter: { enabled: false, variant: FilterItemVariant.Misc },
   };
 }

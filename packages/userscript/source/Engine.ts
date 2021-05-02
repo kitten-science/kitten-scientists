@@ -161,7 +161,7 @@ export class Engine {
     };
 
     // check building
-    for (const [name, entry] of objectEntries(this._host.options.auto.build.items))
+    for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.buildItems))
       if (entry.checkForReset) {
         const bld = this._host.gamePage.bld.get(name);
         checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
@@ -173,7 +173,7 @@ export class Engine {
       }
 
     // unicornPasture
-    const unicornPasture = this._host.options.auto.unicorn.items.unicornPasture;
+    const unicornPasture = this._host.options.auto.timeCtrl.religionItems.unicornPasture;
     if (unicornPasture.checkForReset) {
       const bld = this._host.gamePage.bld.get("unicornPasture");
       checkedList.push({ name: bld.label, trigger: unicornPasture.triggerForReset, val: bld.val });
@@ -186,7 +186,7 @@ export class Engine {
     if (check(this._buildManager.manager.tab.buttons) || checkList.length) return;
 
     // check space
-    for (const [name, entry] of objectEntries(this._host.options.auto.space.items)) {
+    for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.spaceItems)) {
       if (entry.checkForReset) {
         const bld = this._host.gamePage.space.getBuilding(name);
         checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
@@ -215,7 +215,7 @@ export class Engine {
     if (checkList.length) return;
 
     // check religion
-    for (const [name, entry] of objectEntries(this._host.options.auto.faith.items)) {
+    for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.religionItems)) {
       if (entry.checkForReset) {
         const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
         checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
@@ -227,16 +227,6 @@ export class Engine {
       }
     }
 
-    for (const [name, entry] of objectEntries(this._host.options.auto.unicorn.items))
-      if (entry.checkForReset && entry.variant == UnicornItemVariant.Ziggurat) {
-        const bld = mustExist(this._religionManager.getBuild(name, UnicornItemVariant.Ziggurat));
-        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
-        if (entry.triggerForReset > 0) {
-          if (entry.triggerForReset > bld.val) return;
-        } else {
-          checkList.push(name);
-        }
-      }
     if (
       check(this._religionManager.manager.tab.zgUpgradeButtons) ||
       check(this._religionManager.manager.tab.rUpgradeButtons) ||
@@ -246,7 +236,7 @@ export class Engine {
       return;
 
     // check time
-    for (const [name, entry] of objectEntries(this._host.options.auto.time.items))
+    for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.timeItems))
       if (entry.checkForReset) {
         const bld = mustExist(this._timeManager.getBuild(name, entry.variant));
         checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
@@ -265,7 +255,7 @@ export class Engine {
       return;
 
     // check resources
-    for (const [name, entry] of objectEntries(this._host.options.auto.resources))
+    for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.resources))
       if (entry.checkForReset) {
         const res = mustExist(this._host.gamePage.resPool.get(name));
         checkedList.push({ name: res.title, trigger: entry.stockForReset, val: res.value });
