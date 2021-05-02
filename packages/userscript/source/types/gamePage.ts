@@ -20,6 +20,7 @@ import {
   ZiggurathUpgrades,
 } from ".";
 import { SpaceItem } from "../options/OptionsLegacy";
+import { CycleIndices } from "../options/TimeControlSettings";
 import { ReligionTab } from "./religion";
 import { SpaceTab, SpaceUpgrades } from "./space";
 import {
@@ -39,7 +40,7 @@ export type GamePage = {
   };
   calendar: {
     cryptoPrice: number;
-    cycle: number;
+    cycle: CycleIndices;
     cycleEffectsFestival: (options: { catnip: number }) => { catnip: number };
     cycles: Array<{ festivalEffects: { unicorns: number }; title: string }>;
     cyclesPerEra: number;
