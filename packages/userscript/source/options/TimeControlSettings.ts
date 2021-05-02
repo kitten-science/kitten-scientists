@@ -2,6 +2,8 @@ import { Resource } from "../types";
 import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
+export type CycleIndices = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
 export type TimeControlItem = "accelerateTime" | "reset" | "timeSkip";
 export type TimeControlBuildSettingsItem = {
   checkForReset: boolean;

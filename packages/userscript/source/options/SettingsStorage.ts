@@ -88,9 +88,12 @@ export type KittenStorageType = {
   };
 };
 
-export class Storage {
+export class SettingsStorage {
   static getLegacySettings(): KittenStorageType | null {
     const saved = JSON.parse(localStorage["cbc.kitten-scientists"] || "null");
     return saved === null ? null : (saved as KittenStorageType);
+  }
+  static setLegacySettings(settings: KittenStorageType): void {
+    localStorage["cbc.kitten-scientists"] = JSON.stringify(settings);
   }
 }
