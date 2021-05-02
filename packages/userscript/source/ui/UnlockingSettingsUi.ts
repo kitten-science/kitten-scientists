@@ -79,19 +79,82 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
       this.getOption(
         "upgrades",
         this._options.items.upgrades,
-        this._host.i18n("ui.upgrade.upgrades")
+        this._host.i18n("ui.upgrade.upgrades"),
+        false,
+        {
+          onCheck: () => {
+            this._options.items.upgrades.enabled = true;
+            this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.upgrades")]);
+          },
+          onUnCheck: () => {
+            this._options.items.upgrades.enabled = false;
+            this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.upgrades")]);
+          },
+        }
       ),
-      this.getOption("techs", this._options.items.techs, this._host.i18n("ui.upgrade.techs")),
-      this.getOption("races", this._options.items.races, this._host.i18n("ui.upgrade.races")),
+      this.getOption(
+        "techs",
+        this._options.items.techs,
+        this._host.i18n("ui.upgrade.techs"),
+        false,
+        {
+          onCheck: () => {
+            this._options.items.techs.enabled = true;
+            this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.techs")]);
+          },
+          onUnCheck: () => {
+            this._options.items.techs.enabled = false;
+            this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.techs")]);
+          },
+        }
+      ),
+      this.getOption(
+        "races",
+        this._options.items.races,
+        this._host.i18n("ui.upgrade.races"),
+        false,
+        {
+          onCheck: () => {
+            this._options.items.races.enabled = true;
+            this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.races")]);
+          },
+          onUnCheck: () => {
+            this._options.items.races.enabled = false;
+            this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.races")]);
+          },
+        }
+      ),
       this.getOption(
         "missions",
         this._options.items.missions,
-        this._host.i18n("ui.upgrade.missions")
+        this._host.i18n("ui.upgrade.missions"),
+        false,
+        {
+          onCheck: () => {
+            this._options.items.missions.enabled = true;
+            this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.missions")]);
+          },
+          onUnCheck: () => {
+            this._options.items.missions.enabled = false;
+            this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.missions")]);
+          },
+        }
       ),
       this.getOption(
         "buildings",
         this._options.items.buildings,
-        this._host.i18n("ui.upgrade.buildings")
+        this._host.i18n("ui.upgrade.buildings"),
+        false,
+        {
+          onCheck: () => {
+            this._options.items.buildings.enabled = true;
+            this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.buildings")]);
+          },
+          onUnCheck: () => {
+            this._options.items.buildings.enabled = false;
+            this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.buildings")]);
+          },
+        }
       ),
     ];
 
