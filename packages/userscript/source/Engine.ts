@@ -354,14 +354,23 @@ export class Engine {
       return;
     }
 
-    if (typeof kittenStorage.reset === "undefined") kittenStorage.reset = {};
+    //if (typeof kittenStorage.reset === "undefined") kittenStorage.reset = {};
 
-    kittenStorage.reset.karmaLastTime = mustExist(this._host.gamePage.resPool.get("karma")).value;
-    kittenStorage.reset.paragonLastTime = mustExist(
+    this._host.options.reset.karmaLastTime = mustExist(
+      this._host.gamePage.resPool.get("karma")
+    ).value;
+    this._host.options.reset.paragonLastTime = mustExist(
       this._host.gamePage.resPool.get("paragon")
     ).value;
-    kittenStorage.reset.times += 1;
-    kittenStorage.reset.reset = true;
+    this._host.options.reset.times += 1;
+    this._host.options.reset.reset = true;
+
+    // kittenStorage.reset.karmaLastTime = mustExist(this._host.gamePage.resPool.get("karma")).value;
+    // kittenStorage.reset.paragonLastTime = mustExist(
+    // this._host.gamePage.resPool.get("paragon")
+    // ).value;
+    // kittenStorage.reset.times += 1;
+    // kittenStorage.reset.reset = true;
     saveToKittenStorage();
 
     //=============================================================
