@@ -3,6 +3,7 @@ import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
 import { Options } from "./options/Options";
 import { objectEntries } from "./tools/Entries";
+import { roundToTwo, ucfirst } from "./tools/Format";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
@@ -131,13 +132,14 @@ export class UserScript {
     key: keyof typeof i18nData[SupportedLanguages] | TKittenGameLiteral,
     args: Array<number | string> = []
   ): string {
+    // Key is to be translated through KG engine.
     if (key.startsWith("$")) {
       return this.i18nEngine(key.slice(1));
     }
 
-    let value = this._i18nData[this._language][key];
+    let value = this._i18nData[this._language][key as keyof typeof i18nData[SupportedLanguages]];
     if (typeof value === "undefined") {
-      value = i18nData[DefaultLanguage][key];
+      value = i18nData[DefaultLanguage][key as keyof typeof i18nData[SupportedLanguages]];
       if (!value) {
         cwarn(`i18n key '${key}' not found in default language.`);
         return "$" + key;
@@ -167,9 +169,7 @@ export class UserScript {
     const msg = this.gamePage.msg(...args);
     $(msg.span).css("color", color);
 
-    if (this.options.debug && console) {
-      clog(args);
-    }
+    clog(args);
   }
 
   private _message(...args: Array<number | string>): void {
@@ -259,19 +259,19 @@ export class UserScript {
 
     // Techs
     for (const name in this._activitySummary.research) {
-      this._isummary("summary.tech", [this.ucfirst(name)]);
+      this._isummary("summary.tech", [ucfirst(name)]);
     }
 
     // Upgrades
     for (const name in this._activitySummary.upgrade) {
-      this._isummary("summary.upgrade", [this.ucfirst(name)]);
+      this._isummary("summary.upgrade", [ucfirst(name)]);
     }
 
     // Buildings
     for (const name in this._activitySummary.build) {
       this._isummary("summary.building", [
         this.gamePage.getDisplayValueExt(this._activitySummary.build[name]),
-        this.ucfirst(name),
+        ucfirst(name),
       ]);
     }
 
@@ -279,7 +279,7 @@ export class UserScript {
     for (const name in this._activitySummary.faith) {
       this._isummary("summary.sun", [
         this.gamePage.getDisplayValueExt(this._activitySummary.faith[name]),
-        this.ucfirst(name),
+        ucfirst(name),
       ]);
     }
 
@@ -287,7 +287,7 @@ export class UserScript {
     for (const name in this._activitySummary.craft) {
       this._isummary("summary.craft", [
         this.gamePage.getDisplayValueExt(this._activitySummary.craft[name]),
-        this.ucfirst(name),
+        ucfirst(name),
       ]);
     }
 
@@ -295,14 +295,14 @@ export class UserScript {
     for (const name in this._activitySummary.trade) {
       this._isummary("summary.trade", [
         this.gamePage.getDisplayValueExt(this._activitySummary.trade[name]),
-        this.ucfirst(name),
+        ucfirst(name),
       ]);
     }
 
     // Show time since last run. Assumes that the day and year are always higher.
     if (this._activitySummary.lastyear && this._activitySummary.lastday) {
-      let years = this.gamePage.calendar.year - this._activitySummary.lastyear;
-      let days = this.gamePage.calendar.day - this._activitySummary.lastday;
+      let years = this.gamePage.calendar.year - (this._activitySummary.lastyear as number);
+      let days = this.gamePage.calendar.day - (this._activitySummary.lastday as number);
 
       if (days < 0) {
         years -= 1;
@@ -317,7 +317,7 @@ export class UserScript {
 
       if (days >= 0) {
         if (years > 0) duration += this.i18n("summary.separator");
-        duration += this._roundToTwo(days) + " ";
+        duration += roundToTwo(days) + " ";
         duration += days == 1 ? this.i18n("summary.day") : this.i18n("summary.days");
       }
 
