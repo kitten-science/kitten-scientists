@@ -118,13 +118,13 @@ export class BulkManager {
 
         const itemPrices = [];
         const pricesDiscount = this._host.gamePage.getLimitedDR(
-          this._host.gamePage.getEffect(name + "CostReduction"),
+          this._host.gamePage.getEffect(`${name}CostReduction` as const),
           1
         );
         const priceModifier = 1 - pricesDiscount;
         for (const i in prices) {
           const resPriceDiscount = this._host.gamePage.getLimitedDR(
-            this._host.gamePage.getEffect(prices[i].name + "CostReduction"),
+            this._host.gamePage.getEffect(`${prices[i].name}CostReduction` as const),
             1
           );
           const resPriceModifier = 1 - resPriceDiscount;
@@ -309,7 +309,7 @@ export class BulkManager {
     let ratioDiff = 0;
     if (source && source === "bonfire") {
       ratioDiff =
-        this._host.gamePage.getEffect(data.name + "PriceRatio") +
+        this._host.gamePage.getEffect(`${data.name}PriceRatio` as const) +
         this._host.gamePage.getEffect("priceRatio") +
         this._host.gamePage.getEffect("mapPriceReduction");
 

@@ -1,5 +1,12 @@
-import { Resource } from "../types";
-import { BuildItem, FaithItem, SpaceItem, TimeItem, UnicornItem } from "./OptionsLegacy";
+import { Resource, UnicornItemVariant } from "../types";
+import {
+  BuildItem,
+  FaithItem,
+  SpaceItem,
+  TimeItem,
+  TimeItemVariant,
+  UnicornItem,
+} from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
 export type CycleIndices = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
@@ -75,41 +82,143 @@ export class TimeControlSettings extends SettingsSection {
   };
 
   religionItems: {
-    [item in FaithItem | UnicornItem]: TimeControlBuildSettingsItem;
+    [item in FaithItem | UnicornItem]: TimeControlBuildSettingsItem & {
+      variant: UnicornItemVariant;
+    };
   } = {
-    unicornPasture: { checkForReset: true, triggerForReset: -1 },
-    unicornTomb: { checkForReset: true, triggerForReset: -1 },
-    ivoryTower: { checkForReset: true, triggerForReset: -1 },
-    ivoryCitadel: { checkForReset: true, triggerForReset: -1 },
-    skyPalace: { checkForReset: true, triggerForReset: -1 },
-    unicornUtopia: { checkForReset: true, triggerForReset: -1 },
-    sunspire: { checkForReset: true, triggerForReset: -1 },
+    unicornPasture: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Unknown_zp,
+    },
+    unicornTomb: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
+    ivoryTower: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
+    ivoryCitadel: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Ziggurat,
+    },
+    skyPalace: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
+    unicornUtopia: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Ziggurat,
+    },
+    sunspire: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
 
-    marker: { checkForReset: true, triggerForReset: -1 },
-    unicornGraveyard: { checkForReset: true, triggerForReset: -1 },
-    unicornNecropolis: { checkForReset: true, triggerForReset: -1 },
-    blackPyramid: { checkForReset: true, triggerForReset: -1 },
+    marker: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
+    unicornGraveyard: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Ziggurat,
+    },
+    unicornNecropolis: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Ziggurat,
+    },
+    blackPyramid: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Ziggurat,
+    },
 
-    solarchant: { checkForReset: true, triggerForReset: -1 },
-    scholasticism: { checkForReset: true, triggerForReset: -1 },
-    goldenSpire: { checkForReset: true, triggerForReset: -1 },
-    sunAltar: { checkForReset: true, triggerForReset: -1 },
-    stainedGlass: { checkForReset: true, triggerForReset: -1 },
-    solarRevolution: { checkForReset: true, triggerForReset: -1 },
-    basilica: { checkForReset: true, triggerForReset: -1 },
-    templars: { checkForReset: true, triggerForReset: -1 },
-    apocripha: { checkForReset: true, triggerForReset: -1 },
-    transcendence: { checkForReset: true, triggerForReset: -1 },
+    solarchant: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
+    scholasticism: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
+    goldenSpire: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
+    sunAltar: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
+    stainedGlass: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
+    solarRevolution: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
+    basilica: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
+    templars: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
+    apocripha: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
+    transcendence: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.OrderOfTheSun,
+    },
 
-    blackObelisk: { checkForReset: true, triggerForReset: -1 },
-    blackNexus: { checkForReset: true, triggerForReset: -1 },
-    blackCore: { checkForReset: true, triggerForReset: -1 },
-    singularity: { checkForReset: true, triggerForReset: -1 },
-    blackLibrary: { checkForReset: true, triggerForReset: -1 },
-    blackRadiance: { checkForReset: true, triggerForReset: -1 },
-    blazar: { checkForReset: true, triggerForReset: -1 },
-    darkNova: { checkForReset: true, triggerForReset: -1 },
-    holyGenocide: { checkForReset: true, triggerForReset: -1 },
+    blackObelisk: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Cryptotheology,
+    },
+    blackNexus: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Cryptotheology,
+    },
+    blackCore: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Cryptotheology,
+    },
+    singularity: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Cryptotheology,
+    },
+    blackLibrary: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Cryptotheology,
+    },
+    blackRadiance: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Cryptotheology,
+    },
+    blazar: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Cryptotheology,
+    },
+    darkNova: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Cryptotheology,
+    },
+    holyGenocide: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: UnicornItemVariant.Cryptotheology,
+    },
   };
 
   spaceItems: {
@@ -161,20 +270,44 @@ export class TimeControlSettings extends SettingsSection {
   };
 
   timeItems: {
-    [item in TimeItem]: TimeControlBuildSettingsItem;
+    [item in TimeItem]: TimeControlBuildSettingsItem & { variant: TimeItemVariant };
   } = {
-    temporalBattery: { checkForReset: true, triggerForReset: -1 },
-    blastFurnace: { checkForReset: true, triggerForReset: -1 },
-    timeBoiler: { checkForReset: true, triggerForReset: -1 },
-    temporalAccelerator: { checkForReset: true, triggerForReset: -1 },
-    temporalImpedance: { checkForReset: true, triggerForReset: -1 },
-    ressourceRetrieval: { checkForReset: true, triggerForReset: -1 },
+    temporalBattery: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: TimeItemVariant.Unknown_chrone,
+    },
+    blastFurnace: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: TimeItemVariant.Unknown_chrone,
+    },
+    timeBoiler: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: TimeItemVariant.Unknown_chrone,
+    },
+    temporalAccelerator: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: TimeItemVariant.Unknown_chrone,
+    },
+    temporalImpedance: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: TimeItemVariant.Unknown_chrone,
+    },
+    ressourceRetrieval: {
+      checkForReset: true,
+      triggerForReset: -1,
+      variant: TimeItemVariant.Unknown_chrone,
+    },
 
-    cryochambers: { checkForReset: true, triggerForReset: -1 },
-    voidHoover: { checkForReset: true, triggerForReset: -1 },
-    voidRift: { checkForReset: true, triggerForReset: -1 },
-    chronocontrol: { checkForReset: true, triggerForReset: -1 },
-    voidResonator: { checkForReset: true, triggerForReset: -1 },
+    cryochambers: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
+    voidHoover: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
+    voidRift: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
+    chronocontrol: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
+    voidResonator: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
   };
 
   resources: {

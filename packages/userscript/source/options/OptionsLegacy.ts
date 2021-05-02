@@ -130,7 +130,7 @@ export type TimeItemOptions = {
 export type CraftItemOptions = {
   require: Requirement;
   max: number;
-  label: string;
+  label?: string;
   limited: boolean;
   limRat: number;
   enabled: boolean;

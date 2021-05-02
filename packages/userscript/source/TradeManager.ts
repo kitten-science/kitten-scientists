@@ -1,6 +1,7 @@
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
+import { ucfirst } from "./tools/Format";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { BuildButton, Race, RaceInfo, Resource, TradingTab } from "./types";
 import { UserScript } from "./UserScript";
@@ -34,7 +35,7 @@ export class TradeManager {
 
     this._host.gamePage.diplomacy.tradeMultiple(race, amount);
     this._host.storeForSummary(race.title, amount, "trade");
-    this._host.iactivity("act.trade", [amount, this._host.ucfirst(race.title)], "ks-trade");
+    this._host.iactivity("act.trade", [amount, ucfirst(race.title)], "ks-trade");
   }
 
   getProfitability(name: Race): unknown {
