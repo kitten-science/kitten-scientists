@@ -105,7 +105,7 @@ export type BuildButton<T = string> = {
     getPrices: (model: unknown) => Array<Price>;
     hasResources: (model: unknown) => boolean; // Probably generic
     doFixCryochamber: (model: unknown) => boolean; // Fix broken cryochambers
-    doShatterAmt: (model: unknown, willSkip: boolean) => void; // Shatter TC button
+    doShatterAmt: (model: unknown, amt: number) => void; // Shatter TC button
     incrementValue: (model: unknown) => void;
     onAll: (model: unknown) => void; // Turn on all (steamworks)
     payPrice: (model: unknown) => void;

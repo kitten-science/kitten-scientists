@@ -10,6 +10,7 @@ import {
   SpaceItem,
   UnicornFaithItemOptions,
 } from "./options/OptionsLegacy";
+import { CycleIndices } from "./options/TimeControlSettings";
 import { ReligionManager } from "./ReligionManager";
 import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
@@ -430,13 +431,16 @@ export class Engine {
         let skipCycles = 1;
         while (
           canSkip > yearsPerCycle &&
-          optionVals.timeSkip[(currentCycle + skipCycles) % cyclesPerEra]
+          optionVals.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
         ) {
           willSkip += yearsPerCycle;
           canSkip -= yearsPerCycle;
           skipCycles += 1;
         }
-        if (optionVals.timeSkip[(currentCycle + skipCycles) % cyclesPerEra] && canSkip > 0)
+        if (
+          optionVals.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices] &&
+          canSkip > 0
+        )
           willSkip += canSkip;
       }
       if (willSkip > 0) {
@@ -478,7 +482,7 @@ export class Engine {
     const freeKittens = this._host.gamePage.village.getFreeKittens();
     if (!freeKittens) return;
 
-    let jobName: Jobs = "";
+    let jobName: Jobs | undefined;
     let minRatio = Infinity;
     let currentRatio = 0;
     for (const i in this._host.gamePage.village.jobs) {
@@ -511,7 +515,7 @@ export class Engine {
 
   autofeed(): void {
     const levi = this._host.gamePage.diplomacy.get("leviathans");
-    const nCorn = this._host.gamePage.resPool.get("necrocorn");
+    const nCorn = mustExist(this._host.gamePage.resPool.get("necrocorn"));
     if (!(levi.unlocked && nCorn.value > 0)) {
       return;
     }
@@ -762,14 +766,11 @@ export class Engine {
     }
   }
 
-  private _worship(
-    builds: Partial<Record<FaithItem, UnicornFaithItemOptions>> = this._host.options.auto.faith
-      .items
-  ): void {
+  private _worship(builds: Partial<Record<FaithItem, UnicornFaithItemOptions>>): void {
     const buildManager = this._religionManager;
     const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;
-    const trigger = this._host.options.auto.faith.trigger;
+    const trigger = this._host.options.auto.religion.trigger;
 
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     buildManager.manager.render();
@@ -849,7 +850,7 @@ export class Engine {
   }
 
   upgrade(): void {
-    const upgrades = this._host.options.auto.upgrade.items;
+    const upgrades = this._host.options.auto.unlock.items;
     const upgradeManager = this._upgradeManager;
     const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;
@@ -1142,7 +1143,7 @@ export class Engine {
     }
   }
 
-  build(builds: Record<BuildItem, BuildItemOptions> = this._host.options.auto.build.items): void {
+  build(builds: Partial<Record<BuildItem, BuildItemOptions>> = this._host.options.auto.build.items): void {
     const buildManager = this._buildManager;
     const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;

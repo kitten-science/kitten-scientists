@@ -2,6 +2,7 @@ import { ResourcesSettingsItem } from "../options/ResourcesSettings";
 import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
 import { clog } from "../tools/Log";
+import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 
@@ -224,7 +225,7 @@ export abstract class SettingsSectionUi<TState> {
         option.stock.toFixed(0)
       );
       if (value !== null) {
-        this.setStockValue(name, value, false);
+        this.setStockValue(name, parseInt(value), false);
         //this._host.saveToKittenStorage();
       }
     });
@@ -306,7 +307,7 @@ export abstract class SettingsSectionUi<TState> {
     stockElement.on("click", () => {
       const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
       if (value !== null) {
-        this.setStockValue(name, value, true);
+        this.setStockValue(name, parseInt(value), true);
         //this._host.saveToKittenStorage();
       }
     });
@@ -360,12 +361,12 @@ export abstract class SettingsSectionUi<TState> {
     if (forReset) {
       //path = `#resource-reset-${name} #stock-value-${name}`;
       value = value < 0 ? Infinity : value;
-      this._host.options.auto.resources[name]!.checkForReset = true;
-      this._host.options.auto.resources[name]!.stockForReset = value;
+      mustExist(this._host.options.auto.timeCtrl.resources[name]).checkForReset = true;
+      mustExist(this._host.options.auto.timeCtrl.resources[name]).stockForReset = value;
     } else {
       //path = `#resource-${name} #stock-value-${name}`;
-      this._host.options.auto.resources[name]!.enabled = true;
-      this._host.options.auto.resources[name]!.stock = value;
+      mustExist(this._host.options.auto.resources[name]).enabled = true;
+      mustExist(this._host.options.auto.resources[name]).stock = value;
     }
     /*
     $(path).text(
@@ -384,10 +385,12 @@ export abstract class SettingsSectionUi<TState> {
       return;
     }
 
+    /*
     if (!this._host.options.auto.resources[name]) {
       this._host.options.auto.resources[name] = {};
     }
-    this._host.options.auto.resources[name]!.consume = value;
+    */
+    mustExist(this._host.options.auto.resources[name]).consume = value;
     //$("#consume-rate-" + name).text(this._host.i18n("resources.consume", [n.toFixed(2)]));
   }
 }

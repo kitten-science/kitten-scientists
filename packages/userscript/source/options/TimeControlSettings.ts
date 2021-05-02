@@ -275,32 +275,32 @@ export class TimeControlSettings extends SettingsSection {
     temporalBattery: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrone,
+      variant: TimeItemVariant.Unknown_chrono,
     },
     blastFurnace: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrone,
+      variant: TimeItemVariant.Unknown_chrono,
     },
     timeBoiler: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrone,
+      variant: TimeItemVariant.Unknown_chrono,
     },
     temporalAccelerator: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrone,
+      variant: TimeItemVariant.Unknown_chrono,
     },
     temporalImpedance: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrone,
+      variant: TimeItemVariant.Unknown_chrono,
     },
     ressourceRetrieval: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrone,
+      variant: TimeItemVariant.Unknown_chrono,
     },
 
     cryochambers: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },

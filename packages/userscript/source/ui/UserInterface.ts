@@ -276,7 +276,8 @@ export class UserInterface {
       "#ks-options #toggle-list-resources .stockWarn *," +
         "#ks-options #toggle-reset-list-resources .stockWarn * {" +
         "color: " +
-        this._host.options.stockwarncolor +
+        //this._host.options.stockwarncolor +
+        "#DD1E00"+
         ";" +
         "}"
     );
