@@ -10,7 +10,7 @@ import { OptionsSettings } from "./OptionsSettings";
 import { ReligionSettings } from "./ReligionSettings";
 import { ResourcesSettingsItem } from "./ResourcesSettings";
 import { SpaceSettings } from "./SpaceSettings";
-import { TimeControlSettings } from "./TimeControlSettings";
+import { CycleIndices, TimeControlSettings } from "./TimeControlSettings";
 import { TimeSettings } from "./TimeSettings";
 import { TradingSettings } from "./TradingSettings";
 import { UnlockingSettings } from "./UnlockingSettings";
@@ -79,6 +79,142 @@ export class Options {
     karmaTotal: 0,
   };
 
+  asLegacyOptions(): KittenStorageType {
+    const subject = {} as KittenStorageType;
+
+    subject.toggles = {
+      build: this.auto.build.enabled,
+      space: this.auto.space.enabled,
+      craft: this.auto.craft.enabled,
+      upgrade: this.auto.unlock.enabled,
+      trade: this.auto.trade.enabled,
+      faith: this.auto.religion.enabled,
+      time: this.auto.time.enabled,
+      timeCtrl: this.auto.timeCtrl.enabled,
+      distribute: this.auto.distribute.enabled,
+      options: this.auto.options.enabled,
+      filter: this.auto.filters.enabled,
+    };
+
+    subject.triggers = {
+      faith: this.auto.religion.trigger,
+      time: this.auto.time.trigger,
+      build: this.auto.build.trigger,
+      space: this.auto.space.trigger,
+      craft: this.auto.craft.trigger,
+      trade: this.auto.trade.trigger,
+    };
+
+    subject.reset = {
+      reset: this.reset.reset,
+      times: this.reset.times,
+      paragonLastTime: this.reset.paragonLastTime,
+      pargonTotal: this.reset.paragonTotal,
+      karmaLastTime: this.reset.karmaLastTime,
+      karmaTotal: this.reset.karmaTotal,
+    };
+
+    subject.items = {};
+    for (const [name, item] of objectEntries(this.auto.build.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`set-${name}-max` as const] = item.max;
+    }
+    for (const [name, item] of objectEntries(this.auto.craft.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`toggle-limited-${name}` as const] = item.limited;
+    }
+    for (const [name, item] of objectEntries(this.auto.distribute.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`toggle-limited-${name}` as const] = item.limited;
+      subject.items[`set-${name}-max` as const] = item.max;
+    }
+    for (const [name, item] of objectEntries(this.auto.filters.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+    }
+    for (const [name, item] of objectEntries(this.auto.options.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`set-${name}-subTrigger` as const] = item.subTrigger;
+    }
+    for (const [name, item] of objectEntries(this.auto.religion.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+    }
+    for (const [name, item] of objectEntries(this.auto.space.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`set-${name}-max` as const] = item.max;
+    }
+
+    subject.items["toggle-accelerateTime"] = this.auto.timeCtrl.items.accelerateTime.enabled;
+    subject.items[
+      "set-accelerateTime-subTrigger"
+    ] = this.auto.timeCtrl.items.accelerateTime.subTrigger;
+
+    subject.items["toggle-reset"] = this.auto.timeCtrl.items.reset.enabled;
+
+    subject.items["toggle-timeSkip"] = this.auto.timeCtrl.items.timeSkip.enabled;
+    subject.items["set-timeSkip-subTrigger"] = this.auto.timeCtrl.items.timeSkip.subTrigger;
+    subject.items["toggle-timeSkip-autumn"] = this.auto.timeCtrl.items.timeSkip.autumn;
+    subject.items["toggle-timeSkip-spring"] = this.auto.timeCtrl.items.timeSkip.spring;
+    subject.items["toggle-timeSkip-summer"] = this.auto.timeCtrl.items.timeSkip.summer;
+    subject.items["toggle-timeSkip-winter"] = this.auto.timeCtrl.items.timeSkip.winter;
+
+    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
+      subject.items[
+        `toggle-timeSkip-${cycleIndex as CycleIndices}` as const
+      ] = this.auto.timeCtrl.items.timeSkip[cycleIndex as CycleIndices];
+    }
+
+    for (const [name, item] of objectEntries(this.auto.timeCtrl.buildItems)) {
+      subject.items[`toggle-reset-build-${name}` as const] = item.checkForReset;
+      subject.items[`set-reset-build-${name}-min` as const] = item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(this.auto.timeCtrl.religionItems)) {
+      subject.items[`toggle-reset-faith-${name}` as const] = item.checkForReset;
+      subject.items[`set-reset-faith-${name}-min` as const] = item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(this.auto.timeCtrl.spaceItems)) {
+      subject.items[`toggle-reset-space-${name}` as const] = item.checkForReset;
+      subject.items[`set-reset-space-${name}-min` as const] = item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(this.auto.timeCtrl.timeItems)) {
+      subject.items[`toggle-reset-time-${name}` as const] = item.checkForReset;
+      subject.items[`set-reset-time-${name}-min` as const] = item.triggerForReset;
+    }
+
+    for (const [name, item] of objectEntries(this.auto.trade.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`toggle-limited-${name}` as const] = item.limited;
+      subject.items[`toggle-${name}-autumn` as const] = item.autumn;
+      subject.items[`toggle-${name}-spring` as const] = item.spring;
+      subject.items[`toggle-${name}-summer` as const] = item.summer;
+      subject.items[`toggle-${name}-winter` as const] = item.winter;
+    }
+    for (const [name, item] of objectEntries(this.auto.unlock.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+    }
+
+    subject.resources = {};
+    for (const [name, item] of objectEntries(this.auto.resources)) {
+      subject.resources[name] = {
+        checkForReset: false,
+        stockForReset: 0,
+        consume: item.consume,
+        enabled: item.enabled,
+        stock: item.stock,
+      };
+    }
+    for (const [name, item] of objectEntries(this.auto.timeCtrl.resources)) {
+      subject.resources[name] = {
+        checkForReset: item.checkForReset,
+        stockForReset: item.stockForReset,
+        consume: 0,
+        enabled: false,
+        stock: 0,
+      };
+    }
+
+    return subject;
+  }
+
   static parseLegacyOptions(optionsObject: unknown): Options {
     const result = new Options();
 
@@ -131,11 +267,6 @@ export class Options {
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
-    for (const [name, item] of objectEntries(result.auto.distribute.items)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
-      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
-    }
     for (const [name, item] of objectEntries(result.auto.filters.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }
@@ -145,6 +276,10 @@ export class Options {
     }
     for (const [name, item] of objectEntries(result.auto.religion.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
+    for (const [name, item] of objectEntries(result.auto.space.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
 
     // Load remaining religion settings.
@@ -203,9 +338,9 @@ export class Options {
       subject.items["toggle-timeSkip-winter"] ?? result.auto.timeCtrl.items.timeSkip.winter;
 
     for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
-      result.auto.timeCtrl.items.timeSkip[cycleIndex] =
-        subject.items[`toggle-timeSkip-${cycleIndex}` as const] ??
-        result.auto.timeCtrl.items.timeSkip[cycleIndex];
+      result.auto.timeCtrl.items.timeSkip[cycleIndex as CycleIndices] =
+        subject.items[`toggle-timeSkip-${cycleIndex as CycleIndices}` as const] ??
+        result.auto.timeCtrl.items.timeSkip[cycleIndex as CycleIndices];
     }
 
     for (const [name, item] of objectEntries(result.auto.timeCtrl.buildItems)) {
@@ -248,7 +383,7 @@ export class Options {
     for (const [name, item] of objectEntries(subject.resources)) {
       if (item.checkForReset) {
         result.auto.timeCtrl.resources[name] = {
-          checkForReset: true,
+          checkForReset: item.checkForReset,
           stockForReset: item.stockForReset,
         };
       } else {

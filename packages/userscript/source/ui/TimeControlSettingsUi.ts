@@ -1,4 +1,4 @@
-import { TimeControlBuildSettingsItem, TimeControlSettings } from "../options/TimeControlSettings";
+import { CycleIndices, TimeControlBuildSettingsItem, TimeControlSettings } from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { isNil, Maybe, mustExist } from "../tools/Maybe";
@@ -1085,7 +1085,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   }
 
   private _getCycle(
-    index: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9,
+    index: CycleIndices,
     option: TimeControlSettings["items"]["timeSkip"]
   ): JQuery<HTMLElement> {
     const cycle = this._host.gamePage.calendar.cycles[index];
