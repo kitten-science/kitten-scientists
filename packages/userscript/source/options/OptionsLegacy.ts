@@ -116,7 +116,7 @@ export type BuildItemOptions = {
 export type SpaceItem = SpaceUpgrades;
 
 export enum TimeItemVariant {
-  Unknown_chrone = "chrono",
+  Unknown_chrono = "chrono",
   VoidSpace = "void",
 }
 export type TimeItemOptions = {
@@ -1446,42 +1446,42 @@ export const DefaultOptions: OptionsLegacy = {
         temporalBattery: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrone,
+          variant: TimeItemVariant.Unknown_chrono,
           checkForReset: true,
           triggerForReset: -1,
         },
         blastFurnace: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrone,
+          variant: TimeItemVariant.Unknown_chrono,
           checkForReset: true,
           triggerForReset: -1,
         },
         timeBoiler: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrone,
+          variant: TimeItemVariant.Unknown_chrono,
           checkForReset: true,
           triggerForReset: -1,
         },
         temporalAccelerator: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrone,
+          variant: TimeItemVariant.Unknown_chrono,
           checkForReset: true,
           triggerForReset: -1,
         },
         temporalImpedance: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrone,
+          variant: TimeItemVariant.Unknown_chrono,
           checkForReset: true,
           triggerForReset: -1,
         },
         ressourceRetrieval: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrone,
+          variant: TimeItemVariant.Unknown_chrono,
           checkForReset: true,
           triggerForReset: -1,
         },

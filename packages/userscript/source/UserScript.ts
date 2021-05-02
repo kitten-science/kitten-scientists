@@ -174,20 +174,23 @@ export class UserScript {
 
   private _message(...args: Array<number | string>): void {
     args.push("ks-default");
-    args.push(this.options.msgcolor);
+    //args.push(this.options.msgcolor);
+    args.push("#aa50fe");
     this._printOutput(...args);
   }
 
   private _activity(...args: Array<number | string>): void {
     const activityClass = args.length > 1 ? " type_" + args.pop() : "";
     args.push("ks-activity" + activityClass);
-    args.push(this.options.activitycolor);
+    //args.push(this.options.activitycolor);
+    args.push("#E65C00");
     this._printOutput(...args);
   }
 
   private _summary(...args: Array<number | string>): void {
     args.push("ks-summary");
-    args.push(this.options.summarycolor);
+    //args.push(this.options.summarycolor);
+    args.push("#009933");
     this._printOutput(...args);
   }
 
