@@ -22,6 +22,7 @@ import {
   BuildButton,
   Building,
   BuildingExt,
+  Jobs,
   Race,
   RaceInfo,
   Resource,
@@ -265,7 +266,7 @@ export class Engine {
     // stop!
     this.stop(false);
 
-    const sleep =  (time = 1500) =>{
+    const sleep = (time = 1500) => {
       return new Promise(resolve => {
         if (
           !(
@@ -356,7 +357,9 @@ export class Engine {
     if (typeof kittenStorage.reset === "undefined") kittenStorage.reset = {};
 
     kittenStorage.reset.karmaLastTime = mustExist(this._host.gamePage.resPool.get("karma")).value;
-    kittenStorage.reset.paragonLastTime = mustExist(this._host.gamePage.resPool.get("paragon")).value;
+    kittenStorage.reset.paragonLastTime = mustExist(
+      this._host.gamePage.resPool.get("paragon")
+    ).value;
     kittenStorage.reset.times += 1;
     kittenStorage.reset.reset = true;
     saveToKittenStorage();
@@ -405,7 +408,9 @@ export class Engine {
       const yearsPerCycle = this._host.gamePage.calendar.yearsPerCycle;
       const remainingYearsCurrentCycle = yearsPerCycle - this._host.gamePage.calendar.cycleYear;
       const cyclesPerEra = this._host.gamePage.calendar.cyclesPerEra;
-      const factor = mustExist(this._host.gamePage.challenges.getChallenge("1000Years")).researched ? 5 : 10;
+      const factor = mustExist(this._host.gamePage.challenges.getChallenge("1000Years")).researched
+        ? 5
+        : 10;
       let canSkip = Math.min(Math.floor((heatMax - heatNow) / factor), optionVals.timeSkip.maximum);
       let willSkip = 0;
       if (canSkip < remainingYearsCurrentCycle) {
@@ -464,7 +469,7 @@ export class Engine {
     const freeKittens = this._host.gamePage.village.getFreeKittens();
     if (!freeKittens) return;
 
-    let jobName = "";
+    let jobName: Jobs = "";
     let minRatio = Infinity;
     let currentRatio = 0;
     for (const i in this._host.gamePage.village.jobs) {
@@ -488,7 +493,7 @@ export class Engine {
       this._villageManager.render();
       this._host.iactivity(
         "act.distribute",
-        [this._host.i18n("$village.job." + jobName)],
+        [this._host.i18n(`$village.job.${jobName}` as const)],
         "ks-distribute"
       );
       this._host.storeForSummary("distribute", 1);
@@ -533,7 +538,7 @@ export class Engine {
     if (
       waitForBestPrice == false &&
       coinPrice < 950.0 &&
-      previousRelic > this._host.options.auto.options.items.crypto.subTrigger
+      previousRelic > (this._host.options.auto.options.items.crypto.subTrigger ?? 0)
     ) {
       // function name changed in v1.4.8.0
       if (typeof this._host.gamePage.diplomacy.buyEcoin === "function") {
@@ -579,11 +584,11 @@ export class Engine {
   }
 
   worship(): void {
-    let builds = this._host.options.auto.faith.items;
+    let builds = this._host.options.auto.religion.items;
     const manager = this._religionManager;
     const buildManager = this._buildManager;
     const craftManager = this._craftManager;
-    const option = this._host.options.auto.faith.addition;
+    const option = this._host.options.auto.religion.addition;
 
     if (option.bestUnicornBuilding.enabled) {
       const bestUnicornBuilding = this.getBestUnicornBuilding();
@@ -625,12 +630,12 @@ export class Engine {
         {},
         builds,
         Object.fromEntries(
-          Object.entries(this._host.options.auto.unicorn.items).filter(
+          Object.entries(this._host.options.auto.religion.items).filter(
             ([k, v]) => v.variant != "zp"
           )
         )
       );
-      if (this._host.options.auto.unicorn.items.unicornPasture.enabled)
+      if (this._host.options.auto.religion.items.unicornPasture.enabled)
         this.build({ unicornPasture: { require: false, enabled: true } });
     }
     // religion build
