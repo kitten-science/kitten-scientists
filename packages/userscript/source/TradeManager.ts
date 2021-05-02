@@ -168,7 +168,7 @@ export class TradeManager {
       return 0;
     }
 
-    if (name === null || this._host.options.auto.trade.items[name].allowcapped) return amount;
+    if (name === null || name === "leviathans") return amount;
 
     const race = this.getRace(name);
 
