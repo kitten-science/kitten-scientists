@@ -2,7 +2,7 @@ import {
   BuildButton,
   Building,
   BuildingExt,
-  BuildingInfo,
+  BuildingMeta,
   Challenge,
   GameTab,
   Jobs,
@@ -19,10 +19,9 @@ import {
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from ".";
-import { SpaceItem } from "../options/OptionsLegacy";
 import { CycleIndices } from "../options/TimeControlSettings";
 import { ReligionTab } from "./religion";
-import { SpaceTab, SpaceUpgrades } from "./space";
+import { SpaceBuildings, SpaceTab } from "./space";
 import {
   ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
@@ -35,7 +34,8 @@ import { VillageTab } from "./village";
 
 export type GamePage = {
   bld: {
-    get: (build: Building) => BuildingInfo;
+    /** @deprecated Use `getBuildingExt()` instead. */
+    get: (build: Building) => BuildingMeta;
     getBuildingExt: (building: Building) => BuildingExt;
   };
   calendar: {
@@ -211,7 +211,7 @@ export type GamePage = {
   };
   space: {
     getBuilding: (
-      building: SpaceItem
+      building: SpaceBuildings
     ) => {
       calculateEffects: (self: unknown, game: GamePage) => void;
       /**
@@ -230,7 +230,7 @@ export type GamePage = {
        * An internationalized label for this space building.
        */
       label: string;
-      name: SpaceUpgrades;
+      name: SpaceBuildings;
       priceRatio: number;
       prices: Array<Price>;
       requiredTech: Array<"sattelites">;

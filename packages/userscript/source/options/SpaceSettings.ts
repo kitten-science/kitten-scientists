@@ -1,6 +1,7 @@
-import { SpaceItem } from "./OptionsLegacy";
+import { SpaceBuildings } from "../types";
 import { SettingsSection } from "./SettingsSection";
 
+export type SpaceItem = SpaceBuildings;
 export type SpaceSettingsItem = {
   enabled: boolean;
   $enabled?: JQuery<HTMLElement>;

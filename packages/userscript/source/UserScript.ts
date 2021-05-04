@@ -169,7 +169,7 @@ export class UserScript {
     const msg = this.gamePage.msg(...args);
     $(msg.span).css("color", color);
 
-    clog(args);
+    cdebug(args);
   }
 
   private _message(...args: Array<number | string>): void {

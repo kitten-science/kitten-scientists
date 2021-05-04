@@ -1,8 +1,8 @@
 import { CraftManager } from "./CraftManager";
-import { BuildItem, FaithItem, Requirement, SpaceItem, TimeItem } from "./options/OptionsLegacy";
+import { Requirement } from "./options/OptionsLegacy";
 import { objectEntries } from "./tools/Entries";
 import { mustExist } from "./tools/Maybe";
-import { BuildButton, Price, Resource } from "./types";
+import { AllBuildableItems, BuildButton, BuildingMeta, Price, Resource } from "./types";
 import { UserScript } from "./UserScript";
 
 export class BulkManager {
@@ -17,54 +17,34 @@ export class BulkManager {
   bulk(
     builds: Partial<
       Record<
-        BuildItem | FaithItem | SpaceItem | TimeItem,
+        AllBuildableItems,
         {
           enabled: boolean;
-          label: string;
+          label?: string;
           max: number;
-          name: string;
+          name?: string;
           require?: Requirement;
           stage?: number;
           variant?: unknown;
         }
       >
     >,
-    metaData: Partial<
-      Record<
-        BuildItem | FaithItem | SpaceItem | TimeItem,
-        {
-          name: string;
-          noStackable?: unknown;
-          priceRatio: number;
-          prices: Array<Price>;
-          rHidden?: boolean;
-          stackable?: boolean;
-          stage?: number;
-          stages?: Array<{
-            priceRatio: number;
-            prices: Array<Price>;
-          }>;
-          tHidden?: boolean;
-          unlocked?: boolean;
-          val: number;
-        }
-      >
-    >,
+    metaData: Partial<Record<AllBuildableItems, BuildingMeta>>,
     trigger: number,
     source?: "bonfire" | "space"
   ): Array<{
     count: number;
-    id: string;
+    id: AllBuildableItems;
     label: string;
-    name: string;
+    name: AllBuildableItems;
     stage?: number;
     variant?: unknown;
   }> {
     const bList: Array<{
       count: number;
-      id: string;
+      id: AllBuildableItems;
       label: string;
-      name: string;
+      name: AllBuildableItems;
       stage?: number;
       variant?: unknown;
     }> = [];
