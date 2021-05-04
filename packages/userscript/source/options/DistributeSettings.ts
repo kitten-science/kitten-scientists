@@ -1,6 +1,7 @@
 import { Jobs } from "../types";
 import { SettingsSection } from "./SettingsSection";
 
+export type DistributeItems = Jobs;
 export type DistributeSettingsItem = {
   enabled: boolean;
   $enabled?: JQuery<HTMLElement>;
@@ -13,7 +14,7 @@ export type DistributeSettingsItem = {
 };
 export class DistributeSettings extends SettingsSection {
   items: {
-    [item in Jobs]: DistributeSettingsItem;
+    [item in DistributeItems]: DistributeSettingsItem;
   } = {
     woodcutter: { enabled: true, limited: true, max: 1 },
     farmer: { enabled: true, limited: true, max: 1 },

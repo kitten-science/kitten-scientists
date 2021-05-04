@@ -1,13 +1,10 @@
 import { Resource, UnicornItemVariant } from "../types";
-import {
-  BuildItem,
-  FaithItem,
-  SpaceItem,
-  TimeItem,
-  TimeItemVariant,
-  UnicornItem,
-} from "./OptionsLegacy";
+import { BuildItem } from "./BonfireSettings";
+import { TimeItemVariant } from "./OptionsLegacy";
+import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { SettingsSection } from "./SettingsSection";
+import { SpaceItem } from "./SpaceSettings";
+import { TimeItem } from "./TimeSettings";
 
 export type CycleIndices = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 

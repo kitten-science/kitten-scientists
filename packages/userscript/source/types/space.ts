@@ -5,7 +5,7 @@ export type SpaceTab = GameTab & {
   planetPanels: Array<Panel>;
 };
 
-export type SpaceUpgrades =
+export type SpaceBuildings =
   | "containmentChamber"
   | "cryostation"
   | "entangler"
@@ -34,7 +34,7 @@ export type SpaceBuildingInfo = {
    * An internationalized label for this space building.
    */
   label: string;
-  name:SpaceUpgrades;
+  name:SpaceBuildings;
   priceRatio:number;
   prices: Array<Price>;
 

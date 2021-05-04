@@ -3,13 +3,10 @@ import { BulkManager } from "./BulkManager";
 import { CacheManager } from "./CacheManager";
 import { CraftManager } from "./CraftManager";
 import { ExplorationManager } from "./ExplorationManager";
-import {
-  BuildItem,
-  BuildItemOptions,
-  FaithItem,
-  SpaceItem,
-  UnicornFaithItemOptions,
-} from "./options/OptionsLegacy";
+import { BonfireSettingsItem, BuildItem } from "./options/BonfireSettings";
+import { UnicornFaithItemOptions } from "./options/OptionsLegacy";
+import { FaithItem } from "./options/ReligionSettings";
+import { SpaceItem } from "./options/SpaceSettings";
 import { CycleIndices } from "./options/TimeControlSettings";
 import { ReligionManager } from "./ReligionManager";
 import { SpaceManager } from "./SpaceManager";
@@ -21,8 +18,7 @@ import { TradeManager } from "./TradeManager";
 import {
   AbstractReligionUpgradeInfo,
   BuildButton,
-  Building,
-  BuildingExt,
+  BuildingMeta,
   Jobs,
   Race,
   RaceInfo,
@@ -1143,18 +1139,19 @@ export class Engine {
     }
   }
 
-  build(builds: Partial<Record<BuildItem, BuildItemOptions>> = this._host.options.auto.build.items): void {
+  build(
+    builds: Partial<Record<BuildItem, BonfireSettingsItem>> = this._host.options.auto.build.items
+  ): void {
     const buildManager = this._buildManager;
-    const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;
     const trigger = this._host.options.auto.build.trigger;
 
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     buildManager.manager.render();
 
-    const metaData: Partial<Record<BuildItem, BuildingExt["meta"]>> = {};
+    const metaData: Partial<Record<BuildItem, BuildingMeta>> = {};
     for (const [name, build] of objectEntries(builds)) {
-      metaData[name] = buildManager.getBuild(build.name || (name as Building)).meta;
+      metaData[name] = buildManager.getBuild(name).meta;
     }
 
     const buildList = bulkManager.bulk(builds, metaData, trigger, "bonfire");
@@ -1164,7 +1161,7 @@ export class Engine {
       if (buildList[entry].count > 0) {
         buildManager.build(
           buildList[entry].name || buildList[entry].id,
-          buildList[entry].stage,
+          buildList[entry].stage ?? 0,
           buildList[entry].count
         );
         refreshRequired = true;

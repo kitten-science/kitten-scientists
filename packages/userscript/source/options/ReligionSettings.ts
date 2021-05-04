@@ -1,12 +1,41 @@
 import { UnicornItemVariant } from "../types";
-import { FaithItem, UnicornItem } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
-export type ReligionAdditionItem =
-|"adore"
-|"autoPraise"
-|"bestUnicornBuilding"
-|"transcend";
+export type FaithItem =
+  | "apocripha"
+  | "basilica"
+  | "blackCore"
+  | "blackLibrary"
+  | "blackNexus"
+  | "blackObelisk"
+  | "blackPyramid"
+  | "blackRadiance"
+  | "blazar"
+  | "darkNova"
+  | "goldenSpire"
+  | "holyGenocide"
+  | "marker"
+  | "scholasticism"
+  | "singularity"
+  | "solarchant"
+  | "solarRevolution"
+  | "stainedGlass"
+  | "sunAltar"
+  | "templars"
+  | "transcendence"
+  | "unicornGraveyard"
+  | "unicornNecropolis";
+
+export type UnicornItem =
+  | "ivoryCitadel"
+  | "ivoryTower"
+  | "skyPalace"
+  | "sunspire"
+  | "unicornPasture"
+  | "unicornTomb"
+  | "unicornUtopia";
+
+export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
 export type ReligionSettingsItem = {
   enabled: boolean;
   $enabled?: JQuery<HTMLElement>;

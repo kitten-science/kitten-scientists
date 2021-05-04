@@ -1,5 +1,12 @@
-import { BuildItem } from "./OptionsLegacy";
+import { Building } from "../types";
 import { SettingsSection } from "./SettingsSection";
+
+/**
+ * One of the building options in the KS menu.
+ * These are not identical to `Building`!
+ * `Building` is IDs of buildings as defined by KG. KS defines upgrade stages as well.
+ */
+export type BuildItem = Building | "broadcastTower" | "dataCenter" | "hydroPlant" | "solarFarm";
 
 export type BonfireSettingsItem = {
   enabled: boolean;

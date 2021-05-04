@@ -1,4 +1,7 @@
-import { GamePage } from "./gamePage";
+import { BuildItem } from "../options/BonfireSettings";
+import { FaithItem } from "../options/ReligionSettings";
+import { SpaceItem } from "../options/SpaceSettings";
+import { TimeItem } from "../options/TimeSettings";
 
 export type Season = "autumn" | "spring" | "summer" | "winter";
 export type Cycle =
@@ -12,6 +15,7 @@ export type Cycle =
   | "piscine"
   | "t-minus"
   | "kairo";
+
 export type ResourceCraftable =
   | "alloy"
   | "beam"
@@ -64,6 +68,11 @@ export type Resource =
   | "unobtainium"
   | "uranium"
   | "zebras";
+
+/**
+ * The type names of all supported buildings.
+ */
+export type AllBuildableItems = BuildItem | FaithItem | SpaceItem | TimeItem;
 
 export type TabId =
   | "Bonfire"
@@ -138,125 +147,9 @@ export type GameTab = {
   visible: boolean;
 };
 
-/**
- * The type names of all supported buildings.
- */
-export type Building =
-  | "academy"
-  | "accelerator"
-  | "aiCore"
-  | "amphitheatre"
-  | "aqueduct"
-  | "barn"
-  | "biolab"
-  | "blackPyramid"
-  | "brewery"
-  | "broadcastTower"
-  | "calciner"
-  | "chapel"
-  | "chronosphere"
-  | "containmentChamber"
-  | "cryostation"
-  | "dataCenter"
-  | "entangler"
-  | "factory"
-  | "field"
-  | "harbor"
-  | "heatsink"
-  | "hrHarvester"
-  | "hut"
-  | "hydrofracturer"
-  | "hydroPlant"
-  | "hydroponics"
-  | "ivoryCitadel"
-  | "ivoryTower"
-  | "library"
-  | "logHouse"
-  | "lumberMill"
-  | "magneto"
-  | "mansion"
-  | "marker"
-  | "mine"
-  | "mint"
-  | "moltenCore"
-  | "moonBase"
-  | "moonOutpost"
-  | "observatory"
-  | "oilWell"
-  | "orbitalArray"
-  | "pasture"
-  | "planetCracker"
-  | "quarry"
-  | "reactor"
-  | "researchVessel"
-  | "sattelite"
-  | "skyPalace"
-  | "smelter"
-  | "solarFarm"
-  | "spaceBeacon"
-  | "spaceElevator"
-  | "spaceStation"
-  | "spiceRefinery"
-  | "steamworks"
-  | "sunforge"
-  | "sunlifter"
-  | "sunspire"
-  | "tectonic"
-  | "temple"
-  | "terraformingStation"
-  | "tradepost"
-  | "unicornGraveyard"
-  | "unicornNecropolis"
-  | "unicornPasture"
-  | "unicornTomb"
-  | "unicornUtopia"
-  | "warehouse"
-  | "workshop"
-  | "zebraForge"
-  | "zebraOutpost"
-  | "zebraWorkshop"
-  | "ziggurat";
-
-export type BuildingInfo = {
-  calculateEffects: (self: unknown, game: GamePage) => void;
-  description: string;
-  effects: Record<string, unknown>;
-  flavor: string;
-  isAutomationEnabled: boolean;
-  jammed: boolean;
-  label: string;
-  name: Building;
-  on: number;
-  priceRatio: number;
-  prices: Array<Price>;
-  unlockable: boolean;
-  unlocked: boolean;
-  val: number;
-};
-
-export type BuildingExt = {
-  meta: {
-    calculateEffects: (model: unknown, game: GamePage) => void;
-    effects: { unicornsPerTickBase: number };
-    label: string;
-    name: string;
-    on: number;
-    priceRatio: number;
-    prices: Array<Price>;
-    stage: number;
-    stages: Array<{
-      label: string;
-      priceRatio: number;
-      prices: Array<Price>;
-      stageUnlocked: boolean;
-    }>;
-    unlocked: boolean;
-    val: number;
-  };
-};
-
 export type Challenge = "1000Years" | "anarchy" | "atheism" | "energy" | "winterIsComing";
 
+export * from "./buildings";
 export * from "./gamePage";
 export * from "./religion";
 export * from "./space";

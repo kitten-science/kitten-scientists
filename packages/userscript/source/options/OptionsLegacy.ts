@@ -1,49 +1,19 @@
 import { cwarn } from "../tools/Log";
 import {
-  Building,
+  AllBuildableItems,
   ChronoForgeUpgrades,
   Jobs,
   Resource,
-  SpaceUpgrades,
   UnicornItemVariant,
   VoidSpaceUpgrades,
 } from "../types";
+import { BuildItem } from "./BonfireSettings";
+import { DistributeItems } from "./DistributeSettings";
+import { FaithItem, UnicornItem } from "./ReligionSettings";
+import { SpaceItem } from "./SpaceSettings";
+import { TimeItem } from "./TimeSettings";
 
 export type Requirement = Resource | false;
-
-export type FaithItem =
-  | "apocripha"
-  | "basilica"
-  | "blackCore"
-  | "blackLibrary"
-  | "blackNexus"
-  | "blackObelisk"
-  | "blackPyramid"
-  | "blackRadiance"
-  | "blazar"
-  | "darkNova"
-  | "goldenSpire"
-  | "holyGenocide"
-  | "marker"
-  | "scholasticism"
-  | "singularity"
-  | "solarchant"
-  | "solarRevolution"
-  | "stainedGlass"
-  | "sunAltar"
-  | "templars"
-  | "transcendence"
-  | "unicornGraveyard"
-  | "unicornNecropolis";
-
-export type UnicornItem =
-  | "ivoryCitadel"
-  | "ivoryTower"
-  | "skyPalace"
-  | "sunspire"
-  | "unicornPasture"
-  | "unicornTomb"
-  | "unicornUtopia";
 
 export type UnicornFaithItemOptions = {
   require: Requirement;
@@ -54,66 +24,16 @@ export type UnicornFaithItemOptions = {
   triggerForReset: number;
 };
 
-/**
- * One of the building options in the KG menu.
- * These are not identical to `Building`!
- */
-export type BuildItem =
-  | "academy"
-  | "accelerator"
-  | "aiCore"
-  | "amphitheatre"
-  | "aqueduct"
-  | "barn"
-  | "biolab"
-  | "brewery"
-  | "broadcastTower"
-  | "calciner"
-  | "chapel"
-  | "chronosphere"
-  | "dataCenter"
-  | "factory"
-  | "field"
-  | "harbor"
-  | "hut"
-  | "hydroPlant"
-  | "library"
-  | "logHouse"
-  | "lumberMill"
-  | "magneto"
-  | "mansion"
-  | "mine"
-  | "mint"
-  | "observatory"
-  | "oilWell"
-  | "pasture"
-  | "quarry"
-  | "reactor"
-  | "smelter"
-  | "solarFarm"
-  | "steamworks"
-  | "temple"
-  | "tradepost"
-  | "unicornPasture"
-  | "warehouse"
-  | "workshop"
-  | "zebraForge"
-  | "zebraOutpost"
-  | "zebraWorkshop"
-  | "ziggurat";
-
 export type BuildItemOptions = {
   checkForReset: boolean;
   enabled: boolean;
   label: string;
   max: number;
-  name: Building;
+  name: AllBuildableItems;
   require: Requirement;
   stage?: number;
   triggerForReset: number;
 };
-
-export type SpaceItem = SpaceUpgrades;
 
 export enum TimeItemVariant {
   Unknown_chrono = "chrono",
@@ -136,8 +56,6 @@ export type CraftItemOptions = {
   enabled: boolean;
 };
 
-export type DistributeItems = Jobs;
-
 export type TradeItemOptions = {
   enabled: boolean;
   require: Requirement;
@@ -149,10 +67,7 @@ export type TradeItemOptions = {
   spring: boolean;
 };
 
-/**
- * The upgrades on the Time tab that we have options for.
- */
-export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCryochambers">;
+
 /**
  * Options for an automation of the Time tab.
  */
