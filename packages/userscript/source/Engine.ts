@@ -1151,7 +1151,7 @@ export class Engine {
 
     const metaData: Partial<Record<BuildItem, BuildingMeta>> = {};
     for (const [name, build] of objectEntries(builds)) {
-      metaData[name] = buildManager.getBuild(name).meta;
+      metaData[name] = buildManager.getBuild(build.name ?? name).meta;
     }
 
     const buildList = bulkManager.bulk(builds, metaData, trigger, "bonfire");
@@ -1161,7 +1161,7 @@ export class Engine {
       if (buildList[entry].count > 0) {
         buildManager.build(
           buildList[entry].name || buildList[entry].id,
-          buildList[entry].stage ?? 0,
+          buildList[entry].stage,
           buildList[entry].count
         );
         refreshRequired = true;

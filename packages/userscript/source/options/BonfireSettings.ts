@@ -14,6 +14,18 @@ export type BonfireSettingsItem = {
 
   max: number;
   $max?: JQuery<HTMLElement>;
+
+  /**
+   * In case this is an upgrade of another building, this is the name of the
+   * base building.
+   */
+  name?: Building;
+
+  /**
+   * In case this is an upgradable building, this indicates the level of
+   * the stage.
+   */
+  stage?: number;
 };
 export class BonfireSettings extends SettingsSection {
   trigger = 0;
@@ -31,12 +43,12 @@ export class BonfireSettings extends SettingsSection {
     factory: { enabled: true, max: -1 },
 
     field: { enabled: true, max: -1 },
-    pasture: { enabled: true, max: -1 },
-    solarFarm: { enabled: true, max: -1 },
+    pasture: { enabled: true, max: -1, stage: 0 },
+    solarFarm: { enabled: true, max: -1, stage: 1, name: "pasture" },
     mine: { enabled: true, max: -1 },
     lumberMill: { enabled: true, max: -1 },
-    aqueduct: { enabled: true, max: -1 },
-    hydroPlant: { enabled: true, max: -1 },
+    aqueduct: { enabled: true, max: -1, stage: 0 },
+    hydroPlant: { enabled: true, max: -1, stage: 1, name: "aqueduct" },
     oilWell: { enabled: true, max: -1 },
     quarry: { enabled: true, max: -1 },
 
@@ -48,13 +60,13 @@ export class BonfireSettings extends SettingsSection {
     steamworks: { enabled: false, max: -1 },
     magneto: { enabled: false, max: -1 },
 
-    library: { enabled: true, max: -1 },
-    dataCenter: { enabled: true, max: -1 },
+    library: { enabled: true, max: -1, stage: 0 },
+    dataCenter: { enabled: true, max: -1, stage: 1, name: "library" },
     academy: { enabled: true, max: -1 },
     observatory: { enabled: true, max: -1 },
 
-    amphitheatre: { enabled: true, max: -1 },
-    broadcastTower: { enabled: true, max: -1 },
+    amphitheatre: { enabled: true, max: -1, stage: 0 },
+    broadcastTower: { enabled: true, max: -1, stage: 1, name: "amphitheatre" },
     tradepost: { enabled: true, max: -1 },
     chapel: { enabled: true, max: -1 },
     temple: { enabled: true, max: -1 },

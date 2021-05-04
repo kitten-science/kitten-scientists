@@ -5,6 +5,15 @@ import { mustExist } from "./tools/Maybe";
 import { AllBuildableItems, BuildButton, BuildingMeta, Price, Resource } from "./types";
 import { UserScript } from "./UserScript";
 
+export type BulkBuildListItem = {
+  count: number;
+  id: AllBuildableItems;
+  label?: string;
+  name?: AllBuildableItems;
+  stage?: number;
+  variant?: unknown;
+};
+
 export class BulkManager {
   private readonly _host: UserScript;
   private readonly _craftManager: CraftManager;
@@ -32,22 +41,8 @@ export class BulkManager {
     metaData: Partial<Record<AllBuildableItems, BuildingMeta>>,
     trigger: number,
     source?: "bonfire" | "space"
-  ): Array<{
-    count: number;
-    id: AllBuildableItems;
-    label: string;
-    name: AllBuildableItems;
-    stage?: number;
-    variant?: unknown;
-  }> {
-    const bList: Array<{
-      count: number;
-      id: AllBuildableItems;
-      label: string;
-      name: AllBuildableItems;
-      stage?: number;
-      variant?: unknown;
-    }> = [];
+  ): Array<BulkBuildListItem> {
+    const bList: Array<BulkBuildListItem> = [];
     const countList = [];
     let counter = 0;
     for (const [name, build] of objectEntries(builds)) {
@@ -74,10 +69,9 @@ export class BulkManager {
       if (name === "ressourceRetrieval" && data.val >= 100) {
         continue;
       }
-      const prices =
-        typeof data.stages !== "undefined"
-          ? data.stages[mustExist(data.stage)].prices
-          : data.prices;
+      const prices = mustExist(
+        typeof data.stages !== "undefined" ? data.stages[mustExist(data.stage)].prices : data.prices
+      );
       const priceRatio = this.getPriceRatio(data, source);
       if (!this.singleBuildPossible(data, prices, priceRatio, source)) {
         continue;
@@ -273,15 +267,7 @@ export class BulkManager {
     return counter;
   }
 
-  getPriceRatio(
-    data: {
-      name: string;
-      priceRatio: number;
-      stage?: number;
-      stages?: Array<{ priceRatio: number }>;
-    },
-    source?: "bonfire" | "space"
-  ): number {
+  getPriceRatio(data: BuildingMeta, source?: "bonfire" | "space"): number {
     const ratio = !data.stages
       ? data.priceRatio
       : data.priceRatio || data.stages[mustExist(data.stage)].priceRatio;
