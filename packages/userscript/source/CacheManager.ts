@@ -5,13 +5,16 @@ import { UserScript } from "./UserScript";
 export class CacheManager {
   private readonly _host: UserScript;
 
+  private readonly _cache = new Array<{ materials: Record<Resource, number>; timeStamp: number }>();
+  private readonly _cacheSum: Partial<Record<Resource, number>> = {};
+
   constructor(host: UserScript) {
     this._host = host;
   }
 
-  pushToCache(data: { materials: Record<Resource, number>, timeStamp: number }): void {
-    const cache = this._host.options.auto.cache.cache;
-    const cacheSum = this._host.options.auto.cache.cacheSum;
+  pushToCache(data: { materials: Record<Resource, number>; timeStamp: number }): void {
+    const cache = this._cache;
+    const cacheSum = this._cacheSum;
     const materials = data["materials"];
     //var currentTick = this._host.gamePage.timer.ticksTotal;
 
@@ -20,7 +23,8 @@ export class CacheManager {
       if (!cacheSum[mat]) {
         cacheSum[mat] = 0;
       }
-      cacheSum[mat] += amount;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      cacheSum[mat]! += amount;
     }
 
     for (let i = 0; i < cache.length; i++) {
@@ -31,7 +35,8 @@ export class CacheManager {
           if (!cacheSum[mat]) {
             cacheSum[mat] = 0;
           }
-          cacheSum[mat] -= amount;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          cacheSum[mat]! -= amount;
         }
         cache.shift();
         i--;
@@ -42,17 +47,18 @@ export class CacheManager {
   }
 
   getResValue(res: Resource): number {
-    const cache = this._host.options.auto.cache.cache;
+    const cache = this._cache;
     if (cache.length === 0) {
       return 0;
     }
-    const cacheSum = this._host.options.auto.cache.cacheSum;
+    const cacheSum = this._cacheSum;
     if (!cacheSum[res]) {
       return 0;
     }
     const currentTick = this._host.gamePage.timer.ticksTotal;
     const startingTick = cache[0].timeStamp;
 
-    return cacheSum[res] / (currentTick - startingTick);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return cacheSum[res]! / (currentTick - startingTick);
   }
 }
