@@ -291,13 +291,13 @@ export class BulkManager {
     source?: "bonfire" | "space"
   ): boolean {
     const pricesDiscount = this._host.gamePage.getLimitedDR(
-      this._host.gamePage.getEffect(data.name + "CostReduction"),
+      this._host.gamePage.getEffect(`${data.name}CostReduction`),
       1
     );
     const priceModifier = 1 - pricesDiscount;
     for (const price in prices) {
       const resPriceDiscount = this._host.gamePage.getLimitedDR(
-        this._host.gamePage.getEffect(prices[price].name + "CostReduction"),
+        this._host.gamePage.getEffect(`${prices[price].name}CostReduction`),
         1
       );
       const resPriceModifier = 1 - resPriceDiscount;
