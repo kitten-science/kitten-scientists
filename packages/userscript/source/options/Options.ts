@@ -15,6 +15,8 @@ import { TimeSettings } from "./TimeSettings";
 import { TradingSettings } from "./TradingSettings";
 import { UnlockingSettings } from "./UnlockingSettings";
 
+export type Requirement = Resource | false;
+
 export class Options {
   /**
    * The interval at which the internal processing loop is run, in milliseconds.
