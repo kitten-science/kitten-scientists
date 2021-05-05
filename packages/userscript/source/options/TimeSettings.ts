@@ -1,4 +1,5 @@
 import { ChronoForgeUpgrades, VoidSpaceUpgrades } from "../types";
+import { Requirement } from "./Options";
 import { TimeItemVariant } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
@@ -9,6 +10,9 @@ export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCry
 export type TimeSettingsItem = {
   enabled: boolean;
   $enabled?: JQuery<HTMLElement>;
+
+  require: Requirement;
+
   variant: TimeItemVariant;
 };
 export class TimeSettings extends SettingsSection {
@@ -18,17 +22,21 @@ export class TimeSettings extends SettingsSection {
   items: {
     [item in TimeItem]: TimeSettingsItem;
   } = {
-    temporalBattery: { enabled: false, variant: TimeItemVariant.Unknown_chrono },
-    blastFurnace: { enabled: false, variant: TimeItemVariant.Unknown_chrono },
-    timeBoiler: { enabled: false, variant: TimeItemVariant.Unknown_chrono },
-    temporalAccelerator: { enabled: false, variant: TimeItemVariant.Unknown_chrono },
-    temporalImpedance: { enabled: false, variant: TimeItemVariant.Unknown_chrono },
-    ressourceRetrieval: { enabled: false, variant: TimeItemVariant.Unknown_chrono },
+    temporalBattery: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
+    blastFurnace: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
+    timeBoiler: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
+    temporalAccelerator: {
+      enabled: false,
+      variant: TimeItemVariant.Unknown_chrono,
+      require: false,
+    },
+    temporalImpedance: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
+    ressourceRetrieval: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
 
-    cryochambers: { enabled: false, variant: TimeItemVariant.VoidSpace },
-    voidHoover: { enabled: false, variant: TimeItemVariant.VoidSpace },
-    voidRift: { enabled: false, variant: TimeItemVariant.VoidSpace },
-    chronocontrol: { enabled: false, variant: TimeItemVariant.VoidSpace },
-    voidResonator: { enabled: false, variant: TimeItemVariant.VoidSpace },
+    cryochambers: { enabled: false, variant: TimeItemVariant.VoidSpace, require: false },
+    voidHoover: { enabled: false, variant: TimeItemVariant.VoidSpace, require: "antimatter" },
+    voidRift: { enabled: false, variant: TimeItemVariant.VoidSpace, require: false },
+    chronocontrol: { enabled: false, variant: TimeItemVariant.VoidSpace, require: "temporalFlux" },
+    voidResonator: { enabled: false, variant: TimeItemVariant.VoidSpace, require: false },
   };
 }

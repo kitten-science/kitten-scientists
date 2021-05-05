@@ -1,4 +1,5 @@
 import { ResourceCraftable } from "../types";
+import { Requirement } from "./Options";
 import { ResourceSettings } from "./ResourcesSettings";
 import { SettingsSection } from "./SettingsSection";
 
@@ -8,6 +9,8 @@ export type CraftSettingsItem = {
 
   limited: boolean;
   $limited?: JQuery<HTMLElement>;
+
+  require: Requirement;
 };
 export class CraftSettings extends SettingsSection {
   trigger = 0.95;
@@ -16,25 +19,25 @@ export class CraftSettings extends SettingsSection {
   items: {
     [item in ResourceCraftable]: CraftSettingsItem;
   } = {
-    wood: { enabled: true, limited: true },
-    beam: { enabled: true, limited: true },
-    slab: { enabled: true, limited: true },
-    steel: { enabled: true, limited: true },
-    plate: { enabled: true, limited: true },
-    alloy: { enabled: true, limited: true },
-    concrate: { enabled: true, limited: true },
-    gear: { enabled: true, limited: true },
-    scaffold: { enabled: true, limited: true },
-    ship: { enabled: true, limited: true },
-    tanker: { enabled: true, limited: true },
-    parchment: { enabled: true, limited: false },
-    manuscript: { enabled: true, limited: true },
-    compedium: { enabled: true, limited: true },
-    blueprint: { enabled: true, limited: true },
-    kerosene: { enabled: true, limited: true },
-    megalith: { enabled: true, limited: true },
-    eludium: { enabled: true, limited: true },
-    thorium: { enabled: true, limited: true },
+    wood: { enabled: true, limited: true, require: "catnip" },
+    beam: { enabled: true, limited: true, require: "wood" },
+    slab: { enabled: true, limited: true, require: "minerals" },
+    steel: { enabled: true, limited: true, require: "coal" },
+    plate: { enabled: true, limited: true, require: "iron" },
+    alloy: { enabled: true, limited: true, require: "titanium" },
+    concrate: { enabled: true, limited: true, require: false },
+    gear: { enabled: true, limited: true, require: false },
+    scaffold: { enabled: true, limited: true, require: false },
+    ship: { enabled: true, limited: true, require: false },
+    tanker: { enabled: true, limited: true, require: false },
+    parchment: { enabled: true, limited: false, require: false },
+    manuscript: { enabled: true, limited: true, require: "culture" },
+    compedium: { enabled: true, limited: true, require: "science" },
+    blueprint: { enabled: true, limited: true, require: "science" },
+    kerosene: { enabled: true, limited: true, require: "oil" },
+    megalith: { enabled: true, limited: true, require: false },
+    eludium: { enabled: true, limited: true, require: "unobtainium" },
+    thorium: { enabled: true, limited: true, require: "uranium" },
   };
 
   resources: ResourceSettings = {};

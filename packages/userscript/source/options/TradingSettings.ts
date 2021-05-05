@@ -1,4 +1,5 @@
 import { Race } from "../types";
+import { Requirement } from "./Options";
 import { SettingsSection } from "./SettingsSection";
 
 export type TradingSettingsItem = {
@@ -19,6 +20,8 @@ export type TradingSettingsItem = {
 
   spring: boolean;
   $spring?: JQuery<HTMLElement>;
+
+  require: Requirement;
 };
 export class TradingSettings extends SettingsSection {
   trigger = 0.98;
@@ -34,6 +37,7 @@ export class TradingSettings extends SettingsSection {
       autumn: true,
       winter: true,
       spring: true,
+      require: "titanium",
     },
     zebras: {
       enabled: true,
@@ -42,6 +46,7 @@ export class TradingSettings extends SettingsSection {
       autumn: true,
       winter: true,
       spring: true,
+      require: false,
     },
     lizards: {
       enabled: true,
@@ -50,6 +55,7 @@ export class TradingSettings extends SettingsSection {
       autumn: false,
       winter: false,
       spring: false,
+      require: "minerals",
     },
     sharks: {
       enabled: true,
@@ -58,6 +64,7 @@ export class TradingSettings extends SettingsSection {
       autumn: false,
       winter: true,
       spring: false,
+      require: "iron",
     },
     griffins: {
       enabled: true,
@@ -66,6 +73,7 @@ export class TradingSettings extends SettingsSection {
       autumn: true,
       winter: false,
       spring: false,
+      require: "wood",
     },
     nagas: {
       enabled: true,
@@ -74,6 +82,7 @@ export class TradingSettings extends SettingsSection {
       autumn: false,
       winter: false,
       spring: true,
+      require: false,
     },
     spiders: {
       enabled: true,
@@ -82,6 +91,7 @@ export class TradingSettings extends SettingsSection {
       autumn: true,
       winter: false,
       spring: true,
+      require: false,
     },
     leviathans: {
       enabled: true,
@@ -90,6 +100,7 @@ export class TradingSettings extends SettingsSection {
       autumn: true,
       winter: true,
       spring: true,
+      require: "unobtainium",
     },
   };
 }

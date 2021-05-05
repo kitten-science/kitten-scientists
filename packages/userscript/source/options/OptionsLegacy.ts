@@ -1,19 +1,11 @@
 import { cwarn } from "../tools/Log";
-import {
-  AllBuildableItems,
-  ChronoForgeUpgrades,
-  Jobs,
-  Resource,
-  UnicornItemVariant,
-  VoidSpaceUpgrades,
-} from "../types";
+import { AllBuildableItems, Resource, UnicornItemVariant } from "../types";
 import { BuildItem } from "./BonfireSettings";
 import { DistributeItems } from "./DistributeSettings";
+import { Requirement } from "./Options";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { SpaceItem } from "./SpaceSettings";
 import { TimeItem } from "./TimeSettings";
-
-export type Requirement = Resource | false;
 
 export type UnicornFaithItemOptions = {
   require: Requirement;
@@ -66,7 +58,6 @@ export type TradeItemOptions = {
   winter: boolean;
   spring: boolean;
 };
-
 
 /**
  * Options for an automation of the Time tab.
