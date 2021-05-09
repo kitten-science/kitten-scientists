@@ -18,7 +18,7 @@ export type BulkBuildListItem = {
   count: number;
   id: AllItems;
   label?: string;
-  name?: AllItems;
+  name?: AllBuildings;
   stage?: number;
   variant?: unknown;
 };
@@ -33,12 +33,12 @@ export class BulkManager {
   }
 
   /**
-   * Take a hash of potential builds and build as many of them as possible.
+   * Take a hash of potential builds and determine how many of them can be built.
    * @param builds All potential builds.
    * @param metaData The metadata for the potential builds.
    * @param trigger The configured trigger threshold for these builds.
    * @param source The tab these builds originate from.
-   * @returns Not sure.
+   * @returns All the possible builds.
    */
   bulk(
     builds: Partial<
@@ -48,7 +48,7 @@ export class BulkManager {
           enabled: boolean;
           label?: string;
           max?: number;
-          name?: AllBuildings;
+          name: AllBuildings;
           require?: Requirement;
           stage?: number;
           variant?: unknown;
@@ -64,9 +64,22 @@ export class BulkManager {
     trigger: number,
     source?: "bonfire" | "space"
   ): Array<BulkBuildListItem> {
-    const bList: Array<BulkBuildListItem> = [];
-    const countList = [];
+    const buildsPerformed: Array<BulkBuildListItem> = [];
+    const buildsCache: Array<{
+      id: AllItems;
+      name: AllBuildings;
+      count: number;
+      spot: number;
+      prices: Array<Price>;
+      priceRatio: number;
+      source?: "bonfire" | "space";
+      limit: number;
+      val: number;
+    }> = [];
+
+    // How many builds are on the list.
     let counter = 0;
+
     for (const [name, build] of objectEntries(builds)) {
       const buildMetaData = mustExist(metaData[name]);
       // If the build is disabled, skip it.
@@ -102,7 +115,9 @@ export class BulkManager {
 
       // Get the prices and the price ratio of this build.
       const prices = mustExist(
-        this._isStagedBuild(buildMetaData) ? buildMetaData.stages[buildMetaData.stage].prices : buildMetaData.prices
+        this._isStagedBuild(buildMetaData)
+          ? buildMetaData.stages[buildMetaData.stage].prices
+          : buildMetaData.prices
       );
       const priceRatio = this.getPriceRatio(buildMetaData, source);
 
@@ -113,11 +128,20 @@ export class BulkManager {
 
       // Check the requirements for this build.
       const require = !build.require ? false : this._craftManager.getResource(build.require);
+      // Either if we don't require a resource, of the stock is filled to a percentage
+      // greater than the trigger value.
       if (!require || trigger <= require.value / require.maxValue) {
-        if (typeof build.stage !== "undefined" && build.stage !== buildMetaData.stage) {
+        // If the build is for a stage that the building isn't currently at, skip it.
+        if (
+          this._isStagedBuild(buildMetaData) &&
+          typeof build.stage !== "undefined" &&
+          build.stage !== buildMetaData.stage
+        ) {
           continue;
         }
-        bList.push({
+
+        // Create an entry in the build list for this building.
+        buildsPerformed.push({
           count: 0,
           id: name,
           label: build.label,
@@ -127,24 +151,30 @@ export class BulkManager {
         });
 
         const itemPrices = [];
+
+        // Get cost reduction modifier.
+        // TODO: This seems to be a bug, it should be `build.name`.
         const pricesDiscount = this._host.gamePage.getLimitedDR(
           this._host.gamePage.getEffect(`${name}CostReduction` as const),
           1
         );
         const priceModifier = 1 - pricesDiscount;
-        for (const i in prices) {
+
+        // Determine the actual prices for this building.
+        for (const price of prices) {
           const resPriceDiscount = this._host.gamePage.getLimitedDR(
-            this._host.gamePage.getEffect(`${prices[i].name}CostReduction` as const),
+            this._host.gamePage.getEffect(`${price.name}CostReduction` as const),
             1
           );
           const resPriceModifier = 1 - resPriceDiscount;
           itemPrices.push({
-            val: prices[i].val * priceModifier * resPriceModifier,
-            name: prices[i].name,
+            val: price.val * priceModifier * resPriceModifier,
+            name: price.name,
           });
         }
 
-        countList.push({
+        // Create an entry in the cache list for the bulk processing.
+        buildsCache.push({
           id: name,
           name: build.name,
           count: 0,
@@ -160,11 +190,13 @@ export class BulkManager {
       }
     }
 
-    if (countList.length === 0) {
+    if (buildsCache.length === 0) {
       return [];
     }
 
-    const tempPool: Partial<Record<Resource, number>> = {};
+    // Create a copy of the current resources.
+    // TODO: Why is this two loops? This could just be a single loop.
+    const tempPool: Record<Resource, number> = {} as Record<Resource, number>;
     for (const res of this._host.gamePage.resPool.resources) {
       tempPool[res.name] = res.value;
     }
@@ -172,33 +204,41 @@ export class BulkManager {
       tempPool[res] = this._craftManager.getValueAvailable(res, true);
     }
 
-    let k = 0;
-    while (countList.length !== 0) {
-      bulkLoop: for (let j = 0; j < countList.length; j++) {
-        const build = countList[j];
-        const data = mustExist(metaData[build.id]);
-        const prices = build.prices;
-        const priceRatio = build.priceRatio;
-        const source = build.source;
+    // This variable makes no sense.
+    // It _seems_ like it should indicate how many buildings of a specific build slot have been built.
+    // But what it actually holds is how many builds have been performed.
+    // It might be a "best effort" to try to predict how prices would develop if the builds were made.
+    let unknown_k = 0;
+    while (buildsCache.length !== 0) {
+      bulkLoop: for (
+        let countListIndex = 0;
+        countListIndex < buildsCache.length;
+        countListIndex++
+      ) {
+        const buildCacheItem = buildsCache[countListIndex];
+        const buildMetaData = mustExist(metaData[buildCacheItem.id]);
+        const prices = buildCacheItem.prices;
+        const priceRatio = buildCacheItem.priceRatio;
+        const source = buildCacheItem.source;
 
-        for (let p = 0; p < prices.length; p++) {
+        for (let priceIndex = 0; priceIndex < prices.length; priceIndex++) {
           let spaceOil = false;
           let cryoKarma = false;
           let karmaPrice = Infinity;
           let oilPrice = Infinity;
-          if (source && source === "space" && prices[p].name === "oil") {
+          if (source && source === "space" && prices[priceIndex].name === "oil") {
             spaceOil = true;
             oilPrice =
-              prices[p].val *
+              prices[priceIndex].val *
               (1 -
                 this._host.gamePage.getLimitedDR(
                   this._host.gamePage.getEffect("oilReductionRatio"),
                   0.75
                 ));
-          } else if (build.id === "cryochambers" && prices[p].name === "karma") {
+          } else if (buildCacheItem.id === "cryochambers" && prices[priceIndex].name === "karma") {
             cryoKarma = true;
             karmaPrice =
-              prices[p].val *
+              prices[priceIndex].val *
               (1 -
                 this._host.gamePage.getLimitedDR(
                   0.01 * this._host.gamePage.prestige.getBurnedParagonRatio(),
@@ -206,24 +246,32 @@ export class BulkManager {
                 ));
           }
 
-          let nextPriceCheck;
+          let mustPerformNextPriceCheck = false;
           if (spaceOil) {
-            nextPriceCheck = mustExist(tempPool["oil"]) < oilPrice * Math.pow(1.05, k + data.val);
+            mustPerformNextPriceCheck =
+              tempPool["oil"] < oilPrice * Math.pow(1.05, unknown_k + buildMetaData.val);
           } else if (cryoKarma) {
-            nextPriceCheck =
-              mustExist(tempPool["karma"]) < karmaPrice * Math.pow(priceRatio, k + data.val);
+            mustPerformNextPriceCheck =
+              tempPool["karma"] < karmaPrice * Math.pow(priceRatio, unknown_k + buildMetaData.val);
           } else {
-            nextPriceCheck =
-              tempPool[prices[p].name] < prices[p].val * Math.pow(priceRatio, k + data.val);
+            mustPerformNextPriceCheck =
+              tempPool[prices[priceIndex].name] <
+              prices[priceIndex].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
           }
+
           if (
-            nextPriceCheck ||
-            (data.noStackable && k + data.val >= 1) ||
-            (build.id === "ressourceRetrieval" && k + data.val >= 100) ||
-            (build.id === "cryochambers" &&
-              this._host.gamePage.bld.getBuildingExt("chronosphere").meta.val <= k + data.val)
+            mustPerformNextPriceCheck ||
+
+            ("noStackable" in buildMetaData &&
+              buildMetaData.noStackable &&
+              unknown_k + buildMetaData.val >= 1) ||
+
+            (buildCacheItem.id === "ressourceRetrieval" && unknown_k + buildMetaData.val >= 100) ||
+            (buildCacheItem.id === "cryochambers" &&
+              this._host.gamePage.bld.getBuildingExt("chronosphere").meta.val <=
+                unknown_k + buildMetaData.val)
           ) {
-            for (let p2 = 0; p2 < p; p2++) {
+            for (let p2 = 0; p2 < priceIndex; p2++) {
               if (source && source === "space" && prices[p2].name === "oil") {
                 const oilPriceRefund =
                   prices[p2].val *
@@ -232,9 +280,8 @@ export class BulkManager {
                       this._host.gamePage.getEffect("oilReductionRatio"),
                       0.75
                     ));
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                tempPool["oil"]! += oilPriceRefund * Math.pow(1.05, k + data.val);
-              } else if (build.id === "cryochambers" && prices[p2].name === "karma") {
+                tempPool["oil"] += oilPriceRefund * Math.pow(1.05, unknown_k + buildMetaData.val);
+              } else if (buildCacheItem.id === "cryochambers" && prices[p2].name === "karma") {
                 const karmaPriceRefund =
                   prices[p2].val *
                   (1 -
@@ -242,38 +289,45 @@ export class BulkManager {
                       0.01 * this._host.gamePage.prestige.getBurnedParagonRatio(),
                       1.0
                     ));
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                tempPool["karma"]! += karmaPriceRefund * Math.pow(priceRatio, k + data.val);
+                tempPool["karma"] +=
+                  karmaPriceRefund * Math.pow(priceRatio, unknown_k + buildMetaData.val);
               } else {
-                const refundVal = prices[p2].val * Math.pow(priceRatio, k + data.val);
+                const refundVal =
+                  prices[p2].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
                 tempPool[prices[p2].name] +=
                   prices[p2].name === "void" ? Math.ceil(refundVal) : refundVal;
               }
             }
-            if (build.limit && build.limit != -1) {
-              build.count = Math.max(0, Math.min(build.count, build.limit - build.val));
+            if (buildCacheItem.limit && buildCacheItem.limit !== -1) {
+              buildCacheItem.count = Math.max(
+                0,
+                Math.min(buildCacheItem.count, buildCacheItem.limit - buildCacheItem.val)
+              );
             }
-            bList[countList[j].spot].count = countList[j].count;
-            countList.splice(j, 1);
-            j--;
+            buildsPerformed[buildsCache[countListIndex].spot].count =
+              buildsCache[countListIndex].count;
+            buildsCache.splice(countListIndex, 1);
+            countListIndex--;
             continue bulkLoop;
           }
           if (spaceOil) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            tempPool["oil"]! -= oilPrice * Math.pow(1.05, k + data.val);
+            tempPool["oil"] -= oilPrice * Math.pow(1.05, unknown_k + buildMetaData.val);
           } else if (cryoKarma) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            tempPool["karma"]! -= karmaPrice * Math.pow(priceRatio, k + data.val);
+            tempPool["karma"] -= karmaPrice * Math.pow(priceRatio, unknown_k + buildMetaData.val);
           } else {
-            const pVal = prices[p].val * Math.pow(priceRatio, k + data.val);
-            tempPool[prices[p].name] -= prices[p].name === "void" ? Math.ceil(pVal) : pVal;
+            const pVal =
+              prices[priceIndex].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+            tempPool[prices[priceIndex].name] -=
+              prices[priceIndex].name === "void" ? Math.ceil(pVal) : pVal;
           }
         }
-        countList[j].count++;
+
+        // We have built one more item.
+        buildsCache[countListIndex].count++;
       }
-      k++;
+      unknown_k++;
     }
-    return bList;
+    return buildsPerformed;
   }
 
   /**

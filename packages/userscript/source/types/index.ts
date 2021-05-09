@@ -67,6 +67,7 @@ export type Resource =
   | "unicorns"
   | "unobtainium"
   | "uranium"
+  | "void"
   | "zebras";
 
 export type TabId =

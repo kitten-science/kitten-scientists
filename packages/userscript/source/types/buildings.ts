@@ -48,6 +48,7 @@ export type BuildingMeta = {
   flavor?: string;
   label?: string;
   name: Building;
+  noStackable?: boolean;
   on: number;
   priceRatio?: number;
   prices?: Array<Price>;
@@ -66,6 +67,9 @@ export type BuildingMeta = {
   unlockRatio?: number;
   unlockable?: boolean;
   unlocked: boolean;
+  /**
+   * How many of these do you have?
+   */
   val: number;
 };
 export type BuildingExt = {
