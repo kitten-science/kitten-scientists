@@ -53,6 +53,9 @@ export type AbstractReligionUpgradeInfo = {
   label: string;
   prices: Array<Price>;
   unlocked: boolean;
+  /**
+   * How many of these do you have?
+   */
   val: number;
 };
 
