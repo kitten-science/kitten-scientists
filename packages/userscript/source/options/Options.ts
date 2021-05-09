@@ -1,21 +1,26 @@
 import { objectEntries } from "../tools/Entries";
 import { isNil } from "../tools/Maybe";
 import { Resource } from "../types";
-import { BonfireSettings } from "./BonfireSettings";
+import { BonfireSettings, BuildItem } from "./BonfireSettings";
 import { CraftSettings } from "./CraftSettings";
 import { DistributeSettings } from "./DistributeSettings";
 import { FilterSettings } from "./FilterSettings";
 import { KittenStorageType } from "./KittenStorage";
 import { OptionsSettings } from "./OptionsSettings";
-import { ReligionSettings } from "./ReligionSettings";
+import { FaithItem, ReligionSettings } from "./ReligionSettings";
 import { ResourcesSettingsItem } from "./ResourcesSettings";
-import { SpaceSettings } from "./SpaceSettings";
+import { SpaceItem, SpaceSettings } from "./SpaceSettings";
 import { CycleIndices, TimeControlSettings } from "./TimeControlSettings";
-import { TimeSettings } from "./TimeSettings";
+import { TimeItem, TimeSettings } from "./TimeSettings";
 import { TradingSettings } from "./TradingSettings";
 import { UnlockingSettings } from "./UnlockingSettings";
 
 export type Requirement = Resource | false;
+
+/**
+ * The type names of all supported buildings.
+ */
+ export type AllItems = BuildItem | FaithItem | SpaceItem | TimeItem;
 
 export class Options {
   /**

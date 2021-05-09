@@ -1,15 +1,24 @@
 import { CraftManager } from "./CraftManager";
-import { Requirement } from "./options/Options";
+import { AllItems, Requirement } from "./options/Options";
 import { objectEntries } from "./tools/Entries";
-import { mustExist } from "./tools/Maybe";
-import { AllBuildableItems, BuildButton, BuildingMeta, Price, Resource } from "./types";
+import { isNil, mustExist } from "./tools/Maybe";
+import {
+  AllBuildings,
+  BuildButton,
+  BuildingMeta,
+  Price,
+  ReligionUpgradeInfo,
+  Resource,
+  TranscendenceUpgradeInfo,
+  ZiggurathUpgradeInfo,
+} from "./types";
 import { UserScript } from "./UserScript";
 
 export type BulkBuildListItem = {
   count: number;
-  id: AllBuildableItems;
+  id: AllItems;
   label?: string;
-  name?: AllBuildableItems;
+  name?: AllItems;
   stage?: number;
   variant?: unknown;
 };
@@ -23,22 +32,35 @@ export class BulkManager {
     this._craftManager = new CraftManager(this._host);
   }
 
+  /**
+   * Take a hash of potential builds and build as many of them as possible.
+   * @param builds All potential builds.
+   * @param metaData The metadata for the potential builds.
+   * @param trigger The configured trigger threshold for these builds.
+   * @param source The tab these builds originate from.
+   * @returns Not sure.
+   */
   bulk(
     builds: Partial<
       Record<
-        AllBuildableItems,
+        AllItems,
         {
           enabled: boolean;
           label?: string;
-          max: number;
-          name?: string;
+          max?: number;
+          name?: AllBuildings;
           require?: Requirement;
           stage?: number;
           variant?: unknown;
         }
       >
     >,
-    metaData: Partial<Record<AllBuildableItems, BuildingMeta>>,
+    metaData: Partial<
+      Record<
+        AllItems,
+        BuildingMeta | ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo
+      >
+    >,
     trigger: number,
     source?: "bonfire" | "space"
   ): Array<BulkBuildListItem> {
@@ -46,39 +68,53 @@ export class BulkManager {
     const countList = [];
     let counter = 0;
     for (const [name, build] of objectEntries(builds)) {
-      const data = mustExist(metaData[name]);
+      const buildMetaData = mustExist(metaData[name]);
+      // If the build is disabled, skip it.
       if (!build.enabled) {
         continue;
       }
-      if (data.tHidden === true) {
+
+      // It's unclear what these are.
+      if (buildMetaData.tHidden === true) {
         continue;
       }
-      if (data.rHidden === true) {
+      if (buildMetaData.rHidden === true) {
         continue;
       }
-      if (data.rHidden === undefined && !data.unlocked) {
+      if (buildMetaData.rHidden === undefined && !buildMetaData.unlocked) {
         continue;
       }
+
+      // For cryochambers, if there are used cryochambers, don't build new ones.
+      // Also, don't build more cryochambers than you have chronospheres, as they'll stay unused.
       if (
         name === "cryochambers" &&
         (mustExist(this._host.gamePage.time.getVSU("usedCryochambers")).val > 0 ||
-          this._host.gamePage.bld.getBuildingExt("chronosphere").meta.val <= data.val)
+          this._host.gamePage.bld.getBuildingExt("chronosphere").meta.val <= buildMetaData.val)
       ) {
         continue;
       }
-      if (name === "ressourceRetrieval" && data.val >= 100) {
+
+      // TODO: This should be generalized to match all builds that have a `limitBuild` property.
+      if (name === "ressourceRetrieval" && buildMetaData.val >= 100) {
         continue;
       }
+
+      // Get the prices and the price ratio of this build.
       const prices = mustExist(
-        typeof data.stages !== "undefined" ? data.stages[mustExist(data.stage)].prices : data.prices
+        this._isStagedBuild(buildMetaData) ? buildMetaData.stages[buildMetaData.stage].prices : buildMetaData.prices
       );
-      const priceRatio = this.getPriceRatio(data, source);
-      if (!this.singleBuildPossible(data, prices, priceRatio, source)) {
+      const priceRatio = this.getPriceRatio(buildMetaData, source);
+
+      // Check if we can build this item.
+      if (!this.singleBuildPossible(buildMetaData, prices, priceRatio, source)) {
         continue;
       }
+
+      // Check the requirements for this build.
       const require = !build.require ? false : this._craftManager.getResource(build.require);
       if (!require || trigger <= require.value / require.maxValue) {
-        if (typeof build.stage !== "undefined" && build.stage !== data.stage) {
+        if (typeof build.stage !== "undefined" && build.stage !== buildMetaData.stage) {
           continue;
         }
         bList.push({
@@ -117,7 +153,7 @@ export class BulkManager {
           priceRatio: priceRatio,
           source: source,
           limit: build.max || 0,
-          val: data.val,
+          val: buildMetaData.val,
         });
 
         counter++;
@@ -240,12 +276,25 @@ export class BulkManager {
     return bList;
   }
 
+  /**
+   * Try to trigger the build for a given button.
+   * @param model The model associated with the button.
+   * @param button The build button.
+   * @param amount How many items to build.
+   * @returns How many items were built.
+   * @see `build`@`core.js`
+   * @deprecated This should just call `build()` on the game page. I don't understand why it shouldn't.
+   */
   construct(model: BuildButton["model"], button: BuildButton, amount: number): number {
+    // TODO: Replace this with a call to gamePage.build()
     const meta = model.metadata;
     let counter = 0;
-    if (typeof meta.limitBuild == "number" && meta.limitBuild - meta.val < amount) {
+
+    // For limited builds, only construct up to the max.
+    if (!isNil(meta.limitBuild) && meta.limitBuild - meta.val < amount) {
       amount = meta.limitBuild - meta.val;
     }
+
     if ((model.enabled && button.controller.hasResources(model)) || this._host.gamePage.devMode) {
       while (button.controller.hasResources(model) && amount > 0) {
         model.prices = button.controller.getPrices(model);
@@ -267,10 +316,37 @@ export class BulkManager {
     return counter;
   }
 
-  getPriceRatio(data: BuildingMeta, source?: "bonfire" | "space"): number {
-    const ratio = !data.stages
-      ? data.priceRatio
-      : data.priceRatio || data.stages[mustExist(data.stage)].priceRatio;
+  private _isStagedBuild(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any
+  ): data is {
+    stage: number;
+    stages: Array<{
+      priceRatio: number;
+      prices?: Array<Price>;
+    }>;
+  } {
+    return "stage" in data && "stages" in data && !isNil(data.stage) && !isNil(data.stages);
+  }
+
+  /**
+   * Determing the price modifier for the given building.
+   * @param data The building metadata.
+   * @param source The tab the building belongs to.
+   * @returns The price modifier for this building.
+   * @see `getPriceRatioWithAccessor`@`buildings.js`
+   */
+  getPriceRatio(
+    data: BuildingMeta | ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo,
+    source?: "bonfire" | "space"
+  ): number {
+    // If the building has stages, use the ratio for the current stage.
+    const ratio = mustExist(
+      // TODO: This seems weird. Why not take the price ratio of the stage as the default?
+      this._isStagedBuild(data)
+        ? data.priceRatio || data.stages[data.stage].priceRatio
+        : data.priceRatio
+    );
 
     let ratioDiff = 0;
     if (source && source === "bonfire") {
@@ -281,64 +357,81 @@ export class BulkManager {
 
       ratioDiff = this._host.gamePage.getLimitedDR(ratioDiff, ratio - 1);
     }
+
     return ratio + ratioDiff;
   }
 
+  /**
+   * Check if a given build could be performed.
+   * @param build The build that should be checked.
+   * @param prices The current prices for the build.
+   * @param priceRatio The global price ratio modifier.
+   * @param source What tab did the build originate from?
+   * @returns `true` if the build is possible; `false` otherwise.
+   */
   singleBuildPossible(
-    data: { name: string; val: number },
+    build: { name: AllBuildings; val: number },
     prices: Array<Price>,
     priceRatio: number,
     source?: "bonfire" | "space"
   ): boolean {
+    // Determine price reduction on this build.
     const pricesDiscount = this._host.gamePage.getLimitedDR(
-      this._host.gamePage.getEffect(`${data.name}CostReduction`),
+      this._host.gamePage.getEffect(`${build.name}CostReduction` as const),
       1
     );
     const priceModifier = 1 - pricesDiscount;
+
+    // Check if we can't afford any of the prices for this build.
+    // Return `false` if we can't afford something, otherwise `true` is
+    // returned by default.
     for (const price in prices) {
-      const resPriceDiscount = this._host.gamePage.getLimitedDR(
-        this._host.gamePage.getEffect(`${prices[price].name}CostReduction`),
+      const resourcePriceDiscount = this._host.gamePage.getLimitedDR(
+        this._host.gamePage.getEffect(`${prices[price].name}CostReduction` as const),
         1
       );
-      const resPriceModifier = 1 - resPriceDiscount;
-      const rightPrice = prices[price].val * priceModifier * resPriceModifier;
+      const resourcePriceModifier = 1 - resourcePriceDiscount;
+      const finalResourcePrice = prices[price].val * priceModifier * resourcePriceModifier;
+
+      // For space builds that consume oil, take the oil price reduction into account.
+      // This is caused by space elevators.
       if (source && source === "space" && prices[price].name === "oil") {
-        const oilPrice =
-          rightPrice *
-          (1 -
-            this._host.gamePage.getLimitedDR(
-              this._host.gamePage.getEffect("oilReductionRatio"),
-              0.75
-            ));
+        const oilModifier = this._host.gamePage.getLimitedDR(
+          this._host.gamePage.getEffect("oilReductionRatio"),
+          0.75
+        );
+        const oilPrice = finalResourcePrice * (1 - oilModifier);
         if (
           this._craftManager.getValueAvailable("oil", true) <
-          oilPrice * Math.pow(1.05, data.val)
+          oilPrice * Math.pow(1.05, build.val)
         ) {
           return false;
         }
-      } else if (data.name === "cryochambers" && prices[price].name === "karma") {
-        const karmaPrice =
-          rightPrice *
-          (1 -
-            this._host.gamePage.getLimitedDR(
-              0.01 * this._host.gamePage.prestige.getBurnedParagonRatio(),
-              1.0
-            ));
+
+        // For cryochambers, take burned paragon into account for the karma cost.
+      } else if (build.name === "cryochambers" && prices[price].name === "karma") {
+        const karmaModifier = this._host.gamePage.getLimitedDR(
+          0.01 * this._host.gamePage.prestige.getBurnedParagonRatio(),
+          1.0
+        );
+        const karmaPrice = finalResourcePrice * (1 - karmaModifier);
         if (
           this._craftManager.getValueAvailable("karma", true) <
-          karmaPrice * Math.pow(priceRatio, data.val)
+          karmaPrice * Math.pow(priceRatio, build.val)
         ) {
           return false;
         }
       } else {
         if (
           this._craftManager.getValueAvailable(prices[price].name, true) <
-          rightPrice * Math.pow(priceRatio, data.val)
+          finalResourcePrice * Math.pow(priceRatio, build.val)
         ) {
           return false;
         }
       }
     }
+
+    // We can afford this build.
     return true;
   }
 }

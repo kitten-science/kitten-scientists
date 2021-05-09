@@ -1,10 +1,10 @@
 import { cwarn } from "../tools/Log";
-import { AllBuildableItems, Resource, UnicornItemVariant } from "../types";
+import { Resource, UnicornItemVariant } from "../types";
 import { BuildItem } from "./BonfireSettings";
 import { DistributeItems } from "./DistributeSettings";
 import { Requirement } from "./Options";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
-import { SpaceItem } from "./SpaceSettings";
+import { SpaceItem, SpaceSettingsItem } from "./SpaceSettings";
 import { TimeItem } from "./TimeSettings";
 
 export type UnicornFaithItemOptions = {
@@ -21,7 +21,7 @@ export type BuildItemOptions = {
   enabled: boolean;
   label: string;
   max: number;
-  name: AllBuildableItems;
+  name: BuildItem | SpaceItem;
   require: Requirement;
   stage?: number;
   triggerForReset: number;

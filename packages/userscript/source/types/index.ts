@@ -1,7 +1,7 @@
-import { BuildItem } from "../options/BonfireSettings";
-import { FaithItem } from "../options/ReligionSettings";
-import { SpaceItem } from "../options/SpaceSettings";
-import { TimeItem } from "../options/TimeSettings";
+import { Building } from "./buildings";
+import { ReligionUpgrades, TranscendenceUpgrades, ZiggurathUpgrades } from "./religion";
+import { SpaceBuildings } from "./space";
+import { ChronoForgeUpgrades, VoidSpaceUpgrades } from "./time";
 
 export type Season = "autumn" | "spring" | "summer" | "winter";
 export type Cycle =
@@ -69,11 +69,6 @@ export type Resource =
   | "uranium"
   | "zebras";
 
-/**
- * The type names of all supported buildings.
- */
-export type AllBuildableItems = BuildItem | FaithItem | SpaceItem | TimeItem;
-
 export type TabId =
   | "Bonfire"
   | "Religion"
@@ -93,6 +88,15 @@ export type Jobs =
   | "priest"
   | "scholar"
   | "woodcutter";
+
+export type AllBuildings =
+  | Building
+  | ChronoForgeUpgrades
+  | ReligionUpgrades
+  | SpaceBuildings
+  | TranscendenceUpgrades
+  | VoidSpaceUpgrades
+  | ZiggurathUpgrades;
 
 /**
  * A combination of a resource and an amount.
@@ -126,6 +130,10 @@ export type BuildButton<T = string> = {
     enabled: boolean;
     metadata: {
       breakIronWill: boolean;
+      /**
+       * How many items of this can be built at any time?
+       * Used to limit Resource Retrieval to 100.
+       */
       limitBuild?: number;
       name: string;
       unlocks: unknown;

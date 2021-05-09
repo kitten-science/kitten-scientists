@@ -5,7 +5,7 @@ import { CraftManager } from "./CraftManager";
 import { ExplorationManager } from "./ExplorationManager";
 import { BonfireSettingsItem, BuildItem } from "./options/BonfireSettings";
 import { UnicornFaithItemOptions } from "./options/OptionsLegacy";
-import { FaithItem } from "./options/ReligionSettings";
+import { FaithItem, ReligionSettingsItem } from "./options/ReligionSettings";
 import { SpaceItem } from "./options/SpaceSettings";
 import { CycleIndices } from "./options/TimeControlSettings";
 import { ReligionManager } from "./ReligionManager";
@@ -22,9 +22,12 @@ import {
   Jobs,
   Race,
   RaceInfo,
+  ReligionUpgradeInfo,
   Resource,
   SpaceBuildingInfo,
+  TranscendenceUpgradeInfo,
   UnicornItemVariant,
+  ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from "./types";
 import { UpgradeManager } from "./UpgradeManager";
@@ -762,7 +765,7 @@ export class Engine {
     }
   }
 
-  private _worship(builds: Partial<Record<FaithItem, UnicornFaithItemOptions>>): void {
+  private _worship(builds: Partial<Record<FaithItem, ReligionSettingsItem>>): void {
     const buildManager = this._religionManager;
     const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;
@@ -771,8 +774,8 @@ export class Engine {
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     buildManager.manager.render();
 
-    const metaData: Partial<Record<FaithItem, AbstractReligionUpgradeInfo>> = {};
-    for (const [name, build] of objectEntries<FaithItem, UnicornFaithItemOptions>(builds)) {
+    const metaData: Partial<Record<FaithItem,  ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>> = {};
+    for (const [name, build] of objectEntries<FaithItem, ReligionSettingsItem>(builds)) {
       const buildInfo = buildManager.getBuild(name, build.variant);
       if (buildInfo === null) {
         continue;

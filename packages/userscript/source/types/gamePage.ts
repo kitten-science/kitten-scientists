@@ -1,4 +1,5 @@
 import {
+  AllBuildings,
   BuildButton,
   Building,
   BuildingExt,
@@ -96,6 +97,9 @@ export type GamePage = {
   getDisplayValueExt: (value: number) => string;
   getEffect: (
     effect:
+      | `${AllBuildings}CostReduction`
+      | `${Resource}CostReduction`
+      | `${AllBuildings}PriceRatio`
       | "catnipDemandWorkerRatioGlobal"
       | "catnipJobRatio"
       | "catnipPerTickBase"
@@ -116,7 +120,10 @@ export type GamePage = {
       | "unicornsRatioReligion"
       | "uplinkDCRatio"
   ) => number;
-  getLimitedDR: (value0: number, value1: number) => number;
+  /**
+   * Calculate diminishing returns.
+   */
+  getLimitedDR: (effect: number, limit: number) => number;
   getResCraftRatio: (name: string) => number;
   getResourcePerTick: (name: string, value: boolean) => number;
   getResourcePerTickConvertion: (name: "catnip") => number;
@@ -261,7 +268,13 @@ export type GamePage = {
     GameTab
   ];
   time: {
+    /**
+     * Get ChronoForge upgrade.
+     */
     getCFU: (name: ChronoForgeUpgrades) => ChronoForgeUpgradeInfo | undefined;
+    /**
+     * Get Void Space upgrade.
+     */
     getVSU: (name: VoidSpaceUpgrades) => VoidSpaceUpgradeInfo | undefined;
     heat: number;
     isAccelerated: boolean;
