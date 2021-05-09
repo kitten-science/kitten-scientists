@@ -1,6 +1,6 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
-import { SpaceItem } from "./options/OptionsLegacy";
+import { SpaceItem } from "./options/SpaceSettings";
 import { TabManager } from "./TabManager";
 import { BuildButton, SpaceBuildingInfo, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";

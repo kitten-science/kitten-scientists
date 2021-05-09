@@ -154,7 +154,31 @@ export class UserScript {
     return value;
   }
 
-  private _printOutput(...args: Array<number | string>): void {
+  private _printOutput(
+    cssClasses:
+      | "ks-activity"
+      | `ks-activity type_ks-${
+          | "accelerate"
+          | "adore"
+          | "build"
+          | "craft"
+          | "distribute"
+          | "faith"
+          | "festival"
+          | "hunt"
+          | "praise"
+          | "promote"
+          | "research"
+          | "star"
+          | "timeSkip"
+          | "trade"
+          | "transcend"
+          | "upgrade"}`
+      | "ks-default"
+      | "ks-summary",
+    color: string,
+    ...args: Array<number | string>
+  ): void {
     if (this.options.auto.filters.enabled) {
       for (const filterItem of Object.values(this.options.auto.filters.items)) {
         if (filterItem.enabled && filterItem.variant === args[1]) {
@@ -162,36 +186,36 @@ export class UserScript {
         }
       }
     }
-    const color = args.pop();
-    args[1] = args[1] || "ks-default";
+    //const color = args.pop();
+    //args[1] = args[1] || "ks-default";
 
     // update the color of the message immediately after adding
-    const msg = this.gamePage.msg(...args);
+    const msg = this.gamePage.msg(...args, cssClasses);
     $(msg.span).css("color", color);
 
     cdebug(args);
   }
 
   private _message(...args: Array<number | string>): void {
-    args.push("ks-default");
+    //args.push("ks-default");
     //args.push(this.options.msgcolor);
-    args.push("#aa50fe");
-    this._printOutput(...args);
+    //args.push("#aa50fe");
+    this._printOutput("ks-default", "#aa50fe", ...args);
   }
 
   private _activity(...args: Array<number | string>): void {
-    const activityClass = args.length > 1 ? " type_" + args.pop() : "";
-    args.push("ks-activity" + activityClass);
+    const activityClass = args.length > 1 ? "type_" + args.pop() : "";
+    //args.push("ks-activity" + activityClass);
     //args.push(this.options.activitycolor);
-    args.push("#E65C00");
-    this._printOutput(...args);
+    //args.push("#E65C00");
+    this._printOutput(`ks-activity ${activityClass}`, "#e65C00", ...args);
   }
 
   private _summary(...args: Array<number | string>): void {
-    args.push("ks-summary");
+    //args.push("ks-summary");
     //args.push(this.options.summarycolor);
-    args.push("#009933");
-    this._printOutput(...args);
+    //args.push("#009933");
+    this._printOutput("ks-summary", "#009933", ...args);
   }
 
   warning(...args: Array<number | string>): void {

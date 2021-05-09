@@ -1,7 +1,7 @@
 import { CacheManager } from "./CacheManager";
 import { objectEntries } from "./tools/Entries";
 import { isNil, mustExist } from "./tools/Maybe";
-import { Resource } from "./types";
+import { Resource, ResourceCraftable } from "./types";
 import { ResourceInfo } from "./types/craft";
 import { UserScript } from "./UserScript";
 
@@ -14,7 +14,7 @@ export class CraftManager {
     this._cacheManager = new CacheManager(this._host);
   }
 
-  craft(name: Resource, amount: number): void {
+  craft(name: ResourceCraftable, amount: number): void {
     amount = Math.floor(amount);
 
     if (!name || 1 > amount) return;
@@ -38,7 +38,7 @@ export class CraftManager {
     );
   }
 
-  canCraft(name: Resource, amount: number): boolean {
+  canCraft(name: ResourceCraftable, amount: number): boolean {
     const craft = this.getCraft(name);
     const enabled = mustExist(this._host.options.auto.craft.items[name]).enabled;
     let result = false;
@@ -244,7 +244,7 @@ export class CraftManager {
     return this.getResource(name).value;
   }
 
-  getStock(name: string): number {
+  getStock(name: Resource): number {
     const res = this._host.options.auto.resources[name];
     const stock = res && res.enabled ? res.stock : 0;
 

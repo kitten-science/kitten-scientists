@@ -1,5 +1,5 @@
 import { CraftManager } from "./CraftManager";
-import { Requirement } from "./options/OptionsLegacy";
+import { Requirement } from "./options/Options";
 import { objectEntries } from "./tools/Entries";
 import { mustExist } from "./tools/Maybe";
 import { AllBuildableItems, BuildButton, BuildingMeta, Price, Resource } from "./types";
