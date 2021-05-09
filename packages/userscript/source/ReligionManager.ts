@@ -1,14 +1,15 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
-import { mustExist } from "./tools/Maybe";
 import {
-  AbstractReligionUpgradeInfo,
   BuildButton,
   ReligionTab,
+  ReligionUpgradeInfo,
   ReligionUpgrades,
+  TranscendenceUpgradeInfo,
   TranscendenceUpgrades,
   UnicornItemVariant,
+  ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from "./types";
 import { UserScript } from "./UserScript";
@@ -72,7 +73,7 @@ export class ReligionManager {
   getBuild(
     name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
     variant: UnicornItemVariant
-  ): AbstractReligionUpgradeInfo | null {
+  ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo | null {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
         return this._host.gamePage.religion.getZU(name as ZiggurathUpgrades) ?? null;

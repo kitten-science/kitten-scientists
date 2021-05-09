@@ -51,8 +51,8 @@ export type BuildingMeta = {
   on: number;
   priceRatio?: number;
   prices?: Array<Price>;
-  stage: number;
-  stages: Array<{
+  stage?: number;
+  stages?: Array<{
     calculateEffects?: (model: unknown, game: GamePage) => void;
     calculateEnergyProduction?: (game: GamePage, season: unknown) => void;
     description: string;
@@ -63,8 +63,8 @@ export type BuildingMeta = {
     prices: Array<Price>;
     stageUnlocked: boolean;
   }>;
-  unlockRatio: number;
-  unlockable: boolean;
+  unlockRatio?: number;
+  unlockable?: boolean;
   unlocked: boolean;
   val: number;
 };
