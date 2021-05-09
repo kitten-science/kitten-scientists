@@ -69,6 +69,25 @@ export type ActivitySummary = {
   upgrade?: Record<string, number>;
   */
 };
+export type Activitiy =
+  | "accelerate"
+  | "adore"
+  | "build"
+  | "craft"
+  | "distribute"
+  | "faith"
+  | "festival"
+  | "hunt"
+  | "praise"
+  | "promote"
+  | "research"
+  | "star"
+  | "timeSkip"
+  | "trade"
+  | "transcend"
+  | "upgrade";
+export type ActivityClass = `ks-${Activitiy}`;
+export type ActivityTypeClass = `type_${ActivityClass}`;
 
 export class UserScript {
   readonly gamePage: GamePage;
@@ -155,27 +174,7 @@ export class UserScript {
   }
 
   private _printOutput(
-    cssClasses:
-      | "ks-activity"
-      | `ks-activity type_ks-${
-          | "accelerate"
-          | "adore"
-          | "build"
-          | "craft"
-          | "distribute"
-          | "faith"
-          | "festival"
-          | "hunt"
-          | "praise"
-          | "promote"
-          | "research"
-          | "star"
-          | "timeSkip"
-          | "trade"
-          | "transcend"
-          | "upgrade"}`
-      | "ks-default"
-      | "ks-summary",
+    cssClasses: "ks-activity" | `ks-activity ${ActivityTypeClass}` | "ks-default" | "ks-summary",
     color: string,
     ...args: Array<number | string>
   ): void {
@@ -203,12 +202,16 @@ export class UserScript {
     this._printOutput("ks-default", "#aa50fe", ...args);
   }
 
-  private _activity(...args: Array<number | string>): void {
-    const activityClass = args.length > 1 ? "type_" + args.pop() : "";
-    //args.push("ks-activity" + activityClass);
-    //args.push(this.options.activitycolor);
-    //args.push("#E65C00");
-    this._printOutput(`ks-activity ${activityClass}`, "#e65C00", ...args);
+  private _activity(text: string, logStyle?: ActivityClass): void {
+    if (logStyle) {
+      const activityClass: ActivityTypeClass = `type_${logStyle}` as const;
+      //args.push("ks-activity" + activityClass);
+      //args.push(this.options.activitycolor);
+      //args.push("#E65C00");
+      this._printOutput(`ks-activity ${activityClass}` as const, "#e65C00", text);
+    } else {
+      this._printOutput("ks-activity", "#e65C00", text);
+    }
   }
 
   private _summary(...args: Array<number | string>): void {
@@ -226,32 +229,29 @@ export class UserScript {
   }
 
   imessage(
-    key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<number | string> = [],
-    ...templateArgs: Array<string>
+    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
+    i18nArgs: Array<number | string> = [],
   ): void {
-    this._message(this.i18n(key, args), ...templateArgs);
+    this._message(this.i18n(i18nLiteral, i18nArgs));
   }
   iactivity(
-    key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<number | string> = [],
-    ...templateArgs: Array<string>
+    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
+    i18nArgs: Array<number | string> = [],
+    logStyle?: ActivityClass
   ): void {
-    this._activity(this.i18n(key, args), ...templateArgs);
+    this._activity(this.i18n(i18nLiteral, i18nArgs), logStyle);
   }
   private _isummary(
-    key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<number | string>,
-    ...templateArgs: Array<string>
+    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
+    i18nArgs: Array<number | string>,
   ): void {
-    this._summary(this.i18n(key, args), ...templateArgs);
+    this._summary(this.i18n(i18nLiteral, i18nArgs));
   }
   private _iwarning(
-    key: keyof typeof i18nData[SupportedLanguages],
-    args: Array<number | string>,
-    ...templateArgs: Array<string>
+    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
+    i18nArgs: Array<number | string>,
   ): void {
-    this.warning(this.i18n(key, args), ...templateArgs);
+    this.warning(this.i18n(i18nLiteral, i18nArgs));
   }
 
   resetActivitySummary(): void {
