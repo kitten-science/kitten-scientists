@@ -14,7 +14,8 @@
     "incremental": true,
     "declaration": false,
     "skipLibCheck": true,
-    "types": []
+    "types": [],
+    "sourceMap": true
   },
   "exclude": [".yarn", "packages/*/output"]
 }
