@@ -15,9 +15,9 @@
   },
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "scripts": {
-    "build": "tsc",
-    "package": "webpack --config webpack.config.inject.js",
+    "build": "webpack --config webpack.config.inject.js",
     "release": "webpack --config webpack.config.userscript.js",
+    "watch": "webpack --config webpack.config.inject.js --watch",
     "whoami": "echo userscript"
   },
   "keywords": [
@@ -35,6 +35,7 @@
     "@types/dojo": "^1.9.43",
     "@types/jquery": "^3.5.5",
     "pnp-webpack-plugin": "^1.6.4",
+    "ts-loader": "^8",
     "tslib": "^2.2.0"
   }
 }
