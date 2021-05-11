@@ -1,6 +1,5 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
-import { BuildItem } from "./options/BonfireSettings";
 import { TabManager } from "./TabManager";
 import { mustExist } from "./tools/Maybe";
 import { BuildButton, Building, BuildingExt } from "./types";
@@ -19,7 +18,7 @@ export class BuildManager {
     this._bulkManager = new BulkManager(this._host);
   }
 
-  build(name: BuildItem, stage: number | undefined, amount: number): void {
+  build(name: Building, stage: number | undefined, amount: number): void {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name, stage);
 
@@ -39,11 +38,11 @@ export class BuildManager {
     }
   }
 
-  getBuild(name: BuildItem): BuildingExt {
-    return this._host.gamePage.bld.getBuildingExt(name as Building);
+  getBuild(name: Building): BuildingExt {
+    return this._host.gamePage.bld.getBuildingExt(name);
   }
 
-  getBuildButton(name: BuildItem, stage: number | undefined = undefined): BuildButton | null {
+  getBuildButton(name: Building, stage: number | undefined = undefined): BuildButton | null {
     const buttons = this.manager.tab.children;
     const build = this.getBuild(name);
     const label = mustExist(

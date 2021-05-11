@@ -16,6 +16,7 @@ import { mustExist } from "./tools/Maybe";
 import { TradeManager } from "./TradeManager";
 import {
   BuildButton,
+  Building,
   BuildingMeta,
   Jobs,
   Race,
@@ -23,6 +24,7 @@ import {
   ReligionUpgradeInfo,
   Resource,
   SpaceBuildingInfo,
+  SpaceBuildings,
   TranscendenceUpgradeInfo,
   UnicornItemVariant,
   ZiggurathUpgradeInfo,
@@ -115,13 +117,15 @@ export class Engine {
     if (this._host.options.auto.unlock.enabled) {
       this.upgrade();
     }
-
+    // Hold festival.
     if (subOptions.enabled && subOptions.items.festival.enabled) {
       this.holdFestival();
     }
+    // Build bonfire buildings.
     if (this._host.options.auto.build.enabled) {
       this.build();
     }
+    // Build space buildings.
     if (this._host.options.auto.space.enabled) {
       this.space();
     }
@@ -1246,6 +1250,10 @@ export class Engine {
     }
   }
 
+  /**
+   * Try to build some buildings.
+   * @param builds The buildings to build.
+   */
   build(
     builds: Partial<Record<BuildItem, BonfireSettingsItem>> = this._host.options.auto.build.items
   ): void {
@@ -1256,33 +1264,40 @@ export class Engine {
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     buildManager.manager.render();
 
+    // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<BuildItem, BuildingMeta>> = {};
     for (const [name, build] of objectEntries(builds)) {
-      metaData[name] = buildManager.getBuild(build.name ?? name).meta;
+      metaData[name] = buildManager.getBuild((build.name ?? name) as Building).meta;
     }
 
+    // Let the bulkmanager determine the builds we can make.
     const buildList = bulkManager.bulk(builds, metaData, trigger, "bonfire");
 
     let refreshRequired = false;
+    // Build all entries in the build list, where we can build any items.
     for (const entry in buildList) {
       if (buildList[entry].count > 0) {
         buildManager.build(
-          buildList[entry].name || buildList[entry].id,
+          (buildList[entry].name || buildList[entry].id) as Building,
           buildList[entry].stage,
           buildList[entry].count
         );
         refreshRequired = true;
       }
     }
+
     if (refreshRequired) {
       this._host.gamePage.ui.render();
     }
   }
 
+  /**
+   * Build space buildings.
+   * This is pretty much identical to the bonfire buildings.
+   */
   space(): void {
     const builds = this._host.options.auto.space.items;
     const buildManager = this._spaceManager;
-    const craftManager = this._craftManager;
     const bulkManager = this._bulkManager;
     const trigger = this._host.options.auto.space.trigger;
 
@@ -1299,7 +1314,7 @@ export class Engine {
     let refreshRequired = false;
     for (const entry in buildList) {
       if (buildList[entry].count > 0) {
-        buildManager.build(buildList[entry].id, buildList[entry].count);
+        buildManager.build(buildList[entry].id as SpaceBuildings, buildList[entry].count);
         refreshRequired = true;
       }
     }

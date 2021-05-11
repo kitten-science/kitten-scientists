@@ -9,6 +9,7 @@ import {
   Price,
   ReligionUpgradeInfo,
   Resource,
+  SpaceBuildingInfo,
   TranscendenceUpgradeInfo,
   ZiggurathUpgradeInfo,
 } from "./types";
@@ -58,7 +59,11 @@ export class BulkManager {
     metaData: Partial<
       Record<
         AllItems,
-        BuildingMeta | ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo
+        | BuildingMeta
+        | ReligionUpgradeInfo
+        | SpaceBuildingInfo
+        | TranscendenceUpgradeInfo
+        | ZiggurathUpgradeInfo
       >
     >,
     trigger: number,
