@@ -111,9 +111,11 @@ export class Engine {
     if (subOptions.enabled && subOptions.items.observe.enabled) {
       this.observeStars();
     }
+    // Unlock upgrades.
     if (this._host.options.auto.unlock.enabled) {
       this.upgrade();
     }
+
     if (subOptions.enabled && subOptions.items.festival.enabled) {
       this.holdFestival();
     }
@@ -1169,7 +1171,9 @@ export class Engine {
       const libraryMeta = this._host.gamePage.bld.getBuildingExt("library").meta;
       if (libraryMeta.stage === 0) {
         if (mustExist(libraryMeta.stages)[1].stageUnlocked) {
-          let energyConsumptionRate = this._host.gamePage.workshop.get("cryocomputing").researched ? 1 : 2;
+          let energyConsumptionRate = this._host.gamePage.workshop.get("cryocomputing").researched
+            ? 1
+            : 2;
           if (this._host.gamePage.challenges.currentChallenge === "energy") {
             energyConsumptionRate *= 2;
           }
@@ -1195,7 +1199,8 @@ export class Engine {
           // equal to our current libraries, and that wouldn't cap our energy, upgrade them.
           if (
             this._host.gamePage.resPool.energyProd >=
-            this._host.gamePage.resPool.energyCons + (energyConsumptionRate * libraryMeta.val) / libToDat
+            this._host.gamePage.resPool.energyCons +
+              (energyConsumptionRate * libraryMeta.val) / libToDat
           ) {
             const prices = mustExist(libraryMeta.stages)[1].prices;
             if (bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
@@ -1331,21 +1336,25 @@ export class Engine {
   }
 
   holdFestival(): void {
+    // If we haven't researched festivals yet, or still have more than 400 days left on one,
+    // don't hold (another) one.
     if (
-      !(
-        this._host.gamePage.science.get("drama").researched &&
-        this._host.gamePage.calendar.festivalDays < 400
-      )
-    ) {
-      return;
-    }
-    if (
-      !this._host.gamePage.prestige.getPerk("carnivals").researched &&
-      this._host.gamePage.calendar.festivalDays > 0
+      !this._host.gamePage.science.get("drama").researched ||
+      400 < this._host.gamePage.calendar.festivalDays
     ) {
       return;
     }
 
+    // If we don't have stacked festivals researched yet, and we still have days left on one,
+    // don't hold one.
+    if (
+      !this._host.gamePage.prestige.getPerk("carnivals").researched &&
+      0 < this._host.gamePage.calendar.festivalDays
+    ) {
+      return;
+    }
+
+    // Check if we can afford a festival.
     const craftManager = this._craftManager;
     if (
       craftManager.getValueAvailable("manpower", true) < 1500 ||
@@ -1355,21 +1364,23 @@ export class Engine {
       return;
     }
 
-    const catpowProf =
+    // Check if the festival would even be profitable for any resource production.
+    const catpowProfitable =
       4000 * (craftManager.getTickVal(craftManager.getResource("manpower"), true) as number) > 1500;
-    const cultureProf =
+    const cultureProfitable =
       4000 * (craftManager.getTickVal(craftManager.getResource("culture"), true) as number) > 5000;
-    const parchProf =
+    const parchProfitable =
       4000 * (craftManager.getTickVal(craftManager.getResource("parchment"), true) as number) >
       2500;
 
-    if (!(catpowProf && cultureProf && parchProf)) {
+    if (!(catpowProfitable && cultureProfitable && parchProfitable)) {
       return;
     }
 
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     this._villageManager.render();
 
+    // Now we hold the festival.
     if (this._host.gamePage.villageTab.festivalBtn.model.enabled) {
       const beforeDays = this._host.gamePage.calendar.festivalDays;
       this._host.gamePage.villageTab.festivalBtn.onClick();
