@@ -123,7 +123,7 @@ export type BuildButton<T = string> = {
     incrementValue: (model: unknown) => void;
     onAll: (model: unknown) => void; // Turn on all (steamworks)
     payPrice: (model: unknown) => void;
-    sellInternal: (model: unknown, count: number) => void; // Sell button
+    sellInternal: (model: unknown, end: number) => void; // Sell button
   };
   domNode: HTMLDivElement;
   id: T;

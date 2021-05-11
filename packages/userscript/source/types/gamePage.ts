@@ -187,8 +187,7 @@ export type GamePage = {
           title: string;
           unlocked: boolean;
           value: number;
-        }
-      | undefined;
+        };
     energyCons: number;
     energyProd: number;
     resources: Array<{
@@ -291,7 +290,7 @@ export type GamePage = {
   };
   village: {
     assignJob: (job: unknown, count: number) => void;
-    getEffectLeader: (role: "manager" | "scientist", value: number) => number;
+    getEffectLeader: (role: "manager" | "scientist", defaultObject: Array<Price>) => Array<Price>;
     getFreeKittens: () => number;
     getJob: (name: string) => unknown;
     getJobLimit: (name: string) => number;
