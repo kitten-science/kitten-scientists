@@ -6,17 +6,17 @@ import { UserScript } from "./UserScript";
 
 export class UpgradeManager {
   private readonly _host: UserScript;
-  readonly sciManager: TabManager;
-  readonly spaManager: TabManager;
-  readonly workManager: TabManager;
+  readonly scienceManager: TabManager;
+  readonly spaceManager: TabManager;
+  readonly workshopManager: TabManager;
   private readonly _crafts: CraftManager;
   private readonly _bulkManager: BulkManager;
 
   constructor(host: UserScript) {
     this._host = host;
-    this.sciManager = new TabManager(this._host, "Science");
-    this.spaManager = new TabManager(this._host, "Space");
-    this.workManager = new TabManager(this._host, "Workshop");
+    this.scienceManager = new TabManager(this._host, "Science");
+    this.spaceManager = new TabManager(this._host, "Space");
+    this.workshopManager = new TabManager(this._host, "Workshop");
     this._crafts = new CraftManager(this._host);
     this._bulkManager = new BulkManager(this._host);
   }
@@ -42,9 +42,9 @@ export class UpgradeManager {
   getBuildButton(upgrade: { label: string }, variant: "science" | "workshop"): BuildButton | null {
     let buttons;
     if (variant === "workshop") {
-      buttons = this.workManager.tab.buttons;
+      buttons = this.workshopManager.tab.buttons;
     } else if (variant === "science") {
-      buttons = this.sciManager.tab.buttons;
+      buttons = this.scienceManager.tab.buttons;
     } else {
       throw new Error(`Unexpected variant '${variant}'`);
     }

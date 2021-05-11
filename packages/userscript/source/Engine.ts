@@ -4,7 +4,6 @@ import { CacheManager } from "./CacheManager";
 import { CraftManager } from "./CraftManager";
 import { ExplorationManager } from "./ExplorationManager";
 import { BonfireSettingsItem, BuildItem } from "./options/BonfireSettings";
-import { UnicornFaithItemOptions } from "./options/OptionsLegacy";
 import { FaithItem, ReligionSettingsItem } from "./options/ReligionSettings";
 import { SpaceItem } from "./options/SpaceSettings";
 import { CycleIndices } from "./options/TimeControlSettings";
@@ -16,7 +15,6 @@ import { objectEntries } from "./tools/Entries";
 import { mustExist } from "./tools/Maybe";
 import { TradeManager } from "./TradeManager";
 import {
-  AbstractReligionUpgradeInfo,
   BuildButton,
   BuildingMeta,
   Jobs,
@@ -51,6 +49,11 @@ export class Engine {
 
   constructor(host: UserScript) {
     this._host = host;
+
+    // The managers are really weakly defined concepts.
+    // Most commonly, they are a wrapper around the functionality of a KG tab.
+    // Very often though, key functionality of the automation of the tab is located
+    // in the Engine itself. This will likely be refactored.
     this._upgradeManager = new UpgradeManager(this._host);
     this._buildManager = new BuildManager(this._host);
     this._spaceManager = new SpaceManager(this._host);
@@ -64,23 +67,47 @@ export class Engine {
     this._cacheManager = new CacheManager(this._host);
   }
 
+  /**
+   * Start the Kitten Scientists engine.
+   * @param msg Should we print to the log that the engine was started?
+   */
   start(msg = true): void {
-    if (this.loop) return;
+    if (this.loop) {
+      return;
+    }
 
-    this.loop = setInterval(this.iterate.bind(this), this._host.options.interval);
+    // TODO: `_iterate` is async, but it isn't awaited.
+    //       Instead of using an interval, this should use a tail-controlled timeout.
+    this.loop = setInterval(this._iterate.bind(this), this._host.options.interval);
+
     if (msg) this._host.imessage("status.ks.enable");
   }
 
+  /**
+   * Stop the Kitten Scientists engine.
+   * @param msg Should we print to the log that the engine was stopped?
+   */
   stop(msg = true): void {
-    if (!this.loop) return;
+    if (!this.loop) {
+      return;
+    }
 
     clearInterval(this.loop);
     this.loop = undefined;
+
     if (msg) this._host.imessage("status.ks.disable");
   }
 
-  async iterate(): Promise<void> {
+  /**
+   * The main loop of the automation script.
+   */
+  private async _iterate(): Promise<void> {
     const subOptions = this._host.options.auto.options;
+
+    // The order in which these actions are performed is probably
+    // semi-intentional and should be preserved or improved.
+
+    // Observe astronomical events.
     if (subOptions.enabled && subOptions.items.observe.enabled) {
       this.observeStars();
     }
@@ -774,7 +801,9 @@ export class Engine {
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     buildManager.manager.render();
 
-    const metaData: Partial<Record<FaithItem,  ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>> = {};
+    const metaData: Partial<
+      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
+    > = {};
     for (const [name, build] of objectEntries<FaithItem, ReligionSettingsItem>(builds)) {
       const buildInfo = buildManager.getBuild(name, build.variant);
       if (buildInfo === null) {
@@ -848,6 +877,10 @@ export class Engine {
     }
   }
 
+  /**
+   * Upgrade all possible unlockables.
+   * @returns Nothing.
+   */
   upgrade(): void {
     const upgrades = this._host.options.auto.unlock.items;
     const upgradeManager = this._upgradeManager;
@@ -855,60 +888,76 @@ export class Engine {
     const bulkManager = this._bulkManager;
     const buildManager = this._buildManager;
 
-    upgradeManager.workManager.render();
-    upgradeManager.sciManager.render();
-    upgradeManager.spaManager.render();
+    // Ensure all the tabs have their current UI state updated.
+    upgradeManager.workshopManager.render();
+    upgradeManager.scienceManager.render();
+    upgradeManager.spaceManager.render();
 
+    // If upgrades (workshop items) are enabled...
     if (upgrades.upgrades.enabled && this._host.gamePage.tabs[3].visible) {
-      const work = this._host.gamePage.workshop.upgrades;
-      workLoop: for (const upg in work) {
-        if (work[upg].researched || !work[upg].unlocked) {
+      const workshopUpgrades = this._host.gamePage.workshop.upgrades;
+      // TODO: Filter out upgrades that are not beneficial when using KS, like workshop automation.
+      workLoop: for (const upgrade in workshopUpgrades) {
+        // If the upgrade is already purchased or not available yet, continue with the next one.
+        if (workshopUpgrades[upgrade].researched || !workshopUpgrades[upgrade].unlocked) {
           continue;
         }
 
-        let prices = dojo.clone(work[upg].prices); // this._host.gamePage.village.getEffectLeader will override its argument
+        // Create a copy of the prices for this upgrade, so that we can apply effects to it.
+        let prices = dojo.clone(workshopUpgrades[upgrade].prices);
         prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
         for (const resource in prices) {
+          // If we can't afford this resource price, continue with the next upgrade.
           if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
             continue workLoop;
           }
         }
-        upgradeManager.build(work[upg], "workshop");
+
+        // If we can afford all prices, purchase the upgrade.
+        upgradeManager.build(workshopUpgrades[upgrade], "workshop");
       }
     }
 
+    // If techs (science items) are enabled...
     if (upgrades.techs.enabled && this._host.gamePage.tabs[2].visible) {
-      const tech = this._host.gamePage.science.techs;
-      techLoop: for (const upg in tech) {
-        if (tech[upg].researched || !tech[upg].unlocked) {
+      // These behave identically to the workshop uprades above.
+      const scienceUpgrades = this._host.gamePage.science.techs;
+      techLoop: for (const upgrade in scienceUpgrades) {
+        if (scienceUpgrades[upgrade].researched || !scienceUpgrades[upgrade].unlocked) {
           continue;
         }
 
-        let prices = dojo.clone(tech[upg].prices);
+        let prices = dojo.clone(scienceUpgrades[upgrade].prices);
         prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
         for (const resource in prices) {
           if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
             continue techLoop;
           }
         }
-        upgradeManager.build(tech[upg], "science");
+        upgradeManager.build(scienceUpgrades[upgrade], "science");
       }
     }
 
+    // If missions (space items) are enabled...
     if (upgrades.missions.enabled && this._host.gamePage.tabs[6].visible) {
       const missions = this._host.gamePage.space.meta[0].meta;
       missionLoop: for (let i = 0; i < missions.length; i++) {
-        if (!(missions[i].unlocked && missions[i].val < 1)) {
+        // If the mission is already purchased or not available yet, continue with the next one.
+        if (0 < missions[i].val || !missions[i].unlocked) {
           continue;
         }
 
         const model = this._spaceManager.manager.tab.GCPanel.children[i];
         const prices = model.model.prices;
         for (const resource in prices) {
+          // If we can't afford this resource price, continue with the next mission.
           if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
             continue missionLoop;
           }
         }
+
+        // Start the mission by clicking the button.
+        // TODO: Move this into the SpaceManager?
         model.domNode.click();
         if (i === 7 || i === 12) {
           this._host.iactivity("upgrade.space.mission", [missions[i].label], "ks-upgrade");
@@ -918,13 +967,22 @@ export class Engine {
       }
     }
 
+    // If races (trading) are enabled...
     if (upgrades.races.enabled && this._host.gamePage.tabs[4].visible) {
+      // Check how many races we could reasonably unlock at this point.
       const maxRaces = this._host.gamePage.diplomacy.get("leviathans").unlocked ? 8 : 7;
+      // If we haven't unlocked that many races yet...
       if (this._host.gamePage.diplomacyTab.racePanels.length < maxRaces) {
+        // Get the currently available catpower.
         let manpower = craftManager.getValueAvailable("manpower", true);
+        // TODO: These should be checked in reverse order. Otherwise the check for lizards
+        //       can cause the zebras to be discovered at later stages in the game. Then it
+        //       gets to the check for the zebras and doesn't explore again, as they're
+        //       already unlocked. Then it takes another iteration to unlock the other race.
+        // Send explorers if we haven't discovered the lizards yet.
         if (!this._host.gamePage.diplomacy.get("lizards").unlocked) {
           if (manpower >= 1000) {
-            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
+            this._host.gamePage.resPool.get("manpower").value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -934,9 +992,11 @@ export class Engine {
             this._host.gamePage.ui.render();
           }
         }
+
+        // Do exactly the same for the sharks.
         if (!this._host.gamePage.diplomacy.get("sharks").unlocked) {
           if (manpower >= 1000) {
-            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
+            this._host.gamePage.resPool.get("manpower").value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -946,9 +1006,11 @@ export class Engine {
             this._host.gamePage.ui.render();
           }
         }
+
+        // Do exactly the same for the griffins.
         if (!this._host.gamePage.diplomacy.get("griffins").unlocked) {
           if (manpower >= 1000) {
-            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
+            this._host.gamePage.resPool.get("manpower").value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -958,12 +1020,14 @@ export class Engine {
             this._host.gamePage.ui.render();
           }
         }
+
+        // For nagas, we additionally need enough culture.
         if (
           !this._host.gamePage.diplomacy.get("nagas").unlocked &&
-          mustExist(this._host.gamePage.resPool.get("culture")).value >= 1500
+          this._host.gamePage.resPool.get("culture").value >= 1500
         ) {
           if (manpower >= 1000) {
-            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
+            this._host.gamePage.resPool.get("manpower").value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -973,12 +1037,14 @@ export class Engine {
             this._host.gamePage.ui.render();
           }
         }
+
+        // Zebras require us to have a ship.
         if (
           !this._host.gamePage.diplomacy.get("zebras").unlocked &&
-          mustExist(this._host.gamePage.resPool.get("ship")).value >= 1
+          this._host.gamePage.resPool.get("ship").value >= 1
         ) {
           if (manpower >= 1000) {
-            mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
+            this._host.gamePage.resPool.get("manpower").value -= 1000;
             this._host.iactivity(
               "upgrade.race",
               [this._host.gamePage.diplomacy.unlockRandomRace().title],
@@ -988,6 +1054,8 @@ export class Engine {
             this._host.gamePage.ui.render();
           }
         }
+
+        // For spiders, we need 100 ships and 125000 science.
         if (
           !this._host.gamePage.diplomacy.get("spiders").unlocked &&
           mustExist(this._host.gamePage.resPool.get("ship")).value >= 100 &&
@@ -1004,6 +1072,8 @@ export class Engine {
             this._host.gamePage.ui.render();
           }
         }
+
+        // Dragons require nuclear fission to be researched.
         if (
           !this._host.gamePage.diplomacy.get("dragons").unlocked &&
           this._host.gamePage.science.get("nuclearFission").researched
@@ -1022,32 +1092,45 @@ export class Engine {
       }
     }
 
+    // If buildings (upgrades of bonfire items) are enabled...
     if (upgrades.buildings.enabled) {
+      // Get current count of pastures.
       const pastures =
         this._host.gamePage.bld.getBuildingExt("pasture").meta.stage === 0
           ? this._host.gamePage.bld.getBuildingExt("pasture").meta.val
           : 0;
+      // Get current count of aqueducts.
       const aqueducts =
         this._host.gamePage.bld.getBuildingExt("aqueduct").meta.stage === 0
           ? this._host.gamePage.bld.getBuildingExt("aqueduct").meta.val
           : 0;
 
       const pastureMeta = this._host.gamePage.bld.getBuildingExt("pasture").meta;
+      // If pastures haven't been upgraded to solar farms yet...
       if (pastureMeta.stage === 0) {
-        if (pastureMeta.stages[1].stageUnlocked) {
+        if (mustExist(pastureMeta.stages)[1].stageUnlocked) {
+          // If we would reduce our pastures to 0, by upgrading them, would we lose any catnip?
           if (craftManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
-            const prices = pastureMeta.stages[1].prices;
-            const priceRatio = bulkManager.getPriceRatio(pastureMeta, true);
+            const prices = mustExist(pastureMeta.stages)[1].prices;
             if (bulkManager.singleBuildPossible(pastureMeta, prices, 1)) {
               const button = mustExist(buildManager.getBuildButton("pasture", 0));
+              // We need to perform the process like this to avoid UI confirmations
+              // for selling items.
+              // Sell all pastures (to regain the resources).
               button.controller.sellInternal(button.model, 0);
+              // Manually update the metadata, as we bypassed the full selling logic.
               pastureMeta.on = 0;
               pastureMeta.val = 0;
               pastureMeta.stage = 1;
+
               this._host.iactivity("upgrade.building.pasture", [], "ks-upgrade");
+
+              // Upgrade the pasture.
               this._host.gamePage.ui.render();
               buildManager.build("pasture", 1, 1);
               this._host.gamePage.ui.render();
+
+              // TODO: Why do we return here and not just unlock more buildings?
               return;
             }
           }
@@ -1055,22 +1138,28 @@ export class Engine {
       }
 
       const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
+      // If aqueducts haven't beeen upgraded to hydro plants yet...
       if (aqueductMeta.stage === 0) {
-        if (aqueductMeta.stages[1].stageUnlocked) {
+        if (mustExist(aqueductMeta.stages)[1].stageUnlocked) {
+          // If we would reduce our aqueducts to 0, by upgrading them, would we lose any catnip?
           if (craftManager.getPotentialCatnip(true, pastures, 0) > 0) {
-            const prices = aqueductMeta.stages[1].prices;
-            const priceRatio = bulkManager.getPriceRatio(aqueductMeta, true);
+            const prices = mustExist(aqueductMeta.stages)[1].prices;
             if (bulkManager.singleBuildPossible(aqueductMeta, prices, 1)) {
               const button = mustExist(buildManager.getBuildButton("aqueduct", 0));
               button.controller.sellInternal(button.model, 0);
               aqueductMeta.on = 0;
               aqueductMeta.val = 0;
               aqueductMeta.stage = 1;
-              aqueductMeta.calculateEffects(aqueductMeta, this._host.gamePage);
+
+              // TODO: Why do we do this for the aqueduct and not for the pasture?
+              aqueductMeta.calculateEffects!(aqueductMeta, this._host.gamePage);
+
               this._host.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
+
               this._host.gamePage.ui.render();
               buildManager.build("aqueduct", 1, 1);
               this._host.gamePage.ui.render();
+
               return;
             }
           }
@@ -1079,11 +1168,14 @@ export class Engine {
 
       const libraryMeta = this._host.gamePage.bld.getBuildingExt("library").meta;
       if (libraryMeta.stage === 0) {
-        if (libraryMeta.stages[1].stageUnlocked) {
-          let enCon = this._host.gamePage.workshop.get("cryocomputing").researched ? 1 : 2;
-          if (this._host.gamePage.challenges.currentChallenge == "energy") {
-            enCon *= 2;
+        if (mustExist(libraryMeta.stages)[1].stageUnlocked) {
+          let energyConsumptionRate = this._host.gamePage.workshop.get("cryocomputing").researched ? 1 : 2;
+          if (this._host.gamePage.challenges.currentChallenge === "energy") {
+            energyConsumptionRate *= 2;
           }
+
+          // This indicates how valuable a data center is, compared to a single library.
+          // We check for possible upgrades, that would make them more valuable.
           let libToDat = 3;
           if (this._host.gamePage.workshop.get("uplink").researched) {
             libToDat *=
@@ -1097,19 +1189,22 @@ export class Engine {
               this._host.gamePage.bld.get("aiCore").on *
                 this._host.gamePage.getEffect("dataCenterAIRatio");
           }
+
+          // We now have the energy consumption of data centers and the value of data centers.
+          // Assuming, we would upgrade to data centers and buy as many as we need to have value
+          // equal to our current libraries, and that wouldn't cap our energy, upgrade them.
           if (
             this._host.gamePage.resPool.energyProd >=
-            this._host.gamePage.resPool.energyCons + (enCon * libraryMeta.val) / libToDat
+            this._host.gamePage.resPool.energyCons + (energyConsumptionRate * libraryMeta.val) / libToDat
           ) {
-            const prices = libraryMeta.stages[1].prices;
-            const priceRatio = bulkManager.getPriceRatio(libraryMeta, true);
+            const prices = mustExist(libraryMeta.stages)[1].prices;
             if (bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
               const button = mustExist(buildManager.getBuildButton("library", 0));
               button.controller.sellInternal(button.model, 0);
               libraryMeta.on = 0;
               libraryMeta.val = 0;
               libraryMeta.stage = 1;
-              libraryMeta.calculateEffects(libraryMeta, this._host.gamePage);
+              libraryMeta.calculateEffects!(libraryMeta, this._host.gamePage);
               this._host.iactivity("upgrade.building.library", [], "ks-upgrade");
               this._host.gamePage.ui.render();
               buildManager.build("library", 1, 1);
@@ -1121,20 +1216,24 @@ export class Engine {
       }
 
       const amphitheatreMeta = this._host.gamePage.bld.getBuildingExt("amphitheatre").meta;
+      // If amphitheathres haven't been upgraded to broadcast towers yet...
+      // This seems to be identical to the pasture upgrade.
       if (amphitheatreMeta.stage === 0) {
-        if (amphitheatreMeta.stages[1].stageUnlocked) {
-          const prices = amphitheatreMeta.stages[1].prices;
-          const priceRatio = bulkManager.getPriceRatio(amphitheatreMeta, true);
+        if (mustExist(amphitheatreMeta.stages)[1].stageUnlocked) {
+          const prices = mustExist(amphitheatreMeta.stages)[1].prices;
           if (bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
             const button = mustExist(buildManager.getBuildButton("amphitheatre", 0));
             button.controller.sellInternal(button.model, 0);
             amphitheatreMeta.on = 0;
             amphitheatreMeta.val = 0;
             amphitheatreMeta.stage = 1;
+
             this._host.iactivity("upgrade.building.amphitheatre", [], "ks-upgrade");
+
             this._host.gamePage.ui.render();
             buildManager.build("amphitheatre", 1, 1);
             this._host.gamePage.ui.render();
+
             return;
           }
         }
@@ -1283,6 +1382,9 @@ export class Engine {
     }
   }
 
+  /**
+   * If there is currently an astronomical event, observe it.
+   */
   observeStars(): void {
     if (this._host.gamePage.calendar.observeBtn !== null) {
       this._host.gamePage.calendar.observeHandler();

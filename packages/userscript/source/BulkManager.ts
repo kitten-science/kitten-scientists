@@ -208,6 +208,10 @@ export class BulkManager {
     // It _seems_ like it should indicate how many buildings of a specific build slot have been built.
     // But what it actually holds is how many builds have been performed.
     // It might be a "best effort" to try to predict how prices would develop if the builds were made.
+    // Some testing suggests that this is a bug. If you start a fresh KG in dev mode and give all resources,
+    // with all bonfire builds enabled in KS, not all resources will be spent.
+    // I assume this is due to the fact that the script believes it has already built 30 libraries,
+    // when it was only 30 catnip fields (and only catnip was spent).
     let unknown_k = 0;
     // While we have items in the builds cache...
     while (buildsCache.length !== 0) {
