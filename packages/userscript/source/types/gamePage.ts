@@ -51,7 +51,10 @@ export type GamePage = {
     day: number;
     festivalDays: number;
     getCurSeason: () => { modifiers: { catnip: number }; name: Season };
-    getWeatherMod: () => number;
+    /**
+     * Get the production modifier contribution of the weather for certain resource.
+     */
+    getWeatherMod: (res: Resource) => number;
     observeBtn: BuildButton | null;
     observeHandler: () => void;
     season: number;
@@ -184,17 +187,14 @@ export type GamePage = {
   };
   resetAutomatic: () => void;
   resPool: {
-    get: (
-      name: Resource
-    ) =>
-      | {
-          craftable: boolean;
-          maxValue: number;
-          name: Resource;
-          title: string;
-          unlocked: boolean;
-          value: number;
-        };
+    get: (name: Resource) => {
+      craftable: boolean;
+      maxValue: number;
+      name: Resource;
+      title: string;
+      unlocked: boolean;
+      value: number;
+    };
     energyCons: number;
     energyProd: number;
     resources: Array<{
@@ -223,9 +223,7 @@ export type GamePage = {
     }>;
   };
   space: {
-    getBuilding: (
-      building: SpaceBuildings
-    ) => {
+    getBuilding: (building: SpaceBuildings) => {
       calculateEffects: (self: unknown, game: GamePage) => void;
       /**
        * An internationalized description for this space building.
@@ -297,11 +295,22 @@ export type GamePage = {
   };
   village: {
     assignJob: (job: unknown, count: number) => void;
-    getEffectLeader: <TDefaultObject>(role: "manager" | "scientist", defaultObject: TDefaultObject) => TDefaultObject;
+    getEffectLeader: <TDefaultObject>(
+      role: "manager" | "scientist",
+      defaultObject: TDefaultObject
+    ) => TDefaultObject;
     getFreeKittens: () => number;
     getJob: (name: string) => unknown;
     getJobLimit: (name: string) => number;
+    /**
+     * Get a list of resource consumptions per tick
+     * @see getResProduction
+     */
     getResConsumption: () => { catnip: number };
+    /**
+     * Get a list of resource modifiers per tick
+     * This method returns positive villager production that can be multiplied by building bonuses
+     */
     getResProduction: () => { catnip: number };
     happiness: number;
     huntAll: () => void;
