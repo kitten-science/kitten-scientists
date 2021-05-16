@@ -10,7 +10,16 @@ export type CraftSettingsItem = {
   limited: boolean;
   $limited?: JQuery<HTMLElement>;
 
+  /**
+   * Meaning still unclear.
+   * This is hardcoded to `0.5` right now.
+   */
   limRat: 0.5;
+
+  /**
+   * The limit of how many items to craft.
+   * This is hardcoded to `0` right now.
+   */
   max: 0;
   require: Requirement;
 };

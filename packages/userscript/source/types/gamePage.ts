@@ -13,6 +13,7 @@ import {
   ReligionUpgradeInfo,
   ReligionUpgrades,
   Resource,
+  ResourceCraftable,
   Season,
   TabId,
   TranscendenceUpgradeInfo,
@@ -21,6 +22,7 @@ import {
   ZiggurathUpgrades,
 } from ".";
 import { CycleIndices } from "../options/TimeControlSettings";
+import { CraftableInfo } from "./craft";
 import { ReligionTab } from "./religion";
 import { SpaceBuildings, SpaceTab } from "./space";
 import {
@@ -124,6 +126,11 @@ export type GamePage = {
    * Calculate diminishing returns.
    */
   getLimitedDR: (effect: number, limit: number) => number;
+  /**
+   * The resource craft ratio indicates how many items you receive
+   * as the result of a single craft. This is subject to a variety
+   * of bonus effects.
+   */
   getResCraftRatio: (name: string) => number;
   getResourcePerTick: (name: string, value: boolean) => number;
   getResourcePerTickConvertion: (name: "catnip") => number;
@@ -290,7 +297,7 @@ export type GamePage = {
   };
   village: {
     assignJob: (job: unknown, count: number) => void;
-    getEffectLeader: (role: "manager" | "scientist", defaultObject: Array<Price>) => Array<Price>;
+    getEffectLeader: <TDefaultObject>(role: "manager" | "scientist", defaultObject: TDefaultObject) => TDefaultObject;
     getFreeKittens: () => number;
     getJob: (name: string) => unknown;
     getJobLimit: (name: string) => number;
@@ -324,8 +331,8 @@ export type GamePage = {
     get: (
       technology: "chronoforge" | "cryocomputing" | "goldOre" | "machineLearning" | "uplink"
     ) => { researched: boolean };
-    getCraft: (name: string) => { name: string; unlocked: boolean } | undefined;
-    getCraftPrice: (craft: unknown) => Array<Price>;
+    getCraft: (name: ResourceCraftable) => CraftableInfo | undefined;
+    getCraftPrice: (craft: CraftableInfo) => Array<Price>;
     upgrades: Array<{
       description: string;
       effects: Record<string, number>;
