@@ -2,7 +2,7 @@ import { CacheManager } from "./CacheManager";
 import { objectEntries } from "./tools/Entries";
 import { isNil, mustExist } from "./tools/Maybe";
 import { Resource, ResourceCraftable } from "./types";
-import { ResourceInfo } from "./types/craft";
+import { CraftableInfo, ResourceInfo } from "./types/craft";
 import { UserScript } from "./UserScript";
 
 export class CraftManager {
@@ -18,7 +18,7 @@ export class CraftManager {
     amount = Math.floor(amount);
 
     if (!name || 1 > amount) return;
-    if (!this.canCraft(name, amount)) return;
+    if (!this._canCraft(name, amount)) return;
 
     const craft = this.getCraft(name);
     const ratio = this._host.gamePage.getResCraftRatio(craft.name);
@@ -38,7 +38,7 @@ export class CraftManager {
     );
   }
 
-  canCraft(name: ResourceCraftable, amount: number): boolean {
+  private _canCraft(name: ResourceCraftable, amount: number): boolean {
     const craft = this.getCraft(name);
     const enabled = mustExist(this._host.options.auto.craft.items[name]).enabled;
     let result = false;
@@ -60,7 +60,12 @@ export class CraftManager {
     return result;
   }
 
-  getCraft(name: string): { name: string; unlocked: boolean } {
+  /**
+   * Retrieve the resource information object from the game.
+   * @param name The name of the craftable resource.
+   * @returns The information object for the resource.
+   */
+  getCraft(name: ResourceCraftable): CraftableInfo {
     const craft = this._host.gamePage.workshop.getCraft(name);
     if (!craft) {
       throw new Error(`Unable to find craft '${name}'`);
@@ -68,7 +73,12 @@ export class CraftManager {
     return craft;
   }
 
-  singleCraftPossible(name: string): boolean {
+  /**
+   * Check if we have enough resources to craft a single craftable resource.
+   * @param name The name of the resource.
+   * @returns `true` if the build is possible; `false` otherwise.
+   */
+  singleCraftPossible(name: ResourceCraftable): boolean {
     const materials = this.getMaterials(name);
     for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
       if (this.getValueAvailable(mat, true) < amount) {
@@ -78,8 +88,16 @@ export class CraftManager {
     return true;
   }
 
+  /**
+   * Determine the limit of how many items to craft of a given resource.
+   * @param name The resource to craft.
+   * @param limited Is the crafting of the resource currently limited?
+   * @param limRat ?
+   * @param aboveTrigger Are we currently above the trigger value?
+   * @returns ?
+   */
   getLowestCraftAmount(
-    name: Resource,
+    name: ResourceCraftable,
     limited: boolean,
     limRat: number,
     aboveTrigger: boolean
@@ -91,13 +109,13 @@ export class CraftManager {
     const craft = this.getCraft(name);
     const ratio = this._host.gamePage.getResCraftRatio(craft.name);
     const trigger = this._host.options.auto.craft.trigger;
-    const optionVal =
-      this._host.options.auto.options.enabled &&
-      this._host.options.auto.options.items.shipOverride.enabled;
 
     // Safeguard if materials for craft cannot be determined.
-    if (!materials) return 0;
+    if (!materials) {
+      return 0;
+    }
 
+    // Special case handling to balance iron between plates and steel crafting.
     if (name === "steel" && limited) {
       const plateRatio = this._host.gamePage.getResCraftRatio("plate");
       if (
@@ -125,17 +143,21 @@ export class CraftManager {
       }
     }
 
+    const shipOverride =
+      this._host.options.auto.options.enabled &&
+      this._host.options.auto.options.items.shipOverride.enabled;
+
     const res = this.getResource(name);
 
-    for (const [i, materialAmount] of objectEntries<Resource, number>(materials)) {
+    for (const [resource, materialAmount] of objectEntries(materials)) {
       let delta = undefined;
       if (
         !limited ||
-        (this.getResource(i).maxValue > 0 && aboveTrigger) ||
-        (name === "ship" && optionVal && this.getResource("ship").value < 243)
+        (this.getResource(resource).maxValue > 0 && aboveTrigger) ||
+        (name === "ship" && shipOverride && this.getResource("ship").value < 243)
       ) {
         // If there is a storage limit, we can just use everything returned by getValueAvailable, since the regulation happens there
-        delta = this.getValueAvailable(i) / materialAmount;
+        delta = this.getValueAvailable(resource) / materialAmount;
       } else {
         // Take the currently present amount of material to craft into account
         // Currently this determines the amount of resources that can be crafted such that base materials are proportionally distributed across limited resources.
@@ -143,7 +165,7 @@ export class CraftManager {
         // If this were another value, such as 0.75, then if you had 10000 beams and 0 scaffolds, 7500 of the beams would be crafted into scaffolds.
         delta =
           limRat *
-            ((this.getValueAvailable(i, true) +
+            ((this.getValueAvailable(resource, true) +
               (materialAmount / (1 + ratio)) * this.getValueAvailable(res.name, true)) /
               materialAmount) -
           this.getValueAvailable(res.name, true) / (1 + ratio);
@@ -161,7 +183,13 @@ export class CraftManager {
     return Math.floor(amount);
   }
 
-  getMaterials(name: string): Partial<Record<Resource, number>> {
+  /**
+   * Returns a hash of the required source resources and their
+   * amount to craft the given resource.
+   * @param name The resource to craft.
+   * @returns The source resources you need and how many.
+   */
+  getMaterials(name: ResourceCraftable): Partial<Record<Resource, number>> {
     const materials: Partial<Record<Resource, number>> = {};
     const craft = this.getCraft(name);
 
@@ -176,14 +204,11 @@ export class CraftManager {
     return materials;
   }
 
-  getTickVal(
-    res:ResourceInfo,
-    preTrade: boolean | undefined = undefined
-  ): number | "ignore" {
+  getTickVal(res: ResourceInfo, preTrade: boolean | undefined = undefined): number | "ignore" {
     let prod = this._host.gamePage.getResourcePerTick(res.name, true);
     if (res.craftable) {
       let minProd = Number.MAX_VALUE;
-      const materials = this.getMaterials(res.name);
+      const materials = this.getMaterials(res.name as ResourceCraftable);
       for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
         const rat = (1 + this._host.gamePage.getResCraftRatio(res.name)) / amount;
         //Currently preTrade is only true for the festival stuff, so including furs from hunting is ideal.
@@ -227,9 +252,7 @@ export class CraftManager {
     return output;
   }
 
-  getResource(
-    name: Resource
-  ): ResourceInfo {
+  getResource(name: Resource): ResourceInfo {
     if (name === "slabs") {
       name = "slab";
     }
@@ -251,43 +274,52 @@ export class CraftManager {
     return !stock ? 0 : stock;
   }
 
+  /**
+   * Determine how much of a resource is available for a certain operation
+   * to use.
+   * @param name The resource to check.
+   * @param all ?
+   * @param typeTrigger The trigger value associated with this check.
+   * @returns The available amount of the resource.
+   */
   getValueAvailable(
     name: Resource,
     all: boolean | undefined = undefined,
     typeTrigger: number | undefined = undefined
   ): number {
-    let value = this.getValue(name);
     let stock = this.getStock(name);
-    let trigger: number;
-
-    if (!typeTrigger && typeTrigger !== 0) {
-      trigger = this._host.options.auto.craft.trigger;
-    } else {
-      trigger = typeTrigger;
-    }
 
     if ("catnip" === name) {
-      const pastures =
-        this._host.gamePage.bld.getBuildingExt("pasture").meta.stage === 0
-          ? this._host.gamePage.bld.getBuildingExt("pasture").meta.val
-          : 0;
-      const aqueducts =
-        this._host.gamePage.bld.getBuildingExt("aqueduct").meta.stage === 0
-          ? this._host.gamePage.bld.getBuildingExt("aqueduct").meta.val
-          : 0;
+      const pastureMeta = this._host.gamePage.bld.getBuildingExt("pasture").meta;
+      const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
+      const pastures = pastureMeta.stage === 0 ? pastureMeta.val : 0;
+      const aqueducts = aqueductMeta.stage === 0 ? aqueductMeta.val : 0;
       const resPerTick = this.getPotentialCatnip(true, pastures, aqueducts);
 
-      if (resPerTick < 0) stock -= resPerTick * 202 * 5;
+      if (resPerTick < 0) {
+        stock -= resPerTick * 202 * 5;
+      }
     }
 
+    let value = this.getValue(name);
     value = Math.max(value - stock, 0);
 
     // If we have a maxValue, and user hasn't requested all, check
     // consumption rate
     if (!all && this.getResource(name).maxValue > 0) {
-      const res = this._host.options.auto.resources[name];
+      // Determine our de-facto trigger value to use.
+      let trigger: number;
+      if (!typeTrigger && typeTrigger !== 0) {
+        trigger = this._host.options.auto.craft.trigger;
+      } else {
+        trigger = typeTrigger;
+      }
+
+      const resourceSettings = this._host.options.auto.resources[name];
       const consume =
-        res && res.enabled && res.consume != undefined ? res.consume : this._host.options.consume;
+        resourceSettings && resourceSettings.enabled && resourceSettings.consume != undefined
+          ? resourceSettings.consume
+          : this._host.options.consume;
 
       value -= Math.min(this.getResource(name).maxValue * trigger, value) * (1 - consume);
     }

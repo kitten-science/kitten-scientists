@@ -1229,6 +1229,8 @@ export class Engine {
       // This seems to be identical to the pasture upgrade.
       if (amphitheatreMeta.stage === 0) {
         if (mustExist(amphitheatreMeta.stages)[1].stageUnlocked) {
+          // TODO: This is problematic. Upgrading from 50 amphitheatres to 1 broadcast tower sucks
+          //       if you don't have enough resources to build several more.
           const prices = mustExist(amphitheatreMeta.stages)[1].prices;
           if (bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
             const button = mustExist(buildManager.getBuildButton("amphitheatre", 0));
@@ -1323,24 +1325,38 @@ export class Engine {
     }
   }
 
+  /**
+   * Perform crafting as configured in the crafting options.
+   */
   craft(): void {
+    // TODO: One of the core limitations here is that only a single resource
+    //       is taken into account, the one set as `require` in the definition.
     const crafts = this._host.options.auto.craft.items;
     const manager = this._craftManager;
     const trigger = this._host.options.auto.craft.trigger;
 
     for (const [name, craft] of objectEntries(crafts)) {
+      // This will always be `false` while `max` is hardcoded to `0`.
+      // Otherwise, it would contain the current resource information.
       const current = !craft.max ? false : manager.getResource(name);
+      // The resource information for the requirement of this craft, if any.
       const require = !craft.require ? false : manager.getResource(craft.require);
-      const season = this._host.gamePage.calendar.season;
       let amount = 0;
       // Ensure that we have reached our cap
+      // This will never happen as `current` is always `false`.
       if (current && current.value > craft.max) continue;
+
+      // If we can't even craft a single item of resource, skip it.
       if (!manager.singleCraftPossible(name)) {
         continue;
       }
-      // Craft the resource if we meet the trigger requirement
+
+      // Craft the resource if it doesn't require anything or we hit the requirement trigger.
       if (!require || trigger <= require.value / require.maxValue) {
         amount = manager.getLowestCraftAmount(name, craft.limited, craft.limRat, true);
+
+        // If a resource DOES "require" another resource AND its trigger value has NOT been hit
+        // yet AND it is limited... What?
       } else if (craft.limited) {
         amount = manager.getLowestCraftAmount(name, craft.limited, craft.limRat, false);
       }

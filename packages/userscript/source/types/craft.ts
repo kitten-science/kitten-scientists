@@ -1,4 +1,4 @@
-import { Resource } from ".";
+import { Resource, ResourceCraftable } from ".";
 
 export type ResourceInfo = {
   craftable: boolean;
@@ -7,3 +7,5 @@ export type ResourceInfo = {
   title: string;
   value: number;
 };
+
+export type CraftableInfo = { name: ResourceCraftable; unlocked: boolean };
