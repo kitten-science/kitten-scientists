@@ -17,8 +17,12 @@ export class CraftManager {
   craft(name: ResourceCraftable, amount: number): void {
     amount = Math.floor(amount);
 
-    if (!name || 1 > amount) return;
-    if (!this._canCraft(name, amount)) return;
+    if (!name || 1 > amount) {
+      return;
+    }
+    if (!this._canCraft(name, amount)) {
+      return;
+    }
 
     const craft = this.getCraft(name);
     const ratio = this._host.gamePage.getResCraftRatio(craft.name);
@@ -289,13 +293,21 @@ export class CraftManager {
   ): number {
     let stock = this.getStock(name);
 
+    // If the resource is catnip, ensure to not use so much that we can't satisfy
+    // consumption by kittens.
     if ("catnip" === name) {
       const pastureMeta = this._host.gamePage.bld.getBuildingExt("pasture").meta;
       const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
       const pastures = pastureMeta.stage === 0 ? pastureMeta.val : 0;
       const aqueducts = aqueductMeta.stage === 0 ? aqueductMeta.val : 0;
+      // How many catnip per tick do we have available? This can be negative.
       const resPerTick = this.getPotentialCatnip(true, pastures, aqueducts);
 
+      // If our stock is currently decreasing. Ensure we work with the value
+      // where it should be in 5 ticks.
+      // TODO: I'm assuming 202 is the catnip consumption per tick and the 5 are a
+      //       magic value that just made sense, or the script assumes it runs every
+      //       5 ticks. Which would mean it probably ignores the `interval` setting.
       if (resPerTick < 0) {
         stock -= resPerTick * 202 * 5;
       }
@@ -327,22 +339,45 @@ export class CraftManager {
     return value;
   }
 
-  getPotentialCatnip(worstWeather: unknown, pastures: number, aqueducts: number): number {
-    let fieldProd = this._host.gamePage.getEffect("catnipPerTickBase");
+  /**
+   * Determine how much catnip we have available to "work with" per tick.
+   * @param worstWeather Should the worst weather be assumed for this calculation?
+   * @param pastures How many pastures to take into account.
+   * @param aqueducts How many aqueducts to take into account
+   * @returns The potential catnip per tick.
+   */
+  getPotentialCatnip(worstWeather: boolean, pastures: number, aqueducts: number): number {
+    // Start of by checking how much catnip we produce per tick at base level.
+    let productionField = this._host.gamePage.getEffect("catnipPerTickBase");
+
+    // `worstWeather` is `true` in all calls, which is good, because the `else` path
+    // here is broken.
+    // TODO: Maybe fix this, if it could be useful.
     if (worstWeather) {
-      fieldProd *= 0.1;
+      // Assume fields run at -90%
+      productionField *= 0.1;
     } else {
-      fieldProd *=
+      productionField *=
         this._host.gamePage.calendar.getWeatherMod() +
         this._host.gamePage.calendar.getCurSeason().modifiers["catnip"];
     }
-    const vilProd = this._host.gamePage.village.getResProduction().catnip
-      ? this._host.gamePage.village.getResProduction().catnip *
-        (1 + this._host.gamePage.getEffect("catnipJobRatio"))
-      : 0;
-    let baseProd = fieldProd + vilProd;
 
+    // Get base production values for jobs.
+    const resourceProduction = this._host.gamePage.village.getResProduction();
+    // Check how much catnip we're producing through kitten jobs.
+    const productionVillager = resourceProduction.catnip
+      ? resourceProduction.catnip * (1 + this._host.gamePage.getEffect("catnipJobRatio"))
+      : 0;
+
+    // Base production is catnip fields + farmers.
+    let baseProd = productionField + productionVillager;
+
+    // Determine the effect of other buildings on the production value.
     let hydroponics = this._host.gamePage.space.getBuilding("hydroponics").val;
+    // Index 21 is the "pawgan rituals" metaphysics upgrade. This makes no sense.
+    // This likely wants index 22, which is "numeromancy", which has effects on
+    // catnip production in cycles at index 2 and 7.
+    // TODO: Fix this so the upgrade is properly taken into account.
     if (this._host.gamePage.prestige.meta[0].meta[21].researched) {
       if (this._host.gamePage.calendar.cycle === 2) {
         hydroponics *= 2;
@@ -351,49 +386,70 @@ export class CraftManager {
         hydroponics *= 0.5;
       }
     }
+
+    // Our base production value is boosted by our aqueducts and hydroponics accordingly.
     baseProd *= 1 + 0.03 * aqueducts + 0.025 * hydroponics;
 
-    const paragonBonus =
-      this._host.gamePage.challenges.currentChallenge == "winterIsComing"
-        ? 0
-        : this._host.gamePage.prestige.getParagonProductionRatio();
+    // Apply paragon bonus, except during the "winter is coming" challenge.
+    const isWinterComing = this._host.gamePage.challenges.currentChallenge === "winterIsComing";
+    const paragonBonus = isWinterComing
+      ? 0
+      : this._host.gamePage.prestige.getParagonProductionRatio();
     baseProd *= 1 + paragonBonus;
 
+    // Apply faith bonus.
     baseProd *= 1 + this._host.gamePage.religion.getSolarRevolutionRatio();
 
+    // Unless the user disabled the "global donate bonus", apply it.
     if (!this._host.gamePage.opts.disableCMBR) {
       baseProd *= 1 + this._host.gamePage.getCMBRBonus();
     }
 
+    // Apply the effects of possibly running festival.
     baseProd = this._host.gamePage.calendar.cycleEffectsFestival({ catnip: baseProd })["catnip"];
 
+    // Determine our demand for catnip. This is usually a negative value.
     let baseDemand = this._host.gamePage.village.getResConsumption()["catnip"];
-    const uniPastures = this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.val;
+    // Pastures and unicron pastures reduce catnip demand. Factor that in.
+    const unicornPastures = this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.val;
     baseDemand *=
-      1 + this._host.gamePage.getLimitedDR(pastures * -0.005 + uniPastures * -0.0015, 1.0);
+      1 + this._host.gamePage.getLimitedDR(pastures * -0.005 + unicornPastures * -0.0015, 1.0);
+
+    // If we have any kittens and happiness over 100%.
     if (
       this._host.gamePage.village.sim.kittens.length > 0 &&
       this._host.gamePage.village.happiness > 1
     ) {
+      // How happy beyond 100% are we?
       const happyCon = this._host.gamePage.village.happiness - 1;
-      if (this._host.gamePage.challenges.currentChallenge == "anarchy") {
-        baseDemand *=
-          1 + happyCon * (1 + this._host.gamePage.getEffect("catnipDemandWorkerRatioGlobal"));
+      const catnipDemandWorkerRatioGlobal = this._host.gamePage.getEffect(
+        "catnipDemandWorkerRatioGlobal"
+      );
+
+      // Determine the effect of kittens without jobs.
+      if (this._host.gamePage.challenges.currentChallenge === "anarchy") {
+        // During anarchy, they have no effect. They eat all the catnip.
+        baseDemand *= 1 + happyCon * (1 + catnipDemandWorkerRatioGlobal);
       } else {
+        // During normal operation, reduce the demand proportionally.
+        // TODO: This should probably be split up into 2 steps.
         baseDemand *=
           1 +
           happyCon *
-            (1 + this._host.gamePage.getEffect("catnipDemandWorkerRatioGlobal")) *
+            (1 + catnipDemandWorkerRatioGlobal) *
             (1 -
               this._host.gamePage.village.getFreeKittens() /
                 this._host.gamePage.village.sim.kittens.length);
       }
     }
+
+    // Subtract the demand from the production. Demand is negative.
     baseProd += baseDemand;
 
+    // Subtract possible catnip consumers, like breweries.
     baseProd += this._host.gamePage.getResourcePerTickConvertion("catnip");
 
-    //Might need to eventually factor in time acceleration using this._host.gamePage.timeAccelerationRatio().
+    // Might need to eventually factor in time acceleration using this._host.gamePage.timeAccelerationRatio().
     return baseProd;
   }
 }
