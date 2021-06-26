@@ -579,24 +579,30 @@ export class Engine {
     }
   }
 
+  /**
+   * Blackcoin trading automation.
+   */
   crypto(): void {
     const coinPrice = this._host.gamePage.calendar.cryptoPrice;
-    const previousRelic = mustExist(this._host.gamePage.resPool.get("relic")).value;
-    const previousCoin = mustExist(this._host.gamePage.resPool.get("blackcoin")).value;
-    let exchangedCoin = 0.0;
-    let exchangedRelic = 0.0;
+    const relicsInitial = this._host.gamePage.resPool.get("relic").value;
+    const coinsInitial = this._host.gamePage.resPool.get("blackcoin").value;
+    let coinsExchanged = 0.0;
+    let relicsExchanged = 0.0;
     let waitForBestPrice = false;
 
     // Waits for coin price to drop below a certain treshold before starting the exchange process
+    // TODO: This is obviously broken.
     if (waitForBestPrice === true && coinPrice < 860.0) {
       waitForBestPrice = false;
     }
+
+    // All of this code is straight-forward. Buy low, sell high.
 
     // Exchanges up to a certain threshold, in order to keep a good exchange rate, then waits for a higher treshold before exchanging for relics.
     if (
       waitForBestPrice === false &&
       coinPrice < 950.0 &&
-      previousRelic > (this._host.options.auto.options.items.crypto.subTrigger ?? 0)
+      (this._host.options.auto.options.items.crypto.subTrigger ?? 0) < relicsInitial
     ) {
       // function name changed in v1.4.8.0
       if (typeof this._host.gamePage.diplomacy.buyEcoin === "function") {
@@ -605,13 +611,10 @@ export class Engine {
         this._host.gamePage.diplomacy.buyBcoin();
       }
 
-      const currentCoin = mustExist(this._host.gamePage.resPool.get("blackcoin")).value;
-      exchangedCoin = Math.round(currentCoin - previousCoin);
-      this._host.iactivity("blackcoin.buy", [exchangedCoin]);
-    } else if (
-      coinPrice > 1050.0 &&
-      mustExist(this._host.gamePage.resPool.get("blackcoin")).value > 0
-    ) {
+      const currentCoin = this._host.gamePage.resPool.get("blackcoin").value;
+      coinsExchanged = Math.round(currentCoin - coinsInitial);
+      this._host.iactivity("blackcoin.buy", [coinsExchanged]);
+    } else if (coinPrice > 1050.0 && 0 < this._host.gamePage.resPool.get("blackcoin").value) {
       waitForBestPrice = true;
 
       // function name changed in v1.4.8.0
@@ -621,10 +624,10 @@ export class Engine {
         this._host.gamePage.diplomacy.sellBcoin();
       }
 
-      const currentRelic = mustExist(this._host.gamePage.resPool.get("relic")).value;
-      exchangedRelic = Math.round(currentRelic - previousRelic);
+      const relicsCurrent = mustExist(this._host.gamePage.resPool.get("relic")).value;
+      relicsExchanged = Math.round(relicsCurrent - relicsInitial);
 
-      this._host.iactivity("blackcoin.sell", [exchangedRelic]);
+      this._host.iactivity("blackcoin.sell", [relicsExchanged]);
     }
   }
 
