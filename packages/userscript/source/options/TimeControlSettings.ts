@@ -1,6 +1,5 @@
-import { Resource, UnicornItemVariant } from "../types";
+import { Resource, TimeItemVariant, UnicornItemVariant } from "../types";
 import { BuildItem } from "./BonfireSettings";
-import { TimeItemVariant } from "./OptionsLegacy";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { SettingsSection } from "./SettingsSection";
 import { SpaceItem } from "./SpaceSettings";
@@ -272,32 +271,32 @@ export class TimeControlSettings extends SettingsSection {
     temporalBattery: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrono,
+      variant: TimeItemVariant.Chronoforge,
     },
     blastFurnace: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrono,
+      variant: TimeItemVariant.Chronoforge,
     },
     timeBoiler: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrono,
+      variant: TimeItemVariant.Chronoforge,
     },
     temporalAccelerator: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrono,
+      variant: TimeItemVariant.Chronoforge,
     },
     temporalImpedance: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrono,
+      variant: TimeItemVariant.Chronoforge,
     },
     ressourceRetrieval: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: TimeItemVariant.Unknown_chrono,
+      variant: TimeItemVariant.Chronoforge,
     },
 
     cryochambers: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },

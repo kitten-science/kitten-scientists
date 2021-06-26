@@ -2,10 +2,11 @@ import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
 import {
-  AbstractTimeUpgradeInfo,
   BuildButton,
+  ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
   TimeTab,
+  VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
 } from "./types";
 import { UserScript } from "./UserScript";
@@ -54,7 +55,7 @@ export class TimeManager {
   getBuild(
     name: ChronoForgeUpgrades | VoidSpaceUpgrades,
     variant: "chrono" | "void"
-  ): AbstractTimeUpgradeInfo | null {
+  ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
     if (variant === "chrono") {
       return this._host.gamePage.time.getCFU(name as ChronoForgeUpgrades) ?? null;
     } else {

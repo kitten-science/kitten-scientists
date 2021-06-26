@@ -6,12 +6,15 @@ import {
   AllBuildings,
   BuildButton,
   BuildingMeta,
+  ChronoForgeUpgradeInfo,
   Price,
   ReligionUpgradeInfo,
   Resource,
   SpaceBuildingInfo,
+  TimeItemVariant,
   TranscendenceUpgradeInfo,
   UnicornItemVariant,
+  VoidSpaceUpgradeInfo,
   ZiggurathUpgradeInfo,
 } from "./types";
 import { UserScript } from "./UserScript";
@@ -22,7 +25,7 @@ export type BulkBuildListItem = {
   label?: string;
   name?: AllBuildings;
   stage?: number;
-  variant?: UnicornItemVariant;
+  variant?: TimeItemVariant | UnicornItemVariant;
 };
 
 export class BulkManager {
@@ -53,7 +56,7 @@ export class BulkManager {
           name?: AllBuildings;
           require?: Requirement;
           stage?: number;
-          variant?: UnicornItemVariant;
+          variant?: TimeItemVariant | UnicornItemVariant;
         }
       >
     >,
@@ -61,9 +64,11 @@ export class BulkManager {
       Record<
         AllItems,
         | BuildingMeta
+        | ChronoForgeUpgradeInfo
         | ReligionUpgradeInfo
         | SpaceBuildingInfo
         | TranscendenceUpgradeInfo
+        | VoidSpaceUpgradeInfo
         | ZiggurathUpgradeInfo
       >
     >,
@@ -93,13 +98,15 @@ export class BulkManager {
         continue;
       }
 
-      // It's unclear what these are.
+      // tHidden is a flag that is manually set to exclude time buildings from the process.
       if (buildMetaData.tHidden === true) {
         continue;
       }
+      // rHidden is a flag that is manually set to exclude religion buildings from the process.
       if (buildMetaData.rHidden === true) {
         continue;
       }
+      // If rHidden wasn't set, but the building isn't unlocked, skip it.
       if (buildMetaData.rHidden === undefined && !buildMetaData.unlocked) {
         continue;
       }
@@ -427,7 +434,13 @@ export class BulkManager {
    * @see `getPriceRatioWithAccessor`@`buildings.js`
    */
   getPriceRatio(
-    data: BuildingMeta | ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo,
+    data:
+      | BuildingMeta
+      | ChronoForgeUpgradeInfo
+      | ReligionUpgradeInfo
+      | TranscendenceUpgradeInfo
+      | VoidSpaceUpgradeInfo
+      | ZiggurathUpgradeInfo,
     source?: "bonfire" | "space"
   ): number {
     // If the building has stages, use the ratio for the current stage.

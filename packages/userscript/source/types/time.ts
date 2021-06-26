@@ -1,8 +1,20 @@
-import { BuildButton, GameTab, Panel, Price } from ".";
+import { GameTab, Panel, Price } from ".";
+
+export enum TimeItemVariant {
+  Chronoforge = "chrono",
+  VoidSpace = "void",
+}
 
 export type TimeTab = GameTab & {
-  cfPanel: Panel; // Chronoforge
-  vsPanel: Panel; // Void space
+  /**
+   * Chronoforge panel.
+   */
+  cfPanel: Panel;
+
+  /**
+   * Void space panel
+   */
+  vsPanel: Panel;
 };
 
 export type ChronoForgeUpgrades =
@@ -27,7 +39,7 @@ export type AbstractTimeUpgradeInfo = {
    */
   label: string;
   prices: Array<Price>;
-
+  priceRatio: number;
   unlocked: boolean;
   val: number;
 };
@@ -43,7 +55,6 @@ export type ChronoForgeUpgradeInfo = AbstractTimeUpgradeInfo & {
   };
 
   name: ChronoForgeUpgrades;
-  priceRatio: number;
 };
 
 export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
@@ -60,7 +71,6 @@ export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
   flavor: string;
   limitBuild: 0;
   name: VoidSpaceUpgrades;
-  priceRatio: number;
   upgrades: {
     voidSpace: Array<"cryochambers">;
   };

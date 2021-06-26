@@ -1,6 +1,5 @@
-import { ChronoForgeUpgrades, VoidSpaceUpgrades } from "../types";
+import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
 import { Requirement } from "./Options";
-import { TimeItemVariant } from "./OptionsLegacy";
 import { SettingsSection } from "./SettingsSection";
 
 /**
@@ -22,16 +21,16 @@ export class TimeSettings extends SettingsSection {
   items: {
     [item in TimeItem]: TimeSettingsItem;
   } = {
-    temporalBattery: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
-    blastFurnace: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
-    timeBoiler: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
+    temporalBattery: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
+    blastFurnace: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
+    timeBoiler: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
     temporalAccelerator: {
       enabled: false,
-      variant: TimeItemVariant.Unknown_chrono,
+      variant: TimeItemVariant.Chronoforge,
       require: false,
     },
-    temporalImpedance: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
-    ressourceRetrieval: { enabled: false, variant: TimeItemVariant.Unknown_chrono, require: false },
+    temporalImpedance: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
+    ressourceRetrieval: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
 
     cryochambers: { enabled: false, variant: TimeItemVariant.VoidSpace, require: false },
     voidHoover: { enabled: false, variant: TimeItemVariant.VoidSpace, require: "antimatter" },
