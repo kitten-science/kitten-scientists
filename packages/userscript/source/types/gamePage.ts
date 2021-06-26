@@ -49,7 +49,12 @@ export type GamePage = {
     cyclesPerEra: number;
     cycleYear: number;
     day: number;
+    
+    /**
+     * How many festival days are remaining?
+     */
     festivalDays: number;
+
     getCurSeason: () => { modifiers: { catnip: number }; name: Season };
     /**
      * Get the production modifier contribution of the weather for certain resource.
@@ -152,7 +157,12 @@ export type GamePage = {
    */
   getResourcePerTickConvertion: (resName: Resource) => number;
 
+  /**
+   * How many ticks pass per second.
+   * Subject to time acceleration.
+   */
   getTicksPerSecondUI: () => number;
+
   getUnlimitedDR: (value0: number, value1: number) => number;
   ironWill: boolean;
   msg: (...args: Array<number | string>) => { span: HTMLElement };
@@ -160,8 +170,16 @@ export type GamePage = {
     disableCMBR: boolean;
   };
   prestige: {
+    /**
+     * The production modifier from burned paragon only.
+     */
     getBurnedParagonRatio: () => number;
+    
+    /**
+     * The production modifier produced by paragon and burned paragon.
+     */
     getParagonProductionRatio: () => number;
+
     getPerk: (name: "carnivals" | "numeromancy" | "unicornmancy") => { researched: boolean };
     meta: Array<{ meta: Array<{ researched: boolean }> }>;
   };
@@ -169,7 +187,14 @@ export type GamePage = {
     faith: number;
     faithRatio: number;
 
+    /**
+     * The modifier applied to faith generation.
+     */
     getApocryphaBonus: () => number;
+
+    /**
+     * @deprecated No longer exists. Use `getApocryphaBonus()`
+     */
     getFaithBonus: () => number;
 
     /**
@@ -177,6 +202,10 @@ export type GamePage = {
      */
     getRU: (name: ReligionUpgrades) => ReligionUpgradeInfo | undefined;
 
+    /**
+     * The modifier produced from collected faith.
+     * Subject to challenges.
+     */
     getSolarRevolutionRatio: () => number;
 
     /**

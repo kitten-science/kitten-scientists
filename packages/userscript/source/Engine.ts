@@ -141,6 +141,7 @@ export class Engine {
     if (this._host.options.auto.trade.enabled) {
       this.trade();
     }
+    // Religion upgrades.
     if (this._host.options.auto.religion.enabled) {
       this.worship();
     }
@@ -631,21 +632,21 @@ export class Engine {
     }
   }
 
+  /**
+   * Perform all the religion automations.
+   */
   worship(): void {
     let builds = this._host.options.auto.religion.items;
-    const manager = this._religionManager;
-    const buildManager = this._buildManager;
-    const craftManager = this._craftManager;
-    const option = this._host.options.auto.religion.addition;
+    const additions = this._host.options.auto.religion.addition;
 
-    if (option.bestUnicornBuilding.enabled) {
+    if (additions.bestUnicornBuilding.enabled) {
       const bestUnicornBuilding = this.getBestUnicornBuilding();
       if (bestUnicornBuilding) {
         if (bestUnicornBuilding == "unicornPasture") {
-          buildManager.build(bestUnicornBuilding, 0, 1);
+          this._buildManager.build(bestUnicornBuilding, 0, 1);
         } else {
           const btn = mustExist(
-            manager.getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat)
+            this._religionManager.getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat)
           );
           let tearNeed = 0;
           for (const i in btn.model.prices) {
@@ -653,11 +654,13 @@ export class Engine {
               tearNeed = btn.model.prices[i].val;
             }
           }
-          const tearHave = craftManager.getValue("tears") - craftManager.getStock("tears");
+          const tearHave =
+            this._craftManager.getValue("tears") - this._craftManager.getStock("tears");
           if (tearNeed > tearHave) {
             // if no ziggurat, getBestUnicornBuilding will return unicornPasture
             const maxSacrifice = Math.floor(
-              (craftManager.getValue("unicorns") - craftManager.getStock("unicorns")) / 2500
+              (this._craftManager.getValue("unicorns") - this._craftManager.getStock("unicorns")) /
+                2500
             );
             const needSacrifice = Math.ceil(
               (tearNeed - tearHave) / this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on
@@ -679,17 +682,18 @@ export class Engine {
         builds,
         Object.fromEntries(
           Object.entries(this._host.options.auto.religion.items).filter(
-            ([k, v]) => v.variant != "zp"
+            ([k, v]) => v.variant !== UnicornItemVariant.Unknown_zp
           )
         )
       );
-      if (this._host.options.auto.religion.items.unicornPasture.enabled)
+      if (this._host.options.auto.religion.items.unicornPasture.enabled) {
         this.build({ unicornPasture: { require: false, enabled: true } });
+      }
     }
     // religion build
     this._worship(builds);
 
-    const faith = craftManager.getResource("faith");
+    const faith = this._craftManager.getResource("faith");
     const rate = faith.value / faith.maxValue;
     // enough faith, and then TAP
     if (0.98 <= rate) {
@@ -701,7 +705,7 @@ export class Engine {
       let tt = transcendenceReached ? this._host.gamePage.religion.transcendenceTier : 0;
 
       // Transcend
-      if (option.transcend.enabled && transcendenceReached) {
+      if (additions.transcend.enabled && transcendenceReached) {
         const adoreIncreaceRatio = Math.pow((tt + 2) / (tt + 1), 2);
         const needNextLevel =
           this._host.gamePage.religion._getTranscendTotalPrice(tt + 1) -
@@ -750,10 +754,13 @@ export class Engine {
       }
 
       // Adore
-      if (option.adore.enabled && mustExist(this._host.gamePage.religion.getRU("apocripha")).on) {
+      if (
+        additions.adore.enabled &&
+        mustExist(this._host.gamePage.religion.getRU("apocripha")).on
+      ) {
         // game version: 1.4.8.1
         const maxSolarRevolution = 10 + this._host.gamePage.getEffect("solarRevolutionLimit");
-        const triggerSolarRevolution = maxSolarRevolution * option.adore.subTrigger;
+        const triggerSolarRevolution = maxSolarRevolution * additions.adore.subTrigger;
         const epiphanyInc = (worship / 1000000) * tt * tt * 1.01;
         const epiphanyAfterAdore = epiphany + epiphanyInc;
         const worshipAfterAdore =
@@ -780,8 +787,9 @@ export class Engine {
         }
       }
     }
+
     // Praise
-    if (option.autoPraise.enabled && rate >= option.autoPraise.subTrigger) {
+    if (additions.autoPraise.enabled && rate >= additions.autoPraise.subTrigger) {
       let apocryphaBonus;
       if (!this._host.gamePage.religion.getFaithBonus) {
         apocryphaBonus = this._host.gamePage.religion.getApocryphaBonus();
@@ -803,28 +811,25 @@ export class Engine {
   }
 
   private _worship(builds: Partial<Record<FaithItem, ReligionSettingsItem>>): void {
-    const buildManager = this._religionManager;
-    const craftManager = this._craftManager;
-    const bulkManager = this._bulkManager;
     const trigger = this._host.options.auto.religion.trigger;
 
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
-    buildManager.manager.render();
+    this._religionManager.manager.render();
 
     const metaData: Partial<
       Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
     > = {};
     for (const [name, build] of objectEntries<FaithItem, ReligionSettingsItem>(builds)) {
-      const buildInfo = buildManager.getBuild(name, build.variant);
+      const buildInfo = this._religionManager.getBuild(name, build.variant);
       if (buildInfo === null) {
         continue;
       }
       metaData[name] = buildInfo;
 
-      if (!buildManager.getBuildButton(name, build.variant)) {
+      if (!this._religionManager.getBuildButton(name, build.variant)) {
         metaData[name].rHidden = true;
       } else {
-        const model = mustExist(buildManager.getBuildButton(name, build.variant)).model;
+        const model = mustExist(this._religionManager.getBuildButton(name, build.variant)).model;
         const panel =
           build.variant === UnicornItemVariant.Cryptotheology
             ? this._host.gamePage.science.get("cryptotheology").researched
@@ -833,12 +838,16 @@ export class Engine {
       }
     }
 
-    const buildList = bulkManager.bulk(builds, metaData, trigger);
+    const buildList = this._bulkManager.bulk(builds, metaData, trigger);
 
     let refreshRequired = false;
     for (const entry in buildList) {
       if (buildList[entry].count > 0) {
-        buildManager.build(buildList[entry].id, buildList[entry].variant, buildList[entry].count);
+        this._religionManager.build(
+          buildList[entry].id,
+          buildList[entry].variant,
+          buildList[entry].count
+        );
         refreshRequired = true;
       }
     }
@@ -1689,7 +1698,7 @@ export class Engine {
     for (const [name, count] of objectEntries(tradesDone)) {
       // TODO: This check should be redundant. If no trades were possible,
       //       the entry shouldn't even exist.
-      if (0<count) {
+      if (0 < count) {
         this._tradeManager.trade(name, count);
       }
     }
@@ -1815,14 +1824,17 @@ export class Engine {
   }
 
   /**
-   *
+   * Determine the best unicorn-related building to buy next.
+   * This is the building where the cost is in the best proportion to the
+   * unicorn production bonus it generates.
    * @see https://github.com/Bioniclegenius/NummonCalc/blob/112f716e2fde9956dfe520021b0400cba7b7113e/NummonCalc.js#L490
-   * @returns
+   * @returns The best unicorn building.
    */
-  getBestUnicornBuilding(): "unicornPasture" | ZiggurathUpgrades | null {
-    const unicornPasture = "unicornPasture";
+  getBestUnicornBuilding(): ZiggurathUpgrades | null {
     const pastureButton = this._buildManager.getBuildButton("unicornPasture");
-    if (pastureButton === null) return null;
+    if (pastureButton === null) {
+      return null;
+    }
 
     const validBuildings = [
       "unicornTomb",
@@ -1832,78 +1844,132 @@ export class Engine {
       "unicornUtopia",
       "sunspire",
     ];
-    const unicornsPerSecond =
+
+    // How many unicorns are produced per second.
+    const unicornsPerSecondBase =
       this._host.gamePage.getEffect("unicornsPerTickBase") *
       this._host.gamePage.getTicksPerSecondUI();
+    // Unicorn ratio modifier. For example, through "unicorn selection".
     const globalRatio = this._host.gamePage.getEffect("unicornsGlobalRatio") + 1;
+    // The unicorn ratio modifier through religion buildings.
     const religionRatio = this._host.gamePage.getEffect("unicornsRatioReligion") + 1;
+    // The ratio modifier through paragon.
     const paragonRatio = this._host.gamePage.prestige.getParagonProductionRatio() + 1;
+    // Bonus from collected faith.
     const faithBonus = this._host.gamePage.religion.getSolarRevolutionRatio() + 1;
-    let cycle = 1;
-    if (
-      this._host.gamePage.calendar.cycles[this._host.gamePage.calendar.cycle].festivalEffects[
-        "unicorns"
-      ] != undefined
-    )
+
+    const currentCycleIndex = this._host.gamePage.calendar.cycle;
+    const currentCycle = this._host.gamePage.calendar.cycles[currentCycleIndex];
+
+    // The modifier applied by the current cycle and holding a festival.
+    let cycleBonus = 1;
+    // If the current cycle has an effect on unicorn production during festivals
+    // TODO: Simplify
+    if (currentCycle.festivalEffects["unicorns"] !== undefined) {
+      // Numeromancy is the metaphysics upgrade that grants bonuses based on cycles.
       if (
         this._host.gamePage.prestige.getPerk("numeromancy").researched &&
         this._host.gamePage.calendar.festivalDays
-      )
-        cycle =
-          this._host.gamePage.calendar.cycles[this._host.gamePage.calendar.cycle].festivalEffects[
-            "unicorns"
-          ];
-    const onZig = Math.max(this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on, 1);
-    const total =
-      unicornsPerSecond * globalRatio * religionRatio * paragonRatio * faithBonus * cycle;
+      ) {
+        cycleBonus = currentCycle.festivalEffects["unicorns"];
+      }
+    }
+
+    const unicornsPerSecond =
+      unicornsPerSecondBase * globalRatio * religionRatio * paragonRatio * faithBonus * cycleBonus;
+
+    // Based on how many zigguraths we have.
+    const ziggurathRatio = Math.max(this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on, 1);
+    // How many unicorns do we receive in a unicorn rift?
     const baseUnicornsPerRift =
       500 * (1 + this._host.gamePage.getEffect("unicornsRatioReligion") * 0.1);
+
+    // How likely are unicorn rifts to happen? The unicornmancy metaphysics upgrade increases this chance.
     let riftChanceRatio = 1;
-    if (this._host.gamePage.prestige.getPerk("unicornmancy").researched) riftChanceRatio *= 1.1;
-    const baseRift =
+    if (this._host.gamePage.prestige.getPerk("unicornmancy").researched) {
+      riftChanceRatio *= 1.1;
+    }
+    // ?
+    const unicornRiftChange =
       ((this._host.gamePage.getEffect("riftChance") * riftChanceRatio) / (10000 * 2)) *
       baseUnicornsPerRift;
+
+    // We now want to determine how quickly the cost of given building is neutralized
+    // by its effect on production of unicorns.
+
     let bestAmoritization = Infinity;
-    let bestBuilding: "unicornPasture" | ZiggurathUpgrades | null = null;
-    let pastureAmor =
-      this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"] *
-      this._host.gamePage.getTicksPerSecondUI();
-    pastureAmor = pastureAmor * globalRatio * religionRatio * paragonRatio * faithBonus * cycle;
-    pastureAmor = pastureButton.model.prices[0].val / pastureAmor;
-    if (pastureAmor < bestAmoritization) {
-      bestAmoritization = pastureAmor;
-      bestBuilding = unicornPasture;
+    let bestBuilding: ZiggurathUpgrades | null = null;
+    const unicornsPerTickBase = mustExist(
+      this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"]
+    );
+    const pastureProduction =
+      unicornsPerTickBase *
+      this._host.gamePage.getTicksPerSecondUI() *
+      globalRatio *
+      religionRatio *
+      paragonRatio *
+      faithBonus *
+      cycleBonus;
+
+    // If the unicorn pasture amortizes itself in less than infinity ticks,
+    // set it as the default. This is likely to protect against cases where
+    // production of unicorns is 0.
+    const pastureAmortization = pastureButton.model.prices[0].val / pastureProduction;
+    if (pastureAmortization < bestAmoritization) {
+      bestAmoritization = pastureAmortization;
+      bestBuilding = "unicornPasture";
     }
-    for (const i in this._religionManager.manager.tab.zgUpgradeButtons) {
-      const btn = this._religionManager.manager.tab.zgUpgradeButtons[i];
-      if (validBuildings.indexOf(btn.id) != -1) {
-        if (btn.model.visible) {
-          let unicornPrice = 0;
-          for (const j in btn.model.prices) {
-            if (btn.model.prices[j].name == "unicorns") unicornPrice += btn.model.prices[j].val;
-            if (btn.model.prices[j].name == "tears")
-              unicornPrice += (btn.model.prices[j].val * 2500) / onZig;
+
+    // For all ziggurath upgrade buttons...
+    for (const button of this._religionManager.manager.tab.zgUpgradeButtons) {
+      // ...that are in the "valid" buildings (are unicorn-related) and visible (unlocked)...
+      if (validBuildings.includes(button.id) && button.model.visible) {
+        // Determine a price value for this building.
+        let unicornPrice = 0;
+        for (const priceIndex in button.model.prices) {
+          // Add the amount of unicorns the building costs (if any).
+          if (button.model.prices[priceIndex].name === "unicorns") {
+            unicornPrice += button.model.prices[priceIndex].val;
           }
-          const bld = mustExist(this._host.gamePage.religion.getZU(btn.id));
-          let relBonus = religionRatio;
-          let riftChance = this._host.gamePage.getEffect("riftChance");
-          for (const j in bld.effects) {
-            if (j == "unicornsRatioReligion")
-              relBonus += mustExist(bld.effects.unicornsRatioReligion);
-            if (j == "riftChance") riftChance += mustExist(bld.effects.riftChance);
+          // Tears result from unicorn sacrifices, so factor that into the price proportionally.
+          if (button.model.prices[priceIndex].name === "tears") {
+            unicornPrice += (button.model.prices[priceIndex].val * 2500) / ziggurathRatio;
           }
-          const unicornsPerRift = 500 * ((relBonus - 1) * 0.1 + 1);
-          let riftBonus = ((riftChance * riftChanceRatio) / (10000 * 2)) * unicornsPerRift;
-          riftBonus -= baseRift;
-          let amor = unicornsPerSecond * globalRatio * relBonus * paragonRatio * faithBonus * cycle;
-          amor -= total;
-          amor = amor + riftBonus;
-          amor = unicornPrice / amor;
-          if (amor < bestAmoritization)
-            if (riftBonus > 0 || (relBonus > religionRatio && unicornPrice > 0)) {
-              bestAmoritization = amor;
-              bestBuilding = btn.id;
-            }
+        }
+
+        // Determine the effect the building will have on unicorn production and unicorn rifts.
+        const buildingInfo = mustExist(this._host.gamePage.religion.getZU(button.id));
+        let religionBonus = religionRatio;
+        let riftChance = this._host.gamePage.getEffect("riftChance");
+        for (const effect in buildingInfo.effects) {
+          if (effect === "unicornsRatioReligion") {
+            religionBonus += mustExist(buildingInfo.effects.unicornsRatioReligion);
+          }
+          if (effect === "riftChance") {
+            riftChance += mustExist(buildingInfo.effects.riftChance);
+          }
+        }
+
+        // The rest should be straight forward.
+        const unicornsPerRift = 500 * ((religionBonus - 1) * 0.1 + 1);
+        let riftBonus = ((riftChance * riftChanceRatio) / (10000 * 2)) * unicornsPerRift;
+        riftBonus -= unicornRiftChange;
+        let buildingProduction =
+          unicornsPerSecondBase *
+          globalRatio *
+          religionBonus *
+          paragonRatio *
+          faithBonus *
+          cycleBonus;
+        buildingProduction -= unicornsPerSecond;
+        buildingProduction += riftBonus;
+        const amortization = unicornPrice / buildingProduction;
+
+        if (amortization < bestAmoritization) {
+          if (0 < riftBonus || (religionRatio < religionBonus && 0 < unicornPrice)) {
+            bestAmoritization = amortization;
+            bestBuilding = button.id;
+          }
         }
       }
     }

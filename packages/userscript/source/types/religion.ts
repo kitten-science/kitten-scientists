@@ -1,7 +1,14 @@
 import { BuildButton, GamePage, GameTab, Price } from ".";
 
 export type ReligionTab = GameTab & {
+  /**
+   * Religion upgrade (Order of the sun) buttons.
+   */
   rUpgradeButtons: Array<BuildButton<ReligionUpgrades>>;
+
+  /**
+   * Ziggurath upgrade buttons.
+   */
   zgUpgradeButtons: Array<BuildButton<ZiggurathUpgrades>>;
 };
 
@@ -74,7 +81,7 @@ export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
 
   name: ReligionUpgrades;
   noStackable: boolean;
-  on:boolean;
+  on: boolean;
   priceRatio: number;
 };
 
@@ -94,7 +101,7 @@ export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
 
   name: ZiggurathUpgrades;
   priceRatio: number;
-  
+
   unlocks: {
     zigguratUpgrades: Array<"ivoryTower">;
   };
