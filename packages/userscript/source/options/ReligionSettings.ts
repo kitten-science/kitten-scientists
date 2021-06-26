@@ -50,10 +50,16 @@ export class ReligionSettings extends SettingsSection {
   $trigger?: JQuery<HTMLElement>;
 
   addition: {
+    /**
+     * Build best unicorn building first.
+     */
     bestUnicornBuilding: {
       enabled: boolean;
       $enabled?: JQuery<HTMLElement>;
     };
+    /**
+     * Praise the sun.
+     */
     autoPraise: {
       enabled: boolean;
       $enabled?: JQuery<HTMLElement>;
@@ -61,6 +67,9 @@ export class ReligionSettings extends SettingsSection {
       subTrigger: number;
       $subTrigger?: JQuery<HTMLElement>;
     };
+    /**
+     * Adore the galaxy.
+     */
     adore: {
       enabled: boolean;
       $enabled?: JQuery<HTMLElement>;
@@ -68,6 +77,9 @@ export class ReligionSettings extends SettingsSection {
       subTrigger: number;
       $subTrigger?: JQuery<HTMLElement>;
     };
+    /**
+     * Transcend.
+     */
     transcend: {
       enabled: boolean;
       $enabled?: JQuery<HTMLElement>;
