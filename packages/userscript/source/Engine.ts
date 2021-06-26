@@ -7,6 +7,7 @@ import { BonfireSettingsItem, BuildItem } from "./options/BonfireSettings";
 import { FaithItem, ReligionSettingsItem } from "./options/ReligionSettings";
 import { SpaceItem } from "./options/SpaceSettings";
 import { CycleIndices } from "./options/TimeControlSettings";
+import { TimeItem } from "./options/TimeSettings";
 import { ReligionManager } from "./ReligionManager";
 import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
@@ -18,6 +19,8 @@ import {
   BuildButton,
   Building,
   BuildingMeta,
+  ChronoForgeUpgradeInfo,
+  ChronoForgeUpgrades,
   Jobs,
   Race,
   RaceInfo,
@@ -26,9 +29,12 @@ import {
   Resource,
   SpaceBuildingInfo,
   SpaceBuildings,
+  TimeItemVariant,
   TranscendenceUpgradeInfo,
   TranscendenceUpgrades,
   UnicornItemVariant,
+  VoidSpaceUpgradeInfo,
+  VoidSpaceUpgrades,
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from "./types";
@@ -147,6 +153,7 @@ export class Engine {
     if (this._host.options.auto.religion.enabled) {
       this.worship();
     }
+    // Time buildings.
     if (this._host.options.auto.time.enabled) {
       this.chrono();
     }
@@ -911,6 +918,9 @@ export class Engine {
     }
   }
 
+  /**
+   * Build selected time-related buildings.
+   */
   chrono(): void {
     if (!this._host.gamePage.timeTab.visible) {
       return;
@@ -924,15 +934,18 @@ export class Engine {
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     buildManager.manager.render();
 
-    const metaData = {};
+    const metaData: Partial<Record<TimeItem, ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>> = {};
     for (const [name, build] of objectEntries(builds)) {
-      metaData[name] = buildManager.getBuild(name, build.variant);
+      metaData[name] = mustExist(buildManager.getBuild(name, build.variant));
+
       const model = mustExist(buildManager.getBuildButton(name, build.variant)).model;
       const panel =
-        build.variant === "chrono"
+        build.variant === TimeItemVariant.Chronoforge
           ? buildManager.manager.tab.cfPanel
           : buildManager.manager.tab.vsPanel;
-      metaData[name].tHidden = !model.visible || !model.enabled || !panel?.visible;
+
+      const buildingMetaData = mustExist(metaData[name]);
+      buildingMetaData.tHidden = !model.visible || !model.enabled || !panel?.visible;
     }
 
     const buildList = bulkManager.bulk(builds, metaData, trigger);
@@ -940,7 +953,11 @@ export class Engine {
     let refreshRequired = false;
     for (const entry in buildList) {
       if (buildList[entry].count > 0) {
-        buildManager.build(buildList[entry].id, buildList[entry].variant, buildList[entry].count);
+        buildManager.build(
+          buildList[entry].id as ChronoForgeUpgrades | VoidSpaceUpgrades,
+          buildList[entry].variant as TimeItemVariant,
+          buildList[entry].count
+        );
         refreshRequired = true;
       }
     }

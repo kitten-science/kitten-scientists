@@ -1,5 +1,5 @@
 import { cwarn } from "../tools/Log";
-import { Resource, UnicornItemVariant } from "../types";
+import { Resource, TimeItemVariant, UnicornItemVariant } from "../types";
 import { BuildItem } from "./BonfireSettings";
 import { DistributeItems } from "./DistributeSettings";
 import { Requirement } from "./Options";
@@ -27,10 +27,6 @@ export type BuildItemOptions = {
   triggerForReset: number;
 };
 
-export enum TimeItemVariant {
-  Unknown_chrono = "chrono",
-  VoidSpace = "void",
-}
 export type TimeItemOptions = {
   require: Requirement;
   enabled: boolean;
@@ -1352,42 +1348,42 @@ export const DefaultOptions: OptionsLegacy = {
         temporalBattery: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrono,
+          variant: TimeItemVariant.Chronoforge,
           checkForReset: true,
           triggerForReset: -1,
         },
         blastFurnace: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrono,
+          variant: TimeItemVariant.Chronoforge,
           checkForReset: true,
           triggerForReset: -1,
         },
         timeBoiler: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrono,
+          variant: TimeItemVariant.Chronoforge,
           checkForReset: true,
           triggerForReset: -1,
         },
         temporalAccelerator: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrono,
+          variant: TimeItemVariant.Chronoforge,
           checkForReset: true,
           triggerForReset: -1,
         },
         temporalImpedance: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrono,
+          variant: TimeItemVariant.Chronoforge,
           checkForReset: true,
           triggerForReset: -1,
         },
         ressourceRetrieval: {
           require: false,
           enabled: false,
-          variant: TimeItemVariant.Unknown_chrono,
+          variant: TimeItemVariant.Chronoforge,
           checkForReset: true,
           triggerForReset: -1,
         },
