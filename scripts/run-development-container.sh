@@ -10,7 +10,9 @@ echo "Removing previous container..."
 docker stop kitten-game || true
 docker rm kitten-game || true
 echo "Previous container removed or non-existent."
+echo ""
 
+echo "Starting new container..."
 docker run \
   --detach \
   --mount type=bind,source="${BASEDIR}/../packages/userscript/output/kitten-scientists.inject.js",target=/kitten-game/kitten-scientists.inject.js \
