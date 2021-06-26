@@ -905,7 +905,7 @@ export class Engine {
       if (0 < buildList[entry].count) {
         this._religionManager.build(
           buildList[entry].id as ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
-          mustExist(buildList[entry].variant),
+          mustExist(buildList[entry].variant) as UnicornItemVariant,
           buildList[entry].count
         );
         refreshRequired = true;
@@ -926,34 +926,31 @@ export class Engine {
       return;
     }
     const builds = this._host.options.auto.time.items;
-    const buildManager = this._timeManager;
-    const craftManager = this._craftManager;
-    const bulkManager = this._bulkManager;
     const trigger = this._host.options.auto.time.trigger;
 
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
-    buildManager.manager.render();
+    this._timeManager.manager.render();
 
     const metaData: Partial<Record<TimeItem, ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>> = {};
     for (const [name, build] of objectEntries(builds)) {
-      metaData[name] = mustExist(buildManager.getBuild(name, build.variant));
+      metaData[name] = mustExist(this._timeManager.getBuild(name, build.variant));
 
-      const model = mustExist(buildManager.getBuildButton(name, build.variant)).model;
+      const model = mustExist(this._timeManager.getBuildButton(name, build.variant)).model;
       const panel =
         build.variant === TimeItemVariant.Chronoforge
-          ? buildManager.manager.tab.cfPanel
-          : buildManager.manager.tab.vsPanel;
+          ? this._timeManager.manager.tab.cfPanel
+          : this._timeManager.manager.tab.vsPanel;
 
       const buildingMetaData = mustExist(metaData[name]);
       buildingMetaData.tHidden = !model.visible || !model.enabled || !panel?.visible;
     }
 
-    const buildList = bulkManager.bulk(builds, metaData, trigger);
+    const buildList = this._bulkManager.bulk(builds, metaData, trigger);
 
     let refreshRequired = false;
     for (const entry in buildList) {
       if (buildList[entry].count > 0) {
-        buildManager.build(
+        this._timeManager.build(
           buildList[entry].id as ChronoForgeUpgrades | VoidSpaceUpgrades,
           buildList[entry].variant as TimeItemVariant,
           buildList[entry].count

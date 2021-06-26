@@ -5,6 +5,7 @@ import {
   BuildButton,
   ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
+  TimeItemVariant,
   TimeTab,
   VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
@@ -26,7 +27,7 @@ export class TimeManager {
 
   build(
     name: ChronoForgeUpgrades | VoidSpaceUpgrades,
-    variant: "chrono" | "void",
+    variant: TimeItemVariant,
     amount: number
   ): void {
     const build = this.getBuild(name, variant);
@@ -54,9 +55,9 @@ export class TimeManager {
 
   getBuild(
     name: ChronoForgeUpgrades | VoidSpaceUpgrades,
-    variant: "chrono" | "void"
+    variant: TimeItemVariant
   ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
-    if (variant === "chrono") {
+    if (variant === TimeItemVariant.Chronoforge) {
       return this._host.gamePage.time.getCFU(name as ChronoForgeUpgrades) ?? null;
     } else {
       return this._host.gamePage.time.getVSU(name as VoidSpaceUpgrades) ?? null;
@@ -65,10 +66,10 @@ export class TimeManager {
 
   getBuildButton(
     name: ChronoForgeUpgrades | VoidSpaceUpgrades,
-    variant: "chrono" | "void"
+    variant: TimeItemVariant
   ): BuildButton | null {
     let buttons: Array<BuildButton>;
-    if (variant === "chrono") {
+    if (variant === TimeItemVariant.Chronoforge) {
       buttons = this.manager.tab.children[2].children[0].children;
     } else {
       buttons = this.manager.tab.children[3].children[0].children;
