@@ -143,7 +143,7 @@ export class TradeManager {
       const tradeChance = race.embassyPrices
         ? item.chance * (1 + this._host.gamePage.getLimitedDR(0.01 * race.embassyLevel, 0.75))
         : item.chance;
-      if (race.name == "zebras" && item.name == "titanium") {
+      if (race.name === "zebras" && item.name === "titanium") {
         const shipCount = this._host.gamePage.resPool.get("ship").value;
         const titaniumProbability = Math.min(0.15 + shipCount * 0.0035, 1);
         const titaniumRatio = 1 + shipCount / 50;
