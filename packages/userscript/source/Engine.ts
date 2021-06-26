@@ -166,6 +166,7 @@ export class Engine {
     if (subOptions.enabled && subOptions.items.explore.enabled) {
       this.explore();
     }
+    // Feed leviathans.
     if (subOptions.enabled && subOptions.items.autofeed.enabled) {
       this.autofeed();
     }
@@ -561,21 +562,31 @@ export class Engine {
     }
   }
 
+  /**
+   * Feed leviathans.
+   */
   autofeed(): void {
-    const levi = this._host.gamePage.diplomacy.get("leviathans");
-    const nCorn = mustExist(this._host.gamePage.resPool.get("necrocorn"));
-    if (!(levi.unlocked && nCorn.value > 0)) {
+    const leviathanInfo = this._host.gamePage.diplomacy.get("leviathans");
+    const necrocorns = this._host.gamePage.resPool.get("necrocorn");
+
+    if (!leviathanInfo.unlocked || necrocorns.value === 0) {
       return;
     }
-    if (nCorn.value >= 1) {
-      if (levi.energy < this._host.gamePage.diplomacy.getMarkerCap()) {
+
+    if (1 <= necrocorns.value) {
+      // If feeding the elders would increase their energy level towards the
+      // cap, do it.
+      if (leviathanInfo.energy < this._host.gamePage.diplomacy.getMarkerCap()) {
         this._host.gamePage.diplomacy.feedElders();
         this._host.iactivity("act.feed");
         this._host.storeForSummary("feed", 1);
       }
     } else {
+      // We can reach this branch if we have partial necrocorns from resets.
+      // The partial necrocorns will then be fead to the elders to bring us back
+      // to even zero.
       if (0.25 * (1 + this._host.gamePage.getEffect("corruptionBoostRatio")) < 1) {
-        this._host.storeForSummary("feed", nCorn.value);
+        this._host.storeForSummary("feed", necrocorns.value);
         this._host.gamePage.diplomacy.feedElders();
         this._host.iactivity("dispose.necrocorn");
       }
