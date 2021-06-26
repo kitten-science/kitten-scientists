@@ -2,63 +2,86 @@ import { objectEntries } from "./tools/Entries";
 import { Resource } from "./types";
 import { UserScript } from "./UserScript";
 
+/**
+ * The `CacheManager` apparently stores a state of resources in stock.
+ * Components can push individual resource sets into the cache to update
+ * the overall stock cache.
+ * TODO: Why this is a globally maintained state, is unclear.
+ */
 export class CacheManager {
   private readonly _host: UserScript;
 
-  private readonly _cache = new Array<{ materials: Partial<Record<Resource, number>>; timeStamp: number }>();
+  private readonly _cache = new Array<{
+    materials: Partial<Record<Resource, number>>;
+    timeStamp: number;
+  }>();
   private readonly _cacheSum: Partial<Record<Resource, number>> = {};
 
   constructor(host: UserScript) {
     this._host = host;
   }
 
+  /**
+   * Store a set of materials in the cache.
+   * This is usually done *after* hunting and trading.
+   * TODO: This is indicative of the desire to know the resource state at the beginning of 
+   *       a frame. This is likely required to make different automations play nice together.
+   * @param data The materials to store in the cache.
+   */
   pushToCache(data: { materials: Partial<Record<Resource, number>>; timeStamp: number }): void {
-    const cache = this._cache;
-    const cacheSum = this._cacheSum;
-    const materials = data["materials"];
-    //var currentTick = this._host.gamePage.timer.ticksTotal;
+    // Store this entry in the cache.
+    this._cache.push(data);
 
-    cache.push(data);
-    for (const [mat, amount] of objectEntries(materials)) {
-      if (!cacheSum[mat]) {
-        cacheSum[mat] = 0;
+    // Update the cached sums for the passed materials.
+    for (const [mat, amount] of objectEntries(data.materials)) {
+      if (!this._cacheSum[mat]) {
+        this._cacheSum[mat] = 0;
       }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      cacheSum[mat]! += amount;
+      this._cacheSum[mat]! += amount;
     }
 
-    for (let i = 0; i < cache.length; i++) {
-      const oldData = cache[i];
-      if (cache.length > 10000) {
-        const oldMaterials = oldData["materials"];
+    // Iterate over all entries in the cache.
+    // TODO: This seems to be completely pointless, as the cache is never accessed.
+    //       Beyond that, it seems to be a cleanup procedure that is very poorly
+    //       implemented.
+    for (let cacheIndex = 0; cacheIndex < this._cache.length; ++cacheIndex) {
+      const oldData = this._cache[cacheIndex];
+      if (this._cache.length > 10000) {
+        const oldMaterials = oldData.materials;
         for (const [mat, amount] of objectEntries(oldMaterials)) {
-          if (!cacheSum[mat]) {
-            cacheSum[mat] = 0;
+          if (!this._cacheSum[mat]) {
+            this._cacheSum[mat] = 0;
           }
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          cacheSum[mat]! -= amount;
+          this._cacheSum[mat]! -= amount;
         }
-        cache.shift();
-        i--;
+        this._cache.shift();
+        cacheIndex--;
       } else {
         return;
       }
     }
   }
 
-  getResValue(res: Resource): number {
-    const cache = this._cache;
-    if (cache.length === 0) {
+  /**
+   * Retrieve the resource amount that is stored in the cache.
+   * @param resource The resource to check.
+   * @returns The cached resource amount, divided by how long it has been cached.
+   */
+  getResValue(resource: Resource): number {
+    // If the cache is empty, or no sum was stored yet, return 0.
+    if (this._cache.length === 0 || !this._cacheSum[resource]) {
       return 0;
     }
-    const cacheSum = this._cacheSum;
-    if (!cacheSum[res]) {
-      return 0;
-    }
-    const currentTick = this._host.gamePage.timer.ticksTotal;
-    const startingTick = cache[0].timeStamp;
 
+    const currentTick = this._host.gamePage.timer.ticksTotal;
+    const startingTick = this._cache[0].timeStamp;
+
+    // Adjust the cached value by the amount of ticks that have passed
+    // since the last time the cache was updated.
+    // TODO: Why? This seems arbitrary, just like this entire cache manager.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return cacheSum[res]! / (currentTick - startingTick);
+    return this._cacheSum[resource]! / (currentTick - startingTick);
   }
 }

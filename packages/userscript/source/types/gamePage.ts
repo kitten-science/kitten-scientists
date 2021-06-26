@@ -129,14 +129,29 @@ export type GamePage = {
    * Calculate diminishing returns.
    */
   getLimitedDR: (effect: number, limit: number) => number;
+
   /**
    * The resource craft ratio indicates how many items you receive
    * as the result of a single craft. This is subject to a variety
    * of bonus effects.
+   * @param name The resource to check.
    */
-  getResCraftRatio: (name: string) => number;
-  getResourcePerTick: (name: string, withConversion: boolean) => number;
-  getResourcePerTickConvertion: (name: "catnip") => number;
+  getResCraftRatio: (name: ResourceCraftable) => number;
+
+  /**
+   * Determine how much of the given resource is produced per tick.
+   * @param resName The resource to check.
+   * @param withConversion Should resource convertions be taken into account?
+   */
+  getResourcePerTick: (resName: Resource, withConversion: boolean) => number;
+
+  /**
+   * Determine how much of the resource, per tick, is subject to be converted
+   * into another resource. For example, smelters convert wood and minerals.
+   * @param resName The resource to check.
+   */
+  getResourcePerTickConvertion: (resName: Resource) => number;
+
   getTicksPerSecondUI: () => number;
   getUnlimitedDR: (value0: number, value1: number) => number;
   ironWill: boolean;

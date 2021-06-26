@@ -18,20 +18,28 @@ export type Race =
   | "spiders"
   | "zebras";
 
+export type TradeInfo = {
+  chance: number;
+  /**
+   * How many embassies you need to receive this resource.F
+   */
+  minLevel: number;
+  name: Resource;
+  seasons: Record<Season, number>;
+  value: number;
+  width: number;
+};
+
 export type RaceInfo = {
   buys: Array<Price>;
+  /**
+   * How many embassies you have.
+   */
   embassyLevel: number;
   embassyPrices: Array<Price>;
   energy: number;
   name: Race;
-  sells: Array<{
-    chance: number;
-    minLevel: number;
-    name: Resource;
-    seasons: Record<Season, number>;
-    value: number;
-    width: number;
-  }>;
+  sells: Array<TradeInfo>;
   standing: number;
   title: string;
   unlocked: boolean;
