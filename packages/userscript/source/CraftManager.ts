@@ -252,27 +252,50 @@ export class CraftManager {
     return materials;
   }
 
-  getTickVal(res: ResourceInfo, preTrade: boolean | undefined = undefined): number | "ignore" {
-    let prod = this._host.gamePage.getResourcePerTick(res.name, true);
-    if (res.craftable) {
+  /**
+   * Determine how much of a resource is produced per tick. For craftable resources,
+   * this also includes how many of them we *could* craft this tick.
+   * @param resource The resource to retrieve the production for.
+   * @param preTrade ?
+   * @returns The amount of resources produced per tick, adjusted arbitrarily.
+   */
+  getTickVal(resource: ResourceInfo, preTrade: boolean | undefined = undefined): number | "ignore" {
+    let production = this._host.gamePage.getResourcePerTick(resource.name, true);
+
+    // For craftable resources, we also want to take into account how much of them
+    // we *could* craft.
+    if (resource.craftable) {
       let minProd = Number.MAX_VALUE;
-      const materials = this.getMaterials(res.name as ResourceCraftable);
+      const materials = this.getMaterials((resource as CraftableInfo).name);
       for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
-        const rat = (1 + this._host.gamePage.getResCraftRatio(res.name)) / amount;
-        //Currently preTrade is only true for the festival stuff, so including furs from hunting is ideal.
+        const rat =
+          (1 + this._host.gamePage.getResCraftRatio((resource as CraftableInfo).name)) / amount;
+        // Currently preTrade is only true for the festival stuff, so including furs from hunting is ideal.
         const addProd = this.getTickVal(this.getResource(mat));
-        if (addProd === "ignore") continue;
+        if (addProd === "ignore") {
+          continue;
+        }
         minProd = Math.min(addProd * rat, minProd);
       }
-      prod += minProd !== Number.MAX_VALUE ? minProd : 0;
+      production += minProd !== Number.MAX_VALUE ? minProd : 0;
     }
-    if (prod <= 0 && (res.name === "spice" || res.name === "blueprint")) {
+
+    // If we have negative production (or none), and we're looking at either spice or
+    // blueprints, return "ignore".
+    // TODO: This special case seems to revolve around trading. As trading results in
+    //       spice and blueprints.
+    if (production <= 0 && (resource.name === "spice" || resource.name === "blueprint")) {
       return "ignore";
     }
+
+    // If "preTrade" was set, increase the production. The "resValue" stored in the cache
+    // makes no sense.
+    // TODO: The only time this is used is for holding festivals.
+    //       It's unclear why this would be necessary.
     if (!preTrade) {
-      prod += this._cacheManager.getResValue(res.name);
+      production += this._cacheManager.getResValue(resource.name);
     }
-    return prod;
+    return production;
   }
 
   /**
