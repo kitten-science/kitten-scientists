@@ -131,7 +131,7 @@ export type GamePage = {
       | "uplinkDCRatio"
   ) => number;
   /**
-   * Calculate diminishing returns.
+   * Calculate limited diminishing returns.
    */
   getLimitedDR: (effect: number, limit: number) => number;
 
@@ -163,7 +163,14 @@ export type GamePage = {
    */
   getTicksPerSecondUI: () => number;
 
-  getUnlimitedDR: (value0: number, value1: number) => number;
+  /**
+   * Calculate unlimitied diminishing returns.
+   */
+  getUnlimitedDR: (value: number, stripe: number) => number;
+
+  /**
+   * Are we in iron will mode?
+   */
   ironWill: boolean;
   msg: (...args: Array<number | string>) => { span: HTMLElement };
   opts: {
@@ -223,8 +230,15 @@ export type GamePage = {
     tcratio: number;
     transcendenceTier: number;
 
-    _getTranscendTotalPrice: (value: number) => number;
-    _resetFaithInternal: (value: number) => void;
+    /**
+     * Determine the price (worship) to reach the given transcendence tier.
+     */
+    _getTranscendTotalPrice: (tier: number) => number;
+
+    /**
+     * Reset faith and increase praise bonus according to transcendence tier.
+     */
+    _resetFaithInternal: (bonusRatio: number) => void;
   };
   religionTab: {
     sacrificeBtn: BuildButton;
