@@ -129,9 +129,11 @@ export class Engine {
     if (this._host.options.auto.space.enabled) {
       this.space();
     }
+    // Craft configured resources.
     if (this._host.options.auto.craft.enabled) {
       this.craft();
     }
+    // Go hunting.
     if (subOptions.enabled && subOptions.items.hunt.enabled) {
       this.hunt();
     }
@@ -1346,7 +1348,7 @@ export class Engine {
       // This will never happen as `current` is always `false`.
       if (current && current.value > craft.max) continue;
 
-      // If we can't even craft a single item of resource, skip it.
+      // If we can't even craft a single item of the resource, skip it.
       if (!manager.singleCraftPossible(name)) {
         continue;
       }
@@ -1360,6 +1362,8 @@ export class Engine {
       } else if (craft.limited) {
         amount = manager.getLowestCraftAmount(name, craft.limited, craft.limRat, false);
       }
+
+      // If we can craft any of this item, do it.
       if (amount > 0) {
         manager.craft(name, amount);
       }

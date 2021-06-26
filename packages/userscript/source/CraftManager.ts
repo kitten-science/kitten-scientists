@@ -14,6 +14,11 @@ export class CraftManager {
     this._cacheManager = new CacheManager(this._host);
   }
 
+  /**
+   * Craft a certain amount of items.
+   * @param name The resource to craft.
+   * @param amount How many items of the resource to craft.
+   */
   craft(name: ResourceCraftable, amount: number): void {
     amount = Math.floor(amount);
 
@@ -97,17 +102,16 @@ export class CraftManager {
    * @param name The resource to craft.
    * @param limited Is the crafting of the resource currently limited?
    * @param limRat ?
-   * @param aboveTrigger Are we currently above the trigger value?
+   * @param requiredResourceAboveTrigger Is the resource that is required for
+   * this craft currently above the trigger value?
    * @returns ?
    */
   getLowestCraftAmount(
     name: ResourceCraftable,
     limited: boolean,
     limRat: number,
-    aboveTrigger: boolean
+    requiredResourceAboveTrigger: boolean
   ): number {
-    let amount = Number.MAX_VALUE;
-    let plateMax = Number.MAX_VALUE;
     const materials = this.getMaterials(name);
 
     const craft = this.getCraft(name);
@@ -119,54 +123,94 @@ export class CraftManager {
       return 0;
     }
 
-    // Special case handling to balance iron between plates and steel crafting.
+    // This seems to be a (hopefully) finely balanced act to distribute iron
+    // between plates and steel.
+    // One resource will probably be preferred for periods of time, then the
+    // other resource will take over.
     if (name === "steel" && limited) {
+      // Under some condition, we don't want to craft any steel.
       const plateRatio = this._host.gamePage.getResCraftRatio("plate");
+      // The left term will be larger than 1 if we have more plates than steel.
+      // The right term is basically 1.25, the relation of iron costs between
+      // plates and steel. Plates require 125 iron, steel 100.
+      // This term is weighed in regards to the craft ratio of each resource.
+      // If we get twice as many plates out of a craft than we would steel, the
+      // right term is increased above 1.25.
+      // What this all implies is, only craft steel if a reasonable amount of
+      // plates are also already crafted.
       if (
         this.getValueAvailable("plate") / this.getValueAvailable("steel") <
         (plateRatio + 1) / 125 / ((ratio + 1) / 100)
       ) {
         return 0;
       }
-    } else if (name === "plate" && limited) {
+    }
+
+    // It's not clear *how* this is supposed to work.
+    // What it tries to do is, if we have coal production, under some condition,
+    // calculate an appropriate max value for plates to be crafted.
+    // This amount would be lower than the max plates that could be crafted otherwise.
+    let plateMax = Number.MAX_VALUE;
+    if (name === "plate" && limited) {
       const steelRatio = this._host.gamePage.getResCraftRatio("steel");
-      if (this._host.gamePage.getResourcePerTick("coal", true) > 0) {
+      // If we're producing coal, then we could also make steel, and don't want
+      // to use up all the iron.
+      const coalPerTick = this._host.gamePage.getResourcePerTick("coal", true);
+      if (coalPerTick > 0) {
+        // Here we have the same check as above, but reversed.
+        // So this would be the case where steel is preferred.
         if (
           this.getValueAvailable("plate") / this.getValueAvailable("steel") >
           (ratio + 1) / 125 / ((steelRatio + 1) / 100)
         ) {
+          // The absolute trigger value for coal.
+          const coalTriggerAmount = this.getResource("coal").maxValue * trigger;
+          // How many units of coal are we away from the trigger.
+          const distanceToCoalTrigger = coalTriggerAmount - this.getValue("coal");
+          // How many ticks until we hit the trigger for coal.
+          const ticksToCoalTrigger = distanceToCoalTrigger / coalPerTick;
+          // How much iron will be produce in the time until we hit the trigger for coal.
           const ironInTime =
-            ((this.getResource("coal").maxValue * trigger - this.getValue("coal")) /
-              this._host.gamePage.getResourcePerTick("coal", true)) *
-            Math.max(this._host.gamePage.getResourcePerTick("iron", true), 0);
+            ticksToCoalTrigger * Math.max(this._host.gamePage.getResourcePerTick("iron", true), 0);
+          // This is some weird voodoo...
           plateMax =
-            (this.getValueAvailable("iron") -
-              Math.max(this.getResource("coal").maxValue * trigger - ironInTime, 0)) /
-            125;
+            (this.getValueAvailable("iron") - Math.max(coalTriggerAmount - ironInTime, 0)) / 125;
         }
       }
     }
 
+    // The ship override allows the user to treat ships as "unlimited" while there's less than 243.
     const shipOverride =
       this._host.options.auto.options.enabled &&
       this._host.options.auto.options.items.shipOverride.enabled;
 
     const res = this.getResource(name);
 
+    // Iterate over the materials required for this craft.
+    // We want to find the lowest amount of items we could craft, so start with the largest number possible.
+    let amount = Number.MAX_VALUE;
     for (const [resource, materialAmount] of objectEntries(materials)) {
+      // The delta is the smallest craft amount based on the current material.
       let delta = undefined;
+
+      // Either if the build isn't limited, OR we're above the trigger value and have not hit
+      // our storage limit, OR we're handling the ship override.
       if (
         !limited ||
-        (this.getResource(resource).maxValue > 0 && aboveTrigger) ||
+        (requiredResourceAboveTrigger && 0 < this.getResource(resource).maxValue) ||
         (name === "ship" && shipOverride && this.getResource("ship").value < 243)
       ) {
-        // If there is a storage limit, we can just use everything returned by getValueAvailable, since the regulation happens there
+        // If there is a storage limit, we can just use everything returned by getValueAvailable,
+        // since the regulation happens there
         delta = this.getValueAvailable(resource) / materialAmount;
       } else {
         // Take the currently present amount of material to craft into account
-        // Currently this determines the amount of resources that can be crafted such that base materials are proportionally distributed across limited resources.
-        // This base material distribution is governed by limRat "limited ratio" which defaults to 0.5, corresponding to half of the possible components being further crafted.
-        // If this were another value, such as 0.75, then if you had 10000 beams and 0 scaffolds, 7500 of the beams would be crafted into scaffolds.
+        // Currently this determines the amount of resources that can be crafted such that base
+        // materials are proportionally distributed across limited resources.
+        // This base material distribution is governed by limRat "limited ratio" which defaults
+        // to 0.5, corresponding to half of the possible components being further crafted.
+        // If this were another value, such as 0.75, then if you had 10000 beams and 0 scaffolds,
+        // 7500 of the beams would be crafted into scaffolds.
         delta =
           limRat *
             ((this.getValueAvailable(resource, true) +
@@ -231,6 +275,10 @@ export class CraftManager {
     return prod;
   }
 
+  /**
+   * Determine the resources and their amount that would usually result from a hunt.
+   * @returns The amounts of resources usually gained from hunting.
+   */
   getAverageHunt(): Partial<Record<Resource, number>> {
     const output: Partial<Record<Resource, number>> = {};
     const hunterRatio =
@@ -256,6 +304,11 @@ export class CraftManager {
     return output;
   }
 
+  /**
+   * Retrieve the information object for a resource.
+   * @param name The resource to retrieve info for.
+   * @returns The information object for the resource.
+   */
   getResource(name: Resource): ResourceInfo {
     if (name === "slabs") {
       name = "slab";
@@ -267,10 +320,20 @@ export class CraftManager {
     return res;
   }
 
+  /**
+   * Determine how many items of a resource are currently available.
+   * @param name The resource.
+   * @returns How many items are currently available.
+   */
   getValue(name: Resource): number {
     return this.getResource(name).value;
   }
 
+  /**
+   * Determine how many items of the resource to always keep in stock.
+   * @param name The resource.
+   * @returns How many items of the resource to always keep in stock.
+   */
   getStock(name: Resource): number {
     const res = this._host.options.auto.resources[name];
     const stock = res && res.enabled ? res.stock : 0;
@@ -291,6 +354,7 @@ export class CraftManager {
     all: boolean | undefined = undefined,
     typeTrigger: number | undefined = undefined
   ): number {
+    // How many items to keep in stock.
     let stock = this.getStock(name);
 
     // If the resource is catnip, ensure to not use so much that we can't satisfy
@@ -313,11 +377,14 @@ export class CraftManager {
       }
     }
 
+    // How many items are currently available.
     let value = this.getValue(name);
+    // Subtract the amount to keep in stock.
     value = Math.max(value - stock, 0);
 
-    // If we have a maxValue, and user hasn't requested all, check
-    // consumption rate
+    // If the user has not requested "all", and we can store any of the resource,
+    // take consumption rates into account.
+    // TODO: This makes absolutely no sense. This should likely be a different method.
     if (!all && this.getResource(name).maxValue > 0) {
       // Determine our de-facto trigger value to use.
       let trigger: number;
@@ -327,9 +394,11 @@ export class CraftManager {
         trigger = typeTrigger;
       }
 
+      // Determine the consume rate. Either it's configured on the resource, or globally.
+      // If the consume rate is 0.6, we'll always only make 60% of the resource available.
       const resourceSettings = this._host.options.auto.resources[name];
       const consume =
-        resourceSettings && resourceSettings.enabled && resourceSettings.consume != undefined
+        resourceSettings && resourceSettings.enabled && resourceSettings.consume !== undefined
           ? resourceSettings.consume
           : this._host.options.consume;
 
