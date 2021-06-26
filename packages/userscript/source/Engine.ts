@@ -694,8 +694,9 @@ export class Engine {
     if (0.98 <= rate) {
       let worship = this._host.gamePage.religion.faith;
       let epiphany = this._host.gamePage.religion.faithRatio;
-      const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence"))
-        .on;
+      const transcendenceReached = mustExist(
+        this._host.gamePage.religion.getRU("transcendence")
+      ).on;
       let tt = transcendenceReached ? this._host.gamePage.religion.transcendenceTier : 0;
 
       // Transcend
@@ -1439,35 +1440,42 @@ export class Engine {
     }
   }
 
+  /**
+   * Send kittens on a hunt.
+   */
   hunt(): void {
     const manpower = this._craftManager.getResource("manpower");
+    const subTrigger = this._host.options.auto.options.items.hunt.subTrigger ?? 0;
 
-    if (
-      this._host.options.auto.options.items.hunt.subTrigger <= manpower.value / manpower.maxValue &&
-      manpower.value >= 100
-    ) {
-      // No way to send only some hunters. Thus, we hunt with everything
+    if (subTrigger <= manpower.value / manpower.maxValue && 100 <= manpower.value) {
+      // Determine how many hunts are being performed.
       let huntCount = Math.floor(manpower.value / 100);
       this._host.storeForSummary("hunt", huntCount);
       this._host.iactivity("act.hunt", [huntCount], "ks-hunt");
 
       huntCount = Math.floor(manpower.value / 100);
-      const aveOutput = this._craftManager.getAverageHunt();
+      const averageOutput = this._craftManager.getAverageHunt();
       const trueOutput: Partial<Record<Resource, number>> = {};
 
-      for (const [out, outValue] of objectEntries(aveOutput)) {
+      for (const [out, outValue] of objectEntries(averageOutput)) {
         const res = this._craftManager.getResource(out);
         trueOutput[out] =
-          res.maxValue > 0
-            ? Math.min(outValue * huntCount, Math.max(res.maxValue - res.value, 0))
-            : outValue * huntCount;
+          // If this is a capped resource...
+          0 < res.maxValue
+            ? // multiply the amount of times we hunted with the result of an averag hunt.
+              // Cappting at the max value and 0 bounds.
+              Math.min(outValue * huntCount, Math.max(res.maxValue - res.value, 0))
+            : // Otherwise, just multiply unbounded
+              outValue * huntCount;
       }
 
+      // Store the hunted resources in the cache. Why? No idea.
       this._cacheManager.pushToCache({
         materials: trueOutput,
         timeStamp: this._host.gamePage.timer.ticksTotal,
       });
 
+      // Now actually perform the hunts.
       this._host.gamePage.village.huntAll();
     }
   }
@@ -1784,8 +1792,10 @@ export class Engine {
         this._host.gamePage.prestige.getPerk("numeromancy").researched &&
         this._host.gamePage.calendar.festivalDays
       )
-        cycle = this._host.gamePage.calendar.cycles[this._host.gamePage.calendar.cycle]
-          .festivalEffects["unicorns"];
+        cycle =
+          this._host.gamePage.calendar.cycles[this._host.gamePage.calendar.cycle].festivalEffects[
+            "unicorns"
+          ];
     const onZig = Math.max(this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on, 1);
     const total =
       unicornsPerSecond * globalRatio * religionRatio * paragonRatio * faithBonus * cycle;

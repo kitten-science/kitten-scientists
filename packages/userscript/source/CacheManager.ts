@@ -5,14 +5,14 @@ import { UserScript } from "./UserScript";
 export class CacheManager {
   private readonly _host: UserScript;
 
-  private readonly _cache = new Array<{ materials: Record<Resource, number>; timeStamp: number }>();
+  private readonly _cache = new Array<{ materials: Partial<Record<Resource, number>>; timeStamp: number }>();
   private readonly _cacheSum: Partial<Record<Resource, number>> = {};
 
   constructor(host: UserScript) {
     this._host = host;
   }
 
-  pushToCache(data: { materials: Record<Resource, number>; timeStamp: number }): void {
+  pushToCache(data: { materials: Partial<Record<Resource, number>>; timeStamp: number }): void {
     const cache = this._cache;
     const cacheSum = this._cacheSum;
     const materials = data["materials"];

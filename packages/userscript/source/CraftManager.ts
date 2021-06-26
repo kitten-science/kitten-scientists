@@ -382,10 +382,9 @@ export class CraftManager {
     // Subtract the amount to keep in stock.
     value = Math.max(value - stock, 0);
 
-    // If the user has not requested "all", and we can store any of the resource,
-    // take consumption rates into account.
+    // If the user has not requested "all", and this is a capped resource.
     // TODO: This makes absolutely no sense. This should likely be a different method.
-    if (!all && this.getResource(name).maxValue > 0) {
+    if (!all && 0 < this.getResource(name).maxValue) {
       // Determine our de-facto trigger value to use.
       let trigger: number;
       if (!typeTrigger && typeTrigger !== 0) {
