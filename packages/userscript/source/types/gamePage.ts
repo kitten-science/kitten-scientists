@@ -22,7 +22,7 @@ import {
   ZiggurathUpgrades,
 } from ".";
 import { CycleIndices } from "../options/TimeControlSettings";
-import { CraftableInfo } from "./craft";
+import { CraftableInfo, ResourceInfo } from "./craft";
 import { ReligionTab } from "./religion";
 import { SpaceBuildings, SpaceTab } from "./space";
 import {
@@ -135,7 +135,7 @@ export type GamePage = {
    * of bonus effects.
    */
   getResCraftRatio: (name: string) => number;
-  getResourcePerTick: (name: string, value: boolean) => number;
+  getResourcePerTick: (name: string, withConversion: boolean) => number;
   getResourcePerTickConvertion: (name: "catnip") => number;
   getTicksPerSecondUI: () => number;
   getUnlimitedDR: (value0: number, value1: number) => number;
@@ -187,14 +187,7 @@ export type GamePage = {
   };
   resetAutomatic: () => void;
   resPool: {
-    get: (name: Resource) => {
-      craftable: boolean;
-      maxValue: number;
-      name: Resource;
-      title: string;
-      unlocked: boolean;
-      value: number;
-    };
+    get: (name: Resource) => ResourceInfo;
     energyCons: number;
     energyProd: number;
     resources: Array<{

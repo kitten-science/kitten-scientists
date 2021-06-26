@@ -5,6 +5,7 @@ export type ResourceInfo = {
   maxValue: number;
   name: Resource;
   title: string;
+  unlocked: boolean;
   value: number;
 };
 
