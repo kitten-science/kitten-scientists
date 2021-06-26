@@ -11,6 +11,7 @@ import {
   Resource,
   SpaceBuildingInfo,
   TranscendenceUpgradeInfo,
+  UnicornItemVariant,
   ZiggurathUpgradeInfo,
 } from "./types";
 import { UserScript } from "./UserScript";
@@ -21,7 +22,7 @@ export type BulkBuildListItem = {
   label?: string;
   name?: AllBuildings;
   stage?: number;
-  variant?: unknown;
+  variant?: UnicornItemVariant;
 };
 
 export class BulkManager {
@@ -52,7 +53,7 @@ export class BulkManager {
           name?: AllBuildings;
           require?: Requirement;
           stage?: number;
-          variant?: unknown;
+          variant?: UnicornItemVariant;
         }
       >
     >,
