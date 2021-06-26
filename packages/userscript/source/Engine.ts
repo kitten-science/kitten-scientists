@@ -157,9 +157,12 @@ export class Engine {
     if (this._host.options.auto.time.enabled) {
       this.chrono();
     }
+    // Blackcoin trading.
     if (subOptions.enabled && subOptions.items.crypto.enabled) {
       this.crypto();
     }
+    // No longer needed.
+    // TODO: Remove this
     if (subOptions.enabled && subOptions.items.explore.enabled) {
       this.explore();
     }
