@@ -186,12 +186,12 @@ export class Engine {
     const checkedList = [];
     const checkList: Array<string> = [];
     const check = (buttons: Array<BuildButton>) => {
-      if (checkList.length != 0) {
+      if (checkList.length !== 0) {
         for (const i in buttons) {
           if (!buttons[i].model.metadata) continue;
           const name = buttons[i].model.metadata.name;
           const index = checkList.indexOf(name);
-          if (index != -1) {
+          if (index !== -1) {
             checkList.splice(index, 1);
             if (this._host.gamePage.resPool.hasRes(buttons[i].model.prices)) return true;
           }
@@ -238,14 +238,14 @@ export class Engine {
       }
     }
 
-    if (checkList.length != 0) {
+    if (checkList.length === 0) {
       const panels = this._spaceManager.manager.tab.planetPanels;
       for (const i in panels) {
         for (const j in panels[i].children) {
           const model = panels[i].children[j].model;
           const name = model.metadata.name;
           const index = checkList.indexOf(name);
-          if (index != -1) {
+          if (index !== -1) {
             checkList.splice(index, 1);
             if (this._host.gamePage.resPool.hasRes(model.prices)) break;
           }
@@ -493,7 +493,7 @@ export class Engine {
   promote(): void {
     if (
       this._host.gamePage.science.get("civil").researched &&
-      this._host.gamePage.village.leader != null
+      this._host.gamePage.village.leader !== null
     ) {
       const leader = this._host.gamePage.village.leader;
       const rank = leader.rank;
@@ -504,7 +504,7 @@ export class Engine {
       // this._host.gamePage.village.sim.promote check both gold and exp
       if (
         this._host.gamePage.village.sim.goldToPromote(rank, rank + 1, gold - goldStock)[0] &&
-        this._host.gamePage.village.sim.promote(leader, rank + 1) == 1
+        this._host.gamePage.village.sim.promote(leader, rank + 1) === 1
       ) {
         this._host.iactivity("act.promote", [rank + 1], "ks-promote");
         this._host.gamePage.tabs[1].censusPanel.census.renderGovernment(
@@ -581,13 +581,13 @@ export class Engine {
     let waitForBestPrice = false;
 
     // Waits for coin price to drop below a certain treshold before starting the exchange process
-    if (waitForBestPrice == true && coinPrice < 860.0) {
+    if (waitForBestPrice === true && coinPrice < 860.0) {
       waitForBestPrice = false;
     }
 
     // Exchanges up to a certain threshold, in order to keep a good exchange rate, then waits for a higher treshold before exchanging for relics.
     if (
-      waitForBestPrice == false &&
+      waitForBestPrice === false &&
       coinPrice < 950.0 &&
       previousRelic > (this._host.options.auto.options.items.crypto.subTrigger ?? 0)
     ) {
@@ -1870,7 +1870,7 @@ export class Engine {
     // auto turn on steamworks
     if (optionVals._steamworks.enabled) {
       const st = this._host.gamePage.bld.get("steamworks");
-      if (st.val && st.on == 0) {
+      if (st.val && st.on === 0) {
         const button = mustExist(buildManager.getBuildButton("steamworks"));
         button.controller.onAll(button.model);
       }
