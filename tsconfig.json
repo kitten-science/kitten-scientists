@@ -15,7 +15,6 @@
     "declaration": false,
     "skipLibCheck": true,
     "types": [],
-    "sourceMap": true
   },
   "exclude": [".yarn", "packages/*/output"]
 }
