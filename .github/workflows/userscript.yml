@@ -30,6 +30,9 @@ jobs:
         with:
           node-version: 12.x
 
+      - name: Install dependencies
+        run: yarn install
+
       # Runs a single command using the runners shell
       - name: Build userscript
         run: yarn userscript:release
