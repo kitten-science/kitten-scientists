@@ -95,14 +95,14 @@ export abstract class SettingsSectionUi<TState> {
     // }
 
     input.on("change", () => {
-      if (input.is(":checked") && option.enabled == false) {
+      if (input.is(":checked") && option.enabled === false) {
         if (handler.onCheck) {
           handler.onCheck();
         } else {
           option.enabled = true;
           clog("Unlogged action item");
         }
-      } else if (!input.is(":checked") && option.enabled == true) {
+      } else if (!input.is(":checked") && option.enabled === true) {
         if (handler.onUnCheck) {
           handler.onUnCheck();
         } else {
@@ -215,7 +215,7 @@ export abstract class SettingsSectionUi<TState> {
     container.append(label, stockElement, consumeElement, del);
 
     // once created, set color if relevant
-    if (option != undefined && option.stock != undefined) {
+    if (option !== undefined && option.stock !== undefined) {
       this._setStockWarning(name, option.stock);
     }
 
@@ -340,12 +340,13 @@ export abstract class SettingsSectionUi<TState> {
   private _setStockWarning(name: Resource, value: number, forReset = false): void {
     // simplest way to ensure it doesn't stick around too often; always do
     // a remove first then re-add only if needed
-    const path = forReset ? "#resource-reset-" + name : "#resource-" + name;
+    const path = forReset ? `#resource-reset-${name}` : `#resource-${name}`;
     $(path).removeClass("stockWarn");
 
-    const maxValue = this._host.gamePage.resPool.resources.filter(i => i.name == name)[0].maxValue;
-    if ((value > maxValue && !(maxValue === 0)) || value === Infinity)
+    const maxValue = this._host.gamePage.resPool.resources.filter(i => i.name === name)[0].maxValue;
+    if ((value > maxValue && !(maxValue === 0)) || value === Infinity) {
       $(path).addClass("stockWarn");
+    }
   }
 
   protected setStockValue(name: Resource, value: number, forReset = false): void {
@@ -354,29 +355,14 @@ export abstract class SettingsSectionUi<TState> {
       return;
     }
 
-    if (!this._host.options.auto.resources[name]) {
-      this._host.options.auto.resources[name] = {};
-    }
-    let path;
     if (forReset) {
-      //path = `#resource-reset-${name} #stock-value-${name}`;
       value = value < 0 ? Infinity : value;
       mustExist(this._host.options.auto.timeCtrl.resources[name]).checkForReset = true;
       mustExist(this._host.options.auto.timeCtrl.resources[name]).stockForReset = value;
     } else {
-      //path = `#resource-${name} #stock-value-${name}`;
       mustExist(this._host.options.auto.resources[name]).enabled = true;
       mustExist(this._host.options.auto.resources[name]).stock = value;
     }
-    /*
-    $(path).text(
-      this._host.i18n("resources.stock", [
-        n === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(n),
-      ])
-    );
-    */
-
-    //this._setStockWarning(name, n, forReset);
   }
 
   setConsumeRate(name: Resource, value: number): void {
@@ -385,12 +371,6 @@ export abstract class SettingsSectionUi<TState> {
       return;
     }
 
-    /*
-    if (!this._host.options.auto.resources[name]) {
-      this._host.options.auto.resources[name] = {};
-    }
-    */
     mustExist(this._host.options.auto.resources[name]).consume = value;
-    //$("#consume-rate-" + name).text(this._host.i18n("resources.consume", [n.toFixed(2)]));
   }
 }

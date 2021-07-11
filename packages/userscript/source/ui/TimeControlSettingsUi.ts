@@ -1,4 +1,8 @@
-import { CycleIndices, TimeControlBuildSettingsItem, TimeControlSettings } from "../options/TimeControlSettings";
+import {
+  CycleIndices,
+  TimeControlBuildSettingsItem,
+  TimeControlSettings,
+} from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { isNil, Maybe, mustExist } from "../tools/Maybe";
@@ -185,8 +189,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       css: { display: "none", paddingLeft: "20px" },
     });
 
-    for (let i = 0; i < this._host.gamePage.calendar.cycles.length; ++i) {
-      cyclesList.append(this._getCycle(i, option));
+    for (
+      let cycleIndex = 0;
+      cycleIndex < this._host.gamePage.calendar.cycles.length;
+      ++cycleIndex
+    ) {
+      cyclesList.append(this._getCycle(cycleIndex as CycleIndices, option));
     }
 
     const seasonsButton = $("<div/>", {
@@ -1103,21 +1111,14 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     }).data("option", option);
     option[`$${index}` as const] = input;
 
-    /*
-    if (option[index]) {
-      input.prop("checked", true);
-    }
-    */
     input.on("change", () => {
-      if (input.is(":checked") && option[index] == false) {
+      if (input.is(":checked") && option[index] === false) {
         option[index] = true;
         this._host.imessage("time.skip.cycle.enable", [cycle.title]);
-      } else if (!input.is(":checked") && option[index] == true) {
+      } else if (!input.is(":checked") && option[index] === true) {
         option[index] = false;
         this._host.imessage("time.skip.cycle.disable", [cycle.title]);
       }
-      //kittenStorage.items[input.attr("id")] = option[index];
-      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -1152,22 +1153,14 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     }).data("option", option);
     option.$checkForReset = input;
 
-    /*
-    if (option.checkForReset) {
-      input.prop("checked", true);
-    }
-    */
-
     input.on("change", () => {
-      if (input.is(":checked") && option.checkForReset == false) {
+      if (input.is(":checked") && option.checkForReset === false) {
         option.checkForReset = true;
         this._host.imessage("status.reset.check.enable", [elementLabel]);
-      } else if (!input.is(":checked") && option.checkForReset == true) {
+      } else if (!input.is(":checked") && option.checkForReset === true) {
         option.checkForReset = false;
         this._host.imessage("status.reset.check.disable", [elementLabel]);
       }
-      //kittenStorage.items[input.attr("id")] = option.checkForReset;
-      //this._host.saveToKittenStorage();
     });
 
     const minButton = $("<div/>", {
@@ -1192,9 +1185,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
       if (value !== null) {
         option.triggerForReset = parseInt(value);
-        //kittenStorage.items[minButton.attr("id")] = option.triggerForReset;
-        //this._host.saveToKittenStorage();
-        //minButton[0].title = option.triggerForReset;
         minButton.text(this._host.i18n("ui.min", [option.triggerForReset]));
       }
     });
@@ -1223,22 +1213,14 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     }).data("option", option);
     option[`$${season}` as const] = input;
 
-    /*
-    if (option[season]) {
-      input.prop("checked", true);
-    }
-    */
-
     input.on("change", () => {
-      if (input.is(":checked") && option[season] == false) {
+      if (input.is(":checked") && option[season] === false) {
         option[season] = true;
         this._host.imessage("time.skip.season.enable", [iseason]);
-      } else if (!input.is(":checked") && option[season] == true) {
+      } else if (!input.is(":checked") && option[season] === true) {
         option[season] = false;
         this._host.imessage("time.skip.season.disable", [iseason]);
       }
-      //kittenStorage.items[input.attr("id")] = option[season];
-      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -1279,13 +1261,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       for (const name in this._host.options.auto.resources) {
         // Only delete resources with unmodified values. Require manual
         // removal of resources with non-standard values.
+        const resource = mustExist(this._host.options.auto.resources[name as Resource]);
         if (
-          (!this._host.options.auto.resources[name as Resource]!.stock &&
-            this._host.options.auto.resources[name as Resource]!.consume ==
-              this._host.options.consume) ||
-          this._host.options.auto.resources[name as Resource]!.consume == undefined
+          (!resource.stock && resource.consume === this._host.options.consume) ||
+          resource.consume === undefined
         ) {
-          $("#resource-" + name).remove();
+          $(`#resource-${name}`).remove();
         }
       }
     });
@@ -1413,9 +1394,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       "checked",
       this._options.items.accelerateTime.enabled
     );
-    mustExist(
-      this._options.items.accelerateTime.$subTrigger
-    )[0].title = this._options.items.accelerateTime.subTrigger.toFixed(2);
+    mustExist(this._options.items.accelerateTime.$subTrigger)[0].title =
+      this._options.items.accelerateTime.subTrigger.toFixed(2);
 
     mustExist(this._options.items.reset.$enabled).prop(
       "checked",
@@ -1426,9 +1406,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       "checked",
       this._options.items.timeSkip.enabled
     );
-    mustExist(
-      this._options.items.timeSkip.$subTrigger
-    )[0].title = this._options.items.timeSkip.subTrigger.toFixed(2);
+    mustExist(this._options.items.timeSkip.$subTrigger)[0].title =
+      this._options.items.timeSkip.subTrigger.toFixed(2);
     mustExist(this._options.items.timeSkip.$autumn).prop(
       "checked",
       this._options.items.timeSkip.autumn
