@@ -1,3 +1,4 @@
+// Console interaction helpers.
 export function cdebug(...args: Array<any>): void {
   console.debug("👩‍🔬", ...args);
 }

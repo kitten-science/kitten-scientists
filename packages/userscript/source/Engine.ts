@@ -5,6 +5,7 @@ import { CraftManager } from "./CraftManager";
 import { ExplorationManager } from "./ExplorationManager";
 import { BonfireSettingsItem, BuildItem } from "./options/BonfireSettings";
 import { FaithItem, ReligionSettingsItem } from "./options/ReligionSettings";
+import { SettingsStorage } from "./options/SettingsStorage";
 import { SpaceItem } from "./options/SpaceSettings";
 import { CycleIndices } from "./options/TimeControlSettings";
 import { TimeItem } from "./options/TimeSettings";
@@ -441,7 +442,10 @@ export class Engine {
     // ).value;
     // kittenStorage.reset.times += 1;
     // kittenStorage.reset.reset = true;
-    saveToKittenStorage();
+
+    // Force writing out current settings right now
+    const toExport = this._host.options.asLegacyOptions();
+    SettingsStorage.setLegacySettings(toExport);
 
     //=============================================================
     for (
