@@ -568,9 +568,8 @@ export class Engine {
 
       // this._host.gamePage.village.sim.goldToPromote will check gold
       // this._host.gamePage.village.sim.promote check both gold and exp
-      // TODO: Obviously broken code here.
       if (
-        this._host.gamePage.village.sim.goldToPromote(rank, rank + 1, gold - goldStock)[0] &&
+        this._host.gamePage.village.sim.goldToPromote(rank, rank + 1, gold.value - goldStock)[0] &&
         this._host.gamePage.village.sim.promote(leader, rank + 1) === 1
       ) {
         this._host.iactivity("act.promote", [rank + 1], "ks-promote");
