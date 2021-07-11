@@ -168,6 +168,7 @@ export class BulkManager {
         // Get cost reduction modifier.
         // TODO: This seems to be a bug, it should be `build.name`, but only if it is set.
         const pricesDiscount = this._host.gamePage.getLimitedDR(
+          // @ts-expect-error getEffect will return 0 for invalid effects. So this is safe either way.
           this._host.gamePage.getEffect(`${name}CostReduction` as const),
           1
         );
