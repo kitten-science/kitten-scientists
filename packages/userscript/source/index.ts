@@ -8,6 +8,9 @@ import { UserScript } from "./UserScript";
   await UserScript.waitForGame();
   const userScript = await UserScript.getDefaultInstance();
 
+  // @ts-expect-error Manipulating global containers is naughty, be we want to expose the script host.
+  window.kittenScientists = userScript;
+
   cinfo("Looking for legacy settings...");
   const legacySettings = SettingsStorage.getLegacySettings();
   if (legacySettings === null) {
