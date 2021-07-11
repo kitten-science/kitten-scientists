@@ -77,6 +77,7 @@ export type Activitiy =
   | "distribute"
   | "faith"
   | "festival"
+  | "fixCry"
   | "hunt"
   | "praise"
   | "promote"

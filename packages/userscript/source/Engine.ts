@@ -174,12 +174,15 @@ export class Engine {
     if (subOptions.enabled && subOptions.items.promote.enabled) {
       this.promote();
     }
+    // Distribute kittens to jobs.
     if (this._host.options.auto.distribute.enabled) {
       this.distribute();
     }
+    // Time automations (Tempus Fugit & Shatter TC)
     if (this._host.options.auto.timeCtrl.enabled) {
       this.timeCtrl();
     }
+    // Miscelaneous automations.
     if (subOptions.enabled) {
       this.miscOptions();
     }
@@ -432,13 +435,18 @@ export class Engine {
     //=============================================================
   }
 
+  /**
+   * Perform time automation, like Tempus Fugit and TC shattering.
+   */
   timeCtrl(): void {
     const optionVals = this._host.options.auto.timeCtrl.items;
 
     // Tempus Fugit
+    // If it's enabled and we have enough Temporal Flux to reach the trigger,
+    // accelerate time.
     if (optionVals.accelerateTime.enabled && !this._host.gamePage.time.isAccelerated) {
-      const tf = mustExist(this._host.gamePage.resPool.get("temporalFlux"));
-      if (tf.value >= tf.maxValue * optionVals.accelerateTime.subTrigger) {
+      const temporalFlux = this._host.gamePage.resPool.get("temporalFlux");
+      if (temporalFlux.value >= temporalFlux.maxValue * optionVals.accelerateTime.subTrigger) {
         this._host.gamePage.time.isAccelerated = true;
         this._host.iactivity("act.accelerate", [], "ks-accelerate");
         this._host.storeForSummary("accelerate", 1);
@@ -446,33 +454,49 @@ export class Engine {
     }
 
     // Combust time crystal
-    TimeSkip: if (
-      optionVals.timeSkip.enabled &&
-      this._host.gamePage.workshop.get("chronoforge").researched
-    ) {
-      if (this._host.gamePage.calendar.day < 0) break TimeSkip;
+    // If time skipping is enabled and Chronoforge has been researched.
+    if (optionVals.timeSkip.enabled && this._host.gamePage.workshop.get("chronoforge").researched) {
+      // TODO: Not sure when this would ever be true.
+      if (this._host.gamePage.calendar.day < 0) {
+        return;
+      }
 
-      const timeCrystal = mustExist(this._host.gamePage.resPool.get("timeCrystal"));
-      if (timeCrystal.value < optionVals.timeSkip.subTrigger) break TimeSkip;
+      // If we have less time crystals than our required trigger value, bail out.
+      const timeCrystal = this._host.gamePage.resPool.get("timeCrystal");
+      if (timeCrystal.value < optionVals.timeSkip.subTrigger) {
+        return;
+      }
 
+      // If skipping during this season was disabled, bail out.
       const season = this._host.gamePage.calendar.season;
-      if (!optionVals.timeSkip[this._host.gamePage.calendar.seasons[season].name]) break TimeSkip;
+      if (!optionVals.timeSkip[this._host.gamePage.calendar.seasons[season].name]) {
+        return;
+      }
 
+      // If skipping during this cycle was disabled, bail out.
       const currentCycle = this._host.gamePage.calendar.cycle;
-      if (!optionVals.timeSkip[currentCycle]) break TimeSkip;
+      if (!optionVals.timeSkip[currentCycle]) {
+        return;
+      }
 
+      // If we have too much stored heat, wait for it to cool down.
       const heatMax = this._host.gamePage.getEffect("heatMax");
       const heatNow = this._host.gamePage.time.heat;
-      if (heatNow >= heatMax) break TimeSkip;
+      if (heatMax <= heatNow) {
+        return;
+      }
 
       const yearsPerCycle = this._host.gamePage.calendar.yearsPerCycle;
       const remainingYearsCurrentCycle = yearsPerCycle - this._host.gamePage.calendar.cycleYear;
       const cyclesPerEra = this._host.gamePage.calendar.cyclesPerEra;
-      const factor = mustExist(this._host.gamePage.challenges.getChallenge("1000Years")).researched
-        ? 5
-        : 10;
+      const factor = this._host.gamePage.challenges.getChallenge("1000Years").researched ? 5 : 10;
+      // How many times/years we can skip before we reach our max heat.
       let canSkip = Math.min(Math.floor((heatMax - heatNow) / factor), optionVals.timeSkip.maximum);
+      // The amount of skips to perform.
       let willSkip = 0;
+      // If the cycle has more years remaining than we can even skip, skip all of them.
+      // I guess the idea here is to not skip through years of another cycle, if that
+      // cycle may not be enabled for skipping.
       if (canSkip < remainingYearsCurrentCycle) {
         willSkip = canSkip;
       } else {
@@ -480,7 +504,7 @@ export class Engine {
         canSkip -= remainingYearsCurrentCycle;
         let skipCycles = 1;
         while (
-          canSkip > yearsPerCycle &&
+          yearsPerCycle < canSkip &&
           optionVals.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
         ) {
           willSkip += yearsPerCycle;
@@ -489,11 +513,12 @@ export class Engine {
         }
         if (
           optionVals.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices] &&
-          canSkip > 0
+          0 < canSkip
         )
           willSkip += canSkip;
       }
-      if (willSkip > 0) {
+      // If we found we can skip any years, do so now.
+      if (0 < willSkip) {
         const shatter = this._host.gamePage.timeTab.cfPanel.children[0].children[0]; // check?
         this._host.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
         shatter.controller.doShatterAmt(shatter.model, willSkip);
@@ -1807,18 +1832,27 @@ export class Engine {
     }
   }
 
+  /**
+   * All automations that didn't have a better place.
+   * - Building embassies
+   * - Fixing cryochambers
+   * - Turn on Steamworks (they're always off initially)
+   */
   miscOptions(): void {
     const craftManager = this._craftManager;
     const buildManager = this._buildManager;
     const optionVals = this._host.options.auto.options.items;
 
+    // Tries to calculate how many embassies for which races it can buy,
+    // then it buys them. Code should be straight-forward.
     AutoEmbassy: if (
       optionVals.buildEmbassies.enabled &&
       !!this._host.gamePage.diplomacy.races[0].embassyPrices
     ) {
       const culture = craftManager.getResource("culture");
       let cultureVal = 0;
-      if (optionVals.buildEmbassies.subTrigger <= culture.value / culture.maxValue) {
+      const subTrigger = optionVals.buildEmbassies.subTrigger ?? 0;
+      if (subTrigger <= culture.value / culture.maxValue) {
         const racePanels = this._host.gamePage.diplomacyTab.racePanels;
         cultureVal = craftManager.getValueAvailable("culture", true);
 
@@ -1836,11 +1870,11 @@ export class Engine {
         > = {};
         const bulkTracker: Array<Race> = [];
 
-        for (let i = 0; i < racePanels.length; i++) {
-          if (!racePanels[i].embassyButton) {
+        for (let panelIndex = 0; panelIndex < racePanels.length; panelIndex++) {
+          if (!racePanels[panelIndex].embassyButton) {
             continue;
           }
-          const name = racePanels[i].race.name;
+          const name = racePanels[panelIndex].race.name;
           const race = this._host.gamePage.diplomacy.get(name);
           embassyBulk[name] = {
             val: 0,
@@ -1859,8 +1893,8 @@ export class Engine {
         let refreshRequired = false;
 
         while (bulkTracker.length > 0) {
-          for (let i = 0; i < bulkTracker.length; i++) {
-            const name = bulkTracker[i];
+          for (let raceIndex = 0; raceIndex < bulkTracker.length; raceIndex++) {
+            const name = bulkTracker[raceIndex];
             const emBulk = mustExist(embassyBulk[name]);
             const nextPrice = emBulk.basePrice * Math.pow(1.15, emBulk.currentEm + emBulk.val);
             if (nextPrice <= cultureVal) {
@@ -1869,8 +1903,8 @@ export class Engine {
               emBulk.val += 1;
               refreshRequired = true;
             } else {
-              bulkTracker.splice(i, 1);
-              i--;
+              bulkTracker.splice(raceIndex, 1);
+              --raceIndex;
             }
           }
         }
@@ -1880,7 +1914,7 @@ export class Engine {
             continue;
           }
           cultureVal = craftManager.getValueAvailable("culture", true);
-          if (emBulk.priceSum > cultureVal) {
+          if (cultureVal < emBulk.priceSum) {
             this._host.warning(
               "Something has gone horribly wrong." + [emBulk.priceSum, cultureVal]
             );
@@ -1901,25 +1935,25 @@ export class Engine {
       }
     }
 
-    // fix Cryochamber
-    if (
-      optionVals.fixCry.enabled &&
-      mustExist(this._host.gamePage.time.getVSU("usedCryochambers")).val > 0
-    ) {
+    // Fix used cryochambers
+    // If the option is enabled and we have used cryochambers...
+    if (optionVals.fixCry.enabled && 0 < this._host.gamePage.time.getVSU("usedCryochambers").val) {
       let fixed = 0;
       const btn = this._timeManager.manager.tab.vsPanel.children[0].children[0]; //check?
       // doFixCryochamber will check resources
-      while (btn.controller.doFixCryochamber(btn.model)) fixed += 1;
-      if (fixed > 0) {
+      while (btn.controller.doFixCryochamber(btn.model)) {
+        ++fixed;
+      }
+      if (0 < fixed) {
         this._host.iactivity("act.fix.cry", [fixed], "ks-fixCry");
         this._host.storeForSummary("fix.cry", fixed);
       }
     }
 
-    // auto turn on steamworks
+    // Auto turn on steamworks
     if (optionVals._steamworks.enabled) {
-      const st = this._host.gamePage.bld.get("steamworks");
-      if (st.val && st.on === 0) {
+      const steamworks = this._host.gamePage.bld.getBuildingExt("steamworks");
+      if (steamworks.meta.val && steamworks.meta.on === 0) {
         const button = mustExist(buildManager.getBuildButton("steamworks"));
         button.controller.onAll(button.model);
       }

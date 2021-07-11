@@ -49,7 +49,7 @@ export type GamePage = {
     cyclesPerEra: number;
     cycleYear: number;
     day: number;
-    
+
     /**
      * How many festival days are remaining?
      */
@@ -72,9 +72,7 @@ export type GamePage = {
     challenges: Array<{ pending: boolean }>;
     getChallenge: (
       challenge: Challenge
-    ) =>
-      | { calculateEffects: (model: unknown, game: GamePage) => void; researched: number }
-      | undefined;
+    ) => { calculateEffects: (model: unknown, game: GamePage) => void; researched: number };
   };
   console: {
     maxMessages: number;
@@ -181,7 +179,7 @@ export type GamePage = {
      * The production modifier from burned paragon only.
      */
     getBurnedParagonRatio: () => number;
-    
+
     /**
      * The production modifier produced by paragon and burned paragon.
      */
@@ -326,11 +324,11 @@ export type GamePage = {
     /**
      * Get ChronoForge upgrade.
      */
-    getCFU: (name: ChronoForgeUpgrades) => ChronoForgeUpgradeInfo | undefined;
+    getCFU: (name: ChronoForgeUpgrades) => ChronoForgeUpgradeInfo;
     /**
      * Get Void Space upgrade.
      */
-    getVSU: (name: VoidSpaceUpgrades) => VoidSpaceUpgradeInfo | undefined;
+    getVSU: (name: VoidSpaceUpgrades) => VoidSpaceUpgradeInfo;
     heat: number;
     isAccelerated: boolean;
   };
