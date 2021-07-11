@@ -358,7 +358,7 @@ export class CraftManager {
    * @returns How many items of the resource to always keep in stock.
    */
   getStock(name: Resource): number {
-    const res = this._host.options.auto.resources[name];
+    const res = this._host.options.auto.craft.resources[name];
     const stock = res && res.enabled ? res.stock : 0;
 
     return !stock ? 0 : stock;
@@ -418,7 +418,7 @@ export class CraftManager {
 
       // Determine the consume rate. Either it's configured on the resource, or globally.
       // If the consume rate is 0.6, we'll always only make 60% of the resource available.
-      const resourceSettings = this._host.options.auto.resources[name];
+      const resourceSettings = this._host.options.auto.craft.resources[name];
       const consume =
         resourceSettings && resourceSettings.enabled && resourceSettings.consume !== undefined
           ? resourceSettings.consume
