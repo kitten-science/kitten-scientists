@@ -5,7 +5,6 @@ export type OptionsItem =
   | "autofeed"
   | "buildEmbassies"
   | "crypto"
-  | "explore"
   | "festival"
   | "fixCry"
   | "hunt"
@@ -35,7 +34,6 @@ export class OptionsSettings extends SettingsSection {
     fixCry: { enabled: false },
     buildEmbassies: { enabled: true, subTrigger: 0.9 },
     style: { enabled: true },
-    explore: { enabled: false },
     _steamworks: { enabled: false },
   };
 }

@@ -67,14 +67,14 @@ Consider crafting steel and plates. Both require iron. If you would allow unlimi
 
 By clicking the **Resources** label, you can access the fine-grained resource management.
 
-For each resource, you can set a *consumption rate* (60% by default) and a *stock* (0 by default). The consumption rate defines how much of the trigger value times the storage capacity that autocrafting is allowed to consume (meaning with the default consumption rate and a trigger value of 100%, autocrafting would leave 40% of the resource's storage capacity). The stock setting keeps a specific amount on hand, regardless of all other settings.
+For each resource, you can set a _consumption rate_ (60% by default) and a _stock_ (0 by default). The consumption rate defines how much of the trigger value times the storage capacity that autocrafting is allowed to consume (meaning with the default consumption rate and a trigger value of 100%, autocrafting would leave 40% of the resource's storage capacity). The stock setting keeps a specific amount on hand, regardless of all other settings.
 
 ### Unlocking
 
 - Workshop **upgrades** and **techs** are automatically bought when affordable, prioritizing the workshop if both are enabled.
 - **Races** for trading are automatically explored as they become available.
 - Space **missions** can automatically be conducted.
-- **Buildings** can be set to be automatically upgraded to their second stage as soon as upgrading would not significantly impact income. 
+- **Buildings** can be set to be automatically upgraded to their second stage as soon as upgrading would not significantly impact income.
 
 ### Trading
 
@@ -82,7 +82,7 @@ For each resource, you can set a *consumption rate* (60% by default) and a *stoc
 
 By default, the trades are optimized to only happen during seasons when the trade is most effective. You can customize these seasons by clicking the **seasons** label to the right of the individual races.
 
-Trading also has a *limited* trading mode. This mode determines how much production time is needed to make the trade's input resources versus the time to make the trade's average output resources to determine if a trade is profitable. The resources gained and spent trading and hunting are also factored in, making this mode self-limiting.
+Trading also has a _limited_ trading mode. This mode determines how much production time is needed to make the trade's input resources versus the time to make the trade's average output resources to determine if a trade is profitable. The resources gained and spent trading and hunting are also factored in, making this mode self-limiting.
 
 ### Religion
 
@@ -96,7 +96,6 @@ Click **addition** to customize these additional options:
 - **Auto Praise**: Automatically praises the sun as your faith approaches the resource limit. Set the **trigger** value as normal.
 - **Auto Adore the Galaxy**: Automatically adores the galaxy and converts worship to epiphany based on the **trigger** value. (Worship is uncapped, so based in what way?)
 - **Auto Transcend**: Automatically transcends, converting epiphany into transcendence tiers. (What's the threshold?)
-
 
 ### Time
 
@@ -126,7 +125,6 @@ Automatically assigns kittens to selected jobs. If a job is marked **Limited**, 
 - **Fix Cryochamber**: Automatically fixes used cryochambers if possible.
 - **Build Embassies (Beta)**: Automatically builds embassies, just like other buildings.
 - **View Full Width**: Uncheck to make the game look like it normally does when Kitten Scientists isn't active.
-- **Explore (deprecated)**: _relates to a feature no longer present in current versions of Kittens Game_
 
 ### Filters
 
