@@ -170,6 +170,7 @@ export class Engine {
     if (subOptions.enabled && subOptions.items.autofeed.enabled) {
       this.autofeed();
     }
+    // Promote kittens.
     if (subOptions.enabled && subOptions.items.promote.enabled) {
       this.promote();
     }
@@ -501,7 +502,11 @@ export class Engine {
     }
   }
 
+  /**
+   * Promote kittens.
+   */
   promote(): void {
+    // If we have Civil Service unlocked and a leader elected.
     if (
       this._host.gamePage.science.get("civil").researched &&
       this._host.gamePage.village.leader !== null
@@ -513,6 +518,7 @@ export class Engine {
 
       // this._host.gamePage.village.sim.goldToPromote will check gold
       // this._host.gamePage.village.sim.promote check both gold and exp
+      // TODO: Obviously broken code here.
       if (
         this._host.gamePage.village.sim.goldToPromote(rank, rank + 1, gold - goldStock)[0] &&
         this._host.gamePage.village.sim.promote(leader, rank + 1) === 1
@@ -527,29 +533,41 @@ export class Engine {
     }
   }
 
+  /**
+   * Distribute kittens to jobs.
+   */
   distribute(): void {
     const freeKittens = this._host.gamePage.village.getFreeKittens();
-    if (!freeKittens) return;
+    if (!freeKittens) {
+      return;
+    }
 
     let jobName: Jobs | undefined;
     let minRatio = Infinity;
     let currentRatio = 0;
-    for (const i in this._host.gamePage.village.jobs) {
-      const name = this._host.gamePage.village.jobs[i].name;
-      const unlocked = this._host.gamePage.village.jobs[i].unlocked;
+    // Find the job where to assign a kitten this frame.
+    for (const job of this._host.gamePage.village.jobs) {
+      const name = job.name;
+      const unlocked = job.unlocked;
       const enabled = this._host.options.auto.distribute.items[name].enabled;
-      const maxGame = this._host.gamePage.village.getJobLimit(name);
-      const maxKS = this._host.options.auto.distribute.items[name].max;
-      const val = this._host.gamePage.village.jobs[i].value;
+      const maxKittensInJob = this._host.gamePage.village.getJobLimit(name);
+      const maxKittensToAssign = this._host.options.auto.distribute.items[name].max;
+      const kittensInJob = job.value;
       const limited = this._host.options.auto.distribute.items[name].limited;
-      if (unlocked && enabled && val < maxGame && (!limited || val < maxKS)) {
-        currentRatio = val / maxKS;
+      if (
+        unlocked &&
+        enabled &&
+        kittensInJob < maxKittensInJob &&
+        (!limited || kittensInJob < maxKittensToAssign)
+      ) {
+        currentRatio = kittensInJob / maxKittensToAssign;
         if (currentRatio < minRatio) {
           minRatio = currentRatio;
           jobName = name;
         }
       }
     }
+    // If a job was determined that should have a kitten assigned, assign it.
     if (jobName) {
       this._host.gamePage.village.assignJob(this._host.gamePage.village.getJob(jobName), 1);
       this._villageManager.render();
