@@ -119,11 +119,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       ),
       this._getOptionsOption("style", this._options.items.style, this._host.i18n("option.style")),
       this._getOptionsOption(
-        "explore",
-        this._options.items.explore,
-        this._host.i18n("option.explore")
-      ),
-      this._getOptionsOption(
         "_steamworks",
         this._options.items._steamworks,
         this._host.i18n("option.steamworks")

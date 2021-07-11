@@ -2,7 +2,6 @@ import { BuildManager } from "./BuildManager";
 import { BulkManager } from "./BulkManager";
 import { CacheManager } from "./CacheManager";
 import { CraftManager } from "./CraftManager";
-import { ExplorationManager } from "./ExplorationManager";
 import { BonfireSettingsItem, BuildItem } from "./options/BonfireSettings";
 import { FaithItem, ReligionSettingsItem } from "./options/ReligionSettings";
 import { SettingsStorage } from "./options/SettingsStorage";
@@ -52,7 +51,6 @@ export class Engine {
   private readonly _tradeManager: TradeManager;
   private readonly _religionManager: ReligionManager;
   private readonly _timeManager: TimeManager;
-  private readonly _explorationManager: ExplorationManager;
   private readonly _villageManager: TabManager;
   private readonly _cacheManager: CacheManager;
 
@@ -73,7 +71,6 @@ export class Engine {
     this._tradeManager = new TradeManager(this._host);
     this._religionManager = new ReligionManager(this._host);
     this._timeManager = new TimeManager(this._host);
-    this._explorationManager = new ExplorationManager(this._host);
     this._villageManager = new TabManager(this._host, "Village");
     this._cacheManager = new CacheManager(this._host);
   }
@@ -165,11 +162,6 @@ export class Engine {
     // Blackcoin trading.
     if (subOptions.enabled && subOptions.items.crypto.enabled) {
       this.crypto();
-    }
-    // No longer needed.
-    // TODO: Remove this
-    if (subOptions.enabled && subOptions.items.explore.enabled) {
-      this.explore();
     }
     // Feed leviathans.
     if (subOptions.enabled && subOptions.items.autofeed.enabled) {
@@ -713,19 +705,6 @@ export class Engine {
       relicsExchanged = Math.round(relicsCurrent - relicsInitial);
 
       this._host.iactivity("blackcoin.sell", [relicsExchanged]);
-    }
-  }
-
-  explore(): void {
-    const manager = this._explorationManager;
-    const expeditionNode = this._host.gamePage.village.map.expeditionNode;
-
-    if (expeditionNode === null) {
-      manager.getCheapestNode();
-
-      //manager.explore(manager.cheapestNodeX, manager.cheapestNodeY);
-
-      //this._host.iactivity("act.explore", [manager.cheapestNodeX, manager.cheapestNodeY]);
     }
   }
 
