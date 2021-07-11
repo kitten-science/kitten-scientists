@@ -22,7 +22,9 @@ export class BuildManager {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name, stage);
 
-    if (!button || !button.model.enabled) return;
+    if (!button || !button.model.enabled) {
+      return;
+    }
     const amountTemp = amount;
     const label = build.meta.label ? build.meta.label : build.meta.stages[mustExist(stage)].label;
     amount = this._bulkManager.construct(button.model, button, amount);
