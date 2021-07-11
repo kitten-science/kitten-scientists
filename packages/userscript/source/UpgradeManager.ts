@@ -27,7 +27,7 @@ export class UpgradeManager {
     if (!button || !button.model.enabled) return;
 
     //need to simulate a click so the game updates everything properly
-    button.domNode.click(upgrade);
+    button.domNode.click();
     const label = upgrade.label;
 
     if (variant === "workshop") {
