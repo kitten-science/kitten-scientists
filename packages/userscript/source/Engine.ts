@@ -186,6 +186,7 @@ export class Engine {
     if (subOptions.enabled) {
       this.miscOptions();
     }
+    // Reset automation.
     if (
       this._host.options.auto.timeCtrl.enabled &&
       this._host.options.auto.timeCtrl.items.reset.enabled
@@ -195,20 +196,34 @@ export class Engine {
   }
 
   async reset(): Promise<void> {
-    // check challenge
-    if (this._host.gamePage.challenges.currentChallenge) return;
+    // Don't reset if there's a challenge running.
+    if (this._host.gamePage.challenges.currentChallenge) {
+      return;
+    }
 
     const checkedList = [];
     const checkList: Array<string> = [];
+
+    // This function allows us to quickly check a list of items for our
+    // ability to buy them.
+    // The idea is that, if we don't have a given building yet, we put
+    // it on the `checkList`. This function will then check the provided
+    // buttons and see if the item appears on the checklist.
+    // If we don't have a given item, but we *could* buy it, then we act
+    // as if we already had it.
     const check = (buttons: Array<BuildButton>) => {
       if (checkList.length !== 0) {
-        for (const i in buttons) {
-          if (!buttons[i].model.metadata) continue;
-          const name = buttons[i].model.metadata.name;
+        for (const buttonsIndex in buttons) {
+          if (!buttons[buttonsIndex].model.metadata) {
+            continue;
+          }
+          const name = buttons[buttonsIndex].model.metadata.name;
           const index = checkList.indexOf(name);
           if (index !== -1) {
             checkList.splice(index, 1);
-            if (this._host.gamePage.resPool.hasRes(buttons[i].model.prices)) return true;
+            if (this._host.gamePage.resPool.hasRes(buttons[buttonsIndex].model.prices)) {
+              return true;
+            }
           }
         }
       }
@@ -218,35 +233,48 @@ export class Engine {
     // check building
     for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.buildItems))
       if (entry.checkForReset) {
+        // TODO: Obvious error here. For upgraded buildings, it needs special handling.
         const bld = this._host.gamePage.bld.get(name);
         checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
-        if (entry.triggerForReset > 0) {
-          if (entry.triggerForReset > bld.val) return;
+        if (0 < entry.triggerForReset) {
+          // If the required amount of buildings hasn't been built yet, bail out.
+          if (bld.val < entry.triggerForReset) {
+            return;
+          }
         } else {
           checkList.push(name);
         }
       }
 
     // unicornPasture
+    // Special handling for unicorn pasture. As it's listed under religion, but is
+    // actually a bonfire item.
     const unicornPasture = this._host.options.auto.timeCtrl.religionItems.unicornPasture;
     if (unicornPasture.checkForReset) {
       const bld = this._host.gamePage.bld.get("unicornPasture");
       checkedList.push({ name: bld.label, trigger: unicornPasture.triggerForReset, val: bld.val });
-      if (unicornPasture.triggerForReset > 0) {
-        if (unicornPasture.triggerForReset > bld.val) return;
+      if (0 < unicornPasture.triggerForReset) {
+        if (bld.val < unicornPasture.triggerForReset) {
+          return;
+        }
       } else {
         checkList.push("unicornPasture");
       }
     }
-    if (check(this._buildManager.manager.tab.buttons) || checkList.length) return;
+    if (check(this._buildManager.manager.tab.buttons) || checkList.length) {
+      return;
+    }
 
     // check space
+    // This is identical to regular buildings.
     for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.spaceItems)) {
       if (entry.checkForReset) {
         const bld = this._host.gamePage.space.getBuilding(name);
         checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
-        if (entry.triggerForReset > 0) {
-          if (entry.triggerForReset > bld.val) return;
+        if (0 < entry.triggerForReset) {
+          if (bld.val < entry.triggerForReset) {
+            return;
+          }
         } else {
           checkList.push(name);
         }
@@ -255,27 +283,33 @@ export class Engine {
 
     if (checkList.length === 0) {
       const panels = this._spaceManager.manager.tab.planetPanels;
-      for (const i in panels) {
-        for (const j in panels[i].children) {
-          const model = panels[i].children[j].model;
+      for (const panelIndex in panels) {
+        for (const panelButtonIndex in panels[panelIndex].children) {
+          const model = panels[panelIndex].children[panelButtonIndex].model;
           const name = model.metadata.name;
           const index = checkList.indexOf(name);
           if (index !== -1) {
             checkList.splice(index, 1);
-            if (this._host.gamePage.resPool.hasRes(model.prices)) break;
+            if (this._host.gamePage.resPool.hasRes(model.prices)) {
+              break;
+            }
           }
         }
       }
     }
-    if (checkList.length) return;
+    if (checkList.length) {
+      return;
+    }
 
     // check religion
     for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.religionItems)) {
       if (entry.checkForReset) {
         const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
         checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
-        if (entry.triggerForReset > 0) {
-          if (entry.triggerForReset > bld.val) return;
+        if (0 < entry.triggerForReset) {
+          if (bld.val < entry.triggerForReset) {
+            return;
+          }
         } else {
           checkList.push(name);
         }
@@ -287,57 +321,67 @@ export class Engine {
       check(this._religionManager.manager.tab.rUpgradeButtons) ||
       check(this._religionManager.manager.tab.children[0].children[0].children) ||
       checkList.length
-    )
+    ) {
       return;
+    }
 
     // check time
-    for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.timeItems))
+    for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.timeItems)) {
       if (entry.checkForReset) {
         const bld = mustExist(this._timeManager.getBuild(name, entry.variant));
         checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
-        if (entry.triggerForReset > 0) {
-          if (entry.triggerForReset > bld.val) return;
+        if (0 < entry.triggerForReset) {
+          if (bld.val < entry.triggerForReset) {
+            return;
+          }
         } else {
           checkList.push(name);
         }
       }
+    }
 
     if (
       check(this._timeManager.manager.tab.children[2].children[0].children) ||
       check(this._timeManager.manager.tab.children[3].children[0].children) ||
       checkList.length
-    )
+    ) {
       return;
+    }
 
     // check resources
-    for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.resources))
+    for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.resources)) {
       if (entry.checkForReset) {
         const res = mustExist(this._host.gamePage.resPool.get(name));
         checkedList.push({ name: res.title, trigger: entry.stockForReset, val: res.value });
-        if (entry.stockForReset > res.value) return;
+        if (res.value < entry.stockForReset) {
+          return;
+        }
       }
+    }
+
+    // We have now determined that we either have all items or could buy all items.
 
     // stop!
     this.stop(false);
 
-    const sleep = (time = 1500) => {
-      return new Promise(resolve => {
+    const sleep = async (time = 1500) => {
+      return new Promise((resolve, reject) => {
         if (
           !(
             this._host.options.auto.engine.enabled &&
             this._host.options.auto.timeCtrl.enabled &&
             this._host.options.auto.timeCtrl.items.reset.enabled
           )
-        )
-          throw "canceled by player";
+        ) {
+          reject(new Error("canceled by player"));
+        }
         setTimeout(resolve, time);
       });
     };
 
     try {
-      for (const i in checkedList) {
+      for (const checked of checkedList) {
         await sleep(500);
-        const checked = checkedList[i];
         this._host.imessage("reset.check", [
           checked.name,
           this._host.gamePage.getDisplayValueExt(checked.trigger),
@@ -345,63 +389,35 @@ export class Engine {
         ]);
       }
 
-      await sleep(0)
-        .then(() => {
-          this._host.imessage("reset.checked");
-          return sleep();
-        })
-        .then(() => {
-          this._host.iactivity("reset.tip");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.10");
-          return sleep(2000);
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.9");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.8");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.7");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.6");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.5");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.4");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.3");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.2");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.1");
-          return sleep();
-        })
-        .then(() => {
-          this._host.imessage("reset.countdown.0");
-          return sleep();
-        })
-        .then(() => {
-          this._host.iactivity("reset.last.message");
-          return sleep();
-        });
+      await sleep(0);
+      this._host.imessage("reset.checked");
+      await sleep();
+      this._host.iactivity("reset.tip");
+      await sleep();
+      this._host.imessage("reset.countdown.10");
+      await sleep(2000);
+      this._host.imessage("reset.countdown.9");
+      await sleep();
+      this._host.imessage("reset.countdown.8");
+      await sleep();
+      this._host.imessage("reset.countdown.7");
+      await sleep();
+      this._host.imessage("reset.countdown.6");
+      await sleep();
+      this._host.imessage("reset.countdown.5");
+      await sleep();
+      this._host.imessage("reset.countdown.4");
+      await sleep();
+      this._host.imessage("reset.countdown.3");
+      await sleep();
+      this._host.imessage("reset.countdown.2");
+      await sleep();
+      this._host.imessage("reset.countdown.1");
+      await sleep();
+      this._host.imessage("reset.countdown.0");
+      await sleep();
+      this._host.iactivity("reset.last.message");
+      await sleep();
     } catch (error) {
       this._host.imessage("reset.cancel.message");
       this._host.iactivity("reset.cancel.activity");
@@ -410,12 +426,8 @@ export class Engine {
 
     //if (typeof kittenStorage.reset === "undefined") kittenStorage.reset = {};
 
-    this._host.options.reset.karmaLastTime = mustExist(
-      this._host.gamePage.resPool.get("karma")
-    ).value;
-    this._host.options.reset.paragonLastTime = mustExist(
-      this._host.gamePage.resPool.get("paragon")
-    ).value;
+    this._host.options.reset.karmaLastTime = this._host.gamePage.resPool.get("karma").value;
+    this._host.options.reset.paragonLastTime = this._host.gamePage.resPool.get("paragon").value;
     this._host.options.reset.times += 1;
     this._host.options.reset.reset = true;
 
@@ -428,8 +440,12 @@ export class Engine {
     saveToKittenStorage();
 
     //=============================================================
-    for (let i = 0; i < this._host.gamePage.challenges.challenges.length; i++) {
-      this._host.gamePage.challenges.challenges[i].pending = false;
+    for (
+      let challengeIndex = 0;
+      challengeIndex < this._host.gamePage.challenges.challenges.length;
+      challengeIndex++
+    ) {
+      this._host.gamePage.challenges.challenges[challengeIndex].pending = false;
     }
     this._host.gamePage.resetAutomatic();
     //=============================================================
