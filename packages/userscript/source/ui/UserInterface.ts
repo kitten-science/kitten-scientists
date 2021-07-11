@@ -124,12 +124,6 @@ export class UserInterface {
     right.prepend(optionsElement.append(optionsListElement));
   }
 
-  showMessageBox(title: string, content: string): void {
-    mbTitle.html(title);
-    mbContent.html(content);
-    messageBox.toggle();
-  }
-
   setState(state: Options): void {
     this._engineUi.setState(state.auto.engine);
     this._bonfireUi.setState(state.auto.build);
