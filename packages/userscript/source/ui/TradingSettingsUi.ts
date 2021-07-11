@@ -245,7 +245,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       id: "toggle-" + name + "-" + season,
       type: "checkbox",
     }).data("option", option);
-    option[`$${season}`] = input;
+    option[`$${season}` as const] = input;
 
     /*
     if (option[season]) {
