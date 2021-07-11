@@ -49,7 +49,7 @@ export class UserInterface {
   construct(): void {
     this._installCss();
 
-    const kg_version = "Kitten Scientists v2.0.0-alpha0";
+    const kg_version = "Kitten Scientists v2.0.0-alpha1";
     const optionsElement = $("<div/>", { id: "ks-options", css: { marginBottom: "10px" } });
     const optionsListElement = $("<ul/>");
     const optionsTitleElement = $("<div/>", {
@@ -145,7 +145,7 @@ export class UserInterface {
     this._filterUi.setState(state.auto.filters);
   }
 
-  refreshUi():void {
+  refreshUi(): void {
     this._engineUi.refreshUi();
     this._bonfireUi.refreshUi();
     this._spaceUi.refreshUi();
@@ -277,7 +277,7 @@ export class UserInterface {
         "#ks-options #toggle-reset-list-resources .stockWarn * {" +
         "color: " +
         //this._host.options.stockwarncolor +
-        "#DD1E00"+
+        "#DD1E00" +
         ";" +
         "}"
     );
