@@ -137,6 +137,18 @@
     "toggle-timeSkip-1": true
   },
   "resources": {
+    "wood": {
+      "enabled": true,
+      "stock": 1000,
+      "checkForReset": false,
+      "stockForReset": null
+    },
+    "minerals": {
+      "enabled": true,
+      "stock": 1000,
+      "checkForReset": false,
+      "stockForReset": null
+    },
     "furs": {
       "enabled": true,
       "stock": 1000,

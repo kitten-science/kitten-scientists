@@ -114,6 +114,12 @@ export class UserScript {
     this._language = language;
 
     this._i18nData = i18nData;
+
+    this._userInterface = new UserInterface(this);
+    this.engine = new Engine(this);
+
+    this._userInterface.construct();
+    this.injectOptions(new Options());
   }
 
   injectOptions(options: Options): void {
@@ -130,12 +136,11 @@ export class UserScript {
     }
 
     // Increase messages displayed in log
+    // TODO: This should be configurable.
     this.gamePage.console.maxMessages = 1000;
 
     this.resetActivitySummary();
-    this._userInterface = new UserInterface(this);
-    this.engine = new Engine(this);
-    this._userInterface.construct();
+
     cwarn("Kitten Scientists initialized. Engine NOT started for now.");
 
     this._userInterface.refreshUi();
@@ -372,11 +377,12 @@ export class UserScript {
   }
 
   static async getDefaultInstance(): Promise<UserScript> {
-    return new UserScript(
+    const instance = new UserScript(
       mustExist(UserScript._window.gamePage),
       mustExist(UserScript._window.$I),
       localStorage["com.nuclearunicorn.kittengame.language"]
     );
+    return instance;
   }
 
   private static _isGameLoaded(): boolean {

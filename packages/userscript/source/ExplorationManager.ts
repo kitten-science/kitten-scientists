@@ -38,7 +38,7 @@ export class ExplorationManager {
       tileKey = tileIndex;
 
       // Discards locked nodes
-      if (tileIndex.unlocked == false) {
+      if (tileIndex.unlocked === false) {
         break;
       }
 
@@ -53,7 +53,7 @@ export class ExplorationManager {
       const xCoord = parseInt(mustExist(keyMatch)[1]);
       const yCoord = parseInt(mustExist(keyMatch)[2]);
 
-      if (this._currentCheapestNode == null) {
+      if (this._currentCheapestNode === null) {
         this._currentCheapestNodeValue = this.getNodeValue(xCoord, yCoord);
         this._currentCheapestNode = tileIndex;
         this._cheapestNodeX = xCoord;
@@ -61,7 +61,7 @@ export class ExplorationManager {
       }
 
       if (
-        this._currentCheapestNode != null &&
+        this._currentCheapestNode !== null &&
         this.getNodeValue(xCoord, yCoord) < mustExist(this._currentCheapestNodeValue)
       ) {
         this._currentCheapestNodeValue = this.getNodeValue(xCoord, yCoord);

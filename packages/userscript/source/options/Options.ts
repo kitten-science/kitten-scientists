@@ -8,7 +8,6 @@ import { FilterSettings } from "./FilterSettings";
 import { KittenStorageType } from "./KittenStorage";
 import { OptionsSettings } from "./OptionsSettings";
 import { FaithItem, ReligionSettings } from "./ReligionSettings";
-import { ResourcesSettingsItem } from "./ResourcesSettings";
 import { SpaceItem, SpaceSettings } from "./SpaceSettings";
 import { CycleIndices, TimeControlSettings } from "./TimeControlSettings";
 import { TimeItem, TimeSettings } from "./TimeSettings";
@@ -20,7 +19,7 @@ export type Requirement = Resource | false;
 /**
  * The type names of all supported buildings.
  */
- export type AllItems = BuildItem | FaithItem | SpaceItem | TimeItem;
+export type AllItems = BuildItem | FaithItem | SpaceItem | TimeItem;
 
 export class Options {
   /**
@@ -46,9 +45,6 @@ export class Options {
     distribute: DistributeSettings;
     options: OptionsSettings;
     filters: FilterSettings;
-    resources: {
-      [item in Resource]?: ResourcesSettingsItem;
-    };
   } = {
     engine: { enabled: false },
     build: new BonfireSettings(),
@@ -62,12 +58,6 @@ export class Options {
     distribute: new DistributeSettings(),
     options: new OptionsSettings(),
     filters: new FilterSettings(),
-    resources: {
-      furs: {
-        enabled: true,
-        stock: 1000,
-      },
-    },
   };
 
   reset: {
@@ -151,9 +141,8 @@ export class Options {
     }
 
     subject.items["toggle-accelerateTime"] = this.auto.timeCtrl.items.accelerateTime.enabled;
-    subject.items[
-      "set-accelerateTime-subTrigger"
-    ] = this.auto.timeCtrl.items.accelerateTime.subTrigger;
+    subject.items["set-accelerateTime-subTrigger"] =
+      this.auto.timeCtrl.items.accelerateTime.subTrigger;
 
     subject.items["toggle-reset"] = this.auto.timeCtrl.items.reset.enabled;
 
@@ -165,9 +154,8 @@ export class Options {
     subject.items["toggle-timeSkip-winter"] = this.auto.timeCtrl.items.timeSkip.winter;
 
     for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
-      subject.items[
-        `toggle-timeSkip-${cycleIndex as CycleIndices}` as const
-      ] = this.auto.timeCtrl.items.timeSkip[cycleIndex as CycleIndices];
+      subject.items[`toggle-timeSkip-${cycleIndex as CycleIndices}` as const] =
+        this.auto.timeCtrl.items.timeSkip[cycleIndex as CycleIndices];
     }
 
     for (const [name, item] of objectEntries(this.auto.timeCtrl.buildItems)) {
@@ -200,7 +188,7 @@ export class Options {
     }
 
     subject.resources = {};
-    for (const [name, item] of objectEntries(this.auto.resources)) {
+    for (const [name, item] of objectEntries(this.auto.craft.resources)) {
       subject.resources[name] = {
         checkForReset: false,
         stockForReset: 0,
@@ -387,6 +375,9 @@ export class Options {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }
 
+    // Remove all default items before parsing.
+    result.auto.craft.resources = {};
+    result.auto.timeCtrl.resources = {};
     for (const [name, item] of objectEntries(subject.resources)) {
       if (item.checkForReset) {
         result.auto.timeCtrl.resources[name] = {
@@ -394,7 +385,7 @@ export class Options {
           stockForReset: item.stockForReset,
         };
       } else {
-        result.auto.resources[name] = {
+        result.auto.craft.resources[name] = {
           consume: item.consume,
           enabled: item.enabled,
           stock: item.stock,

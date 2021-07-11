@@ -1,8 +1,7 @@
 import { CraftSettings, CraftSettingsItem } from "../options/CraftSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { cwarn } from "../tools/Log";
-import { isNil, Maybe, mustExist } from "../tools/Maybe";
+import { Maybe, mustExist } from "../tools/Maybe";
 import { ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -273,22 +272,14 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     }).data("option", option);
     option.$limited = input;
 
-    /*
-    if (option.limited) {
-      input.prop("checked", true);
-    }
-    */
-
     input.on("change", () => {
-      if (input.is(":checked") && option.limited == false) {
+      if (input.is(":checked") && option.limited === false) {
         option.limited = true;
         this._host.imessage("craft.limited", [label]);
-      } else if (!input.is(":checked") && option.limited == true) {
+      } else if (!input.is(":checked") && option.limited === true) {
         option.limited = false;
         this._host.imessage("craft.unlimited", [label]);
       }
-      //kittenStorage.items[input.attr("id")] = option.limited;
-      //this._host.saveToKittenStorage();
     });
 
     element.append(input, labelElement);
@@ -297,6 +288,10 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
   }
 
   private _getResourceOptions(): JQuery<HTMLElement> {
+    if (this._resourcesList) {
+      return this._resourcesList;
+    }
+
     this._resourcesList = $("<ul/>", {
       id: "toggle-list-resources",
       css: { display: "none", paddingLeft: "20px" },
@@ -326,14 +321,15 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     });
 
     clearunused.on("click", () => {
-      for (const name in this._host.options.auto.resources) {
+      for (const name in this._host.options.auto.craft.resources) {
         // Only delete resources with unmodified values. Require manual
         // removal of resources with non-standard values.
+        const resource = mustExist(
+          this._host.options.auto.craft.resources[name as ResourceCraftable]
+        );
         if (
-          (!this._host.options.auto.resources[name as ResourceCraftable]!.stock &&
-            this._host.options.auto.resources[name as ResourceCraftable]!.consume ==
-              this._host.options.consume) ||
-          this._host.options.auto.resources[name as ResourceCraftable]!.consume == undefined
+          (!resource.stock && resource.consume === this._host.options.consume) ||
+          resource.consume === undefined
         ) {
           $("#resource-" + name).remove();
         }
@@ -370,7 +366,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     this._resourcesList.append(add, clearunused, allresources);
 
     // Add all the current resources
-    for (const [name, item] of objectEntries(this._host.options.auto.resources)) {
+    for (const [name, item] of objectEntries(this._host.options.auto.craft.resources)) {
       this._resourcesList.append(
         this.addNewResourceOption(name, name, item, (_name, _resource) => {
           delete this._options.resources[_name];
@@ -391,16 +387,20 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       option.enabled = state.items[name].enabled;
       option.limited = state.items[name].limited;
     }
+    // Remove old resource options.
     for (const [name, option] of objectEntries(this._options.resources)) {
-      const stateResource = state.resources[name];
-      if (isNil(stateResource)) {
-        cwarn("Existing resource was missing in state! This is a problem.");
-        continue;
-      }
-      option.consume = stateResource.consume;
-      option.enabled = stateResource.enabled;
-      option.stock = stateResource.stock;
+      this.removeResourceOption(name);
     }
+    // Add new resource options.
+    const resourcesList = this._getResourceOptions();
+    for (const [name, option] of objectEntries(state.resources)) {
+      resourcesList.append(
+        this.addNewResourceOption(name, name, option, (_name, _resource) => {
+          delete this._options.resources[_name];
+        })
+      );
+    }
+    this._options.resources = state.resources;
   }
 
   refreshUi(): void {
@@ -413,7 +413,9 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     }
     for (const [name, option] of objectEntries(this._options.resources)) {
       mustExist(option.$consume).text(
-        this._host.i18n("resources.consume", [mustExist(option.consume).toFixed(2)])
+        this._host.i18n("resources.consume", [
+          (option.consume ?? this._host.options.consume).toFixed(2),
+        ])
       );
       mustExist(option.$stock).text(
         this._host.i18n("resources.stock", [

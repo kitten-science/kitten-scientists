@@ -257,6 +257,15 @@ export abstract class SettingsSectionUi<TState> {
     return container;
   }
 
+  protected removeResourceOption(name: Resource): void {
+    const container = $(`#resource-${name}`).remove();
+    if (!container.length) {
+      return;
+    }
+
+    container.remove();
+  }
+
   protected addNewResourceOptionForReset(
     name: Resource,
     title: string,
@@ -308,7 +317,6 @@ export abstract class SettingsSectionUi<TState> {
       const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
       if (value !== null) {
         this.setStockValue(name, parseInt(value), true);
-        //this._host.saveToKittenStorage();
       }
     });
 
@@ -316,8 +324,6 @@ export abstract class SettingsSectionUi<TState> {
       if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
         container.remove();
         onDelHandler(name, option);
-        //this._removeResourceControl(name, true);
-        //this._host.saveToKittenStorage();
       }
     });
 
@@ -325,18 +331,16 @@ export abstract class SettingsSectionUi<TState> {
 
     return container;
   }
-  /*
-  private _removeResourceControl(name: Resource, forReset = false): void {
-    const opt = mustExist(this._host.options.auto.resources[name]);
-    if (forReset) {
-      opt.checkForReset = false;
-    } else {
-      opt.enabled = false;
+
+  protected removeResourceOptionForReset(name: Resource): void {
+    const container = $(`#resource-reset-${name}`);
+    if (!container) {
+      return;
     }
 
-    if (!opt.enabled && !opt.checkForReset) delete this._host.options.auto.resources[name];
+    container.remove();
   }
-*/
+
   private _setStockWarning(name: Resource, value: number, forReset = false): void {
     // simplest way to ensure it doesn't stick around too often; always do
     // a remove first then re-add only if needed
@@ -360,8 +364,8 @@ export abstract class SettingsSectionUi<TState> {
       mustExist(this._host.options.auto.timeCtrl.resources[name]).checkForReset = true;
       mustExist(this._host.options.auto.timeCtrl.resources[name]).stockForReset = value;
     } else {
-      mustExist(this._host.options.auto.resources[name]).enabled = true;
-      mustExist(this._host.options.auto.resources[name]).stock = value;
+      mustExist(this._host.options.auto.craft.resources[name]).enabled = true;
+      mustExist(this._host.options.auto.craft.resources[name]).stock = value;
     }
   }
 
@@ -371,6 +375,6 @@ export abstract class SettingsSectionUi<TState> {
       return;
     }
 
-    mustExist(this._host.options.auto.resources[name]).consume = value;
+    mustExist(this._host.options.auto.craft.resources[name]).consume = value;
   }
 }
