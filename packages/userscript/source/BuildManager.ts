@@ -2,7 +2,7 @@ import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
 import { mustExist } from "./tools/Maybe";
-import { BuildButton, Building, BuildingExt } from "./types";
+import { BuildButton, Building, BuildingExt, BuildingMeta } from "./types";
 import { UserScript } from "./UserScript";
 
 export class BuildManager {
@@ -26,7 +26,7 @@ export class BuildManager {
       return;
     }
     const amountTemp = amount;
-    const label = build.meta.label ? build.meta.label : build.meta.stages[mustExist(stage)].label;
+    const label = this._getBuildLabel(build.meta, stage);
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
       this._host.warning(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
@@ -40,16 +40,18 @@ export class BuildManager {
     }
   }
 
+  private _getBuildLabel(meta: BuildingMeta, stage?: number): string {
+    return meta.stages && stage ? meta.stages[stage].label : mustExist(meta.label);
+  }
+
   getBuild(name: Building): BuildingExt {
     return this._host.gamePage.bld.getBuildingExt(name);
   }
 
-  getBuildButton(name: Building, stage: number | undefined = undefined): BuildButton | null {
+  getBuildButton(name: Building, stage?: number): BuildButton | null {
     const buttons = this.manager.tab.children;
     const build = this.getBuild(name);
-    const label = mustExist(
-      typeof stage !== "undefined" ? build.meta.stages[stage].label : build.meta.label
-    );
+    const label = this._getBuildLabel(build.meta, stage);
 
     for (const i in buttons) {
       const haystack = buttons[i].model.name;
