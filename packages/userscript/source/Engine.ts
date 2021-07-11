@@ -90,7 +90,9 @@ export class Engine {
     //       Instead of using an interval, this should use a tail-controlled timeout.
     this.loop = setInterval(this._iterate.bind(this), this._host.options.interval);
 
-    if (msg) this._host.imessage("status.ks.enable");
+    if (msg) {
+      this._host.imessage("status.ks.enable");
+    }
   }
 
   /**
@@ -105,7 +107,9 @@ export class Engine {
     clearInterval(this.loop);
     this.loop = undefined;
 
-    if (msg) this._host.imessage("status.ks.disable");
+    if (msg) {
+      this._host.imessage("status.ks.disable");
+    }
   }
 
   /**
@@ -201,7 +205,7 @@ export class Engine {
       return;
     }
 
-    const checkedList = [];
+    const checkedList: Array<{ name: string; trigger: number; val: number }> = [];
     const checkList: Array<string> = [];
 
     // This function allows us to quickly check a list of items for our
@@ -530,8 +534,9 @@ export class Engine {
         if (
           optionVals.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices] &&
           0 < canSkip
-        )
+        ) {
           willSkip += canSkip;
+        }
       }
       // If we found we can skip any years, do so now.
       if (0 < willSkip) {
