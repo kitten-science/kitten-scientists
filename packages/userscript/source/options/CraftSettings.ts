@@ -51,5 +51,10 @@ export class CraftSettings extends SettingsSection {
     thorium: { enabled: true, limited: true, require: "uranium", limRat: 0.5, max: 0 },
   };
 
-  resources: ResourceSettings = {};
+  resources: ResourceSettings = {
+    furs: {
+      enabled: true,
+      stock: 1000,
+    },
+  };
 }

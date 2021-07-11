@@ -1258,10 +1258,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
 
     clearunused.on("click", () => {
-      for (const name in this._host.options.auto.resources) {
+      for (const name in this._host.options.auto.craft.resources) {
         // Only delete resources with unmodified values. Require manual
         // removal of resources with non-standard values.
-        const resource = mustExist(this._host.options.auto.resources[name as Resource]);
+        const resource = mustExist(this._host.options.auto.craft.resources[name as Resource]);
         if (
           (!resource.stock && resource.consume === this._host.options.consume) ||
           resource.consume === undefined

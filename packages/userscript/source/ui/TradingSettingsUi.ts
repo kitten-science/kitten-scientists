@@ -184,10 +184,10 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     */
 
     input.on("change", () => {
-      if (input.is(":checked") && option.limited == false) {
+      if (input.is(":checked") && option.limited === false) {
         option.limited = true;
         this._host.imessage("trade.limited", [i18nName]);
-      } else if (!input.is(":checked") && option.limited == true) {
+      } else if (!input.is(":checked") && option.limited === true) {
         option.limited = false;
         this._host.imessage("trade.unlimited", [i18nName]);
       }
@@ -254,10 +254,10 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     */
 
     input.on("change", () => {
-      if (input.is(":checked") && option[season] == false) {
+      if (input.is(":checked") && option[season] === false) {
         option[season] = true;
         this._host.imessage("trade.season.enable", [iname, iseason]);
-      } else if (!input.is(":checked") && option[season] == true) {
+      } else if (!input.is(":checked") && option[season] === true) {
         option[season] = false;
         this._host.imessage("trade.season.disable", [iname, iseason]);
       }
