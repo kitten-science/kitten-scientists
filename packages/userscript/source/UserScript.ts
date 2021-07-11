@@ -231,7 +231,7 @@ export class UserScript {
 
   imessage(
     i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string> = [],
+    i18nArgs: Array<number | string> = []
   ): void {
     this._message(this.i18n(i18nLiteral, i18nArgs));
   }
@@ -244,13 +244,13 @@ export class UserScript {
   }
   private _isummary(
     i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string>,
+    i18nArgs: Array<number | string>
   ): void {
     this._summary(this.i18n(i18nLiteral, i18nArgs));
   }
   private _iwarning(
     i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string>,
+    i18nArgs: Array<number | string>
   ): void {
     this.warning(this.i18n(i18nLiteral, i18nArgs));
   }
@@ -340,13 +340,13 @@ export class UserScript {
       let duration = "";
       if (years > 0) {
         duration += years + " ";
-        duration += years == 1 ? this.i18n("summary.year") : this.i18n("summary.years");
+        duration += years === 1 ? this.i18n("summary.year") : this.i18n("summary.years");
       }
 
       if (days >= 0) {
         if (years > 0) duration += this.i18n("summary.separator");
         duration += roundToTwo(days) + " ";
-        duration += days == 1 ? this.i18n("summary.day") : this.i18n("summary.days");
+        duration += days === 1 ? this.i18n("summary.day") : this.i18n("summary.days");
       }
 
       this._isummary("summary.head", [duration]);
