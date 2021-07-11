@@ -142,7 +142,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
     // hack for style.
     // If there are more UI options, split it to "getUIOption"
-    if (name == "style") {
+    if (name === "style") {
       const input = element.children("input");
       input.unbind("change");
       input.on("change", () => {
@@ -174,7 +174,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
       triggerButton.on("click", () => {
         let value;
-        if (name == "crypto") {
+        if (name === "crypto") {
           value = window.prompt(
             this._host.i18n("ui.trigger.crypto.set", [iname]),
             mustExist(option.subTrigger).toFixed(2)
