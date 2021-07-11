@@ -257,7 +257,11 @@ export class Engine {
     const unicornPasture = this._host.options.auto.timeCtrl.religionItems.unicornPasture;
     if (unicornPasture.checkForReset) {
       const bld = this._host.gamePage.bld.get("unicornPasture");
-      checkedList.push({ name: bld.label, trigger: unicornPasture.triggerForReset, val: bld.val });
+      checkedList.push({
+        name: mustExist(bld.label),
+        trigger: unicornPasture.triggerForReset,
+        val: bld.val,
+      });
       if (0 < unicornPasture.triggerForReset) {
         if (bld.val < unicornPasture.triggerForReset) {
           return;
