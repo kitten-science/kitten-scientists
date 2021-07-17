@@ -83,7 +83,8 @@ export class UserInterface {
 
     const showActivity = $("<a/>", {
       id: "showActivityHref",
-      text: this._host.i18n("summary.show"),
+      text: "📝",
+      title: this._host.i18n("summary.show"),
       href: "#",
       css: {
         verticalAlign: "top",
@@ -94,7 +95,7 @@ export class UserInterface {
 
     activityBox.append(showActivity);
 
-    $("#clearLog").append(activityBox);
+    $("#clearLog").prepend(activityBox);
 
     // Set up the message box.
     const messageBox = $("<div/>", {
