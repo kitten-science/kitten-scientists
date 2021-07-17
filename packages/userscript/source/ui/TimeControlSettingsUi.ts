@@ -1144,7 +1144,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       css: {
         display: "inline-block",
         marginBottom: delimiter ? "10px" : undefined,
-        minWidth: "80px",
+        minWidth: "100px",
       },
     });
 

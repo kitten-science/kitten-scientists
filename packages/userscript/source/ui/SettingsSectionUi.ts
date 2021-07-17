@@ -78,7 +78,7 @@ export abstract class SettingsSectionUi<TState> {
       css: {
         color: "grey",
         display: "inline-block",
-        minWidth: "80px",
+        minWidth: "100px",
       },
     });
 
@@ -106,7 +106,7 @@ export abstract class SettingsSectionUi<TState> {
       css: {
         display: "inline-block",
         marginBottom: delimiter ? "10px" : undefined,
-        minWidth: "80px",
+        minWidth: "100px",
       },
     });
 
