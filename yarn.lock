@@ -6353,7 +6353,7 @@ typescript@4.2.4:
     typescript: 4.2.4
     webpack: 4.46.0
     webpack-cli: 4.6.0
-    webpack-userscript: 2.5.7
+    webpack-userscript: 2.5.8
   languageName: unknown
   linkType: soft
 
@@ -6497,9 +6497,9 @@ typescript@4.2.4:
   languageName: node
   linkType: hard
 
-"webpack-userscript@npm:2.5.7":
-  version: 2.5.7
-  resolution: "webpack-userscript@npm:2.5.7"
+"webpack-userscript@npm:2.5.8":
+  version: 2.5.8
+  resolution: "webpack-userscript@npm:2.5.8"
   dependencies:
     "@tkausl/userscript-meta": ^1.0.2
     dev-null: ^0.1.1
@@ -6511,7 +6511,7 @@ typescript@4.2.4:
     webpack-sources: ^1.4.3
   peerDependencies:
     webpack: ^4.0.0
-  checksum: ee3dfa3488b7609fc81b2d9f0476f69eb91285c227ca69dcc1976c88263e5d168e68addf640bace863667b6b87191ab6528687a3e681d846984326cd126752b1
+  checksum: ceac1fb749df942b46aa74a23a8ecbad2db32df917468749d318863766836e670df8e7d5b7288b973518bb67f9c59b8ee0e45cfdc233b261c9d2250a629a2337
   languageName: node
   linkType: hard
 
