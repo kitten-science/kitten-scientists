@@ -341,7 +341,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
           (!resource.stock && resource.consume === this._host.options.consume) ||
           resource.consume === undefined
         ) {
-          $("#resource-" + name).remove();
+          $(`#resource-${name}`).remove();
         }
       }
     });
