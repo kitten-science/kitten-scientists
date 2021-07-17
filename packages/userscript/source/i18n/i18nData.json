@@ -60,7 +60,7 @@
     "ui.disable.all": "disable all",
     "ui.enable.all": "enable all",
     "ui.craft.resources": "Resources",
-    "ui.trigger": "⚡",
+    "ui.trigger": "🗲",
     "ui.trigger.set": "Enter a new trigger value for {0}. Should be in the range of 0 to 1.",
     "ui.limit": "Limited",
     "ui.trigger.crypto.set": "Enter a new trigger value for {0}. Corresponds to the amount of Relics needed before the exchange is made.",
