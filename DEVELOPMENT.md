@@ -68,6 +68,6 @@ To fill the **Problems** panel in VS Code with all current, type-related errors,
 
 1. Run the script to build the release:
 
-```shell
-yarn userscript:release
-```
+   ```shell
+   yarn userscript:release
+   ```
