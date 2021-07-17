@@ -76,6 +76,7 @@ export abstract class SettingsSectionUi<TState> {
     const header = $("<label/>", {
       text,
       css: {
+        color: "grey",
         display: "inline-block",
         minWidth: "80px",
       },
