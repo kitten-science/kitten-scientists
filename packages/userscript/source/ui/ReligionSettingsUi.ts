@@ -27,15 +27,15 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     const itext = ucfirst(this._host.i18n("ui.faith"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: "ks-" + toggleName });
+    const element = $("<li/>", { id: `ks-${toggleName}` });
 
     const label = $("<label/>", {
-      for: "toggle-" + toggleName,
+      for: `toggle-${toggleName}`,
       text: itext,
     });
 
     const input = $("<input/>", {
-      id: "toggle-" + toggleName,
+      id: `toggle-${toggleName}`,
       type: "checkbox",
     });
     this._options.$enabled = input;
@@ -57,7 +57,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     // Create "trigger" button in the item.
     this._triggerButton = $("<div/>", {
-      id: "trigger-" + toggleName,
+      id: `trigger-${toggleName}`,
       text: this._host.i18n("ui.trigger"),
       //title: this._options.trigger,
       css: {
@@ -91,7 +91,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
     this._itemsButton = $("<div/>", {
-      id: "toggle-items-" + toggleName,
+      id: `toggle-items-${toggleName}`,
       text: "+",
       css: {
         cursor: "pointer",
@@ -462,7 +462,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           }
 
           // This seems wrong to do here.
-          const building = $("#toggle-" + unicornName);
+          const building = $(`#toggle-${unicornName}`);
           building.prop("checked", true);
           building.trigger("change");
         }
