@@ -110,7 +110,7 @@ export class UserScript {
       value = i18nData[DefaultLanguage][key as keyof typeof i18nData[SupportedLanguages]];
       if (!value) {
         cwarn(`i18n key '${key}' not found in default language.`);
-        return "$" + key;
+        return `$${key}`;
       }
       cwarn(`i18n key '${key}' not found in selected language.`);
     }
