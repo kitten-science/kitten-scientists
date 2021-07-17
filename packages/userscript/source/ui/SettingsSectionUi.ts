@@ -16,7 +16,31 @@ export abstract class SettingsSectionUi<TState> {
   abstract setState(state: TState): void;
   abstract refreshUi(): void;
 
-  protected getOptionHead(toggleName: string): JQuery<HTMLElement> {
+  protected _getSettingsPanel(id: string): JQuery<HTMLElement> {
+    const element = $("<li/>", { id: `ks-${id}` });
+    // Add a border on the element
+    element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.2)");
+    return element;
+  }
+
+  protected _getItemsToggle(id: string): JQuery<HTMLElement> {
+    return $("<div/>", {
+      id: `toggle-items-${id}`,
+      text: "+",
+      title: this._host.i18n("ui.itemsShow"),
+      css: {
+        border: "1px solid rgba(255, 255, 255, 0.2)",
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        minWidth: "10px",
+        padding: "0px 3px",
+        textAlign: "center",
+      },
+    });
+  }
+
+  protected _getOptionHead(toggleName: string): JQuery<HTMLElement> {
     const containerList = $("<ul/>", {
       id: `items-list-${toggleName}`,
       css: { display: "none", paddingLeft: "20px", paddingTop: "4px" },

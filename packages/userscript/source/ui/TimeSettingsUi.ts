@@ -26,7 +26,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     const itext = ucfirst(this._host.i18n("ui.time"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: `ks-${toggleName}` });
+    const element = this._getSettingsPanel(toggleName);
 
     const label = $("<label/>", {
       text: itext,
@@ -79,22 +79,9 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this.getOptionHead(toggleName);
+    const list = this._getOptionHead(toggleName);
 
-    // Add a border on the element
-    element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
-
-    this._itemsButton = $("<div/>", {
-      id: `toggle-items-${toggleName}`,
-      text: "+",
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
-
+    this._itemsButton = this._getItemsToggle(toggleName);
     this._itemsButton.on("click", () => {
       list.toggle();
 
