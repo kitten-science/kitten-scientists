@@ -28,9 +28,9 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     const element = $("<li/>", { id: "ks-" + toggleName });
 
     const label = $("<label/>", {
-      for: "toggle-" + toggleName,
       text: itext,
     });
+    label.on("click", () => this._itemsButton.trigger("click"));
 
     const input = $("<input/>", {
       id: "toggle-" + toggleName,
