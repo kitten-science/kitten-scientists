@@ -42,6 +42,13 @@ export type AbstractTimeUpgradeInfo = {
   priceRatio: number;
   unlocked: boolean;
   val: number;
+
+  /**
+   * This flag is set by KS itself to "hide" a given build from being
+   * processed in the BulkManager. This is likely not ideal and will
+   * be refactored later.
+   */
+  tHidden?: boolean;
 };
 
 export type ChronoForgeUpgradeInfo = AbstractTimeUpgradeInfo & {

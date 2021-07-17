@@ -99,15 +99,15 @@ export class BulkManager {
       }
 
       // tHidden is a flag that is manually set to exclude time buildings from the process.
-      if (buildMetaData.tHidden === true) {
+      if ("tHidden" in buildMetaData && buildMetaData.tHidden === true) {
         continue;
       }
       // rHidden is a flag that is manually set to exclude religion buildings from the process.
-      if (buildMetaData.rHidden === true) {
+      if ("rHidden" in buildMetaData && buildMetaData.rHidden === true) {
         continue;
       }
-      // If rHidden wasn't set, but the building isn't unlocked, skip it.
-      if (buildMetaData.rHidden === undefined && !buildMetaData.unlocked) {
+      // If the building isn't unlocked, skip it.
+      if (buildMetaData.unlocked) {
         continue;
       }
 
@@ -439,6 +439,7 @@ export class BulkManager {
       | BuildingMeta
       | ChronoForgeUpgradeInfo
       | ReligionUpgradeInfo
+      | SpaceBuildingInfo
       | TranscendenceUpgradeInfo
       | VoidSpaceUpgradeInfo
       | ZiggurathUpgradeInfo,

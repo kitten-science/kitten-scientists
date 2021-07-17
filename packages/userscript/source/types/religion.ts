@@ -58,12 +58,28 @@ export type AbstractReligionUpgradeInfo = {
    * An internationalized label for this religion upgrade.
    */
   label: string;
+
+  /**
+   * The costs of this upgrade.
+   */
   prices: Array<Price>;
+
+  /**
+   * Has this upgrade been unlocked?
+   */
   unlocked: boolean;
+
   /**
    * How many of these do you have?
    */
   val: number;
+
+  /**
+   * This flag is set by KS itself to "hide" a given build from being
+   * processed in the BulkManager. This is likely not ideal and will
+   * be refactored later.
+   */
+  rHidden?: boolean;
 };
 
 export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
