@@ -48,7 +48,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["@types/eslint", "npm:7.2.10"],
-            ["@types/node", "npm:14.14.44"],
+            ["@types/node", "npm:14.17.5"],
             ["@types/prettier", "npm:2.3.2"],
             ["@typescript-eslint/eslint-plugin", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:4.23.0"],
             ["@typescript-eslint/parser", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:4.23.0"],
@@ -322,10 +322,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:14.14.44", {
-          "packageLocation": "./.yarn/cache/@types-node-npm-14.14.44-607cb19845-5c4db71632.zip/node_modules/@types/node/",
+        ["npm:14.17.5", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-14.17.5-7c88786ff6-bd2c9bd617.zip/node_modules/@types/node/",
           "packageDependencies": [
-            ["@types/node", "npm:14.14.44"]
+            ["@types/node", "npm:14.17.5"]
           ],
           "linkType": "HARD",
         }]
@@ -4429,7 +4429,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["kitten-scientists", "workspace:."],
             ["@types/eslint", "npm:7.2.10"],
-            ["@types/node", "npm:14.14.44"],
+            ["@types/node", "npm:14.17.5"],
             ["@types/prettier", "npm:2.3.2"],
             ["@typescript-eslint/eslint-plugin", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:4.23.0"],
             ["@typescript-eslint/parser", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:4.23.0"],
