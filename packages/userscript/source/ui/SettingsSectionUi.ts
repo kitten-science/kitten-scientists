@@ -19,17 +19,19 @@ export abstract class SettingsSectionUi<TState> {
   protected getOptionHead(toggleName: string): JQuery<HTMLElement> {
     const containerList = $("<ul/>", {
       id: `items-list-${toggleName}`,
-      css: { display: "none", paddingLeft: "20px" },
+      css: { display: "none", paddingLeft: "20px", paddingTop: "4px" },
     });
 
     const disableAllButton = $("<div/>", {
       id: `toggle-all-items-${toggleName}`,
       text: this._host.i18n("ui.disable.all"),
       css: {
+        border: "1px solid grey",
         cursor: "pointer",
+        float: "right",
         display: "inline-block",
-        textShadow: "3px 3px 4px gray",
-        marginRight: "8px",
+        marginBottom: "4px",
+        padding: "1px 2px",
       },
     });
 
@@ -46,7 +48,15 @@ export abstract class SettingsSectionUi<TState> {
     const enableAllButton = $("<div/>", {
       id: `toggle-all-items-${toggleName}`,
       text: this._host.i18n("ui.enable.all"),
-      css: { cursor: "pointer", display: "inline-block", textShadow: "3px 3px 4px gray" },
+      css: {
+        border: "1px solid grey",
+        cursor: "pointer",
+        float: "right",
+        display: "inline-block",
+        marginBottom: "4px",
+        marginRight: "8px",
+        padding: "1px 2px",
+      },
     });
 
     enableAllButton.on("click", function () {
