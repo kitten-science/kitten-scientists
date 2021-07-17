@@ -12,4 +12,5 @@ tsconfig.tsbuildinfo
 /packages/*/output/*
 
 # Created by WebPack and/or plugins
+/packages/userscript/bundle/*-dev.*
 /packages/userscript/node_modules
