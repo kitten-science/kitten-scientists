@@ -31,15 +31,15 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const itext = ucfirst(this._host.i18n("ui.timeCtrl"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: "ks-" + toggleName });
+    const element = $("<li/>", { id: `ks-${toggleName}` });
 
     const label = $("<label/>", {
-      for: "toggle-" + toggleName,
+      for: `toggle-${toggleName}`,
       text: itext,
     });
 
     const input = $("<input/>", {
-      id: "toggle-" + toggleName,
+      id: `toggle-${toggleName}`,
       type: "checkbox",
     });
     this._options.$enabled = input;
@@ -978,7 +978,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
     const resourcesButton = $("<div/>", {
       id: "toggle-reset-resources",
-      text: this._host.i18n("ui.craft.resources"),
+      text: "🛠",
+      title: this._host.i18n("ui.craft.resources"),
       css: {
         cursor: "pointer",
         display: "inline-block",
