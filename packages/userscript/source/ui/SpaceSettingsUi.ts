@@ -114,6 +114,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     });
 
     this._optionButtons = [
+      this._getHeader(this._host.i18n("$space.planet.cath.label")),
       this._getLimitedOption(
         "spaceElevator",
         this._options.items.spaceElevator,
@@ -131,6 +132,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.moon.label")),
       this._getLimitedOption(
         "moonOutpost",
         this._options.items.moonOutpost,
@@ -143,6 +145,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.dune.label")),
       this._getLimitedOption(
         "planetCracker",
         this._options.items.planetCracker,
@@ -160,6 +163,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.piscine.label")),
       this._getLimitedOption(
         "researchVessel",
         this._options.items.researchVessel,
@@ -172,6 +176,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.helios.label")),
       this._getLimitedOption(
         "sunlifter",
         this._options.items.sunlifter,
@@ -194,6 +199,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.terminus.label")),
       this._getLimitedOption(
         "cryostation",
         this._options.items.cryostation,
@@ -201,6 +207,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.kairo.label")),
       this._getLimitedOption(
         "spaceBeacon",
         this._options.items.spaceBeacon,
@@ -208,6 +215,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.yarn.label")),
       this._getLimitedOption(
         "terraformingStation",
         this._options.items.terraformingStation,
@@ -220,6 +228,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.umbra.label")),
       this._getLimitedOption(
         "hrHarvester",
         this._options.items.hrHarvester,
@@ -227,6 +236,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.charon.label")),
       this._getLimitedOption(
         "entangler",
         this._options.items.entangler,
@@ -234,6 +244,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$space.planet.centaurusSystem.label")),
       this._getLimitedOption(
         "tectonic",
         this._options.items.tectonic,
