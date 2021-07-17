@@ -1,3 +1,4 @@
+/packages/*/bundle/
 /packages/*/output/
 
 # yarn internals are already pretty enough
