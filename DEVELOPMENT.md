@@ -8,6 +8,8 @@ The development environment is expected to be a POSIX-compliant system. On Windo
 
 Additionally, you will need to have Docker available.
 
+### Development
+
 1. Build the development container and start it.
 
 ```shell
