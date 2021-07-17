@@ -65,7 +65,6 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -173,7 +172,6 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
     option.$max = maxButton;

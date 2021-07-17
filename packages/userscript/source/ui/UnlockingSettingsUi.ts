@@ -65,7 +65,6 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 

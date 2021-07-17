@@ -65,7 +65,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -171,7 +170,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
           display: "inline-block",
           float: "right",
           paddingRight: "5px",
-          textShadow: "3px 3px 4px gray",
         },
       }).data("option", option);
       option.$subTrigger = triggerButton;

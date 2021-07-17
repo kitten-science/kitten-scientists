@@ -167,7 +167,7 @@ export abstract class SettingsSectionUi<TState> {
         const item = $("<div/>", {
           id: `resource-add-${resource.name}`,
           text: ucfirst(resource.title ? resource.title : resource.name),
-          css: { cursor: "pointer", textShadow: "3px 3px 4px gray" },
+          css: { cursor: "pointer" },
         });
 
         item.on("click", () => {
@@ -232,7 +232,6 @@ export abstract class SettingsSectionUi<TState> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -328,7 +327,6 @@ export abstract class SettingsSectionUi<TState> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 

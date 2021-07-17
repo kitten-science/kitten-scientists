@@ -71,7 +71,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -131,7 +130,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
     option.$subTrigger = triggerButton;
@@ -158,7 +156,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
     option.$maximum = maximunButton;
@@ -184,7 +181,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -210,7 +206,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -960,7 +955,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         filter: "grayscale(100%)",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
     const spaceButton = $("<div/>", {
@@ -973,7 +967,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         filter: "grayscale(100%)",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
     const resourcesButton = $("<div/>", {
@@ -985,7 +978,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
     const religionButton = $("<div/>", {
@@ -998,7 +990,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         filter: "grayscale(100%)",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
     const timeButton = $("<div/>", {
@@ -1011,7 +1002,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         filter: "grayscale(100%)",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -1083,7 +1073,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
     option.$subTrigger = triggerButton;
@@ -1184,7 +1173,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     }).data("option", option);
     option.$triggerForReset = minButton;
@@ -1252,7 +1240,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       css: {
         cursor: "pointer",
         display: "inline-block",
-        textShadow: "3px 3px 4px gray",
         borderBottom: "1px solid rgba(185, 185, 185, 0.7)",
       },
     });
@@ -1265,7 +1252,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 

@@ -64,7 +64,6 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
     this._options.$trigger = this._triggerButton;
@@ -96,7 +95,6 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -225,7 +223,6 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -309,7 +306,6 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       css: {
         cursor: "pointer",
         display: "inline-block",
-        textShadow: "3px 3px 4px gray",
         borderBottom: "1px solid rgba(185, 185, 185, 0.7)",
       },
     });
@@ -322,7 +318,6 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
