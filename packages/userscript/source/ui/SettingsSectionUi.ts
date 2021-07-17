@@ -18,12 +18,12 @@ export abstract class SettingsSectionUi<TState> {
 
   protected getOptionHead(toggleName: string): JQuery<HTMLElement> {
     const containerList = $("<ul/>", {
-      id: "items-list-" + toggleName,
+      id: `items-list-${toggleName}`,
       css: { display: "none", paddingLeft: "20px" },
     });
 
     const disableAllButton = $("<div/>", {
-      id: "toggle-all-items-" + toggleName,
+      id: `toggle-all-items-${toggleName}`,
       text: this._host.i18n("ui.disable.all"),
       css: {
         cursor: "pointer",
@@ -37,14 +37,14 @@ export abstract class SettingsSectionUi<TState> {
       // can't use find as we only want one layer of checkboxes
       const items = containerList.children().children(":checkbox");
       items.prop("checked", false);
-      items.change();
-      containerList.children().children(":checkbox").change();
+      items.trigger("change");
+      containerList.children().children(":checkbox").trigger("change");
     });
 
     containerList.append(disableAllButton);
 
     const enableAllButton = $("<div/>", {
-      id: "toggle-all-items-" + toggleName,
+      id: `toggle-all-items-${toggleName}`,
       text: this._host.i18n("ui.enable.all"),
       css: { cursor: "pointer", display: "inline-block", textShadow: "3px 3px 4px gray" },
     });
@@ -53,8 +53,8 @@ export abstract class SettingsSectionUi<TState> {
       // can't use find as we only want one layer of checkboxes
       const items = containerList.children().children(":checkbox");
       items.prop("checked", true);
-      items.change();
-      containerList.children().children(":checkbox").change();
+      items.trigger("change");
+      containerList.children().children(":checkbox").trigger("change");
     });
 
     containerList.append(enableAllButton);
@@ -75,7 +75,7 @@ export abstract class SettingsSectionUi<TState> {
     const elementLabel = i18nName;
 
     const label = $("<label/>", {
-      for: "toggle-" + name,
+      for: `toggle-${name}`,
       text: elementLabel,
       css: {
         display: "inline-block",
@@ -85,7 +85,7 @@ export abstract class SettingsSectionUi<TState> {
     });
 
     const input = $("<input/>", {
-      id: "toggle-" + name,
+      id: `toggle-${name}`,
       type: "checkbox",
     }).data("option", option);
     option.$enabled = input;
@@ -134,21 +134,19 @@ export abstract class SettingsSectionUi<TState> {
     const items = [];
     const idPrefix = forReset ? "#resource-reset-" : "#resource-";
 
-    for (const i in this._host.gamePage.resPool.resources) {
-      const res = this._host.gamePage.resPool.resources[i];
-
+    for (const resource of this._host.gamePage.resPool.resources) {
       // Show only new resources that we don't have in the list and that are
       // visible. This helps cut down on total size.
-      if (res.name && $(idPrefix + res.name).length === 0) {
+      if (resource.name && $(idPrefix + resource.name).length === 0) {
         const item = $("<div/>", {
-          id: "resource-add-" + res.name,
-          text: ucfirst(res.title ? res.title : res.name),
+          id: `resource-add-${resource.name}`,
+          text: ucfirst(resource.title ? resource.title : resource.name),
           css: { cursor: "pointer", textShadow: "3px 3px 4px gray" },
         });
 
         item.on("click", () => {
           item.remove();
-          onAddHandler(res);
+          onAddHandler(resource);
           //this._host.saveToKittenStorage();
         });
 
@@ -178,7 +176,7 @@ export abstract class SettingsSectionUi<TState> {
 
     // The label with the name of the resource.
     const label = $("<div/>", {
-      id: "resource-label-" + name,
+      id: `resource-label-${name}`,
       text: title,
       css: { display: "inline-block", width: "95px" },
     });
@@ -194,14 +192,14 @@ export abstract class SettingsSectionUi<TState> {
 
     // The consume rate for the resource.
     const consumeElement = $("<div/>", {
-      id: "consume-rate-" + name,
+      id: `consume-rate-${name}`,
       text: this._host.i18n("resources.consume", [consume.toFixed(2)]),
       css: { cursor: "pointer", display: "inline-block" },
     });
 
     // Delete the resource from the list.
     const del = $("<div/>", {
-      id: "resource-delete-" + name,
+      id: `resource-delete-${name}`,
       text: this._host.i18n("resources.del"),
       css: {
         cursor: "pointer",
