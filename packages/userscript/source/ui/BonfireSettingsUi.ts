@@ -243,8 +243,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._getLimitedOption(
         "magneto",
         this._options.items.magneto,
-        this._host.i18n("$buildings.magneto.label"),
-        true
+        this._host.i18n("$buildings.magneto.label")
       ),
       this._getLimitedOption(
         "smelter",
