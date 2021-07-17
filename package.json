@@ -20,7 +20,6 @@
     "packages/*"
   ],
   "scripts": {
-    "devcontainer:build": "yarn workspace kitten-game build",
     "devcontainer:run": "bash ./scripts/run-development-container.sh",
     "typecheck:all": "tsc --noEmit --incremental false"
   },

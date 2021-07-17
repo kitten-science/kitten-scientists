@@ -15,6 +15,6 @@
   },
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "scripts": {
-    "build": "docker build --tag kitten-game ."
+    "devcontainer:build": "docker build --tag kitten-game ."
   }
 }
