@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const path = require("path");
-const WebpackUserscript = require("webpack-userscript");
 const dev = process.env.NODE_ENV === "development";
+const path = require("path");
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const WebpackUserscript = require("webpack-userscript");
 
 module.exports = {
   entry: path.resolve(__dirname, "source", "index.ts"),
@@ -16,6 +17,10 @@ module.exports = {
         options: PnpWebpackPlugin.tsLoaderOptions(),
       },
     ],
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   output: {
     path: path.resolve(__dirname, "bundle"),
