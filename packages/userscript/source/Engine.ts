@@ -1306,6 +1306,7 @@ export class Engine {
               aqueductMeta.stage = 1;
 
               // TODO: Why do we do this for the aqueduct and not for the pasture?
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               aqueductMeta.calculateEffects!(aqueductMeta, this._host.gamePage);
 
               this._host.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
@@ -1361,6 +1362,7 @@ export class Engine {
               libraryMeta.on = 0;
               libraryMeta.val = 0;
               libraryMeta.stage = 1;
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               libraryMeta.calculateEffects!(libraryMeta, this._host.gamePage);
               this._host.iactivity("upgrade.building.library", [], "ks-upgrade");
               this._host.gamePage.ui.render();
