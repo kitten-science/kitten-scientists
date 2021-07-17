@@ -19,7 +19,7 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
     const itext = ucfirst(this._host.i18n("ui.engine"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: "ks-" + toggleName });
+    const element = $("<li/>", { id: `ks-${toggleName}` });
 
     const label = $("<label/>", {
       //for: "toggle-" + toggleName,
@@ -27,7 +27,7 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
     });
 
     const input = $("<input/>", {
-      id: "toggle-" + toggleName,
+      id: `toggle-${toggleName}`,
       type: "checkbox",
     });
     this._options.$enabled = input;
@@ -35,11 +35,11 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
     element.append(input, label);
 
     input.on("change", () => {
-      if (input.is(":checked") && options.enabled == false) {
+      if (input.is(":checked") && options.enabled === false) {
         options.enabled = true;
         //this._host.saveToKittenStorage();
         this._host.engine.start(true);
-      } else if (!input.is(":checked") && options.enabled == true) {
+      } else if (!input.is(":checked") && options.enabled === true) {
         options.enabled = false;
         //this._host.saveToKittenStorage();
         this._host.engine.stop(true);
