@@ -18,10 +18,23 @@ module.exports = {
     ],
   },
   output: {
-    path: path.resolve(__dirname, "output"),
+    path: path.resolve(__dirname, "bundle"),
     filename: "kitten-scientists.user.js",
   },
-  plugins: [new WebpackUserscript()],
+  plugins: [
+    new WebpackUserscript({
+      headers: {
+        match: [
+          "*bloodrizer.ru/games/kittens/*",
+          "*kittensgame.com/alpha/*",
+          "*kittensgame.com/beta/*",
+          "*kittensgame.com/web/*",
+          "file:///*kitten-game*",
+        ],
+        name: "Kitten Scientists",
+      },
+    }),
+  ],
   resolve: {
     extensions: [".ts", ".js"],
     plugins: [PnpWebpackPlugin],
