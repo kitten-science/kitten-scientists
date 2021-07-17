@@ -150,7 +150,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     const maximunButton = $("<div/>", {
       id: "set-timeSkip-maximum",
-      text: this._host.i18n("ui.maximum"),
+      text: "⍐",
+      title: this._host.i18n("ui.maximum"),
       //title: option.max,
       css: {
         cursor: "pointer",
@@ -176,7 +177,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     const cyclesButton = $("<div/>", {
       id: `toggle-cycle-${name}`,
-      text: this._host.i18n("ui.cycles"),
+      text: "↻",
+      title: this._host.i18n("ui.cycles"),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -201,7 +203,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     const seasonsButton = $("<div/>", {
       id: `toggle-seasons-${name}`,
-      text: this._host.i18n("trade.seasons"),
+      text: "🗓",
+      title: this._host.i18n("trade.seasons"),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -949,10 +952,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     const buildButton = $("<div/>", {
       id: "toggle-reset-build",
-      text: this._host.i18n("ui.build"),
+      text: "🔥",
+      title: this._host.i18n("ui.build"),
       css: {
         cursor: "pointer",
         display: "inline-block",
+        filter: "grayscale(100%)",
         float: "right",
         paddingRight: "5px",
         textShadow: "3px 3px 4px gray",
@@ -960,10 +965,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
     const spaceButton = $("<div/>", {
       id: "toggle-reset-space",
-      text: this._host.i18n("ui.space"),
+      text: "🚀",
+      title: this._host.i18n("ui.space"),
       css: {
         cursor: "pointer",
         display: "inline-block",
+        filter: "grayscale(100%)",
         float: "right",
         paddingRight: "5px",
         textShadow: "3px 3px 4px gray",
@@ -983,10 +990,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
     const religionButton = $("<div/>", {
       id: "toggle-reset-religion",
-      text: this._host.i18n("ui.faith"),
+      text: "🐈",
+      title: this._host.i18n("ui.faith"),
       css: {
         cursor: "pointer",
         display: "inline-block",
+        filter: "grayscale(100%)",
         float: "right",
         paddingRight: "5px",
         textShadow: "3px 3px 4px gray",
@@ -994,10 +1003,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
     const timeButton = $("<div/>", {
       id: "toggle-reset-time",
-      text: this._host.i18n("ui.time"),
+      text: "🕙",
+      title: this._host.i18n("ui.time"),
       css: {
         cursor: "pointer",
         display: "inline-block",
+        filter: "grayscale(100%)",
         float: "right",
         paddingRight: "5px",
         textShadow: "3px 3px 4px gray",
