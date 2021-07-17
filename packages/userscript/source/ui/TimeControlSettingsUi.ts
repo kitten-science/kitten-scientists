@@ -67,7 +67,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
     this._itemsButton = $("<div/>", {
-      id: "toggle-items-" + toggleName,
+      id: `toggle-items-${toggleName}`,
       text: "+",
       css: {
         cursor: "pointer",
@@ -182,7 +182,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
 
     const cyclesButton = $("<div/>", {
-      id: "toggle-cycle-" + name,
+      id: `toggle-cycle-${name}`,
       text: this._host.i18n("ui.cycles"),
       css: {
         cursor: "pointer",
@@ -194,7 +194,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
 
     const cyclesList = $("<ul/>", {
-      id: "cycles-list-" + name,
+      id: `cycles-list-${name}`,
       css: { display: "none", paddingLeft: "20px" },
     });
 
@@ -207,7 +207,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     }
 
     const seasonsButton = $("<div/>", {
-      id: "toggle-seasons-" + name,
+      id: `toggle-seasons-${name}`,
       text: this._host.i18n("trade.seasons"),
       css: {
         cursor: "pointer",
@@ -219,7 +219,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
 
     const seasonsList = $("<ul/>", {
-      id: "seasons-list-" + name,
+      id: `seasons-list-${name}`,
       css: { display: "none", paddingLeft: "20px" },
     });
 
@@ -1071,7 +1071,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const element = this.getOption(name, option, label);
 
     const triggerButton = $("<div/>", {
-      id: "set-" + name + "-subTrigger",
+      id: `set-${name}-subTrigger`,
       text: this._host.i18n("ui.trigger"),
       //title: option.subTrigger,
       css: {
@@ -1111,12 +1111,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const element = $("<li/>");
 
     const label = $("<label/>", {
-      for: "toggle-timeSkip-" + index,
+      for: `toggle-timeSkip-${index}`,
       text: cycle.title,
     });
 
     const input = $("<input/>", {
-      id: "toggle-timeSkip-" + index,
+      id: `toggle-timeSkip-${index}`,
       type: "checkbox",
     }).data("option", option);
     option[`$${index}` as const] = input;
@@ -1148,7 +1148,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const elementLabel = i18nName;
 
     const label = $("<label/>", {
-      for: "toggle-reset-" + type + "-" + name,
+      for: `toggle-reset-${type}-${name}`,
       text: elementLabel,
       css: {
         display: "inline-block",
@@ -1158,7 +1158,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
 
     const input = $("<input/>", {
-      id: "toggle-reset-" + type + "-" + name,
+      id: `toggle-reset-${type}-${name}`,
       type: "checkbox",
     }).data("option", option);
     option.$checkForReset = input;
@@ -1174,7 +1174,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     });
 
     const minButton = $("<div/>", {
-      id: "set-reset-" + type + "-" + name + "-min",
+      id: `set-reset-${type}-${name}-min`,
       text: this._host.i18n("ui.min", [option.triggerForReset]),
       //title: option.triggerForReset,
       css: {
@@ -1213,12 +1213,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const element = $("<li/>");
 
     const label = $("<label/>", {
-      for: "toggle-timeSkip-" + season,
+      for: `toggle-timeSkip-${season}`,
       text: ucfirst(iseason),
     });
 
     const input = $("<input/>", {
-      id: "toggle-timeSkip-" + season,
+      id: `toggle-timeSkip-${season}`,
       type: "checkbox",
     }).data("option", option);
     option[`$${season}` as const] = input;

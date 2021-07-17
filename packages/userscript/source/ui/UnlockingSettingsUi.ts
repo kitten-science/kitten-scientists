@@ -25,7 +25,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     const itext = ucfirst(this._host.i18n("ui.upgrade"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: "ks-" + toggleName });
+    const element = $("<li/>", { id: `ks-${toggleName}` });
 
     const label = $("<label/>", {
       text: itext,
@@ -33,7 +33,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     label.on("click", () => this._itemsButton.trigger("click"));
 
     const input = $("<input/>", {
-      id: "toggle-" + toggleName,
+      id: `toggle-${toggleName}`,
       type: "checkbox",
     });
     this._options.$enabled = input;
@@ -61,7 +61,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
     this._itemsButton = $("<div/>", {
-      id: "toggle-items-" + toggleName,
+      id: `toggle-items-${toggleName}`,
       text: "+",
       css: {
         cursor: "pointer",

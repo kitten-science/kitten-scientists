@@ -27,7 +27,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     const itext = ucfirst(this._host.i18n("ui.trade"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: "ks-" + toggleName });
+    const element = $("<li/>", { id: `ks-${toggleName}` });
 
     const label = $("<label/>", {
       text: itext,
@@ -35,7 +35,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     label.on("click", () => this._itemsButton.trigger("click"));
 
     const input = $("<input/>", {
-      id: "toggle-" + toggleName,
+      id: `toggle-${toggleName}`,
       type: "checkbox",
     });
     this._options.$enabled = input;
@@ -57,7 +57,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     // Create "trigger" button in the item.
     this._triggerButton = $("<div/>", {
-      id: "trigger-" + toggleName,
+      id: `trigger-${toggleName}`,
       text: this._host.i18n("ui.trigger"),
       //title: this._options.trigger,
       css: {
@@ -91,7 +91,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
     this._itemsButton = $("<div/>", {
-      id: "toggle-items-" + toggleName,
+      id: `toggle-items-${toggleName}`,
       text: "+",
       css: {
         cursor: "pointer",
@@ -176,12 +176,12 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     //Limited Trading
     const label = $("<label/>", {
-      for: "toggle-limited-" + name,
+      for: `toggle-limited-${name}`,
       text: this._host.i18n("ui.limit"),
     });
 
     const input = $("<input/>", {
-      id: "toggle-limited-" + name,
+      id: `toggle-limited-${name}`,
       type: "checkbox",
     }).data("option", option);
     option.$limited = input;
@@ -208,7 +208,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     //Limited Trading End
 
     const button = $("<div/>", {
-      id: "toggle-seasons-" + name,
+      id: `toggle-seasons-${name}`,
       text: this._host.i18n("trade.seasons"),
       css: {
         cursor: "pointer",
@@ -220,7 +220,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     });
 
     const list = $("<ul/>", {
-      id: "seasons-list-" + name,
+      id: `seasons-list-${name}`,
       css: { display: "none", paddingLeft: "20px" },
     });
 
@@ -246,12 +246,12 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     const element = $("<li/>");
 
     const label = $("<label/>", {
-      for: "toggle-" + name + "-" + season,
+      for: `toggle-${name}-${season}`,
       text: ucfirst(iseason),
     });
 
     const input = $("<input/>", {
-      id: "toggle-" + name + "-" + season,
+      id: `toggle-${name}-${season}`,
       type: "checkbox",
     }).data("option", option);
     option[`$${season}` as const] = input;

@@ -208,7 +208,7 @@ export abstract class SettingsSectionUi<TState> {
 
     // How many items to stock.
     const stockElement = $("<div/>", {
-      id: "stock-value-" + name,
+      id: `stock-value-${name}`,
       text: this._host.i18n("resources.stock", [
         stock === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(stock),
       ]),
@@ -378,7 +378,7 @@ export abstract class SettingsSectionUi<TState> {
 
   protected setStockValue(name: Resource, value: number, forReset = false): void {
     if (value < 0) {
-      this._host.warning("ignoring non-numeric or invalid stock value " + value);
+      this._host.warning(`ignoring non-numeric or invalid stock value '${value}'`);
       return;
     }
 
