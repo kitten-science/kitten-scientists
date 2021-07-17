@@ -130,7 +130,7 @@ export class UserInterface {
   }
 
   private _installCss(): void {
-    // Basic layout for the list-based options menus.
+    // Basic layout for our own list-based options menus.
     this._addRule(`#ks-options ul { list-style: none; margin: 0 0 5px; padding: 0; }`);
     this._addRule(`#ks-options ul:after { clear: both; content: " "; display: block; height: 0; }`);
     this._addRule(`#ks-options ul li { display: block; float: left; width: 100%; }`);
@@ -141,6 +141,9 @@ export class UserInterface {
       #ks-options #toggle-reset-list-resources .stockWarn * {
         color: #DD1E00;
       }`);
+
+    // Ensure the right column gets a scrollbar, when our content extends it too far down.
+    this._addRule(`body #gamePageContainer #game #rightColumn { overflow-y: auto }`);
 
     // Set the entire UI to a monospace font.
     //this._addRule(
@@ -173,8 +176,6 @@ export class UserInterface {
     );
 
     this._addRule(`${defaultSelector} #rightColumn { overflow-y: auto; height: 92%; width: 19%; }`);
-
-    this._addRule(`body #gamePageContainer #game #rightColumn { overflow-y: auto }`);
 
     this._addRule(
       `${defaultSelector} #gameLog { overflow-y: hidden !important; width: 100% !important; padding-top: 5px !important; }`
