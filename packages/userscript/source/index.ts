@@ -1,5 +1,5 @@
-import testConfig from "./fixtures/localstorage.json";
-import savegame from "./fixtures/savegame";
+import devSavegame from "./fixtures/savegame";
+import devSettings from "./fixtures/settings";
 import { Options } from "./options/Options";
 import { SettingsStorage } from "./options/SettingsStorage";
 import { cinfo } from "./tools/Log";
@@ -11,8 +11,8 @@ import { UserScript } from "./UserScript";
   const kittenGame = await UserScript.waitForGame();
 
   // For development convenience, load a lategame save to give us more test options.
-  if (!isNil(savegame)) {
-    await new SavegameLoader(kittenGame).load(savegame);
+  if (!isNil(devSavegame)) {
+    await new SavegameLoader(kittenGame).load(devSavegame);
   }
 
   const userScript = await UserScript.getDefaultInstance();
@@ -25,9 +25,12 @@ import { UserScript } from "./UserScript";
   if (legacySettings === null) {
     cinfo("No legacy settings found. Default settings will be used.");
   }
-  const options = Options.parseLegacyOptions(testConfig);
-  //const options = Options.parseLegacyOptions(legacySettings);
-  userScript.injectOptions(options);
+
+  if (!isNil(devSettings)) {
+    const options = Options.parseLegacyOptions(devSettings);
+    userScript.injectOptions(options);
+  }
+
   userScript.run();
 
   /*

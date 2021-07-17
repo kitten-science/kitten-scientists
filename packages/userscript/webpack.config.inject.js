@@ -23,6 +23,10 @@ module.exports = {
   },
   plugins: [
     new webpack.NormalModuleReplacementPlugin(/.\/fixtures\/savegame/, "./fixtures/lategame"),
+    new webpack.NormalModuleReplacementPlugin(
+      /.\/fixtures\/settings/,
+      "./fixtures/localstorage.json"
+    ),
   ],
   resolve: {
     extensions: [".ts", ".js"],
