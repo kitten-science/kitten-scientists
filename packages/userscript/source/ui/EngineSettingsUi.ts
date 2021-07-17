@@ -22,7 +22,7 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
     const element = $("<li/>", { id: "ks-" + toggleName });
 
     const label = $("<label/>", {
-      for: "toggle-" + toggleName,
+      //for: "toggle-" + toggleName,
       text: itext,
     });
 
