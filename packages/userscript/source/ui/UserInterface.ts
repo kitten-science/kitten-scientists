@@ -77,7 +77,7 @@ export class UserInterface {
       id: "activity-box",
       css: {
         display: "inline-block",
-        verticalAlign: "top",
+        verticalAlign: "bottom",
       },
     });
 
@@ -86,9 +86,6 @@ export class UserInterface {
       text: "📝",
       title: this._host.i18n("summary.show"),
       href: "#",
-      css: {
-        verticalAlign: "top",
-      },
     });
 
     showActivity.on("click", () => this._host.displayActivitySummary());
