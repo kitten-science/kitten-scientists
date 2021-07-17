@@ -3881,7 +3881,7 @@ fsevents@~2.3.1:
     eslint: 7.30.0
     lint-staged: 11.0.1
     prettier: 2.3.2
-    prettier-plugin-organize-imports: 2.0.0
+    prettier-plugin-organize-imports: 2.2.0
     tslib: 2.2.0
     typescript: 4.3.5
   languageName: unknown
@@ -4993,13 +4993,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"prettier-plugin-organize-imports@npm:2.0.0":
-  version: 2.0.0
-  resolution: "prettier-plugin-organize-imports@npm:2.0.0"
+"prettier-plugin-organize-imports@npm:2.2.0":
+  version: 2.2.0
+  resolution: "prettier-plugin-organize-imports@npm:2.2.0"
   peerDependencies:
     prettier: ">=2.0"
     typescript: ">=2.9"
-  checksum: ed3e9742a0177c2c75c31af6e1706ff5fa0297d2cebd0af2da68d62619715682237839c324b6a420dd6c37bde487badec9e0f1a0e41ed841bb1f47c7d2f4b483
+  checksum: 030778bcfa91af473d274509a839f3aad25a6087266cf87d87c90f8790a6e11cae73360d8e8ff57a19e63a7a4b2000c847d72d9b3b6019c46fb87a90b4bb18e6
   languageName: node
   linkType: hard
 
