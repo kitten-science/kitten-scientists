@@ -71,7 +71,7 @@ export abstract class SettingsSectionUi<TState> {
     return containerList;
   }
 
-  protected getHeader(text: string): JQuery<HTMLElement> {
+  protected _getHeader(text: string): JQuery<HTMLElement> {
     const headerElement = $("<li/>");
     const header = $("<label/>", {
       text,
