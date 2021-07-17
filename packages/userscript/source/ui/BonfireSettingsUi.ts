@@ -26,7 +26,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     const itext = ucfirst(this._host.i18n("ui.build"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: "ks-" + toggleName });
+    const element = $("<li/>", { id: `ks-${toggleName}` });
 
     const label = $("<label/>", {
       text: itext,
@@ -34,7 +34,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     label.on("click", () => this._itemsButton.trigger("click"));
 
     const input = $("<input/>", {
-      id: "toggle-" + toggleName,
+      id: `toggle-${toggleName}`,
       type: "checkbox",
     });
     this._options.$enabled = input;
