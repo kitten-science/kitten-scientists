@@ -153,10 +153,10 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     */
 
     input.on("change", () => {
-      if (input.is(":checked") && option.limited == false) {
+      if (input.is(":checked") && option.limited === false) {
         option.limited = true;
         this._host.imessage("distribute.limited", [label]);
-      } else if (!input.is(":checked") && option.limited == true) {
+      } else if (!input.is(":checked") && option.limited === true) {
         option.limited = false;
         this._host.imessage("distribute.unlimited", [label]);
       }
