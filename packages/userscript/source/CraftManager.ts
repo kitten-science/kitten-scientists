@@ -441,16 +441,21 @@ export class CraftManager {
     // Start of by checking how much catnip we produce per tick at base level.
     let productionField = this._host.gamePage.getEffect("catnipPerTickBase");
 
-    // `worstWeather` is `true` in all calls, which is good, because the `else` path
-    // here is broken.
-    // TODO: Maybe fix this, if it could be useful.
     if (worstWeather) {
       // Assume fields run at -90%
       productionField *= 0.1;
+      // Factor in cold harshness.
+      productionField *=
+        1 + this._host.gamePage.getLimitedDR(this._host.gamePage.getEffect("coldHarshness"), 1);
     } else {
       productionField *=
-        this._host.gamePage.calendar.getWeatherMod() +
+        this._host.gamePage.calendar.getWeatherMod({ name: "catnip" }) +
         this._host.gamePage.calendar.getCurSeason().modifiers["catnip"];
+    }
+
+    // When the communism policy is active,
+    if (this._host.gamePage.science.getPolicy("communism").researched) {
+      productionField = 0;
     }
 
     // Get base production values for jobs.

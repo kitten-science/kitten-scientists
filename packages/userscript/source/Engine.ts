@@ -13,7 +13,7 @@ import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
 import { TimeManager } from "./TimeManager";
 import { objectEntries } from "./tools/Entries";
-import { mustExist } from "./tools/Maybe";
+import { isNil, mustExist } from "./tools/Maybe";
 import { TradeManager } from "./TradeManager";
 import {
   BuildButton,
@@ -231,11 +231,25 @@ export class Engine {
     for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.buildItems))
       if (entry.checkForReset) {
         // TODO: Obvious error here. For upgraded buildings, it needs special handling.
-        const bld = this._host.gamePage.bld.get(name);
-        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
+        let bld;
+        try {
+          // @ts-expect-error Obvious error here. For upgraded buildings, it needs special handling.
+          bld = this._host.gamePage.bld.getBuildingExt(name);
+        } catch (error) {
+          bld = null;
+        }
+        if (isNil(bld)) {
+          continue;
+        }
+
+        checkedList.push({
+          name: mustExist(bld.meta.label),
+          trigger: entry.triggerForReset,
+          val: bld.meta.val,
+        });
         if (0 < entry.triggerForReset) {
           // If the required amount of buildings hasn't been built yet, bail out.
-          if (bld.val < entry.triggerForReset) {
+          if (bld.meta.val < entry.triggerForReset) {
             return;
           }
         } else {
@@ -248,14 +262,14 @@ export class Engine {
     // actually a bonfire item.
     const unicornPasture = this._host.options.auto.timeCtrl.religionItems.unicornPasture;
     if (unicornPasture.checkForReset) {
-      const bld = this._host.gamePage.bld.get("unicornPasture");
+      const bld = this._host.gamePage.bld.getBuildingExt("unicornPasture");
       checkedList.push({
-        name: mustExist(bld.label),
+        name: mustExist(bld.meta.label),
         trigger: unicornPasture.triggerForReset,
-        val: bld.val,
+        val: bld.meta.val,
       });
       if (0 < unicornPasture.triggerForReset) {
-        if (bld.val < unicornPasture.triggerForReset) {
+        if (bld.meta.val < unicornPasture.triggerForReset) {
           return;
         }
       } else {
@@ -669,9 +683,9 @@ export class Engine {
 
     // Waits for coin price to drop below a certain treshold before starting the exchange process
     // TODO: This is obviously broken.
-    if (waitForBestPrice === true && coinPrice < 860.0) {
-      waitForBestPrice = false;
-    }
+    // if (waitForBestPrice === true && coinPrice < 860.0) {
+    // waitForBestPrice = false;
+    // }
 
     // All of this code is straight-forward. Buy low, sell high.
 

@@ -7,6 +7,7 @@ import {
   Challenge,
   GameTab,
   Jobs,
+  Policy,
   Price,
   Race,
   RaceInfo,
@@ -59,7 +60,7 @@ export type GamePage = {
     /**
      * Get the production modifier contribution of the weather for certain resource.
      */
-    getWeatherMod: (res: Resource) => number;
+    getWeatherMod: (res: { name: Resource }) => number;
     observeBtn: BuildButton | null;
     observeHandler: () => void;
     season: number;
@@ -70,9 +71,10 @@ export type GamePage = {
   challenges: {
     currentChallenge: Challenge;
     challenges: Array<{ pending: boolean }>;
-    getChallenge: (
-      challenge: Challenge
-    ) => { calculateEffects: (model: unknown, game: GamePage) => void; researched: number };
+    getChallenge: (challenge: Challenge) => {
+      calculateEffects: (model: unknown, game: GamePage) => void;
+      researched: number;
+    };
   };
   console: {
     maxMessages: number;
@@ -111,6 +113,7 @@ export type GamePage = {
       | "catnipDemandWorkerRatioGlobal"
       | "catnipJobRatio"
       | "catnipPerTickBase"
+      | "coldHarshness"
       | "corruptionBoostRatio"
       | "dataCenterAIRatio"
       | "heatMax"
@@ -259,6 +262,21 @@ export type GamePage = {
   };
   science: {
     get: (name: "civil" | "cryptotheology" | "drama" | "nuclearFission") => { researched: boolean };
+    getPolicy: (name: Policy) => {
+      blocked: boolean;
+      blocks: Array<Policy>;
+      description: string;
+      effects: {
+        goldPriceRatio?: number;
+      };
+      label: string;
+      name: Policy;
+      prices: Array<Price>;
+      researched: boolean;
+      unlocked: boolean;
+      unlocks: { policies: Array<Policy> };
+      upgrades: { buildings: Array<Building> };
+    };
     techs: Array<{
       description: string;
       effectDesdc: string;
