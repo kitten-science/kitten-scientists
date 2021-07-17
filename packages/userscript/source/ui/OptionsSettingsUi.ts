@@ -25,7 +25,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     const itext = ucfirst(this._host.i18n("ui.options"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: "ks-" + toggleName });
+    const element = $("<li/>", { id: `ks-${toggleName}` });
 
     const label = $("<label/>", {
       text: itext,
@@ -33,7 +33,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     label.on("click", () => this._itemsButton.trigger("click"));
 
     const input = $("<input/>", {
-      id: "toggle-" + toggleName,
+      id: `toggle-${toggleName}`,
       type: "checkbox",
     });
     this._options.$enabled = input;
@@ -61,7 +61,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
     this._itemsButton = $("<div/>", {
-      id: "toggle-items-" + toggleName,
+      id: `toggle-items-${toggleName}`,
       text: "+",
       css: {
         cursor: "pointer",
@@ -168,7 +168,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
     if (option.subTrigger !== undefined) {
       const triggerButton = $("<div/>", {
-        id: "set-" + name + "-subTrigger",
+        id: `set-${name}-subTrigger`,
         text: this._host.i18n("ui.trigger"),
         //title: option.subTrigger,
         css: {

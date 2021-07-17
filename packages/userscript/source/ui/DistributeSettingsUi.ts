@@ -33,7 +33,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     label.on("click", () => this._itemsButton.trigger("click"));
 
     const input = $("<input/>", {
-      id: "toggle-" + toggleName,
+      id: `toggle-${toggleName}`,
       type: "checkbox",
     });
     this._options.$enabled = input;
@@ -61,7 +61,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
     this._itemsButton = $("<div/>", {
-      id: "toggle-items-" + toggleName,
+      id: `toggle-items-${toggleName}`,
       text: "+",
       css: {
         cursor: "pointer",
@@ -145,12 +145,12 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
 
     //Limited Distribution
     const labelElement = $("<label/>", {
-      for: "toggle-limited-" + name,
+      for: `toggle-limited-${name}`,
       text: this._host.i18n("ui.limit"),
     });
 
     const input = $("<input/>", {
-      id: "toggle-limited-" + name,
+      id: `toggle-limited-${name}`,
       type: "checkbox",
     }).data("option", option);
     option.$limited = input;
@@ -176,7 +176,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     element.append(input, labelElement);
 
     const maxButton = $("<div/>", {
-      id: "set-" + name + "-max",
+      id: `set-${name}-max`,
       text: this._host.i18n("ui.max", [option.max]),
       //title: option.max,
       css: {
