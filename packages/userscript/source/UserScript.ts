@@ -210,7 +210,7 @@ export class UserScript {
     this.resetActivitySummary();
   }
 
-  static async waitForGame(timeout = 30000): Promise<void> {
+  static async waitForGame(timeout = 30000): Promise<GamePage> {
     cdebug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
 
     if (timeout < 0) {
@@ -218,7 +218,7 @@ export class UserScript {
     }
 
     if (UserScript._isGameLoaded()) {
-      return;
+      return mustExist(UserScript._window.gamePage);
     }
 
     await sleep(2000);
