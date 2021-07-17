@@ -124,7 +124,6 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     label: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, label);
-    element.css("borderBottom", "1px solid rgba(185, 185, 185, 0.7)");
 
     //Limited Distribution
     const labelElement = $("<label/>", {
