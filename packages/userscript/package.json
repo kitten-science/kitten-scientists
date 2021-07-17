@@ -16,7 +16,7 @@
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "scripts": {
     "userscript:build": "webpack --config webpack.config.inject.js",
-    "userscript:release": "webpack --config webpack.config.userscript.js",
+    "userscript:release": "webpack --config webpack.config.userscript.js && rm -rf node_modules",
     "userscript:watch": "webpack --config webpack.config.inject.js --watch",
     "whoami": "echo userscript"
   },
