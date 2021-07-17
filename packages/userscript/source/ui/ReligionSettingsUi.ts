@@ -12,6 +12,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   private readonly _options: ReligionSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
+  private _itemsExpanded = false;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
@@ -91,7 +92,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     this._itemsButton = $("<div/>", {
       id: "toggle-items-" + toggleName,
-      text: this._host.i18n("ui.items"),
+      text: "+",
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -103,8 +104,15 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     this._itemsButton.on("click", () => {
       list.toggle();
-    });
 
+      this._itemsExpanded = !this._itemsExpanded;
+
+      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
+      this._itemsButton.prop(
+        "title",
+        this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+      );
+    });
     this._optionButtons = [
       this.getOption(
         "unicornPasture",
@@ -516,16 +524,14 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       "checked",
       this._options.addition.adore.enabled
     );
-    mustExist(
-      this._options.addition.adore.$subTrigger
-    )[0].title = this._options.addition.adore.subTrigger.toFixed(2);
+    mustExist(this._options.addition.adore.$subTrigger)[0].title =
+      this._options.addition.adore.subTrigger.toFixed(2);
     mustExist(this._options.addition.autoPraise.$enabled).prop(
       "checked",
       this._options.addition.autoPraise.enabled
     );
-    mustExist(
-      this._options.addition.autoPraise.$subTrigger
-    )[0].title = this._options.addition.autoPraise.subTrigger.toFixed(2);
+    mustExist(this._options.addition.autoPraise.$subTrigger)[0].title =
+      this._options.addition.autoPraise.subTrigger.toFixed(2);
     mustExist(this._options.addition.bestUnicornBuilding.$enabled).prop(
       "checked",
       this._options.addition.bestUnicornBuilding.enabled

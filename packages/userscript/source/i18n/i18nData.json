@@ -55,6 +55,8 @@
     "act.sun.discovers": "Kittens have discovered {0} {1} times.",
 
     "ui.items": "items",
+    "ui.itemsHide": "Hide options",
+    "ui.itemsShow": "Show options",
     "ui.disable.all": "disable all",
     "ui.enable.all": "enable all",
     "ui.craft.resources": "resources",
@@ -257,6 +259,8 @@
     "act.sun.discovers": "小猫在 {0} 方面获得 {1} 次顿悟",
 
     "ui.items": "项目",
+    "ui.itemsHide": null,
+    "ui.itemsShow": null,
     "ui.disable.all": "全部禁用",
     "ui.enable.all": "全部启用",
     "ui.craft.resources": "资源",
