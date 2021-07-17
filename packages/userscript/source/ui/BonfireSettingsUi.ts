@@ -11,6 +11,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   private readonly _options: BonfireSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
+  private _itemsExpanded = false;
   private readonly _triggerButton: JQuery<HTMLElement>;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
@@ -89,8 +90,9 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
     this._itemsButton = $("<div/>", {
-      id: "toggle-items-" + toggleName,
-      text: this._host.i18n("ui.items"),
+      id: `toggle-items-${toggleName}`,
+      text: "+",
+      title: this._host.i18n("ui.itemsShow"),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -102,6 +104,14 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
     this._itemsButton.on("click", () => {
       list.toggle();
+
+      this._itemsExpanded = !this._itemsExpanded;
+
+      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
+      this._itemsButton.prop(
+        "title",
+        this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+      );
     });
 
     this._optionButtons = [

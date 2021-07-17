@@ -11,6 +11,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
   private readonly _options: OptionsSettings;
 
   private readonly _itemsButton: JQuery<HTMLElement>;
+  private _itemsExpanded = false;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
@@ -61,7 +62,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
     this._itemsButton = $("<div/>", {
       id: "toggle-items-" + toggleName,
-      text: this._host.i18n("ui.items"),
+      text: "+",
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -73,6 +74,14 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
     this._itemsButton.on("click", () => {
       list.toggle();
+
+      this._itemsExpanded = !this._itemsExpanded;
+
+      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
+      this._itemsButton.prop(
+        "title",
+        this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+      );
     });
 
     this._optionButtons = [

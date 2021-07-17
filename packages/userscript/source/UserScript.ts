@@ -106,7 +106,7 @@ export class UserScript {
     }
 
     let value = this._i18nData[this._language][key as keyof typeof i18nData[SupportedLanguages]];
-    if (typeof value === "undefined") {
+    if (typeof value === "undefined" || value === null) {
       value = i18nData[DefaultLanguage][key as keyof typeof i18nData[SupportedLanguages]];
       if (!value) {
         cwarn(`i18n key '${key}' not found in default language.`);
