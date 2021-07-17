@@ -56,9 +56,8 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
     // Create "trigger" button in the item.
     this._triggerButton = $("<div/>", {
-      id: "trigger-" + toggleName,
+      id: `trigger-${toggleName}`,
       text: this._host.i18n("ui.trigger"),
-      //title: this._options.trigger,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -362,7 +361,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     });
 
     const maxButton = $("<div/>", {
-      id: "set-" + name + "-max",
+      id: `set-${name}-max`,
       //text: this._host.i18n("ui.max", []),
       //title: option.max,
       css: {

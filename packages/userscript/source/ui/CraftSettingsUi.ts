@@ -222,7 +222,8 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
     this._resourcesButton = $("<div/>", {
       id: "toggle-resource-controls",
-      text: this._host.i18n("ui.craft.resources"),
+      text: "🛠",
+      title: this._host.i18n("ui.craft.resources"),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -245,8 +246,8 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     });
 
     element.append(this._itemsButton);
-    element.append(this._resourcesButton);
     element.append(this._triggerButton);
+    element.append(this._resourcesButton);
     element.append(list);
     element.append(resourcesList);
 
