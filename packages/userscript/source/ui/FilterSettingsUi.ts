@@ -40,14 +40,11 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
 
     input.on("change", () => {
       if (input.is(":checked") && this._options.enabled === false) {
-        this._options.enabled = true;
-
+        this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-        //saveToKittenStorage();
       } else if (!input.is(":checked") && this._options.enabled === true) {
-        this._options.enabled = false;
+        this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
-        //saveToKittenStorage();
       }
     });
 

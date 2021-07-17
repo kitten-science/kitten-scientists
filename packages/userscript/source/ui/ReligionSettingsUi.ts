@@ -42,14 +42,11 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     input.on("change", () => {
       if (input.is(":checked") && this._options.enabled === false) {
-        this._options.enabled = true;
-
+        this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-        //saveToKittenStorage();
       } else if (!input.is(":checked") && this._options.enabled === true) {
-        this._options.enabled = false;
+        this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
-        //saveToKittenStorage();
       }
     });
 
@@ -77,8 +74,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       );
 
       if (value !== null) {
-        this._options.trigger = parseFloat(value);
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
         this._triggerButton[0].title = this._options.trigger.toFixed(2);
       }
     });
@@ -285,13 +281,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     element.append(list);
     list.append(additionOptions);
 
-    /*
-    button.on("click", () => {
-      additionList.toggle(false);
-    });
-    */
-
-    /*
+    /* TODO:
 
       The idea here, appears to be, to disable the "Build best unicorn building"
       option, whenever _any_ unicorn-related building is disabled in the build
@@ -355,9 +345,9 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       );
 
       if (value !== null) {
-        this._options.addition.adore.subTrigger = parseFloat(value);
-        //kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(
+          () => (this._options.addition.adore.subTrigger = parseFloat(value))
+        );
         triggerButtonAdore[0].title = this._options.addition.adore.subTrigger.toFixed(2);
       }
     });
@@ -402,9 +392,9 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       );
 
       if (value !== null) {
-        this._options.addition.autoPraise.subTrigger = parseFloat(value);
-        //kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(
+          () => (this._options.addition.autoPraise.subTrigger = parseFloat(value))
+        );
         triggerButtonAutoPraise[0].title = this._options.addition.autoPraise.subTrigger.toFixed(2);
       }
     });
@@ -436,7 +426,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     const bub = this._options.addition.bestUnicornBuilding;
     input.on("change", () => {
       if (input.is(":checked") && !bub.enabled) {
-        bub.enabled = true;
+        this._host.updateOptions(() => (bub.enabled = true));
         // enable all unicorn buildings
         for (const [unicornName, option] of objectEntries(this._options.items)) {
           if (
@@ -453,7 +443,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         }
         this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.best.unicorn")]);
       } else if (!input.is(":checked") && bub.enabled) {
-        bub.enabled = false;
+        this._host.updateOptions(() => (bub.enabled = false));
         this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.best.unicorn")]);
       }
       //kittenStorage.items[input.attr("id")] = bub.enabled;

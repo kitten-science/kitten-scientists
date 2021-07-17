@@ -125,14 +125,14 @@ export abstract class SettingsSectionUi<TState> {
         if (handler.onCheck) {
           handler.onCheck();
         } else {
-          option.enabled = true;
+          this._host.updateOptions(() => (option.enabled = true));
           clog("Unlogged action item");
         }
       } else if (!input.is(":checked") && option.enabled === true) {
         if (handler.onUnCheck) {
           handler.onUnCheck();
         } else {
-          option.enabled = false;
+          this._host.updateOptions(() => (option.enabled = false));
           clog("Unlogged action item");
         }
       }
@@ -173,7 +173,7 @@ export abstract class SettingsSectionUi<TState> {
         item.on("click", () => {
           item.remove();
           onAddHandler(resource);
-          //this._host.saveToKittenStorage();
+          this._host.updateOptions();
         });
 
         items.push(item);
@@ -250,7 +250,7 @@ export abstract class SettingsSectionUi<TState> {
       );
       if (value !== null) {
         this.setStockValue(name, parseInt(value), false);
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions();
       }
     });
 
@@ -260,9 +260,7 @@ export abstract class SettingsSectionUi<TState> {
         option.consume?.toFixed(2)
       );
       if (value !== null) {
-        option.consume = parseFloat(value);
-        //this.setConsumeRate(name, value);
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (option.consume = parseFloat(value)));
       }
     });
 
@@ -270,8 +268,7 @@ export abstract class SettingsSectionUi<TState> {
       if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
         container.remove();
         onDelHandler(name, option);
-        //this._removeResourceControl(name, false);
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions();
       }
     });
 
@@ -348,6 +345,7 @@ export abstract class SettingsSectionUi<TState> {
       if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
         container.remove();
         onDelHandler(name, option);
+        this._host.updateOptions();
       }
     });
 

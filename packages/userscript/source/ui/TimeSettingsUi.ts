@@ -41,14 +41,11 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
 
     input.on("change", () => {
       if (input.is(":checked") && this._options.enabled === false) {
-        this._options.enabled = true;
-
+        this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-        //saveToKittenStorage();
       } else if (!input.is(":checked") && this._options.enabled === true) {
-        this._options.enabled = false;
+        this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
-        //saveToKittenStorage();
       }
     });
 
@@ -76,8 +73,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       );
 
       if (value !== null) {
-        this._options.trigger = parseFloat(value);
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
         this._triggerButton[0].title = this._options.trigger.toFixed(2);
       }
     });

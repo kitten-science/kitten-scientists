@@ -34,10 +34,26 @@ export const DefaultLanguage: SupportedLanguages = "en";
 export class UserScript {
   readonly gamePage: GamePage;
   readonly i18nEngine: I18nEngine;
+
+  /**
+   * The currently selected language.
+   */
   private _language: SupportedLanguages;
 
+  /**
+   * All i18n literals of the userscript.
+   */
   private readonly _i18nData: typeof i18nData;
+
+  /**
+   * The settings to use for automations.
+   */
   options: Options = new Options();
+
+  /**
+   * Signals whether the options have been changed since they were last saved.
+   */
+  private _optionsDirty = false;
 
   private _activitySummary: ActivitySummary;
   private _userInterface: UserInterface;
@@ -65,11 +81,6 @@ export class UserScript {
     this._activitySummary = new ActivitySummary(this);
   }
 
-  injectOptions(options: Options): void {
-    this.options = options;
-    this._userInterface?.setState(this.options);
-  }
-
   async run(): Promise<void> {
     if (this._language in this._i18nData === false) {
       cwarn(
@@ -88,6 +99,27 @@ export class UserScript {
 
     this._userInterface.refreshUi();
     //engine.start(false);
+  }
+
+  /**
+   * Inject a different set of settings into the userscript.
+   * @param options The settings to use for the scientists.
+   */
+  injectOptions(options: Options): void {
+    this.options = options;
+    this._userInterface?.setState(this.options);
+  }
+
+  /**
+   * Signal that the settings should be saved again.
+   * @param updater A function that will manipulate the settings before they're saved.
+   */
+  updateOptions(updater?: (currentOptions: Options) => void): void {
+    cdebug("Settings will be updated.");
+    if (updater) {
+      updater(this.options);
+    }
+    this._optionsDirty = true;
   }
 
   /**

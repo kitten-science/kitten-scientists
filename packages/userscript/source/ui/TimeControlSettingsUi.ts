@@ -46,14 +46,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     input.on("change", () => {
       if (input.is(":checked") && this._options.enabled === false) {
-        this._options.enabled = true;
-
+        this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-        //saveToKittenStorage();
       } else if (!input.is(":checked") && this._options.enabled === true) {
-        this._options.enabled = false;
+        this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
-        //saveToKittenStorage();
       }
     });
 
@@ -146,9 +143,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       );
 
       if (value !== null) {
-        option.subTrigger = parseFloat(value);
-        //kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (option.subTrigger = parseFloat(value)));
         triggerButton[0].title = option.subTrigger.toFixed(2);
       }
     });
@@ -174,9 +169,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       );
 
       if (value !== null) {
-        option.maximum = parseFloat(value);
-        //kittenStorage.items[maximunButton.attr("id")] = option.maximum;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (option.maximum = parseFloat(value)));
         maximunButton[0].title = option.maximum.toFixed(0);
       }
     });
@@ -1091,9 +1084,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       );
 
       if (value !== null) {
-        option.subTrigger = parseFloat(value);
-        //kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (option.subTrigger = parseFloat(value)));
         triggerButton[0].title = option.subTrigger.toFixed(2);
       }
     });
@@ -1123,10 +1114,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     input.on("change", () => {
       if (input.is(":checked") && option[index] === false) {
-        option[index] = true;
+        this._host.updateOptions(() => (option[index] = true));
         this._host.imessage("time.skip.cycle.enable", [cycle.title]);
       } else if (!input.is(":checked") && option[index] === true) {
-        option[index] = false;
+        this._host.updateOptions(() => (option[index] = false));
         this._host.imessage("time.skip.cycle.disable", [cycle.title]);
       }
     });
@@ -1165,10 +1156,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     input.on("change", () => {
       if (input.is(":checked") && option.checkForReset === false) {
-        option.checkForReset = true;
+        this._host.updateOptions(() => (option.checkForReset = true));
         this._host.imessage("status.reset.check.enable", [elementLabel]);
       } else if (!input.is(":checked") && option.checkForReset === true) {
-        option.checkForReset = false;
+        this._host.updateOptions(() => (option.checkForReset = false));
         this._host.imessage("status.reset.check.disable", [elementLabel]);
       }
     });
@@ -1194,7 +1185,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       );
 
       if (value !== null) {
-        option.triggerForReset = parseInt(value);
+        this._host.updateOptions(() => (option.triggerForReset = parseInt(value)));
         minButton.text(this._host.i18n("ui.min", [option.triggerForReset]));
       }
     });
@@ -1225,10 +1216,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     input.on("change", () => {
       if (input.is(":checked") && option[season] === false) {
-        option[season] = true;
+        this._host.updateOptions(() => (option[season] = true));
         this._host.imessage("time.skip.season.enable", [iseason]);
       } else if (!input.is(":checked") && option[season] === true) {
-        option[season] = false;
+        this._host.updateOptions(() => (option[season] = false));
         this._host.imessage("time.skip.season.disable", [iseason]);
       }
     });
@@ -1296,7 +1287,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
               checkForReset: true,
               stockForReset: Infinity,
             };
-            this._options.resources[res.name] = option;
+            this._host.updateOptions(() => (this._options.resources[res.name] = option));
             $("#toggle-reset-list-resources").append(
               this.addNewResourceOptionForReset(res.name, res.title, option, (_name, _resource) => {
                 delete this._options.resources[_name];

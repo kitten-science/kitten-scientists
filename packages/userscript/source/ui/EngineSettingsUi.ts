@@ -36,12 +36,10 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
 
     input.on("change", () => {
       if (input.is(":checked") && options.enabled === false) {
-        options.enabled = true;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (options.enabled = true));
         this._host.engine.start(true);
       } else if (!input.is(":checked") && options.enabled === true) {
-        options.enabled = false;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (options.enabled = false));
         this._host.engine.stop(true);
       }
     });

@@ -40,14 +40,11 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
     input.on("change", () => {
       if (input.is(":checked") && this._options.enabled === false) {
-        this._options.enabled = true;
-
+        this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-        //saveToKittenStorage();
       } else if (!input.is(":checked") && this._options.enabled === true) {
-        this._options.enabled = false;
+        this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
-        //saveToKittenStorage();
       }
     });
 
@@ -155,9 +152,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       const input = element.children("input");
       input.unbind("change");
       input.on("change", () => {
-        option.enabled = input.prop("checked");
-        //kittenStorage.items[input.attr("id")] = option.enabled;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (option.enabled = input.prop("checked")));
         if (option.enabled) {
           document.body.setAttribute("data-ks-style", "");
         } else {
@@ -197,8 +192,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
         if (value !== null) {
           option.subTrigger = parseFloat(value);
-          //kittenStorage.items[triggerButton.attr("id")] = option.subTrigger;
-          //this._host.saveToKittenStorage();
+          this._host.updateOptions();
           triggerButton[0].title = option.subTrigger.toFixed(2);
         }
       });
