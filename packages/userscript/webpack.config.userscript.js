@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const dev = process.env.NODE_ENV === "development";
+const isDevBuild = process.env.NODE_ENV === "development";
 const path = require("path");
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
@@ -8,7 +8,7 @@ const WebpackUserscript = require("webpack-userscript");
 
 module.exports = {
   entry: path.resolve(__dirname, "source", "index.ts"),
-  mode: dev ? "development" : "production",
+  mode: isDevBuild ? "development" : "production",
   module: {
     rules: [
       {
@@ -19,12 +19,12 @@ module.exports = {
     ],
   },
   optimization: {
-    minimize: true,
+    minimize: !isDevBuild,
     minimizer: [new TerserPlugin()],
   },
   output: {
     path: path.resolve(__dirname, "bundle"),
-    filename: "kitten-scientists.user.js",
+    filename: `kitten-scientists${isDevBuild ? "-dev" : ""}.user.js`,
   },
   plugins: [
     new WebpackUserscript({
