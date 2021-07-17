@@ -313,7 +313,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/terser-webpack-plugin@npm:^4":
+"@types/terser-webpack-plugin@npm:4.2.2":
   version: 4.2.2
   resolution: "@types/terser-webpack-plugin@npm:4.2.2"
   dependencies:
@@ -6137,6 +6137,25 @@ resolve@^1.9.0:
   languageName: node
   linkType: hard
 
+"terser-webpack-plugin@npm:4.2.3":
+  version: 4.2.3
+  resolution: "terser-webpack-plugin@npm:4.2.3"
+  dependencies:
+    cacache: ^15.0.5
+    find-cache-dir: ^3.3.1
+    jest-worker: ^26.5.0
+    p-limit: ^3.0.2
+    schema-utils: ^3.0.0
+    serialize-javascript: ^5.0.1
+    source-map: ^0.6.1
+    terser: ^5.3.4
+    webpack-sources: ^1.4.3
+  peerDependencies:
+    webpack: ^4.0.0 || ^5.0.0
+  checksum: d628fb7978add1bb862cd75bc875919d5281d0db92440731eb3b52d810ee02a71cbe61a58699f0eb918aa34f5ce36e82cc422cfc9a7ec4a460ed48f080a9af84
+  languageName: node
+  linkType: hard
+
 "terser-webpack-plugin@npm:^1.4.3":
   version: 1.4.5
   resolution: "terser-webpack-plugin@npm:1.4.5"
@@ -6153,25 +6172,6 @@ resolve@^1.9.0:
   peerDependencies:
     webpack: ^4.0.0
   checksum: 8fadaece64d2e67bc5794e8fc2944d693f644c899a489e78ca64e5b90dfed1148f171a084e738df6770c102553d6b4a5dfe582d98b3560004f2b91bca6ad919e
-  languageName: node
-  linkType: hard
-
-"terser-webpack-plugin@npm:^4":
-  version: 4.2.3
-  resolution: "terser-webpack-plugin@npm:4.2.3"
-  dependencies:
-    cacache: ^15.0.5
-    find-cache-dir: ^3.3.1
-    jest-worker: ^26.5.0
-    p-limit: ^3.0.2
-    schema-utils: ^3.0.0
-    serialize-javascript: ^5.0.1
-    source-map: ^0.6.1
-    terser: ^5.3.4
-    webpack-sources: ^1.4.3
-  peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: d628fb7978add1bb862cd75bc875919d5281d0db92440731eb3b52d810ee02a71cbe61a58699f0eb918aa34f5ce36e82cc422cfc9a7ec4a460ed48f080a9af84
   languageName: node
   linkType: hard
 
@@ -6515,9 +6515,9 @@ typescript@4.2.4:
   dependencies:
     "@types/dojo": 1.9.43
     "@types/jquery": 3.5.6
-    "@types/terser-webpack-plugin": ^4
+    "@types/terser-webpack-plugin": 4.2.2
     pnp-webpack-plugin: 1.6.4
-    terser-webpack-plugin: ^4
+    terser-webpack-plugin: 4.2.3
     ts-loader: 8.2.0
     tslib: ^2.2.0
     typescript: 4.2.4
