@@ -7,7 +7,7 @@ Kitten Scientists (KS) is a simple automation script for the complex [Kittens Ga
 Create the following JavaScript bookmarklet (create a new bookmark and paste this as the URL):
 
 ```js
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://cdn.jsdelivr.net/gh/oliversalzburg/cbc-kitten-scientists@master/kitten-scientists.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://cdn.jsdelivr.net/gh/oliversalzburg/cbc-kitten-scientists@master/packages/userscript/bundle/kitten-scientists.user.js';d.body.appendChild(s);})();
 ```
 
 ### Manual Installation
@@ -17,11 +17,7 @@ You can also permanently install Kitten Scientists with a userscript manager.
 - On **Firefox**, you'd want to use [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
 - On **Chrome** and **Opera**, you'd want to use [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
 
-Now simply [open the script](https://raw.githubusercontent.com/cameroncondry/cbc-kitten-scientists/master/kitten-scientists.user.js) and you should be prompted to install it.
-
-### Troubleshooting
-
-In the event the script is not up to date, try purging the cache at: https://purge.jsdelivr.net/gh/cameroncondry/cbc-kitten-scientists@master
+Now simply [open the script](https://raw.githubusercontent.com/oliversalzburg/cbc-kitten-scientists/master/packages/userscript/bundle/kitten-scientists.user.js) and you should be prompted to install it.
 
 ## Introduction
 
@@ -134,8 +130,8 @@ Note that _enabling_ a filter will cause the message to **not** be logged. This 
 
 If you would like to contribute to the Kitten Scientists, then you can do so in these ways:
 
-- [Submit issues or bugs](https://github.com/cameroncondry/cbc-kitten-scientists/issues/new) you find, or functionality that would improve the project.
-- Fork the repository, add some functionality, then [submit a pull request](https://github.com/cameroncondry/cbc-kitten-scientists/compare).
+- [Submit issues or bugs](https://github.com/oliversalzburg/cbc-kitten-scientists/issues/new) you find, or functionality that would improve the project.
+- Fork the repository, add some functionality, then [submit a pull request](https://github.com/oliversalzburg/cbc-kitten-scientists/compare).
 
 Thanks to these past and present contributors!
 
