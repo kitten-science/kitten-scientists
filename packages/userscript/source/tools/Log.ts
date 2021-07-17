@@ -11,3 +11,6 @@ export function clog(...args: Array<any>): void {
 export function cwarn(...args: Array<any>): void {
   console.warn("👩‍🔬", ...args);
 }
+export function cerror(...args: Array<any>): void {
+  console.error("👩‍🔬", ...args);
+}
