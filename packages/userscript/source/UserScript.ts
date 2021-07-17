@@ -8,6 +8,7 @@ import {
 import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
 import { Options } from "./options/Options";
+import { SettingsStorage } from "./options/SettingsStorage";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
@@ -55,6 +56,8 @@ export class UserScript {
    */
   private _optionsDirty = false;
 
+  private _intervalSaveSettings: number | undefined = undefined;
+
   private _activitySummary: ActivitySummary;
   private _userInterface: UserInterface;
   engine: Engine;
@@ -79,6 +82,9 @@ export class UserScript {
     this.injectOptions(new Options());
 
     this._activitySummary = new ActivitySummary(this);
+
+    // Every 30 seconds, check if we need to save our settings.
+    this._intervalSaveSettings = setInterval(this._checkOptions.bind(this), 30 * 1000);
   }
 
   async run(): Promise<void> {
@@ -120,6 +126,15 @@ export class UserScript {
       updater(this.options);
     }
     this._optionsDirty = true;
+  }
+
+  private _checkOptions(): void {
+    if (this._optionsDirty) {
+      this._optionsDirty = false;
+      const toExport = this.options.asLegacyOptions();
+      SettingsStorage.setLegacySettings(toExport);
+      clog("Kitten Scientists settings saved.");
+    }
   }
 
   /**

@@ -54,7 +54,7 @@ export class Engine {
   private readonly _villageManager: TabManager;
   private readonly _cacheManager: CacheManager;
 
-  private loop: number | undefined = undefined;
+  private _intervalMainLoop: number | undefined = undefined;
 
   constructor(host: UserScript) {
     this._host = host;
@@ -80,13 +80,13 @@ export class Engine {
    * @param msg Should we print to the log that the engine was started?
    */
   start(msg = true): void {
-    if (this.loop) {
+    if (this._intervalMainLoop) {
       return;
     }
 
     // TODO: `_iterate` is async, but it isn't awaited.
     //       Instead of using an interval, this should use a tail-controlled timeout.
-    this.loop = setInterval(this._iterate.bind(this), this._host.options.interval);
+    this._intervalMainLoop = setInterval(this._iterate.bind(this), this._host.options.interval);
 
     if (msg) {
       this._host.imessage("status.ks.enable");
@@ -98,12 +98,12 @@ export class Engine {
    * @param msg Should we print to the log that the engine was stopped?
    */
   stop(msg = true): void {
-    if (!this.loop) {
+    if (!this._intervalMainLoop) {
       return;
     }
 
-    clearInterval(this.loop);
-    this.loop = undefined;
+    clearInterval(this._intervalMainLoop);
+    this._intervalMainLoop = undefined;
 
     if (msg) {
       this._host.imessage("status.ks.disable");

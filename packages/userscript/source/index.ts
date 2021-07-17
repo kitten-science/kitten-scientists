@@ -32,12 +32,4 @@ import { UserScript } from "./UserScript";
   }
 
   userScript.run();
-
-  /*
-  setInterval(() => {
-    const toExport = options.asLegacyOptions();
-    SettingsStorage.setLegacySettings(toExport);
-    clog("Kitten Scientists settings saved.");
-  }, 30 * 1000);
-  */
 })();
