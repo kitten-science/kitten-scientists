@@ -71,6 +71,21 @@ export abstract class SettingsSectionUi<TState> {
     return containerList;
   }
 
+  protected getHeader(text: string): JQuery<HTMLElement> {
+    const headerElement = $("<li/>");
+    const header = $("<label/>", {
+      text,
+      css: {
+        display: "inline-block",
+        minWidth: "80px",
+      },
+    });
+
+    headerElement.append(header);
+
+    return headerElement;
+  }
+
   protected getOption(
     name: string,
     option: { enabled: boolean; $enabled?: JQuery<HTMLElement> },
