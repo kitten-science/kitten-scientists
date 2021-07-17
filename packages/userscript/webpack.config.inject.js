@@ -2,6 +2,7 @@
 
 const path = require("path");
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   devtool: "inline-source-map",
@@ -20,6 +21,9 @@ module.exports = {
     path: path.resolve(__dirname, "output"),
     filename: "kitten-scientists.inject.js",
   },
+  plugins: [
+    new webpack.NormalModuleReplacementPlugin(/.\/fixtures\/savegame/, "./fixtures/lategame"),
+  ],
   resolve: {
     extensions: [".ts", ".js"],
     plugins: [PnpWebpackPlugin],
