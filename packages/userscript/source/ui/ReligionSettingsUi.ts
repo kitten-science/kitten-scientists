@@ -114,6 +114,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       );
     });
     this._optionButtons = [
+      this.getHeader("Ziggurats"),
       this.getOption(
         "unicornPasture",
         this._options.items.unicornPasture,
@@ -173,6 +174,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         true
       ),
 
+      this.getHeader("Order of the Sun"),
       this.getOption(
         "solarchant",
         this._options.items.solarchant,
@@ -225,6 +227,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         true
       ),
 
+      this.getHeader("Cryptotheology"),
       this.getOption(
         "blackObelisk",
         this._options.items.blackObelisk,
@@ -268,34 +271,19 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       this.getOption(
         "holyGenocide",
         this._options.items.holyGenocide,
-        this._host.i18n("$religion.tu.holyGenocide.label")
+        this._host.i18n("$religion.tu.holyGenocide.label"),
+        true
       ),
     ];
 
     list.append(...this._optionButtons);
 
-    const additionList = this.getAdditionOptions();
-    const addition = $("<div/>", {
-      id: "toggle-addition-controls",
-      text: this._host.i18n("ui.faith.addtion"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
-      },
-    });
-    addition.on("click", () => {
-      list.toggle(false);
-      additionList.toggle();
-    });
+    const additionOptions = this.getAdditionOptions();
 
     element.append(this._itemsButton);
-    element.append(addition);
     element.append(this._triggerButton);
     element.append(list);
-    element.append(additionList);
+    list.append(additionOptions);
 
     /*
     button.on("click", () => {
@@ -326,24 +314,21 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     this.element = element;
   }
 
-  getAdditionOptions(): JQuery<HTMLElement> {
-    const toggleName = "faith-addition";
-    const list = this.getOptionHead(toggleName);
-
-    const addi = this._options.addition;
+  getAdditionOptions(): Array<JQuery<HTMLElement>> {
+    const nodeHeader = this.getHeader("Additional options");
 
     const nodeAdore = this.getOption(
       "adore",
-      addi.adore,
+      this._options.addition.adore,
       this._host.i18n("option.faith.adore"),
       false,
       {
         onCheck: () => {
-          addi.adore.enabled = true;
+          this._options.addition.adore.enabled = true;
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.adore")]);
         },
         onUnCheck: () => {
-          addi.adore.enabled = false;
+          this._options.addition.adore.enabled = false;
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.adore")]);
         },
       }
@@ -360,20 +345,20 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         paddingRight: "5px",
         textShadow: "3px 3px 4px gray",
       },
-    }).data("option", addi.adore);
-    addi.adore.$subTrigger = triggerButtonAdore;
+    }).data("option", this._options.addition.adore);
+    this._options.addition.adore.$subTrigger = triggerButtonAdore;
 
     triggerButtonAdore.on("click", () => {
       const value = window.prompt(
         this._host.i18n("adore.trigger.set"),
-        addi.adore.subTrigger.toFixed(2)
+        this._options.addition.adore.subTrigger.toFixed(2)
       );
 
       if (value !== null) {
-        addi.adore.subTrigger = parseFloat(value);
+        this._options.addition.adore.subTrigger = parseFloat(value);
         //kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
         //this._host.saveToKittenStorage();
-        triggerButtonAdore[0].title = addi.adore.subTrigger.toFixed(2);
+        triggerButtonAdore[0].title = this._options.addition.adore.subTrigger.toFixed(2);
       }
     });
 
@@ -381,16 +366,16 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const nodeAutoPraise = this.getOption(
       "autoPraise",
-      addi.autoPraise,
+      this._options.addition.autoPraise,
       this._host.i18n("option.praise"),
       false,
       {
         onCheck: () => {
-          addi.autoPraise.enabled = true;
+          this._options.addition.autoPraise.enabled = true;
           this._host.imessage("status.sub.enable", [this._host.i18n("option.praise")]);
         },
         onUnCheck: () => {
-          addi.autoPraise.enabled = false;
+          this._options.addition.autoPraise.enabled = false;
           this._host.imessage("status.sub.disable", [this._host.i18n("option.praise")]);
         },
       }
@@ -399,7 +384,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     const triggerButtonAutoPraise = $("<div/>", {
       id: "set-autoPraise-subTrigger",
       text: this._host.i18n("ui.trigger"),
-      title: addi.autoPraise.subTrigger,
+      title: this._options.addition.autoPraise.subTrigger,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -407,20 +392,20 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         paddingRight: "5px",
         textShadow: "3px 3px 4px gray",
       },
-    }).data("option", addi.autoPraise);
-    addi.autoPraise.$subTrigger = triggerButtonAutoPraise;
+    }).data("option", this._options.addition.autoPraise);
+    this._options.addition.autoPraise.$subTrigger = triggerButtonAutoPraise;
 
     triggerButtonAutoPraise.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [this._host.i18n("option.praise")]),
-        addi.autoPraise.subTrigger.toFixed(2)
+        this._options.addition.autoPraise.subTrigger.toFixed(2)
       );
 
       if (value !== null) {
-        addi.autoPraise.subTrigger = parseFloat(value);
+        this._options.addition.autoPraise.subTrigger = parseFloat(value);
         //kittenStorage.items[triggerButton[0].id] = addi[itemName].subTrigger;
         //this._host.saveToKittenStorage();
-        triggerButtonAutoPraise[0].title = addi.autoPraise.subTrigger.toFixed(2);
+        triggerButtonAutoPraise[0].title = this._options.addition.autoPraise.subTrigger.toFixed(2);
       }
     });
 
@@ -428,16 +413,16 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const nodeBestUnicornBuilding = this.getOption(
       "bestUnicornBuilding",
-      addi.bestUnicornBuilding,
+      this._options.addition.bestUnicornBuilding,
       this._host.i18n("option.faith.best.unicorn"),
       false,
       {
         onCheck: () => {
-          addi.bestUnicornBuilding.enabled = true;
+          this._options.addition.bestUnicornBuilding.enabled = true;
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.best.unicorn")]);
         },
         onUnCheck: () => {
-          addi.bestUnicornBuilding.enabled = false;
+          this._options.addition.bestUnicornBuilding.enabled = false;
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.best.unicorn")]);
         },
       }
@@ -448,7 +433,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       .prop("title", this._host.i18n("option.faith.best.unicorn.desc"));
     const input = nodeBestUnicornBuilding.children("input");
     input.unbind("change");
-    const bub = addi.bestUnicornBuilding;
+    const bub = this._options.addition.bestUnicornBuilding;
     input.on("change", () => {
       if (input.is(":checked") && !bub.enabled) {
         bub.enabled = true;
@@ -477,27 +462,22 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const nodeTranscend = this.getOption(
       "transcend",
-      addi.transcend,
+      this._options.addition.transcend,
       this._host.i18n("option.faith.transcend"),
       false,
       {
         onCheck: () => {
-          addi.transcend.enabled = true;
+          this._options.addition.transcend.enabled = true;
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.transcend")]);
         },
         onUnCheck: () => {
-          addi.transcend.enabled = false;
+          this._options.addition.transcend.enabled = false;
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.transcend")]);
         },
       }
     );
 
-    list.append(nodeBestUnicornBuilding);
-    list.append(nodeAutoPraise);
-    list.append(nodeAdore);
-    list.append(nodeTranscend);
-
-    return list;
+    return [nodeHeader, nodeBestUnicornBuilding, nodeAutoPraise, nodeAdore, nodeTranscend];
   }
 
   setState(state: ReligionSettings): void {
