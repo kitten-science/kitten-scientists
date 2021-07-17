@@ -260,6 +260,7 @@ export type GamePage = {
     }>;
     hasRes: (resources: Array<Price>) => boolean;
   };
+  saveImportDropboxText(lzdata: string, callback: (error?: Error) => unknown): void;
   science: {
     get: (name: "civil" | "cryptotheology" | "drama" | "nuclearFission") => { researched: boolean };
     getPolicy: (name: Policy) => {
