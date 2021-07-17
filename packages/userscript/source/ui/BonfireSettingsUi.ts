@@ -114,6 +114,35 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     });
 
     this._optionButtons = [
+      this._getHeader(this._host.i18n("$buildings.group.food")),
+      this._getLimitedOption(
+        "field",
+        this._options.items.field,
+        this._host.i18n("$buildings.field.label")
+      ),
+      this._getLimitedOption(
+        "pasture",
+        this._options.items.pasture,
+        this._host.i18n("$buildings.pasture.label")
+      ),
+      this._getLimitedOption(
+        "solarFarm",
+        this._options.items.solarFarm,
+        `⮤ ${this._host.i18n("$buildings.solarfarm.label")}`
+      ),
+      this._getLimitedOption(
+        "aqueduct",
+        this._options.items.aqueduct,
+        this._host.i18n("$buildings.aqueduct.label")
+      ),
+      this._getLimitedOption(
+        "hydroPlant",
+        this._options.items.hydroPlant,
+        `⮤ ${this._host.i18n("$buildings.hydroplant.label")}`,
+        true
+      ),
+
+      this._getHeader(this._host.i18n("$buildings.group.population")),
       this._getLimitedOption(
         "hut",
         this._options.items.hut,
@@ -131,102 +160,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         true
       ),
 
-      this._getLimitedOption(
-        "workshop",
-        this._options.items.workshop,
-        this._host.i18n("$buildings.workshop.label")
-      ),
-      this._getLimitedOption(
-        "factory",
-        this._options.items.factory,
-        this._host.i18n("$buildings.factory.label"),
-        true
-      ),
-
-      this._getLimitedOption(
-        "field",
-        this._options.items.field,
-        this._host.i18n("$buildings.field.label")
-      ),
-      this._getLimitedOption(
-        "pasture",
-        this._options.items.pasture,
-        this._host.i18n("$buildings.pasture.label")
-      ),
-      this._getLimitedOption(
-        "solarFarm",
-        this._options.items.solarFarm,
-        this._host.i18n("$buildings.solarfarm.label")
-      ),
-      this._getLimitedOption(
-        "mine",
-        this._options.items.mine,
-        this._host.i18n("$buildings.mine.label")
-      ),
-      this._getLimitedOption(
-        "lumberMill",
-        this._options.items.lumberMill,
-        this._host.i18n("$buildings.lumberMill.label")
-      ),
-      this._getLimitedOption(
-        "aqueduct",
-        this._options.items.aqueduct,
-        this._host.i18n("$buildings.aqueduct.label")
-      ),
-      this._getLimitedOption(
-        "hydroPlant",
-        this._options.items.hydroPlant,
-        this._host.i18n("$buildings.hydroplant.label")
-      ),
-      this._getLimitedOption(
-        "oilWell",
-        this._options.items.oilWell,
-        this._host.i18n("$buildings.oilWell.label")
-      ),
-      this._getLimitedOption(
-        "quarry",
-        this._options.items.quarry,
-        this._host.i18n("$buildings.quarry.label"),
-        true
-      ),
-
-      this._getLimitedOption(
-        "smelter",
-        this._options.items.smelter,
-        this._host.i18n("$buildings.smelter.label")
-      ),
-      this._getLimitedOption(
-        "biolab",
-        this._options.items.biolab,
-        this._host.i18n("$buildings.biolab.label")
-      ),
-      this._getLimitedOption(
-        "calciner",
-        this._options.items.calciner,
-        this._host.i18n("$buildings.calciner.label")
-      ),
-      this._getLimitedOption(
-        "reactor",
-        this._options.items.reactor,
-        this._host.i18n("$buildings.reactor.label")
-      ),
-      this._getLimitedOption(
-        "accelerator",
-        this._options.items.accelerator,
-        this._host.i18n("$buildings.accelerator.label")
-      ),
-      this._getLimitedOption(
-        "steamworks",
-        this._options.items.steamworks,
-        this._host.i18n("$buildings.steamworks.label")
-      ),
-      this._getLimitedOption(
-        "magneto",
-        this._options.items.magneto,
-        this._host.i18n("$buildings.magneto.label"),
-        true
-      ),
-
+      this._getHeader(this._host.i18n("$buildings.group.science")),
       this._getLimitedOption(
         "library",
         this._options.items.library,
@@ -235,7 +169,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._getLimitedOption(
         "dataCenter",
         this._options.items.dataCenter,
-        this._host.i18n("$buildings.dataCenter.label")
+        `⮤ ${this._host.i18n("$buildings.dataCenter.label")}`
       ),
       this._getLimitedOption(
         "academy",
@@ -245,62 +179,16 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._getLimitedOption(
         "observatory",
         this._options.items.observatory,
-        this._host.i18n("$buildings.observatory.label"),
+        `⮤ ${this._host.i18n("$buildings.observatory.label")}`
+      ),
+      this._getLimitedOption(
+        "biolab",
+        this._options.items.biolab,
+        this._host.i18n("$buildings.biolab.label"),
         true
       ),
 
-      this._getLimitedOption(
-        "amphitheatre",
-        this._options.items.amphitheatre,
-        this._host.i18n("$buildings.amphitheatre.label")
-      ),
-      this._getLimitedOption(
-        "broadcastTower",
-        this._options.items.broadcastTower,
-        this._host.i18n("$buildings.broadcasttower.label")
-      ),
-      this._getLimitedOption(
-        "tradepost",
-        this._options.items.tradepost,
-        this._host.i18n("$buildings.tradepost.label")
-      ),
-      this._getLimitedOption(
-        "chapel",
-        this._options.items.chapel,
-        this._host.i18n("$buildings.chapel.label")
-      ),
-      this._getLimitedOption(
-        "temple",
-        this._options.items.temple,
-        this._host.i18n("$buildings.temple.label")
-      ),
-      this._getLimitedOption(
-        "mint",
-        this._options.items.mint,
-        this._host.i18n("$buildings.mint.label")
-      ),
-      this._getLimitedOption(
-        "ziggurat",
-        this._options.items.ziggurat,
-        this._host.i18n("$buildings.ziggurat.label")
-      ),
-      this._getLimitedOption(
-        "chronosphere",
-        this._options.items.chronosphere,
-        this._host.i18n("$buildings.chronosphere.label")
-      ),
-      this._getLimitedOption(
-        "aiCore",
-        this._options.items.aiCore,
-        this._host.i18n("$buildings.aicore.label")
-      ),
-      this._getLimitedOption(
-        "brewery",
-        this._options.items.brewery,
-        this._host.i18n("$buildings.brewery.label"),
-        true
-      ),
-
+      this._getHeader(this._host.i18n("$buildings.group.storage")),
       this._getLimitedOption(
         "barn",
         this._options.items.barn,
@@ -318,6 +206,133 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         true
       ),
 
+      this._getHeader(this._host.i18n("$buildings.group.resource")),
+      this._getLimitedOption(
+        "mine",
+        this._options.items.mine,
+        this._host.i18n("$buildings.mine.label")
+      ),
+      this._getLimitedOption(
+        "quarry",
+        this._options.items.quarry,
+        this._host.i18n("$buildings.quarry.label")
+      ),
+      this._getLimitedOption(
+        "lumberMill",
+        this._options.items.lumberMill,
+        this._host.i18n("$buildings.lumberMill.label")
+      ),
+      this._getLimitedOption(
+        "oilWell",
+        this._options.items.oilWell,
+        this._host.i18n("$buildings.oilWell.label")
+      ),
+      this._getLimitedOption(
+        "accelerator",
+        this._options.items.accelerator,
+        this._host.i18n("$buildings.accelerator.label"),
+        true
+      ),
+
+      this._getHeader(this._host.i18n("$buildings.group.industry")),
+      this._getLimitedOption(
+        "steamworks",
+        this._options.items.steamworks,
+        this._host.i18n("$buildings.steamworks.label")
+      ),
+      this._getLimitedOption(
+        "magneto",
+        this._options.items.magneto,
+        this._host.i18n("$buildings.magneto.label"),
+        true
+      ),
+      this._getLimitedOption(
+        "smelter",
+        this._options.items.smelter,
+        this._host.i18n("$buildings.smelter.label")
+      ),
+      this._getLimitedOption(
+        "calciner",
+        this._options.items.calciner,
+        this._host.i18n("$buildings.calciner.label")
+      ),
+      this._getLimitedOption(
+        "factory",
+        this._options.items.factory,
+        this._host.i18n("$buildings.factory.label")
+      ),
+      this._getLimitedOption(
+        "reactor",
+        this._options.items.reactor,
+        this._host.i18n("$buildings.reactor.label"),
+        true
+      ),
+
+      this._getHeader(this._host.i18n("$buildings.group.culture")),
+      this._getLimitedOption(
+        "amphitheatre",
+        this._options.items.amphitheatre,
+        this._host.i18n("$buildings.amphitheatre.label")
+      ),
+      this._getLimitedOption(
+        "broadcastTower",
+        this._options.items.broadcastTower,
+        `⮤ ${this._host.i18n("$buildings.broadcasttower.label")}`
+      ),
+      this._getLimitedOption(
+        "chapel",
+        this._options.items.chapel,
+        this._host.i18n("$buildings.chapel.label")
+      ),
+      this._getLimitedOption(
+        "temple",
+        this._options.items.temple,
+        this._host.i18n("$buildings.temple.label"),
+        true
+      ),
+
+      this._getHeader(this._host.i18n("$buildings.group.other")),
+      this._getLimitedOption(
+        "workshop",
+        this._options.items.workshop,
+        this._host.i18n("$buildings.workshop.label")
+      ),
+      this._getLimitedOption(
+        "tradepost",
+        this._options.items.tradepost,
+        this._host.i18n("$buildings.tradepost.label")
+      ),
+      this._getLimitedOption(
+        "mint",
+        this._options.items.mint,
+        this._host.i18n("$buildings.mint.label")
+      ),
+      this._getLimitedOption(
+        "brewery",
+        this._options.items.brewery,
+        this._host.i18n("$buildings.brewery.label"),
+        true
+      ),
+
+      this._getHeader(this._host.i18n("$buildings.group.megastructures")),
+      this._getLimitedOption(
+        "ziggurat",
+        this._options.items.ziggurat,
+        this._host.i18n("$buildings.ziggurat.label")
+      ),
+      this._getLimitedOption(
+        "chronosphere",
+        this._options.items.chronosphere,
+        this._host.i18n("$buildings.chronosphere.label")
+      ),
+      this._getLimitedOption(
+        "aiCore",
+        this._options.items.aiCore,
+        this._host.i18n("$buildings.aicore.label"),
+        true
+      ),
+
+      this._getHeader(this._host.i18n("$buildings.group.zebraBuildings")),
       this._getLimitedOption(
         "zebraOutpost",
         this._options.items.zebraOutpost,
