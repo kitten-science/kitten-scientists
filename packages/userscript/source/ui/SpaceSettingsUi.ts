@@ -26,7 +26,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     const itext = ucfirst(this._host.i18n("ui.space"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: "ks-" + toggleName });
+    const element = $("<li/>", { id: `ks-${toggleName}` });
 
     const label = $("<label/>", {
       text: itext,
@@ -34,7 +34,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     label.on("click", () => this._itemsButton.trigger("click"));
 
     const input = $("<input/>", {
-      id: "toggle-" + toggleName,
+      id: `toggle-${toggleName}`,
       type: "checkbox",
     });
     this._options.$enabled = input;
@@ -56,7 +56,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
 
     // Create "trigger" button in the item.
     this._triggerButton = $("<div/>", {
-      id: "trigger-" + toggleName,
+      id: `trigger-${toggleName}`,
       text: this._host.i18n("ui.trigger"),
       //title: this._options.trigger,
       css: {
@@ -90,7 +90,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
 
     this._itemsButton = $("<div/>", {
-      id: "toggle-items-" + toggleName,
+      id: `toggle-items-${toggleName}`,
       text: "+",
       css: {
         cursor: "pointer",
@@ -273,7 +273,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     });
 
     const maxButton = $("<div/>", {
-      id: "set-" + name + "-max",
+      id: `set-${name}-max`,
       text: this._host.i18n("ui.max", [option.max]),
       //title: option.max,
       css: {
