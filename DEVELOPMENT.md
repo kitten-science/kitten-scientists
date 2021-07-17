@@ -16,21 +16,21 @@ Additionally, you will need to have [Docker](https://www.docker.com/get-started)
 
 1. Start a watcher to continuously rebuild KS when you make code changes.
 
-```shell
-yarn userscript:watch
-```
+   ```shell
+   yarn userscript:watch
+   ```
 
 > This task can also be started directly in VS Code, using the **Run Task** command.
 
 1. Build the development container and start it.
 
-```shell
-yarn devcontainer:run
-```
+   ```shell
+   yarn devcontainer:run
+   ```
 
-The script prints the URL where you can now play the game with KS installed.
+   The script prints the URL where you can now play the game with KS installed.
 
-You will need to manually reload the page after each build to get the latest changes in the browser.
+   You will need to manually reload the page after each build to get the latest changes in the browser.
 
 ### Type-checking
 
