@@ -31,7 +31,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const itext = ucfirst(this._host.i18n("ui.timeCtrl"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: `ks-${toggleName}` });
+    const element = this._getSettingsPanel(toggleName);
 
     const label = $("<label/>", {
       text: itext,
@@ -58,22 +58,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this.getOptionHead(toggleName);
+    const list = this._getOptionHead(toggleName);
 
-    // Add a border on the element
-    element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.7)");
-
-    this._itemsButton = $("<div/>", {
-      id: `toggle-items-${toggleName}`,
-      text: "+",
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
-
+    this._itemsButton = this._getItemsToggle(toggleName);
     this._itemsButton.on("click", () => {
       list.toggle();
 
@@ -250,7 +237,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const element = this.getOption(name, option, label);
 
     // Bonfire reset options
-    const resetBuildList = this.getOptionHead("reset-build");
+    const resetBuildList = this._getOptionHead("reset-build");
     resetBuildList.append(
       this._getResetOption(
         "hut",
@@ -515,7 +502,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     );
 
     // Space reset options
-    const resetSpaceList = this.getOptionHead("reset-space");
+    const resetSpaceList = this._getOptionHead("reset-space");
     resetSpaceList.append(
       this._getResetOption(
         "spaceElevator",
@@ -683,7 +670,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     }
 
     // Religion reset options.
-    const resetReligionList = this.getOptionHead("reset-religion");
+    const resetReligionList = this._getOptionHead("reset-religion");
     resetReligionList.append(
       this._getResetOption(
         "unicornPasture",
@@ -873,7 +860,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       )
     );
 
-    const resetTimeList = this.getOptionHead("reset-time");
+    const resetTimeList = this._getOptionHead("reset-time");
     resetTimeList.append(
       this._getResetOption(
         "temporalBattery",
