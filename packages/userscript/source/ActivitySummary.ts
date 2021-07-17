@@ -186,14 +186,14 @@ export class ActivitySummary {
 
       let duration = "";
       if (years > 0) {
-        duration += years + " ";
+        duration += `${years} `;
         duration +=
           years === 1 ? this._host.i18n("summary.year") : this._host.i18n("summary.years");
       }
 
       if (days >= 0) {
         if (years > 0) duration += this._host.i18n("summary.separator");
-        duration += roundToTwo(days) + " ";
+        duration += `${roundToTwo(days)} `;
         duration += days === 1 ? this._host.i18n("summary.day") : this._host.i18n("summary.days");
       }
 

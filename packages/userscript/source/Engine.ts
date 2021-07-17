@@ -1938,9 +1938,7 @@ export class Engine {
           }
           cultureVal = craftManager.getValueAvailable("culture", true);
           if (cultureVal < emBulk.priceSum) {
-            this._host.warning(
-              "Something has gone horribly wrong." + [emBulk.priceSum, cultureVal]
-            );
+            this._host.warning("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
           }
           this._host.gamePage.resPool.resources[13].value -= emBulk.priceSum;
           emBulk.race.embassyLevel += emBulk.val;
