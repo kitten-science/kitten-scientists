@@ -7367,7 +7367,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"],
             ["webpack", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:4.46.0"],
             ["webpack-cli", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:4.6.0"],
-            ["webpack-userscript", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:2.5.7"]
+            ["webpack-userscript", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:2.5.8"]
           ],
           "linkType": "SOFT",
         }]
@@ -7573,17 +7573,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["webpack-userscript", [
-        ["npm:2.5.7", {
-          "packageLocation": "./.yarn/cache/webpack-userscript-npm-2.5.7-35ab96811a-ee3dfa3488.zip/node_modules/webpack-userscript/",
+        ["npm:2.5.8", {
+          "packageLocation": "./.yarn/cache/webpack-userscript-npm-2.5.8-8f1469fa5b-ceac1fb749.zip/node_modules/webpack-userscript/",
           "packageDependencies": [
-            ["webpack-userscript", "npm:2.5.7"]
+            ["webpack-userscript", "npm:2.5.8"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:2.5.7", {
-          "packageLocation": "./.yarn/$$virtual/webpack-userscript-virtual-36b0425336/0/cache/webpack-userscript-npm-2.5.7-35ab96811a-ee3dfa3488.zip/node_modules/webpack-userscript/",
+        ["virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:2.5.8", {
+          "packageLocation": "./.yarn/$$virtual/webpack-userscript-virtual-8d14d9c9cf/0/cache/webpack-userscript-npm-2.5.8-8f1469fa5b-ceac1fb749.zip/node_modules/webpack-userscript/",
           "packageDependencies": [
-            ["webpack-userscript", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:2.5.7"],
+            ["webpack-userscript", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:2.5.8"],
             ["@tkausl/userscript-meta", "npm:1.0.2"],
             ["@types/webpack", null],
             ["dev-null", "npm:0.1.1"],
