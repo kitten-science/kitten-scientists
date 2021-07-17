@@ -1,15 +1,19 @@
-import lategame from "./fixtures/lategame";
 import testConfig from "./fixtures/localstorage.json";
+import savegame from "./fixtures/savegame";
 import { Options } from "./options/Options";
 import { SettingsStorage } from "./options/SettingsStorage";
 import { cinfo } from "./tools/Log";
+import { isNil } from "./tools/Maybe";
 import { SavegameLoader } from "./tools/SavegameLoader";
 import { UserScript } from "./UserScript";
 
 (async () => {
   const kittenGame = await UserScript.waitForGame();
+
   // For development convenience, load a lategame save to give us more test options.
-  await new SavegameLoader(kittenGame).load(lategame);
+  if (!isNil(savegame)) {
+    await new SavegameLoader(kittenGame).load(savegame);
+  }
 
   const userScript = await UserScript.getDefaultInstance();
 
