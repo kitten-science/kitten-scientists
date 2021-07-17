@@ -2,11 +2,13 @@
 
 ## Active development on the script
 
+The project is set up to be used with [VS Code](https://code.visualstudio.com/). While other editors will work fine, some integrations have been prepared to make the development process easier.
+
 ### Prerequisites
 
 The development environment is expected to be a POSIX-compliant system. On Windows, WSL will do fine.
 
-Additionally, you will need to have Docker available.
+Additionally, you will need to have [Docker](https://www.docker.com/get-started) available.
 
 ### Development
 
@@ -25,6 +27,10 @@ yarn userscript:watch
 ```
 
 You will need to manually reload the page after each build to get the latest changes in the browser.
+
+### Type-checking
+
+To fill the **Problems** panel in VS Code with all current, type-related errors, run the `typecheck:all` npm task in VS Code.
 
 ## Building a release of the userscript
 

@@ -5,6 +5,14 @@
       "type": "npm",
       "script": "typecheck:all",
       "problemMatcher": ["$tsc"]
+    },
+    {
+      "type": "npm",
+      "script": "userscript:watch",
+      "problemMatcher": [
+        // See: https://marketplace.visualstudio.com/items?itemName=eamodio.tsl-problem-matcher
+        "$ts-webpack-watch"
+      ]
     }
   ]
 }
