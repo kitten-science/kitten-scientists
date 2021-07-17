@@ -20,7 +20,7 @@ Additionally, you will need to have [Docker](https://www.docker.com/get-started)
    yarn userscript:watch
    ```
 
-> This task can also be started directly in VS Code, using the **Run Task** command.
+   > This task can also be started directly in VS Code, using the **Run Task** command.
 
 1. Build the development container and start it.
 
