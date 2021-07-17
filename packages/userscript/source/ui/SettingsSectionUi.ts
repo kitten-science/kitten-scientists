@@ -97,12 +97,14 @@ export abstract class SettingsSectionUi<TState> {
 
   protected _getHeader(text: string): JQuery<HTMLElement> {
     const headerElement = $("<li/>");
-    const header = $("<label/>", {
+    const header = $("<span/>", {
       text,
       css: {
         color: "grey",
+        cursor: "default",
         display: "inline-block",
         minWidth: "100px",
+        userSelect: "none",
       },
     });
 
