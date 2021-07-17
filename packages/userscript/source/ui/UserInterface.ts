@@ -97,29 +97,6 @@ export class UserInterface {
 
     $("#clearLog").prepend(activityBox);
 
-    // Set up the message box.
-    const messageBox = $("<div/>", {
-      id: "important-msg-box",
-      class: "dialog help",
-      css: {
-        display: "none",
-        width: "auto",
-        height: "auto",
-      },
-    });
-    const mbClose = $("<a/>", {
-      text: this._host.i18n("ui.close"),
-      href: "#",
-      css: { position: "absolute", top: "10px", right: "15px" },
-    });
-    mbClose.on("click", function () {
-      messageBox.toggle();
-    });
-    const mbTitle = $("<h1/>", { id: "mb-title", text: "test text" });
-    const mbContent = $("<h1/>", { id: "mb-content", text: "test text" });
-    messageBox.append(mbClose, mbTitle, mbContent);
-    $("#gamePageContainer").append(messageBox);
-
     // add the options above the game log
     const right = $("#rightColumn");
     right.prepend(optionsElement.append(optionsListElement));
