@@ -114,7 +114,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       );
     });
     this._optionButtons = [
-      this.getHeader("Ziggurats"),
+      this.getHeader("$religion.panel.ziggurat.label"),
       this.getOption(
         "unicornPasture",
         this._options.items.unicornPasture,
@@ -174,7 +174,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         true
       ),
 
-      this.getHeader("Order of the Sun"),
+      this.getHeader("$religion.panel.orderOfTheSun.label"),
       this.getOption(
         "solarchant",
         this._options.items.solarchant,
@@ -227,7 +227,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         true
       ),
 
-      this.getHeader("Cryptotheology"),
+      this.getHeader("$religion.panel.cryptotheology.label"),
       this.getOption(
         "blackObelisk",
         this._options.items.blackObelisk,
