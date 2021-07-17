@@ -62,7 +62,6 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
     this._options.$trigger = this._triggerButton;
@@ -94,7 +93,6 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -333,7 +331,6 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     }).data("option", this._options.addition.adore);
     this._options.addition.adore.$subTrigger = triggerButtonAdore;
@@ -380,7 +377,6 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     }).data("option", this._options.addition.autoPraise);
     this._options.addition.autoPraise.$subTrigger = triggerButtonAutoPraise;

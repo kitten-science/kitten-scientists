@@ -62,7 +62,6 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
     this._options.$trigger = this._triggerButton;
@@ -94,7 +93,6 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
@@ -203,7 +201,6 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 

@@ -61,7 +61,6 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
     this._options.$trigger = this._triggerButton;
@@ -93,7 +92,6 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 

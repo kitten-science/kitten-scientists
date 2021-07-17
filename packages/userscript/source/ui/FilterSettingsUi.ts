@@ -65,7 +65,6 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
         display: "inline-block",
         float: "right",
         paddingRight: "5px",
-        textShadow: "3px 3px 4px gray",
       },
     });
 
