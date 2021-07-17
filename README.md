@@ -1,15 +1,13 @@
-# Kitten Scientists
+# Kitten Scientists V2
 
-<p align="center"><img src="https://i.imgur.com/AWHGIGH.jpg" /></p>
-
-Kitten Scientists (KS) is a simple automation script for the complex [Kittens Game](http://kittensgame.com/web/).
+Kitten Scientists (KS) is a simple automation script for the complex [Kittens Game](http://kittensgame.com/web/). It was originally developed by [Cameron Condry](https://github.com/cameroncondry/cbc-kitten-scientists) and extended by many great [contributors](#contributors).
 
 ## Quick Start
 
 Create the following JavaScript bookmarklet (create a new bookmark and paste this as the URL):
 
 ```js
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://cdn.jsdelivr.net/gh/cameroncondry/cbc-kitten-scientists@master/kitten-scientists.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://cdn.jsdelivr.net/gh/oliversalzburg/cbc-kitten-scientists@master/kitten-scientists.user.js';d.body.appendChild(s);})();
 ```
 
 ### Manual Installation
