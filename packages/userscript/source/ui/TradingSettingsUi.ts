@@ -153,7 +153,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     i18nName: string
   ): JQuery<HTMLElement> {
     const element = this.getOption(name, option, i18nName);
-    element.css("borderBottom", "1px solid rgba(185, 185, 185, 0.7)");
+    element.css("borderBottom", "1px solid rgba(185, 185, 185, 0.1)");
 
     //Limited Trading
     const label = $("<label/>", {
@@ -182,7 +182,8 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     const button = $("<div/>", {
       id: `toggle-seasons-${name}`,
-      text: this._host.i18n("trade.seasons"),
+      text: "🗓",
+      title: this._host.i18n("trade.seasons"),
       css: {
         cursor: "pointer",
         display: "inline-block",

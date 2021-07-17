@@ -1225,9 +1225,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       id: "resources-add",
       text: this._host.i18n("resources.add"),
       css: {
+        border: "1px solid grey",
         cursor: "pointer",
         display: "inline-block",
-        borderBottom: "1px solid rgba(185, 185, 185, 0.7)",
+        padding: "1px 2px",
       },
     });
 

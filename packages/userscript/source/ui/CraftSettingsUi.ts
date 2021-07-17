@@ -293,7 +293,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       css: {
         cursor: "pointer",
         display: "inline-block",
-        borderBottom: "1px solid rgba(185, 185, 185, 0.7)",
+        borderBottom: "1px solid rgba(185, 185, 185, 0.1)",
       },
     });
 
