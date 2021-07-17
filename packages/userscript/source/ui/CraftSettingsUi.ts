@@ -44,14 +44,11 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
     input.on("change", () => {
       if (input.is(":checked") && this._options.enabled === false) {
-        this._options.enabled = true;
-
+        this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-        //saveToKittenStorage();
       } else if (!input.is(":checked") && this._options.enabled === true) {
-        this._options.enabled = false;
+        this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
-        //saveToKittenStorage();
       }
     });
 
@@ -79,8 +76,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       );
 
       if (value !== null) {
-        this._options.trigger = parseFloat(value);
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
         this._triggerButton[0].title = this._options.trigger.toString();
       }
     });
@@ -284,10 +280,10 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
     input.on("change", () => {
       if (input.is(":checked") && option.limited === false) {
-        option.limited = true;
+        this._host.updateOptions(() => (option.limited = true));
         this._host.imessage("craft.limited", [label]);
       } else if (!input.is(":checked") && option.limited === true) {
-        option.limited = false;
+        this._host.updateOptions(() => (option.limited = false));
         this._host.imessage("craft.unlimited", [label]);
       }
     });

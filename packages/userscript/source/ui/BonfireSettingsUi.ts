@@ -41,14 +41,11 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
     input.on("change", () => {
       if (input.is(":checked") && this._options.enabled === false) {
-        this._options.enabled = true;
-
+        this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-        //saveToKittenStorage();
       } else if (!input.is(":checked") && this._options.enabled === true) {
-        this._options.enabled = false;
+        this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
-        //saveToKittenStorage();
       }
     });
 
@@ -75,8 +72,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       );
 
       if (value !== null) {
-        this._options.trigger = parseFloat(value);
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
         this._triggerButton[0].title = this._options.trigger.toFixed(2);
       }
     });
@@ -392,9 +388,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
 
       if (value !== null) {
-        option.max = parseInt(value);
-        //kittenStorage.items[maxButton.attr("id")] = option.max;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (option.max = parseInt(value)));
         maxButton[0].title = option.max.toString();
         maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
       }

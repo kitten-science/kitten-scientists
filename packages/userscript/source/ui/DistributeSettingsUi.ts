@@ -40,14 +40,11 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
 
     input.on("change", () => {
       if (input.is(":checked") && this._options.enabled === false) {
-        this._options.enabled = true;
-
+        this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-        //saveToKittenStorage();
       } else if (!input.is(":checked") && this._options.enabled === true) {
-        this._options.enabled = false;
+        this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
-        //saveToKittenStorage();
       }
     });
 
@@ -155,22 +152,14 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     }).data("option", option);
     option.$limited = input;
 
-    /*
-    if (option.limited) {
-      input.prop("checked", true);
-    }
-    */
-
     input.on("change", () => {
       if (input.is(":checked") && option.limited === false) {
-        option.limited = true;
+        this._host.updateOptions(() => (option.limited = true));
         this._host.imessage("distribute.limited", [label]);
       } else if (!input.is(":checked") && option.limited === true) {
-        option.limited = false;
+        this._host.updateOptions(() => (option.limited = false));
         this._host.imessage("distribute.unlimited", [label]);
       }
-      //kittenStorage.items[input.attr("id")] = option.limited;
-      //this._host.saveToKittenStorage();
     });
 
     element.append(input, labelElement);
@@ -193,9 +182,7 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
       const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
 
       if (value !== null) {
-        option.max = parseInt(value);
-        //kittenStorage.items[maxButton.attr("id")] = option.max;
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (option.max = parseInt(value)));
         maxButton[0].title = option.max.toString();
         maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
       }

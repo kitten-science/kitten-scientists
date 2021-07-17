@@ -42,14 +42,11 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     input.on("change", () => {
       if (input.is(":checked") && this._options.enabled === false) {
-        this._options.enabled = true;
-
+        this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-        //saveToKittenStorage();
       } else if (!input.is(":checked") && this._options.enabled === true) {
-        this._options.enabled = false;
+        this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
-        //saveToKittenStorage();
       }
     });
 
@@ -77,8 +74,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       );
 
       if (value !== null) {
-        this._options.trigger = parseFloat(value);
-        //this._host.saveToKittenStorage();
+        this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
         this._triggerButton[0].title = this._options.trigger.toFixed(2);
       }
     });
@@ -186,22 +182,14 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     }).data("option", option);
     option.$limited = input;
 
-    /*
-    if (option.limited) {
-      input.prop("checked", true);
-    }
-    */
-
     input.on("change", () => {
       if (input.is(":checked") && option.limited === false) {
-        option.limited = true;
+        this._host.updateOptions(() => (option.limited = true));
         this._host.imessage("trade.limited", [i18nName]);
       } else if (!input.is(":checked") && option.limited === true) {
-        option.limited = false;
+        this._host.updateOptions(() => (option.limited = false));
         this._host.imessage("trade.unlimited", [i18nName]);
       }
-      //kittenStorage.items[input.attr("id")] = option.limited;
-      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
@@ -256,22 +244,14 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     }).data("option", option);
     option[`$${season}` as const] = input;
 
-    /*
-    if (option[season]) {
-      input.prop("checked", true);
-    }
-    */
-
     input.on("change", () => {
       if (input.is(":checked") && option[season] === false) {
-        option[season] = true;
+        this._host.updateOptions(() => (option[season] = true));
         this._host.imessage("trade.season.enable", [iname, iseason]);
       } else if (!input.is(":checked") && option[season] === true) {
-        option[season] = false;
+        this._host.updateOptions(() => (option[season] = false));
         this._host.imessage("trade.season.disable", [iname, iseason]);
       }
-      //kittenStorage.items[input.attr("id")] = option[season];
-      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);
