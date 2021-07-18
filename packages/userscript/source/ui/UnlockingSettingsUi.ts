@@ -12,6 +12,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
 
   private readonly _itemsButton: JQuery<HTMLElement>;
   private _itemsExpanded = false;
+  private _policiesExpanded = false;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
@@ -67,6 +68,51 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
       );
     });
 
+    // Set up the more complex policies options.
+    const policiesButton = this.getOption(
+      "policies",
+      this._options.items.policies,
+      this._host.i18n("ui.upgrade.policies"),
+      false,
+      {
+        onCheck: () => {
+          this._options.items.policies.enabled = true;
+          this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.policies")]);
+        },
+        onUnCheck: () => {
+          this._options.items.policies.enabled = false;
+          this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.policies")]);
+        },
+      }
+    );
+    const policiesList = $("<ul/>", {
+      id: "items-list-policies",
+      css: { display: "none", paddingLeft: "20px" },
+    });
+    for (const [policyName, policy] of objectEntries(this._host.options.auto.policies.items)) {
+      const policyButton = this.getOption(
+        `policy-${policyName}`,
+        policy,
+        this._host.i18n(`$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`)
+      );
+
+      policiesList.append(policyButton);
+    }
+    const policiesItemsButton = this._getItemsToggle("policies-show");
+    policiesItemsButton.on("click", () => {
+      policiesList.toggle();
+
+      this._policiesExpanded = !this._policiesExpanded;
+
+      policiesItemsButton.text(this._policiesExpanded ? "-" : "+");
+      policiesItemsButton.prop(
+        "title",
+        this._policiesExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+      );
+    });
+    policiesButton.append(policiesItemsButton, policiesList);
+
+    // Set up the remaining options.
     this._optionButtons = [
       this.getOption(
         "upgrades",
@@ -84,6 +130,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
           },
         }
       ),
+      policiesButton,
       this.getOption(
         "techs",
         this._options.items.techs,

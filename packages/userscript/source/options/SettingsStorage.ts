@@ -1,11 +1,11 @@
-import {  Jobs, Race, Resource, Season } from "../types";
+import { Job, Race, Resource, Season } from "../types";
 import { AllItems } from "./Options";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { SpaceItem } from "./SpaceSettings";
 import { TimeItem } from "./TimeSettings";
 
 type SetMaxBuildingItem = `set-${AllItems}-max`;
-type SetMaxJobItem = `set-${Jobs}-max`;
+type SetMaxJobItem = `set-${Job}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
 type SetMinResetBuildingItem = `set-reset-build-${AllItems}-min`;
 type SetMinResetFaithItem = `set-reset-faith-${FaithItem}-min`;
@@ -14,7 +14,7 @@ type SetMinResetTimeItem = `set-reset-time-${TimeItem}-min`;
 type SetMinResetUnicornItem = `set-reset-unicorn-${UnicornItem}-min`;
 type ToggleBuildingItem = `toggle-${AllItems}`;
 type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
-type ToggleJobItem = `toggle-${Jobs}`;
+type ToggleJobItem = `toggle-${Job}`;
 type ToggleRaceItem = `toggle-${Race}`;
 type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
 type ToggleResetBuildingItem = `toggle-reset-build-${AllItems}`;
@@ -24,7 +24,7 @@ type ToggleResetTimeItem = `toggle-reset-time-${TimeItem}`;
 type ToggleResetUnicornItem = `toggle-reset-unicorn-${UnicornItem}`;
 type ToggleResourceItem = `toggle-${Resource}`;
 type ToggleTimeItem = `toggle-${TimeItem}`;
-type ToggleLimitedJobItem = `toggle-limited-${Jobs}`;
+type ToggleLimitedJobItem = `toggle-limited-${Job}`;
 type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
 type ToggleLimitedResourceItem = `toggle-limited-${Resource}`;
 

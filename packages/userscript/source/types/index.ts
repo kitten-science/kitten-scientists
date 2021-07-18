@@ -80,7 +80,7 @@ export type TabId =
   | "Village"
   | "Workshop";
 
-export type Jobs =
+export type Job =
   | "engineer"
   | "farmer"
   | "geologist"
@@ -158,20 +158,10 @@ export type GameTab = {
 
 export type Challenge = "1000Years" | "anarchy" | "atheism" | "energy" | "winterIsComing";
 
-export type Policy =
-  | "authocracy"
-  | "clearCutting"
-  | "communism"
-  | "diplomacy"
-  | "environmentalism"
-  | "isolationism"
-  | "monarchy"
-  | "republic"
-  | "stripMining";
-
 export * from "./buildings";
 export * from "./gamePage";
 export * from "./religion";
+export * from "./science";
 export * from "./space";
 export * from "./time";
 export * from "./trading";
