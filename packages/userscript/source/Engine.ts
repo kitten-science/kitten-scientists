@@ -1109,8 +1109,8 @@ export class Engine {
     }
 
     if (upgrades.policies.enabled && this._host.gamePage.tabs[2].visible) {
-      var policies = this._host.gamePage.science.policies;
-      var toResearch = [];
+      const policies = this._host.gamePage.science.policies;
+      const toResearch = [];
 
       for (const [policy] of objectEntries(
         (this._host.options.auto.unlock.items.policies as PolicySettings).items
@@ -1127,9 +1127,9 @@ export class Engine {
           }
           if (targetPolicy.unlocked) {
             if (
-              targetPolicy.requiredLeaderJob == undefined ||
-              (this._host.gamePage.village.leader != null &&
-                this._host.gamePage.village.leader.job == targetPolicy.requiredLeaderJob)
+              targetPolicy.requiredLeaderJob === undefined ||
+              (this._host.gamePage.village.leader !== null &&
+                this._host.gamePage.village.leader.job === targetPolicy.requiredLeaderJob)
             ) {
               toResearch.push(targetPolicy);
             }
