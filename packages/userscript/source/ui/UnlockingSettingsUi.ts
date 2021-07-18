@@ -77,11 +77,11 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
       false,
       {
         onCheck: () => {
-          this._options.items.policies.enabled = true;
+          this._host.updateOptions(() => (this._options.items.policies.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.policies")]);
         },
         onUnCheck: () => {
-          this._options.items.policies.enabled = false;
+          this._host.updateOptions(() => (this._options.items.policies.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.policies")]);
         },
       }
@@ -93,11 +93,19 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     for (const [policyName, policy] of objectEntries(
       (this._options.items.policies as PolicySettings).items
     )) {
-      const policyButton = this.getOption(
-        `policy-${policyName}`,
-        policy,
-        this._host.i18n(`$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`)
+      const policyLabel = this._host.i18n(
+        `$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`
       );
+      const policyButton = this.getOption(`policy-${policyName}`, policy, policyLabel, false, {
+        onCheck: () => {
+          this._host.updateOptions(() => (policy.enabled = true));
+          this._host.imessage("status.auto.enable", [policyLabel]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (policy.enabled = false));
+          this._host.imessage("status.auto.disable", [policyLabel]);
+        },
+      });
 
       policy.$enabled = policyButton;
       policiesList.append(policyButton);
@@ -125,11 +133,11 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
         false,
         {
           onCheck: () => {
-            this._options.items.upgrades.enabled = true;
+            this._host.updateOptions(() => (this._options.items.upgrades.enabled = true));
             this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.upgrades")]);
           },
           onUnCheck: () => {
-            this._options.items.upgrades.enabled = false;
+            this._host.updateOptions(() => (this._options.items.upgrades.enabled = false));
             this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.upgrades")]);
           },
         }
@@ -142,11 +150,11 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
         false,
         {
           onCheck: () => {
-            this._options.items.techs.enabled = true;
+            this._host.updateOptions(() => (this._options.items.techs.enabled = true));
             this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.techs")]);
           },
           onUnCheck: () => {
-            this._options.items.techs.enabled = false;
+            this._host.updateOptions(() => (this._options.items.techs.enabled = false));
             this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.techs")]);
           },
         }
@@ -158,11 +166,11 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
         false,
         {
           onCheck: () => {
-            this._options.items.races.enabled = true;
+            this._host.updateOptions(() => (this._options.items.races.enabled = true));
             this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.races")]);
           },
           onUnCheck: () => {
-            this._options.items.races.enabled = false;
+            this._host.updateOptions(() => (this._options.items.races.enabled = false));
             this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.races")]);
           },
         }
@@ -174,11 +182,11 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
         false,
         {
           onCheck: () => {
-            this._options.items.missions.enabled = true;
+            this._host.updateOptions(() => (this._options.items.missions.enabled = true));
             this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.missions")]);
           },
           onUnCheck: () => {
-            this._options.items.missions.enabled = false;
+            this._host.updateOptions(() => (this._options.items.missions.enabled = false));
             this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.missions")]);
           },
         }
@@ -190,11 +198,11 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
         false,
         {
           onCheck: () => {
-            this._options.items.buildings.enabled = true;
+            this._host.updateOptions(() => (this._options.items.buildings.enabled = true));
             this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.buildings")]);
           },
           onUnCheck: () => {
-            this._options.items.buildings.enabled = false;
+            this._host.updateOptions(() => (this._options.items.buildings.enabled = false));
             this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.buildings")]);
           },
         }
