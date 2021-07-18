@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Log in to the Container registry
-        uses: docker/login-action@5bcefc987c7254b900302084e1dde9b2a91a9976
+        uses: docker/login-action@1.10.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -32,12 +32,12 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@8b842e721d38d18bea23b57f4c040e53331f4ca2
+        uses: docker/metadata-action@3.4.1
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad1d2e93beb0ec418817dbbb5b6eb0da403e39a6
+        uses: docker/build-push-action@2.6.1
         with:
           context: packages/kitten-game
           push: true
