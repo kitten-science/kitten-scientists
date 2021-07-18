@@ -76,6 +76,7 @@ export type GamePage = {
       calculateEffects: (model: unknown, game: GamePage) => void;
       researched: number;
     };
+    isActive: (challenge: Challenge) => boolean;
   };
   console: {
     maxMessages: number;

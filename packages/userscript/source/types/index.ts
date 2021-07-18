@@ -156,7 +156,13 @@ export type GameTab = {
   visible: boolean;
 };
 
-export type Challenge = "1000Years" | "anarchy" | "atheism" | "energy" | "winterIsComing";
+export type Challenge =
+  | "1000Years"
+  | "anarchy"
+  | "atheism"
+  | "energy"
+  | "pacifism"
+  | "winterIsComing";
 
 export * from "./buildings";
 export * from "./gamePage";

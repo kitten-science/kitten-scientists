@@ -1643,6 +1643,10 @@ export class Engine {
     const manpower = this._craftManager.getResource("manpower");
     const subTrigger = this._host.options.auto.options.items.hunt.subTrigger ?? 0;
 
+    if (manpower.value < 100 || this._host.gamePage.challenges.isActive("pacifism")) {
+      return;
+    }
+
     if (subTrigger <= manpower.value / manpower.maxValue && 100 <= manpower.value) {
       // Determine how many hunts are being performed.
       let huntCount = Math.floor(manpower.value / 100);
