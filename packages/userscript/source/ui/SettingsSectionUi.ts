@@ -142,10 +142,6 @@ export abstract class SettingsSectionUi<TState> {
     }).data("option", option);
     option.$enabled = input;
 
-    // if (option.enabled) {
-    //   input.prop("checked", true);
-    // }
-
     input.on("change", () => {
       if (input.is(":checked") && option.enabled === false) {
         if (handler.onCheck) {
@@ -162,8 +158,6 @@ export abstract class SettingsSectionUi<TState> {
           clog("Unlogged action item");
         }
       }
-      //kittenStorage.items[input.attr("id")] = option.enabled;
-      //this._host.saveToKittenStorage();
     });
 
     element.append(input, label);

@@ -1,13 +1,13 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
-import { BuildButton } from "./types";
+import { BuildButton, ScienceTab, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
 
 export class UpgradeManager {
   private readonly _host: UserScript;
-  readonly scienceManager: TabManager;
-  readonly spaceManager: TabManager;
+  readonly scienceManager: TabManager<ScienceTab>;
+  readonly spaceManager: TabManager<SpaceTab>;
   readonly workshopManager: TabManager;
   private readonly _crafts: CraftManager;
   private readonly _bulkManager: BulkManager;
@@ -21,7 +21,7 @@ export class UpgradeManager {
     this._bulkManager = new BulkManager(this._host);
   }
 
-  build(upgrade: { label: string }, variant: "science" | "workshop"): void {
+  build(upgrade: { label: string }, variant: "policy" | "science" | "workshop"): void {
     const button = this.getBuildButton(upgrade, variant);
 
     if (!button || !button.model.enabled) return;
@@ -33,16 +33,23 @@ export class UpgradeManager {
     if (variant === "workshop") {
       this._host.storeForSummary(label, 1, "upgrade");
       this._host.iactivity("upgrade.upgrade", [label], "ks-upgrade");
-    } else {
+    } else if (variant === "policy") {
+      this._host.iactivity("upgrade.policy", [label]);
+    } else if (variant === "science") {
       this._host.storeForSummary(label, 1, "research");
       this._host.iactivity("upgrade.tech", [label], "ks-research");
     }
   }
 
-  getBuildButton(upgrade: { label: string }, variant: "science" | "workshop"): BuildButton | null {
+  getBuildButton(
+    upgrade: { label: string },
+    variant: "policy" | "science" | "workshop"
+  ): BuildButton | null {
     let buttons;
     if (variant === "workshop") {
       buttons = this.workshopManager.tab.buttons;
+    } else if (variant === "policy") {
+      buttons = this.scienceManager.tab.policyPanel.children;
     } else if (variant === "science") {
       buttons = this.scienceManager.tab.buttons;
     } else {

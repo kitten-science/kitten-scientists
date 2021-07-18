@@ -7,6 +7,7 @@ import { DistributeSettings } from "./DistributeSettings";
 import { FilterSettings } from "./FilterSettings";
 import { KittenStorageType } from "./KittenStorage";
 import { OptionsSettings } from "./OptionsSettings";
+import { PolicySettings } from "./PolicySettings";
 import { FaithItem, ReligionSettings } from "./ReligionSettings";
 import { SpaceItem, SpaceSettings } from "./SpaceSettings";
 import { CycleIndices, TimeControlSettings } from "./TimeControlSettings";
@@ -45,6 +46,7 @@ export class Options {
     distribute: DistributeSettings;
     options: OptionsSettings;
     filters: FilterSettings;
+    policies: PolicySettings;
   } = {
     engine: { enabled: false },
     build: new BonfireSettings(),
@@ -58,6 +60,7 @@ export class Options {
     distribute: new DistributeSettings(),
     options: new OptionsSettings(),
     filters: new FilterSettings(),
+    policies: new PolicySettings(),
   };
 
   reset: {

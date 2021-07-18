@@ -13,6 +13,7 @@ import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
 import { TimeManager } from "./TimeManager";
 import { objectEntries } from "./tools/Entries";
+import { cerror } from "./tools/Log";
 import { isNil, mustExist } from "./tools/Maybe";
 import { TradeManager } from "./TradeManager";
 import {
@@ -21,7 +22,7 @@ import {
   BuildingMeta,
   ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
-  Jobs,
+  Job,
   Race,
   RaceInfo,
   ReligionUpgradeInfo,
@@ -601,7 +602,7 @@ export class Engine {
       return;
     }
 
-    let jobName: Jobs | undefined;
+    let jobName: Job | undefined;
     let minRatio = Infinity;
     let currentRatio = 0;
     // Find the job where to assign a kitten this frame.
@@ -1103,6 +1104,37 @@ export class Engine {
           }
         }
         upgradeManager.build(scienceUpgrades[upgrade], "science");
+      }
+    }
+
+    if (upgrades.policies.enabled && this._host.gamePage.tabs[2].visible) {
+      var policies = this._host.gamePage.science.policies;
+      var toResearch = [];
+
+      for (const [policy] of objectEntries(this._host.options.auto.policies.items)) {
+        const targetPolicy = policies.find(policy => policy.name === policy.name);
+        if (isNil(targetPolicy)) {
+          cerror(`Policy '${policy}' not found in game!`);
+          continue;
+        }
+
+        if (!targetPolicy.researched) {
+          if (targetPolicy.blocked) {
+            continue;
+          }
+          if (targetPolicy.unlocked) {
+            if (
+              targetPolicy.requiredLeaderJob == undefined ||
+              (this._host.gamePage.village.leader != null &&
+                this._host.gamePage.village.leader.job == targetPolicy.requiredLeaderJob)
+            ) {
+              toResearch.push(targetPolicy);
+            }
+          }
+        }
+      }
+      for (var i in toResearch) {
+        upgradeManager.build(toResearch[i], "policy");
       }
     }
 

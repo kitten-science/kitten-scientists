@@ -1,4 +1,4 @@
-import { Jobs, Race, Resource, Season } from "../types";
+import { Job, Race, Resource, Season } from "../types";
 import { BuildItem } from "./BonfireSettings";
 import { FilterItem } from "./FilterSettings";
 import { AllItems } from "./Options";
@@ -10,7 +10,7 @@ import { TimeItem } from "./TimeSettings";
 import { UnlockItem } from "./UnlockingSettings";
 
 type SetMaxBuildingItem = `set-${AllItems}-max`;
-type SetMaxJobItem = `set-${Jobs}-max`;
+type SetMaxJobItem = `set-${Job}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
 type SetMinResetBuildingItem = `set-reset-build-${Exclude<BuildItem, "unicornPasture">}-min`;
 type SetMinResetFaithItem = `set-reset-faith-${FaithItem | UnicornItem}-min`;
@@ -23,8 +23,8 @@ type SetSubtriggerTimeCtrlItem = `set-${"accelerateTime" | "timeSkip"}-subTrigge
 type ToggleBuildingItem = `toggle-${AllItems}`;
 type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
 type ToggleFilterItem = `toggle-${FilterItem}`;
-type ToggleJobItem = `toggle-${Jobs}`;
-type ToggleLimitedJobItem = `toggle-limited-${Jobs}`;
+type ToggleJobItem = `toggle-${Job}`;
+type ToggleLimitedJobItem = `toggle-limited-${Job}`;
 type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
 type ToggleLimitedResourceItem = `toggle-limited-${Resource}`;
 type ToggleOptionsItem = `toggle-${OptionsItem}`;

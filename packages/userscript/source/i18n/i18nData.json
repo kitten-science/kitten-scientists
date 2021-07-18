@@ -10,7 +10,6 @@
     "option.embassies": "Build Embassies (Beta)",
     "option.style": "View Full Width",
     "option.steamworks": "Turn on Steamworks",
-
     "filter.build": "Building",
     "filter.craft": "Crafting",
     "filter.upgrade": "Upgrading",
@@ -22,7 +21,6 @@
     "filter.festival": "Festivals",
     "filter.star": "Astronomical Events",
     "filter.misc": "Miscellaneous",
-
     "dispose.necrocorn": "Kittens disposed of inefficient necrocorns",
     "blackcoin.buy": "Kittens sold your Relics and bought {0} Blackcoins",
     "blackcoin.sell": "Kittens sold your Blackcoins and bought {0} Relics",
@@ -33,7 +31,6 @@
     "act.builds": "Kittens have built a new {0} {1} times.",
     "act.craft": "Kittens have crafted {0} {1}",
     "act.trade": "Kittens have traded {0}x with {1}",
-
     "upgrade.space.mission": "Kittens conducted a mission to {0}",
     "upgrade.space": "Kittens conducted a {0}",
     "upgrade.race": "Kittens met the {0}",
@@ -43,17 +40,14 @@
     "upgrade.building.amphitheatre": "Upgraded amphitheatres to broadcast towers!",
     "upgrade.upgrade": "Kittens have bought the upgrade {0}",
     "upgrade.tech": "Kittens have bought the tech {0}",
-
+    "upgrade.policy": "Kittens have passed {0}",
     "festival.hold": "Kittens begin holding a festival",
     "festival.extend": "Kittens extend the festival",
-
     "build.embassy": "Built {0} embassy for {1}",
     "build.embassies": "Built {0} embassies for {1}",
-
     "act.praise": "Praised the sun! Accumulated {0} faith to {1} worship",
     "act.sun.discover": "Kittens have discovered {0}",
     "act.sun.discovers": "Kittens have discovered {0} {1} times.",
-
     "ui.items": "items",
     "ui.itemsHide": "Hide options",
     "ui.itemsShow": "Show options",
@@ -76,13 +70,14 @@
     "ui.filter": "Filters",
     "ui.distribute": "Kitten Resources",
     "ui.max": "Max: {0}",
-
     "ui.upgrade.upgrades": "Upgrades",
     "ui.upgrade.techs": "Techs",
     "ui.upgrade.races": "Races",
     "ui.upgrade.missions": "Missions",
     "ui.upgrade.buildings": "Buildings",
-
+    "ui.upgrade.policies": "Policies",
+    "ui.upgrade.policies.load": "Load",
+    "ui.upgrade.policies.show": "Show",
     "ui.faith.addtion": "addition",
     "option.faith.best.unicorn": "Build Best Unicorn Building First",
     "option.faith.best.unicorn.desc": "Include auto Sacrifice Unicorns if tears are not enough to build the best unicorn building",
@@ -95,7 +90,6 @@
     "summary.adore": "Accumulated {0} epiphany by adore the galaxy",
     "filter.adore": "Adoring",
     "adore.trigger.set": "Enter a new trigger value for AutoAdore. Should be in the range of 0 to 1.\nKS will AutoAdore if the Solor Revolutuin Bonus brought by praising the sun once after adore can reach the trigger of maximum.\n\nNote: The solar revolution bonus will diminish after reaching 75% of the maximum.",
-
     "resources.add": "add resources",
     "resources.clear.unused": "clear unused",
     "resources.stock": "Stock: {0}",
@@ -104,38 +98,31 @@
     "resources.stock.set": "Stock for {0}",
     "resources.consume.set": "Consume rate for {0}",
     "resources.del.confirm": "Delete resource controls for {0}?",
-
     "status.ks.enable": "Enabling the kitten scientists!",
     "status.ks.disable": "Disabling the kitten scientists!",
     "status.sub.enable": "Enabled {0}",
     "status.auto.enable": "Enable Auto {0}",
     "status.sub.disable": "Disabled {0}",
     "status.auto.disable": "Disable Auto {0}",
-
     "trade.limited": "Trading with {0}: limited to only occur when profitable based off relative production time",
     "trade.unlimited": "Trading with {0}: unlimited",
     "trade.seasons": "seasons",
     "trade.season.enable": "Enabled trading with {0} in the {1}",
     "trade.season.disable": "Disabled trading with {0} in the {1}",
-
     "filter.enable": "Enable {0} Filter",
     "filter.disable": "Disabled {0} Filter",
-
     "craft.limited": "Crafting {0}: limited to be proportional to cost ratio",
     "craft.unlimited": "Crafting {0}: unlimited",
-
     "distribute.limited": "Distribute to {0}: stop when reach max",
     "distribute.unlimited": "Distribute to {0}: unlimited",
     "act.distribute": "Distribute a kitten to {0}",
     "ui.max.set": "Maximum for {0}",
     "summary.distribute": "Help {0} kittens to find job",
     "filter.distribute": "Distribute",
-
     "option.promote": "Promote Leader",
     "act.promote": "Kittens\" leader has been promoted to rank {0}",
     "filter.promote": "Promote leader",
     "summary.promote": "Promoted leader {0} times",
-
     "ui.timeCtrl": "Time Control",
     "option.accelerate": "Tempus Fugit",
     "act.accelerate": "Accelerate time!",
@@ -178,11 +165,9 @@
     "summary.time.reset.title": "Summary of the last {0} timelines",
     "summary.time.reset.content": "Gain {0} Karma.<br>Gain {1} Paragon.",
     "ui.close": "close",
-
     "option.fix.cry": "Fix Cryochamber",
     "act.fix.cry": "Kittens fix {0} Cryochambers",
     "summary.fix.cry": "Fix {0} Cryochambers",
-
     "summary.festival": "Held {0} festivals",
     "summary.stars": "Observed {0} stars",
     "summary.praise": "Accumulated {0} worship by praising the sun",
@@ -214,7 +199,6 @@
     "option.embassies": "建造大使馆 (Beta)",
     "option.style": "占满屏幕",
     "option.steamworks": "启动蒸汽工房",
-
     "filter.build": "建筑",
     "filter.craft": "工艺",
     "filter.upgrade": "升级",
@@ -226,7 +210,6 @@
     "filter.festival": "节日",
     "filter.star": "天文事件",
     "filter.misc": "杂项",
-
     "dispose.necrocorn": "小猫处理掉了影响效率的多余死灵兽",
     "blackcoin.buy": "小猫出售遗物并买入 {0} 黑币",
     "blackcoin.sell": "小猫出售黑币并买入了 {0} 遗物",
@@ -237,7 +220,6 @@
     "act.builds": "小猫建造了 {1} 个新的 {0}",
     "act.craft": "小猫制作了 {0} {1}",
     "act.trade": "小猫与 {1} 交易 {0} 次",
-
     "upgrade.space.mission": "小猫执行了 {0} 的任务",
     "upgrade.space": "小猫执行了 {0}",
     "upgrade.race": "小猫遇到了 {0}",
@@ -247,17 +229,14 @@
     "upgrade.building.amphitheatre": "剧场 升级为 广播塔!",
     "upgrade.upgrade": "小猫发明了 {0}",
     "upgrade.tech": "小猫掌握了 {0}",
-
+    "upgrade.policy": "小猫通过了 {0} 法案",
     "festival.hold": "小猫开始举办节日",
     "festival.extend": "小猫延长了节日",
-
     "build.embassy": "在 {1} 设立了 {0} 个大使馆",
     "build.embassies": "在 {1} 设立了 {0} 个大使馆",
-
     "act.praise": "赞美太阳! 转化 {0} 信仰为 {1} 虔诚",
     "act.sun.discover": "小猫在 {0} 方面获得顿悟",
     "act.sun.discovers": "小猫在 {0} 方面获得 {1} 次顿悟",
-
     "ui.items": "项目",
     "ui.itemsHide": null,
     "ui.itemsShow": null,
@@ -280,13 +259,14 @@
     "ui.filter": "日志过滤",
     "ui.distribute": "猫力资源",
     "ui.max": "Max: {0}",
-
     "ui.upgrade.upgrades": "升级",
     "ui.upgrade.techs": "科技",
     "ui.upgrade.races": "探险队出发!",
     "ui.upgrade.missions": "探索星球",
     "ui.upgrade.buildings": "建筑",
-
+    "ui.upgrade.policies": "政策",
+    "ui.upgrade.policies.load": "读取",
+    "ui.upgrade.policies.show": "列表",
     "ui.faith.addtion": "附加",
     "option.faith.best.unicorn": "优先最佳独角兽建筑",
     "option.faith.best.unicorn.desc": "当眼泪不够建造最佳独角兽建筑时也会自动献祭独角兽",
@@ -299,7 +279,6 @@
     "summary.adore": "通过赞美群星积累了 {0} 顿悟",
     "filter.adore": "赞美群星",
     "adore.trigger.set": "为自动赞美群星设定一个新触发值，取值范围为 0 到 1 的小数。\n如果赞美群星后第一次赞美太阳可将太阳革命加成恢复到(触发值*太阳革命太阳革命极限加成)，那么珂学家将自动赞美群星。\n\n注意：太阳革命加成在到达上限的75%后便会收益递减。",
-
     "resources.add": "添加资源",
     "resources.clear.unused": "清除未使用",
     "resources.stock": "库存: {0}",
@@ -308,38 +287,31 @@
     "resources.stock.set": "设置 {0} 的库存",
     "resources.consume.set": "设置 {0} 的消耗率",
     "resources.del.confirm": "确定要取消 {0} 的库存控制?",
-
     "status.ks.enable": "神说，要有猫猫珂学家!",
     "status.ks.disable": "太敬业了，该歇了",
     "status.sub.enable": "启用 {0}",
     "status.auto.enable": "启用自动化 {0}",
     "status.sub.disable": "禁用 {0}",
     "status.auto.disable": "禁用自动化 {0}",
-
     "trade.limited": "与 {0} 的交易限制为比产量更优时才会触发",
     "trade.unlimited": "取消与 {0} 交易的限制",
     "trade.seasons": "季节",
     "trade.season.enable": "启用在 {1} 与 {0} 的交易",
     "trade.season.disable": "停止在 {1} 与 {0} 的交易",
-
     "filter.enable": "过滤 {0}",
     "filter.disable": "取消过滤 {0}",
-
     "craft.limited": "制作 {0} 受库存消耗比率的限制",
     "craft.unlimited": "制作 {0} 不受限制",
-
     "distribute.limited": "分配 {0} 受限于最大值",
     "distribute.unlimited": "分配 {0} 不受限",
     "act.distribute": "分配一只猫猫成为 {0}",
     "ui.max.set": "设置 {0} 的最大值",
     "summary.distribute": "帮助 {0} 只猫猫找到工作",
     "filter.distribute": "猫口分配",
-
     "option.promote": "提拔领袖",
     "act.promote": "领袖被提拔到 {0} 级",
     "filter.promote": "提拔领袖",
     "summary.promote": "提拔领袖 {0} 次",
-
     "ui.timeCtrl": "时间操纵",
     "option.accelerate": "时间加速",
     "act.accelerate": "固有时制御，二倍速!",
@@ -382,11 +354,9 @@
     "summary.time.reset.title": "过去 {0} 个时间线的总结",
     "summary.time.reset.content": "获得 {0} 业.<br>获得 {1} 领导力.",
     "ui.close": "关闭",
-
     "option.fix.cry": "修复冷冻仓",
     "act.fix.cry": "小猫修复了 {0} 个冷冻仓",
     "summary.fix.cry": "修复了 {0} 个冷冻仓",
-
     "summary.festival": "举办了 {0} 次节日",
     "summary.stars": "观测了 {0} 颗流星",
     "summary.praise": "通过赞美太阳积累了 {0} 虔诚",

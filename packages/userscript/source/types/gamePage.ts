@@ -6,7 +6,7 @@ import {
   BuildingMeta,
   Challenge,
   GameTab,
-  Jobs,
+  Job,
   Policy,
   Price,
   Race,
@@ -25,6 +25,7 @@ import {
 import { CycleIndices } from "../options/TimeControlSettings";
 import { CraftableInfo, ResourceInfo } from "./craft";
 import { ReligionTab } from "./religion";
+import { PolicyInfo, TechInfo as TechnologyInfo, Technology } from "./science";
 import { SpaceBuildings, SpaceTab } from "./space";
 import {
   ChronoForgeUpgradeInfo,
@@ -262,33 +263,10 @@ export type GamePage = {
   };
   saveImportDropboxText(lzdata: string, callback: (error?: Error) => unknown): void;
   science: {
-    get: (name: "civil" | "cryptotheology" | "drama" | "nuclearFission") => { researched: boolean };
-    getPolicy: (name: Policy) => {
-      blocked: boolean;
-      blocks: Array<Policy>;
-      description: string;
-      effects: {
-        goldPriceRatio?: number;
-      };
-      label: string;
-      name: Policy;
-      prices: Array<Price>;
-      researched: boolean;
-      unlocked: boolean;
-      unlocks: { policies: Array<Policy> };
-      upgrades: { buildings: Array<Building> };
-    };
-    techs: Array<{
-      description: string;
-      effectDesdc: string;
-      flavor: string;
-      label: string;
-      name: string;
-      prices: Array<Price>;
-      researched: boolean;
-      unlocked: boolean;
-      unlocks: { upgrades: Array<unknown> };
-    }>;
+    get: (name: Technology) => TechnologyInfo;
+    getPolicy: (name: Policy) => PolicyInfo;
+    policies: Array<PolicyInfo>;
+    techs: Array<TechnologyInfo>;
   };
   space: {
     getBuilding: (building: SpaceBuildings) => {
@@ -382,8 +360,8 @@ export type GamePage = {
     getResProduction: () => { catnip: number };
     happiness: number;
     huntAll: () => void;
-    jobs: Array<{ name: Jobs; unlocked: boolean; value: number }>;
-    leader: { rank: number };
+    jobs: Array<{ name: Job; unlocked: boolean; value: number }>;
+    leader: { job: Job; rank: number };
     /**
      * @deprecated
      */
