@@ -11,11 +11,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
   private readonly _options: ReligionSettings;
 
-  private readonly _itemsButton: JQuery<HTMLElement>;
   private _itemsExpanded = false;
-  private readonly _triggerButton: JQuery<HTMLElement>;
-
-  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, religionOptions: ReligionSettings = host.options.auto.religion) {
     super(host);
@@ -27,33 +23,22 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     const itext = ucfirst(this._host.i18n("ui.faith"));
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName);
+    const element = this._getSettingsPanel(toggleName, itext);
 
-    const label = $("<label/>", {
-      text: itext,
-    });
-    label.on("click", () => this._itemsButton.trigger("click"));
+    this._options.$enabled = element.checkbox;
 
-    const input = $("<input/>", {
-      id: `toggle-${toggleName}`,
-      type: "checkbox",
-    });
-    this._options.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && this._options.enabled === false) {
+    element.checkbox.on("change", () => {
+      if (element.checkbox.is(":checked") && this._options.enabled === false) {
         this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-      } else if (!input.is(":checked") && this._options.enabled === true) {
+      } else if (!element.checkbox.is(":checked") && this._options.enabled === true) {
         this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
       }
     });
 
-    element.append(input, label);
-
     // Create "trigger" button in the item.
-    this._triggerButton = $("<div/>", {
+    const triggerButton = $("<div/>", {
       id: `trigger-${toggleName}`,
       text: this._host.i18n("ui.trigger"),
       //title: this._options.trigger,
@@ -64,9 +49,9 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         paddingRight: "5px",
       },
     });
-    this._options.$trigger = this._triggerButton;
+    this._options.$trigger = triggerButton;
 
-    this._triggerButton.on("click", () => {
+    triggerButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [itext]),
         this._options.trigger.toFixed(2)
@@ -74,81 +59,80 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
       if (value !== null) {
         this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
-        this._triggerButton[0].title = this._options.trigger.toFixed(2);
+        triggerButton[0].title = this._options.trigger.toFixed(2);
       }
     });
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionHead(toggleName);
+    const list = this._getOptionList(toggleName);
 
-    this._itemsButton = this._getItemsToggle(toggleName);
-    this._itemsButton.on("click", () => {
+    element.items.on("click", () => {
       list.toggle();
 
       this._itemsExpanded = !this._itemsExpanded;
 
-      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
-      this._itemsButton.prop(
+      element.items.text(this._itemsExpanded ? "-" : "+");
+      element.items.prop(
         "title",
         this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
       );
     });
-    this._optionButtons = [
+    const optionButtons = [
       this._getHeader(this._host.i18n("$religion.panel.ziggurat.label")),
-      this.getOption(
+      this._getOption(
         "unicornPasture",
         this._options.items.unicornPasture,
         this._host.i18n("$buildings.unicornPasture.label")
       ),
-      this.getOption(
+      this._getOption(
         "unicornTomb",
         this._options.items.unicornTomb,
         this._host.i18n("$religion.zu.unicornTomb.label")
       ),
-      this.getOption(
+      this._getOption(
         "ivoryTower",
         this._options.items.ivoryTower,
         this._host.i18n("$religion.zu.ivoryTower.label")
       ),
-      this.getOption(
+      this._getOption(
         "ivoryCitadel",
         this._options.items.ivoryCitadel,
         this._host.i18n("$religion.zu.ivoryCitadel.label")
       ),
-      this.getOption(
+      this._getOption(
         "skyPalace",
         this._options.items.skyPalace,
         this._host.i18n("$religion.zu.skyPalace.label")
       ),
-      this.getOption(
+      this._getOption(
         "unicornUtopia",
         this._options.items.unicornUtopia,
         this._host.i18n("$religion.zu.unicornUtopia.label")
       ),
-      this.getOption(
+      this._getOption(
         "sunspire",
         this._options.items.sunspire,
         this._host.i18n("$religion.zu.sunspire.label"),
         true
       ),
 
-      this.getOption(
+      this._getOption(
         "marker",
         this._options.items.marker,
         this._host.i18n("$religion.zu.marker.label")
       ),
-      this.getOption(
+      this._getOption(
         "unicornGraveyard",
         this._options.items.unicornGraveyard,
         this._host.i18n("$religion.zu.unicornGraveyard.label")
       ),
-      this.getOption(
+      this._getOption(
         "unicornNecropolis",
         this._options.items.unicornNecropolis,
         this._host.i18n("$religion.zu.unicornNecropolis.label")
       ),
-      this.getOption(
+      this._getOption(
         "blackPyramid",
         this._options.items.blackPyramid,
         this._host.i18n("$religion.zu.blackPyramid.label"),
@@ -156,52 +140,52 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       ),
 
       this._getHeader(this._host.i18n("$religion.panel.orderOfTheSun.label")),
-      this.getOption(
+      this._getOption(
         "solarchant",
         this._options.items.solarchant,
         this._host.i18n("$religion.ru.solarchant.label")
       ),
-      this.getOption(
+      this._getOption(
         "scholasticism",
         this._options.items.scholasticism,
         this._host.i18n("$religion.ru.scholasticism.label")
       ),
-      this.getOption(
+      this._getOption(
         "goldenSpire",
         this._options.items.goldenSpire,
         this._host.i18n("$religion.ru.goldenSpire.label")
       ),
-      this.getOption(
+      this._getOption(
         "sunAltar",
         this._options.items.sunAltar,
         this._host.i18n("$religion.ru.sunAltar.label")
       ),
-      this.getOption(
+      this._getOption(
         "stainedGlass",
         this._options.items.stainedGlass,
         this._host.i18n("$religion.ru.stainedGlass.label")
       ),
-      this.getOption(
+      this._getOption(
         "solarRevolution",
         this._options.items.solarRevolution,
         this._host.i18n("$religion.ru.solarRevolution.label")
       ),
-      this.getOption(
+      this._getOption(
         "basilica",
         this._options.items.basilica,
         this._host.i18n("$religion.ru.basilica.label")
       ),
-      this.getOption(
+      this._getOption(
         "templars",
         this._options.items.templars,
         this._host.i18n("$religion.ru.templars.label")
       ),
-      this.getOption(
+      this._getOption(
         "apocripha",
         this._options.items.apocripha,
         this._host.i18n("$religion.ru.apocripha.label")
       ),
-      this.getOption(
+      this._getOption(
         "transcendence",
         this._options.items.transcendence,
         this._host.i18n("$religion.ru.transcendence.label"),
@@ -209,47 +193,47 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       ),
 
       this._getHeader(this._host.i18n("$religion.panel.cryptotheology.label")),
-      this.getOption(
+      this._getOption(
         "blackObelisk",
         this._options.items.blackObelisk,
         this._host.i18n("$religion.tu.blackObelisk.label")
       ),
-      this.getOption(
+      this._getOption(
         "blackNexus",
         this._options.items.blackNexus,
         this._host.i18n("$religion.tu.blackNexus.label")
       ),
-      this.getOption(
+      this._getOption(
         "blackCore",
         this._options.items.blackCore,
         this._host.i18n("$religion.tu.blackCore.label")
       ),
-      this.getOption(
+      this._getOption(
         "singularity",
         this._options.items.singularity,
         this._host.i18n("$religion.tu.singularity.label")
       ),
-      this.getOption(
+      this._getOption(
         "blackLibrary",
         this._options.items.blackLibrary,
         this._host.i18n("$religion.tu.blackLibrary.label")
       ),
-      this.getOption(
+      this._getOption(
         "blackRadiance",
         this._options.items.blackRadiance,
         this._host.i18n("$religion.tu.blackRadiance.label")
       ),
-      this.getOption(
+      this._getOption(
         "blazar",
         this._options.items.blazar,
         this._host.i18n("$religion.tu.blazar.label")
       ),
-      this.getOption(
+      this._getOption(
         "darkNova",
         this._options.items.darkNova,
         this._host.i18n("$religion.tu.darkNova.label")
       ),
-      this.getOption(
+      this._getOption(
         "holyGenocide",
         this._options.items.holyGenocide,
         this._host.i18n("$religion.tu.holyGenocide.label"),
@@ -257,13 +241,12 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       ),
     ];
 
-    list.append(...this._optionButtons);
+    list.append(...optionButtons);
 
     const additionOptions = this.getAdditionOptions();
 
-    element.append(this._itemsButton);
-    element.append(this._triggerButton);
-    element.append(list);
+    element.panel.append(triggerButton);
+    element.panel.append(list);
     list.append(additionOptions);
 
     /* TODO:
@@ -286,13 +269,13 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     }
     */
 
-    this.element = element;
+    this.element = element.panel;
   }
 
   getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeAdore = this.getOption(
+    const nodeAdore = this._getOption(
       "adore",
       this._options.addition.adore,
       this._host.i18n("option.faith.adore"),
@@ -338,7 +321,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     nodeAdore.append(triggerButtonAdore);
 
-    const nodeAutoPraise = this.getOption(
+    const nodeAutoPraise = this._getOption(
       "autoPraise",
       this._options.addition.autoPraise,
       this._host.i18n("option.praise"),
@@ -384,7 +367,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     nodeAutoPraise.append(triggerButtonAutoPraise);
 
-    const nodeBestUnicornBuilding = this.getOption(
+    const nodeBestUnicornBuilding = this._getOption(
       "bestUnicornBuilding",
       this._options.addition.bestUnicornBuilding,
       this._host.i18n("option.faith.best.unicorn"),
@@ -433,7 +416,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       //this._host.saveToKittenStorage();
     });
 
-    const nodeTranscend = this.getOption(
+    const nodeTranscend = this._getOption(
       "transcend",
       this._options.addition.transcend,
       this._host.i18n("option.faith.transcend"),

@@ -17,13 +17,60 @@ export abstract class SettingsSectionUi<TState> {
   abstract setState(state: TState): void;
   abstract refreshUi(): void;
 
-  protected _getSettingsPanel(id: string): JQuery<HTMLElement> {
-    const element = $("<li/>", { id: `ks-${id}` });
+  /**
+   * Constructs a settings panel that is used to contain a major section of the UI.
+   * @param id The ID of the settings panel.
+   * @returns The constructed settings panel.
+   */
+  protected _getSettingsPanel(
+    id: string,
+    label: string
+  ): {
+    checkbox: JQuery<HTMLElement>;
+    items: JQuery<HTMLElement>;
+    label: JQuery<HTMLElement>;
+    panel: JQuery<HTMLElement>;
+  } {
+    const panelElement = $("<li/>", { id: `ks-${id}` });
     // Add a border on the element
-    element.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.2)");
-    return element;
+    panelElement.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.2)");
+
+    // The checkbox to enable/disable this panel.
+    const enabledElement = $("<input/>", {
+      id: `toggle-${id}`,
+      type: "checkbox",
+    });
+    panelElement.append(enabledElement);
+
+    // The label for this panel.
+    const labelElement = $("<label/>", {
+      text: label,
+    });
+    panelElement.append(labelElement);
+
+    // The expando button for this panel.
+    const itemsElement = this._getItemsToggle(id);
+    panelElement.append(itemsElement);
+
+    // When clicking the label of a major section, expand it instead of
+    // checking the checkbox.
+    // TODO: Maybe not?
+    labelElement.on("click", () => itemsElement.trigger("click"));
+
+    return {
+      checkbox: enabledElement,
+      items: itemsElement,
+      label: labelElement,
+      panel: panelElement,
+    };
   }
 
+  /**
+   * Constructs an expando element that is commonly used to expand and
+   * collapses a section of the UI.
+   * @param id The ID of the section this is the expando for.
+   * @returns The constructed expando element.
+   */
   protected _getItemsToggle(id: string): JQuery<HTMLElement> {
     return $("<div/>", {
       id: `toggle-items-${id}`,
@@ -41,7 +88,14 @@ export abstract class SettingsSectionUi<TState> {
     });
   }
 
-  protected _getOptionHead(toggleName: string): JQuery<HTMLElement> {
+  /**
+   * Constructs a list panel that is used to contain a list of options.
+   * The panel has "enable all" and "disable all" buttons to act on the contained
+   * options respectively.
+   * @param toggleName The ID for this list.
+   * @returns The constructed list.
+   */
+  protected _getOptionList(toggleName: string): JQuery<HTMLElement> {
     const containerList = $("<ul/>", {
       id: `items-list-${toggleName}`,
       css: { display: "none", paddingLeft: "20px", paddingTop: "4px" },
@@ -96,6 +150,12 @@ export abstract class SettingsSectionUi<TState> {
     return containerList;
   }
 
+  /**
+   * Construct a subsection header.
+   * This is purely for cosmetic/informational value in the UI.
+   * @param text The text to appear on the header element.
+   * @returns The constructed header element.
+   */
   protected _getHeader(text: string): JQuery<HTMLElement> {
     const headerElement = $("<li/>");
     const header = $("<span/>", {
@@ -114,7 +174,17 @@ export abstract class SettingsSectionUi<TState> {
     return headerElement;
   }
 
-  protected getOption(
+  /**
+   * Construct a new option element.
+   * This is a simple checkbox with a label.
+   * @param name The internal ID of this option. Should be unique throughout the script.
+   * @param option The option this element is linked to.
+   * @param i18nName The label on the option element.
+   * @param delimiter Should there be additional padding below this element?
+   * @param handler The event handlers for this option element.
+   * @returns The constructed option element.
+   */
+  protected _getOption(
     name: string,
     option: { enabled: boolean; $enabled?: JQuery<HTMLElement> },
     i18nName: string,
@@ -166,7 +236,7 @@ export abstract class SettingsSectionUi<TState> {
     return element;
   }
 
-  protected getAllAvailableResourceOptions(
+  protected _getAllAvailableResourceOptions(
     forReset: boolean,
     onAddHandler: (res: {
       craftable: boolean;
@@ -204,7 +274,7 @@ export abstract class SettingsSectionUi<TState> {
     return items;
   }
 
-  protected addNewResourceOption(
+  protected _addNewResourceOption(
     name: Resource,
     title: string,
     option: ResourcesSettingsItem,
@@ -269,7 +339,7 @@ export abstract class SettingsSectionUi<TState> {
         option.stock.toFixed(0)
       );
       if (value !== null) {
-        this.setStockValue(name, parseInt(value), false);
+        this._setStockValue(name, parseInt(value), false);
         this._host.updateOptions();
       }
     });
@@ -298,7 +368,7 @@ export abstract class SettingsSectionUi<TState> {
     return container;
   }
 
-  protected removeResourceOption(name: Resource): void {
+  protected _removeResourceOption(name: Resource): void {
     const container = $(`#resource-${name}`).remove();
     if (!container.length) {
       return;
@@ -307,7 +377,7 @@ export abstract class SettingsSectionUi<TState> {
     container.remove();
   }
 
-  protected addNewResourceOptionForReset(
+  protected _addNewResourceOptionForReset(
     name: Resource,
     title: string,
     option: TimeControlResourcesSettingsItem,
@@ -356,7 +426,7 @@ export abstract class SettingsSectionUi<TState> {
     stockElement.on("click", () => {
       const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
       if (value !== null) {
-        this.setStockValue(name, parseInt(value), true);
+        this._setStockValue(name, parseInt(value), true);
       }
     });
 
@@ -373,7 +443,7 @@ export abstract class SettingsSectionUi<TState> {
     return container;
   }
 
-  protected removeResourceOptionForReset(name: Resource): void {
+  protected _removeResourceOptionForReset(name: Resource): void {
     const container = $(`#resource-reset-${name}`);
     if (!container) {
       return;
@@ -394,7 +464,7 @@ export abstract class SettingsSectionUi<TState> {
     }
   }
 
-  protected setStockValue(name: Resource, value: number, forReset = false): void {
+  protected _setStockValue(name: Resource, value: number, forReset = false): void {
     if (value < 0) {
       this._host.warning(`ignoring non-numeric or invalid stock value '${value}'`);
       return;

@@ -15,10 +15,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private readonly _options: TimeControlSettings;
 
-  private readonly _itemsButton: JQuery<HTMLElement>;
   private _itemsExpanded = false;
 
-  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
   private _resourcesList: Maybe<JQuery<HTMLElement>>;
 
   constructor(host: UserScript, religionOptions: TimeControlSettings = host.options.auto.timeCtrl) {
@@ -31,49 +29,37 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const itext = ucfirst(this._host.i18n("ui.timeCtrl"));
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName);
+    const element = this._getSettingsPanel(toggleName, itext);
 
-    const label = $("<label/>", {
-      text: itext,
-    });
-    label.on("click", () => this._itemsButton.trigger("click"));
+    this._options.$enabled = element.checkbox;
 
-    const input = $("<input/>", {
-      id: `toggle-${toggleName}`,
-      type: "checkbox",
-    });
-    this._options.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && this._options.enabled === false) {
+    element.checkbox.on("change", () => {
+      if (element.checkbox.is(":checked") && this._options.enabled === false) {
         this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-      } else if (!input.is(":checked") && this._options.enabled === true) {
+      } else if (!element.checkbox.is(":checked") && this._options.enabled === true) {
         this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
       }
     });
 
-    element.append(input, label);
-
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionHead(toggleName);
+    const list = this._getOptionList(toggleName);
 
-    this._itemsButton = this._getItemsToggle(toggleName);
-    this._itemsButton.on("click", () => {
+    element.items.on("click", () => {
       list.toggle();
 
       this._itemsExpanded = !this._itemsExpanded;
 
-      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
-      this._itemsButton.prop(
+      element.items.text(this._itemsExpanded ? "-" : "+");
+      element.items.prop(
         "title",
         this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
       );
     });
 
-    this._optionButtons = [
+    const optionButtons = [
       this._getOptionAccelerateTime(
         "accelerateTime",
         this._options.items.accelerateTime,
@@ -93,12 +79,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       ),
     ];
 
-    list.append(...this._optionButtons);
+    list.append(...optionButtons);
 
-    element.append(this._itemsButton);
-    element.append(list);
+    element.panel.append(list);
 
-    this.element = element;
+    this.element = element.panel;
   }
 
   private _getOptionTimeSkip(
@@ -106,7 +91,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option: TimeControlSettings["items"]["timeSkip"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, label);
+    const element = this._getOption(name, option, label);
 
     const triggerButton = $("<div/>", {
       id: "set-timeSkip-subTrigger",
@@ -234,10 +219,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option: TimeControlSettings["items"]["reset"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, label);
+    const element = this._getOption(name, option, label);
 
     // Bonfire reset options
-    const resetBuildList = this._getOptionHead("reset-build");
+    const resetBuildList = this._getOptionList("reset-build");
     resetBuildList.append(
       this._getResetOption(
         "hut",
@@ -502,7 +487,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     );
 
     // Space reset options
-    const resetSpaceList = this._getOptionHead("reset-space");
+    const resetSpaceList = this._getOptionList("reset-space");
     resetSpaceList.append(
       this._getResetOption(
         "spaceElevator",
@@ -662,15 +647,15 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const resetResourcesList = this._getResourceOptions();
     for (const [item, resource] of objectEntries(this._options.resources)) {
       resetResourcesList.append(
-        this.addNewResourceOptionForReset(item, item, resource, (_name, _resource) => {
+        this._addNewResourceOptionForReset(item, item, resource, (_name, _resource) => {
           delete this._options.resources[_name];
         })
       );
-      this.setStockValue(item, resource.stockForReset, true);
+      this._setStockValue(item, resource.stockForReset, true);
     }
 
     // Religion reset options.
-    const resetReligionList = this._getOptionHead("reset-religion");
+    const resetReligionList = this._getOptionList("reset-religion");
     resetReligionList.append(
       this._getResetOption(
         "unicornPasture",
@@ -860,7 +845,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       )
     );
 
-    const resetTimeList = this._getOptionHead("reset-time");
+    const resetTimeList = this._getOptionList("reset-time");
     resetTimeList.append(
       this._getResetOption(
         "temporalBattery",
@@ -1049,7 +1034,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option: TimeControlSettings["items"]["accelerateTime"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, label);
+    const element = this._getOption(name, option, label);
 
     const triggerButton = $("<div/>", {
       id: `set-${name}-subTrigger`,
@@ -1266,7 +1251,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       allresources.toggle();
       allresources.empty();
       allresources.append(
-        this.getAllAvailableResourceOptions(true, res => {
+        this._getAllAvailableResourceOptions(true, res => {
           if (!this._options.resources[res.name]) {
             const option = {
               checkForReset: true,
@@ -1274,9 +1259,14 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
             };
             this._host.updateOptions(() => (this._options.resources[res.name] = option));
             $("#toggle-reset-list-resources").append(
-              this.addNewResourceOptionForReset(res.name, res.title, option, (_name, _resource) => {
-                delete this._options.resources[_name];
-              })
+              this._addNewResourceOptionForReset(
+                res.name,
+                res.title,
+                option,
+                (_name, _resource) => {
+                  delete this._options.resources[_name];
+                }
+              )
             );
           }
         })
@@ -1370,7 +1360,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       // Add all the current resources
       for (const [name, res] of objectEntries(this._options.resources)) {
         mustExist(this._resourcesList).append(
-          this.addNewResourceOptionForReset(name, name, res, (_name, _resource) => {
+          this._addNewResourceOptionForReset(name, name, res, (_name, _resource) => {
             delete this._options.resources[_name];
           })
         );

@@ -10,11 +10,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
 
   private readonly _options: TimeSettings;
 
-  private readonly _itemsButton: JQuery<HTMLElement>;
   private _itemsExpanded = false;
-  private readonly _triggerButton: JQuery<HTMLElement>;
-
-  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: TimeSettings = host.options.auto.time) {
     super(host);
@@ -26,33 +22,22 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     const itext = ucfirst(this._host.i18n("ui.time"));
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName);
+    const element = this._getSettingsPanel(toggleName, itext);
 
-    const label = $("<label/>", {
-      text: itext,
-    });
-    label.on("click", () => this._itemsButton.trigger("click"));
+    this._options.$enabled = element.panel;
 
-    const input = $("<input/>", {
-      id: `toggle-${toggleName}`,
-      type: "checkbox",
-    });
-    this._options.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && this._options.enabled === false) {
+    element.checkbox.on("change", () => {
+      if (element.checkbox.is(":checked") && this._options.enabled === false) {
         this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-      } else if (!input.is(":checked") && this._options.enabled === true) {
+      } else if (!element.checkbox.is(":checked") && this._options.enabled === true) {
         this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
       }
     });
 
-    element.append(input, label);
-
     // Create "trigger" button in the item.
-    this._triggerButton = $("<div/>", {
+    const triggerButton = $("<div/>", {
       id: `trigger-${toggleName}`,
       text: this._host.i18n("ui.trigger"),
       //title: this._options.trigger,
@@ -63,9 +48,9 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
         paddingRight: "5px",
       },
     });
-    this._options.$trigger = this._triggerButton;
+    this._options.$trigger = triggerButton;
 
-    this._triggerButton.on("click", () => {
+    triggerButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [itext]),
         this._options.trigger.toFixed(2)
@@ -73,94 +58,92 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
 
       if (value !== null) {
         this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
-        this._triggerButton[0].title = this._options.trigger.toFixed(2);
+        triggerButton[0].title = this._options.trigger.toFixed(2);
       }
     });
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionHead(toggleName);
+    const list = this._getOptionList(toggleName);
 
-    this._itemsButton = this._getItemsToggle(toggleName);
-    this._itemsButton.on("click", () => {
+    element.items.on("click", () => {
       list.toggle();
 
       this._itemsExpanded = !this._itemsExpanded;
 
-      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
-      this._itemsButton.prop(
+      element.items.text(this._itemsExpanded ? "-" : "+");
+      element.items.prop(
         "title",
         this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
       );
     });
 
-    this._optionButtons = [
-      this.getOption(
+    const optionButtons = [
+      this._getOption(
         "temporalBattery",
         this._options.items.temporalBattery,
         this._host.i18n("$time.cfu.temporalBattery.label")
       ),
-      this.getOption(
+      this._getOption(
         "blastFurnace",
         this._options.items.blastFurnace,
         this._host.i18n("$time.cfu.blastFurnace.label")
       ),
-      this.getOption(
+      this._getOption(
         "timeBoiler",
         this._options.items.timeBoiler,
         this._host.i18n("$time.cfu.timeBoiler.label")
       ),
-      this.getOption(
+      this._getOption(
         "temporalAccelerator",
         this._options.items.temporalAccelerator,
         this._host.i18n("$time.cfu.temporalAccelerator.label")
       ),
-      this.getOption(
+      this._getOption(
         "temporalImpedance",
         this._options.items.temporalImpedance,
         this._host.i18n("$time.cfu.temporalImpedance.label")
       ),
-      this.getOption(
+      this._getOption(
         "ressourceRetrieval",
         this._options.items.ressourceRetrieval,
         this._host.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
-      this.getOption(
+      this._getOption(
         "cryochambers",
         this._options.items.cryochambers,
         this._host.i18n("$time.vsu.cryochambers.label")
       ),
-      this.getOption(
+      this._getOption(
         "voidHoover",
         this._options.items.voidHoover,
         this._host.i18n("$time.vsu.voidHoover.label")
       ),
-      this.getOption(
+      this._getOption(
         "voidRift",
         this._options.items.voidRift,
         this._host.i18n("$time.vsu.voidRift.label")
       ),
-      this.getOption(
+      this._getOption(
         "chronocontrol",
         this._options.items.chronocontrol,
         this._host.i18n("$time.vsu.chronocontrol.label")
       ),
-      this.getOption(
+      this._getOption(
         "voidResonator",
         this._options.items.voidResonator,
         this._host.i18n("$time.vsu.voidResonator.label")
       ),
     ];
 
-    list.append(...this._optionButtons);
+    list.append(...optionButtons);
 
-    element.append(this._itemsButton);
-    element.append(this._triggerButton);
-    element.append(list);
+    element.panel.append(triggerButton);
+    element.panel.append(list);
 
-    this.element = element;
+    this.element = element.panel;
   }
 
   getState(): TimeSettings {

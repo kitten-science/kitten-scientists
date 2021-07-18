@@ -10,10 +10,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
   private readonly _options: OptionsSettings;
 
-  private readonly _itemsButton: JQuery<HTMLElement>;
   private _itemsExpanded = false;
-
-  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: OptionsSettings = host.options.auto.options) {
     super(host);
@@ -25,49 +22,37 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     const itext = ucfirst(this._host.i18n("ui.options"));
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName);
+    const element = this._getSettingsPanel(toggleName, itext);
 
-    const label = $("<label/>", {
-      text: itext,
-    });
-    label.on("click", () => this._itemsButton.trigger("click"));
+    this._options.$enabled = element.checkbox;
 
-    const input = $("<input/>", {
-      id: `toggle-${toggleName}`,
-      type: "checkbox",
-    });
-    this._options.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && this._options.enabled === false) {
+    element.checkbox.on("change", () => {
+      if (element.checkbox.is(":checked") && this._options.enabled === false) {
         this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-      } else if (!input.is(":checked") && this._options.enabled === true) {
+      } else if (!element.checkbox.is(":checked") && this._options.enabled === true) {
         this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
       }
     });
 
-    element.append(input, label);
-
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionHead(toggleName);
+    const list = this._getOptionList(toggleName);
 
-    this._itemsButton = this._getItemsToggle(toggleName);
-    this._itemsButton.on("click", () => {
+    element.items.on("click", () => {
       list.toggle();
 
       this._itemsExpanded = !this._itemsExpanded;
 
-      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
-      this._itemsButton.prop(
+      element.items.text(this._itemsExpanded ? "-" : "+");
+      element.items.prop(
         "title",
         this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
       );
     });
 
-    this._optionButtons = [
+    const optionButtons = [
       this._getOptionsOption(
         "observe",
         this._options.items.observe,
@@ -117,12 +102,11 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       ),
     ];
 
-    list.append(...this._optionButtons);
+    list.append(...optionButtons);
 
-    element.append(this._itemsButton);
-    element.append(list);
+    element.panel.append(list);
 
-    this.element = element;
+    this.element = element.panel;
   }
 
   private _getOptionsOption(
@@ -130,7 +114,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     option: OptionsSettingsItem,
     iname: string
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, iname);
+    const element = this._getOption(name, option, iname);
 
     // hack for style.
     // If there are more UI options, split it to "getUIOption"

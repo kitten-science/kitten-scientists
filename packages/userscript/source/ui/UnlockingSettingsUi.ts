@@ -11,11 +11,8 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
 
   private readonly _options: UnlockingSettings;
 
-  private readonly _itemsButton: JQuery<HTMLElement>;
   private _itemsExpanded = false;
   private _policiesExpanded = false;
-
-  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: UnlockingSettings = host.options.auto.unlock) {
     super(host);
@@ -27,50 +24,38 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     const itext = ucfirst(this._host.i18n("ui.upgrade"));
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName);
+    const element = this._getSettingsPanel(toggleName, itext);
 
-    const label = $("<label/>", {
-      text: itext,
-    });
-    label.on("click", () => this._itemsButton.trigger("click"));
+    this._options.$enabled = element.checkbox;
 
-    const input = $("<input/>", {
-      id: `toggle-${toggleName}`,
-      type: "checkbox",
-    });
-    this._options.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && this._options.enabled === false) {
+    element.checkbox.on("change", () => {
+      if (element.checkbox.is(":checked") && this._options.enabled === false) {
         this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-      } else if (!input.is(":checked") && this._options.enabled === true) {
+      } else if (!element.checkbox.is(":checked") && this._options.enabled === true) {
         this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
       }
     });
 
-    element.append(input, label);
-
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionHead(toggleName);
+    const list = this._getOptionList(toggleName);
 
-    this._itemsButton = this._getItemsToggle(toggleName);
-    this._itemsButton.on("click", () => {
+    element.items.on("click", () => {
       list.toggle();
 
       this._itemsExpanded = !this._itemsExpanded;
 
-      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
-      this._itemsButton.prop(
+      element.items.text(this._itemsExpanded ? "-" : "+");
+      element.items.prop(
         "title",
         this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
       );
     });
 
     // Set up the more complex policies options.
-    const policiesButton = this.getOption(
+    const policiesButton = this._getOption(
       "policies",
       this._options.items.policies,
       this._host.i18n("ui.upgrade.policies"),
@@ -96,7 +81,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
       const policyLabel = this._host.i18n(
         `$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`
       );
-      const policyButton = this.getOption(`policy-${policyName}`, policy, policyLabel, false, {
+      const policyButton = this._getOption(`policy-${policyName}`, policy, policyLabel, false, {
         onCheck: () => {
           this._host.updateOptions(() => (policy.enabled = true));
           this._host.imessage("status.auto.enable", [policyLabel]);
@@ -124,8 +109,8 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     policiesButton.append(policiesItemsButton, policiesList);
 
     // Set up the remaining options.
-    this._optionButtons = [
-      this.getOption(
+    const optionButtons = [
+      this._getOption(
         "upgrades",
         this._options.items.upgrades,
         this._host.i18n("ui.upgrade.upgrades"),
@@ -142,7 +127,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
         }
       ),
       policiesButton,
-      this.getOption(
+      this._getOption(
         "techs",
         this._options.items.techs,
         this._host.i18n("ui.upgrade.techs"),
@@ -158,7 +143,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
           },
         }
       ),
-      this.getOption(
+      this._getOption(
         "races",
         this._options.items.races,
         this._host.i18n("ui.upgrade.races"),
@@ -174,7 +159,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
           },
         }
       ),
-      this.getOption(
+      this._getOption(
         "missions",
         this._options.items.missions,
         this._host.i18n("ui.upgrade.missions"),
@@ -190,7 +175,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
           },
         }
       ),
-      this.getOption(
+      this._getOption(
         "buildings",
         this._options.items.buildings,
         this._host.i18n("ui.upgrade.buildings"),
@@ -208,12 +193,11 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
       ),
     ];
 
-    list.append(...this._optionButtons);
+    list.append(...optionButtons);
 
-    element.append(this._itemsButton);
-    element.append(list);
+    element.panel.append(list);
 
-    this.element = element;
+    this.element = element.panel;
   }
 
   getState(): UnlockingSettings {

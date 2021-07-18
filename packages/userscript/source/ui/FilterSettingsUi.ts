@@ -10,10 +10,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
 
   private readonly _options: FilterSettings;
 
-  private readonly _itemsButton: JQuery<HTMLElement>;
   private _itemsExpanded = false;
-
-  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, options: FilterSettings = host.options.auto.filters) {
     super(host);
@@ -25,43 +22,31 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     const itext = ucfirst(this._host.i18n("ui.filter"));
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName);
+    const element = this._getSettingsPanel(toggleName, itext);
 
-    const label = $("<label/>", {
-      text: itext,
-    });
-    label.on("click", () => this._itemsButton.trigger("click"));
+    this._options.$enabled = element.checkbox;
 
-    const input = $("<input/>", {
-      id: `toggle-${toggleName}`,
-      type: "checkbox",
-    });
-    this._options.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && this._options.enabled === false) {
+    element.checkbox.on("change", () => {
+      if (element.checkbox.is(":checked") && this._options.enabled === false) {
         this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-      } else if (!input.is(":checked") && this._options.enabled === true) {
+      } else if (!element.checkbox.is(":checked") && this._options.enabled === true) {
         this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
       }
     });
 
-    element.append(input, label);
-
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionHead(toggleName);
+    const list = this._getOptionList(toggleName);
 
-    this._itemsButton = this._getItemsToggle(toggleName);
-    this._itemsButton.on("click", () => {
+    element.items.on("click", () => {
       list.toggle();
 
       this._itemsExpanded = !this._itemsExpanded;
 
-      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
-      this._itemsButton.prop(
+      element.items.text(this._itemsExpanded ? "-" : "+");
+      element.items.prop(
         "title",
         this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
       );
@@ -156,7 +141,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     ] as const;
 
     const makeButton = (name: FilterItem, option: FilterSettingsItem, label: string) =>
-      this.getOption(name, option, label, false, {
+      this._getOption(name, option, label, false, {
         onCheck: () => {
           option.enabled = true;
           this._host.imessage("filter.enable", [label]);
@@ -167,16 +152,15 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
         },
       });
 
-    this._optionButtons = buttons.map(button =>
+    const optionButtons = buttons.map(button =>
       makeButton(button.name, button.option, button.label)
     );
 
-    list.append(...this._optionButtons);
+    list.append(optionButtons);
 
-    element.append(this._itemsButton);
-    element.append(list);
+    element.panel.append(list);
 
-    this.element = element;
+    this.element = element.panel;
   }
 
   getState(): FilterSettings {
