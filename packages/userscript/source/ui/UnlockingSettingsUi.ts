@@ -216,6 +216,13 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     this.element = element;
   }
 
+  getState(): UnlockingSettings {
+    return {
+      enabled: this._options.enabled,
+      items: this._options.items,
+    };
+  }
+
   setState(state: UnlockingSettings): void {
     this._options.enabled = state.enabled;
 

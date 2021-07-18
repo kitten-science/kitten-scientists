@@ -382,6 +382,14 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     return element;
   }
 
+  getState(): BonfireSettings {
+    return {
+      enabled: this._options.enabled,
+      trigger: this._options.trigger,
+      items: this._options.items,
+    };
+  }
+
   setState(state: BonfireSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;

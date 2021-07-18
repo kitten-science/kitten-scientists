@@ -1288,6 +1288,18 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     return this._resourcesList;
   }
 
+  getState(): TimeControlSettings {
+    return {
+      enabled: this._options.enabled,
+      items: this._options.items,
+      buildItems: this._options.buildItems,
+      religionItems: this._options.religionItems,
+      resources: this._options.resources,
+      spaceItems: this._options.spaceItems,
+      timeItems: this._options.timeItems,
+    };
+  }
+
   setState(state: TimeControlSettings): void {
     this._options.enabled = state.enabled;
 

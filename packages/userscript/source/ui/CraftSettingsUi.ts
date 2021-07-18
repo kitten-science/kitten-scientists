@@ -367,6 +367,15 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     return this._resourcesList;
   }
 
+  getState(): CraftSettings {
+    return {
+      enabled: this._options.enabled,
+      trigger: this._options.trigger,
+      items: this._options.items,
+      resources: this._options.resources,
+    };
+  }
+
   setState(state: CraftSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;

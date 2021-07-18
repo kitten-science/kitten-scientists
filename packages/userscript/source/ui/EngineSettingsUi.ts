@@ -47,6 +47,12 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
     this.element = element;
   }
 
+  getState(): EngineSettings {
+    return {
+      enabled: this._options.enabled,
+    };
+  }
+
   setState(state: EngineSettings): void {
     this._options.enabled = state.enabled;
   }

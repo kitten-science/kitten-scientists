@@ -244,6 +244,14 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     return element;
   }
 
+  getState(): TradingSettings {
+    return {
+      enabled: this._options.enabled,
+      trigger: this._options.trigger,
+      items: this._options.items,
+    };
+  }
+
   setState(state: TradingSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;
