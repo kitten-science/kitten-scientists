@@ -1133,8 +1133,8 @@ export class Engine {
           }
         }
       }
-      for (var i in toResearch) {
-        upgradeManager.build(toResearch[i], "policy");
+      for (const polciy of toResearch) {
+        upgradeManager.build(polciy, "policy");
       }
     }
 
