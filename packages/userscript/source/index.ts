@@ -29,6 +29,9 @@ import { UserScript } from "./UserScript";
   if (!isNil(devSettings)) {
     const options = Options.parseLegacyOptions(devSettings);
     userScript.injectOptions(options);
+  } else if (!isNil(legacySettings)) {
+    const options = Options.parseLegacyOptions(legacySettings);
+    userScript.injectOptions(options);
   }
 
   userScript.run();
