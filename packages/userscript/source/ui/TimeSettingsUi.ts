@@ -163,6 +163,14 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     this.element = element;
   }
 
+  getState(): TimeSettings {
+    return {
+      enabled: this._options.enabled,
+      trigger: this._options.trigger,
+      items: this._options.items,
+    };
+  }
+
   setState(state: TimeSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;

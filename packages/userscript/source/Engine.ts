@@ -3,6 +3,7 @@ import { BulkManager } from "./BulkManager";
 import { CacheManager } from "./CacheManager";
 import { CraftManager } from "./CraftManager";
 import { BonfireSettingsItem, BuildItem } from "./options/BonfireSettings";
+import { PolicySettings } from "./options/PolicySettings";
 import { FaithItem, ReligionSettingsItem } from "./options/ReligionSettings";
 import { SettingsStorage } from "./options/SettingsStorage";
 import { SpaceItem } from "./options/SpaceSettings";
@@ -1111,7 +1112,9 @@ export class Engine {
       var policies = this._host.gamePage.science.policies;
       var toResearch = [];
 
-      for (const [policy] of objectEntries(this._host.options.auto.policies.items)) {
+      for (const [policy] of objectEntries(
+        (this._host.options.auto.unlock.items.policies as PolicySettings).items
+      )) {
         const targetPolicy = policies.find(policy => policy.name === policy.name);
         if (isNil(targetPolicy)) {
           cerror(`Policy '${policy}' not found in game!`);

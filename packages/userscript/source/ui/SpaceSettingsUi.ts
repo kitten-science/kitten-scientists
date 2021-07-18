@@ -292,6 +292,14 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     return element;
   }
 
+  getState(): SpaceSettings {
+    return {
+      enabled: this._options.enabled,
+      trigger: this._options.trigger,
+      items: this._options.items,
+    };
+  }
+
   setState(state: SpaceSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;

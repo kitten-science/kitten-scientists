@@ -125,6 +125,7 @@ export class UserScript {
     if (updater) {
       updater(this.options);
     }
+    this.options = this._userInterface?.getState();
     this._optionsDirty = true;
   }
 

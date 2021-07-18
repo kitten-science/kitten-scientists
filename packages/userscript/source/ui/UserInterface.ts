@@ -99,6 +99,23 @@ export class UserInterface {
     right.prepend(optionsElement.append(optionsListElement));
   }
 
+  getState(): Options {
+    const result = new Options();
+    Object.assign(result.auto, { engine: this._engineUi.getState() });
+    Object.assign(result.auto, { build: this._bonfireUi.getState() });
+    Object.assign(result.auto, { space: this._spaceUi.getState() });
+    Object.assign(result.auto, { craft: this._craftUi.getState() });
+    Object.assign(result.auto, { unlock: this._unlockUi.getState() });
+    Object.assign(result.auto, { trade: this._tradingUi.getState() });
+    Object.assign(result.auto, { religion: this._religionUi.getState() });
+    Object.assign(result.auto, { time: this._timeUi.getState() });
+    Object.assign(result.auto, { timeCtrl: this._timeCtrlUi.getState() });
+    Object.assign(result.auto, { distribute: this._distributeUi.getState() });
+    Object.assign(result.auto, { options: this._optionsUi.getState() });
+    Object.assign(result.auto, { filters: this._filterUi.getState() });
+    return result;
+  }
+
   setState(state: Options): void {
     this._engineUi.setState(state.auto.engine);
     this._bonfireUi.setState(state.auto.build);

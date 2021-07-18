@@ -13,6 +13,7 @@ export abstract class SettingsSectionUi<TState> {
     this._host = host;
   }
 
+  abstract getState(): TState;
   abstract setState(state: TState): void;
   abstract refreshUi(): void;
 

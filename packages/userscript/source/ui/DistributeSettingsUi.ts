@@ -177,6 +177,13 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     return element;
   }
 
+  getState(): DistributeSettings {
+    return {
+      enabled: this._options.enabled,
+      items: this._options.items,
+    };
+  }
+
   setState(state: DistributeSettings): void {
     mustExist(this._options.$enabled).prop("checked", state.enabled);
     this._options.enabled = state.enabled;

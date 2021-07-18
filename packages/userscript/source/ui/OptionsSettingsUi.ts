@@ -188,6 +188,13 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     return element;
   }
 
+  getState(): OptionsSettings {
+    return {
+      enabled: this._options.enabled,
+      items: this._options.items,
+    };
+  }
+
   setState(state: OptionsSettings): void {
     this._options.enabled = state.enabled;
 
