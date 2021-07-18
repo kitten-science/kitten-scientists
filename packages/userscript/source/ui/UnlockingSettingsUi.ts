@@ -224,7 +224,9 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
       option.enabled = state.items[name].enabled;
     }
     // Handle policies.
-    for (const [name, option] of objectEntries(this._host.options.auto.policies.items)) {
+    for (const [name, option] of objectEntries(
+      (this._options.items.policies as PolicySettings).items
+    )) {
       option.enabled = (state.items.policies as PolicySettings).items[name].enabled;
     }
   }
