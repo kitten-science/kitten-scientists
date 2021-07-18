@@ -11,11 +11,8 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
   private readonly _options: CraftSettings;
 
-  private readonly _itemsButton: JQuery<HTMLElement>;
   private _itemsExpanded = false;
-  private readonly _resourcesButton: JQuery<HTMLElement>;
   private _resourcesList: Maybe<JQuery<HTMLElement>>;
-  private readonly _triggerButton: JQuery<HTMLElement>;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
@@ -29,33 +26,22 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     const itext = ucfirst(this._host.i18n("ui.craft"));
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName);
+    const element = this._getSettingsPanel(toggleName, itext);
 
-    const label = $("<label/>", {
-      text: itext,
-    });
-    label.on("click", () => this._itemsButton.trigger("click"));
+    this._options.$enabled = element.checkbox;
 
-    const input = $("<input/>", {
-      id: `toggle-${toggleName}`,
-      type: "checkbox",
-    });
-    this._options.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && this._options.enabled === false) {
+    element.checkbox.on("change", () => {
+      if (element.checkbox.is(":checked") && this._options.enabled === false) {
         this._host.updateOptions(() => (this._options.enabled = true));
         this._host.imessage("status.auto.enable", [itext]);
-      } else if (!input.is(":checked") && this._options.enabled === true) {
+      } else if (!element.checkbox.is(":checked") && this._options.enabled === true) {
         this._host.updateOptions(() => (this._options.enabled = false));
         this._host.imessage("status.auto.disable", [itext]);
       }
     });
 
-    element.append(input, label);
-
     // Create "trigger" button in the item.
-    this._triggerButton = $("<div/>", {
+    const triggerButton = $("<div/>", {
       id: `trigger-${toggleName}`,
       text: this._host.i18n("ui.trigger"),
       title: this._options.trigger,
@@ -66,9 +52,9 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
         paddingRight: "5px",
       },
     });
-    this._options.$trigger = this._triggerButton;
+    this._options.$trigger = triggerButton;
 
-    this._triggerButton.on("click", () => {
+    triggerButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [itext]),
         this._options.trigger.toString()
@@ -76,22 +62,21 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
       if (value !== null) {
         this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
-        this._triggerButton[0].title = this._options.trigger.toString();
+        triggerButton[0].title = this._options.trigger.toString();
       }
     });
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionHead(toggleName);
+    const list = this._getOptionList(toggleName);
 
-    this._itemsButton = this._getItemsToggle(toggleName);
-    this._itemsButton.on("click", () => {
+    element.items.on("click", () => {
       list.toggle();
 
       this._itemsExpanded = !this._itemsExpanded;
 
-      this._itemsButton.text(this._itemsExpanded ? "-" : "+");
-      this._itemsButton.prop(
+      element.items.text(this._itemsExpanded ? "-" : "+");
+      element.items.prop(
         "title",
         this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
       );
@@ -201,7 +186,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
     list.append(...this._optionButtons);
 
-    this._resourcesButton = $("<div/>", {
+    const resourcesButton = $("<div/>", {
       id: "toggle-resource-controls",
       text: "🛠",
       title: this._host.i18n("ui.craft.resources"),
@@ -215,23 +200,22 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
     const resourcesList = this._getResourceOptions();
 
-    // When we click the items button, make sure we clear resources
-    this._itemsButton.on("click", () => {
+    // When we click the items button, make sure we hide resources.
+    element.items.on("click", () => {
       resourcesList.toggle(false);
     });
 
-    this._resourcesButton.on("click", () => {
+    resourcesButton.on("click", () => {
       list.toggle(false);
       resourcesList.toggle();
     });
 
-    element.append(this._itemsButton);
-    element.append(this._triggerButton);
-    element.append(this._resourcesButton);
-    element.append(list);
-    element.append(resourcesList);
+    element.panel.append(triggerButton);
+    element.panel.append(resourcesButton);
+    element.panel.append(list);
+    element.panel.append(resourcesList);
 
-    this.element = element;
+    this.element = element.panel;
   }
 
   private _getCraftOption(
@@ -240,7 +224,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this.getOption(name, option, label, delimiter, {
+    const element = this._getOption(name, option, label, delimiter, {
       onCheck: () => {
         option.enabled = true;
         this._host.imessage("status.auto.enable", [label]);
@@ -333,7 +317,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       allresources.toggle();
       allresources.empty();
       allresources.append(
-        this.getAllAvailableResourceOptions(false, res => {
+        this._getAllAvailableResourceOptions(false, res => {
           if (!this._options.resources[res.name]) {
             const option = {
               consume: this._host.options.consume,
@@ -342,7 +326,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
             };
             this._options.resources[res.name] = option;
             mustExist(this._resourcesList).append(
-              this.addNewResourceOption(res.name, res.title, option, (_name, _resource) => {
+              this._addNewResourceOption(res.name, res.title, option, (_name, _resource) => {
                 delete this._options.resources[_name];
               })
             );
@@ -356,7 +340,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     // Add all the current resources
     for (const [name, item] of objectEntries(this._host.options.auto.craft.resources)) {
       this._resourcesList.append(
-        this.addNewResourceOption(name, name, item, (_name, _resource) => {
+        this._addNewResourceOption(name, name, item, (_name, _resource) => {
           delete this._options.resources[_name];
         })
       );
@@ -386,13 +370,13 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     }
     // Remove old resource options.
     for (const [name, option] of objectEntries(this._options.resources)) {
-      this.removeResourceOption(name);
+      this._removeResourceOption(name);
     }
     // Add new resource options.
     const resourcesList = this._getResourceOptions();
     for (const [name, option] of objectEntries(state.resources)) {
       resourcesList.append(
-        this.addNewResourceOption(name, name, option, (_name, _resource) => {
+        this._addNewResourceOption(name, name, option, (_name, _resource) => {
           delete this._options.resources[_name];
         })
       );
