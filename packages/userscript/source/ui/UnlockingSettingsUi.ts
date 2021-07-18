@@ -1,3 +1,4 @@
+import { PolicySettings } from "../options/PolicySettings";
 import { UnlockingSettings } from "../options/UnlockingSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
@@ -89,13 +90,16 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
       id: "items-list-policies",
       css: { display: "none", paddingLeft: "20px" },
     });
-    for (const [policyName, policy] of objectEntries(this._host.options.auto.policies.items)) {
+    for (const [policyName, policy] of objectEntries(
+      (this._options.items.policies as PolicySettings).items
+    )) {
       const policyButton = this.getOption(
         `policy-${policyName}`,
         policy,
         this._host.i18n(`$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`)
       );
 
+      policy.$enabled = policyButton;
       policiesList.append(policyButton);
     }
     const policiesItemsButton = this._getItemsToggle("policies-show");
@@ -211,6 +215,10 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
     }
+    // Handle policies.
+    for (const [name, option] of objectEntries(this._host.options.auto.policies.items)) {
+      option.enabled = (state.items.policies as PolicySettings).items[name].enabled;
+    }
   }
 
   refreshUi(): void {
@@ -218,6 +226,15 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+    }
+    // Handle policies
+    for (const [name, option] of objectEntries(
+      (this._options.items.policies as PolicySettings).items
+    )) {
+      mustExist(option.$enabled).prop(
+        "checked",
+        (this._options.items.policies as PolicySettings).items[name].enabled
+      );
     }
   }
 }

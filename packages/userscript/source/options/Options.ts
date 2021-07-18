@@ -189,6 +189,11 @@ export class Options {
     for (const [name, item] of objectEntries(this.auto.unlock.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
     }
+    for (const [name, item] of objectEntries(
+      (this.auto.unlock.items.policies as PolicySettings).items
+    )) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+    }
 
     subject.resources = {};
     for (const [name, item] of objectEntries(this.auto.craft.resources)) {
@@ -375,6 +380,11 @@ export class Options {
       item.winter = subject.items[`toggle-${name}-winter` as const] ?? item.winter;
     }
     for (const [name, item] of objectEntries(result.auto.unlock.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
+    for (const [name, item] of objectEntries(
+      (result.auto.unlock.items.policies as PolicySettings).items
+    )) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }
 
