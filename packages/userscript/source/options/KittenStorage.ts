@@ -1,4 +1,4 @@
-import { Job, Race, Resource, Season } from "../types";
+import { Job, Policy, Race, Resource, Season } from "../types";
 import { BuildItem } from "./BonfireSettings";
 import { FilterItem } from "./FilterSettings";
 import { AllItems } from "./Options";
@@ -28,6 +28,7 @@ type ToggleLimitedJobItem = `toggle-limited-${Job}`;
 type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
 type ToggleLimitedResourceItem = `toggle-limited-${Resource}`;
 type ToggleOptionsItem = `toggle-${OptionsItem}`;
+type TogglePolicyItem = `toggle-${Policy}`;
 type ToggleRaceItem = `toggle-${Race}`;
 type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
 type ToggleReligionAdditionItem = `toggle-${ReligionAdditionItem}`;
@@ -65,6 +66,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleLimitedRaceItem, boolean>> &
     Partial<Record<ToggleLimitedResourceItem, boolean>> &
     Partial<Record<ToggleOptionsItem, boolean>> &
+    Partial<Record<TogglePolicyItem, boolean>> &
     Partial<Record<ToggleRaceItem, boolean>> &
     Partial<Record<ToggleRaceSeasonItem, boolean>> &
     Partial<Record<ToggleReligionAdditionItem, boolean>> &
