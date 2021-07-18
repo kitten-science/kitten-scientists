@@ -107,7 +107,6 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
         },
       });
 
-      policy.$enabled = policyButton;
       policiesList.append(policyButton);
     }
     const policiesItemsButton = this._getItemsToggle("policies-show");
