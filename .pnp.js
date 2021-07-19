@@ -56,7 +56,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:7.31.0"],
             ["lint-staged", "npm:11.0.1"],
             ["prettier", "npm:2.3.2"],
-            ["prettier-plugin-organize-imports", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.2.0"],
+            ["prettier-plugin-organize-imports", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.3.0"],
             ["tslib", "npm:2.3.0"],
             ["typescript", "patch:typescript@npm%3A4.3.5#builtin<compat/typescript>::version=4.3.5&hash=ddfc1b"]
           ],
@@ -3023,7 +3023,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:7.31.0"],
             ["lint-staged", "npm:11.0.1"],
             ["prettier", "npm:2.3.2"],
-            ["prettier-plugin-organize-imports", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.2.0"],
+            ["prettier-plugin-organize-imports", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.3.0"],
             ["tslib", "npm:2.3.0"],
             ["typescript", "patch:typescript@npm%3A4.3.5#builtin<compat/typescript>::version=4.3.5&hash=ddfc1b"]
           ],
@@ -3722,17 +3722,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["prettier-plugin-organize-imports", [
-        ["npm:2.2.0", {
-          "packageLocation": "./.yarn/cache/prettier-plugin-organize-imports-npm-2.2.0-439f5bcc38-030778bcfa.zip/node_modules/prettier-plugin-organize-imports/",
+        ["npm:2.3.0", {
+          "packageLocation": "./.yarn/cache/prettier-plugin-organize-imports-npm-2.3.0-2ce47389f0-0816d3859c.zip/node_modules/prettier-plugin-organize-imports/",
           "packageDependencies": [
-            ["prettier-plugin-organize-imports", "npm:2.2.0"]
+            ["prettier-plugin-organize-imports", "npm:2.3.0"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.2.0", {
-          "packageLocation": "./.yarn/$$virtual/prettier-plugin-organize-imports-virtual-4c64dba00d/0/cache/prettier-plugin-organize-imports-npm-2.2.0-439f5bcc38-030778bcfa.zip/node_modules/prettier-plugin-organize-imports/",
+        ["virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.3.0", {
+          "packageLocation": "./.yarn/$$virtual/prettier-plugin-organize-imports-virtual-7722d15c87/0/cache/prettier-plugin-organize-imports-npm-2.3.0-2ce47389f0-0816d3859c.zip/node_modules/prettier-plugin-organize-imports/",
           "packageDependencies": [
-            ["prettier-plugin-organize-imports", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.2.0"],
+            ["prettier-plugin-organize-imports", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.3.0"],
             ["@types/prettier", "npm:2.3.2"],
             ["@types/typescript", null],
             ["prettier", "npm:2.3.2"],
