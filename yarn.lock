@@ -2468,7 +2468,7 @@ __metadata:
     eslint: 7.31.0
     lint-staged: 11.0.1
     prettier: 2.3.2
-    prettier-plugin-organize-imports: 2.3.2
+    prettier-plugin-organize-imports: 2.3.3
     tslib: 2.3.0
     typescript: 4.3.5
   languageName: unknown
@@ -3061,13 +3061,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-organize-imports@npm:2.3.2":
-  version: 2.3.2
-  resolution: "prettier-plugin-organize-imports@npm:2.3.2"
+"prettier-plugin-organize-imports@npm:2.3.3":
+  version: 2.3.3
+  resolution: "prettier-plugin-organize-imports@npm:2.3.3"
   peerDependencies:
     prettier: ">=2.0"
     typescript: ">=2.9"
-  checksum: 57e4062fcfe7d389b4963e791b7b5f8bdb8bc291f34891d94dbe2685278155d19a1d522e11cc1ee99b4b70eef2ec5c40cd0467aefa72b5a17bd1b54d948c4e60
+  checksum: 75a62829ca7b45439d555f7e13af7de6d77ed61c56a7b2ba30b9d0a76c71e5ea28ea9d218fea15395551893c0c2c3329160c951ac2b564710771cee5f8a6dce5
   languageName: node
   linkType: hard
 
