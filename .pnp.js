@@ -4531,17 +4531,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["ts-loader", [
-        ["npm:9.2.3", {
-          "packageLocation": "./.yarn/cache/ts-loader-npm-9.2.3-77457cfe24-10727f5b0e.zip/node_modules/ts-loader/",
+        ["npm:9.2.4", {
+          "packageLocation": "./.yarn/cache/ts-loader-npm-9.2.4-7488cf0c44-10c63a2bb2.zip/node_modules/ts-loader/",
           "packageDependencies": [
-            ["ts-loader", "npm:9.2.3"]
+            ["ts-loader", "npm:9.2.4"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:9.2.3", {
-          "packageLocation": "./.yarn/$$virtual/ts-loader-virtual-3d5c7939f2/0/cache/ts-loader-npm-9.2.3-77457cfe24-10727f5b0e.zip/node_modules/ts-loader/",
+        ["virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:9.2.4", {
+          "packageLocation": "./.yarn/$$virtual/ts-loader-virtual-54f7101f05/0/cache/ts-loader-npm-9.2.4-7488cf0c44-10c63a2bb2.zip/node_modules/ts-loader/",
           "packageDependencies": [
-            ["ts-loader", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:9.2.3"],
+            ["ts-loader", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:9.2.4"],
             ["@types/typescript", null],
             ["@types/webpack", null],
             ["chalk", "npm:4.1.1"],
@@ -4723,7 +4723,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/terser-webpack-plugin", "npm:5.0.4"],
             ["pnp-webpack-plugin", "npm:1.6.4"],
             ["terser-webpack-plugin", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:5.1.4"],
-            ["ts-loader", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:9.2.3"],
+            ["ts-loader", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:9.2.4"],
             ["tslib", "npm:2.2.0"],
             ["typescript", "patch:typescript@npm%3A4.3.5#builtin<compat/typescript>::version=4.3.5&hash=ddfc1b"],
             ["webpack", "virtual:935513de09321a95a5cf64ba620f168c1ab2320ce7adfa257c71194544eb70308f5a50c75f87aab791eddd08a78fb9a953c783f6034be9cfa7d4b18f9aa852e7#npm:5.45.1"],
