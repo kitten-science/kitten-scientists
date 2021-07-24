@@ -2466,7 +2466,7 @@ __metadata:
     "@typescript-eslint/parser": 4.28.4
     "@yarnpkg/pnpify": 2.4.0
     eslint: 7.31.0
-    lint-staged: 11.0.1
+    lint-staged: 11.1.1
     prettier: 2.3.2
     prettier-plugin-organize-imports: 2.3.3
     tslib: 2.3.0
@@ -2491,9 +2491,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:11.0.1":
-  version: 11.0.1
-  resolution: "lint-staged@npm:11.0.1"
+"lint-staged@npm:11.1.1":
+  version: 11.1.1
+  resolution: "lint-staged@npm:11.1.1"
   dependencies:
     chalk: ^4.1.1
     cli-truncate: ^2.1.0
@@ -2512,7 +2512,7 @@ __metadata:
     stringify-object: ^3.3.0
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 2b90d18a40acb26c61df224844040843f4533b874cf5a5b6be9d7641d60c2799b4acf7e1f73cea4ab1c3630f26ab3c4553a42935850b6a7683e0500e5af7b3ec
+  checksum: 1a3100748c60f0ca28635923229ad4e2415681a192fcf40b453b05f6aa053ac87f70328d07374655b55009e4f3b3a6774b132f72ec54a7b1c540d0664ec52c5e
   languageName: node
   linkType: hard
 
