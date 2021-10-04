@@ -22,16 +22,17 @@ import { UserScript } from "./UserScript";
 
   cinfo("Looking for legacy settings...");
   const legacySettings = SettingsStorage.getLegacySettings();
-  if (legacySettings === null) {
-    cinfo("No legacy settings found. Default settings will be used.");
-  }
 
   if (!isNil(devSettings)) {
+    cinfo("Using development settings snapshot.");
     const options = Options.parseLegacyOptions(devSettings);
     userScript.injectOptions(options);
   } else if (!isNil(legacySettings)) {
+    cinfo("Using restored legacy settings.");
     const options = Options.parseLegacyOptions(legacySettings);
     userScript.injectOptions(options);
+  } else {
+    cinfo("No legacy settings found. Default settings will be used.");
   }
 
   userScript.run();
