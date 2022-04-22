@@ -57,7 +57,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["lint-staged", "npm:11.2.6"],
             ["prettier", "npm:2.6.1"],
             ["prettier-plugin-organize-imports", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.3.3"],
-            ["tslib", "npm:2.3.0"],
+            ["tslib", "npm:2.4.0"],
             ["typescript", "patch:typescript@npm%3A4.3.5#builtin<compat/typescript>::version=4.3.5&hash=ddfc1b"]
           ],
           "linkType": "SOFT",
@@ -3060,7 +3060,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["lint-staged", "npm:11.2.6"],
             ["prettier", "npm:2.6.1"],
             ["prettier-plugin-organize-imports", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:2.3.3"],
-            ["tslib", "npm:2.3.0"],
+            ["tslib", "npm:2.4.0"],
             ["typescript", "patch:typescript@npm%3A4.3.5#builtin<compat/typescript>::version=4.3.5&hash=ddfc1b"]
           ],
           "linkType": "SOFT",
@@ -4627,17 +4627,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:2.3.0", {
-          "packageLocation": "./.yarn/cache/tslib-npm-2.3.0-277e75e108-7b4fc9feff.zip/node_modules/tslib/",
-          "packageDependencies": [
-            ["tslib", "npm:2.3.0"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:2.3.1", {
           "packageLocation": "./.yarn/cache/tslib-npm-2.3.1-0e21e18015-5ae2f209c5.zip/node_modules/tslib/",
           "packageDependencies": [
             ["tslib", "npm:2.3.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.4.0", {
+          "packageLocation": "./.yarn/cache/tslib-npm-2.4.0-9cb6dc5030-6964ab2376.zip/node_modules/tslib/",
+          "packageDependencies": [
+            ["tslib", "npm:2.4.0"]
           ],
           "linkType": "HARD",
         }]
