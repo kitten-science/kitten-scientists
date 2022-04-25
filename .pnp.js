@@ -48,7 +48,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["@types/eslint", "npm:7.29.0"],
-            ["@types/node", "npm:16.11.28"],
+            ["@types/node", "npm:16.11.29"],
             ["@types/prettier", "npm:2.6.0"],
             ["@typescript-eslint/eslint-plugin", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:4.33.0"],
             ["@typescript-eslint/parser", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:4.33.0"],
@@ -244,7 +244,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/cacheable-request", "npm:6.0.1"],
             ["@types/http-cache-semantics", "npm:4.0.0"],
             ["@types/keyv", "npm:3.1.1"],
-            ["@types/node", "npm:16.11.28"],
+            ["@types/node", "npm:16.11.29"],
             ["@types/responselike", "npm:1.0.0"]
           ],
           "linkType": "HARD",
@@ -332,7 +332,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-keyv-npm-3.1.1-779a80f2c7-3aaf557d5b.zip/node_modules/@types/keyv/",
           "packageDependencies": [
             ["@types/keyv", "npm:3.1.1"],
-            ["@types/node", "npm:16.11.28"]
+            ["@types/node", "npm:16.11.29"]
           ],
           "linkType": "HARD",
         }]
@@ -345,10 +345,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:16.11.28", {
-          "packageLocation": "./.yarn/cache/@types-node-npm-16.11.28-613fc80101-8abe8dfa9b.zip/node_modules/@types/node/",
+        ["npm:16.11.29", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-16.11.29-302980005c-2d2d4c1f52.zip/node_modules/@types/node/",
           "packageDependencies": [
-            ["@types/node", "npm:16.11.28"]
+            ["@types/node", "npm:16.11.29"]
           ],
           "linkType": "HARD",
         }]
@@ -376,7 +376,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-responselike-npm-1.0.0-85dd08af42-e6e6613c80.zip/node_modules/@types/responselike/",
           "packageDependencies": [
             ["@types/responselike", "npm:1.0.0"],
-            ["@types/node", "npm:16.11.28"]
+            ["@types/node", "npm:16.11.29"]
           ],
           "linkType": "HARD",
         }]
@@ -2800,7 +2800,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/jest-worker-npm-27.0.6-83200713fc-8d7ab8cdf6.zip/node_modules/jest-worker/",
           "packageDependencies": [
             ["jest-worker", "npm:27.0.6"],
-            ["@types/node", "npm:16.11.28"],
+            ["@types/node", "npm:16.11.29"],
             ["merge-stream", "npm:2.0.0"],
             ["supports-color", "npm:8.1.1"]
           ],
@@ -2967,7 +2967,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["kitten-scientists", "workspace:."],
             ["@types/eslint", "npm:7.29.0"],
-            ["@types/node", "npm:16.11.28"],
+            ["@types/node", "npm:16.11.29"],
             ["@types/prettier", "npm:2.6.0"],
             ["@typescript-eslint/eslint-plugin", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:4.33.0"],
             ["@typescript-eslint/parser", "virtual:4abc9875c1fe6769b292b08949f41551693b92c99a58a2a691f99689881137b1ab963eda176d9fb46d1132f41bab6c9493a46d1ffd45163750f10dd2b52cc58b#npm:4.33.0"],
