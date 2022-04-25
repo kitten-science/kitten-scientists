@@ -241,10 +241,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:16.11.28":
-  version: 16.11.28
-  resolution: "@types/node@npm:16.11.28"
-  checksum: 8abe8dfa9b19de5d40b3709e15665fd5703635cbb28332dce30b058892b847cf23c24100dfd97a24f9f07b97a1dea84f818f0890de150dcd45d30f80f102c522
+"@types/node@npm:*, @types/node@npm:16.11.29":
+  version: 16.11.29
+  resolution: "@types/node@npm:16.11.29"
+  checksum: 2d2d4c1f5288dd4acdd951620265468832a44b481e8f63565cb84c3c5831373dfbf090e3b7a4757e9151522a9b658f44242d686ca5a868a942caa4685faefb28
   languageName: node
   linkType: hard
 
@@ -2395,7 +2395,7 @@ __metadata:
   resolution: "kitten-scientists@workspace:."
   dependencies:
     "@types/eslint": 7.29.0
-    "@types/node": 16.11.28
+    "@types/node": 16.11.29
     "@types/prettier": 2.6.0
     "@typescript-eslint/eslint-plugin": 4.33.0
     "@typescript-eslint/parser": 4.33.0
