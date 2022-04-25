@@ -279,10 +279,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:2.4.4":
-  version: 2.4.4
-  resolution: "@types/prettier@npm:2.4.4"
-  checksum: 1dc2e2d20e43efdb5da81ffc56258737db21a62e7c7995701329133fce98785213e525f67572a25084ba8a40766152c71872e0081086059cd9c6f74a92b9bf63
+"@types/prettier@npm:2.6.0":
+  version: 2.6.0
+  resolution: "@types/prettier@npm:2.6.0"
+  checksum: ab1eb7e37910963b0f355663cbb7803d9c1b468a043cca0f74e71647a8b305a16d93c47a9372c0cfd3a24aadf308cd7a01854500d2d3a307fe2d1d3d82ba7cd4
   languageName: node
   linkType: hard
 
@@ -2506,13 +2506,13 @@ __metadata:
   dependencies:
     "@types/eslint": 7.29.0
     "@types/node": 16.11.28
-    "@types/prettier": 2.4.4
+    "@types/prettier": 2.6.0
     "@typescript-eslint/eslint-plugin": 4.33.0
     "@typescript-eslint/parser": 4.33.0
     "@yarnpkg/pnpify": 2.4.0
     eslint: 7.32.0
     lint-staged: 11.2.6
-    prettier: 2.6.1
+    prettier: 2.6.2
     prettier-plugin-organize-imports: 2.3.3
     tslib: 2.4.0
     typescript: 4.3.5
@@ -3107,12 +3107,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.6.1":
-  version: 2.6.1
-  resolution: "prettier@npm:2.6.1"
+"prettier@npm:2.6.2":
+  version: 2.6.2
+  resolution: "prettier@npm:2.6.2"
   bin:
     prettier: bin-prettier.js
-  checksum: 8f032972af06d598bc08bb0d7cb3b7a70d599e05be44992db4135bec360fd109149f3a838f46b4571b4c30e82f1407ec488a3218ff160a0ec0817b2ab8fee490
+  checksum: 10af3147eeb6e7038d6bb4cab48bace7095c4f35e9da45215a8fd3aa8785b4ca6e6cc2cc2fee073a19e230ec0271bae0660031b9252c5263eae7c08113aa8f50
   languageName: node
   linkType: hard
 
