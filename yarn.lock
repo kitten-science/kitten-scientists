@@ -544,36 +544,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webpack-cli/configtest@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "@webpack-cli/configtest@npm:1.0.4"
+"@webpack-cli/configtest@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@webpack-cli/configtest@npm:1.1.1"
   peerDependencies:
     webpack: 4.x.x || 5.x.x
     webpack-cli: 4.x.x
-  checksum: 7865e74abdeba97a0688bcfb6f62fc950300acd2186067ca177ea0e9cecc00e0978a4085a65e62b1196b0e14604c12c262715c3b9a67f0a8b4e0dcfd3f226095
+  checksum: 2977bcaaa23598cf4716c99da9a00f2bcf1a2b09364c4ceae384caeebd2b852be76eb07db8be347dbc209d27b0fdb19e0e0cc2f2c79c7a41a37a05f1b51611e2
   languageName: node
   linkType: hard
 
-"@webpack-cli/info@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@webpack-cli/info@npm:1.3.0"
+"@webpack-cli/info@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@webpack-cli/info@npm:1.4.1"
   dependencies:
     envinfo: ^7.7.3
   peerDependencies:
     webpack-cli: 4.x.x
-  checksum: b4e90cb568392be4425306703d6a8ea98eca72c54d2ad26ed4e26664a130322c4d35b992d7e6e1b902c36a3e4b3a7a515372087357a4ec23045a95825b087a97
+  checksum: f94a3469f5c21c08f188f5605e8c7cfc89e3b95f101c5c422a59a829968bd5c0c453dd570d59e97348407ad6a62f3757b8a47edea2f8f3daadb3c16b9f5b8588
   languageName: node
   linkType: hard
 
-"@webpack-cli/serve@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "@webpack-cli/serve@npm:1.5.1"
+"@webpack-cli/serve@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "@webpack-cli/serve@npm:1.6.1"
   peerDependencies:
     webpack-cli: 4.x.x
   peerDependenciesMeta:
     webpack-dev-server:
       optional: true
-  checksum: a6fdda6cc2cac00ab5e38a9f1fe2b9411cb3e28128efb82a639eb0c08fa1f8c2e78f606c47c6906039db49394ef5135e6a778bdd6b72c614b2651fa1eff35f03
+  checksum: 1a2f42d9c4c31fbc5ea77a0ab6689a681e6bd47e027f45b5a82dce754199fd1b072215b88ae1bfbd65e2d852748ff1bc34f2b81dcd5f63d081d4a649d4d7bbe5
   languageName: node
   linkType: hard
 
@@ -1222,14 +1222,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^1.2.1, colorette@npm:^1.2.2":
+"colorette@npm:^1.2.2":
   version: 1.4.0
   resolution: "colorette@npm:1.4.0"
   checksum: 7ef8e1ca16ca7ae4659722ecd103ff89388e1e1e4100ee41e892ad880364a2f8bb9aacbce6c96aa572f25e56a45a2ea7008ff69b8182bc6baf383cd269b963c0
   languageName: node
   linkType: hard
 
-"colorette@npm:^2.0.16":
+"colorette@npm:^2.0.14, colorette@npm:^2.0.16":
   version: 2.0.16
   resolution: "colorette@npm:2.0.16"
   checksum: 082063746a9881b9a6f49398b6938f9181046ee963d437f759fff97094758769a78db0e1eae67fd39a589958e325379579b871aafdf48b50c6b6929022aa63ce
@@ -3833,7 +3833,7 @@ typescript@4.3.5:
     tslib: ^2.2.0
     typescript: 4.3.5
     webpack: 5.72.0
-    webpack-cli: 4.7.2
+    webpack-cli: 4.9.2
     webpack-userscript: 2.5.8
   languageName: unknown
   linkType: soft
@@ -3847,7 +3847,7 @@ typescript@4.3.5:
   languageName: node
   linkType: hard
 
-"v8-compile-cache@npm:^2.0.3, v8-compile-cache@npm:^2.2.0":
+"v8-compile-cache@npm:^2.0.3":
   version: 2.3.0
   resolution: "v8-compile-cache@npm:2.3.0"
   checksum: b56f83d9ff14187562badc4955dadeef53ff3abde478ce60759539dd8d5472a91fce9db6083fc2450e54cef6f2110c1a28d8c12162dbf575a6cfcb846986904b
@@ -3882,22 +3882,21 @@ typescript@4.3.5:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:4.7.2":
-  version: 4.7.2
-  resolution: "webpack-cli@npm:4.7.2"
+"webpack-cli@npm:4.9.2":
+  version: 4.9.2
+  resolution: "webpack-cli@npm:4.9.2"
   dependencies:
     "@discoveryjs/json-ext": ^0.5.0
-    "@webpack-cli/configtest": ^1.0.4
-    "@webpack-cli/info": ^1.3.0
-    "@webpack-cli/serve": ^1.5.1
-    colorette: ^1.2.1
+    "@webpack-cli/configtest": ^1.1.1
+    "@webpack-cli/info": ^1.4.1
+    "@webpack-cli/serve": ^1.6.1
+    colorette: ^2.0.14
     commander: ^7.0.0
     execa: ^5.0.0
     fastest-levenshtein: ^1.0.12
     import-local: ^3.0.2
     interpret: ^2.2.0
     rechoir: ^0.7.0
-    v8-compile-cache: ^2.2.0
     webpack-merge: ^5.7.3
   peerDependencies:
     webpack: 4.x.x || 5.x.x
@@ -3912,7 +3911,7 @@ typescript@4.3.5:
       optional: true
   bin:
     webpack-cli: bin/cli.js
-  checksum: 7731e0ee4160b2077103507a69e5278d89b541dd3362ac52c97df99ffdf1450c24ef4d4beb1f88b58a1eede628f0e0b983496a1c75bebf7efb0f9ea75a3d6368
+  checksum: efcb9aab27f0b5ed836e240a5ba56eaf87bd7d5092070845b286177110a6a2c28aa404dd877f5a876a3ae888aeb9d38c199c2a90d725dc96a2727334bf979da5
   languageName: node
   linkType: hard
 
