@@ -30,7 +30,7 @@
     "@types/dojo": "1.9.43",
     "@types/jquery": "3.5.14",
     "@types/terser-webpack-plugin": "5.0.4",
-    "pnp-webpack-plugin": "1.6.4",
+    "pnp-webpack-plugin": "1.7.0",
     "terser-webpack-plugin": "5.3.1",
     "ts-loader": "9.2.9",
     "typescript": "4.3.5",
