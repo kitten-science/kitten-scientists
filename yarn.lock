@@ -2939,12 +2939,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pnp-webpack-plugin@npm:1.6.4":
-  version: 1.6.4
-  resolution: "pnp-webpack-plugin@npm:1.6.4"
+"pnp-webpack-plugin@npm:1.7.0":
+  version: 1.7.0
+  resolution: "pnp-webpack-plugin@npm:1.7.0"
   dependencies:
     ts-pnp: ^1.1.6
-  checksum: 39a484182f8fc08cb1420d4a5ccf16457c6498a4546bfbad9e00df7238ba7d98796e9aa6f82a4e803a627860409ffed491a55c5a1384e09bed60cefeb618586d
+  checksum: 756163c5d0460a22353606dc44c2041fbb15e235cc9aac063755c885b090fc68c7c4d9dac68bdd3970716bd98bf2fae521a62ba97146f489cd5d8c08d84fa2f3
   languageName: node
   linkType: hard
 
@@ -3827,7 +3827,7 @@ typescript@4.3.5:
     "@types/dojo": 1.9.43
     "@types/jquery": 3.5.14
     "@types/terser-webpack-plugin": 5.0.4
-    pnp-webpack-plugin: 1.6.4
+    pnp-webpack-plugin: 1.7.0
     terser-webpack-plugin: 5.3.1
     ts-loader: 9.2.9
     tslib: ^2.2.0
