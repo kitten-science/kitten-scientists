@@ -3672,9 +3672,9 @@ resolve@^1.9.0:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:9.2.5":
-  version: 9.2.5
-  resolution: "ts-loader@npm:9.2.5"
+"ts-loader@npm:9.2.9":
+  version: 9.2.9
+  resolution: "ts-loader@npm:9.2.9"
   dependencies:
     chalk: ^4.1.0
     enhanced-resolve: ^5.0.0
@@ -3683,7 +3683,7 @@ resolve@^1.9.0:
   peerDependencies:
     typescript: "*"
     webpack: ^5.0.0
-  checksum: 4f43b27ef05c9b6d77bb44f6415f25f706d961c94b09be11173288ed2bb149c74d9e2879c88128e11a032cc775020d1cdf6cc26f6125da68701b4e0f9c7b962d
+  checksum: ed98b54cd43dd2ae1c287fa55fb9c0ccfd7feb9a067766d718439599a758e7576c0743c309bc9c0ad381e6f09eca538b924a77bb5c95643e3724e82df90142e2
   languageName: node
   linkType: hard
 
@@ -3813,7 +3813,7 @@ typescript@4.3.5:
     "@types/terser-webpack-plugin": 5.0.4
     pnp-webpack-plugin: 1.6.4
     terser-webpack-plugin: 5.1.4
-    ts-loader: 9.2.5
+    ts-loader: 9.2.9
     tslib: ^2.2.0
     typescript: 4.3.5
     webpack: 5.72.0
