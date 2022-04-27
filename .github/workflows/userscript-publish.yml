@@ -1,9 +1,7 @@
-name: Build userscript
+name: Publish userscript
 
 on:
   push:
-    branches: [master]
-  pull_request:
     branches: [master]
 
   # Allows you to run this workflow manually from the Actions tab.
@@ -12,13 +10,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Container needs only basic repo content read permissions.
     permissions:
-      contents: read
+      contents: write
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
       - name: "Use Node.js 18.x"
@@ -34,3 +29,8 @@ jobs:
 
       - name: Build userscript
         run: yarn userscript:release
+
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "packages/userscript/bundle/kitten-scientists.user.jd"
+          token: ${{ secrets.GITHUB_TOKEN }}
