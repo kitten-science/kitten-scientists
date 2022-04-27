@@ -2,7 +2,6 @@
 
 const isDevBuild = process.env.NODE_ENV === "development";
 const path = require("path");
-const PnpWebpackPlugin = require("pnp-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const WebpackUserscript = require("webpack-userscript");
 
@@ -21,7 +20,6 @@ module.exports = {
       {
         test: /\.ts$/,
         loader: require.resolve("ts-loader"),
-        options: PnpWebpackPlugin.tsLoaderOptions(),
       },
     ],
   },
@@ -49,9 +47,5 @@ module.exports = {
   ],
   resolve: {
     extensions: [".ts", ".js"],
-    plugins: [PnpWebpackPlugin],
-  },
-  resolveLoader: {
-    plugins: [PnpWebpackPlugin.moduleLoader(module)],
   },
 };
