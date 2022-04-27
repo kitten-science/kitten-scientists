@@ -1730,7 +1730,7 @@ __metadata:
     prettier: 2.6.2
     prettier-plugin-organize-imports: 2.3.4
     tslib: 2.4.0
-    typescript: 4.3.5
+    typescript: 4.6.3
   languageName: unknown
   linkType: soft
 
@@ -2816,23 +2816,23 @@ resolve@^1.9.0:
   languageName: node
   linkType: hard
 
-typescript@4.3.5:
-  version: 4.3.5
-  resolution: "typescript@npm:4.3.5"
+"typescript@npm:4.6.3":
+  version: 4.6.3
+  resolution: "typescript@npm:4.6.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 7699b1635e34008eb4167ede70d475e4eaece150622e9a143de6c58b160df3c52bae00beb1cd3a836a35cb32defc4d1dc56bdfb11f7ddbebaa003e405f97ad3a
+  checksum: 53e8bcf00abde8ecb2002d1f1e15160b21cb62b2dd0ff71bad2ef55fa96141f76316fce649a415758d3f17bd8e0c5676d8f017c34ec3e38b585812d4717a712c
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.3.5#~builtin<compat/typescript>":
-  version: 4.3.5
-  resolution: "typescript@patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=bda367"
+"typescript@patch:typescript@4.6.3#~builtin<compat/typescript>":
+  version: 4.6.3
+  resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 8991b4a568bd5a9dab8fa470b5e51368f588e46aebde3a773d9c993ef83e8a1ec0832deae4496d2c788a23c400471117d60b8f9607578ae79779cb3f379308ae
+  checksum: 8d62a37d9f238d83b6cdc738be90bb476a61c7e05d5924ecfb894eb63f39406b0660bd931876546a2be6895cd2678ddcb7f6793ceaab1454bc4e39f3cd9eb889
   languageName: node
   linkType: hard
 
@@ -2856,7 +2856,7 @@ typescript@4.3.5:
     terser-webpack-plugin: 5.3.1
     ts-loader: 9.2.9
     tslib: ^2.2.0
-    typescript: 4.3.5
+    typescript: 4.6.3
     webpack: 5.72.0
     webpack-cli: 4.9.2
     webpack-userscript: 2.5.8
