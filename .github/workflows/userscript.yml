@@ -21,10 +21,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: "Use Node.js 12.x"
+      - name: "Use Node.js 18.x"
         uses: actions/setup-node@master
         with:
-          node-version: 12.x
+          node-version: 18.x
 
       - name: Install dependencies
         run: yarn install
