@@ -86,9 +86,19 @@ export class Engine {
       return;
     }
 
-    // TODO: `_iterate` is async, but it isn't awaited.
-    //       Instead of using an interval, this should use a tail-controlled timeout.
-    this._intervalMainLoop = setInterval(this._iterate.bind(this), this._host.options.interval);
+    const loop = () => {
+      const entry = Date.now();
+      this._iterate()
+        .then(() => {
+          const exit = Date.now();
+          const timeTaken = exit - entry;
+          setTimeout(loop, Math.max(10, this._host.options.interval - timeTaken));
+        })
+        .catch(error => {
+          this._host.warning(error as string);
+        });
+    };
+    this._intervalMainLoop = setTimeout(loop, this._host.options.interval);
 
     if (msg) {
       this._host.imessage("status.ks.enable");
@@ -104,7 +114,7 @@ export class Engine {
       return;
     }
 
-    clearInterval(this._intervalMainLoop);
+    clearTimeout(this._intervalMainLoop);
     this._intervalMainLoop = undefined;
 
     if (msg) {
