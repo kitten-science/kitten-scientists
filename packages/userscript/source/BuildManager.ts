@@ -1,7 +1,7 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
-import { mustExist } from "./tools/Maybe";
+import { isNil, mustExist } from "./tools/Maybe";
 import { BuildButton, Building, BuildingExt, BuildingMeta } from "./types";
 import { UserScript } from "./UserScript";
 
@@ -41,7 +41,7 @@ export class BuildManager {
   }
 
   private _getBuildLabel(meta: BuildingMeta, stage?: number): string {
-    return meta.stages && stage ? meta.stages[stage].label : mustExist(meta.label);
+    return meta.stages && !isNil(stage) ? meta.stages[stage].label : mustExist(meta.label);
   }
 
   getBuild(name: Building): BuildingExt {
