@@ -15,7 +15,7 @@ import { UserScript } from "./UserScript";
     await new SavegameLoader(kittenGame).load(devSavegame);
   }
 
-  const userScript = await UserScript.getDefaultInstance();
+  const userScript = UserScript.getDefaultInstance();
 
   // @ts-expect-error Manipulating global containers is naughty, be we want to expose the script host.
   window.kittenScientists = userScript;
@@ -35,5 +35,5 @@ import { UserScript } from "./UserScript";
     cinfo("No legacy settings found. Default settings will be used.");
   }
 
-  await userScript.run();
+  userScript.run();
 })().catch(console.error);
