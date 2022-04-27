@@ -148,9 +148,9 @@ export class UserInterface {
 
   private _installCss(): void {
     // Basic layout for our own list-based options menus.
-    this._addRule(`#ks-options ul { list-style: none; margin: 0 0 5px; padding: 0; }`);
-    this._addRule(`#ks-options ul:after { clear: both; content: " "; display: block; height: 0; }`);
-    this._addRule(`#ks-options ul li { display: block; float: left; width: 100%; }`);
+    this._addRule("#ks-options ul { list-style: none; margin: 0 0 5px; padding: 0; }");
+    this._addRule('#ks-options ul:after { clear: both; content: " "; display: block; height: 0; }');
+    this._addRule("#ks-options ul li { display: block; float: left; width: 100%; }");
 
     // Rules needed to enable stock warning.
     this._addRule(`
@@ -160,7 +160,7 @@ export class UserInterface {
       }`);
 
     // Ensure the right column gets a scrollbar, when our content extends it too far down.
-    this._addRule(`body #gamePageContainer #game #rightColumn { overflow-y: auto }`);
+    this._addRule("body #gamePageContainer #game #rightColumn { overflow-y: auto }");
 
     // Set the entire UI to a monospace font.
     //this._addRule(
@@ -216,9 +216,9 @@ export class UserInterface {
         max-width: 500px;
         overflow: visible; }`
     );
-    this._addRule(`#game .map-dashboard { height: 120px; width: 292px; }`);
+    this._addRule("#game .map-dashboard { height: 120px; width: 292px; }");
 
-    this._addRule(`.right-tab { height: unset !important; }`);
+    this._addRule(".right-tab { height: unset !important; }");
   }
 
   private _addRule(rule: string) {
