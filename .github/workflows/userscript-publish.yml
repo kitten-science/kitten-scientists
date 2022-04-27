@@ -30,8 +30,6 @@ jobs:
       - name: Build userscript
         run: yarn userscript:release
 
-      - run: ls -lha packages/userscript/bundle
-
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
