@@ -1,12 +1,12 @@
-# Zero-Install configuration from https://next.yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
-.yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
+.yarn/*.*
+.yarn/cache/**
 !.yarn/releases
+!.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+.pnp.*
 
+node_modules
 tsconfig.tsbuildinfo
 
 /packages/*/output/*
