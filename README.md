@@ -2,22 +2,14 @@
 
 Kitten Scientists (KS) is a simple automation script for the complex [Kittens Game](http://kittensgame.com/web/). It was originally developed by [Cameron Condry](https://github.com/cameroncondry/cbc-kitten-scientists) and extended by many great [contributors](#contributors).
 
-## Quick Start
-
-Create the following JavaScript bookmarklet (create a new bookmark and paste this as the URL):
-
-```js
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://cdn.jsdelivr.net/gh/oliversalzburg/cbc-kitten-scientists@master/packages/userscript/bundle/kitten-scientists.user.js';d.body.appendChild(s);})();
-```
-
 ### Manual Installation
 
-You can also permanently install Kitten Scientists with a userscript manager.
+Install Kitten Scientists with a userscript manager.
 
 - On **Firefox**, you'd want to use [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
 - On **Chrome** and **Opera**, you'd want to use [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
 
-Now simply [open the script](https://raw.githubusercontent.com/oliversalzburg/cbc-kitten-scientists/master/packages/userscript/bundle/kitten-scientists.user.js) and you should be prompted to install it.
+Grab a build from the [Releases page](https://github.com/oliversalzburg/cbc-kitten-scientists/releases) and install it.
 
 ## Introduction
 
