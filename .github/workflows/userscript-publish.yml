@@ -33,4 +33,6 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "packages/userscript/bundle/kitten-scientists.user.jd"
+          prerelease: true
+          tag: 2.0.0
           token: ${{ secrets.GITHUB_TOKEN }}
