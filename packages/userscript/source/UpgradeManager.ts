@@ -1,6 +1,7 @@
 import { BulkManager } from "./BulkManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
+import { mustExist } from "./tools/Maybe";
 import { BuildButton, ScienceTab, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
 
@@ -52,14 +53,11 @@ export class UpgradeManager {
       buttons = this.scienceManager.tab.policyPanel.children;
     } else if (variant === "science") {
       buttons = this.scienceManager.tab.buttons;
-    } else {
-      throw new Error(`Unexpected variant '${variant}'`);
     }
 
-    for (const i in buttons) {
-      const haystack = buttons[i].model.name;
-      if (haystack === upgrade.label) {
-        return buttons[i];
+    for (const button of mustExist(buttons)) {
+      if (button.model.name === upgrade.label) {
+        return button;
       }
     }
     return null;

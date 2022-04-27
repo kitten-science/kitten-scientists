@@ -53,9 +53,9 @@ export class SpaceManager {
   getBuildButton(name: string): BuildButton | null {
     const panels = this.manager.tab.planetPanels;
 
-    for (const panel in panels) {
-      for (const child in panels[panel].children) {
-        if (panels[panel].children[child].id === name) return panels[panel].children[child];
+    for (const panel of panels) {
+      for (const child of panel.children) {
+        if (child.id === name) return child;
       }
     }
 

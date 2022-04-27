@@ -87,7 +87,7 @@ export class UserScript {
     this._intervalSaveSettings = setInterval(this._checkOptions.bind(this), 30 * 1000);
   }
 
-  async run(): Promise<void> {
+  run(): void {
     if (this._language in this._i18nData === false) {
       cwarn(
         `Requested language '${this._language}' is not available. Falling back to '${DefaultLanguage}'.`
@@ -273,11 +273,11 @@ export class UserScript {
     return UserScript.waitForGame(timeout - 2000);
   }
 
-  static async getDefaultInstance(): Promise<UserScript> {
+  static getDefaultInstance(): UserScript {
     const instance = new UserScript(
       mustExist(UserScript._window.gamePage),
       mustExist(UserScript._window.$I),
-      localStorage["com.nuclearunicorn.kittengame.language"]
+      localStorage["com.nuclearunicorn.kittengame.language"] as SupportedLanguages | undefined
     );
     return instance;
   }

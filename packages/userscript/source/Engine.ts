@@ -212,15 +212,15 @@ export class Engine {
     // as if we already had it.
     const check = (buttons: Array<BuildButton>) => {
       if (checkList.length !== 0) {
-        for (const buttonsIndex in buttons) {
-          if (!buttons[buttonsIndex].model.metadata) {
+        for (const button of buttons) {
+          if (!button.model.metadata) {
             continue;
           }
-          const name = buttons[buttonsIndex].model.metadata.name;
+          const name = button.model.metadata.name;
           const index = checkList.indexOf(name);
           if (index !== -1) {
             checkList.splice(index, 1);
-            if (this._host.gamePage.resPool.hasRes(buttons[buttonsIndex].model.prices)) {
+            if (this._host.gamePage.resPool.hasRes(button.model.prices)) {
               return true;
             }
           }
@@ -300,9 +300,9 @@ export class Engine {
 
     if (checkList.length === 0) {
       const panels = this._spaceManager.manager.tab.planetPanels;
-      for (const panelIndex in panels) {
-        for (const panelButtonIndex in panels[panelIndex].children) {
-          const model = panels[panelIndex].children[panelButtonIndex].model;
+      for (const panel of panels) {
+        for (const panelButton of panel.children) {
+          const model = panelButton.model;
           const name = model.metadata.name;
           const index = checkList.indexOf(name);
           if (index !== -1) {
@@ -984,12 +984,12 @@ export class Engine {
     const buildList = this._bulkManager.bulk(builds, metaData, trigger);
 
     let refreshRequired = false;
-    for (const entry in buildList) {
-      if (0 < buildList[entry].count) {
+    for (const build of buildList) {
+      if (0 < build.count) {
         this._religionManager.build(
-          buildList[entry].id as ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
-          mustExist(buildList[entry].variant) as UnicornItemVariant,
-          buildList[entry].count
+          build.id as ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
+          mustExist(build.variant) as UnicornItemVariant,
+          build.count
         );
         refreshRequired = true;
       }
@@ -1031,12 +1031,12 @@ export class Engine {
     const buildList = this._bulkManager.bulk(builds, metaData, trigger);
 
     let refreshRequired = false;
-    for (const entry in buildList) {
-      if (buildList[entry].count > 0) {
+    for (const build of buildList) {
+      if (build.count > 0) {
         this._timeManager.build(
-          buildList[entry].id as ChronoForgeUpgrades | VoidSpaceUpgrades,
-          buildList[entry].variant as TimeItemVariant,
-          buildList[entry].count
+          build.id as ChronoForgeUpgrades | VoidSpaceUpgrades,
+          build.variant as TimeItemVariant,
+          build.count
         );
         refreshRequired = true;
       }
@@ -1067,24 +1067,24 @@ export class Engine {
     if (upgrades.upgrades.enabled && this._host.gamePage.tabs[3].visible) {
       const workshopUpgrades = this._host.gamePage.workshop.upgrades;
       // TODO: Filter out upgrades that are not beneficial when using KS, like workshop automation.
-      workLoop: for (const upgrade in workshopUpgrades) {
+      workLoop: for (const upgrade of workshopUpgrades) {
         // If the upgrade is already purchased or not available yet, continue with the next one.
-        if (workshopUpgrades[upgrade].researched || !workshopUpgrades[upgrade].unlocked) {
+        if (upgrade.researched || !upgrade.unlocked) {
           continue;
         }
 
         // Create a copy of the prices for this upgrade, so that we can apply effects to it.
-        let prices = dojo.clone(workshopUpgrades[upgrade].prices);
+        let prices = dojo.clone(upgrade.prices);
         prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
-        for (const resource in prices) {
+        for (const resource of prices) {
           // If we can't afford this resource price, continue with the next upgrade.
-          if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
+          if (craftManager.getValueAvailable(resource.name, true) < resource.val) {
             continue workLoop;
           }
         }
 
         // If we can afford all prices, purchase the upgrade.
-        upgradeManager.build(workshopUpgrades[upgrade], "workshop");
+        upgradeManager.build(upgrade, "workshop");
       }
     }
 
@@ -1092,19 +1092,19 @@ export class Engine {
     if (upgrades.techs.enabled && this._host.gamePage.tabs[2].visible) {
       // These behave identically to the workshop uprades above.
       const scienceUpgrades = this._host.gamePage.science.techs;
-      techLoop: for (const upgrade in scienceUpgrades) {
-        if (scienceUpgrades[upgrade].researched || !scienceUpgrades[upgrade].unlocked) {
+      techLoop: for (const upgrade of scienceUpgrades) {
+        if (upgrade.researched || !upgrade.unlocked) {
           continue;
         }
 
-        let prices = dojo.clone(scienceUpgrades[upgrade].prices);
+        let prices = dojo.clone(upgrade.prices);
         prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
-        for (const resource in prices) {
-          if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
+        for (const resource of prices) {
+          if (craftManager.getValueAvailable(resource.name, true) < resource.val) {
             continue techLoop;
           }
         }
-        upgradeManager.build(scienceUpgrades[upgrade], "science");
+        upgradeManager.build(upgrade, "science");
       }
     }
 
@@ -1152,9 +1152,9 @@ export class Engine {
 
         const model = this._spaceManager.manager.tab.GCPanel.children[i];
         const prices = model.model.prices;
-        for (const resource in prices) {
+        for (const resource of prices) {
           // If we can't afford this resource price, continue with the next mission.
-          if (craftManager.getValueAvailable(prices[resource].name, true) < prices[resource].val) {
+          if (craftManager.getValueAvailable(resource.name, true) < resource.val) {
             continue missionLoop;
           }
         }
@@ -1476,13 +1476,9 @@ export class Engine {
 
     let refreshRequired = false;
     // Build all entries in the build list, where we can build any items.
-    for (const entry in buildList) {
-      if (buildList[entry].count > 0) {
-        buildManager.build(
-          (buildList[entry].name || buildList[entry].id) as Building,
-          buildList[entry].stage,
-          buildList[entry].count
-        );
+    for (const build of buildList) {
+      if (build.count > 0) {
+        buildManager.build((build.name || build.id) as Building, build.stage, build.count);
         refreshRequired = true;
       }
     }
@@ -1513,9 +1509,9 @@ export class Engine {
     const buildList = bulkManager.bulk(builds, metaData, trigger, "space");
 
     let refreshRequired = false;
-    for (const entry in buildList) {
-      if (buildList[entry].count > 0) {
-        buildManager.build(buildList[entry].id as SpaceBuildings, buildList[entry].count);
+    for (const build of buildList) {
+      if (build.count > 0) {
+        buildManager.build(build.id as SpaceBuildings, build.count);
         refreshRequired = true;
       }
     }
@@ -2123,14 +2119,14 @@ export class Engine {
       if (validBuildings.includes(button.id) && button.model.visible) {
         // Determine a price value for this building.
         let unicornPrice = 0;
-        for (const priceIndex in button.model.prices) {
+        for (const price of button.model.prices) {
           // Add the amount of unicorns the building costs (if any).
-          if (button.model.prices[priceIndex].name === "unicorns") {
-            unicornPrice += button.model.prices[priceIndex].val;
+          if (price.name === "unicorns") {
+            unicornPrice += price.val;
           }
           // Tears result from unicorn sacrifices, so factor that into the price proportionally.
-          if (button.model.prices[priceIndex].name === "tears") {
-            unicornPrice += (button.model.prices[priceIndex].val * 2500) / ziggurathRatio;
+          if (price.name === "tears") {
+            unicornPrice += (price.val * 2500) / ziggurathRatio;
           }
         }
 
