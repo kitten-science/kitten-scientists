@@ -122,7 +122,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       const input = element.children("input");
       input.unbind("change");
       input.on("change", () => {
-        this._host.updateOptions(() => (option.enabled = input.prop("checked")));
+        this._host.updateOptions(() => (option.enabled = input.prop("checked") as boolean));
         if (option.enabled) {
           document.body.setAttribute("data-ks-style", "");
         } else {
