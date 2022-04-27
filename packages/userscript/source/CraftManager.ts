@@ -56,8 +56,7 @@ export class CraftManager {
       result = true;
 
       const prices = this._host.gamePage.workshop.getCraftPrice(craft);
-      for (const i in prices) {
-        const price = prices[i];
+      for (const price of prices) {
         const value = this.getValueAvailable(price.name);
 
         if (value < price.val * amount) {
@@ -243,9 +242,7 @@ export class CraftManager {
 
     const prices = this._host.gamePage.workshop.getCraftPrice(craft);
 
-    for (const i in prices) {
-      const price = prices[i];
-
+    for (const price of prices) {
       materials[price.name] = price.val;
     }
 

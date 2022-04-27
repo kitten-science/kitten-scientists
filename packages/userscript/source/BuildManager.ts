@@ -53,10 +53,10 @@ export class BuildManager {
     const build = this.getBuild(name);
     const label = this._getBuildLabel(build.meta, stage);
 
-    for (const i in buttons) {
-      const haystack = buttons[i].model.name;
+    for (const button of buttons) {
+      const haystack = button.model.name;
       if (haystack.indexOf(label) !== -1) {
-        return buttons[i];
+        return button;
       }
     }
 

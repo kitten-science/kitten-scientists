@@ -35,5 +35,5 @@ import { UserScript } from "./UserScript";
     cinfo("No legacy settings found. Default settings will be used.");
   }
 
-  userScript.run();
-})();
+  await userScript.run();
+})().catch(console.error);

@@ -424,6 +424,7 @@ export class BulkManager {
       prices?: Array<Price>;
     }>;
   } {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return "stage" in data && "stages" in data && !isNil(data.stage) && !isNil(data.stages);
   }
 
@@ -490,17 +491,17 @@ export class BulkManager {
     // Check if we can't afford any of the prices for this build.
     // Return `false` if we can't afford something, otherwise `true` is
     // returned by default.
-    for (const price in prices) {
+    for (const price of prices) {
       const resourcePriceDiscount = this._host.gamePage.getLimitedDR(
-        this._host.gamePage.getEffect(`${prices[price].name}CostReduction` as const),
+        this._host.gamePage.getEffect(`${price.name}CostReduction` as const),
         1
       );
       const resourcePriceModifier = 1 - resourcePriceDiscount;
-      const finalResourcePrice = prices[price].val * priceModifier * resourcePriceModifier;
+      const finalResourcePrice = price.val * priceModifier * resourcePriceModifier;
 
       // For space builds that consume oil, take the oil price reduction into account.
       // This is caused by space elevators.
-      if (source && source === "space" && prices[price].name === "oil") {
+      if (source && source === "space" && price.name === "oil") {
         const oilModifier = this._host.gamePage.getLimitedDR(
           this._host.gamePage.getEffect("oilReductionRatio"),
           0.75
@@ -514,7 +515,7 @@ export class BulkManager {
         }
 
         // For cryochambers, take burned paragon into account for the karma cost.
-      } else if (build.name === "cryochambers" && prices[price].name === "karma") {
+      } else if (build.name === "cryochambers" && price.name === "karma") {
         const karmaModifier = this._host.gamePage.getLimitedDR(
           0.01 * this._host.gamePage.prestige.getBurnedParagonRatio(),
           1.0
@@ -528,7 +529,7 @@ export class BulkManager {
         }
       } else {
         if (
-          this._craftManager.getValueAvailable(prices[price].name, true) <
+          this._craftManager.getValueAvailable(price.name, true) <
           finalResourcePrice * Math.pow(priceRatio, build.val)
         ) {
           return false;
