@@ -6,6 +6,13 @@ const PnpWebpackPlugin = require("pnp-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const WebpackUserscript = require("webpack-userscript");
 
+const filename = [
+  "kitten-scientists",
+  isDevBuild ? "-dev" : "",
+  process.env.GITHUB_SHA ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}` : "",
+  ".user.js",
+];
+
 module.exports = {
   entry: path.resolve(__dirname, "source", "index.ts"),
   mode: isDevBuild ? "development" : "production",
@@ -24,7 +31,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "bundle"),
-    filename: `kitten-scientists${isDevBuild ? "-dev" : ""}.user.js`,
+    filename: filename.join(""),
   },
   plugins: [
     new WebpackUserscript({
