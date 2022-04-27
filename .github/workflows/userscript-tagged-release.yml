@@ -1,14 +1,14 @@
-name: Pull Request
+name: Release Userscript
 
 on:
-  pull_request:
-    branches: [master]
+  push:
+    tags:
+      - "v*"
 
 jobs:
-  qa:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
 
     steps:
       - uses: actions/checkout@v3
@@ -26,3 +26,10 @@ jobs:
 
       - name: Build userscript
         run: yarn userscript:release
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            packages/userscript/bundle/*

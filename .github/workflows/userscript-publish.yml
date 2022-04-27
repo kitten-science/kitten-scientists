@@ -1,4 +1,4 @@
-name: Publish userscript
+name: Publish Userscript
 
 on:
   push:
@@ -24,13 +24,14 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run ESLint
+      - name: Lint
         run: yarn lint:all
 
       - name: Build userscript
         run: yarn userscript:release
 
-      - uses: marvinpinto/action-automatic-releases@latest
+      - name: Pre-release userscript
+        uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
