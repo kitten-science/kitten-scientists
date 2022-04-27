@@ -30,7 +30,7 @@ jobs:
       - name: Build userscript
         run: yarn userscript:release
 
-      - run: ls -lha .
+      - run: ls -lha packages/userscript/bundle
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
@@ -39,4 +39,4 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            "packages/userscript/bundle/kitten-scientists.user.js"
+            packages/userscript/bundle/kitten-scientists.user.js
