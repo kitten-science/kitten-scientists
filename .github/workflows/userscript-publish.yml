@@ -8,10 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  pre-release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - uses: actions/checkout@v3
@@ -30,9 +28,11 @@ jobs:
       - name: Build userscript
         run: yarn userscript:release
 
-      - uses: ncipollo/release-action@v1
+      - uses: marvinpinto/action-automatic-releases@latest
         with:
-          artifacts: "packages/userscript/bundle/kitten-scientists.user.js"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
           prerelease: true
-          tag: 2.0.0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Development Build"
+          files: |
+            "packages/userscript/bundle/kitten-scientists.user.js"
