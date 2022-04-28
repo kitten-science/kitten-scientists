@@ -1,5 +1,5 @@
 {
-  "name": "kitten-game",
+  "name": "@kitten-science/kitten-game",
   "description": "Containerized version of the Kitten Game",
   "version": "latest",
   "private": true,
