@@ -1,50 +1,47 @@
 {
-  "name": "kitten-scientists",
-  "description": "Contains packages relating to the Kitten Game: http://bloodrizer.ru/games/kittens/",
-  "version": "latest",
   "private": true,
+  "name": "kitten-scientists",
+  "version": "latest",
+  "description": "Contains packages relating to the Kitten Game: http://bloodrizer.ru/games/kittens/",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/oliversalzburg/cbc-kitten-scientists/issues"
-  },
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "homepage": "https://github.com/oliversalzburg/cbc-kitten-scientists",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oliversalzburg/cbc-kitten-scientists.git"
   },
-  "author": {
-    "name": "Oliver Salzburg",
-    "email": "oliver.salzburg@gmail.com"
+  "bugs": {
+    "url": "https://github.com/oliversalzburg/cbc-kitten-scientists/issues"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "devcontainer:run": "bash ./scripts/run-development-container.sh",
     "lint:all": "eslint . --ext .ts",
     "typecheck:all": "tsc --noEmit --incremental false"
   },
-  "keywords": [
-    "kitten",
-    "kittens",
-    "scientists"
+  "workspaces": [
+    "packages/*"
   ],
+  "dependencies": {
+    "tslib": "2.4.0"
+  },
   "devDependencies": {
     "@types/eslint": "8.4.1",
     "@types/node": "16.11.31",
     "@types/prettier": "2.6.0",
+    "@types/prettier-package-json": "^2",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
     "eslint": "8.14.0",
     "lint-staged": "12.4.1",
     "prettier": "2.6.2",
+    "prettier-package-json": "2.6.3",
     "prettier-plugin-organize-imports": "2.3.4",
+    "prettier-plugin-sh": "0.10.1",
     "typescript": "4.6.3"
   },
-  "dependencies": {
-    "tslib": "2.4.0"
-  },
-  "lint-staged": {
-    "*.{js,json,md,ts,yml}": "prettier --write"
-  }
+  "keywords": [
+    "kitten",
+    "kittens",
+    "scientists"
+  ]
 }
