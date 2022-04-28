@@ -1,0 +1,57 @@
+copyright: Oliver Salzburg
+dev_addr: 0.0.0.0:8000
+docs_dir: docs
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/oliversalzburg/
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: blockdiag
+          class: blockdiag
+          format: !!python/name:blockdiag_fences.blockdiag.fence_img_format
+        - name: seqdiag
+          class: seqdiag
+          format: !!python/name:blockdiag_fences.blockdiag.fence_img_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tilde
+  - toc:
+      permalink: true
+plugins:
+  - git-revision-date-localized
+  - search
+repo_name: oliversalzburg/cbc-kitten-scientists
+repo_url: https://github.com/oliversalzburg/cbc-kitten-scientists
+site_name: Kitten Scientists
+theme:
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+  icon:
+    repo: fontawesome/brands/github
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      accent: amber
+      primary: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      accent: indigo
+      primary: amber
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode

@@ -1,0 +1,25 @@
+name: Documentation Deploy
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.x
+      - name: Install mkdocs-material
+        run: |
+          pip install mkdocs-material
+          pip install blockdiag-fences
+          pip install mkdocs-git-revision-date-localized-plugin
+      - name: Build/deploy documentation
+        run: |
+          cd packages/documentation
+          mkdocs gh-deploy --force
