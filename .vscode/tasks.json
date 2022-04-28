@@ -2,13 +2,23 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "npm",
-      "script": "typecheck:all",
-      "problemMatcher": ["$tsc"]
+      "label": "Type-check userscript",
+      "type": "shell",
+      "command": [
+        "yarn",
+        "typecheck:all"
+      ],
+      "problemMatcher": [
+        "$tsc"
+      ]
     },
     {
-      "type": "npm",
-      "script": "userscript:watch",
+      "label": "Build+watch userscript",
+      "type": "shell",
+      "command": [
+        "yarn",
+        "userscript:watch"
+      ],
       "problemMatcher": [
         // See: https://marketplace.visualstudio.com/items?itemName=eamodio.tsl-problem-matcher
         "$ts-webpack-watch"
