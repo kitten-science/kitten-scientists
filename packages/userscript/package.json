@@ -1,5 +1,5 @@
 {
-  "name": "userscript",
+  "name": "@kitten-science/userscript",
   "description": "Add-on for the wonderful incremental browser game: http://bloodrizer.ru/games/kittens/",
   "version": "2.0.0-alpha1",
   "license": "MIT",

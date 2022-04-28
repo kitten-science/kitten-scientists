@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "@kitten-science/documentation",
+  "version": "latest",
+  "description": "Documentation for Kitten Scientists",
+  "license": "MIT",
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
+  "main": "Dockerfile",
+  "scripts": {
+    "docs:build": ".scripts/build.sh",
+    "docs:serve": ".scripts/serve.sh"
+  },
+  "engines": {
+    "node": "^16"
+  }
+}
