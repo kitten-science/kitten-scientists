@@ -222,7 +222,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier-package-json@npm:^2":
+"@types/prettier-package-json@npm:2.1.1":
   version: 2.1.1
   resolution: "@types/prettier-package-json@npm:2.1.1"
   checksum: 142850be0b6b7a4f6540067b628f3001fd89079977bf6a5e34ddc7ffd1b59112b1eb49ae674817521039b3fd281a9556b2a2d87170c75f7f28846aa55fed8ea4
@@ -1563,21 +1563,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.1.3":
-  version: 7.1.6
-  resolution: "glob@npm:7.1.6"
-  dependencies:
-    fs.realpath: ^1.0.0
-    inflight: ^1.0.4
-    inherits: 2
-    minimatch: ^3.0.4
-    once: ^1.3.0
-    path-is-absolute: ^1.0.0
-  checksum: 2575cce9306ac534388db751f0aa3e78afedb6af8f3b529ac6b2354f66765545145dba8530abf7bff49fb399a047d3f9b6901c38ee4c9503f592960d9af67763
-  languageName: node
-  linkType: hard
-
-"glob@npm:^7.1.6":
+"glob@npm:^7.1.3, glob@npm:^7.1.6":
   version: 7.2.0
   resolution: "glob@npm:7.2.0"
   dependencies:
@@ -1992,7 +1978,7 @@ __metadata:
     "@types/eslint": 8.4.1
     "@types/node": 16.11.31
     "@types/prettier": 2.6.0
-    "@types/prettier-package-json": ^2
+    "@types/prettier-package-json": 2.1.1
     "@typescript-eslint/eslint-plugin": 5.21.0
     "@typescript-eslint/parser": 5.21.0
     eslint: 8.14.0
