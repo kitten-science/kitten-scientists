@@ -2,7 +2,10 @@ module.exports = {
   root: true,
   env: {
     node: true,
-    es6: true,
+    es2022: true,
+  },
+  parserOptions: {
+    ecmaVersion: "latest",
   },
   extends: ["eslint:recommended"],
   plugins: ["@typescript-eslint"],
@@ -15,6 +18,7 @@ module.exports = {
       ],
       parserOptions: {
         project: ["./tsconfig.json"],
+        sourceType: "module",
       },
       rules: {
         "@typescript-eslint/no-explicit-any": [

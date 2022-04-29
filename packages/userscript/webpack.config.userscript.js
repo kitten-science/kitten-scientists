@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 const isDevBuild = process.env.NODE_ENV === "development";
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
