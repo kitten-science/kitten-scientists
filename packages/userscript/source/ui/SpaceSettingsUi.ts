@@ -238,11 +238,11 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
   ): JQuery<HTMLElement> {
     const element = this._getOption(name, option, i18nName, delimiter, {
       onCheck: () => {
-        option.enabled = true;
+        this._host.updateOptions(() => (option.enabled = true));
         this._host.imessage("status.auto.enable", [i18nName]);
       },
       onUnCheck: () => {
-        option.enabled = false;
+        this._host.updateOptions(() => (option.enabled = false));
         this._host.imessage("status.auto.disable", [i18nName]);
       },
     });

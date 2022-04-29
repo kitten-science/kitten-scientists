@@ -328,11 +328,11 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   ): JQuery<HTMLElement> {
     const element = this._getOption(name, option, label, delimiter, {
       onCheck: () => {
-        option.enabled = true;
+        this._host.updateOptions(() => (option.enabled = true));
         this._host.imessage("status.auto.enable", [label]);
       },
       onUnCheck: () => {
-        option.enabled = false;
+        this._host.updateOptions(() => (option.enabled = false));
         this._host.imessage("status.auto.disable", [label]);
       },
     });
