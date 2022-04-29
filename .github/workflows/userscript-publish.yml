@@ -1,4 +1,4 @@
-name: Publish Userscript
+name: Publish Userscript Push
 
 on:
   push:
