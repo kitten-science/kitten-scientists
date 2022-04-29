@@ -3,9 +3,18 @@ const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 const WebpackUserscript = require("webpack-userscript");
 
+function getDateString() {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const day = `${date.getDate()}`.padStart(2, "0");
+  return `${year}${month}${day}`;
+}
+
 const filename = [
   "kitten-scientists",
   isDevBuild ? "-dev" : "",
+  process.env.NIGHTLY_BUILD ? `-${getDateString()}` : "",
   process.env.GITHUB_SHA ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}` : "",
   ".user.js",
 ];
