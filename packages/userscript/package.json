@@ -1,19 +1,18 @@
 {
   "name": "@kitten-science/userscript",
+  "version": "2.0.0-alpha.1",
   "description": "Add-on for the wonderful incremental browser game: http://bloodrizer.ru/games/kittens/",
-  "version": "2.0.0-alpha1",
   "license": "MIT",
-  "main": "./output/index.js",
-  "types": "./output/index.ts",
-  "bugs": {
-    "url": "https://github.com/oliversalzburg/cbc-kitten-scientists/issues"
-  },
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "homepage": "https://github.com/oliversalzburg/cbc-kitten-scientists",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oliversalzburg/cbc-kitten-scientists.git"
   },
-  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/oliversalzburg/cbc-kitten-scientists/issues"
+  },
+  "main": "./output/index.js",
   "scripts": {
     "userscript:build": "webpack --config webpack.config.inject.js",
     "userscript:preview": "NODE_ENV=development webpack --config webpack.config.userscript.js && rm -rf node_modules",
@@ -21,11 +20,10 @@
     "userscript:watch": "webpack --config webpack.config.inject.js --watch",
     "whoami": "echo userscript"
   },
-  "keywords": [
-    "kitten",
-    "kittens",
-    "scientists"
-  ],
+  "types": "./output/index.ts",
+  "dependencies": {
+    "tslib": "^2.2.0"
+  },
   "devDependencies": {
     "@types/dojo": "1.9.43",
     "@types/jquery": "3.5.14",
@@ -37,7 +35,9 @@
     "webpack-cli": "4.9.2",
     "webpack-userscript": "2.5.8"
   },
-  "dependencies": {
-    "tslib": "^2.2.0"
-  }
+  "keywords": [
+    "kitten",
+    "kittens",
+    "scientists"
+  ]
 }
