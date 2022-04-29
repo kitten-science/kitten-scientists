@@ -29,6 +29,7 @@
     "@types/node": "16.11.32",
     "@types/prettier": "2.6.0",
     "@types/prettier-package-json": "2.1.1",
+    "@types/web": "0.0.62",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
     "eslint": "8.14.0",

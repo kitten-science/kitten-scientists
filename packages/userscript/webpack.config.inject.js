@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 const path = require("path");
-const PnpWebpackPlugin = require("pnp-webpack-plugin");
 const webpack = require("webpack");
 
 const KG_SAVEGAME = process.env.KG_SAVEGAME ?? "./fixtures/lategame";
@@ -16,7 +13,6 @@ module.exports = {
       {
         test: /\.ts$/,
         loader: require.resolve("ts-loader"),
-        options: PnpWebpackPlugin.tsLoaderOptions(),
       },
     ],
   },
@@ -30,9 +26,5 @@ module.exports = {
   ],
   resolve: {
     extensions: [".ts", ".js"],
-    plugins: [PnpWebpackPlugin],
-  },
-  resolveLoader: {
-    plugins: [PnpWebpackPlugin.moduleLoader(module)],
   },
 };

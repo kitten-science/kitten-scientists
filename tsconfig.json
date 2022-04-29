@@ -1,20 +1,21 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "checkJs": true,
     "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
+    "lib": ["DOM", "ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "output",
     "resolveJsonModule": true,
-    "lib": ["DOM", "ES2020"],
-    "module": "CommonJS",
+    "sourceMap": true,
     "strict": true,
-    "target": "ES2017",
+    "target": "ESNext",
     "incremental": true,
-    "declaration": false,
     "skipLibCheck": true,
-    "types": [],
-  },
-  "exclude": [".yarn", "packages/*/output"]
+    "types": ["@types/web"]
+  }
 }
