@@ -94,7 +94,7 @@ __metadata:
     "@types/jquery": 3.5.14
     "@types/terser-webpack-plugin": 5.0.4
     terser-webpack-plugin: 5.3.1
-    ts-loader: 9.2.9
+    ts-loader: 9.3.0
     tslib: ^2.2.0
     typescript: 4.6.4
     webpack: 5.72.0
@@ -3123,9 +3123,9 @@ resolve@^1.9.0:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:9.2.9":
-  version: 9.2.9
-  resolution: "ts-loader@npm:9.2.9"
+"ts-loader@npm:9.3.0":
+  version: 9.3.0
+  resolution: "ts-loader@npm:9.3.0"
   dependencies:
     chalk: ^4.1.0
     enhanced-resolve: ^5.0.0
@@ -3134,7 +3134,7 @@ resolve@^1.9.0:
   peerDependencies:
     typescript: "*"
     webpack: ^5.0.0
-  checksum: 95eb351be0b3ba286e4573e102d6b28351d982ee7a5e0ad6f26e46ab260cd6a45bc67c4dc9dfbc521b08df54eb555cf07f1c6b97ed58e4fc3a206fee3520d5f0
+  checksum: 988407fa242afccc3b99bd128dbd53310bd076e5bdf7dcfc3fc779e35ed360b034d361318315e75d61b188571c9fb6fafbbf6f5a0a0c3fb2ad29e992af173a3b
   languageName: node
   linkType: hard
 
