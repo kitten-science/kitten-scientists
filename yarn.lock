@@ -168,13 +168,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*, @types/eslint@npm:8.4.1":
-  version: 8.4.1
-  resolution: "@types/eslint@npm:8.4.1"
+"@types/eslint@npm:*, @types/eslint@npm:8.4.2":
+  version: 8.4.2
+  resolution: "@types/eslint@npm:8.4.2"
   dependencies:
     "@types/estree": "*"
     "@types/json-schema": "*"
-  checksum: 3ba1ddb8d2362316bafe65f90aa41ce23f923f8ae6a131e382540a7c0d8ad5f04117e6aba788392717a616bd6e2589a1d954630c49edb364d28dc8eeb5214890
+  checksum: 2cce3e57ba5befc7453aa308c032df8ad3a37565d62f0990287d9f651a8c7b67f4b92f8b8deee0d0b22deae3e7e87fa73096f1b9fbb09b68040a909c4eb0b03d
   languageName: node
   linkType: hard
 
@@ -1982,7 +1982,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kitten-scientists@workspace:."
   dependencies:
-    "@types/eslint": 8.4.1
+    "@types/eslint": 8.4.2
     "@types/node": 16.11.33
     "@types/prettier": 2.6.0
     "@types/prettier-package-json": 2.1.1

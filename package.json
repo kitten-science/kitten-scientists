@@ -25,7 +25,7 @@
     "tslib": "2.4.0"
   },
   "devDependencies": {
-    "@types/eslint": "8.4.1",
+    "@types/eslint": "8.4.2",
     "@types/node": "16.11.33",
     "@types/prettier": "2.6.0",
     "@types/prettier-package-json": "2.1.1",
