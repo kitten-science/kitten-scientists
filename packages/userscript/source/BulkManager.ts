@@ -42,7 +42,7 @@ export class BulkManager {
    * @param builds All potential builds.
    * @param metaData The metadata for the potential builds.
    * @param trigger The configured trigger threshold for these builds.
-   * @param source The tab these builds originate from.
+   * @param sourceTab The tab these builds originate from.
    * @returns All the possible builds.
    */
   bulk(
@@ -73,10 +73,10 @@ export class BulkManager {
       >
     >,
     trigger: number,
-    source?: "bonfire" | "space"
+    sourceTab?: "bonfire" | "space"
   ): Array<BulkBuildListItem> {
     const buildsPerformed: Array<BulkBuildListItem> = [];
-    const buildsCache: Array<{
+    const potentialBuilds: Array<{
       id: AllItems;
       name?: AllBuildings;
       count: number;
@@ -112,7 +112,7 @@ export class BulkManager {
       }
 
       // If the max allowed buildings have already been built, there is no need to check them.
-      if (!isNil(build.max) && buildMetaData.val <= build.max) {
+      if (!isNil(build.max) && -1 < build.max && build.max <= buildMetaData.val) {
         continue;
       }
 
@@ -137,10 +137,10 @@ export class BulkManager {
           ? buildMetaData.stages[buildMetaData.stage].prices
           : buildMetaData.prices
       );
-      const priceRatio = this.getPriceRatio(buildMetaData, source);
+      const priceRatio = this.getPriceRatio(buildMetaData, sourceTab);
 
       // Check if we can build this item.
-      if (!this.singleBuildPossible(buildMetaData, prices, priceRatio, source)) {
+      if (!this.singleBuildPossible(buildMetaData, prices, priceRatio, sourceTab)) {
         continue;
       }
 
@@ -157,16 +157,6 @@ export class BulkManager {
         ) {
           continue;
         }
-
-        // Create an entry in the build list for this building.
-        buildsPerformed.push({
-          count: 0,
-          id: name,
-          label: build.label,
-          name: build.name,
-          stage: build.stage,
-          variant: build.variant,
-        });
 
         const itemPrices = [];
 
@@ -192,15 +182,25 @@ export class BulkManager {
           });
         }
 
+        // Create an entry in the build list for this building.
+        buildsPerformed.push({
+          count: 0,
+          id: name,
+          label: build.label,
+          name: build.name,
+          stage: build.stage,
+          variant: build.variant,
+        });
+
         // Create an entry in the cache list for the bulk processing.
-        buildsCache.push({
+        potentialBuilds.push({
           id: name,
           name: build.name,
           count: 0,
           spot: counter,
           prices: itemPrices,
           priceRatio: priceRatio,
-          source: source,
+          source: sourceTab,
           limit: build.max || 0,
           val: buildMetaData.val,
         });
@@ -209,20 +209,64 @@ export class BulkManager {
       }
     }
 
-    if (buildsCache.length === 0) {
+    if (potentialBuilds.length === 0) {
       return [];
     }
 
-    // Create a copy of the current resources.
-    // TODO: Why is this two loops? This could just be a single loop.
+    // Create a copy of the currently available resources.
     const tempPool: Record<Resource, number> = {} as Record<Resource, number>;
     for (const res of this._host.gamePage.resPool.resources) {
-      tempPool[res.name] = res.value;
-    }
-    for (const [res, resource] of objectEntries(tempPool)) {
-      tempPool[res] = this._craftManager.getValueAvailable(res, true);
+      tempPool[res.name] = this._craftManager.getValueAvailable(res.name, true);
     }
 
+    for (const potentialBuild of potentialBuilds) {
+      // The item in the builds cache, that we're currently processing.
+      const buildCount = this._getPossibleBuildCount(potentialBuild, metaData, tempPool);
+      potentialBuild.count = buildCount;
+
+      const performedBuild = mustExist(
+        buildsPerformed.find(build => build.id === potentialBuild.id)
+      );
+      performedBuild.count = potentialBuild.count;
+    }
+
+    return buildsPerformed;
+  }
+
+  /**
+   * Calculate how many of a given build item build be built with the given resources.
+   * @param buildCacheItem The item to build.
+   * @param metaData The metadata for the potential builds.
+   * @param resources The currently available resources.
+   * @returns The number of items that could be built. If this is non-zero, the `resources` will have been adjusted
+   * to reflect the number of builds made.
+   */
+  private _getPossibleBuildCount(
+    buildCacheItem: {
+      id: AllItems;
+      name?: AllBuildings;
+      count: number;
+      spot: number;
+      prices: Array<Price>;
+      priceRatio: number;
+      source?: "bonfire" | "space";
+      limit: number;
+      val: number;
+    },
+    metaData: Partial<
+      Record<
+        AllItems,
+        | BuildingMeta
+        | ChronoForgeUpgradeInfo
+        | ReligionUpgradeInfo
+        | SpaceBuildingInfo
+        | TranscendenceUpgradeInfo
+        | VoidSpaceUpgradeInfo
+        | ZiggurathUpgradeInfo
+      >
+    >,
+    resources: Record<Resource, number> = {} as Record<Resource, number>
+  ) {
     // This variable makes no sense.
     // It _seems_ like it should indicate how many buildings of a specific build slot have been built.
     // But what it actually holds is how many builds have been performed.
@@ -232,151 +276,140 @@ export class BulkManager {
     // I assume this is due to the fact that the script believes it has already built 30 libraries,
     // when it was only 30 catnip fields (and only catnip was spent).
     let unknown_k = 0;
-    // While we have items in the builds cache...
-    while (buildsCache.length !== 0) {
-      // Go through the elements in the builds cache.
-      bulkLoop: for (
-        let buildCacheIndex = 0;
-        buildCacheIndex < buildsCache.length;
-        buildCacheIndex++
-      ) {
-        // The item in the builds cache, that we're currently processing.
-        const buildCacheItem = buildsCache[buildCacheIndex];
-        // The KG metadata associated with the build.
-        const buildMetaData = mustExist(metaData[buildCacheItem.id]);
-        const prices = buildCacheItem.prices;
-        const priceRatio = buildCacheItem.priceRatio;
-        const source = buildCacheItem.source;
 
-        // Go through the prices for this build.
-        for (let priceIndex = 0; priceIndex < prices.length; priceIndex++) {
-          // Is this an oil cost for a build on the space tab?
-          let spaceOil = false;
-          // Is this a karma cost for building cryochambers?
-          let cryoKarma = false;
-          // The actual, discounted oil price for the build.
-          let oilPrice = Infinity;
-          // The actual, discounted karma price for the build.
-          let karmaPrice = Infinity;
+    const tempPool = Object.assign({}, resources);
 
-          // Determine the new state of the flags above.
-          if (source && source === "space" && prices[priceIndex].name === "oil") {
-            spaceOil = true;
+    // The KG metadata associated with the build.
+    const buildMetaData = mustExist(metaData[buildCacheItem.id]);
+    const prices = buildCacheItem.prices;
+    const priceRatio = buildCacheItem.priceRatio;
+    const source = buildCacheItem.source;
+    let maxItemsBuilt = false;
 
-            const oilReductionRatio = this._host.gamePage.getEffect("oilReductionRatio");
-            oilPrice =
-              prices[priceIndex].val *
-              (1 - this._host.gamePage.getLimitedDR(oilReductionRatio, 0.75));
-          } else if (buildCacheItem.id === "cryochambers" && prices[priceIndex].name === "karma") {
-            cryoKarma = true;
+    while (!maxItemsBuilt) {
+      // Go through the prices for this build.
+      for (let priceIndex = 0; priceIndex < prices.length; priceIndex++) {
+        // Is this an oil cost for a build on the space tab?
+        let spaceOil = false;
+        // Is this a karma cost for building cryochambers?
+        let cryoKarma = false;
+        // The actual, discounted oil price for the build.
+        let oilPrice = Infinity;
+        // The actual, discounted karma price for the build.
+        let karmaPrice = Infinity;
 
-            const burnedParagonRatio = this._host.gamePage.prestige.getBurnedParagonRatio();
-            karmaPrice =
-              prices[priceIndex].val *
-              (1 - this._host.gamePage.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
-          }
+        // Determine the new state of the flags above.
+        if (source && source === "space" && prices[priceIndex].name === "oil") {
+          spaceOil = true;
 
-          let maxItemsBuilt = false;
-          if (spaceOil) {
-            maxItemsBuilt =
-              tempPool["oil"] < oilPrice * Math.pow(1.05, unknown_k + buildMetaData.val);
-          } else if (cryoKarma) {
-            maxItemsBuilt =
-              tempPool["karma"] < karmaPrice * Math.pow(priceRatio, unknown_k + buildMetaData.val);
-          } else {
-            maxItemsBuilt =
-              tempPool[prices[priceIndex].name] <
-              prices[priceIndex].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
-          }
+          const oilReductionRatio = this._host.gamePage.getEffect("oilReductionRatio");
+          oilPrice =
+            prices[priceIndex].val *
+            (1 - this._host.gamePage.getLimitedDR(oilReductionRatio, 0.75));
+        } else if (buildCacheItem.id === "cryochambers" && prices[priceIndex].name === "karma") {
+          cryoKarma = true;
 
-          // Check if any special builds have reached their reasonable limit of units to build.
-          // In which case we update our temporary resources cache. Not sure why.
-          if (
-            maxItemsBuilt ||
-            // Is this a non-stackable build?
-            // Space missions and religion upgrades (before transcendence is unlocked)
-            // are example of non-stackable builds.
-            ("noStackable" in buildMetaData &&
-              buildMetaData.noStackable &&
-              unknown_k + buildMetaData.val >= 1) ||
-            // Is this the resource retrieval build? This one is limited to 100 units.
-            (buildCacheItem.id === "ressourceRetrieval" && unknown_k + buildMetaData.val >= 100) ||
-            (buildCacheItem.id === "cryochambers" &&
-              this._host.gamePage.bld.getBuildingExt("chronosphere").meta.val <=
-                unknown_k + buildMetaData.val)
-          ) {
-            // Go through all prices that we have already checked.
-            for (let priceIndex2 = 0; priceIndex2 < priceIndex; priceIndex2++) {
-              // TODO: This seems to just be `spaceOil`.
-              // TODO: A lot of this code seems to be a duplication from a few lines above.
-              if (source && source === "space" && prices[priceIndex2].name === "oil") {
-                const oilReductionRatio = this._host.gamePage.getEffect("oilReductionRatio");
-                const oilPriceRefund =
-                  prices[priceIndex2].val *
-                  (1 - this._host.gamePage.getLimitedDR(oilReductionRatio, 0.75));
-
-                tempPool["oil"] += oilPriceRefund * Math.pow(1.05, unknown_k + buildMetaData.val);
-
-                // TODO: This seems to just be `cryoKarma`.
-              } else if (
-                buildCacheItem.id === "cryochambers" &&
-                prices[priceIndex2].name === "karma"
-              ) {
-                const burnedParagonRatio = this._host.gamePage.prestige.getBurnedParagonRatio();
-                const karmaPriceRefund =
-                  prices[priceIndex2].val *
-                  (1 - this._host.gamePage.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
-
-                tempPool["karma"] +=
-                  karmaPriceRefund * Math.pow(priceRatio, unknown_k + buildMetaData.val);
-              } else {
-                const refundVal =
-                  prices[priceIndex2].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
-                tempPool[prices[priceIndex2].name] +=
-                  prices[priceIndex2].name === "void" ? Math.ceil(refundVal) : refundVal;
-              }
-            }
-
-            // Is this a limited build? If so, don't build more than the limit.
-            if (buildCacheItem.limit && buildCacheItem.limit !== -1) {
-              buildCacheItem.count = Math.max(
-                0,
-                Math.min(buildCacheItem.count, buildCacheItem.limit - buildCacheItem.val)
-              );
-            }
-
-            // As we have reached our reasonable limit for this build, store the count
-            // and remove the build from the builds cache.
-            buildsPerformed[buildsCache[buildCacheIndex].spot].count =
-              buildsCache[buildCacheIndex].count;
-            buildsCache.splice(buildCacheIndex, 1);
-            buildCacheIndex--;
-
-            // Continue with the next item in the builds cache.
-            continue bulkLoop;
-          }
-
-          // Deduct the cost of this price from the temporary resource cache.
-          if (spaceOil) {
-            tempPool["oil"] -= oilPrice * Math.pow(1.05, unknown_k + buildMetaData.val);
-          } else if (cryoKarma) {
-            tempPool["karma"] -= karmaPrice * Math.pow(priceRatio, unknown_k + buildMetaData.val);
-          } else {
-            const newPriceValue =
-              prices[priceIndex].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
-            tempPool[prices[priceIndex].name] -=
-              prices[priceIndex].name === "void" ? Math.ceil(newPriceValue) : newPriceValue;
-          }
-
-          // Check the next price...
+          const burnedParagonRatio = this._host.gamePage.prestige.getBurnedParagonRatio();
+          karmaPrice =
+            prices[priceIndex].val *
+            (1 - this._host.gamePage.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
         }
 
-        // We have built one more item.
-        buildsCache[buildCacheIndex].count++;
+        if (spaceOil) {
+          maxItemsBuilt =
+            tempPool["oil"] < oilPrice * Math.pow(1.05, unknown_k + buildMetaData.val);
+        } else if (cryoKarma) {
+          maxItemsBuilt =
+            tempPool["karma"] < karmaPrice * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+        } else {
+          maxItemsBuilt =
+            tempPool[prices[priceIndex].name] <
+            prices[priceIndex].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+        }
+
+        // Check if any special builds have reached their reasonable limit of units to build.
+        // In which case we update our temporary resources cache. Not sure why.
+        if (
+          maxItemsBuilt ||
+          // Is this a non-stackable build?
+          // Space missions and religion upgrades (before transcendence is unlocked)
+          // are example of non-stackable builds.
+          ("noStackable" in buildMetaData &&
+            buildMetaData.noStackable &&
+            unknown_k + buildMetaData.val >= 1) ||
+          // Is this the resource retrieval build? This one is limited to 100 units.
+          (buildCacheItem.id === "ressourceRetrieval" && unknown_k + buildMetaData.val >= 100) ||
+          (buildCacheItem.id === "cryochambers" &&
+            this._host.gamePage.bld.getBuildingExt("chronosphere").meta.val <=
+              unknown_k + buildMetaData.val)
+        ) {
+          // Go through all prices that we have already checked.
+          for (let priceIndex2 = 0; priceIndex2 < priceIndex; priceIndex2++) {
+            // TODO: This seems to just be `spaceOil`.
+            // TODO: A lot of this code seems to be a duplication from a few lines above.
+            if (source && source === "space" && prices[priceIndex2].name === "oil") {
+              const oilReductionRatio = this._host.gamePage.getEffect("oilReductionRatio");
+              const oilPriceRefund =
+                prices[priceIndex2].val *
+                (1 - this._host.gamePage.getLimitedDR(oilReductionRatio, 0.75));
+
+              tempPool["oil"] += oilPriceRefund * Math.pow(1.05, unknown_k + buildMetaData.val);
+
+              // TODO: This seems to just be `cryoKarma`.
+            } else if (
+              buildCacheItem.id === "cryochambers" &&
+              prices[priceIndex2].name === "karma"
+            ) {
+              const burnedParagonRatio = this._host.gamePage.prestige.getBurnedParagonRatio();
+              const karmaPriceRefund =
+                prices[priceIndex2].val *
+                (1 - this._host.gamePage.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
+
+              tempPool["karma"] +=
+                karmaPriceRefund * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+            } else {
+              const refundVal =
+                prices[priceIndex2].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+              tempPool[prices[priceIndex2].name] +=
+                prices[priceIndex2].name === "void" ? Math.ceil(refundVal) : refundVal;
+            }
+          }
+
+          // Is this a limited build? If so, don't build more than the limit.
+          if (buildCacheItem.limit && buildCacheItem.limit !== -1) {
+            buildCacheItem.count = Math.max(
+              0,
+              Math.min(buildCacheItem.count, buildCacheItem.limit - buildCacheItem.val)
+            );
+          }
+
+          // As we have reached our reasonable limit for this build, store the count
+          // and remove the build from the builds cache.
+          Object.assign(resources, tempPool);
+          return buildCacheItem.count;
+        }
+
+        // Deduct the cost of this price from the temporary resource cache.
+        if (spaceOil) {
+          tempPool["oil"] -= oilPrice * Math.pow(1.05, unknown_k + buildMetaData.val);
+        } else if (cryoKarma) {
+          tempPool["karma"] -= karmaPrice * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+        } else {
+          const newPriceValue =
+            prices[priceIndex].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+          tempPool[prices[priceIndex].name] -=
+            prices[priceIndex].name === "void" ? Math.ceil(newPriceValue) : newPriceValue;
+        }
+
+        // We're starting to make sense of this variable, as we refactored out this method.
+        ++unknown_k;
+        ++buildCacheItem.count;
+        // Check the next price...
       }
-      unknown_k++;
     }
-    return buildsPerformed;
+
+    Object.assign(resources, tempPool);
+    return buildCacheItem.count;
   }
 
   /**
