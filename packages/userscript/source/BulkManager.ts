@@ -111,6 +111,11 @@ export class BulkManager {
         continue;
       }
 
+      // If the max allowed buildings have already been built, there is no need to check them.
+      if (!isNil(build.max) && buildMetaData.val <= build.max) {
+        continue;
+      }
+
       // For cryochambers, if there are used cryochambers, don't build new ones.
       // Also, don't build more cryochambers than you have chronospheres, as they'll stay unused.
       if (
