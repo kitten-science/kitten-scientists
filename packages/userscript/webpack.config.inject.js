@@ -20,10 +20,12 @@ module.exports = {
     path: path.resolve(__dirname, "output"),
     filename: "kitten-scientists.inject.js",
   },
-  plugins: [
-    new webpack.NormalModuleReplacementPlugin(/.\/fixtures\/savegame/, KG_SAVEGAME),
-    new webpack.NormalModuleReplacementPlugin(/.\/fixtures\/settings/, KS_SETTINGS),
-  ],
+  plugins: process.env.KG_INJECT
+    ? [
+        new webpack.NormalModuleReplacementPlugin(/.\/fixtures\/savegame/, KG_SAVEGAME),
+        new webpack.NormalModuleReplacementPlugin(/.\/fixtures\/settings/, KS_SETTINGS),
+      ]
+    : [],
   resolve: {
     extensions: [".ts", ".js"],
   },
