@@ -339,7 +339,13 @@ export abstract class SettingsSectionUi<TState> {
         option.stock.toFixed(0)
       );
       if (value !== null) {
-        this._setStockValue(name, parseInt(value), false);
+        const stockValue = parseInt(value);
+        this._setStockValue(name, stockValue, false);
+        stockElement.text(
+          this._host.i18n("resources.stock", [
+            stockValue === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(stockValue),
+          ])
+        );
         this._host.updateOptions();
       }
     });
@@ -350,7 +356,9 @@ export abstract class SettingsSectionUi<TState> {
         option.consume?.toFixed(2)
       );
       if (value !== null) {
-        this._host.updateOptions(() => (option.consume = parseFloat(value)));
+        const consumeValue = parseFloat(value);
+        this._host.updateOptions(() => (option.consume = consumeValue));
+        consumeElement.text(this._host.i18n("resources.consume", [consumeValue.toFixed(2)]));
       }
     });
 
