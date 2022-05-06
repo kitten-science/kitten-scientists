@@ -143,7 +143,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._getLimitedOption(
         "observatory",
         this._options.items.observatory,
-        `⮤ ${this._host.i18n("$buildings.observatory.label")}`
+        `${this._host.i18n("$buildings.observatory.label")}`
       ),
       this._getLimitedOption(
         "biolab",
