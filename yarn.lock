@@ -1994,7 +1994,7 @@ __metadata:
     prettier: 2.6.2
     prettier-package-json: 2.6.3
     prettier-plugin-organize-imports: 2.3.4
-    prettier-plugin-sh: 0.10.1
+    prettier-plugin-sh: 0.10.2
     tslib: 2.4.0
     typescript: 4.6.4
   languageName: unknown
@@ -2511,15 +2511,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-sh@npm:0.10.1":
-  version: 0.10.1
-  resolution: "prettier-plugin-sh@npm:0.10.1"
+"prettier-plugin-sh@npm:0.10.2":
+  version: 0.10.2
+  resolution: "prettier-plugin-sh@npm:0.10.2"
   dependencies:
     sh-syntax: ^0.1.4
     synckit: ^0.7.0
   peerDependencies:
     prettier: ^2.0.0
-  checksum: cb11a379541b4a04cbb81674d889f9d6194b30d501ebac63d4e891b3f1b263401470877a9631e9b8b95f2fece8dcac19753bf10701a04ce8ea6965b6c7075e27
+  checksum: c38e576c93b3ac403aec92061f0dfca33fbfe5fe1a1046e82aaaea0e1efd326d160d3beab1e23b0099485d46bb0c0607f70121ebf3dee411f6b67fed19d72a0c
   languageName: node
   linkType: hard
 
