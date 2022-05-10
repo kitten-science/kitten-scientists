@@ -97,7 +97,7 @@ __metadata:
     ts-loader: 9.3.0
     tslib: ^2.2.0
     typescript: 4.6.4
-    webpack: 5.72.0
+    webpack: 5.72.1
     webpack-cli: 4.9.2
     webpack-userscript: 2.5.8
   languageName: unknown
@@ -1134,7 +1134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.0.0, enhanced-resolve@npm:^5.9.2":
+"enhanced-resolve@npm:^5.0.0, enhanced-resolve@npm:^5.9.3":
   version: 5.9.3
   resolution: "enhanced-resolve@npm:5.9.3"
   dependencies:
@@ -1904,14 +1904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-parse-better-errors@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "json-parse-better-errors@npm:1.0.2"
-  checksum: 2f1287a7c833e397c9ddd361a78638e828fc523038bb3441fd4fc144cfd2c6cd4963ffb9e207e648cf7b692600f1e1e524e965c32df5152120910e4903a47dcb
-  languageName: node
-  linkType: hard
-
-"json-parse-even-better-errors@npm:^2.3.0":
+"json-parse-even-better-errors@npm:^2.3.0, json-parse-even-better-errors@npm:^2.3.1":
   version: 2.3.1
   resolution: "json-parse-even-better-errors@npm:2.3.1"
   checksum: 140932564c8f0b88455432e0f33c4cb4086b8868e37524e07e723f4eaedb9425bdc2bafd71bd1d9765bd15fd1e2d126972bc83990f55c467168c228c24d665f3
@@ -3360,9 +3353,9 @@ resolve@^1.9.0:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.72.0, webpack@npm:^5.1.0":
-  version: 5.72.0
-  resolution: "webpack@npm:5.72.0"
+"webpack@npm:5.72.1, webpack@npm:^5.1.0":
+  version: 5.72.1
+  resolution: "webpack@npm:5.72.1"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^0.0.51
@@ -3373,13 +3366,13 @@ resolve@^1.9.0:
     acorn-import-assertions: ^1.7.6
     browserslist: ^4.14.5
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.9.2
+    enhanced-resolve: ^5.9.3
     es-module-lexer: ^0.9.0
     eslint-scope: 5.1.1
     events: ^3.2.0
     glob-to-regexp: ^0.4.1
     graceful-fs: ^4.2.9
-    json-parse-better-errors: ^1.0.2
+    json-parse-even-better-errors: ^2.3.1
     loader-runner: ^4.2.0
     mime-types: ^2.1.27
     neo-async: ^2.6.2
@@ -3393,7 +3386,7 @@ resolve@^1.9.0:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: a5bcf88eb7e1d0c95a3bf96050e29be314e8162c4759730465feeaf4f37086ef0c16a6932fa03e13eb7927d89e8794b02dedea55fee1c47479d36a914e15f65f
+  checksum: bdba33268930448eb84347c2da383de8d71f46b2a199c5abf56f6619c86a081de802a4c297c8389c9a888eec0613d5069427c12af0a878058e4be3790875d536
   languageName: node
   linkType: hard
 
