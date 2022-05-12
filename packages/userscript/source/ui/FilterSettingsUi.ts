@@ -157,6 +157,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     );
 
     list.append(optionButtons);
+    list.append(this._getExplainer("Checked items are hidden from the log."));
 
     element.panel.append(list);
 
