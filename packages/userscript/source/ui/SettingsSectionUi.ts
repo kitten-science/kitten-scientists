@@ -175,6 +175,31 @@ export abstract class SettingsSectionUi<TState> {
   }
 
   /**
+   * Construct an informational text item.
+   * This is purely for cosmetic/informational value in the UI.
+   * @param text The text to appear on the header element.
+   * @returns The constructed header element.
+   */
+  protected _getExplainer(text: string): JQuery<HTMLElement> {
+    const headerElement = $("<li/>");
+    const header = $("<span/>", {
+      text,
+      css: {
+        color: "#888",
+        cursor: "default",
+        display: "inline-block",
+        minWidth: "100px",
+        userSelect: "none",
+        padding: "4px",
+      },
+    });
+
+    headerElement.append(header);
+
+    return headerElement;
+  }
+
+  /**
    * Construct a new option element.
    * This is a simple checkbox with a label.
    * @param name The internal ID of this option. Should be unique throughout the script.
