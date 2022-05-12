@@ -177,7 +177,7 @@ export class UserScript {
   ): void {
     if (this.options.auto.filters.enabled) {
       for (const filterItem of Object.values(this.options.auto.filters.items)) {
-        if (filterItem.enabled && filterItem.variant === args[1]) {
+        if (filterItem.enabled && filterItem.variant === cssClasses) {
           return;
         }
       }
