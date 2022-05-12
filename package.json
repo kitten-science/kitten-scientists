@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/eslint": "8.4.2",
     "@types/node": "16.11.34",
-    "@types/prettier": "2.6.0",
+    "@types/prettier": "2.6.1",
     "@types/prettier-package-json": "2.1.1",
     "@types/web": "0.0.64",
     "@typescript-eslint/eslint-plugin": "5.23.0",
