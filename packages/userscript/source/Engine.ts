@@ -92,7 +92,10 @@ export class Engine {
         .then(() => {
           const exit = Date.now();
           const timeTaken = exit - entry;
-          setTimeout(loop, Math.max(10, this._host.options.interval - timeTaken));
+          this._intervalMainLoop = setTimeout(
+            loop,
+            Math.max(10, this._host.options.interval - timeTaken)
+          );
         })
         .catch(error => {
           this._host.warning(error as string);
