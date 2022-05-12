@@ -401,11 +401,12 @@ export class BulkManager {
             prices[priceIndex].name === "void" ? Math.ceil(newPriceValue) : newPriceValue;
         }
 
-        // We're starting to make sense of this variable, as we refactored out this method.
-        ++unknown_k;
-        ++buildCacheItem.count;
         // Check the next price...
       }
+
+      // We're starting to make sense of this variable, as we refactored out this method.
+      ++unknown_k;
+      ++buildCacheItem.count;
     }
 
     Object.assign(resources, tempPool);
