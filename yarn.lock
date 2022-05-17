@@ -239,10 +239,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/web@npm:0.0.65":
-  version: 0.0.65
-  resolution: "@types/web@npm:0.0.65"
-  checksum: 3db26f46648dcb2aff58627360c09c234f333035a2d2b01e2f6608a1de4317eeaeff6a37b4ca8cb3d22612bffcb880e1844dbddc1f9962f374472af2e84d3f85
+"@types/web@npm:0.0.66":
+  version: 0.0.66
+  resolution: "@types/web@npm:0.0.66"
+  checksum: be96b3dfefb8ca8e3c173d5c6a721ead6b4f432864bc913690ae46465c94066afb120fa21154791a0c96ec29e989f09ddb45d611b8476eb0f9b31c33987d6ad0
   languageName: node
   linkType: hard
 
@@ -1926,7 +1926,7 @@ __metadata:
     "@types/node": 16.11.36
     "@types/prettier": 2.6.1
     "@types/prettier-package-json": 2.1.1
-    "@types/web": 0.0.65
+    "@types/web": 0.0.66
     "@typescript-eslint/eslint-plugin": 5.24.0
     "@typescript-eslint/parser": 5.24.0
     eslint: 8.15.0
