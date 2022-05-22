@@ -1614,7 +1614,7 @@ export class Engine {
       4000 * (craftManager.getTickVal(craftManager.getResource("parchment"), true) as number) >
       2500;
 
-    if (!(catpowProfitable && cultureProfitable && parchProfitable)) {
+    if (!catpowProfitable && !cultureProfitable && !parchProfitable) {
       return;
     }
 
