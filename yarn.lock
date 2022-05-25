@@ -3103,11 +3103,11 @@ resolve@^1.9.0:
 
 "typescript@patch:typescript@4.7.2#~builtin<compat/typescript>":
   version: 4.7.2
-  resolution: "typescript@patch:typescript@npm%3A4.7.2#~builtin<compat/typescript>::version=4.7.2&hash=bda367"
+  resolution: "typescript@patch:typescript@npm%3A4.7.2#~builtin<compat/typescript>::version=4.7.2&hash=7ad353"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 2ea9ff6fe037a2724508703e0e4b31edf1dbd8de6f05930480526f7db268a6efc2e1346c3545c065bfdb425393157e91ef6ace909266a49a19f90dfe9e81f844
+  checksum: f454730aef4a8cef2ad5650ce769f38ed4460583fe5867d4f93592282afdbd9b5142b75d448b647e4984edf23575ac1f2adafb2db8614f253f700721d3eb439a
   languageName: node
   linkType: hard
 
