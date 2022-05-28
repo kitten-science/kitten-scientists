@@ -215,10 +215,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:2.6.1":
-  version: 2.6.1
-  resolution: "@types/prettier@npm:2.6.1"
-  checksum: 2161c9c00b8545d49ca0f45eff1825d7b87a28bb1031fc2b03afaba254f5697810814db16ab4aa1814e41c0cb6963881758f26deef88cb7098ac874c7bbad8f2
+"@types/prettier@npm:2.6.2":
+  version: 2.6.2
+  resolution: "@types/prettier@npm:2.6.2"
+  checksum: 3246fdd352a8a9f10205632f3c6a38d9358460023a7e6bb530683140081bd566acfe8e20cd14dce03303a8d428ae377a8bd6301acf8056259ac109227fc65706
   languageName: node
   linkType: hard
 
@@ -1924,7 +1924,7 @@ __metadata:
   dependencies:
     "@types/eslint": 8.4.2
     "@types/node": 16.11.36
-    "@types/prettier": 2.6.1
+    "@types/prettier": 2.6.2
     "@types/prettier-package-json": 2.1.1
     "@types/web": 0.0.67
     "@typescript-eslint/eslint-plugin": 5.26.0
