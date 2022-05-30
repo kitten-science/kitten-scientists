@@ -118,14 +118,18 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       this._getTradeOption(
         "leviathans",
         this._options.items.leviathans,
-        this._host.i18n("$trade.race.leviathans")
+        this._host.i18n("$trade.race.leviathans"),
+        true
       ),
     ];
 
     list.append(...optionButtons);
 
+    const additionOptions = this.getAdditionOptions();
+
     element.panel.append(triggerButton);
     element.panel.append(list);
+    list.append(additionOptions);
 
     this.element = element.panel;
   }
@@ -133,10 +137,11 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   private _getTradeOption(
     name: Race,
     option: TradingSettingsItem,
-    i18nName: string
+    i18nName: string,
+    delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, i18nName);
-    element.css("borderBottom", "1px solid rgba(185, 185, 185, 0.1)");
+    const element = this._getOption(name, option, i18nName, delimiter);
+    element.css("borderTop", "1px solid rgba(185, 185, 185, 0.1)");
 
     //Limited Trading
     const label = $("<label/>", {
@@ -227,10 +232,34 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     return element;
   }
 
+  getAdditionOptions(): Array<JQuery<HTMLElement>> {
+    const nodeHeader = this._getHeader("Additional options");
+
+    const nodeEmbassies = this._getOption(
+      "embassies",
+      this._options.addition.buildEmbassies,
+      this._host.i18n("option.embassies"),
+      false,
+      {
+        onCheck: () => {
+          this._options.addition.buildEmbassies.enabled = true;
+          this._host.imessage("status.sub.enable", [this._host.i18n("option.embassies")]);
+        },
+        onUnCheck: () => {
+          this._options.addition.buildEmbassies.enabled = false;
+          this._host.imessage("status.sub.disable", [this._host.i18n("option.embassies")]);
+        },
+      }
+    );
+
+    return [nodeHeader, nodeEmbassies];
+  }
+
   getState(): TradingSettings {
     return {
       enabled: this._options.enabled,
       trigger: this._options.trigger,
+      addition: this._options.addition,
       items: this._options.items,
     };
   }

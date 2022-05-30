@@ -33,7 +33,7 @@ export abstract class SettingsSectionUi<TState> {
   } {
     const panelElement = $("<li/>", { id: `ks-${id}` });
     // Add a border on the element
-    panelElement.css("borderBottom", "1px  solid rgba(185, 185, 185, 0.2)");
+    panelElement.css("borderTop", "1px solid rgba(185, 185, 185, 0.2)");
 
     // The checkbox to enable/disable this panel.
     const enabledElement = $("<input/>", {

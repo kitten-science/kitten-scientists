@@ -1916,12 +1916,12 @@ export class Engine {
     // Tries to calculate how many embassies for which races it can buy,
     // then it buys them. Code should be straight-forward.
     AutoEmbassy: if (
-      optionVals.buildEmbassies.enabled &&
+      this._host.options.auto.trade.addition.buildEmbassies.enabled &&
       !!this._host.gamePage.diplomacy.races[0].embassyPrices
     ) {
       const culture = craftManager.getResource("culture");
       let cultureVal = 0;
-      const subTrigger = optionVals.buildEmbassies.subTrigger ?? 0;
+      const subTrigger = this._host.options.auto.trade.addition.buildEmbassies.subTrigger ?? 0;
       if (subTrigger <= culture.value / culture.maxValue) {
         const racePanels = this._host.gamePage.diplomacyTab.racePanels;
         cultureVal = craftManager.getValueAvailable("culture", true);

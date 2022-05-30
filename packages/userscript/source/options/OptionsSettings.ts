@@ -3,7 +3,6 @@ import { SettingsSection } from "./SettingsSection";
 export type OptionsItem =
   | "_steamworks"
   | "autofeed"
-  | "buildEmbassies"
   | "crypto"
   | "festival"
   | "fixCry"
@@ -31,7 +30,6 @@ export class OptionsSettings extends SettingsSection {
     promote: { enabled: true },
     crypto: { enabled: true, subTrigger: 10000 },
     fixCry: { enabled: false },
-    buildEmbassies: { enabled: true, subTrigger: 0.9 },
     _steamworks: { enabled: false },
   };
 }

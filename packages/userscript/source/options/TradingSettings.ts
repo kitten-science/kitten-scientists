@@ -1,5 +1,6 @@
 import { Race } from "../types";
 import { Requirement } from "./Options";
+import { OptionsSettingsItem } from "./OptionsSettings";
 import { SettingsSection } from "./SettingsSection";
 
 export type TradingSettingsItem = {
@@ -26,6 +27,10 @@ export type TradingSettingsItem = {
 export class TradingSettings extends SettingsSection {
   trigger = 0.98;
   $trigger?: JQuery<HTMLElement>;
+
+  addition: {
+    buildEmbassies: OptionsSettingsItem;
+  } = { buildEmbassies: { enabled: true, subTrigger: 0.9 } };
 
   items: {
     [item in Race]: TradingSettingsItem;
