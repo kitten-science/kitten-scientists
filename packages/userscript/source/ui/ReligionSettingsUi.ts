@@ -396,7 +396,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         // enable all unicorn buildings
         for (const [unicornName, option] of objectEntries(this._options.items)) {
           if (
-            option.variant !== UnicornItemVariant.Unknown_zp &&
+            option.variant !== UnicornItemVariant.UnicornPasture &&
             option.variant !== UnicornItemVariant.Ziggurat
           ) {
             continue;

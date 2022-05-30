@@ -743,10 +743,12 @@ export class Engine {
   worship(): void {
     const additions = this._host.options.auto.religion.addition;
 
+    const IS_BUILD_BEST_BUILDING_STILL_BROKEN = true;
+
     // Build the best unicorn building if the option is enabled.
     // TODO: This is stupid, as it *only* builds unicorn buildings, instead of all
     //       religion buildings.
-    if (additions.bestUnicornBuilding.enabled) {
+    if (!IS_BUILD_BEST_BUILDING_STILL_BROKEN && additions.bestUnicornBuilding.enabled) {
       const bestUnicornBuilding = this.getBestUnicornBuilding();
       if (bestUnicornBuilding !== null) {
         if (bestUnicornBuilding === "unicornPasture") {
@@ -798,15 +800,12 @@ export class Engine {
         }
       }
     } else {
-      // TODO: This seems needlessly complicated to filter out the unicorn pasture.
-      //       Nothing in this branch makes any sense. Just build the buildings!
-      const builds = Object.assign(
-        {},
-        this._host.options.auto.religion.items,
-        Object.fromEntries(
-          Object.entries(this._host.options.auto.religion.items).filter(
-            ([k, v]) => v.variant !== UnicornItemVariant.Unknown_zp
-          )
+      // TODO: It's not clear why this process is split into two steps.
+
+      // Create the list of builds, excluding the unicorn pasture.
+      const builds = Object.fromEntries(
+        Object.entries(this._host.options.auto.religion.items).filter(
+          ([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture
         )
       );
       // Now we build a unicorn pasture if possible.
