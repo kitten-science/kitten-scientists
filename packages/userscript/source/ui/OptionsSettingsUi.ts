@@ -90,11 +90,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
         this._host.i18n("option.fix.cry")
       ),
       this._getOptionsOption(
-        "buildEmbassies",
-        this._options.items.buildEmbassies,
-        this._host.i18n("option.embassies")
-      ),
-      this._getOptionsOption(
         "_steamworks",
         this._options.items._steamworks,
         this._host.i18n("option.steamworks")
