@@ -767,7 +767,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"braces@npm:^3.0.1":
+"braces@npm:^3.0.2":
   version: 3.0.2
   resolution: "braces@npm:3.0.2"
   dependencies:
@@ -970,10 +970,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^8.3.0":
-  version: 8.3.0
-  resolution: "commander@npm:8.3.0"
-  checksum: 8b043bb8322ea1c39664a1598a95e0495bfe4ca2fad0d84a92d7d1d8d213e2a155b441d2470c8e08de7c4a28cf2bc6e169211c49e1b21d9f7edc6ae4d9356060
+"commander@npm:^9.3.0":
+  version: 9.3.0
+  resolution: "commander@npm:9.3.0"
+  checksum: 4cf2f3a75358e620c3bfb515c5306b3be083463c752504788266a7ff0ed862c0fe3bf7f700154b50546c5c3eca0195f9ca99020184ff6f6128ae7ea87f24b5ba
   languageName: node
   linkType: hard
 
@@ -1024,7 +1024,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^4.1.1, debug@npm:^4.3.2, debug@npm:^4.3.3, debug@npm:^4.3.4":
+"debug@npm:^4.1.1, debug@npm:^4.3.2, debug@npm:^4.3.4":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
   dependencies:
@@ -1930,7 +1930,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.26.0
     "@typescript-eslint/parser": 5.26.0
     eslint: 8.16.0
-    lint-staged: 12.4.2
+    lint-staged: 12.4.3
     prettier: 2.6.2
     prettier-package-json: 2.6.3
     prettier-plugin-organize-imports: 2.3.4
@@ -1950,10 +1950,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lilconfig@npm:2.0.4":
-  version: 2.0.4
-  resolution: "lilconfig@npm:2.0.4"
-  checksum: bdd3d4bd82c6381a3e600962cfc285610564888f126e2cec3cd0fdc41a1892266fa17f32f372a4a6c9c57c265d377ab58a36e2b68a91eedd377389b41334f112
+"lilconfig@npm:2.0.5":
+  version: 2.0.5
+  resolution: "lilconfig@npm:2.0.5"
+  checksum: eed9afcecf1b864405f4b7299abefb87945edba250c70896de54b19b08b87333abc268cc6689539bc33f0e8d098139578704bf51af8077d358f1ac95d58beef0
   languageName: node
   linkType: hard
 
@@ -1964,31 +1964,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:12.4.2":
-  version: 12.4.2
-  resolution: "lint-staged@npm:12.4.2"
+"lint-staged@npm:12.4.3":
+  version: 12.4.3
+  resolution: "lint-staged@npm:12.4.3"
   dependencies:
     cli-truncate: ^3.1.0
     colorette: ^2.0.16
-    commander: ^8.3.0
-    debug: ^4.3.3
+    commander: ^9.3.0
+    debug: ^4.3.4
     execa: ^5.1.1
-    lilconfig: 2.0.4
-    listr2: ^4.0.1
-    micromatch: ^4.0.4
+    lilconfig: 2.0.5
+    listr2: ^4.0.5
+    micromatch: ^4.0.5
     normalize-path: ^3.0.0
-    object-inspect: ^1.12.0
+    object-inspect: ^1.12.2
     pidtree: ^0.5.0
     string-argv: ^0.3.1
-    supports-color: ^9.2.1
+    supports-color: ^9.2.2
     yaml: ^1.10.2
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 5a9d5f8178ee9796005d0dd364c4eddc3ee3f96f81a5d359b9b9cf88c991ba4f87e13f66151ed07b3c57471ed0d01b22f08badf1adec3ccd0a46550a14a0997b
+  checksum: ba420b476a1d49e7e1cb0a853c7f2e5c933a87fdd2906e7ff57aa88744619c25990a9b3e35a57dbced571c2df50c1688f474fec466c84a6e93a6c87e08bfd5e3
   languageName: node
   linkType: hard
 
-"listr2@npm:^4.0.1":
+"listr2@npm:^4.0.5":
   version: 4.0.5
   resolution: "listr2@npm:4.0.5"
   dependencies:
@@ -2091,13 +2091,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.0, micromatch@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "micromatch@npm:4.0.4"
+"micromatch@npm:^4.0.0, micromatch@npm:^4.0.4, micromatch@npm:^4.0.5":
+  version: 4.0.5
+  resolution: "micromatch@npm:4.0.5"
   dependencies:
-    braces: ^3.0.1
-    picomatch: ^2.2.3
-  checksum: 87bc95e3e52ebe413dbadd43c96e797c736bf238f154e3b546859493e83781b6f7fa4dfa54e423034fb9aeea65259ee6480551581271c348d8e19214910a5a64
+    braces: ^3.0.2
+    picomatch: ^2.3.1
+  checksum: 3d6505b20f9fa804af5d8c596cb1c5e475b9b0cd05f652c5b56141cf941bd72adaeb7a436fda344235cef93a7f29b7472efc779fcdb83b478eab0867b95cdeff
   languageName: node
   linkType: hard
 
@@ -2200,10 +2200,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-inspect@npm:^1.12.0":
-  version: 1.12.0
-  resolution: "object-inspect@npm:1.12.0"
-  checksum: 5ea7837f39f8da87b7cf25e81d14d21c45aae87ecbf0a5997a4d1950eacff363b85d39eab9ef6677ea36e862c708a4fe880ca2ffae1492acacdcbc963f2ee239
+"object-inspect@npm:^1.12.2":
+  version: 1.12.2
+  resolution: "object-inspect@npm:1.12.2"
+  checksum: e1bd625f4c44a2f733bd69cfccce6469f71333fb09c6de151f4f346c16d658ef7555727b12652c108e20c2afb908ae7cd165f52ca53745a1d6cbf228cdb46ebe
   languageName: node
   linkType: hard
 
@@ -2361,10 +2361,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picomatch@npm:^2.2.3":
-  version: 2.2.3
-  resolution: "picomatch@npm:2.2.3"
-  checksum: f9abe9e1fff7e77dac6701796f0a27e5ff7e47025adb66914dbf22c5edd95f4f916986c2848440754387d01cc90e0da3dd6a733bd7dbdf814466910243ede983
+"picomatch@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "picomatch@npm:2.3.1"
+  checksum: 26c02b8d06f03206fc2ab8d16f19960f2ff9e81a658f831ecb656d8f17d9edc799e8364b1f4a7873e89d9702dff96204be0fa26fe4181f6843f040f819dac4be
   languageName: node
   linkType: hard
 
@@ -2920,7 +2920,7 @@ resolve@^1.9.0:
   languageName: node
   linkType: hard
 
-"supports-color@npm:^9.2.1":
+"supports-color@npm:^9.2.2":
   version: 9.2.2
   resolution: "supports-color@npm:9.2.2"
   checksum: 630bfaba6144df9c92935c1a84d268aea4fdc58ada9bf54e2f4d2e38ac3239f892e8bbbd493f9d5be52f8a1ee84a7d830ead9ea9d3536446151f197b8a287fcf
