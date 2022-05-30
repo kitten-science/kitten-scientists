@@ -16,7 +16,7 @@ export enum UnicornItemVariant {
   Cryptotheology = "c",
   OrderOfTheSun = "s",
   Ziggurat = "z",
-  Unknown_zp = "zp",
+  UnicornPasture = "zp",
 }
 
 export type ReligionUpgrades =

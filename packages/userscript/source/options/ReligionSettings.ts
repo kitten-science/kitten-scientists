@@ -104,7 +104,7 @@ export class ReligionSettings extends SettingsSection {
   items: {
     [item in FaithItem | UnicornItem]: ReligionSettingsItem;
   } = {
-    unicornPasture: { enabled: true, variant: UnicornItemVariant.Unknown_zp, require: false },
+    unicornPasture: { enabled: true, variant: UnicornItemVariant.UnicornPasture, require: false },
     unicornTomb: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false },
     ivoryTower: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false },
     ivoryCitadel: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false },

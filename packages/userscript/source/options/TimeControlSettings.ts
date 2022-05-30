@@ -85,7 +85,7 @@ export class TimeControlSettings extends SettingsSection {
     unicornPasture: {
       checkForReset: true,
       triggerForReset: -1,
-      variant: UnicornItemVariant.Unknown_zp,
+      variant: UnicornItemVariant.UnicornPasture,
     },
     unicornTomb: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
     ivoryTower: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
