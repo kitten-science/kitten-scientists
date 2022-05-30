@@ -268,27 +268,33 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
     this._resourcesList = $("<ul/>", {
       id: "toggle-list-resources",
-      css: { display: "none", paddingLeft: "20px" },
-    });
-
-    const add = $("<div/>", {
-      id: "resources-add",
-      text: this._host.i18n("resources.add"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        borderBottom: "1px solid rgba(185, 185, 185, 0.1)",
-      },
+      css: { display: "none", paddingLeft: "20px", paddingTop: "4px" },
     });
 
     const clearunused = $("<div/>", {
       id: "resources-clear-unused",
       text: this._host.i18n("resources.clear.unused"),
       css: {
+        border: "1px solid grey",
         cursor: "pointer",
-        display: "inline-block",
         float: "right",
-        paddingRight: "5px",
+        display: "inline-block",
+        marginBottom: "4px",
+        padding: "1px 2px",
+      },
+    });
+
+    const add = $("<div/>", {
+      id: "resources-add",
+      text: this._host.i18n("resources.add"),
+      css: {
+        border: "1px solid grey",
+        cursor: "pointer",
+        float: "right",
+        display: "inline-block",
+        marginBottom: "4px",
+        marginRight: "8px",
+        padding: "1px 2px",
       },
     });
 
@@ -335,7 +341,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       );
     });
 
-    this._resourcesList.append(add, clearunused, allresources);
+    this._resourcesList.append(clearunused, add, allresources);
 
     // Add all the current resources
     for (const [name, item] of objectEntries(this._host.options.auto.craft.resources)) {
