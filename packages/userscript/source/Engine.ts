@@ -810,7 +810,7 @@ export class Engine {
       );
       // Now we build a unicorn pasture if possible.
       if (this._host.options.auto.religion.items.unicornPasture.enabled) {
-        this.build({ unicornPasture: { require: false, enabled: true, max: 0 } });
+        this.build({ unicornPasture: { require: false, enabled: true, max: -1 } });
       }
       // And then we build all other possible religion buildings.
       this._buildReligionBuildings(builds);
