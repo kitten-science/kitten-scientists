@@ -22,6 +22,9 @@ export type BonfireSettingsItem = {
    */
   name?: Building;
 
+  /**
+   * A resource that you must have unlocked to build this.
+   */
   require: Requirement;
 
   /**

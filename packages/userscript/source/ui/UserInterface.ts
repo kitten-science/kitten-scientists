@@ -161,64 +161,6 @@ export class UserInterface {
 
     // Ensure the right column gets a scrollbar, when our content extends it too far down.
     this._addRule("body #gamePageContainer #game #rightColumn { overflow-y: auto }");
-
-    // Set the entire UI to a monospace font.
-    //this._addRule(
-    //  "body {" + // low priority. make sure it can be covered by the theme
-    //    "font-family: monospace;" +
-    //    "font-size: 12px;" +
-    //    "}"
-    //);
-
-    // Ignore remaining rules for now, until their use becomes clear.
-    return;
-
-    const defaultSelector = "body[data-ks-style]:not(.scheme_sleek)";
-
-    this._addRule(`${defaultSelector} #game { min-width: 1300px; top: 32px; }`);
-
-    this._addRule(
-      `${defaultSelector} .column {
-        min-height: inherit;
-        max-width: inherit !important;
-        padding: 1%;
-        margin: 0;
-        overflow-y: auto; }`
-    );
-
-    this._addRule(`${defaultSelector} #leftColumn { height: 92%; width: 26%; }`);
-
-    this._addRule(
-      `${defaultSelector} #midColumn { margin-top: 1% !important; height: 90%; width: 48%; }`
-    );
-
-    this._addRule(`${defaultSelector} #rightColumn { overflow-y: auto; height: 92%; width: 19%; }`);
-
-    this._addRule(
-      `${defaultSelector} #gameLog { overflow-y: hidden !important; width: 100% !important; padding-top: 5px !important; }`
-    );
-
-    this._addRule(`${defaultSelector} #resContainer .maxRes { color: #676766; }`);
-
-    this._addRule(
-      `${defaultSelector} #game .btn {
-        border-radius: 0px;
-        font-family: monospace;
-        font-size: 12px !important;
-        margin: 0 5px 7px 0;
-        width: 290px; }`
-    );
-
-    // TODO: Sound related to exploration. Should likely be removed.
-    this._addRule(
-      `${defaultSelector} #game .map-viewport {
-        height: 340px;
-        max-width: 500px;
-        overflow: visible; }`
-    );
-    this._addRule("#game .map-dashboard { height: 120px; width: 292px; }");
-
-    this._addRule(".right-tab { height: unset !important; }");
   }
 
   private _addRule(rule: string) {
