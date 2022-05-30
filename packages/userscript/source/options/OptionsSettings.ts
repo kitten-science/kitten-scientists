@@ -10,8 +10,7 @@ export type OptionsItem =
   | "hunt"
   | "observe"
   | "promote"
-  | "shipOverride"
-  | "style";
+  | "shipOverride";
 
 export type OptionsSettingsItem = {
   enabled: boolean;
@@ -33,7 +32,6 @@ export class OptionsSettings extends SettingsSection {
     crypto: { enabled: true, subTrigger: 10000 },
     fixCry: { enabled: false },
     buildEmbassies: { enabled: true, subTrigger: 0.9 },
-    style: { enabled: true },
     _steamworks: { enabled: false },
   };
 }

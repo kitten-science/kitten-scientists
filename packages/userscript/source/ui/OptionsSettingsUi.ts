@@ -94,7 +94,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
         this._options.items.buildEmbassies,
         this._host.i18n("option.embassies")
       ),
-      this._getOptionsOption("style", this._options.items.style, this._host.i18n("option.style")),
       this._getOptionsOption(
         "_steamworks",
         this._options.items._steamworks,
@@ -115,21 +114,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     iname: string
   ): JQuery<HTMLElement> {
     const element = this._getOption(name, option, iname);
-
-    // hack for style.
-    // If there are more UI options, split it to "getUIOption"
-    if (name === "style") {
-      const input = element.children("input");
-      input.unbind("change");
-      input.on("change", () => {
-        this._host.updateOptions(() => (option.enabled = input.prop("checked") as boolean));
-        if (option.enabled) {
-          document.body.setAttribute("data-ks-style", "");
-        } else {
-          document.body.removeAttribute("data-ks-style");
-        }
-      });
-    }
 
     if (option.subTrigger !== undefined) {
       const triggerButton = $("<div/>", {
