@@ -81,16 +81,6 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     const optionButtons = [
       this._getTradeOption(
-        "dragons",
-        this._options.items.dragons,
-        this._host.i18n("$trade.race.dragons")
-      ),
-      this._getTradeOption(
-        "zebras",
-        this._options.items.zebras,
-        this._host.i18n("$trade.race.zebras")
-      ),
-      this._getTradeOption(
         "lizards",
         this._options.items.lizards,
         this._host.i18n("$trade.race.lizards")
@@ -111,9 +101,19 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
         this._host.i18n("$trade.race.nagas")
       ),
       this._getTradeOption(
+        "zebras",
+        this._options.items.zebras,
+        this._host.i18n("$trade.race.zebras")
+      ),
+      this._getTradeOption(
         "spiders",
         this._options.items.spiders,
         this._host.i18n("$trade.race.spiders")
+      ),
+      this._getTradeOption(
+        "dragons",
+        this._options.items.dragons,
+        this._host.i18n("$trade.race.dragons")
       ),
       this._getTradeOption(
         "leviathans",
