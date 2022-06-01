@@ -486,12 +486,11 @@ export class BulkManager {
     source?: "bonfire" | "space"
   ): number {
     // If the building has stages, use the ratio for the current stage.
-    const ratio = mustExist(
+    const ratio =
       // TODO: This seems weird. Why not take the price ratio of the stage as the default?
       this._isStagedBuild(data)
         ? data.priceRatio || data.stages[data.stage].priceRatio
-        : data.priceRatio
-    );
+        : data.priceRatio ?? 0;
 
     let ratioDiff = 0;
     if (source && source === "bonfire") {
