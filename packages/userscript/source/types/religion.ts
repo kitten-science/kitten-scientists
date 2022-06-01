@@ -138,7 +138,7 @@ export type TranscendenceUpgradeInfo = AbstractReligionUpgradeInfo & {
   flavor: string;
 
   name: TranscendenceUpgrades;
-  priceRatio: number;
+  priceRatio?: number;
   tier: number;
   unlocks: {
     zigguratUpgrades: Array<"ivoryTower">;
