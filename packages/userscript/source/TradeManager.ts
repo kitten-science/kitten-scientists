@@ -136,6 +136,8 @@ export class TradeManager {
     const output: Partial<Record<Resource, number>> = {};
     for (const item of race.sells) {
       if (!this._isValidTrade(item, race)) {
+        // Still put invalid trades into the result to not cause missing keys.
+        output[item.name] = 0;
         continue;
       }
 
