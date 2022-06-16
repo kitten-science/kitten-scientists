@@ -1691,6 +1691,8 @@ export class Engine {
   trade(): void {
     this._tradeManager.manager.render();
 
+    this.buildEmbassies();
+
     // If we can't make any trades, bail out.
     if (!this._tradeManager.singleTradePossible()) {
       return;
@@ -1902,29 +1904,19 @@ export class Engine {
     }
   }
 
-  /**
-   * All automations that didn't have a better place.
-   * - Building embassies
-   * - Fixing cryochambers
-   * - Turn on Steamworks (they're always off initially)
-   */
-  miscOptions(): void {
-    const craftManager = this._craftManager;
-    const buildManager = this._buildManager;
-    const optionVals = this._host.options.auto.options.items;
-
+  buildEmbassies() {
     // Tries to calculate how many embassies for which races it can buy,
     // then it buys them. Code should be straight-forward.
     AutoEmbassy: if (
       this._host.options.auto.trade.addition.buildEmbassies.enabled &&
       !!this._host.gamePage.diplomacy.races[0].embassyPrices
     ) {
-      const culture = craftManager.getResource("culture");
+      const culture = this._craftManager.getResource("culture");
       let cultureVal = 0;
       const subTrigger = this._host.options.auto.trade.addition.buildEmbassies.subTrigger ?? 0;
       if (subTrigger <= culture.value / culture.maxValue) {
         const racePanels = this._host.gamePage.diplomacyTab.racePanels;
-        cultureVal = craftManager.getValueAvailable("culture", true);
+        cultureVal = this._craftManager.getValueAvailable("culture", true);
 
         const embassyBulk: Partial<
           Record<
@@ -1983,7 +1975,7 @@ export class Engine {
           if (emBulk.val === 0) {
             continue;
           }
-          cultureVal = craftManager.getValueAvailable("culture", true);
+          cultureVal = this._craftManager.getValueAvailable("culture", true);
           if (cultureVal < emBulk.priceSum) {
             this._host.warning("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
           }
@@ -2002,6 +1994,16 @@ export class Engine {
         }
       }
     }
+  }
+
+  /**
+   * All automations that didn't have a better place.
+   * - Fixing cryochambers
+   * - Turn on Steamworks (they're always off initially)
+   */
+  miscOptions(): void {
+    const buildManager = this._buildManager;
+    const optionVals = this._host.options.auto.options.items;
 
     // Fix used cryochambers
     // If the option is enabled and we have used cryochambers...

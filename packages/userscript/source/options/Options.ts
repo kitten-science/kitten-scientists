@@ -186,6 +186,8 @@ export class Options {
       subject.items[`toggle-${name}-summer` as const] = item.summer;
       subject.items[`toggle-${name}-winter` as const] = item.winter;
     }
+    subject.items["toggle-buildEmbassies" as const] =
+      optionsObject.auto.trade.addition.buildEmbassies.enabled;
     for (const [name, item] of objectEntries(optionsObject.auto.unlock.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
     }
@@ -379,6 +381,9 @@ export class Options {
       item.summer = subject.items[`toggle-${name}-summer` as const] ?? item.summer;
       item.winter = subject.items[`toggle-${name}-winter` as const] ?? item.winter;
     }
+    result.auto.trade.addition.buildEmbassies.enabled =
+      subject.items["toggle-buildEmbassies" as const] ??
+      result.auto.trade.addition.buildEmbassies.enabled;
     for (const [name, item] of objectEntries(result.auto.unlock.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }

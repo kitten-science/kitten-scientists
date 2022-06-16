@@ -28,6 +28,7 @@ type ToggleLimitedJobItem = `toggle-limited-${Job}`;
 type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
 type ToggleLimitedResourceItem = `toggle-limited-${Resource}`;
 type ToggleOptionsItem = `toggle-${OptionsItem}`;
+type ToggleBuildEmbassies = "toggle-buildEmbassies";
 type TogglePolicyItem = `toggle-${Policy}`;
 type ToggleRaceItem = `toggle-${Race}`;
 type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
@@ -59,6 +60,7 @@ export type KittenStorageType = {
     Partial<Record<SetSubtriggerReligionItem, number>> &
     Partial<Record<SetSubtriggerTimeCtrlItem, number>> &
     Partial<Record<ToggleBuildingItem, boolean>> &
+    Partial<Record<ToggleBuildEmbassies, boolean>> &
     Partial<Record<ToggleFaithUnicornItem, boolean>> &
     Partial<Record<ToggleFilterItem, boolean>> &
     Partial<Record<ToggleJobItem, boolean>> &

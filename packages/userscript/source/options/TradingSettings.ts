@@ -24,13 +24,16 @@ export type TradingSettingsItem = {
 
   require: Requirement;
 };
+
+export type TradeAdditionSettings = {
+  buildEmbassies: OptionsSettingsItem;
+};
+
 export class TradingSettings extends SettingsSection {
   trigger = 0.98;
   $trigger?: JQuery<HTMLElement>;
 
-  addition: {
-    buildEmbassies: OptionsSettingsItem;
-  } = { buildEmbassies: { enabled: true, subTrigger: 0.9 } };
+  addition: TradeAdditionSettings = { buildEmbassies: { enabled: true, subTrigger: 0.9 } };
 
   items: {
     [item in Race]: TradingSettingsItem;

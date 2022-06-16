@@ -1,4 +1,8 @@
-import { TradingSettings, TradingSettingsItem } from "../options/TradingSettings";
+import {
+  TradeAdditionSettings,
+  TradingSettings,
+  TradingSettingsItem,
+} from "../options/TradingSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -125,7 +129,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     list.append(...optionButtons);
 
-    const additionOptions = this.getAdditionOptions();
+    const additionOptions = this.getAdditionOptions(this._options.addition);
 
     element.panel.append(triggerButton);
     element.panel.append(list);
@@ -232,21 +236,21 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     return element;
   }
 
-  getAdditionOptions(): Array<JQuery<HTMLElement>> {
+  getAdditionOptions(addition: TradeAdditionSettings): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
     const nodeEmbassies = this._getOption(
       "embassies",
-      this._options.addition.buildEmbassies,
+      addition.buildEmbassies,
       this._host.i18n("option.embassies"),
       false,
       {
         onCheck: () => {
-          this._options.addition.buildEmbassies.enabled = true;
+          this._host.updateOptions(() => (this._options.addition.buildEmbassies.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.embassies")]);
         },
         onUnCheck: () => {
-          this._options.addition.buildEmbassies.enabled = false;
+          this._host.updateOptions(() => (this._options.addition.buildEmbassies.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.embassies")]);
         },
       }
@@ -267,6 +271,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   setState(state: TradingSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;
+    this._options.addition.buildEmbassies.enabled = state.addition.buildEmbassies.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -282,6 +287,10 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
     mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(2);
+    mustExist(this._options.addition.buildEmbassies.$enabled).prop(
+      "checked",
+      this._options.addition.buildEmbassies.enabled
+    );
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
