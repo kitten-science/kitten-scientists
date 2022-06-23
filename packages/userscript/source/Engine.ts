@@ -803,10 +803,13 @@ export class Engine {
       // TODO: It's not clear why this process is split into two steps.
 
       // Create the list of builds, excluding the unicorn pasture.
+      // Also reverse the build order, so that the best unicorn building is
+      // always build preferably.
+      // TODO: The "build best unicorn building first" feature might be redundant.
       const builds = Object.fromEntries(
-        Object.entries(this._host.options.auto.religion.items).filter(
-          ([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture
-        )
+        Object.entries(this._host.options.auto.religion.items)
+          .filter(([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture)
+          .reverse()
       );
       // Now we build a unicorn pasture if possible.
       if (this._host.options.auto.religion.items.unicornPasture.enabled) {
