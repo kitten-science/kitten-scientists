@@ -1,7 +1,7 @@
 {
   "name": "@kitten-science/userscript",
   "version": "2.0.0-alpha.1",
-  "description": "Add-on for the wonderful incremental browser game: http://bloodrizer.ru/games/kittens/",
+  "description": "Add-on for the wonderful incremental browser game: https://kittensgame.com/web/",
   "license": "MIT",
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "homepage": "https://github.com/oliversalzburg/cbc-kitten-scientists",
@@ -12,12 +12,13 @@
   "bugs": {
     "url": "https://github.com/oliversalzburg/cbc-kitten-scientists/issues"
   },
+  "type": "module",
   "main": "./output/index.js",
   "scripts": {
-    "userscript:build": "webpack --config webpack.config.inject.js",
-    "userscript:preview": "NODE_ENV=development webpack --config webpack.config.userscript.js && rm -rf node_modules",
-    "userscript:release": "webpack --config webpack.config.userscript.js && rm -rf node_modules",
-    "userscript:watch": "webpack --config webpack.config.inject.js --watch",
+    "userscript:build": "vite --config vite.config.inject.js build",
+    "userscript:preview": "NODE_ENV=development vite --config vite.config.userscript.js build",
+    "userscript:release": "vite --config vite.config.userscript.js build",
+    "userscript:watch": "vite --config vite.config.inject.js --watch",
     "whoami": "echo userscript"
   },
   "types": "./output/index.ts",
@@ -27,13 +28,9 @@
   "devDependencies": {
     "@types/dojo": "1.9.43",
     "@types/jquery": "3.5.14",
-    "@types/terser-webpack-plugin": "5.2.0",
-    "terser-webpack-plugin": "5.3.3",
-    "ts-loader": "9.3.1",
-    "typescript": "4.7.4",
-    "webpack": "5.73.0",
-    "webpack-cli": "4.10.0",
-    "webpack-userscript": "2.5.8"
+    "typescript": "4.7.2",
+    "vite": "2.9.12",
+    "vite-plugin-userscript": "0.1.3"
   },
   "keywords": [
     "kitten",

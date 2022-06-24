@@ -16,6 +16,8 @@ import { GamePage } from "./types";
 import { UserInterface } from "./ui/UserInterface";
 
 declare global {
+  const KG_SAVEGAME: string | null;
+  const KS_SETTINGS: string | null;
   let unsafeWindow: Window | undefined;
   const dojo: {
     clone: <T>(subject: T) => T;

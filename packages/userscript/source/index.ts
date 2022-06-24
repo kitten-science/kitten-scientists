@@ -1,11 +1,12 @@
-import devSavegame from "./fixtures/savegame";
-import devSettings from "./fixtures/settings";
 import { Options } from "./options/Options";
 import { SettingsStorage } from "./options/SettingsStorage";
 import { cinfo } from "./tools/Log";
 import { isNil } from "./tools/Maybe";
 import { SavegameLoader } from "./tools/SavegameLoader";
 import { UserScript } from "./UserScript";
+
+const devSavegame = KG_SAVEGAME ?? null;
+const devSettings = KS_SETTINGS ?? null;
 
 (async () => {
   const kittenGame = await UserScript.waitForGame();
