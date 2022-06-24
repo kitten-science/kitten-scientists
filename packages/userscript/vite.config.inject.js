@@ -16,8 +16,10 @@ const filename = [
   "kitten-scientists",
   isDevBuild ? "-dev" : `-${manifest.version}`,
   isNightlyBuild ? `-${getDateString()}` : "",
-  process.env.GITHUB_SHA ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}` : "",
-  ".inject.js",
+  (isDevBuild || isNightlyBuild) && process.env.GITHUB_SHA
+    ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}`
+    : "",
+  ".user.js",
 ].join("");
 
 const KG_SAVEGAME = process.env.KG_SAVEGAME ?? null;
