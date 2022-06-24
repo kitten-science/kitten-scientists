@@ -1343,7 +1343,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       )
     ) {
       // Remove existing elements.
-      for (const [name, resource] of objectEntries(this._options.resources)) {
+      for (const [, resource] of objectEntries(this._options.resources)) {
         if (!isNil(resource.$checkForReset)) {
           resource.$checkForReset.remove();
           resource.$checkForReset = undefined;

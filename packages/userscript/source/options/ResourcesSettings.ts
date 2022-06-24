@@ -1,4 +1,4 @@
-import { Resource, ResourceCraftable } from "../types";
+import { Resource } from "../types";
 
 export type ResourcesSettingsItem = {
   consume?: number;
