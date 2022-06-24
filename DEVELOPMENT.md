@@ -22,21 +22,21 @@ The development container provides a version of Kitten Game that already a Kitte
 
 1. Start a watcher to continuously rebuild KS when you make code changes.
 
-   ```shell
-   yarn userscript:watch
-   ```
+    ```shell
+    yarn userscript:watch
+    ```
 
-   > This task can also be started directly in VS Code, using the **Run Task** command.
+    > This task can also be started directly in VS Code, using the **Run Task** command.
 
 1. Build the development container and start it.
 
-   ```shell
-   yarn devcontainer:run
-   ```
+    ```shell
+    yarn devcontainer:run
+    ```
 
-   The script prints the URL where you can now play the game with KS installed.
+    The script prints the URL where you can now play the game with KS installed.
 
-   You will need to manually reload the page after each build to get the latest changes in the browser.
+    You will need to manually reload the page after each build to get the latest changes in the browser.
 
 When the container is built, it downloads the latest version of the game from https://bitbucket.org/bloodrizer/kitten-game.
 
@@ -54,11 +54,11 @@ To develop without containers, you can build a development version of the usersc
 
 1. Run the build script.
 
-   ```shell
-   yarn userscript:preview
-   ```
+    ```shell
+    yarn userscript:preview
+    ```
 
-   The userscript is placed in the `packages/userscript/bundle` directory.
+    The userscript is placed in the `packages/userscript/output` directory.
 
 ### Type-checking
 
@@ -68,6 +68,6 @@ To fill the **Problems** panel in VS Code with all current, type-related errors,
 
 1. Run the script to build the release:
 
-   ```shell
-   yarn userscript:release
-   ```
+    ```shell
+    yarn userscript:release
+    ```
