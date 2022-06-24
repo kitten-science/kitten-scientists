@@ -27,7 +27,7 @@
   "devDependencies": {
     "@babel/core": "7.18.5",
     "@babel/eslint-parser": "7.18.2",
-    "@types/babel__core": "^7",
+    "@types/babel__core": "7.1.19",
     "@types/eslint": "8.4.3",
     "@types/node": "16.11.41",
     "@types/prettier": "2.6.3",
