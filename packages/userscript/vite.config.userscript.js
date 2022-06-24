@@ -14,7 +14,7 @@ function getDateString() {
 
 const filename = [
   "kitten-scientists",
-  isDevBuild ? "-dev" : "",
+  isDevBuild ? "-dev" : `-${manifest.version}`,
   process.env.NIGHTLY_BUILD ? `-${getDateString()}` : "",
   process.env.GITHUB_SHA ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}` : "",
   ".user.js",
