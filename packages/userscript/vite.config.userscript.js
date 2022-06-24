@@ -36,7 +36,7 @@ export default defineConfig({
       entry: "source/index.ts",
       name: "kitten-scientists",
     },
-    minify: isDevBuild ? "esbuild" : false,
+    minify: isDevBuild ? false : "esbuild",
     outDir: "output",
     rollupOptions: {
       output: {
