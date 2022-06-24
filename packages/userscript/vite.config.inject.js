@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
+import manifest from "./package.json" assert { type: "json" };
 
-const isDevBuild = process.env.NODE_ENV === "development";
+const isDevBuild = Boolean(process.env.DEV_BUILD);
+const isNightlyBuild = Boolean(process.env.NIGHTLY_BUILD);
 
 function getDateString() {
   const date = new Date();
@@ -12,8 +14,8 @@ function getDateString() {
 
 const filename = [
   "kitten-scientists",
-  isDevBuild ? "-dev" : "",
-  process.env.NIGHTLY_BUILD ? `-${getDateString()}` : "",
+  isDevBuild ? "-dev" : `-${manifest.version}`,
+  isNightlyBuild ? `-${getDateString()}` : "",
   process.env.GITHUB_SHA ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}` : "",
   ".inject.js",
 ].join("");
