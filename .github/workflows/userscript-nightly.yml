@@ -56,4 +56,4 @@ jobs:
           prerelease: true
           title: "Nightly Build"
           files: |
-            packages/userscript/bundle/*
+            packages/userscript/output/*

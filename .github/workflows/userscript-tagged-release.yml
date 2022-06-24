@@ -32,4 +32,4 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            packages/userscript/bundle/*
+            packages/userscript/output/*

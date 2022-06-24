@@ -38,4 +38,4 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            packages/userscript/bundle/*
+            packages/userscript/output/*
