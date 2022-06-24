@@ -1517,7 +1517,7 @@ export class Engine {
     buildManager.manager.render();
 
     const metaData: Partial<Record<SpaceItem, SpaceBuildingInfo>> = {};
-    for (const [name, build] of objectEntries(builds)) {
+    for (const [name] of objectEntries(builds)) {
       metaData[name] = buildManager.getBuild(name);
     }
 
@@ -1974,7 +1974,7 @@ export class Engine {
           }
         }
 
-        for (const [name, emBulk] of objectEntries(embassyBulk)) {
+        for (const [, emBulk] of objectEntries(embassyBulk)) {
           if (emBulk.val === 0) {
             continue;
           }

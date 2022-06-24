@@ -375,7 +375,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       option.limited = state.items[name].limited;
     }
     // Remove old resource options.
-    for (const [name, option] of objectEntries(this._options.resources)) {
+    for (const [name] of objectEntries(this._options.resources)) {
       this._removeResourceOption(name);
     }
     // Add new resource options.
@@ -394,11 +394,11 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
     mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(2);
 
-    for (const [name, option] of objectEntries(this._options.items)) {
+    for (const [, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
       mustExist(option.$limited).prop("checked", option.limited);
     }
-    for (const [name, option] of objectEntries(this._options.resources)) {
+    for (const [, option] of objectEntries(this._options.resources)) {
       mustExist(option.$consume).text(
         this._host.i18n("resources.consume", [
           (option.consume ?? this._host.options.consume).toFixed(2),
