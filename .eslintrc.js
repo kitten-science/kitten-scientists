@@ -1,11 +1,21 @@
 module.exports = {
   root: true,
+  extends: ["eslint:recommended"],
+
   env: {
     browser: true,
     node: true,
     es2022: true,
   },
-  extends: ["eslint:recommended"],
+
+  parser: "@babel/eslint-parser",
+  parserOptions: {
+    babelOptions: {
+      plugins: ["@babel/plugin-syntax-import-assertions"],
+    },
+    requireConfigFile: false,
+    sourceType: "module",
+  },
   plugins: ["@typescript-eslint"],
   overrides: [
     {
@@ -15,8 +25,7 @@ module.exports = {
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
       ],
       parserOptions: {
-        project: ["./tsconfig.json"],
-        sourceType: "module",
+        project: ["packages/*/tsconfig.json"],
       },
       rules: {
         "@typescript-eslint/no-explicit-any": [
@@ -25,8 +34,8 @@ module.exports = {
             ignoreRestArgs: true,
           },
         ],
-        "@typescript-eslint/no-implied-eval": "off",
-        "@typescript-eslint/no-unused-vars": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": ["error", { args: "none" }],
         "@typescript-eslint/no-var-requires": "off",
       },
     },
