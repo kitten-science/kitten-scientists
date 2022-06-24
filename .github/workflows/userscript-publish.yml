@@ -28,6 +28,8 @@ jobs:
         run: yarn lint:all
 
       - name: Build userscript
+        env:
+          NODE_ENV: development
         run: yarn userscript:release
 
       - name: Pre-release userscript
