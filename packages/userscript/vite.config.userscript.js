@@ -23,6 +23,9 @@ const filename = [
   ".user.js",
 ].join("");
 
+const KG_SAVEGAME = process.env.KG_SAVEGAME ?? null;
+const KS_SETTINGS = process.env.KS_SETTINGS ?? null;
+
 export default defineConfig({
   plugins: [
     metablock({
@@ -48,5 +51,9 @@ export default defineConfig({
         entryFileNames: filename,
       },
     },
+  },
+  define: {
+    KG_SAVEGAME,
+    KS_SETTINGS,
   },
 });
