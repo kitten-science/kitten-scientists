@@ -49,7 +49,7 @@ export class UserInterface {
   construct(): void {
     this._installCss();
 
-    const kg_version = "Kitten Scientists v2.0.0-alpha.2";
+    const kg_version = "Kitten Scientists v2.0.0-alpha.3";
     const optionsElement = $("<div/>", { id: "ks-options", css: { marginBottom: "10px" } });
     const optionsListElement = $("<ul/>");
     const optionsTitleElement = $("<div/>", {
