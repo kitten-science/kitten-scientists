@@ -18,7 +18,7 @@
     "userscript:build": "vite --config vite.config.inject.js build",
     "userscript:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
     "userscript:release": "vite --config vite.config.userscript.js build",
-    "userscript:watch": "vite --config vite.config.inject.js --watch",
+    "userscript:watch": "vite --config vite.config.inject.js",
     "whoami": "echo userscript"
   },
   "types": "./output/index.ts",

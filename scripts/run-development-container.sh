@@ -4,6 +4,7 @@ set -o errexit
 
 BASEDIR=$(dirname "$(readlink -f "$0")")
 
+yarn userscript:build
 yarn devcontainer:build
 
 echo "Removing previous container..."

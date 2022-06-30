@@ -1,26 +1,6 @@
 import { defineConfig } from "vite";
-import manifest from "./package.json" assert { type: "json" };
 
-const isDevBuild = Boolean(process.env.DEV_BUILD);
-const isNightlyBuild = Boolean(process.env.NIGHTLY_BUILD);
-
-function getDateString() {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, "0");
-  const day = `${date.getDate()}`.padStart(2, "0");
-  return `${year}${month}${day}`;
-}
-
-const filename = [
-  "kitten-scientists",
-  isDevBuild ? "-dev" : `-${manifest.version}`,
-  isNightlyBuild ? `-${getDateString()}` : "",
-  (isDevBuild || isNightlyBuild) && process.env.GITHUB_SHA
-    ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}`
-    : "",
-  ".user.js",
-].join("");
+const filename = "kitten-scientists.inject.js";
 
 const KG_SAVEGAME = process.env.KG_SAVEGAME ?? null;
 const KS_SETTINGS = process.env.KS_SETTINGS ?? null;
