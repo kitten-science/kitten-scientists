@@ -25,9 +25,10 @@
     "tslib": "2.4.0"
   },
   "devDependencies": {
-    "@babel/core": "7.18.5",
+    "@babel/core": "7.18.6",
     "@babel/eslint-parser": "7.18.2",
-    "@types/babel__core": "7.1.19",
+    "@babel/plugin-syntax-import-assertions": "7.18.6",
+    "@types/babel__core": "7",
     "@types/eslint": "8.4.3",
     "@types/node": "16.11.41",
     "@types/prettier": "2.6.3",
@@ -35,6 +36,7 @@
     "@typescript-eslint/eslint-plugin": "5.29.0",
     "@typescript-eslint/parser": "5.29.0",
     "eslint": "8.18.0",
+    "eslint-plugin-jsdoc": "39.3.3",
     "lint-staged": "13.0.2",
     "prettier": "2.7.1",
     "prettier-package-json": "2.6.4",
