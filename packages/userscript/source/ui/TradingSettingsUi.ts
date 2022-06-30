@@ -42,29 +42,17 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     });
 
     // Create "trigger" button in the item.
-    const triggerButton = $("<div/>", {
-      id: `trigger-${toggleName}`,
-      text: this._host.i18n("ui.trigger"),
-      //title: this._options.trigger,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
+    this._options.$trigger = this._getTriggerButton(toggleName, {
+      onClick: () => {
+        const value = window.prompt(
+          this._host.i18n("ui.trigger.set", [itext]),
+          this._options.trigger.toFixed(2)
+        );
+
+        if (value !== null) {
+          this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
+        }
       },
-    });
-    this._options.$trigger = triggerButton;
-
-    triggerButton.on("click", () => {
-      const value = window.prompt(
-        this._host.i18n("ui.trigger.set", [itext]),
-        this._options.trigger.toFixed(2)
-      );
-
-      if (value !== null) {
-        this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
-        triggerButton[0].title = this._options.trigger.toFixed(2);
-      }
     });
 
     // Create build items.
@@ -131,7 +119,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     const additionOptions = this.getAdditionOptions(this._options.addition);
 
-    element.panel.append(triggerButton);
+    element.panel.append(this._options.$trigger);
     element.panel.append(list);
     list.append(additionOptions);
 
@@ -286,7 +274,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(2);
+    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
     mustExist(this._options.addition.buildEmbassies.$enabled).prop(
       "checked",
       this._options.addition.buildEmbassies.enabled

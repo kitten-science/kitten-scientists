@@ -96,21 +96,50 @@ export abstract class SettingsSectionUi<TState> {
   }
 
   /**
+   * Constructs a button to configure the trigger value of an
+   * automation section.
+   *
+   * @param id The ID of this trigger button.
+   * @param handler Handlers to register on the control.
+   * @param handler.onClick Call this method when the trigger button
+   * is clicked.
+   * @returns The constructed trigger button.
+   */
+  protected _getTriggerButton(id: string, handler: { onClick?: () => void } = {}) {
+    const triggerButton = $("<div/>", {
+      id: `trigger-${id}`,
+      text: this._host.i18n("ui.trigger"),
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+      },
+    });
+
+    if (handler.onClick) {
+      triggerButton.on("click", handler.onClick);
+    }
+
+    return triggerButton;
+  }
+
+  /**
    * Constructs a list panel that is used to contain a list of options.
    * The panel has "enable all" and "disable all" buttons to check and
    * uncheck all checkboxes in the section at once.
    *
-   * @param toggleName The ID for this list.
+   * @param id The ID for this list.
    * @returns The constructed list.
    */
-  protected _getOptionList(toggleName: string): JQuery<HTMLElement> {
+  protected _getOptionList(id: string): JQuery<HTMLElement> {
     const containerList = $("<ul/>", {
-      id: `items-list-${toggleName}`,
+      id: `items-list-${id}`,
       css: { display: "none", paddingLeft: "20px", paddingTop: "4px" },
     });
 
     const disableAllButton = $("<div/>", {
-      id: `toggle-all-items-${toggleName}`,
+      id: `toggle-all-items-${id}`,
       text: this._host.i18n("ui.disable.all"),
       css: {
         border: "1px solid grey",
@@ -133,7 +162,7 @@ export abstract class SettingsSectionUi<TState> {
     containerList.append(disableAllButton);
 
     const enableAllButton = $("<div/>", {
-      id: `toggle-all-items-${toggleName}`,
+      id: `toggle-all-items-${id}`,
       text: this._host.i18n("ui.enable.all"),
       css: {
         border: "1px solid grey",

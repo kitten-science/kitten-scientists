@@ -41,29 +41,18 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     });
 
     // Create "trigger" button in the item.
-    const triggerButton = $("<div/>", {
-      id: `trigger-${toggleName}`,
-      text: this._host.i18n("ui.trigger"),
-      title: this._options.trigger,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
+    this._options.$trigger = this._getTriggerButton(toggleName, {
+      onClick: () => {
+        const value = window.prompt(
+          this._host.i18n("ui.trigger.set", [itext]),
+          this._options.trigger.toString()
+        );
+
+        if (value !== null) {
+          this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
+          this.refreshUi();
+        }
       },
-    });
-    this._options.$trigger = triggerButton;
-
-    triggerButton.on("click", () => {
-      const value = window.prompt(
-        this._host.i18n("ui.trigger.set", [itext]),
-        this._options.trigger.toString()
-      );
-
-      if (value !== null) {
-        this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
-        triggerButton[0].title = this._options.trigger.toString();
-      }
     });
 
     // Create build items.
@@ -210,7 +199,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       resourcesList.toggle();
     });
 
-    element.panel.append(triggerButton);
+    element.panel.append(this._options.$trigger);
     element.panel.append(resourcesButton);
     element.panel.append(list);
     element.panel.append(resourcesList);
@@ -392,7 +381,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(2);
+    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
 
     for (const [, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
@@ -401,7 +390,7 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     for (const [, option] of objectEntries(this._options.resources)) {
       mustExist(option.$consume).text(
         this._host.i18n("resources.consume", [
-          (option.consume ?? this._host.options.consume).toFixed(2),
+          (option.consume ?? this._host.options.consume).toFixed(3),
         ])
       );
       mustExist(option.$stock).text(

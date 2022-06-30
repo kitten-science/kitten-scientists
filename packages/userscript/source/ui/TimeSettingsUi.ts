@@ -37,29 +37,17 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     });
 
     // Create "trigger" button in the item.
-    const triggerButton = $("<div/>", {
-      id: `trigger-${toggleName}`,
-      text: this._host.i18n("ui.trigger"),
-      //title: this._options.trigger,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
+    this._options.$trigger = this._getTriggerButton(toggleName, {
+      onClick: () => {
+        const value = window.prompt(
+          this._host.i18n("ui.trigger.set", [itext]),
+          this._options.trigger.toFixed(2)
+        );
+
+        if (value !== null) {
+          this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
+        }
       },
-    });
-    this._options.$trigger = triggerButton;
-
-    triggerButton.on("click", () => {
-      const value = window.prompt(
-        this._host.i18n("ui.trigger.set", [itext]),
-        this._options.trigger.toFixed(2)
-      );
-
-      if (value !== null) {
-        this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
-        triggerButton[0].title = this._options.trigger.toFixed(2);
-      }
     });
 
     // Create build items.
@@ -140,7 +128,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
 
     list.append(...optionButtons);
 
-    element.panel.append(triggerButton);
+    element.panel.append(this._options.$trigger);
     element.panel.append(list);
 
     this.element = element.panel;
@@ -165,7 +153,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
 
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(2);
+    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
