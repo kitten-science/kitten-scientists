@@ -79,6 +79,7 @@ export class Engine {
 
   /**
    * Start the Kitten Scientists engine.
+   *
    * @param msg Should we print to the log that the engine was started?
    */
   start(msg = true): void {
@@ -110,6 +111,7 @@ export class Engine {
 
   /**
    * Stop the Kitten Scientists engine.
+   *
    * @param msg Should we print to the log that the engine was stopped?
    */
   stop(msg = true): void {
@@ -1064,7 +1066,6 @@ export class Engine {
 
   /**
    * Upgrade all possible unlockables.
-   * @returns Nothing.
    */
   upgrade(): void {
     const upgrades = this._host.options.auto.unlock.items;
@@ -1468,6 +1469,7 @@ export class Engine {
 
   /**
    * Try to build some buildings.
+   *
    * @param builds The buildings to build.
    */
   build(
@@ -2037,6 +2039,7 @@ export class Engine {
    * Determine the best unicorn-related building to buy next.
    * This is the building where the cost is in the best proportion to the
    * unicorn production bonus it generates.
+   *
    * @see https://github.com/Bioniclegenius/NummonCalc/blob/112f716e2fde9956dfe520021b0400cba7b7113e/NummonCalc.js#L490
    * @returns The best unicorn building.
    */
