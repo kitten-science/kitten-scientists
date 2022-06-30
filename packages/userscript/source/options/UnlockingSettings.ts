@@ -1,10 +1,9 @@
 import { PolicySettings } from "./PolicySettings";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
 export type UnlockItem = "buildings" | "missions" | "policies" | "races" | "techs" | "upgrades";
-export type UnlockingSettingsItem =
-  | { enabled: boolean; $enabled?: JQuery<HTMLElement> }
-  | PolicySettings;
+export type UnlockingSettingsItem = SettingToggle | PolicySettings;
+
 export class UnlockingSettings extends SettingsSection {
   items: {
     [key in UnlockItem]: UnlockingSettingsItem;

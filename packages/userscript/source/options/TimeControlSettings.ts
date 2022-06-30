@@ -1,7 +1,7 @@
 import { Resource, TimeItemVariant, UnicornItemVariant } from "../types";
 import { BuildItem } from "./BonfireSettings";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 import { SpaceItem } from "./SpaceSettings";
 import { TimeItem } from "./TimeSettings";
 
@@ -311,17 +311,11 @@ export class TimeControlSettings extends SettingsSection {
   } = {};
 
   items: {
-    accelerateTime: {
-      enabled: boolean;
-      $enabled?: JQuery<HTMLElement>;
-
+    accelerateTime: SettingToggle & {
       subTrigger: number;
       $subTrigger?: JQuery<HTMLElement>;
     };
-    timeSkip: {
-      enabled: boolean;
-      $enabled?: JQuery<HTMLElement>;
-
+    timeSkip: SettingToggle & {
       subTrigger: number;
       $subTrigger?: JQuery<HTMLElement>;
 
@@ -358,10 +352,7 @@ export class TimeControlSettings extends SettingsSection {
       $8?: JQuery<HTMLElement>;
       $9?: JQuery<HTMLElement>;
     };
-    reset: {
-      enabled: boolean;
-      $enabled?: JQuery<HTMLElement>;
-    };
+    reset: SettingToggle;
   } = {
     accelerateTime: { enabled: true, subTrigger: 1 },
     timeSkip: {

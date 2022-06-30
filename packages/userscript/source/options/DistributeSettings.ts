@@ -1,11 +1,8 @@
 import { Job } from "../types";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
 export type DistributeItems = Job;
-export type DistributeSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
+export type DistributeSettingsItem = SettingToggle & {
   limited: boolean;
   $limited?: JQuery<HTMLElement>;
 

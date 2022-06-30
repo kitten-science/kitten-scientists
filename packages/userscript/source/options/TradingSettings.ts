@@ -1,12 +1,9 @@
 import { Race } from "../types";
 import { Requirement } from "./Options";
 import { OptionsSettingsItem } from "./OptionsSettings";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
-export type TradingSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
+export type TradingSettingsItem = SettingToggle & {
   limited: boolean;
   $limited?: JQuery<HTMLElement>;
 

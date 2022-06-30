@@ -1,4 +1,4 @@
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
 export type OptionsItem =
   | "_steamworks"
@@ -11,10 +11,7 @@ export type OptionsItem =
   | "promote"
   | "shipOverride";
 
-export type OptionsSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
+export type OptionsSettingsItem = SettingToggle & {
   subTrigger?: number;
   $subTrigger?: JQuery<HTMLElement>;
 };

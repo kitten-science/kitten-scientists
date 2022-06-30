@@ -1,11 +1,9 @@
 import { Resource } from "../types";
+import { SettingToggle } from "./SettingsSection";
 
-export type ResourcesSettingsItem = {
+export type ResourcesSettingsItem = SettingToggle & {
   consume?: number;
   $consume?: JQuery<HTMLElement>;
-
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
 
   stock: number;
   $stock?: JQuery<HTMLElement>;

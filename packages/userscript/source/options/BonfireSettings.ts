@@ -1,6 +1,6 @@
 import { Building } from "../types";
 import { Requirement } from "./Options";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
 /**
  * One of the building options in the KS menu.
@@ -9,10 +9,7 @@ import { SettingsSection } from "./SettingsSection";
  */
 export type BuildItem = Building | "broadcastTower" | "dataCenter" | "hydroPlant" | "solarFarm";
 
-export type BonfireSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
+export type BonfireSettingsItem = SettingToggle & {
   max: number;
   $max?: JQuery<HTMLElement>;
 

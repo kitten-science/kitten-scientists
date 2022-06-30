@@ -1,12 +1,9 @@
 import { ResourceCraftable } from "../types";
 import { Requirement } from "./Options";
 import { ResourceSettings } from "./ResourcesSettings";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
-export type CraftSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
+export type CraftSettingsItem = SettingToggle & {
   limited: boolean;
   $limited?: JQuery<HTMLElement>;
 

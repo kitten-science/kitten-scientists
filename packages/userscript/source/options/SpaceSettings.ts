@@ -1,11 +1,8 @@
 import { SpaceBuildings } from "../types";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
 export type SpaceItem = SpaceBuildings;
-export type SpaceSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
+export type SpaceSettingsItem = SettingToggle & {
   max: number;
   $max?: JQuery<HTMLElement>;
 };

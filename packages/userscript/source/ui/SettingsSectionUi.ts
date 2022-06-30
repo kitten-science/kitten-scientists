@@ -1,4 +1,5 @@
 import { ResourcesSettingsItem } from "../options/ResourcesSettings";
+import { SettingToggle } from "../options/SettingsSection";
 import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
 import { clog } from "../tools/Log";
@@ -6,6 +7,17 @@ import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 
+export type SettingsSectionUiComposition = {
+  checkbox: JQuery<HTMLElement>;
+  items: JQuery<HTMLElement>;
+  label: JQuery<HTMLElement>;
+  panel: JQuery<HTMLElement>;
+};
+
+/**
+ * Base class for all automation UI sections.
+ * This provides common functionality to help build the automation sections themselves.
+ */
 export abstract class SettingsSectionUi<TState> {
   protected _host: UserScript;
 
@@ -19,18 +31,12 @@ export abstract class SettingsSectionUi<TState> {
 
   /**
    * Constructs a settings panel that is used to contain a major section of the UI.
+   *
    * @param id The ID of the settings panel.
+   * @param label The label to put main checkbox of this section.
    * @returns The constructed settings panel.
    */
-  protected _getSettingsPanel(
-    id: string,
-    label: string
-  ): {
-    checkbox: JQuery<HTMLElement>;
-    items: JQuery<HTMLElement>;
-    label: JQuery<HTMLElement>;
-    panel: JQuery<HTMLElement>;
-  } {
+  protected _getSettingsPanel(id: string, label: string): SettingsSectionUiComposition {
     const panelElement = $("<li/>", { id: `ks-${id}` });
     // Add a border on the element
     panelElement.css("borderTop", "1px solid rgba(185, 185, 185, 0.2)");
@@ -68,6 +74,7 @@ export abstract class SettingsSectionUi<TState> {
   /**
    * Constructs an expando element that is commonly used to expand and
    * collapses a section of the UI.
+   *
    * @param id The ID of the section this is the expando for.
    * @returns The constructed expando element.
    */
@@ -90,8 +97,9 @@ export abstract class SettingsSectionUi<TState> {
 
   /**
    * Constructs a list panel that is used to contain a list of options.
-   * The panel has "enable all" and "disable all" buttons to act on the contained
-   * options respectively.
+   * The panel has "enable all" and "disable all" buttons to check and
+   * uncheck all checkboxes in the section at once.
+   *
    * @param toggleName The ID for this list.
    * @returns The constructed list.
    */
@@ -153,6 +161,7 @@ export abstract class SettingsSectionUi<TState> {
   /**
    * Construct a subsection header.
    * This is purely for cosmetic/informational value in the UI.
+   *
    * @param text The text to appear on the header element.
    * @returns The constructed header element.
    */
@@ -177,6 +186,7 @@ export abstract class SettingsSectionUi<TState> {
   /**
    * Construct an informational text item.
    * This is purely for cosmetic/informational value in the UI.
+   *
    * @param text The text to appear on the header element.
    * @returns The constructed header element.
    */
@@ -202,16 +212,19 @@ export abstract class SettingsSectionUi<TState> {
   /**
    * Construct a new option element.
    * This is a simple checkbox with a label.
+   *
    * @param name The internal ID of this option. Should be unique throughout the script.
    * @param option The option this element is linked to.
    * @param i18nName The label on the option element.
    * @param delimiter Should there be additional padding below this element?
    * @param handler The event handlers for this option element.
+   * @param handler.onCheck Will be invoked when the user checks the checkbox.
+   * @param handler.onUnCheck Will be invoked when the user unchecks the checkbox.
    * @returns The constructed option element.
    */
   protected _getOption(
     name: string,
-    option: { enabled: boolean; $enabled?: JQuery<HTMLElement> },
+    option: SettingToggle,
     i18nName: string,
     delimiter = false,
     handler: {
@@ -261,6 +274,17 @@ export abstract class SettingsSectionUi<TState> {
     return element;
   }
 
+  /**
+   * Create a list of option elements that represent every single resource
+   * available in the game. This allows users to pick certain resources for
+   * other operations.
+   *
+   * @param forReset Is this a list that will be used to control resources
+   * for reset automation?
+   * @param onAddHandler Call this method when the user clicks on one of the
+   * resources to add them.
+   * @returns A list of option elements.
+   */
   protected _getAllAvailableResourceOptions(
     forReset: boolean,
     onAddHandler: (res: {
@@ -299,6 +323,16 @@ export abstract class SettingsSectionUi<TState> {
     return items;
   }
 
+  /**
+   * Creates a UI element that reflects stock and consume values for a given resource.
+   * This is currently only used for the craft section.
+   *
+   * @param name The resource.
+   * @param title The title to apply to the option.
+   * @param option The option that is being controlled.
+   * @param onDelHandler Will be invoked when the user removes the resoruce from the list.
+   * @returns A new option with stock and consume values.
+   */
   protected _addNewResourceOption(
     name: Resource,
     title: string,
@@ -401,6 +435,11 @@ export abstract class SettingsSectionUi<TState> {
     return container;
   }
 
+  /**
+   * Removes a previously created resource option.
+   *
+   * @param name The resource to remove.
+   */
   protected _removeResourceOption(name: Resource): void {
     const container = $(`#resource-${name}`).remove();
     if (!container.length) {
@@ -410,6 +449,16 @@ export abstract class SettingsSectionUi<TState> {
     container.remove();
   }
 
+  /**
+   * Creates a UI element that reflects stock values for a given resource.
+   * This is currently only used for the time/reset section.
+   *
+   * @param name The resource.
+   * @param title The title to apply to the option.
+   * @param option The option that is being controlled.
+   * @param onDelHandler Will be invoked when the user removes the resoruce from the list.
+   * @returns A new option with stock value.
+   */
   protected _addNewResourceOptionForReset(
     name: Resource,
     title: string,
@@ -476,6 +525,11 @@ export abstract class SettingsSectionUi<TState> {
     return container;
   }
 
+  /**
+   * Removes a previously created resource option.
+   *
+   * @param name The resource to remove.
+   */
   protected _removeResourceOptionForReset(name: Resource): void {
     const container = $(`#resource-reset-${name}`);
     if (!container) {

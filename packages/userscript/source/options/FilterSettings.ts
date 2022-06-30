@@ -1,4 +1,4 @@
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
 export enum FilterItemVariant {
   Build = "ks-activity type_ks-build",
@@ -39,7 +39,7 @@ export type FilterItem =
   | "transcendFilter"
   | "upgradeFilter";
 
-export type FilterSettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> } & {
+export type FilterSettingsItem = SettingToggle & {
   variant: FilterItemVariant;
 };
 export class FilterSettings extends SettingsSection {

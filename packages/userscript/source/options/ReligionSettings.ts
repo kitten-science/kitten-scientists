@@ -1,6 +1,6 @@
 import { UnicornItemVariant } from "../types";
 import { Requirement } from "./Options";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
 export type FaithItem =
   | "apocripha"
@@ -37,10 +37,7 @@ export type UnicornItem =
   | "unicornUtopia";
 
 export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
-export type ReligionSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
+export type ReligionSettingsItem = SettingToggle & {
   require: Requirement;
 
   variant: UnicornItemVariant;
@@ -53,37 +50,25 @@ export class ReligionSettings extends SettingsSection {
     /**
      * Build best unicorn building first.
      */
-    bestUnicornBuilding: {
-      enabled: boolean;
-      $enabled?: JQuery<HTMLElement>;
-    };
+    bestUnicornBuilding: SettingToggle;
     /**
      * Praise the sun.
      */
-    autoPraise: {
-      enabled: boolean;
-      $enabled?: JQuery<HTMLElement>;
-
+    autoPraise: SettingToggle & {
       subTrigger: number;
       $subTrigger?: JQuery<HTMLElement>;
     };
     /**
      * Adore the galaxy.
      */
-    adore: {
-      enabled: boolean;
-      $enabled?: JQuery<HTMLElement>;
-
+    adore: SettingToggle & {
       subTrigger: number;
       $subTrigger?: JQuery<HTMLElement>;
     };
     /**
      * Transcend.
      */
-    transcend: {
-      enabled: boolean;
-      $enabled?: JQuery<HTMLElement>;
-    };
+    transcend: SettingToggle;
   } = {
     bestUnicornBuilding: {
       enabled: true,

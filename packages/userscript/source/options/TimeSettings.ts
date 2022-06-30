@@ -1,15 +1,12 @@
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
 import { Requirement } from "./Options";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
 /**
  * The upgrades on the Time tab that we have options for.
  */
 export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCryochambers">;
-export type TimeSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
+export type TimeSettingsItem = SettingToggle & {
   require: Requirement;
 
   variant: TimeItemVariant;

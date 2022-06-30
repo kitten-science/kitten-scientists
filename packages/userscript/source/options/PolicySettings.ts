@@ -1,7 +1,7 @@
 import { Policy } from "../types";
-import { SettingsSection } from "./SettingsSection";
+import { SettingsSection, SettingToggle } from "./SettingsSection";
 
-export type PolicySettingsItem = { enabled: boolean; $enabled?: JQuery<HTMLElement> };
+export type PolicySettingsItem = SettingToggle;
 export class PolicySettings extends SettingsSection {
   items: {
     [item in Policy]: PolicySettingsItem;
