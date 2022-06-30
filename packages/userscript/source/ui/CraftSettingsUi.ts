@@ -184,6 +184,9 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
     resourcesButton.on("click", () => {
       list.toggle(false);
+      this._itemsExpanded = false;
+      element.items.text("+");
+
       resourcesList.toggle();
     });
 
