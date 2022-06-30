@@ -111,15 +111,18 @@ export class UserScript {
 
   /**
    * Inject a different set of settings into the userscript.
+   *
    * @param options The settings to use for the scientists.
    */
   injectOptions(options: Options): void {
     this.options = options;
     this._userInterface?.setState(this.options);
+    this._userInterface?.refreshUi();
   }
 
   /**
    * Signal that the settings should be saved again.
+   *
    * @param updater A function that will manipulate the settings before they're saved.
    */
   updateOptions(updater?: (currentOptions: Options) => void): void {
@@ -142,6 +145,7 @@ export class UserScript {
 
   /**
    * Retrieve an internationalized string literal.
+   *
    * @param key The key to retrieve from the translation table.
    * @param args Variable arguments to render into the string.
    * @returns The translated string.
