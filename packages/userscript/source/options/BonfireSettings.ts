@@ -1,6 +1,6 @@
 import { Building } from "../types";
 import { Requirement } from "./Options";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 
 /**
  * One of the building options in the KS menu.
@@ -9,27 +9,25 @@ import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSectio
  */
 export type BuildItem = Building | "broadcastTower" | "dataCenter" | "hydroPlant" | "solarFarm";
 
-export type BonfireSettingsItem = SettingToggle & {
-  max: number;
-  $max?: JQuery<HTMLElement>;
+export type BonfireSettingsItem = SettingToggle &
+  SettingLimit & {
+    /**
+     * In case this is an upgrade of another building, this is the name of the
+     * base building.
+     */
+    name?: Building;
 
-  /**
-   * In case this is an upgrade of another building, this is the name of the
-   * base building.
-   */
-  name?: Building;
+    /**
+     * A resource that you must have unlocked to build this.
+     */
+    require: Requirement;
 
-  /**
-   * A resource that you must have unlocked to build this.
-   */
-  require: Requirement;
-
-  /**
-   * In case this is an upgradable building, this indicates the level of
-   * the stage.
-   */
-  stage?: number;
-};
+    /**
+     * In case this is an upgradable building, this indicates the level of
+     * the stage.
+     */
+    stage?: number;
+  };
 export class BonfireSettings extends SettingsSection implements SettingTrigger {
   trigger = 0;
   $trigger?: JQuery<HTMLElement>;

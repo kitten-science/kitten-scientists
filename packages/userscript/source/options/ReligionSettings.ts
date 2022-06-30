@@ -1,6 +1,6 @@
 import { UnicornItemVariant } from "../types";
 import { Requirement } from "./Options";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 
 export type FaithItem =
   | "apocripha"
@@ -37,11 +37,13 @@ export type UnicornItem =
   | "unicornUtopia";
 
 export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
-export type ReligionSettingsItem = SettingToggle & {
-  require: Requirement;
+export type ReligionSettingsItem = SettingToggle &
+  SettingLimit & {
+    require: Requirement;
 
-  variant: UnicornItemVariant;
-};
+    variant: UnicornItemVariant;
+  };
+
 export class ReligionSettings extends SettingsSection implements SettingTrigger {
   trigger = 0;
   $trigger?: JQuery<HTMLElement>;
@@ -89,38 +91,158 @@ export class ReligionSettings extends SettingsSection implements SettingTrigger 
   items: {
     [item in FaithItem | UnicornItem]: ReligionSettingsItem;
   } = {
-    unicornPasture: { enabled: true, variant: UnicornItemVariant.UnicornPasture, require: false },
-    unicornTomb: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false },
-    ivoryTower: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false },
-    ivoryCitadel: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false },
-    skyPalace: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false },
-    unicornUtopia: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: "gold" },
-    sunspire: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: "gold" },
+    unicornPasture: {
+      enabled: true,
+      variant: UnicornItemVariant.UnicornPasture,
+      require: false,
+      max: -1,
+    },
+    unicornTomb: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false, max: -1 },
+    ivoryTower: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false, max: -1 },
+    ivoryCitadel: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false, max: -1 },
+    skyPalace: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false, max: -1 },
+    unicornUtopia: {
+      enabled: false,
+      variant: UnicornItemVariant.Ziggurat,
+      require: "gold",
+      max: -1,
+    },
+    sunspire: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: "gold", max: -1 },
 
-    marker: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: "unobtainium" },
-    unicornGraveyard: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false },
-    unicornNecropolis: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false },
-    blackPyramid: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: "unobtainium" },
+    marker: {
+      enabled: false,
+      variant: UnicornItemVariant.Ziggurat,
+      require: "unobtainium",
+      max: -1,
+    },
+    unicornGraveyard: {
+      enabled: false,
+      variant: UnicornItemVariant.Ziggurat,
+      require: false,
+      max: -1,
+    },
+    unicornNecropolis: {
+      enabled: false,
+      variant: UnicornItemVariant.Ziggurat,
+      require: false,
+      max: -1,
+    },
+    blackPyramid: {
+      enabled: false,
+      variant: UnicornItemVariant.Ziggurat,
+      require: "unobtainium",
+      max: -1,
+    },
 
-    solarchant: { enabled: true, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
-    scholasticism: { enabled: true, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
-    goldenSpire: { enabled: true, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
-    sunAltar: { enabled: true, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
-    stainedGlass: { enabled: true, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
-    solarRevolution: { enabled: true, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
-    basilica: { enabled: true, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
-    templars: { enabled: true, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
-    apocripha: { enabled: false, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
-    transcendence: { enabled: true, variant: UnicornItemVariant.OrderOfTheSun, require: "faith" },
+    solarchant: {
+      enabled: true,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
+    scholasticism: {
+      enabled: true,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
+    goldenSpire: {
+      enabled: true,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
+    sunAltar: {
+      enabled: true,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
+    stainedGlass: {
+      enabled: true,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
+    solarRevolution: {
+      enabled: true,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
+    basilica: {
+      enabled: true,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
+    templars: {
+      enabled: true,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
+    apocripha: {
+      enabled: false,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
+    transcendence: {
+      enabled: true,
+      variant: UnicornItemVariant.OrderOfTheSun,
+      require: "faith",
+      max: -1,
+    },
 
-    blackObelisk: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false },
-    blackNexus: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false },
-    blackCore: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false },
-    singularity: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false },
-    blackLibrary: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false },
-    blackRadiance: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false },
-    blazar: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false },
-    darkNova: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false },
-    holyGenocide: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false },
+    blackObelisk: {
+      enabled: false,
+      variant: UnicornItemVariant.Cryptotheology,
+      require: false,
+      max: -1,
+    },
+    blackNexus: {
+      enabled: false,
+      variant: UnicornItemVariant.Cryptotheology,
+      require: false,
+      max: -1,
+    },
+    blackCore: {
+      enabled: false,
+      variant: UnicornItemVariant.Cryptotheology,
+      require: false,
+      max: -1,
+    },
+    singularity: {
+      enabled: false,
+      variant: UnicornItemVariant.Cryptotheology,
+      require: false,
+      max: -1,
+    },
+    blackLibrary: {
+      enabled: false,
+      variant: UnicornItemVariant.Cryptotheology,
+      require: false,
+      max: -1,
+    },
+    blackRadiance: {
+      enabled: false,
+      variant: UnicornItemVariant.Cryptotheology,
+      require: false,
+      max: -1,
+    },
+    blazar: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false, max: -1 },
+    darkNova: {
+      enabled: false,
+      variant: UnicornItemVariant.Cryptotheology,
+      require: false,
+      max: -1,
+    },
+    holyGenocide: {
+      enabled: false,
+      variant: UnicornItemVariant.Cryptotheology,
+      require: false,
+      max: -1,
+    },
   };
 }

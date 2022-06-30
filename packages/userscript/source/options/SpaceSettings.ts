@@ -1,11 +1,9 @@
 import { SpaceBuildings } from "../types";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 
 export type SpaceItem = SpaceBuildings;
-export type SpaceSettingsItem = SettingToggle & {
-  max: number;
-  $max?: JQuery<HTMLElement>;
-};
+export type SpaceSettingsItem = SettingToggle & SettingLimit;
+
 export class SpaceSettings extends SettingsSection implements SettingTrigger {
   trigger = 0;
   $trigger?: JQuery<HTMLElement>;

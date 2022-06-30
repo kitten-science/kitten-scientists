@@ -1,4 +1,4 @@
-import { SpaceSettings, SpaceSettingsItem } from "../options/SpaceSettings";
+import { SpaceSettings } from "../options/SpaceSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -205,51 +205,6 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     element.panel.append(list);
 
     this.element = element.panel;
-  }
-
-  private _getLimitedOption(
-    name: string,
-    option: SpaceSettingsItem,
-    i18nName: string,
-    delimiter = false
-  ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, i18nName, delimiter, {
-      onCheck: () => {
-        this._host.updateOptions(() => (option.enabled = true));
-        this._host.imessage("status.auto.enable", [i18nName]);
-      },
-      onUnCheck: () => {
-        this._host.updateOptions(() => (option.enabled = false));
-        this._host.imessage("status.auto.disable", [i18nName]);
-      },
-    });
-
-    const maxButton = $("<div/>", {
-      id: `set-${name}-max`,
-      text: this._host.i18n("ui.max", [option.max]),
-      //title: option.max,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    }).data("option", option);
-    option.$max = maxButton;
-
-    maxButton.on("click", () => {
-      const value = window.prompt(this._host.i18n("ui.max.set", [i18nName]), option.max.toString());
-
-      if (value !== null) {
-        this._host.updateOptions(() => (option.max = parseInt(value)));
-        maxButton[0].title = option.max.toString();
-        maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
-      }
-    });
-
-    element.append(maxButton);
-
-    return element;
   }
 
   getState(): SpaceSettings {

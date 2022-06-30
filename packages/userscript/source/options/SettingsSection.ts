@@ -1,3 +1,8 @@
+export type SettingLimit = {
+  max: number;
+  $max?: JQuery<HTMLElement>;
+};
+
 export type SettingToggle = {
   enabled: boolean;
   $enabled?: JQuery<HTMLElement>;

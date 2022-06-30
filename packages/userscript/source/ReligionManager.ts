@@ -66,6 +66,7 @@ export class ReligionManager {
 
   /**
    * Retrieve information about an upgrade.
+   *
    * @param name The name of the upgrade.
    * @param variant The variant of the upgrade.
    * @returns The build information for the upgrade.
@@ -87,6 +88,7 @@ export class ReligionManager {
 
   /**
    * Find the button that allows purchasing a given upgrade.
+   *
    * @param name The name of the upgrade.
    * @param variant The variant of the upgrade.
    * @returns The button to buy the upgrade, or `null`.

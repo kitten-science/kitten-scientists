@@ -1,5 +1,5 @@
 import { ResourcesSettingsItem } from "../options/ResourcesSettings";
-import { SettingToggle, SettingTrigger } from "../options/SettingsSection";
+import { SettingLimit, SettingToggle, SettingTrigger } from "../options/SettingsSection";
 import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
 import { clog } from "../tools/Log";
@@ -323,6 +323,49 @@ export abstract class SettingsSectionUi<TState> {
     });
 
     element.append(input, label);
+
+    return element;
+  }
+
+  protected _getLimitedOption(
+    name: string,
+    option: SettingLimit & SettingToggle,
+    label: string,
+    delimiter = false
+  ): JQuery<HTMLElement> {
+    const element = this._getOption(name, option, label, delimiter, {
+      onCheck: () => {
+        this._host.updateOptions(() => (option.enabled = true));
+        this._host.imessage("status.auto.enable", [label]);
+      },
+      onUnCheck: () => {
+        this._host.updateOptions(() => (option.enabled = false));
+        this._host.imessage("status.auto.disable", [label]);
+      },
+    });
+
+    const maxButton = $("<div/>", {
+      id: `set-${name}-max`,
+      css: {
+        cursor: "pointer",
+        display: "inline-block",
+        float: "right",
+        paddingRight: "5px",
+      },
+    }).data("option", option);
+    option.$max = maxButton;
+
+    maxButton.on("click", () => {
+      const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
+
+      if (value !== null) {
+        this._host.updateOptions(() => (option.max = parseInt(value)));
+        maxButton[0].title = option.max.toString();
+        maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
+      }
+    });
+
+    element.append(maxButton);
 
     return element;
   }
