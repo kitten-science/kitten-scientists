@@ -1,7 +1,7 @@
 import { ResourceCraftable } from "../types";
 import { Requirement } from "./Options";
 import { ResourceSettings } from "./ResourcesSettings";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 
 export type CraftSettingsItem = SettingToggle & {
   limited: boolean;
@@ -20,7 +20,7 @@ export type CraftSettingsItem = SettingToggle & {
   max: 0;
   require: Requirement;
 };
-export class CraftSettings extends SettingsSection {
+export class CraftSettings extends SettingsSection implements SettingTrigger {
   trigger = 0.95;
   $trigger?: JQuery<HTMLElement>;
 

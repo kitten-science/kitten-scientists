@@ -1,6 +1,6 @@
 import { Building } from "../types";
 import { Requirement } from "./Options";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 
 /**
  * One of the building options in the KS menu.
@@ -30,7 +30,7 @@ export type BonfireSettingsItem = SettingToggle & {
    */
   stage?: number;
 };
-export class BonfireSettings extends SettingsSection {
+export class BonfireSettings extends SettingsSection implements SettingTrigger {
   trigger = 0;
   $trigger?: JQuery<HTMLElement>;
 

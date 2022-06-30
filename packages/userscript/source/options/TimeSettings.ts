@@ -1,6 +1,6 @@
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
 import { Requirement } from "./Options";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 
 /**
  * The upgrades on the Time tab that we have options for.
@@ -11,7 +11,7 @@ export type TimeSettingsItem = SettingToggle & {
 
   variant: TimeItemVariant;
 };
-export class TimeSettings extends SettingsSection {
+export class TimeSettings extends SettingsSection implements SettingTrigger {
   trigger = 0;
   $trigger?: JQuery<HTMLElement>;
 

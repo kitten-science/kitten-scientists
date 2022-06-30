@@ -37,19 +37,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     });
 
     // Create "trigger" button in the item.
-    this._options.$trigger = this._getTriggerButton(toggleName, {
-      onClick: () => {
-        const value = window.prompt(
-          this._host.i18n("ui.trigger.set", [itext]),
-          this._options.trigger.toString()
-        );
-
-        if (value !== null) {
-          this._host.updateOptions(() => (this._options.trigger = parseFloat(value)));
-          this.refreshUi();
-        }
-      },
-    });
+    this._options.$trigger = this._registerTriggerButton(toggleName, itext, this._options);
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.

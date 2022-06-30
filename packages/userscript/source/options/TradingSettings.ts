@@ -1,7 +1,7 @@
 import { Race } from "../types";
 import { Requirement } from "./Options";
 import { OptionsSettingsItem } from "./OptionsSettings";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 
 export type TradingSettingsItem = SettingToggle & {
   limited: boolean;
@@ -26,7 +26,7 @@ export type TradeAdditionSettings = {
   buildEmbassies: OptionsSettingsItem;
 };
 
-export class TradingSettings extends SettingsSection {
+export class TradingSettings extends SettingsSection implements SettingTrigger {
   trigger = 0.98;
   $trigger?: JQuery<HTMLElement>;
 

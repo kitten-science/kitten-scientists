@@ -1,6 +1,6 @@
 import { UnicornItemVariant } from "../types";
 import { Requirement } from "./Options";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 
 export type FaithItem =
   | "apocripha"
@@ -42,7 +42,7 @@ export type ReligionSettingsItem = SettingToggle & {
 
   variant: UnicornItemVariant;
 };
-export class ReligionSettings extends SettingsSection {
+export class ReligionSettings extends SettingsSection implements SettingTrigger {
   trigger = 0;
   $trigger?: JQuery<HTMLElement>;
 

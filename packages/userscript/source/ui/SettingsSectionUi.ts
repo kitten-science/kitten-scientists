@@ -1,5 +1,5 @@
 import { ResourcesSettingsItem } from "../options/ResourcesSettings";
-import { SettingToggle } from "../options/SettingsSection";
+import { SettingToggle, SettingTrigger } from "../options/SettingsSection";
 import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
 import { clog } from "../tools/Log";
@@ -122,6 +122,30 @@ export abstract class SettingsSectionUi<TState> {
     }
 
     return triggerButton;
+  }
+
+  /**
+   * Creates a new button to control a trigger value in a configuration section.
+   *
+   * @param id The ID of the button.
+   * @param itext The label of the section this trigger is for.
+   * @param options The settings section this trigger is for.
+   * @returns The created button.
+   */
+  protected _registerTriggerButton(id: string, itext: string, options: SettingTrigger) {
+    return this._getTriggerButton(id, {
+      onClick: () => {
+        const value = window.prompt(
+          this._host.i18n("ui.trigger.set", [itext]),
+          options.trigger.toFixed(2)
+        );
+
+        if (value !== null) {
+          this._host.updateOptions(() => (options.trigger = parseFloat(value)));
+          this.refreshUi();
+        }
+      },
+    });
   }
 
   /**
