@@ -11,50 +11,25 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
   private readonly _options: ReligionSettings;
 
-  private _itemsExpanded = false;
-
   constructor(host: UserScript, religionOptions: ReligionSettings = host.options.auto.religion) {
     super(host);
 
     this._options = religionOptions;
 
     const toggleName = "faith";
-
-    const itext = ucfirst(this._host.i18n("ui.faith"));
-
-    // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, itext);
-
-    this._options.$enabled = element.checkbox;
-
-    element.checkbox.on("change", () => {
-      if (element.checkbox.is(":checked") && this._options.enabled === false) {
-        this._host.updateOptions(() => (this._options.enabled = true));
-        this._host.imessage("status.auto.enable", [itext]);
-      } else if (!element.checkbox.is(":checked") && this._options.enabled === true) {
-        this._host.updateOptions(() => (this._options.enabled = false));
-        this._host.imessage("status.auto.disable", [itext]);
-      }
-    });
-
-    // Create "trigger" button in the item.
-    this._options.$trigger = this._registerTriggerButton(toggleName, itext, this._options);
+    const label = ucfirst(this._host.i18n("ui.faith"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
     const list = this._getOptionList(toggleName);
 
-    element.items.on("click", () => {
-      list.toggle();
+    // Our main element is a list item.
+    const element = this._getSettingsPanel(toggleName, label, this._options, list);
+    this._options.$enabled = element.checkbox;
 
-      this._itemsExpanded = !this._itemsExpanded;
+    // Create "trigger" button in the item.
+    this._options.$trigger = this._registerTriggerButton(toggleName, label, this._options);
 
-      element.items.text(this._itemsExpanded ? "-" : "+");
-      element.items.prop(
-        "title",
-        this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
-      );
-    });
     const optionButtons = [
       this._getHeader(this._host.i18n("$religion.panel.ziggurat.label")),
       this._getLimitedOption(

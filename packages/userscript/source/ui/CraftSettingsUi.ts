@@ -11,7 +11,6 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
 
   private readonly _options: CraftSettings;
 
-  private _itemsExpanded = false;
   private _resourcesList: Maybe<JQuery<HTMLElement>>;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
@@ -22,42 +21,18 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     this._options = options;
 
     const toggleName = "craft";
-
-    const itext = ucfirst(this._host.i18n("ui.craft"));
-
-    // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, itext);
-
-    this._options.$enabled = element.checkbox;
-
-    element.checkbox.on("change", () => {
-      if (element.checkbox.is(":checked") && this._options.enabled === false) {
-        this._host.updateOptions(() => (this._options.enabled = true));
-        this._host.imessage("status.auto.enable", [itext]);
-      } else if (!element.checkbox.is(":checked") && this._options.enabled === true) {
-        this._host.updateOptions(() => (this._options.enabled = false));
-        this._host.imessage("status.auto.disable", [itext]);
-      }
-    });
-
-    // Create "trigger" button in the item.
-    this._options.$trigger = this._registerTriggerButton(toggleName, itext, this._options);
+    const label = ucfirst(this._host.i18n("ui.craft"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
     const list = this._getOptionList(toggleName);
 
-    element.items.on("click", () => {
-      list.toggle();
+    // Our main element is a list item.
+    const element = this._getSettingsPanel(toggleName, label, this._options, list);
+    this._options.$enabled = element.checkbox;
 
-      this._itemsExpanded = !this._itemsExpanded;
-
-      element.items.text(this._itemsExpanded ? "-" : "+");
-      element.items.prop(
-        "title",
-        this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
-      );
-    });
+    // Create "trigger" button in the item.
+    this._options.$trigger = this._registerTriggerButton(toggleName, label, this._options);
 
     this._optionButtons = [
       this._getCraftOption(

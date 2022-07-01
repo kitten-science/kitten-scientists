@@ -1,5 +1,10 @@
 import { ResourcesSettingsItem } from "../options/ResourcesSettings";
-import { SettingLimit, SettingToggle, SettingTrigger } from "../options/SettingsSection";
+import {
+  SettingLimit,
+  SettingsSection,
+  SettingToggle,
+  SettingTrigger,
+} from "../options/SettingsSection";
 import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
 import { clog } from "../tools/Log";
@@ -20,6 +25,7 @@ export type SettingsSectionUiComposition = {
  */
 export abstract class SettingsSectionUi<TState> {
   protected _host: UserScript;
+  protected _itemsExpanded = false;
 
   constructor(host: UserScript) {
     this._host = host;
@@ -34,9 +40,17 @@ export abstract class SettingsSectionUi<TState> {
    *
    * @param id The ID of the settings panel.
    * @param label The label to put main checkbox of this section.
+   * @param options An options section for which this is the settings panel.
+   * @param mainChild The main child element in the panel that should be toggled with
+   * the sections' expando button.
    * @returns The constructed settings panel.
    */
-  protected _getSettingsPanel(id: string, label: string): SettingsSectionUiComposition {
+  protected _getSettingsPanel(
+    id: string,
+    label: string,
+    options: SettingsSection,
+    mainChild: JQuery<HTMLElement>
+  ): SettingsSectionUiComposition {
     const panelElement = $("<li/>", { id: `ks-${id}` });
     // Add a border on the element
     panelElement.css("borderTop", "1px solid rgba(185, 185, 185, 0.2)");
@@ -48,6 +62,16 @@ export abstract class SettingsSectionUi<TState> {
     });
     panelElement.append(enabledElement);
 
+    enabledElement.on("change", () => {
+      if (enabledElement.is(":checked") && options.enabled === false) {
+        this._host.updateOptions(() => (options.enabled = true));
+        this._host.imessage("status.auto.enable", [label]);
+      } else if (!enabledElement.is(":checked") && options.enabled === true) {
+        this._host.updateOptions(() => (options.enabled = false));
+        this._host.imessage("status.auto.disable", [label]);
+      }
+    });
+
     // The label for this panel.
     const labelElement = $("<label/>", {
       text: label,
@@ -57,6 +81,18 @@ export abstract class SettingsSectionUi<TState> {
     // The expando button for this panel.
     const itemsElement = this._getItemsToggle(id);
     panelElement.append(itemsElement);
+
+    itemsElement.on("click", () => {
+      mainChild.toggle();
+
+      this._itemsExpanded = !this._itemsExpanded;
+
+      itemsElement.text(this._itemsExpanded ? "-" : "+");
+      itemsElement.prop(
+        "title",
+        this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+      );
+    });
 
     // When clicking the label of a major section, expand it instead of
     // checking the checkbox.
