@@ -687,6 +687,8 @@ export class Engine {
     }
   }
 
+  private waitForBestPrice = false;
+
   /**
    * Blackcoin trading automation.
    */
@@ -696,19 +698,17 @@ export class Engine {
     const coinsInitial = this._host.gamePage.resPool.get("blackcoin").value;
     let coinsExchanged = 0.0;
     let relicsExchanged = 0.0;
-    let waitForBestPrice = false;
 
     // Waits for coin price to drop below a certain treshold before starting the exchange process
-    // TODO: This is obviously broken.
-    // if (waitForBestPrice === true && coinPrice < 860.0) {
-    // waitForBestPrice = false;
-    // }
+    if (this.waitForBestPrice === true && coinPrice < 860.0) {
+      this.waitForBestPrice = false;
+    }
 
     // All of this code is straight-forward. Buy low, sell high.
 
     // Exchanges up to a certain threshold, in order to keep a good exchange rate, then waits for a higher treshold before exchanging for relics.
     if (
-      waitForBestPrice === false &&
+      this.waitForBestPrice === false &&
       coinPrice < 950.0 &&
       (this._host.options.auto.options.items.crypto.subTrigger ?? 0) < relicsInitial
     ) {
@@ -723,7 +723,7 @@ export class Engine {
       coinsExchanged = Math.round(currentCoin - coinsInitial);
       this._host.iactivity("blackcoin.buy", [coinsExchanged]);
     } else if (coinPrice > 1050.0 && 0 < this._host.gamePage.resPool.get("blackcoin").value) {
-      waitForBestPrice = true;
+      this.waitForBestPrice = true;
 
       // function name changed in v1.4.8.0
       if (typeof this._host.gamePage.diplomacy.sellEcoin === "function") {
