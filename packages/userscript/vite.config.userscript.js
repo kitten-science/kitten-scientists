@@ -2,8 +2,10 @@ import { defineConfig } from "vite";
 import { metablock } from "vite-plugin-userscript";
 import manifest from "./package.json" assert { type: "json" };
 
+const isCi = Boolean(process.env.CI);
 const isDevBuild = Boolean(process.env.DEV_BUILD);
 const isNightlyBuild = Boolean(process.env.NIGHTLY_BUILD);
+const minify = Boolean(process.env.MINIFY) ?? !isDevBuild;
 
 function getDateString() {
   const date = new Date();
@@ -20,6 +22,7 @@ const filename = [
   (isDevBuild || isNightlyBuild) && process.env.GITHUB_SHA
     ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}`
     : "",
+  minify ? ".min" : "",
   ".user.js",
 ].join("");
 
@@ -38,11 +41,12 @@ export default defineConfig({
     }),
   ],
   build: {
+    emptyOutDir: !isCi,
     lib: {
       entry: "source/index.ts",
       name: "kitten-scientists",
     },
-    minify: isDevBuild ? false : "esbuild",
+    minify: minify ? "esbuild" : false,
     outDir: "output",
     rollupOptions: {
       output: {
