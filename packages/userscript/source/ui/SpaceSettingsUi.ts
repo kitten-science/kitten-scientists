@@ -24,7 +24,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, itext);
 
-    this._options.$enabled = element.panel;
+    this._options.$enabled = element.checkbox;
 
     element.checkbox.on("change", () => {
       if (element.checkbox.is(":checked") && this._options.enabled === false) {
