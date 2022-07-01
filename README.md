@@ -2,14 +2,26 @@
 
 Kitten Scientists (KS) is a simple automation script for the complex [Kittens Game](http://kittensgame.com/web/). It was originally developed by [Cameron Condry](https://github.com/cameroncondry/cbc-kitten-scientists) and extended by many great [contributors](#contributors).
 
-### Manual Installation
+## Installation
 
 Install Kitten Scientists with a userscript manager.
 
-- On **Firefox**, you'd want to use [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
-- On **Chrome** and **Opera**, you'd want to use [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
+-   On **Firefox**, you'd want to use [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
+-   On **Chrome** and **Opera**, you'd want to use [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
 
 Grab a build from the [Releases page](https://github.com/oliversalzburg/cbc-kitten-scientists/releases) and install it.
+
+### Bookmarklet
+
+Currently points to Alpha.3 release.
+
+```
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/oliversalzburg/cbc-kitten-scientists/releases/download/v2.0.0-alpha.3/kitten-scientists-2.0.0-alpha.3.user.js';d.body.appendChild(s);})();
+```
+
+## Warning
+
+The rest of this document has not been maintained for some time. While the script is still in its early development phase, the documentation is not planned to be maintained. After a solid beta state has been reached, all features will be documented at <https://oliversalzburg.github.io/cbc-kitten-scientists/>.
 
 ## Introduction
 
@@ -57,11 +69,10 @@ For each resource, you can set a _consumption rate_ (60% by default) and a _stoc
 
 ### Unlocking
 
-- Workshop **upgrades** and **techs** are automatically bought when affordable, prioritizing the workshop if both are enabled. When you enable the *Limited* option for upgrades, then will ignore some useless upgrades.
-- **Policies** can be automatically chosen last load policies list.
-- **Races** for trading are automatically explored as they become available.
-- Space **missions** can automatically be conducted.
-- **Buildings** can be set to be automatically upgraded to their second stage as soon as upgrading would not significantly impact income.
+-   Workshop **upgrades** and **techs** are automatically bought when affordable, prioritizing the workshop if both are enabled.
+-   **Races** for trading are automatically explored as they become available.
+-   Space **missions** can automatically be conducted.
+-   **Buildings** can be set to be automatically upgraded to their second stage as soon as upgrading would not significantly impact income.
 
 ### Trading
 
@@ -79,10 +90,10 @@ In the **Religion** section, you can select which buildings and techs from the *
 
 Click **addition** to customize these additional options:
 
-- **Build Best Unicorn Building First**: Figures out which unicorn building gives the best return on investment ([source](https://github.com/Bioniclegenius/NummonCalc/blob/master/NummonCalc.js#L490)) and builds that one first. Overrides the individual settings for those buildings.
-- **Auto Praise**: Automatically praises the sun as your faith approaches the resource limit. Set the **trigger** value as normal.
-- **Auto Adore the Galaxy**: Automatically adores the galaxy and converts worship to epiphany based on the **trigger** value. (Worship is uncapped, so based in what way?)
-- **Auto Transcend**: Automatically transcends, converting epiphany into transcendence tiers. (What's the threshold?)
+-   **Build Best Unicorn Building First**: Figures out which unicorn building gives the best return on investment ([source](https://github.com/Bioniclegenius/NummonCalc/blob/master/NummonCalc.js#L490)) and builds that one first. Overrides the individual settings for those buildings.
+-   **Auto Praise**: Automatically praises the sun as your faith approaches the resource limit. Set the **trigger** value as normal.
+-   **Auto Adore the Galaxy**: Automatically adores the galaxy and converts worship to epiphany based on the **trigger** value. (Worship is uncapped, so based in what way?)
+-   **Auto Transcend**: Automatically transcends, converting epiphany into transcendence tiers. (What's the threshold?)
 
 ### Time
 
@@ -92,9 +103,9 @@ The automations in this section behave exactly like in the **Bonfire** and **Spa
 
 ### Time Control
 
-- **Tempus Fugit**: Automatically enables the time-acceleration ability when temporal flux approaches cap, customizable with a **trigger** value as normal.
-- **Time Skip**: As long as you have a minimum number of time crystals (set by the **trigger** value), will automatically shatter time crystals (up to the number specified in the **Maximum** value) to skip over the selected **Cycles**. Will only activate during designated **seasons**.
-- **Reset Timeline (Danger!)**: TBA
+-   **Tempus Fugit**: Automatically enables the time-acceleration ability when temporal flux approaches cap, customizable with a **trigger** value as normal.
+-   **Time Skip**: As long as you have a minimum number of time crystals (set by the **trigger** value), will automatically shatter time crystals (up to the number specified in the **Maximum** value) to skip over the selected **Cycles**. Will only activate during designated **seasons**.
+-   **Reset Timeline (Danger!)**: TBA
 
 ### Kitten Resources
 
@@ -103,16 +114,16 @@ The automations in this section behave exactly like in the **Bonfire** and **Spa
 
 ### Options
 
-- **Observe Astro Events**: Automatically observe astronomical events as they happen.
-- **Hold Festivals**: Automatically hold festivals as soon as the previous one ends and enough resources are available and holding the festival won't drain your stockpile.
-- **Force Ships to 243**: Ensures that 243 ships are constructed as soon as possible, ignoring other resource constraints. This is useful because after 243 ships, trades for titanium with the zebras are guaranteed to be successful 100% of the time.
-- **Feed Leviathans**: Automatically feed the leviathans race necrocorns to ensure they stay longer for possible trading.
-- **Hunt**: Automatically send your kittens hunting as you approach the catpower limit. This automation has a configurable trigger. The default value is `0.98`, which means the kittens will hunt when your catpower is at 98% of your catpower limit.
-- **Promote Leader**: Automatically promotes leader when they have enough experience and you have enough gold.
-- **Trade Blackcoin**: Automatically trade blackcoin with the leviathans at low prices and sells near the peak. The trigger value corresponds to the amount of relics needed before the exchange is made.
-- **Fix Cryochamber**: Automatically fixes used cryochambers if possible.
-- **Build Embassies (Beta)**: Automatically builds embassies, just like other buildings.
-- **View Full Width**: Uncheck to make the game look like it normally does when Kitten Scientists isn't active.
+-   **Observe Astro Events**: Automatically observe astronomical events as they happen.
+-   **Hold Festivals**: Automatically hold festivals as soon as the previous one ends and enough resources are available and holding the festival won't drain your stockpile.
+-   **Force Ships to 243**: Ensures that 243 ships are constructed as soon as possible, ignoring other resource constraints. This is useful because after 243 ships, trades for titanium with the zebras are guaranteed to be successful 100% of the time.
+-   **Feed Leviathans**: Automatically feed the leviathans race necrocorns to ensure they stay longer for possible trading.
+-   **Hunt**: Automatically send your kittens hunting as you approach the catpower limit. This automation has a configurable trigger. The default value is `0.98`, which means the kittens will hunt when your catpower is at 98% of your catpower limit.
+-   **Promote Leader**: Automatically promotes leader when they have enough experience and you have enough gold.
+-   **Trade Blackcoin**: Automatically trade blackcoin with the leviathans at low prices and sells near the peak. The trigger value corresponds to the amount of relics needed before the exchange is made.
+-   **Fix Cryochamber**: Automatically fixes used cryochambers if possible.
+-   **Build Embassies (Beta)**: Automatically builds embassies, just like other buildings.
+-   **View Full Width**: Uncheck to make the game look like it normally does when Kitten Scientists isn't active.
 
 ### Filters
 
@@ -124,52 +135,52 @@ Note that _enabling_ a filter will cause the message to **not** be logged. This 
 
 If you would like to contribute to the Kitten Scientists, then you can do so in these ways:
 
-- [Submit issues or bugs](https://github.com/oliversalzburg/cbc-kitten-scientists/issues/new) you find, or functionality that would improve the project.
-- Fork the repository, add some functionality, then [submit a pull request](https://github.com/oliversalzburg/cbc-kitten-scientists/compare).
+-   [Submit issues or bugs](https://github.com/oliversalzburg/cbc-kitten-scientists/issues/new) you find, or functionality that would improve the project.
+-   Fork the repository, add some functionality, then [submit a pull request](https://github.com/oliversalzburg/cbc-kitten-scientists/compare).
 
 Thanks to these past and present contributors!
 
-- [adituv](https://github.com/adituv)
-- [amaranth](https://github.com/amaranth)
-- [Azulan](https://www.reddit.com/user/Azulan)
-- [carver](https://github.com/carver)
-- [coderpatsy](https://github.com/coderpatsy)
-- [cokernel](https://github.com/cokernel)
-- [DirCattus](https://www.reddit.com/user/DirCattus)
-- [DrGaellon](https://github.com/DrGaellon)
-- Eliezer Kanal
-- [enki1337](https://github.com/enki1337)
-- [FancyRabbitt](https://www.reddit.com/user/FancyRabbitt)
-- [gnidan](https://github.com/gnidan)
-- [Hastebro](https://github.com/Hastebro)
-- [hypehuman](https://github.com/hypehuman)
-- [ironchefpython](https://github.com/ironchefpython)
-- [jacob-keller](https://github.com/jacob-keller)
-- [jcranmer](https://github.com/jcranmer)
-- [KMChappell](https://github.com/KMChappell)
-- [Kobata](https://github.com/Kobata)
-- [magus424](https://github.com/magus424)
-- [mammothb](https://github.com/mammothb)
-- [markuskeunecke](https://github.com/markuskeunecke)
-- [Meleneth](https://github.com/meleneth)
-- [Mewnine](https://www.reddit.com/user/Mewnine)
-- [mjdillon](https://github.com/mjdillon)
-- [mmccubbing](https://github.com/mmccubbing)
-- [NoobKitten](https://github.com/NoobKitten)
-- [oliversalzburg](https://github.com/oliversalzburg)
-- [pefoley2](https://www.reddit.com/user/pefoley2)
-- [Phoenix09](https://github.com/Phoenix09)
-- [poizan42](https://github.com/poizan42)
-- [riannucci](https://github.com/riannucci)
-- [romanalexander](https://github.com/romanalexander)
-- [sapid](https://github.com/sapid)
-- [sjdrodge](https://github.com/sjdrodge)
-- [SphtMarathon](https://www.reddit.com/user/SphtMarathon)
-- [TeWeBu](https://github.com/TeWeBu)
-- [toadjaune](https://github.com/toadjaune)
-- Tom Rauchenwald
-- [trini](https://github.com/trini)
-- [woutershep](https://github.com/woutershep)
-- [Wymrite](https://github.com/Wymrite)
-- [Xanidel](https://github.com/Xanidel)
-- [zelenay](https://github.com/zelenay)
+-   [adituv](https://github.com/adituv)
+-   [amaranth](https://github.com/amaranth)
+-   [Azulan](https://www.reddit.com/user/Azulan)
+-   [carver](https://github.com/carver)
+-   [coderpatsy](https://github.com/coderpatsy)
+-   [cokernel](https://github.com/cokernel)
+-   [DirCattus](https://www.reddit.com/user/DirCattus)
+-   [DrGaellon](https://github.com/DrGaellon)
+-   Eliezer Kanal
+-   [enki1337](https://github.com/enki1337)
+-   [FancyRabbitt](https://www.reddit.com/user/FancyRabbitt)
+-   [gnidan](https://github.com/gnidan)
+-   [Hastebro](https://github.com/Hastebro)
+-   [hypehuman](https://github.com/hypehuman)
+-   [ironchefpython](https://github.com/ironchefpython)
+-   [jacob-keller](https://github.com/jacob-keller)
+-   [jcranmer](https://github.com/jcranmer)
+-   [KMChappell](https://github.com/KMChappell)
+-   [Kobata](https://github.com/Kobata)
+-   [magus424](https://github.com/magus424)
+-   [mammothb](https://github.com/mammothb)
+-   [markuskeunecke](https://github.com/markuskeunecke)
+-   [Meleneth](https://github.com/meleneth)
+-   [Mewnine](https://www.reddit.com/user/Mewnine)
+-   [mjdillon](https://github.com/mjdillon)
+-   [mmccubbing](https://github.com/mmccubbing)
+-   [NoobKitten](https://github.com/NoobKitten)
+-   [oliversalzburg](https://github.com/oliversalzburg)
+-   [pefoley2](https://www.reddit.com/user/pefoley2)
+-   [Phoenix09](https://github.com/Phoenix09)
+-   [poizan42](https://github.com/poizan42)
+-   [riannucci](https://github.com/riannucci)
+-   [romanalexander](https://github.com/romanalexander)
+-   [sapid](https://github.com/sapid)
+-   [sjdrodge](https://github.com/sjdrodge)
+-   [SphtMarathon](https://www.reddit.com/user/SphtMarathon)
+-   [TeWeBu](https://github.com/TeWeBu)
+-   [toadjaune](https://github.com/toadjaune)
+-   Tom Rauchenwald
+-   [trini](https://github.com/trini)
+-   [woutershep](https://github.com/woutershep)
+-   [Wymrite](https://github.com/Wymrite)
+-   [Xanidel](https://github.com/Xanidel)
+-   [zelenay](https://github.com/zelenay)
