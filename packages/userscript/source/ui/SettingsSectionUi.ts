@@ -144,12 +144,15 @@ export abstract class SettingsSectionUi<TState> {
   protected _getTriggerButton(id: string, handler: { onClick?: () => void } = {}) {
     const triggerButton = $("<div/>", {
       id: `trigger-${id}`,
-      text: this._host.i18n("ui.trigger"),
+      //text: this._host.i18n("ui.trigger"),
+      html: '<svg style="width:15px;height:15px" viewBox="0 0 24 24"><path fill="currentColor" d="M11 15H6L13 1V9H18L11 23V15Z" /></svg>',
       css: {
         cursor: "pointer",
         display: "inline-block",
         float: "right",
-        paddingRight: "5px",
+        marginBottom: "-2px",
+        paddingRight: "3px",
+        paddingTop: "2px",
       },
     });
 
