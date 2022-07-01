@@ -105,8 +105,12 @@ export class UserScript {
 
     cwarn("Kitten Scientists initialized. Engine NOT started for now.");
 
-    this._userInterface.refreshUi();
+    this.refreshUi();
     //engine.start(false);
+  }
+
+  refreshUi() {
+    this._userInterface.refreshUi();
   }
 
   /**
@@ -117,7 +121,7 @@ export class UserScript {
   injectOptions(options: Options): void {
     this.options = options;
     this._userInterface?.setState(this.options);
-    this._userInterface?.refreshUi();
+    this.refreshUi();
   }
 
   /**
