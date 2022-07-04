@@ -1,5 +1,7 @@
+import { objectEntries } from "../tools/Entries";
 import { Job } from "../types";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 
 export type DistributeItems = Job;
 export type DistributeSettingsItem = SettingToggle & {
@@ -22,4 +24,15 @@ export class DistributeSettings extends SettingsSection {
     geologist: { enabled: true, limited: true, max: 1 },
     engineer: { enabled: true, limited: true, max: 1 },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new DistributeSettings();
+    options.enabled = subject.toggles.distribute;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
+    }
+    return options;
+  }
 }

@@ -1,5 +1,7 @@
+import { objectEntries } from "../tools/Entries";
 import { SpaceBuildings } from "../types";
 import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 
 export type SpaceItem = SpaceBuildings;
 export type SpaceSettingsItem = SettingToggle & SettingLimit;
@@ -44,4 +46,15 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
     tectonic: { enabled: false, max: -1 },
     moltenCore: { enabled: false, max: -1 },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new SpaceSettings();
+    options.enabled = subject.toggles.space;
+    options.trigger = subject.triggers.space;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
+    }
+    return options;
+  }
 }

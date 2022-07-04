@@ -1,6 +1,8 @@
+import { objectEntries } from "../tools/Entries";
 import { UnicornItemVariant } from "../types";
 import { Requirement } from "./Options";
 import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 
 export type FaithItem =
   | "apocripha"
@@ -36,6 +38,7 @@ export type UnicornItem =
   | "unicornTomb"
   | "unicornUtopia";
 
+export type ReligionItem = FaithItem | UnicornItem;
 export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
 export type ReligionSettingsItem = SettingToggle &
   SettingLimit & {
@@ -245,4 +248,35 @@ export class ReligionSettings extends SettingsSection implements SettingTrigger 
       max: -1,
     },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new ReligionSettings();
+    options.enabled = subject.toggles.faith;
+    options.trigger = subject.triggers.faith;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
+    }
+
+    // Load remaining religion settings.
+    options.addition.adore.enabled =
+      subject.items["toggle-adore"] ?? options.addition.adore.enabled;
+
+    options.addition.autoPraise.enabled =
+      subject.items["toggle-autoPraise"] ?? options.addition.autoPraise.enabled;
+
+    options.addition.bestUnicornBuilding.enabled =
+      subject.items["toggle-bestUnicornBuilding"] ?? options.addition.bestUnicornBuilding.enabled;
+
+    options.addition.transcend.enabled =
+      subject.items["toggle-transcend"] ?? options.addition.transcend.enabled;
+
+    options.addition.adore.subTrigger =
+      subject.items["set-adore-subTrigger"] ?? options.addition.adore.subTrigger;
+
+    options.addition.autoPraise.subTrigger =
+      subject.items["set-autoPraise-subTrigger"] ?? options.addition.autoPraise.subTrigger;
+
+    return options;
+  }
 }

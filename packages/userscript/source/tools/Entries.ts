@@ -1,6 +1,7 @@
 /**
  * Provides type-safe means to iterate over the entries
  * in a partially filled structure with typed keys.
+ *
  * @param subject Some object.
  * @returns An array of key-value tuples.
  */

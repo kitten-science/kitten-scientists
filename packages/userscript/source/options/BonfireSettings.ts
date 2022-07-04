@@ -1,6 +1,8 @@
+import { objectEntries } from "../tools/Entries";
 import { Building } from "../types";
 import { Requirement } from "./Options";
 import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 
 /**
  * One of the building options in the KS menu.
@@ -85,4 +87,15 @@ export class BonfireSettings extends SettingsSection implements SettingTrigger {
     zebraWorkshop: { enabled: false, max: -1, require: "bloodstone" },
     zebraForge: { enabled: false, max: -1, require: "bloodstone" },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new BonfireSettings();
+    options.enabled = subject.toggles.build;
+    options.trigger = subject.triggers.build;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
+    }
+    return options;
+  }
 }

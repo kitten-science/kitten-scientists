@@ -1,4 +1,6 @@
+import { objectEntries } from "../tools/Entries";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 
 export enum FilterItemVariant {
   Build = "ks-activity type_ks-build",
@@ -64,4 +66,13 @@ export class FilterSettings extends SettingsSection {
     promoteFilter: { enabled: false, variant: FilterItemVariant.Promote },
     miscFilter: { enabled: false, variant: FilterItemVariant.Misc },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new FilterSettings();
+    options.enabled = subject.toggles.filter;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
+    return options;
+  }
 }

@@ -1,7 +1,9 @@
+import { objectEntries } from "../tools/Entries";
 import { ResourceCraftable } from "../types";
 import { Requirement } from "./Options";
 import { ResourceSettings } from "./ResourcesSettings";
 import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 
 export type CraftSettingsItem = SettingToggle & {
   limited: boolean;
@@ -54,4 +56,28 @@ export class CraftSettings extends SettingsSection implements SettingTrigger {
       stock: 1000,
     },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new CraftSettings();
+    options.enabled = subject.toggles.craft;
+    options.trigger = subject.triggers.craft;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
+    }
+
+    options.resources = {};
+    for (const [name, item] of objectEntries(subject.resources)) {
+      if (item.checkForReset) {
+        continue;
+      }
+
+      options.resources[name] = {
+        consume: item.consume,
+        enabled: item.enabled,
+        stock: item.stock,
+      };
+    }
+    return options;
+  }
 }

@@ -1,6 +1,8 @@
+import { objectEntries } from "../tools/Entries";
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
 import { Requirement } from "./Options";
 import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 
 /**
  * The upgrades on the Time tab that we have options for.
@@ -35,4 +37,14 @@ export class TimeSettings extends SettingsSection implements SettingTrigger {
     chronocontrol: { enabled: false, variant: TimeItemVariant.VoidSpace, require: "temporalFlux" },
     voidResonator: { enabled: false, variant: TimeItemVariant.VoidSpace, require: false },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new TimeSettings();
+    options.enabled = subject.toggles.time;
+    options.trigger = subject.triggers.time;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
+    return options;
+  }
 }

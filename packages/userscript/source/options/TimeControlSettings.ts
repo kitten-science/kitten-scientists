@@ -1,7 +1,9 @@
+import { objectEntries } from "../tools/Entries";
 import { Resource, TimeItemVariant, UnicornItemVariant } from "../types";
 import { BuildItem } from "./BonfireSettings";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 import { SpaceItem } from "./SpaceSettings";
 import { TimeItem } from "./TimeSettings";
 
@@ -380,4 +382,76 @@ export class TimeControlSettings extends SettingsSection {
       enabled: false,
     },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new TimeControlSettings();
+    options.enabled = subject.toggles.timeCtrl;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
+
+    options.items.accelerateTime.enabled =
+      subject.items["toggle-accelerateTime"] ?? options.items.accelerateTime.enabled;
+    options.items.accelerateTime.subTrigger =
+      subject.items["set-accelerateTime-subTrigger"] ?? options.items.accelerateTime.subTrigger;
+
+    options.items.reset.enabled = subject.items["toggle-reset"] ?? options.items.reset.enabled;
+
+    options.items.timeSkip.enabled =
+      subject.items["toggle-timeSkip"] ?? options.items.timeSkip.enabled;
+    options.items.timeSkip.subTrigger =
+      subject.items["set-timeSkip-subTrigger"] ?? options.items.timeSkip.subTrigger;
+    options.items.timeSkip.autumn =
+      subject.items["toggle-timeSkip-autumn"] ?? options.items.timeSkip.autumn;
+    options.items.timeSkip.spring =
+      subject.items["toggle-timeSkip-spring"] ?? options.items.timeSkip.spring;
+    options.items.timeSkip.summer =
+      subject.items["toggle-timeSkip-summer"] ?? options.items.timeSkip.summer;
+    options.items.timeSkip.winter =
+      subject.items["toggle-timeSkip-winter"] ?? options.items.timeSkip.winter;
+
+    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
+      options.items.timeSkip[cycleIndex as CycleIndices] =
+        subject.items[`toggle-timeSkip-${cycleIndex as CycleIndices}` as const] ??
+        options.items.timeSkip[cycleIndex as CycleIndices];
+    }
+
+    for (const [name, item] of objectEntries(options.buildItems)) {
+      item.checkForReset =
+        subject.items[`toggle-reset-build-${name}` as const] ?? item.checkForReset;
+      item.triggerForReset =
+        subject.items[`set-reset-build-${name}-min` as const] ?? item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(options.religionItems)) {
+      item.checkForReset =
+        subject.items[`toggle-reset-faith-${name}` as const] ?? item.checkForReset;
+      item.triggerForReset =
+        subject.items[`set-reset-faith-${name}-min` as const] ?? item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(options.spaceItems)) {
+      item.checkForReset =
+        subject.items[`toggle-reset-space-${name}` as const] ?? item.checkForReset;
+      item.triggerForReset =
+        subject.items[`set-reset-space-${name}-min` as const] ?? item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(options.timeItems)) {
+      item.checkForReset =
+        subject.items[`toggle-reset-time-${name}` as const] ?? item.checkForReset;
+      item.triggerForReset =
+        subject.items[`set-reset-time-${name}-min` as const] ?? item.triggerForReset;
+    }
+
+    options.resources = {};
+    for (const [name, item] of objectEntries(subject.resources)) {
+      if (!item.checkForReset) {
+        continue;
+      }
+      options.resources[name] = {
+        checkForReset: item.checkForReset,
+        stockForReset: item.stockForReset,
+      };
+    }
+
+    return options;
+  }
 }

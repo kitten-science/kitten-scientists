@@ -1,7 +1,9 @@
+import { objectEntries } from "../tools/Entries";
 import { Race } from "../types";
 import { Requirement } from "./Options";
 import { OptionsSettingsItem } from "./OptionsSettings";
 import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 
 export type TradingSettingsItem = SettingToggle & {
   limited: boolean;
@@ -108,4 +110,21 @@ export class TradingSettings extends SettingsSection implements SettingTrigger {
       require: "unobtainium",
     },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new TradingSettings();
+    options.enabled = subject.toggles.trade;
+    options.trigger = subject.triggers.trade;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
+      item.autumn = subject.items[`toggle-${name}-autumn` as const] ?? item.autumn;
+      item.spring = subject.items[`toggle-${name}-spring` as const] ?? item.spring;
+      item.summer = subject.items[`toggle-${name}-summer` as const] ?? item.summer;
+      item.winter = subject.items[`toggle-${name}-winter` as const] ?? item.winter;
+    }
+    options.addition.buildEmbassies.enabled =
+      subject.items["toggle-buildEmbassies" as const] ?? options.addition.buildEmbassies.enabled;
+    return options;
+  }
 }

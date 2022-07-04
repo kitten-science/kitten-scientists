@@ -1,4 +1,6 @@
+import { objectEntries } from "../tools/Entries";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { KittenStorageType } from "./SettingsStorage";
 
 export type OptionsItem =
   | "_steamworks"
@@ -29,4 +31,14 @@ export class OptionsSettings extends SettingsSection {
     fixCry: { enabled: false },
     _steamworks: { enabled: false },
   };
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new OptionsSettings();
+    options.enabled = subject.toggles.options;
+    for (const [name, item] of objectEntries(options.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.subTrigger = subject.items[`set-${name}-subTrigger` as const] ?? item.subTrigger;
+    }
+    return options;
+  }
 }
