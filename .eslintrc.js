@@ -47,7 +47,7 @@ module.exports = {
   rules: {
     "no-implied-eval": "off",
     "no-unused-expressions": "warn",
-    quotes: "warn",
+    quotes: "off",
   },
   ignorePatterns: ["build/", "output/"],
 };
