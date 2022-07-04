@@ -61,14 +61,14 @@ export class UserInterface {
 
     optionsListElement.append(this._engineUi.element);
     optionsListElement.append(this._bonfireUi.element);
-    optionsListElement.append(this._spaceUi.element);
-    optionsListElement.append(this._craftUi.element);
+    optionsListElement.append(this._distributeUi.element);
     optionsListElement.append(this._unlockUi.element);
+    optionsListElement.append(this._craftUi.element);
     optionsListElement.append(this._tradingUi.element);
     optionsListElement.append(this._religionUi.element);
+    optionsListElement.append(this._spaceUi.element);
     optionsListElement.append(this._timeUi.element);
     optionsListElement.append(this._timeCtrlUi.element);
-    optionsListElement.append(this._distributeUi.element);
     optionsListElement.append(this._optionsUi.element);
     optionsListElement.append(this._filterUi.element);
 
