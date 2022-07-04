@@ -11,7 +11,6 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
 
   private readonly _options: UnlockingSettings;
 
-  private _itemsExpanded = false;
   private _policiesExpanded = false;
 
   constructor(host: UserScript, options: UnlockingSettings = host.options.auto.unlock) {
