@@ -249,10 +249,29 @@ export class ReligionSettings extends SettingsSection implements SettingTrigger 
     },
   };
 
+  static toLegacyOptions(settings: ReligionSettings, subject: KittenStorageType) {
+    subject.toggles.faith = settings.enabled;
+    subject.triggers.faith = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`set-${name}-max` as const] = item.max;
+    }
+
+    subject.items["toggle-adore"] = settings.addition.adore.enabled;
+    subject.items["toggle-autoPraise"] = settings.addition.autoPraise.enabled;
+    subject.items["toggle-bestUnicornBuilding"] = settings.addition.bestUnicornBuilding.enabled;
+    subject.items["toggle-transcend"] = settings.addition.transcend.enabled;
+
+    subject.items["set-adore-subTrigger"] = settings.addition.adore.subTrigger;
+    subject.items["set-autoPraise-subTrigger"] = settings.addition.autoPraise.subTrigger;
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new ReligionSettings();
     options.enabled = subject.toggles.faith;
     options.trigger = subject.triggers.faith;
+
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;

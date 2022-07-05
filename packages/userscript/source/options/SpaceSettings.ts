@@ -47,10 +47,21 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
     moltenCore: { enabled: false, max: -1 },
   };
 
+  static toLegacyOptions(settings: SpaceSettings, subject: KittenStorageType) {
+    subject.toggles.space = settings.enabled;
+    subject.triggers.space = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`set-${name}-max` as const] = item.max;
+    }
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new SpaceSettings();
     options.enabled = subject.toggles.space;
     options.trigger = subject.triggers.space;
+
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;

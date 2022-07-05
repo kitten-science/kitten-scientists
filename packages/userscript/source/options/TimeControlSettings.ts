@@ -383,6 +383,54 @@ export class TimeControlSettings extends SettingsSection {
     },
   };
 
+  static toLegacyOptions(settings: TimeControlSettings, subject: KittenStorageType) {
+    subject.toggles.timeCtrl = settings.enabled;
+
+    subject.items["toggle-accelerateTime"] = settings.items.accelerateTime.enabled;
+    subject.items["set-accelerateTime-subTrigger"] = settings.items.accelerateTime.subTrigger;
+
+    subject.items["toggle-reset"] = settings.items.reset.enabled;
+
+    subject.items["toggle-timeSkip"] = settings.items.timeSkip.enabled;
+    subject.items["set-timeSkip-subTrigger"] = settings.items.timeSkip.subTrigger;
+    subject.items["toggle-timeSkip-autumn"] = settings.items.timeSkip.autumn;
+    subject.items["toggle-timeSkip-spring"] = settings.items.timeSkip.spring;
+    subject.items["toggle-timeSkip-summer"] = settings.items.timeSkip.summer;
+    subject.items["toggle-timeSkip-winter"] = settings.items.timeSkip.winter;
+
+    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
+      subject.items[`toggle-timeSkip-${cycleIndex as CycleIndices}` as const] =
+        settings.items.timeSkip[cycleIndex as CycleIndices];
+    }
+
+    for (const [name, item] of objectEntries(settings.buildItems)) {
+      subject.items[`toggle-reset-build-${name}` as const] = item.checkForReset;
+      subject.items[`set-reset-build-${name}-min` as const] = item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(settings.religionItems)) {
+      subject.items[`toggle-reset-faith-${name}` as const] = item.checkForReset;
+      subject.items[`set-reset-faith-${name}-min` as const] = item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(settings.spaceItems)) {
+      subject.items[`toggle-reset-space-${name}` as const] = item.checkForReset;
+      subject.items[`set-reset-space-${name}-min` as const] = item.triggerForReset;
+    }
+    for (const [name, item] of objectEntries(settings.timeItems)) {
+      subject.items[`toggle-reset-time-${name}` as const] = item.checkForReset;
+      subject.items[`set-reset-time-${name}-min` as const] = item.triggerForReset;
+    }
+
+    for (const [name, item] of objectEntries(settings.resources)) {
+      subject.resources[name] = {
+        checkForReset: item.checkForReset,
+        stockForReset: item.stockForReset,
+        consume: 0,
+        enabled: false,
+        stock: 0,
+      };
+    }
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new TimeControlSettings();
     options.enabled = subject.toggles.timeCtrl;

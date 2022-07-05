@@ -38,10 +38,20 @@ export class TimeSettings extends SettingsSection implements SettingTrigger {
     voidResonator: { enabled: false, variant: TimeItemVariant.VoidSpace, require: false },
   };
 
+  static toLegacyOptions(settings: TimeSettings, subject: KittenStorageType) {
+    subject.toggles.time = settings.enabled;
+    subject.triggers.time = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+    }
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new TimeSettings();
     options.enabled = subject.toggles.time;
     options.trigger = subject.triggers.time;
+
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }

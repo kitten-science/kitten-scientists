@@ -57,10 +57,31 @@ export class CraftSettings extends SettingsSection implements SettingTrigger {
     },
   };
 
+  static toLegacyOptions(settings: CraftSettings, subject: KittenStorageType) {
+    subject.toggles.craft = settings.enabled;
+    subject.triggers.craft = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`toggle-limited-${name}` as const] = item.limited;
+    }
+
+    for (const [name, item] of objectEntries(settings.resources)) {
+      subject.resources[name] = {
+        checkForReset: false,
+        stockForReset: 0,
+        consume: item.consume,
+        enabled: item.enabled,
+        stock: item.stock,
+      };
+    }
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new CraftSettings();
     options.enabled = subject.toggles.craft;
     options.trigger = subject.triggers.craft;
+
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;

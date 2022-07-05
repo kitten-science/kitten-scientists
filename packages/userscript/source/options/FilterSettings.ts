@@ -67,9 +67,18 @@ export class FilterSettings extends SettingsSection {
     miscFilter: { enabled: false, variant: FilterItemVariant.Misc },
   };
 
+  static toLegacyOptions(settings: FilterSettings, subject: KittenStorageType) {
+    subject.toggles.filter = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+    }
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new FilterSettings();
     options.enabled = subject.toggles.filter;
+
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }

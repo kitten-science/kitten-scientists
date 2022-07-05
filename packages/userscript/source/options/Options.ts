@@ -10,7 +10,7 @@ import { PolicySettings } from "./PolicySettings";
 import { FaithItem, ReligionItem, ReligionSettings } from "./ReligionSettings";
 import { KittenStorageType } from "./SettingsStorage";
 import { SpaceItem, SpaceSettings } from "./SpaceSettings";
-import { CycleIndices, TimeControlSettings } from "./TimeControlSettings";
+import { TimeControlSettings } from "./TimeControlSettings";
 import { TimeItem, TimeSettings } from "./TimeSettings";
 import { TradingSettings } from "./TradingSettings";
 import { UnlockingSettings } from "./UnlockingSettings";
@@ -113,81 +113,24 @@ export class Options {
     };
 
     subject.items = {};
-    for (const [name, item] of objectEntries(optionsObject.auto.bonfire.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`set-${name}-max` as const] = item.max;
-    }
-    for (const [name, item] of objectEntries(optionsObject.auto.craft.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`toggle-limited-${name}` as const] = item.limited;
-    }
-    for (const [name, item] of objectEntries(optionsObject.auto.distribute.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`toggle-limited-${name}` as const] = item.limited;
-      subject.items[`set-${name}-max` as const] = item.max;
-    }
-    for (const [name, item] of objectEntries(optionsObject.auto.filters.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-    }
+    subject.resources = {};
+
+    BonfireSettings.toLegacyOptions(optionsObject.auto.bonfire, subject);
+    CraftSettings.toLegacyOptions(optionsObject.auto.craft, subject);
+    DistributeSettings.toLegacyOptions(optionsObject.auto.distribute, subject);
+    FilterSettings.toLegacyOptions(optionsObject.auto.filters, subject);
+
     for (const [name, item] of objectEntries(optionsObject.auto.options.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`set-${name}-subTrigger` as const] = item.subTrigger;
     }
-    for (const [name, item] of objectEntries(optionsObject.auto.religion.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-    }
-    for (const [name, item] of objectEntries(optionsObject.auto.space.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`set-${name}-max` as const] = item.max;
-    }
 
-    subject.items["toggle-accelerateTime"] =
-      optionsObject.auto.timeCtrl.items.accelerateTime.enabled;
-    subject.items["set-accelerateTime-subTrigger"] =
-      optionsObject.auto.timeCtrl.items.accelerateTime.subTrigger;
+    ReligionSettings.toLegacyOptions(optionsObject.auto.religion, subject);
+    SpaceSettings.toLegacyOptions(optionsObject.auto.space, subject);
+    TimeSettings.toLegacyOptions(optionsObject.auto.time, subject);
+    TimeControlSettings.toLegacyOptions(optionsObject.auto.timeCtrl, subject);
+    TradingSettings.toLegacyOptions(optionsObject.auto.trade, subject);
 
-    subject.items["toggle-reset"] = optionsObject.auto.timeCtrl.items.reset.enabled;
-
-    subject.items["toggle-timeSkip"] = optionsObject.auto.timeCtrl.items.timeSkip.enabled;
-    subject.items["set-timeSkip-subTrigger"] =
-      optionsObject.auto.timeCtrl.items.timeSkip.subTrigger;
-    subject.items["toggle-timeSkip-autumn"] = optionsObject.auto.timeCtrl.items.timeSkip.autumn;
-    subject.items["toggle-timeSkip-spring"] = optionsObject.auto.timeCtrl.items.timeSkip.spring;
-    subject.items["toggle-timeSkip-summer"] = optionsObject.auto.timeCtrl.items.timeSkip.summer;
-    subject.items["toggle-timeSkip-winter"] = optionsObject.auto.timeCtrl.items.timeSkip.winter;
-
-    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
-      subject.items[`toggle-timeSkip-${cycleIndex as CycleIndices}` as const] =
-        optionsObject.auto.timeCtrl.items.timeSkip[cycleIndex as CycleIndices];
-    }
-
-    for (const [name, item] of objectEntries(optionsObject.auto.timeCtrl.buildItems)) {
-      subject.items[`toggle-reset-build-${name}` as const] = item.checkForReset;
-      subject.items[`set-reset-build-${name}-min` as const] = item.triggerForReset;
-    }
-    for (const [name, item] of objectEntries(optionsObject.auto.timeCtrl.religionItems)) {
-      subject.items[`toggle-reset-faith-${name}` as const] = item.checkForReset;
-      subject.items[`set-reset-faith-${name}-min` as const] = item.triggerForReset;
-    }
-    for (const [name, item] of objectEntries(optionsObject.auto.timeCtrl.spaceItems)) {
-      subject.items[`toggle-reset-space-${name}` as const] = item.checkForReset;
-      subject.items[`set-reset-space-${name}-min` as const] = item.triggerForReset;
-    }
-    for (const [name, item] of objectEntries(optionsObject.auto.timeCtrl.timeItems)) {
-      subject.items[`toggle-reset-time-${name}` as const] = item.checkForReset;
-      subject.items[`set-reset-time-${name}-min` as const] = item.triggerForReset;
-    }
-
-    for (const [name, item] of objectEntries(optionsObject.auto.trade.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`toggle-limited-${name}` as const] = item.limited;
-      subject.items[`toggle-${name}-autumn` as const] = item.autumn;
-      subject.items[`toggle-${name}-spring` as const] = item.spring;
-      subject.items[`toggle-${name}-summer` as const] = item.summer;
-      subject.items[`toggle-${name}-winter` as const] = item.winter;
-    }
-    subject.items["toggle-buildEmbassies" as const] =
-      optionsObject.auto.trade.addition.buildEmbassies.enabled;
     for (const [name, item] of objectEntries(optionsObject.auto.unlock.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
     }
@@ -195,26 +138,6 @@ export class Options {
       (optionsObject.auto.unlock.items.policies as PolicySettings).items
     )) {
       subject.items[`toggle-${name}` as const] = item.enabled;
-    }
-
-    subject.resources = {};
-    for (const [name, item] of objectEntries(optionsObject.auto.craft.resources)) {
-      subject.resources[name] = {
-        checkForReset: false,
-        stockForReset: 0,
-        consume: item.consume,
-        enabled: item.enabled,
-        stock: item.stock,
-      };
-    }
-    for (const [name, item] of objectEntries(optionsObject.auto.timeCtrl.resources)) {
-      subject.resources[name] = {
-        checkForReset: item.checkForReset,
-        stockForReset: item.stockForReset,
-        consume: 0,
-        enabled: false,
-        stock: 0,
-      };
     }
 
     return subject;

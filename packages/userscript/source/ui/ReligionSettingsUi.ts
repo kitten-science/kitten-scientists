@@ -234,11 +234,11 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       false,
       {
         onCheck: () => {
-          this._options.addition.adore.enabled = true;
+          this._host.updateOptions(() => (this._options.addition.adore.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.adore")]);
         },
         onUnCheck: () => {
-          this._options.addition.adore.enabled = false;
+          this._host.updateOptions(() => (this._options.addition.adore.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.adore")]);
         },
       }
@@ -280,11 +280,11 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       false,
       {
         onCheck: () => {
-          this._options.addition.autoPraise.enabled = true;
+          this._host.updateOptions(() => (this._options.addition.autoPraise.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.praise")]);
         },
         onUnCheck: () => {
-          this._options.addition.autoPraise.enabled = false;
+          this._host.updateOptions(() => (this._options.addition.autoPraise.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.praise")]);
         },
       }
@@ -326,11 +326,15 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       false,
       {
         onCheck: () => {
-          this._options.addition.bestUnicornBuilding.enabled = true;
+          this._host.updateOptions(
+            () => (this._options.addition.bestUnicornBuilding.enabled = true)
+          );
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.best.unicorn")]);
         },
         onUnCheck: () => {
-          this._options.addition.bestUnicornBuilding.enabled = false;
+          this._host.updateOptions(
+            () => (this._options.addition.bestUnicornBuilding.enabled = false)
+          );
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.best.unicorn")]);
         },
       }
@@ -375,11 +379,11 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       false,
       {
         onCheck: () => {
-          this._options.addition.transcend.enabled = true;
+          this._host.updateOptions(() => (this._options.addition.transcend.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.transcend")]);
         },
         onUnCheck: () => {
-          this._options.addition.transcend.enabled = false;
+          this._host.updateOptions(() => (this._options.addition.transcend.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.transcend")]);
         },
       }

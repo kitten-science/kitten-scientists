@@ -99,20 +99,33 @@ export class BonfireSettings extends SettingsSection implements SettingTrigger {
     zebraForge: { enabled: false, max: -1, require: "bloodstone" },
   };
 
+  static toLegacyOptions(settings: BonfireSettings, subject: KittenStorageType) {
+    subject.toggles.build = settings.enabled;
+    subject.triggers.build = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`set-${name}-max` as const] = item.max;
+    }
+
+    subject.items["toggle-buildings"] = settings.addition.upgradeBuildings.enabled;
+    subject.items["toggle-_steamworks"] = settings.addition.turnOnSteamworks.enabled;
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new BonfireSettings();
     options.enabled = subject.toggles.build;
     options.trigger = subject.triggers.build;
 
-    options.addition.upgradeBuildings.enabled =
-      subject.items["toggle-buildings"] ?? options.addition.upgradeBuildings.enabled;
-    options.addition.turnOnSteamworks.enabled =
-      subject.items["toggle-_steamworks"] ?? options.addition.turnOnSteamworks.enabled;
-
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
+
+    options.addition.upgradeBuildings.enabled =
+      subject.items["toggle-buildings"] ?? options.addition.upgradeBuildings.enabled;
+    options.addition.turnOnSteamworks.enabled =
+      subject.items["toggle-_steamworks"] ?? options.addition.turnOnSteamworks.enabled;
     return options;
   }
 }

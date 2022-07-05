@@ -111,10 +111,27 @@ export class TradingSettings extends SettingsSection implements SettingTrigger {
     },
   };
 
+  static toLegacyOptions(settings: TradingSettings, subject: KittenStorageType) {
+    subject.toggles.trade = settings.enabled;
+    subject.triggers.trade = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`toggle-limited-${name}` as const] = item.limited;
+      subject.items[`toggle-${name}-autumn` as const] = item.autumn;
+      subject.items[`toggle-${name}-spring` as const] = item.spring;
+      subject.items[`toggle-${name}-summer` as const] = item.summer;
+      subject.items[`toggle-${name}-winter` as const] = item.winter;
+    }
+
+    subject.items["toggle-buildEmbassies"] = settings.addition.buildEmbassies.enabled;
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new TradingSettings();
     options.enabled = subject.toggles.trade;
     options.trigger = subject.triggers.trade;
+
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
@@ -123,6 +140,7 @@ export class TradingSettings extends SettingsSection implements SettingTrigger {
       item.summer = subject.items[`toggle-${name}-summer` as const] ?? item.summer;
       item.winter = subject.items[`toggle-${name}-winter` as const] ?? item.winter;
     }
+
     options.addition.buildEmbassies.enabled =
       subject.items["toggle-buildEmbassies" as const] ?? options.addition.buildEmbassies.enabled;
     return options;

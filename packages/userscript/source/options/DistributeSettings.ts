@@ -25,9 +25,20 @@ export class DistributeSettings extends SettingsSection {
     engineer: { enabled: true, limited: true, max: 1 },
   };
 
+  static toLegacyOptions(settings: DistributeSettings, subject: KittenStorageType) {
+    subject.toggles.distribute = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`toggle-limited-${name}` as const] = item.limited;
+      subject.items[`set-${name}-max` as const] = item.max;
+    }
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new DistributeSettings();
     options.enabled = subject.toggles.distribute;
+
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
