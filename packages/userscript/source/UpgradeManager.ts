@@ -1,25 +1,21 @@
-import { BulkManager } from "./BulkManager";
-import { CraftManager } from "./CraftManager";
-import { TabManager } from "./TabManager";
+import { ScienceManager } from "./ScienceManager";
+import { SpaceManager } from "./SpaceManager";
 import { mustExist } from "./tools/Maybe";
-import { BuildButton, ScienceTab, SpaceTab } from "./types";
+import { BuildButton } from "./types";
 import { UserScript } from "./UserScript";
+import { WorkshopManager } from "./WorkshopManager";
 
 export class UpgradeManager {
   private readonly _host: UserScript;
-  readonly scienceManager: TabManager<ScienceTab>;
-  readonly spaceManager: TabManager<SpaceTab>;
-  readonly workshopManager: TabManager;
-  private readonly _crafts: CraftManager;
-  private readonly _bulkManager: BulkManager;
+  readonly scienceManager: ScienceManager;
+  readonly spaceManager: SpaceManager;
+  readonly workshopManager: WorkshopManager;
 
   constructor(host: UserScript) {
     this._host = host;
-    this.scienceManager = new TabManager(this._host, "Science");
-    this.spaceManager = new TabManager(this._host, "Space");
-    this.workshopManager = new TabManager(this._host, "Workshop");
-    this._crafts = new CraftManager(this._host);
-    this._bulkManager = new BulkManager(this._host);
+    this.scienceManager = new ScienceManager(this._host);
+    this.spaceManager = new SpaceManager(this._host);
+    this.workshopManager = new WorkshopManager(this._host);
   }
 
   build(upgrade: { label: string }, variant: "policy" | "science" | "workshop"): void {
@@ -48,11 +44,11 @@ export class UpgradeManager {
   ): BuildButton | null {
     let buttons;
     if (variant === "workshop") {
-      buttons = this.workshopManager.tab.buttons;
+      buttons = this.workshopManager.manager.tab.buttons;
     } else if (variant === "policy") {
-      buttons = this.scienceManager.tab.policyPanel.children;
+      buttons = this.scienceManager.manager.tab.policyPanel.children;
     } else if (variant === "science") {
-      buttons = this.scienceManager.tab.buttons;
+      buttons = this.scienceManager.manager.tab.buttons;
     }
 
     for (const button of mustExist(buttons)) {

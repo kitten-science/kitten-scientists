@@ -1,6 +1,5 @@
 import { BonfireManager } from "./BonfireManager";
 import { BulkManager } from "./BulkManager";
-import { CraftManager } from "./CraftManager";
 import { FaithItem, ReligionSettingsItem } from "./options/ReligionSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
@@ -17,18 +16,19 @@ import {
   ZiggurathUpgrades,
 } from "./types";
 import { UserScript } from "./UserScript";
+import { WorkshopManager } from "./WorkshopManager";
 
 export class ReligionManager {
   private readonly _host: UserScript;
   readonly manager: TabManager<ReligionTab>;
-  private readonly _craftManager: CraftManager;
   private readonly _bulkManager: BulkManager;
   private readonly _bonfireManager: BonfireManager;
+  private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript) {
     this._host = host;
     this.manager = new TabManager(this._host, "Religion");
-    this._craftManager = new CraftManager(this._host);
+    this._workshopManager = new WorkshopManager(this._host);
     this._bulkManager = new BulkManager(this._host);
     this._bonfireManager = new BonfireManager(this._host);
   }
@@ -59,7 +59,7 @@ export class ReligionManager {
           }
 
           const tearsAvailableForUse =
-            this._craftManager.getValue("tears") - this._craftManager.getStock("tears");
+            this._workshopManager.getValue("tears") - this._workshopManager.getStock("tears");
 
           if (tearsAvailableForUse < tearsNeeded) {
             // if no ziggurat, getBestUnicornBuilding will return unicornPasture
@@ -67,7 +67,8 @@ export class ReligionManager {
 
             // How many times can we sacrifice unicorns to make tears?
             const maxSacrifice = Math.floor(
-              (this._craftManager.getValue("unicorns") - this._craftManager.getStock("unicorns")) /
+              (this._workshopManager.getValue("unicorns") -
+                this._workshopManager.getStock("unicorns")) /
                 2500
             );
 
@@ -114,7 +115,7 @@ export class ReligionManager {
       this._buildReligionBuildings(builds);
     }
 
-    const faith = this._craftManager.getResource("faith");
+    const faith = this._workshopManager.getResource("faith");
     const faithLevel = faith.value / faith.maxValue;
     // enough faith, and then TAP (transcende, adore, praise)
     if (0.98 <= faithLevel) {

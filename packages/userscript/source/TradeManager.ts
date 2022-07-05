@@ -1,21 +1,21 @@
 import { CacheManager } from "./CacheManager";
-import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { ucfirst } from "./tools/Format";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradingTab } from "./types";
 import { UserScript } from "./UserScript";
+import { WorkshopManager } from "./WorkshopManager";
 
 export class TradeManager {
   private readonly _host: UserScript;
   readonly manager: TabManager<TradingTab>;
-  private readonly _craftManager: CraftManager;
+  private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript) {
     this._host = host;
     this.manager = new TabManager(this._host, "Trade");
-    this._craftManager = new CraftManager(this._host);
+    this._workshopManager = new WorkshopManager(this._host);
   }
 
   autoTrade(cacheManager?: CacheManager) {
@@ -29,7 +29,7 @@ export class TradeManager {
     // The races we might want to trade with during this frame.
     const trades: Array<Race> = [];
 
-    const gold = this._craftManager.getResource("gold");
+    const gold = this._workshopManager.getResource("gold");
     const requireTrigger = this._host.options.auto.trade.trigger;
     const season = this._host.gamePage.calendar.getCurSeason().name;
 
@@ -50,7 +50,7 @@ export class TradeManager {
       }
 
       // Determine which resource the race requires for trading, if any.
-      const require = !trade.require ? false : this._craftManager.getResource(trade.require);
+      const require = !trade.require ? false : this._workshopManager.getResource(trade.require);
 
       // Check if this trade would be profitable.
       const profitable = this.getProfitability(name);
@@ -95,7 +95,7 @@ export class TradeManager {
       // Does this trade require a certain resource?
       const require = !tradeSettings.require
         ? false
-        : this._craftManager.getResource(tradeSettings.require);
+        : this._workshopManager.getResource(tradeSettings.require);
       // Have the trigger conditions for this trade been met?
       const trigConditions =
         (!require || requireTrigger <= require.value / require.maxValue) &&
@@ -192,7 +192,7 @@ export class TradeManager {
 
       const meanOutput = this.getAverageTrade(race);
       for (const [out, outValue] of objectEntries(meanOutput)) {
-        const res = this._craftManager.getResource(out);
+        const res = this._workshopManager.getResource(out);
         if (!tradeNet[out]) {
           tradeNet[out] = 0;
         }
@@ -232,12 +232,12 @@ export class TradeManager {
       this._host.options.auto.trade.addition.buildEmbassies.enabled &&
       !!this._host.gamePage.diplomacy.races[0].embassyPrices
     ) {
-      const culture = this._craftManager.getResource("culture");
+      const culture = this._workshopManager.getResource("culture");
       let cultureVal = 0;
       const subTrigger = this._host.options.auto.trade.addition.buildEmbassies.subTrigger ?? 0;
       if (subTrigger <= culture.value / culture.maxValue) {
         const racePanels = this._host.gamePage.diplomacyTab.racePanels;
-        cultureVal = this._craftManager.getValueAvailable("culture", true);
+        cultureVal = this._workshopManager.getValueAvailable("culture", true);
 
         const embassyBulk: Partial<
           Record<
@@ -296,7 +296,7 @@ export class TradeManager {
           if (emBulk.val === 0) {
             continue;
           }
-          cultureVal = this._craftManager.getValueAvailable("culture", true);
+          cultureVal = this._workshopManager.getValueAvailable("culture", true);
           if (cultureVal < emBulk.priceSum) {
             this._host.warning("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
           }
@@ -345,6 +345,130 @@ export class TradeManager {
     }
   }
 
+  autoUnlock() {
+    // Check how many races we could reasonably unlock at this point.
+    const maxRaces = this._host.gamePage.diplomacy.get("leviathans").unlocked ? 8 : 7;
+    // If we haven't unlocked that many races yet...
+    if (this._host.gamePage.diplomacyTab.racePanels.length < maxRaces) {
+      // Get the currently available catpower.
+      let manpower = this._workshopManager.getValueAvailable("manpower", true);
+      // TODO: These should be checked in reverse order. Otherwise the check for lizards
+      //       can cause the zebras to be discovered at later stages in the game. Then it
+      //       gets to the check for the zebras and doesn't explore again, as they're
+      //       already unlocked. Then it takes another iteration to unlock the other race.
+      // Send explorers if we haven't discovered the lizards yet.
+      if (!this._host.gamePage.diplomacy.get("lizards").unlocked) {
+        if (manpower >= 1000) {
+          this._host.gamePage.resPool.get("manpower").value -= 1000;
+          this._host.iactivity(
+            "upgrade.race",
+            [this._host.gamePage.diplomacy.unlockRandomRace().title],
+            "ks-upgrade"
+          );
+          manpower -= 1000;
+          this._host.gamePage.ui.render();
+        }
+      }
+
+      // Do exactly the same for the sharks.
+      if (!this._host.gamePage.diplomacy.get("sharks").unlocked) {
+        if (manpower >= 1000) {
+          this._host.gamePage.resPool.get("manpower").value -= 1000;
+          this._host.iactivity(
+            "upgrade.race",
+            [this._host.gamePage.diplomacy.unlockRandomRace().title],
+            "ks-upgrade"
+          );
+          manpower -= 1000;
+          this._host.gamePage.ui.render();
+        }
+      }
+
+      // Do exactly the same for the griffins.
+      if (!this._host.gamePage.diplomacy.get("griffins").unlocked) {
+        if (manpower >= 1000) {
+          this._host.gamePage.resPool.get("manpower").value -= 1000;
+          this._host.iactivity(
+            "upgrade.race",
+            [this._host.gamePage.diplomacy.unlockRandomRace().title],
+            "ks-upgrade"
+          );
+          manpower -= 1000;
+          this._host.gamePage.ui.render();
+        }
+      }
+
+      // For nagas, we additionally need enough culture.
+      if (
+        !this._host.gamePage.diplomacy.get("nagas").unlocked &&
+        this._host.gamePage.resPool.get("culture").value >= 1500
+      ) {
+        if (manpower >= 1000) {
+          this._host.gamePage.resPool.get("manpower").value -= 1000;
+          this._host.iactivity(
+            "upgrade.race",
+            [this._host.gamePage.diplomacy.unlockRandomRace().title],
+            "ks-upgrade"
+          );
+          manpower -= 1000;
+          this._host.gamePage.ui.render();
+        }
+      }
+
+      // Zebras require us to have a ship.
+      if (
+        !this._host.gamePage.diplomacy.get("zebras").unlocked &&
+        this._host.gamePage.resPool.get("ship").value >= 1
+      ) {
+        if (manpower >= 1000) {
+          this._host.gamePage.resPool.get("manpower").value -= 1000;
+          this._host.iactivity(
+            "upgrade.race",
+            [this._host.gamePage.diplomacy.unlockRandomRace().title],
+            "ks-upgrade"
+          );
+          manpower -= 1000;
+          this._host.gamePage.ui.render();
+        }
+      }
+
+      // For spiders, we need 100 ships and 125000 science.
+      if (
+        !this._host.gamePage.diplomacy.get("spiders").unlocked &&
+        mustExist(this._host.gamePage.resPool.get("ship")).value >= 100 &&
+        mustExist(this._host.gamePage.resPool.get("science")).maxValue > 125000
+      ) {
+        if (manpower >= 1000) {
+          mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
+          this._host.iactivity(
+            "upgrade.race",
+            [this._host.gamePage.diplomacy.unlockRandomRace().title],
+            "ks-upgrade"
+          );
+          manpower -= 1000;
+          this._host.gamePage.ui.render();
+        }
+      }
+
+      // Dragons require nuclear fission to be researched.
+      if (
+        !this._host.gamePage.diplomacy.get("dragons").unlocked &&
+        this._host.gamePage.science.get("nuclearFission").researched
+      ) {
+        if (manpower >= 1000) {
+          mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
+          this._host.iactivity(
+            "upgrade.race",
+            [this._host.gamePage.diplomacy.unlockRandomRace().title],
+            "ks-upgrade"
+          );
+          manpower -= 1000;
+          this._host.gamePage.ui.render();
+        }
+      }
+    }
+  }
+
   /**
    * Trade with the given race.
    *
@@ -389,7 +513,7 @@ export class TradeManager {
     // For each material required to trade with the race...
     for (const [mat, amount] of objectEntries(materials)) {
       // ...determine how much of the resource is produced each tick.
-      const tick = this._craftManager.getTickVal(this._craftManager.getResource(mat));
+      const tick = this._workshopManager.getTickVal(this._workshopManager.getResource(mat));
       // If we're not producing any of this resource, it's spice, or blueprints,
       // don't consider it in the calculation.
       if (tick === "ignore") {
@@ -414,9 +538,9 @@ export class TradeManager {
     const output = this.getAverageTrade(race);
     // For each material resulting from a trade with the race...
     for (const [prod, amount] of objectEntries(output)) {
-      const resource = this._craftManager.getResource(prod);
+      const resource = this._workshopManager.getResource(prod);
       // ...determine how much of the resource is produced each tick.
-      const tick = this._craftManager.getTickVal(resource);
+      const tick = this._workshopManager.getTickVal(resource);
       // If we're not producing any of this resource, it's spice, or blueprints,
       // don't consider it in the calculation.
       if (tick === "ignore") {
@@ -535,13 +659,13 @@ export class TradeManager {
     for (const [resource, required] of objectEntries(materials)) {
       // If this resource is manpower, the amount of trades it allows is straight forward.
       if (resource === "manpower") {
-        total = this._craftManager.getValueAvailable(resource, true) / required;
+        total = this._workshopManager.getValueAvailable(resource, true) / required;
       } else {
         // For other resources, use a different path to determine the available resource
         // amount.
         // TODO: It's unclear how this works
         total =
-          this._craftManager.getValueAvailable(
+          this._workshopManager.getValueAvailable(
             resource,
             limited,
             this._host.options.auto.trade.trigger
@@ -578,7 +702,7 @@ export class TradeManager {
     let highestCapacity = 0;
     const tradeOutput = this.getAverageTrade(race);
     for (const item of race.sells) {
-      const resource = this._craftManager.getResource(item.name);
+      const resource = this._workshopManager.getResource(item.name);
       let max = 0;
 
       // No need to process resources that don't cap
@@ -679,7 +803,7 @@ export class TradeManager {
     const materials = this.getMaterials(name);
     for (const [resource, amount] of objectEntries<Resource, number>(materials)) {
       // Check if we have a sufficient amount of that resource in storage.
-      if (this._craftManager.getValueAvailable(resource, true) < amount) {
+      if (this._workshopManager.getValueAvailable(resource, true) < amount) {
         return false;
       }
     }

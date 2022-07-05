@@ -4,16 +4,19 @@ import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { BuildButton, SpaceBuildingInfo, SpaceBuildings, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
+import { WorkshopManager } from "./WorkshopManager";
 
 export class SpaceManager {
   private readonly _host: UserScript;
   readonly manager: TabManager<SpaceTab>;
   private readonly _bulkManager: BulkManager;
+  private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript) {
     this._host = host;
     this.manager = new TabManager(this._host, "Space");
     this._bulkManager = new BulkManager(this._host);
+    this._workshopManager = new WorkshopManager(this._host);
   }
 
   /**
@@ -54,6 +57,36 @@ export class SpaceManager {
 
     if (refreshRequired) {
       this._host.gamePage.ui.render();
+    }
+  }
+
+  autoUnlock() {
+    this.manager.render();
+
+    const missions = this._host.gamePage.space.meta[0].meta;
+    missionLoop: for (let i = 0; i < missions.length; i++) {
+      // If the mission is already purchased or not available yet, continue with the next one.
+      if (0 < missions[i].val || !missions[i].unlocked) {
+        continue;
+      }
+
+      const model = this.manager.tab.GCPanel.children[i];
+      const prices = model.model.prices;
+      for (const resource of prices) {
+        // If we can't afford this resource price, continue with the next mission.
+        if (this._workshopManager.getValueAvailable(resource.name, true) < resource.val) {
+          continue missionLoop;
+        }
+      }
+
+      // Start the mission by clicking the button.
+      // TODO: Move this into the SpaceManager?
+      model.domNode.click();
+      if (i === 7 || i === 12) {
+        this._host.iactivity("upgrade.space.mission", [missions[i].label], "ks-upgrade");
+      } else {
+        this._host.iactivity("upgrade.space", [missions[i].label], "ks-upgrade");
+      }
     }
   }
 

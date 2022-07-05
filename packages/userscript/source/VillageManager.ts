@@ -1,21 +1,21 @@
 import { CacheManager } from "./CacheManager";
-import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { isNil } from "./tools/Maybe";
 import { Job, Resource } from "./types";
 import { VillageTab } from "./types/village";
 import { UserScript } from "./UserScript";
+import { WorkshopManager } from "./WorkshopManager";
 
 export class VillageManager {
   private readonly _host: UserScript;
   readonly manager: TabManager<VillageTab>;
-  private readonly _craftManager: CraftManager;
+  private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript) {
     this._host = host;
     this.manager = new TabManager(this._host, "Village");
-    this._craftManager = new CraftManager(this._host);
+    this._workshopManager = new WorkshopManager(this._host);
   }
 
   autoDistributeKittens() {
@@ -70,8 +70,8 @@ export class VillageManager {
     ) {
       const leader = this._host.gamePage.village.leader;
       const rank = leader.rank;
-      const gold = this._craftManager.getResource("gold");
-      const goldStock = this._craftManager.getStock("gold");
+      const gold = this._workshopManager.getResource("gold");
+      const goldStock = this._workshopManager.getStock("gold");
 
       // this._host.gamePage.village.sim.goldToPromote will check gold
       // this._host.gamePage.village.sim.promote check both gold and exp
@@ -90,7 +90,7 @@ export class VillageManager {
   }
 
   autoHunt(cacheManager?: CacheManager) {
-    const manpower = this._craftManager.getResource("manpower");
+    const manpower = this._workshopManager.getResource("manpower");
     const subTrigger = this._host.options.auto.options.items.hunt.subTrigger ?? 0;
 
     if (manpower.value < 100 || this._host.gamePage.challenges.isActive("pacifism")) {
@@ -104,11 +104,11 @@ export class VillageManager {
       this._host.iactivity("act.hunt", [huntCount], "ks-hunt");
 
       huntCount = Math.floor(manpower.value / 100);
-      const averageOutput = this._craftManager.getAverageHunt();
+      const averageOutput = this._workshopManager.getAverageHunt();
       const trueOutput: Partial<Record<Resource, number>> = {};
 
       for (const [out, outValue] of objectEntries(averageOutput)) {
-        const res = this._craftManager.getResource(out);
+        const res = this._workshopManager.getResource(out);
         trueOutput[out] =
           // If this is a capped resource...
           0 < res.maxValue
@@ -132,7 +132,7 @@ export class VillageManager {
     }
   }
 
-  autoFestival() {
+  autoFestival(cacheManager?: CacheManager) {
     // If we haven't researched festivals yet, or still have more than 400 days left on one,
     // don't hold (another) one.
     if (
@@ -152,7 +152,7 @@ export class VillageManager {
     }
 
     // Check if we can afford a festival.
-    const craftManager = this._craftManager;
+    const craftManager = this._workshopManager;
     if (
       craftManager.getValueAvailable("manpower", true) < 1500 ||
       craftManager.getValueAvailable("culture", true) < 5000 ||
@@ -163,11 +163,28 @@ export class VillageManager {
 
     // Check if the festival would even be profitable for any resource production.
     const catpowProfitable =
-      4000 * (craftManager.getTickVal(craftManager.getResource("manpower"), true) as number) > 1500;
+      4000 *
+        (craftManager.getTickVal(
+          craftManager.getResource("manpower"),
+          cacheManager,
+          true
+        ) as number) >
+      1500;
     const cultureProfitable =
-      4000 * (craftManager.getTickVal(craftManager.getResource("culture"), true) as number) > 5000;
+      4000 *
+        (craftManager.getTickVal(
+          craftManager.getResource("culture"),
+          cacheManager,
+          true
+        ) as number) >
+      5000;
     const parchProfitable =
-      4000 * (craftManager.getTickVal(craftManager.getResource("parchment"), true) as number) >
+      4000 *
+        (craftManager.getTickVal(
+          craftManager.getResource("parchment"),
+          cacheManager,
+          true
+        ) as number) >
       2500;
 
     if (!catpowProfitable && !cultureProfitable && !parchProfitable) {

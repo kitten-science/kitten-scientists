@@ -1,4 +1,3 @@
-import { CraftManager } from "./CraftManager";
 import { AllItems, Requirement } from "./options/Options";
 import { objectEntries } from "./tools/Entries";
 import { isNil, mustExist } from "./tools/Maybe";
@@ -18,6 +17,7 @@ import {
   ZiggurathUpgradeInfo,
 } from "./types";
 import { UserScript } from "./UserScript";
+import { WorkshopManager } from "./WorkshopManager";
 
 export type BulkBuildListItem = {
   count: number;
@@ -30,11 +30,11 @@ export type BulkBuildListItem = {
 
 export class BulkManager {
   private readonly _host: UserScript;
-  private readonly _craftManager: CraftManager;
+  private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript) {
     this._host = host;
-    this._craftManager = new CraftManager(this._host);
+    this._workshopManager = new WorkshopManager(this._host);
   }
 
   /**
@@ -146,7 +146,7 @@ export class BulkManager {
       }
 
       // Check the requirements for this build.
-      const require = !build.require ? false : this._craftManager.getResource(build.require);
+      const require = !build.require ? false : this._workshopManager.getResource(build.require);
       // Either if we don't require a resource, of the stock is filled to a percentage
       // greater than the trigger value.
       if (!require || trigger <= require.value / require.maxValue) {
@@ -217,7 +217,7 @@ export class BulkManager {
     // Create a copy of the currently available resources.
     const tempPool: Record<Resource, number> = {} as Record<Resource, number>;
     for (const res of this._host.gamePage.resPool.resources) {
-      tempPool[res.name] = this._craftManager.getValueAvailable(res.name, true);
+      tempPool[res.name] = this._workshopManager.getValueAvailable(res.name, true);
     }
 
     for (const potentialBuild of potentialBuilds) {
@@ -551,7 +551,7 @@ export class BulkManager {
         );
         const oilPrice = finalResourcePrice * (1 - oilModifier);
         if (
-          this._craftManager.getValueAvailable("oil", true) <
+          this._workshopManager.getValueAvailable("oil", true) <
           oilPrice * Math.pow(1.05, build.val)
         ) {
           return false;
@@ -565,14 +565,14 @@ export class BulkManager {
         );
         const karmaPrice = finalResourcePrice * (1 - karmaModifier);
         if (
-          this._craftManager.getValueAvailable("karma", true) <
+          this._workshopManager.getValueAvailable("karma", true) <
           karmaPrice * Math.pow(priceRatio, build.val)
         ) {
           return false;
         }
       } else {
         if (
-          this._craftManager.getValueAvailable(price.name, true) <
+          this._workshopManager.getValueAvailable(price.name, true) <
           finalResourcePrice * Math.pow(priceRatio, build.val)
         ) {
           return false;

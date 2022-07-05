@@ -1,18 +1,49 @@
 import { CacheManager } from "./CacheManager";
 import { CraftSettingsItem } from "./options/CraftSettings";
+import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { isNil, mustExist } from "./tools/Maybe";
 import { Resource, ResourceCraftable } from "./types";
 import { CraftableInfo, ResourceInfo } from "./types/craft";
+import { VillageTab } from "./types/village";
+import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 
-export class CraftManager {
+export class WorkshopManager {
   private readonly _host: UserScript;
-  private readonly _cacheManager: CacheManager;
+  readonly manager: TabManager<VillageTab>;
+  private readonly _upgradeManager: UpgradeManager;
 
   constructor(host: UserScript) {
     this._host = host;
-    this._cacheManager = new CacheManager(this._host);
+    this.manager = new TabManager(this._host, "Workshop");
+    this._upgradeManager = new UpgradeManager(this._host);
+  }
+
+  autoUnlock() {
+    this.manager.render();
+
+    const workshopUpgrades = this._host.gamePage.workshop.upgrades;
+    // TODO: Filter out upgrades that are not beneficial when using KS, like workshop automation.
+    workLoop: for (const upgrade of workshopUpgrades) {
+      // If the upgrade is already purchased or not available yet, continue with the next one.
+      if (upgrade.researched || !upgrade.unlocked) {
+        continue;
+      }
+
+      // Create a copy of the prices for this upgrade, so that we can apply effects to it.
+      let prices = dojo.clone(upgrade.prices);
+      prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
+      for (const resource of prices) {
+        // If we can't afford this resource price, continue with the next upgrade.
+        if (this.getValueAvailable(resource.name, true) < resource.val) {
+          continue workLoop;
+        }
+      }
+
+      // If we can afford all prices, purchase the upgrade.
+      this._upgradeManager.build(upgrade, "workshop");
+    }
   }
 
   /**
@@ -308,10 +339,15 @@ export class CraftManager {
    * this also includes how many of them we *could* craft this tick.
    *
    * @param resource The resource to retrieve the production for.
+   * @param cacheManager A `CacheManager` to use in the process.
    * @param preTrade ?
    * @returns The amount of resources produced per tick, adjusted arbitrarily.
    */
-  getTickVal(resource: ResourceInfo, preTrade: boolean | undefined = undefined): number | "ignore" {
+  getTickVal(
+    resource: ResourceInfo,
+    cacheManager?: CacheManager,
+    preTrade: boolean | undefined = undefined
+  ): number | "ignore" {
     let production = this._host.gamePage.getResourcePerTick(resource.name, true);
 
     // For craftable resources, we also want to take into account how much of them
@@ -344,8 +380,8 @@ export class CraftManager {
     // makes no sense.
     // TODO: The only time this is used is for holding festivals.
     //       It's unclear why this would be necessary.
-    if (!preTrade) {
-      production += this._cacheManager.getResValue(resource.name);
+    if (!preTrade && !isNil(cacheManager)) {
+      production += cacheManager.getResValue(resource.name);
     }
     return production;
   }
