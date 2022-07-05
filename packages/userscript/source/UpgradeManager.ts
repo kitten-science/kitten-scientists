@@ -1,25 +1,18 @@
-import { ScienceManager } from "./ScienceManager";
-import { SpaceManager } from "./SpaceManager";
+import { TabManager } from "./TabManager";
 import { mustExist } from "./tools/Maybe";
-import { BuildButton } from "./types";
+import { BuildButton, ScienceTab } from "./types";
 import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
 
-export class UpgradeManager {
-  private readonly _host: UserScript;
-  readonly scienceManager: ScienceManager;
-  readonly spaceManager: SpaceManager;
-  readonly workshopManager: WorkshopManager;
+export abstract class UpgradeManager {
+  protected readonly _host: UserScript;
+  abstract manager: TabManager;
 
   constructor(host: UserScript) {
     this._host = host;
-    this.scienceManager = new ScienceManager(this._host);
-    this.spaceManager = new SpaceManager(this._host);
-    this.workshopManager = new WorkshopManager(this._host);
   }
 
-  build(upgrade: { label: string }, variant: "policy" | "science" | "workshop"): void {
-    const button = this.getBuildButton(upgrade, variant);
+  upgrade(upgrade: { label: string }, variant: "policy" | "science" | "workshop"): void {
+    const button = this.getUpgradeButton(upgrade, variant);
 
     if (!button || !button.model.enabled) return;
 
@@ -38,17 +31,17 @@ export class UpgradeManager {
     }
   }
 
-  getBuildButton(
+  getUpgradeButton(
     upgrade: { label: string },
     variant: "policy" | "science" | "workshop"
   ): BuildButton | null {
     let buttons;
     if (variant === "workshop") {
-      buttons = this.workshopManager.manager.tab.buttons;
+      buttons = this.manager.tab.buttons;
     } else if (variant === "policy") {
-      buttons = this.scienceManager.manager.tab.policyPanel.children;
+      buttons = (this.manager.tab as ScienceTab).policyPanel.children;
     } else if (variant === "science") {
-      buttons = this.scienceManager.manager.tab.buttons;
+      buttons = this.manager.tab.buttons;
     }
 
     for (const button of mustExist(buttons)) {

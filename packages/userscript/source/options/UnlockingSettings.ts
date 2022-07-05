@@ -3,7 +3,7 @@ import { PolicySettings } from "./PolicySettings";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type UnlockItem = "buildings" | "missions" | "policies" | "races" | "techs" | "upgrades";
+export type UnlockItem = "missions" | "policies" | "races" | "techs" | "upgrades";
 export type UnlockingSettingsItem = SettingToggle | PolicySettings;
 
 export class UnlockingSettings extends SettingsSection {
@@ -15,7 +15,6 @@ export class UnlockingSettings extends SettingsSection {
     policies: new PolicySettings(),
     races: { enabled: true },
     missions: { enabled: true },
-    buildings: { enabled: true },
   };
 
   static fromLegacyOptions(subject: KittenStorageType) {

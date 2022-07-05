@@ -35,7 +35,7 @@ export class Options {
 
   auto: {
     engine: { enabled: boolean };
-    build: BonfireSettings;
+    bonfire: BonfireSettings;
     space: SpaceSettings;
     craft: CraftSettings;
     unlock: UnlockingSettings;
@@ -48,7 +48,7 @@ export class Options {
     filters: FilterSettings;
   } = {
     engine: { enabled: false },
-    build: new BonfireSettings(),
+    bonfire: new BonfireSettings(),
     space: new SpaceSettings(),
     craft: new CraftSettings(),
     unlock: new UnlockingSettings(),
@@ -81,7 +81,7 @@ export class Options {
     const subject = {} as KittenStorageType;
 
     subject.toggles = {
-      build: optionsObject.auto.build.enabled,
+      build: optionsObject.auto.bonfire.enabled,
       space: optionsObject.auto.space.enabled,
       craft: optionsObject.auto.craft.enabled,
       upgrade: optionsObject.auto.unlock.enabled,
@@ -97,7 +97,7 @@ export class Options {
     subject.triggers = {
       faith: optionsObject.auto.religion.trigger,
       time: optionsObject.auto.time.trigger,
-      build: optionsObject.auto.build.trigger,
+      build: optionsObject.auto.bonfire.trigger,
       space: optionsObject.auto.space.trigger,
       craft: optionsObject.auto.craft.trigger,
       trade: optionsObject.auto.trade.trigger,
@@ -113,7 +113,7 @@ export class Options {
     };
 
     subject.items = {};
-    for (const [name, item] of objectEntries(optionsObject.auto.build.items)) {
+    for (const [name, item] of objectEntries(optionsObject.auto.bonfire.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`set-${name}-max` as const] = item.max;
     }
@@ -229,7 +229,7 @@ export class Options {
 
     const subject = optionsObject as KittenStorageType;
 
-    result.auto.build = BonfireSettings.fromLegacyOptions(subject);
+    result.auto.bonfire = BonfireSettings.fromLegacyOptions(subject);
     result.auto.craft = CraftSettings.fromLegacyOptions(subject);
     result.auto.distribute = DistributeSettings.fromLegacyOptions(subject);
     result.auto.filters = FilterSettings.fromLegacyOptions(subject);

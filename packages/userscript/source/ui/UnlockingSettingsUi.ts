@@ -150,22 +150,6 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
           },
         }
       ),
-      this._getOption(
-        "buildings",
-        this._options.items.buildings,
-        this._host.i18n("ui.upgrade.buildings"),
-        false,
-        {
-          onCheck: () => {
-            this._host.updateOptions(() => (this._options.items.buildings.enabled = true));
-            this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.buildings")]);
-          },
-          onUnCheck: () => {
-            this._host.updateOptions(() => (this._options.items.buildings.enabled = false));
-            this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.buildings")]);
-          },
-        }
-      ),
     ];
 
     list.append(...optionButtons);

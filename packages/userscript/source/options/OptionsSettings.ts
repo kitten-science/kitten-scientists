@@ -3,7 +3,6 @@ import { SettingsSection, SettingToggle } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type OptionsItem =
-  | "_steamworks"
   | "autofeed"
   | "crypto"
   | "festival"
@@ -29,7 +28,6 @@ export class OptionsSettings extends SettingsSection {
     promote: { enabled: true },
     crypto: { enabled: true, subTrigger: 10000 },
     fixCry: { enabled: false },
-    _steamworks: { enabled: false },
   };
 
   static fromLegacyOptions(subject: KittenStorageType) {

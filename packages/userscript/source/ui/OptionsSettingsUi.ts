@@ -63,11 +63,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
         this._options.items.fixCry,
         this._host.i18n("option.fix.cry")
       ),
-      this._getOptionsOption(
-        "_steamworks",
-        this._options.items._steamworks,
-        this._host.i18n("option.steamworks")
-      ),
     ];
 
     list.append(...optionButtons);

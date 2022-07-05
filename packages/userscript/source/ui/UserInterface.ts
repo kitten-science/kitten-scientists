@@ -118,7 +118,7 @@ export class UserInterface {
 
   setState(state: Options): void {
     this._engineUi.setState(state.auto.engine);
-    this._bonfireUi.setState(state.auto.build);
+    this._bonfireUi.setState(state.auto.bonfire);
     this._spaceUi.setState(state.auto.space);
     this._craftUi.setState(state.auto.craft);
     this._unlockUi.setState(state.auto.unlock);

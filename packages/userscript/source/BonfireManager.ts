@@ -30,11 +30,12 @@ export class BonfireManager {
    * @param builds The buildings to build.
    */
   autoBuild(
-    builds: Partial<Record<BonfireItem, BonfireSettingsItem>> = this._host.options.auto.build.items
+    builds: Partial<Record<BonfireItem, BonfireSettingsItem>> = this._host.options.auto.bonfire
+      .items
   ) {
     // TODO: Refactor. See SpaceManager.autoBuild
     const bulkManager = this._bulkManager;
-    const trigger = this._host.options.auto.build.trigger;
+    const trigger = this._host.options.auto.bonfire.trigger;
 
     // Render the tab to make sure that the buttons actually exist in the DOM.
     // TODO: Is this really required?
@@ -213,6 +214,17 @@ export class BonfireManager {
 
           return;
         }
+      }
+    }
+  }
+
+  autoMisc() {
+    // Auto turn on steamworks
+    if (this._host.options.auto.bonfire.addition.turnOnSteamworks.enabled) {
+      const steamworks = this._host.gamePage.bld.getBuildingExt("steamworks");
+      if (steamworks.meta.val && steamworks.meta.on === 0) {
+        const button = mustExist(this.getBuildButton("steamworks"));
+        button.controller.onAll(button.model);
       }
     }
   }

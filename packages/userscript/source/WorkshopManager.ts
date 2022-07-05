@@ -9,15 +9,13 @@ import { VillageTab } from "./types/village";
 import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 
-export class WorkshopManager {
-  private readonly _host: UserScript;
+export class WorkshopManager extends UpgradeManager {
   readonly manager: TabManager<VillageTab>;
-  private readonly _upgradeManager: UpgradeManager;
 
   constructor(host: UserScript) {
-    this._host = host;
+    super(host);
+
     this.manager = new TabManager(this._host, "Workshop");
-    this._upgradeManager = new UpgradeManager(this._host);
   }
 
   autoUnlock() {
@@ -42,7 +40,7 @@ export class WorkshopManager {
       }
 
       // If we can afford all prices, purchase the upgrade.
-      this._upgradeManager.build(upgrade, "workshop");
+      this.upgrade(upgrade, "workshop");
     }
   }
 

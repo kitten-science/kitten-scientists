@@ -8,16 +8,13 @@ import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
 
-export class ScienceManager {
-  private readonly _host: UserScript;
+export class ScienceManager extends UpgradeManager {
   readonly manager: TabManager<ScienceTab>;
-  private readonly _upgradeManager: UpgradeManager;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript) {
-    this._host = host;
+    super(host);
     this.manager = new TabManager(this._host, "Science");
-    this._upgradeManager = new UpgradeManager(this._host);
     this._workshopManager = new WorkshopManager(this._host);
   }
 
@@ -38,7 +35,7 @@ export class ScienceManager {
           continue techLoop;
         }
       }
-      this._upgradeManager.build(upgrade, "science");
+      this.upgrade(upgrade, "science");
     }
   }
 
@@ -73,7 +70,7 @@ export class ScienceManager {
       }
     }
     for (const polciy of toResearch) {
-      this._upgradeManager.build(polciy, "policy");
+      this.upgrade(polciy, "policy");
     }
   }
 }

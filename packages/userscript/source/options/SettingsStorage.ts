@@ -32,6 +32,7 @@ type SetMinResetUnicornItem = `set-reset-unicorn-${UnicornItem}-min`;
 type SetSubtriggerOptionItem = `set-${OptionsItem}-subTrigger`;
 type SetSubtriggerReligionItem = `set-${ReligionAdditionItem}-subTrigger`;
 type SetSubtriggerTimeCtrlItem = `set-${"accelerateTime" | "timeSkip"}-subTrigger`;
+type ToggleBuildEmbassies = "toggle-buildEmbassies";
 type ToggleBuildingItem = `toggle-${AllItems}`;
 type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
 type ToggleFilterItem = `toggle-${FilterItem}`;
@@ -40,7 +41,6 @@ type ToggleLimitedJobItem = `toggle-limited-${Job}`;
 type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
 type ToggleLimitedResourceItem = `toggle-limited-${Resource}`;
 type ToggleOptionsItem = `toggle-${OptionsItem}`;
-type ToggleBuildEmbassies = "toggle-buildEmbassies";
 type TogglePolicyItem = `toggle-${Policy}`;
 type ToggleRaceItem = `toggle-${Race}`;
 type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
@@ -51,11 +51,13 @@ type ToggleResetSpaceItem = `toggle-reset-space-${SpaceItem}`;
 type ToggleResetTimeItem = `toggle-reset-time-${TimeItem}`;
 type ToggleResetUnicornItem = `toggle-reset-unicorn-${UnicornItem}`;
 type ToggleResourceItem = `toggle-${Resource}`;
-type ToggleTimeControlItem = `toggle-${TimeControlItem}`;
 type ToggleTimeControlCycleItem = `toggle-timeSkip-${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
+type ToggleTimeControlItem = `toggle-${TimeControlItem}`;
 type ToggleTimeControlSeasonItem = `toggle-timeSkip-${Season}`;
 type ToggleTimeItem = `toggle-${TimeItem}`;
+type ToggleTurnOnSteamworks = "toggle-_steamworks";
 type ToggleUnlockItem = `toggle-${UnlockItem}`;
+type ToggleUpgradeBuildings = "toggle-buildings";
 
 export type KittenStorageType = {
   version: number;
@@ -71,8 +73,8 @@ export type KittenStorageType = {
     Partial<Record<SetSubtriggerOptionItem, number>> &
     Partial<Record<SetSubtriggerReligionItem, number>> &
     Partial<Record<SetSubtriggerTimeCtrlItem, number>> &
-    Partial<Record<ToggleBuildingItem, boolean>> &
     Partial<Record<ToggleBuildEmbassies, boolean>> &
+    Partial<Record<ToggleBuildingItem, boolean>> &
     Partial<Record<ToggleFaithUnicornItem, boolean>> &
     Partial<Record<ToggleFilterItem, boolean>> &
     Partial<Record<ToggleJobItem, boolean>> &
@@ -94,7 +96,9 @@ export type KittenStorageType = {
     Partial<Record<ToggleTimeControlItem, boolean>> &
     Partial<Record<ToggleTimeControlSeasonItem, boolean>> &
     Partial<Record<ToggleTimeItem, boolean>> &
-    Partial<Record<ToggleUnlockItem, boolean>>;
+    Partial<Record<ToggleTurnOnSteamworks, boolean>> &
+    Partial<Record<ToggleUnlockItem, boolean>> &
+    Partial<Record<ToggleUpgradeBuildings, boolean>>;
   resources: Partial<
     Record<
       Resource,

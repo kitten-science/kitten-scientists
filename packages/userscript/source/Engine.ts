@@ -119,8 +119,9 @@ export class Engine {
       this.holdFestival();
     }
     // Build bonfire buildings.
-    if (this._host.options.auto.build.enabled) {
+    if (this._host.options.auto.bonfire.enabled) {
       this.buildBonfire();
+      this._bonfireManager.autoMisc();
     }
     // Build space buildings.
     if (this._host.options.auto.space.enabled) {
@@ -308,7 +309,7 @@ export class Engine {
     }
 
     // If buildings (upgrades of bonfire items) are enabled...
-    if (upgrades.buildings.enabled) {
+    if (this._host.options.auto.bonfire.addition.upgradeBuildings.enabled) {
       this._bonfireManager.autoUpgrade();
     }
   }
@@ -319,7 +320,8 @@ export class Engine {
    * @param builds The buildings to build.
    */
   buildBonfire(
-    builds: Partial<Record<BonfireItem, BonfireSettingsItem>> = this._host.options.auto.build.items
+    builds: Partial<Record<BonfireItem, BonfireSettingsItem>> = this._host.options.auto.bonfire
+      .items
   ): void {
     this._bonfireManager.autoBuild(builds);
   }
@@ -381,7 +383,6 @@ export class Engine {
    * - Turn on Steamworks (they're always off initially)
    */
   miscOptions(): void {
-    const buildManager = this._bonfireManager;
     const optionVals = this._host.options.auto.options.items;
 
     // Fix used cryochambers
@@ -396,15 +397,6 @@ export class Engine {
       if (0 < fixed) {
         this._host.iactivity("act.fix.cry", [fixed], "ks-fixCry");
         this._host.storeForSummary("fix.cry", fixed);
-      }
-    }
-
-    // Auto turn on steamworks
-    if (optionVals._steamworks.enabled) {
-      const steamworks = this._host.gamePage.bld.getBuildingExt("steamworks");
-      if (steamworks.meta.val && steamworks.meta.on === 0) {
-        const button = mustExist(buildManager.getBuildButton("steamworks"));
-        button.controller.onAll(button.model);
       }
     }
   }

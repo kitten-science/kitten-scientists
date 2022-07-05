@@ -30,9 +30,20 @@ export type BonfireSettingsItem = SettingToggle &
      */
     stage?: number;
   };
+
+export type BonfireAdditionSettings = {
+  turnOnSteamworks: SettingToggle;
+  upgradeBuildings: SettingToggle;
+};
+
 export class BonfireSettings extends SettingsSection implements SettingTrigger {
   trigger = 0;
   $trigger?: JQuery<HTMLElement>;
+
+  addition: BonfireAdditionSettings = {
+    turnOnSteamworks: { enabled: true },
+    upgradeBuildings: { enabled: true },
+  };
 
   items: {
     // unicornPasture is handled in the Religion section.
@@ -92,6 +103,12 @@ export class BonfireSettings extends SettingsSection implements SettingTrigger {
     const options = new BonfireSettings();
     options.enabled = subject.toggles.build;
     options.trigger = subject.triggers.build;
+
+    options.addition.upgradeBuildings.enabled =
+      subject.items["toggle-buildings"] ?? options.addition.upgradeBuildings.enabled;
+    options.addition.turnOnSteamworks.enabled =
+      subject.items["toggle-_steamworks"] ?? options.addition.turnOnSteamworks.enabled;
+
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;

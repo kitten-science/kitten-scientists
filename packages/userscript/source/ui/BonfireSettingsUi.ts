@@ -1,4 +1,4 @@
-import { BonfireSettings } from "../options/BonfireSettings";
+import { BonfireAdditionSettings, BonfireSettings } from "../options/BonfireSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -10,7 +10,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
   private readonly _options: BonfireSettings;
 
-  constructor(host: UserScript, options: BonfireSettings = host.options.auto.build) {
+  constructor(host: UserScript, options: BonfireSettings = host.options.auto.bonfire) {
     super(host);
 
     this._options = options;
@@ -261,21 +261,66 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._getLimitedOption(
         "zebraForge",
         this._options.items.zebraForge,
-        this._host.i18n("$buildings.zebraForge.label")
+        this._host.i18n("$buildings.zebraForge.label"),
+        true
       ),
     ];
     list.append(optionButtons);
 
+    const additionOptions = this.getAdditionOptions(this._options.addition);
+
     element.panel.append(this._options.$trigger);
     element.panel.append(list);
+    list.append(additionOptions);
 
     this.element = element.panel;
+  }
+
+  getAdditionOptions(addition: BonfireAdditionSettings): Array<JQuery<HTMLElement>> {
+    const nodeHeader = this._getHeader("Additional options");
+
+    const nodeUpgradeBuildings = this._getOption(
+      "buildings",
+      addition.upgradeBuildings,
+      this._host.i18n("ui.upgrade.buildings"),
+      false,
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (addition.upgradeBuildings.enabled = true));
+          this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.buildings")]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (addition.upgradeBuildings.enabled = false));
+          this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.buildings")]);
+        },
+      }
+    );
+
+    const nodeTurnOnSteamworks = this._getOption(
+      "_steamworks",
+      addition.turnOnSteamworks,
+      this._host.i18n("option.steamworks"),
+      false,
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (addition.upgradeBuildings.enabled = true));
+          this._host.imessage("status.auto.enable", [this._host.i18n("option.steamworks")]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (addition.upgradeBuildings.enabled = false));
+          this._host.imessage("status.auto.disable", [this._host.i18n("option.steamworks")]);
+        },
+      }
+    );
+
+    return [nodeHeader, nodeUpgradeBuildings, nodeTurnOnSteamworks];
   }
 
   getState(): BonfireSettings {
     return {
       enabled: this._options.enabled,
       trigger: this._options.trigger,
+      addition: this._options.addition,
       items: this._options.items,
     };
   }
@@ -283,6 +328,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   setState(state: BonfireSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;
+    this._options.addition.upgradeBuildings.enabled = state.addition.upgradeBuildings.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -293,6 +339,10 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
     mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
+    mustExist(this._options.addition.upgradeBuildings.$enabled).prop(
+      "checked",
+      this._options.addition.upgradeBuildings.enabled
+    );
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
