@@ -739,11 +739,11 @@ export class Engine {
    * Send kittens on a hunt.
    */
   hunt(): void {
-    this._villageManager.autoHunt();
+    this._villageManager.autoHunt(this._cacheManager);
   }
 
   trade(): void {
-    this._tradeManager.autoTrade();
+    this._tradeManager.autoTrade(this._cacheManager);
     this._tradeManager.autoBuildEmbassies();
   }
 
