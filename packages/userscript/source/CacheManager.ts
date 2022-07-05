@@ -24,8 +24,9 @@ export class CacheManager {
   /**
    * Store a set of materials in the cache.
    * This is usually done *after* hunting and trading.
-   * TODO: This is indicative of the desire to know the resource state at the beginning of 
+   * TODO: This is indicative of the desire to know the resource state at the beginning of
    *       a frame. This is likely required to make different automations play nice together.
+   *
    * @param data The materials to store in the cache.
    */
   pushToCache(data: { materials: Partial<Record<Resource, number>>; timeStamp: number }): void {
@@ -66,6 +67,7 @@ export class CacheManager {
 
   /**
    * Retrieve the resource amount that is stored in the cache.
+   *
    * @param resource The resource to check.
    * @returns The cached resource amount, divided by how long it has been cached.
    */

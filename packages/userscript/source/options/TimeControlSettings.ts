@@ -1,6 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { Resource, TimeItemVariant, UnicornItemVariant } from "../types";
-import { BuildItem } from "./BonfireSettings";
+import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
@@ -27,7 +27,7 @@ export type TimeControlResourcesSettingsItem = {
 export class TimeControlSettings extends SettingsSection {
   buildItems: {
     // unicornPasture is handled in the Religion section.
-    [item in Exclude<BuildItem, "unicornPasture">]: TimeControlBuildSettingsItem;
+    [item in Exclude<BonfireItem, "unicornPasture">]: TimeControlBuildSettingsItem;
   } = {
     hut: { checkForReset: true, triggerForReset: -1 },
     logHouse: { checkForReset: true, triggerForReset: -1 },

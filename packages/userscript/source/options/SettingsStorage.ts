@@ -1,5 +1,5 @@
 import { Job, Policy, Race, Resource, Season } from "../types";
-import { BuildItem } from "./BonfireSettings";
+import { BonfireItem } from "./BonfireSettings";
 import { FilterItem } from "./FilterSettings";
 import { AllItems } from "./Options";
 import { OptionsItem } from "./OptionsSettings";
@@ -24,7 +24,7 @@ type LegacySettingsSections =
 type SetMaxBuildingItem = `set-${AllItems}-max`;
 type SetMaxJobItem = `set-${Job}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
-type SetMinResetBuildingItem = `set-reset-build-${Exclude<BuildItem, "unicornPasture">}-min`;
+type SetMinResetBuildingItem = `set-reset-build-${Exclude<BonfireItem, "unicornPasture">}-min`;
 type SetMinResetFaithItem = `set-reset-faith-${FaithItem | UnicornItem}-min`;
 type SetMinResetSpaceItem = `set-reset-space-${SpaceItem}-min`;
 type SetMinResetTimeItem = `set-reset-time-${TimeItem}-min`;
@@ -45,7 +45,7 @@ type TogglePolicyItem = `toggle-${Policy}`;
 type ToggleRaceItem = `toggle-${Race}`;
 type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
 type ToggleReligionAdditionItem = `toggle-${ReligionAdditionItem}`;
-type ToggleResetBuildingItem = `toggle-reset-build-${Exclude<BuildItem, "unicornPasture">}`;
+type ToggleResetBuildingItem = `toggle-reset-build-${Exclude<BonfireItem, "unicornPasture">}`;
 type ToggleResetFaithItem = `toggle-reset-faith-${FaithItem | UnicornItem}`;
 type ToggleResetSpaceItem = `toggle-reset-space-${SpaceItem}`;
 type ToggleResetTimeItem = `toggle-reset-time-${TimeItem}`;

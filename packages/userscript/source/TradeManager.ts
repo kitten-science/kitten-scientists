@@ -1,3 +1,4 @@
+import { CacheManager } from "./CacheManager";
 import { CraftManager } from "./CraftManager";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
@@ -17,8 +18,336 @@ export class TradeManager {
     this._craftManager = new CraftManager(this._host);
   }
 
+  autoTrade(cacheManager?: CacheManager) {
+    this.manager.render();
+
+    // If we can't make any trades, bail out.
+    if (!this.singleTradePossible()) {
+      return;
+    }
+
+    // The races we might want to trade with during this frame.
+    const trades: Array<Race> = [];
+
+    const gold = this._craftManager.getResource("gold");
+    const requireTrigger = this._host.options.auto.trade.trigger;
+    const season = this._host.gamePage.calendar.getCurSeason().name;
+
+    // Determine how many races we will trade with this cycle.
+    for (const [name, trade] of objectEntries(this._host.options.auto.trade.items)) {
+      const race = this.getRace(name);
+
+      // Check if the race is enabled, in season, unlocked, and we can actually afford it.
+      if (!trade.enabled || !trade[season] || !race.unlocked || !this.singleTradePossible(name)) {
+        continue;
+      }
+
+      // Additionally, we now check if the trade button is enabled, which kinda makes all previous
+      // checks moot, but whatever :D
+      const button = this.getTradeButton(race.name);
+      if (!button.model.enabled) {
+        continue;
+      }
+
+      // Determine which resource the race requires for trading, if any.
+      const require = !trade.require ? false : this._craftManager.getResource(trade.require);
+
+      // Check if this trade would be profitable.
+      const profitable = this.getProfitability(name);
+      // If the trade is set to be limited and profitable, make this trade.
+      if (trade.limited && profitable) {
+        trades.push(name);
+      } else if (
+        // If this trade is not limited, it must either not require anything, or
+        // the required resource must be over the trigger value.
+        // Additionally, gold must also be over the trigger value.
+        (!require || requireTrigger <= require.value / require.maxValue) &&
+        requireTrigger <= gold.value / gold.maxValue
+      ) {
+        trades.push(name);
+      }
+    }
+
+    // If no possible trades were found, bail out.
+    if (trades.length === 0) {
+      return;
+    }
+
+    // Figure out how much we can currently trade
+    let maxTrades = this.getLowestTradeAmount(null, true, false);
+
+    // If no trades are possible, bail out.
+    if (maxTrades < 1) {
+      return;
+    }
+
+    // Distribute max trades without starving any race.
+
+    // This array should hold the amount of trades possible with each race.
+    // The indices between this array and `trades` align.
+    const maxByRace: Array<number> = [];
+    // For all races we consider trading with, perform a more thorough check
+    // if we actually can trade with them and how many times we could trade
+    // with them.
+    for (let tradeIndex = 0; tradeIndex < trades.length; tradeIndex++) {
+      const race = trades[tradeIndex];
+      const tradeSettings = this._host.options.auto.trade.items[race];
+      // Does this trade require a certain resource?
+      const require = !tradeSettings.require
+        ? false
+        : this._craftManager.getResource(tradeSettings.require);
+      // Have the trigger conditions for this trade been met?
+      const trigConditions =
+        (!require || requireTrigger <= require.value / require.maxValue) &&
+        requireTrigger <= gold.value / gold.maxValue;
+      // How many trades could we do?
+      const tradePos = this.getLowestTradeAmount(race, tradeSettings.limited, trigConditions);
+      // If no trades are possible, remove the race.
+      if (tradePos < 1) {
+        trades.splice(tradeIndex, 1);
+        tradeIndex--;
+        continue;
+      }
+
+      maxByRace.push(tradePos);
+    }
+
+    // If no trades are left over after this check, bail out.
+    if (trades.length === 0) {
+      return;
+    }
+
+    // Now let's do some trades.
+
+    // This keeps track of how many trades we've done with each race.
+    const tradesDone: Partial<Record<Race, number>> = {};
+    // While we have races left to trade with, and enough resources to trade (this
+    // is indicated by `maxTrades`)...
+    while (0 < trades.length && 1 <= maxTrades) {
+      // If we can make fewer trades than we have resources available for...
+      if (maxTrades < trades.length) {
+        // ...find a random race to trade with
+        const randomRaceIndex = Math.floor(Math.random() * trades.length);
+        // Init the counter if necessary.
+        if (!tradesDone[trades[randomRaceIndex]]) {
+          tradesDone[trades[randomRaceIndex]] = 0;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        tradesDone[trades[randomRaceIndex]]! += 1;
+        maxTrades -= 1;
+
+        // As we are constrained on resources, don't trade with this race again.
+        // We want to distribute the few resources we have between races.
+        trades.splice(randomRaceIndex, 1);
+        maxByRace.splice(randomRaceIndex, 1);
+        continue;
+      }
+
+      // We now want to determine which race we can trade with the least amount
+      // of times.
+      // This likely to determine the "best" trades to perform.
+      // The result is that we trade first with the races that we can make the
+      // least amount of trades with, then continue to make trades with the
+      // races we can make more trades with (although that amount could be reduced
+      // by the time we get to them).
+      let minTrades = Math.floor(maxTrades / trades.length);
+      let minTradeIndex = 0;
+      for (let tradeIndex = 0; tradeIndex < trades.length; ++tradeIndex) {
+        if (maxByRace[tradeIndex] < minTrades) {
+          minTrades = maxByRace[tradeIndex];
+          minTradeIndex = tradeIndex;
+        }
+      }
+
+      // Store this trade in the trades we've "done".
+      if (!tradesDone[trades[minTradeIndex]]) {
+        tradesDone[trades[minTradeIndex]] = 0;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      tradesDone[trades[minTradeIndex]]! += minTrades;
+      maxTrades -= minTrades;
+      trades.splice(minTradeIndex, 1);
+      maxByRace.splice(minTradeIndex, 1);
+    }
+
+    // If we found no trades to do, bail out.
+    if (Object.values(tradesDone).length === 0) {
+      return;
+    }
+
+    // Calculate how much we will spend and earn from trades.
+    // This is straight forward.
+    const tradeNet: Partial<Record<Resource, number>> = {};
+    for (const [name, amount] of objectEntries(tradesDone)) {
+      const race = this.getRace(name);
+
+      const materials = this.getMaterials(name);
+      for (const [mat, matAmount] of objectEntries(materials)) {
+        if (!tradeNet[mat]) {
+          tradeNet[mat] = 0;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        tradeNet[mat]! -= matAmount * amount;
+      }
+
+      const meanOutput = this.getAverageTrade(race);
+      for (const [out, outValue] of objectEntries(meanOutput)) {
+        const res = this._craftManager.getResource(out);
+        if (!tradeNet[out]) {
+          tradeNet[out] = 0;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        tradeNet[out]! +=
+          res.maxValue > 0
+            ? Math.min(
+                mustExist(meanOutput[out]) * mustExist(tradesDone[name]),
+                Math.max(res.maxValue - res.value, 0)
+              )
+            : outValue * mustExist(tradesDone[name]);
+      }
+    }
+
+    // Update the cache with the changes produced from the trades.
+    if (!isNil(cacheManager)) {
+      cacheManager.pushToCache({
+        materials: tradeNet,
+        timeStamp: this._host.gamePage.timer.ticksTotal,
+      });
+    }
+
+    // Now actually perform the calculated trades.
+    for (const [name, count] of objectEntries(tradesDone)) {
+      // TODO: This check should be redundant. If no trades were possible,
+      //       the entry shouldn't even exist.
+      if (0 < count) {
+        this.trade(name, count);
+      }
+    }
+  }
+
+  autoBuildEmbassies() {
+    // Tries to calculate how many embassies for which races it can buy,
+    // then it buys them. Code should be straight-forward.
+    AutoEmbassy: if (
+      this._host.options.auto.trade.addition.buildEmbassies.enabled &&
+      !!this._host.gamePage.diplomacy.races[0].embassyPrices
+    ) {
+      const culture = this._craftManager.getResource("culture");
+      let cultureVal = 0;
+      const subTrigger = this._host.options.auto.trade.addition.buildEmbassies.subTrigger ?? 0;
+      if (subTrigger <= culture.value / culture.maxValue) {
+        const racePanels = this._host.gamePage.diplomacyTab.racePanels;
+        cultureVal = this._craftManager.getValueAvailable("culture", true);
+
+        const embassyBulk: Partial<
+          Record<
+            Race,
+            {
+              val: number;
+              basePrice: number;
+              currentEm: number;
+              priceSum: number;
+              race: RaceInfo;
+            }
+          >
+        > = {};
+        const bulkTracker: Array<Race> = [];
+
+        for (let panelIndex = 0; panelIndex < racePanels.length; panelIndex++) {
+          if (!racePanels[panelIndex].embassyButton) {
+            continue;
+          }
+          const name = racePanels[panelIndex].race.name;
+          const race = this._host.gamePage.diplomacy.get(name);
+          embassyBulk[name] = {
+            val: 0,
+            basePrice: race.embassyPrices[0].val,
+            currentEm: race.embassyLevel,
+            priceSum: 0,
+            race: race,
+          };
+          bulkTracker.push(name);
+        }
+
+        if (bulkTracker.length === 0) {
+          break AutoEmbassy;
+        }
+
+        let refreshRequired = false;
+
+        while (bulkTracker.length > 0) {
+          for (let raceIndex = 0; raceIndex < bulkTracker.length; raceIndex++) {
+            const name = bulkTracker[raceIndex];
+            const emBulk = mustExist(embassyBulk[name]);
+            const nextPrice = emBulk.basePrice * Math.pow(1.15, emBulk.currentEm + emBulk.val);
+            if (nextPrice <= cultureVal) {
+              cultureVal -= nextPrice;
+              emBulk.priceSum += nextPrice;
+              emBulk.val += 1;
+              refreshRequired = true;
+            } else {
+              bulkTracker.splice(raceIndex, 1);
+              --raceIndex;
+            }
+          }
+        }
+
+        for (const [, emBulk] of objectEntries(embassyBulk)) {
+          if (emBulk.val === 0) {
+            continue;
+          }
+          cultureVal = this._craftManager.getValueAvailable("culture", true);
+          if (cultureVal < emBulk.priceSum) {
+            this._host.warning("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
+          }
+          this._host.gamePage.resPool.resources[13].value -= emBulk.priceSum;
+          emBulk.race.embassyLevel += emBulk.val;
+          this._host.storeForSummary("embassy", emBulk.val);
+          if (emBulk.val !== 1) {
+            this._host.iactivity("build.embassies", [emBulk.val, emBulk.race.title], "ks-trade");
+          } else {
+            this._host.iactivity("build.embassy", [emBulk.val, emBulk.race.title], "ks-trade");
+          }
+        }
+
+        if (refreshRequired) {
+          this._host.gamePage.ui.render();
+        }
+      }
+    }
+  }
+
+  autoFeedElders() {
+    const leviathanInfo = this._host.gamePage.diplomacy.get("leviathans");
+    const necrocorns = this._host.gamePage.resPool.get("necrocorn");
+
+    if (!leviathanInfo.unlocked || necrocorns.value === 0) {
+      return;
+    }
+
+    if (1 <= necrocorns.value) {
+      // If feeding the elders would increase their energy level towards the
+      // cap, do it.
+      if (leviathanInfo.energy < this._host.gamePage.diplomacy.getMarkerCap()) {
+        this._host.gamePage.diplomacy.feedElders();
+        this._host.iactivity("act.feed");
+        this._host.storeForSummary("feed", 1);
+      }
+    } else {
+      // We can reach this branch if we have partial necrocorns from resets.
+      // The partial necrocorns will then be fead to the elders to bring us back
+      // to even zero.
+      if (0.25 * (1 + this._host.gamePage.getEffect("corruptionBoostRatio")) < 1) {
+        this._host.storeForSummary("feed", necrocorns.value);
+        this._host.gamePage.diplomacy.feedElders();
+        this._host.iactivity("dispose.necrocorn");
+      }
+    }
+  }
+
   /**
    * Trade with the given race.
+   *
    * @param name The race to trade with.
    * @param amount How often to trade with the race.
    */
@@ -45,6 +374,7 @@ export class TradeManager {
 
   /**
    * Determine if a trade with the given race would be considered profitable.
+   *
    * @param name The race to trade with.
    * @returns `true` if the trade is profitable; `false` otherwise.
    */
@@ -113,6 +443,7 @@ export class TradeManager {
 
   /**
    * Determine which resources and how much of them a trade with the given race results in.
+   *
    * @param race The race to check.
    * @returns The resources returned from an average trade and their amount.
    */
@@ -171,6 +502,7 @@ export class TradeManager {
 
   /**
    * Determine if this trade is valid.
+   *
    * @param item The tradeable item.
    * @param race The race to trade with.
    * @returns `true` if the trade is valid; `false` otherwise.
@@ -189,6 +521,7 @@ export class TradeManager {
 
   /**
    * Determine how many trades are at least possible.
+   *
    * @param name The race to trade with.
    * @param limited Is the race set to be limited.
    * @param trigConditions Ignored
@@ -283,6 +616,7 @@ export class TradeManager {
 
   /**
    * Determine the resources required to trade with the given race.
+   *
    * @param race The race to check. If not specified the resources for any
    * trade will be returned.
    * @returns The resources need to trade with the race.
@@ -308,6 +642,7 @@ export class TradeManager {
 
   /**
    * Retrieve information about the given race from the game.
+   *
    * @param name The race to get the information object for.
    * @returns The information object for the given race.
    */
@@ -321,6 +656,7 @@ export class TradeManager {
 
   /**
    * Retrieve a reference to the trade button for the given race from the game.
+   *
    * @param race The race to get the button reference for.
    * @returns The reference to the trade button.
    */
@@ -334,6 +670,7 @@ export class TradeManager {
 
   /**
    * Determine if at least a single trade can be made.
+   *
    * @param name The race to trade with. If not specified, all races are checked.
    * @returns If the requested trade is possible.
    */

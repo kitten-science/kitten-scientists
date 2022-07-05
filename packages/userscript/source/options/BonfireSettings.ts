@@ -9,7 +9,7 @@ import { KittenStorageType } from "./SettingsStorage";
  * These are not identical to `Building`!
  * `Building` is IDs of buildings as defined by KG. KS defines upgrade stages as well.
  */
-export type BuildItem = Building | "broadcastTower" | "dataCenter" | "hydroPlant" | "solarFarm";
+export type BonfireItem = Building | "broadcastTower" | "dataCenter" | "hydroPlant" | "solarFarm";
 
 export type BonfireSettingsItem = SettingToggle &
   SettingLimit & {
@@ -36,7 +36,7 @@ export class BonfireSettings extends SettingsSection implements SettingTrigger {
 
   items: {
     // unicornPasture is handled in the Religion section.
-    [item in Exclude<BuildItem, "unicornPasture">]: BonfireSettingsItem;
+    [item in Exclude<BonfireItem, "unicornPasture">]: BonfireSettingsItem;
   } = {
     hut: { enabled: false, max: -1, require: "wood" },
     logHouse: { enabled: false, max: -1, require: "minerals" },

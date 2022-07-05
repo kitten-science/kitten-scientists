@@ -1,21 +1,60 @@
 import { BulkManager } from "./BulkManager";
-import { CraftManager } from "./CraftManager";
-import { SpaceItem } from "./options/SpaceSettings";
+import { SpaceItem, SpaceSettingsItem } from "./options/SpaceSettings";
 import { TabManager } from "./TabManager";
-import { BuildButton, SpaceBuildingInfo, SpaceTab } from "./types";
+import { objectEntries } from "./tools/Entries";
+import { BuildButton, SpaceBuildingInfo, SpaceBuildings, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
 
 export class SpaceManager {
   private readonly _host: UserScript;
   readonly manager: TabManager<SpaceTab>;
-  private readonly _crafts: CraftManager;
   private readonly _bulkManager: BulkManager;
 
   constructor(host: UserScript) {
     this._host = host;
     this.manager = new TabManager(this._host, "Space");
-    this._crafts = new CraftManager(this._host);
     this._bulkManager = new BulkManager(this._host);
+  }
+
+  /**
+   * Try to build as many of the passed buildings as possible.
+   * Usually, this is called at each iteration of the automation engine to
+   * handle the building of items on the Space tab.
+   *
+   * @param builds The buildings to build.
+   */
+  autoBuild(
+    builds: Partial<Record<SpaceItem, SpaceSettingsItem>> = this._host.options.auto.space.items
+  ) {
+    // TODO: Refactor. See BonfireManager.autoBuild
+    const bulkManager = this._bulkManager;
+    const trigger = this._host.options.auto.space.trigger;
+
+    // Render the tab to make sure that the buttons actually exist in the DOM.
+    // TODO: Is this really required?
+    this.manager.render();
+
+    // Get the current metadata for all the referenced buildings.
+    const metaData: Partial<Record<SpaceItem, SpaceBuildingInfo>> = {};
+    for (const [name] of objectEntries(builds)) {
+      metaData[name] = this.getBuild(name);
+    }
+
+    // Let the bulkmanager determine the builds we can make.
+    const buildList = bulkManager.bulk(builds, metaData, trigger, "space");
+
+    let refreshRequired = false;
+    // Build all entries in the build list, where we can build any items.
+    for (const build of buildList) {
+      if (build.count > 0) {
+        this.build(build.id as SpaceBuildings, build.count);
+        refreshRequired = true;
+      }
+    }
+
+    if (refreshRequired) {
+      this._host.gamePage.ui.render();
+    }
   }
 
   build(name: SpaceItem, amount: number): void {

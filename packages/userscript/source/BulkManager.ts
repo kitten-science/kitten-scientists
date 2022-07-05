@@ -39,6 +39,7 @@ export class BulkManager {
 
   /**
    * Take a hash of potential builds and determine how many of them can be built.
+   *
    * @param builds All potential builds.
    * @param metaData The metadata for the potential builds.
    * @param trigger The configured trigger threshold for these builds.
@@ -235,6 +236,7 @@ export class BulkManager {
 
   /**
    * Calculate how many of a given build item build be built with the given resources.
+   *
    * @param buildCacheItem The item to build.
    * @param metaData The metadata for the potential builds.
    * @param resources The currently available resources.
@@ -415,6 +417,7 @@ export class BulkManager {
 
   /**
    * Try to trigger the build for a given button.
+   *
    * @param model The model associated with the button.
    * @param button The build button.
    * @param amount How many items to build.
@@ -469,6 +472,7 @@ export class BulkManager {
 
   /**
    * Determing the price modifier for the given building.
+   *
    * @param data The building metadata.
    * @param source The tab the building belongs to.
    * @returns The price modifier for this building.
@@ -507,6 +511,7 @@ export class BulkManager {
 
   /**
    * Check if a given build could be performed.
+   *
    * @param build The build that should be checked.
    * @param prices The current prices for the build.
    * @param priceRatio The global price ratio modifier.

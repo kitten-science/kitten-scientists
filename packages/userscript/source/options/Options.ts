@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { isNil } from "../tools/Maybe";
 import { Resource } from "../types";
-import { BonfireSettings, BuildItem } from "./BonfireSettings";
+import { BonfireItem, BonfireSettings } from "./BonfireSettings";
 import { CraftSettings } from "./CraftSettings";
 import { DistributeSettings } from "./DistributeSettings";
 import { FilterSettings } from "./FilterSettings";
@@ -20,7 +20,7 @@ export type Requirement = Resource | false;
 /**
  * The type names of all supported buildings.
  */
-export type AllItems = BuildItem | FaithItem | ReligionItem | SpaceItem | TimeItem;
+export type AllItems = BonfireItem | FaithItem | ReligionItem | SpaceItem | TimeItem;
 
 export class Options {
   /**

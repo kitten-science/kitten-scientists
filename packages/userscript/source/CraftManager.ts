@@ -1,4 +1,5 @@
 import { CacheManager } from "./CacheManager";
+import { CraftSettingsItem } from "./options/CraftSettings";
 import { objectEntries } from "./tools/Entries";
 import { isNil, mustExist } from "./tools/Maybe";
 import { Resource, ResourceCraftable } from "./types";
@@ -15,7 +16,56 @@ export class CraftManager {
   }
 
   /**
+   * Try to craft as many of the passed resources as possible.
+   * Usually, this is called at each iteration of the automation engine to
+   * handle the crafting of items on the Workshop tab.
+   *
+   * @param crafts The resources to build.
+   */
+  autoCraft(
+    crafts: Partial<Record<ResourceCraftable, CraftSettingsItem>> = this._host.options.auto.craft
+      .items
+  ) {
+    // TODO: One of the core limitations here is that only a single resource
+    //       is taken into account, the one set as `require` in the definition.
+    const trigger = this._host.options.auto.craft.trigger;
+
+    for (const [name, craft] of objectEntries(crafts)) {
+      // This will always be `false` while `max` is hardcoded to `0`.
+      // Otherwise, it would contain the current resource information.
+      const current = !craft.max ? false : this.getResource(name);
+      // The resource information for the requirement of this craft, if any.
+      const require = !craft.require ? false : this.getResource(craft.require);
+      let amount = 0;
+      // Ensure that we have reached our cap
+      // This will never happen as `current` is always `false`.
+      if (current && current.value > craft.max) continue;
+
+      // If we can't even craft a single item of the resource, skip it.
+      if (!this.singleCraftPossible(name)) {
+        continue;
+      }
+
+      // Craft the resource if it doesn't require anything or we hit the requirement trigger.
+      if (!require || trigger <= require.value / require.maxValue) {
+        amount = this.getLowestCraftAmount(name, craft.limited, craft.limRat, true);
+
+        // If a resource DOES "require" another resource AND its trigger value has NOT been hit
+        // yet AND it is limited... What?
+      } else if (craft.limited) {
+        amount = this.getLowestCraftAmount(name, craft.limited, craft.limRat, false);
+      }
+
+      // If we can craft any of this item, do it.
+      if (amount > 0) {
+        this.craft(name, amount);
+      }
+    }
+  }
+
+  /**
    * Craft a certain amount of items.
+   *
    * @param name The resource to craft.
    * @param amount How many items of the resource to craft.
    */
@@ -70,6 +120,7 @@ export class CraftManager {
 
   /**
    * Retrieve the resource information object from the game.
+   *
    * @param name The name of the craftable resource.
    * @returns The information object for the resource.
    */
@@ -83,6 +134,7 @@ export class CraftManager {
 
   /**
    * Check if we have enough resources to craft a single craftable resource.
+   *
    * @param name The name of the resource.
    * @returns `true` if the build is possible; `false` otherwise.
    */
@@ -98,6 +150,7 @@ export class CraftManager {
 
   /**
    * Determine the limit of how many items to craft of a given resource.
+   *
    * @param name The resource to craft.
    * @param limited Is the crafting of the resource currently limited?
    * @param limRat ?
@@ -233,6 +286,7 @@ export class CraftManager {
   /**
    * Returns a hash of the required source resources and their
    * amount to craft the given resource.
+   *
    * @param name The resource to craft.
    * @returns The source resources you need and how many.
    */
@@ -252,6 +306,7 @@ export class CraftManager {
   /**
    * Determine how much of a resource is produced per tick. For craftable resources,
    * this also includes how many of them we *could* craft this tick.
+   *
    * @param resource The resource to retrieve the production for.
    * @param preTrade ?
    * @returns The amount of resources produced per tick, adjusted arbitrarily.
@@ -297,6 +352,7 @@ export class CraftManager {
 
   /**
    * Determine the resources and their amount that would usually result from a hunt.
+   *
    * @returns The amounts of resources usually gained from hunting.
    */
   getAverageHunt(): Partial<Record<Resource, number>> {
@@ -326,6 +382,7 @@ export class CraftManager {
 
   /**
    * Retrieve the information object for a resource.
+   *
    * @param name The resource to retrieve info for.
    * @returns The information object for the resource.
    */
@@ -342,6 +399,7 @@ export class CraftManager {
 
   /**
    * Determine how many items of a resource are currently available.
+   *
    * @param name The resource.
    * @returns How many items are currently available.
    */
@@ -351,6 +409,7 @@ export class CraftManager {
 
   /**
    * Determine how many items of the resource to always keep in stock.
+   *
    * @param name The resource.
    * @returns How many items of the resource to always keep in stock.
    */
@@ -364,6 +423,7 @@ export class CraftManager {
   /**
    * Determine how much of a resource is available for a certain operation
    * to use.
+   *
    * @param name The resource to check.
    * @param all ?
    * @param typeTrigger The trigger value associated with this check.
@@ -429,6 +489,7 @@ export class CraftManager {
 
   /**
    * Determine how much catnip we have available to "work with" per tick.
+   *
    * @param worstWeather Should the worst weather be assumed for this calculation?
    * @param pastures How many pastures to take into account.
    * @param aqueducts How many aqueducts to take into account
