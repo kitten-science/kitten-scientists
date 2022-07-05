@@ -140,11 +140,15 @@ export class UserScript {
 
   private _checkOptions(): void {
     if (this._optionsDirty) {
-      this._optionsDirty = false;
-      const toExport = this.options.asLegacyOptions();
-      SettingsStorage.setLegacySettings(toExport);
-      clog("Kitten Scientists settings saved.");
+      this.saveSettings();
     }
+  }
+
+  saveSettings() {
+    this._optionsDirty = false;
+    const toExport = this.options.asLegacyOptions();
+    SettingsStorage.setLegacySettings(toExport);
+    clog("Kitten Scientists settings saved.");
   }
 
   /**
