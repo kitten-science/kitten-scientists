@@ -119,22 +119,6 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
         }
       ),
       this._getOption(
-        "races",
-        this._options.items.races,
-        this._host.i18n("ui.upgrade.races"),
-        false,
-        {
-          onCheck: () => {
-            this._host.updateOptions(() => (this._options.items.races.enabled = true));
-            this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.races")]);
-          },
-          onUnCheck: () => {
-            this._host.updateOptions(() => (this._options.items.races.enabled = false));
-            this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.races")]);
-          },
-        }
-      ),
-      this._getOption(
         "missions",
         this._options.items.missions,
         this._host.i18n("ui.upgrade.missions"),

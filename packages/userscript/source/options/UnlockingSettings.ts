@@ -3,7 +3,7 @@ import { PolicySettings } from "./PolicySettings";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type UnlockItem = "missions" | "policies" | "races" | "techs" | "upgrades";
+export type UnlockItem = "missions" | "policies" | "techs" | "upgrades";
 export type UnlockingSettingsItem = SettingToggle | PolicySettings;
 
 export class UnlockingSettings extends SettingsSection {
@@ -13,7 +13,6 @@ export class UnlockingSettings extends SettingsSection {
     upgrades: { enabled: true },
     techs: { enabled: true },
     policies: new PolicySettings(),
-    races: { enabled: true },
     missions: { enabled: true },
   };
 

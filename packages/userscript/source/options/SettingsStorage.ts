@@ -57,6 +57,7 @@ type ToggleTimeControlSeasonItem = `toggle-timeSkip-${Season}`;
 type ToggleTimeItem = `toggle-${TimeItem}`;
 type ToggleTurnOnSteamworks = "toggle-_steamworks";
 type ToggleUnlockItem = `toggle-${UnlockItem}`;
+type ToggleUnlockRaces = "toggle-races";
 type ToggleUpgradeBuildings = "toggle-buildings";
 
 export type KittenStorageType = {
@@ -98,6 +99,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleTimeItem, boolean>> &
     Partial<Record<ToggleTurnOnSteamworks, boolean>> &
     Partial<Record<ToggleUnlockItem, boolean>> &
+    Partial<Record<ToggleUnlockRaces, boolean>> &
     Partial<Record<ToggleUpgradeBuildings, boolean>>;
   resources: Partial<
     Record<

@@ -228,10 +228,7 @@ export class TradeManager {
   autoBuildEmbassies() {
     // Tries to calculate how many embassies for which races it can buy,
     // then it buys them. Code should be straight-forward.
-    AutoEmbassy: if (
-      this._host.options.auto.trade.addition.buildEmbassies.enabled &&
-      !!this._host.gamePage.diplomacy.races[0].embassyPrices
-    ) {
+    AutoEmbassy: if (this._host.gamePage.diplomacy.races[0].embassyPrices) {
       const culture = this._workshopManager.getResource("culture");
       let cultureVal = 0;
       const subTrigger = this._host.options.auto.trade.addition.buildEmbassies.subTrigger ?? 0;
@@ -346,6 +343,10 @@ export class TradeManager {
   }
 
   autoUnlock() {
+    if (!this._host.gamePage.tabs[4].visible) {
+      return;
+    }
+
     // Check how many races we could reasonably unlock at this point.
     const maxRaces = this._host.gamePage.diplomacy.get("leviathans").unlocked ? 8 : 7;
     // If we haven't unlocked that many races yet...

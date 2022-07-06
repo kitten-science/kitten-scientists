@@ -26,13 +26,17 @@ export type TradingSettingsItem = SettingToggle & {
 
 export type TradeAdditionSettings = {
   buildEmbassies: OptionsSettingsItem;
+  unlockRaces: OptionsSettingsItem;
 };
 
 export class TradingSettings extends SettingsSection implements SettingTrigger {
   trigger = 0.98;
   $trigger?: JQuery<HTMLElement>;
 
-  addition: TradeAdditionSettings = { buildEmbassies: { enabled: true, subTrigger: 0.9 } };
+  addition: TradeAdditionSettings = {
+    buildEmbassies: { enabled: true },
+    unlockRaces: { enabled: true },
+  };
 
   items: {
     [item in Race]: TradingSettingsItem;
@@ -125,6 +129,7 @@ export class TradingSettings extends SettingsSection implements SettingTrigger {
     }
 
     subject.items["toggle-buildEmbassies"] = settings.addition.buildEmbassies.enabled;
+    subject.items["toggle-races"] = settings.addition.unlockRaces.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -143,6 +148,8 @@ export class TradingSettings extends SettingsSection implements SettingTrigger {
 
     options.addition.buildEmbassies.enabled =
       subject.items["toggle-buildEmbassies" as const] ?? options.addition.buildEmbassies.enabled;
+    options.addition.unlockRaces.enabled =
+      subject.items["toggle-races" as const] ?? options.addition.unlockRaces.enabled;
     return options;
   }
 }

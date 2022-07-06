@@ -303,11 +303,6 @@ export class Engine {
       this._spaceManager.autoUnlock();
     }
 
-    // If races (trading) are enabled...
-    if (upgrades.races.enabled && this._host.gamePage.tabs[4].visible) {
-      this._tradeManager.autoUnlock();
-    }
-
     // If buildings (upgrades of bonfire items) are enabled...
     if (this._host.options.auto.bonfire.addition.upgradeBuildings.enabled) {
       this._bonfireManager.autoUpgrade();
@@ -374,7 +369,13 @@ export class Engine {
 
   trade(): void {
     this._tradeManager.autoTrade(this._cacheManager);
-    this._tradeManager.autoBuildEmbassies();
+
+    if (this._host.options.auto.trade.addition.unlockRaces.enabled) {
+      this._tradeManager.autoUnlock();
+    }
+    if (this._host.options.auto.trade.addition.buildEmbassies.enabled) {
+      this._tradeManager.autoBuildEmbassies();
+    }
   }
 
   /**

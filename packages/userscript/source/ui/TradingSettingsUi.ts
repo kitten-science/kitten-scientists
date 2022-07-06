@@ -207,7 +207,24 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       }
     );
 
-    return [nodeHeader, nodeEmbassies];
+    const nodeRaces = this._getOption(
+      "races",
+      addition.unlockRaces,
+      this._host.i18n("ui.upgrade.races"),
+      false,
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (this._options.addition.unlockRaces.enabled = true));
+          this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.races")]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (this._options.addition.unlockRaces.enabled = false));
+          this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.races")]);
+        },
+      }
+    );
+
+    return [nodeHeader, nodeRaces, nodeEmbassies];
   }
 
   getState(): TradingSettings {
@@ -223,6 +240,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;
     this._options.addition.buildEmbassies.enabled = state.addition.buildEmbassies.enabled;
+    this._options.addition.unlockRaces.enabled = state.addition.unlockRaces.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -241,6 +259,10 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     mustExist(this._options.addition.buildEmbassies.$enabled).prop(
       "checked",
       this._options.addition.buildEmbassies.enabled
+    );
+    mustExist(this._options.addition.unlockRaces.$enabled).prop(
+      "checked",
+      this._options.addition.unlockRaces.enabled
     );
 
     for (const [name, option] of objectEntries(this._options.items)) {
