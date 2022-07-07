@@ -110,7 +110,7 @@ export class UserInterface {
     result.auto.religion = this._religionUi.getState();
     result.auto.time = this._timeUi.getState();
     result.auto.timeCtrl = this._timeCtrlUi.getState();
-    result.auto.distribute = this._distributeUi.getState();
+    result.auto.village = this._distributeUi.getState();
     result.auto.options = this._optionsUi.getState();
     result.auto.filters = this._filterUi.getState();
     return result;
@@ -126,7 +126,7 @@ export class UserInterface {
     this._religionUi.setState(state.auto.religion);
     this._timeUi.setState(state.auto.time);
     this._timeCtrlUi.setState(state.auto.timeCtrl);
-    this._distributeUi.setState(state.auto.distribute);
+    this._distributeUi.setState(state.auto.village);
     this._optionsUi.setState(state.auto.options);
     this._filterUi.setState(state.auto.filters);
   }

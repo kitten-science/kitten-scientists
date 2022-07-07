@@ -114,10 +114,7 @@ export class Engine {
     if (this._host.options.auto.unlock.enabled) {
       this.unlock();
     }
-    // Hold festival.
-    if (subOptions.enabled && subOptions.items.festival.enabled) {
-      this.holdFestival();
-    }
+
     // Build bonfire buildings.
     if (this._host.options.auto.bonfire.enabled) {
       this.buildBonfire();
@@ -164,8 +161,13 @@ export class Engine {
       this.promote();
     }
     // Distribute kittens to jobs.
-    if (this._host.options.auto.distribute.enabled) {
+    if (this._host.options.auto.village.enabled) {
       this.distributeKittens();
+
+      // Hold festival.
+      if (this._host.options.auto.village.addition.holdFestivals.enabled) {
+        this.holdFestival();
+      }
     }
     // Time automations (Tempus Fugit & Shatter TC)
     if (this._host.options.auto.timeCtrl.enabled) {

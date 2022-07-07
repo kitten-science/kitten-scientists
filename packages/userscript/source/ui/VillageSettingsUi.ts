@@ -1,4 +1,8 @@
-import { DistributeSettingsItem, VillageSettings } from "../options/VillageSettings";
+import {
+  DistributeSettingsItem,
+  VillageAdditionSettings,
+  VillageSettings,
+} from "../options/VillageSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -12,7 +16,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, options: VillageSettings = host.options.auto.distribute) {
+  constructor(host: UserScript, options: VillageSettings = host.options.auto.village) {
     super(host);
 
     this._options = options;
@@ -67,11 +71,15 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this._getDistributeOption(
         "engineer",
         this._options.items.engineer,
-        this._host.i18n("$village.job.engineer")
+        this._host.i18n("$village.job.engineer"),
+        true
       ),
     ];
 
     list.append(...this._optionButtons);
+
+    const additionOptions = this.getAdditionOptions(this._options.addition);
+    list.append(additionOptions);
 
     element.panel.append(list);
 
@@ -81,9 +89,10 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   private _getDistributeOption(
     name: string,
     option: DistributeSettingsItem,
-    label: string
+    label: string,
+    delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label);
+    const element = this._getOption(name, option, label, delimiter);
 
     //Limited Distribution
     const labelElement = $("<label/>", {
@@ -137,16 +146,41 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     return element;
   }
 
+  getAdditionOptions(addition: VillageAdditionSettings): Array<JQuery<HTMLElement>> {
+    const nodeHeader = this._getHeader("Additional options");
+
+    const nodeFestivals = this._getOption(
+      "festival",
+      addition.holdFestivals,
+      this._host.i18n("option.festival"),
+      false,
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (this._options.addition.holdFestivals.enabled = true));
+          this._host.imessage("status.auto.enable", [this._host.i18n("option.festival")]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (this._options.addition.holdFestivals.enabled = false));
+          this._host.imessage("status.auto.disable", [this._host.i18n("option.festival")]);
+        },
+      }
+    );
+
+    return [nodeHeader, nodeFestivals];
+  }
+
   getState(): VillageSettings {
     return {
       enabled: this._options.enabled,
       items: this._options.items,
+      addition: this._options.addition,
     };
   }
 
   setState(state: VillageSettings): void {
-    mustExist(this._options.$enabled).prop("checked", state.enabled);
     this._options.enabled = state.enabled;
+
+    this._options.addition.holdFestivals.enabled = state.addition.holdFestivals.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -157,6 +191,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
 
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+
+    mustExist(this._options.addition.holdFestivals.$enabled).prop(
+      "checked",
+      this._options.addition.holdFestivals.enabled
+    );
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);

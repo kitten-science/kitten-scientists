@@ -11,7 +11,16 @@ export type DistributeSettingsItem = SettingToggle & {
   max: number;
   $max?: JQuery<HTMLElement>;
 };
+
+export type VillageAdditionSettings = {
+  holdFestivals: SettingToggle;
+};
+
 export class VillageSettings extends SettingsSection {
+  addition: VillageAdditionSettings = {
+    holdFestivals: { enabled: true },
+  };
+
   items: {
     [item in DistributeItems]: DistributeSettingsItem;
   } = {
@@ -33,6 +42,8 @@ export class VillageSettings extends SettingsSection {
       subject.items[`toggle-limited-${name}` as const] = item.limited;
       subject.items[`set-${name}-max` as const] = item.max;
     }
+
+    subject.items["toggle-festival"] = settings.addition.holdFestivals.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -44,6 +55,10 @@ export class VillageSettings extends SettingsSection {
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
+
+    options.addition.holdFestivals.enabled =
+      subject.items["toggle-festival"] ?? options.addition.holdFestivals.enabled;
+
     return options;
   }
 }

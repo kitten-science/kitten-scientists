@@ -33,11 +33,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
         this._host.i18n("option.observe")
       ),
       this._getOptionsOption(
-        "festival",
-        this._options.items.festival,
-        this._host.i18n("option.festival")
-      ),
-      this._getOptionsOption(
         "shipOverride",
         this._options.items.shipOverride,
         this._host.i18n("option.shipOverride")

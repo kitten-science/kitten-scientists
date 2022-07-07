@@ -31,11 +31,11 @@ export class VillageManager {
     for (const job of this._host.gamePage.village.jobs) {
       const name = job.name;
       const unlocked = job.unlocked;
-      const enabled = this._host.options.auto.distribute.items[name].enabled;
+      const enabled = this._host.options.auto.village.items[name].enabled;
       const maxKittensInJob = this._host.gamePage.village.getJobLimit(name);
-      const maxKittensToAssign = this._host.options.auto.distribute.items[name].max;
+      const maxKittensToAssign = this._host.options.auto.village.items[name].max;
       const kittensInJob = job.value;
-      const limited = this._host.options.auto.distribute.items[name].limited;
+      const limited = this._host.options.auto.village.items[name].limited;
       if (
         unlocked &&
         enabled &&

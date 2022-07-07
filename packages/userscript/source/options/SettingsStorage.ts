@@ -36,6 +36,7 @@ type ToggleBuildEmbassies = "toggle-buildEmbassies";
 type ToggleBuildingItem = `toggle-${AllItems}`;
 type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
 type ToggleFilterItem = `toggle-${FilterItem}`;
+type ToggleHoldFestivals = "toggle-festival";
 type ToggleJobItem = `toggle-${Job}`;
 type ToggleLimitedJobItem = `toggle-limited-${Job}`;
 type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
@@ -80,6 +81,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleBuildingItem, boolean>> &
     Partial<Record<ToggleFaithUnicornItem, boolean>> &
     Partial<Record<ToggleFilterItem, boolean>> &
+    Partial<Record<ToggleHoldFestivals, boolean>> &
     Partial<Record<ToggleJobItem, boolean>> &
     Partial<Record<ToggleLimitedJobItem, boolean>> &
     Partial<Record<ToggleLimitedRaceItem, boolean>> &

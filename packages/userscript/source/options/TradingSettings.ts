@@ -150,6 +150,7 @@ export class TradingSettings extends SettingsSection implements SettingTrigger {
       subject.items["toggle-buildEmbassies"] ?? options.addition.buildEmbassies.enabled;
     options.addition.unlockRaces.enabled =
       subject.items["toggle-races"] ?? options.addition.unlockRaces.enabled;
+
     return options;
   }
 }

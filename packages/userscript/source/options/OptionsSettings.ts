@@ -5,7 +5,6 @@ import { KittenStorageType } from "./SettingsStorage";
 export type OptionsItem =
   | "autofeed"
   | "crypto"
-  | "festival"
   | "fixCry"
   | "hunt"
   | "observe"
@@ -21,7 +20,6 @@ export class OptionsSettings extends SettingsSection {
     [key in OptionsItem]: OptionsSettingsItem;
   } = {
     observe: { enabled: true },
-    festival: { enabled: true },
     shipOverride: { enabled: true },
     autofeed: { enabled: true },
     hunt: { enabled: true, subTrigger: 0.98 },

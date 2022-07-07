@@ -43,7 +43,7 @@ export class Options {
     religion: ReligionSettings;
     time: TimeSettings;
     timeCtrl: TimeControlSettings;
-    distribute: VillageSettings;
+    village: VillageSettings;
     options: OptionsSettings;
     filters: FilterSettings;
   } = {
@@ -56,7 +56,7 @@ export class Options {
     religion: new ReligionSettings(),
     time: new TimeSettings(),
     timeCtrl: new TimeControlSettings(),
-    distribute: new VillageSettings(),
+    village: new VillageSettings(),
     options: new OptionsSettings(),
     filters: new FilterSettings(),
   };
@@ -89,7 +89,7 @@ export class Options {
       faith: optionsObject.auto.religion.enabled,
       time: optionsObject.auto.time.enabled,
       timeCtrl: optionsObject.auto.timeCtrl.enabled,
-      distribute: optionsObject.auto.distribute.enabled,
+      distribute: optionsObject.auto.village.enabled,
       options: optionsObject.auto.options.enabled,
       filter: optionsObject.auto.filters.enabled,
     };
@@ -117,7 +117,7 @@ export class Options {
 
     BonfireSettings.toLegacyOptions(optionsObject.auto.bonfire, subject);
     CraftSettings.toLegacyOptions(optionsObject.auto.craft, subject);
-    VillageSettings.toLegacyOptions(optionsObject.auto.distribute, subject);
+    VillageSettings.toLegacyOptions(optionsObject.auto.village, subject);
     FilterSettings.toLegacyOptions(optionsObject.auto.filters, subject);
 
     for (const [name, item] of objectEntries(optionsObject.auto.options.items)) {
@@ -154,7 +154,7 @@ export class Options {
 
     result.auto.bonfire = BonfireSettings.fromLegacyOptions(subject);
     result.auto.craft = CraftSettings.fromLegacyOptions(subject);
-    result.auto.distribute = VillageSettings.fromLegacyOptions(subject);
+    result.auto.village = VillageSettings.fromLegacyOptions(subject);
     result.auto.filters = FilterSettings.fromLegacyOptions(subject);
     result.auto.options = OptionsSettings.fromLegacyOptions(subject);
     result.auto.religion = ReligionSettings.fromLegacyOptions(subject);
