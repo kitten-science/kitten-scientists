@@ -1,4 +1,4 @@
-import { SpaceSettings } from "../options/SpaceSettings";
+import { SpaceAdditionSettings, SpaceSettings } from "../options/SpaceSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -169,22 +169,50 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getLimitedOption(
         "moltenCore",
         this._options.items.moltenCore,
-        this._host.i18n("$space.planet.centaurusSystem.moltenCore.label")
+        this._host.i18n("$space.planet.centaurusSystem.moltenCore.label"),
+        true
       ),
     ];
 
     list.append(...optionButtons);
 
+    const additionOptions = this.getAdditionOptions(this._options.addition);
+
     element.panel.append(this._options.$trigger);
     element.panel.append(list);
+    list.append(additionOptions);
 
     this.element = element.panel;
+  }
+
+  getAdditionOptions(addition: SpaceAdditionSettings): Array<JQuery<HTMLElement>> {
+    const nodeHeader = this._getHeader("Additional options");
+
+    const nodeMissions = this._getOption(
+      "races",
+      addition.unlockMissions,
+      this._host.i18n("ui.upgrade.missions"),
+      false,
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (addition.unlockMissions.enabled = true));
+          this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.missions")]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (addition.unlockMissions.enabled = false));
+          this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.missions")]);
+        },
+      }
+    );
+
+    return [nodeHeader, nodeMissions];
   }
 
   getState(): SpaceSettings {
     return {
       enabled: this._options.enabled,
       trigger: this._options.trigger,
+      addition: this._options.addition,
       items: this._options.items,
     };
   }
@@ -192,6 +220,8 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
   setState(state: SpaceSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;
+
+    this._options.addition.unlockMissions.enabled = state.addition.unlockMissions.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -202,6 +232,11 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
     mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
+
+    mustExist(this._options.addition.unlockMissions.$enabled).prop(
+      "checked",
+      this._options.addition.unlockMissions.enabled
+    );
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);

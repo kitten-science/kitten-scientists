@@ -227,6 +227,11 @@ export class BonfireManager {
         button.controller.onAll(button.model);
       }
     }
+
+    // If buildings (upgrades of bonfire items) are enabled...
+    if (this._host.options.auto.bonfire.addition.upgradeBuildings.enabled) {
+      this.autoUpgrade();
+    }
   }
 
   build(name: Building, stage: number | undefined, amount: number): void {

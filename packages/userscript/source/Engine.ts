@@ -297,16 +297,6 @@ export class Engine {
     if (upgrades.policies.enabled && this._host.gamePage.tabs[2].visible) {
       this._scienceManager.autoPolicy();
     }
-
-    // If missions (space items) are enabled...
-    if (upgrades.missions.enabled && this._host.gamePage.tabs[6].visible) {
-      this._spaceManager.autoUnlock();
-    }
-
-    // If buildings (upgrades of bonfire items) are enabled...
-    if (this._host.options.auto.bonfire.addition.upgradeBuildings.enabled) {
-      this._bonfireManager.autoUpgrade();
-    }
   }
 
   /**
@@ -331,6 +321,10 @@ export class Engine {
     builds: Partial<Record<SpaceItem, SpaceSettingsItem>> = this._host.options.auto.space.items
   ): void {
     this._spaceManager.autoBuild(builds);
+
+    if (this._host.options.auto.space.addition.unlockMissions.enabled) {
+      this._spaceManager.autoUnlock();
+    }
   }
 
   /**

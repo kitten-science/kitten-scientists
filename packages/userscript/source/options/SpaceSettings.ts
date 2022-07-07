@@ -6,9 +6,17 @@ import { KittenStorageType } from "./SettingsStorage";
 export type SpaceItem = SpaceBuildings;
 export type SpaceSettingsItem = SettingToggle & SettingLimit;
 
+export type SpaceAdditionSettings = {
+  unlockMissions: SettingToggle;
+};
+
 export class SpaceSettings extends SettingsSection implements SettingTrigger {
   trigger = 0;
   $trigger?: JQuery<HTMLElement>;
+
+  addition: SpaceAdditionSettings = {
+    unlockMissions: { enabled: true },
+  };
 
   items: {
     [item in SpaceItem]: SpaceSettingsItem;
@@ -55,6 +63,8 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`set-${name}-max` as const] = item.max;
     }
+
+    subject.items["toggle-missions"] = settings.addition.unlockMissions.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -66,6 +76,9 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
+
+    options.addition.unlockMissions.enabled =
+      subject.items["toggle-missions"] ?? options.addition.unlockMissions.enabled;
     return options;
   }
 }

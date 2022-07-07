@@ -239,6 +239,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   setState(state: TradingSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;
+
     this._options.addition.buildEmbassies.enabled = state.addition.buildEmbassies.enabled;
     this._options.addition.unlockRaces.enabled = state.addition.unlockRaces.enabled;
 
@@ -256,6 +257,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
     mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
+
     mustExist(this._options.addition.buildEmbassies.$enabled).prop(
       "checked",
       this._options.addition.buildEmbassies.enabled

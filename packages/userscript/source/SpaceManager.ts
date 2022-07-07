@@ -61,6 +61,10 @@ export class SpaceManager {
   }
 
   autoUnlock() {
+    if (!this._host.gamePage.tabs[6].visible) {
+      return;
+    }
+
     this.manager.render();
 
     const missions = this._host.gamePage.space.meta[0].meta;

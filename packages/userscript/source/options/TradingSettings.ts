@@ -26,7 +26,7 @@ export type TradingSettingsItem = SettingToggle & {
 
 export type TradeAdditionSettings = {
   buildEmbassies: OptionsSettingsItem;
-  unlockRaces: OptionsSettingsItem;
+  unlockRaces: SettingToggle;
 };
 
 export class TradingSettings extends SettingsSection implements SettingTrigger {
@@ -147,9 +147,9 @@ export class TradingSettings extends SettingsSection implements SettingTrigger {
     }
 
     options.addition.buildEmbassies.enabled =
-      subject.items["toggle-buildEmbassies" as const] ?? options.addition.buildEmbassies.enabled;
+      subject.items["toggle-buildEmbassies"] ?? options.addition.buildEmbassies.enabled;
     options.addition.unlockRaces.enabled =
-      subject.items["toggle-races" as const] ?? options.addition.unlockRaces.enabled;
+      subject.items["toggle-races"] ?? options.addition.unlockRaces.enabled;
     return options;
   }
 }
