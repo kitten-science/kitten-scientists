@@ -1,18 +1,18 @@
-import { DistributeSettings, DistributeSettingsItem } from "../options/DistributeSettings";
+import { DistributeSettingsItem, VillageSettings } from "../options/VillageSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> {
+export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: DistributeSettings;
+  private readonly _options: VillageSettings;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, options: DistributeSettings = host.options.auto.distribute) {
+  constructor(host: UserScript, options: VillageSettings = host.options.auto.distribute) {
     super(host);
 
     this._options = options;
@@ -137,14 +137,14 @@ export class DistributeSettingsUi extends SettingsSectionUi<DistributeSettings> 
     return element;
   }
 
-  getState(): DistributeSettings {
+  getState(): VillageSettings {
     return {
       enabled: this._options.enabled,
       items: this._options.items,
     };
   }
 
-  setState(state: DistributeSettings): void {
+  setState(state: VillageSettings): void {
     mustExist(this._options.$enabled).prop("checked", state.enabled);
     this._options.enabled = state.enabled;
 

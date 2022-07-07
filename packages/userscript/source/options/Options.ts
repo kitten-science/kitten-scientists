@@ -3,7 +3,6 @@ import { isNil } from "../tools/Maybe";
 import { Resource } from "../types";
 import { BonfireItem, BonfireSettings } from "./BonfireSettings";
 import { CraftSettings } from "./CraftSettings";
-import { DistributeSettings } from "./DistributeSettings";
 import { FilterSettings } from "./FilterSettings";
 import { OptionsSettings } from "./OptionsSettings";
 import { PolicySettings } from "./PolicySettings";
@@ -14,6 +13,7 @@ import { SpaceItem, SpaceSettings } from "./SpaceSettings";
 import { TimeControlSettings } from "./TimeControlSettings";
 import { TimeItem, TimeSettings } from "./TimeSettings";
 import { TradingSettings } from "./TradingSettings";
+import { VillageSettings } from "./VillageSettings";
 
 export type Requirement = Resource | false;
 
@@ -43,7 +43,7 @@ export class Options {
     religion: ReligionSettings;
     time: TimeSettings;
     timeCtrl: TimeControlSettings;
-    distribute: DistributeSettings;
+    distribute: VillageSettings;
     options: OptionsSettings;
     filters: FilterSettings;
   } = {
@@ -56,7 +56,7 @@ export class Options {
     religion: new ReligionSettings(),
     time: new TimeSettings(),
     timeCtrl: new TimeControlSettings(),
-    distribute: new DistributeSettings(),
+    distribute: new VillageSettings(),
     options: new OptionsSettings(),
     filters: new FilterSettings(),
   };
@@ -117,7 +117,7 @@ export class Options {
 
     BonfireSettings.toLegacyOptions(optionsObject.auto.bonfire, subject);
     CraftSettings.toLegacyOptions(optionsObject.auto.craft, subject);
-    DistributeSettings.toLegacyOptions(optionsObject.auto.distribute, subject);
+    VillageSettings.toLegacyOptions(optionsObject.auto.distribute, subject);
     FilterSettings.toLegacyOptions(optionsObject.auto.filters, subject);
 
     for (const [name, item] of objectEntries(optionsObject.auto.options.items)) {
@@ -154,7 +154,7 @@ export class Options {
 
     result.auto.bonfire = BonfireSettings.fromLegacyOptions(subject);
     result.auto.craft = CraftSettings.fromLegacyOptions(subject);
-    result.auto.distribute = DistributeSettings.fromLegacyOptions(subject);
+    result.auto.distribute = VillageSettings.fromLegacyOptions(subject);
     result.auto.filters = FilterSettings.fromLegacyOptions(subject);
     result.auto.options = OptionsSettings.fromLegacyOptions(subject);
     result.auto.religion = ReligionSettings.fromLegacyOptions(subject);

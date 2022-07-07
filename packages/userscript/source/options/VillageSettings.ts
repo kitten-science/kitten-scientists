@@ -11,7 +11,7 @@ export type DistributeSettingsItem = SettingToggle & {
   max: number;
   $max?: JQuery<HTMLElement>;
 };
-export class DistributeSettings extends SettingsSection {
+export class VillageSettings extends SettingsSection {
   items: {
     [item in DistributeItems]: DistributeSettingsItem;
   } = {
@@ -25,7 +25,7 @@ export class DistributeSettings extends SettingsSection {
     engineer: { enabled: true, limited: true, max: 1 },
   };
 
-  static toLegacyOptions(settings: DistributeSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: VillageSettings, subject: KittenStorageType) {
     subject.toggles.distribute = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.items)) {
@@ -36,7 +36,7 @@ export class DistributeSettings extends SettingsSection {
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
-    const options = new DistributeSettings();
+    const options = new VillageSettings();
     options.enabled = subject.toggles.distribute;
 
     for (const [name, item] of objectEntries(options.items)) {
