@@ -91,7 +91,7 @@ export class VillageManager {
 
   autoHunt(cacheManager?: CacheManager) {
     const manpower = this._workshopManager.getResource("manpower");
-    const subTrigger = this._host.options.auto.options.items.hunt.subTrigger ?? 0;
+    const subTrigger = this._host.options.auto.village.addition.hunt.trigger ?? 0;
 
     if (manpower.value < 100 || this._host.gamePage.challenges.isActive("pacifism")) {
       return;

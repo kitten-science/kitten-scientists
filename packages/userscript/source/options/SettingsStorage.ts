@@ -21,6 +21,7 @@ type LegacySettingsSections =
   | "timeCtrl"
   | "trade"
   | "upgrade";
+
 type SetMaxBuildingItem = `set-${AllItems}-max`;
 type SetMaxJobItem = `set-${Job}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
@@ -37,6 +38,7 @@ type ToggleBuildingItem = `toggle-${AllItems}`;
 type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
 type ToggleFilterItem = `toggle-${FilterItem}`;
 type ToggleHoldFestivals = "toggle-festival";
+type ToggleHunt = "toggle-hunt";
 type ToggleJobItem = `toggle-${Job}`;
 type ToggleLimitedJobItem = `toggle-limited-${Job}`;
 type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
@@ -83,6 +85,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleFaithUnicornItem, boolean>> &
     Partial<Record<ToggleFilterItem, boolean>> &
     Partial<Record<ToggleHoldFestivals, boolean>> &
+    Partial<Record<ToggleHunt, boolean>> &
     Partial<Record<ToggleJobItem, boolean>> &
     Partial<Record<ToggleLimitedJobItem, boolean>> &
     Partial<Record<ToggleLimitedRaceItem, boolean>> &

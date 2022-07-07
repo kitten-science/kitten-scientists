@@ -132,10 +132,7 @@ export class Engine {
         this._workshopManager.autoUnlock();
       }
     }
-    // Go hunting.
-    if (subOptions.enabled && subOptions.items.hunt.enabled) {
-      this.hunt();
-    }
+
     // Trade with other races.
     if (this._host.options.auto.trade.enabled) {
       this.trade();
@@ -160,6 +157,11 @@ export class Engine {
     // Distribute kittens to jobs.
     if (this._host.options.auto.village.enabled) {
       this.distributeKittens();
+
+      // Go hunting.
+      if (this._host.options.auto.village.addition.hunt.enabled) {
+        this.hunt();
+      }
 
       // Hold festival.
       if (this._host.options.auto.village.addition.holdFestivals.enabled) {

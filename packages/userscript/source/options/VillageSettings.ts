@@ -1,6 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { Job } from "../types";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type DistributeItems = Job;
@@ -14,12 +14,14 @@ export type DistributeSettingsItem = SettingToggle & {
 
 export type VillageAdditionSettings = {
   holdFestivals: SettingToggle;
+  hunt: SettingToggle & SettingTrigger;
   promoteLeader: SettingToggle;
 };
 
 export class VillageSettings extends SettingsSection {
   addition: VillageAdditionSettings = {
     holdFestivals: { enabled: true },
+    hunt: { enabled: true, trigger: 0.98 },
     promoteLeader: { enabled: true },
   };
 
@@ -46,6 +48,7 @@ export class VillageSettings extends SettingsSection {
     }
 
     subject.items["toggle-festival"] = settings.addition.holdFestivals.enabled;
+    subject.items["toggle-hunt"] = settings.addition.hunt.enabled;
     subject.items["toggle-promote"] = settings.addition.promoteLeader.enabled;
   }
 
@@ -61,6 +64,7 @@ export class VillageSettings extends SettingsSection {
 
     options.addition.holdFestivals.enabled =
       subject.items["toggle-festival"] ?? options.addition.holdFestivals.enabled;
+    options.addition.hunt.enabled = subject.items["toggle-hunt"] ?? options.addition.hunt.enabled;
     options.addition.promoteLeader.enabled =
       subject.items["toggle-promote"] ?? options.addition.promoteLeader.enabled;
 

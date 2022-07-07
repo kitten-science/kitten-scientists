@@ -149,6 +149,23 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   getAdditionOptions(addition: VillageAdditionSettings): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
+    const nodeHunt = this._getTriggeredOption(
+      "hunt",
+      addition.hunt,
+      this._host.i18n("option.hunt"),
+      false,
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (this._options.addition.hunt.enabled = true));
+          this._host.imessage("status.auto.enable", [this._host.i18n("option.hunt")]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (this._options.addition.hunt.enabled = false));
+          this._host.imessage("status.auto.disable", [this._host.i18n("option.hunt")]);
+        },
+      }
+    );
+
     const nodeFestivals = this._getOption(
       "festival",
       addition.holdFestivals,
@@ -183,7 +200,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       }
     );
 
-    return [nodeHeader, nodeFestivals, nodePromote];
+    return [nodeHeader, nodeHunt, nodeFestivals, nodePromote];
   }
 
   getState(): VillageSettings {
@@ -198,6 +215,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     this._options.enabled = state.enabled;
 
     this._options.addition.holdFestivals.enabled = state.addition.holdFestivals.enabled;
+    this._options.addition.hunt.enabled = state.addition.hunt.enabled;
     this._options.addition.promoteLeader.enabled = state.addition.promoteLeader.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
@@ -213,6 +231,10 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     mustExist(this._options.addition.holdFestivals.$enabled).prop(
       "checked",
       this._options.addition.holdFestivals.enabled
+    );
+    mustExist(this._options.addition.hunt.$enabled).prop(
+      "checked",
+      this._options.addition.hunt.enabled
     );
     mustExist(this._options.addition.promoteLeader.$enabled).prop(
       "checked",

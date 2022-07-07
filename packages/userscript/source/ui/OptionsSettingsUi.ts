@@ -42,7 +42,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
         this._options.items.autofeed,
         this._host.i18n("option.autofeed")
       ),
-      this._getOptionsOption("hunt", this._options.items.hunt, this._host.i18n("option.hunt")),
       this._getOptionsOption(
         "crypto",
         this._options.items.crypto,

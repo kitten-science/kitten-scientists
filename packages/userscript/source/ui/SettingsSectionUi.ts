@@ -370,18 +370,13 @@ export abstract class SettingsSectionUi<TState> {
     name: string,
     option: SettingLimit & SettingToggle,
     label: string,
-    delimiter = false
+    delimiter = false,
+    handler: {
+      onCheck?: () => void;
+      onUnCheck?: () => void;
+    } = {}
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label, delimiter, {
-      onCheck: () => {
-        this._host.updateOptions(() => (option.enabled = true));
-        this._host.imessage("status.auto.enable", [label]);
-      },
-      onUnCheck: () => {
-        this._host.updateOptions(() => (option.enabled = false));
-        this._host.imessage("status.auto.disable", [label]);
-      },
-    });
+    const element = this._getOption(name, option, label, delimiter, handler);
 
     const maxButton = $("<div/>", {
       id: `set-${name}-max`,
@@ -405,6 +400,59 @@ export abstract class SettingsSectionUi<TState> {
     });
 
     element.append(maxButton);
+
+    return element;
+  }
+
+  protected _getTriggeredOption(
+    name: string,
+    option: SettingTrigger & SettingToggle,
+    label: string,
+    delimiter = false,
+    handler: {
+      onCheck?: () => void;
+      onUnCheck?: () => void;
+    } = {}
+  ) {
+    const element = this._getOption(name, option, label, delimiter, handler);
+
+    if (option.trigger !== undefined) {
+      const triggerButton = $("<div/>", {
+        id: `set-${name}-subTrigger`,
+        text: this._host.i18n("ui.trigger"),
+        //title: option.subTrigger,
+        css: {
+          cursor: "pointer",
+          display: "inline-block",
+          float: "right",
+          paddingRight: "5px",
+        },
+      }).data("option", option);
+      option.$trigger = triggerButton;
+
+      triggerButton.on("click", () => {
+        let value;
+        if (name === "crypto") {
+          value = window.prompt(
+            this._host.i18n("ui.trigger.crypto.set", [label]),
+            mustExist(option.trigger).toFixed(2)
+          );
+        } else {
+          value = window.prompt(
+            this._host.i18n("ui.trigger.set", [label]),
+            mustExist(option.trigger).toFixed(2)
+          );
+        }
+
+        if (value !== null) {
+          option.trigger = parseFloat(value);
+          this._host.updateOptions();
+          triggerButton[0].title = option.trigger.toFixed(2);
+        }
+      });
+
+      element.append(triggerButton);
+    }
 
     return element;
   }
