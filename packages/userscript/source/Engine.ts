@@ -156,10 +156,7 @@ export class Engine {
     if (subOptions.enabled && subOptions.items.autofeed.enabled) {
       this.autofeed();
     }
-    // Promote kittens.
-    if (subOptions.enabled && subOptions.items.promote.enabled) {
-      this.promote();
-    }
+
     // Distribute kittens to jobs.
     if (this._host.options.auto.village.enabled) {
       this.distributeKittens();
@@ -167,6 +164,11 @@ export class Engine {
       // Hold festival.
       if (this._host.options.auto.village.addition.holdFestivals.enabled) {
         this.holdFestival();
+      }
+
+      // Promote kittens.
+      if (this._host.options.auto.village.addition.promoteLeader.enabled) {
+        this.promote();
       }
     }
     // Time automations (Tempus Fugit & Shatter TC)

@@ -2,14 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type OptionsItem =
-  | "autofeed"
-  | "crypto"
-  | "fixCry"
-  | "hunt"
-  | "observe"
-  | "promote"
-  | "shipOverride";
+export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "hunt" | "observe" | "shipOverride";
 
 export type OptionsSettingsItem = SettingToggle & {
   subTrigger?: number;
@@ -23,7 +16,7 @@ export class OptionsSettings extends SettingsSection {
     shipOverride: { enabled: true },
     autofeed: { enabled: true },
     hunt: { enabled: true, subTrigger: 0.98 },
-    promote: { enabled: true },
+
     crypto: { enabled: true, subTrigger: 10000 },
     fixCry: { enabled: false },
   };

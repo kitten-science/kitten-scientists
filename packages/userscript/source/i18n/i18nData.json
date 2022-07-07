@@ -116,7 +116,7 @@
     "ui.max.set": "Maximum for {0}",
     "summary.distribute": "Help {0} kittens to find job",
     "filter.distribute": "Distribute",
-    "option.promote": "Promote Leader",
+    "option.promote": "Promote leader",
     "act.promote": "Kittens' leader has been promoted to rank {0}",
     "filter.promote": "Promote leader",
     "summary.promote": "Promoted leader {0} times",

@@ -43,6 +43,7 @@ type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
 type ToggleLimitedResourceItem = `toggle-limited-${Resource}`;
 type ToggleOptionsItem = `toggle-${OptionsItem}`;
 type TogglePolicyItem = `toggle-${Policy}`;
+type TogglePromoteLeader = `toggle-promote`;
 type ToggleRaceItem = `toggle-${Race}`;
 type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
 type ToggleReligionAdditionItem = `toggle-${ReligionAdditionItem}`;
@@ -88,6 +89,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleLimitedResourceItem, boolean>> &
     Partial<Record<ToggleOptionsItem, boolean>> &
     Partial<Record<TogglePolicyItem, boolean>> &
+    Partial<Record<TogglePromoteLeader, boolean>> &
     Partial<Record<ToggleRaceItem, boolean>> &
     Partial<Record<ToggleRaceSeasonItem, boolean>> &
     Partial<Record<ToggleReligionAdditionItem, boolean>> &

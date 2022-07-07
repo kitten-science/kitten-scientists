@@ -166,7 +166,24 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       }
     );
 
-    return [nodeHeader, nodeFestivals];
+    const nodePromote = this._getOption(
+      "promote",
+      addition.promoteLeader,
+      this._host.i18n("option.promote"),
+      false,
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (this._options.addition.promoteLeader.enabled = true));
+          this._host.imessage("status.auto.enable", [this._host.i18n("option.promote")]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (this._options.addition.promoteLeader.enabled = false));
+          this._host.imessage("status.auto.disable", [this._host.i18n("option.promote")]);
+        },
+      }
+    );
+
+    return [nodeHeader, nodeFestivals, nodePromote];
   }
 
   getState(): VillageSettings {
@@ -181,6 +198,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     this._options.enabled = state.enabled;
 
     this._options.addition.holdFestivals.enabled = state.addition.holdFestivals.enabled;
+    this._options.addition.promoteLeader.enabled = state.addition.promoteLeader.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -195,6 +213,10 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     mustExist(this._options.addition.holdFestivals.$enabled).prop(
       "checked",
       this._options.addition.holdFestivals.enabled
+    );
+    mustExist(this._options.addition.promoteLeader.$enabled).prop(
+      "checked",
+      this._options.addition.promoteLeader.enabled
     );
 
     for (const [name, option] of objectEntries(this._options.items)) {

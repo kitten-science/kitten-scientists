@@ -44,11 +44,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       ),
       this._getOptionsOption("hunt", this._options.items.hunt, this._host.i18n("option.hunt")),
       this._getOptionsOption(
-        "promote",
-        this._options.items.promote,
-        this._host.i18n("option.promote")
-      ),
-      this._getOptionsOption(
         "crypto",
         this._options.items.crypto,
         this._host.i18n("option.crypto")

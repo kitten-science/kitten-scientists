@@ -14,11 +14,13 @@ export type DistributeSettingsItem = SettingToggle & {
 
 export type VillageAdditionSettings = {
   holdFestivals: SettingToggle;
+  promoteLeader: SettingToggle;
 };
 
 export class VillageSettings extends SettingsSection {
   addition: VillageAdditionSettings = {
     holdFestivals: { enabled: true },
+    promoteLeader: { enabled: true },
   };
 
   items: {
@@ -44,6 +46,7 @@ export class VillageSettings extends SettingsSection {
     }
 
     subject.items["toggle-festival"] = settings.addition.holdFestivals.enabled;
+    subject.items["toggle-promote"] = settings.addition.promoteLeader.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -58,6 +61,8 @@ export class VillageSettings extends SettingsSection {
 
     options.addition.holdFestivals.enabled =
       subject.items["toggle-festival"] ?? options.addition.holdFestivals.enabled;
+    options.addition.promoteLeader.enabled =
+      subject.items["toggle-promote"] ?? options.addition.promoteLeader.enabled;
 
     return options;
   }
