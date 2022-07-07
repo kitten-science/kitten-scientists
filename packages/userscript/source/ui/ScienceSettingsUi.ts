@@ -1,19 +1,19 @@
 import { PolicySettings } from "../options/PolicySettings";
-import { UnlockingSettings } from "../options/UnlockingSettings";
+import { ScienceSettings } from "../options/ScienceSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
+export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: UnlockingSettings;
+  private readonly _options: ScienceSettings;
 
   private _policiesExpanded = false;
 
-  constructor(host: UserScript, options: UnlockingSettings = host.options.auto.unlock) {
+  constructor(host: UserScript, options: ScienceSettings = host.options.auto.unlock) {
     super(host);
 
     this._options = options;
@@ -111,14 +111,14 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     this.element = element.panel;
   }
 
-  getState(): UnlockingSettings {
+  getState(): ScienceSettings {
     return {
       enabled: this._options.enabled,
       items: this._options.items,
     };
   }
 
-  setState(state: UnlockingSettings): void {
+  setState(state: ScienceSettings): void {
     this._options.enabled = state.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {

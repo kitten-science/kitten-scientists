@@ -7,11 +7,11 @@ import { EngineSettingsUi } from "./EngineSettingsUi";
 import { FiltersSettingsUi } from "./FilterSettingsUi";
 import { OptionsSettingsUi } from "./OptionsSettingsUi";
 import { ReligionSettingsUi } from "./ReligionSettingsUi";
+import { ScienceSettingsUi } from "./ScienceSettingsUi";
 import { SpaceSettingsUi } from "./SpaceSettingsUi";
 import { TimeControlSettingsUi } from "./TimeControlSettingsUi";
 import { TimeSettingsUi } from "./TimeSettingsUi";
 import { TradingSettingsUi } from "./TradingSettingsUi";
-import { UnlockingSettingsUi } from "./UnlockingSettingsUi";
 
 export class UserInterface {
   private readonly _host: UserScript;
@@ -20,7 +20,7 @@ export class UserInterface {
   private _bonfireUi: BonfireSettingsUi;
   private _spaceUi: SpaceSettingsUi;
   private _craftUi: CraftSettingsUi;
-  private _unlockUi: UnlockingSettingsUi;
+  private _unlockUi: ScienceSettingsUi;
   private _tradingUi: TradingSettingsUi;
   private _religionUi: ReligionSettingsUi;
   private _timeUi: TimeSettingsUi;
@@ -36,7 +36,7 @@ export class UserInterface {
     this._bonfireUi = new BonfireSettingsUi(this._host);
     this._spaceUi = new SpaceSettingsUi(this._host);
     this._craftUi = new CraftSettingsUi(this._host);
-    this._unlockUi = new UnlockingSettingsUi(this._host);
+    this._unlockUi = new ScienceSettingsUi(this._host);
     this._tradingUi = new TradingSettingsUi(this._host);
     this._religionUi = new ReligionSettingsUi(this._host);
     this._timeUi = new TimeSettingsUi(this._host);

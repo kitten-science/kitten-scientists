@@ -4,10 +4,10 @@ import { FilterItem } from "./FilterSettings";
 import { AllItems } from "./Options";
 import { OptionsItem } from "./OptionsSettings";
 import { FaithItem, ReligionAdditionItem, UnicornItem } from "./ReligionSettings";
+import { ScienceItem } from "./ScienceSettings";
 import { SpaceItem } from "./SpaceSettings";
 import { TimeControlItem } from "./TimeControlSettings";
 import { TimeItem } from "./TimeSettings";
-import { UnlockItem } from "./UnlockingSettings";
 
 type LegacySettingsSections =
   | "build"
@@ -56,7 +56,7 @@ type ToggleTimeControlItem = `toggle-${TimeControlItem}`;
 type ToggleTimeControlSeasonItem = `toggle-timeSkip-${Season}`;
 type ToggleTimeItem = `toggle-${TimeItem}`;
 type ToggleTurnOnSteamworks = "toggle-_steamworks";
-type ToggleUnlockItem = `toggle-${UnlockItem}`;
+type ToggleUnlockItem = `toggle-${ScienceItem}`;
 type ToggleUnlockRaces = "toggle-races";
 type ToggleUnlockMissions = "toggle-missions";
 type ToggleUnlockUpgrades = "toggle-upgrades";

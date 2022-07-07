@@ -3,19 +3,19 @@ import { PolicySettings } from "./PolicySettings";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type UnlockItem = "policies" | "techs";
-export type UnlockingSettingsItem = SettingToggle | PolicySettings;
+export type ScienceItem = "policies" | "techs";
+export type ScienceSettingsItem = SettingToggle | PolicySettings;
 
-export class UnlockingSettings extends SettingsSection {
+export class ScienceSettings extends SettingsSection {
   items: {
-    [key in UnlockItem]: UnlockingSettingsItem;
+    [key in ScienceItem]: ScienceSettingsItem;
   } = {
     techs: { enabled: true },
     policies: new PolicySettings(),
   };
 
   static fromLegacyOptions(subject: KittenStorageType) {
-    const options = new UnlockingSettings();
+    const options = new ScienceSettings();
     options.enabled = subject.toggles.upgrade;
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;

@@ -8,12 +8,12 @@ import { FilterSettings } from "./FilterSettings";
 import { OptionsSettings } from "./OptionsSettings";
 import { PolicySettings } from "./PolicySettings";
 import { FaithItem, ReligionItem, ReligionSettings } from "./ReligionSettings";
+import { ScienceSettings } from "./ScienceSettings";
 import { KittenStorageType } from "./SettingsStorage";
 import { SpaceItem, SpaceSettings } from "./SpaceSettings";
 import { TimeControlSettings } from "./TimeControlSettings";
 import { TimeItem, TimeSettings } from "./TimeSettings";
 import { TradingSettings } from "./TradingSettings";
-import { UnlockingSettings } from "./UnlockingSettings";
 
 export type Requirement = Resource | false;
 
@@ -38,7 +38,7 @@ export class Options {
     bonfire: BonfireSettings;
     space: SpaceSettings;
     craft: CraftSettings;
-    unlock: UnlockingSettings;
+    unlock: ScienceSettings;
     trade: TradingSettings;
     religion: ReligionSettings;
     time: TimeSettings;
@@ -51,7 +51,7 @@ export class Options {
     bonfire: new BonfireSettings(),
     space: new SpaceSettings(),
     craft: new CraftSettings(),
-    unlock: new UnlockingSettings(),
+    unlock: new ScienceSettings(),
     trade: new TradingSettings(),
     religion: new ReligionSettings(),
     time: new TimeSettings(),
@@ -162,7 +162,7 @@ export class Options {
     result.auto.timeCtrl = TimeControlSettings.fromLegacyOptions(subject);
     result.auto.time = TimeSettings.fromLegacyOptions(subject);
     result.auto.trade = TradingSettings.fromLegacyOptions(subject);
-    result.auto.unlock = UnlockingSettings.fromLegacyOptions(subject);
+    result.auto.unlock = ScienceSettings.fromLegacyOptions(subject);
 
     // Reset options. Specific use unclear for now
     result.reset.reset = subject.reset.reset;
