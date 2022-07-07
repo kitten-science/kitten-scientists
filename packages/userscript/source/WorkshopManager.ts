@@ -19,6 +19,10 @@ export class WorkshopManager extends UpgradeManager {
   }
 
   autoUnlock() {
+    if (!this._host.gamePage.tabs[3].visible) {
+      return;
+    }
+
     this.manager.render();
 
     const workshopUpgrades = this._host.gamePage.workshop.upgrades;

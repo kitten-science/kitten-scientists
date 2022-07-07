@@ -59,6 +59,7 @@ type ToggleTurnOnSteamworks = "toggle-_steamworks";
 type ToggleUnlockItem = `toggle-${UnlockItem}`;
 type ToggleUnlockRaces = "toggle-races";
 type ToggleUnlockMissions = "toggle-missions";
+type ToggleUnlockUpgrades = "toggle-upgrades";
 type ToggleUpgradeBuildings = "toggle-buildings";
 
 export type KittenStorageType = {
@@ -102,6 +103,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleUnlockItem, boolean>> &
     Partial<Record<ToggleUnlockMissions, boolean>> &
     Partial<Record<ToggleUnlockRaces, boolean>> &
+    Partial<Record<ToggleUnlockUpgrades, boolean>> &
     Partial<Record<ToggleUpgradeBuildings, boolean>>;
   resources: Partial<
     Record<

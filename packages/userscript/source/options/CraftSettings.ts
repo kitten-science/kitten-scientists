@@ -22,9 +22,18 @@ export type CraftSettingsItem = SettingToggle & {
   max: 0;
   require: Requirement;
 };
+
+export type CraftAdditionSettings = {
+  unlockUpgrades: SettingToggle;
+};
+
 export class CraftSettings extends SettingsSection implements SettingTrigger {
   trigger = 0.95;
   $trigger?: JQuery<HTMLElement>;
+
+  addition: CraftAdditionSettings = {
+    unlockUpgrades: { enabled: true },
+  };
 
   items: {
     [item in ResourceCraftable]: CraftSettingsItem;
@@ -75,6 +84,8 @@ export class CraftSettings extends SettingsSection implements SettingTrigger {
         stock: item.stock,
       };
     }
+
+    subject.items["toggle-upgrades"] = settings.addition.unlockUpgrades.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -99,6 +110,10 @@ export class CraftSettings extends SettingsSection implements SettingTrigger {
         stock: item.stock,
       };
     }
+
+    options.addition.unlockUpgrades.enabled =
+      subject.items["toggle-upgrades"] ?? options.addition.unlockUpgrades.enabled;
+
     return options;
   }
 }

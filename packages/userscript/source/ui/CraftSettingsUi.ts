@@ -1,4 +1,4 @@
-import { CraftSettings, CraftSettingsItem } from "../options/CraftSettings";
+import { CraftAdditionSettings, CraftSettings, CraftSettingsItem } from "../options/CraftSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { Maybe, mustExist } from "../tools/Maybe";
@@ -132,11 +132,15 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       this._getCraftOption(
         "thorium",
         this._options.items.thorium,
-        this._host.i18n("$workshop.crafts.thorium.label")
+        this._host.i18n("$workshop.crafts.thorium.label"),
+        true
       ),
     ];
 
     list.append(...this._optionButtons);
+
+    const additionOptions = this.getAdditionOptions(this._options.addition);
+    list.append(additionOptions);
 
     const resourcesButton = $("<div/>", {
       id: "toggle-resource-controls",
@@ -312,18 +316,44 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     return this._resourcesList;
   }
 
+  getAdditionOptions(addition: CraftAdditionSettings): Array<JQuery<HTMLElement>> {
+    const nodeHeader = this._getHeader("Additional options");
+
+    const nodeUpgrades = this._getOption(
+      "upgrades",
+      addition.unlockUpgrades,
+      this._host.i18n("ui.upgrade.upgrades"),
+      false,
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (addition.unlockUpgrades.enabled = true));
+          this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.upgrades")]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (addition.unlockUpgrades.enabled = false));
+          this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.upgrades")]);
+        },
+      }
+    );
+
+    return [nodeHeader, nodeUpgrades];
+  }
+
   getState(): CraftSettings {
     return {
       enabled: this._options.enabled,
       trigger: this._options.trigger,
       items: this._options.items,
       resources: this._options.resources,
+      addition: this._options.addition,
     };
   }
 
   setState(state: CraftSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;
+
+    this._options.addition.unlockUpgrades.enabled = state.addition.unlockUpgrades.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -348,6 +378,11 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
     mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
+
+    mustExist(this._options.addition.unlockUpgrades.$enabled).prop(
+      "checked",
+      this._options.addition.unlockUpgrades.enabled
+    );
 
     for (const [, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);

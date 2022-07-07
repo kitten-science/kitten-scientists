@@ -130,6 +130,10 @@ export class Engine {
     // Craft configured resources.
     if (this._host.options.auto.craft.enabled) {
       this.craft();
+
+      if (this._host.options.auto.craft.addition.unlockUpgrades.enabled) {
+        this._workshopManager.autoUnlock();
+      }
     }
     // Go hunting.
     if (subOptions.enabled && subOptions.items.hunt.enabled) {
@@ -283,11 +287,6 @@ export class Engine {
    */
   unlock(): void {
     const upgrades = this._host.options.auto.unlock.items;
-
-    // If upgrades (workshop items) are enabled...
-    if (upgrades.upgrades.enabled && this._host.gamePage.tabs[3].visible) {
-      this._workshopManager.autoUnlock();
-    }
 
     // If techs (science items) are enabled...
     if (upgrades.techs.enabled && this._host.gamePage.tabs[2].visible) {

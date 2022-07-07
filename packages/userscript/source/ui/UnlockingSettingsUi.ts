@@ -86,23 +86,6 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
     // Set up the remaining options.
     const optionButtons = [
       this._getOption(
-        "upgrades",
-        this._options.items.upgrades,
-        this._host.i18n("ui.upgrade.upgrades"),
-        false,
-        {
-          onCheck: () => {
-            this._host.updateOptions(() => (this._options.items.upgrades.enabled = true));
-            this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.upgrades")]);
-          },
-          onUnCheck: () => {
-            this._host.updateOptions(() => (this._options.items.upgrades.enabled = false));
-            this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.upgrades")]);
-          },
-        }
-      ),
-      policiesButton,
-      this._getOption(
         "techs",
         this._options.items.techs,
         this._host.i18n("ui.upgrade.techs"),
@@ -118,6 +101,7 @@ export class UnlockingSettingsUi extends SettingsSectionUi<UnlockingSettings> {
           },
         }
       ),
+      policiesButton,
     ];
 
     list.append(...optionButtons);

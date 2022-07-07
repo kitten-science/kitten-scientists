@@ -177,10 +177,10 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     list.append(...optionButtons);
 
     const additionOptions = this.getAdditionOptions(this._options.addition);
+    list.append(additionOptions);
 
     element.panel.append(this._options.$trigger);
     element.panel.append(list);
-    list.append(additionOptions);
 
     this.element = element.panel;
   }

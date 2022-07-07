@@ -79,6 +79,7 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
 
     options.addition.unlockMissions.enabled =
       subject.items["toggle-missions"] ?? options.addition.unlockMissions.enabled;
+
     return options;
   }
 }
