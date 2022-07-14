@@ -44,6 +44,9 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
       }
     });
 
+    const toggleOptionsVisiblity = this._getItemsToggle(toggleName);
+    element.append(toggleOptionsVisiblity);
+
     this.element = element;
   }
 

@@ -72,6 +72,48 @@ export class UserInterface {
     optionsListElement.append(this._optionsUi.element);
     optionsListElement.append(this._filterUi.element);
 
+    // Make _engineUI's expando button hide/show the other option groups
+    // Currently accesses the button via id.
+    let optionsToggle = this._engineUi.element.children("#toggle-items-engine");
+    optionsToggle.on("click", () => {
+      let optionsVisiblity = this._engineUi.toggleOptions();
+      this._bonfireUi.element.toggle(optionsVisiblity);
+      this._spaceUi.element.toggle(optionsVisiblity);
+      this._craftUi.element.toggle(optionsVisiblity);
+      this._unlockUi.element.toggle(optionsVisiblity);
+      this._tradingUi.element.toggle(optionsVisiblity);
+      this._religionUi.element.toggle(optionsVisiblity);
+      this._timeUi.element.toggle(optionsVisiblity);
+      this._timeCtrlUi.element.toggle(optionsVisiblity);
+      this._distributeUi.element.toggle(optionsVisiblity);
+      this._optionsUi.element.toggle(optionsVisiblity);
+      this._filterUi.element.toggle(optionsVisiblity);
+
+      optionsToggle.text(optionsVisiblity ? "-" : "+");
+      optionsToggle.prop(
+        "title",
+        optionsVisiblity ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+      );
+    });
+
+    // collapse all options if the Enable Kitten Scientists label is shift-clicked
+    this._engineUi.element.children("label").on("click", e => {
+      if (!e.shiftKey) {
+        return;
+      }
+      this._bonfireUi.toggleOptions(false);
+      this._spaceUi.toggleOptions(false);
+      this._craftUi.toggleOptions(false);
+      this._unlockUi.toggleOptions(false);
+      this._tradingUi.toggleOptions(false);
+      this._religionUi.toggleOptions(false);
+      this._timeUi.toggleOptions(false);
+      this._timeCtrlUi.toggleOptions(false);
+      this._distributeUi.toggleOptions(false);
+      this._optionsUi.toggleOptions(false);
+      this._filterUi.toggleOptions(false);
+    });
+
     // Set up the "show activity summary" area.
     const activityBox = $("<div/>", {
       id: "activity-box",

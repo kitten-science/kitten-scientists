@@ -25,6 +25,7 @@ export type SettingsSectionUiComposition = {
  */
 export abstract class SettingsSectionUi<TState> {
   protected _host: UserScript;
+  protected _mainChild: JQuery<HTMLElement> | null = null;
   protected _itemsExpanded = false;
 
   constructor(host: UserScript) {
@@ -34,6 +35,19 @@ export abstract class SettingsSectionUi<TState> {
   abstract getState(): TState;
   abstract setState(state: TState): void;
   abstract refreshUi(): void;
+
+  /**
+   * Expands the options list if true, and collapses it if false.
+   * Changes the value of _itemsExpanded even if _mainChild is not defined.
+   * @returns the value of _itemsExpanded
+   */
+  public toggleOptions(display = !this._itemsExpanded) {
+    this._itemsExpanded = display;
+    if (this._mainChild) {
+      this._mainChild.toggle(display);
+    }
+    return this._itemsExpanded;
+  }
 
   /**
    * Constructs a settings panel that is used to contain a major section of the UI.
@@ -51,6 +65,8 @@ export abstract class SettingsSectionUi<TState> {
     options: SettingsSection,
     mainChild: JQuery<HTMLElement>
   ): SettingsSectionUiComposition {
+    this._mainChild = mainChild;
+
     const panelElement = $("<li/>", { id: `ks-${id}` });
     // Add a border on the element
     panelElement.css("borderTop", "1px solid rgba(185, 185, 185, 0.2)");
@@ -83,9 +99,7 @@ export abstract class SettingsSectionUi<TState> {
     panelElement.append(itemsElement);
 
     itemsElement.on("click", () => {
-      mainChild.toggle();
-
-      this._itemsExpanded = !this._itemsExpanded;
+      this.toggleOptions();
 
       itemsElement.text(this._itemsExpanded ? "-" : "+");
       itemsElement.prop(
