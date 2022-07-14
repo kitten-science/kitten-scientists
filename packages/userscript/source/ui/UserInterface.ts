@@ -74,9 +74,9 @@ export class UserInterface {
 
     // Make _engineUI's expando button hide/show the other option groups
     // Currently accesses the button via id.
-    let optionsToggle = this._engineUi.element.children("#toggle-items-engine");
+    const optionsToggle = this._engineUi.element.children("#toggle-items-engine");
     optionsToggle.on("click", () => {
-      let optionsVisiblity = this._engineUi.toggleOptions();
+      const optionsVisiblity = this._engineUi.toggleOptions();
       this._bonfireUi.element.toggle(optionsVisiblity);
       this._spaceUi.element.toggle(optionsVisiblity);
       this._craftUi.element.toggle(optionsVisiblity);
@@ -97,8 +97,8 @@ export class UserInterface {
     });
 
     // collapse all options if the Enable Kitten Scientists label is shift-clicked
-    this._engineUi.element.children("label").on("click", e => {
-      if (!e.shiftKey) {
+    this._engineUi.element.children("label").on("click", event => {
+      if (!event.shiftKey) {
         return;
       }
       this._bonfireUi.toggleOptions(false);
