@@ -16,7 +16,7 @@ echo ""
 echo "Starting new container..."
 docker run \
   --detach \
-  --mount type=bind,source="${BASEDIR}/../packages/userscript/output/kitten-scientists.inject.js",target=/kitten-game/kitten-scientists.inject.js \
+  --mount type=bind,source="${BASEDIR}/../packages/userscript/output",target=/kitten-game/build \
   --name kitten-game \
   --publish 8100:8080 kitten-game
 echo "Container started."
