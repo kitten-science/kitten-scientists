@@ -1,4 +1,5 @@
 import { Options } from "../options/Options";
+import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
 import { CraftSettingsUi } from "./CraftSettingsUi";
@@ -209,7 +210,14 @@ export class UserInterface {
   }
 
   private _addRule(rule: string) {
-    const sheets = document.styleSheets;
-    sheets[0].insertRule(rule, 0);
+    const styleSheetId = "kitten-scientists-styles";
+    let styleSheet = document.getElementById(styleSheetId) as HTMLStyleElement;
+    if (isNil(styleSheet)) {
+      styleSheet = document.createElement("style");
+      styleSheet.id = styleSheetId;
+      document.head.appendChild(styleSheet);
+    }
+    const sheet = mustExist(styleSheet.sheet);
+    sheet.insertRule(rule);
   }
 }
