@@ -303,11 +303,11 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (addition.upgradeBuildings.enabled = true));
+          this._host.updateOptions(() => (addition.turnOnSteamworks.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("option.steamworks")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (addition.upgradeBuildings.enabled = false));
+          this._host.updateOptions(() => (addition.turnOnSteamworks.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("option.steamworks")]);
         },
       }
@@ -329,6 +329,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;
     this._options.addition.upgradeBuildings.enabled = state.addition.upgradeBuildings.enabled;
+    this._options.addition.turnOnSteamworks.enabled = state.addition.turnOnSteamworks.enabled;
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -342,6 +343,10 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     mustExist(this._options.addition.upgradeBuildings.$enabled).prop(
       "checked",
       this._options.addition.upgradeBuildings.enabled
+    );
+    mustExist(this._options.addition.turnOnSteamworks.$enabled).prop(
+      "checked",
+      this._options.addition.turnOnSteamworks.enabled
     );
 
     for (const [name, option] of objectEntries(this._options.items)) {
