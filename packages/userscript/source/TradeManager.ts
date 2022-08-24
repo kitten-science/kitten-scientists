@@ -351,6 +351,8 @@ export class TradeManager {
     const maxRaces = this._host.gamePage.diplomacy.get("leviathans").unlocked ? 8 : 7;
     // If we haven't unlocked that many races yet...
     if (this._host.gamePage.diplomacyTab.racePanels.length < maxRaces) {
+      let refreshRequired = false;
+
       // Get the currently available catpower.
       let manpower = this._workshopManager.getValueAvailable("manpower", true);
       // TODO: These should be checked in reverse order. Otherwise the check for lizards
@@ -361,13 +363,10 @@ export class TradeManager {
       if (!this._host.gamePage.diplomacy.get("lizards").unlocked) {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
-          this._host.iactivity(
-            "upgrade.race",
-            [this._host.gamePage.diplomacy.unlockRandomRace().title],
-            "ks-upgrade"
-          );
+          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          this._host.gamePage.ui.render();
+          refreshRequired = true;
         }
       }
 
@@ -375,13 +374,10 @@ export class TradeManager {
       if (!this._host.gamePage.diplomacy.get("sharks").unlocked) {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
-          this._host.iactivity(
-            "upgrade.race",
-            [this._host.gamePage.diplomacy.unlockRandomRace().title],
-            "ks-upgrade"
-          );
+          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          this._host.gamePage.ui.render();
+          refreshRequired = true;
         }
       }
 
@@ -389,13 +385,10 @@ export class TradeManager {
       if (!this._host.gamePage.diplomacy.get("griffins").unlocked) {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
-          this._host.iactivity(
-            "upgrade.race",
-            [this._host.gamePage.diplomacy.unlockRandomRace().title],
-            "ks-upgrade"
-          );
+          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          this._host.gamePage.ui.render();
+          refreshRequired = true;
         }
       }
 
@@ -406,13 +399,10 @@ export class TradeManager {
       ) {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
-          this._host.iactivity(
-            "upgrade.race",
-            [this._host.gamePage.diplomacy.unlockRandomRace().title],
-            "ks-upgrade"
-          );
+          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          this._host.gamePage.ui.render();
+          refreshRequired = true;
         }
       }
 
@@ -423,13 +413,10 @@ export class TradeManager {
       ) {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
-          this._host.iactivity(
-            "upgrade.race",
-            [this._host.gamePage.diplomacy.unlockRandomRace().title],
-            "ks-upgrade"
-          );
+          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          this._host.gamePage.ui.render();
+          refreshRequired = true;
         }
       }
 
@@ -441,13 +428,10 @@ export class TradeManager {
       ) {
         if (manpower >= 1000) {
           mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
-          this._host.iactivity(
-            "upgrade.race",
-            [this._host.gamePage.diplomacy.unlockRandomRace().title],
-            "ks-upgrade"
-          );
+          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          this._host.gamePage.ui.render();
+          refreshRequired = true;
         }
       }
 
@@ -458,14 +442,15 @@ export class TradeManager {
       ) {
         if (manpower >= 1000) {
           mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
-          this._host.iactivity(
-            "upgrade.race",
-            [this._host.gamePage.diplomacy.unlockRandomRace().title],
-            "ks-upgrade"
-          );
+          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          this._host.gamePage.ui.render();
+          refreshRequired = true;
         }
+      }
+
+      if (refreshRequired) {
+        this._host.gamePage.ui.render();
       }
     }
   }
