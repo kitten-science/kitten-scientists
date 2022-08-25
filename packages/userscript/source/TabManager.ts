@@ -19,7 +19,7 @@ export class TabManager<TTab extends GameTab = GameTab> {
   }
 
   render(): this {
-    if ( this._host.gamePage.ui.activeTabId !== this.tab.tabId) {
+    if (this._host.gamePage.ui.activeTabId !== this.tab.tabId) {
       this.tab.render();
     }
 
