@@ -3,7 +3,7 @@ import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { cerror } from "./tools/Log";
 import { isNil } from "./tools/Maybe";
-import { ScienceTab } from "./types";
+import { PolicyInfo, ScienceTab } from "./types";
 import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
@@ -43,34 +43,34 @@ export class ScienceManager extends UpgradeManager {
     this.manager.render();
 
     const policies = this._host.gamePage.science.policies;
-    const toResearch = [];
+    const toResearch = new Array<PolicyInfo>();
 
-    for (const [policy] of objectEntries(
+    for (const [policy, options] of objectEntries(
       (this._host.options.auto.unlock.items.policies as PolicySettings).items
     )) {
-      const targetPolicy = policies.find(policy => policy.name === policy.name);
+      if (!options.enabled) {
+        continue;
+      }
+
+      const targetPolicy = policies.find(subject => subject.name === policy);
       if (isNil(targetPolicy)) {
         cerror(`Policy '${policy}' not found in game!`);
         continue;
       }
 
-      if (!targetPolicy.researched) {
-        if (targetPolicy.blocked) {
-          continue;
-        }
-        if (targetPolicy.unlocked) {
-          if (
-            targetPolicy.requiredLeaderJob === undefined ||
-            (this._host.gamePage.village.leader !== null &&
-              this._host.gamePage.village.leader.job === targetPolicy.requiredLeaderJob)
-          ) {
-            toResearch.push(targetPolicy);
-          }
+      if (!targetPolicy.researched && !targetPolicy.blocked && targetPolicy.unlocked) {
+        if (
+          targetPolicy.requiredLeaderJob === undefined ||
+          (this._host.gamePage.village.leader !== null &&
+            this._host.gamePage.village.leader.job === targetPolicy.requiredLeaderJob)
+        ) {
+          toResearch.push(targetPolicy);
         }
       }
     }
-    for (const polciy of toResearch) {
-      this.upgrade(polciy, "policy");
+
+    for (const policy of toResearch) {
+      this.upgrade(policy, "policy");
     }
   }
 }
