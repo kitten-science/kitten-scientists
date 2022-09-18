@@ -39,6 +39,8 @@ export abstract class SettingsSectionUi<TState> {
   /**
    * Expands the options list if true, and collapses it if false.
    * Changes the value of _itemsExpanded even if _mainChild is not defined.
+   *
+   * @param display Force a display state.
    * @returns the value of _itemsExpanded
    */
   public toggleOptions(display = !this._itemsExpanded) {
