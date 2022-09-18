@@ -129,7 +129,7 @@ export class Engine {
       this.craft();
 
       if (this._host.options.auto.craft.addition.unlockUpgrades.enabled) {
-        this._workshopManager.autoUnlock();
+        await this._workshopManager.autoUnlock();
       }
     }
 

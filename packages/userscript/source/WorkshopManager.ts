@@ -18,7 +18,7 @@ export class WorkshopManager extends UpgradeManager {
     this.manager = new TabManager(this._host, "Workshop");
   }
 
-  autoUnlock() {
+  async autoUnlock() {
     if (!this._host.gamePage.tabs[3].visible) {
       return;
     }
@@ -44,7 +44,7 @@ export class WorkshopManager extends UpgradeManager {
       }
 
       // If we can afford all prices, purchase the upgrade.
-      this.upgrade(upgrade, "workshop");
+      await this.upgrade(upgrade, "workshop");
     }
   }
 
