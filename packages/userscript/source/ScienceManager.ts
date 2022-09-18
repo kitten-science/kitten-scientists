@@ -1,4 +1,5 @@
 import { PolicySettings } from "./options/PolicySettings";
+import { TechSettings } from "./options/TechSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { cerror } from "./tools/Log";
@@ -21,9 +22,20 @@ export class ScienceManager extends UpgradeManager {
   async autoUnlock() {
     this.manager.render();
 
-    // These behave identically to the workshop uprades above.
     const scienceUpgrades = this._host.gamePage.science.techs;
-    techLoop: for (const upgrade of scienceUpgrades) {
+    techLoop: for (const [tech, options] of objectEntries(
+      (this._host.options.auto.unlock.items.techs as TechSettings).items
+    )) {
+      if (!options.enabled) {
+        continue;
+      }
+
+      const upgrade = scienceUpgrades.find(subject => subject.name === tech);
+      if (isNil(upgrade)) {
+        cerror(`Tech '${tech}' not found in game!`);
+        continue;
+      }
+
       if (upgrade.researched || !upgrade.unlocked) {
         continue;
       }
@@ -35,6 +47,7 @@ export class ScienceManager extends UpgradeManager {
           continue techLoop;
         }
       }
+
       await this.upgrade(upgrade, "science");
     }
   }

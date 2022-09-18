@@ -1,4 +1,4 @@
-import { Job, Policy, Race, Resource, Season } from "../types";
+import { Job, Policy, Race, Resource, Season, Technology } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FilterItem } from "./FilterSettings";
 import { AllItems } from "./Options";
@@ -55,6 +55,7 @@ type ToggleResetSpaceItem = `toggle-reset-space-${SpaceItem}`;
 type ToggleResetTimeItem = `toggle-reset-time-${TimeItem}`;
 type ToggleResetUnicornItem = `toggle-reset-unicorn-${UnicornItem}`;
 type ToggleResourceItem = `toggle-${Resource}`;
+type ToggleTechItem = `toggle-${Technology}`;
 type ToggleTimeControlCycleItem = `toggle-timeSkip-${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
 type ToggleTimeControlItem = `toggle-${TimeControlItem}`;
 type ToggleTimeControlSeasonItem = `toggle-timeSkip-${Season}`;
@@ -102,6 +103,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleResetTimeItem, boolean>> &
     Partial<Record<ToggleResetUnicornItem, boolean>> &
     Partial<Record<ToggleResourceItem, boolean>> &
+    Partial<Record<ToggleTechItem, boolean>> &
     Partial<Record<ToggleTimeControlCycleItem, boolean>> &
     Partial<Record<ToggleTimeControlItem, boolean>> &
     Partial<Record<ToggleTimeControlSeasonItem, boolean>> &
