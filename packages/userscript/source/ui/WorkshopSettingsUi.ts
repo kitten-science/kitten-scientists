@@ -1,4 +1,8 @@
-import { CraftAdditionSettings, CraftSettings, CraftSettingsItem } from "../options/CraftSettings";
+import {
+  CraftAdditionSettings,
+  CraftSettingsItem,
+  WorkshopSettings,
+} from "../options/WorkshopSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { Maybe, mustExist } from "../tools/Maybe";
@@ -6,16 +10,18 @@ import { ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
+export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: CraftSettings;
+  private readonly _options: WorkshopSettings;
 
   private _resourcesList: Maybe<JQuery<HTMLElement>>;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, options: CraftSettings = host.options.auto.craft) {
+  private _upgradesExpanded = false;
+
+  constructor(host: UserScript, options: WorkshopSettings = host.options.auto.craft) {
     super(host);
 
     this._options = options;
@@ -317,9 +323,9 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
   }
 
   getAdditionOptions(addition: CraftAdditionSettings): Array<JQuery<HTMLElement>> {
-    const nodeHeader = this._getHeader("Additional options");
+    const header = this._getHeader("Additional options");
 
-    const nodeUpgrades = this._getOption(
+    const upgradesButton = this._getOption(
       "upgrades",
       addition.unlockUpgrades,
       this._host.i18n("ui.upgrade.upgrades"),
@@ -336,10 +342,57 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       }
     );
 
-    return [nodeHeader, nodeUpgrades];
+    const upgradesList = $("<ul/>", {
+      id: "items-list-upgrades",
+      css: { display: "none", paddingLeft: "20px" },
+    });
+
+    const upgradeButtons = [];
+    for (const [upgradeName, upgrade] of objectEntries(
+      this._options.addition.unlockUpgrades.items
+    )) {
+      const upgradeLabel = this._host.i18n(`$workshop.${upgradeName}.label`);
+      const upgradeButton = this._getOption(
+        `upgrade-${upgradeName}`,
+        upgrade,
+        upgradeLabel,
+        false,
+        {
+          onCheck: () => {
+            this._host.updateOptions(() => (upgrade.enabled = true));
+            this._host.imessage("status.auto.enable", [upgradeLabel]);
+          },
+          onUnCheck: () => {
+            this._host.updateOptions(() => (upgrade.enabled = false));
+            this._host.imessage("status.auto.disable", [upgradeLabel]);
+          },
+        }
+      );
+
+      upgradeButtons.push({ label: upgradeLabel, button: upgradeButton });
+    }
+    // Ensure buttons are added into UI with their labels alphabetized.
+    upgradeButtons.sort((a, b) => a.label.localeCompare(b.label));
+    upgradeButtons.forEach(button => upgradesList.append(button.button));
+
+    const upgradesItemsButton = this._getItemsToggle("upgrades-show");
+    upgradesItemsButton.on("click", () => {
+      upgradesList.toggle();
+
+      this._upgradesExpanded = !this._upgradesExpanded;
+
+      upgradesItemsButton.text(this._upgradesExpanded ? "-" : "+");
+      upgradesItemsButton.prop(
+        "title",
+        this._upgradesExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+      );
+    });
+    upgradesButton.append(upgradesItemsButton, upgradesList);
+
+    return [header, upgradesButton];
   }
 
-  getState(): CraftSettings {
+  getState(): WorkshopSettings {
     return {
       enabled: this._options.enabled,
       trigger: this._options.trigger,
@@ -349,11 +402,14 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
     };
   }
 
-  setState(state: CraftSettings): void {
+  setState(state: WorkshopSettings): void {
     this._options.enabled = state.enabled;
     this._options.trigger = state.trigger;
 
     this._options.addition.unlockUpgrades.enabled = state.addition.unlockUpgrades.enabled;
+    for (const [name, option] of objectEntries(this._options.addition.unlockUpgrades.items)) {
+      option.enabled = state.addition.unlockUpgrades.items[name].enabled;
+    }
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -383,6 +439,9 @@ export class CraftSettingsUi extends SettingsSectionUi<CraftSettings> {
       "checked",
       this._options.addition.unlockUpgrades.enabled
     );
+    for (const [, option] of objectEntries(this._options.addition.unlockUpgrades.items)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
+    }
 
     for (const [, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);

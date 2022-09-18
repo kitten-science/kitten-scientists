@@ -1,4 +1,4 @@
-import { Job, Policy, Race, Resource, Season, Technology } from "../types";
+import { Job, Policy, Race, Resource, Season, Technology, Upgrade } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FilterItem } from "./FilterSettings";
 import { AllItems } from "./Options";
@@ -65,6 +65,7 @@ type ToggleUnlockItem = `toggle-${ScienceItem}`;
 type ToggleUnlockRaces = "toggle-races";
 type ToggleUnlockMissions = "toggle-missions";
 type ToggleUnlockUpgrades = "toggle-upgrades";
+type ToggleUpgradeItem = `toggle-${Upgrade}`;
 type ToggleUpgradeBuildings = "toggle-buildings";
 
 export type KittenStorageType = {
@@ -113,7 +114,8 @@ export type KittenStorageType = {
     Partial<Record<ToggleUnlockMissions, boolean>> &
     Partial<Record<ToggleUnlockRaces, boolean>> &
     Partial<Record<ToggleUnlockUpgrades, boolean>> &
-    Partial<Record<ToggleUpgradeBuildings, boolean>>;
+    Partial<Record<ToggleUpgradeBuildings, boolean>> &
+    Partial<Record<ToggleUpgradeItem, boolean>>;
   resources: Partial<
     Record<
       Resource,

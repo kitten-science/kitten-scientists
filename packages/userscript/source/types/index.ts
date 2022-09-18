@@ -206,3 +206,4 @@ export * from "./science";
 export * from "./space";
 export * from "./time";
 export * from "./trading";
+export * from "./workshop";

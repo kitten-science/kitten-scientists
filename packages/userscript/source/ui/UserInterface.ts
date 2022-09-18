@@ -2,7 +2,6 @@ import { Options } from "../options/Options";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
-import { CraftSettingsUi } from "./CraftSettingsUi";
 import { EngineSettingsUi } from "./EngineSettingsUi";
 import { FiltersSettingsUi } from "./FilterSettingsUi";
 import { OptionsSettingsUi } from "./OptionsSettingsUi";
@@ -13,6 +12,7 @@ import { TimeControlSettingsUi } from "./TimeControlSettingsUi";
 import { TimeSettingsUi } from "./TimeSettingsUi";
 import { TradingSettingsUi } from "./TradingSettingsUi";
 import { VillageSettingsUi } from "./VillageSettingsUi";
+import { WorkshopSettingsUi } from "./WorkshopSettingsUi";
 
 export class UserInterface {
   private readonly _host: UserScript;
@@ -20,7 +20,7 @@ export class UserInterface {
   private _engineUi: EngineSettingsUi;
   private _bonfireUi: BonfireSettingsUi;
   private _spaceUi: SpaceSettingsUi;
-  private _craftUi: CraftSettingsUi;
+  private _craftUi: WorkshopSettingsUi;
   private _unlockUi: ScienceSettingsUi;
   private _tradingUi: TradingSettingsUi;
   private _religionUi: ReligionSettingsUi;
@@ -36,7 +36,7 @@ export class UserInterface {
     this._engineUi = new EngineSettingsUi(this._host);
     this._bonfireUi = new BonfireSettingsUi(this._host);
     this._spaceUi = new SpaceSettingsUi(this._host);
-    this._craftUi = new CraftSettingsUi(this._host);
+    this._craftUi = new WorkshopSettingsUi(this._host);
     this._unlockUi = new ScienceSettingsUi(this._host);
     this._tradingUi = new TradingSettingsUi(this._host);
     this._religionUi = new ReligionSettingsUi(this._host);

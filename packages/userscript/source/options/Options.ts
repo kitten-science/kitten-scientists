@@ -2,10 +2,8 @@ import { objectEntries } from "../tools/Entries";
 import { isNil } from "../tools/Maybe";
 import { Resource } from "../types";
 import { BonfireItem, BonfireSettings } from "./BonfireSettings";
-import { CraftSettings } from "./CraftSettings";
 import { FilterSettings } from "./FilterSettings";
 import { OptionsSettings } from "./OptionsSettings";
-import { PolicySettings } from "./PolicySettings";
 import { FaithItem, ReligionItem, ReligionSettings } from "./ReligionSettings";
 import { ScienceSettings } from "./ScienceSettings";
 import { KittenStorageType } from "./SettingsStorage";
@@ -14,6 +12,7 @@ import { TimeControlSettings } from "./TimeControlSettings";
 import { TimeItem, TimeSettings } from "./TimeSettings";
 import { TradingSettings } from "./TradingSettings";
 import { VillageSettings } from "./VillageSettings";
+import { WorkshopSettings } from "./WorkshopSettings";
 
 export type Requirement = Resource | false;
 
@@ -37,7 +36,7 @@ export class Options {
     engine: { enabled: boolean };
     bonfire: BonfireSettings;
     space: SpaceSettings;
-    craft: CraftSettings;
+    craft: WorkshopSettings;
     unlock: ScienceSettings;
     trade: TradingSettings;
     religion: ReligionSettings;
@@ -50,7 +49,7 @@ export class Options {
     engine: { enabled: false },
     bonfire: new BonfireSettings(),
     space: new SpaceSettings(),
-    craft: new CraftSettings(),
+    craft: new WorkshopSettings(),
     unlock: new ScienceSettings(),
     trade: new TradingSettings(),
     religion: new ReligionSettings(),
@@ -116,7 +115,7 @@ export class Options {
     subject.resources = {};
 
     BonfireSettings.toLegacyOptions(optionsObject.auto.bonfire, subject);
-    CraftSettings.toLegacyOptions(optionsObject.auto.craft, subject);
+    WorkshopSettings.toLegacyOptions(optionsObject.auto.craft, subject);
     VillageSettings.toLegacyOptions(optionsObject.auto.village, subject);
     FilterSettings.toLegacyOptions(optionsObject.auto.filters, subject);
 
@@ -126,19 +125,11 @@ export class Options {
     }
 
     ReligionSettings.toLegacyOptions(optionsObject.auto.religion, subject);
+    ScienceSettings.toLegacyOptions(optionsObject.auto.unlock, subject);
     SpaceSettings.toLegacyOptions(optionsObject.auto.space, subject);
     TimeSettings.toLegacyOptions(optionsObject.auto.time, subject);
     TimeControlSettings.toLegacyOptions(optionsObject.auto.timeCtrl, subject);
     TradingSettings.toLegacyOptions(optionsObject.auto.trade, subject);
-
-    for (const [name, item] of objectEntries(optionsObject.auto.unlock.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-    }
-    for (const [name, item] of objectEntries(
-      (optionsObject.auto.unlock.items.policies as PolicySettings).items
-    )) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-    }
 
     return subject;
   }
@@ -153,7 +144,7 @@ export class Options {
     const subject = optionsObject as KittenStorageType;
 
     result.auto.bonfire = BonfireSettings.fromLegacyOptions(subject);
-    result.auto.craft = CraftSettings.fromLegacyOptions(subject);
+    result.auto.craft = WorkshopSettings.fromLegacyOptions(subject);
     result.auto.village = VillageSettings.fromLegacyOptions(subject);
     result.auto.filters = FilterSettings.fromLegacyOptions(subject);
     result.auto.options = OptionsSettings.fromLegacyOptions(subject);

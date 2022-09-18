@@ -1,9 +1,10 @@
 import { objectEntries } from "../tools/Entries";
-import { ResourceCraftable } from "../types";
+import { GamePage, ResourceCraftable } from "../types";
 import { Requirement } from "./Options";
 import { ResourceSettings } from "./ResourcesSettings";
 import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
+import { UpgradeSettings } from "./UpgradeSettings";
 
 export type CraftSettingsItem = SettingToggle & {
   limited: boolean;
@@ -24,15 +25,15 @@ export type CraftSettingsItem = SettingToggle & {
 };
 
 export type CraftAdditionSettings = {
-  unlockUpgrades: SettingToggle;
+  unlockUpgrades: UpgradeSettings;
 };
 
-export class CraftSettings extends SettingsSection implements SettingTrigger {
+export class WorkshopSettings extends SettingsSection implements SettingTrigger {
   trigger = 0.95;
   $trigger?: JQuery<HTMLElement>;
 
   addition: CraftAdditionSettings = {
-    unlockUpgrades: { enabled: true },
+    unlockUpgrades: new UpgradeSettings(),
   };
 
   items: {
@@ -66,7 +67,11 @@ export class CraftSettings extends SettingsSection implements SettingTrigger {
     },
   };
 
-  static toLegacyOptions(settings: CraftSettings, subject: KittenStorageType) {
+  static validateGame(game: GamePage, settings: WorkshopSettings) {
+    UpgradeSettings.validateGame(game, settings.addition.unlockUpgrades);
+  }
+
+  static toLegacyOptions(settings: WorkshopSettings, subject: KittenStorageType) {
     subject.toggles.craft = settings.enabled;
     subject.triggers.craft = settings.trigger;
 
@@ -86,10 +91,13 @@ export class CraftSettings extends SettingsSection implements SettingTrigger {
     }
 
     subject.items["toggle-upgrades"] = settings.addition.unlockUpgrades.enabled;
+    for (const [name, item] of objectEntries(settings.addition.unlockUpgrades.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+    }
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
-    const options = new CraftSettings();
+    const options = new WorkshopSettings();
     options.enabled = subject.toggles.craft;
     options.trigger = subject.triggers.craft;
 
@@ -113,6 +121,9 @@ export class CraftSettings extends SettingsSection implements SettingTrigger {
 
     options.addition.unlockUpgrades.enabled =
       subject.items["toggle-upgrades"] ?? options.addition.unlockUpgrades.enabled;
+    for (const [name, item] of objectEntries(options.addition.unlockUpgrades.items)) {
+      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+    }
 
     return options;
   }

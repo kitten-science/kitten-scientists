@@ -10,6 +10,7 @@ import i18nData from "./i18n/i18nData.json";
 import { Options } from "./options/Options";
 import { ScienceSettings } from "./options/ScienceSettings";
 import { SettingsStorage } from "./options/SettingsStorage";
+import { WorkshopSettings } from "./options/WorkshopSettings";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
@@ -97,6 +98,7 @@ export class UserScript {
    */
   validateGame() {
     ScienceSettings.validateGame(this.gamePage, this.options.auto.unlock);
+    WorkshopSettings.validateGame(this.gamePage, this.options.auto.craft);
   }
 
   run(): void {

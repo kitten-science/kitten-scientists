@@ -4,7 +4,7 @@ import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { cerror } from "./tools/Log";
 import { isNil } from "./tools/Maybe";
-import { PolicyInfo, ScienceTab } from "./types";
+import { PolicyInfo, ScienceTab, TechInfo } from "./types";
 import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
@@ -22,17 +22,19 @@ export class ScienceManager extends UpgradeManager {
   async autoUnlock() {
     this.manager.render();
 
-    const scienceUpgrades = this._host.gamePage.science.techs;
-    techLoop: for (const [tech, options] of objectEntries(
+    const techs = this._host.gamePage.science.techs;
+    const toUnlock = new Array<TechInfo>();
+
+    workLoop: for (const [item, options] of objectEntries(
       (this._host.options.auto.unlock.items.techs as TechSettings).items
     )) {
       if (!options.enabled) {
         continue;
       }
 
-      const upgrade = scienceUpgrades.find(subject => subject.name === tech);
+      const upgrade = techs.find(subject => subject.name === item);
       if (isNil(upgrade)) {
-        cerror(`Tech '${tech}' not found in game!`);
+        cerror(`Tech '${item}' not found in game!`);
         continue;
       }
 
@@ -44,11 +46,15 @@ export class ScienceManager extends UpgradeManager {
       prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
       for (const resource of prices) {
         if (this._workshopManager.getValueAvailable(resource.name, true) < resource.val) {
-          continue techLoop;
+          continue workLoop;
         }
       }
 
-      await this.upgrade(upgrade, "science");
+      toUnlock.push(upgrade);
+    }
+
+    for (const item of toUnlock) {
+      await this.upgrade(item, "science");
     }
   }
 
@@ -56,18 +62,18 @@ export class ScienceManager extends UpgradeManager {
     this.manager.render();
 
     const policies = this._host.gamePage.science.policies;
-    const toResearch = new Array<PolicyInfo>();
+    const toUnlock = new Array<PolicyInfo>();
 
-    for (const [policy, options] of objectEntries(
+    for (const [item, options] of objectEntries(
       (this._host.options.auto.unlock.items.policies as PolicySettings).items
     )) {
       if (!options.enabled) {
         continue;
       }
 
-      const targetPolicy = policies.find(subject => subject.name === policy);
+      const targetPolicy = policies.find(subject => subject.name === item);
       if (isNil(targetPolicy)) {
-        cerror(`Policy '${policy}' not found in game!`);
+        cerror(`Policy '${item}' not found in game!`);
         continue;
       }
 
@@ -77,13 +83,13 @@ export class ScienceManager extends UpgradeManager {
           (this._host.gamePage.village.leader !== null &&
             this._host.gamePage.village.leader.job === targetPolicy.requiredLeaderJob)
         ) {
-          toResearch.push(targetPolicy);
+          toUnlock.push(targetPolicy);
         }
       }
     }
 
-    for (const policy of toResearch) {
-      await this.upgrade(policy, "policy");
+    for (const item of toUnlock) {
+      await this.upgrade(item, "policy");
     }
   }
 }

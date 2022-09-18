@@ -19,6 +19,7 @@ import {
   TabId,
   TranscendenceUpgradeInfo,
   TranscendenceUpgrades,
+  UpgradeInfo,
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from ".";
@@ -403,15 +404,6 @@ export type GamePage = {
     ) => { researched: boolean };
     getCraft: (name: ResourceCraftable) => CraftableInfo | undefined;
     getCraftPrice: (craft: CraftableInfo) => Array<Price>;
-    upgrades: Array<{
-      description: string;
-      effects: Record<string, number>;
-      label: string;
-      name: string;
-      prices: Array<Price>;
-      researched: boolean;
-      unlocked: boolean;
-      unlocks: { upgrades: Array<unknown> };
-    }>;
+    upgrades: Array<UpgradeInfo>;
   };
 };

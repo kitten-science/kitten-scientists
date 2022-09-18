@@ -1,8 +1,8 @@
 import { BonfireManager } from "./BonfireManager";
 import { CacheManager } from "./CacheManager";
 import { BonfireItem, BonfireSettingsItem } from "./options/BonfireSettings";
-import { CraftSettingsItem } from "./options/CraftSettings";
 import { SpaceItem, SpaceSettingsItem } from "./options/SpaceSettings";
+import { CraftSettingsItem } from "./options/WorkshopSettings";
 import { ReligionManager } from "./ReligionManager";
 import { ScienceManager } from "./ScienceManager";
 import { SpaceManager } from "./SpaceManager";

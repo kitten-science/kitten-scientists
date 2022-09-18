@@ -1,12 +1,12 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage } from "../types";
 import { PolicySettings } from "./PolicySettings";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 import { TechSettings } from "./TechSettings";
 
 export type ScienceItem = "policies" | "techs";
-export type ScienceSettingsItem = SettingToggle | PolicySettings;
+export type ScienceSettingsItem = TechSettings | PolicySettings;
 
 export class ScienceSettings extends SettingsSection {
   items: {
@@ -21,12 +21,27 @@ export class ScienceSettings extends SettingsSection {
     TechSettings.validateGame(game, settings.items.techs as TechSettings);
   }
 
+  static toLegacyOptions(settings: ScienceSettings, subject: KittenStorageType) {
+    subject.toggles.upgrade = settings.enabled;
+
+    subject.items["toggle-policies"] = settings.items.policies.enabled;
+    subject.items["toggle-techs"] = settings.items.techs.enabled;
+
+    for (const [name, item] of objectEntries(settings.items.techs.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+    }
+    for (const [name, item] of objectEntries(settings.items.policies.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+    }
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new ScienceSettings();
     options.enabled = subject.toggles.upgrade;
-    for (const [name, item] of objectEntries(options.items)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-    }
+
+    options.items.policies.enabled =
+      subject.items["toggle-policies"] ?? options.items.policies.enabled;
+    options.items.techs.enabled = subject.items["toggle-techs"] ?? options.items.techs.enabled;
 
     for (const [name, item] of objectEntries((options.items.policies as PolicySettings).items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
