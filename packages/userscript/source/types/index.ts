@@ -109,6 +109,25 @@ export type Panel = {
   visible: boolean;
 };
 
+export type ButtonModel = {
+  enabled: boolean;
+  metadata: {
+    breakIronWill: boolean;
+    /**
+     * How many items of this can be built at any time?
+     * Used to limit Resource Retrieval to 100.
+     */
+    limitBuild?: number;
+    name: string;
+    unlocks: unknown;
+    upgrades: unknown;
+    val: number;
+  };
+  name: string;
+  prices: Array<Price>;
+  visible: boolean;
+};
+
 /**
  * Not necessarily a button, but a KG UI element.
  */
@@ -127,24 +146,7 @@ export type BuildButton<T = string> = {
   };
   domNode: HTMLDivElement;
   id: T;
-  model: {
-    enabled: boolean;
-    metadata: {
-      breakIronWill: boolean;
-      /**
-       * How many items of this can be built at any time?
-       * Used to limit Resource Retrieval to 100.
-       */
-      limitBuild?: number;
-      name: string;
-      unlocks: unknown;
-      upgrades: unknown;
-      val: number;
-    };
-    name: string;
-    prices: Array<Price>;
-    visible: boolean;
-  };
+  model: ButtonModel;
   onClick: () => void;
 };
 

@@ -63,6 +63,9 @@ export type PolicyInfo = {
   name: Policy;
   prices: Array<Price>;
   requiredLeaderJob?: Job;
+  /**
+   * Has this policy already been researched?
+   */
   researched: boolean;
   unlocked: boolean;
   unlocks: { policies: Array<Policy> };

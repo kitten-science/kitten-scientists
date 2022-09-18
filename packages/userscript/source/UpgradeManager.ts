@@ -11,13 +11,34 @@ export abstract class UpgradeManager {
     this._host = host;
   }
 
-  upgrade(upgrade: { label: string }, variant: "policy" | "science" | "workshop"): void {
+  async upgrade(
+    upgrade: { label: string },
+    variant: "policy" | "science" | "workshop"
+  ): Promise<boolean> {
     const button = this.getUpgradeButton(upgrade, variant);
 
-    if (!button || !button.model.enabled) return;
+    if (!button || !button.model.enabled) {
+      return false;
+    }
 
-    //need to simulate a click so the game updates everything properly
-    button.domNode.click();
+    const controller =
+      variant === "policy"
+        ? new classes.ui.PolicyBtnController(this._host.gamePage)
+        : new com.nuclearunicorn.game.ui.TechButtonController(this._host.gamePage);
+
+    // Ensure `noConfirm` is set for the purchasing, as that might invoke `confirm()`
+    // in the game.
+    const noConfirm = (this._host.gamePage.opts.noConfirm = true);
+    this._host.gamePage.opts.noConfirm = true;
+    const success = await new Promise(resolve =>
+      controller.buyItem(button.model, undefined, resolve)
+    );
+    this._host.gamePage.opts.noConfirm = noConfirm;
+
+    if (!success) {
+      return false;
+    }
+
     const label = upgrade.label;
 
     if (variant === "workshop") {
@@ -29,6 +50,8 @@ export abstract class UpgradeManager {
       this._host.storeForSummary(label, 1, "research");
       this._host.iactivity("upgrade.tech", [label], "ks-research");
     }
+
+    return true;
   }
 
   getUpgradeButton(
