@@ -1,5 +1,6 @@
-import { Policy } from "../types";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { cwarn } from "../tools/Log";
+import { GamePage, Policy } from "../types";
+import { difference, SettingsSection, SettingToggle } from "./SettingsSection";
 
 export type PolicySettingsItem = SettingToggle;
 export class PolicySettings extends SettingsSection {
@@ -47,4 +48,19 @@ export class PolicySettings extends SettingsSection {
     zebraRelationsAppeasement: { enabled: false },
     zebraRelationsBellicosity: { enabled: false },
   };
+
+  static validateGame(game: GamePage, settings: PolicySettings) {
+    const inSettings = Object.keys(settings.items);
+    const inGame = game.science.policies.map(policy => policy.name);
+
+    const missingInSettings = difference(inGame, inSettings);
+    const redundantInSettings = difference(inSettings, inGame);
+
+    for (const policy of missingInSettings) {
+      cwarn(`The policy '${policy}' is not tracked in Kitten Scientists!`);
+    }
+    for (const policy of redundantInSettings) {
+      cwarn(`The policy '${policy}' is not a policy in Kitten Game!`);
+    }
+  }
 }

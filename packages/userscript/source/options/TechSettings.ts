@@ -1,5 +1,6 @@
-import { Technology } from "../types";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { cwarn } from "../tools/Log";
+import { GamePage, Technology } from "../types";
+import { difference, SettingsSection, SettingToggle } from "./SettingsSection";
 
 export type TechSettingsItem = SettingToggle;
 export class TechSettings extends SettingsSection {
@@ -69,4 +70,19 @@ export class TechSettings extends SettingsSection {
     voidSpace: { enabled: true },
     writing: { enabled: true },
   };
+
+  static validateGame(game: GamePage, settings: TechSettings) {
+    const inSettings = Object.keys(settings.items);
+    const inGame = game.science.techs.map(tech => tech.name);
+
+    const missingInSettings = difference(inGame, inSettings);
+    const redundantInSettings = difference(inSettings, inGame);
+
+    for (const tech of missingInSettings) {
+      cwarn(`The technology '${tech}' is not tracked in Kitten Scientists!`);
+    }
+    for (const tech of redundantInSettings) {
+      cwarn(`The technology '${tech}' is not a technology in Kitten Game!`);
+    }
+  }
 }

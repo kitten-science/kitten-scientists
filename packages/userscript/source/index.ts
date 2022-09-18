@@ -36,5 +36,6 @@ const devSettings = KS_SETTINGS ?? null;
     cinfo("No legacy settings found. Default settings will be used.");
   }
 
+  userScript.validateGame();
   userScript.run();
 })().catch(console.error);

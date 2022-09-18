@@ -1,4 +1,5 @@
 import { objectEntries } from "../tools/Entries";
+import { GamePage } from "../types";
 import { PolicySettings } from "./PolicySettings";
 import { SettingsSection, SettingToggle } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
@@ -14,6 +15,11 @@ export class ScienceSettings extends SettingsSection {
     policies: new PolicySettings(),
     techs: new TechSettings(),
   };
+
+  static validateGame(game: GamePage, settings: ScienceSettings) {
+    PolicySettings.validateGame(game, settings.items.policies as PolicySettings);
+    TechSettings.validateGame(game, settings.items.techs as TechSettings);
+  }
 
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new ScienceSettings();

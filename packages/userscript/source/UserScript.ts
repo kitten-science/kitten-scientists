@@ -8,6 +8,7 @@ import {
 import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
 import { Options } from "./options/Options";
+import { ScienceSettings } from "./options/ScienceSettings";
 import { SettingsStorage } from "./options/SettingsStorage";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
@@ -87,6 +88,15 @@ export class UserScript {
 
     // Every 30 seconds, check if we need to save our settings.
     this._intervalSaveSettings = setInterval(this._checkOptions.bind(this), 30 * 1000);
+  }
+
+  /**
+   * Runs some validations against the game to determine if internal control
+   * structures still match up with expectations.
+   * Issues should be logged to the console.
+   */
+  validateGame() {
+    ScienceSettings.validateGame(this.gamePage, this.options.auto.unlock);
   }
 
   run(): void {
