@@ -46,10 +46,13 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
         },
       }
     );
+
     const policiesList = $("<ul/>", {
       id: "items-list-policies",
       css: { display: "none", paddingLeft: "20px" },
     });
+
+    const buttons = [];
     for (const [policyName, policy] of objectEntries(
       (this._options.items.policies as PolicySettings).items
     )) {
@@ -67,8 +70,12 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
         },
       });
 
-      policiesList.append(policyButton);
+      buttons.push({ label: policyLabel, button: policyButton });
     }
+    // Ensure buttons are added into UI with their labels alphabetized.
+    buttons.sort((a, b) => a.label.localeCompare(b.label));
+    buttons.forEach(button => policiesList.append(button.button));
+
     const policiesItemsButton = this._getItemsToggle("policies-show");
     policiesItemsButton.on("click", () => {
       policiesList.toggle();
