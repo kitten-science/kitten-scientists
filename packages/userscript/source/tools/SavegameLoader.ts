@@ -9,6 +9,7 @@ export class SavegameLoader {
 
   /**
    * Conveniently wraps the savegame loading process in an async construct.
+   *
    * @param data The savegame data to load. We accept `null` here for convenience
    * when dealing with `import`ed save game data.
    * @returns Nothing
