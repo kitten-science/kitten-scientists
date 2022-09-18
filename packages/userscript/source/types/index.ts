@@ -1,4 +1,5 @@
 import { Building } from "./buildings";
+import { GamePage } from "./gamePage";
 import { ReligionUpgrades, TranscendenceUpgrades, ZiggurathUpgrades } from "./religion";
 import { SpaceBuildings } from "./space";
 import { ChronoForgeUpgrades, VoidSpaceUpgrades } from "./time";
@@ -165,6 +166,38 @@ export type Challenge =
   | "energy"
   | "pacifism"
   | "winterIsComing";
+
+export type PolicyBtnController = {
+  new (game: GamePage): TechButtonController;
+  buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
+};
+
+export type TechButtonController = {
+  new (game: GamePage): TechButtonController;
+  buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
+};
+
+export type ClassList = {
+  ui: {
+    PolicyBtnController: PolicyBtnController;
+  };
+};
+
+export type ComInterface = {
+  nuclearunicorn: {
+    game: {
+      ui: {
+        TechButtonController: TechButtonController;
+      };
+    };
+  };
+};
+
+declare global {
+  const classes: ClassList;
+  const com: ComInterface;
+  const game: GamePage;
+}
 
 export * from "./buildings";
 export * from "./gamePage";

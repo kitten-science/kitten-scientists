@@ -18,7 +18,7 @@ export class ScienceManager extends UpgradeManager {
     this._workshopManager = new WorkshopManager(this._host);
   }
 
-  autoUnlock() {
+  async autoUnlock() {
     this.manager.render();
 
     // These behave identically to the workshop uprades above.
@@ -35,11 +35,11 @@ export class ScienceManager extends UpgradeManager {
           continue techLoop;
         }
       }
-      this.upgrade(upgrade, "science");
+      await this.upgrade(upgrade, "science");
     }
   }
 
-  autoPolicy() {
+  async autoPolicy() {
     this.manager.render();
 
     const policies = this._host.gamePage.science.policies;
@@ -70,7 +70,7 @@ export class ScienceManager extends UpgradeManager {
     }
 
     for (const policy of toResearch) {
-      this.upgrade(policy, "policy");
+      await this.upgrade(policy, "policy");
     }
   }
 }

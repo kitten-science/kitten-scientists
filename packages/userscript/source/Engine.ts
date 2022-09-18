@@ -112,7 +112,7 @@ export class Engine {
     }
     // Unlock upgrades.
     if (this._host.options.auto.unlock.enabled) {
-      this.unlock();
+      await this.unlock();
     }
 
     // Build bonfire buildings.
@@ -291,16 +291,16 @@ export class Engine {
   /**
    * Upgrade all possible unlockables.
    */
-  unlock(): void {
+  async unlock(): Promise<void> {
     const upgrades = this._host.options.auto.unlock.items;
 
     // If techs (science items) are enabled...
     if (upgrades.techs.enabled && this._host.gamePage.tabs[2].visible) {
-      this._scienceManager.autoUnlock();
+      await this._scienceManager.autoUnlock();
     }
 
     if (upgrades.policies.enabled && this._host.gamePage.tabs[2].visible) {
-      this._scienceManager.autoPolicy();
+      await this._scienceManager.autoPolicy();
     }
   }
 

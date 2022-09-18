@@ -4,7 +4,6 @@ import {
   Building,
   BuildingExt,
   BuildingMeta,
-  ButtonModel,
   Challenge,
   GameTab,
   Job,
@@ -346,6 +345,12 @@ export type GamePage = {
   upgrade: (value: unknown) => void;
   ui: {
     activeTabId: TabId;
+    confirm: (
+      title: string,
+      message: string,
+      callbackOk: () => void,
+      callbackCancel: () => void
+    ) => void;
     render: () => void;
   };
   village: {
@@ -410,34 +415,3 @@ export type GamePage = {
     }>;
   };
 };
-
-export type PolicyBtnController = {
-  new (game: GamePage): TechButtonController;
-  buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
-};
-
-export type TechButtonController = {
-  new (game: GamePage): TechButtonController;
-  buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
-};
-
-export type ClassList = {
-  ui: {
-    PolicyBtnController: PolicyBtnController;
-  };
-};
-
-export type ComInterface = {
-  nuclearunicorn: {
-    game: {
-      ui: {
-        TechButtonController: TechButtonController;
-      };
-    };
-  };
-};
-
-declare global {
-  const classes: ClassList;
-  const com: ComInterface;
-}

@@ -26,14 +26,10 @@ export abstract class UpgradeManager {
         ? new classes.ui.PolicyBtnController(this._host.gamePage)
         : new com.nuclearunicorn.game.ui.TechButtonController(this._host.gamePage);
 
-    // Ensure `noConfirm` is set for the purchasing, as that might invoke `confirm()`
-    // in the game.
-    const noConfirm = (this._host.gamePage.opts.noConfirm = true);
     this._host.gamePage.opts.noConfirm = true;
-    const success = await new Promise(resolve =>
-      controller.buyItem(button.model, undefined, resolve)
+    const success = await UpgradeManager.skipConfirm(
+      () => new Promise(resolve => controller.buyItem(button.model, undefined, resolve))
     );
-    this._host.gamePage.opts.noConfirm = noConfirm;
 
     if (!success) {
       return false;
@@ -52,6 +48,23 @@ export abstract class UpgradeManager {
     }
 
     return true;
+  }
+
+  /**
+   * Run a piece of code that might invoke UI confirmation and
+   * skip that UI confirmation.
+   *
+   * @param action The function to run without UI confirmation.
+   * @returns Whatever `action` returns.
+   */
+  static async skipConfirm<T>(action: () => Promise<T>): Promise<T> {
+    const originalConfirm = game.ui.confirm;
+    try {
+      game.ui.confirm = () => true;
+      return await action();
+    } finally {
+      game.ui.confirm = originalConfirm;
+    }
   }
 
   getUpgradeButton(
