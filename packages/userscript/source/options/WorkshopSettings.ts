@@ -92,7 +92,7 @@ export class WorkshopSettings extends SettingsSection implements SettingTrigger 
 
     subject.items["toggle-upgrades"] = settings.addition.unlockUpgrades.enabled;
     for (const [name, item] of objectEntries(settings.addition.unlockUpgrades.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
     }
   }
 
@@ -122,7 +122,7 @@ export class WorkshopSettings extends SettingsSection implements SettingTrigger 
     options.addition.unlockUpgrades.enabled =
       subject.items["toggle-upgrades"] ?? options.addition.unlockUpgrades.enabled;
     for (const [name, item] of objectEntries(options.addition.unlockUpgrades.items)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
     }
 
     return options;

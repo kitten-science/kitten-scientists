@@ -1,5 +1,5 @@
 import { objectEntries } from "../tools/Entries";
-import { GamePage } from "../types";
+import { GamePage, Policy, Technology } from "../types";
 import { PolicySettings } from "./PolicySettings";
 import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
@@ -27,11 +27,11 @@ export class ScienceSettings extends SettingsSection {
     subject.items["toggle-policies"] = settings.items.policies.enabled;
     subject.items["toggle-techs"] = settings.items.techs.enabled;
 
-    for (const [name, item] of objectEntries(settings.items.techs.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-    }
     for (const [name, item] of objectEntries(settings.items.policies.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`toggle-policy-${name as Policy}` as const] = item.enabled;
+    }
+    for (const [name, item] of objectEntries(settings.items.techs.items)) {
+      subject.items[`toggle-tech-${name as Technology}` as const] = item.enabled;
     }
   }
 
@@ -44,10 +44,10 @@ export class ScienceSettings extends SettingsSection {
     options.items.techs.enabled = subject.items["toggle-techs"] ?? options.items.techs.enabled;
 
     for (const [name, item] of objectEntries((options.items.policies as PolicySettings).items)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.enabled = subject.items[`toggle-policy-${name}` as const] ?? item.enabled;
     }
     for (const [name, item] of objectEntries((options.items.techs as TechSettings).items)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.enabled = subject.items[`toggle-tech-${name}` as const] ?? item.enabled;
     }
 
     return options;
