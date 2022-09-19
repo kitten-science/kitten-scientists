@@ -132,12 +132,14 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     option.$max = maxButton;
 
     maxButton.on("click", () => {
-      const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
+      const value = this._promptLimit(
+        this._host.i18n("ui.max.set", [label]),
+        option.max.toString()
+      );
 
       if (value !== null) {
-        const limitValue = parseInt(value);
-        const limit = this._renderLimit(limitValue);
-        this._host.updateOptions(() => (option.max = limitValue));
+        const limit = this._renderLimit(value);
+        this._host.updateOptions(() => (option.max = value));
         maxButton[0].title = limit;
         maxButton[0].innerText = this._host.i18n("ui.max", [limit]);
       }

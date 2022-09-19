@@ -107,13 +107,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option.$maximum = maximumButton;
 
     maximumButton.on("click", () => {
-      const value = window.prompt(
+      const value = this._promptLimit(
         this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
         option.maximum.toFixed(0)
       );
 
       if (value !== null) {
-        this._host.updateOptions(() => (option.maximum = parseFloat(value)));
+        this._host.updateOptions(() => (option.maximum = value));
         maximumButton[0].title = option.maximum.toFixed(0);
       }
     });
@@ -1124,13 +1124,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option.$triggerForReset = minButton;
 
     minButton.on("click", () => {
-      const value = window.prompt(
+      const value = this._promptLimit(
         this._host.i18n("reset.check.trigger.set", [i18nName]),
         option.triggerForReset.toFixed(0)
       );
 
       if (value !== null) {
-        this._host.updateOptions(() => (option.triggerForReset = parseInt(value)));
+        this._host.updateOptions(() => (option.triggerForReset = value));
         minButton.text(this._host.i18n("ui.min", [this._renderLimit(option.triggerForReset)]));
       }
     });

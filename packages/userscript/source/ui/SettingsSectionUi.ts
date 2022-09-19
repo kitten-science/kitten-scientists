@@ -406,12 +406,14 @@ export abstract class SettingsSectionUi<TState> {
     option.$max = maxButton;
 
     maxButton.on("click", () => {
-      const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
+      const value = this._promptLimit(
+        this._host.i18n("ui.max.set", [label]),
+        option.max.toString()
+      );
 
       if (value !== null) {
-        const limitValue = parseInt(value);
-        const limit = this._renderLimit(limitValue);
-        this._host.updateOptions(() => (option.max = limitValue));
+        const limit = this._renderLimit(value);
+        this._host.updateOptions(() => (option.max = value));
         maxButton[0].title = limit;
         maxButton[0].innerText = this._host.i18n("ui.max", [limit]);
       }
@@ -591,14 +593,13 @@ export abstract class SettingsSectionUi<TState> {
     }
 
     stockElement.on("click", () => {
-      const value = window.prompt(
+      const value = this._promptLimit(
         this._host.i18n("resources.stock.set", [title]),
         option.stock.toFixed(0)
       );
       if (value !== null) {
-        const stockValue = parseInt(value);
-        this._setStockValue(name, stockValue, false);
-        stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(stockValue)]));
+        this._setStockValue(name, value, false);
+        stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(value)]));
         this._host.updateOptions();
       }
     });
@@ -700,9 +701,12 @@ export abstract class SettingsSectionUi<TState> {
     container.append(label, stockElement, del);
 
     stockElement.on("click", () => {
-      const value = window.prompt(this._host.i18n("resources.stock.set", [title]));
+      const value = this._promptLimit(
+        this._host.i18n("resources.stock.set", [title]),
+        option.stockForReset.toFixed(0)
+      );
       if (value !== null) {
-        this._setStockValue(name, parseInt(value), true);
+        this._setStockValue(name, value, true);
       }
     });
 
@@ -768,6 +772,28 @@ export abstract class SettingsSectionUi<TState> {
     }
 
     mustExist(this._host.options.auto.craft.resources[name]).consume = value;
+  }
+
+  protected _promptLimit(text: string, defaultValue: string): number | null {
+    const value = window.prompt(text, defaultValue);
+    if (value === null) {
+      return null;
+    }
+
+    const hasSuffix = /[KMGT]$/.test(value);
+    const baseValue = value.substring(0, value.length - (hasSuffix ? 1 : 0));
+
+    let numericValue =
+      value.includes("e") || hasSuffix ? parseFloat(baseValue) : parseInt(baseValue);
+    if (hasSuffix) {
+      const suffix = value.substring(value.length - 1);
+      numericValue = numericValue * Math.pow(1000, ["", "K", "M", "G", "T"].indexOf(suffix));
+    }
+    if (numericValue === Number.POSITIVE_INFINITY || numericValue < 0) {
+      numericValue = -1;
+    }
+
+    return numericValue;
   }
 
   protected _promptPercentage(text: string, defaultValue: string): number | null {
