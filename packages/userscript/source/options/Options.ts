@@ -30,7 +30,7 @@ export class Options {
   /**
    * The default consume rate.
    */
-  consume = 0.6;
+  consume = 1;
 
   auto: {
     engine: { enabled: boolean };
