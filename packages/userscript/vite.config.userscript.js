@@ -15,24 +15,18 @@ function getDateString() {
   return `${year}${month}${day}`;
 }
 
-const filename = [
-  "kitten-scientists",
-  isDevBuild ? "-dev" : `-${manifest.version}`,
-  isNightlyBuild ? `-${getDateString()}` : "",
-  (isDevBuild || isNightlyBuild) && process.env.GITHUB_SHA
-    ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}`
-    : "",
-  minify ? ".min" : "",
-  ".user.js",
-].join("");
-
 const versionString = [
   manifest.version,
+  isDevBuild ? "-dev" : "",
   isNightlyBuild ? `-${getDateString()}` : "",
   (isDevBuild || isNightlyBuild) && process.env.GITHUB_SHA
     ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}`
     : "",
 ].join("");
+
+const filename = ["kitten-scientists", `-${versionString}`, minify ? ".min" : "", ".user.js"].join(
+  ""
+);
 
 const KG_SAVEGAME = process.env.KG_SAVEGAME ?? null;
 const KS_SETTINGS = process.env.KS_SETTINGS ?? null;

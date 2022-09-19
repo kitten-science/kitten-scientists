@@ -5,7 +5,7 @@ const filename = "kitten-scientists.inject.js";
 
 const KG_SAVEGAME = process.env.KG_SAVEGAME ?? null;
 const KS_SETTINGS = process.env.KS_SETTINGS ?? null;
-const KS_VERSION = JSON.stringify(`${manifest.version}-next`);
+const KS_VERSION = JSON.stringify(`${manifest.version}-live`);
 
 export default defineConfig({
   build: {
