@@ -2,7 +2,7 @@ import { CacheManager } from "./CacheManager";
 import { CraftSettingsItem } from "./options/WorkshopSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
-import { cerror } from "./tools/Log";
+import { cdebug, cerror } from "./tools/Log";
 import { isNil, mustExist } from "./tools/Maybe";
 import { Resource, ResourceCraftable, UpgradeInfo } from "./types";
 import { CraftableInfo, ResourceInfo } from "./types/craft";
@@ -306,19 +306,33 @@ export class WorkshopManager extends UpgradeManager {
         // since the regulation happens there
         delta = this.getValueAvailable(resource) / materialAmount;
       } else {
-        // Take the currently present amount of material to craft into account
-        // Currently this determines the amount of resources that can be crafted such that base
-        // materials are proportionally distributed across limited resources.
-        // This base material distribution is governed by limRat "limited ratio" which defaults
-        // to 0.5, corresponding to half of the possible components being further crafted.
-        // If this were another value, such as 0.75, then if you had 10000 beams and 0 scaffolds,
-        // 7500 of the beams would be crafted into scaffolds.
-        delta =
-          limRat *
-            ((this.getValueAvailable(resource, true) +
-              (materialAmount / (1 + ratio)) * this.getValueAvailable(res.name, true)) /
-              materialAmount) -
-          this.getValueAvailable(res.name, true) / (1 + ratio);
+        // Quantity of source and target resource currently available.
+        const srcAvailable = this.getValueAvailable(resource, true);
+        const tgtAvailable = this.getValueAvailable(name, true);
+
+        // How much source resource is consumed and target resource is crafted per craft operation.
+        const recipeRequires = materialAmount;
+        const recipeProduces = 1 + ratio;
+
+        // How many crafts could we do given the amount of source resource available.
+        const craftsPossible = srcAvailable / recipeRequires;
+
+        // How many crafts were hypothetically done to produce the current amount of target resource.
+        const craftsDone = tgtAvailable / recipeProduces;
+
+        // Craft only when the craftsPossible >= craftsDone.
+        // Crafting gets progressively more expensive as the amount of the target increases.
+        // This heuristic gives other, cheaper, targets a chance to get built from the same source resource.
+        // There is no checking if there actually exists a different target that could get built.
+        delta = 1 + craftsPossible - craftsDone;
+
+        // If crafting is not going to happen, explain why not.
+        const explanationMessages = false;
+        if (explanationMessages && delta < 1.0) {
+          // delta >= 1.0 when craftsPossible >= craftsDone.
+          const srcNeeded = recipeRequires * craftsDone;
+          cdebug(`[GLCA] not crafting '${name}' until '${resource}' >= '${srcNeeded}'`);
+        }
       }
 
       amount = Math.min(delta, amount, plateMax);
