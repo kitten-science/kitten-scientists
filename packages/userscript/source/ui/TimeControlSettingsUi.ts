@@ -81,18 +81,18 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option.$subTrigger = triggerButton;
 
     triggerButton.on("click", () => {
-      const value = window.prompt(
+      const value = this._promptPercentage(
         this._host.i18n("time.skip.trigger.set", []),
         this._renderPercentage(option.subTrigger)
       );
 
       if (value !== null) {
-        this._host.updateOptions(() => (option.subTrigger = parseFloat(value)));
+        this._host.updateOptions(() => (option.subTrigger = value));
         triggerButton[0].title = this._renderPercentage(option.subTrigger);
       }
     });
 
-    const maximunButton = $("<div/>", {
+    const maximumButton = $("<div/>", {
       id: "set-timeSkip-maximum",
       text: "⍐",
       title: this._host.i18n("ui.maximum"),
@@ -104,17 +104,17 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         paddingRight: "5px",
       },
     }).data("option", option);
-    option.$maximum = maximunButton;
+    option.$maximum = maximumButton;
 
-    maximunButton.on("click", () => {
+    maximumButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
-        this._renderPercentage(option.maximum)
+        option.maximum.toFixed(0)
       );
 
       if (value !== null) {
         this._host.updateOptions(() => (option.maximum = parseFloat(value)));
-        maximunButton[0].title = option.maximum.toFixed(0);
+        maximumButton[0].title = option.maximum.toFixed(0);
       }
     });
 
@@ -179,7 +179,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     element.append(
       cyclesButton,
       seasonsButton,
-      maximunButton,
+      maximumButton,
       triggerButton,
       cyclesList,
       seasonsList
@@ -1024,13 +1024,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option.$subTrigger = triggerButton;
 
     triggerButton.on("click", () => {
-      const value = window.prompt(
+      const value = this._promptPercentage(
         this._host.i18n("ui.trigger.set", [label]),
         this._renderPercentage(option.subTrigger)
       );
 
       if (value !== null) {
-        this._host.updateOptions(() => (option.subTrigger = parseFloat(value)));
+        this._host.updateOptions(() => (option.subTrigger = value));
         triggerButton[0].title = this._renderPercentage(option.subTrigger);
       }
     });

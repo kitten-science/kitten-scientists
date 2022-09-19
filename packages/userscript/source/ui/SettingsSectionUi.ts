@@ -190,13 +190,13 @@ export abstract class SettingsSectionUi<TState> {
   protected _registerTriggerButton(id: string, itext: string, options: SettingTrigger) {
     return this._getTriggerButton(id, {
       onClick: () => {
-        const value = window.prompt(
+        const value = this._promptPercentage(
           this._host.i18n("ui.trigger.set", [itext]),
           this._renderPercentage(options.trigger)
         );
 
         if (value !== null) {
-          this._host.updateOptions(() => (options.trigger = parseFloat(value)));
+          this._host.updateOptions(() => (options.trigger = value));
           this.refreshUi();
         }
       },
@@ -449,19 +449,19 @@ export abstract class SettingsSectionUi<TState> {
       triggerButton.on("click", () => {
         let value;
         if (name === "crypto") {
-          value = window.prompt(
+          value = this._promptPercentage(
             this._host.i18n("ui.trigger.crypto.set", [label]),
             this._renderPercentage(mustExist(option.trigger))
           );
         } else {
-          value = window.prompt(
+          value = this._promptPercentage(
             this._host.i18n("ui.trigger.set", [label]),
             this._renderPercentage(mustExist(option.trigger))
           );
         }
 
         if (value !== null) {
-          option.trigger = parseFloat(value);
+          option.trigger = value;
           this._host.updateOptions();
           triggerButton[0].title = this._renderPercentage(option.trigger);
         }
@@ -608,12 +608,12 @@ export abstract class SettingsSectionUi<TState> {
     });
 
     consumeElement.on("click", () => {
-      const value = window.prompt(
+      const consumeValue = this._promptPercentage(
         this._host.i18n("resources.consume.set", [title]),
         this._renderConsumeRate(option.consume)
       );
-      if (value !== null) {
-        const consumeValue = parseFloat(value);
+      if (consumeValue !== null) {
+        // Cap value between 0 and 1.
         this._host.updateOptions(() => (option.consume = consumeValue));
         consumeElement.text(
           this._host.i18n("resources.consume", [this._renderConsumeRate(consumeValue)])
@@ -774,6 +774,16 @@ export abstract class SettingsSectionUi<TState> {
     }
 
     mustExist(this._host.options.auto.craft.resources[name]).consume = value;
+  }
+
+  protected _promptPercentage(text: string, defaultValue: string): number | null {
+    const value = window.prompt(text, defaultValue);
+    if (value === null) {
+      return null;
+    }
+
+    // Cap value between 0 and 1.
+    return Math.max(0, Math.min(1, parseFloat(value)));
   }
 
   protected _renderPercentage(value: number): string {

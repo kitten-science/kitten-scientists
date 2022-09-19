@@ -85,19 +85,19 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       triggerButton.on("click", () => {
         let value;
         if (name === "crypto") {
-          value = window.prompt(
+          value = this._promptPercentage(
             this._host.i18n("ui.trigger.crypto.set", [iname]),
             this._renderPercentage(mustExist(option.subTrigger))
           );
         } else {
-          value = window.prompt(
+          value = this._promptPercentage(
             this._host.i18n("ui.trigger.set", [iname]),
             this._renderPercentage(mustExist(option.subTrigger))
           );
         }
 
         if (value !== null) {
-          option.subTrigger = parseFloat(value);
+          option.subTrigger = value;
           this._host.updateOptions();
           triggerButton[0].title = this._renderPercentage(option.subTrigger);
         }
