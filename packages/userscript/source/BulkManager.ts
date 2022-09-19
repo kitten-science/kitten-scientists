@@ -513,6 +513,9 @@ export class BulkManager {
    * Check if a given build could be performed.
    *
    * @param build The build that should be checked.
+   * @param build.name The name of the build.
+   * @param build.val Probably how many items should be built in total.
+   * TODO: Why is this relevant if we only care about a single build being possible?
    * @param prices The current prices for the build.
    * @param priceRatio The global price ratio modifier.
    * @param source What tab did the build originate from?

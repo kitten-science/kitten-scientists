@@ -28,6 +28,8 @@ export class CacheManager {
    *       a frame. This is likely required to make different automations play nice together.
    *
    * @param data The materials to store in the cache.
+   * @param data.materials The materials themselves.
+   * @param data.timeStamp The current time.
    */
   pushToCache(data: { materials: Partial<Record<Resource, number>>; timeStamp: number }): void {
     // Store this entry in the cache.
