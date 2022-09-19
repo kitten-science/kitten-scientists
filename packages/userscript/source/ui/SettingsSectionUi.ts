@@ -382,17 +382,40 @@ export abstract class SettingsSectionUi<TState> {
     return element;
   }
 
+  /**
+   * Create a UI element for an option that can be limited.
+   * This will result in an element with a labeled checkbox and a "Max" indicator,
+   * which controls the respective `max` property in the option model.
+   *
+   * @param name A unique name for this option.
+   * @param option The option model.
+   * @param label The label for the option.
+   * @param delimiter Should a delimiter be rendered after this element?
+   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
+   * to indicate that this is an upgrade of a prior option?
+   * @param handler Handlers to call when the option is checked or unchecked.
+   * @param handler.onCheck Is called when the option is checked.
+   * @param handler.onUnCheck Is called when the option is unchecked.
+   * @returns The created element.
+   */
   protected _getLimitedOption(
     name: string,
     option: SettingLimit & SettingToggle,
     label: string,
     delimiter = false,
+    upgradeIndicator = false,
     handler: {
       onCheck?: () => void;
       onUnCheck?: () => void;
     } = {}
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label, delimiter, handler);
+    const element = this._getOption(
+      name,
+      option,
+      `${upgradeIndicator ? `⮤ ` : ""}${label}`,
+      delimiter,
+      handler
+    );
 
     const maxButton = $("<div/>", {
       id: `set-${name}-max`,

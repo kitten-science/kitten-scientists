@@ -44,7 +44,9 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._getLimitedOption(
         "solarFarm",
         this._options.items.solarFarm,
-        `⮤ ${this._host.i18n("$buildings.solarfarm.label")}`
+        this._host.i18n("$buildings.solarfarm.label"),
+        false,
+        true
       ),
       this._getLimitedOption(
         "aqueduct",
@@ -54,7 +56,8 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._getLimitedOption(
         "hydroPlant",
         this._options.items.hydroPlant,
-        `⮤ ${this._host.i18n("$buildings.hydroplant.label")}`,
+        this._host.i18n("$buildings.hydroplant.label"),
+        true,
         true
       ),
 
@@ -85,7 +88,9 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._getLimitedOption(
         "dataCenter",
         this._options.items.dataCenter,
-        `⮤ ${this._host.i18n("$buildings.dataCenter.label")}`
+        this._host.i18n("$buildings.dataCenter.label"),
+        false,
+        true
       ),
       this._getLimitedOption(
         "academy",
@@ -192,7 +197,9 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._getLimitedOption(
         "broadcastTower",
         this._options.items.broadcastTower,
-        `⮤ ${this._host.i18n("$buildings.broadcasttower.label")}`
+        this._host.i18n("$buildings.broadcasttower.label"),
+        false,
+        true
       ),
       this._getLimitedOption(
         "chapel",
