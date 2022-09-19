@@ -1126,12 +1126,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     minButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("reset.check.trigger.set", [i18nName]),
-        this._renderPercentage(option.triggerForReset)
+        option.triggerForReset.toFixed(0)
       );
 
       if (value !== null) {
         this._host.updateOptions(() => (option.triggerForReset = parseInt(value)));
-        minButton.text(this._host.i18n("ui.min", [option.triggerForReset]));
+        minButton.text(this._host.i18n("ui.min", [this._renderLimit(option.triggerForReset)]));
       }
     });
 
@@ -1405,7 +1405,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         this._options.buildItems[name].checkForReset
       );
       mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [this._options.buildItems[name].triggerForReset])
+        this._host.i18n("ui.min", [
+          this._renderLimit(this._options.buildItems[name].triggerForReset),
+        ])
       );
     }
     for (const [name, option] of objectEntries(this._options.religionItems)) {
@@ -1414,7 +1416,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         this._options.religionItems[name].checkForReset
       );
       mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [this._options.religionItems[name].triggerForReset])
+        this._host.i18n("ui.min", [
+          this._renderLimit(this._options.religionItems[name].triggerForReset),
+        ])
       );
     }
     for (const [name, option] of objectEntries(this._options.spaceItems)) {
@@ -1423,24 +1427,24 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         this._options.spaceItems[name].checkForReset
       );
       mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [this._options.spaceItems[name].triggerForReset])
+        this._host.i18n("ui.min", [
+          this._renderLimit(this._options.spaceItems[name].triggerForReset),
+        ])
       );
     }
     for (const [name, option] of objectEntries(this._options.timeItems)) {
       mustExist(option.$checkForReset).prop("checked", this._options.timeItems[name].checkForReset);
       mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [this._options.timeItems[name].triggerForReset])
+        this._host.i18n("ui.min", [
+          this._renderLimit(this._options.timeItems[name].triggerForReset),
+        ])
       );
     }
 
     for (const [name, option] of objectEntries(this._options.resources)) {
       mustExist(option.$stockForReset).text(
         this._host.i18n("resources.stock", [
-          option.stockForReset === Infinity
-            ? "∞"
-            : this._host.gamePage.getDisplayValueExt(
-                mustExist(this._options.resources[name]).stockForReset
-              ),
+          this._renderLimit(mustExist(this._options.resources[name]).stockForReset),
         ])
       );
     }

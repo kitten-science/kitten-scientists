@@ -135,9 +135,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
 
       if (value !== null) {
-        this._host.updateOptions(() => (option.max = parseInt(value)));
-        maxButton[0].title = option.max.toString();
-        maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
+        const limitValue = parseInt(value);
+        const limit = this._renderLimit(limitValue);
+        this._host.updateOptions(() => (option.max = limitValue));
+        maxButton[0].title = limit;
+        maxButton[0].innerText = this._host.i18n("ui.max", [limit]);
       }
     });
 
@@ -236,6 +238,9 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       "checked",
       this._options.addition.hunt.enabled
     );
+    mustExist(this._options.addition.hunt.$trigger).text(
+      this._renderPercentage(this._options.addition.hunt.trigger)
+    );
     mustExist(this._options.addition.promoteLeader.$enabled).prop(
       "checked",
       this._options.addition.promoteLeader.enabled
@@ -244,7 +249,9 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
       mustExist(option.$limited).prop("checked", this._options.items[name].limited);
-      mustExist(option.$max).text(this._host.i18n("ui.max", [this._options.items[name].max]));
+      mustExist(option.$max).text(
+        this._host.i18n("ui.max", [this._renderLimit(this._options.items[name].max)])
+      );
     }
   }
 }

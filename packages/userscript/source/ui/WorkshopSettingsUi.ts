@@ -452,9 +452,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
         this._host.i18n("resources.consume", [this._renderConsumeRate(option.consume)])
       );
       mustExist(option.$stock).text(
-        this._host.i18n("resources.stock", [
-          option.stock === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(option.stock),
-        ])
+        this._host.i18n("resources.stock", [this._renderLimit(option.stock)])
       );
     }
   }

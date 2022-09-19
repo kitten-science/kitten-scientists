@@ -409,9 +409,11 @@ export abstract class SettingsSectionUi<TState> {
       const value = window.prompt(this._host.i18n("ui.max.set", [label]), option.max.toString());
 
       if (value !== null) {
-        this._host.updateOptions(() => (option.max = parseInt(value)));
-        maxButton[0].title = option.max.toString();
-        maxButton[0].innerText = this._host.i18n("ui.max", [option.max]);
+        const limitValue = parseInt(value);
+        const limit = this._renderLimit(limitValue);
+        this._host.updateOptions(() => (option.max = limitValue));
+        maxButton[0].title = limit;
+        maxButton[0].innerText = this._host.i18n("ui.max", [limit]);
       }
     });
 
@@ -558,9 +560,7 @@ export abstract class SettingsSectionUi<TState> {
     // How many items to stock.
     const stockElement = $("<div/>", {
       id: `stock-value-${name}`,
-      text: this._host.i18n("resources.stock", [
-        stock === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(stock),
-      ]),
+      text: this._host.i18n("resources.stock", [this._renderLimit(stock)]),
       css: { cursor: "pointer", display: "inline-block", width: "80px" },
     });
 
@@ -598,11 +598,7 @@ export abstract class SettingsSectionUi<TState> {
       if (value !== null) {
         const stockValue = parseInt(value);
         this._setStockValue(name, stockValue, false);
-        stockElement.text(
-          this._host.i18n("resources.stock", [
-            stockValue === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(stockValue),
-          ])
-        );
+        stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(stockValue)]));
         this._host.updateOptions();
       }
     });
@@ -685,9 +681,7 @@ export abstract class SettingsSectionUi<TState> {
     // How many items to stock.
     const stockElement = $("<div/>", {
       id: `stock-value-${name}`,
-      text: this._host.i18n("resources.stock", [
-        stock === Infinity ? "∞" : this._host.gamePage.getDisplayValueExt(stock),
-      ]),
+      text: this._host.i18n("resources.stock", [this._renderLimit(stock)]),
       css: { cursor: "pointer", display: "inline-block", width: "80px" },
     });
 
@@ -784,6 +778,14 @@ export abstract class SettingsSectionUi<TState> {
 
     // Cap value between 0 and 1.
     return Math.max(0, Math.min(1, parseFloat(value)));
+  }
+
+  protected _renderLimit(value: number): string {
+    if (value < 0 || value === Number.POSITIVE_INFINITY) {
+      return "∞";
+    }
+
+    return this._host.gamePage.getDisplayValueExt(value);
   }
 
   protected _renderPercentage(value: number): string {

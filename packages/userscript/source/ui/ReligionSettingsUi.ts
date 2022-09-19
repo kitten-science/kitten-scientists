@@ -446,7 +446,9 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
-      mustExist(option.$max).text(this._host.i18n("ui.max", [this._options.items[name].max]));
+      mustExist(option.$max).text(
+        this._host.i18n("ui.max", [this._renderLimit(this._options.items[name].max)])
+      );
     }
   }
 }
