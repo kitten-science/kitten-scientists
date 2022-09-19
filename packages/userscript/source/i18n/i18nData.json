@@ -90,7 +90,7 @@
     "resources.add": "add resources",
     "resources.clear.unused": "clear unused",
     "resources.stock": "Stock: {0}",
-    "resources.consume": "Comsume: {0}",
+    "resources.consume": "Consume: {0}",
     "resources.del": "del",
     "resources.stock.set": "Stock for {0}",
     "resources.consume.set": "Consume rate for {0}",
