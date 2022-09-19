@@ -116,7 +116,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
 
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
+    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);

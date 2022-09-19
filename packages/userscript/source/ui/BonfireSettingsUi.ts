@@ -339,7 +339,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
+    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
     mustExist(this._options.addition.upgradeBuildings.$enabled).prop(
       "checked",
       this._options.addition.upgradeBuildings.enabled

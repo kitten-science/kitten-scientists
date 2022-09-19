@@ -87,19 +87,19 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
         if (name === "crypto") {
           value = window.prompt(
             this._host.i18n("ui.trigger.crypto.set", [iname]),
-            mustExist(option.subTrigger).toFixed(2)
+            this._renderPercentage(mustExist(option.subTrigger))
           );
         } else {
           value = window.prompt(
             this._host.i18n("ui.trigger.set", [iname]),
-            mustExist(option.subTrigger).toFixed(2)
+            this._renderPercentage(mustExist(option.subTrigger))
           );
         }
 
         if (value !== null) {
           option.subTrigger = parseFloat(value);
           this._host.updateOptions();
-          triggerButton[0].title = option.subTrigger.toFixed(2);
+          triggerButton[0].title = this._renderPercentage(option.subTrigger);
         }
       });
 
@@ -135,7 +135,9 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
 
       if (!isNil(option.$subTrigger)) {
-        option.$subTrigger[0].title = mustExist(this._options.items[name].subTrigger).toFixed(2);
+        option.$subTrigger[0].title = this._renderPercentage(
+          mustExist(this._options.items[name].subTrigger)
+        );
       }
     }
   }

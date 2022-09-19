@@ -192,7 +192,7 @@ export abstract class SettingsSectionUi<TState> {
       onClick: () => {
         const value = window.prompt(
           this._host.i18n("ui.trigger.set", [itext]),
-          options.trigger.toFixed(2)
+          this._renderPercentage(options.trigger)
         );
 
         if (value !== null) {
@@ -451,19 +451,19 @@ export abstract class SettingsSectionUi<TState> {
         if (name === "crypto") {
           value = window.prompt(
             this._host.i18n("ui.trigger.crypto.set", [label]),
-            mustExist(option.trigger).toFixed(2)
+            this._renderPercentage(mustExist(option.trigger))
           );
         } else {
           value = window.prompt(
             this._host.i18n("ui.trigger.set", [label]),
-            mustExist(option.trigger).toFixed(2)
+            this._renderPercentage(mustExist(option.trigger))
           );
         }
 
         if (value !== null) {
           option.trigger = parseFloat(value);
           this._host.updateOptions();
-          triggerButton[0].title = option.trigger.toFixed(2);
+          triggerButton[0].title = this._renderPercentage(option.trigger);
         }
       });
 
@@ -541,7 +541,6 @@ export abstract class SettingsSectionUi<TState> {
     //title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
 
     const stock = option.stock;
-    const consume = option.consume ?? this._host.options.consume;
 
     // The overall container for this resource item.
     const container = $("<div/>", {
@@ -568,7 +567,7 @@ export abstract class SettingsSectionUi<TState> {
     // The consume rate for the resource.
     const consumeElement = $("<div/>", {
       id: `consume-rate-${name}`,
-      text: this._host.i18n("resources.consume", [consume.toFixed(2)]),
+      text: this._host.i18n("resources.consume", [this._renderConsumeRate(option.consume)]),
       css: { cursor: "pointer", display: "inline-block" },
     });
 
@@ -611,12 +610,14 @@ export abstract class SettingsSectionUi<TState> {
     consumeElement.on("click", () => {
       const value = window.prompt(
         this._host.i18n("resources.consume.set", [title]),
-        option.consume?.toFixed(2)
+        this._renderConsumeRate(option.consume)
       );
       if (value !== null) {
         const consumeValue = parseFloat(value);
         this._host.updateOptions(() => (option.consume = consumeValue));
-        consumeElement.text(this._host.i18n("resources.consume", [consumeValue.toFixed(2)]));
+        consumeElement.text(
+          this._host.i18n("resources.consume", [this._renderConsumeRate(consumeValue)])
+        );
       }
     });
 
@@ -773,5 +774,13 @@ export abstract class SettingsSectionUi<TState> {
     }
 
     mustExist(this._host.options.auto.craft.resources[name]).consume = value;
+  }
+
+  protected _renderPercentage(value: number): string {
+    return value.toFixed(3);
+  }
+
+  protected _renderConsumeRate(consume: number | undefined): string {
+    return this._renderPercentage(consume ?? this._host.options.consume);
   }
 }

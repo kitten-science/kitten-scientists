@@ -231,7 +231,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
 
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
+    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
 
     mustExist(this._options.addition.unlockMissions.$enabled).prop(
       "checked",

@@ -83,12 +83,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     triggerButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("time.skip.trigger.set", []),
-        option.subTrigger.toFixed(2)
+        this._renderPercentage(option.subTrigger)
       );
 
       if (value !== null) {
         this._host.updateOptions(() => (option.subTrigger = parseFloat(value)));
-        triggerButton[0].title = option.subTrigger.toFixed(2);
+        triggerButton[0].title = this._renderPercentage(option.subTrigger);
       }
     });
 
@@ -109,7 +109,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     maximunButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
-        option.maximum.toFixed(0)
+        this._renderPercentage(option.maximum)
       );
 
       if (value !== null) {
@@ -1026,12 +1026,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     triggerButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [label]),
-        option.subTrigger.toFixed(2)
+        this._renderPercentage(option.subTrigger)
       );
 
       if (value !== null) {
         this._host.updateOptions(() => (option.subTrigger = parseFloat(value)));
-        triggerButton[0].title = option.subTrigger.toFixed(2);
+        triggerButton[0].title = this._renderPercentage(option.subTrigger);
       }
     });
     element.append(triggerButton);
@@ -1126,7 +1126,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     minButton.on("click", () => {
       const value = window.prompt(
         this._host.i18n("reset.check.trigger.set", [i18nName]),
-        option.triggerForReset.toFixed(2)
+        this._renderPercentage(option.triggerForReset)
       );
 
       if (value !== null) {
@@ -1356,8 +1356,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       "checked",
       this._options.items.accelerateTime.enabled
     );
-    mustExist(this._options.items.accelerateTime.$subTrigger)[0].title =
-      this._options.items.accelerateTime.subTrigger.toFixed(2);
+    mustExist(this._options.items.accelerateTime.$subTrigger)[0].title = this._renderPercentage(
+      this._options.items.accelerateTime.subTrigger
+    );
 
     mustExist(this._options.items.reset.$enabled).prop(
       "checked",
@@ -1368,8 +1369,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       "checked",
       this._options.items.timeSkip.enabled
     );
-    mustExist(this._options.items.timeSkip.$subTrigger)[0].title =
-      this._options.items.timeSkip.subTrigger.toFixed(2);
+    mustExist(this._options.items.timeSkip.$subTrigger)[0].title = this._renderPercentage(
+      this._options.items.timeSkip.subTrigger
+    );
     mustExist(this._options.items.timeSkip.$autumn).prop(
       "checked",
       this._options.items.timeSkip.autumn

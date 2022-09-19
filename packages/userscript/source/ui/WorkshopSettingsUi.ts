@@ -433,7 +433,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
 
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
+    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
 
     mustExist(this._options.addition.unlockUpgrades.$enabled).prop(
       "checked",
@@ -449,9 +449,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     }
     for (const [, option] of objectEntries(this._options.resources)) {
       mustExist(option.$consume).text(
-        this._host.i18n("resources.consume", [
-          (option.consume ?? this._host.options.consume).toFixed(3),
-        ])
+        this._host.i18n("resources.consume", [this._renderConsumeRate(option.consume)])
       );
       mustExist(option.$stock).text(
         this._host.i18n("resources.stock", [

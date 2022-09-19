@@ -260,14 +260,16 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     triggerButtonAdore.on("click", () => {
       const value = window.prompt(
         this._host.i18n("adore.trigger.set"),
-        this._options.addition.adore.subTrigger.toFixed(2)
+        this._renderPercentage(this._options.addition.adore.subTrigger)
       );
 
       if (value !== null) {
         this._host.updateOptions(
           () => (this._options.addition.adore.subTrigger = parseFloat(value))
         );
-        triggerButtonAdore[0].title = this._options.addition.adore.subTrigger.toFixed(2);
+        triggerButtonAdore[0].title = this._renderPercentage(
+          this._options.addition.adore.subTrigger
+        );
       }
     });
 
@@ -306,14 +308,16 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     triggerButtonAutoPraise.on("click", () => {
       const value = window.prompt(
         this._host.i18n("ui.trigger.set", [this._host.i18n("option.praise")]),
-        this._options.addition.autoPraise.subTrigger.toFixed(2)
+        this._renderPercentage(this._options.addition.autoPraise.subTrigger)
       );
 
       if (value !== null) {
         this._host.updateOptions(
           () => (this._options.addition.autoPraise.subTrigger = parseFloat(value))
         );
-        triggerButtonAutoPraise[0].title = this._options.addition.autoPraise.subTrigger.toFixed(2);
+        triggerButtonAutoPraise[0].title = this._renderPercentage(
+          this._options.addition.autoPraise.subTrigger
+        );
       }
     });
 
@@ -419,20 +423,22 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
   refreshUi(): void {
     mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._options.trigger.toFixed(3);
+    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
 
     mustExist(this._options.addition.adore.$enabled).prop(
       "checked",
       this._options.addition.adore.enabled
     );
-    mustExist(this._options.addition.adore.$subTrigger)[0].title =
-      this._options.addition.adore.subTrigger.toFixed(2);
+    mustExist(this._options.addition.adore.$subTrigger)[0].title = this._renderPercentage(
+      this._options.addition.adore.subTrigger
+    );
     mustExist(this._options.addition.autoPraise.$enabled).prop(
       "checked",
       this._options.addition.autoPraise.enabled
     );
-    mustExist(this._options.addition.autoPraise.$subTrigger)[0].title =
-      this._options.addition.autoPraise.subTrigger.toFixed(2);
+    mustExist(this._options.addition.autoPraise.$subTrigger)[0].title = this._renderPercentage(
+      this._options.addition.autoPraise.subTrigger
+    );
     mustExist(this._options.addition.bestUnicornBuilding.$enabled).prop(
       "checked",
       this._options.addition.bestUnicornBuilding.enabled
