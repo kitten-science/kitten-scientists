@@ -71,3 +71,19 @@ To fill the **Problems** panel in VS Code with all current, type-related errors,
     ```shell
     yarn userscript:release
     ```
+
+## Releasing a new version
+
+1. Create a tag for this version:
+
+    ```bash
+    git tag v2.0.0-beta.9
+    ```
+
+1. Push the tag:
+
+    ```bash
+    git push --tags
+    ```
+
+1. Raise the version number in `packages/userscript/package.json` to a higher version that will be in development next!
