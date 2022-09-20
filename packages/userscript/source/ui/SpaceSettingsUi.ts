@@ -10,6 +10,8 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
 
   private readonly _options: SpaceSettings;
 
+  private _missionsExpanded = false;
+
   constructor(host: UserScript, options: SpaceSettings = host.options.auto.space) {
     super(host);
 
@@ -186,9 +188,9 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
   }
 
   getAdditionOptions(addition: SpaceAdditionSettings): Array<JQuery<HTMLElement>> {
-    const nodeHeader = this._getHeader("Additional options");
+    const header = this._getHeader("Additional options");
 
-    const nodeMissions = this._getOption(
+    const missionsButton = this._getOption(
       "races",
       addition.unlockMissions,
       this._host.i18n("ui.upgrade.missions"),
@@ -205,7 +207,54 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       }
     );
 
-    return [nodeHeader, nodeMissions];
+    const missionsList = $("<ul/>", {
+      id: "items-list-missions",
+      css: { display: "none", paddingLeft: "20px" },
+    });
+
+    const missionButtons = [];
+    for (const [missionName, mission] of objectEntries(
+      this._options.addition.unlockMissions.items
+    )) {
+      const missionLabel = this._host.i18n(`$space.${missionName}.label`);
+      const missionButton = this._getOption(
+        `mission-${missionName}`,
+        mission,
+        missionLabel,
+        false,
+        {
+          onCheck: () => {
+            this._host.updateOptions(() => (mission.enabled = true));
+            this._host.imessage("status.auto.enable", [missionLabel]);
+          },
+          onUnCheck: () => {
+            this._host.updateOptions(() => (mission.enabled = false));
+            this._host.imessage("status.auto.disable", [missionLabel]);
+          },
+        }
+      );
+
+      missionButtons.push({ label: missionLabel, button: missionButton });
+    }
+    // Ensure buttons are added into UI with their labels alphabetized.
+    missionButtons.sort((a, b) => a.label.localeCompare(b.label));
+    missionButtons.forEach(button => missionsList.append(button.button));
+
+    const missionsItemsButton = this._getItemsToggle("missions-show");
+    missionsItemsButton.on("click", () => {
+      missionsList.toggle();
+
+      this._missionsExpanded = !this._missionsExpanded;
+
+      missionsItemsButton.text(this._missionsExpanded ? "-" : "+");
+      missionsItemsButton.prop(
+        "title",
+        this._missionsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+      );
+    });
+    missionsButton.append(missionsItemsButton, missionsList);
+
+    return [header, missionsButton];
   }
 
   getState(): SpaceSettings {
@@ -222,6 +271,9 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     this._options.trigger = state.trigger;
 
     this._options.addition.unlockMissions.enabled = state.addition.unlockMissions.enabled;
+    for (const [name, option] of objectEntries(this._options.addition.unlockMissions.items)) {
+      option.enabled = state.addition.unlockMissions.items[name].enabled;
+    }
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
@@ -237,6 +289,9 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       "checked",
       this._options.addition.unlockMissions.enabled
     );
+    for (const [, option] of objectEntries(this._options.addition.unlockMissions.items)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
+    }
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);

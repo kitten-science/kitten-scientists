@@ -1,4 +1,4 @@
-import { Job, Policy, Race, Resource, Season, Technology, Upgrade } from "../types";
+import { Job, Missions, Policy, Race, Resource, Season, Technology, Upgrade } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FilterItem } from "./FilterSettings";
 import { AllItems } from "./Options";
@@ -43,6 +43,7 @@ type ToggleJobItem = `toggle-${Job}`;
 type ToggleLimitedJobItem = `toggle-limited-${Job}`;
 type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
 type ToggleLimitedResourceItem = `toggle-limited-${Resource}`;
+type ToggleMissionItem = `toggle-mission-${Missions}`;
 type ToggleOptionsItem = `toggle-${OptionsItem}`;
 type TogglePolicyItem = `toggle-policy-${Policy}`;
 type TogglePromoteLeader = `toggle-promote`;
@@ -92,6 +93,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleLimitedJobItem, boolean>> &
     Partial<Record<ToggleLimitedRaceItem, boolean>> &
     Partial<Record<ToggleLimitedResourceItem, boolean>> &
+    Partial<Record<ToggleMissionItem, boolean>> &
     Partial<Record<ToggleOptionsItem, boolean>> &
     Partial<Record<TogglePolicyItem, boolean>> &
     Partial<Record<TogglePromoteLeader, boolean>> &

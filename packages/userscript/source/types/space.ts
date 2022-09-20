@@ -5,6 +5,21 @@ export type SpaceTab = GameTab & {
   planetPanels: Array<Panel>;
 };
 
+export type Missions =
+  | "centaurusSystemMission"
+  | "charonMission"
+  | "duneMission"
+  | "furthestRingMission"
+  | "heliosMission"
+  | "kairoMission"
+  | "moonMission"
+  | "orbitalLaunch"
+  | "piscineMission"
+  | "rorschachMission"
+  | "terminusMission"
+  | "umbraMission"
+  | "yarnMission";
+
 export type SpaceBuildings =
   | "containmentChamber"
   | "cryostation"

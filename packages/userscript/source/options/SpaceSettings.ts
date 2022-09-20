@@ -1,5 +1,6 @@
 import { objectEntries } from "../tools/Entries";
-import { SpaceBuildings } from "../types";
+import { GamePage, SpaceBuildings } from "../types";
+import { MissionSettings } from "./MissionSettings";
 import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
@@ -7,7 +8,7 @@ export type SpaceItem = SpaceBuildings;
 export type SpaceSettingsItem = SettingToggle & SettingLimit;
 
 export type SpaceAdditionSettings = {
-  unlockMissions: SettingToggle;
+  unlockMissions: MissionSettings;
 };
 
 export class SpaceSettings extends SettingsSection implements SettingTrigger {
@@ -15,7 +16,7 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
   $trigger?: JQuery<HTMLElement>;
 
   addition: SpaceAdditionSettings = {
-    unlockMissions: { enabled: true },
+    unlockMissions: new MissionSettings(),
   };
 
   items: {
@@ -55,6 +56,10 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
     moltenCore: { enabled: false, max: -1 },
   };
 
+  static validateGame(game: GamePage, settings: SpaceSettings) {
+    MissionSettings.validateGame(game, settings.addition.unlockMissions);
+  }
+
   static toLegacyOptions(settings: SpaceSettings, subject: KittenStorageType) {
     subject.toggles.space = settings.enabled;
     subject.triggers.space = settings.trigger;
@@ -65,6 +70,9 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
     }
 
     subject.items["toggle-missions"] = settings.addition.unlockMissions.enabled;
+    for (const [name, item] of objectEntries(settings.addition.unlockMissions.items)) {
+      subject.items[`toggle-mission-${name}` as const] = item.enabled;
+    }
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -79,6 +87,9 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
 
     options.addition.unlockMissions.enabled =
       subject.items["toggle-missions"] ?? options.addition.unlockMissions.enabled;
+    for (const [name, item] of objectEntries(options.addition.unlockMissions.items)) {
+      item.enabled = subject.items[`toggle-mission-${name}` as const] ?? item.enabled;
+    }
 
     return options;
   }

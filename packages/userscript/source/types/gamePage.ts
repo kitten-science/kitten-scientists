@@ -27,7 +27,7 @@ import { CycleIndices } from "../options/TimeControlSettings";
 import { CraftableInfo, ResourceInfo } from "./craft";
 import { ReligionTab } from "./religion";
 import { PolicyInfo, TechInfo as TechnologyInfo, Technology } from "./science";
-import { SpaceBuildings, SpaceTab } from "./space";
+import { Missions, SpaceBuildings, SpaceTab } from "./space";
 import {
   ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
@@ -312,6 +312,7 @@ export type GamePage = {
       val: number;
     };
     meta: Array<{ meta: Array<{ label: string; name: string; unlocked: boolean; val: number }> }>;
+    missions: Array<{ name: Missions }>;
   };
   tabs: [
     GameTab,
