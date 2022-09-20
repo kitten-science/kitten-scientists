@@ -414,6 +414,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
+      option.max = state.items[name].max;
     }
   }
 
