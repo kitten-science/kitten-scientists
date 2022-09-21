@@ -21,6 +21,9 @@ export type TradingSettingsItem = SettingToggle & {
   spring: boolean;
   $spring?: JQuery<HTMLElement>;
 
+  /**
+   * A resource that is required to trade with the race.
+   */
   require: Requirement;
 };
 

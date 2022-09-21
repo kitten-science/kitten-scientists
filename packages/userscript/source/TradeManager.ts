@@ -19,6 +19,19 @@ export class TradeManager {
   }
 
   autoTrade(cacheManager?: CacheManager) {
+    const catpower = this._workshopManager.getResource("manpower");
+    const gold = this._workshopManager.getResource("gold");
+    const requireTrigger = this._host.options.auto.trade.trigger;
+
+    // We should only trade if catpower and gold hit the trigger value.
+    // Trades can additionally require specific resources. We will check for those later.
+    if (
+      catpower.value / catpower.maxValue < requireTrigger ||
+      gold.value / gold.maxValue < requireTrigger
+    ) {
+      return;
+    }
+
     this.manager.render();
 
     // If we can't make any trades, bail out.
@@ -29,8 +42,6 @@ export class TradeManager {
     // The races we might want to trade with during this frame.
     const trades: Array<Race> = [];
 
-    const gold = this._workshopManager.getResource("gold");
-    const requireTrigger = this._host.options.auto.trade.trigger;
     const season = this._host.gamePage.calendar.getCurSeason().name;
 
     // Determine how many races we will trade with this cycle.
@@ -50,7 +61,7 @@ export class TradeManager {
       }
 
       // Determine which resource the race requires for trading, if any.
-      const require = !trade.require ? false : this._workshopManager.getResource(trade.require);
+      const require = trade.require ? this._workshopManager.getResource(trade.require) : false;
 
       // Check if this trade would be profitable.
       const profitable = this.getProfitability(name);
@@ -61,8 +72,8 @@ export class TradeManager {
         // If this trade is not limited, it must either not require anything, or
         // the required resource must be over the trigger value.
         // Additionally, gold must also be over the trigger value.
-        (!require || requireTrigger <= require.value / require.maxValue) &&
-        requireTrigger <= gold.value / gold.maxValue
+        !require ||
+        requireTrigger <= require.value / require.maxValue
       ) {
         trades.push(name);
       }
