@@ -32,59 +32,59 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const optionButtons = [
       this._getHeader(this._host.i18n("$religion.panel.ziggurat.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "unicornPasture",
         this._options.items.unicornPasture,
         this._host.i18n("$buildings.unicornPasture.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "unicornTomb",
         this._options.items.unicornTomb,
         this._host.i18n("$religion.zu.unicornTomb.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "ivoryTower",
         this._options.items.ivoryTower,
         this._host.i18n("$religion.zu.ivoryTower.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "ivoryCitadel",
         this._options.items.ivoryCitadel,
         this._host.i18n("$religion.zu.ivoryCitadel.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "skyPalace",
         this._options.items.skyPalace,
         this._host.i18n("$religion.zu.skyPalace.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "unicornUtopia",
         this._options.items.unicornUtopia,
         this._host.i18n("$religion.zu.unicornUtopia.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "sunspire",
         this._options.items.sunspire,
         this._host.i18n("$religion.zu.sunspire.label"),
         true
       ),
 
-      this._getLimitedOption(
+      this._getBuildOption(
         "marker",
         this._options.items.marker,
         this._host.i18n("$religion.zu.marker.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "unicornGraveyard",
         this._options.items.unicornGraveyard,
         this._host.i18n("$religion.zu.unicornGraveyard.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "unicornNecropolis",
         this._options.items.unicornNecropolis,
         this._host.i18n("$religion.zu.unicornNecropolis.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "blackPyramid",
         this._options.items.blackPyramid,
         this._host.i18n("$religion.zu.blackPyramid.label"),
@@ -92,52 +92,52 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       ),
 
       this._getHeader(this._host.i18n("$religion.panel.orderOfTheSun.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "solarchant",
         this._options.items.solarchant,
         this._host.i18n("$religion.ru.solarchant.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "scholasticism",
         this._options.items.scholasticism,
         this._host.i18n("$religion.ru.scholasticism.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "goldenSpire",
         this._options.items.goldenSpire,
         this._host.i18n("$religion.ru.goldenSpire.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "sunAltar",
         this._options.items.sunAltar,
         this._host.i18n("$religion.ru.sunAltar.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "stainedGlass",
         this._options.items.stainedGlass,
         this._host.i18n("$religion.ru.stainedGlass.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "solarRevolution",
         this._options.items.solarRevolution,
         this._host.i18n("$religion.ru.solarRevolution.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "basilica",
         this._options.items.basilica,
         this._host.i18n("$religion.ru.basilica.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "templars",
         this._options.items.templars,
         this._host.i18n("$religion.ru.templars.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "apocripha",
         this._options.items.apocripha,
         this._host.i18n("$religion.ru.apocripha.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "transcendence",
         this._options.items.transcendence,
         this._host.i18n("$religion.ru.transcendence.label"),
@@ -145,47 +145,47 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       ),
 
       this._getHeader(this._host.i18n("$religion.panel.cryptotheology.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "blackObelisk",
         this._options.items.blackObelisk,
         this._host.i18n("$religion.tu.blackObelisk.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "blackNexus",
         this._options.items.blackNexus,
         this._host.i18n("$religion.tu.blackNexus.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "blackCore",
         this._options.items.blackCore,
         this._host.i18n("$religion.tu.blackCore.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "singularity",
         this._options.items.singularity,
         this._host.i18n("$religion.tu.singularity.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "blackLibrary",
         this._options.items.blackLibrary,
         this._host.i18n("$religion.tu.blackLibrary.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "blackRadiance",
         this._options.items.blackRadiance,
         this._host.i18n("$religion.tu.blackRadiance.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "blazar",
         this._options.items.blazar,
         this._host.i18n("$religion.tu.blazar.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "darkNova",
         this._options.items.darkNova,
         this._host.i18n("$religion.tu.darkNova.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "holyGenocide",
         this._options.items.holyGenocide,
         this._host.i18n("$religion.tu.holyGenocide.label"),

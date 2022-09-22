@@ -33,17 +33,17 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
 
     const optionButtons = [
       this._getHeader(this._host.i18n("$space.planet.cath.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "spaceElevator",
         this._options.items.spaceElevator,
         this._host.i18n("$space.planet.cath.spaceElevator.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "sattelite",
         this._options.items.sattelite,
         this._host.i18n("$space.planet.cath.sattelite.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "spaceStation",
         this._options.items.spaceStation,
         this._host.i18n("$space.planet.cath.spaceStation.label"),
@@ -51,12 +51,12 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.moon.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "moonOutpost",
         this._options.items.moonOutpost,
         this._host.i18n("$space.planet.moon.moonOutpost.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "moonBase",
         this._options.items.moonBase,
         this._host.i18n("$space.planet.moon.moonBase.label"),
@@ -64,17 +64,17 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.dune.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "planetCracker",
         this._options.items.planetCracker,
         this._host.i18n("$space.planet.dune.planetCracker.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "hydrofracturer",
         this._options.items.hydrofracturer,
         this._host.i18n("$space.planet.dune.hydrofracturer.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "spiceRefinery",
         this._options.items.spiceRefinery,
         this._host.i18n("$space.planet.dune.spiceRefinery.label"),
@@ -82,12 +82,12 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.piscine.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "researchVessel",
         this._options.items.researchVessel,
         this._host.i18n("$space.planet.piscine.researchVessel.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "orbitalArray",
         this._options.items.orbitalArray,
         this._host.i18n("$space.planet.piscine.orbitalArray.label"),
@@ -95,22 +95,22 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.helios.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "sunlifter",
         this._options.items.sunlifter,
         this._host.i18n("$space.planet.helios.sunlifter.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "containmentChamber",
         this._options.items.containmentChamber,
         this._host.i18n("$space.planet.helios.containmentChamber.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "heatsink",
         this._options.items.heatsink,
         this._host.i18n("$space.planet.helios.heatsink.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "sunforge",
         this._options.items.sunforge,
         this._host.i18n("$space.planet.helios.sunforge.label"),
@@ -118,7 +118,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.terminus.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "cryostation",
         this._options.items.cryostation,
         this._host.i18n("$space.planet.terminus.cryostation.label"),
@@ -126,7 +126,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.kairo.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "spaceBeacon",
         this._options.items.spaceBeacon,
         this._host.i18n("$space.planet.kairo.spaceBeacon.label"),
@@ -134,12 +134,12 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.yarn.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "terraformingStation",
         this._options.items.terraformingStation,
         this._host.i18n("$space.planet.yarn.terraformingStation.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "hydroponics",
         this._options.items.hydroponics,
         this._host.i18n("$space.planet.yarn.hydroponics.label"),
@@ -147,7 +147,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.umbra.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "hrHarvester",
         this._options.items.hrHarvester,
         this._host.i18n("$space.planet.umbra.hrHarvester.label"),
@@ -155,7 +155,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.charon.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "entangler",
         this._options.items.entangler,
         this._host.i18n("$space.planet.charon.entangler.label"),
@@ -163,12 +163,12 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       ),
 
       this._getHeader(this._host.i18n("$space.planet.centaurusSystem.label")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "tectonic",
         this._options.items.tectonic,
         this._host.i18n("$space.planet.centaurusSystem.tectonic.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "moltenCore",
         this._options.items.moltenCore,
         this._host.i18n("$space.planet.centaurusSystem.moltenCore.label"),

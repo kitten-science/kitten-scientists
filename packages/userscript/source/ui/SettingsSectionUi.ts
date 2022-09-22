@@ -1,3 +1,5 @@
+import { BonfireSettingsItem } from "../options/BonfireSettings";
+import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { ResourcesSettingsItem } from "../options/ResourcesSettings";
 import {
   SettingLimit,
@@ -5,6 +7,7 @@ import {
   SettingToggle,
   SettingTrigger,
 } from "../options/SettingsSection";
+import { SpaceSettingsItem } from "../options/SpaceSettings";
 import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
 import { clog } from "../tools/Log";
@@ -498,6 +501,25 @@ export abstract class SettingsSectionUi<TState> {
     }
 
     return element;
+  }
+
+  protected _getBuildOption(
+    name: string,
+    option: BonfireSettingsItem | ReligionSettingsItem | SpaceSettingsItem,
+    label: string,
+    delimiter = false,
+    upgradeIndicator = false
+  ): JQuery<HTMLElement> {
+    return this._getLimitedOption(name, option, label, delimiter, upgradeIndicator, {
+      onCheck: () => {
+        this._host.updateOptions(() => (option.enabled = true));
+        this._host.imessage("status.auto.enable", [label]);
+      },
+      onUnCheck: () => {
+        this._host.updateOptions(() => (option.enabled = false));
+        this._host.imessage("status.auto.disable", [label]);
+      },
+    });
   }
 
   /**

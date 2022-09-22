@@ -31,29 +31,29 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
     const optionButtons = [
       this._getHeader(this._host.i18n("$buildings.group.food")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "field",
         this._options.items.field,
         this._host.i18n("$buildings.field.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "pasture",
         this._options.items.pasture,
         this._host.i18n("$buildings.pasture.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "solarFarm",
         this._options.items.solarFarm,
         this._host.i18n("$buildings.solarfarm.label"),
         false,
         true
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "aqueduct",
         this._options.items.aqueduct,
         this._host.i18n("$buildings.aqueduct.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "hydroPlant",
         this._options.items.hydroPlant,
         this._host.i18n("$buildings.hydroplant.label"),
@@ -62,17 +62,13 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
 
       this._getHeader(this._host.i18n("$buildings.group.population")),
-      this._getLimitedOption(
-        "hut",
-        this._options.items.hut,
-        this._host.i18n("$buildings.hut.label")
-      ),
-      this._getLimitedOption(
+      this._getBuildOption("hut", this._options.items.hut, this._host.i18n("$buildings.hut.label")),
+      this._getBuildOption(
         "logHouse",
         this._options.items.logHouse,
         this._host.i18n("$buildings.logHouse.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "mansion",
         this._options.items.mansion,
         this._host.i18n("$buildings.mansion.label"),
@@ -80,29 +76,29 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
 
       this._getHeader(this._host.i18n("$buildings.group.science")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "library",
         this._options.items.library,
         this._host.i18n("$buildings.library.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "dataCenter",
         this._options.items.dataCenter,
         this._host.i18n("$buildings.dataCenter.label"),
         false,
         true
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "academy",
         this._options.items.academy,
         this._host.i18n("$buildings.academy.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "observatory",
         this._options.items.observatory,
         `${this._host.i18n("$buildings.observatory.label")}`
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "biolab",
         this._options.items.biolab,
         this._host.i18n("$buildings.biolab.label"),
@@ -110,17 +106,17 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
 
       this._getHeader(this._host.i18n("$buildings.group.storage")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "barn",
         this._options.items.barn,
         this._host.i18n("$buildings.barn.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "harbor",
         this._options.items.harbor,
         this._host.i18n("$buildings.harbor.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "warehouse",
         this._options.items.warehouse,
         this._host.i18n("$buildings.warehouse.label"),
@@ -128,27 +124,27 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
 
       this._getHeader(this._host.i18n("$buildings.group.resource")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "mine",
         this._options.items.mine,
         this._host.i18n("$buildings.mine.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "quarry",
         this._options.items.quarry,
         this._host.i18n("$buildings.quarry.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "lumberMill",
         this._options.items.lumberMill,
         this._host.i18n("$buildings.lumberMill.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "oilWell",
         this._options.items.oilWell,
         this._host.i18n("$buildings.oilWell.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "accelerator",
         this._options.items.accelerator,
         this._host.i18n("$buildings.accelerator.label"),
@@ -156,32 +152,32 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
 
       this._getHeader(this._host.i18n("$buildings.group.industry")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "steamworks",
         this._options.items.steamworks,
         this._host.i18n("$buildings.steamworks.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "magneto",
         this._options.items.magneto,
         this._host.i18n("$buildings.magneto.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "smelter",
         this._options.items.smelter,
         this._host.i18n("$buildings.smelter.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "calciner",
         this._options.items.calciner,
         this._host.i18n("$buildings.calciner.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "factory",
         this._options.items.factory,
         this._host.i18n("$buildings.factory.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "reactor",
         this._options.items.reactor,
         this._host.i18n("$buildings.reactor.label"),
@@ -189,24 +185,24 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
 
       this._getHeader(this._host.i18n("$buildings.group.culture")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "amphitheatre",
         this._options.items.amphitheatre,
         this._host.i18n("$buildings.amphitheatre.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "broadcastTower",
         this._options.items.broadcastTower,
         this._host.i18n("$buildings.broadcasttower.label"),
         false,
         true
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "chapel",
         this._options.items.chapel,
         this._host.i18n("$buildings.chapel.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "temple",
         this._options.items.temple,
         this._host.i18n("$buildings.temple.label"),
@@ -214,22 +210,22 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
 
       this._getHeader(this._host.i18n("$buildings.group.other")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "workshop",
         this._options.items.workshop,
         this._host.i18n("$buildings.workshop.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "tradepost",
         this._options.items.tradepost,
         this._host.i18n("$buildings.tradepost.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "mint",
         this._options.items.mint,
         this._host.i18n("$buildings.mint.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "brewery",
         this._options.items.brewery,
         this._host.i18n("$buildings.brewery.label"),
@@ -237,17 +233,17 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
 
       this._getHeader(this._host.i18n("$buildings.group.megastructures")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "ziggurat",
         this._options.items.ziggurat,
         this._host.i18n("$buildings.ziggurat.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "chronosphere",
         this._options.items.chronosphere,
         this._host.i18n("$buildings.chronosphere.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "aiCore",
         this._options.items.aiCore,
         this._host.i18n("$buildings.aicore.label"),
@@ -255,17 +251,17 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
 
       this._getHeader(this._host.i18n("$buildings.group.zebraBuildings")),
-      this._getLimitedOption(
+      this._getBuildOption(
         "zebraOutpost",
         this._options.items.zebraOutpost,
         this._host.i18n("$buildings.zebraOutpost.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "zebraWorkshop",
         this._options.items.zebraWorkshop,
         this._host.i18n("$buildings.zebraWorkshop.label")
       ),
-      this._getLimitedOption(
+      this._getBuildOption(
         "zebraForge",
         this._options.items.zebraForge,
         this._host.i18n("$buildings.zebraForge.label"),
