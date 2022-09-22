@@ -194,8 +194,8 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       "checked",
       this._options.addition.hunt.enabled
     );
-    mustExist(this._options.addition.hunt.$trigger).text(
-      this._renderPercentage(this._options.addition.hunt.trigger)
+    mustExist(this._options.addition.hunt.$trigger)[0].title = this._renderPercentage(
+      this._options.addition.hunt.trigger
     );
     mustExist(this._options.addition.promoteLeader.$enabled).prop(
       "checked",
