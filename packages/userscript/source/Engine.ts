@@ -7,6 +7,7 @@ import { ReligionManager } from "./ReligionManager";
 import { ScienceManager } from "./ScienceManager";
 import { SpaceManager } from "./SpaceManager";
 import { TimeManager } from "./TimeManager";
+import { objectEntries } from "./tools/Entries";
 import { mustExist } from "./tools/Maybe";
 import { TradeManager } from "./TradeManager";
 import { ResourceCraftable } from "./types";
@@ -173,14 +174,19 @@ export class Engine {
         this.promote();
       }
     }
+
     // Time automations (Tempus Fugit & Shatter TC)
     if (this._host.options.auto.timeCtrl.enabled) {
       this.timeCtrl();
     }
+
     // Miscelaneous automations.
     if (subOptions.enabled) {
       this.miscOptions();
     }
+
+    this.refreshStock();
+
     // Reset automation.
     if (
       this._host.options.auto.timeCtrl.enabled &&
@@ -397,6 +403,38 @@ export class Engine {
       if (0 < fixed) {
         this._host.iactivity("act.fix.cry", [fixed], "ks-fixCry");
         this._host.storeForSummary("fix.cry", fixed);
+      }
+    }
+  }
+
+  /**
+   * Maintains the CSS classes in the resource indicators in the game UI to
+   * reflect if the amount of resource in stock is below or above the desired
+   * total amount to keep in stock.
+   * The user can configure this in the Workshop automation section.
+   */
+  refreshStock() {
+    for (const [name, resource] of objectEntries(this._host.options.auto.craft.resources)) {
+      if (resource.stock === 0) {
+        continue;
+      }
+
+      const isBelow = this._host.gamePage.resPool.get(name).value < resource.stock;
+
+      const resourceCells = [
+        // Resource table on the top.
+        ...$(`#game .res-row.resource_${name} .res-cell.resAmount`),
+        // Craft table on the bottom.
+        ...$(`#game .res-row.resource_${name} .res-cell.resource-value`),
+      ];
+
+      if (!resourceCells) {
+        continue;
+      }
+
+      for (const resourceCell of resourceCells) {
+        resourceCell.classList.add(isBelow ? "ks-stock-below" : "ks-stock-above");
+        resourceCell.classList.remove(isBelow ? "ks-stock-above" : "ks-stock-below");
       }
     }
   }

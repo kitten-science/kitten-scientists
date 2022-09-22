@@ -207,6 +207,9 @@ export class UserInterface {
 
     // Ensure the right column gets a scrollbar, when our content extends it too far down.
     this._addRule("body #gamePageContainer #game #rightColumn { overflow-y: auto }");
+
+    this._addRule("#game .res-row .res-cell.ks-stock-above { color: green; }");
+    this._addRule("#game .res-row .res-cell.ks-stock-below { color: red; }");
   }
 
   private _addRule(rule: string) {
