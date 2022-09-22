@@ -59,17 +59,11 @@ export class ReligionSettings extends SettingsSection implements SettingTrigger 
     /**
      * Praise the sun.
      */
-    autoPraise: SettingToggle & {
-      subTrigger: number;
-      $subTrigger?: JQuery<HTMLElement>;
-    };
+    autoPraise: SettingToggle & SettingTrigger;
     /**
      * Adore the galaxy.
      */
-    adore: SettingToggle & {
-      subTrigger: number;
-      $subTrigger?: JQuery<HTMLElement>;
-    };
+    adore: SettingToggle & SettingTrigger;
     /**
      * Transcend.
      */
@@ -80,11 +74,11 @@ export class ReligionSettings extends SettingsSection implements SettingTrigger 
     },
     autoPraise: {
       enabled: true,
-      subTrigger: 0.98,
+      trigger: 0.98,
     },
     adore: {
       enabled: false,
-      subTrigger: 0.75,
+      trigger: 0.75,
     },
     transcend: {
       enabled: false,
@@ -263,8 +257,8 @@ export class ReligionSettings extends SettingsSection implements SettingTrigger 
     subject.items["toggle-bestUnicornBuilding"] = settings.addition.bestUnicornBuilding.enabled;
     subject.items["toggle-transcend"] = settings.addition.transcend.enabled;
 
-    subject.items["set-adore-subTrigger"] = settings.addition.adore.subTrigger;
-    subject.items["set-autoPraise-subTrigger"] = settings.addition.autoPraise.subTrigger;
+    subject.items["set-adore-trigger"] = settings.addition.adore.trigger;
+    subject.items["set-autoPraise-trigger"] = settings.addition.autoPraise.trigger;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -290,11 +284,11 @@ export class ReligionSettings extends SettingsSection implements SettingTrigger 
     options.addition.transcend.enabled =
       subject.items["toggle-transcend"] ?? options.addition.transcend.enabled;
 
-    options.addition.adore.subTrigger =
-      subject.items["set-adore-subTrigger"] ?? options.addition.adore.subTrigger;
+    options.addition.adore.trigger =
+      subject.items["set-adore-trigger"] ?? options.addition.adore.trigger;
 
-    options.addition.autoPraise.subTrigger =
-      subject.items["set-autoPraise-subTrigger"] ?? options.addition.autoPraise.subTrigger;
+    options.addition.autoPraise.trigger =
+      subject.items["set-autoPraise-trigger"] ?? options.addition.autoPraise.trigger;
 
     return options;
   }

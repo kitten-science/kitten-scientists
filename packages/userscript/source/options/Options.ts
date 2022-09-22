@@ -121,7 +121,7 @@ export class Options {
 
     for (const [name, item] of objectEntries(optionsObject.auto.options.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`set-${name}-subTrigger` as const] = item.subTrigger;
+      subject.items[`set-${name}-trigger` as const] = item.trigger;
     }
 
     ReligionSettings.toLegacyOptions(optionsObject.auto.religion, subject);

@@ -242,8 +242,8 @@ export class TradeManager {
     AutoEmbassy: if (this._host.gamePage.diplomacy.races[0].embassyPrices) {
       const culture = this._workshopManager.getResource("culture");
       let cultureVal = 0;
-      const subTrigger = this._host.options.auto.trade.addition.buildEmbassies.subTrigger ?? 0;
-      if (subTrigger <= culture.value / culture.maxValue) {
+      const trigger = this._host.options.auto.trade.addition.buildEmbassies.trigger ?? 0;
+      if (trigger <= culture.value / culture.maxValue) {
         const racePanels = this._host.gamePage.diplomacyTab.racePanels;
         cultureVal = this._workshopManager.getValueAvailable("culture", true);
 

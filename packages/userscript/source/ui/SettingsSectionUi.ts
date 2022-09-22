@@ -163,7 +163,6 @@ export abstract class SettingsSectionUi<TState> {
   protected _getTriggerButton(id: string, handler: { onClick?: () => void } = {}) {
     const triggerButton = $("<div/>", {
       id: `trigger-${id}`,
-      //text: this._host.i18n("ui.trigger"),
       html: '<svg style="width:15px;height:15px" viewBox="0 0 24 24"><path fill="currentColor" d="M11 15H6L13 1V9H18L11 23V15Z" /></svg>',
       css: {
         cursor: "pointer",
@@ -463,39 +462,29 @@ export abstract class SettingsSectionUi<TState> {
     const element = this._getOption(name, option, label, delimiter, handler);
 
     if (option.trigger !== undefined) {
-      const triggerButton = $("<div/>", {
-        id: `set-${name}-subTrigger`,
-        text: this._host.i18n("ui.trigger"),
-        //title: option.subTrigger,
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
+      const triggerButton = this._getTriggerButton(`set-${name}-trigger`, {
+        onClick: () => {
+          let value;
+          if (name === "crypto") {
+            value = this._promptPercentage(
+              this._host.i18n("ui.trigger.crypto.set", [label]),
+              this._renderPercentage(mustExist(option.trigger))
+            );
+          } else {
+            value = this._promptPercentage(
+              this._host.i18n("ui.trigger.set", [label]),
+              this._renderPercentage(mustExist(option.trigger))
+            );
+          }
+
+          if (value !== null) {
+            option.trigger = value;
+            this._host.updateOptions();
+            triggerButton[0].title = this._renderPercentage(option.trigger);
+          }
         },
-      }).data("option", option);
-      option.$trigger = triggerButton;
-
-      triggerButton.on("click", () => {
-        let value;
-        if (name === "crypto") {
-          value = this._promptPercentage(
-            this._host.i18n("ui.trigger.crypto.set", [label]),
-            this._renderPercentage(mustExist(option.trigger))
-          );
-        } else {
-          value = this._promptPercentage(
-            this._host.i18n("ui.trigger.set", [label]),
-            this._renderPercentage(mustExist(option.trigger))
-          );
-        }
-
-        if (value !== null) {
-          option.trigger = value;
-          this._host.updateOptions();
-          triggerButton[0].title = this._renderPercentage(option.trigger);
-        }
       });
+      option.$trigger = triggerButton;
 
       element.append(triggerButton);
     }

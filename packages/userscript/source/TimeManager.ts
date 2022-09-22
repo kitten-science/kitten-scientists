@@ -374,7 +374,7 @@ export class TimeManager {
     // accelerate time.
     if (optionVals.accelerateTime.enabled && !this._host.gamePage.time.isAccelerated) {
       const temporalFlux = this._host.gamePage.resPool.get("temporalFlux");
-      if (temporalFlux.value >= temporalFlux.maxValue * optionVals.accelerateTime.subTrigger) {
+      if (temporalFlux.value >= temporalFlux.maxValue * optionVals.accelerateTime.trigger) {
         this._host.gamePage.time.isAccelerated = true;
         this._host.iactivity("act.accelerate", [], "ks-accelerate");
         this._host.storeForSummary("accelerate", 1);
@@ -391,7 +391,7 @@ export class TimeManager {
 
       // If we have less time crystals than our required trigger value, bail out.
       const timeCrystal = this._host.gamePage.resPool.get("timeCrystal");
-      if (timeCrystal.value < optionVals.timeSkip.subTrigger) {
+      if (timeCrystal.value < optionVals.timeSkip.trigger) {
         return;
       }
 

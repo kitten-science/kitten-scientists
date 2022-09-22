@@ -65,32 +65,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option: TimeControlSettings["items"]["timeSkip"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label);
-
-    const triggerButton = $("<div/>", {
-      id: "set-timeSkip-subTrigger",
-      text: this._host.i18n("ui.trigger"),
-      //title: option.subTrigger,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    }).data("option", option);
-    option.$subTrigger = triggerButton;
-
-    triggerButton.on("click", () => {
-      const value = this._promptPercentage(
-        this._host.i18n("time.skip.trigger.set", []),
-        this._renderPercentage(option.subTrigger)
-      );
-
-      if (value !== null) {
-        this._host.updateOptions(() => (option.subTrigger = value));
-        triggerButton[0].title = this._renderPercentage(option.subTrigger);
-      }
-    });
+    const element = this._getTriggeredOption(name, option, label);
 
     const maximumButton = $("<div/>", {
       id: "set-timeSkip-maximum",
@@ -176,14 +151,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       seasonsList.toggle();
     });
 
-    element.append(
-      cyclesButton,
-      seasonsButton,
-      maximumButton,
-      triggerButton,
-      cyclesList,
-      seasonsList
-    );
+    element.append(cyclesButton, seasonsButton, maximumButton, cyclesList, seasonsList);
 
     return element;
   }
@@ -1008,35 +976,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option: TimeControlSettings["items"]["accelerateTime"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label);
-
-    const triggerButton = $("<div/>", {
-      id: `set-${name}-subTrigger`,
-      text: this._host.i18n("ui.trigger"),
-      //title: option.subTrigger,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    }).data("option", option);
-    option.$subTrigger = triggerButton;
-
-    triggerButton.on("click", () => {
-      const value = this._promptPercentage(
-        this._host.i18n("ui.trigger.set", [label]),
-        this._renderPercentage(option.subTrigger)
-      );
-
-      if (value !== null) {
-        this._host.updateOptions(() => (option.subTrigger = value));
-        triggerButton[0].title = this._renderPercentage(option.subTrigger);
-      }
-    });
-    element.append(triggerButton);
-
-    return element;
+    return this._getTriggeredOption(name, option, label);
   }
 
   private _getCycle(
@@ -1113,7 +1053,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const minButton = $("<div/>", {
       id: `set-reset-${type}-${name}-min`,
       text: this._host.i18n("ui.min", [option.triggerForReset]),
-      //title: option.triggerForReset,
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -1125,7 +1064,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     minButton.on("click", () => {
       const value = this._promptLimit(
-        this._host.i18n("reset.check.trigger.set", [i18nName]),
+        this._host.i18n("ui.trigger.set", [i18nName]),
         option.triggerForReset.toFixed(0)
       );
 
@@ -1268,12 +1207,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     this._options.enabled = state.enabled;
 
     this._options.items.accelerateTime.enabled = state.items.accelerateTime.enabled;
-    this._options.items.accelerateTime.subTrigger = state.items.accelerateTime.subTrigger;
+    this._options.items.accelerateTime.trigger = state.items.accelerateTime.trigger;
 
     this._options.items.reset.enabled = state.items.reset.enabled;
 
     this._options.items.timeSkip.enabled = state.items.timeSkip.enabled;
-    this._options.items.timeSkip.subTrigger = state.items.timeSkip.subTrigger;
+    this._options.items.timeSkip.trigger = state.items.timeSkip.trigger;
     this._options.items.timeSkip.autumn = state.items.timeSkip.autumn;
     this._options.items.timeSkip.spring = state.items.timeSkip.spring;
     this._options.items.timeSkip.summer = state.items.timeSkip.summer;
@@ -1356,8 +1295,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       "checked",
       this._options.items.accelerateTime.enabled
     );
-    mustExist(this._options.items.accelerateTime.$subTrigger)[0].title = this._renderPercentage(
-      this._options.items.accelerateTime.subTrigger
+    mustExist(this._options.items.accelerateTime.$trigger)[0].title = this._renderPercentage(
+      this._options.items.accelerateTime.trigger
     );
 
     mustExist(this._options.items.reset.$enabled).prop(
@@ -1369,8 +1308,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       "checked",
       this._options.items.timeSkip.enabled
     );
-    mustExist(this._options.items.timeSkip.$subTrigger)[0].title = this._renderPercentage(
-      this._options.items.timeSkip.subTrigger
+    mustExist(this._options.items.timeSkip.$trigger)[0].title = this._renderPercentage(
+      this._options.items.timeSkip.trigger
     );
     mustExist(this._options.items.timeSkip.$autumn).prop(
       "checked",

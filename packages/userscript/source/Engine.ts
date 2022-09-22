@@ -245,7 +245,7 @@ export class Engine {
     if (
       this.waitForBestPrice === false &&
       coinPrice < 950.0 &&
-      (this._host.options.auto.options.items.crypto.subTrigger ?? 0) < relicsInitial
+      (this._host.options.auto.options.items.crypto.trigger ?? 0) < relicsInitial
     ) {
       // function name changed in v1.4.8.0
       if (typeof this._host.gamePage.diplomacy.buyEcoin === "function") {

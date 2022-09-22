@@ -1,13 +1,10 @@
 import { objectEntries } from "../tools/Entries";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe" | "shipOverride";
 
-export type OptionsSettingsItem = SettingToggle & {
-  subTrigger?: number;
-  $subTrigger?: JQuery<HTMLElement>;
-};
+export type OptionsSettingsItem = SettingToggle & Partial<SettingTrigger>;
 export class OptionsSettings extends SettingsSection {
   items: {
     [key in OptionsItem]: OptionsSettingsItem;
@@ -16,7 +13,7 @@ export class OptionsSettings extends SettingsSection {
     shipOverride: { enabled: true },
     autofeed: { enabled: true },
 
-    crypto: { enabled: true, subTrigger: 10000 },
+    crypto: { enabled: true, trigger: 10000 },
     fixCry: { enabled: false },
   };
 
@@ -25,7 +22,7 @@ export class OptionsSettings extends SettingsSection {
     options.enabled = subject.toggles.options;
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-      item.subTrigger = subject.items[`set-${name}-subTrigger` as const] ?? item.subTrigger;
+      item.trigger = subject.items[`set-${name}-trigger` as const] ?? item.trigger;
     }
     return options;
   }

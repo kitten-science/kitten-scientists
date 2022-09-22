@@ -92,13 +92,13 @@ export class VillageManager {
 
   autoHunt(cacheManager?: CacheManager) {
     const manpower = this._workshopManager.getResource("manpower");
-    const subTrigger = this._host.options.auto.village.addition.hunt.trigger ?? 0;
+    const trigger = this._host.options.auto.village.addition.hunt.trigger ?? 0;
 
     if (manpower.value < 100 || this._host.gamePage.challenges.isActive("pacifism")) {
       return;
     }
 
-    if (subTrigger <= manpower.value / manpower.maxValue && 100 <= manpower.value) {
+    if (trigger <= manpower.value / manpower.maxValue && 100 <= manpower.value) {
       // Determine how many hunts are being performed.
       let huntCount = Math.floor(manpower.value / 100);
       this._host.storeForSummary("hunt", huntCount);

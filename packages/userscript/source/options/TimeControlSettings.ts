@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { Resource, TimeItemVariant, UnicornItemVariant } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 import { SpaceItem } from "./SpaceSettings";
 import { TimeItem } from "./TimeSettings";
@@ -313,53 +313,48 @@ export class TimeControlSettings extends SettingsSection {
   } = {};
 
   items: {
-    accelerateTime: SettingToggle & {
-      subTrigger: number;
-      $subTrigger?: JQuery<HTMLElement>;
-    };
-    timeSkip: SettingToggle & {
-      subTrigger: number;
-      $subTrigger?: JQuery<HTMLElement>;
+    accelerateTime: SettingToggle & SettingTrigger;
+    timeSkip: SettingToggle &
+      SettingTrigger & {
+        maximum: number;
+        $maximum?: JQuery<HTMLElement>;
 
-      maximum: number;
-      $maximum?: JQuery<HTMLElement>;
+        spring: boolean;
+        $spring?: JQuery<HTMLElement>;
+        summer: boolean;
+        $summer?: JQuery<HTMLElement>;
+        autumn: boolean;
+        $autumn?: JQuery<HTMLElement>;
+        winter: boolean;
+        $winter?: JQuery<HTMLElement>;
 
-      spring: boolean;
-      $spring?: JQuery<HTMLElement>;
-      summer: boolean;
-      $summer?: JQuery<HTMLElement>;
-      autumn: boolean;
-      $autumn?: JQuery<HTMLElement>;
-      winter: boolean;
-      $winter?: JQuery<HTMLElement>;
-
-      0: boolean;
-      1: boolean;
-      2: boolean;
-      3: boolean;
-      4: boolean;
-      5: boolean;
-      6: boolean;
-      7: boolean;
-      8: boolean;
-      9: boolean;
-      $0?: JQuery<HTMLElement>;
-      $1?: JQuery<HTMLElement>;
-      $2?: JQuery<HTMLElement>;
-      $3?: JQuery<HTMLElement>;
-      $4?: JQuery<HTMLElement>;
-      $5?: JQuery<HTMLElement>;
-      $6?: JQuery<HTMLElement>;
-      $7?: JQuery<HTMLElement>;
-      $8?: JQuery<HTMLElement>;
-      $9?: JQuery<HTMLElement>;
-    };
+        0: boolean;
+        1: boolean;
+        2: boolean;
+        3: boolean;
+        4: boolean;
+        5: boolean;
+        6: boolean;
+        7: boolean;
+        8: boolean;
+        9: boolean;
+        $0?: JQuery<HTMLElement>;
+        $1?: JQuery<HTMLElement>;
+        $2?: JQuery<HTMLElement>;
+        $3?: JQuery<HTMLElement>;
+        $4?: JQuery<HTMLElement>;
+        $5?: JQuery<HTMLElement>;
+        $6?: JQuery<HTMLElement>;
+        $7?: JQuery<HTMLElement>;
+        $8?: JQuery<HTMLElement>;
+        $9?: JQuery<HTMLElement>;
+      };
     reset: SettingToggle;
   } = {
-    accelerateTime: { enabled: true, subTrigger: 1 },
+    accelerateTime: { enabled: true, trigger: 1 },
     timeSkip: {
       enabled: false,
-      subTrigger: 5,
+      trigger: 5,
       maximum: 50,
 
       autumn: false,
@@ -387,12 +382,12 @@ export class TimeControlSettings extends SettingsSection {
     subject.toggles.timeCtrl = settings.enabled;
 
     subject.items["toggle-accelerateTime"] = settings.items.accelerateTime.enabled;
-    subject.items["set-accelerateTime-subTrigger"] = settings.items.accelerateTime.subTrigger;
+    subject.items["set-accelerateTime-trigger"] = settings.items.accelerateTime.trigger;
 
     subject.items["toggle-reset"] = settings.items.reset.enabled;
 
     subject.items["toggle-timeSkip"] = settings.items.timeSkip.enabled;
-    subject.items["set-timeSkip-subTrigger"] = settings.items.timeSkip.subTrigger;
+    subject.items["set-timeSkip-trigger"] = settings.items.timeSkip.trigger;
     subject.items["toggle-timeSkip-autumn"] = settings.items.timeSkip.autumn;
     subject.items["toggle-timeSkip-spring"] = settings.items.timeSkip.spring;
     subject.items["toggle-timeSkip-summer"] = settings.items.timeSkip.summer;
@@ -440,15 +435,15 @@ export class TimeControlSettings extends SettingsSection {
 
     options.items.accelerateTime.enabled =
       subject.items["toggle-accelerateTime"] ?? options.items.accelerateTime.enabled;
-    options.items.accelerateTime.subTrigger =
-      subject.items["set-accelerateTime-subTrigger"] ?? options.items.accelerateTime.subTrigger;
+    options.items.accelerateTime.trigger =
+      subject.items["set-accelerateTime-trigger"] ?? options.items.accelerateTime.trigger;
 
     options.items.reset.enabled = subject.items["toggle-reset"] ?? options.items.reset.enabled;
 
     options.items.timeSkip.enabled =
       subject.items["toggle-timeSkip"] ?? options.items.timeSkip.enabled;
-    options.items.timeSkip.subTrigger =
-      subject.items["set-timeSkip-subTrigger"] ?? options.items.timeSkip.subTrigger;
+    options.items.timeSkip.trigger =
+      subject.items["set-timeSkip-trigger"] ?? options.items.timeSkip.trigger;
     options.items.timeSkip.autumn =
       subject.items["toggle-timeSkip-autumn"] ?? options.items.timeSkip.autumn;
     options.items.timeSkip.spring =

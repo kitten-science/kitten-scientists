@@ -1,4 +1,5 @@
 import { OptionsSettings, OptionsSettingsItem } from "../options/OptionsSettings";
+import { SettingToggle, SettingTrigger } from "../options/SettingsSection";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { isNil, mustExist } from "../tools/Maybe";
@@ -66,47 +67,9 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     option: OptionsSettingsItem,
     iname: string
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, iname);
-
-    if (option.subTrigger !== undefined) {
-      const triggerButton = $("<div/>", {
-        id: `set-${name}-subTrigger`,
-        text: this._host.i18n("ui.trigger"),
-        //title: option.subTrigger,
-        css: {
-          cursor: "pointer",
-          display: "inline-block",
-          float: "right",
-          paddingRight: "5px",
-        },
-      }).data("option", option);
-      option.$subTrigger = triggerButton;
-
-      triggerButton.on("click", () => {
-        let value;
-        if (name === "crypto") {
-          value = this._promptPercentage(
-            this._host.i18n("ui.trigger.crypto.set", [iname]),
-            this._renderPercentage(mustExist(option.subTrigger))
-          );
-        } else {
-          value = this._promptPercentage(
-            this._host.i18n("ui.trigger.set", [iname]),
-            this._renderPercentage(mustExist(option.subTrigger))
-          );
-        }
-
-        if (value !== null) {
-          option.subTrigger = value;
-          this._host.updateOptions();
-          triggerButton[0].title = this._renderPercentage(option.subTrigger);
-        }
-      });
-
-      element.append(triggerButton);
-    }
-
-    return element;
+    return option.trigger
+      ? this._getTriggeredOption(name, option as SettingTrigger & SettingToggle, iname)
+      : this._getOption(name, option, iname);
   }
 
   getState(): OptionsSettings {
@@ -122,8 +85,8 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
 
-      if (!isNil(option.$subTrigger)) {
-        option.subTrigger = state.items[name].subTrigger;
+      if (!isNil(option.$trigger)) {
+        option.trigger = state.items[name].trigger;
       }
     }
   }
@@ -134,9 +97,9 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
 
-      if (!isNil(option.$subTrigger)) {
-        option.$subTrigger[0].title = this._renderPercentage(
-          mustExist(this._options.items[name].subTrigger)
+      if (!isNil(option.$trigger)) {
+        option.$trigger[0].title = this._renderPercentage(
+          mustExist(this._options.items[name].trigger)
         );
       }
     }

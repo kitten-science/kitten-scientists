@@ -124,11 +124,11 @@ export class ReligionManager {
 
     // Adore the galaxy (worship → epiphany)
     if (additions.adore.enabled && mustExist(this._host.gamePage.religion.getRU("apocripha")).on) {
-      this._autoAdore(additions.adore.subTrigger);
+      this._autoAdore(additions.adore.trigger);
     }
 
     // Praise (faith → worhsip)
-    if (additions.autoPraise.enabled && additions.autoPraise.subTrigger <= faithLevel) {
+    if (additions.autoPraise.enabled && additions.autoPraise.trigger <= faithLevel) {
       this._autoPraise();
     }
   }
