@@ -2,8 +2,8 @@ import { CacheManager } from "./CacheManager";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { isNil } from "./tools/Maybe";
-import { Job, Resource } from "./types";
-import { VillageTab } from "./types/village";
+import { Resource } from "./types";
+import { JobInfo, VillageTab } from "./types/village";
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
 
@@ -24,42 +24,43 @@ export class VillageManager {
       return;
     }
 
-    let jobName: Job | undefined;
-    let minRatio = Infinity;
-    let currentRatio = 0;
-    // Find the job where to assign a kitten this frame.
+    // Find all jobs where we haven't assigned the maximum desired kittens yet.
+    const jobsNotCapped = new Array<{ job: JobInfo; count: number; toCap: number }>();
     for (const job of this._host.gamePage.village.jobs) {
-      const name = job.name;
+      // Skip disabled jobs and those that haven't been unlocked;
+      const enabled = this._host.options.auto.village.items[job.name].enabled;
       const unlocked = job.unlocked;
-      const enabled = this._host.options.auto.village.items[name].enabled;
-      const maxKittensInJob = this._host.gamePage.village.getJobLimit(name);
-      const maxKittensToAssign = this._host.options.auto.village.items[name].max;
+      if (!enabled || !unlocked) {
+        continue;
+      }
+
+      const maxKittensInJob = this._host.gamePage.village.getJobLimit(job.name);
+      const maxKittensToAssign =
+        this._host.options.auto.village.items[job.name].max === -1
+          ? Number.POSITIVE_INFINITY
+          : this._host.options.auto.village.items[job.name].max;
       const kittensInJob = job.value;
-      const limited = this._host.options.auto.village.items[name].limited;
-      if (
-        unlocked &&
-        enabled &&
-        kittensInJob < maxKittensInJob &&
-        (!limited || kittensInJob < maxKittensToAssign)
-      ) {
-        currentRatio = kittensInJob / maxKittensToAssign;
-        if (currentRatio < minRatio) {
-          minRatio = currentRatio;
-          jobName = name;
-        }
+      if (kittensInJob < maxKittensInJob && kittensInJob < maxKittensToAssign) {
+        jobsNotCapped.push({ job, count: kittensInJob, toCap: maxKittensInJob - kittensInJob });
       }
     }
-    // If a job was determined that should have a kitten assigned, assign it.
-    if (jobName) {
-      this._host.gamePage.village.assignJob(this._host.gamePage.village.getJob(jobName), 1);
-      this.manager.render();
-      this._host.iactivity(
-        "act.distribute",
-        [this._host.i18n(`$village.job.${jobName}` as const)],
-        "ks-distribute"
-      );
-      this._host.storeForSummary("distribute", 1);
+
+    if (!jobsNotCapped.length) {
+      return;
     }
+
+    // Find the job with the least kittens assigned and assign a kitten to that job.
+    jobsNotCapped.sort((a, b) => a.count - b.count);
+    const jobName = jobsNotCapped[0].job.name;
+
+    this._host.gamePage.village.assignJob(this._host.gamePage.village.getJob(jobName), 1);
+    this.manager.render();
+    this._host.iactivity(
+      "act.distribute",
+      [this._host.i18n(`$village.job.${jobName}` as const)],
+      "ks-distribute"
+    );
+    this._host.storeForSummary("distribute", 1);
   }
 
   autoPromote(): void {

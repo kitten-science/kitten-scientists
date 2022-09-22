@@ -36,7 +36,7 @@ import {
   VoidSpaceUpgrades,
 } from "./time";
 import { TradingTab } from "./trading";
-import { VillageTab } from "./village";
+import { JobInfo, VillageTab } from "./village";
 
 export type GamePage = {
   bld: {
@@ -377,7 +377,7 @@ export type GamePage = {
     getResProduction: () => { catnip: number };
     happiness: number;
     huntAll: () => void;
-    jobs: Array<{ name: Job; unlocked: boolean; value: number }>;
+    jobs: Array<JobInfo>;
     leader: { job: Job; rank: number };
     /**
      * @deprecated

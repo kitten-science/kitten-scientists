@@ -1,4 +1,4 @@
-import { BuildButton, GameTab } from ".";
+import { BuildButton, GameTab, Job } from ".";
 
 export type VillageTab = GameTab & {
   censusPanel: {
@@ -9,3 +9,5 @@ export type VillageTab = GameTab & {
   };
   festivalBtn: BuildButton;
 };
+
+export type JobInfo = { name: Job; unlocked: boolean; value: number };

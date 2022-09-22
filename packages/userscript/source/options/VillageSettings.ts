@@ -5,9 +5,6 @@ import { KittenStorageType } from "./SettingsStorage";
 
 export type DistributeItems = Job;
 export type DistributeSettingsItem = SettingToggle & {
-  limited: boolean;
-  $limited?: JQuery<HTMLElement>;
-
   max: number;
   $max?: JQuery<HTMLElement>;
 };
@@ -28,14 +25,14 @@ export class VillageSettings extends SettingsSection {
   items: {
     [item in DistributeItems]: DistributeSettingsItem;
   } = {
-    woodcutter: { enabled: true, limited: true, max: 1 },
-    farmer: { enabled: true, limited: true, max: 1 },
-    scholar: { enabled: true, limited: true, max: 1 },
-    hunter: { enabled: true, limited: true, max: 1 },
-    miner: { enabled: true, limited: true, max: 1 },
-    priest: { enabled: true, limited: true, max: 1 },
-    geologist: { enabled: true, limited: true, max: 1 },
-    engineer: { enabled: true, limited: true, max: 1 },
+    woodcutter: { enabled: true, max: 1 },
+    farmer: { enabled: true, max: 1 },
+    scholar: { enabled: true, max: 1 },
+    hunter: { enabled: true, max: 1 },
+    miner: { enabled: true, max: 1 },
+    priest: { enabled: true, max: 1 },
+    geologist: { enabled: true, max: 1 },
+    engineer: { enabled: true, max: 1 },
   };
 
   static toLegacyOptions(settings: VillageSettings, subject: KittenStorageType) {
@@ -43,7 +40,6 @@ export class VillageSettings extends SettingsSection {
 
     for (const [name, item] of objectEntries(settings.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`toggle-limited-${name}` as const] = item.limited;
       subject.items[`set-${name}-max` as const] = item.max;
     }
 
@@ -58,7 +54,6 @@ export class VillageSettings extends SettingsSection {
 
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
 

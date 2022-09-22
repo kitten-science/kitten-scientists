@@ -92,61 +92,16 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label, delimiter);
-
-    //Limited Distribution
-    const labelElement = $("<label/>", {
-      for: `toggle-limited-${name}`,
-      text: this._host.i18n("ui.limit"),
-    });
-
-    const input = $("<input/>", {
-      id: `toggle-limited-${name}`,
-      type: "checkbox",
-    }).data("option", option);
-    option.$limited = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && option.limited === false) {
-        this._host.updateOptions(() => (option.limited = true));
-        this._host.imessage("distribute.limited", [label]);
-      } else if (!input.is(":checked") && option.limited === true) {
-        this._host.updateOptions(() => (option.limited = false));
-        this._host.imessage("distribute.unlimited", [label]);
-      }
-    });
-
-    element.append(input, labelElement);
-
-    const maxButton = $("<div/>", {
-      id: `set-${name}-max`,
-      text: this._host.i18n("ui.max", [option.max]),
-      //title: option.max,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
+    const element = this._getLimitedOption(name, option, label, delimiter, false, {
+      onCheck: () => {
+        this._host.updateOptions(() => (option.enabled = true));
+        this._host.imessage("status.auto.enable", [label]);
       },
-    }).data("option", option);
-    option.$max = maxButton;
-
-    maxButton.on("click", () => {
-      const value = this._promptLimit(
-        this._host.i18n("ui.max.set", [label]),
-        option.max.toString()
-      );
-
-      if (value !== null) {
-        const limit = this._renderLimit(value);
-        this._host.updateOptions(() => (option.max = value));
-        maxButton[0].title = limit;
-        maxButton[0].innerText = this._host.i18n("ui.max", [limit]);
-      }
+      onUnCheck: () => {
+        this._host.updateOptions(() => (option.enabled = false));
+        this._host.imessage("status.auto.disable", [label]);
+      },
     });
-
-    element.append(maxButton);
-
     return element;
   }
 
@@ -224,7 +179,6 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
 
     for (const [name, option] of objectEntries(this._options.items)) {
       option.enabled = state.items[name].enabled;
-      option.limited = state.items[name].limited;
       option.max = state.items[name].max;
     }
   }
@@ -250,7 +204,6 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
 
     for (const [name, option] of objectEntries(this._options.items)) {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
-      mustExist(option.$limited).prop("checked", this._options.items[name].limited);
       mustExist(option.$max).text(
         this._host.i18n("ui.max", [this._renderLimit(this._options.items[name].max)])
       );
