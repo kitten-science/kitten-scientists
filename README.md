@@ -13,10 +13,10 @@ Grab a build from the [Releases page](https://github.com/oliversalzburg/cbc-kitt
 
 ### Bookmarklet
 
-Currently points to Alpha.3 release.
+Currently points to Alpha.4 release.
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/oliversalzburg/cbc-kitten-scientists/releases/download/v2.0.0-alpha.3/kitten-scientists-2.0.0-alpha.3.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/oliversalzburg/cbc-kitten-scientists/releases/download/v2.0.0-alpha.4/kitten-scientists-2.0.0-alpha.4.user.js';d.body.appendChild(s);})();
 ```
 
 ## Warning
@@ -109,8 +109,8 @@ The automations in this section behave exactly like in the **Bonfire** and **Spa
 
 ### Kitten Resources
 
-- Automatically assigns kittens to selected jobs. If a job is marked **Limited**, kittens will be distributed up to the designated **Max** amount.
-- Make Leader can be set to automatically make leader for selecting job and trait.
+-   Automatically assigns kittens to selected jobs. If a job is marked **Limited**, kittens will be distributed up to the designated **Max** amount.
+-   Make Leader can be set to automatically make leader for selecting job and trait.
 
 ### Options
 
