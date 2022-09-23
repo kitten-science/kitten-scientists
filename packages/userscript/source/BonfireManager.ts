@@ -78,7 +78,10 @@ export class BonfireManager {
 
     const pastureMeta = this._host.gamePage.bld.getBuildingExt("pasture").meta;
     // If pastures haven't been upgraded to solar farms yet...
-    if (pastureMeta.stage === 0) {
+    if (
+      this._host.options.auto.bonfire.addition.upgradeBuildings.items.solarfarm.enabled &&
+      pastureMeta.stage === 0
+    ) {
       if (mustExist(pastureMeta.stages)[1].stageUnlocked) {
         // If we would reduce our pastures to 0, by upgrading them, would we lose any catnip?
         if (this._workshopManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
@@ -110,7 +113,10 @@ export class BonfireManager {
 
     const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
     // If aqueducts haven't beeen upgraded to hydro plants yet...
-    if (aqueductMeta.stage === 0) {
+    if (
+      this._host.options.auto.bonfire.addition.upgradeBuildings.items.hydroplant.enabled &&
+      aqueductMeta.stage === 0
+    ) {
       if (mustExist(aqueductMeta.stages)[1].stageUnlocked) {
         // If we would reduce our aqueducts to 0, by upgrading them, would we lose any catnip?
         if (this._workshopManager.getPotentialCatnip(true, pastures, 0) > 0) {
@@ -139,7 +145,10 @@ export class BonfireManager {
     }
 
     const libraryMeta = this._host.gamePage.bld.getBuildingExt("library").meta;
-    if (libraryMeta.stage === 0) {
+    if (
+      this._host.options.auto.bonfire.addition.upgradeBuildings.items.dataCenter.enabled &&
+      libraryMeta.stage === 0
+    ) {
       if (mustExist(libraryMeta.stages)[1].stageUnlocked) {
         let energyConsumptionRate = this._host.gamePage.workshop.get("cryocomputing").researched
           ? 1
@@ -194,7 +203,10 @@ export class BonfireManager {
     const amphitheatreMeta = this._host.gamePage.bld.getBuildingExt("amphitheatre").meta;
     // If amphitheathres haven't been upgraded to broadcast towers yet...
     // This seems to be identical to the pasture upgrade.
-    if (amphitheatreMeta.stage === 0) {
+    if (
+      this._host.options.auto.bonfire.addition.upgradeBuildings.items.broadcasttower.enabled &&
+      amphitheatreMeta.stage === 0
+    ) {
       if (mustExist(amphitheatreMeta.stages)[1].stageUnlocked) {
         // TODO: This is problematic. Upgrading from 50 amphitheatres to 1 broadcast tower sucks
         //       if you don't have enough resources to build several more.

@@ -40,6 +40,8 @@ export type Building =
   | "zebraWorkshop"
   | "ziggurat";
 
+export type StagedBuilding = "broadcasttower" | "dataCenter" | "hydroplant" | "solarfarm";
+
 // Returned from gamePage.bld.getBuildingExt()
 export type BuildingMeta = {
   calculateEffects?: (model: unknown, game: GamePage) => void;

@@ -57,19 +57,19 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
     for (const [techName, tech] of objectEntries(
       (this._options.items.techs as TechSettings).items
     )) {
-      const techLabel = this._host.i18n(`$science.${techName}.label`);
-      const techButton = this._getOption(`tech-${techName}`, tech, techLabel, false, {
+      const label = this._host.i18n(`$science.${techName}.label`);
+      const button = this._getOption(`tech-${techName}`, tech, label, false, {
         onCheck: () => {
           this._host.updateOptions(() => (tech.enabled = true));
-          this._host.imessage("status.auto.enable", [techLabel]);
+          this._host.imessage("status.auto.enable", [label]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (tech.enabled = false));
-          this._host.imessage("status.auto.disable", [techLabel]);
+          this._host.imessage("status.auto.disable", [label]);
         },
       });
 
-      techButtons.push({ label: techLabel, button: techButton });
+      techButtons.push({ label: label, button: button });
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     techButtons.sort((a, b) => a.label.localeCompare(b.label));

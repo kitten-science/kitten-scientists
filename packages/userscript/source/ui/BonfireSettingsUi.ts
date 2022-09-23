@@ -10,6 +10,8 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
   private readonly _options: BonfireSettings;
 
+  private _buildingUpgradesExpanded = false;
+
   constructor(host: UserScript, options: BonfireSettings = host.options.auto.bonfire) {
     super(host);
 
@@ -280,9 +282,9 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   }
 
   getAdditionOptions(addition: BonfireAdditionSettings): Array<JQuery<HTMLElement>> {
-    const nodeHeader = this._getHeader("Additional options");
+    const header = this._getHeader("Additional options");
 
-    const nodeUpgradeBuildings = this._getOption(
+    const upgradeBuildingsButton = this._getOption(
       "buildings",
       addition.upgradeBuildings,
       this._host.i18n("ui.upgrade.buildings"),
@@ -298,6 +300,49 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         },
       }
     );
+
+    const upgradeBuildingsList = $("<ul/>", {
+      id: "items-list-buildings",
+      css: { display: "none", paddingLeft: "20px" },
+    });
+
+    const upgradeBuildingsButtons = [];
+    for (const [upgradeName, upgrade] of objectEntries(
+      this._options.addition.upgradeBuildings.items
+    )) {
+      const label = this._host.i18n(`$buildings.${upgradeName}.label`);
+      const button = this._getOption(`building-${upgradeName}`, upgrade, label, false, {
+        onCheck: () => {
+          this._host.updateOptions(() => (upgrade.enabled = true));
+          this._host.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (upgrade.enabled = false));
+          this._host.imessage("status.auto.disable", [label]);
+        },
+      });
+
+      upgradeBuildingsButtons.push({ label: label, button: button });
+    }
+    // Ensure buttons are added into UI with their labels alphabetized.
+    upgradeBuildingsButtons.sort((a, b) => a.label.localeCompare(b.label));
+    upgradeBuildingsButtons.forEach(button => upgradeBuildingsList.append(button.button));
+
+    const upgradeBuildingsItemsButton = this._getItemsToggle("buildings-show");
+    upgradeBuildingsItemsButton.on("click", () => {
+      upgradeBuildingsList.toggle();
+
+      this._buildingUpgradesExpanded = !this._buildingUpgradesExpanded;
+
+      upgradeBuildingsItemsButton.text(this._buildingUpgradesExpanded ? "-" : "+");
+      upgradeBuildingsItemsButton.prop(
+        "title",
+        this._buildingUpgradesExpanded
+          ? this._host.i18n("ui.itemsHide")
+          : this._host.i18n("ui.itemsShow")
+      );
+    });
+    upgradeBuildingsButton.append(upgradeBuildingsItemsButton, upgradeBuildingsList);
 
     const nodeTurnOnSteamworks = this._getOption(
       "_steamworks",
@@ -316,7 +361,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       }
     );
 
-    return [nodeHeader, nodeUpgradeBuildings, nodeTurnOnSteamworks];
+    return [header, upgradeBuildingsButton, nodeTurnOnSteamworks];
   }
 
   getState(): BonfireSettings {
@@ -338,6 +383,11 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       option.enabled = state.items[name].enabled;
       option.max = state.items[name].max;
     }
+
+    // Building upgrades.
+    for (const [name, option] of objectEntries(this._options.addition.upgradeBuildings.items)) {
+      option.enabled = state.addition.upgradeBuildings.items[name].enabled;
+    }
   }
 
   refreshUi(): void {
@@ -356,6 +406,14 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
       mustExist(option.$max).text(
         this._host.i18n("ui.max", [this._renderLimit(this._options.items[name].max)])
+      );
+    }
+
+    // Building upgrades.
+    for (const [name, option] of objectEntries(this._options.addition.upgradeBuildings.items)) {
+      mustExist(option.$enabled).prop(
+        "checked",
+        this._options.addition.upgradeBuildings.items[name].enabled
       );
     }
   }

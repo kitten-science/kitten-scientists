@@ -1,5 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { Building } from "../types";
+import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
 import { Requirement } from "./Options";
 import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
@@ -33,7 +34,7 @@ export type BonfireSettingsItem = SettingToggle &
 
 export type BonfireAdditionSettings = {
   turnOnSteamworks: SettingToggle;
-  upgradeBuildings: SettingToggle;
+  upgradeBuildings: BuildingUpgradeSettings;
 };
 
 export class BonfireSettings extends SettingsSection implements SettingTrigger {
@@ -42,7 +43,7 @@ export class BonfireSettings extends SettingsSection implements SettingTrigger {
 
   addition: BonfireAdditionSettings = {
     turnOnSteamworks: { enabled: true },
-    upgradeBuildings: { enabled: true },
+    upgradeBuildings: new BuildingUpgradeSettings(),
   };
 
   items: {
@@ -110,6 +111,10 @@ export class BonfireSettings extends SettingsSection implements SettingTrigger {
 
     subject.items["toggle-buildings"] = settings.addition.upgradeBuildings.enabled;
     subject.items["toggle-_steamworks"] = settings.addition.turnOnSteamworks.enabled;
+
+    for (const [name, item] of objectEntries(settings.addition.upgradeBuildings.items)) {
+      subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
+    }
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -126,6 +131,10 @@ export class BonfireSettings extends SettingsSection implements SettingTrigger {
       subject.items["toggle-buildings"] ?? options.addition.upgradeBuildings.enabled;
     options.addition.turnOnSteamworks.enabled =
       subject.items["toggle-_steamworks"] ?? options.addition.turnOnSteamworks.enabled;
+
+    for (const [name, item] of objectEntries(options.addition.upgradeBuildings.items)) {
+      item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
+    }
     return options;
   }
 }
