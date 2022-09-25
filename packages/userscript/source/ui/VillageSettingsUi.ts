@@ -113,6 +113,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       addition.hunt,
       this._host.i18n("option.hunt"),
       false,
+      false,
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._options.addition.hunt.enabled = true));
@@ -130,6 +131,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       addition.holdFestivals,
       this._host.i18n("option.festival"),
       false,
+      false,
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._options.addition.holdFestivals.enabled = true));
@@ -146,6 +148,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       "promote",
       addition.promoteLeader,
       this._host.i18n("option.promote"),
+      false,
       false,
       {
         onCheck: () => {

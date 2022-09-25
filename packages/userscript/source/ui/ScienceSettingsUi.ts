@@ -36,6 +36,7 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
       this._options.items.techs,
       this._host.i18n("ui.upgrade.techs"),
       false,
+      false,
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._options.items.techs.enabled = true));
@@ -58,7 +59,7 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
       (this._options.items.techs as TechSettings).items
     )) {
       const label = this._host.i18n(`$science.${techName}.label`);
-      const button = this._getOption(`tech-${techName}`, tech, label, false, {
+      const button = this._getOption(`tech-${techName}`, tech, label, false, false, {
         onCheck: () => {
           this._host.updateOptions(() => (tech.enabled = true));
           this._host.imessage("status.auto.enable", [label]);
@@ -95,6 +96,7 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
       this._options.items.policies,
       this._host.i18n("ui.upgrade.policies"),
       false,
+      false,
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._options.items.policies.enabled = true));
@@ -119,16 +121,23 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
       const policyLabel = this._host.i18n(
         `$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`
       );
-      const policyButton = this._getOption(`policy-${policyName}`, policy, policyLabel, false, {
-        onCheck: () => {
-          this._host.updateOptions(() => (policy.enabled = true));
-          this._host.imessage("status.auto.enable", [policyLabel]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (policy.enabled = false));
-          this._host.imessage("status.auto.disable", [policyLabel]);
-        },
-      });
+      const policyButton = this._getOption(
+        `policy-${policyName}`,
+        policy,
+        policyLabel,
+        false,
+        false,
+        {
+          onCheck: () => {
+            this._host.updateOptions(() => (policy.enabled = true));
+            this._host.imessage("status.auto.enable", [policyLabel]);
+          },
+          onUnCheck: () => {
+            this._host.updateOptions(() => (policy.enabled = false));
+            this._host.imessage("status.auto.disable", [policyLabel]);
+          },
+        }
+      );
 
       policyButtons.push({ label: policyLabel, button: policyButton });
     }

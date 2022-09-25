@@ -426,14 +426,7 @@ export abstract class SettingsSectionUi<TState> {
       onUnCheck?: () => void;
     } = {}
   ): JQuery<HTMLElement> {
-    const element = this._getOption(
-      name,
-      option,
-      `${upgradeIndicator ? `⮤ ` : ""}${label}`,
-      delimiter,
-      upgradeIndicator,
-      handler
-    );
+    const element = this._getOption(name, option, label, delimiter, upgradeIndicator, handler);
 
     const maxButton = $("<div/>", {
       id: `set-${name}-max`,

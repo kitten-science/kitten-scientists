@@ -115,7 +115,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     ] as const;
 
     const makeButton = (name: FilterItem, option: FilterSettingsItem, label: string) =>
-      this._getOption(name, option, label, false, {
+      this._getOption(name, option, label, false, false, {
         onCheck: () => {
           option.enabled = true;
           this._host.imessage("filter.enable", [label]);
