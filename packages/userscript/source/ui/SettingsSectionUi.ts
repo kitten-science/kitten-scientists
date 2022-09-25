@@ -40,6 +40,8 @@ export abstract class SettingsSectionUi<TState> {
   abstract setState(state: TState): void;
   abstract refreshUi(): void;
 
+  private static _provisionedOptionElements = new Map<string, JQuery<HTMLElement>>();
+
   /**
    * Expands the options list if true, and collapses it if false.
    * Changes the value of _itemsExpanded even if _mainChild is not defined.
@@ -346,6 +348,11 @@ export abstract class SettingsSectionUi<TState> {
       onUnCheck?: () => void;
     } = {}
   ): JQuery<HTMLElement> {
+    if (SettingsSectionUi._provisionedOptionElements.has(name)) {
+      throw new Error(
+        `Duplicate option ID requested! The option ID '${name}' has already been assigned to a previously provisoned element.`
+      );
+    }
     const element = $("<li/>");
     const elementLabel = `${upgradeIndicator ? `⮤ ` : ""}${i18nName}`;
 
@@ -386,6 +393,8 @@ export abstract class SettingsSectionUi<TState> {
     });
 
     element.append(input, label);
+
+    SettingsSectionUi._provisionedOptionElements.set(name, element);
 
     return element;
   }
