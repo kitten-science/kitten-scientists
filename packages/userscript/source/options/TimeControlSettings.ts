@@ -10,17 +10,8 @@ import { TimeItem } from "./TimeSettings";
 export type CycleIndices = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export type TimeControlItem = "accelerateTime" | "reset" | "timeSkip";
-export type TimeControlBuildSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
-  trigger: number;
-  $trigger?: JQuery<HTMLElement>;
-};
-export type TimeControlResourcesSettingsItem = {
-  enabled: boolean;
-  $enabled?: JQuery<HTMLElement>;
-
+export type TimeControlBuildSettingsItem = SettingToggle & SettingTrigger;
+export type TimeControlResourcesSettingsItem = SettingToggle & {
   stock: number;
   $stock?: JQuery<HTMLElement>;
 };

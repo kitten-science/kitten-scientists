@@ -68,7 +68,7 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     iname: string
   ): JQuery<HTMLElement> {
     return option.trigger
-      ? this._getTriggeredOption(name, option as SettingTrigger & SettingToggle, iname)
+      ? this._getOptionWithTrigger(name, option as SettingTrigger & SettingToggle, iname)
       : this._getOption(name, option, iname);
   }
 

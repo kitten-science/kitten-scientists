@@ -2,27 +2,25 @@ import { objectEntries } from "../tools/Entries";
 import { GamePage, ResourceCraftable } from "../types";
 import { Requirement } from "./Options";
 import { ResourceSettings } from "./ResourcesSettings";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";
 
-export type CraftSettingsItem = SettingToggle & {
-  limited: boolean;
-  $limited?: JQuery<HTMLElement>;
+export type CraftSettingsItem = SettingLimit &
+  SettingToggle & {
+    /**
+     * Meaning still unclear.
+     * This is hardcoded to `0.5` right now.
+     */
+    limRat: 0.5;
 
-  /**
-   * Meaning still unclear.
-   * This is hardcoded to `0.5` right now.
-   */
-  limRat: 0.5;
-
-  /**
-   * The limit of how many items to craft.
-   * This is hardcoded to `0` right now.
-   */
-  max: 0;
-  require: Requirement;
-};
+    /**
+     * The limit of how many items to craft.
+     * This is hardcoded to `0` right now.
+     */
+    max: 0;
+    require: Requirement;
+  };
 
 export type CraftAdditionSettings = {
   unlockUpgrades: UpgradeSettings;

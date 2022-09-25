@@ -3,6 +3,7 @@ import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { ResourcesSettingsItem } from "../options/ResourcesSettings";
 import {
   SettingLimit,
+  SettingMax,
   SettingsSection,
   SettingToggle,
   SettingTrigger,
@@ -327,6 +328,8 @@ export abstract class SettingsSectionUi<TState> {
    * @param option The option this element is linked to.
    * @param i18nName The label on the option element.
    * @param delimiter Should there be additional padding below this element?
+   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
+   * to indicate that this is an upgrade of a prior option?
    * @param handler The event handlers for this option element.
    * @param handler.onCheck Will be invoked when the user checks the checkbox.
    * @param handler.onUnCheck Will be invoked when the user unchecks the checkbox.
@@ -337,13 +340,14 @@ export abstract class SettingsSectionUi<TState> {
     option: SettingToggle,
     i18nName: string,
     delimiter = false,
+    upgradeIndicator = false,
     handler: {
       onCheck?: () => void;
       onUnCheck?: () => void;
     } = {}
   ): JQuery<HTMLElement> {
     const element = $("<li/>");
-    const elementLabel = i18nName;
+    const elementLabel = `${upgradeIndicator ? `⮤ ` : ""}${i18nName}`;
 
     const label = $("<label/>", {
       for: `toggle-${name}`,
@@ -365,17 +369,19 @@ export abstract class SettingsSectionUi<TState> {
       if (input.is(":checked") && option.enabled === false) {
         if (handler.onCheck) {
           handler.onCheck();
-        } else {
-          this._host.updateOptions(() => (option.enabled = true));
-          clog("Unlogged action item");
+          return;
         }
+
+        this._host.updateOptions(() => (option.enabled = true));
+        clog("Unlogged action item");
       } else if (!input.is(":checked") && option.enabled === true) {
         if (handler.onUnCheck) {
           handler.onUnCheck();
-        } else {
-          this._host.updateOptions(() => (option.enabled = false));
-          clog("Unlogged action item");
+          return;
         }
+
+        this._host.updateOptions(() => (option.enabled = false));
+        clog("Unlogged action item");
       }
     });
 
@@ -385,7 +391,7 @@ export abstract class SettingsSectionUi<TState> {
   }
 
   /**
-   * Create a UI element for an option that can be limited.
+   * Create a UI element for an option that can have a maximum.
    * This will result in an element with a labeled checkbox and a "Max" indicator,
    * which controls the respective `max` property in the option model.
    *
@@ -400,9 +406,9 @@ export abstract class SettingsSectionUi<TState> {
    * @param handler.onUnCheck Is called when the option is unchecked.
    * @returns The created element.
    */
-  protected _getLimitedOption(
+  protected _getOptionWithMax(
     name: string,
-    option: SettingLimit & SettingToggle,
+    option: SettingMax & SettingToggle,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -416,6 +422,7 @@ export abstract class SettingsSectionUi<TState> {
       option,
       `${upgradeIndicator ? `⮤ ` : ""}${label}`,
       delimiter,
+      upgradeIndicator,
       handler
     );
 
@@ -449,17 +456,86 @@ export abstract class SettingsSectionUi<TState> {
     return element;
   }
 
-  protected _getTriggeredOption(
+  /**
+   * Create a UI element for an option that can be limited.
+   * This will result in an element with a checkbox that has a "Limited" label.
+   *
+   * @param name A unique name for this option.
+   * @param option The option model.
+   * @param label The label for the option.
+   * @param delimiter Should a delimiter be rendered after this element?
+   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
+   * to indicate that this is an upgrade of a prior option?
+   * @param handler Handlers to call when the option is checked or unchecked.
+   * @param handler.onCheck Is called when the option is checked.
+   * @param handler.onUnCheck Is called when the option is unchecked.
+   * @param handler.onLimitedCheck Is called when the "Limited" checkbox is checked.
+   * @param handler.onLimitedUnCheck Is called when the "Limited" checkbox is unchecked.
+   * @returns The created element.
+   */
+  protected _getOptionWithLimited(
+    name: string,
+    option: SettingLimit & SettingToggle,
+    label: string,
+    delimiter = false,
+    upgradeIndicator = false,
+    handler: {
+      onCheck?: () => void;
+      onUnCheck?: () => void;
+      onLimitedCheck?: () => void;
+      onLimitedUnCheck?: () => void;
+    } = {}
+  ): JQuery<HTMLElement> {
+    const element = this._getOption(name, option, label, delimiter, upgradeIndicator, handler);
+
+    const labelElement = $("<label/>", {
+      for: `toggle-limited-${name}`,
+      text: this._host.i18n("ui.limit"),
+    });
+
+    const input = $("<input/>", {
+      id: `toggle-limited-${name}`,
+      type: "checkbox",
+    }).data("option", option);
+    option.$limited = input;
+
+    input.on("change", () => {
+      if (input.is(":checked") && option.limited === false) {
+        if (handler.onLimitedCheck) {
+          handler.onLimitedCheck();
+          return;
+        }
+
+        this._host.updateOptions(() => (option.limited = true));
+        clog("Unlogged action item");
+      } else if (!input.is(":checked") && option.limited === true) {
+        if (handler.onLimitedUnCheck) {
+          handler.onLimitedUnCheck();
+          return;
+        }
+
+        this._host.updateOptions(() => (option.limited = false));
+        clog("Unlogged action item");
+      }
+    });
+
+    element.append(input, labelElement);
+
+    return element;
+  }
+
+  protected _getOptionWithTrigger(
     name: string,
     option: SettingTrigger & SettingToggle,
     label: string,
     delimiter = false,
+    upgradeIndicator = false,
     handler: {
       onCheck?: () => void;
       onUnCheck?: () => void;
     } = {}
   ) {
-    const element = this._getOption(name, option, label, delimiter, handler);
+    const element = this._getOption(name, option, label, delimiter, upgradeIndicator, handler);
 
     if (option.trigger !== undefined) {
       const triggerButton = this._getTriggerButton(`set-${name}-trigger`, {
@@ -491,7 +567,7 @@ export abstract class SettingsSectionUi<TState> {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return this._getLimitedOption(name, option, label, delimiter, upgradeIndicator, {
+    return this._getOptionWithMax(name, option, label, delimiter, upgradeIndicator, {
       onCheck: () => {
         this._host.updateOptions(() => (option.enabled = true));
         this._host.imessage("status.auto.enable", [label]);

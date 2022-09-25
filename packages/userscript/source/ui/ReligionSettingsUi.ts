@@ -227,10 +227,11 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeAdore = this._getTriggeredOption(
+    const nodeAdore = this._getOptionWithTrigger(
       "adore",
       this._options.addition.adore,
       this._host.i18n("option.faith.adore"),
+      false,
       false,
       {
         onCheck: () => {
@@ -244,10 +245,11 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       }
     );
 
-    const nodeAutoPraise = this._getTriggeredOption(
+    const nodeAutoPraise = this._getOptionWithTrigger(
       "autoPraise",
       this._options.addition.autoPraise,
       this._host.i18n("option.praise"),
+      false,
       false,
       {
         onCheck: () => {
@@ -265,6 +267,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       "bestUnicornBuilding",
       this._options.addition.bestUnicornBuilding,
       this._host.i18n("option.faith.best.unicorn"),
+      false,
       false,
       {
         onCheck: () => {
@@ -318,6 +321,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       "transcend",
       this._options.addition.transcend,
       this._host.i18n("option.faith.transcend"),
+      false,
       false,
       {
         onCheck: () => {

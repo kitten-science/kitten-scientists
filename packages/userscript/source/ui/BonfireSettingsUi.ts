@@ -289,6 +289,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       addition.upgradeBuildings,
       this._host.i18n("ui.upgrade.buildings"),
       false,
+      false,
       {
         onCheck: () => {
           this._host.updateOptions(() => (addition.upgradeBuildings.enabled = true));
@@ -311,7 +312,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._options.addition.upgradeBuildings.items
     )) {
       const label = this._host.i18n(`$buildings.${upgradeName}.label`);
-      const button = this._getOption(`building-${upgradeName}`, upgrade, label, false, {
+      const button = this._getOption(`building-${upgradeName}`, upgrade, label, false, false, {
         onCheck: () => {
           this._host.updateOptions(() => (upgrade.enabled = true));
           this._host.imessage("status.auto.enable", [label]);
@@ -348,6 +349,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       "_steamworks",
       addition.turnOnSteamworks,
       this._host.i18n("option.steamworks"),
+      false,
       false,
       {
         onCheck: () => {

@@ -92,7 +92,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this._getLimitedOption(name, option, label, delimiter, false, {
+    const element = this._getOptionWithMax(name, option, label, delimiter, false, {
       onCheck: () => {
         this._host.updateOptions(() => (option.enabled = true));
         this._host.imessage("status.auto.enable", [label]);
@@ -108,7 +108,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   getAdditionOptions(addition: VillageAdditionSettings): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeHunt = this._getTriggeredOption(
+    const nodeHunt = this._getOptionWithTrigger(
       "hunt",
       addition.hunt,
       this._host.i18n("option.hunt"),

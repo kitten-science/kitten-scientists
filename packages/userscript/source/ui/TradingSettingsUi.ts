@@ -93,35 +93,27 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     name: Race,
     option: TradingSettingsItem,
     i18nName: string,
-    delimiter = false
+    delimiter = false,
+    upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, i18nName, delimiter);
-    element.css("borderTop", "1px solid rgba(185, 185, 185, 0.1)");
-
-    //Limited Trading
-    const label = $("<label/>", {
-      for: `toggle-limited-${name}`,
-      text: this._host.i18n("ui.limit"),
-    });
-
-    const input = $("<input/>", {
-      id: `toggle-limited-${name}`,
-      type: "checkbox",
-    }).data("option", option);
-    option.$limited = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && option.limited === false) {
-        this._host.updateOptions(() => (option.limited = true));
-        this._host.imessage("trade.limited", [i18nName]);
-      } else if (!input.is(":checked") && option.limited === true) {
-        this._host.updateOptions(() => (option.limited = false));
-        this._host.imessage("trade.unlimited", [i18nName]);
+    const element = this._getOptionWithLimited(
+      name,
+      option,
+      i18nName,
+      delimiter,
+      upgradeIndicator,
+      {
+        onLimitedCheck: () => {
+          this._host.updateOptions(() => (option.limited = true));
+          this._host.imessage("trade.limited", [i18nName]);
+        },
+        onLimitedUnCheck: () => {
+          this._host.updateOptions(() => (option.limited = false));
+          this._host.imessage("trade.unlimited", [i18nName]);
+        },
       }
-    });
-
-    element.append(input, label);
-    //Limited Trading End
+    );
+    element.css("borderTop", "1px solid rgba(185, 185, 185, 0.1)");
 
     const button = $("<div/>", {
       id: `toggle-seasons-${name}`,
@@ -195,6 +187,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       addition.buildEmbassies,
       this._host.i18n("option.embassies"),
       false,
+      false,
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._options.addition.buildEmbassies.enabled = true));
@@ -211,6 +204,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       "races",
       addition.unlockRaces,
       this._host.i18n("ui.upgrade.races"),
+      false,
       false,
       {
         onCheck: () => {

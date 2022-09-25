@@ -65,7 +65,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option: TimeControlSettings["items"]["timeSkip"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = this._getTriggeredOption(name, option, label);
+    const element = this._getOptionWithTrigger(name, option, label);
 
     const maximumButton = $("<div/>", {
       id: "set-timeSkip-maximum",
@@ -976,7 +976,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     option: TimeControlSettings["items"]["accelerateTime"],
     label: string
   ): JQuery<HTMLElement> {
-    return this._getTriggeredOption(name, option, label);
+    return this._getOptionWithTrigger(name, option, label);
   }
 
   private _getCycle(
@@ -1013,70 +1013,31 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     return element;
   }
 
-  // Ideally, this was replaced by using `getOption()`.
   private _getResetOption(
     name: string,
     type: "build" | "faith" | "space" | "time",
     option: TimeControlBuildSettingsItem,
     i18nName: string,
-    delimiter = false
+    delimiter = false,
+    upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    const element = $("<li/>");
-    const elementLabel = i18nName;
-
-    const label = $("<label/>", {
-      for: `toggle-reset-${type}-${name}`,
-      text: elementLabel,
-      css: {
-        display: "inline-block",
-        marginBottom: delimiter ? "10px" : undefined,
-        minWidth: "100px",
-      },
-    });
-
-    const input = $("<input/>", {
-      id: `toggle-reset-${type}-${name}`,
-      type: "checkbox",
-    }).data("option", option);
-    option.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && option.enabled === false) {
-        this._host.updateOptions(() => (option.enabled = true));
-        this._host.imessage("status.reset.check.enable", [elementLabel]);
-      } else if (!input.is(":checked") && option.enabled === true) {
-        this._host.updateOptions(() => (option.enabled = false));
-        this._host.imessage("status.reset.check.disable", [elementLabel]);
+    return this._getOptionWithTrigger(
+      `toggle-reset-${type}-${name}`,
+      option,
+      i18nName,
+      delimiter,
+      upgradeIndicator,
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (option.enabled = true));
+          this._host.imessage("status.reset.check.enable", [i18nName]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (option.enabled = false));
+          this._host.imessage("status.reset.check.disable", [i18nName]);
+        },
       }
-    });
-
-    const minButton = $("<div/>", {
-      id: `set-reset-${type}-${name}-min`,
-      text: this._host.i18n("ui.min", [option.trigger]),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    }).data("option", option);
-    option.$trigger = minButton;
-
-    minButton.on("click", () => {
-      const value = this._promptLimit(
-        this._host.i18n("ui.trigger.set", [i18nName]),
-        option.trigger.toFixed(0)
-      );
-
-      if (value !== null) {
-        this._host.updateOptions(() => (option.trigger = value));
-        minButton.text(this._host.i18n("ui.min", [this._renderLimit(option.trigger)]));
-      }
-    });
-
-    element.append(input, label, minButton);
-
-    return element;
+    );
   }
 
   private _getSeasonForTimeSkip(

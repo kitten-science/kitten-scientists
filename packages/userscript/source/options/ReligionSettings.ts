@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { UnicornItemVariant } from "../types";
 import { Requirement } from "./Options";
-import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { SettingMax, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type FaithItem =
@@ -41,7 +41,7 @@ export type UnicornItem =
 export type ReligionItem = FaithItem | UnicornItem;
 export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
 export type ReligionSettingsItem = SettingToggle &
-  SettingLimit & {
+  SettingMax & {
     require: Requirement;
 
     variant: UnicornItemVariant;

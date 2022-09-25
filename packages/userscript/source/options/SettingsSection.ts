@@ -1,4 +1,9 @@
 export type SettingLimit = {
+  limited: boolean;
+  $limited?: JQuery<HTMLElement>;
+};
+
+export type SettingMax = {
   max: number;
   $max?: JQuery<HTMLElement>;
 };

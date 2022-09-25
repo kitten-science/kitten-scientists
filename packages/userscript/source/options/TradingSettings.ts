@@ -2,30 +2,28 @@ import { objectEntries } from "../tools/Entries";
 import { Race } from "../types";
 import { Requirement } from "./Options";
 import { OptionsSettingsItem } from "./OptionsSettings";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type TradingSettingsItem = SettingToggle & {
-  limited: boolean;
-  $limited?: JQuery<HTMLElement>;
+export type TradingSettingsItem = SettingLimit &
+  SettingToggle & {
+    summer: boolean;
+    $summer?: JQuery<HTMLElement>;
 
-  summer: boolean;
-  $summer?: JQuery<HTMLElement>;
+    autumn: boolean;
+    $autumn?: JQuery<HTMLElement>;
 
-  autumn: boolean;
-  $autumn?: JQuery<HTMLElement>;
+    winter: boolean;
+    $winter?: JQuery<HTMLElement>;
 
-  winter: boolean;
-  $winter?: JQuery<HTMLElement>;
+    spring: boolean;
+    $spring?: JQuery<HTMLElement>;
 
-  spring: boolean;
-  $spring?: JQuery<HTMLElement>;
-
-  /**
-   * A resource that is required to trade with the race.
-   */
-  require: Requirement;
-};
+    /**
+     * A resource that is required to trade with the race.
+     */
+    require: Requirement;
+  };
 
 export type TradeAdditionSettings = {
   buildEmbassies: OptionsSettingsItem;

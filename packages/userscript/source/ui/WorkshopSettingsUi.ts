@@ -187,43 +187,19 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     name: string,
     option: CraftSettingsItem,
     label: string,
-    delimiter = false
+    delimiter = false,
+    upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label, delimiter, {
-      onCheck: () => {
-        this._host.updateOptions(() => (option.enabled = true));
-        this._host.imessage("status.auto.enable", [label]);
-      },
-      onUnCheck: () => {
-        this._host.updateOptions(() => (option.enabled = false));
-        this._host.imessage("status.auto.disable", [label]);
-      },
-    });
-
-    const labelElement = $("<label/>", {
-      for: `toggle-limited-${name}`,
-      text: this._host.i18n("ui.limit"),
-    });
-
-    const input = $("<input/>", {
-      id: `toggle-limited-${name}`,
-      type: "checkbox",
-    }).data("option", option);
-    option.$limited = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && option.limited === false) {
+    return this._getOptionWithLimited(name, option, label, delimiter, upgradeIndicator, {
+      onLimitedCheck: () => {
         this._host.updateOptions(() => (option.limited = true));
         this._host.imessage("craft.limited", [label]);
-      } else if (!input.is(":checked") && option.limited === true) {
+      },
+      onLimitedUnCheck: () => {
         this._host.updateOptions(() => (option.limited = false));
         this._host.imessage("craft.unlimited", [label]);
-      }
+      },
     });
-
-    element.append(input, labelElement);
-
-    return element;
   }
 
   private _getResourceOptions(): JQuery<HTMLElement> {
@@ -330,6 +306,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
       addition.unlockUpgrades,
       this._host.i18n("ui.upgrade.upgrades"),
       false,
+      false,
       {
         onCheck: () => {
           this._host.updateOptions(() => (addition.unlockUpgrades.enabled = true));
@@ -356,6 +333,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
         `upgrade-${upgradeName}`,
         upgrade,
         upgradeLabel,
+        false,
         false,
         {
           onCheck: () => {

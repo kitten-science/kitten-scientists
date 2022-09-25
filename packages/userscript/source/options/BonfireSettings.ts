@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { Building } from "../types";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
 import { Requirement } from "./Options";
-import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { SettingMax, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 /**
@@ -13,7 +13,7 @@ import { KittenStorageType } from "./SettingsStorage";
 export type BonfireItem = Building | "broadcastTower" | "dataCenter" | "hydroPlant" | "solarFarm";
 
 export type BonfireSettingsItem = SettingToggle &
-  SettingLimit & {
+  SettingMax & {
     /**
      * In case this is an upgrade of another building, this is the name of the
      * base building.
