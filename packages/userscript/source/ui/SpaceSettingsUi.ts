@@ -191,9 +191,10 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     const header = this._getHeader("Additional options");
 
     const missionsButton = this._getOption(
-      "races",
+      "missions",
       addition.unlockMissions,
       this._host.i18n("ui.upgrade.missions"),
+      false,
       false,
       {
         onCheck: () => {
@@ -221,6 +222,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         `mission-${missionName}`,
         mission,
         missionLabel,
+        false,
         false,
         {
           onCheck: () => {
