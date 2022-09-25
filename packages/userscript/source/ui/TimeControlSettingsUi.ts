@@ -593,7 +593,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
           delete this._options.resources[_name];
         })
       );
-      this._setStockValue(item, resource.stockForReset, true);
+      this._setStockValue(item, resource.stock, true);
     }
 
     // Religion reset options.
@@ -1038,21 +1038,21 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       id: `toggle-reset-${type}-${name}`,
       type: "checkbox",
     }).data("option", option);
-    option.$checkForReset = input;
+    option.$enabled = input;
 
     input.on("change", () => {
-      if (input.is(":checked") && option.checkForReset === false) {
-        this._host.updateOptions(() => (option.checkForReset = true));
+      if (input.is(":checked") && option.enabled === false) {
+        this._host.updateOptions(() => (option.enabled = true));
         this._host.imessage("status.reset.check.enable", [elementLabel]);
-      } else if (!input.is(":checked") && option.checkForReset === true) {
-        this._host.updateOptions(() => (option.checkForReset = false));
+      } else if (!input.is(":checked") && option.enabled === true) {
+        this._host.updateOptions(() => (option.enabled = false));
         this._host.imessage("status.reset.check.disable", [elementLabel]);
       }
     });
 
     const minButton = $("<div/>", {
       id: `set-reset-${type}-${name}-min`,
-      text: this._host.i18n("ui.min", [option.triggerForReset]),
+      text: this._host.i18n("ui.min", [option.trigger]),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -1060,17 +1060,17 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         paddingRight: "5px",
       },
     }).data("option", option);
-    option.$triggerForReset = minButton;
+    option.$trigger = minButton;
 
     minButton.on("click", () => {
       const value = this._promptLimit(
         this._host.i18n("ui.trigger.set", [i18nName]),
-        option.triggerForReset.toFixed(0)
+        option.trigger.toFixed(0)
       );
 
       if (value !== null) {
-        this._host.updateOptions(() => (option.triggerForReset = value));
-        minButton.text(this._host.i18n("ui.min", [this._renderLimit(option.triggerForReset)]));
+        this._host.updateOptions(() => (option.trigger = value));
+        minButton.text(this._host.i18n("ui.min", [this._renderLimit(option.trigger)]));
       }
     });
 
@@ -1167,8 +1167,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         this._getAllAvailableResourceOptions(true, res => {
           if (!this._options.resources[res.name]) {
             const option = {
-              checkForReset: true,
-              stockForReset: Infinity,
+              enabled: true,
+              stock: Infinity,
             };
             this._host.updateOptions(() => (this._options.resources[res.name] = option));
             $("#toggle-reset-list-resources").append(
@@ -1229,20 +1229,20 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     this._options.items.timeSkip[9] = state.items.timeSkip[9];
 
     for (const [name, option] of objectEntries(this._options.buildItems)) {
-      option.checkForReset = state.buildItems[name].checkForReset;
-      option.triggerForReset = state.buildItems[name].triggerForReset;
+      option.enabled = state.buildItems[name].enabled;
+      option.trigger = state.buildItems[name].trigger;
     }
     for (const [name, option] of objectEntries(this._options.religionItems)) {
-      option.checkForReset = state.religionItems[name].checkForReset;
-      option.triggerForReset = state.religionItems[name].triggerForReset;
+      option.enabled = state.religionItems[name].enabled;
+      option.trigger = state.religionItems[name].trigger;
     }
     for (const [name, option] of objectEntries(this._options.spaceItems)) {
-      option.checkForReset = state.spaceItems[name].checkForReset;
-      option.triggerForReset = state.spaceItems[name].triggerForReset;
+      option.enabled = state.spaceItems[name].enabled;
+      option.trigger = state.spaceItems[name].trigger;
     }
     for (const [name, option] of objectEntries(this._options.timeItems)) {
-      option.checkForReset = state.timeItems[name].checkForReset;
-      option.triggerForReset = state.timeItems[name].triggerForReset;
+      option.enabled = state.timeItems[name].enabled;
+      option.trigger = state.timeItems[name].trigger;
     }
 
     // Resources are a dynamic list. We first do a primitive dirty check,
@@ -1251,19 +1251,19 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       Object.keys(this._options.resources).length !== Object.keys(state.resources).length ||
       objectEntries(this._options.resources).some(
         ([name, resource]) =>
-          resource.checkForReset !== state.resources[name]?.checkForReset ||
-          resource.stockForReset !== state.resources[name]?.stockForReset
+          resource.enabled !== state.resources[name]?.enabled ||
+          resource.stock !== state.resources[name]?.stock
       )
     ) {
       // Remove existing elements.
       for (const [, resource] of objectEntries(this._options.resources)) {
-        if (!isNil(resource.$checkForReset)) {
-          resource.$checkForReset.remove();
-          resource.$checkForReset = undefined;
+        if (!isNil(resource.$enabled)) {
+          resource.$enabled.remove();
+          resource.$enabled = undefined;
         }
-        if (!isNil(resource.$stockForReset)) {
-          resource.$stockForReset.remove();
-          resource.$stockForReset = undefined;
+        if (!isNil(resource.$stock)) {
+          resource.$stock.remove();
+          resource.$stock = undefined;
         }
       }
 
@@ -1282,8 +1282,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       // If both lists are the same, just copy the state.
       for (const [name, option] of objectEntries(this._options.resources)) {
         const stateResource = mustExist(state.resources[name]);
-        option.checkForReset = stateResource.checkForReset;
-        option.stockForReset = stateResource.stockForReset;
+        option.enabled = stateResource.enabled;
+        option.stock = stateResource.stock;
       }
     }
   }
@@ -1339,51 +1339,34 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     mustExist(this._options.items.timeSkip.$9).prop("checked", this._options.items.timeSkip[9]);
 
     for (const [name, option] of objectEntries(this._options.buildItems)) {
-      mustExist(option.$checkForReset).prop(
-        "checked",
-        this._options.buildItems[name].checkForReset
-      );
-      mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [
-          this._renderLimit(this._options.buildItems[name].triggerForReset),
-        ])
+      mustExist(option.$enabled).prop("checked", this._options.buildItems[name].enabled);
+      mustExist(option.$trigger).text(
+        this._host.i18n("ui.min", [this._renderLimit(this._options.buildItems[name].trigger)])
       );
     }
     for (const [name, option] of objectEntries(this._options.religionItems)) {
-      mustExist(option.$checkForReset).prop(
-        "checked",
-        this._options.religionItems[name].checkForReset
-      );
-      mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [
-          this._renderLimit(this._options.religionItems[name].triggerForReset),
-        ])
+      mustExist(option.$enabled).prop("checked", this._options.religionItems[name].enabled);
+      mustExist(option.$trigger).text(
+        this._host.i18n("ui.min", [this._renderLimit(this._options.religionItems[name].trigger)])
       );
     }
     for (const [name, option] of objectEntries(this._options.spaceItems)) {
-      mustExist(option.$checkForReset).prop(
-        "checked",
-        this._options.spaceItems[name].checkForReset
-      );
-      mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [
-          this._renderLimit(this._options.spaceItems[name].triggerForReset),
-        ])
+      mustExist(option.$enabled).prop("checked", this._options.spaceItems[name].enabled);
+      mustExist(option.$trigger).text(
+        this._host.i18n("ui.min", [this._renderLimit(this._options.spaceItems[name].trigger)])
       );
     }
     for (const [name, option] of objectEntries(this._options.timeItems)) {
-      mustExist(option.$checkForReset).prop("checked", this._options.timeItems[name].checkForReset);
-      mustExist(option.$triggerForReset).text(
-        this._host.i18n("ui.min", [
-          this._renderLimit(this._options.timeItems[name].triggerForReset),
-        ])
+      mustExist(option.$enabled).prop("checked", this._options.timeItems[name].enabled);
+      mustExist(option.$trigger).text(
+        this._host.i18n("ui.min", [this._renderLimit(this._options.timeItems[name].trigger)])
       );
     }
 
     for (const [name, option] of objectEntries(this._options.resources)) {
-      mustExist(option.$stockForReset).text(
+      mustExist(option.$stock).text(
         this._host.i18n("resources.stock", [
-          this._renderLimit(mustExist(this._options.resources[name]).stockForReset),
+          this._renderLimit(mustExist(this._options.resources[name]).stock),
         ])
       );
     }

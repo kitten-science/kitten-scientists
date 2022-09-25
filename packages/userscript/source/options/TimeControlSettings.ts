@@ -11,72 +11,72 @@ export type CycleIndices = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export type TimeControlItem = "accelerateTime" | "reset" | "timeSkip";
 export type TimeControlBuildSettingsItem = {
-  checkForReset: boolean;
-  $checkForReset?: JQuery<HTMLElement>;
+  enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
 
-  triggerForReset: number;
-  $triggerForReset?: JQuery<HTMLElement>;
+  trigger: number;
+  $trigger?: JQuery<HTMLElement>;
 };
 export type TimeControlResourcesSettingsItem = {
-  checkForReset: boolean;
-  $checkForReset?: JQuery<HTMLElement>;
+  enabled: boolean;
+  $enabled?: JQuery<HTMLElement>;
 
-  stockForReset: number;
-  $stockForReset?: JQuery<HTMLElement>;
+  stock: number;
+  $stock?: JQuery<HTMLElement>;
 };
 export class TimeControlSettings extends SettingsSection {
   buildItems: {
     // unicornPasture is handled in the Religion section.
     [item in Exclude<BonfireItem, "unicornPasture">]: TimeControlBuildSettingsItem;
   } = {
-    hut: { checkForReset: true, triggerForReset: -1 },
-    logHouse: { checkForReset: true, triggerForReset: -1 },
-    mansion: { checkForReset: true, triggerForReset: -1 },
+    hut: { enabled: true, trigger: -1 },
+    logHouse: { enabled: true, trigger: -1 },
+    mansion: { enabled: true, trigger: -1 },
 
-    workshop: { checkForReset: true, triggerForReset: -1 },
-    factory: { checkForReset: true, triggerForReset: -1 },
+    workshop: { enabled: true, trigger: -1 },
+    factory: { enabled: true, trigger: -1 },
 
-    field: { checkForReset: true, triggerForReset: -1 },
-    pasture: { checkForReset: true, triggerForReset: -1 },
-    solarFarm: { checkForReset: true, triggerForReset: -1 },
-    mine: { checkForReset: true, triggerForReset: -1 },
-    lumberMill: { checkForReset: true, triggerForReset: -1 },
-    aqueduct: { checkForReset: true, triggerForReset: -1 },
-    hydroPlant: { checkForReset: true, triggerForReset: -1 },
-    oilWell: { checkForReset: true, triggerForReset: -1 },
-    quarry: { checkForReset: true, triggerForReset: -1 },
+    field: { enabled: true, trigger: -1 },
+    pasture: { enabled: true, trigger: -1 },
+    solarFarm: { enabled: true, trigger: -1 },
+    mine: { enabled: true, trigger: -1 },
+    lumberMill: { enabled: true, trigger: -1 },
+    aqueduct: { enabled: true, trigger: -1 },
+    hydroPlant: { enabled: true, trigger: -1 },
+    oilWell: { enabled: true, trigger: -1 },
+    quarry: { enabled: true, trigger: -1 },
 
-    smelter: { checkForReset: true, triggerForReset: -1 },
-    biolab: { checkForReset: true, triggerForReset: -1 },
-    calciner: { checkForReset: true, triggerForReset: -1 },
-    reactor: { checkForReset: true, triggerForReset: -1 },
-    accelerator: { checkForReset: true, triggerForReset: -1 },
-    steamworks: { checkForReset: true, triggerForReset: -1 },
-    magneto: { checkForReset: true, triggerForReset: -1 },
+    smelter: { enabled: true, trigger: -1 },
+    biolab: { enabled: true, trigger: -1 },
+    calciner: { enabled: true, trigger: -1 },
+    reactor: { enabled: true, trigger: -1 },
+    accelerator: { enabled: true, trigger: -1 },
+    steamworks: { enabled: true, trigger: -1 },
+    magneto: { enabled: true, trigger: -1 },
 
-    library: { checkForReset: true, triggerForReset: -1 },
-    dataCenter: { checkForReset: true, triggerForReset: -1 },
-    academy: { checkForReset: true, triggerForReset: -1 },
-    observatory: { checkForReset: true, triggerForReset: -1 },
+    library: { enabled: true, trigger: -1 },
+    dataCenter: { enabled: true, trigger: -1 },
+    academy: { enabled: true, trigger: -1 },
+    observatory: { enabled: true, trigger: -1 },
 
-    amphitheatre: { checkForReset: true, triggerForReset: -1 },
-    broadcastTower: { checkForReset: true, triggerForReset: -1 },
-    tradepost: { checkForReset: true, triggerForReset: -1 },
-    chapel: { checkForReset: true, triggerForReset: -1 },
-    temple: { checkForReset: true, triggerForReset: -1 },
-    mint: { checkForReset: true, triggerForReset: -1 },
-    ziggurat: { checkForReset: true, triggerForReset: -1 },
-    chronosphere: { checkForReset: true, triggerForReset: -1 },
-    aiCore: { checkForReset: true, triggerForReset: -1 },
-    brewery: { checkForReset: true, triggerForReset: -1 },
+    amphitheatre: { enabled: true, trigger: -1 },
+    broadcastTower: { enabled: true, trigger: -1 },
+    tradepost: { enabled: true, trigger: -1 },
+    chapel: { enabled: true, trigger: -1 },
+    temple: { enabled: true, trigger: -1 },
+    mint: { enabled: true, trigger: -1 },
+    ziggurat: { enabled: true, trigger: -1 },
+    chronosphere: { enabled: true, trigger: -1 },
+    aiCore: { enabled: true, trigger: -1 },
+    brewery: { enabled: true, trigger: -1 },
 
-    barn: { checkForReset: true, triggerForReset: -1 },
-    harbor: { checkForReset: true, triggerForReset: -1 },
-    warehouse: { checkForReset: true, triggerForReset: -1 },
+    barn: { enabled: true, trigger: -1 },
+    harbor: { enabled: true, trigger: -1 },
+    warehouse: { enabled: true, trigger: -1 },
 
-    zebraOutpost: { checkForReset: true, triggerForReset: -1 },
-    zebraWorkshop: { checkForReset: true, triggerForReset: -1 },
-    zebraForge: { checkForReset: true, triggerForReset: -1 },
+    zebraOutpost: { enabled: true, trigger: -1 },
+    zebraWorkshop: { enabled: true, trigger: -1 },
+    zebraForge: { enabled: true, trigger: -1 },
   };
 
   religionItems: {
@@ -85,136 +85,136 @@ export class TimeControlSettings extends SettingsSection {
     };
   } = {
     unicornPasture: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.UnicornPasture,
     },
-    unicornTomb: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
-    ivoryTower: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
+    unicornTomb: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
+    ivoryTower: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
     ivoryCitadel: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Ziggurat,
     },
-    skyPalace: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
+    skyPalace: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
     unicornUtopia: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Ziggurat,
     },
-    sunspire: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
+    sunspire: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
 
-    marker: { checkForReset: true, triggerForReset: -1, variant: UnicornItemVariant.Ziggurat },
+    marker: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
     unicornGraveyard: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Ziggurat,
     },
     unicornNecropolis: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Ziggurat,
     },
     blackPyramid: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Ziggurat,
     },
 
     solarchant: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
     scholasticism: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
     goldenSpire: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
     sunAltar: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
     stainedGlass: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
     solarRevolution: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
     basilica: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
     templars: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
     apocripha: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
     transcendence: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.OrderOfTheSun,
     },
 
     blackObelisk: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Cryptotheology,
     },
     blackNexus: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Cryptotheology,
     },
     blackCore: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Cryptotheology,
     },
     singularity: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Cryptotheology,
     },
     blackLibrary: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Cryptotheology,
     },
     blackRadiance: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Cryptotheology,
     },
     blazar: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Cryptotheology,
     },
     darkNova: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Cryptotheology,
     },
     holyGenocide: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: UnicornItemVariant.Cryptotheology,
     },
   };
@@ -223,89 +223,89 @@ export class TimeControlSettings extends SettingsSection {
     [item in SpaceItem]: TimeControlBuildSettingsItem;
   } = {
     // Cath
-    spaceElevator: { checkForReset: true, triggerForReset: -1 },
-    sattelite: { checkForReset: true, triggerForReset: -1 },
-    spaceStation: { checkForReset: true, triggerForReset: -1 },
+    spaceElevator: { enabled: true, trigger: -1 },
+    sattelite: { enabled: true, trigger: -1 },
+    spaceStation: { enabled: true, trigger: -1 },
 
     // Moon
-    moonOutpost: { checkForReset: true, triggerForReset: -1 },
-    moonBase: { checkForReset: true, triggerForReset: -1 },
+    moonOutpost: { enabled: true, trigger: -1 },
+    moonBase: { enabled: true, trigger: -1 },
 
     // Dune
-    planetCracker: { checkForReset: true, triggerForReset: -1 },
-    hydrofracturer: { checkForReset: true, triggerForReset: -1 },
-    spiceRefinery: { checkForReset: true, triggerForReset: -1 },
+    planetCracker: { enabled: true, trigger: -1 },
+    hydrofracturer: { enabled: true, trigger: -1 },
+    spiceRefinery: { enabled: true, trigger: -1 },
 
     // Piscine
-    researchVessel: { checkForReset: true, triggerForReset: -1 },
-    orbitalArray: { checkForReset: true, triggerForReset: -1 },
+    researchVessel: { enabled: true, trigger: -1 },
+    orbitalArray: { enabled: true, trigger: -1 },
 
     // Helios
-    sunlifter: { checkForReset: true, triggerForReset: -1 },
-    containmentChamber: { checkForReset: true, triggerForReset: -1 },
-    heatsink: { checkForReset: true, triggerForReset: -1 },
-    sunforge: { checkForReset: true, triggerForReset: -1 },
+    sunlifter: { enabled: true, trigger: -1 },
+    containmentChamber: { enabled: true, trigger: -1 },
+    heatsink: { enabled: true, trigger: -1 },
+    sunforge: { enabled: true, trigger: -1 },
 
     // T-Minus
-    cryostation: { checkForReset: true, triggerForReset: -1 },
+    cryostation: { enabled: true, trigger: -1 },
 
     // Kairo
-    spaceBeacon: { checkForReset: true, triggerForReset: -1 },
+    spaceBeacon: { enabled: true, trigger: -1 },
 
     // Yarn
-    terraformingStation: { checkForReset: true, triggerForReset: -1 },
-    hydroponics: { checkForReset: true, triggerForReset: -1 },
+    terraformingStation: { enabled: true, trigger: -1 },
+    hydroponics: { enabled: true, trigger: -1 },
 
     // Umbra
-    hrHarvester: { checkForReset: true, triggerForReset: -1 },
+    hrHarvester: { enabled: true, trigger: -1 },
 
     // Charon
-    entangler: { checkForReset: true, triggerForReset: -1 },
+    entangler: { enabled: true, trigger: -1 },
 
     // Centaurus
-    tectonic: { checkForReset: true, triggerForReset: -1 },
-    moltenCore: { checkForReset: true, triggerForReset: -1 },
+    tectonic: { enabled: true, trigger: -1 },
+    moltenCore: { enabled: true, trigger: -1 },
   };
 
   timeItems: {
     [item in TimeItem]: TimeControlBuildSettingsItem & { variant: TimeItemVariant };
   } = {
     temporalBattery: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: TimeItemVariant.Chronoforge,
     },
     blastFurnace: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: TimeItemVariant.Chronoforge,
     },
     timeBoiler: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: TimeItemVariant.Chronoforge,
     },
     temporalAccelerator: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: TimeItemVariant.Chronoforge,
     },
     temporalImpedance: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: TimeItemVariant.Chronoforge,
     },
     ressourceRetrieval: {
-      checkForReset: true,
-      triggerForReset: -1,
+      enabled: true,
+      trigger: -1,
       variant: TimeItemVariant.Chronoforge,
     },
 
-    cryochambers: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
-    voidHoover: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
-    voidRift: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
-    chronocontrol: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
-    voidResonator: { checkForReset: true, triggerForReset: -1, variant: TimeItemVariant.VoidSpace },
+    cryochambers: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
+    voidHoover: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
+    voidRift: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
+    chronocontrol: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
+    voidResonator: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
   };
 
   resources: {
@@ -399,26 +399,26 @@ export class TimeControlSettings extends SettingsSection {
     }
 
     for (const [name, item] of objectEntries(settings.buildItems)) {
-      subject.items[`toggle-reset-build-${name}` as const] = item.checkForReset;
-      subject.items[`set-reset-build-${name}-min` as const] = item.triggerForReset;
+      subject.items[`toggle-reset-build-${name}` as const] = item.enabled;
+      subject.items[`set-reset-build-${name}-min` as const] = item.trigger;
     }
     for (const [name, item] of objectEntries(settings.religionItems)) {
-      subject.items[`toggle-reset-faith-${name}` as const] = item.checkForReset;
-      subject.items[`set-reset-faith-${name}-min` as const] = item.triggerForReset;
+      subject.items[`toggle-reset-faith-${name}` as const] = item.enabled;
+      subject.items[`set-reset-faith-${name}-min` as const] = item.trigger;
     }
     for (const [name, item] of objectEntries(settings.spaceItems)) {
-      subject.items[`toggle-reset-space-${name}` as const] = item.checkForReset;
-      subject.items[`set-reset-space-${name}-min` as const] = item.triggerForReset;
+      subject.items[`toggle-reset-space-${name}` as const] = item.enabled;
+      subject.items[`set-reset-space-${name}-min` as const] = item.trigger;
     }
     for (const [name, item] of objectEntries(settings.timeItems)) {
-      subject.items[`toggle-reset-time-${name}` as const] = item.checkForReset;
-      subject.items[`set-reset-time-${name}-min` as const] = item.triggerForReset;
+      subject.items[`toggle-reset-time-${name}` as const] = item.enabled;
+      subject.items[`set-reset-time-${name}-min` as const] = item.trigger;
     }
 
     for (const [name, item] of objectEntries(settings.resources)) {
       subject.resources[name] = {
-        checkForReset: item.checkForReset,
-        stockForReset: item.stockForReset,
+        checkForReset: item.enabled,
+        stockForReset: item.stock,
         consume: 0,
         enabled: false,
         stock: 0,
@@ -460,28 +460,20 @@ export class TimeControlSettings extends SettingsSection {
     }
 
     for (const [name, item] of objectEntries(options.buildItems)) {
-      item.checkForReset =
-        subject.items[`toggle-reset-build-${name}` as const] ?? item.checkForReset;
-      item.triggerForReset =
-        subject.items[`set-reset-build-${name}-min` as const] ?? item.triggerForReset;
+      item.enabled = subject.items[`toggle-reset-build-${name}` as const] ?? item.enabled;
+      item.trigger = subject.items[`set-reset-build-${name}-min` as const] ?? item.trigger;
     }
     for (const [name, item] of objectEntries(options.religionItems)) {
-      item.checkForReset =
-        subject.items[`toggle-reset-faith-${name}` as const] ?? item.checkForReset;
-      item.triggerForReset =
-        subject.items[`set-reset-faith-${name}-min` as const] ?? item.triggerForReset;
+      item.enabled = subject.items[`toggle-reset-faith-${name}` as const] ?? item.enabled;
+      item.trigger = subject.items[`set-reset-faith-${name}-min` as const] ?? item.trigger;
     }
     for (const [name, item] of objectEntries(options.spaceItems)) {
-      item.checkForReset =
-        subject.items[`toggle-reset-space-${name}` as const] ?? item.checkForReset;
-      item.triggerForReset =
-        subject.items[`set-reset-space-${name}-min` as const] ?? item.triggerForReset;
+      item.enabled = subject.items[`toggle-reset-space-${name}` as const] ?? item.enabled;
+      item.trigger = subject.items[`set-reset-space-${name}-min` as const] ?? item.trigger;
     }
     for (const [name, item] of objectEntries(options.timeItems)) {
-      item.checkForReset =
-        subject.items[`toggle-reset-time-${name}` as const] ?? item.checkForReset;
-      item.triggerForReset =
-        subject.items[`set-reset-time-${name}-min` as const] ?? item.triggerForReset;
+      item.enabled = subject.items[`toggle-reset-time-${name}` as const] ?? item.enabled;
+      item.trigger = subject.items[`set-reset-time-${name}-min` as const] ?? item.trigger;
     }
 
     options.resources = {};
@@ -490,8 +482,8 @@ export class TimeControlSettings extends SettingsSection {
         continue;
       }
       options.resources[name] = {
-        checkForReset: item.checkForReset,
-        stockForReset: item.stockForReset,
+        enabled: item.checkForReset,
+        stock: item.stockForReset,
       };
     }
 

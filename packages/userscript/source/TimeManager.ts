@@ -126,7 +126,7 @@ export class TimeManager {
 
     // check building
     for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.buildItems))
-      if (entry.checkForReset) {
+      if (entry.enabled) {
         // TODO: Obvious error here. For upgraded buildings, it needs special handling.
         let bld;
         try {
@@ -141,12 +141,12 @@ export class TimeManager {
 
         checkedList.push({
           name: mustExist(bld.meta.label),
-          trigger: entry.triggerForReset,
+          trigger: entry.trigger,
           val: bld.meta.val,
         });
-        if (0 < entry.triggerForReset) {
+        if (0 < entry.trigger) {
           // If the required amount of buildings hasn't been built yet, bail out.
-          if (bld.meta.val < entry.triggerForReset) {
+          if (bld.meta.val < entry.trigger) {
             return;
           }
         } else {
@@ -158,15 +158,15 @@ export class TimeManager {
     // Special handling for unicorn pasture. As it's listed under religion, but is
     // actually a bonfire item.
     const unicornPasture = this._host.options.auto.timeCtrl.religionItems.unicornPasture;
-    if (unicornPasture.checkForReset) {
+    if (unicornPasture.enabled) {
       const bld = this._host.gamePage.bld.getBuildingExt("unicornPasture");
       checkedList.push({
         name: mustExist(bld.meta.label),
-        trigger: unicornPasture.triggerForReset,
+        trigger: unicornPasture.trigger,
         val: bld.meta.val,
       });
-      if (0 < unicornPasture.triggerForReset) {
-        if (bld.meta.val < unicornPasture.triggerForReset) {
+      if (0 < unicornPasture.trigger) {
+        if (bld.meta.val < unicornPasture.trigger) {
           return;
         }
       } else {
@@ -180,11 +180,11 @@ export class TimeManager {
     // check space
     // This is identical to regular buildings.
     for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.spaceItems)) {
-      if (entry.checkForReset) {
+      if (entry.enabled) {
         const bld = this._host.gamePage.space.getBuilding(name);
-        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
-        if (0 < entry.triggerForReset) {
-          if (bld.val < entry.triggerForReset) {
+        checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
+        if (0 < entry.trigger) {
+          if (bld.val < entry.trigger) {
             return;
           }
         } else {
@@ -215,11 +215,11 @@ export class TimeManager {
 
     // check religion
     for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.religionItems)) {
-      if (entry.checkForReset) {
+      if (entry.enabled) {
         const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
-        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
-        if (0 < entry.triggerForReset) {
-          if (bld.val < entry.triggerForReset) {
+        checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
+        if (0 < entry.trigger) {
+          if (bld.val < entry.trigger) {
             return;
           }
         } else {
@@ -239,11 +239,11 @@ export class TimeManager {
 
     // check time
     for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.timeItems)) {
-      if (entry.checkForReset) {
+      if (entry.enabled) {
         const bld = mustExist(this.getBuild(name, entry.variant));
-        checkedList.push({ name: bld.label, trigger: entry.triggerForReset, val: bld.val });
-        if (0 < entry.triggerForReset) {
-          if (bld.val < entry.triggerForReset) {
+        checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
+        if (0 < entry.trigger) {
+          if (bld.val < entry.trigger) {
             return;
           }
         } else {
@@ -262,10 +262,10 @@ export class TimeManager {
 
     // check resources
     for (const [name, entry] of objectEntries(this._host.options.auto.timeCtrl.resources)) {
-      if (entry.checkForReset) {
+      if (entry.enabled) {
         const res = mustExist(this._host.gamePage.resPool.get(name));
-        checkedList.push({ name: res.title, trigger: entry.stockForReset, val: res.value });
-        if (res.value < entry.stockForReset) {
+        checkedList.push({ name: res.title, trigger: entry.stock, val: res.value });
+        if (res.value < entry.stock) {
           return;
         }
       }

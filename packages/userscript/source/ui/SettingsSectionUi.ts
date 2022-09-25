@@ -698,7 +698,7 @@ export abstract class SettingsSectionUi<TState> {
   ): JQuery<HTMLElement> {
     //title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
 
-    const stock = option.stockForReset;
+    const stock = option.stock;
 
     // The overall container for this resource item.
     const container = $("<div/>", {
@@ -737,7 +737,7 @@ export abstract class SettingsSectionUi<TState> {
     stockElement.on("click", () => {
       const value = this._promptLimit(
         this._host.i18n("resources.stock.set", [title]),
-        option.stockForReset.toFixed(0)
+        option.stock.toFixed(0)
       );
       if (value !== null) {
         this._setStockValue(name, value, true);
@@ -752,7 +752,7 @@ export abstract class SettingsSectionUi<TState> {
       }
     });
 
-    option.$stockForReset = stockElement;
+    option.$stock = stockElement;
 
     return container;
   }
@@ -791,8 +791,8 @@ export abstract class SettingsSectionUi<TState> {
 
     if (forReset) {
       value = value < 0 ? Infinity : value;
-      mustExist(this._host.options.auto.timeCtrl.resources[name]).checkForReset = true;
-      mustExist(this._host.options.auto.timeCtrl.resources[name]).stockForReset = value;
+      mustExist(this._host.options.auto.timeCtrl.resources[name]).enabled = true;
+      mustExist(this._host.options.auto.timeCtrl.resources[name]).stock = value;
     } else {
       mustExist(this._host.options.auto.craft.resources[name]).enabled = true;
       mustExist(this._host.options.auto.craft.resources[name]).stock = value;
