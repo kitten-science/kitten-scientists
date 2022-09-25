@@ -464,18 +464,10 @@ export abstract class SettingsSectionUi<TState> {
     if (option.trigger !== undefined) {
       const triggerButton = this._getTriggerButton(`set-${name}-trigger`, {
         onClick: () => {
-          let value;
-          if (name === "crypto") {
-            value = this._promptPercentage(
-              this._host.i18n("ui.trigger.crypto.set", [label]),
-              this._renderPercentage(mustExist(option.trigger))
-            );
-          } else {
-            value = this._promptPercentage(
-              this._host.i18n("ui.trigger.set", [label]),
-              this._renderPercentage(mustExist(option.trigger))
-            );
-          }
+          const value = this._promptPercentage(
+            this._host.i18n("ui.trigger.set", [label]),
+            this._renderPercentage(mustExist(option.trigger))
+          );
 
           if (value !== null) {
             option.trigger = value;
