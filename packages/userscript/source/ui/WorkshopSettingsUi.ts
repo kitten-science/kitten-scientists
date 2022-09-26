@@ -1,3 +1,4 @@
+import { ResourcesSettingsItem } from "../options/ResourcesSettings";
 import {
   CraftAdditionSettings,
   CraftSettingsItem,
@@ -266,11 +267,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
       allresources.append(
         this._getAllAvailableResourceOptions(false, res => {
           if (!this._options.resources[res.name]) {
-            const option = {
-              consume: this._host.options.consume,
-              enabled: true,
-              stock: 0,
-            };
+            const option = new ResourcesSettingsItem(true, this._host.options.consume, 0);
             this._options.resources[res.name] = option;
             mustExist(this._resourcesList).append(
               this._addNewResourceOption(res.name, res.title, option, (_name, _resource) => {
@@ -371,13 +368,13 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
   }
 
   getState(): WorkshopSettings {
-    return {
-      enabled: this._options.enabled,
-      trigger: this._options.trigger,
-      items: this._options.items,
-      resources: this._options.resources,
-      addition: this._options.addition,
-    };
+    return new WorkshopSettings(
+      this._options.enabled,
+      this._options.trigger,
+      this._options.items,
+      this._options.resources,
+      this._options.addition.unlockUpgrades
+    );
   }
 
   setState(state: WorkshopSettings): void {

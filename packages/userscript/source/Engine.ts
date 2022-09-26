@@ -1,7 +1,7 @@
 import { BonfireManager } from "./BonfireManager";
 import { CacheManager } from "./CacheManager";
 import { BonfireItem, BonfireSettingsItem } from "./options/BonfireSettings";
-import { SpaceItem, SpaceSettingsItem } from "./options/SpaceSettings";
+import { SettingMax } from "./options/Settings";
 import { CraftSettingsItem } from "./options/WorkshopSettings";
 import { ReligionManager } from "./ReligionManager";
 import { ScienceManager } from "./ScienceManager";
@@ -10,7 +10,7 @@ import { TimeManager } from "./TimeManager";
 import { objectEntries } from "./tools/Entries";
 import { mustExist } from "./tools/Maybe";
 import { TradeManager } from "./TradeManager";
-import { ResourceCraftable } from "./types";
+import { ResourceCraftable, SpaceBuildings } from "./types";
 import { UserScript } from "./UserScript";
 import { VillageManager } from "./VillageManager";
 import { WorkshopManager } from "./WorkshopManager";
@@ -329,7 +329,7 @@ export class Engine {
    * @param builds The buildings to build.
    */
   buildSpace(
-    builds: Partial<Record<SpaceItem, SpaceSettingsItem>> = this._host.options.auto.space.items
+    builds: Partial<Record<SpaceBuildings, SettingMax>> = this._host.options.auto.space.items
   ): void {
     this._spaceManager.autoBuild(builds);
 

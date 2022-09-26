@@ -1,14 +1,8 @@
 import { BonfireSettingsItem } from "../options/BonfireSettings";
 import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { ResourcesSettingsItem } from "../options/ResourcesSettings";
-import {
-  SettingLimit,
-  SettingMax,
-  SettingsSection,
-  SettingToggle,
-  SettingTrigger,
-} from "../options/SettingsSection";
-import { SpaceSettingsItem } from "../options/SpaceSettings";
+import { Setting, SettingLimited, SettingMax, SettingTrigger } from "../options/Settings";
+import { SettingsSection } from "../options/SettingsSection";
 import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
 import { clog } from "../tools/Log";
@@ -339,7 +333,7 @@ export abstract class SettingsSectionUi<TState> {
    */
   protected _getOption(
     name: string,
-    option: SettingToggle,
+    option: Setting,
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -417,7 +411,7 @@ export abstract class SettingsSectionUi<TState> {
    */
   protected _getOptionWithMax(
     name: string,
-    option: SettingMax & SettingToggle,
+    option: SettingMax,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -477,7 +471,7 @@ export abstract class SettingsSectionUi<TState> {
    */
   protected _getOptionWithLimited(
     name: string,
-    option: SettingLimit & SettingToggle,
+    option: SettingLimited,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -528,7 +522,7 @@ export abstract class SettingsSectionUi<TState> {
 
   protected _getOptionWithTrigger(
     name: string,
-    option: SettingTrigger & SettingToggle,
+    option: SettingTrigger,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -564,7 +558,7 @@ export abstract class SettingsSectionUi<TState> {
 
   protected _getBuildOption(
     name: string,
-    option: BonfireSettingsItem | ReligionSettingsItem | SpaceSettingsItem,
+    option: BonfireSettingsItem | ReligionSettingsItem | SettingMax,
     label: string,
     delimiter = false,
     upgradeIndicator = false

@@ -1,373 +1,462 @@
 import { objectEntries } from "../tools/Entries";
-import { Resource, TimeItemVariant, UnicornItemVariant } from "../types";
+import { Resource, SpaceBuildings, TimeItemVariant, UnicornItemVariant } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { Setting, SettingTrigger } from "./Settings";
+import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
-import { SpaceItem } from "./SpaceSettings";
 import { TimeItem } from "./TimeSettings";
 
 export type CycleIndices = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export type TimeControlItem = "accelerateTime" | "reset" | "timeSkip";
-export type TimeControlBuildSettingsItem = SettingToggle & SettingTrigger;
-export type TimeControlResourcesSettingsItem = SettingToggle & {
-  stock: number;
+
+export class TimeControlResourcesSettingsItem extends Setting {
+  stock = 0;
   $stock?: JQuery<HTMLElement>;
+
+  constructor(enabled: boolean, stock: number) {
+    super(enabled);
+    this.stock = stock;
+  }
+}
+
+export class TimeControlReligionSettingsItem extends SettingTrigger {
+  variant: UnicornItemVariant;
+
+  constructor(variant: UnicornItemVariant, enabled = false, trigger = 1) {
+    super(enabled, trigger);
+    this.variant = variant;
+  }
+}
+
+export class TimeControlTimeSettingsItem extends SettingTrigger {
+  variant: TimeItemVariant;
+
+  constructor(variant: TimeItemVariant, enabled = false, trigger = 1) {
+    super(enabled, trigger);
+    this.variant = variant;
+  }
+}
+
+export class TimeControlTimeSkipSettings extends SettingTrigger {
+  maximum = 50;
+  $maximum?: JQuery<HTMLElement>;
+
+  spring = true;
+  $spring?: JQuery<HTMLElement>;
+  summer = false;
+  $summer?: JQuery<HTMLElement>;
+  autumn = false;
+  $autumn?: JQuery<HTMLElement>;
+  winter = false;
+  $winter?: JQuery<HTMLElement>;
+
+  0 = false;
+  1 = false;
+  2 = false;
+  3 = false;
+  4 = false;
+  5 = false;
+  6 = false;
+  7 = false;
+  8 = false;
+  9 = false;
+  $0?: JQuery<HTMLElement>;
+  $1?: JQuery<HTMLElement>;
+  $2?: JQuery<HTMLElement>;
+  $3?: JQuery<HTMLElement>;
+  $4?: JQuery<HTMLElement>;
+  $5?: JQuery<HTMLElement>;
+  $6?: JQuery<HTMLElement>;
+  $7?: JQuery<HTMLElement>;
+  $8?: JQuery<HTMLElement>;
+  $9?: JQuery<HTMLElement>;
+
+  constructor() {
+    super(false, 5);
+  }
+}
+
+export type TimeControlBuildSettingItems = {
+  // unicornPasture is handled in the Religion section.
+  [item in Exclude<BonfireItem, "unicornPasture">]: SettingTrigger;
 };
+export type TimeControlReligionSettingItems = {
+  [item in FaithItem | UnicornItem]: TimeControlReligionSettingsItem;
+};
+export type TimeControlSpaceSettingItems = {
+  [item in SpaceBuildings]: SettingTrigger;
+};
+export type TimeControlTimeSettingItems = {
+  [item in TimeItem]: TimeControlTimeSettingsItem;
+};
+export type TimeControlResourceSettingItems = {
+  [item in Resource]?: TimeControlResourcesSettingsItem;
+};
+
 export class TimeControlSettings extends SettingsSection {
-  buildItems: {
-    // unicornPasture is handled in the Religion section.
-    [item in Exclude<BonfireItem, "unicornPasture">]: TimeControlBuildSettingsItem;
-  } = {
-    hut: { enabled: true, trigger: -1 },
-    logHouse: { enabled: true, trigger: -1 },
-    mansion: { enabled: true, trigger: -1 },
+  buildItems: TimeControlBuildSettingItems = {
+    hut: new SettingTrigger(true, -1),
+    logHouse: new SettingTrigger(true, -1),
+    mansion: new SettingTrigger(true, -1),
 
-    workshop: { enabled: true, trigger: -1 },
-    factory: { enabled: true, trigger: -1 },
+    workshop: new SettingTrigger(true, -1),
+    factory: new SettingTrigger(true, -1),
 
-    field: { enabled: true, trigger: -1 },
-    pasture: { enabled: true, trigger: -1 },
-    solarFarm: { enabled: true, trigger: -1 },
-    mine: { enabled: true, trigger: -1 },
-    lumberMill: { enabled: true, trigger: -1 },
-    aqueduct: { enabled: true, trigger: -1 },
-    hydroPlant: { enabled: true, trigger: -1 },
-    oilWell: { enabled: true, trigger: -1 },
-    quarry: { enabled: true, trigger: -1 },
+    field: new SettingTrigger(true, -1),
+    pasture: new SettingTrigger(true, -1),
+    solarFarm: new SettingTrigger(true, -1),
+    mine: new SettingTrigger(true, -1),
+    lumberMill: new SettingTrigger(true, -1),
+    aqueduct: new SettingTrigger(true, -1),
+    hydroPlant: new SettingTrigger(true, -1),
+    oilWell: new SettingTrigger(true, -1),
+    quarry: new SettingTrigger(true, -1),
 
-    smelter: { enabled: true, trigger: -1 },
-    biolab: { enabled: true, trigger: -1 },
-    calciner: { enabled: true, trigger: -1 },
-    reactor: { enabled: true, trigger: -1 },
-    accelerator: { enabled: true, trigger: -1 },
-    steamworks: { enabled: true, trigger: -1 },
-    magneto: { enabled: true, trigger: -1 },
+    smelter: new SettingTrigger(true, -1),
+    biolab: new SettingTrigger(true, -1),
+    calciner: new SettingTrigger(true, -1),
+    reactor: new SettingTrigger(true, -1),
+    accelerator: new SettingTrigger(true, -1),
+    steamworks: new SettingTrigger(true, -1),
+    magneto: new SettingTrigger(true, -1),
 
-    library: { enabled: true, trigger: -1 },
-    dataCenter: { enabled: true, trigger: -1 },
-    academy: { enabled: true, trigger: -1 },
-    observatory: { enabled: true, trigger: -1 },
+    library: new SettingTrigger(true, -1),
+    dataCenter: new SettingTrigger(true, -1),
+    academy: new SettingTrigger(true, -1),
+    observatory: new SettingTrigger(true, -1),
 
-    amphitheatre: { enabled: true, trigger: -1 },
-    broadcastTower: { enabled: true, trigger: -1 },
-    tradepost: { enabled: true, trigger: -1 },
-    chapel: { enabled: true, trigger: -1 },
-    temple: { enabled: true, trigger: -1 },
-    mint: { enabled: true, trigger: -1 },
-    ziggurat: { enabled: true, trigger: -1 },
-    chronosphere: { enabled: true, trigger: -1 },
-    aiCore: { enabled: true, trigger: -1 },
-    brewery: { enabled: true, trigger: -1 },
+    amphitheatre: new SettingTrigger(true, -1),
+    broadcastTower: new SettingTrigger(true, -1),
+    tradepost: new SettingTrigger(true, -1),
+    chapel: new SettingTrigger(true, -1),
+    temple: new SettingTrigger(true, -1),
+    mint: new SettingTrigger(true, -1),
+    ziggurat: new SettingTrigger(true, -1),
+    chronosphere: new SettingTrigger(true, -1),
+    aiCore: new SettingTrigger(true, -1),
+    brewery: new SettingTrigger(true, -1),
 
-    barn: { enabled: true, trigger: -1 },
-    harbor: { enabled: true, trigger: -1 },
-    warehouse: { enabled: true, trigger: -1 },
+    barn: new SettingTrigger(true, -1),
+    harbor: new SettingTrigger(true, -1),
+    warehouse: new SettingTrigger(true, -1),
 
-    zebraOutpost: { enabled: true, trigger: -1 },
-    zebraWorkshop: { enabled: true, trigger: -1 },
-    zebraForge: { enabled: true, trigger: -1 },
+    zebraOutpost: new SettingTrigger(true, -1),
+    zebraWorkshop: new SettingTrigger(true, -1),
+    zebraForge: new SettingTrigger(true, -1),
   };
 
-  religionItems: {
-    [item in FaithItem | UnicornItem]: TimeControlBuildSettingsItem & {
-      variant: UnicornItemVariant;
-    };
-  } = {
-    unicornPasture: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.UnicornPasture,
-    },
-    unicornTomb: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
-    ivoryTower: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
-    ivoryCitadel: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Ziggurat,
-    },
-    skyPalace: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
-    unicornUtopia: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Ziggurat,
-    },
-    sunspire: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
+  religionItems: TimeControlReligionSettingItems = {
+    unicornPasture: new TimeControlReligionSettingsItem(
+      UnicornItemVariant.UnicornPasture,
+      true,
+      -1
+    ),
+    unicornTomb: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+    ivoryTower: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+    ivoryCitadel: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+    skyPalace: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+    unicornUtopia: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+    sunspire: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
 
-    marker: { enabled: true, trigger: -1, variant: UnicornItemVariant.Ziggurat },
-    unicornGraveyard: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Ziggurat,
-    },
-    unicornNecropolis: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Ziggurat,
-    },
-    blackPyramid: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Ziggurat,
-    },
+    marker: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+    unicornGraveyard: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+    unicornNecropolis: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+    blackPyramid: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
 
-    solarchant: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
-    scholasticism: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
-    goldenSpire: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
-    sunAltar: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
-    stainedGlass: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
-    solarRevolution: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
-    basilica: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
-    templars: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
-    apocripha: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
-    transcendence: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.OrderOfTheSun,
-    },
+    solarchant: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+    scholasticism: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+    goldenSpire: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+    sunAltar: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+    stainedGlass: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+    solarRevolution: new TimeControlReligionSettingsItem(
+      UnicornItemVariant.OrderOfTheSun,
+      true,
+      -1
+    ),
+    basilica: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+    templars: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+    apocripha: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+    transcendence: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
 
-    blackObelisk: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Cryptotheology,
-    },
-    blackNexus: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Cryptotheology,
-    },
-    blackCore: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Cryptotheology,
-    },
-    singularity: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Cryptotheology,
-    },
-    blackLibrary: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Cryptotheology,
-    },
-    blackRadiance: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Cryptotheology,
-    },
-    blazar: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Cryptotheology,
-    },
-    darkNova: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Cryptotheology,
-    },
-    holyGenocide: {
-      enabled: true,
-      trigger: -1,
-      variant: UnicornItemVariant.Cryptotheology,
-    },
+    blackObelisk: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+    blackNexus: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+    blackCore: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+    singularity: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+    blackLibrary: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+    blackRadiance: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+    blazar: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+    darkNova: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+    holyGenocide: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
   };
 
-  spaceItems: {
-    [item in SpaceItem]: TimeControlBuildSettingsItem;
-  } = {
+  spaceItems: TimeControlSpaceSettingItems = {
     // Cath
-    spaceElevator: { enabled: true, trigger: -1 },
-    sattelite: { enabled: true, trigger: -1 },
-    spaceStation: { enabled: true, trigger: -1 },
+    spaceElevator: new SettingTrigger(true, -1),
+    sattelite: new SettingTrigger(true, -1),
+    spaceStation: new SettingTrigger(true, -1),
 
     // Moon
-    moonOutpost: { enabled: true, trigger: -1 },
-    moonBase: { enabled: true, trigger: -1 },
+    moonOutpost: new SettingTrigger(true, -1),
+    moonBase: new SettingTrigger(true, -1),
 
     // Dune
-    planetCracker: { enabled: true, trigger: -1 },
-    hydrofracturer: { enabled: true, trigger: -1 },
-    spiceRefinery: { enabled: true, trigger: -1 },
+    planetCracker: new SettingTrigger(true, -1),
+    hydrofracturer: new SettingTrigger(true, -1),
+    spiceRefinery: new SettingTrigger(true, -1),
 
     // Piscine
-    researchVessel: { enabled: true, trigger: -1 },
-    orbitalArray: { enabled: true, trigger: -1 },
+    researchVessel: new SettingTrigger(true, -1),
+    orbitalArray: new SettingTrigger(true, -1),
 
     // Helios
-    sunlifter: { enabled: true, trigger: -1 },
-    containmentChamber: { enabled: true, trigger: -1 },
-    heatsink: { enabled: true, trigger: -1 },
-    sunforge: { enabled: true, trigger: -1 },
+    sunlifter: new SettingTrigger(true, -1),
+    containmentChamber: new SettingTrigger(true, -1),
+    heatsink: new SettingTrigger(true, -1),
+    sunforge: new SettingTrigger(true, -1),
 
     // T-Minus
-    cryostation: { enabled: true, trigger: -1 },
+    cryostation: new SettingTrigger(true, -1),
 
     // Kairo
-    spaceBeacon: { enabled: true, trigger: -1 },
+    spaceBeacon: new SettingTrigger(true, -1),
 
     // Yarn
-    terraformingStation: { enabled: true, trigger: -1 },
-    hydroponics: { enabled: true, trigger: -1 },
+    terraformingStation: new SettingTrigger(true, -1),
+    hydroponics: new SettingTrigger(true, -1),
 
     // Umbra
-    hrHarvester: { enabled: true, trigger: -1 },
+    hrHarvester: new SettingTrigger(true, -1),
 
     // Charon
-    entangler: { enabled: true, trigger: -1 },
+    entangler: new SettingTrigger(true, -1),
 
     // Centaurus
-    tectonic: { enabled: true, trigger: -1 },
-    moltenCore: { enabled: true, trigger: -1 },
+    tectonic: new SettingTrigger(true, -1),
+    moltenCore: new SettingTrigger(true, -1),
   };
 
-  timeItems: {
-    [item in TimeItem]: TimeControlBuildSettingsItem & { variant: TimeItemVariant };
-  } = {
-    temporalBattery: {
-      enabled: true,
-      trigger: -1,
-      variant: TimeItemVariant.Chronoforge,
-    },
-    blastFurnace: {
-      enabled: true,
-      trigger: -1,
-      variant: TimeItemVariant.Chronoforge,
-    },
-    timeBoiler: {
-      enabled: true,
-      trigger: -1,
-      variant: TimeItemVariant.Chronoforge,
-    },
-    temporalAccelerator: {
-      enabled: true,
-      trigger: -1,
-      variant: TimeItemVariant.Chronoforge,
-    },
-    temporalImpedance: {
-      enabled: true,
-      trigger: -1,
-      variant: TimeItemVariant.Chronoforge,
-    },
-    ressourceRetrieval: {
-      enabled: true,
-      trigger: -1,
-      variant: TimeItemVariant.Chronoforge,
-    },
+  timeItems: TimeControlTimeSettingItems = {
+    temporalBattery: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+    blastFurnace: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+    timeBoiler: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+    temporalAccelerator: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+    temporalImpedance: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+    ressourceRetrieval: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
 
-    cryochambers: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
-    voidHoover: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
-    voidRift: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
-    chronocontrol: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
-    voidResonator: { enabled: true, trigger: -1, variant: TimeItemVariant.VoidSpace },
+    cryochambers: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
+    voidHoover: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
+    voidRift: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
+    chronocontrol: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
+    voidResonator: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
   };
 
-  resources: {
-    [item in Resource]?: TimeControlResourcesSettingsItem;
-  } = {};
+  resources: TimeControlResourceSettingItems = {};
 
   items: {
-    accelerateTime: SettingToggle & SettingTrigger;
-    timeSkip: SettingToggle &
-      SettingTrigger & {
-        maximum: number;
-        $maximum?: JQuery<HTMLElement>;
-
-        spring: boolean;
-        $spring?: JQuery<HTMLElement>;
-        summer: boolean;
-        $summer?: JQuery<HTMLElement>;
-        autumn: boolean;
-        $autumn?: JQuery<HTMLElement>;
-        winter: boolean;
-        $winter?: JQuery<HTMLElement>;
-
-        0: boolean;
-        1: boolean;
-        2: boolean;
-        3: boolean;
-        4: boolean;
-        5: boolean;
-        6: boolean;
-        7: boolean;
-        8: boolean;
-        9: boolean;
-        $0?: JQuery<HTMLElement>;
-        $1?: JQuery<HTMLElement>;
-        $2?: JQuery<HTMLElement>;
-        $3?: JQuery<HTMLElement>;
-        $4?: JQuery<HTMLElement>;
-        $5?: JQuery<HTMLElement>;
-        $6?: JQuery<HTMLElement>;
-        $7?: JQuery<HTMLElement>;
-        $8?: JQuery<HTMLElement>;
-        $9?: JQuery<HTMLElement>;
-      };
-    reset: SettingToggle;
+    accelerateTime: SettingTrigger;
+    timeSkip: TimeControlTimeSkipSettings;
+    reset: Setting;
   } = {
-    accelerateTime: { enabled: true, trigger: 1 },
-    timeSkip: {
-      enabled: false,
-      trigger: 5,
-      maximum: 50,
-
-      autumn: false,
-      summer: false,
-      spring: true,
-      winter: false,
-
-      0: false,
-      1: false,
-      2: false,
-      3: false,
-      4: false,
-      5: false,
-      6: false,
-      7: false,
-      8: false,
-      9: false,
-    },
-    reset: {
-      enabled: false,
-    },
+    accelerateTime: new SettingTrigger(true, 1),
+    timeSkip: new TimeControlTimeSkipSettings(),
+    reset: new Setting(false),
   };
+
+  constructor(
+    enabled = false,
+    buildItems = {
+      hut: new SettingTrigger(true, -1),
+      logHouse: new SettingTrigger(true, -1),
+      mansion: new SettingTrigger(true, -1),
+
+      workshop: new SettingTrigger(true, -1),
+      factory: new SettingTrigger(true, -1),
+
+      field: new SettingTrigger(true, -1),
+      pasture: new SettingTrigger(true, -1),
+      solarFarm: new SettingTrigger(true, -1),
+      mine: new SettingTrigger(true, -1),
+      lumberMill: new SettingTrigger(true, -1),
+      aqueduct: new SettingTrigger(true, -1),
+      hydroPlant: new SettingTrigger(true, -1),
+      oilWell: new SettingTrigger(true, -1),
+      quarry: new SettingTrigger(true, -1),
+
+      smelter: new SettingTrigger(true, -1),
+      biolab: new SettingTrigger(true, -1),
+      calciner: new SettingTrigger(true, -1),
+      reactor: new SettingTrigger(true, -1),
+      accelerator: new SettingTrigger(true, -1),
+      steamworks: new SettingTrigger(true, -1),
+      magneto: new SettingTrigger(true, -1),
+
+      library: new SettingTrigger(true, -1),
+      dataCenter: new SettingTrigger(true, -1),
+      academy: new SettingTrigger(true, -1),
+      observatory: new SettingTrigger(true, -1),
+
+      amphitheatre: new SettingTrigger(true, -1),
+      broadcastTower: new SettingTrigger(true, -1),
+      tradepost: new SettingTrigger(true, -1),
+      chapel: new SettingTrigger(true, -1),
+      temple: new SettingTrigger(true, -1),
+      mint: new SettingTrigger(true, -1),
+      ziggurat: new SettingTrigger(true, -1),
+      chronosphere: new SettingTrigger(true, -1),
+      aiCore: new SettingTrigger(true, -1),
+      brewery: new SettingTrigger(true, -1),
+
+      barn: new SettingTrigger(true, -1),
+      harbor: new SettingTrigger(true, -1),
+      warehouse: new SettingTrigger(true, -1),
+
+      zebraOutpost: new SettingTrigger(true, -1),
+      zebraWorkshop: new SettingTrigger(true, -1),
+      zebraForge: new SettingTrigger(true, -1),
+    },
+    religionItems = {
+      unicornPasture: new TimeControlReligionSettingsItem(
+        UnicornItemVariant.UnicornPasture,
+        true,
+        -1
+      ),
+      unicornTomb: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+      ivoryTower: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+      ivoryCitadel: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+      skyPalace: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+      unicornUtopia: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+      sunspire: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+
+      marker: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+      unicornGraveyard: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+      unicornNecropolis: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+      blackPyramid: new TimeControlReligionSettingsItem(UnicornItemVariant.Ziggurat, true, -1),
+
+      solarchant: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+      scholasticism: new TimeControlReligionSettingsItem(
+        UnicornItemVariant.OrderOfTheSun,
+        true,
+        -1
+      ),
+      goldenSpire: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+      sunAltar: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+      stainedGlass: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+      solarRevolution: new TimeControlReligionSettingsItem(
+        UnicornItemVariant.OrderOfTheSun,
+        true,
+        -1
+      ),
+      basilica: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+      templars: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+      apocripha: new TimeControlReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1),
+      transcendence: new TimeControlReligionSettingsItem(
+        UnicornItemVariant.OrderOfTheSun,
+        true,
+        -1
+      ),
+
+      blackObelisk: new TimeControlReligionSettingsItem(
+        UnicornItemVariant.Cryptotheology,
+        true,
+        -1
+      ),
+      blackNexus: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+      blackCore: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+      singularity: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+      blackLibrary: new TimeControlReligionSettingsItem(
+        UnicornItemVariant.Cryptotheology,
+        true,
+        -1
+      ),
+      blackRadiance: new TimeControlReligionSettingsItem(
+        UnicornItemVariant.Cryptotheology,
+        true,
+        -1
+      ),
+      blazar: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+      darkNova: new TimeControlReligionSettingsItem(UnicornItemVariant.Cryptotheology, true, -1),
+      holyGenocide: new TimeControlReligionSettingsItem(
+        UnicornItemVariant.Cryptotheology,
+        true,
+        -1
+      ),
+    },
+    spaceItems = {
+      // Cath
+      spaceElevator: new SettingTrigger(true, -1),
+      sattelite: new SettingTrigger(true, -1),
+      spaceStation: new SettingTrigger(true, -1),
+
+      // Moon
+      moonOutpost: new SettingTrigger(true, -1),
+      moonBase: new SettingTrigger(true, -1),
+
+      // Dune
+      planetCracker: new SettingTrigger(true, -1),
+      hydrofracturer: new SettingTrigger(true, -1),
+      spiceRefinery: new SettingTrigger(true, -1),
+
+      // Piscine
+      researchVessel: new SettingTrigger(true, -1),
+      orbitalArray: new SettingTrigger(true, -1),
+
+      // Helios
+      sunlifter: new SettingTrigger(true, -1),
+      containmentChamber: new SettingTrigger(true, -1),
+      heatsink: new SettingTrigger(true, -1),
+      sunforge: new SettingTrigger(true, -1),
+
+      // T-Minus
+      cryostation: new SettingTrigger(true, -1),
+
+      // Kairo
+      spaceBeacon: new SettingTrigger(true, -1),
+
+      // Yarn
+      terraformingStation: new SettingTrigger(true, -1),
+      hydroponics: new SettingTrigger(true, -1),
+
+      // Umbra
+      hrHarvester: new SettingTrigger(true, -1),
+
+      // Charon
+      entangler: new SettingTrigger(true, -1),
+
+      // Centaurus
+      tectonic: new SettingTrigger(true, -1),
+      moltenCore: new SettingTrigger(true, -1),
+    },
+    timeItems = {
+      temporalBattery: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+      blastFurnace: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+      timeBoiler: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+      temporalAccelerator: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+      temporalImpedance: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+      ressourceRetrieval: new TimeControlTimeSettingsItem(TimeItemVariant.Chronoforge, true, -1),
+
+      cryochambers: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
+      voidHoover: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
+      voidRift: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
+      chronocontrol: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
+      voidResonator: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
+    },
+    resources: TimeControlResourceSettingItems = {},
+    accelerateTime = new SettingTrigger(true, 1),
+    timeSkip = new TimeControlTimeSkipSettings(),
+    reset = new Setting(false)
+  ) {
+    super(enabled);
+    this.buildItems = buildItems;
+    this.religionItems = religionItems;
+    this.spaceItems = spaceItems;
+    this.timeItems = timeItems;
+    this.resources = resources;
+    this.items.accelerateTime = accelerateTime;
+    this.items.timeSkip = timeSkip;
+    this.items.reset = reset;
+  }
 
   static toLegacyOptions(settings: TimeControlSettings, subject: KittenStorageType) {
     subject.toggles.timeCtrl = settings.enabled;
@@ -472,10 +561,10 @@ export class TimeControlSettings extends SettingsSection {
       if (!item.checkForReset) {
         continue;
       }
-      options.resources[name] = {
-        enabled: item.checkForReset,
-        stock: item.stockForReset,
-      };
+      options.resources[name] = new TimeControlResourcesSettingsItem(
+        item.checkForReset,
+        item.stockForReset
+      );
     }
 
     return options;

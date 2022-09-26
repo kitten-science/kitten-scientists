@@ -1,8 +1,5 @@
-import {
-  DistributeSettingsItem,
-  VillageAdditionSettings,
-  VillageSettings,
-} from "../options/VillageSettings";
+import { SettingMax } from "../options/Settings";
+import { VillageAdditionSettings, VillageSettings } from "../options/VillageSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -88,7 +85,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
 
   private _getDistributeOption(
     name: string,
-    option: DistributeSettingsItem,
+    option: SettingMax,
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
@@ -166,11 +163,13 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   }
 
   getState(): VillageSettings {
-    return {
-      enabled: this._options.enabled,
-      items: this._options.items,
-      addition: this._options.addition,
-    };
+    return new VillageSettings(
+      this._options.enabled,
+      this._options.items,
+      this._options.addition.holdFestivals,
+      this._options.addition.hunt,
+      this._options.addition.promoteLeader
+    );
   }
 
   setState(state: VillageSettings): void {

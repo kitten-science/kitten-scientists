@@ -16,6 +16,12 @@ export class ScienceSettings extends SettingsSection {
     techs: new TechSettings(),
   };
 
+  constructor(enabled = false, policies = new PolicySettings(), techs = new TechSettings()) {
+    super(enabled);
+    this.items.policies = policies;
+    this.items.techs = techs;
+  }
+
   static validateGame(game: GamePage, settings: ScienceSettings) {
     PolicySettings.validateGame(game, settings.items.policies as PolicySettings);
     TechSettings.validateGame(game, settings.items.techs as TechSettings);

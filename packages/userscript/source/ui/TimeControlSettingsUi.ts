@@ -1,6 +1,7 @@
+import { SettingTrigger } from "../options/Settings";
 import {
   CycleIndices,
-  TimeControlBuildSettingsItem,
+  TimeControlResourcesSettingsItem,
   TimeControlSettings,
 } from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
@@ -1016,7 +1017,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   private _getResetOption(
     name: string,
     type: "build" | "faith" | "space" | "time",
-    option: TimeControlBuildSettingsItem,
+    option: SettingTrigger,
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false
@@ -1127,10 +1128,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       allresources.append(
         this._getAllAvailableResourceOptions(true, res => {
           if (!this._options.resources[res.name]) {
-            const option = {
-              enabled: true,
-              stock: Infinity,
-            };
+            const option = new TimeControlResourcesSettingsItem(true, Number.POSITIVE_INFINITY);
             this._host.updateOptions(() => (this._options.resources[res.name] = option));
             $("#toggle-reset-list-resources").append(
               this._addNewResourceOptionForReset(
@@ -1153,15 +1151,17 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   }
 
   getState(): TimeControlSettings {
-    return {
-      enabled: this._options.enabled,
-      items: this._options.items,
-      buildItems: this._options.buildItems,
-      religionItems: this._options.religionItems,
-      resources: this._options.resources,
-      spaceItems: this._options.spaceItems,
-      timeItems: this._options.timeItems,
-    };
+    return new TimeControlSettings(
+      this._options.enabled,
+      this._options.buildItems,
+      this._options.religionItems,
+      this._options.spaceItems,
+      this._options.timeItems,
+      this._options.resources,
+      this._options.items.accelerateTime,
+      this._options.items.timeSkip,
+      this._options.items.reset
+    );
   }
 
   setState(state: TimeControlSettings): void {

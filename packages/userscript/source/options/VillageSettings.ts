@@ -1,39 +1,55 @@
 import { objectEntries } from "../tools/Entries";
 import { Job } from "../types";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { Setting, SettingMax, SettingTrigger } from "./Settings";
+import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type DistributeItems = Job;
-export type DistributeSettingsItem = SettingToggle & {
-  max: number;
-  $max?: JQuery<HTMLElement>;
-};
+export class VillageAdditionSettings {
+  holdFestivals = new Setting(true);
+  hunt = new SettingTrigger(true, 0.98);
+  promoteLeader = new Setting(true);
+}
 
-export type VillageAdditionSettings = {
-  holdFestivals: SettingToggle;
-  hunt: SettingToggle & SettingTrigger;
-  promoteLeader: SettingToggle;
+export type VillageSettingsItems = {
+  [item in Job]: SettingMax;
 };
 
 export class VillageSettings extends SettingsSection {
-  addition: VillageAdditionSettings = {
-    holdFestivals: { enabled: true },
-    hunt: { enabled: true, trigger: 0.98 },
-    promoteLeader: { enabled: true },
+  addition = new VillageAdditionSettings();
+
+  items: VillageSettingsItems = {
+    woodcutter: new SettingMax(true, 1),
+    farmer: new SettingMax(true, 1),
+    scholar: new SettingMax(true, 1),
+    hunter: new SettingMax(true, 1),
+    miner: new SettingMax(true, 1),
+    priest: new SettingMax(true, 1),
+    geologist: new SettingMax(true, 1),
+    engineer: new SettingMax(true, 1),
   };
 
-  items: {
-    [item in DistributeItems]: DistributeSettingsItem;
-  } = {
-    woodcutter: { enabled: true, max: 1 },
-    farmer: { enabled: true, max: 1 },
-    scholar: { enabled: true, max: 1 },
-    hunter: { enabled: true, max: 1 },
-    miner: { enabled: true, max: 1 },
-    priest: { enabled: true, max: 1 },
-    geologist: { enabled: true, max: 1 },
-    engineer: { enabled: true, max: 1 },
-  };
+  constructor(
+    enabled = false,
+    items: VillageSettingsItems = {
+      woodcutter: new SettingMax(true, 1),
+      farmer: new SettingMax(true, 1),
+      scholar: new SettingMax(true, 1),
+      hunter: new SettingMax(true, 1),
+      miner: new SettingMax(true, 1),
+      priest: new SettingMax(true, 1),
+      geologist: new SettingMax(true, 1),
+      engineer: new SettingMax(true, 1),
+    },
+    holdFestivals = new Setting(true),
+    hunt = new SettingTrigger(true, 0.98),
+    promoteLeader = new Setting(true)
+  ) {
+    super(enabled);
+    this.items = items;
+    this.addition.holdFestivals = holdFestivals;
+    this.addition.hunt = hunt;
+    this.addition.promoteLeader = promoteLeader;
+  }
 
   static toLegacyOptions(settings: VillageSettings, subject: KittenStorageType) {
     subject.toggles.distribute = settings.enabled;

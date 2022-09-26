@@ -7,3 +7,11 @@ export const shuffleArray = <T>(array: Array<T>) => {
   }
   return array;
 };
+
+export const intersect = <T>(a: Array<T>, b: Array<T>) => {
+  return a.filter(x => b.includes(x));
+};
+
+export const difference = <T>(a: Array<T>, b: Array<T>) => {
+  return a.filter(x => !b.includes(x));
+};

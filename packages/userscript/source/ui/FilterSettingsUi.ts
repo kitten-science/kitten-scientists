@@ -139,10 +139,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
   }
 
   getState(): FilterSettings {
-    return {
-      enabled: this._options.enabled,
-      items: this._options.items,
-    };
+    return new FilterSettings(this._options.enabled, this._options.items);
   }
 
   setState(state: FilterSettings): void {

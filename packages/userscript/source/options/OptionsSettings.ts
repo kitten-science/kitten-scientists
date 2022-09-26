@@ -1,21 +1,47 @@
 import { objectEntries } from "../tools/Entries";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { Setting, SettingTrigger } from "./Settings";
+import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe" | "shipOverride";
 
-export type OptionsSettingsItem = SettingToggle & Partial<SettingTrigger>;
+export class OptionsSettingsItem extends Setting implements Partial<SettingTrigger> {
+  trigger: number | undefined = undefined;
+  $trigger: JQuery<HTMLElement> | undefined = undefined;
+
+  constructor(enabled = false, trigger: number | undefined = undefined) {
+    super(enabled);
+    this.trigger = trigger;
+  }
+}
+
 export class OptionsSettings extends SettingsSection {
   items: {
     [key in OptionsItem]: OptionsSettingsItem;
   } = {
-    observe: { enabled: true },
-    shipOverride: { enabled: true },
-    autofeed: { enabled: true },
+    observe: new OptionsSettingsItem(true),
+    shipOverride: new OptionsSettingsItem(true),
+    autofeed: new OptionsSettingsItem(true),
 
-    crypto: { enabled: true, trigger: 10000 },
-    fixCry: { enabled: false },
+    crypto: new OptionsSettingsItem(true, 10000),
+    fixCry: new OptionsSettingsItem(false),
   };
+
+  constructor(
+    enabled = false,
+    observe = new OptionsSettingsItem(true),
+    shipOverride = new OptionsSettingsItem(true),
+    autofeed = new OptionsSettingsItem(true),
+    crypto = new OptionsSettingsItem(true, 10000),
+    fixCry = new OptionsSettingsItem(false)
+  ) {
+    super(enabled);
+    this.items.observe = observe;
+    this.items.shipOverride = shipOverride;
+    this.items.autofeed = autofeed;
+    this.items.crypto = crypto;
+    this.items.fixCry = fixCry;
+  }
 
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new OptionsSettings();

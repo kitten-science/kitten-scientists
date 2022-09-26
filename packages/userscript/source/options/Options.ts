@@ -1,13 +1,14 @@
 import { objectEntries } from "../tools/Entries";
 import { isNil } from "../tools/Maybe";
-import { Resource } from "../types";
+import { Resource, SpaceBuildings } from "../types";
 import { BonfireItem, BonfireSettings } from "./BonfireSettings";
+import { EngineSettings } from "./EngineSettings";
 import { FilterSettings } from "./FilterSettings";
 import { OptionsSettings } from "./OptionsSettings";
 import { FaithItem, ReligionItem, ReligionSettings } from "./ReligionSettings";
 import { ScienceSettings } from "./ScienceSettings";
 import { KittenStorageType } from "./SettingsStorage";
-import { SpaceItem, SpaceSettings } from "./SpaceSettings";
+import { SpaceSettings } from "./SpaceSettings";
 import { TimeControlSettings } from "./TimeControlSettings";
 import { TimeItem, TimeSettings } from "./TimeSettings";
 import { TradingSettings } from "./TradingSettings";
@@ -19,7 +20,7 @@ export type Requirement = Resource | false;
 /**
  * The type names of all supported buildings.
  */
-export type AllItems = BonfireItem | FaithItem | ReligionItem | SpaceItem | TimeItem;
+export type AllItems = BonfireItem | FaithItem | ReligionItem | SpaceBuildings | TimeItem;
 
 export class Options {
   /**
@@ -33,7 +34,7 @@ export class Options {
   consume = 1;
 
   auto: {
-    engine: { enabled: boolean };
+    engine: EngineSettings;
     bonfire: BonfireSettings;
     space: SpaceSettings;
     craft: WorkshopSettings;
@@ -46,7 +47,7 @@ export class Options {
     options: OptionsSettings;
     filters: FilterSettings;
   } = {
-    engine: { enabled: false },
+    engine: new EngineSettings(),
     bonfire: new BonfireSettings(),
     space: new SpaceSettings(),
     craft: new WorkshopSettings(),

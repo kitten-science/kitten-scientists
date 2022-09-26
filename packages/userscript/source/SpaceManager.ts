@@ -1,5 +1,5 @@
 import { BulkManager } from "./BulkManager";
-import { SpaceItem, SpaceSettingsItem } from "./options/SpaceSettings";
+import { SettingMax } from "./options/Settings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { BuildButton, SpaceBuildingInfo, SpaceBuildings, SpaceTab } from "./types";
@@ -27,7 +27,7 @@ export class SpaceManager {
    * @param builds The buildings to build.
    */
   autoBuild(
-    builds: Partial<Record<SpaceItem, SpaceSettingsItem>> = this._host.options.auto.space.items
+    builds: Partial<Record<SpaceBuildings, SettingMax>> = this._host.options.auto.space.items
   ) {
     // TODO: Refactor. See BonfireManager.autoBuild
     const bulkManager = this._bulkManager;
@@ -38,7 +38,7 @@ export class SpaceManager {
     this.manager.render();
 
     // Get the current metadata for all the referenced buildings.
-    const metaData: Partial<Record<SpaceItem, SpaceBuildingInfo>> = {};
+    const metaData: Partial<Record<SpaceBuildings, SpaceBuildingInfo>> = {};
     for (const [name] of objectEntries(builds)) {
       metaData[name] = this.getBuild(name);
     }
@@ -94,7 +94,7 @@ export class SpaceManager {
     }
   }
 
-  build(name: SpaceItem, amount: number): void {
+  build(name: SpaceBuildings, amount: number): void {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name);
 
@@ -122,7 +122,7 @@ export class SpaceManager {
     }
   }
 
-  getBuild(name: SpaceItem): SpaceBuildingInfo {
+  getBuild(name: SpaceBuildings): SpaceBuildingInfo {
     return this._host.gamePage.space.getBuilding(name);
   }
 

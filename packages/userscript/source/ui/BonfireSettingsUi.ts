@@ -367,12 +367,13 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   }
 
   getState(): BonfireSettings {
-    return {
-      enabled: this._options.enabled,
-      trigger: this._options.trigger,
-      addition: this._options.addition,
-      items: this._options.items,
-    };
+    return new BonfireSettings(
+      this._options.enabled,
+      this._options.trigger,
+      this._options.items,
+      this._options.addition.turnOnSteamworks,
+      this._options.addition.upgradeBuildings
+    );
   }
 
   setState(state: BonfireSettings): void {

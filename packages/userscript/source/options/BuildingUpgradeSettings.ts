@@ -1,14 +1,14 @@
 import { StagedBuilding } from "../types";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { Setting } from "./Settings";
+import { SettingsSection } from "./SettingsSection";
 
-export type BuildingUpgradeSettingsItem = SettingToggle;
 export class BuildingUpgradeSettings extends SettingsSection {
   items: {
-    [item in StagedBuilding]: BuildingUpgradeSettingsItem;
+    [item in StagedBuilding]: Setting;
   } = {
-    broadcasttower: { enabled: true },
-    dataCenter: { enabled: true },
-    hydroplant: { enabled: true },
-    solarfarm: { enabled: true },
+    broadcasttower: new Setting(true),
+    dataCenter: new Setting(true),
+    hydroplant: new Setting(true),
+    solarfarm: new Setting(true),
   };
 }

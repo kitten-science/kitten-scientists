@@ -260,12 +260,12 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
   }
 
   getState(): SpaceSettings {
-    return {
-      enabled: this._options.enabled,
-      trigger: this._options.trigger,
-      addition: this._options.addition,
-      items: this._options.items,
-    };
+    return new SpaceSettings(
+      this._options.enabled,
+      this._options.trigger,
+      this._options.items,
+      this._options.addition.unlockMissions
+    );
   }
 
   setState(state: SpaceSettings): void {

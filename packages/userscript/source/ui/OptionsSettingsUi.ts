@@ -1,5 +1,5 @@
 import { OptionsSettings, OptionsSettingsItem } from "../options/OptionsSettings";
-import { SettingToggle, SettingTrigger } from "../options/SettingsSection";
+import { SettingTrigger } from "../options/Settings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { isNil, mustExist } from "../tools/Maybe";
@@ -68,15 +68,19 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     iname: string
   ): JQuery<HTMLElement> {
     return option.trigger
-      ? this._getOptionWithTrigger(name, option as SettingTrigger & SettingToggle, iname)
+      ? this._getOptionWithTrigger(name, option as SettingTrigger, iname)
       : this._getOption(name, option, iname);
   }
 
   getState(): OptionsSettings {
-    return {
-      enabled: this._options.enabled,
-      items: this._options.items,
-    };
+    return new OptionsSettings(
+      this._options.enabled,
+      this._options.items.observe,
+      this._options.items.shipOverride,
+      this._options.items.autofeed,
+      this._options.items.crypto,
+      this._options.items.fixCry
+    );
   }
 
   setState(state: OptionsSettings): void {

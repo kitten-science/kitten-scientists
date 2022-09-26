@@ -1,5 +1,6 @@
 import { BonfireManager } from "./BonfireManager";
 import { BulkManager } from "./BulkManager";
+import { BonfireSettingsItem } from "./options/BonfireSettings";
 import { FaithItem, ReligionSettingsItem } from "./options/ReligionSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
@@ -108,7 +109,7 @@ export class ReligionManager {
       // Now we build a unicorn pasture if possible.
       if (this._host.options.auto.religion.items.unicornPasture.enabled) {
         this._bonfireManager.autoBuild({
-          unicornPasture: { require: false, enabled: true, max: -1 },
+          unicornPasture: new BonfireSettingsItem(true, false, -1),
         });
       }
       // And then we build all other possible religion buildings.

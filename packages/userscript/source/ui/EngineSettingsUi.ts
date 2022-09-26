@@ -9,7 +9,10 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
 
   private readonly _options: EngineSettings;
 
-  constructor(host: UserScript, options: EngineSettings = host.options.auto.engine) {
+  constructor(
+    host: UserScript,
+    options: EngineSettings = new EngineSettings(host.options.auto.engine.enabled)
+  ) {
     super(host);
 
     this._options = options;
@@ -51,9 +54,7 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
   }
 
   getState(): EngineSettings {
-    return {
-      enabled: this._options.enabled,
-    };
+    return new EngineSettings(this._options.enabled);
   }
 
   setState(state: EngineSettings): void {

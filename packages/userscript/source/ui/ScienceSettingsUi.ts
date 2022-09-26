@@ -170,10 +170,11 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
   }
 
   getState(): ScienceSettings {
-    return {
-      enabled: this._options.enabled,
-      items: this._options.items,
-    };
+    return new ScienceSettings(
+      this._options.enabled,
+      this._options.items.policies as PolicySettings,
+      this._options.items.techs as TechSettings
+    );
   }
 
   setState(state: ScienceSettings): void {

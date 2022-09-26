@@ -1,7 +1,8 @@
 import { objectEntries } from "../tools/Entries";
 import { UnicornItemVariant } from "../types";
 import { Requirement } from "./Options";
-import { SettingMax, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { Setting, SettingMax, SettingTrigger } from "./Settings";
+import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type FaithItem =
@@ -40,208 +41,110 @@ export type UnicornItem =
 
 export type ReligionItem = FaithItem | UnicornItem;
 export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
-export type ReligionSettingsItem = SettingToggle &
-  SettingMax & {
-    require: Requirement;
 
-    variant: UnicornItemVariant;
-  };
+export class ReligionSettingsItem extends SettingMax {
+  require: Requirement;
 
-export class ReligionSettings extends SettingsSection implements SettingTrigger {
-  trigger = 0;
-  $trigger?: JQuery<HTMLElement>;
+  variant: UnicornItemVariant;
 
+  constructor(
+    variant: UnicornItemVariant,
+    enabled = false,
+    max = -1,
+    require: Requirement = false
+  ) {
+    super(enabled, max);
+    this.require = require;
+    this.variant = variant;
+  }
+}
+
+export type ReligionSettingsItems = {
+  [item in FaithItem | UnicornItem]: ReligionSettingsItem;
+};
+
+export class ReligionSettings extends SettingsSectionTrigger {
   addition: {
     /**
      * Build best unicorn building first.
      */
-    bestUnicornBuilding: SettingToggle;
+    bestUnicornBuilding: Setting;
     /**
      * Praise the sun.
      */
-    autoPraise: SettingToggle & SettingTrigger;
+    autoPraise: SettingTrigger;
     /**
      * Adore the galaxy.
      */
-    adore: SettingToggle & SettingTrigger;
+    adore: SettingTrigger;
     /**
      * Transcend.
      */
-    transcend: SettingToggle;
+    transcend: Setting;
   } = {
-    bestUnicornBuilding: {
-      enabled: true,
-    },
-    autoPraise: {
-      enabled: true,
-      trigger: 0.98,
-    },
-    adore: {
-      enabled: false,
-      trigger: 0.75,
-    },
-    transcend: {
-      enabled: false,
-    },
+    bestUnicornBuilding: new Setting(true),
+    autoPraise: new SettingTrigger(true, 0.98),
+    adore: new SettingTrigger(false, 0.75),
+    transcend: new Setting(false),
   };
 
-  items: {
-    [item in FaithItem | UnicornItem]: ReligionSettingsItem;
-  } = {
-    unicornPasture: {
-      enabled: true,
-      variant: UnicornItemVariant.UnicornPasture,
-      require: false,
-      max: -1,
-    },
-    unicornTomb: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false, max: -1 },
-    ivoryTower: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false, max: -1 },
-    ivoryCitadel: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false, max: -1 },
-    skyPalace: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: false, max: -1 },
-    unicornUtopia: {
-      enabled: false,
-      variant: UnicornItemVariant.Ziggurat,
-      require: "gold",
-      max: -1,
-    },
-    sunspire: { enabled: false, variant: UnicornItemVariant.Ziggurat, require: "gold", max: -1 },
+  items: ReligionSettingsItems;
 
-    marker: {
-      enabled: false,
-      variant: UnicornItemVariant.Ziggurat,
-      require: "unobtainium",
-      max: -1,
-    },
-    unicornGraveyard: {
-      enabled: false,
-      variant: UnicornItemVariant.Ziggurat,
-      require: false,
-      max: -1,
-    },
-    unicornNecropolis: {
-      enabled: false,
-      variant: UnicornItemVariant.Ziggurat,
-      require: false,
-      max: -1,
-    },
-    blackPyramid: {
-      enabled: false,
-      variant: UnicornItemVariant.Ziggurat,
-      require: "unobtainium",
-      max: -1,
-    },
+  constructor(
+    enabled = false,
+    trigger = 1,
+    items: ReligionSettingsItems = {
+      unicornPasture: new ReligionSettingsItem(UnicornItemVariant.UnicornPasture, true, -1, false),
+      unicornTomb: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, false),
+      ivoryTower: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, false),
+      ivoryCitadel: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, false),
+      skyPalace: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, false),
+      unicornUtopia: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, "gold"),
+      sunspire: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, "gold"),
 
-    solarchant: {
-      enabled: true,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
-    scholasticism: {
-      enabled: true,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
-    goldenSpire: {
-      enabled: true,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
-    sunAltar: {
-      enabled: true,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
-    stainedGlass: {
-      enabled: true,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
-    solarRevolution: {
-      enabled: true,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
-    basilica: {
-      enabled: true,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
-    templars: {
-      enabled: true,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
-    apocripha: {
-      enabled: false,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
-    transcendence: {
-      enabled: true,
-      variant: UnicornItemVariant.OrderOfTheSun,
-      require: "faith",
-      max: -1,
-    },
+      marker: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, "unobtainium"),
+      unicornGraveyard: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, false),
+      unicornNecropolis: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, false),
+      blackPyramid: new ReligionSettingsItem(UnicornItemVariant.Ziggurat, false, -1, "unobtainium"),
 
-    blackObelisk: {
-      enabled: false,
-      variant: UnicornItemVariant.Cryptotheology,
-      require: false,
-      max: -1,
+      solarchant: new ReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1, "faith"),
+      scholasticism: new ReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1, "faith"),
+      goldenSpire: new ReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1, "faith"),
+      sunAltar: new ReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1, "faith"),
+      stainedGlass: new ReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1, "faith"),
+      solarRevolution: new ReligionSettingsItem(
+        UnicornItemVariant.OrderOfTheSun,
+        true,
+        -1,
+        "faith"
+      ),
+      basilica: new ReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1, "faith"),
+      templars: new ReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1, "faith"),
+      apocripha: new ReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, false, -1, "faith"),
+      transcendence: new ReligionSettingsItem(UnicornItemVariant.OrderOfTheSun, true, -1, "faith"),
+
+      blackObelisk: new ReligionSettingsItem(UnicornItemVariant.Cryptotheology, false, -1, false),
+      blackNexus: new ReligionSettingsItem(UnicornItemVariant.Cryptotheology, false, -1, false),
+      blackCore: new ReligionSettingsItem(UnicornItemVariant.Cryptotheology, false, -1, false),
+      singularity: new ReligionSettingsItem(UnicornItemVariant.Cryptotheology, false, -1, false),
+      blackLibrary: new ReligionSettingsItem(UnicornItemVariant.Cryptotheology, false, -1, false),
+      blackRadiance: new ReligionSettingsItem(UnicornItemVariant.Cryptotheology, false, -1, false),
+      blazar: new ReligionSettingsItem(UnicornItemVariant.Cryptotheology, false, -1, false),
+      darkNova: new ReligionSettingsItem(UnicornItemVariant.Cryptotheology, false, -1, false),
+      holyGenocide: new ReligionSettingsItem(UnicornItemVariant.Cryptotheology, false, -1, false),
     },
-    blackNexus: {
-      enabled: false,
-      variant: UnicornItemVariant.Cryptotheology,
-      require: false,
-      max: -1,
-    },
-    blackCore: {
-      enabled: false,
-      variant: UnicornItemVariant.Cryptotheology,
-      require: false,
-      max: -1,
-    },
-    singularity: {
-      enabled: false,
-      variant: UnicornItemVariant.Cryptotheology,
-      require: false,
-      max: -1,
-    },
-    blackLibrary: {
-      enabled: false,
-      variant: UnicornItemVariant.Cryptotheology,
-      require: false,
-      max: -1,
-    },
-    blackRadiance: {
-      enabled: false,
-      variant: UnicornItemVariant.Cryptotheology,
-      require: false,
-      max: -1,
-    },
-    blazar: { enabled: false, variant: UnicornItemVariant.Cryptotheology, require: false, max: -1 },
-    darkNova: {
-      enabled: false,
-      variant: UnicornItemVariant.Cryptotheology,
-      require: false,
-      max: -1,
-    },
-    holyGenocide: {
-      enabled: false,
-      variant: UnicornItemVariant.Cryptotheology,
-      require: false,
-      max: -1,
-    },
-  };
+    bestUnicornBuilding = new Setting(true),
+    autoPraise = new SettingTrigger(true, 0.98),
+    adore = new SettingTrigger(false, 0.75),
+    transcend = new Setting(false)
+  ) {
+    super(enabled, trigger);
+    this.items = items;
+    this.addition.adore = adore;
+    this.addition.autoPraise = autoPraise;
+    this.addition.bestUnicornBuilding = bestUnicornBuilding;
+    this.addition.transcend = transcend;
+  }
 
   static toLegacyOptions(settings: ReligionSettings, subject: KittenStorageType) {
     subject.toggles.faith = settings.enabled;

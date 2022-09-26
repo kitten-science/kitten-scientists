@@ -1,120 +1,94 @@
 import { objectEntries } from "../tools/Entries";
 import { Race } from "../types";
 import { Requirement } from "./Options";
-import { OptionsSettingsItem } from "./OptionsSettings";
-import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { Setting, SettingLimited, SettingTrigger } from "./Settings";
+import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type TradingSettingsItem = SettingLimit &
-  SettingToggle & {
-    summer: boolean;
-    $summer?: JQuery<HTMLElement>;
+export class TradingSettingsItem extends SettingLimited {
+  summer: boolean;
+  $summer?: JQuery<HTMLElement>;
 
-    autumn: boolean;
-    $autumn?: JQuery<HTMLElement>;
+  autumn: boolean;
+  $autumn?: JQuery<HTMLElement>;
 
-    winter: boolean;
-    $winter?: JQuery<HTMLElement>;
+  winter: boolean;
+  $winter?: JQuery<HTMLElement>;
 
-    spring: boolean;
-    $spring?: JQuery<HTMLElement>;
+  spring: boolean;
+  $spring?: JQuery<HTMLElement>;
 
-    /**
-     * A resource that is required to trade with the race.
-     */
-    require: Requirement;
-  };
+  /**
+   * A resource that is required to trade with the race.
+   */
+  require: Requirement;
+
+  constructor(
+    enabled: boolean,
+    limited: boolean,
+    summer: boolean,
+    autumn: boolean,
+    winter: boolean,
+    spring: boolean,
+    require: Requirement = false
+  ) {
+    super(enabled, limited);
+
+    this.summer = summer;
+    this.autumn = autumn;
+    this.winter = winter;
+    this.spring = spring;
+    this.require = require;
+  }
+}
 
 export type TradeAdditionSettings = {
-  buildEmbassies: OptionsSettingsItem;
-  unlockRaces: SettingToggle;
+  buildEmbassies: SettingTrigger;
+  unlockRaces: Setting;
 };
 
-export class TradingSettings extends SettingsSection implements SettingTrigger {
-  trigger = 0.98;
-  $trigger?: JQuery<HTMLElement>;
+export type TradingSettingsItems = {
+  [item in Race]: TradingSettingsItem;
+};
 
+export class TradingSettings extends SettingsSectionTrigger {
   addition: TradeAdditionSettings = {
-    buildEmbassies: { enabled: true },
-    unlockRaces: { enabled: true },
+    buildEmbassies: new SettingTrigger(true, 0),
+    unlockRaces: new Setting(true),
   };
 
-  items: {
-    [item in Race]: TradingSettingsItem;
-  } = {
-    dragons: {
-      enabled: true,
-      limited: true,
-      summer: true,
-      autumn: true,
-      winter: true,
-      spring: true,
-      require: "titanium",
-    },
-    zebras: {
-      enabled: true,
-      limited: true,
-      summer: true,
-      autumn: true,
-      winter: true,
-      spring: true,
-      require: false,
-    },
-    lizards: {
-      enabled: true,
-      limited: true,
-      summer: true,
-      autumn: false,
-      winter: false,
-      spring: false,
-      require: "minerals",
-    },
-    sharks: {
-      enabled: true,
-      limited: true,
-      summer: false,
-      autumn: false,
-      winter: true,
-      spring: false,
-      require: "iron",
-    },
-    griffins: {
-      enabled: true,
-      limited: true,
-      summer: false,
-      autumn: true,
-      winter: false,
-      spring: false,
-      require: "wood",
-    },
-    nagas: {
-      enabled: true,
-      limited: true,
-      summer: true,
-      autumn: false,
-      winter: false,
-      spring: true,
-      require: false,
-    },
-    spiders: {
-      enabled: true,
-      limited: true,
-      summer: true,
-      autumn: true,
-      winter: false,
-      spring: true,
-      require: false,
-    },
-    leviathans: {
-      enabled: true,
-      limited: true,
-      summer: true,
-      autumn: true,
-      winter: true,
-      spring: true,
-      require: "unobtainium",
-    },
+  items: TradingSettingsItems = {
+    dragons: new TradingSettingsItem(true, true, true, true, true, true, "titanium"),
+    zebras: new TradingSettingsItem(true, true, true, true, true, true),
+    lizards: new TradingSettingsItem(true, true, true, false, false, false, "minerals"),
+    sharks: new TradingSettingsItem(true, true, false, false, true, false, "iron"),
+    griffins: new TradingSettingsItem(true, true, false, true, false, false, "wood"),
+    nagas: new TradingSettingsItem(true, true, true, false, false, true),
+    spiders: new TradingSettingsItem(true, true, true, true, false, true),
+    leviathans: new TradingSettingsItem(true, true, true, true, true, true, "unobtainium"),
   };
+
+  constructor(
+    enabled = false,
+    trigger = 1,
+    items = {
+      dragons: new TradingSettingsItem(true, true, true, true, true, true, "titanium"),
+      zebras: new TradingSettingsItem(true, true, true, true, true, true),
+      lizards: new TradingSettingsItem(true, true, true, false, false, false, "minerals"),
+      sharks: new TradingSettingsItem(true, true, false, false, true, false, "iron"),
+      griffins: new TradingSettingsItem(true, true, false, true, false, false, "wood"),
+      nagas: new TradingSettingsItem(true, true, true, false, false, true),
+      spiders: new TradingSettingsItem(true, true, true, true, false, true),
+      leviathans: new TradingSettingsItem(true, true, true, true, true, true, "unobtainium"),
+    },
+    buildEmbassies = new SettingTrigger(true, 0),
+    unlockRaces = new Setting(true)
+  ) {
+    super(enabled, trigger);
+    this.items = items;
+    this.addition.buildEmbassies = buildEmbassies;
+    this.addition.unlockRaces = unlockRaces;
+  }
 
   static toLegacyOptions(settings: TradingSettings, subject: KittenStorageType) {
     subject.toggles.trade = settings.enabled;

@@ -339,12 +339,15 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   }
 
   getState(): ReligionSettings {
-    return {
-      enabled: this._options.enabled,
-      trigger: this._options.trigger,
-      addition: this._options.addition,
-      items: this._options.items,
-    };
+    return new ReligionSettings(
+      this._options.enabled,
+      this._options.trigger,
+      this._options.items,
+      this._options.addition.bestUnicornBuilding,
+      this._options.addition.autoPraise,
+      this._options.addition.adore,
+      this._options.addition.transcend
+    );
   }
 
   setState(state: ReligionSettings): void {

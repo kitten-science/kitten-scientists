@@ -182,7 +182,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   getAdditionOptions(addition: TradeAdditionSettings): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeEmbassies = this._getOption(
+    const nodeEmbassies = this._getOptionWithTrigger(
       "embassies",
       addition.buildEmbassies,
       this._host.i18n("option.embassies"),
@@ -222,12 +222,13 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   }
 
   getState(): TradingSettings {
-    return {
-      enabled: this._options.enabled,
-      trigger: this._options.trigger,
-      addition: this._options.addition,
-      items: this._options.items,
-    };
+    return new TradingSettings(
+      this._options.enabled,
+      this._options.trigger,
+      this._options.items,
+      this._options.addition.buildEmbassies,
+      this._options.addition.unlockRaces
+    );
   }
 
   setState(state: TradingSettings): void {

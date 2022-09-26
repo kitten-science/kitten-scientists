@@ -1,69 +1,78 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage, ResourceCraftable } from "../types";
 import { Requirement } from "./Options";
-import { ResourceSettings } from "./ResourcesSettings";
-import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { ResourceSettings, ResourcesSettingsItem } from "./ResourcesSettings";
+import { SettingLimitedMax } from "./Settings";
+import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";
 
-export type CraftSettingsItem = SettingLimit &
-  SettingToggle & {
-    /**
-     * Meaning still unclear.
-     * This is hardcoded to `0.5` right now.
-     */
-    limRat: 0.5;
+export class CraftSettingsItem extends SettingLimitedMax {
+  /**
+   * Meaning still unclear.
+   * This is hardcoded to `0.5` right now.
+   */
+  limRat = 0.5;
 
-    /**
-     * The limit of how many items to craft.
-     * This is hardcoded to `0` right now.
-     */
-    max: 0;
-    require: Requirement;
-  };
+  require: Requirement;
+
+  constructor(require: Requirement = false, enabled = true, limited = true) {
+    super(enabled, limited);
+    this.require = require;
+  }
+}
 
 export type CraftAdditionSettings = {
   unlockUpgrades: UpgradeSettings;
 };
 
-export class WorkshopSettings extends SettingsSection implements SettingTrigger {
-  trigger = 0.95;
-  $trigger?: JQuery<HTMLElement>;
+export type WorkshopSettingsItems = {
+  [item in ResourceCraftable]: CraftSettingsItem;
+};
 
+export class WorkshopSettings extends SettingsSectionTrigger {
   addition: CraftAdditionSettings = {
     unlockUpgrades: new UpgradeSettings(),
   };
 
-  items: {
-    [item in ResourceCraftable]: CraftSettingsItem;
-  } = {
-    wood: { enabled: true, limited: true, require: "catnip", limRat: 0.5, max: 0 },
-    beam: { enabled: true, limited: true, require: "wood", limRat: 0.5, max: 0 },
-    slab: { enabled: true, limited: true, require: "minerals", limRat: 0.5, max: 0 },
-    steel: { enabled: true, limited: true, require: "coal", limRat: 0.5, max: 0 },
-    plate: { enabled: true, limited: true, require: "iron", limRat: 0.5, max: 0 },
-    alloy: { enabled: true, limited: true, require: "titanium", limRat: 0.5, max: 0 },
-    concrate: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    gear: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    scaffold: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    ship: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    tanker: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    parchment: { enabled: true, limited: false, require: false, limRat: 0.5, max: 0 },
-    manuscript: { enabled: true, limited: true, require: "culture", limRat: 0.5, max: 0 },
-    compedium: { enabled: true, limited: true, require: "science", limRat: 0.5, max: 0 },
-    blueprint: { enabled: true, limited: true, require: "science", limRat: 0.5, max: 0 },
-    kerosene: { enabled: true, limited: true, require: "oil", limRat: 0.5, max: 0 },
-    megalith: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    eludium: { enabled: true, limited: true, require: "unobtainium", limRat: 0.5, max: 0 },
-    thorium: { enabled: true, limited: true, require: "uranium", limRat: 0.5, max: 0 },
-  };
+  items: WorkshopSettingsItems;
 
-  resources: ResourceSettings = {
-    furs: {
-      enabled: true,
-      stock: 1000,
+  resources: ResourceSettings;
+
+  constructor(
+    enabled = false,
+    trigger = 0.95,
+    items: WorkshopSettingsItems = {
+      wood: new CraftSettingsItem("catnip"),
+      beam: new CraftSettingsItem("wood"),
+      slab: new CraftSettingsItem("minerals"),
+      steel: new CraftSettingsItem("coal"),
+      plate: new CraftSettingsItem("iron"),
+      alloy: new CraftSettingsItem("titanium"),
+      concrate: new CraftSettingsItem(false),
+      gear: new CraftSettingsItem(false),
+      scaffold: new CraftSettingsItem(false),
+      ship: new CraftSettingsItem(false),
+      tanker: new CraftSettingsItem(false),
+      parchment: new CraftSettingsItem(false, true, false),
+      manuscript: new CraftSettingsItem("culture"),
+      compedium: new CraftSettingsItem("science"),
+      blueprint: new CraftSettingsItem("science"),
+      kerosene: new CraftSettingsItem("oil"),
+      megalith: new CraftSettingsItem(false),
+      eludium: new CraftSettingsItem("unobtainium"),
+      thorium: new CraftSettingsItem("uranium"),
     },
-  };
+    resources: ResourceSettings = {
+      furs: new ResourcesSettingsItem(true, undefined, 1000),
+    },
+    unlockUpgrades = new UpgradeSettings()
+  ) {
+    super(enabled, trigger);
+    this.items = items;
+    this.resources = resources;
+    this.addition.unlockUpgrades = unlockUpgrades;
+  }
 
   static validateGame(game: GamePage, settings: WorkshopSettings) {
     UpgradeSettings.validateGame(game, settings.addition.unlockUpgrades);
@@ -110,11 +119,7 @@ export class WorkshopSettings extends SettingsSection implements SettingTrigger 
         continue;
       }
 
-      options.resources[name] = {
-        consume: item.consume,
-        enabled: item.enabled,
-        stock: item.stock,
-      };
+      options.resources[name] = new ResourcesSettingsItem(item.enabled, item.consume, item.stock);
     }
 
     options.addition.unlockUpgrades.enabled =

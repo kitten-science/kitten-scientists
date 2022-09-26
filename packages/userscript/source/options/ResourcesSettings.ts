@@ -1,13 +1,20 @@
 import { Resource } from "../types";
-import { SettingToggle } from "./SettingsSection";
+import { Setting } from "./Settings";
 
-export type ResourcesSettingsItem = SettingToggle & {
+export class ResourcesSettingsItem extends Setting {
   consume?: number;
   $consume?: JQuery<HTMLElement>;
 
-  stock: number;
+  stock = 0;
   $stock?: JQuery<HTMLElement>;
-};
+
+  constructor(enabled: boolean, consume: number | undefined, stock: number) {
+    super(enabled);
+    this.consume = consume;
+    this.stock = stock;
+  }
+}
+
 export type ResourceSettings = {
   [item in Resource]?: ResourcesSettingsItem;
 };

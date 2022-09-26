@@ -1,60 +1,68 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage, SpaceBuildings } from "../types";
 import { MissionSettings } from "./MissionSettings";
-import { SettingMax, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { SettingMax } from "./Settings";
+import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
-
-export type SpaceItem = SpaceBuildings;
-export type SpaceSettingsItem = SettingToggle & SettingMax;
 
 export type SpaceAdditionSettings = {
   unlockMissions: MissionSettings;
 };
 
-export class SpaceSettings extends SettingsSection implements SettingTrigger {
-  trigger = 0;
-  $trigger?: JQuery<HTMLElement>;
+export type SpaceSettingsItems = {
+  [item in SpaceBuildings]: SettingMax;
+};
 
+export class SpaceSettings extends SettingsSectionTrigger {
   addition: SpaceAdditionSettings = {
     unlockMissions: new MissionSettings(),
   };
 
-  items: {
-    [item in SpaceItem]: SpaceSettingsItem;
-  } = {
-    spaceElevator: { enabled: false, max: -1 },
-    sattelite: { enabled: false, max: -1 },
-    spaceStation: { enabled: false, max: -1 },
+  items: SpaceSettingsItems;
 
-    moonOutpost: { enabled: false, max: -1 },
-    moonBase: { enabled: false, max: -1 },
+  constructor(
+    enabled = false,
+    trigger = 0,
+    items = {
+      spaceElevator: new SettingMax(),
+      sattelite: new SettingMax(),
+      spaceStation: new SettingMax(),
 
-    planetCracker: { enabled: false, max: -1 },
-    hydrofracturer: { enabled: false, max: -1 },
-    spiceRefinery: { enabled: false, max: -1 },
+      moonOutpost: new SettingMax(),
+      moonBase: new SettingMax(),
 
-    researchVessel: { enabled: false, max: -1 },
-    orbitalArray: { enabled: false, max: -1 },
+      planetCracker: new SettingMax(),
+      hydrofracturer: new SettingMax(),
+      spiceRefinery: new SettingMax(),
 
-    sunlifter: { enabled: false, max: -1 },
-    containmentChamber: { enabled: false, max: -1 },
-    heatsink: { enabled: false, max: -1 },
-    sunforge: { enabled: false, max: -1 },
+      researchVessel: new SettingMax(),
+      orbitalArray: new SettingMax(),
 
-    cryostation: { enabled: false, max: -1 },
+      sunlifter: new SettingMax(),
+      containmentChamber: new SettingMax(),
+      heatsink: new SettingMax(),
+      sunforge: new SettingMax(),
 
-    spaceBeacon: { enabled: false, max: -1 },
+      cryostation: new SettingMax(),
 
-    terraformingStation: { enabled: false, max: -1 },
-    hydroponics: { enabled: false, max: -1 },
+      spaceBeacon: new SettingMax(),
 
-    hrHarvester: { enabled: false, max: -1 },
+      terraformingStation: new SettingMax(),
+      hydroponics: new SettingMax(),
 
-    entangler: { enabled: false, max: -1 },
+      hrHarvester: new SettingMax(),
 
-    tectonic: { enabled: false, max: -1 },
-    moltenCore: { enabled: false, max: -1 },
-  };
+      entangler: new SettingMax(),
+
+      tectonic: new SettingMax(),
+      moltenCore: new SettingMax(),
+    },
+    unlockMissions = new MissionSettings()
+  ) {
+    super(enabled, trigger);
+    this.items = items;
+    this.addition.unlockMissions = unlockMissions;
+  }
 
   static validateGame(game: GamePage, settings: SpaceSettings) {
     MissionSettings.validateGame(game, settings.addition.unlockMissions);

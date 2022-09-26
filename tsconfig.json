@@ -17,5 +17,6 @@
     "incremental": true,
     "skipLibCheck": true,
     "types": ["@types/web"]
-  }
+  },
+  "exclude": ["**/*.js"]
 }
