@@ -8,12 +8,12 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: TimeSettings;
+  private readonly _settings: TimeSettings;
 
-  constructor(host: UserScript, options: TimeSettings = host.options.auto.time) {
+  constructor(host: UserScript, settings: TimeSettings) {
     super(host);
 
-    this._options = options;
+    this._settings = settings;
 
     const toggleName = "time";
     const label = ucfirst(this._host.i18n("ui.time"));
@@ -23,99 +23,99 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     const list = this._getOptionList(toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._options, list);
-    this._options.$enabled = element.checkbox;
+    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    this._settings.$enabled = element.checkbox;
 
     // Create "trigger" button in the item.
-    this._options.$trigger = this._registerTriggerButton(toggleName, label, this._options);
+    this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
 
     const optionButtons = [
       this._getOption(
         "temporalBattery",
-        this._options.items.temporalBattery,
+        this._settings.items.temporalBattery,
         this._host.i18n("$time.cfu.temporalBattery.label")
       ),
       this._getOption(
         "blastFurnace",
-        this._options.items.blastFurnace,
+        this._settings.items.blastFurnace,
         this._host.i18n("$time.cfu.blastFurnace.label")
       ),
       this._getOption(
         "timeBoiler",
-        this._options.items.timeBoiler,
+        this._settings.items.timeBoiler,
         this._host.i18n("$time.cfu.timeBoiler.label")
       ),
       this._getOption(
         "temporalAccelerator",
-        this._options.items.temporalAccelerator,
+        this._settings.items.temporalAccelerator,
         this._host.i18n("$time.cfu.temporalAccelerator.label")
       ),
       this._getOption(
         "temporalImpedance",
-        this._options.items.temporalImpedance,
+        this._settings.items.temporalImpedance,
         this._host.i18n("$time.cfu.temporalImpedance.label")
       ),
       this._getOption(
         "ressourceRetrieval",
-        this._options.items.ressourceRetrieval,
+        this._settings.items.ressourceRetrieval,
         this._host.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
       this._getOption(
         "cryochambers",
-        this._options.items.cryochambers,
+        this._settings.items.cryochambers,
         this._host.i18n("$time.vsu.cryochambers.label")
       ),
       this._getOption(
         "voidHoover",
-        this._options.items.voidHoover,
+        this._settings.items.voidHoover,
         this._host.i18n("$time.vsu.voidHoover.label")
       ),
       this._getOption(
         "voidRift",
-        this._options.items.voidRift,
+        this._settings.items.voidRift,
         this._host.i18n("$time.vsu.voidRift.label")
       ),
       this._getOption(
         "chronocontrol",
-        this._options.items.chronocontrol,
+        this._settings.items.chronocontrol,
         this._host.i18n("$time.vsu.chronocontrol.label")
       ),
       this._getOption(
         "voidResonator",
-        this._options.items.voidResonator,
+        this._settings.items.voidResonator,
         this._host.i18n("$time.vsu.voidResonator.label")
       ),
     ];
 
     list.append(...optionButtons);
 
-    element.panel.append(this._options.$trigger);
+    element.panel.append(this._settings.$trigger);
     element.panel.append(list);
 
     this.element = element.panel;
   }
 
   getState(): TimeSettings {
-    return new TimeSettings(this._options.enabled, this._options.trigger, this._options.items);
+    return new TimeSettings(this._settings.enabled, this._settings.trigger, this._settings.items);
   }
 
   setState(state: TimeSettings): void {
-    this._options.enabled = state.enabled;
-    this._options.trigger = state.trigger;
+    this._settings.enabled = state.enabled;
+    this._settings.trigger = state.trigger;
 
-    for (const [name, option] of objectEntries(this._options.items)) {
+    for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
     }
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 
-    for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+    for (const [name, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
     }
   }
 }

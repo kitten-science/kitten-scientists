@@ -1,22 +1,38 @@
 import { BulkManager } from "./BulkManager";
+import { Automation, TickContext } from "./Engine";
 import { SettingMax } from "./options/Settings";
+import { SpaceSettings } from "./options/SpaceSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { BuildButton, SpaceBuildingInfo, SpaceBuildings, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
 
-export class SpaceManager {
+export class SpaceManager implements Automation {
   private readonly _host: UserScript;
+  settings: SpaceSettings;
   readonly manager: TabManager<SpaceTab>;
   private readonly _bulkManager: BulkManager;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript) {
+  constructor(host: UserScript, settings = new SpaceSettings()) {
     this._host = host;
+    this.settings = settings;
     this.manager = new TabManager(this._host, "Space");
     this._bulkManager = new BulkManager(this._host);
     this._workshopManager = new WorkshopManager(this._host);
+  }
+
+  tick(context: TickContext) {
+    if (!this.settings.enabled) {
+      return;
+    }
+
+    this.autoBuild();
+
+    if (this.settings.addition.unlockMissions.enabled) {
+      this.autoUnlock();
+    }
   }
 
   /**
@@ -26,12 +42,10 @@ export class SpaceManager {
    *
    * @param builds The buildings to build.
    */
-  autoBuild(
-    builds: Partial<Record<SpaceBuildings, SettingMax>> = this._host.options.auto.space.items
-  ) {
+  autoBuild(builds: Partial<Record<SpaceBuildings, SettingMax>> = this.settings.items) {
     // TODO: Refactor. See BonfireManager.autoBuild
     const bulkManager = this._bulkManager;
-    const trigger = this._host.options.auto.space.trigger;
+    const trigger = this.settings.trigger;
 
     // Render the tab to make sure that the buttons actually exist in the DOM.
     // TODO: Is this really required?
@@ -98,12 +112,7 @@ export class SpaceManager {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name);
 
-    if (
-      !build.unlocked ||
-      !button ||
-      !button.model.enabled ||
-      !this._host.options.auto.space.items[name].enabled
-    ) {
+    if (!build.unlocked || !button || !button.model.enabled || !this.settings.items[name].enabled) {
       return;
     }
 

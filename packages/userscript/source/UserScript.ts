@@ -10,6 +10,7 @@ import i18nData from "./i18n/i18nData.json";
 import { Options } from "./options/Options";
 import { ScienceSettings } from "./options/ScienceSettings";
 import { SettingsStorage } from "./options/SettingsStorage";
+import { SpaceSettings } from "./options/SpaceSettings";
 import { WorkshopSettings } from "./options/WorkshopSettings";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
@@ -50,11 +51,6 @@ export class UserScript {
    * All i18n literals of the userscript.
    */
   private readonly _i18nData: typeof i18nData;
-
-  /**
-   * The settings to use for automations.
-   */
-  options: Options = new Options();
 
   /**
    * Signals whether the options have been changed since they were last saved.
@@ -98,8 +94,9 @@ export class UserScript {
    * Issues should be logged to the console.
    */
   validateGame() {
-    ScienceSettings.validateGame(this.gamePage, this.options.auto.unlock);
-    WorkshopSettings.validateGame(this.gamePage, this.options.auto.craft);
+    ScienceSettings.validateGame(this.gamePage, this.engine.scienceManager.settings);
+    SpaceSettings.validateGame(this.gamePage, this.engine.spaceManager.settings);
+    WorkshopSettings.validateGame(this.gamePage, this.engine.workshopManager.settings);
   }
 
   run(): void {
@@ -202,8 +199,8 @@ export class UserScript {
     color: string,
     ...args: Array<number | string>
   ): void {
-    if (this.options.auto.filters.enabled) {
-      for (const filterItem of Object.values(this.options.auto.filters.items)) {
+    if (this.engine.settings.filters.enabled) {
+      for (const filterItem of Object.values(this.engine.settings.filters.items)) {
         if (filterItem.enabled && filterItem.variant === cssClasses) {
           return;
         }

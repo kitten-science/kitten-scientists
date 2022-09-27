@@ -82,11 +82,13 @@ export class TradingSettings extends SettingsSectionTrigger {
       leviathans: new TradingSettingsItem(true, true, true, true, true, true, "unobtainium"),
     },
     buildEmbassies = new SettingTrigger(true, 0),
+
     unlockRaces = new Setting(true)
   ) {
     super(enabled, trigger);
     this.items = items;
     this.addition.buildEmbassies = buildEmbassies;
+
     this.addition.unlockRaces = unlockRaces;
   }
 

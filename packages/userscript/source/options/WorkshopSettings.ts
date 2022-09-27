@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { GamePage, ResourceCraftable } from "../types";
 import { Requirement } from "./Options";
 import { ResourceSettings, ResourcesSettingsItem } from "./ResourcesSettings";
-import { SettingLimitedMax } from "./Settings";
+import { Setting, SettingLimitedMax } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";
@@ -23,6 +23,7 @@ export class CraftSettingsItem extends SettingLimitedMax {
 }
 
 export type CraftAdditionSettings = {
+  shipOverride: Setting;
   unlockUpgrades: UpgradeSettings;
 };
 
@@ -32,6 +33,7 @@ export type WorkshopSettingsItems = {
 
 export class WorkshopSettings extends SettingsSectionTrigger {
   addition: CraftAdditionSettings = {
+    shipOverride: new Setting(true),
     unlockUpgrades: new UpgradeSettings(),
   };
 
@@ -66,11 +68,13 @@ export class WorkshopSettings extends SettingsSectionTrigger {
     resources: ResourceSettings = {
       furs: new ResourcesSettingsItem(true, undefined, 1000),
     },
-    unlockUpgrades = new UpgradeSettings()
+    unlockUpgrades = new UpgradeSettings(),
+    shipOverride = new Setting(true)
   ) {
     super(enabled, trigger);
     this.items = items;
     this.resources = resources;
+    this.addition.shipOverride = shipOverride;
     this.addition.unlockUpgrades = unlockUpgrades;
   }
 
@@ -101,6 +105,8 @@ export class WorkshopSettings extends SettingsSectionTrigger {
     for (const [name, item] of objectEntries(settings.addition.unlockUpgrades.items)) {
       subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
     }
+
+    subject.items["toggle-shipOverride"] = settings.addition.shipOverride.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -127,6 +133,9 @@ export class WorkshopSettings extends SettingsSectionTrigger {
     for (const [name, item] of objectEntries(options.addition.unlockUpgrades.items)) {
       item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
     }
+
+    options.addition.shipOverride.enabled =
+      subject.items["toggle-shipOverride"] ?? options.addition.shipOverride.enabled;
 
     return options;
   }

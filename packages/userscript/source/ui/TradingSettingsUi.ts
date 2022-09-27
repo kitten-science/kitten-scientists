@@ -13,12 +13,12 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: TradingSettings;
+  private readonly _settings: TradingSettings;
 
-  constructor(host: UserScript, upgradeOptions: TradingSettings = host.options.auto.trade) {
+  constructor(host: UserScript, settings: TradingSettings) {
     super(host);
 
-    this._options = upgradeOptions;
+    this._settings = settings;
 
     const toggleName = "trade";
     const label = ucfirst(this._host.i18n("ui.trade"));
@@ -28,51 +28,51 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     const list = this._getOptionList(toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._options, list);
-    this._options.$enabled = element.checkbox;
+    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    this._settings.$enabled = element.checkbox;
 
     // Create "trigger" button in the item.
-    this._options.$trigger = this._registerTriggerButton(toggleName, label, this._options);
+    this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
 
     const optionButtons = [
       this._getTradeOption(
         "lizards",
-        this._options.items.lizards,
+        this._settings.items.lizards,
         this._host.i18n("$trade.race.lizards")
       ),
       this._getTradeOption(
         "sharks",
-        this._options.items.sharks,
+        this._settings.items.sharks,
         this._host.i18n("$trade.race.sharks")
       ),
       this._getTradeOption(
         "griffins",
-        this._options.items.griffins,
+        this._settings.items.griffins,
         this._host.i18n("$trade.race.griffins")
       ),
       this._getTradeOption(
         "nagas",
-        this._options.items.nagas,
+        this._settings.items.nagas,
         this._host.i18n("$trade.race.nagas")
       ),
       this._getTradeOption(
         "zebras",
-        this._options.items.zebras,
+        this._settings.items.zebras,
         this._host.i18n("$trade.race.zebras")
       ),
       this._getTradeOption(
         "spiders",
-        this._options.items.spiders,
+        this._settings.items.spiders,
         this._host.i18n("$trade.race.spiders")
       ),
       this._getTradeOption(
         "dragons",
-        this._options.items.dragons,
+        this._settings.items.dragons,
         this._host.i18n("$trade.race.dragons")
       ),
       this._getTradeOption(
         "leviathans",
-        this._options.items.leviathans,
+        this._settings.items.leviathans,
         this._host.i18n("$trade.race.leviathans"),
         true
       ),
@@ -80,10 +80,10 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     list.append(...optionButtons);
 
-    const additionOptions = this.getAdditionOptions(this._options.addition);
+    const additionOptions = this.getAdditionOptions(this._settings.addition);
     list.append(additionOptions);
 
-    element.panel.append(this._options.$trigger);
+    element.panel.append(this._settings.$trigger);
     element.panel.append(list);
 
     this.element = element.panel;
@@ -190,11 +190,11 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.buildEmbassies.enabled = true));
+          this._host.updateOptions(() => (this._settings.addition.buildEmbassies.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.embassies")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.buildEmbassies.enabled = false));
+          this._host.updateOptions(() => (this._settings.addition.buildEmbassies.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.embassies")]);
         },
       }
@@ -208,11 +208,11 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.unlockRaces.enabled = true));
+          this._host.updateOptions(() => (this._settings.addition.unlockRaces.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.races")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.unlockRaces.enabled = false));
+          this._host.updateOptions(() => (this._settings.addition.unlockRaces.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.races")]);
         },
       }
@@ -223,22 +223,22 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
   getState(): TradingSettings {
     return new TradingSettings(
-      this._options.enabled,
-      this._options.trigger,
-      this._options.items,
-      this._options.addition.buildEmbassies,
-      this._options.addition.unlockRaces
+      this._settings.enabled,
+      this._settings.trigger,
+      this._settings.items,
+      this._settings.addition.buildEmbassies,
+      this._settings.addition.unlockRaces
     );
   }
 
   setState(state: TradingSettings): void {
-    this._options.enabled = state.enabled;
-    this._options.trigger = state.trigger;
+    this._settings.enabled = state.enabled;
+    this._settings.trigger = state.trigger;
 
-    this._options.addition.buildEmbassies.enabled = state.addition.buildEmbassies.enabled;
-    this._options.addition.unlockRaces.enabled = state.addition.unlockRaces.enabled;
+    this._settings.addition.buildEmbassies.enabled = state.addition.buildEmbassies.enabled;
+    this._settings.addition.unlockRaces.enabled = state.addition.unlockRaces.enabled;
 
-    for (const [name, option] of objectEntries(this._options.items)) {
+    for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
       option.limited = state.items[name].limited;
 
@@ -250,26 +250,26 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 
-    mustExist(this._options.addition.buildEmbassies.$enabled).prop(
+    mustExist(this._settings.addition.buildEmbassies.$enabled).prop(
       "checked",
-      this._options.addition.buildEmbassies.enabled
+      this._settings.addition.buildEmbassies.enabled
     );
-    mustExist(this._options.addition.unlockRaces.$enabled).prop(
+    mustExist(this._settings.addition.unlockRaces.$enabled).prop(
       "checked",
-      this._options.addition.unlockRaces.enabled
+      this._settings.addition.unlockRaces.enabled
     );
 
-    for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
-      mustExist(option.$limited).prop("checked", this._options.items[name].limited);
+    for (const [name, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+      mustExist(option.$limited).prop("checked", this._settings.items[name].limited);
 
-      mustExist(option.$autumn).prop("checked", this._options.items[name].autumn);
-      mustExist(option.$spring).prop("checked", this._options.items[name].spring);
-      mustExist(option.$summer).prop("checked", this._options.items[name].summer);
-      mustExist(option.$winter).prop("checked", this._options.items[name].winter);
+      mustExist(option.$autumn).prop("checked", this._settings.items[name].autumn);
+      mustExist(option.$spring).prop("checked", this._settings.items[name].spring);
+      mustExist(option.$summer).prop("checked", this._settings.items[name].summer);
+      mustExist(option.$winter).prop("checked", this._settings.items[name].winter);
     }
   }
 }

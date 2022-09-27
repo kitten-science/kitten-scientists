@@ -22,17 +22,12 @@ export type Requirement = Resource | false;
  */
 export type AllItems = BonfireItem | FaithItem | ReligionItem | SpaceBuildings | TimeItem;
 
+/**
+ * The `Options` object resembles the options as they were authored in
+ * Kitten Scientists 1.5. It serves as an intermediate structure to import
+ * the legacy settings format.
+ */
 export class Options {
-  /**
-   * The interval at which the internal processing loop is run, in milliseconds.
-   */
-  interval = 2000;
-
-  /**
-   * The default consume rate.
-   */
-  consume = 1;
-
   auto: {
     engine: EngineSettings;
     bonfire: BonfireSettings;
@@ -61,22 +56,6 @@ export class Options {
     filters: new FilterSettings(),
   };
 
-  reset: {
-    karmaLastTime: number;
-    karmaTotal: number;
-    paragonLastTime: number;
-    paragonTotal: number;
-    times: number;
-    reset: boolean;
-  } = {
-    reset: false,
-    times: 0,
-    paragonLastTime: 0,
-    paragonTotal: 0,
-    karmaLastTime: 0,
-    karmaTotal: 0,
-  };
-
   asLegacyOptions(optionsObject: Options = this): KittenStorageType {
     const subject = {} as KittenStorageType;
 
@@ -101,15 +80,6 @@ export class Options {
       space: optionsObject.auto.space.trigger,
       craft: optionsObject.auto.craft.trigger,
       trade: optionsObject.auto.trade.trigger,
-    };
-
-    subject.reset = {
-      reset: optionsObject.reset.reset,
-      times: optionsObject.reset.times,
-      paragonLastTime: optionsObject.reset.paragonLastTime,
-      pargonTotal: optionsObject.reset.paragonTotal,
-      karmaLastTime: optionsObject.reset.karmaLastTime,
-      karmaTotal: optionsObject.reset.karmaTotal,
     };
 
     subject.items = {};
@@ -155,14 +125,6 @@ export class Options {
     result.auto.time = TimeSettings.fromLegacyOptions(subject);
     result.auto.trade = TradingSettings.fromLegacyOptions(subject);
     result.auto.unlock = ScienceSettings.fromLegacyOptions(subject);
-
-    // Reset options. Specific use unclear for now
-    result.reset.reset = subject.reset.reset;
-    result.reset.times = subject.reset.times;
-    result.reset.paragonLastTime = subject.reset.paragonLastTime;
-    result.reset.paragonTotal = subject.reset.pargonTotal;
-    result.reset.karmaLastTime = subject.reset.karmaLastTime;
-    result.reset.karmaTotal = subject.reset.karmaTotal;
 
     return result;
   }

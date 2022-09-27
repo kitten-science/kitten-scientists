@@ -3,7 +3,7 @@ import { Setting, SettingTrigger } from "./Settings";
 import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe" | "shipOverride";
+export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe";
 
 export class OptionsSettingsItem extends Setting implements Partial<SettingTrigger> {
   trigger: number | undefined = undefined;
@@ -20,7 +20,6 @@ export class OptionsSettings extends SettingsSection {
     [key in OptionsItem]: OptionsSettingsItem;
   } = {
     observe: new OptionsSettingsItem(true),
-    shipOverride: new OptionsSettingsItem(true),
     autofeed: new OptionsSettingsItem(true),
 
     crypto: new OptionsSettingsItem(true, 10000),
@@ -30,14 +29,12 @@ export class OptionsSettings extends SettingsSection {
   constructor(
     enabled = false,
     observe = new OptionsSettingsItem(true),
-    shipOverride = new OptionsSettingsItem(true),
     autofeed = new OptionsSettingsItem(true),
     crypto = new OptionsSettingsItem(true, 10000),
     fixCry = new OptionsSettingsItem(false)
   ) {
     super(enabled);
     this.items.observe = observe;
-    this.items.shipOverride = shipOverride;
     this.items.autofeed = autofeed;
     this.items.crypto = crypto;
     this.items.fixCry = fixCry;

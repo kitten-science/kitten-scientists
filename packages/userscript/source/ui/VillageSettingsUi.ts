@@ -9,14 +9,14 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: VillageSettings;
+  private readonly _settings: VillageSettings;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
-  constructor(host: UserScript, options: VillageSettings = host.options.auto.village) {
+  constructor(host: UserScript, settings: VillageSettings) {
     super(host);
 
-    this._options = options;
+    this._settings = settings;
 
     const toggleName = "distribute";
     const label = ucfirst(this._host.i18n("ui.distribute"));
@@ -26,48 +26,48 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     const list = this._getOptionList(toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._options, list);
-    this._options.$enabled = element.checkbox;
+    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    this._settings.$enabled = element.checkbox;
 
     this._optionButtons = [
       this._getDistributeOption(
         "woodcutter",
-        this._options.items.woodcutter,
+        this._settings.items.woodcutter,
         this._host.i18n("$village.job.woodcutter")
       ),
       this._getDistributeOption(
         "farmer",
-        this._options.items.farmer,
+        this._settings.items.farmer,
         this._host.i18n("$village.job.farmer")
       ),
       this._getDistributeOption(
         "scholar",
-        this._options.items.scholar,
+        this._settings.items.scholar,
         this._host.i18n("$village.job.scholar")
       ),
       this._getDistributeOption(
         "hunter",
-        this._options.items.hunter,
+        this._settings.items.hunter,
         this._host.i18n("$village.job.hunter")
       ),
       this._getDistributeOption(
         "miner",
-        this._options.items.miner,
+        this._settings.items.miner,
         this._host.i18n("$village.job.miner")
       ),
       this._getDistributeOption(
         "priest",
-        this._options.items.priest,
+        this._settings.items.priest,
         this._host.i18n("$village.job.priest")
       ),
       this._getDistributeOption(
         "geologist",
-        this._options.items.geologist,
+        this._settings.items.geologist,
         this._host.i18n("$village.job.geologist")
       ),
       this._getDistributeOption(
         "engineer",
-        this._options.items.engineer,
+        this._settings.items.engineer,
         this._host.i18n("$village.job.engineer"),
         true
       ),
@@ -75,7 +75,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
 
     list.append(...this._optionButtons);
 
-    const additionOptions = this.getAdditionOptions(this._options.addition);
+    const additionOptions = this.getAdditionOptions(this._settings.addition);
     list.append(additionOptions);
 
     element.panel.append(list);
@@ -113,11 +113,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.hunt.enabled = true));
+          this._host.updateOptions(() => (this._settings.addition.hunt.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("option.hunt")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.hunt.enabled = false));
+          this._host.updateOptions(() => (this._settings.addition.hunt.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("option.hunt")]);
         },
       }
@@ -131,11 +131,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.holdFestivals.enabled = true));
+          this._host.updateOptions(() => (this._settings.addition.holdFestivals.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("option.festival")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.holdFestivals.enabled = false));
+          this._host.updateOptions(() => (this._settings.addition.holdFestivals.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("option.festival")]);
         },
       }
@@ -149,11 +149,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.promoteLeader.enabled = true));
+          this._host.updateOptions(() => (this._settings.addition.promoteLeader.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("option.promote")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.promoteLeader.enabled = false));
+          this._host.updateOptions(() => (this._settings.addition.promoteLeader.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("option.promote")]);
         },
       }
@@ -164,50 +164,50 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
 
   getState(): VillageSettings {
     return new VillageSettings(
-      this._options.enabled,
-      this._options.items,
-      this._options.addition.holdFestivals,
-      this._options.addition.hunt,
-      this._options.addition.promoteLeader
+      this._settings.enabled,
+      this._settings.items,
+      this._settings.addition.holdFestivals,
+      this._settings.addition.hunt,
+      this._settings.addition.promoteLeader
     );
   }
 
   setState(state: VillageSettings): void {
-    this._options.enabled = state.enabled;
+    this._settings.enabled = state.enabled;
 
-    this._options.addition.holdFestivals.enabled = state.addition.holdFestivals.enabled;
-    this._options.addition.hunt.enabled = state.addition.hunt.enabled;
-    this._options.addition.promoteLeader.enabled = state.addition.promoteLeader.enabled;
+    this._settings.addition.holdFestivals.enabled = state.addition.holdFestivals.enabled;
+    this._settings.addition.hunt.enabled = state.addition.hunt.enabled;
+    this._settings.addition.promoteLeader.enabled = state.addition.promoteLeader.enabled;
 
-    for (const [name, option] of objectEntries(this._options.items)) {
+    for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
       option.max = state.items[name].max;
     }
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
 
-    mustExist(this._options.addition.holdFestivals.$enabled).prop(
+    mustExist(this._settings.addition.holdFestivals.$enabled).prop(
       "checked",
-      this._options.addition.holdFestivals.enabled
+      this._settings.addition.holdFestivals.enabled
     );
-    mustExist(this._options.addition.hunt.$enabled).prop(
+    mustExist(this._settings.addition.hunt.$enabled).prop(
       "checked",
-      this._options.addition.hunt.enabled
+      this._settings.addition.hunt.enabled
     );
-    mustExist(this._options.addition.hunt.$trigger)[0].title = this._renderPercentage(
-      this._options.addition.hunt.trigger
+    mustExist(this._settings.addition.hunt.$trigger)[0].title = this._renderPercentage(
+      this._settings.addition.hunt.trigger
     );
-    mustExist(this._options.addition.promoteLeader.$enabled).prop(
+    mustExist(this._settings.addition.promoteLeader.$enabled).prop(
       "checked",
-      this._options.addition.promoteLeader.enabled
+      this._settings.addition.promoteLeader.enabled
     );
 
-    for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+    for (const [name, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
       mustExist(option.$max).text(
-        this._host.i18n("ui.max", [this._renderLimit(this._options.items[name].max)])
+        this._host.i18n("ui.max", [this._renderLimit(this._settings.items[name].max)])
       );
     }
   }

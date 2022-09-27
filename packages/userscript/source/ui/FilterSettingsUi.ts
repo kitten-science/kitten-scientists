@@ -8,12 +8,12 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: FilterSettings;
+  private readonly _settings: FilterSettings;
 
-  constructor(host: UserScript, options: FilterSettings = host.options.auto.filters) {
+  constructor(host: UserScript, settings: FilterSettings) {
     super(host);
 
-    this._options = options;
+    this._settings = settings;
 
     const toggleName = "filter";
     const label = ucfirst(this._host.i18n("ui.filter"));
@@ -23,93 +23,93 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     const list = this._getOptionList(toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._options, list);
-    this._options.$enabled = element.checkbox;
+    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    this._settings.$enabled = element.checkbox;
 
     const buttons = [
       {
         name: "buildFilter",
-        option: this._options.items.buildFilter,
+        option: this._settings.items.buildFilter,
         label: this._host.i18n("filter.build"),
       },
       {
         name: "craftFilter",
-        option: this._options.items.craftFilter,
+        option: this._settings.items.craftFilter,
         label: this._host.i18n("filter.craft"),
       },
       {
         name: "upgradeFilter",
-        option: this._options.items.upgradeFilter,
+        option: this._settings.items.upgradeFilter,
         label: this._host.i18n("filter.upgrade"),
       },
       {
         name: "researchFilter",
-        option: this._options.items.researchFilter,
+        option: this._settings.items.researchFilter,
         label: this._host.i18n("filter.research"),
       },
       {
         name: "tradeFilter",
-        option: this._options.items.tradeFilter,
+        option: this._settings.items.tradeFilter,
         label: this._host.i18n("filter.trade"),
       },
       {
         name: "huntFilter",
-        option: this._options.items.huntFilter,
+        option: this._settings.items.huntFilter,
         label: this._host.i18n("filter.hunt"),
       },
       {
         name: "praiseFilter",
-        option: this._options.items.praiseFilter,
+        option: this._settings.items.praiseFilter,
         label: this._host.i18n("filter.praise"),
       },
       {
         name: "adoreFilter",
-        option: this._options.items.adoreFilter,
+        option: this._settings.items.adoreFilter,
         label: this._host.i18n("filter.adore"),
       },
       {
         name: "transcendFilter",
-        option: this._options.items.transcendFilter,
+        option: this._settings.items.transcendFilter,
         label: this._host.i18n("filter.transcend"),
       },
       {
         name: "faithFilter",
-        option: this._options.items.faithFilter,
+        option: this._settings.items.faithFilter,
         label: this._host.i18n("filter.faith"),
       },
       {
         name: "accelerateFilter",
-        option: this._options.items.accelerateFilter,
+        option: this._settings.items.accelerateFilter,
         label: this._host.i18n("filter.accelerate"),
       },
       {
         name: "timeSkipFilter",
-        option: this._options.items.timeSkipFilter,
+        option: this._settings.items.timeSkipFilter,
         label: this._host.i18n("filter.time.skip"),
       },
       {
         name: "festivalFilter",
-        option: this._options.items.festivalFilter,
+        option: this._settings.items.festivalFilter,
         label: this._host.i18n("filter.festival"),
       },
       {
         name: "starFilter",
-        option: this._options.items.starFilter,
+        option: this._settings.items.starFilter,
         label: this._host.i18n("filter.star"),
       },
       {
         name: "distributeFilter",
-        option: this._options.items.distributeFilter,
+        option: this._settings.items.distributeFilter,
         label: this._host.i18n("filter.distribute"),
       },
       {
         name: "promoteFilter",
-        option: this._options.items.promoteFilter,
+        option: this._settings.items.promoteFilter,
         label: this._host.i18n("filter.promote"),
       },
       {
         name: "miscFilter",
-        option: this._options.items.miscFilter,
+        option: this._settings.items.miscFilter,
         label: this._host.i18n("filter.misc"),
       },
     ] as const;
@@ -139,22 +139,22 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
   }
 
   getState(): FilterSettings {
-    return new FilterSettings(this._options.enabled, this._options.items);
+    return new FilterSettings(this._settings.enabled, this._settings.items);
   }
 
   setState(state: FilterSettings): void {
-    this._options.enabled = state.enabled;
+    this._settings.enabled = state.enabled;
 
-    for (const [name, option] of objectEntries(this._options.items)) {
+    for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
     }
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
 
-    for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+    for (const [name, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
     }
   }
 }

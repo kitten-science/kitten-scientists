@@ -66,6 +66,7 @@ type ToggleResetSpaceItem = `toggle-reset-space-${SpaceBuildings}`;
 type ToggleResetTimeItem = `toggle-reset-time-${TimeItem}`;
 type ToggleResetUnicornItem = `toggle-reset-unicorn-${UnicornItem}`;
 type ToggleResourceItem = `toggle-${Resource}`;
+type ToggleShipOverride = `toggle-shipOverride`;
 type ToggleTechItem = `toggle-tech-${Technology}`;
 type ToggleTimeControlCycleItem = `toggle-timeSkip-${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
 type ToggleTimeControlItem = `toggle-${TimeControlItem}`;
@@ -117,6 +118,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleResetTimeItem, boolean>> &
     Partial<Record<ToggleResetUnicornItem, boolean>> &
     Partial<Record<ToggleResourceItem, boolean>> &
+    Partial<Record<ToggleShipOverride, boolean>> &
     Partial<Record<ToggleTechItem, boolean>> &
     Partial<Record<ToggleTimeControlCycleItem, boolean>> &
     Partial<Record<ToggleTimeControlItem, boolean>> &

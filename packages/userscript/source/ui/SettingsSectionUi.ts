@@ -9,6 +9,7 @@ import { clog } from "../tools/Log";
 import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
+import { WorkshopManager } from "../WorkshopManager";
 
 export type SettingsSectionUiComposition = {
   checkbox: JQuery<HTMLElement>;
@@ -855,11 +856,11 @@ export abstract class SettingsSectionUi<TState> {
 
     if (forReset) {
       value = value < 0 ? Infinity : value;
-      mustExist(this._host.options.auto.timeCtrl.resources[name]).enabled = true;
-      mustExist(this._host.options.auto.timeCtrl.resources[name]).stock = value;
+      mustExist(this._host.engine.timeControlManager.settings.resources[name]).enabled = true;
+      mustExist(this._host.engine.timeControlManager.settings.resources[name]).stock = value;
     } else {
-      mustExist(this._host.options.auto.craft.resources[name]).enabled = true;
-      mustExist(this._host.options.auto.craft.resources[name]).stock = value;
+      mustExist(this._host.engine.workshopManager.settings.resources[name]).enabled = true;
+      mustExist(this._host.engine.workshopManager.settings.resources[name]).stock = value;
     }
   }
 
@@ -869,7 +870,7 @@ export abstract class SettingsSectionUi<TState> {
       return;
     }
 
-    mustExist(this._host.options.auto.craft.resources[name]).consume = value;
+    mustExist(this._host.engine.workshopManager.settings.resources[name]).consume = value;
   }
 
   protected _promptLimit(text: string, defaultValue: string): number | null {
@@ -917,6 +918,6 @@ export abstract class SettingsSectionUi<TState> {
   }
 
   protected _renderConsumeRate(consume: number | undefined): string {
-    return this._renderPercentage(consume ?? this._host.options.consume);
+    return this._renderPercentage(consume ?? WorkshopManager.DEFAULT_CONSUME_RATE);
   }
 }

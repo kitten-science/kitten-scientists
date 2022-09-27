@@ -10,15 +10,15 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: ScienceSettings;
+  private readonly _settings: ScienceSettings;
 
   private _techsExpanded = false;
   private _policiesExpanded = false;
 
-  constructor(host: UserScript, options: ScienceSettings = host.options.auto.unlock) {
+  constructor(host: UserScript, settings: ScienceSettings) {
     super(host);
 
-    this._options = options;
+    this._settings = settings;
 
     const toggleName = "upgrade";
     const label = ucfirst(this._host.i18n("ui.upgrade"));
@@ -28,22 +28,22 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
     const list = this._getOptionList(toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._options, list);
-    this._options.$enabled = element.checkbox;
+    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    this._settings.$enabled = element.checkbox;
 
     const techsButton = this._getOption(
       "techs",
-      this._options.items.techs,
+      this._settings.items.techs,
       this._host.i18n("ui.upgrade.techs"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.items.techs.enabled = true));
+          this._host.updateOptions(() => (this._settings.items.techs.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.techs")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.items.techs.enabled = false));
+          this._host.updateOptions(() => (this._settings.items.techs.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.techs")]);
         },
       }
@@ -56,7 +56,7 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
 
     const techButtons = [];
     for (const [techName, tech] of objectEntries(
-      (this._options.items.techs as TechSettings).items
+      (this._settings.items.techs as TechSettings).items
     )) {
       const label = this._host.i18n(`$science.${techName}.label`);
       const button = this._getOption(`tech-${techName}`, tech, label, false, false, {
@@ -93,17 +93,17 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
     // Set up the more complex policies options.
     const policiesButton = this._getOption(
       "policies",
-      this._options.items.policies,
+      this._settings.items.policies,
       this._host.i18n("ui.upgrade.policies"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.items.policies.enabled = true));
+          this._host.updateOptions(() => (this._settings.items.policies.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.policies")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.items.policies.enabled = false));
+          this._host.updateOptions(() => (this._settings.items.policies.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.policies")]);
         },
       }
@@ -116,7 +116,7 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
 
     const policyButtons = [];
     for (const [policyName, policy] of objectEntries(
-      (this._options.items.policies as PolicySettings).items
+      (this._settings.items.policies as PolicySettings).items
     )) {
       const policyLabel = this._host.i18n(
         `$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`
@@ -171,58 +171,62 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
 
   getState(): ScienceSettings {
     return new ScienceSettings(
-      this._options.enabled,
-      this._options.items.policies as PolicySettings,
-      this._options.items.techs as TechSettings
+      this._settings.enabled,
+      this._settings.items.policies as PolicySettings,
+      this._settings.items.techs as TechSettings
     );
   }
 
   setState(state: ScienceSettings): void {
-    this._options.enabled = state.enabled;
+    this._settings.enabled = state.enabled;
 
-    this._options.items.policies.enabled = state.items.policies.enabled;
-    this._options.items.techs.enabled = state.items.techs.enabled;
+    this._settings.items.policies.enabled = state.items.policies.enabled;
+    this._settings.items.techs.enabled = state.items.techs.enabled;
 
     // Handle policies.
     for (const [name, option] of objectEntries(
-      (this._options.items.policies as PolicySettings).items
+      (this._settings.items.policies as PolicySettings).items
     )) {
       option.enabled = (state.items.policies as PolicySettings).items[name].enabled;
     }
 
     // Handle techs.
-    for (const [name, option] of objectEntries((this._options.items.techs as TechSettings).items)) {
+    for (const [name, option] of objectEntries(
+      (this._settings.items.techs as TechSettings).items
+    )) {
       option.enabled = (state.items.techs as TechSettings).items[name].enabled;
     }
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
 
-    mustExist(this._options.items.policies.$enabled).prop(
+    mustExist(this._settings.items.policies.$enabled).prop(
       "checked",
-      this._options.items.policies.enabled
+      this._settings.items.policies.enabled
     );
-    mustExist(this._options.items.techs.$enabled).prop(
+    mustExist(this._settings.items.techs.$enabled).prop(
       "checked",
-      this._options.items.techs.enabled
+      this._settings.items.techs.enabled
     );
 
     // Handle techs.
-    for (const [name, option] of objectEntries((this._options.items.techs as TechSettings).items)) {
+    for (const [name, option] of objectEntries(
+      (this._settings.items.techs as TechSettings).items
+    )) {
       mustExist(option.$enabled).prop(
         "checked",
-        (this._options.items.techs as TechSettings).items[name].enabled
+        (this._settings.items.techs as TechSettings).items[name].enabled
       );
     }
 
     // Handle policies.
     for (const [name, option] of objectEntries(
-      (this._options.items.policies as PolicySettings).items
+      (this._settings.items.policies as PolicySettings).items
     )) {
       mustExist(option.$enabled).prop(
         "checked",
-        (this._options.items.policies as PolicySettings).items[name].enabled
+        (this._settings.items.policies as PolicySettings).items[name].enabled
       );
     }
   }
