@@ -1,8 +1,4 @@
-import {
-  TradeAdditionSettings,
-  TradingSettings,
-  TradingSettingsItem,
-} from "../options/TradingSettings";
+import { TradingSettings, TradingSettingsItem } from "../options/TradingSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -80,7 +76,7 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     list.append(...optionButtons);
 
-    const additionOptions = this.getAdditionOptions(this._settings.addition);
+    const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
     element.panel.append(this._settings.$trigger);
@@ -179,22 +175,22 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     return element;
   }
 
-  getAdditionOptions(addition: TradeAdditionSettings): Array<JQuery<HTMLElement>> {
+  private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
     const nodeEmbassies = this._getOptionWithTrigger(
       "embassies",
-      addition.buildEmbassies,
+      this._settings.buildEmbassies,
       this._host.i18n("option.embassies"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.buildEmbassies.enabled = true));
+          this._host.updateOptions(() => (this._settings.buildEmbassies.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.embassies")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.buildEmbassies.enabled = false));
+          this._host.updateOptions(() => (this._settings.buildEmbassies.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.embassies")]);
         },
       }
@@ -202,17 +198,17 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
 
     const nodeRaces = this._getOption(
       "races",
-      addition.unlockRaces,
+      this._settings.unlockRaces,
       this._host.i18n("ui.upgrade.races"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.unlockRaces.enabled = true));
+          this._host.updateOptions(() => (this._settings.unlockRaces.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.races")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.unlockRaces.enabled = false));
+          this._host.updateOptions(() => (this._settings.unlockRaces.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.races")]);
         },
       }
@@ -226,8 +222,8 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
       this._settings.enabled,
       this._settings.trigger,
       this._settings.items,
-      this._settings.addition.buildEmbassies,
-      this._settings.addition.unlockRaces
+      this._settings.buildEmbassies,
+      this._settings.unlockRaces
     );
   }
 
@@ -235,8 +231,8 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
 
-    this._settings.addition.buildEmbassies.enabled = state.addition.buildEmbassies.enabled;
-    this._settings.addition.unlockRaces.enabled = state.addition.unlockRaces.enabled;
+    this._settings.buildEmbassies.enabled = state.buildEmbassies.enabled;
+    this._settings.unlockRaces.enabled = state.unlockRaces.enabled;
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
@@ -253,13 +249,13 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 
-    mustExist(this._settings.addition.buildEmbassies.$enabled).prop(
+    mustExist(this._settings.buildEmbassies.$enabled).prop(
       "checked",
-      this._settings.addition.buildEmbassies.enabled
+      this._settings.buildEmbassies.enabled
     );
-    mustExist(this._settings.addition.unlockRaces.$enabled).prop(
+    mustExist(this._settings.unlockRaces.$enabled).prop(
       "checked",
-      this._settings.addition.unlockRaces.enabled
+      this._settings.unlockRaces.enabled
     );
 
     for (const [name, option] of objectEntries(this._settings.items)) {

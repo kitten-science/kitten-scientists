@@ -46,14 +46,12 @@ export class ReligionManager implements Automation {
   }
 
   autoWorship() {
-    const additions = this.settings.addition;
-
     const IS_BUILD_BEST_BUILDING_STILL_BROKEN = true;
 
     // Build the best unicorn building if the option is enabled.
     // TODO: This is stupid, as it *only* builds unicorn buildings, instead of all
     //       religion buildings.
-    if (!IS_BUILD_BEST_BUILDING_STILL_BROKEN && additions.bestUnicornBuilding.enabled) {
+    if (!IS_BUILD_BEST_BUILDING_STILL_BROKEN && this.settings.bestUnicornBuilding.enabled) {
       const bestUnicornBuilding = this._getBestUnicornBuilding();
       if (bestUnicornBuilding !== null) {
         if (bestUnicornBuilding === "unicornPasture") {
@@ -130,17 +128,20 @@ export class ReligionManager implements Automation {
     const faith = this._workshopManager.getResource("faith");
     const faithLevel = faith.value / faith.maxValue;
     // enough faith, and then TAP (transcende, adore, praise)
-    if (additions.transcend.enabled && 0.98 <= faithLevel) {
+    if (this.settings.transcend.enabled && 0.98 <= faithLevel) {
       this._autoTranscend();
     }
 
     // Adore the galaxy (worship → epiphany)
-    if (additions.adore.enabled && mustExist(this._host.gamePage.religion.getRU("apocripha")).on) {
-      this._autoAdore(additions.adore.trigger);
+    if (
+      this.settings.adore.enabled &&
+      mustExist(this._host.gamePage.religion.getRU("apocripha")).on
+    ) {
+      this._autoAdore(this.settings.adore.trigger);
     }
 
     // Praise (faith → worhsip)
-    if (additions.autoPraise.enabled && additions.autoPraise.trigger <= faithLevel) {
+    if (this.settings.autoPraise.enabled && this.settings.autoPraise.trigger <= faithLevel) {
       this._autoPraise();
     }
   }

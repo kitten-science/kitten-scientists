@@ -31,7 +31,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this.autoCraft();
     this.refreshStock();
 
-    if (this.settings.addition.unlockUpgrades.enabled) {
+    if (this.settings.unlockUpgrades.enabled) {
       return this.autoUnlock();
     }
   }
@@ -46,9 +46,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     const upgrades = this._host.gamePage.workshop.upgrades;
     const toUnlock = new Array<UpgradeInfo>();
 
-    workLoop: for (const [item, options] of objectEntries(
-      this.settings.addition.unlockUpgrades.items
-    )) {
+    workLoop: for (const [item, options] of objectEntries(this.settings.unlockUpgrades.items)) {
       if (!options.enabled) {
         continue;
       }
@@ -296,7 +294,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     }
 
     // The ship override allows the user to treat ships as "unlimited" while there's less than 243.
-    const shipOverride = this.settings.addition.shipOverride.enabled;
+    const shipOverride = this.settings.shipOverride.enabled;
 
     const res = this.getResource(name);
 

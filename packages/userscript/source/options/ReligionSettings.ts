@@ -64,31 +64,27 @@ export type ReligionSettingsItems = {
 };
 
 export class ReligionSettings extends SettingsSectionTrigger {
-  addition: {
-    /**
-     * Build best unicorn building first.
-     */
-    bestUnicornBuilding: Setting;
-    /**
-     * Praise the sun.
-     */
-    autoPraise: SettingTrigger;
-    /**
-     * Adore the galaxy.
-     */
-    adore: SettingTrigger;
-    /**
-     * Transcend.
-     */
-    transcend: Setting;
-  } = {
-    bestUnicornBuilding: new Setting(true),
-    autoPraise: new SettingTrigger(true, 0.98),
-    adore: new SettingTrigger(false, 0.75),
-    transcend: new Setting(false),
-  };
-
   items: ReligionSettingsItems;
+
+  /**
+   * Build best unicorn building first.
+   */
+  bestUnicornBuilding: Setting;
+
+  /**
+   * Praise the sun.
+   */
+  autoPraise: SettingTrigger;
+
+  /**
+   * Adore the galaxy.
+   */
+  adore: SettingTrigger;
+
+  /**
+   * Transcend.
+   */
+  transcend: Setting;
 
   constructor(
     enabled = false,
@@ -140,10 +136,10 @@ export class ReligionSettings extends SettingsSectionTrigger {
   ) {
     super(enabled, trigger);
     this.items = items;
-    this.addition.adore = adore;
-    this.addition.autoPraise = autoPraise;
-    this.addition.bestUnicornBuilding = bestUnicornBuilding;
-    this.addition.transcend = transcend;
+    this.adore = adore;
+    this.autoPraise = autoPraise;
+    this.bestUnicornBuilding = bestUnicornBuilding;
+    this.transcend = transcend;
   }
 
   static toLegacyOptions(settings: ReligionSettings, subject: KittenStorageType) {
@@ -155,13 +151,13 @@ export class ReligionSettings extends SettingsSectionTrigger {
       subject.items[`set-${name}-max` as const] = item.max;
     }
 
-    subject.items["toggle-adore"] = settings.addition.adore.enabled;
-    subject.items["toggle-autoPraise"] = settings.addition.autoPraise.enabled;
-    subject.items["toggle-bestUnicornBuilding"] = settings.addition.bestUnicornBuilding.enabled;
-    subject.items["toggle-transcend"] = settings.addition.transcend.enabled;
+    subject.items["toggle-adore"] = settings.adore.enabled;
+    subject.items["toggle-autoPraise"] = settings.autoPraise.enabled;
+    subject.items["toggle-bestUnicornBuilding"] = settings.bestUnicornBuilding.enabled;
+    subject.items["toggle-transcend"] = settings.transcend.enabled;
 
-    subject.items["set-adore-trigger"] = settings.addition.adore.trigger;
-    subject.items["set-autoPraise-trigger"] = settings.addition.autoPraise.trigger;
+    subject.items["set-adore-trigger"] = settings.adore.trigger;
+    subject.items["set-autoPraise-trigger"] = settings.autoPraise.trigger;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -175,23 +171,19 @@ export class ReligionSettings extends SettingsSectionTrigger {
     }
 
     // Load remaining religion settings.
-    options.addition.adore.enabled =
-      subject.items["toggle-adore"] ?? options.addition.adore.enabled;
+    options.adore.enabled = subject.items["toggle-adore"] ?? options.adore.enabled;
 
-    options.addition.autoPraise.enabled =
-      subject.items["toggle-autoPraise"] ?? options.addition.autoPraise.enabled;
+    options.autoPraise.enabled = subject.items["toggle-autoPraise"] ?? options.autoPraise.enabled;
 
-    options.addition.bestUnicornBuilding.enabled =
-      subject.items["toggle-bestUnicornBuilding"] ?? options.addition.bestUnicornBuilding.enabled;
+    options.bestUnicornBuilding.enabled =
+      subject.items["toggle-bestUnicornBuilding"] ?? options.bestUnicornBuilding.enabled;
 
-    options.addition.transcend.enabled =
-      subject.items["toggle-transcend"] ?? options.addition.transcend.enabled;
+    options.transcend.enabled = subject.items["toggle-transcend"] ?? options.transcend.enabled;
 
-    options.addition.adore.trigger =
-      subject.items["set-adore-trigger"] ?? options.addition.adore.trigger;
+    options.adore.trigger = subject.items["set-adore-trigger"] ?? options.adore.trigger;
 
-    options.addition.autoPraise.trigger =
-      subject.items["set-autoPraise-trigger"] ?? options.addition.autoPraise.trigger;
+    options.autoPraise.trigger =
+      subject.items["set-autoPraise-trigger"] ?? options.autoPraise.trigger;
 
     return options;
   }

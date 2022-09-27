@@ -1,4 +1,4 @@
-import { SpaceAdditionSettings, SpaceSettings } from "../options/SpaceSettings";
+import { SpaceSettings } from "../options/SpaceSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -178,7 +178,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
 
     list.append(...optionButtons);
 
-    const additionOptions = this.getAdditionOptions(this._settings.addition);
+    const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
     element.panel.append(this._settings.$trigger);
@@ -187,22 +187,22 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     this.element = element.panel;
   }
 
-  getAdditionOptions(addition: SpaceAdditionSettings): Array<JQuery<HTMLElement>> {
+  private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
     const missionsButton = this._getOption(
       "missions",
-      addition.unlockMissions,
+      this._settings.unlockMissions,
       this._host.i18n("ui.upgrade.missions"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (addition.unlockMissions.enabled = true));
+          this._host.updateOptions(() => (this._settings.unlockMissions.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.missions")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (addition.unlockMissions.enabled = false));
+          this._host.updateOptions(() => (this._settings.unlockMissions.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.missions")]);
         },
       }
@@ -214,9 +214,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     });
 
     const missionButtons = [];
-    for (const [missionName, mission] of objectEntries(
-      this._settings.addition.unlockMissions.items
-    )) {
+    for (const [missionName, mission] of objectEntries(this._settings.unlockMissions.items)) {
       const missionLabel = this._host.i18n(`$space.${missionName}.label`);
       const missionButton = this._getOption(
         `mission-${missionName}`,
@@ -264,7 +262,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._settings.enabled,
       this._settings.trigger,
       this._settings.items,
-      this._settings.addition.unlockMissions
+      this._settings.unlockMissions
     );
   }
 
@@ -272,9 +270,9 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
 
-    this._settings.addition.unlockMissions.enabled = state.addition.unlockMissions.enabled;
-    for (const [name, option] of objectEntries(this._settings.addition.unlockMissions.items)) {
-      option.enabled = state.addition.unlockMissions.items[name].enabled;
+    this._settings.unlockMissions.enabled = state.unlockMissions.enabled;
+    for (const [name, option] of objectEntries(this._settings.unlockMissions.items)) {
+      option.enabled = state.unlockMissions.items[name].enabled;
     }
 
     for (const [name, option] of objectEntries(this._settings.items)) {
@@ -287,11 +285,11 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 
-    mustExist(this._settings.addition.unlockMissions.$enabled).prop(
+    mustExist(this._settings.unlockMissions.$enabled).prop(
       "checked",
-      this._settings.addition.unlockMissions.enabled
+      this._settings.unlockMissions.enabled
     );
-    for (const [, option] of objectEntries(this._settings.addition.unlockMissions.items)) {
+    for (const [, option] of objectEntries(this._settings.unlockMissions.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
     }
 

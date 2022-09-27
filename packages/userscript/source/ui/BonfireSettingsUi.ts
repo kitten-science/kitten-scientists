@@ -1,4 +1,4 @@
-import { BonfireAdditionSettings, BonfireSettings } from "../options/BonfireSettings";
+import { BonfireSettings } from "../options/BonfireSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -276,7 +276,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     ];
     list.append(optionButtons);
 
-    const additionOptions = this.getAdditionOptions(this._settings.addition);
+    const additionOptions = this._getAdditionOptions();
 
     element.panel.append(this._settings.$trigger);
     element.panel.append(list);
@@ -285,22 +285,22 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     this.element = element.panel;
   }
 
-  getAdditionOptions(addition: BonfireAdditionSettings): Array<JQuery<HTMLElement>> {
+  private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
     const upgradeBuildingsButton = this._getOption(
       "buildings",
-      addition.upgradeBuildings,
+      this._settings.upgradeBuildings,
       this._host.i18n("ui.upgrade.buildings"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (addition.upgradeBuildings.enabled = true));
+          this._host.updateOptions(() => (this._settings.upgradeBuildings.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.buildings")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (addition.upgradeBuildings.enabled = false));
+          this._host.updateOptions(() => (this._settings.upgradeBuildings.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.buildings")]);
         },
       }
@@ -312,9 +312,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     });
 
     const upgradeBuildingsButtons = [];
-    for (const [upgradeName, upgrade] of objectEntries(
-      this._settings.addition.upgradeBuildings.items
-    )) {
+    for (const [upgradeName, upgrade] of objectEntries(this._settings.upgradeBuildings.items)) {
       const label = this._host.i18n(`$buildings.${upgradeName}.label`);
       const button = this._getOption(`building-${upgradeName}`, upgrade, label, false, false, {
         onCheck: () => {
@@ -351,17 +349,17 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
     const nodeTurnOnSteamworks = this._getOption(
       "_steamworks",
-      addition.turnOnSteamworks,
+      this._settings.turnOnSteamworks,
       this._host.i18n("option.steamworks"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (addition.turnOnSteamworks.enabled = true));
+          this._host.updateOptions(() => (this._settings.turnOnSteamworks.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("option.steamworks")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (addition.turnOnSteamworks.enabled = false));
+          this._host.updateOptions(() => (this._settings.turnOnSteamworks.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("option.steamworks")]);
         },
       }
@@ -375,16 +373,16 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       this._settings.enabled,
       this._settings.trigger,
       this._settings.items,
-      this._settings.addition.turnOnSteamworks,
-      this._settings.addition.upgradeBuildings
+      this._settings.turnOnSteamworks,
+      this._settings.upgradeBuildings
     );
   }
 
   setState(state: BonfireSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
-    this._settings.addition.upgradeBuildings.enabled = state.addition.upgradeBuildings.enabled;
-    this._settings.addition.turnOnSteamworks.enabled = state.addition.turnOnSteamworks.enabled;
+    this._settings.upgradeBuildings.enabled = state.upgradeBuildings.enabled;
+    this._settings.turnOnSteamworks.enabled = state.turnOnSteamworks.enabled;
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
@@ -392,21 +390,21 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     }
 
     // Building upgrades.
-    for (const [name, option] of objectEntries(this._settings.addition.upgradeBuildings.items)) {
-      option.enabled = state.addition.upgradeBuildings.items[name].enabled;
+    for (const [name, option] of objectEntries(this._settings.upgradeBuildings.items)) {
+      option.enabled = state.upgradeBuildings.items[name].enabled;
     }
   }
 
   refreshUi(): void {
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
-    mustExist(this._settings.addition.upgradeBuildings.$enabled).prop(
+    mustExist(this._settings.upgradeBuildings.$enabled).prop(
       "checked",
-      this._settings.addition.upgradeBuildings.enabled
+      this._settings.upgradeBuildings.enabled
     );
-    mustExist(this._settings.addition.turnOnSteamworks.$enabled).prop(
+    mustExist(this._settings.turnOnSteamworks.$enabled).prop(
       "checked",
-      this._settings.addition.turnOnSteamworks.enabled
+      this._settings.turnOnSteamworks.enabled
     );
 
     for (const [name, option] of objectEntries(this._settings.items)) {
@@ -417,10 +415,10 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     }
 
     // Building upgrades.
-    for (const [name, option] of objectEntries(this._settings.addition.upgradeBuildings.items)) {
+    for (const [name, option] of objectEntries(this._settings.upgradeBuildings.items)) {
       mustExist(option.$enabled).prop(
         "checked",
-        this._settings.addition.upgradeBuildings.items[name].enabled
+        this._settings.upgradeBuildings.items[name].enabled
       );
     }
   }

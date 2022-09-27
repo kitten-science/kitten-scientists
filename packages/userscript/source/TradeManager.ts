@@ -29,10 +29,10 @@ export class TradeManager implements Automation {
 
     this.autoTrade();
 
-    if (this.settings.addition.unlockRaces.enabled) {
+    if (this.settings.unlockRaces.enabled) {
       this.autoUnlock();
     }
-    if (this.settings.addition.buildEmbassies.enabled) {
+    if (this.settings.buildEmbassies.enabled) {
       this.autoBuildEmbassies();
     }
   }
@@ -261,7 +261,7 @@ export class TradeManager implements Automation {
     AutoEmbassy: if (this._host.gamePage.diplomacy.races[0].embassyPrices) {
       const culture = this._workshopManager.getResource("culture");
       let cultureVal = 0;
-      const trigger = this.settings.addition.buildEmbassies.trigger ?? 0;
+      const trigger = this.settings.buildEmbassies.trigger ?? 0;
       if (trigger <= culture.value / culture.maxValue) {
         const racePanels = this._host.gamePage.diplomacyTab.racePanels;
         cultureVal = this._workshopManager.getValueAvailable("culture", true);

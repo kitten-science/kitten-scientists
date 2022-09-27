@@ -31,15 +31,15 @@ export class VillageManager implements Automation {
 
     this.autoDistributeKittens();
 
-    if (this.settings.addition.hunt.enabled) {
+    if (this.settings.hunt.enabled) {
       this.autoHunt(this._cacheManager);
     }
 
-    if (this.settings.addition.holdFestivals.enabled) {
+    if (this.settings.holdFestivals.enabled) {
       this.autoFestival(this._cacheManager);
     }
 
-    if (this.settings.addition.promoteLeader.enabled) {
+    if (this.settings.promoteLeader.enabled) {
       this.autoPromote();
     }
   }
@@ -118,7 +118,7 @@ export class VillageManager implements Automation {
 
   autoHunt(cacheManager?: CacheManager) {
     const manpower = this._workshopManager.getResource("manpower");
-    const trigger = this.settings.addition.hunt.trigger ?? 0;
+    const trigger = this.settings.hunt.trigger ?? 0;
 
     if (manpower.value < 100 || this._host.gamePage.challenges.isActive("pacifism")) {
       return;

@@ -42,21 +42,11 @@ export class TradingSettingsItem extends SettingLimited {
   }
 }
 
-export type TradeAdditionSettings = {
-  buildEmbassies: SettingTrigger;
-  unlockRaces: Setting;
-};
-
 export type TradingSettingsItems = {
   [item in Race]: TradingSettingsItem;
 };
 
 export class TradingSettings extends SettingsSectionTrigger {
-  addition: TradeAdditionSettings = {
-    buildEmbassies: new SettingTrigger(true, 0),
-    unlockRaces: new Setting(true),
-  };
-
   items: TradingSettingsItems = {
     dragons: new TradingSettingsItem(true, true, true, true, true, true, "titanium"),
     zebras: new TradingSettingsItem(true, true, true, true, true, true),
@@ -67,6 +57,9 @@ export class TradingSettings extends SettingsSectionTrigger {
     spiders: new TradingSettingsItem(true, true, true, true, false, true),
     leviathans: new TradingSettingsItem(true, true, true, true, true, true, "unobtainium"),
   };
+
+  buildEmbassies: SettingTrigger;
+  unlockRaces: Setting;
 
   constructor(
     enabled = false,
@@ -87,9 +80,8 @@ export class TradingSettings extends SettingsSectionTrigger {
   ) {
     super(enabled, trigger);
     this.items = items;
-    this.addition.buildEmbassies = buildEmbassies;
-
-    this.addition.unlockRaces = unlockRaces;
+    this.buildEmbassies = buildEmbassies;
+    this.unlockRaces = unlockRaces;
   }
 
   static toLegacyOptions(settings: TradingSettings, subject: KittenStorageType) {
@@ -105,8 +97,8 @@ export class TradingSettings extends SettingsSectionTrigger {
       subject.items[`toggle-${name}-winter` as const] = item.winter;
     }
 
-    subject.items["toggle-buildEmbassies"] = settings.addition.buildEmbassies.enabled;
-    subject.items["toggle-races"] = settings.addition.unlockRaces.enabled;
+    subject.items["toggle-buildEmbassies"] = settings.buildEmbassies.enabled;
+    subject.items["toggle-races"] = settings.unlockRaces.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -123,10 +115,9 @@ export class TradingSettings extends SettingsSectionTrigger {
       item.winter = subject.items[`toggle-${name}-winter` as const] ?? item.winter;
     }
 
-    options.addition.buildEmbassies.enabled =
-      subject.items["toggle-buildEmbassies"] ?? options.addition.buildEmbassies.enabled;
-    options.addition.unlockRaces.enabled =
-      subject.items["toggle-races"] ?? options.addition.unlockRaces.enabled;
+    options.buildEmbassies.enabled =
+      subject.items["toggle-buildEmbassies"] ?? options.buildEmbassies.enabled;
+    options.unlockRaces.enabled = subject.items["toggle-races"] ?? options.unlockRaces.enabled;
 
     return options;
   }

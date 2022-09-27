@@ -1,9 +1,5 @@
 import { ResourcesSettingsItem } from "../options/ResourcesSettings";
-import {
-  CraftAdditionSettings,
-  CraftSettingsItem,
-  WorkshopSettings,
-} from "../options/WorkshopSettings";
+import { CraftSettingsItem, WorkshopSettings } from "../options/WorkshopSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { Maybe, mustExist } from "../tools/Maybe";
@@ -147,7 +143,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
 
     list.append(...this._optionButtons);
 
-    const additionOptions = this.getAdditionOptions(this._settings.addition);
+    const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
     const resourcesButton = $("<div/>", {
@@ -294,22 +290,22 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     return this._resourcesList;
   }
 
-  getAdditionOptions(addition: CraftAdditionSettings): Array<JQuery<HTMLElement>> {
+  private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
     const upgradesButton = this._getOption(
       "upgrades",
-      addition.unlockUpgrades,
+      this._settings.unlockUpgrades,
       this._host.i18n("ui.upgrade.upgrades"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (addition.unlockUpgrades.enabled = true));
+          this._host.updateOptions(() => (this._settings.unlockUpgrades.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.upgrades")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (addition.unlockUpgrades.enabled = false));
+          this._host.updateOptions(() => (this._settings.unlockUpgrades.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.upgrades")]);
         },
       }
@@ -321,9 +317,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     });
 
     const upgradeButtons = [];
-    for (const [upgradeName, upgrade] of objectEntries(
-      this._settings.addition.unlockUpgrades.items
-    )) {
+    for (const [upgradeName, upgrade] of objectEntries(this._settings.unlockUpgrades.items)) {
       const upgradeLabel = this._host.i18n(`$workshop.${upgradeName}.label`);
       const upgradeButton = this._getOption(
         `upgrade-${upgradeName}`,
@@ -365,17 +359,17 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
 
     const shipOverride = this._getOption(
       "shipOverride",
-      addition.shipOverride,
+      this._settings.shipOverride,
       this._host.i18n("option.shipOverride"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.shipOverride.enabled = true));
+          this._host.updateOptions(() => (this._settings.shipOverride.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("option.shipOverride")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.shipOverride.enabled = false));
+          this._host.updateOptions(() => (this._settings.shipOverride.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("option.shipOverride")]);
         },
       }
@@ -390,7 +384,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
       this._settings.trigger,
       this._settings.items,
       this._settings.resources,
-      this._settings.addition.unlockUpgrades
+      this._settings.unlockUpgrades
     );
   }
 
@@ -398,9 +392,9 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
 
-    this._settings.addition.unlockUpgrades.enabled = state.addition.unlockUpgrades.enabled;
-    for (const [name, option] of objectEntries(this._settings.addition.unlockUpgrades.items)) {
-      option.enabled = state.addition.unlockUpgrades.items[name].enabled;
+    this._settings.unlockUpgrades.enabled = state.unlockUpgrades.enabled;
+    for (const [name, option] of objectEntries(this._settings.unlockUpgrades.items)) {
+      option.enabled = state.unlockUpgrades.items[name].enabled;
     }
 
     for (const [name, option] of objectEntries(this._settings.items)) {
@@ -427,11 +421,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 
-    mustExist(this._settings.addition.unlockUpgrades.$enabled).prop(
+    mustExist(this._settings.unlockUpgrades.$enabled).prop(
       "checked",
-      this._settings.addition.unlockUpgrades.enabled
+      this._settings.unlockUpgrades.enabled
     );
-    for (const [, option] of objectEntries(this._settings.addition.unlockUpgrades.items)) {
+    for (const [, option] of objectEntries(this._settings.unlockUpgrades.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
     }
 

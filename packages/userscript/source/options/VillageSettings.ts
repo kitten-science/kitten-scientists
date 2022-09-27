@@ -4,19 +4,11 @@ import { Setting, SettingMax, SettingTrigger } from "./Settings";
 import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export class VillageAdditionSettings {
-  holdFestivals = new Setting(true);
-  hunt = new SettingTrigger(true, 0.98);
-  promoteLeader = new Setting(true);
-}
-
 export type VillageSettingsItems = {
   [item in Job]: SettingMax;
 };
 
 export class VillageSettings extends SettingsSection {
-  addition = new VillageAdditionSettings();
-
   items: VillageSettingsItems = {
     woodcutter: new SettingMax(true, 1),
     farmer: new SettingMax(true, 1),
@@ -27,6 +19,10 @@ export class VillageSettings extends SettingsSection {
     geologist: new SettingMax(true, 1),
     engineer: new SettingMax(true, 1),
   };
+
+  holdFestivals: Setting;
+  hunt: SettingTrigger;
+  promoteLeader: Setting;
 
   constructor(
     enabled = false,
@@ -46,9 +42,9 @@ export class VillageSettings extends SettingsSection {
   ) {
     super(enabled);
     this.items = items;
-    this.addition.holdFestivals = holdFestivals;
-    this.addition.hunt = hunt;
-    this.addition.promoteLeader = promoteLeader;
+    this.holdFestivals = holdFestivals;
+    this.hunt = hunt;
+    this.promoteLeader = promoteLeader;
   }
 
   static toLegacyOptions(settings: VillageSettings, subject: KittenStorageType) {
@@ -59,9 +55,9 @@ export class VillageSettings extends SettingsSection {
       subject.items[`set-${name}-max` as const] = item.max;
     }
 
-    subject.items["toggle-festival"] = settings.addition.holdFestivals.enabled;
-    subject.items["toggle-hunt"] = settings.addition.hunt.enabled;
-    subject.items["toggle-promote"] = settings.addition.promoteLeader.enabled;
+    subject.items["toggle-festival"] = settings.holdFestivals.enabled;
+    subject.items["toggle-hunt"] = settings.hunt.enabled;
+    subject.items["toggle-promote"] = settings.promoteLeader.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -73,11 +69,11 @@ export class VillageSettings extends SettingsSection {
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
 
-    options.addition.holdFestivals.enabled =
-      subject.items["toggle-festival"] ?? options.addition.holdFestivals.enabled;
-    options.addition.hunt.enabled = subject.items["toggle-hunt"] ?? options.addition.hunt.enabled;
-    options.addition.promoteLeader.enabled =
-      subject.items["toggle-promote"] ?? options.addition.promoteLeader.enabled;
+    options.holdFestivals.enabled =
+      subject.items["toggle-festival"] ?? options.holdFestivals.enabled;
+    options.hunt.enabled = subject.items["toggle-hunt"] ?? options.hunt.enabled;
+    options.promoteLeader.enabled =
+      subject.items["toggle-promote"] ?? options.promoteLeader.enabled;
 
     return options;
   }

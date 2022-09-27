@@ -5,20 +5,14 @@ import { SettingMax } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type SpaceAdditionSettings = {
-  unlockMissions: MissionSettings;
-};
-
 export type SpaceSettingsItems = {
   [item in SpaceBuildings]: SettingMax;
 };
 
 export class SpaceSettings extends SettingsSectionTrigger {
-  addition: SpaceAdditionSettings = {
-    unlockMissions: new MissionSettings(),
-  };
-
   items: SpaceSettingsItems;
+
+  unlockMissions: MissionSettings;
 
   constructor(
     enabled = false,
@@ -61,11 +55,11 @@ export class SpaceSettings extends SettingsSectionTrigger {
   ) {
     super(enabled, trigger);
     this.items = items;
-    this.addition.unlockMissions = unlockMissions;
+    this.unlockMissions = unlockMissions;
   }
 
   static validateGame(game: GamePage, settings: SpaceSettings) {
-    MissionSettings.validateGame(game, settings.addition.unlockMissions);
+    MissionSettings.validateGame(game, settings.unlockMissions);
   }
 
   static toLegacyOptions(settings: SpaceSettings, subject: KittenStorageType) {
@@ -77,8 +71,8 @@ export class SpaceSettings extends SettingsSectionTrigger {
       subject.items[`set-${name}-max` as const] = item.max;
     }
 
-    subject.items["toggle-missions"] = settings.addition.unlockMissions.enabled;
-    for (const [name, item] of objectEntries(settings.addition.unlockMissions.items)) {
+    subject.items["toggle-missions"] = settings.unlockMissions.enabled;
+    for (const [name, item] of objectEntries(settings.unlockMissions.items)) {
       subject.items[`toggle-mission-${name}` as const] = item.enabled;
     }
   }
@@ -93,9 +87,9 @@ export class SpaceSettings extends SettingsSectionTrigger {
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
 
-    options.addition.unlockMissions.enabled =
-      subject.items["toggle-missions"] ?? options.addition.unlockMissions.enabled;
-    for (const [name, item] of objectEntries(options.addition.unlockMissions.items)) {
+    options.unlockMissions.enabled =
+      subject.items["toggle-missions"] ?? options.unlockMissions.enabled;
+    for (const [name, item] of objectEntries(options.unlockMissions.items)) {
       item.enabled = subject.items[`toggle-mission-${name}` as const] ?? item.enabled;
     }
 

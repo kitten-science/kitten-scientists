@@ -22,24 +22,16 @@ export class CraftSettingsItem extends SettingLimitedMax {
   }
 }
 
-export type CraftAdditionSettings = {
-  shipOverride: Setting;
-  unlockUpgrades: UpgradeSettings;
-};
-
 export type WorkshopSettingsItems = {
   [item in ResourceCraftable]: CraftSettingsItem;
 };
 
 export class WorkshopSettings extends SettingsSectionTrigger {
-  addition: CraftAdditionSettings = {
-    shipOverride: new Setting(true),
-    unlockUpgrades: new UpgradeSettings(),
-  };
-
   items: WorkshopSettingsItems;
-
   resources: ResourceSettings;
+
+  shipOverride: Setting;
+  unlockUpgrades: UpgradeSettings;
 
   constructor(
     enabled = false,
@@ -74,12 +66,12 @@ export class WorkshopSettings extends SettingsSectionTrigger {
     super(enabled, trigger);
     this.items = items;
     this.resources = resources;
-    this.addition.shipOverride = shipOverride;
-    this.addition.unlockUpgrades = unlockUpgrades;
+    this.shipOverride = shipOverride;
+    this.unlockUpgrades = unlockUpgrades;
   }
 
   static validateGame(game: GamePage, settings: WorkshopSettings) {
-    UpgradeSettings.validateGame(game, settings.addition.unlockUpgrades);
+    UpgradeSettings.validateGame(game, settings.unlockUpgrades);
   }
 
   static toLegacyOptions(settings: WorkshopSettings, subject: KittenStorageType) {
@@ -101,12 +93,12 @@ export class WorkshopSettings extends SettingsSectionTrigger {
       };
     }
 
-    subject.items["toggle-upgrades"] = settings.addition.unlockUpgrades.enabled;
-    for (const [name, item] of objectEntries(settings.addition.unlockUpgrades.items)) {
+    subject.items["toggle-upgrades"] = settings.unlockUpgrades.enabled;
+    for (const [name, item] of objectEntries(settings.unlockUpgrades.items)) {
       subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
     }
 
-    subject.items["toggle-shipOverride"] = settings.addition.shipOverride.enabled;
+    subject.items["toggle-shipOverride"] = settings.shipOverride.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -128,14 +120,14 @@ export class WorkshopSettings extends SettingsSectionTrigger {
       options.resources[name] = new ResourcesSettingsItem(item.enabled, item.consume, item.stock);
     }
 
-    options.addition.unlockUpgrades.enabled =
-      subject.items["toggle-upgrades"] ?? options.addition.unlockUpgrades.enabled;
-    for (const [name, item] of objectEntries(options.addition.unlockUpgrades.items)) {
+    options.unlockUpgrades.enabled =
+      subject.items["toggle-upgrades"] ?? options.unlockUpgrades.enabled;
+    for (const [name, item] of objectEntries(options.unlockUpgrades.items)) {
       item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
     }
 
-    options.addition.shipOverride.enabled =
-      subject.items["toggle-shipOverride"] ?? options.addition.shipOverride.enabled;
+    options.shipOverride.enabled =
+      subject.items["toggle-shipOverride"] ?? options.shipOverride.enabled;
 
     return options;
   }

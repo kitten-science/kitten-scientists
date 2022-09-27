@@ -229,17 +229,17 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const nodeAdore = this._getOptionWithTrigger(
       "adore",
-      this._settings.addition.adore,
+      this._settings.adore,
       this._host.i18n("option.faith.adore"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.adore.enabled = true));
+          this._host.updateOptions(() => (this._settings.adore.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.adore")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.adore.enabled = false));
+          this._host.updateOptions(() => (this._settings.adore.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.adore")]);
         },
       }
@@ -247,17 +247,17 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const nodeAutoPraise = this._getOptionWithTrigger(
       "autoPraise",
-      this._settings.addition.autoPraise,
+      this._settings.autoPraise,
       this._host.i18n("option.praise"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.autoPraise.enabled = true));
+          this._host.updateOptions(() => (this._settings.autoPraise.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.praise")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.autoPraise.enabled = false));
+          this._host.updateOptions(() => (this._settings.autoPraise.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.praise")]);
         },
       }
@@ -265,21 +265,17 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const nodeBestUnicornBuilding = this._getOption(
       "bestUnicornBuilding",
-      this._settings.addition.bestUnicornBuilding,
+      this._settings.bestUnicornBuilding,
       this._host.i18n("option.faith.best.unicorn"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(
-            () => (this._settings.addition.bestUnicornBuilding.enabled = true)
-          );
+          this._host.updateOptions(() => (this._settings.bestUnicornBuilding.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.best.unicorn")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(
-            () => (this._settings.addition.bestUnicornBuilding.enabled = false)
-          );
+          this._host.updateOptions(() => (this._settings.bestUnicornBuilding.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.best.unicorn")]);
         },
       }
@@ -290,7 +286,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       .prop("title", this._host.i18n("option.faith.best.unicorn.desc"));
     const input = nodeBestUnicornBuilding.children("input");
     input.unbind("change");
-    const bub = this._settings.addition.bestUnicornBuilding;
+    const bub = this._settings.bestUnicornBuilding;
     input.on("change", () => {
       if (input.is(":checked") && !bub.enabled) {
         this._host.updateOptions(() => (bub.enabled = true));
@@ -319,17 +315,17 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const nodeTranscend = this._getOption(
       "transcend",
-      this._settings.addition.transcend,
+      this._settings.transcend,
       this._host.i18n("option.faith.transcend"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.transcend.enabled = true));
+          this._host.updateOptions(() => (this._settings.transcend.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.transcend")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.addition.transcend.enabled = false));
+          this._host.updateOptions(() => (this._settings.transcend.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.transcend")]);
         },
       }
@@ -343,10 +339,10 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       this._settings.enabled,
       this._settings.trigger,
       this._settings.items,
-      this._settings.addition.bestUnicornBuilding,
-      this._settings.addition.autoPraise,
-      this._settings.addition.adore,
-      this._settings.addition.transcend
+      this._settings.bestUnicornBuilding,
+      this._settings.autoPraise,
+      this._settings.adore,
+      this._settings.transcend
     );
   }
 
@@ -354,13 +350,12 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
 
-    this._settings.addition.adore.enabled = state.addition.adore.enabled;
-    this._settings.addition.adore.trigger = state.addition.adore.trigger;
-    this._settings.addition.autoPraise.enabled = state.addition.autoPraise.enabled;
-    this._settings.addition.autoPraise.trigger = state.addition.autoPraise.trigger;
-    this._settings.addition.bestUnicornBuilding.enabled =
-      state.addition.bestUnicornBuilding.enabled;
-    this._settings.addition.transcend.enabled = state.addition.transcend.enabled;
+    this._settings.adore.enabled = state.adore.enabled;
+    this._settings.adore.trigger = state.adore.trigger;
+    this._settings.autoPraise.enabled = state.autoPraise.enabled;
+    this._settings.autoPraise.trigger = state.autoPraise.trigger;
+    this._settings.bestUnicornBuilding.enabled = state.bestUnicornBuilding.enabled;
+    this._settings.transcend.enabled = state.transcend.enabled;
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
@@ -372,28 +367,22 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 
-    mustExist(this._settings.addition.adore.$enabled).prop(
+    mustExist(this._settings.adore.$enabled).prop("checked", this._settings.adore.enabled);
+    mustExist(this._settings.adore.$trigger)[0].title = this._renderPercentage(
+      this._settings.adore.trigger
+    );
+    mustExist(this._settings.autoPraise.$enabled).prop(
       "checked",
-      this._settings.addition.adore.enabled
+      this._settings.autoPraise.enabled
     );
-    mustExist(this._settings.addition.adore.$trigger)[0].title = this._renderPercentage(
-      this._settings.addition.adore.trigger
+    mustExist(this._settings.autoPraise.$trigger)[0].title = this._renderPercentage(
+      this._settings.autoPraise.trigger
     );
-    mustExist(this._settings.addition.autoPraise.$enabled).prop(
+    mustExist(this._settings.bestUnicornBuilding.$enabled).prop(
       "checked",
-      this._settings.addition.autoPraise.enabled
+      this._settings.bestUnicornBuilding.enabled
     );
-    mustExist(this._settings.addition.autoPraise.$trigger)[0].title = this._renderPercentage(
-      this._settings.addition.autoPraise.trigger
-    );
-    mustExist(this._settings.addition.bestUnicornBuilding.$enabled).prop(
-      "checked",
-      this._settings.addition.bestUnicornBuilding.enabled
-    );
-    mustExist(this._settings.addition.transcend.$enabled).prop(
-      "checked",
-      this._settings.addition.transcend.enabled
-    );
+    mustExist(this._settings.transcend.$enabled).prop("checked", this._settings.transcend.enabled);
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);

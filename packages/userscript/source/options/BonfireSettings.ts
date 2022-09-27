@@ -42,20 +42,16 @@ export class BonfireSettingsItem extends SettingMax {
   }
 }
 
-export class BonfireAdditionSettings {
-  turnOnSteamworks = new Setting(true);
-  upgradeBuildings = new BuildingUpgradeSettings();
-}
-
 export type BonfirSettingsItems = {
   // unicornPasture is handled in the Religion section.
   [item in Exclude<BonfireItem, "unicornPasture">]: BonfireSettingsItem;
 };
 
 export class BonfireSettings extends SettingsSectionTrigger {
-  addition = new BonfireAdditionSettings();
-
   items: BonfirSettingsItems;
+
+  turnOnSteamworks: Setting;
+  upgradeBuildings: BuildingUpgradeSettings;
 
   constructor(
     enabled = false,
@@ -115,8 +111,8 @@ export class BonfireSettings extends SettingsSectionTrigger {
   ) {
     super(enabled, trigger);
     this.items = items;
-    this.addition.turnOnSteamworks = turnOnSteamworks;
-    this.addition.upgradeBuildings = upgradeBuildings;
+    this.turnOnSteamworks = turnOnSteamworks;
+    this.upgradeBuildings = upgradeBuildings;
   }
 
   static toLegacyOptions(settings: BonfireSettings, subject: KittenStorageType) {
@@ -128,10 +124,10 @@ export class BonfireSettings extends SettingsSectionTrigger {
       subject.items[`set-${name}-max` as const] = item.max;
     }
 
-    subject.items["toggle-buildings"] = settings.addition.upgradeBuildings.enabled;
-    subject.items["toggle-_steamworks"] = settings.addition.turnOnSteamworks.enabled;
+    subject.items["toggle-buildings"] = settings.upgradeBuildings.enabled;
+    subject.items["toggle-_steamworks"] = settings.turnOnSteamworks.enabled;
 
-    for (const [name, item] of objectEntries(settings.addition.upgradeBuildings.items)) {
+    for (const [name, item] of objectEntries(settings.upgradeBuildings.items)) {
       subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
     }
   }
@@ -146,12 +142,12 @@ export class BonfireSettings extends SettingsSectionTrigger {
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
 
-    options.addition.upgradeBuildings.enabled =
-      subject.items["toggle-buildings"] ?? options.addition.upgradeBuildings.enabled;
-    options.addition.turnOnSteamworks.enabled =
-      subject.items["toggle-_steamworks"] ?? options.addition.turnOnSteamworks.enabled;
+    options.upgradeBuildings.enabled =
+      subject.items["toggle-buildings"] ?? options.upgradeBuildings.enabled;
+    options.turnOnSteamworks.enabled =
+      subject.items["toggle-_steamworks"] ?? options.turnOnSteamworks.enabled;
 
-    for (const [name, item] of objectEntries(options.addition.upgradeBuildings.items)) {
+    for (const [name, item] of objectEntries(options.upgradeBuildings.items)) {
       item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
     }
     return options;

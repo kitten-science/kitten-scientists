@@ -30,7 +30,7 @@ export class SpaceManager implements Automation {
 
     this.autoBuild();
 
-    if (this.settings.addition.unlockMissions.enabled) {
+    if (this.settings.unlockMissions.enabled) {
       this.autoUnlock();
     }
   }
