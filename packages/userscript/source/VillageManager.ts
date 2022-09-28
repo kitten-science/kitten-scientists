@@ -44,6 +44,10 @@ export class VillageManager implements Automation {
     }
   }
 
+  load(settings: VillageSettings) {
+    this.settings.load(settings);
+  }
+
   autoDistributeKittens() {
     const freeKittens = this._host.gamePage.village.getFreeKittens();
     if (!freeKittens) {

@@ -74,6 +74,28 @@ export class WorkshopSettings extends SettingsSectionTrigger {
     UpgradeSettings.validateGame(game, settings.unlockUpgrades);
   }
 
+  load(settings: WorkshopSettings) {
+    this.enabled = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].limited = item.limited;
+      this.items[name].max = item.max;
+    }
+
+    this.resources = {};
+    for (const [name, item] of objectEntries(settings.resources)) {
+      this.resources[name] = new ResourcesSettingsItem(item.enabled, item.consume, item.stock);
+    }
+
+    this.unlockUpgrades.enabled = settings.unlockUpgrades.enabled;
+    for (const [name, item] of objectEntries(settings.unlockUpgrades.items)) {
+      this.unlockUpgrades.items[name].enabled = item.enabled;
+    }
+
+    this.shipOverride.enabled = settings.shipOverride.enabled;
+  }
+
   static toLegacyOptions(settings: WorkshopSettings, subject: KittenStorageType) {
     subject.toggles.craft = settings.enabled;
     subject.triggers.craft = settings.trigger;

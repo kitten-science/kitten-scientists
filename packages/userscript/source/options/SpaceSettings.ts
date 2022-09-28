@@ -62,6 +62,21 @@ export class SpaceSettings extends SettingsSectionTrigger {
     MissionSettings.validateGame(game, settings.unlockMissions);
   }
 
+  load(settings: SpaceSettings) {
+    this.enabled = settings.enabled;
+    this.trigger = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].max = item.max;
+    }
+
+    this.unlockMissions.enabled = settings.unlockMissions.enabled;
+    for (const [name, item] of objectEntries(settings.unlockMissions.items)) {
+      this.unlockMissions.items[name].enabled = item.enabled;
+    }
+  }
+
   static toLegacyOptions(settings: SpaceSettings, subject: KittenStorageType) {
     subject.toggles.space = settings.enabled;
     subject.triggers.space = settings.trigger;

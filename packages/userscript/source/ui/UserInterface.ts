@@ -1,3 +1,4 @@
+import { Engine } from "../Engine";
 import { Options } from "../options/Options";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
@@ -30,30 +31,21 @@ export class UserInterface {
   private _optionsUi: OptionsSettingsUi;
   private _filterUi: FiltersSettingsUi;
 
-  constructor(host: UserScript) {
+  constructor(host: UserScript, engine: Engine) {
     this._host = host;
 
-    this._engineUi = new EngineSettingsUi(this._host, this._host.engine.settings);
-    this._bonfireUi = new BonfireSettingsUi(this._host, this._host.engine.bonfireManager.settings);
-    this._spaceUi = new SpaceSettingsUi(this._host, this._host.engine.spaceManager.settings);
-    this._craftUi = new WorkshopSettingsUi(this._host, this._host.engine.workshopManager.settings);
-    this._unlockUi = new ScienceSettingsUi(this._host, this._host.engine.scienceManager.settings);
-    this._tradingUi = new TradingSettingsUi(this._host, this._host.engine.tradingManager.settings);
-    this._religionUi = new ReligionSettingsUi(
-      this._host,
-      this._host.engine.religionManager.settings
-    );
-    this._timeUi = new TimeSettingsUi(this._host, this._host.engine.timeManager.settings);
-    this._timeCtrlUi = new TimeControlSettingsUi(
-      this._host,
-      this._host.engine.timeControlManager.settings
-    );
-    this._distributeUi = new VillageSettingsUi(
-      this._host,
-      this._host.engine.villageManager.settings
-    );
-    this._optionsUi = new OptionsSettingsUi(this._host, this._host.engine.settings.options);
-    this._filterUi = new FiltersSettingsUi(this._host, this._host.engine.settings.filters);
+    this._engineUi = new EngineSettingsUi(this._host, engine.settings);
+    this._bonfireUi = new BonfireSettingsUi(this._host, engine.bonfireManager.settings);
+    this._spaceUi = new SpaceSettingsUi(this._host, engine.spaceManager.settings);
+    this._craftUi = new WorkshopSettingsUi(this._host, engine.workshopManager.settings);
+    this._unlockUi = new ScienceSettingsUi(this._host, engine.scienceManager.settings);
+    this._tradingUi = new TradingSettingsUi(this._host, engine.tradingManager.settings);
+    this._religionUi = new ReligionSettingsUi(this._host, engine.religionManager.settings);
+    this._timeUi = new TimeSettingsUi(this._host, engine.timeManager.settings);
+    this._timeCtrlUi = new TimeControlSettingsUi(this._host, engine.timeControlManager.settings);
+    this._distributeUi = new VillageSettingsUi(this._host, engine.villageManager.settings);
+    this._optionsUi = new OptionsSettingsUi(this._host, engine.settings.options);
+    this._filterUi = new FiltersSettingsUi(this._host, engine.settings.filters);
   }
 
   construct(): void {

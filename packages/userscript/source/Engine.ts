@@ -1,5 +1,14 @@
 import { BonfireManager } from "./BonfireManager";
+import { BonfireSettings } from "./options/BonfireSettings";
 import { EngineSettings } from "./options/EngineSettings";
+import { ReligionSettings } from "./options/ReligionSettings";
+import { ScienceSettings } from "./options/ScienceSettings";
+import { SpaceSettings } from "./options/SpaceSettings";
+import { TimeControlSettings } from "./options/TimeControlSettings";
+import { TimeSettings } from "./options/TimeSettings";
+import { TradingSettings } from "./options/TradingSettings";
+import { VillageSettings } from "./options/VillageSettings";
+import { WorkshopSettings } from "./options/WorkshopSettings";
 import { ReligionManager } from "./ReligionManager";
 import { ScienceManager } from "./ScienceManager";
 import { SpaceManager } from "./SpaceManager";
@@ -22,14 +31,14 @@ export class Engine {
   readonly _host: UserScript;
   readonly settings: EngineSettings;
   readonly bonfireManager: BonfireManager;
-  readonly spaceManager: SpaceManager;
-  readonly tradingManager: TradeManager;
   readonly religionManager: ReligionManager;
+  readonly scienceManager: ScienceManager;
+  readonly spaceManager: SpaceManager;
   readonly timeControlManager: TimeControlManager;
   readonly timeManager: TimeManager;
-  readonly scienceManager: ScienceManager;
-  readonly workshopManager: WorkshopManager;
+  readonly tradingManager: TradeManager;
   readonly villageManager: VillageManager;
+  readonly workshopManager: WorkshopManager;
 
   private _intervalMainLoop: number | undefined = undefined;
 
@@ -42,18 +51,38 @@ export class Engine {
     // Very often though, key functionality of the automation of the tab is located
     // in the Engine itself. This will likely be refactored.
     this.bonfireManager = new BonfireManager(this._host);
-    this.villageManager = new VillageManager(this._host);
-    this.scienceManager = new ScienceManager(this._host);
-    this.workshopManager = new WorkshopManager(this._host);
-    this.tradingManager = new TradeManager(this._host);
     this.religionManager = new ReligionManager(this._host);
+    this.scienceManager = new ScienceManager(this._host);
+    this.spaceManager = new SpaceManager(this._host);
     this.timeControlManager = new TimeControlManager(this._host);
     this.timeManager = new TimeManager(this._host);
-    this.spaceManager = new SpaceManager(this._host);
+    this.tradingManager = new TradeManager(this._host);
+    this.villageManager = new VillageManager(this._host);
+    this.workshopManager = new WorkshopManager(this._host);
   }
 
-  load(settings: EngineSettings) {
-    this.settings = settings;
+  load(settings: {
+    engine: EngineSettings;
+    bonfire: BonfireSettings;
+    religion: ReligionSettings;
+    science: ScienceSettings;
+    space: SpaceSettings;
+    time: TimeSettings;
+    timeControl: TimeControlSettings;
+    trading: TradingSettings;
+    village: VillageSettings;
+    workshop: WorkshopSettings;
+  }) {
+    this.settings.load(settings.engine);
+    this.bonfireManager.load(settings.bonfire);
+    this.religionManager.load(settings.religion);
+    this.scienceManager.load(settings.science);
+    this.spaceManager.load(settings.space);
+    this.timeControlManager.load(settings.timeControl);
+    this.timeManager.load(settings.time);
+    this.tradingManager.load(settings.trading);
+    this.villageManager.load(settings.village);
+    this.workshopManager.load(settings.workshop);
   }
 
   /**

@@ -84,6 +84,23 @@ export class TradingSettings extends SettingsSectionTrigger {
     this.unlockRaces = unlockRaces;
   }
 
+  load(settings: TradingSettings) {
+    this.enabled = settings.enabled;
+    this.trigger = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].limited = item.limited;
+      this.items[name].autumn = item.autumn;
+      this.items[name].spring = item.spring;
+      this.items[name].summer = item.summer;
+      this.items[name].winter = item.winter;
+    }
+
+    this.buildEmbassies.enabled = settings.buildEmbassies.enabled;
+    this.unlockRaces.enabled = settings.unlockRaces.enabled;
+  }
+
   static toLegacyOptions(settings: TradingSettings, subject: KittenStorageType) {
     subject.toggles.trade = settings.enabled;
     subject.triggers.trade = settings.trigger;

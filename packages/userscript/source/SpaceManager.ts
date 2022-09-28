@@ -35,6 +35,10 @@ export class SpaceManager implements Automation {
     }
   }
 
+  load(settings: SpaceSettings) {
+    this.settings.load(settings);
+  }
+
   /**
    * Try to build as many of the passed buildings as possible.
    * Usually, this is called at each iteration of the automation engine to

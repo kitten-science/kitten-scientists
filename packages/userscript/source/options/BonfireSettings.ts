@@ -115,6 +115,23 @@ export class BonfireSettings extends SettingsSectionTrigger {
     this.upgradeBuildings = upgradeBuildings;
   }
 
+  load(settings: BonfireSettings) {
+    this.enabled = settings.enabled;
+    this.trigger = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].max = item.max;
+    }
+
+    this.turnOnSteamworks.enabled = settings.turnOnSteamworks.enabled;
+    this.upgradeBuildings.enabled = settings.upgradeBuildings.enabled;
+
+    for (const [name, item] of objectEntries(settings.upgradeBuildings.items)) {
+      this.upgradeBuildings.items[name].enabled = item.enabled;
+    }
+  }
+
   static toLegacyOptions(settings: BonfireSettings, subject: KittenStorageType) {
     subject.toggles.build = settings.enabled;
     subject.triggers.build = settings.trigger;

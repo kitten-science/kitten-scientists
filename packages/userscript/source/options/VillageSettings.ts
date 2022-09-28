@@ -47,6 +47,19 @@ export class VillageSettings extends SettingsSection {
     this.promoteLeader = promoteLeader;
   }
 
+  load(settings: VillageSettings) {
+    this.enabled = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].max = item.max;
+    }
+
+    this.holdFestivals.enabled = settings.holdFestivals.enabled;
+    this.hunt.enabled = settings.hunt.enabled;
+    this.promoteLeader.enabled = settings.promoteLeader.enabled;
+  }
+
   static toLegacyOptions(settings: VillageSettings, subject: KittenStorageType) {
     subject.toggles.distribute = settings.enabled;
 

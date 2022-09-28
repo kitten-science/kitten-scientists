@@ -37,21 +37,17 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const optionButtons = [
       this._getOptionAccelerateTime(
         "accelerateTime",
-        this._settings.items.accelerateTime,
+        this._settings.accelerateTime,
         this._host.i18n("option.accelerate")
       ),
 
       this._getOptionTimeSkip(
         "timeSkip",
-        this._settings.items.timeSkip,
+        this._settings.timeSkip,
         this._host.i18n("option.time.skip")
       ),
 
-      this._getOptionReset(
-        "reset",
-        this._settings.items.reset,
-        this._host.i18n("option.time.reset")
-      ),
+      this._getOptionReset("reset", this._settings.reset, this._host.i18n("option.time.reset")),
     ];
 
     list.append(...optionButtons);
@@ -63,7 +59,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getOptionTimeSkip(
     name: string,
-    option: TimeControlSettings["items"]["timeSkip"],
+    option: TimeControlSettings["timeSkip"],
     label: string
   ): JQuery<HTMLElement> {
     const element = this._getOptionWithTrigger(name, option, label);
@@ -159,7 +155,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getOptionReset(
     name: string,
-    option: TimeControlSettings["items"]["reset"],
+    option: TimeControlSettings["reset"],
     label: string
   ): JQuery<HTMLElement> {
     const element = this._getOption(name, option, label);
@@ -974,7 +970,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getOptionAccelerateTime(
     name: string,
-    option: TimeControlSettings["items"]["accelerateTime"],
+    option: TimeControlSettings["accelerateTime"],
     label: string
   ): JQuery<HTMLElement> {
     return this._getOptionWithTrigger(name, option, label);
@@ -982,7 +978,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getCycle(
     index: CycleIndices,
-    option: TimeControlSettings["items"]["timeSkip"]
+    option: TimeControlSettings["timeSkip"]
   ): JQuery<HTMLElement> {
     const cycle = this._host.gamePage.calendar.cycles[index];
 
@@ -1043,7 +1039,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
   private _getSeasonForTimeSkip(
     season: Season,
-    option: TimeControlSettings["items"]["timeSkip"]
+    option: TimeControlSettings["timeSkip"]
   ): JQuery<HTMLElement> {
     const iseason = ucfirst(this._host.i18n(`$calendar.season.${season}` as const));
 
@@ -1133,36 +1129,36 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       this._settings.spaceItems,
       this._settings.timeItems,
       this._settings.resources,
-      this._settings.items.accelerateTime,
-      this._settings.items.timeSkip,
-      this._settings.items.reset
+      this._settings.accelerateTime,
+      this._settings.timeSkip,
+      this._settings.reset
     );
   }
 
   setState(state: TimeControlSettings): void {
     this._settings.enabled = state.enabled;
 
-    this._settings.items.accelerateTime.enabled = state.items.accelerateTime.enabled;
-    this._settings.items.accelerateTime.trigger = state.items.accelerateTime.trigger;
+    this._settings.accelerateTime.enabled = state.accelerateTime.enabled;
+    this._settings.accelerateTime.trigger = state.accelerateTime.trigger;
 
-    this._settings.items.reset.enabled = state.items.reset.enabled;
+    this._settings.reset.enabled = state.reset.enabled;
 
-    this._settings.items.timeSkip.enabled = state.items.timeSkip.enabled;
-    this._settings.items.timeSkip.trigger = state.items.timeSkip.trigger;
-    this._settings.items.timeSkip.autumn = state.items.timeSkip.autumn;
-    this._settings.items.timeSkip.spring = state.items.timeSkip.spring;
-    this._settings.items.timeSkip.summer = state.items.timeSkip.summer;
-    this._settings.items.timeSkip.winter = state.items.timeSkip.winter;
-    this._settings.items.timeSkip[0] = state.items.timeSkip[0];
-    this._settings.items.timeSkip[1] = state.items.timeSkip[1];
-    this._settings.items.timeSkip[2] = state.items.timeSkip[2];
-    this._settings.items.timeSkip[3] = state.items.timeSkip[3];
-    this._settings.items.timeSkip[4] = state.items.timeSkip[4];
-    this._settings.items.timeSkip[5] = state.items.timeSkip[5];
-    this._settings.items.timeSkip[6] = state.items.timeSkip[6];
-    this._settings.items.timeSkip[7] = state.items.timeSkip[7];
-    this._settings.items.timeSkip[8] = state.items.timeSkip[8];
-    this._settings.items.timeSkip[9] = state.items.timeSkip[9];
+    this._settings.timeSkip.enabled = state.timeSkip.enabled;
+    this._settings.timeSkip.trigger = state.timeSkip.trigger;
+    this._settings.timeSkip.autumn = state.timeSkip.autumn;
+    this._settings.timeSkip.spring = state.timeSkip.spring;
+    this._settings.timeSkip.summer = state.timeSkip.summer;
+    this._settings.timeSkip.winter = state.timeSkip.winter;
+    this._settings.timeSkip[0] = state.timeSkip[0];
+    this._settings.timeSkip[1] = state.timeSkip[1];
+    this._settings.timeSkip[2] = state.timeSkip[2];
+    this._settings.timeSkip[3] = state.timeSkip[3];
+    this._settings.timeSkip[4] = state.timeSkip[4];
+    this._settings.timeSkip[5] = state.timeSkip[5];
+    this._settings.timeSkip[6] = state.timeSkip[6];
+    this._settings.timeSkip[7] = state.timeSkip[7];
+    this._settings.timeSkip[8] = state.timeSkip[8];
+    this._settings.timeSkip[9] = state.timeSkip[9];
 
     for (const [name, option] of objectEntries(this._settings.buildItems)) {
       option.enabled = state.buildItems[name].enabled;
@@ -1227,52 +1223,34 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   refreshUi(): void {
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
 
-    mustExist(this._settings.items.accelerateTime.$enabled).prop(
+    mustExist(this._settings.accelerateTime.$enabled).prop(
       "checked",
-      this._settings.items.accelerateTime.enabled
+      this._settings.accelerateTime.enabled
     );
-    mustExist(this._settings.items.accelerateTime.$trigger)[0].title = this._renderPercentage(
-      this._settings.items.accelerateTime.trigger
+    mustExist(this._settings.accelerateTime.$trigger)[0].title = this._renderPercentage(
+      this._settings.accelerateTime.trigger
     );
 
-    mustExist(this._settings.items.reset.$enabled).prop(
-      "checked",
-      this._settings.items.reset.enabled
-    );
+    mustExist(this._settings.reset.$enabled).prop("checked", this._settings.reset.enabled);
 
-    mustExist(this._settings.items.timeSkip.$enabled).prop(
-      "checked",
-      this._settings.items.timeSkip.enabled
+    mustExist(this._settings.timeSkip.$enabled).prop("checked", this._settings.timeSkip.enabled);
+    mustExist(this._settings.timeSkip.$trigger)[0].title = this._renderPercentage(
+      this._settings.timeSkip.trigger
     );
-    mustExist(this._settings.items.timeSkip.$trigger)[0].title = this._renderPercentage(
-      this._settings.items.timeSkip.trigger
-    );
-    mustExist(this._settings.items.timeSkip.$autumn).prop(
-      "checked",
-      this._settings.items.timeSkip.autumn
-    );
-    mustExist(this._settings.items.timeSkip.$spring).prop(
-      "checked",
-      this._settings.items.timeSkip.spring
-    );
-    mustExist(this._settings.items.timeSkip.$summer).prop(
-      "checked",
-      this._settings.items.timeSkip.summer
-    );
-    mustExist(this._settings.items.timeSkip.$winter).prop(
-      "checked",
-      this._settings.items.timeSkip.winter
-    );
-    mustExist(this._settings.items.timeSkip.$0).prop("checked", this._settings.items.timeSkip[0]);
-    mustExist(this._settings.items.timeSkip.$1).prop("checked", this._settings.items.timeSkip[1]);
-    mustExist(this._settings.items.timeSkip.$2).prop("checked", this._settings.items.timeSkip[2]);
-    mustExist(this._settings.items.timeSkip.$3).prop("checked", this._settings.items.timeSkip[3]);
-    mustExist(this._settings.items.timeSkip.$4).prop("checked", this._settings.items.timeSkip[4]);
-    mustExist(this._settings.items.timeSkip.$5).prop("checked", this._settings.items.timeSkip[5]);
-    mustExist(this._settings.items.timeSkip.$6).prop("checked", this._settings.items.timeSkip[6]);
-    mustExist(this._settings.items.timeSkip.$7).prop("checked", this._settings.items.timeSkip[7]);
-    mustExist(this._settings.items.timeSkip.$8).prop("checked", this._settings.items.timeSkip[8]);
-    mustExist(this._settings.items.timeSkip.$9).prop("checked", this._settings.items.timeSkip[9]);
+    mustExist(this._settings.timeSkip.$autumn).prop("checked", this._settings.timeSkip.autumn);
+    mustExist(this._settings.timeSkip.$spring).prop("checked", this._settings.timeSkip.spring);
+    mustExist(this._settings.timeSkip.$summer).prop("checked", this._settings.timeSkip.summer);
+    mustExist(this._settings.timeSkip.$winter).prop("checked", this._settings.timeSkip.winter);
+    mustExist(this._settings.timeSkip.$0).prop("checked", this._settings.timeSkip[0]);
+    mustExist(this._settings.timeSkip.$1).prop("checked", this._settings.timeSkip[1]);
+    mustExist(this._settings.timeSkip.$2).prop("checked", this._settings.timeSkip[2]);
+    mustExist(this._settings.timeSkip.$3).prop("checked", this._settings.timeSkip[3]);
+    mustExist(this._settings.timeSkip.$4).prop("checked", this._settings.timeSkip[4]);
+    mustExist(this._settings.timeSkip.$5).prop("checked", this._settings.timeSkip[5]);
+    mustExist(this._settings.timeSkip.$6).prop("checked", this._settings.timeSkip[6]);
+    mustExist(this._settings.timeSkip.$7).prop("checked", this._settings.timeSkip[7]);
+    mustExist(this._settings.timeSkip.$8).prop("checked", this._settings.timeSkip[8]);
+    mustExist(this._settings.timeSkip.$9).prop("checked", this._settings.timeSkip[9]);
 
     for (const [name, option] of objectEntries(this._settings.buildItems)) {
       mustExist(option.$enabled).prop("checked", this._settings.buildItems[name].enabled);

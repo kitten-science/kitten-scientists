@@ -36,6 +36,10 @@ export class TimeManager {
     this.autoBuild();
   }
 
+  load(settings: TimeSettings) {
+    this.settings.load(settings);
+  }
+
   /**
    * Try to build as many of the passed buildings as possible.
    * Usually, this is called at each iteration of the automation engine to

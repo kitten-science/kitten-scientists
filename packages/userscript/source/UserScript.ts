@@ -7,10 +7,17 @@ import {
 } from "./ActivitySummary";
 import { Engine } from "./Engine";
 import i18nData from "./i18n/i18nData.json";
+import { BonfireSettings } from "./options/BonfireSettings";
+import { EngineSettings } from "./options/EngineSettings";
 import { Options } from "./options/Options";
+import { ReligionSettings } from "./options/ReligionSettings";
 import { ScienceSettings } from "./options/ScienceSettings";
-import { SettingsStorage } from "./options/SettingsStorage";
+import { KittenStorageType, SettingsStorage } from "./options/SettingsStorage";
 import { SpaceSettings } from "./options/SpaceSettings";
+import { TimeControlSettings } from "./options/TimeControlSettings";
+import { TimeSettings } from "./options/TimeSettings";
+import { TradingSettings } from "./options/TradingSettings";
+import { VillageSettings } from "./options/VillageSettings";
 import { WorkshopSettings } from "./options/WorkshopSettings";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
@@ -20,7 +27,6 @@ import { UserInterface } from "./ui/UserInterface";
 
 declare global {
   const KG_SAVEGAME: string | null;
-  const KS_SETTINGS: string | null;
   const KS_VERSION: string | null;
   let unsafeWindow: Window | undefined;
   const dojo: {
@@ -76,8 +82,8 @@ export class UserScript {
 
     this._i18nData = i18nData;
 
-    this._userInterface = new UserInterface(this);
     this.engine = new Engine(this);
+    this._userInterface = new UserInterface(this, this.engine);
 
     this._userInterface.construct();
     this.injectOptions(new Options());
@@ -130,8 +136,22 @@ export class UserScript {
    */
   injectOptions(options: Options): void {
     this.options = options;
-    this._userInterface?.setState(this.options);
     this.refreshUi();
+  }
+
+  loadLegacyOptions(source: KittenStorageType) {
+    this.engine.load({
+      bonfire: BonfireSettings.fromLegacyOptions(source),
+      engine: EngineSettings.fromLegacyOptions(source),
+      religion: ReligionSettings.fromLegacyOptions(source),
+      science: ScienceSettings.fromLegacyOptions(source),
+      space: SpaceSettings.fromLegacyOptions(source),
+      time: TimeSettings.fromLegacyOptions(source),
+      timeControl: TimeControlSettings.fromLegacyOptions(source),
+      trading: TradingSettings.fromLegacyOptions(source),
+      village: VillageSettings.fromLegacyOptions(source),
+      workshop: WorkshopSettings.fromLegacyOptions(source),
+    });
   }
 
   /**

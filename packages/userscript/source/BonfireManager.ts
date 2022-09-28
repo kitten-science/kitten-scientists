@@ -34,6 +34,10 @@ export class BonfireManager implements Automation {
     this.autoMisc();
   }
 
+  load(settings: BonfireSettings) {
+    this.settings.load(settings);
+  }
+
   /**
    * Try to build as many of the passed buildings as possible.
    * Usually, this is called at each iteration of the automation engine to

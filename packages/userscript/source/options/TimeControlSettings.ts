@@ -254,15 +254,9 @@ export class TimeControlSettings extends SettingsSection {
 
   resources: TimeControlResourceSettingItems = {};
 
-  items: {
-    accelerateTime: SettingTrigger;
-    timeSkip: TimeControlTimeSkipSettings;
-    reset: Setting;
-  } = {
-    accelerateTime: new SettingTrigger(true, 1),
-    timeSkip: new TimeControlTimeSkipSettings(),
-    reset: new Setting(false),
-  };
+  accelerateTime: SettingTrigger;
+  timeSkip: TimeControlTimeSkipSettings;
+  reset: Setting;
 
   constructor(
     enabled = false,
@@ -453,29 +447,71 @@ export class TimeControlSettings extends SettingsSection {
     this.spaceItems = spaceItems;
     this.timeItems = timeItems;
     this.resources = resources;
-    this.items.accelerateTime = accelerateTime;
-    this.items.timeSkip = timeSkip;
-    this.items.reset = reset;
+    this.accelerateTime = accelerateTime;
+    this.timeSkip = timeSkip;
+    this.reset = reset;
+  }
+
+  load(settings: TimeControlSettings) {
+    this.enabled = settings.enabled;
+
+    this.accelerateTime.enabled = settings.accelerateTime.enabled;
+    this.timeSkip.enabled = settings.timeSkip.enabled;
+    this.reset.enabled = settings.reset.enabled;
+
+    this.accelerateTime.trigger = settings.accelerateTime.trigger;
+
+    this.timeSkip.trigger = settings.timeSkip.trigger;
+    this.timeSkip.autumn = settings.timeSkip.autumn;
+    this.timeSkip.spring = settings.timeSkip.spring;
+    this.timeSkip.summer = settings.timeSkip.summer;
+    this.timeSkip.winter = settings.timeSkip.winter;
+
+    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
+      this.timeSkip[cycleIndex as CycleIndices] = settings.timeSkip[cycleIndex as CycleIndices];
+    }
+
+    for (const [name, item] of objectEntries(this.buildItems)) {
+      item.enabled = settings.buildItems[name].enabled;
+      item.trigger = settings.buildItems[name].trigger;
+    }
+    for (const [name, item] of objectEntries(this.religionItems)) {
+      item.enabled = settings.religionItems[name].enabled;
+      item.trigger = settings.religionItems[name].trigger;
+    }
+    for (const [name, item] of objectEntries(this.spaceItems)) {
+      item.enabled = settings.spaceItems[name].enabled;
+      item.trigger = settings.spaceItems[name].trigger;
+    }
+    for (const [name, item] of objectEntries(this.timeItems)) {
+      item.enabled = settings.timeItems[name].enabled;
+      item.trigger = settings.timeItems[name].trigger;
+    }
+
+    this.resources = {};
+    for (const [name, item] of objectEntries(settings.resources)) {
+      this.resources[name] = new TimeControlResourcesSettingsItem(item.enabled, item.stock);
+    }
   }
 
   static toLegacyOptions(settings: TimeControlSettings, subject: KittenStorageType) {
     subject.toggles.timeCtrl = settings.enabled;
 
-    subject.items["toggle-accelerateTime"] = settings.items.accelerateTime.enabled;
-    subject.items["set-accelerateTime-trigger"] = settings.items.accelerateTime.trigger;
+    subject.items["toggle-accelerateTime"] = settings.accelerateTime.enabled;
+    subject.items["set-accelerateTime-trigger"] = settings.accelerateTime.trigger;
 
-    subject.items["toggle-reset"] = settings.items.reset.enabled;
+    subject.items["toggle-reset"] = settings.reset.enabled;
 
-    subject.items["toggle-timeSkip"] = settings.items.timeSkip.enabled;
-    subject.items["set-timeSkip-trigger"] = settings.items.timeSkip.trigger;
-    subject.items["toggle-timeSkip-autumn"] = settings.items.timeSkip.autumn;
-    subject.items["toggle-timeSkip-spring"] = settings.items.timeSkip.spring;
-    subject.items["toggle-timeSkip-summer"] = settings.items.timeSkip.summer;
-    subject.items["toggle-timeSkip-winter"] = settings.items.timeSkip.winter;
+    subject.items["toggle-timeSkip"] = settings.timeSkip.enabled;
+    subject.items["set-timeSkip-trigger"] = settings.timeSkip.trigger;
+    subject.items["toggle-timeSkip-autumn"] = settings.timeSkip.autumn;
+    subject.items["toggle-timeSkip-spring"] = settings.timeSkip.spring;
+    subject.items["toggle-timeSkip-summer"] = settings.timeSkip.summer;
+    subject.items["toggle-timeSkip-winter"] = settings.timeSkip.winter;
 
     for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
       subject.items[`toggle-timeSkip-${cycleIndex as CycleIndices}` as const] =
-        settings.items.timeSkip[cycleIndex as CycleIndices];
+        settings.timeSkip[cycleIndex as CycleIndices];
     }
 
     for (const [name, item] of objectEntries(settings.buildItems)) {
@@ -509,34 +545,25 @@ export class TimeControlSettings extends SettingsSection {
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new TimeControlSettings();
     options.enabled = subject.toggles.timeCtrl;
-    for (const [name, item] of objectEntries(options.items)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-    }
 
-    options.items.accelerateTime.enabled =
-      subject.items["toggle-accelerateTime"] ?? options.items.accelerateTime.enabled;
-    options.items.accelerateTime.trigger =
-      subject.items["set-accelerateTime-trigger"] ?? options.items.accelerateTime.trigger;
+    options.accelerateTime.enabled =
+      subject.items["toggle-accelerateTime"] ?? options.accelerateTime.enabled;
+    options.timeSkip.enabled = subject.items["toggle-timeSkip"] ?? options.timeSkip.enabled;
+    options.reset.enabled = subject.items["toggle-reset"] ?? options.reset.enabled;
 
-    options.items.reset.enabled = subject.items["toggle-reset"] ?? options.items.reset.enabled;
+    options.accelerateTime.trigger =
+      subject.items["set-accelerateTime-trigger"] ?? options.accelerateTime.trigger;
 
-    options.items.timeSkip.enabled =
-      subject.items["toggle-timeSkip"] ?? options.items.timeSkip.enabled;
-    options.items.timeSkip.trigger =
-      subject.items["set-timeSkip-trigger"] ?? options.items.timeSkip.trigger;
-    options.items.timeSkip.autumn =
-      subject.items["toggle-timeSkip-autumn"] ?? options.items.timeSkip.autumn;
-    options.items.timeSkip.spring =
-      subject.items["toggle-timeSkip-spring"] ?? options.items.timeSkip.spring;
-    options.items.timeSkip.summer =
-      subject.items["toggle-timeSkip-summer"] ?? options.items.timeSkip.summer;
-    options.items.timeSkip.winter =
-      subject.items["toggle-timeSkip-winter"] ?? options.items.timeSkip.winter;
+    options.timeSkip.trigger = subject.items["set-timeSkip-trigger"] ?? options.timeSkip.trigger;
+    options.timeSkip.autumn = subject.items["toggle-timeSkip-autumn"] ?? options.timeSkip.autumn;
+    options.timeSkip.spring = subject.items["toggle-timeSkip-spring"] ?? options.timeSkip.spring;
+    options.timeSkip.summer = subject.items["toggle-timeSkip-summer"] ?? options.timeSkip.summer;
+    options.timeSkip.winter = subject.items["toggle-timeSkip-winter"] ?? options.timeSkip.winter;
 
     for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
-      options.items.timeSkip[cycleIndex as CycleIndices] =
+      options.timeSkip[cycleIndex as CycleIndices] =
         subject.items[`toggle-timeSkip-${cycleIndex as CycleIndices}` as const] ??
-        options.items.timeSkip[cycleIndex as CycleIndices];
+        options.timeSkip[cycleIndex as CycleIndices];
     }
 
     for (const [name, item] of objectEntries(options.buildItems)) {

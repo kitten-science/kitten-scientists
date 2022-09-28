@@ -40,6 +40,22 @@ export class OptionsSettings extends SettingsSection {
     this.items.fixCry = fixCry;
   }
 
+  load(settings: OptionsSettings) {
+    this.enabled = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].trigger = item.trigger;
+    }
+  }
+
+  static toLegacyOptions(settings: OptionsSettings, subject: KittenStorageType) {
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`set-${name}-trigger` as const] = item.trigger;
+    }
+  }
+
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new OptionsSettings();
     options.enabled = subject.toggles.options;

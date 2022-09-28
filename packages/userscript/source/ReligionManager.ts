@@ -45,6 +45,10 @@ export class ReligionManager implements Automation {
     this.autoWorship();
   }
 
+  load(settings: ReligionSettings) {
+    this.settings.load(settings);
+  }
+
   autoWorship() {
     const IS_BUILD_BEST_BUILDING_STILL_BROKEN = true;
 

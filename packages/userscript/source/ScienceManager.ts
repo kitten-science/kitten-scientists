@@ -27,13 +27,17 @@ export class ScienceManager extends UpgradeManager {
     }
 
     // If techs (science items) are enabled...
-    if (this.settings.items.techs.enabled && this._host.gamePage.tabs[2].visible) {
+    if (this.settings.techs.enabled && this._host.gamePage.tabs[2].visible) {
       await this.autoUnlock();
     }
 
-    if (this.settings.items.policies.enabled && this._host.gamePage.tabs[2].visible) {
+    if (this.settings.policies.enabled && this._host.gamePage.tabs[2].visible) {
       await this.autoPolicy();
     }
+  }
+
+  load(settings: ScienceSettings) {
+    this.settings.load(settings);
   }
 
   async autoUnlock() {
@@ -42,7 +46,7 @@ export class ScienceManager extends UpgradeManager {
     const techs = this._host.gamePage.science.techs;
     const toUnlock = new Array<TechInfo>();
 
-    workLoop: for (const [item, options] of objectEntries(this.settings.items.techs.items)) {
+    workLoop: for (const [item, options] of objectEntries(this.settings.techs.items)) {
       if (!options.enabled) {
         continue;
       }
@@ -79,7 +83,7 @@ export class ScienceManager extends UpgradeManager {
     const policies = this._host.gamePage.science.policies;
     const toUnlock = new Array<PolicyInfo>();
 
-    for (const [item, options] of objectEntries(this.settings.items.policies.items)) {
+    for (const [item, options] of objectEntries(this.settings.policies.items)) {
       if (!options.enabled) {
         continue;
       }

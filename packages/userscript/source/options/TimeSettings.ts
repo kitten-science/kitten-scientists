@@ -51,6 +51,15 @@ export class TimeSettings extends SettingsSectionTrigger {
     this.items = items;
   }
 
+  load(settings: TimeSettings) {
+    this.enabled = settings.enabled;
+    this.trigger = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+    }
+  }
+
   static toLegacyOptions(settings: TimeSettings, subject: KittenStorageType) {
     subject.toggles.time = settings.enabled;
     subject.triggers.time = settings.trigger;

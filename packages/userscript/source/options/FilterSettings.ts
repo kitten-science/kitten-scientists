@@ -84,6 +84,14 @@ export class FilterSettings extends SettingsSection {
     this.items = items;
   }
 
+  load(settings: FilterSettings) {
+    this.enabled = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+    }
+  }
+
   static toLegacyOptions(settings: FilterSettings, subject: KittenStorageType) {
     subject.toggles.filter = settings.enabled;
 

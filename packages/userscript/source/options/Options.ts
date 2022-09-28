@@ -1,4 +1,3 @@
-import { objectEntries } from "../tools/Entries";
 import { isNil } from "../tools/Maybe";
 import { Resource, SpaceBuildings } from "../types";
 import { BonfireItem, BonfireSettings } from "./BonfireSettings";
@@ -89,12 +88,7 @@ export class Options {
     WorkshopSettings.toLegacyOptions(optionsObject.auto.craft, subject);
     VillageSettings.toLegacyOptions(optionsObject.auto.village, subject);
     FilterSettings.toLegacyOptions(optionsObject.auto.filters, subject);
-
-    for (const [name, item] of objectEntries(optionsObject.auto.options.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`set-${name}-trigger` as const] = item.trigger;
-    }
-
+    OptionsSettings.toLegacyOptions(optionsObject.auto.options, subject);
     ReligionSettings.toLegacyOptions(optionsObject.auto.religion, subject);
     ScienceSettings.toLegacyOptions(optionsObject.auto.unlock, subject);
     SpaceSettings.toLegacyOptions(optionsObject.auto.space, subject);

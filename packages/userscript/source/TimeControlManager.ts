@@ -43,6 +43,10 @@ export class TimeControlManager {
     return this.autoReset(this._host.engine);
   }
 
+  load(settings: TimeControlSettings) {
+    this.settings.load(settings);
+  }
+
   async autoReset(engine: Engine) {
     // Don't reset if there's a challenge running.
     if (this._host.gamePage.challenges.currentChallenge) {
@@ -236,7 +240,7 @@ export class TimeControlManager {
           !(
             this._host.engine.settings.enabled &&
             this.settings.enabled &&
-            this.settings.items.reset.enabled
+            this.settings.reset.enabled
           )
         ) {
           reject(new Error("canceled by player"));
@@ -306,7 +310,7 @@ export class TimeControlManager {
   }
 
   autoTimeControl() {
-    const optionVals = this.settings.items;
+    const optionVals = this.settings;
 
     // Tempus Fugit
     // If it's enabled and we have enough Temporal Flux to reach the trigger,

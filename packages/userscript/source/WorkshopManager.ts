@@ -36,6 +36,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     }
   }
 
+  load(settings: WorkshopSettings) {
+    this.settings.load(settings);
+  }
+
   async autoUnlock() {
     if (!this._host.gamePage.tabs[3].visible) {
       return;

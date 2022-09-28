@@ -37,6 +37,10 @@ export class TradeManager implements Automation {
     }
   }
 
+  load(settings: TradingSettings) {
+    this.settings.load(settings);
+  }
+
   autoTrade(cacheManager?: CacheManager) {
     const catpower = this._workshopManager.getResource("manpower");
     const gold = this._workshopManager.getResource("gold");

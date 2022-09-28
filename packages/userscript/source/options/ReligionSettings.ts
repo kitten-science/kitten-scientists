@@ -142,6 +142,23 @@ export class ReligionSettings extends SettingsSectionTrigger {
     this.transcend = transcend;
   }
 
+  load(settings: ReligionSettings) {
+    this.enabled = settings.enabled;
+    this.trigger = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].max = item.max;
+    }
+
+    this.adore.enabled = settings.adore.enabled;
+    this.autoPraise.enabled = settings.autoPraise.enabled;
+    this.bestUnicornBuilding.enabled = settings.bestUnicornBuilding.enabled;
+    this.transcend.enabled = settings.transcend.enabled;
+    this.adore.trigger = settings.adore.trigger;
+    this.autoPraise.trigger = settings.autoPraise.trigger;
+  }
+
   static toLegacyOptions(settings: ReligionSettings, subject: KittenStorageType) {
     subject.toggles.faith = settings.enabled;
     subject.triggers.faith = settings.trigger;
@@ -172,16 +189,12 @@ export class ReligionSettings extends SettingsSectionTrigger {
 
     // Load remaining religion settings.
     options.adore.enabled = subject.items["toggle-adore"] ?? options.adore.enabled;
-
     options.autoPraise.enabled = subject.items["toggle-autoPraise"] ?? options.autoPraise.enabled;
-
     options.bestUnicornBuilding.enabled =
       subject.items["toggle-bestUnicornBuilding"] ?? options.bestUnicornBuilding.enabled;
-
     options.transcend.enabled = subject.items["toggle-transcend"] ?? options.transcend.enabled;
 
     options.adore.trigger = subject.items["set-adore-trigger"] ?? options.adore.trigger;
-
     options.autoPraise.trigger =
       subject.items["set-autoPraise-trigger"] ?? options.autoPraise.trigger;
 
