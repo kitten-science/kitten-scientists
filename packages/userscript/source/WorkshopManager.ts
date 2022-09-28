@@ -102,10 +102,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       const current = !craft.max ? false : this.getResource(name);
       // The resource information for the requirement of this craft, if any.
       const require = !craft.require ? false : this.getResource(craft.require);
+      const max = craft.max === -1 ? Number.POSITIVE_INFINITY : craft.max;
       let amount = 0;
       // Ensure that we have reached our cap
-      // This will never happen as `current` is always `false`.
-      if (current && current.value > craft.max) continue;
+      if (current && current.value > max) continue;
 
       // If we can't even craft a single item of the resource, skip it.
       if (!this.singleCraftPossible(name)) {
