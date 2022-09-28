@@ -1,8 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { Building } from "../types";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
-import { Requirement } from "./Options";
-import { Setting, SettingMax } from "./Settings";
+import { Requirement, Setting, SettingMax } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 

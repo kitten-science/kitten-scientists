@@ -5,7 +5,7 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
+export class TimeSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: TimeSettings;
@@ -97,10 +97,6 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     this.element = element.panel;
   }
 
-  getState(): TimeSettings {
-    return new TimeSettings(this._settings.enabled, this._settings.trigger, this._settings.items);
-  }
-
   setState(state: TimeSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
@@ -111,6 +107,8 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 

@@ -5,7 +5,7 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
+export class ScienceSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: ScienceSettings;
@@ -163,14 +163,6 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
     this.element = element.panel;
   }
 
-  getState(): ScienceSettings {
-    return new ScienceSettings(
-      this._settings.enabled,
-      this._settings.policies,
-      this._settings.techs
-    );
-  }
-
   setState(state: ScienceSettings): void {
     this._settings.enabled = state.enabled;
 
@@ -189,6 +181,8 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
 
     mustExist(this._settings.policies.$enabled).prop("checked", this._settings.policies.enabled);

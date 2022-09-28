@@ -84,9 +84,8 @@ export class UserScript {
 
     this.engine = new Engine(this);
     this._userInterface = new UserInterface(this, this.engine);
-
     this._userInterface.construct();
-    this.injectOptions(new Options());
+    this._userInterface.refreshUi();
 
     this._activitySummary = new ActivitySummary(this);
 
@@ -129,16 +128,6 @@ export class UserScript {
     this._userInterface.refreshUi();
   }
 
-  /**
-   * Inject a different set of settings into the userscript.
-   *
-   * @param options The settings to use for the scientists.
-   */
-  injectOptions(options: Options): void {
-    this.options = options;
-    this.refreshUi();
-  }
-
   loadLegacyOptions(source: KittenStorageType) {
     this.engine.load({
       bonfire: BonfireSettings.fromLegacyOptions(source),
@@ -159,12 +148,11 @@ export class UserScript {
    *
    * @param updater A function that will manipulate the settings before they're saved.
    */
-  updateOptions(updater?: (currentOptions: Options) => void): void {
+  updateOptions(updater?: () => void): void {
     cdebug("Settings will be updated.");
     if (updater) {
-      updater(this.options);
+      updater();
     }
-    this.options = this._userInterface?.getState();
     this._optionsDirty = true;
   }
 
@@ -176,7 +164,19 @@ export class UserScript {
 
   saveSettings() {
     this._optionsDirty = false;
-    const toExport = this.options.asLegacyOptions();
+
+    const toExport = Options.asLegacyOptions({
+      bonfire: this.engine.bonfireManager.settings,
+      engine: this.engine.settings,
+      religion: this.engine.religionManager.settings,
+      science: this.engine.scienceManager.settings,
+      space: this.engine.spaceManager.settings,
+      time: this.engine.timeManager.settings,
+      timeControl: this.engine.timeControlManager.settings,
+      trading: this.engine.tradingManager.settings,
+      village: this.engine.villageManager.settings,
+      workshop: this.engine.workshopManager.settings,
+    });
     SettingsStorage.setLegacySettings(toExport);
     clog("Kitten Scientists settings saved.");
   }

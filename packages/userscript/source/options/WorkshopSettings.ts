@@ -1,8 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage, ResourceCraftable } from "../types";
-import { Requirement } from "./Options";
 import { ResourceSettings, ResourcesSettingsItem } from "./ResourcesSettings";
-import { Setting, SettingLimitedMax } from "./Settings";
+import { Requirement, Setting, SettingLimitedMax } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";

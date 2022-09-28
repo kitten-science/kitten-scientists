@@ -4,7 +4,7 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
+export class EngineSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: EngineSettings;
@@ -50,15 +50,13 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
     this.element = element;
   }
 
-  getState(): EngineSettings {
-    return new EngineSettings(this._settings.enabled);
-  }
-
   setState(state: EngineSettings): void {
     this._settings.enabled = state.enabled;
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
   }
 }

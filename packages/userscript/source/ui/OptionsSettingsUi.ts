@@ -6,7 +6,7 @@ import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
+export class OptionsSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: OptionsSettings;
@@ -67,16 +67,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
       : this._getOption(name, option, iname);
   }
 
-  getState(): OptionsSettings {
-    return new OptionsSettings(
-      this._settings.enabled,
-      this._settings.items.observe,
-      this._settings.items.autofeed,
-      this._settings.items.crypto,
-      this._settings.items.fixCry
-    );
-  }
-
   setState(state: OptionsSettings): void {
     this._settings.enabled = state.enabled;
 
@@ -90,6 +80,8 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
 
     for (const [name, option] of objectEntries(this._settings.items)) {

@@ -6,12 +6,12 @@ import {
 } from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { isNil, Maybe, mustExist } from "../tools/Maybe";
+import { Maybe, mustExist } from "../tools/Maybe";
 import { Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings> {
+export class TimeControlSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: TimeControlSettings;
@@ -1121,20 +1121,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     return this._resourcesList;
   }
 
-  getState(): TimeControlSettings {
-    return new TimeControlSettings(
-      this._settings.enabled,
-      this._settings.buildItems,
-      this._settings.religionItems,
-      this._settings.spaceItems,
-      this._settings.timeItems,
-      this._settings.resources,
-      this._settings.accelerateTime,
-      this._settings.timeSkip,
-      this._settings.reset
-    );
-  }
-
   setState(state: TimeControlSettings): void {
     this._settings.enabled = state.enabled;
 
@@ -1177,50 +1163,24 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       option.trigger = state.timeItems[name].trigger;
     }
 
-    // Resources are a dynamic list. We first do a primitive dirty check,
-    // then simply replace our entire stored list, if the state is dirty.
-    if (
-      Object.keys(this._settings.resources).length !== Object.keys(state.resources).length ||
-      objectEntries(this._settings.resources).some(
-        ([name, resource]) =>
-          resource.enabled !== state.resources[name]?.enabled ||
-          resource.stock !== state.resources[name]?.stock
-      )
-    ) {
-      // Remove existing elements.
-      for (const [, resource] of objectEntries(this._settings.resources)) {
-        if (!isNil(resource.$enabled)) {
-          resource.$enabled.remove();
-          resource.$enabled = undefined;
-        }
-        if (!isNil(resource.$stock)) {
-          resource.$stock.remove();
-          resource.$stock = undefined;
-        }
-      }
-
-      // Replace state.
-      this._settings.resources = { ...state.resources };
-
-      // Add all the current resources
-      for (const [name, res] of objectEntries(this._settings.resources)) {
-        mustExist(this._resourcesList).append(
-          this._addNewResourceOptionForReset(name, name, res, (_name, _resource) => {
-            delete this._settings.resources[_name];
-          })
-        );
-      }
-    } else {
-      // If both lists are the same, just copy the state.
-      for (const [name, option] of objectEntries(this._settings.resources)) {
-        const stateResource = mustExist(state.resources[name]);
-        option.enabled = stateResource.enabled;
-        option.stock = stateResource.stock;
-      }
+    // Remove old resource options.
+    for (const [name] of objectEntries(this._settings.resources)) {
+      this._removeResourceOptionForReset(name);
+    }
+    // Add new resource options.
+    const resourcesList = this._getResourceOptions();
+    for (const [name, option] of objectEntries(state.resources)) {
+      resourcesList.append(
+        this._addNewResourceOptionForReset(name, name, option, (_name, _resource) => {
+          delete this._settings.resources[_name];
+        })
+      );
     }
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
 
     mustExist(this._settings.accelerateTime.$enabled).prop(

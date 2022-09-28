@@ -1,5 +1,4 @@
 import { Engine } from "../Engine";
-import { Options } from "../options/Options";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
@@ -141,38 +140,6 @@ export class UserInterface {
     // add the options above the game log
     const right = $("#rightColumn");
     right.prepend(optionsElement.append(optionsListElement));
-  }
-
-  getState(): Options {
-    const result = new Options();
-    result.auto.engine = this._engineUi.getState();
-    result.auto.bonfire = this._bonfireUi.getState();
-    result.auto.space = this._spaceUi.getState();
-    result.auto.craft = this._craftUi.getState();
-    result.auto.unlock = this._unlockUi.getState();
-    result.auto.trade = this._tradingUi.getState();
-    result.auto.religion = this._religionUi.getState();
-    result.auto.time = this._timeUi.getState();
-    result.auto.timeCtrl = this._timeCtrlUi.getState();
-    result.auto.village = this._distributeUi.getState();
-    result.auto.options = this._optionsUi.getState();
-    result.auto.filters = this._filterUi.getState();
-    return result;
-  }
-
-  setState(state: Options): void {
-    this._engineUi.setState(state.auto.engine);
-    this._bonfireUi.setState(state.auto.bonfire);
-    this._spaceUi.setState(state.auto.space);
-    this._craftUi.setState(state.auto.craft);
-    this._unlockUi.setState(state.auto.unlock);
-    this._tradingUi.setState(state.auto.trade);
-    this._religionUi.setState(state.auto.religion);
-    this._timeUi.setState(state.auto.time);
-    this._timeCtrlUi.setState(state.auto.timeCtrl);
-    this._distributeUi.setState(state.auto.village);
-    this._optionsUi.setState(state.auto.options);
-    this._filterUi.setState(state.auto.filters);
   }
 
   refreshUi(): void {

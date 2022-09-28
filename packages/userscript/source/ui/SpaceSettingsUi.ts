@@ -5,7 +5,7 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
+export class SpaceSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: SpaceSettings;
@@ -257,15 +257,6 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     return [header, missionsButton];
   }
 
-  getState(): SpaceSettings {
-    return new SpaceSettings(
-      this._settings.enabled,
-      this._settings.trigger,
-      this._settings.items,
-      this._settings.unlockMissions
-    );
-  }
-
   setState(state: SpaceSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
@@ -282,6 +273,8 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 

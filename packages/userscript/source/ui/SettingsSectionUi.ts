@@ -22,7 +22,7 @@ export type SettingsSectionUiComposition = {
  * Base class for all automation UI sections.
  * This provides common functionality to help build the automation sections themselves.
  */
-export abstract class SettingsSectionUi<TState> {
+export abstract class SettingsSectionUi {
   protected _host: UserScript;
   protected _mainChild: JQuery<HTMLElement> | null = null;
   protected _itemsExpanded = false;
@@ -31,8 +31,6 @@ export abstract class SettingsSectionUi<TState> {
     this._host = host;
   }
 
-  abstract getState(): TState;
-  abstract setState(state: TState): void;
   abstract refreshUi(): void;
 
   private static _provisionedOptionElements = new Map<string, JQuery<HTMLElement>>();

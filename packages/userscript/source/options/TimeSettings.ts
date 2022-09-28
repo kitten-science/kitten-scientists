@@ -1,7 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
-import { Requirement } from "./Options";
-import { Setting } from "./Settings";
+import { Requirement, Setting } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 

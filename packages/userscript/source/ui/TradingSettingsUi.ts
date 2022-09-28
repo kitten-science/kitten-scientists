@@ -6,7 +6,7 @@ import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
+export class TradingSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: TradingSettings;
@@ -217,16 +217,6 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
     return [nodeHeader, nodeRaces, nodeEmbassies];
   }
 
-  getState(): TradingSettings {
-    return new TradingSettings(
-      this._settings.enabled,
-      this._settings.trigger,
-      this._settings.items,
-      this._settings.buildEmbassies,
-      this._settings.unlockRaces
-    );
-  }
-
   setState(state: TradingSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
@@ -246,6 +236,8 @@ export class TradingSettingsUi extends SettingsSectionUi<TradingSettings> {
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 

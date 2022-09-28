@@ -1,7 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { Race } from "../types";
-import { Requirement } from "./Options";
-import { Setting, SettingLimited, SettingTrigger } from "./Settings";
+import { Requirement, Setting, SettingLimited, SettingTrigger } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 

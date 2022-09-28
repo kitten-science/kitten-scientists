@@ -5,7 +5,7 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
+export class BonfireSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: BonfireSettings;
@@ -368,16 +368,6 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     return [header, upgradeBuildingsButton, nodeTurnOnSteamworks];
   }
 
-  getState(): BonfireSettings {
-    return new BonfireSettings(
-      this._settings.enabled,
-      this._settings.trigger,
-      this._settings.items,
-      this._settings.turnOnSteamworks,
-      this._settings.upgradeBuildings
-    );
-  }
-
   setState(state: BonfireSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
@@ -396,6 +386,8 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
     mustExist(this._settings.upgradeBuildings.$enabled).prop(

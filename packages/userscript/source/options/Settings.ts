@@ -1,3 +1,15 @@
+import { Resource, SpaceBuildings } from "../types";
+import { BonfireItem } from "./BonfireSettings";
+import { FaithItem, ReligionItem } from "./ReligionSettings";
+import { TimeItem } from "./TimeSettings";
+
+export type Requirement = Resource | false;
+
+/**
+ * The type names of all supported buildings.
+ */
+export type AllItems = BonfireItem | FaithItem | ReligionItem | SpaceBuildings | TimeItem;
+
 export class Setting {
   enabled: boolean;
   $enabled: JQuery<HTMLElement> | undefined = undefined;

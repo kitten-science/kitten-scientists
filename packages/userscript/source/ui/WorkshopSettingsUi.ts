@@ -8,7 +8,7 @@ import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
+export class WorkshopSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: WorkshopSettings;
@@ -378,16 +378,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     return [header, upgradesButton, shipOverride];
   }
 
-  getState(): WorkshopSettings {
-    return new WorkshopSettings(
-      this._settings.enabled,
-      this._settings.trigger,
-      this._settings.items,
-      this._settings.resources,
-      this._settings.unlockUpgrades
-    );
-  }
-
   setState(state: WorkshopSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
@@ -418,6 +408,8 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
     mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
 

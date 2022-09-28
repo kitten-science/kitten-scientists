@@ -6,7 +6,7 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
+export class VillageSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: VillageSettings;
@@ -162,16 +162,6 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     return [nodeHeader, nodeHunt, nodeFestivals, nodePromote];
   }
 
-  getState(): VillageSettings {
-    return new VillageSettings(
-      this._settings.enabled,
-      this._settings.items,
-      this._settings.holdFestivals,
-      this._settings.hunt,
-      this._settings.promoteLeader
-    );
-  }
-
   setState(state: VillageSettings): void {
     this._settings.enabled = state.enabled;
 
@@ -186,6 +176,8 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
 
     mustExist(this._settings.holdFestivals.$enabled).prop(

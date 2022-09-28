@@ -5,7 +5,7 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
+export class FiltersSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: FilterSettings;
@@ -138,10 +138,6 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     this.element = element.panel;
   }
 
-  getState(): FilterSettings {
-    return new FilterSettings(this._settings.enabled, this._settings.items);
-  }
-
   setState(state: FilterSettings): void {
     this._settings.enabled = state.enabled;
 
@@ -151,6 +147,8 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
   }
 
   refreshUi(): void {
+    this.setState(this._settings);
+
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
 
     for (const [name, option] of objectEntries(this._settings.items)) {

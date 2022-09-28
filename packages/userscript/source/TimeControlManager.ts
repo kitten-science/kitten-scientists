@@ -34,13 +34,20 @@ export class TimeControlManager {
     this._spaceManager = new SpaceManager(this._host);
   }
 
-  tick(context: TickContext) {
+  async tick(context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }
 
-    this.autoTimeControl();
-    return this.autoReset(this._host.engine);
+    if (this.settings.accelerateTime.enabled) {
+      this.accelerateTime();
+    }
+    if (this.settings.timeSkip.enabled) {
+      this.timeSkip();
+    }
+    if (this.settings.reset.enabled) {
+      await this.autoReset(this._host.engine);
+    }
   }
 
   load(settings: TimeControlSettings) {
@@ -309,93 +316,94 @@ export class TimeControlManager {
     //=============================================================
   }
 
-  autoTimeControl() {
-    const optionVals = this.settings;
+  accelerateTime() {
+    if (this._host.gamePage.time.isAccelerated) {
+      return;
+    }
+    const temporalFlux = this._host.gamePage.resPool.get("temporalFlux");
+    if (temporalFlux.value >= temporalFlux.maxValue * this.settings.accelerateTime.trigger) {
+      this._host.gamePage.time.isAccelerated = true;
+      this._host.iactivity("act.accelerate", [], "ks-accelerate");
+      this._host.storeForSummary("accelerate", 1);
+    }
+  }
 
-    // Tempus Fugit
-    // If it's enabled and we have enough Temporal Flux to reach the trigger,
-    // accelerate time.
-    if (optionVals.accelerateTime.enabled && !this._host.gamePage.time.isAccelerated) {
-      const temporalFlux = this._host.gamePage.resPool.get("temporalFlux");
-      if (temporalFlux.value >= temporalFlux.maxValue * optionVals.accelerateTime.trigger) {
-        this._host.gamePage.time.isAccelerated = true;
-        this._host.iactivity("act.accelerate", [], "ks-accelerate");
-        this._host.storeForSummary("accelerate", 1);
-      }
+  timeSkip() {
+    if (!this._host.gamePage.workshop.get("chronoforge").researched) {
+      return;
     }
 
-    // Combust time crystal
-    // If time skipping is enabled and Chronoforge has been researched.
-    if (optionVals.timeSkip.enabled && this._host.gamePage.workshop.get("chronoforge").researched) {
-      // TODO: Not sure when this would ever be true.
-      if (this._host.gamePage.calendar.day < 0) {
-        return;
-      }
+    // TODO: Not sure when this would ever be true.
+    if (this._host.gamePage.calendar.day < 0) {
+      return;
+    }
 
-      // If we have less time crystals than our required trigger value, bail out.
-      const timeCrystal = this._host.gamePage.resPool.get("timeCrystal");
-      if (timeCrystal.value < optionVals.timeSkip.trigger) {
-        return;
-      }
+    // If we have less time crystals than our required trigger value, bail out.
+    const timeCrystal = this._host.gamePage.resPool.get("timeCrystal");
+    if (timeCrystal.value < this.settings.timeSkip.trigger) {
+      return;
+    }
 
-      // If skipping during this season was disabled, bail out.
-      const season = this._host.gamePage.calendar.season;
-      if (!optionVals.timeSkip[this._host.gamePage.calendar.seasons[season].name]) {
-        return;
-      }
+    // If skipping during this season was disabled, bail out.
+    const season = this._host.gamePage.calendar.season;
+    if (!this.settings.timeSkip[this._host.gamePage.calendar.seasons[season].name]) {
+      return;
+    }
 
-      // If skipping during this cycle was disabled, bail out.
-      const currentCycle = this._host.gamePage.calendar.cycle;
-      if (!optionVals.timeSkip[currentCycle]) {
-        return;
-      }
+    // If skipping during this cycle was disabled, bail out.
+    const currentCycle = this._host.gamePage.calendar.cycle;
+    if (!this.settings.timeSkip[currentCycle]) {
+      return;
+    }
 
-      // If we have too much stored heat, wait for it to cool down.
-      const heatMax = this._host.gamePage.getEffect("heatMax");
-      const heatNow = this._host.gamePage.time.heat;
-      if (heatMax <= heatNow) {
-        return;
-      }
+    // If we have too much stored heat, wait for it to cool down.
+    const heatMax = this._host.gamePage.getEffect("heatMax");
+    const heatNow = this._host.gamePage.time.heat;
+    if (heatMax <= heatNow) {
+      return;
+    }
 
-      const yearsPerCycle = this._host.gamePage.calendar.yearsPerCycle;
-      const remainingYearsCurrentCycle = yearsPerCycle - this._host.gamePage.calendar.cycleYear;
-      const cyclesPerEra = this._host.gamePage.calendar.cyclesPerEra;
-      const factor = this._host.gamePage.challenges.getChallenge("1000Years").researched ? 5 : 10;
-      // How many times/years we can skip before we reach our max heat.
-      let canSkip = Math.min(Math.floor((heatMax - heatNow) / factor), optionVals.timeSkip.maximum);
-      // The amount of skips to perform.
-      let willSkip = 0;
-      // If the cycle has more years remaining than we can even skip, skip all of them.
-      // I guess the idea here is to not skip through years of another cycle, if that
-      // cycle may not be enabled for skipping.
-      if (canSkip < remainingYearsCurrentCycle) {
-        willSkip = canSkip;
-      } else {
-        willSkip += remainingYearsCurrentCycle;
-        canSkip -= remainingYearsCurrentCycle;
-        let skipCycles = 1;
-        while (
-          yearsPerCycle < canSkip &&
-          optionVals.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
-        ) {
-          willSkip += yearsPerCycle;
-          canSkip -= yearsPerCycle;
-          skipCycles += 1;
-        }
-        if (
-          optionVals.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices] &&
-          0 < canSkip
-        ) {
-          willSkip += canSkip;
-        }
+    const yearsPerCycle = this._host.gamePage.calendar.yearsPerCycle;
+    const remainingYearsCurrentCycle = yearsPerCycle - this._host.gamePage.calendar.cycleYear;
+    const cyclesPerEra = this._host.gamePage.calendar.cyclesPerEra;
+    const factor = this._host.gamePage.challenges.getChallenge("1000Years").researched ? 5 : 10;
+    // How many times/years we can skip before we reach our max heat.
+    let canSkip = Math.min(
+      Math.floor((heatMax - heatNow) / factor),
+      this.settings.timeSkip.maximum
+    );
+    // The amount of skips to perform.
+    let willSkip = 0;
+    // If the cycle has more years remaining than we can even skip, skip all of them.
+    // I guess the idea here is to not skip through years of another cycle, if that
+    // cycle may not be enabled for skipping.
+    if (canSkip < remainingYearsCurrentCycle) {
+      willSkip = canSkip;
+    } else {
+      willSkip += remainingYearsCurrentCycle;
+      canSkip -= remainingYearsCurrentCycle;
+      let skipCycles = 1;
+      while (
+        yearsPerCycle < canSkip &&
+        this.settings.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
+      ) {
+        willSkip += yearsPerCycle;
+        canSkip -= yearsPerCycle;
+        skipCycles += 1;
       }
-      // If we found we can skip any years, do so now.
-      if (0 < willSkip) {
-        const shatter = this._host.gamePage.timeTab.cfPanel.children[0].children[0]; // check?
-        this._host.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
-        shatter.controller.doShatterAmt(shatter.model, willSkip);
-        this._host.storeForSummary("time.skip", willSkip);
+      if (
+        this.settings.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices] &&
+        0 < canSkip
+      ) {
+        willSkip += canSkip;
       }
+    }
+    // If we found we can skip any years, do so now.
+    if (0 < willSkip) {
+      const shatter = this._host.gamePage.timeTab.cfPanel.children[0].children[0]; // check?
+      this._host.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
+      shatter.controller.doShatterAmt(shatter.model, willSkip);
+      this._host.storeForSummary("time.skip", willSkip);
     }
   }
 

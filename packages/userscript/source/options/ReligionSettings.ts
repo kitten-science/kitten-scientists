@@ -1,7 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { UnicornItemVariant } from "../types";
-import { Requirement } from "./Options";
-import { Setting, SettingMax, SettingTrigger } from "./Settings";
+import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
