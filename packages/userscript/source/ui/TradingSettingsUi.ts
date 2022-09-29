@@ -24,7 +24,7 @@ export class TradingSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
@@ -115,22 +115,12 @@ export class TradingSettingsUi extends SettingsSectionUi {
     );
     element.css("borderTop", "1px solid rgba(185, 185, 185, 0.1)");
 
-    const button = $("<div/>", {
+    const button = $('<div class="ks-icon-button"/>', {
       id: `toggle-seasons-${name}`,
-      text: "🗓",
       title: this._host.i18n("trade.seasons"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).text("🗓");
 
-    const list = $("<ul/>", {
-      id: `seasons-list-${name}`,
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const list = SettingsSectionUi.getList(`seasons-list-${name}`);
 
     // fill out the list with seasons
     list.append(this._getSeason(name, "spring", option));
@@ -208,6 +198,7 @@ export class TradingSettingsUi extends SettingsSectionUi {
       this._host.i18n("ui.upgrade.races"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.unlockRaces.enabled = true));

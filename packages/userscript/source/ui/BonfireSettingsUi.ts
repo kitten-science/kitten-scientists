@@ -23,7 +23,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
@@ -296,6 +296,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       this._host.i18n("ui.upgrade.buildings"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.upgradeBuildings.enabled = true));
@@ -308,10 +309,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const upgradeBuildingsList = $("<ul/>", {
-      id: "items-list-buildings",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const upgradeBuildingsList = SettingsSectionUi.getList("items-list-buildings");
 
     const upgradeBuildingsButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.upgradeBuildings.items)) {
@@ -323,6 +321,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         label,
         false,
         false,
+        [],
         {
           onCheck: () => {
             this._host.updateOptions(() => (upgrade.enabled = true));
@@ -364,6 +363,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       this._host.i18n("option.steamworks"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.turnOnSteamworks.enabled = true));

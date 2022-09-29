@@ -24,7 +24,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
@@ -37,6 +37,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       this._host.i18n("ui.upgrade.techs"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.techs.enabled = true));
@@ -49,15 +50,12 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const techsList = $("<ul/>", {
-      id: "items-list-techs",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const techsList = SettingsSectionUi.getList("items-list-techs");
 
     const techButtons = [];
     for (const [techName, tech] of objectEntries(this._settings.techs.items)) {
       const label = this._host.i18n(`$science.${techName}.label`);
-      const button = SettingUi.make(this._host, `tech-${techName}`, tech, label, false, false, {
+      const button = SettingUi.make(this._host, `tech-${techName}`, tech, label, false, false, [], {
         onCheck: () => {
           this._host.updateOptions(() => (tech.enabled = true));
           this._host.imessage("status.auto.enable", [label]);
@@ -96,6 +94,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       this._host.i18n("ui.upgrade.policies"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.policies.enabled = true));
@@ -108,10 +107,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const policiesList = $("<ul/>", {
-      id: "items-list-policies",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const policiesList = SettingsSectionUi.getList("items-list-policies");
 
     const policyButtons = [];
     for (const [policyName, policy] of objectEntries(this._settings.policies.items)) {
@@ -125,6 +121,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
         policyLabel,
         false,
         false,
+        [],
         {
           onCheck: () => {
             this._host.updateOptions(() => (policy.enabled = true));

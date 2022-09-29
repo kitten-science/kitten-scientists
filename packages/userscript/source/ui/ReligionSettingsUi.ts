@@ -23,7 +23,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
@@ -274,6 +274,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       this._host.i18n("option.faith.best.unicorn"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.bestUnicornBuilding.enabled = true));
@@ -325,6 +326,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       this._host.i18n("option.faith.transcend"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.transcend.enabled = true));

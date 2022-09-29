@@ -24,6 +24,7 @@ export class SettingTriggerUi {
       label,
       delimiter,
       upgradeIndicator,
+      [],
       handler
     );
 

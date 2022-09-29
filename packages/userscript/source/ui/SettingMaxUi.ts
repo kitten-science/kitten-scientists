@@ -40,18 +40,12 @@ export class SettingMaxUi {
       label,
       delimiter,
       upgradeIndicator,
+      [],
       handler
     );
 
-    const maxButton = $("<div/>", {
+    const maxButton = $('<div class="ks-max-button"/>', {
       id: `set-${name}-max`,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-        paddingTop: "2px",
-      },
     }).data("option", setting);
     setting.$max = maxButton;
 

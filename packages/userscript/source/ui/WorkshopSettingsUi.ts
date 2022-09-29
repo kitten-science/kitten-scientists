@@ -31,7 +31,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
@@ -148,17 +148,10 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    const resourcesButton = $("<div/>", {
+    const resourcesButton = $('<div class="ks-icon-button"/>', {
       id: "toggle-resource-controls",
-      text: "🛠",
       title: this._host.i18n("ui.craft.resources"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).text("🛠");
 
     const resourcesList = this._getResourceOptions();
 
@@ -207,37 +200,17 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       return this._resourcesList;
     }
 
-    this._resourcesList = $("<ul/>", {
+    this._resourcesList = $('<ul class="ks-list ks-items-list"/>', {
       id: "toggle-list-resources",
-      css: { display: "none", paddingLeft: "20px", paddingTop: "4px" },
     });
 
-    const clearunused = $("<div/>", {
+    const clearunused = $('<div class="ks-button"/>', {
       id: "resources-clear-unused",
-      text: this._host.i18n("resources.clear.unused"),
-      css: {
-        border: "1px solid grey",
-        cursor: "pointer",
-        float: "right",
-        display: "inline-block",
-        marginBottom: "4px",
-        padding: "1px 2px",
-      },
-    });
+    }).text(this._host.i18n("resources.clear.unused"));
 
-    const add = $("<div/>", {
+    const add = $('<div class="ks-button ks-margin-right"/>', {
       id: "resources-add",
-      text: this._host.i18n("resources.add"),
-      css: {
-        border: "1px solid grey",
-        cursor: "pointer",
-        float: "right",
-        display: "inline-block",
-        marginBottom: "4px",
-        marginRight: "8px",
-        padding: "1px 2px",
-      },
-    });
+    }).text(this._host.i18n("resources.add"));
 
     clearunused.on("click", () => {
       for (const name in this._settings.resources) {
@@ -253,10 +226,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       }
     });
 
-    const allresources = $("<ul/>", {
-      id: "available-resources-list",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const allresources = SettingsSectionUi.getList("available-resources-list");
 
     add.on("click", () => {
       allresources.toggle();
@@ -302,6 +272,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       this._host.i18n("ui.upgrade.upgrades"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.unlockUpgrades.enabled = true));
@@ -314,10 +285,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const upgradesList = $("<ul/>", {
-      id: "items-list-upgrades",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const upgradesList = SettingsSectionUi.getList("items-list-upgrades");
 
     const upgradeButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.unlockUpgrades.items)) {
@@ -329,6 +297,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
         upgradeLabel,
         false,
         false,
+        [],
         {
           onCheck: () => {
             this._host.updateOptions(() => (upgrade.enabled = true));
@@ -368,6 +337,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       this._host.i18n("option.shipOverride"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.shipOverride.enabled = true));

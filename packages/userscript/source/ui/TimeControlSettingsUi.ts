@@ -31,7 +31,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
@@ -67,18 +67,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
   ): JQuery<HTMLElement> {
     const element = SettingTriggerUi.make(this._host, name, option, label);
 
-    const maximumButton = $("<div/>", {
+    const maximumButton = $('<div class="ks-icon-button"/>', {
       id: "set-timeSkip-maximum",
-      text: "⍐",
       title: this._host.i18n("ui.maximum"),
-      //title: option.max,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    }).data("option", option);
+    })
+      .text("⍐")
+      .data("option", option);
     option.$maximum = maximumButton;
 
     maximumButton.on("click", () => {
@@ -93,22 +87,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       }
     });
 
-    const cyclesButton = $("<div/>", {
+    const cyclesButton = $('<div class="ks-icon-button"/>', {
       id: `toggle-cycle-${name}`,
-      text: "↻",
       title: this._host.i18n("ui.cycles"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).text("↻");
 
-    const cyclesList = $("<ul/>", {
-      id: `cycles-list-${name}`,
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const cyclesList = SettingsSectionUi.getList(`cycles-list-${name}`);
 
     for (
       let cycleIndex = 0;
@@ -118,22 +102,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       cyclesList.append(this._getCycle(cycleIndex as CycleIndices, option));
     }
 
-    const seasonsButton = $("<div/>", {
+    const seasonsButton = $('<div class="ks-icon-button"/>', {
       id: `toggle-seasons-${name}`,
-      text: "🗓",
       title: this._host.i18n("trade.seasons"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).text("🗓");
 
-    const seasonsList = $("<ul/>", {
-      id: `seasons-list-${name}`,
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const seasonsList = SettingsSectionUi.getList(`seasons-list-${name}`);
 
     // fill out the list with seasons
     seasonsList.append(this._getSeasonForTimeSkip("spring", option));
@@ -164,7 +138,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const element = SettingUi.make(this._host, name, option, label);
 
     // Bonfire reset options
-    const resetBuildList = this._getOptionList("reset-build");
+    const resetBuildList = this._getItemsList("reset-build");
     resetBuildList.append(
       this._getResetOption(
         "hut",
@@ -429,7 +403,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     );
 
     // Space reset options
-    const resetSpaceList = this._getOptionList("reset-space");
+    const resetSpaceList = this._getItemsList("reset-space");
     resetSpaceList.append(
       this._getResetOption(
         "spaceElevator",
@@ -597,7 +571,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     }
 
     // Religion reset options.
-    const resetReligionList = this._getOptionList("reset-religion");
+    const resetReligionList = this._getItemsList("reset-religion");
     resetReligionList.append(
       this._getResetOption(
         "unicornPasture",
@@ -787,7 +761,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       )
     );
 
-    const resetTimeList = this._getOptionList("reset-time");
+    const resetTimeList = this._getItemsList("reset-time");
     resetTimeList.append(
       this._getResetOption(
         "temporalBattery",
@@ -883,17 +857,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         paddingRight: "5px",
       },
     });
-    const resourcesButton = $("<div/>", {
+    const resourcesButton = $('<div class="ks-icon-button"/>', {
       id: "toggle-reset-resources",
-      text: "🛠",
       title: this._host.i18n("ui.craft.resources"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).text("🛠");
     const religionButton = $("<div/>", {
       id: "toggle-reset-religion",
       text: "🐈",
@@ -1076,10 +1043,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
   }
 
   private _getResourceOptions(): JQuery<HTMLElement> {
-    this._resourcesList = $("<ul/>", {
-      id: "toggle-reset-list-resources",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    this._resourcesList = SettingsSectionUi.getList("toggle-reset-list-resources");
 
     const add = $("<div/>", {
       id: "resources-add",
@@ -1092,10 +1056,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       },
     });
 
-    const allresources = $("<ul/>", {
-      id: "available-resources-list",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const allresources = SettingsSectionUi.getList("available-resources-list");
 
     add.on("click", () => {
       allresources.toggle();

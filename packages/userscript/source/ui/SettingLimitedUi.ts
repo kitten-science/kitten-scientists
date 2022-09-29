@@ -43,6 +43,7 @@ export class SettingLimitedUi {
       label,
       delimiter,
       upgradeIndicator,
+      [],
       handler
     );
 

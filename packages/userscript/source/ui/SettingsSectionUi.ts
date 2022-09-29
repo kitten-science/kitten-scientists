@@ -66,7 +66,7 @@ export abstract class SettingsSectionUi {
   ): SettingsSectionUiComposition {
     this._mainChild = mainChild;
 
-    const panelElement = $("<li/>", { id: `ks-${id}` });
+    const panelElement = $('<li class="ks-setting"/>', { id: `ks-${id}` });
     // Add a border on the element
     panelElement.css("borderTop", "1px solid rgba(185, 185, 185, 0.2)");
 
@@ -199,6 +199,10 @@ export abstract class SettingsSectionUi {
     });
   }
 
+  static getList(id: string) {
+    return $('<ul class="ks-list"/>');
+  }
+
   /**
    * Constructs a list panel that is used to contain a list of options.
    * The panel has "enable all" and "disable all" buttons to check and
@@ -207,24 +211,14 @@ export abstract class SettingsSectionUi {
    * @param id The ID for this list.
    * @returns The constructed list.
    */
-  protected _getOptionList(id: string): JQuery<HTMLElement> {
-    const containerList = $("<ul/>", {
+  protected _getItemsList(id: string): JQuery<HTMLElement> {
+    const containerList = $('<ul class="ks-list ks-items-list"/>', {
       id: `items-list-${id}`,
-      css: { display: "none", paddingLeft: "20px", paddingTop: "4px" },
     });
 
-    const disableAllButton = $("<div/>", {
+    const disableAllButton = $('<div class="ks-button"/>', {
       id: `toggle-all-items-${id}`,
-      text: this._host.i18n("ui.disable.all"),
-      css: {
-        border: "1px solid grey",
-        cursor: "pointer",
-        float: "right",
-        display: "inline-block",
-        marginBottom: "4px",
-        padding: "1px 2px",
-      },
-    });
+    }).text(this._host.i18n("ui.disable.all"));
 
     disableAllButton.on("click", function () {
       // can't use find as we only want one layer of checkboxes
@@ -236,19 +230,9 @@ export abstract class SettingsSectionUi {
 
     containerList.append(disableAllButton);
 
-    const enableAllButton = $("<div/>", {
+    const enableAllButton = $('<div class="ks-button ks-margin-right"/>', {
       id: `toggle-all-items-${id}`,
-      text: this._host.i18n("ui.enable.all"),
-      css: {
-        border: "1px solid grey",
-        cursor: "pointer",
-        float: "right",
-        display: "inline-block",
-        marginBottom: "4px",
-        marginRight: "8px",
-        padding: "1px 2px",
-      },
-    });
+    }).text(this._host.i18n("ui.enable.all"));
 
     enableAllButton.on("click", function () {
       // can't use find as we only want one layer of checkboxes
@@ -431,16 +415,9 @@ export abstract class SettingsSectionUi {
     });
 
     // Delete the resource from the list.
-    const del = $("<div/>", {
+    const del = $('<div class="ks-icon-button"/>', {
       id: `resource-delete-${name}`,
-      text: this._host.i18n("resources.del"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).text(this._host.i18n("resources.del"));
 
     container.append(label, stockElement, consumeElement, del);
 
@@ -544,16 +521,9 @@ export abstract class SettingsSectionUi {
     });
 
     // Delete the resource from the list.
-    const del = $("<div/>", {
+    const del = $('<div class="ks-icon-button"/>', {
       id: `resource-delete-${name}`,
-      text: this._host.i18n("resources.del"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).text(this._host.i18n("resources.del"));
 
     container.append(label, stockElement, del);
 

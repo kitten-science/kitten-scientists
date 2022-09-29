@@ -166,13 +166,64 @@ export class UserInterface {
     this._addRule('#ks-options ul:after { clear: both; content: " "; display: block; height: 0; }');
     this._addRule(
       `#ks-options ul li { 
-        display: block; float: left; width: 100%; 
+        float: left;
+        width: 100%;
+      }`
+    );
+
+    this._addRule(
+      `#ks-options ul li.ks-setting label {
+        display: inline-block;
+        min-width: 100px;
+      }`
+    );
+    this._addRule(
+      `#ks-options ul li.ks-setting .ks-icon-button {
+        cursor: pointer;
+        display: inline-block;
+        float: right;
+        padding-right: 5px;
+      }`
+    );
+    this._addRule(
+      `#ks-options ul li.ks-setting .ks-list {
+        display: none;
+        padding-left: 20px;
+      }`
+    );
+    // Items lists have additional padding due to the "enable/disable all" buttons.
+    this._addRule(
+      `#ks-options ul li.ks-setting .ks-list.ks-items-list {
+        padding-top: 4px;
+      }`
+    );
+    this._addRule(
+      `#ks-options ul li.ks-setting .ks-list.ks-items-list .ks-button {
+        border: 1px solid grey;
+        cursor: pointer;
+        float: right;
+        display: inline-block;
+        margin-bottom: 4px;
+        padding: 1px 2px;
+      }`
+    );
+    this._addRule(
+      `#ks-options ul li.ks-setting .ks-list.ks-items-list .ks-button.ks-margin-right {
+        margin-right: 8px;
+      }`
+    );
+    this._addRule(
+      `#ks-options ul li.ks-setting .ks-max-button {
+        cursor: pointer;
+        float: right;
+        padding-right: 5px;
+        padding-top: 2px;
       }`
     );
 
     // Style settings that act as UI delimiters.
     this._addRule(
-      `#ks-options ul li.ks-delimiter {
+      `#ks-options ul li.ks-setting.ks-delimiter {
         margin-bottom: 10px;
       }`
     );

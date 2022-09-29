@@ -23,7 +23,7 @@ export class SpaceSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
@@ -198,6 +198,7 @@ export class SpaceSettingsUi extends SettingsSectionUi {
       this._host.i18n("ui.upgrade.missions"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.unlockMissions.enabled = true));
@@ -210,10 +211,7 @@ export class SpaceSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const missionsList = $("<ul/>", {
-      id: "items-list-missions",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const missionsList = SettingsSectionUi.getList("items-list-missions");
 
     const missionButtons = [];
     for (const [missionName, mission] of objectEntries(this._settings.unlockMissions.items)) {
@@ -225,6 +223,7 @@ export class SpaceSettingsUi extends SettingsSectionUi {
         missionLabel,
         false,
         false,
+        [],
         {
           onCheck: () => {
             this._host.updateOptions(() => (mission.enabled = true));

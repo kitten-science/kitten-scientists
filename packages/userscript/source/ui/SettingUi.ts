@@ -16,6 +16,7 @@ export class SettingUi {
    * @param delimiter Should there be additional padding below this element?
    * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
    * to indicate that this is an upgrade of a prior setting?
+   * @param additionalClasses A list of CSS classes to attach to the element.
    * @param handler The event handlers for this setting element.
    * @param handler.onCheck Will be invoked when the user checks the checkbox.
    * @param handler.onUnCheck Will be invoked when the user unchecks the checkbox.
@@ -28,6 +29,7 @@ export class SettingUi {
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false,
+    additionalClasses = [],
     handler: {
       onCheck?: () => void;
       onUnCheck?: () => void;
@@ -38,16 +40,16 @@ export class SettingUi {
         `Duplicate setting ID requested! The setting ID '${name}' has already been assigned to a previously provisoned element.`
       );
     }
-    const element = $(`<li class="${delimiter ? "ks-delimiter" : ""}"/>`);
+    const element = $(
+      `<li class="${["ks-setting", delimiter ? "ks-delimiter" : "", ...additionalClasses]
+        .filter(Boolean)
+        .join(" ")}"/>`
+    );
     const elementLabel = `${upgradeIndicator ? `⮤ ` : ""}${i18nName}`;
 
     const label = $("<label/>", {
       for: `toggle-${name}`,
       text: elementLabel,
-      css: {
-        display: "inline-block",
-        minWidth: "100px",
-      },
     });
 
     const input = $("<input/>", {

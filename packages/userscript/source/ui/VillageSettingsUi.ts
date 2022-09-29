@@ -26,7 +26,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
@@ -134,6 +134,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
       this._host.i18n("option.festival"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.holdFestivals.enabled = true));
@@ -153,6 +154,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
       this._host.i18n("option.promote"),
       false,
       false,
+      [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.promoteLeader.enabled = true));
