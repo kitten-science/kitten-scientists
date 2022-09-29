@@ -14,6 +14,7 @@ import {
   VoidSpaceUpgrades,
 } from "./types";
 import { UserScript } from "./UserScript";
+import { WorkshopManager } from "./WorkshopManager";
 
 export class TimeManager {
   private readonly _host: UserScript;
@@ -21,11 +22,11 @@ export class TimeManager {
   readonly manager: TabManager<TimeTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
 
-  constructor(host: UserScript, settings = new TimeSettings()) {
+  constructor(host: UserScript, workshopManager: WorkshopManager, settings = new TimeSettings()) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Time");
-    this._bulkManager = new BulkPurchaseHelper(this._host);
+    this._bulkManager = new BulkPurchaseHelper(this._host, workshopManager);
   }
 
   tick(context: TickContext) {

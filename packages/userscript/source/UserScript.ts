@@ -1,11 +1,11 @@
 import JQuery from "jquery";
+import { Engine } from "./Engine";
 import {
   ActivityClass,
   ActivitySummary,
   ActivitySummarySection,
   ActivityTypeClass,
-} from "./ActivitySummary";
-import { Engine } from "./Engine";
+} from "./helper/ActivitySummary";
 import i18nData from "./i18n/i18nData.json";
 import { BonfireSettings } from "./options/BonfireSettings";
 import { EngineSettings } from "./options/EngineSettings";

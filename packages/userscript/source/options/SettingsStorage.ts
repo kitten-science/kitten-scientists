@@ -12,10 +12,10 @@ import {
 } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FilterItem } from "./FilterSettings";
-import { AllItems } from "./Options";
 import { OptionsItem } from "./OptionsSettings";
 import { FaithItem, ReligionAdditionItem, UnicornItem } from "./ReligionSettings";
 import { ScienceItem } from "./ScienceSettings";
+import { AllItems } from "./Settings";
 import { TimeControlItem } from "./TimeControlSettings";
 import { TimeItem } from "./TimeSettings";
 

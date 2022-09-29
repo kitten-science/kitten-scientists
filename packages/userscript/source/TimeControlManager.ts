@@ -25,13 +25,20 @@ export class TimeControlManager {
   private readonly _religionManager: ReligionManager;
   private readonly _spaceManager: SpaceManager;
 
-  constructor(host: UserScript, settings = new TimeControlSettings()) {
+  constructor(
+    host: UserScript,
+    bonfireManager: BonfireManager,
+    religionManager: ReligionManager,
+    spaceManager: SpaceManager,
+    settings = new TimeControlSettings()
+  ) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Time");
-    this._bonfireManager = new BonfireManager(this._host);
-    this._religionManager = new ReligionManager(this._host);
-    this._spaceManager = new SpaceManager(this._host);
+
+    this._bonfireManager = bonfireManager;
+    this._religionManager = religionManager;
+    this._spaceManager = spaceManager;
   }
 
   async tick(context: TickContext) {

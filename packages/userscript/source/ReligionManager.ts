@@ -28,13 +28,18 @@ export class ReligionManager implements Automation {
   private readonly _bonfireManager: BonfireManager;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, settings = new ReligionSettings()) {
+  constructor(
+    host: UserScript,
+    bonfireManager: BonfireManager,
+    workshopManager: WorkshopManager,
+    settings = new ReligionSettings()
+  ) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Religion");
-    this._workshopManager = new WorkshopManager(this._host);
-    this._bulkManager = new BulkPurchaseHelper(this._host);
-    this._bonfireManager = new BonfireManager(this._host);
+    this._workshopManager = workshopManager;
+    this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
+    this._bonfireManager = bonfireManager;
   }
 
   tick(context: TickContext) {

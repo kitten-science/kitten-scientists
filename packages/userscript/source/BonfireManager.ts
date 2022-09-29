@@ -17,12 +17,17 @@ export class BonfireManager implements Automation {
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, settings = new BonfireSettings()) {
+  constructor(
+    host: UserScript,
+    workshopManager: WorkshopManager,
+    settings = new BonfireSettings()
+  ) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager<BonfireTab>(this._host, "Bonfire");
-    this._bulkManager = new BulkPurchaseHelper(this._host);
-    this._workshopManager = new WorkshopManager(this._host);
+
+    this._workshopManager = workshopManager;
+    this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
   }
 
   tick(context: TickContext) {

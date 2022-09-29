@@ -16,12 +16,16 @@ export class VillageManager implements Automation {
   private readonly _cacheManager: MaterialsCache;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, settings = new VillageSettings()) {
+  constructor(
+    host: UserScript,
+    workshopManager: WorkshopManager,
+    settings = new VillageSettings()
+  ) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Village");
     this._cacheManager = new MaterialsCache(this._host);
-    this._workshopManager = new WorkshopManager(this._host);
+    this._workshopManager = workshopManager;
   }
 
   tick(context: TickContext) {

@@ -46,19 +46,25 @@ export class Engine {
     this._host = host;
     this.settings = new EngineSettings();
 
-    // The managers are really weakly defined concepts.
-    // Most commonly, they are a wrapper around the functionality of a KG tab.
-    // Very often though, key functionality of the automation of the tab is located
-    // in the Engine itself. This will likely be refactored.
-    this.bonfireManager = new BonfireManager(this._host);
-    this.religionManager = new ReligionManager(this._host);
-    this.scienceManager = new ScienceManager(this._host);
-    this.spaceManager = new SpaceManager(this._host);
-    this.timeControlManager = new TimeControlManager(this._host);
-    this.timeManager = new TimeManager(this._host);
-    this.tradingManager = new TradeManager(this._host);
-    this.villageManager = new VillageManager(this._host);
     this.workshopManager = new WorkshopManager(this._host);
+
+    this.bonfireManager = new BonfireManager(this._host, this.workshopManager);
+    this.religionManager = new ReligionManager(
+      this._host,
+      this.bonfireManager,
+      this.workshopManager
+    );
+    this.scienceManager = new ScienceManager(this._host, this.workshopManager);
+    this.spaceManager = new SpaceManager(this._host, this.workshopManager);
+    this.timeControlManager = new TimeControlManager(
+      this._host,
+      this.bonfireManager,
+      this.religionManager,
+      this.spaceManager
+    );
+    this.timeManager = new TimeManager(this._host, this.workshopManager);
+    this.tradingManager = new TradeManager(this._host, this.workshopManager);
+    this.villageManager = new VillageManager(this._host, this.workshopManager);
   }
 
   load(settings: {

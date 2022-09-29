@@ -15,11 +15,15 @@ export class TradeManager implements Automation {
   readonly manager: TabManager<TradingTab>;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, settings = new TradingSettings()) {
+  constructor(
+    host: UserScript,
+    workshopManager: WorkshopManager,
+    settings = new TradingSettings()
+  ) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Trade");
-    this._workshopManager = new WorkshopManager(this._host);
+    this._workshopManager = workshopManager;
   }
 
   tick(context: TickContext) {

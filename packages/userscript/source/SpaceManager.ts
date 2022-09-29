@@ -15,12 +15,13 @@ export class SpaceManager implements Automation {
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, settings = new SpaceSettings()) {
+  constructor(host: UserScript, workshopManager: WorkshopManager, settings = new SpaceSettings()) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Space");
-    this._bulkManager = new BulkPurchaseHelper(this._host);
-    this._workshopManager = new WorkshopManager(this._host);
+
+    this._workshopManager = workshopManager;
+    this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
   }
 
   tick(context: TickContext) {

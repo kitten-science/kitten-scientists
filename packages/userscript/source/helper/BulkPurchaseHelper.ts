@@ -32,9 +32,9 @@ export class BulkPurchaseHelper {
   private readonly _host: UserScript;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript) {
+  constructor(host: UserScript, workshopManager: WorkshopManager) {
     this._host = host;
-    this._workshopManager = new WorkshopManager(this._host);
+    this._workshopManager = workshopManager;
   }
 
   /**

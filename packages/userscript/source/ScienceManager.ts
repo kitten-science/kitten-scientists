@@ -14,11 +14,15 @@ export class ScienceManager extends UpgradeManager {
   settings: ScienceSettings;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, settings = new ScienceSettings()) {
+  constructor(
+    host: UserScript,
+    workshopManager: WorkshopManager,
+    settings = new ScienceSettings()
+  ) {
     super(host);
     this.settings = settings;
     this.manager = new TabManager(this._host, "Science");
-    this._workshopManager = this._host.engine.workshopManager;
+    this._workshopManager = workshopManager;
   }
 
   async tick(context: TickContext) {
