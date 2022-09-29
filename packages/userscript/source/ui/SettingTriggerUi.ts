@@ -8,7 +8,7 @@ export class SettingTriggerUi {
   static make(
     host: UserScript,
     name: string,
-    option: SettingTrigger,
+    setting: SettingTrigger,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -17,24 +17,32 @@ export class SettingTriggerUi {
       onUnCheck?: () => void;
     } = {}
   ): JQuery<HTMLElement> {
-    const element = SettingUi.make(host, name, option, label, delimiter, upgradeIndicator, handler);
+    const element = SettingUi.make(
+      host,
+      name,
+      setting,
+      label,
+      delimiter,
+      upgradeIndicator,
+      handler
+    );
 
-    if (option.trigger !== undefined) {
+    if (setting.trigger !== undefined) {
       const triggerButton = SettingsSectionUi.getTriggerButton(`set-${name}-trigger`, {
         onClick: () => {
           const value = SettingsSectionUi.promptPercentage(
             host.i18n("ui.trigger.set", [label]),
-            SettingsSectionUi.renderPercentage(mustExist(option.trigger))
+            SettingsSectionUi.renderPercentage(mustExist(setting.trigger))
           );
 
           if (value !== null) {
-            option.trigger = value;
+            setting.trigger = value;
             host.updateOptions();
-            triggerButton[0].title = SettingsSectionUi.renderPercentage(option.trigger);
+            triggerButton[0].title = SettingsSectionUi.renderPercentage(setting.trigger);
           }
         },
       });
-      option.$trigger = triggerButton;
+      setting.$trigger = triggerButton;
 
       element.append(triggerButton);
     }

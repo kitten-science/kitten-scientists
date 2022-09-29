@@ -3,6 +3,7 @@ import {
   CycleIndices,
   TimeControlResourcesSettingsItem,
   TimeControlSettings,
+  TimeControlTimeSkipSettings,
 } from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
@@ -1042,7 +1043,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
   private _getSeasonForTimeSkip(
     season: Season,
-    option: TimeControlSettings["timeSkip"]
+    option: TimeControlTimeSkipSettings
   ): JQuery<HTMLElement> {
     const iseason = ucfirst(this._host.i18n(`$calendar.season.${season}` as const));
 

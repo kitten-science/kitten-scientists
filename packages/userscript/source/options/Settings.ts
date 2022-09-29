@@ -39,16 +39,12 @@ export class SettingMax extends Setting {
   }
 }
 
-export class SettingLimitedMax extends Setting implements SettingLimited, SettingMax {
-  limited: boolean;
-  $limited: JQuery<HTMLElement> | undefined = undefined;
-
+export class SettingLimitedMax extends SettingLimited implements SettingMax {
   max: number;
   $max: JQuery<HTMLElement> | undefined = undefined;
 
   constructor(enabled = false, limited = false, max = -1) {
-    super(enabled);
-    this.limited = limited;
+    super(enabled, limited);
     this.max = max;
   }
 }

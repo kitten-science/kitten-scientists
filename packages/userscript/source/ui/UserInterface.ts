@@ -164,7 +164,18 @@ export class UserInterface {
     // Basic layout for our own list-based options menus.
     this._addRule("#ks-options ul { list-style: none; margin: 0 0 5px; padding: 0; }");
     this._addRule('#ks-options ul:after { clear: both; content: " "; display: block; height: 0; }');
-    this._addRule("#ks-options ul li { display: block; float: left; width: 100%; }");
+    this._addRule(
+      `#ks-options ul li { 
+        display: block; float: left; width: 100%; 
+      }`
+    );
+
+    // Style settings that act as UI delimiters.
+    this._addRule(
+      `#ks-options ul li.ks-delimiter {
+        margin-bottom: 10px;
+      }`
+    );
 
     // Rules needed to enable stock warning.
     this._addRule(`

@@ -6,7 +6,7 @@ import { Maybe, mustExist } from "../tools/Maybe";
 import { ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
-import { SettingLimitedUi } from "./SettingLimitedUi";
+import { SettingLimitedMaxUi } from "./SettingLimitedMaxUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingUi } from "./SettingUi";
 
@@ -190,7 +190,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return SettingLimitedUi.make(this._host, name, option, label, delimiter, upgradeIndicator, {
+    return SettingLimitedMaxUi.make(this._host, name, option, label, delimiter, upgradeIndicator, {
       onLimitedCheck: () => {
         this._host.updateOptions(() => (option.limited = true));
         this._host.imessage("craft.limited", [label]);
@@ -431,6 +431,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     for (const [, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
       mustExist(option.$limited).prop("checked", option.limited);
+      mustExist(option.$max).text(this._host.i18n("ui.max", [this._renderLimit(option.max)]));
     }
     for (const [, option] of objectEntries(this._settings.resources)) {
       mustExist(option.$consume).text(
