@@ -8,7 +8,7 @@ import {
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { Maybe, mustExist } from "../tools/Maybe";
-import { Season } from "../types";
+import { Resource, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingTriggerUi } from "./SettingTriggerUi";
@@ -567,7 +567,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
           delete this._settings.resources[_name];
         })
       );
-      this._setStockValue(item, resource.stock, true);
     }
 
     // Religion reset options.
@@ -1084,6 +1083,91 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     this._resourcesList.append(add, allresources);
 
     return this._resourcesList;
+  }
+
+  /**
+   * Creates a UI element that reflects stock values for a given resource.
+   * This is currently only used for the time/reset section.
+   *
+   * @param name The resource.
+   * @param title The title to apply to the option.
+   * @param option The option that is being controlled.
+   * @param onDelHandler Will be invoked when the user removes the resoruce from the list.
+   * @returns A new option with stock value.
+   */
+  private _addNewResourceOptionForReset(
+    name: Resource,
+    title: string,
+    option: TimeControlResourcesSettingsItem,
+    onDelHandler: (name: Resource, option: TimeControlResourcesSettingsItem) => void
+  ): JQuery<HTMLElement> {
+    const stock = option.stock;
+
+    // The overall container for this resource item.
+    const container = $("<div/>", {
+      id: `resource-reset-${name}`,
+      css: { display: "inline-block", width: "100%" },
+    });
+
+    // The label with the name of the resource.
+    const label = $("<div/>", {
+      id: `resource-label-${name}`,
+      text: title,
+      css: { display: "inline-block", width: "95px" },
+    });
+
+    // How many items to stock.
+    const stockElement = $("<div/>", {
+      id: `stock-value-${name}`,
+      text: this._host.i18n("resources.stock", [this._renderLimit(stock)]),
+      css: { cursor: "pointer", display: "inline-block", width: "80px" },
+    });
+
+    // Delete the resource from the list.
+    const del = $('<div class="ks-icon-button"/>', {
+      id: `resource-delete-${name}`,
+    }).text(this._host.i18n("resources.del"));
+
+    container.append(label, stockElement, del);
+
+    stockElement.on("click", () => {
+      const value = SettingsSectionUi.promptLimit(
+        this._host.i18n("resources.stock.set", [title]),
+        option.stock.toFixed(0)
+      );
+      if (value !== null) {
+        option.enabled = true;
+        option.stock = value;
+        stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(value)]));
+        this._host.updateOptions();
+      }
+    });
+
+    del.on("click", () => {
+      if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
+        container.remove();
+        onDelHandler(name, option);
+        this._host.updateOptions();
+      }
+    });
+
+    option.$stock = stockElement;
+
+    return container;
+  }
+
+  /**
+   * Removes a previously created resource option.
+   *
+   * @param name The resource to remove.
+   */
+  private _removeResourceOptionForReset(name: Resource): void {
+    const container = $(`#resource-reset-${name}`);
+    if (!container) {
+      return;
+    }
+
+    container.remove();
   }
 
   setState(state: TimeControlSettings): void {

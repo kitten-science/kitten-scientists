@@ -3,7 +3,7 @@ import { CraftSettingsItem, WorkshopSettings } from "../options/WorkshopSettings
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { Maybe, mustExist } from "../tools/Maybe";
-import { ResourceCraftable } from "../types";
+import { Resource, ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
 import { SettingLimitedMaxUi } from "./SettingLimitedMaxUi";
@@ -351,6 +351,134 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     );
 
     return [header, upgradesButton, shipOverride];
+  }
+
+  /**
+   * Creates a UI element that reflects stock and consume values for a given resource.
+   * This is currently only used for the craft section.
+   *
+   * @param name The resource.
+   * @param title The title to apply to the option.
+   * @param option The option that is being controlled.
+   * @param onDelHandler Will be invoked when the user removes the resoruce from the list.
+   * @returns A new option with stock and consume values.
+   */
+  private _addNewResourceOption(
+    name: Resource,
+    title: string,
+    option: ResourcesSettingsItem,
+    onDelHandler: (name: Resource, option: ResourcesSettingsItem) => void
+  ): JQuery<HTMLElement> {
+    //title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
+
+    const stock = option.stock;
+
+    // The overall container for this resource item.
+    const container = $("<div/>", {
+      id: `resource-${name}`,
+      css: { display: "inline-block", width: "100%" },
+    });
+
+    // The label with the name of the resource.
+    const label = $("<div/>", {
+      id: `resource-label-${name}`,
+      text: title,
+      css: { display: "inline-block", width: "95px" },
+    });
+
+    // How many items to stock.
+    const stockElement = $("<div/>", {
+      id: `stock-value-${name}`,
+      text: this._host.i18n("resources.stock", [this._renderLimit(stock)]),
+      css: { cursor: "pointer", display: "inline-block", width: "80px" },
+    });
+
+    // The consume rate for the resource.
+    const consumeElement = $("<div/>", {
+      id: `consume-rate-${name}`,
+      text: this._host.i18n("resources.consume", [
+        SettingsSectionUi.renderConsumeRate(option.consume),
+      ]),
+      css: { cursor: "pointer", display: "inline-block" },
+    });
+
+    // Delete the resource from the list.
+    const del = $('<div class="ks-icon-button"/>', {
+      id: `resource-delete-${name}`,
+    }).text(this._host.i18n("resources.del"));
+
+    container.append(label, stockElement, consumeElement, del);
+
+    // once created, set color if relevant
+    if (option !== undefined && option.stock !== undefined) {
+      this._setStockWarning(name, option.stock);
+    }
+
+    stockElement.on("click", () => {
+      const value = SettingsSectionUi.promptLimit(
+        this._host.i18n("resources.stock.set", [title]),
+        option.stock.toFixed(0)
+      );
+      if (value !== null) {
+        option.enabled = true;
+        option.stock = value;
+        stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(value)]));
+        this._host.updateOptions();
+      }
+    });
+
+    consumeElement.on("click", () => {
+      const consumeValue = SettingsSectionUi.promptPercentage(
+        this._host.i18n("resources.consume.set", [title]),
+        SettingsSectionUi.renderConsumeRate(option.consume)
+      );
+      if (consumeValue !== null) {
+        // Cap value between 0 and 1.
+        this._host.updateOptions(() => (option.consume = consumeValue));
+        consumeElement.text(
+          this._host.i18n("resources.consume", [SettingsSectionUi.renderConsumeRate(consumeValue)])
+        );
+      }
+    });
+
+    del.on("click", () => {
+      if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
+        container.remove();
+        onDelHandler(name, option);
+        this._host.updateOptions();
+      }
+    });
+
+    option.$consume = consumeElement;
+    option.$stock = stockElement;
+
+    return container;
+  }
+
+  /**
+   * Removes a previously created resource option.
+   *
+   * @param name The resource to remove.
+   */
+  private _removeResourceOption(name: Resource): void {
+    const container = $(`#resource-${name}`).remove();
+    if (!container.length) {
+      return;
+    }
+
+    container.remove();
+  }
+
+  private _setStockWarning(name: Resource, value: number, forReset = false): void {
+    // simplest way to ensure it doesn't stick around too often; always do
+    // a remove first then re-add only if needed
+    const path = forReset ? `#resource-reset-${name}` : `#resource-${name}`;
+    $(path).removeClass("stockWarn");
+
+    const maxValue = this._host.gamePage.resPool.resources.filter(i => i.name === name)[0].maxValue;
+    if ((value > maxValue && !(maxValue === 0)) || value === Infinity) {
+      $(path).addClass("stockWarn");
+    }
   }
 
   setState(state: WorkshopSettings): void {
