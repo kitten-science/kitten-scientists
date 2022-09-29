@@ -4,6 +4,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingUi } from "./SettingUi";
 
 export class ScienceSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -29,7 +30,8 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
     this._settings.$enabled = element.checkbox;
 
-    const techsButton = this._getOption(
+    const techsButton = SettingUi.make(
+      this._host,
       "techs",
       this._settings.techs,
       this._host.i18n("ui.upgrade.techs"),
@@ -55,7 +57,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     const techButtons = [];
     for (const [techName, tech] of objectEntries(this._settings.techs.items)) {
       const label = this._host.i18n(`$science.${techName}.label`);
-      const button = this._getOption(`tech-${techName}`, tech, label, false, false, {
+      const button = SettingUi.make(this._host, `tech-${techName}`, tech, label, false, false, {
         onCheck: () => {
           this._host.updateOptions(() => (tech.enabled = true));
           this._host.imessage("status.auto.enable", [label]);
@@ -87,7 +89,8 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     techsButton.append(techsItemsButton, techsList);
 
     // Set up the more complex policies options.
-    const policiesButton = this._getOption(
+    const policiesButton = SettingUi.make(
+      this._host,
       "policies",
       this._settings.policies,
       this._host.i18n("ui.upgrade.policies"),
@@ -115,7 +118,8 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       const policyLabel = this._host.i18n(
         `$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`
       );
-      const policyButton = this._getOption(
+      const policyButton = SettingUi.make(
+        this._host,
         `policy-${policyName}`,
         policy,
         policyLabel,

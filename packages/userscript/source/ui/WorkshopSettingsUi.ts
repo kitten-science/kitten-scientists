@@ -6,7 +6,9 @@ import { Maybe, mustExist } from "../tools/Maybe";
 import { ResourceCraftable } from "../types";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
+import { SettingLimitedUi } from "./SettingLimitedUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingUi } from "./SettingUi";
 
 export class WorkshopSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -188,7 +190,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return this._getOptionWithLimited(name, option, label, delimiter, upgradeIndicator, {
+    return SettingLimitedUi.make(this._host, name, option, label, delimiter, upgradeIndicator, {
       onLimitedCheck: () => {
         this._host.updateOptions(() => (option.limited = true));
         this._host.imessage("craft.limited", [label]);
@@ -293,7 +295,8 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const upgradesButton = this._getOption(
+    const upgradesButton = SettingUi.make(
+      this._host,
       "upgrades",
       this._settings.unlockUpgrades,
       this._host.i18n("ui.upgrade.upgrades"),
@@ -319,7 +322,8 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const upgradeButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.unlockUpgrades.items)) {
       const upgradeLabel = this._host.i18n(`$workshop.${upgradeName}.label`);
-      const upgradeButton = this._getOption(
+      const upgradeButton = SettingUi.make(
+        this._host,
         `upgrade-${upgradeName}`,
         upgrade,
         upgradeLabel,
@@ -357,7 +361,8 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     });
     upgradesButton.append(upgradesItemsButton, upgradesList);
 
-    const shipOverride = this._getOption(
+    const shipOverride = SettingUi.make(
+      this._host,
       "shipOverride",
       this._settings.shipOverride,
       this._host.i18n("option.shipOverride"),
@@ -411,7 +416,9 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     this.setState(this._settings);
 
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
-    mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
+    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.trigger
+    );
 
     mustExist(this._settings.unlockUpgrades.$enabled).prop(
       "checked",
@@ -427,7 +434,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     }
     for (const [, option] of objectEntries(this._settings.resources)) {
       mustExist(option.$consume).text(
-        this._host.i18n("resources.consume", [this._renderConsumeRate(option.consume)])
+        this._host.i18n("resources.consume", [SettingsSectionUi.renderConsumeRate(option.consume)])
       );
       mustExist(option.$stock).text(
         this._host.i18n("resources.stock", [this._renderLimit(option.stock)])

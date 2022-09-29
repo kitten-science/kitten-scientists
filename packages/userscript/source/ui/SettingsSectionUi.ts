@@ -1,15 +1,15 @@
 import { BonfireSettingsItem } from "../options/BonfireSettings";
 import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { ResourcesSettingsItem } from "../options/ResourcesSettings";
-import { Setting, SettingLimited, SettingMax, SettingTrigger } from "../options/Settings";
+import { SettingMax, SettingTrigger } from "../options/Settings";
 import { SettingsSection } from "../options/SettingsSection";
 import { TimeControlResourcesSettingsItem } from "../options/TimeControlSettings";
 import { ucfirst } from "../tools/Format";
-import { clog } from "../tools/Log";
 import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
+import { SettingMaxUi } from "./SettingMaxUi";
 
 export type SettingsSectionUiComposition = {
   checkbox: JQuery<HTMLElement>;
@@ -32,8 +32,6 @@ export abstract class SettingsSectionUi {
   }
 
   abstract refreshUi(): void;
-
-  private static _provisionedOptionElements = new Map<string, JQuery<HTMLElement>>();
 
   /**
    * Expands the options list if true, and collapses it if false.
@@ -156,7 +154,7 @@ export abstract class SettingsSectionUi {
    * is clicked.
    * @returns The constructed trigger button.
    */
-  protected _getTriggerButton(id: string, handler: { onClick?: () => void } = {}) {
+  static getTriggerButton(id: string, handler: { onClick?: () => void } = {}) {
     const triggerButton = $("<div/>", {
       id: `trigger-${id}`,
       html: '<svg style="width:15px;height:15px" viewBox="0 0 24 24"><path fill="currentColor" d="M11 15H6L13 1V9H18L11 23V15Z" /></svg>',
@@ -186,11 +184,11 @@ export abstract class SettingsSectionUi {
    * @returns The created button.
    */
   protected _registerTriggerButton(id: string, itext: string, options: SettingTrigger) {
-    return this._getTriggerButton(id, {
+    return SettingsSectionUi.getTriggerButton(id, {
       onClick: () => {
-        const value = this._promptPercentage(
+        const value = SettingsSectionUi.promptPercentage(
           this._host.i18n("ui.trigger.set", [itext]),
-          this._renderPercentage(options.trigger)
+          SettingsSectionUi.renderPercentage(options.trigger)
         );
 
         if (value !== null) {
@@ -315,246 +313,6 @@ export abstract class SettingsSectionUi {
     return headerElement;
   }
 
-  /**
-   * Construct a new option element.
-   * This is a simple checkbox with a label.
-   *
-   * @param name The internal ID of this option. Should be unique throughout the script.
-   * @param option The option this element is linked to.
-   * @param i18nName The label on the option element.
-   * @param delimiter Should there be additional padding below this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
-   * to indicate that this is an upgrade of a prior option?
-   * @param handler The event handlers for this option element.
-   * @param handler.onCheck Will be invoked when the user checks the checkbox.
-   * @param handler.onUnCheck Will be invoked when the user unchecks the checkbox.
-   * @returns The constructed option element.
-   */
-  protected _getOption(
-    name: string,
-    option: Setting,
-    i18nName: string,
-    delimiter = false,
-    upgradeIndicator = false,
-    handler: {
-      onCheck?: () => void;
-      onUnCheck?: () => void;
-    } = {}
-  ): JQuery<HTMLElement> {
-    if (SettingsSectionUi._provisionedOptionElements.has(name)) {
-      throw new Error(
-        `Duplicate option ID requested! The option ID '${name}' has already been assigned to a previously provisoned element.`
-      );
-    }
-    const element = $("<li/>");
-    const elementLabel = `${upgradeIndicator ? `⮤ ` : ""}${i18nName}`;
-
-    const label = $("<label/>", {
-      for: `toggle-${name}`,
-      text: elementLabel,
-      css: {
-        display: "inline-block",
-        marginBottom: delimiter ? "10px" : undefined,
-        minWidth: "100px",
-      },
-    });
-
-    const input = $("<input/>", {
-      id: `toggle-${name}`,
-      type: "checkbox",
-    }).data("option", option);
-    option.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && option.enabled === false) {
-        if (handler.onCheck) {
-          handler.onCheck();
-          return;
-        }
-
-        this._host.updateOptions(() => (option.enabled = true));
-        clog("Unlogged action item");
-      } else if (!input.is(":checked") && option.enabled === true) {
-        if (handler.onUnCheck) {
-          handler.onUnCheck();
-          return;
-        }
-
-        this._host.updateOptions(() => (option.enabled = false));
-        clog("Unlogged action item");
-      }
-    });
-
-    element.append(input, label);
-
-    SettingsSectionUi._provisionedOptionElements.set(name, element);
-
-    return element;
-  }
-
-  /**
-   * Create a UI element for an option that can have a maximum.
-   * This will result in an element with a labeled checkbox and a "Max" indicator,
-   * which controls the respective `max` property in the option model.
-   *
-   * @param name A unique name for this option.
-   * @param option The option model.
-   * @param label The label for the option.
-   * @param delimiter Should a delimiter be rendered after this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
-   * to indicate that this is an upgrade of a prior option?
-   * @param handler Handlers to call when the option is checked or unchecked.
-   * @param handler.onCheck Is called when the option is checked.
-   * @param handler.onUnCheck Is called when the option is unchecked.
-   * @returns The created element.
-   */
-  protected _getOptionWithMax(
-    name: string,
-    option: SettingMax,
-    label: string,
-    delimiter = false,
-    upgradeIndicator = false,
-    handler: {
-      onCheck?: () => void;
-      onUnCheck?: () => void;
-    } = {}
-  ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label, delimiter, upgradeIndicator, handler);
-
-    const maxButton = $("<div/>", {
-      id: `set-${name}-max`,
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    }).data("option", option);
-    option.$max = maxButton;
-
-    maxButton.on("click", () => {
-      const value = this._promptLimit(
-        this._host.i18n("ui.max.set", [label]),
-        option.max.toString()
-      );
-
-      if (value !== null) {
-        const limit = this._renderLimit(value);
-        this._host.updateOptions(() => (option.max = value));
-        maxButton[0].title = limit;
-        maxButton[0].innerText = this._host.i18n("ui.max", [limit]);
-      }
-    });
-
-    element.append(maxButton);
-
-    return element;
-  }
-
-  /**
-   * Create a UI element for an option that can be limited.
-   * This will result in an element with a checkbox that has a "Limited" label.
-   *
-   * @param name A unique name for this option.
-   * @param option The option model.
-   * @param label The label for the option.
-   * @param delimiter Should a delimiter be rendered after this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
-   * to indicate that this is an upgrade of a prior option?
-   * @param handler Handlers to call when the option is checked or unchecked.
-   * @param handler.onCheck Is called when the option is checked.
-   * @param handler.onUnCheck Is called when the option is unchecked.
-   * @param handler.onLimitedCheck Is called when the "Limited" checkbox is checked.
-   * @param handler.onLimitedUnCheck Is called when the "Limited" checkbox is unchecked.
-   * @returns The created element.
-   */
-  protected _getOptionWithLimited(
-    name: string,
-    option: SettingLimited,
-    label: string,
-    delimiter = false,
-    upgradeIndicator = false,
-    handler: {
-      onCheck?: () => void;
-      onUnCheck?: () => void;
-      onLimitedCheck?: () => void;
-      onLimitedUnCheck?: () => void;
-    } = {}
-  ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label, delimiter, upgradeIndicator, handler);
-
-    const labelElement = $("<label/>", {
-      for: `toggle-limited-${name}`,
-      text: this._host.i18n("ui.limit"),
-    });
-
-    const input = $("<input/>", {
-      id: `toggle-limited-${name}`,
-      type: "checkbox",
-    }).data("option", option);
-    option.$limited = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && option.limited === false) {
-        if (handler.onLimitedCheck) {
-          handler.onLimitedCheck();
-          return;
-        }
-
-        this._host.updateOptions(() => (option.limited = true));
-        clog("Unlogged action item");
-      } else if (!input.is(":checked") && option.limited === true) {
-        if (handler.onLimitedUnCheck) {
-          handler.onLimitedUnCheck();
-          return;
-        }
-
-        this._host.updateOptions(() => (option.limited = false));
-        clog("Unlogged action item");
-      }
-    });
-
-    element.append(input, labelElement);
-
-    return element;
-  }
-
-  protected _getOptionWithTrigger(
-    name: string,
-    option: SettingTrigger,
-    label: string,
-    delimiter = false,
-    upgradeIndicator = false,
-    handler: {
-      onCheck?: () => void;
-      onUnCheck?: () => void;
-    } = {}
-  ) {
-    const element = this._getOption(name, option, label, delimiter, upgradeIndicator, handler);
-
-    if (option.trigger !== undefined) {
-      const triggerButton = this._getTriggerButton(`set-${name}-trigger`, {
-        onClick: () => {
-          const value = this._promptPercentage(
-            this._host.i18n("ui.trigger.set", [label]),
-            this._renderPercentage(mustExist(option.trigger))
-          );
-
-          if (value !== null) {
-            option.trigger = value;
-            this._host.updateOptions();
-            triggerButton[0].title = this._renderPercentage(option.trigger);
-          }
-        },
-      });
-      option.$trigger = triggerButton;
-
-      element.append(triggerButton);
-    }
-
-    return element;
-  }
-
   protected _getBuildOption(
     name: string,
     option: BonfireSettingsItem | ReligionSettingsItem | SettingMax,
@@ -562,7 +320,7 @@ export abstract class SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return this._getOptionWithMax(name, option, label, delimiter, upgradeIndicator, {
+    return SettingMaxUi.make(this._host, name, option, label, delimiter, upgradeIndicator, {
       onCheck: () => {
         this._host.updateOptions(() => (option.enabled = true));
         this._host.imessage("status.auto.enable", [label]);
@@ -666,7 +424,9 @@ export abstract class SettingsSectionUi {
     // The consume rate for the resource.
     const consumeElement = $("<div/>", {
       id: `consume-rate-${name}`,
-      text: this._host.i18n("resources.consume", [this._renderConsumeRate(option.consume)]),
+      text: this._host.i18n("resources.consume", [
+        SettingsSectionUi.renderConsumeRate(option.consume),
+      ]),
       css: { cursor: "pointer", display: "inline-block" },
     });
 
@@ -690,7 +450,7 @@ export abstract class SettingsSectionUi {
     }
 
     stockElement.on("click", () => {
-      const value = this._promptLimit(
+      const value = SettingsSectionUi.promptLimit(
         this._host.i18n("resources.stock.set", [title]),
         option.stock.toFixed(0)
       );
@@ -702,15 +462,15 @@ export abstract class SettingsSectionUi {
     });
 
     consumeElement.on("click", () => {
-      const consumeValue = this._promptPercentage(
+      const consumeValue = SettingsSectionUi.promptPercentage(
         this._host.i18n("resources.consume.set", [title]),
-        this._renderConsumeRate(option.consume)
+        SettingsSectionUi.renderConsumeRate(option.consume)
       );
       if (consumeValue !== null) {
         // Cap value between 0 and 1.
         this._host.updateOptions(() => (option.consume = consumeValue));
         consumeElement.text(
-          this._host.i18n("resources.consume", [this._renderConsumeRate(consumeValue)])
+          this._host.i18n("resources.consume", [SettingsSectionUi.renderConsumeRate(consumeValue)])
         );
       }
     });
@@ -798,7 +558,7 @@ export abstract class SettingsSectionUi {
     container.append(label, stockElement, del);
 
     stockElement.on("click", () => {
-      const value = this._promptLimit(
+      const value = SettingsSectionUi.promptLimit(
         this._host.i18n("resources.stock.set", [title]),
         option.stock.toFixed(0)
       );
@@ -871,7 +631,7 @@ export abstract class SettingsSectionUi {
     mustExist(this._host.engine.workshopManager.settings.resources[name]).consume = value;
   }
 
-  protected _promptLimit(text: string, defaultValue: string): number | null {
+  static promptLimit(text: string, defaultValue: string): number | null {
     const value = window.prompt(text, defaultValue);
     if (value === null) {
       return null;
@@ -893,7 +653,7 @@ export abstract class SettingsSectionUi {
     return numericValue;
   }
 
-  protected _promptPercentage(text: string, defaultValue: string): number | null {
+  static promptPercentage(text: string, defaultValue: string): number | null {
     const value = window.prompt(text, defaultValue);
     if (value === null) {
       return null;
@@ -904,18 +664,22 @@ export abstract class SettingsSectionUi {
   }
 
   protected _renderLimit(value: number): string {
+    return SettingsSectionUi.renderLimit(value, this._host);
+  }
+
+  static renderLimit(value: number, host: UserScript) {
     if (value < 0 || value === Number.POSITIVE_INFINITY) {
       return "∞";
     }
 
-    return this._host.gamePage.getDisplayValueExt(value);
+    return host.gamePage.getDisplayValueExt(value);
   }
 
-  protected _renderPercentage(value: number): string {
+  static renderPercentage(value: number): string {
     return value.toFixed(3);
   }
 
-  protected _renderConsumeRate(consume: number | undefined): string {
-    return this._renderPercentage(consume ?? WorkshopManager.DEFAULT_CONSUME_RATE);
+  static renderConsumeRate(consume: number | undefined): string {
+    return SettingsSectionUi.renderPercentage(consume ?? WorkshopManager.DEFAULT_CONSUME_RATE);
   }
 }

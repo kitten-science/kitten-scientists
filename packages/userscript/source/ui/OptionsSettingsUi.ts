@@ -5,6 +5,8 @@ import { ucfirst } from "../tools/Format";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingTriggerUi } from "./SettingTriggerUi";
+import { SettingUi } from "./SettingUi";
 
 export class OptionsSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -63,8 +65,8 @@ export class OptionsSettingsUi extends SettingsSectionUi {
     iname: string
   ): JQuery<HTMLElement> {
     return option.trigger
-      ? this._getOptionWithTrigger(name, option as SettingTrigger, iname)
-      : this._getOption(name, option, iname);
+      ? SettingTriggerUi.make(this._host, name, option as SettingTrigger, iname)
+      : SettingUi.make(this._host, name, option, iname);
   }
 
   setState(state: OptionsSettings): void {
@@ -88,7 +90,7 @@ export class OptionsSettingsUi extends SettingsSectionUi {
       mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
 
       if (!isNil(option.$trigger)) {
-        option.$trigger[0].title = this._renderPercentage(
+        option.$trigger[0].title = SettingsSectionUi.renderPercentage(
           mustExist(this._settings.items[name].trigger)
         );
       }

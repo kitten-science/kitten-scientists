@@ -4,6 +4,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingUi } from "./SettingUi";
 
 export class FiltersSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -115,7 +116,7 @@ export class FiltersSettingsUi extends SettingsSectionUi {
     ] as const;
 
     const makeButton = (name: FilterItem, option: FilterSettingsItem, label: string) =>
-      this._getOption(name, option, label, false, false, {
+      SettingUi.make(this._host, name, option, label, false, false, {
         onCheck: () => {
           option.enabled = true;
           this._host.imessage("filter.enable", [label]);

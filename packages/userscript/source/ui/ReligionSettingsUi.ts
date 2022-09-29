@@ -5,6 +5,8 @@ import { mustExist } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingTriggerUi } from "./SettingTriggerUi";
+import { SettingUi } from "./SettingUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -227,7 +229,8 @@ export class ReligionSettingsUi extends SettingsSectionUi {
   getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeAdore = this._getOptionWithTrigger(
+    const nodeAdore = SettingTriggerUi.make(
+      this._host,
       "adore",
       this._settings.adore,
       this._host.i18n("option.faith.adore"),
@@ -245,7 +248,8 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const nodeAutoPraise = this._getOptionWithTrigger(
+    const nodeAutoPraise = SettingTriggerUi.make(
+      this._host,
       "autoPraise",
       this._settings.autoPraise,
       this._host.i18n("option.praise"),
@@ -263,7 +267,8 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const nodeBestUnicornBuilding = this._getOption(
+    const nodeBestUnicornBuilding = SettingUi.make(
+      this._host,
       "bestUnicornBuilding",
       this._settings.bestUnicornBuilding,
       this._host.i18n("option.faith.best.unicorn"),
@@ -313,7 +318,8 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       //this._host.saveToKittenStorage();
     });
 
-    const nodeTranscend = this._getOption(
+    const nodeTranscend = SettingUi.make(
+      this._host,
       "transcend",
       this._settings.transcend,
       this._host.i18n("option.faith.transcend"),
@@ -355,17 +361,19 @@ export class ReligionSettingsUi extends SettingsSectionUi {
     this.setState(this._settings);
 
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
-    mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
+    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.trigger
+    );
 
     mustExist(this._settings.adore.$enabled).prop("checked", this._settings.adore.enabled);
-    mustExist(this._settings.adore.$trigger)[0].title = this._renderPercentage(
+    mustExist(this._settings.adore.$trigger)[0].title = SettingsSectionUi.renderPercentage(
       this._settings.adore.trigger
     );
     mustExist(this._settings.autoPraise.$enabled).prop(
       "checked",
       this._settings.autoPraise.enabled
     );
-    mustExist(this._settings.autoPraise.$trigger)[0].title = this._renderPercentage(
+    mustExist(this._settings.autoPraise.$trigger)[0].title = SettingsSectionUi.renderPercentage(
       this._settings.autoPraise.trigger
     );
     mustExist(this._settings.bestUnicornBuilding.$enabled).prop(

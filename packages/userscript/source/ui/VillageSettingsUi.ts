@@ -4,7 +4,10 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingMaxUi } from "./SettingMaxUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingTriggerUi } from "./SettingTriggerUi";
+import { SettingUi } from "./SettingUi";
 
 export class VillageSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -89,7 +92,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = this._getOptionWithMax(name, option, label, delimiter, false, {
+    const element = SettingMaxUi.make(this._host, name, option, label, delimiter, false, {
       onCheck: () => {
         this._host.updateOptions(() => (option.enabled = true));
         this._host.imessage("status.auto.enable", [label]);
@@ -105,7 +108,8 @@ export class VillageSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeHunt = this._getOptionWithTrigger(
+    const nodeHunt = SettingTriggerUi.make(
+      this._host,
       "hunt",
       this._settings.hunt,
       this._host.i18n("option.hunt"),
@@ -123,7 +127,8 @@ export class VillageSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const nodeFestivals = this._getOption(
+    const nodeFestivals = SettingUi.make(
+      this._host,
       "festival",
       this._settings.holdFestivals,
       this._host.i18n("option.festival"),
@@ -141,7 +146,8 @@ export class VillageSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const nodePromote = this._getOption(
+    const nodePromote = SettingUi.make(
+      this._host,
       "promote",
       this._settings.promoteLeader,
       this._host.i18n("option.promote"),
@@ -185,7 +191,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
       this._settings.holdFestivals.enabled
     );
     mustExist(this._settings.hunt.$enabled).prop("checked", this._settings.hunt.enabled);
-    mustExist(this._settings.hunt.$trigger)[0].title = this._renderPercentage(
+    mustExist(this._settings.hunt.$trigger)[0].title = SettingsSectionUi.renderPercentage(
       this._settings.hunt.trigger
     );
     mustExist(this._settings.promoteLeader.$enabled).prop(

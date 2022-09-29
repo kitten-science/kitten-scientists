@@ -10,6 +10,8 @@ import { Maybe, mustExist } from "../tools/Maybe";
 import { Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingTriggerUi } from "./SettingTriggerUi";
+import { SettingUi } from "./SettingUi";
 
 export class TimeControlSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -62,7 +64,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option: TimeControlSettings["timeSkip"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = this._getOptionWithTrigger(name, option, label);
+    const element = SettingTriggerUi.make(this._host, name, option, label);
 
     const maximumButton = $("<div/>", {
       id: "set-timeSkip-maximum",
@@ -79,7 +81,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option.$maximum = maximumButton;
 
     maximumButton.on("click", () => {
-      const value = this._promptLimit(
+      const value = SettingsSectionUi.promptLimit(
         this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
         option.maximum.toFixed(0)
       );
@@ -158,7 +160,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option: TimeControlSettings["reset"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = this._getOption(name, option, label);
+    const element = SettingUi.make(this._host, name, option, label);
 
     // Bonfire reset options
     const resetBuildList = this._getOptionList("reset-build");
@@ -973,7 +975,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option: TimeControlSettings["accelerateTime"],
     label: string
   ): JQuery<HTMLElement> {
-    return this._getOptionWithTrigger(name, option, label);
+    return SettingTriggerUi.make(this._host, name, option, label);
   }
 
   private _getCycle(
@@ -1018,7 +1020,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return this._getOptionWithTrigger(
+    return SettingTriggerUi.make(
+      this._host,
       `toggle-reset-${type}-${name}`,
       option,
       i18nName,
@@ -1187,14 +1190,14 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       "checked",
       this._settings.accelerateTime.enabled
     );
-    mustExist(this._settings.accelerateTime.$trigger)[0].title = this._renderPercentage(
+    mustExist(this._settings.accelerateTime.$trigger)[0].title = SettingsSectionUi.renderPercentage(
       this._settings.accelerateTime.trigger
     );
 
     mustExist(this._settings.reset.$enabled).prop("checked", this._settings.reset.enabled);
 
     mustExist(this._settings.timeSkip.$enabled).prop("checked", this._settings.timeSkip.enabled);
-    mustExist(this._settings.timeSkip.$trigger)[0].title = this._renderPercentage(
+    mustExist(this._settings.timeSkip.$trigger)[0].title = SettingsSectionUi.renderPercentage(
       this._settings.timeSkip.trigger
     );
     mustExist(this._settings.timeSkip.$autumn).prop("checked", this._settings.timeSkip.autumn);

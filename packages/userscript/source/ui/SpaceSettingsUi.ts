@@ -4,6 +4,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingUi } from "./SettingUi";
 
 export class SpaceSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -190,7 +191,8 @@ export class SpaceSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const missionsButton = this._getOption(
+    const missionsButton = SettingUi.make(
+      this._host,
       "missions",
       this._settings.unlockMissions,
       this._host.i18n("ui.upgrade.missions"),
@@ -216,7 +218,8 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     const missionButtons = [];
     for (const [missionName, mission] of objectEntries(this._settings.unlockMissions.items)) {
       const missionLabel = this._host.i18n(`$space.${missionName}.label`);
-      const missionButton = this._getOption(
+      const missionButton = SettingUi.make(
+        this._host,
         `mission-${missionName}`,
         mission,
         missionLabel,
@@ -276,7 +279,9 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     this.setState(this._settings);
 
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
-    mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
+    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.trigger
+    );
 
     mustExist(this._settings.unlockMissions.$enabled).prop(
       "checked",

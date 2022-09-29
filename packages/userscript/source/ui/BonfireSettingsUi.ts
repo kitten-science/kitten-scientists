@@ -4,6 +4,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingUi } from "./SettingUi";
 
 export class BonfireSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -288,7 +289,8 @@ export class BonfireSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const upgradeBuildingsButton = this._getOption(
+    const upgradeBuildingsButton = SettingUi.make(
+      this._host,
       "buildings",
       this._settings.upgradeBuildings,
       this._host.i18n("ui.upgrade.buildings"),
@@ -314,16 +316,24 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     const upgradeBuildingsButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.upgradeBuildings.items)) {
       const label = this._host.i18n(`$buildings.${upgradeName}.label`);
-      const button = this._getOption(`building-${upgradeName}`, upgrade, label, false, false, {
-        onCheck: () => {
-          this._host.updateOptions(() => (upgrade.enabled = true));
-          this._host.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (upgrade.enabled = false));
-          this._host.imessage("status.auto.disable", [label]);
-        },
-      });
+      const button = SettingUi.make(
+        this._host,
+        `building-${upgradeName}`,
+        upgrade,
+        label,
+        false,
+        false,
+        {
+          onCheck: () => {
+            this._host.updateOptions(() => (upgrade.enabled = true));
+            this._host.imessage("status.auto.enable", [label]);
+          },
+          onUnCheck: () => {
+            this._host.updateOptions(() => (upgrade.enabled = false));
+            this._host.imessage("status.auto.disable", [label]);
+          },
+        }
+      );
 
       upgradeBuildingsButtons.push({ label: label, button: button });
     }
@@ -347,7 +357,8 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     });
     upgradeBuildingsButton.append(upgradeBuildingsItemsButton, upgradeBuildingsList);
 
-    const nodeTurnOnSteamworks = this._getOption(
+    const nodeTurnOnSteamworks = SettingUi.make(
+      this._host,
       "_steamworks",
       this._settings.turnOnSteamworks,
       this._host.i18n("option.steamworks"),
@@ -389,7 +400,9 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     this.setState(this._settings);
 
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
-    mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
+    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.trigger
+    );
     mustExist(this._settings.upgradeBuildings.$enabled).prop(
       "checked",
       this._settings.upgradeBuildings.enabled

@@ -4,6 +4,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingUi } from "./SettingUi";
 
 export class TimeSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -30,59 +31,70 @@ export class TimeSettingsUi extends SettingsSectionUi {
     this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
 
     const optionButtons = [
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "temporalBattery",
         this._settings.items.temporalBattery,
         this._host.i18n("$time.cfu.temporalBattery.label")
       ),
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "blastFurnace",
         this._settings.items.blastFurnace,
         this._host.i18n("$time.cfu.blastFurnace.label")
       ),
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "timeBoiler",
         this._settings.items.timeBoiler,
         this._host.i18n("$time.cfu.timeBoiler.label")
       ),
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "temporalAccelerator",
         this._settings.items.temporalAccelerator,
         this._host.i18n("$time.cfu.temporalAccelerator.label")
       ),
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "temporalImpedance",
         this._settings.items.temporalImpedance,
         this._host.i18n("$time.cfu.temporalImpedance.label")
       ),
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "ressourceRetrieval",
         this._settings.items.ressourceRetrieval,
         this._host.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "cryochambers",
         this._settings.items.cryochambers,
         this._host.i18n("$time.vsu.cryochambers.label")
       ),
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "voidHoover",
         this._settings.items.voidHoover,
         this._host.i18n("$time.vsu.voidHoover.label")
       ),
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "voidRift",
         this._settings.items.voidRift,
         this._host.i18n("$time.vsu.voidRift.label")
       ),
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "chronocontrol",
         this._settings.items.chronocontrol,
         this._host.i18n("$time.vsu.chronocontrol.label")
       ),
-      this._getOption(
+      SettingUi.make(
+        this._host,
         "voidResonator",
         this._settings.items.voidResonator,
         this._host.i18n("$time.vsu.voidResonator.label")
@@ -110,7 +122,9 @@ export class TimeSettingsUi extends SettingsSectionUi {
     this.setState(this._settings);
 
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
-    mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
+    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.trigger
+    );
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);

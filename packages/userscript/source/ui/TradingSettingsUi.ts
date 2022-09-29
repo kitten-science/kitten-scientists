@@ -4,7 +4,10 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
+import { SettingLimitedUi } from "./SettingLimitedUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingTriggerUi } from "./SettingTriggerUi";
+import { SettingUi } from "./SettingUi";
 
 export class TradingSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -92,7 +95,8 @@ export class TradingSettingsUi extends SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    const element = this._getOptionWithLimited(
+    const element = SettingLimitedUi.make(
+      this._host,
       name,
       option,
       i18nName,
@@ -178,7 +182,8 @@ export class TradingSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeEmbassies = this._getOptionWithTrigger(
+    const nodeEmbassies = SettingTriggerUi.make(
+      this._host,
       "embassies",
       this._settings.buildEmbassies,
       this._host.i18n("option.embassies"),
@@ -196,7 +201,8 @@ export class TradingSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const nodeRaces = this._getOption(
+    const nodeRaces = SettingUi.make(
+      this._host,
       "races",
       this._settings.unlockRaces,
       this._host.i18n("ui.upgrade.races"),
@@ -239,7 +245,9 @@ export class TradingSettingsUi extends SettingsSectionUi {
     this.setState(this._settings);
 
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
-    mustExist(this._settings.$trigger)[0].title = this._renderPercentage(this._settings.trigger);
+    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.trigger
+    );
 
     mustExist(this._settings.buildEmbassies.$enabled).prop(
       "checked",
