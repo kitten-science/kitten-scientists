@@ -18,7 +18,7 @@ export class ScienceManager extends UpgradeManager {
     super(host);
     this.settings = settings;
     this.manager = new TabManager(this._host, "Science");
-    this._workshopManager = new WorkshopManager(this._host);
+    this._workshopManager = this._host.engine.workshopManager;
   }
 
   async tick(context: TickContext) {

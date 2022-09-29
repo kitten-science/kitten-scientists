@@ -1,5 +1,5 @@
-import { CacheManager } from "./CacheManager";
 import { Automation, TickContext } from "./Engine";
+import { MaterialsCache } from "./helper/MaterialsCache";
 import { CraftSettingsItem, WorkshopSettings } from "./options/WorkshopSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
@@ -392,7 +392,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    */
   getTickVal(
     resource: ResourceInfo,
-    cacheManager?: CacheManager,
+    cacheManager?: MaterialsCache,
     preTrade: boolean | undefined = undefined
   ): number | "ignore" {
     let production = this._host.gamePage.getResourcePerTick(resource.name, true);
@@ -496,6 +496,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @param name The resource.
    * @returns How many items of the resource to always keep in stock.
    */
+
   getStock(name: Resource): number {
     const res = this.settings.resources[name];
     const stock = res && res.enabled ? res.stock : 0;

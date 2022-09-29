@@ -1,5 +1,5 @@
-import { CacheManager } from "./CacheManager";
 import { Automation, TickContext } from "./Engine";
+import { MaterialsCache } from "./helper/MaterialsCache";
 import { TradingSettings } from "./options/TradingSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
@@ -41,7 +41,7 @@ export class TradeManager implements Automation {
     this.settings.load(settings);
   }
 
-  autoTrade(cacheManager?: CacheManager) {
+  autoTrade(cacheManager?: MaterialsCache) {
     const catpower = this._workshopManager.getResource("manpower");
     const gold = this._workshopManager.getResource("gold");
     const requireTrigger = this.settings.trigger;

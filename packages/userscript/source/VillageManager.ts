@@ -1,5 +1,5 @@
-import { CacheManager } from "./CacheManager";
 import { Automation, TickContext } from "./Engine";
+import { MaterialsCache } from "./helper/MaterialsCache";
 import { VillageSettings } from "./options/VillageSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
@@ -13,14 +13,14 @@ export class VillageManager implements Automation {
   private readonly _host: UserScript;
   settings: VillageSettings;
   readonly manager: TabManager<VillageTab>;
-  private readonly _cacheManager: CacheManager;
+  private readonly _cacheManager: MaterialsCache;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript, settings = new VillageSettings()) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Village");
-    this._cacheManager = new CacheManager(this._host);
+    this._cacheManager = new MaterialsCache(this._host);
     this._workshopManager = new WorkshopManager(this._host);
   }
 
@@ -120,7 +120,7 @@ export class VillageManager implements Automation {
     }
   }
 
-  autoHunt(cacheManager?: CacheManager) {
+  autoHunt(cacheManager?: MaterialsCache) {
     const manpower = this._workshopManager.getResource("manpower");
     const trigger = this.settings.hunt.trigger ?? 0;
 
@@ -163,7 +163,7 @@ export class VillageManager implements Automation {
     }
   }
 
-  autoFestival(cacheManager?: CacheManager) {
+  autoFestival(cacheManager?: MaterialsCache) {
     // If we haven't researched festivals yet, or still have more than 400 days left on one,
     // don't hold (another) one.
     if (

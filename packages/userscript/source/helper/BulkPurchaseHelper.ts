@@ -1,6 +1,6 @@
-import { AllItems, Requirement } from "./options/Options";
-import { objectEntries } from "./tools/Entries";
-import { isNil, mustExist } from "./tools/Maybe";
+import { AllItems, Requirement } from "../options/Settings";
+import { objectEntries } from "../tools/Entries";
+import { isNil, mustExist } from "../tools/Maybe";
 import {
   AllBuildings,
   BuildButton,
@@ -15,9 +15,9 @@ import {
   UnicornItemVariant,
   VoidSpaceUpgradeInfo,
   ZiggurathUpgradeInfo,
-} from "./types";
-import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
+} from "../types";
+import { UserScript } from "../UserScript";
+import { WorkshopManager } from "../WorkshopManager";
 
 export type BulkBuildListItem = {
   count: number;
@@ -28,7 +28,7 @@ export type BulkBuildListItem = {
   variant?: TimeItemVariant | UnicornItemVariant;
 };
 
-export class BulkManager {
+export class BulkPurchaseHelper {
   private readonly _host: UserScript;
   private readonly _workshopManager: WorkshopManager;
 

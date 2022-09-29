@@ -1,5 +1,5 @@
-import { BulkManager } from "./BulkManager";
 import { Automation, TickContext } from "./Engine";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { BonfireItem, BonfireSettings, BonfireSettingsItem } from "./options/BonfireSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
@@ -14,14 +14,14 @@ export class BonfireManager implements Automation {
   private readonly _host: UserScript;
   settings: BonfireSettings;
   readonly manager: TabManager<BonfireTab>;
-  private readonly _bulkManager: BulkManager;
+  private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript, settings = new BonfireSettings()) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager<BonfireTab>(this._host, "Bonfire");
-    this._bulkManager = new BulkManager(this._host);
+    this._bulkManager = new BulkPurchaseHelper(this._host);
     this._workshopManager = new WorkshopManager(this._host);
   }
 

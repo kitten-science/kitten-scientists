@@ -1,6 +1,6 @@
 import { BonfireManager } from "./BonfireManager";
-import { BulkManager } from "./BulkManager";
 import { Automation, TickContext } from "./Engine";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { BonfireSettingsItem } from "./options/BonfireSettings";
 import { FaithItem, ReligionSettings, ReligionSettingsItem } from "./options/ReligionSettings";
 import { TabManager } from "./TabManager";
@@ -24,7 +24,7 @@ export class ReligionManager implements Automation {
   private readonly _host: UserScript;
   settings: ReligionSettings;
   readonly manager: TabManager<ReligionTab>;
-  private readonly _bulkManager: BulkManager;
+  private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _bonfireManager: BonfireManager;
   private readonly _workshopManager: WorkshopManager;
 
@@ -33,7 +33,7 @@ export class ReligionManager implements Automation {
     this.settings = settings;
     this.manager = new TabManager(this._host, "Religion");
     this._workshopManager = new WorkshopManager(this._host);
-    this._bulkManager = new BulkManager(this._host);
+    this._bulkManager = new BulkPurchaseHelper(this._host);
     this._bonfireManager = new BonfireManager(this._host);
   }
 

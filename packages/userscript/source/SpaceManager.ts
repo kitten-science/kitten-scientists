@@ -1,5 +1,5 @@
-import { BulkManager } from "./BulkManager";
 import { Automation, TickContext } from "./Engine";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { SettingMax } from "./options/Settings";
 import { SpaceSettings } from "./options/SpaceSettings";
 import { TabManager } from "./TabManager";
@@ -12,14 +12,14 @@ export class SpaceManager implements Automation {
   private readonly _host: UserScript;
   settings: SpaceSettings;
   readonly manager: TabManager<SpaceTab>;
-  private readonly _bulkManager: BulkManager;
+  private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript, settings = new SpaceSettings()) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Space");
-    this._bulkManager = new BulkManager(this._host);
+    this._bulkManager = new BulkPurchaseHelper(this._host);
     this._workshopManager = new WorkshopManager(this._host);
   }
 

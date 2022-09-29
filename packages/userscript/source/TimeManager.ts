@@ -1,5 +1,5 @@
-import { BulkManager } from "./BulkManager";
 import { TickContext } from "./Engine";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { TimeItem, TimeSettings, TimeSettingsItem } from "./options/TimeSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
@@ -19,13 +19,13 @@ export class TimeManager {
   private readonly _host: UserScript;
   settings: TimeSettings;
   readonly manager: TabManager<TimeTab>;
-  private readonly _bulkManager: BulkManager;
+  private readonly _bulkManager: BulkPurchaseHelper;
 
   constructor(host: UserScript, settings = new TimeSettings()) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Time");
-    this._bulkManager = new BulkManager(this._host);
+    this._bulkManager = new BulkPurchaseHelper(this._host);
   }
 
   tick(context: TickContext) {
