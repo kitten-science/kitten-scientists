@@ -561,13 +561,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     // Resources list
     const resetResourcesList = this._getResourceOptions();
-    for (const [item, resource] of objectEntries(this._settings.resources)) {
-      resetResourcesList.append(
-        this._addNewResourceOptionForReset(item, item, resource, (_name, _resource) => {
-          delete this._settings.resources[_name];
-        })
-      );
-    }
 
     // Religion reset options.
     const resetReligionList = this._getItemsList("reset-religion");
@@ -1044,43 +1037,18 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
   private _getResourceOptions(): JQuery<HTMLElement> {
     this._resourcesList = SettingsSectionUi.getList("toggle-reset-list-resources");
 
-    const add = $("<div/>", {
-      id: "resources-add",
-      text: this._host.i18n("resources.add"),
-      css: {
-        border: "1px solid grey",
-        cursor: "pointer",
-        display: "inline-block",
-        padding: "1px 2px",
-      },
-    });
-
     const allresources = SettingsSectionUi.getList("available-resources-list");
 
-    add.on("click", () => {
-      allresources.toggle();
-      allresources.empty();
-      allresources.append(
-        this._getAllAvailableResourceOptions(true, res => {
-          if (!this._settings.resources[res.name]) {
-            const option = new TimeControlResourcesSettingsItem(true, Number.POSITIVE_INFINITY);
-            this._host.updateOptions(() => (this._settings.resources[res.name] = option));
-            $("#toggle-reset-list-resources").append(
-              this._addNewResourceOptionForReset(
-                res.name,
-                res.title,
-                option,
-                (_name, _resource) => {
-                  delete this._settings.resources[_name];
-                }
-              )
-            );
-          }
-        })
-      );
-    });
+    this._resourcesList.append(allresources);
 
-    this._resourcesList.append(add, allresources);
+    // Add all the current resources
+    for (const [name, item] of objectEntries(this._settings.resources)) {
+      this._resourcesList.append(
+        this._addNewResourceOption(name, ucfirst(this._host.i18n(`$resources.${name}.title`)), item)
+      );
+      //this.setStockValue(name, item.stock);
+      //this.setConsumeRate(name, item.consume);
+    }
 
     return this._resourcesList;
   }
@@ -1091,30 +1059,18 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
    *
    * @param name The resource.
    * @param title The title to apply to the option.
-   * @param option The option that is being controlled.
-   * @param onDelHandler Will be invoked when the user removes the resoruce from the list.
+   * @param setting The option that is being controlled.
    * @returns A new option with stock value.
    */
-  private _addNewResourceOptionForReset(
+  private _addNewResourceOption(
     name: Resource,
     title: string,
-    option: TimeControlResourcesSettingsItem,
-    onDelHandler: (name: Resource, option: TimeControlResourcesSettingsItem) => void
+    setting: TimeControlResourcesSettingsItem
   ): JQuery<HTMLElement> {
-    const stock = option.stock;
+    const stock = setting.stock;
 
     // The overall container for this resource item.
-    const container = $("<div/>", {
-      id: `resource-reset-${name}`,
-      css: { display: "inline-block", width: "100%" },
-    });
-
-    // The label with the name of the resource.
-    const label = $("<div/>", {
-      id: `resource-label-${name}`,
-      text: title,
-      css: { display: "inline-block", width: "95px" },
-    });
+    const container = SettingUi.make(this._host, `resource-reset-${name}`, setting, title);
 
     // How many items to stock.
     const stockElement = $("<div/>", {
@@ -1123,35 +1079,22 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       css: { cursor: "pointer", display: "inline-block", width: "80px" },
     });
 
-    // Delete the resource from the list.
-    const del = $('<div class="ks-icon-button"/>', {
-      id: `resource-delete-${name}`,
-    }).text(this._host.i18n("resources.del"));
-
-    container.append(label, stockElement, del);
+    container.append(stockElement);
 
     stockElement.on("click", () => {
       const value = SettingsSectionUi.promptLimit(
         this._host.i18n("resources.stock.set", [title]),
-        option.stock.toFixed(0)
+        setting.stock.toFixed(0)
       );
       if (value !== null) {
-        option.enabled = true;
-        option.stock = value;
+        setting.enabled = true;
+        setting.stock = value;
         stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(value)]));
         this._host.updateOptions();
       }
     });
 
-    del.on("click", () => {
-      if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
-        container.remove();
-        onDelHandler(name, option);
-        this._host.updateOptions();
-      }
-    });
-
-    option.$stock = stockElement;
+    setting.$stock = stockElement;
 
     return container;
   }
@@ -1212,18 +1155,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       option.trigger = state.timeItems[name].trigger;
     }
 
-    // Remove old resource options.
-    for (const [name] of objectEntries(this._settings.resources)) {
-      this._removeResourceOptionForReset(name);
-    }
-    // Add new resource options.
-    const resourcesList = this._getResourceOptions();
     for (const [name, option] of objectEntries(state.resources)) {
-      resourcesList.append(
-        this._addNewResourceOptionForReset(name, name, option, (_name, _resource) => {
-          delete this._settings.resources[_name];
-        })
-      );
+      option.enabled = state.resources[name].enabled;
+      option.stock = state.resources[name].stock;
     }
   }
 

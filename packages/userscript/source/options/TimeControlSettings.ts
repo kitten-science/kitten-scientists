@@ -1,5 +1,5 @@
 import { objectEntries } from "../tools/Entries";
-import { Resource, SpaceBuildings, TimeItemVariant, UnicornItemVariant } from "../types";
+import { SpaceBuildings, TimeItemVariant, UnicornItemVariant } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { Setting, SettingTrigger } from "./Settings";
@@ -19,6 +19,57 @@ export class TimeControlResourcesSettingsItem extends Setting {
     super(enabled);
     this.stock = stock;
   }
+}
+
+export class TimeControlResourceSettings {
+  alloy = new TimeControlResourcesSettingsItem(false, 0);
+  antimatter = new TimeControlResourcesSettingsItem(false, 0);
+  beam = new TimeControlResourcesSettingsItem(false, 0);
+  blackcoin = new TimeControlResourcesSettingsItem(false, 0);
+  bloodstone = new TimeControlResourcesSettingsItem(false, 0);
+  blueprint = new TimeControlResourcesSettingsItem(false, 0);
+  catnip = new TimeControlResourcesSettingsItem(false, 0);
+  coal = new TimeControlResourcesSettingsItem(false, 0);
+  compedium = new TimeControlResourcesSettingsItem(false, 0);
+  concrate = new TimeControlResourcesSettingsItem(false, 0);
+  culture = new TimeControlResourcesSettingsItem(false, 0);
+  eludium = new TimeControlResourcesSettingsItem(false, 0);
+  faith = new TimeControlResourcesSettingsItem(false, 0);
+  furs = new TimeControlResourcesSettingsItem(false, 0);
+  gear = new TimeControlResourcesSettingsItem(false, 0);
+  gold = new TimeControlResourcesSettingsItem(false, 0);
+  iron = new TimeControlResourcesSettingsItem(false, 0);
+  ivory = new TimeControlResourcesSettingsItem(false, 0);
+  karma = new TimeControlResourcesSettingsItem(false, 0);
+  kerosene = new TimeControlResourcesSettingsItem(false, 0);
+  manpower = new TimeControlResourcesSettingsItem(false, 0);
+  manuscript = new TimeControlResourcesSettingsItem(false, 0);
+  megalith = new TimeControlResourcesSettingsItem(false, 0);
+  minerals = new TimeControlResourcesSettingsItem(false, 0);
+  necrocorn = new TimeControlResourcesSettingsItem(false, 0);
+  oil = new TimeControlResourcesSettingsItem(false, 0);
+  paragon = new TimeControlResourcesSettingsItem(false, 0);
+  parchment = new TimeControlResourcesSettingsItem(false, 0);
+  plate = new TimeControlResourcesSettingsItem(false, 0);
+  relic = new TimeControlResourcesSettingsItem(false, 0);
+  scaffold = new TimeControlResourcesSettingsItem(false, 0);
+  science = new TimeControlResourcesSettingsItem(false, 0);
+  ship = new TimeControlResourcesSettingsItem(false, 0);
+  slab = new TimeControlResourcesSettingsItem(false, 0);
+  spice = new TimeControlResourcesSettingsItem(false, 0);
+  steel = new TimeControlResourcesSettingsItem(false, 0);
+  tanker = new TimeControlResourcesSettingsItem(false, 0);
+  tears = new TimeControlResourcesSettingsItem(false, 0);
+  temporalFlux = new TimeControlResourcesSettingsItem(false, 0);
+  thorium = new TimeControlResourcesSettingsItem(false, 0);
+  timeCrystal = new TimeControlResourcesSettingsItem(false, 0);
+  titanium = new TimeControlResourcesSettingsItem(false, 0);
+  unicorns = new TimeControlResourcesSettingsItem(false, 0);
+  unobtainium = new TimeControlResourcesSettingsItem(false, 0);
+  uranium = new TimeControlResourcesSettingsItem(false, 0);
+  void = new TimeControlResourcesSettingsItem(false, 0);
+  wood = new TimeControlResourcesSettingsItem(false, 0);
+  zebras = new TimeControlResourcesSettingsItem(false, 0);
 }
 
 export class TimeControlReligionSettingsItem extends SettingTrigger {
@@ -90,9 +141,6 @@ export type TimeControlSpaceSettingItems = {
 };
 export type TimeControlTimeSettingItems = {
   [item in TimeItem]: TimeControlTimeSettingsItem;
-};
-export type TimeControlResourceSettingItems = {
-  [item in Resource]?: TimeControlResourcesSettingsItem;
 };
 
 export class TimeControlSettings extends SettingsSection {
@@ -252,7 +300,7 @@ export class TimeControlSettings extends SettingsSection {
     voidResonator: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
   };
 
-  resources: TimeControlResourceSettingItems = {};
+  resources: TimeControlResourceSettings;
 
   accelerateTime: SettingTrigger;
   timeSkip: TimeControlTimeSkipSettings;
@@ -436,7 +484,7 @@ export class TimeControlSettings extends SettingsSection {
       chronocontrol: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
       voidResonator: new TimeControlTimeSettingsItem(TimeItemVariant.VoidSpace, true, -1),
     },
-    resources: TimeControlResourceSettingItems = {},
+    resources = new TimeControlResourceSettings(),
     accelerateTime = new SettingTrigger(true, 1),
     timeSkip = new TimeControlTimeSkipSettings(),
     reset = new Setting(false)
@@ -488,9 +536,9 @@ export class TimeControlSettings extends SettingsSection {
       item.trigger = settings.timeItems[name].trigger;
     }
 
-    this.resources = {};
     for (const [name, item] of objectEntries(settings.resources)) {
-      this.resources[name] = new TimeControlResourcesSettingsItem(item.enabled, item.stock);
+      this.resources[name].enabled = item.enabled;
+      this.resources[name].stock = item.stock;
     }
   }
 
@@ -583,15 +631,12 @@ export class TimeControlSettings extends SettingsSection {
       item.trigger = subject.items[`set-reset-time-${name}-min` as const] ?? item.trigger;
     }
 
-    options.resources = {};
     for (const [name, item] of objectEntries(subject.resources)) {
       if (!item.checkForReset) {
         continue;
       }
-      options.resources[name] = new TimeControlResourcesSettingsItem(
-        item.checkForReset,
-        item.stockForReset
-      );
+      options.resources[name].enabled = item.enabled;
+      options.resources[name].stock = item.stock;
     }
 
     return options;

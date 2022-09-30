@@ -470,9 +470,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @returns The information object for the resource.
    */
   getResource(name: Resource): ResourceInfo {
-    if (name === "slabs") {
-      name = "slab";
-    }
     const res = this._host.gamePage.resPool.get(name);
     if (isNil(res)) {
       throw new Error(`Unable to find resource ${name}`);

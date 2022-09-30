@@ -2,10 +2,10 @@ import { ResourcesSettingsItem } from "../options/ResourcesSettings";
 import { CraftSettingsItem, WorkshopSettings } from "../options/WorkshopSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { Maybe, mustExist } from "../tools/Maybe";
-import { Resource, ResourceCraftable } from "../types";
+import { cwarn } from "../tools/Log";
+import { isNil, Maybe, mustExist } from "../tools/Maybe";
+import { Resource } from "../types";
 import { UserScript } from "../UserScript";
-import { WorkshopManager } from "../WorkshopManager";
 import { SettingLimitedMaxUi } from "./SettingLimitedMaxUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingUi } from "./SettingUi";
@@ -196,64 +196,16 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   }
 
   private _getResourceOptions(): JQuery<HTMLElement> {
-    if (this._resourcesList) {
-      return this._resourcesList;
-    }
-
-    this._resourcesList = $('<ul class="ks-list ks-items-list"/>', {
-      id: "toggle-list-resources",
-    });
-
-    const clearunused = $('<div class="ks-button"/>', {
-      id: "resources-clear-unused",
-    }).text(this._host.i18n("resources.clear.unused"));
-
-    const add = $('<div class="ks-button ks-margin-right"/>', {
-      id: "resources-add",
-    }).text(this._host.i18n("resources.add"));
-
-    clearunused.on("click", () => {
-      for (const name in this._settings.resources) {
-        // Only delete resources with unmodified values. Require manual
-        // removal of resources with non-standard values.
-        const resource = mustExist(this._settings.resources[name as ResourceCraftable]);
-        if (
-          (!resource.stock && resource.consume === WorkshopManager.DEFAULT_CONSUME_RATE) ||
-          resource.consume === undefined
-        ) {
-          $(`#resource-${name}`).remove();
-        }
-      }
-    });
+    this._resourcesList = SettingsSectionUi.getList("toggle-list-resources");
 
     const allresources = SettingsSectionUi.getList("available-resources-list");
 
-    add.on("click", () => {
-      allresources.toggle();
-      allresources.empty();
-      allresources.append(
-        this._getAllAvailableResourceOptions(false, res => {
-          if (!this._settings.resources[res.name]) {
-            const option = new ResourcesSettingsItem(true, WorkshopManager.DEFAULT_CONSUME_RATE, 0);
-            this._settings.resources[res.name] = option;
-            mustExist(this._resourcesList).append(
-              this._addNewResourceOption(res.name, res.title, option, (_name, _resource) => {
-                delete this._settings.resources[_name];
-              })
-            );
-          }
-        })
-      );
-    });
-
-    this._resourcesList.append(clearunused, add, allresources);
+    this._resourcesList.append(allresources);
 
     // Add all the current resources
     for (const [name, item] of objectEntries(this._settings.resources)) {
       this._resourcesList.append(
-        this._addNewResourceOption(name, name, item, (_name, _resource) => {
-          delete this._settings.resources[_name];
-        })
+        this._addNewResourceOption(name, ucfirst(this._host.i18n(`$resources.${name}.title`)), item)
       );
       //this.setStockValue(name, item.stock);
       //this.setConsumeRate(name, item.consume);
@@ -359,32 +311,18 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
    *
    * @param name The resource.
    * @param title The title to apply to the option.
-   * @param option The option that is being controlled.
-   * @param onDelHandler Will be invoked when the user removes the resoruce from the list.
+   * @param setting The option that is being controlled.
    * @returns A new option with stock and consume values.
    */
   private _addNewResourceOption(
     name: Resource,
     title: string,
-    option: ResourcesSettingsItem,
-    onDelHandler: (name: Resource, option: ResourcesSettingsItem) => void
+    setting: ResourcesSettingsItem
   ): JQuery<HTMLElement> {
-    //title = title || this._host.gamePage.resPool.get(name)?.title || ucfirst(name);
-
-    const stock = option.stock;
+    const stock = setting.stock;
 
     // The overall container for this resource item.
-    const container = $("<div/>", {
-      id: `resource-${name}`,
-      css: { display: "inline-block", width: "100%" },
-    });
-
-    // The label with the name of the resource.
-    const label = $("<div/>", {
-      id: `resource-label-${name}`,
-      text: title,
-      css: { display: "inline-block", width: "95px" },
-    });
+    const container = SettingUi.make(this._host, `resource-${name}`, setting, title);
 
     // How many items to stock.
     const stockElement = $("<div/>", {
@@ -397,31 +335,26 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const consumeElement = $("<div/>", {
       id: `consume-rate-${name}`,
       text: this._host.i18n("resources.consume", [
-        SettingsSectionUi.renderConsumeRate(option.consume),
+        SettingsSectionUi.renderConsumeRate(setting.consume),
       ]),
       css: { cursor: "pointer", display: "inline-block" },
     });
 
-    // Delete the resource from the list.
-    const del = $('<div class="ks-icon-button"/>', {
-      id: `resource-delete-${name}`,
-    }).text(this._host.i18n("resources.del"));
-
-    container.append(label, stockElement, consumeElement, del);
+    container.append(stockElement, consumeElement);
 
     // once created, set color if relevant
-    if (option !== undefined && option.stock !== undefined) {
-      this._setStockWarning(name, option.stock);
+    if (setting !== undefined && setting.stock !== undefined) {
+      this._setStockWarning(name, setting.stock);
     }
 
     stockElement.on("click", () => {
       const value = SettingsSectionUi.promptLimit(
         this._host.i18n("resources.stock.set", [title]),
-        option.stock.toFixed(0)
+        setting.stock.toFixed(0)
       );
       if (value !== null) {
-        option.enabled = true;
-        option.stock = value;
+        setting.enabled = true;
+        setting.stock = value;
         stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(value)]));
         this._host.updateOptions();
       }
@@ -430,43 +363,21 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     consumeElement.on("click", () => {
       const consumeValue = SettingsSectionUi.promptPercentage(
         this._host.i18n("resources.consume.set", [title]),
-        SettingsSectionUi.renderConsumeRate(option.consume)
+        SettingsSectionUi.renderConsumeRate(setting.consume)
       );
       if (consumeValue !== null) {
         // Cap value between 0 and 1.
-        this._host.updateOptions(() => (option.consume = consumeValue));
+        this._host.updateOptions(() => (setting.consume = consumeValue));
         consumeElement.text(
           this._host.i18n("resources.consume", [SettingsSectionUi.renderConsumeRate(consumeValue)])
         );
       }
     });
 
-    del.on("click", () => {
-      if (window.confirm(this._host.i18n("resources.del.confirm", [title]))) {
-        container.remove();
-        onDelHandler(name, option);
-        this._host.updateOptions();
-      }
-    });
-
-    option.$consume = consumeElement;
-    option.$stock = stockElement;
+    setting.$consume = consumeElement;
+    setting.$stock = stockElement;
 
     return container;
-  }
-
-  /**
-   * Removes a previously created resource option.
-   *
-   * @param name The resource to remove.
-   */
-  private _removeResourceOption(name: Resource): void {
-    const container = $(`#resource-${name}`).remove();
-    if (!container.length) {
-      return;
-    }
-
-    container.remove();
   }
 
   private _setStockWarning(name: Resource, value: number, forReset = false): void {
@@ -475,7 +386,13 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const path = forReset ? `#resource-reset-${name}` : `#resource-${name}`;
     $(path).removeClass("stockWarn");
 
-    const maxValue = this._host.gamePage.resPool.resources.filter(i => i.name === name)[0].maxValue;
+    const resource = this._host.gamePage.resPool.resources.filter(i => i.name === name)[0];
+    if (isNil(resource)) {
+      cwarn(`Unable to find resource '${name}'!`);
+      return;
+    }
+
+    const maxValue = resource.maxValue;
     if ((value > maxValue && !(maxValue === 0)) || value === Infinity) {
       $(path).addClass("stockWarn");
     }
@@ -494,20 +411,12 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       option.enabled = state.items[name].enabled;
       option.limited = state.items[name].limited;
     }
-    // Remove old resource options.
-    for (const [name] of objectEntries(this._settings.resources)) {
-      this._removeResourceOption(name);
+
+    for (const [name, option] of objectEntries(this._settings.resources)) {
+      option.enabled = state.resources[name].enabled;
+      option.consume = state.resources[name].consume;
+      option.stock = state.resources[name].stock;
     }
-    // Add new resource options.
-    const resourcesList = this._getResourceOptions();
-    for (const [name, option] of objectEntries(state.resources)) {
-      resourcesList.append(
-        this._addNewResourceOption(name, name, option, (_name, _resource) => {
-          delete this._settings.resources[_name];
-        })
-      );
-    }
-    this._settings.resources = state.resources;
   }
 
   refreshUi(): void {
@@ -531,7 +440,9 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       mustExist(option.$limited).prop("checked", option.limited);
       mustExist(option.$max).text(this._host.i18n("ui.max", [this._renderLimit(option.max)]));
     }
+
     for (const [, option] of objectEntries(this._settings.resources)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
       mustExist(option.$consume).text(
         this._host.i18n("resources.consume", [SettingsSectionUi.renderConsumeRate(option.consume)])
       );
