@@ -1,22 +1,43 @@
-import { BulkManager } from "./BulkManager";
-import { SpaceItem, SpaceSettingsItem } from "./options/SpaceSettings";
+import { Automation, TickContext } from "./Engine";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
+import { SettingMax } from "./options/Settings";
+import { SpaceSettings } from "./options/SpaceSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { BuildButton, SpaceBuildingInfo, SpaceBuildings, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
 
-export class SpaceManager {
+export class SpaceManager implements Automation {
   private readonly _host: UserScript;
+  settings: SpaceSettings;
   readonly manager: TabManager<SpaceTab>;
-  private readonly _bulkManager: BulkManager;
+  private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript) {
+  constructor(host: UserScript, workshopManager: WorkshopManager, settings = new SpaceSettings()) {
     this._host = host;
+    this.settings = settings;
     this.manager = new TabManager(this._host, "Space");
-    this._bulkManager = new BulkManager(this._host);
-    this._workshopManager = new WorkshopManager(this._host);
+
+    this._workshopManager = workshopManager;
+    this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
+  }
+
+  tick(context: TickContext) {
+    if (!this.settings.enabled) {
+      return;
+    }
+
+    this.autoBuild();
+
+    if (this.settings.unlockMissions.enabled) {
+      this.autoUnlock();
+    }
+  }
+
+  load(settings: SpaceSettings) {
+    this.settings.load(settings);
   }
 
   /**
@@ -26,19 +47,17 @@ export class SpaceManager {
    *
    * @param builds The buildings to build.
    */
-  autoBuild(
-    builds: Partial<Record<SpaceItem, SpaceSettingsItem>> = this._host.options.auto.space.items
-  ) {
+  autoBuild(builds: Partial<Record<SpaceBuildings, SettingMax>> = this.settings.items) {
     // TODO: Refactor. See BonfireManager.autoBuild
     const bulkManager = this._bulkManager;
-    const trigger = this._host.options.auto.space.trigger;
+    const trigger = this.settings.trigger;
 
     // Render the tab to make sure that the buttons actually exist in the DOM.
     // TODO: Is this really required?
     this.manager.render();
 
     // Get the current metadata for all the referenced buildings.
-    const metaData: Partial<Record<SpaceItem, SpaceBuildingInfo>> = {};
+    const metaData: Partial<Record<SpaceBuildings, SpaceBuildingInfo>> = {};
     for (const [name] of objectEntries(builds)) {
       metaData[name] = this.getBuild(name);
     }
@@ -94,16 +113,11 @@ export class SpaceManager {
     }
   }
 
-  build(name: SpaceItem, amount: number): void {
+  build(name: SpaceBuildings, amount: number): void {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name);
 
-    if (
-      !build.unlocked ||
-      !button ||
-      !button.model.enabled ||
-      !this._host.options.auto.space.items[name].enabled
-    ) {
+    if (!build.unlocked || !button || !button.model.enabled || !this.settings.items[name].enabled) {
       return;
     }
 
@@ -122,7 +136,7 @@ export class SpaceManager {
     }
   }
 
-  getBuild(name: SpaceItem): SpaceBuildingInfo {
+  getBuild(name: SpaceBuildings): SpaceBuildingInfo {
     return this._host.gamePage.space.getBuilding(name);
   }
 

@@ -1,63 +1,80 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage, SpaceBuildings } from "../types";
 import { MissionSettings } from "./MissionSettings";
-import { SettingMax, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { SettingMax } from "./Settings";
+import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type SpaceItem = SpaceBuildings;
-export type SpaceSettingsItem = SettingToggle & SettingMax;
-
-export type SpaceAdditionSettings = {
-  unlockMissions: MissionSettings;
+export type SpaceSettingsItems = {
+  [item in SpaceBuildings]: SettingMax;
 };
 
-export class SpaceSettings extends SettingsSection implements SettingTrigger {
-  trigger = 0;
-  $trigger?: JQuery<HTMLElement>;
+export class SpaceSettings extends SettingsSectionTrigger {
+  items: SpaceSettingsItems;
 
-  addition: SpaceAdditionSettings = {
-    unlockMissions: new MissionSettings(),
-  };
+  unlockMissions: MissionSettings;
 
-  items: {
-    [item in SpaceItem]: SpaceSettingsItem;
-  } = {
-    spaceElevator: { enabled: false, max: -1 },
-    sattelite: { enabled: false, max: -1 },
-    spaceStation: { enabled: false, max: -1 },
+  constructor(
+    enabled = false,
+    trigger = 0,
+    items = {
+      spaceElevator: new SettingMax(),
+      sattelite: new SettingMax(),
+      spaceStation: new SettingMax(),
 
-    moonOutpost: { enabled: false, max: -1 },
-    moonBase: { enabled: false, max: -1 },
+      moonOutpost: new SettingMax(),
+      moonBase: new SettingMax(),
 
-    planetCracker: { enabled: false, max: -1 },
-    hydrofracturer: { enabled: false, max: -1 },
-    spiceRefinery: { enabled: false, max: -1 },
+      planetCracker: new SettingMax(),
+      hydrofracturer: new SettingMax(),
+      spiceRefinery: new SettingMax(),
 
-    researchVessel: { enabled: false, max: -1 },
-    orbitalArray: { enabled: false, max: -1 },
+      researchVessel: new SettingMax(),
+      orbitalArray: new SettingMax(),
 
-    sunlifter: { enabled: false, max: -1 },
-    containmentChamber: { enabled: false, max: -1 },
-    heatsink: { enabled: false, max: -1 },
-    sunforge: { enabled: false, max: -1 },
+      sunlifter: new SettingMax(),
+      containmentChamber: new SettingMax(),
+      heatsink: new SettingMax(),
+      sunforge: new SettingMax(),
 
-    cryostation: { enabled: false, max: -1 },
+      cryostation: new SettingMax(),
 
-    spaceBeacon: { enabled: false, max: -1 },
+      spaceBeacon: new SettingMax(),
 
-    terraformingStation: { enabled: false, max: -1 },
-    hydroponics: { enabled: false, max: -1 },
+      terraformingStation: new SettingMax(),
+      hydroponics: new SettingMax(),
 
-    hrHarvester: { enabled: false, max: -1 },
+      hrHarvester: new SettingMax(),
 
-    entangler: { enabled: false, max: -1 },
+      entangler: new SettingMax(),
 
-    tectonic: { enabled: false, max: -1 },
-    moltenCore: { enabled: false, max: -1 },
-  };
+      tectonic: new SettingMax(),
+      moltenCore: new SettingMax(),
+    },
+    unlockMissions = new MissionSettings()
+  ) {
+    super(enabled, trigger);
+    this.items = items;
+    this.unlockMissions = unlockMissions;
+  }
 
   static validateGame(game: GamePage, settings: SpaceSettings) {
-    MissionSettings.validateGame(game, settings.addition.unlockMissions);
+    MissionSettings.validateGame(game, settings.unlockMissions);
+  }
+
+  load(settings: SpaceSettings) {
+    this.enabled = settings.enabled;
+    this.trigger = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].max = item.max;
+    }
+
+    this.unlockMissions.enabled = settings.unlockMissions.enabled;
+    for (const [name, item] of objectEntries(settings.unlockMissions.items)) {
+      this.unlockMissions.items[name].enabled = item.enabled;
+    }
   }
 
   static toLegacyOptions(settings: SpaceSettings, subject: KittenStorageType) {
@@ -69,8 +86,8 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
       subject.items[`set-${name}-max` as const] = item.max;
     }
 
-    subject.items["toggle-missions"] = settings.addition.unlockMissions.enabled;
-    for (const [name, item] of objectEntries(settings.addition.unlockMissions.items)) {
+    subject.items["toggle-missions"] = settings.unlockMissions.enabled;
+    for (const [name, item] of objectEntries(settings.unlockMissions.items)) {
       subject.items[`toggle-mission-${name}` as const] = item.enabled;
     }
   }
@@ -85,9 +102,9 @@ export class SpaceSettings extends SettingsSection implements SettingTrigger {
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
 
-    options.addition.unlockMissions.enabled =
-      subject.items["toggle-missions"] ?? options.addition.unlockMissions.enabled;
-    for (const [name, item] of objectEntries(options.addition.unlockMissions.items)) {
+    options.unlockMissions.enabled =
+      subject.items["toggle-missions"] ?? options.unlockMissions.enabled;
+    for (const [name, item] of objectEntries(options.unlockMissions.items)) {
       item.enabled = subject.items[`toggle-mission-${name}` as const] ?? item.enabled;
     }
 

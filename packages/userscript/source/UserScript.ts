@@ -1,15 +1,23 @@
 import JQuery from "jquery";
+import { Engine } from "./Engine";
 import {
   ActivityClass,
   ActivitySummary,
   ActivitySummarySection,
   ActivityTypeClass,
-} from "./ActivitySummary";
-import { Engine } from "./Engine";
+} from "./helper/ActivitySummary";
 import i18nData from "./i18n/i18nData.json";
+import { BonfireSettings } from "./options/BonfireSettings";
+import { EngineSettings } from "./options/EngineSettings";
 import { Options } from "./options/Options";
+import { ReligionSettings } from "./options/ReligionSettings";
 import { ScienceSettings } from "./options/ScienceSettings";
-import { SettingsStorage } from "./options/SettingsStorage";
+import { KittenStorageType, SettingsStorage } from "./options/SettingsStorage";
+import { SpaceSettings } from "./options/SpaceSettings";
+import { TimeControlSettings } from "./options/TimeControlSettings";
+import { TimeSettings } from "./options/TimeSettings";
+import { TradingSettings } from "./options/TradingSettings";
+import { VillageSettings } from "./options/VillageSettings";
 import { WorkshopSettings } from "./options/WorkshopSettings";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
@@ -19,7 +27,6 @@ import { UserInterface } from "./ui/UserInterface";
 
 declare global {
   const KG_SAVEGAME: string | null;
-  const KS_SETTINGS: string | null;
   const KS_VERSION: string | null;
   let unsafeWindow: Window | undefined;
   const dojo: {
@@ -52,11 +59,6 @@ export class UserScript {
   private readonly _i18nData: typeof i18nData;
 
   /**
-   * The settings to use for automations.
-   */
-  options: Options = new Options();
-
-  /**
    * Signals whether the options have been changed since they were last saved.
    */
   private _optionsDirty = false;
@@ -80,11 +82,10 @@ export class UserScript {
 
     this._i18nData = i18nData;
 
-    this._userInterface = new UserInterface(this);
     this.engine = new Engine(this);
-
+    this._userInterface = new UserInterface(this, this.engine);
     this._userInterface.construct();
-    this.injectOptions(new Options());
+    this._userInterface.refreshUi();
 
     this._activitySummary = new ActivitySummary(this);
 
@@ -98,8 +99,9 @@ export class UserScript {
    * Issues should be logged to the console.
    */
   validateGame() {
-    ScienceSettings.validateGame(this.gamePage, this.options.auto.unlock);
-    WorkshopSettings.validateGame(this.gamePage, this.options.auto.craft);
+    ScienceSettings.validateGame(this.gamePage, this.engine.scienceManager.settings);
+    SpaceSettings.validateGame(this.gamePage, this.engine.spaceManager.settings);
+    WorkshopSettings.validateGame(this.gamePage, this.engine.workshopManager.settings);
   }
 
   run(): void {
@@ -126,15 +128,19 @@ export class UserScript {
     this._userInterface.refreshUi();
   }
 
-  /**
-   * Inject a different set of settings into the userscript.
-   *
-   * @param options The settings to use for the scientists.
-   */
-  injectOptions(options: Options): void {
-    this.options = options;
-    this._userInterface?.setState(this.options);
-    this.refreshUi();
+  loadLegacyOptions(source: KittenStorageType) {
+    this.engine.load({
+      bonfire: BonfireSettings.fromLegacyOptions(source),
+      engine: EngineSettings.fromLegacyOptions(source),
+      religion: ReligionSettings.fromLegacyOptions(source),
+      science: ScienceSettings.fromLegacyOptions(source),
+      space: SpaceSettings.fromLegacyOptions(source),
+      time: TimeSettings.fromLegacyOptions(source),
+      timeControl: TimeControlSettings.fromLegacyOptions(source),
+      trading: TradingSettings.fromLegacyOptions(source),
+      village: VillageSettings.fromLegacyOptions(source),
+      workshop: WorkshopSettings.fromLegacyOptions(source),
+    });
   }
 
   /**
@@ -142,12 +148,11 @@ export class UserScript {
    *
    * @param updater A function that will manipulate the settings before they're saved.
    */
-  updateOptions(updater?: (currentOptions: Options) => void): void {
+  updateOptions(updater?: () => void): void {
     cdebug("Settings will be updated.");
     if (updater) {
-      updater(this.options);
+      updater();
     }
-    this.options = this._userInterface?.getState();
     this._optionsDirty = true;
   }
 
@@ -159,7 +164,19 @@ export class UserScript {
 
   saveSettings() {
     this._optionsDirty = false;
-    const toExport = this.options.asLegacyOptions();
+
+    const toExport = Options.asLegacyOptions({
+      bonfire: this.engine.bonfireManager.settings,
+      engine: this.engine.settings,
+      religion: this.engine.religionManager.settings,
+      science: this.engine.scienceManager.settings,
+      space: this.engine.spaceManager.settings,
+      time: this.engine.timeManager.settings,
+      timeControl: this.engine.timeControlManager.settings,
+      trading: this.engine.tradingManager.settings,
+      village: this.engine.villageManager.settings,
+      workshop: this.engine.workshopManager.settings,
+    });
     SettingsStorage.setLegacySettings(toExport);
     clog("Kitten Scientists settings saved.");
   }
@@ -202,8 +219,8 @@ export class UserScript {
     color: string,
     ...args: Array<number | string>
   ): void {
-    if (this.options.auto.filters.enabled) {
-      for (const filterItem of Object.values(this.options.auto.filters.items)) {
+    if (this.engine.settings.filters.enabled) {
+      for (const filterItem of Object.values(this.engine.settings.filters.items)) {
         if (filterItem.enabled && filterItem.variant === cssClasses) {
           return;
         }

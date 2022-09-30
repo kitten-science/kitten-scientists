@@ -1,56 +1,53 @@
 import { OptionsSettings, OptionsSettingsItem } from "../options/OptionsSettings";
-import { SettingToggle, SettingTrigger } from "../options/SettingsSection";
+import { SettingTrigger } from "../options/Settings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingTriggerUi } from "./SettingTriggerUi";
+import { SettingUi } from "./SettingUi";
 
-export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
+export class OptionsSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: OptionsSettings;
+  private readonly _settings: OptionsSettings;
 
-  constructor(host: UserScript, options: OptionsSettings = host.options.auto.options) {
+  constructor(host: UserScript, settings: OptionsSettings) {
     super(host);
 
-    this._options = options;
+    this._settings = settings;
 
     const toggleName = "options";
     const label = ucfirst(this._host.i18n("ui.options"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._options, list);
-    this._options.$enabled = element.checkbox;
+    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    this._settings.$enabled = element.checkbox;
 
     const optionButtons = [
       this._getOptionsOption(
         "observe",
-        this._options.items.observe,
+        this._settings.items.observe,
         this._host.i18n("option.observe")
       ),
       this._getOptionsOption(
-        "shipOverride",
-        this._options.items.shipOverride,
-        this._host.i18n("option.shipOverride")
-      ),
-      this._getOptionsOption(
         "autofeed",
-        this._options.items.autofeed,
+        this._settings.items.autofeed,
         this._host.i18n("option.autofeed")
       ),
       this._getOptionsOption(
         "crypto",
-        this._options.items.crypto,
+        this._settings.items.crypto,
         this._host.i18n("option.crypto")
       ),
       this._getOptionsOption(
         "fixCry",
-        this._options.items.fixCry,
+        this._settings.items.fixCry,
         this._host.i18n("option.fix.cry")
       ),
     ];
@@ -68,21 +65,14 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     iname: string
   ): JQuery<HTMLElement> {
     return option.trigger
-      ? this._getOptionWithTrigger(name, option as SettingTrigger & SettingToggle, iname)
-      : this._getOption(name, option, iname);
-  }
-
-  getState(): OptionsSettings {
-    return {
-      enabled: this._options.enabled,
-      items: this._options.items,
-    };
+      ? SettingTriggerUi.make(this._host, name, option as SettingTrigger, iname)
+      : SettingUi.make(this._host, name, option, iname);
   }
 
   setState(state: OptionsSettings): void {
-    this._options.enabled = state.enabled;
+    this._settings.enabled = state.enabled;
 
-    for (const [name, option] of objectEntries(this._options.items)) {
+    for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
 
       if (!isNil(option.$trigger)) {
@@ -92,14 +82,16 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+    this.setState(this._settings);
 
-    for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+
+    for (const [name, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
 
       if (!isNil(option.$trigger)) {
-        option.$trigger[0].title = this._renderPercentage(
-          mustExist(this._options.items[name].trigger)
+        option.$trigger[0].title = SettingsSectionUi.renderPercentage(
+          mustExist(this._settings.items[name].trigger)
         );
       }
     }

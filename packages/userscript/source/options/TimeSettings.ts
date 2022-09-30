@@ -1,42 +1,63 @@
 import { objectEntries } from "../tools/Entries";
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
-import { Requirement } from "./Options";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { Requirement, Setting } from "./Settings";
+import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 /**
  * The upgrades on the Time tab that we have options for.
  */
 export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCryochambers">;
-export type TimeSettingsItem = SettingToggle & {
+export class TimeSettingsItem extends Setting {
   require: Requirement;
 
   variant: TimeItemVariant;
+
+  constructor(variant: TimeItemVariant, require: Requirement = false, enabled = false) {
+    super(enabled);
+
+    this.require = require;
+    this.variant = variant;
+  }
+}
+
+export type TimeSettingsItems = {
+  [item in TimeItem]: TimeSettingsItem;
 };
-export class TimeSettings extends SettingsSection implements SettingTrigger {
-  trigger = 0;
-  $trigger?: JQuery<HTMLElement>;
 
-  items: {
-    [item in TimeItem]: TimeSettingsItem;
-  } = {
-    temporalBattery: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
-    blastFurnace: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
-    timeBoiler: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
-    temporalAccelerator: {
-      enabled: false,
-      variant: TimeItemVariant.Chronoforge,
-      require: false,
-    },
-    temporalImpedance: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
-    ressourceRetrieval: { enabled: false, variant: TimeItemVariant.Chronoforge, require: false },
+export class TimeSettings extends SettingsSectionTrigger {
+  items: TimeSettingsItems;
 
-    cryochambers: { enabled: false, variant: TimeItemVariant.VoidSpace, require: false },
-    voidHoover: { enabled: false, variant: TimeItemVariant.VoidSpace, require: "antimatter" },
-    voidRift: { enabled: false, variant: TimeItemVariant.VoidSpace, require: false },
-    chronocontrol: { enabled: false, variant: TimeItemVariant.VoidSpace, require: "temporalFlux" },
-    voidResonator: { enabled: false, variant: TimeItemVariant.VoidSpace, require: false },
-  };
+  constructor(
+    enabled = false,
+    trigger = 1,
+    items: TimeSettingsItems = {
+      temporalBattery: new TimeSettingsItem(TimeItemVariant.Chronoforge),
+      blastFurnace: new TimeSettingsItem(TimeItemVariant.Chronoforge),
+      timeBoiler: new TimeSettingsItem(TimeItemVariant.Chronoforge),
+      temporalAccelerator: new TimeSettingsItem(TimeItemVariant.Chronoforge),
+      temporalImpedance: new TimeSettingsItem(TimeItemVariant.Chronoforge),
+      ressourceRetrieval: new TimeSettingsItem(TimeItemVariant.Chronoforge),
+
+      cryochambers: new TimeSettingsItem(TimeItemVariant.VoidSpace),
+      voidHoover: new TimeSettingsItem(TimeItemVariant.VoidSpace, "antimatter"),
+      voidRift: new TimeSettingsItem(TimeItemVariant.VoidSpace),
+      chronocontrol: new TimeSettingsItem(TimeItemVariant.VoidSpace, "temporalFlux"),
+      voidResonator: new TimeSettingsItem(TimeItemVariant.VoidSpace),
+    }
+  ) {
+    super(enabled, trigger);
+    this.items = items;
+  }
+
+  load(settings: TimeSettings) {
+    this.enabled = settings.enabled;
+    this.trigger = settings.trigger;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+    }
+  }
 
   static toLegacyOptions(settings: TimeSettings, subject: KittenStorageType) {
     subject.toggles.time = settings.enabled;

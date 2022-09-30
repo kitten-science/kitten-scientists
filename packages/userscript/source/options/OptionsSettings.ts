@@ -1,21 +1,60 @@
 import { objectEntries } from "../tools/Entries";
-import { SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { Setting, SettingTrigger } from "./Settings";
+import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe" | "shipOverride";
+export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe";
 
-export type OptionsSettingsItem = SettingToggle & Partial<SettingTrigger>;
+export class OptionsSettingsItem extends Setting implements Partial<SettingTrigger> {
+  trigger: number | undefined = undefined;
+  $trigger: JQuery<HTMLElement> | undefined = undefined;
+
+  constructor(enabled = false, trigger: number | undefined = undefined) {
+    super(enabled);
+    this.trigger = trigger;
+  }
+}
+
 export class OptionsSettings extends SettingsSection {
   items: {
     [key in OptionsItem]: OptionsSettingsItem;
   } = {
-    observe: { enabled: true },
-    shipOverride: { enabled: true },
-    autofeed: { enabled: true },
+    observe: new OptionsSettingsItem(true),
+    autofeed: new OptionsSettingsItem(true),
 
-    crypto: { enabled: true, trigger: 10000 },
-    fixCry: { enabled: false },
+    crypto: new OptionsSettingsItem(true, 10000),
+    fixCry: new OptionsSettingsItem(false),
   };
+
+  constructor(
+    enabled = false,
+    observe = new OptionsSettingsItem(true),
+    autofeed = new OptionsSettingsItem(true),
+    crypto = new OptionsSettingsItem(true, 10000),
+    fixCry = new OptionsSettingsItem(false)
+  ) {
+    super(enabled);
+    this.items.observe = observe;
+    this.items.autofeed = autofeed;
+    this.items.crypto = crypto;
+    this.items.fixCry = fixCry;
+  }
+
+  load(settings: OptionsSettings) {
+    this.enabled = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].trigger = item.trigger;
+    }
+  }
+
+  static toLegacyOptions(settings: OptionsSettings, subject: KittenStorageType) {
+    for (const [name, item] of objectEntries(settings.items)) {
+      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`set-${name}-trigger` as const] = item.trigger;
+    }
+  }
 
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new OptionsSettings();

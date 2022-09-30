@@ -5,88 +5,90 @@ import { mustExist } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingTriggerUi } from "./SettingTriggerUi";
+import { SettingUi } from "./SettingUi";
 
-export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
+export class ReligionSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: ReligionSettings;
+  private readonly _settings: ReligionSettings;
 
-  constructor(host: UserScript, religionOptions: ReligionSettings = host.options.auto.religion) {
+  constructor(host: UserScript, settings: ReligionSettings) {
     super(host);
 
-    this._options = religionOptions;
+    this._settings = settings;
 
     const toggleName = "faith";
     const label = ucfirst(this._host.i18n("ui.faith"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._options, list);
-    this._options.$enabled = element.checkbox;
+    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    this._settings.$enabled = element.checkbox;
 
     // Create "trigger" button in the item.
-    this._options.$trigger = this._registerTriggerButton(toggleName, label, this._options);
+    this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
 
     const optionButtons = [
       this._getHeader(this._host.i18n("$religion.panel.ziggurat.label")),
       this._getBuildOption(
         "unicornPasture",
-        this._options.items.unicornPasture,
+        this._settings.items.unicornPasture,
         this._host.i18n("$buildings.unicornPasture.label")
       ),
       this._getBuildOption(
         "unicornTomb",
-        this._options.items.unicornTomb,
+        this._settings.items.unicornTomb,
         this._host.i18n("$religion.zu.unicornTomb.label")
       ),
       this._getBuildOption(
         "ivoryTower",
-        this._options.items.ivoryTower,
+        this._settings.items.ivoryTower,
         this._host.i18n("$religion.zu.ivoryTower.label")
       ),
       this._getBuildOption(
         "ivoryCitadel",
-        this._options.items.ivoryCitadel,
+        this._settings.items.ivoryCitadel,
         this._host.i18n("$religion.zu.ivoryCitadel.label")
       ),
       this._getBuildOption(
         "skyPalace",
-        this._options.items.skyPalace,
+        this._settings.items.skyPalace,
         this._host.i18n("$religion.zu.skyPalace.label")
       ),
       this._getBuildOption(
         "unicornUtopia",
-        this._options.items.unicornUtopia,
+        this._settings.items.unicornUtopia,
         this._host.i18n("$religion.zu.unicornUtopia.label")
       ),
       this._getBuildOption(
         "sunspire",
-        this._options.items.sunspire,
+        this._settings.items.sunspire,
         this._host.i18n("$religion.zu.sunspire.label"),
         true
       ),
 
       this._getBuildOption(
         "marker",
-        this._options.items.marker,
+        this._settings.items.marker,
         this._host.i18n("$religion.zu.marker.label")
       ),
       this._getBuildOption(
         "unicornGraveyard",
-        this._options.items.unicornGraveyard,
+        this._settings.items.unicornGraveyard,
         this._host.i18n("$religion.zu.unicornGraveyard.label")
       ),
       this._getBuildOption(
         "unicornNecropolis",
-        this._options.items.unicornNecropolis,
+        this._settings.items.unicornNecropolis,
         this._host.i18n("$religion.zu.unicornNecropolis.label")
       ),
       this._getBuildOption(
         "blackPyramid",
-        this._options.items.blackPyramid,
+        this._settings.items.blackPyramid,
         this._host.i18n("$religion.zu.blackPyramid.label"),
         true
       ),
@@ -94,52 +96,52 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       this._getHeader(this._host.i18n("$religion.panel.orderOfTheSun.label")),
       this._getBuildOption(
         "solarchant",
-        this._options.items.solarchant,
+        this._settings.items.solarchant,
         this._host.i18n("$religion.ru.solarchant.label")
       ),
       this._getBuildOption(
         "scholasticism",
-        this._options.items.scholasticism,
+        this._settings.items.scholasticism,
         this._host.i18n("$religion.ru.scholasticism.label")
       ),
       this._getBuildOption(
         "goldenSpire",
-        this._options.items.goldenSpire,
+        this._settings.items.goldenSpire,
         this._host.i18n("$religion.ru.goldenSpire.label")
       ),
       this._getBuildOption(
         "sunAltar",
-        this._options.items.sunAltar,
+        this._settings.items.sunAltar,
         this._host.i18n("$religion.ru.sunAltar.label")
       ),
       this._getBuildOption(
         "stainedGlass",
-        this._options.items.stainedGlass,
+        this._settings.items.stainedGlass,
         this._host.i18n("$religion.ru.stainedGlass.label")
       ),
       this._getBuildOption(
         "solarRevolution",
-        this._options.items.solarRevolution,
+        this._settings.items.solarRevolution,
         this._host.i18n("$religion.ru.solarRevolution.label")
       ),
       this._getBuildOption(
         "basilica",
-        this._options.items.basilica,
+        this._settings.items.basilica,
         this._host.i18n("$religion.ru.basilica.label")
       ),
       this._getBuildOption(
         "templars",
-        this._options.items.templars,
+        this._settings.items.templars,
         this._host.i18n("$religion.ru.templars.label")
       ),
       this._getBuildOption(
         "apocripha",
-        this._options.items.apocripha,
+        this._settings.items.apocripha,
         this._host.i18n("$religion.ru.apocripha.label")
       ),
       this._getBuildOption(
         "transcendence",
-        this._options.items.transcendence,
+        this._settings.items.transcendence,
         this._host.i18n("$religion.ru.transcendence.label"),
         true
       ),
@@ -147,47 +149,47 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       this._getHeader(this._host.i18n("$religion.panel.cryptotheology.label")),
       this._getBuildOption(
         "blackObelisk",
-        this._options.items.blackObelisk,
+        this._settings.items.blackObelisk,
         this._host.i18n("$religion.tu.blackObelisk.label")
       ),
       this._getBuildOption(
         "blackNexus",
-        this._options.items.blackNexus,
+        this._settings.items.blackNexus,
         this._host.i18n("$religion.tu.blackNexus.label")
       ),
       this._getBuildOption(
         "blackCore",
-        this._options.items.blackCore,
+        this._settings.items.blackCore,
         this._host.i18n("$religion.tu.blackCore.label")
       ),
       this._getBuildOption(
         "singularity",
-        this._options.items.singularity,
+        this._settings.items.singularity,
         this._host.i18n("$religion.tu.singularity.label")
       ),
       this._getBuildOption(
         "blackLibrary",
-        this._options.items.blackLibrary,
+        this._settings.items.blackLibrary,
         this._host.i18n("$religion.tu.blackLibrary.label")
       ),
       this._getBuildOption(
         "blackRadiance",
-        this._options.items.blackRadiance,
+        this._settings.items.blackRadiance,
         this._host.i18n("$religion.tu.blackRadiance.label")
       ),
       this._getBuildOption(
         "blazar",
-        this._options.items.blazar,
+        this._settings.items.blazar,
         this._host.i18n("$religion.tu.blazar.label")
       ),
       this._getBuildOption(
         "darkNova",
-        this._options.items.darkNova,
+        this._settings.items.darkNova,
         this._host.i18n("$religion.tu.darkNova.label")
       ),
       this._getBuildOption(
         "holyGenocide",
-        this._options.items.holyGenocide,
+        this._settings.items.holyGenocide,
         this._host.i18n("$religion.tu.holyGenocide.label"),
         true
       ),
@@ -197,7 +199,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const additionOptions = this.getAdditionOptions();
 
-    element.panel.append(this._options.$trigger);
+    element.panel.append(this._settings.$trigger);
     element.panel.append(list);
     list.append(additionOptions);
 
@@ -227,59 +229,59 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeAdore = this._getOptionWithTrigger(
+    const nodeAdore = SettingTriggerUi.make(
+      this._host,
       "adore",
-      this._options.addition.adore,
+      this._settings.adore,
       this._host.i18n("option.faith.adore"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.adore.enabled = true));
+          this._host.updateOptions(() => (this._settings.adore.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.adore")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.adore.enabled = false));
+          this._host.updateOptions(() => (this._settings.adore.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.adore")]);
         },
       }
     );
 
-    const nodeAutoPraise = this._getOptionWithTrigger(
+    const nodeAutoPraise = SettingTriggerUi.make(
+      this._host,
       "autoPraise",
-      this._options.addition.autoPraise,
+      this._settings.autoPraise,
       this._host.i18n("option.praise"),
       false,
       false,
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.autoPraise.enabled = true));
+          this._host.updateOptions(() => (this._settings.autoPraise.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.praise")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.autoPraise.enabled = false));
+          this._host.updateOptions(() => (this._settings.autoPraise.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.praise")]);
         },
       }
     );
 
-    const nodeBestUnicornBuilding = this._getOption(
+    const nodeBestUnicornBuilding = SettingUi.make(
+      this._host,
       "bestUnicornBuilding",
-      this._options.addition.bestUnicornBuilding,
+      this._settings.bestUnicornBuilding,
       this._host.i18n("option.faith.best.unicorn"),
       false,
       false,
+      [],
       {
         onCheck: () => {
-          this._host.updateOptions(
-            () => (this._options.addition.bestUnicornBuilding.enabled = true)
-          );
+          this._host.updateOptions(() => (this._settings.bestUnicornBuilding.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.best.unicorn")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(
-            () => (this._options.addition.bestUnicornBuilding.enabled = false)
-          );
+          this._host.updateOptions(() => (this._settings.bestUnicornBuilding.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.best.unicorn")]);
         },
       }
@@ -290,12 +292,12 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       .prop("title", this._host.i18n("option.faith.best.unicorn.desc"));
     const input = nodeBestUnicornBuilding.children("input");
     input.unbind("change");
-    const bub = this._options.addition.bestUnicornBuilding;
+    const bub = this._settings.bestUnicornBuilding;
     input.on("change", () => {
       if (input.is(":checked") && !bub.enabled) {
         this._host.updateOptions(() => (bub.enabled = true));
         // enable all unicorn buildings
-        for (const [unicornName, option] of objectEntries(this._options.items)) {
+        for (const [unicornName, option] of objectEntries(this._settings.items)) {
           if (
             option.variant !== UnicornItemVariant.UnicornPasture &&
             option.variant !== UnicornItemVariant.Ziggurat
@@ -317,19 +319,21 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       //this._host.saveToKittenStorage();
     });
 
-    const nodeTranscend = this._getOption(
+    const nodeTranscend = SettingUi.make(
+      this._host,
       "transcend",
-      this._options.addition.transcend,
+      this._settings.transcend,
       this._host.i18n("option.faith.transcend"),
       false,
       false,
+      [],
       {
         onCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.transcend.enabled = true));
+          this._host.updateOptions(() => (this._settings.transcend.enabled = true));
           this._host.imessage("status.sub.enable", [this._host.i18n("option.faith.transcend")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (this._options.addition.transcend.enabled = false));
+          this._host.updateOptions(() => (this._settings.transcend.enabled = false));
           this._host.imessage("status.sub.disable", [this._host.i18n("option.faith.transcend")]);
         },
       }
@@ -338,63 +342,52 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     return [nodeHeader, nodeBestUnicornBuilding, nodeAutoPraise, nodeAdore, nodeTranscend];
   }
 
-  getState(): ReligionSettings {
-    return {
-      enabled: this._options.enabled,
-      trigger: this._options.trigger,
-      addition: this._options.addition,
-      items: this._options.items,
-    };
-  }
-
   setState(state: ReligionSettings): void {
-    this._options.enabled = state.enabled;
-    this._options.trigger = state.trigger;
+    this._settings.enabled = state.enabled;
+    this._settings.trigger = state.trigger;
 
-    this._options.addition.adore.enabled = state.addition.adore.enabled;
-    this._options.addition.adore.trigger = state.addition.adore.trigger;
-    this._options.addition.autoPraise.enabled = state.addition.autoPraise.enabled;
-    this._options.addition.autoPraise.trigger = state.addition.autoPraise.trigger;
-    this._options.addition.bestUnicornBuilding.enabled = state.addition.bestUnicornBuilding.enabled;
-    this._options.addition.transcend.enabled = state.addition.transcend.enabled;
+    this._settings.adore.enabled = state.adore.enabled;
+    this._settings.adore.trigger = state.adore.trigger;
+    this._settings.autoPraise.enabled = state.autoPraise.enabled;
+    this._settings.autoPraise.trigger = state.autoPraise.trigger;
+    this._settings.bestUnicornBuilding.enabled = state.bestUnicornBuilding.enabled;
+    this._settings.transcend.enabled = state.transcend.enabled;
 
-    for (const [name, option] of objectEntries(this._options.items)) {
+    for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
       option.max = state.items[name].max;
     }
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
+    this.setState(this._settings);
 
-    mustExist(this._options.addition.adore.$enabled).prop(
-      "checked",
-      this._options.addition.adore.enabled
-    );
-    mustExist(this._options.addition.adore.$trigger)[0].title = this._renderPercentage(
-      this._options.addition.adore.trigger
-    );
-    mustExist(this._options.addition.autoPraise.$enabled).prop(
-      "checked",
-      this._options.addition.autoPraise.enabled
-    );
-    mustExist(this._options.addition.autoPraise.$trigger)[0].title = this._renderPercentage(
-      this._options.addition.autoPraise.trigger
-    );
-    mustExist(this._options.addition.bestUnicornBuilding.$enabled).prop(
-      "checked",
-      this._options.addition.bestUnicornBuilding.enabled
-    );
-    mustExist(this._options.addition.transcend.$enabled).prop(
-      "checked",
-      this._options.addition.transcend.enabled
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.trigger
     );
 
-    for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+    mustExist(this._settings.adore.$enabled).prop("checked", this._settings.adore.enabled);
+    mustExist(this._settings.adore.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.adore.trigger
+    );
+    mustExist(this._settings.autoPraise.$enabled).prop(
+      "checked",
+      this._settings.autoPraise.enabled
+    );
+    mustExist(this._settings.autoPraise.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.autoPraise.trigger
+    );
+    mustExist(this._settings.bestUnicornBuilding.$enabled).prop(
+      "checked",
+      this._settings.bestUnicornBuilding.enabled
+    );
+    mustExist(this._settings.transcend.$enabled).prop("checked", this._settings.transcend.enabled);
+
+    for (const [name, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
       mustExist(option.$max).text(
-        this._host.i18n("ui.max", [this._renderLimit(this._options.items[name].max)])
+        this._host.i18n("ui.max", [this._renderLimit(this._settings.items[name].max)])
       );
     }
   }

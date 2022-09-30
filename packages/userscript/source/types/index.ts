@@ -59,7 +59,7 @@ export type Resource =
   | "paragon"
   | "relic"
   | "science"
-  | "slabs" // deprecated: Use `slab` instead
+  | "slab"
   | "spice"
   | "tears"
   | "temporalFlux"

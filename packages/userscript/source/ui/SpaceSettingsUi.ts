@@ -1,51 +1,52 @@
-import { SpaceAdditionSettings, SpaceSettings } from "../options/SpaceSettings";
+import { SpaceSettings } from "../options/SpaceSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingUi } from "./SettingUi";
 
-export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
+export class SpaceSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: SpaceSettings;
+  private readonly _settings: SpaceSettings;
 
   private _missionsExpanded = false;
 
-  constructor(host: UserScript, options: SpaceSettings = host.options.auto.space) {
+  constructor(host: UserScript, settings: SpaceSettings) {
     super(host);
 
-    this._options = options;
+    this._settings = settings;
 
     const toggleName = "space";
     const label = ucfirst(this._host.i18n("ui.space"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._options, list);
-    this._options.$enabled = element.checkbox;
+    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    this._settings.$enabled = element.checkbox;
 
     // Create "trigger" button in the item.
-    this._options.$trigger = this._registerTriggerButton(toggleName, label, this._options);
+    this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
 
     const optionButtons = [
       this._getHeader(this._host.i18n("$space.planet.cath.label")),
       this._getBuildOption(
         "spaceElevator",
-        this._options.items.spaceElevator,
+        this._settings.items.spaceElevator,
         this._host.i18n("$space.planet.cath.spaceElevator.label")
       ),
       this._getBuildOption(
         "sattelite",
-        this._options.items.sattelite,
+        this._settings.items.sattelite,
         this._host.i18n("$space.planet.cath.sattelite.label")
       ),
       this._getBuildOption(
         "spaceStation",
-        this._options.items.spaceStation,
+        this._settings.items.spaceStation,
         this._host.i18n("$space.planet.cath.spaceStation.label"),
         true
       ),
@@ -53,12 +54,12 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.moon.label")),
       this._getBuildOption(
         "moonOutpost",
-        this._options.items.moonOutpost,
+        this._settings.items.moonOutpost,
         this._host.i18n("$space.planet.moon.moonOutpost.label")
       ),
       this._getBuildOption(
         "moonBase",
-        this._options.items.moonBase,
+        this._settings.items.moonBase,
         this._host.i18n("$space.planet.moon.moonBase.label"),
         true
       ),
@@ -66,17 +67,17 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.dune.label")),
       this._getBuildOption(
         "planetCracker",
-        this._options.items.planetCracker,
+        this._settings.items.planetCracker,
         this._host.i18n("$space.planet.dune.planetCracker.label")
       ),
       this._getBuildOption(
         "hydrofracturer",
-        this._options.items.hydrofracturer,
+        this._settings.items.hydrofracturer,
         this._host.i18n("$space.planet.dune.hydrofracturer.label")
       ),
       this._getBuildOption(
         "spiceRefinery",
-        this._options.items.spiceRefinery,
+        this._settings.items.spiceRefinery,
         this._host.i18n("$space.planet.dune.spiceRefinery.label"),
         true
       ),
@@ -84,12 +85,12 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.piscine.label")),
       this._getBuildOption(
         "researchVessel",
-        this._options.items.researchVessel,
+        this._settings.items.researchVessel,
         this._host.i18n("$space.planet.piscine.researchVessel.label")
       ),
       this._getBuildOption(
         "orbitalArray",
-        this._options.items.orbitalArray,
+        this._settings.items.orbitalArray,
         this._host.i18n("$space.planet.piscine.orbitalArray.label"),
         true
       ),
@@ -97,22 +98,22 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.helios.label")),
       this._getBuildOption(
         "sunlifter",
-        this._options.items.sunlifter,
+        this._settings.items.sunlifter,
         this._host.i18n("$space.planet.helios.sunlifter.label")
       ),
       this._getBuildOption(
         "containmentChamber",
-        this._options.items.containmentChamber,
+        this._settings.items.containmentChamber,
         this._host.i18n("$space.planet.helios.containmentChamber.label")
       ),
       this._getBuildOption(
         "heatsink",
-        this._options.items.heatsink,
+        this._settings.items.heatsink,
         this._host.i18n("$space.planet.helios.heatsink.label")
       ),
       this._getBuildOption(
         "sunforge",
-        this._options.items.sunforge,
+        this._settings.items.sunforge,
         this._host.i18n("$space.planet.helios.sunforge.label"),
         true
       ),
@@ -120,7 +121,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.terminus.label")),
       this._getBuildOption(
         "cryostation",
-        this._options.items.cryostation,
+        this._settings.items.cryostation,
         this._host.i18n("$space.planet.terminus.cryostation.label"),
         true
       ),
@@ -128,7 +129,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.kairo.label")),
       this._getBuildOption(
         "spaceBeacon",
-        this._options.items.spaceBeacon,
+        this._settings.items.spaceBeacon,
         this._host.i18n("$space.planet.kairo.spaceBeacon.label"),
         true
       ),
@@ -136,12 +137,12 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.yarn.label")),
       this._getBuildOption(
         "terraformingStation",
-        this._options.items.terraformingStation,
+        this._settings.items.terraformingStation,
         this._host.i18n("$space.planet.yarn.terraformingStation.label")
       ),
       this._getBuildOption(
         "hydroponics",
-        this._options.items.hydroponics,
+        this._settings.items.hydroponics,
         this._host.i18n("$space.planet.yarn.hydroponics.label"),
         true
       ),
@@ -149,7 +150,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.umbra.label")),
       this._getBuildOption(
         "hrHarvester",
-        this._options.items.hrHarvester,
+        this._settings.items.hrHarvester,
         this._host.i18n("$space.planet.umbra.hrHarvester.label"),
         true
       ),
@@ -157,7 +158,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.charon.label")),
       this._getBuildOption(
         "entangler",
-        this._options.items.entangler,
+        this._settings.items.entangler,
         this._host.i18n("$space.planet.charon.entangler.label"),
         true
       ),
@@ -165,12 +166,12 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       this._getHeader(this._host.i18n("$space.planet.centaurusSystem.label")),
       this._getBuildOption(
         "tectonic",
-        this._options.items.tectonic,
+        this._settings.items.tectonic,
         this._host.i18n("$space.planet.centaurusSystem.tectonic.label")
       ),
       this._getBuildOption(
         "moltenCore",
-        this._options.items.moltenCore,
+        this._settings.items.moltenCore,
         this._host.i18n("$space.planet.centaurusSystem.moltenCore.label"),
         true
       ),
@@ -178,52 +179,51 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
 
     list.append(...optionButtons);
 
-    const additionOptions = this.getAdditionOptions(this._options.addition);
+    const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    element.panel.append(this._options.$trigger);
+    element.panel.append(this._settings.$trigger);
     element.panel.append(list);
 
     this.element = element.panel;
   }
 
-  getAdditionOptions(addition: SpaceAdditionSettings): Array<JQuery<HTMLElement>> {
+  private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const missionsButton = this._getOption(
+    const missionsButton = SettingUi.make(
+      this._host,
       "missions",
-      addition.unlockMissions,
+      this._settings.unlockMissions,
       this._host.i18n("ui.upgrade.missions"),
       false,
       false,
+      [],
       {
         onCheck: () => {
-          this._host.updateOptions(() => (addition.unlockMissions.enabled = true));
+          this._host.updateOptions(() => (this._settings.unlockMissions.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.missions")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (addition.unlockMissions.enabled = false));
+          this._host.updateOptions(() => (this._settings.unlockMissions.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.missions")]);
         },
       }
     );
 
-    const missionsList = $("<ul/>", {
-      id: "items-list-missions",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const missionsList = SettingsSectionUi.getList("items-list-missions");
 
     const missionButtons = [];
-    for (const [missionName, mission] of objectEntries(
-      this._options.addition.unlockMissions.items
-    )) {
+    for (const [missionName, mission] of objectEntries(this._settings.unlockMissions.items)) {
       const missionLabel = this._host.i18n(`$space.${missionName}.label`);
-      const missionButton = this._getOption(
+      const missionButton = SettingUi.make(
+        this._host,
         `mission-${missionName}`,
         mission,
         missionLabel,
         false,
         false,
+        [],
         {
           onCheck: () => {
             this._host.updateOptions(() => (mission.enabled = true));
@@ -259,46 +259,41 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     return [header, missionsButton];
   }
 
-  getState(): SpaceSettings {
-    return {
-      enabled: this._options.enabled,
-      trigger: this._options.trigger,
-      addition: this._options.addition,
-      items: this._options.items,
-    };
-  }
-
   setState(state: SpaceSettings): void {
-    this._options.enabled = state.enabled;
-    this._options.trigger = state.trigger;
+    this._settings.enabled = state.enabled;
+    this._settings.trigger = state.trigger;
 
-    this._options.addition.unlockMissions.enabled = state.addition.unlockMissions.enabled;
-    for (const [name, option] of objectEntries(this._options.addition.unlockMissions.items)) {
-      option.enabled = state.addition.unlockMissions.items[name].enabled;
+    this._settings.unlockMissions.enabled = state.unlockMissions.enabled;
+    for (const [name, option] of objectEntries(this._settings.unlockMissions.items)) {
+      option.enabled = state.unlockMissions.items[name].enabled;
     }
 
-    for (const [name, option] of objectEntries(this._options.items)) {
+    for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
       option.max = state.items[name].max;
     }
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
+    this.setState(this._settings);
 
-    mustExist(this._options.addition.unlockMissions.$enabled).prop(
-      "checked",
-      this._options.addition.unlockMissions.enabled
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.trigger
     );
-    for (const [, option] of objectEntries(this._options.addition.unlockMissions.items)) {
+
+    mustExist(this._settings.unlockMissions.$enabled).prop(
+      "checked",
+      this._settings.unlockMissions.enabled
+    );
+    for (const [, option] of objectEntries(this._settings.unlockMissions.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
     }
 
-    for (const [name, option] of objectEntries(this._options.items)) {
-      mustExist(option.$enabled).prop("checked", this._options.items[name].enabled);
+    for (const [name, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
       mustExist(option.$max).text(
-        this._host.i18n("ui.max", [this._renderLimit(this._options.items[name].max)])
+        this._host.i18n("ui.max", [this._renderLimit(this._settings.items[name].max)])
       );
     }
   }

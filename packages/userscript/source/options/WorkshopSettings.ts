@@ -1,72 +1,98 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage, ResourceCraftable } from "../types";
-import { Requirement } from "./Options";
+import { WorkshopManager } from "../WorkshopManager";
 import { ResourceSettings } from "./ResourcesSettings";
-import { SettingLimit, SettingsSection, SettingToggle, SettingTrigger } from "./SettingsSection";
+import { Requirement, Setting, SettingLimitedMax } from "./Settings";
+import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";
 
-export type CraftSettingsItem = SettingLimit &
-  SettingToggle & {
-    /**
-     * Meaning still unclear.
-     * This is hardcoded to `0.5` right now.
-     */
-    limRat: 0.5;
+export class CraftSettingsItem extends SettingLimitedMax {
+  /**
+   * Meaning still unclear.
+   * This is hardcoded to `0.5` right now.
+   */
+  limRat = 0.5;
 
-    /**
-     * The limit of how many items to craft.
-     * This is hardcoded to `0` right now.
-     */
-    max: 0;
-    require: Requirement;
-  };
+  require: Requirement;
 
-export type CraftAdditionSettings = {
-  unlockUpgrades: UpgradeSettings;
+  constructor(require: Requirement = false, enabled = true, limited = true) {
+    super(enabled, limited);
+    this.require = require;
+  }
+}
+
+export type WorkshopSettingsItems = {
+  [item in ResourceCraftable]: CraftSettingsItem;
 };
 
-export class WorkshopSettings extends SettingsSection implements SettingTrigger {
-  trigger = 0.95;
-  $trigger?: JQuery<HTMLElement>;
+export class WorkshopSettings extends SettingsSectionTrigger {
+  items: WorkshopSettingsItems;
+  resources: ResourceSettings;
 
-  addition: CraftAdditionSettings = {
-    unlockUpgrades: new UpgradeSettings(),
-  };
+  shipOverride: Setting;
+  unlockUpgrades: UpgradeSettings;
 
-  items: {
-    [item in ResourceCraftable]: CraftSettingsItem;
-  } = {
-    wood: { enabled: true, limited: true, require: "catnip", limRat: 0.5, max: 0 },
-    beam: { enabled: true, limited: true, require: "wood", limRat: 0.5, max: 0 },
-    slab: { enabled: true, limited: true, require: "minerals", limRat: 0.5, max: 0 },
-    steel: { enabled: true, limited: true, require: "coal", limRat: 0.5, max: 0 },
-    plate: { enabled: true, limited: true, require: "iron", limRat: 0.5, max: 0 },
-    alloy: { enabled: true, limited: true, require: "titanium", limRat: 0.5, max: 0 },
-    concrate: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    gear: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    scaffold: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    ship: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    tanker: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    parchment: { enabled: true, limited: false, require: false, limRat: 0.5, max: 0 },
-    manuscript: { enabled: true, limited: true, require: "culture", limRat: 0.5, max: 0 },
-    compedium: { enabled: true, limited: true, require: "science", limRat: 0.5, max: 0 },
-    blueprint: { enabled: true, limited: true, require: "science", limRat: 0.5, max: 0 },
-    kerosene: { enabled: true, limited: true, require: "oil", limRat: 0.5, max: 0 },
-    megalith: { enabled: true, limited: true, require: false, limRat: 0.5, max: 0 },
-    eludium: { enabled: true, limited: true, require: "unobtainium", limRat: 0.5, max: 0 },
-    thorium: { enabled: true, limited: true, require: "uranium", limRat: 0.5, max: 0 },
-  };
-
-  resources: ResourceSettings = {
-    furs: {
-      enabled: true,
-      stock: 1000,
+  constructor(
+    enabled = false,
+    trigger = 0.95,
+    items: WorkshopSettingsItems = {
+      wood: new CraftSettingsItem("catnip"),
+      beam: new CraftSettingsItem("wood"),
+      slab: new CraftSettingsItem("minerals"),
+      steel: new CraftSettingsItem("coal"),
+      plate: new CraftSettingsItem("iron"),
+      alloy: new CraftSettingsItem("titanium"),
+      concrate: new CraftSettingsItem(false),
+      gear: new CraftSettingsItem(false),
+      scaffold: new CraftSettingsItem(false),
+      ship: new CraftSettingsItem(false),
+      tanker: new CraftSettingsItem(false),
+      parchment: new CraftSettingsItem(false, true, false),
+      manuscript: new CraftSettingsItem("culture"),
+      compedium: new CraftSettingsItem("science"),
+      blueprint: new CraftSettingsItem("science"),
+      kerosene: new CraftSettingsItem("oil"),
+      megalith: new CraftSettingsItem(false),
+      eludium: new CraftSettingsItem("unobtainium"),
+      thorium: new CraftSettingsItem("uranium"),
     },
-  };
+    resources = new ResourceSettings(),
+    unlockUpgrades = new UpgradeSettings(),
+    shipOverride = new Setting(true)
+  ) {
+    super(enabled, trigger);
+    this.items = items;
+    this.resources = resources;
+    this.shipOverride = shipOverride;
+    this.unlockUpgrades = unlockUpgrades;
+  }
 
   static validateGame(game: GamePage, settings: WorkshopSettings) {
-    UpgradeSettings.validateGame(game, settings.addition.unlockUpgrades);
+    UpgradeSettings.validateGame(game, settings.unlockUpgrades);
+  }
+
+  load(settings: WorkshopSettings) {
+    this.enabled = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].limited = item.limited;
+      this.items[name].max = item.max;
+    }
+
+    for (const [name, item] of objectEntries(settings.resources)) {
+      this.resources[name].enabled = item.enabled;
+      this.resources[name].consume = item.consume;
+      this.resources[name].stock = item.stock;
+    }
+
+    this.unlockUpgrades.enabled = settings.unlockUpgrades.enabled;
+    for (const [name, item] of objectEntries(settings.unlockUpgrades.items)) {
+      this.unlockUpgrades.items[name].enabled = item.enabled;
+    }
+
+    this.shipOverride.enabled = settings.shipOverride.enabled;
   }
 
   static toLegacyOptions(settings: WorkshopSettings, subject: KittenStorageType) {
@@ -88,10 +114,12 @@ export class WorkshopSettings extends SettingsSection implements SettingTrigger 
       };
     }
 
-    subject.items["toggle-upgrades"] = settings.addition.unlockUpgrades.enabled;
-    for (const [name, item] of objectEntries(settings.addition.unlockUpgrades.items)) {
+    subject.items["toggle-upgrades"] = settings.unlockUpgrades.enabled;
+    for (const [name, item] of objectEntries(settings.unlockUpgrades.items)) {
       subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
     }
+
+    subject.items["toggle-shipOverride"] = settings.shipOverride.enabled;
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -104,24 +132,27 @@ export class WorkshopSettings extends SettingsSection implements SettingTrigger 
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
     }
 
-    options.resources = {};
     for (const [name, item] of objectEntries(subject.resources)) {
       if (item.checkForReset) {
         continue;
       }
 
-      options.resources[name] = {
-        consume: item.consume,
-        enabled: item.enabled,
-        stock: item.stock,
-      };
+      // We didn't explicitly store the `enabled` state in legacy.
+      // Instead, it is derived from the setting having non-default values.
+      options.resources[name].enabled =
+        item.consume !== WorkshopManager.DEFAULT_CONSUME_RATE || item.stock !== 0;
+      options.resources[name].consume = item.consume;
+      options.resources[name].stock = item.stock;
     }
 
-    options.addition.unlockUpgrades.enabled =
-      subject.items["toggle-upgrades"] ?? options.addition.unlockUpgrades.enabled;
-    for (const [name, item] of objectEntries(options.addition.unlockUpgrades.items)) {
+    options.unlockUpgrades.enabled =
+      subject.items["toggle-upgrades"] ?? options.unlockUpgrades.enabled;
+    for (const [name, item] of objectEntries(options.unlockUpgrades.items)) {
       item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
     }
+
+    options.shipOverride.enabled =
+      subject.items["toggle-shipOverride"] ?? options.shipOverride.enabled;
 
     return options;
   }

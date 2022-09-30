@@ -1,5 +1,6 @@
-import { CacheManager } from "./CacheManager";
-import { CraftSettingsItem } from "./options/WorkshopSettings";
+import { Automation, TickContext } from "./Engine";
+import { MaterialsCache } from "./helper/MaterialsCache";
+import { CraftSettingsItem, WorkshopSettings } from "./options/WorkshopSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { cdebug, cerror } from "./tools/Log";
@@ -10,13 +11,33 @@ import { VillageTab } from "./types/village";
 import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 
-export class WorkshopManager extends UpgradeManager {
+export class WorkshopManager extends UpgradeManager implements Automation {
+  settings: WorkshopSettings;
   readonly manager: TabManager<VillageTab>;
 
-  constructor(host: UserScript) {
-    super(host);
+  static readonly DEFAULT_CONSUME_RATE = 1;
 
+  constructor(host: UserScript, settings = new WorkshopSettings()) {
+    super(host);
+    this.settings = settings;
     this.manager = new TabManager(this._host, "Workshop");
+  }
+
+  tick(context: TickContext) {
+    if (!this.settings.enabled) {
+      return;
+    }
+
+    this.autoCraft();
+    this.refreshStock();
+
+    if (this.settings.unlockUpgrades.enabled) {
+      return this.autoUnlock();
+    }
+  }
+
+  load(settings: WorkshopSettings) {
+    this.settings.load(settings);
   }
 
   async autoUnlock() {
@@ -29,9 +50,7 @@ export class WorkshopManager extends UpgradeManager {
     const upgrades = this._host.gamePage.workshop.upgrades;
     const toUnlock = new Array<UpgradeInfo>();
 
-    workLoop: for (const [item, options] of objectEntries(
-      this._host.options.auto.craft.addition.unlockUpgrades.items
-    )) {
+    workLoop: for (const [item, options] of objectEntries(this.settings.unlockUpgrades.items)) {
       if (!options.enabled) {
         continue;
       }
@@ -72,13 +91,10 @@ export class WorkshopManager extends UpgradeManager {
    *
    * @param crafts The resources to build.
    */
-  autoCraft(
-    crafts: Partial<Record<ResourceCraftable, CraftSettingsItem>> = this._host.options.auto.craft
-      .items
-  ) {
+  autoCraft(crafts: Partial<Record<ResourceCraftable, CraftSettingsItem>> = this.settings.items) {
     // TODO: One of the core limitations here is that only a single resource
     //       is taken into account, the one set as `require` in the definition.
-    const trigger = this._host.options.auto.craft.trigger;
+    const trigger = this.settings.trigger;
 
     for (const [name, craft] of objectEntries(crafts)) {
       // This will always be `false` while `max` is hardcoded to `0`.
@@ -86,10 +102,10 @@ export class WorkshopManager extends UpgradeManager {
       const current = !craft.max ? false : this.getResource(name);
       // The resource information for the requirement of this craft, if any.
       const require = !craft.require ? false : this.getResource(craft.require);
+      const max = craft.max === -1 ? Number.POSITIVE_INFINITY : craft.max;
       let amount = 0;
       // Ensure that we have reached our cap
-      // This will never happen as `current` is always `false`.
-      if (current && current.value > craft.max) continue;
+      if (current && current.value > max) continue;
 
       // If we can't even craft a single item of the resource, skip it.
       if (!this.singleCraftPossible(name)) {
@@ -149,7 +165,7 @@ export class WorkshopManager extends UpgradeManager {
 
   private _canCraft(name: ResourceCraftable, amount: number): boolean {
     const craft = this.getCraft(name);
-    const enabled = mustExist(this._host.options.auto.craft.items[name]).enabled;
+    const enabled = mustExist(this.settings.items[name]).enabled;
     let result = false;
 
     if (craft.unlocked && enabled) {
@@ -218,7 +234,7 @@ export class WorkshopManager extends UpgradeManager {
 
     const craft = this.getCraft(name);
     const ratio = this._host.gamePage.getResCraftRatio(craft.name);
-    const trigger = this._host.options.auto.craft.trigger;
+    const trigger = this.settings.trigger;
 
     // Safeguard if materials for craft cannot be determined.
     if (!materials) {
@@ -282,9 +298,7 @@ export class WorkshopManager extends UpgradeManager {
     }
 
     // The ship override allows the user to treat ships as "unlimited" while there's less than 243.
-    const shipOverride =
-      this._host.options.auto.options.enabled &&
-      this._host.options.auto.options.items.shipOverride.enabled;
+    const shipOverride = this.settings.shipOverride.enabled;
 
     const res = this.getResource(name);
 
@@ -378,7 +392,7 @@ export class WorkshopManager extends UpgradeManager {
    */
   getTickVal(
     resource: ResourceInfo,
-    cacheManager?: CacheManager,
+    cacheManager?: MaterialsCache,
     preTrade: boolean | undefined = undefined
   ): number | "ignore" {
     let production = this._host.gamePage.getResourcePerTick(resource.name, true);
@@ -456,9 +470,6 @@ export class WorkshopManager extends UpgradeManager {
    * @returns The information object for the resource.
    */
   getResource(name: Resource): ResourceInfo {
-    if (name === "slabs") {
-      name = "slab";
-    }
     const res = this._host.gamePage.resPool.get(name);
     if (isNil(res)) {
       throw new Error(`Unable to find resource ${name}`);
@@ -482,8 +493,9 @@ export class WorkshopManager extends UpgradeManager {
    * @param name The resource.
    * @returns How many items of the resource to always keep in stock.
    */
+
   getStock(name: Resource): number {
-    const res = this._host.options.auto.craft.resources[name];
+    const res = this.settings.resources[name];
     const stock = res && res.enabled ? res.stock : 0;
 
     return !stock ? 0 : stock;
@@ -537,18 +549,18 @@ export class WorkshopManager extends UpgradeManager {
       // Determine our de-facto trigger value to use.
       let trigger: number;
       if (!typeTrigger && typeTrigger !== 0) {
-        trigger = this._host.options.auto.craft.trigger;
+        trigger = this.settings.trigger;
       } else {
         trigger = typeTrigger;
       }
 
       // Determine the consume rate. Either it's configured on the resource, or globally.
       // If the consume rate is 0.6, we'll always only make 60% of the resource available.
-      const resourceSettings = this._host.options.auto.craft.resources[name];
+      const resourceSettings = this.settings.resources[name];
       const consume =
         resourceSettings && resourceSettings.enabled && resourceSettings.consume !== undefined
           ? resourceSettings.consume
-          : this._host.options.consume;
+          : WorkshopManager.DEFAULT_CONSUME_RATE;
 
       value -= Math.min(this.getResource(name).maxValue * trigger, value) * (1 - consume);
     }
@@ -674,5 +686,37 @@ export class WorkshopManager extends UpgradeManager {
 
     // Might need to eventually factor in time acceleration using this._host.gamePage.timeAccelerationRatio().
     return baseProd;
+  }
+
+  /**
+   * Maintains the CSS classes in the resource indicators in the game UI to
+   * reflect if the amount of resource in stock is below or above the desired
+   * total amount to keep in stock.
+   * The user can configure this in the Workshop automation section.
+   */
+  refreshStock() {
+    for (const [name, resource] of objectEntries(this.settings.resources)) {
+      if (resource.stock === 0) {
+        continue;
+      }
+
+      const isBelow = this._host.gamePage.resPool.get(name).value < resource.stock;
+
+      const resourceCells = [
+        // Resource table on the top.
+        ...$(`#game .res-row.resource_${name} .res-cell.resAmount`),
+        // Craft table on the bottom.
+        ...$(`#game .res-row.resource_${name} .res-cell.resource-value`),
+      ];
+
+      if (!resourceCells) {
+        continue;
+      }
+
+      for (const resourceCell of resourceCells) {
+        resourceCell.classList.add(isBelow ? "ks-stock-below" : "ks-stock-above");
+        resourceCell.classList.remove(isBelow ? "ks-stock-above" : "ks-stock-below");
+      }
+    }
   }
 }

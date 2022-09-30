@@ -1,4 +1,6 @@
-import { CacheManager } from "./CacheManager";
+import { Automation, TickContext } from "./Engine";
+import { MaterialsCache } from "./helper/MaterialsCache";
+import { VillageSettings } from "./options/VillageSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { isNil } from "./tools/Maybe";
@@ -7,15 +9,47 @@ import { JobInfo, VillageTab } from "./types/village";
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
 
-export class VillageManager {
+export class VillageManager implements Automation {
   private readonly _host: UserScript;
+  settings: VillageSettings;
   readonly manager: TabManager<VillageTab>;
+  private readonly _cacheManager: MaterialsCache;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript) {
+  constructor(
+    host: UserScript,
+    workshopManager: WorkshopManager,
+    settings = new VillageSettings()
+  ) {
     this._host = host;
+    this.settings = settings;
     this.manager = new TabManager(this._host, "Village");
-    this._workshopManager = new WorkshopManager(this._host);
+    this._cacheManager = new MaterialsCache(this._host);
+    this._workshopManager = workshopManager;
+  }
+
+  tick(context: TickContext) {
+    if (!this.settings.enabled) {
+      return;
+    }
+
+    this.autoDistributeKittens();
+
+    if (this.settings.hunt.enabled) {
+      this.autoHunt(this._cacheManager);
+    }
+
+    if (this.settings.holdFestivals.enabled) {
+      this.autoFestival(this._cacheManager);
+    }
+
+    if (this.settings.promoteLeader.enabled) {
+      this.autoPromote();
+    }
+  }
+
+  load(settings: VillageSettings) {
+    this.settings.load(settings);
   }
 
   autoDistributeKittens() {
@@ -28,7 +62,7 @@ export class VillageManager {
     const jobsNotCapped = new Array<{ job: JobInfo; count: number; toCap: number }>();
     for (const job of this._host.gamePage.village.jobs) {
       // Skip disabled jobs and those that haven't been unlocked;
-      const enabled = this._host.options.auto.village.items[job.name].enabled;
+      const enabled = this.settings.items[job.name].enabled;
       const unlocked = job.unlocked;
       if (!enabled || !unlocked) {
         continue;
@@ -36,9 +70,9 @@ export class VillageManager {
 
       const maxKittensInJob = this._host.gamePage.village.getJobLimit(job.name);
       const maxKittensToAssign =
-        this._host.options.auto.village.items[job.name].max === -1
+        this.settings.items[job.name].max === -1
           ? Number.POSITIVE_INFINITY
-          : this._host.options.auto.village.items[job.name].max;
+          : this.settings.items[job.name].max;
       const kittensInJob = job.value;
       if (kittensInJob < maxKittensInJob && kittensInJob < maxKittensToAssign) {
         jobsNotCapped.push({ job, count: kittensInJob, toCap: maxKittensInJob - kittensInJob });
@@ -90,9 +124,9 @@ export class VillageManager {
     }
   }
 
-  autoHunt(cacheManager?: CacheManager) {
+  autoHunt(cacheManager?: MaterialsCache) {
     const manpower = this._workshopManager.getResource("manpower");
-    const trigger = this._host.options.auto.village.addition.hunt.trigger ?? 0;
+    const trigger = this.settings.hunt.trigger ?? 0;
 
     if (manpower.value < 100 || this._host.gamePage.challenges.isActive("pacifism")) {
       return;
@@ -133,7 +167,7 @@ export class VillageManager {
     }
   }
 
-  autoFestival(cacheManager?: CacheManager) {
+  autoFestival(cacheManager?: MaterialsCache) {
     // If we haven't researched festivals yet, or still have more than 400 days left on one,
     // don't hold (another) one.
     if (

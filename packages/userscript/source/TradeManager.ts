@@ -1,4 +1,6 @@
-import { CacheManager } from "./CacheManager";
+import { Automation, TickContext } from "./Engine";
+import { MaterialsCache } from "./helper/MaterialsCache";
+import { TradingSettings } from "./options/TradingSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { ucfirst } from "./tools/Format";
@@ -7,21 +9,46 @@ import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradingTab } from "./
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
 
-export class TradeManager {
+export class TradeManager implements Automation {
   private readonly _host: UserScript;
+  settings: TradingSettings;
   readonly manager: TabManager<TradingTab>;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript) {
+  constructor(
+    host: UserScript,
+    workshopManager: WorkshopManager,
+    settings = new TradingSettings()
+  ) {
     this._host = host;
+    this.settings = settings;
     this.manager = new TabManager(this._host, "Trade");
-    this._workshopManager = new WorkshopManager(this._host);
+    this._workshopManager = workshopManager;
   }
 
-  autoTrade(cacheManager?: CacheManager) {
+  tick(context: TickContext) {
+    if (!this.settings.enabled) {
+      return;
+    }
+
+    this.autoTrade();
+
+    if (this.settings.unlockRaces.enabled) {
+      this.autoUnlock();
+    }
+    if (this.settings.buildEmbassies.enabled) {
+      this.autoBuildEmbassies();
+    }
+  }
+
+  load(settings: TradingSettings) {
+    this.settings.load(settings);
+  }
+
+  autoTrade(cacheManager?: MaterialsCache) {
     const catpower = this._workshopManager.getResource("manpower");
     const gold = this._workshopManager.getResource("gold");
-    const requireTrigger = this._host.options.auto.trade.trigger;
+    const requireTrigger = this.settings.trigger;
 
     // We should only trade if catpower and gold hit the trigger value.
     // Trades can additionally require specific resources. We will check for those later.
@@ -45,7 +72,7 @@ export class TradeManager {
     const season = this._host.gamePage.calendar.getCurSeason().name;
 
     // Determine how many races we will trade with this cycle.
-    for (const [name, trade] of objectEntries(this._host.options.auto.trade.items)) {
+    for (const [name, trade] of objectEntries(this.settings.items)) {
       const race = this.getRace(name);
 
       // Check if the race is enabled, in season, unlocked, and we can actually afford it.
@@ -102,7 +129,7 @@ export class TradeManager {
     // with them.
     for (let tradeIndex = 0; tradeIndex < trades.length; tradeIndex++) {
       const race = trades[tradeIndex];
-      const tradeSettings = this._host.options.auto.trade.items[race];
+      const tradeSettings = this.settings.items[race];
       // Does this trade require a certain resource?
       const require = !tradeSettings.require
         ? false
@@ -242,7 +269,7 @@ export class TradeManager {
     AutoEmbassy: if (this._host.gamePage.diplomacy.races[0].embassyPrices) {
       const culture = this._workshopManager.getResource("culture");
       let cultureVal = 0;
-      const trigger = this._host.options.auto.trade.addition.buildEmbassies.trigger ?? 0;
+      const trigger = this.settings.buildEmbassies.trigger ?? 0;
       if (trigger <= culture.value / culture.maxValue) {
         const racePanels = this._host.gamePage.diplomacyTab.racePanels;
         cultureVal = this._workshopManager.getValueAvailable("culture", true);
@@ -482,7 +509,7 @@ export class TradeManager {
     const race = this.getRace(name);
     const button = this.getTradeButton(race.name);
 
-    if (!button.model.enabled || !this._host.options.auto.trade.items[name].enabled) {
+    if (!button.model.enabled || !this.settings.items[name].enabled) {
       this._host.warning(
         "KS trade checks are not functioning properly, please create an issue on the github page."
       );
@@ -662,11 +689,8 @@ export class TradeManager {
         // amount.
         // TODO: It's unclear how this works
         total =
-          this._workshopManager.getValueAvailable(
-            resource,
-            limited,
-            this._host.options.auto.trade.trigger
-          ) / required;
+          this._workshopManager.getValueAvailable(resource, limited, this.settings.trigger) /
+          required;
       }
 
       // Set the amount to the lowest amount of possible trades seen yet.

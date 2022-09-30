@@ -5,17 +5,17 @@ import {
   Race,
   Resource,
   Season,
+  SpaceBuildings,
   StagedBuilding,
   Technology,
   Upgrade,
 } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FilterItem } from "./FilterSettings";
-import { AllItems } from "./Options";
 import { OptionsItem } from "./OptionsSettings";
 import { FaithItem, ReligionAdditionItem, UnicornItem } from "./ReligionSettings";
 import { ScienceItem } from "./ScienceSettings";
-import { SpaceItem } from "./SpaceSettings";
+import { AllItems } from "./Settings";
 import { TimeControlItem } from "./TimeControlSettings";
 import { TimeItem } from "./TimeSettings";
 
@@ -37,7 +37,7 @@ type SetMaxJobItem = `set-${Job}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
 type SetMinResetBuildingItem = `set-reset-build-${Exclude<BonfireItem, "unicornPasture">}-min`;
 type SetMinResetFaithItem = `set-reset-faith-${FaithItem | UnicornItem}-min`;
-type SetMinResetSpaceItem = `set-reset-space-${SpaceItem}-min`;
+type SetMinResetSpaceItem = `set-reset-space-${SpaceBuildings}-min`;
 type SetMinResetTimeItem = `set-reset-time-${TimeItem}-min`;
 type SetMinResetUnicornItem = `set-reset-unicorn-${UnicornItem}-min`;
 type SetSubtriggerOptionItem = `set-${OptionsItem}-trigger`;
@@ -62,10 +62,11 @@ type ToggleRaceSeasonItem = `toggle-${Race}-${Season}`;
 type ToggleReligionAdditionItem = `toggle-${ReligionAdditionItem}`;
 type ToggleResetBuildingItem = `toggle-reset-build-${Exclude<BonfireItem, "unicornPasture">}`;
 type ToggleResetFaithItem = `toggle-reset-faith-${FaithItem | UnicornItem}`;
-type ToggleResetSpaceItem = `toggle-reset-space-${SpaceItem}`;
+type ToggleResetSpaceItem = `toggle-reset-space-${SpaceBuildings}`;
 type ToggleResetTimeItem = `toggle-reset-time-${TimeItem}`;
 type ToggleResetUnicornItem = `toggle-reset-unicorn-${UnicornItem}`;
 type ToggleResourceItem = `toggle-${Resource}`;
+type ToggleShipOverride = `toggle-shipOverride`;
 type ToggleTechItem = `toggle-tech-${Technology}`;
 type ToggleTimeControlCycleItem = `toggle-timeSkip-${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
 type ToggleTimeControlItem = `toggle-${TimeControlItem}`;
@@ -117,6 +118,7 @@ export type KittenStorageType = {
     Partial<Record<ToggleResetTimeItem, boolean>> &
     Partial<Record<ToggleResetUnicornItem, boolean>> &
     Partial<Record<ToggleResourceItem, boolean>> &
+    Partial<Record<ToggleShipOverride, boolean>> &
     Partial<Record<ToggleTechItem, boolean>> &
     Partial<Record<ToggleTimeControlCycleItem, boolean>> &
     Partial<Record<ToggleTimeControlItem, boolean>> &

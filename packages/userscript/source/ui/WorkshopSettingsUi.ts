@@ -1,19 +1,18 @@
-import {
-  CraftAdditionSettings,
-  CraftSettingsItem,
-  WorkshopSettings,
-} from "../options/WorkshopSettings";
+import { ResourcesSettingsItem } from "../options/ResourcesSettings";
+import { CraftSettingsItem, WorkshopSettings } from "../options/WorkshopSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { Maybe, mustExist } from "../tools/Maybe";
-import { ResourceCraftable } from "../types";
+import { Resource } from "../types";
 import { UserScript } from "../UserScript";
+import { SettingLimitedMaxUi } from "./SettingLimitedMaxUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingUi } from "./SettingUi";
 
-export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
+export class WorkshopSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: WorkshopSettings;
+  private readonly _settings: WorkshopSettings;
 
   private _resourcesList: Maybe<JQuery<HTMLElement>>;
 
@@ -21,123 +20,123 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
 
   private _upgradesExpanded = false;
 
-  constructor(host: UserScript, options: WorkshopSettings = host.options.auto.craft) {
+  constructor(host: UserScript, settings: WorkshopSettings) {
     super(host);
 
-    this._options = options;
+    this._settings = settings;
 
     const toggleName = "craft";
     const label = ucfirst(this._host.i18n("ui.craft"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getOptionList(toggleName);
+    const list = this._getItemsList(toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._options, list);
-    this._options.$enabled = element.checkbox;
+    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    this._settings.$enabled = element.checkbox;
 
     // Create "trigger" button in the item.
-    this._options.$trigger = this._registerTriggerButton(toggleName, label, this._options);
+    this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
 
     this._optionButtons = [
       this._getCraftOption(
         "wood",
-        this._options.items.wood,
+        this._settings.items.wood,
         this._host.i18n("$workshop.crafts.wood.label")
       ),
       this._getCraftOption(
         "beam",
-        this._options.items.beam,
+        this._settings.items.beam,
         this._host.i18n("$workshop.crafts.beam.label")
       ),
       this._getCraftOption(
         "slab",
-        this._options.items.slab,
+        this._settings.items.slab,
         this._host.i18n("$workshop.crafts.slab.label")
       ),
       this._getCraftOption(
         "steel",
-        this._options.items.steel,
+        this._settings.items.steel,
         this._host.i18n("$workshop.crafts.steel.label")
       ),
       this._getCraftOption(
         "plate",
-        this._options.items.plate,
+        this._settings.items.plate,
         this._host.i18n("$workshop.crafts.plate.label")
       ),
       this._getCraftOption(
         "alloy",
-        this._options.items.alloy,
+        this._settings.items.alloy,
         this._host.i18n("$workshop.crafts.alloy.label")
       ),
       this._getCraftOption(
         "concrate",
-        this._options.items.concrate,
+        this._settings.items.concrate,
         this._host.i18n("$workshop.crafts.concrate.label")
       ),
       this._getCraftOption(
         "gear",
-        this._options.items.gear,
+        this._settings.items.gear,
         this._host.i18n("$workshop.crafts.gear.label")
       ),
       this._getCraftOption(
         "scaffold",
-        this._options.items.scaffold,
+        this._settings.items.scaffold,
         this._host.i18n("$workshop.crafts.scaffold.label")
       ),
       this._getCraftOption(
         "ship",
-        this._options.items.ship,
+        this._settings.items.ship,
         this._host.i18n("$workshop.crafts.ship.label")
       ),
       this._getCraftOption(
         "tanker",
-        this._options.items.tanker,
+        this._settings.items.tanker,
         this._host.i18n("$workshop.crafts.tanker.label"),
         true
       ),
 
       this._getCraftOption(
         "parchment",
-        this._options.items.parchment,
+        this._settings.items.parchment,
         this._host.i18n("$workshop.crafts.parchment.label")
       ),
       this._getCraftOption(
         "manuscript",
-        this._options.items.manuscript,
+        this._settings.items.manuscript,
         this._host.i18n("$workshop.crafts.manuscript.label")
       ),
       this._getCraftOption(
         "compedium",
-        this._options.items.compedium,
+        this._settings.items.compedium,
         this._host.i18n("$workshop.crafts.compedium.label")
       ),
       this._getCraftOption(
         "blueprint",
-        this._options.items.blueprint,
+        this._settings.items.blueprint,
         this._host.i18n("$workshop.crafts.blueprint.label"),
         true
       ),
 
       this._getCraftOption(
         "kerosene",
-        this._options.items.kerosene,
+        this._settings.items.kerosene,
         this._host.i18n("$workshop.crafts.kerosene.label")
       ),
       this._getCraftOption(
         "megalith",
-        this._options.items.megalith,
+        this._settings.items.megalith,
         this._host.i18n("$workshop.crafts.megalith.label")
       ),
       this._getCraftOption(
         "eludium",
-        this._options.items.eludium,
+        this._settings.items.eludium,
         this._host.i18n("$workshop.crafts.eludium.label")
       ),
       this._getCraftOption(
         "thorium",
-        this._options.items.thorium,
+        this._settings.items.thorium,
         this._host.i18n("$workshop.crafts.thorium.label"),
         true
       ),
@@ -145,20 +144,13 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
 
     list.append(...this._optionButtons);
 
-    const additionOptions = this.getAdditionOptions(this._options.addition);
+    const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    const resourcesButton = $("<div/>", {
+    const resourcesButton = $('<div class="ks-icon-button"/>', {
       id: "toggle-resource-controls",
-      text: "🛠",
       title: this._host.i18n("ui.craft.resources"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).text("🛠");
 
     const resourcesList = this._getResourceOptions();
 
@@ -175,7 +167,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
       resourcesList.toggle();
     });
 
-    element.panel.append(this._options.$trigger);
+    element.panel.append(this._settings.$trigger);
     element.panel.append(resourcesButton);
     element.panel.append(list);
     element.panel.append(resourcesList);
@@ -190,7 +182,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return this._getOptionWithLimited(name, option, label, delimiter, upgradeIndicator, {
+    return SettingLimitedMaxUi.make(this._host, name, option, label, delimiter, upgradeIndicator, {
       onLimitedCheck: () => {
         this._host.updateOptions(() => (option.limited = true));
         this._host.imessage("craft.limited", [label]);
@@ -203,93 +195,16 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
   }
 
   private _getResourceOptions(): JQuery<HTMLElement> {
-    if (this._resourcesList) {
-      return this._resourcesList;
-    }
+    this._resourcesList = SettingsSectionUi.getList("toggle-list-resources");
 
-    this._resourcesList = $("<ul/>", {
-      id: "toggle-list-resources",
-      css: { display: "none", paddingLeft: "20px", paddingTop: "4px" },
-    });
+    const allresources = SettingsSectionUi.getList("available-resources-list");
 
-    const clearunused = $("<div/>", {
-      id: "resources-clear-unused",
-      text: this._host.i18n("resources.clear.unused"),
-      css: {
-        border: "1px solid grey",
-        cursor: "pointer",
-        float: "right",
-        display: "inline-block",
-        marginBottom: "4px",
-        padding: "1px 2px",
-      },
-    });
-
-    const add = $("<div/>", {
-      id: "resources-add",
-      text: this._host.i18n("resources.add"),
-      css: {
-        border: "1px solid grey",
-        cursor: "pointer",
-        float: "right",
-        display: "inline-block",
-        marginBottom: "4px",
-        marginRight: "8px",
-        padding: "1px 2px",
-      },
-    });
-
-    clearunused.on("click", () => {
-      for (const name in this._host.options.auto.craft.resources) {
-        // Only delete resources with unmodified values. Require manual
-        // removal of resources with non-standard values.
-        const resource = mustExist(
-          this._host.options.auto.craft.resources[name as ResourceCraftable]
-        );
-        if (
-          (!resource.stock && resource.consume === this._host.options.consume) ||
-          resource.consume === undefined
-        ) {
-          $(`#resource-${name}`).remove();
-        }
-      }
-    });
-
-    const allresources = $("<ul/>", {
-      id: "available-resources-list",
-      css: { display: "none", paddingLeft: "20px" },
-    });
-
-    add.on("click", () => {
-      allresources.toggle();
-      allresources.empty();
-      allresources.append(
-        this._getAllAvailableResourceOptions(false, res => {
-          if (!this._options.resources[res.name]) {
-            const option = {
-              consume: this._host.options.consume,
-              enabled: true,
-              stock: 0,
-            };
-            this._options.resources[res.name] = option;
-            mustExist(this._resourcesList).append(
-              this._addNewResourceOption(res.name, res.title, option, (_name, _resource) => {
-                delete this._options.resources[_name];
-              })
-            );
-          }
-        })
-      );
-    });
-
-    this._resourcesList.append(clearunused, add, allresources);
+    this._resourcesList.append(allresources);
 
     // Add all the current resources
-    for (const [name, item] of objectEntries(this._host.options.auto.craft.resources)) {
+    for (const [name, item] of objectEntries(this._settings.resources)) {
       this._resourcesList.append(
-        this._addNewResourceOption(name, name, item, (_name, _resource) => {
-          delete this._options.resources[_name];
-        })
+        this._addNewResourceOption(name, ucfirst(this._host.i18n(`$resources.${name}.title`)), item)
       );
       //this.setStockValue(name, item.stock);
       //this.setConsumeRate(name, item.consume);
@@ -298,43 +213,42 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     return this._resourcesList;
   }
 
-  getAdditionOptions(addition: CraftAdditionSettings): Array<JQuery<HTMLElement>> {
+  private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const upgradesButton = this._getOption(
+    const upgradesButton = SettingUi.make(
+      this._host,
       "upgrades",
-      addition.unlockUpgrades,
+      this._settings.unlockUpgrades,
       this._host.i18n("ui.upgrade.upgrades"),
       false,
       false,
+      [],
       {
         onCheck: () => {
-          this._host.updateOptions(() => (addition.unlockUpgrades.enabled = true));
+          this._host.updateOptions(() => (this._settings.unlockUpgrades.enabled = true));
           this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.upgrades")]);
         },
         onUnCheck: () => {
-          this._host.updateOptions(() => (addition.unlockUpgrades.enabled = false));
+          this._host.updateOptions(() => (this._settings.unlockUpgrades.enabled = false));
           this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.upgrades")]);
         },
       }
     );
 
-    const upgradesList = $("<ul/>", {
-      id: "items-list-upgrades",
-      css: { display: "none", paddingLeft: "20px" },
-    });
+    const upgradesList = SettingsSectionUi.getList("items-list-upgrades");
 
     const upgradeButtons = [];
-    for (const [upgradeName, upgrade] of objectEntries(
-      this._options.addition.unlockUpgrades.items
-    )) {
+    for (const [upgradeName, upgrade] of objectEntries(this._settings.unlockUpgrades.items)) {
       const upgradeLabel = this._host.i18n(`$workshop.${upgradeName}.label`);
-      const upgradeButton = this._getOption(
+      const upgradeButton = SettingUi.make(
+        this._host,
         `upgrade-${upgradeName}`,
         upgrade,
         upgradeLabel,
         false,
         false,
+        [],
         {
           onCheck: () => {
             this._host.updateOptions(() => (upgrade.enabled = true));
@@ -367,67 +281,146 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     });
     upgradesButton.append(upgradesItemsButton, upgradesList);
 
-    return [header, upgradesButton];
+    const shipOverride = SettingUi.make(
+      this._host,
+      "shipOverride",
+      this._settings.shipOverride,
+      this._host.i18n("option.shipOverride"),
+      false,
+      false,
+      [],
+      {
+        onCheck: () => {
+          this._host.updateOptions(() => (this._settings.shipOverride.enabled = true));
+          this._host.imessage("status.auto.enable", [this._host.i18n("option.shipOverride")]);
+        },
+        onUnCheck: () => {
+          this._host.updateOptions(() => (this._settings.shipOverride.enabled = false));
+          this._host.imessage("status.auto.disable", [this._host.i18n("option.shipOverride")]);
+        },
+      }
+    );
+
+    return [header, upgradesButton, shipOverride];
   }
 
-  getState(): WorkshopSettings {
-    return {
-      enabled: this._options.enabled,
-      trigger: this._options.trigger,
-      items: this._options.items,
-      resources: this._options.resources,
-      addition: this._options.addition,
-    };
+  /**
+   * Creates a UI element that reflects stock and consume values for a given resource.
+   * This is currently only used for the craft section.
+   *
+   * @param name The resource.
+   * @param title The title to apply to the option.
+   * @param setting The option that is being controlled.
+   * @returns A new option with stock and consume values.
+   */
+  private _addNewResourceOption(
+    name: Resource,
+    title: string,
+    setting: ResourcesSettingsItem
+  ): JQuery<HTMLElement> {
+    const stock = setting.stock;
+
+    // The overall container for this resource item.
+    const container = SettingUi.make(this._host, `resource-${name}`, setting, title);
+
+    // How many items to stock.
+    const stockElement = $("<div/>", {
+      id: `stock-value-${name}`,
+      text: this._host.i18n("resources.stock", [this._renderLimit(stock)]),
+      css: { cursor: "pointer", display: "inline-block", width: "80px" },
+    });
+
+    // The consume rate for the resource.
+    const consumeElement = $("<div/>", {
+      id: `consume-rate-${name}`,
+      text: this._host.i18n("resources.consume", [
+        SettingsSectionUi.renderConsumeRate(setting.consume),
+      ]),
+      css: { cursor: "pointer", display: "inline-block" },
+    });
+
+    container.append(stockElement, consumeElement);
+
+    stockElement.on("click", () => {
+      const value = SettingsSectionUi.promptLimit(
+        this._host.i18n("resources.stock.set", [title]),
+        setting.stock.toFixed(0)
+      );
+      if (value !== null) {
+        setting.enabled = true;
+        setting.stock = value;
+        stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(value)]));
+        this._host.updateOptions();
+      }
+    });
+
+    consumeElement.on("click", () => {
+      const consumeValue = SettingsSectionUi.promptPercentage(
+        this._host.i18n("resources.consume.set", [title]),
+        SettingsSectionUi.renderConsumeRate(setting.consume)
+      );
+      if (consumeValue !== null) {
+        // Cap value between 0 and 1.
+        this._host.updateOptions(() => (setting.consume = consumeValue));
+        consumeElement.text(
+          this._host.i18n("resources.consume", [SettingsSectionUi.renderConsumeRate(consumeValue)])
+        );
+      }
+    });
+
+    setting.$consume = consumeElement;
+    setting.$stock = stockElement;
+
+    return container;
   }
 
   setState(state: WorkshopSettings): void {
-    this._options.enabled = state.enabled;
-    this._options.trigger = state.trigger;
+    this._settings.enabled = state.enabled;
+    this._settings.trigger = state.trigger;
 
-    this._options.addition.unlockUpgrades.enabled = state.addition.unlockUpgrades.enabled;
-    for (const [name, option] of objectEntries(this._options.addition.unlockUpgrades.items)) {
-      option.enabled = state.addition.unlockUpgrades.items[name].enabled;
+    this._settings.unlockUpgrades.enabled = state.unlockUpgrades.enabled;
+    for (const [name, option] of objectEntries(this._settings.unlockUpgrades.items)) {
+      option.enabled = state.unlockUpgrades.items[name].enabled;
     }
 
-    for (const [name, option] of objectEntries(this._options.items)) {
+    for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
       option.limited = state.items[name].limited;
     }
-    // Remove old resource options.
-    for (const [name] of objectEntries(this._options.resources)) {
-      this._removeResourceOption(name);
+
+    for (const [name, option] of objectEntries(this._settings.resources)) {
+      option.enabled = state.resources[name].enabled;
+      option.consume = state.resources[name].consume;
+      option.stock = state.resources[name].stock;
     }
-    // Add new resource options.
-    const resourcesList = this._getResourceOptions();
-    for (const [name, option] of objectEntries(state.resources)) {
-      resourcesList.append(
-        this._addNewResourceOption(name, name, option, (_name, _resource) => {
-          delete this._options.resources[_name];
-        })
-      );
-    }
-    this._options.resources = state.resources;
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
-    mustExist(this._options.$trigger)[0].title = this._renderPercentage(this._options.trigger);
+    this.setState(this._settings);
 
-    mustExist(this._options.addition.unlockUpgrades.$enabled).prop(
-      "checked",
-      this._options.addition.unlockUpgrades.enabled
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.trigger
     );
-    for (const [, option] of objectEntries(this._options.addition.unlockUpgrades.items)) {
+
+    mustExist(this._settings.unlockUpgrades.$enabled).prop(
+      "checked",
+      this._settings.unlockUpgrades.enabled
+    );
+    for (const [, option] of objectEntries(this._settings.unlockUpgrades.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
     }
 
-    for (const [, option] of objectEntries(this._options.items)) {
+    for (const [, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
       mustExist(option.$limited).prop("checked", option.limited);
+      mustExist(option.$max).text(this._host.i18n("ui.max", [this._renderLimit(option.max)]));
     }
-    for (const [, option] of objectEntries(this._options.resources)) {
+
+    for (const [, option] of objectEntries(this._settings.resources)) {
+      mustExist(option.$enabled).prop("checked", option.enabled);
       mustExist(option.$consume).text(
-        this._host.i18n("resources.consume", [this._renderConsumeRate(option.consume)])
+        this._host.i18n("resources.consume", [SettingsSectionUi.renderConsumeRate(option.consume)])
       );
       mustExist(option.$stock).text(
         this._host.i18n("resources.stock", [this._renderLimit(option.stock)])

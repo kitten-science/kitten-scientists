@@ -1,6 +1,8 @@
 import { BonfireManager } from "./BonfireManager";
-import { BulkManager } from "./BulkManager";
-import { FaithItem, ReligionSettingsItem } from "./options/ReligionSettings";
+import { Automation, TickContext } from "./Engine";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
+import { BonfireSettingsItem } from "./options/BonfireSettings";
+import { FaithItem, ReligionSettings, ReligionSettingsItem } from "./options/ReligionSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { mustExist } from "./tools/Maybe";
@@ -18,30 +20,47 @@ import {
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
 
-export class ReligionManager {
+export class ReligionManager implements Automation {
   private readonly _host: UserScript;
+  settings: ReligionSettings;
   readonly manager: TabManager<ReligionTab>;
-  private readonly _bulkManager: BulkManager;
+  private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _bonfireManager: BonfireManager;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript) {
+  constructor(
+    host: UserScript,
+    bonfireManager: BonfireManager,
+    workshopManager: WorkshopManager,
+    settings = new ReligionSettings()
+  ) {
     this._host = host;
+    this.settings = settings;
     this.manager = new TabManager(this._host, "Religion");
-    this._workshopManager = new WorkshopManager(this._host);
-    this._bulkManager = new BulkManager(this._host);
-    this._bonfireManager = new BonfireManager(this._host);
+    this._workshopManager = workshopManager;
+    this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
+    this._bonfireManager = bonfireManager;
+  }
+
+  tick(context: TickContext) {
+    if (!this.settings.enabled) {
+      return;
+    }
+
+    this.autoWorship();
+  }
+
+  load(settings: ReligionSettings) {
+    this.settings.load(settings);
   }
 
   autoWorship() {
-    const additions = this._host.options.auto.religion.addition;
-
     const IS_BUILD_BEST_BUILDING_STILL_BROKEN = true;
 
     // Build the best unicorn building if the option is enabled.
     // TODO: This is stupid, as it *only* builds unicorn buildings, instead of all
     //       religion buildings.
-    if (!IS_BUILD_BEST_BUILDING_STILL_BROKEN && additions.bestUnicornBuilding.enabled) {
+    if (!IS_BUILD_BEST_BUILDING_STILL_BROKEN && this.settings.bestUnicornBuilding.enabled) {
       const bestUnicornBuilding = this._getBestUnicornBuilding();
       if (bestUnicornBuilding !== null) {
         if (bestUnicornBuilding === "unicornPasture") {
@@ -101,14 +120,14 @@ export class ReligionManager {
       // always build preferably.
       // TODO: The "build best unicorn building first" feature might be redundant.
       const builds = Object.fromEntries(
-        Object.entries(this._host.options.auto.religion.items)
+        Object.entries(this.settings.items)
           .filter(([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture)
           .reverse()
       );
       // Now we build a unicorn pasture if possible.
-      if (this._host.options.auto.religion.items.unicornPasture.enabled) {
+      if (this.settings.items.unicornPasture.enabled) {
         this._bonfireManager.autoBuild({
-          unicornPasture: { require: false, enabled: true, max: -1 },
+          unicornPasture: new BonfireSettingsItem(true, false, -1),
         });
       }
       // And then we build all other possible religion buildings.
@@ -118,17 +137,20 @@ export class ReligionManager {
     const faith = this._workshopManager.getResource("faith");
     const faithLevel = faith.value / faith.maxValue;
     // enough faith, and then TAP (transcende, adore, praise)
-    if (additions.transcend.enabled && 0.98 <= faithLevel) {
+    if (this.settings.transcend.enabled && 0.98 <= faithLevel) {
       this._autoTranscend();
     }
 
     // Adore the galaxy (worship → epiphany)
-    if (additions.adore.enabled && mustExist(this._host.gamePage.religion.getRU("apocripha")).on) {
-      this._autoAdore(additions.adore.trigger);
+    if (
+      this.settings.adore.enabled &&
+      mustExist(this._host.gamePage.religion.getRU("apocripha")).on
+    ) {
+      this._autoAdore(this.settings.adore.trigger);
     }
 
     // Praise (faith → worhsip)
-    if (additions.autoPraise.enabled && additions.autoPraise.trigger <= faithLevel) {
+    if (this.settings.autoPraise.enabled && this.settings.autoPraise.trigger <= faithLevel) {
       this._autoPraise();
     }
   }
@@ -274,7 +296,7 @@ export class ReligionManager {
   }
 
   private _buildReligionBuildings(builds: Partial<Record<FaithItem, ReligionSettingsItem>>): void {
-    const trigger = this._host.options.auto.religion.trigger;
+    const trigger = this.settings.trigger;
 
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     this.manager.render();

@@ -4,15 +4,15 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
+export class EngineSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _options: EngineSettings;
+  private readonly _settings: EngineSettings;
 
-  constructor(host: UserScript, options: EngineSettings = host.options.auto.engine) {
+  constructor(host: UserScript, settings: EngineSettings) {
     super(host);
 
-    this._options = options;
+    this._settings = settings;
 
     const toggleName = "engine";
 
@@ -30,16 +30,16 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
       id: `toggle-${toggleName}`,
       type: "checkbox",
     });
-    this._options.$enabled = input;
+    this._settings.$enabled = input;
 
     element.append(input, label);
 
     input.on("change", () => {
-      if (input.is(":checked") && options.enabled === false) {
-        this._host.updateOptions(() => (options.enabled = true));
+      if (input.is(":checked") && settings.enabled === false) {
+        this._host.updateOptions(() => (settings.enabled = true));
         this._host.engine.start(true);
-      } else if (!input.is(":checked") && options.enabled === true) {
-        this._host.updateOptions(() => (options.enabled = false));
+      } else if (!input.is(":checked") && settings.enabled === true) {
+        this._host.updateOptions(() => (settings.enabled = false));
         this._host.engine.stop(true);
       }
     });
@@ -50,17 +50,13 @@ export class EngineSettingsUi extends SettingsSectionUi<EngineSettings> {
     this.element = element;
   }
 
-  getState(): EngineSettings {
-    return {
-      enabled: this._options.enabled,
-    };
-  }
-
   setState(state: EngineSettings): void {
-    this._options.enabled = state.enabled;
+    this._settings.enabled = state.enabled;
   }
 
   refreshUi(): void {
-    mustExist(this._options.$enabled).prop("checked", this._options.enabled);
+    this.setState(this._settings);
+
+    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
   }
 }

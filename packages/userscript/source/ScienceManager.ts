@@ -1,5 +1,5 @@
-import { PolicySettings } from "./options/PolicySettings";
-import { TechSettings } from "./options/TechSettings";
+import { TickContext } from "./Engine";
+import { ScienceSettings } from "./options/ScienceSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { cerror } from "./tools/Log";
@@ -11,12 +11,37 @@ import { WorkshopManager } from "./WorkshopManager";
 
 export class ScienceManager extends UpgradeManager {
   readonly manager: TabManager<ScienceTab>;
+  settings: ScienceSettings;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript) {
+  constructor(
+    host: UserScript,
+    workshopManager: WorkshopManager,
+    settings = new ScienceSettings()
+  ) {
     super(host);
+    this.settings = settings;
     this.manager = new TabManager(this._host, "Science");
-    this._workshopManager = new WorkshopManager(this._host);
+    this._workshopManager = workshopManager;
+  }
+
+  async tick(context: TickContext) {
+    if (!this.settings.enabled) {
+      return;
+    }
+
+    // If techs (science items) are enabled...
+    if (this.settings.techs.enabled && this._host.gamePage.tabs[2].visible) {
+      await this.autoUnlock();
+    }
+
+    if (this.settings.policies.enabled && this._host.gamePage.tabs[2].visible) {
+      await this.autoPolicy();
+    }
+  }
+
+  load(settings: ScienceSettings) {
+    this.settings.load(settings);
   }
 
   async autoUnlock() {
@@ -25,9 +50,7 @@ export class ScienceManager extends UpgradeManager {
     const techs = this._host.gamePage.science.techs;
     const toUnlock = new Array<TechInfo>();
 
-    workLoop: for (const [item, options] of objectEntries(
-      (this._host.options.auto.unlock.items.techs as TechSettings).items
-    )) {
+    workLoop: for (const [item, options] of objectEntries(this.settings.techs.items)) {
       if (!options.enabled) {
         continue;
       }
@@ -64,9 +87,7 @@ export class ScienceManager extends UpgradeManager {
     const policies = this._host.gamePage.science.policies;
     const toUnlock = new Array<PolicyInfo>();
 
-    for (const [item, options] of objectEntries(
-      (this._host.options.auto.unlock.items.policies as PolicySettings).items
-    )) {
+    for (const [item, options] of objectEntries(this.settings.policies.items)) {
       if (!options.enabled) {
         continue;
       }

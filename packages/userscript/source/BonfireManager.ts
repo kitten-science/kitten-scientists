@@ -1,5 +1,6 @@
-import { BulkManager } from "./BulkManager";
-import { BonfireItem, BonfireSettingsItem } from "./options/BonfireSettings";
+import { Automation, TickContext } from "./Engine";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
+import { BonfireItem, BonfireSettings, BonfireSettingsItem } from "./options/BonfireSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { isNil, mustExist } from "./tools/Maybe";
@@ -9,17 +10,37 @@ import { WorkshopManager } from "./WorkshopManager";
 
 export type BonfireTab = GameTab;
 
-export class BonfireManager {
+export class BonfireManager implements Automation {
   private readonly _host: UserScript;
+  settings: BonfireSettings;
   readonly manager: TabManager<BonfireTab>;
-  private readonly _bulkManager: BulkManager;
+  private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript) {
+  constructor(
+    host: UserScript,
+    workshopManager: WorkshopManager,
+    settings = new BonfireSettings()
+  ) {
     this._host = host;
+    this.settings = settings;
     this.manager = new TabManager<BonfireTab>(this._host, "Bonfire");
-    this._bulkManager = new BulkManager(this._host);
-    this._workshopManager = new WorkshopManager(this._host);
+
+    this._workshopManager = workshopManager;
+    this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
+  }
+
+  tick(context: TickContext) {
+    if (!this.settings.enabled) {
+      return;
+    }
+
+    this.autoBuild();
+    this.autoMisc();
+  }
+
+  load(settings: BonfireSettings) {
+    this.settings.load(settings);
   }
 
   /**
@@ -29,13 +50,10 @@ export class BonfireManager {
    *
    * @param builds The buildings to build.
    */
-  autoBuild(
-    builds: Partial<Record<BonfireItem, BonfireSettingsItem>> = this._host.options.auto.bonfire
-      .items
-  ) {
+  autoBuild(builds: Partial<Record<BonfireItem, BonfireSettingsItem>> = this.settings.items) {
     // TODO: Refactor. See SpaceManager.autoBuild
     const bulkManager = this._bulkManager;
-    const trigger = this._host.options.auto.bonfire.trigger;
+    const trigger = this.settings.trigger;
 
     // Render the tab to make sure that the buttons actually exist in the DOM.
     // TODO: Is this really required?
@@ -78,10 +96,7 @@ export class BonfireManager {
 
     const pastureMeta = this._host.gamePage.bld.getBuildingExt("pasture").meta;
     // If pastures haven't been upgraded to solar farms yet...
-    if (
-      this._host.options.auto.bonfire.addition.upgradeBuildings.items.solarfarm.enabled &&
-      pastureMeta.stage === 0
-    ) {
+    if (this.settings.upgradeBuildings.items.solarfarm.enabled && pastureMeta.stage === 0) {
       if (mustExist(pastureMeta.stages)[1].stageUnlocked) {
         // If we would reduce our pastures to 0, by upgrading them, would we lose any catnip?
         if (this._workshopManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
@@ -113,10 +128,7 @@ export class BonfireManager {
 
     const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
     // If aqueducts haven't beeen upgraded to hydro plants yet...
-    if (
-      this._host.options.auto.bonfire.addition.upgradeBuildings.items.hydroplant.enabled &&
-      aqueductMeta.stage === 0
-    ) {
+    if (this.settings.upgradeBuildings.items.hydroplant.enabled && aqueductMeta.stage === 0) {
       if (mustExist(aqueductMeta.stages)[1].stageUnlocked) {
         // If we would reduce our aqueducts to 0, by upgrading them, would we lose any catnip?
         if (this._workshopManager.getPotentialCatnip(true, pastures, 0) > 0) {
@@ -145,10 +157,7 @@ export class BonfireManager {
     }
 
     const libraryMeta = this._host.gamePage.bld.getBuildingExt("library").meta;
-    if (
-      this._host.options.auto.bonfire.addition.upgradeBuildings.items.dataCenter.enabled &&
-      libraryMeta.stage === 0
-    ) {
+    if (this.settings.upgradeBuildings.items.dataCenter.enabled && libraryMeta.stage === 0) {
       if (mustExist(libraryMeta.stages)[1].stageUnlocked) {
         let energyConsumptionRate = this._host.gamePage.workshop.get("cryocomputing").researched
           ? 1
@@ -204,7 +213,7 @@ export class BonfireManager {
     // If amphitheathres haven't been upgraded to broadcast towers yet...
     // This seems to be identical to the pasture upgrade.
     if (
-      this._host.options.auto.bonfire.addition.upgradeBuildings.items.broadcasttower.enabled &&
+      this.settings.upgradeBuildings.items.broadcasttower.enabled &&
       amphitheatreMeta.stage === 0
     ) {
       if (mustExist(amphitheatreMeta.stages)[1].stageUnlocked) {
@@ -232,7 +241,7 @@ export class BonfireManager {
 
   autoMisc() {
     // Auto turn on steamworks
-    if (this._host.options.auto.bonfire.addition.turnOnSteamworks.enabled) {
+    if (this.settings.turnOnSteamworks.enabled) {
       const steamworks = this._host.gamePage.bld.getBuildingExt("steamworks");
       if (steamworks.meta.val && steamworks.meta.on === 0) {
         const button = mustExist(this.getBuildButton("steamworks"));
@@ -241,7 +250,7 @@ export class BonfireManager {
     }
 
     // If buildings (upgrades of bonfire items) are enabled...
-    if (this._host.options.auto.bonfire.addition.upgradeBuildings.enabled) {
+    if (this.settings.upgradeBuildings.enabled) {
       this.autoUpgrade();
     }
   }

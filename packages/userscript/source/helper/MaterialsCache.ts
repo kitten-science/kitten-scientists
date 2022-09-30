@@ -1,14 +1,13 @@
-import { objectEntries } from "./tools/Entries";
-import { Resource } from "./types";
-import { UserScript } from "./UserScript";
+import { objectEntries } from "../tools/Entries";
+import { Resource } from "../types";
+import { UserScript } from "../UserScript";
 
 /**
  * The `CacheManager` apparently stores a state of resources in stock.
  * Components can push individual resource sets into the cache to update
  * the overall stock cache.
- * TODO: Why this is a globally maintained state, is unclear.
  */
-export class CacheManager {
+export class MaterialsCache {
   private readonly _host: UserScript;
 
   private readonly _cache = new Array<{

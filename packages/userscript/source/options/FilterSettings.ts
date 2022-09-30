@@ -1,5 +1,6 @@
 import { objectEntries } from "../tools/Entries";
-import { SettingsSection, SettingToggle } from "./SettingsSection";
+import { Setting } from "./Settings";
+import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export enum FilterItemVariant {
@@ -41,31 +42,55 @@ export type FilterItem =
   | "transcendFilter"
   | "upgradeFilter";
 
-export type FilterSettingsItem = SettingToggle & {
+export class FilterSettingsItem extends Setting {
   variant: FilterItemVariant;
+
+  constructor(variant: FilterItemVariant) {
+    super();
+    this.variant = variant;
+  }
+}
+
+export type FilterSettingsItems = {
+  [item in FilterItem]: FilterSettingsItem;
 };
+
 export class FilterSettings extends SettingsSection {
-  items: {
-    [item in FilterItem]: FilterSettingsItem;
-  } = {
-    buildFilter: { enabled: false, variant: FilterItemVariant.Build },
-    craftFilter: { enabled: false, variant: FilterItemVariant.Craft },
-    upgradeFilter: { enabled: false, variant: FilterItemVariant.Upgrade },
-    researchFilter: { enabled: false, variant: FilterItemVariant.Research },
-    tradeFilter: { enabled: false, variant: FilterItemVariant.Trade },
-    huntFilter: { enabled: false, variant: FilterItemVariant.Hunt },
-    praiseFilter: { enabled: false, variant: FilterItemVariant.Praise },
-    adoreFilter: { enabled: false, variant: FilterItemVariant.Adore },
-    transcendFilter: { enabled: false, variant: FilterItemVariant.Transcend },
-    faithFilter: { enabled: false, variant: FilterItemVariant.Faith },
-    accelerateFilter: { enabled: false, variant: FilterItemVariant.Accelerate },
-    timeSkipFilter: { enabled: false, variant: FilterItemVariant.TimeSkip },
-    festivalFilter: { enabled: false, variant: FilterItemVariant.Festival },
-    starFilter: { enabled: false, variant: FilterItemVariant.Star },
-    distributeFilter: { enabled: false, variant: FilterItemVariant.Distribute },
-    promoteFilter: { enabled: false, variant: FilterItemVariant.Promote },
-    miscFilter: { enabled: false, variant: FilterItemVariant.Misc },
-  };
+  items: FilterSettingsItems;
+
+  constructor(
+    enabled = false,
+    items: FilterSettingsItems = {
+      buildFilter: new FilterSettingsItem(FilterItemVariant.Build),
+      craftFilter: new FilterSettingsItem(FilterItemVariant.Craft),
+      upgradeFilter: new FilterSettingsItem(FilterItemVariant.Upgrade),
+      researchFilter: new FilterSettingsItem(FilterItemVariant.Research),
+      tradeFilter: new FilterSettingsItem(FilterItemVariant.Trade),
+      huntFilter: new FilterSettingsItem(FilterItemVariant.Hunt),
+      praiseFilter: new FilterSettingsItem(FilterItemVariant.Praise),
+      adoreFilter: new FilterSettingsItem(FilterItemVariant.Adore),
+      transcendFilter: new FilterSettingsItem(FilterItemVariant.Transcend),
+      faithFilter: new FilterSettingsItem(FilterItemVariant.Faith),
+      accelerateFilter: new FilterSettingsItem(FilterItemVariant.Accelerate),
+      timeSkipFilter: new FilterSettingsItem(FilterItemVariant.TimeSkip),
+      festivalFilter: new FilterSettingsItem(FilterItemVariant.Festival),
+      starFilter: new FilterSettingsItem(FilterItemVariant.Star),
+      distributeFilter: new FilterSettingsItem(FilterItemVariant.Distribute),
+      promoteFilter: new FilterSettingsItem(FilterItemVariant.Promote),
+      miscFilter: new FilterSettingsItem(FilterItemVariant.Misc),
+    }
+  ) {
+    super(enabled);
+    this.items = items;
+  }
+
+  load(settings: FilterSettings) {
+    this.enabled = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+    }
+  }
 
   static toLegacyOptions(settings: FilterSettings, subject: KittenStorageType) {
     subject.toggles.filter = settings.enabled;

@@ -1,6 +1,6 @@
-import { roundToTwo, ucfirst } from "./tools/Format";
-import { mustExist } from "./tools/Maybe";
-import { UserScript } from "./UserScript";
+import { roundToTwo, ucfirst } from "../tools/Format";
+import { mustExist } from "../tools/Maybe";
+import { UserScript } from "../UserScript";
 
 /**
  * The different sections of the summary.
