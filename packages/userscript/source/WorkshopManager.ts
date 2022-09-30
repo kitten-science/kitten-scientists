@@ -336,7 +336,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         // Crafting gets progressively more expensive as the amount of the target increases.
         // This heuristic gives other, cheaper, targets a chance to get built from the same source resource.
         // There is no checking if there actually exists a different target that could get built.
-        delta = 1 + craftsPossible - craftsDone;
+        delta = craftsPossible - craftsDone;
 
         // If crafting is not going to happen, explain why not.
         const explanationMessages = false;
