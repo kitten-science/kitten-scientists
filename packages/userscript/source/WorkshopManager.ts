@@ -114,12 +114,12 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
       // Craft the resource if it doesn't require anything or we hit the requirement trigger.
       if (!require || trigger <= require.value / require.maxValue) {
-        amount = this.getLowestCraftAmount(name, craft.limited, craft.limRat, true);
+        amount = this.getLowestCraftAmount(name, craft.limited, true);
 
         // If a resource DOES "require" another resource AND its trigger value has NOT been hit
         // yet AND it is limited... What?
       } else if (craft.limited) {
-        amount = this.getLowestCraftAmount(name, craft.limited, craft.limRat, false);
+        amount = this.getLowestCraftAmount(name, craft.limited, false);
       }
 
       // If we can craft any of this item, do it.
@@ -219,7 +219,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    *
    * @param name The resource to craft.
    * @param limited Is the crafting of the resource currently limited?
-   * @param limRat ?
    * @param requiredResourceAboveTrigger Is the resource that is required for
    * this craft currently above the trigger value?
    * @returns ?
@@ -227,7 +226,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   getLowestCraftAmount(
     name: ResourceCraftable,
     limited: boolean,
-    limRat: number,
     requiredResourceAboveTrigger: boolean
   ): number {
     const materials = this.getMaterials(name);
