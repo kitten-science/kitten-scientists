@@ -2,8 +2,7 @@ import { ResourcesSettingsItem } from "../options/ResourcesSettings";
 import { CraftSettingsItem, WorkshopSettings } from "../options/WorkshopSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { cwarn } from "../tools/Log";
-import { isNil, Maybe, mustExist } from "../tools/Maybe";
+import { Maybe, mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingLimitedMaxUi } from "./SettingLimitedMaxUi";
@@ -342,11 +341,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     container.append(stockElement, consumeElement);
 
-    // once created, set color if relevant
-    if (setting !== undefined && setting.stock !== undefined) {
-      this._setStockWarning(name, setting.stock);
-    }
-
     stockElement.on("click", () => {
       const value = SettingsSectionUi.promptLimit(
         this._host.i18n("resources.stock.set", [title]),
@@ -378,24 +372,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     setting.$stock = stockElement;
 
     return container;
-  }
-
-  private _setStockWarning(name: Resource, value: number, forReset = false): void {
-    // simplest way to ensure it doesn't stick around too often; always do
-    // a remove first then re-add only if needed
-    const path = forReset ? `#resource-reset-${name}` : `#resource-${name}`;
-    $(path).removeClass("stockWarn");
-
-    const resource = this._host.gamePage.resPool.resources.filter(i => i.name === name)[0];
-    if (isNil(resource)) {
-      cwarn(`Unable to find resource '${name}'!`);
-      return;
-    }
-
-    const maxValue = resource.maxValue;
-    if ((value > maxValue && !(maxValue === 0)) || value === Infinity) {
-      $(path).addClass("stockWarn");
-    }
   }
 
   setState(state: WorkshopSettings): void {
