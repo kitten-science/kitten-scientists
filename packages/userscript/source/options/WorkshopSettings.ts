@@ -1,4 +1,5 @@
 import { objectEntries } from "../tools/Entries";
+import { isNil, mustExist } from "../tools/Maybe";
 import { GamePage, ResourceCraftable } from "../types";
 import { WorkshopManager } from "../WorkshopManager";
 import { ResourceSettings } from "./ResourcesSettings";
@@ -112,6 +113,23 @@ export class WorkshopSettings extends SettingsSectionTrigger {
         enabled: item.enabled,
         stock: item.stock,
       };
+    }
+
+    for (const [name, item] of objectEntries(settings.resources)) {
+      if (isNil(subject.resources[name])) {
+        subject.resources[name] = {
+          checkForReset: false,
+          stockForReset: 0,
+          consume: item.consume,
+          enabled: item.enabled,
+          stock: item.stock,
+        };
+        continue;
+      }
+
+      mustExist(subject.resources[name]).consume = item.consume;
+      mustExist(subject.resources[name]).enabled = item.enabled;
+      mustExist(subject.resources[name]).stock = item.stock;
     }
 
     subject.items["toggle-upgrades"] = settings.unlockUpgrades.enabled;

@@ -1,4 +1,5 @@
 import { objectEntries } from "../tools/Entries";
+import { isNil, mustExist } from "../tools/Maybe";
 import { SpaceBuildings, TimeItemVariant, UnicornItemVariant } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
@@ -580,13 +581,19 @@ export class TimeControlSettings extends SettingsSection {
     }
 
     for (const [name, item] of objectEntries(settings.resources)) {
-      subject.resources[name] = {
-        checkForReset: item.enabled,
-        stockForReset: item.stock,
-        consume: 0,
-        enabled: false,
-        stock: 0,
-      };
+      if (isNil(subject.resources[name])) {
+        subject.resources[name] = {
+          checkForReset: item.enabled,
+          stockForReset: item.stock,
+          consume: 0,
+          enabled: false,
+          stock: 0,
+        };
+        continue;
+      }
+
+      mustExist(subject.resources[name]).checkForReset = item.enabled;
+      mustExist(subject.resources[name]).stockForReset = item.stock;
     }
   }
 
