@@ -6,7 +6,7 @@ import { ScienceSettings } from "./options/ScienceSettings";
 import { SpaceSettings } from "./options/SpaceSettings";
 import { TimeControlSettings } from "./options/TimeControlSettings";
 import { TimeSettings } from "./options/TimeSettings";
-import { TradingSettings } from "./options/TradingSettings";
+import { TradeSettings } from "./options/TradeSettings";
 import { VillageSettings } from "./options/VillageSettings";
 import { WorkshopSettings } from "./options/WorkshopSettings";
 import { ReligionManager } from "./ReligionManager";
@@ -75,7 +75,7 @@ export class Engine {
     space: SpaceSettings;
     time: TimeSettings;
     timeControl: TimeControlSettings;
-    trading: TradingSettings;
+    trading: TradeSettings;
     village: VillageSettings;
     workshop: WorkshopSettings;
   }) {

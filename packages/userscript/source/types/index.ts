@@ -205,5 +205,5 @@ export * from "./religion";
 export * from "./science";
 export * from "./space";
 export * from "./time";
-export * from "./trading";
+export * from "./trade";
 export * from "./workshop";

@@ -1,6 +1,6 @@
 import { BuildButton, GameTab, Price, Resource, Season } from ".";
 
-export type TradingTab = GameTab & {
+export type TradeTab = GameTab & {
   racePanels: Array<{
     embassyButton: BuildButton;
     race: RaceInfo;

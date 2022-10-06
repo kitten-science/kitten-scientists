@@ -4,7 +4,7 @@ import { Requirement, Setting, SettingLimited, SettingTrigger } from "./Settings
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export class TradingSettingsItem extends SettingLimited {
+export class TradeSettingsItem extends SettingLimited {
   summer: boolean;
   $summer?: JQuery<HTMLElement>;
 
@@ -41,20 +41,20 @@ export class TradingSettingsItem extends SettingLimited {
   }
 }
 
-export type TradingSettingsItems = {
-  [item in Race]: TradingSettingsItem;
+export type TradeSettingsItems = {
+  [item in Race]: TradeSettingsItem;
 };
 
-export class TradingSettings extends SettingsSectionTrigger {
-  items: TradingSettingsItems = {
-    dragons: new TradingSettingsItem(true, true, true, true, true, true, "titanium"),
-    zebras: new TradingSettingsItem(true, true, true, true, true, true),
-    lizards: new TradingSettingsItem(true, true, true, false, false, false, "minerals"),
-    sharks: new TradingSettingsItem(true, true, false, false, true, false, "iron"),
-    griffins: new TradingSettingsItem(true, true, false, true, false, false, "wood"),
-    nagas: new TradingSettingsItem(true, true, true, false, false, true),
-    spiders: new TradingSettingsItem(true, true, true, true, false, true),
-    leviathans: new TradingSettingsItem(true, true, true, true, true, true, "unobtainium"),
+export class TradeSettings extends SettingsSectionTrigger {
+  items: TradeSettingsItems = {
+    dragons: new TradeSettingsItem(true, true, true, true, true, true, "titanium"),
+    zebras: new TradeSettingsItem(true, true, true, true, true, true),
+    lizards: new TradeSettingsItem(true, true, true, false, false, false, "minerals"),
+    sharks: new TradeSettingsItem(true, true, false, false, true, false, "iron"),
+    griffins: new TradeSettingsItem(true, true, false, true, false, false, "wood"),
+    nagas: new TradeSettingsItem(true, true, true, false, false, true),
+    spiders: new TradeSettingsItem(true, true, true, true, false, true),
+    leviathans: new TradeSettingsItem(true, true, true, true, true, true, "unobtainium"),
   };
 
   buildEmbassies: SettingTrigger;
@@ -64,14 +64,14 @@ export class TradingSettings extends SettingsSectionTrigger {
     enabled = false,
     trigger = 1,
     items = {
-      dragons: new TradingSettingsItem(true, true, true, true, true, true, "titanium"),
-      zebras: new TradingSettingsItem(true, true, true, true, true, true),
-      lizards: new TradingSettingsItem(true, true, true, false, false, false, "minerals"),
-      sharks: new TradingSettingsItem(true, true, false, false, true, false, "iron"),
-      griffins: new TradingSettingsItem(true, true, false, true, false, false, "wood"),
-      nagas: new TradingSettingsItem(true, true, true, false, false, true),
-      spiders: new TradingSettingsItem(true, true, true, true, false, true),
-      leviathans: new TradingSettingsItem(true, true, true, true, true, true, "unobtainium"),
+      dragons: new TradeSettingsItem(true, true, true, true, true, true, "titanium"),
+      zebras: new TradeSettingsItem(true, true, true, true, true, true),
+      lizards: new TradeSettingsItem(true, true, true, false, false, false, "minerals"),
+      sharks: new TradeSettingsItem(true, true, false, false, true, false, "iron"),
+      griffins: new TradeSettingsItem(true, true, false, true, false, false, "wood"),
+      nagas: new TradeSettingsItem(true, true, true, false, false, true),
+      spiders: new TradeSettingsItem(true, true, true, true, false, true),
+      leviathans: new TradeSettingsItem(true, true, true, true, true, true, "unobtainium"),
     },
     buildEmbassies = new SettingTrigger(true, 0),
 
@@ -83,7 +83,7 @@ export class TradingSettings extends SettingsSectionTrigger {
     this.unlockRaces = unlockRaces;
   }
 
-  load(settings: TradingSettings) {
+  load(settings: TradeSettings) {
     this.enabled = settings.enabled;
     this.trigger = settings.trigger;
 
@@ -100,7 +100,7 @@ export class TradingSettings extends SettingsSectionTrigger {
     this.unlockRaces.enabled = settings.unlockRaces.enabled;
   }
 
-  static toLegacyOptions(settings: TradingSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: TradeSettings, subject: KittenStorageType) {
     subject.toggles.trade = settings.enabled;
     subject.triggers.trade = settings.trigger;
 
@@ -118,7 +118,7 @@ export class TradingSettings extends SettingsSectionTrigger {
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
-    const options = new TradingSettings();
+    const options = new TradeSettings();
     options.enabled = subject.toggles.trade;
     options.trigger = subject.triggers.trade;
 

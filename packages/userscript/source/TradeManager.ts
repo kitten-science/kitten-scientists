@@ -1,25 +1,21 @@
 import { Automation, TickContext } from "./Engine";
 import { MaterialsCache } from "./helper/MaterialsCache";
-import { TradingSettings } from "./options/TradingSettings";
+import { TradeSettings } from "./options/TradeSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { ucfirst } from "./tools/Format";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
-import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradingTab } from "./types";
+import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types";
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
 
 export class TradeManager implements Automation {
   private readonly _host: UserScript;
-  settings: TradingSettings;
-  readonly manager: TabManager<TradingTab>;
+  settings: TradeSettings;
+  readonly manager: TabManager<TradeTab>;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(
-    host: UserScript,
-    workshopManager: WorkshopManager,
-    settings = new TradingSettings()
-  ) {
+  constructor(host: UserScript, workshopManager: WorkshopManager, settings = new TradeSettings()) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Trade");
@@ -41,7 +37,7 @@ export class TradeManager implements Automation {
     }
   }
 
-  load(settings: TradingSettings) {
+  load(settings: TradeSettings) {
     this.settings.load(settings);
   }
 

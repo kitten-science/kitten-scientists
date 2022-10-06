@@ -16,7 +16,7 @@ import { KittenStorageType, SettingsStorage } from "./options/SettingsStorage";
 import { SpaceSettings } from "./options/SpaceSettings";
 import { TimeControlSettings } from "./options/TimeControlSettings";
 import { TimeSettings } from "./options/TimeSettings";
-import { TradingSettings } from "./options/TradingSettings";
+import { TradeSettings } from "./options/TradeSettings";
 import { VillageSettings } from "./options/VillageSettings";
 import { WorkshopSettings } from "./options/WorkshopSettings";
 import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
@@ -137,7 +137,7 @@ export class UserScript {
       space: SpaceSettings.fromLegacyOptions(source),
       time: TimeSettings.fromLegacyOptions(source),
       timeControl: TimeControlSettings.fromLegacyOptions(source),
-      trading: TradingSettings.fromLegacyOptions(source),
+      trading: TradeSettings.fromLegacyOptions(source),
       village: VillageSettings.fromLegacyOptions(source),
       workshop: WorkshopSettings.fromLegacyOptions(source),
     });

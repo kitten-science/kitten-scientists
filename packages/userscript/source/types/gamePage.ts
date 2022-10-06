@@ -35,7 +35,7 @@ import {
   VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
 } from "./time";
-import { TradingTab } from "./trading";
+import { TradeTab } from "./trade";
 import { JobInfo, VillageTab } from "./village";
 
 export type GamePage = {
@@ -105,7 +105,7 @@ export type GamePage = {
     tradeMultiple: (race: RaceInfo, amount: number) => void;
     unlockRandomRace: () => { title: string };
   };
-  diplomacyTab: TradingTab;
+  diplomacyTab: TradeTab;
   getCMBRBonus: () => number;
   getDisplayValueExt: (value: number) => string;
   getEffect: (
@@ -319,7 +319,7 @@ export type GamePage = {
     VillageTab,
     GameTab,
     GameTab,
-    TradingTab,
+    TradeTab,
     ReligionTab,
     SpaceTab,
     TimeTab,

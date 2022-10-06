@@ -10,7 +10,7 @@ import { ScienceSettingsUi } from "./ScienceSettingsUi";
 import { SpaceSettingsUi } from "./SpaceSettingsUi";
 import { TimeControlSettingsUi } from "./TimeControlSettingsUi";
 import { TimeSettingsUi } from "./TimeSettingsUi";
-import { TradingSettingsUi } from "./TradingSettingsUi";
+import { TradeSettingsUi } from "./TradeSettingsUi";
 import { VillageSettingsUi } from "./VillageSettingsUi";
 import { WorkshopSettingsUi } from "./WorkshopSettingsUi";
 
@@ -22,7 +22,7 @@ export class UserInterface {
   private _spaceUi: SpaceSettingsUi;
   private _craftUi: WorkshopSettingsUi;
   private _unlockUi: ScienceSettingsUi;
-  private _tradingUi: TradingSettingsUi;
+  private _tradingUi: TradeSettingsUi;
   private _religionUi: ReligionSettingsUi;
   private _timeUi: TimeSettingsUi;
   private _timeCtrlUi: TimeControlSettingsUi;
@@ -38,7 +38,7 @@ export class UserInterface {
     this._spaceUi = new SpaceSettingsUi(this._host, engine.spaceManager.settings);
     this._craftUi = new WorkshopSettingsUi(this._host, engine.workshopManager.settings);
     this._unlockUi = new ScienceSettingsUi(this._host, engine.scienceManager.settings);
-    this._tradingUi = new TradingSettingsUi(this._host, engine.tradingManager.settings);
+    this._tradingUi = new TradeSettingsUi(this._host, engine.tradingManager.settings);
     this._religionUi = new ReligionSettingsUi(this._host, engine.religionManager.settings);
     this._timeUi = new TimeSettingsUi(this._host, engine.timeManager.settings);
     this._timeCtrlUi = new TimeControlSettingsUi(this._host, engine.timeControlManager.settings);

@@ -1,4 +1,4 @@
-import { TradingSettings, TradingSettingsItem } from "../options/TradingSettings";
+import { TradeSettings, TradeSettingsItem } from "../options/TradeSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -9,12 +9,12 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
-export class TradingSettingsUi extends SettingsSectionUi {
+export class TradeSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
-  private readonly _settings: TradingSettings;
+  private readonly _settings: TradeSettings;
 
-  constructor(host: UserScript, settings: TradingSettings) {
+  constructor(host: UserScript, settings: TradeSettings) {
     super(host);
 
     this._settings = settings;
@@ -90,7 +90,7 @@ export class TradingSettingsUi extends SettingsSectionUi {
 
   private _getTradeOption(
     name: Race,
-    option: TradingSettingsItem,
+    option: TradeSettingsItem,
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false
@@ -137,7 +137,7 @@ export class TradingSettingsUi extends SettingsSectionUi {
     return element;
   }
 
-  private _getSeason(name: Race, season: Season, option: TradingSettingsItem): JQuery<HTMLElement> {
+  private _getSeason(name: Race, season: Season, option: TradeSettingsItem): JQuery<HTMLElement> {
     const iname = ucfirst(this._host.i18n(`$trade.race.${name}` as const));
     const iseason = ucfirst(this._host.i18n(`$calendar.season.${season}` as const));
 
@@ -214,7 +214,7 @@ export class TradingSettingsUi extends SettingsSectionUi {
     return [nodeHeader, nodeRaces, nodeEmbassies];
   }
 
-  setState(state: TradingSettings): void {
+  setState(state: TradeSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
 

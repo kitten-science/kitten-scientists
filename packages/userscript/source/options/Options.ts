@@ -8,7 +8,7 @@ import { KittenStorageType } from "./SettingsStorage";
 import { SpaceSettings } from "./SpaceSettings";
 import { TimeControlSettings } from "./TimeControlSettings";
 import { TimeSettings } from "./TimeSettings";
-import { TradingSettings } from "./TradingSettings";
+import { TradeSettings } from "./TradeSettings";
 import { VillageSettings } from "./VillageSettings";
 import { WorkshopSettings } from "./WorkshopSettings";
 
@@ -26,7 +26,7 @@ export class Options {
     space: SpaceSettings;
     time: TimeSettings;
     timeControl: TimeControlSettings;
-    trading: TradingSettings;
+    trading: TradeSettings;
     village: VillageSettings;
     workshop: WorkshopSettings;
   }): KittenStorageType {
@@ -68,7 +68,7 @@ export class Options {
     SpaceSettings.toLegacyOptions(settings.space, subject);
     TimeSettings.toLegacyOptions(settings.time, subject);
     TimeControlSettings.toLegacyOptions(settings.timeControl, subject);
-    TradingSettings.toLegacyOptions(settings.trading, subject);
+    TradeSettings.toLegacyOptions(settings.trading, subject);
 
     return subject;
   }
