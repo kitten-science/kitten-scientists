@@ -35,22 +35,15 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       "techs",
       this._settings.techs,
       this._host.engine.i18n("ui.upgrade.techs"),
-      false,
-      false,
-      [],
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.techs.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("ui.upgrade.techs"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.techs.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("ui.upgrade.techs"),
-          ]);
-        },
+          ]),
       }
     );
 
@@ -59,15 +52,9 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     const techButtons = [];
     for (const [techName, tech] of objectEntries(this._settings.techs.items)) {
       const label = this._host.engine.i18n(`$science.${techName}.label`);
-      const button = SettingUi.make(this._host, `tech-${techName}`, tech, label, false, false, [], {
-        onCheck: () => {
-          this._host.updateOptions(() => (tech.enabled = true));
-          this._host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (tech.enabled = false));
-          this._host.engine.imessage("status.auto.disable", [label]);
-        },
+      const button = SettingUi.make(this._host, `tech-${techName}`, tech, label, {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       });
 
       techButtons.push({ label: label, button: button });
@@ -98,22 +85,15 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       "policies",
       this._settings.policies,
       this._host.engine.i18n("ui.upgrade.policies"),
-      false,
-      false,
-      [],
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.policies.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("ui.upgrade.policies"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.policies.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("ui.upgrade.policies"),
-          ]);
-        },
+          ]),
       }
     );
 
@@ -124,25 +104,10 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       const policyLabel = this._host.engine.i18n(
         `$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`
       );
-      const policyButton = SettingUi.make(
-        this._host,
-        `policy-${policyName}`,
-        policy,
-        policyLabel,
-        false,
-        false,
-        [],
-        {
-          onCheck: () => {
-            this._host.updateOptions(() => (policy.enabled = true));
-            this._host.engine.imessage("status.auto.enable", [policyLabel]);
-          },
-          onUnCheck: () => {
-            this._host.updateOptions(() => (policy.enabled = false));
-            this._host.engine.imessage("status.auto.disable", [policyLabel]);
-          },
-        }
-      );
+      const policyButton = SettingUi.make(this._host, `policy-${policyName}`, policy, policyLabel, {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [policyLabel]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [policyLabel]),
+      });
 
       policyButtons.push({ label: policyLabel, button: policyButton });
     }

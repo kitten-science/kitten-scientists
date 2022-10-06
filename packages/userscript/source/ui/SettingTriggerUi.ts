@@ -10,22 +10,22 @@ export class SettingTriggerUi {
     name: string,
     setting: SettingTrigger,
     label: string,
-    delimiter = false,
-    upgradeIndicator = false,
     handler: {
-      onCheck?: () => void;
-      onUnCheck?: () => void;
-    } = {}
+      onCheck: () => void;
+      onUnCheck: () => void;
+    },
+    delimiter = false,
+    upgradeIndicator = false
   ): JQuery<HTMLElement> {
     const element = SettingUi.make(
       host,
       name,
       setting,
       label,
+      handler,
       delimiter,
       upgradeIndicator,
-      [],
-      handler
+      []
     );
 
     if (setting.trigger !== undefined) {

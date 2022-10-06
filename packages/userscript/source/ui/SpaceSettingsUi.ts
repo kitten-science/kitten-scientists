@@ -196,22 +196,15 @@ export class SpaceSettingsUi extends SettingsSectionUi {
       "missions",
       this._settings.unlockMissions,
       this._host.engine.i18n("ui.upgrade.missions"),
-      false,
-      false,
-      [],
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.unlockMissions.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("ui.upgrade.missions"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.unlockMissions.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("ui.upgrade.missions"),
-          ]);
-        },
+          ]),
       }
     );
 
@@ -225,18 +218,9 @@ export class SpaceSettingsUi extends SettingsSectionUi {
         `mission-${missionName}`,
         mission,
         missionLabel,
-        false,
-        false,
-        [],
         {
-          onCheck: () => {
-            this._host.updateOptions(() => (mission.enabled = true));
-            this._host.engine.imessage("status.auto.enable", [missionLabel]);
-          },
-          onUnCheck: () => {
-            this._host.updateOptions(() => (mission.enabled = false));
-            this._host.engine.imessage("status.auto.disable", [missionLabel]);
-          },
+          onCheck: () => this._host.engine.imessage("status.auto.enable", [missionLabel]),
+          onUnCheck: () => this._host.engine.imessage("status.auto.disable", [missionLabel]),
         }
       );
 

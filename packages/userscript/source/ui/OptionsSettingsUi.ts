@@ -64,9 +64,13 @@ export class OptionsSettingsUi extends SettingsSectionUi {
     option: OptionsSettingsItem,
     iname: string
   ): JQuery<HTMLElement> {
+    const handler = {
+      onCheck: () => this._host.engine.imessage("status.sub.enable", [iname]),
+      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [iname]),
+    };
     return option.trigger
-      ? SettingTriggerUi.make(this._host, name, option as SettingTrigger, iname)
-      : SettingUi.make(this._host, name, option, iname);
+      ? SettingTriggerUi.make(this._host, name, option as SettingTrigger, iname, handler)
+      : SettingUi.make(this._host, name, option, iname, handler, false, false, []);
   }
 
   setState(state: OptionsSettings): void {

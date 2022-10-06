@@ -100,9 +100,9 @@ export class TradeSettingsUi extends SettingsSectionUi {
       name,
       option,
       i18nName,
-      delimiter,
-      upgradeIndicator,
       {
+        onCheck: () => this._host.engine.imessage("status.sub.enable", [i18nName]),
+        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [i18nName]),
         onLimitedCheck: () => {
           this._host.updateOptions(() => (option.limited = true));
           this._host.engine.imessage("trade.limited", [i18nName]);
@@ -111,7 +111,9 @@ export class TradeSettingsUi extends SettingsSectionUi {
           this._host.updateOptions(() => (option.limited = false));
           this._host.engine.imessage("trade.unlimited", [i18nName]);
         },
-      }
+      },
+      delimiter,
+      upgradeIndicator
     );
     element.css("borderTop", "1px solid rgba(185, 185, 185, 0.1)");
 
@@ -177,21 +179,15 @@ export class TradeSettingsUi extends SettingsSectionUi {
       "embassies",
       this._settings.buildEmbassies,
       this._host.engine.i18n("option.embassies"),
-      false,
-      false,
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.buildEmbassies.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.embassies"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.buildEmbassies.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.embassies"),
-          ]);
-        },
+          ]),
       }
     );
 
@@ -200,22 +196,15 @@ export class TradeSettingsUi extends SettingsSectionUi {
       "races",
       this._settings.unlockRaces,
       this._host.engine.i18n("ui.upgrade.races"),
-      false,
-      false,
-      [],
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.unlockRaces.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("ui.upgrade.races"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.unlockRaces.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("ui.upgrade.races"),
-          ]);
-        },
+          ]),
       }
     );
 

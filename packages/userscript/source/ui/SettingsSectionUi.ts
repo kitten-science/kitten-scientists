@@ -305,16 +305,18 @@ export abstract class SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return SettingMaxUi.make(this._host, name, option, label, delimiter, upgradeIndicator, {
-      onCheck: () => {
-        this._host.updateOptions(() => (option.enabled = true));
-        this._host.engine.imessage("status.auto.enable", [label]);
+    return SettingMaxUi.make(
+      this._host,
+      name,
+      option,
+      label,
+      {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       },
-      onUnCheck: () => {
-        this._host.updateOptions(() => (option.enabled = false));
-        this._host.engine.imessage("status.auto.disable", [label]);
-      },
-    });
+      delimiter,
+      upgradeIndicator
+    );
   }
 
   /**

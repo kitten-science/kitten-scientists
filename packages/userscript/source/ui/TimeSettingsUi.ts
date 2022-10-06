@@ -1,3 +1,4 @@
+import { Setting } from "../options/Settings";
 import { TimeSettings } from "../options/TimeSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
@@ -31,70 +32,59 @@ export class TimeSettingsUi extends SettingsSectionUi {
     this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
 
     const optionButtons = [
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "temporalBattery",
         this._settings.items.temporalBattery,
         this._host.engine.i18n("$time.cfu.temporalBattery.label")
       ),
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "blastFurnace",
         this._settings.items.blastFurnace,
         this._host.engine.i18n("$time.cfu.blastFurnace.label")
       ),
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "timeBoiler",
         this._settings.items.timeBoiler,
         this._host.engine.i18n("$time.cfu.timeBoiler.label")
       ),
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "temporalAccelerator",
         this._settings.items.temporalAccelerator,
         this._host.engine.i18n("$time.cfu.temporalAccelerator.label")
       ),
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "temporalImpedance",
         this._settings.items.temporalImpedance,
         this._host.engine.i18n("$time.cfu.temporalImpedance.label")
       ),
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "ressourceRetrieval",
         this._settings.items.ressourceRetrieval,
         this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "cryochambers",
         this._settings.items.cryochambers,
         this._host.engine.i18n("$time.vsu.cryochambers.label")
       ),
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "voidHoover",
         this._settings.items.voidHoover,
         this._host.engine.i18n("$time.vsu.voidHoover.label")
       ),
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "voidRift",
         this._settings.items.voidRift,
         this._host.engine.i18n("$time.vsu.voidRift.label")
       ),
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "chronocontrol",
         this._settings.items.chronocontrol,
         this._host.engine.i18n("$time.vsu.chronocontrol.label")
       ),
-      SettingUi.make(
-        this._host,
+      this._getTimeSetting(
         "voidResonator",
         this._settings.items.voidResonator,
         this._host.engine.i18n("$time.vsu.voidResonator.label")
@@ -107,6 +97,20 @@ export class TimeSettingsUi extends SettingsSectionUi {
     element.panel.append(list);
 
     this.element = element.panel;
+  }
+
+  private _getTimeSetting(name: string, setting: Setting, label: string, delimiter = false) {
+    return SettingUi.make(
+      this._host,
+      name,
+      setting,
+      label,
+      {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+      },
+      delimiter
+    );
   }
 
   setState(state: TimeSettings): void {

@@ -294,22 +294,16 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       "buildings",
       this._settings.upgradeBuildings,
       this._host.engine.i18n("ui.upgrade.buildings"),
-      false,
-      false,
-      [],
+
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.upgradeBuildings.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("ui.upgrade.buildings"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.upgradeBuildings.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("ui.upgrade.buildings"),
-          ]);
-        },
+          ]),
       }
     );
 
@@ -323,19 +317,14 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         `building-${upgradeName}`,
         upgrade,
         label,
-        false,
-        false,
-        [],
+
         {
-          onCheck: () => {
-            this._host.updateOptions(() => (upgrade.enabled = true));
-            this._host.engine.imessage("status.auto.enable", [label]);
-          },
-          onUnCheck: () => {
-            this._host.updateOptions(() => (upgrade.enabled = false));
-            this._host.engine.imessage("status.auto.disable", [label]);
-          },
-        }
+          onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+          onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+        },
+        false,
+        false,
+        []
       );
 
       upgradeBuildingsButtons.push({ label: label, button: button });
@@ -365,22 +354,16 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       "_steamworks",
       this._settings.turnOnSteamworks,
       this._host.engine.i18n("option.steamworks"),
-      false,
-      false,
-      [],
+
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.turnOnSteamworks.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("option.steamworks"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.turnOnSteamworks.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("option.steamworks"),
-          ]);
-        },
+          ]),
       }
     );
 

@@ -92,16 +92,17 @@ export class VillageSettingsUi extends SettingsSectionUi {
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = SettingMaxUi.make(this._host, name, option, label, delimiter, false, {
-      onCheck: () => {
-        this._host.updateOptions(() => (option.enabled = true));
-        this._host.engine.imessage("status.auto.enable", [label]);
+    const element = SettingMaxUi.make(
+      this._host,
+      name,
+      option,
+      label,
+      {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       },
-      onUnCheck: () => {
-        this._host.updateOptions(() => (option.enabled = false));
-        this._host.engine.imessage("status.auto.disable", [label]);
-      },
-    });
+      delimiter
+    );
     return element;
   }
 
@@ -113,19 +114,13 @@ export class VillageSettingsUi extends SettingsSectionUi {
       "hunt",
       this._settings.hunt,
       this._host.engine.i18n("option.hunt"),
-      false,
-      false,
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.hunt.enabled = true));
-          this._host.engine.imessage("status.auto.enable", [this._host.engine.i18n("option.hunt")]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.hunt.enabled = false));
+        onCheck: () =>
+          this._host.engine.imessage("status.auto.enable", [this._host.engine.i18n("option.hunt")]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("option.hunt"),
-          ]);
-        },
+          ]),
       }
     );
 
@@ -134,22 +129,15 @@ export class VillageSettingsUi extends SettingsSectionUi {
       "festival",
       this._settings.holdFestivals,
       this._host.engine.i18n("option.festival"),
-      false,
-      false,
-      [],
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.holdFestivals.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("option.festival"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.holdFestivals.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("option.festival"),
-          ]);
-        },
+          ]),
       }
     );
 
@@ -158,22 +146,15 @@ export class VillageSettingsUi extends SettingsSectionUi {
       "promote",
       this._settings.promoteLeader,
       this._host.engine.i18n("option.promote"),
-      false,
-      false,
-      [],
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.promoteLeader.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("option.promote"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.promoteLeader.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("option.promote"),
-          ]);
-        },
+          ]),
       }
     );
 

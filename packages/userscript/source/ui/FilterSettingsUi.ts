@@ -116,16 +116,19 @@ export class FiltersSettingsUi extends SettingsSectionUi {
     ];
 
     const makeButton = (name: FilterItem, option: FilterSettingsItem, label: string) =>
-      SettingUi.make(this._host, name, option, label, false, false, [], {
-        onCheck: () => {
-          this._host.updateOptions(() => (option.enabled = true));
-          this._host.engine.imessage("filter.enable", [label]);
+      SettingUi.make(
+        this._host,
+        name,
+        option,
+        label,
+        {
+          onCheck: () => this._host.engine.imessage("filter.enable", [label]),
+          onUnCheck: () => this._host.engine.imessage("filter.disable", [label]),
         },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (option.enabled = false));
-          this._host.engine.imessage("filter.disable", [label]);
-        },
-      });
+        false,
+        false,
+        []
+      );
 
     const optionButtons = buttons
       .sort((a, b) => a.label.localeCompare(b.label))

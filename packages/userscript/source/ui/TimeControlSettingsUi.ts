@@ -69,7 +69,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option: TimeControlSettings["timeSkip"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = SettingTriggerUi.make(this._host, name, option, label);
+    const element = SettingTriggerUi.make(this._host, name, option, label, {
+      onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+    });
 
     const maximumButton = $('<div class="ks-icon-button"/>', {
       id: "set-timeSkip-maximum",
@@ -139,7 +142,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option: TimeControlSettings["reset"],
     label: string
   ): JQuery<HTMLElement> {
-    const element = SettingUi.make(this._host, name, option, label);
+    const element = SettingUi.make(this._host, name, option, label, {
+      onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+    });
 
     // Bonfire reset options
     const resetBuildList = this._getItemsList("reset-build");
@@ -939,7 +945,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option: TimeControlSettings["accelerateTime"],
     label: string
   ): JQuery<HTMLElement> {
-    return SettingTriggerUi.make(this._host, name, option, label);
+    return SettingTriggerUi.make(this._host, name, option, label, {
+      onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+    });
   }
 
   private _getCycle(
@@ -989,18 +998,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       `toggle-reset-${type}-${name}`,
       option,
       i18nName,
-      delimiter,
-      upgradeIndicator,
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (option.enabled = true));
-          this._host.engine.imessage("status.reset.check.enable", [i18nName]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (option.enabled = false));
-          this._host.engine.imessage("status.reset.check.disable", [i18nName]);
-        },
-      }
+        onCheck: () => this._host.engine.imessage("status.reset.check.enable", [i18nName]),
+        onUnCheck: () => this._host.engine.imessage("status.reset.check.disable", [i18nName]),
+      },
+      delimiter,
+      upgradeIndicator
     );
   }
 
@@ -1078,7 +1081,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const stock = setting.stock;
 
     // The overall container for this resource item.
-    const container = SettingUi.make(this._host, `resource-reset-${name}`, setting, title);
+    const container = SettingUi.make(this._host, `resource-reset-${name}`, setting, title, {
+      onCheck: () => this._host.engine.imessage("status.sub.enable", [title]),
+      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [title]),
+    });
 
     // How many items to stock.
     const stockElement = $("<div/>", {
@@ -1105,20 +1111,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     setting.$stock = stockElement;
 
     return container;
-  }
-
-  /**
-   * Removes a previously created resource option.
-   *
-   * @param name The resource to remove.
-   */
-  private _removeResourceOptionForReset(name: Resource): void {
-    const container = $(`#resource-reset-${name}`);
-    if (!container) {
-      return;
-    }
-
-    container.remove();
   }
 
   setState(state: TimeControlSettings): void {

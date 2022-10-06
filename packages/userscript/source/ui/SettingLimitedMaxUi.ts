@@ -15,14 +15,14 @@ export class SettingLimitedMaxUi {
    * @param name A unique name for this setting.
    * @param setting The setting model.
    * @param label The label for the setting.
-   * @param delimiter Should a delimiter be rendered after this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
    * to indicate that this is an upgrade of a prior setting?
    * @param handler Handlers to call when the setting is checked or unchecked.
    * @param handler.onCheck Is called when the setting is checked.
    * @param handler.onUnCheck Is called when the setting is unchecked.
    * @param handler.onLimitedCheck Is called when the "Limited" checkbox is checked.
    * @param handler.onLimitedUnCheck Is called when the "Limited" checkbox is unchecked.
+   * @param delimiter Should a delimiter be rendered after this element?
+   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
    * @returns The created element.
    */
   static make(
@@ -30,23 +30,23 @@ export class SettingLimitedMaxUi {
     name: string,
     setting: SettingLimitedMax,
     label: string,
-    delimiter = false,
-    upgradeIndicator = false,
     handler: {
-      onCheck?: () => void;
-      onUnCheck?: () => void;
+      onCheck: () => void;
+      onUnCheck: () => void;
       onLimitedCheck?: () => void;
       onLimitedUnCheck?: () => void;
-    } = {}
+    },
+    delimiter = false,
+    upgradeIndicator = false
   ): JQuery<HTMLElement> {
     const element = SettingLimitedUi.make(
       host,
       name,
       setting,
       label,
+      handler,
       delimiter,
-      upgradeIndicator,
-      handler
+      upgradeIndicator
     );
 
     const maxButton = $('<div class="ks-max-button"/>', {

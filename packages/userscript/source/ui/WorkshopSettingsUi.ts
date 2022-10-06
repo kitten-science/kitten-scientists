@@ -182,16 +182,26 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return SettingLimitedMaxUi.make(this._host, name, option, label, delimiter, upgradeIndicator, {
-      onLimitedCheck: () => {
-        this._host.updateOptions(() => (option.limited = true));
-        this._host.engine.imessage("craft.limited", [label]);
+    return SettingLimitedMaxUi.make(
+      this._host,
+      name,
+      option,
+      label,
+      {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+        onLimitedCheck: () => {
+          this._host.updateOptions(() => (option.limited = true));
+          this._host.engine.imessage("craft.limited", [label]);
+        },
+        onLimitedUnCheck: () => {
+          this._host.updateOptions(() => (option.limited = false));
+          this._host.engine.imessage("craft.unlimited", [label]);
+        },
       },
-      onLimitedUnCheck: () => {
-        this._host.updateOptions(() => (option.limited = false));
-        this._host.engine.imessage("craft.unlimited", [label]);
-      },
-    });
+      delimiter,
+      upgradeIndicator
+    );
   }
 
   private _getResourceOptions(): JQuery<HTMLElement> {
@@ -225,22 +235,15 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       "upgrades",
       this._settings.unlockUpgrades,
       this._host.engine.i18n("ui.upgrade.upgrades"),
-      false,
-      false,
-      [],
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.unlockUpgrades.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("ui.upgrade.upgrades"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.unlockUpgrades.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("ui.upgrade.upgrades"),
-          ]);
-        },
+          ]),
       }
     );
 
@@ -254,18 +257,9 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
         `upgrade-${upgradeName}`,
         upgrade,
         upgradeLabel,
-        false,
-        false,
-        [],
         {
-          onCheck: () => {
-            this._host.updateOptions(() => (upgrade.enabled = true));
-            this._host.engine.imessage("status.auto.enable", [upgradeLabel]);
-          },
-          onUnCheck: () => {
-            this._host.updateOptions(() => (upgrade.enabled = false));
-            this._host.engine.imessage("status.auto.disable", [upgradeLabel]);
-          },
+          onCheck: () => this._host.engine.imessage("status.auto.enable", [upgradeLabel]),
+          onUnCheck: () => this._host.engine.imessage("status.auto.disable", [upgradeLabel]),
         }
       );
 
@@ -296,22 +290,15 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       "shipOverride",
       this._settings.shipOverride,
       this._host.engine.i18n("option.shipOverride"),
-      false,
-      false,
-      [],
       {
-        onCheck: () => {
-          this._host.updateOptions(() => (this._settings.shipOverride.enabled = true));
+        onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
             this._host.engine.i18n("option.shipOverride"),
-          ]);
-        },
-        onUnCheck: () => {
-          this._host.updateOptions(() => (this._settings.shipOverride.enabled = false));
+          ]),
+        onUnCheck: () =>
           this._host.engine.imessage("status.auto.disable", [
             this._host.engine.i18n("option.shipOverride"),
-          ]);
-        },
+          ]),
       }
     );
 
@@ -335,7 +322,10 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const stock = setting.stock;
 
     // The overall container for this resource item.
-    const container = SettingUi.make(this._host, `resource-${name}`, setting, title);
+    const container = SettingUi.make(this._host, `resource-${name}`, setting, title, {
+      onCheck: () => this._host.engine.imessage("status.resource.enable", [title]),
+      onUnCheck: () => this._host.engine.imessage("status.resource.disable", [title]),
+    });
 
     // How many items to stock.
     const stockElement = $("<div/>", {
