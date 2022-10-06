@@ -13,8 +13,6 @@ Grab a build from the [Releases page](https://github.com/oliversalzburg/cbc-kitt
 
 ### Bookmarklet
 
-Currently points to Alpha.4 release.
-
 ```
 javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/oliversalzburg/cbc-kitten-scientists/releases/download/v2.0.0-alpha.5/kitten-scientists-2.0.0-alpha.5.user.js';d.body.appendChild(s);})();
 ```
