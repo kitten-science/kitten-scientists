@@ -132,7 +132,7 @@ export class FiltersSettingsUi extends SettingsSectionUi {
     );
 
     list.append(optionButtons);
-    list.append(this._getExplainer("Checked items are hidden from the log."));
+    list.append(this._getExplainer("Unchecked items are hidden from the log."));
 
     element.panel.append(list);
 

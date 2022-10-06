@@ -376,7 +376,7 @@ export class Engine {
   ): void {
     if (this.settings.filters.enabled) {
       for (const filterItem of Object.values(this.settings.filters.items)) {
-        if (filterItem.enabled && filterItem.variant === cssClasses) {
+        if (filterItem.variant === cssClasses && !filterItem.enabled) {
           return;
         }
       }
