@@ -87,3 +87,5 @@ To fill the **Problems** panel in VS Code with all current, type-related errors,
     ```
 
 1. Raise the version number in `packages/userscript/package.json` to a higher version that will be in development next!
+
+    Make sure to also update the `README.md` to point the bookmarklet to the new script.
