@@ -29,110 +29,110 @@ export class FiltersSettingsUi extends SettingsSectionUi {
 
     const buttons = [
       {
-        name: "buildFilter",
+        name: "buildFilter" as const,
         option: this._settings.items.buildFilter,
         label: this._host.engine.i18n("filter.build"),
       },
       {
-        name: "craftFilter",
+        name: "craftFilter" as const,
         option: this._settings.items.craftFilter,
         label: this._host.engine.i18n("filter.craft"),
       },
       {
-        name: "upgradeFilter",
+        name: "upgradeFilter" as const,
         option: this._settings.items.upgradeFilter,
         label: this._host.engine.i18n("filter.upgrade"),
       },
       {
-        name: "researchFilter",
+        name: "researchFilter" as const,
         option: this._settings.items.researchFilter,
         label: this._host.engine.i18n("filter.research"),
       },
       {
-        name: "tradeFilter",
+        name: "tradeFilter" as const,
         option: this._settings.items.tradeFilter,
         label: this._host.engine.i18n("filter.trade"),
       },
       {
-        name: "huntFilter",
+        name: "huntFilter" as const,
         option: this._settings.items.huntFilter,
         label: this._host.engine.i18n("filter.hunt"),
       },
       {
-        name: "praiseFilter",
+        name: "praiseFilter" as const,
         option: this._settings.items.praiseFilter,
         label: this._host.engine.i18n("filter.praise"),
       },
       {
-        name: "adoreFilter",
+        name: "adoreFilter" as const,
         option: this._settings.items.adoreFilter,
         label: this._host.engine.i18n("filter.adore"),
       },
       {
-        name: "transcendFilter",
+        name: "transcendFilter" as const,
         option: this._settings.items.transcendFilter,
         label: this._host.engine.i18n("filter.transcend"),
       },
       {
-        name: "faithFilter",
+        name: "faithFilter" as const,
         option: this._settings.items.faithFilter,
         label: this._host.engine.i18n("filter.faith"),
       },
       {
-        name: "accelerateFilter",
+        name: "accelerateFilter" as const,
         option: this._settings.items.accelerateFilter,
         label: this._host.engine.i18n("filter.accelerate"),
       },
       {
-        name: "timeSkipFilter",
+        name: "timeSkipFilter" as const,
         option: this._settings.items.timeSkipFilter,
         label: this._host.engine.i18n("filter.time.skip"),
       },
       {
-        name: "festivalFilter",
+        name: "festivalFilter" as const,
         option: this._settings.items.festivalFilter,
         label: this._host.engine.i18n("filter.festival"),
       },
       {
-        name: "starFilter",
+        name: "starFilter" as const,
         option: this._settings.items.starFilter,
         label: this._host.engine.i18n("filter.star"),
       },
       {
-        name: "distributeFilter",
+        name: "distributeFilter" as const,
         option: this._settings.items.distributeFilter,
         label: this._host.engine.i18n("filter.distribute"),
       },
       {
-        name: "promoteFilter",
+        name: "promoteFilter" as const,
         option: this._settings.items.promoteFilter,
         label: this._host.engine.i18n("filter.promote"),
       },
       {
-        name: "miscFilter",
+        name: "miscFilter" as const,
         option: this._settings.items.miscFilter,
         label: this._host.engine.i18n("filter.misc"),
       },
-    ] as const;
+    ];
 
     const makeButton = (name: FilterItem, option: FilterSettingsItem, label: string) =>
       SettingUi.make(this._host, name, option, label, false, false, [], {
         onCheck: () => {
-          option.enabled = true;
+          this._host.updateOptions(() => (option.enabled = true));
           this._host.engine.imessage("filter.enable", [label]);
         },
         onUnCheck: () => {
-          option.enabled = false;
+          this._host.updateOptions(() => (option.enabled = false));
           this._host.engine.imessage("filter.disable", [label]);
         },
       });
 
-    const optionButtons = buttons.map(button =>
-      makeButton(button.name, button.option, button.label)
-    );
+    const optionButtons = buttons
+      .sort((a, b) => a.label.localeCompare(b.label))
+      .map(button => makeButton(button.name, button.option, button.label));
 
     list.append(optionButtons);
-    list.append(this._getExplainer("Unchecked items are hidden from the log."));
+    list.append(this._getExplainer("Disabled items are hidden from the log."));
 
     element.panel.append(list);
 
