@@ -70,7 +70,7 @@ export class OptionsSettingsUi extends SettingsSectionUi {
     };
     return option.trigger
       ? SettingTriggerUi.make(this._host, name, option as SettingTrigger, iname, handler)
-      : SettingUi.make(this._host, name, option, iname, handler, false, false, []);
+      : SettingUi.make(this._host, name, option, iname, handler);
   }
 
   setState(state: OptionsSettings): void {
