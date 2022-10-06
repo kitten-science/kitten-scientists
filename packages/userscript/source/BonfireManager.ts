@@ -3,6 +3,7 @@ import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { BonfireItem, BonfireSettings, BonfireSettingsItem } from "./options/BonfireSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
+import { cwarn } from "./tools/Log";
 import { isNil, mustExist } from "./tools/Maybe";
 import { BuildButton, Building, BuildingExt, BuildingMeta, GameTab } from "./types";
 import { UserScript } from "./UserScript";
@@ -266,9 +267,7 @@ export class BonfireManager implements Automation {
     const label = this._getBuildLabel(build.meta, stage);
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.engine.warning(
-        `${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`
-      );
+      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
     }
     this._host.engine.storeForSummary(label, amount, "build");
 

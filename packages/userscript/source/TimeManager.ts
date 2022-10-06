@@ -3,6 +3,7 @@ import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { TimeItem, TimeSettings, TimeSettingsItem } from "./options/TimeSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
+import { cwarn } from "./tools/Log";
 import { mustExist } from "./tools/Maybe";
 import {
   BuildButton,
@@ -108,9 +109,7 @@ export class TimeManager {
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.engine.warning(
-        `${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`
-      );
+      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
     }
     this._host.engine.storeForSummary(label, amount, "build");
 

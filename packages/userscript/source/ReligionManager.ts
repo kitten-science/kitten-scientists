@@ -5,6 +5,7 @@ import { BonfireSettingsItem } from "./options/BonfireSettings";
 import { FaithItem, ReligionSettings, ReligionSettingsItem } from "./options/ReligionSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
+import { cwarn } from "./tools/Log";
 import { mustExist } from "./tools/Maybe";
 import {
   BuildButton,
@@ -518,9 +519,7 @@ export class ReligionManager implements Automation {
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.engine.warning(
-        `${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`
-      );
+      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
     }
 
     if (variant === UnicornItemVariant.OrderOfTheSun) {

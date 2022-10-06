@@ -21,7 +21,7 @@ import { ScienceManager } from "./ScienceManager";
 import { SpaceManager } from "./SpaceManager";
 import { TimeControlManager } from "./TimeControlManager";
 import { TimeManager } from "./TimeManager";
-import { cdebug, clog, cwarn } from "./tools/Log";
+import { cdebug, cwarn } from "./tools/Log";
 import { mustExist } from "./tools/Maybe";
 import { TradeManager } from "./TradeManager";
 import { DefaultLanguage, UserScript } from "./UserScript";
@@ -136,7 +136,7 @@ export class Engine {
           );
         })
         .catch(error => {
-          this._host.engine.warning(error as string);
+          cwarn(error as string);
         });
     };
     this._intervalMainLoop = setTimeout(loop, this._host.engine.settings.interval);
@@ -326,6 +326,49 @@ export class Engine {
     return value;
   }
 
+  iactivity(
+    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
+    i18nArgs: Array<number | string> = [],
+    logStyle?: ActivityClass
+  ): void {
+    const text = this.i18n(i18nLiteral, i18nArgs);
+    if (logStyle) {
+      const activityClass: ActivityTypeClass = `type_${logStyle}` as const;
+      this._printOutput(`ks-activity ${activityClass}` as const, "#e65C00", text);
+    } else {
+      this._printOutput("ks-activity", "#e65C00", text);
+    }
+  }
+
+  imessage(
+    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
+    i18nArgs: Array<number | string> = []
+  ): void {
+    this._printOutput("ks-default", "#aa50fe", this.i18n(i18nLiteral, i18nArgs));
+  }
+
+  storeForSummary(name: string, amount = 1, section: ActivitySummarySection = "other"): void {
+    this._activitySummary.storeActivity(name, amount, section);
+  }
+
+  getSummary() {
+    return this._activitySummary.renderSummary();
+  }
+
+  displayActivitySummary(): void {
+    const summary = this.getSummary();
+    for (const summaryLine of summary) {
+      this._printOutput("ks-summary", "#009933", summaryLine);
+    }
+
+    // Clear out the old activity
+    this.resetActivitySummary();
+  }
+
+  resetActivitySummary(): void {
+    this._activitySummary.resetActivity();
+  }
+
   private _printOutput(
     cssClasses: "ks-activity" | `ks-activity ${ActivityTypeClass}` | "ks-default" | "ks-summary",
     color: string,
@@ -344,73 +387,5 @@ export class Engine {
     $(msg.span).css("color", color);
 
     cdebug(args);
-  }
-
-  private _message(...args: Array<number | string>): void {
-    this._printOutput("ks-default", "#aa50fe", ...args);
-  }
-
-  private _activity(text: string, logStyle?: ActivityClass): void {
-    if (logStyle) {
-      const activityClass: ActivityTypeClass = `type_${logStyle}` as const;
-      this._printOutput(`ks-activity ${activityClass}` as const, "#e65C00", text);
-    } else {
-      this._printOutput("ks-activity", "#e65C00", text);
-    }
-  }
-
-  private _summary(...args: Array<number | string>): void {
-    this._printOutput("ks-summary", "#009933", ...args);
-  }
-
-  warning(...args: Array<number | string>): void {
-    args.unshift("Warning!");
-    if (console) {
-      clog(args);
-    }
-  }
-
-  imessage(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string> = []
-  ): void {
-    this._message(this.i18n(i18nLiteral, i18nArgs));
-  }
-  iactivity(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string> = [],
-    logStyle?: ActivityClass
-  ): void {
-    this._activity(this.i18n(i18nLiteral, i18nArgs), logStyle);
-  }
-  private _isummary(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string>
-  ): void {
-    this._summary(this.i18n(i18nLiteral, i18nArgs));
-  }
-  private _iwarning(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string>
-  ): void {
-    this.warning(this.i18n(i18nLiteral, i18nArgs));
-  }
-
-  resetActivitySummary(): void {
-    this._activitySummary.resetActivity();
-  }
-
-  storeForSummary(name: string, amount = 1, section: ActivitySummarySection = "other"): void {
-    this._activitySummary.storeActivity(name, amount, section);
-  }
-
-  displayActivitySummary(): void {
-    const summary = this._activitySummary.renderSummary();
-    for (const summaryLine of summary) {
-      this._summary(summaryLine);
-    }
-
-    // Clear out the old activity
-    this.resetActivitySummary();
   }
 }

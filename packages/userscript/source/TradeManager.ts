@@ -4,6 +4,7 @@ import { TradeSettings } from "./options/TradeSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { ucfirst } from "./tools/Format";
+import { cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types";
 import { UserScript } from "./UserScript";
@@ -329,11 +330,7 @@ export class TradeManager implements Automation {
           }
           cultureVal = this._workshopManager.getValueAvailable("culture", true);
           if (cultureVal < emBulk.priceSum) {
-            this._host.engine.warning(
-              "Something has gone horribly wrong.",
-              emBulk.priceSum,
-              cultureVal
-            );
+            cwarn("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
           }
           this._host.gamePage.resPool.resources[13].value -= emBulk.priceSum;
           emBulk.race.embassyLevel += emBulk.val;
@@ -509,7 +506,7 @@ export class TradeManager implements Automation {
    */
   trade(name: Race, amount: number): void {
     if (!name || 1 > amount) {
-      this._host.engine.warning(
+      cwarn(
         "KS trade checks are not functioning properly, please create an issue on the github page."
       );
     }
@@ -518,7 +515,7 @@ export class TradeManager implements Automation {
     const button = this.getTradeButton(race.name);
 
     if (!button.model.enabled || !this.settings.items[name].enabled) {
-      this._host.engine.warning(
+      cwarn(
         "KS trade checks are not functioning properly, please create an issue on the github page."
       );
     }

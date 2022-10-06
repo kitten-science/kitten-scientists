@@ -3,6 +3,7 @@ import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { SettingMax, SettingTrigger } from "../options/Settings";
 import { SettingsSection } from "../options/SettingsSection";
 import { ucfirst } from "../tools/Format";
+import { cwarn } from "../tools/Log";
 import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
@@ -367,7 +368,7 @@ export abstract class SettingsSectionUi {
 
   setConsumeRate(name: Resource, value: number): void {
     if (value < 0.0 || 1.0 < value) {
-      this._host.engine.warning(`ignoring non-numeric or invalid consume rate ${value}`);
+      cwarn(`ignoring non-numeric or invalid consume rate ${value}`);
       return;
     }
 

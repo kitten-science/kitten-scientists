@@ -4,6 +4,7 @@ import { SettingMax } from "./options/Settings";
 import { SpaceSettings } from "./options/SpaceSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
+import { cwarn } from "./tools/Log";
 import { BuildButton, SpaceBuildingInfo, SpaceBuildings, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
 import { WorkshopManager } from "./WorkshopManager";
@@ -125,9 +126,7 @@ export class SpaceManager implements Automation {
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.engine.warning(
-        `${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`
-      );
+      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
     }
     this._host.engine.storeForSummary(label, amount, "build");
 
