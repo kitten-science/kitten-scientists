@@ -1,12 +1,6 @@
 import JQuery from "jquery";
-import { Engine } from "./Engine";
-import {
-  ActivityClass,
-  ActivitySummary,
-  ActivitySummarySection,
-  ActivityTypeClass,
-} from "./helper/ActivitySummary";
-import i18nData from "./i18n/i18nData.json";
+import { Engine, SupportedLanguages } from "./Engine";
+
 import { BonfireSettings } from "./options/BonfireSettings";
 import { EngineSettings } from "./options/EngineSettings";
 import { Options } from "./options/Options";
@@ -41,11 +35,17 @@ declare global {
 
 export type I18nEngine = (key: string, args?: Array<number | string>) => string;
 
-export type SupportedLanguages = keyof typeof i18nData;
 export const DefaultLanguage: SupportedLanguages = "en";
 
 export class UserScript {
   readonly gamePage: GamePage;
+
+  /**
+   * A function in the game that allows to retrieve translated messages.
+   *
+   * Ideally, you should never access this directly and instead use the
+   * i18n interface provided by `Engine`.
+   */
   readonly i18nEngine: I18nEngine;
 
   /**
@@ -53,10 +53,9 @@ export class UserScript {
    */
   private _language: SupportedLanguages;
 
-  /**
-   * All i18n literals of the userscript.
-   */
-  private readonly _i18nData: typeof i18nData;
+  get language() {
+    return this._language;
+  }
 
   /**
    * Signals whether the options have been changed since they were last saved.
@@ -65,7 +64,6 @@ export class UserScript {
 
   private _intervalSaveSettings: number | undefined = undefined;
 
-  private _activitySummary: ActivitySummary;
   private _userInterface: UserInterface;
   engine: Engine;
 
@@ -80,14 +78,10 @@ export class UserScript {
     this.i18nEngine = i18nEngine;
     this._language = language;
 
-    this._i18nData = i18nData;
-
     this.engine = new Engine(this);
-    this._userInterface = new UserInterface(this, this.engine);
+    this._userInterface = new UserInterface(this);
     this._userInterface.construct();
     this._userInterface.refreshUi();
-
-    this._activitySummary = new ActivitySummary(this);
 
     // Every 30 seconds, check if we need to save our settings.
     this._intervalSaveSettings = setInterval(this._checkOptions.bind(this), 30 * 1000);
@@ -105,7 +99,7 @@ export class UserScript {
   }
 
   run(): void {
-    if (this._language in this._i18nData === false) {
+    if (!this.engine.isLanguageSupported(this._language)) {
       cwarn(
         `Requested language '${this._language}' is not available. Falling back to '${DefaultLanguage}'.`
       );
@@ -115,8 +109,6 @@ export class UserScript {
     // Increase messages displayed in log
     // TODO: This should be configurable.
     this.gamePage.console.maxMessages = 1000;
-
-    this.resetActivitySummary();
 
     cwarn("Kitten Scientists initialized. Engine NOT started for now.");
 
@@ -179,127 +171,6 @@ export class UserScript {
     });
     SettingsStorage.setLegacySettings(toExport);
     clog("Kitten Scientists settings saved.");
-  }
-
-  /**
-   * Retrieve an internationalized string literal.
-   *
-   * @param key The key to retrieve from the translation table.
-   * @param args Variable arguments to render into the string.
-   * @returns The translated string.
-   */
-  i18n<TKittenGameLiteral extends `$${string}`>(
-    key: keyof typeof i18nData[SupportedLanguages] | TKittenGameLiteral,
-    args: Array<number | string> = []
-  ): string {
-    // Key is to be translated through KG engine.
-    if (key.startsWith("$")) {
-      return this.i18nEngine(key.slice(1));
-    }
-
-    let value = this._i18nData[this._language][key as keyof typeof i18nData[SupportedLanguages]];
-    if (typeof value === "undefined" || value === null) {
-      value = i18nData[DefaultLanguage][key as keyof typeof i18nData[SupportedLanguages]];
-      if (!value) {
-        cwarn(`i18n key '${key}' not found in default language.`);
-        return `$${key}`;
-      }
-      cwarn(`i18n key '${key}' not found in selected language.`);
-    }
-    if (args) {
-      for (let argIndex = 0; argIndex < args.length; ++argIndex) {
-        value = value.replace(`{${argIndex}}`, `${args[argIndex]}`);
-      }
-    }
-    return value;
-  }
-
-  private _printOutput(
-    cssClasses: "ks-activity" | `ks-activity ${ActivityTypeClass}` | "ks-default" | "ks-summary",
-    color: string,
-    ...args: Array<number | string>
-  ): void {
-    if (this.engine.settings.filters.enabled) {
-      for (const filterItem of Object.values(this.engine.settings.filters.items)) {
-        if (filterItem.enabled && filterItem.variant === cssClasses) {
-          return;
-        }
-      }
-    }
-
-    // update the color of the message immediately after adding
-    const msg = this.gamePage.msg(...args, cssClasses);
-    $(msg.span).css("color", color);
-
-    cdebug(args);
-  }
-
-  private _message(...args: Array<number | string>): void {
-    this._printOutput("ks-default", "#aa50fe", ...args);
-  }
-
-  private _activity(text: string, logStyle?: ActivityClass): void {
-    if (logStyle) {
-      const activityClass: ActivityTypeClass = `type_${logStyle}` as const;
-      this._printOutput(`ks-activity ${activityClass}` as const, "#e65C00", text);
-    } else {
-      this._printOutput("ks-activity", "#e65C00", text);
-    }
-  }
-
-  private _summary(...args: Array<number | string>): void {
-    this._printOutput("ks-summary", "#009933", ...args);
-  }
-
-  warning(...args: Array<number | string>): void {
-    args.unshift("Warning!");
-    if (console) {
-      clog(args);
-    }
-  }
-
-  imessage(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string> = []
-  ): void {
-    this._message(this.i18n(i18nLiteral, i18nArgs));
-  }
-  iactivity(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string> = [],
-    logStyle?: ActivityClass
-  ): void {
-    this._activity(this.i18n(i18nLiteral, i18nArgs), logStyle);
-  }
-  private _isummary(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string>
-  ): void {
-    this._summary(this.i18n(i18nLiteral, i18nArgs));
-  }
-  private _iwarning(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
-    i18nArgs: Array<number | string>
-  ): void {
-    this.warning(this.i18n(i18nLiteral, i18nArgs));
-  }
-
-  resetActivitySummary(): void {
-    this._activitySummary.resetActivity();
-  }
-
-  storeForSummary(name: string, amount = 1, section: ActivitySummarySection = "other"): void {
-    this._activitySummary.storeActivity(name, amount, section);
-  }
-
-  displayActivitySummary(): void {
-    const summary = this._activitySummary.renderSummary();
-    for (const summaryLine of summary) {
-      this._summary(summaryLine);
-    }
-
-    // Clear out the old activity
-    this.resetActivitySummary();
   }
 
   static async waitForGame(timeout = 30000): Promise<GamePage> {

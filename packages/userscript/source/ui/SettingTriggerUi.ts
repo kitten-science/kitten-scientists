@@ -32,7 +32,7 @@ export class SettingTriggerUi {
       const triggerButton = SettingsSectionUi.getTriggerButton(`set-${name}-trigger`, {
         onClick: () => {
           const value = SettingsSectionUi.promptPercentage(
-            host.i18n("ui.trigger.set", [label]),
+            host.engine.i18n("ui.trigger.set", [label]),
             SettingsSectionUi.renderPercentage(mustExist(setting.trigger))
           );
 

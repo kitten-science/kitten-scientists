@@ -49,7 +49,7 @@ export class SettingLimitedUi {
 
     const labelElement = $("<label/>", {
       for: `toggle-limited-${name}`,
-      text: host.i18n("ui.limit"),
+      text: host.engine.i18n("ui.limit"),
     });
 
     const input = $("<input/>", {

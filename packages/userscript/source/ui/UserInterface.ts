@@ -1,4 +1,3 @@
-import { Engine } from "../Engine";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
@@ -30,9 +29,10 @@ export class UserInterface {
   private _optionsUi: OptionsSettingsUi;
   private _filterUi: FiltersSettingsUi;
 
-  constructor(host: UserScript, engine: Engine) {
+  constructor(host: UserScript) {
     this._host = host;
 
+    const engine = this._host.engine;
     this._engineUi = new EngineSettingsUi(this._host, engine.settings);
     this._bonfireUi = new BonfireSettingsUi(this._host, engine.bonfireManager.settings);
     this._spaceUi = new SpaceSettingsUi(this._host, engine.spaceManager.settings);
@@ -93,7 +93,9 @@ export class UserInterface {
       optionsToggle.text(optionsVisiblity ? "-" : "+");
       optionsToggle.prop(
         "title",
-        optionsVisiblity ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+        optionsVisiblity
+          ? this._host.engine.i18n("ui.itemsHide")
+          : this._host.engine.i18n("ui.itemsShow")
       );
     });
 
@@ -127,11 +129,11 @@ export class UserInterface {
     const showActivity = $("<a/>", {
       id: "showActivityHref",
       text: "📝",
-      title: this._host.i18n("summary.show"),
+      title: this._host.engine.i18n("summary.show"),
       href: "#",
     });
 
-    showActivity.on("click", () => this._host.displayActivitySummary());
+    showActivity.on("click", () => this._host.engine.displayActivitySummary());
 
     activityBox.append(showActivity);
 

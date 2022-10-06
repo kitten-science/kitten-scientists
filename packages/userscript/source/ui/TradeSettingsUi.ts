@@ -20,7 +20,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     const toggleName = "trade";
-    const label = ucfirst(this._host.i18n("ui.trade"));
+    const label = ucfirst(this._host.engine.i18n("ui.trade"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
@@ -37,42 +37,42 @@ export class TradeSettingsUi extends SettingsSectionUi {
       this._getTradeOption(
         "lizards",
         this._settings.items.lizards,
-        this._host.i18n("$trade.race.lizards")
+        this._host.engine.i18n("$trade.race.lizards")
       ),
       this._getTradeOption(
         "sharks",
         this._settings.items.sharks,
-        this._host.i18n("$trade.race.sharks")
+        this._host.engine.i18n("$trade.race.sharks")
       ),
       this._getTradeOption(
         "griffins",
         this._settings.items.griffins,
-        this._host.i18n("$trade.race.griffins")
+        this._host.engine.i18n("$trade.race.griffins")
       ),
       this._getTradeOption(
         "nagas",
         this._settings.items.nagas,
-        this._host.i18n("$trade.race.nagas")
+        this._host.engine.i18n("$trade.race.nagas")
       ),
       this._getTradeOption(
         "zebras",
         this._settings.items.zebras,
-        this._host.i18n("$trade.race.zebras")
+        this._host.engine.i18n("$trade.race.zebras")
       ),
       this._getTradeOption(
         "spiders",
         this._settings.items.spiders,
-        this._host.i18n("$trade.race.spiders")
+        this._host.engine.i18n("$trade.race.spiders")
       ),
       this._getTradeOption(
         "dragons",
         this._settings.items.dragons,
-        this._host.i18n("$trade.race.dragons")
+        this._host.engine.i18n("$trade.race.dragons")
       ),
       this._getTradeOption(
         "leviathans",
         this._settings.items.leviathans,
-        this._host.i18n("$trade.race.leviathans"),
+        this._host.engine.i18n("$trade.race.leviathans"),
         true
       ),
     ];
@@ -105,11 +105,11 @@ export class TradeSettingsUi extends SettingsSectionUi {
       {
         onLimitedCheck: () => {
           this._host.updateOptions(() => (option.limited = true));
-          this._host.imessage("trade.limited", [i18nName]);
+          this._host.engine.imessage("trade.limited", [i18nName]);
         },
         onLimitedUnCheck: () => {
           this._host.updateOptions(() => (option.limited = false));
-          this._host.imessage("trade.unlimited", [i18nName]);
+          this._host.engine.imessage("trade.unlimited", [i18nName]);
         },
       }
     );
@@ -117,7 +117,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
 
     const button = $('<div class="ks-icon-button"/>', {
       id: `toggle-seasons-${name}`,
-      title: this._host.i18n("trade.seasons"),
+      title: this._host.engine.i18n("trade.seasons"),
     }).text("🗓");
 
     const list = SettingsSectionUi.getList(`seasons-list-${name}`);
@@ -138,8 +138,8 @@ export class TradeSettingsUi extends SettingsSectionUi {
   }
 
   private _getSeason(name: Race, season: Season, option: TradeSettingsItem): JQuery<HTMLElement> {
-    const iname = ucfirst(this._host.i18n(`$trade.race.${name}` as const));
-    const iseason = ucfirst(this._host.i18n(`$calendar.season.${season}` as const));
+    const iname = ucfirst(this._host.engine.i18n(`$trade.race.${name}` as const));
+    const iseason = ucfirst(this._host.engine.i18n(`$calendar.season.${season}` as const));
 
     const element = $("<li/>");
 
@@ -157,10 +157,10 @@ export class TradeSettingsUi extends SettingsSectionUi {
     input.on("change", () => {
       if (input.is(":checked") && option[season] === false) {
         this._host.updateOptions(() => (option[season] = true));
-        this._host.imessage("trade.season.enable", [iname, iseason]);
+        this._host.engine.imessage("trade.season.enable", [iname, iseason]);
       } else if (!input.is(":checked") && option[season] === true) {
         this._host.updateOptions(() => (option[season] = false));
-        this._host.imessage("trade.season.disable", [iname, iseason]);
+        this._host.engine.imessage("trade.season.disable", [iname, iseason]);
       }
     });
 
@@ -176,17 +176,21 @@ export class TradeSettingsUi extends SettingsSectionUi {
       this._host,
       "embassies",
       this._settings.buildEmbassies,
-      this._host.i18n("option.embassies"),
+      this._host.engine.i18n("option.embassies"),
       false,
       false,
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.buildEmbassies.enabled = true));
-          this._host.imessage("status.sub.enable", [this._host.i18n("option.embassies")]);
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.embassies"),
+          ]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (this._settings.buildEmbassies.enabled = false));
-          this._host.imessage("status.sub.disable", [this._host.i18n("option.embassies")]);
+          this._host.engine.imessage("status.sub.disable", [
+            this._host.engine.i18n("option.embassies"),
+          ]);
         },
       }
     );
@@ -195,18 +199,22 @@ export class TradeSettingsUi extends SettingsSectionUi {
       this._host,
       "races",
       this._settings.unlockRaces,
-      this._host.i18n("ui.upgrade.races"),
+      this._host.engine.i18n("ui.upgrade.races"),
       false,
       false,
       [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.unlockRaces.enabled = true));
-          this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.races")]);
+          this._host.engine.imessage("status.auto.enable", [
+            this._host.engine.i18n("ui.upgrade.races"),
+          ]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (this._settings.unlockRaces.enabled = false));
-          this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.races")]);
+          this._host.engine.imessage("status.auto.disable", [
+            this._host.engine.i18n("ui.upgrade.races"),
+          ]);
         },
       }
     );

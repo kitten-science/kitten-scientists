@@ -17,7 +17,7 @@ export class TimeSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     const toggleName = "time";
-    const label = ucfirst(this._host.i18n("ui.time"));
+    const label = ucfirst(this._host.engine.i18n("ui.time"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
@@ -35,37 +35,37 @@ export class TimeSettingsUi extends SettingsSectionUi {
         this._host,
         "temporalBattery",
         this._settings.items.temporalBattery,
-        this._host.i18n("$time.cfu.temporalBattery.label")
+        this._host.engine.i18n("$time.cfu.temporalBattery.label")
       ),
       SettingUi.make(
         this._host,
         "blastFurnace",
         this._settings.items.blastFurnace,
-        this._host.i18n("$time.cfu.blastFurnace.label")
+        this._host.engine.i18n("$time.cfu.blastFurnace.label")
       ),
       SettingUi.make(
         this._host,
         "timeBoiler",
         this._settings.items.timeBoiler,
-        this._host.i18n("$time.cfu.timeBoiler.label")
+        this._host.engine.i18n("$time.cfu.timeBoiler.label")
       ),
       SettingUi.make(
         this._host,
         "temporalAccelerator",
         this._settings.items.temporalAccelerator,
-        this._host.i18n("$time.cfu.temporalAccelerator.label")
+        this._host.engine.i18n("$time.cfu.temporalAccelerator.label")
       ),
       SettingUi.make(
         this._host,
         "temporalImpedance",
         this._settings.items.temporalImpedance,
-        this._host.i18n("$time.cfu.temporalImpedance.label")
+        this._host.engine.i18n("$time.cfu.temporalImpedance.label")
       ),
       SettingUi.make(
         this._host,
         "ressourceRetrieval",
         this._settings.items.ressourceRetrieval,
-        this._host.i18n("$time.cfu.ressourceRetrieval.label"),
+        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
@@ -73,31 +73,31 @@ export class TimeSettingsUi extends SettingsSectionUi {
         this._host,
         "cryochambers",
         this._settings.items.cryochambers,
-        this._host.i18n("$time.vsu.cryochambers.label")
+        this._host.engine.i18n("$time.vsu.cryochambers.label")
       ),
       SettingUi.make(
         this._host,
         "voidHoover",
         this._settings.items.voidHoover,
-        this._host.i18n("$time.vsu.voidHoover.label")
+        this._host.engine.i18n("$time.vsu.voidHoover.label")
       ),
       SettingUi.make(
         this._host,
         "voidRift",
         this._settings.items.voidRift,
-        this._host.i18n("$time.vsu.voidRift.label")
+        this._host.engine.i18n("$time.vsu.voidRift.label")
       ),
       SettingUi.make(
         this._host,
         "chronocontrol",
         this._settings.items.chronocontrol,
-        this._host.i18n("$time.vsu.chronocontrol.label")
+        this._host.engine.i18n("$time.vsu.chronocontrol.label")
       ),
       SettingUi.make(
         this._host,
         "voidResonator",
         this._settings.items.voidResonator,
-        this._host.i18n("$time.vsu.voidResonator.label")
+        this._host.engine.i18n("$time.vsu.voidResonator.label")
       ),
     ];
 

@@ -329,15 +329,27 @@ export class TradeManager implements Automation {
           }
           cultureVal = this._workshopManager.getValueAvailable("culture", true);
           if (cultureVal < emBulk.priceSum) {
-            this._host.warning("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
+            this._host.engine.warning(
+              "Something has gone horribly wrong.",
+              emBulk.priceSum,
+              cultureVal
+            );
           }
           this._host.gamePage.resPool.resources[13].value -= emBulk.priceSum;
           emBulk.race.embassyLevel += emBulk.val;
-          this._host.storeForSummary("embassy", emBulk.val);
+          this._host.engine.storeForSummary("embassy", emBulk.val);
           if (emBulk.val !== 1) {
-            this._host.iactivity("build.embassies", [emBulk.val, emBulk.race.title], "ks-build");
+            this._host.engine.iactivity(
+              "build.embassies",
+              [emBulk.val, emBulk.race.title],
+              "ks-build"
+            );
           } else {
-            this._host.iactivity("build.embassy", [emBulk.val, emBulk.race.title], "ks-build");
+            this._host.engine.iactivity(
+              "build.embassy",
+              [emBulk.val, emBulk.race.title],
+              "ks-build"
+            );
           }
         }
 
@@ -361,17 +373,17 @@ export class TradeManager implements Automation {
       // cap, do it.
       if (leviathanInfo.energy < this._host.gamePage.diplomacy.getMarkerCap()) {
         this._host.gamePage.diplomacy.feedElders();
-        this._host.iactivity("act.feed");
-        this._host.storeForSummary("feed", 1);
+        this._host.engine.iactivity("act.feed");
+        this._host.engine.storeForSummary("feed", 1);
       }
     } else {
       // We can reach this branch if we have partial necrocorns from resets.
       // The partial necrocorns will then be fead to the elders to bring us back
       // to even zero.
       if (0.25 * (1 + this._host.gamePage.getEffect("corruptionBoostRatio")) < 1) {
-        this._host.storeForSummary("feed", necrocorns.value);
+        this._host.engine.storeForSummary("feed", necrocorns.value);
         this._host.gamePage.diplomacy.feedElders();
-        this._host.iactivity("dispose.necrocorn");
+        this._host.engine.iactivity("dispose.necrocorn");
       }
     }
   }
@@ -398,7 +410,7 @@ export class TradeManager implements Automation {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
           const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
-          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
         }
@@ -409,7 +421,7 @@ export class TradeManager implements Automation {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
           const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
-          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
         }
@@ -420,7 +432,7 @@ export class TradeManager implements Automation {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
           const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
-          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
         }
@@ -434,7 +446,7 @@ export class TradeManager implements Automation {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
           const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
-          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
         }
@@ -448,7 +460,7 @@ export class TradeManager implements Automation {
         if (manpower >= 1000) {
           this._host.gamePage.resPool.get("manpower").value -= 1000;
           const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
-          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
         }
@@ -463,7 +475,7 @@ export class TradeManager implements Automation {
         if (manpower >= 1000) {
           mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
           const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
-          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
         }
@@ -477,7 +489,7 @@ export class TradeManager implements Automation {
         if (manpower >= 1000) {
           mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
           const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
-          this._host.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
         }
@@ -497,7 +509,7 @@ export class TradeManager implements Automation {
    */
   trade(name: Race, amount: number): void {
     if (!name || 1 > amount) {
-      this._host.warning(
+      this._host.engine.warning(
         "KS trade checks are not functioning properly, please create an issue on the github page."
       );
     }
@@ -506,14 +518,14 @@ export class TradeManager implements Automation {
     const button = this.getTradeButton(race.name);
 
     if (!button.model.enabled || !this.settings.items[name].enabled) {
-      this._host.warning(
+      this._host.engine.warning(
         "KS trade checks are not functioning properly, please create an issue on the github page."
       );
     }
 
     this._host.gamePage.diplomacy.tradeMultiple(race, amount);
-    this._host.storeForSummary(race.title, amount, "trade");
-    this._host.iactivity("act.trade", [amount, ucfirst(race.title)], "ks-trade");
+    this._host.engine.storeForSummary(race.title, amount, "trade");
+    this._host.engine.iactivity("act.trade", [amount, ucfirst(race.title)], "ks-trade");
   }
 
   /**

@@ -155,8 +155,8 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     // determine actual amount after crafting upgrades
     amount = parseFloat((amount * (1 + ratio)).toFixed(2));
 
-    this._host.storeForSummary(iname, amount, "craft");
-    this._host.iactivity(
+    this._host.engine.storeForSummary(iname, amount, "craft");
+    this._host.engine.iactivity(
       "act.craft",
       [this._host.gamePage.getDisplayValueExt(amount), iname],
       "ks-craft"

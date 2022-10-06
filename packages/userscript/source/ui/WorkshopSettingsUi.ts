@@ -26,7 +26,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     const toggleName = "craft";
-    const label = ucfirst(this._host.i18n("ui.craft"));
+    const label = ucfirst(this._host.engine.i18n("ui.craft"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
@@ -43,101 +43,101 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       this._getCraftOption(
         "wood",
         this._settings.items.wood,
-        this._host.i18n("$workshop.crafts.wood.label")
+        this._host.engine.i18n("$workshop.crafts.wood.label")
       ),
       this._getCraftOption(
         "beam",
         this._settings.items.beam,
-        this._host.i18n("$workshop.crafts.beam.label")
+        this._host.engine.i18n("$workshop.crafts.beam.label")
       ),
       this._getCraftOption(
         "slab",
         this._settings.items.slab,
-        this._host.i18n("$workshop.crafts.slab.label")
+        this._host.engine.i18n("$workshop.crafts.slab.label")
       ),
       this._getCraftOption(
         "steel",
         this._settings.items.steel,
-        this._host.i18n("$workshop.crafts.steel.label")
+        this._host.engine.i18n("$workshop.crafts.steel.label")
       ),
       this._getCraftOption(
         "plate",
         this._settings.items.plate,
-        this._host.i18n("$workshop.crafts.plate.label")
+        this._host.engine.i18n("$workshop.crafts.plate.label")
       ),
       this._getCraftOption(
         "alloy",
         this._settings.items.alloy,
-        this._host.i18n("$workshop.crafts.alloy.label")
+        this._host.engine.i18n("$workshop.crafts.alloy.label")
       ),
       this._getCraftOption(
         "concrate",
         this._settings.items.concrate,
-        this._host.i18n("$workshop.crafts.concrate.label")
+        this._host.engine.i18n("$workshop.crafts.concrate.label")
       ),
       this._getCraftOption(
         "gear",
         this._settings.items.gear,
-        this._host.i18n("$workshop.crafts.gear.label")
+        this._host.engine.i18n("$workshop.crafts.gear.label")
       ),
       this._getCraftOption(
         "scaffold",
         this._settings.items.scaffold,
-        this._host.i18n("$workshop.crafts.scaffold.label")
+        this._host.engine.i18n("$workshop.crafts.scaffold.label")
       ),
       this._getCraftOption(
         "ship",
         this._settings.items.ship,
-        this._host.i18n("$workshop.crafts.ship.label")
+        this._host.engine.i18n("$workshop.crafts.ship.label")
       ),
       this._getCraftOption(
         "tanker",
         this._settings.items.tanker,
-        this._host.i18n("$workshop.crafts.tanker.label"),
+        this._host.engine.i18n("$workshop.crafts.tanker.label"),
         true
       ),
 
       this._getCraftOption(
         "parchment",
         this._settings.items.parchment,
-        this._host.i18n("$workshop.crafts.parchment.label")
+        this._host.engine.i18n("$workshop.crafts.parchment.label")
       ),
       this._getCraftOption(
         "manuscript",
         this._settings.items.manuscript,
-        this._host.i18n("$workshop.crafts.manuscript.label")
+        this._host.engine.i18n("$workshop.crafts.manuscript.label")
       ),
       this._getCraftOption(
         "compedium",
         this._settings.items.compedium,
-        this._host.i18n("$workshop.crafts.compedium.label")
+        this._host.engine.i18n("$workshop.crafts.compedium.label")
       ),
       this._getCraftOption(
         "blueprint",
         this._settings.items.blueprint,
-        this._host.i18n("$workshop.crafts.blueprint.label"),
+        this._host.engine.i18n("$workshop.crafts.blueprint.label"),
         true
       ),
 
       this._getCraftOption(
         "kerosene",
         this._settings.items.kerosene,
-        this._host.i18n("$workshop.crafts.kerosene.label")
+        this._host.engine.i18n("$workshop.crafts.kerosene.label")
       ),
       this._getCraftOption(
         "megalith",
         this._settings.items.megalith,
-        this._host.i18n("$workshop.crafts.megalith.label")
+        this._host.engine.i18n("$workshop.crafts.megalith.label")
       ),
       this._getCraftOption(
         "eludium",
         this._settings.items.eludium,
-        this._host.i18n("$workshop.crafts.eludium.label")
+        this._host.engine.i18n("$workshop.crafts.eludium.label")
       ),
       this._getCraftOption(
         "thorium",
         this._settings.items.thorium,
-        this._host.i18n("$workshop.crafts.thorium.label"),
+        this._host.engine.i18n("$workshop.crafts.thorium.label"),
         true
       ),
     ];
@@ -149,7 +149,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     const resourcesButton = $('<div class="ks-icon-button"/>', {
       id: "toggle-resource-controls",
-      title: this._host.i18n("ui.craft.resources"),
+      title: this._host.engine.i18n("ui.craft.resources"),
     }).text("🛠");
 
     const resourcesList = this._getResourceOptions();
@@ -185,11 +185,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     return SettingLimitedMaxUi.make(this._host, name, option, label, delimiter, upgradeIndicator, {
       onLimitedCheck: () => {
         this._host.updateOptions(() => (option.limited = true));
-        this._host.imessage("craft.limited", [label]);
+        this._host.engine.imessage("craft.limited", [label]);
       },
       onLimitedUnCheck: () => {
         this._host.updateOptions(() => (option.limited = false));
-        this._host.imessage("craft.unlimited", [label]);
+        this._host.engine.imessage("craft.unlimited", [label]);
       },
     });
   }
@@ -204,7 +204,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     // Add all the current resources
     for (const [name, item] of objectEntries(this._settings.resources)) {
       this._resourcesList.append(
-        this._addNewResourceOption(name, ucfirst(this._host.i18n(`$resources.${name}.title`)), item)
+        this._addNewResourceOption(
+          name,
+          ucfirst(this._host.engine.i18n(`$resources.${name}.title`)),
+          item
+        )
       );
       //this.setStockValue(name, item.stock);
       //this.setConsumeRate(name, item.consume);
@@ -220,18 +224,22 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       this._host,
       "upgrades",
       this._settings.unlockUpgrades,
-      this._host.i18n("ui.upgrade.upgrades"),
+      this._host.engine.i18n("ui.upgrade.upgrades"),
       false,
       false,
       [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.unlockUpgrades.enabled = true));
-          this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.upgrades")]);
+          this._host.engine.imessage("status.auto.enable", [
+            this._host.engine.i18n("ui.upgrade.upgrades"),
+          ]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (this._settings.unlockUpgrades.enabled = false));
-          this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.upgrades")]);
+          this._host.engine.imessage("status.auto.disable", [
+            this._host.engine.i18n("ui.upgrade.upgrades"),
+          ]);
         },
       }
     );
@@ -240,7 +248,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     const upgradeButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.unlockUpgrades.items)) {
-      const upgradeLabel = this._host.i18n(`$workshop.${upgradeName}.label`);
+      const upgradeLabel = this._host.engine.i18n(`$workshop.${upgradeName}.label`);
       const upgradeButton = SettingUi.make(
         this._host,
         `upgrade-${upgradeName}`,
@@ -252,11 +260,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
         {
           onCheck: () => {
             this._host.updateOptions(() => (upgrade.enabled = true));
-            this._host.imessage("status.auto.enable", [upgradeLabel]);
+            this._host.engine.imessage("status.auto.enable", [upgradeLabel]);
           },
           onUnCheck: () => {
             this._host.updateOptions(() => (upgrade.enabled = false));
-            this._host.imessage("status.auto.disable", [upgradeLabel]);
+            this._host.engine.imessage("status.auto.disable", [upgradeLabel]);
           },
         }
       );
@@ -276,7 +284,9 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       upgradesItemsButton.text(this._upgradesExpanded ? "-" : "+");
       upgradesItemsButton.prop(
         "title",
-        this._upgradesExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+        this._upgradesExpanded
+          ? this._host.engine.i18n("ui.itemsHide")
+          : this._host.engine.i18n("ui.itemsShow")
       );
     });
     upgradesButton.append(upgradesItemsButton, upgradesList);
@@ -285,18 +295,22 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       this._host,
       "shipOverride",
       this._settings.shipOverride,
-      this._host.i18n("option.shipOverride"),
+      this._host.engine.i18n("option.shipOverride"),
       false,
       false,
       [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.shipOverride.enabled = true));
-          this._host.imessage("status.auto.enable", [this._host.i18n("option.shipOverride")]);
+          this._host.engine.imessage("status.auto.enable", [
+            this._host.engine.i18n("option.shipOverride"),
+          ]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (this._settings.shipOverride.enabled = false));
-          this._host.imessage("status.auto.disable", [this._host.i18n("option.shipOverride")]);
+          this._host.engine.imessage("status.auto.disable", [
+            this._host.engine.i18n("option.shipOverride"),
+          ]);
         },
       }
     );
@@ -326,14 +340,14 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     // How many items to stock.
     const stockElement = $("<div/>", {
       id: `stock-value-${name}`,
-      text: this._host.i18n("resources.stock", [this._renderLimit(stock)]),
+      text: this._host.engine.i18n("resources.stock", [this._renderLimit(stock)]),
       css: { cursor: "pointer", display: "inline-block", width: "80px" },
     });
 
     // The consume rate for the resource.
     const consumeElement = $("<div/>", {
       id: `consume-rate-${name}`,
-      text: this._host.i18n("resources.consume", [
+      text: this._host.engine.i18n("resources.consume", [
         SettingsSectionUi.renderConsumeRate(setting.consume),
       ]),
       css: { cursor: "pointer", display: "inline-block" },
@@ -343,27 +357,29 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     stockElement.on("click", () => {
       const value = SettingsSectionUi.promptLimit(
-        this._host.i18n("resources.stock.set", [title]),
+        this._host.engine.i18n("resources.stock.set", [title]),
         setting.stock.toFixed(0)
       );
       if (value !== null) {
         setting.enabled = true;
         setting.stock = value;
-        stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(value)]));
+        stockElement.text(this._host.engine.i18n("resources.stock", [this._renderLimit(value)]));
         this._host.updateOptions();
       }
     });
 
     consumeElement.on("click", () => {
       const consumeValue = SettingsSectionUi.promptPercentage(
-        this._host.i18n("resources.consume.set", [title]),
+        this._host.engine.i18n("resources.consume.set", [title]),
         SettingsSectionUi.renderConsumeRate(setting.consume)
       );
       if (consumeValue !== null) {
         // Cap value between 0 and 1.
         this._host.updateOptions(() => (setting.consume = consumeValue));
         consumeElement.text(
-          this._host.i18n("resources.consume", [SettingsSectionUi.renderConsumeRate(consumeValue)])
+          this._host.engine.i18n("resources.consume", [
+            SettingsSectionUi.renderConsumeRate(consumeValue),
+          ])
         );
       }
     });
@@ -414,16 +430,20 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     for (const [, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
       mustExist(option.$limited).prop("checked", option.limited);
-      mustExist(option.$max).text(this._host.i18n("ui.max", [this._renderLimit(option.max)]));
+      mustExist(option.$max).text(
+        this._host.engine.i18n("ui.max", [this._renderLimit(option.max)])
+      );
     }
 
     for (const [, option] of objectEntries(this._settings.resources)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
       mustExist(option.$consume).text(
-        this._host.i18n("resources.consume", [SettingsSectionUi.renderConsumeRate(option.consume)])
+        this._host.engine.i18n("resources.consume", [
+          SettingsSectionUi.renderConsumeRate(option.consume),
+        ])
       );
       mustExist(option.$stock).text(
-        this._host.i18n("resources.stock", [this._renderLimit(option.stock)])
+        this._host.engine.i18n("resources.stock", [this._renderLimit(option.stock)])
       );
     }
   }

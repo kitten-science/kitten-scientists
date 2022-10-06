@@ -112,7 +112,7 @@ export class BonfireManager implements Automation {
             pastureMeta.val = 0;
             pastureMeta.stage = 1;
 
-            this._host.iactivity("upgrade.building.pasture", [], "ks-upgrade");
+            this._host.engine.iactivity("upgrade.building.pasture", [], "ks-upgrade");
 
             // Upgrade the pasture.
             this._host.gamePage.ui.render();
@@ -144,7 +144,7 @@ export class BonfireManager implements Automation {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             aqueductMeta.calculateEffects!(aqueductMeta, this._host.gamePage);
 
-            this._host.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
+            this._host.engine.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
 
             this._host.gamePage.ui.render();
             this.build("aqueduct", 1, 1);
@@ -199,7 +199,7 @@ export class BonfireManager implements Automation {
             libraryMeta.stage = 1;
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             libraryMeta.calculateEffects!(libraryMeta, this._host.gamePage);
-            this._host.iactivity("upgrade.building.library", [], "ks-upgrade");
+            this._host.engine.iactivity("upgrade.building.library", [], "ks-upgrade");
             this._host.gamePage.ui.render();
             this.build("library", 1, 1);
             this._host.gamePage.ui.render();
@@ -227,7 +227,7 @@ export class BonfireManager implements Automation {
           amphitheatreMeta.val = 0;
           amphitheatreMeta.stage = 1;
 
-          this._host.iactivity("upgrade.building.amphitheatre", [], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.building.amphitheatre", [], "ks-upgrade");
 
           this._host.gamePage.ui.render();
           this.build("amphitheatre", 1, 1);
@@ -266,14 +266,16 @@ export class BonfireManager implements Automation {
     const label = this._getBuildLabel(build.meta, stage);
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.warning(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
+      this._host.engine.warning(
+        `${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`
+      );
     }
-    this._host.storeForSummary(label, amount, "build");
+    this._host.engine.storeForSummary(label, amount, "build");
 
     if (amount === 1) {
-      this._host.iactivity("act.build", [label], "ks-build");
+      this._host.engine.iactivity("act.build", [label], "ks-build");
     } else {
-      this._host.iactivity("act.builds", [label, amount], "ks-build");
+      this._host.engine.iactivity("act.builds", [label, amount], "ks-build");
     }
   }
 

@@ -19,7 +19,7 @@ export class OptionsSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     const toggleName = "options";
-    const label = ucfirst(this._host.i18n("ui.options"));
+    const label = ucfirst(this._host.engine.i18n("ui.options"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
@@ -33,22 +33,22 @@ export class OptionsSettingsUi extends SettingsSectionUi {
       this._getOptionsOption(
         "observe",
         this._settings.items.observe,
-        this._host.i18n("option.observe")
+        this._host.engine.i18n("option.observe")
       ),
       this._getOptionsOption(
         "autofeed",
         this._settings.items.autofeed,
-        this._host.i18n("option.autofeed")
+        this._host.engine.i18n("option.autofeed")
       ),
       this._getOptionsOption(
         "crypto",
         this._settings.items.crypto,
-        this._host.i18n("option.crypto")
+        this._host.engine.i18n("option.crypto")
       ),
       this._getOptionsOption(
         "fixCry",
         this._settings.items.fixCry,
-        this._host.i18n("option.fix.cry")
+        this._host.engine.i18n("option.fix.cry")
       ),
     ];
 

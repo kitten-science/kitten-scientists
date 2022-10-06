@@ -17,7 +17,7 @@ export class FiltersSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     const toggleName = "filter";
-    const label = ucfirst(this._host.i18n("ui.filter"));
+    const label = ucfirst(this._host.engine.i18n("ui.filter"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
@@ -31,87 +31,87 @@ export class FiltersSettingsUi extends SettingsSectionUi {
       {
         name: "buildFilter",
         option: this._settings.items.buildFilter,
-        label: this._host.i18n("filter.build"),
+        label: this._host.engine.i18n("filter.build"),
       },
       {
         name: "craftFilter",
         option: this._settings.items.craftFilter,
-        label: this._host.i18n("filter.craft"),
+        label: this._host.engine.i18n("filter.craft"),
       },
       {
         name: "upgradeFilter",
         option: this._settings.items.upgradeFilter,
-        label: this._host.i18n("filter.upgrade"),
+        label: this._host.engine.i18n("filter.upgrade"),
       },
       {
         name: "researchFilter",
         option: this._settings.items.researchFilter,
-        label: this._host.i18n("filter.research"),
+        label: this._host.engine.i18n("filter.research"),
       },
       {
         name: "tradeFilter",
         option: this._settings.items.tradeFilter,
-        label: this._host.i18n("filter.trade"),
+        label: this._host.engine.i18n("filter.trade"),
       },
       {
         name: "huntFilter",
         option: this._settings.items.huntFilter,
-        label: this._host.i18n("filter.hunt"),
+        label: this._host.engine.i18n("filter.hunt"),
       },
       {
         name: "praiseFilter",
         option: this._settings.items.praiseFilter,
-        label: this._host.i18n("filter.praise"),
+        label: this._host.engine.i18n("filter.praise"),
       },
       {
         name: "adoreFilter",
         option: this._settings.items.adoreFilter,
-        label: this._host.i18n("filter.adore"),
+        label: this._host.engine.i18n("filter.adore"),
       },
       {
         name: "transcendFilter",
         option: this._settings.items.transcendFilter,
-        label: this._host.i18n("filter.transcend"),
+        label: this._host.engine.i18n("filter.transcend"),
       },
       {
         name: "faithFilter",
         option: this._settings.items.faithFilter,
-        label: this._host.i18n("filter.faith"),
+        label: this._host.engine.i18n("filter.faith"),
       },
       {
         name: "accelerateFilter",
         option: this._settings.items.accelerateFilter,
-        label: this._host.i18n("filter.accelerate"),
+        label: this._host.engine.i18n("filter.accelerate"),
       },
       {
         name: "timeSkipFilter",
         option: this._settings.items.timeSkipFilter,
-        label: this._host.i18n("filter.time.skip"),
+        label: this._host.engine.i18n("filter.time.skip"),
       },
       {
         name: "festivalFilter",
         option: this._settings.items.festivalFilter,
-        label: this._host.i18n("filter.festival"),
+        label: this._host.engine.i18n("filter.festival"),
       },
       {
         name: "starFilter",
         option: this._settings.items.starFilter,
-        label: this._host.i18n("filter.star"),
+        label: this._host.engine.i18n("filter.star"),
       },
       {
         name: "distributeFilter",
         option: this._settings.items.distributeFilter,
-        label: this._host.i18n("filter.distribute"),
+        label: this._host.engine.i18n("filter.distribute"),
       },
       {
         name: "promoteFilter",
         option: this._settings.items.promoteFilter,
-        label: this._host.i18n("filter.promote"),
+        label: this._host.engine.i18n("filter.promote"),
       },
       {
         name: "miscFilter",
         option: this._settings.items.miscFilter,
-        label: this._host.i18n("filter.misc"),
+        label: this._host.engine.i18n("filter.misc"),
       },
     ] as const;
 
@@ -119,11 +119,11 @@ export class FiltersSettingsUi extends SettingsSectionUi {
       SettingUi.make(this._host, name, option, label, false, false, [], {
         onCheck: () => {
           option.enabled = true;
-          this._host.imessage("filter.enable", [label]);
+          this._host.engine.imessage("filter.enable", [label]);
         },
         onUnCheck: () => {
           option.enabled = false;
-          this._host.imessage("filter.disable", [label]);
+          this._host.engine.imessage("filter.disable", [label]);
         },
       });
 

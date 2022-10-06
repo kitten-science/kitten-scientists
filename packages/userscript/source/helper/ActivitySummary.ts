@@ -72,6 +72,7 @@ export class ActivitySummary {
 
   constructor(host: UserScript) {
     this._host = host;
+    this.resetActivity();
   }
 
   resetActivity(): void {
@@ -100,7 +101,7 @@ export class ActivitySummary {
       const section = mustExist(this._sections.get("other")) as Map<ActivitySectionOther, number>;
       section.forEach((amount, name) =>
         summary.push(
-          this._host.i18n(`summary.${name}` as const, [
+          this._host.engine.i18n(`summary.${name}` as const, [
             this._host.gamePage.getDisplayValueExt(amount),
           ])
         )
@@ -111,7 +112,7 @@ export class ActivitySummary {
     if (this._sections.has("research")) {
       const section = mustExist(this._sections.get("research"));
       section.forEach((amount, name) => {
-        summary.push(this._host.i18n("summary.tech", [ucfirst(name)]));
+        summary.push(this._host.engine.i18n("summary.tech", [ucfirst(name)]));
       });
     }
 
@@ -119,7 +120,7 @@ export class ActivitySummary {
     if (this._sections.has("upgrade")) {
       const section = mustExist(this._sections.get("upgrade"));
       section.forEach((amount, name) => {
-        summary.push(this._host.i18n("summary.upgrade", [ucfirst(name)]));
+        summary.push(this._host.engine.i18n("summary.upgrade", [ucfirst(name)]));
       });
     }
 
@@ -128,7 +129,7 @@ export class ActivitySummary {
       const section = mustExist(this._sections.get("build"));
       section.forEach((amount, name) => {
         summary.push(
-          this._host.i18n("summary.building", [
+          this._host.engine.i18n("summary.building", [
             this._host.gamePage.getDisplayValueExt(amount),
             ucfirst(name),
           ])
@@ -141,7 +142,7 @@ export class ActivitySummary {
       const section = mustExist(this._sections.get("faith"));
       section.forEach((amount, name) => {
         summary.push(
-          this._host.i18n("summary.sun", [
+          this._host.engine.i18n("summary.sun", [
             this._host.gamePage.getDisplayValueExt(amount),
             ucfirst(name),
           ])
@@ -154,7 +155,7 @@ export class ActivitySummary {
       const section = mustExist(this._sections.get("craft"));
       section.forEach((amount, name) => {
         summary.push(
-          this._host.i18n("summary.craft", [
+          this._host.engine.i18n("summary.craft", [
             this._host.gamePage.getDisplayValueExt(amount),
             ucfirst(name),
           ])
@@ -167,7 +168,7 @@ export class ActivitySummary {
       const section = mustExist(this._sections.get("trade"));
       section.forEach((amount, name) => {
         summary.push(
-          this._host.i18n("summary.trade", [
+          this._host.engine.i18n("summary.trade", [
             this._host.gamePage.getDisplayValueExt(amount),
             ucfirst(name),
           ])
@@ -188,16 +189,21 @@ export class ActivitySummary {
       if (years > 0) {
         duration += `${years} `;
         duration +=
-          years === 1 ? this._host.i18n("summary.year") : this._host.i18n("summary.years");
+          years === 1
+            ? this._host.engine.i18n("summary.year")
+            : this._host.engine.i18n("summary.years");
       }
 
       if (days >= 0) {
-        if (years > 0) duration += this._host.i18n("summary.separator");
+        if (years > 0) duration += this._host.engine.i18n("summary.separator");
         duration += `${roundToTwo(days)} `;
-        duration += days === 1 ? this._host.i18n("summary.day") : this._host.i18n("summary.days");
+        duration +=
+          days === 1
+            ? this._host.engine.i18n("summary.day")
+            : this._host.engine.i18n("summary.days");
       }
 
-      summary.push(this._host.i18n("summary.head", [duration]));
+      summary.push(this._host.engine.i18n("summary.head", [duration]));
     }
 
     return summary;

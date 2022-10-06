@@ -51,7 +51,7 @@ export class SettingMaxUi {
 
     maxButton.on("click", () => {
       const value = SettingsSectionUi.promptLimit(
-        host.i18n("ui.max.set", [label]),
+        host.engine.i18n("ui.max.set", [label]),
         setting.max.toString()
       );
 
@@ -59,7 +59,7 @@ export class SettingMaxUi {
         const limit = SettingsSectionUi.renderLimit(value, host);
         host.updateOptions(() => (setting.max = value));
         maxButton[0].title = limit;
-        maxButton[0].innerText = host.i18n("ui.max", [limit]);
+        maxButton[0].innerText = host.engine.i18n("ui.max", [limit]);
       }
     });
 

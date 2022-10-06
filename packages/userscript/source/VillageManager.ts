@@ -89,12 +89,12 @@ export class VillageManager implements Automation {
 
     this._host.gamePage.village.assignJob(this._host.gamePage.village.getJob(jobName), 1);
     this.manager.render();
-    this._host.iactivity(
+    this._host.engine.iactivity(
       "act.distribute",
-      [this._host.i18n(`$village.job.${jobName}` as const)],
+      [this._host.engine.i18n(`$village.job.${jobName}` as const)],
       "ks-distribute"
     );
-    this._host.storeForSummary("distribute", 1);
+    this._host.engine.storeForSummary("distribute", 1);
   }
 
   autoPromote(): void {
@@ -114,12 +114,12 @@ export class VillageManager implements Automation {
         this._host.gamePage.village.sim.goldToPromote(rank, rank + 1, gold.value - goldStock)[0] &&
         this._host.gamePage.village.sim.promote(leader, rank + 1) === 1
       ) {
-        this._host.iactivity("act.promote", [rank + 1], "ks-promote");
+        this._host.engine.iactivity("act.promote", [rank + 1], "ks-promote");
         this._host.gamePage.tabs[1].censusPanel.census.renderGovernment(
           this._host.gamePage.tabs[1].censusPanel.census
         );
         this._host.gamePage.tabs[1].censusPanel.census.update();
-        this._host.storeForSummary("promote", 1);
+        this._host.engine.storeForSummary("promote", 1);
       }
     }
   }
@@ -135,8 +135,8 @@ export class VillageManager implements Automation {
     if (trigger <= manpower.value / manpower.maxValue && 100 <= manpower.value) {
       // Determine how many hunts are being performed.
       let huntCount = Math.floor(manpower.value / 100);
-      this._host.storeForSummary("hunt", huntCount);
-      this._host.iactivity("act.hunt", [huntCount], "ks-hunt");
+      this._host.engine.storeForSummary("hunt", huntCount);
+      this._host.engine.iactivity("act.hunt", [huntCount], "ks-hunt");
 
       huntCount = Math.floor(manpower.value / 100);
       const averageOutput = this._workshopManager.getAverageHunt();
@@ -233,11 +233,11 @@ export class VillageManager implements Automation {
     if (this._host.gamePage.villageTab.festivalBtn.model.enabled) {
       const beforeDays = this._host.gamePage.calendar.festivalDays;
       this._host.gamePage.villageTab.festivalBtn.onClick();
-      this._host.storeForSummary("festival");
+      this._host.engine.storeForSummary("festival");
       if (beforeDays > 0) {
-        this._host.iactivity("festival.extend", [], "ks-festival");
+        this._host.engine.iactivity("festival.extend", [], "ks-festival");
       } else {
-        this._host.iactivity("festival.hold", [], "ks-festival");
+        this._host.engine.iactivity("festival.hold", [], "ks-festival");
       }
     }
   }

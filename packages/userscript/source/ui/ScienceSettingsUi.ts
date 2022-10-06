@@ -20,7 +20,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     const toggleName = "upgrade";
-    const label = ucfirst(this._host.i18n("ui.upgrade"));
+    const label = ucfirst(this._host.engine.i18n("ui.upgrade"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
@@ -34,18 +34,22 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       this._host,
       "techs",
       this._settings.techs,
-      this._host.i18n("ui.upgrade.techs"),
+      this._host.engine.i18n("ui.upgrade.techs"),
       false,
       false,
       [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.techs.enabled = true));
-          this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.techs")]);
+          this._host.engine.imessage("status.auto.enable", [
+            this._host.engine.i18n("ui.upgrade.techs"),
+          ]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (this._settings.techs.enabled = false));
-          this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.techs")]);
+          this._host.engine.imessage("status.auto.disable", [
+            this._host.engine.i18n("ui.upgrade.techs"),
+          ]);
         },
       }
     );
@@ -54,15 +58,15 @@ export class ScienceSettingsUi extends SettingsSectionUi {
 
     const techButtons = [];
     for (const [techName, tech] of objectEntries(this._settings.techs.items)) {
-      const label = this._host.i18n(`$science.${techName}.label`);
+      const label = this._host.engine.i18n(`$science.${techName}.label`);
       const button = SettingUi.make(this._host, `tech-${techName}`, tech, label, false, false, [], {
         onCheck: () => {
           this._host.updateOptions(() => (tech.enabled = true));
-          this._host.imessage("status.auto.enable", [label]);
+          this._host.engine.imessage("status.auto.enable", [label]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (tech.enabled = false));
-          this._host.imessage("status.auto.disable", [label]);
+          this._host.engine.imessage("status.auto.disable", [label]);
         },
       });
 
@@ -81,7 +85,9 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       techsItemsButton.text(this._techsExpanded ? "-" : "+");
       techsItemsButton.prop(
         "title",
-        this._techsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+        this._techsExpanded
+          ? this._host.engine.i18n("ui.itemsHide")
+          : this._host.engine.i18n("ui.itemsShow")
       );
     });
     techsButton.append(techsItemsButton, techsList);
@@ -91,18 +97,22 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       this._host,
       "policies",
       this._settings.policies,
-      this._host.i18n("ui.upgrade.policies"),
+      this._host.engine.i18n("ui.upgrade.policies"),
       false,
       false,
       [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.policies.enabled = true));
-          this._host.imessage("status.auto.enable", [this._host.i18n("ui.upgrade.policies")]);
+          this._host.engine.imessage("status.auto.enable", [
+            this._host.engine.i18n("ui.upgrade.policies"),
+          ]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (this._settings.policies.enabled = false));
-          this._host.imessage("status.auto.disable", [this._host.i18n("ui.upgrade.policies")]);
+          this._host.engine.imessage("status.auto.disable", [
+            this._host.engine.i18n("ui.upgrade.policies"),
+          ]);
         },
       }
     );
@@ -111,7 +121,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
 
     const policyButtons = [];
     for (const [policyName, policy] of objectEntries(this._settings.policies.items)) {
-      const policyLabel = this._host.i18n(
+      const policyLabel = this._host.engine.i18n(
         `$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`
       );
       const policyButton = SettingUi.make(
@@ -125,11 +135,11 @@ export class ScienceSettingsUi extends SettingsSectionUi {
         {
           onCheck: () => {
             this._host.updateOptions(() => (policy.enabled = true));
-            this._host.imessage("status.auto.enable", [policyLabel]);
+            this._host.engine.imessage("status.auto.enable", [policyLabel]);
           },
           onUnCheck: () => {
             this._host.updateOptions(() => (policy.enabled = false));
-            this._host.imessage("status.auto.disable", [policyLabel]);
+            this._host.engine.imessage("status.auto.disable", [policyLabel]);
           },
         }
       );
@@ -149,7 +159,9 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       policiesItemsButton.text(this._policiesExpanded ? "-" : "+");
       policiesItemsButton.prop(
         "title",
-        this._policiesExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+        this._policiesExpanded
+          ? this._host.engine.i18n("ui.itemsHide")
+          : this._host.engine.i18n("ui.itemsShow")
       );
     });
     policiesButton.append(policiesItemsButton, policiesList);

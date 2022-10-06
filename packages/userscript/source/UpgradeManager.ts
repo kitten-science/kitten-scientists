@@ -38,13 +38,13 @@ export abstract class UpgradeManager {
     const label = upgrade.label;
 
     if (variant === "workshop") {
-      this._host.storeForSummary(label, 1, "upgrade");
-      this._host.iactivity("upgrade.upgrade", [label], "ks-upgrade");
+      this._host.engine.storeForSummary(label, 1, "upgrade");
+      this._host.engine.iactivity("upgrade.upgrade", [label], "ks-upgrade");
     } else if (variant === "policy") {
-      this._host.iactivity("upgrade.policy", [label]);
+      this._host.engine.iactivity("upgrade.policy", [label]);
     } else if (variant === "science") {
-      this._host.storeForSummary(label, 1, "research");
-      this._host.iactivity("upgrade.tech", [label], "ks-research");
+      this._host.engine.storeForSummary(label, 1, "research");
+      this._host.engine.iactivity("upgrade.tech", [label], "ks-research");
     }
 
     return true;

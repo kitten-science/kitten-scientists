@@ -46,7 +46,7 @@ export class FilterSettingsItem extends Setting {
   variant: FilterItemVariant;
 
   constructor(variant: FilterItemVariant) {
-    super();
+    super(true);
     this.variant = variant;
   }
 }

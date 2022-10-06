@@ -27,7 +27,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     const toggleName = "timeCtrl";
-    const label = ucfirst(this._host.i18n("ui.timeCtrl"));
+    const label = ucfirst(this._host.engine.i18n("ui.timeCtrl"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
@@ -41,16 +41,20 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       this._getOptionAccelerateTime(
         "accelerateTime",
         this._settings.accelerateTime,
-        this._host.i18n("option.accelerate")
+        this._host.engine.i18n("option.accelerate")
       ),
 
       this._getOptionTimeSkip(
         "timeSkip",
         this._settings.timeSkip,
-        this._host.i18n("option.time.skip")
+        this._host.engine.i18n("option.time.skip")
       ),
 
-      this._getOptionReset("reset", this._settings.reset, this._host.i18n("option.time.reset")),
+      this._getOptionReset(
+        "reset",
+        this._settings.reset,
+        this._host.engine.i18n("option.time.reset")
+      ),
     ];
 
     list.append(...optionButtons);
@@ -69,7 +73,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     const maximumButton = $('<div class="ks-icon-button"/>', {
       id: "set-timeSkip-maximum",
-      title: this._host.i18n("ui.maximum"),
+      title: this._host.engine.i18n("ui.maximum"),
     })
       .text("⍐")
       .data("option", option);
@@ -77,7 +81,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     maximumButton.on("click", () => {
       const value = SettingsSectionUi.promptLimit(
-        this._host.i18n("ui.max.set", [this._host.i18n("option.time.skip")]),
+        this._host.engine.i18n("ui.max.set", [this._host.engine.i18n("option.time.skip")]),
         option.maximum.toFixed(0)
       );
 
@@ -89,7 +93,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     const cyclesButton = $('<div class="ks-icon-button"/>', {
       id: `toggle-cycle-${name}`,
-      title: this._host.i18n("ui.cycles"),
+      title: this._host.engine.i18n("ui.cycles"),
     }).text("↻");
 
     const cyclesList = SettingsSectionUi.getList(`cycles-list-${name}`);
@@ -104,7 +108,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     const seasonsButton = $('<div class="ks-icon-button"/>', {
       id: `toggle-seasons-${name}`,
-      title: this._host.i18n("trade.seasons"),
+      title: this._host.engine.i18n("trade.seasons"),
     }).text("🗓");
 
     const seasonsList = SettingsSectionUi.getList(`seasons-list-${name}`);
@@ -144,19 +148,19 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "hut",
         "build",
         this._settings.buildItems.hut,
-        this._host.i18n("$buildings.hut.label")
+        this._host.engine.i18n("$buildings.hut.label")
       ),
       this._getResetOption(
         "logHouse",
         "build",
         this._settings.buildItems.logHouse,
-        this._host.i18n("$buildings.logHouse.label")
+        this._host.engine.i18n("$buildings.logHouse.label")
       ),
       this._getResetOption(
         "mansion",
         "build",
         this._settings.buildItems.mansion,
-        this._host.i18n("$buildings.mansion.label"),
+        this._host.engine.i18n("$buildings.mansion.label"),
         true
       ),
 
@@ -164,13 +168,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "workshop",
         "build",
         this._settings.buildItems.workshop,
-        this._host.i18n("$buildings.workshop.label")
+        this._host.engine.i18n("$buildings.workshop.label")
       ),
       this._getResetOption(
         "factory",
         "build",
         this._settings.buildItems.factory,
-        this._host.i18n("$buildings.factory.label"),
+        this._host.engine.i18n("$buildings.factory.label"),
         true
       ),
 
@@ -178,55 +182,55 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "field",
         "build",
         this._settings.buildItems.field,
-        this._host.i18n("$buildings.field.label")
+        this._host.engine.i18n("$buildings.field.label")
       ),
       this._getResetOption(
         "pasture",
         "build",
         this._settings.buildItems.pasture,
-        this._host.i18n("$buildings.pasture.label")
+        this._host.engine.i18n("$buildings.pasture.label")
       ),
       this._getResetOption(
         "solarFarm",
         "build",
         this._settings.buildItems.solarFarm,
-        this._host.i18n("$buildings.solarfarm.label")
+        this._host.engine.i18n("$buildings.solarfarm.label")
       ),
       this._getResetOption(
         "mine",
         "build",
         this._settings.buildItems.mine,
-        this._host.i18n("$buildings.mine.label")
+        this._host.engine.i18n("$buildings.mine.label")
       ),
       this._getResetOption(
         "lumberMill",
         "build",
         this._settings.buildItems.lumberMill,
-        this._host.i18n("$buildings.lumberMill.label")
+        this._host.engine.i18n("$buildings.lumberMill.label")
       ),
       this._getResetOption(
         "aqueduct",
         "build",
         this._settings.buildItems.aqueduct,
-        this._host.i18n("$buildings.aqueduct.label")
+        this._host.engine.i18n("$buildings.aqueduct.label")
       ),
       this._getResetOption(
         "hydroPlant",
         "build",
         this._settings.buildItems.hydroPlant,
-        this._host.i18n("$buildings.hydroplant.label")
+        this._host.engine.i18n("$buildings.hydroplant.label")
       ),
       this._getResetOption(
         "oilWell",
         "build",
         this._settings.buildItems.oilWell,
-        this._host.i18n("$buildings.oilWell.label")
+        this._host.engine.i18n("$buildings.oilWell.label")
       ),
       this._getResetOption(
         "quarry",
         "build",
         this._settings.buildItems.quarry,
-        this._host.i18n("$buildings.quarry.label"),
+        this._host.engine.i18n("$buildings.quarry.label"),
         true
       ),
 
@@ -234,43 +238,43 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "smelter",
         "build",
         this._settings.buildItems.smelter,
-        this._host.i18n("$buildings.smelter.label")
+        this._host.engine.i18n("$buildings.smelter.label")
       ),
       this._getResetOption(
         "biolab",
         "build",
         this._settings.buildItems.biolab,
-        this._host.i18n("$buildings.biolab.label")
+        this._host.engine.i18n("$buildings.biolab.label")
       ),
       this._getResetOption(
         "calciner",
         "build",
         this._settings.buildItems.calciner,
-        this._host.i18n("$buildings.calciner.label")
+        this._host.engine.i18n("$buildings.calciner.label")
       ),
       this._getResetOption(
         "reactor",
         "build",
         this._settings.buildItems.reactor,
-        this._host.i18n("$buildings.reactor.label")
+        this._host.engine.i18n("$buildings.reactor.label")
       ),
       this._getResetOption(
         "accelerator",
         "build",
         this._settings.buildItems.accelerator,
-        this._host.i18n("$buildings.accelerator.label")
+        this._host.engine.i18n("$buildings.accelerator.label")
       ),
       this._getResetOption(
         "steamworks",
         "build",
         this._settings.buildItems.steamworks,
-        this._host.i18n("$buildings.steamworks.label")
+        this._host.engine.i18n("$buildings.steamworks.label")
       ),
       this._getResetOption(
         "magneto",
         "build",
         this._settings.buildItems.magneto,
-        this._host.i18n("$buildings.magneto.label"),
+        this._host.engine.i18n("$buildings.magneto.label"),
         true
       ),
 
@@ -278,25 +282,25 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "library",
         "build",
         this._settings.buildItems.library,
-        this._host.i18n("$buildings.library.label")
+        this._host.engine.i18n("$buildings.library.label")
       ),
       this._getResetOption(
         "dataCenter",
         "build",
         this._settings.buildItems.dataCenter,
-        this._host.i18n("$buildings.dataCenter.label")
+        this._host.engine.i18n("$buildings.dataCenter.label")
       ),
       this._getResetOption(
         "academy",
         "build",
         this._settings.buildItems.academy,
-        this._host.i18n("$buildings.academy.label")
+        this._host.engine.i18n("$buildings.academy.label")
       ),
       this._getResetOption(
         "observatory",
         "build",
         this._settings.buildItems.observatory,
-        this._host.i18n("$buildings.observatory.label"),
+        this._host.engine.i18n("$buildings.observatory.label"),
         true
       ),
 
@@ -304,61 +308,61 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "amphitheatre",
         "build",
         this._settings.buildItems.amphitheatre,
-        this._host.i18n("$buildings.amphitheatre.label")
+        this._host.engine.i18n("$buildings.amphitheatre.label")
       ),
       this._getResetOption(
         "broadcastTower",
         "build",
         this._settings.buildItems.broadcastTower,
-        this._host.i18n("$buildings.broadcasttower.label")
+        this._host.engine.i18n("$buildings.broadcasttower.label")
       ),
       this._getResetOption(
         "tradepost",
         "build",
         this._settings.buildItems.tradepost,
-        this._host.i18n("$buildings.tradepost.label")
+        this._host.engine.i18n("$buildings.tradepost.label")
       ),
       this._getResetOption(
         "chapel",
         "build",
         this._settings.buildItems.chapel,
-        this._host.i18n("$buildings.chapel.label")
+        this._host.engine.i18n("$buildings.chapel.label")
       ),
       this._getResetOption(
         "temple",
         "build",
         this._settings.buildItems.temple,
-        this._host.i18n("$buildings.temple.label")
+        this._host.engine.i18n("$buildings.temple.label")
       ),
       this._getResetOption(
         "mint",
         "build",
         this._settings.buildItems.mint,
-        this._host.i18n("$buildings.mint.label")
+        this._host.engine.i18n("$buildings.mint.label")
       ),
       this._getResetOption(
         "ziggurat",
         "build",
         this._settings.buildItems.ziggurat,
-        this._host.i18n("$buildings.ziggurat.label")
+        this._host.engine.i18n("$buildings.ziggurat.label")
       ),
       this._getResetOption(
         "chronosphere",
         "build",
         this._settings.buildItems.chronosphere,
-        this._host.i18n("$buildings.chronosphere.label")
+        this._host.engine.i18n("$buildings.chronosphere.label")
       ),
       this._getResetOption(
         "aiCore",
         "build",
         this._settings.buildItems.aiCore,
-        this._host.i18n("$buildings.aicore.label")
+        this._host.engine.i18n("$buildings.aicore.label")
       ),
       this._getResetOption(
         "brewery",
         "build",
         this._settings.buildItems.brewery,
-        this._host.i18n("$buildings.brewery.label"),
+        this._host.engine.i18n("$buildings.brewery.label"),
         true
       ),
 
@@ -366,19 +370,19 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "barn",
         "build",
         this._settings.buildItems.barn,
-        this._host.i18n("$buildings.barn.label")
+        this._host.engine.i18n("$buildings.barn.label")
       ),
       this._getResetOption(
         "harbor",
         "build",
         this._settings.buildItems.harbor,
-        this._host.i18n("$buildings.harbor.label")
+        this._host.engine.i18n("$buildings.harbor.label")
       ),
       this._getResetOption(
         "warehouse",
         "build",
         this._settings.buildItems.warehouse,
-        this._host.i18n("$buildings.warehouse.label"),
+        this._host.engine.i18n("$buildings.warehouse.label"),
         true
       ),
 
@@ -386,19 +390,19 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "zebraOutpost",
         "build",
         this._settings.buildItems.zebraOutpost,
-        this._host.i18n("$buildings.zebraOutpost.label")
+        this._host.engine.i18n("$buildings.zebraOutpost.label")
       ),
       this._getResetOption(
         "zebraWorkshop",
         "build",
         this._settings.buildItems.zebraWorkshop,
-        this._host.i18n("$buildings.zebraWorkshop.label")
+        this._host.engine.i18n("$buildings.zebraWorkshop.label")
       ),
       this._getResetOption(
         "zebraForge",
         "build",
         this._settings.buildItems.zebraForge,
-        this._host.i18n("$buildings.zebraForge.label")
+        this._host.engine.i18n("$buildings.zebraForge.label")
       )
     );
 
@@ -409,19 +413,19 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "spaceElevator",
         "space",
         this._settings.spaceItems.spaceElevator,
-        this._host.i18n("$space.planet.cath.spaceElevator.label")
+        this._host.engine.i18n("$space.planet.cath.spaceElevator.label")
       ),
       this._getResetOption(
         "sattelite",
         "space",
         this._settings.spaceItems.sattelite,
-        this._host.i18n("$space.planet.cath.sattelite.label")
+        this._host.engine.i18n("$space.planet.cath.sattelite.label")
       ),
       this._getResetOption(
         "spaceStation",
         "space",
         this._settings.spaceItems.spaceStation,
-        this._host.i18n("$space.planet.cath.spaceStation.label"),
+        this._host.engine.i18n("$space.planet.cath.spaceStation.label"),
         true
       ),
 
@@ -429,13 +433,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "moonOutpost",
         "space",
         this._settings.spaceItems.moonOutpost,
-        this._host.i18n("$space.planet.moon.moonOutpost.label")
+        this._host.engine.i18n("$space.planet.moon.moonOutpost.label")
       ),
       this._getResetOption(
         "moonBase",
         "space",
         this._settings.spaceItems.moonBase,
-        this._host.i18n("$space.planet.moon.moonBase.label"),
+        this._host.engine.i18n("$space.planet.moon.moonBase.label"),
         true
       ),
 
@@ -443,19 +447,19 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "planetCracker",
         "space",
         this._settings.spaceItems.planetCracker,
-        this._host.i18n("$space.planet.dune.planetCracker.label")
+        this._host.engine.i18n("$space.planet.dune.planetCracker.label")
       ),
       this._getResetOption(
         "hydrofracturer",
         "space",
         this._settings.spaceItems.hydrofracturer,
-        this._host.i18n("$space.planet.dune.hydrofracturer.label")
+        this._host.engine.i18n("$space.planet.dune.hydrofracturer.label")
       ),
       this._getResetOption(
         "spiceRefinery",
         "space",
         this._settings.spaceItems.spiceRefinery,
-        this._host.i18n("$space.planet.dune.spiceRefinery.label"),
+        this._host.engine.i18n("$space.planet.dune.spiceRefinery.label"),
         true
       ),
 
@@ -463,13 +467,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "researchVessel",
         "space",
         this._settings.spaceItems.researchVessel,
-        this._host.i18n("$space.planet.piscine.researchVessel.label")
+        this._host.engine.i18n("$space.planet.piscine.researchVessel.label")
       ),
       this._getResetOption(
         "orbitalArray",
         "space",
         this._settings.spaceItems.orbitalArray,
-        this._host.i18n("$space.planet.piscine.orbitalArray.label"),
+        this._host.engine.i18n("$space.planet.piscine.orbitalArray.label"),
         true
       ),
 
@@ -477,25 +481,25 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "sunlifter",
         "space",
         this._settings.spaceItems.sunlifter,
-        this._host.i18n("$space.planet.helios.sunlifter.label")
+        this._host.engine.i18n("$space.planet.helios.sunlifter.label")
       ),
       this._getResetOption(
         "containmentChamber",
         "space",
         this._settings.spaceItems.containmentChamber,
-        this._host.i18n("$space.planet.helios.containmentChamber.label")
+        this._host.engine.i18n("$space.planet.helios.containmentChamber.label")
       ),
       this._getResetOption(
         "heatsink",
         "space",
         this._settings.spaceItems.heatsink,
-        this._host.i18n("$space.planet.helios.heatsink.label")
+        this._host.engine.i18n("$space.planet.helios.heatsink.label")
       ),
       this._getResetOption(
         "sunforge",
         "space",
         this._settings.spaceItems.sunforge,
-        this._host.i18n("$space.planet.helios.sunforge.label"),
+        this._host.engine.i18n("$space.planet.helios.sunforge.label"),
         true
       ),
 
@@ -503,7 +507,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "cryostation",
         "space",
         this._settings.spaceItems.cryostation,
-        this._host.i18n("$space.planet.terminus.cryostation.label"),
+        this._host.engine.i18n("$space.planet.terminus.cryostation.label"),
         true
       ),
 
@@ -511,7 +515,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "spaceBeacon",
         "space",
         this._settings.spaceItems.spaceBeacon,
-        this._host.i18n("$space.planet.kairo.spaceBeacon.label"),
+        this._host.engine.i18n("$space.planet.kairo.spaceBeacon.label"),
         true
       ),
 
@@ -519,13 +523,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "terraformingStation",
         "space",
         this._settings.spaceItems.terraformingStation,
-        this._host.i18n("$space.planet.yarn.terraformingStation.label")
+        this._host.engine.i18n("$space.planet.yarn.terraformingStation.label")
       ),
       this._getResetOption(
         "hydroponics",
         "space",
         this._settings.spaceItems.hydroponics,
-        this._host.i18n("$space.planet.yarn.hydroponics.label"),
+        this._host.engine.i18n("$space.planet.yarn.hydroponics.label"),
         true
       ),
 
@@ -533,7 +537,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "hrHarvester",
         "space",
         this._settings.spaceItems.hrHarvester,
-        this._host.i18n("$space.planet.umbra.hrHarvester.label"),
+        this._host.engine.i18n("$space.planet.umbra.hrHarvester.label"),
         true
       ),
 
@@ -541,7 +545,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "entangler",
         "space",
         this._settings.spaceItems.entangler,
-        this._host.i18n("$space.planet.charon.entangler.label"),
+        this._host.engine.i18n("$space.planet.charon.entangler.label"),
         true
       ),
 
@@ -549,13 +553,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "tectonic",
         "space",
         this._settings.spaceItems.tectonic,
-        this._host.i18n("$space.planet.centaurusSystem.tectonic.label")
+        this._host.engine.i18n("$space.planet.centaurusSystem.tectonic.label")
       ),
       this._getResetOption(
         "moltenCore",
         "space",
         this._settings.spaceItems.moltenCore,
-        this._host.i18n("$space.planet.centaurusSystem.moltenCore.label")
+        this._host.engine.i18n("$space.planet.centaurusSystem.moltenCore.label")
       )
     );
 
@@ -569,43 +573,43 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "unicornPasture",
         "faith",
         this._settings.religionItems.unicornPasture,
-        this._host.i18n("$buildings.unicornPasture.label")
+        this._host.engine.i18n("$buildings.unicornPasture.label")
       ),
       this._getResetOption(
         "unicornTomb",
         "faith",
         this._settings.religionItems.unicornTomb,
-        this._host.i18n("$religion.zu.unicornTomb.label")
+        this._host.engine.i18n("$religion.zu.unicornTomb.label")
       ),
       this._getResetOption(
         "ivoryTower",
         "faith",
         this._settings.religionItems.ivoryTower,
-        this._host.i18n("$religion.zu.ivoryTower.label")
+        this._host.engine.i18n("$religion.zu.ivoryTower.label")
       ),
       this._getResetOption(
         "ivoryCitadel",
         "faith",
         this._settings.religionItems.ivoryCitadel,
-        this._host.i18n("$religion.zu.ivoryCitadel.label")
+        this._host.engine.i18n("$religion.zu.ivoryCitadel.label")
       ),
       this._getResetOption(
         "skyPalace",
         "faith",
         this._settings.religionItems.skyPalace,
-        this._host.i18n("$religion.zu.skyPalace.label")
+        this._host.engine.i18n("$religion.zu.skyPalace.label")
       ),
       this._getResetOption(
         "unicornUtopia",
         "faith",
         this._settings.religionItems.unicornUtopia,
-        this._host.i18n("$religion.zu.unicornUtopia.label")
+        this._host.engine.i18n("$religion.zu.unicornUtopia.label")
       ),
       this._getResetOption(
         "sunspire",
         "faith",
         this._settings.religionItems.sunspire,
-        this._host.i18n("$religion.zu.sunspire.label"),
+        this._host.engine.i18n("$religion.zu.sunspire.label"),
         true
       ),
 
@@ -613,25 +617,25 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "marker",
         "faith",
         this._settings.religionItems.marker,
-        this._host.i18n("$religion.zu.marker.label")
+        this._host.engine.i18n("$religion.zu.marker.label")
       ),
       this._getResetOption(
         "unicornGraveyard",
         "faith",
         this._settings.religionItems.unicornGraveyard,
-        this._host.i18n("$religion.zu.unicornGraveyard.label")
+        this._host.engine.i18n("$religion.zu.unicornGraveyard.label")
       ),
       this._getResetOption(
         "unicornNecropolis",
         "faith",
         this._settings.religionItems.unicornNecropolis,
-        this._host.i18n("$religion.zu.unicornNecropolis.label")
+        this._host.engine.i18n("$religion.zu.unicornNecropolis.label")
       ),
       this._getResetOption(
         "blackPyramid",
         "faith",
         this._settings.religionItems.blackPyramid,
-        this._host.i18n("$religion.zu.blackPyramid.label"),
+        this._host.engine.i18n("$religion.zu.blackPyramid.label"),
         true
       ),
 
@@ -639,61 +643,61 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "solarchant",
         "faith",
         this._settings.religionItems.solarchant,
-        this._host.i18n("$religion.ru.solarchant.label")
+        this._host.engine.i18n("$religion.ru.solarchant.label")
       ),
       this._getResetOption(
         "scholasticism",
         "faith",
         this._settings.religionItems.scholasticism,
-        this._host.i18n("$religion.ru.scholasticism.label")
+        this._host.engine.i18n("$religion.ru.scholasticism.label")
       ),
       this._getResetOption(
         "goldenSpire",
         "faith",
         this._settings.religionItems.goldenSpire,
-        this._host.i18n("$religion.ru.goldenSpire.label")
+        this._host.engine.i18n("$religion.ru.goldenSpire.label")
       ),
       this._getResetOption(
         "sunAltar",
         "faith",
         this._settings.religionItems.sunAltar,
-        this._host.i18n("$religion.ru.sunAltar.label")
+        this._host.engine.i18n("$religion.ru.sunAltar.label")
       ),
       this._getResetOption(
         "stainedGlass",
         "faith",
         this._settings.religionItems.stainedGlass,
-        this._host.i18n("$religion.ru.stainedGlass.label")
+        this._host.engine.i18n("$religion.ru.stainedGlass.label")
       ),
       this._getResetOption(
         "solarRevolution",
         "faith",
         this._settings.religionItems.solarRevolution,
-        this._host.i18n("$religion.ru.solarRevolution.label")
+        this._host.engine.i18n("$religion.ru.solarRevolution.label")
       ),
       this._getResetOption(
         "basilica",
         "faith",
         this._settings.religionItems.basilica,
-        this._host.i18n("$religion.ru.basilica.label")
+        this._host.engine.i18n("$religion.ru.basilica.label")
       ),
       this._getResetOption(
         "templars",
         "faith",
         this._settings.religionItems.templars,
-        this._host.i18n("$religion.ru.templars.label")
+        this._host.engine.i18n("$religion.ru.templars.label")
       ),
       this._getResetOption(
         "apocripha",
         "faith",
         this._settings.religionItems.apocripha,
-        this._host.i18n("$religion.ru.apocripha.label")
+        this._host.engine.i18n("$religion.ru.apocripha.label")
       ),
       this._getResetOption(
         "transcendence",
         "faith",
         this._settings.religionItems.transcendence,
-        this._host.i18n("$religion.ru.transcendence.label"),
+        this._host.engine.i18n("$religion.ru.transcendence.label"),
         true
       ),
 
@@ -701,55 +705,55 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "blackObelisk",
         "faith",
         this._settings.religionItems.blackObelisk,
-        this._host.i18n("$religion.tu.blackObelisk.label")
+        this._host.engine.i18n("$religion.tu.blackObelisk.label")
       ),
       this._getResetOption(
         "blackNexus",
         "faith",
         this._settings.religionItems.blackNexus,
-        this._host.i18n("$religion.tu.blackNexus.label")
+        this._host.engine.i18n("$religion.tu.blackNexus.label")
       ),
       this._getResetOption(
         "blackCore",
         "faith",
         this._settings.religionItems.blackCore,
-        this._host.i18n("$religion.tu.blackCore.label")
+        this._host.engine.i18n("$religion.tu.blackCore.label")
       ),
       this._getResetOption(
         "singularity",
         "faith",
         this._settings.religionItems.singularity,
-        this._host.i18n("$religion.tu.singularity.label")
+        this._host.engine.i18n("$religion.tu.singularity.label")
       ),
       this._getResetOption(
         "blackLibrary",
         "faith",
         this._settings.religionItems.blackLibrary,
-        this._host.i18n("$religion.tu.blackLibrary.label")
+        this._host.engine.i18n("$religion.tu.blackLibrary.label")
       ),
       this._getResetOption(
         "blackRadiance",
         "faith",
         this._settings.religionItems.blackRadiance,
-        this._host.i18n("$religion.tu.blackRadiance.label")
+        this._host.engine.i18n("$religion.tu.blackRadiance.label")
       ),
       this._getResetOption(
         "blazar",
         "faith",
         this._settings.religionItems.blazar,
-        this._host.i18n("$religion.tu.blazar.label")
+        this._host.engine.i18n("$religion.tu.blazar.label")
       ),
       this._getResetOption(
         "darkNova",
         "faith",
         this._settings.religionItems.darkNova,
-        this._host.i18n("$religion.tu.darkNova.label")
+        this._host.engine.i18n("$religion.tu.darkNova.label")
       ),
       this._getResetOption(
         "holyGenocide",
         "faith",
         this._settings.religionItems.holyGenocide,
-        this._host.i18n("$religion.tu.holyGenocide.label")
+        this._host.engine.i18n("$religion.tu.holyGenocide.label")
       )
     );
 
@@ -759,37 +763,37 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "temporalBattery",
         "time",
         this._settings.timeItems.temporalBattery,
-        this._host.i18n("$time.cfu.temporalBattery.label")
+        this._host.engine.i18n("$time.cfu.temporalBattery.label")
       ),
       this._getResetOption(
         "blastFurnace",
         "time",
         this._settings.timeItems.blastFurnace,
-        this._host.i18n("$time.cfu.blastFurnace.label")
+        this._host.engine.i18n("$time.cfu.blastFurnace.label")
       ),
       this._getResetOption(
         "timeBoiler",
         "time",
         this._settings.timeItems.timeBoiler,
-        this._host.i18n("$time.cfu.timeBoiler.label")
+        this._host.engine.i18n("$time.cfu.timeBoiler.label")
       ),
       this._getResetOption(
         "temporalAccelerator",
         "time",
         this._settings.timeItems.temporalAccelerator,
-        this._host.i18n("$time.cfu.temporalAccelerator.label")
+        this._host.engine.i18n("$time.cfu.temporalAccelerator.label")
       ),
       this._getResetOption(
         "temporalImpedance",
         "time",
         this._settings.timeItems.temporalImpedance,
-        this._host.i18n("$time.cfu.temporalImpedance.label")
+        this._host.engine.i18n("$time.cfu.temporalImpedance.label")
       ),
       this._getResetOption(
         "ressourceRetrieval",
         "time",
         this._settings.timeItems.ressourceRetrieval,
-        this._host.i18n("$time.cfu.ressourceRetrieval.label"),
+        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
@@ -797,38 +801,38 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
         "cryochambers",
         "time",
         this._settings.timeItems.cryochambers,
-        this._host.i18n("$time.vsu.cryochambers.label")
+        this._host.engine.i18n("$time.vsu.cryochambers.label")
       ),
       this._getResetOption(
         "voidHoover",
         "time",
         this._settings.timeItems.voidHoover,
-        this._host.i18n("$time.vsu.voidHoover.label")
+        this._host.engine.i18n("$time.vsu.voidHoover.label")
       ),
       this._getResetOption(
         "voidRift",
         "time",
         this._settings.timeItems.voidRift,
-        this._host.i18n("$time.vsu.voidRift.label")
+        this._host.engine.i18n("$time.vsu.voidRift.label")
       ),
       this._getResetOption(
         "chronocontrol",
         "time",
         this._settings.timeItems.chronocontrol,
-        this._host.i18n("$time.vsu.chronocontrol.label")
+        this._host.engine.i18n("$time.vsu.chronocontrol.label")
       ),
       this._getResetOption(
         "voidResonator",
         "time",
         this._settings.timeItems.voidResonator,
-        this._host.i18n("$time.vsu.voidResonator.label")
+        this._host.engine.i18n("$time.vsu.voidResonator.label")
       )
     );
 
     const buildButton = $("<div/>", {
       id: "toggle-reset-build",
       text: "🔥",
-      title: this._host.i18n("ui.build"),
+      title: this._host.engine.i18n("ui.build"),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -840,7 +844,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const spaceButton = $("<div/>", {
       id: "toggle-reset-space",
       text: "🚀",
-      title: this._host.i18n("ui.space"),
+      title: this._host.engine.i18n("ui.space"),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -851,12 +855,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     });
     const resourcesButton = $('<div class="ks-icon-button"/>', {
       id: "toggle-reset-resources",
-      title: this._host.i18n("ui.craft.resources"),
+      title: this._host.engine.i18n("ui.craft.resources"),
     }).text("🛠");
     const religionButton = $("<div/>", {
       id: "toggle-reset-religion",
       text: "🐈",
-      title: this._host.i18n("ui.faith"),
+      title: this._host.engine.i18n("ui.faith"),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -868,7 +872,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const timeButton = $("<div/>", {
       id: "toggle-reset-time",
       text: "🕙",
-      title: this._host.i18n("ui.time"),
+      title: this._host.engine.i18n("ui.time"),
       css: {
         cursor: "pointer",
         display: "inline-block",
@@ -960,10 +964,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     input.on("change", () => {
       if (input.is(":checked") && option[index] === false) {
         this._host.updateOptions(() => (option[index] = true));
-        this._host.imessage("time.skip.cycle.enable", [cycle.title]);
+        this._host.engine.imessage("time.skip.cycle.enable", [cycle.title]);
       } else if (!input.is(":checked") && option[index] === true) {
         this._host.updateOptions(() => (option[index] = false));
-        this._host.imessage("time.skip.cycle.disable", [cycle.title]);
+        this._host.engine.imessage("time.skip.cycle.disable", [cycle.title]);
       }
     });
 
@@ -990,11 +994,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       {
         onCheck: () => {
           this._host.updateOptions(() => (option.enabled = true));
-          this._host.imessage("status.reset.check.enable", [i18nName]);
+          this._host.engine.imessage("status.reset.check.enable", [i18nName]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (option.enabled = false));
-          this._host.imessage("status.reset.check.disable", [i18nName]);
+          this._host.engine.imessage("status.reset.check.disable", [i18nName]);
         },
       }
     );
@@ -1004,7 +1008,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     season: Season,
     option: TimeControlTimeSkipSettings
   ): JQuery<HTMLElement> {
-    const iseason = ucfirst(this._host.i18n(`$calendar.season.${season}` as const));
+    const iseason = ucfirst(this._host.engine.i18n(`$calendar.season.${season}` as const));
 
     const element = $("<li/>");
 
@@ -1022,10 +1026,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     input.on("change", () => {
       if (input.is(":checked") && option[season] === false) {
         this._host.updateOptions(() => (option[season] = true));
-        this._host.imessage("time.skip.season.enable", [iseason]);
+        this._host.engine.imessage("time.skip.season.enable", [iseason]);
       } else if (!input.is(":checked") && option[season] === true) {
         this._host.updateOptions(() => (option[season] = false));
-        this._host.imessage("time.skip.season.disable", [iseason]);
+        this._host.engine.imessage("time.skip.season.disable", [iseason]);
       }
     });
 
@@ -1044,7 +1048,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     // Add all the current resources
     for (const [name, item] of objectEntries(this._settings.resources)) {
       this._resourcesList.append(
-        this._addNewResourceOption(name, ucfirst(this._host.i18n(`$resources.${name}.title`)), item)
+        this._addNewResourceOption(
+          name,
+          ucfirst(this._host.engine.i18n(`$resources.${name}.title`)),
+          item
+        )
       );
       //this.setStockValue(name, item.stock);
       //this.setConsumeRate(name, item.consume);
@@ -1075,7 +1083,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     // How many items to stock.
     const stockElement = $("<div/>", {
       id: `stock-value-${name}`,
-      text: this._host.i18n("resources.stock", [this._renderLimit(stock)]),
+      text: this._host.engine.i18n("resources.stock", [this._renderLimit(stock)]),
       css: { cursor: "pointer", display: "inline-block", width: "80px" },
     });
 
@@ -1083,13 +1091,13 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     stockElement.on("click", () => {
       const value = SettingsSectionUi.promptLimit(
-        this._host.i18n("resources.stock.set", [title]),
+        this._host.engine.i18n("resources.stock.set", [title]),
         setting.stock.toFixed(0)
       );
       if (value !== null) {
         setting.enabled = true;
         setting.stock = value;
-        stockElement.text(this._host.i18n("resources.stock", [this._renderLimit(value)]));
+        stockElement.text(this._host.engine.i18n("resources.stock", [this._renderLimit(value)]));
         this._host.updateOptions();
       }
     });
@@ -1198,31 +1206,39 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     for (const [name, option] of objectEntries(this._settings.buildItems)) {
       mustExist(option.$enabled).prop("checked", this._settings.buildItems[name].enabled);
       mustExist(option.$trigger).text(
-        this._host.i18n("ui.min", [this._renderLimit(this._settings.buildItems[name].trigger)])
+        this._host.engine.i18n("ui.min", [
+          this._renderLimit(this._settings.buildItems[name].trigger),
+        ])
       );
     }
     for (const [name, option] of objectEntries(this._settings.religionItems)) {
       mustExist(option.$enabled).prop("checked", this._settings.religionItems[name].enabled);
       mustExist(option.$trigger).text(
-        this._host.i18n("ui.min", [this._renderLimit(this._settings.religionItems[name].trigger)])
+        this._host.engine.i18n("ui.min", [
+          this._renderLimit(this._settings.religionItems[name].trigger),
+        ])
       );
     }
     for (const [name, option] of objectEntries(this._settings.spaceItems)) {
       mustExist(option.$enabled).prop("checked", this._settings.spaceItems[name].enabled);
       mustExist(option.$trigger).text(
-        this._host.i18n("ui.min", [this._renderLimit(this._settings.spaceItems[name].trigger)])
+        this._host.engine.i18n("ui.min", [
+          this._renderLimit(this._settings.spaceItems[name].trigger),
+        ])
       );
     }
     for (const [name, option] of objectEntries(this._settings.timeItems)) {
       mustExist(option.$enabled).prop("checked", this._settings.timeItems[name].enabled);
       mustExist(option.$trigger).text(
-        this._host.i18n("ui.min", [this._renderLimit(this._settings.timeItems[name].trigger)])
+        this._host.engine.i18n("ui.min", [
+          this._renderLimit(this._settings.timeItems[name].trigger),
+        ])
       );
     }
 
     for (const [name, option] of objectEntries(this._settings.resources)) {
       mustExist(option.$stock).text(
-        this._host.i18n("resources.stock", [
+        this._host.engine.i18n("resources.stock", [
           this._renderLimit(mustExist(this._settings.resources[name]).stock),
         ])
       );

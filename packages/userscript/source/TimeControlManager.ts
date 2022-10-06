@@ -266,7 +266,7 @@ export class TimeControlManager {
     try {
       for (const checked of checkedList) {
         await sleep(500);
-        this._host.imessage("reset.check", [
+        this._host.engine.imessage("reset.check", [
           checked.name,
           this._host.gamePage.getDisplayValueExt(checked.trigger),
           this._host.gamePage.getDisplayValueExt(checked.val),
@@ -274,37 +274,37 @@ export class TimeControlManager {
       }
 
       await sleep(0);
-      this._host.imessage("reset.checked");
+      this._host.engine.imessage("reset.checked");
       await sleep();
-      this._host.iactivity("reset.tip");
+      this._host.engine.iactivity("reset.tip");
       await sleep();
-      this._host.imessage("reset.countdown.10");
+      this._host.engine.imessage("reset.countdown.10");
       await sleep(2000);
-      this._host.imessage("reset.countdown.9");
+      this._host.engine.imessage("reset.countdown.9");
       await sleep();
-      this._host.imessage("reset.countdown.8");
+      this._host.engine.imessage("reset.countdown.8");
       await sleep();
-      this._host.imessage("reset.countdown.7");
+      this._host.engine.imessage("reset.countdown.7");
       await sleep();
-      this._host.imessage("reset.countdown.6");
+      this._host.engine.imessage("reset.countdown.6");
       await sleep();
-      this._host.imessage("reset.countdown.5");
+      this._host.engine.imessage("reset.countdown.5");
       await sleep();
-      this._host.imessage("reset.countdown.4");
+      this._host.engine.imessage("reset.countdown.4");
       await sleep();
-      this._host.imessage("reset.countdown.3");
+      this._host.engine.imessage("reset.countdown.3");
       await sleep();
-      this._host.imessage("reset.countdown.2");
+      this._host.engine.imessage("reset.countdown.2");
       await sleep();
-      this._host.imessage("reset.countdown.1");
+      this._host.engine.imessage("reset.countdown.1");
       await sleep();
-      this._host.imessage("reset.countdown.0");
+      this._host.engine.imessage("reset.countdown.0");
       await sleep();
-      this._host.iactivity("reset.last.message");
+      this._host.engine.iactivity("reset.last.message");
       await sleep();
     } catch (error) {
-      this._host.imessage("reset.cancel.message");
-      this._host.iactivity("reset.cancel.activity");
+      this._host.engine.imessage("reset.cancel.message");
+      this._host.engine.iactivity("reset.cancel.activity");
       return;
     }
 
@@ -330,8 +330,8 @@ export class TimeControlManager {
     const temporalFlux = this._host.gamePage.resPool.get("temporalFlux");
     if (temporalFlux.value >= temporalFlux.maxValue * this.settings.accelerateTime.trigger) {
       this._host.gamePage.time.isAccelerated = true;
-      this._host.iactivity("act.accelerate", [], "ks-accelerate");
-      this._host.storeForSummary("accelerate", 1);
+      this._host.engine.iactivity("act.accelerate", [], "ks-accelerate");
+      this._host.engine.storeForSummary("accelerate", 1);
     }
   }
 
@@ -408,9 +408,9 @@ export class TimeControlManager {
     // If we found we can skip any years, do so now.
     if (0 < willSkip) {
       const shatter = this._host.gamePage.timeTab.cfPanel.children[0].children[0]; // check?
-      this._host.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
+      this._host.engine.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
       shatter.controller.doShatterAmt(shatter.model, willSkip);
-      this._host.storeForSummary("time.skip", willSkip);
+      this._host.engine.storeForSummary("time.skip", willSkip);
     }
   }
 

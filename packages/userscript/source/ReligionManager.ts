@@ -188,7 +188,7 @@ export class ReligionManager implements Automation {
       this._host.gamePage.religion._resetFaithInternal(1.01);
 
       // Log the action.
-      this._host.iactivity(
+      this._host.engine.iactivity(
         "act.adore",
         [
           this._host.gamePage.getDisplayValueExt(worship),
@@ -196,7 +196,7 @@ export class ReligionManager implements Automation {
         ],
         "ks-adore"
       );
-      this._host.storeForSummary("adore", epiphanyIncrease);
+      this._host.engine.storeForSummary("adore", epiphanyIncrease);
       // TODO: Not sure what the point of updating these values would be
       //       We're at the end of the branch.
       //epiphany = this._host.gamePage.religion.faithRatio;
@@ -250,7 +250,7 @@ export class ReligionManager implements Automation {
         blackObelisk.calculateEffects(blackObelisk, this._host.gamePage);
 
         this._host.gamePage.msg(
-          this._host.i18nEngine("religion.transcend.msg.success", [
+          this._host.engine.i18n("$religion.transcend.msg.success", [
             this._host.gamePage.religion.transcendenceTier,
           ])
         );
@@ -260,12 +260,12 @@ export class ReligionManager implements Automation {
 
         epiphany = this._host.gamePage.religion.faithRatio;
         transcendenceTierCurrent = this._host.gamePage.religion.transcendenceTier;
-        this._host.iactivity(
+        this._host.engine.iactivity(
           "act.transcend",
           [this._host.gamePage.getDisplayValueExt(needNextLevel), transcendenceTierCurrent],
           "ks-transcend"
         );
-        this._host.storeForSummary("transcend", 1);
+        this._host.engine.storeForSummary("transcend", 1);
       }
     }
   }
@@ -281,8 +281,8 @@ export class ReligionManager implements Automation {
 
     // Determine how much worship we'll gain and log it.
     const worshipIncrease = faith.value * (1 + apocryphaBonus);
-    this._host.storeForSummary("praise", worshipIncrease);
-    this._host.iactivity(
+    this._host.engine.storeForSummary("praise", worshipIncrease);
+    this._host.engine.iactivity(
       "act.praise",
       [
         this._host.gamePage.getDisplayValueExt(faith.value),
@@ -518,22 +518,24 @@ export class ReligionManager implements Automation {
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);
     if (amount !== amountTemp) {
-      this._host.warning(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
+      this._host.engine.warning(
+        `${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`
+      );
     }
 
     if (variant === UnicornItemVariant.OrderOfTheSun) {
-      this._host.storeForSummary(label, amount, "faith");
+      this._host.engine.storeForSummary(label, amount, "faith");
       if (amount === 1) {
-        this._host.iactivity("act.sun.discover", [label], "ks-faith");
+        this._host.engine.iactivity("act.sun.discover", [label], "ks-faith");
       } else {
-        this._host.iactivity("act.sun.discovers", [label, amount], "ks-faith");
+        this._host.engine.iactivity("act.sun.discovers", [label, amount], "ks-faith");
       }
     } else {
-      this._host.storeForSummary(label, amount, "build");
+      this._host.engine.storeForSummary(label, amount, "build");
       if (amount === 1) {
-        this._host.iactivity("act.build", [label], "ks-build");
+        this._host.engine.iactivity("act.build", [label], "ks-build");
       } else {
-        this._host.iactivity("act.builds", [label, amount], "ks-build");
+        this._host.engine.iactivity("act.builds", [label, amount], "ks-build");
       }
     }
   }

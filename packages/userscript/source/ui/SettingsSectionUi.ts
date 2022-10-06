@@ -78,10 +78,10 @@ export abstract class SettingsSectionUi {
     enabledElement.on("change", () => {
       if (enabledElement.is(":checked") && options.enabled === false) {
         this._host.updateOptions(() => (options.enabled = true));
-        this._host.imessage("status.auto.enable", [label]);
+        this._host.engine.imessage("status.auto.enable", [label]);
       } else if (!enabledElement.is(":checked") && options.enabled === true) {
         this._host.updateOptions(() => (options.enabled = false));
-        this._host.imessage("status.auto.disable", [label]);
+        this._host.engine.imessage("status.auto.disable", [label]);
       }
     });
 
@@ -101,7 +101,9 @@ export abstract class SettingsSectionUi {
       itemsElement.text(this._itemsExpanded ? "-" : "+");
       itemsElement.prop(
         "title",
-        this._itemsExpanded ? this._host.i18n("ui.itemsHide") : this._host.i18n("ui.itemsShow")
+        this._itemsExpanded
+          ? this._host.engine.i18n("ui.itemsHide")
+          : this._host.engine.i18n("ui.itemsShow")
       );
     });
 
@@ -129,7 +131,7 @@ export abstract class SettingsSectionUi {
     return $("<div/>", {
       id: `toggle-items-${id}`,
       text: "+",
-      title: this._host.i18n("ui.itemsShow"),
+      title: this._host.engine.i18n("ui.itemsShow"),
       css: {
         border: "1px solid rgba(255, 255, 255, 0.2)",
         cursor: "pointer",
@@ -185,7 +187,7 @@ export abstract class SettingsSectionUi {
     return SettingsSectionUi.getTriggerButton(id, {
       onClick: () => {
         const value = SettingsSectionUi.promptPercentage(
-          this._host.i18n("ui.trigger.set", [itext]),
+          this._host.engine.i18n("ui.trigger.set", [itext]),
           SettingsSectionUi.renderPercentage(options.trigger)
         );
 
@@ -216,7 +218,7 @@ export abstract class SettingsSectionUi {
 
     const disableAllButton = $('<div class="ks-button"/>', {
       id: `toggle-all-items-${id}`,
-    }).text(this._host.i18n("ui.disable.all"));
+    }).text(this._host.engine.i18n("ui.disable.all"));
 
     disableAllButton.on("click", function () {
       // can't use find as we only want one layer of checkboxes
@@ -230,7 +232,7 @@ export abstract class SettingsSectionUi {
 
     const enableAllButton = $('<div class="ks-button ks-margin-right"/>', {
       id: `toggle-all-items-${id}`,
-    }).text(this._host.i18n("ui.enable.all"));
+    }).text(this._host.engine.i18n("ui.enable.all"));
 
     enableAllButton.on("click", function () {
       // can't use find as we only want one layer of checkboxes
@@ -305,11 +307,11 @@ export abstract class SettingsSectionUi {
     return SettingMaxUi.make(this._host, name, option, label, delimiter, upgradeIndicator, {
       onCheck: () => {
         this._host.updateOptions(() => (option.enabled = true));
-        this._host.imessage("status.auto.enable", [label]);
+        this._host.engine.imessage("status.auto.enable", [label]);
       },
       onUnCheck: () => {
         this._host.updateOptions(() => (option.enabled = false));
-        this._host.imessage("status.auto.disable", [label]);
+        this._host.engine.imessage("status.auto.disable", [label]);
       },
     });
   }
@@ -365,7 +367,7 @@ export abstract class SettingsSectionUi {
 
   setConsumeRate(name: Resource, value: number): void {
     if (value < 0.0 || 1.0 < value) {
-      this._host.warning(`ignoring non-numeric or invalid consume rate ${value}`);
+      this._host.engine.warning(`ignoring non-numeric or invalid consume rate ${value}`);
       return;
     }
 

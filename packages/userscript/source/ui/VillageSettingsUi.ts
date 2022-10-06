@@ -22,7 +22,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     const toggleName = "distribute";
-    const label = ucfirst(this._host.i18n("ui.distribute"));
+    const label = ucfirst(this._host.engine.i18n("ui.distribute"));
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
@@ -36,42 +36,42 @@ export class VillageSettingsUi extends SettingsSectionUi {
       this._getDistributeOption(
         "woodcutter",
         this._settings.items.woodcutter,
-        this._host.i18n("$village.job.woodcutter")
+        this._host.engine.i18n("$village.job.woodcutter")
       ),
       this._getDistributeOption(
         "farmer",
         this._settings.items.farmer,
-        this._host.i18n("$village.job.farmer")
+        this._host.engine.i18n("$village.job.farmer")
       ),
       this._getDistributeOption(
         "scholar",
         this._settings.items.scholar,
-        this._host.i18n("$village.job.scholar")
+        this._host.engine.i18n("$village.job.scholar")
       ),
       this._getDistributeOption(
         "hunter",
         this._settings.items.hunter,
-        this._host.i18n("$village.job.hunter")
+        this._host.engine.i18n("$village.job.hunter")
       ),
       this._getDistributeOption(
         "miner",
         this._settings.items.miner,
-        this._host.i18n("$village.job.miner")
+        this._host.engine.i18n("$village.job.miner")
       ),
       this._getDistributeOption(
         "priest",
         this._settings.items.priest,
-        this._host.i18n("$village.job.priest")
+        this._host.engine.i18n("$village.job.priest")
       ),
       this._getDistributeOption(
         "geologist",
         this._settings.items.geologist,
-        this._host.i18n("$village.job.geologist")
+        this._host.engine.i18n("$village.job.geologist")
       ),
       this._getDistributeOption(
         "engineer",
         this._settings.items.engineer,
-        this._host.i18n("$village.job.engineer"),
+        this._host.engine.i18n("$village.job.engineer"),
         true
       ),
     ];
@@ -95,11 +95,11 @@ export class VillageSettingsUi extends SettingsSectionUi {
     const element = SettingMaxUi.make(this._host, name, option, label, delimiter, false, {
       onCheck: () => {
         this._host.updateOptions(() => (option.enabled = true));
-        this._host.imessage("status.auto.enable", [label]);
+        this._host.engine.imessage("status.auto.enable", [label]);
       },
       onUnCheck: () => {
         this._host.updateOptions(() => (option.enabled = false));
-        this._host.imessage("status.auto.disable", [label]);
+        this._host.engine.imessage("status.auto.disable", [label]);
       },
     });
     return element;
@@ -112,17 +112,19 @@ export class VillageSettingsUi extends SettingsSectionUi {
       this._host,
       "hunt",
       this._settings.hunt,
-      this._host.i18n("option.hunt"),
+      this._host.engine.i18n("option.hunt"),
       false,
       false,
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.hunt.enabled = true));
-          this._host.imessage("status.auto.enable", [this._host.i18n("option.hunt")]);
+          this._host.engine.imessage("status.auto.enable", [this._host.engine.i18n("option.hunt")]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (this._settings.hunt.enabled = false));
-          this._host.imessage("status.auto.disable", [this._host.i18n("option.hunt")]);
+          this._host.engine.imessage("status.auto.disable", [
+            this._host.engine.i18n("option.hunt"),
+          ]);
         },
       }
     );
@@ -131,18 +133,22 @@ export class VillageSettingsUi extends SettingsSectionUi {
       this._host,
       "festival",
       this._settings.holdFestivals,
-      this._host.i18n("option.festival"),
+      this._host.engine.i18n("option.festival"),
       false,
       false,
       [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.holdFestivals.enabled = true));
-          this._host.imessage("status.auto.enable", [this._host.i18n("option.festival")]);
+          this._host.engine.imessage("status.auto.enable", [
+            this._host.engine.i18n("option.festival"),
+          ]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (this._settings.holdFestivals.enabled = false));
-          this._host.imessage("status.auto.disable", [this._host.i18n("option.festival")]);
+          this._host.engine.imessage("status.auto.disable", [
+            this._host.engine.i18n("option.festival"),
+          ]);
         },
       }
     );
@@ -151,18 +157,22 @@ export class VillageSettingsUi extends SettingsSectionUi {
       this._host,
       "promote",
       this._settings.promoteLeader,
-      this._host.i18n("option.promote"),
+      this._host.engine.i18n("option.promote"),
       false,
       false,
       [],
       {
         onCheck: () => {
           this._host.updateOptions(() => (this._settings.promoteLeader.enabled = true));
-          this._host.imessage("status.auto.enable", [this._host.i18n("option.promote")]);
+          this._host.engine.imessage("status.auto.enable", [
+            this._host.engine.i18n("option.promote"),
+          ]);
         },
         onUnCheck: () => {
           this._host.updateOptions(() => (this._settings.promoteLeader.enabled = false));
-          this._host.imessage("status.auto.disable", [this._host.i18n("option.promote")]);
+          this._host.engine.imessage("status.auto.disable", [
+            this._host.engine.i18n("option.promote"),
+          ]);
         },
       }
     );
@@ -204,7 +214,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
     for (const [name, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
       mustExist(option.$max).text(
-        this._host.i18n("ui.max", [this._renderLimit(this._settings.items[name].max)])
+        this._host.engine.i18n("ui.max", [this._renderLimit(this._settings.items[name].max)])
       );
     }
   }
