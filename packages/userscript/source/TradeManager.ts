@@ -339,9 +339,9 @@ export class TradeManager implements Automation {
           emBulk.race.embassyLevel += emBulk.val;
           this._host.storeForSummary("embassy", emBulk.val);
           if (emBulk.val !== 1) {
-            this._host.iactivity("build.embassies", [emBulk.val, emBulk.race.title], "ks-trade");
+            this._host.iactivity("build.embassies", [emBulk.val, emBulk.race.title], "ks-build");
           } else {
-            this._host.iactivity("build.embassy", [emBulk.val, emBulk.race.title], "ks-trade");
+            this._host.iactivity("build.embassy", [emBulk.val, emBulk.race.title], "ks-build");
           }
         }
 
