@@ -55,7 +55,7 @@ export class SettingLimitedUi {
     const input = $("<input/>", {
       id: `toggle-limited-${name}`,
       type: "checkbox",
-    }).data("option", setting);
+    });
     setting.$limited = input;
 
     input.on("change", () => {

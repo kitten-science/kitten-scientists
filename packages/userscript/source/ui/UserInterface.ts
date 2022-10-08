@@ -50,16 +50,16 @@ export class UserInterface {
   construct(): void {
     this._installCss();
 
-    const kg_version = "Kitten Scientists v" + (KS_VERSION ?? "(unknown)");
-    const optionsElement = $("<div/>", { id: "ks-options", css: { marginBottom: "10px" } });
-    const optionsListElement = $("<ul/>");
-    const optionsTitleElement = $("<div/>", {
-      css: { bottomBorder: "1px solid gray", marginBottom: "5px" },
-      text: kg_version,
-    });
+    const version = "Kitten Scientists v" + (KS_VERSION ?? "(unknown)");
 
+    const optionsElement = $("<div/>", { id: "ks" });
+    const optionsTitleElement = $("<div/>", {
+      id: "ks-version",
+      text: version,
+    });
     optionsElement.append(optionsTitleElement);
 
+    const optionsListElement = $("<ul/>");
     optionsListElement.append(this._engineUi.element);
     optionsListElement.append(this._bonfireUi.element);
     optionsListElement.append(this._distributeUi.element);
@@ -118,26 +118,14 @@ export class UserInterface {
     });
 
     // Set up the "show activity summary" area.
-    const activityBox = $("<div/>", {
-      id: "activity-box",
-      css: {
-        display: "inline-block",
-        verticalAlign: "bottom",
-      },
-    });
-
-    const showActivity = $("<a/>", {
-      id: "showActivityHref",
-      text: "📝",
+    const showActivity = $("<span/>", {
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M15.45 16.95q.6 0 1.05-.45.45-.45.45-1.05 0-.6-.45-1.05-.45-.45-1.05-.45-.6 0-1.05.45-.45.45-.45 1.05 0 .6.45 1.05.45.45 1.05.45Zm0 8.55q.6 0 1.05-.45.45-.45.45-1.05 0-.6-.45-1.05-.45-.45-1.05-.45-.6 0-1.05.45-.45.45-.45 1.05 0 .6.45 1.05.45.45 1.05.45Zm0 8.55q.6 0 1.05-.45.45-.45.45-1.05 0-.6-.45-1.05-.45-.45-1.05-.45-.6 0-1.05.45-.45.45-.45 1.05 0 .6.45 1.05.45.45 1.05.45ZM9 42q-1.2 0-2.1-.9Q6 40.2 6 39V9q0-1.2.9-2.1Q7.8 6 9 6h23.1l9.9 9.9V39q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30V17.55h-8.55V9H9v30ZM9 9v8.55V9v30V9Z"/></svg>',
       title: this._host.engine.i18n("summary.show"),
-      href: "#",
-    });
+    }).addClass("ks-show-activity");
 
     showActivity.on("click", () => this._host.engine.displayActivitySummary());
 
-    activityBox.append(showActivity);
-
-    $("#clearLog").prepend(activityBox);
+    $("#clearLog").prepend(showActivity);
 
     // add the options above the game log
     const right = $("#rightColumn");
@@ -164,43 +152,97 @@ export class UserInterface {
     this._addRule("#devPanel { display: none !important; }");
 
     // Basic layout for our own list-based options menus.
-    this._addRule("#ks-options ul { list-style: none; margin: 0 0 5px; padding: 0; }");
-    this._addRule('#ks-options ul:after { clear: both; content: " "; display: block; height: 0; }');
     this._addRule(
-      `#ks-options ul li { 
+      `#ks {
+        margin-bottom: 10px;
+      }`
+    );
+    this._addRule(
+      `#ks #ks-version {
+        margin: 2px 5px;
+      }`
+    );
+    this._addRule("#ks ul { list-style: none; margin: 0 0 5px; padding: 0; }");
+    this._addRule('#ks ul:after { clear: both; content: " "; display: block; height: 0; }');
+    this._addRule(
+      `#ks ul li { 
         float: left;
         width: 100%;
       }`
     );
 
+    // Setting: Label
     this._addRule(
-      `#ks-options ul li.ks-setting label {
+      `#ks ul li.ks-setting .ks-label {
         display: inline-block;
         min-width: 100px;
       }`
     );
+    // Setting: +/- Expando Toggle
     this._addRule(
-      `#ks-options ul li.ks-setting .ks-icon-button {
+      `#ks ul li.ks-setting .ks-expando-button {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        display: inline-block;
+        float: right;
+        min-width: 10px;
+        padding: 0px 3px;
+        text-align: center;
+      }`
+    );
+    // Setting: Icon Button
+    this._addRule(
+      `#ks ul li.ks-setting .ks-icon-button {
         cursor: pointer;
         display: inline-block;
         float: right;
         padding-right: 5px;
+        padding-top: 2px;
       }`
     );
+    // Setting: Text Button
     this._addRule(
-      `#ks-options ul li.ks-setting .ks-list {
+      `#ks ul li.ks-setting .ks-text-button {
+        cursor: pointer;
+        display: inline-block;
+      }`
+    );
+
+    // Setting: Header
+    this._addRule(
+      `#ks ul li.ks-setting .ks-header {
+        color: grey;
+        display: inline-block;
+        min-width: 100px;
+        user-select: none;
+      }`
+    );
+    // Setting: Explainer
+    this._addRule(
+      `#ks ul li.ks-setting .ks-explainer {
+        color: #888;
+        display: inline-block;
+        min-width: 100px;
+        user-select: none;
+        padding: 4px;
+      }`
+    );
+
+    // Setting: List
+    this._addRule(
+      `#ks ul li.ks-setting .ks-list {
         display: none;
         padding-left: 20px;
       }`
     );
     // Items lists have additional padding due to the "enable/disable all" buttons.
     this._addRule(
-      `#ks-options ul li.ks-setting .ks-list.ks-items-list {
+      `#ks ul li.ks-setting .ks-list.ks-items-list {
         padding-top: 4px;
       }`
     );
     this._addRule(
-      `#ks-options ul li.ks-setting .ks-list.ks-items-list .ks-button {
+      `#ks ul li.ks-setting .ks-list.ks-items-list .ks-button {
         border: 1px solid grey;
         cursor: pointer;
         float: right;
@@ -210,12 +252,12 @@ export class UserInterface {
       }`
     );
     this._addRule(
-      `#ks-options ul li.ks-setting .ks-list.ks-items-list .ks-button.ks-margin-right {
+      `#ks ul li.ks-setting .ks-list.ks-items-list .ks-button.ks-margin-right {
         margin-right: 8px;
       }`
     );
     this._addRule(
-      `#ks-options ul li.ks-setting .ks-max-button {
+      `#ks ul li.ks-setting .ks-max-button {
         cursor: pointer;
         float: right;
         padding-right: 5px;
@@ -225,20 +267,28 @@ export class UserInterface {
 
     // Style settings that act as UI delimiters.
     this._addRule(
-      `#ks-options ul li.ks-setting.ks-delimiter {
+      `#ks ul li.ks-setting.ks-delimiter {
         margin-bottom: 10px;
       }`
     );
 
     // Rules needed to enable stock warning.
     this._addRule(`
-      #ks-options #toggle-list-resources .stockWarn *,
-      #ks-options #toggle-reset-list-resources .stockWarn * {
+      #ks #toggle-list-resources .stockWarn *,
+      #ks #toggle-reset-list-resources .stockWarn * {
         color: #DD1E00;
       }`);
 
+    this._addRule(
+      `#game .ks-show-activity {
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+      }`
+    );
+
     // Ensure the right column gets a scrollbar, when our content extends it too far down.
-    this._addRule("body #gamePageContainer #game #rightColumn { overflow-y: auto }");
+    this._addRule("#game #rightColumn { overflow-y: auto }");
 
     this._addRule("#game .res-row .res-cell.ks-stock-above { color: green; }");
     this._addRule("#game .res-row .res-cell.ks-stock-below { color: red; }");

@@ -39,22 +39,22 @@ export class SettingUi {
         `Duplicate setting ID requested! The setting ID '${name}' has already been assigned to a previously provisoned element.`
       );
     }
-    const element = $(
-      `<li class="${["ks-setting", delimiter ? "ks-delimiter" : "", ...additionalClasses]
-        .filter(Boolean)
-        .join(" ")}"/>`
-    );
-    const elementLabel = `${upgradeIndicator ? `⮤ ` : ""}${i18nName}`;
+    const element = $(`<li/>`);
+    for (const cssClass of ["ks-setting", delimiter ? "ks-delimiter" : "", ...additionalClasses]) {
+      element.addClass(cssClass);
+    }
 
+    const elementLabel = `${upgradeIndicator ? `⮤ ` : ""}${i18nName}`;
     const label = $("<label/>", {
       for: `toggle-${name}`,
       text: elementLabel,
-    });
+    }).addClass("ks-label");
 
     const input = $("<input/>", {
       id: `toggle-${name}`,
       type: "checkbox",
-    }).data("option", setting);
+    }).addClass("ks-checkbox");
+
     setting.$enabled = input;
 
     input.on("change", () => {

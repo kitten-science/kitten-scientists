@@ -2,7 +2,6 @@ import { BonfireSettingsItem } from "../options/BonfireSettings";
 import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { SettingMax, SettingTrigger } from "../options/Settings";
 import { SettingsSection } from "../options/SettingsSection";
-import { ucfirst } from "../tools/Format";
 import { cwarn } from "../tools/Log";
 import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
@@ -65,7 +64,7 @@ export abstract class SettingsSectionUi {
   ): SettingsSectionUiComposition {
     this._mainChild = mainChild;
 
-    const panelElement = $('<li class="ks-setting"/>', { id: `ks-${id}` });
+    const panelElement = $("<li/>", { id: `ks-${id}` }).addClass("ks-setting");
     // Add a border on the element
     panelElement.css("borderTop", "1px solid rgba(185, 185, 185, 0.2)");
 
@@ -131,18 +130,10 @@ export abstract class SettingsSectionUi {
   protected _getItemsToggle(id: string): JQuery<HTMLElement> {
     return $("<div/>", {
       id: `toggle-items-${id}`,
-      text: "+",
       title: this._host.engine.i18n("ui.itemsShow"),
-      css: {
-        border: "1px solid rgba(255, 255, 255, 0.2)",
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        minWidth: "10px",
-        padding: "0px 3px",
-        textAlign: "center",
-      },
-    });
+    })
+      .addClass("ks-expando-button")
+      .text("+");
   }
 
   /**
@@ -158,16 +149,8 @@ export abstract class SettingsSectionUi {
   static getTriggerButton(id: string, handler: { onClick?: () => void } = {}) {
     const triggerButton = $("<div/>", {
       id: `trigger-${id}`,
-      html: '<svg style="width:15px;height:15px" viewBox="0 0 24 24"><path fill="currentColor" d="M11 15H6L13 1V9H18L11 23V15Z" /></svg>',
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        float: "right",
-        marginBottom: "-2px",
-        paddingRight: "3px",
-        paddingTop: "2px",
-      },
-    });
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M19.95 42 22 27.9h-7.3q-.55 0-.8-.5t0-.95L26.15 6h2.05l-2.05 14.05h7.2q.55 0 .825.5.275.5.025.95L22 42Z" /></svg>',
+    }).addClass("ks-icon-button");
 
     if (handler.onClick) {
       triggerButton.on("click", handler.onClick);
@@ -201,7 +184,7 @@ export abstract class SettingsSectionUi {
   }
 
   static getList(id: string) {
-    return $('<ul class="ks-list"/>');
+    return $("<ul/>", { id }).addClass("ks-list");
   }
 
   /**
@@ -213,13 +196,17 @@ export abstract class SettingsSectionUi {
    * @returns The constructed list.
    */
   protected _getItemsList(id: string): JQuery<HTMLElement> {
-    const containerList = $('<ul class="ks-list ks-items-list"/>', {
+    const containerList = $("<ul/>", {
       id: `items-list-${id}`,
-    });
+    })
+      .addClass("ks-list")
+      .addClass("ks-items-list");
 
-    const disableAllButton = $('<div class="ks-button"/>', {
+    const disableAllButton = $("<div/>", {
       id: `toggle-all-items-${id}`,
-    }).text(this._host.engine.i18n("ui.disable.all"));
+    })
+      .text(this._host.engine.i18n("ui.disable.all"))
+      .addClass("ks-button");
 
     disableAllButton.on("click", function () {
       // can't use find as we only want one layer of checkboxes
@@ -231,9 +218,12 @@ export abstract class SettingsSectionUi {
 
     containerList.append(disableAllButton);
 
-    const enableAllButton = $('<div class="ks-button ks-margin-right"/>', {
+    const enableAllButton = $("<div/>", {
       id: `toggle-all-items-${id}`,
-    }).text(this._host.engine.i18n("ui.enable.all"));
+    })
+      .text(this._host.engine.i18n("ui.enable.all"))
+      .addClass("ks-button")
+      .addClass("ks-margin-right");
 
     enableAllButton.on("click", function () {
       // can't use find as we only want one layer of checkboxes
@@ -258,14 +248,7 @@ export abstract class SettingsSectionUi {
     const headerElement = $("<li/>");
     const header = $("<span/>", {
       text,
-      css: {
-        color: "grey",
-        cursor: "default",
-        display: "inline-block",
-        minWidth: "100px",
-        userSelect: "none",
-      },
-    });
+    }).addClass("ks-header");
 
     headerElement.append(header);
 
@@ -283,15 +266,7 @@ export abstract class SettingsSectionUi {
     const headerElement = $("<li/>");
     const header = $("<span/>", {
       text,
-      css: {
-        color: "#888",
-        cursor: "default",
-        display: "inline-block",
-        minWidth: "100px",
-        userSelect: "none",
-        padding: "4px",
-      },
-    });
+    }).addClass("ks-explainer");
 
     headerElement.append(header);
 
@@ -317,55 +292,6 @@ export abstract class SettingsSectionUi {
       delimiter,
       upgradeIndicator
     );
-  }
-
-  /**
-   * Create a list of option elements that represent every single resource
-   * available in the game. This allows users to pick certain resources for
-   * other operations.
-   *
-   * @param forReset Is this a list that will be used to control resources
-   * for reset automation?
-   * @param onAddHandler Call this method when the user clicks on one of the
-   * resources to add them.
-   * @returns A list of option elements.
-   */
-  protected _getAllAvailableResourceOptions(
-    forReset: boolean,
-    onAddHandler: (res: {
-      craftable: boolean;
-      maxValue: number;
-      name: Resource;
-      title: string;
-      type: "common" | "uncommon";
-      value: number;
-      visible: boolean;
-    }) => void
-  ): Array<JQuery<HTMLElement>> {
-    const items = [];
-    const idPrefix = forReset ? "#resource-reset-" : "#resource-";
-
-    for (const resource of this._host.gamePage.resPool.resources) {
-      // Show only new resources that we don't have in the list and that are
-      // visible. This helps cut down on total size.
-      if (resource.name && $(idPrefix + resource.name).length === 0) {
-        const item = $("<div/>", {
-          id: `resource-add-${resource.name}`,
-          text: ucfirst(resource.title ? resource.title : resource.name),
-          css: { cursor: "pointer" },
-        });
-
-        item.on("click", () => {
-          item.remove();
-          onAddHandler(resource);
-          this._host.updateOptions();
-        });
-
-        items.push(item);
-      }
-    }
-
-    return items;
   }
 
   setConsumeRate(name: Resource, value: number): void {

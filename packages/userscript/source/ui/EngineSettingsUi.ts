@@ -19,7 +19,7 @@ export class EngineSettingsUi extends SettingsSectionUi {
     const itext = ucfirst(this._host.engine.i18n("ui.engine"));
 
     // Our main element is a list item.
-    const element = $("<li/>", { id: `ks-${toggleName}` });
+    const element = $("<li/>", { id: `ks-${toggleName}` }).addClass("ks-setting");
 
     const label = $("<label/>", {
       //for: "toggle-" + toggleName,

@@ -44,9 +44,9 @@ export class SettingMaxUi {
       []
     );
 
-    const maxButton = $('<div class="ks-max-button"/>', {
+    const maxButton = $("<div/>", {
       id: `set-${name}-max`,
-    }).data("option", setting);
+    }).addClass("ks-max-button");
     setting.$max = maxButton;
 
     maxButton.on("click", () => {

@@ -74,12 +74,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
     });
 
-    const maximumButton = $('<div class="ks-icon-button"/>', {
+    const maximumButton = $("<div/>", {
       id: "set-timeSkip-maximum",
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="m24 36.05-2.15-2.1 8.45-8.45H4v-3h26.3l-8.4-8.45 2.1-2.1L36.05 24ZM41 36V12h3v24Z"/></svg>',
       title: this._host.engine.i18n("ui.maximum"),
-    })
-      .text("⍐")
-      .data("option", option);
+    }).addClass("ks-icon-button");
     option.$maximum = maximumButton;
 
     maximumButton.on("click", () => {
@@ -94,10 +93,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       }
     });
 
-    const cyclesButton = $('<div class="ks-icon-button"/>', {
+    const cyclesButton = $("<div/>", {
       id: `toggle-cycle-${name}`,
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M9 44q-1.2 0-2.1-.9Q6 42.2 6 41V10q0-1.2.9-2.1Q7.8 7 9 7h3.25V4h3.25v3h17V4h3.25v3H39q1.2 0 2.1.9.9.9.9 2.1v15h-3v-5.5H9V41h16.2v3Zm29 4q-3.65 0-6.375-2.275T28.2 40h3.1q.65 2.2 2.475 3.6Q35.6 45 38 45q2.9 0 4.95-2.05Q45 40.9 45 38q0-2.9-2.05-4.95Q40.9 31 38 31q-1.45 0-2.7.525-1.25.525-2.2 1.475H36v3h-8v-8h3v2.85q1.35-1.3 3.15-2.075Q35.95 28 38 28q4.15 0 7.075 2.925T48 38q0 4.15-2.925 7.075T38 48ZM9 16.5h30V10H9Zm0 0V10v6.5Z"/></svg>',
       title: this._host.engine.i18n("ui.cycles"),
-    }).text("↻");
+    }).addClass("ks-icon-button");
 
     const cyclesList = SettingsSectionUi.getList(`cycles-list-${name}`);
 
@@ -109,10 +109,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       cyclesList.append(this._getCycle(cycleIndex as CycleIndices, option));
     }
 
-    const seasonsButton = $('<div class="ks-icon-button"/>', {
-      id: `toggle-seasons-${name}`,
+    const seasonsButton = $("<div/>", {
+      id: `toggle-seasons-timeSkip-${name}`,
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M15.3 28.3q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575Zm8.85 0q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575Zm8.5 0q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575ZM9 44q-1.2 0-2.1-.9Q6 42.2 6 41V10q0-1.2.9-2.1Q7.8 7 9 7h3.25V4h3.25v3h17V4h3.25v3H39q1.2 0 2.1.9.9.9.9 2.1v31q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30V19.5H9V41Zm0-24.5h30V10H9Zm0 0V10v6.5Z"/></svg>',
       title: this._host.engine.i18n("trade.seasons"),
-    }).text("🗓");
+    }).addClass("ks-icon-button");
 
     const seasonsList = SettingsSectionUi.getList(`seasons-list-${name}`);
 
@@ -837,56 +838,29 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     const buildButton = $("<div/>", {
       id: "toggle-reset-build",
-      text: "🔥",
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M4 44v-9.15L22.15 10.3 18.8 5.8l2.45-1.75L24 7.8l2.8-3.75 2.4 1.75-3.3 4.5L44 34.85V44Zm20-31.15-17 23V41h7.25L24 27.35 33.75 41H41v-5.15ZM17.95 41h12.1L24 32.5ZM24 27.35 33.75 41 24 27.35 14.25 41Z"/></svg>',
       title: this._host.engine.i18n("ui.build"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        filter: "grayscale(100%)",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).addClass("ks-icon-button");
     const spaceButton = $("<div/>", {
       id: "toggle-reset-space",
-      text: "🚀",
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="m9.35 20.45 5.3 2.25q.9-1.8 1.925-3.55Q17.6 17.4 18.75 15.8L14.8 15Zm7.7 4.05 6.65 6.65q2.85-1.3 5.35-2.95 2.5-1.65 4.05-3.2 4.05-4.05 5.95-8.3 1.9-4.25 2.05-9.6-5.35.15-9.6 2.05t-8.3 5.95q-1.55 1.55-3.2 4.05-1.65 2.5-2.95 5.35Zm11.45-4.8q-1-1-1-2.475t1-2.475q1-1 2.475-1t2.475 1q1 1 1 2.475t-1 2.475q-1 1-2.475 1t-2.475-1Zm-.75 19.15 5.45-5.45-.8-3.95q-1.6 1.15-3.35 2.175T25.5 33.55Zm16.3-34.7q.45 6.8-1.7 12.4-2.15 5.6-7.1 10.55l-.1.1-.1.1 1.1 5.5q.15.75-.075 1.45-.225.7-.775 1.25l-8.55 8.6-4.25-9.9-8.5-8.5-9.9-4.25 8.6-8.55q.55-.55 1.25-.775.7-.225 1.45-.075l5.5 1.1q.05-.05.1-.075.05-.025.1-.075 4.95-4.95 10.55-7.125 5.6-2.175 12.4-1.725Zm-36.6 27.6Q9.2 30 11.725 29.975 14.25 29.95 16 31.7q1.75 1.75 1.725 4.275Q17.7 38.5 15.95 40.25q-1.3 1.3-4.025 2.15Q9.2 43.25 3.75 44q.75-5.45 1.575-8.2.825-2.75 2.125-4.05Zm2.1 2.15q-.7.75-1.25 2.35t-.95 4.1q2.5-.4 4.1-.95 1.6-.55 2.35-1.25.95-.85.975-2.125.025-1.275-.875-2.225-.95-.9-2.225-.875-1.275.025-2.125.975Z"/></svg>',
       title: this._host.engine.i18n("ui.space"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        filter: "grayscale(100%)",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
-    const resourcesButton = $('<div class="ks-icon-button"/>', {
+    }).addClass("ks-icon-button");
+    const resourcesButton = $("<div/>", {
       id: "toggle-reset-resources",
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M38.4 42 25.85 29.45l2.85-2.85 12.55 12.55ZM9.35 42 6.5 39.15 21 24.65l-5.35-5.35-1.15 1.15-2.2-2.2v4.25l-1.2 1.2L5 17.6l1.2-1.2h4.3L8.1 14l6.55-6.55q.85-.85 1.85-1.15 1-.3 2.2-.3 1.2 0 2.2.425 1 .425 1.85 1.275l-5.35 5.35 2.4 2.4-1.2 1.2 5.2 5.2 6.1-6.1q-.4-.65-.625-1.5-.225-.85-.225-1.8 0-2.65 1.925-4.575Q32.9 5.95 35.55 5.95q.75 0 1.275.15.525.15.875.4l-4.25 4.25 3.75 3.75 4.25-4.25q.25.4.425.975t.175 1.325q0 2.65-1.925 4.575Q38.2 19.05 35.55 19.05q-.9 0-1.55-.125t-1.2-.375Z"/></svg>',
       title: this._host.engine.i18n("ui.craft.resources"),
-    }).text("🛠");
+    }).addClass("ks-icon-button");
     const religionButton = $("<div/>", {
       id: "toggle-reset-religion",
-      text: "🐈",
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M2 42V14q0-2.3 1.6-3.9t3.9-1.6q2.3 0 3.9 1.6T13 14v1.55L24 6l11 9.55V14q0-2.3 1.6-3.9t3.9-1.6q2.3 0 3.9 1.6T46 14v28H26.5V32q0-1.05-.725-1.775Q25.05 29.5 24 29.5q-1.05 0-1.775.725Q21.5 30.95 21.5 32v10Zm36-25.5h5V14q0-1.05-.725-1.775-.725-.725-1.775-.725-1.05 0-1.775.725Q38 12.95 38 14Zm-33 0h5V14q0-1.05-.725-1.775Q8.55 11.5 7.5 11.5q-1.05 0-1.775.725Q5 12.95 5 14ZM5 39h5V19.5H5Zm8 0h5.5v-7q0-2.3 1.6-3.9t3.9-1.6q2.3 0 3.9 1.6t1.6 3.9v7H35V19.5L24 9.95 13 19.5Zm25 0h5V19.5h-5ZM24 22.75q-1.15 0-1.95-.8t-.8-1.95q0-1.15.8-1.95t1.95-.8q1.15 0 1.95.8t.8 1.95q0 1.15-.8 1.95t-1.95.8Z"/></svg>',
       title: this._host.engine.i18n("ui.faith"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        filter: "grayscale(100%)",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).addClass("ks-icon-button");
     const timeButton = $("<div/>", {
       id: "toggle-reset-time",
-      text: "🕙",
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="m31.35 33.65 2.25-2.25-7.95-8V13.35h-3V24.6ZM24 44q-4.1 0-7.75-1.575-3.65-1.575-6.375-4.3-2.725-2.725-4.3-6.375Q4 28.1 4 24t1.575-7.75q1.575-3.65 4.3-6.375 2.725-2.725 6.375-4.3Q19.9 4 24 4t7.75 1.575q3.65 1.575 6.375 4.3 2.725 2.725 4.3 6.375Q44 19.9 44 24t-1.575 7.75q-1.575 3.65-4.3 6.375-2.725 2.725-6.375 4.3Q28.1 44 24 44Zm0-20Zm0 17q7 0 12-5t5-12q0-7-5-12T24 7q-7 0-12 5T7 24q0 7 5 12t12 5Z"/></svg>',
       title: this._host.engine.i18n("ui.time"),
-      css: {
-        cursor: "pointer",
-        display: "inline-block",
-        filter: "grayscale(100%)",
-        float: "right",
-        paddingRight: "5px",
-      },
-    });
+    }).addClass("ks-icon-button");
 
     buildButton.on("click", () => {
       resetBuildList.toggle();
@@ -967,7 +941,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const input = $("<input/>", {
       id: `toggle-timeSkip-${index}`,
       type: "checkbox",
-    }).data("option", option);
+    });
     option[`$${index}` as const] = input;
 
     input.on("change", () => {
@@ -1023,7 +997,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const input = $("<input/>", {
       id: `toggle-timeSkip-${season}`,
       type: "checkbox",
-    }).data("option", option);
+    });
     option[`$${season}` as const] = input;
 
     input.on("change", () => {
@@ -1090,8 +1064,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const stockElement = $("<div/>", {
       id: `stock-value-${name}`,
       text: this._host.engine.i18n("resources.stock", [this._renderLimit(stock)]),
-      css: { cursor: "pointer", display: "inline-block", width: "80px" },
-    });
+    })
+      .addClass("ks-text-button")
+      .addClass("ks-label");
 
     container.append(stockElement);
 

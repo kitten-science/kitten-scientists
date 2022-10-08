@@ -117,10 +117,11 @@ export class TradeSettingsUi extends SettingsSectionUi {
     );
     element.css("borderTop", "1px solid rgba(185, 185, 185, 0.1)");
 
-    const button = $('<div class="ks-icon-button"/>', {
+    const seasonsButton = $("<div/>", {
       id: `toggle-seasons-${name}`,
+      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M15.3 28.3q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575Zm8.85 0q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575Zm8.5 0q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575ZM9 44q-1.2 0-2.1-.9Q6 42.2 6 41V10q0-1.2.9-2.1Q7.8 7 9 7h3.25V4h3.25v3h17V4h3.25v3H39q1.2 0 2.1.9.9.9.9 2.1v31q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30V19.5H9V41Zm0-24.5h30V10H9Zm0 0V10v6.5Z"/></svg>',
       title: this._host.engine.i18n("trade.seasons"),
-    }).text("🗓");
+    }).addClass("ks-icon-button");
 
     const list = SettingsSectionUi.getList(`seasons-list-${name}`);
 
@@ -130,11 +131,11 @@ export class TradeSettingsUi extends SettingsSectionUi {
     list.append(this._getSeason(name, "autumn", option));
     list.append(this._getSeason(name, "winter", option));
 
-    button.on("click", function () {
+    seasonsButton.on("click", function () {
       list.toggle();
     });
 
-    element.append(button, list);
+    element.append(seasonsButton, list);
 
     return element;
   }
@@ -153,7 +154,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
     const input = $("<input/>", {
       id: `toggle-${name}-${season}`,
       type: "checkbox",
-    }).data("option", option);
+    });
     option[`$${season}` as const] = input;
 
     input.on("change", () => {
