@@ -33,6 +33,7 @@ type LegacySettingsSections =
   | "upgrade";
 
 type SetMaxBuildingItem = `set-${AllItems}-max`;
+type SetMaxEmbassyItem = `set-build-${Race}-max`;
 type SetMaxJobItem = `set-${Job}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
 type SetMinResetBuildingItem = `set-reset-build-${Exclude<BonfireItem, "unicornPasture">}-min`;
@@ -44,6 +45,7 @@ type SetSubtriggerOptionItem = `set-${OptionsItem}-trigger`;
 type SetSubtriggerReligionItem = `set-${ReligionAdditionItem}-trigger`;
 type SetSubtriggerTimeCtrlItem = `set-${"accelerateTime" | "timeSkip"}-trigger`;
 type ToggleBuildEmbassies = "toggle-buildEmbassies";
+type ToggleBuildEmbassiesItem = `toggle-build-${Race}`;
 type ToggleBuildingItem = `toggle-${AllItems}`;
 type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
 type ToggleFilterItem = `toggle-${FilterItem}`;
@@ -85,6 +87,7 @@ export type KittenStorageType = {
   version: number;
   toggles: Record<LegacySettingsSections, boolean>;
   items: Partial<Record<SetMaxBuildingItem, number>> &
+    Partial<Record<SetMaxEmbassyItem, number>> &
     Partial<Record<SetMaxJobItem, number>> &
     Partial<Record<SetMaxResourceItem, number>> &
     Partial<Record<SetMinResetBuildingItem, number>> &
@@ -96,6 +99,7 @@ export type KittenStorageType = {
     Partial<Record<SetSubtriggerReligionItem, number>> &
     Partial<Record<SetSubtriggerTimeCtrlItem, number>> &
     Partial<Record<ToggleBuildEmbassies, boolean>> &
+    Partial<Record<ToggleBuildEmbassiesItem, boolean>> &
     Partial<Record<ToggleBuildingItem, boolean>> &
     Partial<Record<ToggleFaithUnicornItem, boolean>> &
     Partial<Record<ToggleFilterItem, boolean>> &

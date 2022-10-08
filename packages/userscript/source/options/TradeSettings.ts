@@ -1,6 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { Race } from "../types";
-import { Requirement, Setting, SettingLimited, SettingTrigger } from "./Settings";
+import { EmbassySettings } from "./EmbassySettings";
+import { Requirement, Setting, SettingLimited } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
@@ -57,7 +58,7 @@ export class TradeSettings extends SettingsSectionTrigger {
     leviathans: new TradeSettingsItem(true, true, true, true, true, true, "unobtainium"),
   };
 
-  buildEmbassies: SettingTrigger;
+  buildEmbassies: EmbassySettings;
   unlockRaces: Setting;
 
   constructor(
@@ -73,7 +74,7 @@ export class TradeSettings extends SettingsSectionTrigger {
       spiders: new TradeSettingsItem(true, true, true, true, false, true),
       leviathans: new TradeSettingsItem(true, true, true, true, true, true, "unobtainium"),
     },
-    buildEmbassies = new SettingTrigger(true, 0),
+    buildEmbassies = new EmbassySettings(),
 
     unlockRaces = new Setting(true)
   ) {
@@ -97,6 +98,11 @@ export class TradeSettings extends SettingsSectionTrigger {
     }
 
     this.buildEmbassies.enabled = settings.buildEmbassies.enabled;
+    for (const [name, item] of objectEntries(settings.buildEmbassies.items)) {
+      this.buildEmbassies.items[name].enabled = item.enabled;
+      this.buildEmbassies.items[name].max = item.max;
+    }
+
     this.unlockRaces.enabled = settings.unlockRaces.enabled;
   }
 
@@ -114,6 +120,11 @@ export class TradeSettings extends SettingsSectionTrigger {
     }
 
     subject.items["toggle-buildEmbassies"] = settings.buildEmbassies.enabled;
+    for (const [name, item] of objectEntries(settings.buildEmbassies.items)) {
+      subject.items[`toggle-build-${name}` as const] = item.enabled;
+      subject.items[`set-build-${name}-max` as const] = item.max;
+    }
+
     subject.items["toggle-races"] = settings.unlockRaces.enabled;
   }
 
@@ -133,6 +144,11 @@ export class TradeSettings extends SettingsSectionTrigger {
 
     options.buildEmbassies.enabled =
       subject.items["toggle-buildEmbassies"] ?? options.buildEmbassies.enabled;
+    for (const [name, item] of objectEntries(options.buildEmbassies.items)) {
+      item.enabled = subject.items[`toggle-build-${name}` as const] ?? item.enabled;
+      item.max = subject.items[`set-build-${name}-max` as const] ?? item.max;
+    }
+
     options.unlockRaces.enabled = subject.items["toggle-races"] ?? options.unlockRaces.enabled;
 
     return options;

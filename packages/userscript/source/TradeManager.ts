@@ -261,99 +261,105 @@ export class TradeManager implements Automation {
   }
 
   autoBuildEmbassies() {
+    if (!this._host.gamePage.diplomacy.races[0].embassyPrices) {
+      return;
+    }
+
     // Tries to calculate how many embassies for which races it can buy,
     // then it buys them. Code should be straight-forward.
-    AutoEmbassy: if (this._host.gamePage.diplomacy.races[0].embassyPrices) {
-      const culture = this._workshopManager.getResource("culture");
-      let cultureVal = 0;
-      const trigger = this.settings.buildEmbassies.trigger ?? 0;
-      if (trigger <= culture.value / culture.maxValue) {
-        const racePanels = this._host.gamePage.diplomacyTab.racePanels;
-        cultureVal = this._workshopManager.getValueAvailable("culture", true);
 
-        const embassyBulk: Partial<
-          Record<
-            Race,
-            {
-              val: number;
-              basePrice: number;
-              currentEm: number;
-              priceSum: number;
-              race: RaceInfo;
-            }
-          >
-        > = {};
-        const bulkTracker: Array<Race> = [];
+    const culture = this._workshopManager.getResource("culture");
+    let cultureVal = 0;
+    const trigger = this.settings.buildEmbassies.trigger ?? 0;
+    if (culture.value / culture.maxValue < trigger) {
+      return;
+    }
 
-        for (let panelIndex = 0; panelIndex < racePanels.length; panelIndex++) {
-          if (!racePanels[panelIndex].embassyButton) {
-            continue;
-          }
-          const name = racePanels[panelIndex].race.name;
-          const race = this._host.gamePage.diplomacy.get(name);
-          embassyBulk[name] = {
-            val: 0,
-            basePrice: race.embassyPrices[0].val,
-            currentEm: race.embassyLevel,
-            priceSum: 0,
-            race: race,
-          };
-          bulkTracker.push(name);
+    const racePanels = this._host.gamePage.diplomacyTab.racePanels;
+    cultureVal = this._workshopManager.getValueAvailable("culture", true);
+
+    const embassyBulk: Partial<
+      Record<
+        Race,
+        {
+          val: number;
+          max: number;
+          basePrice: number;
+          currentEm: number;
+          priceSum: number;
+          race: RaceInfo;
         }
+      >
+    > = {};
+    const bulkTracker: Array<Race> = [];
 
-        if (bulkTracker.length === 0) {
-          break AutoEmbassy;
-        }
+    for (let panelIndex = 0; panelIndex < racePanels.length; panelIndex++) {
+      if (!racePanels[panelIndex].embassyButton) {
+        continue;
+      }
 
-        let refreshRequired = false;
+      const name = racePanels[panelIndex].race.name;
+      const race = this._host.gamePage.diplomacy.get(name);
+      const max = this.settings.buildEmbassies.items[name].max;
 
-        while (bulkTracker.length > 0) {
-          for (let raceIndex = 0; raceIndex < bulkTracker.length; raceIndex++) {
-            const name = bulkTracker[raceIndex];
-            const emBulk = mustExist(embassyBulk[name]);
-            const nextPrice = emBulk.basePrice * Math.pow(1.15, emBulk.currentEm + emBulk.val);
-            if (nextPrice <= cultureVal) {
-              cultureVal -= nextPrice;
-              emBulk.priceSum += nextPrice;
-              emBulk.val += 1;
-              refreshRequired = true;
-            } else {
-              bulkTracker.splice(raceIndex, 1);
-              --raceIndex;
-            }
-          }
-        }
+      if (!this.settings.buildEmbassies.items[name].enabled || max <= race.embassyLevel) {
+        continue;
+      }
 
-        for (const [, emBulk] of objectEntries(embassyBulk)) {
-          if (emBulk.val === 0) {
-            continue;
-          }
-          cultureVal = this._workshopManager.getValueAvailable("culture", true);
-          if (cultureVal < emBulk.priceSum) {
-            cwarn("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
-          }
-          this._host.gamePage.resPool.resources[13].value -= emBulk.priceSum;
-          emBulk.race.embassyLevel += emBulk.val;
-          this._host.engine.storeForSummary("embassy", emBulk.val);
-          if (emBulk.val !== 1) {
-            this._host.engine.iactivity(
-              "build.embassies",
-              [emBulk.val, emBulk.race.title],
-              "ks-build"
-            );
-          } else {
-            this._host.engine.iactivity(
-              "build.embassy",
-              [emBulk.val, emBulk.race.title],
-              "ks-build"
-            );
-          }
-        }
+      embassyBulk[name] = {
+        val: 0,
+        max,
+        basePrice: race.embassyPrices[0].val,
+        currentEm: race.embassyLevel,
+        priceSum: 0,
+        race: race,
+      };
+      bulkTracker.push(name);
+    }
 
-        if (refreshRequired) {
-          this._host.gamePage.ui.render();
+    if (bulkTracker.length === 0) {
+      return;
+    }
+
+    let refreshRequired = false;
+
+    while (bulkTracker.length > 0) {
+      for (let raceIndex = 0; raceIndex < bulkTracker.length; raceIndex++) {
+        const name = bulkTracker[raceIndex];
+        const emBulk = mustExist(embassyBulk[name]);
+        const nextPrice = emBulk.basePrice * Math.pow(1.15, emBulk.currentEm + emBulk.val);
+        if (nextPrice <= cultureVal) {
+          cultureVal -= nextPrice;
+          emBulk.priceSum += nextPrice;
+          emBulk.val += 1;
+          refreshRequired = true;
+        } else {
+          bulkTracker.splice(raceIndex, 1);
+          --raceIndex;
         }
       }
+    }
+
+    for (const [, emBulk] of objectEntries(embassyBulk)) {
+      if (emBulk.val === 0) {
+        continue;
+      }
+      cultureVal = this._workshopManager.getValueAvailable("culture", true);
+      if (cultureVal < emBulk.priceSum) {
+        cwarn("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
+      }
+      this._host.gamePage.resPool.resources[13].value -= emBulk.priceSum;
+      emBulk.race.embassyLevel += emBulk.val;
+      this._host.engine.storeForSummary("embassy", emBulk.val);
+      if (emBulk.val !== 1) {
+        this._host.engine.iactivity("build.embassies", [emBulk.val, emBulk.race.title], "ks-build");
+      } else {
+        this._host.engine.iactivity("build.embassy", [emBulk.val, emBulk.race.title], "ks-build");
+      }
+    }
+
+    if (refreshRequired) {
+      this._host.gamePage.ui.render();
     }
   }
 

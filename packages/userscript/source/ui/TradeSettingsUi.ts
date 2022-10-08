@@ -5,6 +5,7 @@ import { mustExist } from "../tools/Maybe";
 import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingLimitedUi } from "./SettingLimitedUi";
+import { SettingMaxUi } from "./SettingMaxUi";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -33,7 +34,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
     const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Create "trigger" button in the item.
-    this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
+    this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
 
     const optionButtons = [
       this._getTradeOption(
@@ -175,26 +176,41 @@ export class TradeSettingsUi extends SettingsSectionUi {
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
-    const nodeHeader = this._getHeader("Additional options");
+    const header = this._getHeader("Additional options");
 
-    const nodeEmbassies = SettingTriggerUi.make(
+    // Embassies
+    const embassiesList = SettingsListUi.getSettingsList(this._host.engine, "embassies");
+    const embassiesElement = SettingsPanelUi.make(
       this._host,
       "embassies",
-      this._settings.buildEmbassies,
       this._host.engine.i18n("option.embassies"),
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.embassies"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.sub.disable", [
-            this._host.engine.i18n("option.embassies"),
-          ]),
-      }
+      this._settings.buildEmbassies,
+      embassiesList
     );
 
-    const nodeRaces = SettingUi.make(
+    const embassiesButtons = [];
+    for (const [race, option] of objectEntries(this._settings.buildEmbassies.items)) {
+      const label = this._host.engine.i18n(`$trade.race.${race}`);
+      const button = SettingMaxUi.make(this._host, `embassy-${race}`, option, label, {
+        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+      });
+
+      embassiesButtons.push({ label: label, button: button });
+    }
+    embassiesElement.append(
+      SettingTriggerUi.getTriggerButton(
+        this._host,
+        "buildEmbassies",
+        this._host.engine.i18n("option.embassies"),
+        this._settings.buildEmbassies
+      )
+    );
+    // Ensure buttons are added into UI with their labels alphabetized.
+    embassiesButtons.sort((a, b) => a.label.localeCompare(b.label));
+    embassiesButtons.forEach(button => embassiesList.append(button.button));
+
+    const unlockRaces = SettingUi.make(
       this._host,
       "races",
       this._settings.unlockRaces,
@@ -211,7 +227,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [nodeHeader, nodeRaces, nodeEmbassies];
+    return [header, unlockRaces, embassiesElement, embassiesList];
   }
 
   setState(state: TradeSettings): void {
@@ -244,6 +260,15 @@ export class TradeSettingsUi extends SettingsSectionUi {
       "checked",
       this._settings.buildEmbassies.enabled
     );
+    for (const [name, option] of objectEntries(this._settings.buildEmbassies.items)) {
+      mustExist(option.$enabled).prop("checked", this._settings.buildEmbassies.items[name].enabled);
+      mustExist(option.$max).text(
+        this._host.engine.i18n("ui.max", [
+          this._renderLimit(this._settings.buildEmbassies.items[name].max),
+        ])
+      );
+    }
+
     mustExist(this._settings.unlockRaces.$enabled).prop(
       "checked",
       this._settings.unlockRaces.enabled

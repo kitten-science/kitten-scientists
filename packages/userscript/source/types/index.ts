@@ -167,6 +167,11 @@ export type Challenge =
   | "pacifism"
   | "winterIsComing";
 
+export type EmbassyButtonController = {
+  new (game: GamePage): EmbassyButtonController;
+  buyItem: () => void;
+};
+
 export type PolicyBtnController = {
   new (game: GamePage): TechButtonController;
   buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
@@ -178,6 +183,11 @@ export type TechButtonController = {
 };
 
 export type ClassList = {
+  diplomacy: {
+    ui: {
+      EmbassyButtonController: EmbassyButtonController;
+    };
+  };
   ui: {
     PolicyBtnController: PolicyBtnController;
   };

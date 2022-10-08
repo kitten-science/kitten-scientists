@@ -4,6 +4,7 @@ import { SettingMax, SettingTrigger } from "../options/Settings";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
 import { SettingMaxUi } from "./SettingMaxUi";
+import { SettingTriggerUi } from "./SettingTriggerUi";
 
 export type SettingsSectionUiComposition = {
   checkbox: JQuery<HTMLElement>;
@@ -43,46 +44,23 @@ export abstract class SettingsSectionUi {
   }
 
   /**
-   * Constructs a button to configure the trigger value of an
-   * automation section.
-   *
-   * @param id The ID of this trigger button.
-   * @param handler Handlers to register on the control.
-   * @param handler.onClick Call this method when the trigger button
-   * is clicked.
-   * @returns The constructed trigger button.
-   */
-  static getTriggerButton(id: string, handler: { onClick?: () => void } = {}) {
-    const triggerButton = $("<div/>", {
-      id: `trigger-${id}`,
-      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M19.95 42 22 27.9h-7.3q-.55 0-.8-.5t0-.95L26.15 6h2.05l-2.05 14.05h7.2q.55 0 .825.5.275.5.025.95L22 42Z" /></svg>',
-    }).addClass("ks-icon-button");
-
-    if (handler.onClick) {
-      triggerButton.on("click", handler.onClick);
-    }
-
-    return triggerButton;
-  }
-
-  /**
    * Creates a new button to control a trigger value in a configuration section.
    *
    * @param id The ID of the button.
    * @param itext The label of the section this trigger is for.
-   * @param options The settings section this trigger is for.
+   * @param setting The settings section this trigger is for.
    * @returns The created button.
    */
-  protected _registerTriggerButton(id: string, itext: string, options: SettingTrigger) {
-    return SettingsSectionUi.getTriggerButton(id, {
+  protected _makeSectionTriggerButton(id: string, itext: string, setting: SettingTrigger) {
+    return SettingTriggerUi.getTriggerButton(this._host, id, itext, setting, {
       onClick: () => {
         const value = SettingsSectionUi.promptPercentage(
           this._host.engine.i18n("ui.trigger.set", [itext]),
-          SettingsSectionUi.renderPercentage(options.trigger)
+          SettingsSectionUi.renderPercentage(setting.trigger)
         );
 
         if (value !== null) {
-          this._host.updateOptions(() => (options.trigger = value));
+          this._host.updateOptions(() => (setting.trigger = value));
           this.refreshUi();
         }
       },
