@@ -4,12 +4,15 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { UserScript } from "../UserScript";
+import { SettingsListUi } from "./SettingsListUi";
+import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
+  readonly mainChild: JQuery<HTMLElement>;
 
   private readonly _settings: ReligionSettings;
 
@@ -23,10 +26,10 @@ export class ReligionSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getItemsList(toggleName);
+    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Create "trigger" button in the item.
     this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
@@ -223,6 +226,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
     */
 
     this.element = element;
+    this.mainChild = list;
   }
 
   getAdditionOptions(): Array<JQuery<HTMLElement>> {

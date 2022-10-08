@@ -80,20 +80,22 @@ export class UserInterface {
     // Make _engineUI's expando button hide/show the other option groups
     // Currently accesses the button via id.
     const optionsToggle = this._engineUi.element.children("#toggle-items-engine");
+    let sectionsVisible = false;
     optionsToggle.on("click", () => {
-      const optionsVisiblity = this._engineUi.toggleOptions();
-      this._bonfireUi.element.toggle(optionsVisiblity);
-      this._spaceUi.element.toggle(optionsVisiblity);
-      this._craftUi.element.toggle(optionsVisiblity);
-      this._resourcesUi.element.toggle(optionsVisiblity);
-      this._unlockUi.element.toggle(optionsVisiblity);
-      this._tradingUi.element.toggle(optionsVisiblity);
-      this._religionUi.element.toggle(optionsVisiblity);
-      this._timeUi.element.toggle(optionsVisiblity);
-      this._timeCtrlUi.element.toggle(optionsVisiblity);
-      this._distributeUi.element.toggle(optionsVisiblity);
-      this._optionsUi.element.toggle(optionsVisiblity);
-      this._filterUi.element.toggle(optionsVisiblity);
+      sectionsVisible = !sectionsVisible;
+      const optionsVisiblity = sectionsVisible;
+      this._bonfireUi.mainChild.toggle(optionsVisiblity);
+      this._spaceUi.mainChild.toggle(optionsVisiblity);
+      this._craftUi.mainChild.toggle(optionsVisiblity);
+      this._resourcesUi.mainChild.toggle(optionsVisiblity);
+      this._unlockUi.mainChild.toggle(optionsVisiblity);
+      this._tradingUi.mainChild.toggle(optionsVisiblity);
+      this._religionUi.mainChild.toggle(optionsVisiblity);
+      this._timeUi.mainChild.toggle(optionsVisiblity);
+      this._timeCtrlUi.mainChild.toggle(optionsVisiblity);
+      this._distributeUi.mainChild.toggle(optionsVisiblity);
+      this._optionsUi.mainChild.toggle(optionsVisiblity);
+      this._filterUi.mainChild.toggle(optionsVisiblity);
 
       optionsToggle.text(optionsVisiblity ? "-" : "+");
       optionsToggle.prop(
@@ -102,25 +104,6 @@ export class UserInterface {
           ? this._host.engine.i18n("ui.itemsHide")
           : this._host.engine.i18n("ui.itemsShow")
       );
-    });
-
-    // collapse all options if the Enable Kitten Scientists label is shift-clicked
-    this._engineUi.element.children("label").on("click", event => {
-      if (!event.shiftKey) {
-        return;
-      }
-      this._bonfireUi.toggleOptions(false);
-      this._spaceUi.toggleOptions(false);
-      this._craftUi.toggleOptions(false);
-      this._resourcesUi.toggleOptions(false);
-      this._unlockUi.toggleOptions(false);
-      this._tradingUi.toggleOptions(false);
-      this._religionUi.toggleOptions(false);
-      this._timeUi.toggleOptions(false);
-      this._timeCtrlUi.toggleOptions(false);
-      this._distributeUi.toggleOptions(false);
-      this._optionsUi.toggleOptions(false);
-      this._filterUi.toggleOptions(false);
     });
 
     // Set up the "show activity summary" area.

@@ -3,11 +3,14 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingsListUi } from "./SettingsListUi";
+import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingUi } from "./SettingUi";
 
 export class ScienceSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
+  readonly mainChild: JQuery<HTMLElement>;
 
   private readonly _settings: ScienceSettings;
 
@@ -24,29 +27,19 @@ export class ScienceSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getItemsList(toggleName);
+    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
-    const techsButton = SettingUi.make(
+    const techsList = SettingsListUi.getSettingsList(this._host.engine, "techs");
+    const techsElement = SettingsPanelUi.make(
       this._host,
       "techs",
-      this._settings.techs,
       this._host.engine.i18n("ui.upgrade.techs"),
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
-            this._host.engine.i18n("ui.upgrade.techs"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
-            this._host.engine.i18n("ui.upgrade.techs"),
-          ]),
-      }
+      this._settings.techs,
+      techsList
     );
-
-    const techsList = SettingsSectionUi.getList("items-list-techs");
 
     const techButtons = [];
     for (const [techName, tech] of objectEntries(this._settings.techs.items)) {
@@ -61,22 +54,6 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     // Ensure buttons are added into UI with their labels alphabetized.
     techButtons.sort((a, b) => a.label.localeCompare(b.label));
     techButtons.forEach(button => techsList.append(button.button));
-
-    const techsItemsButton = this._getItemsToggle("techs-show");
-    techsItemsButton.on("click", () => {
-      techsList.toggle();
-
-      this._techsExpanded = !this._techsExpanded;
-
-      techsItemsButton.text(this._techsExpanded ? "-" : "+");
-      techsItemsButton.prop(
-        "title",
-        this._techsExpanded
-          ? this._host.engine.i18n("ui.itemsHide")
-          : this._host.engine.i18n("ui.itemsShow")
-      );
-    });
-    techsButton.append(techsItemsButton, techsList);
 
     // Set up the more complex policies options.
     const policiesButton = SettingUi.make(
@@ -131,13 +108,14 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     policiesButton.append(policiesItemsButton, policiesList);
 
     // Set up the remaining options.
-    const optionButtons = [techsButton, policiesButton];
+    const optionButtons = [techsElement, techsList, policiesButton];
 
     list.append(...optionButtons);
 
     element.append(list);
 
     this.element = element;
+    this.mainChild = list;
   }
 
   setState(state: ScienceSettings): void {

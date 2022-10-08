@@ -10,12 +10,15 @@ import { ucfirst } from "../tools/Format";
 import { Maybe, mustExist } from "../tools/Maybe";
 import { Resource, Season } from "../types";
 import { UserScript } from "../UserScript";
+import { SettingsListUi } from "./SettingsListUi";
+import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
 export class TimeControlSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
+  readonly mainChild: JQuery<HTMLElement>;
 
   private readonly _settings: TimeControlSettings;
 
@@ -31,10 +34,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     // Create build items.
     // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = this._getItemsList(toggleName);
+    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
 
     // Our main element is a list item.
-    const element = this._getSettingsPanel(toggleName, label, this._settings, list);
+    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     const optionButtons = [
       this._getOptionAccelerateTime(
@@ -61,6 +64,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     element.append(list);
 
     this.element = element;
+    this.mainChild = list;
   }
 
   private _getOptionTimeSkip(
@@ -148,7 +152,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     });
 
     // Bonfire reset options
-    const resetBuildList = this._getItemsList("reset-build");
+    const resetBuildList = SettingsListUi.getSettingsList(this._host.engine, "reset-build");
     resetBuildList.append(
       this._getResetOption(
         "hut",
@@ -413,7 +417,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     );
 
     // Space reset options
-    const resetSpaceList = this._getItemsList("reset-space");
+    const resetSpaceList = SettingsListUi.getSettingsList(this._host.engine, "reset-space");
     resetSpaceList.append(
       this._getResetOption(
         "spaceElevator",
@@ -573,7 +577,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const resetResourcesList = this._getResourceOptions();
 
     // Religion reset options.
-    const resetReligionList = this._getItemsList("reset-religion");
+    const resetReligionList = SettingsListUi.getSettingsList(this._host.engine, "reset-religion");
     resetReligionList.append(
       this._getResetOption(
         "unicornPasture",
@@ -763,7 +767,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       )
     );
 
-    const resetTimeList = this._getItemsList("reset-time");
+    const resetTimeList = SettingsListUi.getSettingsList(this._host.engine, "reset-time");
     resetTimeList.append(
       this._getResetOption(
         "temporalBattery",

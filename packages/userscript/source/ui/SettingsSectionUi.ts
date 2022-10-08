@@ -1,14 +1,9 @@
 import { BonfireSettingsItem } from "../options/BonfireSettings";
 import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { SettingMax, SettingTrigger } from "../options/Settings";
-import { SettingsSection } from "../options/SettingsSection";
-import { cwarn } from "../tools/Log";
-import { mustExist } from "../tools/Maybe";
-import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
 import { SettingMaxUi } from "./SettingMaxUi";
-import { SettingUi } from "./SettingUi";
 
 export type SettingsSectionUiComposition = {
   checkbox: JQuery<HTMLElement>;
@@ -24,70 +19,12 @@ export type SettingsSectionUiComposition = {
 export abstract class SettingsSectionUi {
   protected _host: UserScript;
   protected _mainChild: JQuery<HTMLElement> | null = null;
-  protected _itemsExpanded = false;
 
   constructor(host: UserScript) {
     this._host = host;
   }
 
   abstract refreshUi(): void;
-
-  /**
-   * Expands the options list if true, and collapses it if false.
-   * Changes the value of _itemsExpanded even if _mainChild is not defined.
-   *
-   * @param display Force a display state.
-   * @returns the value of _itemsExpanded
-   */
-  public toggleOptions(display = !this._itemsExpanded) {
-    this._itemsExpanded = display;
-    if (this._mainChild) {
-      this._mainChild.toggle(display);
-    }
-    return this._itemsExpanded;
-  }
-
-  /**
-   * Constructs a settings panel that is used to contain a major section of the UI.
-   *
-   * @param id The ID of the settings panel.
-   * @param label The label to put main checkbox of this section.
-   * @param options An options section for which this is the settings panel.
-   * @param mainChild The main child element in the panel that should be toggled with
-   * the sections' expando button.
-   * @returns The constructed settings panel.
-   */
-  protected _getSettingsPanel(
-    id: string,
-    label: string,
-    options: SettingsSection,
-    mainChild: JQuery<HTMLElement>
-  ): JQuery<HTMLElement> {
-    this._mainChild = mainChild;
-
-    const panelElement = SettingUi.make(this._host, id, options, label, {
-      onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
-      onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
-    });
-
-    // The expando button for this panel.
-    const itemsElement = this._getItemsToggle(id);
-    panelElement.append(itemsElement);
-
-    itemsElement.on("click", () => {
-      this.toggleOptions();
-
-      itemsElement.text(this._itemsExpanded ? "-" : "+");
-      itemsElement.prop(
-        "title",
-        this._itemsExpanded
-          ? this._host.engine.i18n("ui.itemsHide")
-          : this._host.engine.i18n("ui.itemsShow")
-      );
-    });
-
-    return panelElement;
-  }
 
   /**
    * Constructs an expando element that is commonly used to expand and
@@ -157,56 +94,6 @@ export abstract class SettingsSectionUi {
   }
 
   /**
-   * Constructs a list panel that is used to contain a list of options.
-   * The panel has "enable all" and "disable all" buttons to check and
-   * uncheck all checkboxes in the section at once.
-   *
-   * @param id The ID for this list.
-   * @returns The constructed list.
-   */
-  protected _getItemsList(id: string): JQuery<HTMLElement> {
-    const containerList = $("<ul/>", {
-      id: `items-list-${id}`,
-    })
-      .addClass("ks-list")
-      .addClass("ks-items-list");
-
-    const disableAllButton = $("<div/>", {
-      id: `toggle-all-items-${id}`,
-    })
-      .text(this._host.engine.i18n("ui.disable.all"))
-      .addClass("ks-button");
-
-    disableAllButton.on("click", function () {
-      // can't use find as we only want one layer of checkboxes
-      const items = containerList.children().children(":checkbox");
-      items.prop("checked", false);
-      items.trigger("change");
-      containerList.children().children(":checkbox").trigger("change");
-    });
-
-    containerList.append(disableAllButton);
-
-    const enableAllButton = $("<div/>", {
-      id: `toggle-all-items-${id}`,
-    })
-      .text(this._host.engine.i18n("ui.enable.all"))
-      .addClass("ks-button")
-      .addClass("ks-margin-right");
-
-    enableAllButton.on("click", function () {
-      // can't use find as we only want one layer of checkboxes
-      const items = containerList.children().children(":checkbox");
-      items.prop("checked", true);
-      items.trigger("change");
-      containerList.children().children(":checkbox").trigger("change");
-    });
-
-    containerList.append(enableAllButton);
-    return containerList;
-  }
-
-  /**
    * Construct a subsection header.
    * This is purely for cosmetic/informational value in the UI.
    *
@@ -261,15 +148,6 @@ export abstract class SettingsSectionUi {
       delimiter,
       upgradeIndicator
     );
-  }
-
-  setConsumeRate(name: Resource, value: number): void {
-    if (value < 0.0 || 1.0 < value) {
-      cwarn(`ignoring non-numeric or invalid consume rate ${value}`);
-      return;
-    }
-
-    mustExist(this._host.engine.settings.resources.items[name]).consume = value;
   }
 
   static promptLimit(text: string, defaultValue: string): number | null {
