@@ -1,6 +1,6 @@
 import { SettingsSection } from "../options/SettingsSection";
 import { UserScript } from "../UserScript";
-import { SettingUi } from "./SettingUi";
+import { SettingListItem } from "./components/SettingListItem";
 
 export class SettingsPanelUi {
   /**
@@ -9,7 +9,7 @@ export class SettingsPanelUi {
    * @param host A reference to the host.
    * @param id The ID of the settings panel.
    * @param label The label to put main checkbox of this section.
-   * @param options An options section for which this is the settings panel.
+   * @param settings An options section for which this is the settings panel.
    * @param mainChild The main child element in the panel that should be toggled with
    * the sections' expando button.
    * @param initiallyExpanded Should the main child be expanded right away?
@@ -19,11 +19,11 @@ export class SettingsPanelUi {
     host: UserScript,
     id: string,
     label: string,
-    options: SettingsSection,
+    settings: SettingsSection,
     mainChild: JQuery<HTMLElement>,
     initiallyExpanded = false
   ): { element: JQuery<HTMLElement>; expando: JQuery<HTMLElement> } {
-    const panelElement = SettingUi.make(host, id, options, label, {
+    const panelElement = new SettingListItem(host, id, label, settings, {
       onCheck: () => host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
     });

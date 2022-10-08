@@ -4,12 +4,12 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { UserScript } from "../UserScript";
+import { SettingListItem } from "./components/SettingListItem";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingTriggerUi } from "./SettingTriggerUi";
-import { SettingUi } from "./SettingUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi {
   private readonly _trigger: TriggerButton;
@@ -222,11 +222,11 @@ export class ReligionSettingsUi extends SettingsSectionUi {
   getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeAdore = SettingTriggerUi.make(
+    const nodeAdore = new SettingTriggerListItem(
       this._host,
       "adore",
-      this._settings.adore,
       this._host.engine.i18n("option.faith.adore"),
+      this._settings.adore,
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [
@@ -239,11 +239,11 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const nodeAutoPraise = SettingTriggerUi.make(
+    const nodeAutoPraise = new SettingTriggerListItem(
       this._host,
       "autoPraise",
-      this._settings.autoPraise,
       this._host.engine.i18n("option.praise"),
+      this._settings.autoPraise,
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [
@@ -256,12 +256,11 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const nodeBestUnicornBuilding = SettingUi.make(
+    const nodeBestUnicornBuilding = new SettingListItem(
       this._host,
       "bestUnicornBuilding",
-      this._settings.bestUnicornBuilding,
       this._host.engine.i18n("option.faith.best.unicorn"),
-
+      this._settings.bestUnicornBuilding,
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [
@@ -310,11 +309,11 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       //this._host.saveToKittenStorage();
     });
 
-    const nodeTranscend = SettingUi.make(
+    const nodeTranscend = new SettingListItem(
       this._host,
       "transcend",
-      this._settings.transcend,
       this._host.engine.i18n("option.faith.transcend"),
+      this._settings.transcend,
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [

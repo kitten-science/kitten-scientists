@@ -4,10 +4,10 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
+import { SettingListItem } from "./components/SettingListItem";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingUi } from "./SettingUi";
 
 export class ResourcesSettingsUi extends SettingsSectionUi {
   private readonly _settings: ResourcesSettings;
@@ -57,7 +57,7 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
     const stock = setting.stock;
 
     // The overall container for this resource item.
-    const container = SettingUi.make(this._host, `resource-${name}`, setting, title, {
+    const container = new SettingListItem(this._host, `resource-${name}`, title, setting, {
       onCheck: () => this._host.engine.imessage("status.resource.enable", [title]),
       onUnCheck: () => this._host.engine.imessage("status.resource.disable", [title]),
     });

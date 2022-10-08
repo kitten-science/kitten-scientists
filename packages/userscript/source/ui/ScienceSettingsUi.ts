@@ -3,10 +3,10 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingListItem } from "./components/SettingListItem";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingUi } from "./SettingUi";
 
 export class ScienceSettingsUi extends SettingsSectionUi {
   private readonly _settings: ScienceSettings;
@@ -33,7 +33,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     const techButtons = [];
     for (const [techName, tech] of objectEntries(this._settings.techs.items)) {
       const label = this._host.engine.i18n(`$science.${techName}.label`);
-      const button = SettingUi.make(this._host, `tech-${techName}`, tech, label, {
+      const button = new SettingListItem(this._host, `tech-${techName}`, label, tech, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       });
@@ -59,10 +59,16 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       const policyLabel = this._host.engine.i18n(
         `$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`
       );
-      const policyButton = SettingUi.make(this._host, `policy-${policyName}`, policy, policyLabel, {
-        onCheck: () => this._host.engine.imessage("status.auto.enable", [policyLabel]),
-        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [policyLabel]),
-      });
+      const policyButton = new SettingListItem(
+        this._host,
+        `policy-${policyName}`,
+        policyLabel,
+        policy,
+        {
+          onCheck: () => this._host.engine.imessage("status.auto.enable", [policyLabel]),
+          onUnCheck: () => this._host.engine.imessage("status.auto.disable", [policyLabel]),
+        }
+      );
 
       policyButtons.push({ label: policyLabel, button: policyButton });
     }

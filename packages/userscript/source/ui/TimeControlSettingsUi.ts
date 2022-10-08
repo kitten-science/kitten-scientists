@@ -15,8 +15,6 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingTriggerUi } from "./SettingTriggerUi";
-import { SettingUi } from "./SettingUi";
 
 export class TimeControlSettingsUi extends SettingsSectionUi {
   private readonly _settings: TimeControlSettings;
@@ -62,7 +60,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option: TimeControlSettings["timeSkip"],
     label: string
   ): SettingTriggerListItem {
-    const element = SettingTriggerUi.make(this._host, name, option, label, {
+    const element = new SettingTriggerListItem(this._host, name, label, option, {
       onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
     });
@@ -136,7 +134,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option: TimeControlSettings["reset"],
     label: string
   ): SettingListItem {
-    const element = SettingUi.make(this._host, name, option, label, {
+    const element = new SettingListItem(this._host, name, label, option, {
       onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
     });
@@ -912,7 +910,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     option: TimeControlSettings["accelerateTime"],
     label: string
   ): SettingTriggerListItem {
-    return SettingTriggerUi.make(this._host, name, option, label, {
+    return new SettingTriggerListItem(this._host, name, label, option, {
       onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
     });
@@ -960,11 +958,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return SettingTriggerUi.make(
+    return new SettingTriggerListItem(
       this._host,
       `toggle-reset-${type}-${name}`,
-      option,
       i18nName,
+      option,
       {
         onCheck: () => this._host.engine.imessage("status.reset.check.enable", [i18nName]),
         onUnCheck: () => this._host.engine.imessage("status.reset.check.disable", [i18nName]),
@@ -1048,7 +1046,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const stock = setting.stock;
 
     // The overall container for this resource item.
-    const container = SettingUi.make(this._host, `resource-reset-${name}`, setting, title, {
+    const container = new SettingListItem(this._host, `resource-reset-${name}`, title, setting, {
       onCheck: () => this._host.engine.imessage("status.sub.enable", [title]),
       onUnCheck: () => this._host.engine.imessage("status.sub.disable", [title]),
     });

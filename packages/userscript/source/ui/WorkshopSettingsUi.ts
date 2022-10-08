@@ -3,12 +3,12 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem";
+import { SettingListItem } from "./components/SettingListItem";
 import { TriggerButton } from "./components/TriggerButton";
-import { SettingLimitedMaxUi } from "./SettingLimitedMaxUi";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingUi } from "./SettingUi";
 
 export class WorkshopSettingsUi extends SettingsSectionUi {
   private readonly _trigger: TriggerButton;
@@ -145,11 +145,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return SettingLimitedMaxUi.make(
+    return new SettingLimitedMaxListItem(
       this._host,
       name,
-      option,
       label,
+      option,
       {
         onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
@@ -176,11 +176,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const upgradeButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.unlockUpgrades.items)) {
       const upgradeLabel = this._host.engine.i18n(`$workshop.${upgradeName}.label`);
-      const upgradeButton = SettingUi.make(
+      const upgradeButton = new SettingListItem(
         this._host,
         `upgrade-${upgradeName}`,
-        upgrade,
         upgradeLabel,
+        upgrade,
         {
           onCheck: () => this._host.engine.imessage("status.auto.enable", [upgradeLabel]),
           onUnCheck: () => this._host.engine.imessage("status.auto.disable", [upgradeLabel]),
@@ -193,11 +193,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     upgradeButtons.sort((a, b) => a.label.localeCompare(b.label));
     upgradeButtons.forEach(button => upgradesList.append(button.button.element));
 
-    const shipOverride = SettingUi.make(
+    const shipOverride = new SettingListItem(
       this._host,
       "shipOverride",
-      this._settings.shipOverride,
       this._host.engine.i18n("option.shipOverride"),
+      this._settings.shipOverride,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [

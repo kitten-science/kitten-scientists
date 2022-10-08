@@ -3,7 +3,7 @@ import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { SettingMax } from "../options/Settings";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
-import { SettingMaxUi } from "./SettingMaxUi";
+import { SettingMaxListItem } from "./components/SettingMaxListItem";
 
 export type Toggleable = {
   get isExpanded(): boolean;
@@ -58,11 +58,11 @@ export abstract class SettingsSectionUiBase {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    return SettingMaxUi.make(
+    return new SettingMaxListItem(
       this._host,
       name,
-      option,
       label,
+      option,
       {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),

@@ -5,13 +5,13 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
+import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
+import { SettingListItem } from "./components/SettingListItem";
+import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { TriggerButton } from "./components/TriggerButton";
-import { SettingLimitedUi } from "./SettingLimitedUi";
-import { SettingMaxUi } from "./SettingMaxUi";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingUi } from "./SettingUi";
 
 export class TradeSettingsUi extends SettingsSectionUi {
   private readonly _trigger: TriggerButton;
@@ -89,11 +89,11 @@ export class TradeSettingsUi extends SettingsSectionUi {
     delimiter = false,
     upgradeIndicator = false
   ): JQuery<HTMLElement> {
-    const element = SettingLimitedUi.make(
+    const element = new SettingLimitedListItem(
       this._host,
       name,
-      option,
       i18nName,
+      option,
       {
         onCheck: () => this._host.engine.imessage("status.sub.enable", [i18nName]),
         onUnCheck: () => this._host.engine.imessage("status.sub.disable", [i18nName]),
@@ -223,11 +223,11 @@ export class TradeSettingsUi extends SettingsSectionUi {
     );
     embassiesElement.element.append(embassiesTrigger.element);
 
-    const unlockRaces = SettingUi.make(
+    const unlockRaces = new SettingListItem(
       this._host,
       "races",
-      this._settings.unlockRaces,
       this._host.engine.i18n("ui.upgrade.races"),
+      this._settings.unlockRaces,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
@@ -244,7 +244,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
   }
 
   private _makeEmbassySetting(race: Race, option: SettingMax, label: string) {
-    return SettingMaxUi.make(this._host, `embassy-${race}`, option, label, {
+    return new SettingMaxListItem(this._host, `embassy-${race}`, label, option, {
       onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
       onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
     }).element;

@@ -4,11 +4,11 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingListItem } from "./components/SettingListItem";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingTriggerUi } from "./SettingTriggerUi";
-import { SettingUi } from "./SettingUi";
 
 export class OptionsSettingsUi extends SettingsSectionUi {
   private readonly _settings: OptionsSettings;
@@ -60,8 +60,9 @@ export class OptionsSettingsUi extends SettingsSectionUi {
       onUnCheck: () => this._host.engine.imessage("status.sub.disable", [iname]),
     };
     return option.trigger
-      ? SettingTriggerUi.make(this._host, name, option as SettingTrigger, iname, handler).element
-      : SettingUi.make(this._host, name, option, iname, handler).element;
+      ? new SettingTriggerListItem(this._host, name, iname, option as SettingTrigger, handler)
+          .element
+      : new SettingListItem(this._host, name, iname, option, handler).element;
   }
 
   setState(state: OptionsSettings): void {

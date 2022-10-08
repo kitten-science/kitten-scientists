@@ -3,10 +3,10 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingListItem } from "./components/SettingListItem";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingUi } from "./SettingUi";
 
 export class FiltersSettingsUi extends SettingsSectionUi {
   private readonly _settings: FilterSettings;
@@ -109,11 +109,11 @@ export class FiltersSettingsUi extends SettingsSectionUi {
     ];
 
     const makeButton = (name: FilterItem, option: FilterSettingsItem, label: string) =>
-      SettingUi.make(
+      new SettingListItem(
         this._host,
         name,
-        option,
         label,
+        option,
         {
           onCheck: () => this._host.engine.imessage("filter.enable", [label]),
           onUnCheck: () => this._host.engine.imessage("filter.disable", [label]),

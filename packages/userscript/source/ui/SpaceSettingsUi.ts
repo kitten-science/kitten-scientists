@@ -3,11 +3,11 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingListItem } from "./components/SettingListItem";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingUi } from "./SettingUi";
 
 export class SpaceSettingsUi extends SettingsSectionUi {
   private readonly _trigger: TriggerButton;
@@ -194,11 +194,11 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     const missionButtons = [];
     for (const [missionName, mission] of objectEntries(this._settings.unlockMissions.items)) {
       const missionLabel = this._host.engine.i18n(`$space.${missionName}.label`);
-      const missionButton = SettingUi.make(
+      const missionButton = new SettingListItem(
         this._host,
         `mission-${missionName}`,
-        mission,
         missionLabel,
+        mission,
         {
           onCheck: () => this._host.engine.imessage("status.auto.enable", [missionLabel]),
           onUnCheck: () => this._host.engine.imessage("status.auto.disable", [missionLabel]),

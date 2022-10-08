@@ -4,12 +4,12 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
-import { SettingMaxUi } from "./SettingMaxUi";
+import { SettingListItem } from "./components/SettingListItem";
+import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingTriggerUi } from "./SettingTriggerUi";
-import { SettingUi } from "./SettingUi";
 
 export class VillageSettingsUi extends SettingsSectionUi {
   private readonly _settings: VillageSettings;
@@ -83,11 +83,11 @@ export class VillageSettingsUi extends SettingsSectionUi {
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    return SettingMaxUi.make(
+    return new SettingMaxListItem(
       this._host,
       name,
-      option,
       label,
+      option,
       {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
@@ -99,11 +99,11 @@ export class VillageSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const nodeHeader = this._getHeader("Additional options");
 
-    const nodeHunt = SettingTriggerUi.make(
+    const nodeHunt = new SettingTriggerListItem(
       this._host,
       "hunt",
-      this._settings.hunt,
       this._host.engine.i18n("option.hunt"),
+      this._settings.hunt,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [this._host.engine.i18n("option.hunt")]),
@@ -114,11 +114,11 @@ export class VillageSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const nodeFestivals = SettingUi.make(
+    const nodeFestivals = new SettingListItem(
       this._host,
       "festival",
-      this._settings.holdFestivals,
       this._host.engine.i18n("option.festival"),
+      this._settings.holdFestivals,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
@@ -131,11 +131,11 @@ export class VillageSettingsUi extends SettingsSectionUi {
       }
     );
 
-    const nodePromote = SettingUi.make(
+    const nodePromote = new SettingListItem(
       this._host,
       "promote",
-      this._settings.promoteLeader,
       this._host.engine.i18n("option.promote"),
+      this._settings.promoteLeader,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [

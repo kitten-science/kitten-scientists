@@ -3,11 +3,11 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingListItem } from "./components/SettingListItem";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingUi } from "./SettingUi";
 
 export class BonfireSettingsUi extends SettingsSectionUi {
   private readonly _trigger: TriggerButton;
@@ -292,12 +292,11 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     const upgradeBuildingsButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.upgradeBuildings.items)) {
       const label = this._host.engine.i18n(`$buildings.${upgradeName}.label`);
-      const button = SettingUi.make(
+      const button = new SettingListItem(
         this._host,
         `building-${upgradeName}`,
-        upgrade,
         label,
-
+        upgrade,
         {
           onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
           onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
@@ -313,12 +312,11 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     upgradeBuildingsButtons.sort((a, b) => a.label.localeCompare(b.label));
     upgradeBuildingsButtons.forEach(button => upgradeBuildingsList.append(button.button.element));
 
-    const nodeTurnOnSteamworks = SettingUi.make(
+    const nodeTurnOnSteamworks = new SettingListItem(
       this._host,
       "_steamworks",
-      this._settings.turnOnSteamworks,
       this._host.engine.i18n("option.steamworks"),
-
+      this._settings.turnOnSteamworks,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [

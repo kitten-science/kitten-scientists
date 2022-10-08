@@ -3,8 +3,8 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { TriggerButton } from "./components/TriggerButton";
-import { SettingMaxUi } from "./SettingMaxUi";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -97,11 +97,11 @@ export class TimeSettingsUi extends SettingsSectionUi {
     label: string,
     delimiter = false
   ) {
-    return SettingMaxUi.make(
+    return new SettingMaxListItem(
       this._host,
       name,
-      setting,
       label,
+      setting,
       {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
