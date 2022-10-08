@@ -9,20 +9,16 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingUi } from "./SettingUi";
 
 export class SpaceSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: SpaceSettings;
 
   constructor(host: UserScript, settings: SpaceSettings) {
-    super(host);
+    const toggleName = "space";
+    const label = ucfirst(host.engine.i18n("ui.space"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "space";
-    const label = ucfirst(this._host.engine.i18n("ui.space"));
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Create "trigger" button in the item.
     this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
@@ -177,11 +173,8 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    element.append(this._settings.$trigger);
-    element.append(list);
-
-    this.element = element;
-    this.mainChild = list;
+    panel.element.append(this._settings.$trigger);
+    panel.element.append(list);
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
@@ -216,7 +209,7 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     missionButtons.sort((a, b) => a.label.localeCompare(b.label));
     missionButtons.forEach(button => missionsList.append(button.button));
 
-    return [header, missionsElement, missionsList];
+    return [header, missionsElement.element, missionsList];
   }
 
   setState(state: SpaceSettings): void {

@@ -17,27 +17,18 @@ import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
 export class TimeControlSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: TimeControlSettings;
 
   private _resourcesList: Maybe<JQuery<HTMLElement>>;
 
   constructor(host: UserScript, settings: TimeControlSettings) {
-    super(host);
+    const toggleName = "timeCtrl";
+    const label = ucfirst(host.engine.i18n("ui.timeCtrl"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "timeCtrl";
-    const label = ucfirst(this._host.engine.i18n("ui.timeCtrl"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     const optionButtons = [
       this._getOptionAccelerateTime(
@@ -61,10 +52,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     list.append(...optionButtons);
 
-    element.append(list);
-
-    this.element = element;
-    this.mainChild = list;
+    panel.element.append(list);
   }
 
   private _getOptionTimeSkip(

@@ -2,12 +2,10 @@ import { EngineSettings } from "../options/EngineSettings";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
-import { SettingsPanelUi } from "./SettingsPanelUi";
-import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingsSectionUiBase } from "./SettingsSectionUi";
 
-export class EngineSettingsUi extends SettingsSectionUi {
+export class EngineSettingsUi extends SettingsSectionUiBase {
   readonly element: JQuery<HTMLElement>;
-
   private readonly _settings: EngineSettings;
 
   constructor(host: UserScript, settings: EngineSettings) {
@@ -21,6 +19,7 @@ export class EngineSettingsUi extends SettingsSectionUi {
 
     // Our main element is a list item.
     const element = $("<li/>", { id: `ks-${toggleName}` }).addClass("ks-setting");
+    this.element = element;
 
     const label = $("<label/>", {
       //for: "toggle-" + toggleName,
@@ -44,11 +43,6 @@ export class EngineSettingsUi extends SettingsSectionUi {
         this._host.engine.stop(true);
       }
     });
-
-    const toggleOptionsVisiblity = SettingsPanelUi.makeItemsToggle(this._host, toggleName);
-    element.append(toggleOptionsVisiblity);
-
-    this.element = element;
   }
 
   setState(state: EngineSettings): void {

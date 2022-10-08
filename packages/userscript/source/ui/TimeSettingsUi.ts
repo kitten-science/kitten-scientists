@@ -9,25 +9,16 @@ import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: TimeSettings;
 
   constructor(host: UserScript, settings: TimeSettings) {
-    super(host);
+    const toggleName = "time";
+    const label = ucfirst(host.engine.i18n("ui.time"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "time";
-    const label = ucfirst(this._host.engine.i18n("ui.time"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Create "trigger" button in the item.
     this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
@@ -94,11 +85,8 @@ export class TimeSettingsUi extends SettingsSectionUi {
 
     list.append(...optionButtons);
 
-    element.append(this._settings.$trigger);
-    element.append(list);
-
-    this.element = element;
-    this.mainChild = list;
+    panel.element.append(this._settings.$trigger);
+    panel.element.append(list);
   }
 
   private _getTimeSetting(

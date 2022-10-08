@@ -9,25 +9,16 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingUi } from "./SettingUi";
 
 export class FiltersSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: FilterSettings;
 
   constructor(host: UserScript, settings: FilterSettings) {
-    super(host);
+    const toggleName = "filter";
+    const label = ucfirst(host.engine.i18n("ui.filter"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "filter";
-    const label = ucfirst(this._host.engine.i18n("ui.filter"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     const buttons = [
       {
@@ -139,10 +130,7 @@ export class FiltersSettingsUi extends SettingsSectionUi {
     list.append(optionButtons);
     list.append(this._getExplainer("Disabled items are hidden from the log."));
 
-    element.append(list);
-
-    this.element = element;
-    this.mainChild = list;
+    panel.element.append(list);
   }
 
   setState(state: FilterSettings): void {

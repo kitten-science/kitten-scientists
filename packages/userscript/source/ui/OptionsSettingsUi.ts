@@ -11,25 +11,16 @@ import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
 export class OptionsSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: OptionsSettings;
 
   constructor(host: UserScript, settings: OptionsSettings) {
-    super(host);
+    const toggleName = "options";
+    const label = ucfirst(host.engine.i18n("ui.options"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "options";
-    const label = ucfirst(this._host.engine.i18n("ui.options"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     const optionButtons = [
       this._getOptionsOption(
@@ -56,10 +47,7 @@ export class OptionsSettingsUi extends SettingsSectionUi {
 
     list.append(...optionButtons);
 
-    element.append(list);
-
-    this.element = element;
-    this.mainChild = list;
+    panel.element.append(list);
   }
 
   private _getOptionsOption(

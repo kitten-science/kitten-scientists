@@ -9,20 +9,16 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingUi } from "./SettingUi";
 
 export class ScienceSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: ScienceSettings;
 
   constructor(host: UserScript, settings: ScienceSettings) {
-    super(host);
+    const toggleName = "upgrade";
+    const label = ucfirst(host.engine.i18n("ui.upgrade"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "upgrade";
-    const label = ucfirst(this._host.engine.i18n("ui.upgrade"));
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Technologies
     const techsList = SettingsListUi.getSettingsList(this._host.engine, "techs");
@@ -74,11 +70,8 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     policyButtons.sort((a, b) => a.label.localeCompare(b.label));
     policyButtons.forEach(button => policiesList.append(button.button));
 
-    list.append(techsElement, techsList, policiesElement, policiesList);
-    element.append(list);
-
-    this.element = element;
-    this.mainChild = list;
+    list.append(techsElement.element, techsList, policiesElement.element, policiesList);
+    panel.element.append(list);
   }
 
   setState(state: ScienceSettings): void {

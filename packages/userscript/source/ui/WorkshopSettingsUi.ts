@@ -10,20 +10,16 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingUi } from "./SettingUi";
 
 export class WorkshopSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: WorkshopSettings;
 
   constructor(host: UserScript, settings: WorkshopSettings) {
-    super(host);
+    const toggleName = "craft";
+    const label = ucfirst(host.engine.i18n("ui.craft"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "craft";
-    const label = ucfirst(this._host.engine.i18n("ui.craft"));
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Create "trigger" button in the item.
     this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
@@ -136,11 +132,8 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    element.append(this._settings.$trigger);
-    element.append(list);
-
-    this.element = element;
-    this.mainChild = list;
+    panel.element.append(this._settings.$trigger);
+    panel.element.append(list);
   }
 
   private _getCraftOption(
@@ -221,7 +214,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, upgradesElement, upgradesList, shipOverride];
+    return [header, upgradesElement.element, upgradesList, shipOverride];
   }
 
   setState(state: WorkshopSettings): void {

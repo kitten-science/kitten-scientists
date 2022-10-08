@@ -22,7 +22,7 @@ export class SettingsPanelUi {
     options: SettingsSection,
     mainChild: JQuery<HTMLElement>,
     initiallyExpanded = false
-  ): JQuery<HTMLElement> {
+  ): { element: JQuery<HTMLElement>; expando: JQuery<HTMLElement> } {
     const panelElement = SettingUi.make(host, id, options, label, {
       onCheck: () => host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
@@ -34,23 +34,24 @@ export class SettingsPanelUi {
     );
     panelElement.append(itemsElement);
 
-    let itemsExpanded = initiallyExpanded;
+    itemsElement.data("expanded", initiallyExpanded);
     itemsElement.on("click", () => {
       mainChild.toggle();
-      itemsExpanded = !itemsExpanded;
+      const itemsExpanded = !itemsElement.data("expanded");
 
-      itemsElement.text(itemsExpanded ? "-" : "+");
+      itemsElement.data("expanded", itemsExpanded);
       itemsElement.prop(
         "title",
         itemsExpanded ? host.engine.i18n("ui.itemsHide") : host.engine.i18n("ui.itemsShow")
       );
+      itemsElement.text(itemsExpanded ? "-" : "+");
     });
 
     if (initiallyExpanded) {
       mainChild.toggle();
     }
 
-    return panelElement;
+    return { element: panelElement, expando: itemsElement };
   }
 
   /**

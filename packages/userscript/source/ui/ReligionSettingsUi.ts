@@ -11,25 +11,16 @@ import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: ReligionSettings;
 
   constructor(host: UserScript, settings: ReligionSettings) {
-    super(host);
+    const toggleName = "faith";
+    const label = ucfirst(host.engine.i18n("ui.faith"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "faith";
-    const label = ucfirst(this._host.engine.i18n("ui.faith"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Create "trigger" button in the item.
     this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
@@ -201,8 +192,8 @@ export class ReligionSettingsUi extends SettingsSectionUi {
 
     const additionOptions = this.getAdditionOptions();
 
-    element.append(this._settings.$trigger);
-    element.append(list);
+    panel.element.append(this._settings.$trigger);
+    panel.element.append(list);
     list.append(additionOptions);
 
     /* TODO:
@@ -224,9 +215,6 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       });
     }
     */
-
-    this.element = element;
-    this.mainChild = list;
   }
 
   getAdditionOptions(): Array<JQuery<HTMLElement>> {

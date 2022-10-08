@@ -12,27 +12,18 @@ import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
 export class VillageSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: VillageSettings;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, settings: VillageSettings) {
-    super(host);
+    const toggleName = "distribute";
+    const label = ucfirst(host.engine.i18n("ui.distribute"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "distribute";
-    const label = ucfirst(this._host.engine.i18n("ui.distribute"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     this._optionButtons = [
       this._getDistributeOption(
@@ -83,10 +74,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    element.append(list);
-
-    this.element = element;
-    this.mainChild = list;
+    panel.element.append(list);
   }
 
   private _getDistributeOption(

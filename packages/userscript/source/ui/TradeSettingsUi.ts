@@ -14,25 +14,16 @@ import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
 export class TradeSettingsUi extends SettingsSectionUi {
-  readonly element: JQuery<HTMLElement>;
-  readonly mainChild: JQuery<HTMLElement>;
-
   private readonly _settings: TradeSettings;
 
   constructor(host: UserScript, settings: TradeSettings) {
-    super(host);
+    const toggleName = "trade";
+    const label = ucfirst(host.engine.i18n("ui.trade"));
+    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
+    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
+    super(host, panel, list);
 
     this._settings = settings;
-
-    const toggleName = "trade";
-    const label = ucfirst(this._host.engine.i18n("ui.trade"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
-    const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
-    const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Create "trigger" button in the item.
     this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
@@ -86,11 +77,8 @@ export class TradeSettingsUi extends SettingsSectionUi {
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    element.append(this._settings.$trigger);
-    element.append(list);
-
-    this.element = element;
-    this.mainChild = list;
+    panel.element.append(this._settings.$trigger);
+    panel.element.append(list);
   }
 
   private _getTradeOption(
@@ -232,7 +220,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
       ),
     ];
     embassiesList.append(...embassiesButtons);
-    embassiesElement.append(
+    embassiesElement.element.append(
       SettingTriggerUi.getTriggerButton(
         this._host,
         "buildEmbassies",
@@ -258,7 +246,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, unlockRaces, embassiesElement, embassiesList];
+    return [header, unlockRaces, embassiesElement.element, embassiesList];
   }
 
   private _makeEmbassySetting(race: Race, option: SettingMax, label: string) {
