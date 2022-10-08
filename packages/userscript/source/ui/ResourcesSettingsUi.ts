@@ -29,14 +29,12 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
     // Add all the current resources
     for (const [name, item] of objectEntries(this._settings.items)) {
       list.append(
-        this._addNewResourceOption(
+        this._makeResourceSetting(
           name,
           ucfirst(this._host.engine.i18n(`$resources.${name}.title`)),
           item
         )
       );
-      //this.setStockValue(name, item.stock);
-      //this.setConsumeRate(name, item.consume);
     }
 
     panel.element.append(list);
@@ -51,7 +49,7 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
    * @param setting The option that is being controlled.
    * @returns A new option with stock and consume values.
    */
-  private _addNewResourceOption(
+  private _makeResourceSetting(
     name: Resource,
     title: string,
     setting: ResourcesSettingsItem
