@@ -1,4 +1,5 @@
 import { Resource, SpaceBuildings } from "../types";
+import { TriggerButton } from "../ui/components/TriggerButton";
 import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, ReligionItem } from "./ReligionSettings";
 import { TimeItem } from "./TimeSettings";
@@ -51,7 +52,7 @@ export class SettingLimitedMax extends SettingLimited implements SettingMax {
 
 export class SettingTrigger extends Setting {
   trigger: number;
-  $trigger: JQuery<HTMLElement> | undefined = undefined;
+  $trigger: TriggerButton | undefined = undefined;
 
   constructor(enabled = false, trigger = 1) {
     super(enabled);

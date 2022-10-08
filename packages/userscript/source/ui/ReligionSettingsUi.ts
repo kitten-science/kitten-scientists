@@ -4,6 +4,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { UserScript } from "../UserScript";
+import { TriggerButton } from "./components/TriggerButton";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -11,6 +12,7 @@ import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi {
+  private readonly _trigger: TriggerButton;
   private readonly _settings: ReligionSettings;
 
   constructor(host: UserScript, settings: ReligionSettings) {
@@ -23,7 +25,8 @@ export class ReligionSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    panel.element.append(this._makeSectionTriggerButton(toggleName, label, this._settings));
+    this._trigger = new TriggerButton(host, toggleName, label, settings);
+    panel.element.append(this._trigger.element);
 
     const optionButtons = [
       this._getHeader(this._host.engine.i18n("$religion.panel.ziggurat.label")),
@@ -348,21 +351,15 @@ export class ReligionSettingsUi extends SettingsSectionUi {
     this.setState(this._settings);
 
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
-    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
-      this._settings.trigger
-    );
+    mustExist(this._settings.$trigger).refreshUi();
 
     mustExist(this._settings.adore.$enabled).prop("checked", this._settings.adore.enabled);
-    mustExist(this._settings.adore.$trigger)[0].title = SettingsSectionUi.renderPercentage(
-      this._settings.adore.trigger
-    );
+    mustExist(this._settings.adore.$trigger).refreshUi();
     mustExist(this._settings.autoPraise.$enabled).prop(
       "checked",
       this._settings.autoPraise.enabled
     );
-    mustExist(this._settings.autoPraise.$trigger)[0].title = SettingsSectionUi.renderPercentage(
-      this._settings.autoPraise.trigger
-    );
+    mustExist(this._settings.autoPraise.$trigger).refreshUi();
     mustExist(this._settings.bestUnicornBuilding.$enabled).prop(
       "checked",
       this._settings.bestUnicornBuilding.enabled

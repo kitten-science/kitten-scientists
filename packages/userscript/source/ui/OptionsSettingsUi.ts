@@ -85,9 +85,7 @@ export class OptionsSettingsUi extends SettingsSectionUi {
       mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
 
       if (!isNil(option.$trigger)) {
-        option.$trigger[0].title = SettingsSectionUi.renderPercentage(
-          mustExist(this._settings.items[name].trigger)
-        );
+        option.$trigger.refreshUi();
       }
     }
   }

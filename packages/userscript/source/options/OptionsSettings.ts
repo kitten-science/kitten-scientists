@@ -1,19 +1,11 @@
 import { objectEntries } from "../tools/Entries";
-import { Setting, SettingTrigger } from "./Settings";
+import { SettingTrigger } from "./Settings";
 import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe";
 
-export class OptionsSettingsItem extends Setting implements Partial<SettingTrigger> {
-  trigger: number | undefined = undefined;
-  $trigger: JQuery<HTMLElement> | undefined = undefined;
-
-  constructor(enabled = false, trigger: number | undefined = undefined) {
-    super(enabled);
-    this.trigger = trigger;
-  }
-}
+export class OptionsSettingsItem extends SettingTrigger {}
 
 export class OptionsSettings extends SettingsSection {
   items: {

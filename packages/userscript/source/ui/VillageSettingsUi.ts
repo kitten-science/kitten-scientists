@@ -175,9 +175,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
       this._settings.holdFestivals.enabled
     );
     mustExist(this._settings.hunt.$enabled).prop("checked", this._settings.hunt.enabled);
-    mustExist(this._settings.hunt.$trigger)[0].title = SettingsSectionUi.renderPercentage(
-      this._settings.hunt.trigger
-    );
+    mustExist(this._settings.hunt.$trigger).refreshUi();
     mustExist(this._settings.promoteLeader.$enabled).prop(
       "checked",
       this._settings.promoteLeader.enabled

@@ -1,10 +1,9 @@
 import { BonfireSettingsItem } from "../options/BonfireSettings";
 import { ReligionSettingsItem } from "../options/ReligionSettings";
-import { SettingMax, SettingTrigger } from "../options/Settings";
+import { SettingMax } from "../options/Settings";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
 import { SettingMaxUi } from "./SettingMaxUi";
-import { SettingTriggerUi } from "./SettingTriggerUi";
 
 export type Toggleable = {
   get isExpanded(): boolean;
@@ -23,18 +22,6 @@ export abstract class SettingsSectionUiBase {
   }
 
   abstract refreshUi(): void;
-
-  /**
-   * Creates a new button to control a trigger value in a configuration section.
-   *
-   * @param id The ID of the button.
-   * @param itext The label of the section this trigger is for.
-   * @param setting The settings section this trigger is for.
-   * @returns The created button.
-   */
-  protected _makeSectionTriggerButton(id: string, itext: string, setting: SettingTrigger) {
-    return SettingTriggerUi.getTriggerButton(this._host, id, itext, setting);
-  }
 
   static getList(id: string) {
     return $("<ul/>", { id }).addClass("ks-list");

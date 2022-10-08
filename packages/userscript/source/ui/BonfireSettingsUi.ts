@@ -3,12 +3,14 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { TriggerButton } from "./components/TriggerButton";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { SettingUi } from "./SettingUi";
 
 export class BonfireSettingsUi extends SettingsSectionUi {
+  private readonly _trigger: TriggerButton;
   private readonly _settings: BonfireSettings;
 
   constructor(host: UserScript, settings: BonfireSettings) {
@@ -21,7 +23,8 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    panel.element.append(this._makeSectionTriggerButton(toggleName, label, this._settings));
+    this._trigger = new TriggerButton(host, toggleName, label, settings);
+    panel.element.append(this._trigger.element);
 
     const optionButtons = [
       this._getHeader(this._host.engine.i18n("$buildings.group.food")),
@@ -352,9 +355,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     this.setState(this._settings);
 
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
-    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
-      this._settings.trigger
-    );
+    mustExist(this._settings.$trigger).refreshUi();
     mustExist(this._settings.upgradeBuildings.$enabled).prop(
       "checked",
       this._settings.upgradeBuildings.enabled

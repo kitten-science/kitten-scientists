@@ -5,15 +5,16 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
+import { TriggerButton } from "./components/TriggerButton";
 import { SettingLimitedUi } from "./SettingLimitedUi";
 import { SettingMaxUi } from "./SettingMaxUi";
 import { SettingsListUi } from "./SettingsListUi";
 import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingTriggerUi } from "./SettingTriggerUi";
 import { SettingUi } from "./SettingUi";
 
 export class TradeSettingsUi extends SettingsSectionUi {
+  private readonly _trigger: TriggerButton;
   private readonly _settings: TradeSettings;
 
   constructor(host: UserScript, settings: TradeSettings) {
@@ -26,7 +27,8 @@ export class TradeSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    panel.element.append(this._makeSectionTriggerButton(toggleName, label, this._settings));
+    this._trigger = new TriggerButton(host, toggleName, label, settings);
+    panel.element.append(this._trigger.element);
 
     const optionButtons = [
       this._getTradeOption(
@@ -219,13 +221,13 @@ export class TradeSettingsUi extends SettingsSectionUi {
       ),
     ];
     embassiesList.append(...embassiesButtons);
-    const embassiesTrigger = SettingTriggerUi.getTriggerButton(
+    const embassiesTrigger = new TriggerButton(
       this._host,
       "buildEmbassies",
       this._host.engine.i18n("option.embassies"),
       this._settings.buildEmbassies
     );
-    embassiesElement.element.append(embassiesTrigger);
+    embassiesElement.element.append(embassiesTrigger.element);
 
     const unlockRaces = SettingUi.make(
       this._host,
@@ -276,17 +278,13 @@ export class TradeSettingsUi extends SettingsSectionUi {
     this.setState(this._settings);
 
     mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
-    mustExist(this._settings.$trigger)[0].title = SettingsSectionUi.renderPercentage(
-      this._settings.trigger
-    );
+    mustExist(this._settings.$trigger).refreshUi();
 
     mustExist(this._settings.buildEmbassies.$enabled).prop(
       "checked",
       this._settings.buildEmbassies.enabled
     );
-    mustExist(this._settings.buildEmbassies.$trigger)[0].title = SettingsSectionUi.renderPercentage(
-      this._settings.buildEmbassies.trigger
-    );
+    mustExist(this._settings.buildEmbassies.$trigger).refreshUi();
     for (const [name, option] of objectEntries(this._settings.buildEmbassies.items)) {
       mustExist(option.$enabled).prop("checked", this._settings.buildEmbassies.items[name].enabled);
       mustExist(option.$max).text(

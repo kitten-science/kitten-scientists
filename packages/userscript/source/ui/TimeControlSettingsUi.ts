@@ -1136,16 +1136,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       "checked",
       this._settings.accelerateTime.enabled
     );
-    mustExist(this._settings.accelerateTime.$trigger)[0].title = SettingsSectionUi.renderPercentage(
-      this._settings.accelerateTime.trigger
-    );
+    mustExist(this._settings.accelerateTime.$trigger).refreshUi();
 
     mustExist(this._settings.reset.$enabled).prop("checked", this._settings.reset.enabled);
 
     mustExist(this._settings.timeSkip.$enabled).prop("checked", this._settings.timeSkip.enabled);
-    mustExist(this._settings.timeSkip.$trigger)[0].title = SettingsSectionUi.renderPercentage(
-      this._settings.timeSkip.trigger
-    );
+    mustExist(this._settings.timeSkip.$trigger).refreshUi();
     mustExist(this._settings.timeSkip.$autumn).prop("checked", this._settings.timeSkip.autumn);
     mustExist(this._settings.timeSkip.$spring).prop("checked", this._settings.timeSkip.spring);
     mustExist(this._settings.timeSkip.$summer).prop("checked", this._settings.timeSkip.summer);
@@ -1163,7 +1159,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     for (const [name, option] of objectEntries(this._settings.buildItems)) {
       mustExist(option.$enabled).prop("checked", this._settings.buildItems[name].enabled);
-      mustExist(option.$trigger).text(
+      mustExist(option.$trigger).element.text(
         this._host.engine.i18n("ui.min", [
           this._renderLimit(this._settings.buildItems[name].trigger),
         ])
@@ -1171,7 +1167,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     }
     for (const [name, option] of objectEntries(this._settings.religionItems)) {
       mustExist(option.$enabled).prop("checked", this._settings.religionItems[name].enabled);
-      mustExist(option.$trigger).text(
+      mustExist(option.$trigger).element.text(
         this._host.engine.i18n("ui.min", [
           this._renderLimit(this._settings.religionItems[name].trigger),
         ])
@@ -1179,7 +1175,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     }
     for (const [name, option] of objectEntries(this._settings.spaceItems)) {
       mustExist(option.$enabled).prop("checked", this._settings.spaceItems[name].enabled);
-      mustExist(option.$trigger).text(
+      mustExist(option.$trigger).element.text(
         this._host.engine.i18n("ui.min", [
           this._renderLimit(this._settings.spaceItems[name].trigger),
         ])
@@ -1187,7 +1183,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     }
     for (const [name, option] of objectEntries(this._settings.timeItems)) {
       mustExist(option.$enabled).prop("checked", this._settings.timeItems[name].enabled);
-      mustExist(option.$trigger).text(
+      mustExist(option.$trigger).element.text(
         this._host.engine.i18n("ui.min", [
           this._renderLimit(this._settings.timeItems[name].trigger),
         ])
