@@ -60,8 +60,8 @@ export class OptionsSettingsUi extends SettingsSectionUi {
       onUnCheck: () => this._host.engine.imessage("status.sub.disable", [iname]),
     };
     return option.trigger
-      ? SettingTriggerUi.make(this._host, name, option as SettingTrigger, iname, handler)
-      : SettingUi.make(this._host, name, option, iname, handler);
+      ? SettingTriggerUi.make(this._host, name, option as SettingTrigger, iname, handler).element
+      : SettingUi.make(this._host, name, option, iname, handler).element;
   }
 
   setState(state: OptionsSettings): void {
@@ -79,10 +79,10 @@ export class OptionsSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
 
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).refreshUi();
 
       if (!isNil(option.$trigger)) {
         option.$trigger.refreshUi();

@@ -107,7 +107,7 @@ export class TimeSettingsUi extends SettingsSectionUi {
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       },
       delimiter
-    );
+    ).element;
   }
 
   setState(state: TimeSettings): void {
@@ -122,11 +122,11 @@ export class TimeSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
     mustExist(this._settings.$trigger).refreshUi();
 
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).refreshUi();
       mustExist(option.$max).refreshUi();
     }
   }

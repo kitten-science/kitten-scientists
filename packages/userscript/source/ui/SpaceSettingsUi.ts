@@ -209,7 +209,7 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     missionButtons.sort((a, b) => a.label.localeCompare(b.label));
-    missionButtons.forEach(button => missionsList.append(button.button));
+    missionButtons.forEach(button => missionsList.append(button.button.element));
 
     return [header, missionsElement.element, missionsList];
   }
@@ -232,19 +232,16 @@ export class SpaceSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
     mustExist(this._settings.$trigger).refreshUi();
 
-    mustExist(this._settings.unlockMissions.$enabled).prop(
-      "checked",
-      this._settings.unlockMissions.enabled
-    );
+    mustExist(this._settings.unlockMissions.$enabled).refreshUi();
     for (const [, option] of objectEntries(this._settings.unlockMissions.items)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$enabled).refreshUi();
     }
 
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).refreshUi();
       mustExist(option.$max).refreshUi();
     }
   }

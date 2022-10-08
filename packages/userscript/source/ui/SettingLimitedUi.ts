@@ -1,7 +1,6 @@
 import { SettingLimited } from "../options/Settings";
 import { UserScript } from "../UserScript";
-import { LimitedButton } from "./components/LimitedButton";
-import { SettingUi } from "./SettingUi";
+import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 
 export class SettingLimitedUi {
   /**
@@ -35,21 +34,15 @@ export class SettingLimitedUi {
     },
     delimiter = false,
     upgradeIndicator = false
-  ): JQuery<HTMLElement> {
-    const element = SettingUi.make(
+  ): SettingLimitedListItem {
+    return new SettingLimitedListItem(
       host,
       name,
-      setting,
       label,
+      setting,
       handler,
       delimiter,
-      upgradeIndicator,
-      []
+      upgradeIndicator
     );
-
-    const limitedButton = new LimitedButton(host, name, setting, handler);
-    element.append(limitedButton.element);
-
-    return element;
   }
 }

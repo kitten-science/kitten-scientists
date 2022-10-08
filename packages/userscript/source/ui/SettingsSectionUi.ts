@@ -69,7 +69,7 @@ export abstract class SettingsSectionUiBase {
       },
       delimiter,
       upgradeIndicator
-    );
+    ).element;
   }
 
   static promptLimit(text: string, defaultValue: string): number | null {

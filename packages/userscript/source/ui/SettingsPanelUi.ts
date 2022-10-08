@@ -32,7 +32,7 @@ export class SettingsPanelUi {
     const itemsElement = SettingsPanelUi.makeItemsToggle(host, id).text(
       initiallyExpanded ? "-" : "+"
     );
-    panelElement.append(itemsElement);
+    panelElement.element.append(itemsElement);
 
     itemsElement.data("expanded", initiallyExpanded);
     itemsElement.on("click", () => {
@@ -51,7 +51,7 @@ export class SettingsPanelUi {
       mainChild.toggle();
     }
 
-    return { element: panelElement, expando: itemsElement };
+    return { element: panelElement.element, expando: itemsElement };
   }
 
   /**

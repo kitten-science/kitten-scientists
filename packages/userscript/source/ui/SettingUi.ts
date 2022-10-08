@@ -1,8 +1,9 @@
 import { Setting } from "../options/Settings";
 import { UserScript } from "../UserScript";
+import { SettingListItem } from "./components/SettingListItem";
 
 export class SettingUi {
-  private static _provisionedOptionElements = new Map<string, JQuery<HTMLElement>>();
+  private static _provisionedOptionElements = new Map<string, SettingListItem>();
 
   /**
    * Construct a new setting element.
@@ -33,41 +34,23 @@ export class SettingUi {
     delimiter = false,
     upgradeIndicator = false,
     additionalClasses = []
-  ): JQuery<HTMLElement> {
+  ): SettingListItem {
     if (SettingUi._provisionedOptionElements.has(name)) {
       throw new Error(
         `Duplicate setting ID requested! The setting ID '${name}' has already been assigned to a previously provisoned element.`
       );
     }
-    const element = $(`<li/>`);
-    for (const cssClass of ["ks-setting", delimiter ? "ks-delimiter" : "", ...additionalClasses]) {
-      element.addClass(cssClass);
-    }
 
-    const elementLabel = `${upgradeIndicator ? `⮤ ` : ""}${i18nName}`;
-    const label = $("<label/>", {
-      for: `toggle-${name}`,
-      text: elementLabel,
-    }).addClass("ks-label");
-
-    const input = $("<input/>", {
-      id: `toggle-${name}`,
-      type: "checkbox",
-    }).addClass("ks-checkbox");
-
-    setting.$enabled = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && setting.enabled === false) {
-        handler.onCheck();
-        host.updateOptions(() => (setting.enabled = true));
-      } else if (!input.is(":checked") && setting.enabled === true) {
-        handler.onUnCheck();
-        host.updateOptions(() => (setting.enabled = false));
-      }
-    });
-
-    element.append(input, label);
+    const element = new SettingListItem(
+      host,
+      name,
+      i18nName,
+      setting,
+      handler,
+      delimiter,
+      upgradeIndicator,
+      additionalClasses
+    );
 
     SettingUi._provisionedOptionElements.set(name, element);
 

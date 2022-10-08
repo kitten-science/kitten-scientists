@@ -274,10 +274,10 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       }
     );
 
-    nodeBestUnicornBuilding
+    nodeBestUnicornBuilding.element
       .children("label")
       .prop("title", this._host.engine.i18n("option.faith.best.unicorn.desc"));
-    const input = nodeBestUnicornBuilding.children("input");
+    const input = nodeBestUnicornBuilding.element.children("input");
     input.unbind("change");
     const bub = this._settings.bestUnicornBuilding;
     input.on("change", () => {
@@ -327,7 +327,13 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [nodeHeader, nodeBestUnicornBuilding, nodeAutoPraise, nodeAdore, nodeTranscend];
+    return [
+      nodeHeader,
+      nodeBestUnicornBuilding.element,
+      nodeAutoPraise.element,
+      nodeAdore.element,
+      nodeTranscend.element,
+    ];
   }
 
   setState(state: ReligionSettings): void {
@@ -350,24 +356,18 @@ export class ReligionSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
     mustExist(this._settings.$trigger).refreshUi();
 
-    mustExist(this._settings.adore.$enabled).prop("checked", this._settings.adore.enabled);
+    mustExist(this._settings.adore.$enabled).refreshUi();
     mustExist(this._settings.adore.$trigger).refreshUi();
-    mustExist(this._settings.autoPraise.$enabled).prop(
-      "checked",
-      this._settings.autoPraise.enabled
-    );
+    mustExist(this._settings.autoPraise.$enabled).refreshUi();
     mustExist(this._settings.autoPraise.$trigger).refreshUi();
-    mustExist(this._settings.bestUnicornBuilding.$enabled).prop(
-      "checked",
-      this._settings.bestUnicornBuilding.enabled
-    );
-    mustExist(this._settings.transcend.$enabled).prop("checked", this._settings.transcend.enabled);
+    mustExist(this._settings.bestUnicornBuilding.$enabled).refreshUi();
+    mustExist(this._settings.transcend.$enabled).refreshUi();
 
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).refreshUi();
       mustExist(option.$max).refreshUi();
     }
   }

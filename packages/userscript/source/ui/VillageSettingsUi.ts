@@ -83,7 +83,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
     label: string,
     delimiter = false
   ): JQuery<HTMLElement> {
-    const element = SettingMaxUi.make(
+    return SettingMaxUi.make(
       this._host,
       name,
       option,
@@ -93,8 +93,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       },
       delimiter
-    );
-    return element;
+    ).element;
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
@@ -149,7 +148,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [nodeHeader, nodeHunt, nodeFestivals, nodePromote];
+    return [nodeHeader, nodeHunt.element, nodeFestivals.element, nodePromote.element];
   }
 
   setState(state: VillageSettings): void {
@@ -168,21 +167,15 @@ export class VillageSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
 
-    mustExist(this._settings.holdFestivals.$enabled).prop(
-      "checked",
-      this._settings.holdFestivals.enabled
-    );
-    mustExist(this._settings.hunt.$enabled).prop("checked", this._settings.hunt.enabled);
+    mustExist(this._settings.holdFestivals.$enabled).refreshUi();
+    mustExist(this._settings.hunt.$enabled).refreshUi();
     mustExist(this._settings.hunt.$trigger).refreshUi();
-    mustExist(this._settings.promoteLeader.$enabled).prop(
-      "checked",
-      this._settings.promoteLeader.enabled
-    );
+    mustExist(this._settings.promoteLeader.$enabled).refreshUi();
 
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).refreshUi();
       mustExist(option.$max).refreshUi();
     }
   }

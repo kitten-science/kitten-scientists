@@ -1,6 +1,7 @@
 import { Resource, SpaceBuildings } from "../types";
 import { LimitedButton } from "../ui/components/LimitedButton";
 import { MaxButton } from "../ui/components/MaxButton";
+import { SettingListItem } from "../ui/components/SettingListItem";
 import { TriggerButton } from "../ui/components/TriggerButton";
 import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, ReligionItem } from "./ReligionSettings";
@@ -15,7 +16,7 @@ export type AllItems = BonfireItem | FaithItem | ReligionItem | SpaceBuildings |
 
 export class Setting {
   enabled: boolean;
-  $enabled: JQuery<HTMLElement> | undefined = undefined;
+  $enabled: SettingListItem | undefined = undefined;
 
   constructor(id: string, enabled = false) {
     this.enabled = enabled;

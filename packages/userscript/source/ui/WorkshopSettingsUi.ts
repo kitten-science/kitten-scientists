@@ -158,7 +158,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       },
       delimiter,
       upgradeIndicator
-    );
+    ).element;
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
@@ -191,7 +191,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     upgradeButtons.sort((a, b) => a.label.localeCompare(b.label));
-    upgradeButtons.forEach(button => upgradesList.append(button.button));
+    upgradeButtons.forEach(button => upgradesList.append(button.button.element));
 
     const shipOverride = SettingUi.make(
       this._host,
@@ -210,7 +210,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, upgradesElement.element, upgradesList, shipOverride];
+    return [header, upgradesElement.element, upgradesList, shipOverride.element];
   }
 
   setState(state: WorkshopSettings): void {
@@ -231,19 +231,16 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
     mustExist(this._settings.$trigger).refreshUi();
 
-    mustExist(this._settings.unlockUpgrades.$enabled).prop(
-      "checked",
-      this._settings.unlockUpgrades.enabled
-    );
+    mustExist(this._settings.unlockUpgrades.$enabled).refreshUi();
     for (const [, option] of objectEntries(this._settings.unlockUpgrades.items)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$enabled).refreshUi();
     }
 
     for (const [, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$enabled).refreshUi();
       mustExist(option.$limited).refreshUi();
       mustExist(option.$max).refreshUi();
     }

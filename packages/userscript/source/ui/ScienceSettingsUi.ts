@@ -42,7 +42,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     techButtons.sort((a, b) => a.label.localeCompare(b.label));
-    techButtons.forEach(button => techsList.append(button.button));
+    techButtons.forEach(button => techsList.append(button.button.element));
 
     // Policies
     const policiesList = SettingsListUi.getSettingsList(this._host.engine, "policies");
@@ -68,7 +68,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     policyButtons.sort((a, b) => a.label.localeCompare(b.label));
-    policyButtons.forEach(button => policiesList.append(button.button));
+    policyButtons.forEach(button => policiesList.append(button.button.element));
 
     list.append(techsElement.element, techsList, policiesElement.element, policiesList);
     panel.element.append(list);
@@ -94,19 +94,19 @@ export class ScienceSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
 
-    mustExist(this._settings.policies.$enabled).prop("checked", this._settings.policies.enabled);
-    mustExist(this._settings.techs.$enabled).prop("checked", this._settings.techs.enabled);
+    mustExist(this._settings.policies.$enabled).refreshUi();
+    mustExist(this._settings.techs.$enabled).refreshUi();
 
     // Handle techs.
-    for (const [name, option] of objectEntries(this._settings.techs.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.techs.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.techs.items)) {
+      mustExist(option.$enabled).refreshUi();
     }
 
     // Handle policies.
-    for (const [name, option] of objectEntries(this._settings.policies.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.policies.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.policies.items)) {
+      mustExist(option.$enabled).refreshUi();
     }
   }
 }

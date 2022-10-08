@@ -1,7 +1,6 @@
 import { SettingTrigger } from "../options/Settings";
 import { UserScript } from "../UserScript";
-import { TriggerButton } from "./components/TriggerButton";
-import { SettingUi } from "./SettingUi";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 
 export class SettingTriggerUi {
   static make(
@@ -15,23 +14,15 @@ export class SettingTriggerUi {
     },
     delimiter = false,
     upgradeIndicator = false
-  ): JQuery<HTMLElement> {
-    const element = SettingUi.make(
+  ): SettingTriggerListItem {
+    return new SettingTriggerListItem(
       host,
       name,
-      setting,
       label,
+      setting,
       handler,
       delimiter,
-      upgradeIndicator,
-      []
+      upgradeIndicator
     );
-
-    if (setting.trigger !== undefined) {
-      const triggerButton = new TriggerButton(host, `set-${name}-trigger`, label, setting);
-      element.append(triggerButton.element);
-    }
-
-    return element;
   }
 }

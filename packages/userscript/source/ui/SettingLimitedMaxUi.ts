@@ -1,7 +1,6 @@
 import { SettingLimitedMax } from "../options/Settings";
 import { UserScript } from "../UserScript";
-import { MaxButton } from "./components/MaxButton";
-import { SettingLimitedUi } from "./SettingLimitedUi";
+import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem";
 
 export class SettingLimitedMaxUi {
   /**
@@ -38,21 +37,15 @@ export class SettingLimitedMaxUi {
     },
     delimiter = false,
     upgradeIndicator = false
-  ): JQuery<HTMLElement> {
-    const element = SettingLimitedUi.make(
+  ): SettingLimitedMaxListItem {
+    return new SettingLimitedMaxListItem(
       host,
       name,
-      setting,
       label,
+      setting,
       handler,
       delimiter,
       upgradeIndicator
     );
-
-    const maxButton = new MaxButton(host, name, label, setting);
-    setting.$max = maxButton;
-    element.append(maxButton.element);
-
-    return element;
   }
 }

@@ -122,9 +122,9 @@ export class TradeSettingsUi extends SettingsSectionUi {
       list.toggle();
     });
 
-    element.append(seasonsButton, list);
+    element.element.append(seasonsButton, list);
 
-    return element;
+    return element.element;
   }
 
   private _getSeason(name: Race, season: Season, option: TradeSettingsItem): JQuery<HTMLElement> {
@@ -240,14 +240,14 @@ export class TradeSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, unlockRaces, embassiesElement.element, embassiesList];
+    return [header, unlockRaces.element, embassiesElement.element, embassiesList];
   }
 
   private _makeEmbassySetting(race: Race, option: SettingMax, label: string) {
     return SettingMaxUi.make(this._host, `embassy-${race}`, option, label, {
       onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
       onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-    });
+    }).element;
   }
 
   setState(state: TradeSettings): void {
@@ -271,26 +271,20 @@ export class TradeSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
     mustExist(this._settings.$trigger).refreshUi();
 
-    mustExist(this._settings.buildEmbassies.$enabled).prop(
-      "checked",
-      this._settings.buildEmbassies.enabled
-    );
+    mustExist(this._settings.buildEmbassies.$enabled).refreshUi();
     mustExist(this._settings.buildEmbassies.$trigger).refreshUi();
-    for (const [name, option] of objectEntries(this._settings.buildEmbassies.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.buildEmbassies.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.buildEmbassies.items)) {
+      mustExist(option.$enabled).refreshUi();
       mustExist(option.$max).refreshUi();
     }
 
-    mustExist(this._settings.unlockRaces.$enabled).prop(
-      "checked",
-      this._settings.unlockRaces.enabled
-    );
+    mustExist(this._settings.unlockRaces.$enabled).refreshUi();
 
     for (const [name, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+      mustExist(option.$enabled).refreshUi();
       mustExist(option.$limited).refreshUi();
 
       mustExist(option.$autumn).prop("checked", this._settings.items[name].autumn);

@@ -1,7 +1,6 @@
 import { SettingMax } from "../options/Settings";
 import { UserScript } from "../UserScript";
-import { MaxButton } from "./components/MaxButton";
-import { SettingUi } from "./SettingUi";
+import { SettingMaxListItem } from "./components/SettingMaxListItem";
 
 export class SettingMaxUi {
   /**
@@ -32,21 +31,7 @@ export class SettingMaxUi {
     },
     delimiter = false,
     upgradeIndicator = false
-  ): JQuery<HTMLElement> {
-    const element = SettingUi.make(
-      host,
-      name,
-      setting,
-      label,
-      handler,
-      delimiter,
-      upgradeIndicator,
-      []
-    );
-
-    const maxButton = new MaxButton(host, name, label, setting);
-    element.append(maxButton.element);
-
-    return element;
+  ): SettingMaxListItem {
+    return new SettingMaxListItem(host, name, label, setting, handler, delimiter, upgradeIndicator);
   }
 }

@@ -121,7 +121,7 @@ export class FiltersSettingsUi extends SettingsSectionUi {
         false,
         false,
         []
-      );
+      ).element;
 
     const optionButtons = buttons
       .sort((a, b) => a.label.localeCompare(b.label))
@@ -144,10 +144,10 @@ export class FiltersSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
 
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).refreshUi();
     }
   }
 }

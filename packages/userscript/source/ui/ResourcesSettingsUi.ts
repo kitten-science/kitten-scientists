@@ -78,7 +78,7 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
       ]),
     }).addClass("ks-text-button");
 
-    container.append(stockElement, consumeElement);
+    container.element.append(stockElement, consumeElement);
 
     stockElement.on("click", () => {
       const value = SettingsSectionUi.promptLimit(
@@ -107,7 +107,7 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
     setting.$consume = consumeElement;
     setting.$stock = stockElement;
 
-    return container;
+    return container.element;
   }
 
   setState(state: ResourcesSettings): void {
@@ -123,10 +123,10 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", true);
+    mustExist(this._settings.$enabled).refreshUi();
 
     for (const [, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
+      mustExist(option.$enabled).refreshUi();
       mustExist(option.$consume).text(
         this._host.engine.i18n("resources.consume", [
           SettingsSectionUi.renderConsumeRate(option.consume),

@@ -311,7 +311,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     upgradeBuildingsButtons.sort((a, b) => a.label.localeCompare(b.label));
-    upgradeBuildingsButtons.forEach(button => upgradeBuildingsList.append(button.button));
+    upgradeBuildingsButtons.forEach(button => upgradeBuildingsList.append(button.button.element));
 
     const nodeTurnOnSteamworks = SettingUi.make(
       this._host,
@@ -331,7 +331,12 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, upgradeBuildingsElement.element, upgradeBuildingsList, nodeTurnOnSteamworks];
+    return [
+      header,
+      upgradeBuildingsElement.element,
+      upgradeBuildingsList,
+      nodeTurnOnSteamworks.element,
+    ];
   }
 
   setState(state: BonfireSettings): void {
@@ -354,28 +359,19 @@ export class BonfireSettingsUi extends SettingsSectionUi {
   refreshUi(): void {
     this.setState(this._settings);
 
-    mustExist(this._settings.$enabled).prop("checked", this._settings.enabled);
+    mustExist(this._settings.$enabled).refreshUi();
     mustExist(this._settings.$trigger).refreshUi();
-    mustExist(this._settings.upgradeBuildings.$enabled).prop(
-      "checked",
-      this._settings.upgradeBuildings.enabled
-    );
-    mustExist(this._settings.turnOnSteamworks.$enabled).prop(
-      "checked",
-      this._settings.turnOnSteamworks.enabled
-    );
+    mustExist(this._settings.upgradeBuildings.$enabled).refreshUi();
+    mustExist(this._settings.turnOnSteamworks.$enabled).refreshUi();
 
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+    for (const [, option] of objectEntries(this._settings.items)) {
+      mustExist(option.$enabled).refreshUi();
       mustExist(option.$max).refreshUi();
     }
 
     // Building upgrades.
-    for (const [name, option] of objectEntries(this._settings.upgradeBuildings.items)) {
-      mustExist(option.$enabled).prop(
-        "checked",
-        this._settings.upgradeBuildings.items[name].enabled
-      );
+    for (const [, option] of objectEntries(this._settings.upgradeBuildings.items)) {
+      mustExist(option.$enabled).refreshUi();
     }
   }
 }
