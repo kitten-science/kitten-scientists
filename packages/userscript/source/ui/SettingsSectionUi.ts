@@ -33,19 +33,7 @@ export abstract class SettingsSectionUiBase {
    * @returns The created button.
    */
   protected _makeSectionTriggerButton(id: string, itext: string, setting: SettingTrigger) {
-    return SettingTriggerUi.getTriggerButton(this._host, id, itext, setting, {
-      onClick: () => {
-        const value = SettingsSectionUi.promptPercentage(
-          this._host.engine.i18n("ui.trigger.set", [itext]),
-          SettingsSectionUi.renderPercentage(setting.trigger)
-        );
-
-        if (value !== null) {
-          this._host.updateOptions(() => (setting.trigger = value));
-          this.refreshUi();
-        }
-      },
-    });
+    return SettingTriggerUi.getTriggerButton(this._host, id, itext, setting);
   }
 
   static getList(id: string) {
