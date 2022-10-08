@@ -286,6 +286,9 @@ export class TradeSettingsUi extends SettingsSectionUi {
       "checked",
       this._settings.buildEmbassies.enabled
     );
+    mustExist(this._settings.buildEmbassies.$trigger)[0].title = SettingsSectionUi.renderPercentage(
+      this._settings.buildEmbassies.trigger
+    );
     for (const [name, option] of objectEntries(this._settings.buildEmbassies.items)) {
       mustExist(option.$enabled).prop("checked", this._settings.buildEmbassies.items[name].enabled);
       mustExist(option.$max).text(
