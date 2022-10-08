@@ -151,16 +151,10 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       option,
       label,
       {
-        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
-        onLimitedCheck: () => {
-          this._host.updateOptions(() => (option.limited = true));
-          this._host.engine.imessage("craft.limited", [label]);
-        },
-        onLimitedUnCheck: () => {
-          this._host.updateOptions(() => (option.limited = false));
-          this._host.engine.imessage("craft.unlimited", [label]);
-        },
+        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+        onLimitedCheck: () => this._host.engine.imessage("craft.limited", [label]),
+        onLimitedUnCheck: () => this._host.engine.imessage("craft.unlimited", [label]),
       },
       delimiter,
       upgradeIndicator
@@ -250,7 +244,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     for (const [, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
-      mustExist(option.$limited).prop("checked", option.limited);
+      mustExist(option.$limited).refreshUi();
       mustExist(option.$max).refreshUi();
     }
   }

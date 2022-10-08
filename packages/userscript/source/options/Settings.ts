@@ -1,4 +1,5 @@
 import { Resource, SpaceBuildings } from "../types";
+import { LimitedButton } from "../ui/components/LimitedButton";
 import { MaxButton } from "../ui/components/MaxButton";
 import { TriggerButton } from "../ui/components/TriggerButton";
 import { BonfireItem } from "./BonfireSettings";
@@ -23,7 +24,7 @@ export class Setting {
 
 export class SettingLimited extends Setting {
   limited: boolean;
-  $limited: JQuery<HTMLElement> | undefined = undefined;
+  $limited: LimitedButton | undefined = undefined;
 
   constructor(id: string, enabled = false, limited = false) {
     super(id, enabled);

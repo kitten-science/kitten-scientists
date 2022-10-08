@@ -45,7 +45,6 @@ export class SettingMaxUi {
     );
 
     const maxButton = new MaxButton(host, name, label, setting);
-    setting.$max = maxButton;
     element.append(maxButton.element);
 
     return element;

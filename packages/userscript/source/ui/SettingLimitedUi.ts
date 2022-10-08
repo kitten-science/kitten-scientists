@@ -1,6 +1,6 @@
 import { SettingLimited } from "../options/Settings";
-import { clog } from "../tools/Log";
 import { UserScript } from "../UserScript";
+import { LimitedButton } from "./components/LimitedButton";
 import { SettingUi } from "./SettingUi";
 
 export class SettingLimitedUi {
@@ -30,8 +30,8 @@ export class SettingLimitedUi {
     handler: {
       onCheck: () => void;
       onUnCheck: () => void;
-      onLimitedCheck?: () => void;
-      onLimitedUnCheck?: () => void;
+      onLimitedCheck: () => void;
+      onLimitedUnCheck: () => void;
     },
     delimiter = false,
     upgradeIndicator = false
@@ -47,38 +47,8 @@ export class SettingLimitedUi {
       []
     );
 
-    const labelElement = $("<label/>", {
-      for: `toggle-limited-${name}`,
-      text: host.engine.i18n("ui.limit"),
-    });
-
-    const input = $("<input/>", {
-      id: `toggle-limited-${name}`,
-      type: "checkbox",
-    });
-    setting.$limited = input;
-
-    input.on("change", () => {
-      if (input.is(":checked") && setting.limited === false) {
-        if (handler.onLimitedCheck) {
-          handler.onLimitedCheck();
-          return;
-        }
-
-        host.updateOptions(() => (setting.limited = true));
-        clog("Unlogged action item");
-      } else if (!input.is(":checked") && setting.limited === true) {
-        if (handler.onLimitedUnCheck) {
-          handler.onLimitedUnCheck();
-          return;
-        }
-
-        host.updateOptions(() => (setting.limited = false));
-        clog("Unlogged action item");
-      }
-    });
-
-    element.append(input, labelElement);
+    const limitedButton = new LimitedButton(host, name, setting, handler);
+    element.append(limitedButton.element);
 
     return element;
   }

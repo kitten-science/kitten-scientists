@@ -33,8 +33,8 @@ export class SettingLimitedMaxUi {
     handler: {
       onCheck: () => void;
       onUnCheck: () => void;
-      onLimitedCheck?: () => void;
-      onLimitedUnCheck?: () => void;
+      onLimitedCheck: () => void;
+      onLimitedUnCheck: () => void;
     },
     delimiter = false,
     upgradeIndicator = false

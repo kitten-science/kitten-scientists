@@ -97,14 +97,8 @@ export class TradeSettingsUi extends SettingsSectionUi {
       {
         onCheck: () => this._host.engine.imessage("status.sub.enable", [i18nName]),
         onUnCheck: () => this._host.engine.imessage("status.sub.disable", [i18nName]),
-        onLimitedCheck: () => {
-          this._host.updateOptions(() => (option.limited = true));
-          this._host.engine.imessage("trade.limited", [i18nName]);
-        },
-        onLimitedUnCheck: () => {
-          this._host.updateOptions(() => (option.limited = false));
-          this._host.engine.imessage("trade.unlimited", [i18nName]);
-        },
+        onLimitedCheck: () => this._host.engine.imessage("trade.limited", [i18nName]),
+        onLimitedUnCheck: () => this._host.engine.imessage("trade.unlimited", [i18nName]),
       },
       delimiter,
       upgradeIndicator
@@ -297,7 +291,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
-      mustExist(option.$limited).prop("checked", this._settings.items[name].limited);
+      mustExist(option.$limited).refreshUi();
 
       mustExist(option.$autumn).prop("checked", this._settings.items[name].autumn);
       mustExist(option.$spring).prop("checked", this._settings.items[name].spring);
