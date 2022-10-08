@@ -29,12 +29,9 @@ export class SettingsPanelUi {
     });
 
     // The expando button for this panel.
-    const itemsElement = $("<div/>", {
-      id: `toggle-items-${id}`,
-      title: host.engine.i18n("ui.itemsShow"),
-    })
-      .addClass("ks-expando-button")
-      .text(initiallyExpanded ? "-" : "+");
+    const itemsElement = SettingsPanelUi.makeItemsToggle(host, id).text(
+      initiallyExpanded ? "-" : "+"
+    );
     panelElement.append(itemsElement);
 
     let itemsExpanded = initiallyExpanded;
@@ -54,5 +51,21 @@ export class SettingsPanelUi {
     }
 
     return panelElement;
+  }
+
+  /**
+   * Constructs an expando element that is commonly used to expand and
+   * collapses a section of the UI.
+   *
+   * @param host A reference to the host.
+   * @param id The ID of the section this is the expando for.
+   * @returns The constructed expando element.
+   */
+  static makeItemsToggle(host: UserScript, id: string): JQuery<HTMLElement> {
+    return $("<div/>", {
+      id: `toggle-items-${id}`,
+      title: host.engine.i18n("ui.itemsShow"),
+      text: "+",
+    }).addClass("ks-expando-button");
   }
 }

@@ -2,6 +2,7 @@ import { EngineSettings } from "../options/EngineSettings";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class EngineSettingsUi extends SettingsSectionUi {
@@ -44,7 +45,7 @@ export class EngineSettingsUi extends SettingsSectionUi {
       }
     });
 
-    const toggleOptionsVisiblity = this._getItemsToggle(toggleName);
+    const toggleOptionsVisiblity = SettingsPanelUi.makeItemsToggle(this._host, toggleName);
     element.append(toggleOptionsVisiblity);
 
     this.element = element;

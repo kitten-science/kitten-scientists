@@ -28,22 +28,6 @@ export abstract class SettingsSectionUi {
   abstract refreshUi(): void;
 
   /**
-   * Constructs an expando element that is commonly used to expand and
-   * collapses a section of the UI.
-   *
-   * @param id The ID of the section this is the expando for.
-   * @returns The constructed expando element.
-   */
-  protected _getItemsToggle(id: string): JQuery<HTMLElement> {
-    return $("<div/>", {
-      id: `toggle-items-${id}`,
-      title: this._host.engine.i18n("ui.itemsShow"),
-    })
-      .addClass("ks-expando-button")
-      .text("+");
-  }
-
-  /**
    * Creates a new button to control a trigger value in a configuration section.
    *
    * @param id The ID of the button.
