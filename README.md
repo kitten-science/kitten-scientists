@@ -1,3 +1,5 @@
+![A kitten scientist](.github/cover.png)
+
 # Kitten Scientists V2
 
 Kitten Scientists (KS) is a simple automation script for the complex [Kittens Game](http://kittensgame.com/web/). It was originally developed by [Cameron Condry](https://github.com/cameroncondry/cbc-kitten-scientists) and extended by many great [contributors](#contributors).
