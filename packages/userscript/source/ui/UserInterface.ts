@@ -168,6 +168,13 @@ export class UserInterface {
       `#ks ul li { 
         float: left;
         width: 100%;
+        border-bottom: 1px solid transparent;
+        transition: .3s;
+      }`
+    );
+    this._addRule(
+      `#ks ul li:hover { 
+        border-bottom: 1px solid rgba(185, 185, 185, 0.5);
       }`
     );
 

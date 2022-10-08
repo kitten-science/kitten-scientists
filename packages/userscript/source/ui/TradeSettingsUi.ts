@@ -115,7 +115,6 @@ export class TradeSettingsUi extends SettingsSectionUi {
       delimiter,
       upgradeIndicator
     );
-    element.css("borderTop", "1px solid rgba(185, 185, 185, 0.1)");
 
     const seasonsButton = $("<div/>", {
       id: `toggle-seasons-${name}`,

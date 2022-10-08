@@ -65,8 +65,6 @@ export abstract class SettingsSectionUi {
     this._mainChild = mainChild;
 
     const panelElement = $("<li/>", { id: `ks-${id}` }).addClass("ks-setting");
-    // Add a border on the element
-    panelElement.css("borderTop", "1px solid rgba(185, 185, 185, 0.2)");
 
     // The checkbox to enable/disable this panel.
     const enabledElement = $("<input/>", {
