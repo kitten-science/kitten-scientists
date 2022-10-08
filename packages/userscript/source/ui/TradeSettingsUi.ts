@@ -1,3 +1,4 @@
+import { SettingMax } from "../options/Settings";
 import { TradeSettings, TradeSettingsItem } from "../options/TradeSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
@@ -188,16 +189,49 @@ export class TradeSettingsUi extends SettingsSectionUi {
       embassiesList
     );
 
-    const embassiesButtons = [];
-    for (const [race, option] of objectEntries(this._settings.buildEmbassies.items)) {
-      const label = this._host.engine.i18n(`$trade.race.${race}`);
-      const button = SettingMaxUi.make(this._host, `embassy-${race}`, option, label, {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-      });
-
-      embassiesButtons.push({ label: label, button: button });
-    }
+    const embassiesButtons = [
+      this._makeEmbassySetting(
+        "lizards",
+        this._settings.buildEmbassies.items.lizards,
+        this._host.engine.i18n(`$trade.race.lizards`)
+      ),
+      this._makeEmbassySetting(
+        "sharks",
+        this._settings.buildEmbassies.items.sharks,
+        this._host.engine.i18n(`$trade.race.sharks`)
+      ),
+      this._makeEmbassySetting(
+        "griffins",
+        this._settings.buildEmbassies.items.griffins,
+        this._host.engine.i18n(`$trade.race.griffins`)
+      ),
+      this._makeEmbassySetting(
+        "nagas",
+        this._settings.buildEmbassies.items.nagas,
+        this._host.engine.i18n(`$trade.race.nagas`)
+      ),
+      this._makeEmbassySetting(
+        "zebras",
+        this._settings.buildEmbassies.items.zebras,
+        this._host.engine.i18n(`$trade.race.zebras`)
+      ),
+      this._makeEmbassySetting(
+        "spiders",
+        this._settings.buildEmbassies.items.spiders,
+        this._host.engine.i18n(`$trade.race.spiders`)
+      ),
+      this._makeEmbassySetting(
+        "dragons",
+        this._settings.buildEmbassies.items.dragons,
+        this._host.engine.i18n(`$trade.race.dragons`)
+      ),
+      this._makeEmbassySetting(
+        "leviathans",
+        this._settings.buildEmbassies.items.leviathans,
+        this._host.engine.i18n(`$trade.race.leviathans`)
+      ),
+    ];
+    embassiesList.append(...embassiesButtons);
     embassiesElement.append(
       SettingTriggerUi.getTriggerButton(
         this._host,
@@ -206,9 +240,6 @@ export class TradeSettingsUi extends SettingsSectionUi {
         this._settings.buildEmbassies
       )
     );
-    // Ensure buttons are added into UI with their labels alphabetized.
-    embassiesButtons.sort((a, b) => a.label.localeCompare(b.label));
-    embassiesButtons.forEach(button => embassiesList.append(button.button));
 
     const unlockRaces = SettingUi.make(
       this._host,
@@ -228,6 +259,13 @@ export class TradeSettingsUi extends SettingsSectionUi {
     );
 
     return [header, unlockRaces, embassiesElement, embassiesList];
+  }
+
+  private _makeEmbassySetting(race: Race, option: SettingMax, label: string) {
+    return SettingMaxUi.make(this._host, `embassy-${race}`, option, label, {
+      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+    });
   }
 
   setState(state: TradeSettings): void {
