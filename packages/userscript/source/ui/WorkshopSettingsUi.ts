@@ -22,7 +22,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
+    panel.element.append(this._makeSectionTriggerButton(toggleName, label, this._settings));
 
     const buttons = [
       this._getCraftOption(
@@ -132,7 +132,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    panel.element.append(this._settings.$trigger);
     panel.element.append(list);
   }
 

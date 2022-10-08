@@ -21,7 +21,7 @@ export class TimeSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
+    panel.element.append(this._makeSectionTriggerButton(toggleName, label, this._settings));
 
     const optionButtons = [
       this._getTimeSetting(
@@ -85,7 +85,6 @@ export class TimeSettingsUi extends SettingsSectionUi {
 
     list.append(...optionButtons);
 
-    panel.element.append(this._settings.$trigger);
     panel.element.append(list);
   }
 

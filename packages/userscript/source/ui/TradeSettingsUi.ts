@@ -26,7 +26,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
+    panel.element.append(this._makeSectionTriggerButton(toggleName, label, this._settings));
 
     const optionButtons = [
       this._getTradeOption(
@@ -77,7 +77,6 @@ export class TradeSettingsUi extends SettingsSectionUi {
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    panel.element.append(this._settings.$trigger);
     panel.element.append(list);
   }
 
@@ -220,14 +219,13 @@ export class TradeSettingsUi extends SettingsSectionUi {
       ),
     ];
     embassiesList.append(...embassiesButtons);
-    embassiesElement.element.append(
-      SettingTriggerUi.getTriggerButton(
-        this._host,
-        "buildEmbassies",
-        this._host.engine.i18n("option.embassies"),
-        this._settings.buildEmbassies
-      )
+    const embassiesTrigger = SettingTriggerUi.getTriggerButton(
+      this._host,
+      "buildEmbassies",
+      this._host.engine.i18n("option.embassies"),
+      this._settings.buildEmbassies
     );
+    embassiesElement.element.append(embassiesTrigger);
 
     const unlockRaces = SettingUi.make(
       this._host,

@@ -85,6 +85,8 @@ export class SettingTriggerUi {
       triggerButton.on("click", handler.onClick);
     }
 
+    setting.$trigger = triggerButton;
+
     return triggerButton;
   }
 }

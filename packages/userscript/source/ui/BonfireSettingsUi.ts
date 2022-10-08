@@ -21,7 +21,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
+    panel.element.append(this._makeSectionTriggerButton(toggleName, label, this._settings));
 
     const optionButtons = [
       this._getHeader(this._host.engine.i18n("$buildings.group.food")),
@@ -270,7 +270,6 @@ export class BonfireSettingsUi extends SettingsSectionUi {
 
     const additionOptions = this._getAdditionOptions();
 
-    panel.element.append(this._settings.$trigger);
     panel.element.append(list);
     list.append(additionOptions);
   }

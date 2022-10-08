@@ -21,7 +21,7 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
+    panel.element.append(this._makeSectionTriggerButton(toggleName, label, this._settings));
 
     const optionButtons = [
       this._getHeader(this._host.engine.i18n("$space.planet.cath.label")),
@@ -173,7 +173,6 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    panel.element.append(this._settings.$trigger);
     panel.element.append(list);
   }
 

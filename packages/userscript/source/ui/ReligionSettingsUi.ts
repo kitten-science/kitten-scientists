@@ -23,7 +23,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    this._settings.$trigger = this._makeSectionTriggerButton(toggleName, label, this._settings);
+    panel.element.append(this._makeSectionTriggerButton(toggleName, label, this._settings));
 
     const optionButtons = [
       this._getHeader(this._host.engine.i18n("$religion.panel.ziggurat.label")),
@@ -192,7 +192,6 @@ export class ReligionSettingsUi extends SettingsSectionUi {
 
     const additionOptions = this.getAdditionOptions();
 
-    panel.element.append(this._settings.$trigger);
     panel.element.append(list);
     list.append(additionOptions);
 
