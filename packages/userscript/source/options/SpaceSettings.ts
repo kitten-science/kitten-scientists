@@ -18,42 +18,32 @@ export class SpaceSettings extends SettingsSectionTrigger {
     enabled = false,
     trigger = 0,
     items = {
-      spaceElevator: new SettingMax(),
-      sattelite: new SettingMax(),
-      spaceStation: new SettingMax(),
-
-      moonOutpost: new SettingMax(),
-      moonBase: new SettingMax(),
-
-      planetCracker: new SettingMax(),
-      hydrofracturer: new SettingMax(),
-      spiceRefinery: new SettingMax(),
-
-      researchVessel: new SettingMax(),
-      orbitalArray: new SettingMax(),
-
-      sunlifter: new SettingMax(),
-      containmentChamber: new SettingMax(),
-      heatsink: new SettingMax(),
-      sunforge: new SettingMax(),
-
-      cryostation: new SettingMax(),
-
-      spaceBeacon: new SettingMax(),
-
-      terraformingStation: new SettingMax(),
-      hydroponics: new SettingMax(),
-
-      hrHarvester: new SettingMax(),
-
-      entangler: new SettingMax(),
-
-      tectonic: new SettingMax(),
-      moltenCore: new SettingMax(),
+      containmentChamber: new SettingMax("containmentChamber"),
+      cryostation: new SettingMax("cryostation"),
+      entangler: new SettingMax("entangler"),
+      heatsink: new SettingMax("heatsink"),
+      hrHarvester: new SettingMax("hrHarvester"),
+      hydrofracturer: new SettingMax("hydrofracturer"),
+      hydroponics: new SettingMax("hydroponics"),
+      moltenCore: new SettingMax("moltenCore"),
+      moonBase: new SettingMax("moonBase"),
+      moonOutpost: new SettingMax("moonOutpost"),
+      orbitalArray: new SettingMax("orbitalArray"),
+      planetCracker: new SettingMax("planetCracker"),
+      researchVessel: new SettingMax("researchVessel"),
+      sattelite: new SettingMax("sattelite"),
+      spaceBeacon: new SettingMax("spaceBeacon"),
+      spaceElevator: new SettingMax("spaceElevator"),
+      spaceStation: new SettingMax("spaceStation"),
+      spiceRefinery: new SettingMax("spiceRefinery"),
+      sunforge: new SettingMax("sunforge"),
+      sunlifter: new SettingMax("sunlifter"),
+      tectonic: new SettingMax("tectonic"),
+      terraformingStation: new SettingMax("terraformingStation"),
     },
-    unlockMissions = new MissionSettings()
+    unlockMissions = new MissionSettings("unlockMissions")
   ) {
-    super(enabled, trigger);
+    super("space", enabled, trigger);
     this.items = items;
     this.unlockMissions = unlockMissions;
   }

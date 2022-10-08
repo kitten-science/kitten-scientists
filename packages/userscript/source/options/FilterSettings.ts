@@ -45,8 +45,8 @@ export type FilterItem =
 export class FilterSettingsItem extends Setting {
   variant: FilterItemVariant;
 
-  constructor(variant: FilterItemVariant) {
-    super(true);
+  constructor(id: string, variant: FilterItemVariant) {
+    super(id, true);
     this.variant = variant;
   }
 }
@@ -61,26 +61,26 @@ export class FilterSettings extends SettingsSection {
   constructor(
     enabled = false,
     items: FilterSettingsItems = {
-      buildFilter: new FilterSettingsItem(FilterItemVariant.Build),
-      craftFilter: new FilterSettingsItem(FilterItemVariant.Craft),
-      upgradeFilter: new FilterSettingsItem(FilterItemVariant.Upgrade),
-      researchFilter: new FilterSettingsItem(FilterItemVariant.Research),
-      tradeFilter: new FilterSettingsItem(FilterItemVariant.Trade),
-      huntFilter: new FilterSettingsItem(FilterItemVariant.Hunt),
-      praiseFilter: new FilterSettingsItem(FilterItemVariant.Praise),
-      adoreFilter: new FilterSettingsItem(FilterItemVariant.Adore),
-      transcendFilter: new FilterSettingsItem(FilterItemVariant.Transcend),
-      faithFilter: new FilterSettingsItem(FilterItemVariant.Faith),
-      accelerateFilter: new FilterSettingsItem(FilterItemVariant.Accelerate),
-      timeSkipFilter: new FilterSettingsItem(FilterItemVariant.TimeSkip),
-      festivalFilter: new FilterSettingsItem(FilterItemVariant.Festival),
-      starFilter: new FilterSettingsItem(FilterItemVariant.Star),
-      distributeFilter: new FilterSettingsItem(FilterItemVariant.Distribute),
-      promoteFilter: new FilterSettingsItem(FilterItemVariant.Promote),
-      miscFilter: new FilterSettingsItem(FilterItemVariant.Misc),
+      buildFilter: new FilterSettingsItem("buildFilter", FilterItemVariant.Build),
+      craftFilter: new FilterSettingsItem("craftFilter", FilterItemVariant.Craft),
+      upgradeFilter: new FilterSettingsItem("upgradeFilter", FilterItemVariant.Upgrade),
+      researchFilter: new FilterSettingsItem("researchFilter", FilterItemVariant.Research),
+      tradeFilter: new FilterSettingsItem("tradeFilter", FilterItemVariant.Trade),
+      huntFilter: new FilterSettingsItem("huntFilter", FilterItemVariant.Hunt),
+      praiseFilter: new FilterSettingsItem("praiseFilter", FilterItemVariant.Praise),
+      adoreFilter: new FilterSettingsItem("adoreFilter", FilterItemVariant.Adore),
+      transcendFilter: new FilterSettingsItem("transcendFilter", FilterItemVariant.Transcend),
+      faithFilter: new FilterSettingsItem("faithFilter", FilterItemVariant.Faith),
+      accelerateFilter: new FilterSettingsItem("accelerateFilter", FilterItemVariant.Accelerate),
+      timeSkipFilter: new FilterSettingsItem("timeSkipFilter", FilterItemVariant.TimeSkip),
+      festivalFilter: new FilterSettingsItem("festivalFilter", FilterItemVariant.Festival),
+      starFilter: new FilterSettingsItem("starFilter", FilterItemVariant.Star),
+      distributeFilter: new FilterSettingsItem("distributeFilter", FilterItemVariant.Distribute),
+      promoteFilter: new FilterSettingsItem("promoteFilter", FilterItemVariant.Promote),
+      miscFilter: new FilterSettingsItem("miscFilter", FilterItemVariant.Misc),
     }
   ) {
-    super(enabled);
+    super("filter", enabled);
     this.items = items;
   }
 

@@ -24,6 +24,7 @@ export class TradeSettingsItem extends SettingLimited {
   require: Requirement;
 
   constructor(
+    id: string,
     enabled: boolean,
     limited: boolean,
     summer: boolean,
@@ -32,7 +33,7 @@ export class TradeSettingsItem extends SettingLimited {
     spring: boolean,
     require: Requirement = false
   ) {
-    super(enabled, limited);
+    super(id, enabled, limited);
 
     this.summer = summer;
     this.autumn = autumn;
@@ -47,16 +48,7 @@ export type TradeSettingsItems = {
 };
 
 export class TradeSettings extends SettingsSectionTrigger {
-  items: TradeSettingsItems = {
-    dragons: new TradeSettingsItem(true, true, true, true, true, true, "titanium"),
-    zebras: new TradeSettingsItem(true, true, true, true, true, true),
-    lizards: new TradeSettingsItem(true, true, true, false, false, false, "minerals"),
-    sharks: new TradeSettingsItem(true, true, false, false, true, false, "iron"),
-    griffins: new TradeSettingsItem(true, true, false, true, false, false, "wood"),
-    nagas: new TradeSettingsItem(true, true, true, false, false, true),
-    spiders: new TradeSettingsItem(true, true, true, true, false, true),
-    leviathans: new TradeSettingsItem(true, true, true, true, true, true, "unobtainium"),
-  };
+  items: TradeSettingsItems;
 
   buildEmbassies: EmbassySettings;
   unlockRaces: Setting;
@@ -65,20 +57,28 @@ export class TradeSettings extends SettingsSectionTrigger {
     enabled = false,
     trigger = 1,
     items = {
-      dragons: new TradeSettingsItem(true, true, true, true, true, true, "titanium"),
-      zebras: new TradeSettingsItem(true, true, true, true, true, true),
-      lizards: new TradeSettingsItem(true, true, true, false, false, false, "minerals"),
-      sharks: new TradeSettingsItem(true, true, false, false, true, false, "iron"),
-      griffins: new TradeSettingsItem(true, true, false, true, false, false, "wood"),
-      nagas: new TradeSettingsItem(true, true, true, false, false, true),
-      spiders: new TradeSettingsItem(true, true, true, true, false, true),
-      leviathans: new TradeSettingsItem(true, true, true, true, true, true, "unobtainium"),
+      dragons: new TradeSettingsItem("dragons", true, true, true, true, true, true, "titanium"),
+      griffins: new TradeSettingsItem("griffins", true, true, false, true, false, false, "wood"),
+      leviathans: new TradeSettingsItem(
+        "leviathans",
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        "unobtainium"
+      ),
+      lizards: new TradeSettingsItem("lizards", true, true, true, false, false, false, "minerals"),
+      nagas: new TradeSettingsItem("nagas", true, true, true, false, false, true),
+      sharks: new TradeSettingsItem("sharks", true, true, false, false, true, false, "iron"),
+      spiders: new TradeSettingsItem("spiders", true, true, true, true, false, true),
+      zebras: new TradeSettingsItem("zebras", true, true, true, true, true, true),
     },
-    buildEmbassies = new EmbassySettings(),
-
-    unlockRaces = new Setting(true)
+    buildEmbassies = new EmbassySettings("embassies"),
+    unlockRaces = new Setting("unlockRaces", true)
   ) {
-    super(enabled, trigger);
+    super("trade", enabled, trigger);
     this.items = items;
     this.buildEmbassies = buildEmbassies;
     this.unlockRaces = unlockRaces;

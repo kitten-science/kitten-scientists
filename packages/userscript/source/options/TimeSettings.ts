@@ -13,8 +13,8 @@ export class TimeSettingsItem extends SettingMax {
 
   variant: TimeItemVariant;
 
-  constructor(variant: TimeItemVariant, require: Requirement = false, enabled = false) {
-    super(enabled);
+  constructor(id: string, variant: TimeItemVariant, require: Requirement = false, enabled = false) {
+    super(id, enabled);
 
     this.require = require;
     this.variant = variant;
@@ -32,21 +32,24 @@ export class TimeSettings extends SettingsSectionTrigger {
     enabled = false,
     trigger = 1,
     items: TimeSettingsItems = {
-      temporalBattery: new TimeSettingsItem(TimeItemVariant.Chronoforge),
-      blastFurnace: new TimeSettingsItem(TimeItemVariant.Chronoforge),
-      timeBoiler: new TimeSettingsItem(TimeItemVariant.Chronoforge),
-      temporalAccelerator: new TimeSettingsItem(TimeItemVariant.Chronoforge),
-      temporalImpedance: new TimeSettingsItem(TimeItemVariant.Chronoforge),
-      ressourceRetrieval: new TimeSettingsItem(TimeItemVariant.Chronoforge),
-
-      cryochambers: new TimeSettingsItem(TimeItemVariant.VoidSpace),
-      voidHoover: new TimeSettingsItem(TimeItemVariant.VoidSpace, "antimatter"),
-      voidRift: new TimeSettingsItem(TimeItemVariant.VoidSpace),
-      chronocontrol: new TimeSettingsItem(TimeItemVariant.VoidSpace, "temporalFlux"),
-      voidResonator: new TimeSettingsItem(TimeItemVariant.VoidSpace),
+      blastFurnace: new TimeSettingsItem("blastFurnace", TimeItemVariant.Chronoforge),
+      chronocontrol: new TimeSettingsItem(
+        "chronocontrol",
+        TimeItemVariant.VoidSpace,
+        "temporalFlux"
+      ),
+      cryochambers: new TimeSettingsItem("cryochambers", TimeItemVariant.VoidSpace),
+      ressourceRetrieval: new TimeSettingsItem("ressourceRetrieval", TimeItemVariant.Chronoforge),
+      temporalAccelerator: new TimeSettingsItem("temporalAccelerator", TimeItemVariant.Chronoforge),
+      temporalBattery: new TimeSettingsItem("temporalBattery", TimeItemVariant.Chronoforge),
+      temporalImpedance: new TimeSettingsItem("temporalImpedance", TimeItemVariant.Chronoforge),
+      timeBoiler: new TimeSettingsItem("timeBoiler", TimeItemVariant.Chronoforge),
+      voidHoover: new TimeSettingsItem("voidHoover", TimeItemVariant.VoidSpace, "antimatter"),
+      voidResonator: new TimeSettingsItem("voidResonator", TimeItemVariant.VoidSpace),
+      voidRift: new TimeSettingsItem("voidRift", TimeItemVariant.VoidSpace),
     }
   ) {
-    super(enabled, trigger);
+    super("time", enabled, trigger);
     this.items = items;
   }
 

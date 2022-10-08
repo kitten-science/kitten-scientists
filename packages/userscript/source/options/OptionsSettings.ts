@@ -11,21 +11,20 @@ export class OptionsSettings extends SettingsSection {
   items: {
     [key in OptionsItem]: OptionsSettingsItem;
   } = {
-    observe: new OptionsSettingsItem(true),
-    autofeed: new OptionsSettingsItem(true),
-
-    crypto: new OptionsSettingsItem(true, 10000),
-    fixCry: new OptionsSettingsItem(false),
+    autofeed: new OptionsSettingsItem("autofeed", true),
+    crypto: new OptionsSettingsItem("crypto", true, 10000),
+    fixCry: new OptionsSettingsItem("fixCry", false),
+    observe: new OptionsSettingsItem("observe", true),
   };
 
   constructor(
     enabled = false,
-    observe = new OptionsSettingsItem(true),
-    autofeed = new OptionsSettingsItem(true),
-    crypto = new OptionsSettingsItem(true, 10000),
-    fixCry = new OptionsSettingsItem(false)
+    observe = new OptionsSettingsItem("observe", true),
+    autofeed = new OptionsSettingsItem("autofeed", true),
+    crypto = new OptionsSettingsItem("crypto", true, 10000),
+    fixCry = new OptionsSettingsItem("fixCry", false)
   ) {
-    super(enabled);
+    super("options", enabled);
     this.items.observe = observe;
     this.items.autofeed = autofeed;
     this.items.crypto = crypto;

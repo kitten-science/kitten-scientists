@@ -16,7 +16,7 @@ export class Setting {
   enabled: boolean;
   $enabled: JQuery<HTMLElement> | undefined = undefined;
 
-  constructor(enabled = false) {
+  constructor(id: string, enabled = false) {
     this.enabled = enabled;
   }
 }
@@ -25,8 +25,8 @@ export class SettingLimited extends Setting {
   limited: boolean;
   $limited: JQuery<HTMLElement> | undefined = undefined;
 
-  constructor(enabled = false, limited = false) {
-    super(enabled);
+  constructor(id: string, enabled = false, limited = false) {
+    super(id, enabled);
     this.limited = limited;
   }
 }
@@ -35,8 +35,8 @@ export class SettingMax extends Setting {
   max: number;
   $max: MaxButton | undefined = undefined;
 
-  constructor(enabled = false, max = -1) {
-    super(enabled);
+  constructor(id: string, enabled = false, max = -1) {
+    super(id, enabled);
     this.max = max;
   }
 }
@@ -45,8 +45,8 @@ export class SettingLimitedMax extends SettingLimited implements SettingMax {
   max: number;
   $max: MaxButton | undefined = undefined;
 
-  constructor(enabled = false, limited = false, max = -1) {
-    super(enabled, limited);
+  constructor(id: string, enabled = false, limited = false, max = -1) {
+    super(id, enabled, limited);
     this.max = max;
   }
 }
@@ -55,8 +55,8 @@ export class SettingTrigger extends Setting {
   trigger: number;
   $trigger: TriggerButton | undefined = undefined;
 
-  constructor(enabled = false, trigger = 1) {
-    super(enabled);
+  constructor(id: string, enabled = false, trigger = 1) {
+    super(id, enabled);
     this.trigger = trigger;
   }
 }

@@ -6,9 +6,9 @@ export class BuildingUpgradeSettings extends SettingsSection {
   items: {
     [item in StagedBuilding]: Setting;
   } = {
-    broadcasttower: new Setting(true),
-    dataCenter: new Setting(true),
-    hydroplant: new Setting(true),
-    solarfarm: new Setting(true),
+    broadcasttower: new Setting("broadcasttower", true),
+    dataCenter: new Setting("dataCenter", true),
+    hydroplant: new Setting("hydroplant", true),
+    solarfarm: new Setting("solarfarm", true),
   };
 }

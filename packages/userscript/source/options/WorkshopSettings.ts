@@ -1,6 +1,5 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage, ResourceCraftable } from "../types";
-import { ResourcesSettings } from "./ResourcesSettings";
 import { Requirement, Setting, SettingLimitedMax } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
@@ -15,8 +14,8 @@ export class CraftSettingsItem extends SettingLimitedMax {
 
   require: Requirement;
 
-  constructor(require: Requirement = false, enabled = true, limited = true) {
-    super(enabled, limited);
+  constructor(id: string, require: Requirement = false, enabled = true, limited = true) {
+    super(id, enabled, limited);
     this.require = require;
   }
 }
@@ -35,31 +34,30 @@ export class WorkshopSettings extends SettingsSectionTrigger {
     enabled = false,
     trigger = 0.95,
     items: WorkshopSettingsItems = {
-      wood: new CraftSettingsItem("catnip"),
-      beam: new CraftSettingsItem("wood"),
-      slab: new CraftSettingsItem("minerals"),
-      steel: new CraftSettingsItem("coal"),
-      plate: new CraftSettingsItem("iron"),
-      alloy: new CraftSettingsItem("titanium"),
-      concrate: new CraftSettingsItem(false),
-      gear: new CraftSettingsItem(false),
-      scaffold: new CraftSettingsItem(false),
-      ship: new CraftSettingsItem(false),
-      tanker: new CraftSettingsItem(false),
-      parchment: new CraftSettingsItem(false, true, false),
-      manuscript: new CraftSettingsItem("culture"),
-      compedium: new CraftSettingsItem("science"),
-      blueprint: new CraftSettingsItem("science"),
-      kerosene: new CraftSettingsItem("oil"),
-      megalith: new CraftSettingsItem(false),
-      eludium: new CraftSettingsItem("unobtainium"),
-      thorium: new CraftSettingsItem("uranium"),
+      alloy: new CraftSettingsItem("alloy", "titanium"),
+      beam: new CraftSettingsItem("beam", "wood"),
+      blueprint: new CraftSettingsItem("blueprint", "science"),
+      compedium: new CraftSettingsItem("compedium", "science"),
+      concrate: new CraftSettingsItem("concrate", false),
+      eludium: new CraftSettingsItem("eludium", "unobtainium"),
+      gear: new CraftSettingsItem("gear", false),
+      kerosene: new CraftSettingsItem("kerosene", "oil"),
+      manuscript: new CraftSettingsItem("manuscript", "culture"),
+      megalith: new CraftSettingsItem("megalith", false),
+      parchment: new CraftSettingsItem("parchment", false, true, false),
+      plate: new CraftSettingsItem("plate", "iron"),
+      scaffold: new CraftSettingsItem("scaffold", false),
+      ship: new CraftSettingsItem("ship", false),
+      slab: new CraftSettingsItem("slab", "minerals"),
+      steel: new CraftSettingsItem("steel", "coal"),
+      tanker: new CraftSettingsItem("tanker", false),
+      thorium: new CraftSettingsItem("thorium", "uranium"),
+      wood: new CraftSettingsItem("wood", "catnip"),
     },
-    resources = new ResourcesSettings(),
-    unlockUpgrades = new UpgradeSettings(),
-    shipOverride = new Setting(true)
+    unlockUpgrades = new UpgradeSettings("unlockUpgrades"),
+    shipOverride = new Setting("shipOverride", true)
   ) {
-    super(enabled, trigger);
+    super("workshop", enabled, trigger);
     this.items = items;
     this.shipOverride = shipOverride;
     this.unlockUpgrades = unlockUpgrades;

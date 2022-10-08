@@ -8,19 +8,19 @@ export class MissionSettings extends SettingsSection {
   items: {
     [item in Missions]: Setting;
   } = {
-    centaurusSystemMission: new Setting(true),
-    charonMission: new Setting(true),
-    duneMission: new Setting(true),
-    furthestRingMission: new Setting(true),
-    heliosMission: new Setting(true),
-    kairoMission: new Setting(true),
-    moonMission: new Setting(true),
-    orbitalLaunch: new Setting(true),
-    piscineMission: new Setting(true),
-    rorschachMission: new Setting(true),
-    terminusMission: new Setting(true),
-    umbraMission: new Setting(true),
-    yarnMission: new Setting(true),
+    centaurusSystemMission: new Setting("centaurusSystemMission", true),
+    charonMission: new Setting("charonMission", true),
+    duneMission: new Setting("duneMission", true),
+    furthestRingMission: new Setting("furthestRingMission", true),
+    heliosMission: new Setting("heliosMission", true),
+    kairoMission: new Setting("kairoMission", true),
+    moonMission: new Setting("moonMission", true),
+    orbitalLaunch: new Setting("orbitalLaunch", true),
+    piscineMission: new Setting("piscineMission", true),
+    rorschachMission: new Setting("rorschachMission", true),
+    terminusMission: new Setting("terminusMission", true),
+    umbraMission: new Setting("umbraMission", true),
+    yarnMission: new Setting("yarnMission", true),
   };
 
   static validateGame(game: GamePage, settings: MissionSettings) {

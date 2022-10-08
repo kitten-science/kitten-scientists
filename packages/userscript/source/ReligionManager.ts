@@ -128,7 +128,7 @@ export class ReligionManager implements Automation {
       // Now we build a unicorn pasture if possible.
       if (this.settings.items.unicornPasture.enabled) {
         this._bonfireManager.autoBuild({
-          unicornPasture: new BonfireSettingsItem(true, false, -1),
+          unicornPasture: new BonfireSettingsItem("unicornPasture", true, false, -1),
         });
       }
       // And then we build all other possible religion buildings.

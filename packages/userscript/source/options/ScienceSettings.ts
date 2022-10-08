@@ -12,8 +12,12 @@ export class ScienceSettings extends SettingsSection {
   policies: PolicySettings;
   techs: TechSettings;
 
-  constructor(enabled = false, policies = new PolicySettings(), techs = new TechSettings()) {
-    super(enabled);
+  constructor(
+    enabled = false,
+    policies = new PolicySettings("policies"),
+    techs = new TechSettings("techs")
+  ) {
+    super("science", enabled);
     this.policies = policies;
     this.techs = techs;
   }
