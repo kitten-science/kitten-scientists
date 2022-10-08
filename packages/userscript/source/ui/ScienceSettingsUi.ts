@@ -14,9 +14,6 @@ export class ScienceSettingsUi extends SettingsSectionUi {
 
   private readonly _settings: ScienceSettings;
 
-  private _techsExpanded = false;
-  private _policiesExpanded = false;
-
   constructor(host: UserScript, settings: ScienceSettings) {
     super(host);
 
@@ -24,14 +21,10 @@ export class ScienceSettingsUi extends SettingsSectionUi {
 
     const toggleName = "upgrade";
     const label = ucfirst(this._host.engine.i18n("ui.upgrade"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
     const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
     const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
+    // Technologies
     const techsList = SettingsListUi.getSettingsList(this._host.engine, "techs");
     const techsElement = SettingsPanelUi.make(
       this._host,
@@ -55,25 +48,15 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     techButtons.sort((a, b) => a.label.localeCompare(b.label));
     techButtons.forEach(button => techsList.append(button.button));
 
-    // Set up the more complex policies options.
-    const policiesButton = SettingUi.make(
+    // Policies
+    const policiesList = SettingsListUi.getSettingsList(this._host.engine, "policies");
+    const policiesElement = SettingsPanelUi.make(
       this._host,
       "policies",
-      this._settings.policies,
       this._host.engine.i18n("ui.upgrade.policies"),
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
-            this._host.engine.i18n("ui.upgrade.policies"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
-            this._host.engine.i18n("ui.upgrade.policies"),
-          ]),
-      }
+      this._settings.policies,
+      policiesList
     );
-
-    const policiesList = SettingsSectionUi.getList("items-list-policies");
 
     const policyButtons = [];
     for (const [policyName, policy] of objectEntries(this._settings.policies.items)) {
@@ -91,27 +74,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     policyButtons.sort((a, b) => a.label.localeCompare(b.label));
     policyButtons.forEach(button => policiesList.append(button.button));
 
-    const policiesItemsButton = this._getItemsToggle("policies-show");
-    policiesItemsButton.on("click", () => {
-      policiesList.toggle();
-
-      this._policiesExpanded = !this._policiesExpanded;
-
-      policiesItemsButton.text(this._policiesExpanded ? "-" : "+");
-      policiesItemsButton.prop(
-        "title",
-        this._policiesExpanded
-          ? this._host.engine.i18n("ui.itemsHide")
-          : this._host.engine.i18n("ui.itemsShow")
-      );
-    });
-    policiesButton.append(policiesItemsButton, policiesList);
-
-    // Set up the remaining options.
-    const optionButtons = [techsElement, techsList, policiesButton];
-
-    list.append(...optionButtons);
-
+    list.append(techsElement, techsList, policiesElement, policiesList);
     element.append(list);
 
     this.element = element;

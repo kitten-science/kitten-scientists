@@ -14,8 +14,6 @@ export class SpaceSettingsUi extends SettingsSectionUi {
 
   private readonly _settings: SpaceSettings;
 
-  private _missionsExpanded = false;
-
   constructor(host: UserScript, settings: SpaceSettings) {
     super(host);
 
@@ -23,12 +21,7 @@ export class SpaceSettingsUi extends SettingsSectionUi {
 
     const toggleName = "space";
     const label = ucfirst(this._host.engine.i18n("ui.space"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
     const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
     const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Create "trigger" button in the item.
@@ -194,24 +187,14 @@ export class SpaceSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const missionsButton = SettingUi.make(
+    const missionsList = SettingsListUi.getSettingsList(this._host.engine, "missions");
+    const missionsElement = SettingsPanelUi.make(
       this._host,
       "missions",
-      this._settings.unlockMissions,
       this._host.engine.i18n("ui.upgrade.missions"),
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
-            this._host.engine.i18n("ui.upgrade.missions"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
-            this._host.engine.i18n("ui.upgrade.missions"),
-          ]),
-      }
+      this._settings.unlockMissions,
+      missionsList
     );
-
-    const missionsList = SettingsSectionUi.getList("items-list-missions");
 
     const missionButtons = [];
     for (const [missionName, mission] of objectEntries(this._settings.unlockMissions.items)) {
@@ -233,23 +216,7 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     missionButtons.sort((a, b) => a.label.localeCompare(b.label));
     missionButtons.forEach(button => missionsList.append(button.button));
 
-    const missionsItemsButton = this._getItemsToggle("missions-show");
-    missionsItemsButton.on("click", () => {
-      missionsList.toggle();
-
-      this._missionsExpanded = !this._missionsExpanded;
-
-      missionsItemsButton.text(this._missionsExpanded ? "-" : "+");
-      missionsItemsButton.prop(
-        "title",
-        this._missionsExpanded
-          ? this._host.engine.i18n("ui.itemsHide")
-          : this._host.engine.i18n("ui.itemsShow")
-      );
-    });
-    missionsButton.append(missionsItemsButton, missionsList);
-
-    return [header, missionsButton];
+    return [header, missionsElement, missionsList];
   }
 
   setState(state: SpaceSettings): void {

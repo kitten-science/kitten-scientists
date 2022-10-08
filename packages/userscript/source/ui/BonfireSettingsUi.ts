@@ -14,8 +14,6 @@ export class BonfireSettingsUi extends SettingsSectionUi {
 
   private readonly _settings: BonfireSettings;
 
-  private _buildingUpgradesExpanded = false;
-
   constructor(host: UserScript, settings: BonfireSettings) {
     super(host);
 
@@ -292,25 +290,14 @@ export class BonfireSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const upgradeBuildingsButton = SettingUi.make(
+    const upgradeBuildingsList = SettingsListUi.getSettingsList(this._host.engine, "buildings");
+    const upgradeBuildingsElement = SettingsPanelUi.make(
       this._host,
       "buildings",
-      this._settings.upgradeBuildings,
       this._host.engine.i18n("ui.upgrade.buildings"),
-
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
-            this._host.engine.i18n("ui.upgrade.buildings"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
-            this._host.engine.i18n("ui.upgrade.buildings"),
-          ]),
-      }
+      this._settings.upgradeBuildings,
+      upgradeBuildingsList
     );
-
-    const upgradeBuildingsList = SettingsSectionUi.getList("items-list-buildings");
 
     const upgradeBuildingsButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.upgradeBuildings.items)) {
@@ -336,22 +323,6 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     upgradeBuildingsButtons.sort((a, b) => a.label.localeCompare(b.label));
     upgradeBuildingsButtons.forEach(button => upgradeBuildingsList.append(button.button));
 
-    const upgradeBuildingsItemsButton = this._getItemsToggle("buildings-show");
-    upgradeBuildingsItemsButton.on("click", () => {
-      upgradeBuildingsList.toggle();
-
-      this._buildingUpgradesExpanded = !this._buildingUpgradesExpanded;
-
-      upgradeBuildingsItemsButton.text(this._buildingUpgradesExpanded ? "-" : "+");
-      upgradeBuildingsItemsButton.prop(
-        "title",
-        this._buildingUpgradesExpanded
-          ? this._host.engine.i18n("ui.itemsHide")
-          : this._host.engine.i18n("ui.itemsShow")
-      );
-    });
-    upgradeBuildingsButton.append(upgradeBuildingsItemsButton, upgradeBuildingsList);
-
     const nodeTurnOnSteamworks = SettingUi.make(
       this._host,
       "_steamworks",
@@ -370,7 +341,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, upgradeBuildingsButton, nodeTurnOnSteamworks];
+    return [header, upgradeBuildingsElement, upgradeBuildingsList, nodeTurnOnSteamworks];
   }
 
   setState(state: BonfireSettings): void {

@@ -15,10 +15,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
   private readonly _settings: WorkshopSettings;
 
-  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
-
-  private _upgradesExpanded = false;
-
   constructor(host: UserScript, settings: WorkshopSettings) {
     super(host);
 
@@ -26,18 +22,13 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     const toggleName = "craft";
     const label = ucfirst(this._host.engine.i18n("ui.craft"));
-
-    // Create build items.
-    // We create these in a list that is displayed when the user clicks the "items" button.
     const list = SettingsListUi.getSettingsList(this._host.engine, toggleName);
-
-    // Our main element is a list item.
     const element = SettingsPanelUi.make(this._host, toggleName, label, this._settings, list);
 
     // Create "trigger" button in the item.
     this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
 
-    this._optionButtons = [
+    const buttons = [
       this._getCraftOption(
         "wood",
         this._settings.items.wood,
@@ -140,7 +131,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    list.append(...this._optionButtons);
+    list.append(...buttons);
 
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
@@ -184,24 +175,14 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const upgradesButton = SettingUi.make(
+    const upgradesList = SettingsListUi.getSettingsList(this._host.engine, "upgrades");
+    const upgradesElement = SettingsPanelUi.make(
       this._host,
       "upgrades",
-      this._settings.unlockUpgrades,
       this._host.engine.i18n("ui.upgrade.upgrades"),
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
-            this._host.engine.i18n("ui.upgrade.upgrades"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
-            this._host.engine.i18n("ui.upgrade.upgrades"),
-          ]),
-      }
+      this._settings.unlockUpgrades,
+      upgradesList
     );
-
-    const upgradesList = SettingsSectionUi.getList("items-list-upgrades");
 
     const upgradeButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.unlockUpgrades.items)) {
@@ -223,22 +204,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     upgradeButtons.sort((a, b) => a.label.localeCompare(b.label));
     upgradeButtons.forEach(button => upgradesList.append(button.button));
 
-    const upgradesItemsButton = this._getItemsToggle("upgrades-show");
-    upgradesItemsButton.on("click", () => {
-      upgradesList.toggle();
-
-      this._upgradesExpanded = !this._upgradesExpanded;
-
-      upgradesItemsButton.text(this._upgradesExpanded ? "-" : "+");
-      upgradesItemsButton.prop(
-        "title",
-        this._upgradesExpanded
-          ? this._host.engine.i18n("ui.itemsHide")
-          : this._host.engine.i18n("ui.itemsShow")
-      );
-    });
-    upgradesButton.append(upgradesItemsButton, upgradesList);
-
     const shipOverride = SettingUi.make(
       this._host,
       "shipOverride",
@@ -256,7 +221,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, upgradesButton, shipOverride];
+    return [header, upgradesElement, upgradesList, shipOverride];
   }
 
   setState(state: WorkshopSettings): void {
