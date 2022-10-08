@@ -79,13 +79,7 @@ export abstract class SettingsSectionUi {
    * @returns The constructed header element.
    */
   protected _getHeader(text: string): JQuery<HTMLElement> {
-    const headerElement = $("<li/>");
-    const header = $("<span/>", {
-      text,
-    }).addClass("ks-header");
-
-    headerElement.append(header);
-
+    const headerElement = $("<li/>", { text }).addClass("ks-header");
     return headerElement;
   }
 
@@ -97,14 +91,8 @@ export abstract class SettingsSectionUi {
    * @returns The constructed header element.
    */
   protected _getExplainer(text: string): JQuery<HTMLElement> {
-    const headerElement = $("<li/>");
-    const header = $("<span/>", {
-      text,
-    }).addClass("ks-explainer");
-
-    headerElement.append(header);
-
-    return headerElement;
+    const explainerElement = $("<li/>", { text }).addClass("ks-explainer");
+    return explainerElement;
   }
 
   protected _getBuildOption(
