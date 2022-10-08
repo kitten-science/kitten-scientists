@@ -1,7 +1,7 @@
 import { SettingsSection } from "../../options/SettingsSection";
 import { UserScript } from "../../UserScript";
-import { SettingsListUi } from "../SettingsListUi";
 import { SettingListItem } from "./SettingListItem";
+import { SettingsList } from "./SettingsList";
 
 export class SettingsPanel {
   readonly host: UserScript;
@@ -10,6 +10,7 @@ export class SettingsPanel {
   private readonly _element: SettingListItem;
   readonly expando: JQuery<HTMLElement>;
   readonly list: JQuery<HTMLElement>;
+  readonly _list: SettingsList;
   private _mainChildVisible: boolean;
 
   get isExpanded() {
@@ -38,7 +39,7 @@ export class SettingsPanel {
       onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
     });
 
-    const list = SettingsListUi.getSettingsList(host.engine, id);
+    const list = new SettingsList(host, id);
 
     // The expando button for this panel.
     const itemsElement = SettingsPanel.makeItemsToggle(host, id).text(
@@ -46,7 +47,7 @@ export class SettingsPanel {
     );
     itemsElement.data("expanded", initiallyExpanded);
     itemsElement.on("click", () => {
-      list.toggle();
+      list.element.toggle();
       const itemsExpanded = !itemsElement.data("expanded");
 
       itemsElement.data("expanded", itemsExpanded);
@@ -57,18 +58,19 @@ export class SettingsPanel {
       itemsElement.text(itemsExpanded ? "-" : "+");
     });
 
-    element.element.append(itemsElement, list);
+    element.element.append(itemsElement, list.element);
 
     if (initiallyExpanded) {
-      list.toggle();
+      list.element.toggle();
     }
 
     this._element = element;
+    this._list = list;
     this._mainChildVisible = initiallyExpanded;
     this.element = element.element;
     this.expando = itemsElement;
     this.host = host;
-    this.list = list;
+    this.list = list.element;
     this.settings = settings;
   }
 

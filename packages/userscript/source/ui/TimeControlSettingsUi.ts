@@ -11,9 +11,9 @@ import { Maybe, mustExist } from "../tools/Maybe";
 import { Resource, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
-import { SettingsListUi } from "./SettingsListUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeControlSettingsUi extends SettingsSectionUi {
@@ -137,8 +137,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     });
 
     // Bonfire reset options
-    const resetBuildList = SettingsListUi.getSettingsList(this._host.engine, "reset-build");
-    resetBuildList.append(
+    const resetBuildList = new SettingsList(this._host, "reset-build");
+    resetBuildList.element.append(
       this._getResetOption(
         "hut",
         "build",
@@ -402,8 +402,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     );
 
     // Space reset options
-    const resetSpaceList = SettingsListUi.getSettingsList(this._host.engine, "reset-space");
-    resetSpaceList.append(
+    const resetSpaceList = new SettingsList(this._host, "reset-space");
+    resetSpaceList.element.append(
       this._getResetOption(
         "spaceElevator",
         "space",
@@ -559,11 +559,23 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     );
 
     // Resources list
-    const resetResourcesList = this._getResourceOptions();
+    const resetResourcesList = (this._resourcesList = SettingsSectionUi.getList(
+      "toggle-reset-list-resources"
+    ));
+    // Add all the current resources
+    for (const [name, item] of objectEntries(this._settings.resources)) {
+      this._resourcesList.append(
+        this._addNewResourceOption(
+          name,
+          ucfirst(this._host.engine.i18n(`$resources.${name}.title`)),
+          item
+        )
+      );
+    }
 
     // Religion reset options.
-    const resetReligionList = SettingsListUi.getSettingsList(this._host.engine, "reset-religion");
-    resetReligionList.append(
+    const resetReligionList = new SettingsList(this._host, "reset-religion");
+    resetReligionList.element.append(
       this._getResetOption(
         "unicornPasture",
         "faith",
@@ -752,8 +764,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       )
     );
 
-    const resetTimeList = SettingsListUi.getSettingsList(this._host.engine, "reset-time");
-    resetTimeList.append(
+    const resetTimeList = new SettingsList(this._host, "reset-time");
+    resetTimeList.element.append(
       this._getResetOption(
         "temporalBattery",
         "time",
@@ -851,39 +863,39 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     }).addClass("ks-icon-button");
 
     buildButton.on("click", () => {
-      resetBuildList.toggle();
-      resetSpaceList.toggle(false);
+      resetBuildList.element.toggle();
+      resetSpaceList.element.toggle(false);
       resetResourcesList.toggle(false);
-      resetReligionList.toggle(false);
-      resetTimeList.toggle(false);
+      resetReligionList.element.toggle(false);
+      resetTimeList.element.toggle(false);
     });
     spaceButton.on("click", () => {
-      resetBuildList.toggle(false);
-      resetSpaceList.toggle();
+      resetBuildList.element.toggle(false);
+      resetSpaceList.element.toggle();
       resetResourcesList.toggle(false);
-      resetReligionList.toggle(false);
-      resetTimeList.toggle(false);
+      resetReligionList.element.toggle(false);
+      resetTimeList.element.toggle(false);
     });
     resourcesButton.on("click", () => {
-      resetBuildList.toggle(false);
-      resetSpaceList.toggle(false);
+      resetBuildList.element.toggle(false);
+      resetSpaceList.element.toggle(false);
       resetResourcesList.toggle();
-      resetReligionList.toggle(false);
-      resetTimeList.toggle(false);
+      resetReligionList.element.toggle(false);
+      resetTimeList.element.toggle(false);
     });
     religionButton.on("click", () => {
-      resetBuildList.toggle(false);
-      resetSpaceList.toggle(false);
+      resetBuildList.element.toggle(false);
+      resetSpaceList.element.toggle(false);
       resetResourcesList.toggle(false);
-      resetReligionList.toggle();
-      resetTimeList.toggle(false);
+      resetReligionList.element.toggle();
+      resetTimeList.element.toggle(false);
     });
     timeButton.on("click", () => {
-      resetBuildList.toggle(false);
-      resetSpaceList.toggle(false);
+      resetBuildList.element.toggle(false);
+      resetSpaceList.element.toggle(false);
       resetResourcesList.toggle(false);
-      resetReligionList.toggle(false);
-      resetTimeList.toggle();
+      resetReligionList.element.toggle(false);
+      resetTimeList.element.toggle();
     });
 
     element.element.append(
@@ -892,11 +904,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       resourcesButton,
       religionButton,
       timeButton,
-      resetBuildList,
-      resetSpaceList,
+      resetBuildList.element,
+      resetSpaceList.element,
       resetResourcesList,
-      resetReligionList,
-      resetTimeList
+      resetReligionList.element,
+      resetTimeList.element
     );
 
     return element;
@@ -1005,10 +1017,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
   private _getResourceOptions(): JQuery<HTMLElement> {
     this._resourcesList = SettingsSectionUi.getList("toggle-reset-list-resources");
-
-    const allresources = SettingsSectionUi.getList("available-resources-list");
-
-    this._resourcesList.append(allresources);
 
     // Add all the current resources
     for (const [name, item] of objectEntries(this._settings.resources)) {

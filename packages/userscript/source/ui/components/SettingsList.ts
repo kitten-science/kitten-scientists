@@ -1,16 +1,17 @@
-import { Engine } from "../Engine";
+import { UserScript } from "../../UserScript";
 
-export class SettingsListUi {
+export class SettingsList {
+  readonly element: JQuery<HTMLElement>;
+
   /**
    * Constructs a list panel that is used to contain a list of options.
    * The panel has "enable all" and "disable all" buttons to check and
    * uncheck all checkboxes in the section at once.
    *
-   * @param engine A reference to the engine.
+   * @param host A reference to the host.
    * @param id The ID for this list.
-   * @returns The constructed list.
    */
-  static getSettingsList(engine: Engine, id: string) {
+  constructor(host: UserScript, id: string) {
     const containerList = $("<ul/>", {
       id: `items-list-${id}`,
     })
@@ -20,7 +21,7 @@ export class SettingsListUi {
     const disableAllButton = $("<div/>", {
       id: `toggle-all-items-${id}`,
     })
-      .text(engine.i18n("ui.disable.all"))
+      .text(host.engine.i18n("ui.disable.all"))
       .addClass("ks-button");
 
     disableAllButton.on("click", function () {
@@ -36,7 +37,7 @@ export class SettingsListUi {
     const enableAllButton = $("<div/>", {
       id: `toggle-all-items-${id}`,
     })
-      .text(engine.i18n("ui.enable.all"))
+      .text(host.engine.i18n("ui.enable.all"))
       .addClass("ks-button")
       .addClass("ks-margin-right");
 
@@ -49,6 +50,7 @@ export class SettingsListUi {
     });
 
     containerList.append(enableAllButton);
-    return containerList;
+
+    this.element = containerList;
   }
 }
