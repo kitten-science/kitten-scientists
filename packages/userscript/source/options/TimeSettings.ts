@@ -1,6 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
-import { Requirement, Setting } from "./Settings";
+import { Requirement, SettingMax } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
@@ -8,7 +8,7 @@ import { KittenStorageType } from "./SettingsStorage";
  * The upgrades on the Time tab that we have options for.
  */
 export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCryochambers">;
-export class TimeSettingsItem extends Setting {
+export class TimeSettingsItem extends SettingMax {
   require: Requirement;
 
   variant: TimeItemVariant;
@@ -56,6 +56,7 @@ export class TimeSettings extends SettingsSectionTrigger {
 
     for (const [name, item] of objectEntries(settings.items)) {
       this.items[name].enabled = item.enabled;
+      this.items[name].max = item.max;
     }
   }
 
@@ -65,6 +66,7 @@ export class TimeSettings extends SettingsSectionTrigger {
 
     for (const [name, item] of objectEntries(settings.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`set-${name}-max` as const] = item.max;
     }
   }
 
@@ -75,6 +77,7 @@ export class TimeSettings extends SettingsSectionTrigger {
 
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
     return options;
   }

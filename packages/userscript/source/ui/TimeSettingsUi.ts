@@ -1,11 +1,10 @@
-import { Setting } from "../options/Settings";
-import { TimeSettings } from "../options/TimeSettings";
+import { TimeSettings, TimeSettingsItem } from "../options/TimeSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingMaxUi } from "./SettingMaxUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
-import { SettingUi } from "./SettingUi";
 
 export class TimeSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
@@ -99,8 +98,13 @@ export class TimeSettingsUi extends SettingsSectionUi {
     this.element = element.panel;
   }
 
-  private _getTimeSetting(name: string, setting: Setting, label: string, delimiter = false) {
-    return SettingUi.make(
+  private _getTimeSetting(
+    name: string,
+    setting: TimeSettingsItem,
+    label: string,
+    delimiter = false
+  ) {
+    return SettingMaxUi.make(
       this._host,
       name,
       setting,
@@ -132,6 +136,9 @@ export class TimeSettingsUi extends SettingsSectionUi {
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
+      mustExist(option.$max).text(
+        this._host.engine.i18n("ui.max", [this._renderLimit(this._settings.items[name].max)])
+      );
     }
   }
 }

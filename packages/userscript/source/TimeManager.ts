@@ -50,15 +50,14 @@ export class TimeManager {
    * @param builds The buildings to build.
    */
   autoBuild(builds: Partial<Record<TimeItem, TimeSettingsItem>> = this.settings.items) {
-    // TODO: Refactor. See BonfireManager.autoBuild
-    if (!this._host.gamePage.timeTab.visible) {
-      return;
-    }
+    const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
 
-    // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
+    // Render the tab to make sure that the buttons actually exist in the DOM.
+    // TODO: Is this really required?
     this.manager.render();
 
+    // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<TimeItem, ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>> = {};
     for (const [name, build] of objectEntries(builds)) {
       metaData[name] = mustExist(this.getBuild(name, build.variant));
@@ -73,7 +72,8 @@ export class TimeManager {
       buildingMetaData.tHidden = !model.visible || !model.enabled || !panel?.visible;
     }
 
-    const buildList = this._bulkManager.bulk(builds, metaData, trigger);
+    // Let the bulkmanager determine the builds we can make.
+    const buildList = bulkManager.bulk(builds, metaData, trigger);
 
     let refreshRequired = false;
     for (const build of buildList) {
@@ -97,14 +97,12 @@ export class TimeManager {
     variant: TimeItemVariant,
     amount: number
   ): void {
-    const build = this.getBuild(name, variant);
-    if (build === null) {
-      throw new Error(`Unable to build '${name}'. Build information not available.`);
-    }
-
+    const build = mustExist(this.getBuild(name, variant));
     const button = this.getBuildButton(name, variant);
-    if (!button || !button.model.enabled) return;
 
+    if (!button || !button.model.enabled) {
+      return;
+    }
     const amountTemp = amount;
     const label = build.label;
     amount = this._bulkManager.construct(button.model, button, amount);

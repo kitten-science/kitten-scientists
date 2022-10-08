@@ -52,7 +52,6 @@ export class BonfireManager implements Automation {
    * @param builds The buildings to build.
    */
   autoBuild(builds: Partial<Record<BonfireItem, BonfireSettingsItem>> = this.settings.items) {
-    // TODO: Refactor. See SpaceManager.autoBuild
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
 
