@@ -162,8 +162,9 @@ export class UserInterface {
         transition: .3s;
       }`
     );
+    // Hover guides
     this._addRule(
-      `#ks ul li:hover { 
+      `#ks > ul > li li:hover { 
         border-bottom: 1px solid rgba(185, 185, 185, 0.5);
       }`
     );
