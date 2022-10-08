@@ -28,7 +28,6 @@ export class ScienceSettingsUi extends SettingsSectionUi {
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
-    this._settings.$enabled = element.checkbox;
 
     const techsButton = SettingUi.make(
       this._host,
@@ -136,9 +135,9 @@ export class ScienceSettingsUi extends SettingsSectionUi {
 
     list.append(...optionButtons);
 
-    element.panel.append(list);
+    element.append(list);
 
-    this.element = element.panel;
+    this.element = element;
   }
 
   setState(state: ScienceSettings): void {

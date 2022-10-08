@@ -25,7 +25,6 @@ export class FiltersSettingsUi extends SettingsSectionUi {
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
-    this._settings.$enabled = element.checkbox;
 
     const buttons = [
       {
@@ -137,9 +136,9 @@ export class FiltersSettingsUi extends SettingsSectionUi {
     list.append(optionButtons);
     list.append(this._getExplainer("Disabled items are hidden from the log."));
 
-    element.panel.append(list);
+    element.append(list);
 
-    this.element = element.panel;
+    this.element = element;
   }
 
   setState(state: FilterSettings): void {

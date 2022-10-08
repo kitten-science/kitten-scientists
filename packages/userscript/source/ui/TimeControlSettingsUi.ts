@@ -35,7 +35,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
-    this._settings.$enabled = element.checkbox;
 
     const optionButtons = [
       this._getOptionAccelerateTime(
@@ -59,9 +58,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     list.append(...optionButtons);
 
-    element.panel.append(list);
+    element.append(list);
 
-    this.element = element.panel;
+    this.element = element;
   }
 
   private _getOptionTimeSkip(

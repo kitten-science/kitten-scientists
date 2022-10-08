@@ -1,9 +1,7 @@
-import { ResourcesSettingsItem } from "../options/ResourcesSettings";
 import { CraftSettingsItem, WorkshopSettings } from "../options/WorkshopSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { Maybe, mustExist } from "../tools/Maybe";
-import { Resource } from "../types";
+import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingLimitedMaxUi } from "./SettingLimitedMaxUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -13,8 +11,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   readonly element: JQuery<HTMLElement>;
 
   private readonly _settings: WorkshopSettings;
-
-  private _resourcesList: Maybe<JQuery<HTMLElement>>;
 
   private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
@@ -34,7 +30,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
-    this._settings.$enabled = element.checkbox;
 
     // Create "trigger" button in the item.
     this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
@@ -147,33 +142,10 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const additionOptions = this._getAdditionOptions();
     list.append(additionOptions);
 
-    const resourcesButton = $("<div/>", {
-      id: "toggle-resource-controls",
-      html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M38.4 42 25.85 29.45l2.85-2.85 12.55 12.55ZM9.35 42 6.5 39.15 21 24.65l-5.35-5.35-1.15 1.15-2.2-2.2v4.25l-1.2 1.2L5 17.6l1.2-1.2h4.3L8.1 14l6.55-6.55q.85-.85 1.85-1.15 1-.3 2.2-.3 1.2 0 2.2.425 1 .425 1.85 1.275l-5.35 5.35 2.4 2.4-1.2 1.2 5.2 5.2 6.1-6.1q-.4-.65-.625-1.5-.225-.85-.225-1.8 0-2.65 1.925-4.575Q32.9 5.95 35.55 5.95q.75 0 1.275.15.525.15.875.4l-4.25 4.25 3.75 3.75 4.25-4.25q.25.4.425.975t.175 1.325q0 2.65-1.925 4.575Q38.2 19.05 35.55 19.05q-.9 0-1.55-.125t-1.2-.375Z"/></svg>',
-      title: this._host.engine.i18n("ui.craft.resources"),
-    }).addClass("ks-icon-button");
+    element.append(this._settings.$trigger);
+    element.append(list);
 
-    const resourcesList = this._getResourceOptions();
-
-    // When we click the items button, make sure we hide resources.
-    element.items.on("click", () => {
-      resourcesList.toggle(false);
-    });
-
-    resourcesButton.on("click", () => {
-      list.toggle(false);
-      this._itemsExpanded = false;
-      element.items.text("+");
-
-      resourcesList.toggle();
-    });
-
-    element.panel.append(this._settings.$trigger);
-    element.panel.append(resourcesButton);
-    element.panel.append(list);
-    element.panel.append(resourcesList);
-
-    this.element = element.panel;
+    this.element = element;
   }
 
   private _getCraftOption(
@@ -203,29 +175,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       delimiter,
       upgradeIndicator
     );
-  }
-
-  private _getResourceOptions(): JQuery<HTMLElement> {
-    this._resourcesList = SettingsSectionUi.getList("toggle-list-resources");
-
-    const allresources = SettingsSectionUi.getList("available-resources-list");
-
-    this._resourcesList.append(allresources);
-
-    // Add all the current resources
-    for (const [name, item] of objectEntries(this._settings.resources)) {
-      this._resourcesList.append(
-        this._addNewResourceOption(
-          name,
-          ucfirst(this._host.engine.i18n(`$resources.${name}.title`)),
-          item
-        )
-      );
-      //this.setStockValue(name, item.stock);
-      //this.setConsumeRate(name, item.consume);
-    }
-
-    return this._resourcesList;
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
@@ -306,81 +255,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     return [header, upgradesButton, shipOverride];
   }
 
-  /**
-   * Creates a UI element that reflects stock and consume values for a given resource.
-   * This is currently only used for the craft section.
-   *
-   * @param name The resource.
-   * @param title The title to apply to the option.
-   * @param setting The option that is being controlled.
-   * @returns A new option with stock and consume values.
-   */
-  private _addNewResourceOption(
-    name: Resource,
-    title: string,
-    setting: ResourcesSettingsItem
-  ): JQuery<HTMLElement> {
-    const stock = setting.stock;
-
-    // The overall container for this resource item.
-    const container = SettingUi.make(this._host, `resource-${name}`, setting, title, {
-      onCheck: () => this._host.engine.imessage("status.resource.enable", [title]),
-      onUnCheck: () => this._host.engine.imessage("status.resource.disable", [title]),
-    });
-
-    // How many items to stock.
-    const stockElement = $("<div/>", {
-      id: `stock-value-${name}`,
-      text: this._host.engine.i18n("resources.stock", [this._renderLimit(stock)]),
-    })
-      .addClass("ks-text-button")
-      .addClass("ks-label");
-
-    // The consume rate for the resource.
-    const consumeElement = $("<div/>", {
-      id: `consume-rate-${name}`,
-      text: this._host.engine.i18n("resources.consume", [
-        SettingsSectionUi.renderConsumeRate(setting.consume),
-      ]),
-    }).addClass("ks-text-button");
-
-    container.append(stockElement, consumeElement);
-
-    stockElement.on("click", () => {
-      const value = SettingsSectionUi.promptLimit(
-        this._host.engine.i18n("resources.stock.set", [title]),
-        setting.stock.toFixed(0)
-      );
-      if (value !== null) {
-        setting.enabled = true;
-        setting.stock = value;
-        stockElement.text(this._host.engine.i18n("resources.stock", [this._renderLimit(value)]));
-        this._host.updateOptions();
-      }
-    });
-
-    consumeElement.on("click", () => {
-      const consumeValue = SettingsSectionUi.promptPercentage(
-        this._host.engine.i18n("resources.consume.set", [title]),
-        SettingsSectionUi.renderConsumeRate(setting.consume)
-      );
-      if (consumeValue !== null) {
-        // Cap value between 0 and 1.
-        this._host.updateOptions(() => (setting.consume = consumeValue));
-        consumeElement.text(
-          this._host.engine.i18n("resources.consume", [
-            SettingsSectionUi.renderConsumeRate(consumeValue),
-          ])
-        );
-      }
-    });
-
-    setting.$consume = consumeElement;
-    setting.$stock = stockElement;
-
-    return container;
-  }
-
   setState(state: WorkshopSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
@@ -393,12 +267,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
       option.limited = state.items[name].limited;
-    }
-
-    for (const [name, option] of objectEntries(this._settings.resources)) {
-      option.enabled = state.resources[name].enabled;
-      option.consume = state.resources[name].consume;
-      option.stock = state.resources[name].stock;
     }
   }
 
@@ -423,18 +291,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       mustExist(option.$limited).prop("checked", option.limited);
       mustExist(option.$max).text(
         this._host.engine.i18n("ui.max", [this._renderLimit(option.max)])
-      );
-    }
-
-    for (const [, option] of objectEntries(this._settings.resources)) {
-      mustExist(option.$enabled).prop("checked", option.enabled);
-      mustExist(option.$consume).text(
-        this._host.engine.i18n("resources.consume", [
-          SettingsSectionUi.renderConsumeRate(option.consume),
-        ])
-      );
-      mustExist(option.$stock).text(
-        this._host.engine.i18n("resources.stock", [this._renderLimit(option.stock)])
       );
     }
   }

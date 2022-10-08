@@ -8,6 +8,7 @@ import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
 import { SettingMaxUi } from "./SettingMaxUi";
+import { SettingUi } from "./SettingUi";
 
 export type SettingsSectionUiComposition = {
   checkbox: JQuery<HTMLElement>;
@@ -61,33 +62,13 @@ export abstract class SettingsSectionUi {
     label: string,
     options: SettingsSection,
     mainChild: JQuery<HTMLElement>
-  ): SettingsSectionUiComposition {
+  ): JQuery<HTMLElement> {
     this._mainChild = mainChild;
 
-    const panelElement = $("<li/>", { id: `ks-${id}` }).addClass("ks-setting");
-
-    // The checkbox to enable/disable this panel.
-    const enabledElement = $("<input/>", {
-      id: `toggle-${id}`,
-      type: "checkbox",
+    const panelElement = SettingUi.make(this._host, id, options, label, {
+      onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
     });
-    panelElement.append(enabledElement);
-
-    enabledElement.on("change", () => {
-      if (enabledElement.is(":checked") && options.enabled === false) {
-        this._host.updateOptions(() => (options.enabled = true));
-        this._host.engine.imessage("status.auto.enable", [label]);
-      } else if (!enabledElement.is(":checked") && options.enabled === true) {
-        this._host.updateOptions(() => (options.enabled = false));
-        this._host.engine.imessage("status.auto.disable", [label]);
-      }
-    });
-
-    // The label for this panel.
-    const labelElement = $("<label/>", {
-      text: label,
-    });
-    panelElement.append(labelElement);
 
     // The expando button for this panel.
     const itemsElement = this._getItemsToggle(id);
@@ -105,17 +86,7 @@ export abstract class SettingsSectionUi {
       );
     });
 
-    // When clicking the label of a major section, expand it instead of
-    // checking the checkbox.
-    // TODO: Maybe not?
-    labelElement.on("click", () => itemsElement.trigger("click"));
-
-    return {
-      checkbox: enabledElement,
-      items: itemsElement,
-      label: labelElement,
-      panel: panelElement,
-    };
+    return panelElement;
   }
 
   /**
@@ -298,7 +269,7 @@ export abstract class SettingsSectionUi {
       return;
     }
 
-    mustExist(this._host.engine.workshopManager.settings.resources[name]).consume = value;
+    mustExist(this._host.engine.settings.resources.items[name]).consume = value;
   }
 
   static promptLimit(text: string, defaultValue: string): number | null {

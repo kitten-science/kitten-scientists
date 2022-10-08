@@ -1,7 +1,5 @@
 import { BonfireSettings } from "./BonfireSettings";
 import { EngineSettings } from "./EngineSettings";
-import { FilterSettings } from "./FilterSettings";
-import { OptionsSettings } from "./OptionsSettings";
 import { ReligionSettings } from "./ReligionSettings";
 import { ScienceSettings } from "./ScienceSettings";
 import { KittenStorageType } from "./SettingsStorage";
@@ -58,17 +56,17 @@ export class Options {
     subject.items = {};
     subject.resources = {};
 
+    EngineSettings.toLegacyOptions(settings.engine, subject);
+
     BonfireSettings.toLegacyOptions(settings.bonfire, subject);
-    WorkshopSettings.toLegacyOptions(settings.workshop, subject);
-    VillageSettings.toLegacyOptions(settings.village, subject);
-    FilterSettings.toLegacyOptions(settings.engine.filters, subject);
-    OptionsSettings.toLegacyOptions(settings.engine.options, subject);
     ReligionSettings.toLegacyOptions(settings.religion, subject);
     ScienceSettings.toLegacyOptions(settings.science, subject);
     SpaceSettings.toLegacyOptions(settings.space, subject);
-    TimeSettings.toLegacyOptions(settings.time, subject);
     TimeControlSettings.toLegacyOptions(settings.timeControl, subject);
+    TimeSettings.toLegacyOptions(settings.time, subject);
     TradeSettings.toLegacyOptions(settings.trading, subject);
+    VillageSettings.toLegacyOptions(settings.village, subject);
+    WorkshopSettings.toLegacyOptions(settings.workshop, subject);
 
     return subject;
   }

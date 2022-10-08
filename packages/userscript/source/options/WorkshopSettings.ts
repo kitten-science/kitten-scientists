@@ -1,8 +1,6 @@
 import { objectEntries } from "../tools/Entries";
-import { isNil, mustExist } from "../tools/Maybe";
 import { GamePage, ResourceCraftable } from "../types";
-import { WorkshopManager } from "../WorkshopManager";
-import { ResourceSettings } from "./ResourcesSettings";
+import { ResourcesSettings } from "./ResourcesSettings";
 import { Requirement, Setting, SettingLimitedMax } from "./Settings";
 import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
@@ -29,7 +27,6 @@ export type WorkshopSettingsItems = {
 
 export class WorkshopSettings extends SettingsSectionTrigger {
   items: WorkshopSettingsItems;
-  resources: ResourceSettings;
 
   shipOverride: Setting;
   unlockUpgrades: UpgradeSettings;
@@ -58,13 +55,12 @@ export class WorkshopSettings extends SettingsSectionTrigger {
       eludium: new CraftSettingsItem("unobtainium"),
       thorium: new CraftSettingsItem("uranium"),
     },
-    resources = new ResourceSettings(),
+    resources = new ResourcesSettings(),
     unlockUpgrades = new UpgradeSettings(),
     shipOverride = new Setting(true)
   ) {
     super(enabled, trigger);
     this.items = items;
-    this.resources = resources;
     this.shipOverride = shipOverride;
     this.unlockUpgrades = unlockUpgrades;
   }
@@ -80,12 +76,6 @@ export class WorkshopSettings extends SettingsSectionTrigger {
       this.items[name].enabled = item.enabled;
       this.items[name].limited = item.limited;
       this.items[name].max = item.max;
-    }
-
-    for (const [name, item] of objectEntries(settings.resources)) {
-      this.resources[name].enabled = item.enabled;
-      this.resources[name].consume = item.consume;
-      this.resources[name].stock = item.stock;
     }
 
     this.unlockUpgrades.enabled = settings.unlockUpgrades.enabled;
@@ -105,33 +95,6 @@ export class WorkshopSettings extends SettingsSectionTrigger {
       subject.items[`toggle-limited-${name}` as const] = item.limited;
     }
 
-    for (const [name, item] of objectEntries(settings.resources)) {
-      subject.resources[name] = {
-        checkForReset: false,
-        stockForReset: 0,
-        consume: item.consume,
-        enabled: item.enabled,
-        stock: item.stock,
-      };
-    }
-
-    for (const [name, item] of objectEntries(settings.resources)) {
-      if (isNil(subject.resources[name])) {
-        subject.resources[name] = {
-          checkForReset: false,
-          stockForReset: 0,
-          consume: item.consume,
-          enabled: item.enabled,
-          stock: item.stock,
-        };
-        continue;
-      }
-
-      mustExist(subject.resources[name]).consume = item.consume;
-      mustExist(subject.resources[name]).enabled = item.enabled;
-      mustExist(subject.resources[name]).stock = item.stock;
-    }
-
     subject.items["toggle-upgrades"] = settings.unlockUpgrades.enabled;
     for (const [name, item] of objectEntries(settings.unlockUpgrades.items)) {
       subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
@@ -148,19 +111,6 @@ export class WorkshopSettings extends SettingsSectionTrigger {
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
-    }
-
-    for (const [name, item] of objectEntries(subject.resources)) {
-      if (item.checkForReset) {
-        continue;
-      }
-
-      // We didn't explicitly store the `enabled` state in legacy.
-      // Instead, it is derived from the setting having non-default values.
-      options.resources[name].enabled =
-        item.consume !== WorkshopManager.DEFAULT_CONSUME_RATE || item.stock !== 0;
-      options.resources[name].consume = item.consume;
-      options.resources[name].stock = item.stock;
     }
 
     options.unlockUpgrades.enabled =

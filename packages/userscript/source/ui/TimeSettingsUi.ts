@@ -25,7 +25,6 @@ export class TimeSettingsUi extends SettingsSectionUi {
 
     // Our main element is a list item.
     const element = this._getSettingsPanel(toggleName, label, this._settings, list);
-    this._settings.$enabled = element.checkbox;
 
     // Create "trigger" button in the item.
     this._settings.$trigger = this._registerTriggerButton(toggleName, label, this._settings);
@@ -92,10 +91,10 @@ export class TimeSettingsUi extends SettingsSectionUi {
 
     list.append(...optionButtons);
 
-    element.panel.append(this._settings.$trigger);
-    element.panel.append(list);
+    element.append(this._settings.$trigger);
+    element.append(list);
 
-    this.element = element.panel;
+    this.element = element;
   }
 
   private _getTimeSetting(

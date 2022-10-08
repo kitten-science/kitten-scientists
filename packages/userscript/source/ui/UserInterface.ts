@@ -5,6 +5,7 @@ import { EngineSettingsUi } from "./EngineSettingsUi";
 import { FiltersSettingsUi } from "./FilterSettingsUi";
 import { OptionsSettingsUi } from "./OptionsSettingsUi";
 import { ReligionSettingsUi } from "./ReligionSettingsUi";
+import { ResourcesSettingsUi } from "./ResourcesSettingsUi";
 import { ScienceSettingsUi } from "./ScienceSettingsUi";
 import { SpaceSettingsUi } from "./SpaceSettingsUi";
 import { TimeControlSettingsUi } from "./TimeControlSettingsUi";
@@ -20,6 +21,7 @@ export class UserInterface {
   private _bonfireUi: BonfireSettingsUi;
   private _spaceUi: SpaceSettingsUi;
   private _craftUi: WorkshopSettingsUi;
+  private _resourcesUi: ResourcesSettingsUi;
   private _unlockUi: ScienceSettingsUi;
   private _tradingUi: TradeSettingsUi;
   private _religionUi: ReligionSettingsUi;
@@ -37,6 +39,7 @@ export class UserInterface {
     this._bonfireUi = new BonfireSettingsUi(this._host, engine.bonfireManager.settings);
     this._spaceUi = new SpaceSettingsUi(this._host, engine.spaceManager.settings);
     this._craftUi = new WorkshopSettingsUi(this._host, engine.workshopManager.settings);
+    this._resourcesUi = new ResourcesSettingsUi(this._host, engine.settings.resources);
     this._unlockUi = new ScienceSettingsUi(this._host, engine.scienceManager.settings);
     this._tradingUi = new TradeSettingsUi(this._host, engine.tradingManager.settings);
     this._religionUi = new ReligionSettingsUi(this._host, engine.religionManager.settings);
@@ -65,6 +68,7 @@ export class UserInterface {
     optionsListElement.append(this._distributeUi.element);
     optionsListElement.append(this._unlockUi.element);
     optionsListElement.append(this._craftUi.element);
+    optionsListElement.append(this._resourcesUi.element);
     optionsListElement.append(this._tradingUi.element);
     optionsListElement.append(this._religionUi.element);
     optionsListElement.append(this._spaceUi.element);
@@ -81,6 +85,7 @@ export class UserInterface {
       this._bonfireUi.element.toggle(optionsVisiblity);
       this._spaceUi.element.toggle(optionsVisiblity);
       this._craftUi.element.toggle(optionsVisiblity);
+      this._resourcesUi.element.toggle(optionsVisiblity);
       this._unlockUi.element.toggle(optionsVisiblity);
       this._tradingUi.element.toggle(optionsVisiblity);
       this._religionUi.element.toggle(optionsVisiblity);
@@ -107,6 +112,7 @@ export class UserInterface {
       this._bonfireUi.toggleOptions(false);
       this._spaceUi.toggleOptions(false);
       this._craftUi.toggleOptions(false);
+      this._resourcesUi.toggleOptions(false);
       this._unlockUi.toggleOptions(false);
       this._tradingUi.toggleOptions(false);
       this._religionUi.toggleOptions(false);
@@ -137,6 +143,7 @@ export class UserInterface {
     this._bonfireUi.refreshUi();
     this._spaceUi.refreshUi();
     this._craftUi.refreshUi();
+    this._resourcesUi.refreshUi();
     this._unlockUi.refreshUi();
     this._tradingUi.refreshUi();
     this._religionUi.refreshUi();

@@ -1,22 +1,29 @@
 import { FilterSettings } from "./FilterSettings";
 import { OptionsSettings } from "./OptionsSettings";
+import { ResourcesSettings } from "./ResourcesSettings";
 import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export class EngineSettings extends SettingsSection {
-  filters: FilterSettings;
-
   /**
    * The interval at which the internal processing loop is run, in milliseconds.
    */
   interval = 2000;
 
+  filters: FilterSettings;
   options: OptionsSettings;
+  resources: ResourcesSettings;
 
-  constructor(enabled = false, filters = new FilterSettings(), options = new OptionsSettings()) {
+  constructor(
+    enabled = false,
+    filters = new FilterSettings(),
+    options = new OptionsSettings(),
+    resources = new ResourcesSettings()
+  ) {
     super(enabled);
     this.filters = filters;
     this.options = options;
+    this.resources = resources;
   }
 
   load(settings: EngineSettings) {
@@ -25,11 +32,13 @@ export class EngineSettings extends SettingsSection {
 
     this.filters.load(settings.filters);
     this.options.load(settings.options);
+    this.resources.load(settings.resources);
   }
 
   static toLegacyOptions(settings: EngineSettings, subject: KittenStorageType) {
     FilterSettings.toLegacyOptions(settings.filters, subject);
     OptionsSettings.toLegacyOptions(settings.options, subject);
+    ResourcesSettings.toLegacyOptions(settings.resources, subject);
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -37,6 +46,7 @@ export class EngineSettings extends SettingsSection {
 
     options.filters = FilterSettings.fromLegacyOptions(subject);
     options.options = OptionsSettings.fromLegacyOptions(subject);
+    options.resources = ResourcesSettings.fromLegacyOptions(subject);
 
     return options;
   }
