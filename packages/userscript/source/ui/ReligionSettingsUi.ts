@@ -5,10 +5,9 @@ import { mustExist } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { TriggerButton } from "./components/TriggerButton";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi {
@@ -18,9 +17,8 @@ export class ReligionSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: ReligionSettings) {
     const toggleName = "faith";
     const label = ucfirst(host.engine.i18n("ui.faith"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
@@ -191,12 +189,10 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    list.append(...optionButtons);
+    panel.list.append(...optionButtons);
 
     const additionOptions = this.getAdditionOptions();
-
-    panel.element.append(list);
-    list.append(additionOptions);
+    panel.list.append(additionOptions);
 
     /* TODO:
 

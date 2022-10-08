@@ -1,13 +1,13 @@
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { EngineSettingsUi } from "./EngineSettingsUi";
 import { FiltersSettingsUi } from "./FilterSettingsUi";
 import { OptionsSettingsUi } from "./OptionsSettingsUi";
 import { ReligionSettingsUi } from "./ReligionSettingsUi";
 import { ResourcesSettingsUi } from "./ResourcesSettingsUi";
 import { ScienceSettingsUi } from "./ScienceSettingsUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SpaceSettingsUi } from "./SpaceSettingsUi";
 import { TimeControlSettingsUi } from "./TimeControlSettingsUi";
 import { TimeSettingsUi } from "./TimeSettingsUi";
@@ -78,7 +78,7 @@ export class UserInterface {
     optionsListElement.append(this._optionsUi.element);
     optionsListElement.append(this._filterUi.element);
 
-    const toggleOptionsVisiblity = SettingsPanelUi.makeItemsToggle(this._host, "");
+    const toggleOptionsVisiblity = SettingsPanel.makeItemsToggle(this._host, "");
     this._engineUi.element.append(toggleOptionsVisiblity);
 
     // Make _engineUI's expando button hide/show the other option groups
@@ -88,18 +88,18 @@ export class UserInterface {
     optionsToggle.on("click", () => {
       sectionsVisible = !sectionsVisible;
       const optionsVisiblity = sectionsVisible;
-      this._bonfireUi.toggle(optionsVisiblity);
-      this._spaceUi.toggle(optionsVisiblity);
-      this._craftUi.toggle(optionsVisiblity);
-      this._resourcesUi.toggle(optionsVisiblity);
-      this._unlockUi.toggle(optionsVisiblity);
-      this._tradingUi.toggle(optionsVisiblity);
-      this._religionUi.toggle(optionsVisiblity);
-      this._timeUi.toggle(optionsVisiblity);
-      this._timeCtrlUi.toggle(optionsVisiblity);
-      this._distributeUi.toggle(optionsVisiblity);
-      this._optionsUi.toggle(optionsVisiblity);
-      this._filterUi.toggle(optionsVisiblity);
+      this._bonfireUi.panel.toggle(optionsVisiblity);
+      this._spaceUi.panel.toggle(optionsVisiblity);
+      this._craftUi.panel.toggle(optionsVisiblity);
+      this._resourcesUi.panel.toggle(optionsVisiblity);
+      this._unlockUi.panel.toggle(optionsVisiblity);
+      this._tradingUi.panel.toggle(optionsVisiblity);
+      this._religionUi.panel.toggle(optionsVisiblity);
+      this._timeUi.panel.toggle(optionsVisiblity);
+      this._timeCtrlUi.panel.toggle(optionsVisiblity);
+      this._distributeUi.panel.toggle(optionsVisiblity);
+      this._optionsUi.panel.toggle(optionsVisiblity);
+      this._filterUi.panel.toggle(optionsVisiblity);
 
       optionsToggle.text(optionsVisiblity ? "-" : "+");
       optionsToggle.prop(

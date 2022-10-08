@@ -4,9 +4,8 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class BonfireSettingsUi extends SettingsSectionUi {
@@ -16,9 +15,8 @@ export class BonfireSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: BonfireSettings) {
     const toggleName = "build";
     const label = ucfirst(host.engine.i18n("ui.build"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
@@ -269,24 +267,20 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
     ];
-    list.append(optionButtons);
+    panel.list.append(optionButtons);
 
     const additionOptions = this._getAdditionOptions();
-
-    panel.element.append(list);
-    list.append(additionOptions);
+    panel.list.append(additionOptions);
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const upgradeBuildingsList = SettingsListUi.getSettingsList(this._host.engine, "buildings");
-    const upgradeBuildingsElement = SettingsPanelUi.make(
+    const upgradeBuildingsElement = new SettingsPanel(
       this._host,
       "buildings",
       this._host.engine.i18n("ui.upgrade.buildings"),
-      this._settings.upgradeBuildings,
-      upgradeBuildingsList
+      this._settings.upgradeBuildings
     );
 
     const upgradeBuildingsButtons = [];
@@ -310,7 +304,9 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     upgradeBuildingsButtons.sort((a, b) => a.label.localeCompare(b.label));
-    upgradeBuildingsButtons.forEach(button => upgradeBuildingsList.append(button.button.element));
+    upgradeBuildingsButtons.forEach(button =>
+      upgradeBuildingsElement.list.append(button.button.element)
+    );
 
     const nodeTurnOnSteamworks = new SettingListItem(
       this._host,
@@ -329,12 +325,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [
-      header,
-      upgradeBuildingsElement.element,
-      upgradeBuildingsList,
-      nodeTurnOnSteamworks.element,
-    ];
+    return [header, upgradeBuildingsElement.element, nodeTurnOnSteamworks.element];
   }
 
   setState(state: BonfireSettings): void {

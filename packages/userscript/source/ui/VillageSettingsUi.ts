@@ -6,9 +6,8 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class VillageSettingsUi extends SettingsSectionUi {
@@ -19,9 +18,8 @@ export class VillageSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: VillageSettings) {
     const toggleName = "distribute";
     const label = ucfirst(host.engine.i18n("ui.distribute"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
@@ -69,12 +67,10 @@ export class VillageSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    list.append(...this._optionButtons);
+    panel.list.append(...this._optionButtons);
 
     const additionOptions = this._getAdditionOptions();
-    list.append(additionOptions);
-
-    panel.element.append(list);
+    panel.list.append(additionOptions);
   }
 
   private _getDistributeOption(

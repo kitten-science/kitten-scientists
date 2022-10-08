@@ -4,6 +4,7 @@ import { SettingMax } from "../options/Settings";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 
 export type Toggleable = {
   get isExpanded(): boolean;
@@ -14,11 +15,15 @@ export type Toggleable = {
  * Base class for all automation UI sections.
  * This provides common functionality to help build the automation sections themselves.
  */
-export abstract class SettingsSectionUiBase {
+export abstract class SettingsSectionUi {
   protected _host: UserScript;
+  readonly element: JQuery<HTMLElement>;
+  readonly panel: SettingsPanel;
 
-  constructor(host: UserScript) {
+  constructor(host: UserScript, panel: SettingsPanel) {
     this._host = host;
+    this.element = panel.element;
+    this.panel = panel;
   }
 
   abstract refreshUi(): void;
@@ -122,42 +127,5 @@ export abstract class SettingsSectionUiBase {
 
   static renderConsumeRate(consume: number | undefined): string {
     return SettingsSectionUi.renderPercentage(consume ?? WorkshopManager.DEFAULT_CONSUME_RATE);
-  }
-}
-
-export abstract class SettingsSectionUi extends SettingsSectionUiBase {
-  readonly element: JQuery<HTMLElement>;
-  protected readonly expando: JQuery<HTMLElement>;
-  protected readonly mainChild: JQuery<HTMLElement>;
-  private _mainChildVisible = false;
-
-  get isExpanded() {
-    return this._mainChildVisible;
-  }
-
-  constructor(
-    host: UserScript,
-    settingsPanel: { element: JQuery<HTMLElement>; expando: JQuery<HTMLElement> },
-    mainChild: JQuery<HTMLElement>
-  ) {
-    super(host);
-    this.element = settingsPanel.element;
-    this.expando = settingsPanel.expando;
-    this.mainChild = mainChild;
-  }
-
-  toggle(expand: boolean | undefined) {
-    this._mainChildVisible = expand !== undefined ? expand : !this._mainChildVisible;
-    if (this._mainChildVisible) {
-      this.mainChild.show();
-      this.expando.data("expanded", true);
-      this.expando.prop("title", this._host.engine.i18n("ui.itemsHide"));
-      this.expando.text("-");
-    } else {
-      this.mainChild.hide();
-      this.expando.data("expanded", false);
-      this.expando.prop("title", this._host.engine.i18n("ui.itemsShow"));
-      this.expando.text("+");
-    }
   }
 }

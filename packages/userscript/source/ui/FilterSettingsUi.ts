@@ -4,8 +4,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class FiltersSettingsUi extends SettingsSectionUi {
@@ -14,9 +13,8 @@ export class FiltersSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: FilterSettings) {
     const toggleName = "filter";
     const label = ucfirst(host.engine.i18n("ui.filter"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
@@ -127,10 +125,8 @@ export class FiltersSettingsUi extends SettingsSectionUi {
       .sort((a, b) => a.label.localeCompare(b.label))
       .map(button => makeButton(button.name, button.option, button.label));
 
-    list.append(optionButtons);
-    list.append(this._getExplainer("Disabled items are hidden from the log."));
-
-    panel.element.append(list);
+    panel.list.append(optionButtons);
+    panel.list.append(this._getExplainer("Disabled items are hidden from the log."));
   }
 
   setState(state: FilterSettings): void {

@@ -5,9 +5,8 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class WorkshopSettingsUi extends SettingsSectionUi {
@@ -17,9 +16,8 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: WorkshopSettings) {
     const toggleName = "craft";
     const label = ucfirst(host.engine.i18n("ui.craft"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
@@ -130,12 +128,10 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    list.append(...buttons);
+    panel.list.append(...buttons);
 
     const additionOptions = this._getAdditionOptions();
-    list.append(additionOptions);
-
-    panel.element.append(list);
+    panel.list.append(additionOptions);
   }
 
   private _getCraftOption(
@@ -164,13 +160,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const upgradesList = SettingsListUi.getSettingsList(this._host.engine, "upgrades");
-    const upgradesElement = SettingsPanelUi.make(
+    const upgradesElement = new SettingsPanel(
       this._host,
       "upgrades",
       this._host.engine.i18n("ui.upgrade.upgrades"),
-      this._settings.unlockUpgrades,
-      upgradesList
+      this._settings.unlockUpgrades
     );
 
     const upgradeButtons = [];
@@ -191,7 +185,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     upgradeButtons.sort((a, b) => a.label.localeCompare(b.label));
-    upgradeButtons.forEach(button => upgradesList.append(button.button.element));
+    upgradeButtons.forEach(button => upgradesElement.list.append(button.button.element));
 
     const shipOverride = new SettingListItem(
       this._host,
@@ -210,7 +204,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, upgradesElement.element, upgradesList, shipOverride.element];
+    return [header, upgradesElement.element, shipOverride.element];
   }
 
   setState(state: WorkshopSettings): void {

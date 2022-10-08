@@ -5,8 +5,7 @@ import { mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ResourcesSettingsUi extends SettingsSectionUi {
@@ -15,20 +14,15 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: ResourcesSettings) {
     const toggleName = "resources";
     const label = ucfirst(host.engine.i18n("ui.resources"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
     $("input", panel.element).prop("disabled", true);
 
-    const allresources = SettingsSectionUi.getList("available-resources-list");
-
-    list.append(allresources);
-
     // Add all the current resources
     for (const [name, item] of objectEntries(this._settings.items)) {
-      list.append(
+      panel.list.append(
         this._makeResourceSetting(
           name,
           ucfirst(this._host.engine.i18n(`$resources.${name}.title`)),
@@ -36,8 +30,6 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
         )
       );
     }
-
-    panel.element.append(list);
   }
 
   /**

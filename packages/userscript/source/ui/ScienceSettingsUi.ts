@@ -4,8 +4,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ScienceSettingsUi extends SettingsSectionUi {
@@ -14,20 +13,17 @@ export class ScienceSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: ScienceSettings) {
     const toggleName = "upgrade";
     const label = ucfirst(host.engine.i18n("ui.upgrade"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
     // Technologies
-    const techsList = SettingsListUi.getSettingsList(this._host.engine, "techs");
-    const techsElement = SettingsPanelUi.make(
+    const techsElement = new SettingsPanel(
       this._host,
       "techs",
       this._host.engine.i18n("ui.upgrade.techs"),
-      this._settings.techs,
-      techsList
+      this._settings.techs
     );
 
     const techButtons = [];
@@ -42,16 +38,14 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     techButtons.sort((a, b) => a.label.localeCompare(b.label));
-    techButtons.forEach(button => techsList.append(button.button.element));
+    techButtons.forEach(button => techsElement.list.append(button.button.element));
 
     // Policies
-    const policiesList = SettingsListUi.getSettingsList(this._host.engine, "policies");
-    const policiesElement = SettingsPanelUi.make(
+    const policiesElement = new SettingsPanel(
       this._host,
       "policies",
       this._host.engine.i18n("ui.upgrade.policies"),
-      this._settings.policies,
-      policiesList
+      this._settings.policies
     );
 
     const policyButtons = [];
@@ -74,10 +68,9 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     policyButtons.sort((a, b) => a.label.localeCompare(b.label));
-    policyButtons.forEach(button => policiesList.append(button.button.element));
+    policyButtons.forEach(button => policiesElement.list.append(button.button.element));
 
-    list.append(techsElement.element, techsList, policiesElement.element, policiesList);
-    panel.element.append(list);
+    panel.list.append(techsElement.element, policiesElement.element);
   }
 
   setState(state: ScienceSettings): void {

@@ -1,8 +1,21 @@
-import { SettingsSection } from "../options/SettingsSection";
-import { UserScript } from "../UserScript";
-import { SettingListItem } from "./components/SettingListItem";
+import { SettingsSection } from "../../options/SettingsSection";
+import { UserScript } from "../../UserScript";
+import { SettingsListUi } from "../SettingsListUi";
+import { SettingListItem } from "./SettingListItem";
 
-export class SettingsPanelUi {
+export class SettingsPanel {
+  readonly host: UserScript;
+  readonly settings: SettingsSection;
+  readonly element: JQuery<HTMLElement>;
+  private readonly _element: SettingListItem;
+  readonly expando: JQuery<HTMLElement>;
+  readonly list: JQuery<HTMLElement>;
+  private _mainChildVisible: boolean;
+
+  get isExpanded() {
+    return this._mainChildVisible;
+  }
+
   /**
    * Constructs a settings panel that is used to contain a major section of the UI.
    *
@@ -10,33 +23,30 @@ export class SettingsPanelUi {
    * @param id The ID of the settings panel.
    * @param label The label to put main checkbox of this section.
    * @param settings An options section for which this is the settings panel.
-   * @param mainChild The main child element in the panel that should be toggled with
-   * the sections' expando button.
    * @param initiallyExpanded Should the main child be expanded right away?
-   * @returns The constructed settings panel.
    */
-  static make(
+  constructor(
     host: UserScript,
     id: string,
     label: string,
     settings: SettingsSection,
-    mainChild: JQuery<HTMLElement>,
     initiallyExpanded = false
-  ): { element: JQuery<HTMLElement>; expando: JQuery<HTMLElement> } {
-    const panelElement = new SettingListItem(host, id, label, settings, {
+  ) {
+    this.host = host;
+    const element = new SettingListItem(host, id, label, settings, {
       onCheck: () => host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
     });
 
+    const list = SettingsListUi.getSettingsList(host.engine, id);
+
     // The expando button for this panel.
-    const itemsElement = SettingsPanelUi.makeItemsToggle(host, id).text(
+    const itemsElement = SettingsPanel.makeItemsToggle(host, id).text(
       initiallyExpanded ? "-" : "+"
     );
-    panelElement.element.append(itemsElement);
-
     itemsElement.data("expanded", initiallyExpanded);
     itemsElement.on("click", () => {
-      mainChild.toggle();
+      list.toggle();
       const itemsExpanded = !itemsElement.data("expanded");
 
       itemsElement.data("expanded", itemsExpanded);
@@ -47,11 +57,38 @@ export class SettingsPanelUi {
       itemsElement.text(itemsExpanded ? "-" : "+");
     });
 
+    element.element.append(itemsElement, list);
+
     if (initiallyExpanded) {
-      mainChild.toggle();
+      list.toggle();
     }
 
-    return { element: panelElement.element, expando: itemsElement };
+    this._element = element;
+    this._mainChildVisible = initiallyExpanded;
+    this.element = element.element;
+    this.expando = itemsElement;
+    this.host = host;
+    this.list = list;
+    this.settings = settings;
+  }
+
+  refreshUi() {
+    this._element.refreshUi();
+  }
+
+  toggle(expand: boolean | undefined) {
+    this._mainChildVisible = expand !== undefined ? expand : !this._mainChildVisible;
+    if (this._mainChildVisible) {
+      this.list.show();
+      this.expando.data("expanded", true);
+      this.expando.prop("title", this.host.engine.i18n("ui.itemsHide"));
+      this.expando.text("-");
+    } else {
+      this.list.hide();
+      this.expando.data("expanded", false);
+      this.expando.prop("title", this.host.engine.i18n("ui.itemsShow"));
+      this.expando.text("+");
+    }
   }
 
   /**

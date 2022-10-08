@@ -11,9 +11,9 @@ import { Maybe, mustExist } from "../tools/Maybe";
 import { Resource, Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeControlSettingsUi extends SettingsSectionUi {
@@ -24,9 +24,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: TimeControlSettings) {
     const toggleName = "timeCtrl";
     const label = ucfirst(host.engine.i18n("ui.timeCtrl"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
@@ -50,9 +49,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       ).element,
     ];
 
-    list.append(...optionButtons);
-
-    panel.element.append(list);
+    panel.list.append(...optionButtons);
   }
 
   private _getOptionTimeSkip(

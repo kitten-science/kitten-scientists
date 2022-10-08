@@ -4,9 +4,8 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class SpaceSettingsUi extends SettingsSectionUi {
@@ -16,9 +15,8 @@ export class SpaceSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: SpaceSettings) {
     const toggleName = "space";
     const label = ucfirst(host.engine.i18n("ui.space"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
@@ -171,24 +169,20 @@ export class SpaceSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    list.append(...optionButtons);
+    panel.list.append(...optionButtons);
 
     const additionOptions = this._getAdditionOptions();
-    list.append(additionOptions);
-
-    panel.element.append(list);
+    panel.list.append(additionOptions);
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = this._getHeader("Additional options");
 
-    const missionsList = SettingsListUi.getSettingsList(this._host.engine, "missions");
-    const missionsElement = SettingsPanelUi.make(
+    const missionsElement = new SettingsPanel(
       this._host,
       "missions",
       this._host.engine.i18n("ui.upgrade.missions"),
-      this._settings.unlockMissions,
-      missionsList
+      this._settings.unlockMissions
     );
 
     const missionButtons = [];
@@ -209,9 +203,9 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     missionButtons.sort((a, b) => a.label.localeCompare(b.label));
-    missionButtons.forEach(button => missionsList.append(button.button.element));
+    missionButtons.forEach(button => missionsElement.list.append(button.button.element));
 
-    return [header, missionsElement.element, missionsList];
+    return [header, missionsElement.element];
   }
 
   setState(state: SpaceSettings): void {

@@ -4,9 +4,8 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeSettingsUi extends SettingsSectionUi {
@@ -16,9 +15,8 @@ export class TimeSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: TimeSettings) {
     const toggleName = "time";
     const label = ucfirst(host.engine.i18n("ui.time"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
@@ -86,9 +84,7 @@ export class TimeSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    list.append(...optionButtons);
-
-    panel.element.append(list);
+    panel.list.append(...optionButtons);
   }
 
   private _getTimeSetting(

@@ -8,9 +8,8 @@ import { UserScript } from "../UserScript";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
-import { SettingsListUi } from "./SettingsListUi";
-import { SettingsPanelUi } from "./SettingsPanelUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TradeSettingsUi extends SettingsSectionUi {
@@ -20,9 +19,8 @@ export class TradeSettingsUi extends SettingsSectionUi {
   constructor(host: UserScript, settings: TradeSettings) {
     const toggleName = "trade";
     const label = ucfirst(host.engine.i18n("ui.trade"));
-    const list = SettingsListUi.getSettingsList(host.engine, toggleName);
-    const panel = SettingsPanelUi.make(host, toggleName, label, settings, list);
-    super(host, panel, list);
+    const panel = new SettingsPanel(host, toggleName, label, settings);
+    super(host, panel);
 
     this._settings = settings;
 
@@ -74,12 +72,10 @@ export class TradeSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    list.append(...optionButtons);
+    panel.list.append(...optionButtons);
 
     const additionOptions = this._getAdditionOptions();
-    list.append(additionOptions);
-
-    panel.element.append(list);
+    panel.list.append(additionOptions);
   }
 
   private _getTradeOption(
@@ -163,13 +159,11 @@ export class TradeSettingsUi extends SettingsSectionUi {
     const header = this._getHeader("Additional options");
 
     // Embassies
-    const embassiesList = SettingsListUi.getSettingsList(this._host.engine, "embassies");
-    const embassiesElement = SettingsPanelUi.make(
+    const embassiesElement = new SettingsPanel(
       this._host,
       "embassies",
       this._host.engine.i18n("option.embassies"),
-      this._settings.buildEmbassies,
-      embassiesList
+      this._settings.buildEmbassies
     );
 
     const embassiesButtons = [
@@ -214,7 +208,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
         this._host.engine.i18n(`$trade.race.leviathans`)
       ),
     ];
-    embassiesList.append(...embassiesButtons);
+    embassiesElement.list.append(...embassiesButtons);
     const embassiesTrigger = new TriggerButton(
       this._host,
       "buildEmbassies",
@@ -240,7 +234,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, unlockRaces.element, embassiesElement.element, embassiesList];
+    return [header, unlockRaces.element, embassiesElement.element];
   }
 
   private _makeEmbassySetting(race: Race, option: SettingMax, label: string) {
