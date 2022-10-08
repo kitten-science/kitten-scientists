@@ -287,11 +287,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
     mustExist(this._settings.buildEmbassies.$trigger).refreshUi();
     for (const [name, option] of objectEntries(this._settings.buildEmbassies.items)) {
       mustExist(option.$enabled).prop("checked", this._settings.buildEmbassies.items[name].enabled);
-      mustExist(option.$max).text(
-        this._host.engine.i18n("ui.max", [
-          this._renderLimit(this._settings.buildEmbassies.items[name].max),
-        ])
-      );
+      mustExist(option.$max).refreshUi();
     }
 
     mustExist(this._settings.unlockRaces.$enabled).prop(

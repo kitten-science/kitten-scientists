@@ -367,9 +367,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", this._settings.items[name].enabled);
-      mustExist(option.$max).text(
-        this._host.engine.i18n("ui.max", [this._renderLimit(this._settings.items[name].max)])
-      );
+      mustExist(option.$max).refreshUi();
     }
 
     // Building upgrades.

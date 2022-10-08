@@ -251,9 +251,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     for (const [, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).prop("checked", option.enabled);
       mustExist(option.$limited).prop("checked", option.limited);
-      mustExist(option.$max).text(
-        this._host.engine.i18n("ui.max", [this._renderLimit(option.max)])
-      );
+      mustExist(option.$max).refreshUi();
     }
   }
 }

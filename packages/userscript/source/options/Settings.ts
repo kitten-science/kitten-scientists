@@ -1,4 +1,5 @@
 import { Resource, SpaceBuildings } from "../types";
+import { MaxButton } from "../ui/components/MaxButton";
 import { TriggerButton } from "../ui/components/TriggerButton";
 import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, ReligionItem } from "./ReligionSettings";
@@ -32,7 +33,7 @@ export class SettingLimited extends Setting {
 
 export class SettingMax extends Setting {
   max: number;
-  $max: JQuery<HTMLElement> | undefined = undefined;
+  $max: MaxButton | undefined = undefined;
 
   constructor(enabled = false, max = -1) {
     super(enabled);
@@ -42,7 +43,7 @@ export class SettingMax extends Setting {
 
 export class SettingLimitedMax extends SettingLimited implements SettingMax {
   max: number;
-  $max: JQuery<HTMLElement> | undefined = undefined;
+  $max: MaxButton | undefined = undefined;
 
   constructor(enabled = false, limited = false, max = -1) {
     super(enabled, limited);

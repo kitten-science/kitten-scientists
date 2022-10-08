@@ -1,7 +1,7 @@
 import { SettingLimitedMax } from "../options/Settings";
 import { UserScript } from "../UserScript";
+import { MaxButton } from "./components/MaxButton";
 import { SettingLimitedUi } from "./SettingLimitedUi";
-import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class SettingLimitedMaxUi {
   /**
@@ -49,26 +49,9 @@ export class SettingLimitedMaxUi {
       upgradeIndicator
     );
 
-    const maxButton = $("<div/>", {
-      id: `set-${name}-max`,
-    }).addClass("ks-max-button");
+    const maxButton = new MaxButton(host, name, label, setting);
     setting.$max = maxButton;
-
-    maxButton.on("click", () => {
-      const value = SettingsSectionUi.promptLimit(
-        host.engine.i18n("ui.max.set", [label]),
-        setting.max.toString()
-      );
-
-      if (value !== null) {
-        const limit = SettingsSectionUi.renderLimit(value, host);
-        host.updateOptions(() => (setting.max = value));
-        maxButton[0].title = limit;
-        maxButton[0].innerText = host.engine.i18n("ui.max", [limit]);
-      }
-    });
-
-    element.append(maxButton);
+    element.append(maxButton.element);
 
     return element;
   }
