@@ -5,6 +5,8 @@ import { UserScript } from "../../UserScript";
  *
  * It has enable/disable buttons to check/uncheck all settings contained in it.
  * Most commonly, it is used as part of the `SettingsPanel`.
+ *
+ * This construct is also sometimes referred to as an "items list" for historic reasons.
  */
 export class SettingsList {
   readonly element: JQuery<HTMLElement>;

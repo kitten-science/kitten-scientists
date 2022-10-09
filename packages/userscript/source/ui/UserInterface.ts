@@ -207,6 +207,7 @@ export class UserInterface {
       `#ks ul li.ks-setting .ks-text-button {
         cursor: pointer;
         display: inline-block;
+        user-select: none;
       }`
     );
 
@@ -227,6 +228,7 @@ export class UserInterface {
         min-width: 100px;
         user-select: none;
         padding: 4px;
+        user-select: none;
       }`
     );
 
@@ -241,8 +243,10 @@ export class UserInterface {
     this._addRule(
       `#ks ul li.ks-setting .ks-list.ks-items-list {
         padding-top: 4px;
+        user-select: none;
       }`
     );
+    // Regular Button in items lists
     this._addRule(
       `#ks ul li.ks-setting .ks-list.ks-items-list .ks-button {
         border: 1px solid grey;
@@ -251,6 +255,7 @@ export class UserInterface {
         display: inline-block;
         margin-bottom: 4px;
         padding: 1px 2px;
+        user-select: none;
       }`
     );
     this._addRule(
@@ -264,6 +269,7 @@ export class UserInterface {
         float: right;
         padding-right: 5px;
         padding-top: 2px;
+        user-select: none;
       }`
     );
 
