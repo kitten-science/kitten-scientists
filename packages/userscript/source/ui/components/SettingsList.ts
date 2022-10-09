@@ -1,12 +1,16 @@
 import { UserScript } from "../../UserScript";
 
+/**
+ * The `SettingsList` is a `<ul>` designed to host `SettingListItem` instances.
+ *
+ * It has enable/disable buttons to check/uncheck all settings contained in it.
+ * Most commonly, it is used as part of the `SettingsPanel`.
+ */
 export class SettingsList {
   readonly element: JQuery<HTMLElement>;
 
   /**
-   * Constructs a list panel that is used to contain a list of options.
-   * The panel has "enable all" and "disable all" buttons to check and
-   * uncheck all checkboxes in the section at once.
+   * Constructs a `SettingsList`.
    *
    * @param host A reference to the host.
    * @param id The ID for this list.

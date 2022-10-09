@@ -28,10 +28,6 @@ export abstract class SettingsSectionUi {
 
   abstract refreshUi(): void;
 
-  static getList(id: string) {
-    return $("<ul/>", { id }).addClass("ks-list");
-  }
-
   /**
    * Construct a subsection header.
    * This is purely for cosmetic/informational value in the UI.

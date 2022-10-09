@@ -87,14 +87,14 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       title: this._host.engine.i18n("ui.cycles"),
     }).addClass("ks-icon-button");
 
-    const cyclesList = SettingsSectionUi.getList(`cycles-list-${name}`);
+    const cyclesList = new SettingsList(this._host, `cycles-list-${name}`);
 
     for (
       let cycleIndex = 0;
       cycleIndex < this._host.gamePage.calendar.cycles.length;
       ++cycleIndex
     ) {
-      cyclesList.append(this._getCycle(cycleIndex as CycleIndices, option));
+      cyclesList.element.append(this._getCycle(cycleIndex as CycleIndices, option));
     }
 
     const seasonsButton = $("<div/>", {
@@ -103,25 +103,31 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       title: this._host.engine.i18n("trade.seasons"),
     }).addClass("ks-icon-button");
 
-    const seasonsList = SettingsSectionUi.getList(`seasons-list-${name}`);
+    const seasonsList = new SettingsList(this._host, `seasons-list-${name}`);
 
     // fill out the list with seasons
-    seasonsList.append(this._getSeasonForTimeSkip("spring", option));
-    seasonsList.append(this._getSeasonForTimeSkip("summer", option));
-    seasonsList.append(this._getSeasonForTimeSkip("autumn", option));
-    seasonsList.append(this._getSeasonForTimeSkip("winter", option));
+    seasonsList.element.append(this._getSeasonForTimeSkip("spring", option));
+    seasonsList.element.append(this._getSeasonForTimeSkip("summer", option));
+    seasonsList.element.append(this._getSeasonForTimeSkip("autumn", option));
+    seasonsList.element.append(this._getSeasonForTimeSkip("winter", option));
 
     cyclesButton.on("click", function () {
-      cyclesList.toggle();
-      seasonsList.toggle(false);
+      cyclesList.element.toggle();
+      seasonsList.element.toggle(false);
     });
 
     seasonsButton.on("click", function () {
-      cyclesList.toggle(false);
-      seasonsList.toggle();
+      cyclesList.element.toggle(false);
+      seasonsList.element.toggle();
     });
 
-    element.element.append(cyclesButton, seasonsButton, maximumButton, cyclesList, seasonsList);
+    element.element.append(
+      cyclesButton,
+      seasonsButton,
+      maximumButton,
+      cyclesList.element,
+      seasonsList.element
+    );
 
     return element;
   }
@@ -559,9 +565,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     );
 
     // Resources list
-    const resetResourcesList = (this._resourcesList = SettingsSectionUi.getList(
-      "toggle-reset-list-resources"
-    ));
+    const resetResourcesList = new SettingsList(this._host, "toggle-reset-list-resources");
+    this._resourcesList = resetResourcesList.element;
     // Add all the current resources
     for (const [name, item] of objectEntries(this._settings.resources)) {
       this._resourcesList.append(
@@ -865,35 +870,35 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     buildButton.on("click", () => {
       resetBuildList.element.toggle();
       resetSpaceList.element.toggle(false);
-      resetResourcesList.toggle(false);
+      resetResourcesList.element.toggle(false);
       resetReligionList.element.toggle(false);
       resetTimeList.element.toggle(false);
     });
     spaceButton.on("click", () => {
       resetBuildList.element.toggle(false);
       resetSpaceList.element.toggle();
-      resetResourcesList.toggle(false);
+      resetResourcesList.element.toggle(false);
       resetReligionList.element.toggle(false);
       resetTimeList.element.toggle(false);
     });
     resourcesButton.on("click", () => {
       resetBuildList.element.toggle(false);
       resetSpaceList.element.toggle(false);
-      resetResourcesList.toggle();
+      resetResourcesList.element.toggle();
       resetReligionList.element.toggle(false);
       resetTimeList.element.toggle(false);
     });
     religionButton.on("click", () => {
       resetBuildList.element.toggle(false);
       resetSpaceList.element.toggle(false);
-      resetResourcesList.toggle(false);
+      resetResourcesList.element.toggle(false);
       resetReligionList.element.toggle();
       resetTimeList.element.toggle(false);
     });
     timeButton.on("click", () => {
       resetBuildList.element.toggle(false);
       resetSpaceList.element.toggle(false);
-      resetResourcesList.toggle(false);
+      resetResourcesList.element.toggle(false);
       resetReligionList.element.toggle(false);
       resetTimeList.element.toggle();
     });
@@ -906,7 +911,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       timeButton,
       resetBuildList.element,
       resetSpaceList.element,
-      resetResourcesList,
+      resetResourcesList.element,
       resetReligionList.element,
       resetTimeList.element
     );
@@ -1013,25 +1018,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     element.append(input, label);
 
     return element;
-  }
-
-  private _getResourceOptions(): JQuery<HTMLElement> {
-    this._resourcesList = SettingsSectionUi.getList("toggle-reset-list-resources");
-
-    // Add all the current resources
-    for (const [name, item] of objectEntries(this._settings.resources)) {
-      this._resourcesList.append(
-        this._addNewResourceOption(
-          name,
-          ucfirst(this._host.engine.i18n(`$resources.${name}.title`)),
-          item
-        )
-      );
-      //this.setStockValue(name, item.stock);
-      //this.setConsumeRate(name, item.consume);
-    }
-
-    return this._resourcesList;
   }
 
   /**

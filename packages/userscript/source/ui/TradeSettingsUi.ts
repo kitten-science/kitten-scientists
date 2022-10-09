@@ -8,6 +8,7 @@ import { UserScript } from "../UserScript";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -106,19 +107,19 @@ export class TradeSettingsUi extends SettingsSectionUi {
       title: this._host.engine.i18n("trade.seasons"),
     }).addClass("ks-icon-button");
 
-    const list = SettingsSectionUi.getList(`seasons-list-${name}`);
+    const list = new SettingsList(this._host, `seasons-list-${name}`);
 
     // fill out the list with seasons
-    list.append(this._getSeason(name, "spring", option));
-    list.append(this._getSeason(name, "summer", option));
-    list.append(this._getSeason(name, "autumn", option));
-    list.append(this._getSeason(name, "winter", option));
+    list.element.append(this._getSeason(name, "spring", option));
+    list.element.append(this._getSeason(name, "summer", option));
+    list.element.append(this._getSeason(name, "autumn", option));
+    list.element.append(this._getSeason(name, "winter", option));
 
     seasonsButton.on("click", function () {
-      list.toggle();
+      list.element.toggle();
     });
 
-    element.element.append(seasonsButton, list);
+    element.element.append(seasonsButton, list.element);
 
     return element.element;
   }
