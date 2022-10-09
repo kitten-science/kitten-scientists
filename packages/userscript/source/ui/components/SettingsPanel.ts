@@ -45,17 +45,8 @@ export class SettingsPanel {
     const itemsElement = SettingsPanel.makeItemsToggle(host, id).text(
       initiallyExpanded ? "-" : "+"
     );
-    itemsElement.data("expanded", initiallyExpanded);
     itemsElement.on("click", () => {
-      list.element.toggle();
-      const itemsExpanded = !itemsElement.data("expanded");
-
-      itemsElement.data("expanded", itemsExpanded);
-      itemsElement.prop(
-        "title",
-        itemsExpanded ? host.engine.i18n("ui.itemsHide") : host.engine.i18n("ui.itemsShow")
-      );
-      itemsElement.text(itemsExpanded ? "-" : "+");
+      this.toggle();
     });
 
     element.element.append(itemsElement, list.element);
@@ -78,16 +69,14 @@ export class SettingsPanel {
     this._element.refreshUi();
   }
 
-  toggle(expand: boolean | undefined) {
+  toggle(expand: boolean | undefined = undefined) {
     this._mainChildVisible = expand !== undefined ? expand : !this._mainChildVisible;
     if (this._mainChildVisible) {
       this.list.show();
-      this.expando.data("expanded", true);
       this.expando.prop("title", this.host.engine.i18n("ui.itemsHide"));
       this.expando.text("-");
     } else {
       this.list.hide();
-      this.expando.data("expanded", false);
       this.expando.prop("title", this.host.engine.i18n("ui.itemsShow"));
       this.expando.text("+");
     }
