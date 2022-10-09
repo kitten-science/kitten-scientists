@@ -959,7 +959,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       }
     });
 
-    element.append(input, label);
+    label.prepend(input);
+    element.append(input);
 
     return element;
   }
@@ -1015,7 +1016,8 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       }
     });
 
-    element.append(input, label);
+    label.prepend(input);
+    element.append(label);
 
     return element;
   }

@@ -37,7 +37,8 @@ export class LimitedButton extends UiComponent {
       }
     });
 
-    element.append(checkbox, elementLabel);
+    elementLabel.prepend(checkbox);
+    element.append(elementLabel);
 
     setting.$limited = this;
 

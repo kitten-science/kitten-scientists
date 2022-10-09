@@ -71,7 +71,8 @@ export class SettingListItem extends UiComponent {
       }
     });
 
-    element.append(checkbox, elementLabel);
+    elementLabel.prepend(checkbox);
+    element.append(elementLabel);
 
     setting.$enabled = this;
 

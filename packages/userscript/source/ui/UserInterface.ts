@@ -167,7 +167,7 @@ export class UserInterface {
     this._addRule(
       `#ks ul li.ks-setting .ks-label {
         display: inline-block;
-        min-width: 100px;
+        min-width: 120px;
       }`
     );
     // Setting: +/- Expando Toggle

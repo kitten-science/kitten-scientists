@@ -151,7 +151,8 @@ export class TradeSettingsUi extends SettingsSectionUi {
       }
     });
 
-    element.append(input, label);
+    label.prepend(input);
+    element.append(label);
 
     return element;
   }
