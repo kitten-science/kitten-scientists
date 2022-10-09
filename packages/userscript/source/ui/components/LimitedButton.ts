@@ -9,19 +9,16 @@ export class LimitedButton extends UiComponent {
 
   constructor(
     host: UserScript,
-    id: string,
     setting: SettingLimited,
     handler: { onLimitedCheck: () => void; onLimitedUnCheck: () => void }
   ) {
     super(host);
     const element = $(`<span/>`);
     const elementLabel = $("<label/>", {
-      for: `toggle-limited-${id}`,
       text: host.engine.i18n("ui.limit"),
     });
 
     const checkbox = $("<input/>", {
-      id: `toggle-limited-${id}`,
       type: "checkbox",
     });
 

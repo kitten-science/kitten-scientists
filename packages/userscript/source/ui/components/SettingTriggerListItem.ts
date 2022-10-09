@@ -8,7 +8,6 @@ export class SettingTriggerListItem extends SettingListItem {
 
   constructor(
     host: UserScript,
-    id: string,
     label: string,
     setting: SettingTrigger,
     handler: {
@@ -19,9 +18,9 @@ export class SettingTriggerListItem extends SettingListItem {
     upgradeIndicator = false,
     additionalClasses = []
   ) {
-    super(host, id, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
+    super(host, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
 
-    this.triggerButton = new TriggerButton(host, `set-${id}-trigger`, label, setting);
+    this.triggerButton = new TriggerButton(host, label, setting);
     this.element.append(this.triggerButton.element);
   }
 

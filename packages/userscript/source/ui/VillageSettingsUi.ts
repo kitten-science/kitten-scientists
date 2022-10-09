@@ -15,51 +15,42 @@ export class VillageSettingsUi extends SettingsSectionUi {
   private readonly _settings: VillageSettings;
 
   constructor(host: UserScript, settings: VillageSettings) {
-    const toggleName = "distribute";
     const label = ucfirst(host.engine.i18n("ui.distribute"));
-    const panel = new SettingsPanel(host, toggleName, label, settings);
+    const panel = new SettingsPanel(host, label, settings);
     super(host, panel);
 
     this._settings = settings;
 
     this._items = [
       this._getDistributeOption(
-        "woodcutter",
         this._settings.items.woodcutter,
         this._host.engine.i18n("$village.job.woodcutter")
       ),
       this._getDistributeOption(
-        "farmer",
         this._settings.items.farmer,
         this._host.engine.i18n("$village.job.farmer")
       ),
       this._getDistributeOption(
-        "scholar",
         this._settings.items.scholar,
         this._host.engine.i18n("$village.job.scholar")
       ),
       this._getDistributeOption(
-        "hunter",
         this._settings.items.hunter,
         this._host.engine.i18n("$village.job.hunter")
       ),
       this._getDistributeOption(
-        "miner",
         this._settings.items.miner,
         this._host.engine.i18n("$village.job.miner")
       ),
       this._getDistributeOption(
-        "priest",
         this._settings.items.priest,
         this._host.engine.i18n("$village.job.priest")
       ),
       this._getDistributeOption(
-        "geologist",
         this._settings.items.geologist,
         this._host.engine.i18n("$village.job.geologist")
       ),
       this._getDistributeOption(
-        "engineer",
         this._settings.items.engineer,
         this._host.engine.i18n("$village.job.engineer"),
         true
@@ -74,10 +65,9 @@ export class VillageSettingsUi extends SettingsSectionUi {
     panel.list.append(additionOptions);
   }
 
-  private _getDistributeOption(name: string, option: SettingMax, label: string, delimiter = false) {
+  private _getDistributeOption(option: SettingMax, label: string, delimiter = false) {
     return new SettingMaxListItem(
       this._host,
-      name,
       label,
       option,
       {
@@ -93,7 +83,6 @@ export class VillageSettingsUi extends SettingsSectionUi {
 
     const nodeHunt = new SettingTriggerListItem(
       this._host,
-      "hunt",
       this._host.engine.i18n("option.hunt"),
       this._settings.hunt,
       {
@@ -108,7 +97,6 @@ export class VillageSettingsUi extends SettingsSectionUi {
 
     const nodeFestivals = new SettingListItem(
       this._host,
-      "festival",
       this._host.engine.i18n("option.festival"),
       this._settings.holdFestivals,
       {
@@ -125,7 +113,6 @@ export class VillageSettingsUi extends SettingsSectionUi {
 
     const nodePromote = new SettingListItem(
       this._host,
-      "promote",
       this._host.engine.i18n("option.promote"),
       this._settings.promoteLeader,
       {

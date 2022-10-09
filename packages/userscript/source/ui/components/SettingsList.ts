@@ -16,20 +16,13 @@ export class SettingsList extends UiComponent {
    * Constructs a `SettingsList`.
    *
    * @param host A reference to the host.
-   * @param id The ID for this list.
    */
-  constructor(host: UserScript, id: string) {
+  constructor(host: UserScript) {
     super(host);
 
-    const containerList = $("<ul/>", {
-      id: `items-list-${id}`,
-    })
-      .addClass("ks-list")
-      .addClass("ks-items-list");
+    const containerList = $("<ul/>").addClass("ks-list").addClass("ks-items-list");
 
-    const disableAllButton = $("<div/>", {
-      id: `toggle-all-items-${id}`,
-    })
+    const disableAllButton = $("<div/>")
       .text(host.engine.i18n("ui.disable.all"))
       .addClass("ks-button");
 
@@ -43,9 +36,7 @@ export class SettingsList extends UiComponent {
 
     containerList.append(disableAllButton);
 
-    const enableAllButton = $("<div/>", {
-      id: `toggle-all-items-${id}`,
-    })
+    const enableAllButton = $("<div/>")
       .text(host.engine.i18n("ui.enable.all"))
       .addClass("ks-button")
       .addClass("ks-margin-right");

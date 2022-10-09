@@ -11,9 +11,8 @@ export class ScienceSettingsUi extends SettingsSectionUi {
   private readonly _settings: ScienceSettings;
 
   constructor(host: UserScript, settings: ScienceSettings) {
-    const toggleName = "upgrade";
     const label = ucfirst(host.engine.i18n("ui.upgrade"));
-    const panel = new SettingsPanel(host, toggleName, label, settings);
+    const panel = new SettingsPanel(host, label, settings);
     super(host, panel);
 
     this._settings = settings;
@@ -21,7 +20,6 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     // Technologies
     const techsElement = new SettingsPanel(
       this._host,
-      "techs",
       this._host.engine.i18n("ui.upgrade.techs"),
       this._settings.techs
     );
@@ -29,7 +27,7 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     const techButtons = [];
     for (const [techName, tech] of objectEntries(this._settings.techs.items)) {
       const label = this._host.engine.i18n(`$science.${techName}.label`);
-      const button = new SettingListItem(this._host, `tech-${techName}`, label, tech, {
+      const button = new SettingListItem(this._host, label, tech, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       });
@@ -43,7 +41,6 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     // Policies
     const policiesElement = new SettingsPanel(
       this._host,
-      "policies",
       this._host.engine.i18n("ui.upgrade.policies"),
       this._settings.policies
     );
@@ -53,16 +50,10 @@ export class ScienceSettingsUi extends SettingsSectionUi {
       const policyLabel = this._host.engine.i18n(
         `$policy.${policyName === "authocracy" ? "autocracy" : policyName}.label`
       );
-      const policyButton = new SettingListItem(
-        this._host,
-        `policy-${policyName}`,
-        policyLabel,
-        policy,
-        {
-          onCheck: () => this._host.engine.imessage("status.auto.enable", [policyLabel]),
-          onUnCheck: () => this._host.engine.imessage("status.auto.disable", [policyLabel]),
-        }
-      );
+      const policyButton = new SettingListItem(this._host, policyLabel, policy, {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [policyLabel]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [policyLabel]),
+      });
 
       policyButtons.push({ label: policyLabel, button: policyButton });
     }

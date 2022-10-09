@@ -18,15 +18,14 @@ export class TradeSettingsUi extends SettingsSectionUi {
   private readonly _settings: TradeSettings;
 
   constructor(host: UserScript, settings: TradeSettings) {
-    const toggleName = "trade";
     const label = ucfirst(host.engine.i18n("ui.trade"));
-    const panel = new SettingsPanel(host, toggleName, label, settings);
+    const panel = new SettingsPanel(host, label, settings);
     super(host, panel);
 
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    this._trigger = new TriggerButton(host, toggleName, label, settings);
+    this._trigger = new TriggerButton(host, label, settings);
     panel.element.append(this._trigger.element);
 
     const optionButtons = [
@@ -88,7 +87,6 @@ export class TradeSettingsUi extends SettingsSectionUi {
   ): JQuery<HTMLElement> {
     const element = new SettingLimitedListItem(
       this._host,
-      name,
       i18nName,
       option,
       {
@@ -102,12 +100,11 @@ export class TradeSettingsUi extends SettingsSectionUi {
     );
 
     const seasonsButton = $("<div/>", {
-      id: `toggle-seasons-${name}`,
       html: '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M15.3 28.3q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575Zm8.85 0q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575Zm8.5 0q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575ZM9 44q-1.2 0-2.1-.9Q6 42.2 6 41V10q0-1.2.9-2.1Q7.8 7 9 7h3.25V4h3.25v3h17V4h3.25v3H39q1.2 0 2.1.9.9.9.9 2.1v31q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30V19.5H9V41Zm0-24.5h30V10H9Zm0 0V10v6.5Z"/></svg>',
       title: this._host.engine.i18n("trade.seasons"),
     }).addClass("ks-icon-button");
 
-    const list = new SettingsList(this._host, `seasons-list-${name}`);
+    const list = new SettingsList(this._host);
 
     // fill out the list with seasons
     list.element.append(this._getSeason(name, "spring", option));
@@ -163,49 +160,40 @@ export class TradeSettingsUi extends SettingsSectionUi {
     // Embassies
     const embassiesElement = new SettingsPanel(
       this._host,
-      "embassies",
       this._host.engine.i18n("option.embassies"),
       this._settings.buildEmbassies
     );
 
     const embassiesButtons = [
       this._makeEmbassySetting(
-        "lizards",
         this._settings.buildEmbassies.items.lizards,
         this._host.engine.i18n(`$trade.race.lizards`)
       ),
       this._makeEmbassySetting(
-        "sharks",
         this._settings.buildEmbassies.items.sharks,
         this._host.engine.i18n(`$trade.race.sharks`)
       ),
       this._makeEmbassySetting(
-        "griffins",
         this._settings.buildEmbassies.items.griffins,
         this._host.engine.i18n(`$trade.race.griffins`)
       ),
       this._makeEmbassySetting(
-        "nagas",
         this._settings.buildEmbassies.items.nagas,
         this._host.engine.i18n(`$trade.race.nagas`)
       ),
       this._makeEmbassySetting(
-        "zebras",
         this._settings.buildEmbassies.items.zebras,
         this._host.engine.i18n(`$trade.race.zebras`)
       ),
       this._makeEmbassySetting(
-        "spiders",
         this._settings.buildEmbassies.items.spiders,
         this._host.engine.i18n(`$trade.race.spiders`)
       ),
       this._makeEmbassySetting(
-        "dragons",
         this._settings.buildEmbassies.items.dragons,
         this._host.engine.i18n(`$trade.race.dragons`)
       ),
       this._makeEmbassySetting(
-        "leviathans",
         this._settings.buildEmbassies.items.leviathans,
         this._host.engine.i18n(`$trade.race.leviathans`)
       ),
@@ -213,7 +201,6 @@ export class TradeSettingsUi extends SettingsSectionUi {
     embassiesElement.list.append(...embassiesButtons);
     const embassiesTrigger = new TriggerButton(
       this._host,
-      "buildEmbassies",
       this._host.engine.i18n("option.embassies"),
       this._settings.buildEmbassies
     );
@@ -221,7 +208,6 @@ export class TradeSettingsUi extends SettingsSectionUi {
 
     const unlockRaces = new SettingListItem(
       this._host,
-      "races",
       this._host.engine.i18n("ui.upgrade.races"),
       this._settings.unlockRaces,
       {
@@ -239,8 +225,8 @@ export class TradeSettingsUi extends SettingsSectionUi {
     return [header, unlockRaces.element, embassiesElement.element];
   }
 
-  private _makeEmbassySetting(race: Race, option: SettingMax, label: string) {
-    return new SettingMaxListItem(this._host, `embassy-${race}`, label, option, {
+  private _makeEmbassySetting(option: SettingMax, label: string) {
+    return new SettingMaxListItem(this._host, label, option, {
       onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
       onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
     }).element;

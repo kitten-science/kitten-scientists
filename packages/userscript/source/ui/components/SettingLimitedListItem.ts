@@ -11,7 +11,6 @@ export class SettingLimitedListItem extends SettingListItem {
    * This will result in an element with a checkbox that has a "Limited" label.
    *
    * @param host The userscript instance.
-   * @param id A unique name for this setting.
    * @param label The label for the setting.
    * @param setting The setting model.
    * @param handler Handlers to call when the setting is checked or unchecked.
@@ -26,7 +25,6 @@ export class SettingLimitedListItem extends SettingListItem {
    */
   constructor(
     host: UserScript,
-    id: string,
     label: string,
     setting: SettingLimited,
     handler: {
@@ -39,9 +37,9 @@ export class SettingLimitedListItem extends SettingListItem {
     upgradeIndicator = false,
     additionalClasses = []
   ) {
-    super(host, id, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
+    super(host, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
 
-    this.limitedButton = new LimitedButton(host, id, setting, handler);
+    this.limitedButton = new LimitedButton(host, setting, handler);
     this.element.append(this.limitedButton.element);
   }
 

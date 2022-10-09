@@ -53,7 +53,6 @@ export abstract class SettingsSectionUi {
   }
 
   protected _getBuildOption(
-    name: string,
     option: BonfireSettingsItem | ReligionSettingsItem | SettingMax,
     label: string,
     delimiter = false,
@@ -61,7 +60,6 @@ export abstract class SettingsSectionUi {
   ): JQuery<HTMLElement> {
     return new SettingMaxListItem(
       this._host,
-      name,
       label,
       option,
       {

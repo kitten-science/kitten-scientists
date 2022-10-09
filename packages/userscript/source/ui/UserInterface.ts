@@ -78,7 +78,7 @@ export class UserInterface {
     optionsListElement.append(this._optionsUi.element);
     optionsListElement.append(this._filterUi.element);
 
-    const expando = new ExpandoButton(this._host, "engine");
+    const expando = new ExpandoButton(this._host);
     this._engineUi.element.append(expando.element);
 
     // Make _engineUI's expando button hide/show the other option groups

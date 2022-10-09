@@ -15,114 +15,94 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   private readonly _settings: WorkshopSettings;
 
   constructor(host: UserScript, settings: WorkshopSettings) {
-    const toggleName = "craft";
     const label = ucfirst(host.engine.i18n("ui.craft"));
-    const panel = new SettingsPanel(host, "craft", label, settings);
+    const panel = new SettingsPanel(host, label, settings);
     super(host, panel);
 
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    this._trigger = new TriggerButton(host, toggleName, label, settings);
+    this._trigger = new TriggerButton(host, label, settings);
     panel.element.append(this._trigger.element);
 
     this._items = [
       this._getCraftOption(
-        "wood",
         this._settings.items.wood,
         this._host.engine.i18n("$workshop.crafts.wood.label")
       ),
       this._getCraftOption(
-        "beam",
         this._settings.items.beam,
         this._host.engine.i18n("$workshop.crafts.beam.label")
       ),
       this._getCraftOption(
-        "slab",
         this._settings.items.slab,
         this._host.engine.i18n("$workshop.crafts.slab.label")
       ),
       this._getCraftOption(
-        "steel",
         this._settings.items.steel,
         this._host.engine.i18n("$workshop.crafts.steel.label")
       ),
       this._getCraftOption(
-        "plate",
         this._settings.items.plate,
         this._host.engine.i18n("$workshop.crafts.plate.label")
       ),
       this._getCraftOption(
-        "alloy",
         this._settings.items.alloy,
         this._host.engine.i18n("$workshop.crafts.alloy.label")
       ),
       this._getCraftOption(
-        "concrate",
         this._settings.items.concrate,
         this._host.engine.i18n("$workshop.crafts.concrate.label")
       ),
       this._getCraftOption(
-        "gear",
         this._settings.items.gear,
         this._host.engine.i18n("$workshop.crafts.gear.label")
       ),
       this._getCraftOption(
-        "scaffold",
         this._settings.items.scaffold,
         this._host.engine.i18n("$workshop.crafts.scaffold.label")
       ),
       this._getCraftOption(
-        "ship",
         this._settings.items.ship,
         this._host.engine.i18n("$workshop.crafts.ship.label")
       ),
       this._getCraftOption(
-        "tanker",
         this._settings.items.tanker,
         this._host.engine.i18n("$workshop.crafts.tanker.label"),
         true
       ),
 
       this._getCraftOption(
-        "parchment",
         this._settings.items.parchment,
         this._host.engine.i18n("$workshop.crafts.parchment.label")
       ),
       this._getCraftOption(
-        "manuscript",
         this._settings.items.manuscript,
         this._host.engine.i18n("$workshop.crafts.manuscript.label")
       ),
       this._getCraftOption(
-        "compedium",
         this._settings.items.compedium,
         this._host.engine.i18n("$workshop.crafts.compedium.label")
       ),
       this._getCraftOption(
-        "blueprint",
         this._settings.items.blueprint,
         this._host.engine.i18n("$workshop.crafts.blueprint.label"),
         true
       ),
 
       this._getCraftOption(
-        "kerosene",
         this._settings.items.kerosene,
         this._host.engine.i18n("$workshop.crafts.kerosene.label")
       ),
       this._getCraftOption(
-        "megalith",
         this._settings.items.megalith,
         this._host.engine.i18n("$workshop.crafts.megalith.label")
       ),
       this._getCraftOption(
-        "eludium",
         this._settings.items.eludium,
         this._host.engine.i18n("$workshop.crafts.eludium.label")
       ),
       this._getCraftOption(
-        "thorium",
         this._settings.items.thorium,
         this._host.engine.i18n("$workshop.crafts.thorium.label"),
         true
@@ -138,7 +118,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   }
 
   private _getCraftOption(
-    name: string,
     option: CraftSettingsItem,
     label: string,
     delimiter = false,
@@ -146,7 +125,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   ) {
     return new SettingLimitedMaxListItem(
       this._host,
-      name,
       label,
       option,
       {
@@ -165,7 +143,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     const upgradesElement = new SettingsPanel(
       this._host,
-      "upgrades",
       this._host.engine.i18n("ui.upgrade.upgrades"),
       this._settings.unlockUpgrades
     );
@@ -173,16 +150,10 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     const upgradeButtons = [];
     for (const [upgradeName, upgrade] of objectEntries(this._settings.unlockUpgrades.items)) {
       const upgradeLabel = this._host.engine.i18n(`$workshop.${upgradeName}.label`);
-      const upgradeButton = new SettingListItem(
-        this._host,
-        `upgrade-${upgradeName}`,
-        upgradeLabel,
-        upgrade,
-        {
-          onCheck: () => this._host.engine.imessage("status.auto.enable", [upgradeLabel]),
-          onUnCheck: () => this._host.engine.imessage("status.auto.disable", [upgradeLabel]),
-        }
-      );
+      const upgradeButton = new SettingListItem(this._host, upgradeLabel, upgrade, {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [upgradeLabel]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [upgradeLabel]),
+      });
 
       upgradeButtons.push({ label: upgradeLabel, button: upgradeButton });
     }
@@ -192,7 +163,6 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
 
     const shipOverride = new SettingListItem(
       this._host,
-      "shipOverride",
       this._host.engine.i18n("option.shipOverride"),
       this._settings.shipOverride,
       {

@@ -23,29 +23,27 @@ export class SettingsPanel extends UiComponent {
    * Constructs a settings panel that is used to contain a major section of the UI.
    *
    * @param host A reference to the host.
-   * @param id The ID of the settings panel.
    * @param label The label to put main checkbox of this section.
    * @param settings An options section for which this is the settings panel.
    * @param initiallyExpanded Should the main child be expanded right away?
    */
   constructor(
     host: UserScript,
-    id: string,
     label: string,
     settings: SettingsSection,
     initiallyExpanded = false
   ) {
     super(host);
 
-    const element = new SettingListItem(host, id, label, settings, {
+    const element = new SettingListItem(host, label, settings, {
       onCheck: () => host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
     });
 
-    const list = new SettingsList(host, id);
+    const list = new SettingsList(host);
 
     // The expando button for this panel.
-    const expando = new ExpandoButton(host, id);
+    const expando = new ExpandoButton(host);
     if (initiallyExpanded) {
       expando.setExpanded();
     }

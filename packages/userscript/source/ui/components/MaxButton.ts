@@ -9,16 +9,13 @@ export class MaxButton extends UiComponent {
 
   constructor(
     host: UserScript,
-    id: string,
     label: string,
     setting: SettingMax,
     handler: { onClick?: () => void } = {}
   ) {
     super(host);
 
-    const element = $("<div/>", {
-      id: `set-${id}-max`,
-    }).addClass("ks-max-button");
+    const element = $("<div/>").addClass("ks-max-button");
 
     element.on("click", () => {
       const value = SettingsSectionUi.promptLimit(

@@ -3,8 +3,6 @@ import { UserScript } from "../../UserScript";
 import { UiComponent } from "./UiComponent";
 
 export class SettingListItem extends UiComponent {
-  private static _provisionedOptionElements = new Map<string, SettingListItem>();
-
   readonly setting: Setting;
   readonly element: JQuery<HTMLElement>;
   readonly checkbox: JQuery<HTMLElement>;
@@ -14,7 +12,6 @@ export class SettingListItem extends UiComponent {
    * This is a simple checkbox with a label.
    *
    * @param host The userscript instance.
-   * @param id The internal ID of this setting. Should be unique throughout the script.
    * @param label The label on the setting element.
    * @param setting The setting this element is linked to.
    * @param handler The event handlers for this setting element.
@@ -27,7 +24,6 @@ export class SettingListItem extends UiComponent {
    */
   constructor(
     host: UserScript,
-    id: string,
     label: string,
     setting: Setting,
     handler: {
@@ -38,12 +34,6 @@ export class SettingListItem extends UiComponent {
     upgradeIndicator = false,
     additionalClasses = []
   ) {
-    if (SettingListItem._provisionedOptionElements.has(id)) {
-      throw new Error(
-        `Duplicate setting ID requested! The setting ID '${id}' has already been assigned to a previously provisoned element.`
-      );
-    }
-
     super(host);
 
     const element = $(`<li/>`);
@@ -52,12 +42,10 @@ export class SettingListItem extends UiComponent {
     }
 
     const elementLabel = $("<label/>", {
-      for: `toggle-${id}`,
       text: `${upgradeIndicator ? `⮤ ` : ""}${label}`,
     }).addClass("ks-label");
 
     const checkbox = $("<input/>", {
-      id: `toggle-${id}`,
       type: "checkbox",
     }).addClass("ks-checkbox");
 
@@ -79,8 +67,6 @@ export class SettingListItem extends UiComponent {
     this.checkbox = checkbox;
     this.element = element;
     this.setting = setting;
-
-    SettingListItem._provisionedOptionElements.set(id, this);
   }
 
   refreshUi() {

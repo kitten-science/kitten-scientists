@@ -9,12 +9,10 @@ export class ExpandoButton extends UiComponent {
    * collapses a section of the UI.
    *
    * @param host A reference to the host.
-   * @param id The ID of the section this is the expando for.
    */
-  constructor(host: UserScript, id: string) {
+  constructor(host: UserScript) {
     super(host);
     const element = $("<div/>", {
-      id: `toggle-items-${id}`,
       title: host.engine.i18n("ui.itemsShow"),
       text: "+",
     }).addClass("ks-expando-button");

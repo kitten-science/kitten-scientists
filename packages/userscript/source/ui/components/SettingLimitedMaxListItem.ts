@@ -14,7 +14,6 @@ export class SettingLimitedMaxListItem extends SettingLimitedListItem {
    * property in the setting model.
    *
    * @param host The userscript instance.
-   * @param id A unique name for this setting.
    * @param label The label for the setting.
    * @param setting The setting model.
    * @param handler Handlers to call when the setting is checked or unchecked.
@@ -29,7 +28,6 @@ export class SettingLimitedMaxListItem extends SettingLimitedListItem {
    */
   constructor(
     host: UserScript,
-    id: string,
     label: string,
     setting: SettingLimitedMax,
     handler: {
@@ -42,9 +40,9 @@ export class SettingLimitedMaxListItem extends SettingLimitedListItem {
     upgradeIndicator = false,
     additionalClasses = []
   ) {
-    super(host, id, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
+    super(host, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
 
-    this.maxButton = new MaxButton(host, id, label, setting);
+    this.maxButton = new MaxButton(host, label, setting);
     this.element.append(this.maxButton.element);
   }
 

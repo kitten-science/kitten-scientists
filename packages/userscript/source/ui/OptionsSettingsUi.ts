@@ -13,52 +13,36 @@ export class OptionsSettingsUi extends SettingsSectionUi {
   private readonly _settings: OptionsSettings;
 
   constructor(host: UserScript, settings: OptionsSettings) {
-    const toggleName = "options";
     const label = ucfirst(host.engine.i18n("ui.options"));
-    const panel = new SettingsPanel(host, toggleName, label, settings);
+    const panel = new SettingsPanel(host, label, settings);
     super(host, panel);
 
     this._settings = settings;
 
     const optionButtons = [
       this._getOptionsOption(
-        "observe",
         this._settings.items.observe,
         this._host.engine.i18n("option.observe")
       ),
       this._getOptionsOption(
-        "autofeed",
         this._settings.items.autofeed,
         this._host.engine.i18n("option.autofeed")
       ),
-      this._getOptionsOption(
-        "crypto",
-        this._settings.items.crypto,
-        this._host.engine.i18n("option.crypto")
-      ),
-      this._getOptionsOption(
-        "fixCry",
-        this._settings.items.fixCry,
-        this._host.engine.i18n("option.fix.cry")
-      ),
+      this._getOptionsOption(this._settings.items.crypto, this._host.engine.i18n("option.crypto")),
+      this._getOptionsOption(this._settings.items.fixCry, this._host.engine.i18n("option.fix.cry")),
     ];
 
     panel.list.append(...optionButtons);
   }
 
-  private _getOptionsOption(
-    name: string,
-    option: OptionsSettingsItem,
-    iname: string
-  ): JQuery<HTMLElement> {
+  private _getOptionsOption(option: OptionsSettingsItem, iname: string): JQuery<HTMLElement> {
     const handler = {
       onCheck: () => this._host.engine.imessage("status.sub.enable", [iname]),
       onUnCheck: () => this._host.engine.imessage("status.sub.disable", [iname]),
     };
     return option.trigger
-      ? new SettingTriggerListItem(this._host, name, iname, option as SettingTrigger, handler)
-          .element
-      : new SettingListItem(this._host, name, iname, option, handler).element;
+      ? new SettingTriggerListItem(this._host, iname, option as SettingTrigger, handler).element
+      : new SettingListItem(this._host, iname, option, handler).element;
   }
 
   setState(state: OptionsSettings): void {

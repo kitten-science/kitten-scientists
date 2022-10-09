@@ -13,72 +13,60 @@ export class TimeSettingsUi extends SettingsSectionUi {
   private readonly _settings: TimeSettings;
 
   constructor(host: UserScript, settings: TimeSettings) {
-    const toggleName = "time";
     const label = ucfirst(host.engine.i18n("ui.time"));
-    const panel = new SettingsPanel(host, toggleName, label, settings);
+    const panel = new SettingsPanel(host, label, settings);
     super(host, panel);
 
     this._settings = settings;
 
     // Create "trigger" button in the item.
-    this._trigger = new TriggerButton(host, toggleName, label, settings);
+    this._trigger = new TriggerButton(host, label, settings);
     panel.element.append(this._trigger.element);
 
     const optionButtons = [
       this._getTimeSetting(
-        "temporalBattery",
         this._settings.items.temporalBattery,
         this._host.engine.i18n("$time.cfu.temporalBattery.label")
       ),
       this._getTimeSetting(
-        "blastFurnace",
         this._settings.items.blastFurnace,
         this._host.engine.i18n("$time.cfu.blastFurnace.label")
       ),
       this._getTimeSetting(
-        "timeBoiler",
         this._settings.items.timeBoiler,
         this._host.engine.i18n("$time.cfu.timeBoiler.label")
       ),
       this._getTimeSetting(
-        "temporalAccelerator",
         this._settings.items.temporalAccelerator,
         this._host.engine.i18n("$time.cfu.temporalAccelerator.label")
       ),
       this._getTimeSetting(
-        "temporalImpedance",
         this._settings.items.temporalImpedance,
         this._host.engine.i18n("$time.cfu.temporalImpedance.label")
       ),
       this._getTimeSetting(
-        "ressourceRetrieval",
         this._settings.items.ressourceRetrieval,
         this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
       this._getTimeSetting(
-        "cryochambers",
         this._settings.items.cryochambers,
         this._host.engine.i18n("$time.vsu.cryochambers.label")
       ),
       this._getTimeSetting(
-        "voidHoover",
         this._settings.items.voidHoover,
         this._host.engine.i18n("$time.vsu.voidHoover.label")
       ),
       this._getTimeSetting(
-        "voidRift",
         this._settings.items.voidRift,
         this._host.engine.i18n("$time.vsu.voidRift.label")
       ),
       this._getTimeSetting(
-        "chronocontrol",
         this._settings.items.chronocontrol,
         this._host.engine.i18n("$time.vsu.chronocontrol.label")
       ),
       this._getTimeSetting(
-        "voidResonator",
         this._settings.items.voidResonator,
         this._host.engine.i18n("$time.vsu.voidResonator.label")
       ),
@@ -87,15 +75,9 @@ export class TimeSettingsUi extends SettingsSectionUi {
     panel.list.append(...optionButtons);
   }
 
-  private _getTimeSetting(
-    name: string,
-    setting: TimeSettingsItem,
-    label: string,
-    delimiter = false
-  ) {
+  private _getTimeSetting(setting: TimeSettingsItem, label: string, delimiter = false) {
     return new SettingMaxListItem(
       this._host,
-      name,
       label,
       setting,
       {

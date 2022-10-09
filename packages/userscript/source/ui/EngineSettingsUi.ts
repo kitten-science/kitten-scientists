@@ -11,12 +11,10 @@ export class EngineSettingsUi {
   constructor(host: UserScript, settings: EngineSettings) {
     this._settings = settings;
 
-    const toggleName = "engine";
-
     const itext = ucfirst(host.engine.i18n("ui.engine"));
 
     // Our main element is a list item.
-    const element = new SettingListItem(host, toggleName, itext, settings, {
+    const element = new SettingListItem(host, itext, settings, {
       onCheck: () => host.engine.start(true),
       onUnCheck: () => host.engine.stop(true),
     });

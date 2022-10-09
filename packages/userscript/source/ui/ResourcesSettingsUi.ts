@@ -12,9 +12,8 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
   private readonly _settings: ResourcesSettings;
 
   constructor(host: UserScript, settings: ResourcesSettings) {
-    const toggleName = "resources";
     const label = ucfirst(host.engine.i18n("ui.resources"));
-    const panel = new SettingsPanel(host, toggleName, label, settings);
+    const panel = new SettingsPanel(host, label, settings);
     super(host, panel);
 
     this._settings = settings;
@@ -49,14 +48,13 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
     const stock = setting.stock;
 
     // The overall container for this resource item.
-    const container = new SettingListItem(this._host, `resource-${name}`, title, setting, {
+    const container = new SettingListItem(this._host, title, setting, {
       onCheck: () => this._host.engine.imessage("status.resource.enable", [title]),
       onUnCheck: () => this._host.engine.imessage("status.resource.disable", [title]),
     });
 
     // How many items to stock.
     const stockElement = $("<div/>", {
-      id: `stock-value-${name}`,
       text: this._host.engine.i18n("resources.stock", [this._renderLimit(stock)]),
     })
       .addClass("ks-text-button")
@@ -64,7 +62,6 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
 
     // The consume rate for the resource.
     const consumeElement = $("<div/>", {
-      id: `consume-rate-${name}`,
       text: this._host.engine.i18n("resources.consume", [
         SettingsSectionUi.renderConsumeRate(setting.consume),
       ]),
