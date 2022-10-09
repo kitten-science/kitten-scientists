@@ -3,6 +3,7 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
@@ -139,7 +140,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
-    const header = this._getHeader("Additional options");
+    const header = new HeaderListItem(this._host, "Additional options");
 
     const upgradesElement = new SettingsPanel(
       this._host,
@@ -177,7 +178,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, upgradesElement.element, shipOverride.element];
+    return [header.element, upgradesElement.element, shipOverride.element];
   }
 
   setState(state: WorkshopSettings): void {

@@ -13,7 +13,8 @@ export class LimitedButton extends UiComponent {
     handler: { onLimitedCheck: () => void; onLimitedUnCheck: () => void }
   ) {
     super(host);
-    const element = $(`<span/>`);
+    const element = $(`<div/>`);
+
     const elementLabel = $("<label/>", {
       text: host.engine.i18n("ui.limit"),
     });

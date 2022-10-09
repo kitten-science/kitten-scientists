@@ -3,6 +3,7 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
@@ -24,7 +25,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
     panel.element.append(this._trigger.element);
 
     const optionButtons = [
-      this._getHeader(this._host.engine.i18n("$buildings.group.food")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.food")),
       this._getBuildOption(
         this._settings.items.field,
         this._host.engine.i18n("$buildings.field.label")
@@ -50,7 +51,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$buildings.group.population")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.population")),
       this._getBuildOption(
         this._settings.items.hut,
         this._host.engine.i18n("$buildings.hut.label")
@@ -65,7 +66,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$buildings.group.science")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.science")),
       this._getBuildOption(
         this._settings.items.library,
         this._host.engine.i18n("$buildings.library.label")
@@ -90,7 +91,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$buildings.group.storage")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.storage")),
       this._getBuildOption(
         this._settings.items.barn,
         this._host.engine.i18n("$buildings.barn.label")
@@ -105,7 +106,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$buildings.group.resource")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.resource")),
       this._getBuildOption(
         this._settings.items.mine,
         this._host.engine.i18n("$buildings.mine.label")
@@ -128,7 +129,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$buildings.group.industry")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.industry")),
       this._getBuildOption(
         this._settings.items.steamworks,
         this._host.engine.i18n("$buildings.steamworks.label")
@@ -155,7 +156,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$buildings.group.culture")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.culture")),
       this._getBuildOption(
         this._settings.items.amphitheatre,
         this._host.engine.i18n("$buildings.amphitheatre.label")
@@ -176,7 +177,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$buildings.group.other")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.other")),
       this._getBuildOption(
         this._settings.items.workshop,
         this._host.engine.i18n("$buildings.workshop.label")
@@ -195,7 +196,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$buildings.group.megastructures")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.megastructures")),
       this._getBuildOption(
         this._settings.items.ziggurat,
         this._host.engine.i18n("$buildings.ziggurat.label")
@@ -210,7 +211,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$buildings.group.zebraBuildings")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.zebraBuildings")),
       this._getBuildOption(
         this._settings.items.zebraOutpost,
         this._host.engine.i18n("$buildings.zebraOutpost.label")
@@ -225,14 +226,17 @@ export class BonfireSettingsUi extends SettingsSectionUi {
         true
       ),
     ];
-    panel.list.append(optionButtons);
+
+    for (const item of optionButtons) {
+      panel.list.append(item.element);
+    }
 
     const additionOptions = this._getAdditionOptions();
     panel.list.append(additionOptions);
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
-    const header = this._getHeader("Additional options");
+    const header = new HeaderListItem(this._host, "Additional options");
 
     const upgradeBuildingsElement = new SettingsPanel(
       this._host,
@@ -280,7 +284,7 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, upgradeBuildingsElement.element, nodeTurnOnSteamworks.element];
+    return [header.element, upgradeBuildingsElement.element, nodeTurnOnSteamworks.element];
   }
 
   setState(state: BonfireSettings): void {

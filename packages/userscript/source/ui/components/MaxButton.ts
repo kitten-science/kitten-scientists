@@ -15,7 +15,7 @@ export class MaxButton extends UiComponent {
   ) {
     super(host);
 
-    const element = $("<div/>").addClass("ks-max-button");
+    const element = $("<div/>").addClass("ks-text-button").addClass("ks-max-button");
 
     element.on("click", () => {
       const value = SettingsSectionUi.promptLimit(

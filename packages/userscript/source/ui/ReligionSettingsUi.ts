@@ -4,6 +4,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { UserScript } from "../UserScript";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
@@ -26,7 +27,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
     panel.element.append(this._trigger.element);
 
     const optionButtons = [
-      this._getHeader(this._host.engine.i18n("$religion.panel.ziggurat.label")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.ziggurat.label")),
       this._getBuildOption(
         this._settings.items.unicornPasture,
         this._host.engine.i18n("$buildings.unicornPasture.label")
@@ -75,7 +76,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$religion.panel.orderOfTheSun.label")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.orderOfTheSun.label")),
       this._getBuildOption(
         this._settings.items.solarchant,
         this._host.engine.i18n("$religion.ru.solarchant.label")
@@ -118,7 +119,10 @@ export class ReligionSettingsUi extends SettingsSectionUi {
         true
       ),
 
-      this._getHeader(this._host.engine.i18n("$religion.panel.cryptotheology.label")),
+      new HeaderListItem(
+        this._host,
+        this._host.engine.i18n("$religion.panel.cryptotheology.label")
+      ),
       this._getBuildOption(
         this._settings.items.blackObelisk,
         this._host.engine.i18n("$religion.tu.blackObelisk.label")
@@ -158,7 +162,9 @@ export class ReligionSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    panel.list.append(...optionButtons);
+    for (const item of optionButtons) {
+      panel.list.append(item.element);
+    }
 
     const additionOptions = this.getAdditionOptions();
     panel.list.append(additionOptions);
@@ -185,7 +191,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
   }
 
   getAdditionOptions(): Array<JQuery<HTMLElement>> {
-    const nodeHeader = this._getHeader("Additional options");
+    const nodeHeader = new HeaderListItem(this._host, "Additional options");
 
     const nodeAdore = new SettingTriggerListItem(
       this._host,
@@ -288,7 +294,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
     );
 
     return [
-      nodeHeader,
+      nodeHeader.element,
       nodeBestUnicornBuilding.element,
       nodeAutoPraise.element,
       nodeAdore.element,

@@ -4,6 +4,7 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
@@ -79,7 +80,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
-    const nodeHeader = this._getHeader("Additional options");
+    const nodeHeader = new HeaderListItem(this._host, "Additional options");
 
     const nodeHunt = new SettingTriggerListItem(
       this._host,
@@ -127,7 +128,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [nodeHeader, nodeHunt.element, nodeFestivals.element, nodePromote.element];
+    return [nodeHeader.element, nodeHunt.element, nodeFestivals.element, nodePromote.element];
   }
 
   setState(state: VillageSettings): void {

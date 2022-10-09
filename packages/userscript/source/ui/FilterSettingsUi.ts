@@ -3,6 +3,7 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { ExplainerListItem } from "./components/ExplainerListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -124,7 +125,9 @@ export class FiltersSettingsUi extends SettingsSectionUi {
       .map(button => makeButton(button.option, button.label));
 
     panel.list.append(optionButtons);
-    panel.list.append(this._getExplainer("Disabled items are hidden from the log."));
+    panel.list.append(
+      new ExplainerListItem(this._host, "Disabled items are hidden from the log.").element
+    );
   }
 
   setState(state: FilterSettings): void {

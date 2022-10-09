@@ -28,36 +28,12 @@ export abstract class SettingsSectionUi {
 
   abstract refreshUi(): void;
 
-  /**
-   * Construct a subsection header.
-   * This is purely for cosmetic/informational value in the UI.
-   *
-   * @param text The text to appear on the header element.
-   * @returns The constructed header element.
-   */
-  protected _getHeader(text: string): JQuery<HTMLElement> {
-    const headerElement = $("<li/>", { text }).addClass("ks-header");
-    return headerElement;
-  }
-
-  /**
-   * Construct an informational text item.
-   * This is purely for cosmetic/informational value in the UI.
-   *
-   * @param text The text to appear on the header element.
-   * @returns The constructed header element.
-   */
-  protected _getExplainer(text: string): JQuery<HTMLElement> {
-    const explainerElement = $("<li/>", { text }).addClass("ks-explainer");
-    return explainerElement;
-  }
-
   protected _getBuildOption(
     option: BonfireSettingsItem | ReligionSettingsItem | SettingMax,
     label: string,
     delimiter = false,
     upgradeIndicator = false
-  ): JQuery<HTMLElement> {
+  ) {
     return new SettingMaxListItem(
       this._host,
       label,
@@ -68,7 +44,7 @@ export abstract class SettingsSectionUi {
       },
       delimiter,
       upgradeIndicator
-    ).element;
+    );
   }
 
   static promptLimit(text: string, defaultValue: string): number | null {

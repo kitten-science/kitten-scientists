@@ -5,6 +5,7 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { Race, Season } from "../types";
 import { UserScript } from "../UserScript";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
@@ -155,7 +156,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
-    const header = this._getHeader("Additional options");
+    const header = new HeaderListItem(this._host, "Additional options");
 
     // Embassies
     const embassiesElement = new SettingsPanel(
@@ -222,7 +223,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header, unlockRaces.element, embassiesElement.element];
+    return [header.element, unlockRaces.element, embassiesElement.element];
   }
 
   private _makeEmbassySetting(option: SettingMax, label: string) {

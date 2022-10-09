@@ -255,11 +255,9 @@ export class UserInterface {
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-max-button {
-        cursor: pointer;
         float: right;
         padding-right: 5px;
         padding-top: 2px;
-        user-select: none;
       }`
     );
 
