@@ -1,7 +1,7 @@
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { ExpandoButton } from "./components/ExpandoButton";
 import { EngineSettingsUi } from "./EngineSettingsUi";
 import { FiltersSettingsUi } from "./FilterSettingsUi";
 import { OptionsSettingsUi } from "./OptionsSettingsUi";
@@ -78,14 +78,12 @@ export class UserInterface {
     optionsListElement.append(this._optionsUi.element);
     optionsListElement.append(this._filterUi.element);
 
-    const toggleOptionsVisiblity = SettingsPanel.makeItemsToggle(this._host, "");
-    this._engineUi.element.append(toggleOptionsVisiblity);
+    const expando = new ExpandoButton(this._host, "engine");
+    this._engineUi.element.append(expando.element);
 
     // Make _engineUI's expando button hide/show the other option groups
-    // Currently accesses the button via id.
-    const optionsToggle = toggleOptionsVisiblity;
     let sectionsVisible = false;
-    optionsToggle.on("click", () => {
+    expando.element.on("click", () => {
       sectionsVisible = !sectionsVisible;
       const optionsVisiblity = sectionsVisible;
       this._bonfireUi.panel.toggle(optionsVisiblity);
@@ -100,14 +98,6 @@ export class UserInterface {
       this._distributeUi.panel.toggle(optionsVisiblity);
       this._optionsUi.panel.toggle(optionsVisiblity);
       this._filterUi.panel.toggle(optionsVisiblity);
-
-      optionsToggle.text(optionsVisiblity ? "-" : "+");
-      optionsToggle.prop(
-        "title",
-        optionsVisiblity
-          ? this._host.engine.i18n("ui.itemsHide")
-          : this._host.engine.i18n("ui.itemsShow")
-      );
     });
 
     // Set up the "show activity summary" area.

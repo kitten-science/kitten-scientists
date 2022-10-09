@@ -1,5 +1,6 @@
 import { SettingsSection } from "../../options/SettingsSection";
 import { UserScript } from "../../UserScript";
+import { ExpandoButton } from "./ExpandoButton";
 import { SettingListItem } from "./SettingListItem";
 import { SettingsList } from "./SettingsList";
 
@@ -8,7 +9,7 @@ export class SettingsPanel {
   readonly settings: SettingsSection;
   readonly element: JQuery<HTMLElement>;
   private readonly _element: SettingListItem;
-  readonly expando: JQuery<HTMLElement>;
+  private readonly _expando: ExpandoButton;
   readonly list: JQuery<HTMLElement>;
   readonly _list: SettingsList;
   private _mainChildVisible: boolean;
@@ -42,14 +43,15 @@ export class SettingsPanel {
     const list = new SettingsList(host, id);
 
     // The expando button for this panel.
-    const itemsElement = SettingsPanel.makeItemsToggle(host, id).text(
-      initiallyExpanded ? "-" : "+"
-    );
-    itemsElement.on("click", () => {
+    const expando = new ExpandoButton(host, id);
+    if (initiallyExpanded) {
+      expando.setExpanded();
+    }
+    expando.element.on("click", () => {
       this.toggle();
     });
 
-    element.element.append(itemsElement, list.element);
+    element.element.append(expando.element, list.element);
 
     if (initiallyExpanded) {
       list.element.toggle();
@@ -59,7 +61,7 @@ export class SettingsPanel {
     this._list = list;
     this._mainChildVisible = initiallyExpanded;
     this.element = element.element;
-    this.expando = itemsElement;
+    this._expando = expando;
     this.host = host;
     this.list = list.element;
     this.settings = settings;
@@ -73,28 +75,10 @@ export class SettingsPanel {
     this._mainChildVisible = expand !== undefined ? expand : !this._mainChildVisible;
     if (this._mainChildVisible) {
       this.list.show();
-      this.expando.prop("title", this.host.engine.i18n("ui.itemsHide"));
-      this.expando.text("-");
+      this._expando.setExpanded();
     } else {
       this.list.hide();
-      this.expando.prop("title", this.host.engine.i18n("ui.itemsShow"));
-      this.expando.text("+");
+      this._expando.setCollapsed();
     }
-  }
-
-  /**
-   * Constructs an expando element that is commonly used to expand and
-   * collapses a section of the UI.
-   *
-   * @param host A reference to the host.
-   * @param id The ID of the section this is the expando for.
-   * @returns The constructed expando element.
-   */
-  static makeItemsToggle(host: UserScript, id: string): JQuery<HTMLElement> {
-    return $("<div/>", {
-      id: `toggle-items-${id}`,
-      title: host.engine.i18n("ui.itemsShow"),
-      text: "+",
-    }).addClass("ks-expando-button");
   }
 }
