@@ -1,8 +1,8 @@
 import { SettingLimited } from "../../options/Settings";
 import { UserScript } from "../../UserScript";
+import { UiComponent } from "./UiComponent";
 
-export class LimitedButton {
-  readonly host: UserScript;
+export class LimitedButton extends UiComponent {
   readonly setting: SettingLimited;
   readonly element: JQuery<HTMLElement>;
   readonly checkbox: JQuery<HTMLElement>;
@@ -13,6 +13,7 @@ export class LimitedButton {
     setting: SettingLimited,
     handler: { onLimitedCheck: () => void; onLimitedUnCheck: () => void }
   ) {
+    super(host);
     const element = $(`<span/>`);
     const elementLabel = $("<label/>", {
       for: `toggle-limited-${id}`,
@@ -42,7 +43,6 @@ export class LimitedButton {
 
     this.checkbox = checkbox;
     this.element = element;
-    this.host = host;
     this.setting = setting;
   }
 

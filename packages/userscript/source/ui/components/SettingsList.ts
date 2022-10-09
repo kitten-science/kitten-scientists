@@ -1,4 +1,5 @@
 import { UserScript } from "../../UserScript";
+import { UiComponent } from "./UiComponent";
 
 /**
  * The `SettingsList` is a `<ul>` designed to host `SettingListItem` instances.
@@ -8,7 +9,7 @@ import { UserScript } from "../../UserScript";
  *
  * This construct is also sometimes referred to as an "items list" for historic reasons.
  */
-export class SettingsList {
+export class SettingsList extends UiComponent {
   readonly element: JQuery<HTMLElement>;
 
   /**
@@ -18,6 +19,8 @@ export class SettingsList {
    * @param id The ID for this list.
    */
   constructor(host: UserScript, id: string) {
+    super(host);
+
     const containerList = $("<ul/>", {
       id: `items-list-${id}`,
     })
@@ -58,5 +61,9 @@ export class SettingsList {
     containerList.append(enableAllButton);
 
     this.element = containerList;
+  }
+
+  refreshUi() {
+    /* intentionally left blank */
   }
 }

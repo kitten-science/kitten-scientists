@@ -11,9 +11,8 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class VillageSettingsUi extends SettingsSectionUi {
+  private readonly _items: Array<SettingListItem>;
   private readonly _settings: VillageSettings;
-
-  private readonly _optionButtons = new Array<JQuery<HTMLElement>>();
 
   constructor(host: UserScript, settings: VillageSettings) {
     const toggleName = "distribute";
@@ -23,7 +22,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
 
     this._settings = settings;
 
-    this._optionButtons = [
+    this._items = [
       this._getDistributeOption(
         "woodcutter",
         this._settings.items.woodcutter,
@@ -67,18 +66,15 @@ export class VillageSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    panel.list.append(...this._optionButtons);
+    for (const setting of this._items) {
+      panel.list.append(setting.element);
+    }
 
     const additionOptions = this._getAdditionOptions();
     panel.list.append(additionOptions);
   }
 
-  private _getDistributeOption(
-    name: string,
-    option: SettingMax,
-    label: string,
-    delimiter = false
-  ): JQuery<HTMLElement> {
+  private _getDistributeOption(name: string, option: SettingMax, label: string, delimiter = false) {
     return new SettingMaxListItem(
       this._host,
       name,
@@ -89,7 +85,7 @@ export class VillageSettingsUi extends SettingsSectionUi {
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       },
       delimiter
-    ).element;
+    );
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {

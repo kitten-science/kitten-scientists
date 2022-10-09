@@ -10,13 +10,14 @@ import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class WorkshopSettingsUi extends SettingsSectionUi {
+  private readonly _items: Array<SettingListItem>;
   private readonly _trigger: TriggerButton;
   private readonly _settings: WorkshopSettings;
 
   constructor(host: UserScript, settings: WorkshopSettings) {
     const toggleName = "craft";
     const label = ucfirst(host.engine.i18n("ui.craft"));
-    const panel = new SettingsPanel(host, toggleName, label, settings);
+    const panel = new SettingsPanel(host, "craft", label, settings);
     super(host, panel);
 
     this._settings = settings;
@@ -25,7 +26,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     this._trigger = new TriggerButton(host, toggleName, label, settings);
     panel.element.append(this._trigger.element);
 
-    const buttons = [
+    this._items = [
       this._getCraftOption(
         "wood",
         this._settings.items.wood,
@@ -128,7 +129,9 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    panel.list.append(...buttons);
+    for (const setting of this._items) {
+      panel.list.append(setting.element);
+    }
 
     const additionOptions = this._getAdditionOptions();
     panel.list.append(additionOptions);
@@ -140,7 +143,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     label: string,
     delimiter = false,
     upgradeIndicator = false
-  ): JQuery<HTMLElement> {
+  ) {
     return new SettingLimitedMaxListItem(
       this._host,
       name,
@@ -154,7 +157,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       },
       delimiter,
       upgradeIndicator
-    ).element;
+    );
   }
 
   private _getAdditionOptions(): Array<JQuery<HTMLElement>> {

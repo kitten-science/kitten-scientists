@@ -1,9 +1,9 @@
 import { SettingMax } from "../../options/Settings";
 import { UserScript } from "../../UserScript";
 import { SettingsSectionUi } from "../SettingsSectionUi";
+import { UiComponent } from "./UiComponent";
 
-export class MaxButton {
-  readonly host: UserScript;
+export class MaxButton extends UiComponent {
   readonly setting: SettingMax;
   readonly element: JQuery<HTMLElement>;
 
@@ -14,6 +14,8 @@ export class MaxButton {
     setting: SettingMax,
     handler: { onClick?: () => void } = {}
   ) {
+    super(host);
+
     const element = $("<div/>", {
       id: `set-${id}-max`,
     }).addClass("ks-max-button");
@@ -39,7 +41,6 @@ export class MaxButton {
     setting.$max = this;
 
     this.element = element;
-    this.host = host;
     this.setting = setting;
   }
 

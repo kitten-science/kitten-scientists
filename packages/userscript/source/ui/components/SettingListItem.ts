@@ -1,10 +1,10 @@
 import { Setting } from "../../options/Settings";
 import { UserScript } from "../../UserScript";
+import { UiComponent } from "./UiComponent";
 
-export class SettingListItem {
+export class SettingListItem extends UiComponent {
   private static _provisionedOptionElements = new Map<string, SettingListItem>();
 
-  readonly host: UserScript;
   readonly setting: Setting;
   readonly element: JQuery<HTMLElement>;
   readonly checkbox: JQuery<HTMLElement>;
@@ -44,6 +44,8 @@ export class SettingListItem {
       );
     }
 
+    super(host);
+
     const element = $(`<li/>`);
     for (const cssClass of ["ks-setting", delimiter ? "ks-delimiter" : "", ...additionalClasses]) {
       element.addClass(cssClass);
@@ -75,7 +77,6 @@ export class SettingListItem {
 
     this.checkbox = checkbox;
     this.element = element;
-    this.host = host;
     this.setting = setting;
 
     SettingListItem._provisionedOptionElements.set(id, this);

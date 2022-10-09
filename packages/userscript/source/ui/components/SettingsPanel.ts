@@ -3,8 +3,9 @@ import { UserScript } from "../../UserScript";
 import { ExpandoButton } from "./ExpandoButton";
 import { SettingListItem } from "./SettingListItem";
 import { SettingsList } from "./SettingsList";
+import { UiComponent } from "./UiComponent";
 
-export class SettingsPanel {
+export class SettingsPanel extends UiComponent {
   readonly host: UserScript;
   readonly settings: SettingsSection;
   readonly element: JQuery<HTMLElement>;
@@ -34,7 +35,8 @@ export class SettingsPanel {
     settings: SettingsSection,
     initiallyExpanded = false
   ) {
-    this.host = host;
+    super(host);
+
     const element = new SettingListItem(host, id, label, settings, {
       onCheck: () => host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
