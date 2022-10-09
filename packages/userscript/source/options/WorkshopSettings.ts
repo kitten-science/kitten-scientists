@@ -6,12 +6,6 @@ import { KittenStorageType } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";
 
 export class CraftSettingsItem extends SettingLimitedMax {
-  /**
-   * Meaning still unclear.
-   * This is hardcoded to `0.5` right now.
-   */
-  limRat = 0.5;
-
   require: Requirement;
 
   constructor(id: string, require: Requirement = false, enabled = true, limited = true) {
