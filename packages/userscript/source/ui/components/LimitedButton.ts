@@ -13,7 +13,7 @@ export class LimitedButton extends UiComponent {
     handler: { onLimitedCheck: () => void; onLimitedUnCheck: () => void }
   ) {
     super(host);
-    const element = $(`<div/>`);
+    const element = $(`<div/>`).addClass("ks-text-button");
 
     const elementLabel = $("<label/>", {
       text: host.engine.i18n("ui.limit"),
