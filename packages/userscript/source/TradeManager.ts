@@ -300,7 +300,10 @@ export class TradeManager implements Automation {
 
       const name = racePanels[panelIndex].race.name;
       const race = this._host.gamePage.diplomacy.get(name);
-      const max = this.settings.buildEmbassies.items[name].max;
+      const max =
+        this.settings.buildEmbassies.items[name].max === -1
+          ? Number.POSITIVE_INFINITY
+          : this.settings.buildEmbassies.items[name].max;
 
       if (!this.settings.buildEmbassies.items[name].enabled || max <= race.embassyLevel) {
         continue;
@@ -333,6 +336,10 @@ export class TradeManager implements Automation {
           emBulk.priceSum += nextPrice;
           emBulk.val += 1;
           refreshRequired = true;
+
+          if (emBulk.max <= emBulk.val) {
+            continue;
+          }
         } else {
           bulkTracker.splice(raceIndex, 1);
           --raceIndex;
