@@ -10,7 +10,7 @@ export class UpgradeSettingsUi extends SettingsPanel {
   private readonly _settings: UpgradeSettings;
 
   constructor(host: UserScript, settings: UpgradeSettings) {
-    super(host, host.engine.i18n("ui.craft"), settings);
+    super(host, host.engine.i18n("ui.upgrade.upgrades"), settings);
 
     this._settings = settings;
 
