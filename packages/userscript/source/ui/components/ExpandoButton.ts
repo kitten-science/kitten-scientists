@@ -22,11 +22,11 @@ export class ExpandoButton extends UiComponent {
   }
 
   setCollapsed() {
-    this.element.prop("title", this.host.engine.i18n("ui.itemsShow"));
+    this.element.prop("title", this._host.engine.i18n("ui.itemsShow"));
     this.element.text("+");
   }
   setExpanded() {
-    this.element.prop("title", this.host.engine.i18n("ui.itemsHide"));
+    this.element.prop("title", this._host.engine.i18n("ui.itemsHide"));
     this.element.text("-");
   }
 

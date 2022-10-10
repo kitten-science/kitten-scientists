@@ -33,35 +33,35 @@ export class EmbassySettingsUi extends SettingsPanel {
     this._items = [
       this._makeEmbassySetting(
         this._settings.items.lizards,
-        this.host.engine.i18n(`$trade.race.lizards`)
+        this._host.engine.i18n(`$trade.race.lizards`)
       ),
       this._makeEmbassySetting(
         this._settings.items.sharks,
-        this.host.engine.i18n(`$trade.race.sharks`)
+        this._host.engine.i18n(`$trade.race.sharks`)
       ),
       this._makeEmbassySetting(
         this._settings.items.griffins,
-        this.host.engine.i18n(`$trade.race.griffins`)
+        this._host.engine.i18n(`$trade.race.griffins`)
       ),
       this._makeEmbassySetting(
         this._settings.items.nagas,
-        this.host.engine.i18n(`$trade.race.nagas`)
+        this._host.engine.i18n(`$trade.race.nagas`)
       ),
       this._makeEmbassySetting(
         this._settings.items.zebras,
-        this.host.engine.i18n(`$trade.race.zebras`)
+        this._host.engine.i18n(`$trade.race.zebras`)
       ),
       this._makeEmbassySetting(
         this._settings.items.spiders,
-        this.host.engine.i18n(`$trade.race.spiders`)
+        this._host.engine.i18n(`$trade.race.spiders`)
       ),
       this._makeEmbassySetting(
         this._settings.items.dragons,
-        this.host.engine.i18n(`$trade.race.dragons`)
+        this._host.engine.i18n(`$trade.race.dragons`)
       ),
       this._makeEmbassySetting(
         this._settings.items.leviathans,
-        this.host.engine.i18n(`$trade.race.leviathans`)
+        this._host.engine.i18n(`$trade.race.leviathans`)
       ),
     ];
     for (const item of this._items) {
@@ -69,17 +69,17 @@ export class EmbassySettingsUi extends SettingsPanel {
     }
 
     const embassiesTrigger = new TriggerButton(
-      this.host,
-      this.host.engine.i18n("option.embassies"),
+      this._host,
+      this._host.engine.i18n("option.embassies"),
       this._settings
     );
     this.element.append(embassiesTrigger.element);
   }
 
   private _makeEmbassySetting(option: SettingMax, label: string) {
-    return new SettingMaxListItem(this.host, label, option, {
-      onCheck: () => this.host.engine.imessage("status.sub.enable", [label]),
-      onUnCheck: () => this.host.engine.imessage("status.sub.disable", [label]),
+    return new SettingMaxListItem(this._host, label, option, {
+      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
     });
   }
 

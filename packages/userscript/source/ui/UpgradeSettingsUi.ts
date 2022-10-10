@@ -29,10 +29,10 @@ export class UpgradeSettingsUi extends SettingsPanel {
 
     const items = [];
     for (const [name, setting] of objectEntries(this._settings.items)) {
-      const label = this.host.engine.i18n(`$workshop.${name}.label`);
-      const button = new SettingListItem(this.host, label, setting, {
-        onCheck: () => this.host.engine.imessage("status.auto.enable", [label]),
-        onUnCheck: () => this.host.engine.imessage("status.auto.disable", [label]),
+      const label = this._host.engine.i18n(`$workshop.${name}.label`);
+      const button = new SettingListItem(this._host, label, setting, {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       });
 
       items.push({ label: label, button: button });

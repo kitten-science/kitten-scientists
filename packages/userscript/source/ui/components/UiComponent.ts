@@ -4,7 +4,7 @@ export abstract class UiComponent extends EventTarget {
   /**
    * A reference to the host itself.
    */
-  readonly host: UserScript;
+  protected readonly _host: UserScript;
 
   /**
    * The main DOM element for this component, in a JQuery wrapper.
@@ -13,7 +13,7 @@ export abstract class UiComponent extends EventTarget {
 
   constructor(host: UserScript) {
     super();
-    this.host = host;
+    this._host = host;
   }
 
   abstract refreshUi(): void;

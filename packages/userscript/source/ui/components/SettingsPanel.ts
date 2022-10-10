@@ -6,7 +6,6 @@ import { SettingsList } from "./SettingsList";
 import { UiComponent } from "./UiComponent";
 
 export class SettingsPanel extends UiComponent implements SettingListItem {
-  readonly host: UserScript;
   readonly settings: SettingsSection;
   readonly element: JQuery<HTMLElement>;
   private readonly _element: SettingListItem;
@@ -70,7 +69,6 @@ export class SettingsPanel extends UiComponent implements SettingListItem {
     this._mainChildVisible = initiallyExpanded;
     this.element = element.element;
     this._expando = expando;
-    this.host = host;
     this.list = list.element;
     this.settings = settings;
   }

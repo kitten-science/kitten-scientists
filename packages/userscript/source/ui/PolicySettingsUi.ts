@@ -29,12 +29,12 @@ export class PolicySettingsUi extends SettingsPanel {
 
     const items = [];
     for (const [name, setting] of objectEntries(this._settings.items)) {
-      const policyLabel = this.host.engine.i18n(
+      const policyLabel = this._host.engine.i18n(
         `$policy.${name === "authocracy" ? "autocracy" : name}.label`
       );
-      const policyButton = new SettingListItem(this.host, policyLabel, setting, {
-        onCheck: () => this.host.engine.imessage("status.auto.enable", [policyLabel]),
-        onUnCheck: () => this.host.engine.imessage("status.auto.disable", [policyLabel]),
+      const policyButton = new SettingListItem(this._host, policyLabel, setting, {
+        onCheck: () => this._host.engine.imessage("status.auto.enable", [policyLabel]),
+        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [policyLabel]),
       });
 
       items.push({ label: policyLabel, button: policyButton });

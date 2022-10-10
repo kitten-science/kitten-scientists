@@ -26,15 +26,15 @@ export class SettingsList extends UiComponent {
 
     const containerList = $("<ul/>").addClass("ks-list").addClass("ks-items-list");
 
-    const disableAllButton = new DisableButton(this.host);
+    const disableAllButton = new DisableButton(this._host);
     disableAllButton.element.on("click", () => this.dispatchEvent(new Event("disableAll")));
     containerList.append(disableAllButton.element);
 
-    const enableAllButton = new EnableButton(this.host);
+    const enableAllButton = new EnableButton(this._host);
     enableAllButton.element.on("click", () => this.dispatchEvent(new Event("enableAll")));
     containerList.append(enableAllButton.element);
 
-    this.resetButton = new ResetButton(this.host);
+    this.resetButton = new ResetButton(this._host);
     this.resetButton.element.on("click", () => this.dispatchEvent(new Event("reset")));
     containerList.append(this.resetButton.element);
 

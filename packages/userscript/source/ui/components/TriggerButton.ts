@@ -4,7 +4,7 @@ import { SettingsSectionUi } from "../SettingsSectionUi";
 import { UiComponent } from "./UiComponent";
 
 export class TriggerButton extends UiComponent {
-  readonly host: UserScript;
+  readonly _host: UserScript;
   readonly setting: SettingTrigger;
   readonly element: JQuery<HTMLElement>;
 
@@ -40,12 +40,12 @@ export class TriggerButton extends UiComponent {
     setting.$trigger = this;
 
     this.element = element;
-    this.host = host;
+    this._host = host;
     this.setting = setting;
   }
 
   refreshUi() {
-    this.element[0].title = this.host.engine.i18n("ui.trigger", [
+    this.element[0].title = this._host.engine.i18n("ui.trigger", [
       SettingsSectionUi.renderPercentage(this.setting.trigger),
     ]);
   }
