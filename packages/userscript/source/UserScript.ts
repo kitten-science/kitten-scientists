@@ -25,6 +25,7 @@ declare global {
   let unsafeWindow: Window | undefined;
   const dojo: {
     clone: <T>(subject: T) => T;
+    subscribe: (event: string, handler: () => void) => void;
   };
   interface Window {
     gamePage?: Maybe<GamePage>;
@@ -61,8 +62,13 @@ export class UserScript {
    * Signals whether the options have been changed since they were last saved.
    */
   private _optionsDirty = false;
-
   private _intervalSaveSettings: number | undefined = undefined;
+
+  /**
+   * Stores if we caught the `game/start` signal from the game.
+   */
+  private static _gameStartSignal: Promise<boolean>;
+  private static _gameStartSignalResolver: undefined | ((value: boolean) => void);
 
   private _userInterface: UserInterface;
   engine: Engine;
@@ -174,17 +180,28 @@ export class UserScript {
   }
 
   static async waitForGame(timeout = 30000): Promise<GamePage> {
-    cdebug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
+    if (isNil(UserScript._gameStartSignal)) {
+      UserScript._gameStartSignal = new Promise(resolve => {
+        UserScript._gameStartSignalResolver = resolve;
+      });
+
+      dojo.subscribe("game/start", () => {
+        cdebug("`game/start` signal caught. Fast-tracking script load...");
+        mustExist(UserScript._gameStartSignalResolver)(true);
+      });
+    }
 
     if (timeout < 0) {
-      throw new Error("Unable to find game page.");
+      throw new Error("Unable to find game page. Giving up.");
     }
 
     if (UserScript._isGameLoaded()) {
       return mustExist(UserScript._window.gamePage);
     }
 
-    await sleep(2000);
+    cdebug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
+
+    await Promise.race([UserScript._gameStartSignal, sleep(2000)]);
     return UserScript.waitForGame(timeout - 2000);
   }
 

@@ -1,5 +1,5 @@
 import { SettingsStorage } from "./options/SettingsStorage";
-import { cinfo } from "./tools/Log";
+import { cerror, cinfo } from "./tools/Log";
 import { isNil } from "./tools/Maybe";
 import { SavegameLoader } from "./tools/SavegameLoader";
 import { UserScript } from "./UserScript";
@@ -31,4 +31,4 @@ const devSavegame = KG_SAVEGAME ?? null;
 
   userScript.validateGame();
   userScript.run();
-})().catch(console.error);
+})().catch(cerror);
