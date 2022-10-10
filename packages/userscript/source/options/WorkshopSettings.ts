@@ -70,10 +70,7 @@ export class WorkshopSettings extends SettingsSectionTrigger {
       this.items[name].max = item.max;
     }
 
-    this.unlockUpgrades.enabled = settings.unlockUpgrades.enabled;
-    for (const [name, item] of objectEntries(settings.unlockUpgrades.items)) {
-      this.unlockUpgrades.items[name].enabled = item.enabled;
-    }
+    this.unlockUpgrades.load(settings.unlockUpgrades);
 
     this.shipOverride.enabled = settings.shipOverride.enabled;
   }
@@ -87,10 +84,7 @@ export class WorkshopSettings extends SettingsSectionTrigger {
       subject.items[`toggle-limited-${name}` as const] = item.limited;
     }
 
-    subject.items["toggle-upgrades"] = settings.unlockUpgrades.enabled;
-    for (const [name, item] of objectEntries(settings.unlockUpgrades.items)) {
-      subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
-    }
+    UpgradeSettings.toLegacyOptions(settings.unlockUpgrades, subject);
 
     subject.items["toggle-shipOverride"] = settings.shipOverride.enabled;
   }
@@ -105,11 +99,7 @@ export class WorkshopSettings extends SettingsSectionTrigger {
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
     }
 
-    options.unlockUpgrades.enabled =
-      subject.items["toggle-upgrades"] ?? options.unlockUpgrades.enabled;
-    for (const [name, item] of objectEntries(options.unlockUpgrades.items)) {
-      item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
-    }
+    options.unlockUpgrades = UpgradeSettings.fromLegacyOptions(subject);
 
     options.shipOverride.enabled =
       subject.items["toggle-shipOverride"] ?? options.shipOverride.enabled;

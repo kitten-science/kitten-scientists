@@ -9,11 +9,14 @@ import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
+import { UpgradeSettingsUi } from "./UpgradeSettingsUi";
 
 export class WorkshopSettingsUi extends SettingsSectionUi {
   protected readonly _items: Array<SettingListItem>;
   private readonly _trigger: TriggerButton;
   private readonly _settings: WorkshopSettings;
+
+  private readonly _upgradeUi: UpgradeSettingsUi;
 
   constructor(host: UserScript, settings: WorkshopSettings) {
     const label = ucfirst(host.engine.i18n("ui.craft"));
@@ -127,8 +130,27 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       panel.list.append(setting.element);
     }
 
-    const additionOptions = this._getAdditionOptions();
-    panel.list.append(additionOptions);
+    const additionHeader = new HeaderListItem(this._host, "Additional options");
+
+    this._upgradeUi = new UpgradeSettingsUi(this._host, this._settings.unlockUpgrades);
+
+    const shipOverride = new SettingListItem(
+      this._host,
+      this._host.engine.i18n("option.shipOverride"),
+      this._settings.shipOverride,
+      {
+        onCheck: () =>
+          this._host.engine.imessage("status.auto.enable", [
+            this._host.engine.i18n("option.shipOverride"),
+          ]),
+        onUnCheck: () =>
+          this._host.engine.imessage("status.auto.disable", [
+            this._host.engine.i18n("option.shipOverride"),
+          ]),
+      }
+    );
+
+    panel.list.append(additionHeader.element, this._upgradeUi.element, shipOverride.element);
   }
 
   private _getCraftOption(
@@ -152,61 +174,18 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     );
   }
 
-  private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
-    const header = new HeaderListItem(this._host, "Additional options");
-
-    const upgradesElement = new SettingsPanel(
-      this._host,
-      this._host.engine.i18n("ui.upgrade.upgrades"),
-      this._settings.unlockUpgrades
-    );
-
-    const upgradeButtons = [];
-    for (const [upgradeName, upgrade] of objectEntries(this._settings.unlockUpgrades.items)) {
-      const upgradeLabel = this._host.engine.i18n(`$workshop.${upgradeName}.label`);
-      const upgradeButton = new SettingListItem(this._host, upgradeLabel, upgrade, {
-        onCheck: () => this._host.engine.imessage("status.auto.enable", [upgradeLabel]),
-        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [upgradeLabel]),
-      });
-
-      upgradeButtons.push({ label: upgradeLabel, button: upgradeButton });
-    }
-    // Ensure buttons are added into UI with their labels alphabetized.
-    upgradeButtons.sort((a, b) => a.label.localeCompare(b.label));
-    upgradeButtons.forEach(button => upgradesElement.list.append(button.button.element));
-
-    const shipOverride = new SettingListItem(
-      this._host,
-      this._host.engine.i18n("option.shipOverride"),
-      this._settings.shipOverride,
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
-            this._host.engine.i18n("option.shipOverride"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
-            this._host.engine.i18n("option.shipOverride"),
-          ]),
-      }
-    );
-
-    return [header.element, upgradesElement.element, shipOverride.element];
-  }
-
   setState(state: WorkshopSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
 
-    this._settings.unlockUpgrades.enabled = state.unlockUpgrades.enabled;
-    for (const [name, option] of objectEntries(this._settings.unlockUpgrades.items)) {
-      option.enabled = state.unlockUpgrades.items[name].enabled;
-    }
+    this._upgradeUi.setState(state.unlockUpgrades);
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
       option.limited = state.items[name].limited;
     }
+
+    this._settings.shipOverride.enabled = state.shipOverride.enabled;
   }
 
   refreshUi(): void {
@@ -215,15 +194,14 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     mustExist(this._settings.$enabled).refreshUi();
     mustExist(this._settings.$trigger).refreshUi();
 
-    mustExist(this._settings.unlockUpgrades.$enabled).refreshUi();
-    for (const [, option] of objectEntries(this._settings.unlockUpgrades.items)) {
-      mustExist(option.$enabled).refreshUi();
-    }
-
     for (const [, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).refreshUi();
       mustExist(option.$limited).refreshUi();
       mustExist(option.$max).refreshUi();
     }
+
+    this._upgradeUi.refreshUi();
+
+    mustExist(this._settings.shipOverride.$enabled).refreshUi();
   }
 }
