@@ -1,13 +1,11 @@
 import { SettingMax } from "../options/Settings";
 import { VillageSettings } from "../options/VillageSettings";
 import { objectEntries } from "../tools/Entries";
-import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -16,21 +14,20 @@ export class VillageSettingsUi extends SettingsSectionUi {
   private readonly _settings: VillageSettings;
 
   constructor(host: UserScript, settings: VillageSettings) {
-    const label = ucfirst(host.engine.i18n("ui.distribute"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    const label = host.engine.i18n("ui.distribute");
+    super(host, label, settings);
 
     this._settings = settings;
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new VillageSettings());
       this.refreshUi();
     });
@@ -72,11 +69,11 @@ export class VillageSettingsUi extends SettingsSectionUi {
     ];
 
     for (const setting of this._items) {
-      panel.list.append(setting.element);
+      this.list.append(setting.element);
     }
 
     const additionOptions = this._getAdditionOptions();
-    panel.list.append(additionOptions);
+    this.list.append(additionOptions);
   }
 
   private _getDistributeOption(option: SettingMax, label: string, delimiter = false) {

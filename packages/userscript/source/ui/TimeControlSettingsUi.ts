@@ -12,7 +12,6 @@ import { Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -23,21 +22,20 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
   private _resourcesList: Maybe<JQuery<HTMLElement>>;
 
   constructor(host: UserScript, settings: TimeControlSettings) {
-    const label = ucfirst(host.engine.i18n("ui.timeCtrl"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    const label = host.engine.i18n("ui.timeCtrl");
+    super(host, label, settings);
 
     this._settings = settings;
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new TimeControlSettings());
       this.refreshUi();
     });
@@ -54,7 +52,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     ];
 
     for (const setting of this._items) {
-      panel.list.append(setting.element);
+      this.list.append(setting.element);
     }
   }
 

@@ -91,18 +91,18 @@ export class UserInterface {
         expando.setCollapsed();
       }
 
-      this._bonfireUi.panel.toggle(sectionsVisible);
-      this._spaceUi.panel.toggle(sectionsVisible);
-      this._craftUi.panel.toggle(sectionsVisible);
-      this._resourcesUi.panel.toggle(sectionsVisible);
-      this._unlockUi.panel.toggle(sectionsVisible);
-      this._tradingUi.panel.toggle(sectionsVisible);
-      this._religionUi.panel.toggle(sectionsVisible);
-      this._timeUi.panel.toggle(sectionsVisible);
-      this._timeCtrlUi.panel.toggle(sectionsVisible);
-      this._distributeUi.panel.toggle(sectionsVisible);
-      this._optionsUi.panel.toggle(sectionsVisible);
-      this._filterUi.panel.toggle(sectionsVisible);
+      this._bonfireUi.toggle(sectionsVisible);
+      this._spaceUi.toggle(sectionsVisible);
+      this._craftUi.toggle(sectionsVisible);
+      this._resourcesUi.toggle(sectionsVisible);
+      this._unlockUi.toggle(sectionsVisible);
+      this._tradingUi.toggle(sectionsVisible);
+      this._religionUi.toggle(sectionsVisible);
+      this._timeUi.toggle(sectionsVisible);
+      this._timeCtrlUi.toggle(sectionsVisible);
+      this._distributeUi.toggle(sectionsVisible);
+      this._optionsUi.toggle(sectionsVisible);
+      this._filterUi.toggle(sectionsVisible);
     });
 
     // Set up the "show activity summary" area.

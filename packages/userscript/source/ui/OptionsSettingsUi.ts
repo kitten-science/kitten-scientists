@@ -5,7 +5,6 @@ import { ucfirst } from "../tools/Format";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -15,20 +14,19 @@ export class OptionsSettingsUi extends SettingsSectionUi {
 
   constructor(host: UserScript, settings: OptionsSettings) {
     const label = ucfirst(host.engine.i18n("ui.options"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    super(host, label, settings);
 
     this._settings = settings;
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new OptionsSettings());
       this.refreshUi();
     });
@@ -47,7 +45,7 @@ export class OptionsSettingsUi extends SettingsSectionUi {
     ];
 
     for (const item of this._items) {
-      panel.list.append(item.element);
+      this.list.append(item.element);
     }
   }
 

@@ -4,7 +4,6 @@ import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ResourcesSettingsUi extends SettingsSectionUi {
@@ -12,22 +11,21 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
   private readonly _settings: ResourcesSettings;
 
   constructor(host: UserScript, settings: ResourcesSettings) {
-    const label = ucfirst(host.engine.i18n("ui.resources"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    const label = host.engine.i18n("ui.resources");
+    super(host, label, settings);
 
     this._settings = settings;
-    $("input", panel.element).prop("disabled", true);
+    $("input", this.element).prop("disabled", true);
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new ResourcesSettings());
       this.refreshUi();
     });
@@ -41,7 +39,7 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
     }
 
     for (const setting of this._items) {
-      panel.list.append(setting.element);
+      this.list.append(setting.element);
     }
   }
 

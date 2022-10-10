@@ -1,11 +1,9 @@
 import { TimeSettings, TimeSettingsItem } from "../options/TimeSettings";
 import { objectEntries } from "../tools/Entries";
-import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -15,24 +13,23 @@ export class TimeSettingsUi extends SettingsSectionUi {
   private readonly _settings: TimeSettings;
 
   constructor(host: UserScript, settings: TimeSettings) {
-    const label = ucfirst(host.engine.i18n("ui.time"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    const label = host.engine.i18n("ui.time");
+    super(host, label, settings);
 
     this._settings = settings;
 
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(panel.list);
+    this._trigger.element.insertBefore(this.list);
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new TimeSettings());
       this.refreshUi();
     });
@@ -87,7 +84,7 @@ export class TimeSettingsUi extends SettingsSectionUi {
     ];
 
     for (const setting of this._items) {
-      panel.list.append(setting.element);
+      this.list.append(setting.element);
     }
   }
 

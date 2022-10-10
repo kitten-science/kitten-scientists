@@ -8,7 +8,6 @@ import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
 import { EmbassySettingsUi } from "./EmbassySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -19,25 +18,24 @@ export class TradeSettingsUi extends SettingsSectionUi {
   private readonly _settings: TradeSettings;
 
   constructor(host: UserScript, settings: TradeSettings) {
-    const label = ucfirst(host.engine.i18n("ui.trade"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    const label = host.engine.i18n("ui.trade");
+    super(host, label, settings);
 
     this._settings = settings;
 
     // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(panel.list);
+    this._trigger.element.insertBefore(this.list);
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new TradeSettings());
       this.refreshUi();
     });
@@ -87,11 +85,11 @@ export class TradeSettingsUi extends SettingsSectionUi {
     ];
 
     for (const setting of this._items) {
-      panel.list.append(setting.element);
+      this.list.append(setting.element);
     }
 
     const additionOptions = this._getAdditionOptions();
-    panel.list.append(additionOptions);
+    this.list.append(additionOptions);
   }
 
   private _getTradeOption(

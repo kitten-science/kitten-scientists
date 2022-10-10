@@ -1,12 +1,10 @@
 import { SpaceSettings } from "../options/SpaceSettings";
 import { filterType } from "../tools/Array";
 import { objectEntries } from "../tools/Entries";
-import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
 import { MissionSettingsUi } from "./MissionSettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -19,25 +17,24 @@ export class SpaceSettingsUi extends SettingsSectionUi {
   private readonly _missionsUi: MissionSettingsUi;
 
   constructor(host: UserScript, settings: SpaceSettings) {
-    const label = ucfirst(host.engine.i18n("ui.space"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    const label = host.engine.i18n("ui.space");
+    super(host, label, settings);
 
     this._settings = settings;
 
     // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(panel.list);
+    this._trigger.element.insertBefore(this.list);
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new SpaceSettings());
       this.refreshUi();
     });
@@ -167,14 +164,14 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     this._items = filterType(uiElements, SettingListItem);
 
     for (const item of uiElements) {
-      panel.list.append(item.element);
+      this.list.append(item.element);
     }
 
     const headerAdditions = new HeaderListItem(this._host, "Additional options");
 
     this._missionsUi = new MissionSettingsUi(this._host, this._settings.unlockMissions);
 
-    panel.list.append(headerAdditions.element, this._missionsUi.element);
+    this.list.append(headerAdditions.element, this._missionsUi.element);
   }
 
   setState(state: SpaceSettings): void {

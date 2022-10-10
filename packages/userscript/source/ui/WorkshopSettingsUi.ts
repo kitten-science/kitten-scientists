@@ -1,12 +1,10 @@
 import { CraftSettingsItem, WorkshopSettings } from "../options/WorkshopSettings";
 import { objectEntries } from "../tools/Entries";
-import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi";
@@ -19,25 +17,24 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
   private readonly _upgradeUi: UpgradeSettingsUi;
 
   constructor(host: UserScript, settings: WorkshopSettings) {
-    const label = ucfirst(host.engine.i18n("ui.craft"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    const label = host.engine.i18n("ui.craft");
+    super(host, label, settings);
 
     this._settings = settings;
 
     // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(panel.list);
+    this._trigger.element.insertBefore(this.list);
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new WorkshopSettings());
       this.refreshUi();
     });
@@ -127,7 +124,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     ];
 
     for (const setting of this._items) {
-      panel.list.append(setting.element);
+      this.list.append(setting.element);
     }
 
     const additionHeader = new HeaderListItem(this._host, "Additional options");
@@ -150,7 +147,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
       }
     );
 
-    panel.list.append(additionHeader.element, this._upgradeUi.element, shipOverride.element);
+    this.list.append(additionHeader.element, this._upgradeUi.element, shipOverride.element);
   }
 
   private _getCraftOption(

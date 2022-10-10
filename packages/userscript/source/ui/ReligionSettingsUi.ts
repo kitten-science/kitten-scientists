@@ -1,13 +1,11 @@
 import { ReligionSettings } from "../options/ReligionSettings";
 import { filterType } from "../tools/Array";
 import { objectEntries } from "../tools/Entries";
-import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -18,25 +16,24 @@ export class ReligionSettingsUi extends SettingsSectionUi {
   private readonly _settings: ReligionSettings;
 
   constructor(host: UserScript, settings: ReligionSettings) {
-    const label = ucfirst(host.engine.i18n("ui.faith"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    const label = host.engine.i18n("ui.faith");
+    super(host, label, settings);
 
     this._settings = settings;
 
     // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(panel.list);
+    this._trigger.element.insertBefore(this.list);
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new ReligionSettings());
       this.refreshUi();
     });
@@ -179,11 +176,11 @@ export class ReligionSettingsUi extends SettingsSectionUi {
     this._items = filterType(uiElements, SettingListItem);
 
     for (const item of uiElements) {
-      panel.list.append(item.element);
+      this.list.append(item.element);
     }
 
     const additionOptions = this.getAdditionOptions();
-    panel.list.append(additionOptions);
+    this.list.append(additionOptions);
 
     /* TODO:
 

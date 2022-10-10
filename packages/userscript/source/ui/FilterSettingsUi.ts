@@ -5,7 +5,6 @@ import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { ExplainerListItem } from "./components/ExplainerListItem";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class FiltersSettingsUi extends SettingsSectionUi {
@@ -14,20 +13,19 @@ export class FiltersSettingsUi extends SettingsSectionUi {
 
   constructor(host: UserScript, settings: FilterSettings) {
     const label = ucfirst(host.engine.i18n("ui.filter"));
-    const panel = new SettingsPanel(host, label, settings);
-    super(host, panel);
+    super(host, label, settings);
 
     this._settings = settings;
 
-    this.panel._list.addEventListener("enableAll", () => {
+    this._list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("disableAll", () => {
+    this._list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this.panel._list.addEventListener("reset", () => {
+    this._list.addEventListener("reset", () => {
       this._settings.load(new FilterSettings());
       this.refreshUi();
     });
@@ -139,10 +137,10 @@ export class FiltersSettingsUi extends SettingsSectionUi {
       .map(button => makeButton(button.option, button.label));
 
     for (const item of this._items) {
-      panel.list.append(item.element);
+      this.list.append(item.element);
     }
 
-    panel.list.append(
+    this.list.append(
       new ExplainerListItem(this._host, "Disabled items are hidden from the log.").element
     );
   }

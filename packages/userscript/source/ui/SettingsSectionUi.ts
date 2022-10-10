@@ -1,6 +1,7 @@
 import { BonfireSettingsItem } from "../options/BonfireSettings";
 import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { SettingMax } from "../options/Settings";
+import { SettingsSection } from "../options/SettingsSection";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
 import { SettingListItem } from "./components/SettingListItem";
@@ -16,16 +17,16 @@ export type Toggleable = {
  * Base class for all automation UI sections.
  * This provides common functionality to help build the automation sections themselves.
  */
-export abstract class SettingsSectionUi {
+export abstract class SettingsSectionUi extends SettingsPanel {
   protected abstract readonly _items: Array<SettingListItem>;
-  protected _host: UserScript;
-  readonly element: JQuery<HTMLElement>;
-  readonly panel: SettingsPanel;
 
-  constructor(host: UserScript, panel: SettingsPanel) {
-    this._host = host;
-    this.element = panel.element;
-    this.panel = panel;
+  constructor(
+    host: UserScript,
+    label: string,
+    settings: SettingsSection,
+    initiallyExpanded = false
+  ) {
+    super(host, label, settings, initiallyExpanded);
   }
 
   abstract refreshUi(): void;
