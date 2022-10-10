@@ -61,10 +61,7 @@ export class SpaceSettings extends SettingsSectionTrigger {
       this.items[name].max = item.max;
     }
 
-    this.unlockMissions.enabled = settings.unlockMissions.enabled;
-    for (const [name, item] of objectEntries(settings.unlockMissions.items)) {
-      this.unlockMissions.items[name].enabled = item.enabled;
-    }
+    this.unlockMissions.load(settings.unlockMissions);
   }
 
   static toLegacyOptions(settings: SpaceSettings, subject: KittenStorageType) {
@@ -76,10 +73,7 @@ export class SpaceSettings extends SettingsSectionTrigger {
       subject.items[`set-${name}-max` as const] = item.max;
     }
 
-    subject.items["toggle-missions"] = settings.unlockMissions.enabled;
-    for (const [name, item] of objectEntries(settings.unlockMissions.items)) {
-      subject.items[`toggle-mission-${name}` as const] = item.enabled;
-    }
+    MissionSettings.toLegacyOptions(settings.unlockMissions, subject);
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -92,11 +86,7 @@ export class SpaceSettings extends SettingsSectionTrigger {
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
 
-    options.unlockMissions.enabled =
-      subject.items["toggle-missions"] ?? options.unlockMissions.enabled;
-    for (const [name, item] of objectEntries(options.unlockMissions.items)) {
-      item.enabled = subject.items[`toggle-mission-${name}` as const] ?? item.enabled;
-    }
+    options.unlockMissions = MissionSettings.fromLegacyOptions(subject);
 
     return options;
   }

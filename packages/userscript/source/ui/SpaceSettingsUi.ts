@@ -8,12 +8,15 @@ import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
+import { MissionSettingsUi } from "./MissionSettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class SpaceSettingsUi extends SettingsSectionUi {
   protected readonly _items: Array<SettingListItem>;
   private readonly _trigger: TriggerButton;
   private readonly _settings: SpaceSettings;
+
+  private readonly _missionsUi: MissionSettingsUi;
 
   constructor(host: UserScript, settings: SpaceSettings) {
     const label = ucfirst(host.engine.i18n("ui.space"));
@@ -167,49 +170,23 @@ export class SpaceSettingsUi extends SettingsSectionUi {
       panel.list.append(item.element);
     }
 
-    const additionOptions = this._getAdditionOptions();
-    panel.list.append(additionOptions);
-  }
+    const headerAdditions = new HeaderListItem(this._host, "Additional options");
 
-  private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
-    const header = new HeaderListItem(this._host, "Additional options");
+    this._missionsUi = new MissionSettingsUi(this._host, this._settings.unlockMissions);
 
-    const missionsElement = new SettingsPanel(
-      this._host,
-      this._host.engine.i18n("ui.upgrade.missions"),
-      this._settings.unlockMissions
-    );
-
-    const missionButtons = [];
-    for (const [missionName, mission] of objectEntries(this._settings.unlockMissions.items)) {
-      const missionLabel = this._host.engine.i18n(`$space.${missionName}.label`);
-      const missionButton = new SettingListItem(this._host, missionLabel, mission, {
-        onCheck: () => this._host.engine.imessage("status.auto.enable", [missionLabel]),
-        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [missionLabel]),
-      });
-
-      missionButtons.push({ label: missionLabel, button: missionButton });
-    }
-    // Ensure buttons are added into UI with their labels alphabetized.
-    missionButtons.sort((a, b) => a.label.localeCompare(b.label));
-    missionButtons.forEach(button => missionsElement.list.append(button.button.element));
-
-    return [header.element, missionsElement.element];
+    panel.list.append(headerAdditions.element, this._missionsUi.element);
   }
 
   setState(state: SpaceSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
 
-    this._settings.unlockMissions.enabled = state.unlockMissions.enabled;
-    for (const [name, option] of objectEntries(this._settings.unlockMissions.items)) {
-      option.enabled = state.unlockMissions.items[name].enabled;
-    }
-
     for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
       option.max = state.items[name].max;
     }
+
+    this._missionsUi.setState(state.unlockMissions);
   }
 
   refreshUi(): void {
@@ -218,14 +195,11 @@ export class SpaceSettingsUi extends SettingsSectionUi {
     mustExist(this._settings.$enabled).refreshUi();
     mustExist(this._settings.$trigger).refreshUi();
 
-    mustExist(this._settings.unlockMissions.$enabled).refreshUi();
-    for (const [, option] of objectEntries(this._settings.unlockMissions.items)) {
-      mustExist(option.$enabled).refreshUi();
-    }
-
     for (const [, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).refreshUi();
       mustExist(option.$max).refreshUi();
     }
+
+    this._missionsUi.refreshUi();
   }
 }
