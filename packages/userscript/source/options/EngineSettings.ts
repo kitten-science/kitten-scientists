@@ -36,6 +36,7 @@ export class EngineSettings extends SettingsSection {
   }
 
   static toLegacyOptions(settings: EngineSettings, subject: KittenStorageType) {
+    subject.interval = settings.interval;
     subject.toggles.engine = settings.enabled;
 
     FilterSettings.toLegacyOptions(settings.filters, subject);
@@ -46,6 +47,7 @@ export class EngineSettings extends SettingsSection {
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new EngineSettings();
 
+    options.interval = subject.interval ?? options.interval;
     options.enabled = subject.toggles.engine ?? options.enabled;
 
     options.filters = FilterSettings.fromLegacyOptions(subject);
