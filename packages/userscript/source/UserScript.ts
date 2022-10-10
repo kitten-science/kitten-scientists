@@ -183,7 +183,7 @@ export class UserScript {
   }
 
   static async waitForGame(timeout = 30000): Promise<GamePage> {
-    if (isNil(UserScript._gameStartSignal)) {
+    if (isNil(UserScript._gameStartSignal) && dojo) {
       UserScript._gameStartSignal = new Promise(resolve => {
         UserScript._gameStartSignalResolver = resolve;
       });
