@@ -85,19 +85,24 @@ export class UserInterface {
     let sectionsVisible = false;
     expando.element.on("click", () => {
       sectionsVisible = !sectionsVisible;
-      const optionsVisiblity = sectionsVisible;
-      this._bonfireUi.panel.toggle(optionsVisiblity);
-      this._spaceUi.panel.toggle(optionsVisiblity);
-      this._craftUi.panel.toggle(optionsVisiblity);
-      this._resourcesUi.panel.toggle(optionsVisiblity);
-      this._unlockUi.panel.toggle(optionsVisiblity);
-      this._tradingUi.panel.toggle(optionsVisiblity);
-      this._religionUi.panel.toggle(optionsVisiblity);
-      this._timeUi.panel.toggle(optionsVisiblity);
-      this._timeCtrlUi.panel.toggle(optionsVisiblity);
-      this._distributeUi.panel.toggle(optionsVisiblity);
-      this._optionsUi.panel.toggle(optionsVisiblity);
-      this._filterUi.panel.toggle(optionsVisiblity);
+      if (sectionsVisible) {
+        expando.setExpanded();
+      } else {
+        expando.setCollapsed();
+      }
+
+      this._bonfireUi.panel.toggle(sectionsVisible);
+      this._spaceUi.panel.toggle(sectionsVisible);
+      this._craftUi.panel.toggle(sectionsVisible);
+      this._resourcesUi.panel.toggle(sectionsVisible);
+      this._unlockUi.panel.toggle(sectionsVisible);
+      this._tradingUi.panel.toggle(sectionsVisible);
+      this._religionUi.panel.toggle(sectionsVisible);
+      this._timeUi.panel.toggle(sectionsVisible);
+      this._timeCtrlUi.panel.toggle(sectionsVisible);
+      this._distributeUi.panel.toggle(sectionsVisible);
+      this._optionsUi.panel.toggle(sectionsVisible);
+      this._filterUi.panel.toggle(sectionsVisible);
     });
 
     // Set up the "show activity summary" area.
