@@ -75,7 +75,7 @@ export class TradeSettings extends SettingsSectionTrigger {
       spiders: new TradeSettingsItem("spiders", true, true, true, true, false, true),
       zebras: new TradeSettingsItem("zebras", true, true, true, true, true, true),
     },
-    buildEmbassies = new EmbassySettings("embassies"),
+    buildEmbassies = new EmbassySettings(),
     unlockRaces = new Setting("unlockRaces", true)
   ) {
     super("trade", enabled, trigger);
@@ -97,11 +97,7 @@ export class TradeSettings extends SettingsSectionTrigger {
       this.items[name].winter = item.winter;
     }
 
-    this.buildEmbassies.enabled = settings.buildEmbassies.enabled;
-    for (const [name, item] of objectEntries(settings.buildEmbassies.items)) {
-      this.buildEmbassies.items[name].enabled = item.enabled;
-      this.buildEmbassies.items[name].max = item.max;
-    }
+    this.buildEmbassies.load(settings.buildEmbassies);
 
     this.unlockRaces.enabled = settings.unlockRaces.enabled;
   }
@@ -119,11 +115,7 @@ export class TradeSettings extends SettingsSectionTrigger {
       subject.items[`toggle-${name}-winter` as const] = item.winter;
     }
 
-    subject.items["toggle-buildEmbassies"] = settings.buildEmbassies.enabled;
-    for (const [name, item] of objectEntries(settings.buildEmbassies.items)) {
-      subject.items[`toggle-build-${name}` as const] = item.enabled;
-      subject.items[`set-build-${name}-max` as const] = item.max;
-    }
+    EmbassySettings.toLegacyOptions(settings.buildEmbassies, subject);
 
     subject.items["toggle-races"] = settings.unlockRaces.enabled;
   }
@@ -142,12 +134,7 @@ export class TradeSettings extends SettingsSectionTrigger {
       item.winter = subject.items[`toggle-${name}-winter` as const] ?? item.winter;
     }
 
-    options.buildEmbassies.enabled =
-      subject.items["toggle-buildEmbassies"] ?? options.buildEmbassies.enabled;
-    for (const [name, item] of objectEntries(options.buildEmbassies.items)) {
-      item.enabled = subject.items[`toggle-build-${name}` as const] ?? item.enabled;
-      item.max = subject.items[`set-build-${name}-max` as const] ?? item.max;
-    }
+    options.buildEmbassies = EmbassySettings.fromLegacyOptions(subject);
 
     options.unlockRaces.enabled = subject.items["toggle-races"] ?? options.unlockRaces.enabled;
 
