@@ -39,6 +39,10 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
         this._makeResourceSetting(ucfirst(this._host.engine.i18n(`$resources.${name}.title`)), item)
       );
     }
+
+    for (const setting of this._items) {
+      panel.list.append(setting.element);
+    }
   }
 
   /**
