@@ -4,6 +4,7 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
@@ -14,6 +15,8 @@ export class BonfireSettingsUi extends SettingsSectionUi {
   protected readonly _items: Array<SettingListItem>;
   private readonly _trigger: TriggerButton;
   private readonly _settings: BonfireSettings;
+
+  private readonly _buildingUpgradeUi: BuildingUpgradeSettingsUi;
 
   constructor(host: UserScript, settings: BonfireSettings) {
     const label = ucfirst(host.engine.i18n("ui.build"));
@@ -247,41 +250,11 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       panel.list.append(item.element);
     }
 
-    const additionOptions = this._getAdditionOptions();
-    panel.list.append(additionOptions);
-  }
-
-  private _getAdditionOptions(): Array<JQuery<HTMLElement>> {
     const header = new HeaderListItem(this._host, "Additional options");
 
-    const upgradeBuildingsElement = new SettingsPanel(
+    this._buildingUpgradeUi = new BuildingUpgradeSettingsUi(
       this._host,
-      this._host.engine.i18n("ui.upgrade.buildings"),
       this._settings.upgradeBuildings
-    );
-
-    const upgradeBuildingsButtons = [];
-    for (const [upgradeName, upgrade] of objectEntries(this._settings.upgradeBuildings.items)) {
-      const label = this._host.engine.i18n(`$buildings.${upgradeName}.label`);
-      const button = new SettingListItem(
-        this._host,
-        label,
-        upgrade,
-        {
-          onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
-          onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
-        },
-        false,
-        false,
-        []
-      );
-
-      upgradeBuildingsButtons.push({ label: label, button: button });
-    }
-    // Ensure buttons are added into UI with their labels alphabetized.
-    upgradeBuildingsButtons.sort((a, b) => a.label.localeCompare(b.label));
-    upgradeBuildingsButtons.forEach(button =>
-      upgradeBuildingsElement.list.append(button.button.element)
     );
 
     const nodeTurnOnSteamworks = new SettingListItem(
@@ -300,24 +273,23 @@ export class BonfireSettingsUi extends SettingsSectionUi {
       }
     );
 
-    return [header.element, upgradeBuildingsElement.element, nodeTurnOnSteamworks.element];
+    panel.list.append(
+      header.element,
+      this._buildingUpgradeUi.element,
+      nodeTurnOnSteamworks.element
+    );
   }
 
   setState(state: BonfireSettings): void {
     this._settings.enabled = state.enabled;
     this._settings.trigger = state.trigger;
-    this._settings.upgradeBuildings.enabled = state.upgradeBuildings.enabled;
-    this._settings.turnOnSteamworks.enabled = state.turnOnSteamworks.enabled;
 
     for (const [name, option] of objectEntries(this._settings.items)) {
       option.enabled = state.items[name].enabled;
       option.max = state.items[name].max;
     }
 
-    // Building upgrades.
-    for (const [name, option] of objectEntries(this._settings.upgradeBuildings.items)) {
-      option.enabled = state.upgradeBuildings.items[name].enabled;
-    }
+    this._buildingUpgradeUi.setState(state.upgradeBuildings);
   }
 
   refreshUi(): void {
@@ -325,17 +297,14 @@ export class BonfireSettingsUi extends SettingsSectionUi {
 
     mustExist(this._settings.$enabled).refreshUi();
     mustExist(this._settings.$trigger).refreshUi();
-    mustExist(this._settings.upgradeBuildings.$enabled).refreshUi();
-    mustExist(this._settings.turnOnSteamworks.$enabled).refreshUi();
 
     for (const [, option] of objectEntries(this._settings.items)) {
       mustExist(option.$enabled).refreshUi();
       mustExist(option.$max).refreshUi();
     }
 
-    // Building upgrades.
-    for (const [, option] of objectEntries(this._settings.upgradeBuildings.items)) {
-      mustExist(option.$enabled).refreshUi();
-    }
+    mustExist(this._settings.turnOnSteamworks.$enabled).refreshUi();
+
+    this._buildingUpgradeUi.refreshUi();
   }
 }

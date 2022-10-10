@@ -129,11 +129,8 @@ export class BonfireSettings extends SettingsSectionTrigger {
     }
 
     this.turnOnSteamworks.enabled = settings.turnOnSteamworks.enabled;
-    this.upgradeBuildings.enabled = settings.upgradeBuildings.enabled;
 
-    for (const [name, item] of objectEntries(settings.upgradeBuildings.items)) {
-      this.upgradeBuildings.items[name].enabled = item.enabled;
-    }
+    this.upgradeBuildings.load(settings.upgradeBuildings);
   }
 
   static toLegacyOptions(settings: BonfireSettings, subject: KittenStorageType) {
@@ -145,12 +142,9 @@ export class BonfireSettings extends SettingsSectionTrigger {
       subject.items[`set-${name}-max` as const] = item.max;
     }
 
-    subject.items["toggle-buildings"] = settings.upgradeBuildings.enabled;
     subject.items["toggle-_steamworks"] = settings.turnOnSteamworks.enabled;
 
-    for (const [name, item] of objectEntries(settings.upgradeBuildings.items)) {
-      subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
-    }
+    BuildingUpgradeSettings.toLegacyOptions(settings.upgradeBuildings, subject);
   }
 
   static fromLegacyOptions(subject: KittenStorageType) {
@@ -163,14 +157,11 @@ export class BonfireSettings extends SettingsSectionTrigger {
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
 
-    options.upgradeBuildings.enabled =
-      subject.items["toggle-buildings"] ?? options.upgradeBuildings.enabled;
     options.turnOnSteamworks.enabled =
       subject.items["toggle-_steamworks"] ?? options.turnOnSteamworks.enabled;
 
-    for (const [name, item] of objectEntries(options.upgradeBuildings.items)) {
-      item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
-    }
+    options.upgradeBuildings = BuildingUpgradeSettings.fromLegacyOptions(subject);
+
     return options;
   }
 }
