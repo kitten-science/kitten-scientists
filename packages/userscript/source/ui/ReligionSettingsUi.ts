@@ -24,7 +24,7 @@ export class ReligionSettingsUi extends SettingsSectionUi {
 
     // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
-    panel.element.append(this._trigger.element);
+    this._trigger.element.insertBefore(panel.list);
 
     const optionButtons = [
       new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.ziggurat.label")),
