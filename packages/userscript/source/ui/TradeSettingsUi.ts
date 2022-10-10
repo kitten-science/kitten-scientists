@@ -15,6 +15,7 @@ import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TradeSettingsUi extends SettingsSectionUi {
+  protected readonly _items: Array<SettingListItem>;
   private readonly _trigger: TriggerButton;
   private readonly _settings: TradeSettings;
 
@@ -29,7 +30,20 @@ export class TradeSettingsUi extends SettingsSectionUi {
     this._trigger = new TriggerButton(host, label, settings);
     this._trigger.element.insertBefore(panel.list);
 
-    const optionButtons = [
+    this.panel._list.addEventListener("enableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = true));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("disableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = false));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("reset", () => {
+      this._settings.load(new TradeSettings());
+      this.refreshUi();
+    });
+
+    this._items = [
       this._getTradeOption(
         "lizards",
         this._settings.items.lizards,
@@ -73,7 +87,9 @@ export class TradeSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    panel.list.append(...optionButtons);
+    for (const setting of this._items) {
+      panel.list.append(setting.element);
+    }
 
     const additionOptions = this._getAdditionOptions();
     panel.list.append(additionOptions);
@@ -85,7 +101,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false
-  ): JQuery<HTMLElement> {
+  ) {
     const element = new SettingLimitedListItem(
       this._host,
       i18nName,
@@ -119,7 +135,7 @@ export class TradeSettingsUi extends SettingsSectionUi {
 
     element.element.append(seasonsButton, list.element);
 
-    return element.element;
+    return element;
   }
 
   private _getSeason(name: Race, season: Season, option: TradeSettingsItem): JQuery<HTMLElement> {

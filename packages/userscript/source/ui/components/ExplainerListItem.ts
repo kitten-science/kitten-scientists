@@ -13,6 +13,7 @@ export class ExplainerListItem extends UiComponent {
    */
   constructor(host: UserScript, text: string) {
     super(host);
+
     const element = $("<li/>", { text }).addClass("ks-explainer");
 
     this.element = element;

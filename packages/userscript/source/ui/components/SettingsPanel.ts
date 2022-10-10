@@ -5,7 +5,7 @@ import { SettingListItem } from "./SettingListItem";
 import { SettingsList } from "./SettingsList";
 import { UiComponent } from "./UiComponent";
 
-export class SettingsPanel extends UiComponent {
+export class SettingsPanel extends UiComponent implements SettingListItem {
   readonly host: UserScript;
   readonly settings: SettingsSection;
   readonly element: JQuery<HTMLElement>;
@@ -17,6 +17,14 @@ export class SettingsPanel extends UiComponent {
 
   get isExpanded() {
     return this._mainChildVisible;
+  }
+
+  // SettingListItem interface
+  get checkbox() {
+    return this._element.checkbox;
+  }
+  get setting() {
+    return this.settings;
   }
 
   /**

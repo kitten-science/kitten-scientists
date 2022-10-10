@@ -12,6 +12,7 @@ export class ExpandoButton extends UiComponent {
    */
   constructor(host: UserScript) {
     super(host);
+
     const element = $("<div/>", {
       title: host.engine.i18n("ui.itemsShow"),
       text: "+",

@@ -12,7 +12,7 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class VillageSettingsUi extends SettingsSectionUi {
-  private readonly _items: Array<SettingListItem>;
+  protected readonly _items: Array<SettingListItem>;
   private readonly _settings: VillageSettings;
 
   constructor(host: UserScript, settings: VillageSettings) {
@@ -21,6 +21,19 @@ export class VillageSettingsUi extends SettingsSectionUi {
     super(host, panel);
 
     this._settings = settings;
+
+    this.panel._list.addEventListener("enableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = true));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("disableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = false));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("reset", () => {
+      this._settings.load(new VillageSettings());
+      this.refreshUi();
+    });
 
     this._items = [
       this._getDistributeOption(

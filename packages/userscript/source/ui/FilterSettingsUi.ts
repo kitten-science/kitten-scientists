@@ -9,6 +9,7 @@ import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class FiltersSettingsUi extends SettingsSectionUi {
+  protected readonly _items: Array<SettingListItem>;
   private readonly _settings: FilterSettings;
 
   constructor(host: UserScript, settings: FilterSettings) {
@@ -17,6 +18,19 @@ export class FiltersSettingsUi extends SettingsSectionUi {
     super(host, panel);
 
     this._settings = settings;
+
+    this.panel._list.addEventListener("enableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = true));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("disableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = false));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("reset", () => {
+      this._settings.load(new FilterSettings());
+      this.refreshUi();
+    });
 
     const buttons = [
       {
@@ -118,13 +132,16 @@ export class FiltersSettingsUi extends SettingsSectionUi {
         false,
         false,
         []
-      ).element;
+      );
 
-    const optionButtons = buttons
+    this._items = buttons
       .sort((a, b) => a.label.localeCompare(b.label))
       .map(button => makeButton(button.option, button.label));
 
-    panel.list.append(optionButtons);
+    for (const item of this._items) {
+      panel.list.append(item.element);
+    }
+
     panel.list.append(
       new ExplainerListItem(this._host, "Disabled items are hidden from the log.").element
     );

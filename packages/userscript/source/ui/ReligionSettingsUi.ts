@@ -1,4 +1,5 @@
 import { ReligionSettings } from "../options/ReligionSettings";
+import { filterType } from "../tools/Array";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
@@ -12,6 +13,7 @@ import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi {
+  protected readonly _items: Array<SettingListItem>;
   private readonly _trigger: TriggerButton;
   private readonly _settings: ReligionSettings;
 
@@ -26,7 +28,20 @@ export class ReligionSettingsUi extends SettingsSectionUi {
     this._trigger = new TriggerButton(host, label, settings);
     this._trigger.element.insertBefore(panel.list);
 
-    const optionButtons = [
+    this.panel._list.addEventListener("enableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = true));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("disableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = false));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("reset", () => {
+      this._settings.load(new ReligionSettings());
+      this.refreshUi();
+    });
+
+    const uiElements = [
       new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.ziggurat.label")),
       this._getBuildOption(
         this._settings.items.unicornPasture,
@@ -161,8 +176,9 @@ export class ReligionSettingsUi extends SettingsSectionUi {
         true
       ),
     ];
+    this._items = filterType(uiElements, SettingListItem);
 
-    for (const item of optionButtons) {
+    for (const item of uiElements) {
       panel.list.append(item.element);
     }
 

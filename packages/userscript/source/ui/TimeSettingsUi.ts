@@ -3,12 +3,14 @@ import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
+import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeSettingsUi extends SettingsSectionUi {
+  protected readonly _items: Array<SettingListItem>;
   private readonly _trigger: TriggerButton;
   private readonly _settings: TimeSettings;
 
@@ -19,11 +21,23 @@ export class TimeSettingsUi extends SettingsSectionUi {
 
     this._settings = settings;
 
-    // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
     this._trigger.element.insertBefore(panel.list);
 
-    const optionButtons = [
+    this.panel._list.addEventListener("enableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = true));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("disableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = false));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("reset", () => {
+      this._settings.load(new TimeSettings());
+      this.refreshUi();
+    });
+
+    this._items = [
       this._getTimeSetting(
         this._settings.items.temporalBattery,
         this._host.engine.i18n("$time.cfu.temporalBattery.label")
@@ -72,7 +86,9 @@ export class TimeSettingsUi extends SettingsSectionUi {
       ),
     ];
 
-    panel.list.append(...optionButtons);
+    for (const setting of this._items) {
+      panel.list.append(setting.element);
+    }
   }
 
   private _getTimeSetting(setting: TimeSettingsItem, label: string, delimiter = false) {
@@ -85,7 +101,7 @@ export class TimeSettingsUi extends SettingsSectionUi {
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       },
       delimiter
-    ).element;
+    );
   }
 
   setState(state: TimeSettings): void {

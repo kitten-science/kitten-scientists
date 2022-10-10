@@ -8,6 +8,7 @@ import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ScienceSettingsUi extends SettingsSectionUi {
+  protected readonly _items: Array<SettingListItem>;
   private readonly _settings: ScienceSettings;
 
   constructor(host: UserScript, settings: ScienceSettings) {
@@ -17,12 +18,26 @@ export class ScienceSettingsUi extends SettingsSectionUi {
 
     this._settings = settings;
 
+    this.panel._list.addEventListener("enableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = true));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("disableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = false));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("reset", () => {
+      this._settings.load(new ScienceSettings());
+      this.refreshUi();
+    });
+
     // Technologies
     const techsElement = new SettingsPanel(
       this._host,
       this._host.engine.i18n("ui.upgrade.techs"),
       this._settings.techs
     );
+    techsElement._list.resetButton.element.hide();
 
     const techButtons = [];
     for (const [techName, tech] of objectEntries(this._settings.techs.items)) {
@@ -60,6 +75,8 @@ export class ScienceSettingsUi extends SettingsSectionUi {
     // Ensure buttons are added into UI with their labels alphabetized.
     policyButtons.sort((a, b) => a.label.localeCompare(b.label));
     policyButtons.forEach(button => policiesElement.list.append(button.button.element));
+
+    this._items = [policiesElement, techsElement];
 
     panel.list.append(techsElement.element, policiesElement.element);
   }

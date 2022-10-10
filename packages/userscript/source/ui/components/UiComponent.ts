@@ -1,6 +1,6 @@
 import { UserScript } from "../../UserScript";
 
-export abstract class UiComponent {
+export abstract class UiComponent extends EventTarget {
   /**
    * A reference to the host itself.
    */
@@ -12,6 +12,7 @@ export abstract class UiComponent {
   abstract readonly element: JQuery<HTMLElement>;
 
   constructor(host: UserScript) {
+    super();
     this.host = host;
   }
 

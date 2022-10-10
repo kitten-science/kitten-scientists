@@ -11,7 +11,7 @@ import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class WorkshopSettingsUi extends SettingsSectionUi {
-  private readonly _items: Array<SettingListItem>;
+  protected readonly _items: Array<SettingListItem>;
   private readonly _trigger: TriggerButton;
   private readonly _settings: WorkshopSettings;
 
@@ -25,6 +25,19 @@ export class WorkshopSettingsUi extends SettingsSectionUi {
     // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
     this._trigger.element.insertBefore(panel.list);
+
+    this.panel._list.addEventListener("enableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = true));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("disableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = false));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("reset", () => {
+      this._settings.load(new WorkshopSettings());
+      this.refreshUi();
+    });
 
     this._items = [
       this._getCraftOption(

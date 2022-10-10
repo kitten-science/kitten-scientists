@@ -2,13 +2,13 @@ import { ResourcesSettings, ResourcesSettingsItem } from "../options/ResourcesSe
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { mustExist } from "../tools/Maybe";
-import { Resource } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ResourcesSettingsUi extends SettingsSectionUi {
+  protected readonly _items: Array<SettingListItem>;
   private readonly _settings: ResourcesSettings;
 
   constructor(host: UserScript, settings: ResourcesSettings) {
@@ -19,14 +19,24 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
     this._settings = settings;
     $("input", panel.element).prop("disabled", true);
 
+    this.panel._list.addEventListener("enableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = true));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("disableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = false));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("reset", () => {
+      this._settings.load(new ResourcesSettings());
+      this.refreshUi();
+    });
+
     // Add all the current resources
+    this._items = [];
     for (const [name, item] of objectEntries(this._settings.items)) {
-      panel.list.append(
-        this._makeResourceSetting(
-          name,
-          ucfirst(this._host.engine.i18n(`$resources.${name}.title`)),
-          item
-        )
+      this._items.push(
+        this._makeResourceSetting(ucfirst(this._host.engine.i18n(`$resources.${name}.title`)), item)
       );
     }
   }
@@ -35,16 +45,11 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
    * Creates a UI element that reflects stock and consume values for a given resource.
    * This is currently only used for the craft section.
    *
-   * @param name The resource.
    * @param title The title to apply to the option.
    * @param setting The option that is being controlled.
    * @returns A new option with stock and consume values.
    */
-  private _makeResourceSetting(
-    name: Resource,
-    title: string,
-    setting: ResourcesSettingsItem
-  ): JQuery<HTMLElement> {
+  private _makeResourceSetting(title: string, setting: ResourcesSettingsItem) {
     const stock = setting.stock;
 
     // The overall container for this resource item.
@@ -96,7 +101,7 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
     setting.$consume = consumeElement;
     setting.$stock = stockElement;
 
-    return container.element;
+    return container;
   }
 
   setState(state: ResourcesSettings): void {

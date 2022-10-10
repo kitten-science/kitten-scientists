@@ -31,6 +31,7 @@ export class Options {
     const subject = {} as KittenStorageType;
 
     subject.toggles = {
+      engine: settings.engine.enabled,
       build: settings.bonfire.enabled,
       space: settings.space.enabled,
       craft: settings.workshop.enabled,

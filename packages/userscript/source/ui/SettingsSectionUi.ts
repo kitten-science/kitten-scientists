@@ -3,6 +3,7 @@ import { ReligionSettingsItem } from "../options/ReligionSettings";
 import { SettingMax } from "../options/Settings";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
+import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 
@@ -16,6 +17,7 @@ export type Toggleable = {
  * This provides common functionality to help build the automation sections themselves.
  */
 export abstract class SettingsSectionUi {
+  protected abstract readonly _items: Array<SettingListItem>;
   protected _host: UserScript;
   readonly element: JQuery<HTMLElement>;
   readonly panel: SettingsPanel;

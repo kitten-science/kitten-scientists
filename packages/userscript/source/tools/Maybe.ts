@@ -2,6 +2,22 @@ export type Nil = null | undefined;
 export type Maybe<T> = T | Nil;
 
 /**
+ * Describes a function that is a constructor for T.
+ */
+export type ConstructorOf<T = Record<string, unknown>> = new (...args: any[]) => T;
+
+/**
+ * Check if something is a concrete value of the given type.
+ * Can be used as a typeguard.
+ *
+ * @param nilable The subject that could be nil.
+ * @param InstanceType The type to check against.
+ */
+export function is<T>(nilable: Maybe<T>, InstanceType: ConstructorOf<T>): nilable is T {
+  return !isNil(nilable) && nilable instanceof InstanceType;
+}
+
+/**
  * Check if something is Nil.
  * Can be used as a typeguard.
  *

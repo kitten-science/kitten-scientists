@@ -1,4 +1,7 @@
 import { UserScript } from "../../UserScript";
+import { DisableButton } from "./DisableButton";
+import { EnableButton } from "./EnableButton";
+import { ResetButton } from "./ResetButton";
 import { UiComponent } from "./UiComponent";
 
 /**
@@ -11,6 +14,7 @@ import { UiComponent } from "./UiComponent";
  */
 export class SettingsList extends UiComponent {
   readonly element: JQuery<HTMLElement>;
+  readonly resetButton: ResetButton;
 
   /**
    * Constructs a `SettingsList`.
@@ -22,40 +26,17 @@ export class SettingsList extends UiComponent {
 
     const containerList = $("<ul/>").addClass("ks-list").addClass("ks-items-list");
 
-    const disableAllButton = $("<div/>")
-      .html(
-        '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M9 42q-1.2 0-2.1-.9Q6 40.2 6 39V9q0-1.2.9-2.1Q7.8 6 9 6h30q1.2 0 2.1.9.9.9.9 2.1v30q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30V9H9v30Z" /></svg>'
-      )
-      .prop("title", host.engine.i18n("ui.disable.all"))
-      .addClass("ks-icon-button");
+    const disableAllButton = new DisableButton(this.host);
+    disableAllButton.element.on("click", () => this.dispatchEvent(new Event("disableAll")));
+    containerList.append(disableAllButton.element);
 
-    disableAllButton.on("click", function () {
-      // can't use find as we only want one layer of checkboxes
-      const items = containerList.children().children(":checkbox");
-      items.prop("checked", false);
-      items.trigger("change");
-      containerList.children().children(":checkbox").trigger("change");
-    });
+    const enableAllButton = new EnableButton(this.host);
+    enableAllButton.element.on("click", () => this.dispatchEvent(new Event("enableAll")));
+    containerList.append(enableAllButton.element);
 
-    containerList.append(disableAllButton);
-
-    const enableAllButton = $("<div/>")
-      .html(
-        '<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="M20.95 31.95 35.4 17.5l-2.15-2.15-12.3 12.3L15 21.7l-2.15 2.15ZM9 42q-1.2 0-2.1-.9Q6 40.2 6 39V9q0-1.2.9-2.1Q7.8 6 9 6h30q1.2 0 2.1.9.9.9.9 2.1v30q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30V9H9v30ZM9 9v30V9Z" /></svg>'
-      )
-      .prop("title", host.engine.i18n("ui.enable.all"))
-      .addClass("ks-icon-button")
-      .addClass("ks-margin-right");
-
-    enableAllButton.on("click", function () {
-      // can't use find as we only want one layer of checkboxes
-      const items = containerList.children().children(":checkbox");
-      items.prop("checked", true);
-      items.trigger("change");
-      containerList.children().children(":checkbox").trigger("change");
-    });
-
-    containerList.append(enableAllButton);
+    this.resetButton = new ResetButton(this.host);
+    this.resetButton.element.on("click", () => this.dispatchEvent(new Event("reset")));
+    containerList.append(this.resetButton.element);
 
     this.element = containerList;
   }

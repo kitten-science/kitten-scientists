@@ -13,6 +13,7 @@ export class HeaderListItem extends UiComponent {
    */
   constructor(host: UserScript, text: string) {
     super(host);
+
     const element = $("<li/>", { text }).addClass("ks-header");
 
     this.element = element;

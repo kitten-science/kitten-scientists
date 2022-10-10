@@ -17,6 +17,7 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeControlSettingsUi extends SettingsSectionUi {
+  protected readonly _items: Array<SettingListItem>;
   private readonly _settings: TimeControlSettings;
 
   private _resourcesList: Maybe<JQuery<HTMLElement>>;
@@ -28,20 +29,33 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
 
     this._settings = settings;
 
-    const optionButtons = [
+    this.panel._list.addEventListener("enableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = true));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("disableAll", () => {
+      this._items.forEach(item => (item.setting.enabled = false));
+      this.refreshUi();
+    });
+    this.panel._list.addEventListener("reset", () => {
+      this._settings.load(new TimeControlSettings());
+      this.refreshUi();
+    });
+
+    this._items = [
       this._getOptionAccelerateTime(
         this._settings.accelerateTime,
         this._host.engine.i18n("option.accelerate")
-      ).element,
+      ),
 
-      this._getOptionTimeSkip(this._settings.timeSkip, this._host.engine.i18n("option.time.skip"))
-        .element,
+      this._getOptionTimeSkip(this._settings.timeSkip, this._host.engine.i18n("option.time.skip")),
 
-      this._getOptionReset(this._settings.reset, this._host.engine.i18n("option.time.reset"))
-        .element,
+      this._getOptionReset(this._settings.reset, this._host.engine.i18n("option.time.reset")),
     ];
 
-    panel.list.append(...optionButtons);
+    for (const setting of this._items) {
+      panel.list.append(setting.element);
+    }
   }
 
   private _getOptionTimeSkip(
