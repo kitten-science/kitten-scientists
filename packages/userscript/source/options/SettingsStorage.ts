@@ -85,7 +85,7 @@ type ToggleUpgradeItem = `toggle-upgrade-${Upgrade}`;
 
 export type KittenStorageType = {
   version: number;
-  toggles: Record<LegacySettingsSections, boolean>;
+  toggles: Record<LegacySettingsSections | "engine", boolean>;
   items: Partial<Record<SetMaxBuildingItem, number>> &
     Partial<Record<SetMaxEmbassyItem, number>> &
     Partial<Record<SetMaxJobItem, number>> &

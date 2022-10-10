@@ -36,6 +36,8 @@ export class EngineSettings extends SettingsSection {
   }
 
   static toLegacyOptions(settings: EngineSettings, subject: KittenStorageType) {
+    subject.toggles.engine = settings.enabled;
+
     FilterSettings.toLegacyOptions(settings.filters, subject);
     OptionsSettings.toLegacyOptions(settings.options, subject);
     ResourcesSettings.toLegacyOptions(settings.resources, subject);
@@ -43,6 +45,8 @@ export class EngineSettings extends SettingsSection {
 
   static fromLegacyOptions(subject: KittenStorageType) {
     const options = new EngineSettings();
+
+    options.enabled = subject.toggles.engine ?? options.enabled;
 
     options.filters = FilterSettings.fromLegacyOptions(subject);
     options.options = OptionsSettings.fromLegacyOptions(subject);

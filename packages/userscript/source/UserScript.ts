@@ -116,10 +116,13 @@ export class UserScript {
     // TODO: This should be configurable.
     this.gamePage.console.maxMessages = 1000;
 
-    cwarn("Kitten Scientists initialized. Engine NOT started for now.");
-
     this.refreshUi();
-    //engine.start(false);
+
+    if (this.engine.settings.enabled) {
+      this.engine.start(true);
+    }
+
+    cinfo("Kitten Scientists initialized.");
   }
 
   refreshUi() {
