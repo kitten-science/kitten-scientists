@@ -36,6 +36,7 @@ type SetMaxBuildingItem = `set-${AllItems}-max`;
 type SetMaxEmbassyItem = `set-build-${Race}-max`;
 type SetMaxJobItem = `set-${Job}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
+type SetMaxTimeSkip = `set-timeSkip-maximum`;
 type SetMinResetBuildingItem = `set-reset-build-${Exclude<BonfireItem, "unicornPasture">}-min`;
 type SetMinResetFaithItem = `set-reset-faith-${FaithItem | UnicornItem}-min`;
 type SetMinResetSpaceItem = `set-reset-space-${SpaceBuildings}-min`;
@@ -91,6 +92,7 @@ export type KittenStorageType = {
     Partial<Record<SetMaxEmbassyItem, number>> &
     Partial<Record<SetMaxJobItem, number>> &
     Partial<Record<SetMaxResourceItem, number>> &
+    Partial<Record<SetMaxTimeSkip, number>> &
     Partial<Record<SetMinResetBuildingItem, number>> &
     Partial<Record<SetMinResetFaithItem, number>> &
     Partial<Record<SetMinResetSpaceItem, number>> &

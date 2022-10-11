@@ -97,7 +97,7 @@ export class TimeControlManager {
     };
 
     // check building
-    for (const [name, entry] of objectEntries(this.settings.buildItems))
+    for (const [name, entry] of objectEntries(this.settings.bonfireBuildings))
       if (entry.enabled) {
         // TODO: Obvious error here. For upgraded buildings, it needs special handling.
         let bld;

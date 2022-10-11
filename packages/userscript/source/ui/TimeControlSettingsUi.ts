@@ -1,10 +1,7 @@
+import { TimeControlResourcesSettingsItem } from "../options/ResetResourcesSettings";
 import { SettingTrigger } from "../options/Settings";
-import {
-  CycleIndices,
-  TimeControlResourcesSettingsItem,
-  TimeControlSettings,
-  TimeControlTimeSkipSettings,
-} from "../options/TimeControlSettings";
+import { CycleIndices, TimeControlSettings } from "../options/TimeControlSettings";
+import { TimeSkipSettings } from "../options/TimeSkipSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { Maybe } from "../tools/Maybe";
@@ -142,181 +139,181 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const resetBuildList = new SettingsList(this._host);
     resetBuildList.element.append(
       this._getResetOption(
-        this._settings.buildItems.hut,
+        this._settings.bonfireBuildings.hut,
         this._host.engine.i18n("$buildings.hut.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.logHouse,
+        this._settings.bonfireBuildings.logHouse,
         this._host.engine.i18n("$buildings.logHouse.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.mansion,
+        this._settings.bonfireBuildings.mansion,
         this._host.engine.i18n("$buildings.mansion.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.buildItems.workshop,
+        this._settings.bonfireBuildings.workshop,
         this._host.engine.i18n("$buildings.workshop.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.factory,
+        this._settings.bonfireBuildings.factory,
         this._host.engine.i18n("$buildings.factory.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.buildItems.field,
+        this._settings.bonfireBuildings.field,
         this._host.engine.i18n("$buildings.field.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.pasture,
+        this._settings.bonfireBuildings.pasture,
         this._host.engine.i18n("$buildings.pasture.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.solarFarm,
+        this._settings.bonfireBuildings.solarFarm,
         this._host.engine.i18n("$buildings.solarfarm.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.mine,
+        this._settings.bonfireBuildings.mine,
         this._host.engine.i18n("$buildings.mine.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.lumberMill,
+        this._settings.bonfireBuildings.lumberMill,
         this._host.engine.i18n("$buildings.lumberMill.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.aqueduct,
+        this._settings.bonfireBuildings.aqueduct,
         this._host.engine.i18n("$buildings.aqueduct.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.hydroPlant,
+        this._settings.bonfireBuildings.hydroPlant,
         this._host.engine.i18n("$buildings.hydroplant.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.oilWell,
+        this._settings.bonfireBuildings.oilWell,
         this._host.engine.i18n("$buildings.oilWell.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.quarry,
+        this._settings.bonfireBuildings.quarry,
         this._host.engine.i18n("$buildings.quarry.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.buildItems.smelter,
+        this._settings.bonfireBuildings.smelter,
         this._host.engine.i18n("$buildings.smelter.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.biolab,
+        this._settings.bonfireBuildings.biolab,
         this._host.engine.i18n("$buildings.biolab.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.calciner,
+        this._settings.bonfireBuildings.calciner,
         this._host.engine.i18n("$buildings.calciner.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.reactor,
+        this._settings.bonfireBuildings.reactor,
         this._host.engine.i18n("$buildings.reactor.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.accelerator,
+        this._settings.bonfireBuildings.accelerator,
         this._host.engine.i18n("$buildings.accelerator.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.steamworks,
+        this._settings.bonfireBuildings.steamworks,
         this._host.engine.i18n("$buildings.steamworks.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.magneto,
+        this._settings.bonfireBuildings.magneto,
         this._host.engine.i18n("$buildings.magneto.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.buildItems.library,
+        this._settings.bonfireBuildings.library,
         this._host.engine.i18n("$buildings.library.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.dataCenter,
+        this._settings.bonfireBuildings.dataCenter,
         this._host.engine.i18n("$buildings.dataCenter.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.academy,
+        this._settings.bonfireBuildings.academy,
         this._host.engine.i18n("$buildings.academy.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.observatory,
+        this._settings.bonfireBuildings.observatory,
         this._host.engine.i18n("$buildings.observatory.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.buildItems.amphitheatre,
+        this._settings.bonfireBuildings.amphitheatre,
         this._host.engine.i18n("$buildings.amphitheatre.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.broadcastTower,
+        this._settings.bonfireBuildings.broadcastTower,
         this._host.engine.i18n("$buildings.broadcasttower.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.tradepost,
+        this._settings.bonfireBuildings.tradepost,
         this._host.engine.i18n("$buildings.tradepost.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.chapel,
+        this._settings.bonfireBuildings.chapel,
         this._host.engine.i18n("$buildings.chapel.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.temple,
+        this._settings.bonfireBuildings.temple,
         this._host.engine.i18n("$buildings.temple.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.mint,
+        this._settings.bonfireBuildings.mint,
         this._host.engine.i18n("$buildings.mint.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.ziggurat,
+        this._settings.bonfireBuildings.ziggurat,
         this._host.engine.i18n("$buildings.ziggurat.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.chronosphere,
+        this._settings.bonfireBuildings.chronosphere,
         this._host.engine.i18n("$buildings.chronosphere.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.aiCore,
+        this._settings.bonfireBuildings.aiCore,
         this._host.engine.i18n("$buildings.aicore.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.brewery,
+        this._settings.bonfireBuildings.brewery,
         this._host.engine.i18n("$buildings.brewery.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.buildItems.barn,
+        this._settings.bonfireBuildings.barn,
         this._host.engine.i18n("$buildings.barn.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.harbor,
+        this._settings.bonfireBuildings.harbor,
         this._host.engine.i18n("$buildings.harbor.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.warehouse,
+        this._settings.bonfireBuildings.warehouse,
         this._host.engine.i18n("$buildings.warehouse.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.buildItems.zebraOutpost,
+        this._settings.bonfireBuildings.zebraOutpost,
         this._host.engine.i18n("$buildings.zebraOutpost.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.zebraWorkshop,
+        this._settings.bonfireBuildings.zebraWorkshop,
         this._host.engine.i18n("$buildings.zebraWorkshop.label")
       ),
       this._getResetOption(
-        this._settings.buildItems.zebraForge,
+        this._settings.bonfireBuildings.zebraForge,
         this._host.engine.i18n("$buildings.zebraForge.label")
       )
     );
@@ -768,10 +765,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     ).element;
   }
 
-  private _getSeasonForTimeSkip(
-    season: Season,
-    option: TimeControlTimeSkipSettings
-  ): JQuery<HTMLElement> {
+  private _getSeasonForTimeSkip(season: Season, option: TimeSkipSettings): JQuery<HTMLElement> {
     const iseason = ucfirst(this._host.engine.i18n(`$calendar.season.${season}` as const));
 
     const element = $("<li/>");
@@ -873,9 +867,9 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     this._settings.timeSkip[8] = state.timeSkip[8];
     this._settings.timeSkip[9] = state.timeSkip[9];
 
-    for (const [name, option] of objectEntries(this._settings.buildItems)) {
-      option.enabled = state.buildItems[name].enabled;
-      option.trigger = state.buildItems[name].trigger;
+    for (const [name, option] of objectEntries(this._settings.bonfireBuildings)) {
+      option.enabled = state.bonfireBuildings[name].enabled;
+      option.trigger = state.bonfireBuildings[name].trigger;
     }
     for (const [name, option] of objectEntries(this._settings.religionItems)) {
       option.enabled = state.religionItems[name].enabled;
