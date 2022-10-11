@@ -27,10 +27,7 @@ export class TimeControlSettings extends Setting {
   load(settings: TimeControlSettings) {
     this.enabled = settings.enabled;
 
-    this.accelerateTime.enabled = settings.accelerateTime.enabled;
-    this.reset.enabled = settings.reset.enabled;
-
-    this.accelerateTime.trigger = settings.accelerateTime.trigger;
+    this.accelerateTime.load(settings.accelerateTime);
     this.reset.load(settings.reset);
     this.timeSkip.load(settings.timeSkip);
   }
@@ -51,8 +48,6 @@ export class TimeControlSettings extends Setting {
 
     options.accelerateTime.enabled =
       subject.items["toggle-accelerateTime"] ?? options.accelerateTime.enabled;
-    options.timeSkip.enabled = subject.items["toggle-timeSkip"] ?? options.timeSkip.enabled;
-
     options.accelerateTime.trigger =
       subject.items["set-accelerateTime-trigger"] ?? options.accelerateTime.trigger;
 
