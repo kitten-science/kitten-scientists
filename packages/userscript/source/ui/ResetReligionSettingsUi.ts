@@ -8,7 +8,7 @@ export class ResetReligionSettingsUi extends SettingsPanel<ResetReligionSettings
   private readonly _buildings: Array<SettingTriggerListItem>;
 
   constructor(host: UserScript, settings: ResetReligionSettings) {
-    const label = host.engine.i18n("option.embassies");
+    const label = host.engine.i18n("ui.faith");
     super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {

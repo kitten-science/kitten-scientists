@@ -12,7 +12,7 @@ export class ResetResourcesSettingsUi extends SettingsPanel<ResetResourcesSettin
   private readonly _buildings: Array<SettingListItem>;
 
   constructor(host: UserScript, settings: ResetResourcesSettings) {
-    const label = host.engine.i18n("option.embassies");
+    const label = host.engine.i18n("ui.resources");
     super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {

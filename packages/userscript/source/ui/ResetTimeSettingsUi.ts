@@ -8,7 +8,7 @@ export class ResetTimeSettingsUi extends SettingsPanel<ResetTimeSettings> {
   private readonly _buildings: Array<SettingTriggerListItem>;
 
   constructor(host: UserScript, settings: ResetTimeSettings) {
-    const label = host.engine.i18n("option.embassies");
+    const label = host.engine.i18n("ui.time");
     super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {

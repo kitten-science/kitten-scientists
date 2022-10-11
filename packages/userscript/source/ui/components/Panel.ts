@@ -20,14 +20,21 @@ export class Panel<TChild extends UiComponent = UiComponent> extends UiComponent
    * @param host A reference to the host.
    * @param label The label to put main checkbox of this section.
    * @param child Another compontent to host in the panel.
+   * @param icon When set to an SVG path, will be used as an icon on the label.
    * @param initiallyExpanded Should the main child be expanded right away?
    */
-  constructor(host: UserScript, label: string, child: TChild, initiallyExpanded = false) {
+  constructor(
+    host: UserScript,
+    label: string,
+    child: TChild,
+    icon: string | undefined = undefined,
+    initiallyExpanded = false
+  ) {
     super(host);
 
     this._child = child;
 
-    const element = new LabelListItem(host, label);
+    const element = new LabelListItem(host, label, icon);
     this.children.add(element);
     this.children.add(child);
 

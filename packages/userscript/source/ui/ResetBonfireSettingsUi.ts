@@ -8,7 +8,7 @@ export class ResetBonfireSettingsUi extends SettingsPanel<ResetBonfireSettings> 
   private readonly _buildings: Array<SettingTriggerListItem>;
 
   constructor(host: UserScript, settings: ResetBonfireSettings) {
-    const label = host.engine.i18n("option.embassies");
+    const label = host.engine.i18n("ui.build");
     super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {

@@ -8,7 +8,7 @@ export class ResetSpaceSettingsUi extends SettingsPanel<ResetSpaceSettings> {
   private readonly _buildings: Array<SettingTriggerListItem>;
 
   constructor(host: UserScript, settings: ResetSpaceSettings) {
-    const label = host.engine.i18n("option.embassies");
+    const label = host.engine.i18n("ui.space");
     super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {

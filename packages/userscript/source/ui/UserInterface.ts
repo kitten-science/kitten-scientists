@@ -197,6 +197,14 @@ export class UserInterface {
         padding-top: 2px;
       }`
     );
+    this._addRule(
+      `#ks ul li.ks-setting .ks-icon-label {
+        display: inline-block;
+        margin-right: 10px;
+        margin-left: 3px;
+        vertical-align: middle;
+      }`
+    );
     // Setting: Text Button
     this._addRule(
       `#ks ul li.ks-setting .ks-text-button {

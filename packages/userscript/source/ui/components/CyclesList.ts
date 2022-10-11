@@ -72,7 +72,7 @@ export class CyclesList extends SettingsList {
     });
 
     label.prepend(input);
-    element.append(input);
+    element.append(label);
 
     return element;
   }
