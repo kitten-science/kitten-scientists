@@ -1,4 +1,4 @@
-import { TimeControlResourcesSettingsItem } from "../options/ResetResourcesSettings";
+import { ResetResourcesSettingsItem } from "../options/ResetResourcesSettings";
 import { SettingTrigger } from "../options/Settings";
 import { CycleIndices, TimeControlSettings } from "../options/TimeControlSettings";
 import { TimeSkipSettings } from "../options/TimeSkipSettings";
@@ -139,181 +139,181 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const resetBuildList = new SettingsList(this._host);
     resetBuildList.element.append(
       this._getResetOption(
-        this._settings.bonfireBuildings.hut,
+        this._settings.bonfireBuildings.items.hut,
         this._host.engine.i18n("$buildings.hut.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.logHouse,
+        this._settings.bonfireBuildings.items.logHouse,
         this._host.engine.i18n("$buildings.logHouse.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.mansion,
+        this._settings.bonfireBuildings.items.mansion,
         this._host.engine.i18n("$buildings.mansion.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.bonfireBuildings.workshop,
+        this._settings.bonfireBuildings.items.workshop,
         this._host.engine.i18n("$buildings.workshop.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.factory,
+        this._settings.bonfireBuildings.items.factory,
         this._host.engine.i18n("$buildings.factory.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.bonfireBuildings.field,
+        this._settings.bonfireBuildings.items.field,
         this._host.engine.i18n("$buildings.field.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.pasture,
+        this._settings.bonfireBuildings.items.pasture,
         this._host.engine.i18n("$buildings.pasture.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.solarFarm,
+        this._settings.bonfireBuildings.items.solarFarm,
         this._host.engine.i18n("$buildings.solarfarm.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.mine,
+        this._settings.bonfireBuildings.items.mine,
         this._host.engine.i18n("$buildings.mine.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.lumberMill,
+        this._settings.bonfireBuildings.items.lumberMill,
         this._host.engine.i18n("$buildings.lumberMill.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.aqueduct,
+        this._settings.bonfireBuildings.items.aqueduct,
         this._host.engine.i18n("$buildings.aqueduct.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.hydroPlant,
+        this._settings.bonfireBuildings.items.hydroPlant,
         this._host.engine.i18n("$buildings.hydroplant.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.oilWell,
+        this._settings.bonfireBuildings.items.oilWell,
         this._host.engine.i18n("$buildings.oilWell.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.quarry,
+        this._settings.bonfireBuildings.items.quarry,
         this._host.engine.i18n("$buildings.quarry.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.bonfireBuildings.smelter,
+        this._settings.bonfireBuildings.items.smelter,
         this._host.engine.i18n("$buildings.smelter.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.biolab,
+        this._settings.bonfireBuildings.items.biolab,
         this._host.engine.i18n("$buildings.biolab.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.calciner,
+        this._settings.bonfireBuildings.items.calciner,
         this._host.engine.i18n("$buildings.calciner.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.reactor,
+        this._settings.bonfireBuildings.items.reactor,
         this._host.engine.i18n("$buildings.reactor.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.accelerator,
+        this._settings.bonfireBuildings.items.accelerator,
         this._host.engine.i18n("$buildings.accelerator.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.steamworks,
+        this._settings.bonfireBuildings.items.steamworks,
         this._host.engine.i18n("$buildings.steamworks.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.magneto,
+        this._settings.bonfireBuildings.items.magneto,
         this._host.engine.i18n("$buildings.magneto.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.bonfireBuildings.library,
+        this._settings.bonfireBuildings.items.library,
         this._host.engine.i18n("$buildings.library.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.dataCenter,
+        this._settings.bonfireBuildings.items.dataCenter,
         this._host.engine.i18n("$buildings.dataCenter.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.academy,
+        this._settings.bonfireBuildings.items.academy,
         this._host.engine.i18n("$buildings.academy.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.observatory,
+        this._settings.bonfireBuildings.items.observatory,
         this._host.engine.i18n("$buildings.observatory.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.bonfireBuildings.amphitheatre,
+        this._settings.bonfireBuildings.items.amphitheatre,
         this._host.engine.i18n("$buildings.amphitheatre.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.broadcastTower,
+        this._settings.bonfireBuildings.items.broadcastTower,
         this._host.engine.i18n("$buildings.broadcasttower.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.tradepost,
+        this._settings.bonfireBuildings.items.tradepost,
         this._host.engine.i18n("$buildings.tradepost.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.chapel,
+        this._settings.bonfireBuildings.items.chapel,
         this._host.engine.i18n("$buildings.chapel.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.temple,
+        this._settings.bonfireBuildings.items.temple,
         this._host.engine.i18n("$buildings.temple.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.mint,
+        this._settings.bonfireBuildings.items.mint,
         this._host.engine.i18n("$buildings.mint.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.ziggurat,
+        this._settings.bonfireBuildings.items.ziggurat,
         this._host.engine.i18n("$buildings.ziggurat.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.chronosphere,
+        this._settings.bonfireBuildings.items.chronosphere,
         this._host.engine.i18n("$buildings.chronosphere.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.aiCore,
+        this._settings.bonfireBuildings.items.aiCore,
         this._host.engine.i18n("$buildings.aicore.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.brewery,
+        this._settings.bonfireBuildings.items.brewery,
         this._host.engine.i18n("$buildings.brewery.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.bonfireBuildings.barn,
+        this._settings.bonfireBuildings.items.barn,
         this._host.engine.i18n("$buildings.barn.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.harbor,
+        this._settings.bonfireBuildings.items.harbor,
         this._host.engine.i18n("$buildings.harbor.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.warehouse,
+        this._settings.bonfireBuildings.items.warehouse,
         this._host.engine.i18n("$buildings.warehouse.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.bonfireBuildings.zebraOutpost,
+        this._settings.bonfireBuildings.items.zebraOutpost,
         this._host.engine.i18n("$buildings.zebraOutpost.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.zebraWorkshop,
+        this._settings.bonfireBuildings.items.zebraWorkshop,
         this._host.engine.i18n("$buildings.zebraWorkshop.label")
       ),
       this._getResetOption(
-        this._settings.bonfireBuildings.zebraForge,
+        this._settings.bonfireBuildings.items.zebraForge,
         this._host.engine.i18n("$buildings.zebraForge.label")
       )
     );
@@ -322,111 +322,111 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const resetSpaceList = new SettingsList(this._host);
     resetSpaceList.element.append(
       this._getResetOption(
-        this._settings.spaceItems.spaceElevator,
+        this._settings.spaceItems.items.spaceElevator,
         this._host.engine.i18n("$space.planet.cath.spaceElevator.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.sattelite,
+        this._settings.spaceItems.items.sattelite,
         this._host.engine.i18n("$space.planet.cath.sattelite.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.spaceStation,
+        this._settings.spaceItems.items.spaceStation,
         this._host.engine.i18n("$space.planet.cath.spaceStation.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.moonOutpost,
+        this._settings.spaceItems.items.moonOutpost,
         this._host.engine.i18n("$space.planet.moon.moonOutpost.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.moonBase,
+        this._settings.spaceItems.items.moonBase,
         this._host.engine.i18n("$space.planet.moon.moonBase.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.planetCracker,
+        this._settings.spaceItems.items.planetCracker,
         this._host.engine.i18n("$space.planet.dune.planetCracker.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.hydrofracturer,
+        this._settings.spaceItems.items.hydrofracturer,
         this._host.engine.i18n("$space.planet.dune.hydrofracturer.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.spiceRefinery,
+        this._settings.spaceItems.items.spiceRefinery,
         this._host.engine.i18n("$space.planet.dune.spiceRefinery.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.researchVessel,
+        this._settings.spaceItems.items.researchVessel,
         this._host.engine.i18n("$space.planet.piscine.researchVessel.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.orbitalArray,
+        this._settings.spaceItems.items.orbitalArray,
         this._host.engine.i18n("$space.planet.piscine.orbitalArray.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.sunlifter,
+        this._settings.spaceItems.items.sunlifter,
         this._host.engine.i18n("$space.planet.helios.sunlifter.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.containmentChamber,
+        this._settings.spaceItems.items.containmentChamber,
         this._host.engine.i18n("$space.planet.helios.containmentChamber.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.heatsink,
+        this._settings.spaceItems.items.heatsink,
         this._host.engine.i18n("$space.planet.helios.heatsink.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.sunforge,
+        this._settings.spaceItems.items.sunforge,
         this._host.engine.i18n("$space.planet.helios.sunforge.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.cryostation,
+        this._settings.spaceItems.items.cryostation,
         this._host.engine.i18n("$space.planet.terminus.cryostation.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.spaceBeacon,
+        this._settings.spaceItems.items.spaceBeacon,
         this._host.engine.i18n("$space.planet.kairo.spaceBeacon.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.terraformingStation,
+        this._settings.spaceItems.items.terraformingStation,
         this._host.engine.i18n("$space.planet.yarn.terraformingStation.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.hydroponics,
+        this._settings.spaceItems.items.hydroponics,
         this._host.engine.i18n("$space.planet.yarn.hydroponics.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.hrHarvester,
+        this._settings.spaceItems.items.hrHarvester,
         this._host.engine.i18n("$space.planet.umbra.hrHarvester.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.entangler,
+        this._settings.spaceItems.items.entangler,
         this._host.engine.i18n("$space.planet.charon.entangler.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.spaceItems.tectonic,
+        this._settings.spaceItems.items.tectonic,
         this._host.engine.i18n("$space.planet.centaurusSystem.tectonic.label")
       ),
       this._getResetOption(
-        this._settings.spaceItems.moltenCore,
+        this._settings.spaceItems.items.moltenCore,
         this._host.engine.i18n("$space.planet.centaurusSystem.moltenCore.label")
       )
     );
@@ -435,7 +435,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const resetResourcesList = new SettingsList(this._host);
     this._resourcesList = resetResourcesList.element;
     // Add all the current resources
-    for (const [name, item] of objectEntries(this._settings.resources)) {
+    for (const [name, item] of objectEntries(this._settings.resources.items)) {
       this._resourcesList.append(
         this._addNewResourceOption(
           ucfirst(this._host.engine.i18n(`$resources.${name}.title`)),
@@ -448,129 +448,129 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const resetReligionList = new SettingsList(this._host);
     resetReligionList.element.append(
       this._getResetOption(
-        this._settings.religionItems.unicornPasture,
+        this._settings.religionItems.items.unicornPasture,
         this._host.engine.i18n("$buildings.unicornPasture.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.unicornTomb,
+        this._settings.religionItems.items.unicornTomb,
         this._host.engine.i18n("$religion.zu.unicornTomb.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.ivoryTower,
+        this._settings.religionItems.items.ivoryTower,
         this._host.engine.i18n("$religion.zu.ivoryTower.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.ivoryCitadel,
+        this._settings.religionItems.items.ivoryCitadel,
         this._host.engine.i18n("$religion.zu.ivoryCitadel.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.skyPalace,
+        this._settings.religionItems.items.skyPalace,
         this._host.engine.i18n("$religion.zu.skyPalace.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.unicornUtopia,
+        this._settings.religionItems.items.unicornUtopia,
         this._host.engine.i18n("$religion.zu.unicornUtopia.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.sunspire,
+        this._settings.religionItems.items.sunspire,
         this._host.engine.i18n("$religion.zu.sunspire.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.religionItems.marker,
+        this._settings.religionItems.items.marker,
         this._host.engine.i18n("$religion.zu.marker.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.unicornGraveyard,
+        this._settings.religionItems.items.unicornGraveyard,
         this._host.engine.i18n("$religion.zu.unicornGraveyard.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.unicornNecropolis,
+        this._settings.religionItems.items.unicornNecropolis,
         this._host.engine.i18n("$religion.zu.unicornNecropolis.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.blackPyramid,
+        this._settings.religionItems.items.blackPyramid,
         this._host.engine.i18n("$religion.zu.blackPyramid.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.religionItems.solarchant,
+        this._settings.religionItems.items.solarchant,
         this._host.engine.i18n("$religion.ru.solarchant.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.scholasticism,
+        this._settings.religionItems.items.scholasticism,
         this._host.engine.i18n("$religion.ru.scholasticism.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.goldenSpire,
+        this._settings.religionItems.items.goldenSpire,
         this._host.engine.i18n("$religion.ru.goldenSpire.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.sunAltar,
+        this._settings.religionItems.items.sunAltar,
         this._host.engine.i18n("$religion.ru.sunAltar.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.stainedGlass,
+        this._settings.religionItems.items.stainedGlass,
         this._host.engine.i18n("$religion.ru.stainedGlass.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.solarRevolution,
+        this._settings.religionItems.items.solarRevolution,
         this._host.engine.i18n("$religion.ru.solarRevolution.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.basilica,
+        this._settings.religionItems.items.basilica,
         this._host.engine.i18n("$religion.ru.basilica.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.templars,
+        this._settings.religionItems.items.templars,
         this._host.engine.i18n("$religion.ru.templars.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.apocripha,
+        this._settings.religionItems.items.apocripha,
         this._host.engine.i18n("$religion.ru.apocripha.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.transcendence,
+        this._settings.religionItems.items.transcendence,
         this._host.engine.i18n("$religion.ru.transcendence.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.religionItems.blackObelisk,
+        this._settings.religionItems.items.blackObelisk,
         this._host.engine.i18n("$religion.tu.blackObelisk.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.blackNexus,
+        this._settings.religionItems.items.blackNexus,
         this._host.engine.i18n("$religion.tu.blackNexus.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.blackCore,
+        this._settings.religionItems.items.blackCore,
         this._host.engine.i18n("$religion.tu.blackCore.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.singularity,
+        this._settings.religionItems.items.singularity,
         this._host.engine.i18n("$religion.tu.singularity.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.blackLibrary,
+        this._settings.religionItems.items.blackLibrary,
         this._host.engine.i18n("$religion.tu.blackLibrary.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.blackRadiance,
+        this._settings.religionItems.items.blackRadiance,
         this._host.engine.i18n("$religion.tu.blackRadiance.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.blazar,
+        this._settings.religionItems.items.blazar,
         this._host.engine.i18n("$religion.tu.blazar.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.darkNova,
+        this._settings.religionItems.items.darkNova,
         this._host.engine.i18n("$religion.tu.darkNova.label")
       ),
       this._getResetOption(
-        this._settings.religionItems.holyGenocide,
+        this._settings.religionItems.items.holyGenocide,
         this._host.engine.i18n("$religion.tu.holyGenocide.label")
       )
     );
@@ -578,49 +578,49 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     const resetTimeList = new SettingsList(this._host);
     resetTimeList.element.append(
       this._getResetOption(
-        this._settings.timeItems.temporalBattery,
+        this._settings.timeItems.items.temporalBattery,
         this._host.engine.i18n("$time.cfu.temporalBattery.label")
       ),
       this._getResetOption(
-        this._settings.timeItems.blastFurnace,
+        this._settings.timeItems.items.blastFurnace,
         this._host.engine.i18n("$time.cfu.blastFurnace.label")
       ),
       this._getResetOption(
-        this._settings.timeItems.timeBoiler,
+        this._settings.timeItems.items.timeBoiler,
         this._host.engine.i18n("$time.cfu.timeBoiler.label")
       ),
       this._getResetOption(
-        this._settings.timeItems.temporalAccelerator,
+        this._settings.timeItems.items.temporalAccelerator,
         this._host.engine.i18n("$time.cfu.temporalAccelerator.label")
       ),
       this._getResetOption(
-        this._settings.timeItems.temporalImpedance,
+        this._settings.timeItems.items.temporalImpedance,
         this._host.engine.i18n("$time.cfu.temporalImpedance.label")
       ),
       this._getResetOption(
-        this._settings.timeItems.ressourceRetrieval,
+        this._settings.timeItems.items.ressourceRetrieval,
         this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
       this._getResetOption(
-        this._settings.timeItems.cryochambers,
+        this._settings.timeItems.items.cryochambers,
         this._host.engine.i18n("$time.vsu.cryochambers.label")
       ),
       this._getResetOption(
-        this._settings.timeItems.voidHoover,
+        this._settings.timeItems.items.voidHoover,
         this._host.engine.i18n("$time.vsu.voidHoover.label")
       ),
       this._getResetOption(
-        this._settings.timeItems.voidRift,
+        this._settings.timeItems.items.voidRift,
         this._host.engine.i18n("$time.vsu.voidRift.label")
       ),
       this._getResetOption(
-        this._settings.timeItems.chronocontrol,
+        this._settings.timeItems.items.chronocontrol,
         this._host.engine.i18n("$time.vsu.chronocontrol.label")
       ),
       this._getResetOption(
-        this._settings.timeItems.voidResonator,
+        this._settings.timeItems.items.voidResonator,
         this._host.engine.i18n("$time.vsu.voidResonator.label")
       )
     );
@@ -805,7 +805,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
    */
   private _addNewResourceOption(
     title: string,
-    setting: TimeControlResourcesSettingsItem
+    setting: ResetResourcesSettingsItem
   ): JQuery<HTMLElement> {
     const stock = setting.stock;
 
@@ -867,26 +867,26 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     this._settings.timeSkip[8] = state.timeSkip[8];
     this._settings.timeSkip[9] = state.timeSkip[9];
 
-    for (const [name, option] of objectEntries(this._settings.bonfireBuildings)) {
-      option.enabled = state.bonfireBuildings[name].enabled;
-      option.trigger = state.bonfireBuildings[name].trigger;
+    for (const [name, option] of objectEntries(this._settings.bonfireBuildings.items)) {
+      option.enabled = state.bonfireBuildings.items[name].enabled;
+      option.trigger = state.bonfireBuildings.items[name].trigger;
     }
-    for (const [name, option] of objectEntries(this._settings.religionItems)) {
-      option.enabled = state.religionItems[name].enabled;
-      option.trigger = state.religionItems[name].trigger;
+    for (const [name, option] of objectEntries(this._settings.religionItems.items)) {
+      option.enabled = state.religionItems.items[name].enabled;
+      option.trigger = state.religionItems.items[name].trigger;
     }
-    for (const [name, option] of objectEntries(this._settings.spaceItems)) {
-      option.enabled = state.spaceItems[name].enabled;
-      option.trigger = state.spaceItems[name].trigger;
+    for (const [name, option] of objectEntries(this._settings.spaceItems.items)) {
+      option.enabled = state.spaceItems.items[name].enabled;
+      option.trigger = state.spaceItems.items[name].trigger;
     }
-    for (const [name, option] of objectEntries(this._settings.timeItems)) {
-      option.enabled = state.timeItems[name].enabled;
-      option.trigger = state.timeItems[name].trigger;
+    for (const [name, option] of objectEntries(this._settings.timeItems.items)) {
+      option.enabled = state.timeItems.items[name].enabled;
+      option.trigger = state.timeItems.items[name].trigger;
     }
 
-    for (const [name, option] of objectEntries(state.resources)) {
-      option.enabled = state.resources[name].enabled;
-      option.stock = state.resources[name].stock;
+    for (const [name, option] of objectEntries(state.resources.items)) {
+      option.enabled = state.resources.items[name].enabled;
+      option.stock = state.resources.items[name].stock;
     }
   }
 }

@@ -1,6 +1,10 @@
+import { objectEntries } from "../tools/Entries";
+import { isNil, mustExist } from "../tools/Maybe";
+import { Resource } from "../types";
 import { Setting } from "./Settings";
+import { KittenStorageType } from "./SettingsStorage";
 
-export class TimeControlResourcesSettingsItem extends Setting {
+export class ResetResourcesSettingsItem extends Setting {
   stock = 0;
   $stock?: JQuery<HTMLElement>;
 
@@ -10,53 +14,105 @@ export class TimeControlResourcesSettingsItem extends Setting {
   }
 }
 
-export class ResetResourcesSettings {
-  alloy = new TimeControlResourcesSettingsItem("alloy", false, 0);
-  antimatter = new TimeControlResourcesSettingsItem("antimatter", false, 0);
-  beam = new TimeControlResourcesSettingsItem("beam", false, 0);
-  blackcoin = new TimeControlResourcesSettingsItem("blackcoin", false, 0);
-  bloodstone = new TimeControlResourcesSettingsItem("bloodstone", false, 0);
-  blueprint = new TimeControlResourcesSettingsItem("blueprint", false, 0);
-  catnip = new TimeControlResourcesSettingsItem("catnip", false, 0);
-  coal = new TimeControlResourcesSettingsItem("coal", false, 0);
-  compedium = new TimeControlResourcesSettingsItem("compedium", false, 0);
-  concrate = new TimeControlResourcesSettingsItem("concrate", false, 0);
-  culture = new TimeControlResourcesSettingsItem("culture", false, 0);
-  eludium = new TimeControlResourcesSettingsItem("eludium", false, 0);
-  faith = new TimeControlResourcesSettingsItem("faith", false, 0);
-  furs = new TimeControlResourcesSettingsItem("furs", false, 0);
-  gear = new TimeControlResourcesSettingsItem("gear", false, 0);
-  gold = new TimeControlResourcesSettingsItem("gold", false, 0);
-  iron = new TimeControlResourcesSettingsItem("iron", false, 0);
-  ivory = new TimeControlResourcesSettingsItem("ivory", false, 0);
-  karma = new TimeControlResourcesSettingsItem("karma", false, 0);
-  kerosene = new TimeControlResourcesSettingsItem("kerosene", false, 0);
-  manpower = new TimeControlResourcesSettingsItem("manpower", false, 0);
-  manuscript = new TimeControlResourcesSettingsItem("manuscript", false, 0);
-  megalith = new TimeControlResourcesSettingsItem("megalith", false, 0);
-  minerals = new TimeControlResourcesSettingsItem("minerals", false, 0);
-  necrocorn = new TimeControlResourcesSettingsItem("necrocorn", false, 0);
-  oil = new TimeControlResourcesSettingsItem("oil", false, 0);
-  paragon = new TimeControlResourcesSettingsItem("paragon", false, 0);
-  parchment = new TimeControlResourcesSettingsItem("parchment", false, 0);
-  plate = new TimeControlResourcesSettingsItem("plate", false, 0);
-  relic = new TimeControlResourcesSettingsItem("relic", false, 0);
-  scaffold = new TimeControlResourcesSettingsItem("scaffold", false, 0);
-  science = new TimeControlResourcesSettingsItem("science", false, 0);
-  ship = new TimeControlResourcesSettingsItem("ship", false, 0);
-  slab = new TimeControlResourcesSettingsItem("slab", false, 0);
-  spice = new TimeControlResourcesSettingsItem("spice", false, 0);
-  steel = new TimeControlResourcesSettingsItem("steel", false, 0);
-  tanker = new TimeControlResourcesSettingsItem("tanker", false, 0);
-  tears = new TimeControlResourcesSettingsItem("tears", false, 0);
-  temporalFlux = new TimeControlResourcesSettingsItem("temporalFlux", false, 0);
-  thorium = new TimeControlResourcesSettingsItem("thorium", false, 0);
-  timeCrystal = new TimeControlResourcesSettingsItem("timeCrystal", false, 0);
-  titanium = new TimeControlResourcesSettingsItem("titanium", false, 0);
-  unicorns = new TimeControlResourcesSettingsItem("unicorns", false, 0);
-  unobtainium = new TimeControlResourcesSettingsItem("unobtainium", false, 0);
-  uranium = new TimeControlResourcesSettingsItem("uranium", false, 0);
-  void = new TimeControlResourcesSettingsItem("void", false, 0);
-  wood = new TimeControlResourcesSettingsItem("wood", false, 0);
-  zebras = new TimeControlResourcesSettingsItem("zebras", false, 0);
+export class ResetResourcesSettings extends Setting {
+  items: { [item in Resource]: ResetResourcesSettingsItem };
+
+  constructor(
+    enabled = false,
+    items = {
+      alloy: new ResetResourcesSettingsItem("alloy", false, 0),
+      antimatter: new ResetResourcesSettingsItem("antimatter", false, 0),
+      beam: new ResetResourcesSettingsItem("beam", false, 0),
+      blackcoin: new ResetResourcesSettingsItem("blackcoin", false, 0),
+      bloodstone: new ResetResourcesSettingsItem("bloodstone", false, 0),
+      blueprint: new ResetResourcesSettingsItem("blueprint", false, 0),
+      catnip: new ResetResourcesSettingsItem("catnip", false, 0),
+      coal: new ResetResourcesSettingsItem("coal", false, 0),
+      compedium: new ResetResourcesSettingsItem("compedium", false, 0),
+      concrate: new ResetResourcesSettingsItem("concrate", false, 0),
+      culture: new ResetResourcesSettingsItem("culture", false, 0),
+      eludium: new ResetResourcesSettingsItem("eludium", false, 0),
+      faith: new ResetResourcesSettingsItem("faith", false, 0),
+      furs: new ResetResourcesSettingsItem("furs", false, 0),
+      gear: new ResetResourcesSettingsItem("gear", false, 0),
+      gold: new ResetResourcesSettingsItem("gold", false, 0),
+      iron: new ResetResourcesSettingsItem("iron", false, 0),
+      ivory: new ResetResourcesSettingsItem("ivory", false, 0),
+      karma: new ResetResourcesSettingsItem("karma", false, 0),
+      kerosene: new ResetResourcesSettingsItem("kerosene", false, 0),
+      manpower: new ResetResourcesSettingsItem("manpower", false, 0),
+      manuscript: new ResetResourcesSettingsItem("manuscript", false, 0),
+      megalith: new ResetResourcesSettingsItem("megalith", false, 0),
+      minerals: new ResetResourcesSettingsItem("minerals", false, 0),
+      necrocorn: new ResetResourcesSettingsItem("necrocorn", false, 0),
+      oil: new ResetResourcesSettingsItem("oil", false, 0),
+      paragon: new ResetResourcesSettingsItem("paragon", false, 0),
+      parchment: new ResetResourcesSettingsItem("parchment", false, 0),
+      plate: new ResetResourcesSettingsItem("plate", false, 0),
+      relic: new ResetResourcesSettingsItem("relic", false, 0),
+      scaffold: new ResetResourcesSettingsItem("scaffold", false, 0),
+      science: new ResetResourcesSettingsItem("science", false, 0),
+      ship: new ResetResourcesSettingsItem("ship", false, 0),
+      slab: new ResetResourcesSettingsItem("slab", false, 0),
+      spice: new ResetResourcesSettingsItem("spice", false, 0),
+      steel: new ResetResourcesSettingsItem("steel", false, 0),
+      tanker: new ResetResourcesSettingsItem("tanker", false, 0),
+      tears: new ResetResourcesSettingsItem("tears", false, 0),
+      temporalFlux: new ResetResourcesSettingsItem("temporalFlux", false, 0),
+      thorium: new ResetResourcesSettingsItem("thorium", false, 0),
+      timeCrystal: new ResetResourcesSettingsItem("timeCrystal", false, 0),
+      titanium: new ResetResourcesSettingsItem("titanium", false, 0),
+      unicorns: new ResetResourcesSettingsItem("unicorns", false, 0),
+      unobtainium: new ResetResourcesSettingsItem("unobtainium", false, 0),
+      uranium: new ResetResourcesSettingsItem("uranium", false, 0),
+      void: new ResetResourcesSettingsItem("void", false, 0),
+      wood: new ResetResourcesSettingsItem("wood", false, 0),
+      zebras: new ResetResourcesSettingsItem("zebras", false, 0),
+    }
+  ) {
+    super("", enabled);
+    this.items = items;
+  }
+
+  load(settings: ResetResourcesSettings) {
+    this.enabled = settings.enabled;
+
+    for (const [name, item] of objectEntries(settings.items)) {
+      this.items[name].enabled = item.enabled;
+      this.items[name].stock = item.stock;
+    }
+  }
+
+  static toLegacyOptions(settings: ResetResourcesSettings, subject: KittenStorageType) {
+    for (const [name, item] of objectEntries(settings.items)) {
+      if (isNil(subject.resources[name])) {
+        subject.resources[name] = {
+          checkForReset: item.enabled,
+          stockForReset: item.stock,
+          consume: 0,
+          enabled: false,
+          stock: 0,
+        };
+        continue;
+      }
+
+      mustExist(subject.resources[name]).checkForReset = item.enabled;
+      mustExist(subject.resources[name]).stockForReset = item.stock;
+    }
+  }
+
+  static fromLegacyOptions(subject: KittenStorageType) {
+    const options = new ResetResourcesSettings();
+    options.enabled = true;
+
+    for (const [name, item] of objectEntries(subject.resources)) {
+      if (!item.checkForReset) {
+        continue;
+      }
+      options.items[name].enabled = item.enabled;
+      options.items[name].stock = item.stock;
+    }
+
+    return options;
+  }
 }
