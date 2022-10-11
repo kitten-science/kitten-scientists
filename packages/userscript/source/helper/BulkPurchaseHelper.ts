@@ -1,9 +1,11 @@
+import { BonfireItem } from "../options/BonfireSettings";
 import { AllItems, Requirement } from "../options/Settings";
 import { objectEntries } from "../tools/Entries";
 import { isNil, mustExist } from "../tools/Maybe";
 import {
   AllBuildings,
   BuildButton,
+  Building,
   BuildingMeta,
   ChronoForgeUpgradeInfo,
   Price,
@@ -54,7 +56,8 @@ export class BulkPurchaseHelper {
           enabled: boolean;
           label?: string;
           max?: number;
-          name?: AllBuildings;
+          baseBuilding?: Building;
+          building?: AllBuildings | BonfireItem;
           require?: Requirement;
           stage?: number;
           variant?: TimeItemVariant | UnicornItemVariant;
@@ -188,7 +191,7 @@ export class BulkPurchaseHelper {
           count: 0,
           id: name,
           label: build.label,
-          name: build.name,
+          name: (build.baseBuilding ?? build.building) as Building,
           stage: build.stage,
           variant: build.variant,
         });
@@ -196,7 +199,7 @@ export class BulkPurchaseHelper {
         // Create an entry in the cache list for the bulk processing.
         potentialBuilds.push({
           id: name,
-          name: build.name,
+          name: (build.baseBuilding ?? build.building) as Building,
           count: 0,
           spot: counter,
           prices: itemPrices,
@@ -238,6 +241,15 @@ export class BulkPurchaseHelper {
    * Calculate how many of a given build item build be built with the given resources.
    *
    * @param buildCacheItem The item to build.
+   * @param buildCacheItem.id ?
+   * @param buildCacheItem.name ?
+   * @param buildCacheItem.count ?
+   * @param buildCacheItem.spot ?
+   * @param buildCacheItem.prices ?
+   * @param buildCacheItem.priceRatio ?
+   * @param buildCacheItem.source ?
+   * @param buildCacheItem.limit ?
+   * @param buildCacheItem.val ?
    * @param metaData The metadata for the potential builds.
    * @param resources The currently available resources.
    * @returns The number of items that could be built. If this is non-zero, the `resources` will have been adjusted
