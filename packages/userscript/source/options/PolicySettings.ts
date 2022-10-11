@@ -5,6 +5,15 @@ import { GamePage, Policy } from "../types";
 import { Setting } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
+export class PolicySetting extends Setting {
+  readonly policy: Policy;
+
+  constructor(policy: Policy, enabled = false) {
+    super("", enabled);
+    this.policy = policy;
+  }
+}
+
 export class PolicySettings extends Setting {
   items: {
     [item in Policy]: Setting;
@@ -14,46 +23,46 @@ export class PolicySettings extends Setting {
     id = "policies",
     enabled = false,
     items = {
-      authocracy: new Setting("authocracy", false),
-      bigStickPolicy: new Setting("bigStickPolicy", false),
-      carnivale: new Setting("carnivale", false),
-      cityOnAHill: new Setting("cityOnAHill", false),
-      clearCutting: new Setting("clearCutting", false),
-      communism: new Setting("communism", false),
-      conservation: new Setting("conservation", false),
-      culturalExchange: new Setting("culturalExchange", false),
-      diplomacy: new Setting("diplomacy", false),
-      environmentalism: new Setting("environmentalism", false),
-      epicurianism: new Setting("epicurianism", false),
-      expansionism: new Setting("expansionism", false),
-      extravagance: new Setting("extravagance", false),
-      fascism: new Setting("fascism", false),
-      frugality: new Setting("frugality", false),
-      fullIndustrialization: new Setting("fullIndustrialization", false),
-      isolationism: new Setting("isolationism", false),
-      knowledgeSharing: new Setting("knowledgeSharing", false),
-      liberalism: new Setting("liberalism", false),
-      liberty: new Setting("liberty", false),
-      militarizeSpace: new Setting("militarizeSpace", false),
-      monarchy: new Setting("monarchy", false),
-      mysticism: new Setting("mysticism", false),
-      necrocracy: new Setting("necrocracy", false),
-      openWoodlands: new Setting("openWoodlands", false),
-      outerSpaceTreaty: new Setting("outerSpaceTreaty", false),
-      radicalXenophobia: new Setting("radicalXenophobia", false),
-      rationality: new Setting("rationality", false),
-      rationing: new Setting("rationing", false),
-      republic: new Setting("republic", false),
-      socialism: new Setting("socialism", false),
-      stoicism: new Setting("stoicism", false),
-      stripMining: new Setting("stripMining", false),
-      sustainability: new Setting("sustainability", false),
-      technocracy: new Setting("technocracy", false),
-      theocracy: new Setting("theocracy", false),
-      tradition: new Setting("tradition", false),
-      transkittenism: new Setting("transkittenism", false),
-      zebraRelationsAppeasement: new Setting("zebraRelationsAppeasement", false),
-      zebraRelationsBellicosity: new Setting("zebraRelationsBellicosity", false),
+      authocracy: new PolicySetting("authocracy", false),
+      bigStickPolicy: new PolicySetting("bigStickPolicy", false),
+      carnivale: new PolicySetting("carnivale", false),
+      cityOnAHill: new PolicySetting("cityOnAHill", false),
+      clearCutting: new PolicySetting("clearCutting", false),
+      communism: new PolicySetting("communism", false),
+      conservation: new PolicySetting("conservation", false),
+      culturalExchange: new PolicySetting("culturalExchange", false),
+      diplomacy: new PolicySetting("diplomacy", false),
+      environmentalism: new PolicySetting("environmentalism", false),
+      epicurianism: new PolicySetting("epicurianism", false),
+      expansionism: new PolicySetting("expansionism", false),
+      extravagance: new PolicySetting("extravagance", false),
+      fascism: new PolicySetting("fascism", false),
+      frugality: new PolicySetting("frugality", false),
+      fullIndustrialization: new PolicySetting("fullIndustrialization", false),
+      isolationism: new PolicySetting("isolationism", false),
+      knowledgeSharing: new PolicySetting("knowledgeSharing", false),
+      liberalism: new PolicySetting("liberalism", false),
+      liberty: new PolicySetting("liberty", false),
+      militarizeSpace: new PolicySetting("militarizeSpace", false),
+      monarchy: new PolicySetting("monarchy", false),
+      mysticism: new PolicySetting("mysticism", false),
+      necrocracy: new PolicySetting("necrocracy", false),
+      openWoodlands: new PolicySetting("openWoodlands", false),
+      outerSpaceTreaty: new PolicySetting("outerSpaceTreaty", false),
+      radicalXenophobia: new PolicySetting("radicalXenophobia", false),
+      rationality: new PolicySetting("rationality", false),
+      rationing: new PolicySetting("rationing", false),
+      republic: new PolicySetting("republic", false),
+      socialism: new PolicySetting("socialism", false),
+      stoicism: new PolicySetting("stoicism", false),
+      stripMining: new PolicySetting("stripMining", false),
+      sustainability: new PolicySetting("sustainability", false),
+      technocracy: new PolicySetting("technocracy", false),
+      theocracy: new PolicySetting("theocracy", false),
+      tradition: new PolicySetting("tradition", false),
+      transkittenism: new PolicySetting("transkittenism", false),
+      zebraRelationsAppeasement: new PolicySetting("zebraRelationsAppeasement", false),
+      zebraRelationsBellicosity: new PolicySetting("zebraRelationsBellicosity", false),
     }
   ) {
     super(id, enabled);

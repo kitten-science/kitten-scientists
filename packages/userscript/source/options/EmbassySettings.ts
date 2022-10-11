@@ -3,6 +3,15 @@ import { Race } from "../types";
 import { SettingMax, SettingTrigger } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
+export class EmbassySetting extends SettingMax {
+  readonly race: Race;
+
+  constructor(race: Race, enabled = false) {
+    super("", enabled);
+    this.race = race;
+  }
+}
+
 export class EmbassySettings extends SettingTrigger {
   items: {
     [item in Race]: SettingMax;
@@ -11,14 +20,14 @@ export class EmbassySettings extends SettingTrigger {
   constructor(
     enabled = false,
     items = {
-      dragons: new SettingMax("dragons", true),
-      griffins: new SettingMax("griffins", true),
-      leviathans: new SettingMax("leviathans", true),
-      lizards: new SettingMax("lizards", true),
-      nagas: new SettingMax("nagas", true),
-      sharks: new SettingMax("sharks", true),
-      spiders: new SettingMax("spiders", true),
-      zebras: new SettingMax("zebras", true),
+      dragons: new EmbassySetting("dragons", true),
+      griffins: new EmbassySetting("griffins", true),
+      leviathans: new EmbassySetting("leviathans", true),
+      lizards: new EmbassySetting("lizards", true),
+      nagas: new EmbassySetting("nagas", true),
+      sharks: new EmbassySetting("sharks", true),
+      spiders: new EmbassySetting("spiders", true),
+      zebras: new EmbassySetting("zebras", true),
     }
   ) {
     super("embassies", enabled);

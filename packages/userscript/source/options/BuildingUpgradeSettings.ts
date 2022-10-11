@@ -3,6 +3,15 @@ import { StagedBuilding } from "../types";
 import { Setting } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
+export class BuildingUpgradeSetting extends Setting {
+  readonly upgrade: StagedBuilding;
+
+  constructor(upgrade: StagedBuilding, enabled = false) {
+    super("", enabled);
+    this.upgrade = upgrade;
+  }
+}
+
 export class BuildingUpgradeSettings extends Setting {
   items: {
     [item in StagedBuilding]: Setting;
@@ -12,10 +21,10 @@ export class BuildingUpgradeSettings extends Setting {
     id = "buildingUpgrades",
     enabled = false,
     items = {
-      broadcasttower: new Setting("broadcasttower", true),
-      dataCenter: new Setting("dataCenter", true),
-      hydroplant: new Setting("hydroplant", true),
-      solarfarm: new Setting("solarfarm", true),
+      broadcasttower: new BuildingUpgradeSetting("broadcasttower", true),
+      dataCenter: new BuildingUpgradeSetting("dataCenter", true),
+      hydroplant: new BuildingUpgradeSetting("hydroplant", true),
+      solarfarm: new BuildingUpgradeSetting("solarfarm", true),
     }
   ) {
     super(id, enabled);

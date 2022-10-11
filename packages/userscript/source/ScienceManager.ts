@@ -87,8 +87,8 @@ export class ScienceManager extends UpgradeManager {
     const policies = this._host.gamePage.science.policies;
     const toUnlock = new Array<PolicyInfo>();
 
-    for (const [item, options] of objectEntries(this.settings.policies.items)) {
-      if (!options.enabled) {
+    for (const [item, setting] of objectEntries(this.settings.policies.items)) {
+      if (!setting.enabled) {
         continue;
       }
 

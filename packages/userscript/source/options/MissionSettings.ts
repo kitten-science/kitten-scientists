@@ -5,6 +5,15 @@ import { GamePage, Missions } from "../types";
 import { Setting } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
+export class MissionSetting extends Setting {
+  readonly mission: Missions;
+
+  constructor(mission: Missions, enabled = false) {
+    super("", enabled);
+    this.mission = mission;
+  }
+}
+
 export class MissionSettings extends Setting {
   items: {
     [item in Missions]: Setting;
@@ -14,19 +23,19 @@ export class MissionSettings extends Setting {
     id = "missions",
     enabled = false,
     items = {
-      centaurusSystemMission: new Setting("centaurusSystemMission", true),
-      charonMission: new Setting("charonMission", true),
-      duneMission: new Setting("duneMission", true),
-      furthestRingMission: new Setting("furthestRingMission", true),
-      heliosMission: new Setting("heliosMission", true),
-      kairoMission: new Setting("kairoMission", true),
-      moonMission: new Setting("moonMission", true),
-      orbitalLaunch: new Setting("orbitalLaunch", true),
-      piscineMission: new Setting("piscineMission", true),
-      rorschachMission: new Setting("rorschachMission", true),
-      terminusMission: new Setting("terminusMission", true),
-      umbraMission: new Setting("umbraMission", true),
-      yarnMission: new Setting("yarnMission", true),
+      centaurusSystemMission: new MissionSetting("centaurusSystemMission", true),
+      charonMission: new MissionSetting("charonMission", true),
+      duneMission: new MissionSetting("duneMission", true),
+      furthestRingMission: new MissionSetting("furthestRingMission", true),
+      heliosMission: new MissionSetting("heliosMission", true),
+      kairoMission: new MissionSetting("kairoMission", true),
+      moonMission: new MissionSetting("moonMission", true),
+      orbitalLaunch: new MissionSetting("orbitalLaunch", true),
+      piscineMission: new MissionSetting("piscineMission", true),
+      rorschachMission: new MissionSetting("rorschachMission", true),
+      terminusMission: new MissionSetting("terminusMission", true),
+      umbraMission: new MissionSetting("umbraMission", true),
+      yarnMission: new MissionSetting("yarnMission", true),
     }
   ) {
     super(id, enabled);
