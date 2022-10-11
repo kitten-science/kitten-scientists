@@ -4,16 +4,11 @@ import { CycleIndices } from "./TimeControlSettings";
 
 export class TimeSkipSettings extends SettingTrigger {
   maximum = 50;
-  $maximum?: JQuery<HTMLElement>;
 
   spring = true;
-  $spring?: JQuery<HTMLElement>;
   summer = false;
-  $summer?: JQuery<HTMLElement>;
   autumn = false;
-  $autumn?: JQuery<HTMLElement>;
   winter = false;
-  $winter?: JQuery<HTMLElement>;
 
   0 = false;
   1 = false;
@@ -25,16 +20,6 @@ export class TimeSkipSettings extends SettingTrigger {
   7 = false;
   8 = false;
   9 = false;
-  $0?: JQuery<HTMLElement>;
-  $1?: JQuery<HTMLElement>;
-  $2?: JQuery<HTMLElement>;
-  $3?: JQuery<HTMLElement>;
-  $4?: JQuery<HTMLElement>;
-  $5?: JQuery<HTMLElement>;
-  $6?: JQuery<HTMLElement>;
-  $7?: JQuery<HTMLElement>;
-  $8?: JQuery<HTMLElement>;
-  $9?: JQuery<HTMLElement>;
 
   constructor() {
     super("timeSkip", false, 5);

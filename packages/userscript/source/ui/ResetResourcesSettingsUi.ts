@@ -85,8 +85,6 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
       }
     });
 
-    setting.$stock = stockElement;
-
     return container;
   }
 }
