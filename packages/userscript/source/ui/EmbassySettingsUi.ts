@@ -7,11 +7,16 @@ import { SettingsPanel } from "./components/SettingsPanel";
 import { TriggerButton } from "./components/TriggerButton";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
+  private readonly _trigger: TriggerButton;
   private readonly _races: Array<SettingListItem>;
-  private readonly _embassiesTrigger: TriggerButton;
 
   constructor(host: UserScript, settings: EmbassySettings) {
-    super(host, host.engine.i18n("option.embassies"), settings);
+    const label = host.engine.i18n("option.embassies");
+    super(host, label, settings);
+
+    this._trigger = new TriggerButton(host, label, settings);
+    this._trigger.element.insertBefore(this.list);
+    this.children.add(this._trigger);
 
     this._list.addEventListener("enableAll", () => {
       this._races.forEach(item => (item.settings.enabled = true));
@@ -61,13 +66,6 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
       ),
     ];
     this.addChildren(this._races);
-
-    this._embassiesTrigger = new TriggerButton(
-      this._host,
-      this._host.engine.i18n("option.embassies"),
-      this.settings
-    );
-    this.addChild(this._embassiesTrigger);
   }
 
   private _makeEmbassySetting(option: SettingMax, label: string) {
