@@ -2,7 +2,6 @@ import { TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { TimeItem, TimeSettings, TimeSettingsItem } from "./options/TimeSettings";
 import { TabManager } from "./TabManager";
-import { objectEntries } from "./tools/Entries";
 import { cwarn } from "./tools/Log";
 import { mustExist } from "./tools/Maybe";
 import {
@@ -59,16 +58,16 @@ export class TimeManager {
 
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<TimeItem, ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>> = {};
-    for (const [name, build] of objectEntries(builds)) {
-      metaData[name] = mustExist(this.getBuild(name, build.variant));
+    for (const build of Object.values(builds)) {
+      metaData[build.upgrade] = mustExist(this.getBuild(build.upgrade, build.variant));
 
-      const model = mustExist(this.getBuildButton(name, build.variant)).model;
+      const model = mustExist(this.getBuildButton(build.upgrade, build.variant)).model;
       const panel =
         build.variant === TimeItemVariant.Chronoforge
           ? this.manager.tab.cfPanel
           : this.manager.tab.vsPanel;
 
-      const buildingMetaData = mustExist(metaData[name]);
+      const buildingMetaData = mustExist(metaData[build.upgrade]);
       buildingMetaData.tHidden = !model.visible || !model.enabled || !panel?.visible;
     }
 

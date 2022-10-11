@@ -16,7 +16,7 @@ export class MissionSetting extends Setting {
 
 export class MissionSettings extends Setting {
   items: {
-    [item in Missions]: Setting;
+    [item in Missions]: MissionSetting;
   };
 
   constructor(

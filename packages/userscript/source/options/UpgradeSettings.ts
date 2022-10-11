@@ -16,7 +16,7 @@ export class UpgradeSetting extends Setting {
 
 export class UpgradeSettings extends Setting {
   items: {
-    [item in Upgrade]: Setting;
+    [item in Upgrade]: UpgradeSetting;
   };
 
   constructor(

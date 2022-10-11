@@ -7,14 +7,22 @@ import { KittenStorageType } from "./SettingsStorage";
  * The upgrades on the Time tab that we have options for.
  */
 export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCryochambers">;
+
 export class TimeSettingsItem extends SettingMax {
+  readonly upgrade: TimeItem;
   require: Requirement;
 
   variant: TimeItemVariant;
 
-  constructor(id: string, variant: TimeItemVariant, require: Requirement = false, enabled = false) {
+  constructor(
+    id: TimeItem,
+    variant: TimeItemVariant,
+    require: Requirement = false,
+    enabled = false
+  ) {
     super(id, enabled);
 
+    this.upgrade = id;
     this.require = require;
     this.variant = variant;
   }

@@ -14,7 +14,7 @@ export class BuildingUpgradeSetting extends Setting {
 
 export class BuildingUpgradeSettings extends Setting {
   items: {
-    [item in StagedBuilding]: Setting;
+    [item in StagedBuilding]: BuildingUpgradeSetting;
   };
 
   constructor(

@@ -1,9 +1,7 @@
 import { Automation, TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { SettingMax } from "./options/Settings";
-import { SpaceSettings } from "./options/SpaceSettings";
+import { SpaceBuildingSetting, SpaceSettings } from "./options/SpaceSettings";
 import { TabManager } from "./TabManager";
-import { objectEntries } from "./tools/Entries";
 import { cwarn } from "./tools/Log";
 import { BuildButton, SpaceBuildingInfo, SpaceBuildings, SpaceTab } from "./types";
 import { UserScript } from "./UserScript";
@@ -48,7 +46,7 @@ export class SpaceManager implements Automation {
    *
    * @param builds The buildings to build.
    */
-  autoBuild(builds: Partial<Record<SpaceBuildings, SettingMax>> = this.settings.items) {
+  autoBuild(builds: Partial<Record<SpaceBuildings, SpaceBuildingSetting>> = this.settings.items) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
 
@@ -58,8 +56,8 @@ export class SpaceManager implements Automation {
 
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<SpaceBuildings, SpaceBuildingInfo>> = {};
-    for (const [name] of objectEntries(builds)) {
-      metaData[name] = this.getBuild(name);
+    for (const build of Object.values(builds)) {
+      metaData[build.building] = this.getBuild(build.building);
     }
 
     // Let the bulkmanager determine the builds we can make.

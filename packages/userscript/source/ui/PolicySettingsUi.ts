@@ -1,5 +1,4 @@
 import { PolicySettings } from "../options/PolicySettings";
-import { objectEntries } from "../tools/Entries";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
@@ -24,9 +23,9 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     });
 
     const items = [];
-    for (const [name, setting] of objectEntries(this.settings.items)) {
+    for (const setting of Object.values(this.settings.items)) {
       const policyLabel = this._host.engine.i18n(
-        `$policy.${name === "authocracy" ? "autocracy" : name}.label`
+        `$policy.${setting.policy === "authocracy" ? "autocracy" : setting.policy}.label`
       );
       const policyButton = new SettingListItem(this._host, policyLabel, setting, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [policyLabel]),

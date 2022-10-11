@@ -4,7 +4,6 @@ import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { BonfireBuildingSetting } from "./options/BonfireSettings";
 import { FaithItem, ReligionSettings, ReligionSettingsItem } from "./options/ReligionSettings";
 import { TabManager } from "./TabManager";
-import { objectEntries } from "./tools/Entries";
 import { cwarn } from "./tools/Log";
 import { mustExist } from "./tools/Maybe";
 import {
@@ -305,20 +304,20 @@ export class ReligionManager implements Automation {
     const metaData: Partial<
       Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
     > = {};
-    for (const [name, build] of objectEntries<FaithItem, ReligionSettingsItem>(builds)) {
-      const buildInfo = this.getBuild(name, build.variant);
+    for (const build of Object.values(builds)) {
+      const buildInfo = this.getBuild(build.building, build.variant);
       if (buildInfo === null) {
         continue;
       }
-      metaData[name] = buildInfo;
-      const buildMetaData = mustExist(metaData[name]);
+      metaData[build.building as FaithItem] = buildInfo;
+      const buildMetaData = mustExist(metaData[build.building as FaithItem]);
 
       // If an item is marked as `rHidden`, it wouldn't be build.
       // TODO: Why not remove it from the `builds` then?
-      if (!this.getBuildButton(name, build.variant)) {
+      if (!this.getBuildButton(build.building, build.variant)) {
         buildMetaData.rHidden = true;
       } else {
-        const model = mustExist(this.getBuildButton(name, build.variant)).model;
+        const model = mustExist(this.getBuildButton(build.building, build.variant)).model;
         const panel =
           build.variant === UnicornItemVariant.Cryptotheology
             ? this._host.gamePage.science.get("cryptotheology").researched

@@ -16,7 +16,7 @@ export class PolicySetting extends Setting {
 
 export class PolicySettings extends Setting {
   items: {
-    [item in Policy]: Setting;
+    [item in Policy]: PolicySetting;
   };
 
   constructor(

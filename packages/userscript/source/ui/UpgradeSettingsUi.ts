@@ -1,5 +1,4 @@
 import { UpgradeSettings } from "../options/UpgradeSettings";
-import { objectEntries } from "../tools/Entries";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
@@ -24,8 +23,8 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     });
 
     const items = [];
-    for (const [name, setting] of objectEntries(this.settings.items)) {
-      const label = this._host.engine.i18n(`$workshop.${name}.label`);
+    for (const setting of Object.values(this.settings.items)) {
+      const label = this._host.engine.i18n(`$workshop.${setting.upgrade}.label`);
       const button = new SettingListItem(this._host, label, setting, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),

@@ -16,7 +16,7 @@ export class TechSetting extends Setting {
 
 export class TechSettings extends Setting {
   items: {
-    [item in Technology]: Setting;
+    [item in Technology]: TechSetting;
   };
 
   constructor(

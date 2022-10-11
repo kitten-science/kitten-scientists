@@ -2,7 +2,6 @@ import { Automation, TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { BonfireBuildingSetting, BonfireItem, BonfireSettings } from "./options/BonfireSettings";
 import { TabManager } from "./TabManager";
-import { objectEntries } from "./tools/Entries";
 import { cwarn } from "./tools/Log";
 import { isNil, mustExist } from "./tools/Maybe";
 import { BuildButton, Building, BuildingExt, BuildingMeta, GameTab } from "./types";
@@ -63,8 +62,10 @@ export class BonfireManager implements Automation {
 
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<BonfireItem, BuildingMeta>> = {};
-    for (const [name, build] of objectEntries(builds)) {
-      metaData[name] = this.getBuild((build.baseBuilding ?? build.building) as Building).meta;
+    for (const build of Object.values(builds)) {
+      metaData[build.building] = this.getBuild(
+        (build.baseBuilding ?? build.building) as Building
+      ).meta;
     }
 
     // Let the bulkmanager determine the builds we can make.

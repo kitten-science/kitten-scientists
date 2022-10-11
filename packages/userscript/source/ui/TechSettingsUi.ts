@@ -1,5 +1,4 @@
 import { TechSettings } from "../options/TechSettings";
-import { objectEntries } from "../tools/Entries";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
@@ -24,8 +23,8 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
     });
 
     const items = [];
-    for (const [name, setting] of objectEntries(this.settings.items)) {
-      const label = this._host.engine.i18n(`$science.${name}.label`);
+    for (const setting of Object.values(this.settings.items)) {
+      const label = this._host.engine.i18n(`$science.${setting.tech}.label`);
       const button = new SettingListItem(this._host, label, setting, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),

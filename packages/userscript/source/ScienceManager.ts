@@ -1,7 +1,6 @@
 import { TickContext } from "./Engine";
 import { ScienceSettings } from "./options/ScienceSettings";
 import { TabManager } from "./TabManager";
-import { objectEntries } from "./tools/Entries";
 import { cerror } from "./tools/Log";
 import { isNil } from "./tools/Maybe";
 import { PolicyInfo, ScienceTab, TechInfo } from "./types";
@@ -50,22 +49,22 @@ export class ScienceManager extends UpgradeManager {
     const techs = this._host.gamePage.science.techs;
     const toUnlock = new Array<TechInfo>();
 
-    workLoop: for (const [item, options] of objectEntries(this.settings.techs.items)) {
-      if (!options.enabled) {
+    workLoop: for (const setting of Object.values(this.settings.techs.items)) {
+      if (!setting.enabled) {
         continue;
       }
 
-      const upgrade = techs.find(subject => subject.name === item);
-      if (isNil(upgrade)) {
-        cerror(`Tech '${item}' not found in game!`);
+      const tech = techs.find(subject => subject.name === setting.tech);
+      if (isNil(tech)) {
+        cerror(`Tech '${setting.tech}' not found in game!`);
         continue;
       }
 
-      if (upgrade.researched || !upgrade.unlocked) {
+      if (tech.researched || !tech.unlocked) {
         continue;
       }
 
-      let prices = dojo.clone(upgrade.prices);
+      let prices = dojo.clone(tech.prices);
       prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
       for (const resource of prices) {
         if (this._workshopManager.getValueAvailable(resource.name, true) < resource.val) {
@@ -73,7 +72,7 @@ export class ScienceManager extends UpgradeManager {
         }
       }
 
-      toUnlock.push(upgrade);
+      toUnlock.push(tech);
     }
 
     for (const item of toUnlock) {
@@ -87,14 +86,14 @@ export class ScienceManager extends UpgradeManager {
     const policies = this._host.gamePage.science.policies;
     const toUnlock = new Array<PolicyInfo>();
 
-    for (const [item, setting] of objectEntries(this.settings.policies.items)) {
+    for (const setting of Object.values(this.settings.policies.items)) {
       if (!setting.enabled) {
         continue;
       }
 
-      const targetPolicy = policies.find(subject => subject.name === item);
+      const targetPolicy = policies.find(subject => subject.name === setting.policy);
       if (isNil(targetPolicy)) {
-        cerror(`Policy '${item}' not found in game!`);
+        cerror(`Policy '${setting.policy}' not found in game!`);
         continue;
       }
 

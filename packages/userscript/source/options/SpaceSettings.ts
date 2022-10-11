@@ -4,8 +4,16 @@ import { MissionSettings } from "./MissionSettings";
 import { SettingMax, SettingTrigger } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
+export class SpaceBuildingSetting extends SettingMax {
+  readonly building: SpaceBuildings;
+  constructor(building: SpaceBuildings, enabled = false) {
+    super("", enabled);
+    this.building = building;
+  }
+}
+
 export type SpaceSettingsItems = {
-  [item in SpaceBuildings]: SettingMax;
+  [item in SpaceBuildings]: SpaceBuildingSetting;
 };
 
 export class SpaceSettings extends SettingTrigger {
@@ -17,28 +25,28 @@ export class SpaceSettings extends SettingTrigger {
     enabled = false,
     trigger = 0,
     items = {
-      containmentChamber: new SettingMax("containmentChamber"),
-      cryostation: new SettingMax("cryostation"),
-      entangler: new SettingMax("entangler"),
-      heatsink: new SettingMax("heatsink"),
-      hrHarvester: new SettingMax("hrHarvester"),
-      hydrofracturer: new SettingMax("hydrofracturer"),
-      hydroponics: new SettingMax("hydroponics"),
-      moltenCore: new SettingMax("moltenCore"),
-      moonBase: new SettingMax("moonBase"),
-      moonOutpost: new SettingMax("moonOutpost"),
-      orbitalArray: new SettingMax("orbitalArray"),
-      planetCracker: new SettingMax("planetCracker"),
-      researchVessel: new SettingMax("researchVessel"),
-      sattelite: new SettingMax("sattelite"),
-      spaceBeacon: new SettingMax("spaceBeacon"),
-      spaceElevator: new SettingMax("spaceElevator"),
-      spaceStation: new SettingMax("spaceStation"),
-      spiceRefinery: new SettingMax("spiceRefinery"),
-      sunforge: new SettingMax("sunforge"),
-      sunlifter: new SettingMax("sunlifter"),
-      tectonic: new SettingMax("tectonic"),
-      terraformingStation: new SettingMax("terraformingStation"),
+      containmentChamber: new SpaceBuildingSetting("containmentChamber"),
+      cryostation: new SpaceBuildingSetting("cryostation"),
+      entangler: new SpaceBuildingSetting("entangler"),
+      heatsink: new SpaceBuildingSetting("heatsink"),
+      hrHarvester: new SpaceBuildingSetting("hrHarvester"),
+      hydrofracturer: new SpaceBuildingSetting("hydrofracturer"),
+      hydroponics: new SpaceBuildingSetting("hydroponics"),
+      moltenCore: new SpaceBuildingSetting("moltenCore"),
+      moonBase: new SpaceBuildingSetting("moonBase"),
+      moonOutpost: new SpaceBuildingSetting("moonOutpost"),
+      orbitalArray: new SpaceBuildingSetting("orbitalArray"),
+      planetCracker: new SpaceBuildingSetting("planetCracker"),
+      researchVessel: new SpaceBuildingSetting("researchVessel"),
+      sattelite: new SpaceBuildingSetting("sattelite"),
+      spaceBeacon: new SpaceBuildingSetting("spaceBeacon"),
+      spaceElevator: new SpaceBuildingSetting("spaceElevator"),
+      spaceStation: new SpaceBuildingSetting("spaceStation"),
+      spiceRefinery: new SpaceBuildingSetting("spiceRefinery"),
+      sunforge: new SpaceBuildingSetting("sunforge"),
+      sunlifter: new SpaceBuildingSetting("sunlifter"),
+      tectonic: new SpaceBuildingSetting("tectonic"),
+      terraformingStation: new SpaceBuildingSetting("terraformingStation"),
     },
     unlockMissions = new MissionSettings("unlockMissions")
   ) {

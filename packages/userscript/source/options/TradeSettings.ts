@@ -5,17 +5,12 @@ import { Requirement, Setting, SettingLimited, SettingTrigger } from "./Settings
 import { KittenStorageType } from "./SettingsStorage";
 
 export class TradeSettingsItem extends SettingLimited {
+  readonly race: Race;
+
   summer: boolean;
-  $summer?: JQuery<HTMLElement>;
-
   autumn: boolean;
-  $autumn?: JQuery<HTMLElement>;
-
   winter: boolean;
-  $winter?: JQuery<HTMLElement>;
-
   spring: boolean;
-  $spring?: JQuery<HTMLElement>;
 
   /**
    * A resource that is required to trade with the race.
@@ -23,7 +18,7 @@ export class TradeSettingsItem extends SettingLimited {
   require: Requirement;
 
   constructor(
-    id: string,
+    race: Race,
     enabled: boolean,
     limited: boolean,
     summer: boolean,
@@ -32,8 +27,9 @@ export class TradeSettingsItem extends SettingLimited {
     spring: boolean,
     require: Requirement = false
   ) {
-    super(id, enabled, limited);
+    super(race, enabled, limited);
 
+    this.race = race;
     this.summer = summer;
     this.autumn = autumn;
     this.winter = winter;

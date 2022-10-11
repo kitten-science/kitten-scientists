@@ -50,14 +50,14 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     const upgrades = this._host.gamePage.workshop.upgrades;
     const toUnlock = new Array<UpgradeInfo>();
 
-    workLoop: for (const [item, options] of objectEntries(this.settings.unlockUpgrades.items)) {
-      if (!options.enabled) {
+    workLoop: for (const setting of Object.values(this.settings.unlockUpgrades.items)) {
+      if (!setting.enabled) {
         continue;
       }
 
-      const upgrade = upgrades.find(subject => subject.name === item);
+      const upgrade = upgrades.find(subject => subject.name === setting.upgrade);
       if (isNil(upgrade)) {
-        cerror(`Upgrade '${item}' not found in game!`);
+        cerror(`Upgrade '${setting.upgrade}' not found in game!`);
         continue;
       }
 
@@ -96,10 +96,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     //       is taken into account, the one set as `require` in the definition.
     const trigger = this.settings.trigger;
 
-    for (const [name, craft] of objectEntries(crafts)) {
+    for (const craft of Object.values(crafts)) {
       // This will always be `false` while `max` is hardcoded to `0`.
       // Otherwise, it would contain the current resource information.
-      const current = !craft.max ? false : this.getResource(name);
+      const current = !craft.max ? false : this.getResource(craft.resource);
       // The resource information for the requirement of this craft, if any.
       const require = !craft.require ? false : this.getResource(craft.require);
       const max = craft.max === -1 ? Number.POSITIVE_INFINITY : craft.max;
@@ -108,23 +108,23 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       if (current && current.value > max) continue;
 
       // If we can't even craft a single item of the resource, skip it.
-      if (!this.singleCraftPossible(name)) {
+      if (!this.singleCraftPossible(craft.resource)) {
         continue;
       }
 
       // Craft the resource if it doesn't require anything or we hit the requirement trigger.
       if (!require || trigger <= require.value / require.maxValue) {
-        amount = this.getLowestCraftAmount(name, craft.limited, true);
+        amount = this.getLowestCraftAmount(craft.resource, craft.limited, true);
 
         // If a resource DOES "require" another resource AND its trigger value has NOT been hit
         // yet AND it is limited... What?
       } else if (craft.limited) {
-        amount = this.getLowestCraftAmount(name, craft.limited, false);
+        amount = this.getLowestCraftAmount(craft.resource, craft.limited, false);
       }
 
       // If we can craft any of this item, do it.
       if (amount > 0) {
-        this.craft(name, amount);
+        this.craft(craft.resource, amount);
       }
     }
   }

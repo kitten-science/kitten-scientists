@@ -69,11 +69,16 @@ export class TradeManager implements Automation {
     const season = this._host.gamePage.calendar.getCurSeason().name;
 
     // Determine how many races we will trade with this cycle.
-    for (const [name, trade] of objectEntries(this.settings.items)) {
-      const race = this.getRace(name);
+    for (const trade of Object.values(this.settings.items)) {
+      const race = this.getRace(trade.race);
 
       // Check if the race is enabled, in season, unlocked, and we can actually afford it.
-      if (!trade.enabled || !trade[season] || !race.unlocked || !this.singleTradePossible(name)) {
+      if (
+        !trade.enabled ||
+        !trade[season] ||
+        !race.unlocked ||
+        !this.singleTradePossible(trade.race)
+      ) {
         continue;
       }
 
@@ -88,10 +93,10 @@ export class TradeManager implements Automation {
       const require = trade.require ? this._workshopManager.getResource(trade.require) : false;
 
       // Check if this trade would be profitable.
-      const profitable = this.getProfitability(name);
+      const profitable = this.getProfitability(trade.race);
       // If the trade is set to be limited and profitable, make this trade.
       if (trade.limited && profitable) {
-        trades.push(name);
+        trades.push(trade.race);
       } else if (
         // If this trade is not limited, it must either not require anything, or
         // the required resource must be over the trigger value.
@@ -99,7 +104,7 @@ export class TradeManager implements Automation {
         !require ||
         requireTrigger <= require.value / require.maxValue
       ) {
-        trades.push(name);
+        trades.push(trade.race);
       }
     }
 

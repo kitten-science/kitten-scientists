@@ -5,10 +5,17 @@ import { KittenStorageType } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";
 
 export class CraftSettingsItem extends SettingLimitedMax {
+  readonly resource: ResourceCraftable;
   require: Requirement;
 
-  constructor(id: string, require: Requirement = false, enabled = true, limited = true) {
-    super(id, enabled, limited);
+  constructor(
+    resource: ResourceCraftable,
+    require: Requirement = false,
+    enabled = true,
+    limited = true
+  ) {
+    super(resource, enabled, limited);
+    this.resource = resource;
     this.require = require;
   }
 }

@@ -1,5 +1,4 @@
 import { ResourcesSettings, ResourcesSettingsItem } from "../options/ResourcesSettings";
-import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
@@ -30,9 +29,12 @@ export class ResourcesSettingsUi extends SettingsSectionUi<ResourcesSettings> {
 
     // Add all the current resources
     this._buildings = [];
-    for (const [name, item] of objectEntries(this.settings.items)) {
+    for (const setting of Object.values(this.settings.items)) {
       this._buildings.push(
-        this._makeResourceSetting(ucfirst(this._host.engine.i18n(`$resources.${name}.title`)), item)
+        this._makeResourceSetting(
+          ucfirst(this._host.engine.i18n(`$resources.${setting.resource}.title`)),
+          setting
+        )
       );
     }
     this.addChildren(this._buildings);
@@ -94,9 +96,6 @@ export class ResourcesSettingsUi extends SettingsSectionUi<ResourcesSettings> {
         this.refreshUi();
       }
     });
-
-    setting.$consume = consumeElement;
-    setting.$stock = stockElement;
 
     return container;
   }
