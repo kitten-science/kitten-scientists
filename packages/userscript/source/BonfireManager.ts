@@ -1,6 +1,6 @@
 import { Automation, TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { BonfireItem, BonfireSettings, BonfireSettingsItem } from "./options/BonfireSettings";
+import { BonfireBuildingSetting, BonfireItem, BonfireSettings } from "./options/BonfireSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { cwarn } from "./tools/Log";
@@ -51,7 +51,9 @@ export class BonfireManager implements Automation {
    *
    * @param builds The buildings to build.
    */
-  autoBuild(builds: Partial<Record<BonfireItem, BonfireSettingsItem>> = this.settings.items) {
+  autoBuild(
+    builds: Partial<Record<BonfireItem, BonfireBuildingSetting>> = this.settings.buildings
+  ) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
 
@@ -62,7 +64,7 @@ export class BonfireManager implements Automation {
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<BonfireItem, BuildingMeta>> = {};
     for (const [name, build] of objectEntries(builds)) {
-      metaData[name] = this.getBuild((build.name ?? name) as Building).meta;
+      metaData[name] = this.getBuild((build.baseBuilding ?? build.building) as Building).meta;
     }
 
     // Let the bulkmanager determine the builds we can make.

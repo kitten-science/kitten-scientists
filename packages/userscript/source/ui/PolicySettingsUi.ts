@@ -1,34 +1,30 @@
 import { PolicySettings } from "../options/PolicySettings";
 import { objectEntries } from "../tools/Entries";
-import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 
-export class PolicySettingsUi extends SettingsPanel {
-  protected readonly _items: Array<SettingListItem>;
-  private readonly _settings: PolicySettings;
+export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
+  private readonly _policies: Array<SettingListItem>;
 
   constructor(host: UserScript, settings: PolicySettings) {
     super(host, host.engine.i18n("ui.upgrade.policies"), settings);
 
-    this._settings = settings;
-
     this._list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = true));
+      this._policies.forEach(item => (item.settings.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = false));
+      this._policies.forEach(item => (item.settings.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this._settings.load(new PolicySettings());
+      this.settings.load(new PolicySettings());
       this.refreshUi();
     });
 
     const items = [];
-    for (const [name, setting] of objectEntries(this._settings.items)) {
+    for (const [name, setting] of objectEntries(this.settings.items)) {
       const policyLabel = this._host.engine.i18n(
         `$policy.${name === "authocracy" ? "autocracy" : name}.label`
       );
@@ -41,26 +37,8 @@ export class PolicySettingsUi extends SettingsPanel {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
-    items.forEach(button => this.list.append(button.button.element));
+    items.forEach(button => this.addChild(button.button));
 
-    this._items = items.map(button => button.button);
-  }
-
-  setState(state: PolicySettings): void {
-    this._settings.enabled = state.enabled;
-
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      option.enabled = state.items[name].enabled;
-    }
-  }
-
-  refreshUi(): void {
-    this.setState(this._settings);
-
-    mustExist(this._settings.$enabled).refreshUi();
-
-    for (const [, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).refreshUi();
-    }
+    this._policies = items.map(button => button.button);
   }
 }

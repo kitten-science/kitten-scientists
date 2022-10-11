@@ -1,18 +1,21 @@
-import { SettingsSection } from "../../options/SettingsSection";
+import { Setting } from "../../options/Settings";
 import { UserScript } from "../../UserScript";
 import { ExpandoButton } from "./ExpandoButton";
 import { SettingListItem } from "./SettingListItem";
 import { SettingsList } from "./SettingsList";
 import { UiComponent } from "./UiComponent";
 
-export class SettingsPanel extends UiComponent implements SettingListItem {
-  readonly settings: SettingsSection;
+export class SettingsPanel<TSetting extends Setting = Setting>
+  extends UiComponent
+  implements SettingListItem
+{
+  readonly settings: TSetting;
   readonly element: JQuery<HTMLElement>;
-  private readonly _element: SettingListItem;
-  private readonly _expando: ExpandoButton;
+  protected readonly _element: SettingListItem;
+  protected readonly _expando: ExpandoButton;
   readonly list: JQuery<HTMLElement>;
-  readonly _list: SettingsList;
-  private _mainChildVisible: boolean;
+  protected readonly _list: SettingsList;
+  protected _mainChildVisible: boolean;
 
   get isExpanded() {
     return this._mainChildVisible;
@@ -22,32 +25,26 @@ export class SettingsPanel extends UiComponent implements SettingListItem {
   get checkbox() {
     return this._element.checkbox;
   }
-  get setting() {
-    return this.settings;
-  }
 
   /**
    * Constructs a settings panel that is used to contain a major section of the UI.
    *
    * @param host A reference to the host.
    * @param label The label to put main checkbox of this section.
-   * @param settings An options section for which this is the settings panel.
+   * @param setting An setting for which this is the settings panel.
    * @param initiallyExpanded Should the main child be expanded right away?
    */
-  constructor(
-    host: UserScript,
-    label: string,
-    settings: SettingsSection,
-    initiallyExpanded = false
-  ) {
+  constructor(host: UserScript, label: string, setting: TSetting, initiallyExpanded = false) {
     super(host);
 
-    const element = new SettingListItem(host, label, settings, {
+    const element = new SettingListItem(host, label, setting, {
       onCheck: () => host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
     });
+    this.children.add(element);
 
     const list = new SettingsList(host);
+    this.children.add(list);
 
     // The expando button for this panel.
     const expando = new ExpandoButton(host);
@@ -70,11 +67,12 @@ export class SettingsPanel extends UiComponent implements SettingListItem {
     this.element = element.element;
     this._expando = expando;
     this.list = list.element;
-    this.settings = settings;
+    this.settings = setting;
   }
 
-  refreshUi() {
-    this._element.refreshUi();
+  override addChild(child: UiComponent) {
+    this.children.add(child);
+    this._list.element.append(child.element);
   }
 
   toggle(expand: boolean | undefined = undefined) {

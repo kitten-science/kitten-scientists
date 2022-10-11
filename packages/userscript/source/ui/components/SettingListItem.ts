@@ -3,7 +3,7 @@ import { UserScript } from "../../UserScript";
 import { UiComponent } from "./UiComponent";
 
 export class SettingListItem extends UiComponent {
-  readonly setting: Setting;
+  readonly settings: Setting;
   readonly element: JQuery<HTMLElement>;
   readonly checkbox: JQuery<HTMLElement>;
 
@@ -62,14 +62,12 @@ export class SettingListItem extends UiComponent {
     elementLabel.prepend(checkbox);
     element.append(elementLabel);
 
-    setting.$enabled = this;
-
     this.checkbox = checkbox;
     this.element = element;
-    this.setting = setting;
+    this.settings = setting;
   }
 
   refreshUi() {
-    this.checkbox.prop("checked", this.setting.enabled);
+    this.checkbox.prop("checked", this.settings.enabled);
   }
 }

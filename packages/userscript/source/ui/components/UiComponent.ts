@@ -11,10 +11,26 @@ export abstract class UiComponent extends EventTarget {
    */
   abstract readonly element: JQuery<HTMLElement>;
 
+  readonly children = new Set<UiComponent>();
+
   constructor(host: UserScript) {
     super();
     this._host = host;
   }
 
-  abstract refreshUi(): void;
+  refreshUi() {
+    for (const child of this.children) {
+      child.refreshUi();
+    }
+  }
+
+  addChild(child: UiComponent) {
+    this.children.add(child);
+    this.element.append(child.element);
+  }
+  addChildren(children: Iterable<UiComponent>) {
+    for (const child of children) {
+      this.addChild(child);
+    }
+  }
 }

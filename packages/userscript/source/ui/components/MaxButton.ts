@@ -35,8 +35,6 @@ export class MaxButton extends UiComponent {
       }
     });
 
-    setting.$max = this;
-
     this.element = element;
     this.setting = setting;
   }

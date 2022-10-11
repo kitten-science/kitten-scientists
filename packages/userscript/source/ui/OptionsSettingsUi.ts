@@ -1,52 +1,40 @@
 import { OptionsSettings, OptionsSettingsItem } from "../options/OptionsSettings";
 import { SettingTrigger } from "../options/Settings";
-import { objectEntries } from "../tools/Entries";
-import { ucfirst } from "../tools/Format";
-import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class OptionsSettingsUi extends SettingsSectionUi {
-  protected readonly _items: Array<SettingListItem>;
-  private readonly _settings: OptionsSettings;
+export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
+  protected readonly _buildings: Array<SettingListItem>;
 
   constructor(host: UserScript, settings: OptionsSettings) {
-    const label = ucfirst(host.engine.i18n("ui.options"));
+    const label = host.engine.i18n("ui.options");
     super(host, label, settings);
 
-    this._settings = settings;
-
     this._list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = true));
+      this._buildings.forEach(item => (item.settings.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = false));
+      this._buildings.forEach(item => (item.settings.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this._settings.load(new OptionsSettings());
+      this.settings.load(new OptionsSettings());
       this.refreshUi();
     });
 
-    this._items = [
+    this._buildings = [
+      this._getOptionsOption(this.settings.items.observe, this._host.engine.i18n("option.observe")),
       this._getOptionsOption(
-        this._settings.items.observe,
-        this._host.engine.i18n("option.observe")
-      ),
-      this._getOptionsOption(
-        this._settings.items.autofeed,
+        this.settings.items.autofeed,
         this._host.engine.i18n("option.autofeed")
       ),
-      this._getOptionsOption(this._settings.items.crypto, this._host.engine.i18n("option.crypto")),
-      this._getOptionsOption(this._settings.items.fixCry, this._host.engine.i18n("option.fix.cry")),
+      this._getOptionsOption(this.settings.items.crypto, this._host.engine.i18n("option.crypto")),
+      this._getOptionsOption(this.settings.items.fixCry, this._host.engine.i18n("option.fix.cry")),
     ];
-
-    for (const item of this._items) {
-      this.list.append(item.element);
-    }
+    this.addChildren(this._buildings);
   }
 
   private _getOptionsOption(option: OptionsSettingsItem, iname: string) {
@@ -57,31 +45,5 @@ export class OptionsSettingsUi extends SettingsSectionUi {
     return option.trigger
       ? new SettingTriggerListItem(this._host, iname, option as SettingTrigger, handler)
       : new SettingListItem(this._host, iname, option, handler);
-  }
-
-  setState(state: OptionsSettings): void {
-    this._settings.enabled = state.enabled;
-
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      option.enabled = state.items[name].enabled;
-
-      if (!isNil(option.$trigger)) {
-        option.trigger = state.items[name].trigger;
-      }
-    }
-  }
-
-  refreshUi(): void {
-    this.setState(this._settings);
-
-    mustExist(this._settings.$enabled).refreshUi();
-
-    for (const [, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).refreshUi();
-
-      if (!isNil(option.$trigger)) {
-        option.$trigger.refreshUi();
-      }
-    }
   }
 }

@@ -12,26 +12,28 @@ import { KittenStorageType } from "./SettingsStorage";
  */
 export type BonfireItem = Building | "broadcastTower" | "dataCenter" | "hydroPlant" | "solarFarm";
 
-export class BonfireSettingsItem extends SettingMax {
+export class BonfireBuildingSetting extends SettingMax {
   /**
    * In case this is an upgrade of another building, this is the name of the
    * base building.
    */
-  name: Building | undefined = undefined;
+  readonly baseBuilding: Building | undefined = undefined;
+
+  readonly building: BonfireItem;
 
   /**
    * A resource that you must have unlocked to build this.
    */
-  require: Requirement = false;
+  readonly require: Requirement = false;
 
   /**
    * In case this is an upgradable building, this indicates the level of
    * the stage.
    */
-  stage = 0;
+  readonly stage: number = 0;
 
   constructor(
-    id: string,
+    id: BonfireItem,
     enabled = false,
     require: Requirement = false,
     max = -1,
@@ -39,21 +41,19 @@ export class BonfireSettingsItem extends SettingMax {
   ) {
     super(id, enabled, max);
 
+    this.building = id;
     this.require = require;
     if (baseStage) {
       this.stage = 1;
-      this.name = baseStage;
+      this.baseBuilding = baseStage;
     }
   }
 }
 
-export type BonfirSettingsItems = {
-  // unicornPasture is handled in the Religion section.
-  [item in Exclude<BonfireItem, "unicornPasture">]: BonfireSettingsItem;
-};
+export type BonfireBuildingSettings = Record<string, BonfireBuildingSetting>;
 
 export class BonfireSettings extends SettingsSectionTrigger {
-  items: BonfirSettingsItems;
+  buildings: BonfireBuildingSettings;
 
   turnOnSteamworks: Setting;
   upgradeBuildings: BuildingUpgradeSettings;
@@ -61,60 +61,60 @@ export class BonfireSettings extends SettingsSectionTrigger {
   constructor(
     enabled = false,
     trigger = 0,
-    items: BonfirSettingsItems = {
-      academy: new BonfireSettingsItem("academy", true, "wood"),
-      accelerator: new BonfireSettingsItem("accelerator", false, "titanium"),
-      aiCore: new BonfireSettingsItem("aiCore"),
-      amphitheatre: new BonfireSettingsItem("amphitheatre", true, "minerals"),
-      aqueduct: new BonfireSettingsItem("aqueduct", true, "minerals"),
-      barn: new BonfireSettingsItem("barn", true, "wood"),
-      biolab: new BonfireSettingsItem("biolab", false, "science"),
-      brewery: new BonfireSettingsItem("brewery"),
-      broadcastTower: new BonfireSettingsItem(
+    buildings: BonfireBuildingSettings = {
+      academy: new BonfireBuildingSetting("academy", true, "wood"),
+      accelerator: new BonfireBuildingSetting("accelerator", false, "titanium"),
+      aiCore: new BonfireBuildingSetting("aiCore"),
+      amphitheatre: new BonfireBuildingSetting("amphitheatre", true, "minerals"),
+      aqueduct: new BonfireBuildingSetting("aqueduct", true, "minerals"),
+      barn: new BonfireBuildingSetting("barn", true, "wood"),
+      biolab: new BonfireBuildingSetting("biolab", false, "science"),
+      brewery: new BonfireBuildingSetting("brewery"),
+      broadcastTower: new BonfireBuildingSetting(
         "broadcastTower",
         true,
         "titanium",
         -1,
         "amphitheatre"
       ),
-      calciner: new BonfireSettingsItem("calciner", false, "titanium"),
-      chapel: new BonfireSettingsItem("chapel", true, "minerals"),
-      chronosphere: new BonfireSettingsItem("chronosphere", true, "unobtainium"),
-      dataCenter: new BonfireSettingsItem("dataCenter", true, false, -1, "library"),
-      factory: new BonfireSettingsItem("factory", true, "titanium"),
-      field: new BonfireSettingsItem("field", true, "catnip"),
-      harbor: new BonfireSettingsItem("harbor"),
-      hut: new BonfireSettingsItem("hut", false, "wood"),
-      hydroPlant: new BonfireSettingsItem("hydroPlant", true, "titanium", -1, "aqueduct"),
-      library: new BonfireSettingsItem("library", true, "wood"),
-      logHouse: new BonfireSettingsItem("logHouse", false, "minerals"),
-      lumberMill: new BonfireSettingsItem("lumberMill", true, "minerals"),
-      magneto: new BonfireSettingsItem("magneto"),
-      mansion: new BonfireSettingsItem("mansion", false, "titanium"),
-      mine: new BonfireSettingsItem("mine", true, "wood"),
-      mint: new BonfireSettingsItem("mint"),
-      observatory: new BonfireSettingsItem("observatory", true, "iron"),
-      oilWell: new BonfireSettingsItem("oilWell", true, "coal"),
-      pasture: new BonfireSettingsItem("pasture", true, "catnip"),
-      quarry: new BonfireSettingsItem("quarry", true, "coal"),
-      reactor: new BonfireSettingsItem("reactor", false, "titanium"),
-      smelter: new BonfireSettingsItem("smelter", true, "minerals"),
-      solarFarm: new BonfireSettingsItem("solarFarm", true, "titanium", -1, "pasture"),
-      steamworks: new BonfireSettingsItem("steamworks"),
-      temple: new BonfireSettingsItem("temple", true, "gold"),
-      tradepost: new BonfireSettingsItem("tradepost", true, "gold"),
-      warehouse: new BonfireSettingsItem("warehouse"),
-      workshop: new BonfireSettingsItem("workshop", true, "minerals"),
-      zebraForge: new BonfireSettingsItem("zebraForge", false, "bloodstone"),
-      zebraOutpost: new BonfireSettingsItem("zebraOutpost", true, "bloodstone"),
-      zebraWorkshop: new BonfireSettingsItem("zebraWorkshop", false, "bloodstone"),
-      ziggurat: new BonfireSettingsItem("ziggurat", true),
+      calciner: new BonfireBuildingSetting("calciner", false, "titanium"),
+      chapel: new BonfireBuildingSetting("chapel", true, "minerals"),
+      chronosphere: new BonfireBuildingSetting("chronosphere", true, "unobtainium"),
+      dataCenter: new BonfireBuildingSetting("dataCenter", true, false, -1, "library"),
+      factory: new BonfireBuildingSetting("factory", true, "titanium"),
+      field: new BonfireBuildingSetting("field", true, "catnip"),
+      harbor: new BonfireBuildingSetting("harbor"),
+      hut: new BonfireBuildingSetting("hut", false, "wood"),
+      hydroPlant: new BonfireBuildingSetting("hydroPlant", true, "titanium", -1, "aqueduct"),
+      library: new BonfireBuildingSetting("library", true, "wood"),
+      logHouse: new BonfireBuildingSetting("logHouse", false, "minerals"),
+      lumberMill: new BonfireBuildingSetting("lumberMill", true, "minerals"),
+      magneto: new BonfireBuildingSetting("magneto"),
+      mansion: new BonfireBuildingSetting("mansion", false, "titanium"),
+      mine: new BonfireBuildingSetting("mine", true, "wood"),
+      mint: new BonfireBuildingSetting("mint"),
+      observatory: new BonfireBuildingSetting("observatory", true, "iron"),
+      oilWell: new BonfireBuildingSetting("oilWell", true, "coal"),
+      pasture: new BonfireBuildingSetting("pasture", true, "catnip"),
+      quarry: new BonfireBuildingSetting("quarry", true, "coal"),
+      reactor: new BonfireBuildingSetting("reactor", false, "titanium"),
+      smelter: new BonfireBuildingSetting("smelter", true, "minerals"),
+      solarFarm: new BonfireBuildingSetting("solarFarm", true, "titanium", -1, "pasture"),
+      steamworks: new BonfireBuildingSetting("steamworks"),
+      temple: new BonfireBuildingSetting("temple", true, "gold"),
+      tradepost: new BonfireBuildingSetting("tradepost", true, "gold"),
+      warehouse: new BonfireBuildingSetting("warehouse"),
+      workshop: new BonfireBuildingSetting("workshop", true, "minerals"),
+      zebraForge: new BonfireBuildingSetting("zebraForge", false, "bloodstone"),
+      zebraOutpost: new BonfireBuildingSetting("zebraOutpost", true, "bloodstone"),
+      zebraWorkshop: new BonfireBuildingSetting("zebraWorkshop", false, "bloodstone"),
+      ziggurat: new BonfireBuildingSetting("ziggurat", true),
     },
     turnOnSteamworks = new Setting("turnOnSteamworks", true),
     upgradeBuildings = new BuildingUpgradeSettings("upgradeBuildings")
   ) {
     super("bonfire", enabled, trigger);
-    this.items = items;
+    this.buildings = buildings;
     this.turnOnSteamworks = turnOnSteamworks;
     this.upgradeBuildings = upgradeBuildings;
   }
@@ -123,9 +123,9 @@ export class BonfireSettings extends SettingsSectionTrigger {
     this.enabled = settings.enabled;
     this.trigger = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].max = item.max;
+    for (const [name, item] of objectEntries(settings.buildings)) {
+      this.buildings[name].enabled = item.enabled;
+      this.buildings[name].max = item.max;
     }
 
     this.turnOnSteamworks.enabled = settings.turnOnSteamworks.enabled;
@@ -137,9 +137,9 @@ export class BonfireSettings extends SettingsSectionTrigger {
     subject.toggles.build = settings.enabled;
     subject.triggers.build = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`set-${name}-max` as const] = item.max;
+    for (const [, item] of objectEntries(settings.buildings)) {
+      subject.items[`toggle-${item.building}` as const] = item.enabled;
+      subject.items[`set-${item.building}-max` as const] = item.max;
     }
 
     subject.items["toggle-_steamworks"] = settings.turnOnSteamworks.enabled;
@@ -152,9 +152,9 @@ export class BonfireSettings extends SettingsSectionTrigger {
     options.enabled = subject.toggles.build;
     options.trigger = subject.triggers.build;
 
-    for (const [name, item] of objectEntries(options.items)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
+    for (const [, item] of objectEntries(options.buildings)) {
+      item.enabled = subject.items[`toggle-${item.building}` as const] ?? item.enabled;
+      item.max = subject.items[`set-${item.building}-max` as const] ?? item.max;
     }
 
     options.turnOnSteamworks.enabled =

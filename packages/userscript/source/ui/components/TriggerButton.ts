@@ -37,8 +37,6 @@ export class TriggerButton extends UiComponent {
       }
     });
 
-    setting.$trigger = this;
-
     this.element = element;
     this._host = host;
     this.setting = setting;

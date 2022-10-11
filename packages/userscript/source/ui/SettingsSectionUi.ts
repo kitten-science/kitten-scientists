@@ -1,10 +1,8 @@
-import { BonfireSettingsItem } from "../options/BonfireSettings";
+import { BonfireBuildingSetting } from "../options/BonfireSettings";
 import { ReligionSettingsItem } from "../options/ReligionSettings";
-import { SettingMax } from "../options/Settings";
-import { SettingsSection } from "../options/SettingsSection";
+import { Setting, SettingMax } from "../options/Settings";
 import { UserScript } from "../UserScript";
 import { WorkshopManager } from "../WorkshopManager";
-import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 
@@ -17,22 +15,15 @@ export type Toggleable = {
  * Base class for all automation UI sections.
  * This provides common functionality to help build the automation sections themselves.
  */
-export abstract class SettingsSectionUi extends SettingsPanel {
-  protected abstract readonly _items: Array<SettingListItem>;
-
-  constructor(
-    host: UserScript,
-    label: string,
-    settings: SettingsSection,
-    initiallyExpanded = false
-  ) {
+export abstract class SettingsSectionUi<
+  TSetting extends Setting = Setting
+> extends SettingsPanel<TSetting> {
+  constructor(host: UserScript, label: string, settings: TSetting, initiallyExpanded = false) {
     super(host, label, settings, initiallyExpanded);
   }
 
-  abstract refreshUi(): void;
-
   protected _getBuildOption(
-    option: BonfireSettingsItem | ReligionSettingsItem | SettingMax,
+    option: BonfireBuildingSetting | ReligionSettingsItem | SettingMax,
     label: string,
     delimiter = false,
     upgradeIndicator = false

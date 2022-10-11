@@ -1,7 +1,7 @@
 import { BonfireManager } from "./BonfireManager";
 import { Automation, TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { BonfireSettingsItem } from "./options/BonfireSettings";
+import { BonfireBuildingSetting } from "./options/BonfireSettings";
 import { FaithItem, ReligionSettings, ReligionSettingsItem } from "./options/ReligionSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
@@ -128,7 +128,7 @@ export class ReligionManager implements Automation {
       // Now we build a unicorn pasture if possible.
       if (this.settings.items.unicornPasture.enabled) {
         this._bonfireManager.autoBuild({
-          unicornPasture: new BonfireSettingsItem("unicornPasture", true, false, -1),
+          unicornPasture: new BonfireBuildingSetting("unicornPasture", true, false, -1),
         });
       }
       // And then we build all other possible religion buildings.

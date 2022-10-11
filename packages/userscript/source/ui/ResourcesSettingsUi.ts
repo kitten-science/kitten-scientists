@@ -1,46 +1,41 @@
 import { ResourcesSettings, ResourcesSettingsItem } from "../options/ResourcesSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class ResourcesSettingsUi extends SettingsSectionUi {
-  protected readonly _items: Array<SettingListItem>;
-  private readonly _settings: ResourcesSettings;
+export class ResourcesSettingsUi extends SettingsSectionUi<ResourcesSettings> {
+  private readonly _buildings: Array<SettingListItem>;
 
   constructor(host: UserScript, settings: ResourcesSettings) {
     const label = host.engine.i18n("ui.resources");
     super(host, label, settings);
 
-    this._settings = settings;
+    // Disable checkbox. Resource control is always active.
     $("input", this.element).prop("disabled", true);
 
     this._list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = true));
+      this._buildings.forEach(item => (item.settings.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = false));
+      this._buildings.forEach(item => (item.settings.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this._settings.load(new ResourcesSettings());
+      this.settings.load(new ResourcesSettings());
       this.refreshUi();
     });
 
     // Add all the current resources
-    this._items = [];
-    for (const [name, item] of objectEntries(this._settings.items)) {
-      this._items.push(
+    this._buildings = [];
+    for (const [name, item] of objectEntries(this.settings.items)) {
+      this._buildings.push(
         this._makeResourceSetting(ucfirst(this._host.engine.i18n(`$resources.${name}.title`)), item)
       );
     }
-
-    for (const setting of this._items) {
-      this.list.append(setting.element);
-    }
+    this.addChildren(this._buildings);
   }
 
   /**
@@ -104,33 +99,5 @@ export class ResourcesSettingsUi extends SettingsSectionUi {
     setting.$stock = stockElement;
 
     return container;
-  }
-
-  setState(state: ResourcesSettings): void {
-    this._settings.enabled = state.enabled;
-
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      option.enabled = state.items[name].enabled;
-      option.consume = state.items[name].consume;
-      option.stock = state.items[name].stock;
-    }
-  }
-
-  refreshUi(): void {
-    this.setState(this._settings);
-
-    mustExist(this._settings.$enabled).refreshUi();
-
-    for (const [, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).refreshUi();
-      mustExist(option.$consume).text(
-        this._host.engine.i18n("resources.consume", [
-          SettingsSectionUi.renderConsumeRate(option.consume),
-        ])
-      );
-      mustExist(option.$stock).text(
-        this._host.engine.i18n("resources.stock", [this._renderLimit(option.stock)])
-      );
-    }
   }
 }

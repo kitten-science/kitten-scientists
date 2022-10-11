@@ -1,119 +1,113 @@
 import { FilterSettings, FilterSettingsItem } from "../options/FilterSettings";
-import { objectEntries } from "../tools/Entries";
-import { ucfirst } from "../tools/Format";
-import { mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { ExplainerListItem } from "./components/ExplainerListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class FiltersSettingsUi extends SettingsSectionUi {
-  protected readonly _items: Array<SettingListItem>;
-  private readonly _settings: FilterSettings;
+export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
+  private readonly _filters: Array<SettingListItem>;
 
   constructor(host: UserScript, settings: FilterSettings) {
-    const label = ucfirst(host.engine.i18n("ui.filter"));
+    const label = host.engine.i18n("ui.filter");
     super(host, label, settings);
 
-    this._settings = settings;
-
     this._list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = true));
+      this._filters.forEach(item => (item.settings.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = false));
+      this._filters.forEach(item => (item.settings.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this._settings.load(new FilterSettings());
+      this.settings.load(new FilterSettings());
       this.refreshUi();
     });
 
-    const buttons = [
+    const buttonTemplates = [
       {
         name: "buildFilter" as const,
-        option: this._settings.items.buildFilter,
+        option: this.settings.items.buildFilter,
         label: this._host.engine.i18n("filter.build"),
       },
       {
         name: "craftFilter" as const,
-        option: this._settings.items.craftFilter,
+        option: this.settings.items.craftFilter,
         label: this._host.engine.i18n("filter.craft"),
       },
       {
         name: "upgradeFilter" as const,
-        option: this._settings.items.upgradeFilter,
+        option: this.settings.items.upgradeFilter,
         label: this._host.engine.i18n("filter.upgrade"),
       },
       {
         name: "researchFilter" as const,
-        option: this._settings.items.researchFilter,
+        option: this.settings.items.researchFilter,
         label: this._host.engine.i18n("filter.research"),
       },
       {
         name: "tradeFilter" as const,
-        option: this._settings.items.tradeFilter,
+        option: this.settings.items.tradeFilter,
         label: this._host.engine.i18n("filter.trade"),
       },
       {
         name: "huntFilter" as const,
-        option: this._settings.items.huntFilter,
+        option: this.settings.items.huntFilter,
         label: this._host.engine.i18n("filter.hunt"),
       },
       {
         name: "praiseFilter" as const,
-        option: this._settings.items.praiseFilter,
+        option: this.settings.items.praiseFilter,
         label: this._host.engine.i18n("filter.praise"),
       },
       {
         name: "adoreFilter" as const,
-        option: this._settings.items.adoreFilter,
+        option: this.settings.items.adoreFilter,
         label: this._host.engine.i18n("filter.adore"),
       },
       {
         name: "transcendFilter" as const,
-        option: this._settings.items.transcendFilter,
+        option: this.settings.items.transcendFilter,
         label: this._host.engine.i18n("filter.transcend"),
       },
       {
         name: "faithFilter" as const,
-        option: this._settings.items.faithFilter,
+        option: this.settings.items.faithFilter,
         label: this._host.engine.i18n("filter.faith"),
       },
       {
         name: "accelerateFilter" as const,
-        option: this._settings.items.accelerateFilter,
+        option: this.settings.items.accelerateFilter,
         label: this._host.engine.i18n("filter.accelerate"),
       },
       {
         name: "timeSkipFilter" as const,
-        option: this._settings.items.timeSkipFilter,
+        option: this.settings.items.timeSkipFilter,
         label: this._host.engine.i18n("filter.time.skip"),
       },
       {
         name: "festivalFilter" as const,
-        option: this._settings.items.festivalFilter,
+        option: this.settings.items.festivalFilter,
         label: this._host.engine.i18n("filter.festival"),
       },
       {
         name: "starFilter" as const,
-        option: this._settings.items.starFilter,
+        option: this.settings.items.starFilter,
         label: this._host.engine.i18n("filter.star"),
       },
       {
         name: "distributeFilter" as const,
-        option: this._settings.items.distributeFilter,
+        option: this.settings.items.distributeFilter,
         label: this._host.engine.i18n("filter.distribute"),
       },
       {
         name: "promoteFilter" as const,
-        option: this._settings.items.promoteFilter,
+        option: this.settings.items.promoteFilter,
         label: this._host.engine.i18n("filter.promote"),
       },
       {
         name: "miscFilter" as const,
-        option: this._settings.items.miscFilter,
+        option: this.settings.items.miscFilter,
         label: this._host.engine.i18n("filter.misc"),
       },
     ];
@@ -132,34 +126,11 @@ export class FiltersSettingsUi extends SettingsSectionUi {
         []
       );
 
-    this._items = buttons
+    this._filters = buttonTemplates
       .sort((a, b) => a.label.localeCompare(b.label))
       .map(button => makeButton(button.option, button.label));
+    this.addChildren(this._filters);
 
-    for (const item of this._items) {
-      this.list.append(item.element);
-    }
-
-    this.list.append(
-      new ExplainerListItem(this._host, "Disabled items are hidden from the log.").element
-    );
-  }
-
-  setState(state: FilterSettings): void {
-    this._settings.enabled = state.enabled;
-
-    for (const [name, option] of objectEntries(this._settings.items)) {
-      option.enabled = state.items[name].enabled;
-    }
-  }
-
-  refreshUi(): void {
-    this.setState(this._settings);
-
-    mustExist(this._settings.$enabled).refreshUi();
-
-    for (const [, option] of objectEntries(this._settings.items)) {
-      mustExist(option.$enabled).refreshUi();
-    }
+    this.addChild(new ExplainerListItem(this._host, "Disabled items are hidden from the log."));
   }
 }

@@ -7,7 +7,7 @@ import {
 } from "../options/TimeControlSettings";
 import { objectEntries } from "../tools/Entries";
 import { ucfirst } from "../tools/Format";
-import { Maybe, mustExist } from "../tools/Maybe";
+import { Maybe } from "../tools/Maybe";
 import { Season } from "../types";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
@@ -16,7 +16,7 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeControlSettingsUi extends SettingsSectionUi {
-  protected readonly _items: Array<SettingListItem>;
+  protected readonly _buildings: Array<SettingListItem>;
   private readonly _settings: TimeControlSettings;
 
   private _resourcesList: Maybe<JQuery<HTMLElement>>;
@@ -28,11 +28,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     this._settings = settings;
 
     this._list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = true));
+      this._buildings.forEach(item => (item.settings.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = false));
+      this._buildings.forEach(item => (item.settings.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
@@ -40,7 +40,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       this.refreshUi();
     });
 
-    this._items = [
+    this._buildings = [
       this._getOptionAccelerateTime(
         this._settings.accelerateTime,
         this._host.engine.i18n("option.accelerate")
@@ -51,7 +51,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
       this._getOptionReset(this._settings.reset, this._host.engine.i18n("option.time.reset")),
     ];
 
-    for (const setting of this._items) {
+    for (const setting of this._buildings) {
       this.list.append(setting.element);
     }
   }
@@ -893,75 +893,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi {
     for (const [name, option] of objectEntries(state.resources)) {
       option.enabled = state.resources[name].enabled;
       option.stock = state.resources[name].stock;
-    }
-  }
-
-  refreshUi(): void {
-    this.setState(this._settings);
-
-    mustExist(this._settings.$enabled).refreshUi();
-
-    mustExist(this._settings.accelerateTime.$enabled).refreshUi();
-    mustExist(this._settings.accelerateTime.$trigger).refreshUi();
-
-    mustExist(this._settings.reset.$enabled).refreshUi();
-
-    mustExist(this._settings.timeSkip.$enabled).refreshUi();
-    mustExist(this._settings.timeSkip.$trigger).refreshUi();
-    mustExist(this._settings.timeSkip.$autumn).prop("checked", this._settings.timeSkip.autumn);
-    mustExist(this._settings.timeSkip.$spring).prop("checked", this._settings.timeSkip.spring);
-    mustExist(this._settings.timeSkip.$summer).prop("checked", this._settings.timeSkip.summer);
-    mustExist(this._settings.timeSkip.$winter).prop("checked", this._settings.timeSkip.winter);
-    mustExist(this._settings.timeSkip.$0).prop("checked", this._settings.timeSkip[0]);
-    mustExist(this._settings.timeSkip.$1).prop("checked", this._settings.timeSkip[1]);
-    mustExist(this._settings.timeSkip.$2).prop("checked", this._settings.timeSkip[2]);
-    mustExist(this._settings.timeSkip.$3).prop("checked", this._settings.timeSkip[3]);
-    mustExist(this._settings.timeSkip.$4).prop("checked", this._settings.timeSkip[4]);
-    mustExist(this._settings.timeSkip.$5).prop("checked", this._settings.timeSkip[5]);
-    mustExist(this._settings.timeSkip.$6).prop("checked", this._settings.timeSkip[6]);
-    mustExist(this._settings.timeSkip.$7).prop("checked", this._settings.timeSkip[7]);
-    mustExist(this._settings.timeSkip.$8).prop("checked", this._settings.timeSkip[8]);
-    mustExist(this._settings.timeSkip.$9).prop("checked", this._settings.timeSkip[9]);
-
-    for (const [name, option] of objectEntries(this._settings.buildItems)) {
-      mustExist(option.$enabled).refreshUi();
-      mustExist(option.$trigger).element.text(
-        this._host.engine.i18n("ui.min", [
-          this._renderLimit(this._settings.buildItems[name].trigger),
-        ])
-      );
-    }
-    for (const [name, option] of objectEntries(this._settings.religionItems)) {
-      mustExist(option.$enabled).refreshUi();
-      mustExist(option.$trigger).element.text(
-        this._host.engine.i18n("ui.min", [
-          this._renderLimit(this._settings.religionItems[name].trigger),
-        ])
-      );
-    }
-    for (const [name, option] of objectEntries(this._settings.spaceItems)) {
-      mustExist(option.$enabled).refreshUi();
-      mustExist(option.$trigger).element.text(
-        this._host.engine.i18n("ui.min", [
-          this._renderLimit(this._settings.spaceItems[name].trigger),
-        ])
-      );
-    }
-    for (const [name, option] of objectEntries(this._settings.timeItems)) {
-      mustExist(option.$enabled).refreshUi();
-      mustExist(option.$trigger).element.text(
-        this._host.engine.i18n("ui.min", [
-          this._renderLimit(this._settings.timeItems[name].trigger),
-        ])
-      );
-    }
-
-    for (const [name, option] of objectEntries(this._settings.resources)) {
-      mustExist(option.$stock).text(
-        this._host.engine.i18n("resources.stock", [
-          this._renderLimit(mustExist(this._settings.resources[name]).stock),
-        ])
-      );
     }
   }
 }
