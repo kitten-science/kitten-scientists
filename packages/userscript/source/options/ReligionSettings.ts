@@ -1,7 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { UnicornItemVariant } from "../types";
 import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
-import { SettingsSectionTrigger } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type FaithItem =
@@ -63,7 +62,7 @@ export type ReligionSettingsItems = {
   [item in FaithItem | UnicornItem]: ReligionSettingsItem;
 };
 
-export class ReligionSettings extends SettingsSectionTrigger {
+export class ReligionSettings extends SettingTrigger {
   items: ReligionSettingsItems;
 
   /**

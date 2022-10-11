@@ -1,13 +1,12 @@
 import { objectEntries } from "../tools/Entries";
-import { SettingTrigger } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
+import { Setting, SettingTrigger } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe";
 
 export class OptionsSettingsItem extends SettingTrigger {}
 
-export class OptionsSettings extends SettingsSection {
+export class OptionsSettings extends Setting {
   items: {
     [key in OptionsItem]: OptionsSettingsItem;
   } = {

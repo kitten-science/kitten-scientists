@@ -4,7 +4,6 @@ import { SpaceBuildings, TimeItemVariant, UnicornItemVariant } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { Setting, SettingTrigger } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 import { TimeItem } from "./TimeSettings";
 
@@ -144,7 +143,7 @@ export type TimeControlTimeSettingItems = {
   [item in TimeItem]: TimeControlTimeSettingsItem;
 };
 
-export class TimeControlSettings extends SettingsSection {
+export class TimeControlSettings extends Setting {
   buildItems: TimeControlBuildSettingItems;
   religionItems: TimeControlReligionSettingItems;
   spaceItems: TimeControlSpaceSettingItems;

@@ -1,10 +1,10 @@
 import { FilterSettings } from "./FilterSettings";
 import { OptionsSettings } from "./OptionsSettings";
 import { ResourcesSettings } from "./ResourcesSettings";
-import { SettingsSection } from "./SettingsSection";
+import { Setting } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
-export class EngineSettings extends SettingsSection {
+export class EngineSettings extends Setting {
   /**
    * The interval at which the internal processing loop is run, in milliseconds.
    */

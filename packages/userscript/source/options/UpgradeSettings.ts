@@ -3,10 +3,9 @@ import { objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Upgrade } from "../types";
 import { Setting } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export class UpgradeSettings extends SettingsSection {
+export class UpgradeSettings extends Setting {
   items: {
     [item in Upgrade]: Setting;
   };

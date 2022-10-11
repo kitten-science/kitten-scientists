@@ -114,6 +114,12 @@ export class Engine {
     this.workshopManager.load(settings.workshop);
   }
 
+  stateSerialize() {
+    return {
+      engine: this.settings.options,
+    };
+  }
+
   /**
    * Start the Kitten Scientists engine.
    *

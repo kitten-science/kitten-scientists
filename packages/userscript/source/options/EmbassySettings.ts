@@ -1,10 +1,9 @@
 import { objectEntries } from "../tools/Entries";
 import { Race } from "../types";
-import { SettingMax } from "./Settings";
-import { SettingsSectionTrigger } from "./SettingsSection";
+import { SettingMax, SettingTrigger } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
-export class EmbassySettings extends SettingsSectionTrigger {
+export class EmbassySettings extends SettingTrigger {
   items: {
     [item in Race]: SettingMax;
   };

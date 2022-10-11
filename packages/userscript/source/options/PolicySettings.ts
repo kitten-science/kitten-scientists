@@ -3,10 +3,9 @@ import { objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Policy } from "../types";
 import { Setting } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export class PolicySettings extends SettingsSection {
+export class PolicySettings extends Setting {
   items: {
     [item in Policy]: Setting;
   };

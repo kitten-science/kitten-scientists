@@ -1,8 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { Race } from "../types";
 import { EmbassySettings } from "./EmbassySettings";
-import { Requirement, Setting, SettingLimited } from "./Settings";
-import { SettingsSectionTrigger } from "./SettingsSection";
+import { Requirement, Setting, SettingLimited, SettingTrigger } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
 export class TradeSettingsItem extends SettingLimited {
@@ -47,7 +46,7 @@ export type TradeSettingsItems = {
   [item in Race]: TradeSettingsItem;
 };
 
-export class TradeSettings extends SettingsSectionTrigger {
+export class TradeSettings extends SettingTrigger {
   items: TradeSettingsItems;
 
   buildEmbassies: EmbassySettings;

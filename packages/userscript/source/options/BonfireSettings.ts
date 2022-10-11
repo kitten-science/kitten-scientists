@@ -1,8 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { Building } from "../types";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
-import { Requirement, Setting, SettingMax } from "./Settings";
-import { SettingsSectionTrigger } from "./SettingsSection";
+import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
 /**
@@ -52,7 +51,7 @@ export class BonfireBuildingSetting extends SettingMax {
 
 export type BonfireBuildingSettings = Record<string, BonfireBuildingSetting>;
 
-export class BonfireSettings extends SettingsSectionTrigger {
+export class BonfireSettings extends SettingTrigger {
   buildings: BonfireBuildingSettings;
 
   turnOnSteamworks: Setting;

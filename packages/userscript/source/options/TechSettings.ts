@@ -3,10 +3,9 @@ import { objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Technology } from "../types";
 import { Setting } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export class TechSettings extends SettingsSection {
+export class TechSettings extends Setting {
   items: {
     [item in Technology]: Setting;
   };

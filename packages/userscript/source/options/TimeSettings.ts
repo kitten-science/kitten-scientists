@@ -1,7 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
-import { Requirement, SettingMax } from "./Settings";
-import { SettingsSectionTrigger } from "./SettingsSection";
+import { Requirement, SettingMax, SettingTrigger } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
 /**
@@ -25,7 +24,7 @@ export type TimeSettingsItems = {
   [item in TimeItem]: TimeSettingsItem;
 };
 
-export class TimeSettings extends SettingsSectionTrigger {
+export class TimeSettings extends SettingTrigger {
   items: TimeSettingsItems;
 
   constructor(

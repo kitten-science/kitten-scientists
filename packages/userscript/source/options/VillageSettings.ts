@@ -1,14 +1,13 @@
 import { objectEntries } from "../tools/Entries";
 import { Job } from "../types";
 import { Setting, SettingMax, SettingTrigger } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type VillageSettingsItems = {
   [item in Job]: SettingMax;
 };
 
-export class VillageSettings extends SettingsSection {
+export class VillageSettings extends Setting {
   items: VillageSettingsItems;
 
   holdFestivals: Setting;

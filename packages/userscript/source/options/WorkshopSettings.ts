@@ -1,7 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage, ResourceCraftable } from "../types";
-import { Requirement, Setting, SettingLimitedMax } from "./Settings";
-import { SettingsSectionTrigger } from "./SettingsSection";
+import { Requirement, Setting, SettingLimitedMax, SettingTrigger } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";
 
@@ -18,7 +17,7 @@ export type WorkshopSettingsItems = {
   [item in ResourceCraftable]: CraftSettingsItem;
 };
 
-export class WorkshopSettings extends SettingsSectionTrigger {
+export class WorkshopSettings extends SettingTrigger {
   items: WorkshopSettingsItems;
 
   shipOverride: Setting;

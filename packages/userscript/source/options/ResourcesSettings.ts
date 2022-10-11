@@ -3,7 +3,6 @@ import { isNil, mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { WorkshopManager } from "../WorkshopManager";
 import { Setting } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export class ResourcesSettingsItem extends Setting {
@@ -22,7 +21,7 @@ export class ResourcesSettingsItem extends Setting {
 
 export type ResourcesSettingsItems = { [item in Resource]: ResourcesSettingsItem };
 
-export class ResourcesSettings extends SettingsSection {
+export class ResourcesSettings extends Setting {
   items: ResourcesSettingsItems;
 
   constructor(

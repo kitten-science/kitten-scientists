@@ -1,15 +1,14 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage, SpaceBuildings } from "../types";
 import { MissionSettings } from "./MissionSettings";
-import { SettingMax } from "./Settings";
-import { SettingsSectionTrigger } from "./SettingsSection";
+import { SettingMax, SettingTrigger } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
 export type SpaceSettingsItems = {
   [item in SpaceBuildings]: SettingMax;
 };
 
-export class SpaceSettings extends SettingsSectionTrigger {
+export class SpaceSettings extends SettingTrigger {
   items: SpaceSettingsItems;
 
   unlockMissions: MissionSettings;

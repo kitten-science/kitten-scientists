@@ -1,6 +1,5 @@
 import { objectEntries } from "../tools/Entries";
 import { Setting } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
 export enum FilterItemVariant {
@@ -55,7 +54,7 @@ export type FilterSettingsItems = {
   [item in FilterItem]: FilterSettingsItem;
 };
 
-export class FilterSettings extends SettingsSection {
+export class FilterSettings extends Setting {
   items: FilterSettingsItems;
 
   constructor(

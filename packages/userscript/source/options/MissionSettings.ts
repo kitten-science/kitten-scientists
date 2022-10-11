@@ -3,10 +3,9 @@ import { objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Missions } from "../types";
 import { Setting } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export class MissionSettings extends SettingsSection {
+export class MissionSettings extends Setting {
   items: {
     [item in Missions]: Setting;
   };

@@ -1,10 +1,9 @@
 import { objectEntries } from "../tools/Entries";
 import { StagedBuilding } from "../types";
 import { Setting } from "./Settings";
-import { SettingsSection } from "./SettingsSection";
 import { KittenStorageType } from "./SettingsStorage";
 
-export class BuildingUpgradeSettings extends SettingsSection {
+export class BuildingUpgradeSettings extends Setting {
   items: {
     [item in StagedBuilding]: Setting;
   };

@@ -1,13 +1,13 @@
 import { GamePage } from "../types";
 import { PolicySettings } from "./PolicySettings";
-import { SettingsSection } from "./SettingsSection";
+import { Setting } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 import { TechSettings } from "./TechSettings";
 
 export type ScienceItem = "policies" | "techs";
 export type ScienceSettingsItem = TechSettings | PolicySettings;
 
-export class ScienceSettings extends SettingsSection {
+export class ScienceSettings extends Setting {
   policies: PolicySettings;
   techs: TechSettings;
 
