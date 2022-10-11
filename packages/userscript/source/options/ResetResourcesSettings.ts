@@ -5,11 +5,13 @@ import { Setting } from "./Settings";
 import { KittenStorageType } from "./SettingsStorage";
 
 export class ResetResourcesSettingsItem extends Setting {
+  readonly resource: Resource;
   stock = 0;
   $stock?: JQuery<HTMLElement>;
 
-  constructor(id: string, enabled: boolean, stock: number) {
+  constructor(id: Resource, enabled: boolean, stock: number) {
     super(id, enabled);
+    this.resource = id;
     this.stock = stock;
   }
 }
