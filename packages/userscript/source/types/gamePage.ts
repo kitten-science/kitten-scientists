@@ -312,7 +312,7 @@ export type GamePage = {
       val: number;
     };
     meta: Array<{ meta: Array<{ label: string; name: string; unlocked: boolean; val: number }> }>;
-    missions: Array<{ name: Missions }>;
+    programs: Array<{ name: Missions }>;
   };
   tabs: [
     GameTab,
