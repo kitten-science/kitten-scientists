@@ -13,7 +13,7 @@ import { TimeSettings } from "./options/TimeSettings";
 import { TradeSettings } from "./options/TradeSettings";
 import { VillageSettings } from "./options/VillageSettings";
 import { WorkshopSettings } from "./options/WorkshopSettings";
-import { cdebug, cinfo, clog, cwarn } from "./tools/Log";
+import { cdebug, cinfo, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
 import { GamePage } from "./types";
@@ -167,10 +167,10 @@ export class UserScript {
     this._settingsDirty = false;
 
     SettingsStorage.setLegacyOptions(this.getLegacyOptions());
-    clog("Kitten Scientists settings (legacy) saved.");
+    cinfo("Kitten Scientists settings (legacy) saved.");
 
     SettingsStorage.setSettings(this.getSettings());
-    clog("Kitten Scientists settings (modern) saved.");
+    cinfo("Kitten Scientists settings (modern) saved.");
   }
 
   getLegacyOptions() {

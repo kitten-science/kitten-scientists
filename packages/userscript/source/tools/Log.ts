@@ -17,15 +17,6 @@ export function cinfo(...args: Array<unknown>): void {
 }
 
 /**
- * Print a message to the console.
- *
- * @param {...any} args Arguments to pass to `console.log`.
- */
-export function clog(...args: Array<unknown>): void {
-  console.log("👩‍🔬", ...args);
-}
-
-/**
  * Print a warning to the console.
  *
  * @param {...any} args Arguments to pass to `console.warn`.
