@@ -125,7 +125,12 @@ export class ReligionManager implements Automation {
           .reverse()
       );
       // Now we build a unicorn pasture if possible.
-      if (this.settings.items.unicornPasture.enabled) {
+      const maxPastures =
+        -1 === this.settings.items.unicornPasture.max
+          ? Number.POSITIVE_INFINITY
+          : this.settings.items.unicornPasture.max;
+      const meta = this._host.gamePage.bld.getBuildingExt("unicornPasture").meta;
+      if (this.settings.items.unicornPasture.enabled && meta.val < maxPastures) {
         this._bonfireManager.autoBuild({
           unicornPasture: new BonfireBuildingSetting("unicornPasture", true, false, -1),
         });
