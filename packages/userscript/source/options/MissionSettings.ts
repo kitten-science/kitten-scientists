@@ -3,7 +3,7 @@ import { objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Missions } from "../types";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class MissionSetting extends Setting {
   readonly mission: Missions;
@@ -66,7 +66,7 @@ export class MissionSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: MissionSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: MissionSettings, subject: LegacyStorage) {
     subject.items["toggle-missions"] = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.items)) {
@@ -74,7 +74,7 @@ export class MissionSettings extends Setting {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new MissionSettings();
     options.enabled = subject.items["toggle-missions"] ?? options.enabled;
 

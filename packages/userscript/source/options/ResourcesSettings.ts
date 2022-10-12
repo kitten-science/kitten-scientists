@@ -3,7 +3,7 @@ import { isNil, mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { WorkshopManager } from "../WorkshopManager";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class ResourcesSettingsItem extends Setting {
   readonly resource: Resource;
@@ -89,7 +89,7 @@ export class ResourcesSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: ResourcesSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: ResourcesSettings, subject: LegacyStorage) {
     for (const [name, item] of objectEntries(settings.items)) {
       if (isNil(subject.resources[name])) {
         subject.resources[name] = {
@@ -108,7 +108,7 @@ export class ResourcesSettings extends Setting {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResourcesSettings();
     options.enabled = true;
 

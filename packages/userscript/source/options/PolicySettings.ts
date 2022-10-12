@@ -3,7 +3,7 @@ import { objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Policy } from "../types";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class PolicySetting extends Setting {
   readonly policy: Policy;
@@ -92,7 +92,7 @@ export class PolicySettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: PolicySettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: PolicySettings, subject: LegacyStorage) {
     subject.items["toggle-policies"] = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.items)) {
@@ -100,7 +100,7 @@ export class PolicySettings extends Setting {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new PolicySettings();
     options.enabled = subject.items["toggle-policies"] ?? options.enabled;
 

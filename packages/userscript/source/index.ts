@@ -20,7 +20,7 @@ const devSavegame = KG_SAVEGAME ?? null;
   window.kittenScientists = userScript;
 
   cinfo("Looking for legacy settings...");
-  const legacySettings = SettingsStorage.getLegacySettings();
+  const legacySettings = SettingsStorage.getLegacyOptions();
 
   if (!isNil(legacySettings)) {
     cinfo("Using restored legacy settings.");

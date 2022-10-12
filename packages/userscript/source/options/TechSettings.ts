@@ -3,7 +3,7 @@ import { objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Technology } from "../types";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class TechSetting extends Setting {
   readonly tech: Technology;
@@ -114,7 +114,7 @@ export class TechSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: TechSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: TechSettings, subject: LegacyStorage) {
     subject.items["toggle-techs"] = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.items)) {
@@ -122,7 +122,7 @@ export class TechSettings extends Setting {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new TechSettings();
     options.enabled = subject.items["toggle-policies"] ?? options.enabled;
 

@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { Building } from "../types";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
 import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 /**
  * One of the building options in the KS menu.
@@ -132,7 +132,7 @@ export class BonfireSettings extends SettingTrigger {
     this.upgradeBuildings.load(settings.upgradeBuildings);
   }
 
-  static toLegacyOptions(settings: BonfireSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: BonfireSettings, subject: LegacyStorage) {
     subject.toggles.build = settings.enabled;
     subject.triggers.build = settings.trigger;
 
@@ -146,7 +146,7 @@ export class BonfireSettings extends SettingTrigger {
     BuildingUpgradeSettings.toLegacyOptions(settings.upgradeBuildings, subject);
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new BonfireSettings();
     options.enabled = subject.toggles.build;
     options.trigger = subject.triggers.build;

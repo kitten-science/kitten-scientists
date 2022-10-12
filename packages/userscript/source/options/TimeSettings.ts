@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
 import { Requirement, SettingMax, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 /**
  * The upgrades on the Time tab that we have options for.
@@ -68,7 +68,7 @@ export class TimeSettings extends SettingTrigger {
     }
   }
 
-  static toLegacyOptions(settings: TimeSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: TimeSettings, subject: LegacyStorage) {
     subject.toggles.time = settings.enabled;
     subject.triggers.time = settings.trigger;
 
@@ -78,7 +78,7 @@ export class TimeSettings extends SettingTrigger {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new TimeSettings();
     options.enabled = subject.toggles.time;
     options.trigger = subject.triggers.time;

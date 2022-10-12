@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { BonfireItem } from "./BonfireSettings";
 import { Setting, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class ResetBonfireBuildingSetting extends SettingTrigger {
   readonly building: BonfireItem;
@@ -77,14 +77,14 @@ export class ResetBonfireSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: ResetBonfireSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: ResetBonfireSettings, subject: LegacyStorage) {
     for (const [name, item] of objectEntries(settings.items)) {
       subject.items[`toggle-reset-build-${name}` as const] = item.enabled;
       subject.items[`set-reset-build-${name}-min` as const] = item.trigger;
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetBonfireSettings();
     options.enabled = true;
 

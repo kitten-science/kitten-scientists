@@ -3,7 +3,7 @@ import { objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Upgrade } from "../types";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class UpgradeSetting extends Setting {
   readonly upgrade: Upgrade;
@@ -189,7 +189,7 @@ export class UpgradeSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: UpgradeSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: UpgradeSettings, subject: LegacyStorage) {
     subject.items["toggle-upgrades"] = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.items)) {
@@ -197,7 +197,7 @@ export class UpgradeSettings extends Setting {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new UpgradeSettings();
     options.enabled = subject.items["toggle-upgrades"] ?? options.enabled;
 

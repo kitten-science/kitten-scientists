@@ -1,7 +1,7 @@
 import { GamePage } from "../types";
 import { PolicySettings } from "./PolicySettings";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 import { TechSettings } from "./TechSettings";
 
 export type ScienceItem = "policies" | "techs";
@@ -33,14 +33,14 @@ export class ScienceSettings extends Setting {
     this.techs.load(settings.techs);
   }
 
-  static toLegacyOptions(settings: ScienceSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: ScienceSettings, subject: LegacyStorage) {
     subject.toggles.upgrade = settings.enabled;
 
     PolicySettings.toLegacyOptions(settings.policies, subject);
     TechSettings.toLegacyOptions(settings.techs, subject);
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ScienceSettings();
     options.enabled = subject.toggles.upgrade;
 

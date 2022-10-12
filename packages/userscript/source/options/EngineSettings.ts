@@ -2,7 +2,7 @@ import { FilterSettings } from "./FilterSettings";
 import { OptionsSettings } from "./OptionsSettings";
 import { ResourcesSettings } from "./ResourcesSettings";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class EngineSettings extends Setting {
   /**
@@ -35,7 +35,7 @@ export class EngineSettings extends Setting {
     this.resources.load(settings.resources);
   }
 
-  static toLegacyOptions(settings: EngineSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: EngineSettings, subject: LegacyStorage) {
     subject.interval = settings.interval;
     subject.toggles.engine = settings.enabled;
 
@@ -44,7 +44,7 @@ export class EngineSettings extends Setting {
     ResourcesSettings.toLegacyOptions(settings.resources, subject);
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new EngineSettings();
 
     options.interval = subject.interval ?? options.interval;

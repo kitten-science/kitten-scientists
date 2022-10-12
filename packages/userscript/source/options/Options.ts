@@ -2,7 +2,7 @@ import { BonfireSettings } from "./BonfireSettings";
 import { EngineSettings } from "./EngineSettings";
 import { ReligionSettings } from "./ReligionSettings";
 import { ScienceSettings } from "./ScienceSettings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 import { SpaceSettings } from "./SpaceSettings";
 import { TimeControlSettings } from "./TimeControlSettings";
 import { TimeSettings } from "./TimeSettings";
@@ -27,8 +27,8 @@ export class Options {
     trading: TradeSettings;
     village: VillageSettings;
     workshop: WorkshopSettings;
-  }): KittenStorageType {
-    const subject = {} as KittenStorageType;
+  }): LegacyStorage {
+    const subject = {} as LegacyStorage;
 
     subject.toggles = {
       engine: settings.engine.enabled,

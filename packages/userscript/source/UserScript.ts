@@ -6,7 +6,7 @@ import { EngineSettings } from "./options/EngineSettings";
 import { Options } from "./options/Options";
 import { ReligionSettings } from "./options/ReligionSettings";
 import { ScienceSettings } from "./options/ScienceSettings";
-import { KittenStorageType, SettingsStorage } from "./options/SettingsStorage";
+import { LegacyStorage, SettingsStorage } from "./options/SettingsStorage";
 import { SpaceSettings } from "./options/SpaceSettings";
 import { TimeControlSettings } from "./options/TimeControlSettings";
 import { TimeSettings } from "./options/TimeSettings";
@@ -129,7 +129,7 @@ export class UserScript {
     this._userInterface.refreshUi();
   }
 
-  loadLegacyOptions(source: KittenStorageType) {
+  loadLegacyOptions(source: LegacyStorage) {
     this.engine.load({
       bonfire: BonfireSettings.fromLegacyOptions(source),
       engine: EngineSettings.fromLegacyOptions(source),
@@ -166,9 +166,11 @@ export class UserScript {
   saveSettings() {
     this._settingsDirty = false;
 
-    const toExport = this.getLegacyOptions();
-    SettingsStorage.setLegacySettings(toExport);
-    clog("Kitten Scientists settings saved.");
+    SettingsStorage.setLegacyOptions(this.getLegacyOptions());
+    clog("Kitten Scientists settings (legacy) saved.");
+
+    SettingsStorage.setSettings(this.getSettings());
+    clog("Kitten Scientists settings (modern) saved.");
   }
 
   getLegacyOptions() {

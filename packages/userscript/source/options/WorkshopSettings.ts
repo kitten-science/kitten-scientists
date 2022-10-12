@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { GamePage, ResourceCraftable } from "../types";
 import { Requirement, Setting, SettingLimitedMax, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";
 
 export class CraftSettingsItem extends SettingLimitedMax {
@@ -81,7 +81,7 @@ export class WorkshopSettings extends SettingTrigger {
     this.shipOverride.enabled = settings.shipOverride.enabled;
   }
 
-  static toLegacyOptions(settings: WorkshopSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: WorkshopSettings, subject: LegacyStorage) {
     subject.toggles.craft = settings.enabled;
     subject.triggers.craft = settings.trigger;
 
@@ -95,7 +95,7 @@ export class WorkshopSettings extends SettingTrigger {
     subject.items["toggle-shipOverride"] = settings.shipOverride.enabled;
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new WorkshopSettings();
     options.enabled = subject.toggles.craft;
     options.trigger = subject.triggers.craft;

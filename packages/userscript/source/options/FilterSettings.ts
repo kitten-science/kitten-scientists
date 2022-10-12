@@ -1,6 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export enum FilterItemVariant {
   Build = "ks-activity type_ks-build",
@@ -91,7 +91,7 @@ export class FilterSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: FilterSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: FilterSettings, subject: LegacyStorage) {
     subject.toggles.filter = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.items)) {
@@ -99,7 +99,7 @@ export class FilterSettings extends Setting {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new FilterSettings();
     options.enabled = subject.toggles.filter;
 

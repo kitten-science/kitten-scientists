@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { TimeItemVariant } from "../types";
 import { Setting, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 import { TimeItem } from "./TimeSettings";
 
 export class ResetTimeBuildingSetting extends SettingTrigger {
@@ -89,14 +89,14 @@ export class ResetTimeSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: ResetTimeSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: ResetTimeSettings, subject: LegacyStorage) {
     for (const [name, item] of objectEntries(settings.items)) {
       subject.items[`toggle-reset-time-${name}` as const] = item.enabled;
       subject.items[`set-reset-time-${name}-min` as const] = item.trigger;
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetTimeSettings();
     options.enabled = true;
 

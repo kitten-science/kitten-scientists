@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { isNil, mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class ResetResourcesSettingsItem extends Setting {
   readonly resource: Resource;
@@ -84,7 +84,7 @@ export class ResetResourcesSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: ResetResourcesSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: ResetResourcesSettings, subject: LegacyStorage) {
     for (const [name, item] of objectEntries(settings.items)) {
       if (isNil(subject.resources[name])) {
         subject.resources[name] = {
@@ -102,7 +102,7 @@ export class ResetResourcesSettings extends Setting {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetResourcesSettings();
     options.enabled = true;
 

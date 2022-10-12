@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { Job } from "../types";
 import { Setting, SettingMax, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export type VillageSettingsItems = {
   [item in Job]: SettingMax;
@@ -50,7 +50,7 @@ export class VillageSettings extends Setting {
     this.promoteLeader.enabled = settings.promoteLeader.enabled;
   }
 
-  static toLegacyOptions(settings: VillageSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: VillageSettings, subject: LegacyStorage) {
     subject.toggles.distribute = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.items)) {
@@ -63,7 +63,7 @@ export class VillageSettings extends Setting {
     subject.items["toggle-promote"] = settings.promoteLeader.enabled;
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new VillageSettings();
     options.enabled = subject.toggles.distribute;
 

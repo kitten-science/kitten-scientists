@@ -1,5 +1,5 @@
 import { SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 import { CycleIndices } from "./TimeControlSettings";
 
 export class TimeSkipSettings extends SettingTrigger {
@@ -39,7 +39,7 @@ export class TimeSkipSettings extends SettingTrigger {
     }
   }
 
-  static toLegacyOptions(settings: TimeSkipSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: TimeSkipSettings, subject: LegacyStorage) {
     subject.items["toggle-timeSkip"] = settings.enabled;
     subject.items["set-timeSkip-trigger"] = settings.trigger;
     subject.items["set-timeSkip-maximum"] = settings.maximum;
@@ -54,7 +54,7 @@ export class TimeSkipSettings extends SettingTrigger {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new TimeSkipSettings();
     options.enabled = subject.items["toggle-timeSkip"] ?? options.enabled;
 

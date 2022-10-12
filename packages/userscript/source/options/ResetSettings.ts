@@ -4,7 +4,7 @@ import { ResetResourcesSettings } from "./ResetResourcesSettings";
 import { ResetSpaceSettings } from "./ResetSpaceSettings";
 import { ResetTimeSettings } from "./ResetTimeSettings";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class ResetSettings extends Setting {
   bonfire: ResetBonfireSettings;
@@ -39,7 +39,7 @@ export class ResetSettings extends Setting {
     this.time.load(settings.time);
   }
 
-  static toLegacyOptions(settings: ResetSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: ResetSettings, subject: LegacyStorage) {
     subject.items["toggle-reset"] = settings.enabled;
 
     ResetBonfireSettings.toLegacyOptions(settings.bonfire, subject);
@@ -49,7 +49,7 @@ export class ResetSettings extends Setting {
     ResetTimeSettings.toLegacyOptions(settings.time, subject);
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetSettings();
     options.enabled = subject.items["toggle-reset"] ?? options.enabled;
 

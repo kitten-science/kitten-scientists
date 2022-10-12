@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { GamePage, SpaceBuildings } from "../types";
 import { MissionSettings } from "./MissionSettings";
 import { SettingMax, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class SpaceBuildingSetting extends SettingMax {
   readonly building: SpaceBuildings;
@@ -71,7 +71,7 @@ export class SpaceSettings extends SettingTrigger {
     this.unlockMissions.load(settings.unlockMissions);
   }
 
-  static toLegacyOptions(settings: SpaceSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: SpaceSettings, subject: LegacyStorage) {
     subject.toggles.space = settings.enabled;
     subject.triggers.space = settings.trigger;
 
@@ -83,7 +83,7 @@ export class SpaceSettings extends SettingTrigger {
     MissionSettings.toLegacyOptions(settings.unlockMissions, subject);
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new SpaceSettings();
     options.enabled = subject.toggles.space;
     options.trigger = subject.triggers.space;

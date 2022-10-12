@@ -1,6 +1,6 @@
 import { objectEntries } from "../tools/Entries";
 import { Setting, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe";
 
@@ -31,14 +31,14 @@ export class OptionsSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: OptionsSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: OptionsSettings, subject: LegacyStorage) {
     for (const [name, item] of objectEntries(settings.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`set-${name}-trigger` as const] = item.trigger;
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new OptionsSettings();
     options.enabled = subject.toggles.options;
     for (const [name, item] of objectEntries(options.items)) {

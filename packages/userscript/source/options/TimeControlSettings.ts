@@ -1,6 +1,6 @@
 import { ResetSettings } from "./ResetSettings";
 import { Setting, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 import { TimeSkipSettings } from "./TimeSkipSettings";
 
 export type CycleIndices = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
@@ -32,7 +32,7 @@ export class TimeControlSettings extends Setting {
     this.timeSkip.load(settings.timeSkip);
   }
 
-  static toLegacyOptions(settings: TimeControlSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: TimeControlSettings, subject: LegacyStorage) {
     subject.toggles.timeCtrl = settings.enabled;
 
     subject.items["toggle-accelerateTime"] = settings.accelerateTime.enabled;
@@ -42,7 +42,7 @@ export class TimeControlSettings extends Setting {
     TimeSkipSettings.toLegacyOptions(settings.timeSkip, subject);
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new TimeControlSettings();
     options.enabled = subject.toggles.timeCtrl;
 

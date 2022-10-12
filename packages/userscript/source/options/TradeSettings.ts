@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { Race } from "../types";
 import { EmbassySettings } from "./EmbassySettings";
 import { Requirement, Setting, SettingLimited, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class TradeSettingsItem extends SettingLimited {
   readonly race: Race;
@@ -96,7 +96,7 @@ export class TradeSettings extends SettingTrigger {
     this.unlockRaces.enabled = settings.unlockRaces.enabled;
   }
 
-  static toLegacyOptions(settings: TradeSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: TradeSettings, subject: LegacyStorage) {
     subject.toggles.trade = settings.enabled;
     subject.triggers.trade = settings.trigger;
 
@@ -114,7 +114,7 @@ export class TradeSettings extends SettingTrigger {
     subject.items["toggle-races"] = settings.unlockRaces.enabled;
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new TradeSettings();
     options.enabled = subject.toggles.trade;
     options.trigger = subject.triggers.trade;

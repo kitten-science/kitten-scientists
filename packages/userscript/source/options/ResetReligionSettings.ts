@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { UnicornItemVariant } from "../types";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { Setting, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class ResetReligionBuildingSetting extends SettingTrigger {
   readonly building: FaithItem | UnicornItem;
@@ -216,14 +216,14 @@ export class ResetReligionSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: ResetReligionSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: ResetReligionSettings, subject: LegacyStorage) {
     for (const [name, item] of objectEntries(settings.items)) {
       subject.items[`toggle-reset-faith-${name}` as const] = item.enabled;
       subject.items[`set-reset-faith-${name}-min` as const] = item.trigger;
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetReligionSettings();
     options.enabled = true;
 

@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { StagedBuilding } from "../types";
 import { Setting } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class BuildingUpgradeSetting extends Setting {
   readonly upgrade: StagedBuilding;
@@ -39,7 +39,7 @@ export class BuildingUpgradeSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: BuildingUpgradeSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: BuildingUpgradeSettings, subject: LegacyStorage) {
     subject.items["toggle-buildings"] = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.items)) {
@@ -47,7 +47,7 @@ export class BuildingUpgradeSettings extends Setting {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new BuildingUpgradeSettings();
     options.enabled = subject.items["toggle-buildings"] ?? options.enabled;
 

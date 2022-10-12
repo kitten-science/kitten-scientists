@@ -1,3 +1,4 @@
+import { EngineState } from "../Engine";
 import {
   Job,
   Missions,
@@ -84,7 +85,7 @@ type ToggleUpgradeBuildings = "toggle-buildings";
 type ToggleUpgradeBuildingItem = `toggle-upgrade-${StagedBuilding}`;
 type ToggleUpgradeItem = `toggle-upgrade-${Upgrade}`;
 
-export type KittenStorageType = {
+export type LegacyStorage = {
   version: number;
   interval: number;
   toggles: Record<LegacySettingsSections | "engine", boolean>;
@@ -174,13 +175,16 @@ export type KittenStorageType = {
 };
 
 export class SettingsStorage {
-  static getLegacySettings(): KittenStorageType | null {
+  static getLegacyOptions(): LegacyStorage | null {
     const saved = JSON.parse(
       (localStorage["cbc.kitten-scientists"] as string | undefined) ?? "null"
-    ) as KittenStorageType | null;
+    ) as LegacyStorage | null;
     return saved === null ? null : saved;
   }
-  static setLegacySettings(settings: KittenStorageType): void {
-    localStorage["cbc.kitten-scientists"] = JSON.stringify(settings);
+  static setLegacyOptions(options: LegacyStorage): void {
+    localStorage["cbc.kitten-scientists"] = JSON.stringify(options);
+  }
+  static setSettings(settings: EngineState): void {
+    localStorage["ks.state.0"] = JSON.stringify(settings);
   }
 }

@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { Race } from "../types";
 import { SettingMax, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class EmbassySetting extends SettingMax {
   readonly race: Race;
@@ -43,7 +43,7 @@ export class EmbassySettings extends SettingTrigger {
     }
   }
 
-  static toLegacyOptions(settings: EmbassySettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: EmbassySettings, subject: LegacyStorage) {
     subject.items["toggle-buildEmbassies"] = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.items)) {
@@ -52,7 +52,7 @@ export class EmbassySettings extends SettingTrigger {
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new EmbassySettings();
     options.enabled = subject.items["toggle-buildEmbassies"] ?? options.enabled;
 

@@ -34,6 +34,18 @@ export type TickContext = {
 export type Automation = {
   tick(context: TickContext): void | Promise<void>;
 };
+export type EngineState = {
+  engine: EngineSettings;
+  bonfire: BonfireSettings;
+  religion: ReligionSettings;
+  science: ScienceSettings;
+  space: SpaceSettings;
+  timeControl: TimeControlSettings;
+  time: TimeSettings;
+  trade: TradeSettings;
+  village: VillageSettings;
+  workshop: WorkshopSettings;
+};
 export type SupportedLanguages = keyof typeof i18nData;
 
 export class Engine {
@@ -114,7 +126,7 @@ export class Engine {
     this.workshopManager.load(settings.workshop);
   }
 
-  stateSerialize() {
+  stateSerialize(): EngineState {
     return {
       engine: this.settings,
       bonfire: this.bonfireManager.settings,

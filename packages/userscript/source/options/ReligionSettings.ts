@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { UnicornItemVariant } from "../types";
 import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export type FaithItem =
   | "apocripha"
@@ -331,7 +331,7 @@ export class ReligionSettings extends SettingTrigger {
     this.autoPraise.trigger = settings.autoPraise.trigger;
   }
 
-  static toLegacyOptions(settings: ReligionSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: ReligionSettings, subject: LegacyStorage) {
     subject.toggles.faith = settings.enabled;
     subject.triggers.faith = settings.trigger;
 
@@ -349,7 +349,7 @@ export class ReligionSettings extends SettingTrigger {
     subject.items["set-autoPraise-trigger"] = settings.autoPraise.trigger;
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ReligionSettings();
     options.enabled = subject.toggles.faith;
     options.trigger = subject.triggers.faith;

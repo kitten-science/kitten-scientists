@@ -1,7 +1,7 @@
 import { objectEntries } from "../tools/Entries";
 import { SpaceBuildings } from "../types";
 import { Setting, SettingTrigger } from "./Settings";
-import { KittenStorageType } from "./SettingsStorage";
+import { LegacyStorage } from "./SettingsStorage";
 
 export class ResetSpaceBuildingSetting extends SettingTrigger {
   readonly building: SpaceBuildings;
@@ -57,14 +57,14 @@ export class ResetSpaceSettings extends Setting {
     }
   }
 
-  static toLegacyOptions(settings: ResetSpaceSettings, subject: KittenStorageType) {
+  static toLegacyOptions(settings: ResetSpaceSettings, subject: LegacyStorage) {
     for (const [name, item] of objectEntries(settings.items)) {
       subject.items[`toggle-reset-space-${name}` as const] = item.enabled;
       subject.items[`set-reset-space-${name}-min` as const] = item.trigger;
     }
   }
 
-  static fromLegacyOptions(subject: KittenStorageType) {
+  static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetSpaceSettings();
     options.enabled = true;
 
