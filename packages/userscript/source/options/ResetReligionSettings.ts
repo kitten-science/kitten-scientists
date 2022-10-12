@@ -9,13 +9,13 @@ export class ResetReligionBuildingSetting extends SettingTrigger {
   readonly variant: UnicornItemVariant;
 
   constructor(
-    id: FaithItem | UnicornItem,
+    building: FaithItem | UnicornItem,
     variant: UnicornItemVariant,
     enabled = false,
     trigger = 1
   ) {
-    super(id, enabled, trigger);
-    this.building = id;
+    super(enabled, trigger);
+    this.building = building;
     this.variant = variant;
   }
 }
@@ -203,7 +203,7 @@ export class ResetReligionSettings extends Setting {
       ),
     }
   ) {
-    super("", enabled);
+    super(enabled);
     this.items = items;
   }
 

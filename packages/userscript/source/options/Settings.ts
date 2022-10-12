@@ -13,7 +13,7 @@ export type AllItems = BonfireItem | FaithItem | ReligionItem | SpaceBuildings |
 export class Setting {
   enabled: boolean;
 
-  constructor(id: string, enabled = false) {
+  constructor(enabled = false) {
     this.enabled = enabled;
   }
 
@@ -25,8 +25,8 @@ export class Setting {
 export class SettingLimited extends Setting {
   limited: boolean;
 
-  constructor(id: string, enabled = false, limited = false) {
-    super(id, enabled);
+  constructor(enabled = false, limited = false) {
+    super(enabled);
     this.limited = limited;
   }
 
@@ -39,8 +39,8 @@ export class SettingLimited extends Setting {
 export class SettingMax extends Setting {
   max: number;
 
-  constructor(id: string, enabled = false, max = -1) {
-    super(id, enabled);
+  constructor(enabled = false, max = -1) {
+    super(enabled);
     this.max = max;
   }
 
@@ -53,8 +53,8 @@ export class SettingMax extends Setting {
 export class SettingLimitedMax extends SettingLimited implements SettingMax {
   max: number;
 
-  constructor(id: string, enabled = false, limited = false, max = -1) {
-    super(id, enabled, limited);
+  constructor(enabled = false, limited = false, max = -1) {
+    super(enabled, limited);
     this.max = max;
   }
 
@@ -67,8 +67,8 @@ export class SettingLimitedMax extends SettingLimited implements SettingMax {
 export class SettingTrigger extends Setting {
   trigger: number;
 
-  constructor(id: string, enabled = false, trigger = 1) {
-    super(id, enabled);
+  constructor(enabled = false, trigger = 1) {
+    super(enabled);
     this.trigger = trigger;
   }
 

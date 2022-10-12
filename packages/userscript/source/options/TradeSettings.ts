@@ -27,8 +27,7 @@ export class TradeSettingsItem extends SettingLimited {
     spring: boolean,
     require: Requirement = false
   ) {
-    super(race, enabled, limited);
-
+    super(enabled, limited);
     this.race = race;
     this.summer = summer;
     this.autumn = autumn;
@@ -71,9 +70,9 @@ export class TradeSettings extends SettingTrigger {
       zebras: new TradeSettingsItem("zebras", true, true, true, true, true, true),
     },
     buildEmbassies = new EmbassySettings(),
-    unlockRaces = new Setting("unlockRaces", true)
+    unlockRaces = new Setting(true)
   ) {
-    super("trade", enabled, trigger);
+    super(enabled, trigger);
     this.items = items;
     this.buildEmbassies = buildEmbassies;
     this.unlockRaces = unlockRaces;

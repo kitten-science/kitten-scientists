@@ -7,7 +7,7 @@ export class EmbassySetting extends SettingMax {
   readonly race: Race;
 
   constructor(race: Race, enabled = false) {
-    super("", enabled);
+    super(enabled);
     this.race = race;
   }
 }
@@ -30,7 +30,7 @@ export class EmbassySettings extends SettingTrigger {
       zebras: new EmbassySetting("zebras", true),
     }
   ) {
-    super("embassies", enabled);
+    super(enabled);
     this.items = items;
   }
 

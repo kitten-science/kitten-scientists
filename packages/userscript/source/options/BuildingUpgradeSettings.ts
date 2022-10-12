@@ -7,7 +7,7 @@ export class BuildingUpgradeSetting extends Setting {
   readonly upgrade: StagedBuilding;
 
   constructor(upgrade: StagedBuilding, enabled = false) {
-    super("", enabled);
+    super(enabled);
     this.upgrade = upgrade;
   }
 }
@@ -27,7 +27,7 @@ export class BuildingUpgradeSettings extends Setting {
       solarfarm: new BuildingUpgradeSetting("solarfarm", true),
     }
   ) {
-    super(id, enabled);
+    super(enabled);
     this.items = items;
   }
 

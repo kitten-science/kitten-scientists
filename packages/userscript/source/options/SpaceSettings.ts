@@ -7,7 +7,7 @@ import { KittenStorageType } from "./SettingsStorage";
 export class SpaceBuildingSetting extends SettingMax {
   readonly building: SpaceBuildings;
   constructor(building: SpaceBuildings, enabled = false) {
-    super("", enabled);
+    super(enabled);
     this.building = building;
   }
 }
@@ -50,7 +50,7 @@ export class SpaceSettings extends SettingTrigger {
     },
     unlockMissions = new MissionSettings("unlockMissions")
   ) {
-    super("space", enabled, trigger);
+    super(enabled, trigger);
     this.items = items;
     this.unlockMissions = unlockMissions;
   }

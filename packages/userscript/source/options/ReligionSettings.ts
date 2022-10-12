@@ -46,14 +46,14 @@ export class ReligionSettingsItem extends SettingMax {
   readonly variant: UnicornItemVariant;
 
   constructor(
-    id: FaithItem | UnicornItem,
+    building: FaithItem | UnicornItem,
     variant: UnicornItemVariant,
     enabled = false,
     max = -1,
     require: Requirement = false
   ) {
-    super(id, enabled, max);
-    this.building = id;
+    super(enabled, max);
+    this.building = building;
     this.require = require;
     this.variant = variant;
   }
@@ -301,12 +301,12 @@ export class ReligionSettings extends SettingTrigger {
         "gold"
       ),
     },
-    bestUnicornBuilding = new Setting("bestUnicornBuilding", true),
-    autoPraise = new SettingTrigger("autoPraise", true, 0.98),
-    adore = new SettingTrigger("adore", false, 0.75),
-    transcend = new Setting("transcend", false)
+    bestUnicornBuilding = new Setting(true),
+    autoPraise = new SettingTrigger(true, 0.98),
+    adore = new SettingTrigger(false, 0.75),
+    transcend = new Setting(false)
   ) {
-    super("religion", enabled, trigger);
+    super(enabled, trigger);
     this.items = items;
     this.adore = adore;
     this.autoPraise = autoPraise;

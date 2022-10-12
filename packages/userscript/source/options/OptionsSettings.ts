@@ -7,27 +7,19 @@ export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe";
 export class OptionsSettingsItem extends SettingTrigger {}
 
 export class OptionsSettings extends Setting {
-  items: {
+  readonly items: {
     [key in OptionsItem]: OptionsSettingsItem;
-  } = {
-    autofeed: new OptionsSettingsItem("autofeed", true),
-    crypto: new OptionsSettingsItem("crypto", true, 10000),
-    fixCry: new OptionsSettingsItem("fixCry", false),
-    observe: new OptionsSettingsItem("observe", true),
   };
 
   constructor(
     enabled = false,
-    observe = new OptionsSettingsItem("observe", true),
-    autofeed = new OptionsSettingsItem("autofeed", true),
-    crypto = new OptionsSettingsItem("crypto", true, 10000),
-    fixCry = new OptionsSettingsItem("fixCry", false)
+    observe = new OptionsSettingsItem(true),
+    autofeed = new OptionsSettingsItem(true),
+    crypto = new OptionsSettingsItem(true, 10000),
+    fixCry = new OptionsSettingsItem(false)
   ) {
-    super("options", enabled);
-    this.items.observe = observe;
-    this.items.autofeed = autofeed;
-    this.items.crypto = crypto;
-    this.items.fixCry = fixCry;
+    super(enabled);
+    this.items = { autofeed, crypto, fixCry, observe };
   }
 
   load(settings: OptionsSettings) {

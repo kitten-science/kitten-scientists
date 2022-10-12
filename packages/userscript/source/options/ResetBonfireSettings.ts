@@ -7,7 +7,7 @@ export class ResetBonfireBuildingSetting extends SettingTrigger {
   readonly building: BonfireItem;
 
   constructor(building: BonfireItem, enabled = false, trigger = 1) {
-    super(building, enabled, trigger);
+    super(enabled, trigger);
     this.building = building;
   }
 }
@@ -64,7 +64,7 @@ export class ResetBonfireSettings extends Setting {
       ziggurat: new ResetBonfireBuildingSetting("ziggurat", true, -1),
     }
   ) {
-    super("", enabled);
+    super(enabled);
     this.items = items;
   }
 

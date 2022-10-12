@@ -9,7 +9,7 @@ export class MissionSetting extends Setting {
   readonly mission: Missions;
 
   constructor(mission: Missions, enabled = false) {
-    super("", enabled);
+    super(enabled);
     this.mission = mission;
   }
 }
@@ -38,7 +38,7 @@ export class MissionSettings extends Setting {
       yarnMission: new MissionSetting("yarnMission", true),
     }
   ) {
-    super(id, enabled);
+    super(enabled);
     this.items = items;
   }
 

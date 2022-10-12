@@ -11,7 +11,7 @@ export class ResourcesSettingsItem extends Setting {
   stock = 0;
 
   constructor(id: Resource, enabled: boolean, consume: number | undefined, stock: number) {
-    super(id, enabled);
+    super(enabled);
     this.resource = id;
     this.consume = consume;
     this.stock = stock;
@@ -75,7 +75,7 @@ export class ResourcesSettings extends Setting {
       zebras: new ResourcesSettingsItem("zebras", false, 1, 0),
     }
   ) {
-    super("resources", true);
+    super(true);
     this.items = items;
   }
 

@@ -7,7 +7,7 @@ export class ResetSpaceBuildingSetting extends SettingTrigger {
   readonly building: SpaceBuildings;
 
   constructor(building: SpaceBuildings, enabled = false, trigger = 1) {
-    super(building, enabled, trigger);
+    super(enabled, trigger);
     this.building = building;
   }
 }
@@ -44,7 +44,7 @@ export class ResetSpaceSettings extends Setting {
       terraformingStation: new ResetSpaceBuildingSetting("terraformingStation", true, -1),
     }
   ) {
-    super("", enabled);
+    super(enabled);
     this.items = items;
   }
 

@@ -45,7 +45,7 @@ export class FilterSettingsItem extends Setting {
   variant: FilterItemVariant;
 
   constructor(id: string, variant: FilterItemVariant) {
-    super(id, true);
+    super(true);
     this.variant = variant;
   }
 }
@@ -79,7 +79,7 @@ export class FilterSettings extends Setting {
       miscFilter: new FilterSettingsItem("miscFilter", FilterItemVariant.Misc),
     }
   ) {
-    super("filter", enabled);
+    super(enabled);
     this.items = items;
   }
 

@@ -20,7 +20,7 @@ export class EngineSettings extends Setting {
     options = new OptionsSettings(),
     resources = new ResourcesSettings()
   ) {
-    super("engine", enabled);
+    super(enabled);
     this.filters = filters;
     this.options = options;
     this.resources = resources;

@@ -14,7 +14,7 @@ export class CraftSettingsItem extends SettingLimitedMax {
     enabled = true,
     limited = true
   ) {
-    super(resource, enabled, limited);
+    super(enabled, limited);
     this.resource = resource;
     this.require = require;
   }
@@ -55,9 +55,9 @@ export class WorkshopSettings extends SettingTrigger {
       wood: new CraftSettingsItem("wood", "catnip"),
     },
     unlockUpgrades = new UpgradeSettings("unlockUpgrades"),
-    shipOverride = new Setting("shipOverride", true)
+    shipOverride = new Setting(true)
   ) {
-    super("workshop", enabled, trigger);
+    super(enabled, trigger);
     this.items = items;
     this.shipOverride = shipOverride;
     this.unlockUpgrades = unlockUpgrades;

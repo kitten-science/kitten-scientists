@@ -9,7 +9,7 @@ export class PolicySetting extends Setting {
   readonly policy: Policy;
 
   constructor(policy: Policy, enabled = false) {
-    super("", enabled);
+    super(enabled);
     this.policy = policy;
   }
 }
@@ -65,7 +65,7 @@ export class PolicySettings extends Setting {
       zebraRelationsBellicosity: new PolicySetting("zebraRelationsBellicosity", false),
     }
   ) {
-    super(id, enabled);
+    super(enabled);
     this.items = items;
   }
 

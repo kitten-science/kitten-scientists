@@ -9,20 +9,18 @@ import { KittenStorageType } from "./SettingsStorage";
 export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCryochambers">;
 
 export class TimeSettingsItem extends SettingMax {
-  readonly upgrade: TimeItem;
-  require: Requirement;
-
-  variant: TimeItemVariant;
+  readonly building: TimeItem;
+  readonly require: Requirement;
+  readonly variant: TimeItemVariant;
 
   constructor(
-    id: TimeItem,
+    building: TimeItem,
     variant: TimeItemVariant,
     require: Requirement = false,
     enabled = false
   ) {
-    super(id, enabled);
-
-    this.upgrade = id;
+    super(enabled);
+    this.building = building;
     this.require = require;
     this.variant = variant;
   }
@@ -56,7 +54,7 @@ export class TimeSettings extends SettingTrigger {
       voidRift: new TimeSettingsItem("voidRift", TimeItemVariant.VoidSpace),
     }
   ) {
-    super("time", enabled, trigger);
+    super(enabled, trigger);
     this.items = items;
   }
 

@@ -17,20 +17,20 @@ export class VillageSettings extends Setting {
   constructor(
     enabled = false,
     items: VillageSettingsItems = {
-      engineer: new SettingMax("engineer", true, 1),
-      farmer: new SettingMax("farmer", true, 1),
-      geologist: new SettingMax("geologist", true, 1),
-      hunter: new SettingMax("hunter", true, 1),
-      miner: new SettingMax("miner", true, 1),
-      priest: new SettingMax("priest", true, 1),
-      scholar: new SettingMax("scholar", true, 1),
-      woodcutter: new SettingMax("woodcutter", true, 1),
+      engineer: new SettingMax(true, 1),
+      farmer: new SettingMax(true, 1),
+      geologist: new SettingMax(true, 1),
+      hunter: new SettingMax(true, 1),
+      miner: new SettingMax(true, 1),
+      priest: new SettingMax(true, 1),
+      scholar: new SettingMax(true, 1),
+      woodcutter: new SettingMax(true, 1),
     },
-    holdFestivals = new Setting("holdFestivals", true),
-    hunt = new SettingTrigger("hunt", true, 0.98),
-    promoteLeader = new Setting("promoteLeader", true)
+    holdFestivals = new Setting(true),
+    hunt = new SettingTrigger(true, 0.98),
+    promoteLeader = new Setting(true)
   ) {
-    super("village", enabled);
+    super(enabled);
     this.items = items;
     this.holdFestivals = holdFestivals;
     this.hunt = hunt;

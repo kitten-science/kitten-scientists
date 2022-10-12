@@ -9,7 +9,7 @@ export class ResetTimeBuildingSetting extends SettingTrigger {
   readonly variant: TimeItemVariant;
 
   constructor(id: TimeItem, variant: TimeItemVariant, enabled = false, trigger = 1) {
-    super(id, enabled, trigger);
+    super(enabled, trigger);
     this.building = id;
     this.variant = variant;
   }
@@ -76,7 +76,7 @@ export class ResetTimeSettings extends Setting {
       voidRift: new ResetTimeBuildingSetting("voidRift", TimeItemVariant.VoidSpace, true, -1),
     }
   ) {
-    super("", enabled);
+    super(enabled);
     this.items = items;
   }
 

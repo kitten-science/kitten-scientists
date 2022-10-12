@@ -9,7 +9,7 @@ export class TechSetting extends Setting {
   readonly tech: Technology;
 
   constructor(tech: Technology, enabled = false) {
-    super("", enabled);
+    super(enabled);
     this.tech = tech;
   }
 }
@@ -87,7 +87,7 @@ export class TechSettings extends Setting {
       writing: new TechSetting("writing", true),
     }
   ) {
-    super(id, enabled);
+    super(enabled);
     this.items = items;
   }
 

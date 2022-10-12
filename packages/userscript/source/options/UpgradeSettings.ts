@@ -9,7 +9,7 @@ export class UpgradeSetting extends Setting {
   readonly upgrade: Upgrade;
 
   constructor(upgrade: Upgrade, enabled = false) {
-    super("", enabled);
+    super(enabled);
     this.upgrade = upgrade;
   }
 }
@@ -162,7 +162,7 @@ export class UpgradeSettings extends Setting {
       voidReactors: new UpgradeSetting("voidReactors", true),
     }
   ) {
-    super(id, enabled);
+    super(enabled);
     this.items = items;
   }
 

@@ -21,7 +21,7 @@ export class ResetSettings extends Setting {
     space = new ResetSpaceSettings(),
     time = new ResetTimeSettings()
   ) {
-    super("", enabled);
+    super(enabled);
     this.bonfire = bonfire;
     this.religion = religion;
     this.resources = resources;

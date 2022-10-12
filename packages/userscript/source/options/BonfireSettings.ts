@@ -32,15 +32,15 @@ export class BonfireBuildingSetting extends SettingMax {
   readonly stage: number = 0;
 
   constructor(
-    id: BonfireItem,
+    building: BonfireItem,
     enabled = false,
     require: Requirement = false,
     max = -1,
     baseStage?: Building
   ) {
-    super(id, enabled, max);
+    super(enabled, max);
 
-    this.building = id;
+    this.building = building;
     this.require = require;
     if (baseStage) {
       this.stage = 1;
@@ -109,10 +109,10 @@ export class BonfireSettings extends SettingTrigger {
       zebraWorkshop: new BonfireBuildingSetting("zebraWorkshop", false, "bloodstone"),
       ziggurat: new BonfireBuildingSetting("ziggurat", true),
     },
-    turnOnSteamworks = new Setting("turnOnSteamworks", true),
+    turnOnSteamworks = new Setting(true),
     upgradeBuildings = new BuildingUpgradeSettings("upgradeBuildings")
   ) {
-    super("bonfire", enabled, trigger);
+    super(enabled, trigger);
     this.buildings = buildings;
     this.turnOnSteamworks = turnOnSteamworks;
     this.upgradeBuildings = upgradeBuildings;

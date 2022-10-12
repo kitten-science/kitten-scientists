@@ -9,7 +9,7 @@ export class ResetResourcesSettingsItem extends Setting {
   stock = 0;
 
   constructor(id: Resource, enabled: boolean, stock: number) {
-    super(id, enabled);
+    super(enabled);
     this.resource = id;
     this.stock = stock;
   }
@@ -71,7 +71,7 @@ export class ResetResourcesSettings extends Setting {
       zebras: new ResetResourcesSettingsItem("zebras", false, 0),
     }
   ) {
-    super("", enabled);
+    super(enabled);
     this.items = items;
   }
 

@@ -22,7 +22,7 @@ export class TimeSkipSettings extends SettingTrigger {
   9 = false;
 
   constructor() {
-    super("timeSkip", false, 5);
+    super(false, 5);
   }
 
   load(settings: TimeSkipSettings) {
