@@ -40,6 +40,20 @@ export class SettingLimited extends Setting {
   }
 }
 
+export class SettingTrigger extends Setting {
+  trigger: number;
+
+  constructor(enabled = false, trigger = 1) {
+    super(enabled);
+    this.trigger = trigger;
+  }
+
+  load(setting: SettingTrigger) {
+    super.load(setting);
+    this.trigger = setting.trigger;
+  }
+}
+
 export class SettingMax extends Setting {
   max: number;
 
@@ -68,16 +82,16 @@ export class SettingLimitedMax extends SettingLimited implements SettingMax {
   }
 }
 
-export class SettingTrigger extends Setting {
-  trigger: number;
+export class SettingTriggerMax extends SettingTrigger implements SettingMax {
+  max: number;
 
-  constructor(enabled = false, trigger = 1) {
-    super(enabled);
-    this.trigger = trigger;
+  constructor(enabled = false, trigger = 1, max = -1) {
+    super(enabled, trigger);
+    this.max = max;
   }
 
-  load(setting: SettingTrigger) {
+  load(setting: SettingTriggerMax) {
     super.load(setting);
-    this.trigger = setting.trigger;
+    this.max = setting.max;
   }
 }

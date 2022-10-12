@@ -2,26 +2,24 @@ import { TimeSkipSettings } from "../options/TimeSkipSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { CyclesList } from "./components/CyclesList";
+import { MaxButton } from "./components/MaxButton";
 import { Panel } from "./components/Panel";
 import { SeasonsList } from "./components/SeasonsList";
-import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
-  private readonly _items: Array<SettingListItem>;
-  private readonly _maximum: SettingListItem;
+  private readonly _maximum: MaxButton;
   private readonly _cycles: Panel<CyclesList>;
   private readonly _seasons: Panel<SeasonsList>;
 
   constructor(host: UserScript, settings: TimeSkipSettings) {
-    super(host, host.engine.i18n("option.time.skip"), settings);
+    const label = host.engine.i18n("option.time.skip");
+    super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.settings.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.settings.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
@@ -29,17 +27,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
       this.refreshUi();
     });
 
-    this._maximum = new SettingListItem(
-      this._host,
-      this._host.engine.i18n("ui.maximum"),
-      this.settings,
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [this._host.engine.i18n("ui.maximum")]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [this._host.engine.i18n("ui.maximum")]),
-      }
-    );
+    this._maximum = new MaxButton(this._host, label, this.settings);
     this._cycles = new Panel(
       this._host,
       ucfirst(this._host.engine.i18n("ui.cycles")),
@@ -53,7 +41,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
       "M15.3 28.3q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575Zm8.85 0q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575Zm8.5 0q-.85 0-1.425-.575-.575-.575-.575-1.425 0-.85.575-1.425.575-.575 1.425-.575.85 0 1.425.575.575.575.575 1.425 0 .85-.575 1.425-.575.575-1.425.575ZM9 44q-1.2 0-2.1-.9Q6 42.2 6 41V10q0-1.2.9-2.1Q7.8 7 9 7h3.25V4h3.25v3h17V4h3.25v3H39q1.2 0 2.1.9.9.9.9 2.1v31q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30V19.5H9V41Zm0-24.5h30V10H9Zm0 0V10v6.5Z"
     );
 
-    this._items = [this._maximum];
+    this.element.append(this._maximum.element);
 
     this.addChildren([this._maximum, this._cycles, this._seasons]);
   }

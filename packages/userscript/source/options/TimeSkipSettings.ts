@@ -3,7 +3,7 @@ import { LegacyStorage } from "./SettingsStorage";
 import { CycleIndices } from "./TimeControlSettings";
 
 export class TimeSkipSettings extends SettingTrigger {
-  maximum = 50;
+  max = 50;
 
   spring = true;
   summer = false;
@@ -27,7 +27,7 @@ export class TimeSkipSettings extends SettingTrigger {
 
   load(settings: TimeSkipSettings) {
     super.load(settings);
-    this.maximum = settings.maximum;
+    this.max = settings.max;
 
     this.autumn = settings.autumn;
     this.spring = settings.spring;
@@ -42,7 +42,7 @@ export class TimeSkipSettings extends SettingTrigger {
   static toLegacyOptions(settings: TimeSkipSettings, subject: LegacyStorage) {
     subject.items["toggle-timeSkip"] = settings.enabled;
     subject.items["set-timeSkip-trigger"] = settings.trigger;
-    subject.items["set-timeSkip-maximum"] = settings.maximum;
+    subject.items["set-timeSkip-max"] = settings.max;
     subject.items["toggle-timeSkip-autumn"] = settings.autumn;
     subject.items["toggle-timeSkip-spring"] = settings.spring;
     subject.items["toggle-timeSkip-summer"] = settings.summer;
@@ -59,7 +59,7 @@ export class TimeSkipSettings extends SettingTrigger {
     options.enabled = subject.items["toggle-timeSkip"] ?? options.enabled;
 
     options.trigger = subject.items["set-timeSkip-trigger"] ?? options.trigger;
-    options.maximum = subject.items["set-timeSkip-maximum"] ?? options.maximum;
+    options.max = subject.items["set-timeSkip-max"] ?? options.max;
     options.autumn = subject.items["toggle-timeSkip-autumn"] ?? options.autumn;
     options.spring = subject.items["toggle-timeSkip-spring"] ?? options.spring;
     options.summer = subject.items["toggle-timeSkip-summer"] ?? options.summer;
