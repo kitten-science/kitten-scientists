@@ -28,7 +28,7 @@ export class TriggerButton extends UiComponent {
 
       if (value !== null) {
         setting.trigger = value;
-        host.updateOptions();
+        host.updateSettings();
         this.refreshUi();
       }
 

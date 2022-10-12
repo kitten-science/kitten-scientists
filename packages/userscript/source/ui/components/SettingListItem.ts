@@ -52,10 +52,10 @@ export class SettingListItem extends UiComponent {
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && setting.enabled === false) {
         handler.onCheck();
-        host.updateOptions(() => (setting.enabled = true));
+        host.updateSettings(() => (setting.enabled = true));
       } else if (!checkbox.is(":checked") && setting.enabled === true) {
         handler.onUnCheck();
-        host.updateOptions(() => (setting.enabled = false));
+        host.updateSettings(() => (setting.enabled = false));
       }
     });
 

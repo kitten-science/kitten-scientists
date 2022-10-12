@@ -61,7 +61,7 @@ export class UserScript {
   /**
    * Signals whether the options have been changed since they were last saved.
    */
-  private _optionsDirty = false;
+  private _settingsDirty = false;
   private _intervalSaveSettings: number | undefined = undefined;
 
   /**
@@ -90,7 +90,7 @@ export class UserScript {
     this._userInterface.refreshUi();
 
     // Every 30 seconds, check if we need to save our settings.
-    this._intervalSaveSettings = setInterval(this._checkOptions.bind(this), 30 * 1000);
+    this._intervalSaveSettings = setInterval(this._checkSettings.bind(this), 30 * 1000);
   }
 
   /**
@@ -149,24 +149,30 @@ export class UserScript {
    *
    * @param updater A function that will manipulate the settings before they're saved.
    */
-  updateOptions(updater?: () => void): void {
+  updateSettings(updater?: () => void): void {
     cdebug("Settings will be updated.");
     if (updater) {
       updater();
     }
-    this._optionsDirty = true;
+    this._settingsDirty = true;
   }
 
-  private _checkOptions(): void {
-    if (this._optionsDirty) {
+  private _checkSettings(): void {
+    if (this._settingsDirty) {
       this.saveSettings();
     }
   }
 
   saveSettings() {
-    this._optionsDirty = false;
+    this._settingsDirty = false;
 
-    const toExport = Options.asLegacyOptions({
+    const toExport = this.getLegacyOptions();
+    SettingsStorage.setLegacySettings(toExport);
+    clog("Kitten Scientists settings saved.");
+  }
+
+  getLegacyOptions() {
+    return Options.asLegacyOptions({
       bonfire: this.engine.bonfireManager.settings,
       engine: this.engine.settings,
       religion: this.engine.religionManager.settings,
@@ -178,8 +184,9 @@ export class UserScript {
       village: this.engine.villageManager.settings,
       workshop: this.engine.workshopManager.settings,
     });
-    SettingsStorage.setLegacySettings(toExport);
-    clog("Kitten Scientists settings saved.");
+  }
+  getSettings() {
+    return this.engine.stateSerialize();
   }
 
   static async waitForGame(timeout = 30000): Promise<GamePage> {

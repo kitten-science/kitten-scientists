@@ -81,7 +81,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
         setting.enabled = true;
         setting.stock = value;
         stockElement.text(this._host.engine.i18n("resources.stock", [this._renderLimit(value)]));
-        this._host.updateOptions();
+        this._host.updateSettings();
       }
     });
 

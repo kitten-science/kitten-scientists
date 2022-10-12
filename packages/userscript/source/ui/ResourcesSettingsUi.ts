@@ -80,7 +80,7 @@ export class ResourcesSettingsUi extends SettingsSectionUi<ResourcesSettings> {
       );
       if (value !== null) {
         setting.stock = value;
-        this._host.updateOptions();
+        this._host.updateSettings();
         this.refreshUi();
       }
     });
@@ -92,7 +92,7 @@ export class ResourcesSettingsUi extends SettingsSectionUi<ResourcesSettings> {
       );
       if (consumeValue !== null) {
         setting.consume = consumeValue;
-        this._host.updateOptions();
+        this._host.updateSettings();
         this.refreshUi();
       }
     });

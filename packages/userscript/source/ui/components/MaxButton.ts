@@ -25,7 +25,7 @@ export class MaxButton extends UiComponent {
 
       if (value !== null) {
         const limit = SettingsSectionUi.renderLimit(value, host);
-        host.updateOptions(() => (setting.max = value));
+        host.updateSettings(() => (setting.max = value));
         element[0].title = limit;
         element[0].innerText = host.engine.i18n("ui.max", [limit]);
       }

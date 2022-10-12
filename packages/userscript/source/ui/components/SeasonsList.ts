@@ -52,10 +52,10 @@ export class SeasonsList extends SettingsList {
 
     input.on("change", () => {
       if (input.is(":checked") && option[season] === false) {
-        this._host.updateOptions(() => (option[season] = true));
+        this._host.updateSettings(() => (option[season] = true));
         //this._host.engine.imessage("trade.season.enable", [iname, iseason]);
       } else if (!input.is(":checked") && option[season] === true) {
-        this._host.updateOptions(() => (option[season] = false));
+        this._host.updateSettings(() => (option[season] = false));
         //this._host.engine.imessage("trade.season.disable", [iname, iseason]);
       }
     });

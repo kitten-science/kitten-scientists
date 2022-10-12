@@ -233,7 +233,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     const bub = this.settings.bestUnicornBuilding;
     input.on("change", () => {
       if (input.is(":checked") && !bub.enabled) {
-        this._host.updateOptions(() => (bub.enabled = true));
+        this._host.updateSettings(() => (bub.enabled = true));
         // enable all unicorn buildings
         for (const [unicornName, option] of objectEntries(this.settings.items)) {
           if (
@@ -252,7 +252,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           this._host.engine.i18n("option.faith.best.unicorn"),
         ]);
       } else if (!input.is(":checked") && bub.enabled) {
-        this._host.updateOptions(() => (bub.enabled = false));
+        this._host.updateSettings(() => (bub.enabled = false));
         this._host.engine.imessage("status.sub.disable", [
           this._host.engine.i18n("option.faith.best.unicorn"),
         ]);

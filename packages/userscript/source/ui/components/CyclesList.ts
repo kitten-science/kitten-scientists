@@ -63,10 +63,10 @@ export class CyclesList extends SettingsList {
 
     input.on("change", () => {
       if (input.is(":checked") && option[index] === false) {
-        this._host.updateOptions(() => (option[index] = true));
+        this._host.updateSettings(() => (option[index] = true));
         this._host.engine.imessage("time.skip.cycle.enable", [cycle.title]);
       } else if (!input.is(":checked") && option[index] === true) {
-        this._host.updateOptions(() => (option[index] = false));
+        this._host.updateSettings(() => (option[index] = false));
         this._host.engine.imessage("time.skip.cycle.disable", [cycle.title]);
       }
     });

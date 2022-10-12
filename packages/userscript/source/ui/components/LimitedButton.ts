@@ -27,11 +27,11 @@ export class LimitedButton extends UiComponent {
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && setting.limited === false) {
         setting.limited = true;
-        host.updateOptions();
+        host.updateSettings();
         handler.onLimitedCheck();
       } else if (!checkbox.is(":checked") && setting.limited === true) {
         setting.limited = false;
-        host.updateOptions();
+        host.updateSettings();
         handler.onLimitedUnCheck();
       }
     });
