@@ -142,26 +142,29 @@ export class ReligionManager implements Automation {
     const faith = this._workshopManager.getResource("faith");
     const faithLevel = faith.value / faith.maxValue;
     // enough faith, and then TAP (transcende, adore, praise)
-    if (this.settings.transcend.enabled && 0.98 <= faithLevel) {
+    if (this.settings.transcend.enabled && this.settings.autoPraise.trigger - 0.02 <= faithLevel) {
       this._autoTranscend();
     }
 
-    // Adore the galaxy (worship → epiphany)
-    if (
-      this.settings.adore.enabled &&
-      mustExist(this._host.gamePage.religion.getRU("apocripha")).on
-    ) {
-      this._autoAdore(this.settings.adore.trigger);
-    }
-
     // Praise (faith → worhsip)
-    if (this.settings.autoPraise.enabled && this.settings.autoPraise.trigger <= faithLevel) {
-      this._autoPraise();
+    if (this.settings.autoPraise.trigger <= faithLevel) {
+      // Adore the galaxy (worship → epiphany)
+      if (
+        this.settings.adore.enabled &&
+        mustExist(this._host.gamePage.religion.getRU("apocripha")).on
+      ) {
+        this._autoAdore(this.settings.adore.trigger);
+      }
+
+      if (this.settings.autoPraise.enabled) {
+        this._autoPraise();
+      }
     }
   }
 
   private _autoAdore(trigger: number) {
     const faith = this._workshopManager.getResource("faith");
+
     const worship = this._host.gamePage.religion.faith;
     const epiphany = this._host.gamePage.religion.faithRatio;
     const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence")).on;
