@@ -138,7 +138,7 @@ export class UserScript {
       space: SpaceSettings.fromLegacyOptions(source),
       time: TimeSettings.fromLegacyOptions(source),
       timeControl: TimeControlSettings.fromLegacyOptions(source),
-      trading: TradeSettings.fromLegacyOptions(source),
+      trade: TradeSettings.fromLegacyOptions(source),
       village: VillageSettings.fromLegacyOptions(source),
       workshop: WorkshopSettings.fromLegacyOptions(source),
     });
@@ -174,7 +174,7 @@ export class UserScript {
       space: this.engine.spaceManager.settings,
       time: this.engine.timeManager.settings,
       timeControl: this.engine.timeControlManager.settings,
-      trading: this.engine.tradingManager.settings,
+      trading: this.engine.tradeManager.settings,
       village: this.engine.villageManager.settings,
       workshop: this.engine.workshopManager.settings,
     });

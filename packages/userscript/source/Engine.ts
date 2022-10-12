@@ -50,7 +50,7 @@ export class Engine {
   readonly spaceManager: SpaceManager;
   readonly timeControlManager: TimeControlManager;
   readonly timeManager: TimeManager;
-  readonly tradingManager: TradeManager;
+  readonly tradeManager: TradeManager;
   readonly villageManager: VillageManager;
   readonly workshopManager: WorkshopManager;
 
@@ -82,7 +82,7 @@ export class Engine {
       this.spaceManager
     );
     this.timeManager = new TimeManager(this._host, this.workshopManager);
-    this.tradingManager = new TradeManager(this._host, this.workshopManager);
+    this.tradeManager = new TradeManager(this._host, this.workshopManager);
     this.villageManager = new VillageManager(this._host, this.workshopManager);
   }
 
@@ -98,7 +98,7 @@ export class Engine {
     space: SpaceSettings;
     time: TimeSettings;
     timeControl: TimeControlSettings;
-    trading: TradeSettings;
+    trade: TradeSettings;
     village: VillageSettings;
     workshop: WorkshopSettings;
   }) {
@@ -109,14 +109,23 @@ export class Engine {
     this.spaceManager.load(settings.space);
     this.timeControlManager.load(settings.timeControl);
     this.timeManager.load(settings.time);
-    this.tradingManager.load(settings.trading);
+    this.tradeManager.load(settings.trade);
     this.villageManager.load(settings.village);
     this.workshopManager.load(settings.workshop);
   }
 
   stateSerialize() {
     return {
-      engine: this.settings.options,
+      engine: this.settings,
+      bonfire: this.bonfireManager.settings,
+      religion: this.religionManager.settings,
+      science: this.scienceManager.settings,
+      space: this.spaceManager.settings,
+      timeControl: this.timeControlManager.settings,
+      time: this.timeManager.settings,
+      trade: this.tradeManager.settings,
+      village: this.villageManager.settings,
+      workshop: this.workshopManager.settings,
     };
   }
 
@@ -189,7 +198,7 @@ export class Engine {
     this.bonfireManager.tick(context);
     this.spaceManager.tick(context);
     await this.workshopManager.tick(context);
-    this.tradingManager.tick(context);
+    this.tradeManager.tick(context);
     this.religionManager.tick(context);
     this.timeManager.tick(context);
     // Blackcoin trading.
@@ -232,7 +241,7 @@ export class Engine {
    * Feed leviathans.
    */
   autofeed(): void {
-    this.tradingManager.autoFeedElders();
+    this.tradeManager.autoFeedElders();
   }
 
   private waitForBestPrice = false;

@@ -42,7 +42,7 @@ export class UserInterface {
     this._craftUi = new WorkshopSettingsUi(this._host, engine.workshopManager.settings);
     this._resourcesUi = new ResourcesSettingsUi(this._host, engine.settings.resources);
     this._unlockUi = new ScienceSettingsUi(this._host, engine.scienceManager.settings);
-    this._tradingUi = new TradeSettingsUi(this._host, engine.tradingManager.settings);
+    this._tradingUi = new TradeSettingsUi(this._host, engine.tradeManager.settings);
     this._religionUi = new ReligionSettingsUi(this._host, engine.religionManager.settings);
     this._timeUi = new TimeSettingsUi(this._host, engine.timeManager.settings);
     this._timeCtrlUi = new TimeControlSettingsUi(this._host, engine.timeControlManager.settings);

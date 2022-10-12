@@ -20,6 +20,10 @@ export class Setting {
   load(setting: Setting) {
     this.enabled = setting.enabled;
   }
+
+  serialize() {
+    return this;
+  }
 }
 
 export class SettingLimited extends Setting {
