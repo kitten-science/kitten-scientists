@@ -413,6 +413,6 @@ export class Engine {
     const msg = this._host.gamePage.msg(...args, cssClasses);
     $(msg.span).css("color", color);
 
-    cdebug(args);
+    cdebug(...args);
   }
 }
