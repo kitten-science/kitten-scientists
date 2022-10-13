@@ -16,7 +16,7 @@ Grab a build from the [Releases page](https://github.com/oliversalzburg/cbc-kitt
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/oliversalzburg/cbc-kitten-scientists/releases/download/v2.0.0-alpha.6/kitten-scientists-2.0.0-alpha.6.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/oliversalzburg/cbc-kitten-scientists/releases/download/v2.0.0-alpha.7/kitten-scientists-2.0.0-alpha.7.user.js';d.body.appendChild(s);})();
 ```
 
 ## Warning
