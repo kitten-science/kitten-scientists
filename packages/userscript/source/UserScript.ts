@@ -191,6 +191,24 @@ export class UserScript {
     return this.engine.stateSerialize();
   }
 
+  /**
+   * Experimental save manager for Kitten Game.
+   * It can be injected manually into the game to cause KS settings to be
+   * injected into the save blob.
+   *
+   *  game.managers.push(kittenScientists.saveManager)
+   */
+  get saveManager() {
+    return this._saveManager;
+  }
+
+  private _saveManager = {
+    save: (saveData: Record<string, unknown>) => {
+      cwarn("EXPERIMENTAL: Injecting Kitten Scientists settings into save data...");
+      saveData.ks = { state: [this.getSettings()] };
+    },
+  };
+
   static async waitForGame(timeout = 30000): Promise<GamePage> {
     const signals: Array<Promise<unknown>> = [sleep(2000)];
 
