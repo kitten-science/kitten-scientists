@@ -192,6 +192,8 @@ export class UserScript {
   }
 
   static async waitForGame(timeout = 30000): Promise<GamePage> {
+    const signals: Array<Promise<unknown>> = [sleep(2000)];
+
     if (isNil(UserScript._gameStartSignal) && typeof dojo !== "undefined") {
       UserScript._gameStartSignal = new Promise(resolve => {
         UserScript._gameStartSignalResolver = resolve;
@@ -201,6 +203,10 @@ export class UserScript {
         cdebug("`game/start` signal caught. Fast-tracking script load...");
         mustExist(UserScript._gameStartSignalResolver)(true);
       });
+    }
+
+    if (!isNil(UserScript._gameStartSignal)) {
+      signals.push(UserScript._gameStartSignal);
     }
 
     if (timeout < 0) {
@@ -213,7 +219,7 @@ export class UserScript {
 
     cdebug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
 
-    await Promise.race([UserScript._gameStartSignal, sleep(2000)]);
+    await Promise.race(signals);
     return UserScript.waitForGame(timeout - 2000);
   }
 
