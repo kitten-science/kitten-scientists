@@ -74,6 +74,18 @@ To fill the **Problems** panel in VS Code with all current, type-related errors,
 
 ## Releasing a new version
 
+1. Build a preview of the script:
+
+    ```bash
+    yarn userscript:preview
+    ```
+
+1. Load the built preview into a userscript manager in Chrome and perform a quick, manual test.
+
+    1. Does the script load at all?
+    1. Are settings restored to expectation?
+    1. Are settings saved when they are changed?
+
 1. Create a tag for this version:
 
     ```bash
