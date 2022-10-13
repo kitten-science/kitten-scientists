@@ -1,4 +1,4 @@
-name: Publish container
+name: Publish Container
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 
 env:
+  DEV_BUILD: true
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
@@ -23,6 +24,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: "Use Node.js 18.x"
+        uses: actions/setup-node@master
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Get version
+        id: version
+        run: |
+          export KS_VERSION=$(yarn userscript:version)
+          echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
+
+      - name: Build userscript
+        run: |
+          yarn userscript:build
+          cp packages/userscript/output/* packages/kitten-game/kitten-scientists/
+
       - name: Log in to the Container registry
         uses: docker/login-action@master
         with:
@@ -35,6 +55,8 @@ jobs:
         uses: docker/metadata-action@master
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            ${{ env.KS_VERSION }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@master

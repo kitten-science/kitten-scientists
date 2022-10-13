@@ -6,19 +6,9 @@ RUN git clone https://bitbucket.org/bloodrizer/kitten-game.git && \
   cd kitten-game && \
   yarn install
 
-# The entire build output directory will be mounted inside the docker container at /kitten-scientists.
-# If the build process changes the inode of the kitten-scientists.inject.js file, then the new
-# file will be visible inside the container. In contrast, if only the single file is mounted inside
-# the container, then the mount is tied to that specific inode. Build updates that change the inode
-# will not be visible in the container.
-RUN mkdir -p /kitten-scientists
-
-# Also symlink to the build artifact from the /kitten-game directory, where inject-scientists.js
-# normally expects to find the file.
-RUN ln -s /kitten-scientists/kitten-scientists.inject.js /kitten-game/kitten-scientists.inject.js
-
 # Copy the script that injects kitten-scientists.inject.js into index.html and execute it.
 WORKDIR /kitten-game
+COPY "kitten-scientists" "kitten-scientists"
 COPY "inject-scientists.js" "inject-scientists.js"
 RUN node inject-scientists.js
 

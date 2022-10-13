@@ -6,7 +6,7 @@ Kitten Scientists (KS) is a simple automation script for the complex [Kittens Ga
 
 ## Installation
 
-Install Kitten Scientists with a userscript manager.
+### Install Kitten Scientists with a userscript manager.
 
 -   On **Firefox**, you'd want to use [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
 -   On **Chrome** and **Opera**, you'd want to use [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
@@ -17,6 +17,16 @@ Grab a build from the [Releases page](https://github.com/oliversalzburg/cbc-kitt
 
 ```
 javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/oliversalzburg/cbc-kitten-scientists/releases/download/v2.0.0-alpha.7/kitten-scientists-2.0.0-alpha.7.user.js';d.body.appendChild(s);})();
+```
+
+### Container
+
+You can pull any version of the script as a container. The images are hosted on the [GitHub registry](https://github.com/oliversalzburg/cbc-kitten-scientists/pkgs/container/cbc-kitten-scientists).
+
+The container exposes Kitten Game's own development server on port 8080. It has the version of the userscript injected into it, according to the tag on the image.
+
+```shell
+docker run --publish 8080:8080 --rm ghcr.io/oliversalzburg/cbc-kitten-scientists:2.0.0-alpha.8-dev-623cdd4
 ```
 
 ## Warning
