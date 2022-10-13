@@ -64,7 +64,7 @@ export class ScienceManager extends UpgradeManager {
         continue;
       }
 
-      let prices = dojo.clone(tech.prices);
+      let prices = UserScript.window.dojo.clone(tech.prices);
       prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
       for (const resource of prices) {
         if (this._workshopManager.getValueAvailable(resource.name, true) < resource.val) {

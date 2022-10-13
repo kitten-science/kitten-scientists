@@ -66,7 +66,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       }
 
       // Create a copy of the prices for this upgrade, so that we can apply effects to it.
-      let prices = dojo.clone(upgrade.prices);
+      let prices = UserScript.window.dojo.clone(upgrade.prices);
       prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
       for (const resource of prices) {
         // If we can't afford this resource price, continue with the next upgrade.

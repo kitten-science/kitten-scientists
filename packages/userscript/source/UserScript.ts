@@ -23,11 +23,11 @@ declare global {
   const KG_SAVEGAME: string | null;
   const KS_VERSION: string | null;
   let unsafeWindow: Window | undefined;
-  const dojo: {
-    clone: <T>(subject: T) => T;
-    subscribe: (event: string, handler: () => void) => void;
-  };
   interface Window {
+    dojo: {
+      clone: <T>(subject: T) => T;
+      subscribe: (event: string, handler: () => void) => void;
+    };
     gamePage?: Maybe<GamePage>;
     $: JQuery;
     $I?: Maybe<I18nEngine>;
@@ -194,12 +194,12 @@ export class UserScript {
   static async waitForGame(timeout = 30000): Promise<GamePage> {
     const signals: Array<Promise<unknown>> = [sleep(2000)];
 
-    if (isNil(UserScript._gameStartSignal) && typeof dojo !== "undefined") {
+    if (isNil(UserScript._gameStartSignal) && typeof UserScript.window.dojo !== "undefined") {
       UserScript._gameStartSignal = new Promise(resolve => {
         UserScript._gameStartSignalResolver = resolve;
       });
 
-      dojo.subscribe("game/start", () => {
+      UserScript.window.dojo.subscribe("game/start", () => {
         cdebug("`game/start` signal caught. Fast-tracking script load...");
         mustExist(UserScript._gameStartSignalResolver)(true);
       });
@@ -214,7 +214,7 @@ export class UserScript {
     }
 
     if (UserScript._isGameLoaded()) {
-      return mustExist(UserScript._window.gamePage);
+      return mustExist(UserScript.window.gamePage);
     }
 
     cdebug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
@@ -225,18 +225,18 @@ export class UserScript {
 
   static getDefaultInstance(): UserScript {
     const instance = new UserScript(
-      mustExist(UserScript._window.gamePage),
-      mustExist(UserScript._window.$I),
+      mustExist(UserScript.window.gamePage),
+      mustExist(UserScript.window.$I),
       localStorage["com.nuclearunicorn.kittengame.language"] as SupportedLanguages | undefined
     );
     return instance;
   }
 
   private static _isGameLoaded(): boolean {
-    return !isNil(UserScript._window.gamePage);
+    return !isNil(UserScript.window.gamePage);
   }
 
-  private static get _window(): Window {
+  static get window(): Window {
     try {
       return unsafeWindow as Window;
     } catch (error) {
