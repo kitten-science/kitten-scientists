@@ -3508,11 +3508,11 @@ __metadata:
 
 "typescript@patch:typescript@4.8.3#~builtin<compat/typescript>":
   version: 4.8.3
-  resolution: "typescript@patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=7ad353"
+  resolution: "typescript@patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=701156"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 5b0cbf5166204c992b13a3ca89cf4f45d5e11c7f4999622344566c46a6f6e88468424d55cd7824ebcd76886e8fb5e817f19908e492565e206fcaadfea7c0f03d
+  checksum: 513000149a2d1f4b01c6f2b0831c0929407661a559b60d6e668c3983bd7b4218dfc0084f997ea9bb3ec908bd60fceefa58f7502ce81f840a574529dd7a012429
   languageName: node
   linkType: hard
 
