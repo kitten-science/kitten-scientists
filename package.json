@@ -14,7 +14,6 @@
     "url": "https://github.com/oliversalzburg/cbc-kitten-scientists/issues"
   },
   "scripts": {
-    "devcontainer:run": "bash ./scripts/run-development-container.sh",
     "lint:all": "eslint . --ext .ts",
     "typecheck:all": "tsc --noEmit --incremental false"
   },

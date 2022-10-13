@@ -16,7 +16,7 @@ echo ""
 echo "Starting new container..."
 docker run \
   --detach \
-  --mount type=bind,source="${BASEDIR}/../packages/userscript/output",target=/kitten-game/build \
+  --mount type=bind,source="${BASEDIR}/../../userscript/output",target=/kitten-scientists \
   --name kitten-game \
   --publish 8100:8080 kitten-game
 echo "Container started."
