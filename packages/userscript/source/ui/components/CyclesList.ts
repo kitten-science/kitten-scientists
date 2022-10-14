@@ -78,6 +78,11 @@ export class CyclesList extends SettingsList {
   }
 
   refreshUi() {
-    /* intentionally left blank */
+    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
+      $("input", this[cycleIndex as CycleIndices]).prop(
+        "checked",
+        this.setting[cycleIndex as CycleIndices]
+      );
+    }
   }
 }

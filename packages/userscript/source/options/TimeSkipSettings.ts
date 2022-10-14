@@ -65,6 +65,12 @@ export class TimeSkipSettings extends SettingTrigger {
     options.summer = subject.items["toggle-timeSkip-summer"] ?? options.summer;
     options.winter = subject.items["toggle-timeSkip-winter"] ?? options.winter;
 
+    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
+      options[cycleIndex as CycleIndices] =
+        subject.items[`toggle-timeSkip-${cycleIndex as CycleIndices}` as const] ??
+        options[cycleIndex as CycleIndices];
+    }
+
     return options;
   }
 }
