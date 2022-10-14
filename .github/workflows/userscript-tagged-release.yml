@@ -31,5 +31,7 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
+          # Create only as draft, so we can add a description on the web UI.
+          draft: true
           files: |
             packages/userscript/output/*
