@@ -68,6 +68,7 @@ export class SettingListItem extends UiComponent {
   }
 
   refreshUi() {
+    super.refreshUi();
     this.checkbox.prop("checked", this.settings.enabled);
   }
 }

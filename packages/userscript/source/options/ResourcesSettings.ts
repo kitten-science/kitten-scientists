@@ -7,10 +7,15 @@ import { LegacyStorage } from "./SettingsStorage";
 
 export class ResourcesSettingsItem extends Setting {
   readonly resource: Resource;
-  consume?: number;
+  consume: number;
   stock = 0;
 
-  constructor(id: Resource, enabled: boolean, consume: number | undefined, stock: number) {
+  constructor(
+    id: Resource,
+    enabled: boolean,
+    consume = WorkshopManager.DEFAULT_CONSUME_RATE,
+    stock = 0
+  ) {
     super(enabled);
     this.resource = id;
     this.consume = consume;
@@ -121,7 +126,7 @@ export class ResourcesSettings extends Setting {
       // Instead, it is derived from the setting having non-default values.
       options.items[name].enabled =
         item.consume !== WorkshopManager.DEFAULT_CONSUME_RATE || item.stock !== 0;
-      options.items[name].consume = item.consume;
+      options.items[name].consume = item.consume ?? WorkshopManager.DEFAULT_CONSUME_RATE;
       options.items[name].stock = item.stock;
     }
 

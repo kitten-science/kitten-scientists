@@ -554,10 +554,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       // Determine the consume rate. Either it's configured on the resource, or globally.
       // If the consume rate is 0.6, we'll always only make 60% of the resource available.
       const resourceSettings = this._host.engine.settings.resources.items[name];
-      const consume =
-        resourceSettings && resourceSettings.enabled && resourceSettings.consume !== undefined
-          ? resourceSettings.consume
-          : WorkshopManager.DEFAULT_CONSUME_RATE;
+      const consume = resourceSettings.consume;
 
       value -= Math.min(this.getResource(name).maxValue * trigger, value) * (1 - consume);
     }

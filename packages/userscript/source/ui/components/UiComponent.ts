@@ -1,5 +1,4 @@
 import { UserScript } from "../../UserScript";
-import { WorkshopManager } from "../../WorkshopManager";
 
 export abstract class UiComponent extends EventTarget {
   /**
@@ -81,9 +80,5 @@ export abstract class UiComponent extends EventTarget {
 
   static renderPercentage(value: number): string {
     return value.toFixed(3);
-  }
-
-  static renderConsumeRate(consume: number | undefined): string {
-    return UiComponent.renderPercentage(consume ?? WorkshopManager.DEFAULT_CONSUME_RATE);
   }
 }

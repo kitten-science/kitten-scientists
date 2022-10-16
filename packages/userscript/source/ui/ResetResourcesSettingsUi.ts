@@ -6,7 +6,7 @@ import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { IconSettingsPanel } from "./components/IconSettingsPanel";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsSectionUi } from "./SettingsSectionUi";
+import { StockButton } from "./components/StockButton";
 
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
   private readonly _buildings: Array<SettingListItem>;
@@ -55,8 +55,6 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
    * @returns A new option with stock value.
    */
   private _addNewResourceOption(title: string, setting: ResetResourcesSettingsItem) {
-    const stock = setting.stock;
-
     // The overall container for this resource item.
     const container = new SettingListItem(this._host, title, setting, {
       onCheck: () => this._host.engine.imessage("status.sub.enable", [title]),
@@ -64,26 +62,8 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     });
 
     // How many items to stock.
-    const stockElement = $("<div/>", {
-      text: this._host.engine.i18n("resources.stock", [this._renderLimit(stock)]),
-    })
-      .addClass("ks-text-button")
-      .addClass("ks-label");
-
-    container.element.append(stockElement);
-
-    stockElement.on("click", () => {
-      const value = SettingsSectionUi.promptLimit(
-        this._host.engine.i18n("resources.stock.set", [title]),
-        setting.stock.toFixed(0)
-      );
-      if (value !== null) {
-        setting.enabled = true;
-        setting.stock = value;
-        stockElement.text(this._host.engine.i18n("resources.stock", [this._renderLimit(value)]));
-        this._host.updateSettings();
-      }
-    });
+    const stockElement = new StockButton(this._host, title, setting);
+    container.addChild(stockElement);
 
     return container;
   }
