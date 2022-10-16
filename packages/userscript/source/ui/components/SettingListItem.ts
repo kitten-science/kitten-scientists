@@ -7,6 +7,8 @@ export class SettingListItem extends UiComponent {
   readonly element: JQuery<HTMLElement>;
   readonly checkbox: JQuery<HTMLElement>;
 
+  readOnly: boolean;
+
   /**
    * Construct a new setting element.
    * This is a simple checkbox with a label.
@@ -20,6 +22,7 @@ export class SettingListItem extends UiComponent {
    * @param delimiter Should there be additional padding below this element?
    * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
    * to indicate that this is an upgrade of a prior setting?
+   * @param readOnly Should the user be prevented from changing the value of the input?
    */
   constructor(
     host: UserScript,
@@ -30,7 +33,8 @@ export class SettingListItem extends UiComponent {
       onUnCheck: () => void;
     },
     delimiter = false,
-    upgradeIndicator = false
+    upgradeIndicator = false,
+    readOnly = false
   ) {
     super(host);
 
@@ -46,6 +50,8 @@ export class SettingListItem extends UiComponent {
     const checkbox = $("<input/>", {
       type: "checkbox",
     }).addClass("ks-checkbox");
+
+    this.readOnly = readOnly;
 
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && setting.enabled === false) {
@@ -68,5 +74,6 @@ export class SettingListItem extends UiComponent {
   refreshUi() {
     super.refreshUi();
     this.checkbox.prop("checked", this.settings.enabled);
+    this.checkbox.prop("disabled", this.readOnly);
   }
 }

@@ -25,6 +25,12 @@ export class SettingsPanel<TSetting extends Setting = Setting>
   get checkbox() {
     return this._element.checkbox;
   }
+  get readOnly() {
+    return this._element.readOnly;
+  }
+  set readOnly(value: boolean) {
+    this._element.readOnly = value;
+  }
 
   /**
    * Constructs a settings panel that is used to contain a major section of the UI.

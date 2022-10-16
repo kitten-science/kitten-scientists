@@ -40,7 +40,7 @@ export class SettingLimitedMaxListItem extends SettingLimitedListItem {
     upgradeIndicator = false,
     additionalClasses = []
   ) {
-    super(host, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
+    super(host, label, setting, handler, delimiter, upgradeIndicator);
 
     this.maxButton = new MaxButton(host, label, setting);
     this.element.append(this.maxButton.element);

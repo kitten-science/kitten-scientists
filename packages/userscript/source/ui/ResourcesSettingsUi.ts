@@ -3,10 +3,10 @@ import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { ConsumeButton } from "./components/ConsumeButton";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { StockButton } from "./components/StockButton";
-import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class ResourcesSettingsUi extends SettingsSectionUi<ResourcesSettings> {
+export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;
 
   constructor(host: UserScript, settings: ResourcesSettings) {
@@ -14,7 +14,7 @@ export class ResourcesSettingsUi extends SettingsSectionUi<ResourcesSettings> {
     super(host, label, settings);
 
     // Disable checkbox. Resource control is always active.
-    $("input", this.element).prop("disabled", true);
+    this.readOnly = true;
 
     this._list.addEventListener("enableAll", () => {
       this._resources.forEach(item => (item.settings.enabled = true));
