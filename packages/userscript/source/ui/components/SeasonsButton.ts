@@ -22,8 +22,4 @@ export class SeasonsButton extends UiComponent {
 
     this.element = element;
   }
-
-  refreshUi() {
-    /* intentionally left blank */
-  }
 }

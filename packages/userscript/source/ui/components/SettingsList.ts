@@ -40,8 +40,4 @@ export class SettingsList extends UiComponent {
 
     this.element = containerList;
   }
-
-  refreshUi() {
-    /* intentionally left blank */
-  }
 }

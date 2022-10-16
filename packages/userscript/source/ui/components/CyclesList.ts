@@ -54,7 +54,7 @@ export class CyclesList extends SettingsList {
       this.setting.cath
     );
     this.redmoon = this._makeCycle(
-      this._host.engine.i18n("$space.planet.redmoon.label"),
+      this._host.engine.i18n("$space.planet.moon.label"),
       this.setting.redmoon
     );
     this.dune = this._makeCycle(

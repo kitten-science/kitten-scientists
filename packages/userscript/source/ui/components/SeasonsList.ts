@@ -74,8 +74,4 @@ export class SeasonsList extends SettingsList {
       onUnCheck: () => handler.onUnCheck(label, setting),
     });
   }
-
-  refreshUi() {
-    /* intentionally left blank */
-  }
 }

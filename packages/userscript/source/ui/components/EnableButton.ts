@@ -24,8 +24,4 @@ export class EnableButton extends UiComponent {
 
     this.element = element;
   }
-
-  refreshUi() {
-    /* intentionally left blank */
-  }
 }

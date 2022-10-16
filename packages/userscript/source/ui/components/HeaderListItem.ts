@@ -18,8 +18,4 @@ export class HeaderListItem extends UiComponent {
 
     this.element = element;
   }
-
-  refreshUi() {
-    /* intentionally left blank */
-  }
 }

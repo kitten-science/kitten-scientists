@@ -29,8 +29,4 @@ export class ExpandoButton extends UiComponent {
     this.element.prop("title", this._host.engine.i18n("ui.itemsHide"));
     this.element.text("-");
   }
-
-  refreshUi() {
-    /* intentionally left blank */
-  }
 }
