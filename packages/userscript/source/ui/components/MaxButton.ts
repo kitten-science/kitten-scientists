@@ -1,4 +1,4 @@
-import { SettingMax } from "../../options/Settings";
+import { SettingMax } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { SettingsSectionUi } from "../SettingsSectionUi";
 import { UiComponent } from "./UiComponent";

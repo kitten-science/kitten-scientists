@@ -1,4 +1,4 @@
-import { MissionSettings } from "../options/MissionSettings";
+import { MissionSettings } from "../settings/MissionSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";

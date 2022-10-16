@@ -23,7 +23,7 @@ import {
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from ".";
-import { CycleIndices } from "../options/TimeControlSettings";
+import { CycleIndices } from "../settings/TimeControlSettings";
 import { CraftableInfo, ResourceInfo } from "./craft";
 import { ReligionTab } from "./religion";
 import { PolicyInfo, TechInfo as TechnologyInfo, Technology } from "./science";

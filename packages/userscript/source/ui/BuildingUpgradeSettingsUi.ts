@@ -1,4 +1,4 @@
-import { BuildingUpgradeSettings } from "../options/BuildingUpgradeSettings";
+import { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";

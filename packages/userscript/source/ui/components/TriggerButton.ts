@@ -1,4 +1,4 @@
-import { SettingTrigger } from "../../options/Settings";
+import { SettingTrigger } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { SettingsSectionUi } from "../SettingsSectionUi";
 import { UiComponent } from "./UiComponent";

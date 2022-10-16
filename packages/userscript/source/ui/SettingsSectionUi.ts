@@ -1,6 +1,6 @@
-import { BonfireBuildingSetting } from "../options/BonfireSettings";
-import { ReligionSettingsItem } from "../options/ReligionSettings";
-import { Setting, SettingMax } from "../options/Settings";
+import { BonfireBuildingSetting } from "../settings/BonfireSettings";
+import { ReligionSettingsItem } from "../settings/ReligionSettings";
+import { Setting, SettingMax } from "../settings/Settings";
 import { UserScript } from "../UserScript";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingsPanel } from "./components/SettingsPanel";

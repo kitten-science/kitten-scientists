@@ -1,4 +1,4 @@
-import { ResetSettings } from "../options/ResetSettings";
+import { ResetSettings } from "../settings/ResetSettings";
 import { UserScript } from "../UserScript";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi";

@@ -1,4 +1,4 @@
-import { SettingLimitedMax } from "../../options/Settings";
+import { SettingLimitedMax } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { MaxButton } from "./MaxButton";
 import { SettingLimitedListItem } from "./SettingLimitedListItem";

@@ -1,6 +1,6 @@
 import { Automation, TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { SpaceBuildingSetting, SpaceSettings } from "./options/SpaceSettings";
+import { SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings";
 import { TabManager } from "./TabManager";
 import { cwarn } from "./tools/Log";
 import { BuildButton, SpaceBuildingInfo, SpaceBuildings, SpaceTab } from "./types";

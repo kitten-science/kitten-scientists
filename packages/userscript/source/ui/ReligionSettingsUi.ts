@@ -1,4 +1,4 @@
-import { ReligionSettings } from "../options/ReligionSettings";
+import { ReligionSettings } from "../settings/ReligionSettings";
 import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";

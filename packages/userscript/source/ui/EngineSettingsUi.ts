@@ -1,4 +1,4 @@
-import { EngineSettings } from "../options/EngineSettings";
+import { EngineSettings } from "../settings/EngineSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";

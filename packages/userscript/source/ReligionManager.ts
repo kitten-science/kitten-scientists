@@ -1,8 +1,8 @@
 import { BonfireManager } from "./BonfireManager";
 import { Automation, TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { BonfireBuildingSetting } from "./options/BonfireSettings";
-import { FaithItem, ReligionSettings, ReligionSettingsItem } from "./options/ReligionSettings";
+import { BonfireBuildingSetting } from "./settings/BonfireSettings";
+import { FaithItem, ReligionSettings, ReligionSettingsItem } from "./settings/ReligionSettings";
 import { TabManager } from "./TabManager";
 import { cwarn } from "./tools/Log";
 import { mustExist } from "./tools/Maybe";

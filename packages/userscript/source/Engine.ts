@@ -6,18 +6,18 @@ import {
   ActivityTypeClass,
 } from "./helper/ActivitySummary";
 import i18nData from "./i18n/i18nData.json";
-import { BonfireSettings } from "./options/BonfireSettings";
-import { EngineSettings } from "./options/EngineSettings";
-import { ReligionSettings } from "./options/ReligionSettings";
-import { ScienceSettings } from "./options/ScienceSettings";
-import { SpaceSettings } from "./options/SpaceSettings";
-import { TimeControlSettings } from "./options/TimeControlSettings";
-import { TimeSettings } from "./options/TimeSettings";
-import { TradeSettings } from "./options/TradeSettings";
-import { VillageSettings } from "./options/VillageSettings";
-import { WorkshopSettings } from "./options/WorkshopSettings";
 import { ReligionManager } from "./ReligionManager";
 import { ScienceManager } from "./ScienceManager";
+import { BonfireSettings } from "./settings/BonfireSettings";
+import { EngineSettings } from "./settings/EngineSettings";
+import { ReligionSettings } from "./settings/ReligionSettings";
+import { ScienceSettings } from "./settings/ScienceSettings";
+import { SpaceSettings } from "./settings/SpaceSettings";
+import { TimeControlSettings } from "./settings/TimeControlSettings";
+import { TimeSettings } from "./settings/TimeSettings";
+import { TradeSettings } from "./settings/TradeSettings";
+import { VillageSettings } from "./settings/VillageSettings";
+import { WorkshopSettings } from "./settings/WorkshopSettings";
 import { SpaceManager } from "./SpaceManager";
 import { TimeControlManager } from "./TimeControlManager";
 import { TimeManager } from "./TimeManager";

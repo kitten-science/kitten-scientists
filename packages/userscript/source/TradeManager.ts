@@ -1,6 +1,6 @@
 import { Automation, TickContext } from "./Engine";
 import { MaterialsCache } from "./helper/MaterialsCache";
-import { TradeSettings } from "./options/TradeSettings";
+import { TradeSettings } from "./settings/TradeSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { ucfirst } from "./tools/Format";

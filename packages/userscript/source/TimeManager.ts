@@ -1,6 +1,6 @@
 import { TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { TimeItem, TimeSettings, TimeSettingsItem } from "./options/TimeSettings";
+import { TimeItem, TimeSettings, TimeSettingsItem } from "./settings/TimeSettings";
 import { TabManager } from "./TabManager";
 import { cwarn } from "./tools/Log";
 import { mustExist } from "./tools/Maybe";

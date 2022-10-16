@@ -1,6 +1,6 @@
 import { Automation, TickContext } from "./Engine";
 import { MaterialsCache } from "./helper/MaterialsCache";
-import { VillageSettings } from "./options/VillageSettings";
+import { VillageSettings } from "./settings/VillageSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { isNil } from "./tools/Maybe";

@@ -1,18 +1,18 @@
 import JQuery from "jquery";
 import { Engine, EngineState, SupportedLanguages } from "./Engine";
 
-import { BonfireSettings } from "./options/BonfireSettings";
-import { EngineSettings } from "./options/EngineSettings";
-import { Options } from "./options/Options";
-import { ReligionSettings } from "./options/ReligionSettings";
-import { ScienceSettings } from "./options/ScienceSettings";
-import { LegacyStorage, SettingsStorage } from "./options/SettingsStorage";
-import { SpaceSettings } from "./options/SpaceSettings";
-import { TimeControlSettings } from "./options/TimeControlSettings";
-import { TimeSettings } from "./options/TimeSettings";
-import { TradeSettings } from "./options/TradeSettings";
-import { VillageSettings } from "./options/VillageSettings";
-import { WorkshopSettings } from "./options/WorkshopSettings";
+import { BonfireSettings } from "./settings/BonfireSettings";
+import { EngineSettings } from "./settings/EngineSettings";
+import { Options } from "./settings/Options";
+import { ReligionSettings } from "./settings/ReligionSettings";
+import { ScienceSettings } from "./settings/ScienceSettings";
+import { LegacyStorage, SettingsStorage } from "./settings/SettingsStorage";
+import { SpaceSettings } from "./settings/SpaceSettings";
+import { TimeControlSettings } from "./settings/TimeControlSettings";
+import { TimeSettings } from "./settings/TimeSettings";
+import { TradeSettings } from "./settings/TradeSettings";
+import { VillageSettings } from "./settings/VillageSettings";
+import { WorkshopSettings } from "./settings/WorkshopSettings";
 import { cdebug, cinfo, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
@@ -197,6 +197,7 @@ export class UserScript {
   }
 
   installSaveManager() {
+    cinfo("Replacing internal save management with game manager...");
     clearInterval(this._intervalSaveSettings);
     this.gamePage.managers.push(this.saveManager);
   }
@@ -214,6 +215,7 @@ export class UserScript {
 
   private _saveManager = {
     load: (saveData: Record<string, unknown>) => {
+      cwarn("EXPERIMENTAL: Looking for Kitten Scientists settings in save data...");
       if ("ks" in saveData === false) {
         return;
       }
@@ -228,7 +230,7 @@ export class UserScript {
         return;
       }
 
-      cwarn("EXPERIMENTAL: Loading Kitten Scientists setting from save data...");
+      cwarn("EXPERIMENTAL: Loading Kitten Scientists settings from save data...");
       this.engine.stateLoad(state[0]);
     },
     save: (saveData: Record<string, unknown>) => {
@@ -253,7 +255,9 @@ export class UserScript {
       UserScript.window.dojo.subscribe(
         "server/load",
         (saveData: { ks?: { state?: Array<EngineState> } }) => {
-          cwarn("`server/load` signal caught.");
+          cinfo(
+            "`server/load` signal caught. Looking for Kitten Scientists engine state in save data..."
+          );
           if ("ks" in saveData === false) {
             return;
           }
@@ -268,7 +272,7 @@ export class UserScript {
             return;
           }
 
-          cdebug("Using provided save data as seed for next userscript instance.");
+          cinfo("Using provided save data as seed for next userscript instance.");
           UserScript._possibleEngineState = mustExist(mustExist(saveData.ks).state)[0];
         }
       );
@@ -300,6 +304,7 @@ export class UserScript {
     );
     if (!isNil(UserScript._possibleEngineState)) {
       instance.setSettings(UserScript._possibleEngineState);
+      instance.installSaveManager();
     }
     return instance;
   }

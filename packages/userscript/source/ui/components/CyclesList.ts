@@ -1,4 +1,4 @@
-import { Setting } from "../../options/Settings";
+import { Setting } from "../../settings/Settings";
 import { Cycle } from "../../types";
 import { UserScript } from "../../UserScript";
 import { SettingListItem } from "./SettingListItem";

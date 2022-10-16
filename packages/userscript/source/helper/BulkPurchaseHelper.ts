@@ -1,5 +1,5 @@
-import { BonfireItem } from "../options/BonfireSettings";
-import { AllItems, Requirement } from "../options/Settings";
+import { BonfireItem } from "../settings/BonfireSettings";
+import { AllItems, Requirement } from "../settings/Settings";
 import { objectEntries } from "../tools/Entries";
 import { isNil, mustExist } from "../tools/Maybe";
 import {

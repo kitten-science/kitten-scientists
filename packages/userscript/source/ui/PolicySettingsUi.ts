@@ -1,4 +1,4 @@
-import { PolicySettings } from "../options/PolicySettings";
+import { PolicySettings } from "../settings/PolicySettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";

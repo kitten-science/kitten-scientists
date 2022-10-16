@@ -1,4 +1,4 @@
-import { SpaceSettings } from "../options/SpaceSettings";
+import { SpaceSettings } from "../settings/SpaceSettings";
 import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";

@@ -1,4 +1,4 @@
-import { TechSettings } from "../options/TechSettings";
+import { TechSettings } from "../settings/TechSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";

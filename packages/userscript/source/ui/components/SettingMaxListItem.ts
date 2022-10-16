@@ -1,4 +1,4 @@
-import { SettingMax } from "../../options/Settings";
+import { SettingMax } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { MaxButton } from "./MaxButton";
 import { SettingListItem } from "./SettingListItem";

@@ -1,4 +1,4 @@
-import { Setting } from "../../options/Settings";
+import { Setting } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { UiComponent } from "./UiComponent";
 

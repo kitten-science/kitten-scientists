@@ -1,7 +1,7 @@
 import {
   ResetResourcesSettings,
   ResetResourcesSettingsItem,
-} from "../options/ResetResourcesSettings";
+} from "../settings/ResetResourcesSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { IconSettingsPanel } from "./components/IconSettingsPanel";

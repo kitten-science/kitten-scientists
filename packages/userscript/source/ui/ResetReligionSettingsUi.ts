@@ -1,5 +1,5 @@
-import { ResetReligionSettings } from "../options/ResetReligionSettings";
-import { SettingTrigger } from "../options/Settings";
+import { ResetReligionSettings } from "../settings/ResetReligionSettings";
+import { SettingTrigger } from "../settings/Settings";
 import { UserScript } from "../UserScript";
 import { IconSettingsPanel } from "./components/IconSettingsPanel";
 import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem";

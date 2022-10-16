@@ -1,5 +1,5 @@
-import { SettingMax } from "../options/Settings";
-import { VillageSettings } from "../options/VillageSettings";
+import { SettingMax } from "../settings/Settings";
+import { VillageSettings } from "../settings/VillageSettings";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";

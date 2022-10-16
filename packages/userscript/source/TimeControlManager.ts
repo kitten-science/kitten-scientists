@@ -1,7 +1,7 @@
 import { BonfireManager } from "./BonfireManager";
 import { Engine, TickContext } from "./Engine";
-import { CycleIndices, TimeControlSettings } from "./options/TimeControlSettings";
 import { ReligionManager } from "./ReligionManager";
+import { CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings";
 import { SpaceManager } from "./SpaceManager";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";

@@ -1,5 +1,5 @@
 import { TickContext } from "./Engine";
-import { ScienceSettings } from "./options/ScienceSettings";
+import { ScienceSettings } from "./settings/ScienceSettings";
 import { TabManager } from "./TabManager";
 import { cerror } from "./tools/Log";
 import { isNil } from "./tools/Maybe";

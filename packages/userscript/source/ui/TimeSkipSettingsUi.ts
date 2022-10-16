@@ -1,4 +1,4 @@
-import { TimeSkipSettings } from "../options/TimeSkipSettings";
+import { TimeSkipSettings } from "../settings/TimeSkipSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { CyclesList } from "./components/CyclesList";

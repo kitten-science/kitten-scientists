@@ -1,5 +1,5 @@
-import { EmbassySettings } from "../options/EmbassySettings";
-import { SettingMax } from "../options/Settings";
+import { EmbassySettings } from "../settings/EmbassySettings";
+import { SettingMax } from "../settings/Settings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";

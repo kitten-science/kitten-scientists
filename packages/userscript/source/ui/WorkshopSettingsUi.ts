@@ -1,4 +1,4 @@
-import { CraftSettingsItem, WorkshopSettings } from "../options/WorkshopSettings";
+import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem";

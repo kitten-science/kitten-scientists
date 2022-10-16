@@ -1,4 +1,4 @@
-import { BonfireSettings } from "../options/BonfireSettings";
+import { BonfireSettings } from "../settings/BonfireSettings";
 import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi";

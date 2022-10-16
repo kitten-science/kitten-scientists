@@ -1,6 +1,6 @@
 import { Automation, TickContext } from "./Engine";
 import { MaterialsCache } from "./helper/MaterialsCache";
-import { CraftSettingsItem, WorkshopSettings } from "./options/WorkshopSettings";
+import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { cdebug, cerror } from "./tools/Log";

@@ -1,4 +1,4 @@
-import { TradeSettings, TradeSettingsItem } from "../options/TradeSettings";
+import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings";
 import { Race } from "../types";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";

@@ -1,4 +1,4 @@
-import { ResourcesSettings, ResourcesSettingsItem } from "../options/ResourcesSettings";
+import { ResourcesSettings, ResourcesSettingsItem } from "../settings/ResourcesSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
 import { ConsumeButton } from "./components/ConsumeButton";

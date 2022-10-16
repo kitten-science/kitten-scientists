@@ -1,4 +1,4 @@
-import { TimeControlSettings } from "../options/TimeControlSettings";
+import { TimeControlSettings } from "../settings/TimeControlSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";

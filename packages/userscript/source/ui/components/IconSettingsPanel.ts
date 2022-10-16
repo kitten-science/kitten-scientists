@@ -1,4 +1,4 @@
-import { Setting } from "../../options/Settings";
+import { Setting } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { ExpandoButton } from "./ExpandoButton";
 import { LabelListItem } from "./LabelListItem";

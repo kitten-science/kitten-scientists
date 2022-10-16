@@ -1,5 +1,5 @@
-import { ResetBonfireSettings } from "../options/ResetBonfireSettings";
-import { SettingTrigger } from "../options/Settings";
+import { ResetBonfireSettings } from "../settings/ResetBonfireSettings";
+import { SettingTrigger } from "../settings/Settings";
 import { UserScript } from "../UserScript";
 import { IconSettingsPanel } from "./components/IconSettingsPanel";
 import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem";

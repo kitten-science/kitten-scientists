@@ -1,4 +1,4 @@
-import { TimeSettings, TimeSettingsItem } from "../options/TimeSettings";
+import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";

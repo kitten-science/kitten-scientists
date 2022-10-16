@@ -1,5 +1,5 @@
-import { ResetTimeSettings } from "../options/ResetTimeSettings";
-import { SettingTrigger } from "../options/Settings";
+import { ResetTimeSettings } from "../settings/ResetTimeSettings";
+import { SettingTrigger } from "../settings/Settings";
 import { UserScript } from "../UserScript";
 import { IconSettingsPanel } from "./components/IconSettingsPanel";
 import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem";

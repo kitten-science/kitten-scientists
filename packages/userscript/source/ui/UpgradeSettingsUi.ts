@@ -1,4 +1,4 @@
-import { UpgradeSettings } from "../options/UpgradeSettings";
+import { UpgradeSettings } from "../settings/UpgradeSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";

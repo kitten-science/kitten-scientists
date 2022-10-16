@@ -1,5 +1,5 @@
-import { ResetSpaceSettings } from "../options/ResetSpaceSettings";
-import { SettingTrigger } from "../options/Settings";
+import { ResetSpaceSettings } from "../settings/ResetSpaceSettings";
+import { SettingTrigger } from "../settings/Settings";
 import { UserScript } from "../UserScript";
 import { IconSettingsPanel } from "./components/IconSettingsPanel";
 import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem";

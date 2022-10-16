@@ -1,6 +1,6 @@
 import { Automation, TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { BonfireBuildingSetting, BonfireItem, BonfireSettings } from "./options/BonfireSettings";
+import { BonfireBuildingSetting, BonfireItem, BonfireSettings } from "./settings/BonfireSettings";
 import { TabManager } from "./TabManager";
 import { cwarn } from "./tools/Log";
 import { isNil, mustExist } from "./tools/Maybe";

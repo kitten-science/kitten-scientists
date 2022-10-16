@@ -1,4 +1,4 @@
-import { ScienceSettings } from "../options/ScienceSettings";
+import { ScienceSettings } from "../settings/ScienceSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { PolicySettingsUi } from "./PolicySettingsUi";

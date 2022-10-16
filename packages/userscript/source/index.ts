@@ -1,4 +1,4 @@
-import { SettingsStorage } from "./options/SettingsStorage";
+import { SettingsStorage } from "./settings/SettingsStorage";
 import { cerror, cinfo } from "./tools/Log";
 import { isNil } from "./tools/Maybe";
 import { SavegameLoader } from "./tools/SavegameLoader";

@@ -1,4 +1,4 @@
-import { FilterSettings, FilterSettingsItem } from "../options/FilterSettings";
+import { FilterSettings, FilterSettingsItem } from "../settings/FilterSettings";
 import { UserScript } from "../UserScript";
 import { ExplainerListItem } from "./components/ExplainerListItem";
 import { SettingListItem } from "./components/SettingListItem";

@@ -1,5 +1,5 @@
-import { OptionsSettings, OptionsSettingsItem } from "../options/OptionsSettings";
-import { SettingTrigger } from "../options/Settings";
+import { OptionsSettings, OptionsSettingsItem } from "../settings/OptionsSettings";
+import { SettingTrigger } from "../settings/Settings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";

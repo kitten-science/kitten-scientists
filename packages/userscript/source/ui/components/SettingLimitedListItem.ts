@@ -1,4 +1,4 @@
-import { SettingLimited } from "../../options/Settings";
+import { SettingLimited } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { LimitedButton } from "./LimitedButton";
 import { SettingListItem } from "./SettingListItem";
