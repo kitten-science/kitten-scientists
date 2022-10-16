@@ -26,7 +26,7 @@ declare global {
   interface Window {
     dojo: {
       clone: <T>(subject: T) => T;
-      subscribe: (event: string, handler: () => void) => void;
+      subscribe: (event: string, handler: (...args: any[]) => void) => void;
     };
     gamePage?: Maybe<GamePage>;
     $: JQuery;
@@ -69,6 +69,8 @@ export class UserScript {
    */
   private static _gameStartSignal: Promise<boolean>;
   private static _gameStartSignalResolver: undefined | ((value: boolean) => void);
+
+  private static _possibleEngineState: EngineState | undefined = undefined;
 
   private _userInterface: UserInterface;
   engine: Engine;
@@ -190,8 +192,13 @@ export class UserScript {
   getSettings() {
     return this.engine.stateSerialize();
   }
-  setSetting(settings: EngineState) {
+  setSettings(settings: EngineState) {
     this.engine.stateLoad(settings);
+  }
+
+  installSaveManager() {
+    clearInterval(this._intervalSaveSettings);
+    this.gamePage.managers.push(this.saveManager);
   }
 
   /**
@@ -242,6 +249,29 @@ export class UserScript {
         cdebug("`game/start` signal caught. Fast-tracking script load...");
         mustExist(UserScript._gameStartSignalResolver)(true);
       });
+
+      UserScript.window.dojo.subscribe(
+        "server/load",
+        (saveData: { ks?: { state?: Array<EngineState> } }) => {
+          cwarn("`server/load` signal caught.");
+          if ("ks" in saveData === false) {
+            return;
+          }
+
+          const ksData = saveData.ks as { state?: Array<EngineState> };
+          if ("state" in ksData === false) {
+            return;
+          }
+
+          const state = ksData.state;
+          if (!Array.isArray(state)) {
+            return;
+          }
+
+          cdebug("Using provided save data as seed for next userscript instance.");
+          UserScript._possibleEngineState = mustExist(mustExist(saveData.ks).state)[0];
+        }
+      );
     }
 
     if (!isNil(UserScript._gameStartSignal)) {
@@ -268,6 +298,9 @@ export class UserScript {
       mustExist(UserScript.window.$I),
       localStorage["com.nuclearunicorn.kittengame.language"] as SupportedLanguages | undefined
     );
+    if (!isNil(UserScript._possibleEngineState)) {
+      instance.setSettings(UserScript._possibleEngineState);
+    }
     return instance;
   }
 

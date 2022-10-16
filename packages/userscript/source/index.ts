@@ -9,12 +9,13 @@ const devSavegame = KG_SAVEGAME ?? null;
 (async () => {
   const kittenGame = await UserScript.waitForGame();
 
+  const userScript = UserScript.getDefaultInstance();
+  userScript.installSaveManager();
+
   // For development convenience, load a lategame save to give us more test options.
   if (!isNil(devSavegame)) {
     await new SavegameLoader(kittenGame).load(devSavegame);
   }
-
-  const userScript = UserScript.getDefaultInstance();
 
   // @ts-expect-error Manipulating global containers is naughty, be we want to expose the script host.
   window.kittenScientists = userScript;

@@ -179,6 +179,10 @@ export type GamePage = {
    * Are we in iron will mode?
    */
   ironWill: boolean;
+  managers: Array<{
+    load: (saveData: Record<string, unknown>) => void;
+    save: (saveData: Record<string, unknown>) => void;
+  }>;
   msg: (...args: Array<number | string>) => { span: HTMLElement };
   opts: {
     disableCMBR: boolean;
