@@ -9,7 +9,7 @@ export class SettingsPanel<TSetting extends Setting = Setting>
   extends UiComponent
   implements SettingListItem
 {
-  readonly settings: TSetting;
+  readonly setting: TSetting;
   readonly element: JQuery<HTMLElement>;
   protected readonly _element: SettingListItem;
   protected readonly _expando: ExpandoButton;
@@ -73,7 +73,7 @@ export class SettingsPanel<TSetting extends Setting = Setting>
     this.element = element.element;
     this._expando = expando;
     this.list = list.element;
-    this.settings = setting;
+    this.setting = setting;
   }
 
   override addChild(child: UiComponent) {

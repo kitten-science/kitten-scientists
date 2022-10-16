@@ -18,63 +18,63 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     this.children.add(this._trigger);
 
     this._list.addEventListener("enableAll", () => {
-      this._buildings.forEach(item => (item.settings.enabled = true));
+      this._buildings.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._buildings.forEach(item => (item.settings.enabled = false));
+      this._buildings.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new TimeSettings());
+      this.setting.load(new TimeSettings());
       this.refreshUi();
     });
 
     this._buildings = [
       this._getTimeSetting(
-        this.settings.items.temporalBattery,
+        this.setting.items.temporalBattery,
         this._host.engine.i18n("$time.cfu.temporalBattery.label")
       ),
       this._getTimeSetting(
-        this.settings.items.blastFurnace,
+        this.setting.items.blastFurnace,
         this._host.engine.i18n("$time.cfu.blastFurnace.label")
       ),
       this._getTimeSetting(
-        this.settings.items.timeBoiler,
+        this.setting.items.timeBoiler,
         this._host.engine.i18n("$time.cfu.timeBoiler.label")
       ),
       this._getTimeSetting(
-        this.settings.items.temporalAccelerator,
+        this.setting.items.temporalAccelerator,
         this._host.engine.i18n("$time.cfu.temporalAccelerator.label")
       ),
       this._getTimeSetting(
-        this.settings.items.temporalImpedance,
+        this.setting.items.temporalImpedance,
         this._host.engine.i18n("$time.cfu.temporalImpedance.label")
       ),
       this._getTimeSetting(
-        this.settings.items.ressourceRetrieval,
+        this.setting.items.ressourceRetrieval,
         this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
       this._getTimeSetting(
-        this.settings.items.cryochambers,
+        this.setting.items.cryochambers,
         this._host.engine.i18n("$time.vsu.cryochambers.label")
       ),
       this._getTimeSetting(
-        this.settings.items.voidHoover,
+        this.setting.items.voidHoover,
         this._host.engine.i18n("$time.vsu.voidHoover.label")
       ),
       this._getTimeSetting(
-        this.settings.items.voidRift,
+        this.setting.items.voidRift,
         this._host.engine.i18n("$time.vsu.voidRift.label")
       ),
       this._getTimeSetting(
-        this.settings.items.chronocontrol,
+        this.setting.items.chronocontrol,
         this._host.engine.i18n("$time.vsu.chronocontrol.label")
       ),
       this._getTimeSetting(
-        this.settings.items.voidResonator,
+        this.setting.items.voidResonator,
         this._host.engine.i18n("$time.vsu.voidResonator.label")
       ),
     ];

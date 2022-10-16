@@ -18,49 +18,49 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {
-      this._jobs.forEach(item => (item.settings.enabled = true));
+      this._jobs.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._jobs.forEach(item => (item.settings.enabled = false));
+      this._jobs.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new VillageSettings());
+      this.setting.load(new VillageSettings());
       this.refreshUi();
     });
 
     this._jobs = [
       this._getDistributeOption(
-        this.settings.items.woodcutter,
+        this.setting.items.woodcutter,
         this._host.engine.i18n("$village.job.woodcutter")
       ),
       this._getDistributeOption(
-        this.settings.items.farmer,
+        this.setting.items.farmer,
         this._host.engine.i18n("$village.job.farmer")
       ),
       this._getDistributeOption(
-        this.settings.items.scholar,
+        this.setting.items.scholar,
         this._host.engine.i18n("$village.job.scholar")
       ),
       this._getDistributeOption(
-        this.settings.items.hunter,
+        this.setting.items.hunter,
         this._host.engine.i18n("$village.job.hunter")
       ),
       this._getDistributeOption(
-        this.settings.items.miner,
+        this.setting.items.miner,
         this._host.engine.i18n("$village.job.miner")
       ),
       this._getDistributeOption(
-        this.settings.items.priest,
+        this.setting.items.priest,
         this._host.engine.i18n("$village.job.priest")
       ),
       this._getDistributeOption(
-        this.settings.items.geologist,
+        this.setting.items.geologist,
         this._host.engine.i18n("$village.job.geologist")
       ),
       this._getDistributeOption(
-        this.settings.items.engineer,
+        this.setting.items.engineer,
         this._host.engine.i18n("$village.job.engineer"),
         true
       ),
@@ -72,7 +72,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     this._hunt = new SettingTriggerListItem(
       this._host,
       this._host.engine.i18n("option.hunt"),
-      this.settings.hunt,
+      this.setting.hunt,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [this._host.engine.i18n("option.hunt")]),
@@ -87,7 +87,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     this._festivals = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.festival"),
-      this.settings.holdFestivals,
+      this.setting.holdFestivals,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [
@@ -104,7 +104,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     this._promoteLeader = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.promote"),
-      this.settings.promoteLeader,
+      this.setting.promoteLeader,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [

@@ -17,21 +17,21 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     this.readOnly = true;
 
     this._list.addEventListener("enableAll", () => {
-      this._resources.forEach(item => (item.settings.enabled = true));
+      this._resources.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._resources.forEach(item => (item.settings.enabled = false));
+      this._resources.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new ResourcesSettings());
+      this.setting.load(new ResourcesSettings());
       this.refreshUi();
     });
 
     // Add all the current resources
     this._resources = [];
-    for (const setting of Object.values(this.settings.items)) {
+    for (const setting of Object.values(this.setting.items)) {
       this._resources.push(
         this._makeResourceSetting(
           ucfirst(this._host.engine.i18n(`$resources.${setting.resource}.title`)),

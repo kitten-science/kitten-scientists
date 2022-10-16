@@ -10,20 +10,20 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     super(host, host.engine.i18n("ui.upgrade.policies"), settings);
 
     this._list.addEventListener("enableAll", () => {
-      this._policies.forEach(item => (item.settings.enabled = true));
+      this._policies.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._policies.forEach(item => (item.settings.enabled = false));
+      this._policies.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new PolicySettings());
+      this.setting.load(new PolicySettings());
       this.refreshUi();
     });
 
     const items = [];
-    for (const setting of Object.values(this.settings.items)) {
+    for (const setting of Object.values(this.setting.items)) {
       const policyLabel = this._host.engine.i18n(
         `$policy.${setting.policy === "authocracy" ? "autocracy" : setting.policy}.label`
       );

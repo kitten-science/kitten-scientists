@@ -3,7 +3,7 @@ import { UserScript } from "../../UserScript";
 import { MaxButton } from "./MaxButton";
 import { SettingListItem } from "./SettingListItem";
 
-export class SettingMaxListItem extends SettingListItem {
+export class SettingMaxListItem extends SettingListItem<SettingMax> {
   readonly maxButton: MaxButton;
 
   /**

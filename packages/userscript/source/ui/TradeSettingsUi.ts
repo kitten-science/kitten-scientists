@@ -25,57 +25,57 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     this.children.add(this._trigger);
 
     this._list.addEventListener("enableAll", () => {
-      this._races.forEach(item => (item.settings.enabled = true));
+      this._races.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._races.forEach(item => (item.settings.enabled = false));
+      this._races.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new TradeSettings());
+      this.setting.load(new TradeSettings());
       this.refreshUi();
     });
 
     this._races = [
       this._getTradeOption(
         "lizards",
-        this.settings.items.lizards,
+        this.setting.items.lizards,
         this._host.engine.i18n("$trade.race.lizards")
       ),
       this._getTradeOption(
         "sharks",
-        this.settings.items.sharks,
+        this.setting.items.sharks,
         this._host.engine.i18n("$trade.race.sharks")
       ),
       this._getTradeOption(
         "griffins",
-        this.settings.items.griffins,
+        this.setting.items.griffins,
         this._host.engine.i18n("$trade.race.griffins")
       ),
       this._getTradeOption(
         "nagas",
-        this.settings.items.nagas,
+        this.setting.items.nagas,
         this._host.engine.i18n("$trade.race.nagas")
       ),
       this._getTradeOption(
         "zebras",
-        this.settings.items.zebras,
+        this.setting.items.zebras,
         this._host.engine.i18n("$trade.race.zebras")
       ),
       this._getTradeOption(
         "spiders",
-        this.settings.items.spiders,
+        this.setting.items.spiders,
         this._host.engine.i18n("$trade.race.spiders")
       ),
       this._getTradeOption(
         "dragons",
-        this.settings.items.dragons,
+        this.setting.items.dragons,
         this._host.engine.i18n("$trade.race.dragons")
       ),
       this._getTradeOption(
         "leviathans",
-        this.settings.items.leviathans,
+        this.setting.items.leviathans,
         this._host.engine.i18n("$trade.race.leviathans"),
         true
       ),
@@ -84,13 +84,13 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
 
     this.addChild(new HeaderListItem(this._host, "Additional options"));
 
-    this._embassiesUi = new EmbassySettingsUi(this._host, this.settings.buildEmbassies);
+    this._embassiesUi = new EmbassySettingsUi(this._host, this.setting.buildEmbassies);
     this.addChild(this._embassiesUi);
 
     this._unlockRaces = new SettingListItem(
       this._host,
       this._host.engine.i18n("ui.upgrade.races"),
-      this.settings.unlockRaces,
+      this.setting.unlockRaces,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [

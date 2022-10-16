@@ -24,15 +24,15 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new ResetSettings());
+      this.setting.load(new ResetSettings());
       this.refreshUi();
     });
 
-    this._bonfireUi = new ResetBonfireSettingsUi(this._host, this.settings.bonfire);
-    this._religionUi = new ResetReligionSettingsUi(this._host, this.settings.religion);
-    this._resourcesUi = new ResetResourcesSettingsUi(this._host, this.settings.resources);
-    this._spaceUi = new ResetSpaceSettingsUi(this._host, this.settings.space);
-    this._timeUi = new ResetTimeSettingsUi(this._host, this.settings.time);
+    this._bonfireUi = new ResetBonfireSettingsUi(this._host, this.setting.bonfire);
+    this._religionUi = new ResetReligionSettingsUi(this._host, this.setting.religion);
+    this._resourcesUi = new ResetResourcesSettingsUi(this._host, this.setting.resources);
+    this._spaceUi = new ResetSpaceSettingsUi(this._host, this.setting.space);
+    this._timeUi = new ResetTimeSettingsUi(this._host, this.setting.time);
 
     this.addChildren([
       this._bonfireUi,

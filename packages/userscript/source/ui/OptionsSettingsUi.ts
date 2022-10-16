@@ -13,26 +13,26 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
     super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {
-      this._buildings.forEach(item => (item.settings.enabled = true));
+      this._buildings.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._buildings.forEach(item => (item.settings.enabled = false));
+      this._buildings.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new OptionsSettings());
+      this.setting.load(new OptionsSettings());
       this.refreshUi();
     });
 
     this._buildings = [
-      this._getOptionsOption(this.settings.items.observe, this._host.engine.i18n("option.observe")),
+      this._getOptionsOption(this.setting.items.observe, this._host.engine.i18n("option.observe")),
       this._getOptionsOption(
-        this.settings.items.autofeed,
+        this.setting.items.autofeed,
         this._host.engine.i18n("option.autofeed")
       ),
-      this._getOptionsOption(this.settings.items.crypto, this._host.engine.i18n("option.crypto")),
-      this._getOptionsOption(this.settings.items.fixCry, this._host.engine.i18n("option.fix.cry")),
+      this._getOptionsOption(this.setting.items.crypto, this._host.engine.i18n("option.crypto")),
+      this._getOptionsOption(this.setting.items.fixCry, this._host.engine.i18n("option.fix.cry")),
     ];
     this.addChildren(this._buildings);
   }

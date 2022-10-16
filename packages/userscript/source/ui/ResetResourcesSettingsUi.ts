@@ -21,11 +21,11 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     );
 
     this._list.addEventListener("enableAll", () => {
-      this._buildings.forEach(item => (item.settings.enabled = true));
+      this._buildings.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._buildings.forEach(item => (item.settings.enabled = false));
+      this._buildings.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {

@@ -301,7 +301,7 @@ export class ReligionSettings extends SettingTrigger {
         "gold"
       ),
     },
-    bestUnicornBuilding = new Setting(true),
+    bestUnicornBuilding = new Setting(false),
     autoPraise = new SettingTrigger(true, 0.98),
     adore = new SettingTrigger(false, 0.75),
     transcend = new Setting(false)

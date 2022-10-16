@@ -19,49 +19,49 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
     this.children.add(this._trigger);
 
     this._list.addEventListener("enableAll", () => {
-      this._races.forEach(item => (item.settings.enabled = true));
+      this._races.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._races.forEach(item => (item.settings.enabled = false));
+      this._races.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new EmbassySettings());
+      this.setting.load(new EmbassySettings());
       this.refreshUi();
     });
 
     this._races = [
       this._makeEmbassySetting(
-        this.settings.items.lizards,
+        this.setting.items.lizards,
         this._host.engine.i18n(`$trade.race.lizards`)
       ),
       this._makeEmbassySetting(
-        this.settings.items.sharks,
+        this.setting.items.sharks,
         this._host.engine.i18n(`$trade.race.sharks`)
       ),
       this._makeEmbassySetting(
-        this.settings.items.griffins,
+        this.setting.items.griffins,
         this._host.engine.i18n(`$trade.race.griffins`)
       ),
       this._makeEmbassySetting(
-        this.settings.items.nagas,
+        this.setting.items.nagas,
         this._host.engine.i18n(`$trade.race.nagas`)
       ),
       this._makeEmbassySetting(
-        this.settings.items.zebras,
+        this.setting.items.zebras,
         this._host.engine.i18n(`$trade.race.zebras`)
       ),
       this._makeEmbassySetting(
-        this.settings.items.spiders,
+        this.setting.items.spiders,
         this._host.engine.i18n(`$trade.race.spiders`)
       ),
       this._makeEmbassySetting(
-        this.settings.items.dragons,
+        this.setting.items.dragons,
         this._host.engine.i18n(`$trade.race.dragons`)
       ),
       this._makeEmbassySetting(
-        this.settings.items.leviathans,
+        this.setting.items.leviathans,
         this._host.engine.i18n(`$trade.race.leviathans`)
       ),
     ];

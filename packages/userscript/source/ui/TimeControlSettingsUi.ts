@@ -18,29 +18,29 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.settings.enabled = true));
+      this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.settings.enabled = false));
+      this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new TimeControlSettings());
+      this.setting.load(new TimeControlSettings());
       this.refreshUi();
     });
 
     this._accelerateTime = new SettingTriggerListItem(
       this._host,
       label,
-      this.settings.accelerateTime,
+      this.setting.accelerateTime,
       {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
       }
     );
-    this._timeSkipUi = new TimeSkipSettingsUi(this._host, this.settings.timeSkip);
-    this._resetUi = new ResetSettingsUi(this._host, this.settings.reset);
+    this._timeSkipUi = new TimeSkipSettingsUi(this._host, this.setting.timeSkip);
+    this._resetUi = new ResetSettingsUi(this._host, this.setting.reset);
 
     this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];
 

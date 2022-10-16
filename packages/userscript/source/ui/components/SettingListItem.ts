@@ -2,8 +2,8 @@ import { Setting } from "../../options/Settings";
 import { UserScript } from "../../UserScript";
 import { UiComponent } from "./UiComponent";
 
-export class SettingListItem extends UiComponent {
-  readonly settings: Setting;
+export class SettingListItem<TSetting extends Setting = Setting> extends UiComponent {
+  readonly setting: TSetting;
   readonly element: JQuery<HTMLElement>;
   readonly checkbox: JQuery<HTMLElement>;
 
@@ -27,7 +27,7 @@ export class SettingListItem extends UiComponent {
   constructor(
     host: UserScript,
     label: string,
-    setting: Setting,
+    setting: TSetting,
     handler: {
       onCheck: () => void;
       onUnCheck: () => void;
@@ -55,11 +55,11 @@ export class SettingListItem extends UiComponent {
 
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && setting.enabled === false) {
-        handler.onCheck();
         host.updateSettings(() => (setting.enabled = true));
+        handler.onCheck();
       } else if (!checkbox.is(":checked") && setting.enabled === true) {
-        handler.onUnCheck();
         host.updateSettings(() => (setting.enabled = false));
+        handler.onUnCheck();
       }
     });
 
@@ -68,12 +68,12 @@ export class SettingListItem extends UiComponent {
 
     this.checkbox = checkbox;
     this.element = element;
-    this.settings = setting;
+    this.setting = setting;
   }
 
   refreshUi() {
     super.refreshUi();
-    this.checkbox.prop("checked", this.settings.enabled);
+    this.checkbox.prop("checked", this.setting.enabled);
     this.checkbox.prop("disabled", this.readOnly);
   }
 }

@@ -10,20 +10,20 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     super(host, host.engine.i18n("ui.upgrade.upgrades"), settings);
 
     this._list.addEventListener("enableAll", () => {
-      this._upgrades.forEach(item => (item.settings.enabled = true));
+      this._upgrades.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._upgrades.forEach(item => (item.settings.enabled = false));
+      this._upgrades.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new UpgradeSettings());
+      this.setting.load(new UpgradeSettings());
       this.refreshUi();
     });
 
     const items = [];
-    for (const setting of Object.values(this.settings.items)) {
+    for (const setting of Object.values(this.setting.items)) {
       const label = this._host.engine.i18n(`$workshop.${setting.upgrade}.label`);
       const button = new SettingListItem(this._host, label, setting, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),

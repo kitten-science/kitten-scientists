@@ -22,97 +22,97 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     this.children.add(this._trigger);
 
     this._list.addEventListener("enableAll", () => {
-      this._crafts.forEach(item => (item.settings.enabled = true));
+      this._crafts.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._crafts.forEach(item => (item.settings.enabled = false));
+      this._crafts.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new WorkshopSettings());
+      this.setting.load(new WorkshopSettings());
       this.refreshUi();
     });
 
     this._crafts = [
       this._getCraftOption(
-        this.settings.items.wood,
+        this.setting.items.wood,
         this._host.engine.i18n("$workshop.crafts.wood.label")
       ),
       this._getCraftOption(
-        this.settings.items.beam,
+        this.setting.items.beam,
         this._host.engine.i18n("$workshop.crafts.beam.label")
       ),
       this._getCraftOption(
-        this.settings.items.slab,
+        this.setting.items.slab,
         this._host.engine.i18n("$workshop.crafts.slab.label")
       ),
       this._getCraftOption(
-        this.settings.items.steel,
+        this.setting.items.steel,
         this._host.engine.i18n("$workshop.crafts.steel.label")
       ),
       this._getCraftOption(
-        this.settings.items.plate,
+        this.setting.items.plate,
         this._host.engine.i18n("$workshop.crafts.plate.label")
       ),
       this._getCraftOption(
-        this.settings.items.alloy,
+        this.setting.items.alloy,
         this._host.engine.i18n("$workshop.crafts.alloy.label")
       ),
       this._getCraftOption(
-        this.settings.items.concrate,
+        this.setting.items.concrate,
         this._host.engine.i18n("$workshop.crafts.concrate.label")
       ),
       this._getCraftOption(
-        this.settings.items.gear,
+        this.setting.items.gear,
         this._host.engine.i18n("$workshop.crafts.gear.label")
       ),
       this._getCraftOption(
-        this.settings.items.scaffold,
+        this.setting.items.scaffold,
         this._host.engine.i18n("$workshop.crafts.scaffold.label")
       ),
       this._getCraftOption(
-        this.settings.items.ship,
+        this.setting.items.ship,
         this._host.engine.i18n("$workshop.crafts.ship.label")
       ),
       this._getCraftOption(
-        this.settings.items.tanker,
+        this.setting.items.tanker,
         this._host.engine.i18n("$workshop.crafts.tanker.label"),
         true
       ),
 
       this._getCraftOption(
-        this.settings.items.parchment,
+        this.setting.items.parchment,
         this._host.engine.i18n("$workshop.crafts.parchment.label")
       ),
       this._getCraftOption(
-        this.settings.items.manuscript,
+        this.setting.items.manuscript,
         this._host.engine.i18n("$workshop.crafts.manuscript.label")
       ),
       this._getCraftOption(
-        this.settings.items.compedium,
+        this.setting.items.compedium,
         this._host.engine.i18n("$workshop.crafts.compedium.label")
       ),
       this._getCraftOption(
-        this.settings.items.blueprint,
+        this.setting.items.blueprint,
         this._host.engine.i18n("$workshop.crafts.blueprint.label"),
         true
       ),
 
       this._getCraftOption(
-        this.settings.items.kerosene,
+        this.setting.items.kerosene,
         this._host.engine.i18n("$workshop.crafts.kerosene.label")
       ),
       this._getCraftOption(
-        this.settings.items.megalith,
+        this.setting.items.megalith,
         this._host.engine.i18n("$workshop.crafts.megalith.label")
       ),
       this._getCraftOption(
-        this.settings.items.eludium,
+        this.setting.items.eludium,
         this._host.engine.i18n("$workshop.crafts.eludium.label")
       ),
       this._getCraftOption(
-        this.settings.items.thorium,
+        this.setting.items.thorium,
         this._host.engine.i18n("$workshop.crafts.thorium.label"),
         true
       ),
@@ -121,13 +121,13 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
 
     this.addChild(new HeaderListItem(this._host, "Additional options"));
 
-    this._upgradeUi = new UpgradeSettingsUi(this._host, this.settings.unlockUpgrades);
+    this._upgradeUi = new UpgradeSettingsUi(this._host, this.setting.unlockUpgrades);
     this.addChild(this._upgradeUi);
 
     this._shipOverride = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.shipOverride"),
-      this.settings.shipOverride,
+      this.setting.shipOverride,
       {
         onCheck: () =>
           this._host.engine.imessage("status.auto.enable", [

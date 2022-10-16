@@ -7,17 +7,26 @@ export class MaxButton extends UiComponent {
   readonly setting: SettingMax;
   readonly element: JQuery<HTMLElement>;
 
+  readOnly: boolean;
+
   constructor(
     host: UserScript,
     label: string,
     setting: SettingMax,
-    handler: { onClick?: () => void } = {}
+    handler: { onClick?: () => void } = {},
+    readOnly = false
   ) {
     super(host);
 
     const element = $("<div/>").addClass("ks-text-button").addClass("ks-max-button");
 
+    this.readOnly = readOnly;
+
     element.on("click", () => {
+      if (this.readOnly) {
+        return;
+      }
+
       const value = SettingsSectionUi.promptLimit(
         host.engine.i18n("ui.max.set", [label]),
         setting.max.toString()

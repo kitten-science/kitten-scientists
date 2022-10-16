@@ -47,71 +47,38 @@ export class ReligionManager implements Automation {
       return;
     }
 
-    this.autoWorship();
+    this._autoBuild();
+
+    const faith = this._workshopManager.getResource("faith");
+    const faithLevel = faith.value / faith.maxValue;
+    // enough faith, and then TAP (transcende, adore, praise)
+    if (this.settings.transcend.enabled && this.settings.autoPraise.trigger - 0.02 <= faithLevel) {
+      this._autoTranscend();
+    }
+
+    // Praise (faith → worhsip)
+    if (this.settings.autoPraise.trigger <= faithLevel) {
+      // Adore the galaxy (worship → epiphany)
+      if (
+        this.settings.adore.enabled &&
+        mustExist(this._host.gamePage.religion.getRU("apocripha")).on
+      ) {
+        this._autoAdore(this.settings.adore.trigger);
+      }
+
+      if (this.settings.autoPraise.enabled) {
+        this._autoPraise();
+      }
+    }
   }
 
   load(settings: ReligionSettings) {
     this.settings.load(settings);
   }
 
-  autoWorship() {
-    const IS_BUILD_BEST_BUILDING_STILL_BROKEN = true;
-
-    // Build the best unicorn building if the option is enabled.
-    // TODO: This is stupid, as it *only* builds unicorn buildings, instead of all
-    //       religion buildings.
-    if (!IS_BUILD_BEST_BUILDING_STILL_BROKEN && this.settings.bestUnicornBuilding.enabled) {
-      const bestUnicornBuilding = this._getBestUnicornBuilding();
-      if (bestUnicornBuilding !== null) {
-        if (bestUnicornBuilding === "unicornPasture") {
-          this._bonfireManager.build(bestUnicornBuilding, 0, 1);
-        } else {
-          const buildingButton = mustExist(
-            this.getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat)
-          );
-          let tearsNeeded = 0;
-          // TODO: A simple `.find()` makes more sense here.
-          for (const price of buildingButton.model.prices) {
-            if (price.name === "tears") {
-              tearsNeeded = price.val;
-            }
-          }
-
-          const tearsAvailableForUse =
-            this._workshopManager.getValue("tears") - this._workshopManager.getStock("tears");
-
-          if (tearsAvailableForUse < tearsNeeded) {
-            // if no ziggurat, getBestUnicornBuilding will return unicornPasture
-            // TODO: ☝ Yeah. So?
-
-            // How many times can we sacrifice unicorns to make tears?
-            const maxSacrifice = Math.floor(
-              (this._workshopManager.getValue("unicorns") -
-                this._workshopManager.getStock("unicorns")) /
-                2500
-            );
-
-            // How many sacrifices would we need, so we'd end up with enough tears.
-            const needSacrifice = Math.ceil(
-              (tearsNeeded - tearsAvailableForUse) /
-                this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on
-            );
-
-            // Sacrifice some unicorns to get the tears to buy the building.
-            if (needSacrifice < maxSacrifice) {
-              this._host.gamePage.religionTab.sacrificeBtn.controller._transform(
-                this._host.gamePage.religionTab.sacrificeBtn.model,
-                needSacrifice
-              );
-              // iactivity?
-              // TODO: ☝ Yeah, seems like a good idea.
-            }
-          }
-
-          // Build the best unicorn building.
-          this.build(bestUnicornBuilding, UnicornItemVariant.Ziggurat, 1);
-        }
-      }
+  private _autoBuild() {
+    if (this.settings.bestUnicornBuilding.enabled) {
+      this._buildBestUnicornBuilding();
     } else {
       // TODO: It's not clear why this process is split into two steps.
 
@@ -138,27 +105,64 @@ export class ReligionManager implements Automation {
       // And then we build all other possible religion buildings.
       this._buildReligionBuildings(builds);
     }
+  }
 
-    const faith = this._workshopManager.getResource("faith");
-    const faithLevel = faith.value / faith.maxValue;
-    // enough faith, and then TAP (transcende, adore, praise)
-    if (this.settings.transcend.enabled && this.settings.autoPraise.trigger - 0.02 <= faithLevel) {
-      this._autoTranscend();
+  private _buildBestUnicornBuilding() {
+    const bestUnicornBuilding = this.getBestUnicornBuilding();
+    if (bestUnicornBuilding === null) {
+      return;
     }
 
-    // Praise (faith → worhsip)
-    if (this.settings.autoPraise.trigger <= faithLevel) {
-      // Adore the galaxy (worship → epiphany)
-      if (
-        this.settings.adore.enabled &&
-        mustExist(this._host.gamePage.religion.getRU("apocripha")).on
-      ) {
-        this._autoAdore(this.settings.adore.trigger);
+    if (bestUnicornBuilding === "unicornPasture") {
+      this._bonfireManager.build(bestUnicornBuilding, 0, 1);
+    } else {
+      const buildingButton = mustExist(
+        this.getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat)
+      );
+      let tearsNeeded = 0;
+      // TODO: A simple `.find()` makes more sense here.
+      for (const price of buildingButton.model.prices) {
+        if (price.name === "tears") {
+          tearsNeeded = price.val;
+        }
       }
 
-      if (this.settings.autoPraise.enabled) {
-        this._autoPraise();
+      const tearsAvailableForUse =
+        this._workshopManager.getValue("tears") - this._workshopManager.getStock("tears");
+
+      if (tearsAvailableForUse < tearsNeeded) {
+        // if no ziggurat, getBestUnicornBuilding will return unicornPasture
+        // TODO: ☝ Yeah. So?
+
+        // How many times can we sacrifice unicorns to make tears?
+        const maxSacrifice = Math.floor(
+          (this._workshopManager.getValue("unicorns") -
+            this._workshopManager.getStock("unicorns")) /
+            2500
+        );
+
+        // How many sacrifices would we need, so we'd end up with enough tears.
+        const needSacrifice = Math.ceil(
+          (tearsNeeded - tearsAvailableForUse) /
+            this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on
+        );
+
+        // Sacrifice some unicorns to get the tears to buy the building.
+        if (needSacrifice < maxSacrifice) {
+          this._host.gamePage.religionTab.sacrificeBtn.controller._transform(
+            this._host.gamePage.religionTab.sacrificeBtn.model,
+            needSacrifice
+          );
+          // iactivity?
+          // TODO: ☝ Yeah, seems like a good idea.
+        } else {
+          // Not enough unicorns to sacrifice to make enough tears.
+          return;
+        }
       }
+
+      // Build the best unicorn building.
+      this.build(bestUnicornBuilding, UnicornItemVariant.Ziggurat, 1);
     }
   }
 
@@ -363,7 +367,7 @@ export class ReligionManager implements Automation {
    * @see https://github.com/Bioniclegenius/NummonCalc/blob/112f716e2fde9956dfe520021b0400cba7b7113e/NummonCalc.js#L490
    * @returns The best unicorn building.
    */
-  private _getBestUnicornBuilding(): ZiggurathUpgrades | null {
+  getBestUnicornBuilding(): ZiggurathUpgrades | null {
     const pastureButton = this._bonfireManager.getBuildButton("unicornPasture");
     if (pastureButton === null) {
       return null;

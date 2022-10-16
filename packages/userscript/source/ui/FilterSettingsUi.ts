@@ -12,102 +12,102 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     super(host, label, settings);
 
     this._list.addEventListener("enableAll", () => {
-      this._filters.forEach(item => (item.settings.enabled = true));
+      this._filters.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._filters.forEach(item => (item.settings.enabled = false));
+      this._filters.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
-      this.settings.load(new FilterSettings());
+      this.setting.load(new FilterSettings());
       this.refreshUi();
     });
 
     const buttonTemplates = [
       {
         name: "buildFilter" as const,
-        option: this.settings.items.buildFilter,
+        option: this.setting.items.buildFilter,
         label: this._host.engine.i18n("filter.build"),
       },
       {
         name: "craftFilter" as const,
-        option: this.settings.items.craftFilter,
+        option: this.setting.items.craftFilter,
         label: this._host.engine.i18n("filter.craft"),
       },
       {
         name: "upgradeFilter" as const,
-        option: this.settings.items.upgradeFilter,
+        option: this.setting.items.upgradeFilter,
         label: this._host.engine.i18n("filter.upgrade"),
       },
       {
         name: "researchFilter" as const,
-        option: this.settings.items.researchFilter,
+        option: this.setting.items.researchFilter,
         label: this._host.engine.i18n("filter.research"),
       },
       {
         name: "tradeFilter" as const,
-        option: this.settings.items.tradeFilter,
+        option: this.setting.items.tradeFilter,
         label: this._host.engine.i18n("filter.trade"),
       },
       {
         name: "huntFilter" as const,
-        option: this.settings.items.huntFilter,
+        option: this.setting.items.huntFilter,
         label: this._host.engine.i18n("filter.hunt"),
       },
       {
         name: "praiseFilter" as const,
-        option: this.settings.items.praiseFilter,
+        option: this.setting.items.praiseFilter,
         label: this._host.engine.i18n("filter.praise"),
       },
       {
         name: "adoreFilter" as const,
-        option: this.settings.items.adoreFilter,
+        option: this.setting.items.adoreFilter,
         label: this._host.engine.i18n("filter.adore"),
       },
       {
         name: "transcendFilter" as const,
-        option: this.settings.items.transcendFilter,
+        option: this.setting.items.transcendFilter,
         label: this._host.engine.i18n("filter.transcend"),
       },
       {
         name: "faithFilter" as const,
-        option: this.settings.items.faithFilter,
+        option: this.setting.items.faithFilter,
         label: this._host.engine.i18n("filter.faith"),
       },
       {
         name: "accelerateFilter" as const,
-        option: this.settings.items.accelerateFilter,
+        option: this.setting.items.accelerateFilter,
         label: this._host.engine.i18n("filter.accelerate"),
       },
       {
         name: "timeSkipFilter" as const,
-        option: this.settings.items.timeSkipFilter,
+        option: this.setting.items.timeSkipFilter,
         label: this._host.engine.i18n("filter.time.skip"),
       },
       {
         name: "festivalFilter" as const,
-        option: this.settings.items.festivalFilter,
+        option: this.setting.items.festivalFilter,
         label: this._host.engine.i18n("filter.festival"),
       },
       {
         name: "starFilter" as const,
-        option: this.settings.items.starFilter,
+        option: this.setting.items.starFilter,
         label: this._host.engine.i18n("filter.star"),
       },
       {
         name: "distributeFilter" as const,
-        option: this.settings.items.distributeFilter,
+        option: this.setting.items.distributeFilter,
         label: this._host.engine.i18n("filter.distribute"),
       },
       {
         name: "promoteFilter" as const,
-        option: this.settings.items.promoteFilter,
+        option: this.setting.items.promoteFilter,
         label: this._host.engine.i18n("filter.promote"),
       },
       {
         name: "miscFilter" as const,
-        option: this.settings.items.miscFilter,
+        option: this.setting.items.miscFilter,
         label: this._host.engine.i18n("filter.misc"),
       },
     ];
