@@ -1,19 +1,10 @@
-import { CycleIndices } from "../../options/TimeControlSettings";
+import { Setting } from "../../options/Settings";
+import { Cycle } from "../../types";
 import { UserScript } from "../../UserScript";
+import { SettingListItem } from "./SettingListItem";
 import { SettingsList } from "./SettingsList";
 
-export type SettingWithCycles = {
-  0: boolean;
-  1: boolean;
-  2: boolean;
-  3: boolean;
-  4: boolean;
-  5: boolean;
-  6: boolean;
-  7: boolean;
-  8: boolean;
-  9: boolean;
-};
+export type SettingWithCycles = Record<Cycle, Setting>;
 
 /**
  * A list of settings correlating to the planetary cycles in the game.
@@ -21,16 +12,16 @@ export type SettingWithCycles = {
 export class CyclesList extends SettingsList {
   readonly setting: SettingWithCycles;
 
-  readonly 0: JQuery<HTMLElement>;
-  readonly 1: JQuery<HTMLElement>;
-  readonly 2: JQuery<HTMLElement>;
-  readonly 3: JQuery<HTMLElement>;
-  readonly 4: JQuery<HTMLElement>;
-  readonly 5: JQuery<HTMLElement>;
-  readonly 6: JQuery<HTMLElement>;
-  readonly 7: JQuery<HTMLElement>;
-  readonly 8: JQuery<HTMLElement>;
-  readonly 9: JQuery<HTMLElement>;
+  readonly charon: SettingListItem;
+  readonly umbra: SettingListItem;
+  readonly yarn: SettingListItem;
+  readonly helios: SettingListItem;
+  readonly cath: SettingListItem;
+  readonly redmoon: SettingListItem;
+  readonly dune: SettingListItem;
+  readonly piscine: SettingListItem;
+  readonly terminus: SettingListItem;
+  readonly kairo: SettingListItem;
 
   /**
    * Constructs a `SeasonsList`.
@@ -42,47 +33,78 @@ export class CyclesList extends SettingsList {
     super(host);
     this.setting = setting;
 
-    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
-      this[cycleIndex as CycleIndices] = this._getCycle(cycleIndex as CycleIndices, this.setting);
-      this.element.append(this[cycleIndex as CycleIndices]);
-    }
+    this.charon = this._makeCycle(
+      this._host.engine.i18n("$space.planet.charon.label"),
+      this.setting.charon
+    );
+    this.umbra = this._makeCycle(
+      this._host.engine.i18n("$space.planet.umbra.label"),
+      this.setting.umbra
+    );
+    this.yarn = this._makeCycle(
+      this._host.engine.i18n("$space.planet.yarn.label"),
+      this.setting.yarn
+    );
+    this.helios = this._makeCycle(
+      this._host.engine.i18n("$space.planet.helios.label"),
+      this.setting.helios
+    );
+    this.cath = this._makeCycle(
+      this._host.engine.i18n("$space.planet.cath.label"),
+      this.setting.cath
+    );
+    this.redmoon = this._makeCycle(
+      this._host.engine.i18n("$space.planet.redmoon.label"),
+      this.setting.redmoon
+    );
+    this.dune = this._makeCycle(
+      this._host.engine.i18n("$space.planet.dune.label"),
+      this.setting.dune
+    );
+    this.piscine = this._makeCycle(
+      this._host.engine.i18n("$space.planet.piscine.label"),
+      this.setting.piscine
+    );
+    this.terminus = this._makeCycle(
+      this._host.engine.i18n("$space.planet.terminus.label"),
+      this.setting.terminus
+    );
+    this.kairo = this._makeCycle(
+      this._host.engine.i18n("$space.planet.kairo.label"),
+      this.setting.kairo
+    );
+
+    this.addChildren([
+      this.charon,
+      this.umbra,
+      this.yarn,
+      this.helios,
+      this.cath,
+      this.redmoon,
+      this.dune,
+      this.piscine,
+      this.terminus,
+      this.kairo,
+    ]);
   }
 
-  private _getCycle(index: CycleIndices, option: SettingWithCycles): JQuery<HTMLElement> {
-    const cycle = this._host.gamePage.calendar.cycles[index];
-
-    const element = $("<li/>");
-
-    const label = $("<label/>", {
-      text: cycle.title,
+  private _makeCycle(label: string, setting: Setting) {
+    return new SettingListItem(this._host, label, setting, {
+      onCheck: () => this._host.engine.imessage("time.skip.cycle.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("time.skip.cycle.disable", [label]),
     });
-
-    const input = $("<input/>", {
-      type: "checkbox",
-    });
-
-    input.on("change", () => {
-      if (input.is(":checked") && option[index] === false) {
-        this._host.updateSettings(() => (option[index] = true));
-        this._host.engine.imessage("time.skip.cycle.enable", [cycle.title]);
-      } else if (!input.is(":checked") && option[index] === true) {
-        this._host.updateSettings(() => (option[index] = false));
-        this._host.engine.imessage("time.skip.cycle.disable", [cycle.title]);
-      }
-    });
-
-    label.prepend(input);
-    element.append(label);
-
-    return element;
   }
 
   refreshUi() {
-    for (let cycleIndex = 0; cycleIndex < 10; ++cycleIndex) {
-      $("input", this[cycleIndex as CycleIndices]).prop(
-        "checked",
-        this.setting[cycleIndex as CycleIndices]
-      );
-    }
+    this.charon.refreshUi();
+    this.umbra.refreshUi();
+    this.yarn.refreshUi();
+    this.helios.refreshUi();
+    this.cath.refreshUi();
+    this.redmoon.refreshUi();
+    this.dune.refreshUi();
+    this.piscine.refreshUi();
+    this.terminus.refreshUi();
+    this.kairo.refreshUi();
   }
 }

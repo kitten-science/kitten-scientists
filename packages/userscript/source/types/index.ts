@@ -14,7 +14,7 @@ export type Cycle =
   | "redmoon"
   | "dune"
   | "piscine"
-  | "t-minus"
+  | "terminus"
   | "kairo";
 
 export type ResourceCraftable =

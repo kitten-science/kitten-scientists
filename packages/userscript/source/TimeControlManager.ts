@@ -359,7 +359,7 @@ export class TimeControlManager {
 
     // If skipping during this cycle was disabled, bail out.
     const currentCycle = this._host.gamePage.calendar.cycle;
-    if (!this.settings.timeSkip[currentCycle]) {
+    if (!this.settings.timeSkip.cycles[currentCycle]) {
       return;
     }
 
@@ -389,14 +389,16 @@ export class TimeControlManager {
       let skipCycles = 1;
       while (
         yearsPerCycle < canSkip &&
-        this.settings.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
+        this.settings.timeSkip.cycles[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
       ) {
         willSkip += yearsPerCycle;
         canSkip -= yearsPerCycle;
         skipCycles += 1;
       }
       if (
-        this.settings.timeSkip[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices] &&
+        this.settings.timeSkip.cycles[
+          ((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices
+        ] &&
         0 < canSkip
       ) {
         willSkip += canSkip;
