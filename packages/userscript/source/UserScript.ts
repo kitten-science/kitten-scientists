@@ -1,5 +1,5 @@
 import JQuery from "jquery";
-import { Engine, SupportedLanguages } from "./Engine";
+import { Engine, EngineState, SupportedLanguages } from "./Engine";
 
 import { BonfireSettings } from "./options/BonfireSettings";
 import { EngineSettings } from "./options/EngineSettings";
@@ -130,7 +130,7 @@ export class UserScript {
   }
 
   loadLegacyOptions(source: LegacyStorage) {
-    this.engine.load({
+    this.engine.stateLoad({
       bonfire: BonfireSettings.fromLegacyOptions(source),
       engine: EngineSettings.fromLegacyOptions(source),
       religion: ReligionSettings.fromLegacyOptions(source),
@@ -190,6 +190,9 @@ export class UserScript {
   getSettings() {
     return this.engine.stateSerialize();
   }
+  setSetting(settings: EngineState) {
+    this.engine.stateLoad(settings);
+  }
 
   /**
    * Experimental save manager for Kitten Game.
@@ -203,6 +206,24 @@ export class UserScript {
   }
 
   private _saveManager = {
+    load: (saveData: Record<string, unknown>) => {
+      if ("ks" in saveData === false) {
+        return;
+      }
+
+      const ksData = saveData.ks as { state?: Array<EngineState> };
+      if ("state" in ksData === false) {
+        return;
+      }
+
+      const state = ksData.state;
+      if (!Array.isArray(state)) {
+        return;
+      }
+
+      cwarn("EXPERIMENTAL: Loading Kitten Scientists setting from save data...");
+      this.engine.stateLoad(state[0]);
+    },
     save: (saveData: Record<string, unknown>) => {
       cwarn("EXPERIMENTAL: Injecting Kitten Scientists settings into save data...");
       saveData.ks = { state: [this.getSettings()] };

@@ -102,18 +102,7 @@ export class Engine {
     return language in this._i18nData;
   }
 
-  load(settings: {
-    engine: EngineSettings;
-    bonfire: BonfireSettings;
-    religion: ReligionSettings;
-    science: ScienceSettings;
-    space: SpaceSettings;
-    time: TimeSettings;
-    timeControl: TimeControlSettings;
-    trade: TradeSettings;
-    village: VillageSettings;
-    workshop: WorkshopSettings;
-  }) {
+  stateLoad(settings: EngineState) {
     this.settings.load(settings.engine);
     this.bonfireManager.load(settings.bonfire);
     this.religionManager.load(settings.religion);
