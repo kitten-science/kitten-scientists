@@ -4,6 +4,7 @@ import { UserScript } from "../UserScript";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -236,7 +237,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         true
       ),
     ];
-    this._buildings = filterType(uiElements, SettingListItem);
+    this._buildings = filterType(uiElements, SettingMaxListItem);
     this.addChildren(uiElements);
 
     this.addChild(new HeaderListItem(this._host, "Additional options"));
