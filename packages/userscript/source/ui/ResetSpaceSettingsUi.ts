@@ -2,6 +2,7 @@ import { ResetSpaceSettings } from "../options/ResetSpaceSettings";
 import { SettingTrigger } from "../options/Settings";
 import { UserScript } from "../UserScript";
 import { IconSettingsPanel } from "./components/IconSettingsPanel";
+import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 
 export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> {
@@ -148,7 +149,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
     delimiter = false,
     upgradeIndicator = false
   ) {
-    return new SettingTriggerListItem(
+    return new SettingTriggerLimitListItem(
       this._host,
       i18nName,
       option,
