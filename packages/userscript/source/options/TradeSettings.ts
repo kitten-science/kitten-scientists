@@ -7,10 +7,10 @@ import { LegacyStorage } from "./SettingsStorage";
 export class TradeSettingsItem extends SettingLimited {
   readonly race: Race;
 
-  summer: boolean;
-  autumn: boolean;
-  winter: boolean;
-  spring: boolean;
+  summer: Setting;
+  autumn: Setting;
+  winter: Setting;
+  spring: Setting;
 
   /**
    * A resource that is required to trade with the race.
@@ -29,10 +29,10 @@ export class TradeSettingsItem extends SettingLimited {
   ) {
     super(enabled, limited);
     this.race = race;
-    this.summer = summer;
-    this.autumn = autumn;
-    this.winter = winter;
-    this.spring = spring;
+    this.summer = new Setting(summer);
+    this.autumn = new Setting(autumn);
+    this.winter = new Setting(winter);
+    this.spring = new Setting(spring);
     this.require = require;
   }
 }
@@ -103,10 +103,10 @@ export class TradeSettings extends SettingTrigger {
     for (const [name, item] of objectEntries(settings.items)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`toggle-limited-${name}` as const] = item.limited;
-      subject.items[`toggle-${name}-autumn` as const] = item.autumn;
-      subject.items[`toggle-${name}-spring` as const] = item.spring;
-      subject.items[`toggle-${name}-summer` as const] = item.summer;
-      subject.items[`toggle-${name}-winter` as const] = item.winter;
+      subject.items[`toggle-${name}-autumn` as const] = item.autumn.enabled;
+      subject.items[`toggle-${name}-spring` as const] = item.spring.enabled;
+      subject.items[`toggle-${name}-summer` as const] = item.summer.enabled;
+      subject.items[`toggle-${name}-winter` as const] = item.winter.enabled;
     }
 
     EmbassySettings.toLegacyOptions(settings.buildEmbassies, subject);
@@ -122,10 +122,10 @@ export class TradeSettings extends SettingTrigger {
     for (const [name, item] of objectEntries(options.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
-      item.autumn = subject.items[`toggle-${name}-autumn` as const] ?? item.autumn;
-      item.spring = subject.items[`toggle-${name}-spring` as const] ?? item.spring;
-      item.summer = subject.items[`toggle-${name}-summer` as const] ?? item.summer;
-      item.winter = subject.items[`toggle-${name}-winter` as const] ?? item.winter;
+      item.autumn.enabled = subject.items[`toggle-${name}-autumn` as const] ?? item.autumn.enabled;
+      item.spring.enabled = subject.items[`toggle-${name}-spring` as const] ?? item.spring.enabled;
+      item.summer.enabled = subject.items[`toggle-${name}-summer` as const] ?? item.summer.enabled;
+      item.winter.enabled = subject.items[`toggle-${name}-winter` as const] ?? item.winter.enabled;
     }
 
     options.buildEmbassies = EmbassySettings.fromLegacyOptions(subject);

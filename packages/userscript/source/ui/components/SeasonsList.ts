@@ -1,14 +1,10 @@
-import { ucfirst } from "../../tools/Format";
+import { Setting } from "../../options/Settings";
 import { Season } from "../../types";
 import { UserScript } from "../../UserScript";
+import { SettingListItem } from "./SettingListItem";
 import { SettingsList } from "./SettingsList";
 
-export type SettingWithSeasons = {
-  summer: boolean;
-  autumn: boolean;
-  winter: boolean;
-  spring: boolean;
-};
+export type SettingWithSeasons = Record<Season, Setting>;
 
 /**
  * A list of 4 settings correlating to the 4 seasons.
@@ -16,53 +12,67 @@ export type SettingWithSeasons = {
 export class SeasonsList extends SettingsList {
   readonly setting: SettingWithSeasons;
 
-  readonly _spring: JQuery<HTMLElement>;
-  readonly _summer: JQuery<HTMLElement>;
-  readonly _autumn: JQuery<HTMLElement>;
-  readonly _winter: JQuery<HTMLElement>;
+  readonly spring: SettingListItem;
+  readonly summer: SettingListItem;
+  readonly autumn: SettingListItem;
+  readonly winter: SettingListItem;
 
   /**
    * Constructs a `SeasonsList`.
    *
    * @param host A reference to the host.
    * @param setting The settings that correlate to this list.
+   * @param handler Callbacks to invoke when a season is checked/unchecked.
+   * @param handler.onCheck Called when a season is checked.
+   * @param handler.onUnCheck Called when a season is unchecked.
    */
-  constructor(host: UserScript, setting: SettingWithSeasons) {
+  constructor(
+    host: UserScript,
+    setting: SettingWithSeasons,
+    handler: {
+      onCheck: (label: string, setting: Setting) => void;
+      onUnCheck: (label: string, setting: Setting) => void;
+    }
+  ) {
     super(host);
     this.setting = setting;
 
-    this._spring = this._getSeason("spring", this.setting);
-    this._summer = this._getSeason("summer", this.setting);
-    this._autumn = this._getSeason("autumn", this.setting);
-    this._winter = this._getSeason("winter", this.setting);
-    this.element.append(this._spring, this._summer, this._autumn, this._winter);
+    this.spring = this._makeSeason(
+      this._host.engine.i18n(`$calendar.season.spring`),
+      this.setting.spring,
+      handler
+    );
+    this.summer = this._makeSeason(
+      this._host.engine.i18n(`$calendar.season.summer`),
+      this.setting.summer,
+      handler
+    );
+    this.autumn = this._makeSeason(
+      this._host.engine.i18n(`$calendar.season.autumn`),
+      this.setting.autumn,
+      handler
+    );
+    this.winter = this._makeSeason(
+      this._host.engine.i18n(`$calendar.season.winter`),
+      this.setting.winter,
+      handler
+    );
+
+    this.addChildren([this.spring, this.summer, this.autumn, this.winter]);
   }
 
-  private _getSeason(season: Season, option: SettingWithSeasons): JQuery<HTMLElement> {
-    const iseason = ucfirst(this._host.engine.i18n(`$calendar.season.${season}` as const));
-
-    const element = $("<li/>");
-
-    const label = $("<label/>").text(ucfirst(iseason));
-
-    const input = $("<input/>", {
-      type: "checkbox",
+  private _makeSeason(
+    label: string,
+    setting: Setting,
+    handler: {
+      onCheck: (label: string, setting: Setting) => void;
+      onUnCheck: (label: string, setting: Setting) => void;
+    }
+  ) {
+    return new SettingListItem(this._host, label, setting, {
+      onCheck: () => handler.onCheck(label, setting),
+      onUnCheck: () => handler.onUnCheck(label, setting),
     });
-    label.prepend(input);
-
-    input.on("change", () => {
-      if (input.is(":checked") && option[season] === false) {
-        this._host.updateSettings(() => (option[season] = true));
-        //this._host.engine.imessage("trade.season.enable", [iname, iseason]);
-      } else if (!input.is(":checked") && option[season] === true) {
-        this._host.updateSettings(() => (option[season] = false));
-        //this._host.engine.imessage("trade.season.disable", [iname, iseason]);
-      }
-    });
-
-    element.append(label);
-
-    return element;
   }
 
   refreshUi() {

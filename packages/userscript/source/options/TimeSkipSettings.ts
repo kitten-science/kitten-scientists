@@ -5,10 +5,10 @@ import { LegacyStorage } from "./SettingsStorage";
 export class TimeSkipSettings extends SettingTrigger implements SettingWithCycles {
   max = 50;
 
-  spring = true;
-  summer = false;
-  autumn = false;
-  winter = false;
+  spring: Setting;
+  summer: Setting;
+  autumn: Setting;
+  winter: Setting;
 
   charon: Setting;
   umbra: Setting;
@@ -48,6 +48,12 @@ export class TimeSkipSettings extends SettingTrigger implements SettingWithCycle
       piscine: new Setting(false),
       terminus: new Setting(false),
       kairo: new Setting(false),
+    },
+    seasons = {
+      spring: new Setting(true),
+      summer: new Setting(false),
+      autumn: new Setting(false),
+      winter: new Setting(false),
     }
   ) {
     super(false, 5);
@@ -62,16 +68,21 @@ export class TimeSkipSettings extends SettingTrigger implements SettingWithCycle
     this.piscine = cycles.piscine;
     this.terminus = cycles.terminus;
     this.kairo = cycles.kairo;
+
+    this.spring = seasons.spring;
+    this.summer = seasons.summer;
+    this.autumn = seasons.autumn;
+    this.winter = seasons.winter;
   }
 
   load(settings: TimeSkipSettings) {
     super.load(settings);
     this.max = settings.max;
 
-    this.autumn = settings.autumn;
-    this.spring = settings.spring;
-    this.summer = settings.summer;
-    this.winter = settings.winter;
+    this.autumn.load(settings.autumn);
+    this.spring.load(settings.spring);
+    this.summer.load(settings.summer);
+    this.winter.load(settings.winter);
 
     this.charon.load(settings.charon);
     this.umbra.load(settings.umbra);
@@ -89,10 +100,11 @@ export class TimeSkipSettings extends SettingTrigger implements SettingWithCycle
     subject.items["toggle-timeSkip"] = settings.enabled;
     subject.items["set-timeSkip-trigger"] = settings.trigger;
     subject.items["set-timeSkip-max"] = settings.max;
-    subject.items["toggle-timeSkip-autumn"] = settings.autumn;
-    subject.items["toggle-timeSkip-spring"] = settings.spring;
-    subject.items["toggle-timeSkip-summer"] = settings.summer;
-    subject.items["toggle-timeSkip-winter"] = settings.winter;
+
+    subject.items["toggle-timeSkip-autumn"] = settings.autumn.enabled;
+    subject.items["toggle-timeSkip-spring"] = settings.spring.enabled;
+    subject.items["toggle-timeSkip-summer"] = settings.summer.enabled;
+    subject.items["toggle-timeSkip-winter"] = settings.winter.enabled;
 
     subject.items[`toggle-timeSkip-0`] = settings.charon.enabled;
     subject.items[`toggle-timeSkip-1`] = settings.umbra.enabled;
@@ -112,10 +124,11 @@ export class TimeSkipSettings extends SettingTrigger implements SettingWithCycle
 
     settings.trigger = subject.items["set-timeSkip-trigger"] ?? settings.trigger;
     settings.max = subject.items["set-timeSkip-max"] ?? settings.max;
-    settings.autumn = subject.items["toggle-timeSkip-autumn"] ?? settings.autumn;
-    settings.spring = subject.items["toggle-timeSkip-spring"] ?? settings.spring;
-    settings.summer = subject.items["toggle-timeSkip-summer"] ?? settings.summer;
-    settings.winter = subject.items["toggle-timeSkip-winter"] ?? settings.winter;
+
+    settings.autumn.enabled = subject.items["toggle-timeSkip-autumn"] ?? settings.autumn.enabled;
+    settings.spring.enabled = subject.items["toggle-timeSkip-spring"] ?? settings.spring.enabled;
+    settings.summer.enabled = subject.items["toggle-timeSkip-summer"] ?? settings.summer.enabled;
+    settings.winter.enabled = subject.items["toggle-timeSkip-winter"] ?? settings.winter.enabled;
 
     settings.charon.enabled = subject.items[`toggle-timeSkip-0`] ?? settings.charon.enabled;
     settings.umbra.enabled = subject.items[`toggle-timeSkip-1`] ?? settings.umbra.enabled;

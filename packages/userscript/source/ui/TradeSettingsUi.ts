@@ -129,7 +129,10 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     const seasonsButton = new SeasonsButton(this._host);
     element.addChild(seasonsButton);
 
-    const seasons = new SeasonsList(this._host, option);
+    const seasons = new SeasonsList(this._host, option, {
+      onCheck: (label: string) => this._host.engine.imessage("trade.season.enable", [label]),
+      onUnCheck: (label: string) => this._host.engine.imessage("trade.season.disable", [label]),
+    });
     element.addChild(seasons);
 
     seasonsButton.element.on("click", function () {

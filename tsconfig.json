@@ -18,5 +18,5 @@
     "skipLibCheck": true,
     "types": ["@types/web"]
   },
-  "exclude": ["**/*.c?js"]
+  "exclude": ["**/*.cjs", "**/*.js"]
 }
