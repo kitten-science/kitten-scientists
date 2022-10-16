@@ -21,7 +21,6 @@ export class SettingLimitedListItem extends SettingListItem {
    * @param delimiter Should a delimiter be rendered after this element?
    * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
    * to indicate that this is an upgrade of a prior setting?
-   * @param additionalClasses A list of CSS classes to attach to the element.
    */
   constructor(
     host: UserScript,
@@ -34,10 +33,9 @@ export class SettingLimitedListItem extends SettingListItem {
       onLimitedUnCheck: () => void;
     },
     delimiter = false,
-    upgradeIndicator = false,
-    additionalClasses = []
+    upgradeIndicator = false
   ) {
-    super(host, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
+    super(host, label, setting, handler, delimiter, upgradeIndicator);
 
     this.limitedButton = new LimitedButton(host, setting, handler);
     this.element.append(this.limitedButton.element);

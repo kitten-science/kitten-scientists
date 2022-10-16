@@ -20,7 +20,6 @@ export class SettingMaxListItem extends SettingListItem {
    * @param delimiter Should a delimiter be rendered after this element?
    * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
    * to indicate that this is an upgrade of a prior setting?
-   * @param additionalClasses A list of CSS classes to attach to the element.
    */
   constructor(
     host: UserScript,
@@ -31,10 +30,9 @@ export class SettingMaxListItem extends SettingListItem {
       onUnCheck: () => void;
     },
     delimiter = false,
-    upgradeIndicator = false,
-    additionalClasses = []
+    upgradeIndicator = false
   ) {
-    super(host, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
+    super(host, label, setting, handler, delimiter, upgradeIndicator);
 
     this.maxButton = new MaxButton(host, label, setting);
     this.element.append(this.maxButton.element);

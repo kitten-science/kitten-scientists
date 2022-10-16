@@ -20,7 +20,6 @@ export class SettingListItem extends UiComponent {
    * @param delimiter Should there be additional padding below this element?
    * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
    * to indicate that this is an upgrade of a prior setting?
-   * @param additionalClasses A list of CSS classes to attach to the element.
    */
   constructor(
     host: UserScript,
@@ -31,13 +30,12 @@ export class SettingListItem extends UiComponent {
       onUnCheck: () => void;
     },
     delimiter = false,
-    upgradeIndicator = false,
-    additionalClasses = []
+    upgradeIndicator = false
   ) {
     super(host);
 
     const element = $(`<li/>`);
-    for (const cssClass of ["ks-setting", delimiter ? "ks-delimiter" : "", ...additionalClasses]) {
+    for (const cssClass of ["ks-setting", delimiter ? "ks-delimiter" : ""]) {
       element.addClass(cssClass);
     }
 

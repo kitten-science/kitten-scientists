@@ -15,10 +15,9 @@ export class SettingTriggerListItem extends SettingListItem {
       onUnCheck: () => void;
     },
     delimiter = false,
-    upgradeIndicator = false,
-    additionalClasses = []
+    upgradeIndicator = false
   ) {
-    super(host, label, setting, handler, delimiter, upgradeIndicator, additionalClasses);
+    super(host, label, setting, handler, delimiter, upgradeIndicator);
 
     this.triggerButton = new TriggerButton(host, label, setting);
     this.element.append(this.triggerButton.element);

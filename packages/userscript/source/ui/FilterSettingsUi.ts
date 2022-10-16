@@ -122,8 +122,7 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
           onUnCheck: () => this._host.engine.imessage("filter.disable", [label]),
         },
         false,
-        false,
-        []
+        false
       );
 
     this._filters = buttonTemplates
