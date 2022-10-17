@@ -25,7 +25,7 @@ export class StockButton extends UiComponent {
       );
 
       if (value !== null) {
-        host.updateSettings(() => (setting.stock = value));
+        setting.stock = value;
         this.refreshUi();
       }
 

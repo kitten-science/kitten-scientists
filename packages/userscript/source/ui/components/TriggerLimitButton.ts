@@ -24,7 +24,7 @@ export class TriggerLimitButton extends UiComponent {
       );
 
       if (value !== null) {
-        host.updateSettings(() => (setting.trigger = value));
+        setting.trigger = value;
         this.refreshUi();
       }
 

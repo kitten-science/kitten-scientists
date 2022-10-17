@@ -184,6 +184,13 @@ export class SettingsStorage {
   static setLegacyOptions(options: LegacyStorage): void {
     localStorage["cbc.kitten-scientists"] = JSON.stringify(options);
   }
+
+  /**
+   * Persists an engine state to local storage.
+   *
+   * @deprecated Hook into the save/load mechanism of Kittens Game instead.
+   * @param settings The engine state to persist.
+   */
   static setSettings(settings: EngineState): void {
     localStorage["ks.state.0"] = JSON.stringify(settings);
   }

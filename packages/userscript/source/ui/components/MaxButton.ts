@@ -33,7 +33,7 @@ export class MaxButton extends UiComponent {
       );
 
       if (value !== null) {
-        host.updateSettings(() => (setting.max = value));
+        setting.max = value;
         this.refreshUi();
       }
 

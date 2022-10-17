@@ -55,10 +55,10 @@ export class SettingListItem<TSetting extends Setting = Setting> extends UiCompo
 
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && setting.enabled === false) {
-        host.updateSettings(() => (setting.enabled = true));
+        setting.enabled = true;
         handler.onCheck();
       } else if (!checkbox.is(":checked") && setting.enabled === true) {
-        host.updateSettings(() => (setting.enabled = false));
+        setting.enabled = false;
         handler.onUnCheck();
       }
     });

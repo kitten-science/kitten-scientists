@@ -59,12 +59,6 @@ export class UserScript {
   }
 
   /**
-   * Signals whether the options have been changed since they were last saved.
-   */
-  private _settingsDirty = false;
-  private _intervalSaveSettings: number | undefined = undefined;
-
-  /**
    * Stores if we caught the `game/start` signal from the game.
    */
   private static _gameStartSignal: Promise<boolean>;
@@ -90,9 +84,6 @@ export class UserScript {
     this._userInterface = new UserInterface(this);
     this._userInterface.construct();
     this._userInterface.refreshUi();
-
-    // Every 30 seconds, check if we need to save our settings.
-    this._intervalSaveSettings = setInterval(this._checkSettings.bind(this), 30 * 1000);
   }
 
   /**
@@ -146,35 +137,6 @@ export class UserScript {
     });
   }
 
-  /**
-   * Signal that the settings should be saved again.
-   *
-   * @param updater A function that will manipulate the settings before they're saved.
-   */
-  updateSettings(updater?: () => void): void {
-    cdebug("Settings will be updated.");
-    if (updater) {
-      updater();
-    }
-    this._settingsDirty = true;
-  }
-
-  private _checkSettings(): void {
-    if (this._settingsDirty) {
-      this.saveSettings();
-    }
-  }
-
-  saveSettings() {
-    this._settingsDirty = false;
-
-    SettingsStorage.setLegacyOptions(this.getLegacyOptions());
-    cinfo("Kitten Scientists settings (legacy) saved.");
-
-    SettingsStorage.setSettings(this.getSettings());
-    cinfo("Kitten Scientists settings (modern) saved.");
-  }
-
   getLegacyOptions() {
     return Options.asLegacyOptions({
       bonfire: this.engine.bonfireManager.settings,
@@ -193,12 +155,12 @@ export class UserScript {
     return this.engine.stateSerialize();
   }
   setSettings(settings: EngineState) {
+    cinfo("Loading engine state...");
     this.engine.stateLoad(settings);
   }
 
   installSaveManager() {
-    cinfo("Replacing internal save management with game manager...");
-    clearInterval(this._intervalSaveSettings);
+    cinfo("EXPERIMENTAL: Installing save game manager...");
     this.gamePage.managers.push(this.saveManager);
   }
 
@@ -215,29 +177,50 @@ export class UserScript {
 
   private _saveManager = {
     load: (saveData: Record<string, unknown>) => {
-      cwarn("EXPERIMENTAL: Looking for Kitten Scientists settings in save data...");
-      if ("ks" in saveData === false) {
+      cwarn("EXPERIMENTAL: Looking for Kitten Scientists engine state in save data...");
+
+      const state = UserScript._tryEngineStateFromSaveData(saveData);
+      if (!state) {
         return;
       }
 
-      const ksData = saveData.ks as { state?: Array<EngineState> };
-      if ("state" in ksData === false) {
-        return;
-      }
-
-      const state = ksData.state;
-      if (!Array.isArray(state)) {
-        return;
-      }
-
-      cwarn("EXPERIMENTAL: Loading Kitten Scientists settings from save data...");
-      this.engine.stateLoad(state[0]);
+      cwarn(
+        "EXPERIMENTAL: Found Kitten Scientists engine state in save data. These will NOT be loaded at this time."
+      );
+      //this.engine.stateLoad(state);
     },
     save: (saveData: Record<string, unknown>) => {
-      cwarn("EXPERIMENTAL: Injecting Kitten Scientists settings into save data...");
+      cwarn("EXPERIMENTAL: Injecting Kitten Scientists engine state into save data...");
       saveData.ks = { state: [this.getSettings()] };
+
+      // Also save to legacy storage.
+      SettingsStorage.setLegacyOptions(this.getLegacyOptions());
+      cinfo("Kitten Scientists settings (legacy) saved.");
     },
   };
+
+  private static _tryEngineStateFromSaveData(
+    saveData: Record<string, unknown>
+  ): EngineState | undefined {
+    if ("ks" in saveData === false) {
+      cdebug("Failed: `ks` not found in save data.");
+      return;
+    }
+
+    const ksData = saveData.ks as { state?: Array<EngineState> };
+    if ("state" in ksData === false) {
+      cdebug("Failed: `ks.state` not found in save data.");
+      return;
+    }
+
+    const state = ksData.state;
+    if (!Array.isArray(state)) {
+      cdebug("Failed: `ks.state` not `Array`.");
+      return;
+    }
+
+    return state[0];
+  }
 
   static async waitForGame(timeout = 30000): Promise<GamePage> {
     const signals: Array<Promise<unknown>> = [sleep(2000)];
@@ -256,24 +239,18 @@ export class UserScript {
         "server/load",
         (saveData: { ks?: { state?: Array<EngineState> } }) => {
           cinfo(
-            "`server/load` signal caught. Looking for Kitten Scientists engine state in save data..."
+            "EXPERIMENTAL: `server/load` signal caught. Looking for Kitten Scientists engine state in save data..."
           );
-          if ("ks" in saveData === false) {
+
+          const state = UserScript._tryEngineStateFromSaveData(saveData);
+          if (!state) {
             return;
           }
 
-          const ksData = saveData.ks as { state?: Array<EngineState> };
-          if ("state" in ksData === false) {
-            return;
-          }
-
-          const state = ksData.state;
-          if (!Array.isArray(state)) {
-            return;
-          }
-
-          cinfo("Using provided save data as seed for next userscript instance.");
-          UserScript._possibleEngineState = mustExist(mustExist(saveData.ks).state)[0];
+          cinfo(
+            "EXPERIMENTAL: Found! Provided save data will be used as seed for next userscript instance."
+          );
+          UserScript._possibleEngineState = state;
         }
       );
     }
@@ -296,16 +273,27 @@ export class UserScript {
     return UserScript.waitForGame(timeout - 2000);
   }
 
+  /**
+   * Returns an instance of the userscript in our default confiuration.
+   *
+   * @returns The default userscript instance.
+   */
   static getDefaultInstance(): UserScript {
     const instance = new UserScript(
       mustExist(UserScript.window.gamePage),
       mustExist(UserScript.window.$I),
       localStorage["com.nuclearunicorn.kittengame.language"] as SupportedLanguages | undefined
     );
+
+    // We can already attempt to load the possible engine state and see if this produces errors.
+    // As the startup is orchestrated right now by `index.ts`, if there are legacy options, they
+    // will be loaded into the instance after we return it from here.
+    // Thus, legacy options will overrule modern settings, if they are present.
     if (!isNil(UserScript._possibleEngineState)) {
       instance.setSettings(UserScript._possibleEngineState);
-      instance.installSaveManager();
     }
+
+    instance.installSaveManager();
     return instance;
   }
 

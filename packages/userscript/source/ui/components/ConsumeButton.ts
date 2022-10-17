@@ -25,7 +25,7 @@ export class ConsumeButton extends UiComponent {
       );
 
       if (value !== null) {
-        host.updateSettings(() => (setting.consume = value));
+        setting.consume = value;
         this.refreshUi();
       }
 
