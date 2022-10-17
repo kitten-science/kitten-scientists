@@ -2,7 +2,12 @@ import { BonfireManager } from "./BonfireManager";
 import { Automation, TickContext } from "./Engine";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings";
-import { FaithItem, ReligionSettings, ReligionSettingsItem } from "./settings/ReligionSettings";
+import {
+  FaithItem,
+  ReligionSettings,
+  ReligionSettingsItem,
+  UnicornItem,
+} from "./settings/ReligionSettings";
 import { TabManager } from "./TabManager";
 import { cwarn } from "./tools/Log";
 import { mustExist } from "./tools/Maybe";
@@ -79,19 +84,17 @@ export class ReligionManager implements Automation {
   private _autoBuild() {
     if (this.settings.bestUnicornBuilding.enabled) {
       this._buildBestUnicornBuilding();
+      this._buildNonUnicornBuildings();
     } else {
-      // TODO: It's not clear why this process is split into two steps.
-
       // Create the list of builds, excluding the unicorn pasture.
-      // Also reverse the build order, so that the best unicorn building is
-      // always build preferably.
-      // TODO: The "build best unicorn building first" feature might be redundant.
+      // The unicorn pasture requires a special build path, because it's really
+      // a bonfire building.
       const builds = Object.fromEntries(
-        Object.entries(this.settings.items)
-          .filter(([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture)
-          .reverse()
+        Object.entries(this.settings.items).filter(
+          ([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture
+        )
       );
-      // Now we build a unicorn pasture if possible.
+      // Build a unicorn pasture if possible.
       const maxPastures =
         -1 === this.settings.items.unicornPasture.max
           ? Number.POSITIVE_INFINITY
@@ -99,7 +102,12 @@ export class ReligionManager implements Automation {
       const meta = this._host.gamePage.bld.getBuildingExt("unicornPasture").meta;
       if (this.settings.items.unicornPasture.enabled && meta.val < maxPastures) {
         this._bonfireManager.autoBuild({
-          unicornPasture: new BonfireBuildingSetting("unicornPasture", true, false, -1),
+          unicornPasture: new BonfireBuildingSetting(
+            "unicornPasture",
+            this.settings.items.unicornPasture.enabled,
+            this.settings.items.unicornPasture.require,
+            this.settings.items.unicornPasture.max
+          ),
         });
       }
       // And then we build all other possible religion buildings.
@@ -164,6 +172,21 @@ export class ReligionManager implements Automation {
       // Build the best unicorn building.
       this.build(bestUnicornBuilding, UnicornItemVariant.Ziggurat, 1);
     }
+  }
+  private _buildNonUnicornBuildings() {
+    const alreadyHandled: Array<FaithItem | UnicornItem> = [
+      "unicornPasture",
+      "unicornTomb",
+      "ivoryTower",
+      "ivoryCitadel",
+      "skyPalace",
+      "unicornUtopia",
+      "sunspire",
+    ];
+    const builds = Object.fromEntries(
+      Object.entries(this.settings.items).filter(([k, v]) => !alreadyHandled.includes(v.building))
+    );
+    this._buildReligionBuildings(builds);
   }
 
   private _autoAdore(trigger: number) {
@@ -373,7 +396,7 @@ export class ReligionManager implements Automation {
       return null;
     }
 
-    const validBuildings = [
+    const validBuildings: Array<ZiggurathUpgrades> = [
       "unicornTomb",
       "ivoryTower",
       "ivoryCitadel",
