@@ -308,9 +308,6 @@ export class TimeControlManager {
       return;
     }
 
-    // Force writing out current settings right now
-    this._host.saveSettings();
-
     //=============================================================
     for (
       let challengeIndex = 0;
