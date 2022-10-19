@@ -10,7 +10,7 @@ import {
 } from "./settings/ReligionSettings";
 import { TabManager } from "./TabManager";
 import { cwarn } from "./tools/Log";
-import { mustExist } from "./tools/Maybe";
+import { isNil, mustExist } from "./tools/Maybe";
 import {
   BuildButton,
   ReligionTab,
@@ -127,12 +127,11 @@ export class ReligionManager implements Automation {
       const buildingButton = mustExist(
         this.getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat)
       );
+
       let tearsNeeded = 0;
-      // TODO: A simple `.find()` makes more sense here.
-      for (const price of buildingButton.model.prices) {
-        if (price.name === "tears") {
-          tearsNeeded = price.val;
-        }
+      const priceTears = buildingButton.model.prices.find(subject => subject.name === "tears");
+      if (!isNil(priceTears)) {
+        tearsNeeded = priceTears.val;
       }
 
       const tearsAvailableForUse =
@@ -169,8 +168,18 @@ export class ReligionManager implements Automation {
         }
       }
 
-      // Build the best unicorn building.
-      this.build(bestUnicornBuilding, UnicornItemVariant.Ziggurat, 1);
+      // Let the BulkManager figure out if the build can be made.
+      const buildRequest = { [bestUnicornBuilding]: this.settings.items[bestUnicornBuilding] };
+      const build = this._bulkManager.bulk(
+        buildRequest,
+        this.getBuildMetaData(buildRequest),
+        this.settings.trigger
+      );
+      if (0 < build.length && 0 < build[0].count) {
+        // We force only building 1 of the best unicorn building, because
+        // afterwards the best unicorn building is likely going to change.
+        this.build(bestUnicornBuilding, UnicornItemVariant.Ziggurat, 1);
+      }
     }
   }
   private _buildNonUnicornBuildings() {
@@ -331,38 +340,15 @@ export class ReligionManager implements Automation {
   }
 
   private _buildReligionBuildings(builds: Partial<Record<FaithItem, ReligionSettingsItem>>): void {
-    const trigger = this.settings.trigger;
-
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     this.manager.render();
 
     const metaData: Partial<
       Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
-    > = {};
-    for (const build of Object.values(builds)) {
-      const buildInfo = this.getBuild(build.building, build.variant);
-      if (buildInfo === null) {
-        continue;
-      }
-      metaData[build.building as FaithItem] = buildInfo;
-      const buildMetaData = mustExist(metaData[build.building as FaithItem]);
-
-      // If an item is marked as `rHidden`, it wouldn't be build.
-      // TODO: Why not remove it from the `builds` then?
-      if (!this.getBuildButton(build.building, build.variant)) {
-        buildMetaData.rHidden = true;
-      } else {
-        const model = mustExist(this.getBuildButton(build.building, build.variant)).model;
-        const panel =
-          build.variant === UnicornItemVariant.Cryptotheology
-            ? this._host.gamePage.science.get("cryptotheology").researched
-            : true;
-        buildMetaData.rHidden = !(model.visible && model.enabled && panel);
-      }
-    }
+    > = this.getBuildMetaData(builds);
 
     // Let the bulk manager figure out which of the builds to actually build.
-    const buildList = this._bulkManager.bulk(builds, metaData, trigger);
+    const buildList = this._bulkManager.bulk(builds, metaData, this.settings.trigger);
 
     let refreshRequired = false;
     for (const build of buildList) {
@@ -571,6 +557,35 @@ export class ReligionManager implements Automation {
         this._host.engine.iactivity("act.builds", [label, amount], "ks-build");
       }
     }
+  }
+
+  getBuildMetaData(builds: Partial<Record<FaithItem, ReligionSettingsItem>>) {
+    const metaData: Partial<
+      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
+    > = {};
+    for (const build of Object.values(builds)) {
+      const buildInfo = this.getBuild(build.building, build.variant);
+      if (buildInfo === null) {
+        continue;
+      }
+      metaData[build.building as FaithItem] = buildInfo;
+      const buildMetaData = mustExist(metaData[build.building as FaithItem]);
+
+      // If an item is marked as `rHidden`, it wouldn't be build.
+      // TODO: Why not remove it from the `builds` then?
+      if (!this.getBuildButton(build.building, build.variant)) {
+        buildMetaData.rHidden = true;
+      } else {
+        const model = mustExist(this.getBuildButton(build.building, build.variant)).model;
+        const panel =
+          build.variant === UnicornItemVariant.Cryptotheology
+            ? this._host.gamePage.science.get("cryptotheology").researched
+            : true;
+        buildMetaData.rHidden = !(model.visible && model.enabled && panel);
+      }
+    }
+
+    return metaData;
   }
 
   /**
