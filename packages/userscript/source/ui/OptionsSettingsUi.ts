@@ -27,11 +27,6 @@ export class OptionsSettingsUi extends SettingsSectionUi<OptionsSettings> {
 
     this._buildings = [
       this._getOptionsOption(this.setting.items.observe, this._host.engine.i18n("option.observe")),
-      this._getOptionsOption(
-        this.setting.items.autofeed,
-        this._host.engine.i18n("option.autofeed")
-      ),
-      this._getOptionsOption(this.setting.items.crypto, this._host.engine.i18n("option.crypto")),
       this._getOptionsOption(this.setting.items.fixCry, this._host.engine.i18n("option.fix.cry")),
     ];
     this.addChildren(this._buildings);

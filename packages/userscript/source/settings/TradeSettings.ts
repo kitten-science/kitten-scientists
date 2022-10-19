@@ -44,7 +44,9 @@ export type TradeSettingsItems = {
 export class TradeSettings extends SettingTrigger {
   items: TradeSettingsItems;
 
+  feedLeviathans: SettingTrigger;
   buildEmbassies: EmbassySettings;
+  tradeBlackcoin: SettingTrigger;
   unlockRaces: Setting;
 
   constructor(
@@ -70,11 +72,16 @@ export class TradeSettings extends SettingTrigger {
       zebras: new TradeSettingsItem("zebras", true, true, true, true, true, true),
     },
     buildEmbassies = new EmbassySettings(),
+    feedLeviathans = new SettingTrigger(false, 1),
+    tradeBlackcoin = new SettingTrigger(true, 10000),
     unlockRaces = new Setting(true)
   ) {
     super(enabled, trigger);
     this.items = items;
+
     this.buildEmbassies = buildEmbassies;
+    this.feedLeviathans = feedLeviathans;
+    this.tradeBlackcoin = tradeBlackcoin;
     this.unlockRaces = unlockRaces;
   }
 
@@ -92,8 +99,9 @@ export class TradeSettings extends SettingTrigger {
     }
 
     this.buildEmbassies.load(settings.buildEmbassies);
-
-    this.unlockRaces.enabled = settings.unlockRaces.enabled;
+    this.feedLeviathans.load(settings.feedLeviathans);
+    this.tradeBlackcoin.load(settings.tradeBlackcoin);
+    this.unlockRaces.load(settings.unlockRaces);
   }
 
   static toLegacyOptions(settings: TradeSettings, subject: LegacyStorage) {
@@ -111,6 +119,8 @@ export class TradeSettings extends SettingTrigger {
 
     EmbassySettings.toLegacyOptions(settings.buildEmbassies, subject);
 
+    subject.items["toggle-autofeed"] = settings.feedLeviathans.enabled;
+    subject.items["toggle-crypto"] = settings.tradeBlackcoin.enabled;
     subject.items["toggle-races"] = settings.unlockRaces.enabled;
   }
 
@@ -130,6 +140,10 @@ export class TradeSettings extends SettingTrigger {
 
     options.buildEmbassies = EmbassySettings.fromLegacyOptions(subject);
 
+    options.feedLeviathans.enabled =
+      subject.items["toggle-autofeed"] ?? options.feedLeviathans.enabled;
+    options.tradeBlackcoin.enabled =
+      subject.items["toggle-crypto"] ?? options.tradeBlackcoin.enabled;
     options.unlockRaces.enabled = subject.items["toggle-races"] ?? options.unlockRaces.enabled;
 
     return options;

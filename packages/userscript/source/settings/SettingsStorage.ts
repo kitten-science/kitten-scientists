@@ -46,6 +46,8 @@ type SetMinResetUnicornItem = `set-reset-unicorn-${UnicornItem}-min`;
 type SetSubtriggerOptionItem = `set-${OptionsItem}-trigger`;
 type SetSubtriggerReligionItem = `set-${ReligionAdditionItem}-trigger`;
 type SetSubtriggerTimeCtrlItem = `set-${"accelerateTime" | "timeSkip"}-trigger`;
+type ToggleTradeBlackcoin = "toggle-crypto";
+type ToggleFeedLeviathans = "toggle-autofeed";
 type ToggleBuildEmbassies = "toggle-buildEmbassies";
 type ToggleBuildEmbassiesItem = `toggle-build-${Race}`;
 type ToggleBuildingItem = `toggle-${AllItems}`;
@@ -106,6 +108,7 @@ export type LegacyStorage = {
     Partial<Record<ToggleBuildEmbassiesItem, boolean>> &
     Partial<Record<ToggleBuildingItem, boolean>> &
     Partial<Record<ToggleFaithUnicornItem, boolean>> &
+    Partial<Record<ToggleFeedLeviathans, boolean>> &
     Partial<Record<ToggleFilterItem, boolean>> &
     Partial<Record<ToggleHoldFestivals, boolean>> &
     Partial<Record<ToggleHunt, boolean>> &
@@ -132,6 +135,7 @@ export type LegacyStorage = {
     Partial<Record<ToggleTimeControlItem, boolean>> &
     Partial<Record<ToggleTimeControlSeasonItem, boolean>> &
     Partial<Record<ToggleTimeItem, boolean>> &
+    Partial<Record<ToggleTradeBlackcoin, boolean>> &
     Partial<Record<ToggleTurnOnSteamworks, boolean>> &
     Partial<Record<ToggleUnlockItem, boolean>> &
     Partial<Record<ToggleUnlockMissions, boolean>> &

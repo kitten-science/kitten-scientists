@@ -36,6 +36,12 @@ export class TradeManager implements Automation {
     if (this.settings.buildEmbassies.enabled) {
       this.autoBuildEmbassies();
     }
+    if (this.settings.feedLeviathans.enabled) {
+      this.autoFeedElders();
+    }
+    if (this.settings.tradeBlackcoin.enabled) {
+      this.autoTradeBlackcoin();
+    }
   }
 
   load(settings: TradeSettings) {
@@ -513,6 +519,55 @@ export class TradeManager implements Automation {
       if (refreshRequired) {
         this._host.gamePage.ui.render();
       }
+    }
+  }
+
+  private waitForBestPrice = false;
+
+  autoTradeBlackcoin() {
+    const coinPrice = this._host.gamePage.calendar.cryptoPrice;
+    const relicsInitial = this._host.gamePage.resPool.get("relic").value;
+    const coinsInitial = this._host.gamePage.resPool.get("blackcoin").value;
+    let coinsExchanged = 0.0;
+    let relicsExchanged = 0.0;
+
+    // Waits for coin price to drop below a certain treshold before starting the exchange process
+    if (this.waitForBestPrice === true && coinPrice < 860.0) {
+      this.waitForBestPrice = false;
+    }
+
+    // All of this code is straight-forward. Buy low, sell high.
+
+    // Exchanges up to a certain threshold, in order to keep a good exchange rate, then waits for a higher treshold before exchanging for relics.
+    if (
+      this.waitForBestPrice === false &&
+      coinPrice < 950.0 &&
+      (this.settings.tradeBlackcoin.trigger ?? 0) < relicsInitial
+    ) {
+      // function name changed in v1.4.8.0
+      if (typeof this._host.gamePage.diplomacy.buyEcoin === "function") {
+        this._host.gamePage.diplomacy.buyEcoin();
+      } else {
+        this._host.gamePage.diplomacy.buyBcoin();
+      }
+
+      const currentCoin = this._host.gamePage.resPool.get("blackcoin").value;
+      coinsExchanged = Math.round(currentCoin - coinsInitial);
+      this._host.engine.iactivity("blackcoin.buy", [coinsExchanged]);
+    } else if (coinPrice > 1050.0 && 0 < this._host.gamePage.resPool.get("blackcoin").value) {
+      this.waitForBestPrice = true;
+
+      // function name changed in v1.4.8.0
+      if (typeof this._host.gamePage.diplomacy.sellEcoin === "function") {
+        this._host.gamePage.diplomacy.sellEcoin();
+      } else {
+        this._host.gamePage.diplomacy.sellBcoin();
+      }
+
+      const relicsCurrent = mustExist(this._host.gamePage.resPool.get("relic")).value;
+      relicsExchanged = Math.round(relicsCurrent - relicsInitial);
+
+      this._host.engine.iactivity("blackcoin.sell", [relicsExchanged]);
     }
   }
 

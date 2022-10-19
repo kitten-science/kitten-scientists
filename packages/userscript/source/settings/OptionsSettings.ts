@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { Setting, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
 
-export type OptionsItem = "autofeed" | "crypto" | "fixCry" | "observe";
+export type OptionsItem = "fixCry" | "observe";
 
 export class OptionsSettingsItem extends SettingTrigger {}
 
@@ -14,12 +14,10 @@ export class OptionsSettings extends Setting {
   constructor(
     enabled = false,
     observe = new OptionsSettingsItem(true),
-    autofeed = new OptionsSettingsItem(true),
-    crypto = new OptionsSettingsItem(true, 10000),
     fixCry = new OptionsSettingsItem(false)
   ) {
     super(enabled);
-    this.items = { autofeed, crypto, fixCry, observe };
+    this.items = { fixCry, observe };
   }
 
   load(settings: OptionsSettings) {

@@ -6,6 +6,7 @@ import { SeasonsButton } from "./components/SeasonsButton";
 import { SeasonsList } from "./components/SeasonsList";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { TriggerButton } from "./components/TriggerButton";
 import { EmbassySettingsUi } from "./EmbassySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -14,6 +15,8 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
   private readonly _trigger: TriggerButton;
   private readonly _races: Array<SettingListItem>;
   private readonly _embassiesUi: EmbassySettingsUi;
+  private readonly _feedLeviathans: SettingTriggerListItem;
+  private readonly _tradeBlackcoin: SettingTriggerListItem;
   private readonly _unlockRaces: SettingListItem;
 
   constructor(host: UserScript, settings: TradeSettings) {
@@ -76,11 +79,45 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       this._getTradeOption(
         "leviathans",
         this.setting.items.leviathans,
-        this._host.engine.i18n("$trade.race.leviathans"),
-        true
+        this._host.engine.i18n("$trade.race.leviathans")
       ),
     ];
     this.addChildren(this._races);
+
+    this._feedLeviathans = new SettingTriggerListItem(
+      this._host,
+      this._host.engine.i18n("option.autofeed"),
+      this.setting.feedLeviathans,
+      {
+        onCheck: () =>
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.autofeed"),
+          ]),
+        onUnCheck: () =>
+          this._host.engine.imessage("status.sub.disable", [
+            this._host.engine.i18n("option.autofeed"),
+          ]),
+      }
+    );
+    this.addChild(this._feedLeviathans);
+
+    this._tradeBlackcoin = new SettingTriggerListItem(
+      this._host,
+      this._host.engine.i18n("option.crypto"),
+      this.setting.feedLeviathans,
+      {
+        onCheck: () =>
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.crypto"),
+          ]),
+        onUnCheck: () =>
+          this._host.engine.imessage("status.sub.disable", [
+            this._host.engine.i18n("option.crypto"),
+          ]),
+      },
+      true
+    );
+    this.addChild(this._tradeBlackcoin);
 
     this.addChild(new HeaderListItem(this._host, "Additional options"));
 

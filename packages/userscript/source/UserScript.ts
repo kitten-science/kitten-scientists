@@ -13,7 +13,7 @@ import { TimeSettings } from "./settings/TimeSettings";
 import { TradeSettings } from "./settings/TradeSettings";
 import { VillageSettings } from "./settings/VillageSettings";
 import { WorkshopSettings } from "./settings/WorkshopSettings";
-import { cdebug, cinfo, cwarn } from "./tools/Log";
+import { cdebug, cerror, cinfo, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
 import { GamePage } from "./types";
@@ -290,7 +290,11 @@ export class UserScript {
     // will be loaded into the instance after we return it from here.
     // Thus, legacy options will overrule modern settings, if they are present.
     if (!isNil(UserScript._possibleEngineState)) {
-      instance.setSettings(UserScript._possibleEngineState);
+      try {
+        instance.setSettings(UserScript._possibleEngineState);
+      } catch (error) {
+        cerror("The previous engine state could not be processed!", error);
+      }
     }
 
     instance.installSaveManager();
