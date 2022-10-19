@@ -65,6 +65,7 @@ export class ResourcesSettings extends Setting {
       ship: new ResourcesSettingsItem("ship", false, 1, 0),
       slab: new ResourcesSettingsItem("slab", false, 1, 0),
       spice: new ResourcesSettingsItem("spice", false, 1, 0),
+      starchart: new ResourcesSettingsItem("starchart", true, 1, 500),
       steel: new ResourcesSettingsItem("steel", false, 1, 0),
       tanker: new ResourcesSettingsItem("tanker", false, 1, 0),
       tears: new ResourcesSettingsItem("tears", false, 1, 0),

@@ -61,6 +61,7 @@ export type Resource =
   | "science"
   | "slab"
   | "spice"
+  | "starchart"
   | "tears"
   | "temporalFlux"
   | "timeCrystal"

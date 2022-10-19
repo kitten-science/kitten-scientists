@@ -9,7 +9,7 @@ import { SettingListItem } from "./components/SettingListItem";
 import { StockButton } from "./components/StockButton";
 
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
-  private readonly _buildings: Array<SettingListItem>;
+  private readonly _resources: Array<SettingListItem>;
 
   constructor(host: UserScript, settings: ResetResourcesSettings) {
     const label = host.engine.i18n("ui.resources");
@@ -21,11 +21,11 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     );
 
     this._list.addEventListener("enableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = true));
+      this._resources.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
     this._list.addEventListener("disableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = false));
+      this._resources.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
     this._list.addEventListener("reset", () => {
@@ -34,16 +34,16 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     });
 
     // Add all the current resources
-    this._buildings = [];
+    this._resources = [];
     for (const setting of Object.values(this.settings.items)) {
-      this._buildings.push(
+      this._resources.push(
         this._addNewResourceOption(
           ucfirst(this._host.engine.i18n(`$resources.${setting.resource}.title`)),
           setting
         )
       );
     }
-    this.addChildren(this._buildings);
+    this.addChildren(this._resources);
   }
 
   /**
