@@ -46,13 +46,13 @@ type SetMinResetUnicornItem = `set-reset-unicorn-${UnicornItem}-min`;
 type SetSubtriggerOptionItem = `set-${OptionsItem}-trigger`;
 type SetSubtriggerReligionItem = `set-${ReligionAdditionItem}-trigger`;
 type SetSubtriggerTimeCtrlItem = `set-${"accelerateTime" | "timeSkip"}-trigger`;
-type ToggleTradeBlackcoin = "toggle-crypto";
-type ToggleFeedLeviathans = "toggle-autofeed";
 type ToggleBuildEmbassies = "toggle-buildEmbassies";
 type ToggleBuildEmbassiesItem = `toggle-build-${Race}`;
 type ToggleBuildingItem = `toggle-${AllItems}`;
 type ToggleFaithUnicornItem = `toggle-${FaithItem | UnicornItem}`;
+type ToggleFeedLeviathans = "toggle-autofeed";
 type ToggleFilterItem = `toggle-${FilterItem}`;
+type ToggleFixCryochambers = `toggle-fixCry`;
 type ToggleHoldFestivals = "toggle-festival";
 type ToggleHunt = "toggle-hunt";
 type ToggleJobItem = `toggle-${Job}`;
@@ -78,13 +78,14 @@ type ToggleTimeControlCycleItem = `toggle-timeSkip-${0 | 1 | 2 | 3 | 4 | 5 | 6 |
 type ToggleTimeControlItem = `toggle-${TimeControlItem}`;
 type ToggleTimeControlSeasonItem = `toggle-timeSkip-${Season}`;
 type ToggleTimeItem = `toggle-${TimeItem}`;
+type ToggleTradeBlackcoin = "toggle-crypto";
 type ToggleTurnOnSteamworks = "toggle-_steamworks";
 type ToggleUnlockItem = `toggle-${ScienceItem}`;
-type ToggleUnlockRaces = "toggle-races";
 type ToggleUnlockMissions = "toggle-missions";
+type ToggleUnlockRaces = "toggle-races";
 type ToggleUnlockUpgrades = "toggle-upgrades";
-type ToggleUpgradeBuildings = "toggle-buildings";
 type ToggleUpgradeBuildingItem = `toggle-upgrade-${StagedBuilding}`;
+type ToggleUpgradeBuildings = "toggle-buildings";
 type ToggleUpgradeItem = `toggle-upgrade-${Upgrade}`;
 
 export type LegacyStorage = {
@@ -110,6 +111,7 @@ export type LegacyStorage = {
     Partial<Record<ToggleFaithUnicornItem, boolean>> &
     Partial<Record<ToggleFeedLeviathans, boolean>> &
     Partial<Record<ToggleFilterItem, boolean>> &
+    Partial<Record<ToggleFixCryochambers, boolean>> &
     Partial<Record<ToggleHoldFestivals, boolean>> &
     Partial<Record<ToggleHunt, boolean>> &
     Partial<Record<ToggleJobItem, boolean>> &

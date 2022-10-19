@@ -42,9 +42,9 @@ export type TradeSettingsItems = {
 };
 
 export class TradeSettings extends SettingTrigger {
-  items: TradeSettingsItems;
+  races: TradeSettingsItems;
 
-  feedLeviathans: SettingTrigger;
+  feedLeviathans: Setting;
   buildEmbassies: EmbassySettings;
   tradeBlackcoin: SettingTrigger;
   unlockRaces: Setting;
@@ -52,7 +52,7 @@ export class TradeSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = 1,
-    items = {
+    races = {
       dragons: new TradeSettingsItem("dragons", true, true, true, true, true, true, "titanium"),
       griffins: new TradeSettingsItem("griffins", true, true, false, true, false, false, "wood"),
       leviathans: new TradeSettingsItem(
@@ -72,12 +72,12 @@ export class TradeSettings extends SettingTrigger {
       zebras: new TradeSettingsItem("zebras", true, true, true, true, true, true),
     },
     buildEmbassies = new EmbassySettings(),
-    feedLeviathans = new SettingTrigger(false, 1),
+    feedLeviathans = new Setting(false),
     tradeBlackcoin = new SettingTrigger(true, 10000),
     unlockRaces = new Setting(true)
   ) {
     super(enabled, trigger);
-    this.items = items;
+    this.races = races;
 
     this.buildEmbassies = buildEmbassies;
     this.feedLeviathans = feedLeviathans;
@@ -89,13 +89,13 @@ export class TradeSettings extends SettingTrigger {
     this.enabled = settings.enabled;
     this.trigger = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].limited = item.limited;
-      this.items[name].autumn = item.autumn;
-      this.items[name].spring = item.spring;
-      this.items[name].summer = item.summer;
-      this.items[name].winter = item.winter;
+    for (const [name, item] of objectEntries(settings.races)) {
+      this.races[name].enabled = item.enabled;
+      this.races[name].limited = item.limited;
+      this.races[name].autumn = item.autumn;
+      this.races[name].spring = item.spring;
+      this.races[name].summer = item.summer;
+      this.races[name].winter = item.winter;
     }
 
     this.buildEmbassies.load(settings.buildEmbassies);
@@ -108,7 +108,7 @@ export class TradeSettings extends SettingTrigger {
     subject.toggles.trade = settings.enabled;
     subject.triggers.trade = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.races)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`toggle-limited-${name}` as const] = item.limited;
       subject.items[`toggle-${name}-autumn` as const] = item.autumn.enabled;
@@ -129,7 +129,7 @@ export class TradeSettings extends SettingTrigger {
     options.enabled = subject.toggles.trade;
     options.trigger = subject.triggers.trade;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.races)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
       item.autumn.enabled = subject.items[`toggle-${name}-autumn` as const] ?? item.autumn.enabled;

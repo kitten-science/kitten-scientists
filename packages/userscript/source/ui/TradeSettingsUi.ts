@@ -6,7 +6,6 @@ import { SeasonsButton } from "./components/SeasonsButton";
 import { SeasonsList } from "./components/SeasonsList";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { TriggerButton } from "./components/TriggerButton";
 import { EmbassySettingsUi } from "./EmbassySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -15,8 +14,8 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
   private readonly _trigger: TriggerButton;
   private readonly _races: Array<SettingListItem>;
   private readonly _embassiesUi: EmbassySettingsUi;
-  private readonly _feedLeviathans: SettingTriggerListItem;
-  private readonly _tradeBlackcoin: SettingTriggerListItem;
+  private readonly _feedLeviathans: SettingListItem;
+  private readonly _tradeBlackcoin: SettingListItem;
   private readonly _unlockRaces: SettingListItem;
 
   constructor(host: UserScript, settings: TradeSettings) {
@@ -43,48 +42,48 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     this._races = [
       this._getTradeOption(
         "lizards",
-        this.setting.items.lizards,
+        this.setting.races.lizards,
         this._host.engine.i18n("$trade.race.lizards")
       ),
       this._getTradeOption(
         "sharks",
-        this.setting.items.sharks,
+        this.setting.races.sharks,
         this._host.engine.i18n("$trade.race.sharks")
       ),
       this._getTradeOption(
         "griffins",
-        this.setting.items.griffins,
+        this.setting.races.griffins,
         this._host.engine.i18n("$trade.race.griffins")
       ),
       this._getTradeOption(
         "nagas",
-        this.setting.items.nagas,
+        this.setting.races.nagas,
         this._host.engine.i18n("$trade.race.nagas")
       ),
       this._getTradeOption(
         "zebras",
-        this.setting.items.zebras,
+        this.setting.races.zebras,
         this._host.engine.i18n("$trade.race.zebras")
       ),
       this._getTradeOption(
         "spiders",
-        this.setting.items.spiders,
+        this.setting.races.spiders,
         this._host.engine.i18n("$trade.race.spiders")
       ),
       this._getTradeOption(
         "dragons",
-        this.setting.items.dragons,
+        this.setting.races.dragons,
         this._host.engine.i18n("$trade.race.dragons")
       ),
       this._getTradeOption(
         "leviathans",
-        this.setting.items.leviathans,
+        this.setting.races.leviathans,
         this._host.engine.i18n("$trade.race.leviathans")
       ),
     ];
     this.addChildren(this._races);
 
-    this._feedLeviathans = new SettingTriggerListItem(
+    this._feedLeviathans = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.autofeed"),
       this.setting.feedLeviathans,
@@ -101,7 +100,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     );
     this.addChild(this._feedLeviathans);
 
-    this._tradeBlackcoin = new SettingTriggerListItem(
+    this._tradeBlackcoin = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.crypto"),
       this.setting.feedLeviathans,

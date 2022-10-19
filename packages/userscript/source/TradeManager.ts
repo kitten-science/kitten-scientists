@@ -75,7 +75,7 @@ export class TradeManager implements Automation {
     const season = this._host.gamePage.calendar.getCurSeason().name;
 
     // Determine how many races we will trade with this cycle.
-    for (const trade of Object.values(this.settings.items)) {
+    for (const trade of Object.values(this.settings.races)) {
       const race = this.getRace(trade.race);
 
       // Check if the race is enabled, in season, unlocked, and we can actually afford it.
@@ -137,7 +137,7 @@ export class TradeManager implements Automation {
     // with them.
     for (let tradeIndex = 0; tradeIndex < trades.length; tradeIndex++) {
       const race = trades[tradeIndex];
-      const tradeSettings = this.settings.items[race];
+      const tradeSettings = this.settings.races[race];
       // Does this trade require a certain resource?
       const require = !tradeSettings.require
         ? false
@@ -587,7 +587,7 @@ export class TradeManager implements Automation {
     const race = this.getRace(name);
     const button = this.getTradeButton(race.name);
 
-    if (!button.model.enabled || !this.settings.items[name].enabled) {
+    if (!button.model.enabled || !this.settings.races[name].enabled) {
       cwarn(
         "KS trade checks are not functioning properly, please create an issue on the github page."
       );

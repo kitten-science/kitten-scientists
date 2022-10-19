@@ -1,5 +1,6 @@
 import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings";
 import { UserScript } from "../UserScript";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { TriggerButton } from "./components/TriggerButton";
@@ -8,6 +9,7 @@ import { SettingsSectionUi } from "./SettingsSectionUi";
 export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   private readonly _trigger: TriggerButton;
   private readonly _buildings: Array<SettingListItem>;
+  private readonly _fixCryochamber: SettingListItem;
 
   constructor(host: UserScript, settings: TimeSettings) {
     const label = host.engine.i18n("ui.time");
@@ -75,10 +77,29 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       ),
       this._getTimeSetting(
         this.setting.items.voidResonator,
-        this._host.engine.i18n("$time.vsu.voidResonator.label")
+        this._host.engine.i18n("$time.vsu.voidResonator.label"),
+        true
       ),
     ];
     this.addChildren(this._buildings);
+
+    this.addChild(new HeaderListItem(this._host, "Additional options"));
+    this._fixCryochamber = new SettingListItem(
+      this._host,
+      this._host.engine.i18n("option.fix.cry"),
+      this.setting.fixCryochambers,
+      {
+        onCheck: () =>
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.fix.cry"),
+          ]),
+        onUnCheck: () =>
+          this._host.engine.imessage("status.sub.disable", [
+            this._host.engine.i18n("option.fix.cry"),
+          ]),
+      }
+    );
+    this.addChild(this._fixCryochamber);
   }
 
   private _getTimeSetting(setting: TimeSettingsItem, label: string, delimiter = false) {
@@ -87,8 +108,8 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       label,
       setting,
       {
-        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
       },
       delimiter
     );

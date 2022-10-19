@@ -33,6 +33,8 @@ export type TimeSettingsItems = {
 export class TimeSettings extends SettingTrigger {
   items: TimeSettingsItems;
 
+  fixCryochambers: SettingTrigger;
+
   constructor(
     enabled = false,
     trigger = 1,
@@ -52,10 +54,12 @@ export class TimeSettings extends SettingTrigger {
       voidHoover: new TimeSettingsItem("voidHoover", TimeItemVariant.VoidSpace, "antimatter"),
       voidResonator: new TimeSettingsItem("voidResonator", TimeItemVariant.VoidSpace),
       voidRift: new TimeSettingsItem("voidRift", TimeItemVariant.VoidSpace),
-    }
+    },
+    fixCryochambers = new SettingTrigger(false)
   ) {
     super(enabled, trigger);
     this.items = items;
+    this.fixCryochambers = fixCryochambers;
   }
 
   load(settings: TimeSettings) {
@@ -76,17 +80,23 @@ export class TimeSettings extends SettingTrigger {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`set-${name}-max` as const] = item.max;
     }
+
+    subject.items[`toggle-fixCry`] = settings.fixCryochambers.enabled;
   }
 
   static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new TimeSettings();
-    options.enabled = subject.toggles.time;
-    options.trigger = subject.triggers.time;
+    const settings = new TimeSettings();
+    settings.enabled = subject.toggles.time;
+    settings.trigger = subject.triggers.time;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(settings.items)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }
-    return options;
+
+    settings.fixCryochambers.enabled =
+      subject.items[`toggle-fixCry`] ?? settings.fixCryochambers.enabled;
+
+    return settings;
   }
 }

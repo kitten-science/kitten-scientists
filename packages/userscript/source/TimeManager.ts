@@ -35,6 +35,10 @@ export class TimeManager {
     }
 
     this.autoBuild();
+
+    if (this.settings.fixCryochambers.enabled) {
+      this.fixCryochambers();
+    }
   }
 
   load(settings: TimeSettings) {
@@ -152,5 +156,22 @@ export class TimeManager {
     }
 
     return null;
+  }
+
+  fixCryochambers() {
+    // Fix used cryochambers
+    // If the option is enabled and we have used cryochambers...
+    if (0 < this._host.gamePage.time.getVSU("usedCryochambers").val) {
+      let fixed = 0;
+      const btn = this.manager.tab.vsPanel.children[0].children[0]; //check?
+      // doFixCryochamber will check resources
+      while (btn.controller.doFixCryochamber(btn.model)) {
+        ++fixed;
+      }
+      if (0 < fixed) {
+        this._host.engine.iactivity("act.fix.cry", [fixed], "ks-fixCry");
+        this._host.engine.storeForSummary("fix.cry", fixed);
+      }
+    }
   }
 }

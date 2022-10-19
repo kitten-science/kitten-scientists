@@ -2,7 +2,7 @@ import { objectEntries } from "../tools/Entries";
 import { Setting, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
 
-export type OptionsItem = "fixCry" | "observe";
+export type OptionsItem = "observe";
 
 export class OptionsSettingsItem extends SettingTrigger {}
 
@@ -11,13 +11,9 @@ export class OptionsSettings extends Setting {
     [key in OptionsItem]: OptionsSettingsItem;
   };
 
-  constructor(
-    enabled = false,
-    observe = new OptionsSettingsItem(true),
-    fixCry = new OptionsSettingsItem(false)
-  ) {
+  constructor(enabled = false, observe = new OptionsSettingsItem(true)) {
     super(enabled);
-    this.items = { fixCry, observe };
+    this.items = { observe };
   }
 
   load(settings: OptionsSettings) {

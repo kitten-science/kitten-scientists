@@ -202,30 +202,7 @@ export class Engine {
     this.religionManager.tick(context);
     this.timeManager.tick(context);
     this.villageManager.tick(context);
-
-    // Time automations (Tempus Fugit & Shatter TC)
     await this.timeControlManager.tick(context);
-
-    // Miscelaneous automations.
-    if (subOptions.enabled) {
-      // Fix used cryochambers
-      // If the option is enabled and we have used cryochambers...
-      if (
-        subOptions.items.fixCry.enabled &&
-        0 < this._host.gamePage.time.getVSU("usedCryochambers").val
-      ) {
-        let fixed = 0;
-        const btn = this.timeManager.manager.tab.vsPanel.children[0].children[0]; //check?
-        // doFixCryochamber will check resources
-        while (btn.controller.doFixCryochamber(btn.model)) {
-          ++fixed;
-        }
-        if (0 < fixed) {
-          this._host.engine.iactivity("act.fix.cry", [fixed], "ks-fixCry");
-          this._host.engine.storeForSummary("fix.cry", fixed);
-        }
-      }
-    }
   }
 
   /**
