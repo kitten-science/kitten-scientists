@@ -387,15 +387,15 @@ export class TimeControlManager {
       while (
         yearsPerCycle < canSkip &&
         this.settings.timeSkip.cycles[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
+          .enabled
       ) {
         willSkip += yearsPerCycle;
         canSkip -= yearsPerCycle;
         skipCycles += 1;
       }
       if (
-        this.settings.timeSkip.cycles[
-          ((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices
-        ] &&
+        this.settings.timeSkip.cycles[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
+          .enabled &&
         0 < canSkip
       ) {
         willSkip += canSkip;
