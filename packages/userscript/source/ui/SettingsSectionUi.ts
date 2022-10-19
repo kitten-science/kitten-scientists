@@ -32,8 +32,8 @@ export abstract class SettingsSectionUi<
       label,
       option,
       {
-        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
       },
       delimiter,
       upgradeIndicator

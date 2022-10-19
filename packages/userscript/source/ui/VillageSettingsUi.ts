@@ -75,11 +75,9 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this.setting.hunt,
       {
         onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [this._host.engine.i18n("option.hunt")]),
+          this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.hunt")]),
         onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
-            this._host.engine.i18n("option.hunt"),
-          ]),
+          this._host.engine.imessage("status.sub.disable", [this._host.engine.i18n("option.hunt")]),
       }
     );
     this.addChild(this._hunt);
@@ -90,11 +88,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this.setting.holdFestivals,
       {
         onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
+          this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.festival"),
           ]),
         onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
+          this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.festival"),
           ]),
       }
@@ -107,11 +105,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this.setting.promoteLeader,
       {
         onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
+          this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.promote"),
           ]),
         onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
+          this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.promote"),
           ]),
       }
@@ -125,8 +123,8 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       label,
       option,
       {
-        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
       },
       delimiter
     );

@@ -129,11 +129,11 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       this.setting.unlockRaces,
       {
         onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
+          this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("ui.upgrade.races"),
           ]),
         onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
+          this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("ui.upgrade.races"),
           ]),
       }

@@ -26,8 +26,8 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
     for (const setting of Object.values(this.setting.missions)) {
       const label = this._host.engine.i18n(`$space.${setting.mission}.label`);
       const button = new SettingListItem(this._host, label, setting, {
-        onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [label]),
+        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
       });
 
       items.push({ label: label, button: button });

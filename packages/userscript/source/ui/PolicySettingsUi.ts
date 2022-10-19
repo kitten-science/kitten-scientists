@@ -28,8 +28,8 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
         `$policy.${setting.policy === "authocracy" ? "autocracy" : setting.policy}.label`
       );
       const policyButton = new SettingListItem(this._host, policyLabel, setting, {
-        onCheck: () => this._host.engine.imessage("status.auto.enable", [policyLabel]),
-        onUnCheck: () => this._host.engine.imessage("status.auto.disable", [policyLabel]),
+        onCheck: () => this._host.engine.imessage("status.sub.enable", [policyLabel]),
+        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [policyLabel]),
       });
 
       items.push({ label: policyLabel, button: policyButton });

@@ -130,11 +130,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
       this.setting.shipOverride,
       {
         onCheck: () =>
-          this._host.engine.imessage("status.auto.enable", [
+          this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.shipOverride"),
           ]),
         onUnCheck: () =>
-          this._host.engine.imessage("status.auto.disable", [
+          this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.shipOverride"),
           ]),
       }
