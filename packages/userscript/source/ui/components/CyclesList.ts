@@ -34,43 +34,43 @@ export class CyclesList extends SettingsList {
     this.setting = setting;
 
     this.charon = this._makeCycle(
-      this._host.engine.i18n("$space.planet.charon.label"),
+      `⍙ ${this._host.engine.i18n("$space.planet.charon.label")}`,
       this.setting.charon
     );
     this.umbra = this._makeCycle(
-      this._host.engine.i18n("$space.planet.umbra.label"),
+      `⍦ ${this._host.engine.i18n("$space.planet.umbra.label")}`,
       this.setting.umbra
     );
     this.yarn = this._makeCycle(
-      this._host.engine.i18n("$space.planet.yarn.label"),
+      `⍧ ${this._host.engine.i18n("$space.planet.yarn.label")}`,
       this.setting.yarn
     );
     this.helios = this._makeCycle(
-      this._host.engine.i18n("$space.planet.helios.label"),
+      `⌒ ${this._host.engine.i18n("$space.planet.helios.label")}`,
       this.setting.helios
     );
     this.cath = this._makeCycle(
-      this._host.engine.i18n("$space.planet.cath.label"),
+      `⌾ ${this._host.engine.i18n("$space.planet.cath.label")}`,
       this.setting.cath
     );
     this.redmoon = this._makeCycle(
-      this._host.engine.i18n("$space.planet.moon.label"),
+      `⍜ ${this._host.engine.i18n("$space.planet.moon.label")}`,
       this.setting.redmoon
     );
     this.dune = this._makeCycle(
-      this._host.engine.i18n("$space.planet.dune.label"),
+      `⍫ ${this._host.engine.i18n("$space.planet.dune.label")}`,
       this.setting.dune
     );
     this.piscine = this._makeCycle(
-      this._host.engine.i18n("$space.planet.piscine.label"),
+      `⎈ ${this._host.engine.i18n("$space.planet.piscine.label")}`,
       this.setting.piscine
     );
     this.terminus = this._makeCycle(
-      this._host.engine.i18n("$space.planet.terminus.label"),
+      `⍝ ${this._host.engine.i18n("$space.planet.terminus.label")}`,
       this.setting.terminus
     );
     this.kairo = this._makeCycle(
-      this._host.engine.i18n("$space.planet.kairo.label"),
+      `℣ ${this._host.engine.i18n("$space.planet.kairo.label")}`,
       this.setting.kairo
     );
 
