@@ -38,121 +38,121 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     const uiElements = [
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.cath.label")),
       this._getBuildOption(
-        this.setting.items.spaceElevator,
+        this.setting.buildings.spaceElevator,
         this._host.engine.i18n("$space.planet.cath.spaceElevator.label")
       ),
       this._getBuildOption(
-        this.setting.items.sattelite,
+        this.setting.buildings.sattelite,
         this._host.engine.i18n("$space.planet.cath.sattelite.label")
       ),
       this._getBuildOption(
-        this.setting.items.spaceStation,
+        this.setting.buildings.spaceStation,
         this._host.engine.i18n("$space.planet.cath.spaceStation.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.moon.label")),
       this._getBuildOption(
-        this.setting.items.moonOutpost,
+        this.setting.buildings.moonOutpost,
         this._host.engine.i18n("$space.planet.moon.moonOutpost.label")
       ),
       this._getBuildOption(
-        this.setting.items.moonBase,
+        this.setting.buildings.moonBase,
         this._host.engine.i18n("$space.planet.moon.moonBase.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.dune.label")),
       this._getBuildOption(
-        this.setting.items.planetCracker,
+        this.setting.buildings.planetCracker,
         this._host.engine.i18n("$space.planet.dune.planetCracker.label")
       ),
       this._getBuildOption(
-        this.setting.items.hydrofracturer,
+        this.setting.buildings.hydrofracturer,
         this._host.engine.i18n("$space.planet.dune.hydrofracturer.label")
       ),
       this._getBuildOption(
-        this.setting.items.spiceRefinery,
+        this.setting.buildings.spiceRefinery,
         this._host.engine.i18n("$space.planet.dune.spiceRefinery.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.piscine.label")),
       this._getBuildOption(
-        this.setting.items.researchVessel,
+        this.setting.buildings.researchVessel,
         this._host.engine.i18n("$space.planet.piscine.researchVessel.label")
       ),
       this._getBuildOption(
-        this.setting.items.orbitalArray,
+        this.setting.buildings.orbitalArray,
         this._host.engine.i18n("$space.planet.piscine.orbitalArray.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.helios.label")),
       this._getBuildOption(
-        this.setting.items.sunlifter,
+        this.setting.buildings.sunlifter,
         this._host.engine.i18n("$space.planet.helios.sunlifter.label")
       ),
       this._getBuildOption(
-        this.setting.items.containmentChamber,
+        this.setting.buildings.containmentChamber,
         this._host.engine.i18n("$space.planet.helios.containmentChamber.label")
       ),
       this._getBuildOption(
-        this.setting.items.heatsink,
+        this.setting.buildings.heatsink,
         this._host.engine.i18n("$space.planet.helios.heatsink.label")
       ),
       this._getBuildOption(
-        this.setting.items.sunforge,
+        this.setting.buildings.sunforge,
         this._host.engine.i18n("$space.planet.helios.sunforge.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.terminus.label")),
       this._getBuildOption(
-        this.setting.items.cryostation,
+        this.setting.buildings.cryostation,
         this._host.engine.i18n("$space.planet.terminus.cryostation.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.kairo.label")),
       this._getBuildOption(
-        this.setting.items.spaceBeacon,
+        this.setting.buildings.spaceBeacon,
         this._host.engine.i18n("$space.planet.kairo.spaceBeacon.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.yarn.label")),
       this._getBuildOption(
-        this.setting.items.terraformingStation,
+        this.setting.buildings.terraformingStation,
         this._host.engine.i18n("$space.planet.yarn.terraformingStation.label")
       ),
       this._getBuildOption(
-        this.setting.items.hydroponics,
+        this.setting.buildings.hydroponics,
         this._host.engine.i18n("$space.planet.yarn.hydroponics.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.umbra.label")),
       this._getBuildOption(
-        this.setting.items.hrHarvester,
+        this.setting.buildings.hrHarvester,
         this._host.engine.i18n("$space.planet.umbra.hrHarvester.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.charon.label")),
       this._getBuildOption(
-        this.setting.items.entangler,
+        this.setting.buildings.entangler,
         this._host.engine.i18n("$space.planet.charon.entangler.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.centaurusSystem.label")),
       this._getBuildOption(
-        this.setting.items.tectonic,
+        this.setting.buildings.tectonic,
         this._host.engine.i18n("$space.planet.centaurusSystem.tectonic.label")
       ),
       this._getBuildOption(
-        this.setting.items.moltenCore,
+        this.setting.buildings.moltenCore,
         this._host.engine.i18n("$space.planet.centaurusSystem.moltenCore.label"),
         true
       ),

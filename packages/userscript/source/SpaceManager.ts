@@ -46,7 +46,9 @@ export class SpaceManager implements Automation {
    *
    * @param builds The buildings to build.
    */
-  autoBuild(builds: Partial<Record<SpaceBuildings, SpaceBuildingSetting>> = this.settings.items) {
+  autoBuild(
+    builds: Partial<Record<SpaceBuildings, SpaceBuildingSetting>> = this.settings.buildings
+  ) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
 
@@ -115,7 +117,12 @@ export class SpaceManager implements Automation {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name);
 
-    if (!build.unlocked || !button || !button.model.enabled || !this.settings.items[name].enabled) {
+    if (
+      !build.unlocked ||
+      !button ||
+      !button.model.enabled ||
+      !this.settings.buildings[name].enabled
+    ) {
       return;
     }
 

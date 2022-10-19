@@ -50,7 +50,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     const upgrades = this._host.gamePage.workshop.upgrades;
     const toUnlock = new Array<UpgradeInfo>();
 
-    workLoop: for (const setting of Object.values(this.settings.unlockUpgrades.items)) {
+    workLoop: for (const setting of Object.values(this.settings.unlockUpgrades.upgrades)) {
       if (!setting.enabled) {
         continue;
       }
@@ -91,7 +91,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    *
    * @param crafts The resources to build.
    */
-  autoCraft(crafts: Partial<Record<ResourceCraftable, CraftSettingsItem>> = this.settings.items) {
+  autoCraft(
+    crafts: Partial<Record<ResourceCraftable, CraftSettingsItem>> = this.settings.resources
+  ) {
     // TODO: One of the core limitations here is that only a single resource
     //       is taken into account, the one set as `require` in the definition.
     const trigger = this.settings.trigger;
@@ -165,7 +167,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
   private _canCraft(name: ResourceCraftable, amount: number): boolean {
     const craft = this.getCraft(name);
-    const enabled = mustExist(this.settings.items[name]).enabled;
+    const enabled = mustExist(this.settings.resources[name]).enabled;
     let result = false;
 
     if (craft.unlocked && enabled) {
@@ -492,7 +494,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @returns How many items of the resource to always keep in stock.
    */
   getStock(name: Resource): number {
-    const res = this._host.engine.settings.resources.items[name];
+    const res = this._host.engine.settings.resources.resources[name];
     const stock = res && res.enabled ? res.stock : 0;
 
     return !stock ? 0 : stock;
@@ -553,7 +555,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
       // Determine the consume rate. Either it's configured on the resource, or globally.
       // If the consume rate is 0.6, we'll always only make 60% of the resource available.
-      const resourceSettings = this._host.engine.settings.resources.items[name];
+      const resourceSettings = this._host.engine.settings.resources.resources[name];
       const consume = resourceSettings.consume;
 
       value -= Math.min(this.getResource(name).maxValue * trigger, value) * (1 - consume);
@@ -689,7 +691,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * The user can configure this in the Workshop automation section.
    */
   refreshStock() {
-    for (const [name, resource] of objectEntries(this._host.engine.settings.resources.items)) {
+    for (const [name, resource] of objectEntries(this._host.engine.settings.resources.resources)) {
       if (resource.stock === 0) {
         continue;
       }

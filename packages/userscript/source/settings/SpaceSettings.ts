@@ -17,14 +17,14 @@ export type SpaceSettingsItems = {
 };
 
 export class SpaceSettings extends SettingTrigger {
-  items: SpaceSettingsItems;
+  buildings: SpaceSettingsItems;
 
   unlockMissions: MissionSettings;
 
   constructor(
     enabled = false,
     trigger = 0,
-    items = {
+    buildings = {
       containmentChamber: new SpaceBuildingSetting("containmentChamber"),
       cryostation: new SpaceBuildingSetting("cryostation"),
       entangler: new SpaceBuildingSetting("entangler"),
@@ -48,10 +48,10 @@ export class SpaceSettings extends SettingTrigger {
       tectonic: new SpaceBuildingSetting("tectonic"),
       terraformingStation: new SpaceBuildingSetting("terraformingStation"),
     },
-    unlockMissions = new MissionSettings("unlockMissions")
+    unlockMissions = new MissionSettings()
   ) {
     super(enabled, trigger);
-    this.items = items;
+    this.buildings = buildings;
     this.unlockMissions = unlockMissions;
   }
 
@@ -63,9 +63,9 @@ export class SpaceSettings extends SettingTrigger {
     this.enabled = settings.enabled;
     this.trigger = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].max = item.max;
+    for (const [name, item] of objectEntries(settings.buildings)) {
+      this.buildings[name].enabled = item.enabled;
+      this.buildings[name].max = item.max;
     }
 
     this.unlockMissions.load(settings.unlockMissions);
@@ -75,7 +75,7 @@ export class SpaceSettings extends SettingTrigger {
     subject.toggles.space = settings.enabled;
     subject.triggers.space = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.buildings)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`set-${name}-max` as const] = item.max;
     }
@@ -88,7 +88,7 @@ export class SpaceSettings extends SettingTrigger {
     options.enabled = subject.toggles.space;
     options.trigger = subject.triggers.space;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.buildings)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }

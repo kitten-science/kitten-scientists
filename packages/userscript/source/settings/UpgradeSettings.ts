@@ -15,14 +15,13 @@ export class UpgradeSetting extends Setting {
 }
 
 export class UpgradeSettings extends Setting {
-  items: {
+  upgrades: {
     [item in Upgrade]: UpgradeSetting;
   };
 
   constructor(
-    id = "upgrades",
     enabled = false,
-    items = {
+    upgrades = {
       advancedAutomation: new UpgradeSetting("advancedAutomation", true),
       advancedRefinement: new UpgradeSetting("advancedRefinement", true),
       aiBases: new UpgradeSetting("aiBases", true),
@@ -163,11 +162,11 @@ export class UpgradeSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.upgrades = upgrades;
   }
 
   static validateGame(game: GamePage, settings: UpgradeSettings) {
-    const inSettings = Object.keys(settings.items);
+    const inSettings = Object.keys(settings.upgrades);
     const inGame = game.workshop.upgrades.map(upgrade => upgrade.name);
 
     const missingInSettings = difference(inGame, inSettings);
@@ -184,15 +183,15 @@ export class UpgradeSettings extends Setting {
   load(settings: UpgradeSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
+    for (const [name, item] of objectEntries(settings.upgrades)) {
+      this.upgrades[name].enabled = item.enabled;
     }
   }
 
   static toLegacyOptions(settings: UpgradeSettings, subject: LegacyStorage) {
     subject.items["toggle-upgrades"] = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.upgrades)) {
       subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
     }
   }
@@ -201,7 +200,7 @@ export class UpgradeSettings extends Setting {
     const options = new UpgradeSettings();
     options.enabled = subject.items["toggle-upgrades"] ?? options.enabled;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.upgrades)) {
       item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
     }
 

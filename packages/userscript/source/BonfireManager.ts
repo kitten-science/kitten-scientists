@@ -99,7 +99,7 @@ export class BonfireManager implements Automation {
 
     const pastureMeta = this._host.gamePage.bld.getBuildingExt("pasture").meta;
     // If pastures haven't been upgraded to solar farms yet...
-    if (this.settings.upgradeBuildings.items.solarfarm.enabled && pastureMeta.stage === 0) {
+    if (this.settings.upgradeBuildings.buildings.solarfarm.enabled && pastureMeta.stage === 0) {
       if (mustExist(pastureMeta.stages)[1].stageUnlocked) {
         // If we would reduce our pastures to 0, by upgrading them, would we lose any catnip?
         if (this._workshopManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
@@ -131,7 +131,7 @@ export class BonfireManager implements Automation {
 
     const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
     // If aqueducts haven't beeen upgraded to hydro plants yet...
-    if (this.settings.upgradeBuildings.items.hydroplant.enabled && aqueductMeta.stage === 0) {
+    if (this.settings.upgradeBuildings.buildings.hydroplant.enabled && aqueductMeta.stage === 0) {
       if (mustExist(aqueductMeta.stages)[1].stageUnlocked) {
         // If we would reduce our aqueducts to 0, by upgrading them, would we lose any catnip?
         if (this._workshopManager.getPotentialCatnip(true, pastures, 0) > 0) {
@@ -160,7 +160,7 @@ export class BonfireManager implements Automation {
     }
 
     const libraryMeta = this._host.gamePage.bld.getBuildingExt("library").meta;
-    if (this.settings.upgradeBuildings.items.dataCenter.enabled && libraryMeta.stage === 0) {
+    if (this.settings.upgradeBuildings.buildings.dataCenter.enabled && libraryMeta.stage === 0) {
       if (mustExist(libraryMeta.stages)[1].stageUnlocked) {
         let energyConsumptionRate = this._host.gamePage.workshop.get("cryocomputing").researched
           ? 1
@@ -216,7 +216,7 @@ export class BonfireManager implements Automation {
     // If amphitheathres haven't been upgraded to broadcast towers yet...
     // This seems to be identical to the pasture upgrade.
     if (
-      this.settings.upgradeBuildings.items.broadcasttower.enabled &&
+      this.settings.upgradeBuildings.buildings.broadcasttower.enabled &&
       amphitheatreMeta.stage === 0
     ) {
       if (mustExist(amphitheatreMeta.stages)[1].stageUnlocked) {

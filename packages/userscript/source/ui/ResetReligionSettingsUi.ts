@@ -32,129 +32,129 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 
     this._buildings = [
       this._getResetOption(
-        this.settings.items.unicornPasture,
+        this.settings.buildings.unicornPasture,
         this._host.engine.i18n("$buildings.unicornPasture.label")
       ),
       this._getResetOption(
-        this.settings.items.unicornTomb,
+        this.settings.buildings.unicornTomb,
         this._host.engine.i18n("$religion.zu.unicornTomb.label")
       ),
       this._getResetOption(
-        this.settings.items.ivoryTower,
+        this.settings.buildings.ivoryTower,
         this._host.engine.i18n("$religion.zu.ivoryTower.label")
       ),
       this._getResetOption(
-        this.settings.items.ivoryCitadel,
+        this.settings.buildings.ivoryCitadel,
         this._host.engine.i18n("$religion.zu.ivoryCitadel.label")
       ),
       this._getResetOption(
-        this.settings.items.skyPalace,
+        this.settings.buildings.skyPalace,
         this._host.engine.i18n("$religion.zu.skyPalace.label")
       ),
       this._getResetOption(
-        this.settings.items.unicornUtopia,
+        this.settings.buildings.unicornUtopia,
         this._host.engine.i18n("$religion.zu.unicornUtopia.label")
       ),
       this._getResetOption(
-        this.settings.items.sunspire,
+        this.settings.buildings.sunspire,
         this._host.engine.i18n("$religion.zu.sunspire.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.marker,
+        this.settings.buildings.marker,
         this._host.engine.i18n("$religion.zu.marker.label")
       ),
       this._getResetOption(
-        this.settings.items.unicornGraveyard,
+        this.settings.buildings.unicornGraveyard,
         this._host.engine.i18n("$religion.zu.unicornGraveyard.label")
       ),
       this._getResetOption(
-        this.settings.items.unicornNecropolis,
+        this.settings.buildings.unicornNecropolis,
         this._host.engine.i18n("$religion.zu.unicornNecropolis.label")
       ),
       this._getResetOption(
-        this.settings.items.blackPyramid,
+        this.settings.buildings.blackPyramid,
         this._host.engine.i18n("$religion.zu.blackPyramid.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.solarchant,
+        this.settings.buildings.solarchant,
         this._host.engine.i18n("$religion.ru.solarchant.label")
       ),
       this._getResetOption(
-        this.settings.items.scholasticism,
+        this.settings.buildings.scholasticism,
         this._host.engine.i18n("$religion.ru.scholasticism.label")
       ),
       this._getResetOption(
-        this.settings.items.goldenSpire,
+        this.settings.buildings.goldenSpire,
         this._host.engine.i18n("$religion.ru.goldenSpire.label")
       ),
       this._getResetOption(
-        this.settings.items.sunAltar,
+        this.settings.buildings.sunAltar,
         this._host.engine.i18n("$religion.ru.sunAltar.label")
       ),
       this._getResetOption(
-        this.settings.items.stainedGlass,
+        this.settings.buildings.stainedGlass,
         this._host.engine.i18n("$religion.ru.stainedGlass.label")
       ),
       this._getResetOption(
-        this.settings.items.solarRevolution,
+        this.settings.buildings.solarRevolution,
         this._host.engine.i18n("$religion.ru.solarRevolution.label")
       ),
       this._getResetOption(
-        this.settings.items.basilica,
+        this.settings.buildings.basilica,
         this._host.engine.i18n("$religion.ru.basilica.label")
       ),
       this._getResetOption(
-        this.settings.items.templars,
+        this.settings.buildings.templars,
         this._host.engine.i18n("$religion.ru.templars.label")
       ),
       this._getResetOption(
-        this.settings.items.apocripha,
+        this.settings.buildings.apocripha,
         this._host.engine.i18n("$religion.ru.apocripha.label")
       ),
       this._getResetOption(
-        this.settings.items.transcendence,
+        this.settings.buildings.transcendence,
         this._host.engine.i18n("$religion.ru.transcendence.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.blackObelisk,
+        this.settings.buildings.blackObelisk,
         this._host.engine.i18n("$religion.tu.blackObelisk.label")
       ),
       this._getResetOption(
-        this.settings.items.blackNexus,
+        this.settings.buildings.blackNexus,
         this._host.engine.i18n("$religion.tu.blackNexus.label")
       ),
       this._getResetOption(
-        this.settings.items.blackCore,
+        this.settings.buildings.blackCore,
         this._host.engine.i18n("$religion.tu.blackCore.label")
       ),
       this._getResetOption(
-        this.settings.items.singularity,
+        this.settings.buildings.singularity,
         this._host.engine.i18n("$religion.tu.singularity.label")
       ),
       this._getResetOption(
-        this.settings.items.blackLibrary,
+        this.settings.buildings.blackLibrary,
         this._host.engine.i18n("$religion.tu.blackLibrary.label")
       ),
       this._getResetOption(
-        this.settings.items.blackRadiance,
+        this.settings.buildings.blackRadiance,
         this._host.engine.i18n("$religion.tu.blackRadiance.label")
       ),
       this._getResetOption(
-        this.settings.items.blazar,
+        this.settings.buildings.blazar,
         this._host.engine.i18n("$religion.tu.blazar.label")
       ),
       this._getResetOption(
-        this.settings.items.darkNova,
+        this.settings.buildings.darkNova,
         this._host.engine.i18n("$religion.tu.darkNova.label")
       ),
       this._getResetOption(
-        this.settings.items.holyGenocide,
+        this.settings.buildings.holyGenocide,
         this._host.engine.i18n("$religion.tu.holyGenocide.label")
       ),
     ];

@@ -97,7 +97,7 @@ export class TimeControlManager {
     };
 
     // check building
-    for (const [name, entry] of objectEntries(this.settings.reset.bonfire.items))
+    for (const [name, entry] of objectEntries(this.settings.reset.bonfire.buildings))
       if (entry.enabled) {
         // TODO: Obvious error here. For upgraded buildings, it needs special handling.
         let bld;
@@ -129,7 +129,7 @@ export class TimeControlManager {
     // unicornPasture
     // Special handling for unicorn pasture. As it's listed under religion, but is
     // actually a bonfire item.
-    const unicornPasture = this.settings.reset.religion.items.unicornPasture;
+    const unicornPasture = this.settings.reset.religion.buildings.unicornPasture;
     if (unicornPasture.enabled) {
       const bld = this._host.gamePage.bld.getBuildingExt("unicornPasture");
       checkedList.push({
@@ -151,7 +151,7 @@ export class TimeControlManager {
 
     // check space
     // This is identical to regular buildings.
-    for (const [name, entry] of objectEntries(this.settings.reset.space.items)) {
+    for (const [name, entry] of objectEntries(this.settings.reset.space.buildings)) {
       if (entry.enabled) {
         const bld = this._host.gamePage.space.getBuilding(name);
         checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
@@ -186,7 +186,7 @@ export class TimeControlManager {
     }
 
     // check religion
-    for (const [name, entry] of objectEntries(this.settings.reset.religion.items)) {
+    for (const [name, entry] of objectEntries(this.settings.reset.religion.buildings)) {
       if (entry.enabled) {
         const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
         checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
@@ -210,7 +210,7 @@ export class TimeControlManager {
     }
 
     // check time
-    for (const [name, entry] of objectEntries(this.settings.reset.time.items)) {
+    for (const [name, entry] of objectEntries(this.settings.reset.time.buildings)) {
       if (entry.enabled) {
         const bld = mustExist(this.getBuild(name, entry.variant));
         checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
@@ -233,7 +233,7 @@ export class TimeControlManager {
     }
 
     // check resources
-    for (const [name, entry] of objectEntries(this.settings.reset.resources.items)) {
+    for (const [name, entry] of objectEntries(this.settings.reset.resources.resources)) {
       if (entry.enabled) {
         const res = mustExist(this._host.gamePage.resPool.get(name));
         checkedList.push({ name: res.title, trigger: entry.stock, val: res.value });

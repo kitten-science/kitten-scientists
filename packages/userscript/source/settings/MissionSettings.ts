@@ -15,14 +15,13 @@ export class MissionSetting extends Setting {
 }
 
 export class MissionSettings extends Setting {
-  items: {
+  missions: {
     [item in Missions]: MissionSetting;
   };
 
   constructor(
-    id = "missions",
     enabled = false,
-    items = {
+    missions = {
       centaurusSystemMission: new MissionSetting("centaurusSystemMission", true),
       charonMission: new MissionSetting("charonMission", true),
       duneMission: new MissionSetting("duneMission", true),
@@ -39,11 +38,11 @@ export class MissionSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.missions = missions;
   }
 
   static validateGame(game: GamePage, settings: MissionSettings) {
-    const inSettings = Object.keys(settings.items);
+    const inSettings = Object.keys(settings.missions);
     // TODO: Find a better place in the game where this information is *always* available.
     const inGame = (game.space.programs ?? []).map(program => program.name);
 
@@ -61,15 +60,15 @@ export class MissionSettings extends Setting {
   load(settings: MissionSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
+    for (const [name, item] of objectEntries(settings.missions)) {
+      this.missions[name].enabled = item.enabled;
     }
   }
 
   static toLegacyOptions(settings: MissionSettings, subject: LegacyStorage) {
     subject.items["toggle-missions"] = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.missions)) {
       subject.items[`toggle-mission-${name}` as const] = item.enabled;
     }
   }
@@ -78,7 +77,7 @@ export class MissionSettings extends Setting {
     const options = new MissionSettings();
     options.enabled = subject.items["toggle-missions"] ?? options.enabled;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.missions)) {
       item.enabled = subject.items[`toggle-mission-${name}` as const] ?? item.enabled;
     }
 

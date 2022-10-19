@@ -34,49 +34,49 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
 
     this._buildings = [
       this._getTimeSetting(
-        this.setting.items.temporalBattery,
+        this.setting.buildings.temporalBattery,
         this._host.engine.i18n("$time.cfu.temporalBattery.label")
       ),
       this._getTimeSetting(
-        this.setting.items.blastFurnace,
+        this.setting.buildings.blastFurnace,
         this._host.engine.i18n("$time.cfu.blastFurnace.label")
       ),
       this._getTimeSetting(
-        this.setting.items.timeBoiler,
+        this.setting.buildings.timeBoiler,
         this._host.engine.i18n("$time.cfu.timeBoiler.label")
       ),
       this._getTimeSetting(
-        this.setting.items.temporalAccelerator,
+        this.setting.buildings.temporalAccelerator,
         this._host.engine.i18n("$time.cfu.temporalAccelerator.label")
       ),
       this._getTimeSetting(
-        this.setting.items.temporalImpedance,
+        this.setting.buildings.temporalImpedance,
         this._host.engine.i18n("$time.cfu.temporalImpedance.label")
       ),
       this._getTimeSetting(
-        this.setting.items.ressourceRetrieval,
+        this.setting.buildings.ressourceRetrieval,
         this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
       this._getTimeSetting(
-        this.setting.items.cryochambers,
+        this.setting.buildings.cryochambers,
         this._host.engine.i18n("$time.vsu.cryochambers.label")
       ),
       this._getTimeSetting(
-        this.setting.items.voidHoover,
+        this.setting.buildings.voidHoover,
         this._host.engine.i18n("$time.vsu.voidHoover.label")
       ),
       this._getTimeSetting(
-        this.setting.items.voidRift,
+        this.setting.buildings.voidRift,
         this._host.engine.i18n("$time.vsu.voidRift.label")
       ),
       this._getTimeSetting(
-        this.setting.items.chronocontrol,
+        this.setting.buildings.chronocontrol,
         this._host.engine.i18n("$time.vsu.chronocontrol.label")
       ),
       this._getTimeSetting(
-        this.setting.items.voidResonator,
+        this.setting.buildings.voidResonator,
         this._host.engine.i18n("$time.vsu.voidResonator.label"),
         true
       ),

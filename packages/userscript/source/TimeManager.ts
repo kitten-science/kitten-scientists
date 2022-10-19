@@ -52,7 +52,7 @@ export class TimeManager {
    *
    * @param builds The buildings to build.
    */
-  autoBuild(builds: Partial<Record<TimeItem, TimeSettingsItem>> = this.settings.items) {
+  autoBuild(builds: Partial<Record<TimeItem, TimeSettingsItem>> = this.settings.buildings) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
 

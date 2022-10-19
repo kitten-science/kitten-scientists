@@ -13,13 +13,13 @@ export class EmbassySetting extends SettingMax {
 }
 
 export class EmbassySettings extends SettingTrigger {
-  items: {
+  races: {
     [item in Race]: SettingMax;
   };
 
   constructor(
     enabled = false,
-    items = {
+    races = {
       dragons: new EmbassySetting("dragons", true),
       griffins: new EmbassySetting("griffins", true),
       leviathans: new EmbassySetting("leviathans", true),
@@ -31,22 +31,22 @@ export class EmbassySettings extends SettingTrigger {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.races = races;
   }
 
   load(settings: EmbassySettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].max = item.max;
+    for (const [name, item] of objectEntries(settings.races)) {
+      this.races[name].enabled = item.enabled;
+      this.races[name].max = item.max;
     }
   }
 
   static toLegacyOptions(settings: EmbassySettings, subject: LegacyStorage) {
     subject.items["toggle-buildEmbassies"] = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.races)) {
       subject.items[`toggle-build-${name}` as const] = item.enabled;
       subject.items[`set-build-${name}-max` as const] = item.max;
     }
@@ -56,7 +56,7 @@ export class EmbassySettings extends SettingTrigger {
     const options = new EmbassySettings();
     options.enabled = subject.items["toggle-buildEmbassies"] ?? options.enabled;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.races)) {
       item.enabled = subject.items[`toggle-build-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-build-${name}-max` as const] ?? item.max;
     }

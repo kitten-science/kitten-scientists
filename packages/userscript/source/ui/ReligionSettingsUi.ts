@@ -39,31 +39,31 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     this._unicornBuildings = [
       this._getBuildOption(
-        this.setting.items.unicornPasture,
+        this.setting.buildings.unicornPasture,
         this._host.engine.i18n("$buildings.unicornPasture.label")
       ),
       this._getBuildOption(
-        this.setting.items.unicornTomb,
+        this.setting.buildings.unicornTomb,
         this._host.engine.i18n("$religion.zu.unicornTomb.label")
       ),
       this._getBuildOption(
-        this.setting.items.ivoryTower,
+        this.setting.buildings.ivoryTower,
         this._host.engine.i18n("$religion.zu.ivoryTower.label")
       ),
       this._getBuildOption(
-        this.setting.items.ivoryCitadel,
+        this.setting.buildings.ivoryCitadel,
         this._host.engine.i18n("$religion.zu.ivoryCitadel.label")
       ),
       this._getBuildOption(
-        this.setting.items.skyPalace,
+        this.setting.buildings.skyPalace,
         this._host.engine.i18n("$religion.zu.skyPalace.label")
       ),
       this._getBuildOption(
-        this.setting.items.unicornUtopia,
+        this.setting.buildings.unicornUtopia,
         this._host.engine.i18n("$religion.zu.unicornUtopia.label")
       ),
       this._getBuildOption(
-        this.setting.items.sunspire,
+        this.setting.buildings.sunspire,
         this._host.engine.i18n("$religion.zu.sunspire.label")
       ),
     ];
@@ -99,62 +99,62 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       this._bestUnicornBuilding,
 
       this._getBuildOption(
-        this.setting.items.marker,
+        this.setting.buildings.marker,
         this._host.engine.i18n("$religion.zu.marker.label")
       ),
       this._getBuildOption(
-        this.setting.items.unicornGraveyard,
+        this.setting.buildings.unicornGraveyard,
         this._host.engine.i18n("$religion.zu.unicornGraveyard.label")
       ),
       this._getBuildOption(
-        this.setting.items.unicornNecropolis,
+        this.setting.buildings.unicornNecropolis,
         this._host.engine.i18n("$religion.zu.unicornNecropolis.label")
       ),
       this._getBuildOption(
-        this.setting.items.blackPyramid,
+        this.setting.buildings.blackPyramid,
         this._host.engine.i18n("$religion.zu.blackPyramid.label"),
         true
       ),
 
       new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.orderOfTheSun.label")),
       this._getBuildOption(
-        this.setting.items.solarchant,
+        this.setting.buildings.solarchant,
         this._host.engine.i18n("$religion.ru.solarchant.label")
       ),
       this._getBuildOption(
-        this.setting.items.scholasticism,
+        this.setting.buildings.scholasticism,
         this._host.engine.i18n("$religion.ru.scholasticism.label")
       ),
       this._getBuildOption(
-        this.setting.items.goldenSpire,
+        this.setting.buildings.goldenSpire,
         this._host.engine.i18n("$religion.ru.goldenSpire.label")
       ),
       this._getBuildOption(
-        this.setting.items.sunAltar,
+        this.setting.buildings.sunAltar,
         this._host.engine.i18n("$religion.ru.sunAltar.label")
       ),
       this._getBuildOption(
-        this.setting.items.stainedGlass,
+        this.setting.buildings.stainedGlass,
         this._host.engine.i18n("$religion.ru.stainedGlass.label")
       ),
       this._getBuildOption(
-        this.setting.items.solarRevolution,
+        this.setting.buildings.solarRevolution,
         this._host.engine.i18n("$religion.ru.solarRevolution.label")
       ),
       this._getBuildOption(
-        this.setting.items.basilica,
+        this.setting.buildings.basilica,
         this._host.engine.i18n("$religion.ru.basilica.label")
       ),
       this._getBuildOption(
-        this.setting.items.templars,
+        this.setting.buildings.templars,
         this._host.engine.i18n("$religion.ru.templars.label")
       ),
       this._getBuildOption(
-        this.setting.items.apocripha,
+        this.setting.buildings.apocripha,
         this._host.engine.i18n("$religion.ru.apocripha.label")
       ),
       this._getBuildOption(
-        this.setting.items.transcendence,
+        this.setting.buildings.transcendence,
         this._host.engine.i18n("$religion.ru.transcendence.label"),
         true
       ),
@@ -164,39 +164,39 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         this._host.engine.i18n("$religion.panel.cryptotheology.label")
       ),
       this._getBuildOption(
-        this.setting.items.blackObelisk,
+        this.setting.buildings.blackObelisk,
         this._host.engine.i18n("$religion.tu.blackObelisk.label")
       ),
       this._getBuildOption(
-        this.setting.items.blackNexus,
+        this.setting.buildings.blackNexus,
         this._host.engine.i18n("$religion.tu.blackNexus.label")
       ),
       this._getBuildOption(
-        this.setting.items.blackCore,
+        this.setting.buildings.blackCore,
         this._host.engine.i18n("$religion.tu.blackCore.label")
       ),
       this._getBuildOption(
-        this.setting.items.singularity,
+        this.setting.buildings.singularity,
         this._host.engine.i18n("$religion.tu.singularity.label")
       ),
       this._getBuildOption(
-        this.setting.items.blackLibrary,
+        this.setting.buildings.blackLibrary,
         this._host.engine.i18n("$religion.tu.blackLibrary.label")
       ),
       this._getBuildOption(
-        this.setting.items.blackRadiance,
+        this.setting.buildings.blackRadiance,
         this._host.engine.i18n("$religion.tu.blackRadiance.label")
       ),
       this._getBuildOption(
-        this.setting.items.blazar,
+        this.setting.buildings.blazar,
         this._host.engine.i18n("$religion.tu.blazar.label")
       ),
       this._getBuildOption(
-        this.setting.items.darkNova,
+        this.setting.buildings.darkNova,
         this._host.engine.i18n("$religion.tu.darkNova.label")
       ),
       this._getBuildOption(
-        this.setting.items.holyGenocide,
+        this.setting.buildings.holyGenocide,
         this._host.engine.i18n("$religion.tu.holyGenocide.label"),
         true
       ),

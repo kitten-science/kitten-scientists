@@ -23,7 +23,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
     });
 
     const items = [];
-    for (const setting of Object.values(this.setting.items)) {
+    for (const setting of Object.values(this.setting.techs)) {
       const label = this._host.engine.i18n(`$science.${setting.tech}.label`);
       const button = new SettingListItem(this._host, label, setting, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),

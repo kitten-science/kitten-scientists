@@ -31,179 +31,182 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
     });
 
     this._buildings = [
-      this._getResetOption(this.settings.items.hut, this._host.engine.i18n("$buildings.hut.label")),
       this._getResetOption(
-        this.settings.items.logHouse,
+        this.settings.buildings.hut,
+        this._host.engine.i18n("$buildings.hut.label")
+      ),
+      this._getResetOption(
+        this.settings.buildings.logHouse,
         this._host.engine.i18n("$buildings.logHouse.label")
       ),
       this._getResetOption(
-        this.settings.items.mansion,
+        this.settings.buildings.mansion,
         this._host.engine.i18n("$buildings.mansion.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.workshop,
+        this.settings.buildings.workshop,
         this._host.engine.i18n("$buildings.workshop.label")
       ),
       this._getResetOption(
-        this.settings.items.factory,
+        this.settings.buildings.factory,
         this._host.engine.i18n("$buildings.factory.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.field,
+        this.settings.buildings.field,
         this._host.engine.i18n("$buildings.field.label")
       ),
       this._getResetOption(
-        this.settings.items.pasture,
+        this.settings.buildings.pasture,
         this._host.engine.i18n("$buildings.pasture.label")
       ),
       this._getResetOption(
-        this.settings.items.solarFarm,
+        this.settings.buildings.solarFarm,
         this._host.engine.i18n("$buildings.solarfarm.label")
       ),
       this._getResetOption(
-        this.settings.items.mine,
+        this.settings.buildings.mine,
         this._host.engine.i18n("$buildings.mine.label")
       ),
       this._getResetOption(
-        this.settings.items.lumberMill,
+        this.settings.buildings.lumberMill,
         this._host.engine.i18n("$buildings.lumberMill.label")
       ),
       this._getResetOption(
-        this.settings.items.aqueduct,
+        this.settings.buildings.aqueduct,
         this._host.engine.i18n("$buildings.aqueduct.label")
       ),
       this._getResetOption(
-        this.settings.items.hydroPlant,
+        this.settings.buildings.hydroPlant,
         this._host.engine.i18n("$buildings.hydroplant.label")
       ),
       this._getResetOption(
-        this.settings.items.oilWell,
+        this.settings.buildings.oilWell,
         this._host.engine.i18n("$buildings.oilWell.label")
       ),
       this._getResetOption(
-        this.settings.items.quarry,
+        this.settings.buildings.quarry,
         this._host.engine.i18n("$buildings.quarry.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.smelter,
+        this.settings.buildings.smelter,
         this._host.engine.i18n("$buildings.smelter.label")
       ),
       this._getResetOption(
-        this.settings.items.biolab,
+        this.settings.buildings.biolab,
         this._host.engine.i18n("$buildings.biolab.label")
       ),
       this._getResetOption(
-        this.settings.items.calciner,
+        this.settings.buildings.calciner,
         this._host.engine.i18n("$buildings.calciner.label")
       ),
       this._getResetOption(
-        this.settings.items.reactor,
+        this.settings.buildings.reactor,
         this._host.engine.i18n("$buildings.reactor.label")
       ),
       this._getResetOption(
-        this.settings.items.accelerator,
+        this.settings.buildings.accelerator,
         this._host.engine.i18n("$buildings.accelerator.label")
       ),
       this._getResetOption(
-        this.settings.items.steamworks,
+        this.settings.buildings.steamworks,
         this._host.engine.i18n("$buildings.steamworks.label")
       ),
       this._getResetOption(
-        this.settings.items.magneto,
+        this.settings.buildings.magneto,
         this._host.engine.i18n("$buildings.magneto.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.library,
+        this.settings.buildings.library,
         this._host.engine.i18n("$buildings.library.label")
       ),
       this._getResetOption(
-        this.settings.items.dataCenter,
+        this.settings.buildings.dataCenter,
         this._host.engine.i18n("$buildings.dataCenter.label")
       ),
       this._getResetOption(
-        this.settings.items.academy,
+        this.settings.buildings.academy,
         this._host.engine.i18n("$buildings.academy.label")
       ),
       this._getResetOption(
-        this.settings.items.observatory,
+        this.settings.buildings.observatory,
         this._host.engine.i18n("$buildings.observatory.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.amphitheatre,
+        this.settings.buildings.amphitheatre,
         this._host.engine.i18n("$buildings.amphitheatre.label")
       ),
       this._getResetOption(
-        this.settings.items.broadcastTower,
+        this.settings.buildings.broadcastTower,
         this._host.engine.i18n("$buildings.broadcasttower.label")
       ),
       this._getResetOption(
-        this.settings.items.tradepost,
+        this.settings.buildings.tradepost,
         this._host.engine.i18n("$buildings.tradepost.label")
       ),
       this._getResetOption(
-        this.settings.items.chapel,
+        this.settings.buildings.chapel,
         this._host.engine.i18n("$buildings.chapel.label")
       ),
       this._getResetOption(
-        this.settings.items.temple,
+        this.settings.buildings.temple,
         this._host.engine.i18n("$buildings.temple.label")
       ),
       this._getResetOption(
-        this.settings.items.mint,
+        this.settings.buildings.mint,
         this._host.engine.i18n("$buildings.mint.label")
       ),
       this._getResetOption(
-        this.settings.items.ziggurat,
+        this.settings.buildings.ziggurat,
         this._host.engine.i18n("$buildings.ziggurat.label")
       ),
       this._getResetOption(
-        this.settings.items.chronosphere,
+        this.settings.buildings.chronosphere,
         this._host.engine.i18n("$buildings.chronosphere.label")
       ),
       this._getResetOption(
-        this.settings.items.aiCore,
+        this.settings.buildings.aiCore,
         this._host.engine.i18n("$buildings.aicore.label")
       ),
       this._getResetOption(
-        this.settings.items.brewery,
+        this.settings.buildings.brewery,
         this._host.engine.i18n("$buildings.brewery.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.barn,
+        this.settings.buildings.barn,
         this._host.engine.i18n("$buildings.barn.label")
       ),
       this._getResetOption(
-        this.settings.items.harbor,
+        this.settings.buildings.harbor,
         this._host.engine.i18n("$buildings.harbor.label")
       ),
       this._getResetOption(
-        this.settings.items.warehouse,
+        this.settings.buildings.warehouse,
         this._host.engine.i18n("$buildings.warehouse.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.zebraOutpost,
+        this.settings.buildings.zebraOutpost,
         this._host.engine.i18n("$buildings.zebraOutpost.label")
       ),
       this._getResetOption(
-        this.settings.items.zebraWorkshop,
+        this.settings.buildings.zebraWorkshop,
         this._host.engine.i18n("$buildings.zebraWorkshop.label")
       ),
       this._getResetOption(
-        this.settings.items.zebraForge,
+        this.settings.buildings.zebraForge,
         this._host.engine.i18n("$buildings.zebraForge.label")
       ),
     ];

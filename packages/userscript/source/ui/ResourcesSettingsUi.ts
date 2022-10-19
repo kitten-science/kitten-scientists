@@ -31,7 +31,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
 
     // Add all the current resources
     this._resources = [];
-    for (const setting of Object.values(this.setting.items)) {
+    for (const setting of Object.values(this.setting.resources)) {
       this._resources.push(
         this._makeResourceSetting(
           ucfirst(this._host.engine.i18n(`$resources.${setting.resource}.title`)),

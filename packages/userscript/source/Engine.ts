@@ -299,7 +299,7 @@ export class Engine {
     ...args: Array<number | string>
   ): void {
     if (this.settings.filters.enabled) {
-      for (const filterItem of Object.values(this.settings.filters.items)) {
+      for (const filterItem of Object.values(this.settings.filters.filters)) {
         if (filterItem.variant === cssClasses && !filterItem.enabled) {
           return;
         }

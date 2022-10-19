@@ -62,7 +62,7 @@ export class VillageManager implements Automation {
     const jobsNotCapped = new Array<{ job: JobInfo; count: number; toCap: number }>();
     for (const job of this._host.gamePage.village.jobs) {
       // Skip disabled jobs and those that haven't been unlocked;
-      const enabled = this.settings.items[job.name].enabled;
+      const enabled = this.settings.jobs[job.name].enabled;
       const unlocked = job.unlocked;
       if (!enabled || !unlocked) {
         continue;
@@ -70,9 +70,9 @@ export class VillageManager implements Automation {
 
       const maxKittensInJob = this._host.gamePage.village.getJobLimit(job.name);
       const maxKittensToAssign =
-        this.settings.items[job.name].max === -1
+        this.settings.jobs[job.name].max === -1
           ? Number.POSITIVE_INFINITY
-          : this.settings.items[job.name].max;
+          : this.settings.jobs[job.name].max;
       const kittensInJob = job.value;
       if (kittensInJob < maxKittensInJob && kittensInJob < maxKittensToAssign) {
         jobsNotCapped.push({ job, count: kittensInJob, toCap: maxKittensInJob - kittensInJob });

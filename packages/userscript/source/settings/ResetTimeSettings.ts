@@ -16,13 +16,13 @@ export class ResetTimeBuildingSetting extends SettingTrigger {
 }
 
 export class ResetTimeSettings extends Setting {
-  readonly items: {
+  readonly buildings: {
     [item in TimeItem]: ResetTimeBuildingSetting;
   };
 
   constructor(
     enabled = false,
-    items = {
+    buildings = {
       blastFurnace: new ResetTimeBuildingSetting(
         "blastFurnace",
         TimeItemVariant.Chronoforge,
@@ -77,20 +77,20 @@ export class ResetTimeSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.buildings = buildings;
   }
 
   load(settings: ResetTimeSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].trigger = item.trigger;
+    for (const [name, item] of objectEntries(settings.buildings)) {
+      this.buildings[name].enabled = item.enabled;
+      this.buildings[name].trigger = item.trigger;
     }
   }
 
   static toLegacyOptions(settings: ResetTimeSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.buildings)) {
       subject.items[`toggle-reset-time-${name}` as const] = item.enabled;
       subject.items[`set-reset-time-${name}-min` as const] = item.trigger;
     }
@@ -100,7 +100,7 @@ export class ResetTimeSettings extends Setting {
     const options = new ResetTimeSettings();
     options.enabled = true;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.buildings)) {
       item.enabled = subject.items[`toggle-reset-time-${name}` as const] ?? item.enabled;
       item.trigger = subject.items[`set-reset-time-${name}-min` as const] ?? item.trigger;
     }

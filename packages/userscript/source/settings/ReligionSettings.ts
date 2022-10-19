@@ -64,7 +64,7 @@ export type ReligionSettingsItems = {
 };
 
 export class ReligionSettings extends SettingTrigger {
-  items: ReligionSettingsItems;
+  buildings: ReligionSettingsItems;
 
   /**
    * Build best unicorn building first.
@@ -89,7 +89,7 @@ export class ReligionSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = 1,
-    items: ReligionSettingsItems = {
+    buildings: ReligionSettingsItems = {
       apocripha: new ReligionSettingsItem(
         "apocripha",
         UnicornItemVariant.OrderOfTheSun,
@@ -307,7 +307,7 @@ export class ReligionSettings extends SettingTrigger {
     transcend = new Setting(false)
   ) {
     super(enabled, trigger);
-    this.items = items;
+    this.buildings = buildings;
     this.adore = adore;
     this.autoPraise = autoPraise;
     this.bestUnicornBuilding = bestUnicornBuilding;
@@ -318,9 +318,9 @@ export class ReligionSettings extends SettingTrigger {
     this.enabled = settings.enabled;
     this.trigger = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].max = item.max;
+    for (const [name, item] of objectEntries(settings.buildings)) {
+      this.buildings[name].enabled = item.enabled;
+      this.buildings[name].max = item.max;
     }
 
     this.adore.enabled = settings.adore.enabled;
@@ -335,7 +335,7 @@ export class ReligionSettings extends SettingTrigger {
     subject.toggles.faith = settings.enabled;
     subject.triggers.faith = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.buildings)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`set-${name}-max` as const] = item.max;
     }
@@ -354,7 +354,7 @@ export class ReligionSettings extends SettingTrigger {
     options.enabled = subject.toggles.faith;
     options.trigger = subject.triggers.faith;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.buildings)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }

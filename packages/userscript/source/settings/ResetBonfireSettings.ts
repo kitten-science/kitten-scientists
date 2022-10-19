@@ -13,14 +13,14 @@ export class ResetBonfireBuildingSetting extends SettingTrigger {
 }
 
 export class ResetBonfireSettings extends Setting {
-  readonly items: {
+  readonly buildings: {
     // unicornPasture is handled in the Religion section.
     [item in Exclude<BonfireItem, "unicornPasture">]: ResetBonfireBuildingSetting;
   };
 
   constructor(
     enabled = false,
-    items = {
+    buildings = {
       academy: new ResetBonfireBuildingSetting("academy", true, -1),
       accelerator: new ResetBonfireBuildingSetting("accelerator", true, -1),
       aiCore: new ResetBonfireBuildingSetting("aiCore", true, -1),
@@ -65,20 +65,20 @@ export class ResetBonfireSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.buildings = buildings;
   }
 
   load(settings: ResetBonfireSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].trigger = item.trigger;
+    for (const [name, item] of objectEntries(settings.buildings)) {
+      this.buildings[name].enabled = item.enabled;
+      this.buildings[name].trigger = item.trigger;
     }
   }
 
   static toLegacyOptions(settings: ResetBonfireSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.buildings)) {
       subject.items[`toggle-reset-build-${name}` as const] = item.enabled;
       subject.items[`set-reset-build-${name}-min` as const] = item.trigger;
     }
@@ -88,7 +88,7 @@ export class ResetBonfireSettings extends Setting {
     const options = new ResetBonfireSettings();
     options.enabled = true;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.buildings)) {
       item.enabled = subject.items[`toggle-reset-build-${name}` as const] ?? item.enabled;
       item.trigger = subject.items[`set-reset-build-${name}-min` as const] ?? item.trigger;
     }

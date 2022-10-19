@@ -13,13 +13,13 @@ export class ResetSpaceBuildingSetting extends SettingTrigger {
 }
 
 export class ResetSpaceSettings extends Setting {
-  readonly items: {
+  readonly buildings: {
     [item in SpaceBuildings]: SettingTrigger;
   };
 
   constructor(
     enabled = false,
-    items = {
+    buildings = {
       containmentChamber: new ResetSpaceBuildingSetting("containmentChamber", true, -1),
       cryostation: new ResetSpaceBuildingSetting("cryostation", true, -1),
       entangler: new ResetSpaceBuildingSetting("entangler", true, -1),
@@ -45,20 +45,20 @@ export class ResetSpaceSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.buildings = buildings;
   }
 
   load(settings: ResetSpaceSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].trigger = item.trigger;
+    for (const [name, item] of objectEntries(settings.buildings)) {
+      this.buildings[name].enabled = item.enabled;
+      this.buildings[name].trigger = item.trigger;
     }
   }
 
   static toLegacyOptions(settings: ResetSpaceSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.buildings)) {
       subject.items[`toggle-reset-space-${name}` as const] = item.enabled;
       subject.items[`set-reset-space-${name}-min` as const] = item.trigger;
     }
@@ -68,7 +68,7 @@ export class ResetSpaceSettings extends Setting {
     const options = new ResetSpaceSettings();
     options.enabled = true;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.buildings)) {
       item.enabled = subject.items[`toggle-reset-space-${name}` as const] ?? item.enabled;
       item.trigger = subject.items[`set-reset-space-${name}-min` as const] ?? item.trigger;
     }

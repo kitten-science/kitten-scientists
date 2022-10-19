@@ -15,14 +15,13 @@ export class TechSetting extends Setting {
 }
 
 export class TechSettings extends Setting {
-  items: {
+  techs: {
     [item in Technology]: TechSetting;
   };
 
   constructor(
-    id = "techs",
     enabled = false,
-    items = {
+    techs = {
       acoustics: new TechSetting("acoustics", true),
       advExogeology: new TechSetting("advExogeology", true),
       agriculture: new TechSetting("agriculture", true),
@@ -88,11 +87,11 @@ export class TechSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.techs = techs;
   }
 
   static validateGame(game: GamePage, settings: TechSettings) {
-    const inSettings = Object.keys(settings.items);
+    const inSettings = Object.keys(settings.techs);
     const inGame = game.science.techs.map(tech => tech.name);
 
     const missingInSettings = difference(inGame, inSettings);
@@ -109,15 +108,15 @@ export class TechSettings extends Setting {
   load(settings: TechSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
+    for (const [name, item] of objectEntries(settings.techs)) {
+      this.techs[name].enabled = item.enabled;
     }
   }
 
   static toLegacyOptions(settings: TechSettings, subject: LegacyStorage) {
     subject.items["toggle-techs"] = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.techs)) {
       subject.items[`toggle-tech-${name}` as const] = item.enabled;
     }
   }
@@ -126,7 +125,7 @@ export class TechSettings extends Setting {
     const options = new TechSettings();
     options.enabled = subject.items["toggle-policies"] ?? options.enabled;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.techs)) {
       item.enabled = subject.items[`toggle-tech-${name}` as const] ?? item.enabled;
     }
 

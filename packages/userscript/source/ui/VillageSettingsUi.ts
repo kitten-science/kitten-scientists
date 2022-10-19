@@ -32,35 +32,35 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
 
     this._jobs = [
       this._getDistributeOption(
-        this.setting.items.woodcutter,
+        this.setting.jobs.woodcutter,
         this._host.engine.i18n("$village.job.woodcutter")
       ),
       this._getDistributeOption(
-        this.setting.items.farmer,
+        this.setting.jobs.farmer,
         this._host.engine.i18n("$village.job.farmer")
       ),
       this._getDistributeOption(
-        this.setting.items.scholar,
+        this.setting.jobs.scholar,
         this._host.engine.i18n("$village.job.scholar")
       ),
       this._getDistributeOption(
-        this.setting.items.hunter,
+        this.setting.jobs.hunter,
         this._host.engine.i18n("$village.job.hunter")
       ),
       this._getDistributeOption(
-        this.setting.items.miner,
+        this.setting.jobs.miner,
         this._host.engine.i18n("$village.job.miner")
       ),
       this._getDistributeOption(
-        this.setting.items.priest,
+        this.setting.jobs.priest,
         this._host.engine.i18n("$village.job.priest")
       ),
       this._getDistributeOption(
-        this.setting.items.geologist,
+        this.setting.jobs.geologist,
         this._host.engine.i18n("$village.job.geologist")
       ),
       this._getDistributeOption(
-        this.setting.items.engineer,
+        this.setting.jobs.engineer,
         this._host.engine.i18n("$village.job.engineer"),
         true
       ),

@@ -23,7 +23,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
     });
 
     const items = [];
-    for (const setting of Object.values(this.setting.items)) {
+    for (const setting of Object.values(this.setting.missions)) {
       const label = this._host.engine.i18n(`$space.${setting.mission}.label`);
       const button = new SettingListItem(this._host, label, setting, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),

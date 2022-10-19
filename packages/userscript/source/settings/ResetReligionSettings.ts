@@ -21,11 +21,11 @@ export class ResetReligionBuildingSetting extends SettingTrigger {
 }
 
 export class ResetReligionSettings extends Setting {
-  readonly items: { [item in FaithItem | UnicornItem]: ResetReligionBuildingSetting };
+  readonly buildings: { [item in FaithItem | UnicornItem]: ResetReligionBuildingSetting };
 
   constructor(
     enabled = false,
-    items = {
+    buildings = {
       apocripha: new ResetReligionBuildingSetting(
         "apocripha",
         UnicornItemVariant.OrderOfTheSun,
@@ -204,20 +204,20 @@ export class ResetReligionSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.buildings = buildings;
   }
 
   load(settings: ResetReligionSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].trigger = item.trigger;
+    for (const [name, item] of objectEntries(settings.buildings)) {
+      this.buildings[name].enabled = item.enabled;
+      this.buildings[name].trigger = item.trigger;
     }
   }
 
   static toLegacyOptions(settings: ResetReligionSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.buildings)) {
       subject.items[`toggle-reset-faith-${name}` as const] = item.enabled;
       subject.items[`set-reset-faith-${name}-min` as const] = item.trigger;
     }
@@ -227,7 +227,7 @@ export class ResetReligionSettings extends Setting {
     const options = new ResetReligionSettings();
     options.enabled = true;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.buildings)) {
       item.enabled = subject.items[`toggle-reset-faith-${name}` as const] ?? item.enabled;
       item.trigger = subject.items[`set-reset-faith-${name}-min` as const] ?? item.trigger;
     }

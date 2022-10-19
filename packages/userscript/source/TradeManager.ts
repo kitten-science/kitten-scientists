@@ -312,11 +312,11 @@ export class TradeManager implements Automation {
       const name = racePanels[panelIndex].race.name;
       const race = this._host.gamePage.diplomacy.get(name);
       const max =
-        this.settings.buildEmbassies.items[name].max === -1
+        this.settings.buildEmbassies.races[name].max === -1
           ? Number.POSITIVE_INFINITY
-          : this.settings.buildEmbassies.items[name].max;
+          : this.settings.buildEmbassies.races[name].max;
 
-      if (!this.settings.buildEmbassies.items[name].enabled || max <= race.embassyLevel) {
+      if (!this.settings.buildEmbassies.races[name].enabled || max <= race.embassyLevel) {
         continue;
       }
 

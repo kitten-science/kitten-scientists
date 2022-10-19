@@ -49,7 +49,7 @@ export class ScienceManager extends UpgradeManager {
     const techs = this._host.gamePage.science.techs;
     const toUnlock = new Array<TechInfo>();
 
-    workLoop: for (const setting of Object.values(this.settings.techs.items)) {
+    workLoop: for (const setting of Object.values(this.settings.techs.techs)) {
       if (!setting.enabled) {
         continue;
       }
@@ -86,7 +86,7 @@ export class ScienceManager extends UpgradeManager {
     const policies = this._host.gamePage.science.policies;
     const toUnlock = new Array<PolicyInfo>();
 
-    for (const setting of Object.values(this.settings.policies.items)) {
+    for (const setting of Object.values(this.settings.policies.policies)) {
       if (!setting.enabled) {
         continue;
       }

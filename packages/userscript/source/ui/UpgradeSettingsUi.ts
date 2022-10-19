@@ -23,7 +23,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     });
 
     const items = [];
-    for (const setting of Object.values(this.setting.items)) {
+    for (const setting of Object.values(this.setting.upgrades)) {
       const label = this._host.engine.i18n(`$workshop.${setting.upgrade}.label`);
       const button = new SettingListItem(this._host, label, setting, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),

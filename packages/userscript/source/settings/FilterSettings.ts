@@ -55,11 +55,11 @@ export type FilterSettingsItems = {
 };
 
 export class FilterSettings extends Setting {
-  items: FilterSettingsItems;
+  filters: FilterSettingsItems;
 
   constructor(
     enabled = false,
-    items: FilterSettingsItems = {
+    filters: FilterSettingsItems = {
       buildFilter: new FilterSettingsItem("buildFilter", FilterItemVariant.Build),
       craftFilter: new FilterSettingsItem("craftFilter", FilterItemVariant.Craft),
       upgradeFilter: new FilterSettingsItem("upgradeFilter", FilterItemVariant.Upgrade),
@@ -80,21 +80,21 @@ export class FilterSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.filters = filters;
   }
 
   load(settings: FilterSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
+    for (const [name, item] of objectEntries(settings.filters)) {
+      this.filters[name].enabled = item.enabled;
     }
   }
 
   static toLegacyOptions(settings: FilterSettings, subject: LegacyStorage) {
     subject.toggles.filter = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.filters)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
     }
   }
@@ -103,7 +103,7 @@ export class FilterSettings extends Setting {
     const options = new FilterSettings();
     options.enabled = subject.toggles.filter;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.filters)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
     }
     return options;

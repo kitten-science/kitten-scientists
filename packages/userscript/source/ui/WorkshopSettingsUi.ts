@@ -36,83 +36,83 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
 
     this._crafts = [
       this._getCraftOption(
-        this.setting.items.wood,
+        this.setting.resources.wood,
         this._host.engine.i18n("$workshop.crafts.wood.label")
       ),
       this._getCraftOption(
-        this.setting.items.beam,
+        this.setting.resources.beam,
         this._host.engine.i18n("$workshop.crafts.beam.label")
       ),
       this._getCraftOption(
-        this.setting.items.slab,
+        this.setting.resources.slab,
         this._host.engine.i18n("$workshop.crafts.slab.label")
       ),
       this._getCraftOption(
-        this.setting.items.steel,
+        this.setting.resources.steel,
         this._host.engine.i18n("$workshop.crafts.steel.label")
       ),
       this._getCraftOption(
-        this.setting.items.plate,
+        this.setting.resources.plate,
         this._host.engine.i18n("$workshop.crafts.plate.label")
       ),
       this._getCraftOption(
-        this.setting.items.alloy,
+        this.setting.resources.alloy,
         this._host.engine.i18n("$workshop.crafts.alloy.label")
       ),
       this._getCraftOption(
-        this.setting.items.concrate,
+        this.setting.resources.concrate,
         this._host.engine.i18n("$workshop.crafts.concrate.label")
       ),
       this._getCraftOption(
-        this.setting.items.gear,
+        this.setting.resources.gear,
         this._host.engine.i18n("$workshop.crafts.gear.label")
       ),
       this._getCraftOption(
-        this.setting.items.scaffold,
+        this.setting.resources.scaffold,
         this._host.engine.i18n("$workshop.crafts.scaffold.label")
       ),
       this._getCraftOption(
-        this.setting.items.ship,
+        this.setting.resources.ship,
         this._host.engine.i18n("$workshop.crafts.ship.label")
       ),
       this._getCraftOption(
-        this.setting.items.tanker,
+        this.setting.resources.tanker,
         this._host.engine.i18n("$workshop.crafts.tanker.label"),
         true
       ),
 
       this._getCraftOption(
-        this.setting.items.parchment,
+        this.setting.resources.parchment,
         this._host.engine.i18n("$workshop.crafts.parchment.label")
       ),
       this._getCraftOption(
-        this.setting.items.manuscript,
+        this.setting.resources.manuscript,
         this._host.engine.i18n("$workshop.crafts.manuscript.label")
       ),
       this._getCraftOption(
-        this.setting.items.compedium,
+        this.setting.resources.compedium,
         this._host.engine.i18n("$workshop.crafts.compedium.label")
       ),
       this._getCraftOption(
-        this.setting.items.blueprint,
+        this.setting.resources.blueprint,
         this._host.engine.i18n("$workshop.crafts.blueprint.label"),
         true
       ),
 
       this._getCraftOption(
-        this.setting.items.kerosene,
+        this.setting.resources.kerosene,
         this._host.engine.i18n("$workshop.crafts.kerosene.label")
       ),
       this._getCraftOption(
-        this.setting.items.megalith,
+        this.setting.resources.megalith,
         this._host.engine.i18n("$workshop.crafts.megalith.label")
       ),
       this._getCraftOption(
-        this.setting.items.eludium,
+        this.setting.resources.eludium,
         this._host.engine.i18n("$workshop.crafts.eludium.label")
       ),
       this._getCraftOption(
-        this.setting.items.thorium,
+        this.setting.resources.thorium,
         this._host.engine.i18n("$workshop.crafts.thorium.label"),
         true
       ),

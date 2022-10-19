@@ -35,7 +35,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
 
     // Add all the current resources
     this._resources = [];
-    for (const setting of Object.values(this.settings.items)) {
+    for (const setting of Object.values(this.settings.resources)) {
       this._resources.push(
         this._addNewResourceOption(
           ucfirst(this._host.engine.i18n(`$resources.${setting.resource}.title`)),

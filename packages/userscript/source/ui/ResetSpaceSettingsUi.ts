@@ -32,111 +32,111 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
 
     this._buildings = [
       this._getResetOption(
-        this.settings.items.spaceElevator,
+        this.settings.buildings.spaceElevator,
         this._host.engine.i18n("$space.planet.cath.spaceElevator.label")
       ),
       this._getResetOption(
-        this.settings.items.sattelite,
+        this.settings.buildings.sattelite,
         this._host.engine.i18n("$space.planet.cath.sattelite.label")
       ),
       this._getResetOption(
-        this.settings.items.spaceStation,
+        this.settings.buildings.spaceStation,
         this._host.engine.i18n("$space.planet.cath.spaceStation.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.moonOutpost,
+        this.settings.buildings.moonOutpost,
         this._host.engine.i18n("$space.planet.moon.moonOutpost.label")
       ),
       this._getResetOption(
-        this.settings.items.moonBase,
+        this.settings.buildings.moonBase,
         this._host.engine.i18n("$space.planet.moon.moonBase.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.planetCracker,
+        this.settings.buildings.planetCracker,
         this._host.engine.i18n("$space.planet.dune.planetCracker.label")
       ),
       this._getResetOption(
-        this.settings.items.hydrofracturer,
+        this.settings.buildings.hydrofracturer,
         this._host.engine.i18n("$space.planet.dune.hydrofracturer.label")
       ),
       this._getResetOption(
-        this.settings.items.spiceRefinery,
+        this.settings.buildings.spiceRefinery,
         this._host.engine.i18n("$space.planet.dune.spiceRefinery.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.researchVessel,
+        this.settings.buildings.researchVessel,
         this._host.engine.i18n("$space.planet.piscine.researchVessel.label")
       ),
       this._getResetOption(
-        this.settings.items.orbitalArray,
+        this.settings.buildings.orbitalArray,
         this._host.engine.i18n("$space.planet.piscine.orbitalArray.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.sunlifter,
+        this.settings.buildings.sunlifter,
         this._host.engine.i18n("$space.planet.helios.sunlifter.label")
       ),
       this._getResetOption(
-        this.settings.items.containmentChamber,
+        this.settings.buildings.containmentChamber,
         this._host.engine.i18n("$space.planet.helios.containmentChamber.label")
       ),
       this._getResetOption(
-        this.settings.items.heatsink,
+        this.settings.buildings.heatsink,
         this._host.engine.i18n("$space.planet.helios.heatsink.label")
       ),
       this._getResetOption(
-        this.settings.items.sunforge,
+        this.settings.buildings.sunforge,
         this._host.engine.i18n("$space.planet.helios.sunforge.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.cryostation,
+        this.settings.buildings.cryostation,
         this._host.engine.i18n("$space.planet.terminus.cryostation.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.spaceBeacon,
+        this.settings.buildings.spaceBeacon,
         this._host.engine.i18n("$space.planet.kairo.spaceBeacon.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.terraformingStation,
+        this.settings.buildings.terraformingStation,
         this._host.engine.i18n("$space.planet.yarn.terraformingStation.label")
       ),
       this._getResetOption(
-        this.settings.items.hydroponics,
+        this.settings.buildings.hydroponics,
         this._host.engine.i18n("$space.planet.yarn.hydroponics.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.hrHarvester,
+        this.settings.buildings.hrHarvester,
         this._host.engine.i18n("$space.planet.umbra.hrHarvester.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.entangler,
+        this.settings.buildings.entangler,
         this._host.engine.i18n("$space.planet.charon.entangler.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.tectonic,
+        this.settings.buildings.tectonic,
         this._host.engine.i18n("$space.planet.centaurusSystem.tectonic.label")
       ),
       this._getResetOption(
-        this.settings.items.moltenCore,
+        this.settings.buildings.moltenCore,
         this._host.engine.i18n("$space.planet.centaurusSystem.moltenCore.label")
       ),
     ];

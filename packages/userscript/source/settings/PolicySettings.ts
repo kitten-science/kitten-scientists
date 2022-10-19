@@ -15,14 +15,13 @@ export class PolicySetting extends Setting {
 }
 
 export class PolicySettings extends Setting {
-  items: {
+  policies: {
     [item in Policy]: PolicySetting;
   };
 
   constructor(
-    id = "policies",
     enabled = false,
-    items = {
+    policies = {
       authocracy: new PolicySetting("authocracy", false),
       bigStickPolicy: new PolicySetting("bigStickPolicy", false),
       carnivale: new PolicySetting("carnivale", false),
@@ -66,11 +65,11 @@ export class PolicySettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.policies = policies;
   }
 
   static validateGame(game: GamePage, settings: PolicySettings) {
-    const inSettings = Object.keys(settings.items);
+    const inSettings = Object.keys(settings.policies);
     const inGame = game.science.policies.map(policy => policy.name);
 
     const missingInSettings = difference(inGame, inSettings);
@@ -87,15 +86,15 @@ export class PolicySettings extends Setting {
   load(settings: PolicySettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
+    for (const [name, item] of objectEntries(settings.policies)) {
+      this.policies[name].enabled = item.enabled;
     }
   }
 
   static toLegacyOptions(settings: PolicySettings, subject: LegacyStorage) {
     subject.items["toggle-policies"] = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.policies)) {
       subject.items[`toggle-policy-${name}` as const] = item.enabled;
     }
   }
@@ -104,7 +103,7 @@ export class PolicySettings extends Setting {
     const options = new PolicySettings();
     options.enabled = subject.items["toggle-policies"] ?? options.enabled;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.policies)) {
       item.enabled = subject.items[`toggle-policy-${name}` as const] ?? item.enabled;
     }
 

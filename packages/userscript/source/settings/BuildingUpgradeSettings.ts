@@ -13,14 +13,13 @@ export class BuildingUpgradeSetting extends Setting {
 }
 
 export class BuildingUpgradeSettings extends Setting {
-  items: {
+  buildings: {
     [item in StagedBuilding]: BuildingUpgradeSetting;
   };
 
   constructor(
-    id = "buildingUpgrades",
     enabled = false,
-    items = {
+    buildings = {
       broadcasttower: new BuildingUpgradeSetting("broadcasttower", true),
       dataCenter: new BuildingUpgradeSetting("dataCenter", true),
       hydroplant: new BuildingUpgradeSetting("hydroplant", true),
@@ -28,21 +27,21 @@ export class BuildingUpgradeSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.buildings = buildings;
   }
 
   load(settings: BuildingUpgradeSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
+    for (const [name, item] of objectEntries(settings.buildings)) {
+      this.buildings[name].enabled = item.enabled;
     }
   }
 
   static toLegacyOptions(settings: BuildingUpgradeSettings, subject: LegacyStorage) {
     subject.items["toggle-buildings"] = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.buildings)) {
       subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
     }
   }
@@ -51,7 +50,7 @@ export class BuildingUpgradeSettings extends Setting {
     const options = new BuildingUpgradeSettings();
     options.enabled = subject.items["toggle-buildings"] ?? options.enabled;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.buildings)) {
       item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
     }
 

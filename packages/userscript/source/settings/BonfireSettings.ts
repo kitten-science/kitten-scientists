@@ -110,7 +110,7 @@ export class BonfireSettings extends SettingTrigger {
       ziggurat: new BonfireBuildingSetting("ziggurat", true),
     },
     turnOnSteamworks = new Setting(true),
-    upgradeBuildings = new BuildingUpgradeSettings("upgradeBuildings")
+    upgradeBuildings = new BuildingUpgradeSettings()
   ) {
     super(enabled, trigger);
     this.buildings = buildings;

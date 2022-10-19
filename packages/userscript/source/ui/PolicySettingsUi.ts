@@ -23,7 +23,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     });
 
     const items = [];
-    for (const setting of Object.values(this.setting.items)) {
+    for (const setting of Object.values(this.setting.policies)) {
       const policyLabel = this._host.engine.i18n(
         `$policy.${setting.policy === "authocracy" ? "autocracy" : setting.policy}.label`
       );

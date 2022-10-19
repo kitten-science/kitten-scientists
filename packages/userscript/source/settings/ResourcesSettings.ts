@@ -26,10 +26,10 @@ export class ResourcesSettingsItem extends Setting {
 export type ResourcesSettingsItems = { [item in Resource]: ResourcesSettingsItem };
 
 export class ResourcesSettings extends Setting {
-  items: ResourcesSettingsItems;
+  resources: ResourcesSettingsItems;
 
   constructor(
-    items = {
+    resources = {
       alloy: new ResourcesSettingsItem("alloy", false, 1, 0),
       antimatter: new ResourcesSettingsItem("antimatter", false, 1, 0),
       beam: new ResourcesSettingsItem("beam", false, 1, 0),
@@ -82,21 +82,21 @@ export class ResourcesSettings extends Setting {
     }
   ) {
     super(true);
-    this.items = items;
+    this.resources = resources;
   }
 
   load(settings: ResourcesSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].consume = item.consume;
-      this.items[name].stock = item.stock;
+    for (const [name, item] of objectEntries(settings.resources)) {
+      this.resources[name].enabled = item.enabled;
+      this.resources[name].consume = item.consume;
+      this.resources[name].stock = item.stock;
     }
   }
 
   static toLegacyOptions(settings: ResourcesSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.resources)) {
       if (isNil(subject.resources[name])) {
         subject.resources[name] = {
           checkForReset: false,
@@ -125,10 +125,10 @@ export class ResourcesSettings extends Setting {
 
       // We didn't explicitly store the `enabled` state in legacy.
       // Instead, it is derived from the setting having non-default values.
-      options.items[name].enabled =
+      options.resources[name].enabled =
         item.consume !== WorkshopManager.DEFAULT_CONSUME_RATE || item.stock !== 0;
-      options.items[name].consume = item.consume ?? WorkshopManager.DEFAULT_CONSUME_RATE;
-      options.items[name].stock = item.stock;
+      options.resources[name].consume = item.consume ?? WorkshopManager.DEFAULT_CONSUME_RATE;
+      options.resources[name].stock = item.stock;
     }
 
     return options;

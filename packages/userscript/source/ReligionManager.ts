@@ -90,23 +90,23 @@ export class ReligionManager implements Automation {
       // The unicorn pasture requires a special build path, because it's really
       // a bonfire building.
       const builds = Object.fromEntries(
-        Object.entries(this.settings.items).filter(
+        Object.entries(this.settings.buildings).filter(
           ([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture
         )
       );
       // Build a unicorn pasture if possible.
       const maxPastures =
-        -1 === this.settings.items.unicornPasture.max
+        -1 === this.settings.buildings.unicornPasture.max
           ? Number.POSITIVE_INFINITY
-          : this.settings.items.unicornPasture.max;
+          : this.settings.buildings.unicornPasture.max;
       const meta = this._host.gamePage.bld.getBuildingExt("unicornPasture").meta;
-      if (this.settings.items.unicornPasture.enabled && meta.val < maxPastures) {
+      if (this.settings.buildings.unicornPasture.enabled && meta.val < maxPastures) {
         this._bonfireManager.autoBuild({
           unicornPasture: new BonfireBuildingSetting(
             "unicornPasture",
-            this.settings.items.unicornPasture.enabled,
-            this.settings.items.unicornPasture.require,
-            this.settings.items.unicornPasture.max
+            this.settings.buildings.unicornPasture.enabled,
+            this.settings.buildings.unicornPasture.require,
+            this.settings.buildings.unicornPasture.max
           ),
         });
       }
@@ -169,7 +169,7 @@ export class ReligionManager implements Automation {
       }
 
       // Let the BulkManager figure out if the build can be made.
-      const buildRequest = { [bestUnicornBuilding]: this.settings.items[bestUnicornBuilding] };
+      const buildRequest = { [bestUnicornBuilding]: this.settings.buildings[bestUnicornBuilding] };
       const build = this._bulkManager.bulk(
         buildRequest,
         this.getBuildMetaData(buildRequest),
@@ -193,7 +193,9 @@ export class ReligionManager implements Automation {
       "sunspire",
     ];
     const builds = Object.fromEntries(
-      Object.entries(this.settings.items).filter(([k, v]) => !alreadyHandled.includes(v.building))
+      Object.entries(this.settings.buildings).filter(
+        ([k, v]) => !alreadyHandled.includes(v.building)
+      )
     );
     this._buildReligionBuildings(builds);
   }

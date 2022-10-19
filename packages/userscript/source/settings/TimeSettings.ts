@@ -31,14 +31,14 @@ export type TimeSettingsItems = {
 };
 
 export class TimeSettings extends SettingTrigger {
-  items: TimeSettingsItems;
+  buildings: TimeSettingsItems;
 
   fixCryochambers: SettingTrigger;
 
   constructor(
     enabled = false,
     trigger = 1,
-    items: TimeSettingsItems = {
+    buildings: TimeSettingsItems = {
       blastFurnace: new TimeSettingsItem("blastFurnace", TimeItemVariant.Chronoforge),
       chronocontrol: new TimeSettingsItem(
         "chronocontrol",
@@ -58,7 +58,7 @@ export class TimeSettings extends SettingTrigger {
     fixCryochambers = new SettingTrigger(false)
   ) {
     super(enabled, trigger);
-    this.items = items;
+    this.buildings = buildings;
     this.fixCryochambers = fixCryochambers;
   }
 
@@ -66,9 +66,9 @@ export class TimeSettings extends SettingTrigger {
     this.enabled = settings.enabled;
     this.trigger = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].max = item.max;
+    for (const [name, item] of objectEntries(settings.buildings)) {
+      this.buildings[name].enabled = item.enabled;
+      this.buildings[name].max = item.max;
     }
   }
 
@@ -76,7 +76,7 @@ export class TimeSettings extends SettingTrigger {
     subject.toggles.time = settings.enabled;
     subject.triggers.time = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.buildings)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`set-${name}-max` as const] = item.max;
     }
@@ -89,7 +89,7 @@ export class TimeSettings extends SettingTrigger {
     settings.enabled = subject.toggles.time;
     settings.trigger = subject.triggers.time;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.buildings)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }

@@ -8,7 +8,7 @@ export type VillageSettingsItems = {
 };
 
 export class VillageSettings extends Setting {
-  items: VillageSettingsItems;
+  jobs: VillageSettingsItems;
 
   holdFestivals: Setting;
   hunt: SettingTrigger;
@@ -16,7 +16,7 @@ export class VillageSettings extends Setting {
 
   constructor(
     enabled = false,
-    items: VillageSettingsItems = {
+    jobs: VillageSettingsItems = {
       engineer: new SettingMax(true, 1),
       farmer: new SettingMax(true, 1),
       geologist: new SettingMax(true, 1),
@@ -31,7 +31,7 @@ export class VillageSettings extends Setting {
     promoteLeader = new Setting(true)
   ) {
     super(enabled);
-    this.items = items;
+    this.jobs = jobs;
     this.holdFestivals = holdFestivals;
     this.hunt = hunt;
     this.promoteLeader = promoteLeader;
@@ -40,9 +40,9 @@ export class VillageSettings extends Setting {
   load(settings: VillageSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].max = item.max;
+    for (const [name, item] of objectEntries(settings.jobs)) {
+      this.jobs[name].enabled = item.enabled;
+      this.jobs[name].max = item.max;
     }
 
     this.holdFestivals.enabled = settings.holdFestivals.enabled;
@@ -53,7 +53,7 @@ export class VillageSettings extends Setting {
   static toLegacyOptions(settings: VillageSettings, subject: LegacyStorage) {
     subject.toggles.distribute = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.jobs)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`set-${name}-max` as const] = item.max;
     }
@@ -67,7 +67,7 @@ export class VillageSettings extends Setting {
     const options = new VillageSettings();
     options.enabled = subject.toggles.distribute;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.jobs)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.max = subject.items[`set-${name}-max` as const] ?? item.max;
     }

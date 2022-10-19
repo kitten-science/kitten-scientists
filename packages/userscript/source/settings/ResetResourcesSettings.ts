@@ -16,11 +16,11 @@ export class ResetResourcesSettingsItem extends Setting {
 }
 
 export class ResetResourcesSettings extends Setting {
-  items: { [item in Resource]: ResetResourcesSettingsItem };
+  resources: { [item in Resource]: ResetResourcesSettingsItem };
 
   constructor(
     enabled = false,
-    items = {
+    resources = {
       alloy: new ResetResourcesSettingsItem("alloy", false, 0),
       antimatter: new ResetResourcesSettingsItem("antimatter", false, 0),
       beam: new ResetResourcesSettingsItem("beam", false, 0),
@@ -73,20 +73,20 @@ export class ResetResourcesSettings extends Setting {
     }
   ) {
     super(enabled);
-    this.items = items;
+    this.resources = resources;
   }
 
   load(settings: ResetResourcesSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].stock = item.stock;
+    for (const [name, item] of objectEntries(settings.resources)) {
+      this.resources[name].enabled = item.enabled;
+      this.resources[name].stock = item.stock;
     }
   }
 
   static toLegacyOptions(settings: ResetResourcesSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.resources)) {
       if (isNil(subject.resources[name])) {
         subject.resources[name] = {
           checkForReset: item.enabled,
@@ -111,8 +111,8 @@ export class ResetResourcesSettings extends Setting {
       if (!item.checkForReset) {
         continue;
       }
-      options.items[name].enabled = item.enabled;
-      options.items[name].stock = item.stock;
+      options.resources[name].enabled = item.enabled;
+      options.resources[name].stock = item.stock;
     }
 
     return options;

@@ -33,35 +33,35 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
 
     this._races = [
       this._makeEmbassySetting(
-        this.setting.items.lizards,
+        this.setting.races.lizards,
         this._host.engine.i18n(`$trade.race.lizards`)
       ),
       this._makeEmbassySetting(
-        this.setting.items.sharks,
+        this.setting.races.sharks,
         this._host.engine.i18n(`$trade.race.sharks`)
       ),
       this._makeEmbassySetting(
-        this.setting.items.griffins,
+        this.setting.races.griffins,
         this._host.engine.i18n(`$trade.race.griffins`)
       ),
       this._makeEmbassySetting(
-        this.setting.items.nagas,
+        this.setting.races.nagas,
         this._host.engine.i18n(`$trade.race.nagas`)
       ),
       this._makeEmbassySetting(
-        this.setting.items.zebras,
+        this.setting.races.zebras,
         this._host.engine.i18n(`$trade.race.zebras`)
       ),
       this._makeEmbassySetting(
-        this.setting.items.spiders,
+        this.setting.races.spiders,
         this._host.engine.i18n(`$trade.race.spiders`)
       ),
       this._makeEmbassySetting(
-        this.setting.items.dragons,
+        this.setting.races.dragons,
         this._host.engine.i18n(`$trade.race.dragons`)
       ),
       this._makeEmbassySetting(
-        this.setting.items.leviathans,
+        this.setting.races.leviathans,
         this._host.engine.i18n(`$trade.race.leviathans`)
       ),
     ];

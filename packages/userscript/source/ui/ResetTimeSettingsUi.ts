@@ -32,49 +32,49 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
 
     this._buildings = [
       this._getResetOption(
-        this.settings.items.temporalBattery,
+        this.settings.buildings.temporalBattery,
         this._host.engine.i18n("$time.cfu.temporalBattery.label")
       ),
       this._getResetOption(
-        this.settings.items.blastFurnace,
+        this.settings.buildings.blastFurnace,
         this._host.engine.i18n("$time.cfu.blastFurnace.label")
       ),
       this._getResetOption(
-        this.settings.items.timeBoiler,
+        this.settings.buildings.timeBoiler,
         this._host.engine.i18n("$time.cfu.timeBoiler.label")
       ),
       this._getResetOption(
-        this.settings.items.temporalAccelerator,
+        this.settings.buildings.temporalAccelerator,
         this._host.engine.i18n("$time.cfu.temporalAccelerator.label")
       ),
       this._getResetOption(
-        this.settings.items.temporalImpedance,
+        this.settings.buildings.temporalImpedance,
         this._host.engine.i18n("$time.cfu.temporalImpedance.label")
       ),
       this._getResetOption(
-        this.settings.items.ressourceRetrieval,
+        this.settings.buildings.ressourceRetrieval,
         this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
         true
       ),
 
       this._getResetOption(
-        this.settings.items.cryochambers,
+        this.settings.buildings.cryochambers,
         this._host.engine.i18n("$time.vsu.cryochambers.label")
       ),
       this._getResetOption(
-        this.settings.items.voidHoover,
+        this.settings.buildings.voidHoover,
         this._host.engine.i18n("$time.vsu.voidHoover.label")
       ),
       this._getResetOption(
-        this.settings.items.voidRift,
+        this.settings.buildings.voidRift,
         this._host.engine.i18n("$time.vsu.voidRift.label")
       ),
       this._getResetOption(
-        this.settings.items.chronocontrol,
+        this.settings.buildings.chronocontrol,
         this._host.engine.i18n("$time.vsu.chronocontrol.label")
       ),
       this._getResetOption(
-        this.settings.items.voidResonator,
+        this.settings.buildings.voidResonator,
         this._host.engine.i18n("$time.vsu.voidResonator.label")
       ),
     ];

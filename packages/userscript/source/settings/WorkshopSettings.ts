@@ -25,7 +25,7 @@ export type WorkshopSettingsItems = {
 };
 
 export class WorkshopSettings extends SettingTrigger {
-  items: WorkshopSettingsItems;
+  resources: WorkshopSettingsItems;
 
   shipOverride: Setting;
   unlockUpgrades: UpgradeSettings;
@@ -33,7 +33,7 @@ export class WorkshopSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = 0.95,
-    items: WorkshopSettingsItems = {
+    resources: WorkshopSettingsItems = {
       alloy: new CraftSettingsItem("alloy", "titanium"),
       beam: new CraftSettingsItem("beam", "wood"),
       blueprint: new CraftSettingsItem("blueprint", "science"),
@@ -54,11 +54,11 @@ export class WorkshopSettings extends SettingTrigger {
       thorium: new CraftSettingsItem("thorium", "uranium"),
       wood: new CraftSettingsItem("wood", "catnip"),
     },
-    unlockUpgrades = new UpgradeSettings("unlockUpgrades"),
+    unlockUpgrades = new UpgradeSettings(),
     shipOverride = new Setting(true)
   ) {
     super(enabled, trigger);
-    this.items = items;
+    this.resources = resources;
     this.shipOverride = shipOverride;
     this.unlockUpgrades = unlockUpgrades;
   }
@@ -70,10 +70,10 @@ export class WorkshopSettings extends SettingTrigger {
   load(settings: WorkshopSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.items)) {
-      this.items[name].enabled = item.enabled;
-      this.items[name].limited = item.limited;
-      this.items[name].max = item.max;
+    for (const [name, item] of objectEntries(settings.resources)) {
+      this.resources[name].enabled = item.enabled;
+      this.resources[name].limited = item.limited;
+      this.resources[name].max = item.max;
     }
 
     this.unlockUpgrades.load(settings.unlockUpgrades);
@@ -85,7 +85,7 @@ export class WorkshopSettings extends SettingTrigger {
     subject.toggles.craft = settings.enabled;
     subject.triggers.craft = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.items)) {
+    for (const [name, item] of objectEntries(settings.resources)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`toggle-limited-${name}` as const] = item.limited;
     }
@@ -100,7 +100,7 @@ export class WorkshopSettings extends SettingTrigger {
     options.enabled = subject.toggles.craft;
     options.trigger = subject.triggers.craft;
 
-    for (const [name, item] of objectEntries(options.items)) {
+    for (const [name, item] of objectEntries(options.resources)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
     }

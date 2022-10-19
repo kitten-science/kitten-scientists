@@ -23,7 +23,7 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
     });
 
     const items = [];
-    for (const setting of Object.values(this.setting.items)) {
+    for (const setting of Object.values(this.setting.buildings)) {
       const label = this._host.engine.i18n(`$buildings.${setting.upgrade}.label`);
       const button = new SettingListItem(this._host, label, setting, {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
