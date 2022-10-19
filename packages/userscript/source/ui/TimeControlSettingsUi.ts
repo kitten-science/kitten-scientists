@@ -32,7 +32,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     this._accelerateTime = new SettingTriggerListItem(
       this._host,
-      label,
+      this._host.engine.i18n("option.accelerate"),
       this.setting.accelerateTime,
       {
         onCheck: () => this._host.engine.imessage("status.auto.enable", [label]),
