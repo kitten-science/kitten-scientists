@@ -720,10 +720,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/web@npm:0.0.73":
-  version: 0.0.73
-  resolution: "@types/web@npm:0.0.73"
-  checksum: 0b0c4fbaa1740aaa80c987d67e131dfeda664591e2b8d5e878e541d04cec184c15998c61e7169df32c1a08b7881bb4ce329f44120920c44eef0ff789df977b1e
+"@types/web@npm:0.0.75":
+  version: 0.0.75
+  resolution: "@types/web@npm:0.0.75"
+  checksum: e784fb6a46a0305c93b2baf69edecb06532de4ca8f0fd8242cf2ead4a7b2a00cfb6d8b84d28421588c460a0cff889a62e809e5079f5f158e886f53334550c38c
   languageName: node
   linkType: hard
 
@@ -2414,7 +2414,7 @@ __metadata:
     "@types/eslint": 8.4.7
     "@types/node": 16.11.59
     "@types/prettier": 2.7.0
-    "@types/web": 0.0.73
+    "@types/web": 0.0.75
     "@typescript-eslint/eslint-plugin": 5.40.1
     "@typescript-eslint/parser": 5.40.1
     eslint: 8.25.0
