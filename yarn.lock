@@ -2377,7 +2377,7 @@ __metadata:
     eslint-plugin-jsdoc: 39.3.14
     lint-staged: 13.0.3
     prettier: 2.7.1
-    prettier-package-json: 2.6.4
+    prettier-package-json: 2.7.0
     prettier-plugin-organize-imports: 3.1.1
     prettier-plugin-sh: 0.11.0
     tslib: 2.4.0
@@ -2954,9 +2954,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-package-json@npm:2.6.4":
-  version: 2.6.4
-  resolution: "prettier-package-json@npm:2.6.4"
+"prettier-package-json@npm:2.7.0":
+  version: 2.7.0
+  resolution: "prettier-package-json@npm:2.7.0"
   dependencies:
     "@types/parse-author": ^2.0.0
     commander: ^4.0.1
@@ -2969,7 +2969,7 @@ __metadata:
     sort-order: ^1.0.1
   bin:
     prettier-package-json: bin/prettier-package-json
-  checksum: f14b2666c4232999e8f4d588158f035a4a69f459c4ab6fbc3ef8561a2a8bcecd817227cb2b56a52a627012bec79195ad47976ccf09d5d3b9cb037871ec70dfba
+  checksum: 424bff75b735dd6329dbc53aa3f2e13e9e3dfc8ffff8479d2bd9e9c7d6f0ba4ff722b1ec93aa126e8cf145c7df7ae976f74725355e4d9e12281c78ab1954a178
   languageName: node
   linkType: hard
 
