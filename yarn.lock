@@ -678,10 +678,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.59":
-  version: 16.11.59
-  resolution: "@types/node@npm:16.11.59"
-  checksum: 57c03c9783a7d93060d7b6c8b1c1eade63436faf798481d38b151f8f4eadbce7171b7fc834e7ddd9b6ff421de58e4e57fbc5bb06909e9d470f50b17007cdaf77
+"@types/node@npm:18.11.3":
+  version: 18.11.3
+  resolution: "@types/node@npm:18.11.3"
+  checksum: 97da0b4e6505bf179cb0560e02d88e63681ba8d5a1105a91e2870d7ca9f15bc38728670586e96a25760f3830fa366dcb7c8a90f94eba2588ae1c62b55dad5fd6
   languageName: node
   linkType: hard
 
@@ -2412,7 +2412,7 @@ __metadata:
     "@babel/plugin-syntax-import-assertions": 7.18.6
     "@types/babel__core": 7.1.19
     "@types/eslint": 8.4.7
-    "@types/node": 16.11.59
+    "@types/node": 18.11.3
     "@types/prettier": 2.7.1
     "@types/web": 0.0.75
     "@typescript-eslint/eslint-plugin": 5.40.1
