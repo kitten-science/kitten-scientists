@@ -29,7 +29,7 @@
     "@babel/plugin-syntax-import-assertions": "7.18.6",
     "@types/babel__core": "7.1.19",
     "@types/eslint": "8.4.7",
-    "@types/node": "16.11.59",
+    "@types/node": "18.11.3",
     "@types/prettier": "2.7.1",
     "@types/web": "0.0.75",
     "@typescript-eslint/eslint-plugin": "5.40.1",
