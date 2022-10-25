@@ -16,7 +16,7 @@ Grab a build from the [Releases page](https://github.com/kitten-science/kitten-s
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-alpha.8/kitten-scientists-2.0.0-alpha.8.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-alpha.9/kitten-scientists-2.0.0-alpha.9.user.js';d.body.appendChild(s);})();
 ```
 
 ### Container
