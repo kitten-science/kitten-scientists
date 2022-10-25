@@ -4,7 +4,7 @@ docs_dir: docs
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/oliversalzburg/
+      link: https://github.com/kitten-science/
 markdown_extensions:
   - admonition
   - pymdownx.details
@@ -28,8 +28,8 @@ markdown_extensions:
 plugins:
   - git-revision-date-localized
   - search
-repo_name: oliversalzburg/cbc-kitten-scientists
-repo_url: https://github.com/oliversalzburg/cbc-kitten-scientists
+repo_name: kitten-science/kitten-scientists
+repo_url: https://github.com/kitten-science/kitten-scientists
 site_name: Kitten Scientists
 theme:
   features:

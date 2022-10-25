@@ -6,7 +6,7 @@ The project is set up to be used with [VS Code](https://code.visualstudio.com/).
 
 ### Introduction
 
-The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in [userscript source code](https://github.com/oliversalzburg/cbc-kitten-scientists/tree/main/packages/userscript/source) and then be compiled into the userscript.
+The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in [userscript source code](https://github.com/kitten-science/kitten-scientists/tree/main/packages/userscript/source) and then be compiled into the userscript.
 
 ### Prerequisites
 
@@ -42,7 +42,7 @@ When the container is built, it downloads the latest version of the game from ht
 
 Additionally, the Kitten Scientists will use a pre-configured set of options. This makes it easier to always start debugging with a defined state.
 
-If you need to make changes to either the stored game state or the pre-configured options, see the [`packages/userscript/source/fixtures`](https://github.com/oliversalzburg/cbc-kitten-scientists/tree/main/packages/userscript/source/fixtures) directory.
+If you need to make changes to either the stored game state or the pre-configured options, see the [`packages/userscript/source/fixtures`](https://github.com/kitten-science/kitten-scientists/tree/main/packages/userscript/source/fixtures) directory.
 The savegame data is a simple export from the game and the settings are a copy of the object that is stored in localStorage. This can be accessed through the DevTools of the browser.
 
 If you have another savegame to load, you can set the path in the environment variable `KG_SAVEGAME`, the default is `"./fixtures/lategame"`.  

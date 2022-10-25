@@ -5,13 +5,13 @@
   "description": "Containerized version of the Kitten Game",
   "license": "MIT",
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
-  "homepage": "https://github.com/oliversalzburg/cbc-kitten-scientists",
+  "homepage": "https://github.com/kitten-science/kitten-scientists",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oliversalzburg/cbc-kitten-scientists.git"
+    "url": "git+https://github.com/kitten-science/kitten-scientists.git"
   },
   "bugs": {
-    "url": "https://github.com/oliversalzburg/cbc-kitten-scientists/issues"
+    "url": "https://github.com/kitten-science/kitten-scientists/issues"
   },
   "main": "Dockerfile",
   "scripts": {

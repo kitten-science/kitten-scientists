@@ -1,6 +1,6 @@
 {
   "name": "Kitten Scientists",
-  "namespace": "https://github.com/oliversalzburg/",
+  "namespace": "https://github.com/kitten-science/",
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "match": [
     "https://kittensgame.com/web/",

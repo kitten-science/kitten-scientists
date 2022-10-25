@@ -11,27 +11,27 @@ Kitten Scientists (KS) is a simple automation script for the complex [Kittens Ga
 -   On **Firefox**, you'd want to use [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
 -   On **Chrome** and **Opera**, you'd want to use [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
 
-Grab a build from the [Releases page](https://github.com/oliversalzburg/cbc-kitten-scientists/releases) and install it.
+Grab a build from the [Releases page](https://github.com/kitten-science/kitten-scientists/releases) and install it.
 
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/oliversalzburg/cbc-kitten-scientists/releases/download/v2.0.0-alpha.8/kitten-scientists-2.0.0-alpha.8.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-alpha.8/kitten-scientists-2.0.0-alpha.8.user.js';d.body.appendChild(s);})();
 ```
 
 ### Container
 
-You can pull any version of the script as a container. The images are hosted on the [GitHub registry](https://github.com/oliversalzburg/cbc-kitten-scientists/pkgs/container/cbc-kitten-scientists).
+You can pull any version of the script as a container. The images are hosted on the [GitHub registry](https://github.com/kitten-science/kitten-scientists/pkgs/container/kitten-scientists).
 
 The container exposes Kitten Game's own development server on port 8080. It has the version of the userscript injected into it, according to the tag on the image.
 
 ```shell
-docker run --publish 8080:8080 --rm ghcr.io/oliversalzburg/cbc-kitten-scientists:2.0.0-alpha.8-dev-623cdd4
+docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-alpha.8-dev-623cdd4
 ```
 
 ## Warning
 
-The rest of this document has not been maintained for some time. While the script is still in its early development phase, the documentation is not planned to be maintained. After a solid beta state has been reached, all features will be documented at <https://oliversalzburg.github.io/cbc-kitten-scientists/>.
+The rest of this document has not been maintained for some time. While the script is still in its early development phase, the documentation is not planned to be maintained. After a solid beta state has been reached, all features will be documented at <https://kitten-science.github.io/kitten-scientists/>.
 
 ## Introduction
 
@@ -145,8 +145,8 @@ Note that _enabling_ a filter will cause the message to **not** be logged. This 
 
 If you would like to contribute to the Kitten Scientists, then you can do so in these ways:
 
--   [Submit issues or bugs](https://github.com/oliversalzburg/cbc-kitten-scientists/issues/new) you find, or functionality that would improve the project.
--   Fork the repository, add some functionality, then [submit a pull request](https://github.com/oliversalzburg/cbc-kitten-scientists/compare).
+-   [Submit issues or bugs](https://github.com/kitten-science/kitten-scientists/issues/new) you find, or functionality that would improve the project.
+-   Fork the repository, add some functionality, then [submit a pull request](https://github.com/kitten-science/kitten-scientists/compare).
 
 Thanks to these past and present contributors!
 
