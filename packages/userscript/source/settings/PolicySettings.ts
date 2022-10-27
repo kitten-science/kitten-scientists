@@ -14,14 +14,14 @@ export class PolicySetting extends Setting {
   }
 }
 
+export type PolicyPolicySettings = Record<Policy, PolicySetting>;
+
 export class PolicySettings extends Setting {
-  policies: {
-    [item in Policy]: PolicySetting;
-  };
+  policies: PolicyPolicySettings;
 
   constructor(
     enabled = false,
-    policies = {
+    policies: PolicyPolicySettings = {
       authocracy: new PolicySetting("authocracy", false),
       bigStickPolicy: new PolicySetting("bigStickPolicy", false),
       carnivale: new PolicySetting("carnivale", false),

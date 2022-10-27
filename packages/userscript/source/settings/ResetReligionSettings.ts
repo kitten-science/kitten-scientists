@@ -20,12 +20,17 @@ export class ResetReligionBuildingSetting extends SettingTrigger {
   }
 }
 
+export type ResetReligionBuildingSettings = Record<
+  FaithItem | UnicornItem,
+  ResetReligionBuildingSetting
+>;
+
 export class ResetReligionSettings extends Setting {
-  readonly buildings: { [item in FaithItem | UnicornItem]: ResetReligionBuildingSetting };
+  readonly buildings: ResetReligionBuildingSettings;
 
   constructor(
     enabled = false,
-    buildings = {
+    buildings: ResetReligionBuildingSettings = {
       apocripha: new ResetReligionBuildingSetting(
         "apocripha",
         UnicornItemVariant.OrderOfTheSun,

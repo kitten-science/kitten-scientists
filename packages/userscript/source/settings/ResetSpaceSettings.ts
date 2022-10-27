@@ -12,14 +12,14 @@ export class ResetSpaceBuildingSetting extends SettingTrigger {
   }
 }
 
+export type ResetSpaceBuildingSettings = Record<SpaceBuildings, SettingTrigger>;
+
 export class ResetSpaceSettings extends Setting {
-  readonly buildings: {
-    [item in SpaceBuildings]: SettingTrigger;
-  };
+  readonly buildings: ResetSpaceBuildingSettings;
 
   constructor(
     enabled = false,
-    buildings = {
+    buildings: ResetSpaceBuildingSettings = {
       containmentChamber: new ResetSpaceBuildingSetting("containmentChamber", true, -1),
       cryostation: new ResetSpaceBuildingSetting("cryostation", true, -1),
       entangler: new ResetSpaceBuildingSetting("entangler", true, -1),

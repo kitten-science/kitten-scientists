@@ -15,12 +15,14 @@ export class ResetResourcesSettingsItem extends Setting {
   }
 }
 
+export type ResetResourcesResourceSettings = Record<Resource, ResetResourcesSettingsItem>;
+
 export class ResetResourcesSettings extends Setting {
-  resources: { [item in Resource]: ResetResourcesSettingsItem };
+  resources: ResetResourcesResourceSettings;
 
   constructor(
     enabled = false,
-    resources = {
+    resources: ResetResourcesResourceSettings = {
       alloy: new ResetResourcesSettingsItem("alloy", false, 0),
       antimatter: new ResetResourcesSettingsItem("antimatter", false, 0),
       beam: new ResetResourcesSettingsItem("beam", false, 0),

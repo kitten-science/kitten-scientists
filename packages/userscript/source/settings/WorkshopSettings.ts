@@ -20,12 +20,10 @@ export class CraftSettingsItem extends SettingLimitedMax {
   }
 }
 
-export type WorkshopSettingsItems = {
-  [item in ResourceCraftable]: CraftSettingsItem;
-};
+export type WorkshopResourceSettings = Record<ResourceCraftable, CraftSettingsItem>;
 
 export class WorkshopSettings extends SettingTrigger {
-  resources: WorkshopSettingsItems;
+  resources: WorkshopResourceSettings;
 
   shipOverride: Setting;
   unlockUpgrades: UpgradeSettings;
@@ -33,7 +31,7 @@ export class WorkshopSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = 0.95,
-    resources: WorkshopSettingsItems = {
+    resources: WorkshopResourceSettings = {
       alloy: new CraftSettingsItem("alloy", "titanium"),
       beam: new CraftSettingsItem("beam", "wood"),
       blueprint: new CraftSettingsItem("blueprint", "science"),

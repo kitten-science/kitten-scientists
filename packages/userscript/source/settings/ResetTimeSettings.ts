@@ -15,14 +15,14 @@ export class ResetTimeBuildingSetting extends SettingTrigger {
   }
 }
 
+export type ResetTimeBuildingSettings = Record<TimeItem, ResetTimeBuildingSetting>;
+
 export class ResetTimeSettings extends Setting {
-  readonly buildings: {
-    [item in TimeItem]: ResetTimeBuildingSetting;
-  };
+  readonly buildings: ResetTimeBuildingSettings;
 
   constructor(
     enabled = false,
-    buildings = {
+    buildings: ResetTimeBuildingSettings = {
       blastFurnace: new ResetTimeBuildingSetting(
         "blastFurnace",
         TimeItemVariant.Chronoforge,

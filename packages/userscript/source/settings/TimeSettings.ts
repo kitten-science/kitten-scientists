@@ -26,19 +26,17 @@ export class TimeSettingsItem extends SettingMax {
   }
 }
 
-export type TimeSettingsItems = {
-  [item in TimeItem]: TimeSettingsItem;
-};
+export type TimeBuildingsSettings = Record<TimeItem, TimeSettingsItem>;
 
 export class TimeSettings extends SettingTrigger {
-  buildings: TimeSettingsItems;
+  buildings: TimeBuildingsSettings;
 
   fixCryochambers: SettingTrigger;
 
   constructor(
     enabled = false,
     trigger = 1,
-    buildings: TimeSettingsItems = {
+    buildings: TimeBuildingsSettings = {
       blastFurnace: new TimeSettingsItem("blastFurnace", TimeItemVariant.Chronoforge),
       chronocontrol: new TimeSettingsItem(
         "chronocontrol",

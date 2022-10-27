@@ -12,12 +12,10 @@ export class SpaceBuildingSetting extends SettingMax {
   }
 }
 
-export type SpaceSettingsItems = {
-  [item in SpaceBuildings]: SpaceBuildingSetting;
-};
+export type SpaceBuildingSettings = Record<SpaceBuildings, SpaceBuildingSetting>;
 
 export class SpaceSettings extends SettingTrigger {
-  buildings: SpaceSettingsItems;
+  buildings: SpaceBuildingSettings;
 
   unlockMissions: MissionSettings;
 

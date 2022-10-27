@@ -14,14 +14,14 @@ export class MissionSetting extends Setting {
   }
 }
 
+export type MissionMissionSettings = Record<Missions, MissionSetting>;
+
 export class MissionSettings extends Setting {
-  missions: {
-    [item in Missions]: MissionSetting;
-  };
+  missions: MissionMissionSettings;
 
   constructor(
     enabled = false,
-    missions = {
+    missions: MissionMissionSettings = {
       centaurusSystemMission: new MissionSetting("centaurusSystemMission", true),
       charonMission: new MissionSetting("charonMission", true),
       duneMission: new MissionSetting("duneMission", true),

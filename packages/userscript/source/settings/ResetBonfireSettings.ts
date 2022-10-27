@@ -12,15 +12,18 @@ export class ResetBonfireBuildingSetting extends SettingTrigger {
   }
 }
 
+// unicornPasture is handled in the Religion section.
+export type ResetBonfireBuildingSettings = Record<
+  Exclude<BonfireItem, "unicornPasture">,
+  ResetBonfireBuildingSetting
+>;
+
 export class ResetBonfireSettings extends Setting {
-  readonly buildings: {
-    // unicornPasture is handled in the Religion section.
-    [item in Exclude<BonfireItem, "unicornPasture">]: ResetBonfireBuildingSetting;
-  };
+  readonly buildings: ResetBonfireBuildingSettings;
 
   constructor(
     enabled = false,
-    buildings = {
+    buildings: ResetBonfireBuildingSettings = {
       academy: new ResetBonfireBuildingSetting("academy", true, -1),
       accelerator: new ResetBonfireBuildingSetting("accelerator", true, -1),
       aiCore: new ResetBonfireBuildingSetting("aiCore", true, -1),

@@ -44,14 +44,30 @@ export type FilterItem =
 export class FilterSettingsItem extends Setting {
   variant: FilterItemVariant;
 
-  constructor(id: string, variant: FilterItemVariant) {
+  constructor(variant: FilterItemVariant) {
     super(true);
     this.variant = variant;
   }
 }
 
 export type FilterSettingsItems = {
-  [item in FilterItem]: FilterSettingsItem;
+  build: FilterSettingsItem;
+  craft: FilterSettingsItem;
+  upgrade: FilterSettingsItem;
+  research: FilterSettingsItem;
+  trade: FilterSettingsItem;
+  hunt: FilterSettingsItem;
+  praise: FilterSettingsItem;
+  adore: FilterSettingsItem;
+  transcend: FilterSettingsItem;
+  faith: FilterSettingsItem;
+  accelerate: FilterSettingsItem;
+  timeSkip: FilterSettingsItem;
+  festival: FilterSettingsItem;
+  star: FilterSettingsItem;
+  distribute: FilterSettingsItem;
+  promote: FilterSettingsItem;
+  misc: FilterSettingsItem;
 };
 
 export class FilterSettings extends Setting {
@@ -60,23 +76,23 @@ export class FilterSettings extends Setting {
   constructor(
     enabled = false,
     filters: FilterSettingsItems = {
-      buildFilter: new FilterSettingsItem("buildFilter", FilterItemVariant.Build),
-      craftFilter: new FilterSettingsItem("craftFilter", FilterItemVariant.Craft),
-      upgradeFilter: new FilterSettingsItem("upgradeFilter", FilterItemVariant.Upgrade),
-      researchFilter: new FilterSettingsItem("researchFilter", FilterItemVariant.Research),
-      tradeFilter: new FilterSettingsItem("tradeFilter", FilterItemVariant.Trade),
-      huntFilter: new FilterSettingsItem("huntFilter", FilterItemVariant.Hunt),
-      praiseFilter: new FilterSettingsItem("praiseFilter", FilterItemVariant.Praise),
-      adoreFilter: new FilterSettingsItem("adoreFilter", FilterItemVariant.Adore),
-      transcendFilter: new FilterSettingsItem("transcendFilter", FilterItemVariant.Transcend),
-      faithFilter: new FilterSettingsItem("faithFilter", FilterItemVariant.Faith),
-      accelerateFilter: new FilterSettingsItem("accelerateFilter", FilterItemVariant.Accelerate),
-      timeSkipFilter: new FilterSettingsItem("timeSkipFilter", FilterItemVariant.TimeSkip),
-      festivalFilter: new FilterSettingsItem("festivalFilter", FilterItemVariant.Festival),
-      starFilter: new FilterSettingsItem("starFilter", FilterItemVariant.Star),
-      distributeFilter: new FilterSettingsItem("distributeFilter", FilterItemVariant.Distribute),
-      promoteFilter: new FilterSettingsItem("promoteFilter", FilterItemVariant.Promote),
-      miscFilter: new FilterSettingsItem("miscFilter", FilterItemVariant.Misc),
+      build: new FilterSettingsItem(FilterItemVariant.Build),
+      craft: new FilterSettingsItem(FilterItemVariant.Craft),
+      upgrade: new FilterSettingsItem(FilterItemVariant.Upgrade),
+      research: new FilterSettingsItem(FilterItemVariant.Research),
+      trade: new FilterSettingsItem(FilterItemVariant.Trade),
+      hunt: new FilterSettingsItem(FilterItemVariant.Hunt),
+      praise: new FilterSettingsItem(FilterItemVariant.Praise),
+      adore: new FilterSettingsItem(FilterItemVariant.Adore),
+      transcend: new FilterSettingsItem(FilterItemVariant.Transcend),
+      faith: new FilterSettingsItem(FilterItemVariant.Faith),
+      accelerate: new FilterSettingsItem(FilterItemVariant.Accelerate),
+      timeSkip: new FilterSettingsItem(FilterItemVariant.TimeSkip),
+      festival: new FilterSettingsItem(FilterItemVariant.Festival),
+      star: new FilterSettingsItem(FilterItemVariant.Star),
+      distribute: new FilterSettingsItem(FilterItemVariant.Distribute),
+      promote: new FilterSettingsItem(FilterItemVariant.Promote),
+      misc: new FilterSettingsItem(FilterItemVariant.Misc),
     }
   ) {
     super(enabled);
@@ -95,7 +111,7 @@ export class FilterSettings extends Setting {
     subject.toggles.filter = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.filters)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
+      subject.items[`toggle-${name}Filter` as const] = item.enabled;
     }
   }
 
@@ -104,7 +120,7 @@ export class FilterSettings extends Setting {
     options.enabled = subject.toggles.filter;
 
     for (const [name, item] of objectEntries(options.filters)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
+      item.enabled = subject.items[`toggle-${name}Filter` as const] ?? item.enabled;
     }
     return options;
   }

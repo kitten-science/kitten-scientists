@@ -12,14 +12,14 @@ export class BuildingUpgradeSetting extends Setting {
   }
 }
 
+export type BuildingUpdateBuildingSettings = Record<StagedBuilding, BuildingUpgradeSetting>;
+
 export class BuildingUpgradeSettings extends Setting {
-  buildings: {
-    [item in StagedBuilding]: BuildingUpgradeSetting;
-  };
+  buildings: BuildingUpdateBuildingSettings;
 
   constructor(
     enabled = false,
-    buildings = {
+    buildings: BuildingUpdateBuildingSettings = {
       broadcasttower: new BuildingUpgradeSetting("broadcasttower", true),
       dataCenter: new BuildingUpgradeSetting("dataCenter", true),
       hydroplant: new BuildingUpgradeSetting("hydroplant", true),

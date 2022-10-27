@@ -3,12 +3,10 @@ import { Job } from "../types";
 import { Setting, SettingMax, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
 
-export type VillageSettingsItems = {
-  [item in Job]: SettingMax;
-};
+export type VillageJobSettings = Record<Job, SettingMax>;
 
 export class VillageSettings extends Setting {
-  jobs: VillageSettingsItems;
+  jobs: VillageJobSettings;
 
   holdFestivals: Setting;
   hunt: SettingTrigger;
@@ -16,7 +14,7 @@ export class VillageSettings extends Setting {
 
   constructor(
     enabled = false,
-    jobs: VillageSettingsItems = {
+    jobs: VillageJobSettings = {
       engineer: new SettingMax(true, 1),
       farmer: new SettingMax(true, 1),
       geologist: new SettingMax(true, 1),

@@ -23,10 +23,10 @@ export class ResourcesSettingsItem extends Setting {
   }
 }
 
-export type ResourcesSettingsItems = { [item in Resource]: ResourcesSettingsItem };
+export type ResourcesResourceSettings = { [item in Resource]: ResourcesSettingsItem };
 
 export class ResourcesSettings extends Setting {
-  resources: ResourcesSettingsItems;
+  resources: ResourcesResourceSettings;
 
   constructor(
     resources = {

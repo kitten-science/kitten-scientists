@@ -12,14 +12,14 @@ export class EmbassySetting extends SettingMax {
   }
 }
 
+export type EmbassyRaceSettings = Record<Race, SettingMax>;
+
 export class EmbassySettings extends SettingTrigger {
-  races: {
-    [item in Race]: SettingMax;
-  };
+  races: EmbassyRaceSettings;
 
   constructor(
     enabled = false,
-    races = {
+    races: EmbassyRaceSettings = {
       dragons: new EmbassySetting("dragons", true),
       griffins: new EmbassySetting("griffins", true),
       leviathans: new EmbassySetting("leviathans", true),

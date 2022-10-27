@@ -14,14 +14,14 @@ export class TechSetting extends Setting {
   }
 }
 
+export type TechTechSettings = Record<Technology, TechSetting>;
+
 export class TechSettings extends Setting {
-  techs: {
-    [item in Technology]: TechSetting;
-  };
+  techs: TechTechSettings;
 
   constructor(
     enabled = false,
-    techs = {
+    techs: TechTechSettings = {
       acoustics: new TechSetting("acoustics", true),
       advExogeology: new TechSetting("advExogeology", true),
       agriculture: new TechSetting("agriculture", true),

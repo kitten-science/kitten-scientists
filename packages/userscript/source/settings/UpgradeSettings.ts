@@ -14,14 +14,14 @@ export class UpgradeSetting extends Setting {
   }
 }
 
+export type UpgradeUpgradeSettings = Record<Upgrade, UpgradeSetting>;
+
 export class UpgradeSettings extends Setting {
-  upgrades: {
-    [item in Upgrade]: UpgradeSetting;
-  };
+  upgrades: UpgradeUpgradeSettings;
 
   constructor(
     enabled = false,
-    upgrades = {
+    upgrades: UpgradeUpgradeSettings = {
       advancedAutomation: new UpgradeSetting("advancedAutomation", true),
       advancedRefinement: new UpgradeSetting("advancedRefinement", true),
       aiBases: new UpgradeSetting("aiBases", true),
