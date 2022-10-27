@@ -1,16 +1,12 @@
 import { objectEntries } from "../tools/Entries";
-import { Race } from "../types";
+import { Race, Season } from "../types";
 import { EmbassySettings } from "./EmbassySettings";
 import { Requirement, Setting, SettingLimited, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
 
 export class TradeSettingsItem extends SettingLimited {
   readonly race: Race;
-
-  summer: Setting;
-  autumn: Setting;
-  winter: Setting;
-  spring: Setting;
+  readonly seasons: Record<Season, Setting>;
 
   /**
    * A resource that is required to trade with the race.
@@ -29,10 +25,12 @@ export class TradeSettingsItem extends SettingLimited {
   ) {
     super(enabled, limited);
     this.race = race;
-    this.summer = new Setting(summer);
-    this.autumn = new Setting(autumn);
-    this.winter = new Setting(winter);
-    this.spring = new Setting(spring);
+    this.seasons = {
+      summer: new Setting(summer),
+      autumn: new Setting(autumn),
+      winter: new Setting(winter),
+      spring: new Setting(spring),
+    };
     this.require = require;
   }
 }
@@ -92,10 +90,10 @@ export class TradeSettings extends SettingTrigger {
     for (const [name, item] of objectEntries(settings.races)) {
       this.races[name].enabled = item.enabled;
       this.races[name].limited = item.limited;
-      this.races[name].autumn = item.autumn;
-      this.races[name].spring = item.spring;
-      this.races[name].summer = item.summer;
-      this.races[name].winter = item.winter;
+      this.races[name].seasons.autumn = item.seasons.autumn;
+      this.races[name].seasons.spring = item.seasons.spring;
+      this.races[name].seasons.summer = item.seasons.summer;
+      this.races[name].seasons.winter = item.seasons.winter;
     }
 
     this.buildEmbassies.load(settings.buildEmbassies);
@@ -111,10 +109,10 @@ export class TradeSettings extends SettingTrigger {
     for (const [name, item] of objectEntries(settings.races)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`toggle-limited-${name}` as const] = item.limited;
-      subject.items[`toggle-${name}-autumn` as const] = item.autumn.enabled;
-      subject.items[`toggle-${name}-spring` as const] = item.spring.enabled;
-      subject.items[`toggle-${name}-summer` as const] = item.summer.enabled;
-      subject.items[`toggle-${name}-winter` as const] = item.winter.enabled;
+      subject.items[`toggle-${name}-autumn` as const] = item.seasons.autumn.enabled;
+      subject.items[`toggle-${name}-spring` as const] = item.seasons.spring.enabled;
+      subject.items[`toggle-${name}-summer` as const] = item.seasons.summer.enabled;
+      subject.items[`toggle-${name}-winter` as const] = item.seasons.winter.enabled;
     }
 
     EmbassySettings.toLegacyOptions(settings.buildEmbassies, subject);
@@ -132,10 +130,14 @@ export class TradeSettings extends SettingTrigger {
     for (const [name, item] of objectEntries(options.races)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
-      item.autumn.enabled = subject.items[`toggle-${name}-autumn` as const] ?? item.autumn.enabled;
-      item.spring.enabled = subject.items[`toggle-${name}-spring` as const] ?? item.spring.enabled;
-      item.summer.enabled = subject.items[`toggle-${name}-summer` as const] ?? item.summer.enabled;
-      item.winter.enabled = subject.items[`toggle-${name}-winter` as const] ?? item.winter.enabled;
+      item.seasons.autumn.enabled =
+        subject.items[`toggle-${name}-autumn` as const] ?? item.seasons.autumn.enabled;
+      item.seasons.spring.enabled =
+        subject.items[`toggle-${name}-spring` as const] ?? item.seasons.spring.enabled;
+      item.seasons.summer.enabled =
+        subject.items[`toggle-${name}-summer` as const] ?? item.seasons.summer.enabled;
+      item.seasons.winter.enabled =
+        subject.items[`toggle-${name}-winter` as const] ?? item.seasons.winter.enabled;
     }
 
     options.buildEmbassies = EmbassySettings.fromLegacyOptions(subject);

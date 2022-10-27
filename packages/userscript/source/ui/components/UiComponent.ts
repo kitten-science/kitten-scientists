@@ -1,3 +1,4 @@
+import { cerror } from "../../tools/Log";
 import { UserScript } from "../../UserScript";
 
 export abstract class UiComponent extends EventTarget {
@@ -20,7 +21,11 @@ export abstract class UiComponent extends EventTarget {
 
   refreshUi() {
     for (const child of this.children) {
-      child.refreshUi();
+      try {
+        child.refreshUi();
+      } catch (error) {
+        cerror("Error while refreshing child component!", error);
+      }
     }
   }
 

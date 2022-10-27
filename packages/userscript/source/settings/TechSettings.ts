@@ -122,13 +122,13 @@ export class TechSettings extends Setting {
   }
 
   static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new TechSettings();
-    options.enabled = subject.items["toggle-policies"] ?? options.enabled;
+    const settings = new TechSettings();
+    settings.enabled = subject.items["toggle-policies"] ?? settings.enabled;
 
-    for (const [name, item] of objectEntries(options.techs)) {
+    for (const [name, item] of objectEntries(settings.techs)) {
       item.enabled = subject.items[`toggle-tech-${name}` as const] ?? item.enabled;
     }
 
-    return options;
+    return settings;
   }
 }

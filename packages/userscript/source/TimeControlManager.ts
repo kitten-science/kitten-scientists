@@ -350,13 +350,15 @@ export class TimeControlManager {
 
     // If skipping during this season was disabled, bail out.
     const season = this._host.gamePage.calendar.season;
-    if (!this.settings.timeSkip[this._host.gamePage.calendar.seasons[season].name].enabled) {
+    if (
+      !this.settings.timeSkip.seasons[this._host.gamePage.calendar.seasons[season].name].enabled
+    ) {
       return;
     }
 
     // If skipping during this cycle was disabled, bail out.
     const currentCycle = this._host.gamePage.calendar.cycle;
-    if (!this.settings.timeSkip.cycles[currentCycle].enabled) {
+    if (!this.settings.timeSkip.cyclesList[currentCycle].enabled) {
       return;
     }
 
@@ -386,16 +388,18 @@ export class TimeControlManager {
       let skipCycles = 1;
       while (
         yearsPerCycle < canSkip &&
-        this.settings.timeSkip.cycles[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
-          .enabled
+        this.settings.timeSkip.cyclesList[
+          ((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices
+        ].enabled
       ) {
         willSkip += yearsPerCycle;
         canSkip -= yearsPerCycle;
         skipCycles += 1;
       }
       if (
-        this.settings.timeSkip.cycles[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
-          .enabled &&
+        this.settings.timeSkip.cyclesList[
+          ((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices
+        ].enabled &&
         0 < canSkip
       ) {
         willSkip += canSkip;
