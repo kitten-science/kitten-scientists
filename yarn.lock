@@ -153,10 +153,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-plugin-utils@npm:^7.18.6":
-  version: 7.18.6
-  resolution: "@babel/helper-plugin-utils@npm:7.18.6"
-  checksum: ef6f2e319fa0f262c82a841e9b9d177159fe0c086e14207bc44bea162e655b177872ad56c1cbbcb2290304791539943a243a490a76cccba63be7386ea05690e1
+"@babel/helper-plugin-utils@npm:^7.19.0":
+  version: 7.19.0
+  resolution: "@babel/helper-plugin-utils@npm:7.19.0"
+  checksum: 9ae9c09cf7e3b6023be2bb66f3ca3b5fa8c2b21b58bd09819d494fcd7ab2a1844056c8dfd609ffb474e3c857a1bc979fa7a60931b0c71d69a3e939ba724498ac
   languageName: node
   linkType: hard
 
@@ -280,14 +280,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-import-assertions@npm:7.18.6":
-  version: 7.18.6
-  resolution: "@babel/plugin-syntax-import-assertions@npm:7.18.6"
+"@babel/plugin-syntax-import-assertions@npm:7.20.0":
+  version: 7.20.0
+  resolution: "@babel/plugin-syntax-import-assertions@npm:7.20.0"
   dependencies:
-    "@babel/helper-plugin-utils": ^7.18.6
+    "@babel/helper-plugin-utils": ^7.19.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: b2673462593bac392d09679b3f6273784d2c5b8424d5c9c37cc9318e66d190b585789f0ec8aea76a4eeb945210f3193757461e34f4ffec3a0011d338512f384d
+  checksum: 0ac0176984ad799b39264070007737c514ea95e4b3c3c515ecddef958629abcd3c8e8810fd60fb63de5a8f3f7022dd2c7af7580b819a9207acc372c8b8ec878e
   languageName: node
   linkType: hard
 
@@ -2409,7 +2409,7 @@ __metadata:
   dependencies:
     "@babel/core": 7.19.6
     "@babel/eslint-parser": 7.19.1
-    "@babel/plugin-syntax-import-assertions": 7.18.6
+    "@babel/plugin-syntax-import-assertions": 7.20.0
     "@types/babel__core": 7.1.19
     "@types/eslint": 8.4.7
     "@types/node": 18.11.3
