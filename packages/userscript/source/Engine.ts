@@ -34,6 +34,7 @@ export type Automation = {
   tick(context: TickContext): void | Promise<void>;
 };
 export type EngineState = {
+  v: string;
   engine: EngineSettings;
   bonfire: BonfireSettings;
   religion: ReligionSettings;
@@ -116,6 +117,7 @@ export class Engine {
 
   stateSerialize(): EngineState {
     return {
+      v: KS_VERSION ?? "latest",
       engine: this.settings,
       bonfire: this.bonfireManager.settings,
       religion: this.religionManager.settings,

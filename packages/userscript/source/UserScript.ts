@@ -130,6 +130,7 @@ export class UserScript {
 
   loadLegacyOptions(source: LegacyStorage) {
     this.engine.stateLoad({
+      v: KS_VERSION ?? "latest",
       bonfire: BonfireSettings.fromLegacyOptions(source),
       engine: EngineSettings.fromLegacyOptions(source),
       religion: ReligionSettings.fromLegacyOptions(source),
