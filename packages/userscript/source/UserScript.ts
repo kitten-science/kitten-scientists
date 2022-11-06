@@ -158,23 +158,31 @@ export class UserScript {
       workshop: this.engine.workshopManager.settings,
     });
   }
+
   getSettings(): EngineState {
     return this.engine.stateSerialize();
   }
+  encodeSettings(settings: EngineState) {
+    const settingsString = JSON.stringify(settings);
+    return window.LZString.compressToBase64(settingsString);
+  }
   copySettings() {
     const settings = this.getSettings();
-    const settingsString = JSON.stringify(settings);
-    const compressedSettings = window.LZString.compressToBase64(settingsString);
+    const compressedSettings = this.encodeSettings(settings);
     return window.navigator.clipboard.writeText(compressedSettings);
   }
+
   setSettings(settings: EngineState) {
     cinfo("Loading engine state...");
     this.engine.stateLoad(settings);
     this._userInterface.refreshUi();
   }
-  importSettings(compressedSettings: string) {
+  decodeSettings(compressedSettings: string): EngineState {
     const settingsString = window.LZString.decompressFromBase64(compressedSettings);
-    const settings = JSON.parse(settingsString) as EngineState;
+    return JSON.parse(settingsString) as EngineState;
+  }
+  importSettings(compressedSettings: string) {
+    const settings = this.decodeSettings(compressedSettings);
     this.setSettings(settings);
   }
 
