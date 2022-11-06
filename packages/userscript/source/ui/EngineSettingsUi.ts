@@ -29,10 +29,10 @@ export class EngineSettingsUi {
     this.expando = new ExpandoButton(host);
     this.element.append(this.expando.element);
 
-    this.copyButton = new CopyButton(host);
+    this.copyButton = new CopyButton(host, "Copy settings to clipboard");
     this.element.append(this.copyButton.element);
 
-    this.importButton = new ImportButton(host);
+    this.importButton = new ImportButton(host, "Import settings");
     this.element.append(this.importButton.element);
   }
 
