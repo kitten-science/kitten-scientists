@@ -1,7 +1,7 @@
+import { cinfo } from "../tools/Log";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
-import { ExpandoButton } from "./components/ExpandoButton";
 import { EngineSettingsUi } from "./EngineSettingsUi";
 import { FiltersSettingsUi } from "./FilterSettingsUi";
 import { OptionsSettingsUi } from "./OptionsSettingsUi";
@@ -78,10 +78,8 @@ export class UserInterface {
     optionsListElement.append(this._optionsUi.element);
     optionsListElement.append(this._filterUi.element);
 
-    const expando = new ExpandoButton(this._host);
-    this._engineUi.element.append(expando.element);
-
     // Make _engineUI's expando button hide/show the other option groups
+    const expando = this._engineUi.expando;
     let sectionsVisible = false;
     expando.element.on("click", () => {
       sectionsVisible = !sectionsVisible;
@@ -103,6 +101,20 @@ export class UserInterface {
       this._distributeUi.toggle(sectionsVisible);
       this._optionsUi.toggle(sectionsVisible);
       this._filterUi.toggle(sectionsVisible);
+    });
+
+    const copyButton = this._engineUi.copyButton;
+    copyButton.element.on("click", () => {
+      this._host.copySettings().catch(console.error);
+      cinfo("Settings copied to clipboard.");
+    });
+    this._engineUi.importButton.element.on("click", () => {
+      const input = window.prompt("Settings BLOB");
+      if (isNil(input)) {
+        return;
+      }
+      this._host.importSettings(input);
+      cinfo("Settings imported.");
     });
 
     // Set up the "show activity summary" area.

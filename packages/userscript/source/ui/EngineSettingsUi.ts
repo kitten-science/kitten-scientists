@@ -1,10 +1,16 @@
 import { EngineSettings } from "../settings/EngineSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
+import { CopyButton } from "./components/CopyButton";
+import { ExpandoButton } from "./components/ExpandoButton";
+import { ImportButton } from "./components/ImportButton";
 import { SettingListItem } from "./components/SettingListItem";
 
 export class EngineSettingsUi {
+  readonly copyButton: CopyButton;
   readonly element: JQuery<HTMLElement>;
+  readonly expando: ExpandoButton;
+  readonly importButton: ImportButton;
   private readonly _element: SettingListItem;
   private readonly _settings: EngineSettings;
 
@@ -19,6 +25,15 @@ export class EngineSettingsUi {
       onUnCheck: () => host.engine.stop(true),
     });
     this.element = this._element.element;
+
+    this.expando = new ExpandoButton(host);
+    this.element.append(this.expando.element);
+
+    this.copyButton = new CopyButton(host);
+    this.element.append(this.copyButton.element);
+
+    this.importButton = new ImportButton(host);
+    this.element.append(this.importButton.element);
   }
 
   setState(state: EngineSettings): void {

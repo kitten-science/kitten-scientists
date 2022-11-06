@@ -24,13 +24,19 @@ declare global {
   const KS_VERSION: string | null;
   let unsafeWindow: Window | undefined;
   interface Window {
+    $: JQuery;
+    $I?: Maybe<I18nEngine>;
     dojo: {
       clone: <T>(subject: T) => T;
       subscribe: (event: string, handler: (...args: any[]) => void) => void;
     };
     gamePage?: Maybe<GamePage>;
-    $: JQuery;
-    $I?: Maybe<I18nEngine>;
+    LZString: {
+      compressToBase64: (input: string) => string;
+      compressToUTF16: (input: string) => string;
+      decompressFromBase64: (input: string) => string;
+      decompressFromUTF16: (input: string) => string;
+    };
   }
 }
 
@@ -151,12 +157,24 @@ export class UserScript {
       workshop: this.engine.workshopManager.settings,
     });
   }
-  getSettings() {
+  getSettings(): EngineState {
     return this.engine.stateSerialize();
+  }
+  copySettings() {
+    const settings = this.getSettings();
+    const settingsString = JSON.stringify(settings);
+    const compressedSettings = window.LZString.compressToBase64(settingsString);
+    return window.navigator.clipboard.writeText(compressedSettings);
   }
   setSettings(settings: EngineState) {
     cinfo("Loading engine state...");
     this.engine.stateLoad(settings);
+    this._userInterface.refreshUi();
+  }
+  importSettings(compressedSettings: string) {
+    const settingsString = window.LZString.decompressFromBase64(compressedSettings);
+    const settings = JSON.parse(settingsString) as EngineState;
+    this.setSettings(settings);
   }
 
   installSaveManager() {

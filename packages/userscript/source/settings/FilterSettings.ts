@@ -103,6 +103,10 @@ export class FilterSettings extends Setting {
     this.enabled = settings.enabled;
 
     for (const [name, item] of objectEntries(settings.filters)) {
+      if (!this.filters[name]) {
+        console.warn(`Outdated filter '${name}' is ignored on settings load.`);
+        continue;
+      }
       this.filters[name].enabled = item.enabled;
     }
   }
