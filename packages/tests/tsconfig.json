@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "source",
+    "module": "commonjs",
+    "outDir": "output",
+    "tsBuildInfoFile": "output/.tsbuildinfo",
+    "types": ["@types/mocha", "@types/node"]
+  },
+  "include": ["../../@types", "./source"]
+}

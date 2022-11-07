@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "@kitten-science/tests",
+  "version": "latest",
+  "license": "MIT",
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
+  "homepage": "https://github.com/kitten-science/kitten-scientists",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitten-science/kitten-scientists.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kitten-science/kitten-scientists/issues"
+  },
+  "scripts": {
+    "tests:build": "tsc --build",
+    "tests:run": "mocha --timeout 10000 output/*.spec.js"
+  },
+  "dependencies": {
+    "tslib": "2.4.1"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10",
+    "@types/selenium-webdriver": "^4",
+    "chromedriver": "107.0.3",
+    "mocha": "10.1.0",
+    "selenium-webdriver": "4.6.0",
+    "typescript": "4.8.4"
+  }
+}
