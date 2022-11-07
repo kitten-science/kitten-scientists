@@ -2,6 +2,8 @@
 
 # Kitten Scientists V2
 
+[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=a3cxbHphUDA2V0hiS01IZVI1RWVBNFpxRmZGMDMxbGNBZE1HeCtyVkdmWT0tLWFKNjFscC9Wb0tzdEhsbTNMVU9udkE9PQ==--d8207026fbdfbecc4011a24e0e001e31f0892dc1)](https://automate.browserstack.com/public-build/a3cxbHphUDA2V0hiS01IZVI1RWVBNFpxRmZGMDMxbGNBZE1HeCtyVkdmWT0tLWFKNjFscC9Wb0tzdEhsbTNMVU9udkE9PQ==--d8207026fbdfbecc4011a24e0e001e31f0892dc1)
+
 Kitten Scientists (KS) is a simple automation script for the complex [Kittens Game](http://kittensgame.com/web/). It was originally developed by [Cameron Condry](https://github.com/cameroncondry/cbc-kitten-scientists) and extended by many great [contributors](#contributors).
 
 ## Installation
