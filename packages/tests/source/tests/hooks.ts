@@ -7,7 +7,13 @@ const bs_local_args = { key: process.env.BROWSERSTACK_ACCESS_KEY };
 
 export const mochaHooks = {
   beforeAll(done: () => unknown) {
-    console.log("Setting up BrowserStack Local...");
+    if (!process.env.BROWSERSTACK_ACCESS_KEY) {
+      console.log("Skipping BrowserStackLocal due to missing key.");
+      done();
+      return;
+    }
+
+    console.log("Setting up BrowserStackLocal...");
     // Starts the Local instance with the required arguments.
     bs_local.start(bs_local_args, function () {
       console.log("Started BrowserStackLocal");
