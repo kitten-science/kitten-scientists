@@ -31,8 +31,8 @@ describe("Smoke test", function () {
       driver = await new Builder().forBrowser("chrome").build();
     }
 
-    await driver.manage().window().setSize(1024, 768);
     await driver.navigate().to(config.baseUrl);
+    await driver.manage().window().setRect({ width: 1366, height: 960 });
   });
 
   beforeEach(async function () {
