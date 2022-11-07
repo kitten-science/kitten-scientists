@@ -9,6 +9,7 @@ const accessKey = process.env.BROWSERSTACK_ACCESS_KEY;
 describe("Smoke test", function () {
   let driver: WebDriver;
   let kg: KittenGamePage;
+  let allPassed = true;
 
   before(async function () {
     if (username && accessKey) {
@@ -32,7 +33,7 @@ describe("Smoke test", function () {
     }
 
     await driver.navigate().to(config.baseUrl);
-    await driver.manage().window().setRect({ width: 1366, height: 960 });
+    await driver.manage().window().setRect({ width: 1460, height: 1080 });
   });
 
   beforeEach(async function () {
@@ -43,7 +44,22 @@ describe("Smoke test", function () {
     await kg.waitForLoadComplete();
   });
 
-  after(async () => await driver.quit());
+  afterEach(function () {
+    if (!this.currentTest) {
+      return;
+    }
+    allPassed = allPassed && this.currentTest.state === "passed";
+  });
+
+  after(async () => {
+    await driver.executeScript(
+      `'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"${
+        allPassed ? "passed" : "failed"
+      }"}}'`
+    );
+
+    await driver.quit();
+  });
 
   it("Gathers catnip", async function () {
     await kg.testGatherCatnip();
