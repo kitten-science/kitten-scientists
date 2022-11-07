@@ -63,16 +63,22 @@ describe("Smoke test", function () {
   });
 
   after(async () => {
-    await driver.executeScript(
-      `browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"${
-        allPassed ? "passed" : "failed"
-      }", "reason": "${`${countPassed} / ${countTotal} passed.`}"}}`
-    );
+    if (username && accessKey) {
+      await driver.executeScript(
+        `browserstack_executor: {"action": "setSessionStatus", "arguments": {"status": "${
+          allPassed ? "passed" : "failed"
+        }", "reason": "${countPassed} / ${countTotal} passed."}}`
+      );
+    }
 
     await driver.quit();
   });
 
-  it("Gathers catnip", async function () {
+  it("gathers catnip", async function () {
     await kg.testGatherCatnip();
+  });
+
+  it("builds a field", async function () {
+    await kg.testBuildField();
   });
 });

@@ -8,6 +8,12 @@ export class KittenGamePage {
   get catnipButton() {
     return By.css("td:nth-child(1) .btnContent");
   }
+  get refineCatnipButton() {
+    return By.css("td:nth-child(1) .btnContent");
+  }
+  get catnipFieldButton() {
+    return By.css(".btn:nth-child(2) .btnContent");
+  }
   get loadingContainer() {
     return By.css("#loadingContainer");
   }
@@ -23,7 +29,7 @@ export class KittenGamePage {
     );
   }
   async waitForLoadStart() {
-    await this.driver.wait(until.elementLocated(this.loadingContainer), 30000);
+    await this.driver.wait(until.elementLocated(this.loadingContainer), 15000);
   }
 
   async testGatherCatnip() {
@@ -31,8 +37,30 @@ export class KittenGamePage {
     await this.driver.findElement(this.catnipButton).click();
 
     const resAmountLocator = By.css(".resAmount");
-    await this.driver.wait(until.elementLocated(resAmountLocator), 30000);
+    await this.driver.wait(until.elementLocated(resAmountLocator), 3000);
     assert((await (await this.driver.findElement(resAmountLocator)).getText()) == "1");
+  }
+
+  async testBuildField() {
+    await this.driver.wait(until.elementLocated(this.catnipButton), 3000);
+    let clicksFailed = 0;
+    for (let fieldCount = 0; fieldCount < 10; ) {
+      try {
+        await this.driver.findElement(this.catnipButton).click();
+        await delay(100);
+        ++fieldCount;
+      } catch (error) {
+        if (10 < ++clicksFailed) {
+          throw error;
+        }
+      }
+    }
+
+    await this.driver.findElement(this.catnipFieldButton).click();
+    const buttonTitle = By.css(".btn:nth-child(2) .btnTitle");
+    await delay(1000);
+    await this.driver.wait(until.elementLocated(buttonTitle), 3000);
+    assert((await (await this.driver.findElement(buttonTitle)).getText()) == "Catnip Field (1)");
   }
 
   async wipe() {
