@@ -16,11 +16,15 @@ describe("Smoke test", function () {
         .usingServer(`http://${username}:${accessKey}@hub.browserstack.com/wd/hub`)
         .withCapabilities({
           "bstack:options": {
+            local: true,
             os: "Windows",
             osVersion: "11",
           },
           browserName: "Chrome",
           browserVersion: "103.0",
+          buildName: process.env.BROWSERSTACK_BUILD_NAME,
+          projectName: "Kitten Scientists",
+          sessionName: "Smoke tests",
         })
         .build();
     } else {
