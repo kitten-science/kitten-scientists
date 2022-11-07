@@ -23,8 +23,8 @@ describe("Smoke test", function () {
           browserName: "Chrome",
           browserVersion: "103.0",
           buildName: process.env.BROWSERSTACK_BUILD_NAME,
-          projectName: "Kitten Scientists",
-          sessionName: "Smoke tests",
+          projectName: "kitten-scientists",
+          sessionName: "smoke",
         })
         .build();
     } else {
