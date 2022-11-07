@@ -1,0 +1,46 @@
+name: UI Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    environment:
+      name: BrowserStack
+
+    steps:
+      - name: "BrowserStack Env Setup" # Invokes the setup-env action
+        uses: browserstack/github-actions/setup-env@master
+        with:
+          username: ${{ secrets.BROWSERSTACK_USERNAME }}
+          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      - name: "BrowserStack Local Tunnel Setup" # Invokes the setup-local action
+        uses: browserstack/github-actions/setup-local@master
+        with:
+          local-testing: start
+          local-identifier: random
+
+      - uses: actions/checkout@v3
+
+      - name: "Use Node.js 18.x"
+        uses: actions/setup-node@master
+        with:
+          node-version: 18.x
+
+      - name: Run DevContainer
+        run: |
+          yarn install
+          yarn devcontainer:run
+
+      - name: Run tests
+        run: |
+          yarn tests:build
+          yarn tests:run
+
+      - name: "BrowserStackLocal Stop" # Terminating the BrowserStackLocal tunnel connection
+        uses: browserstack/github-actions/setup-local@master
+        with:
+          local-testing: stop
