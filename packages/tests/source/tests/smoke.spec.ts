@@ -14,27 +14,24 @@ describe("Smoke test", function () {
   before(async function () {
     if (username && accessKey) {
       driver = await new Builder()
-        .usingServer(`http://${username}:${accessKey}@hub.browserstack.com/wd/hub`)
+        .usingServer(`http://hub.browserstack.com/wd/hub`)
         .withCapabilities({
           "bstack:options": {
+            accessKey,
             buildName: process.env.BROWSERSTACK_BUILD_NAME,
+            consoleLogs: "verbose",
+            debug: true,
             local: true,
+            // Not available for free users.
+            networkLogs: false,
             os: "Windows",
             osVersion: "11",
             projectName: "Kitten Scientists",
+            seleniumVersion: "4.5.0",
             sessionName: "Smoke tests",
+            telemetryLogs: true,
+            username,
           },
-          "browserstack.appiumLogs": true,
-          "browserstack.console": "debug",
-          "browserstack.debug": true,
-          "browserstack.deviceLogs": true,
-          // Not available for free users.
-          "browserstack.networkLogs": false,
-          "browserstack.networkLogsOptions": {
-            captureContent: "true",
-          },
-          "browserstack.seleniumLogs": true,
-          "browserstack.video": true,
           browserName: "Chrome",
           browserVersion: "103.0",
         })
