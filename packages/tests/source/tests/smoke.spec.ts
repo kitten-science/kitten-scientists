@@ -14,10 +14,9 @@ describe("Smoke test", function () {
   before(async function () {
     if (username && accessKey) {
       driver = await new Builder()
-        .usingServer(`http://hub.browserstack.com/wd/hub`)
+        .usingServer(`http://${username}:${accessKey}@hub.browserstack.com/wd/hub`)
         .withCapabilities({
           "bstack:options": {
-            accessKey,
             buildName: process.env.BROWSERSTACK_BUILD_NAME,
             consoleLogs: "verbose",
             debug: true,
@@ -30,7 +29,6 @@ describe("Smoke test", function () {
             seleniumVersion: "4.5.0",
             sessionName: "Smoke tests",
             telemetryLogs: true,
-            username,
           },
           browserName: "Chrome",
           browserVersion: "103.0",
