@@ -53,9 +53,9 @@ describe("Smoke test", function () {
 
   after(async () => {
     await driver.executeScript(
-      `'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"${
+      `browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"${
         allPassed ? "passed" : "failed"
-      }", "reason": "none"}}'`
+      }", "reason": "none"}}`
     );
 
     await driver.quit();
