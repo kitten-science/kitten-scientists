@@ -10,6 +10,8 @@ describe("Smoke test", function () {
   let driver: WebDriver;
   let kg: KittenGamePage;
   let allPassed = true;
+  let countPassed = 0;
+  let countTotal = 0;
 
   before(async function () {
     if (username && accessKey) {
@@ -54,14 +56,17 @@ describe("Smoke test", function () {
     if (!this.currentTest) {
       return;
     }
-    allPassed = allPassed && this.currentTest.state === "passed";
+    const testPassed = this.currentTest.state === "passed";
+    countPassed += testPassed ? 1 : 0;
+    ++countTotal;
+    allPassed = allPassed && testPassed;
   });
 
   after(async () => {
     await driver.executeScript(
       `browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"${
         allPassed ? "passed" : "failed"
-      }", "reason": "none"}}`
+      }", "reason": "${`${countPassed} / ${countTotal} passed.`}"}}`
     );
 
     await driver.quit();
