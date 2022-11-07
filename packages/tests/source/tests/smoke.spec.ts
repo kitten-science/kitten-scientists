@@ -1,7 +1,7 @@
 import "chromedriver";
 import { Builder, WebDriver } from "selenium-webdriver";
-import config from "./config";
-import { KittenGamePage } from "./pages/KittenGamePage";
+import config from "../config";
+import { KittenGamePage } from "../pages/KittenGamePage";
 
 const username = process.env.BROWSERSTACK_USERNAME;
 const accessKey = process.env.BROWSERSTACK_ACCESS_KEY;
