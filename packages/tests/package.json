@@ -14,7 +14,7 @@
   },
   "scripts": {
     "tests:build": "tsc --build",
-    "tests:run": "mocha --timeout 10000 --require output/tests/hooks.js output/tests/*.spec.js"
+    "tests:run": "mocha output/tests/*.spec.js"
   },
   "dependencies": {
     "tslib": "2.4.1"
