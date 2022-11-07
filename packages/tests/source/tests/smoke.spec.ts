@@ -24,6 +24,15 @@ describe("Smoke test", function () {
             projectName: "Kitten Scientists",
             sessionName: "Smoke tests",
           },
+          "browserstack.appiumLogs": true,
+          "browserstack.console": "verbose",
+          "browserstack.debug": true,
+          "browserstack.networkLogs": true,
+          "browserstack.networkLogsOptions": {
+            captureContent: true,
+          },
+          "browserstack.seleniumLogs": true,
+          "browserstack.video": true,
           browserName: "Chrome",
           browserVersion: "103.0",
         })
