@@ -13,7 +13,6 @@ jobs:
       contents: read
     environment:
       name: BrowserStack
-      url: https://automate.browserstack.com/dashboard/v2/public-build/YkNlcjFZam9LMmxQZzhLS0Q2Z29WWjNQczBJbUJNUDRQYjRKdU1RdHZSblhVZUVROFh5b0JlVGhKc1cwREhDenRmNVJob0RiZ2dOaVBVYi9KTFgyaWc9PS0tUlV4OVdZbEpVNjVJY3ZlaUlWQ2Fsdz09--1e361bacbef1635ac46b8c114b679d83c1be18b8
 
     steps:
       - name: "BrowserStack Env Setup" # Invokes the setup-env action
