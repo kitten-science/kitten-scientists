@@ -113,8 +113,8 @@ export class ResetResourcesSettings extends Setting {
       if (!item.checkForReset) {
         continue;
       }
-      options.resources[name].enabled = item.enabled;
-      options.resources[name].stock = item.stock;
+      options.resources[name].enabled = item.checkForReset;
+      options.resources[name].stock = item.stockForReset;
     }
 
     return options;
