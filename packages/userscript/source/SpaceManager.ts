@@ -89,7 +89,11 @@ export class SpaceManager implements Automation {
     const missions = this._host.gamePage.space.meta[0].meta;
     missionLoop: for (let i = 0; i < missions.length; i++) {
       // If the mission is already purchased or not available yet, continue with the next one.
-      if (0 < missions[i].val || !missions[i].unlocked) {
+      if (
+        0 < missions[i].val ||
+        !missions[i].unlocked ||
+        !this.settings.unlockMissions.missionsList[i].enabled
+      ) {
         continue;
       }
 

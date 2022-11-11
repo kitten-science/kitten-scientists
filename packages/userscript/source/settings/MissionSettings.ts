@@ -19,6 +19,24 @@ export type MissionMissionSettings = Record<Missions, MissionSetting>;
 export class MissionSettings extends Setting {
   missions: MissionMissionSettings;
 
+  get missionsList(): Array<MissionSetting> {
+    return [
+      this.missions.orbitalLaunch,
+      this.missions.moonMission,
+      this.missions.duneMission,
+      this.missions.piscineMission,
+      this.missions.heliosMission,
+      this.missions.terminusMission,
+      this.missions.kairoMission,
+      this.missions.rorschachMission,
+      this.missions.yarnMission,
+      this.missions.umbraMission,
+      this.missions.charonMission,
+      this.missions.centaurusSystemMission,
+      this.missions.furthestRingMission,
+    ];
+  }
+
   constructor(
     enabled = false,
     missions: MissionMissionSettings = {
