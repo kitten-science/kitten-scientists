@@ -262,13 +262,17 @@ export class Engine {
     key: keyof typeof i18nData[SupportedLanguages] | TKittenGameLiteral,
     args: Array<number | string> = []
   ): string {
+    let value;
+
     // Key is to be translated through KG engine.
     if (key.startsWith("$")) {
-      return this._host.i18nEngine(key.slice(1));
+      value = this._host.i18nEngine(key.slice(1));
     }
 
-    let value =
+    value =
+      value ??
       this._i18nData[this._host.language][key as keyof typeof i18nData[SupportedLanguages]];
+
     if (typeof value === "undefined" || value === null) {
       value = i18nData[DefaultLanguage][key as keyof typeof i18nData[SupportedLanguages]];
       if (!value) {
