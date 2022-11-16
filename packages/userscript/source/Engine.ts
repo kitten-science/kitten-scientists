@@ -21,7 +21,7 @@ import { WorkshopSettings } from "./settings/WorkshopSettings";
 import { SpaceManager } from "./SpaceManager";
 import { TimeControlManager } from "./TimeControlManager";
 import { TimeManager } from "./TimeManager";
-import { cdebug, cwarn } from "./tools/Log";
+import { cdebug, cerror, cwarn } from "./tools/Log";
 import { TradeManager } from "./TradeManager";
 import { DefaultLanguage, UserScript } from "./UserScript";
 import { VillageManager } from "./VillageManager";
@@ -102,19 +102,52 @@ export class Engine {
     return language in this._i18nData;
   }
 
+  /**
+   * Loads a new state into the engine.
+   *
+   * @param settings The engine state to load.
+   */
   stateLoad(settings: EngineState) {
-    this.settings.load(settings.engine);
-    this.bonfireManager.load(settings.bonfire);
-    this.religionManager.load(settings.religion);
-    this.scienceManager.load(settings.science);
-    this.spaceManager.load(settings.space);
-    this.timeControlManager.load(settings.timeControl);
-    this.timeManager.load(settings.time);
-    this.tradeManager.load(settings.trade);
-    this.villageManager.load(settings.village);
-    this.workshopManager.load(settings.workshop);
+    // For now, we only log a warning on mismatching tags.
+    // Ideally, we would perform semvar comparison, but that is
+    // excessive at this point in time. The goal should be a stable
+    // state import of most versions anyway.
+    if (settings.v !== KS_VERSION) {
+      cwarn(
+        `Attempting to load engine state with version tag '${
+          settings.v
+        }' when engine is at version '${KS_VERSION ?? "latest"}'!`
+      );
+    }
+
+    // Perform the load of each sub settings section in a try-catch to
+    // allow us to still load the other sections if there were schema
+    // changes.
+    const attemptLoad = (loader: () => unknown, errorMessage: string) => {
+      try {
+        loader();
+      } catch (error) {
+        cerror(`Failed load of ${errorMessage} settings.`, error);
+      }
+    };
+
+    attemptLoad(() => this.settings.load(settings.engine), "engine");
+    attemptLoad(() => this.bonfireManager.load(settings.bonfire), "bonfire");
+    attemptLoad(() => this.religionManager.load(settings.religion), "religion");
+    attemptLoad(() => this.scienceManager.load(settings.science), "science");
+    attemptLoad(() => this.spaceManager.load(settings.space), "space");
+    attemptLoad(() => this.timeControlManager.load(settings.timeControl), "time control");
+    attemptLoad(() => this.timeManager.load(settings.time), "time");
+    attemptLoad(() => this.tradeManager.load(settings.trade), "trade");
+    attemptLoad(() => this.villageManager.load(settings.village), "village");
+    attemptLoad(() => this.workshopManager.load(settings.workshop), "workshop");
   }
 
+  /**
+   * Serializes all settings in the engine.
+   *
+   * @returns A snapshot of the current engine settings state.
+   */
   stateSerialize(): EngineState {
     return {
       v: KS_VERSION ?? "latest",
