@@ -216,6 +216,7 @@ export class UserScript {
       );
       //this.engine.stateLoad(state);
     },
+    resetState: () => null,
     save: (saveData: Record<string, unknown>) => {
       cwarn("EXPERIMENTAL: Injecting Kitten Scientists engine state into save data...");
       saveData.ks = { state: [this.getSettings()] };
