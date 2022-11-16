@@ -1,4 +1,4 @@
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
 
@@ -102,13 +102,9 @@ export class FilterSettings extends Setting {
   load(settings: FilterSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.filters)) {
-      if (!this.filters[name]) {
-        console.warn(`Outdated filter '${name}' is ignored on settings load.`);
-        continue;
-      }
-      this.filters[name].enabled = item.enabled;
-    }
+    consumeEntriesPedantic(this.filters, settings.filters, (filter, item) => {
+      filter.enabled = item?.enabled ?? filter.enabled;
+    });
   }
 
   static toLegacyOptions(settings: FilterSettings, subject: LegacyStorage) {

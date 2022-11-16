@@ -1,4 +1,4 @@
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { StagedBuilding } from "../types";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -33,9 +33,9 @@ export class BuildingUpgradeSettings extends Setting {
   load(settings: BuildingUpgradeSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      this.buildings[name].enabled = item.enabled;
-    }
+    consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
+      building.enabled = item?.enabled ?? building.enabled;
+    });
   }
 
   static toLegacyOptions(settings: BuildingUpgradeSettings, subject: LegacyStorage) {

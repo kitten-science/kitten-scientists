@@ -1,4 +1,4 @@
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { Building } from "../types";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
 import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
@@ -122,10 +122,10 @@ export class BonfireSettings extends SettingTrigger {
     this.enabled = settings.enabled;
     this.trigger = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      this.buildings[name].enabled = item.enabled;
-      this.buildings[name].max = item.max;
-    }
+    consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
+      building.enabled = item?.enabled ?? building.enabled;
+      building.max = item?.max ?? building.max;
+    });
 
     this.turnOnSteamworks.enabled = settings.turnOnSteamworks.enabled;
 
