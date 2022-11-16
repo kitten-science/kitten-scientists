@@ -5,6 +5,7 @@ import {
   Policy,
   Race,
   Resource,
+  ResourceCraftable,
   Season,
   SpaceBuildings,
   StagedBuilding,
@@ -34,6 +35,7 @@ type LegacySettingsSections =
   | "upgrade";
 
 type SetMaxBuildingItem = `set-${AllItems}-max`;
+type SetMaxCraftableItem = `set-${ResourceCraftable}-craft-max`;
 type SetMaxEmbassyItem = `set-build-${Race}-max`;
 type SetMaxJobItem = `set-${Job}-max`;
 type SetMaxResourceItem = `set-${Resource}-max`;
@@ -93,6 +95,7 @@ export type LegacyStorage = {
   interval: number;
   toggles: Record<LegacySettingsSections | "engine", boolean>;
   items: Partial<Record<SetMaxBuildingItem, number>> &
+    Partial<Record<SetMaxCraftableItem, number>> &
     Partial<Record<SetMaxEmbassyItem, number>> &
     Partial<Record<SetMaxJobItem, number>> &
     Partial<Record<SetMaxResourceItem, number>> &

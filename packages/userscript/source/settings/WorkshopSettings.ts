@@ -86,6 +86,7 @@ export class WorkshopSettings extends SettingTrigger {
     for (const [name, item] of objectEntries(settings.resources)) {
       subject.items[`toggle-${name}` as const] = item.enabled;
       subject.items[`toggle-limited-${name}` as const] = item.limited;
+      subject.items[`set-${name}-craft-max` as const] = item.max;
     }
 
     UpgradeSettings.toLegacyOptions(settings.unlockUpgrades, subject);
@@ -101,6 +102,7 @@ export class WorkshopSettings extends SettingTrigger {
     for (const [name, item] of objectEntries(options.resources)) {
       item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
       item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
+      item.max = subject.items[`set-${name}-craft-max` as const] ?? item.max;
     }
 
     options.unlockUpgrades = UpgradeSettings.fromLegacyOptions(subject);
