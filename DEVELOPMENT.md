@@ -14,11 +14,11 @@ The development environment is expected to be a POSIX-compliant system. On Windo
 
 You will need [NodeJS](https://nodejs.org/) and [yarn](https://yarnpkg.com/getting-started/install) to be able to work with the project.
 
-Additionally, you will need to have [Docker](https://www.docker.com/get-started) available, to use the container-based Kitten Game development server. If you do not have Docker, you can still build a release version of the script and drop that into your userscript manager.
+Additionally, you will need to have [Docker](https://www.docker.com/get-started) available, to use the container-based Kittens Game development server. If you do not have Docker, you can still build a release version of the script and drop that into your userscript manager.
 
-### Development (with Kitten Game container)
+### Development (with Kittens Game container)
 
-The development container provides a version of Kitten Game that already a Kitten Scientists version injected into it, based on your local development state.
+The development container provides a version of Kittens Game that already a Kitten Scientists version injected into it, based on your local development state.
 
 1. Start a watcher to continuously rebuild KS when you make code changes.
 

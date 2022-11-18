@@ -80,7 +80,7 @@ export class PolicySettings extends Setting {
       cwarn(`The policy '${policy}' is not tracked in Kitten Scientists!`);
     }
     for (const policy of redundantInSettings) {
-      cwarn(`The policy '${policy}' is not a policy in Kitten Game!`);
+      cwarn(`The policy '${policy}' is not a policy in Kittens Game!`);
     }
   }
 

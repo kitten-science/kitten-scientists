@@ -2,7 +2,7 @@
   "private": true,
   "name": "@kitten-science/kitten-game",
   "version": "latest",
-  "description": "Containerized version of the Kitten Game",
+  "description": "Containerized version of the Kittens Game",
   "license": "MIT",
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "homepage": "https://github.com/kitten-science/kitten-scientists",

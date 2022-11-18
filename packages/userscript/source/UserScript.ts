@@ -192,7 +192,7 @@ export class UserScript {
   }
 
   /**
-   * Experimental save manager for Kitten Game.
+   * Experimental save manager for Kittens Game.
    * It can be injected manually into the game to cause KS settings to be
    * injected into the save blob.
    *

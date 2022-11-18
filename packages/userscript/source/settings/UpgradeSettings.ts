@@ -177,7 +177,7 @@ export class UpgradeSettings extends Setting {
       cwarn(`The workshop upgrade '${upgrade}' is not tracked in Kitten Scientists!`);
     }
     for (const upgrade of redundantInSettings) {
-      cwarn(`The workshop upgrade '${upgrade}' is not an upgrade in Kitten Game!`);
+      cwarn(`The workshop upgrade '${upgrade}' is not an upgrade in Kittens Game!`);
     }
   }
 

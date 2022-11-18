@@ -102,7 +102,7 @@ export class TechSettings extends Setting {
       cwarn(`The technology '${tech}' is not tracked in Kitten Scientists!`);
     }
     for (const tech of redundantInSettings) {
-      cwarn(`The technology '${tech}' is not a technology in Kitten Game!`);
+      cwarn(`The technology '${tech}' is not a technology in Kittens Game!`);
     }
   }
 

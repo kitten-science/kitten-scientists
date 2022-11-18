@@ -72,7 +72,7 @@ export class MissionSettings extends Setting {
       cwarn(`The space mission '${mission}' is not tracked in Kitten Scientists!`);
     }
     for (const mission of redundantInSettings) {
-      cwarn(`The space mission '${mission}' is not a space mission in Kitten Game!`);
+      cwarn(`The space mission '${mission}' is not a space mission in Kittens Game!`);
     }
   }
 

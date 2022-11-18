@@ -2,7 +2,7 @@
   "private": true,
   "name": "kitten-scientists",
   "version": "latest",
-  "description": "Contains packages relating to the Kitten Game: http://bloodrizer.ru/games/kittens/",
+  "description": "Contains packages relating to the Kittens Game: https://kittensgame.com/web/",
   "license": "MIT",
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "homepage": "https://github.com/kitten-science/kitten-scientists",
