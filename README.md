@@ -43,13 +43,9 @@ You can still check out the [README content of the 1.5 version](./LEGACY_README.
 
 ## Contributors
 
-If you would like to contribute to the Kitten Scientists, then you can do so in these ways:
+A lot of thanks goes out to all the amazing people who contributed to Kitten Scientists 1.5 in the past.
 
--   [Submit issues or bugs](https://github.com/kitten-science/kitten-scientists/issues/new) you find, or functionality that would improve the project.
--   Fork the repository, add some functionality, then [submit a pull request](https://github.com/kitten-science/kitten-scientists/compare).
-
-Thanks to these past and present contributors!
-
+-   [Cameron Condry](https://github.com/cameroncondry)
 -   [adituv](https://github.com/adituv)
 -   [amaranth](https://github.com/amaranth)
 -   [Azulan](https://www.reddit.com/user/Azulan)
@@ -94,3 +90,5 @@ Thanks to these past and present contributors!
 -   [Wymrite](https://github.com/Wymrite)
 -   [Xanidel](https://github.com/Xanidel)
 -   [zelenay](https://github.com/zelenay)
+
+> If you want to see a live view of contributors for this repository, you can see it at <https://github.com/kitten-science/kitten-scientists/graphs/contributors>.
