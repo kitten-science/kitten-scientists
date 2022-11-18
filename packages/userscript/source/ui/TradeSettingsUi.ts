@@ -104,7 +104,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     this._tradeBlackcoin = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.crypto"),
-      this.setting.feedLeviathans,
+      this.setting.tradeBlackcoin,
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [
