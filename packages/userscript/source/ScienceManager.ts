@@ -37,6 +37,11 @@ export class ScienceManager extends UpgradeManager {
     if (this.settings.policies.enabled && this._host.gamePage.tabs[2].visible) {
       await this.autoPolicy();
     }
+
+    // Observe astronomical events.
+    if (this.settings.observe.enabled) {
+      this.observeStars();
+    }
   }
 
   load(settings: ScienceSettings) {
@@ -110,6 +115,17 @@ export class ScienceManager extends UpgradeManager {
 
     for (const item of toUnlock) {
       await this.upgrade(item, "policy");
+    }
+  }
+
+  /**
+   * If there is currently an astronomical event, observe it.
+   */
+  observeStars(): void {
+    if (this._host.gamePage.calendar.observeBtn !== null) {
+      this._host.gamePage.calendar.observeHandler();
+      this._host.engine.iactivity("act.observe", [], "ks-star");
+      this._host.engine.storeForSummary("stars", 1);
     }
   }
 }

@@ -4,7 +4,6 @@ import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
 import { EngineSettingsUi } from "./EngineSettingsUi";
 import { FiltersSettingsUi } from "./FilterSettingsUi";
-import { OptionsSettingsUi } from "./OptionsSettingsUi";
 import { ReligionSettingsUi } from "./ReligionSettingsUi";
 import { ResourcesSettingsUi } from "./ResourcesSettingsUi";
 import { ScienceSettingsUi } from "./ScienceSettingsUi";
@@ -29,7 +28,6 @@ export class UserInterface {
   private _timeUi: TimeSettingsUi;
   private _timeCtrlUi: TimeControlSettingsUi;
   private _distributeUi: VillageSettingsUi;
-  private _optionsUi: OptionsSettingsUi;
   private _filterUi: FiltersSettingsUi;
 
   constructor(host: UserScript) {
@@ -47,7 +45,6 @@ export class UserInterface {
     this._timeUi = new TimeSettingsUi(this._host, engine.timeManager.settings);
     this._timeCtrlUi = new TimeControlSettingsUi(this._host, engine.timeControlManager.settings);
     this._distributeUi = new VillageSettingsUi(this._host, engine.villageManager.settings);
-    this._optionsUi = new OptionsSettingsUi(this._host, engine.settings.options);
     this._filterUi = new FiltersSettingsUi(this._host, engine.settings.filters);
   }
 
@@ -75,7 +72,6 @@ export class UserInterface {
     optionsListElement.append(this._spaceUi.element);
     optionsListElement.append(this._timeUi.element);
     optionsListElement.append(this._timeCtrlUi.element);
-    optionsListElement.append(this._optionsUi.element);
     optionsListElement.append(this._filterUi.element);
 
     // Make _engineUI's expando button hide/show the other option groups
@@ -99,7 +95,6 @@ export class UserInterface {
       this._timeUi.toggle(sectionsVisible);
       this._timeCtrlUi.toggle(sectionsVisible);
       this._distributeUi.toggle(sectionsVisible);
-      this._optionsUi.toggle(sectionsVisible);
       this._filterUi.toggle(sectionsVisible);
     });
 
@@ -144,7 +139,6 @@ export class UserInterface {
     this._timeUi.refreshUi();
     this._timeCtrlUi.refreshUi();
     this._distributeUi.refreshUi();
-    this._optionsUi.refreshUi();
     this._filterUi.refreshUi();
   }
 

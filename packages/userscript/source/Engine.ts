@@ -220,15 +220,8 @@ export class Engine {
   private async _iterate(): Promise<void> {
     const context = { tick: new Date().getTime() };
 
-    const subOptions = this._host.engine.settings.options;
-
     // The order in which these actions are performed is probably
     // semi-intentional and should be preserved or improved.
-
-    // Observe astronomical events.
-    if (subOptions.enabled && subOptions.items.observe.enabled) {
-      this.observeStars();
-    }
     await this.scienceManager.tick(context);
     this.bonfireManager.tick(context);
     this.spaceManager.tick(context);
@@ -238,17 +231,6 @@ export class Engine {
     this.timeManager.tick(context);
     this.villageManager.tick(context);
     await this.timeControlManager.tick(context);
-  }
-
-  /**
-   * If there is currently an astronomical event, observe it.
-   */
-  observeStars(): void {
-    if (this._host.gamePage.calendar.observeBtn !== null) {
-      this._host.gamePage.calendar.observeHandler();
-      this._host.engine.iactivity("act.observe", [], "ks-star");
-      this._host.engine.storeForSummary("stars", 1);
-    }
   }
 
   /**

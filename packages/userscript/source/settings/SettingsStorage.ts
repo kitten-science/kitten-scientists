@@ -14,7 +14,6 @@ import {
 } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FilterItem } from "./FilterSettings";
-import { OptionsItem } from "./OptionsSettings";
 import { FaithItem, ReligionAdditionItem, UnicornItem } from "./ReligionSettings";
 import { ScienceItem } from "./ScienceSettings";
 import { AllItems } from "./Settings";
@@ -45,7 +44,6 @@ type SetMinResetFaithItem = `set-reset-faith-${FaithItem | UnicornItem}-min`;
 type SetMinResetSpaceItem = `set-reset-space-${SpaceBuildings}-min`;
 type SetMinResetTimeItem = `set-reset-time-${TimeItem}-min`;
 type SetMinResetUnicornItem = `set-reset-unicorn-${UnicornItem}-min`;
-type SetSubtriggerOptionItem = `set-${OptionsItem}-trigger`;
 type SetSubtriggerReligionItem = `set-${ReligionAdditionItem}-trigger`;
 type SetSubtriggerTimeCtrlItem = `set-${"accelerateTime" | "timeSkip"}-trigger`;
 type ToggleBuildEmbassies = "toggle-buildEmbassies";
@@ -62,7 +60,7 @@ type ToggleLimitedJobItem = `toggle-limited-${Job}`;
 type ToggleLimitedRaceItem = `toggle-limited-${Race}`;
 type ToggleLimitedResourceItem = `toggle-limited-${Resource}`;
 type ToggleMissionItem = `toggle-mission-${Missions}`;
-type ToggleOptionsItem = `toggle-${OptionsItem}`;
+type ToggleObserve = `toggle-observe`;
 type TogglePolicyItem = `toggle-policy-${Policy}`;
 type TogglePromoteLeader = `toggle-promote`;
 type ToggleRaceItem = `toggle-${Race}`;
@@ -105,7 +103,6 @@ export type LegacyStorage = {
     Partial<Record<SetMinResetSpaceItem, number>> &
     Partial<Record<SetMinResetTimeItem, number>> &
     Partial<Record<SetMinResetUnicornItem, number>> &
-    Partial<Record<SetSubtriggerOptionItem, number>> &
     Partial<Record<SetSubtriggerReligionItem, number>> &
     Partial<Record<SetSubtriggerTimeCtrlItem, number>> &
     Partial<Record<ToggleBuildEmbassies, boolean>> &
@@ -122,7 +119,7 @@ export type LegacyStorage = {
     Partial<Record<ToggleLimitedRaceItem, boolean>> &
     Partial<Record<ToggleLimitedResourceItem, boolean>> &
     Partial<Record<ToggleMissionItem, boolean>> &
-    Partial<Record<ToggleOptionsItem, boolean>> &
+    Partial<Record<ToggleObserve, boolean>> &
     Partial<Record<TogglePolicyItem, boolean>> &
     Partial<Record<TogglePromoteLeader, boolean>> &
     Partial<Record<ToggleRaceItem, boolean>> &

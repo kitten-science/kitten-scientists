@@ -41,7 +41,7 @@ export class Options {
       time: settings.time.enabled,
       timeCtrl: settings.timeControl.enabled,
       distribute: settings.village.enabled,
-      options: settings.engine.options.enabled,
+      options: true,
       filter: settings.engine.filters.enabled,
     };
 

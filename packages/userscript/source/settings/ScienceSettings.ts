@@ -10,11 +10,18 @@ export type ScienceSettingsItem = TechSettings | PolicySettings;
 export class ScienceSettings extends Setting {
   policies: PolicySettings;
   techs: TechSettings;
+  observe: Setting;
 
-  constructor(enabled = false, policies = new PolicySettings(), techs = new TechSettings()) {
+  constructor(
+    enabled = false,
+    policies = new PolicySettings(),
+    techs = new TechSettings(),
+    observe = new Setting(true)
+  ) {
     super(enabled);
     this.policies = policies;
     this.techs = techs;
+    this.observe = observe;
   }
 
   static validateGame(game: GamePage, settings: ScienceSettings) {
@@ -27,6 +34,8 @@ export class ScienceSettings extends Setting {
 
     this.policies.load(settings.policies);
     this.techs.load(settings.techs);
+
+    this.observe.enabled = settings.observe.enabled;
   }
 
   static toLegacyOptions(settings: ScienceSettings, subject: LegacyStorage) {
@@ -34,6 +43,8 @@ export class ScienceSettings extends Setting {
 
     PolicySettings.toLegacyOptions(settings.policies, subject);
     TechSettings.toLegacyOptions(settings.techs, subject);
+
+    subject.items["toggle-observe"] = settings.observe.enabled;
   }
 
   static fromLegacyOptions(subject: LegacyStorage) {
@@ -42,6 +53,8 @@ export class ScienceSettings extends Setting {
 
     options.policies = PolicySettings.fromLegacyOptions(subject);
     options.techs = TechSettings.fromLegacyOptions(subject);
+
+    options.observe.enabled = subject.items["toggle-observe"] ?? options.observe.enabled;
 
     return options;
   }
