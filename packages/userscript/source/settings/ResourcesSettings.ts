@@ -1,5 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
-import { isNil, mustExist } from "../tools/Maybe";
+import { isNil, Maybe, mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { WorkshopManager } from "../WorkshopManager";
 import { Setting } from "./Settings";
@@ -85,8 +85,12 @@ export class ResourcesSettings extends Setting {
     this.resources = resources;
   }
 
-  load(settings: ResourcesSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<ResourcesSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.resources, settings.resources, (resource, item) => {
       resource.enabled = item?.enabled ?? resource.enabled;

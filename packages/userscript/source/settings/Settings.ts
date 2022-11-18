@@ -1,3 +1,4 @@
+import { isNil, Maybe } from "../tools/Maybe";
 import { Resource, SpaceBuildings } from "../types";
 import { BonfireItem } from "./BonfireSettings";
 import { FaithItem, ReligionItem } from "./ReligionSettings";
@@ -17,8 +18,12 @@ export class Setting {
     this.enabled = enabled;
   }
 
-  load(setting: Setting) {
-    this.enabled = setting.enabled;
+  load(setting: Maybe<Partial<Setting>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
+    this.enabled = setting.enabled ?? this.enabled;
   }
 
   serialize() {
@@ -34,9 +39,13 @@ export class SettingLimited extends Setting {
     this.limited = limited;
   }
 
-  load(setting: SettingLimited) {
+  load(setting: Maybe<Partial<SettingLimited>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
     super.load(setting);
-    this.limited = setting.limited;
+    this.limited = setting.limited ?? this.limited;
   }
 }
 
@@ -48,9 +57,13 @@ export class SettingTrigger extends Setting {
     this.trigger = trigger;
   }
 
-  load(setting: SettingTrigger) {
+  load(setting: Maybe<Partial<SettingTrigger>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
     super.load(setting);
-    this.trigger = setting.trigger;
+    this.trigger = setting.trigger ?? this.trigger;
   }
 }
 
@@ -62,9 +75,13 @@ export class SettingMax extends Setting {
     this.max = max;
   }
 
-  load(setting: SettingMax) {
+  load(setting: Maybe<Partial<SettingMax>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
     super.load(setting);
-    this.max = setting.max;
+    this.max = setting.max ?? this.max;
   }
 }
 
@@ -76,9 +93,13 @@ export class SettingLimitedMax extends SettingLimited implements SettingMax {
     this.max = max;
   }
 
-  load(setting: SettingLimitedMax) {
+  load(setting: Maybe<Partial<SettingLimitedMax>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
     super.load(setting);
-    this.max = setting.max;
+    this.max = setting.max ?? this.max;
   }
 }
 
@@ -90,8 +111,12 @@ export class SettingTriggerMax extends SettingTrigger implements SettingMax {
     this.max = max;
   }
 
-  load(setting: SettingTriggerMax) {
+  load(setting: Maybe<Partial<SettingTriggerMax>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
     super.load(setting);
-    this.max = setting.max;
+    this.max = setting.max ?? this.max;
   }
 }

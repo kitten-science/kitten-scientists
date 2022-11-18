@@ -1,4 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { isNil, Maybe } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -314,21 +315,25 @@ export class ReligionSettings extends SettingTrigger {
     this.transcend = transcend;
   }
 
-  load(settings: ReligionSettings) {
-    this.enabled = settings.enabled;
-    this.trigger = settings.trigger;
+  load(settings: Maybe<Partial<ReligionSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
       building.enabled = item?.enabled ?? building.enabled;
       building.max = item?.max ?? building.max;
     });
 
-    this.adore.enabled = settings.adore.enabled;
-    this.autoPraise.enabled = settings.autoPraise.enabled;
-    this.bestUnicornBuilding.enabled = settings.bestUnicornBuilding.enabled;
-    this.transcend.enabled = settings.transcend.enabled;
-    this.adore.trigger = settings.adore.trigger;
-    this.autoPraise.trigger = settings.autoPraise.trigger;
+    this.adore.enabled = settings.adore?.enabled ?? this.adore.enabled;
+    this.autoPraise.enabled = settings.autoPraise?.enabled ?? this.autoPraise.enabled;
+    this.bestUnicornBuilding.enabled =
+      settings.bestUnicornBuilding?.enabled ?? this.bestUnicornBuilding.enabled;
+    this.transcend.enabled = settings.transcend?.enabled ?? this.transcend.enabled;
+    this.adore.trigger = settings.adore?.trigger ?? this.adore.trigger;
+    this.autoPraise.trigger = settings.autoPraise?.trigger ?? this.autoPraise.trigger;
   }
 
   static toLegacyOptions(settings: ReligionSettings, subject: LegacyStorage) {

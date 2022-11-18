@@ -1,6 +1,7 @@
 import { difference } from "../tools/Array";
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
+import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, Upgrade } from "../types";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -180,8 +181,12 @@ export class UpgradeSettings extends Setting {
     }
   }
 
-  load(settings: UpgradeSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<UpgradeSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.upgrades, settings.upgrades, (upgrade, item) => {
       upgrade.enabled = item?.enabled ?? upgrade.enabled;

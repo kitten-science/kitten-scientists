@@ -1,4 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { isNil, Maybe } from "../tools/Maybe";
 import { SpaceBuildings } from "../types";
 import { Setting, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -48,8 +49,12 @@ export class ResetSpaceSettings extends Setting {
     this.buildings = buildings;
   }
 
-  load(settings: ResetSpaceSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<ResetSpaceSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
       building.enabled = item?.enabled ?? building.enabled;

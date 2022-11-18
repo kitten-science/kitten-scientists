@@ -1,4 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { isNil, Maybe } from "../tools/Maybe";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
 
@@ -99,8 +100,12 @@ export class FilterSettings extends Setting {
     this.filters = filters;
   }
 
-  load(settings: FilterSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<FilterSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.filters, settings.filters, (filter, item) => {
       filter.enabled = item?.enabled ?? filter.enabled;

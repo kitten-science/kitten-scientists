@@ -1,4 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { isNil, Maybe } from "../tools/Maybe";
 import { Cycle, Season } from "../types";
 import { Setting, SettingTriggerMax } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -48,9 +49,12 @@ export class TimeSkipSettings extends SettingTriggerMax {
     this.cycles = cycles;
   }
 
-  load(settings: TimeSkipSettings) {
+  load(settings: Maybe<Partial<TimeSkipSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
     super.load(settings);
-    this.max = settings.max;
 
     consumeEntriesPedantic(this.seasons, settings.seasons, (season, item) => {
       season.enabled = item?.enabled ?? season.enabled;

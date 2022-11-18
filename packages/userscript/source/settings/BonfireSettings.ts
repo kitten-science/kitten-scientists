@@ -1,4 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { isNil, Maybe } from "../tools/Maybe";
 import { Building } from "../types";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
 import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
@@ -118,16 +119,20 @@ export class BonfireSettings extends SettingTrigger {
     this.upgradeBuildings = upgradeBuildings;
   }
 
-  load(settings: BonfireSettings) {
-    this.enabled = settings.enabled;
-    this.trigger = settings.trigger;
+  load(settings: Maybe<Partial<BonfireSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
       building.enabled = item?.enabled ?? building.enabled;
       building.max = item?.max ?? building.max;
     });
 
-    this.turnOnSteamworks.enabled = settings.turnOnSteamworks.enabled;
+    this.turnOnSteamworks.enabled =
+      settings.turnOnSteamworks?.enabled ?? this.turnOnSteamworks.enabled;
 
     this.upgradeBuildings.load(settings.upgradeBuildings);
   }

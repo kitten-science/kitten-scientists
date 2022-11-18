@@ -1,4 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { isNil, Maybe } from "../tools/Maybe";
 import { Race } from "../types";
 import { SettingMax, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -34,8 +35,12 @@ export class EmbassySettings extends SettingTrigger {
     this.races = races;
   }
 
-  load(settings: EmbassySettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<EmbassySettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.races, settings.races, (race, item) => {
       race.enabled = item?.enabled ?? race.enabled;

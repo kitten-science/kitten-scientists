@@ -1,3 +1,4 @@
+import { isNil, Maybe } from "../tools/Maybe";
 import { ResetBonfireSettings } from "./ResetBonfireSettings";
 import { ResetReligionSettings } from "./ResetReligionSettings";
 import { ResetResourcesSettings } from "./ResetResourcesSettings";
@@ -29,8 +30,12 @@ export class ResetSettings extends Setting {
     this.time = time;
   }
 
-  load(settings: ResetSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<ResetSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     this.bonfire.load(settings.bonfire);
     this.religion.load(settings.religion);

@@ -1,6 +1,7 @@
 import { difference } from "../tools/Array";
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
+import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, Policy } from "../types";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -83,8 +84,12 @@ export class PolicySettings extends Setting {
     }
   }
 
-  load(settings: PolicySettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<PolicySettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.policies, settings.policies, (policy, item) => {
       policy.enabled = item?.enabled ?? policy.enabled;

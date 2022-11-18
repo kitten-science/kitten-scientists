@@ -1,4 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { isNil, Maybe } from "../tools/Maybe";
 import { Job } from "../types";
 import { Setting, SettingMax, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -35,17 +36,21 @@ export class VillageSettings extends Setting {
     this.promoteLeader = promoteLeader;
   }
 
-  load(settings: VillageSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<VillageSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.jobs, settings.jobs, (job, item) => {
       job.enabled = item?.enabled ?? job.enabled;
       job.max = item?.max ?? job.max;
     });
 
-    this.holdFestivals.enabled = settings.holdFestivals.enabled;
-    this.hunt.enabled = settings.hunt.enabled;
-    this.promoteLeader.enabled = settings.promoteLeader.enabled;
+    this.holdFestivals.enabled = settings.holdFestivals?.enabled ?? this.holdFestivals.enabled;
+    this.hunt.enabled = settings.hunt?.enabled ?? this.hunt.enabled;
+    this.promoteLeader.enabled = settings.promoteLeader?.enabled ?? this.promoteLeader.enabled;
   }
 
   static toLegacyOptions(settings: VillageSettings, subject: LegacyStorage) {

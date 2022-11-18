@@ -1,4 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { isNil, Maybe } from "../tools/Maybe";
 import { Race, Season } from "../types";
 import { EmbassySettings } from "./EmbassySettings";
 import { Requirement, Setting, SettingLimited, SettingTrigger } from "./Settings";
@@ -83,9 +84,12 @@ export class TradeSettings extends SettingTrigger {
     this.unlockRaces = unlockRaces;
   }
 
-  load(settings: TradeSettings) {
-    this.enabled = settings.enabled;
-    this.trigger = settings.trigger;
+  load(settings: Maybe<Partial<TradeSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.races, settings.races, (race, item) => {
       race.enabled = item?.enabled ?? race.enabled;

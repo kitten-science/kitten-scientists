@@ -1,4 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { isNil, Maybe } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { Setting, SettingTrigger } from "./Settings";
@@ -212,8 +213,12 @@ export class ResetReligionSettings extends Setting {
     this.buildings = buildings;
   }
 
-  load(settings: ResetReligionSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<ResetReligionSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
       building.enabled = item?.enabled ?? building.enabled;

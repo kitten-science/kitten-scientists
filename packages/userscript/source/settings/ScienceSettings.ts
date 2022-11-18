@@ -1,3 +1,4 @@
+import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage } from "../types";
 import { PolicySettings } from "./PolicySettings";
 import { Setting } from "./Settings";
@@ -29,13 +30,17 @@ export class ScienceSettings extends Setting {
     TechSettings.validateGame(game, settings.techs);
   }
 
-  load(settings: ScienceSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<ScienceSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     this.policies.load(settings.policies);
     this.techs.load(settings.techs);
 
-    this.observe.enabled = settings.observe.enabled;
+    this.observe.enabled = settings.observe?.enabled ?? this.observe.enabled;
   }
 
   static toLegacyOptions(settings: ScienceSettings, subject: LegacyStorage) {

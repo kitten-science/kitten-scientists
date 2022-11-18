@@ -1,4 +1,5 @@
 import { cinfo, cwarn } from "./Log";
+import { isNil } from "./Maybe";
 
 /**
  * Provides type-safe means to iterate over the entries
@@ -24,9 +25,13 @@ export function objectEntries<TKeys extends string, TValues>(
  */
 export function consumeEntries<TKeys extends string, TValues>(
   subject: Partial<Record<TKeys, TValues>>,
-  source: Partial<Record<TKeys, TValues>>,
+  source: Partial<Record<TKeys, TValues>> | undefined,
   consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown
 ): Partial<Record<TKeys, TValues>> {
+  if (isNil(source)) {
+    return subject;
+  }
+
   for (const [key, value] of objectEntries(subject)) {
     consumer(value, source[key]);
   }
@@ -48,9 +53,14 @@ export function consumeEntries<TKeys extends string, TValues>(
  */
 export function consumeEntriesPedantic<TKeys extends string, TValues>(
   subject: Partial<Record<TKeys, TValues>>,
-  source: Partial<Record<TKeys, TValues>>,
+  source: Partial<Record<TKeys, TValues>> | undefined,
   consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown
 ): Partial<Record<TKeys, TValues>> {
+  if (isNil(source)) {
+    cwarn("No source data was provided.");
+    return subject;
+  }
+
   for (const [key, value] of objectEntries(subject)) {
     if (key in source === false) {
       cinfo(`Entry '${key}' is missing in source. Using default value.`);

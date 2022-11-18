@@ -1,3 +1,4 @@
+import { isNil, Maybe } from "../tools/Maybe";
 import { FilterSettings } from "./FilterSettings";
 import { ResourcesSettings } from "./ResourcesSettings";
 import { Setting } from "./Settings";
@@ -22,9 +23,14 @@ export class EngineSettings extends Setting {
     this.resources = resources;
   }
 
-  load(settings: EngineSettings) {
-    this.enabled = settings.enabled;
-    this.interval = settings.interval;
+  load(settings: Maybe<Partial<EngineSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
+
+    this.interval = settings.interval ?? this.interval;
 
     this.filters.load(settings.filters);
     this.resources.load(settings.resources);

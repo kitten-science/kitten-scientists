@@ -1,6 +1,7 @@
 import { difference } from "../tools/Array";
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
+import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, Missions } from "../types";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -75,8 +76,12 @@ export class MissionSettings extends Setting {
     }
   }
 
-  load(settings: MissionSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<MissionSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.missions, settings.missions, (mission, item) => {
       mission.enabled = item?.enabled ?? mission.enabled;

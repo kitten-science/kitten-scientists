@@ -1,6 +1,7 @@
 import { difference } from "../tools/Array";
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
+import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, Technology } from "../types";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -105,8 +106,12 @@ export class TechSettings extends Setting {
     }
   }
 
-  load(settings: TechSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<TechSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     consumeEntriesPedantic(this.techs, settings.techs, (tech, item) => {
       tech.enabled = item?.enabled ?? tech.enabled;

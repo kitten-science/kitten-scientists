@@ -1,3 +1,4 @@
+import { isNil, Maybe } from "../tools/Maybe";
 import { ResetSettings } from "./ResetSettings";
 import { Setting, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -24,8 +25,12 @@ export class TimeControlSettings extends Setting {
     this.timeSkip = timeSkip;
   }
 
-  load(settings: TimeControlSettings) {
-    this.enabled = settings.enabled;
+  load(settings: Maybe<Partial<TimeControlSettings>>) {
+    if (isNil(settings)) {
+      return;
+    }
+
+    super.load(settings);
 
     this.accelerateTime.load(settings.accelerateTime);
     this.reset.load(settings.reset);
