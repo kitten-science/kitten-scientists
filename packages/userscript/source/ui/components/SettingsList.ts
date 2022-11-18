@@ -14,14 +14,15 @@ import { UiComponent } from "./UiComponent";
  */
 export class SettingsList extends UiComponent {
   readonly element: JQuery<HTMLElement>;
-  readonly resetButton: ResetButton;
+  readonly resetButton: ResetButton | undefined;
 
   /**
    * Constructs a `SettingsList`.
    *
    * @param host A reference to the host.
+   * @param hasReset Does this section have a "Reset" button?
    */
-  constructor(host: UserScript) {
+  constructor(host: UserScript, hasReset = true) {
     super(host);
 
     const containerList = $("<ul/>").addClass("ks-list").addClass("ks-items-list");
@@ -34,9 +35,11 @@ export class SettingsList extends UiComponent {
     enableAllButton.element.on("click", () => this.dispatchEvent(new Event("enableAll")));
     containerList.append(enableAllButton.element);
 
-    this.resetButton = new ResetButton(this._host);
-    this.resetButton.element.on("click", () => this.dispatchEvent(new Event("reset")));
-    containerList.append(this.resetButton.element);
+    if (hasReset) {
+      this.resetButton = new ResetButton(this._host);
+      this.resetButton.element.on("click", () => this.dispatchEvent(new Event("reset")));
+      containerList.append(this.resetButton.element);
+    }
 
     this.element = containerList;
   }

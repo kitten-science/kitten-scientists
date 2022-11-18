@@ -34,8 +34,23 @@ export class SeasonsList extends SettingsList {
       onUnCheck: (label: string, setting: Setting) => void;
     }
   ) {
-    super(host);
+    super(host, false);
     this.setting = setting;
+
+    this.addEventListener("enableAll", () => {
+      this.setting.autumn.enabled = true;
+      this.setting.spring.enabled = true;
+      this.setting.summer.enabled = true;
+      this.setting.winter.enabled = true;
+      this.refreshUi();
+    });
+    this.addEventListener("disableAll", () => {
+      this.setting.autumn.enabled = false;
+      this.setting.spring.enabled = false;
+      this.setting.summer.enabled = false;
+      this.setting.winter.enabled = false;
+      this.refreshUi();
+    });
 
     this.spring = this._makeSeason(
       this._host.engine.i18n(`$calendar.season.spring`),
