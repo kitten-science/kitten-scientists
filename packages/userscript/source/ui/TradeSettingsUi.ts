@@ -1,4 +1,5 @@
 import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings";
+import { ucfirst } from "../tools/Format";
 import { Race } from "../types";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";
@@ -166,8 +167,10 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     element.addChild(seasonsButton);
 
     const seasons = new SeasonsList(this._host, option.seasons, {
-      onCheck: (label: string) => this._host.engine.imessage("trade.season.enable", [label]),
-      onUnCheck: (label: string) => this._host.engine.imessage("trade.season.disable", [label]),
+      onCheck: (label: string) =>
+        this._host.engine.imessage("trade.season.enable", [ucfirst(name), label]),
+      onUnCheck: (label: string) =>
+        this._host.engine.imessage("trade.season.disable", [ucfirst(name), label]),
     });
     element.addChild(seasons);
 

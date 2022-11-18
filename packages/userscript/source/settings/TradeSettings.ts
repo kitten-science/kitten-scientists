@@ -94,10 +94,10 @@ export class TradeSettings extends SettingTrigger {
     consumeEntriesPedantic(this.races, settings.races, (race, item) => {
       race.enabled = item?.enabled ?? race.enabled;
       race.limited = item?.limited ?? race.limited;
-      race.seasons.autumn = item?.seasons.autumn ?? race.seasons.autumn;
-      race.seasons.spring = item?.seasons.spring ?? race.seasons.spring;
-      race.seasons.summer = item?.seasons.summer ?? race.seasons.summer;
-      race.seasons.winter = item?.seasons.winter ?? race.seasons.winter;
+      race.seasons.autumn.enabled = item?.seasons.autumn.enabled ?? race.seasons.autumn.enabled;
+      race.seasons.spring.enabled = item?.seasons.spring.enabled ?? race.seasons.spring.enabled;
+      race.seasons.summer.enabled = item?.seasons.summer.enabled ?? race.seasons.summer.enabled;
+      race.seasons.winter.enabled = item?.seasons.winter.enabled ?? race.seasons.winter.enabled;
     });
 
     this.buildEmbassies.load(settings.buildEmbassies);
