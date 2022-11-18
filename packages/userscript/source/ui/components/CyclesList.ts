@@ -30,8 +30,35 @@ export class CyclesList extends SettingsList {
    * @param setting The settings that correlate to this list.
    */
   constructor(host: UserScript, setting: SettingWithCycles) {
-    super(host);
+    super(host, false);
     this.setting = setting;
+
+    this.addEventListener("enableAll", () => {
+      this.setting.charon.enabled = true;
+      this.setting.umbra.enabled = true;
+      this.setting.yarn.enabled = true;
+      this.setting.helios.enabled = true;
+      this.setting.cath.enabled = true;
+      this.setting.redmoon.enabled = true;
+      this.setting.dune.enabled = true;
+      this.setting.piscine.enabled = true;
+      this.setting.terminus.enabled = true;
+      this.setting.kairo.enabled = true;
+      this.refreshUi();
+    });
+    this.addEventListener("disableAll", () => {
+      this.setting.charon.enabled = false;
+      this.setting.umbra.enabled = false;
+      this.setting.yarn.enabled = false;
+      this.setting.helios.enabled = false;
+      this.setting.cath.enabled = false;
+      this.setting.redmoon.enabled = false;
+      this.setting.dune.enabled = false;
+      this.setting.piscine.enabled = false;
+      this.setting.terminus.enabled = false;
+      this.setting.kairo.enabled = false;
+      this.refreshUi();
+    });
 
     this.charon = this._makeCycle(
       `⍙ ${this._host.engine.i18n("$space.planet.charon.label")}`,
