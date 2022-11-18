@@ -1,5 +1,5 @@
 import { difference } from "../tools/Array";
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Technology } from "../types";
 import { Setting } from "./Settings";
@@ -108,9 +108,9 @@ export class TechSettings extends Setting {
   load(settings: TechSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.techs)) {
-      this.techs[name].enabled = item.enabled;
-    }
+    consumeEntriesPedantic(this.techs, settings.techs, (tech, item) => {
+      tech.enabled = item?.enabled ?? tech.enabled;
+    });
   }
 
   static toLegacyOptions(settings: TechSettings, subject: LegacyStorage) {

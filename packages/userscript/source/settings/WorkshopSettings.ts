@@ -1,4 +1,4 @@
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { GamePage, ResourceCraftable } from "../types";
 import { Requirement, Setting, SettingLimitedMax, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -68,11 +68,11 @@ export class WorkshopSettings extends SettingTrigger {
   load(settings: WorkshopSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.resources)) {
-      this.resources[name].enabled = item.enabled;
-      this.resources[name].limited = item.limited;
-      this.resources[name].max = item.max;
-    }
+    consumeEntriesPedantic(this.resources, settings.resources, (resource, item) => {
+      resource.enabled = item?.enabled ?? resource.enabled;
+      resource.limited = item?.limited ?? resource.limited;
+      resource.max = item?.max ?? resource.max;
+    });
 
     this.unlockUpgrades.load(settings.unlockUpgrades);
 

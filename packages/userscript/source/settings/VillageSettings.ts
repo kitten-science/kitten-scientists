@@ -1,4 +1,4 @@
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { Job } from "../types";
 import { Setting, SettingMax, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -38,10 +38,10 @@ export class VillageSettings extends Setting {
   load(settings: VillageSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.jobs)) {
-      this.jobs[name].enabled = item.enabled;
-      this.jobs[name].max = item.max;
-    }
+    consumeEntriesPedantic(this.jobs, settings.jobs, (job, item) => {
+      job.enabled = item?.enabled ?? job.enabled;
+      job.max = item?.max ?? job.max;
+    });
 
     this.holdFestivals.enabled = settings.holdFestivals.enabled;
     this.hunt.enabled = settings.hunt.enabled;

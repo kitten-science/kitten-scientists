@@ -1,4 +1,4 @@
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { UnicornItemVariant } from "../types";
 import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -318,10 +318,10 @@ export class ReligionSettings extends SettingTrigger {
     this.enabled = settings.enabled;
     this.trigger = settings.trigger;
 
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      this.buildings[name].enabled = item.enabled;
-      this.buildings[name].max = item.max;
-    }
+    consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
+      building.enabled = item?.enabled ?? building.enabled;
+      building.max = item?.max ?? building.max;
+    });
 
     this.adore.enabled = settings.adore.enabled;
     this.autoPraise.enabled = settings.autoPraise.enabled;

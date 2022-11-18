@@ -1,4 +1,4 @@
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { UnicornItemVariant } from "../types";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { Setting, SettingTrigger } from "./Settings";
@@ -215,10 +215,10 @@ export class ResetReligionSettings extends Setting {
   load(settings: ResetReligionSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      this.buildings[name].enabled = item.enabled;
-      this.buildings[name].trigger = item.trigger;
-    }
+    consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
+      building.enabled = item?.enabled ?? building.enabled;
+      building.trigger = item?.trigger ?? building.trigger;
+    });
   }
 
   static toLegacyOptions(settings: ResetReligionSettings, subject: LegacyStorage) {

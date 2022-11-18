@@ -1,5 +1,5 @@
 import { difference } from "../tools/Array";
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Missions } from "../types";
 import { Setting } from "./Settings";
@@ -78,9 +78,9 @@ export class MissionSettings extends Setting {
   load(settings: MissionSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.missions)) {
-      this.missions[name].enabled = item.enabled;
-    }
+    consumeEntriesPedantic(this.missions, settings.missions, (mission, item) => {
+      mission.enabled = item?.enabled ?? mission.enabled;
+    });
   }
 
   static toLegacyOptions(settings: MissionSettings, subject: LegacyStorage) {

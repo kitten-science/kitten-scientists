@@ -1,4 +1,4 @@
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { isNil, mustExist } from "../tools/Maybe";
 import { Resource } from "../types";
 import { Setting } from "./Settings";
@@ -81,10 +81,10 @@ export class ResetResourcesSettings extends Setting {
   load(settings: ResetResourcesSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.resources)) {
-      this.resources[name].enabled = item.enabled;
-      this.resources[name].stock = item.stock;
-    }
+    consumeEntriesPedantic(this.resources, settings.resources, (resource, item) => {
+      resource.enabled = item?.enabled ?? resource.enabled;
+      resource.stock = item?.stock ?? resource.stock;
+    });
   }
 
   static toLegacyOptions(settings: ResetResourcesSettings, subject: LegacyStorage) {

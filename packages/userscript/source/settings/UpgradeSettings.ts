@@ -1,5 +1,5 @@
 import { difference } from "../tools/Array";
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { GamePage, Upgrade } from "../types";
 import { Setting } from "./Settings";
@@ -183,9 +183,9 @@ export class UpgradeSettings extends Setting {
   load(settings: UpgradeSettings) {
     this.enabled = settings.enabled;
 
-    for (const [name, item] of objectEntries(settings.upgrades)) {
-      this.upgrades[name].enabled = item.enabled;
-    }
+    consumeEntriesPedantic(this.upgrades, settings.upgrades, (upgrade, item) => {
+      upgrade.enabled = item?.enabled ?? upgrade.enabled;
+    });
   }
 
   static toLegacyOptions(settings: UpgradeSettings, subject: LegacyStorage) {

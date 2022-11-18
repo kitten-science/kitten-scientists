@@ -1,4 +1,4 @@
-import { objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { Cycle, Season } from "../types";
 import { Setting, SettingTriggerMax } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -52,13 +52,12 @@ export class TimeSkipSettings extends SettingTriggerMax {
     super.load(settings);
     this.max = settings.max;
 
-    for (const [name, item] of objectEntries(settings.seasons)) {
-      this.seasons[name].enabled = item.enabled;
-    }
-
-    for (const [name, item] of objectEntries(settings.cycles)) {
-      this.cycles[name].enabled = item.enabled;
-    }
+    consumeEntriesPedantic(this.seasons, settings.seasons, (season, item) => {
+      season.enabled = item?.enabled ?? season.enabled;
+    });
+    consumeEntriesPedantic(this.cycles, settings.cycles, (cycle, item) => {
+      cycle.enabled = item?.enabled ?? cycle.enabled;
+    });
   }
 
   static toLegacyOptions(settings: TimeSkipSettings, subject: LegacyStorage) {
