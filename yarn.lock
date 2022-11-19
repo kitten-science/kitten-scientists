@@ -868,13 +868,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.11.3":
-  version: 18.11.3
-  resolution: "@types/node@npm:18.11.3"
-  checksum: 97da0b4e6505bf179cb0560e02d88e63681ba8d5a1105a91e2870d7ca9f15bc38728670586e96a25760f3830fa366dcb7c8a90f94eba2588ae1c62b55dad5fd6
-  languageName: node
-  linkType: hard
-
 "@types/parse-author@npm:^2.0.0":
   version: 2.0.1
   resolution: "@types/parse-author@npm:2.0.1"
@@ -3088,7 +3081,7 @@ __metadata:
     "@babel/plugin-syntax-import-assertions": 7.20.0
     "@types/babel__core": 7.1.19
     "@types/eslint": 8.4.7
-    "@types/node": 18.11.3
+    "@types/node": 18.11.9
     "@types/prettier": 2.7.1
     "@types/web": 0.0.75
     "@typescript-eslint/eslint-plugin": 5.40.1
