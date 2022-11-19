@@ -6,4 +6,5 @@ updates:
       interval: "daily"
     labels:
       - "dependencies"
+      - "needs:merge"
       - "type:housekeeping"
