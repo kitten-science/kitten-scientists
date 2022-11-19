@@ -15,8 +15,7 @@
     "strict": true,
     "target": "ESNext",
     "incremental": true,
-    "skipLibCheck": true,
-    "types": ["@types/web"]
+    "skipLibCheck": true
   },
   "exclude": ["**/*.cjs", "**/*.js"]
 }

@@ -1,0 +1,10 @@
+name: "KS Label Manager"
+description: "Manages labels on the Kitten Science repositories."
+author: "Oliver Salzburg"
+inputs:
+  repo_token:
+    required: true
+    description: Needs `secrets.GITHUB_TOKEN` to talk to the API.
+runs:
+  using: "node16"
+  main: "output/main.js"
