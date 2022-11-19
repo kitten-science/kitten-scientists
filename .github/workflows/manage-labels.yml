@@ -1,0 +1,27 @@
+name: Manage Labels
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ./.github/labels.yml
+      - ./packages/label-manager/**
+  workflow_dispatch:
+
+concurrency: manage-labels
+
+jobs:
+  manage-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@master
+        with:
+          node-version: 18.x
+      - run: yarn install
+      - run: yarn workspace @kitten-science/label-manager tsc --build
+
+      - uses: ./packages/label-manager
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"

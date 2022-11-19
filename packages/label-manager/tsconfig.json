@@ -1,10 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "source",
+    "module": "commonjs",
     "outDir": "output",
+    "rootDir": "source",
+    "target": "ES6",
     "tsBuildInfoFile": "output/.tsbuildinfo",
-    "types": ["@types/web"]
+    "types": ["@types/node"]
   },
   "include": ["../../@types", "./source"]
 }

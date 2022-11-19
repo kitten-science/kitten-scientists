@@ -1,0 +1,97 @@
+labels:
+  affects:all:
+    color: "0DDAFA"
+    description: Not browser-specific
+  affects:build:
+    color: "0DDAFA"
+    description: An issue with the build process
+  affects:chrome:
+    color: "0DDAFA"
+    description: Has been observed in Chrome
+  affects:firefox:
+    color: "0DDAFA"
+    description: Has been observed in Firefox
+
+  dependencies:
+    color: "BFD4F2"
+    description: Pull requests that update a dependency file
+  # https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels#about-default-labels
+  good first issue:
+    color: "7057ff"
+    description: If you haven't contributed yet, this might be a good place to start
+  help wanted:
+    color: "008672"
+    description: We can't figure this out, please help
+
+  needs:confirmation:
+    color: "eb6420"
+    description: A developer should confirm this issue happening
+  needs:merge:
+    color: "eb6420"
+    description: This work has been completed. It needs to be merged
+  needs:research:
+    color: "eb6420"
+    description: We don't know enough. Someone needs to look into it
+  needs:testing:
+    color: "eb6420"
+    description: Work has been done. Someone needs to test it
+  needs:triage:
+    color: "eb6420"
+    description: A developer needs to look at this
+  needs:work:
+    color: "eb6420"
+    description: It's clear what needs to be done. Now we need to do it
+
+  prio:accepted:
+    color: "53F643"
+    description: Tickets under active consideration for implementation
+  prio:beta:
+    color: "016E96"
+    description: Delayed until beta phase (earliest)
+  prio:important:
+    color: "B60205"
+    description: Should be included in next release
+  prio:rejected:
+    color: "CE3C0F"
+    description: Not realistically solvable at this time
+
+  status:confirmed:
+    color: "c7def8"
+    description: A developer reproduced this issue
+  status:duplicate:
+    color: "c7def8"
+    description: This problem has already neem reported
+  status:fixed:
+    color: "c7def8"
+    description: This problem has been solved
+  status:inprogress:
+    color: "c7def8"
+    description: Someone is actively working on this
+  status:norepro:
+    color: "c7def8"
+    description: We tried, but we don't know why this happens
+  status:wontfix:
+    color: "c7def8"
+    description: Sorry
+
+  type:bug:
+    color: "cc317c"
+    description: Problems in existing behavior
+  type:documentation:
+    color: "cc317c"
+    description: Improvements or additions to documentation
+  type:enhancement:
+    color: "cc317c"
+    description: Improvements to existing behavior
+  type:feature:
+    color: "cc317c"
+    description: Completely new behavior
+  type:housekeeping:
+    color: "cc317c"
+    description: Pull requests that maintain our repository in a clean state
+  type:rfc:
+    color: "cc317c"
+    description: Please provide feedback on this item
+  type:question:
+    color: "cc317c"
+    description: Support; no call to action
