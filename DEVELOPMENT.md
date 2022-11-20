@@ -10,7 +10,7 @@ The project is set up to be used with [VS Code](https://code.visualstudio.com/).
 
 The development environment is expected to be a POSIX-compliant system. On Windows, WSL will do fine.
 
-You will need [NodeJS](https://nodejs.org/) and [yarn](https://yarnpkg.com/getting-started/install) to be able to work with the project.
+You will need [NodeJS](https://nodejs.org/) to be able to work with the project. The project uses [yarn](https://yarnpkg.com/) as a package and project manager, which is usually integrated with recent NodeJS versions.
 
 Additionally, you will need to have [Docker](https://www.docker.com/get-started) available, to use the container-based Kittens Game development server. If you do not have Docker, you can still build a release version of the script and drop that into your userscript manager.
 
