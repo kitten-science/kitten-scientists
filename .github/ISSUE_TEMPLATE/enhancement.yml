@@ -1,0 +1,23 @@
+name: Enhancement
+description: An improvement to existing functionality
+labels: ["type:enhancement", "needs:triage"]
+assignees:
+  - oliversalzburg
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the enhancement
+      description: How is the feature behaving right now, and how should it be improved?
+    validations:
+      required: true
+
+  - type: textarea
+    id: savegame
+    attributes:
+      label: Your savegame
+      description: Provide a savegame that is suitable to illustrate your idea.
+      placeholder: Paste your savegame export here
+      render: Text
+    validations:
+      required: false

@@ -1,0 +1,36 @@
+name: Feature
+description: Completely new functionality
+labels:
+  - "needs:triage"
+  - "prio:beta"
+  - "type:feature"
+assignees:
+  - oliversalzburg
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Note that new features are currently _rarely_ considered to be implemented
+        any time soon.
+
+        Right now, the focus is on fixing bugs, and filling gaps in functionality. If you feel
+        like your idea fits better into one of those categories, consider filing a **bug** or
+        an **enhancement** instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+      description: How should this new feature behave?
+    validations:
+      required: true
+
+  - type: textarea
+    id: savegame
+    attributes:
+      label: Your savegame
+      description: Provide a savegame that is suitable to illustrate your idea.
+      placeholder: Paste your savegame export here
+      render: Text
+    validations:
+      required: false
