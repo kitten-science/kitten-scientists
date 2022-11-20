@@ -10,7 +10,7 @@ body:
     id: checks
     attributes:
       label: Version Check
-      description: Please checkk all applicable statements.
+      description: Please check all applicable statements. You don't _need_ to check any of these.
       options:
         - label: I have updated to `v2.0.0-alpha.10` or later.
           required: false
