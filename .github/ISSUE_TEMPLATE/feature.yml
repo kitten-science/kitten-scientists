@@ -1,5 +1,5 @@
 name: Feature
-description: Completely new functionality
+description: Suggest an idea for completely new functionality
 labels:
   - "needs:triage"
   - "prio:beta"
@@ -10,17 +10,16 @@ body:
   - type: markdown
     attributes:
       value: |
-        Note that new features are currently _rarely_ considered to be implemented
-        any time soon.
+        Note that new features are currently _rarely_ considered to be implemented any time soon.
 
-        Right now, the focus is on fixing bugs, and filling gaps in functionality. If you feel
-        like your idea fits better into one of those categories, consider filing a **bug** or
-        an **enhancement** instead.
+        Right now, the focus is on _fixing bugs_, and _filling gaps in functionality_.
+
+        If you feel like your idea fits better into one of those categories, consider filing a **bug** or an **enhancement** instead.
 
   - type: textarea
     id: description
     attributes:
-      label: Describe the feature
+      label: Describe the Feature
       description: How should this new feature behave?
     validations:
       required: true
@@ -28,7 +27,7 @@ body:
   - type: textarea
     id: savegame
     attributes:
-      label: Your savegame
+      label: Your Savegame
       description: Provide a savegame that is suitable to illustrate your idea.
       placeholder: Paste your savegame export here
       render: Text

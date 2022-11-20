@@ -1,0 +1,54 @@
+name: Bug report
+description: Create a report to help us improve
+labels:
+  - "needs:triage"
+  - "type:bug"
+assignees:
+  - oliversalzburg
+body:
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Version Check
+      description: Please checkk all applicable statements.
+      options:
+        - label: I have updated to `v2.0.0-alpha.9` or later.
+          required: false
+        - label: I have updated to the `nightly` build from last night (or latest one available).
+          required: false
+        - label: I have tested with the latest source code from `main` as of today.
+          required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: savegame
+    attributes:
+      label: Your Savegame
+      description: Provide a savegame that is suitable to illustrate the bug.
+      placeholder: Paste your savegame export here
+      render: Text
+    validations:
+      required: false
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: To Reproduce
+      description: If needed, provide additional steps how to reproduce the issue in the savegame.
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem.
+    validations:
+      required: false
