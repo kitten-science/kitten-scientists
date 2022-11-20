@@ -1,14 +1,12 @@
 # Development Guide
 
-## Active development on the script
-
-The project is set up to be used with [VS Code](https://code.visualstudio.com/). While other editors will work fine, some integrations have been prepared to make the development process easier.
-
-### Introduction
+## Introduction
 
 The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in [userscript source code](https://github.com/kitten-science/kitten-scientists/tree/main/packages/userscript/source) and then be compiled into the userscript.
 
-### Prerequisites
+The project is set up to be used with [VS Code](https://code.visualstudio.com/). While other editors will work fine, some integrations have been prepared to make the development process easier.
+
+## Prerequisites
 
 The development environment is expected to be a POSIX-compliant system. On Windows, WSL will do fine.
 
@@ -16,19 +14,15 @@ You will need [NodeJS](https://nodejs.org/) and [yarn](https://yarnpkg.com/getti
 
 Additionally, you will need to have [Docker](https://www.docker.com/get-started) available, to use the container-based Kittens Game development server. If you do not have Docker, you can still build a release version of the script and drop that into your userscript manager.
 
-### Development (with Kittens Game container)
+## Development
+
+### with Kittens Game Container
 
 The development container provides a version of Kittens Game that already a Kitten Scientists version injected into it, based on your local development state.
 
-1. Start a watcher to continuously rebuild KS when you make code changes.
+1. Manual Refresh (recommended)
 
-    ```shell
-    yarn userscript:watch
-    ```
-
-    > This task can also be started directly in VS Code, using the **Run Task** command.
-
-1. Build the development container and start it.
+    Build the development container and start it.
 
     ```shell
     yarn devcontainer:run
@@ -38,17 +32,19 @@ The development container provides a version of Kittens Game that already a Kitt
 
     You will need to manually reload the page after each build to get the latest changes in the browser.
 
+1. Watcher (experimental)
+
+    Start a watcher to continuously rebuild KS when you make code changes.
+
+    ```shell
+    yarn userscript:watch
+    ```
+
+    > This task can also be started directly in VS Code, using the **Run Task** command.
+
 When the container is built, it downloads the latest version of the game from https://bitbucket.org/bloodrizer/kitten-game.
 
-Additionally, the Kitten Scientists will use a pre-configured set of options. This makes it easier to always start debugging with a defined state.
-
-If you need to make changes to either the stored game state or the pre-configured options, see the [`packages/userscript/source/fixtures`](https://github.com/kitten-science/kitten-scientists/tree/main/packages/userscript/source/fixtures) directory.
-The savegame data is a simple export from the game and the settings are a copy of the object that is stored in localStorage. This can be accessed through the DevTools of the browser.
-
-If you have another savegame to load, you can set the path in the environment variable `KG_SAVEGAME`, the default is `"./fixtures/lategame"`.  
-If you have other settings to load, you can set the path in the environment variable `KS_SETTINGS`, the default is `"./fixtures/localstorage.json"`.
-
-### Development (without container)
+### without Container
 
 To develop without containers, you can build a development version of the userscript with full debugging information.
 
@@ -60,11 +56,13 @@ To develop without containers, you can build a development version of the usersc
 
     The userscript is placed in the `packages/userscript/output` directory.
 
-### Type-checking
+### Type-Checking
 
 To fill the **Problems** panel in VS Code with all current, type-related errors, run the `typecheck:all` npm task in VS Code.
 
-## Building a release version of the userscript
+## Releases
+
+### Building a release version of the userscript
 
 1. Run the script to build the release:
 
@@ -72,7 +70,7 @@ To fill the **Problems** panel in VS Code with all current, type-related errors,
     yarn userscript:release
     ```
 
-## Releasing a new version
+### Releasing a new version
 
 1. Build a preview of the script:
 
