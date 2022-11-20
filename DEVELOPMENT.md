@@ -14,9 +14,7 @@ You will need [NodeJS](https://nodejs.org/) and [yarn](https://yarnpkg.com/getti
 
 Additionally, you will need to have [Docker](https://www.docker.com/get-started) available, to use the container-based Kittens Game development server. If you do not have Docker, you can still build a release version of the script and drop that into your userscript manager.
 
-## Development
-
-### with Kittens Game Container
+## Development with Kittens Game Container
 
 The development container provides a version of Kittens Game that already a Kitten Scientists version injected into it, based on your local development state.
 
@@ -44,7 +42,7 @@ The development container provides a version of Kittens Game that already a Kitt
 
 When the container is built, it downloads the latest version of the game from https://bitbucket.org/bloodrizer/kitten-game.
 
-### without Container
+## Development without Container
 
 To develop without containers, you can build a development version of the userscript with full debugging information.
 
@@ -56,21 +54,21 @@ To develop without containers, you can build a development version of the usersc
 
     The userscript is placed in the `packages/userscript/output` directory.
 
-### Type-Checking
+## Type-Checking
 
 To fill the **Problems** panel in VS Code with all current, type-related errors, run the `typecheck:all` npm task in VS Code.
 
 ## Releases
 
-### Building a release version of the userscript
+### Building a Release Version of the Userscript
 
-1. Run the script to build the release:
+Run the script to build the release:
 
-    ```shell
-    yarn userscript:release
-    ```
+```shell
+yarn userscript:release
+```
 
-### Releasing a new version
+### Releasing a New Version
 
 1. Build a preview of the script:
 

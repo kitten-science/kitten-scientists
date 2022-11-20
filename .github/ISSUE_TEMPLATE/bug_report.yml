@@ -1,5 +1,5 @@
-name: Bug report
-description: Create a report to help us improve
+name: Bug Report
+description: Tell us about something that is not working as expected
 labels:
   - "needs:triage"
   - "type:bug"
