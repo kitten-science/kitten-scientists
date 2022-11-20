@@ -166,10 +166,11 @@ export class UserScript {
     const settingsString = JSON.stringify(settings);
     return window.LZString.compressToBase64(settingsString);
   }
-  copySettings() {
+  async copySettings() {
     const settings = this.getSettings();
     const compressedSettings = this.encodeSettings(settings);
-    return window.navigator.clipboard.writeText(compressedSettings);
+    await window.navigator.clipboard.writeText(compressedSettings);
+    this.engine.imessage("settings.copied");
   }
 
   setSettings(settings: EngineState) {
@@ -184,6 +185,7 @@ export class UserScript {
   importSettings(compressedSettings: string) {
     const settings = this.decodeSettings(compressedSettings);
     this.setSettings(settings);
+    this.engine.imessage("settings.imported");
   }
 
   installSaveManager() {

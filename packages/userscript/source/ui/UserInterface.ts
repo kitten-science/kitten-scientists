@@ -1,4 +1,3 @@
-import { cinfo } from "../tools/Log";
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
@@ -101,15 +100,13 @@ export class UserInterface {
     const copyButton = this._engineUi.copyButton;
     copyButton.element.on("click", () => {
       this._host.copySettings().catch(console.error);
-      cinfo("Settings copied to clipboard.");
     });
     this._engineUi.importButton.element.on("click", () => {
-      const input = window.prompt("Settings BLOB");
+      const input = window.prompt("Paste your settings here");
       if (isNil(input)) {
         return;
       }
       this._host.importSettings(input);
-      cinfo("Settings imported.");
     });
 
     // Set up the "show activity summary" area.
