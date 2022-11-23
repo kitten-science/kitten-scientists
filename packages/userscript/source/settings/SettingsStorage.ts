@@ -187,8 +187,17 @@ export class SettingsStorage {
     ) as LegacyStorage | null;
     return saved === null ? null : saved;
   }
+
   static setLegacyOptions(options: LegacyStorage): void {
     localStorage["cbc.kitten-scientists"] = JSON.stringify(options);
+  }
+
+  static backupLegacyOptions(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    localStorage["cbc.kitten-scientists.backup"] = localStorage["cbc.kitten-scientists"];
+  }
+  static deleteLegacyOptions(): void {
+    delete localStorage["cbc.kitten-scientists"];
   }
 
   /**

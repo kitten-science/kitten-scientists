@@ -44,16 +44,6 @@ export class ResetSettings extends Setting {
     this.time.load(settings.time);
   }
 
-  static toLegacyOptions(settings: ResetSettings, subject: LegacyStorage) {
-    subject.items["toggle-reset"] = settings.enabled;
-
-    ResetBonfireSettings.toLegacyOptions(settings.bonfire, subject);
-    ResetReligionSettings.toLegacyOptions(settings.religion, subject);
-    ResetResourcesSettings.toLegacyOptions(settings.resources, subject);
-    ResetSpaceSettings.toLegacyOptions(settings.space, subject);
-    ResetTimeSettings.toLegacyOptions(settings.time, subject);
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetSettings();
     options.enabled = subject.items["toggle-reset"] ?? options.enabled;

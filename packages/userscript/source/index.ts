@@ -1,5 +1,5 @@
 import { SettingsStorage } from "./settings/SettingsStorage";
-import { cerror, cinfo } from "./tools/Log";
+import { cerror, cinfo, cwarn } from "./tools/Log";
 import { isNil } from "./tools/Maybe";
 import { SavegameLoader } from "./tools/SavegameLoader";
 import { UserScript } from "./UserScript";
@@ -23,10 +23,16 @@ const devSavegame = KG_SAVEGAME ?? null;
   const legacySettings = SettingsStorage.getLegacyOptions();
 
   if (!isNil(legacySettings)) {
-    cinfo("Using restored legacy options.");
+    cwarn("DEPRECATED: Using restored legacy options.");
+    cwarn("1. Your configuration will be migrated to modern storage.");
+    cwarn(
+      "2. Your existing configuration will be moved to `cbc.kitten-scientists.backup` in your browser's LocalStorage."
+    );
     userScript.loadLegacyOptions(legacySettings);
+    SettingsStorage.backupLegacyOptions();
+    SettingsStorage.deleteLegacyOptions();
   } else {
-    cinfo("No legacy options found. Default configuration will be used.");
+    cinfo("No legacy options found. Using Kittens Game integration.");
   }
 
   userScript.validateGame();

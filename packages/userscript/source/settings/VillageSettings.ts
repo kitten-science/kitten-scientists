@@ -53,19 +53,6 @@ export class VillageSettings extends Setting {
     this.promoteLeader.enabled = settings.promoteLeader?.enabled ?? this.promoteLeader.enabled;
   }
 
-  static toLegacyOptions(settings: VillageSettings, subject: LegacyStorage) {
-    subject.toggles.distribute = settings.enabled;
-
-    for (const [name, item] of objectEntries(settings.jobs)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`set-${name}-max` as const] = item.max;
-    }
-
-    subject.items["toggle-festival"] = settings.holdFestivals.enabled;
-    subject.items["toggle-hunt"] = settings.hunt.enabled;
-    subject.items["toggle-promote"] = settings.promoteLeader.enabled;
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new VillageSettings();
     options.enabled = subject.toggles.distribute;

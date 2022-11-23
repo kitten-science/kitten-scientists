@@ -85,13 +85,6 @@ export class ResetBonfireSettings extends Setting {
     });
   }
 
-  static toLegacyOptions(settings: ResetBonfireSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      subject.items[`toggle-reset-build-${name}` as const] = item.enabled;
-      subject.items[`set-reset-build-${name}-min` as const] = item.trigger;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetBonfireSettings();
     options.enabled = true;

@@ -48,15 +48,6 @@ export class EmbassySettings extends SettingTrigger {
     });
   }
 
-  static toLegacyOptions(settings: EmbassySettings, subject: LegacyStorage) {
-    subject.items["toggle-buildEmbassies"] = settings.enabled;
-
-    for (const [name, item] of objectEntries(settings.races)) {
-      subject.items[`toggle-build-${name}` as const] = item.enabled;
-      subject.items[`set-build-${name}-max` as const] = item.max;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new EmbassySettings();
     options.enabled = subject.items["toggle-buildEmbassies"] ?? options.enabled;

@@ -1,5 +1,5 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
-import { isNil, Maybe, mustExist } from "../tools/Maybe";
+import { isNil, Maybe } from "../tools/Maybe";
 import { Resource } from "../types";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -89,24 +89,6 @@ export class ResetResourcesSettings extends Setting {
       resource.enabled = item?.enabled ?? resource.enabled;
       resource.stock = item?.stock ?? resource.stock;
     });
-  }
-
-  static toLegacyOptions(settings: ResetResourcesSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.resources)) {
-      if (isNil(subject.resources[name])) {
-        subject.resources[name] = {
-          checkForReset: item.enabled,
-          stockForReset: item.stock,
-          consume: 0,
-          enabled: false,
-          stock: 0,
-        };
-        continue;
-      }
-
-      mustExist(subject.resources[name]).checkForReset = item.enabled;
-      mustExist(subject.resources[name]).stockForReset = item.stock;
-    }
   }
 
   static fromLegacyOptions(subject: LegacyStorage) {

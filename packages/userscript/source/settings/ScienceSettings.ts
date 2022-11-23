@@ -43,15 +43,6 @@ export class ScienceSettings extends Setting {
     this.observe.enabled = settings.observe?.enabled ?? this.observe.enabled;
   }
 
-  static toLegacyOptions(settings: ScienceSettings, subject: LegacyStorage) {
-    subject.toggles.upgrade = settings.enabled;
-
-    PolicySettings.toLegacyOptions(settings.policies, subject);
-    TechSettings.toLegacyOptions(settings.techs, subject);
-
-    subject.items["toggle-observe"] = settings.observe.enabled;
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ScienceSettings();
     options.enabled = subject.toggles.upgrade;

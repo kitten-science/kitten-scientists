@@ -36,14 +36,6 @@ export class EngineSettings extends Setting {
     this.resources.load(settings.resources);
   }
 
-  static toLegacyOptions(settings: EngineSettings, subject: LegacyStorage) {
-    subject.interval = settings.interval;
-    subject.toggles.engine = settings.enabled;
-
-    FilterSettings.toLegacyOptions(settings.filters, subject);
-    ResourcesSettings.toLegacyOptions(settings.resources, subject);
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new EngineSettings();
 

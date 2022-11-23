@@ -73,18 +73,6 @@ export class SpaceSettings extends SettingTrigger {
     this.unlockMissions.load(settings.unlockMissions);
   }
 
-  static toLegacyOptions(settings: SpaceSettings, subject: LegacyStorage) {
-    subject.toggles.space = settings.enabled;
-    subject.triggers.space = settings.trigger;
-
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`set-${name}-max` as const] = item.max;
-    }
-
-    MissionSettings.toLegacyOptions(settings.unlockMissions, subject);
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new SpaceSettings();
     options.enabled = subject.toggles.space;

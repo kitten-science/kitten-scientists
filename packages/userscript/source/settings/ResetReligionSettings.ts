@@ -226,13 +226,6 @@ export class ResetReligionSettings extends Setting {
     });
   }
 
-  static toLegacyOptions(settings: ResetReligionSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      subject.items[`toggle-reset-faith-${name}` as const] = item.enabled;
-      subject.items[`set-reset-faith-${name}-min` as const] = item.trigger;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetReligionSettings();
     options.enabled = true;

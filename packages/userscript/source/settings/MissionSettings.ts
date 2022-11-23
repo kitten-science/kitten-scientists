@@ -88,14 +88,6 @@ export class MissionSettings extends Setting {
     });
   }
 
-  static toLegacyOptions(settings: MissionSettings, subject: LegacyStorage) {
-    subject.items["toggle-missions"] = settings.enabled;
-
-    for (const [name, item] of objectEntries(settings.missions)) {
-      subject.items[`toggle-mission-${name}` as const] = item.enabled;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new MissionSettings();
     options.enabled = subject.items["toggle-missions"] ?? options.enabled;

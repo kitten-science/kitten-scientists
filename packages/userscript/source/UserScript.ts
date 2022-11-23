@@ -3,10 +3,9 @@ import { Engine, EngineState, SupportedLanguages } from "./Engine";
 
 import { BonfireSettings } from "./settings/BonfireSettings";
 import { EngineSettings } from "./settings/EngineSettings";
-import { Options } from "./settings/Options";
 import { ReligionSettings } from "./settings/ReligionSettings";
 import { ScienceSettings } from "./settings/ScienceSettings";
-import { LegacyStorage, SettingsStorage } from "./settings/SettingsStorage";
+import { LegacyStorage } from "./settings/SettingsStorage";
 import { SpaceSettings } from "./settings/SpaceSettings";
 import { TimeControlSettings } from "./settings/TimeControlSettings";
 import { TimeSettings } from "./settings/TimeSettings";
@@ -122,6 +121,11 @@ export class UserScript {
     }
 
     cinfo("Kitten Scientists initialized.");
+
+    UserScript.window.dojo.subscribe("game/beforesave", (saveData: Record<string, unknown>) => {
+      cinfo("Injecting Kitten Scientists engine state into save data...");
+      saveData.ks = { state: [this.getSettings()] };
+    });
   }
 
   refreshUi() {
@@ -141,21 +145,6 @@ export class UserScript {
       trade: TradeSettings.fromLegacyOptions(source),
       village: VillageSettings.fromLegacyOptions(source),
       workshop: WorkshopSettings.fromLegacyOptions(source),
-    });
-  }
-
-  getLegacyOptions() {
-    return Options.asLegacyOptions({
-      bonfire: this.engine.bonfireManager.settings,
-      engine: this.engine.settings,
-      religion: this.engine.religionManager.settings,
-      science: this.engine.scienceManager.settings,
-      space: this.engine.spaceManager.settings,
-      time: this.engine.timeManager.settings,
-      timeControl: this.engine.timeControlManager.settings,
-      trading: this.engine.tradeManager.settings,
-      village: this.engine.villageManager.settings,
-      workshop: this.engine.workshopManager.settings,
     });
   }
 
@@ -189,43 +178,27 @@ export class UserScript {
   }
 
   installSaveManager() {
-    cinfo("EXPERIMENTAL: Installing save game manager...");
-    this.gamePage.managers.push(this.saveManager);
-  }
-
-  /**
-   * Experimental save manager for Kittens Game.
-   * It can be injected manually into the game to cause KS settings to be
-   * injected into the save blob.
-   *
-   *  game.managers.push(kittenScientists.saveManager)
-   */
-  get saveManager() {
-    return this._saveManager;
+    cinfo("Installing save game manager...");
+    this.gamePage.managers.push(this._saveManager);
   }
 
   private _saveManager = {
     load: (saveData: Record<string, unknown>) => {
-      cwarn("EXPERIMENTAL: Looking for Kitten Scientists engine state in save data...");
+      cinfo("Looking for Kitten Scientists engine state in save data...");
 
       const state = UserScript._tryEngineStateFromSaveData(saveData);
       if (!state) {
         return;
       }
 
-      cwarn(
-        "EXPERIMENTAL: Found Kitten Scientists engine state in save data. These will NOT be loaded at this time."
-      );
-      //this.engine.stateLoad(state);
+      cinfo("Found Kitten Scientists engine state in save data.");
+      this.engine.stateLoad(state);
+      this.refreshUi();
     },
     resetState: () => null,
     save: (saveData: Record<string, unknown>) => {
-      cwarn("EXPERIMENTAL: Injecting Kitten Scientists engine state into save data...");
-      saveData.ks = { state: [this.getSettings()] };
-
-      // Also save to legacy storage.
-      SettingsStorage.setLegacyOptions(this.getLegacyOptions());
-      cinfo("Kitten Scientists settings (legacy) saved.");
+      // We ignore the manager invokation, because we already handle the
+      // `game/beforesave` event, which is intended for external consumers.
     },
   };
 
@@ -269,17 +242,16 @@ export class UserScript {
         "server/load",
         (saveData: { ks?: { state?: Array<EngineState> } }) => {
           cinfo(
-            "EXPERIMENTAL: `server/load` signal caught. Looking for Kitten Scientists engine state in save data..."
+            "`server/load` signal caught. Looking for Kitten Scientists engine state in save data..."
           );
 
           const state = UserScript._tryEngineStateFromSaveData(saveData);
           if (!state) {
+            cinfo("The Kittens Game save data did not contain an engine state.");
             return;
           }
 
-          cinfo(
-            "EXPERIMENTAL: Found! Provided save data will be used as seed for next userscript instance."
-          );
+          cinfo("Found! Provided save data will be used as seed for next userscript instance.");
           UserScript._possibleEngineState = state;
         }
       );

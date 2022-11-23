@@ -106,26 +106,6 @@ export class TradeSettings extends SettingTrigger {
     this.unlockRaces.load(settings.unlockRaces);
   }
 
-  static toLegacyOptions(settings: TradeSettings, subject: LegacyStorage) {
-    subject.toggles.trade = settings.enabled;
-    subject.triggers.trade = settings.trigger;
-
-    for (const [name, item] of objectEntries(settings.races)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`toggle-limited-${name}` as const] = item.limited;
-      subject.items[`toggle-${name}-autumn` as const] = item.seasons.autumn.enabled;
-      subject.items[`toggle-${name}-spring` as const] = item.seasons.spring.enabled;
-      subject.items[`toggle-${name}-summer` as const] = item.seasons.summer.enabled;
-      subject.items[`toggle-${name}-winter` as const] = item.seasons.winter.enabled;
-    }
-
-    EmbassySettings.toLegacyOptions(settings.buildEmbassies, subject);
-
-    subject.items["toggle-autofeed"] = settings.feedLeviathans.enabled;
-    subject.items["toggle-crypto"] = settings.tradeBlackcoin.enabled;
-    subject.items["toggle-races"] = settings.unlockRaces.enabled;
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new TradeSettings();
     options.enabled = subject.toggles.trade;
