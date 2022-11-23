@@ -3,6 +3,7 @@ import { MaterialsCache } from "./helper/MaterialsCache";
 import { VillageSettings } from "./settings/VillageSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
+import { cdebug, cinfo, cwarn } from "./tools/Log";
 import { isNil } from "./tools/Maybe";
 import { Resource } from "./types";
 import { JobInfo, VillageTab } from "./types/village";
@@ -41,6 +42,10 @@ export class VillageManager implements Automation {
 
     if (this.settings.holdFestivals.enabled) {
       this.autoFestival(this._cacheManager);
+    }
+
+    if (this.settings.electLeader.enabled) {
+      this.autoElect();
     }
 
     if (this.settings.promoteLeader.enabled) {
@@ -95,6 +100,36 @@ export class VillageManager implements Automation {
       "ks-distribute"
     );
     this._host.engine.storeForSummary("distribute", 1);
+  }
+
+  autoElect(): void {
+    const kittens = this._host.gamePage.village.sim.kittens;
+    const leader = this._host.gamePage.village.leader;
+    const job = this.settings.electLeader.job.selected;
+    const trait = this.settings.electLeader.trait.selected;
+
+    const leaderCandidates = kittens.filter(
+      kitten => kitten.job === job && kitten.trait.name === trait
+    );
+    cdebug(`Found '${leaderCandidates.length}' possible leader candidates.`);
+
+    if (leaderCandidates.length === 0) {
+      return;
+    }
+
+    leaderCandidates.sort((a, b) => b.rank - a.rank);
+    const bestLeader = leaderCandidates[0];
+    cdebug(
+      `Best leader candidate (${bestLeader.name} ${bestLeader.surname}) has rank '${bestLeader.rank}'.`
+    );
+    cdebug(`Current leader (${bestLeader.name} ${bestLeader.surname}) has rank '${leader.rank}'.`);
+
+    if (leader.trait.name === trait && leader.job === job && bestLeader.rank <= leader.rank) {
+      cinfo("Current leader is already ideal. No changes are made.");
+      return;
+    }
+
+    cwarn("Current leader is not ideal!");
   }
 
   autoPromote(): void {

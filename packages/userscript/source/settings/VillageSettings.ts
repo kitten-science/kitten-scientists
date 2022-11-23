@@ -1,6 +1,7 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Job } from "../types";
+import { ElectLeaderSettings } from "./ElectLeaderSettings";
 import { Setting, SettingMax, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
 
@@ -12,6 +13,7 @@ export class VillageSettings extends Setting {
   holdFestivals: Setting;
   hunt: SettingTrigger;
   promoteLeader: Setting;
+  electLeader: ElectLeaderSettings;
 
   constructor(
     enabled = false,
@@ -27,13 +29,15 @@ export class VillageSettings extends Setting {
     },
     holdFestivals = new Setting(true),
     hunt = new SettingTrigger(true, 0.98),
-    promoteLeader = new Setting(true)
+    promoteLeader = new Setting(true),
+    electLeader = new ElectLeaderSettings()
   ) {
     super(enabled);
     this.jobs = jobs;
     this.holdFestivals = holdFestivals;
     this.hunt = hunt;
     this.promoteLeader = promoteLeader;
+    this.electLeader = electLeader;
   }
 
   load(settings: Maybe<Partial<VillageSettings>>) {
@@ -51,6 +55,7 @@ export class VillageSettings extends Setting {
     this.holdFestivals.enabled = settings.holdFestivals?.enabled ?? this.holdFestivals.enabled;
     this.hunt.enabled = settings.hunt?.enabled ?? this.hunt.enabled;
     this.promoteLeader.enabled = settings.promoteLeader?.enabled ?? this.promoteLeader.enabled;
+    this.electLeader.load(settings.electLeader);
   }
 
   static fromLegacyOptions(subject: LegacyStorage) {

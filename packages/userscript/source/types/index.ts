@@ -92,6 +92,16 @@ export type Job =
   | "scholar"
   | "woodcutter";
 
+export type Trait =
+  | "chemist"
+  | "engineer"
+  | "manager"
+  | "matallurgist"
+  | "merchant"
+  | "none"
+  | "scientist"
+  | "wise";
+
 export type AllBuildings =
   | Building
   | ChronoForgeUpgrades
@@ -158,6 +168,29 @@ export type GameTab = {
   render: () => void;
   tabId: TabId;
   visible: boolean;
+};
+
+export type Kitten = {
+  age: number;
+  color: number;
+  engineerSpecialtity: null;
+  exp: number;
+  isAdopted: boolean;
+  isLeader: boolean;
+  isSenator: boolean;
+  job: Job;
+  name: string;
+  rank: number;
+  rarity: number;
+  skills: {
+    priest: number;
+  };
+  surname: string;
+  trait: {
+    name: Trait;
+    title: string;
+  };
+  variety: number;
 };
 
 export type Challenge =
