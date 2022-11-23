@@ -120,3 +120,16 @@ export class SettingTriggerMax extends SettingTrigger implements SettingMax {
     this.max = setting.max ?? this.max;
   }
 }
+
+export class SettingOptions<T = string> {
+  readonly #options: Array<{ label: string; value: T }>;
+  selected: T | undefined;
+
+  get options() {
+    return this.#options;
+  }
+
+  constructor(options = new Array<{ label: string; value: T }>()) {
+    this.#options = options;
+  }
+}
