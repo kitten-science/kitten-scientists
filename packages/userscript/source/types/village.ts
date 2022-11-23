@@ -1,8 +1,9 @@
-import { BuildButton, GameTab, Job } from ".";
+import { BuildButton, GameTab, Job, Kitten } from ".";
 
 export type VillageTab = GameTab & {
   censusPanel: {
     census: {
+      makeLeader: (kitten: Kitten) => void;
       renderGovernment: (model: unknown) => void;
       update: () => void;
     };

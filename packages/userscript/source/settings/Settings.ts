@@ -132,4 +132,12 @@ export class SettingOptions<T = string> {
   constructor(options = new Array<{ label: string; value: T }>()) {
     this.#options = options;
   }
+
+  load(setting: Maybe<Partial<SettingOptions<T>>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
+    this.selected = setting.selected ?? this.selected;
+  }
 }

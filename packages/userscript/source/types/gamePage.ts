@@ -6,7 +6,7 @@ import {
   BuildingMeta,
   Challenge,
   GameTab,
-  Job,
+  Kitten,
   Policy,
   Price,
   Race,
@@ -382,7 +382,7 @@ export type GamePage = {
     happiness: number;
     huntAll: () => void;
     jobs: Array<JobInfo>;
-    leader: { job: Job; rank: number };
+    leader: Kitten;
     /**
      * @deprecated
      */
@@ -398,7 +398,7 @@ export type GamePage = {
     };
     sim: {
       goldToPromote: (rank: number, value0: number, value1: number) => Array<unknown>;
-      kittens: Array<unknown>;
+      kittens: Array<Kitten>;
       promote: (leader: unknown, rank: number) => number;
     };
   };

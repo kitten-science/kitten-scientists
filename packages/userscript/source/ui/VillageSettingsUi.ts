@@ -2,6 +2,7 @@ import { SettingMax } from "../settings/Settings";
 import { VillageSettings } from "../settings/VillageSettings";
 import { UserScript } from "../UserScript";
 import { HeaderListItem } from "./components/HeaderListItem";
+import { OptionsListItem } from "./components/OptionsListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
@@ -12,6 +13,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   private readonly _hunt: SettingTriggerListItem;
   private readonly _festivals: SettingListItem;
   private readonly _promoteLeader: SettingListItem;
+  private readonly _electLeader: SettingListItem;
 
   constructor(host: UserScript, settings: VillageSettings) {
     const label = host.engine.i18n("ui.distribute");
@@ -115,6 +117,39 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       }
     );
     this.addChild(this._promoteLeader);
+
+    this._electLeader = new SettingListItem(
+      this._host,
+      "Elect leader",
+      this.setting.electLeader,
+      {
+        onCheck: () =>
+          this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.elect")]),
+        onUnCheck: () =>
+          this._host.engine.imessage("status.sub.disable", [
+            this._host.engine.i18n("option.elect"),
+          ]),
+      },
+      false,
+      false,
+      false
+    );
+    this.addChild(this._electLeader);
+
+    this._electLeader.addChildren([
+      new OptionsListItem(host, "Job", this.setting.electLeader.job, {
+        onCheck: () =>
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.promote"),
+          ]),
+      }),
+      new OptionsListItem(host, "Trait", this.setting.electLeader.trait, {
+        onCheck: () =>
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.promote"),
+          ]),
+      }),
+    ]);
   }
 
   private _getDistributeOption(option: SettingMax, label: string, delimiter = false) {
