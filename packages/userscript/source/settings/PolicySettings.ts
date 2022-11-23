@@ -96,14 +96,6 @@ export class PolicySettings extends Setting {
     });
   }
 
-  static toLegacyOptions(settings: PolicySettings, subject: LegacyStorage) {
-    subject.items["toggle-policies"] = settings.enabled;
-
-    for (const [name, item] of objectEntries(settings.policies)) {
-      subject.items[`toggle-policy-${name}` as const] = item.enabled;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new PolicySettings();
     options.enabled = subject.items["toggle-policies"] ?? options.enabled;

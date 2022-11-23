@@ -112,14 +112,6 @@ export class FilterSettings extends Setting {
     });
   }
 
-  static toLegacyOptions(settings: FilterSettings, subject: LegacyStorage) {
-    subject.toggles.filter = settings.enabled;
-
-    for (const [name, item] of objectEntries(settings.filters)) {
-      subject.items[`toggle-${name}Filter` as const] = item.enabled;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new FilterSettings();
     options.enabled = subject.toggles.filter;

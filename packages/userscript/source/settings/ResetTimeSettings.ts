@@ -94,13 +94,6 @@ export class ResetTimeSettings extends Setting {
     });
   }
 
-  static toLegacyOptions(settings: ResetTimeSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      subject.items[`toggle-reset-time-${name}` as const] = item.enabled;
-      subject.items[`set-reset-time-${name}-min` as const] = item.trigger;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetTimeSettings();
     options.enabled = true;

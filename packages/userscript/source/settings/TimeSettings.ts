@@ -74,18 +74,6 @@ export class TimeSettings extends SettingTrigger {
     });
   }
 
-  static toLegacyOptions(settings: TimeSettings, subject: LegacyStorage) {
-    subject.toggles.time = settings.enabled;
-    subject.triggers.time = settings.trigger;
-
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`set-${name}-max` as const] = item.max;
-    }
-
-    subject.items[`toggle-fixCry`] = settings.fixCryochambers.enabled;
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const settings = new TimeSettings();
     settings.enabled = subject.toggles.time;

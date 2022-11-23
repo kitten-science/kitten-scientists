@@ -336,24 +336,6 @@ export class ReligionSettings extends SettingTrigger {
     this.autoPraise.trigger = settings.autoPraise?.trigger ?? this.autoPraise.trigger;
   }
 
-  static toLegacyOptions(settings: ReligionSettings, subject: LegacyStorage) {
-    subject.toggles.faith = settings.enabled;
-    subject.triggers.faith = settings.trigger;
-
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`set-${name}-max` as const] = item.max;
-    }
-
-    subject.items["toggle-adore"] = settings.adore.enabled;
-    subject.items["toggle-autoPraise"] = settings.autoPraise.enabled;
-    subject.items["toggle-bestUnicornBuilding"] = settings.bestUnicornBuilding.enabled;
-    subject.items["toggle-transcend"] = settings.transcend.enabled;
-
-    subject.items["set-adore-trigger"] = settings.adore.trigger;
-    subject.items["set-autoPraise-trigger"] = settings.autoPraise.trigger;
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ReligionSettings();
     options.enabled = subject.toggles.faith;

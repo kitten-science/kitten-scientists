@@ -84,21 +84,6 @@ export class WorkshopSettings extends SettingTrigger {
     this.shipOverride.enabled = settings.shipOverride?.enabled ?? this.shipOverride.enabled;
   }
 
-  static toLegacyOptions(settings: WorkshopSettings, subject: LegacyStorage) {
-    subject.toggles.craft = settings.enabled;
-    subject.triggers.craft = settings.trigger;
-
-    for (const [name, item] of objectEntries(settings.resources)) {
-      subject.items[`toggle-${name}` as const] = item.enabled;
-      subject.items[`toggle-limited-${name}` as const] = item.limited;
-      subject.items[`set-${name}-craft-max` as const] = item.max;
-    }
-
-    UpgradeSettings.toLegacyOptions(settings.unlockUpgrades, subject);
-
-    subject.items["toggle-shipOverride"] = settings.shipOverride.enabled;
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new WorkshopSettings();
     options.enabled = subject.toggles.craft;

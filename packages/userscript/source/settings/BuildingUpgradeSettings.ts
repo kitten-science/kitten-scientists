@@ -43,14 +43,6 @@ export class BuildingUpgradeSettings extends Setting {
     });
   }
 
-  static toLegacyOptions(settings: BuildingUpgradeSettings, subject: LegacyStorage) {
-    subject.items["toggle-buildings"] = settings.enabled;
-
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new BuildingUpgradeSettings();
     options.enabled = subject.items["toggle-buildings"] ?? options.enabled;

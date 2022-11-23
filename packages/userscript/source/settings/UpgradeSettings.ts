@@ -193,14 +193,6 @@ export class UpgradeSettings extends Setting {
     });
   }
 
-  static toLegacyOptions(settings: UpgradeSettings, subject: LegacyStorage) {
-    subject.items["toggle-upgrades"] = settings.enabled;
-
-    for (const [name, item] of objectEntries(settings.upgrades)) {
-      subject.items[`toggle-upgrade-${name}` as const] = item.enabled;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new UpgradeSettings();
     options.enabled = subject.items["toggle-upgrades"] ?? options.enabled;

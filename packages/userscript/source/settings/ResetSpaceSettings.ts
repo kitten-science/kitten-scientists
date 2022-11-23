@@ -62,13 +62,6 @@ export class ResetSpaceSettings extends Setting {
     });
   }
 
-  static toLegacyOptions(settings: ResetSpaceSettings, subject: LegacyStorage) {
-    for (const [name, item] of objectEntries(settings.buildings)) {
-      subject.items[`toggle-reset-space-${name}` as const] = item.enabled;
-      subject.items[`set-reset-space-${name}-min` as const] = item.trigger;
-    }
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new ResetSpaceSettings();
     options.enabled = true;

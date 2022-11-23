@@ -37,16 +37,6 @@ export class TimeControlSettings extends Setting {
     this.timeSkip.load(settings.timeSkip);
   }
 
-  static toLegacyOptions(settings: TimeControlSettings, subject: LegacyStorage) {
-    subject.toggles.timeCtrl = settings.enabled;
-
-    subject.items["toggle-accelerateTime"] = settings.accelerateTime.enabled;
-    subject.items["set-accelerateTime-trigger"] = settings.accelerateTime.trigger;
-
-    ResetSettings.toLegacyOptions(settings.reset, subject);
-    TimeSkipSettings.toLegacyOptions(settings.timeSkip, subject);
-  }
-
   static fromLegacyOptions(subject: LegacyStorage) {
     const options = new TimeControlSettings();
     options.enabled = subject.toggles.timeCtrl;
