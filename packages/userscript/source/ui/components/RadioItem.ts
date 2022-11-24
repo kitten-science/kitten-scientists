@@ -4,6 +4,7 @@ import { UiComponent } from "./UiComponent";
 
 export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
   readonly setting: TSetting;
+  readonly option: TSetting["options"][0];
   readonly element: JQuery<HTMLElement>;
   readonly input: JQuery<HTMLElement>;
 
@@ -65,10 +66,12 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     this.input = input;
     this.element = element;
     this.setting = setting;
+    this.option = option;
   }
 
   refreshUi() {
     super.refreshUi();
+
     this.input.prop("disabled", this.readOnly);
   }
 }

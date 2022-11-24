@@ -6,7 +6,9 @@ import { UiComponent } from "./UiComponent";
 
 export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
   readonly fieldset: Fieldset;
+  readonly setting: TSetting;
   readonly element: JQuery<HTMLElement>;
+  readonly _options: Array<RadioItem>;
 
   /**
    * Construct a new options setting element.
@@ -35,14 +37,25 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
     this.fieldset = new Fieldset(host, label);
     this.addChild(this.fieldset);
 
+    this._options = new Array<RadioItem>();
     for (const option of setting.options) {
-      this.fieldset.addChild(
+      this._options.push(
         new RadioItem(host, setting, option, label, handler, false, false, readOnly)
       );
     }
+    this.fieldset.addChildren(this._options);
+
+    this.setting = setting;
   }
 
   refreshUi() {
     super.refreshUi();
+
+    for (const option of this._options) {
+      if (option.option.value === this.setting.selected) {
+        option.input.prop("checked", true);
+        break;
+      }
+    }
   }
 }
