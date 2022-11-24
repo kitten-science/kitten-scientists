@@ -25,6 +25,7 @@ export class SettingTriggerListItem extends SettingListItem {
 
   refreshUi() {
     super.refreshUi();
+
     this.triggerButton.refreshUi();
   }
 }

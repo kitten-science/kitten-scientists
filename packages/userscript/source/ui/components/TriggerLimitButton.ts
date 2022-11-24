@@ -38,6 +38,8 @@ export class TriggerLimitButton extends UiComponent {
   }
 
   refreshUi() {
+    super.refreshUi();
+
     this.element[0].title = this.setting.trigger.toFixed();
     this.element.text(
       this._host.engine.i18n("ui.trigger", [

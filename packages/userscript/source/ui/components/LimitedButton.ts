@@ -43,6 +43,8 @@ export class LimitedButton extends UiComponent {
   }
 
   refreshUi() {
+    super.refreshUi();
+
     this.checkbox.prop("checked", this.setting.limited);
   }
 }

@@ -40,6 +40,7 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
 
   refreshUi() {
     super.refreshUi();
+
     this.maxButton.refreshUi();
   }
 }

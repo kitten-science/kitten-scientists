@@ -47,6 +47,8 @@ export class MaxButton extends UiComponent {
   }
 
   refreshUi() {
+    super.refreshUi();
+
     this.element[0].title = this.setting.max.toFixed();
     this.element.text(
       this._host.engine.i18n("ui.max", [

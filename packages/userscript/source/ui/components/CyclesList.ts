@@ -123,6 +123,8 @@ export class CyclesList extends SettingsList {
   }
 
   refreshUi() {
+    super.refreshUi();
+
     this.charon.refreshUi();
     this.umbra.refreshUi();
     this.yarn.refreshUi();

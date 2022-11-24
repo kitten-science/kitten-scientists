@@ -73,6 +73,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends UiCompo
 
   refreshUi() {
     super.refreshUi();
+
     this.checkbox.prop("checked", this.setting.enabled);
     this.checkbox.prop("disabled", this.readOnly);
   }

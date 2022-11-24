@@ -43,6 +43,7 @@ export class SettingLimitedListItem extends SettingListItem {
 
   refreshUi() {
     super.refreshUi();
+
     this.limitedButton.refreshUi();
   }
 }

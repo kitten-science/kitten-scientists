@@ -25,6 +25,7 @@ export class SettingTriggerLimitListItem extends SettingListItem {
 
   refreshUi() {
     super.refreshUi();
+
     this.triggerButton.refreshUi();
   }
 }

@@ -46,6 +46,7 @@ export class SettingLimitedMaxListItem extends SettingLimitedListItem {
 
   refreshUi() {
     super.refreshUi();
+
     this.maxButton.refreshUi();
   }
 }

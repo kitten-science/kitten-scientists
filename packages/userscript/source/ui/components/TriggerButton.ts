@@ -38,6 +38,8 @@ export class TriggerButton extends IconButton {
   }
 
   refreshUi() {
+    super.refreshUi();
+
     this.element[0].title = this._host.engine.i18n("ui.trigger", [
       SettingsSectionUi.renderPercentage(this.setting.trigger),
     ]);

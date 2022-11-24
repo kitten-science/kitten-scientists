@@ -259,10 +259,11 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   }
 
   refreshUi() {
+    super.refreshUi();
+
     for (const building of this._unicornBuildings) {
       building.readOnly = this._bestUnicornBuilding.setting.enabled;
       building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;
     }
-    super.refreshUi();
   }
 }

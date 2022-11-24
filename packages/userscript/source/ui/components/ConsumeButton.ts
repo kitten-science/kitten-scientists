@@ -39,6 +39,8 @@ export class ConsumeButton extends UiComponent {
   }
 
   refreshUi() {
+    super.refreshUi();
+
     this.element[0].title = this.setting.consume.toString();
     this.element.text(
       this._host.engine.i18n("resources.consume", [
