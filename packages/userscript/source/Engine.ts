@@ -264,6 +264,259 @@ export class Engine {
     await this.timeControlManager.tick(context);
   }
 
+  getEnergyReport() {
+    const accelerator = this._host.gamePage.bld.getBuildingExt("accelerator").meta;
+    const aqueduct = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
+    const biolab = this._host.gamePage.bld.getBuildingExt("biolab").meta;
+    const calciner = this._host.gamePage.bld.getBuildingExt("calciner").meta;
+    const chronosphere = this._host.gamePage.bld.getBuildingExt("chronosphere").meta;
+    const factory = this._host.gamePage.bld.getBuildingExt("factory").meta;
+    const library = this._host.gamePage.bld.getBuildingExt("library").meta;
+    const lunaroutpost = this._host.gamePage.space.getBuilding("moonOutpost");
+    const magneto = this._host.gamePage.bld.getBuildingExt("magneto").meta;
+    const moonbase = this._host.gamePage.space.getBuilding("moonBase");
+    const oilwell = this._host.gamePage.bld.getBuildingExt("oilWell").meta;
+    const orbitalarray = this._host.gamePage.space.getBuilding("orbitalArray");
+    const pasture = this._host.gamePage.bld.getBuildingExt("pasture").meta;
+    const reactor = this._host.gamePage.bld.getBuildingExt("reactor").meta;
+    const satellite = this._host.gamePage.space.getBuilding("sattelite");
+    const spacestation = this._host.gamePage.space.getBuilding("spaceStation");
+    const steamworks = this._host.gamePage.bld.getBuildingExt("steamworks").meta;
+    const sunlifter = this._host.gamePage.space.getBuilding("sunlifter");
+
+    const acceleratorCount = accelerator.on;
+    const biolabCount = biolab.on;
+    const calcinerCount = calciner.on;
+    const chronosphereCount = chronosphere.val;
+    const datacenterCount = library.stage === 1 ? library.on : 0;
+    const factoryCount = factory.on;
+    const hydroPlantCount = aqueduct.stage === 1 ? aqueduct.on : 0;
+    const lunaroutpostCount = lunaroutpost.on;
+    const magnetoCount = magneto.on;
+    const moonbaseCount = moonbase.on;
+    const oilwellCount = oilwell.on;
+    const orbitalarrayCount = orbitalarray.on;
+    const reactorCount = reactor.on;
+    const satelliteCount = satellite.val;
+    const solarFarmCount = pasture.stage === 1 ? pasture.on : 0;
+    const spacestationCount = spacestation.on;
+    const steamworksCount = steamworks.on;
+    const sunlifterCount = sunlifter.val;
+
+    const acceleratorEnergy =
+      0 < acceleratorCount ? -(accelerator.effects.energyConsumption ?? 0) : 0;
+    const biolabEnergy = 0 < biolabCount ? -(biolab.effects.energyConsumption ?? 0) : 0;
+    const calcinerEnergy = 0 < calcinerCount ? -(calciner.effects.energyConsumption ?? 0) : 0;
+    const chronosphereEnergy =
+      0 < chronosphereCount ? -(chronosphere.effects.energyConsumption ?? 0) : 0;
+    const datacenterEnergy =
+      0 < datacenterCount ? -(library.stages?.[1]?.effects?.energyConsumption ?? 0) : 0;
+    const factoryEnergy = 0 < factoryCount ? -(factory.effects.energyConsumption ?? 0) : 0;
+    const hydroPlantEnergy =
+      0 < hydroPlantCount ? aqueduct.stages?.[1]?.effects?.energyProduction ?? 0 : 0;
+    const lunaroutpostEnergy =
+      0 < lunaroutpostCount ? -(lunaroutpost.effects.energyConsumption ?? 0) : 0;
+    const magnetoEnergy = 0 < magnetoCount ? magneto.effects.energyProduction ?? 0 : 0;
+    const moonbaseEnergy = 0 < moonbaseCount ? -(moonbase.effects.energyConsumption ?? 0) : 0;
+    const oilwellEnergy = 0 < oilwellCount ? -(oilwell.effects.energyConsumption ?? 0) : 0;
+    const orbitalarrayEnergy =
+      0 < orbitalarrayCount ? -(orbitalarray.effects.energyConsumption ?? 0) : 0;
+    const reactorEnery = 0 < reactorCount ? reactor.effects.energyProduction ?? 0 : 0;
+    const satelitteEnergy = 0 < satelliteCount ? satellite.effects.energyProduction ?? 0 : 0;
+    const solarFarmEnergy =
+      0 < solarFarmCount
+        ? pasture.stages?.[1]?.calculateEnergyProduction?.(
+            this._host.gamePage,
+            this._host.gamePage.calendar.season
+          ) ?? 0
+        : 0;
+    const spacestationEnergy =
+      0 < spacestationCount ? -(spacestation.effects.energyConsumption ?? 0) : 0;
+    const steamworksEnergy = 0 < steamworksCount ? steamworks.effects.energyProduction ?? 0 : 0;
+    const sunlifterEnergy = 0 < sunlifterCount ? sunlifter.effects.energyProduction ?? 0 : 0;
+
+    const acceleratorTotal = acceleratorCount * acceleratorEnergy;
+    const biolabTotal = biolabCount * biolabEnergy;
+    const calcinerTotal = calcinerCount * calcinerEnergy;
+    const chronosphereTotal = chronosphereCount * chronosphereEnergy;
+    const datacenterTotal = datacenterCount * datacenterEnergy;
+    const factoryTotal = factoryCount * factoryEnergy;
+    const hydroPlantTotal = hydroPlantCount * hydroPlantEnergy;
+    const lunaroutpostTotal = lunaroutpostCount * lunaroutpostEnergy;
+    const magnetoTotal = magnetoCount * magnetoEnergy;
+    const moonbaseTotal = moonbaseCount * moonbaseEnergy;
+    const oilwellTotal = oilwellCount * oilwellEnergy;
+    const orbitalarrayTotal = orbitalarrayCount * orbitalarrayEnergy;
+    const reactorTotal = reactorCount * reactorEnery;
+    const satelliteTotal = satelliteCount * satelitteEnergy;
+    const solarFarmTotal = solarFarmCount * solarFarmEnergy;
+    const spacestationTotal = spacestationCount * spacestationEnergy;
+    const steamworksTotal = steamworksCount * steamworksEnergy;
+    const sunlifterTotal = sunlifterCount * sunlifterEnergy;
+
+    const energyChallenge = this._host.gamePage.challenges.getChallenge("energy");
+
+    const energyConsumption: Record<
+      string,
+      {
+        Count: number | undefined;
+        "Energy consumption": number | string | undefined;
+        Total: number;
+      }
+    > = {};
+    const energyProduction = new Array<{
+      Building: string;
+      Count: number | undefined;
+      "Energy production": number | string | undefined;
+      Total: number;
+    }>();
+
+    const consumptionTotal =
+      acceleratorTotal +
+      biolabTotal +
+      calcinerTotal +
+      chronosphereTotal +
+      datacenterTotal +
+      factoryTotal +
+      lunaroutpostTotal +
+      moonbaseTotal +
+      oilwellTotal +
+      orbitalarrayTotal +
+      spacestationTotal;
+
+    const discountTotal =
+      energyChallenge.on * (energyChallenge.effects.energyConsumptionRatio ?? 0) * consumptionTotal;
+
+    energyConsumption["Accelerator"] = {
+      Count: acceleratorCount,
+      "Energy consumption": acceleratorEnergy,
+      Total: acceleratorTotal,
+    };
+    energyConsumption["Biolab"] = {
+      Count: biolabCount,
+      "Energy consumption": biolabEnergy,
+      Total: biolabTotal,
+    };
+    energyConsumption["Calciner"] = {
+      Count: calcinerCount,
+      "Energy consumption": calcinerEnergy,
+      Total: calcinerTotal,
+    };
+    energyConsumption["Chronosphere"] = {
+      Count: chronosphereCount,
+      "Energy consumption": chronosphereEnergy,
+      Total: chronosphereTotal,
+    };
+    energyConsumption["Data center"] = {
+      Count: datacenterCount,
+      "Energy consumption": datacenterEnergy,
+      Total: datacenterTotal,
+    };
+    energyConsumption["Factory"] = {
+      Count: factoryCount,
+      "Energy consumption": factoryEnergy,
+      Total: factoryTotal,
+    };
+    energyConsumption["Lunar outpost"] = {
+      Count: lunaroutpostCount,
+      "Energy consumption": lunaroutpostEnergy,
+      Total: lunaroutpostTotal,
+    };
+    energyConsumption["Moon base"] = {
+      Count: moonbaseCount,
+      "Energy consumption": moonbaseEnergy,
+      Total: moonbaseTotal,
+    };
+    energyConsumption["Oil well"] = {
+      Count: oilwellCount,
+      "Energy consumption": oilwellEnergy,
+      Total: oilwellTotal,
+    };
+    energyConsumption["Orbital array"] = {
+      Count: orbitalarrayCount,
+      "Energy consumption": orbitalarrayEnergy,
+      Total: orbitalarrayTotal,
+    };
+    energyConsumption["Space station"] = {
+      Count: spacestationCount,
+      "Energy consumption": spacestationEnergy,
+      Total: spacestationTotal,
+    };
+    energyConsumption["Energy challenge discount"] = {
+      Count: energyChallenge.on,
+      "Energy consumption": `${Math.round(
+        (energyChallenge.effects.energyConsumptionRatio ?? 0) * 100
+      )}%`,
+      Total: discountTotal,
+    };
+    energyConsumption["Total"] = {
+      Count: undefined,
+      "Energy consumption": undefined,
+      Total: consumptionTotal + discountTotal,
+    };
+
+    energyProduction.push(
+      {
+        Building: "Hydro plant",
+        Count: hydroPlantCount,
+        "Energy production": hydroPlantEnergy,
+        Total: hydroPlantTotal,
+      },
+      {
+        Building: "Magneto",
+        Count: magnetoCount,
+        "Energy production": magnetoEnergy,
+        Total: magnetoTotal,
+      },
+      {
+        Building: "Reactor",
+        Count: reactorCount,
+        "Energy production": reactorEnery,
+        Total: reactorTotal,
+      },
+      {
+        Building: "Satellite",
+        Count: satelliteCount,
+        "Energy production": satelitteEnergy,
+        Total: satelliteTotal,
+      },
+      {
+        Building: "Solar farm",
+        Count: solarFarmCount,
+        "Energy production": solarFarmEnergy,
+        Total: solarFarmTotal,
+      },
+      {
+        Building: "Steamworks",
+        Count: steamworksCount,
+        "Energy production": steamworksEnergy,
+        Total: steamworksTotal,
+      },
+      {
+        Building: "Sunlifter",
+        Count: sunlifterCount,
+        "Energy production": sunlifterEnergy,
+        Total: sunlifterTotal,
+      },
+      {
+        Building: "Total",
+        Count: undefined,
+        "Energy production": undefined,
+        Total:
+          hydroPlantTotal +
+          magnetoEnergy +
+          reactorTotal +
+          satelliteTotal +
+          solarFarmTotal +
+          steamworksTotal +
+          sunlifterTotal,
+      }
+    );
+
+    console.table(energyConsumption);
+    console.table(energyProduction);
+  }
+
   /**
    * Retrieve an internationalized string literal.
    *
