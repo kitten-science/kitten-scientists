@@ -5,33 +5,35 @@ on:
     tags:
       - "v*"
 
+env:
+  DEV_BUILD: false
+
 jobs:
   tagged-release:
-    name: "Tagged Release"
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: read
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: "Use Node.js 18.x"
-        uses: actions/setup-node@master
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          cache: yarn
+          node-version: 18
+      - run: yarn install --immutable
+      - run: yarn lint:all
 
-      - name: Install dependencies
-        run: yarn install
+      - run: yarn userscript:release
 
-      - name: Lint
-        run: yarn lint:all
-
-      - name: Build userscript
-        run: yarn userscript:release
-
-      - uses: "marvinpinto/action-automatic-releases@v1.2.1"
+      - uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
+          automatic_release_tag: latest
           # Create only as draft, so we can add a description on the web UI.
           draft: true
           files: |
             packages/userscript/output/*
+          prerelease: false
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          title: ${{ github.ref_name }}

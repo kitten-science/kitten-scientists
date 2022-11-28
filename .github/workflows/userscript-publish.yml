@@ -15,30 +15,26 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
+      pull-requests: read
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: "Use Node.js 18.x"
-        uses: actions/setup-node@master
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          cache: yarn
+          node-version: 18
+      - run: yarn install --immutable
+      - run: yarn lint:all
 
-      - name: Install dependencies
-        run: yarn install
+      - run: yarn userscript:release
 
-      - name: Lint
-        run: yarn lint:all
-
-      - name: Build userscript
-        run: yarn userscript:release
-
-      - name: Pre-release userscript
-        uses: marvinpinto/action-automatic-releases@latest
+      - uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: true
-          title: "Development Build"
+          automatic_release_tag: latest
+          draft: false
           files: |
             packages/userscript/output/*
+          prerelease: true
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          title: Development Build
