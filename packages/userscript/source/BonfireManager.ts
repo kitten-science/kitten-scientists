@@ -99,127 +99,124 @@ export class BonfireManager implements Automation {
 
     const pastureMeta = this._host.gamePage.bld.getBuildingExt("pasture").meta;
     // If pastures haven't been upgraded to solar farms yet...
-    if (this.settings.upgradeBuildings.buildings.solarfarm.enabled && pastureMeta.stage === 0) {
-      if (mustExist(pastureMeta.stages)[1].stageUnlocked) {
-        // If we would reduce our pastures to 0, by upgrading them, would we lose any catnip?
-        if (this._workshopManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
-          const prices = mustExist(pastureMeta.stages)[1].prices;
-          if (this._bulkManager.singleBuildPossible(pastureMeta, prices, 1)) {
-            try {
-              const button = mustExist(this.getBuildButton("pasture", 0));
-              // We need to perform the process like this to avoid UI confirmations
-              // for selling items.
-              // Sell all pastures (to regain the resources).
-              button.controller.sellInternal(button.model, 0);
-              // Manually update the metadata, as we bypassed the full selling logic.
-              pastureMeta.on = 0;
-              pastureMeta.val = 0;
-              pastureMeta.stage = 1;
+    if (
+      this.settings.upgradeBuildings.buildings.solarfarm.enabled &&
+      pastureMeta.unlocked &&
+      pastureMeta.stage === 0 &&
+      mustExist(pastureMeta.stages)[1].stageUnlocked
+    ) {
+      // If we would reduce our pastures to 0, by upgrading them, would we lose any catnip?
+      if (this._workshopManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
+        const prices = mustExist(pastureMeta.stages)[1].prices;
+        if (this._bulkManager.singleBuildPossible(pastureMeta, prices, 1)) {
+          const button = mustExist(this.getBuildButton("pasture", 0));
+          // We need to perform the process like this to avoid UI confirmations
+          // for selling items.
+          // Sell all pastures (to regain the resources).
+          button.controller.sellInternal(button.model, 0);
+          // Manually update the metadata, as we bypassed the full selling logic.
+          pastureMeta.on = 0;
+          pastureMeta.val = 0;
+          pastureMeta.stage = 1;
 
-              this._host.engine.iactivity("upgrade.building.pasture", [], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.building.pasture", [], "ks-upgrade");
 
-              // Upgrade the pasture.
-              this._host.gamePage.ui.render();
-              this.build("pasture", 1, 1);
-              this._host.gamePage.ui.render();
+          // Upgrade the pasture.
+          this._host.gamePage.ui.render();
+          this.build("pasture", 1, 1);
+          this._host.gamePage.ui.render();
 
-              // TODO: Why do we return here and not just unlock more buildings?
-              return;
-            } catch (error) {
-              cwarn(`[bonfire] pasture upgrade button to solarfarm should exist but does not`);
-            }
-          }
+          // TODO: Why do we return here and not just unlock more buildings?
+          return;
         }
       }
     }
 
     const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
     // If aqueducts haven't beeen upgraded to hydro plants yet...
-    if (this.settings.upgradeBuildings.buildings.hydroplant.enabled && aqueductMeta.stage === 0) {
-      if (mustExist(aqueductMeta.stages)[1].stageUnlocked) {
-        // If we would reduce our aqueducts to 0, by upgrading them, would we lose any catnip?
-        if (this._workshopManager.getPotentialCatnip(true, pastures, 0) > 0) {
-          const prices = mustExist(aqueductMeta.stages)[1].prices;
-          if (this._bulkManager.singleBuildPossible(aqueductMeta, prices, 1)) {
-            try {
-              const button = mustExist(this.getBuildButton("aqueduct", 0));
-              button.controller.sellInternal(button.model, 0);
-              aqueductMeta.on = 0;
-              aqueductMeta.val = 0;
-              aqueductMeta.stage = 1;
+    if (
+      this.settings.upgradeBuildings.buildings.hydroplant.enabled &&
+      aqueductMeta.unlocked &&
+      aqueductMeta.stage === 0 &&
+      mustExist(aqueductMeta.stages)[1].stageUnlocked
+    ) {
+      // If we would reduce our aqueducts to 0, by upgrading them, would we lose any catnip?
+      if (this._workshopManager.getPotentialCatnip(true, pastures, 0) > 0) {
+        const prices = mustExist(aqueductMeta.stages)[1].prices;
+        if (this._bulkManager.singleBuildPossible(aqueductMeta, prices, 1)) {
+          const button = mustExist(this.getBuildButton("aqueduct", 0));
+          button.controller.sellInternal(button.model, 0);
+          aqueductMeta.on = 0;
+          aqueductMeta.val = 0;
+          aqueductMeta.stage = 1;
 
-              // TODO: Why do we do this for the aqueduct and not for the pasture?
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              aqueductMeta.calculateEffects!(aqueductMeta, this._host.gamePage);
+          // TODO: Why do we do this for the aqueduct and not for the pasture?
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          aqueductMeta.calculateEffects!(aqueductMeta, this._host.gamePage);
 
-              this._host.engine.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
 
-              this._host.gamePage.ui.render();
-              this.build("aqueduct", 1, 1);
-              this._host.gamePage.ui.render();
+          this._host.gamePage.ui.render();
+          this.build("aqueduct", 1, 1);
+          this._host.gamePage.ui.render();
 
-              return;
-            } catch (error) {
-              cwarn(`[bonfire] aqueduct upgrade button to hydroplant should exist but does not`);
-            }
-          }
+          return;
         }
       }
     }
 
     const libraryMeta = this._host.gamePage.bld.getBuildingExt("library").meta;
-    if (this.settings.upgradeBuildings.buildings.dataCenter.enabled && libraryMeta.stage === 0) {
-      if (mustExist(libraryMeta.stages)[1].stageUnlocked) {
-        let energyConsumptionRate = this._host.gamePage.workshop.get("cryocomputing").researched
-          ? 1
-          : 2;
-        if (this._host.gamePage.challenges.currentChallenge === "energy") {
-          energyConsumptionRate *= 2;
-        }
+    if (
+      this.settings.upgradeBuildings.buildings.dataCenter.enabled &&
+      libraryMeta.unlocked &&
+      libraryMeta.stage === 0 &&
+      mustExist(libraryMeta.stages)[1].stageUnlocked
+    ) {
+      let energyConsumptionRate = this._host.gamePage.workshop.get("cryocomputing").researched
+        ? 1
+        : 2;
+      if (this._host.gamePage.challenges.currentChallenge === "energy") {
+        energyConsumptionRate *= 2;
+      }
 
-        // This indicates how valuable a data center is, compared to a single library.
-        // We check for possible upgrades, that would make them more valuable.
-        let libToDat = 3;
-        if (this._host.gamePage.workshop.get("uplink").researched) {
-          libToDat *=
-            1 +
-            this._host.gamePage.bld.get("biolab").val *
-              this._host.gamePage.getEffect("uplinkDCRatio");
-        }
-        if (this._host.gamePage.workshop.get("machineLearning").researched) {
-          libToDat *=
-            1 +
-            this._host.gamePage.bld.get("aiCore").on *
-              this._host.gamePage.getEffect("dataCenterAIRatio");
-        }
+      // This indicates how valuable a data center is, compared to a single library.
+      // We check for possible upgrades, that would make them more valuable.
+      let libToDat = 3;
+      if (this._host.gamePage.workshop.get("uplink").researched) {
+        libToDat *=
+          1 +
+          this._host.gamePage.bld.get("biolab").val *
+            this._host.gamePage.getEffect("uplinkDCRatio");
+      }
+      if (this._host.gamePage.workshop.get("machineLearning").researched) {
+        libToDat *=
+          1 +
+          this._host.gamePage.bld.get("aiCore").on *
+            this._host.gamePage.getEffect("dataCenterAIRatio");
+      }
 
-        // We now have the energy consumption of data centers and the value of data centers.
-        // Assuming, we would upgrade to data centers and buy as many as we need to have value
-        // equal to our current libraries, and that wouldn't cap our energy, upgrade them.
-        if (
-          this._host.gamePage.resPool.energyProd >=
-          this._host.gamePage.resPool.energyCons +
-            (energyConsumptionRate * libraryMeta.val) / libToDat
-        ) {
-          const prices = mustExist(libraryMeta.stages)[1].prices;
-          if (this._bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
-            try {
-              const button = mustExist(this.getBuildButton("library", 0));
-              button.controller.sellInternal(button.model, 0);
-              libraryMeta.on = 0;
-              libraryMeta.val = 0;
-              libraryMeta.stage = 1;
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              libraryMeta.calculateEffects!(libraryMeta, this._host.gamePage);
-              this._host.engine.iactivity("upgrade.building.library", [], "ks-upgrade");
-              this._host.gamePage.ui.render();
-              this.build("library", 1, 1);
-              this._host.gamePage.ui.render();
-              return;
-            } catch (error) {
-              cwarn(`[bonfire] library upgrade button to datacenter should exist but does not`);
-            }
-          }
+      // We now have the energy consumption of data centers and the value of data centers.
+      // Assuming, we would upgrade to data centers and buy as many as we need to have value
+      // equal to our current libraries, and that wouldn't cap our energy, upgrade them.
+      if (
+        this._host.gamePage.resPool.energyProd >=
+        this._host.gamePage.resPool.energyCons +
+          (energyConsumptionRate * libraryMeta.val) / libToDat
+      ) {
+        const prices = mustExist(libraryMeta.stages)[1].prices;
+        if (this._bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
+          const button = mustExist(this.getBuildButton("library", 0));
+          button.controller.sellInternal(button.model, 0);
+          libraryMeta.on = 0;
+          libraryMeta.val = 0;
+          libraryMeta.stage = 1;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          libraryMeta.calculateEffects!(libraryMeta, this._host.gamePage);
+          this._host.engine.iactivity("upgrade.building.library", [], "ks-upgrade");
+          this._host.gamePage.ui.render();
+          this.build("library", 1, 1);
+          this._host.gamePage.ui.render();
+          return;
         }
       }
     }
@@ -229,33 +226,27 @@ export class BonfireManager implements Automation {
     // This seems to be identical to the pasture upgrade.
     if (
       this.settings.upgradeBuildings.buildings.broadcasttower.enabled &&
-      amphitheatreMeta.stage === 0
+      amphitheatreMeta.unlocked &&
+      amphitheatreMeta.stage === 0 &&
+      mustExist(amphitheatreMeta.stages)[1].stageUnlocked
     ) {
-      if (mustExist(amphitheatreMeta.stages)[1].stageUnlocked) {
-        // TODO: This is problematic. Upgrading from 50 amphitheatres to 1 broadcast tower sucks
-        //       if you don't have enough resources to build several more.
-        const prices = mustExist(amphitheatreMeta.stages)[1].prices;
-        if (this._bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
-          try {
-            const button = mustExist(this.getBuildButton("amphitheatre", 0));
-            button.controller.sellInternal(button.model, 0);
-            amphitheatreMeta.on = 0;
-            amphitheatreMeta.val = 0;
-            amphitheatreMeta.stage = 1;
+      // TODO: This is problematic. Upgrading from 50 amphitheatres to 1 broadcast tower sucks
+      //       if you don't have enough resources to build several more.
+      const prices = mustExist(amphitheatreMeta.stages)[1].prices;
+      if (this._bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
+        const button = mustExist(this.getBuildButton("amphitheatre", 0));
+        button.controller.sellInternal(button.model, 0);
+        amphitheatreMeta.on = 0;
+        amphitheatreMeta.val = 0;
+        amphitheatreMeta.stage = 1;
 
-            this._host.engine.iactivity("upgrade.building.amphitheatre", [], "ks-upgrade");
+        this._host.engine.iactivity("upgrade.building.amphitheatre", [], "ks-upgrade");
 
-            this._host.gamePage.ui.render();
-            this.build("amphitheatre", 1, 1);
-            this._host.gamePage.ui.render();
+        this._host.gamePage.ui.render();
+        this.build("amphitheatre", 1, 1);
+        this._host.gamePage.ui.render();
 
-            return;
-          } catch (error) {
-            cwarn(
-              `[bonfire] amphitheater upgrade button to broadcasttower should exist but does not`
-            );
-          }
-        }
+        return;
       }
     }
   }
