@@ -19,6 +19,14 @@ body:
         - label: I have tested with the latest source code from `main` as of today.
           required: false
 
+  - type: input
+    id: browser
+    attributes:
+      label: What browser are you using?
+      description: Sometimes issues are specific to certain browsers. Providing your browser here might help in reproducing the issue.
+    validations:
+      required: false
+
   - type: textarea
     id: description
     attributes:
