@@ -11,3 +11,15 @@ updates:
       - "type:housekeeping"
     reviewers:
       - oliversalzburg
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "needs:merge"
+      - "type:housekeeping"
+    reviewers:
+      - oliversalzburg
