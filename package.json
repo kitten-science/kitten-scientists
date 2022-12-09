@@ -32,7 +32,7 @@
     "@types/node": "18.11.12",
     "@types/prettier": "2.7.1",
     "@types/web": "0.0.80",
-    "@typescript-eslint/eslint-plugin": "5.43.0",
+    "@typescript-eslint/eslint-plugin": "5.46.0",
     "@typescript-eslint/parser": "5.42.0",
     "eslint": "8.25.0",
     "eslint-plugin-jsdoc": "39.4.0",
