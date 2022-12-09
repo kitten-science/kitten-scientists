@@ -3101,7 +3101,7 @@ __metadata:
     eslint: 8.25.0
     eslint-plugin-jsdoc: 39.6.4
     lint-staged: 13.1.0
-    prettier: 2.7.1
+    prettier: 2.8.1
     prettier-package-json: 2.7.0
     prettier-plugin-organize-imports: 3.2.1
     prettier-plugin-sh: 0.12.8
@@ -3875,12 +3875,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.7.1":
-  version: 2.7.1
-  resolution: "prettier@npm:2.7.1"
+"prettier@npm:2.8.1":
+  version: 2.8.1
+  resolution: "prettier@npm:2.8.1"
   bin:
     prettier: bin-prettier.js
-  checksum: 359d2b7ecf36bd52924a48331cae506d335f18637fde6c686212f952b9ce678ce9f554a80571049b36ec2897a8a6c40094b776dea371cc5c04c481cf5b78504b
+  checksum: 66a2967780f7ebb724e0470c61b97ac19d2e91258f26288e4920138621a845958d86df23ec37c9342ddf475872396f2c458e9fbabb095631b03e436f315002b2
   languageName: node
   linkType: hard
 
