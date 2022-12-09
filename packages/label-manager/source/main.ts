@@ -3,6 +3,9 @@ import * as github from "@actions/github";
 import fs from "node:fs/promises";
 import YAML from "yaml";
 
+/**
+ * Execute the label manager.
+ */
 async function run(): Promise<void> {
   try {
     if (!process.env.GITHUB_REPOSITORY) {
