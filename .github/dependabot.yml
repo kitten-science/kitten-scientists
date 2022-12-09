@@ -9,8 +9,6 @@ updates:
       - "dependencies"
       - "needs:merge"
       - "type:housekeeping"
-    reviewers:
-      - oliversalzburg
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -21,5 +19,3 @@ updates:
       - "dependencies"
       - "needs:merge"
       - "type:housekeeping"
-    reviewers:
-      - oliversalzburg
