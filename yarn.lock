@@ -608,7 +608,7 @@ __metadata:
     "@types/selenium-webdriver": ^4
     browserstack-local: 1.5.1
     chromedriver: 108.0.0
-    mocha: 10.1.0
+    mocha: 10.2.0
     selenium-webdriver: 4.7.0
     tslib: 2.4.1
     typescript: 4.9.4
@@ -3440,9 +3440,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mocha@npm:10.1.0":
-  version: 10.1.0
-  resolution: "mocha@npm:10.1.0"
+"mocha@npm:10.2.0":
+  version: 10.2.0
+  resolution: "mocha@npm:10.2.0"
   dependencies:
     ansi-colors: 4.1.1
     browser-stdout: 1.3.1
@@ -3468,7 +3468,7 @@ __metadata:
   bin:
     _mocha: bin/_mocha
     mocha: bin/mocha.js
-  checksum: a5b84d1e5018afbedfb60cceb7983257e9ca0b0959a9097bd88b1b928908db020188ac029e6fb59bfbf7ad29b79d182172e49acc4db6a437eea0ddfa870c4e83
+  checksum: 145185435535ec7766932e9fa3def1520ffb895e7fa341e8592829844c4c9dd9fcb35db139d448c228b5ad3c2bedce50423ce760827b3054fafe6d47ef014937
   languageName: node
   linkType: hard
 
