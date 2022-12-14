@@ -1,9 +1,11 @@
 import { SettingTrigger } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { SettingsSectionUi } from "../SettingsSectionUi";
+import { TriggerButtonBehavior } from "./TriggerButton";
 import { UiComponent } from "./UiComponent";
 
 export class TriggerLimitButton extends UiComponent {
+  readonly behavior: TriggerButtonBehavior = "percentage";
   readonly setting: SettingTrigger;
   readonly element: JQuery<HTMLElement>;
 
@@ -19,7 +21,7 @@ export class TriggerLimitButton extends UiComponent {
 
     element.on("click", () => {
       const value = SettingsSectionUi.promptLimit(
-        host.engine.i18n("ui.trigger.set", [label]),
+        host.engine.i18n("ui.trigger.setinteger", [label]),
         setting.trigger.toString()
       );
 
