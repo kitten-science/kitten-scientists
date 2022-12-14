@@ -16,6 +16,7 @@ import {
   VoidSpaceUpgrades,
 } from "./types";
 import { UserScript } from "./UserScript";
+import { WorkshopManager } from "./WorkshopManager";
 
 export class TimeControlManager {
   private readonly _host: UserScript;
@@ -24,12 +25,14 @@ export class TimeControlManager {
   private readonly _bonfireManager: BonfireManager;
   private readonly _religionManager: ReligionManager;
   private readonly _spaceManager: SpaceManager;
+  private readonly _workshopManager: WorkshopManager;
 
   constructor(
     host: UserScript,
     bonfireManager: BonfireManager,
     religionManager: ReligionManager,
     spaceManager: SpaceManager,
+    workshopManager: WorkshopManager,
     settings = new TimeControlSettings()
   ) {
     this._host = host;
@@ -39,6 +42,7 @@ export class TimeControlManager {
     this._bonfireManager = bonfireManager;
     this._religionManager = religionManager;
     this._spaceManager = spaceManager;
+    this._workshopManager = workshopManager;
   }
 
   async tick(context: TickContext) {
@@ -337,14 +341,14 @@ export class TimeControlManager {
       return;
     }
 
-    // TODO: Not sure when this would ever be true.
+    // Don't time skip while we're in a temporal paradox.
     if (this._host.gamePage.calendar.day < 0) {
       return;
     }
 
     // If we have less time crystals than our required trigger value, bail out.
-    const timeCrystal = this._host.gamePage.resPool.get("timeCrystal");
-    if (timeCrystal.value < this.settings.timeSkip.trigger) {
+    const timeCrystalsAvailable = this._workshopManager.getValueAvailable("timeCrystal");
+    if (timeCrystalsAvailable < this.settings.timeSkip.trigger) {
       return;
     }
 

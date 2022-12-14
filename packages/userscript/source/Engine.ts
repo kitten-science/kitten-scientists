@@ -91,7 +91,8 @@ export class Engine {
       this._host,
       this.bonfireManager,
       this.religionManager,
-      this.spaceManager
+      this.spaceManager,
+      this.workshopManager
     );
     this.timeManager = new TimeManager(this._host, this.workshopManager);
     this.tradeManager = new TradeManager(this._host, this.workshopManager);
