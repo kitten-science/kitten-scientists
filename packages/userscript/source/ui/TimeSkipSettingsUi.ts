@@ -18,7 +18,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
     const label = host.engine.i18n("option.time.skip");
     super(host, label, settings);
 
-    this._trigger = new TriggerButton(host, label, settings);
+    this._trigger = new TriggerButton(host, label, settings, "integer");
     this._trigger.element.insertBefore(this.list);
     this.children.add(this._trigger);
 
