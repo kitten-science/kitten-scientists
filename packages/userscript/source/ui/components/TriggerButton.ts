@@ -3,13 +3,17 @@ import { UserScript } from "../../UserScript";
 import { SettingsSectionUi } from "../SettingsSectionUi";
 import { IconButton } from "./IconButton";
 
+export type TriggerButtonBehavior = "integer" | "percentage";
+
 export class TriggerButton extends IconButton {
+  readonly behavior: TriggerButtonBehavior;
   readonly setting: SettingTrigger;
 
   constructor(
     host: UserScript,
     label: string,
     setting: SettingTrigger,
+    behavior: TriggerButtonBehavior = "percentage",
     handler: { onClick?: () => void } = {}
   ) {
     super(
@@ -18,11 +22,19 @@ export class TriggerButton extends IconButton {
       ""
     );
 
+    this.behavior = behavior;
+
     this.element.on("click", () => {
-      const value = SettingsSectionUi.promptPercentage(
-        host.engine.i18n("ui.trigger.set", [label]),
-        SettingsSectionUi.renderPercentage(setting.trigger)
-      );
+      const value =
+        this.behavior === "percentage"
+          ? SettingsSectionUi.promptPercentage(
+              host.engine.i18n("ui.trigger.setpercentage", [label]),
+              SettingsSectionUi.renderPercentage(setting.trigger)
+            )
+          : SettingsSectionUi.promptLimit(
+              host.engine.i18n("ui.trigger.setinteger", [label]),
+              SettingsSectionUi.renderPercentage(setting.trigger)
+            );
 
       if (value !== null) {
         setting.trigger = value;
@@ -41,7 +53,9 @@ export class TriggerButton extends IconButton {
     super.refreshUi();
 
     this.element[0].title = this._host.engine.i18n("ui.trigger", [
-      SettingsSectionUi.renderPercentage(this.setting.trigger),
+      this.behavior === "percentage"
+        ? SettingsSectionUi.renderPercentage(this.setting.trigger)
+        : SettingsSectionUi.renderLimit(this.setting.trigger, this._host),
     ]);
   }
 }
