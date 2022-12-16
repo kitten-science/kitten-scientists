@@ -26,16 +26,16 @@ export class TimeSkipSettings extends SettingTriggerMax {
 
   constructor(
     cycles = {
-      charon: new Setting(false),
-      umbra: new Setting(false),
-      yarn: new Setting(false),
-      helios: new Setting(false),
-      cath: new Setting(false),
+      charon: new Setting(true),
+      umbra: new Setting(true),
+      yarn: new Setting(true),
+      helios: new Setting(true),
+      cath: new Setting(true),
       redmoon: new Setting(false),
-      dune: new Setting(false),
-      piscine: new Setting(false),
-      terminus: new Setting(false),
-      kairo: new Setting(false),
+      dune: new Setting(true),
+      piscine: new Setting(true),
+      terminus: new Setting(true),
+      kairo: new Setting(true),
     },
     seasons = {
       spring: new Setting(true),

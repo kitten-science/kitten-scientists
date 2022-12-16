@@ -378,9 +378,14 @@ export class TimeControlManager {
     const cyclesPerEra = this._host.gamePage.calendar.cyclesPerEra;
     const factor = this._host.gamePage.challenges.getChallenge("1000Years").researched ? 5 : 10;
     // How many times/years we can skip before we reach our max heat.
-    const maxHeat =
+    const maxSkips =
       -1 === this.settings.timeSkip.max ? Number.POSITIVE_INFINITY : this.settings.timeSkip.max;
-    let canSkip = Math.min(Math.floor((heatMax - heatNow) / factor), maxHeat);
+    // The amount of skips we can perform.
+    let canSkip = Math.min(
+      Math.floor((heatMax - heatNow) / factor),
+      maxSkips,
+      timeCrystalsAvailable
+    );
     // The amount of skips to perform.
     let willSkip = 0;
     // If the cycle has more years remaining than we can even skip, skip all of them.
