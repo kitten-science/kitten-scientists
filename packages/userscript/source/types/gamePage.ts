@@ -396,6 +396,7 @@ export type GamePage = {
       getExplorationPrice: (x: number, y: number) => number;
       villageData: Record<string, unknown>;
     };
+    promoteKittens(): void;
     sim: {
       goldToPromote: (rank: number, value0: number, value1: number) => Array<unknown>;
       kittens: Array<Kitten>;

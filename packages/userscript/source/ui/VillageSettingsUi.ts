@@ -12,6 +12,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   private readonly _jobs: Array<SettingListItem>;
   private readonly _hunt: SettingTriggerListItem;
   private readonly _festivals: SettingListItem;
+  private readonly _promoteKittens: SettingTriggerListItem;
   private readonly _promoteLeader: SettingListItem;
   private readonly _electLeader: SettingListItem;
 
@@ -100,6 +101,23 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       }
     );
     this.addChild(this._festivals);
+
+    this._promoteKittens = new SettingTriggerListItem(
+      this._host,
+      this._host.engine.i18n("option.promotekittens"),
+      this.setting.promoteKittens,
+      {
+        onCheck: () =>
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.promotekittens"),
+          ]),
+        onUnCheck: () =>
+          this._host.engine.imessage("status.sub.disable", [
+            this._host.engine.i18n("option.promotekittens"),
+          ]),
+      }
+    );
+    this.addChild(this._promoteKittens);
 
     this._promoteLeader = new SettingListItem(
       this._host,

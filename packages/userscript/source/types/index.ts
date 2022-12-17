@@ -173,7 +173,7 @@ export type GameTab = {
 export type Kitten = {
   age: number;
   color: number;
-  engineerSpecialtity: null;
+  engineerSpeciality: ResourceCraftable | null;
   exp: number;
   isAdopted: boolean;
   isLeader: boolean;
