@@ -123,13 +123,19 @@ export class SettingTriggerMax extends SettingTrigger implements SettingMax {
 
 export class SettingOptions<T = string> {
   readonly #options: Array<{ label: string; value: T }>;
-  selected: T | undefined;
+  selected: T;
 
   get options() {
     return this.#options;
   }
 
-  constructor(options = new Array<{ label: string; value: T }>()) {
+  constructor(selected: T, options = new Array<{ label: string; value: T }>()) {
+    // Make sure the provided selected value exists in options.
+    if (isNil(options.find(option => (option.value = selected)))) {
+      throw new Error("Provided selected value is not in provided options.");
+    }
+
+    this.selected = selected;
     this.#options = options;
   }
 
