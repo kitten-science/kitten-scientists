@@ -345,16 +345,19 @@ export class TradeManager implements Automation {
       for (let raceIndex = 0; raceIndex < bulkTracker.length; raceIndex++) {
         const name = bulkTracker[raceIndex];
         const emBulk = mustExist(embassyBulk[name]);
+
+        if (emBulk.max <= emBulk.currentEm + emBulk.val) {
+          bulkTracker.splice(raceIndex, 1);
+          --raceIndex;
+          continue;
+        }
+
         const nextPrice = emBulk.basePrice * Math.pow(1.15, emBulk.currentEm + emBulk.val);
         if (nextPrice <= cultureVal) {
           cultureVal -= nextPrice;
           emBulk.priceSum += nextPrice;
           emBulk.val += 1;
           refreshRequired = true;
-
-          if (emBulk.max <= emBulk.val) {
-            continue;
-          }
         } else {
           bulkTracker.splice(raceIndex, 1);
           --raceIndex;
@@ -370,8 +373,12 @@ export class TradeManager implements Automation {
       if (cultureVal < emBulk.priceSum) {
         cwarn("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
       }
-      this._host.gamePage.resPool.resources[13].value -= emBulk.priceSum;
+      // We don't want to invoke the embassy build action multiple times, as
+      // that would cause lots of log messages.
+      // Instead, we replicate the behavior of the game here and purchase in bulk.
+      this._workshopManager.getResource("culture").value -= emBulk.priceSum;
       emBulk.race.embassyLevel += emBulk.val;
+
       this._host.engine.storeForSummary("embassy", emBulk.val);
       if (emBulk.val !== 1) {
         this._host.engine.iactivity("build.embassies", [emBulk.val, emBulk.race.title], "ks-build");
