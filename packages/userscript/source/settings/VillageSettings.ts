@@ -12,6 +12,7 @@ export class VillageSettings extends Setting {
 
   holdFestivals: Setting;
   hunt: SettingTrigger;
+  promoteKittens: SettingTrigger;
   promoteLeader: Setting;
   electLeader: ElectLeaderSettings;
 
@@ -29,6 +30,7 @@ export class VillageSettings extends Setting {
     },
     holdFestivals = new Setting(true),
     hunt = new SettingTrigger(true, 0.98),
+    promoteKittens = new SettingTrigger(true, 1),
     promoteLeader = new Setting(true),
     electLeader = new ElectLeaderSettings()
   ) {
@@ -36,6 +38,7 @@ export class VillageSettings extends Setting {
     this.jobs = jobs;
     this.holdFestivals = holdFestivals;
     this.hunt = hunt;
+    this.promoteKittens = promoteKittens;
     this.promoteLeader = promoteLeader;
     this.electLeader = electLeader;
   }

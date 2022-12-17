@@ -4,7 +4,7 @@ import { VillageSettings } from "./settings/VillageSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
 import { cdebug } from "./tools/Log";
-import { isNil } from "./tools/Maybe";
+import { isNil, mustExist } from "./tools/Maybe";
 import { Resource } from "./types";
 import { JobInfo, VillageTab } from "./types/village";
 import { UserScript } from "./UserScript";
@@ -49,7 +49,11 @@ export class VillageManager implements Automation {
     }
 
     if (this.settings.promoteLeader.enabled) {
-      this.autoPromote();
+      this.autoPromoteLeader();
+    }
+
+    if (this.settings.promoteKittens.enabled) {
+      this.autoPromoteKittens();
     }
   }
 
@@ -135,7 +139,40 @@ export class VillageManager implements Automation {
     this._host.engine.iactivity("act.elect");
   }
 
-  autoPromote(): void {
+  autoPromoteKittens(): void {
+    const gold = this._workshopManager.getResource("gold");
+    if (this.settings.promoteKittens.trigger < gold.value / gold.maxValue) {
+      return;
+    }
+
+    for (
+      let kittenIndex = 0;
+      kittenIndex < this._host.gamePage.village.sim.kittens.length;
+      kittenIndex++
+    ) {
+      let tier = -1;
+      const engineerSpeciality =
+        this._host.gamePage.village.sim.kittens[kittenIndex].engineerSpeciality;
+      // If this kitten has no engineer speciality, skip it.
+      if (isNil(engineerSpeciality)) {
+        continue;
+      }
+
+      // Check which rank would be ideal for their craft.
+      tier = mustExist(this._host.gamePage.workshop.getCraft(engineerSpeciality)).tier;
+      // If the rank has already been reached, check next kitten.
+      if (tier <= this._host.gamePage.village.sim.kittens[kittenIndex].rank) {
+        continue;
+      }
+
+      // We have found an engineer that isn't at their ideal rank.
+      // No need to look further.
+      this._host.gamePage.village.promoteKittens();
+      return;
+    }
+  }
+
+  autoPromoteLeader(): void {
     // If we have Civil Service unlocked and a leader elected.
     if (
       this._host.gamePage.science.get("civil").researched &&
