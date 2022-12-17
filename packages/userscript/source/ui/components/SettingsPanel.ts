@@ -86,9 +86,11 @@ export class SettingsPanel<TSetting extends Setting = Setting>
     if (this._mainChildVisible) {
       this.list.show();
       this._expando.setExpanded();
+      this._element.element.addClass("ks-expanded");
     } else {
       this.list.hide();
       this._expando.setCollapsed();
+      this._element.element.removeClass("ks-expanded");
     }
   }
 }
