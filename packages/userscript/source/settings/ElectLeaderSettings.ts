@@ -8,7 +8,7 @@ export class ElectLeaderSettings extends Setting {
 
   constructor(
     enabled = false,
-    job = new SettingOptions<Job>([
+    job = new SettingOptions<Job>("priest", [
       { label: "Engineer", value: "engineer" },
       { label: "Farmer", value: "farmer" },
       { label: "Geologist", value: "geologist" },
@@ -18,7 +18,7 @@ export class ElectLeaderSettings extends Setting {
       { label: "Scholar", value: "scholar" },
       { label: "Woodcutter", value: "woodcutter" },
     ]),
-    trait = new SettingOptions<Trait>([
+    trait = new SettingOptions<Trait>("wise", [
       { label: "Artisan", value: "engineer" },
       { label: "Chemist", value: "chemist" },
       { label: "Manager", value: "manager" },
