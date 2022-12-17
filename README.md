@@ -20,7 +20,7 @@ If you don't have a userscript manager yet:
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-alpha.10/kitten-scientists-2.0.0-alpha.10.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-alpha.10/kitten-scientists-2.0.0-alpha.11.user.js';d.body.appendChild(s);})();
 ```
 
 ### Container
