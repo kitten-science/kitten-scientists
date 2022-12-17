@@ -25,7 +25,7 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
     host: UserScript,
     label: string,
     setting: TSetting,
-    handler: {
+    handler?: {
       onCheck: () => void;
     },
     readOnly = false

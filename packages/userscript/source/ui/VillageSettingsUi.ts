@@ -137,18 +137,8 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     this.addChild(this._electLeader);
 
     this._electLeader.addChildren([
-      new OptionsListItem(host, "Job", this.setting.electLeader.job, {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.promote"),
-          ]),
-      }),
-      new OptionsListItem(host, "Trait", this.setting.electLeader.trait, {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.promote"),
-          ]),
-      }),
+      new OptionsListItem(host, "Job", this.setting.electLeader.job),
+      new OptionsListItem(host, "Trait", this.setting.electLeader.trait),
     ]);
   }
 

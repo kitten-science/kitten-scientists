@@ -1,4 +1,5 @@
 import { SettingOptions } from "../../settings/Settings";
+import { isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
 import { UiComponent } from "./UiComponent";
 
@@ -30,7 +31,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     setting: TSetting,
     option: TSetting["options"][0],
     groupKey: string,
-    handler: {
+    handler?: {
       onCheck: () => void;
     },
     delimiter = false,
@@ -57,7 +58,9 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
 
     input.on("change", () => {
       this.setting.selected = option.value;
-      handler.onCheck();
+      if (!isNil(handler)) {
+        handler.onCheck();
+      }
     });
 
     elementLabel.prepend(input);
