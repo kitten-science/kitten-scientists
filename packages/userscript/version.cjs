@@ -1,7 +1,7 @@
 const manifest = require("./package.json");
 
-const isDevBuild = Boolean(process.env.DEV_BUILD);
-const isNightlyBuild = Boolean(process.env.NIGHTLY_BUILD);
+const isDevBuild = String(process.env.DEV_BUILD) === "true";
+const isNightlyBuild = String(process.env.NIGHTLY_BUILD) === "true";
 
 function getDateString() {
   const date = new Date();
