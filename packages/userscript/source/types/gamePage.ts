@@ -382,7 +382,7 @@ export type GamePage = {
     happiness: number;
     huntAll: () => void;
     jobs: Array<JobInfo>;
-    leader: Kitten;
+    leader: Kitten | null;
     /**
      * @deprecated
      */

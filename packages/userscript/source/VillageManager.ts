@@ -122,11 +122,13 @@ export class VillageManager implements Automation {
     cdebug(
       `Best leader candidate (${bestLeader.name} ${bestLeader.surname}) has rank '${bestLeader.rank}'.`
     );
-    cdebug(`Current leader (${bestLeader.name} ${bestLeader.surname}) has rank '${leader.rank}'.`);
+    if (!isNil(leader)) {
+      cdebug(`Current leader (${leader.name} ${leader.surname}) has rank '${leader.rank}'.`);
 
-    if (leader.trait.name === trait && leader.job === job && bestLeader.rank <= leader.rank) {
-      cdebug("Current leader is already ideal. No changes are made.");
-      return;
+      if (leader.trait.name === trait && leader.job === job && bestLeader.rank <= leader.rank) {
+        cdebug("Current leader is already ideal. No changes are made.");
+        return;
+      }
     }
 
     this._host.gamePage.villageTab.censusPanel.census.makeLeader(bestLeader);
