@@ -68,9 +68,11 @@ export class Panel<TChild extends UiComponent = UiComponent> extends UiComponent
     if (this._mainChildVisible) {
       this._child.element.show();
       this._expando.setExpanded();
+      this._element.element.addClass("ks-expanded");
     } else {
       this._child.element.hide();
       this._expando.setCollapsed();
+      this._element.element.removeClass("ks-expanded");
     }
   }
 }
