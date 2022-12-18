@@ -11,6 +11,7 @@ export class SettingsPanel<TSetting extends Setting = Setting>
 {
   readonly setting: TSetting;
   readonly element: JQuery<HTMLElement>;
+  readonly elementLabel: JQuery<HTMLElement>;
   protected readonly _element: SettingListItem;
   protected readonly _expando: ExpandoButton;
   readonly list: JQuery<HTMLElement>;
@@ -71,6 +72,7 @@ export class SettingsPanel<TSetting extends Setting = Setting>
     this._list = list;
     this._mainChildVisible = initiallyExpanded;
     this.element = element.element;
+    this.elementLabel = element.element;
     this._expando = expando;
     this.list = list.element;
     this.setting = setting;

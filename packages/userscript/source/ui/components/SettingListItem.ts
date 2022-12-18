@@ -1,10 +1,9 @@
 import { Setting } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
-import { UiComponent } from "./UiComponent";
+import { ListItem } from "./ListItem";
 
-export class SettingListItem<TSetting extends Setting = Setting> extends UiComponent {
+export class SettingListItem<TSetting extends Setting = Setting> extends ListItem {
   readonly setting: TSetting;
-  readonly element: JQuery<HTMLElement>;
   readonly checkbox: JQuery<HTMLElement>;
 
   readOnly: boolean;
@@ -36,16 +35,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends UiCompo
     upgradeIndicator = false,
     readOnly = false
   ) {
-    super(host);
-
-    const element = $(`<li/>`);
-    for (const cssClass of ["ks-setting", delimiter ? "ks-delimiter" : ""]) {
-      element.addClass(cssClass);
-    }
-
-    const elementLabel = $("<label/>", {
-      text: `${upgradeIndicator ? `⮤ ` : ""}${label}`,
-    }).addClass("ks-label");
+    super(host, label, delimiter, upgradeIndicator);
 
     const checkbox = $("<input/>", {
       type: "checkbox",
@@ -63,11 +53,9 @@ export class SettingListItem<TSetting extends Setting = Setting> extends UiCompo
       }
     });
 
-    elementLabel.prepend(checkbox);
-    element.append(elementLabel);
+    this.elementLabel.prepend(checkbox);
 
     this.checkbox = checkbox;
-    this.element = element;
     this.setting = setting;
   }
 
