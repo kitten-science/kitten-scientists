@@ -3,8 +3,8 @@ import { metablock } from "vite-plugin-userscript";
 import manifest from "./package.json" assert { type: "json" };
 
 const isCi = Boolean(process.env.CI);
-const isDevBuild = Boolean(process.env.DEV_BUILD);
-const isNightlyBuild = Boolean(process.env.NIGHTLY_BUILD);
+const isDevBuild = String(process.env.DEV_BUILD) === "true";
+const isNightlyBuild = String(process.env.NIGHTLY_BUILD) === "true";
 const minify = Boolean(process.env.MINIFY) ?? !isDevBuild;
 
 function getDateString() {
