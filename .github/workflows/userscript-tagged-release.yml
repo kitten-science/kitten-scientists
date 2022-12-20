@@ -29,7 +29,6 @@ jobs:
 
       - uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
-          automatic_release_tag: latest
           # Create only as draft, so we can add a description on the web UI.
           draft: true
           files: |
