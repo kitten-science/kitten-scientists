@@ -20,7 +20,7 @@ If you don't have a userscript manager yet:
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-alpha.10/kitten-scientists-2.0.0-alpha.11.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-alpha.12/kitten-scientists-2.0.0-alpha.12.user.js';d.body.appendChild(s);})();
 ```
 
 ### Container
@@ -30,7 +30,7 @@ You can pull any version of the script as a container. The images are hosted on 
 The container exposes Kittens Game's own development server on port 8080. It has the version of the userscript injected into it, according to the tag on the image.
 
 ```shell
-docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-alpha.8-dev-623cdd4
+docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-alpha.12
 ```
 
 ## Warning
