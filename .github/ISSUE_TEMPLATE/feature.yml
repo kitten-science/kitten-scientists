@@ -10,11 +10,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        Note that new features are currently _rarely_ considered to be implemented any time soon.
+        Thank you for having come up with a new idea for Kitten Scientists.
 
-        Right now, the focus is on _fixing bugs_, and _filling gaps in functionality_.
-
-        If you feel like your idea fits better into one of those categories, consider filing a **bug** or an **enhancement** instead.
+        Please describe your idea in as much detail as you can, and be prepared
+        to elaborate on your idea later on.
 
   - type: textarea
     id: description
