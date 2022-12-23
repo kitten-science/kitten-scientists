@@ -12,15 +12,12 @@ Kitten Scientists (KS) is a simple automation script for the complex [Kittens Ga
 
 Grab a build from the [Releases page](https://github.com/kitten-science/kitten-scientists/releases) and install it.
 
-If you don't have a userscript manager yet:
-
--   On **Firefox**, you'd want to use [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
--   On **Chrome** and **Opera**, you'd want to use [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo).
+> If you don't have a userscript manager yet, [Tampermonkey](https://www.tampermonkey.net/) is a good solution for the most popular browsers.
 
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-alpha.12/kitten-scientists-2.0.0-alpha.12.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.1/kitten-scientists-2.0.0-beta.1.user.js';d.body.appendChild(s);})();
 ```
 
 ### Container
@@ -30,16 +27,16 @@ You can pull any version of the script as a container. The images are hosted on 
 The container exposes Kittens Game's own development server on port 8080. It has the version of the userscript injected into it, according to the tag on the image.
 
 ```shell
-docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-alpha.12
+docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-beta.1
 ```
 
-## Warning
+## Documentation
 
-**While the script is still in its early development phase, no documentation is planned to be maintained. After a solid beta state has been reached, all features will be documented at <https://kitten-science.github.io/kitten-scientists/>.**
+For a full explaination of how everything in Kitten Scientists works, please visit the [documentation](https://kitten-science.github.io/kitten-scientists/).
 
-For the time being, [open a discussion](https://github.com/kitten-science/kitten-scientists/discussions/new) if you have any questions, and [open an issue on the issue tracker](https://github.com/kitten-science/kitten-scientists/issues/new/choose) if something goes wrong. If you're not sure which option to pick, create an issue.
+## Contributing
 
-You can still check out the [README content of the 1.5 version](./LEGACY_README.md) to get a good idea of the intention behind most options.
+You are welcome to [open a discussion](https://github.com/kitten-science/kitten-scientists/discussions/new) if you have any questions, and [open an issue on the issue tracker](https://github.com/kitten-science/kitten-scientists/issues/new/choose) if something goes wrong in your game. If you're not sure which option to pick, just create an issue.
 
 ## Contributors
 
