@@ -1,17 +1,4 @@
 labels:
-  affects:all:
-    color: "0DDAFA"
-    description: Not browser-specific
-  affects:build:
-    color: "0DDAFA"
-    description: An issue with the build process
-  affects:chrome:
-    color: "0DDAFA"
-    description: Has been observed in Chrome
-  affects:firefox:
-    color: "0DDAFA"
-    description: Has been observed in Firefox
-
   dependencies:
     color: "BFD4F2"
     description: Pull requests that update a dependency file
@@ -47,7 +34,7 @@ labels:
     description: Tickets under active consideration for implementation
   prio:beta:
     color: "016E96"
-    description: Delayed until beta phase (earliest)
+    description: This should ideally be implemented during the beta phase
   prio:important:
     color: "B60205"
     description: Should be included in next release
@@ -74,6 +61,9 @@ labels:
     color: "c7def8"
     description: Sorry
 
+  type:beta-feature:
+    color: "cc317c"
+    description: Completely new behavior in Kittens Game
   type:bug:
     color: "cc317c"
     description: Problems in existing behavior
