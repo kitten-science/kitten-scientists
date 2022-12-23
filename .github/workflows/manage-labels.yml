@@ -13,6 +13,9 @@ concurrency: manage-labels
 
 jobs:
   manage-labels:
+    permissions:
+      contents: read
+      issues: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
