@@ -227,6 +227,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       this._host,
       this._host.engine.i18n("option.faith.adore"),
       this.setting.adore,
+      "percentage",
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [
@@ -244,6 +245,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       this._host,
       this._host.engine.i18n("option.praise"),
       this.setting.autoPraise,
+      "percentage",
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [

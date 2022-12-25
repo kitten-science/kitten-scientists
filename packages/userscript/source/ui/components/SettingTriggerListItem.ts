@@ -1,7 +1,7 @@
 import { SettingTrigger } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { SettingListItem } from "./SettingListItem";
-import { TriggerButton } from "./TriggerButton";
+import { TriggerButton, TriggerButtonBehavior } from "./TriggerButton";
 
 export class SettingTriggerListItem extends SettingListItem {
   readonly triggerButton: TriggerButton;
@@ -10,6 +10,7 @@ export class SettingTriggerListItem extends SettingListItem {
     host: UserScript,
     label: string,
     setting: SettingTrigger,
+    behavior: TriggerButtonBehavior = "percentage",
     handler: {
       onCheck: () => void;
       onUnCheck: () => void;
@@ -19,7 +20,7 @@ export class SettingTriggerListItem extends SettingListItem {
   ) {
     super(host, label, setting, handler, delimiter, upgradeIndicator);
 
-    this.triggerButton = new TriggerButton(host, label, setting);
+    this.triggerButton = new TriggerButton(host, label, setting, behavior);
     this.element.append(this.triggerButton.element);
   }
 

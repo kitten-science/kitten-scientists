@@ -75,6 +75,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this._host,
       this._host.engine.i18n("option.hunt"),
       this.setting.hunt,
+      "percentage",
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.hunt")]),
