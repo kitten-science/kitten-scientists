@@ -1,6 +1,6 @@
 ![A kitten scientist](.github/cover.png)
 
-# Kitten Scientists V2
+# Kitten Scientists v2
 
 [![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=a3cxbHphUDA2V0hiS01IZVI1RWVBNFpxRmZGMDMxbGNBZE1HeCtyVkdmWT0tLWFKNjFscC9Wb0tzdEhsbTNMVU9udkE9PQ==--d8207026fbdfbecc4011a24e0e001e31f0892dc1)](https://automate.browserstack.com/public-build/a3cxbHphUDA2V0hiS01IZVI1RWVBNFpxRmZGMDMxbGNBZE1HeCtyVkdmWT0tLWFKNjFscC9Wb0tzdEhsbTNMVU9udkE9PQ==--d8207026fbdfbecc4011a24e0e001e31f0892dc1)
 
