@@ -7,6 +7,7 @@ import { SeasonsButton } from "./components/SeasonsButton";
 import { SeasonsList } from "./components/SeasonsList";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { TriggerButton } from "./components/TriggerButton";
 import { EmbassySettingsUi } from "./EmbassySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -101,10 +102,11 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     );
     this.addChild(this._feedLeviathans);
 
-    this._tradeBlackcoin = new SettingListItem(
+    this._tradeBlackcoin = new SettingTriggerListItem(
       this._host,
       this._host.engine.i18n("option.crypto"),
       this.setting.tradeBlackcoin,
+      "integer",
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [
