@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { By, until, WebDriver } from "selenium-webdriver";
+import { Alert, By, until, WebDriver } from "selenium-webdriver";
 import { delay } from "../tools";
 
 export class KittenGamePage {
@@ -65,14 +65,35 @@ export class KittenGamePage {
 
   async wipe() {
     await this.driver.findElement(By.id("wipe-link")).click();
+
+    // Wait for confirm()
+    await this.waitForAlert();
     assert(
       (await this.driver.switchTo().alert().getText()) ==
         "All save data will be DESTROYED, are you sure?"
     );
     await this.driver.switchTo().alert().accept();
+
+    // Wait for second confirm()
+    await this.waitForAlert();
     assert((await this.driver.switchTo().alert().getText()) == "Are you ABSOLUTELY sure?");
     await this.driver.switchTo().alert().accept();
+
     await delay(1000);
     await this.waitForLoadStart();
+  }
+
+  async waitForAlert(): Promise<Alert> {
+    try {
+      const alert = await this.driver.switchTo().alert();
+      return alert;
+    } catch (error) {
+      // @ts-expect-error Error
+      if (error.message === "no such alert") {
+        await delay(1000);
+        return this.waitForAlert();
+      }
+      throw error;
+    }
   }
 }
