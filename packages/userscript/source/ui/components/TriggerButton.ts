@@ -33,7 +33,7 @@ export class TriggerButton extends IconButton {
             )
           : SettingsSectionUi.promptLimit(
               host.engine.i18n("ui.trigger.setinteger", [label]),
-              SettingsSectionUi.renderPercentage(setting.trigger)
+              setting.trigger.toFixed()
             );
 
       if (value !== null) {
