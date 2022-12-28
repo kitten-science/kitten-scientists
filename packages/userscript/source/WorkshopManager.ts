@@ -401,10 +401,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     // we *could* craft.
     if (resource.craftable) {
       let minProd = Number.MAX_VALUE;
-      const materials = this.getMaterials((resource as CraftableInfo).name);
+      const materials = this.getMaterials(resource.name as ResourceCraftable);
       for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
         const rat =
-          (1 + this._host.gamePage.getResCraftRatio((resource as CraftableInfo).name)) / amount;
+          (1 + this._host.gamePage.getResCraftRatio(resource.name as ResourceCraftable)) / amount;
         // Currently preTrade is only true for the festival stuff, so including furs from hunting is ideal.
         const addProd = this.getTickVal(this.getResource(mat));
         if (addProd === "ignore") {
