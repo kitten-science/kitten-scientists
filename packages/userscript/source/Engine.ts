@@ -181,7 +181,7 @@ export class Engine {
         .then(() => {
           const exit = Date.now();
           const timeTaken = exit - entry;
-          this._intervalMainLoop = setTimeout(
+          this._intervalMainLoop = window.setTimeout(
             loop,
             Math.max(10, this._host.engine.settings.interval - timeTaken)
           );
@@ -190,7 +190,7 @@ export class Engine {
           cwarn(error as string);
         });
     };
-    this._intervalMainLoop = setTimeout(loop, this._host.engine.settings.interval);
+    this._intervalMainLoop = window.setTimeout(loop, this._host.engine.settings.interval);
 
     if (msg) {
       this._host.engine.imessage("status.ks.enable");
