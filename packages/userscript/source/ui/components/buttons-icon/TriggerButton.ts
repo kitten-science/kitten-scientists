@@ -1,7 +1,7 @@
-import { SettingTrigger } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { SettingsSectionUi } from "../SettingsSectionUi";
-import { IconButton } from "./IconButton";
+import { SettingTrigger } from "../../../settings/Settings";
+import { UserScript } from "../../../UserScript";
+import { SettingsSectionUi } from "../../SettingsSectionUi";
+import { IconButton } from "../IconButton";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 

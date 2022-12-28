@@ -1,10 +1,10 @@
 import { ResourcesSettings, ResourcesSettingsItem } from "../settings/ResourcesSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
-import { ConsumeButton } from "./components/ConsumeButton";
+import { ConsumeButton } from "./components/buttons-text/ConsumeButton";
+import { StockButton } from "./components/buttons-text/StockButton";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
-import { StockButton } from "./components/StockButton";
 
 export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;

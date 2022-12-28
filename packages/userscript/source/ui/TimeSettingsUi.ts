@@ -1,9 +1,9 @@
 import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings";
 import { UserScript } from "../UserScript";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {

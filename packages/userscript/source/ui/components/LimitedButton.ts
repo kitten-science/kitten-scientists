@@ -14,7 +14,7 @@ export class LimitedButton extends UiComponent {
   ) {
     super(host);
 
-    const element = $(`<div/>`).addClass("ks-text-button");
+    const element = $("<div/>").addClass("ks-text-button");
 
     const elementLabel = $("<label/>", {
       text: host.engine.i18n("ui.limit"),

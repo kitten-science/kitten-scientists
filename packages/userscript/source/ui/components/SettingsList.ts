@@ -1,7 +1,7 @@
 import { UserScript } from "../../UserScript";
-import { DisableButton } from "./DisableButton";
-import { EnableButton } from "./EnableButton";
-import { ResetButton } from "./ResetButton";
+import { DisableButton } from "./buttons-icon/DisableButton";
+import { EnableButton } from "./buttons-icon/EnableButton";
+import { ResetButton } from "./buttons-icon/ResetButton";
 import { UiComponent } from "./UiComponent";
 
 /**

@@ -1,10 +1,10 @@
 import { SpaceSettings } from "../settings/SpaceSettings";
 import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { TriggerButton } from "./components/TriggerButton";
 import { MissionSettingsUi } from "./MissionSettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 

@@ -1,11 +1,11 @@
 import { ReligionSettings } from "../settings/ReligionSettings";
 import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
-import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {

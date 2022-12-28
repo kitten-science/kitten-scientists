@@ -1,9 +1,9 @@
 import { EngineSettings } from "../settings/EngineSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
-import { CopyButton } from "./components/CopyButton";
+import { CopyButton } from "./components/buttons-icon/CopyButton";
+import { ImportButton } from "./components/buttons-icon/ImportButton";
 import { ExpandoButton } from "./components/ExpandoButton";
-import { ImportButton } from "./components/ImportButton";
 import { SettingListItem } from "./components/SettingListItem";
 
 export class EngineSettingsUi {

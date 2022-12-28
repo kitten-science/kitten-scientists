@@ -1,12 +1,12 @@
 import { TimeSkipSettings } from "../settings/TimeSkipSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton";
+import { MaxButton } from "./components/buttons-text/MaxButton";
 import { CyclesList } from "./components/CyclesList";
-import { MaxButton } from "./components/MaxButton";
 import { Panel } from "./components/Panel";
 import { SeasonsList } from "./components/SeasonsList";
 import { SettingsPanel } from "./components/SettingsPanel";
-import { TriggerButton } from "./components/TriggerButton";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
   private readonly _trigger: TriggerButton;

@@ -2,13 +2,13 @@ import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings";
 import { ucfirst } from "../tools/Format";
 import { Race } from "../types";
 import { UserScript } from "../UserScript";
+import { SeasonsButton } from "./components/buttons-icon/SeasonsButton";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { HeaderListItem } from "./components/HeaderListItem";
-import { SeasonsButton } from "./components/SeasonsButton";
 import { SeasonsList } from "./components/SeasonsList";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
-import { TriggerButton } from "./components/TriggerButton";
 import { EmbassySettingsUi } from "./EmbassySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 

@@ -4,9 +4,9 @@ import {
 } from "../settings/ResetResourcesSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
+import { StockButton } from "./components/buttons-text/StockButton";
 import { IconSettingsPanel } from "./components/IconSettingsPanel";
 import { SettingListItem } from "./components/SettingListItem";
-import { StockButton } from "./components/StockButton";
 
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;

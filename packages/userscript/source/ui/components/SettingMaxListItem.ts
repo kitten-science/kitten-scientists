@@ -1,6 +1,6 @@
 import { SettingMax } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
-import { MaxButton } from "./MaxButton";
+import { MaxButton } from "./buttons-text/MaxButton";
 import { SettingListItem } from "./SettingListItem";
 
 export class SettingMaxListItem extends SettingListItem<SettingMax> {

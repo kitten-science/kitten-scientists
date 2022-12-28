@@ -1,7 +1,7 @@
 import { SettingTrigger } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
+import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton";
 import { SettingListItem } from "./SettingListItem";
-import { TriggerButton, TriggerButtonBehavior } from "./TriggerButton";
 
 export class SettingTriggerListItem extends SettingListItem {
   readonly triggerButton: TriggerButton;

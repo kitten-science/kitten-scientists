@@ -1,7 +1,7 @@
 import { SettingTrigger } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
+import { TriggerLimitButton } from "./buttons-text/TriggerLimitButton";
 import { SettingListItem } from "./SettingListItem";
-import { TriggerLimitButton } from "./TriggerLimitButton";
 
 export class SettingTriggerLimitListItem extends SettingListItem {
   readonly triggerButton: TriggerLimitButton;

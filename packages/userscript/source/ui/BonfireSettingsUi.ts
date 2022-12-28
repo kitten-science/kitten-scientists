@@ -2,10 +2,10 @@ import { BonfireSettings } from "../settings/BonfireSettings";
 import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { TriggerButton } from "./components/TriggerButton";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {

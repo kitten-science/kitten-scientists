@@ -1,5 +1,5 @@
-import { UserScript } from "../../UserScript";
-import { IconButton } from "./IconButton";
+import { UserScript } from "../../../UserScript";
+import { IconButton } from "../IconButton";
 
 /**
  * A button that is intended to reset something when clicked.

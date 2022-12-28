@@ -1,10 +1,10 @@
 import { EmbassySettings } from "../settings/EmbassySettings";
 import { SettingMax } from "../settings/Settings";
 import { UserScript } from "../UserScript";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingsPanel } from "./components/SettingsPanel";
-import { TriggerButton } from "./components/TriggerButton";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   private readonly _trigger: TriggerButton;
