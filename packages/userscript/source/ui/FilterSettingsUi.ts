@@ -11,15 +11,15 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     const label = host.engine.i18n("ui.filter");
     super(host, label, settings);
 
-    this._list.addEventListener("enableAll", () => {
+    this.list.addEventListener("enableAll", () => {
       this._filters.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this._list.addEventListener("disableAll", () => {
+    this.list.addEventListener("disableAll", () => {
       this._filters.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this._list.addEventListener("reset", () => {
+    this.list.addEventListener("reset", () => {
       this.setting.load(new FilterSettings());
       this.refreshUi();
     });

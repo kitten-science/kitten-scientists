@@ -9,15 +9,15 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
   constructor(host: UserScript, settings: UpgradeSettings) {
     super(host, host.engine.i18n("ui.upgrade.upgrades"), settings);
 
-    this._list.addEventListener("enableAll", () => {
+    this.list.addEventListener("enableAll", () => {
       this._upgrades.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this._list.addEventListener("disableAll", () => {
+    this.list.addEventListener("disableAll", () => {
       this._upgrades.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this._list.addEventListener("reset", () => {
+    this.list.addEventListener("reset", () => {
       this.setting.load(new UpgradeSettings());
       this.refreshUi();
     });

@@ -9,15 +9,15 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
   constructor(host: UserScript, settings: TechSettings) {
     super(host, host.engine.i18n("ui.upgrade.techs"), settings);
 
-    this._list.addEventListener("enableAll", () => {
+    this.list.addEventListener("enableAll", () => {
       this._techs.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this._list.addEventListener("disableAll", () => {
+    this.list.addEventListener("disableAll", () => {
       this._techs.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this._list.addEventListener("reset", () => {
+    this.list.addEventListener("reset", () => {
       this.setting.load(new TechSettings());
       this.refreshUi();
     });

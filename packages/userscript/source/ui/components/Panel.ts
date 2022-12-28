@@ -1,13 +1,21 @@
 import { UserScript } from "../../UserScript";
 import { ExpandoButton } from "./ExpandoButton";
-import { LabelListItem } from "./LabelListItem";
 import { UiComponent } from "./UiComponent";
 
-export class Panel<TChild extends UiComponent = UiComponent> extends UiComponent {
+/**
+ * A `Panel` is a section of the UI that can be expanded and collapsed
+ * through an expando button.
+ * The panel also has a head element, which is extended to create the panel
+ * behavior.
+ */
+export class Panel<
+  TChild extends UiComponent = UiComponent,
+  THead extends UiComponent = UiComponent
+> extends UiComponent {
   readonly element: JQuery<HTMLElement>;
   protected readonly _child: TChild;
-  protected readonly _element: UiComponent;
   protected readonly _expando: ExpandoButton;
+  protected readonly _head: THead;
   protected _mainChildVisible: boolean;
 
   get isExpanded() {
@@ -15,27 +23,20 @@ export class Panel<TChild extends UiComponent = UiComponent> extends UiComponent
   }
 
   /**
-   * Constructs a settings panel that is used to contain a major section of the UI.
+   * Constructs a settings panel that is used to contain a single child element.
    *
    * @param host A reference to the host.
-   * @param label The label to put main checkbox of this section.
-   * @param child Another compontent to host in the panel.
-   * @param icon When set to an SVG path, will be used as an icon on the label.
+   * @param child Another component to host in the panel.
+   * @param head Another component to host in the head of the panel.
    * @param initiallyExpanded Should the main child be expanded right away?
    */
-  constructor(
-    host: UserScript,
-    label: string,
-    child: TChild,
-    icon: string | undefined = undefined,
-    initiallyExpanded = false
-  ) {
+  constructor(host: UserScript, child: TChild, head: THead, initiallyExpanded = false) {
     super(host);
 
+    this._head = head;
     this._child = child;
 
-    const element = new LabelListItem(host, label, icon);
-    this.children.add(element);
+    this.children.add(head);
     this.children.add(child);
 
     // The expando button for this panel.
@@ -47,15 +48,14 @@ export class Panel<TChild extends UiComponent = UiComponent> extends UiComponent
       this.toggle();
     });
 
-    element.element.append(expando.element, child.element);
+    head.element.append(expando.element, child.element);
 
     if (initiallyExpanded) {
       child.element.toggle();
     }
 
-    this._element = element;
     this._mainChildVisible = initiallyExpanded;
-    this.element = element.element;
+    this.element = head.element;
     this._expando = expando;
   }
 
@@ -68,11 +68,11 @@ export class Panel<TChild extends UiComponent = UiComponent> extends UiComponent
     if (this._mainChildVisible) {
       this._child.element.show();
       this._expando.setExpanded();
-      this._element.element.addClass("ks-expanded");
+      this._head.element.addClass("ks-expanded");
     } else {
       this._child.element.hide();
       this._expando.setCollapsed();
-      this._element.element.removeClass("ks-expanded");
+      this._head.element.removeClass("ks-expanded");
     }
   }
 }

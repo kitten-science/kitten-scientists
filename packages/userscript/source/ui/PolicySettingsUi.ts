@@ -9,15 +9,15 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
   constructor(host: UserScript, settings: PolicySettings) {
     super(host, host.engine.i18n("ui.upgrade.policies"), settings);
 
-    this._list.addEventListener("enableAll", () => {
+    this.list.addEventListener("enableAll", () => {
       this._policies.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this._list.addEventListener("disableAll", () => {
+    this.list.addEventListener("disableAll", () => {
       this._policies.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this._list.addEventListener("reset", () => {
+    this.list.addEventListener("reset", () => {
       this.setting.load(new PolicySettings());
       this.refreshUi();
     });

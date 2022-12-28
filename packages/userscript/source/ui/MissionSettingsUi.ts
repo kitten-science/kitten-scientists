@@ -9,15 +9,15 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
   constructor(host: UserScript, settings: MissionSettings) {
     super(host, host.engine.i18n("ui.upgrade.missions"), settings);
 
-    this._list.addEventListener("enableAll", () => {
+    this.list.addEventListener("enableAll", () => {
       this._missions.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this._list.addEventListener("disableAll", () => {
+    this.list.addEventListener("disableAll", () => {
       this._missions.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this._list.addEventListener("reset", () => {
+    this.list.addEventListener("reset", () => {
       this.setting.load(new MissionSettings());
       this.refreshUi();
     });

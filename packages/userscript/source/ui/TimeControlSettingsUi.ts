@@ -17,15 +17,15 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const label = host.engine.i18n("ui.timeCtrl");
     super(host, label, settings);
 
-    this._list.addEventListener("enableAll", () => {
+    this.list.addEventListener("enableAll", () => {
       this._items.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this._list.addEventListener("disableAll", () => {
+    this.list.addEventListener("disableAll", () => {
       this._items.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this._list.addEventListener("reset", () => {
+    this.list.addEventListener("reset", () => {
       this.setting.load(new TimeControlSettings());
       this.refreshUi();
     });

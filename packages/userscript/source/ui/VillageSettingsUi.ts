@@ -20,15 +20,15 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     const label = host.engine.i18n("ui.distribute");
     super(host, label, settings);
 
-    this._list.addEventListener("enableAll", () => {
+    this.list.addEventListener("enableAll", () => {
       this._jobs.forEach(item => (item.setting.enabled = true));
       this.refreshUi();
     });
-    this._list.addEventListener("disableAll", () => {
+    this.list.addEventListener("disableAll", () => {
       this._jobs.forEach(item => (item.setting.enabled = false));
       this.refreshUi();
     });
-    this._list.addEventListener("reset", () => {
+    this.list.addEventListener("reset", () => {
       this.setting.load(new VillageSettings());
       this.refreshUi();
     });

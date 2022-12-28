@@ -17,13 +17,13 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   constructor(host: UserScript, settings: ResetSettings) {
     super(host, host.engine.i18n("option.time.reset"), settings);
 
-    this._list.addEventListener("enableAll", () => {
+    this.list.addEventListener("enableAll", () => {
       this.refreshUi();
     });
-    this._list.addEventListener("disableAll", () => {
+    this.list.addEventListener("disableAll", () => {
       this.refreshUi();
     });
-    this._list.addEventListener("reset", () => {
+    this.list.addEventListener("reset", () => {
       this.setting.load(new ResetSettings());
       this.refreshUi();
     });
