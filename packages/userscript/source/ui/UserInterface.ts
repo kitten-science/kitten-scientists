@@ -166,7 +166,7 @@ export class UserInterface {
     );
     // Hover guides
     this._addRule(
-      `#ks ul li:not(.ks-expanded):hover { 
+      `#ks ul .ks-setting:not(.ks-expanded):hover { 
         border-bottom: 1px solid rgba(185, 185, 185, 0.5);
       }`
     );
