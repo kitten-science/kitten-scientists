@@ -7,4 +7,4 @@ cd ${basedir}/..
 docker build -t mkdocs-material .
 
 cd ../..
-docker run --rm -it -v ${PWD}:/docs mkdocs-material build --config-file packages/documentation/mkdocs.yml --site-dir public
+docker run --rm -it -v ${PWD}:/docs ghcr.io/oliversalzburg/mkdocs-material-ex:main build --config-file packages/documentation/mkdocs.yml --site-dir public

@@ -55,3 +55,19 @@ theme:
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
+
+nav:
+  - Home: index.md
+  - Sections:
+      - Overview: sections/overview.md
+      - Bonfire: sections/bonfire.md
+      - Village: sections/village.md
+      - Science: sections/science.md
+      - Workshop: sections/workshop.md
+      - Resource Control: sections/resource-control.md
+      - Trade: sections/trade.md
+      - Religion: sections/religion.md
+      - Space: sections/space.md
+      - Time: sections/time.md
+      - Time Control: sections/time-control.md
+      - Log Filters: sections/log-filters.md
