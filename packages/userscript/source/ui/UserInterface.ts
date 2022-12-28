@@ -183,7 +183,7 @@ export class UserInterface {
       `#ks ul li.ks-setting .ks-expando-button {
         border: 1px solid rgba(255, 255, 255, 0.2);
         cursor: pointer;
-        display: inline-block;
+        display: block;
         float: right;
         min-width: 10px;
         padding: 0px 3px;
@@ -194,7 +194,7 @@ export class UserInterface {
     this._addRule(
       `#ks ul li.ks-setting .ks-icon-button {
         cursor: pointer;
-        display: inline-block;
+        display: block;
         float: right;
         padding-right: 5px;
         padding-top: 2px;
