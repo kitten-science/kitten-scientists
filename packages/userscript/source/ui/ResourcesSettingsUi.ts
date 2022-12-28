@@ -59,6 +59,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
 
     // How many items to stock.
     const stockElement = new StockButton(this._host, title, setting);
+    stockElement.element.addClass("ks-stock-button");
     container.addChild(stockElement);
 
     // The consume rate for the resource.

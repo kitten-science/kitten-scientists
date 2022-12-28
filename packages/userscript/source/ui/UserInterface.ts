@@ -252,28 +252,18 @@ export class UserInterface {
         user-select: none;
       }`
     );
-    // Regular Button in items lists
-    this._addRule(
-      `#ks ul li.ks-setting .ks-list.ks-items-list .ks-button {
-        border: 1px solid grey;
-        cursor: pointer;
-        float: right;
-        display: inline-block;
-        margin-bottom: 4px;
-        padding: 1px 2px;
-        user-select: none;
-      }`
-    );
-    this._addRule(
-      `#ks ul li.ks-setting .ks-list.ks-items-list .ks-button.ks-margin-right {
-        margin-right: 8px;
-      }`
-    );
     this._addRule(
       `#ks ul li.ks-setting .ks-max-button {
         float: right;
         padding-right: 5px;
         padding-top: 2px;
+      }`
+    );
+    // The stock buttons should layout similarly to ks-label.
+    this._addRule(
+      `#ks ul li.ks-setting .ks-stock-button {
+        display: inline-block;
+        min-width: 120px;
       }`
     );
 

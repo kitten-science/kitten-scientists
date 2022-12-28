@@ -30,6 +30,8 @@ export class MaxButton extends TextButton {
       },
     });
 
+    this.element.addClass("ks-max-button");
+
     this.setting = setting;
   }
 

@@ -32,6 +32,8 @@ export class TriggerLimitButton extends TextButton {
       },
     });
 
+    this.element.addClass("ks-max-button");
+
     this.setting = setting;
   }
 

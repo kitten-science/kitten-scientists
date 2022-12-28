@@ -14,7 +14,7 @@ export class TextButton extends UiComponent {
   ) {
     super(host);
 
-    const element = $("<div/>").addClass("ks-label").addClass("ks-text-button").text(label);
+    const element = $("<div/>").addClass("ks-text-button").text(label);
 
     if (!isNil(title)) {
       element.prop("title", title);
