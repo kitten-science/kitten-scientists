@@ -140,9 +140,6 @@ export class UserInterface {
   }
 
   private _installCss(): void {
-    // This development panel overlays the UI in the Sleek theme.
-    this._addRule("#devPanel { display: none !important; }");
-
     // Basic layout for our own list-based options menus.
     this._addRule(
       `#ks {
