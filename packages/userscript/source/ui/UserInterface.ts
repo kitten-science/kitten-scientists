@@ -144,6 +144,7 @@ export class UserInterface {
     this._addRule(
       `#ks {
         margin-bottom: 10px;
+        padding-right: 10px;
       }`
     );
     this._addRule(
