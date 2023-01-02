@@ -6,6 +6,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/kitten-science/
 markdown_extensions:
+  - abbr
   - admonition
   - pymdownx.details
   - pymdownx.highlight:
