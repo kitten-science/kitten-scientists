@@ -63,5 +63,8 @@ Another common option is the _limit_. This will usually prevent an automation fr
 
     When entering limits, you can usually use the KG notations for big numbers. So `9.5M` will become `9,500,000`. You _have to_ use upper-case letters for this to work though.
 
-_[KG]: Kittens Game
-_[KS]: Kitten Scientists \*[UI]: User interface
+<!-- prettier-ignore-start -->
+*[KG]: Kittens Game
+*[KS]: Kitten Scientists
+*[UI]: User interface
+<!-- prettier-ignore-end -->
