@@ -42,14 +42,13 @@ Some panels, when expanded, show 3 more buttons:
 
 A _setting_ in KS is most commonly a checkbox. When the checkbox is checked, this feature is active. If the checkbox is unchecked, the feature is inactive.
 
-Some settings also come with additional options. These are shown on the same line as the checkbox. You can click on these options to change their value. Sometimes, these options behave like expando buttons and collapse an entire new panel with options.
+Some settings also come with additional options. These are shown on the same line as the checkbox. You can click on these options to change their value. Sometimes, these options behave like expando buttons and expand an entire new panel with options.
 
 ### Triggers
 
-One common option to see is the _trigger_, symbolized by a little lightning. A trigger usually communicated at which threshold an automation should become active. Which resource this threshold refers to, is documented with the individual automations.
+One common option to see is the _trigger_, symbolized by a little lightning. A trigger usually communicates at which threshold an automation should become active. Which resource this threshold refers to, is documented with the individual automations.
 
-Triggers can be absolute values or, most commonly, a percentage. This percentage then usually refers to your storage capacity for a given resource.  
-When you enter a percentage value into KS, it expects you to provide it as a value between `0` and `1`. So if you wanted a trigger value at ¾ of your storage capacity, you'd enter `0.75`.
+Triggers can be absolute values or, most commonly, a percentage. This percentage then usually refers to your storage capacity for a given resource. When you enter a percentage value into KS, it expects you to provide it as a value between `0` and `1`. So if you wanted a trigger value at ¾ of your storage capacity, you'd enter `0.75`.
 
 ### Limits
 
