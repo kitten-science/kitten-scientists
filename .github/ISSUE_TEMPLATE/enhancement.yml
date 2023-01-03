@@ -18,8 +18,7 @@ body:
     id: savegame
     attributes:
       label: Your Savegame
-      description: Provide a savegame that is suitable to illustrate your idea.
-      placeholder: Paste your savegame export here
-      render: Text
+      description: Provide a savegame that is suitable to illustrate the bug.
+      placeholder: Export your save to a file and then attach the file here.
     validations:
       required: false
