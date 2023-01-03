@@ -34,6 +34,7 @@ repo_url: https://github.com/kitten-science/kitten-scientists
 site_name: Kitten Scientists
 theme:
   features:
+    - content.code.copy
     - navigation.instant
     - navigation.sections
     - navigation.tabs
