@@ -59,6 +59,7 @@ theme:
 
 nav:
   - Home: index.md
+  - Installation: installation.md
   - Sections:
       - Overview: sections/overview.md
       - Bonfire: sections/bonfire.md

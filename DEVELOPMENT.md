@@ -98,4 +98,6 @@ yarn userscript:release
 
 1. Make sure to also update the `README.md` to point the bookmarklet to the new script.
 
+1. Make sure to also update the `packages/documentation/installation.md` to point to the latest version number.
+
 1. Make sure to also update the `.github/bug_report.yml` to mention the latest version number.
