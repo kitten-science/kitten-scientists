@@ -110,7 +110,7 @@ export class Engine {
    */
   stateLoad(settings: EngineState) {
     // For now, we only log a warning on mismatching tags.
-    // Ideally, we would perform semvar comparison, but that is
+    // Ideally, we would perform semver comparison, but that is
     // excessive at this point in time. The goal should be a stable
     // state import of most versions anyway.
     if (settings.v !== KS_VERSION) {

@@ -133,7 +133,7 @@ export class BonfireManager implements Automation {
     }
 
     const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
-    // If aqueducts haven't beeen upgraded to hydro plants yet...
+    // If aqueducts haven't been upgraded to hydro plants yet...
     if (
       this.settings.upgradeBuildings.buildings.hydroplant.enabled &&
       aqueductMeta.unlocked &&

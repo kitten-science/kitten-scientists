@@ -222,8 +222,8 @@ export class VillageManager implements Automation {
         trueOutput[out] =
           // If this is a capped resource...
           0 < res.maxValue
-            ? // multiply the amount of times we hunted with the result of an averag hunt.
-              // Cappting at the max value and 0 bounds.
+            ? // multiply the amount of times we hunted with the result of an average hunt.
+              // Capping at the max value and 0 bounds.
               Math.min(outValue * huntCount, Math.max(res.maxValue - res.value, 0))
             : // Otherwise, just multiply unbounded
               outValue * huntCount;
