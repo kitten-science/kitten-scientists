@@ -35,6 +35,11 @@ export type VoidSpaceUpgrades =
 
 export type AbstractTimeUpgradeInfo = {
   /**
+   * An internationalized description for this space building.
+   */
+  description: string;
+
+  /**
    * An internationalized label for this time upgrade.
    */
   label: string;
@@ -52,25 +57,20 @@ export type AbstractTimeUpgradeInfo = {
 };
 
 export type ChronoForgeUpgradeInfo = AbstractTimeUpgradeInfo & {
-  /**
-   * An internationalized description for this space building.
-   */
-  description: string;
-
   effects: {
+    heatMax?: number;
+    heatPerTick?: number;
     temporalFluxMax?: number;
   };
+  heat?: number;
+  isAutomationEnabled?: boolean;
+  on?: number;
 
   name: ChronoForgeUpgrades;
 };
 
 export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
   breakIronWill: true;
-
-  /**
-   * An internationalized description for this space building.
-   */
-  description: string;
 
   effects: {
     maxKittens?: number;

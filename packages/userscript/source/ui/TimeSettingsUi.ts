@@ -11,6 +11,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   private readonly _trigger: TriggerButton;
   private readonly _buildings: Array<SettingListItem>;
   private readonly _fixCryochamber: SettingListItem;
+  private readonly _turnOnChronoFurnace: SettingListItem;
 
   constructor(host: UserScript, settings: TimeSettings) {
     const label = host.engine.i18n("ui.time");
@@ -93,6 +94,23 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       }
     );
     listAddition.addChild(this._fixCryochamber);
+    
+    this._turnOnChronoFurnace = new SettingListItem(
+      this._host,
+      this._host.engine.i18n("option.chronofurnace"),
+      this.setting.turnOnChronoFurnace,
+      {
+        onCheck: () =>
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.chronofurnace"),
+          ]),
+        onUnCheck: () =>
+          this._host.engine.imessage("status.sub.disable", [
+            this._host.engine.i18n("option.chronofurnace"),
+          ]),
+      }
+    );
+    listAddition.addChild(this._turnOnChronoFurnace);
     this.addChild(listAddition);
   }
 
