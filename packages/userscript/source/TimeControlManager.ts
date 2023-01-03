@@ -325,11 +325,24 @@ export class TimeControlManager {
   }
 
   accelerateTime() {
+    const temporalFluxAvailable = this._workshopManager.getValueAvailable("temporalFlux");
+
+    // If there's no available flux (we went below the limit)
+    if (temporalFluxAvailable <= 0) {
+      if (this._host.gamePage.time.isAccelerated) {
+        // Stop the acceleration
+        this._host.gamePage.time.isAccelerated = false;
+      }
+      return;
+    }
+
     if (this._host.gamePage.time.isAccelerated) {
       return;
     }
+
     const temporalFlux = this._host.gamePage.resPool.get("temporalFlux");
-    if (temporalFlux.value >= temporalFlux.maxValue * this.settings.accelerateTime.trigger) {
+
+    if (temporalFlux.maxValue * this.settings.accelerateTime.trigger <= temporalFlux.value) {
       this._host.gamePage.time.isAccelerated = true;
       this._host.engine.iactivity("act.accelerate", [], "ks-accelerate");
       this._host.engine.storeForSummary("accelerate", 1);
