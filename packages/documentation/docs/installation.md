@@ -34,7 +34,7 @@ KS is released in 3 variants:
 
 You can also load KS through a bookmarklet.
 
-To use bookmarklets, just create a new bookmark in your browser and enter the text below as the URL. When you're on the KG game website, open this bookmark, and it should KS for you.
+To use bookmarklets, just create a new bookmark in your browser and enter the text below as the URL. When you're on the KG game website, open this bookmark, and it should load KS for you.
 
 !!! note
 
@@ -48,7 +48,7 @@ javascript:(function(){var d=document,s=d.createElement('script');s.src='https:/
 
 !!! warning
 
-    If you are not familiar with Docker/OCI containers, then you can safely ignore this section.
+    If you're not familiar with Docker/OCI containers, then you can safely ignore this section.
 
 You can pull any version of the script as a container. The images are hosted on the [GitHub registry](https://github.com/kitten-science/kitten-scientists/pkgs/container/kitten-scientists).
 
