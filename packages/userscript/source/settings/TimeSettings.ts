@@ -1,7 +1,7 @@
 import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
-import { Requirement, SettingMax, SettingTrigger } from "./Settings";
+import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
 
 /**
@@ -32,7 +32,8 @@ export type TimeBuildingsSettings = Record<TimeItem, TimeSettingsItem>;
 export class TimeSettings extends SettingTrigger {
   buildings: TimeBuildingsSettings;
 
-  fixCryochambers: SettingTrigger;
+  fixCryochambers: Setting;
+  turnOnChronoFurnace: Setting;
 
   constructor(
     enabled = false,
@@ -54,11 +55,13 @@ export class TimeSettings extends SettingTrigger {
       voidResonator: new TimeSettingsItem("voidResonator", TimeItemVariant.VoidSpace),
       voidRift: new TimeSettingsItem("voidRift", TimeItemVariant.VoidSpace),
     },
-    fixCryochambers = new SettingTrigger(false)
+    fixCryochambers = new Setting(false),
+    turnOnChronoFurnace = new Setting(false)
   ) {
     super(enabled, trigger);
     this.buildings = buildings;
     this.fixCryochambers = fixCryochambers;
+    this.turnOnChronoFurnace = turnOnChronoFurnace;
   }
 
   load(settings: Maybe<Partial<TimeSettings>>) {
