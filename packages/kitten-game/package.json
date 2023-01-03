@@ -16,6 +16,7 @@
   "main": "Dockerfile",
   "scripts": {
     "devcontainer:build": "docker build --tag kitten-game .",
+    "devcontainer:rebuild": "docker build --no-cache --tag kitten-game .",
     "devcontainer:run": "bash ./scripts/run-development-container.sh"
   }
 }
