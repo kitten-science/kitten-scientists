@@ -10,7 +10,7 @@ The file you need to put into your userscript manager is available from the [Rel
 
 KS is released in 3 variants:
 
-1. The **latest** release.
+1. The **latest stable** release.
 
     This is a release with a familiar version number, that has been designated as a reasonably stable version to use. At this time, that is:
 
@@ -38,7 +38,7 @@ To use bookmarklets, just create a new bookmark in your browser and enter the te
 
 !!! note
 
-    This bookmarklet points to the **latest** release of KS.
+    This bookmarklet points to the **latest stable** release of KS.
 
 ```
 javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.1/kitten-scientists-2.0.0-beta.1.user.js';d.body.appendChild(s);})();
