@@ -51,7 +51,9 @@ export class Panel<
     head.element.append(expando.element, child.element);
 
     if (initiallyExpanded) {
-      child.element.toggle();
+      child.element.show();
+    } else {
+      child.element.hide();
     }
 
     this._mainChildVisible = initiallyExpanded;

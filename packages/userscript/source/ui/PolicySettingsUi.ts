@@ -9,19 +9,6 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
   constructor(host: UserScript, settings: PolicySettings) {
     super(host, host.engine.i18n("ui.upgrade.policies"), settings);
 
-    this.list.addEventListener("enableAll", () => {
-      this._policies.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._policies.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new PolicySettings());
-      this.refreshUi();
-    });
-
     const items = [];
     for (const setting of Object.values(this.setting.policies)) {
       const policyLabel = this._host.engine.i18n(

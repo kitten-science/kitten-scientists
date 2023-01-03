@@ -20,19 +20,8 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
     super(host, label, settings);
 
     this._trigger = new TriggerButton(host, label, settings, "integer");
-    this._trigger.element.insertBefore(this.list.element);
+    this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
-
-    this.list.addEventListener("enableAll", () => {
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new TimeSkipSettings());
-      this.refreshUi();
-    });
 
     this._maximum = new MaxButton(this._host, label, this.setting);
     this._cycles = new Panel(

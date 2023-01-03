@@ -14,6 +14,10 @@ import { UiComponent } from "./UiComponent";
  */
 export class SettingsList extends UiComponent {
   readonly element: JQuery<HTMLElement>;
+  readonly list: JQuery<HTMLElement>;
+
+  readonly disableAllButton: DisableButton;
+  readonly enableAllButton: EnableButton;
   readonly resetButton: ResetButton | undefined;
 
   /**
@@ -22,25 +26,38 @@ export class SettingsList extends UiComponent {
    * @param host A reference to the host.
    * @param hasReset Does this section have a "Reset" button?
    */
-  constructor(host: UserScript, hasReset = true) {
+  constructor(host: UserScript, hasReset = false) {
     super(host);
 
-    const containerList = $("<ul/>").addClass("ks-list").addClass("ks-items-list");
+    const container = $("<div/>").addClass("ks-list-container");
 
-    const disableAllButton = new DisableButton(this._host);
-    disableAllButton.element.on("click", () => this.dispatchEvent(new Event("disableAll")));
-    containerList.append(disableAllButton.element);
+    this.list = $("<ul/>").addClass("ks-list").addClass("ks-items-list");
 
-    const enableAllButton = new EnableButton(this._host);
-    enableAllButton.element.on("click", () => this.dispatchEvent(new Event("enableAll")));
-    containerList.append(enableAllButton.element);
+    container.append(this.list);
+
+    const tools = $("<div/>").addClass("ks-list-tools");
+
+    this.enableAllButton = new EnableButton(this._host);
+    this.enableAllButton.element.on("click", () => this.dispatchEvent(new Event("enableAll")));
+    tools.append(this.enableAllButton.element);
+
+    this.disableAllButton = new DisableButton(this._host);
+    this.disableAllButton.element.on("click", () => this.dispatchEvent(new Event("disableAll")));
+    tools.append(this.disableAllButton.element);
 
     if (hasReset) {
       this.resetButton = new ResetButton(this._host);
       this.resetButton.element.on("click", () => this.dispatchEvent(new Event("reset")));
-      containerList.append(this.resetButton.element);
+      tools.append(this.resetButton.element);
     }
 
-    this.element = containerList;
+    container.append(tools);
+
+    this.element = container;
+  }
+
+  override addChild(child: UiComponent) {
+    this.children.add(child);
+    this.list.append(child.element);
   }
 }

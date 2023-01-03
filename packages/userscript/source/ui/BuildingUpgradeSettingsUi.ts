@@ -9,19 +9,6 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
   constructor(host: UserScript, settings: BuildingUpgradeSettings) {
     super(host, host.engine.i18n("ui.upgrade.buildings"), settings);
 
-    this.list.addEventListener("enableAll", () => {
-      this._upgrades.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._upgrades.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new BuildingUpgradeSettings());
-      this.refreshUi();
-    });
-
     const items = [];
     for (const setting of Object.values(this.setting.buildings)) {
       const label = this._host.engine.i18n(`$buildings.${setting.upgrade}.label`);

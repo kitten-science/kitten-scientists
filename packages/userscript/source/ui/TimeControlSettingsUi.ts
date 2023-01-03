@@ -17,19 +17,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const label = host.engine.i18n("ui.timeCtrl");
     super(host, label, settings);
 
-    this.list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new TimeControlSettings());
-      this.refreshUi();
-    });
-
     this._accelerateTime = new SettingTriggerListItem(
       this._host,
       this._host.engine.i18n("option.accelerate"),

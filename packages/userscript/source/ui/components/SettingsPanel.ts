@@ -1,15 +1,15 @@
 import { Setting } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
+import { Container } from "./Container";
 import { Panel } from "./Panel";
 import { SettingListItem } from "./SettingListItem";
-import { SettingsList } from "./SettingsList";
 import { UiComponent } from "./UiComponent";
 
 export class SettingsPanel<TSetting extends Setting = Setting>
   extends Panel
   implements SettingListItem
 {
-  readonly list: SettingsList;
+  protected readonly container: UiComponent;
   readonly setting: TSetting;
   readonly settingItem: SettingListItem;
 
@@ -40,20 +40,21 @@ export class SettingsPanel<TSetting extends Setting = Setting>
    * @param initiallyExpanded Should the main child be expanded right away?
    */
   constructor(host: UserScript, label: string, setting: TSetting, initiallyExpanded = false) {
-    const list = new SettingsList(host);
+    const container = new Container(host);
+    container.element.addClass("ks-panel-content");
+
     const settingItem = new SettingListItem(host, label, setting, {
       onCheck: () => host.engine.imessage("status.auto.enable", [label]),
       onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
     });
-    super(host, list, settingItem, initiallyExpanded);
-    this.list = list;
+    super(host, container, settingItem, initiallyExpanded);
+    this.container = container;
     this.settingItem = settingItem;
-
     this.setting = setting;
   }
 
   override addChild(child: UiComponent) {
     this.children.add(child);
-    this._child.element.append(child.element);
+    this.container.element.append(child.element);
   }
 }

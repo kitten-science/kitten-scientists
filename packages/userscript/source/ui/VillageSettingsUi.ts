@@ -1,11 +1,11 @@
 import { SettingMax } from "../settings/Settings";
 import { VillageSettings } from "../settings/VillageSettings";
 import { UserScript } from "../UserScript";
-import { HeaderListItem } from "./components/HeaderListItem";
 import { OptionsListItem } from "./components/OptionsListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
+import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
@@ -19,19 +19,6 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   constructor(host: UserScript, settings: VillageSettings) {
     const label = host.engine.i18n("ui.distribute");
     super(host, label, settings);
-
-    this.list.addEventListener("enableAll", () => {
-      this._jobs.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._jobs.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new VillageSettings());
-      this.refreshUi();
-    });
 
     this._jobs = [
       this._getDistributeOption(
@@ -70,7 +57,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     ];
     this.addChildren(this._jobs);
 
-    this.addChild(new HeaderListItem(this._host, "Additional options"));
+    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
 
     this._hunt = new SettingTriggerListItem(
       this._host,

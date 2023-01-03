@@ -152,7 +152,7 @@ export class UserInterface {
         margin: 2px 5px;
       }`
     );
-    this._addRule("#ks ul { list-style: none; margin: 0 0 5px; padding: 0; }");
+    this._addRule("#ks ul { list-style: none; margin: 0; padding: 0; }");
     this._addRule('#ks ul:after { clear: both; content: " "; display: block; height: 0; }');
     this._addRule(
       `#ks ul li { 
@@ -160,6 +160,17 @@ export class UserInterface {
         width: 100%;
         border-bottom: 1px solid transparent;
         transition: .3s;
+      }`
+    );
+    this._addRule(
+      `#ks ul li .ks-panel-content { 
+        margin-left: 10px;
+        margin-top: 5px;
+      }`
+    );
+    this._addRule(
+      `#ks ul .ks-setting.ks-expanded { 
+        margin-bottom: 10px;
       }`
     );
     // Hover guides
@@ -194,8 +205,8 @@ export class UserInterface {
         cursor: pointer;
         display: block;
         float: right;
-        padding-right: 5px;
-        padding-top: 2px;
+        padding-right: 3px;
+        line-height: 0;
       }`
     );
     this._addRule(
@@ -218,6 +229,15 @@ export class UserInterface {
     // Setting: Header
     this._addRule(
       `#ks ul li.ks-setting .ks-header {
+        color: inherit;
+        display: inline-block;
+        min-width: 100px;
+        user-select: none;
+      }`
+    );
+    // Setting: Sub-Header
+    this._addRule(
+      `#ks ul li.ks-setting .ks-subheader {
         color: grey;
         display: inline-block;
         min-width: 100px;
@@ -238,16 +258,31 @@ export class UserInterface {
 
     // Setting: List
     this._addRule(
-      `#ks ul li.ks-setting .ks-list {
-        display: none;
-        padding-left: 20px;
+      // This compensates the floating tools below the list.
+      `#ks ul li.ks-setting .ks-list-container {
+        margin-bottom: 4px;
       }`
     );
-    // Items lists have additional padding due to the "enable/disable all" buttons.
+    this._addRule(
+      `#ks ul li.ks-setting .ks-list {
+        border-bottom: 1px dashed grey;
+      }`
+    );
     this._addRule(
       `#ks ul li.ks-setting .ks-list.ks-items-list {
-        padding-top: 4px;
         user-select: none;
+      }`
+    );
+    this._addRule(
+      `#ks ul li.ks-setting .ks-list ~ .ks-list-tools {
+        margin-left: 3px;
+        margin-top: 2px;
+      }`
+    );
+    this._addRule(
+      `#ks ul li.ks-setting .ks-list ~ .ks-list-tools .ks-icon-button {
+        display: inline-block;
+        float: none;
       }`
     );
     this._addRule(
@@ -261,13 +296,13 @@ export class UserInterface {
     this._addRule(
       `#ks ul li.ks-setting .ks-stock-button {
         display: inline-block;
-        min-width: 120px;
+        min-width: 86px;
       }`
     );
 
     // Style settings that act as UI delimiters.
     this._addRule(
-      `#ks ul li.ks-setting.ks-delimiter {
+      `#ks ul .ks-delimiter {
         margin-bottom: 10px;
       }`
     );

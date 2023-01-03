@@ -4,11 +4,11 @@ import { Race } from "../types";
 import { UserScript } from "../UserScript";
 import { SeasonsButton } from "./components/buttons-icon/SeasonsButton";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { HeaderListItem } from "./components/HeaderListItem";
 import { SeasonsList } from "./components/SeasonsList";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
+import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { EmbassySettingsUi } from "./EmbassySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -25,21 +25,8 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     super(host, label, settings);
 
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(this.list.element);
+    this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
-
-    this.list.addEventListener("enableAll", () => {
-      this._races.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._races.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new TradeSettings());
-      this.refreshUi();
-    });
 
     this._races = [
       this._getTradeOption(
@@ -121,7 +108,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     );
     this.addChild(this._tradeBlackcoin);
 
-    this.addChild(new HeaderListItem(this._host, "Additional options"));
+    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
 
     this._embassiesUi = new EmbassySettingsUi(this._host, this.setting.buildEmbassies);
     this.addChild(this._embassiesUi);
@@ -175,9 +162,11 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
         this._host.engine.imessage("trade.season.disable", [ucfirst(name), label]),
     });
     element.addChild(seasons);
+    seasons.element.hide();
 
-    seasonsButton.element.on("click", function () {
+    seasonsButton.element.on("click", () => {
       seasons.element.toggle();
+      element.element.toggleClass("ks-expanded");
     });
 
     return element;

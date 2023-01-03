@@ -2,9 +2,9 @@ import { SpaceSettings } from "../settings/SpaceSettings";
 import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { MissionSettingsUi } from "./MissionSettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
@@ -19,24 +19,11 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
 
     // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(this.list.element);
+    this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
-    this.list.addEventListener("enableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new SpaceSettings());
-      this.refreshUi();
-    });
-
     const uiElements = [
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.cath.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.cath.label")),
       this._getBuildOption(
         this.setting.buildings.spaceElevator,
         this._host.engine.i18n("$space.planet.cath.spaceElevator.label")
@@ -51,7 +38,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.moon.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.moon.label")),
       this._getBuildOption(
         this.setting.buildings.moonOutpost,
         this._host.engine.i18n("$space.planet.moon.moonOutpost.label")
@@ -62,7 +49,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.dune.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.dune.label")),
       this._getBuildOption(
         this.setting.buildings.planetCracker,
         this._host.engine.i18n("$space.planet.dune.planetCracker.label")
@@ -77,7 +64,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.piscine.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.piscine.label")),
       this._getBuildOption(
         this.setting.buildings.researchVessel,
         this._host.engine.i18n("$space.planet.piscine.researchVessel.label")
@@ -88,7 +75,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.helios.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.helios.label")),
       this._getBuildOption(
         this.setting.buildings.sunlifter,
         this._host.engine.i18n("$space.planet.helios.sunlifter.label")
@@ -107,21 +94,21 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.terminus.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.terminus.label")),
       this._getBuildOption(
         this.setting.buildings.cryostation,
         this._host.engine.i18n("$space.planet.terminus.cryostation.label"),
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.kairo.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.kairo.label")),
       this._getBuildOption(
         this.setting.buildings.spaceBeacon,
         this._host.engine.i18n("$space.planet.kairo.spaceBeacon.label"),
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.yarn.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.yarn.label")),
       this._getBuildOption(
         this.setting.buildings.terraformingStation,
         this._host.engine.i18n("$space.planet.yarn.terraformingStation.label")
@@ -132,21 +119,24 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.umbra.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.umbra.label")),
       this._getBuildOption(
         this.setting.buildings.hrHarvester,
         this._host.engine.i18n("$space.planet.umbra.hrHarvester.label"),
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.charon.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$space.planet.charon.label")),
       this._getBuildOption(
         this.setting.buildings.entangler,
         this._host.engine.i18n("$space.planet.charon.entangler.label"),
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$space.planet.centaurusSystem.label")),
+      new SubHeaderListItem(
+        this._host,
+        this._host.engine.i18n("$space.planet.centaurusSystem.label")
+      ),
       this._getBuildOption(
         this.setting.buildings.tectonic,
         this._host.engine.i18n("$space.planet.centaurusSystem.tectonic.label")
@@ -160,7 +150,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
     this._buildings = filterType(uiElements, SettingMaxListItem);
     this.addChildren(uiElements);
 
-    this.addChild(new HeaderListItem(this._host, "Additional options"));
+    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
 
     this._missionsUi = new MissionSettingsUi(this._host, this.setting.unlockMissions);
     this.addChild(this._missionsUi);

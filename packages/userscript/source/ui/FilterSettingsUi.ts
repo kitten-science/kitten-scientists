@@ -11,19 +11,6 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     const label = host.engine.i18n("ui.filter");
     super(host, label, settings);
 
-    this.list.addEventListener("enableAll", () => {
-      this._filters.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._filters.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new FilterSettings());
-      this.refreshUi();
-    });
-
     const buttonTemplates = [
       {
         name: "buildFilter" as const,

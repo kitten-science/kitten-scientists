@@ -16,19 +16,6 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     // Disable checkbox. Resource control is always active.
     this.readOnly = true;
 
-    this.list.addEventListener("enableAll", () => {
-      this._resources.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._resources.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new ResourcesSettings());
-      this.refreshUi();
-    });
-
     // Add all the current resources
     this._resources = [];
     for (const setting of Object.values(this.setting.resources)) {

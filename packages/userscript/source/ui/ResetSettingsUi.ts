@@ -17,17 +17,6 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   constructor(host: UserScript, settings: ResetSettings) {
     super(host, host.engine.i18n("option.time.reset"), settings);
 
-    this.list.addEventListener("enableAll", () => {
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new ResetSettings());
-      this.refreshUi();
-    });
-
     this._bonfireUi = new ResetBonfireSettingsUi(this._host, this.setting.bonfire);
     this._religionUi = new ResetReligionSettingsUi(this._host, this.setting.religion);
     this._resourcesUi = new ResetResourcesSettingsUi(this._host, this.setting.resources);

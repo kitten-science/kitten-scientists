@@ -2,10 +2,10 @@ import { ReligionSettings } from "../settings/ReligionSettings";
 import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
+import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
@@ -21,21 +21,8 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(this.list.element);
+    this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
-
-    this.list.addEventListener("enableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new ReligionSettings());
-      this.refreshUi();
-    });
 
     this._unicornBuildings = [
       this._getBuildOption(
@@ -94,7 +81,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     );
 
     const uiElements = [
-      new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.ziggurat.label")),
+      new SubHeaderListItem(this._host, this._host.engine.i18n("$religion.panel.ziggurat.label")),
       ...this._unicornBuildings,
       this._bestUnicornBuilding,
 
@@ -116,7 +103,10 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         true
       ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.orderOfTheSun.label")),
+      new SubHeaderListItem(
+        this._host,
+        this._host.engine.i18n("$religion.panel.orderOfTheSun.label")
+      ),
       this._getBuildOption(
         this.setting.buildings.solarchant,
         this._host.engine.i18n("$religion.ru.solarchant.label")
@@ -159,7 +149,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         true
       ),
 
-      new HeaderListItem(
+      new SubHeaderListItem(
         this._host,
         this._host.engine.i18n("$religion.panel.cryptotheology.label")
       ),
@@ -204,7 +194,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     this._buildings = filterType(uiElements, SettingMaxListItem);
     this.addChildren(uiElements);
 
-    this.addChild(new HeaderListItem(this._host, "Additional options"));
+    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
 
     const nodeTranscend = new SettingListItem(
       this._host,

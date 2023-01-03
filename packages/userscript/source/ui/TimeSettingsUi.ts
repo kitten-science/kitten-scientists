@@ -1,9 +1,9 @@
 import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings";
 import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
@@ -16,21 +16,8 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     super(host, label, settings);
 
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(this.list.element);
+    this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
-
-    this.list.addEventListener("enableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new TimeSettings());
-      this.refreshUi();
-    });
 
     this._buildings = [
       this._getTimeSetting(
@@ -83,7 +70,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     ];
     this.addChildren(this._buildings);
 
-    this.addChild(new HeaderListItem(this._host, "Additional options"));
+    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
     this._fixCryochamber = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.fix.cry"),

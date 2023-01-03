@@ -18,7 +18,7 @@ export class IconButton extends UiComponent {
     super(host);
 
     const element = $("<div/>", {
-      html: `<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="${pathData}"/></svg>`,
+      html: `<svg style="width: 18px; height: 18px;" viewBox="0 0 48 48"><path fill="currentColor" d="${pathData}"/></svg>`,
       title,
     }).addClass("ks-icon-button");
 

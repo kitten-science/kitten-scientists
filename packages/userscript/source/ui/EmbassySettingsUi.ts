@@ -15,21 +15,8 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
     super(host, label, settings);
 
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(this.list.element);
+    this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
-
-    this.list.addEventListener("enableAll", () => {
-      this._races.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._races.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new EmbassySettings());
-      this.refreshUi();
-    });
 
     this._races = [
       this._makeEmbassySetting(
