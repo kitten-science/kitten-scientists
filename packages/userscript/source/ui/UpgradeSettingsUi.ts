@@ -1,6 +1,7 @@
 import { UpgradeSettings } from "../settings/UpgradeSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingsPanel } from "./components/SettingsPanel";
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
@@ -21,7 +22,9 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
-    items.forEach(button => this.addChild(button.button));
+    const itemsList = new SettingsList(this._host);
+    items.forEach(button => itemsList.addChild(button.button));
+    this.addChild(itemsList);
 
     this._upgrades = items.map(button => button.button);
   }

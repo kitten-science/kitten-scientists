@@ -7,6 +7,7 @@ import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { SeasonsList } from "./components/SeasonsList";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { EmbassySettingsUi } from "./EmbassySettingsUi";
@@ -28,6 +29,11 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
+    const listRaces = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+      hasReset: false,
+    });
     this._races = [
       this._getTradeOption(
         "lizards",
@@ -62,7 +68,8 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       this._getTradeOption(
         "dragons",
         this.setting.races.dragons,
-        this._host.engine.i18n("$trade.race.dragons")
+        this._host.engine.i18n("$trade.race.dragons"),
+        true
       ),
       this._getTradeOption(
         "leviathans",
@@ -70,7 +77,8 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
         this._host.engine.i18n("$trade.race.leviathans")
       ),
     ];
-    this.addChildren(this._races);
+    listRaces.addChildren(this._races);
+    this.addChild(listRaces);
 
     this._feedLeviathans = new SettingListItem(
       this._host,
@@ -108,10 +116,15 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     );
     this.addChild(this._tradeBlackcoin);
 
-    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
+    const listAddition = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+      hasReset: false,
+    });
+    listAddition.addChild(new SubHeaderListItem(this._host, "Additional options"));
 
     this._embassiesUi = new EmbassySettingsUi(this._host, this.setting.buildEmbassies);
-    this.addChild(this._embassiesUi);
+    listAddition.addChild(this._embassiesUi);
 
     this._unlockRaces = new SettingListItem(
       this._host,
@@ -128,7 +141,8 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
           ]),
       }
     );
-    this.addChild(this._unlockRaces);
+    listAddition.addChild(this._unlockRaces);
+    this.addChild(listAddition);
   }
 
   private _getTradeOption(

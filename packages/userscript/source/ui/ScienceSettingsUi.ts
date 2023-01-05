@@ -1,6 +1,7 @@
 import { ScienceSettings } from "../settings/ScienceSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { PolicySettingsUi } from "./PolicySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { TechSettingsUi } from "./TechSettingsUi";
@@ -32,10 +33,15 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
           ]),
       }
     );
-    this.addChild(this._observeStars);
 
     this._items = [this._policiesUi, this._techsUi, this._observeStars];
 
-    this.addChildren([this._techsUi, this._policiesUi, this._observeStars]);
+    const itemsList = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+      hasReset: false,
+    });
+    itemsList.addChildren([this._techsUi, this._policiesUi, this._observeStars]);
+    this.addChild(itemsList);
   }
 }

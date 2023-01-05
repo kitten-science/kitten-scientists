@@ -19,8 +19,6 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     const label = host.engine.i18n("ui.build");
     super(host, label, settings);
 
-    this.container.element.css("clear", "right");
-
     this._trigger = new TriggerButton(host, label, settings);
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
@@ -228,17 +226,22 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     ];
     this._buildings = filterType(buildingElements, SettingMaxListItem);
 
-    const buildingsList = new SettingsList(this._host, true);
-    buildingsList.addChildren(buildingElements);
-    this.addChild(buildingsList);
+    const listBuildings = new SettingsList(this._host, { hasReset: true });
+    listBuildings.addChildren(buildingElements);
+    this.addChild(listBuildings);
 
-    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
+    const listAddition = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+      hasReset: false,
+    });
+    listAddition.addChild(new SubHeaderListItem(this._host, "Additional options"));
 
     this._buildingUpgradeUi = new BuildingUpgradeSettingsUi(
       this._host,
       this.setting.upgradeBuildings
     );
-    this.addChild(this._buildingUpgradeUi);
+    listAddition.addChild(this._buildingUpgradeUi);
 
     this._turnOnSteamworks = new SettingListItem(
       this._host,
@@ -255,6 +258,8 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
           ]),
       }
     );
-    this.addChild(this._turnOnSteamworks);
+    listAddition.addChild(this._turnOnSteamworks);
+
+    this.addChild(listAddition);
   }
 }

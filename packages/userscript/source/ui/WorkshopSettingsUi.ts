@@ -3,6 +3,7 @@ import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi";
@@ -21,6 +22,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
+    const listCrafts = new SettingsList(this._host, { hasReset: true });
     this._crafts = [
       this._getCraftOption(
         this.setting.resources.wood,
@@ -100,16 +102,21 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
       ),
       this._getCraftOption(
         this.setting.resources.thorium,
-        this._host.engine.i18n("$workshop.crafts.thorium.label"),
-        true
+        this._host.engine.i18n("$workshop.crafts.thorium.label")
       ),
     ];
-    this.addChildren(this._crafts);
+    listCrafts.addChildren(this._crafts);
+    this.addChild(listCrafts);
 
-    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
+    const listAdditional = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+      hasReset: false,
+    });
+    listAdditional.addChild(new SubHeaderListItem(this._host, "Additional options"));
 
     this._upgradeUi = new UpgradeSettingsUi(this._host, this.setting.unlockUpgrades);
-    this.addChild(this._upgradeUi);
+    listAdditional.addChild(this._upgradeUi);
 
     this._shipOverride = new SettingListItem(
       this._host,
@@ -126,7 +133,8 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
           ]),
       }
     );
-    this.addChild(this._shipOverride);
+    listAdditional.addChild(this._shipOverride);
+    this.addChild(listAdditional);
   }
 
   private _getCraftOption(

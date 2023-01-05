@@ -4,6 +4,12 @@ import { EnableButton } from "./buttons-icon/EnableButton";
 import { ResetButton } from "./buttons-icon/ResetButton";
 import { UiComponent } from "./UiComponent";
 
+export type SettingsListOptions = {
+  hasEnableAll: boolean;
+  hasDisableAll: boolean;
+  hasReset: boolean;
+};
+
 /**
  * The `SettingsList` is a `<ul>` designed to host `SettingListItem` instances.
  *
@@ -16,18 +22,26 @@ export class SettingsList extends UiComponent {
   readonly element: JQuery<HTMLElement>;
   readonly list: JQuery<HTMLElement>;
 
-  readonly disableAllButton: DisableButton;
-  readonly enableAllButton: EnableButton;
+  readonly disableAllButton: DisableButton | undefined;
+  readonly enableAllButton: EnableButton | undefined;
   readonly resetButton: ResetButton | undefined;
 
   /**
    * Constructs a `SettingsList`.
    *
    * @param host A reference to the host.
-   * @param hasReset Does this section have a "Reset" button?
+   * @param options Which tools should be available on the list?
    */
-  constructor(host: UserScript, hasReset = false) {
+  constructor(host: UserScript, options?: Partial<SettingsListOptions>) {
     super(host);
+
+    const toolOptions: SettingsListOptions = {
+      hasDisableAll: true,
+      hasEnableAll: true,
+      hasReset: false,
+      ...options,
+    };
+    const hasTools = toolOptions.hasDisableAll || toolOptions.hasEnableAll || toolOptions.hasReset;
 
     const container = $("<div/>").addClass("ks-list-container");
 
@@ -35,23 +49,31 @@ export class SettingsList extends UiComponent {
 
     container.append(this.list);
 
-    const tools = $("<div/>").addClass("ks-list-tools");
+    if (hasTools) {
+      const tools = $("<div/>").addClass("ks-list-tools");
 
-    this.enableAllButton = new EnableButton(this._host);
-    this.enableAllButton.element.on("click", () => this.dispatchEvent(new Event("enableAll")));
-    tools.append(this.enableAllButton.element);
+      if (toolOptions.hasEnableAll) {
+        this.enableAllButton = new EnableButton(this._host);
+        this.enableAllButton.element.on("click", () => this.dispatchEvent(new Event("enableAll")));
+        tools.append(this.enableAllButton.element);
+      }
 
-    this.disableAllButton = new DisableButton(this._host);
-    this.disableAllButton.element.on("click", () => this.dispatchEvent(new Event("disableAll")));
-    tools.append(this.disableAllButton.element);
+      if (toolOptions.hasDisableAll) {
+        this.disableAllButton = new DisableButton(this._host);
+        this.disableAllButton.element.on("click", () =>
+          this.dispatchEvent(new Event("disableAll"))
+        );
+        tools.append(this.disableAllButton.element);
+      }
 
-    if (hasReset) {
-      this.resetButton = new ResetButton(this._host);
-      this.resetButton.element.on("click", () => this.dispatchEvent(new Event("reset")));
-      tools.append(this.resetButton.element);
+      if (toolOptions.hasReset) {
+        this.resetButton = new ResetButton(this._host);
+        this.resetButton.element.on("click", () => this.dispatchEvent(new Event("reset")));
+        tools.append(this.resetButton.element);
+      }
+
+      container.append(tools);
     }
-
-    container.append(tools);
 
     this.element = container;
   }

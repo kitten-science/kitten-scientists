@@ -155,6 +155,18 @@ export class UserInterface {
     this._addRule("#ks ul { list-style: none; margin: 0; padding: 0; }");
     this._addRule('#ks ul:after { clear: both; content: " "; display: block; height: 0; }');
     this._addRule(
+      `#ks .ks-checkbox {
+        margin: 1px 5px 2px 2px;
+       }`
+    );
+    this._addRule(
+      `#ks .ks-fieldset {
+        border-bottom: none;
+        border-right: none;
+        border-top: none;
+       }`
+    );
+    this._addRule(
       `#ks ul li { 
         float: left;
         width: 100%;
@@ -164,7 +176,9 @@ export class UserInterface {
     );
     this._addRule(
       `#ks ul li .ks-panel-content { 
-        margin-left: 10px;
+        border-left: 1px dashed grey;
+        padding-left: 16px;
+        margin-left: 8px;
         margin-top: 5px;
       }`
     );
@@ -264,18 +278,14 @@ export class UserInterface {
       }`
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-list {
-        border-bottom: 1px dashed grey;
-      }`
-    );
-    this._addRule(
       `#ks ul li.ks-setting .ks-list.ks-items-list {
         user-select: none;
       }`
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-list ~ .ks-list-tools {
-        margin-left: 3px;
+        border-top: 1px dotted grey;
+        margin-left: 0px;
         margin-top: 2px;
       }`
     );

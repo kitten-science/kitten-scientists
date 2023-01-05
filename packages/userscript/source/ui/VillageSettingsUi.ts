@@ -4,6 +4,7 @@ import { UserScript } from "../UserScript";
 import { OptionsListItem } from "./components/OptionsListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -20,6 +21,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     const label = host.engine.i18n("ui.distribute");
     super(host, label, settings);
 
+    const listJobs = new SettingsList(this._host);
     this._jobs = [
       this._getDistributeOption(
         this.setting.jobs.woodcutter,
@@ -51,13 +53,19 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       ),
       this._getDistributeOption(
         this.setting.jobs.engineer,
-        this._host.engine.i18n("$village.job.engineer"),
-        true
+        this._host.engine.i18n("$village.job.engineer")
       ),
     ];
-    this.addChildren(this._jobs);
+    listJobs.addChildren(this._jobs);
+    this.addChild(listJobs);
 
-    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
+    const listAddition = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+      hasReset: false,
+    });
+
+    listAddition.addChild(new SubHeaderListItem(this._host, "Additional options"));
 
     this._hunt = new SettingTriggerListItem(
       this._host,
@@ -71,7 +79,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
           this._host.engine.imessage("status.sub.disable", [this._host.engine.i18n("option.hunt")]),
       }
     );
-    this.addChild(this._hunt);
+    listAddition.addChild(this._hunt);
 
     this._festivals = new SettingListItem(
       this._host,
@@ -88,7 +96,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
           ]),
       }
     );
-    this.addChild(this._festivals);
+    listAddition.addChild(this._festivals);
 
     this._promoteKittens = new SettingTriggerListItem(
       this._host,
@@ -106,7 +114,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
           ]),
       }
     );
-    this.addChild(this._promoteKittens);
+    listAddition.addChild(this._promoteKittens);
 
     this._promoteLeader = new SettingListItem(
       this._host,
@@ -123,7 +131,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
           ]),
       }
     );
-    this.addChild(this._promoteLeader);
+    listAddition.addChild(this._promoteLeader);
 
     this._electLeader = new SettingListItem(
       this._host,
@@ -141,12 +149,13 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       false,
       false
     );
-    this.addChild(this._electLeader);
+    listAddition.addChild(this._electLeader);
 
     this._electLeader.addChildren([
       new OptionsListItem(host, "Job", this.setting.electLeader.job),
       new OptionsListItem(host, "Trait", this.setting.electLeader.trait),
     ]);
+    this.addChild(listAddition);
   }
 
   private _getDistributeOption(option: SettingMax, label: string, delimiter = false) {

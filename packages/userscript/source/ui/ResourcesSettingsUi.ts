@@ -4,6 +4,7 @@ import { UserScript } from "../UserScript";
 import { ConsumeButton } from "./components/buttons-text/ConsumeButton";
 import { StockButton } from "./components/buttons-text/StockButton";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingsPanel } from "./components/SettingsPanel";
 
 export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
@@ -26,7 +27,9 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
         )
       );
     }
-    this.addChildren(this._resources);
+    const listResource = new SettingsList(this._host);
+    listResource.addChildren(this._resources);
+    this.addChild(listResource);
   }
 
   /**
