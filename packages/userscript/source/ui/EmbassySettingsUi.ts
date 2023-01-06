@@ -5,15 +5,19 @@ import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   private readonly _trigger: TriggerButton;
   private readonly _races: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: EmbassySettings) {
+  constructor(
+    host: UserScript,
+    settings: EmbassySettings,
+    options?: SettingsPanelOptions<SettingsPanel<EmbassySettings>>
+  ) {
     const label = host.engine.i18n("option.embassies");
-    super(host, label, settings);
+    super(host, label, settings, options);
 
     this._trigger = new TriggerButton(host, label, settings);
     this._trigger.element.insertAfter(this._expando.element);

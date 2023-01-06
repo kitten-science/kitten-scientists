@@ -1,7 +1,7 @@
 import { ResetSettings } from "../settings/ResetSettings";
 import { UserScript } from "../UserScript";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi";
 import { ResetReligionSettingsUi } from "./ResetReligionSettingsUi";
 import { ResetResourcesSettingsUi } from "./ResetResourcesSettingsUi";
@@ -15,7 +15,11 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   private readonly _spaceUi: ResetSpaceSettingsUi;
   private readonly _timeUi: ResetTimeSettingsUi;
 
-  constructor(host: UserScript, settings: ResetSettings) {
+  constructor(
+    host: UserScript,
+    settings: ResetSettings,
+    options?: SettingsPanelOptions<SettingsPanel<ResetSettings>>
+  ) {
     super(host, host.engine.i18n("option.time.reset"), settings);
 
     const list = new SettingsList(this._host, {

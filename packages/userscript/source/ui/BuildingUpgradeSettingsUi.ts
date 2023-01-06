@@ -2,13 +2,15 @@ import { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSettings> {
-  private readonly _upgrades: Array<SettingListItem>;
-
-  constructor(host: UserScript, settings: BuildingUpgradeSettings) {
-    super(host, host.engine.i18n("ui.upgrade.buildings"), settings);
+  constructor(
+    host: UserScript,
+    settings: BuildingUpgradeSettings,
+    options?: SettingsPanelOptions<SettingsPanel<BuildingUpgradeSettings>>
+  ) {
+    super(host, host.engine.i18n("ui.upgrade.buildings"), settings, options);
 
     const items = [];
     for (const setting of Object.values(this.setting.buildings)) {
@@ -25,7 +27,5 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
     const itemsList = new SettingsList(this._host);
     items.forEach(button => itemsList.addChild(button.button));
     this.addChild(itemsList);
-
-    this._upgrades = items.map(button => button.button);
   }
 }

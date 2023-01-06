@@ -2,13 +2,15 @@ import { PolicySettings } from "../settings/PolicySettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
-  private readonly _policies: Array<SettingListItem>;
-
-  constructor(host: UserScript, settings: PolicySettings) {
-    super(host, host.engine.i18n("ui.upgrade.policies"), settings);
+  constructor(
+    host: UserScript,
+    settings: PolicySettings,
+    options?: SettingsPanelOptions<SettingsPanel<PolicySettings>>
+  ) {
+    super(host, host.engine.i18n("ui.upgrade.policies"), settings, options);
 
     const items = [];
     for (const setting of Object.values(this.setting.policies)) {
@@ -27,7 +29,5 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     const itemsList = new SettingsList(this._host);
     items.forEach(button => itemsList.addChild(button.button));
     this.addChild(itemsList);
-
-    this._policies = items.map(button => button.button);
   }
 }

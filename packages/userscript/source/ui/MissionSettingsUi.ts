@@ -2,13 +2,17 @@ import { MissionSettings } from "../settings/MissionSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
   private readonly _missions: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: MissionSettings) {
-    super(host, host.engine.i18n("ui.upgrade.missions"), settings);
+  constructor(
+    host: UserScript,
+    settings: MissionSettings,
+    options?: SettingsPanelOptions<SettingsPanel<MissionSettings>>
+  ) {
+    super(host, host.engine.i18n("ui.upgrade.missions"), settings, options);
 
     const items = [];
     for (const setting of Object.values(this.setting.missions)) {

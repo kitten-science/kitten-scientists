@@ -5,14 +5,18 @@ import { ConsumeButton } from "./components/buttons-text/ConsumeButton";
 import { StockButton } from "./components/buttons-text/StockButton";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: ResourcesSettings) {
+  constructor(
+    host: UserScript,
+    settings: ResourcesSettings,
+    options?: SettingsPanelOptions<SettingsPanel<ResourcesSettings>>
+  ) {
     const label = host.engine.i18n("ui.resources");
-    super(host, label, settings);
+    super(host, label, settings, options);
 
     // Disable checkbox. Resource control is always active.
     this.readOnly = true;

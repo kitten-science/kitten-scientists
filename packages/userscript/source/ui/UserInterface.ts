@@ -82,8 +82,19 @@ export class UserInterface extends UiComponent {
       }
     });
 
+    // Keep track of open panels and adjust the state of the
+    // expando accordingly.
+    let panelsOpen = 0;
     for (const section of this._sections) {
+      section.addEventListener("panelHidden", () => {
+        --panelsOpen;
+        sectionsVisible = 0 < panelsOpen;
+        if (!sectionsVisible) {
+          expando.setCollapsed();
+        }
+      });
       section.addEventListener("panelShown", () => {
+        ++panelsOpen;
         sectionsVisible = true;
         expando.setExpanded();
       });

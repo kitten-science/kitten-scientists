@@ -2,13 +2,17 @@ import { TechSettings } from "../settings/TechSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class TechSettingsUi extends SettingsPanel<TechSettings> {
   protected readonly _techs: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: TechSettings) {
-    super(host, host.engine.i18n("ui.upgrade.techs"), settings);
+  constructor(
+    host: UserScript,
+    settings: TechSettings,
+    options?: SettingsPanelOptions<SettingsPanel<TechSettings>>
+  ) {
+    super(host, host.engine.i18n("ui.upgrade.techs"), settings, options);
 
     const items = [];
     for (const setting of Object.values(this.setting.techs)) {

@@ -8,7 +8,7 @@ import { LabelListItem } from "./components/LabelListItem";
 import { Panel } from "./components/Panel";
 import { SeasonsList } from "./components/SeasonsList";
 import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
   private readonly _trigger: TriggerButton;
@@ -16,9 +16,13 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
   private readonly _cycles: Panel<CyclesList, LabelListItem>;
   private readonly _seasons: Panel<SeasonsList, LabelListItem>;
 
-  constructor(host: UserScript, settings: TimeSkipSettings) {
+  constructor(
+    host: UserScript,
+    settings: TimeSkipSettings,
+    options?: SettingsPanelOptions<SettingsPanel<TimeSkipSettings>>
+  ) {
     const label = host.engine.i18n("option.time.skip");
-    super(host, label, settings);
+    super(host, label, settings, options);
 
     this._trigger = new TriggerButton(host, label, settings, "integer");
     this._trigger.element.insertAfter(this._expando.element);
