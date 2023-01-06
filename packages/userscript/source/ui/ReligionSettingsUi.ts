@@ -205,63 +205,91 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     this.addChild(listBuildings);
 
     const listAddition = new SettingsList(this._host, {
+      children: [
+        new HeaderListItem(this._host, "Additional options"),
+        new SettingTriggerListItem(
+          this._host,
+          this._host.engine.i18n("option.faith.refineTears"),
+          this.setting.refineTears,
+          "integer",
+          {
+            onCheck: () =>
+              this._host.engine.imessage("status.sub.enable", [
+                this._host.engine.i18n("option.faith.refineTears"),
+              ]),
+            onUnCheck: () =>
+              this._host.engine.imessage("status.sub.disable", [
+                this._host.engine.i18n("option.faith.refineTears"),
+              ]),
+          }
+        ),
+        new SettingTriggerListItem(
+          this._host,
+          this._host.engine.i18n("option.faith.refineTCs"),
+          this.setting.refineTimeCrystals,
+          "integer",
+          {
+            onCheck: () =>
+              this._host.engine.imessage("status.sub.enable", [
+                this._host.engine.i18n("option.faith.refineTCs"),
+              ]),
+            onUnCheck: () =>
+              this._host.engine.imessage("status.sub.disable", [
+                this._host.engine.i18n("option.faith.refineTCs"),
+              ]),
+          }
+        ),
+        new SettingListItem(
+          this._host,
+          this._host.engine.i18n("option.faith.transcend"),
+          this.setting.transcend,
+          {
+            onCheck: () =>
+              this._host.engine.imessage("status.sub.enable", [
+                this._host.engine.i18n("option.faith.transcend"),
+              ]),
+            onUnCheck: () =>
+              this._host.engine.imessage("status.sub.disable", [
+                this._host.engine.i18n("option.faith.transcend"),
+              ]),
+          }
+        ),
+        new SettingTriggerListItem(
+          this._host,
+          this._host.engine.i18n("option.faith.adore"),
+          this.setting.adore,
+          "percentage",
+          {
+            onCheck: () =>
+              this._host.engine.imessage("status.sub.enable", [
+                this._host.engine.i18n("option.faith.adore"),
+              ]),
+            onUnCheck: () =>
+              this._host.engine.imessage("status.sub.disable", [
+                this._host.engine.i18n("option.faith.adore"),
+              ]),
+          }
+        ),
+        new SettingTriggerListItem(
+          this._host,
+          this._host.engine.i18n("option.praise"),
+          this.setting.autoPraise,
+          "percentage",
+          {
+            onCheck: () =>
+              this._host.engine.imessage("status.sub.enable", [
+                this._host.engine.i18n("option.praise"),
+              ]),
+            onUnCheck: () =>
+              this._host.engine.imessage("status.sub.disable", [
+                this._host.engine.i18n("option.praise"),
+              ]),
+          }
+        ),
+      ],
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
-
-    const nodeTranscend = new SettingListItem(
-      this._host,
-      this._host.engine.i18n("option.faith.transcend"),
-      this.setting.transcend,
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.faith.transcend"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.sub.disable", [
-            this._host.engine.i18n("option.faith.transcend"),
-          ]),
-      }
-    );
-    listAddition.addChild(nodeTranscend);
-
-    const nodeAdore = new SettingTriggerListItem(
-      this._host,
-      this._host.engine.i18n("option.faith.adore"),
-      this.setting.adore,
-      "percentage",
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.faith.adore"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.sub.disable", [
-            this._host.engine.i18n("option.faith.adore"),
-          ]),
-      }
-    );
-    listAddition.addChild(nodeAdore);
-
-    const nodeAutoPraise = new SettingTriggerListItem(
-      this._host,
-      this._host.engine.i18n("option.praise"),
-      this.setting.autoPraise,
-      "percentage",
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.praise"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.sub.disable", [
-            this._host.engine.i18n("option.praise"),
-          ]),
-      }
-    );
-    listAddition.addChild(nodeAutoPraise);
     this.addChild(listAddition);
   }
 

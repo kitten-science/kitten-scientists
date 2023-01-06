@@ -447,11 +447,11 @@ export class BulkPurchaseHelper {
       amount = meta.limitBuild - meta.val;
     }
 
-    if ((model.enabled && button.controller.hasResources(model)) || this._host.gamePage.devMode) {
-      while (button.controller.hasResources(model) && amount > 0) {
-        model.prices = button.controller.getPrices(model);
-        button.controller.payPrice(model);
-        button.controller.incrementValue(model);
+    if ((model.enabled && button.controller.hasResources!(model)) || this._host.gamePage.devMode) {
+      while (button.controller.hasResources!(model) && amount > 0) {
+        model.prices = button.controller.getPrices!(model);
+        button.controller.payPrice!(model);
+        button.controller.incrementValue!(model);
         counter++;
         amount--;
       }

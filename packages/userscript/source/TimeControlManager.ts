@@ -433,7 +433,7 @@ export class TimeControlManager {
     if (0 < willSkip) {
       const shatter = this._host.gamePage.timeTab.cfPanel.children[0].children[0]; // check?
       this._host.engine.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
-      shatter.controller.doShatterAmt(shatter.model, willSkip);
+      shatter.controller.doShatterAmt!(shatter.model, willSkip);
       this._host.engine.storeForSummary("time.skip", willSkip);
     }
   }

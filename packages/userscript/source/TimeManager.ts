@@ -165,7 +165,7 @@ export class TimeManager {
       let fixed = 0;
       const btn = this.manager.tab.vsPanel.children[0].children[0]; //check?
       // doFixCryochamber will check resources
-      while (btn.controller.doFixCryochamber(btn.model)) {
+      while (btn.controller.doFixCryochamber!(btn.model)) {
         ++fixed;
       }
       if (0 < fixed) {

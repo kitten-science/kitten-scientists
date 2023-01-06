@@ -73,6 +73,16 @@ export class ReligionSettings extends SettingTrigger {
   bestUnicornBuilding: Setting;
 
   /**
+   * Refine tears into BLS.
+   */
+  refineTears: SettingTrigger;
+
+  /**
+   * Refine time crystals into relics.
+   */
+  refineTimeCrystals: SettingTrigger;
+
+  /**
    * Praise the sun.
    */
   autoPraise: SettingTrigger;
@@ -303,15 +313,19 @@ export class ReligionSettings extends SettingTrigger {
       ),
     },
     bestUnicornBuilding = new Setting(false),
+    refineTears = new SettingTrigger(false, 10000),
+    refineTimeCrystals = new SettingTrigger(false, 15000),
     autoPraise = new SettingTrigger(true, 0.98),
     adore = new SettingTrigger(false, 0.75),
     transcend = new Setting(false)
   ) {
     super(enabled, trigger);
     this.buildings = buildings;
-    this.adore = adore;
-    this.autoPraise = autoPraise;
     this.bestUnicornBuilding = bestUnicornBuilding;
+    this.refineTears = refineTears;
+    this.refineTimeCrystals = refineTimeCrystals;
+    this.autoPraise = autoPraise;
+    this.adore = adore;
     this.transcend = transcend;
   }
 
@@ -327,13 +341,12 @@ export class ReligionSettings extends SettingTrigger {
       building.max = item?.max ?? building.max;
     });
 
-    this.adore.enabled = settings.adore?.enabled ?? this.adore.enabled;
-    this.autoPraise.enabled = settings.autoPraise?.enabled ?? this.autoPraise.enabled;
-    this.bestUnicornBuilding.enabled =
-      settings.bestUnicornBuilding?.enabled ?? this.bestUnicornBuilding.enabled;
-    this.transcend.enabled = settings.transcend?.enabled ?? this.transcend.enabled;
-    this.adore.trigger = settings.adore?.trigger ?? this.adore.trigger;
-    this.autoPraise.trigger = settings.autoPraise?.trigger ?? this.autoPraise.trigger;
+    this.bestUnicornBuilding.load(settings.bestUnicornBuilding);
+    this.refineTears.load(settings.refineTears);
+    this.refineTimeCrystals.load(settings.refineTimeCrystals);
+    this.autoPraise.load(settings.autoPraise);
+    this.adore.load(settings.adore);
+    this.transcend.load(settings.transcend);
   }
 
   static fromLegacyOptions(subject: LegacyStorage) {

@@ -255,9 +255,7 @@ export type GamePage = {
      */
     _resetFaithInternal: (bonusRatio: number) => void;
   };
-  religionTab: {
-    sacrificeBtn: BuildButton;
-  };
+  religionTab: ReligionTab;
   resetAutomatic: () => void;
   resPool: {
     get: (name: Resource) => ResourceInfo;

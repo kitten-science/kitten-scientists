@@ -146,15 +146,16 @@ export type ButtonModel = {
 export type BuildButton<T = string> = {
   children: Array<BuildButton>;
   controller: {
-    _transform: (model: unknown, value: unknown) => void;
-    getPrices: (model: unknown) => Array<Price>;
-    hasResources: (model: unknown) => boolean; // Probably generic
-    doFixCryochamber: (model: unknown) => boolean; // Fix broken cryochambers
-    doShatterAmt: (model: unknown, amt: number) => void; // Shatter TC button
-    incrementValue: (model: unknown) => void;
-    onAll: (model: unknown) => void; // Turn on all (steamworks)
-    payPrice: (model: unknown) => void;
-    sellInternal: (model: unknown, end: number) => void; // Sell button
+    _transform?: (model: unknown, value: unknown) => void;
+    buyItem?: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
+    getPrices?: (model: unknown) => Array<Price>;
+    hasResources?: (model: unknown) => boolean; // Probably generic
+    doFixCryochamber?: (model: unknown) => boolean; // Fix broken cryochambers
+    doShatterAmt?: (model: unknown, amt: number) => void; // Shatter TC button
+    incrementValue?: (model: unknown) => void;
+    onAll?: (model: unknown) => void; // Turn on all (steamworks)
+    payPrice?: (model: unknown) => void;
+    sellInternal?: (model: unknown, end: number) => void; // Sell button
   };
   domNode: HTMLDivElement;
   id: T;
@@ -211,9 +212,25 @@ export type PolicyBtnController = {
   buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
 };
 
+export type RefineTearsBtnController = {
+  new (game: GamePage): RefineTearsBtnController;
+  buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
+};
+
 export type TechButtonController = {
   new (game: GamePage): TechButtonController;
   buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
+};
+
+export type TransformBtnController = {
+  new (game: GamePage): TransformBtnController;
+  buyItem: (
+    model: ButtonModel,
+    event: Event,
+    callback: (success: boolean) => void,
+    amt?: number
+  ) => void;
+  _transform: (model: ButtonModel, amt: number) => boolean;
 };
 
 export type ClassList = {
@@ -224,6 +241,10 @@ export type ClassList = {
   };
   ui: {
     PolicyBtnController: PolicyBtnController;
+    religion: {
+      RefineTearsBtnController: RefineTearsBtnController;
+      TransformBtnController: TransformBtnController;
+    };
   };
 };
 
