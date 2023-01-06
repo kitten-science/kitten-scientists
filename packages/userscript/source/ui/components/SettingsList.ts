@@ -1,15 +1,26 @@
-import { is } from "../../tools/Maybe";
+import { is, isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
 import { DisableButton } from "./buttons-icon/DisableButton";
 import { EnableButton } from "./buttons-icon/EnableButton";
 import { ResetButton } from "./buttons-icon/ResetButton";
+import { ListItem } from "./ListItem";
 import { SettingListItem } from "./SettingListItem";
 import { UiComponent } from "./UiComponent";
 
 export type SettingsListOptions = {
-  hasEnableAll: boolean;
-  hasDisableAll: boolean;
-  hasReset: boolean;
+  /**
+   * A component that should be hosted in the panel.
+   */
+  child?: ListItem;
+
+  /**
+   * Component that should be hosted in the panel.
+   */
+  children?: Array<ListItem>;
+
+  hasEnableAll?: boolean;
+  hasDisableAll?: boolean;
+  onReset?: () => void;
 };
 
 /**
@@ -34,16 +45,16 @@ export class SettingsList extends UiComponent {
    * @param host A reference to the host.
    * @param options Which tools should be available on the list?
    */
-  constructor(host: UserScript, options?: Partial<SettingsListOptions>) {
+  constructor(host: UserScript, options?: SettingsListOptions) {
     super(host);
 
     const toolOptions: SettingsListOptions = {
       hasDisableAll: true,
       hasEnableAll: true,
-      hasReset: false,
       ...options,
     };
-    const hasTools = toolOptions.hasDisableAll || toolOptions.hasEnableAll || toolOptions.hasReset;
+    const hasTools =
+      toolOptions.hasDisableAll || toolOptions.hasEnableAll || !isNil(toolOptions.onReset);
 
     const container = $("<div/>").addClass("ks-list-container");
 
@@ -92,9 +103,10 @@ export class SettingsList extends UiComponent {
         tools.append(this.disableAllButton.element);
       }
 
-      if (toolOptions.hasReset) {
+      const onReset = toolOptions.onReset;
+      if (!isNil(onReset)) {
         this.resetButton = new ResetButton(this._host);
-        this.resetButton.element.on("click", () => this.dispatchEvent(new Event("reset")));
+        this.resetButton.element.on("click", () => onReset());
         tools.append(this.resetButton.element);
       }
 
@@ -102,6 +114,15 @@ export class SettingsList extends UiComponent {
     }
 
     this.element = container;
+
+    const child = options?.child;
+    if (!isNil(child)) {
+      this.addChild(child);
+    }
+    const children = options?.children;
+    if (!isNil(children)) {
+      this.addChildren(children);
+    }
   }
 
   override addChild(child: UiComponent) {

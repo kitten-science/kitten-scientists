@@ -21,7 +21,6 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
     const list = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
-      hasReset: false,
     });
     this._bonfireUi = new ResetBonfireSettingsUi(this._host, this.setting.bonfire);
     this._religionUi = new ResetReligionSettingsUi(this._host, this.setting.religion);

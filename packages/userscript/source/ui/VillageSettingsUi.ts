@@ -62,7 +62,6 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     const listAddition = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
-      hasReset: false,
     });
 
     listAddition.addChild(new HeaderListItem(this._host, "Additional options"));

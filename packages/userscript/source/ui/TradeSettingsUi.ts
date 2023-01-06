@@ -33,7 +33,6 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     const listRaces = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
-      hasReset: false,
     });
     this._races = [
       this._getTradeOption(
@@ -120,7 +119,6 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     const listAddition = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
-      hasReset: false,
     });
     listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
 

@@ -75,7 +75,6 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     const listAddition = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
-      hasReset: false,
     });
     listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
     this._fixCryochamber = new SettingListItem(

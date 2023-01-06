@@ -30,7 +30,6 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
     const list = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
-      hasReset: false,
     });
     this._cycles = new Panel(
       this._host,

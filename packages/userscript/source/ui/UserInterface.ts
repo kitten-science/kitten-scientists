@@ -150,7 +150,7 @@ export class UserInterface extends UiComponent {
     );
     this._addRule(
       `#ks #ks-version {
-        margin: 2px 5px;
+        margin: 2px 0 2px 2px;
       }`
     );
     this._addRule("#ks ul { list-style: none; margin: 0; padding: 0; }");

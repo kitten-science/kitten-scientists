@@ -25,7 +25,6 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
     const itemsList = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
-      hasReset: false,
     });
     items.forEach(button => itemsList.addChild(button.button));
     this.addChild(itemsList);

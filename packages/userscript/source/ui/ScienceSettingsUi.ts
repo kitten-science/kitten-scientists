@@ -39,7 +39,6 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
     const itemsList = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
-      hasReset: false,
     });
     itemsList.addChildren([this._techsUi, this._policiesUi, this._observeStars]);
     this.addChild(itemsList);

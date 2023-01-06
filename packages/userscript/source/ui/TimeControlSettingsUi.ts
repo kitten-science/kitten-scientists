@@ -21,7 +21,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const list = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
-      hasReset: false,
     });
     this._accelerateTime = new SettingTriggerListItem(
       this._host,

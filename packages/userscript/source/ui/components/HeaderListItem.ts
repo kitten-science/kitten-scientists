@@ -1,8 +1,12 @@
 import { UserScript } from "../../UserScript";
+import { ListItem } from "./ListItem";
 import { UiComponent } from "./UiComponent";
 
-export class HeaderListItem extends UiComponent {
+export class HeaderListItem extends UiComponent implements ListItem {
   readonly element: JQuery<HTMLElement>;
+  get elementLabel() {
+    return this.element;
+  }
 
   /**
    * Construct an informational text item.
