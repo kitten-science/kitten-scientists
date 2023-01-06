@@ -100,17 +100,20 @@ export class Panel<
    * @param toggleNested Also toggle all panels inside this panel?
    */
   toggle(expand: boolean | undefined = undefined, toggleNested = false) {
-    this._mainChildVisible = expand !== undefined ? expand : !this._mainChildVisible;
-    if (this._mainChildVisible) {
-      this.container.element.show();
-      this._expando.setExpanded();
-      this._head.element.addClass("ks-expanded");
-      this.dispatchEvent(new CustomEvent("panelShown"));
-    } else {
-      this.container.element.hide();
-      this._expando.setCollapsed();
-      this._head.element.removeClass("ks-expanded");
-      this.dispatchEvent(new CustomEvent("panelHidden"));
+    const visible = expand !== undefined ? expand : !this._mainChildVisible;
+    if (visible !== this._mainChildVisible) {
+      this._mainChildVisible = visible;
+      if (this._mainChildVisible) {
+        this.container.element.show();
+        this._expando.setExpanded();
+        this._head.element.addClass("ks-expanded");
+        this.dispatchEvent(new CustomEvent("panelShown"));
+      } else {
+        this.container.element.hide();
+        this._expando.setCollapsed();
+        this._head.element.removeClass("ks-expanded");
+        this.dispatchEvent(new CustomEvent("panelHidden"));
+      }
     }
 
     if (toggleNested) {

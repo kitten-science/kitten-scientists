@@ -71,12 +71,6 @@ export class UserInterface extends UiComponent {
     let sectionsVisible = false;
     expando.element.on("click", () => {
       sectionsVisible = !sectionsVisible;
-      if (sectionsVisible) {
-        expando.setExpanded();
-      } else {
-        expando.setCollapsed();
-      }
-
       for (const section of this._sections) {
         section.toggle(sectionsVisible, true);
       }
@@ -88,7 +82,9 @@ export class UserInterface extends UiComponent {
     for (const section of this._sections) {
       section.addEventListener("panelHidden", () => {
         --panelsOpen;
-        sectionsVisible = 0 < panelsOpen;
+        if (panelsOpen === 0) {
+          sectionsVisible = false;
+        }
         if (!sectionsVisible) {
           expando.setCollapsed();
         }
