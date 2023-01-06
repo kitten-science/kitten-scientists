@@ -28,7 +28,8 @@ export abstract class UpgradeManager {
 
     this._host.gamePage.opts.noConfirm = true;
     const success = await UpgradeManager.skipConfirm(
-      () => new Promise(resolve => controller.buyItem(button.model, undefined, resolve))
+      () =>
+        new Promise(resolve => controller.buyItem(button.model, new MouseEvent("click"), resolve))
     );
 
     if (!success) {

@@ -7,6 +7,9 @@ import {
   BuildButton,
   Building,
   BuildingMeta,
+  BuildingStackableBtnController,
+  ButtonModernController,
+  ButtonModernModel,
   ChronoForgeUpgradeInfo,
   Price,
   ReligionUpgradeInfo,
@@ -15,6 +18,7 @@ import {
   TimeItemVariant,
   TranscendenceUpgradeInfo,
   UnicornItemVariant,
+  UpgradeInfo,
   VoidSpaceUpgradeInfo,
   ZiggurathUpgradeInfo,
 } from "../types";
@@ -437,32 +441,37 @@ export class BulkPurchaseHelper {
    * @see `build`@`core.js`
    * @deprecated This should just call `build()` on the game page. I don't understand why it shouldn't.
    */
-  construct(model: BuildButton["model"], button: BuildButton, amount: number): number {
+  construct(
+    model: ButtonModernModel,
+    button: BuildButton<string, ButtonModernModel, ButtonModernController>,
+    amount: number
+  ): number {
     // TODO: Replace this with a call to gamePage.build()
     const meta = model.metadata;
     let counter = 0;
 
     // For limited builds, only construct up to the max.
-    if (!isNil(meta.limitBuild) && meta.limitBuild - meta.val < amount) {
-      amount = meta.limitBuild - meta.val;
+    const vsMeta = meta as VoidSpaceUpgradeInfo;
+    if (!isNil(vsMeta.limitBuild) && vsMeta.limitBuild - vsMeta.val < amount) {
+      amount = vsMeta.limitBuild - vsMeta.val;
     }
 
-    if ((model.enabled && button.controller.hasResources!(model)) || this._host.gamePage.devMode) {
-      while (button.controller.hasResources!(model) && amount > 0) {
-        model.prices = button.controller.getPrices!(model);
-        button.controller.payPrice!(model);
-        button.controller.incrementValue!(model);
+    if ((model.enabled && button.controller.hasResources(model)) || this._host.gamePage.devMode) {
+      while (button.controller.hasResources(model) && amount > 0) {
+        model.prices = button.controller.getPrices(model);
+        button.controller.payPrice(model);
+        (button.controller as BuildingStackableBtnController).incrementValue(model);
         counter++;
         amount--;
       }
-      if (meta.breakIronWill) {
+      if (vsMeta.breakIronWill) {
         this._host.gamePage.ironWill = false;
       }
-      if (meta.unlocks) {
-        this._host.gamePage.unlock(meta.unlocks);
+      if ((meta as UpgradeInfo).unlocks) {
+        this._host.gamePage.unlock((meta as UpgradeInfo).unlocks);
       }
-      if (meta.upgrades) {
-        this._host.gamePage.upgrade(meta.upgrades);
+      if ((meta as VoidSpaceUpgradeInfo).upgrades) {
+        this._host.gamePage.upgrade((meta as VoidSpaceUpgradeInfo).upgrades);
       }
     }
     return counter;

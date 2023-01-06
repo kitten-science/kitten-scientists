@@ -1,8 +1,16 @@
-import { Building } from "./buildings";
+import { Building, BuildingMeta } from "./buildings";
 import { GamePage } from "./gamePage";
-import { ReligionUpgrades, TranscendenceUpgrades, ZiggurathUpgrades } from "./religion";
+import {
+  ReligionUpgrades,
+  TranscendenceUpgradeInfo,
+  TranscendenceUpgrades,
+  ZiggurathUpgradeInfo,
+  ZiggurathUpgrades,
+} from "./religion";
+import { TechInfo } from "./science";
 import { SpaceBuildings } from "./space";
-import { ChronoForgeUpgrades, VoidSpaceUpgrades } from "./time";
+import { ChronoForgeUpgrades, VoidSpaceUpgradeInfo, VoidSpaceUpgrades } from "./time";
+import { UpgradeInfo } from "./workshop";
 
 export type Season = "autumn" | "spring" | "summer" | "winter";
 export type Cycle =
@@ -121,45 +129,31 @@ export type Panel = {
   visible: boolean;
 };
 
-export type ButtonModel = {
-  enabled: boolean;
-  metadata: {
-    breakIronWill: boolean;
-    /**
-     * How many items of this can be built at any time?
-     * Used to limit Resource Retrieval to 100.
-     */
-    limitBuild?: number;
-    name: string;
-    unlocks: unknown;
-    upgrades: unknown;
-    val: number;
-  };
-  name: string;
-  prices: Array<Price>;
-  visible: boolean;
-};
-
 /**
  * Not necessarily a button, but a KG UI element.
  */
-export type BuildButton<T = string> = {
+export type BuildButton<
+  T = string,
+  TModel extends ButtonModel = ButtonModel,
+  TController =
+    | BuildingBtnController
+    | BuildingNotStackableBtnController
+    | BuildingStackableBtnController
+    | ButtonController
+    | ButtonModernController
+    | EmbassyButtonController
+    | FixCryochamberBtnController
+    | PolicyBtnController
+    | RefineTearsBtnController
+    | ShatterTCBtnController
+    | TechButtonController
+    | TransformBtnController
+> = {
   children: Array<BuildButton>;
-  controller: {
-    _transform?: (model: unknown, value: unknown) => void;
-    buyItem?: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
-    getPrices?: (model: unknown) => Array<Price>;
-    hasResources?: (model: unknown) => boolean; // Probably generic
-    doFixCryochamber?: (model: unknown) => boolean; // Fix broken cryochambers
-    doShatterAmt?: (model: unknown, amt: number) => void; // Shatter TC button
-    incrementValue?: (model: unknown) => void;
-    onAll?: (model: unknown) => void; // Turn on all (steamworks)
-    payPrice?: (model: unknown) => void;
-    sellInternal?: (model: unknown, end: number) => void; // Sell button
-  };
+  controller: TController;
   domNode: HTMLDivElement;
   id: T;
-  model: ButtonModel;
+  model: TModel;
   onClick: () => void;
 };
 
@@ -202,34 +196,123 @@ export type Challenge =
   | "pacifism"
   | "winterIsComing";
 
-export type EmbassyButtonController = {
+export type ButtonControllerOptions = Record<string, unknown>;
+export type ButtonModelDefaults = {
+  name: string;
+  description: string;
+  visible: boolean;
+  enabled: boolean;
+  handler: null;
+  prices: Array<Price> | null;
+  priceRatio: null;
+  twoRow: null;
+  refundPercentage: number;
+  highlightUnavailable: boolean;
+  resourceIsLimited: string;
+  multiplyEffects: boolean;
+};
+export type ButtonModel = { options: ButtonControllerOptions } & ButtonModelDefaults;
+
+export type ButtonController = {
+  new (game: GamePage, controllerOpts?: ButtonControllerOptions): ButtonController;
+  fetchModel: (options: ButtonControllerOptions) => ButtonModel;
+  fetchExtendedModel: (model: ButtonModel) => void;
+  initModel: (options: ButtonControllerOptions) => ButtonModel;
+  defaults: () => ButtonModelDefaults;
+  createPriceLineModel: (model: ButtonModel, price: unknown) => unknown;
+  hasResources: (model: ButtonModel, prices?: Array<unknown>) => boolean;
+  updateEnabled: (model: ButtonModel) => void;
+  updateVisible: (model: ButtonModel) => void;
+  getPrices: (model: ButtonModel) => Array<Price>;
+  getName: (model: ButtonModel) => string;
+  getDescription: (model: ButtonModel) => string;
+  /** @deprecated */
+  adjustPrice: (model: ButtonModel, ratio: number) => void;
+  /** @deprecated */
+  rejustPrice: (model: ButtonModel, ratio: number) => void;
+  payPrice: (model: ButtonModel) => void;
+  clickHandler: (model: ButtonModel, event: Event) => void;
+  buyItem: (model: ButtonModel, event: Event, callback: (success: boolean) => void) => void;
+  refund: (model: ButtonModel) => void;
+};
+
+export type ButtonModernModel = {
+  metadata:
+    | BuildingMeta
+    | TechInfo
+    | TranscendenceUpgradeInfo
+    | UpgradeInfo
+    | VoidSpaceUpgradeInfo
+    | ZiggurathUpgradeInfo;
+} & ButtonModel;
+export type ButtonModernController = ButtonController & {
+  new (game: GamePage): ButtonModernController;
+  initModel: (options: ButtonControllerOptions) => ButtonModernModel;
+  fetchModel: (options: ButtonControllerOptions) => ButtonModernModel;
+  getMetadata: (model: ButtonModernModel) => BuildingMeta | null;
+  getEffects: (model: ButtonModernModel) => unknown;
+  getTotalEffects: (model: ButtonModernModel) => unknown;
+  getNextEffectValue: (model: ButtonModernModel, effectName: string) => unknown;
+  getFlavor: (model: ButtonModernModel) => string;
+  hasSellLink: (model: ButtonModernModel) => boolean;
+  metadataHasChanged: (model: ButtonModernModel) => void;
+  off: (model: ButtonModernModel, amt: number) => void;
+  offAll: (model: ButtonModernModel) => void;
+  on: (model: ButtonModernModel, amt: number) => void;
+  onAll: (model: ButtonModernModel) => void;
+  sell: (event: Event, model: ButtonModernModel) => void;
+  sellInternal: (model: ButtonModernModel, end: number) => void;
+  decrementValue: (model: ButtonModernModel) => void;
+  updateVisible: (model: ButtonModernModel) => void;
+  handleTogglableOnOffClick: (model: ButtonModernModel) => void;
+  handleToggleAutomationLinkClick: (model: ButtonModernModel) => void;
+};
+
+export type BuildingBtnController = ButtonModernController & {
+  new (game: GamePage): BuildingBtnController;
+};
+
+export type BuildingNotStackableBtnController = BuildingBtnController & {
+  new (game: GamePage): BuildingNotStackableBtnController;
+};
+
+export type BuildingStackableBtnController = BuildingBtnController & {
+  new (game: GamePage): BuildingStackableBtnController;
+  _buyItem_step2: (model: ButtonModel, event: Event, callback: (success: boolean) => void) => void;
+  build: (model: ButtonModel, maxBld: number) => void;
+  incrementValue: (model: ButtonModel) => void;
+};
+
+export type EmbassyButtonController = BuildingStackableBtnController & {
   new (game: GamePage): EmbassyButtonController;
-  buyItem: () => void;
 };
 
-export type PolicyBtnController = {
+export type FixCryochamberBtnController = ButtonModernController & {
+  new (game: GamePage): EmbassyButtonController;
+  doFixCryochamber: (model: ButtonModernModel) => boolean;
+};
+
+export type PolicyBtnController = BuildingNotStackableBtnController & {
+  new (game: GamePage): PolicyBtnController;
+  shouldBeBough: (model: ButtonModel, game: GamePage) => boolean;
+};
+
+export type RefineTearsBtnController = ButtonModernController & {
+  new (game: GamePage): ButtonModernController;
+  refine: () => void;
+};
+
+export type ShatterTCBtnController = ButtonModernController & {
+  new (game: GamePage): ButtonModernController;
+  doShatterAmt: (model: ButtonModel, amt: number) => void;
+};
+
+export type TechButtonController = BuildingNotStackableBtnController & {
   new (game: GamePage): TechButtonController;
-  buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
 };
 
-export type RefineTearsBtnController = {
-  new (game: GamePage): RefineTearsBtnController;
-  buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
-};
-
-export type TechButtonController = {
-  new (game: GamePage): TechButtonController;
-  buyItem: (model: ButtonModel, event: unknown, callback: (success: boolean) => void) => void;
-};
-
-export type TransformBtnController = {
+export type TransformBtnController = ButtonModernController & {
   new (game: GamePage): TransformBtnController;
-  buyItem: (
-    model: ButtonModel,
-    event: Event,
-    callback: (success: boolean) => void,
-    amt?: number
-  ) => void;
   _transform: (model: ButtonModel, amt: number) => boolean;
 };
 
@@ -240,10 +323,18 @@ export type ClassList = {
     };
   };
   ui: {
+    BuildingBtnController: BuildingBtnController;
+    ButtonController: ButtonController;
+    ButtonModernController: ButtonModernController;
+    BuildingStackableBtnController: BuildingStackableBtnController;
     PolicyBtnController: PolicyBtnController;
     religion: {
       RefineTearsBtnController: RefineTearsBtnController;
       TransformBtnController: TransformBtnController;
+    };
+    time: {
+      FixCryochamberBtnController: FixCryochamberBtnController;
+      ShatterTCBtnController: ShatterTCBtnController;
     };
   };
 };

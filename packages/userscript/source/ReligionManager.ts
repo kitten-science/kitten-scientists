@@ -13,6 +13,8 @@ import { cwarn } from "./tools/Log";
 import { isNil, mustExist } from "./tools/Maybe";
 import {
   BuildButton,
+  ButtonModernController,
+  ButtonModernModel,
   ReligionTab,
   ReligionUpgradeInfo,
   ReligionUpgrades,
@@ -118,7 +120,9 @@ export class ReligionManager implements Automation {
       );
 
       let tearsNeeded = 0;
-      const priceTears = buildingButton.model.prices.find(subject => subject.name === "tears");
+      const priceTears = mustExist(mustExist(buildingButton.model).prices).find(
+        subject => subject.name === "tears"
+      );
       if (!isNil(priceTears)) {
         tearsNeeded = priceTears.val;
       }
@@ -145,7 +149,7 @@ export class ReligionManager implements Automation {
 
         // Sacrifice some unicorns to get the tears to buy the building.
         if (needSacrifice < maxSacrifice) {
-          this._host.gamePage.religionTab.sacrificeBtn.controller._transform!(
+          this._host.gamePage.religionTab.sacrificeBtn.controller._transform(
             this._host.gamePage.religionTab.sacrificeBtn.model,
             needSacrifice
           );
@@ -310,7 +314,7 @@ export class ReligionManager implements Automation {
     // If the unicorn pasture amortizes itself in less than infinity ticks,
     // set it as the default. This is likely to protect against cases where
     // production of unicorns is 0.
-    const pastureAmortization = pastureButton.model.prices[0].val / pastureProduction;
+    const pastureAmortization = mustExist(pastureButton.model.prices)[0].val / pastureProduction;
     if (pastureAmortization < bestAmoritization) {
       bestAmoritization = pastureAmortization;
       bestBuilding = "unicornPasture";
@@ -322,7 +326,7 @@ export class ReligionManager implements Automation {
       if (validBuildings.includes(button.id) && button.model.visible) {
         // Determine a price value for this building.
         let unicornPrice = 0;
-        for (const price of button.model.prices) {
+        for (const price of mustExist(button.model.prices)) {
           // Add the amount of unicorns the building costs (if any).
           if (price.name === "unicorns") {
             unicornPrice += price.val;
@@ -470,7 +474,7 @@ export class ReligionManager implements Automation {
   getBuildButton(
     name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
     variant: UnicornItemVariant
-  ): BuildButton | null {
+  ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
     let buttons: Array<BuildButton>;
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
@@ -494,7 +498,7 @@ export class ReligionManager implements Automation {
     for (const button of buttons) {
       const haystack = button.model.name;
       if (haystack.indexOf(build.label) !== -1) {
-        return button;
+        return button as BuildButton<string, ButtonModernModel, ButtonModernController>;
       }
     }
 
@@ -511,7 +515,11 @@ export class ReligionManager implements Automation {
       const controller = new classes.ui.religion.RefineTearsBtnController(this._host.gamePage);
 
       await new Promise(resolve =>
-        controller.buyItem(this._host.gamePage.religionTab.refineBtn.model, undefined, resolve)
+        controller.buyItem(
+          this._host.gamePage.religionTab.refineBtn.model,
+          new MouseEvent("click"),
+          resolve
+        )
       );
 
       this._host.engine.iactivity("act.refineTears", [], "ks-faith");
@@ -534,7 +542,11 @@ export class ReligionManager implements Automation {
         .controller as TransformBtnController;
       const model = this._host.gamePage.religionTab.refineTCBtn.model;
       await new Promise(resolve =>
-        controller.buyItem(this._host.gamePage.religionTab.refineTCBtn.model, undefined, resolve)
+        controller.buyItem(
+          this._host.gamePage.religionTab.refineTCBtn.model,
+          new MouseEvent("click"),
+          resolve
+        )
       );
 
       const cost = mustExist(model.prices?.[0]).val;

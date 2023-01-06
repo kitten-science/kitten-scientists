@@ -228,7 +228,7 @@ export class Engine {
     this.spaceManager.tick(context);
     await this.workshopManager.tick(context);
     this.tradeManager.tick(context);
-    this.religionManager.tick(context);
+    await this.religionManager.tick(context);
     this.timeManager.tick(context);
     this.villageManager.tick(context);
     await this.timeControlManager.tick(context);
