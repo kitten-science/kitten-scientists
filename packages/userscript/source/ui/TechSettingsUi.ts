@@ -22,11 +22,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
-    const itemsList = new SettingsList(this._host, {
-      hasDisableAll: false,
-      hasEnableAll: false,
-      hasReset: false,
-    });
+    const itemsList = new SettingsList(this._host);
     items.forEach(button => itemsList.addChild(button.button));
     this.addChild(itemsList);
 

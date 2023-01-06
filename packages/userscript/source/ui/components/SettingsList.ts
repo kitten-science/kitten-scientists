@@ -1,7 +1,9 @@
+import { is } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
 import { DisableButton } from "./buttons-icon/DisableButton";
 import { EnableButton } from "./buttons-icon/EnableButton";
 import { ResetButton } from "./buttons-icon/ResetButton";
+import { SettingListItem } from "./SettingListItem";
 import { UiComponent } from "./UiComponent";
 
 export type SettingsListOptions = {
@@ -54,15 +56,39 @@ export class SettingsList extends UiComponent {
 
       if (toolOptions.hasEnableAll) {
         this.enableAllButton = new EnableButton(this._host);
-        this.enableAllButton.element.on("click", () => this.dispatchEvent(new Event("enableAll")));
+        this.enableAllButton.element.on("click", () => {
+          const event = new Event("enableAll");
+          this.dispatchEvent(event);
+          if (event.defaultPrevented) {
+            return;
+          }
+
+          for (const child of this.children) {
+            if (is(child, SettingListItem)) {
+              (child as SettingListItem).setting.enabled = true;
+            }
+          }
+          this.refreshUi();
+        });
         tools.append(this.enableAllButton.element);
       }
 
       if (toolOptions.hasDisableAll) {
         this.disableAllButton = new DisableButton(this._host);
-        this.disableAllButton.element.on("click", () =>
-          this.dispatchEvent(new Event("disableAll"))
-        );
+        this.disableAllButton.element.on("click", () => {
+          const event = new Event("disableAll");
+          this.dispatchEvent(event);
+          if (event.defaultPrevented) {
+            return;
+          }
+
+          for (const child of this.children) {
+            if (is(child, SettingListItem)) {
+              (child as SettingListItem).setting.enabled = false;
+            }
+          }
+          this.refreshUi();
+        });
         tools.append(this.disableAllButton.element);
       }
 
