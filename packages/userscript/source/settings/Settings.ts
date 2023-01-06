@@ -131,7 +131,7 @@ export class SettingOptions<T = string> {
 
   constructor(selected: T, options = new Array<{ label: string; value: T }>()) {
     // Make sure the provided selected value exists in options.
-    if (isNil(options.find(option => (option.value = selected)))) {
+    if (isNil(options.find(option => option.value === selected))) {
       throw new Error("Provided selected value is not in provided options.");
     }
 

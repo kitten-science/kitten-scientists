@@ -96,7 +96,7 @@ export type Trait =
   | "chemist"
   | "engineer"
   | "manager"
-  | "matallurgist"
+  | "metallurgist"
   | "merchant"
   | "none"
   | "scientist"
