@@ -23,7 +23,7 @@ export class ElectLeaderSettings extends Setting {
       { label: "Chemist", value: "chemist" },
       { label: "Manager", value: "manager" },
       { label: "Merchant", value: "merchant" },
-      { label: "Metallurgist", value: "matallurgist" },
+      { label: "Metallurgist", value: "metallurgist" },
       { label: "Philosopher", value: "wise" },
       { label: "Scientist", value: "scientist" },
       { label: "None", value: "none" },
