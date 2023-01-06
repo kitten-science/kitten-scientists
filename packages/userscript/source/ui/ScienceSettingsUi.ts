@@ -1,6 +1,7 @@
 import { ScienceSettings } from "../settings/ScienceSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { PolicySettingsUi } from "./PolicySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { TechSettingsUi } from "./TechSettingsUi";
@@ -13,19 +14,6 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
 
   constructor(host: UserScript, settings: ScienceSettings) {
     super(host, host.engine.i18n("ui.upgrade"), settings);
-
-    this.list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new ScienceSettings());
-      this.refreshUi();
-    });
 
     this._policiesUi = new PolicySettingsUi(this._host, this.setting.policies);
     this._techsUi = new TechSettingsUi(this._host, this.setting.techs);
@@ -45,10 +33,14 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
           ]),
       }
     );
-    this.addChild(this._observeStars);
 
     this._items = [this._policiesUi, this._techsUi, this._observeStars];
 
-    this.addChildren([this._techsUi, this._policiesUi, this._observeStars]);
+    const itemsList = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+    });
+    itemsList.addChildren([this._techsUi, this._policiesUi, this._observeStars]);
+    this.addChild(itemsList);
   }
 }

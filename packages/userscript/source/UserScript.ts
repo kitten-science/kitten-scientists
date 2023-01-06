@@ -87,7 +87,6 @@ export class UserScript {
 
     this.engine = new Engine(this);
     this._userInterface = new UserInterface(this);
-    this._userInterface.construct();
     this._userInterface.refreshUi();
   }
 

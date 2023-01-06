@@ -4,30 +4,22 @@ import { UserScript } from "../UserScript";
 import { ConsumeButton } from "./components/buttons-text/ConsumeButton";
 import { StockButton } from "./components/buttons-text/StockButton";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsList } from "./components/SettingsList";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: ResourcesSettings) {
+  constructor(
+    host: UserScript,
+    settings: ResourcesSettings,
+    options?: SettingsPanelOptions<SettingsPanel<ResourcesSettings>>
+  ) {
     const label = host.engine.i18n("ui.resources");
-    super(host, label, settings);
+    super(host, label, settings, options);
 
     // Disable checkbox. Resource control is always active.
     this.readOnly = true;
-
-    this.list.addEventListener("enableAll", () => {
-      this._resources.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._resources.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new ResourcesSettings());
-      this.refreshUi();
-    });
 
     // Add all the current resources
     this._resources = [];
@@ -39,7 +31,9 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
         )
       );
     }
-    this.addChildren(this._resources);
+    const listResource = new SettingsList(this._host);
+    listResource.addChildren(this._resources);
+    this.addChild(listResource);
   }
 
   /**

@@ -1,16 +1,15 @@
 import { ReligionSettings } from "../settings/ReligionSettings";
-import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   private readonly _trigger: TriggerButton;
-  private readonly _buildings: Array<SettingListItem>;
 
   private readonly _unicornBuildings: Array<SettingMaxListItem>;
   private readonly _bestUnicornBuilding: SettingListItem;
@@ -21,21 +20,8 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     // Create "trigger" button in the item.
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(this.list.element);
+    this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
-
-    this.list.addEventListener("enableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._buildings.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new ReligionSettings());
-      this.refreshUi();
-    });
 
     this._unicornBuildings = [
       this._getBuildOption(
@@ -93,118 +79,134 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       true
     );
 
-    const uiElements = [
-      new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.ziggurat.label")),
-      ...this._unicornBuildings,
-      this._bestUnicornBuilding,
+    const listBuildings = new SettingsList(this._host, {
+      children: [
+        new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.ziggurat.label")),
+        ...this._unicornBuildings,
+        this._bestUnicornBuilding,
 
-      this._getBuildOption(
-        this.setting.buildings.marker,
-        this._host.engine.i18n("$religion.zu.marker.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.unicornGraveyard,
-        this._host.engine.i18n("$religion.zu.unicornGraveyard.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.unicornNecropolis,
-        this._host.engine.i18n("$religion.zu.unicornNecropolis.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.blackPyramid,
-        this._host.engine.i18n("$religion.zu.blackPyramid.label"),
-        true
-      ),
+        this._getBuildOption(
+          this.setting.buildings.marker,
+          this._host.engine.i18n("$religion.zu.marker.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.unicornGraveyard,
+          this._host.engine.i18n("$religion.zu.unicornGraveyard.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.unicornNecropolis,
+          this._host.engine.i18n("$religion.zu.unicornNecropolis.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.blackPyramid,
+          this._host.engine.i18n("$religion.zu.blackPyramid.label"),
+          true
+        ),
 
-      new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.orderOfTheSun.label")),
-      this._getBuildOption(
-        this.setting.buildings.solarchant,
-        this._host.engine.i18n("$religion.ru.solarchant.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.scholasticism,
-        this._host.engine.i18n("$religion.ru.scholasticism.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.goldenSpire,
-        this._host.engine.i18n("$religion.ru.goldenSpire.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.sunAltar,
-        this._host.engine.i18n("$religion.ru.sunAltar.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.stainedGlass,
-        this._host.engine.i18n("$religion.ru.stainedGlass.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.solarRevolution,
-        this._host.engine.i18n("$religion.ru.solarRevolution.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.basilica,
-        this._host.engine.i18n("$religion.ru.basilica.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.templars,
-        this._host.engine.i18n("$religion.ru.templars.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.apocripha,
-        this._host.engine.i18n("$religion.ru.apocripha.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.transcendence,
-        this._host.engine.i18n("$religion.ru.transcendence.label"),
-        true
-      ),
+        new HeaderListItem(
+          this._host,
+          this._host.engine.i18n("$religion.panel.orderOfTheSun.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.solarchant,
+          this._host.engine.i18n("$religion.ru.solarchant.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.scholasticism,
+          this._host.engine.i18n("$religion.ru.scholasticism.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.goldenSpire,
+          this._host.engine.i18n("$religion.ru.goldenSpire.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.sunAltar,
+          this._host.engine.i18n("$religion.ru.sunAltar.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.stainedGlass,
+          this._host.engine.i18n("$religion.ru.stainedGlass.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.solarRevolution,
+          this._host.engine.i18n("$religion.ru.solarRevolution.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.basilica,
+          this._host.engine.i18n("$religion.ru.basilica.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.templars,
+          this._host.engine.i18n("$religion.ru.templars.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.apocripha,
+          this._host.engine.i18n("$religion.ru.apocripha.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.transcendence,
+          this._host.engine.i18n("$religion.ru.transcendence.label"),
+          true
+        ),
 
-      new HeaderListItem(
-        this._host,
-        this._host.engine.i18n("$religion.panel.cryptotheology.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.blackObelisk,
-        this._host.engine.i18n("$religion.tu.blackObelisk.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.blackNexus,
-        this._host.engine.i18n("$religion.tu.blackNexus.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.blackCore,
-        this._host.engine.i18n("$religion.tu.blackCore.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.singularity,
-        this._host.engine.i18n("$religion.tu.singularity.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.blackLibrary,
-        this._host.engine.i18n("$religion.tu.blackLibrary.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.blackRadiance,
-        this._host.engine.i18n("$religion.tu.blackRadiance.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.blazar,
-        this._host.engine.i18n("$religion.tu.blazar.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.darkNova,
-        this._host.engine.i18n("$religion.tu.darkNova.label")
-      ),
-      this._getBuildOption(
-        this.setting.buildings.holyGenocide,
-        this._host.engine.i18n("$religion.tu.holyGenocide.label"),
-        true
-      ),
-    ];
-    this._buildings = filterType(uiElements, SettingMaxListItem);
-    this.addChildren(uiElements);
+        new HeaderListItem(
+          this._host,
+          this._host.engine.i18n("$religion.panel.cryptotheology.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.blackObelisk,
+          this._host.engine.i18n("$religion.tu.blackObelisk.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.blackNexus,
+          this._host.engine.i18n("$religion.tu.blackNexus.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.blackCore,
+          this._host.engine.i18n("$religion.tu.blackCore.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.singularity,
+          this._host.engine.i18n("$religion.tu.singularity.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.blackLibrary,
+          this._host.engine.i18n("$religion.tu.blackLibrary.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.blackRadiance,
+          this._host.engine.i18n("$religion.tu.blackRadiance.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.blazar,
+          this._host.engine.i18n("$religion.tu.blazar.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.darkNova,
+          this._host.engine.i18n("$religion.tu.darkNova.label")
+        ),
+        this._getBuildOption(
+          this.setting.buildings.holyGenocide,
+          this._host.engine.i18n("$religion.tu.holyGenocide.label")
+        ),
+      ],
+      onReset: () => {
+        const defaults = new ReligionSettings();
+        this.setting.load({
+          buildings: defaults.buildings,
+          bestUnicornBuilding: defaults.bestUnicornBuilding,
+        });
+        this.refreshUi();
+      },
+    });
 
-    this.addChild(new HeaderListItem(this._host, "Additional options"));
+    this.addChild(listBuildings);
+
+    const listAddition = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+    });
+    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
 
     const nodeTranscend = new SettingListItem(
       this._host,
@@ -221,7 +223,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           ]),
       }
     );
-    this.addChild(nodeTranscend);
+    listAddition.addChild(nodeTranscend);
 
     const nodeAdore = new SettingTriggerListItem(
       this._host,
@@ -239,7 +241,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           ]),
       }
     );
-    this.addChild(nodeAdore);
+    listAddition.addChild(nodeAdore);
 
     const nodeAutoPraise = new SettingTriggerListItem(
       this._host,
@@ -257,7 +259,8 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           ]),
       }
     );
-    this.addChild(nodeAutoPraise);
+    listAddition.addChild(nodeAutoPraise);
+    this.addChild(listAddition);
   }
 
   refreshUi() {

@@ -30,7 +30,7 @@ export class CyclesList extends SettingsList {
    * @param setting The settings that correlate to this list.
    */
   constructor(host: UserScript, setting: SettingWithCycles) {
-    super(host, false);
+    super(host);
     this.setting = setting;
 
     this.addEventListener("enableAll", () => {

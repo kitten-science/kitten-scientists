@@ -4,33 +4,26 @@ import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsList } from "./components/SettingsList";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   private readonly _trigger: TriggerButton;
   private readonly _races: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: EmbassySettings) {
+  constructor(
+    host: UserScript,
+    settings: EmbassySettings,
+    options?: SettingsPanelOptions<SettingsPanel<EmbassySettings>>
+  ) {
     const label = host.engine.i18n("option.embassies");
-    super(host, label, settings);
+    super(host, label, settings, options);
 
     this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertBefore(this.list.element);
+    this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
-    this.list.addEventListener("enableAll", () => {
-      this._races.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._races.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new EmbassySettings());
-      this.refreshUi();
-    });
-
+    const listRaces = new SettingsList(this._host);
     this._races = [
       this._makeEmbassySetting(
         this.setting.races.lizards,
@@ -65,7 +58,8 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
         this._host.engine.i18n(`$trade.race.leviathans`)
       ),
     ];
-    this.addChildren(this._races);
+    listRaces.addChildren(this._races);
+    this.addChild(listRaces);
   }
 
   private _makeEmbassySetting(option: SettingMax, label: string) {

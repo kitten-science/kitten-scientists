@@ -2,6 +2,7 @@ import { FilterSettings, FilterSettingsItem } from "../settings/FilterSettings";
 import { UserScript } from "../UserScript";
 import { ExplainerListItem } from "./components/ExplainerListItem";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
@@ -10,19 +11,6 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
   constructor(host: UserScript, settings: FilterSettings) {
     const label = host.engine.i18n("ui.filter");
     super(host, label, settings);
-
-    this.list.addEventListener("enableAll", () => {
-      this._filters.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._filters.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new FilterSettings());
-      this.refreshUi();
-    });
 
     const buttonTemplates = [
       {
@@ -128,7 +116,9 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     this._filters = buttonTemplates
       .sort((a, b) => a.label.localeCompare(b.label))
       .map(button => makeButton(button.option, button.label));
-    this.addChildren(this._filters);
+    const listFilters = new SettingsList(this._host);
+    listFilters.addChildren(this._filters);
+    this.addChild(listFilters);
 
     this.addChild(new ExplainerListItem(this._host, "Disabled items are hidden from the log."));
   }

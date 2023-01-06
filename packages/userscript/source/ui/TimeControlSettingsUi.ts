@@ -1,6 +1,7 @@
 import { TimeControlSettings } from "../settings/TimeControlSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { ResetSettingsUi } from "./ResetSettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -17,19 +18,10 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     const label = host.engine.i18n("ui.timeCtrl");
     super(host, label, settings);
 
-    this.list.addEventListener("enableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
+    const list = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
     });
-    this.list.addEventListener("disableAll", () => {
-      this._items.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new TimeControlSettings());
-      this.refreshUi();
-    });
-
     this._accelerateTime = new SettingTriggerListItem(
       this._host,
       this._host.engine.i18n("option.accelerate"),
@@ -45,6 +37,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
 
     this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];
 
-    this.addChildren(this._items);
+    list.addChildren(this._items);
+    this.addChild(list);
   }
 }

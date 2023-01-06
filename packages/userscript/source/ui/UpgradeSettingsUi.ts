@@ -1,26 +1,16 @@
 import { UpgradeSettings } from "../settings/UpgradeSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsList } from "./components/SettingsList";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
-  private readonly _upgrades: Array<SettingListItem>;
-
-  constructor(host: UserScript, settings: UpgradeSettings) {
-    super(host, host.engine.i18n("ui.upgrade.upgrades"), settings);
-
-    this.list.addEventListener("enableAll", () => {
-      this._upgrades.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._upgrades.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new UpgradeSettings());
-      this.refreshUi();
-    });
+  constructor(
+    host: UserScript,
+    settings: UpgradeSettings,
+    options?: SettingsPanelOptions<SettingsPanel<UpgradeSettings>>
+  ) {
+    super(host, host.engine.i18n("ui.upgrade.upgrades"), settings, options);
 
     const items = [];
     for (const setting of Object.values(this.setting.upgrades)) {
@@ -34,8 +24,20 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
-    items.forEach(button => this.addChild(button.button));
 
-    this._upgrades = items.map(button => button.button);
+    let lastLetter = items[0].label.charCodeAt(0);
+    let lastItem = items[0];
+    for (const item of items) {
+      const subject = item.label.charCodeAt(0);
+      if (subject !== lastLetter) {
+        lastLetter = subject;
+        lastItem.button.element.addClass("ks-delimiter");
+      }
+      lastItem = item;
+    }
+
+    const itemsList = new SettingsList(this._host);
+    items.forEach(button => itemsList.addChild(button.button));
+    this.addChild(itemsList);
   }
 }

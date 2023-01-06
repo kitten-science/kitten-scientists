@@ -1,8 +1,27 @@
+import { is, isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
 import { DisableButton } from "./buttons-icon/DisableButton";
 import { EnableButton } from "./buttons-icon/EnableButton";
 import { ResetButton } from "./buttons-icon/ResetButton";
+import { ListItem } from "./ListItem";
+import { SettingListItem } from "./SettingListItem";
 import { UiComponent } from "./UiComponent";
+
+export type SettingsListOptions = {
+  /**
+   * A component that should be hosted in the panel.
+   */
+  child?: ListItem;
+
+  /**
+   * Component that should be hosted in the panel.
+   */
+  children?: Array<ListItem>;
+
+  hasEnableAll?: boolean;
+  hasDisableAll?: boolean;
+  onReset?: () => void;
+};
 
 /**
  * The `SettingsList` is a `<ul>` designed to host `SettingListItem` instances.
@@ -14,33 +33,100 @@ import { UiComponent } from "./UiComponent";
  */
 export class SettingsList extends UiComponent {
   readonly element: JQuery<HTMLElement>;
+  readonly list: JQuery<HTMLElement>;
+
+  readonly disableAllButton: DisableButton | undefined;
+  readonly enableAllButton: EnableButton | undefined;
   readonly resetButton: ResetButton | undefined;
 
   /**
    * Constructs a `SettingsList`.
    *
    * @param host A reference to the host.
-   * @param hasReset Does this section have a "Reset" button?
+   * @param options Which tools should be available on the list?
    */
-  constructor(host: UserScript, hasReset = true) {
+  constructor(host: UserScript, options?: SettingsListOptions) {
     super(host);
 
-    const containerList = $("<ul/>").addClass("ks-list").addClass("ks-items-list");
+    const toolOptions: SettingsListOptions = {
+      hasDisableAll: true,
+      hasEnableAll: true,
+      ...options,
+    };
+    const hasTools =
+      toolOptions.hasDisableAll || toolOptions.hasEnableAll || !isNil(toolOptions.onReset);
 
-    const disableAllButton = new DisableButton(this._host);
-    disableAllButton.element.on("click", () => this.dispatchEvent(new Event("disableAll")));
-    containerList.append(disableAllButton.element);
+    const container = $("<div/>").addClass("ks-list-container");
 
-    const enableAllButton = new EnableButton(this._host);
-    enableAllButton.element.on("click", () => this.dispatchEvent(new Event("enableAll")));
-    containerList.append(enableAllButton.element);
+    this.list = $("<ul/>").addClass("ks-list").addClass("ks-items-list");
 
-    if (hasReset) {
-      this.resetButton = new ResetButton(this._host);
-      this.resetButton.element.on("click", () => this.dispatchEvent(new Event("reset")));
-      containerList.append(this.resetButton.element);
+    container.append(this.list);
+
+    if (hasTools) {
+      const tools = $("<div/>").addClass("ks-list-tools");
+
+      if (toolOptions.hasEnableAll) {
+        this.enableAllButton = new EnableButton(this._host);
+        this.enableAllButton.element.on("click", () => {
+          const event = new Event("enableAll", { cancelable: true });
+          this.dispatchEvent(event);
+          if (event.defaultPrevented) {
+            return;
+          }
+
+          for (const child of this.children) {
+            if (is(child, SettingListItem)) {
+              (child as SettingListItem).setting.enabled = true;
+            }
+          }
+          this.refreshUi();
+        });
+        tools.append(this.enableAllButton.element);
+      }
+
+      if (toolOptions.hasDisableAll) {
+        this.disableAllButton = new DisableButton(this._host);
+        this.disableAllButton.element.on("click", () => {
+          const event = new Event("disableAll", { cancelable: true });
+          this.dispatchEvent(event);
+          if (event.defaultPrevented) {
+            return;
+          }
+
+          for (const child of this.children) {
+            if (is(child, SettingListItem)) {
+              (child as SettingListItem).setting.enabled = false;
+            }
+          }
+          this.refreshUi();
+        });
+        tools.append(this.disableAllButton.element);
+      }
+
+      const onReset = toolOptions.onReset;
+      if (!isNil(onReset)) {
+        this.resetButton = new ResetButton(this._host);
+        this.resetButton.element.on("click", () => onReset());
+        tools.append(this.resetButton.element);
+      }
+
+      container.append(tools);
     }
 
-    this.element = containerList;
+    this.element = container;
+
+    const child = options?.child;
+    if (!isNil(child)) {
+      this.addChild(child);
+    }
+    const children = options?.children;
+    if (!isNil(children)) {
+      this.addChildren(children);
+    }
+  }
+
+  override addChild(child: UiComponent) {
+    this.children.add(child);
+    this.list.append(child.element);
   }
 }

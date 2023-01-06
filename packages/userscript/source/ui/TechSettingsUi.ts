@@ -1,26 +1,18 @@
 import { TechSettings } from "../settings/TechSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsList } from "./components/SettingsList";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class TechSettingsUi extends SettingsPanel<TechSettings> {
   protected readonly _techs: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: TechSettings) {
-    super(host, host.engine.i18n("ui.upgrade.techs"), settings);
-
-    this.list.addEventListener("enableAll", () => {
-      this._techs.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._techs.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new TechSettings());
-      this.refreshUi();
-    });
+  constructor(
+    host: UserScript,
+    settings: TechSettings,
+    options?: SettingsPanelOptions<SettingsPanel<TechSettings>>
+  ) {
+    super(host, host.engine.i18n("ui.upgrade.techs"), settings, options);
 
     const items = [];
     for (const setting of Object.values(this.setting.techs)) {
@@ -34,7 +26,9 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
-    items.forEach(button => this.addChild(button.button));
+    const itemsList = new SettingsList(this._host);
+    items.forEach(button => itemsList.addChild(button.button));
+    this.addChild(itemsList);
 
     this._techs = items.map(button => button.button);
   }

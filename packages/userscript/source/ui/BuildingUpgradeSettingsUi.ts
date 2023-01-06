@@ -1,26 +1,16 @@
 import { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
-import { SettingsPanel } from "./components/SettingsPanel";
+import { SettingsList } from "./components/SettingsList";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
 export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSettings> {
-  private readonly _upgrades: Array<SettingListItem>;
-
-  constructor(host: UserScript, settings: BuildingUpgradeSettings) {
-    super(host, host.engine.i18n("ui.upgrade.buildings"), settings);
-
-    this.list.addEventListener("enableAll", () => {
-      this._upgrades.forEach(item => (item.setting.enabled = true));
-      this.refreshUi();
-    });
-    this.list.addEventListener("disableAll", () => {
-      this._upgrades.forEach(item => (item.setting.enabled = false));
-      this.refreshUi();
-    });
-    this.list.addEventListener("reset", () => {
-      this.setting.load(new BuildingUpgradeSettings());
-      this.refreshUi();
-    });
+  constructor(
+    host: UserScript,
+    settings: BuildingUpgradeSettings,
+    options?: SettingsPanelOptions<SettingsPanel<BuildingUpgradeSettings>>
+  ) {
+    super(host, host.engine.i18n("ui.upgrade.buildings"), settings, options);
 
     const items = [];
     for (const setting of Object.values(this.setting.buildings)) {
@@ -34,8 +24,8 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
-    items.forEach(button => this.addChild(button.button));
-
-    this._upgrades = items.map(button => button.button);
+    const itemsList = new SettingsList(this._host);
+    items.forEach(button => itemsList.addChild(button.button));
+    this.addChild(itemsList);
   }
 }
