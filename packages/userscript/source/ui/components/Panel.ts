@@ -19,6 +19,11 @@ export type PanelOptions<TChild extends UiComponent = UiComponent> = {
    * Should the main child be expanded right away?
    */
   initiallyExpanded?: boolean;
+
+  /**
+   * The panel this panel is nested in, if any.
+   */
+  parent?: Panel;
 };
 
 /**
@@ -36,6 +41,7 @@ export class Panel<
   protected readonly _expando: ExpandoButton;
   protected readonly _head: THead;
   protected _mainChildVisible: boolean;
+  protected readonly parent: Panel | undefined;
 
   get isExpanded() {
     return this._mainChildVisible;
@@ -82,6 +88,8 @@ export class Panel<
       this.container.element.hide();
     }
 
+    this.parent = options?.parent;
+
     this._mainChildVisible = options?.initiallyExpanded ?? false;
     this.element = head.element;
     this._expando = expando;
@@ -104,6 +112,10 @@ export class Panel<
       this.container.element.show();
       this._expando.setExpanded();
       this._head.element.addClass("ks-expanded");
+      this.dispatchEvent(new CustomEvent("panelShown"));
+      if (this.parent) {
+        this.parent.onChildShown();
+      }
     } else {
       this.container.element.hide();
       this._expando.setCollapsed();
@@ -123,5 +135,9 @@ export class Panel<
 
       toggleChildren(this.children);
     }
+  }
+
+  onChildShown() {
+    this.dispatchEvent(new CustomEvent("panelShown"));
   }
 }

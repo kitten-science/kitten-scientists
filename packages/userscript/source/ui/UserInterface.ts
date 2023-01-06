@@ -18,34 +18,38 @@ export class UserInterface extends UiComponent {
   readonly element: JQuery<HTMLElement>;
 
   private _engineUi: EngineSettingsUi;
-  private _bonfireUi: BonfireSettingsUi;
-  private _spaceUi: SpaceSettingsUi;
-  private _craftUi: WorkshopSettingsUi;
-  private _resourcesUi: ResourcesSettingsUi;
-  private _unlockUi: ScienceSettingsUi;
-  private _tradingUi: TradeSettingsUi;
-  private _religionUi: ReligionSettingsUi;
-  private _timeUi: TimeSettingsUi;
-  private _timeCtrlUi: TimeControlSettingsUi;
-  private _distributeUi: VillageSettingsUi;
-  private _filterUi: FiltersSettingsUi;
+  private _sections: Array<
+    | BonfireSettingsUi
+    | SpaceSettingsUi
+    | WorkshopSettingsUi
+    | ResourcesSettingsUi
+    | ScienceSettingsUi
+    | TradeSettingsUi
+    | ReligionSettingsUi
+    | TimeSettingsUi
+    | TimeControlSettingsUi
+    | VillageSettingsUi
+    | FiltersSettingsUi
+  >;
 
   constructor(host: UserScript) {
     super(host);
 
     const engine = this._host.engine;
     this._engineUi = new EngineSettingsUi(this._host, engine.settings);
-    this._bonfireUi = new BonfireSettingsUi(this._host, engine.bonfireManager.settings);
-    this._spaceUi = new SpaceSettingsUi(this._host, engine.spaceManager.settings);
-    this._craftUi = new WorkshopSettingsUi(this._host, engine.workshopManager.settings);
-    this._resourcesUi = new ResourcesSettingsUi(this._host, engine.settings.resources);
-    this._unlockUi = new ScienceSettingsUi(this._host, engine.scienceManager.settings);
-    this._tradingUi = new TradeSettingsUi(this._host, engine.tradeManager.settings);
-    this._religionUi = new ReligionSettingsUi(this._host, engine.religionManager.settings);
-    this._timeUi = new TimeSettingsUi(this._host, engine.timeManager.settings);
-    this._timeCtrlUi = new TimeControlSettingsUi(this._host, engine.timeControlManager.settings);
-    this._distributeUi = new VillageSettingsUi(this._host, engine.villageManager.settings);
-    this._filterUi = new FiltersSettingsUi(this._host, engine.settings.filters);
+    this._sections = [
+      new BonfireSettingsUi(this._host, engine.bonfireManager.settings),
+      new SpaceSettingsUi(this._host, engine.spaceManager.settings),
+      new WorkshopSettingsUi(this._host, engine.workshopManager.settings),
+      new ResourcesSettingsUi(this._host, engine.settings.resources),
+      new ScienceSettingsUi(this._host, engine.scienceManager.settings),
+      new TradeSettingsUi(this._host, engine.tradeManager.settings),
+      new ReligionSettingsUi(this._host, engine.religionManager.settings),
+      new TimeSettingsUi(this._host, engine.timeManager.settings),
+      new TimeControlSettingsUi(this._host, engine.timeControlManager.settings),
+      new VillageSettingsUi(this._host, engine.villageManager.settings),
+      new FiltersSettingsUi(this._host, engine.settings.filters),
+    ];
 
     this._installCss();
 
@@ -60,17 +64,7 @@ export class UserInterface extends UiComponent {
 
     const optionsListElement = $("<ul/>");
     optionsListElement.append(this._engineUi.element);
-    optionsListElement.append(this._bonfireUi.element);
-    optionsListElement.append(this._distributeUi.element);
-    optionsListElement.append(this._unlockUi.element);
-    optionsListElement.append(this._craftUi.element);
-    optionsListElement.append(this._resourcesUi.element);
-    optionsListElement.append(this._tradingUi.element);
-    optionsListElement.append(this._religionUi.element);
-    optionsListElement.append(this._spaceUi.element);
-    optionsListElement.append(this._timeUi.element);
-    optionsListElement.append(this._timeCtrlUi.element);
-    optionsListElement.append(this._filterUi.element);
+    this._sections.forEach(section => optionsListElement.append(section.element));
 
     // Make _engineUI's expando button hide/show the other option groups
     const expando = this._engineUi.expando;
@@ -83,18 +77,17 @@ export class UserInterface extends UiComponent {
         expando.setCollapsed();
       }
 
-      this._bonfireUi.toggle(sectionsVisible, true);
-      this._spaceUi.toggle(sectionsVisible, true);
-      this._craftUi.toggle(sectionsVisible, true);
-      this._resourcesUi.toggle(sectionsVisible, true);
-      this._unlockUi.toggle(sectionsVisible, true);
-      this._tradingUi.toggle(sectionsVisible, true);
-      this._religionUi.toggle(sectionsVisible, true);
-      this._timeUi.toggle(sectionsVisible, true);
-      this._timeCtrlUi.toggle(sectionsVisible, true);
-      this._distributeUi.toggle(sectionsVisible, true);
-      this._filterUi.toggle(sectionsVisible, true);
+      for (const section of this._sections) {
+        section.toggle(sectionsVisible, true);
+      }
     });
+
+    for (const section of this._sections) {
+      section.addEventListener("panelShown", () => {
+        sectionsVisible = true;
+        expando.setExpanded();
+      });
+    }
 
     const copyButton = this._engineUi.copyButton;
     copyButton.element.on("click", () => {
@@ -127,17 +120,9 @@ export class UserInterface extends UiComponent {
 
   refreshUi(): void {
     this._engineUi.refreshUi();
-    this._bonfireUi.refreshUi();
-    this._spaceUi.refreshUi();
-    this._craftUi.refreshUi();
-    this._resourcesUi.refreshUi();
-    this._unlockUi.refreshUi();
-    this._tradingUi.refreshUi();
-    this._religionUi.refreshUi();
-    this._timeUi.refreshUi();
-    this._timeCtrlUi.refreshUi();
-    this._distributeUi.refreshUi();
-    this._filterUi.refreshUi();
+    for (const section of this._sections) {
+      section.refreshUi();
+    }
   }
 
   private _installCss(): void {
