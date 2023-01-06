@@ -1,4 +1,11 @@
-import { BuildButton, GamePage, GameTab, Price } from ".";
+import {
+  BuildButton,
+  ButtonModernModel,
+  GamePage,
+  GameTab,
+  Price,
+  TransformBtnController,
+} from ".";
 
 export type ReligionTab = GameTab & {
   /**
@@ -19,7 +26,7 @@ export type ReligionTab = GameTab & {
   /**
    * Sacrifice unicorns.
    */
-  sacrificeBtn: BuildButton;
+  sacrificeBtn: BuildButton<string, ButtonModernModel, TransformBtnController>;
 
   /**
    * Ziggurath upgrade buttons.

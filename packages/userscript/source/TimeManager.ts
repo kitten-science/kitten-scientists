@@ -6,8 +6,11 @@ import { cwarn } from "./tools/Log";
 import { mustExist } from "./tools/Maybe";
 import {
   BuildButton,
+  ButtonModernController,
+  ButtonModernModel,
   ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
+  FixCryochamberBtnController,
   TimeItemVariant,
   TimeTab,
   VoidSpaceUpgradeInfo,
@@ -135,7 +138,7 @@ export class TimeManager {
   getBuildButton(
     name: ChronoForgeUpgrades | VoidSpaceUpgrades,
     variant: TimeItemVariant
-  ): BuildButton | null {
+  ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
     let buttons: Array<BuildButton>;
     if (variant === TimeItemVariant.Chronoforge) {
       buttons = this.manager.tab.children[2].children[0].children;
@@ -151,7 +154,7 @@ export class TimeManager {
     for (const button of buttons) {
       const haystack = button.model.name;
       if (haystack.indexOf(build.label) !== -1) {
-        return button;
+        return button as BuildButton<string, ButtonModernModel, ButtonModernController>;
       }
     }
 
@@ -165,7 +168,11 @@ export class TimeManager {
       let fixed = 0;
       const btn = this.manager.tab.vsPanel.children[0].children[0]; //check?
       // doFixCryochamber will check resources
-      while (btn.controller.doFixCryochamber!(btn.model)) {
+      while (
+        (btn.controller as FixCryochamberBtnController).doFixCryochamber(
+          btn.model as ButtonModernModel
+        )
+      ) {
         ++fixed;
       }
       if (0 < fixed) {
