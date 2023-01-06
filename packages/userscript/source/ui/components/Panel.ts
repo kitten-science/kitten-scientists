@@ -1,4 +1,4 @@
-import { isNil } from "../../tools/Maybe";
+import { is, isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
 import { Container } from "./Container";
 import { ExpandoButton } from "./ExpandoButton";
@@ -92,7 +92,13 @@ export class Panel<
     this.container.element.append(child.element);
   }
 
-  toggle(expand: boolean | undefined = undefined) {
+  /**
+   * Control the visibility of the panel's contents.
+   *
+   * @param expand Should the panel be expanded? If not set, the panel is toggled.
+   * @param toggleNested Also toggle all panels inside this panel?
+   */
+  toggle(expand: boolean | undefined = undefined, toggleNested = false) {
     this._mainChildVisible = expand !== undefined ? expand : !this._mainChildVisible;
     if (this._mainChildVisible) {
       this.container.element.show();
@@ -102,6 +108,20 @@ export class Panel<
       this.container.element.hide();
       this._expando.setCollapsed();
       this._head.element.removeClass("ks-expanded");
+    }
+
+    if (toggleNested) {
+      const toggleChildren = (children: Set<UiComponent>) => {
+        for (const child of children) {
+          if (is(child, Panel)) {
+            (child as Panel).toggle(expand, toggleNested);
+          } else {
+            toggleChildren((child as UiComponent).children);
+          }
+        }
+      };
+
+      toggleChildren(this.children);
     }
   }
 }

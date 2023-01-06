@@ -1,6 +1,7 @@
 import { isNil, mustExist } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
+import { UiComponent } from "./components/UiComponent";
 import { EngineSettingsUi } from "./EngineSettingsUi";
 import { FiltersSettingsUi } from "./FilterSettingsUi";
 import { ReligionSettingsUi } from "./ReligionSettingsUi";
@@ -13,8 +14,8 @@ import { TradeSettingsUi } from "./TradeSettingsUi";
 import { VillageSettingsUi } from "./VillageSettingsUi";
 import { WorkshopSettingsUi } from "./WorkshopSettingsUi";
 
-export class UserInterface {
-  private readonly _host: UserScript;
+export class UserInterface extends UiComponent {
+  readonly element: JQuery<HTMLElement>;
 
   private _engineUi: EngineSettingsUi;
   private _bonfireUi: BonfireSettingsUi;
@@ -30,7 +31,7 @@ export class UserInterface {
   private _filterUi: FiltersSettingsUi;
 
   constructor(host: UserScript) {
-    this._host = host;
+    super(host);
 
     const engine = this._host.engine;
     this._engineUi = new EngineSettingsUi(this._host, engine.settings);
@@ -45,19 +46,17 @@ export class UserInterface {
     this._timeCtrlUi = new TimeControlSettingsUi(this._host, engine.timeControlManager.settings);
     this._distributeUi = new VillageSettingsUi(this._host, engine.villageManager.settings);
     this._filterUi = new FiltersSettingsUi(this._host, engine.settings.filters);
-  }
 
-  construct(): void {
     this._installCss();
 
     const version = "Kitten Scientists v" + (KS_VERSION ?? "(unknown)");
 
-    const optionsElement = $("<div/>", { id: "ks" });
+    const ks = $("<div/>", { id: "ks" });
     const optionsTitleElement = $("<div/>", {
       id: "ks-version",
       text: version,
     });
-    optionsElement.append(optionsTitleElement);
+    ks.append(optionsTitleElement);
 
     const optionsListElement = $("<ul/>");
     optionsListElement.append(this._engineUi.element);
@@ -84,17 +83,17 @@ export class UserInterface {
         expando.setCollapsed();
       }
 
-      this._bonfireUi.toggle(sectionsVisible);
-      this._spaceUi.toggle(sectionsVisible);
-      this._craftUi.toggle(sectionsVisible);
-      this._resourcesUi.toggle(sectionsVisible);
-      this._unlockUi.toggle(sectionsVisible);
-      this._tradingUi.toggle(sectionsVisible);
-      this._religionUi.toggle(sectionsVisible);
-      this._timeUi.toggle(sectionsVisible);
-      this._timeCtrlUi.toggle(sectionsVisible);
-      this._distributeUi.toggle(sectionsVisible);
-      this._filterUi.toggle(sectionsVisible);
+      this._bonfireUi.toggle(sectionsVisible, true);
+      this._spaceUi.toggle(sectionsVisible, true);
+      this._craftUi.toggle(sectionsVisible, true);
+      this._resourcesUi.toggle(sectionsVisible, true);
+      this._unlockUi.toggle(sectionsVisible, true);
+      this._tradingUi.toggle(sectionsVisible, true);
+      this._religionUi.toggle(sectionsVisible, true);
+      this._timeUi.toggle(sectionsVisible, true);
+      this._timeCtrlUi.toggle(sectionsVisible, true);
+      this._distributeUi.toggle(sectionsVisible, true);
+      this._filterUi.toggle(sectionsVisible, true);
     });
 
     const copyButton = this._engineUi.copyButton;
@@ -121,7 +120,9 @@ export class UserInterface {
 
     // add the options above the game log
     const right = $("#rightColumn");
-    right.prepend(optionsElement.append(optionsListElement));
+    right.prepend(ks.append(optionsListElement));
+
+    this.element = ks;
   }
 
   refreshUi(): void {

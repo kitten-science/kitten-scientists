@@ -57,7 +57,7 @@ export class SettingsList extends UiComponent {
       if (toolOptions.hasEnableAll) {
         this.enableAllButton = new EnableButton(this._host);
         this.enableAllButton.element.on("click", () => {
-          const event = new Event("enableAll");
+          const event = new Event("enableAll", { cancelable: true });
           this.dispatchEvent(event);
           if (event.defaultPrevented) {
             return;
@@ -76,7 +76,7 @@ export class SettingsList extends UiComponent {
       if (toolOptions.hasDisableAll) {
         this.disableAllButton = new DisableButton(this._host);
         this.disableAllButton.element.on("click", () => {
-          const event = new Event("disableAll");
+          const event = new Event("disableAll", { cancelable: true });
           this.dispatchEvent(event);
           if (event.defaultPrevented) {
             return;
