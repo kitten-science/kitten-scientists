@@ -190,6 +190,8 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           this._host.engine.i18n("$religion.tu.holyGenocide.label")
         ),
       ],
+      onEnableAll: () => this.refreshUi(),
+      onDisableAll: () => this.refreshUi(),
       onReset: () => {
         const defaults = new ReligionSettings();
         this.setting.load({

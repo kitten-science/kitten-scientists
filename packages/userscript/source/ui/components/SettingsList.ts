@@ -20,6 +20,8 @@ export type SettingsListOptions = {
 
   hasEnableAll?: boolean;
   hasDisableAll?: boolean;
+  onEnableAll?: () => void;
+  onDisableAll?: () => void;
   onReset?: () => void;
 };
 
@@ -66,6 +68,7 @@ export class SettingsList extends UiComponent {
       const tools = $("<div/>").addClass("ks-list-tools");
 
       if (toolOptions.hasEnableAll) {
+        const onEnableAll = options?.onEnableAll;
         this.enableAllButton = new EnableButton(this._host);
         this.enableAllButton.element.on("click", () => {
           const event = new Event("enableAll", { cancelable: true });
@@ -79,12 +82,18 @@ export class SettingsList extends UiComponent {
               (child as SettingListItem).setting.enabled = true;
             }
           }
+
+          if (!isNil(onEnableAll)) {
+            onEnableAll();
+          }
+
           this.refreshUi();
         });
         tools.append(this.enableAllButton.element);
       }
 
       if (toolOptions.hasDisableAll) {
+        const onDisableAll = options?.onDisableAll;
         this.disableAllButton = new DisableButton(this._host);
         this.disableAllButton.element.on("click", () => {
           const event = new Event("disableAll", { cancelable: true });
@@ -98,6 +107,10 @@ export class SettingsList extends UiComponent {
               (child as SettingListItem).setting.enabled = false;
             }
           }
+          if (!isNil(onDisableAll)) {
+            onDisableAll();
+          }
+
           this.refreshUi();
         });
         tools.append(this.disableAllButton.element);
