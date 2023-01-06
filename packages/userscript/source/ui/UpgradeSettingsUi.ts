@@ -24,6 +24,18 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
+
+    let lastLetter = items[0].label.charCodeAt(0);
+    let lastItem = items[0];
+    for (const item of items) {
+      const subject = item.label.charCodeAt(0);
+      if (subject !== lastLetter) {
+        lastLetter = subject;
+        lastItem.button.element.addClass("ks-delimiter");
+      }
+      lastItem = item;
+    }
+
     const itemsList = new SettingsList(this._host);
     items.forEach(button => itemsList.addChild(button.button));
     this.addChild(itemsList);
