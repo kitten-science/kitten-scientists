@@ -1,10 +1,10 @@
 import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings";
 import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
-import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi";
 
@@ -113,7 +113,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
       hasEnableAll: false,
       hasReset: false,
     });
-    listAdditional.addChild(new SubHeaderListItem(this._host, "Additional options"));
+    listAdditional.addChild(new HeaderListItem(this._host, "Additional options"));
 
     this._upgradeUi = new UpgradeSettingsUi(this._host, this.setting.unlockUpgrades);
     listAdditional.addChild(this._upgradeUi);

@@ -1,6 +1,7 @@
 import { MissionSettings } from "../settings/MissionSettings";
 import { UserScript } from "../UserScript";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingsPanel } from "./components/SettingsPanel";
 
 export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
@@ -21,7 +22,13 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
-    items.forEach(button => this.addChild(button.button));
+    const itemsList = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+      hasReset: false,
+    });
+    items.forEach(button => itemsList.addChild(button.button));
+    this.addChild(itemsList);
 
     this._missions = items.map(button => button.button);
   }

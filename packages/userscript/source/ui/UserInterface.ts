@@ -243,15 +243,6 @@ export class UserInterface {
     // Setting: Header
     this._addRule(
       `#ks ul li.ks-setting .ks-header {
-        color: inherit;
-        display: inline-block;
-        min-width: 100px;
-        user-select: none;
-      }`
-    );
-    // Setting: Sub-Header
-    this._addRule(
-      `#ks ul li.ks-setting .ks-subheader {
         color: grey;
         display: inline-block;
         min-width: 100px;

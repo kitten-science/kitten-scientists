@@ -1,9 +1,10 @@
 import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings";
 import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { SubHeaderListItem } from "./components/SubHeaderListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
@@ -19,6 +20,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
+    const listBuildings = new SettingsList(this._host);
     this._buildings = [
       this._getTimeSetting(
         this.setting.buildings.temporalBattery,
@@ -64,13 +66,18 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       ),
       this._getTimeSetting(
         this.setting.buildings.voidResonator,
-        this._host.engine.i18n("$time.vsu.voidResonator.label"),
-        true
+        this._host.engine.i18n("$time.vsu.voidResonator.label")
       ),
     ];
-    this.addChildren(this._buildings);
+    listBuildings.addChildren(this._buildings);
+    this.addChild(listBuildings);
 
-    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
+    const listAddition = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+      hasReset: false,
+    });
+    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
     this._fixCryochamber = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.fix.cry"),
@@ -86,7 +93,8 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
           ]),
       }
     );
-    this.addChild(this._fixCryochamber);
+    listAddition.addChild(this._fixCryochamber);
+    this.addChild(listAddition);
   }
 
   private _getTimeSetting(setting: TimeSettingsItem, label: string, delimiter = false) {

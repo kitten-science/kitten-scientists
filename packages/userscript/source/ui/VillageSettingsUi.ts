@@ -1,12 +1,12 @@
 import { SettingMax } from "../settings/Settings";
 import { VillageSettings } from "../settings/VillageSettings";
 import { UserScript } from "../UserScript";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { OptionsListItem } from "./components/OptionsListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
 import { SettingsList } from "./components/SettingsList";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
-import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
@@ -65,7 +65,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       hasReset: false,
     });
 
-    listAddition.addChild(new SubHeaderListItem(this._host, "Additional options"));
+    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
 
     this._hunt = new SettingTriggerListItem(
       this._host,

@@ -2,6 +2,7 @@ import { FilterSettings, FilterSettingsItem } from "../settings/FilterSettings";
 import { UserScript } from "../UserScript";
 import { ExplainerListItem } from "./components/ExplainerListItem";
 import { SettingListItem } from "./components/SettingListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
@@ -115,7 +116,9 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
     this._filters = buttonTemplates
       .sort((a, b) => a.label.localeCompare(b.label))
       .map(button => makeButton(button.option, button.label));
-    this.addChildren(this._filters);
+    const listFilters = new SettingsList(this._host);
+    listFilters.addChildren(this._filters);
+    this.addChild(listFilters);
 
     this.addChild(new ExplainerListItem(this._host, "Disabled items are hidden from the log."));
   }

@@ -1,17 +1,23 @@
 import { Setting } from "../../settings/Settings";
+import { isNil, mustExist } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
-import { Container } from "./Container";
-import { Panel } from "./Panel";
+import { Panel, PanelOptions } from "./Panel";
 import { SettingListItem } from "./SettingListItem";
-import { UiComponent } from "./UiComponent";
 
-export class SettingsPanel<TSetting extends Setting = Setting>
+export type SettingsPanelOptions<TListItem extends SettingListItem = SettingListItem> =
+  PanelOptions & {
+    settingItem?: TListItem;
+  };
+
+export class SettingsPanel<
+    TSetting extends Setting = Setting,
+    TListItem extends SettingListItem = SettingListItem
+  >
   extends Panel
   implements SettingListItem
 {
-  protected readonly container: UiComponent;
   readonly setting: TSetting;
-  readonly settingItem: SettingListItem;
+  readonly settingItem: TListItem;
 
   get isExpanded() {
     return this._mainChildVisible;
@@ -37,24 +43,23 @@ export class SettingsPanel<TSetting extends Setting = Setting>
    * @param host A reference to the host.
    * @param label The label to put main checkbox of this section.
    * @param setting An setting for which this is the settings panel.
-   * @param initiallyExpanded Should the main child be expanded right away?
+   * @param options Options for this panel.
    */
-  constructor(host: UserScript, label: string, setting: TSetting, initiallyExpanded = false) {
-    const container = new Container(host);
-    container.element.addClass("ks-panel-content");
+  constructor(
+    host: UserScript,
+    label: string,
+    setting: TSetting,
+    options?: SettingsPanelOptions<TListItem>
+  ) {
+    const settingItem = !isNil(options?.settingItem)
+      ? mustExist(options?.settingItem)
+      : (new SettingListItem(host, label, setting, {
+          onCheck: () => host.engine.imessage("status.auto.enable", [label]),
+          onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
+        }) as unknown as TListItem);
+    super(host, settingItem, options);
 
-    const settingItem = new SettingListItem(host, label, setting, {
-      onCheck: () => host.engine.imessage("status.auto.enable", [label]),
-      onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
-    });
-    super(host, container, settingItem, initiallyExpanded);
-    this.container = container;
     this.settingItem = settingItem;
     this.setting = setting;
-  }
-
-  override addChild(child: UiComponent) {
-    this.children.add(child);
-    this.container.element.append(child.element);
   }
 }

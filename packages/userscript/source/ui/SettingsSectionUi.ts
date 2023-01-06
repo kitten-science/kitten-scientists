@@ -11,14 +11,15 @@ export type Toggleable = {
 };
 
 /**
- * Base class for all automation UI sections.
- * This provides common functionality to help build the automation sections themselves.
+ * Base class for UI sections.
+ * This exists mostly for historic reasons. New implementations likely want to use
+ * `SettingsPanel` or `Panel` directly.
  */
 export abstract class SettingsSectionUi<
   TSetting extends Setting = Setting
 > extends SettingsPanel<TSetting> {
   constructor(host: UserScript, label: string, settings: TSetting, initiallyExpanded = false) {
-    super(host, label, settings, initiallyExpanded);
+    super(host, label, settings, { initiallyExpanded });
   }
 
   protected _getBuildOption(

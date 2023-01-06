@@ -4,6 +4,7 @@ import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingsPanel } from "./components/SettingsPanel";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
@@ -18,6 +19,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
+    const listRaces = new SettingsList(this._host);
     this._races = [
       this._makeEmbassySetting(
         this.setting.races.lizards,
@@ -52,7 +54,8 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
         this._host.engine.i18n(`$trade.race.leviathans`)
       ),
     ];
-    this.addChildren(this._races);
+    listRaces.addChildren(this._races);
+    this.addChild(listRaces);
   }
 
   private _makeEmbassySetting(option: SettingMax, label: string) {

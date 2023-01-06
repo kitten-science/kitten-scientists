@@ -2,20 +2,21 @@ import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings";
 import { ucfirst } from "../tools/Format";
 import { Race } from "../types";
 import { UserScript } from "../UserScript";
-import { SeasonsButton } from "./components/buttons-icon/SeasonsButton";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SeasonsList } from "./components/SeasonsList";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
-import { SubHeaderListItem } from "./components/SubHeaderListItem";
+import { UiComponent } from "./components/UiComponent";
 import { EmbassySettingsUi } from "./EmbassySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
   private readonly _trigger: TriggerButton;
-  private readonly _races: Array<SettingListItem>;
+  private readonly _races: Array<UiComponent>;
   private readonly _embassiesUi: EmbassySettingsUi;
   private readonly _feedLeviathans: SettingListItem;
   private readonly _tradeBlackcoin: SettingListItem;
@@ -78,7 +79,6 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       ),
     ];
     listRaces.addChildren(this._races);
-    this.addChild(listRaces);
 
     this._feedLeviathans = new SettingListItem(
       this._host,
@@ -95,7 +95,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
           ]),
       }
     );
-    this.addChild(this._feedLeviathans);
+    listRaces.addChild(this._feedLeviathans);
 
     this._tradeBlackcoin = new SettingTriggerListItem(
       this._host,
@@ -114,14 +114,15 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       },
       true
     );
-    this.addChild(this._tradeBlackcoin);
+    listRaces.addChild(this._tradeBlackcoin);
+    this.addChild(listRaces);
 
     const listAddition = new SettingsList(this._host, {
       hasDisableAll: false,
       hasEnableAll: false,
       hasReset: false,
     });
-    listAddition.addChild(new SubHeaderListItem(this._host, "Additional options"));
+    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
 
     this._embassiesUi = new EmbassySettingsUi(this._host, this.setting.buildEmbassies);
     listAddition.addChild(this._embassiesUi);
@@ -152,22 +153,21 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     delimiter = false,
     upgradeIndicator = false
   ) {
-    const element = new SettingLimitedListItem(
-      this._host,
-      i18nName,
-      option,
-      {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [i18nName]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [i18nName]),
-        onLimitedCheck: () => this._host.engine.imessage("trade.limited", [i18nName]),
-        onLimitedUnCheck: () => this._host.engine.imessage("trade.unlimited", [i18nName]),
-      },
-      delimiter,
-      upgradeIndicator
-    );
-
-    const seasonsButton = new SeasonsButton(this._host);
-    element.addChild(seasonsButton);
+    const panel = new SettingsPanel(this._host, i18nName, option, {
+      settingItem: new SettingLimitedListItem(
+        this._host,
+        i18nName,
+        option,
+        {
+          onCheck: () => this._host.engine.imessage("status.sub.enable", [i18nName]),
+          onUnCheck: () => this._host.engine.imessage("status.sub.disable", [i18nName]),
+          onLimitedCheck: () => this._host.engine.imessage("trade.limited", [i18nName]),
+          onLimitedUnCheck: () => this._host.engine.imessage("trade.unlimited", [i18nName]),
+        },
+        delimiter,
+        upgradeIndicator
+      ),
+    });
 
     const seasons = new SeasonsList(this._host, option.seasons, {
       onCheck: (label: string) =>
@@ -175,14 +175,8 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       onUnCheck: (label: string) =>
         this._host.engine.imessage("trade.season.disable", [ucfirst(name), label]),
     });
-    element.addChild(seasons);
-    seasons.element.hide();
+    panel.addChild(seasons);
 
-    seasonsButton.element.on("click", () => {
-      seasons.element.toggle();
-      element.element.toggleClass("ks-expanded");
-    });
-
-    return element;
+    return panel;
   }
 }

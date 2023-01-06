@@ -2,10 +2,11 @@ import { ReligionSettings } from "../settings/ReligionSettings";
 import { filterType } from "../tools/Array";
 import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
+import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingMaxListItem } from "./components/SettingMaxListItem";
+import { SettingsList } from "./components/SettingsList";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
-import { SubHeaderListItem } from "./components/SubHeaderListItem";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
 export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
@@ -24,6 +25,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
+    const listBuildings = new SettingsList(this._host, { hasReset: true });
     this._unicornBuildings = [
       this._getBuildOption(
         this.setting.buildings.unicornPasture,
@@ -81,7 +83,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     );
 
     const uiElements = [
-      new SubHeaderListItem(this._host, this._host.engine.i18n("$religion.panel.ziggurat.label")),
+      new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.ziggurat.label")),
       ...this._unicornBuildings,
       this._bestUnicornBuilding,
 
@@ -103,10 +105,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         true
       ),
 
-      new SubHeaderListItem(
-        this._host,
-        this._host.engine.i18n("$religion.panel.orderOfTheSun.label")
-      ),
+      new HeaderListItem(this._host, this._host.engine.i18n("$religion.panel.orderOfTheSun.label")),
       this._getBuildOption(
         this.setting.buildings.solarchant,
         this._host.engine.i18n("$religion.ru.solarchant.label")
@@ -149,7 +148,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         true
       ),
 
-      new SubHeaderListItem(
+      new HeaderListItem(
         this._host,
         this._host.engine.i18n("$religion.panel.cryptotheology.label")
       ),
@@ -187,14 +186,19 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
       ),
       this._getBuildOption(
         this.setting.buildings.holyGenocide,
-        this._host.engine.i18n("$religion.tu.holyGenocide.label"),
-        true
+        this._host.engine.i18n("$religion.tu.holyGenocide.label")
       ),
     ];
     this._buildings = filterType(uiElements, SettingMaxListItem);
-    this.addChildren(uiElements);
+    listBuildings.addChildren(uiElements);
+    this.addChild(listBuildings);
 
-    this.addChild(new SubHeaderListItem(this._host, "Additional options"));
+    const listAddition = new SettingsList(this._host, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+      hasReset: false,
+    });
+    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
 
     const nodeTranscend = new SettingListItem(
       this._host,
@@ -211,7 +215,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           ]),
       }
     );
-    this.addChild(nodeTranscend);
+    listAddition.addChild(nodeTranscend);
 
     const nodeAdore = new SettingTriggerListItem(
       this._host,
@@ -229,7 +233,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           ]),
       }
     );
-    this.addChild(nodeAdore);
+    listAddition.addChild(nodeAdore);
 
     const nodeAutoPraise = new SettingTriggerListItem(
       this._host,
@@ -247,7 +251,8 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           ]),
       }
     );
-    this.addChild(nodeAutoPraise);
+    listAddition.addChild(nodeAutoPraise);
+    this.addChild(listAddition);
   }
 
   refreshUi() {

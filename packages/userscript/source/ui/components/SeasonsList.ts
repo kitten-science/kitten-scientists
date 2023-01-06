@@ -34,7 +34,7 @@ export class SeasonsList extends SettingsList {
       onUnCheck: (label: string, setting: Setting) => void;
     }
   ) {
-    super(host, false);
+    super(host);
     this.setting = setting;
 
     this.addEventListener("enableAll", () => {
