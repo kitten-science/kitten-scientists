@@ -18,6 +18,7 @@ import {
   ReligionUpgrades,
   TranscendenceUpgradeInfo,
   TranscendenceUpgrades,
+  TransformBtnController,
   UnicornItemVariant,
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
@@ -47,34 +48,22 @@ export class ReligionManager implements Automation {
     this._bonfireManager = bonfireManager;
   }
 
-  tick(context: TickContext) {
+  async tick(context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }
 
     this._autoBuild();
 
-    const faith = this._workshopManager.getResource("faith");
-    const faithLevel = faith.value / faith.maxValue;
-    // enough faith, and then TAP (transcende, adore, praise)
-    if (this.settings.transcend.enabled && this.settings.autoPraise.trigger - 0.02 <= faithLevel) {
-      this._autoTranscend();
+    if (this.settings.refineTears.enabled) {
+      await this._autoTears();
     }
 
-    // Praise (faith → worhsip)
-    if (this.settings.autoPraise.trigger <= faithLevel) {
-      // Adore the galaxy (worship → epiphany)
-      if (
-        this.settings.adore.enabled &&
-        mustExist(this._host.gamePage.religion.getRU("apocripha")).on
-      ) {
-        this._autoAdore(this.settings.adore.trigger);
-      }
-
-      if (this.settings.autoPraise.enabled) {
-        this._autoPraise();
-      }
+    if (this.settings.refineTimeCrystals.enabled) {
+      await this._autoTCs();
     }
+
+    this._autoTAP();
   }
 
   load(settings: ReligionSettings) {
@@ -156,7 +145,7 @@ export class ReligionManager implements Automation {
 
         // Sacrifice some unicorns to get the tears to buy the building.
         if (needSacrifice < maxSacrifice) {
-          this._host.gamePage.religionTab.sacrificeBtn.controller._transform(
+          this._host.gamePage.religionTab.sacrificeBtn.controller._transform!(
             this._host.gamePage.religionTab.sacrificeBtn.model,
             needSacrifice
           );
@@ -198,147 +187,6 @@ export class ReligionManager implements Automation {
       )
     );
     this._buildReligionBuildings(builds);
-  }
-
-  private _autoAdore(trigger: number) {
-    const faith = this._workshopManager.getResource("faith");
-
-    const worship = this._host.gamePage.religion.faith;
-    const epiphany = this._host.gamePage.religion.faithRatio;
-    const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence")).on;
-    const transcendenceTierCurrent = transcendenceReached
-      ? this._host.gamePage.religion.transcendenceTier
-      : 0;
-    // game version: 1.4.8.1
-    // solarRevolutionLimit is increased by black obelisks.
-    const maxSolarRevolution = 10 + this._host.gamePage.getEffect("solarRevolutionLimit");
-    // The absolute value at which to trigger adoring the galaxy.
-    const triggerSolarRevolution = maxSolarRevolution * trigger;
-    // How much epiphany we'll get from converting our worship.
-    const epiphanyIncrease =
-      (worship / 1000000) * transcendenceTierCurrent * transcendenceTierCurrent * 1.01;
-    // How much epiphany we'll have after adoring.
-    const epiphanyAfterAdore = epiphany + epiphanyIncrease;
-    // How much worship we'll have after adoring.
-    const worshipAfterAdore =
-      0.01 + faith.value * (1 + this._host.gamePage.getUnlimitedDR(epiphanyAfterAdore, 0.1) * 0.1);
-    // How much solar revolution bonus we'll have after adoring.
-    const solarRevolutionAfterAdore = this._host.gamePage.getLimitedDR(
-      this._host.gamePage.getUnlimitedDR(worshipAfterAdore, 1000) / 100,
-      maxSolarRevolution
-    );
-    // After adoring the galaxy, we want a single praise to be able to reach the trigger
-    // level of solar revolution bonus.
-    if (triggerSolarRevolution <= solarRevolutionAfterAdore) {
-      // Perform the actual adoration.
-      this._host.gamePage.religion._resetFaithInternal(1.01);
-
-      // Log the action.
-      this._host.engine.iactivity(
-        "act.adore",
-        [
-          this._host.gamePage.getDisplayValueExt(worship),
-          this._host.gamePage.getDisplayValueExt(epiphanyIncrease),
-        ],
-        "ks-adore"
-      );
-      this._host.engine.storeForSummary("adore", epiphanyIncrease);
-      // TODO: Not sure what the point of updating these values would be
-      //       We're at the end of the branch.
-      //epiphany = this._host.gamePage.religion.faithRatio;
-      //worship = this._host.gamePage.religion.faith;
-    }
-  }
-
-  private _autoTranscend() {
-    let epiphany = this._host.gamePage.religion.faithRatio;
-    const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence")).on;
-    let transcendenceTierCurrent = transcendenceReached
-      ? this._host.gamePage.religion.transcendenceTier
-      : 0;
-
-    // Transcend
-    if (transcendenceReached) {
-      // How much our adoration ratio increases from transcending.
-      const adoreIncreaceRatio = Math.pow(
-        (transcendenceTierCurrent + 2) / (transcendenceTierCurrent + 1),
-        2
-      );
-      // The amount of worship needed to upgrade to the next level.
-      const needNextLevel =
-        this._host.gamePage.religion._getTranscendTotalPrice(transcendenceTierCurrent + 1) -
-        this._host.gamePage.religion._getTranscendTotalPrice(transcendenceTierCurrent);
-
-      // We want to determine the ideal value for when to trancend.
-      // TODO: How exactly this works isn't understood yet.
-      const x = needNextLevel;
-      const k = adoreIncreaceRatio;
-      const epiphanyRecommend =
-        ((1 - k + Math.sqrt(80 * (k * k - 1) * x + (k - 1) * (k - 1))) * k) /
-          (40 * (k + 1) * (k + 1) * (k - 1)) +
-        x +
-        x / (k * k - 1);
-
-      if (epiphanyRecommend <= epiphany) {
-        // code copy from kittens game's religion.js: this._host.gamePage.religion.transcend()
-        // this._host.gamePage.religion.transcend() need confirm by player
-        // game version: 1.4.8.1
-        // ========================================================================================================
-        // DO TRANSCEND START
-        // ========================================================================================================
-        this._host.gamePage.religion.faithRatio -= needNextLevel;
-        this._host.gamePage.religion.tcratio += needNextLevel;
-        this._host.gamePage.religion.transcendenceTier += 1;
-
-        const atheism = mustExist(this._host.gamePage.challenges.getChallenge("atheism"));
-        atheism.calculateEffects(atheism, this._host.gamePage);
-        const blackObelisk = mustExist(this._host.gamePage.religion.getTU("blackObelisk"));
-        blackObelisk.calculateEffects(blackObelisk, this._host.gamePage);
-
-        this._host.gamePage.msg(
-          this._host.engine.i18n("$religion.transcend.msg.success", [
-            this._host.gamePage.religion.transcendenceTier,
-          ])
-        );
-        // ========================================================================================================
-        // DO TRANSCEND END
-        // ========================================================================================================
-
-        epiphany = this._host.gamePage.religion.faithRatio;
-        transcendenceTierCurrent = this._host.gamePage.religion.transcendenceTier;
-        this._host.engine.iactivity(
-          "act.transcend",
-          [this._host.gamePage.getDisplayValueExt(needNextLevel), transcendenceTierCurrent],
-          "ks-transcend"
-        );
-        this._host.engine.storeForSummary("transcend", 1);
-      }
-    }
-  }
-
-  private _autoPraise() {
-    const faith = this._workshopManager.getResource("faith");
-    let apocryphaBonus;
-    if (!this._host.gamePage.religion.getFaithBonus) {
-      apocryphaBonus = this._host.gamePage.religion.getApocryphaBonus();
-    } else {
-      apocryphaBonus = this._host.gamePage.religion.getFaithBonus();
-    }
-
-    // Determine how much worship we'll gain and log it.
-    const worshipIncrease = faith.value * (1 + apocryphaBonus);
-    this._host.engine.storeForSummary("praise", worshipIncrease);
-    this._host.engine.iactivity(
-      "act.praise",
-      [
-        this._host.gamePage.getDisplayValueExt(faith.value),
-        this._host.gamePage.getDisplayValueExt(worshipIncrease),
-      ],
-      "ks-praise"
-    );
-
-    // Now finally praise the sun.
-    this._host.gamePage.religion.praise();
   }
 
   private _buildReligionBuildings(builds: Partial<Record<FaithItem, ReligionSettingsItem>>): void {
@@ -651,5 +499,217 @@ export class ReligionManager implements Automation {
     }
 
     return null;
+  }
+
+  private async _autoTears() {
+    const tears = this._workshopManager.getResource("tears");
+    const available = this._workshopManager.getValueAvailable("tears");
+    if (
+      this.settings.refineTears.trigger <= available &&
+      this.settings.refineTears.trigger <= tears.value
+    ) {
+      const controller = new classes.ui.religion.RefineTearsBtnController(this._host.gamePage);
+
+      await new Promise(resolve =>
+        controller.buyItem(this._host.gamePage.religionTab.refineBtn.model, undefined, resolve)
+      );
+
+      this._host.engine.iactivity("act.refineTears", [], "ks-faith");
+      this._host.engine.storeForSummary(
+        this._host.engine.i18n("$resources.tears.title"),
+        1,
+        "refine"
+      );
+    }
+  }
+
+  private async _autoTCs() {
+    const timeCrystals = this._workshopManager.getResource("timeCrystal");
+    const available = this._workshopManager.getValueAvailable("timeCrystal");
+    if (
+      this.settings.refineTimeCrystals.trigger <= available &&
+      this.settings.refineTimeCrystals.trigger <= timeCrystals.value
+    ) {
+      const controller = this._host.gamePage.religionTab.refineTCBtn
+        .controller as TransformBtnController;
+      const model = this._host.gamePage.religionTab.refineTCBtn.model;
+      await new Promise(resolve =>
+        controller.buyItem(this._host.gamePage.religionTab.refineTCBtn.model, undefined, resolve)
+      );
+
+      const cost = mustExist(model.prices?.[0]).val;
+
+      this._host.engine.iactivity("act.refineTCs", [cost], "ks-faith");
+      this._host.engine.storeForSummary(
+        this._host.engine.i18n("$resources.timeCrystal.title"),
+        cost,
+        "refine"
+      );
+    }
+  }
+
+  private _autoTAP() {
+    const faith = this._workshopManager.getResource("faith");
+    const faithLevel = faith.value / faith.maxValue;
+    // enough faith, and then TAP (transcend, adore, praise)
+    if (this.settings.transcend.enabled && this.settings.autoPraise.trigger - 0.02 <= faithLevel) {
+      this._autoTranscend();
+    }
+
+    // Praise (faith → worship)
+    if (this.settings.autoPraise.trigger <= faithLevel) {
+      // Adore the galaxy (worship → epiphany)
+      if (
+        this.settings.adore.enabled &&
+        mustExist(this._host.gamePage.religion.getRU("apocripha")).on
+      ) {
+        this._autoAdore(this.settings.adore.trigger);
+      }
+
+      if (this.settings.autoPraise.enabled) {
+        this._autoPraise();
+      }
+    }
+  }
+
+  private _autoAdore(trigger: number) {
+    const faith = this._workshopManager.getResource("faith");
+
+    const worship = this._host.gamePage.religion.faith;
+    const epiphany = this._host.gamePage.religion.faithRatio;
+    const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence")).on;
+    const transcendenceTierCurrent = transcendenceReached
+      ? this._host.gamePage.religion.transcendenceTier
+      : 0;
+    // game version: 1.4.8.1
+    // solarRevolutionLimit is increased by black obelisks.
+    const maxSolarRevolution = 10 + this._host.gamePage.getEffect("solarRevolutionLimit");
+    // The absolute value at which to trigger adoring the galaxy.
+    const triggerSolarRevolution = maxSolarRevolution * trigger;
+    // How much epiphany we'll get from converting our worship.
+    const epiphanyIncrease =
+      (worship / 1000000) * transcendenceTierCurrent * transcendenceTierCurrent * 1.01;
+    // How much epiphany we'll have after adoring.
+    const epiphanyAfterAdore = epiphany + epiphanyIncrease;
+    // How much worship we'll have after adoring.
+    const worshipAfterAdore =
+      0.01 + faith.value * (1 + this._host.gamePage.getUnlimitedDR(epiphanyAfterAdore, 0.1) * 0.1);
+    // How much solar revolution bonus we'll have after adoring.
+    const solarRevolutionAfterAdore = this._host.gamePage.getLimitedDR(
+      this._host.gamePage.getUnlimitedDR(worshipAfterAdore, 1000) / 100,
+      maxSolarRevolution
+    );
+    // After adoring the galaxy, we want a single praise to be able to reach the trigger
+    // level of solar revolution bonus.
+    if (triggerSolarRevolution <= solarRevolutionAfterAdore) {
+      // Perform the actual adoration.
+      this._host.gamePage.religion._resetFaithInternal(1.01);
+
+      // Log the action.
+      this._host.engine.iactivity(
+        "act.adore",
+        [
+          this._host.gamePage.getDisplayValueExt(worship),
+          this._host.gamePage.getDisplayValueExt(epiphanyIncrease),
+        ],
+        "ks-adore"
+      );
+      this._host.engine.storeForSummary("adore", epiphanyIncrease);
+      // TODO: Not sure what the point of updating these values would be
+      //       We're at the end of the branch.
+      //epiphany = this._host.gamePage.religion.faithRatio;
+      //worship = this._host.gamePage.religion.faith;
+    }
+  }
+
+  private _autoTranscend() {
+    let epiphany = this._host.gamePage.religion.faithRatio;
+    const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence")).on;
+    let transcendenceTierCurrent = transcendenceReached
+      ? this._host.gamePage.religion.transcendenceTier
+      : 0;
+
+    // Transcend
+    if (transcendenceReached) {
+      // How much our adoration ratio increases from transcending.
+      const adoreIncreaceRatio = Math.pow(
+        (transcendenceTierCurrent + 2) / (transcendenceTierCurrent + 1),
+        2
+      );
+      // The amount of worship needed to upgrade to the next level.
+      const needNextLevel =
+        this._host.gamePage.religion._getTranscendTotalPrice(transcendenceTierCurrent + 1) -
+        this._host.gamePage.religion._getTranscendTotalPrice(transcendenceTierCurrent);
+
+      // We want to determine the ideal value for when to trancend.
+      // TODO: How exactly this works isn't understood yet.
+      const x = needNextLevel;
+      const k = adoreIncreaceRatio;
+      const epiphanyRecommend =
+        ((1 - k + Math.sqrt(80 * (k * k - 1) * x + (k - 1) * (k - 1))) * k) /
+          (40 * (k + 1) * (k + 1) * (k - 1)) +
+        x +
+        x / (k * k - 1);
+
+      if (epiphanyRecommend <= epiphany) {
+        // code copy from kittens game's religion.js: this._host.gamePage.religion.transcend()
+        // this._host.gamePage.religion.transcend() need confirm by player
+        // game version: 1.4.8.1
+        // ========================================================================================================
+        // DO TRANSCEND START
+        // ========================================================================================================
+        this._host.gamePage.religion.faithRatio -= needNextLevel;
+        this._host.gamePage.religion.tcratio += needNextLevel;
+        this._host.gamePage.religion.transcendenceTier += 1;
+
+        const atheism = mustExist(this._host.gamePage.challenges.getChallenge("atheism"));
+        atheism.calculateEffects(atheism, this._host.gamePage);
+        const blackObelisk = mustExist(this._host.gamePage.religion.getTU("blackObelisk"));
+        blackObelisk.calculateEffects(blackObelisk, this._host.gamePage);
+
+        this._host.gamePage.msg(
+          this._host.engine.i18n("$religion.transcend.msg.success", [
+            this._host.gamePage.religion.transcendenceTier,
+          ])
+        );
+        // ========================================================================================================
+        // DO TRANSCEND END
+        // ========================================================================================================
+
+        epiphany = this._host.gamePage.religion.faithRatio;
+        transcendenceTierCurrent = this._host.gamePage.religion.transcendenceTier;
+        this._host.engine.iactivity(
+          "act.transcend",
+          [this._host.gamePage.getDisplayValueExt(needNextLevel), transcendenceTierCurrent],
+          "ks-transcend"
+        );
+        this._host.engine.storeForSummary("transcend", 1);
+      }
+    }
+  }
+
+  private _autoPraise() {
+    const faith = this._workshopManager.getResource("faith");
+    let apocryphaBonus;
+    if (!this._host.gamePage.religion.getFaithBonus) {
+      apocryphaBonus = this._host.gamePage.religion.getApocryphaBonus();
+    } else {
+      apocryphaBonus = this._host.gamePage.religion.getFaithBonus();
+    }
+
+    // Determine how much worship we'll gain and log it.
+    const worshipIncrease = faith.value * (1 + apocryphaBonus);
+    this._host.engine.storeForSummary("praise", worshipIncrease);
+    this._host.engine.iactivity(
+      "act.praise",
+      [
+        this._host.gamePage.getDisplayValueExt(faith.value),
+        this._host.gamePage.getDisplayValueExt(worshipIncrease),
+      ],
+      "ks-praise"
+    );
+
+    // Now finally praise the sun.
+    this._host.gamePage.religion.praise();
   }
 }

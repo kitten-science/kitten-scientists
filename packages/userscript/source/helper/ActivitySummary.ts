@@ -10,6 +10,7 @@ export type ActivitySummarySection =
   | "craft"
   | "faith"
   | "other"
+  | "refine"
   | "research"
   | "trade"
   | "upgrade";
@@ -137,6 +138,18 @@ export class ActivitySummary {
       });
     }
 
+    // Ziggurats
+    if (this._sections.has("refine")) {
+      const section = mustExist(this._sections.get("refine"));
+      section.forEach((amount, name) => {
+        summary.push(
+          this._host.engine.i18n("summary.refine", [
+            this._host.gamePage.getDisplayValueExt(amount),
+            ucfirst(name),
+          ])
+        );
+      });
+    }
     // Order of the sun.
     if (this._sections.has("faith")) {
       const section = mustExist(this._sections.get("faith"));

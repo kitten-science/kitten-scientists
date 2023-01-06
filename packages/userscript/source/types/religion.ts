@@ -2,9 +2,24 @@ import { BuildButton, GamePage, GameTab, Price } from ".";
 
 export type ReligionTab = GameTab & {
   /**
+   * Refine tears.
+   */
+  refineBtn: BuildButton;
+
+  /**
+   * Refine time crystals.
+   */
+  refineTCBtn: BuildButton;
+
+  /**
    * Religion upgrade (Order of the sun) buttons.
    */
   rUpgradeButtons: Array<BuildButton<ReligionUpgrades>>;
+
+  /**
+   * Sacrifice unicorns.
+   */
+  sacrificeBtn: BuildButton;
 
   /**
    * Ziggurath upgrade buttons.
