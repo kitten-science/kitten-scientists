@@ -14,7 +14,7 @@ KS is released in 3 variants:
 
     This is a release with a familiar version number, that has been designated as a reasonably stable version to use. At this time, that is:
 
-    <https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.1>.
+    <https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.2>.
 
 1. The **nightly** release.
 
@@ -41,7 +41,7 @@ To use bookmarklets, just create a new bookmark in your browser and enter the te
     This bookmarklet points to the **latest stable** release of KS.
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.1/kitten-scientists-2.0.0-beta.1.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.2/kitten-scientists-2.0.0-beta.2.user.js';d.body.appendChild(s);})();
 ```
 
 ## Container
@@ -55,7 +55,7 @@ You can pull any version of the script as a container. The images are hosted on 
 The container exposes Kittens Game's own development server on port 8080. It has the version of the userscript injected into it, according to the tag on the image.
 
 ```shell
-docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-beta.1
+docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-beta.2
 ```
 
 <!-- prettier-ignore-start -->

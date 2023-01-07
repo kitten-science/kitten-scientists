@@ -1,6 +1,6 @@
 {
   "name": "@kitten-science/userscript",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.3",
   "description": "Add-on for the wonderful incremental browser game: https://kittensgame.com/web/",
   "license": "MIT",
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
