@@ -31,7 +31,7 @@ jobs:
 
       - uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
-          automatic_release_tag: latest
+          automatic_release_tag: next
           draft: false
           files: |
             packages/userscript/output/*
