@@ -692,6 +692,8 @@ __metadata:
 "@kitten-science/documentation@workspace:packages/documentation":
   version: 0.0.0-use.local
   resolution: "@kitten-science/documentation@workspace:packages/documentation"
+  dependencies:
+    node-scripts-docs: 0.0.14
   languageName: unknown
   linkType: soft
 
@@ -3116,7 +3118,6 @@ __metadata:
     eslint: 8.31.0
     eslint-plugin-jsdoc: 39.6.4
     lint-staged: 13.1.0
-    node-scripts-docs: 0.0.14
     prettier: 2.8.1
     prettier-package-json: 2.8.0
     prettier-plugin-organize-imports: 3.2.1

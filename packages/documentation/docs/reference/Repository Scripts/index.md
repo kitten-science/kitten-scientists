@@ -52,6 +52,19 @@
 
     _documentation pending_
 
+## docs:nsd
+
+-   Project: `@kitten-science/documentation`
+-   Source:
+
+    ```shell
+    nsd --cwd=$INIT_CWD --docs-location="packages/documentation/docs/reference/Repository Scripts/"
+    ```
+
+-   Description:
+
+    _documentation pending_
+
 ## docs:serve
 
 -   Project: `@kitten-science/documentation`
