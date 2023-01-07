@@ -92,9 +92,16 @@ export class VillageManager implements Automation {
       return;
     }
 
+    // Check if we _could_ assign farmers _and_ currently don't have any assigned.
+    // The idea here is, don't assign any kittens into jobs without having filled
+    // that single open farmer position first. This might prevent kitten death in
+    // certain scenarios.
+    const noFarmersAssigned =
+      jobsNotCapped.find(job => job.job.name === "farmer" && job.count === 0) !== null;
+
     // Find the job with the least kittens assigned and assign a kitten to that job.
     jobsNotCapped.sort((a, b) => a.count - b.count);
-    const jobName = jobsNotCapped[0].job.name;
+    const jobName = noFarmersAssigned ? "farmer" : jobsNotCapped[0].job.name;
 
     this._host.gamePage.village.assignJob(this._host.gamePage.village.getJob(jobName), 1);
     this.manager.render();
