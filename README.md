@@ -15,7 +15,7 @@ Grab a build from the [Releases page](https://github.com/kitten-science/kitten-s
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.1/kitten-scientists-2.0.0-beta.1.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.2/kitten-scientists-2.0.0-beta.2.user.js';d.body.appendChild(s);})();
 ```
 
 ### Container
@@ -25,7 +25,7 @@ You can pull any version of the script as a container. The images are hosted on 
 The container exposes Kittens Game's own development server on port 8080. It has the version of the userscript injected into it, according to the tag on the image.
 
 ```shell
-docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-beta.1
+docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-beta.2
 ```
 
 ## Documentation
