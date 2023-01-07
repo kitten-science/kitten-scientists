@@ -96,8 +96,9 @@ export class VillageManager implements Automation {
     // The idea here is, don't assign any kittens into jobs without having filled
     // that single open farmer position first. This might prevent kitten death in
     // certain scenarios.
-    const noFarmersAssigned =
-      jobsNotCapped.find(job => job.job.name === "farmer" && job.count === 0) !== null;
+    const noFarmersAssigned = !isNil(
+      jobsNotCapped.find(job => job.job.name === "farmer" && job.count === 0)
+    );
 
     // Find the job with the least kittens assigned and assign a kitten to that job.
     jobsNotCapped.sort((a, b) => a.count - b.count);
