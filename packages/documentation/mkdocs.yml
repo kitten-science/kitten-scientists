@@ -61,7 +61,7 @@ theme:
 nav:
   - Home: index.md
   - Installation: installation.md
-  - Sections:
+  - User Interface:
       - Overview: sections/overview.md
       - Bonfire: sections/bonfire.md
       - Village: sections/village.md
@@ -74,3 +74,4 @@ nav:
       - Time: sections/time.md
       - Time Control: sections/time-control.md
       - Log Filters: sections/log-filters.md
+  - Development: development.md
