@@ -7,7 +7,8 @@
       "scriptName": "devcontainer:build",
       "scriptCode": "docker build --tag kitten-game .",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Builds the Development Container."
     },
     {
       "manifestPath": "packages/kitten-game/package.json",
@@ -15,7 +16,8 @@
       "scriptName": "devcontainer:rebuild",
       "scriptCode": "docker build --no-cache --tag kitten-game .",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Rebuilds the development container.\n\nYou're going to want to rebuild your development container every once in a while to ensure you're using the latest version of Kittens Game in your container."
     },
     {
       "manifestPath": "packages/kitten-game/package.json",
@@ -23,7 +25,8 @@
       "scriptName": "devcontainer:run",
       "scriptCode": "bash ./scripts/run-development-container.sh",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Builds the development container and starts it."
     },
     {
       "manifestPath": "packages/documentation/package.json",

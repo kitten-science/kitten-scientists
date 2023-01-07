@@ -11,7 +11,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Builds the Development Container.
 
 ## devcontainer:rebuild
 
@@ -24,7 +24,9 @@
 
 -   Description:
 
-    _documentation pending_
+    Rebuilds the development container.
+
+    You're going to want to rebuild your development container every once in a while to ensure you're using the latest version of Kittens Game in your container.
 
 ## devcontainer:run
 
@@ -37,7 +39,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Builds the development container and starts it.
 
 ## docs:build
 
