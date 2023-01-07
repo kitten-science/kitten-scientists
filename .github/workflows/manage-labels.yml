@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - ./.github/labels.yml
-      - ./packages/label-manager/**
+      - .github/labels.yml
+      - packages/label-manager/**
   workflow_dispatch:
 
 concurrency: manage-labels
