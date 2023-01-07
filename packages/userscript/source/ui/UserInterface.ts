@@ -219,8 +219,8 @@ export class UserInterface extends UiComponent {
     this._addRule(
       `#ks ul li.ks-setting .ks-icon-label {
         display: inline-block;
-        margin-right: 10px;
-        margin-left: 3px;
+        margin-right: 4px;
+        margin-left: 2px;
         vertical-align: middle;
       }`
     );

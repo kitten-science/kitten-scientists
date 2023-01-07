@@ -11,7 +11,7 @@ export class ListItem extends UiComponent {
    * @param host The userscript instance.
    * @param label The label on the setting element.
    * @param delimiter Should there be additional padding below this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
+   * @param upgradeIndicator Should an indicator be rendered in front of the element,
    * to indicate that this is an upgrade of a prior setting?
    */
   constructor(host: UserScript, label: string, delimiter = false, upgradeIndicator = false) {

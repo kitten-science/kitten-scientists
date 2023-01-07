@@ -1,9 +1,7 @@
 import { UserScript } from "../../UserScript";
-import { UiComponent } from "./UiComponent";
+import { ListItem } from "./ListItem";
 
-export class LabelListItem extends UiComponent {
-  readonly element: JQuery<HTMLElement>;
-
+export class LabelListItem extends ListItem {
   /**
    * Construct a new label list item.
    *
@@ -11,35 +9,20 @@ export class LabelListItem extends UiComponent {
    * @param label The label on the setting element.
    * @param icon When set to an SVG path, will be used as an icon on the label.
    * @param delimiter Should there be additional padding below this element?
-   * @param additionalClasses A list of CSS classes to attach to the element.
    */
   constructor(
     host: UserScript,
     label: string,
     icon: string | undefined = undefined,
-    delimiter = false,
-    additionalClasses = []
+    delimiter = false
   ) {
-    super(host);
-
-    const element = $(`<li/>`);
-    for (const cssClass of ["ks-setting", delimiter ? "ks-delimiter" : "", ...additionalClasses]) {
-      element.addClass(cssClass);
-    }
+    super(host, label, delimiter);
 
     if (icon) {
       const iconElement = $("<div/>", {
         html: `<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="${icon}"/></svg>`,
       }).addClass("ks-icon-label");
-      element.append(iconElement);
+      iconElement.insertBefore(this.elementLabel);
     }
-
-    const elementLabel = $("<label/>", {
-      text: label,
-    }).addClass("ks-label");
-
-    element.append(elementLabel);
-
-    this.element = element;
   }
 }

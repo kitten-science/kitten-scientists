@@ -1,10 +1,11 @@
 import { Setting } from "../../settings/Settings";
+import { isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
 import { ListItem } from "./ListItem";
 
 export class SettingListItem<TSetting extends Setting = Setting> extends ListItem {
   readonly setting: TSetting;
-  readonly checkbox: JQuery<HTMLElement>;
+  readonly checkbox?: JQuery<HTMLElement>;
 
   readOnly: boolean;
 
@@ -19,7 +20,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends ListIte
    * @param handler.onCheck Will be invoked when the user checks the checkbox.
    * @param handler.onUnCheck Will be invoked when the user unchecks the checkbox.
    * @param delimiter Should there be additional padding below this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
+   * @param upgradeIndicator Should an indicator be rendered in front of the element,
    * to indicate that this is an upgrade of a prior setting?
    * @param readOnly Should the user be prevented from changing the value of the input?
    */
@@ -62,7 +63,9 @@ export class SettingListItem<TSetting extends Setting = Setting> extends ListIte
   refreshUi() {
     super.refreshUi();
 
-    this.checkbox.prop("checked", this.setting.enabled);
-    this.checkbox.prop("disabled", this.readOnly);
+    if (!isNil(this.checkbox)) {
+      this.checkbox.prop("checked", this.setting.enabled);
+      this.checkbox.prop("disabled", this.readOnly);
+    }
   }
 }

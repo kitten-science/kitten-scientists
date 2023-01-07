@@ -1,17 +1,17 @@
 import { Setting } from "../../settings/Settings";
 import { isNil, mustExist } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
+import { ListItem } from "./ListItem";
 import { Panel, PanelOptions } from "./Panel";
 import { SettingListItem } from "./SettingListItem";
 
-export type SettingsPanelOptions<TListItem extends SettingListItem = SettingListItem> =
-  PanelOptions & {
-    settingItem?: TListItem;
-  };
+export type SettingsPanelOptions<TListItem extends ListItem = ListItem> = PanelOptions & {
+  settingItem?: TListItem;
+};
 
 export class SettingsPanel<
     TSetting extends Setting = Setting,
-    TListItem extends SettingListItem = SettingListItem
+    TListItem extends ListItem = ListItem
   >
   extends Panel
   implements SettingListItem
@@ -24,17 +24,15 @@ export class SettingsPanel<
   }
 
   // SettingListItem interface
-  get checkbox() {
-    return this.settingItem.checkbox;
-  }
   get elementLabel() {
     return this._head.element;
   }
+
   get readOnly() {
-    return this.settingItem.readOnly;
+    return true;
   }
   set readOnly(value: boolean) {
-    this.settingItem.readOnly = value;
+    /* noop */
   }
 
   /**
