@@ -2,9 +2,9 @@
 
 ## Introduction
 
-The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in [userscript source code](https://github.com/kitten-science/kitten-scientists/tree/main/packages/userscript/source) and then be compiled into the userscript.
+The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in the [userscript source code](https://github.com/kitten-science/kitten-scientists/tree/main/packages/userscript/source) and then be compiled into the actual userscript.
 
-The project is set up to be used with [VS Code](https://code.visualstudio.com/). While other editors will work fine, some integrations have been prepared to make the development process easier.
+The project is set up to be used with [Visual Studio Code](https://code.visualstudio.com/). While other editors will work fine, some integrations have been prepared to make the development process easier.
 
 ## Prerequisites
 
@@ -14,11 +14,23 @@ You will need [NodeJS](https://nodejs.org/) to be able to work with the project.
 
 Additionally, you will need to have [Docker](https://www.docker.com/get-started) available, to use the container-based Kittens Game development server. If you do not have Docker, you can still build a release version of the script and drop that into your userscript manager.
 
+## General Development
+
+Whenever you want to see the result of your changes, use:
+
+```shell
+yarn userscript:build
+```
+
+This will build a fresh version of the userscript. _If_ you are running a development container, this build output will also be used the next time you refresh the page.
+
 ## Development with Kittens Game Container
 
 The development container provides a version of Kittens Game that already a Kitten Scientists version injected into it, based on your local development state.
 
-1. Manual Refresh (recommended)
+When the container is built, it downloads the latest version of the game from <https://bitbucket.org/bloodrizer/kitten-game>.
+
+1.  Manual Refresh (recommended)
 
     Build the development container and start it.
 
@@ -30,7 +42,7 @@ The development container provides a version of Kittens Game that already a Kitt
 
     You will need to manually reload the page after each build to get the latest changes in the browser.
 
-1. Watcher (experimental)
+1.  Watcher (experimental)
 
     Start a watcher to continuously rebuild KS when you make code changes.
 
@@ -38,9 +50,15 @@ The development container provides a version of Kittens Game that already a Kitt
     yarn userscript:watch
     ```
 
-    > This task can also be started directly in VS Code, using the **Run Task** command.
+    !!! danger
 
-When the container is built, it downloads the latest version of the game from https://bitbucket.org/bloodrizer/kitten-game.
+        Sadly, this behavior is known to produce broken output files. Use at your own risk and switch to manual builds as necessary.
+
+If you ever want to rebuild the container from scratch, for example, to pull in the _latest_ source code of KG again, run:
+
+```shell
+yarn devcontainer:rebuild
+```
 
 ## Development without Container
 
@@ -101,3 +119,10 @@ yarn userscript:release
 1. Make sure to also update the `packages/documentation/installation.md` to point to the latest version number.
 
 1. Make sure to also update the `.github/bug_report.yml` to mention the latest version number.
+
+<!-- prettier-ignore-start -->
+*[JS]: JavaScript
+*[KG]: Kittens Game
+*[KS]: Kitten Scientists
+*[UI]: User interface
+<!-- prettier-ignore-end -->
