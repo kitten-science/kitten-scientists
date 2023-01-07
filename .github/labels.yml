@@ -32,9 +32,6 @@ labels:
   prio:accepted:
     color: "53F643"
     description: Tickets under active consideration for implementation
-  prio:beta:
-    color: "016E96"
-    description: This should ideally be implemented during the beta phase
   prio:important:
     color: "B60205"
     description: Should be included in next release
@@ -42,12 +39,15 @@ labels:
     color: "CE3C0F"
     description: Not realistically solvable at this time
 
+  status:completed:
+    color: "c7def8"
+    description: This needs no further attention
   status:confirmed:
     color: "c7def8"
     description: A developer reproduced this issue
   status:duplicate:
     color: "c7def8"
-    description: This problem has already neem reported
+    description: This problem has already been reported
   status:fixed:
     color: "c7def8"
     description: This problem has been solved
