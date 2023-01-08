@@ -23,7 +23,7 @@ import { WorkshopManager } from "./WorkshopManager";
 
 export class TimeControlManager {
   private readonly _host: UserScript;
-  settings: TimeControlSettings;
+  readonly settings: TimeControlSettings;
   readonly manager: TabManager<TimeTab>;
   private readonly _bonfireManager: BonfireManager;
   private readonly _religionManager: ReligionManager;
@@ -62,10 +62,6 @@ export class TimeControlManager {
     if (this.settings.reset.enabled) {
       await this.autoReset(this._host.engine);
     }
-  }
-
-  load(settings: TimeControlSettings) {
-    this.settings.load(settings);
   }
 
   async autoReset(engine: Engine) {

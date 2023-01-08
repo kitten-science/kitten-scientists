@@ -20,7 +20,7 @@ export type BonfireTab = GameTab;
 
 export class BonfireManager implements Automation {
   private readonly _host: UserScript;
-  settings: BonfireSettings;
+  readonly settings: BonfireSettings;
   readonly manager: TabManager<BonfireTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
@@ -45,10 +45,6 @@ export class BonfireManager implements Automation {
 
     this.autoBuild();
     this.autoMisc();
-  }
-
-  load(settings: BonfireSettings) {
-    this.settings.load(settings);
   }
 
   /**

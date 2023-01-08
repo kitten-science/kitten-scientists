@@ -10,7 +10,7 @@ import { WorkshopManager } from "./WorkshopManager";
 
 export class ScienceManager extends UpgradeManager {
   readonly manager: TabManager<ScienceTab>;
-  settings: ScienceSettings;
+  readonly settings: ScienceSettings;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
@@ -42,10 +42,6 @@ export class ScienceManager extends UpgradeManager {
     if (this.settings.observe.enabled) {
       this.observeStars();
     }
-  }
-
-  load(settings: ScienceSettings) {
-    this.settings.load(settings);
   }
 
   async autoUnlock() {

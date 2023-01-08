@@ -30,7 +30,7 @@ import { WorkshopManager } from "./WorkshopManager";
 
 export class ReligionManager implements Automation {
   private readonly _host: UserScript;
-  settings: ReligionSettings;
+  readonly settings: ReligionSettings;
   readonly manager: TabManager<ReligionTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _bonfireManager: BonfireManager;
@@ -66,10 +66,6 @@ export class ReligionManager implements Automation {
     }
 
     this._autoTAP();
-  }
-
-  load(settings: ReligionSettings) {
-    this.settings.load(settings);
   }
 
   private _autoBuild() {

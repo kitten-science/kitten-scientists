@@ -12,7 +12,7 @@ import { UpgradeManager } from "./UpgradeManager";
 import { UserScript } from "./UserScript";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
-  settings: WorkshopSettings;
+  readonly settings: WorkshopSettings;
   readonly manager: TabManager<VillageTab>;
 
   static readonly DEFAULT_CONSUME_RATE = 1;
@@ -34,10 +34,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     if (this.settings.unlockUpgrades.enabled) {
       return this.autoUnlock();
     }
-  }
-
-  load(settings: WorkshopSettings) {
-    this.settings.load(settings);
   }
 
   async autoUnlock() {

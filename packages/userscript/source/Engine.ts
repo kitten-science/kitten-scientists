@@ -133,15 +133,15 @@ export class Engine {
     };
 
     attemptLoad(() => this.settings.load(settings.engine), "engine");
-    attemptLoad(() => this.bonfireManager.load(settings.bonfire), "bonfire");
-    attemptLoad(() => this.religionManager.load(settings.religion), "religion");
-    attemptLoad(() => this.scienceManager.load(settings.science), "science");
-    attemptLoad(() => this.spaceManager.load(settings.space), "space");
-    attemptLoad(() => this.timeControlManager.load(settings.timeControl), "time control");
-    attemptLoad(() => this.timeManager.load(settings.time), "time");
-    attemptLoad(() => this.tradeManager.load(settings.trade), "trade");
-    attemptLoad(() => this.villageManager.load(settings.village), "village");
-    attemptLoad(() => this.workshopManager.load(settings.workshop), "workshop");
+    attemptLoad(() => this.bonfireManager.settings.load(settings.bonfire), "bonfire");
+    attemptLoad(() => this.religionManager.settings.load(settings.religion), "religion");
+    attemptLoad(() => this.scienceManager.settings.load(settings.science), "science");
+    attemptLoad(() => this.spaceManager.settings.load(settings.space), "space");
+    attemptLoad(() => this.timeControlManager.settings.load(settings.timeControl), "time control");
+    attemptLoad(() => this.timeManager.settings.load(settings.time), "time");
+    attemptLoad(() => this.tradeManager.settings.load(settings.trade), "trade");
+    attemptLoad(() => this.villageManager.settings.load(settings.village), "village");
+    attemptLoad(() => this.workshopManager.settings.load(settings.workshop), "workshop");
   }
 
   /**

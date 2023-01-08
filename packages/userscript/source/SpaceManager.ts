@@ -17,7 +17,7 @@ import { WorkshopManager } from "./WorkshopManager";
 
 export class SpaceManager implements Automation {
   private readonly _host: UserScript;
-  settings: SpaceSettings;
+  readonly settings: SpaceSettings;
   readonly manager: TabManager<SpaceTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
@@ -41,10 +41,6 @@ export class SpaceManager implements Automation {
     if (this.settings.unlockMissions.enabled) {
       this.autoUnlock();
     }
-  }
-
-  load(settings: SpaceSettings) {
-    this.settings.load(settings);
   }
 
   /**

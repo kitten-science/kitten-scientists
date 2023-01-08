@@ -12,7 +12,7 @@ import { WorkshopManager } from "./WorkshopManager";
 
 export class TradeManager implements Automation {
   private readonly _host: UserScript;
-  settings: TradeSettings;
+  readonly settings: TradeSettings;
   readonly manager: TabManager<TradeTab>;
   private readonly _workshopManager: WorkshopManager;
 
@@ -42,10 +42,6 @@ export class TradeManager implements Automation {
     if (this.settings.tradeBlackcoin.enabled) {
       this.autoTradeBlackcoin();
     }
-  }
-
-  load(settings: TradeSettings) {
-    this.settings.load(settings);
   }
 
   autoTrade(cacheManager?: MaterialsCache) {

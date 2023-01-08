@@ -21,7 +21,7 @@ import { WorkshopManager } from "./WorkshopManager";
 
 export class TimeManager {
   private readonly _host: UserScript;
-  settings: TimeSettings;
+  readonly settings: TimeSettings;
   readonly manager: TabManager<TimeTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
 
@@ -45,10 +45,6 @@ export class TimeManager {
     if (this.settings.turnOnChronoFurnace.enabled) {
       this.turnOnChronoFurnace();
     }
-  }
-
-  load(settings: TimeSettings) {
-    this.settings.load(settings);
   }
 
   /**

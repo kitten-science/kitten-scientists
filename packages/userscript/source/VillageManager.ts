@@ -12,7 +12,7 @@ import { WorkshopManager } from "./WorkshopManager";
 
 export class VillageManager implements Automation {
   private readonly _host: UserScript;
-  settings: VillageSettings;
+  readonly settings: VillageSettings;
   readonly manager: TabManager<VillageTab>;
   private readonly _cacheManager: MaterialsCache;
   private readonly _workshopManager: WorkshopManager;
@@ -55,10 +55,6 @@ export class VillageManager implements Automation {
     if (this.settings.promoteKittens.enabled) {
       this.autoPromoteKittens();
     }
-  }
-
-  load(settings: VillageSettings) {
-    this.settings.load(settings);
   }
 
   autoDistributeKittens() {
