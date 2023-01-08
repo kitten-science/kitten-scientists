@@ -33,16 +33,11 @@ export abstract class SettingsSectionUi<
     delimiter = false,
     upgradeIndicator = false
   ) {
-    return new SettingMaxListItem(
-      this._host,
-      label,
-      option,
-      {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-      },
+    return new SettingMaxListItem(this._host, label, option, {
       delimiter,
-      upgradeIndicator
-    );
+      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+      upgradeIndicator,
+    });
   }
 }

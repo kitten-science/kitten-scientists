@@ -26,7 +26,6 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       this._host,
       this._host.engine.i18n("option.accelerate"),
       this.setting.accelerateTime,
-      "percentage",
       {
         onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),

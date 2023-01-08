@@ -1,14 +1,14 @@
-import { FilterSettings, FilterSettingsItem } from "../settings/FilterSettings";
+import { LogFilterSettings, LogFilterSettingsItem } from "../settings/LogFilterSettings";
 import { UserScript } from "../UserScript";
 import { ExplainerListItem } from "./components/ExplainerListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
 import { SettingsSectionUi } from "./SettingsSectionUi";
 
-export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
+export class LogFiltersSettingsUi extends SettingsSectionUi<LogFilterSettings> {
   private readonly _filters: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: FilterSettings) {
+  constructor(host: UserScript, settings: LogFilterSettings) {
     const label = host.engine.i18n("ui.filter");
     super(host, label, settings);
 
@@ -100,18 +100,11 @@ export class FiltersSettingsUi extends SettingsSectionUi<FilterSettings> {
       },
     ];
 
-    const makeButton = (option: FilterSettingsItem, label: string) =>
-      new SettingListItem(
-        this._host,
-        label,
-        option,
-        {
-          onCheck: () => this._host.engine.imessage("filter.enable", [label]),
-          onUnCheck: () => this._host.engine.imessage("filter.disable", [label]),
-        },
-        false,
-        false
-      );
+    const makeButton = (option: LogFilterSettingsItem, label: string) =>
+      new SettingListItem(this._host, label, option, {
+        onCheck: () => this._host.engine.imessage("filter.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("filter.disable", [label]),
+      });
 
     this._filters = buttonTemplates
       .sort((a, b) => a.label.localeCompare(b.label))

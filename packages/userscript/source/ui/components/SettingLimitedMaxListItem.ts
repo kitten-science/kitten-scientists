@@ -1,7 +1,7 @@
 import { SettingLimitedMax } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { MaxButton } from "./buttons-text/MaxButton";
-import { SettingLimitedListItem } from "./SettingLimitedListItem";
+import { SettingLimitedListItem, SettingLimitedListItemOptions } from "./SettingLimitedListItem";
 
 export class SettingLimitedMaxListItem extends SettingLimitedListItem {
   readonly maxButton: MaxButton;
@@ -16,29 +16,15 @@ export class SettingLimitedMaxListItem extends SettingLimitedListItem {
    * @param host The userscript instance.
    * @param label The label for the setting.
    * @param setting The setting model.
-   * @param handler Handlers to call when the setting is checked or unchecked.
-   * @param handler.onCheck Is called when the setting is checked.
-   * @param handler.onUnCheck Is called when the setting is unchecked.
-   * @param handler.onLimitedCheck Is called when the "Limited" checkbox is checked.
-   * @param handler.onLimitedUnCheck Is called when the "Limited" checkbox is unchecked.
-   * @param delimiter Should a delimiter be rendered after this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
-   * to indicate that this is an upgrade of a prior setting?
+   * @param options Options for the list item.
    */
   constructor(
     host: UserScript,
     label: string,
     setting: SettingLimitedMax,
-    handler: {
-      onCheck: () => void;
-      onUnCheck: () => void;
-      onLimitedCheck: () => void;
-      onLimitedUnCheck: () => void;
-    },
-    delimiter = false,
-    upgradeIndicator = false
+    options?: Partial<SettingLimitedListItemOptions>
   ) {
-    super(host, label, setting, handler, delimiter, upgradeIndicator);
+    super(host, label, setting, options);
 
     this.maxButton = new MaxButton(host, label, setting);
     this.element.append(this.maxButton.element);

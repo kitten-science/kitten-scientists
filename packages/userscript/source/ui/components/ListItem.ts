@@ -1,34 +1,32 @@
 import { UserScript } from "../../UserScript";
 import { UiComponent } from "./UiComponent";
 
+export type ListItemOptions = {
+  /**
+   * Should there be additional padding below this element?
+   */
+  delimiter: boolean;
+};
+
 export class ListItem extends UiComponent {
   readonly element: JQuery<HTMLElement>;
-  readonly elementLabel: JQuery<HTMLElement>;
 
   /**
    * Construct a new simple list item with only a label.
    *
    * @param host The userscript instance.
-   * @param label The label on the setting element.
-   * @param delimiter Should there be additional padding below this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the element,
-   * to indicate that this is an upgrade of a prior setting?
+   * @param options Options for the list item.
    */
-  constructor(host: UserScript, label: string, delimiter = false, upgradeIndicator = false) {
+  constructor(host: UserScript, options?: Partial<ListItemOptions>) {
     super(host);
 
-    const element = $(`<li/>`);
-    for (const cssClass of ["ks-setting", delimiter ? "ks-delimiter" : ""]) {
-      element.addClass(cssClass);
+    const element = $("<li/>");
+    element.addClass("ks-setting");
+
+    if (options?.delimiter === true) {
+      element.addClass("ks-delimiter");
     }
 
-    const elementLabel = $("<label/>", {
-      text: `${upgradeIndicator ? `⮤ ` : ""}${label}`,
-    }).addClass("ks-label");
-
-    element.append(elementLabel);
-
     this.element = element;
-    this.elementLabel = elementLabel;
   }
 }

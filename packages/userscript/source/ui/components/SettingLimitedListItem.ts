@@ -1,7 +1,19 @@
 import { SettingLimited } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { LimitedButton } from "./LimitedButton";
-import { SettingListItem } from "./SettingListItem";
+import { SettingListItem, SettingListItemOptions } from "./SettingListItem";
+
+export type SettingLimitedListItemOptions = SettingListItemOptions & {
+  /**
+   * Is called when the "Limited" checkbox is checked.
+   */
+  onLimitedCheck: () => void;
+
+  /**
+   * Is called when the "Limited" checkbox is unchecked.
+   */
+  onLimitedUnCheck: () => void;
+};
 
 export class SettingLimitedListItem extends SettingListItem {
   readonly limitedButton: LimitedButton;
@@ -13,31 +25,17 @@ export class SettingLimitedListItem extends SettingListItem {
    * @param host The userscript instance.
    * @param label The label for the setting.
    * @param setting The setting model.
-   * @param handler Handlers to call when the setting is checked or unchecked.
-   * @param handler.onCheck Is called when the setting is checked.
-   * @param handler.onUnCheck Is called when the setting is unchecked.
-   * @param handler.onLimitedCheck Is called when the "Limited" checkbox is checked.
-   * @param handler.onLimitedUnCheck Is called when the "Limited" checkbox is unchecked.
-   * @param delimiter Should a delimiter be rendered after this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
-   * to indicate that this is an upgrade of a prior setting?
+   * @param options Options for the list item.
    */
   constructor(
     host: UserScript,
     label: string,
     setting: SettingLimited,
-    handler: {
-      onCheck: () => void;
-      onUnCheck: () => void;
-      onLimitedCheck: () => void;
-      onLimitedUnCheck: () => void;
-    },
-    delimiter = false,
-    upgradeIndicator = false
+    options?: Partial<SettingLimitedListItemOptions>
   ) {
-    super(host, label, setting, handler, delimiter, upgradeIndicator);
+    super(host, label, setting, options);
 
-    this.limitedButton = new LimitedButton(host, setting, handler);
+    this.limitedButton = new LimitedButton(host, setting, options);
     this.element.append(this.limitedButton.element);
   }
 

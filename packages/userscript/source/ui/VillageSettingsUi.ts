@@ -70,7 +70,6 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this._host,
       this._host.engine.i18n("option.hunt"),
       this.setting.hunt,
-      "percentage",
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.hunt")]),
@@ -101,7 +100,6 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this._host,
       this._host.engine.i18n("option.promotekittens"),
       this.setting.promoteKittens,
-      "percentage",
       {
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [
@@ -132,22 +130,12 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     );
     listAddition.addChild(this._promoteLeader);
 
-    this._electLeader = new SettingListItem(
-      this._host,
-      "Elect leader",
-      this.setting.electLeader,
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.elect")]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.sub.disable", [
-            this._host.engine.i18n("option.elect"),
-          ]),
-      },
-      false,
-      false,
-      false
-    );
+    this._electLeader = new SettingListItem(this._host, "Elect leader", this.setting.electLeader, {
+      onCheck: () =>
+        this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.elect")]),
+      onUnCheck: () =>
+        this._host.engine.imessage("status.sub.disable", [this._host.engine.i18n("option.elect")]),
+    });
     listAddition.addChild(this._electLeader);
 
     this._electLeader.addChildren([
@@ -158,15 +146,10 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   }
 
   private _getDistributeOption(option: SettingMax, label: string, delimiter = false) {
-    return new SettingMaxListItem(
-      this._host,
-      label,
-      option,
-      {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-      },
-      delimiter
-    );
+    return new SettingMaxListItem(this._host, label, option, {
+      delimiter,
+      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+    });
   }
 }

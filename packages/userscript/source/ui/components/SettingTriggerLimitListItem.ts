@@ -1,7 +1,7 @@
 import { SettingTrigger } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
 import { TriggerLimitButton } from "./buttons-text/TriggerLimitButton";
-import { SettingListItem } from "./SettingListItem";
+import { SettingListItem, SettingListItemOptions } from "./SettingListItem";
 
 export class SettingTriggerLimitListItem extends SettingListItem {
   readonly triggerButton: TriggerLimitButton;
@@ -10,14 +10,9 @@ export class SettingTriggerLimitListItem extends SettingListItem {
     host: UserScript,
     label: string,
     setting: SettingTrigger,
-    handler: {
-      onCheck: () => void;
-      onUnCheck: () => void;
-    },
-    delimiter = false,
-    upgradeIndicator = false
+    options?: Partial<SettingListItemOptions>
   ) {
-    super(host, label, setting, handler, delimiter, upgradeIndicator);
+    super(host, label, setting, options);
 
     this.triggerButton = new TriggerLimitButton(host, label, setting);
     this.element.append(this.triggerButton.element);

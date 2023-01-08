@@ -1,17 +1,17 @@
 import { Setting } from "../../settings/Settings";
 import { isNil, mustExist } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
-import { ListItem } from "./ListItem";
+import { LabelListItem } from "./LabelListItem";
 import { Panel, PanelOptions } from "./Panel";
 import { SettingListItem } from "./SettingListItem";
 
-export type SettingsPanelOptions<TListItem extends ListItem = ListItem> = PanelOptions & {
-  settingItem?: TListItem;
+export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem> = PanelOptions & {
+  settingItem: TListItem;
 };
 
 export class SettingsPanel<
     TSetting extends Setting = Setting,
-    TListItem extends ListItem = ListItem
+    TListItem extends LabelListItem = LabelListItem
   >
   extends Panel
   implements SettingListItem
@@ -47,7 +47,7 @@ export class SettingsPanel<
     host: UserScript,
     label: string,
     setting: TSetting,
-    options?: SettingsPanelOptions<TListItem>
+    options?: Partial<SettingsPanelOptions<TListItem>>
   ) {
     const settingItem = !isNil(options?.settingItem)
       ? mustExist(options?.settingItem)

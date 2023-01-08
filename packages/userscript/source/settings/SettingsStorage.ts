@@ -13,7 +13,7 @@ import {
   Upgrade,
 } from "../types";
 import { BonfireItem } from "./BonfireSettings";
-import { FilterItem } from "./FilterSettings";
+import { FilterItem } from "./LogFilterSettings";
 import { FaithItem, ReligionAdditionItem, UnicornItem } from "./ReligionSettings";
 import { ScienceItem } from "./ScienceSettings";
 import { AllItems } from "./Settings";

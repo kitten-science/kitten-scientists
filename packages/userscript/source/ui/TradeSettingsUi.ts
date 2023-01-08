@@ -100,8 +100,9 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       this._host,
       this._host.engine.i18n("option.crypto"),
       this.setting.tradeBlackcoin,
-      "integer",
       {
+        behavior: "integer",
+        delimiter: true,
         onCheck: () =>
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.crypto"),
@@ -110,8 +111,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.crypto"),
           ]),
-      },
-      true
+      }
     );
     listRaces.addChild(this._tradeBlackcoin);
     this.addChild(listRaces);
@@ -151,20 +151,16 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     delimiter = false,
     upgradeIndicator = false
   ) {
+    const settingItem = new SettingLimitedListItem(this._host, i18nName, option, {
+      onCheck: () => this._host.engine.imessage("status.sub.enable", [i18nName]),
+      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [i18nName]),
+      onLimitedCheck: () => this._host.engine.imessage("trade.limited", [i18nName]),
+      onLimitedUnCheck: () => this._host.engine.imessage("trade.unlimited", [i18nName]),
+      delimiter,
+      upgradeIndicator,
+    });
     const panel = new SettingsPanel(this._host, i18nName, option, {
-      settingItem: new SettingLimitedListItem(
-        this._host,
-        i18nName,
-        option,
-        {
-          onCheck: () => this._host.engine.imessage("status.sub.enable", [i18nName]),
-          onUnCheck: () => this._host.engine.imessage("status.sub.disable", [i18nName]),
-          onLimitedCheck: () => this._host.engine.imessage("trade.limited", [i18nName]),
-          onLimitedUnCheck: () => this._host.engine.imessage("trade.unlimited", [i18nName]),
-        },
-        delimiter,
-        upgradeIndicator
-      ),
+      settingItem,
     });
 
     const seasons = new SeasonsList(this._host, option.seasons, {

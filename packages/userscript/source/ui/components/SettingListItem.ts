@@ -1,9 +1,26 @@
 import { Setting } from "../../settings/Settings";
 import { isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
-import { ListItem } from "./ListItem";
+import { LabelListItem, LabelListItemOptions } from "./LabelListItem";
 
-export class SettingListItem<TSetting extends Setting = Setting> extends ListItem {
+export type SettingListItemOptions = LabelListItemOptions & {
+  /**
+   * Will be invoked when the user checks the checkbox.
+   */
+  onCheck: () => void;
+
+  /**
+   * Will be invoked when the user unchecks the checkbox.
+   */
+  onUnCheck: () => void;
+
+  /**
+   * Should the user be prevented from changing the value of the input?
+   */
+  readOnly: boolean;
+};
+
+export class SettingListItem<TSetting extends Setting = Setting> extends LabelListItem {
   readonly setting: TSetting;
   readonly checkbox?: JQuery<HTMLElement>;
 
@@ -16,41 +33,29 @@ export class SettingListItem<TSetting extends Setting = Setting> extends ListIte
    * @param host The userscript instance.
    * @param label The label on the setting element.
    * @param setting The setting this element is linked to.
-   * @param handler The event handlers for this setting element.
-   * @param handler.onCheck Will be invoked when the user checks the checkbox.
-   * @param handler.onUnCheck Will be invoked when the user unchecks the checkbox.
-   * @param delimiter Should there be additional padding below this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the element,
-   * to indicate that this is an upgrade of a prior setting?
-   * @param readOnly Should the user be prevented from changing the value of the input?
+   * @param options Options for this list item.
    */
   constructor(
     host: UserScript,
     label: string,
     setting: TSetting,
-    handler: {
-      onCheck: () => void;
-      onUnCheck: () => void;
-    },
-    delimiter = false,
-    upgradeIndicator = false,
-    readOnly = false
+    options?: Partial<SettingListItemOptions>
   ) {
-    super(host, label, delimiter, upgradeIndicator);
+    super(host, label, options);
 
     const checkbox = $("<input/>", {
       type: "checkbox",
     }).addClass("ks-checkbox");
 
-    this.readOnly = readOnly;
+    this.readOnly = options?.readOnly ?? false;
 
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && setting.enabled === false) {
         setting.enabled = true;
-        handler.onCheck();
+        options?.onCheck?.();
       } else if (!checkbox.is(":checked") && setting.enabled === true) {
         setting.enabled = false;
-        handler.onUnCheck();
+        options?.onUnCheck?.();
       }
     });
 

@@ -1,5 +1,5 @@
 import { isNil, Maybe } from "../tools/Maybe";
-import { FilterSettings } from "./FilterSettings";
+import { LogFilterSettings } from "./LogFilterSettings";
 import { ResourcesSettings } from "./ResourcesSettings";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
@@ -10,12 +10,12 @@ export class EngineSettings extends Setting {
    */
   interval = 2000;
 
-  filters: FilterSettings;
+  filters: LogFilterSettings;
   resources: ResourcesSettings;
 
   constructor(
     enabled = false,
-    filters = new FilterSettings(),
+    filters = new LogFilterSettings(),
     resources = new ResourcesSettings()
   ) {
     super(enabled);
@@ -42,7 +42,7 @@ export class EngineSettings extends Setting {
     options.interval = subject.interval ?? options.interval;
     options.enabled = subject.toggles.engine ?? options.enabled;
 
-    options.filters = FilterSettings.fromLegacyOptions(subject);
+    options.filters = LogFilterSettings.fromLegacyOptions(subject);
     options.resources = ResourcesSettings.fromLegacyOptions(subject);
 
     return options;

@@ -8,17 +8,17 @@ export type PanelOptions<TChild extends UiComponent = UiComponent> = {
   /**
    * A component that should be hosted in the panel.
    */
-  child?: TChild;
+  child: TChild;
 
   /**
    * Component that should be hosted in the panel.
    */
-  children?: Array<TChild>;
+  children: Array<TChild>;
 
   /**
    * Should the main child be expanded right away?
    */
-  initiallyExpanded?: boolean;
+  initiallyExpanded: boolean;
 };
 
 /**
@@ -49,7 +49,7 @@ export class Panel<
    * @param head Another component to host in the head of the panel.
    * @param options Options for this panel.
    */
-  constructor(host: UserScript, head: THead, options?: PanelOptions<TChild>) {
+  constructor(host: UserScript, head: THead, options?: Partial<PanelOptions<TChild>>) {
     super(host);
 
     this.container = new Container(host);

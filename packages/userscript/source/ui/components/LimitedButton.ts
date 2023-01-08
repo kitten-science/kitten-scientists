@@ -10,7 +10,7 @@ export class LimitedButton extends UiComponent {
   constructor(
     host: UserScript,
     setting: SettingLimited,
-    handler: { onLimitedCheck: () => void; onLimitedUnCheck: () => void }
+    handler?: Partial<{ onLimitedCheck: () => void; onLimitedUnCheck: () => void }>
   ) {
     super(host);
 
@@ -27,10 +27,10 @@ export class LimitedButton extends UiComponent {
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && setting.limited === false) {
         setting.limited = true;
-        handler.onLimitedCheck();
+        handler?.onLimitedCheck?.();
       } else if (!checkbox.is(":checked") && setting.limited === true) {
         setting.limited = false;
-        handler.onLimitedUnCheck();
+        handler?.onLimitedUnCheck?.();
       }
     });
 

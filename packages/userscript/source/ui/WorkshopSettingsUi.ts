@@ -145,18 +145,13 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     delimiter = false,
     upgradeIndicator = false
   ) {
-    return new SettingLimitedMaxListItem(
-      this._host,
-      label,
-      option,
-      {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-        onLimitedCheck: () => this._host.engine.imessage("craft.limited", [label]),
-        onLimitedUnCheck: () => this._host.engine.imessage("craft.unlimited", [label]),
-      },
+    return new SettingLimitedMaxListItem(this._host, label, option, {
       delimiter,
-      upgradeIndicator
-    );
+      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+      onLimitedCheck: () => this._host.engine.imessage("craft.limited", [label]),
+      onLimitedUnCheck: () => this._host.engine.imessage("craft.unlimited", [label]),
+      upgradeIndicator,
+    });
   }
 }

@@ -94,7 +94,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       }
     );
     listAddition.addChild(this._fixCryochamber);
-    
+
     this._turnOnChronoFurnace = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.chronofurnace"),
@@ -115,15 +115,10 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   }
 
   private _getTimeSetting(setting: TimeSettingsItem, label: string, delimiter = false) {
-    return new SettingMaxListItem(
-      this._host,
-      label,
-      setting,
-      {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-      },
-      delimiter
-    );
+    return new SettingMaxListItem(this._host, label, setting, {
+      delimiter,
+      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+    });
   }
 }
