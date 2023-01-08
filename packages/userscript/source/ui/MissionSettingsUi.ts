@@ -26,10 +26,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
-    const itemsList = new SettingsList(this._host, {
-      hasDisableAll: false,
-      hasEnableAll: false,
-    });
+    const itemsList = new SettingsList(this._host);
     items.forEach(button => itemsList.addChild(button.button));
     this.addChild(itemsList);
 
