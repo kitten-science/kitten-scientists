@@ -52,7 +52,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Build the documentation.
 
 ## docs:nsd
 
@@ -65,7 +65,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Update the scripts documentation that you are looking at right now.
 
 ## docs:serve
 
@@ -78,7 +78,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Start the [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) development server to work on the documentation.
 
 ## lint:all
 
@@ -91,7 +91,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Check source code for style issues.
 
 ## tests:build
 
@@ -104,7 +104,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Build tests.
 
 ## tests:run
 
@@ -117,7 +117,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Execute tests.
 
 ## typecheck:all
 
@@ -130,7 +130,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Run the TypeScript compiler to find problems with the code.
 
 ## userscript:build
 
@@ -143,7 +143,9 @@
 
 -   Description:
 
-    _documentation pending_
+    Build the userscript.
+
+    This builds the version of the script that is also used in the development container.
 
 ## userscript:preview
 
@@ -156,7 +158,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Build a development release version of the userscript.
 
 ## userscript:release
 
@@ -170,7 +172,9 @@
 
 -   Description:
 
-    _documentation pending_
+    Build a release version of the userscript.
+
+    This is usually only used from CI to build both the regular version of the script, as well as a minified build. When you use this locally, it still builds both files, but clears the output directory between builds. So you end up with only the regular version.
 
 ## userscript:version
 
@@ -183,7 +187,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Returns the version for the userscript.
 
 ## userscript:watch
 
@@ -196,4 +200,8 @@
 
 -   Description:
 
-    _documentation pending_
+    Builds the userscript and watches all files for changes. If changes are detected, the script is rebuilt.
+
+    !!! warning
+
+        This watcher has caused problems in the past, generating broken output. Use at your own risk.

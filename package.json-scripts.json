@@ -34,7 +34,8 @@
       "scriptName": "docs:build",
       "scriptCode": ".scripts/build.sh",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Build the documentation."
     },
     {
       "manifestPath": "packages/documentation/package.json",
@@ -42,7 +43,8 @@
       "scriptName": "docs:nsd",
       "scriptCode": "nsd --cwd=$INIT_CWD --docs-location=\"packages/documentation/docs/reference/Repository Scripts/\"",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Update the scripts documentation that you are looking at right now."
     },
     {
       "manifestPath": "packages/documentation/package.json",
@@ -50,7 +52,8 @@
       "scriptName": "docs:serve",
       "scriptCode": ".scripts/serve.sh",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Start the [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) development server to work on the documentation."
     },
     {
       "manifestPath": "package.json",
@@ -58,7 +61,8 @@
       "scriptName": "lint:all",
       "scriptCode": "eslint . --ext .ts",
       "isGlobal": true,
-      "isRootManifest": true
+      "isRootManifest": true,
+      "description": "Check source code for style issues."
     },
     {
       "manifestPath": "packages/tests/package.json",
@@ -66,7 +70,8 @@
       "scriptName": "tests:build",
       "scriptCode": "tsc --build",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Build tests."
     },
     {
       "manifestPath": "packages/tests/package.json",
@@ -74,7 +79,8 @@
       "scriptName": "tests:run",
       "scriptCode": "mocha output/tests/*.spec.js",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Execute tests."
     },
     {
       "manifestPath": "package.json",
@@ -82,7 +88,8 @@
       "scriptName": "typecheck:all",
       "scriptCode": "tsc --noEmit --incremental false",
       "isGlobal": true,
-      "isRootManifest": true
+      "isRootManifest": true,
+      "description": "Run the TypeScript compiler to find problems with the code."
     },
     {
       "manifestPath": "packages/userscript/package.json",
@@ -90,7 +97,8 @@
       "scriptName": "userscript:build",
       "scriptCode": "vite --config vite.config.inject.js build",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Build the userscript.\n\nThis builds the version of the script that is also used in the development container."
     },
     {
       "manifestPath": "packages/userscript/package.json",
@@ -98,7 +106,8 @@
       "scriptName": "userscript:preview",
       "scriptCode": "DEV_BUILD=true vite --config vite.config.userscript.js build",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Build a development release version of the userscript."
     },
     {
       "manifestPath": "packages/userscript/package.json",
@@ -106,7 +115,8 @@
       "scriptName": "userscript:release",
       "scriptCode": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Build a release version of the userscript.\n\nThis is usually only used from CI to build both the regular version of the script, as well as a minified build. When you use this locally, it still builds both files, but clears the output directory between builds. So you end up with only the regular version."
     },
     {
       "manifestPath": "packages/userscript/package.json",
@@ -114,7 +124,8 @@
       "scriptName": "userscript:version",
       "scriptCode": "node version.cjs",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Returns the version for the userscript."
     },
     {
       "manifestPath": "packages/userscript/package.json",
@@ -122,7 +133,8 @@
       "scriptName": "userscript:watch",
       "scriptCode": "vite --config vite.config.inject.js build --watch",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Builds the userscript and watches all files for changes. If changes are detected, the script is rebuilt.\n\n!!! warning\n\n    This watcher has caused problems in the past, generating broken output. Use at your own risk."
     },
     {
       "manifestPath": "packages/userscript/package.json",
