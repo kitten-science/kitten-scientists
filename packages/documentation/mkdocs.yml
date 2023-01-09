@@ -75,6 +75,7 @@ nav:
       - Time: sections/time.md
       - Time Control: sections/time-control.md
       - Log Filters: sections/log-filters.md
+      - State Management: sections/state-management.md
   - Development:
       - Getting Started: development.md
       - Repository Scripts: reference/Repository Scripts/index.md
