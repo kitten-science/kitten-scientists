@@ -193,6 +193,12 @@ export class UserInterface extends UiComponent {
       `#ks ul li.ks-setting .ks-label {
         display: inline-block;
         min-width: 120px;
+        opacity: 0.8;
+      }`
+    );
+    this._addRule(
+      `#ks ul li.ks-setting .ks-label:hover {
+        opacity: 1;
       }`
     );
     // Setting: +/- Expando Toggle
@@ -215,6 +221,12 @@ export class UserInterface extends UiComponent {
         float: right;
         padding-right: 3px;
         line-height: 0;
+        opacity: 0.8;
+      }`
+    );
+    this._addRule(
+      `#ks ul li.ks-setting .ks-icon-button:hover {
+        opacity: 1;
       }`
     );
     this._addRule(
@@ -230,15 +242,22 @@ export class UserInterface extends UiComponent {
       `#ks ul li.ks-setting .ks-text-button {
         cursor: pointer;
         display: inline-block;
+        max-width: 315px;
         user-select: none;
+        opacity: 0.8;
+      }`
+    );
+    this._addRule(
+      `#ks ul li.ks-setting .ks-text-button:hover {
+        opacity: 1;
       }`
     );
 
     // Setting: Header
     this._addRule(
       `#ks ul li.ks-setting .ks-header {
-        color: grey;
         display: inline-block;
+        font-weight: bold;
         min-width: 100px;
         user-select: none;
       }`
