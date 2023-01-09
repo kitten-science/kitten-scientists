@@ -18,17 +18,15 @@ The UI of KS is made up of _panels_. You recognize a panel from the little `+` s
 
 Most panels are also [settings](#settings). Which means that they have a **checkbox** as their top element, which is always visible, even when the panel is collapsed. When you _disable_ this setting, it causes any automation that is controlled through that section of the UI to be bypassed.
 
-#### Utilities
+### Settings
 
-!!! warning
+A _setting_ in KS is most commonly a checkbox. When the checkbox is checked, this feature is active. If the checkbox is unchecked, the feature is inactive.
 
-    These buttons are likely to be replaced by a different approach. Don't get used to them.
+Some settings also come with additional options. These are shown on the same line as the checkbox. You can click on these options to change their value. Sometimes, these options behave like expando buttons and expand an entire new panel with options.
 
-Some panels, when expanded, show 3 more buttons:
+### Settings Lists
 
-1. Reset to defaults
-
-    Set all options to the values that come with KS.
+A _settings list_ is a series of settings that have are grouped with each other. Sometimes, these lists have tools at the bottom. These tools can be any of these:
 
 1. Enable all options
 
@@ -38,11 +36,9 @@ Some panels, when expanded, show 3 more buttons:
 
     Turns everything off.
 
-### Settings
+1. Reset to defaults
 
-A _setting_ in KS is most commonly a checkbox. When the checkbox is checked, this feature is active. If the checkbox is unchecked, the feature is inactive.
-
-Some settings also come with additional options. These are shown on the same line as the checkbox. You can click on these options to change their value. Sometimes, these options behave like expando buttons and expand an entire new panel with options.
+    Set all options to the values that come with KS.
 
 ### Triggers
 
