@@ -5,11 +5,11 @@ export class ExplainerListItem extends UiComponent {
   readonly element: JQuery<HTMLElement>;
 
   /**
-   * Construct a subsection header.
+   * Construct an element to explain an area of the UI.
    * This is purely for cosmetic/informational value in the UI.
    *
    * @param host A reference to the host.
-   * @param text The text to appear on the header element.
+   * @param text The text to appear on the element.
    */
   constructor(host: UserScript, text: string) {
     super(host);

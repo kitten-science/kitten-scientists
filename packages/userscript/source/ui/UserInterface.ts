@@ -9,6 +9,7 @@ import { ReligionSettingsUi } from "./ReligionSettingsUi";
 import { ResourcesSettingsUi } from "./ResourcesSettingsUi";
 import { ScienceSettingsUi } from "./ScienceSettingsUi";
 import { SpaceSettingsUi } from "./SpaceSettingsUi";
+import { StateManagementUi } from "./StateManagementUi";
 import { TimeControlSettingsUi } from "./TimeControlSettingsUi";
 import { TimeSettingsUi } from "./TimeSettingsUi";
 import { TradeSettingsUi } from "./TradeSettingsUi";
@@ -31,6 +32,7 @@ export class UserInterface extends UiComponent {
     | TimeControlSettingsUi
     | VillageSettingsUi
     | LogFiltersSettingsUi
+    | StateManagementUi
   >;
 
   constructor(host: UserScript) {
@@ -50,6 +52,7 @@ export class UserInterface extends UiComponent {
       new TimeSettingsUi(this._host, engine.timeManager.settings),
       new TimeControlSettingsUi(this._host, engine.timeControlManager.settings),
       new LogFiltersSettingsUi(this._host, engine.settings.filters),
+      new StateManagementUi(this._host, engine.settings.states),
     ];
 
     this._installCss();
@@ -96,18 +99,6 @@ export class UserInterface extends UiComponent {
         expando.setExpanded();
       });
     }
-
-    const copyButton = this._engineUi.copyButton;
-    copyButton.element.on("click", () => {
-      this._host.copySettings().catch(console.error);
-    });
-    this._engineUi.importButton.element.on("click", () => {
-      const input = window.prompt("Paste your settings here");
-      if (isNil(input)) {
-        return;
-      }
-      this._host.importSettings(input);
-    });
 
     // Set up the "show activity summary" area.
     const showActivity = $("<span/>", {
@@ -271,6 +262,7 @@ export class UserInterface extends UiComponent {
         user-select: none;
         padding: 4px;
         user-select: none;
+        white-space: break-spaces;
       }`
     );
 

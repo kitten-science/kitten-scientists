@@ -79,6 +79,7 @@ export type GamePage = {
     };
     isActive: (challenge: Challenge) => boolean;
   };
+  compressLZData: (data: string) => string;
   console: {
     maxMessages: number;
   };
@@ -272,6 +273,13 @@ export type GamePage = {
     }>;
     hasRes: (resources: Array<Price>) => boolean;
   };
+  /**
+   * Saves the game and returns the save game.
+   */
+  save(): string;
+  /**
+   * Import a savegame blob.
+   */
   saveImportDropboxText(lzdata: string, callback: (error?: Error) => unknown): void;
   science: {
     get: (name: Technology) => TechnologyInfo;

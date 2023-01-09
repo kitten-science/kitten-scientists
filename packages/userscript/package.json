@@ -24,6 +24,7 @@
   },
   "types": "./output/index.ts",
   "dependencies": {
+    "date-fns": "2.29.3",
     "tslib": "2.4.1"
   },
   "devDependencies": {

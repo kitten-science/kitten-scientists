@@ -39,6 +39,20 @@ export abstract class UiComponent extends EventTarget {
     }
   }
 
+  removeChild(child: UiComponent) {
+    if (!this.children.has(child)) {
+      return;
+    }
+
+    child.element.remove();
+    this.children.delete(child);
+  }
+  removeChildren(children: Iterable<UiComponent>) {
+    for (const child of children) {
+      this.removeChild(child);
+    }
+  }
+
   static promptLimit(text: string, defaultValue: string): number | null {
     const value = window.prompt(text, defaultValue);
     if (value === null) {
