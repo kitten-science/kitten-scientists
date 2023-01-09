@@ -3,7 +3,7 @@ import { UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
 import { UiComponent } from "./components/UiComponent";
 import { EngineSettingsUi } from "./EngineSettingsUi";
-import { FiltersSettingsUi } from "./FilterSettingsUi";
+import { LogFiltersSettingsUi } from "./LogFilterSettingsUi";
 import { ReligionSettingsUi } from "./ReligionSettingsUi";
 import { ResourcesSettingsUi } from "./ResourcesSettingsUi";
 import { ScienceSettingsUi } from "./ScienceSettingsUi";
@@ -29,7 +29,7 @@ export class UserInterface extends UiComponent {
     | TimeSettingsUi
     | TimeControlSettingsUi
     | VillageSettingsUi
-    | FiltersSettingsUi
+    | LogFiltersSettingsUi
   >;
 
   constructor(host: UserScript) {
@@ -48,7 +48,7 @@ export class UserInterface extends UiComponent {
       new SpaceSettingsUi(this._host, engine.spaceManager.settings),
       new TimeSettingsUi(this._host, engine.timeManager.settings),
       new TimeControlSettingsUi(this._host, engine.timeControlManager.settings),
-      new FiltersSettingsUi(this._host, engine.settings.filters),
+      new LogFiltersSettingsUi(this._host, engine.settings.filters),
     ];
 
     this._installCss();
