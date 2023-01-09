@@ -3,6 +3,7 @@ import { LogFilterSettings } from "./LogFilterSettings";
 import { ResourcesSettings } from "./ResourcesSettings";
 import { Setting } from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
+import { StateSettings } from "./StateSettings";
 
 export class EngineSettings extends Setting {
   /**
@@ -12,15 +13,18 @@ export class EngineSettings extends Setting {
 
   filters: LogFilterSettings;
   resources: ResourcesSettings;
+  readonly states: StateSettings;
 
   constructor(
     enabled = false,
     filters = new LogFilterSettings(),
-    resources = new ResourcesSettings()
+    resources = new ResourcesSettings(),
+    states = new StateSettings()
   ) {
     super(enabled);
     this.filters = filters;
     this.resources = resources;
+    this.states = states;
   }
 
   load(settings: Maybe<Partial<EngineSettings>>) {
@@ -34,6 +38,7 @@ export class EngineSettings extends Setting {
 
     this.filters.load(settings.filters);
     this.resources.load(settings.resources);
+    this.states.load(settings.states);
   }
 
   static fromLegacyOptions(subject: LegacyStorage) {

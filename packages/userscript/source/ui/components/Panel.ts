@@ -104,9 +104,15 @@ export class Panel<
     if (visible !== this._mainChildVisible) {
       this._mainChildVisible = visible;
       if (this._mainChildVisible) {
+        // Refresh panel UI on expand.
+        this.container.refreshUi();
+        // Show the DOM element.
         this.container.element.show();
+        // Reflect expanded state on expando.
         this._expando.setExpanded();
+        // Reflect expanded state for CSS.
         this._head.element.addClass("ks-expanded");
+        // This is NOT a DOM event! It can only be caught by listening on this panel directly.
         this.dispatchEvent(new CustomEvent("panelShown"));
       } else {
         this.container.element.hide();
