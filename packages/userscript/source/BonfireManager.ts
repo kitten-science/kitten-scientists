@@ -265,6 +265,15 @@ export class BonfireManager implements Automation {
       }
     }
 
+    // Auto turn on magnetos
+    if (this.settings.turnOnMagnetos.enabled) {
+      const magnetos = this._host.gamePage.bld.getBuildingExt("magneto");
+      if (magnetos.meta.val && magnetos.meta.on < magnetos.meta.val) {
+        const button = mustExist(this.getBuildButton("magneto"));
+        button.controller.onAll(button.model);
+      }
+    }
+
     // If buildings (upgrades of bonfire items) are enabled...
     if (this.settings.upgradeBuildings.enabled) {
       this.autoUpgrade();

@@ -11,6 +11,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   private readonly _trigger: TriggerButton;
   private readonly _buildingUpgradeUi: BuildingUpgradeSettingsUi;
   private readonly _turnOnSteamworks: SettingListItem;
+  private readonly _turnOnMagnetos: SettingListItem;
 
   constructor(host: UserScript, settings: BonfireSettings) {
     const label = host.engine.i18n("ui.build");
@@ -257,6 +258,23 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       }
     );
     listAddition.addChild(this._turnOnSteamworks);
+
+    this._turnOnMagnetos = new SettingListItem(
+      this._host,
+      this._host.engine.i18n("option.magnetos"),
+      this.setting.turnOnMagnetos,
+      {
+        onCheck: () =>
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.magnetos"),
+          ]),
+        onUnCheck: () =>
+          this._host.engine.imessage("status.sub.disable", [
+            this._host.engine.i18n("option.magnetos"),
+          ]),
+      }
+    );
+    listAddition.addChild(this._turnOnMagnetos);
 
     this.addChild(listAddition);
   }
