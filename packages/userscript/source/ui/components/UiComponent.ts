@@ -93,7 +93,6 @@ export abstract class UiComponent extends EventTarget {
       return null;
     }
 
-    // Cap value between 0 and 1.
     return parseFloat(value);
   }
 
