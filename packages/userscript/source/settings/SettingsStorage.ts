@@ -80,6 +80,7 @@ type ToggleTimeControlSeasonItem = `toggle-timeSkip-${Season}`;
 type ToggleTimeItem = `toggle-${TimeItem}`;
 type ToggleTradeBlackcoin = "toggle-crypto";
 type ToggleTurnOnSteamworks = "toggle-_steamworks";
+type ToggleTurnOnMagnetos = "toggle-_magnetos";
 type ToggleUnlockItem = `toggle-${ScienceItem}`;
 type ToggleUnlockMissions = "toggle-missions";
 type ToggleUnlockRaces = "toggle-races";
@@ -139,6 +140,7 @@ export type LegacyStorage = {
     Partial<Record<ToggleTimeItem, boolean>> &
     Partial<Record<ToggleTradeBlackcoin, boolean>> &
     Partial<Record<ToggleTurnOnSteamworks, boolean>> &
+    Partial<Record<ToggleTurnOnMagnetos, boolean>> &
     Partial<Record<ToggleUnlockItem, boolean>> &
     Partial<Record<ToggleUnlockMissions, boolean>> &
     Partial<Record<ToggleUnlockRaces, boolean>> &
