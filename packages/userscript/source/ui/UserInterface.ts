@@ -313,6 +313,23 @@ export class UserInterface extends UiComponent {
         min-width: 86px;
       }`
     );
+    // blackcoin buy/sell threshold buttons
+    this._addRule(
+      `#ks ul li.ks-setting .ks-buy-button {
+        display: inline-block;
+        float: right;
+        padding-right: 10px;
+        min-width: 86px;
+      }`
+    );
+    this._addRule(
+      `#ks ul li.ks-setting .ks-sell-button {
+        display: inline-block;
+        float: right;
+        padding-right: 10px;
+        min-width: 86px;
+      }`
+    );
 
     // Style settings that act as UI delimiters.
     this._addRule(

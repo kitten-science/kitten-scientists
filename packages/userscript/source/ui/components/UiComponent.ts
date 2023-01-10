@@ -86,4 +86,18 @@ export abstract class UiComponent extends EventTarget {
   static renderPercentage(value: number): string {
     return value.toFixed(3);
   }
+
+  static promptFloat(text: string, defaultValue: string): number | null {
+    const value = window.prompt(text, defaultValue);
+    if (value === null) {
+      return null;
+    }
+
+    // Cap value between 0 and 1.
+    return parseFloat(value);
+  }
+
+  static renderFloat(value: number): string {
+    return value.toFixed(3);
+  }
 }
