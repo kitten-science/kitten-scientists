@@ -150,14 +150,13 @@ export class UserScript {
   getSettings(): EngineState {
     return this.engine.stateSerialize();
   }
-  encodeSettings(settings: EngineState) {
+  encodeSettings(settings: EngineState, compress = true) {
     const settingsString = JSON.stringify(settings);
-    return window.LZString.compressToBase64(settingsString);
+    return compress ? window.LZString.compressToBase64(settingsString) : settingsString;
   }
-  async copySettings() {
-    const settings = this.getSettings();
-    const compressedSettings = this.encodeSettings(settings);
-    await window.navigator.clipboard.writeText(compressedSettings);
+  async copySettings(settings = this.getSettings(), compress = true) {
+    const encodedSettings = this.encodeSettings(settings, compress);
+    await window.navigator.clipboard.writeText(encodedSettings);
     this.engine.imessage("settings.copied");
   }
 
@@ -166,9 +165,35 @@ export class UserScript {
     this.engine.stateLoad(settings);
     this._userInterface.refreshUi();
   }
+
+  unknownAsEngineStateOrThrow(subject?: { v?: string }): EngineState {
+    const v = subject?.v;
+    if (!isNil(v) && typeof v === "string") {
+      if (v.startsWith("2")) {
+        return subject as EngineState;
+      }
+    }
+    throw new Error("Not a valid engine state.");
+  }
+
+  /**
+   * Given a serialized engine state, attempts to deserialize that engine state.
+   * Assumes the input has been compressed with LZString, will accept uncompressed.
+   *
+   * @param compressedSettings An engine state that has previously been serialized to a string.
+   * @returns The engine state, if valid.
+   */
   decodeSettings(compressedSettings: string): EngineState {
+    try {
+      const naiveParse = JSON.parse(compressedSettings) as { v?: string };
+      return this.unknownAsEngineStateOrThrow(naiveParse);
+    } catch (error) {
+      /* expected, as we assume the input to be compressed. */
+    }
+
     const settingsString = window.LZString.decompressFromBase64(compressedSettings);
-    return JSON.parse(settingsString) as EngineState;
+    const parsed = JSON.parse(settingsString) as Record<string, unknown>;
+    return this.unknownAsEngineStateOrThrow(parsed);
   }
   importSettings(compressedSettings: string) {
     const settings = this.decodeSettings(compressedSettings);

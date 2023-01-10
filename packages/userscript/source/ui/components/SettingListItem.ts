@@ -48,6 +48,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     }).addClass("ks-checkbox");
 
     this.readOnly = options?.readOnly ?? false;
+    checkbox.prop("disabled", this.readOnly);
 
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && setting.enabled === false) {

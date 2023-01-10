@@ -144,6 +144,22 @@ export class Engine {
     attemptLoad(() => this.workshopManager.settings.load(settings.workshop), "workshop");
   }
 
+  stateReset() {
+    this.stateLoad({
+      v: KS_VERSION ?? "latest",
+      engine: new EngineSettings(),
+      bonfire: new BonfireSettings(),
+      religion: new ReligionSettings(),
+      science: new ScienceSettings(),
+      space: new SpaceSettings(),
+      timeControl: new TimeControlSettings(),
+      time: new TimeSettings(),
+      trade: new TradeSettings(),
+      village: new VillageSettings(),
+      workshop: new WorkshopSettings(),
+    });
+  }
+
   /**
    * Serializes all settings in the engine.
    *
