@@ -13,7 +13,7 @@ export class ConsumeButton extends TextButton {
     setting: SettingWithConsume,
     handler: { onClick?: () => void } = {}
   ) {
-    super(host, label, setting.consume.toString(), {
+    super(host, label, {
       onClick: () => {
         const value = SettingsSectionUi.promptPercentage(
           this._host.engine.i18n("resources.consume.set", [label]),
@@ -29,6 +29,7 @@ export class ConsumeButton extends TextButton {
           handler.onClick();
         }
       },
+      title: setting.consume.toString(),
     });
 
     this.setting = setting;

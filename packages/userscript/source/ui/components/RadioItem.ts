@@ -3,6 +3,29 @@ import { isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
 import { UiComponent } from "./UiComponent";
 
+export type RadioItemOptions = {
+  /**
+   * Will be invoked when the user selects this radio item.
+   */
+  onCheck: () => void;
+
+  /**
+   * Should there be additional padding below this element?
+   */
+  delimiter: boolean;
+
+  /**
+   * Should an indicator be rendered in front of the element,
+   * to indicate that this is an upgrade of a prior setting?
+   */
+  upgradeIndicator: boolean;
+
+  /**
+   * Should the user be prevented from changing the value of the input?
+   */
+  readOnly: boolean;
+};
+
 export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
   readonly setting: TSetting;
   readonly option: TSetting["options"][0];
@@ -19,34 +42,26 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
    * @param setting The setting this element is linked to.
    * @param option The specific option out of the setting that this radio item represents.
    * @param groupKey A unique name for the group of radio items this one belongs to.
-   * @param handler The event handlers for this setting element.
-   * @param handler.onCheck Will be invoked when the user selects this radio item.
-   * @param delimiter Should there be additional padding below this element?
-   * @param upgradeIndicator Should an indicator be rendered in front of the elemnt,
-   * to indicate that this is an upgrade of a prior setting?
-   * @param readOnly Should the user be prevented from changing the value of the input?
+   * @param options Options for this radio item.
    */
   constructor(
     host: UserScript,
     setting: TSetting,
     option: TSetting["options"][0],
     groupKey: string,
-    handler?: {
-      onCheck: () => void;
-    },
-    delimiter = false,
-    upgradeIndicator = false,
-    readOnly = false
+    options?: Partial<RadioItemOptions>
   ) {
     super(host);
 
     const element = $(`<div/>`);
-    for (const cssClass of ["ks-setting", delimiter ? "ks-delimiter" : ""]) {
-      element.addClass(cssClass);
+    element.addClass("ks-setting");
+
+    if (options?.delimiter === true) {
+      element.addClass("ks-delimiter");
     }
 
     const elementLabel = $("<label/>", {
-      text: `${upgradeIndicator ? `⮤ ` : ""}${option.label}`,
+      text: `${options?.upgradeIndicator ? `⮤ ` : ""}${option.label}`,
     }).addClass("ks-label");
 
     const input = $("<input/>", {
@@ -54,12 +69,12 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
       type: "radio",
     }).addClass("ks-radio");
 
-    this.readOnly = readOnly;
+    this.readOnly = options?.readOnly ?? false;
 
     input.on("change", () => {
       this.setting.selected = option.value;
-      if (!isNil(handler)) {
-        handler.onCheck();
+      if (!isNil(options?.onCheck)) {
+        options?.onCheck();
       }
     });
 

@@ -12,7 +12,7 @@ export class MaxButton extends TextButton {
     setting: SettingMax,
     handler: { onClick?: () => void } = {}
   ) {
-    super(host, label, setting.max.toFixed(), {
+    super(host, label, {
       onClick: () => {
         const value = SettingsSectionUi.promptLimit(
           host.engine.i18n("ui.max.set", [label]),
@@ -28,6 +28,7 @@ export class MaxButton extends TextButton {
           handler.onClick();
         }
       },
+      title: setting.max.toFixed(),
     });
 
     this.element.addClass("ks-max-button");

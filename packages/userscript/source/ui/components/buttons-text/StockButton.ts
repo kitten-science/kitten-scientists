@@ -13,7 +13,7 @@ export class StockButton extends TextButton {
     setting: SettingWithStock,
     handler: { onClick?: () => void } = {}
   ) {
-    super(host, label, setting.stock.toString(), {
+    super(host, label, {
       onClick: () => {
         const value = SettingsSectionUi.promptLimit(
           this._host.engine.i18n("resources.stock.set", [label]),
@@ -29,6 +29,7 @@ export class StockButton extends TextButton {
           handler.onClick();
         }
       },
+      title: setting.stock.toString(),
     });
 
     this.setting = setting;

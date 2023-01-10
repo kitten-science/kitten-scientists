@@ -40,7 +40,7 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
     this._options = new Array<RadioItem>();
     for (const option of setting.options) {
       this._options.push(
-        new RadioItem(host, setting, option, label, handler, false, false, readOnly)
+        new RadioItem(host, setting, option, label, { onCheck: handler?.onCheck, readOnly })
       );
     }
     this.fieldset.addChildren(this._options);

@@ -14,7 +14,7 @@ export class TriggerLimitButton extends TextButton {
     setting: SettingTrigger,
     handler: { onClick?: () => void } = {}
   ) {
-    super(host, label, setting.trigger.toFixed(), {
+    super(host, label, {
       onClick: () => {
         const value = SettingsSectionUi.promptLimit(
           host.engine.i18n("ui.trigger.setinteger", [label]),
@@ -30,6 +30,7 @@ export class TriggerLimitButton extends TextButton {
           handler.onClick();
         }
       },
+      title: setting.trigger.toFixed(),
     });
 
     this.element.addClass("ks-max-button");

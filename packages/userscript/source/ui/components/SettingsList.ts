@@ -11,18 +11,18 @@ export type SettingsListOptions = {
   /**
    * A component that should be hosted in the panel.
    */
-  child?: ListItem;
+  readonly child?: ListItem;
 
   /**
    * Component that should be hosted in the panel.
    */
-  children?: Array<ListItem>;
+  readonly children?: Array<ListItem>;
 
-  hasEnableAll?: boolean;
-  hasDisableAll?: boolean;
-  onEnableAll?: () => void;
-  onDisableAll?: () => void;
-  onReset?: () => void;
+  readonly hasEnableAll?: boolean;
+  readonly hasDisableAll?: boolean;
+  readonly onEnableAll?: () => void;
+  readonly onDisableAll?: () => void;
+  readonly onReset?: () => void;
 };
 
 /**

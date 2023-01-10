@@ -6,7 +6,7 @@ import { Panel, PanelOptions } from "./Panel";
 import { SettingListItem } from "./SettingListItem";
 
 export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem> = PanelOptions & {
-  settingItem: TListItem;
+  readonly settingItem: TListItem;
 };
 
 export class SettingsPanel<

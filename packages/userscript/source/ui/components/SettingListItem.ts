@@ -7,17 +7,17 @@ export type SettingListItemOptions = LabelListItemOptions & {
   /**
    * Will be invoked when the user checks the checkbox.
    */
-  onCheck: () => void;
+  readonly onCheck: () => void;
 
   /**
    * Will be invoked when the user unchecks the checkbox.
    */
-  onUnCheck: () => void;
+  readonly onUnCheck: () => void;
 
   /**
    * Should the user be prevented from changing the value of the input?
    */
-  readOnly: boolean;
+  readonly readOnly: boolean;
 };
 
 export class SettingListItem<TSetting extends Setting = Setting> extends LabelListItem {

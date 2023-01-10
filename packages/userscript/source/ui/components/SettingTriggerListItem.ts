@@ -4,7 +4,7 @@ import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButt
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem";
 
 export type SettingTriggerListItemOptions = SettingListItemOptions & {
-  behavior: TriggerButtonBehavior;
+  readonly behavior: TriggerButtonBehavior;
 };
 
 export class SettingTriggerListItem extends SettingListItem {

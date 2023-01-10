@@ -7,12 +7,12 @@ export type SettingLimitedListItemOptions = SettingListItemOptions & {
   /**
    * Is called when the "Limited" checkbox is checked.
    */
-  onLimitedCheck: () => void;
+  readonly onLimitedCheck: () => void;
 
   /**
    * Is called when the "Limited" checkbox is unchecked.
    */
-  onLimitedUnCheck: () => void;
+  readonly onLimitedUnCheck: () => void;
 };
 
 export class SettingLimitedListItem extends SettingListItem {
