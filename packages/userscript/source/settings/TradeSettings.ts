@@ -2,7 +2,13 @@ import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Race, Season } from "../types";
 import { EmbassySettings } from "./EmbassySettings";
-import { Requirement, Setting, SettingLimited, SettingTrigger } from "./Settings";
+import {
+  Requirement,
+  Setting,
+  SettingBuySellTrigger,
+  SettingLimited,
+  SettingTrigger,
+} from "./Settings";
 import { LegacyStorage } from "./SettingsStorage";
 
 export class TradeSettingsItem extends SettingLimited {
@@ -45,7 +51,7 @@ export class TradeSettings extends SettingTrigger {
 
   feedLeviathans: Setting;
   buildEmbassies: EmbassySettings;
-  tradeBlackcoin: SettingTrigger;
+  tradeBlackcoin: SettingBuySellTrigger;
   unlockRaces: Setting;
 
   constructor(
@@ -72,7 +78,7 @@ export class TradeSettings extends SettingTrigger {
     },
     buildEmbassies = new EmbassySettings(),
     feedLeviathans = new Setting(false),
-    tradeBlackcoin = new SettingTrigger(true, 10000),
+    tradeBlackcoin = new SettingBuySellTrigger(false, 1090.0, 1095.0, 10000),
     unlockRaces = new Setting(true)
   ) {
     super(enabled, trigger);

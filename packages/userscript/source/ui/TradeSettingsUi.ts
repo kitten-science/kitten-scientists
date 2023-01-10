@@ -5,11 +5,11 @@ import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { SeasonsList } from "./components/SeasonsList";
+import { SettingBuySellTriggerListItem } from "./components/SettingBuySellTriggerListItem";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
 import { SettingsPanel } from "./components/SettingsPanel";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
 import { UiComponent } from "./components/UiComponent";
 import { EmbassySettingsUi } from "./EmbassySettingsUi";
 import { SettingsSectionUi } from "./SettingsSectionUi";
@@ -19,7 +19,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
   private readonly _races: Array<UiComponent>;
   private readonly _embassiesUi: EmbassySettingsUi;
   private readonly _feedLeviathans: SettingListItem;
-  private readonly _tradeBlackcoin: SettingListItem;
+  private readonly _tradeBlackcoin: SettingBuySellTriggerListItem;
   private readonly _unlockRaces: SettingListItem;
 
   constructor(host: UserScript, settings: TradeSettings) {
@@ -96,7 +96,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     );
     listRaces.addChild(this._feedLeviathans);
 
-    this._tradeBlackcoin = new SettingTriggerListItem(
+    this._tradeBlackcoin = new SettingBuySellTriggerListItem(
       this._host,
       this._host.engine.i18n("option.crypto"),
       this.setting.tradeBlackcoin,

@@ -147,3 +147,60 @@ export class SettingOptions<T = string> {
     this.selected = setting.selected ?? this.selected;
   }
 }
+
+export class SettingBuy extends Setting {
+  buy: number;
+
+  constructor(enabled = false, buy = -1) {
+    super(enabled);
+    this.buy = buy;
+  }
+
+  load(setting: Maybe<Partial<SettingBuy>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
+    super.load(setting);
+    this.buy = setting.buy ?? this.buy;
+  }
+}
+
+export class SettingSell extends Setting {
+  sell: number;
+
+  constructor(enabled = false, sell = -1) {
+    super(enabled);
+    this.sell = sell;
+  }
+
+  load(setting: Maybe<Partial<SettingSell>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
+    super.load(setting);
+    this.sell = setting.sell ?? this.sell;
+  }
+}
+
+export class SettingBuySellTrigger extends SettingTrigger implements SettingBuy, SettingSell {
+  buy: number;
+  sell: number;
+
+  constructor(enabled = false, buy = 0.0, sell = 1000.0, trigger = 1) {
+    super(enabled, trigger);
+    this.buy = buy;
+    this.sell = sell;
+  }
+
+  load(setting: Maybe<Partial<SettingBuySellTrigger>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
+    super.load(setting);
+    this.buy = setting.buy ?? this.buy;
+    this.sell = setting.sell ?? this.sell;
+  }
+}
