@@ -56,6 +56,7 @@ export class BonfireSettings extends SettingTrigger {
   buildings: BonfireBuildingSettings;
 
   turnOnSteamworks: Setting;
+  turnOnMagnetos: Setting;
   upgradeBuildings: BuildingUpgradeSettings;
 
   constructor(
@@ -111,11 +112,13 @@ export class BonfireSettings extends SettingTrigger {
       ziggurat: new BonfireBuildingSetting("ziggurat", true),
     },
     turnOnSteamworks = new Setting(true),
+    turnOnMagnetos = new Setting(false),
     upgradeBuildings = new BuildingUpgradeSettings()
   ) {
     super(enabled, trigger);
     this.buildings = buildings;
     this.turnOnSteamworks = turnOnSteamworks;
+    this.turnOnMagnetos = turnOnMagnetos;
     this.upgradeBuildings = upgradeBuildings;
   }
 
@@ -133,6 +136,8 @@ export class BonfireSettings extends SettingTrigger {
 
     this.turnOnSteamworks.enabled =
       settings.turnOnSteamworks?.enabled ?? this.turnOnSteamworks.enabled;
+
+    this.turnOnMagnetos.enabled = settings.turnOnMagnetos?.enabled ?? this.turnOnMagnetos.enabled;
 
     this.upgradeBuildings.load(settings.upgradeBuildings);
   }
