@@ -155,9 +155,6 @@ export class BonfireSettings extends SettingTrigger {
     options.turnOnSteamworks.enabled =
       subject.items["toggle-_steamworks"] ?? options.turnOnSteamworks.enabled;
 
-    options.turnOnMagnetos.enabled =
-      subject.items["toggle-_magnetos"] ?? options.turnOnMagnetos.enabled;
-
     options.upgradeBuildings = BuildingUpgradeSettings.fromLegacyOptions(subject);
 
     return options;
