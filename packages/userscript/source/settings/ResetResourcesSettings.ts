@@ -23,6 +23,7 @@ export class ResetResourcesSettings extends Setting {
   constructor(
     enabled = false,
     resources: ResetResourcesResourceSettings = {
+      alicorn: new ResetResourcesSettingsItem("alicorn", false, 0),
       alloy: new ResetResourcesSettingsItem("alloy", false, 0),
       antimatter: new ResetResourcesSettingsItem("antimatter", false, 0),
       beam: new ResetResourcesSettingsItem("beam", false, 0),

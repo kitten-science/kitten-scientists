@@ -30,6 +30,7 @@ export class ResourcesSettings extends Setting {
 
   constructor(
     resources = {
+      alicorn: new ResourcesSettingsItem("alicorn", false, 1, 0),
       alloy: new ResourcesSettingsItem("alloy", false, 1, 0),
       antimatter: new ResourcesSettingsItem("antimatter", false, 1, 0),
       beam: new ResourcesSettingsItem("beam", false, 1, 0),
