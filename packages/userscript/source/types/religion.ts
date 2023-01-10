@@ -24,6 +24,11 @@ export type ReligionTab = GameTab & {
   rUpgradeButtons: Array<BuildButton<ReligionUpgrades>>;
 
   /**
+   * Sacrifice alicorns.
+   */
+  sacrificeAlicornsBtn: BuildButton<string, ButtonModernModel, TransformBtnController>;
+
+  /**
    * Sacrifice unicorns.
    */
   sacrificeBtn: BuildButton<string, ButtonModernModel, TransformBtnController>;
