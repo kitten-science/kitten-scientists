@@ -27,7 +27,8 @@ markdown_extensions:
   - toc:
       permalink: true
 plugins:
-  - git-revision-date-localized
+  - git-revision-date-localized:
+      enable_creation_date: true
   - search
 repo_name: kitten-science/kitten-scientists
 repo_url: https://github.com/kitten-science/kitten-scientists

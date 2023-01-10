@@ -209,6 +209,22 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         new HeaderListItem(this._host, "Additional options"),
         new SettingTriggerListItem(
           this._host,
+          this._host.engine.i18n("option.faith.sacrificeAlicorns"),
+          this.setting.sacrificeAlicorns,
+          {
+            behavior: "integer",
+            onCheck: () =>
+              this._host.engine.imessage("status.sub.enable", [
+                this._host.engine.i18n("option.faith.sacrificeAlicorns"),
+              ]),
+            onUnCheck: () =>
+              this._host.engine.imessage("status.sub.disable", [
+                this._host.engine.i18n("option.faith.sacrificeAlicorns"),
+              ]),
+          }
+        ),
+        new SettingTriggerListItem(
+          this._host,
           this._host.engine.i18n("option.faith.refineTears"),
           this.setting.refineTears,
           {
@@ -292,11 +308,10 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   }
 
   refreshUi() {
-    super.refreshUi();
-
     for (const building of this._unicornBuildings) {
       building.readOnly = this._bestUnicornBuilding.setting.enabled;
       building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;
     }
+    super.refreshUi();
   }
 }

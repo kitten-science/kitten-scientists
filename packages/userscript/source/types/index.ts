@@ -48,6 +48,7 @@ export type ResourceCraftable =
 
 export type Resource =
   | ResourceCraftable
+  | "alicorn"
   | "antimatter"
   | "blackcoin"
   | "bloodstone"

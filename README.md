@@ -1,10 +1,10 @@
-![A kitten scientist](.github/cover.png)
-
 # Kitten Scientists v2
 
-Kitten Scientists (KS) is a simple automation script for the complex [Kittens Game](http://kittensgame.com/web/). It was originally developed by [Cameron Condry](https://github.com/cameroncondry/cbc-kitten-scientists) and extended by many great [contributors](#contributors).
+Kitten Scientists (KS) is a simple automation userscript for the complex [Kittens Game](https://kittensgame.com/web/).
 
-## Installation
+For a full explanation of how everything in Kitten Scientists works, please visit the [**full documentation**](https://kitten-science.github.io/kitten-scientists/).
+
+## Quick Start
 
 ### Userscript Manager (recommended)
 
@@ -28,17 +28,11 @@ The container exposes Kittens Game's own development server on port 8080. It has
 docker run --publish 8080:8080 --rm ghcr.io/kitten-science/kitten-scientists:2.0.0-beta.2
 ```
 
-## Documentation
-
-For a full explaination of how everything in Kitten Scientists works, please visit the [documentation](https://kitten-science.github.io/kitten-scientists/).
-
-## Contributing
-
-You are welcome to [open a discussion](https://github.com/kitten-science/kitten-scientists/discussions/new) if you have any questions, and [open an issue on the issue tracker](https://github.com/kitten-science/kitten-scientists/issues/new/choose) if something goes wrong in your game. If you're not sure which option to pick, just create an issue.
-
 ## Contributors
 
-A lot of thanks goes out to all the amazing people who contributed to Kitten Scientists 1.5 in the past.
+Kitten Scientists was originally developed by [Cameron Condry](https://github.com/cameroncondry/cbc-kitten-scientists) and extended by many great contributors.
+
+A lot of thanks goes out to all the amazing people who contributed to the original Kitten Scientists 1.5 in the past.
 
 -   [Cameron Condry](https://github.com/cameroncondry)
 -   [adituv](https://github.com/adituv)
@@ -86,4 +80,4 @@ A lot of thanks goes out to all the amazing people who contributed to Kitten Sci
 -   [Xanidel](https://github.com/Xanidel)
 -   [zelenay](https://github.com/zelenay)
 
-> If you want to see a live view of contributors for this repository, you can see it at <https://github.com/kitten-science/kitten-scientists/graphs/contributors>.
+> If you want to see a live view of contributors for _this_ repository, you can see it at <https://github.com/kitten-science/kitten-scientists/graphs/contributors>.

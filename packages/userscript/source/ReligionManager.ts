@@ -20,7 +20,6 @@ import {
   ReligionUpgrades,
   TranscendenceUpgradeInfo,
   TranscendenceUpgrades,
-  TransformBtnController,
   UnicornItemVariant,
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
@@ -56,6 +55,10 @@ export class ReligionManager implements Automation {
     }
 
     this._autoBuild();
+
+    if (this.settings.sacrificeAlicorns.enabled) {
+      await this._autoSacrificeAlicorns();
+    }
 
     if (this.settings.refineTears.enabled) {
       await this._autoTears();
@@ -501,6 +504,29 @@ export class ReligionManager implements Automation {
     return null;
   }
 
+  private async _autoSacrificeAlicorns() {
+    const alicorns = this._workshopManager.getResource("alicorn");
+    const available = this._workshopManager.getValueAvailable("alicorn");
+    if (
+      this.settings.sacrificeAlicorns.trigger <= available &&
+      this.settings.sacrificeAlicorns.trigger <= alicorns.value
+    ) {
+      const controller = this._host.gamePage.religionTab.sacrificeAlicornsBtn.controller;
+      const model = this._host.gamePage.religionTab.sacrificeAlicornsBtn.model;
+
+      await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
+
+      const cost = mustExist(model.prices?.[0]).val;
+
+      this._host.engine.iactivity("act.sacrificeAlicorns", [cost], "ks-faith");
+      this._host.engine.storeForSummary(
+        this._host.engine.i18n("$resources.alicorn.title"),
+        1,
+        "refine"
+      );
+    }
+  }
+
   private async _autoTears() {
     const tears = this._workshopManager.getResource("tears");
     const available = this._workshopManager.getValueAvailable("tears");
@@ -509,14 +535,9 @@ export class ReligionManager implements Automation {
       this.settings.refineTears.trigger <= tears.value
     ) {
       const controller = new classes.ui.religion.RefineTearsBtnController(this._host.gamePage);
+      const model = this._host.gamePage.religionTab.refineBtn.model;
 
-      await new Promise(resolve =>
-        controller.buyItem(
-          this._host.gamePage.religionTab.refineBtn.model,
-          new MouseEvent("click"),
-          resolve
-        )
-      );
+      await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
 
       this._host.engine.iactivity("act.refineTears", [], "ks-faith");
       this._host.engine.storeForSummary(
@@ -534,16 +555,10 @@ export class ReligionManager implements Automation {
       this.settings.refineTimeCrystals.trigger <= available &&
       this.settings.refineTimeCrystals.trigger <= timeCrystals.value
     ) {
-      const controller = this._host.gamePage.religionTab.refineTCBtn
-        .controller as TransformBtnController;
+      const controller = this._host.gamePage.religionTab.refineTCBtn.controller;
       const model = this._host.gamePage.religionTab.refineTCBtn.model;
-      await new Promise(resolve =>
-        controller.buyItem(
-          this._host.gamePage.religionTab.refineTCBtn.model,
-          new MouseEvent("click"),
-          resolve
-        )
-      );
+
+      await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
 
       const cost = mustExist(model.prices?.[0]).val;
 

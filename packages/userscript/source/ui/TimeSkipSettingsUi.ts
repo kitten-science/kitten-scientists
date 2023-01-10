@@ -2,6 +2,7 @@ import { Icons } from "../images/Icons";
 import { TimeSkipSettings } from "../settings/TimeSkipSettings";
 import { ucfirst } from "../tools/Format";
 import { UserScript } from "../UserScript";
+import { ButtonListItem } from "./components/ButtonListItem";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
 import { MaxButton } from "./components/buttons-text/MaxButton";
 import { CyclesList } from "./components/CyclesList";
@@ -30,12 +31,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
     this.children.add(this._trigger);
 
     this._maximum = new MaxButton(this._host, label, this.setting);
-    this.addChild(this._maximum);
 
-    const list = new SettingsList(this._host, {
-      hasDisableAll: false,
-      hasEnableAll: false,
-    });
     this._cycles = new Panel(
       this._host,
       new LabelListItem(host, ucfirst(this._host.engine.i18n("ui.cycles")), {
@@ -60,7 +56,16 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
       }
     );
 
-    list.addChildren([this._cycles, this._seasons]);
-    this.addChild(list);
+    this.addChild(
+      new SettingsList(this._host, {
+        children: [
+          new ButtonListItem(host, this._maximum, { delimiter: true }),
+          this._cycles,
+          this._seasons,
+        ],
+        hasDisableAll: false,
+        hasEnableAll: false,
+      })
+    );
   }
 }
