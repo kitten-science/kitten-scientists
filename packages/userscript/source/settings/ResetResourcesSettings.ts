@@ -59,6 +59,7 @@ export class ResetResourcesSettings extends Setting {
       science: new ResetResourcesSettingsItem("science", false, 0),
       ship: new ResetResourcesSettingsItem("ship", false, 0),
       slab: new ResetResourcesSettingsItem("slab", false, 0),
+      sorrow: new ResetResourcesSettingsItem("sorrow", false, 0),
       spice: new ResetResourcesSettingsItem("spice", false, 0),
       starchart: new ResetResourcesSettingsItem("starchart", false, 0),
       steel: new ResetResourcesSettingsItem("steel", false, 0),

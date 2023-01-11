@@ -70,6 +70,7 @@ export type Resource =
   | "relic"
   | "science"
   | "slab"
+  | "sorrow"
   | "spice"
   | "starchart"
   | "tears"
