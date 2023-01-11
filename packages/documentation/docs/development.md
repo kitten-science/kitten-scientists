@@ -76,6 +76,32 @@ To develop without containers, you can build a development version of the usersc
 
 To fill the **Problems** panel in VS Code with all current, type-related errors, run the [`typecheck:all`](/reference/Repository Scripts/#typecheckall) npm task in VS Code.
 
+## Commit Standards
+
+KS development follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification for commit messages.
+
+Whenever possible, use one of the established scopes:
+
+Tab related:
+
+-   `bonfire`
+-   `religion`
+-   `science`
+-   `space`
+-   `time`
+-   `trade`
+-   `village`
+-   `workshop`
+
+Internals related:
+
+-   `api`
+-   `container`
+-   `core`
+-   `filters`
+-   `settings`
+-   `ui`
+
 ## Releases
 
 ### Building a Release Version of the Userscript
