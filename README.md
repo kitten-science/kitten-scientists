@@ -65,7 +65,7 @@ A lot of thanks goes out to all the amazing people who contributed to the origin
 -   [SphtMarathon](https://www.reddit.com/user/SphtMarathon)
 -   [TeWeBu](https://github.com/TeWeBu)
 -   [toadjaune](https://github.com/toadjaune)
--   Tom Rauchenwald
+-   [Tom Rauchenwald](https://github.com/TomRauchenwald)
 -   [trini](https://github.com/trini)
 -   [woutershep](https://github.com/woutershep)
 -   [Wymrite](https://github.com/Wymrite)
