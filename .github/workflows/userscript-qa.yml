@@ -24,5 +24,8 @@ jobs:
       - name: Lint
         run: yarn lint:all
 
+      - name: Type-check
+        run: yarn typecheck:all
+
       - name: Build userscript
         run: yarn userscript:release

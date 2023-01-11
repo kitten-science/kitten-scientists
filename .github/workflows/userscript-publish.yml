@@ -26,6 +26,7 @@ jobs:
           node-version: 18
       - run: yarn install --immutable
       - run: yarn lint:all
+      - run: yarn typecheck:all
 
       - run: yarn userscript:release
 
