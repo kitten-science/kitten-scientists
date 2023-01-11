@@ -11,6 +11,7 @@ export class VillageSettings extends Setting {
   jobs: VillageJobSettings;
 
   holdFestivals: Setting;
+  holdUnprofitableFestivals: Setting;
   hunt: SettingTrigger;
   promoteKittens: SettingTrigger;
   promoteLeader: Setting;
@@ -29,6 +30,7 @@ export class VillageSettings extends Setting {
       woodcutter: new SettingMax(true, 1),
     },
     holdFestivals = new Setting(true),
+    holdUnprofitableFestivals = new Setting(false),
     hunt = new SettingTrigger(true, 0.98),
     promoteKittens = new SettingTrigger(true, 1),
     promoteLeader = new Setting(true),
@@ -37,6 +39,7 @@ export class VillageSettings extends Setting {
     super(enabled);
     this.jobs = jobs;
     this.holdFestivals = holdFestivals;
+    this.holdUnprofitableFestivals = holdUnprofitableFestivals;
     this.hunt = hunt;
     this.promoteKittens = promoteKittens;
     this.promoteLeader = promoteLeader;
@@ -56,6 +59,8 @@ export class VillageSettings extends Setting {
     });
 
     this.holdFestivals.enabled = settings.holdFestivals?.enabled ?? this.holdFestivals.enabled;
+    this.holdUnprofitableFestivals.enabled =
+      settings.holdUnprofitableFestivals?.enabled ?? this.holdUnprofitableFestivals.enabled;
     this.hunt.enabled = settings.hunt?.enabled ?? this.hunt.enabled;
     this.promoteKittens.enabled = settings.promoteKittens?.enabled ?? this.promoteKittens.enabled;
     this.promoteLeader.enabled = settings.promoteLeader?.enabled ?? this.promoteLeader.enabled;

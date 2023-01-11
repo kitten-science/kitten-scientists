@@ -13,6 +13,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   private readonly _jobs: Array<SettingListItem>;
   private readonly _hunt: SettingTriggerListItem;
   private readonly _festivals: SettingListItem;
+  private readonly _unprofitableFestivals: SettingListItem;
   private readonly _promoteKittens: SettingTriggerListItem;
   private readonly _promoteLeader: SettingListItem;
   private readonly _electLeader: SettingListItem;
@@ -96,6 +97,30 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     );
     listAddition.addChild(this._festivals);
 
+    this._unprofitableFestivals = new SettingListItem(
+      this._host,
+      this._host.engine.i18n("option.festival.unprofitable"),
+      this.setting.holdUnprofitableFestivals,
+      {
+        delimiter: false,
+        onCheck: () => {
+          this._host.engine.imessage("status.sub.enable", [
+            this._host.engine.i18n("option.festival.unprofitable"),
+          ]);
+          this._festivals.setting.enabled = true;
+          this.refreshUi();
+        },
+        onUnCheck: () => {
+          this._host.engine.imessage("status.sub.disable", [
+            this._host.engine.i18n("option.festival.unprofitable"),
+          ]);
+          this.refreshUi();
+        },
+        upgradeIndicator: true,
+      }
+    );
+    listAddition.addChild(this._unprofitableFestivals);
+
     this._promoteKittens = new SettingTriggerListItem(
       this._host,
       this._host.engine.i18n("option.promotekittens"),
@@ -151,5 +176,10 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
       onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
     });
+  }
+
+  refreshUi(): void {
+    this._festivals.readOnly = this._unprofitableFestivals.setting.enabled;
+    super.refreshUi();
   }
 }

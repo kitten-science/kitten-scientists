@@ -36,10 +36,6 @@ export class VillageManager implements Automation {
 
     this.autoDistributeKittens();
 
-    if (this.settings.hunt.enabled) {
-      this.autoHunt(this._cacheManager);
-    }
-
     if (this.settings.holdFestivals.enabled) {
       this.autoFestival(this._cacheManager);
     }
@@ -54,6 +50,11 @@ export class VillageManager implements Automation {
 
     if (this.settings.promoteKittens.enabled) {
       this.autoPromoteKittens();
+    }
+
+    // Hunt after holding festivals because hunting will consume all remaining catpower.
+    if (this.settings.hunt.enabled) {
+      this.autoHunt(this._cacheManager);
     }
   }
 
@@ -301,7 +302,16 @@ export class VillageManager implements Automation {
         ) as number) >
       2500;
 
-    if (!catpowProfitable && !cultureProfitable && !parchProfitable) {
+    if (
+      !this.settings.holdUnprofitableFestivals.enabled &&
+      !catpowProfitable &&
+      !cultureProfitable &&
+      !parchProfitable
+    ) {
+      // Festival is not profitable and we don't want to hold unprofitable festivals.
+      // Reasons to hold unprofitable festivals:
+      // - Cycle-specific festival bonus
+      // - Kitten arrival speed bonus
       return;
     }
 
