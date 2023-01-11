@@ -102,6 +102,10 @@ Internals related:
 -   `settings`
 -   `ui`
 
+## Pull Requests
+
+When you open a pull request, make sure that you squash your commits into a single one, _unless_ individual commits are substantial enough that they should be preserved as-is. Just make sure that all commits follow the [commit standards](#commit-standards) mentioned above.
+
 ## Releases
 
 ### Building a Release Version of the Userscript
