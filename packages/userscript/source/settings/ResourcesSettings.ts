@@ -51,6 +51,7 @@ export class ResourcesSettings extends Setting {
       ivory: new ResourcesSettingsItem("ivory", false, 1, 0),
       karma: new ResourcesSettingsItem("karma", false, 1, 0),
       kerosene: new ResourcesSettingsItem("kerosene", false, 1, 0),
+      kittens: new ResourcesSettingsItem("kittens", false, 1, 0),
       manpower: new ResourcesSettingsItem("manpower", false, 1, 0),
       manuscript: new ResourcesSettingsItem("manuscript", false, 1, 0),
       megalith: new ResourcesSettingsItem("megalith", false, 1, 0),

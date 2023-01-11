@@ -61,6 +61,7 @@ export type Resource =
   | "iron"
   | "ivory"
   | "karma"
+  | "kittens"
   | "manpower"
   | "minerals"
   | "necrocorn"
