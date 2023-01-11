@@ -43,6 +43,7 @@ export class ResetResourcesSettings extends Setting {
       ivory: new ResetResourcesSettingsItem("ivory", false, 0),
       karma: new ResetResourcesSettingsItem("karma", false, 0),
       kerosene: new ResetResourcesSettingsItem("kerosene", false, 0),
+      kittens: new ResetResourcesSettingsItem("kittens", false, 0),
       manpower: new ResetResourcesSettingsItem("manpower", false, 0),
       manuscript: new ResetResourcesSettingsItem("manuscript", false, 0),
       megalith: new ResetResourcesSettingsItem("megalith", false, 0),
