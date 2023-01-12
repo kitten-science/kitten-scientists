@@ -5,6 +5,7 @@ import {
   ActivitySummarySection,
   ActivityTypeClass,
 } from "./helper/ActivitySummary";
+import de from "./i18n/de.json";
 import en from "./i18n/en.json";
 import zh from "./i18n/zh.json";
 import { ReligionManager } from "./ReligionManager";
@@ -28,7 +29,7 @@ import { DefaultLanguage, UserScript } from "./UserScript";
 import { VillageManager } from "./VillageManager";
 import { WorkshopManager } from "./WorkshopManager";
 
-const i18nData = { en, zh };
+const i18nData = { de, en, zh };
 
 export type TickContext = {
   tick: number;
@@ -49,7 +50,7 @@ export type EngineState = {
   village: VillageSettings;
   workshop: WorkshopSettings;
 };
-export type SupportedLanguages = "en" | "zh";
+export type SupportedLanguages = "de" | "en" | "zh";
 
 export class Engine {
   /**
