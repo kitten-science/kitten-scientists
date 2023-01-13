@@ -19,10 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
-      - run: yarn install
+          cache: yarn
+          node-version: 18
+      - run: yarn install --immutable
       - run: yarn workspace @kitten-science/label-manager tsc --build
 
       - uses: ./packages/label-manager
