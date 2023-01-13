@@ -1,5 +1,9 @@
 # Development Guide
 
+!!! question
+
+    Please help us [translate KS](https://crowdin.com/project/kitten-scientists), either by contributing missing translations or reviewing the existing entries.
+
 ## Introduction
 
 The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in the [userscript source code](https://github.com/kitten-science/kitten-scientists/tree/main/packages/userscript/source) and then be compiled into the actual userscript.
@@ -22,7 +26,7 @@ Whenever you want to see the result of your changes, use:
 yarn userscript:build
 ```
 
-This will [build a fresh version of the userscript](/reference/Repository Scripts/#userscriptbuild). _If_ you are running a development container, this build output will also be used the next time you refresh the page.
+This will [build a fresh version of the userscript](/reference/Repository Scripts/index.md#userscriptbuild). _If_ you are running a development container, this build output will also be used the next time you refresh the page.
 
 ## Development with Kittens Game Container
 
@@ -54,7 +58,7 @@ When the container is built, it downloads the latest version of the game from <h
 
         Sadly, this behavior is known to produce broken output files. Use at your own risk and switch to manual builds as necessary.
 
-If you ever want to [rebuild the container from scratch](/reference/Repository Scripts/#devcontainerrebuild), for example, to pull in the _latest_ source code of KG again, run:
+If you ever want to [rebuild the container from scratch](/reference/Repository Scripts/index.md#devcontainerrebuild), for example, to pull in the _latest_ source code of KG again, run:
 
 ```shell
 yarn devcontainer:rebuild

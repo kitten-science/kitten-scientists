@@ -5,3 +5,11 @@
     Documenting all features has only been started since the beta phase. This documentation is part of the ongoing development effort and it is incomplete.
 
 Please refer to the [Sections](sections/overview) for the current documentation.
+
+!!! question
+
+    Please help us [translate KS into more languages](https://crowdin.com/project/kitten-scientists).
+
+<!-- prettier-ignore-start -->
+*[KS]: Kitten Scientists
+<!-- prettier-ignore-end -->
