@@ -1,8 +1,11 @@
 name: Pull Request
 
 on:
-  pull_request:
-    branches: [main]
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
 
 jobs:
   qa:
@@ -12,20 +15,44 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: "Use Node.js 18.x"
-        uses: actions/setup-node@master
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          cache: yarn
+          node-version: 18
+      - run: yarn install --immutable
 
-      - name: Install dependencies
-        run: yarn install
+      - run: yarn lint:all
+      - run: yarn typecheck:all
+      - run: yarn userscript:build
 
-      - name: Lint
-        run: yarn lint:all
+      - run: yarn workspace @kitten-science/commit-validator tsc --build
 
-      - name: Type-check
-        run: yarn typecheck:all
+      - uses: ./packages/commit-validator
+        with:
+          accept_breaking_changes: false
+          accept_emoji: false
+          accepted_scopes: |
+            bonfire
+            religion
+            science
+            space
+            time
+            trade
+            village
+            workshop
 
-      - name: Build userscript
-        run: yarn userscript:release
+            api
+            container
+            core
+            filters
+            settings
+            ui
+          accepted_types: |
+            chore
+            ci
+            docs
+            feat
+            fix
+            refactor
+            test
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"

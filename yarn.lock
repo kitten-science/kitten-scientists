@@ -323,6 +323,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.18.3":
+  version: 7.20.7
+  resolution: "@babel/runtime@npm:7.20.7"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: 60ff1a1452d0f88b766211604610b92d5e063d7024150b6dab87af238e2a6634c01eff4add9e14b4335ced966640af34196ee4cd63a0c181c2d4edd387795c0f
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.18.10":
   version: 7.18.10
   resolution: "@babel/template@npm:7.18.10"
@@ -689,6 +698,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kitten-science/commit-validator@workspace:packages/commit-validator":
+  version: 0.0.0-use.local
+  resolution: "@kitten-science/commit-validator@workspace:packages/commit-validator"
+  dependencies:
+    "@actions/core": 1.10.0
+    "@actions/github": 5.1.1
+    "@types/node": ^18.11.14
+    json-schema-to-ts: 2.6.2
+    tslib: 2.4.1
+    typescript: 4.9.4
+  languageName: unknown
+  linkType: soft
+
 "@kitten-science/documentation@workspace:packages/documentation":
   version: 0.0.0-use.local
   resolution: "@kitten-science/documentation@workspace:packages/documentation"
@@ -1034,7 +1056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.11.18":
+"@types/node@npm:18.11.18, @types/node@npm:^18.11.14":
   version: 18.11.18
   resolution: "@types/node@npm:18.11.18"
   checksum: 1a308a03a7c1cfced411fc3187e49a507ab2b3ce7cdf0794b7511c8843aae5a8dbe52b16ba4217d2da1c8e3c50920c272b45fecff4cccc26606be7f42c33f4f5
@@ -3061,6 +3083,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-schema-to-ts@npm:2.6.2":
+  version: 2.6.2
+  resolution: "json-schema-to-ts@npm:2.6.2"
+  dependencies:
+    "@babel/runtime": ^7.18.3
+    "@types/json-schema": ^7.0.9
+    ts-algebra: ^1.1.1
+    ts-toolbelt: ^9.6.0
+  checksum: 9fd7eaa58ba6fb607d007936d342d931d2b5cddbfff71ee32441ccc3a8d12e5616566ab572bb30621351d757b5ce9c6630d737dabce9ba66d1925cfcd61fedca
+  languageName: node
+  linkType: hard
+
 "json-schema-traverse@npm:^0.4.1":
   version: 0.4.1
   resolution: "json-schema-traverse@npm:0.4.1"
@@ -4059,6 +4093,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"regenerator-runtime@npm:^0.13.11":
+  version: 0.13.11
+  resolution: "regenerator-runtime@npm:0.13.11"
+  checksum: 12b069dc774001fbb0014f6a28f11c09ebfe3c0d984d88c9bced77fdb6fedbacbca434d24da9ae9371bfbf23f754869307fb51a4c98a8b8b18e5ef748677ca24
+  languageName: node
+  linkType: hard
+
 "regexpp@npm:^3.2.0":
   version: 3.2.0
   resolution: "regexpp@npm:3.2.0"
@@ -4657,6 +4698,22 @@ __metadata:
   version: 0.0.3
   resolution: "tr46@npm:0.0.3"
   checksum: 047cb209a6b60c742f05c9d3ace8fa510bff609995c129a37ace03476a9b12db4dbf975e74600830ef0796e18882b2381fb5fb1f6b4f96b832c374de3ab91a11
+  languageName: node
+  linkType: hard
+
+"ts-algebra@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "ts-algebra@npm:1.1.1"
+  dependencies:
+    ts-toolbelt: ^9.6.0
+  checksum: 4f3680e527ca8e17deea84b6fc14d9048abed05caf911cd72338b3733494c51a7663f579e28deba32ed23a2e9679cef813291f1e869bcde4efafb50e3135f3ed
+  languageName: node
+  linkType: hard
+
+"ts-toolbelt@npm:^9.6.0":
+  version: 9.6.0
+  resolution: "ts-toolbelt@npm:9.6.0"
+  checksum: 838f9a2f0fe881d5065257a23b402c41315b33ff987b73db3e2b39fcb70640c4c7220e1ef118ed5676763543724fdbf4eda7b0e2c17acb667ed1401336af9f8c
   languageName: node
   linkType: hard
 

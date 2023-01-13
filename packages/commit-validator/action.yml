@@ -1,0 +1,39 @@
+name: Commit Validator
+description: Ensures the commits in a PR follow common rules.
+author: Oliver Salzburg
+inputs:
+  accept_breaking_changes:
+    default: "true"
+    description: Is the breaking change indicator (`!`) allowed?
+    required: false
+  accept_emoji:
+    default: "true"
+    description: Are emoji allowed?
+    required: false
+  accepted_scopes:
+    default: ""
+    description: |
+      Only accept these scopes. Provide as multi-line string, each type on it's own line.
+
+      By default, all scopes are accepted.
+    required: false
+  accepted_types:
+    default: |
+      feat
+      fix
+    description: Only accept these type prefixes. Provide as multi-line string, each type on it's own line.
+    required: false
+  repo_token:
+    description: Needs `secrets.GITHUB_TOKEN` to talk to the API.
+    required: true
+  require_conventional:
+    default: "true"
+    description: Require all commits to follow the Conventional Commits specification
+    required: false
+  require_scope:
+    default: "false"
+    description: Require all commits to specify a scope.
+    required: false
+runs:
+  using: node16
+  main: output/main.mjs
