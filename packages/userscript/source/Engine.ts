@@ -262,7 +262,7 @@ export class Engine {
    * @returns The translated string.
    */
   i18n<TKittenGameLiteral extends `$${string}`>(
-    key: keyof typeof i18nData[SupportedLanguages] | TKittenGameLiteral,
+    key: keyof typeof i18nData.en | TKittenGameLiteral,
     args: Array<number | string> = []
   ): string {
     let value;
