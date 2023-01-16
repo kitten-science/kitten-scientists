@@ -129,7 +129,10 @@ export class ReligionManager implements Automation {
       const tearsAvailableForUse =
         this._workshopManager.getValue("tears") - this._workshopManager.getStock("tears");
 
-      if (tearsAvailableForUse < tearsNeeded) {
+      if (
+        !isNil(this._host.gamePage.religionTab.sacrificeBtn) &&
+        tearsAvailableForUse < tearsNeeded
+      ) {
         // if no ziggurat, getBestUnicornBuilding will return unicornPasture
         // TODO: ☝ Yeah. So?
 
@@ -508,6 +511,7 @@ export class ReligionManager implements Automation {
     const alicorns = this._workshopManager.getResource("alicorn");
     const available = this._workshopManager.getValueAvailable("alicorn");
     if (
+      !isNil(this._host.gamePage.religionTab.sacrificeAlicornsBtn) &&
       this.settings.sacrificeAlicorns.trigger <= available &&
       this.settings.sacrificeAlicorns.trigger <= alicorns.value
     ) {
@@ -531,6 +535,7 @@ export class ReligionManager implements Automation {
     const tears = this._workshopManager.getResource("tears");
     const available = this._workshopManager.getValueAvailable("tears");
     if (
+      !isNil(this._host.gamePage.religionTab.refineBtn) &&
       this.settings.refineTears.trigger <= available &&
       this.settings.refineTears.trigger <= tears.value
     ) {
@@ -552,6 +557,7 @@ export class ReligionManager implements Automation {
     const timeCrystals = this._workshopManager.getResource("timeCrystal");
     const available = this._workshopManager.getValueAvailable("timeCrystal");
     if (
+      !isNil(this._host.gamePage.religionTab.refineTCBtn) &&
       this.settings.refineTimeCrystals.trigger <= available &&
       this.settings.refineTimeCrystals.trigger <= timeCrystals.value
     ) {

@@ -11,12 +11,12 @@ export type ReligionTab = GameTab & {
   /**
    * Refine tears.
    */
-  refineBtn: BuildButton;
+  refineBtn?: BuildButton;
 
   /**
    * Refine time crystals.
    */
-  refineTCBtn: BuildButton;
+  refineTCBtn?: BuildButton;
 
   /**
    * Religion upgrade (Order of the sun) buttons.
@@ -26,12 +26,12 @@ export type ReligionTab = GameTab & {
   /**
    * Sacrifice alicorns.
    */
-  sacrificeAlicornsBtn: BuildButton<string, ButtonModernModel, TransformBtnController>;
+  sacrificeAlicornsBtn: BuildButton<string, ButtonModernModel, TransformBtnController> | null;
 
   /**
    * Sacrifice unicorns.
    */
-  sacrificeBtn: BuildButton<string, ButtonModernModel, TransformBtnController>;
+  sacrificeBtn: BuildButton<string, ButtonModernModel, TransformBtnController> | null;
 
   /**
    * Ziggurath upgrade buttons.
