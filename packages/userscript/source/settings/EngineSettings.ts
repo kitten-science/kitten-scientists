@@ -27,18 +27,20 @@ export class EngineSettings extends Setting {
     this.states = states;
   }
 
-  load(settings: Maybe<Partial<EngineSettings>>) {
+  load(settings: Maybe<Partial<EngineSettings>>, retainMetaBehavior = false) {
     if (isNil(settings)) {
       return;
     }
 
     super.load(settings);
 
-    this.interval = settings.interval ?? this.interval;
+    if (!retainMetaBehavior) {
+      this.interval = settings.interval ?? this.interval;
+      this.states.load(settings.states);
+    }
 
     this.filters.load(settings.filters);
     this.resources.load(settings.resources);
-    this.states.load(settings.states);
   }
 
   static fromLegacyOptions(subject: LegacyStorage) {

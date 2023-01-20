@@ -111,8 +111,11 @@ export class Engine {
    * Loads a new state into the engine.
    *
    * @param settings The engine state to load.
+   * @param retainMetaBehavior When set to `true`, the engine will not be stopped or started, if the engine
+   * state would require that. The settings for state management are also not loaded from the engine state.
+   * This is intended to make loading of previous settings snapshots more intuitive.
    */
-  stateLoad(settings: EngineState) {
+  stateLoad(settings: EngineState, retainMetaBehavior = false) {
     // For now, we only log a warning on mismatching tags.
     // Ideally, we would perform semver comparison, but that is
     // excessive at this point in time. The goal should be a stable
@@ -136,7 +139,7 @@ export class Engine {
       }
     };
 
-    attemptLoad(() => this.settings.load(settings.engine), "engine");
+    attemptLoad(() => this.settings.load(settings.engine, retainMetaBehavior), "engine");
     attemptLoad(() => this.bonfireManager.settings.load(settings.bonfire), "bonfire");
     attemptLoad(() => this.religionManager.settings.load(settings.religion), "religion");
     attemptLoad(() => this.scienceManager.settings.load(settings.science), "science");
@@ -146,6 +149,13 @@ export class Engine {
     attemptLoad(() => this.tradeManager.settings.load(settings.trade), "trade");
     attemptLoad(() => this.villageManager.settings.load(settings.village), "village");
     attemptLoad(() => this.workshopManager.settings.load(settings.workshop), "workshop");
+
+    // Ensure the main engine setting is respected.
+    if (this.settings.enabled) {
+      this.start(false);
+    } else {
+      this.stop(false);
+    }
   }
 
   stateReset() {

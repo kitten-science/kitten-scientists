@@ -299,7 +299,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       return;
     }
 
-    this._host.engine.stateLoad(state);
+    this._host.engine.stateLoad(state, true);
     this._host.refreshUi();
 
     this._host.engine.imessage("state.loaded");
