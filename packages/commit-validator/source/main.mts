@@ -38,7 +38,7 @@ async function run() {
   const requireScope = core.getBooleanInput("require_scope", { required: false });
 
   const parseCommitMessage =
-    /(?<type>[a-z]+)(?:\((?<scope>\w+)\))?(?<breaking>!)?: (?<message>[^\n]+)/m;
+    /^(?<type>[a-z]+)(?:\((?<scope>[\w-]+)\))?(?<breaking>!)?: (?<message>[^\n]+)$/m;
   const hasEmoji = /\p{Extended_Pictographic}/u;
 
   for (const commitInfo of commits) {
