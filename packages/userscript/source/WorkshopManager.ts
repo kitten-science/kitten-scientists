@@ -162,6 +162,11 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   }
 
   private _canCraft(name: ResourceCraftable, amount: number): boolean {
+    // Can't craft anything but wood until workshop is unlocked.
+    if (!this._host.gamePage.workshopTab.visible && name !== "wood") {
+      return false;
+    }
+
     const craft = this.getCraft(name);
     const enabled = mustExist(this.settings.resources[name]).enabled;
     let result = false;
@@ -203,6 +208,11 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @returns `true` if the build is possible; `false` otherwise.
    */
   singleCraftPossible(name: ResourceCraftable): boolean {
+    // Can't craft anything but wood until workshop is unlocked.
+    if (!this._host.gamePage.workshopTab.visible && name !== "wood") {
+      return false;
+    }
+
     const materials = this.getMaterials(name);
     for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
       if (this.getValueAvailable(mat, true) < amount) {

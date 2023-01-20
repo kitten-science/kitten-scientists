@@ -20,6 +20,7 @@ import {
   TranscendenceUpgradeInfo,
   TranscendenceUpgrades,
   UpgradeInfo,
+  WorkshopTab,
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from ".";
@@ -418,4 +419,5 @@ export type GamePage = {
     getCraftPrice: (craft: CraftableInfo) => Array<Price>;
     upgrades: Array<UpgradeInfo>;
   };
+  workshopTab: WorkshopTab;
 };

@@ -1,4 +1,4 @@
-import { Price } from ".";
+import { GameTab, Price } from ".";
 
 export type Upgrade =
   | "advancedAutomation"
@@ -149,3 +149,5 @@ export type UpgradeInfo = {
   unlocked: boolean;
   unlocks: { upgrades: Array<unknown> };
 };
+
+export type WorkshopTab = GameTab;
