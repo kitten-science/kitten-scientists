@@ -1,0 +1,40 @@
+name: Update Release Info
+
+on:
+  schedule:
+    - cron: 0 4 * * *
+  workflow_dispatch:
+
+concurrency: release-info
+
+jobs:
+  release-info:
+    permissions:
+      contents: read
+      id-token: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 18
+      - run: yarn install --immutable
+      - run: yarn workspace @kitten-science/action-release-info tsc --build
+
+      - uses: ./packages/action-release-info
+        with:
+          filename: release-info.json
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: GitHubActions
+
+      - name: Deploy to S3
+        run: |
+          aws s3 cp release-info.json s3://${{ secrets.AWS_S3_BUCKET }}
