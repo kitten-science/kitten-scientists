@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - .github/labels.yml
-      - packages/label-manager/**
+      - packages/action-label-manager/**
   workflow_dispatch:
 
 concurrency: manage-labels
@@ -24,8 +24,8 @@ jobs:
           cache: yarn
           node-version: 18
       - run: yarn install --immutable
-      - run: yarn workspace @kitten-science/label-manager tsc --build
+      - run: yarn workspace @kitten-science/action-label-manager tsc --build
 
-      - uses: ./packages/label-manager
+      - uses: ./packages/action-label-manager
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"

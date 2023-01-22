@@ -25,9 +25,9 @@ jobs:
       - run: yarn typecheck:all
       - run: yarn userscript:build
 
-      - run: yarn workspace @kitten-science/commit-validator tsc --build
+      - run: yarn workspace @kitten-science/action-commit-validator tsc --build
 
-      - uses: ./packages/commit-validator
+      - uses: ./packages/action-commit-validator
         with:
           accept_breaking_changes: false
           accept_emoji: false

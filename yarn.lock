@@ -698,9 +698,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kitten-science/commit-validator@workspace:packages/commit-validator":
+"@kitten-science/action-commit-validator@workspace:packages/action-commit-validator":
   version: 0.0.0-use.local
-  resolution: "@kitten-science/commit-validator@workspace:packages/commit-validator"
+  resolution: "@kitten-science/action-commit-validator@workspace:packages/action-commit-validator"
   dependencies:
     "@actions/core": 1.10.0
     "@actions/github": 5.1.1
@@ -708,6 +708,19 @@ __metadata:
     json-schema-to-ts: 2.6.2
     tslib: 2.4.1
     typescript: 4.9.4
+  languageName: unknown
+  linkType: soft
+
+"@kitten-science/action-label-manager@workspace:packages/action-label-manager":
+  version: 0.0.0-use.local
+  resolution: "@kitten-science/action-label-manager@workspace:packages/action-label-manager"
+  dependencies:
+    "@actions/core": 1.10.0
+    "@actions/github": 5.1.1
+    "@types/node": 18.11.18
+    tslib: 2.4.1
+    typescript: 4.9.4
+    yaml: 2.2.1
   languageName: unknown
   linkType: soft
 
@@ -722,19 +735,6 @@ __metadata:
 "@kitten-science/kitten-game@workspace:packages/kitten-game":
   version: 0.0.0-use.local
   resolution: "@kitten-science/kitten-game@workspace:packages/kitten-game"
-  languageName: unknown
-  linkType: soft
-
-"@kitten-science/label-manager@workspace:packages/label-manager":
-  version: 0.0.0-use.local
-  resolution: "@kitten-science/label-manager@workspace:packages/label-manager"
-  dependencies:
-    "@actions/core": 1.10.0
-    "@actions/github": 5.1.1
-    "@types/node": 18.11.18
-    tslib: 2.4.1
-    typescript: 4.9.4
-    yaml: 2.2.1
   languageName: unknown
   linkType: soft
 

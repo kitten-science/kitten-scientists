@@ -1,31 +1,27 @@
 {
   "private": true,
-  "name": "@kitten-science/commit-validator",
+  "name": "@kitten-science/action-label-manager",
   "version": "latest",
+  "description": "Manages the labels on this GitHub repository.",
   "license": "MIT",
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "homepage": "https://github.com/kitten-science/kitten-scientists",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kitten-science/kitten-scientists.git",
-    "directory": "packages/commit-validator"
+    "directory": "packages/action-label-manager"
   },
   "bugs": {
     "url": "https://github.com/kitten-science/kitten-scientists/issues"
   },
-  "type": "module",
-  "exports": {
-    ".": "./output/index.mjs"
-  },
-  "types": "./output/index.d.mts",
   "dependencies": {
     "@actions/core": "1.10.0",
     "@actions/github": "5.1.1",
-    "tslib": "2.4.1"
+    "tslib": "2.4.1",
+    "yaml": "2.2.1"
   },
   "devDependencies": {
-    "@types/node": "^18.11.14",
-    "json-schema-to-ts": "2.6.2",
+    "@types/node": "18.11.18",
     "typescript": "4.9.4"
   }
 }
