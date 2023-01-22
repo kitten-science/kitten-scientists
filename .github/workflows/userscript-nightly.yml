@@ -46,8 +46,11 @@ jobs:
       - run: yarn lint:all
       - run: yarn typecheck:all
 
+      - name: Get version
+        run: |
+          export KS_VERSION=$(yarn userscript:version)
+          echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
       - run: yarn userscript:release
-
       - uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
           automatic_release_tag: nightly
@@ -56,4 +59,4 @@ jobs:
             packages/userscript/output/*
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          title: Nightly Build
+          title: Nightly Build ${{ env.KS_VERSION }}
