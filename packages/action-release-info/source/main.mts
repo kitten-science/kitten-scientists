@@ -32,7 +32,7 @@ async function run() {
 
   const releaseInfo: ReleaseInfo = {
     dev: {
-      version: "0.0.0",
+      version: extractVersionFromTitle(latestBuildDev.data.name),
       date: latestBuildDev.data.published_at ?? latestBuildDev.data.created_at,
       url: {
         default: findUserscript(latestBuildDev.data.assets)!.browser_download_url,
@@ -41,7 +41,7 @@ async function run() {
       },
     },
     nightly: {
-      version: "0.0.0",
+      version: extractVersionFromTitle(latestBuildNightly.data.name),
       date: latestBuildNightly.data.published_at ?? latestBuildNightly.data.created_at,
       url: {
         default: findUserscript(latestBuildNightly.data.assets)!.browser_download_url,
@@ -76,6 +76,12 @@ function findUserscript<TAsset extends { name: string }>(
     asset =>
       asset.name.startsWith("kitten-scientists-") && asset.name.includes(".min.") === minified
   );
+}
+
+function extractVersionFromTitle(title: string | null) {
+  const subject = title ?? "";
+  const version = subject.replace(/(Development Build|Nightly Build) /, "");
+  return version.startsWith("v2") ? version : "0.0.0";
 }
 
 void run();
