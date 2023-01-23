@@ -29,12 +29,11 @@ async function run() {
     repo: "kitten-scientists",
     tag: latestStableVersion,
   });
-  latestBuildDev.data.assets[1].name;
 
   const releaseInfo: ReleaseInfo = {
     dev: {
       version: "0.0.0",
-      date: latestBuildDev.data.created_at,
+      date: latestBuildDev.data.published_at ?? latestBuildDev.data.created_at,
       url: {
         default: findUserscript(latestBuildDev.data.assets)!.browser_download_url,
         minified: findUserscript(latestBuildDev.data.assets, true)!.browser_download_url,
@@ -43,7 +42,7 @@ async function run() {
     },
     nightly: {
       version: "0.0.0",
-      date: latestBuildNightly.data.created_at,
+      date: latestBuildNightly.data.published_at ?? latestBuildNightly.data.created_at,
       url: {
         default: findUserscript(latestBuildNightly.data.assets)!.browser_download_url,
         minified: findUserscript(latestBuildNightly.data.assets, true)!.browser_download_url,
@@ -52,7 +51,7 @@ async function run() {
     },
     stable: {
       version: latestBuildStable.data.tag_name,
-      date: latestBuildStable.data.created_at,
+      date: latestBuildStable.data.published_at ?? latestBuildStable.data.created_at,
       url: {
         default: findUserscript(latestBuildStable.data.assets)!.browser_download_url,
         minified: findUserscript(latestBuildStable.data.assets, true)!.browser_download_url,
