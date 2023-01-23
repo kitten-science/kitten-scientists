@@ -59,4 +59,4 @@ jobs:
             packages/userscript/output/*
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          title: Nightly Build ${{ env.KS_VERSION }}
+          title: Nightly Build v${{ env.KS_VERSION }}

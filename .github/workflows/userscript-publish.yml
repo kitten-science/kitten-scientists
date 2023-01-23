@@ -41,4 +41,4 @@ jobs:
             packages/userscript/output/*
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          title: Development Build ${{ env.KS_VERSION }}
+          title: Development Build v${{ env.KS_VERSION }}
