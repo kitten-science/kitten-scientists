@@ -43,6 +43,14 @@ export type I18nEngine = (key: string, args?: Array<number | string>) => string;
 
 export const DefaultLanguage: SupportedLanguages = "en";
 
+export const ksVersion = (prefix = "") => {
+  if (isNil(KS_VERSION)) {
+    throw Error(`Build error: KS_VERSION is not defined.`);
+  }
+
+  return `${prefix}${KS_VERSION}`;
+};
+
 export class UserScript {
   readonly gamePage: GamePage;
 
@@ -79,7 +87,7 @@ export class UserScript {
     i18nEngine: I18nEngine,
     language: SupportedLanguages = DefaultLanguage
   ) {
-    cinfo("Kitten Scientists constructed.");
+    cinfo(`Kitten Scientists ${ksVersion("v")} constructed.`);
 
     this.gamePage = gamePage;
     this.i18nEngine = i18nEngine;
@@ -133,7 +141,7 @@ export class UserScript {
 
   loadLegacyOptions(source: LegacyStorage) {
     this.engine.stateLoad({
-      v: KS_VERSION ?? "latest",
+      v: ksVersion(),
       bonfire: BonfireSettings.fromLegacyOptions(source),
       engine: EngineSettings.fromLegacyOptions(source),
       religion: ReligionSettings.fromLegacyOptions(source),

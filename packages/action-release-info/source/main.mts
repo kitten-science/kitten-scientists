@@ -81,7 +81,7 @@ function findUserscript<TAsset extends { name: string }>(
 function extractVersionFromTitle(title: string | null) {
   const subject = title ?? "";
   const version = subject.replace(/(Development Build|Nightly Build) /, "");
-  return version.startsWith("v2") ? version : "0.0.0";
+  return version.startsWith("v2") ? version : "v0.0.0";
 }
 
 void run();

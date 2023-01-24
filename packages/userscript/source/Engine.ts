@@ -26,7 +26,7 @@ import { TimeControlManager } from "./TimeControlManager";
 import { TimeManager } from "./TimeManager";
 import { cdebug, cerror, cwarn } from "./tools/Log";
 import { TradeManager } from "./TradeManager";
-import { DefaultLanguage, UserScript } from "./UserScript";
+import { DefaultLanguage, ksVersion, UserScript } from "./UserScript";
 import { VillageManager } from "./VillageManager";
 import { WorkshopManager } from "./WorkshopManager";
 
@@ -121,11 +121,10 @@ export class Engine {
     // Ideally, we would perform semver comparison, but that is
     // excessive at this point in time. The goal should be a stable
     // state import of most versions anyway.
-    if (settings.v !== KS_VERSION) {
+    const version = ksVersion();
+    if (settings.v !== version) {
       cwarn(
-        `Attempting to load engine state with version tag '${
-          settings.v
-        }' when engine is at version '${KS_VERSION ?? "latest"}'!`
+        `Attempting to load engine state with version tag '${settings.v}' when engine is at version '${version}'!`
       );
     }
 
@@ -161,7 +160,7 @@ export class Engine {
 
   stateReset() {
     this.stateLoad({
-      v: KS_VERSION ?? "latest",
+      v: ksVersion(),
       engine: new EngineSettings(),
       bonfire: new BonfireSettings(),
       religion: new ReligionSettings(),
@@ -182,7 +181,7 @@ export class Engine {
    */
   stateSerialize(): EngineState {
     return {
-      v: KS_VERSION ?? "latest",
+      v: ksVersion(),
       engine: this.settings,
       bonfire: this.bonfireManager.settings,
       religion: this.religionManager.settings,

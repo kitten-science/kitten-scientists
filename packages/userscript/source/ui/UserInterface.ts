@@ -1,6 +1,6 @@
 import { Icons } from "../images/Icons";
 import { isNil, mustExist } from "../tools/Maybe";
-import { UserScript } from "../UserScript";
+import { ksVersion, UserScript } from "../UserScript";
 import { BonfireSettingsUi } from "./BonfireSettingsUi";
 import { UiComponent } from "./components/UiComponent";
 import { EngineSettingsUi } from "./EngineSettingsUi";
@@ -57,7 +57,7 @@ export class UserInterface extends UiComponent {
 
     this._installCss();
 
-    const version = "Kitten Scientists v" + (KS_VERSION ?? "(unknown)");
+    const version = "Kitten Scientists " + ksVersion("v");
 
     const ks = $("<div/>", { id: "ks" });
     const optionsTitleElement = $("<div/>", {
