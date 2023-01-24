@@ -9,6 +9,7 @@ on:
 
 env:
   DEV_BUILD: true
+  KS_RELEASE_CHANNEL: dev
 
 jobs:
   pre-release:

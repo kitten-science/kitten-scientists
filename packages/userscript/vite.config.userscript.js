@@ -28,6 +28,7 @@ const filename = ["kitten-scientists", `-${versionString}`, minify ? ".min" : ""
   ""
 );
 
+const KS_RELEASE_CHANNEL = JSON.stringify(process.env.KS_RELEASE_CHANNEL ?? "fixed");
 const KS_VERSION = JSON.stringify(versionString);
 
 export default defineConfig({
@@ -58,6 +59,7 @@ export default defineConfig({
     },
   },
   define: {
+    KS_RELEASE_CHANNEL,
     KS_VERSION,
   },
 });

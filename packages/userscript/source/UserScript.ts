@@ -11,7 +11,9 @@ import { GamePage } from "./types";
 import { UserInterface } from "./ui/UserInterface";
 
 declare global {
-  const KS_VERSION: string | null;
+  const KS_RELEASE_CHANNEL: "dev" | "fixed" | "nightly" | "stable";
+  const KS_VERSION: string | undefined;
+
   let unsafeWindow: Window | undefined;
   interface Window {
     $: JQuery;
@@ -79,6 +81,7 @@ export class UserScript {
     language: SupportedLanguages = DefaultLanguage
   ) {
     cinfo(`Kitten Scientists ${ksVersion("v")} constructed.`);
+    cinfo(`You are on the '${KS_RELEASE_CHANNEL}' release channel.`);
 
     this.gamePage = gamePage;
     this.i18nEngine = i18nEngine;

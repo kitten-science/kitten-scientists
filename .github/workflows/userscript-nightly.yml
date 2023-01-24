@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 
 env:
+  KS_RELEASE_CHANNEL: nightly
   NIGHTLY_BUILD: true
 
 jobs:

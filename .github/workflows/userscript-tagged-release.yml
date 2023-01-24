@@ -7,6 +7,7 @@ on:
 
 env:
   DEV_BUILD: false
+  KS_RELEASE_CHANNEL: stable
 
 jobs:
   tagged-release:

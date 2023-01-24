@@ -11,8 +11,9 @@ on:
 
 env:
   DEV_BUILD: ${{ github.ref_name == 'main' }}
-  REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  KS_RELEASE_CHANNEL: fixed
+  REGISTRY: ghcr.io
 
 jobs:
   build-and-push-image:
