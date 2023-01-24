@@ -100,6 +100,7 @@ Tab related:
 Internals related:
 
 -   `api`
+-   `build`
 -   `container`
 -   `core`
 -   `filters`
