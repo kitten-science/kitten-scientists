@@ -1,8 +1,7 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Race } from "../types";
 import { SettingMax, SettingTrigger } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class EmbassySetting extends SettingMax {
   readonly race: Race;
@@ -46,17 +45,5 @@ export class EmbassySettings extends SettingTrigger {
       race.enabled = item?.enabled ?? race.enabled;
       race.max = item?.max ?? race.max;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new EmbassySettings();
-    options.enabled = subject.items["toggle-buildEmbassies"] ?? options.enabled;
-
-    for (const [name, item] of objectEntries(options.races)) {
-      item.enabled = subject.items[`toggle-build-${name}` as const] ?? item.enabled;
-      item.max = subject.items[`set-build-${name}-max` as const] ?? item.max;
-    }
-
-    return options;
   }
 }

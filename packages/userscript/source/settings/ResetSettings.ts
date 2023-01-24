@@ -5,7 +5,6 @@ import { ResetResourcesSettings } from "./ResetResourcesSettings";
 import { ResetSpaceSettings } from "./ResetSpaceSettings";
 import { ResetTimeSettings } from "./ResetTimeSettings";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class ResetSettings extends Setting {
   bonfire: ResetBonfireSettings;
@@ -42,18 +41,5 @@ export class ResetSettings extends Setting {
     this.resources.load(settings.resources);
     this.space.load(settings.space);
     this.time.load(settings.time);
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new ResetSettings();
-    options.enabled = subject.items["toggle-reset"] ?? options.enabled;
-
-    options.bonfire = ResetBonfireSettings.fromLegacyOptions(subject);
-    options.religion = ResetReligionSettings.fromLegacyOptions(subject);
-    options.resources = ResetResourcesSettings.fromLegacyOptions(subject);
-    options.space = ResetSpaceSettings.fromLegacyOptions(subject);
-    options.time = ResetTimeSettings.fromLegacyOptions(subject);
-
-    return options;
   }
 }

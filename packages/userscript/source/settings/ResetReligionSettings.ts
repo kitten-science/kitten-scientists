@@ -1,9 +1,8 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { Setting, SettingTrigger } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class ResetReligionBuildingSetting extends SettingTrigger {
   readonly building: FaithItem | UnicornItem;
@@ -224,17 +223,5 @@ export class ResetReligionSettings extends Setting {
       building.enabled = item?.enabled ?? building.enabled;
       building.trigger = item?.trigger ?? building.trigger;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new ResetReligionSettings();
-    options.enabled = true;
-
-    for (const [name, item] of objectEntries(options.buildings)) {
-      item.enabled = subject.items[`toggle-reset-faith-${name}` as const] ?? item.enabled;
-      item.trigger = subject.items[`set-reset-faith-${name}-min` as const] ?? item.trigger;
-    }
-
-    return options;
   }
 }

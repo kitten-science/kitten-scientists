@@ -1,9 +1,8 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Job } from "../types";
 import { ElectLeaderSettings } from "./ElectLeaderSettings";
 import { Setting, SettingMax, SettingTrigger } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export type VillageJobSettings = Record<Job, SettingMax>;
 
@@ -60,23 +59,5 @@ export class VillageSettings extends Setting {
     this.promoteKittens.enabled = settings.promoteKittens?.enabled ?? this.promoteKittens.enabled;
     this.promoteLeader.enabled = settings.promoteLeader?.enabled ?? this.promoteLeader.enabled;
     this.electLeader.load(settings.electLeader);
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new VillageSettings();
-    options.enabled = subject.toggles.distribute;
-
-    for (const [name, item] of objectEntries(options.jobs)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
-    }
-
-    options.holdFestivals.enabled =
-      subject.items["toggle-festival"] ?? options.holdFestivals.enabled;
-    options.hunt.enabled = subject.items["toggle-hunt"] ?? options.hunt.enabled;
-    options.promoteLeader.enabled =
-      subject.items["toggle-promote"] ?? options.promoteLeader.enabled;
-
-    return options;
   }
 }

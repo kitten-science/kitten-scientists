@@ -1,8 +1,7 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { UnicornItemVariant } from "../types";
 import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export type FaithItem =
   | "apocripha"
@@ -355,29 +354,5 @@ export class ReligionSettings extends SettingTrigger {
     this.autoPraise.load(settings.autoPraise);
     this.adore.load(settings.adore);
     this.transcend.load(settings.transcend);
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new ReligionSettings();
-    options.enabled = subject.toggles.faith;
-    options.trigger = subject.triggers.faith;
-
-    for (const [name, item] of objectEntries(options.buildings)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
-    }
-
-    // Load remaining religion settings.
-    options.adore.enabled = subject.items["toggle-adore"] ?? options.adore.enabled;
-    options.autoPraise.enabled = subject.items["toggle-autoPraise"] ?? options.autoPraise.enabled;
-    options.bestUnicornBuilding.enabled =
-      subject.items["toggle-bestUnicornBuilding"] ?? options.bestUnicornBuilding.enabled;
-    options.transcend.enabled = subject.items["toggle-transcend"] ?? options.transcend.enabled;
-
-    options.adore.trigger = subject.items["set-adore-trigger"] ?? options.adore.trigger;
-    options.autoPraise.trigger =
-      subject.items["set-autoPraise-trigger"] ?? options.autoPraise.trigger;
-
-    return options;
   }
 }

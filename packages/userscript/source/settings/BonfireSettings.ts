@@ -1,9 +1,8 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Building } from "../types";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
 import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 /**
  * One of the building options in the KS menu.
@@ -140,23 +139,5 @@ export class BonfireSettings extends SettingTrigger {
     this.turnOnMagnetos.enabled = settings.turnOnMagnetos?.enabled ?? this.turnOnMagnetos.enabled;
 
     this.upgradeBuildings.load(settings.upgradeBuildings);
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new BonfireSettings();
-    options.enabled = subject.toggles.build;
-    options.trigger = subject.triggers.build;
-
-    for (const [, item] of objectEntries(options.buildings)) {
-      item.enabled = subject.items[`toggle-${item.building}` as const] ?? item.enabled;
-      item.max = subject.items[`set-${item.building}-max` as const] ?? item.max;
-    }
-
-    options.turnOnSteamworks.enabled =
-      subject.items["toggle-_steamworks"] ?? options.turnOnSteamworks.enabled;
-
-    options.upgradeBuildings = BuildingUpgradeSettings.fromLegacyOptions(subject);
-
-    return options;
   }
 }

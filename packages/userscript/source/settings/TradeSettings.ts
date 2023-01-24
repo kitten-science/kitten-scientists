@@ -1,4 +1,4 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Race, Season } from "../types";
 import { EmbassySettings } from "./EmbassySettings";
@@ -9,7 +9,6 @@ import {
   SettingLimited,
   SettingTrigger,
 } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class TradeSettingsItem extends SettingLimited {
   readonly race: Race;
@@ -110,34 +109,5 @@ export class TradeSettings extends SettingTrigger {
     this.feedLeviathans.load(settings.feedLeviathans);
     this.tradeBlackcoin.load(settings.tradeBlackcoin);
     this.unlockRaces.load(settings.unlockRaces);
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new TradeSettings();
-    options.enabled = subject.toggles.trade;
-    options.trigger = subject.triggers.trade;
-
-    for (const [name, item] of objectEntries(options.races)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
-      item.seasons.autumn.enabled =
-        subject.items[`toggle-${name}-autumn` as const] ?? item.seasons.autumn.enabled;
-      item.seasons.spring.enabled =
-        subject.items[`toggle-${name}-spring` as const] ?? item.seasons.spring.enabled;
-      item.seasons.summer.enabled =
-        subject.items[`toggle-${name}-summer` as const] ?? item.seasons.summer.enabled;
-      item.seasons.winter.enabled =
-        subject.items[`toggle-${name}-winter` as const] ?? item.seasons.winter.enabled;
-    }
-
-    options.buildEmbassies = EmbassySettings.fromLegacyOptions(subject);
-
-    options.feedLeviathans.enabled =
-      subject.items["toggle-autofeed"] ?? options.feedLeviathans.enabled;
-    options.tradeBlackcoin.enabled =
-      subject.items["toggle-crypto"] ?? options.tradeBlackcoin.enabled;
-    options.unlockRaces.enabled = subject.items["toggle-races"] ?? options.unlockRaces.enabled;
-
-    return options;
   }
 }

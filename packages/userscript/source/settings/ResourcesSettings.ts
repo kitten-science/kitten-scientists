@@ -1,9 +1,8 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Resource } from "../types";
 import { WorkshopManager } from "../WorkshopManager";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class ResourcesSettingsItem extends Setting {
   readonly resource: Resource;
@@ -100,25 +99,5 @@ export class ResourcesSettings extends Setting {
       resource.consume = item?.consume ?? resource.consume;
       resource.stock = item?.stock ?? resource.stock;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new ResourcesSettings();
-    options.enabled = true;
-
-    for (const [name, item] of objectEntries(subject.resources)) {
-      if (item.checkForReset) {
-        continue;
-      }
-
-      // We didn't explicitly store the `enabled` state in legacy.
-      // Instead, it is derived from the setting having non-default values.
-      options.resources[name].enabled =
-        item.consume !== WorkshopManager.DEFAULT_CONSUME_RATE || item.stock !== 0;
-      options.resources[name].consume = item.consume ?? WorkshopManager.DEFAULT_CONSUME_RATE;
-      options.resources[name].stock = item.stock;
-    }
-
-    return options;
   }
 }

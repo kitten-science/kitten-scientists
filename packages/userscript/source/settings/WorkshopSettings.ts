@@ -1,8 +1,7 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, ResourceCraftable } from "../types";
 import { Requirement, Setting, SettingLimitedMax, SettingTrigger } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 import { UpgradeSettings } from "./UpgradeSettings";
 
 export class CraftSettingsItem extends SettingLimitedMax {
@@ -82,24 +81,5 @@ export class WorkshopSettings extends SettingTrigger {
     this.unlockUpgrades.load(settings.unlockUpgrades);
 
     this.shipOverride.enabled = settings.shipOverride?.enabled ?? this.shipOverride.enabled;
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new WorkshopSettings();
-    options.enabled = subject.toggles.craft;
-    options.trigger = subject.triggers.craft;
-
-    for (const [name, item] of objectEntries(options.resources)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-      item.limited = subject.items[`toggle-limited-${name}` as const] ?? item.limited;
-      item.max = subject.items[`set-${name}-craft-max` as const] ?? item.max;
-    }
-
-    options.unlockUpgrades = UpgradeSettings.fromLegacyOptions(subject);
-
-    options.shipOverride.enabled =
-      subject.items["toggle-shipOverride"] ?? options.shipOverride.enabled;
-
-    return options;
   }
 }

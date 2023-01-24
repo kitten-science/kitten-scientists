@@ -1,8 +1,7 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Cycle, Season } from "../types";
 import { Setting, SettingTriggerMax } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class TimeSkipSettings extends SettingTriggerMax {
   readonly seasons: Record<Season, Setting>;
@@ -62,40 +61,5 @@ export class TimeSkipSettings extends SettingTriggerMax {
     consumeEntriesPedantic(this.cycles, settings.cycles, (cycle, item) => {
       cycle.enabled = item?.enabled ?? cycle.enabled;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const settings = new TimeSkipSettings();
-    settings.enabled = subject.items["toggle-timeSkip"] ?? settings.enabled;
-
-    settings.trigger = subject.items["set-timeSkip-trigger"] ?? settings.trigger;
-    settings.max = subject.items["set-timeSkip-max"] ?? settings.max;
-
-    for (const [name, item] of objectEntries(settings.seasons)) {
-      item.enabled = subject.items[`toggle-timeSkip-${name}`] ?? item.enabled;
-    }
-
-    settings.cycles.charon.enabled =
-      subject.items[`toggle-timeSkip-0`] ?? settings.cycles.charon.enabled;
-    settings.cycles.umbra.enabled =
-      subject.items[`toggle-timeSkip-1`] ?? settings.cycles.umbra.enabled;
-    settings.cycles.yarn.enabled =
-      subject.items[`toggle-timeSkip-2`] ?? settings.cycles.yarn.enabled;
-    settings.cycles.helios.enabled =
-      subject.items[`toggle-timeSkip-3`] ?? settings.cycles.helios.enabled;
-    settings.cycles.cath.enabled =
-      subject.items[`toggle-timeSkip-4`] ?? settings.cycles.cath.enabled;
-    settings.cycles.redmoon.enabled =
-      subject.items[`toggle-timeSkip-5`] ?? settings.cycles.redmoon.enabled;
-    settings.cycles.dune.enabled =
-      subject.items[`toggle-timeSkip-6`] ?? settings.cycles.dune.enabled;
-    settings.cycles.piscine.enabled =
-      subject.items[`toggle-timeSkip-7`] ?? settings.cycles.piscine.enabled;
-    settings.cycles.terminus.enabled =
-      subject.items[`toggle-timeSkip-8`] ?? settings.cycles.terminus.enabled;
-    settings.cycles.kairo.enabled =
-      subject.items[`toggle-timeSkip-9`] ?? settings.cycles.kairo.enabled;
-
-    return settings;
   }
 }

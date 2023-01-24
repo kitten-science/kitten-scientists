@@ -1,8 +1,7 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Resource } from "../types";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class ResetResourcesSettingsItem extends Setting {
   readonly resource: Resource;
@@ -92,20 +91,5 @@ export class ResetResourcesSettings extends Setting {
       resource.enabled = item?.enabled ?? resource.enabled;
       resource.stock = item?.stock ?? resource.stock;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new ResetResourcesSettings();
-    options.enabled = true;
-
-    for (const [name, item] of objectEntries(subject.resources)) {
-      if (!item.checkForReset) {
-        continue;
-      }
-      options.resources[name].enabled = item.checkForReset;
-      options.resources[name].stock = item.stockForReset;
-    }
-
-    return options;
   }
 }

@@ -1,10 +1,9 @@
 import { difference } from "../tools/Array";
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, Upgrade } from "../types";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class UpgradeSetting extends Setting {
   readonly upgrade: Upgrade;
@@ -191,16 +190,5 @@ export class UpgradeSettings extends Setting {
     consumeEntriesPedantic(this.upgrades, settings.upgrades, (upgrade, item) => {
       upgrade.enabled = item?.enabled ?? upgrade.enabled;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new UpgradeSettings();
-    options.enabled = subject.items["toggle-upgrades"] ?? options.enabled;
-
-    for (const [name, item] of objectEntries(options.upgrades)) {
-      item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
-    }
-
-    return options;
   }
 }

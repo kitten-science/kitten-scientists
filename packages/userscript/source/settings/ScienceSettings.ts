@@ -2,7 +2,6 @@ import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage } from "../types";
 import { PolicySettings } from "./PolicySettings";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 import { TechSettings } from "./TechSettings";
 
 export type ScienceItem = "policies" | "techs";
@@ -41,17 +40,5 @@ export class ScienceSettings extends Setting {
     this.techs.load(settings.techs);
 
     this.observe.enabled = settings.observe?.enabled ?? this.observe.enabled;
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new ScienceSettings();
-    options.enabled = subject.toggles.upgrade;
-
-    options.policies = PolicySettings.fromLegacyOptions(subject);
-    options.techs = TechSettings.fromLegacyOptions(subject);
-
-    options.observe.enabled = subject.items["toggle-observe"] ?? options.observe.enabled;
-
-    return options;
   }
 }

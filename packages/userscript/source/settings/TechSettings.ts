@@ -1,10 +1,9 @@
 import { difference } from "../tools/Array";
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, Technology } from "../types";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class TechSetting extends Setting {
   readonly tech: Technology;
@@ -116,16 +115,5 @@ export class TechSettings extends Setting {
     consumeEntriesPedantic(this.techs, settings.techs, (tech, item) => {
       tech.enabled = item?.enabled ?? tech.enabled;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const settings = new TechSettings();
-    settings.enabled = subject.items["toggle-policies"] ?? settings.enabled;
-
-    for (const [name, item] of objectEntries(settings.techs)) {
-      item.enabled = subject.items[`toggle-tech-${name}` as const] ?? item.enabled;
-    }
-
-    return settings;
   }
 }

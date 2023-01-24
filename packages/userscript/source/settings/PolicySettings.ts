@@ -1,10 +1,9 @@
 import { difference } from "../tools/Array";
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, Policy } from "../types";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class PolicySetting extends Setting {
   readonly policy: Policy;
@@ -94,16 +93,5 @@ export class PolicySettings extends Setting {
     consumeEntriesPedantic(this.policies, settings.policies, (policy, item) => {
       policy.enabled = item?.enabled ?? policy.enabled;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new PolicySettings();
-    options.enabled = subject.items["toggle-policies"] ?? options.enabled;
-
-    for (const [name, item] of objectEntries(options.policies)) {
-      item.enabled = subject.items[`toggle-policy-${name}` as const] ?? item.enabled;
-    }
-
-    return options;
   }
 }

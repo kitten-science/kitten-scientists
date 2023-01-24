@@ -1,8 +1,7 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { StagedBuilding } from "../types";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class BuildingUpgradeSetting extends Setting {
   readonly upgrade: StagedBuilding;
@@ -41,16 +40,5 @@ export class BuildingUpgradeSettings extends Setting {
     consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
       building.enabled = item?.enabled ?? building.enabled;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new BuildingUpgradeSettings();
-    options.enabled = subject.items["toggle-buildings"] ?? options.enabled;
-
-    for (const [name, item] of objectEntries(options.buildings)) {
-      item.enabled = subject.items[`toggle-upgrade-${name}` as const] ?? item.enabled;
-    }
-
-    return options;
   }
 }

@@ -1,16 +1,8 @@
 import JQuery from "jquery";
 import { Engine, EngineState, SupportedLanguages } from "./Engine";
 
-import { BonfireSettings } from "./settings/BonfireSettings";
-import { EngineSettings } from "./settings/EngineSettings";
-import { ReligionSettings } from "./settings/ReligionSettings";
 import { ScienceSettings } from "./settings/ScienceSettings";
-import { LegacyStorage } from "./settings/SettingsStorage";
 import { SpaceSettings } from "./settings/SpaceSettings";
-import { TimeControlSettings } from "./settings/TimeControlSettings";
-import { TimeSettings } from "./settings/TimeSettings";
-import { TradeSettings } from "./settings/TradeSettings";
-import { VillageSettings } from "./settings/VillageSettings";
 import { WorkshopSettings } from "./settings/WorkshopSettings";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log";
 import { isNil, Maybe, mustExist } from "./tools/Maybe";
@@ -136,22 +128,6 @@ export class UserScript {
 
   refreshUi() {
     this._userInterface.refreshUi();
-  }
-
-  loadLegacyOptions(source: LegacyStorage) {
-    this.engine.stateLoad({
-      v: ksVersion(),
-      bonfire: BonfireSettings.fromLegacyOptions(source),
-      engine: EngineSettings.fromLegacyOptions(source),
-      religion: ReligionSettings.fromLegacyOptions(source),
-      science: ScienceSettings.fromLegacyOptions(source),
-      space: SpaceSettings.fromLegacyOptions(source),
-      time: TimeSettings.fromLegacyOptions(source),
-      timeControl: TimeControlSettings.fromLegacyOptions(source),
-      trade: TradeSettings.fromLegacyOptions(source),
-      village: VillageSettings.fromLegacyOptions(source),
-      workshop: WorkshopSettings.fromLegacyOptions(source),
-    });
   }
 
   getSettings(): EngineState {
@@ -318,10 +294,6 @@ export class UserScript {
       localStorage["com.nuclearunicorn.kittengame.language"] as SupportedLanguages | undefined
     );
 
-    // We can already attempt to load the possible engine state and see if this produces errors.
-    // As the startup is orchestrated right now by `index.ts`, if there are legacy options, they
-    // will be loaded into the instance after we return it from here.
-    // Thus, legacy options will overrule modern settings, if they are present.
     if (!isNil(UserScript._possibleEngineState)) {
       try {
         instance.setSettings(UserScript._possibleEngineState);

@@ -1,7 +1,6 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export enum LogFilterItemVariant {
   Build = "ks-activity type_ks-build",
@@ -110,15 +109,5 @@ export class LogFilterSettings extends Setting {
     consumeEntriesPedantic(this.filters, settings.filters, (filter, item) => {
       filter.enabled = item?.enabled ?? filter.enabled;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new LogFilterSettings();
-    options.enabled = subject.toggles.filter;
-
-    for (const [name, item] of objectEntries(options.filters)) {
-      item.enabled = subject.items[`toggle-${name}Filter` as const] ?? item.enabled;
-    }
-    return options;
   }
 }

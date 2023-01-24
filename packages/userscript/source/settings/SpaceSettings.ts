@@ -1,9 +1,8 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, SpaceBuildings } from "../types";
 import { MissionSettings } from "./MissionSettings";
 import { SettingMax, SettingTrigger } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class SpaceBuildingSetting extends SettingMax {
   readonly building: SpaceBuildings;
@@ -71,20 +70,5 @@ export class SpaceSettings extends SettingTrigger {
     });
 
     this.unlockMissions.load(settings.unlockMissions);
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new SpaceSettings();
-    options.enabled = subject.toggles.space;
-    options.trigger = subject.triggers.space;
-
-    for (const [name, item] of objectEntries(options.buildings)) {
-      item.enabled = subject.items[`toggle-${name}` as const] ?? item.enabled;
-      item.max = subject.items[`set-${name}-max` as const] ?? item.max;
-    }
-
-    options.unlockMissions = MissionSettings.fromLegacyOptions(subject);
-
-    return options;
   }
 }

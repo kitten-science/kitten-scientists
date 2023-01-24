@@ -1,10 +1,9 @@
 import { difference } from "../tools/Array";
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { cwarn } from "../tools/Log";
 import { isNil, Maybe } from "../tools/Maybe";
 import { GamePage, Missions } from "../types";
 import { Setting } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 
 export class MissionSetting extends Setting {
   readonly mission: Missions;
@@ -86,16 +85,5 @@ export class MissionSettings extends Setting {
     consumeEntriesPedantic(this.missions, settings.missions, (mission, item) => {
       mission.enabled = item?.enabled ?? mission.enabled;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new MissionSettings();
-    options.enabled = subject.items["toggle-missions"] ?? options.enabled;
-
-    for (const [name, item] of objectEntries(options.missions)) {
-      item.enabled = subject.items[`toggle-mission-${name}` as const] ?? item.enabled;
-    }
-
-    return options;
   }
 }

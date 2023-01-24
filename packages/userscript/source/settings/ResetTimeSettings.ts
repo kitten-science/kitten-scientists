@@ -1,8 +1,7 @@
-import { consumeEntriesPedantic, objectEntries } from "../tools/Entries";
+import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { TimeItemVariant } from "../types";
 import { Setting, SettingTrigger } from "./Settings";
-import { LegacyStorage } from "./SettingsStorage";
 import { TimeItem } from "./TimeSettings";
 
 export class ResetTimeBuildingSetting extends SettingTrigger {
@@ -92,17 +91,5 @@ export class ResetTimeSettings extends Setting {
       building.enabled = item?.enabled ?? building.enabled;
       building.trigger = item?.trigger ?? building.trigger;
     });
-  }
-
-  static fromLegacyOptions(subject: LegacyStorage) {
-    const options = new ResetTimeSettings();
-    options.enabled = true;
-
-    for (const [name, item] of objectEntries(options.buildings)) {
-      item.enabled = subject.items[`toggle-reset-time-${name}` as const] ?? item.enabled;
-      item.trigger = subject.items[`set-reset-time-${name}-min` as const] ?? item.trigger;
-    }
-
-    return options;
   }
 }
