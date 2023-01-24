@@ -34,6 +34,7 @@ repo_name: kitten-science/kitten-scientists
 repo_url: https://github.com/kitten-science/kitten-scientists
 site_name: Kitten Scientists
 theme:
+  favicon: assets/images/favicon.ico
   features:
     - content.code.copy
     - navigation.instant
@@ -42,6 +43,7 @@ theme:
     - navigation.tabs.sticky
   icon:
     repo: fontawesome/brands/github
+  logo: assets/images/organization-logo64.png
   name: material
   palette:
     - media: "(prefers-color-scheme: light)"
