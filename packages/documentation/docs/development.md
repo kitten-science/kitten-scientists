@@ -155,6 +155,10 @@ yarn userscript:release
 
 1. Make sure to also update the `.github/bug_report.yml` to mention the latest version number.
 
+!!! note
+
+    Don't forget to publish the drafted release on GitHub!
+
 <!-- prettier-ignore-start -->
 *[JS]: JavaScript
 *[KG]: Kittens Game
