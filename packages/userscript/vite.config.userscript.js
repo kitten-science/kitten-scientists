@@ -28,7 +28,6 @@ const filename = ["kitten-scientists", `-${versionString}`, minify ? ".min" : ""
   ""
 );
 
-const KG_SAVEGAME = process.env.KG_SAVEGAME ?? null;
 const KS_SETTINGS = process.env.KS_SETTINGS ?? null;
 const KS_VERSION = JSON.stringify(versionString);
 
@@ -60,7 +59,6 @@ export default defineConfig({
     },
   },
   define: {
-    KG_SAVEGAME,
     KS_SETTINGS,
     KS_VERSION,
   },
