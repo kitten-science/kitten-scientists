@@ -7,7 +7,8 @@ async function run() {
   const token = core.getInput("repo_token", { required: true });
   const octokit = github.getOctokit(token);
 
-  let latestStableVersion = "v2.0.0-beta.3";
+  // TODO: Instead of rasing this manually, we should properly search for it.
+  let latestStableVersion = "v2.0.0-beta.4";
 
   core.info("Looking for dev build...");
   const latestBuildDev = await octokit.rest.repos.getReleaseByTag({
