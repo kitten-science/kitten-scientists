@@ -28,7 +28,6 @@ const filename = ["kitten-scientists", `-${versionString}`, minify ? ".min" : ""
   ""
 );
 
-const KS_SETTINGS = process.env.KS_SETTINGS ?? null;
 const KS_VERSION = JSON.stringify(versionString);
 
 export default defineConfig({
@@ -59,7 +58,6 @@ export default defineConfig({
     },
   },
   define: {
-    KS_SETTINGS,
     KS_VERSION,
   },
 });
