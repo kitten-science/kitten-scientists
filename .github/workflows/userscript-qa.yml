@@ -42,6 +42,7 @@ jobs:
             workshop
 
             api
+            build
             container
             core
             filters
