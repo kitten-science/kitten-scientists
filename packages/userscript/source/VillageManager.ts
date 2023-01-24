@@ -157,7 +157,7 @@ export class VillageManager implements Automation {
       let tier = -1;
       const engineerSpeciality =
         this._host.gamePage.village.sim.kittens[kittenIndex].engineerSpeciality;
-      // If this kitten has no engineer speciality, skip it.
+      // If this kitten has no engineer specialty, skip it.
       if (isNil(engineerSpeciality)) {
         continue;
       }

@@ -10,10 +10,16 @@ When you enable a building, this building will be built if all of these are true
 
 ### Upgrades
 
-Buildings with a "⮤" in front of their name are upgrades to the building above them.
+Buildings with a `⮤` in front of their name are upgrades to the building above them.
 
 You can select which upgrade will be automatically purchased by enabling them under **Upgrade buildings**.
 
-## Additional options
+## Additional Options
 
-**Turn on steamworks** turns on the Steamworks building as soon as the first one is purchased.
+### Turn on Steamworks
+
+Turns on the Steamworks building as soon as the first one is purchased, and keeps them turned on.
+
+### Turn on Magnetos
+
+Turns on the Magnets building as soon as the first one is purchased, and keeps them turned on.
