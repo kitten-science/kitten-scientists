@@ -127,6 +127,8 @@ export type GamePage = {
       | "oilReductionRatio"
       | "priceRatio"
       | "riftChance"
+      | "shatterCostIncreaseChallenge"
+      | "shatterVoidCost"
       | "solarRevolutionLimit"
       | "standingRatio"
       | "tradeCatpowerDiscount"

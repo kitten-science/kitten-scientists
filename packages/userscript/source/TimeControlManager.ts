@@ -388,8 +388,20 @@ export class TimeControlManager {
     }
 
     // If we have less time crystals than our required trigger value, bail out.
+    const shatterCostIncreaseChallenge = this._host.gamePage.getEffect(
+      "shatterCostIncreaseChallenge"
+    );
     const timeCrystalsAvailable = this._workshopManager.getValueAvailable("timeCrystal");
-    if (timeCrystalsAvailable < this.settings.timeSkip.trigger) {
+    if (
+      timeCrystalsAvailable < this.settings.timeSkip.trigger ||
+      timeCrystalsAvailable < 1 + shatterCostIncreaseChallenge
+    ) {
+      return;
+    }
+
+    const shatterVoidCost = this._host.gamePage.getEffect("shatterVoidCost");
+    const voidAvailable = this._workshopManager.getValueAvailable("void");
+    if (voidAvailable < shatterVoidCost) {
       return;
     }
 
@@ -414,9 +426,6 @@ export class TimeControlManager {
       return;
     }
 
-    const yearsPerCycle = this._host.gamePage.calendar.yearsPerCycle;
-    const remainingYearsCurrentCycle = yearsPerCycle - this._host.gamePage.calendar.cycleYear;
-    const cyclesPerEra = this._host.gamePage.calendar.cyclesPerEra;
     const factor = this._host.gamePage.challenges.getChallenge("1000Years").researched ? 5 : 10;
     // How many times/years we can skip before we reach our max heat.
     const maxSkips =
@@ -425,10 +434,16 @@ export class TimeControlManager {
     let canSkip = Math.min(
       Math.floor((heatMax - heatNow) / factor),
       maxSkips,
-      timeCrystalsAvailable
+      timeCrystalsAvailable / (1 + shatterCostIncreaseChallenge),
+      0 < shatterVoidCost ? voidAvailable / shatterVoidCost : Number.POSITIVE_INFINITY
     );
+
     // The amount of skips to perform.
     let willSkip = 0;
+
+    const yearsPerCycle = this._host.gamePage.calendar.yearsPerCycle;
+    const remainingYearsCurrentCycle = yearsPerCycle - this._host.gamePage.calendar.cycleYear;
+    const cyclesPerEra = this._host.gamePage.calendar.cyclesPerEra;
     // If the cycle has more years remaining than we can even skip, skip all of them.
     // I guess the idea here is to not skip through years of another cycle, if that
     // cycle may not be enabled for skipping.
