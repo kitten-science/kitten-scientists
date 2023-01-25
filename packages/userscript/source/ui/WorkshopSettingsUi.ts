@@ -1,7 +1,6 @@
 import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings";
 import { UserScript } from "../UserScript";
 import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { HeaderListItem } from "./components/HeaderListItem";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem";
 import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
@@ -10,8 +9,6 @@ import { UpgradeSettingsUi } from "./UpgradeSettingsUi";
 
 export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
   private readonly _trigger: TriggerButton;
-  private readonly _upgradeUi: UpgradeSettingsUi;
-  private readonly _shipOverride: SettingListItem;
 
   constructor(host: UserScript, settings: WorkshopSettings) {
     const label = host.engine.i18n("ui.craft");
@@ -63,6 +60,22 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
           this.setting.resources.ship,
           this._host.engine.i18n("$workshop.crafts.ship.label")
         ),
+        new SettingListItem(
+          this._host,
+          this._host.engine.i18n("option.shipOverride"),
+          this.setting.shipOverride,
+          {
+            onCheck: () =>
+              this._host.engine.imessage("status.sub.enable", [
+                this._host.engine.i18n("option.shipOverride"),
+              ]),
+            onUnCheck: () =>
+              this._host.engine.imessage("status.sub.disable", [
+                this._host.engine.i18n("option.shipOverride"),
+              ]),
+            upgradeIndicator: true,
+          }
+        ),
         this._getCraftOption(
           this.setting.resources.tanker,
           this._host.engine.i18n("$workshop.crafts.tanker.label"),
@@ -111,32 +124,13 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     });
     this.addChild(listCrafts);
 
-    const listAdditional = new SettingsList(this._host, {
-      hasDisableAll: false,
-      hasEnableAll: false,
-    });
-    listAdditional.addChild(new HeaderListItem(this._host, "Additional options"));
-
-    this._upgradeUi = new UpgradeSettingsUi(this._host, this.setting.unlockUpgrades);
-    listAdditional.addChild(this._upgradeUi);
-
-    this._shipOverride = new SettingListItem(
-      this._host,
-      this._host.engine.i18n("option.shipOverride"),
-      this.setting.shipOverride,
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.shipOverride"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.sub.disable", [
-            this._host.engine.i18n("option.shipOverride"),
-          ]),
-      }
+    this.addChild(
+      new SettingsList(this._host, {
+        children: [new UpgradeSettingsUi(this._host, this.setting.unlockUpgrades)],
+        hasDisableAll: false,
+        hasEnableAll: false,
+      })
     );
-    listAdditional.addChild(this._shipOverride);
-    this.addChild(listAdditional);
   }
 
   private _getCraftOption(
