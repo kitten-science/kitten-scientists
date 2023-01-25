@@ -74,5 +74,8 @@ export class TimeSettings extends SettingTrigger {
       building.enabled = item?.enabled ?? building.enabled;
       building.max = item?.max ?? building.max;
     });
+
+    this.fixCryochambers.load(settings.fixCryochambers);
+    this.turnOnChronoFurnace.load(settings.turnOnChronoFurnace);
   }
 }
