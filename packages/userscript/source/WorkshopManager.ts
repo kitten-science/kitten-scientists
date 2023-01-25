@@ -90,38 +90,38 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   autoCraft(
     crafts: Partial<Record<ResourceCraftable, CraftSettingsItem>> = this.settings.resources
   ) {
-    // TODO: One of the core limitations here is that only a single resource
-    //       is taken into account, the one set as `require` in the definition.
     const trigger = this.settings.trigger;
 
     for (const craft of Object.values(crafts)) {
-      // This will always be `false` while `max` is hardcoded to `0`.
-      // Otherwise, it would contain the current resource information.
       const current = !craft.max ? false : this.getResource(craft.resource);
-      // The resource information for the requirement of this craft, if any.
-      const require = !craft.require ? false : this.getResource(craft.require);
+
       const max = craft.max === -1 ? Number.POSITIVE_INFINITY : craft.max;
-      let amount = 0;
-      // Ensure that we have reached our cap
-      if (current && current.value > max) continue;
+      if (current && max < current.value) {
+        continue;
+      }
 
       // If we can't even craft a single item of the resource, skip it.
       if (!this.singleCraftPossible(craft.resource)) {
         continue;
       }
 
-      // Craft the resource if it doesn't require anything or we hit the requirement trigger.
-      if (!require || trigger <= require.value / require.maxValue) {
-        amount = this.getLowestCraftAmount(craft.resource, craft.limited, true);
+      const materials = Object.keys(this.getMaterials(craft.resource)) as Array<Resource>;
+      // The resource information for the requirement of this craft which have a capacity.
+      const require = materials
+        .map(material => this.getResource(material))
+        .filter(material => 0 < material.maxValue);
 
-        // If a resource DOES "require" another resource AND its trigger value has NOT been hit
-        // yet AND it is limited... What?
-      } else if (craft.limited) {
-        amount = this.getLowestCraftAmount(craft.resource, craft.limited, false);
+      const allMaterialsAboveTrigger =
+        require.filter(material => material.value / material.maxValue < trigger).length === 0;
+
+      if (!allMaterialsAboveTrigger) {
+        continue;
       }
 
+      const amount = this.getLowestCraftAmount(craft.resource, craft.limited, 0 < require.length);
+
       // If we can craft any of this item, do it.
-      if (amount > 0) {
+      if (0 < amount) {
         this.craft(craft.resource, amount);
       }
     }
@@ -227,81 +227,18 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    *
    * @param name The resource to craft.
    * @param limited Is the crafting of the resource currently limited?
-   * @param requiredResourceAboveTrigger Is the resource that is required for
-   * this craft currently above the trigger value?
-   * @returns ?
+   * @param capacityControlled Is this craft dependant on materials that have a stock capacity?
+   * @returns The amount of resources to craft.
    */
   getLowestCraftAmount(
     name: ResourceCraftable,
     limited: boolean,
-    requiredResourceAboveTrigger: boolean
+    capacityControlled = false
   ): number {
     const materials = this.getMaterials(name);
 
     const craft = this.getCraft(name);
     const ratio = this._host.gamePage.getResCraftRatio(craft.name);
-    const trigger = this.settings.trigger;
-
-    // Safeguard if materials for craft cannot be determined.
-    if (!materials) {
-      return 0;
-    }
-
-    // This seems to be a (hopefully) finely balanced act to distribute iron
-    // between plates and steel.
-    // One resource will probably be preferred for periods of time, then the
-    // other resource will take over.
-    if (name === "steel" && limited) {
-      // Under some condition, we don't want to craft any steel.
-      const plateRatio = this._host.gamePage.getResCraftRatio("plate");
-      // The left term will be larger than 1 if we have more plates than steel.
-      // The right term is basically 1.25, the relation of iron costs between
-      // plates and steel. Plates require 125 iron, steel 100.
-      // This term is weighed in regards to the craft ratio of each resource.
-      // If we get twice as many plates out of a craft than we would steel, the
-      // right term is increased above 1.25.
-      // What this all implies is, only craft steel if a reasonable amount of
-      // plates are also already crafted.
-      if (
-        this.getValueAvailable("plate") / this.getValueAvailable("steel") <
-        (plateRatio + 1) / 125 / ((ratio + 1) / 100)
-      ) {
-        return 0;
-      }
-    }
-
-    // It's not clear *how* this is supposed to work.
-    // What it tries to do is, if we have coal production, under some condition,
-    // calculate an appropriate max value for plates to be crafted.
-    // This amount would be lower than the max plates that could be crafted otherwise.
-    let plateMax = Number.MAX_VALUE;
-    if (name === "plate" && limited) {
-      const steelRatio = this._host.gamePage.getResCraftRatio("steel");
-      // If we're producing coal, then we could also make steel, and don't want
-      // to use up all the iron.
-      const coalPerTick = this._host.gamePage.getResourcePerTick("coal", true);
-      if (coalPerTick > 0) {
-        // Here we have the same check as above, but reversed.
-        // So this would be the case where steel is preferred.
-        if (
-          this.getValueAvailable("plate") / this.getValueAvailable("steel") >
-          (ratio + 1) / 125 / ((steelRatio + 1) / 100)
-        ) {
-          // The absolute trigger value for coal.
-          const coalTriggerAmount = this.getResource("coal").maxValue * trigger;
-          // How many units of coal are we away from the trigger.
-          const distanceToCoalTrigger = coalTriggerAmount - this.getValue("coal");
-          // How many ticks until we hit the trigger for coal.
-          const ticksToCoalTrigger = distanceToCoalTrigger / coalPerTick;
-          // How much iron will be produce in the time until we hit the trigger for coal.
-          const ironInTime =
-            ticksToCoalTrigger * Math.max(this._host.gamePage.getResourcePerTick("iron", true), 0);
-          // This is some weird voodoo...
-          plateMax =
-            (this.getValueAvailable("iron") - Math.max(coalTriggerAmount - ironInTime, 0)) / 125;
-        }
-      }
-    }
 
     // The ship override allows the user to treat ships as "unlimited" while there's less than 243.
     const shipOverride = this.settings.shipOverride.enabled;
@@ -315,11 +252,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       // The delta is the smallest craft amount based on the current material.
       let delta = undefined;
 
-      // Either if the build isn't limited, OR we're above the trigger value and have not hit
-      // our storage limit, OR we're handling the ship override.
+      // Either if the build isn't limited, or we're handling the ship override.
       if (
         !limited ||
-        (requiredResourceAboveTrigger && 0 < this.getResource(resource).maxValue) ||
+        capacityControlled ||
         (name === "ship" && shipOverride && this.getResource("ship").value < 243)
       ) {
         // If there is a storage limit, we can just use everything returned by getValueAvailable,
@@ -355,14 +291,16 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         }
       }
 
-      amount = Math.min(delta, amount, plateMax);
+      amount = Math.min(delta, amount);
     }
 
     // If we have a maximum value, ensure that we don't produce more than
     // this value. This should currently only impact wood crafting, but is
     // written generically to ensure it works for any craft that produces a
     // good with a maximum value.
-    if (res.maxValue > 0 && amount > res.maxValue - res.value) amount = res.maxValue - res.value;
+    if (0 < res.maxValue && res.maxValue - res.value < amount) {
+      amount = res.maxValue - res.value;
+    }
 
     return Math.floor(amount);
   }

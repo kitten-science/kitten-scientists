@@ -26,4 +26,4 @@ Promotes your leader, as soon as possible.
 
 ### Elect leader
 
-Elects a kittens with the given attributes as a leader.
+Elects a kitten with the given attributes as a leader.
