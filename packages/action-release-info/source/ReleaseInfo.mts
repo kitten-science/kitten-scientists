@@ -27,19 +27,6 @@ export type ReleaseMeta = {
   };
 };
 
-export type ReleaseInfo = {
-  /**
-   * The latest stable release.
-   */
-  stable: ReleaseMeta;
-
-  /**
-   * The nightly build.
-   */
-  nightly: ReleaseMeta;
-
-  /**
-   * The development build.
-   */
-  dev: ReleaseMeta;
-};
+export type TravelingReleaseChannel = "dev" | "nightly" | "stable";
+export type ReleaseChannel = "fixed" | TravelingReleaseChannel;
+export type ReleaseInfo = Record<TravelingReleaseChannel, ReleaseMeta>;

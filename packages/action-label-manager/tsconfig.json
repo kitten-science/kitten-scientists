@@ -1,12 +1,9 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs",
     "outDir": "output",
-    "rootDir": "source",
-    "target": "ES6",
-    "tsBuildInfoFile": "output/.tsbuildinfo",
-    "types": ["@types/node"]
+    "rootDir": "source"
   },
-  "include": ["../../@types", "./source"]
+  "include": ["../../@types", "source"],
+  "references": []
 }

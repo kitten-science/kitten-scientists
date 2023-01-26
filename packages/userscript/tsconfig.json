@@ -1,10 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "source",
     "outDir": "output",
-    "tsBuildInfoFile": "output/.tsbuildinfo",
+    "rootDir": "source",
     "types": ["@types/web"]
   },
-  "include": ["../../@types", "./source"]
+  "include": ["../../@types", "source", "source/i18n/*.json"],
+  "references": [{ "path": "../action-release-info" }]
 }

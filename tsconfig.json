@@ -1,21 +1,20 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "checkJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
-    "lib": ["DOM", "ESNext"],
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "outDir": "output",
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "ESNext",
-    "incremental": true,
-    "skipLibCheck": true
-  },
-  "exclude": ["**/*.cjs", "**/*.js"]
+  "files": [],
+  "references": [
+    {
+      "path": "packages/action-commit-validator"
+    },
+    {
+      "path": "packages/action-label-manager"
+    },
+    {
+      "path": "packages/action-release-info"
+    },
+    {
+      "path": "packages/tests"
+    },
+    {
+      "path": "packages/userscript"
+    }
+  ]
 }
