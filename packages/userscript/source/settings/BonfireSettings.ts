@@ -2,7 +2,7 @@ import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { Building } from "../types";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
-import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
+import { Setting, SettingMax, SettingTrigger } from "./Settings";
 
 /**
  * One of the building options in the KS menu.
@@ -19,11 +19,6 @@ export class BonfireBuildingSetting extends SettingMax {
   readonly baseBuilding: Building | undefined = undefined;
 
   readonly building: BonfireItem;
-
-  /**
-   * A resource that you must have unlocked to build this.
-   */
-  readonly require: Requirement = false;
 
   /**
    * In case this is an upgradable building, this indicates the level of
