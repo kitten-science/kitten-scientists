@@ -95,7 +95,6 @@ export class ReligionManager implements Automation {
           unicornPasture: new BonfireBuildingSetting(
             "unicornPasture",
             this.settings.buildings.unicornPasture.enabled,
-            this.settings.buildings.unicornPasture.require,
             this.settings.buildings.unicornPasture.max
           ),
         });
