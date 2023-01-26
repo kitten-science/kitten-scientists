@@ -25,18 +25,17 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
       }),
     });
 
-    // Disable checkbox. Resource control is always active.
-    //this.readOnly = true;
-
     // Add all the current resources
+    const preparedResources: Array<[ResourcesSettingsItem, string]> = Object.values(
+      this.setting.resources
+    ).map(resource => [
+      resource,
+      ucfirst(this._host.engine.i18n(`$resources.${resource.resource}.title`)),
+    ]);
+
     this._resources = [];
-    for (const setting of Object.values(this.setting.resources)) {
-      this._resources.push(
-        this._makeResourceSetting(
-          ucfirst(this._host.engine.i18n(`$resources.${setting.resource}.title`)),
-          setting
-        )
-      );
+    for (const [setting, title] of preparedResources.sort((a, b) => a[1].localeCompare(b[1]))) {
+      this._resources.push(this._makeResourceSetting(title, setting));
     }
     const listResource = new SettingsList(this._host);
     listResource.addChildren(this._resources);
