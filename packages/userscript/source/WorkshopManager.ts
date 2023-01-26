@@ -107,18 +107,23 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
       const materials = Object.keys(this.getMaterials(craft.resource)) as Array<Resource>;
       // The resource information for the requirement of this craft which have a capacity.
-      const require = materials
+      const requiredMaterials = materials
         .map(material => this.getResource(material))
         .filter(material => 0 < material.maxValue);
 
       const allMaterialsAboveTrigger =
-        require.filter(material => material.value / material.maxValue < trigger).length === 0;
+        requiredMaterials.filter(material => material.value / material.maxValue < trigger)
+          .length === 0;
 
       if (!allMaterialsAboveTrigger) {
         continue;
       }
 
-      const amount = this.getLowestCraftAmount(craft.resource, craft.limited, 0 < require.length);
+      const amount = this.getLowestCraftAmount(
+        craft.resource,
+        craft.limited,
+        0 < requiredMaterials.length
+      );
 
       // If we can craft any of this item, do it.
       if (0 < amount) {

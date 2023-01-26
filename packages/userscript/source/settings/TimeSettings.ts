@@ -1,7 +1,7 @@
 import { consumeEntriesPedantic } from "../tools/Entries";
 import { isNil, Maybe } from "../tools/Maybe";
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
-import { Requirement, Setting, SettingMax, SettingTrigger } from "./Settings";
+import { Setting, SettingMax, SettingTrigger } from "./Settings";
 
 /**
  * The upgrades on the Time tab that we have options for.
@@ -10,18 +10,11 @@ export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCry
 
 export class TimeSettingsItem extends SettingMax {
   readonly building: TimeItem;
-  readonly require: Requirement;
   readonly variant: TimeItemVariant;
 
-  constructor(
-    building: TimeItem,
-    variant: TimeItemVariant,
-    require: Requirement = false,
-    enabled = false
-  ) {
+  constructor(building: TimeItem, variant: TimeItemVariant, enabled = false) {
     super(enabled);
     this.building = building;
-    this.require = require;
     this.variant = variant;
   }
 }
@@ -39,18 +32,14 @@ export class TimeSettings extends SettingTrigger {
     trigger = 1,
     buildings: TimeBuildingsSettings = {
       blastFurnace: new TimeSettingsItem("blastFurnace", TimeItemVariant.Chronoforge),
-      chronocontrol: new TimeSettingsItem(
-        "chronocontrol",
-        TimeItemVariant.VoidSpace,
-        "temporalFlux"
-      ),
+      chronocontrol: new TimeSettingsItem("chronocontrol", TimeItemVariant.VoidSpace),
       cryochambers: new TimeSettingsItem("cryochambers", TimeItemVariant.VoidSpace),
       ressourceRetrieval: new TimeSettingsItem("ressourceRetrieval", TimeItemVariant.Chronoforge),
       temporalAccelerator: new TimeSettingsItem("temporalAccelerator", TimeItemVariant.Chronoforge),
       temporalBattery: new TimeSettingsItem("temporalBattery", TimeItemVariant.Chronoforge),
       temporalImpedance: new TimeSettingsItem("temporalImpedance", TimeItemVariant.Chronoforge),
       timeBoiler: new TimeSettingsItem("timeBoiler", TimeItemVariant.Chronoforge),
-      voidHoover: new TimeSettingsItem("voidHoover", TimeItemVariant.VoidSpace, "antimatter"),
+      voidHoover: new TimeSettingsItem("voidHoover", TimeItemVariant.VoidSpace),
       voidResonator: new TimeSettingsItem("voidResonator", TimeItemVariant.VoidSpace),
       voidRift: new TimeSettingsItem("voidRift", TimeItemVariant.VoidSpace),
     },

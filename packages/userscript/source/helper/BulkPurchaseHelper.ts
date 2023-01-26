@@ -1,5 +1,5 @@
 import { BonfireItem } from "../settings/BonfireSettings";
-import { AllItems, Requirement } from "../settings/Settings";
+import { AllItems } from "../settings/Settings";
 import { objectEntries } from "../tools/Entries";
 import { isNil, mustExist } from "../tools/Maybe";
 import {
@@ -62,7 +62,6 @@ export class BulkPurchaseHelper {
           max?: number;
           baseBuilding?: Building;
           building?: AllBuildings | BonfireItem;
-          require?: Requirement;
           stage?: number;
           variant?: TimeItemVariant | UnicornItemVariant;
         }
@@ -153,10 +152,15 @@ export class BulkPurchaseHelper {
       }
 
       // Check the requirements for this build.
-      const require = !build.require ? false : this._workshopManager.getResource(build.require);
-      // Either if we don't require a resource, of the stock is filled to a percentage
-      // greater than the trigger value.
-      if (!require || trigger <= require.value / require.maxValue) {
+      // We want a list of all resources that are required for this build, which have a capacity.
+      const requiredMaterials = prices
+        .map(price => this._workshopManager.getResource(price.name))
+        .filter(material => 0 < material.maxValue);
+      const allMaterialsAboveTrigger =
+        requiredMaterials.filter(material => material.value / material.maxValue < trigger)
+          .length === 0;
+
+      if (allMaterialsAboveTrigger) {
         // If the build is for a stage that the building isn't currently at, skip it.
         if (
           this._isStagedBuild(buildMetaData) &&
