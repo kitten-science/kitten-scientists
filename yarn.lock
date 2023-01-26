@@ -751,7 +751,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kitten-science/action-release-info@workspace:packages/action-release-info":
+"@kitten-science/action-release-info@workspace:*, @kitten-science/action-release-info@workspace:packages/action-release-info":
   version: 0.0.0-use.local
   resolution: "@kitten-science/action-release-info@workspace:packages/action-release-info"
   dependencies:
@@ -796,9 +796,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kitten-science/userscript@workspace:packages/userscript"
   dependencies:
+    "@kitten-science/action-release-info": "workspace:*"
     "@types/dojo": 1.9.43
     "@types/jquery": 3.5.16
+    "@types/semver": ^7
     date-fns: 2.29.3
+    semver: 7.3.8
     tslib: 2.5.0
     typescript: 4.9.5
     vite: 4.1.1
@@ -1129,6 +1132,13 @@ __metadata:
   dependencies:
     "@types/ws": "*"
   checksum: a188b0ac10839e9860ac2683797ccff14eaa6ae30e9e595acf11c914232124c0bd25b9c8074d0291212b91d97749647619749f15e283dbf0df67ae5cef5a919b
+  languageName: node
+  linkType: hard
+
+"@types/semver@npm:^7":
+  version: 7.3.13
+  resolution: "@types/semver@npm:7.3.13"
+  checksum: 73295bb1fee46f8c76c7a759feeae5a3022f5bedfdc17d16982092e4b33af17560234fb94861560c20992a702a1e1b9a173bb623a96f95f80892105f5e7d25e3
   languageName: node
   linkType: hard
 
@@ -4304,6 +4314,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"semver@npm:7.3.8, semver@npm:^7.3.8":
+  version: 7.3.8
+  resolution: "semver@npm:7.3.8"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: 7e581d679530db31757301c2117721577a2bb36a301a443aac833b8efad372cda58e7f2a464fe4412ae1041cc1f63a6c1fe0ced8c57ce5aca1e0b57bb0d627b9
+  languageName: node
+  linkType: hard
+
 "semver@npm:^6.3.0":
   version: 6.3.0
   resolution: "semver@npm:6.3.0"
@@ -4321,17 +4342,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: cffd30102de68a9f8cac9ef57b43c2173dc999da4fc5189872b421f9c9e2660f70243b8e964781ac6dc48ba2542647bb672beeb4d756c89c4a9e05e1144fa40a
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.3.8":
-  version: 7.3.8
-  resolution: "semver@npm:7.3.8"
-  dependencies:
-    lru-cache: ^6.0.0
-  bin:
-    semver: bin/semver.js
-  checksum: 7e581d679530db31757301c2117721577a2bb36a301a443aac833b8efad372cda58e7f2a464fe4412ae1041cc1f63a6c1fe0ced8c57ce5aca1e0b57bb0d627b9
   languageName: node
   linkType: hard
 

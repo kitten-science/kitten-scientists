@@ -1,6 +1,7 @@
+import { ReleaseChannel, ReleaseInfo } from "@kitten-science/action-release-info";
 import JQuery from "jquery";
+import gt from "semver/functions/gt";
 import { Engine, EngineState, SupportedLanguages } from "./Engine";
-
 import { ScienceSettings } from "./settings/ScienceSettings";
 import { SpaceSettings } from "./settings/SpaceSettings";
 import { WorkshopSettings } from "./settings/WorkshopSettings";
@@ -11,7 +12,7 @@ import { GamePage } from "./types";
 import { UserInterface } from "./ui/UserInterface";
 
 declare global {
-  const KS_RELEASE_CHANNEL: "dev" | "fixed" | "nightly" | "stable";
+  const KS_RELEASE_CHANNEL: ReleaseChannel;
   const KS_VERSION: string | undefined;
 
   let unsafeWindow: Window | undefined;
@@ -81,7 +82,7 @@ export class UserScript {
     language: SupportedLanguages = DefaultLanguage
   ) {
     cinfo(`Kitten Scientists ${ksVersion("v")} constructed.`);
-    cinfo(`You are on the '${KS_RELEASE_CHANNEL}' release channel.`);
+    cinfo(`You are on the '${String(KS_RELEASE_CHANNEL)}' release channel.`);
 
     this.gamePage = gamePage;
     this.i18nEngine = i18nEngine;
@@ -123,10 +124,35 @@ export class UserScript {
 
     cinfo("Kitten Scientists initialized.");
 
+    this.runUpdateCheck().catch(console.error);
+
     UserScript.window.dojo.subscribe("game/beforesave", (saveData: Record<string, unknown>) => {
       cinfo("Injecting Kitten Scientists engine state into save data...");
       saveData.ks = { state: [this.getSettings()] };
     });
+  }
+
+  async runUpdateCheck() {
+    if (KS_RELEASE_CHANNEL === "fixed") {
+      cdebug("No update check on 'fixed' release channel.");
+      return;
+    }
+
+    try {
+      const response = await fetch("https://ks.rm-rf.link/release-info.json");
+      const releaseInfo = (await response.json()) as ReleaseInfo;
+      cdebug(releaseInfo);
+
+      if (!isNil(KS_VERSION) && gt(KS_VERSION, releaseInfo[KS_RELEASE_CHANNEL].version)) {
+        cinfo("Looks like there's a new version out!");
+        cinfo(
+          `We have '${KS_VERSION}' and there is '${releaseInfo[KS_RELEASE_CHANNEL].version}' available.`
+        );
+      }
+    } catch (error) {
+      cwarn("Update check failed.");
+      cwarn(error);
+    }
   }
 
   refreshUi() {
