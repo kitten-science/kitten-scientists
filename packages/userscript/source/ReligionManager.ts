@@ -298,7 +298,7 @@ export class ReligionManager implements Automation {
     // We now want to determine how quickly the cost of given building is neutralized
     // by its effect on production of unicorns.
 
-    let bestAmoritization = Infinity;
+    let bestAmortization = Infinity;
     let bestBuilding: ZiggurathUpgrades | null = null;
     const unicornsPerTickBase = mustExist(
       this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"]
@@ -316,8 +316,8 @@ export class ReligionManager implements Automation {
     // set it as the default. This is likely to protect against cases where
     // production of unicorns is 0.
     const pastureAmortization = mustExist(pastureButton.model.prices)[0].val / pastureProduction;
-    if (pastureAmortization < bestAmoritization) {
-      bestAmoritization = pastureAmortization;
+    if (pastureAmortization < bestAmortization) {
+      bestAmortization = pastureAmortization;
       bestBuilding = "unicornPasture";
     }
 
@@ -366,9 +366,9 @@ export class ReligionManager implements Automation {
         buildingProduction += riftBonus;
         const amortization = unicornPrice / buildingProduction;
 
-        if (amortization < bestAmoritization) {
+        if (amortization < bestAmortization) {
           if (0 < riftBonus || (religionRatio < religionBonus && 0 < unicornPrice)) {
-            bestAmoritization = amortization;
+            bestAmortization = amortization;
             bestBuilding = button.id;
           }
         }
@@ -660,7 +660,7 @@ export class ReligionManager implements Automation {
     // Transcend
     if (transcendenceReached) {
       // How much our adoration ratio increases from transcending.
-      const adoreIncreaceRatio = Math.pow(
+      const adoreIncreaseRatio = Math.pow(
         (transcendenceTierCurrent + 2) / (transcendenceTierCurrent + 1),
         2
       );
@@ -669,10 +669,10 @@ export class ReligionManager implements Automation {
         this._host.gamePage.religion._getTranscendTotalPrice(transcendenceTierCurrent + 1) -
         this._host.gamePage.religion._getTranscendTotalPrice(transcendenceTierCurrent);
 
-      // We want to determine the ideal value for when to trancend.
+      // We want to determine the ideal value for when to transcend.
       // TODO: How exactly this works isn't understood yet.
       const x = needNextLevel;
-      const k = adoreIncreaceRatio;
+      const k = adoreIncreaseRatio;
       const epiphanyRecommend =
         ((1 - k + Math.sqrt(80 * (k * k - 1) * x + (k - 1) * (k - 1))) * k) /
           (40 * (k + 1) * (k + 1) * (k - 1)) +

@@ -37,8 +37,10 @@
     "chronospheres",
     "cinfo",
     "Craftable",
+    "cryo",
     "Cryochamber",
     "Cryochambers",
+    "Cryptotheology",
     "cwarn",
     "devcontainer",
     "eludium",
@@ -52,6 +54,8 @@
     "nagas",
     "nbsp",
     "necrocorn",
+    "necrocorns",
+    "Numeromancy",
     "oliversalzburg",
     "POSIX",
     "prio",
@@ -59,8 +63,11 @@
     "railguns",
     "redmoon",
     "savegame",
+    "solarfarm",
+    "Stackable",
     "starchart",
     "Steamworks",
+    "sunspire",
     "Tampermonkey",
     "Toggleable",
     "tradepost",
@@ -68,6 +75,7 @@
     "ucfirst",
     "unobtainium",
     "userscript",
-    "Ziggurath"
+    "Ziggurath",
+    "zigguraths"
   ]
 }

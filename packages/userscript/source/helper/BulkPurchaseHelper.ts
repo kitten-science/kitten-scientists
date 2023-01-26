@@ -492,7 +492,7 @@ export class BulkPurchaseHelper {
   }
 
   /**
-   * Determing the price modifier for the given building.
+   * Determine the price modifier for the given building.
    *
    * @param data The building metadata.
    * @param source The tab the building belongs to.

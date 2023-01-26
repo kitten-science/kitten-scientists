@@ -406,7 +406,7 @@ export class TradeManager implements Automation {
       }
     } else {
       // We can reach this branch if we have partial necrocorns from resets.
-      // The partial necrocorns will then be fead to the elders to bring us back
+      // The partial necrocorns will then be feed to the elders to bring us back
       // to even zero.
       if (0.25 * (1 + this._host.gamePage.getEffect("corruptionBoostRatio")) < 1) {
         this._host.engine.storeForSummary("feed", necrocorns.value);
@@ -538,7 +538,8 @@ export class TradeManager implements Automation {
 
     // All of this code is straight-forward. Buy low, sell high.
 
-    // Exchanges up to a certain threshold, in order to keep a good exchange rate, then waits for a higher treshold before exchanging for relics.
+    // Exchanges up to a certain threshold, in order to keep a good exchange rate, then waits
+    // for a higher threshold before exchanging for relics.
     if (
       coinPrice < (this.settings.tradeBlackcoin.buy ?? 950.0) &&
       (this.settings.tradeBlackcoin.trigger ?? 0) < relicsInitial
@@ -628,7 +629,7 @@ export class TradeManager implements Automation {
       }
 
       // Add to the cost.
-      // We consider all resources to be equal in the profatibility calculation.
+      // We consider all resources to be equal in the profitability calculation.
       // We just add the cost of the resource, divided by how much of it we're
       // producing. So resources that we produce a lot of, don't "cost" as much.
       cost += amount / tick;
