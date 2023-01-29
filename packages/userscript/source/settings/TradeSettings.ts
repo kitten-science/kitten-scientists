@@ -11,13 +11,20 @@ import {
 } from "./Settings";
 
 export class TradeSettingsItem extends SettingLimited {
-  readonly race: Race;
+  readonly #race: Race;
   readonly seasons: Record<Season, Setting>;
 
   /**
    * A resource that is required to trade with the race.
    */
-  require: Requirement;
+  readonly #require: Requirement;
+
+  get race() {
+    return this.#race;
+  }
+  get require() {
+    return this.#require;
+  }
 
   constructor(
     race: Race,
@@ -30,14 +37,14 @@ export class TradeSettingsItem extends SettingLimited {
     require: Requirement = false
   ) {
     super(enabled, limited);
-    this.race = race;
+    this.#race = race;
     this.seasons = {
       summer: new Setting(summer),
       autumn: new Setting(autumn),
       winter: new Setting(winter),
       spring: new Setting(spring),
     };
-    this.require = require;
+    this.#require = require;
   }
 }
 

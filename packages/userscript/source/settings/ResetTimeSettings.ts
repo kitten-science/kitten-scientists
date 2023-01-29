@@ -5,13 +5,20 @@ import { Setting, SettingTrigger } from "./Settings";
 import { TimeItem } from "./TimeSettings";
 
 export class ResetTimeBuildingSetting extends SettingTrigger {
-  readonly building: TimeItem;
-  readonly variant: TimeItemVariant;
+  readonly #building: TimeItem;
+  readonly #variant: TimeItemVariant;
+
+  get building() {
+    return this.#building;
+  }
+  get variant() {
+    return this.#variant;
+  }
 
   constructor(id: TimeItem, variant: TimeItemVariant, enabled = false, trigger = 1) {
     super(enabled, trigger);
-    this.building = id;
-    this.variant = variant;
+    this.#building = id;
+    this.#variant = variant;
   }
 }
 

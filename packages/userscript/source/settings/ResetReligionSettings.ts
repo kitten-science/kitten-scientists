@@ -5,8 +5,15 @@ import { FaithItem, UnicornItem } from "./ReligionSettings";
 import { Setting, SettingTrigger } from "./Settings";
 
 export class ResetReligionBuildingSetting extends SettingTrigger {
-  readonly building: FaithItem | UnicornItem;
-  readonly variant: UnicornItemVariant;
+  readonly #building: FaithItem | UnicornItem;
+  readonly #variant: UnicornItemVariant;
+
+  get building() {
+    return this.#building;
+  }
+  get variant() {
+    return this.#variant;
+  }
 
   constructor(
     building: FaithItem | UnicornItem,
@@ -15,8 +22,8 @@ export class ResetReligionBuildingSetting extends SettingTrigger {
     trigger = 1
   ) {
     super(enabled, trigger);
-    this.building = building;
-    this.variant = variant;
+    this.#building = building;
+    this.#variant = variant;
   }
 }
 

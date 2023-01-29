@@ -9,13 +9,20 @@ import { Setting, SettingMax, SettingTrigger } from "./Settings";
 export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCryochambers">;
 
 export class TimeSettingsItem extends SettingMax {
-  readonly building: TimeItem;
-  readonly variant: TimeItemVariant;
+  readonly #building: TimeItem;
+  readonly #variant: TimeItemVariant;
+
+  get building() {
+    return this.#building;
+  }
+  get variant() {
+    return this.#variant;
+  }
 
   constructor(building: TimeItem, variant: TimeItemVariant, enabled = false) {
     super(enabled);
-    this.building = building;
-    this.variant = variant;
+    this.#building = building;
+    this.#variant = variant;
   }
 }
 

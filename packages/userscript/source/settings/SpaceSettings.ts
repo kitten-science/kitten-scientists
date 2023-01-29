@@ -5,10 +5,15 @@ import { MissionSettings } from "./MissionSettings";
 import { SettingMax, SettingTrigger } from "./Settings";
 
 export class SpaceBuildingSetting extends SettingMax {
-  readonly building: SpaceBuildings;
+  readonly #building: SpaceBuildings;
+
+  get building() {
+    return this.#building;
+  }
+
   constructor(building: SpaceBuildings, enabled = false) {
     super(enabled);
-    this.building = building;
+    this.#building = building;
   }
 }
 

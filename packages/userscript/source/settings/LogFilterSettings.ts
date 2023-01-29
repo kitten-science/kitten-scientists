@@ -42,11 +42,15 @@ export type FilterItem =
   | "upgradeFilter";
 
 export class LogFilterSettingsItem extends Setting {
-  variant: LogFilterItemVariant;
+  readonly #variant: LogFilterItemVariant;
+
+  get variant() {
+    return this.#variant;
+  }
 
   constructor(variant: LogFilterItemVariant) {
     super(true);
-    this.variant = variant;
+    this.#variant = variant;
   }
 }
 

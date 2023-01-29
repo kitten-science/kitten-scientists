@@ -41,8 +41,15 @@ export type ReligionItem = FaithItem | UnicornItem;
 export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
 
 export class ReligionSettingsItem extends SettingMax {
-  readonly building: FaithItem | UnicornItem;
-  readonly variant: UnicornItemVariant;
+  readonly #building: FaithItem | UnicornItem;
+  readonly #variant: UnicornItemVariant;
+
+  get building() {
+    return this.#building;
+  }
+  get variant() {
+    return this.#variant;
+  }
 
   constructor(
     building: FaithItem | UnicornItem,
@@ -51,8 +58,8 @@ export class ReligionSettingsItem extends SettingMax {
     max = -1
   ) {
     super(enabled, max);
-    this.building = building;
-    this.variant = variant;
+    this.#building = building;
+    this.#variant = variant;
   }
 }
 

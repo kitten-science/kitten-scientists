@@ -6,11 +6,15 @@ import { GamePage, Upgrade } from "../types";
 import { Setting } from "./Settings";
 
 export class UpgradeSetting extends Setting {
-  readonly upgrade: Upgrade;
+  readonly #upgrade: Upgrade;
+
+  get upgrade() {
+    return this.#upgrade;
+  }
 
   constructor(upgrade: Upgrade, enabled = false) {
     super(enabled);
-    this.upgrade = upgrade;
+    this.#upgrade = upgrade;
   }
 }
 

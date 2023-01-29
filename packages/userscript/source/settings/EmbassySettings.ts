@@ -4,11 +4,15 @@ import { Race } from "../types";
 import { SettingMax, SettingTrigger } from "./Settings";
 
 export class EmbassySetting extends SettingMax {
-  readonly race: Race;
+  readonly #race: Race;
+
+  get race() {
+    return this.#race;
+  }
 
   constructor(race: Race, enabled = false) {
     super(enabled);
-    this.race = race;
+    this.#race = race;
   }
 }
 

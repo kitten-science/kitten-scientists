@@ -5,11 +5,15 @@ import { Setting, SettingLimitedMax, SettingTrigger } from "./Settings";
 import { UpgradeSettings } from "./UpgradeSettings";
 
 export class CraftSettingsItem extends SettingLimitedMax {
-  readonly resource: ResourceCraftable;
+  readonly #resource: ResourceCraftable;
+
+  get resource() {
+    return this.#resource;
+  }
 
   constructor(resource: ResourceCraftable, enabled = true, limited = true) {
     super(enabled, limited);
-    this.resource = resource;
+    this.#resource = resource;
   }
 }
 
