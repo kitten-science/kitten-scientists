@@ -4,12 +4,16 @@ import { Resource } from "../types";
 import { Setting } from "./Settings";
 
 export class ResetResourcesSettingsItem extends Setting {
-  readonly resource: Resource;
+  readonly #resource: Resource;
   stock = 0;
 
-  constructor(id: Resource, enabled: boolean, stock: number) {
+  get resource() {
+    return this.#resource;
+  }
+
+  constructor(resource: Resource, enabled: boolean, stock: number) {
     super(enabled);
-    this.resource = id;
+    this.#resource = resource;
     this.stock = stock;
   }
 }

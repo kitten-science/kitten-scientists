@@ -16,23 +16,32 @@ export class BonfireBuildingSetting extends SettingMax {
    * In case this is an upgrade of another building, this is the name of the
    * base building.
    */
-  readonly baseBuilding: Building | undefined = undefined;
+  readonly #baseBuilding: Building | undefined = undefined;
+  get baseBuilding() {
+    return this.#baseBuilding;
+  }
 
-  readonly building: BonfireItem;
+  readonly #building: BonfireItem;
+  get building() {
+    return this.#building;
+  }
 
   /**
    * In case this is an upgradable building, this indicates the level of
    * the stage.
    */
-  readonly stage: number = 0;
+  readonly #stage: number = 0;
+  get stage() {
+    return this.#stage;
+  }
 
   constructor(building: BonfireItem, enabled = false, max = -1, baseStage?: Building) {
     super(enabled, max);
 
-    this.building = building;
+    this.#building = building;
     if (baseStage) {
-      this.stage = 1;
-      this.baseBuilding = baseStage;
+      this.#stage = 1;
+      this.#baseBuilding = baseStage;
     }
   }
 }

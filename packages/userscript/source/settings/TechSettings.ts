@@ -6,11 +6,15 @@ import { GamePage, Technology } from "../types";
 import { Setting } from "./Settings";
 
 export class TechSetting extends Setting {
-  readonly tech: Technology;
+  readonly #tech: Technology;
+
+  get tech() {
+    return this.#tech;
+  }
 
   constructor(tech: Technology, enabled = false) {
     super(enabled);
-    this.tech = tech;
+    this.#tech = tech;
   }
 }
 

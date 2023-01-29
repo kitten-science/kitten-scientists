@@ -4,11 +4,15 @@ import { StagedBuilding } from "../types";
 import { Setting } from "./Settings";
 
 export class BuildingUpgradeSetting extends Setting {
-  readonly upgrade: StagedBuilding;
+  readonly #upgrade: StagedBuilding;
+
+  get upgrade() {
+    return this.#upgrade;
+  }
 
   constructor(upgrade: StagedBuilding, enabled = false) {
     super(enabled);
-    this.upgrade = upgrade;
+    this.#upgrade = upgrade;
   }
 }
 

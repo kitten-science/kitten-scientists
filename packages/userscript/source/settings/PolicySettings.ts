@@ -6,11 +6,15 @@ import { GamePage, Policy } from "../types";
 import { Setting } from "./Settings";
 
 export class PolicySetting extends Setting {
-  readonly policy: Policy;
+  readonly #policy: Policy;
+
+  get policy() {
+    return this.#policy;
+  }
 
   constructor(policy: Policy, enabled = false) {
     super(enabled);
-    this.policy = policy;
+    this.#policy = policy;
   }
 }
 

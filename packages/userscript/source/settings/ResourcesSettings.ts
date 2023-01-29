@@ -5,18 +5,22 @@ import { WorkshopManager } from "../WorkshopManager";
 import { Setting } from "./Settings";
 
 export class ResourcesSettingsItem extends Setting {
-  readonly resource: Resource;
+  readonly #resource: Resource;
   consume: number;
   stock = 0;
 
+  get resource() {
+    return this.#resource;
+  }
+
   constructor(
-    id: Resource,
+    resource: Resource,
     enabled: boolean,
     consume = WorkshopManager.DEFAULT_CONSUME_RATE,
     stock = 0
   ) {
     super(enabled);
-    this.resource = id;
+    this.#resource = resource;
     this.consume = consume;
     this.stock = stock;
   }

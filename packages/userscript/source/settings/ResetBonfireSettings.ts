@@ -4,11 +4,15 @@ import { BonfireItem } from "./BonfireSettings";
 import { Setting, SettingTrigger } from "./Settings";
 
 export class ResetBonfireBuildingSetting extends SettingTrigger {
-  readonly building: BonfireItem;
+  readonly #building: BonfireItem;
+
+  get building() {
+    return this.#building;
+  }
 
   constructor(building: BonfireItem, enabled = false, trigger = 1) {
     super(enabled, trigger);
-    this.building = building;
+    this.#building = building;
   }
 }
 

@@ -4,11 +4,15 @@ import { SpaceBuildings } from "../types";
 import { Setting, SettingTrigger } from "./Settings";
 
 export class ResetSpaceBuildingSetting extends SettingTrigger {
-  readonly building: SpaceBuildings;
+  readonly #building: SpaceBuildings;
+
+  get building() {
+    return this.#building;
+  }
 
   constructor(building: SpaceBuildings, enabled = false, trigger = 1) {
     super(enabled, trigger);
-    this.building = building;
+    this.#building = building;
   }
 }
 

@@ -6,11 +6,15 @@ import { GamePage, Missions } from "../types";
 import { Setting } from "./Settings";
 
 export class MissionSetting extends Setting {
-  readonly mission: Missions;
+  readonly #mission: Missions;
+
+  get mission() {
+    return this.#mission;
+  }
 
   constructor(mission: Missions, enabled = false) {
     super(enabled);
-    this.mission = mission;
+    this.#mission = mission;
   }
 }
 
