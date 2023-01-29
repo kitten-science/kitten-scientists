@@ -3,13 +3,14 @@
 set -o errexit
 
 BASEDIR=$(dirname "$(readlink -f "$0")")
+BRANCH=${1:-master}
 
 yarn userscript:build
-yarn devcontainer:build
+yarn devcontainer:build "$BRANCH"
 
 echo "Removing previous container..."
-docker stop kitten-game || true
-docker rm kitten-game || true
+docker stop kitten-game > /dev/null || true
+docker rm kitten-game > /dev/null || true
 echo "Previous container removed or non-existent."
 echo ""
 

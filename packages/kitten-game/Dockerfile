@@ -1,9 +1,12 @@
 FROM node:18-buster
 
+ARG BRANCH=master
+
 EXPOSE 8080
 
 RUN git clone https://bitbucket.org/bloodrizer/kitten-game.git && \
   cd kitten-game && \
+  git checkout $BRANCH && \
   yarn install
 
 # Copy the script that injects kitten-scientists.inject.js into index.html and execute it.

@@ -64,6 +64,14 @@ If you ever want to [rebuild the container from scratch](/reference/Repository S
 yarn devcontainer:rebuild
 ```
 
+### Kittens Game Branch
+
+You can run the development container on another branch of Kittens Game by providing the branch name to the `devcontainer` commands, like so:
+
+```shell
+yarn devcontainer:run dev/alpha
+```
+
 ## Development without Container
 
 To develop without containers, you can build a development version of the userscript with full debugging information.
