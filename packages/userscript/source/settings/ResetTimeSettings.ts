@@ -65,6 +65,12 @@ export class ResetTimeSettings extends Setting {
         true,
         -1
       ),
+      temporalPress: new ResetTimeBuildingSetting(
+        "temporalPress",
+        TimeItemVariant.Chronoforge,
+        true,
+        -1
+      ),
       timeBoiler: new ResetTimeBuildingSetting("timeBoiler", TimeItemVariant.Chronoforge, true, -1),
       voidHoover: new ResetTimeBuildingSetting("voidHoover", TimeItemVariant.VoidSpace, true, -1),
       voidResonator: new ResetTimeBuildingSetting(

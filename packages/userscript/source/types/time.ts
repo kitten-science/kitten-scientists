@@ -23,6 +23,7 @@ export type ChronoForgeUpgrades =
   | "temporalAccelerator"
   | "temporalBattery"
   | "temporalImpedance"
+  | "temporalPress"
   | "timeBoiler";
 
 export type VoidSpaceUpgrades =

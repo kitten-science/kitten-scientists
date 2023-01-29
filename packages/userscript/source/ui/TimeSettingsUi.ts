@@ -45,7 +45,11 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       ),
       this._getTimeSetting(
         this.setting.buildings.ressourceRetrieval,
-        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
+        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label")
+      ),
+      this._getTimeSetting(
+        this.setting.buildings.temporalPress,
+        this._host.engine.i18n("$time.cfu.temporalPress.label"),
         true
       ),
 

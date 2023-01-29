@@ -38,6 +38,7 @@ export class TimeSettings extends SettingTrigger {
       temporalAccelerator: new TimeSettingsItem("temporalAccelerator", TimeItemVariant.Chronoforge),
       temporalBattery: new TimeSettingsItem("temporalBattery", TimeItemVariant.Chronoforge),
       temporalImpedance: new TimeSettingsItem("temporalImpedance", TimeItemVariant.Chronoforge),
+      temporalPress: new TimeSettingsItem("temporalPress", TimeItemVariant.Chronoforge),
       timeBoiler: new TimeSettingsItem("timeBoiler", TimeItemVariant.Chronoforge),
       voidHoover: new TimeSettingsItem("voidHoover", TimeItemVariant.VoidSpace),
       voidResonator: new TimeSettingsItem("voidResonator", TimeItemVariant.VoidSpace),
