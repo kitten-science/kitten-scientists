@@ -1,10 +1,21 @@
 #!/usr/bin/env bash
 
-self=$(readlink -f "$0")
-basedir=$(dirname "$self")
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+  set -o xtrace
+fi
 
-cd "${basedir}"/.. || exit
-docker build -t squidfunk/mkdocs-material .
+cd "$(dirname "$0")"
 
-cd ../..
-docker run --rm -it -v "${PWD}":/docs squidfunk/mkdocs-material build --config-file packages/documentation/mkdocs.yml --site-dir public
+main() {
+  cd ..
+  export DOCKER_SCAN_SUGGEST=false
+  docker build -t squidfunk/mkdocs-material .
+
+  cd ../..
+  docker run --rm -it -v "${PWD}":/docs squidfunk/mkdocs-material build --config-file packages/documentation/mkdocs.yml --site-dir public
+}
+
+main "$@"
