@@ -13,6 +13,7 @@ main() {
   BRANCH=${1:-master}
 
   echo "Building development container on $BRANCH branch..."
+  cd ..
   export DOCKER_SCAN_SUGGEST=false
   docker build \
     --build-arg BRANCH="$BRANCH" \

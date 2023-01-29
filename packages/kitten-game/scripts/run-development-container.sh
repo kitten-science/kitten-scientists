@@ -10,7 +10,7 @@ fi
 cd "$(dirname "$0")"
 
 main() {
-  BASEDIR=$(dirname "$(readlink -f "$0")")
+  BASEDIR=$(pwd)
   BRANCH=${1:-master}
 
   yarn userscript:build
