@@ -1,5 +1,5 @@
 import { UserScript } from "../../UserScript";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
 
 export class ExpandoButton extends UiComponent {
   readonly element: JQuery<HTMLElement>;
@@ -9,9 +9,10 @@ export class ExpandoButton extends UiComponent {
    * collapses a section of the UI.
    *
    * @param host A reference to the host.
+   * @param options Options for this expando.
    */
-  constructor(host: UserScript) {
-    super(host);
+  constructor(host: UserScript, options?: Partial<UiComponentOptions>) {
+    super(host, options);
 
     const element = $("<div/>", {
       title: host.engine.i18n("ui.itemsShow"),

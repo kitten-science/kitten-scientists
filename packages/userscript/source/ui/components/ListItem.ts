@@ -1,7 +1,7 @@
 import { UserScript } from "../../UserScript";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
 
-export type ListItemOptions = {
+export type ListItemOptions = UiComponentOptions & {
   /**
    * Should there be additional padding below this element?
    */
@@ -18,7 +18,7 @@ export class ListItem extends UiComponent {
    * @param options Options for the list item.
    */
   constructor(host: UserScript, options?: Partial<ListItemOptions>) {
-    super(host);
+    super(host, options);
 
     const element = $("<li/>");
     element.addClass("ks-setting");

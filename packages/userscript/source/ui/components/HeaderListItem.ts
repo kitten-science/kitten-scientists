@@ -1,6 +1,6 @@
 import { UserScript } from "../../UserScript";
 import { ListItem } from "./ListItem";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
 
 export class HeaderListItem extends UiComponent implements ListItem {
   readonly element: JQuery<HTMLElement>;
@@ -14,9 +14,10 @@ export class HeaderListItem extends UiComponent implements ListItem {
    *
    * @param host A reference to the host.
    * @param text The text to appear on the header element.
+   * @param options Options for the header.
    */
-  constructor(host: UserScript, text: string) {
-    super(host);
+  constructor(host: UserScript, text: string, options?: Partial<UiComponentOptions>) {
+    super(host, options);
 
     const element = $("<li/>", { text }).addClass("ks-header");
 

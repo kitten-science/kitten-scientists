@@ -1,5 +1,5 @@
 import { UserScript } from "../../UserScript";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
 
 export class ExplainerListItem extends UiComponent {
   readonly element: JQuery<HTMLElement>;
@@ -10,8 +10,9 @@ export class ExplainerListItem extends UiComponent {
    *
    * @param host A reference to the host.
    * @param text The text to appear on the element.
+   * @param options Options for this explainer.
    */
-  constructor(host: UserScript, text: string) {
+  constructor(host: UserScript, text: string, options?: Partial<UiComponentOptions>) {
     super(host);
 
     const element = $("<li/>", { text }).addClass("ks-explainer");

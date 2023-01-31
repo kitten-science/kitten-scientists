@@ -47,7 +47,7 @@ export class SettingsList extends UiComponent {
    * @param host A reference to the host.
    * @param options Which tools should be available on the list?
    */
-  constructor(host: UserScript, options?: SettingsListOptions) {
+  constructor(host: UserScript, options?: Partial<SettingsListOptions>) {
     super(host, options);
 
     const toolOptions = {

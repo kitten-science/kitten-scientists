@@ -1,18 +1,19 @@
 import { SettingLimited } from "../../settings/Settings";
 import { UserScript } from "../../UserScript";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
+
+export type LimitedButtonOptions = UiComponentOptions & {
+  readonly onLimitedCheck: () => void;
+  readonly onLimitedUnCheck: () => void;
+};
 
 export class LimitedButton extends UiComponent {
   readonly setting: SettingLimited;
   readonly element: JQuery<HTMLElement>;
   readonly checkbox: JQuery<HTMLElement>;
 
-  constructor(
-    host: UserScript,
-    setting: SettingLimited,
-    handler?: Partial<{ onLimitedCheck: () => void; onLimitedUnCheck: () => void }>
-  ) {
-    super(host);
+  constructor(host: UserScript, setting: SettingLimited, options?: Partial<LimitedButtonOptions>) {
+    super(host, options);
 
     const element = $("<div/>").addClass("ks-text-button");
 
@@ -27,10 +28,10 @@ export class LimitedButton extends UiComponent {
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && setting.limited === false) {
         setting.limited = true;
-        handler?.onLimitedCheck?.();
+        options?.onLimitedCheck?.();
       } else if (!checkbox.is(":checked") && setting.limited === true) {
         setting.limited = false;
-        handler?.onLimitedUnCheck?.();
+        options?.onLimitedUnCheck?.();
       }
     });
 

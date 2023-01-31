@@ -1,5 +1,9 @@
 import { UserScript } from "../../UserScript";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
+
+export type FieldsetOptions = UiComponentOptions & {
+  readonly delimiter: boolean;
+};
 
 export class Fieldset extends UiComponent {
   readonly element: JQuery<HTMLElement>;
@@ -9,13 +13,13 @@ export class Fieldset extends UiComponent {
    *
    * @param host A reference to the host.
    * @param label The label on the fieldset.
-   * @param delimiter Should this fieldset have additional padding on the bottom?
+   * @param options Options for the fieldset.
    */
-  constructor(host: UserScript, label: string, delimiter = false) {
-    super(host);
+  constructor(host: UserScript, label: string, options?: Partial<FieldsetOptions>) {
+    super(host, options);
 
     const element = $("<fieldset/>").addClass("ks-fieldset");
-    if (delimiter) {
+    if (options?.delimiter) {
       element.addClass("ks-delimiter");
     }
     const legend = $("<legend/>").text(label).addClass("ks-label");

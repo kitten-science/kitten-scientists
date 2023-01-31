@@ -3,6 +3,7 @@ import { Cycle } from "../../types";
 import { UserScript } from "../../UserScript";
 import { SettingListItem } from "./SettingListItem";
 import { SettingsList } from "./SettingsList";
+import { UiComponentOptions } from "./UiComponent";
 
 export type SettingWithCycles = Record<Cycle, Setting>;
 
@@ -28,9 +29,10 @@ export class CyclesList extends SettingsList {
    *
    * @param host A reference to the host.
    * @param setting The settings that correlate to this list.
+   * @param options Options for this list.
    */
-  constructor(host: UserScript, setting: SettingWithCycles) {
-    super(host);
+  constructor(host: UserScript, setting: SettingWithCycles, options?: Partial<UiComponentOptions>) {
+    super(host, options);
     this.setting = setting;
 
     this.addEventListener("enableAll", () => {
