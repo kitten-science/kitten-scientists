@@ -85,7 +85,7 @@ export abstract class UiComponent extends EventTarget {
 
   static promptPercentage(text: string, defaultValue: string): number | null {
     const value = window.prompt(text, defaultValue);
-    if (value === null) {
+    if (value === null || value === "") {
       return null;
     }
 
@@ -111,7 +111,7 @@ export abstract class UiComponent extends EventTarget {
 
   static promptFloat(text: string, defaultValue: string): number | null {
     const value = window.prompt(text, defaultValue);
-    if (value === null) {
+    if (value === null || value === "") {
       return null;
     }
 
