@@ -2,7 +2,7 @@ import { cerror } from "../../tools/Log";
 import { UserScript } from "../../UserScript";
 
 export type UiComponentOptions = {
-  readonly onRefresh: () => void;
+  readonly onRefresh: <T extends UiComponent>(subject: T) => void;
 };
 
 export abstract class UiComponent extends EventTarget {
@@ -27,7 +27,7 @@ export abstract class UiComponent extends EventTarget {
   }
 
   refreshUi() {
-    this._onRefresh?.();
+    this._onRefresh?.(this);
     for (const child of this.children) {
       try {
         child.refreshUi();
