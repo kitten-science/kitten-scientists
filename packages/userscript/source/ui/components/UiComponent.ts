@@ -63,7 +63,7 @@ export abstract class UiComponent extends EventTarget {
 
   static promptLimit(text: string, defaultValue: string): number | null {
     const value = window.prompt(text, defaultValue);
-    if (value === null) {
+    if (value === null || value === "") {
       return null;
     }
 
