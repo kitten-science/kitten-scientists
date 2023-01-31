@@ -5,9 +5,9 @@ import { EnableButton } from "./buttons-icon/EnableButton";
 import { ResetButton } from "./buttons-icon/ResetButton";
 import { ListItem } from "./ListItem";
 import { SettingListItem } from "./SettingListItem";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
 
-export type SettingsListOptions = {
+export type SettingsListOptions = UiComponentOptions & {
   /**
    * A component that should be hosted in the panel.
    */
@@ -48,9 +48,9 @@ export class SettingsList extends UiComponent {
    * @param options Which tools should be available on the list?
    */
   constructor(host: UserScript, options?: SettingsListOptions) {
-    super(host);
+    super(host, options);
 
-    const toolOptions: SettingsListOptions = {
+    const toolOptions = {
       hasDisableAll: true,
       hasEnableAll: true,
       ...options,

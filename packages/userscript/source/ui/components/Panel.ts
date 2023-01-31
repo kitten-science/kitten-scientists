@@ -2,9 +2,9 @@ import { is, isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
 import { Container } from "./Container";
 import { ExpandoButton } from "./ExpandoButton";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
 
-export type PanelOptions<TChild extends UiComponent = UiComponent> = {
+export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponentOptions & {
   /**
    * A component that should be hosted in the panel.
    */
@@ -50,7 +50,7 @@ export class Panel<
    * @param options Options for this panel.
    */
   constructor(host: UserScript, head: THead, options?: Partial<PanelOptions<TChild>>) {
-    super(host);
+    super(host, options);
 
     this.container = new Container(host);
     this.container.element.addClass("ks-panel-content");

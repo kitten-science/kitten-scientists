@@ -1,6 +1,10 @@
 import { cerror } from "../../tools/Log";
 import { UserScript } from "../../UserScript";
 
+export type UiComponentOptions = {
+  readonly onRefresh: () => void;
+};
+
 export abstract class UiComponent extends EventTarget {
   /**
    * A reference to the host itself.
@@ -14,12 +18,16 @@ export abstract class UiComponent extends EventTarget {
 
   readonly children = new Set<UiComponent>();
 
-  constructor(host: UserScript) {
+  private readonly _onRefresh: UiComponentOptions["onRefresh"] | undefined;
+
+  constructor(host: UserScript, options?: Partial<UiComponentOptions>) {
     super();
     this._host = host;
+    this._onRefresh = options?.onRefresh;
   }
 
   refreshUi() {
+    this._onRefresh?.();
     for (const child of this.children) {
       try {
         child.refreshUi();

@@ -1,9 +1,9 @@
 import { SettingOptions } from "../../settings/Settings";
 import { isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
 
-export type RadioItemOptions = {
+export type RadioItemOptions = UiComponentOptions & {
   /**
    * Will be invoked when the user selects this radio item.
    */
@@ -51,7 +51,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     groupKey: string,
     options?: Partial<RadioItemOptions>
   ) {
-    super(host);
+    super(host, options);
 
     const element = $(`<div/>`);
     element.addClass("ks-setting");

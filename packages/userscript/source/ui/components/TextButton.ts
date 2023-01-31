@@ -1,8 +1,8 @@
 import { isNil } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
-import { UiComponent } from "./UiComponent";
+import { UiComponent, UiComponentOptions } from "./UiComponent";
 
-export type TextButtonOptions = {
+export type TextButtonOptions = UiComponentOptions & {
   readonly title: string;
   readonly onClick: () => void;
 };
@@ -12,7 +12,7 @@ export class TextButton extends UiComponent {
   readOnly: boolean;
 
   constructor(host: UserScript, label: string, options?: Partial<TextButtonOptions>) {
-    super(host);
+    super(host, options);
 
     const element = $("<div/>").addClass("ks-text-button").text(label);
 
