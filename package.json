@@ -21,7 +21,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "tslib": "2.4.1"
+    "tslib": "2.5.0"
   },
   "devDependencies": {
     "@babel/core": "7.20.12",
