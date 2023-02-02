@@ -767,7 +767,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kitten-science/documentation@workspace:packages/documentation"
   dependencies:
-    node-scripts-docs: 0.0.14
+    node-scripts-docs: 0.1.0
   languageName: unknown
   linkType: soft
 
@@ -2755,7 +2755,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globby@npm:11.1.0, globby@npm:^11.1.0":
+"globby@npm:^11, globby@npm:^11.1.0":
   version: 11.1.0
   resolution: "globby@npm:11.1.0"
   dependencies:
@@ -3424,12 +3424,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:4.0.15":
-  version: 4.0.15
-  resolution: "marked@npm:4.0.15"
+"marked@npm:4.2.5":
+  version: 4.2.5
+  resolution: "marked@npm:4.2.5"
   bin:
     marked: bin/marked.js
-  checksum: 87a96d78aaa77295d1ec9b39589e9e4c49919c5ee2676c97861036f936fe1b0ffee492ddd75aaf72d99fdd36ec377af7d7423be12305db95ecc67af85da1fb39
+  checksum: 998f4c4e00dbf99e5fdca8332000eda156b6f7d4375bdc9577a89dd468e0205044b3826ef55ef31b02ea61b9913b374029944e9138d31f1d2d9bb90c8f773579
   languageName: node
   linkType: hard
 
@@ -3514,10 +3514,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:1.2.6":
-  version: 1.2.6
-  resolution: "minimist@npm:1.2.6"
-  checksum: d0b566204044481c4401abbd24cc75814e753b37268e7fe7ccc78612bf3e37bf1e45a6c43fb0b119445ea1c413c000bde013f320b7211974f2f49bcbec1d0dbf
+"minimist@npm:1.2.7":
+  version: 1.2.7
+  resolution: "minimist@npm:1.2.7"
+  checksum: 8808da67ca50ee19ab2d69051d77ee78572e67297fd8a1635ecc757a15106ccdfb5b8c4d11d84750120142f1684e5329a141295728c755e5d149eedd73cc6572
   languageName: node
   linkType: hard
 
@@ -3733,18 +3733,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-scripts-docs@npm:0.0.14":
-  version: 0.0.14
-  resolution: "node-scripts-docs@npm:0.0.14"
+"node-scripts-docs@npm:0.1.0":
+  version: 0.1.0
+  resolution: "node-scripts-docs@npm:0.1.0"
   dependencies:
     elapsed-time: 0.0.1
-    globby: 11.1.0
-    marked: 4.0.15
-    minimist: 1.2.6
-    tslib: 2.4.0
+    globby: ^11
+    marked: 4.2.5
+    minimist: 1.2.7
+    tslib: 2.4.1
   bin:
     nsd: output/node-scripts-docs.js
-  checksum: f31c226fe79ab99e45294d032adb87e9dca1f4e3ed1799f1c9d64e4d6fa3860242cb37934afa2942c9a61244cc5543f51ee4fa80f8779e0d6ca5e38cfe723c0a
+  checksum: 76fb79399bad962cf27bd18a3add2419b62a5b9ecd037e2f1a78a879cbc4e06fb151ed641d221314a532d1e0b7d722ca281e4a1e1ff27fd46bd399d7c80d6d19
   languageName: node
   linkType: hard
 
@@ -4801,10 +4801,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.4.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "tslib@npm:2.4.0"
-  checksum: eb19bda3ae545b03caea6a244b34593468e23d53b26bf8649fbc20fce43e9b21a71127fd6d2b9662c0fe48ee6ff668ead48fd00d3b88b2b716b1c12edae25b5d
+"tslib@npm:2.4.1":
+  version: 2.4.1
+  resolution: "tslib@npm:2.4.1"
+  checksum: 9ac0e4fd1033861f0b4f0d848dc3009ebcc3aa4757a06e8602a2d8a7aed252810e3540e54e70709f06c0f95311faa8584f769bcbede48aff785eb7e4d399b9ec
   languageName: node
   linkType: hard
 
@@ -4819,6 +4819,13 @@ __metadata:
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: 69ae09c49eea644bc5ebe1bca4fa4cc2c82b7b3e02f43b84bd891504edf66dbc6b2ec0eef31a957042de2269139e4acff911e6d186a258fb14069cd7f6febce2
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.1.0, tslib@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: eb19bda3ae545b03caea6a244b34593468e23d53b26bf8649fbc20fce43e9b21a71127fd6d2b9662c0fe48ee6ff668ead48fd00d3b88b2b716b1c12edae25b5d
   languageName: node
   linkType: hard
 
