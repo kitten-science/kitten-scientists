@@ -3174,7 +3174,7 @@ __metadata:
     lint-staged: 13.1.0
     prettier: 2.8.3
     prettier-package-json: 2.8.0
-    prettier-plugin-organize-imports: 3.2.1
+    prettier-plugin-organize-imports: 3.2.2
     prettier-plugin-sh: 0.12.8
     tslib: 2.4.1
     typescript: 4.9.5
@@ -3956,9 +3956,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-organize-imports@npm:3.2.1":
-  version: 3.2.1
-  resolution: "prettier-plugin-organize-imports@npm:3.2.1"
+"prettier-plugin-organize-imports@npm:3.2.2":
+  version: 3.2.2
+  resolution: "prettier-plugin-organize-imports@npm:3.2.2"
   peerDependencies:
     "@volar/vue-language-plugin-pug": ^1.0.4
     "@volar/vue-typescript": ^1.0.4
@@ -3969,7 +3969,7 @@ __metadata:
       optional: true
     "@volar/vue-typescript":
       optional: true
-  checksum: 49922afb8f4e71baead28faebeb63284e1c96fd8f9725648800c33d2bf8db605cd4eccffc8fdccc173cbab8f3510aa1cb3b6ebccdaad6102d645094df7e4688d
+  checksum: b49433485059ae9df77d8d89fdb5ef7b4e270329fd3792f9962a552efe86a76d6ab49d9a33860bc250d6707265643d59060add5b2389aa668013bad613601dda
   languageName: node
   linkType: hard
 
