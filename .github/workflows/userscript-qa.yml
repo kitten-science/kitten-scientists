@@ -45,6 +45,8 @@ jobs:
             build
             container
             core
+            deps
+            deps-dev
             filters
             settings
             ui
