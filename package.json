@@ -35,7 +35,7 @@
     "@typescript-eslint/eslint-plugin": "5.47.1",
     "@typescript-eslint/parser": "5.47.1",
     "eslint": "8.33.0",
-    "eslint-plugin-jsdoc": "39.6.4",
+    "eslint-plugin-jsdoc": "39.7.5",
     "lint-staged": "13.1.0",
     "prettier": "2.8.3",
     "prettier-package-json": "2.8.0",
