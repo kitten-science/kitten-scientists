@@ -25,7 +25,7 @@
   "types": "./output/index.ts",
   "dependencies": {
     "date-fns": "2.29.3",
-    "tslib": "2.4.1"
+    "tslib": "2.5.0"
   },
   "devDependencies": {
     "@types/dojo": "1.9.43",
