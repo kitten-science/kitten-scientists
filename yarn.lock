@@ -1021,13 +1021,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:8.4.10":
-  version: 8.4.10
-  resolution: "@types/eslint@npm:8.4.10"
+"@types/eslint@npm:8.21.0":
+  version: 8.21.0
+  resolution: "@types/eslint@npm:8.21.0"
   dependencies:
     "@types/estree": "*"
     "@types/json-schema": "*"
-  checksum: ff245f08f2a687a78314f7f5054af833ea17fc392587196d11c9811efe396f3bdf4aaba20c4be763607315ebb81c68da64f58726d14ab1d2ca4a98aaa758e1c9
+  checksum: 2cdf0016066d99984c0dcf387404a319aa81aa7d8cf40e8dd2066abab8786bbc3099f63868c954994a1eb27383201833a95402237c9dd260959741236a5d0ee9
   languageName: node
   linkType: hard
 
@@ -2220,9 +2220,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.31.0":
-  version: 8.31.0
-  resolution: "eslint@npm:8.31.0"
+"eslint@npm:8.33.0":
+  version: 8.33.0
+  resolution: "eslint@npm:8.33.0"
   dependencies:
     "@eslint/eslintrc": ^1.4.1
     "@humanwhocodes/config-array": ^0.11.8
@@ -2265,7 +2265,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 55c32aeeb9b5d6d7417a9c5e5789aa5486ffd31cc0cf498ebaa945f2492964ea2372c38eff084eb99948d81d69cc387ca62ddf58e5824fac3c1d0162a53a76f7
+  checksum: 583a783a3c7bec8b1167455cc6665a8f8ad9eba55518dadfdbd95041fa9ac57e0866c06dd3b380f3ebfa1be62461faca7df814a3286027037a3a0ea25ee4ef80
   languageName: node
   linkType: hard
 
@@ -3163,13 +3163,13 @@ __metadata:
     "@babel/eslint-parser": 7.19.1
     "@babel/plugin-syntax-import-assertions": 7.20.0
     "@types/babel__core": 7.1.20
-    "@types/eslint": 8.4.10
+    "@types/eslint": 8.21.0
     "@types/node": 18.11.18
     "@types/prettier": 2.7.2
     "@types/web": 0.0.90
     "@typescript-eslint/eslint-plugin": 5.47.1
     "@typescript-eslint/parser": 5.47.1
-    eslint: 8.31.0
+    eslint: 8.33.0
     eslint-plugin-jsdoc: 39.6.4
     lint-staged: 13.1.0
     prettier: 2.8.1
