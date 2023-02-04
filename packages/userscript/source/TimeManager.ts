@@ -164,16 +164,25 @@ export class TimeManager {
     // Fix used cryochambers
     // If the option is enabled and we have used cryochambers...
     if (0 < this._host.gamePage.time.getVSU("usedCryochambers").val) {
+      const btn = this.manager.tab.vsPanel.children[0].children[0];
+
       let fixed = 0;
-      const btn = this.manager.tab.vsPanel.children[0].children[0]; //check?
-      // doFixCryochamber will check resources
-      while (
-        (btn.controller as FixCryochamberBtnController).doFixCryochamber(
-          btn.model as ButtonModernModel
-        )
-      ) {
-        ++fixed;
-      }
+      let fixHappened;
+      do {
+        fixHappened = false;
+
+        (btn.controller as FixCryochamberBtnController).buyItem(
+          btn.model as ButtonModernModel,
+          new MouseEvent("click"),
+          // This callback is invoked at the end of the `buyItem` call.
+          // Thus, the callback should be invoked before this loop ends.
+          (didHappen: boolean) => {
+            fixHappened = didHappen;
+            ++fixed;
+          }
+        );
+      } while (fixHappened);
+
       if (0 < fixed) {
         this._host.engine.iactivity("act.fix.cry", [fixed], "ks-fixCry");
         this._host.engine.storeForSummary("fix.cry", fixed);
