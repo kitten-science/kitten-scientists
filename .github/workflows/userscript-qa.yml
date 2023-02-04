@@ -21,8 +21,8 @@ jobs:
           node-version: 18
       - run: yarn install --immutable
 
+      - run: yarn build:all
       - run: yarn lint:all
-      - run: yarn typecheck:all
       - run: yarn userscript:build
 
       - run: yarn workspace @kitten-science/action-commit-validator tsc --build
