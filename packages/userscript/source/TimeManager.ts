@@ -151,8 +151,7 @@ export class TimeManager {
     }
 
     for (const button of buttons) {
-      const haystack = button.model.name;
-      if (haystack.indexOf(build.label) !== -1) {
+      if (button.model.name.startsWith(build.label)) {
         return button as BuildButton<string, ButtonModernModel, ButtonModernController>;
       }
     }
