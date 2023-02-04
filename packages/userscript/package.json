@@ -13,7 +13,7 @@
     "url": "https://github.com/kitten-science/kitten-scientists/issues"
   },
   "type": "module",
-  "main": "./output/index.js",
+  "main": "./build/index.js",
   "scripts": {
     "userscript:build": "vite --config vite.config.inject.js build",
     "userscript:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
@@ -22,7 +22,7 @@
     "userscript:watch": "vite --config vite.config.inject.js build --watch",
     "whoami": "echo userscript"
   },
-  "types": "./output/index.ts",
+  "types": "./build/index.ts",
   "dependencies": {
     "date-fns": "2.29.3",
     "semver": "7.3.8",

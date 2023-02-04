@@ -9,4 +9,5 @@
 node_modules
 tsconfig.tsbuildinfo
 
+/packages/*/build/*
 /packages/*/output/*

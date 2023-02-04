@@ -7,4 +7,4 @@ inputs:
     description: Needs `secrets.GITHUB_TOKEN` to talk to the API.
 runs:
   using: "node16"
-  main: "output/main.js"
+  main: "build/main.js"

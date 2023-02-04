@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build:all": "tsc --build",
-    "clean:all": "rm -rf packages/*/output packages/*/tsconfig.tsbuildinfo",
+    "clean:all": "rm -rf packages/*/build packages/*/tsconfig.tsbuildinfo",
     "lint:all": "eslint . --ext .ts",
     "typecheck:all": "tsc --noEmit --incremental false"
   },

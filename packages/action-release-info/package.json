@@ -15,9 +15,9 @@
   },
   "type": "module",
   "exports": {
-    ".": "./output/index.mjs"
+    ".": "./build/index.mjs"
   },
-  "types": "./output/index.d.mts",
+  "types": "./build/index.d.mts",
   "dependencies": {
     "@actions/core": "1.10.0",
     "@actions/github": "5.1.1",

@@ -11,7 +11,6 @@
     "lib": ["DOM", "ESNext"],
     "module": "ESNext",
     "moduleResolution": "Node",
-    "outDir": "output",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
