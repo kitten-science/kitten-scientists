@@ -14,6 +14,8 @@
     "url": "https://github.com/kitten-science/kitten-scientists/issues"
   },
   "scripts": {
+    "build:all": "tsc --build",
+    "clean:all": "rm -rf packages/*/output packages/*/tsconfig.tsbuildinfo",
     "lint:all": "eslint . --ext .ts",
     "typecheck:all": "tsc --noEmit --incremental false"
   },
