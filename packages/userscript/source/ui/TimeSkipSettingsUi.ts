@@ -38,7 +38,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
         icon: Icons.Cycles,
       }),
       {
-        child: new CyclesList(this._host, this.setting.cycles),
+        children: [new CyclesList(this._host, this.setting.cycles)],
       }
     );
     this._seasons = new Panel(
@@ -47,12 +47,14 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
         icon: Icons.Seasons,
       }),
       {
-        child: new SeasonsList(this._host, this.setting.seasons, {
-          onCheck: (label: string) =>
-            this._host.engine.imessage("time.skip.season.enable", [label]),
-          onUnCheck: (label: string) =>
-            this._host.engine.imessage("time.skip.season.disable", [label]),
-        }),
+        children: [
+          new SeasonsList(this._host, this.setting.seasons, {
+            onCheck: (label: string) =>
+              this._host.engine.imessage("time.skip.season.enable", [label]),
+            onUnCheck: (label: string) =>
+              this._host.engine.imessage("time.skip.season.disable", [label]),
+          }),
+        ],
       }
     );
 

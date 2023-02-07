@@ -35,6 +35,7 @@ export class TextButton extends UiComponent {
     }
 
     this.element = element;
+    this.addChildren(options?.children);
     this.readOnly = false;
   }
 }

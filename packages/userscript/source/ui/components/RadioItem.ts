@@ -83,6 +83,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
 
     this.input = input;
     this.element = element;
+    this.addChildren(options?.children);
     this.setting = setting;
     this.option = option;
   }

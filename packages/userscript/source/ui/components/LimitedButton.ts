@@ -40,6 +40,7 @@ export class LimitedButton extends UiComponent {
 
     this.checkbox = checkbox;
     this.element = element;
+    this.addChildren(options?.children);
     this.setting = setting;
   }
 

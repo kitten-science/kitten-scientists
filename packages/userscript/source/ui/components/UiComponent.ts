@@ -1,7 +1,8 @@
 import { cerror } from "../../tools/Log";
 import { UserScript } from "../../UserScript";
 
-export type UiComponentOptions = {
+export type UiComponentOptions<TChild extends UiComponent = UiComponent> = {
+  readonly children: Array<TChild>;
   readonly onRefresh: <T extends UiComponent>(subject: T) => void;
 };
 
@@ -20,6 +21,13 @@ export abstract class UiComponent extends EventTarget {
 
   private readonly _onRefresh: UiComponentOptions["onRefresh"] | undefined;
 
+  /**
+   * Constructs the base `UiComponent`.
+   * Subclasses MUST add children from options when `this.element` is constructed.
+   *
+   * @param host A reference to the host.
+   * @param options The options for this component.
+   */
   constructor(host: UserScript, options?: Partial<UiComponentOptions>) {
     super();
     this._host = host;
@@ -41,8 +49,8 @@ export abstract class UiComponent extends EventTarget {
     this.children.add(child);
     this.element.append(child.element);
   }
-  addChildren(children: Iterable<UiComponent>) {
-    for (const child of children) {
+  addChildren(children?: Iterable<UiComponent>) {
+    for (const child of children ?? []) {
       this.addChild(child);
     }
   }

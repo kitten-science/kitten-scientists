@@ -16,5 +16,6 @@ export class Container extends UiComponent {
     const element = $("<div/>");
 
     this.element = element;
+    this.addChildren(options?.children);
   }
 }

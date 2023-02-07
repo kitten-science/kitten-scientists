@@ -29,5 +29,6 @@ export class IconButton extends UiComponent {
     }).addClass("ks-icon-button");
 
     this.element = element;
+    this.addChildren(options?.children);
   }
 }
