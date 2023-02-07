@@ -22,5 +22,6 @@ export class HeaderListItem extends UiComponent implements ListItem {
     const element = $("<li/>", { text }).addClass("ks-header");
 
     this.element = element;
+    this.addChildren(options?.children);
   }
 }

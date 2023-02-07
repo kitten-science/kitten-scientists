@@ -18,5 +18,6 @@ export class ExplainerListItem extends UiComponent {
     const element = $("<li/>", { text }).addClass("ks-explainer");
 
     this.element = element;
+    this.addChildren(options?.children);
   }
 }

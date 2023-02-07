@@ -28,5 +28,6 @@ export class ListItem extends UiComponent {
     }
 
     this.element = element;
+    this.addChildren(options?.children);
   }
 }

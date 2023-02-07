@@ -28,7 +28,7 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
     host: UserScript,
     label: string,
     setting: TSetting,
-    options?: Partial<OptionsListItemOptions>
+    options?: Partial<Omit<OptionsListItemOptions, "children">>
   ) {
     super(host, options);
 

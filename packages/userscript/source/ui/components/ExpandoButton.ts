@@ -20,6 +20,7 @@ export class ExpandoButton extends UiComponent {
     }).addClass("ks-expando-button");
 
     this.element = element;
+    this.addChildren(options?.children);
   }
 
   setCollapsed() {

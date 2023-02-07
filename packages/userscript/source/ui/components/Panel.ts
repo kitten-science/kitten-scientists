@@ -1,20 +1,10 @@
-import { is, isNil } from "../../tools/Maybe";
+import { is } from "../../tools/Maybe";
 import { UserScript } from "../../UserScript";
 import { Container } from "./Container";
 import { ExpandoButton } from "./ExpandoButton";
 import { UiComponent, UiComponentOptions } from "./UiComponent";
 
-export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponentOptions & {
-  /**
-   * A component that should be hosted in the panel.
-   */
-  child: TChild;
-
-  /**
-   * Component that should be hosted in the panel.
-   */
-  children: Array<TChild>;
-
+export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponentOptions<TChild> & {
   /**
    * Should the main child be expanded right away?
    */
@@ -67,15 +57,6 @@ export class Panel<
 
     head.element.append(expando.element, this.container.element);
 
-    const child = options?.child;
-    if (!isNil(child)) {
-      this.addChild(child);
-    }
-    const children = options?.children;
-    if (!isNil(children)) {
-      this.addChildren(children);
-    }
-
     if (options?.initiallyExpanded) {
       this.container.element.show();
       expando.setExpanded();
@@ -85,6 +66,7 @@ export class Panel<
 
     this._mainChildVisible = options?.initiallyExpanded ?? false;
     this.element = head.element;
+    this.addChildren(options?.children);
     this._expando = expando;
   }
 

@@ -3,21 +3,10 @@ import { UserScript } from "../../UserScript";
 import { DisableButton } from "./buttons-icon/DisableButton";
 import { EnableButton } from "./buttons-icon/EnableButton";
 import { ResetButton } from "./buttons-icon/ResetButton";
-import { ListItem } from "./ListItem";
 import { SettingListItem } from "./SettingListItem";
 import { UiComponent, UiComponentOptions } from "./UiComponent";
 
 export type SettingsListOptions = UiComponentOptions & {
-  /**
-   * A component that should be hosted in the panel.
-   */
-  readonly child?: ListItem;
-
-  /**
-   * Component that should be hosted in the panel.
-   */
-  readonly children?: Array<ListItem>;
-
   readonly hasEnableAll?: boolean;
   readonly hasDisableAll?: boolean;
   readonly onEnableAll?: () => void;
@@ -48,7 +37,7 @@ export class SettingsList extends UiComponent {
    * @param options Which tools should be available on the list?
    */
   constructor(host: UserScript, options?: Partial<SettingsListOptions>) {
-    super(host, options);
+    super(host, { ...options, children: [] });
 
     const toolOptions = {
       hasDisableAll: true,
@@ -127,15 +116,7 @@ export class SettingsList extends UiComponent {
     }
 
     this.element = container;
-
-    const child = options?.child;
-    if (!isNil(child)) {
-      this.addChild(child);
-    }
-    const children = options?.children;
-    if (!isNil(children)) {
-      this.addChildren(children);
-    }
+    this.addChildren(options?.children);
   }
 
   override addChild(child: UiComponent) {
