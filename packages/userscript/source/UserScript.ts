@@ -1,7 +1,7 @@
 import { ReleaseChannel, ReleaseInfo } from "@kitten-science/action-release-info";
 import JQuery from "jquery";
 import gt from "semver/functions/gt";
-import { Engine, EngineState, SupportedLanguages } from "./Engine";
+import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine";
 import { ScienceSettings } from "./settings/ScienceSettings";
 import { SpaceSettings } from "./settings/SpaceSettings";
 import { WorkshopSettings } from "./settings/WorkshopSettings";
@@ -35,7 +35,7 @@ declare global {
 
 export type I18nEngine = (key: string, args?: Array<number | string>) => string;
 
-export const DefaultLanguage: SupportedLanguages = "en";
+export const FallbackLanguage: GameLanguage & SupportedLanguage = "en";
 
 export const ksVersion = (prefix = "") => {
   if (isNil(KS_VERSION)) {
@@ -57,15 +57,6 @@ export class UserScript {
   readonly i18nEngine: I18nEngine;
 
   /**
-   * The currently selected language.
-   */
-  private _language: SupportedLanguages;
-
-  get language() {
-    return this._language;
-  }
-
-  /**
    * Stores if we caught the `game/start` signal from the game.
    */
   private static _gameStartSignal: Promise<boolean>;
@@ -79,18 +70,27 @@ export class UserScript {
   constructor(
     gamePage: GamePage,
     i18nEngine: I18nEngine,
-    language: SupportedLanguages = DefaultLanguage
+    gameLanguage: GameLanguage = FallbackLanguage
   ) {
     cinfo(`Kitten Scientists ${ksVersion("v")} constructed.`);
     cinfo(`You are on the '${String(KS_RELEASE_CHANNEL)}' release channel.`);
 
     this.gamePage = gamePage;
     this.i18nEngine = i18nEngine;
-    this._language = language;
 
-    this.engine = new Engine(this);
-    this._userInterface = new UserInterface(this);
-    this._userInterface.refreshUi();
+    this.engine = new Engine(this, gameLanguage);
+    this._userInterface = this._constructUi();
+  }
+
+  private _constructUi() {
+    const ui = new UserInterface(this);
+    ui.refreshUi();
+    return ui;
+  }
+
+  rebuildUi() {
+    this._userInterface.destroy();
+    this._userInterface = this._constructUi();
   }
 
   /**
@@ -105,13 +105,6 @@ export class UserScript {
   }
 
   run(): void {
-    if (!this.engine.isLanguageSupported(this._language)) {
-      cwarn(
-        `Requested language '${this._language}' is not available. Falling back to '${DefaultLanguage}'.`
-      );
-      this._language = DefaultLanguage;
-    }
-
     // Increase messages displayed in log
     // TODO: This should be configurable.
     this.gamePage.console.maxMessages = 1000;
@@ -320,7 +313,7 @@ export class UserScript {
     const instance = new UserScript(
       mustExist(UserScript.window.gamePage),
       mustExist(UserScript.window.$I),
-      localStorage["com.nuclearunicorn.kittengame.language"] as SupportedLanguages | undefined
+      localStorage["com.nuclearunicorn.kittengame.language"] as GameLanguage | undefined
     );
 
     if (!isNil(UserScript._possibleEngineState)) {

@@ -19,6 +19,7 @@ import { WorkshopSettingsUi } from "./WorkshopSettingsUi";
 
 export class UserInterface extends UiComponent {
   readonly element: JQuery<HTMLElement>;
+  readonly showActivity: JQuery<HTMLElement>;
 
   private _engineUi: EngineSettingsUi;
   private _sections: Array<
@@ -104,20 +105,25 @@ export class UserInterface extends UiComponent {
     }
 
     // Set up the "show activity summary" area.
-    const showActivity = $("<span/>", {
+    this.showActivity = $("<span/>", {
       html: `<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="${Icons.Summary}"/></svg>`,
       title: this._host.engine.i18n("summary.show"),
     }).addClass("ks-show-activity");
 
-    showActivity.on("click", () => this._host.engine.displayActivitySummary());
+    this.showActivity.on("click", () => this._host.engine.displayActivitySummary());
 
-    $("#clearLog").prepend(showActivity);
+    $("#clearLog").prepend(this.showActivity);
 
     // add the options above the game log
     const right = $("#rightColumn");
     right.prepend(ks.append(optionsListElement));
 
     this.element = ks;
+  }
+
+  destroy() {
+    this.showActivity.remove();
+    this.element.remove();
   }
 
   refreshUi(): void {
