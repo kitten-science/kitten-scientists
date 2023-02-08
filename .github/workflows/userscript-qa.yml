@@ -48,6 +48,7 @@ jobs:
             deps
             deps-dev
             filters
+            i18n
             settings
             ui
           accepted_types: |

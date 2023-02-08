@@ -108,12 +108,36 @@ Tab related:
 Internals related:
 
 -   `api`
+
+    Relates to the global `kittenScientists` API.
+
 -   `build`
+
+    Relates to the process of producing one of the KS release fragment.
+
 -   `container`
+
+    Relates to the KS development container.
+
 -   `core`
+
+    Relates to central behavior of KS
+
 -   `filters`
+
+    Relates to the log filters of KS.
+
+-   `i18n`
+
+    Relates to translations of KS.
+
 -   `settings`
+
+    Relates to changes to the settings system.
+
 -   `ui`
+
+    Relates to the KS user interface.
 
 ## Pull Requests
 
