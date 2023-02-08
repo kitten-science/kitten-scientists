@@ -4,6 +4,7 @@ import { isNil } from "../tools/Maybe";
 import { UserScript } from "../UserScript";
 import { ButtonListItem } from "./components/ButtonListItem";
 import { LabelListItem } from "./components/LabelListItem";
+import { OptionsListItem } from "./components/OptionsListItem";
 import { SettingsList } from "./components/SettingsList";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { TextButton } from "./components/TextButton";
@@ -36,6 +37,11 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                 },
               })
             ),
+            new OptionsListItem(host, "Language", settings.language, {
+              onCheck: () => {
+                this._host.rebuildUi();
+              },
+            }),
           ],
         }),
       ],

@@ -24,9 +24,9 @@ import { WorkshopSettings } from "./settings/WorkshopSettings";
 import { SpaceManager } from "./SpaceManager";
 import { TimeControlManager } from "./TimeControlManager";
 import { TimeManager } from "./TimeManager";
-import { cdebug, cerror, cwarn } from "./tools/Log";
+import { cdebug, cerror, cinfo, cwarn } from "./tools/Log";
 import { TradeManager } from "./TradeManager";
-import { DefaultLanguage, ksVersion, UserScript } from "./UserScript";
+import { FallbackLanguage, ksVersion, UserScript } from "./UserScript";
 import { VillageManager } from "./VillageManager";
 import { WorkshopManager } from "./WorkshopManager";
 
@@ -51,7 +51,27 @@ export type EngineState = {
   village: VillageSettings;
   workshop: WorkshopSettings;
 };
-export type SupportedLanguages = "de" | "en" | "he" | "zh";
+export type GameLanguage =
+  | "en"
+  | "br"
+  | "cz"
+  | "de"
+  | "es"
+  | "fr"
+  | "fro"
+  | "it"
+  | "ja"
+  | "ko"
+  | "nl"
+  | "no"
+  | "pl"
+  | "ro"
+  | "ru"
+  | "tr"
+  | "uk"
+  | "zh"
+  | "zht";
+export type SupportedLanguage = "de" | "en" | "he" | "zh";
 
 export class Engine {
   /**
@@ -74,13 +94,14 @@ export class Engine {
   private _activitySummary: ActivitySummary;
   private _intervalMainLoop: number | undefined = undefined;
 
-  constructor(host: UserScript) {
+  constructor(host: UserScript, gameLanguage: GameLanguage) {
+    this.settings = new EngineSettings();
+
     this._i18nData = i18nData;
+    this.setLanguage(gameLanguage);
 
     this._host = host;
     this._activitySummary = new ActivitySummary(this._host);
-
-    this.settings = new EngineSettings();
 
     this.workshopManager = new WorkshopManager(this._host);
 
@@ -106,6 +127,23 @@ export class Engine {
 
   isLanguageSupported(language: string): boolean {
     return language in this._i18nData;
+  }
+
+  setLanguage(language: GameLanguage | SupportedLanguage) {
+    const previousLanguage = this.settings.language.selected;
+    if (!this.isLanguageSupported(language)) {
+      cwarn(
+        `Requested language '${language}' is not available. Falling back to '${FallbackLanguage}'.`
+      );
+      this.settings.language.selected = FallbackLanguage;
+    } else {
+      cinfo(`Selecting language '${language}'.`);
+      this.settings.language.selected = language as SupportedLanguage;
+    }
+
+    if (previousLanguage !== this.settings.language.selected) {
+      this._host.rebuildUi();
+    }
   }
 
   /**
@@ -149,6 +187,8 @@ export class Engine {
     attemptLoad(() => this.tradeManager.settings.load(settings.trade), "trade");
     attemptLoad(() => this.villageManager.settings.load(settings.village), "village");
     attemptLoad(() => this.workshopManager.settings.load(settings.workshop), "workshop");
+
+    this.setLanguage(this.settings.language.selected);
 
     // Ensure the main engine setting is respected.
     if (this.settings.enabled) {
@@ -284,10 +324,12 @@ export class Engine {
 
     value =
       value ??
-      this._i18nData[this._host.language][key as keyof typeof i18nData[SupportedLanguages]];
+      this._i18nData[this.settings.language.selected][
+        key as keyof (typeof i18nData)[SupportedLanguage]
+      ];
 
     if (typeof value === "undefined" || value === null) {
-      value = i18nData[DefaultLanguage][key as keyof typeof i18nData[SupportedLanguages]];
+      value = i18nData[FallbackLanguage][key as keyof (typeof i18nData)[SupportedLanguage]];
       if (!value) {
         cwarn(`i18n key '${key}' not found in default language.`);
         return `$${key}`;
@@ -303,7 +345,7 @@ export class Engine {
   }
 
   iactivity(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
+    i18nLiteral: keyof (typeof i18nData)[SupportedLanguage],
     i18nArgs: Array<number | string> = [],
     logStyle?: ActivityClass
   ): void {
@@ -317,7 +359,7 @@ export class Engine {
   }
 
   imessage(
-    i18nLiteral: keyof typeof i18nData[SupportedLanguages],
+    i18nLiteral: keyof (typeof i18nData)[SupportedLanguage],
     i18nArgs: Array<number | string> = []
   ): void {
     this._printOutput("ks-default", "#aa50fe", this.i18n(i18nLiteral, i18nArgs));
