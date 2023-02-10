@@ -431,11 +431,13 @@ export class TimeControlManager {
     const maxSkips =
       -1 === this.settings.timeSkip.max ? Number.POSITIVE_INFINITY : this.settings.timeSkip.max;
     // The amount of skips we can perform.
-    let canSkip = Math.min(
-      Math.floor((heatMax - heatNow) / factor),
-      maxSkips,
-      timeCrystalsAvailable / (1 + shatterCostIncreaseChallenge),
-      0 < shatterVoidCost ? voidAvailable / shatterVoidCost : Number.POSITIVE_INFINITY
+    let canSkip = Math.floor(
+      Math.min(
+        (heatMax - heatNow) / factor,
+        maxSkips,
+        timeCrystalsAvailable / (1 + shatterCostIncreaseChallenge),
+        0 < shatterVoidCost ? voidAvailable / shatterVoidCost : Number.POSITIVE_INFINITY
+      )
     );
 
     // The amount of skips to perform.
