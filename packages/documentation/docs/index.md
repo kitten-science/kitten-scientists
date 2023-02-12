@@ -1,13 +1,17 @@
 # Kitten Scientists v2
 
-Documenting all features has only been started since the beta phase. This documentation is part of the ongoing development effort and it is incomplete.
+KS is a userscript for [Kittens Game](https://kittensgame.com/web/), which allows you to automate most tasks in the game.
 
-Please refer to the sections above until we author a proper landing page.
+You load the script into your game through a [userscript manager or a bookmarklet](https://kitten-science.github.io/kitten-scientists/installation/) and it will create a new panel in your UI with options to configure the behavior of KS.
+
+KS was originally developed by [Cameron Condry](https://github.com/cameroncondry) and has since been extended by many great contributors. The v2 of KS is a major effort to rewrite the entire script with more modern approaches, fix all issues in the script, and add new features.
 
 !!! question
 
     Please help us [translate KS into more languages](https://crowdin.com/project/kitten-scientists) on Crowdin.
 
 <!-- prettier-ignore-start -->
+*[KG]: Kittens Game
 *[KS]: Kitten Scientists
+*[UI]: User interface
 <!-- prettier-ignore-end -->
