@@ -46,7 +46,7 @@ export type StagedBuilding = "broadcasttower" | "dataCenter" | "hydroplant" | "s
 export type BuildingMeta = {
   calculateEffects?: (model: unknown, game: GamePage) => void;
   description?: string;
-  effects: { unicornsPerTickBase?: number };
+  effects: { energyConsumption?: number; energyProduction?: number; unicornsPerTickBase?: number };
   flavor?: string;
   label?: string;
   name: Building;
@@ -57,9 +57,9 @@ export type BuildingMeta = {
   stage?: number;
   stages?: Array<{
     calculateEffects?: (model: unknown, game: GamePage) => void;
-    calculateEnergyProduction?: (game: GamePage, season: unknown) => void;
+    calculateEnergyProduction?: (game: GamePage, season: unknown) => number;
     description: string;
-    effects?: { catnipDemandRatio?: number };
+    effects?: { catnipDemandRatio?: number; energyConsumption?: number; energyProduction?: number };
     flavor?: string;
     label: string;
     priceRatio: number;

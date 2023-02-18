@@ -39,6 +39,20 @@ import {
 import { TradeTab } from "./trade";
 import { JobInfo, VillageTab } from "./village";
 
+export type ChallengeInfo = {
+  active: boolean;
+  calculateEffects: (model: unknown, game: GamePage) => void;
+  description: string;
+  effectDesc: string;
+  effects: { energyConsumptionIncrease?: number; energyConsumptionRatio?: number };
+  enabled: boolean;
+  on: number;
+  pending: boolean;
+  researched: boolean;
+  unlocked: boolean;
+  val: number;
+};
+
 export type GamePage = {
   bld: {
     /** @deprecated Use `getBuildingExt()` instead. */
@@ -73,11 +87,8 @@ export type GamePage = {
   };
   challenges: {
     currentChallenge: Challenge;
-    challenges: Array<{ pending: boolean }>;
-    getChallenge: (challenge: Challenge) => {
-      calculateEffects: (model: unknown, game: GamePage) => void;
-      researched: number;
-    };
+    challenges: Array<ChallengeInfo>;
+    getChallenge: (challenge: Challenge) => ChallengeInfo;
     isActive: (challenge: Challenge) => boolean;
   };
   compressLZData: (data: string) => string;
@@ -310,6 +321,7 @@ export type GamePage = {
        */
       label: string;
       name: SpaceBuildings;
+      on: number;
       priceRatio: number;
       prices: Array<Price>;
       requiredTech: Array<"sattelites">;
