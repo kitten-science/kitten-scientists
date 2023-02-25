@@ -3,7 +3,7 @@ import { MaterialsCache } from "./helper/MaterialsCache";
 import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
-import { cdebug, cerror } from "./tools/Log";
+import { cerror } from "./tools/Log";
 import { isNil, mustExist } from "./tools/Maybe";
 import { Resource, ResourceCraftable, UpgradeInfo } from "./types";
 import { CraftableInfo, ResourceInfo } from "./types/craft";
@@ -90,9 +90,25 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   autoCraft(
     crafts: Partial<Record<ResourceCraftable, CraftSettingsItem>> = this.settings.resources
   ) {
-    const trigger = this.settings.trigger;
+    const craftRequests = new Map<
+      CraftSettingsItem,
+      {
+        countRequested: number;
+        materials: Array<{
+          resource: Resource;
+          consume: number;
+        }>;
+      }
+    >();
 
+    // Find all resources we would want to craft.
+    // For crafts that require resources with a capacity, those resources must
+    // be at or above the trigger for them to be considered to be crafted.
     for (const craft of Object.values(crafts)) {
+      if (!craft.enabled) {
+        continue;
+      }
+
       const current = !craft.max ? false : this.getResource(craft.resource);
 
       const max = craft.max === -1 ? Number.POSITIVE_INFINITY : craft.max;
@@ -112,23 +128,111 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         .filter(material => 0 < material.maxValue);
 
       const allMaterialsAboveTrigger =
-        requiredMaterials.filter(material => material.value / material.maxValue < trigger)
-          .length === 0;
+        requiredMaterials.filter(
+          material => material.value / material.maxValue < this.settings.trigger
+        ).length === 0;
 
       if (!allMaterialsAboveTrigger) {
         continue;
       }
 
-      const amount = this.getLowestCraftAmount(
-        craft.resource,
-        craft.limited,
-        0 < requiredMaterials.length
-      );
+      craftRequests.set(craft, {
+        countRequested: 1,
+        materials: materials.map(material => ({
+          resource: material,
+          consume: 0,
+        })),
+      });
+    }
 
-      // If we can craft any of this item, do it.
-      if (0 < amount) {
-        this.craft(craft.resource, amount);
+    if (craftRequests.size < 1) {
+      return;
+    }
+
+    // For all crafts under consideration, find the crafts that share resources in their requirements.
+    // We will use this to split crafts evenly among the available stock of that resource.
+    const billOfMaterials = new Map<Resource, Array<ResourceCraftable>>();
+    for (const [craft, request] of craftRequests) {
+      for (const material of request.materials) {
+        if (!billOfMaterials.has(material.resource)) {
+          billOfMaterials.set(material.resource, new Array<ResourceCraftable>());
+        }
+        const consumers = mustExist(billOfMaterials.get(material.resource));
+        consumers.push(craft.resource);
       }
+    }
+
+    // Determine how much of each resource we want to spend on each craft.
+    for (const [, request] of craftRequests) {
+      for (const material of request.materials) {
+        const available = this.getValueAvailable(material.resource);
+        material.consume = available / mustExist(billOfMaterials.get(material.resource)).length;
+      }
+    }
+
+    // Determine how much of each craft we want to perform, given our resource allocations.
+    for (const [craft, request] of craftRequests) {
+      const materials = this.getMaterials(craft.resource);
+      let amount = Number.MAX_VALUE;
+      for (const material of request.materials) {
+        // How much of the material is needed to craft 1 new resource.
+        const materialAmount = mustExist(materials[material.resource]);
+
+        const materialResource = this.getResource(material.resource);
+        const materialCraft =
+          material.resource in this.settings.resources
+            ? this.settings.resources[material.resource as ResourceCraftable]
+            : undefined;
+        if (
+          // For unlimited crafts, assign all resources.
+          !craft.limited ||
+          // For materials that have a resource cap, also assign all resources.
+          // It makes no sense to apply source material balancing here. If we did, we'd stop
+          // crafting resources when the source material becomes capped. We would never be able
+          // to get enough source stock so the balancing would allow for more crafts.
+          0 < materialResource.maxValue ||
+          // For materials that are also crafted, if they have already been crafted to their `max`,
+          // treat them the same as capped source materials, to avoid the same conflict.
+          (materialCraft ? materialCraft.max - materialResource.value < 1 : false) ||
+          // Handle the ship override.
+          (craft.resource === "ship" && this.settings.shipOverride.enabled)
+        ) {
+          amount = Math.min(amount, material.consume / materialAmount);
+          continue;
+        }
+
+        const ratio = this._host.gamePage.getResCraftRatio(craft.resource);
+
+        // Quantity of source and target resource currently available.
+        const availableSource =
+          this.getValueAvailable(material.resource, true) /
+          mustExist(billOfMaterials.get(material.resource)).length;
+        const availableTarget = this.getValueAvailable(craft.resource, true);
+
+        // How much source resource is consumed and target resource is crafted per craft operation.
+        const recipeRequires = materialAmount;
+        const recipeProduces = 1 + ratio;
+
+        // How many crafts could we do given the amount of source resource available.
+        const craftsPossible = availableSource / recipeRequires;
+
+        // How many crafts were hypothetically done to produce the current amount of target resource.
+        const craftsDone = availableTarget / recipeProduces;
+
+        // Craft only when the craftsPossible >= craftsDone.
+        // Crafting gets progressively more expensive as the amount of the target increases.
+        // This heuristic gives other, cheaper, targets a chance to get built from the same source resource.
+        // There is no checking if there actually exists a different target that could get built.
+        amount = Math.min(amount, craftsPossible - craftsDone, material.consume / materialAmount);
+      }
+      request.countRequested = Math.max(0, amount);
+    }
+
+    for (const [craft, request] of craftRequests) {
+      if (request.countRequested < 1) {
+        continue;
+      }
+      this.craft(craft.resource, request.countRequested);
     }
   }
 
@@ -141,7 +245,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   craft(name: ResourceCraftable, amount: number): void {
     amount = Math.floor(amount);
 
-    if (!name || 1 > amount) {
+    if (!name || amount < 1) {
       return;
     }
     if (!this._canCraft(name, amount)) {
@@ -153,15 +257,15 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
     this._host.gamePage.craft(craft.name, amount);
 
-    const iname = mustExist(this._host.gamePage.resPool.get(name)).title;
+    const resourceName = mustExist(this._host.gamePage.resPool.get(name)).title;
 
-    // determine actual amount after crafting upgrades
+    // Determine actual amount after crafting upgrades
     amount = parseFloat((amount * (1 + ratio)).toFixed(2));
 
-    this._host.engine.storeForSummary(iname, amount, "craft");
+    this._host.engine.storeForSummary(resourceName, amount, "craft");
     this._host.engine.iactivity(
       "act.craft",
-      [this._host.gamePage.getDisplayValueExt(amount), iname],
+      [this._host.gamePage.getDisplayValueExt(amount), resourceName],
       "ks-craft"
     );
   }
@@ -219,95 +323,12 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     }
 
     const materials = this.getMaterials(name);
-    for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
-      if (this.getValueAvailable(mat, true) < amount) {
+    for (const [material, amount] of objectEntries(materials)) {
+      if (this.getValueAvailable(material, true) < amount) {
         return false;
       }
     }
     return true;
-  }
-
-  /**
-   * Determine the limit of how many items to craft of a given resource.
-   *
-   * @param name The resource to craft.
-   * @param limited Is the crafting of the resource currently limited?
-   * @param capacityControlled Is this craft dependant on materials that have a stock capacity?
-   * @returns The amount of resources to craft.
-   */
-  getLowestCraftAmount(
-    name: ResourceCraftable,
-    limited: boolean,
-    capacityControlled = false
-  ): number {
-    const materials = this.getMaterials(name);
-
-    const craft = this.getCraft(name);
-    const ratio = this._host.gamePage.getResCraftRatio(craft.name);
-
-    // The ship override allows the user to treat ships as "unlimited" while there's less than 243.
-    const shipOverride = this.settings.shipOverride.enabled;
-
-    const res = this.getResource(name);
-
-    // Iterate over the materials required for this craft.
-    // We want to find the lowest amount of items we could craft, so start with the largest number possible.
-    let amount = Number.MAX_VALUE;
-    for (const [resource, materialAmount] of objectEntries(materials)) {
-      // The delta is the smallest craft amount based on the current material.
-      let delta = undefined;
-
-      // Either if the build isn't limited, or we're handling the ship override.
-      if (
-        !limited ||
-        capacityControlled ||
-        (name === "ship" && shipOverride && this.getResource("ship").value < 243)
-      ) {
-        // If there is a storage limit, we can just use everything returned by getValueAvailable,
-        // since the regulation happens there
-        delta = this.getValueAvailable(resource) / materialAmount;
-      } else {
-        // Quantity of source and target resource currently available.
-        const srcAvailable = this.getValueAvailable(resource, true);
-        const tgtAvailable = this.getValueAvailable(name, true);
-
-        // How much source resource is consumed and target resource is crafted per craft operation.
-        const recipeRequires = materialAmount;
-        const recipeProduces = 1 + ratio;
-
-        // How many crafts could we do given the amount of source resource available.
-        const craftsPossible = srcAvailable / recipeRequires;
-
-        // How many crafts were hypothetically done to produce the current amount of target resource.
-        const craftsDone = tgtAvailable / recipeProduces;
-
-        // Craft only when the craftsPossible >= craftsDone.
-        // Crafting gets progressively more expensive as the amount of the target increases.
-        // This heuristic gives other, cheaper, targets a chance to get built from the same source resource.
-        // There is no checking if there actually exists a different target that could get built.
-        delta = craftsPossible - craftsDone;
-
-        // If crafting is not going to happen, explain why not.
-        const explanationMessages = false;
-        if (explanationMessages && delta < 1.0) {
-          // delta >= 1.0 when craftsPossible >= craftsDone.
-          const srcNeeded = recipeRequires * craftsDone;
-          cdebug(`[GLCA] not crafting '${name}' until '${resource}' >= '${srcNeeded}'`);
-        }
-      }
-
-      amount = Math.min(delta, amount);
-    }
-
-    // If we have a maximum value, ensure that we don't produce more than
-    // this value. This should currently only impact wood crafting, but is
-    // written generically to ensure it works for any craft that produces a
-    // good with a maximum value.
-    if (0 < res.maxValue && res.maxValue - res.value < amount) {
-      amount = res.maxValue - res.value;
-    }
-
-    return Math.floor(amount);
   }
 
   /**
