@@ -533,10 +533,12 @@ export class ReligionManager implements Automation {
   private async _autoTears() {
     const tears = this._workshopManager.getResource("tears");
     const available = this._workshopManager.getValueAvailable("tears");
+    const sorrow = this._workshopManager.getResource("sorrow");
     if (
       !isNil(this._host.gamePage.religionTab.refineBtn) &&
       this.settings.refineTears.trigger <= available &&
-      this.settings.refineTears.trigger <= tears.value
+      this.settings.refineTears.trigger <= tears.value &&
+      sorrow.value < sorrow.maxValue
     ) {
       const controller = new classes.ui.religion.RefineTearsBtnController(this._host.gamePage);
       const model = this._host.gamePage.religionTab.refineBtn.model;
