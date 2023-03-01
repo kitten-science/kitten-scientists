@@ -766,7 +766,7 @@ __metadata:
     browserstack-local: 1.5.1
     chromedriver: 109.0.0
     mocha: 10.2.0
-    selenium-webdriver: 4.8.0
+    selenium-webdriver: 4.8.1
     tslib: 2.5.0
     typescript: 4.9.5
   languageName: unknown
@@ -4283,14 +4283,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"selenium-webdriver@npm:4.8.0":
-  version: 4.8.0
-  resolution: "selenium-webdriver@npm:4.8.0"
+"selenium-webdriver@npm:4.8.1":
+  version: 4.8.1
+  resolution: "selenium-webdriver@npm:4.8.1"
   dependencies:
     jszip: ^3.10.0
     tmp: ^0.2.1
     ws: ">=8.11.0"
-  checksum: a818a886a546ee5c2a33145bca8c8ddf3747b2721d12399ffc307bfc30e12fa033eef12f8933451593547e389cb3cfd5c6756cd8ee5c8489e00e23c5176eea8e
+  checksum: 48a6078603f5ab8fbc965ff692ef1959f5d47fddfbbf25febda88dd1d3ec6522b3eb62be4b5aa83ee581616e2d35bdd8cb12e98896bb96e47d5096b8674ddaf3
   languageName: node
   linkType: hard
 
