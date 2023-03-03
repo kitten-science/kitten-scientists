@@ -197,7 +197,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
             ? materialCraft.max - materialResource.value < 1
             : false) ||
           // Handle the ship override.
-          (craft.resource === "ship" && this.settings.shipOverride.enabled)
+          (craft.resource === "ship" &&
+            this.settings.shipOverride.enabled &&
+            this.getResource("ship").value < 243)
         ) {
           amount = Math.min(amount, material.consume / materialAmount);
           continue;
