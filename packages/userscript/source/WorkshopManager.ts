@@ -66,7 +66,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
       for (const resource of prices) {
         // If we can't afford this resource price, continue with the next upgrade.
-        if (this.getValueAvailable(resource.name, true) < resource.val) {
+        if (this.getValueAvailable(resource.name) < resource.val) {
           continue workLoop;
         }
       }
@@ -193,7 +193,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
           0 < materialResource.maxValue ||
           // For materials that are also crafted, if they have already been crafted to their `max`,
           // treat them the same as capped source materials, to avoid the same conflict.
-          (materialCraft ? materialCraft.max - materialResource.value < 1 : false) ||
+          (!isNil(materialCraft) && -1 < materialCraft.max
+            ? materialCraft.max - materialResource.value < 1
+            : false) ||
           // Handle the ship override.
           (craft.resource === "ship" && this.settings.shipOverride.enabled)
         ) {
@@ -205,9 +207,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
         // Quantity of source and target resource currently available.
         const availableSource =
-          this.getValueAvailable(material.resource, true) /
+          this.getValueAvailable(material.resource) /
           mustExist(billOfMaterials.get(material.resource)).length;
-        const availableTarget = this.getValueAvailable(craft.resource, true);
+        const availableTarget = this.getValueAvailable(craft.resource);
 
         // How much source resource is consumed and target resource is crafted per craft operation.
         const recipeRequires = materialAmount;
@@ -324,7 +326,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
     const materials = this.getMaterials(name);
     for (const [material, amount] of objectEntries(materials)) {
-      if (this.getValueAvailable(material, true) < amount) {
+      if (this.getValueAvailable(material) < amount) {
         return false;
       }
     }
@@ -475,15 +477,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * to use.
    *
    * @param name The resource to check.
-   * @param all ?
-   * @param typeTrigger The trigger value associated with this check.
    * @returns The available amount of the resource.
    */
-  getValueAvailable(
-    name: Resource,
-    all: boolean | undefined = undefined,
-    typeTrigger: number | undefined = undefined
-  ): number {
+  getValueAvailable(name: Resource): number {
     // How many items to keep in stock.
     let stock = this.getStock(name);
 
@@ -512,26 +508,12 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     // Subtract the amount to keep in stock.
     value = Math.max(value - stock, 0);
 
-    // If the user has not requested "all", and this is a capped resource.
-    // TODO: This makes absolutely no sense. This should likely be a different method.
-    if (!all && 0 < this.getResource(name).maxValue) {
-      // Determine our de-facto trigger value to use.
-      let trigger: number;
-      if (!typeTrigger && typeTrigger !== 0) {
-        trigger = this.settings.trigger;
-      } else {
-        trigger = typeTrigger;
-      }
+    // Determine the consume rate.
+    // If the consume rate is 0.6, we'll always only make 60% of the resource available.
+    const resourceSettings = this._host.engine.settings.resources.resources[name];
+    const consume = resourceSettings.consume;
 
-      // Determine the consume rate. Either it's configured on the resource, or globally.
-      // If the consume rate is 0.6, we'll always only make 60% of the resource available.
-      const resourceSettings = this._host.engine.settings.resources.resources[name];
-      const consume = resourceSettings.consume;
-
-      value -= Math.min(this.getResource(name).maxValue * trigger, value) * (1 - consume);
-    }
-
-    return value;
+    return value * consume;
   }
 
   /**
