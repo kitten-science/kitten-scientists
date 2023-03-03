@@ -228,7 +228,7 @@ export class BulkPurchaseHelper {
     // Create a copy of the currently available resources.
     const tempPool: Record<Resource, number> = {} as Record<Resource, number>;
     for (const res of this._host.gamePage.resPool.resources) {
-      tempPool[res.name] = this._workshopManager.getValueAvailable(res.name, true);
+      tempPool[res.name] = this._workshopManager.getValueAvailable(res.name);
     }
 
     for (const potentialBuild of potentialBuilds) {
@@ -578,10 +578,7 @@ export class BulkPurchaseHelper {
           0.75
         );
         const oilPrice = finalResourcePrice * (1 - oilModifier);
-        if (
-          this._workshopManager.getValueAvailable("oil", true) <
-          oilPrice * Math.pow(1.05, build.val)
-        ) {
+        if (this._workshopManager.getValueAvailable("oil") < oilPrice * Math.pow(1.05, build.val)) {
           return false;
         }
 
@@ -593,14 +590,14 @@ export class BulkPurchaseHelper {
         );
         const karmaPrice = finalResourcePrice * (1 - karmaModifier);
         if (
-          this._workshopManager.getValueAvailable("karma", true) <
+          this._workshopManager.getValueAvailable("karma") <
           karmaPrice * Math.pow(priceRatio, build.val)
         ) {
           return false;
         }
       } else {
         if (
-          this._workshopManager.getValueAvailable(price.name, true) <
+          this._workshopManager.getValueAvailable(price.name) <
           finalResourcePrice * Math.pow(priceRatio, build.val)
         ) {
           return false;

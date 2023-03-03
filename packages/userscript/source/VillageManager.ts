@@ -267,9 +267,9 @@ export class VillageManager implements Automation {
     // Check if we can afford a festival.
     const craftManager = this._workshopManager;
     if (
-      craftManager.getValueAvailable("manpower", true) < 1500 ||
-      craftManager.getValueAvailable("culture", true) < 5000 ||
-      craftManager.getValueAvailable("parchment", true) < 2500
+      craftManager.getValueAvailable("manpower") < 1500 ||
+      craftManager.getValueAvailable("culture") < 5000 ||
+      craftManager.getValueAvailable("parchment") < 2500
     ) {
       return;
     }

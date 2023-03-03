@@ -283,7 +283,7 @@ export class TradeManager implements Automation {
     }
 
     const racePanels = this._host.gamePage.diplomacyTab.racePanels;
-    cultureVal = this._workshopManager.getValueAvailable("culture", true);
+    cultureVal = this._workshopManager.getValueAvailable("culture");
 
     const embassyBulk: Partial<
       Record<
@@ -365,7 +365,7 @@ export class TradeManager implements Automation {
       if (emBulk.val === 0) {
         continue;
       }
-      cultureVal = this._workshopManager.getValueAvailable("culture", true);
+      cultureVal = this._workshopManager.getValueAvailable("culture");
       if (cultureVal < emBulk.priceSum) {
         cwarn("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
       }
@@ -428,7 +428,7 @@ export class TradeManager implements Automation {
       let refreshRequired = false;
 
       // Get the currently available catpower.
-      let manpower = this._workshopManager.getValueAvailable("manpower", true);
+      let manpower = this._workshopManager.getValueAvailable("manpower");
       // TODO: These should be checked in reverse order. Otherwise the check for lizards
       //       can cause the zebras to be discovered at later stages in the game. Then it
       //       gets to the check for the zebras and doesn't explore again, as they're
@@ -762,14 +762,12 @@ export class TradeManager implements Automation {
     for (const [resource, required] of objectEntries(materials)) {
       // If this resource is manpower, the amount of trades it allows is straight forward.
       if (resource === "manpower") {
-        total = this._workshopManager.getValueAvailable(resource, true) / required;
+        total = this._workshopManager.getValueAvailable(resource) / required;
       } else {
         // For other resources, use a different path to determine the available resource
         // amount.
         // TODO: It's unclear how this works
-        total =
-          this._workshopManager.getValueAvailable(resource, limited, this.settings.trigger) /
-          required;
+        total = this._workshopManager.getValueAvailable(resource) / required;
       }
 
       // Set the amount to the lowest amount of possible trades seen yet.
@@ -903,7 +901,7 @@ export class TradeManager implements Automation {
     const materials = this.getMaterials(name);
     for (const [resource, amount] of objectEntries<Resource, number>(materials)) {
       // Check if we have a sufficient amount of that resource in storage.
-      if (this._workshopManager.getValueAvailable(resource, true) < amount) {
+      if (this._workshopManager.getValueAvailable(resource) < amount) {
         return false;
       }
     }

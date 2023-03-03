@@ -105,7 +105,7 @@ export class SpaceManager implements Automation {
       const prices = mustExist(model.model.prices);
       for (const resource of prices) {
         // If we can't afford this resource price, continue with the next mission.
-        if (this._workshopManager.getValueAvailable(resource.name, true) < resource.val) {
+        if (this._workshopManager.getValueAvailable(resource.name) < resource.val) {
           continue missionLoop;
         }
       }
