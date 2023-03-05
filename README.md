@@ -8,14 +8,14 @@ For a full explanation of how everything in Kitten Scientists works, please visi
 
 ### Userscript Manager (recommended)
 
-Grab the [latest stable build](https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.5), or any other release from the [Releases page](https://github.com/kitten-science/kitten-scientists/releases) and install it.
+Grab the [latest stable build](https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.6), or any other release from the [Releases page](https://github.com/kitten-science/kitten-scientists/releases) and install it.
 
 > If you don't have a userscript manager yet, [Tampermonkey](https://www.tampermonkey.net/) is a good solution for the most popular browsers.
 
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.5/kitten-scientists-2.0.0-beta.5.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.6/kitten-scientists-2.0.0-beta.5.user.js';d.body.appendChild(s);})();
 ```
 
 This bookmarklet points to the latest stable release. Come back here regularly to see if new versions are available 🙂

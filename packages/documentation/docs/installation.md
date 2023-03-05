@@ -14,7 +14,7 @@ KS is released in 3 variants:
 
     This is a release with a familiar version number, that has been designated as a reasonably stable version to use. At this time, that is:
 
-    <https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.5>.
+    <https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.6>.
 
 1. The **nightly** release.
 
@@ -41,7 +41,7 @@ To use bookmarklets, just create a new bookmark in your browser and enter the te
     This bookmarklet points to the **latest stable** release of KS.
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.5/kitten-scientists-2.0.0-beta.5.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.6/kitten-scientists-2.0.0-beta.5.user.js';d.body.appendChild(s);})();
 ```
 
 ## Container
