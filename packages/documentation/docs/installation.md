@@ -30,6 +30,13 @@ KS is released in 3 variants:
 
     <https://github.com/kitten-science/kitten-scientists/releases/tag/latest>
 
+For each of these releases, you will usually find 2 important files:
+
+1. A file that ends in `.min.user.js`
+1. A file that ends in `.user.js`
+
+Usually, you want to use the `.user.js` version, unless you are very concerned about bandwidth usage.
+
 ## Bookmarklet
 
 You can also load KS through a bookmarklet.
