@@ -15,7 +15,7 @@ Grab the [latest stable build](https://github.com/kitten-science/kitten-scientis
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.6/kitten-scientists-2.0.0-beta.5.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.6/kitten-scientists-2.0.0-beta.6.user.js';d.body.appendChild(s);})();
 ```
 
 This bookmarklet points to the latest stable release. Come back here regularly to see if new versions are available 🙂
