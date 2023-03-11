@@ -12,4 +12,4 @@ When you enable a building, this building will be built if all of these are true
 
 ## Start Missions
 
-The missions you select, will automatically started as soon as the required materials are available.
+The missions you select, will automatically be started as soon as the required materials are available.
