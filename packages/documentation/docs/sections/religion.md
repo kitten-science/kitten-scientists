@@ -16,6 +16,10 @@ All selected buildings are built, until their `Max` is reached.
 
 ## Additional Options
 
+### Sacrifice Unicorns
+
+When you have `Trigger` amount of unicorns, sacrifice them to earn tears.
+
 ### Sacrifice Alicorns
 
 When you have `Trigger` amount of alicorns, sacrifice them to earn time crystals.

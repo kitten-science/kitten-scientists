@@ -56,6 +56,10 @@ export class ReligionManager implements Automation {
 
     this._autoBuild();
 
+    if (this.settings.sacrificeUnicorns.enabled) {
+      await this._autoSacrificeUnicorns();
+    }
+
     if (this.settings.sacrificeAlicorns.enabled) {
       await this._autoSacrificeAlicorns();
     }
@@ -504,6 +508,30 @@ export class ReligionManager implements Automation {
     }
 
     return null;
+  }
+
+  private async _autoSacrificeUnicorns() {
+    const unicorns = this._workshopManager.getResource("unicorns");
+    const available = this._workshopManager.getValueAvailable("unicorns");
+    if (
+      !isNil(this._host.gamePage.religionTab.sacrificeBtn) &&
+      this.settings.sacrificeUnicorns.trigger <= available &&
+      this.settings.sacrificeUnicorns.trigger <= unicorns.value
+    ) {
+      const controller = this._host.gamePage.religionTab.sacrificeBtn.controller;
+      const model = this._host.gamePage.religionTab.sacrificeBtn.model;
+
+      await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
+
+      const cost = mustExist(model.prices?.[0]).val;
+
+      this._host.engine.iactivity("act.sacrificeUnicorns", [cost], "ks-faith");
+      this._host.engine.storeForSummary(
+        this._host.engine.i18n("$resources.unicorns.title"),
+        1,
+        "refine"
+      );
+    }
   }
 
   private async _autoSacrificeAlicorns() {
