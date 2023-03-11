@@ -209,6 +209,22 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
         new HeaderListItem(this._host, "Additional options"),
         new SettingTriggerListItem(
           this._host,
+          this._host.engine.i18n("option.faith.sacrificeUnicorns"),
+          this.setting.sacrificeUnicorns,
+          {
+            behavior: "integer",
+            onCheck: () =>
+              this._host.engine.imessage("status.sub.enable", [
+                this._host.engine.i18n("option.faith.sacrificeUnicorns"),
+              ]),
+            onUnCheck: () =>
+              this._host.engine.imessage("status.sub.disable", [
+                this._host.engine.i18n("option.faith.sacrificeUnicorns"),
+              ]),
+          }
+        ),
+        new SettingTriggerListItem(
+          this._host,
           this._host.engine.i18n("option.faith.sacrificeAlicorns"),
           this.setting.sacrificeAlicorns,
           {

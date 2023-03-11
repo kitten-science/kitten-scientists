@@ -81,6 +81,11 @@ export class ReligionSettings extends SettingTrigger {
   sacrificeAlicorns: SettingTrigger;
 
   /**
+   * Sacrifice unicorns for tears.
+   */
+  sacrificeUnicorns: SettingTrigger;
+
+  /**
    * Refine tears into BLS.
    */
   refineTears: SettingTrigger;
@@ -237,6 +242,7 @@ export class ReligionSettings extends SettingTrigger {
     },
     bestUnicornBuilding = new Setting(false),
     sacrificeAlicorns = new SettingTrigger(false, 25),
+    sacrificeUnicorns = new SettingTrigger(false, 1000000),
     refineTears = new SettingTrigger(false, 10000),
     refineTimeCrystals = new SettingTrigger(false, 15000),
     autoPraise = new SettingTrigger(true, 0.98),
@@ -247,6 +253,7 @@ export class ReligionSettings extends SettingTrigger {
     this.buildings = buildings;
     this.bestUnicornBuilding = bestUnicornBuilding;
     this.sacrificeAlicorns = sacrificeAlicorns;
+    this.sacrificeUnicorns = sacrificeUnicorns;
     this.refineTears = refineTears;
     this.refineTimeCrystals = refineTimeCrystals;
     this.autoPraise = autoPraise;
@@ -268,6 +275,7 @@ export class ReligionSettings extends SettingTrigger {
 
     this.bestUnicornBuilding.load(settings.bestUnicornBuilding);
     this.sacrificeAlicorns.load(settings.sacrificeAlicorns);
+    this.sacrificeUnicorns.load(settings.sacrificeUnicorns);
     this.refineTears.load(settings.refineTears);
     this.refineTimeCrystals.load(settings.refineTimeCrystals);
     this.autoPraise.load(settings.autoPraise);
