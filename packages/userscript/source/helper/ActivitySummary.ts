@@ -32,7 +32,7 @@ export type ActivitySectionOther =
   | "stars"
   | "transcend";
 
-export type Activitiy =
+export type Activity =
   | "accelerate"
   | "adore"
   | "build"
@@ -50,7 +50,7 @@ export type Activitiy =
   | "trade"
   | "transcend"
   | "upgrade";
-export type ActivityClass = `ks-${Activitiy}`;
+export type ActivityClass = `ks-${Activity}`;
 export type ActivityTypeClass = `type_${ActivityClass}`;
 
 export class ActivitySummary {
