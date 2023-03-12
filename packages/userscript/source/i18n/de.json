@@ -106,6 +106,7 @@
   "state.confirmDestruction": "Bist du sicher?",
   "state.deleted": "Zustand geladen.",
   "state.loaded": "Zustand geladen.",
+  "state.updated": "State updated.",
   "status.auto.disable": "Auto {0} deaktiviert",
   "status.auto.enable": "Auto {0} aktiviert",
   "status.ks.disable": "Deaktiviere die Kätzchenwissenschaftler!",
