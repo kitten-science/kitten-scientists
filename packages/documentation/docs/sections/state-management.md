@@ -34,7 +34,7 @@ Resets every setting to the state that KS would have if you used it for the firs
 
 When you have stored any states, they will appear in this list. Clicking on their name will load them.
 
-You can also copy the state to the clipboard, or delete it. When copying a state, the **Compress data** setting is respected.
+You can also sync the stored state with your current settings state, copy the state to the clipboard, or delete it. When copying a state, the **Compress data** setting is respected.
 
 <!-- prettier-ignore-start -->
 *[KG]: Kittens Game

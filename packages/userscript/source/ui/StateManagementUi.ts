@@ -9,6 +9,7 @@ import { UserScript } from "../UserScript";
 import { ButtonListItem } from "./components/ButtonListItem";
 import { CopyButton } from "./components/buttons-icon/CopyButton";
 import { DeleteButton } from "./components/buttons-icon/DeleteButton";
+import { UpdateButton } from "./components/buttons-icon/UpdateButton";
 import { ExplainerListItem } from "./components/ExplainerListItem";
 import { HeaderListItem } from "./components/HeaderListItem";
 import { LabelListItem } from "./components/LabelListItem";
@@ -177,6 +178,13 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       );
       listItem.addChild(copyButton);
 
+      const updateButton = new UpdateButton(this._host);
+      updateButton.element.on(
+        "click",
+        () => void this.updateState(state, this._host.engine.stateSerialize())
+      );
+      listItem.addChild(updateButton);
+
       this.stateList.addChild(listItem);
     }
   }
@@ -303,6 +311,30 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this._host.refreshUi();
 
     this._host.engine.imessage("state.loaded");
+  }
+
+  updateState(state: StoredState, newState: EngineState) {
+    if (
+      !this.setting.noConfirm.enabled &&
+      !window.confirm(this._host.engine.i18n("state.confirmDestruction"))
+    ) {
+      return;
+    }
+
+    const index = this.states.indexOf(state);
+    if (index < 0) {
+      return;
+    }
+
+    this.states[index] = {
+      label: state.label,
+      state: newState,
+      timestamp: new Date().toISOString(),
+    };
+    this._storeStates();
+    this.refreshUi();
+
+    this._host.engine.imessage("state.updated");
   }
 
   deleteState(state: StoredState) {

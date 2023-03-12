@@ -121,7 +121,7 @@ Internals related:
 
 -   `core`
 
-    Relates to central behavior of KS
+    Relates to central behavior of KS. Also includes state management.
 
 -   `filters`
 
