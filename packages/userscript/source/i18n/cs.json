@@ -106,6 +106,7 @@
   "state.confirmDestruction": "Are you sure?",
   "state.deleted": "State loaded.",
   "state.loaded": "State loaded.",
+  "state.updated": "State updated.",
   "status.auto.disable": "Disable Auto {0}",
   "status.auto.enable": "Enable Auto {0}",
   "status.ks.disable": "Disabling the Kitten Scientists!",
