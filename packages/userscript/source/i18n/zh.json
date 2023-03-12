@@ -106,6 +106,7 @@
   "state.confirmDestruction": "你确定吗？",
   "state.deleted": "已载入状态。",
   "state.loaded": "已载入状态。",
+  "state.updated": "State updated.",
   "status.auto.disable": "禁用自动化 {0}",
   "status.auto.enable": "启用自动化 {0}",
   "status.ks.disable": "太敬业了，该歇了",
