@@ -136,7 +136,7 @@ export class UserScript {
       const releaseInfo = (await response.json()) as ReleaseInfo;
       cdebug(releaseInfo);
 
-      if (!isNil(KS_VERSION) && gt(KS_VERSION, releaseInfo[KS_RELEASE_CHANNEL].version)) {
+      if (!isNil(KS_VERSION) && gt(releaseInfo[KS_RELEASE_CHANNEL].version, KS_VERSION)) {
         cinfo("Looks like there's a new version out!");
         cinfo(
           `We have '${KS_VERSION}' and there is '${releaseInfo[KS_RELEASE_CHANNEL].version}' available.`
