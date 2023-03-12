@@ -106,6 +106,7 @@
   "state.confirmDestruction": "האם אתה בטוח?",
   "state.deleted": "הסביבה נטענה.",
   "state.loaded": "הסביבה נטענה.",
+  "state.updated": "State updated.",
   "status.auto.disable": "כבה {0} אוטומטי",
   "status.auto.enable": "הפעל {0} אוטומטי",
   "status.ks.disable": "מבטל את המדעניתלתול!",
