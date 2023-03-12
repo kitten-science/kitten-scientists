@@ -345,7 +345,7 @@ export class Engine {
   }
 
   iactivity(
-    i18nLiteral: keyof (typeof i18nData)[SupportedLanguage],
+    i18nLiteral: keyof (typeof i18nData)["en"],
     i18nArgs: Array<number | string> = [],
     logStyle?: ActivityClass
   ): void {
@@ -359,7 +359,7 @@ export class Engine {
   }
 
   imessage(
-    i18nLiteral: keyof (typeof i18nData)[SupportedLanguage],
+    i18nLiteral: keyof (typeof i18nData)["en"],
     i18nArgs: Array<number | string> = []
   ): void {
     this._printOutput("ks-default", "#aa50fe", this.i18n(i18nLiteral, i18nArgs));
