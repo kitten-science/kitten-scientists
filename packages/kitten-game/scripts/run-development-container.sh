@@ -13,7 +13,7 @@ main() {
   BASEDIR=$(pwd)
   BRANCH=${1:-master}
 
-  yarn userscript:build
+  yarn kitten-scientists:build
   yarn devcontainer:build "$BRANCH"
 
   echo "Removing previous container..."
@@ -25,7 +25,7 @@ main() {
   echo "Starting new container..."
   docker run \
     --detach \
-    --mount type=bind,source="${BASEDIR}/../../userscript/output",target=/kitten-game/kitten-scientists \
+    --mount type=bind,source="${BASEDIR}/../../kitten-scientists/output",target=/kitten-game/kitten-scientists \
     --name kitten-game \
     --publish 8100:8080 \
     kitten-game

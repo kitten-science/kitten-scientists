@@ -34,13 +34,13 @@ jobs:
       - name: Get version
         id: version
         run: |
-          export KS_VERSION=$(yarn userscript:version)
+          export KS_VERSION=$(yarn kitten-scientists:version)
           echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
 
-      - name: Build userscript
+      - name: Build Kitten Scientists
         run: |
-          yarn userscript:build
-          cp packages/userscript/output/* packages/kitten-game/kitten-scientists/
+          yarn kitten-scientists:build
+          cp packages/kitten-scientists/output/* packages/kitten-game/kitten-scientists/
 
       - name: Log in to the Container registry
         uses: docker/login-action@master

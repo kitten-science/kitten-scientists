@@ -2,23 +2,15 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Type-check userscript",
+      "label": "Type-check kitten-scientists",
       "type": "shell",
-      "command": [
-        "yarn",
-        "typecheck:all"
-      ],
-      "problemMatcher": [
-        "$tsc"
-      ]
+      "command": ["yarn", "typecheck:all"],
+      "problemMatcher": ["$tsc"]
     },
     {
-      "label": "Build+watch userscript",
+      "label": "Build+watch kitten-scientists",
       "type": "shell",
-      "command": [
-        "yarn",
-        "userscript:watch"
-      ],
+      "command": ["yarn", "kitten-scientists:watch"],
       "problemMatcher": [
         // See: https://marketplace.visualstudio.com/items?itemName=eamodio.tsl-problem-matcher
         "$ts-webpack-watch"

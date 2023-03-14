@@ -1,4 +1,4 @@
-name: Publish Userscript Push
+name: Publish Kitten Scientists Push
 
 on:
   push:
@@ -31,15 +31,15 @@ jobs:
 
       - name: Get version
         run: |
-          export KS_VERSION=$(yarn userscript:version)
+          export KS_VERSION=$(yarn kitten-scientists:version)
           echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
-      - run: yarn userscript:release
+      - run: yarn kitten-scientists:release
       - uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
           automatic_release_tag: next
           draft: false
           files: |
-            packages/userscript/output/*
+            packages/kitten-scientists/output/*
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: Development Build v${{ env.KS_VERSION }}

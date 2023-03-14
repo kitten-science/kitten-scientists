@@ -1,12 +1,38 @@
 # Full reference
 
+## build:all
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    tsc --build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## clean:all
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    rm -rf packages/*/build packages/*/tsconfig.tsbuildinfo
+    ```
+
+-   Description:
+
+    _documentation pending_
+
 ## devcontainer:build
 
 -   Project: `@kitten-science/kitten-game`
 -   Source:
 
     ```shell
-    docker build --tag kitten-game .
+    bash ./scripts/build-development-container.sh
     ```
 
 -   Description:
@@ -19,7 +45,7 @@
 -   Source:
 
     ```shell
-    docker build --no-cache --tag kitten-game .
+    bash ./scripts/rebuild-development-container.sh
     ```
 
 -   Description:
@@ -80,6 +106,72 @@
 
     Start the [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) development server to work on the documentation.
 
+## kitten-scientists:build
+
+-   Project: `@kitten-science/kitten-scientists`
+-   Source:
+
+    ```shell
+    vite --config vite.config.inject.js build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-scientists:preview
+
+-   Project: `@kitten-science/kitten-scientists`
+-   Source:
+
+    ```shell
+    DEV_BUILD=true vite --config vite.config.userscript.js build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-scientists:release
+
+-   Project: `@kitten-science/kitten-scientists`
+-   Source:
+
+    ```shell
+    MINIFY=true vite --config vite.config.userscript.js build
+    vite --config vite.config.userscript.js build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-scientists:version
+
+-   Project: `@kitten-science/kitten-scientists`
+-   Source:
+
+    ```shell
+    node version.cjs
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-scientists:watch
+
+-   Project: `@kitten-science/kitten-scientists`
+-   Source:
+
+    ```shell
+    vite --config vite.config.inject.js build --watch
+    ```
+
+-   Description:
+
+    _documentation pending_
+
 ## lint:all
 
 -   Project: `kitten-scientists`
@@ -112,7 +204,7 @@
 -   Source:
 
     ```shell
-    mocha output/tests/*.spec.js
+    mocha ./build/tests/*.spec.js
     ```
 
 -   Description:
@@ -131,77 +223,3 @@
 -   Description:
 
     Run the TypeScript compiler to find problems with the code.
-
-## userscript:build
-
--   Project: `@kitten-science/userscript`
--   Source:
-
-    ```shell
-    vite --config vite.config.inject.js build
-    ```
-
--   Description:
-
-    Build the userscript.
-
-    This builds the version of the script that is also used in the development container.
-
-## userscript:preview
-
--   Project: `@kitten-science/userscript`
--   Source:
-
-    ```shell
-    DEV_BUILD=true vite --config vite.config.userscript.js build
-    ```
-
--   Description:
-
-    Build a development release version of the userscript.
-
-## userscript:release
-
--   Project: `@kitten-science/userscript`
--   Source:
-
-    ```shell
-    MINIFY=true vite --config vite.config.userscript.js build
-    vite --config vite.config.userscript.js build
-    ```
-
--   Description:
-
-    Build a release version of the userscript.
-
-    This is usually only used from CI to build both the regular version of the script, as well as a minified build. When you use this locally, it still builds both files, but clears the output directory between builds. So you end up with only the regular version.
-
-## userscript:version
-
--   Project: `@kitten-science/userscript`
--   Source:
-
-    ```shell
-    node version.cjs
-    ```
-
--   Description:
-
-    Returns the version for the userscript.
-
-## userscript:watch
-
--   Project: `@kitten-science/userscript`
--   Source:
-
-    ```shell
-    vite --config vite.config.inject.js build --watch
-    ```
-
--   Description:
-
-    Builds the userscript and watches all files for changes. If changes are detected, the script is rebuilt.
-
-    !!! warning
-
-        This watcher has caused problems in the past, generating broken output. Use at your own risk.

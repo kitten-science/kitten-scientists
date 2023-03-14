@@ -1,4 +1,4 @@
-name: Publish Userscript Release
+name: Publish Kitten Scientists Release
 
 on:
   push:
@@ -27,14 +27,14 @@ jobs:
       - run: yarn build:all
       - run: yarn lint:all
 
-      - run: yarn userscript:release
+      - run: yarn kitten-scientists:release
 
       - uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
           # Create only as draft, so we can add a description on the web UI.
           draft: true
           files: |
-            packages/userscript/output/*
+            packages/kitten-scientists/output/*
           prerelease: false
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ github.ref_name }}
