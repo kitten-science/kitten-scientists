@@ -1,5 +1,5 @@
 {
-  "name": "@kitten-science/userscript",
+  "name": "@kitten-science/kitten-scientists",
   "version": "2.0.0-beta.7",
   "description": "Add-on for the wonderful incremental browser game: https://kittensgame.com/web/",
   "license": "MIT",
@@ -15,12 +15,12 @@
   "type": "module",
   "main": "./build/index.js",
   "scripts": {
-    "userscript:build": "vite --config vite.config.inject.js build",
-    "userscript:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
-    "userscript:release": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
-    "userscript:version": "node version.cjs",
-    "userscript:watch": "vite --config vite.config.inject.js build --watch",
-    "whoami": "echo userscript"
+    "kitten-scientists:build": "vite --config vite.config.inject.js build",
+    "kitten-scientists:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
+    "kitten-scientists:release": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
+    "kitten-scientists:version": "node version.cjs",
+    "kitten-scientists:watch": "vite --config vite.config.inject.js build --watch",
+    "whoami": "echo kitten-scientists"
   },
   "types": "./build/index.ts",
   "dependencies": {
