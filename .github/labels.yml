@@ -48,6 +48,9 @@ labels:
   status:duplicate:
     color: "c7def8"
     description: This problem has already been reported
+  status:engineers-candidate:
+    color: "c7def8"
+    description: Not a good fit for Kitten Scientists, but maybe for a future endeavour 🤔
   status:fixed:
     color: "c7def8"
     description: This problem has been solved
@@ -63,7 +66,7 @@ labels:
 
   type:beta-feature:
     color: "cc317c"
-    description: Completely new behavior in Kittens Game
+    description: Completely new behavior in _Kittens Game_
   type:bug:
     color: "cc317c"
     description: Problems in existing behavior
@@ -85,3 +88,6 @@ labels:
   type:question:
     color: "cc317c"
     description: Support; no call to action
+  type:upstream-issue:
+    color: "cc317c"
+    description: We need to fix this somewhere else
