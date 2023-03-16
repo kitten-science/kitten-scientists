@@ -52,8 +52,8 @@ body:
     id: savegame
     attributes:
       label: Your Savegame
-      description: Provide a savegame that is suitable to illustrate the bug.
-      placeholder: Export your save to a file and then attach the file here.
+      description: Provide a savegame that is suitable to illustrate the bug, in case you think it could help.
+      placeholder: Export your save to a file and then attach the file here. Attach files by dragging & dropping, selecting or pasting them.
     validations:
       required: false
 
@@ -72,3 +72,8 @@ body:
       description: If applicable, add screenshots to help explain your problem.
     validations:
       required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
