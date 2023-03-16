@@ -27,6 +27,19 @@ body:
     validations:
       required: false
 
+  - type: dropdown
+    id: method
+    attributes:
+      label: How are you loading Kitten Scientists?
+      description: Some issues only happen in certain loading approaches. Providing this helps us to easier reproduce your issue.
+      options:
+        - Userscript Manager (Tampermonkey)
+        - Userscript Manager (Other, please specify below)
+        - Bookmarklet
+        - Doesn't matter
+    validations:
+      required: false
+
   - type: textarea
     id: description
     attributes:
