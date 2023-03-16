@@ -152,7 +152,7 @@ export class TimeControlManager {
     }
     if (
       check(
-        this._bonfireManager.manager.tab.buttons as Array<
+        this._bonfireManager.manager.tab.children as Array<
           BuildButton<string, ButtonModernModel, ButtonModernController>
         >
       ) ||
