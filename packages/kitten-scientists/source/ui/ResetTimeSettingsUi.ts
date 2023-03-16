@@ -39,7 +39,11 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
       ),
       this._getResetOption(
         this.setting.buildings.ressourceRetrieval,
-        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
+        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label")
+      ),
+      this._getResetOption(
+        this.setting.buildings.temporalPress,
+        this._host.engine.i18n("$time.cfu.temporalPress.label"),
         true
       ),
 
