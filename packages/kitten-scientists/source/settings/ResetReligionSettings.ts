@@ -47,7 +47,7 @@ export class ResetReligionSettings extends Setting {
       basilica: new ResetReligionBuildingSetting(
         "basilica",
         UnicornItemVariant.OrderOfTheSun,
-        true,
+        false,
         -1
       ),
       blackCore: new ResetReligionBuildingSetting(
@@ -101,7 +101,7 @@ export class ResetReligionSettings extends Setting {
       goldenSpire: new ResetReligionBuildingSetting(
         "goldenSpire",
         UnicornItemVariant.OrderOfTheSun,
-        true,
+        false,
         -1
       ),
       holyGenocide: new ResetReligionBuildingSetting(
@@ -126,7 +126,7 @@ export class ResetReligionSettings extends Setting {
       scholasticism: new ResetReligionBuildingSetting(
         "scholasticism",
         UnicornItemVariant.OrderOfTheSun,
-        true,
+        false,
         -1
       ),
       singularity: new ResetReligionBuildingSetting(
@@ -144,25 +144,25 @@ export class ResetReligionSettings extends Setting {
       solarchant: new ResetReligionBuildingSetting(
         "solarchant",
         UnicornItemVariant.OrderOfTheSun,
-        true,
+        false,
         -1
       ),
       solarRevolution: new ResetReligionBuildingSetting(
         "solarRevolution",
         UnicornItemVariant.OrderOfTheSun,
-        true,
+        false,
         -1
       ),
       stainedGlass: new ResetReligionBuildingSetting(
         "stainedGlass",
         UnicornItemVariant.OrderOfTheSun,
-        true,
+        false,
         -1
       ),
       sunAltar: new ResetReligionBuildingSetting(
         "sunAltar",
         UnicornItemVariant.OrderOfTheSun,
-        true,
+        false,
         -1
       ),
       sunspire: new ResetReligionBuildingSetting(
@@ -174,13 +174,13 @@ export class ResetReligionSettings extends Setting {
       templars: new ResetReligionBuildingSetting(
         "templars",
         UnicornItemVariant.OrderOfTheSun,
-        true,
+        false,
         -1
       ),
       transcendence: new ResetReligionBuildingSetting(
         "transcendence",
         UnicornItemVariant.OrderOfTheSun,
-        true,
+        false,
         -1
       ),
       unicornGraveyard: new ResetReligionBuildingSetting(
@@ -198,7 +198,7 @@ export class ResetReligionSettings extends Setting {
       unicornPasture: new ResetReligionBuildingSetting(
         "unicornPasture",
         UnicornItemVariant.UnicornPasture,
-        true,
+        false,
         -1
       ),
       unicornTomb: new ResetReligionBuildingSetting(

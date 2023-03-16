@@ -33,60 +33,65 @@ export class ResetTimeSettings extends Setting {
       blastFurnace: new ResetTimeBuildingSetting(
         "blastFurnace",
         TimeItemVariant.Chronoforge,
-        true,
+        false,
         -1
       ),
       chronocontrol: new ResetTimeBuildingSetting(
         "chronocontrol",
         TimeItemVariant.VoidSpace,
-        true,
+        false,
         -1
       ),
       cryochambers: new ResetTimeBuildingSetting(
         "cryochambers",
         TimeItemVariant.VoidSpace,
-        true,
+        false,
         -1
       ),
       ressourceRetrieval: new ResetTimeBuildingSetting(
         "ressourceRetrieval",
         TimeItemVariant.Chronoforge,
-        true,
+        false,
         -1
       ),
       temporalAccelerator: new ResetTimeBuildingSetting(
         "temporalAccelerator",
         TimeItemVariant.Chronoforge,
-        true,
+        false,
         -1
       ),
       temporalBattery: new ResetTimeBuildingSetting(
         "temporalBattery",
         TimeItemVariant.Chronoforge,
-        true,
+        false,
         -1
       ),
       temporalImpedance: new ResetTimeBuildingSetting(
         "temporalImpedance",
         TimeItemVariant.Chronoforge,
-        true,
+        false,
         -1
       ),
       temporalPress: new ResetTimeBuildingSetting(
         "temporalPress",
         TimeItemVariant.Chronoforge,
-        true,
+        false,
         -1
       ),
-      timeBoiler: new ResetTimeBuildingSetting("timeBoiler", TimeItemVariant.Chronoforge, true, -1),
-      voidHoover: new ResetTimeBuildingSetting("voidHoover", TimeItemVariant.VoidSpace, true, -1),
+      timeBoiler: new ResetTimeBuildingSetting(
+        "timeBoiler",
+        TimeItemVariant.Chronoforge,
+        false,
+        -1
+      ),
+      voidHoover: new ResetTimeBuildingSetting("voidHoover", TimeItemVariant.VoidSpace, false, -1),
       voidResonator: new ResetTimeBuildingSetting(
         "voidResonator",
         TimeItemVariant.VoidSpace,
-        true,
+        false,
         -1
       ),
-      voidRift: new ResetTimeBuildingSetting("voidRift", TimeItemVariant.VoidSpace, true, -1),
+      voidRift: new ResetTimeBuildingSetting("voidRift", TimeItemVariant.VoidSpace, false, -1),
     }
   ) {
     super(enabled);
