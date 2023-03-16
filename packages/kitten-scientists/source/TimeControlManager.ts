@@ -117,7 +117,7 @@ export class TimeControlManager {
         }
 
         checkedList.push({
-          name: mustExist(bld.meta.label),
+          name: bld.meta.label ?? mustExist(bld.meta.stages)[mustExist(bld.meta.stage)].label,
           trigger: entry.trigger,
           val: bld.meta.val,
         });
