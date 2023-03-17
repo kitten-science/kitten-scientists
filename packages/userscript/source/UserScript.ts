@@ -45,6 +45,16 @@ export const ksVersion = (prefix = "") => {
   return `${prefix}${KS_VERSION}`;
 };
 
+// How long to wait for KG to load, in milliseconds.
+const TIMEOUT_DEFAULT = 2 * 60 * 1000;
+
+// Allows the user to define a timeout override in their browser's web storage.
+// This allows users to extend the timeout period, in case their local configuration
+// requires it.
+const TIMEOUT_OVERRIDE = !isNil(localStorage["ks.timeout"])
+  ? Number(localStorage["ks.timeout"])
+  : undefined;
+
 export class UserScript {
   readonly gamePage: GamePage;
 
@@ -254,7 +264,7 @@ export class UserScript {
     return state[0];
   }
 
-  static async waitForGame(timeout = 30000): Promise<GamePage> {
+  static async waitForGame(timeout = TIMEOUT_OVERRIDE ?? TIMEOUT_DEFAULT): Promise<GamePage> {
     const signals: Array<Promise<unknown>> = [sleep(2000)];
 
     if (isNil(UserScript._gameStartSignal) && typeof UserScript.window.dojo !== "undefined") {
