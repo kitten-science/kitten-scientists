@@ -92,7 +92,7 @@ export class Engine {
   readonly workshopManager: WorkshopManager;
 
   private _activitySummary: ActivitySummary;
-  private _intervalMainLoop: number | undefined = undefined;
+  private _timeoutMainLoop: number | undefined = undefined;
 
   constructor(host: UserScript, gameLanguage: GameLanguage) {
     this.settings = new EngineSettings();
@@ -241,7 +241,7 @@ export class Engine {
    * @param msg Should we print to the log that the engine was started?
    */
   start(msg = true): void {
-    if (this._intervalMainLoop) {
+    if (this._timeoutMainLoop) {
       return;
     }
 
@@ -251,7 +251,14 @@ export class Engine {
         .then(() => {
           const exit = Date.now();
           const timeTaken = exit - entry;
-          this._intervalMainLoop = window.setTimeout(
+
+          // Check if the main loop was terminated during
+          // the last iteration.
+          if (this._timeoutMainLoop === undefined) {
+            return;
+          }
+
+          this._timeoutMainLoop = window.setTimeout(
             loop,
             Math.max(10, this._host.engine.settings.interval - timeTaken)
           );
@@ -260,7 +267,7 @@ export class Engine {
           cwarn(error as string);
         });
     };
-    this._intervalMainLoop = window.setTimeout(loop, this._host.engine.settings.interval);
+    this._timeoutMainLoop = window.setTimeout(loop, this._host.engine.settings.interval);
 
     if (msg) {
       this._host.engine.imessage("status.ks.enable");
@@ -273,12 +280,12 @@ export class Engine {
    * @param msg Should we print to the log that the engine was stopped?
    */
   stop(msg = true): void {
-    if (!this._intervalMainLoop) {
+    if (!this._timeoutMainLoop) {
       return;
     }
 
-    clearTimeout(this._intervalMainLoop);
-    this._intervalMainLoop = undefined;
+    clearTimeout(this._timeoutMainLoop);
+    this._timeoutMainLoop = undefined;
 
     if (msg) {
       this._host.engine.imessage("status.ks.disable");
