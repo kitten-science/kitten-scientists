@@ -3,7 +3,6 @@ import { MaterialsCache } from "./helper/MaterialsCache";
 import { VillageSettings } from "./settings/VillageSettings";
 import { TabManager } from "./TabManager";
 import { objectEntries } from "./tools/Entries";
-import { cdebug } from "./tools/Log";
 import { isNil, mustExist } from "./tools/Maybe";
 import { Resource } from "./types";
 import { JobInfo, VillageTab } from "./types/village";
@@ -119,7 +118,6 @@ export class VillageManager implements Automation {
     const leaderCandidates = kittens.filter(
       kitten => kitten.job === job && kitten.trait.name === trait
     );
-    cdebug(`Found '${leaderCandidates.length}' possible leader candidates.`);
 
     if (leaderCandidates.length === 0) {
       return;
@@ -127,14 +125,8 @@ export class VillageManager implements Automation {
 
     leaderCandidates.sort((a, b) => b.rank - a.rank);
     const bestLeader = leaderCandidates[0];
-    cdebug(
-      `Best leader candidate (${bestLeader.name} ${bestLeader.surname}) has rank '${bestLeader.rank}'.`
-    );
     if (!isNil(leader)) {
-      cdebug(`Current leader (${leader.name} ${leader.surname}) has rank '${leader.rank}'.`);
-
       if (leader.trait.name === trait && leader.job === job && bestLeader.rank <= leader.rank) {
-        cdebug("Current leader is already ideal. No changes are made.");
         return;
       }
     }
