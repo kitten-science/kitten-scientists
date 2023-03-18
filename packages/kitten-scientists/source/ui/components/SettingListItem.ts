@@ -63,6 +63,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     this.elementLabel.prepend(checkbox);
 
     this.checkbox = checkbox;
+    this.addChildren(options?.children);
     this.setting = setting;
   }
 
