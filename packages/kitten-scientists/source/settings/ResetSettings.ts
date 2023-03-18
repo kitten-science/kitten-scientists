@@ -4,6 +4,7 @@ import { ResetReligionSettings } from "./ResetReligionSettings";
 import { ResetResourcesSettings } from "./ResetResourcesSettings";
 import { ResetSpaceSettings } from "./ResetSpaceSettings";
 import { ResetTimeSettings } from "./ResetTimeSettings";
+import { ResetUpgradeSettings } from "./ResetUpgradeSettings";
 import { Setting } from "./Settings";
 
 export class ResetSettings extends Setting {
@@ -12,6 +13,7 @@ export class ResetSettings extends Setting {
   resources: ResetResourcesSettings;
   space: ResetSpaceSettings;
   time: ResetTimeSettings;
+  upgrades: ResetUpgradeSettings;
 
   constructor(
     enabled = false,
@@ -19,7 +21,8 @@ export class ResetSettings extends Setting {
     religion = new ResetReligionSettings(),
     resources = new ResetResourcesSettings(),
     space = new ResetSpaceSettings(),
-    time = new ResetTimeSettings()
+    time = new ResetTimeSettings(),
+    upgrades = new ResetUpgradeSettings()
   ) {
     super(enabled);
     this.bonfire = bonfire;
@@ -27,6 +30,7 @@ export class ResetSettings extends Setting {
     this.resources = resources;
     this.space = space;
     this.time = time;
+    this.upgrades = upgrades;
   }
 
   load(settings: Maybe<Partial<ResetSettings>>) {
@@ -41,5 +45,6 @@ export class ResetSettings extends Setting {
     this.resources.load(settings.resources);
     this.space.load(settings.space);
     this.time.load(settings.time);
+    this.upgrades.load(settings.upgrades);
   }
 }
