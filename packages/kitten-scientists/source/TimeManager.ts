@@ -177,7 +177,7 @@ export class TimeManager {
           // Thus, the callback should be invoked before this loop ends.
           (didHappen: boolean) => {
             fixHappened = didHappen;
-            ++fixed;
+            fixed += didHappen ? 1 : 0;
           }
         );
       } while (fixHappened);
