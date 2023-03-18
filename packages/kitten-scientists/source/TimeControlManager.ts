@@ -296,11 +296,7 @@ export class TimeControlManager {
 
     const sleep = async (time = 1500) => {
       return new Promise((resolve, reject) => {
-        if (
-          !this._host.engine.settings.enabled ||
-          !this.settings.enabled ||
-          !this.settings.reset.enabled
-        ) {
+        if (!this._host.engine.settings.enabled) {
           return reject(new Error("canceled by player"));
         }
         setTimeout(resolve, time);

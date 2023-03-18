@@ -94,7 +94,7 @@
   "reset.countdown.8": "&nbsp;8 - Releasing lizards",
   "reset.countdown.9": "&nbsp;9 - Sacrificing Unicorns",
   "reset.last.message": "See you next poincaré recurrence",
-  "reset.tip": "You can cancel this reset by disabling \"Kitten Scientists\" or \"Time Control\" or \"Reset Timeline\"",
+  "reset.tip": "You can cancel this reset by disabling \"Enable Scientists\" at the top of the settings.",
   "resources.consume.set": "Consume rate for {0}",
   "resources.consume": "Consume: {0}",
   "resources.stock.set": "Stock for {0}",
