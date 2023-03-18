@@ -6,7 +6,7 @@
 
 ## Introduction
 
-The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in the [userscript source code](https://github.com/kitten-science/kitten-scientists/tree/main/packages/userscript/source) and then be compiled into the actual userscript.
+The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in the [userscript source code](https://github.com/kitten-science/kitten-scientists/tree/main/packages/kitten-scientists/source) and then be compiled into the actual userscript.
 
 The project is set up to be used with [Visual Studio Code](https://code.visualstudio.com/). While other editors will work fine, some integrations have been prepared to make the development process easier.
 
@@ -23,10 +23,10 @@ Additionally, you will need to have [Docker](https://www.docker.com/get-started)
 Whenever you want to see the result of your changes, use:
 
 ```shell
-yarn userscript:build
+yarn kitten-scientists:build
 ```
 
-This will [build a fresh version of the userscript](/reference/Repository Scripts/index.md#userscriptbuild). _If_ you are running a development container, this build output will also be used the next time you refresh the page.
+This will [build a fresh version of the userscript](/reference/Repository Scripts/index.md#kitten-scientistsbuild). _If_ you are running a development container, this build output will also be used the next time you refresh the page.
 
 ## Development with Kittens Game Container
 
@@ -51,7 +51,7 @@ When the container is built, it downloads the latest version of the game from <h
     Start a watcher to continuously rebuild KS when you make code changes.
 
     ```shell
-    yarn userscript:watch
+    yarn kitten-scientists:watch
     ```
 
     !!! danger
@@ -79,10 +79,10 @@ To develop without containers, you can build a development version of the usersc
 1. Run the build script.
 
     ```shell
-    yarn userscript:preview
+    yarn kitten-scientists:preview
     ```
 
-    The userscript is placed in the `packages/userscript/output` directory.
+    The userscript is placed in the `packages/kitten-scientists/output` directory.
 
 ## Type-Checking
 
@@ -150,7 +150,7 @@ When you open a pull request, make sure that you squash your commits into a sing
 Run the script to build the release:
 
 ```shell
-yarn userscript:release
+yarn kitten-scientists:release
 ```
 
 ### Releasing a New Version
@@ -158,7 +158,7 @@ yarn userscript:release
 1. Build a preview of the script:
 
     ```bash
-    yarn userscript:preview
+    yarn kitten-scientists:preview
     ```
 
 1. Load the built preview into a userscript manager in Chrome and perform a quick, manual test.
