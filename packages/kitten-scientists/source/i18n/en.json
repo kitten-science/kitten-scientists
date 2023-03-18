@@ -193,6 +193,7 @@
   "ui.upgrade.techs": "Research technologies",
   "ui.upgrade.upgrades": "Research upgrades",
   "ui.upgrade": "Science",
+  "ui.upgrades": "Upgrades",
   "upgrade.building.amphitheatre": "Upgraded amphitheatres to broadcast towers!",
   "upgrade.building.aqueduct": "Upgraded aqueducts to hydro plants!",
   "upgrade.building.library": "Upgraded libraries to data centers!",

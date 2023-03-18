@@ -199,16 +199,17 @@ export class TimeControlManager {
 
     // check religion
     for (const [name, entry] of objectEntries(this.settings.reset.religion.buildings)) {
-      if (entry.enabled) {
-        const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
-        checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
-        if (0 < entry.trigger) {
-          if (bld.val < entry.trigger) {
-            return;
-          }
-        } else {
-          checkList.push(name);
+      if (!entry.enabled) {
+        continue;
+      }
+      const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
+      checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
+      if (0 < entry.trigger) {
+        if (bld.val < entry.trigger) {
+          return;
         }
+      } else {
+        checkList.push(name);
       }
     }
 
@@ -270,6 +271,19 @@ export class TimeControlManager {
         const res = mustExist(this._host.gamePage.resPool.get(name));
         checkedList.push({ name: res.title, trigger: entry.stock, val: res.value });
         if (res.value < entry.stock) {
+          return;
+        }
+      }
+    }
+
+    // Check Workshop upgrades
+    for (const [, entry] of objectEntries(this.settings.reset.upgrades.upgrades)) {
+      if (entry.enabled) {
+        const upgrade = mustExist(
+          this._host.gamePage.workshop.upgrades.find(subject => subject.name === entry.upgrade)
+        );
+        checkedList.push({ name: upgrade.label, trigger: 1, val: upgrade.researched ? 1 : 0 });
+        if (!upgrade.researched) {
           return;
         }
       }
