@@ -434,18 +434,23 @@ export class TimeControlManager {
     // If we have too much stored heat, wait for it to cool down.
     const heatMax = this._host.gamePage.getEffect("heatMax");
     const heatNow = this._host.gamePage.time.heat;
-    if (heatMax <= heatNow) {
-      return;
+    if (!this.settings.timeSkip.ignoreOverheat.enabled) {
+      if (heatMax <= heatNow) {
+        return;
+      }
     }
 
     const factor = this._host.gamePage.challenges.getChallenge("1000Years").researched ? 5 : 10;
-    // How many times/years we can skip before we reach our max heat.
+    // The maximum years to skip, based on the user configuration.
     const maxSkips =
       -1 === this.settings.timeSkip.max ? Number.POSITIVE_INFINITY : this.settings.timeSkip.max;
+
     // The amount of skips we can perform.
     let canSkip = Math.floor(
       Math.min(
-        (heatMax - heatNow) / factor,
+        this.settings.timeSkip.ignoreOverheat.enabled
+          ? Number.POSITIVE_INFINITY
+          : (heatMax - heatNow) / factor,
         maxSkips,
         timeCrystalsAvailable / (1 + shatterCostIncreaseChallenge),
         0 < shatterVoidCost ? voidAvailable / shatterVoidCost : Number.POSITIVE_INFINITY

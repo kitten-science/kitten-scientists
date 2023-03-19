@@ -4,9 +4,9 @@ import { Cycle, Season } from "../types";
 import { Setting, SettingTriggerMax } from "./Settings";
 
 export class TimeSkipSettings extends SettingTriggerMax {
-  readonly seasons: Record<Season, Setting>;
-
   readonly cycles: Record<Cycle, Setting>;
+  readonly seasons: Record<Season, Setting>;
+  readonly ignoreOverheat: Setting;
 
   get cyclesList(): Array<Setting> {
     return [
@@ -41,11 +41,13 @@ export class TimeSkipSettings extends SettingTriggerMax {
       summer: new Setting(false),
       autumn: new Setting(false),
       winter: new Setting(false),
-    }
+    },
+    ignoreOverheat = new Setting(false)
   ) {
     super(false, 5);
-    this.seasons = seasons;
     this.cycles = cycles;
+    this.seasons = seasons;
+    this.ignoreOverheat = ignoreOverheat;
   }
 
   load(settings: Maybe<Partial<TimeSkipSettings>>) {
@@ -55,11 +57,12 @@ export class TimeSkipSettings extends SettingTriggerMax {
 
     super.load(settings);
 
-    consumeEntriesPedantic(this.seasons, settings.seasons, (season, item) => {
-      season.enabled = item?.enabled ?? season.enabled;
-    });
     consumeEntriesPedantic(this.cycles, settings.cycles, (cycle, item) => {
       cycle.enabled = item?.enabled ?? cycle.enabled;
     });
+    consumeEntriesPedantic(this.seasons, settings.seasons, (season, item) => {
+      season.enabled = item?.enabled ?? season.enabled;
+    });
+    this.ignoreOverheat.load(settings.ignoreOverheat);
   }
 }
