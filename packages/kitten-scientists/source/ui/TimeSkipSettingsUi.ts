@@ -9,6 +9,7 @@ import { CyclesList } from "./components/CyclesList";
 import { LabelListItem } from "./components/LabelListItem";
 import { Panel } from "./components/Panel";
 import { SeasonsList } from "./components/SeasonsList";
+import { SettingListItem } from "./components/SettingListItem";
 import { SettingsList } from "./components/SettingsList";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
 
@@ -64,6 +65,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
           new ButtonListItem(host, this._maximum, { delimiter: true }),
           this._cycles,
           this._seasons,
+          new SettingListItem(this._host, "Ignore overheat", this.setting.ignoreOverheat),
         ],
         hasDisableAll: false,
         hasEnableAll: false,

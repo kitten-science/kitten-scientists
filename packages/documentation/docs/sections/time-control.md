@@ -17,6 +17,12 @@ For a skip to be triggered, all of these have to be true:
 
 KS will skip as many as the configured **Max** years.
 
+### Ignore overheat
+
+Usually, KS will not combust any more TCs when you have already reached your chrono heat capacity. When you have overheated your capacity, combusting any more TCs costs a premium.
+
+You can ignore this, when moving forward through time is more important than saving the time crystals.
+
 ## Reset Timeline
 
 This automation allows you to reset your entire game, when all your configured conditions are met.
