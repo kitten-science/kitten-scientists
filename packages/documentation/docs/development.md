@@ -179,7 +179,7 @@ yarn kitten-scientists:release
     git push --tags
     ```
 
-1. Raise the version number in `packages/userscript/package.json` to a higher version that will be in development next!
+1. Raise the version number in `packages/kitten-scientists/package.json` to a higher version that will be in development next!
 
 1. Make sure to also update the `README.md` to point the bookmarklet to the new script.
 
