@@ -20,6 +20,8 @@ main() {
     --no-cache \
     --tag kitten-game .
   echo "Done."
+  echo
+  echo "Remember to restart your development container if it's already running!"
 }
 
 main "$@"
