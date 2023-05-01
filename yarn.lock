@@ -853,7 +853,7 @@ __metadata:
     semver: 7.3.8
     tslib: 2.5.0
     typescript: 5.0.3
-    vite: 4.2.1
+    vite: 4.3.3
     vite-plugin-userscript: 0.1.3
   languageName: unknown
   linkType: soft
@@ -2663,13 +2663,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"function-bind@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "function-bind@npm:1.1.1"
-  checksum: 60b74b2407e1942e1ed7f8c284f8ef714d0689dcfce5319985a5b7da3fc727f40b4a59ec72dc55aa83365ad7b8fa4fac3a30d93c850a2b452f29ae03dbc10a1e
-  languageName: node
-  linkType: hard
-
 "gauge@npm:^4.0.3":
   version: 4.0.4
   resolution: "gauge@npm:4.0.4"
@@ -2854,15 +2847,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"has@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "has@npm:1.0.3"
-  dependencies:
-    function-bind: ^1.1.1
-  checksum: e1da0d2bd109f116b632f27782cf23182b42f14972ca9540e4c5aa7e52647407a0a4a76937334fddcb56befe94a3494825ec22b19b51f5e5507c3153fd1a5e1b
-  languageName: node
-  linkType: hard
-
 "he@npm:1.2.0":
   version: 1.2.0
   resolution: "he@npm:1.2.0"
@@ -3014,15 +2998,6 @@ __metadata:
   dependencies:
     binary-extensions: ^2.0.0
   checksum: a16eaee59ae2b315ba36fad5c5dcaf8e49c3e27318f8ab8fa3cdb8772bf559c8d1ba750a589c2ccb096113bb64497084361a25960899cb6172a6925ab6123d38
-  languageName: node
-  linkType: hard
-
-"is-core-module@npm:^2.9.0":
-  version: 2.9.0
-  resolution: "is-core-module@npm:2.9.0"
-  dependencies:
-    has: ^1.0.3
-  checksum: 056fe4c5f9f383dc1c1b0dc3250c300880b9b1e17e1885077d64a1667926ecc11ba696776597616bfd2fd7f87c7476c01b127a0c842b4821bee2414d0e296e6e
   languageName: node
   linkType: hard
 
@@ -3704,12 +3679,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.4":
-  version: 3.3.4
-  resolution: "nanoid@npm:3.3.4"
+"nanoid@npm:^3.3.6":
+  version: 3.3.6
+  resolution: "nanoid@npm:3.3.6"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: a0747d5c6021828fe8d38334e5afb05d3268d7d4b06024058ec894ccc47070e4e81d268a6b75488d2ff3485fa79a75c251d4b7c6f31051bb54bb662b6fd2a27d
+  checksum: 606b355960d0fcbe3d27924c4c52ef7d47d3b57208808ece73279420d91469b01ec1dce10fae512b6d4a8c5a5432b352b228336a8b2202a6ea68e67fa348e2ee
   languageName: node
   linkType: hard
 
@@ -3980,13 +3955,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-parse@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "path-parse@npm:1.0.7"
-  checksum: 11ce261f9d294cc7a58d6a574b7f1b935842355ec66fba3c3fd79e0f036462eaf07d0aa95bb74ff432f9afef97ce1926c720988c6a7451d8a584930ae7de86e1
-  languageName: node
-  linkType: hard
-
 "path-type@npm:^4.0.0":
   version: 4.0.0
   resolution: "path-type@npm:4.0.0"
@@ -4033,14 +4001,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.21":
-  version: 8.4.21
-  resolution: "postcss@npm:8.4.21"
+"postcss@npm:^8.4.23":
+  version: 8.4.23
+  resolution: "postcss@npm:8.4.23"
   dependencies:
-    nanoid: ^3.3.4
+    nanoid: ^3.3.6
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: a26e7cc86a1807d624d9965914c26c20faa3f237184cbd69db537387f6a4f62df97347549144284d47e9e8e27e7c60e797cb3b92ad36cb2f4c3c9cb3b73f9758
+  checksum: 35c2e26496be286a63706a0b8240fc4d2075a746466df530989208f60ea33cbc80c89420221cffb7d4fdd605afc385993f5f60302447e3047a7c0a8756b6471d
   languageName: node
   linkType: hard
 
@@ -4240,32 +4208,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.22.1":
-  version: 1.22.1
-  resolution: "resolve@npm:1.22.1"
-  dependencies:
-    is-core-module: ^2.9.0
-    path-parse: ^1.0.7
-    supports-preserve-symlinks-flag: ^1.0.0
-  bin:
-    resolve: bin/resolve
-  checksum: 6d58b1cb40f3fc80b9e45dd799d84cdc3829a993e4b9fa3b59d331e1dfacd0870e1851f4d0eb549d68c796e0b7087b43d1aec162653ccccff9e18191221a6e7d
-  languageName: node
-  linkType: hard
-
-"resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>":
-  version: 1.22.1
-  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
-  dependencies:
-    is-core-module: ^2.9.0
-    path-parse: ^1.0.7
-    supports-preserve-symlinks-flag: ^1.0.0
-  bin:
-    resolve: bin/resolve
-  checksum: 0d8ccceba5537769c42aa75e4aa75ae854aac866a11d7e9ffdb1663f0158ee646a0d48fc2818ed5e7fb364d64220a1fb9092a160e11e00cbdd5fbab39a13092c
-  languageName: node
-  linkType: hard
-
 "restore-cursor@npm:^3.1.0":
   version: 3.1.0
   resolution: "restore-cursor@npm:3.1.0"
@@ -4319,9 +4261,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.18.0":
-  version: 3.20.2
-  resolution: "rollup@npm:3.20.2"
+"rollup@npm:^3.21.0":
+  version: 3.21.2
+  resolution: "rollup@npm:3.21.2"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -4329,7 +4271,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 1203da200a6f7dd2e62445fe31c9711134545f32d8a91f8fc3d79d5eff648d5faaf296af1d867c95439b862a39457670f5a32ecad583c11fc0de1ab2d2ca12b1
+  checksum: 24b80944622f82759081ba8c5cf82ed41cd8f7cca87cb39fa8e0f6b27869674dea8a8a98cb61ad2f4c4db858808e52c6ca1bc0e0e83d3712bd18f526ed743149
   languageName: node
   linkType: hard
 
@@ -4714,13 +4656,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supports-preserve-symlinks-flag@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
-  checksum: 6c4032340701a9950865f7ae8ef38578d8d7053f5e10518076e6554a9381fa91bd9c6850193695c141f32b21f979c985db07265a758867bac95de05f7d8aeb39
-  languageName: node
-  linkType: hard
-
 "synckit@npm:^0.8.1":
   version: 0.8.4
   resolution: "synckit@npm:0.8.4"
@@ -5007,15 +4942,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.2.1":
-  version: 4.2.1
-  resolution: "vite@npm:4.2.1"
+"vite@npm:4.3.3":
+  version: 4.3.3
+  resolution: "vite@npm:4.3.3"
   dependencies:
     esbuild: ^0.17.5
     fsevents: ~2.3.2
-    postcss: ^8.4.21
-    resolve: ^1.22.1
-    rollup: ^3.18.0
+    postcss: ^8.4.23
+    rollup: ^3.21.0
   peerDependencies:
     "@types/node": ">= 14"
     less: "*"
@@ -5041,7 +4975,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: a64e3a1563b9584d1fd1ca45e06ee3c9fa4956320e6d4e9d83bf09fc8e64bb9d3ef62f664b6f740141eee16643690e8a41ffdb3030f4f2e170c57894df1f9a5d
+  checksum: 87814f40a1e21fb372014fe43d0faf3b8f166ee0bc458527b6bccd1b6340782f8e6f5a8986492d99bd31d02f7d1b1538cc0006a0ab6f7e311e603fd1782ae04e
   languageName: node
   linkType: hard
 
