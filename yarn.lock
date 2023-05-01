@@ -864,7 +864,7 @@ __metadata:
   dependencies:
     "@types/mocha": ^10
     "@types/selenium-webdriver": ^4
-    browserstack-local: 1.5.1
+    browserstack-local: 1.5.2
     chromedriver: 111.0.0
     mocha: 10.2.0
     selenium-webdriver: 4.8.2
@@ -1647,16 +1647,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserstack-local@npm:1.5.1":
-  version: 1.5.1
-  resolution: "browserstack-local@npm:1.5.1"
+"browserstack-local@npm:1.5.2":
+  version: 1.5.2
+  resolution: "browserstack-local@npm:1.5.2"
   dependencies:
     agent-base: ^6.0.2
     https-proxy-agent: ^5.0.1
     is-running: ^2.1.0
     ps-tree: =1.2.0
     temp-fs: ^0.9.9
-  checksum: 004385b5fc1820c1dd8992ff2f3e94fc308d32aed6ddcf9b0702bc86a8b6823ff95b27dbaca0e75421dca4c4bd123ad864b8072d6fe366f19dd1ab908ee1997b
+  checksum: c3588ee82ba9936a950af0e96b28cd9e5ae0df50d7a1dd579ed3295a06a5e1e5cb5e48b04340a632042e98e0bf7db224c85088e5b4cc219f0a6159431d0b76fc
   languageName: node
   linkType: hard
 

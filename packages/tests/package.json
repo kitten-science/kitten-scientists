@@ -22,7 +22,7 @@
   "devDependencies": {
     "@types/mocha": "^10",
     "@types/selenium-webdriver": "^4",
-    "browserstack-local": "1.5.1",
+    "browserstack-local": "1.5.2",
     "chromedriver": "111.0.0",
     "mocha": "10.2.0",
     "selenium-webdriver": "4.8.2",
