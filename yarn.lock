@@ -795,7 +795,7 @@ __metadata:
   dependencies:
     "@actions/core": 1.10.0
     "@actions/github": 5.1.1
-    "@types/node": ^18.15.11
+    "@types/node": ^20.1.0
     json-schema-to-ts: 2.8.0
     tslib: 2.5.0
     typescript: 5.0.4
@@ -808,7 +808,7 @@ __metadata:
   dependencies:
     "@actions/core": 1.10.0
     "@actions/github": 5.1.1
-    "@types/node": 18.15.11
+    "@types/node": 20.1.0
     tslib: 2.5.0
     typescript: 5.0.4
     yaml: 2.2.2
@@ -821,7 +821,7 @@ __metadata:
   dependencies:
     "@actions/core": 1.10.0
     "@actions/github": 5.1.1
-    "@types/node": ^18.15.11
+    "@types/node": ^20.1.0
     tslib: 2.5.0
     typescript: 5.0.4
   languageName: unknown
@@ -1162,10 +1162,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.15.11, @types/node@npm:^18.15.11":
-  version: 18.15.11
-  resolution: "@types/node@npm:18.15.11"
-  checksum: 670deb1a9daa812dc86b1e8964c0c6b0bef7c32672833c10578c1e5dd2682f2bd99b86d814fde86a5dd4a3da48ea039f41db30a835b245aa7c34c62fa1f23f0d
+"@types/node@npm:20.1.0, @types/node@npm:^20.1.0":
+  version: 20.1.0
+  resolution: "@types/node@npm:20.1.0"
+  checksum: 77173e89fe39867e5f5a2fe8771ae093d6cb81a077319d23090bd257113fb0b6ab327a56966d5d33609b57194ef79ae6fe884c83fc84af7f4915ed79273890a7
   languageName: node
   linkType: hard
 
@@ -3298,7 +3298,7 @@ __metadata:
     "@babel/plugin-syntax-import-assertions": 7.20.0
     "@types/babel__core": 7.20.0
     "@types/eslint": 8.37.0
-    "@types/node": 18.15.11
+    "@types/node": 20.1.0
     "@types/prettier": 2.7.2
     "@types/web": 0.0.99
     "@typescript-eslint/eslint-plugin": 5.59.2
