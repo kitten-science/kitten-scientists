@@ -846,7 +846,7 @@ __metadata:
   resolution: "@kitten-science/kitten-scientists@workspace:packages/kitten-scientists"
   dependencies:
     "@kitten-science/action-release-info": "workspace:*"
-    "@types/dojo": 1.9.43
+    "@types/dojo": 1.9.44
     "@types/jquery": 3.5.16
     "@types/semver": ^7
     date-fns: 2.29.3
@@ -1108,10 +1108,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/dojo@npm:1.9.43":
-  version: 1.9.43
-  resolution: "@types/dojo@npm:1.9.43"
-  checksum: 033a0585142802bdaca43683d39ec172f471a95ed6c33eb524db5fe1ca3e685b33ea7fa30392f3bcb9f1c5b31260b3ceab39f2c7bb271202497c683d1fb52afb
+"@types/dojo@npm:1.9.44":
+  version: 1.9.44
+  resolution: "@types/dojo@npm:1.9.44"
+  checksum: 9a5fe640aef516e632cc56e8ea80cd5478feed1a2e724c328ed396b2b0c4cadb560a2b28b48aff4fcdd8355c15e7af7ee83bbfb7e1a44757ea67cfc64425c0cb
   languageName: node
   linkType: hard
 
