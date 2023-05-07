@@ -850,7 +850,7 @@ __metadata:
     "@types/jquery": 3.5.16
     "@types/semver": ^7
     date-fns: 2.29.3
-    semver: 7.3.8
+    semver: 7.5.0
     tslib: 2.5.0
     typescript: 5.0.4
     vite: 4.3.5
@@ -4370,14 +4370,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.3.8, semver@npm:^7.3.8":
-  version: 7.3.8
-  resolution: "semver@npm:7.3.8"
+"semver@npm:7.5.0":
+  version: 7.5.0
+  resolution: "semver@npm:7.5.0"
   dependencies:
     lru-cache: ^6.0.0
   bin:
     semver: bin/semver.js
-  checksum: 7e581d679530db31757301c2117721577a2bb36a301a443aac833b8efad372cda58e7f2a464fe4412ae1041cc1f63a6c1fe0ced8c57ce5aca1e0b57bb0d627b9
+  checksum: 203a556d7189c277b9774a325fd2695187b2822069094e0dbfcc56dfd10a1fd646a94e73812f249802a661f6437b2370ccb8ee330e7b9888b38e53c5a8216222
   languageName: node
   linkType: hard
 
@@ -4398,6 +4398,17 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: cffd30102de68a9f8cac9ef57b43c2173dc999da4fc5189872b421f9c9e2660f70243b8e964781ac6dc48ba2542647bb672beeb4d756c89c4a9e05e1144fa40a
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.3.8":
+  version: 7.3.8
+  resolution: "semver@npm:7.3.8"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: 7e581d679530db31757301c2117721577a2bb36a301a443aac833b8efad372cda58e7f2a464fe4412ae1041cc1f63a6c1fe0ced8c57ce5aca1e0b57bb0d627b9
   languageName: node
   linkType: hard
 
