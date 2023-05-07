@@ -3283,7 +3283,7 @@ __metadata:
     "@typescript-eslint/parser": 5.57.1
     eslint: 8.40.0
     eslint-plugin-jsdoc: 43.2.0
-    lint-staged: 13.2.0
+    lint-staged: 13.2.2
     prettier: 2.8.8
     prettier-package-json: 2.8.0
     prettier-plugin-organize-imports: 3.2.2
@@ -3326,9 +3326,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:13.2.0":
-  version: 13.2.0
-  resolution: "lint-staged@npm:13.2.0"
+"lint-staged@npm:13.2.2":
+  version: 13.2.2
+  resolution: "lint-staged@npm:13.2.2"
   dependencies:
     chalk: 5.2.0
     cli-truncate: ^3.1.0
@@ -3342,10 +3342,10 @@ __metadata:
     object-inspect: ^1.12.3
     pidtree: ^0.6.0
     string-argv: ^0.3.1
-    yaml: ^2.2.1
+    yaml: ^2.2.2
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 39c2ab8f40c5a55f3877326d23a8434d1fcbb1772c40aec783dc4cf258fb7f758a6366cc11ec97c1dae446d90b3836d84686e8188dd62e73a68147bc64648093
+  checksum: a3f43ad7a88b57cbdd5e15a6b484955092ecf8bfbb38b009ec47d52ef8d16961785ce85fd6fb49a2d57ec7feb54d6724f1b0b2732f425d0e39b17206a88f7f96
   languageName: node
   linkType: hard
 
@@ -5118,7 +5118,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:2.2.2":
+"yaml@npm:2.2.2, yaml@npm:^2.2.2":
   version: 2.2.2
   resolution: "yaml@npm:2.2.2"
   checksum: a95bed9205a1f1cac11b315cb3f7ddf6b9979b85a478a18c86abf3066fd8d32c88f8de128c1ea97c2ac5f05de3268ff64e8286c241fd956851f1308044a50a9d
@@ -5129,13 +5129,6 @@ __metadata:
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
   checksum: 5c28b9eb7adc46544f28d9a8d20c5b3cb1215a886609a2fd41f51628d8aaa5878ccd628b755dbcd29f6bb4921bd04ffbc6dcc370689bb96e594e2f9813d2605f
-  languageName: node
-  linkType: hard
-
-"yaml@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "yaml@npm:2.2.1"
-  checksum: 12f3a73f2d28970d146184b1425d32a63f65e9f4840eeab09155a4d23a15be8401ac7a3a09b6626895ccf853c1b9069450957c0ad82cfe591369aaa58d1593d6
   languageName: node
   linkType: hard
 
