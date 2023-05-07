@@ -43,7 +43,7 @@
     "prettier-package-json": "2.8.0",
     "prettier-plugin-organize-imports": "3.2.2",
     "prettier-plugin-sh": "0.12.8",
-    "typescript": "5.0.3"
+    "typescript": "5.0.4"
   },
   "keywords": [
     "kitten",
