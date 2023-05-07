@@ -876,7 +876,7 @@ __metadata:
     browserstack-local: 1.5.2
     chromedriver: 113.0.0
     mocha: 10.2.0
-    selenium-webdriver: 4.8.2
+    selenium-webdriver: 4.9.0
     tslib: 2.5.0
     typescript: 5.0.4
   languageName: unknown
@@ -3288,7 +3288,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jszip@npm:^3.10.0":
+"jszip@npm:^3.10.1":
   version: 3.10.1
   resolution: "jszip@npm:3.10.1"
   dependencies:
@@ -4370,14 +4370,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"selenium-webdriver@npm:4.8.2":
-  version: 4.8.2
-  resolution: "selenium-webdriver@npm:4.8.2"
+"selenium-webdriver@npm:4.9.0":
+  version: 4.9.0
+  resolution: "selenium-webdriver@npm:4.9.0"
   dependencies:
-    jszip: ^3.10.0
+    jszip: ^3.10.1
     tmp: ^0.2.1
-    ws: ">=8.11.0"
-  checksum: a3f7821a364444b59ad2cd55548b6196c0dd195485d6d9067f8d4f60bbdb04d07708b2a0ca23c02a0e32fdf51588b294aeb5c0294dae25a71484040767988272
+    ws: ">=8.13.0"
+  checksum: 4fe06c36c9e6bb96081c8409d019c954540fba13509133f5de16f5afe255f8a94aa60ac813bd19014131229740341176ce20032a9fedb481f7175461a9ad5fb7
   languageName: node
   linkType: hard
 
@@ -5126,9 +5126,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:>=8.11.0":
-  version: 8.12.0
-  resolution: "ws@npm:8.12.0"
+"ws@npm:>=8.13.0":
+  version: 8.13.0
+  resolution: "ws@npm:8.13.0"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ">=5.0.2"
@@ -5137,7 +5137,7 @@ __metadata:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 2a84d769be015f3644a99a33c1b4c1c268b97315a8387067c242f26ab7ac1f655640220c23ddcbd2f7911649cd00478aaafbb4dff073f0b75f3531ebabd7cced
+  checksum: 579817dbbab3ee46669129c220cfd81ba6cdb9ab5c3e9a105702dd045743c4ab72e33bb384573827c0c481213417cc880e41bc097e0fc541a0b79fa3eb38207d
   languageName: node
   linkType: hard
 
