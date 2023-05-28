@@ -1,5 +1,5 @@
 {
-  "act.accelerate": "Accelerate time!",
+  "act.accelerate": "시간 가속",
   "act.adore": "Adore the galaxy! Accumulated {0} worship to {1} epiphany",
   "act.build": "Kittens have built a new {0}",
   "act.builds": "Kittens have built a new {0} {1} times",
@@ -36,7 +36,7 @@
   "filter.accelerate": "Tempus Fugit",
   "filter.adore": "Adoring",
   "filter.build": "Building",
-  "filter.craft": "Crafting",
+  "filter.craft": "제작",
   "filter.disable": "Disabled {0} log messages",
   "filter.distribute": "Distribute",
   "filter.enable": "Enable {0} log messages",
