@@ -773,7 +773,7 @@ __metadata:
     "@actions/core": 1.10.0
     "@actions/github": 5.1.1
     "@types/node": ^20.1.0
-    json-schema-to-ts: 2.8.0
+    json-schema-to-ts: 2.9.1
     tslib: 2.5.0
     typescript: 5.0.4
   languageName: unknown
@@ -3163,14 +3163,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema-to-ts@npm:2.8.0":
-  version: 2.8.0
-  resolution: "json-schema-to-ts@npm:2.8.0"
+"json-schema-to-ts@npm:2.9.1":
+  version: 2.9.1
+  resolution: "json-schema-to-ts@npm:2.9.1"
   dependencies:
     "@babel/runtime": ^7.18.3
     "@types/json-schema": ^7.0.9
     ts-algebra: ^1.2.0
-  checksum: 1b136f8df2b1133953676a05c08d1c0d7645f36c4c7191e447abca8774ed166dd965c71f25f3b73afb67adeee5bc7a3fd3da53ad834976a8d9db23a15618d986
+  checksum: 61f7f612de013b4cfbd4d04e31f79acd3bc3cc2da5c477a989902cc64cd7078ad3176e0772177510616b037a5c85b8defa4dd16e31edceb9e59c18b4bbf49726
   languageName: node
   linkType: hard
 
