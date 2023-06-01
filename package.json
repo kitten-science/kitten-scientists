@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.21.8",
-    "@babel/eslint-parser": "7.21.3",
+    "@babel/eslint-parser": "7.21.8",
     "@babel/plugin-syntax-import-assertions": "7.20.0",
     "@types/babel__core": "7.20.0",
     "@types/eslint": "8.37.0",
