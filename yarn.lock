@@ -1246,20 +1246,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:5.59.2":
-  version: 5.59.2
-  resolution: "@typescript-eslint/parser@npm:5.59.2"
+"@typescript-eslint/parser@npm:5.59.8":
+  version: 5.59.8
+  resolution: "@typescript-eslint/parser@npm:5.59.8"
   dependencies:
-    "@typescript-eslint/scope-manager": 5.59.2
-    "@typescript-eslint/types": 5.59.2
-    "@typescript-eslint/typescript-estree": 5.59.2
+    "@typescript-eslint/scope-manager": 5.59.8
+    "@typescript-eslint/types": 5.59.8
+    "@typescript-eslint/typescript-estree": 5.59.8
     debug: ^4.3.4
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 9c142ff97ec171240f48896b4b2b16159b031fe3d12eaab53071b39071846a66251f5fb51094c019e7fc439793a4a0a9ee8e1139cff39cd3fa9333baffe554c6
+  checksum: 710daf64331d5bc198c22c66c1fdd06db2300487f655d161f0e59971fcd0c70661a7059ff7e3cf2ed66fc72d6674a3f4a317d5d5778ce6605d18e831b0a7039e
   languageName: node
   linkType: hard
 
@@ -1270,6 +1270,16 @@ __metadata:
     "@typescript-eslint/types": 5.59.2
     "@typescript-eslint/visitor-keys": 5.59.2
   checksum: 92e2927640cd9a155c3ebc971f64ecc4b0dd76449b803b189fdfcf5cd6f9dae16fc0d459a889d517f1bf1b8f17a77a4852f49a773ca2e3f0e63ae517123c044c
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/scope-manager@npm:5.59.8":
+  version: 5.59.8
+  resolution: "@typescript-eslint/scope-manager@npm:5.59.8"
+  dependencies:
+    "@typescript-eslint/types": 5.59.8
+    "@typescript-eslint/visitor-keys": 5.59.8
+  checksum: 164ea98d0d7dd4dd0c462eb7238266b2260af63fd29b96746dd978322114c7ebf31ba697c424397e3fb36027704e1c5d788cb6049a6ccb52fec8c6c134d7503b
   languageName: node
   linkType: hard
 
@@ -1297,6 +1307,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/types@npm:5.59.8":
+  version: 5.59.8
+  resolution: "@typescript-eslint/types@npm:5.59.8"
+  checksum: 3f5000f556b4fe45c16e00b24d18c0f8930a214e61a0302daf3ef952a7a45342d9e63119626bd0556b252a6345e1fa423e34908eaf08560756f6c747dcffb56a
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/typescript-estree@npm:5.59.2":
   version: 5.59.2
   resolution: "@typescript-eslint/typescript-estree@npm:5.59.2"
@@ -1312,6 +1329,24 @@ __metadata:
     typescript:
       optional: true
   checksum: f2a168ba62074ab4375176bc4ab28a9e61442d99b9aa62f468f8e8af41915d86520f9f81b1f6a39de2b68438c17c1ba88ed32d39eab757a5552ef5b33193d0c9
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/typescript-estree@npm:5.59.8":
+  version: 5.59.8
+  resolution: "@typescript-eslint/typescript-estree@npm:5.59.8"
+  dependencies:
+    "@typescript-eslint/types": 5.59.8
+    "@typescript-eslint/visitor-keys": 5.59.8
+    debug: ^4.3.4
+    globby: ^11.1.0
+    is-glob: ^4.0.3
+    semver: ^7.3.7
+    tsutils: ^3.21.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: a6ec2654c5c8c0bead99e1a43936a56e9bd0e1422b993fcd9d603ff31fe4701e9562fbc6d0f2b4d50a7d113d27d5fb68c428f78b938bd110b0112ed4df81ed72
   languageName: node
   linkType: hard
 
@@ -1340,6 +1375,16 @@ __metadata:
     "@typescript-eslint/types": 5.59.2
     eslint-visitor-keys: ^3.3.0
   checksum: a3d2a498b92b57048dbab93ca72acf960d4aa6e6cf4f277ab24b9d004c99dba5ef46f22959b7c37a0e12f555a8a88286ff4732205e0f1a40ad937ce26bb8dbd3
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/visitor-keys@npm:5.59.8":
+  version: 5.59.8
+  resolution: "@typescript-eslint/visitor-keys@npm:5.59.8"
+  dependencies:
+    "@typescript-eslint/types": 5.59.8
+    eslint-visitor-keys: ^3.3.0
+  checksum: 0e7cdb5c0e9106bbb77bb599d9a6464306d7cfa1b35435810c5d59b951f3b65ac3a1a829894e328e43d411da189247568eb24d28dd9ceca95dfc3f19011b889f
   languageName: node
   linkType: hard
 
@@ -3235,7 +3280,7 @@ __metadata:
     "@types/prettier": 2.7.2
     "@types/web": 0.0.99
     "@typescript-eslint/eslint-plugin": 5.59.2
-    "@typescript-eslint/parser": 5.59.2
+    "@typescript-eslint/parser": 5.59.8
     eslint: 8.40.0
     eslint-plugin-jsdoc: 43.2.0
     lint-staged: 13.2.2
