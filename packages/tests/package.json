@@ -26,6 +26,6 @@
     "chromedriver": "113.0.0",
     "mocha": "10.2.0",
     "selenium-webdriver": "4.9.2",
-    "typescript": "5.0.4"
+    "typescript": "5.1.3"
   }
 }
