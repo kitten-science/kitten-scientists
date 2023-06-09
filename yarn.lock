@@ -94,9 +94,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:7.21.3":
-  version: 7.21.3
-  resolution: "@babel/eslint-parser@npm:7.21.3"
+"@babel/eslint-parser@npm:7.22.5":
+  version: 7.22.5
+  resolution: "@babel/eslint-parser@npm:7.22.5"
   dependencies:
     "@nicolo-ribaudo/eslint-scope-5-internals": 5.1.1-v1
     eslint-visitor-keys: ^2.1.0
@@ -104,7 +104,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ^7.5.0 || ^8.0.0
-  checksum: 2bf20f688d0fb17c707e799a7e81e0daed22f5e5113193e2728f129c20c7877d4a37413a4f2b97ed62bd7f71f69832d5e6bd2ea289920649e458f7a3ebea1f41
+  checksum: 070de521c139f53b9cb10a94c9089834aba887ebfac136fc890bafc8e43effc6042e4161d8f379441f65db1042d04126b557403dad551912a94c717d14eafd74
   languageName: node
   linkType: hard
 
@@ -3185,7 +3185,7 @@ __metadata:
   resolution: "kitten-scientists@workspace:."
   dependencies:
     "@babel/core": 7.22.5
-    "@babel/eslint-parser": 7.21.3
+    "@babel/eslint-parser": 7.22.5
     "@babel/plugin-syntax-import-assertions": 7.20.0
     "@types/babel__core": 7.20.1
     "@types/eslint": 8.40.0
