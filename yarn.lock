@@ -3258,7 +3258,7 @@ __metadata:
     "@typescript-eslint/parser": 5.60.1
     eslint: 8.41.0
     eslint-plugin-jsdoc: 46.2.6
-    lint-staged: 13.2.2
+    lint-staged: 13.2.3
     prettier: 2.8.8
     prettier-package-json: 2.8.0
     prettier-plugin-organize-imports: 3.2.2
@@ -3301,9 +3301,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:13.2.2":
-  version: 13.2.2
-  resolution: "lint-staged@npm:13.2.2"
+"lint-staged@npm:13.2.3":
+  version: 13.2.3
+  resolution: "lint-staged@npm:13.2.3"
   dependencies:
     chalk: 5.2.0
     cli-truncate: ^3.1.0
@@ -3320,7 +3320,7 @@ __metadata:
     yaml: ^2.2.2
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: a3f43ad7a88b57cbdd5e15a6b484955092ecf8bfbb38b009ec47d52ef8d16961785ce85fd6fb49a2d57ec7feb54d6724f1b0b2732f425d0e39b17206a88f7f96
+  checksum: 4907d2e60c8bd4b7ba354464a914e9db61d3e121232a3111bfe3e9f24d1ae8c9bd89c8ff19f819227a97fce0d797a33a62bcc29adebb37fb937e012a0a8b358b
   languageName: node
   linkType: hard
 
