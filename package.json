@@ -33,7 +33,7 @@
     "@types/eslint": "8.40.0",
     "@types/node": "20.2.5",
     "@types/prettier": "2.7.3",
-    "@types/web": "0.0.99",
+    "@types/web": "0.0.107",
     "@typescript-eslint/eslint-plugin": "5.61.0",
     "@typescript-eslint/parser": "5.60.1",
     "eslint": "8.41.0",
