@@ -2271,9 +2271,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsdoc@npm:46.4.4":
-  version: 46.4.4
-  resolution: "eslint-plugin-jsdoc@npm:46.4.4"
+"eslint-plugin-jsdoc@npm:46.4.5":
+  version: 46.4.5
+  resolution: "eslint-plugin-jsdoc@npm:46.4.5"
   dependencies:
     "@es-joy/jsdoccomment": ~0.39.4
     are-docs-informative: ^0.0.2
@@ -2282,11 +2282,11 @@ __metadata:
     escape-string-regexp: ^4.0.0
     esquery: ^1.5.0
     is-builtin-module: ^3.2.1
-    semver: ^7.5.1
+    semver: ^7.5.4
     spdx-expression-parse: ^3.0.1
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0
-  checksum: bd6f6e8440aa40fa4906a173d7757c395ae5ba8483febbf3455807ac90ef5676896706039276281f79c4b981cb3fd55885c353c9ea43dcf77fd2f4cd922cd2ea
+  checksum: 05facd210c14a4e9e28a48e917000ead62d6086b05ce53cbd59b640e5124e46cf1c7a84d0b7dabb958b3f55737b46c0847a1d335c228ee2d3014fb3b38fe617e
   languageName: node
   linkType: hard
 
@@ -3255,7 +3255,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.61.0
     "@typescript-eslint/parser": 5.60.1
     eslint: 8.45.0
-    eslint-plugin-jsdoc: 46.4.4
+    eslint-plugin-jsdoc: 46.4.5
     lint-staged: 13.2.3
     prettier: 2.8.8
     prettier-package-json: 2.8.0
@@ -4352,14 +4352,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.5.1":
-  version: 7.5.1
-  resolution: "semver@npm:7.5.1"
+"semver@npm:^7.5.4":
+  version: 7.5.4
+  resolution: "semver@npm:7.5.4"
   dependencies:
     lru-cache: ^6.0.0
   bin:
     semver: bin/semver.js
-  checksum: ae6aca3cfba9b4d0e0a8fa789c7fa4a8412e39f24ecc19500db291a0a31bb43c151021e4fdbb68a85dcd06c1297f6daeeb09647cea4253eba0ccc0106eb7cd67
+  checksum: 5160b06975a38b11c1ab55950cb5b8a23db78df88275d3d8a42ccf1f29e55112ac995b3a26a522c36e3b5f76b0445f1eef70d696b8c7862a2b4303d7b0e7609e
   languageName: node
   linkType: hard
 
