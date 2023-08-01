@@ -23,7 +23,7 @@
     "@types/mocha": "^10",
     "@types/selenium-webdriver": "^4",
     "browserstack-local": "1.5.3",
-    "chromedriver": "114.0.2",
+    "chromedriver": "115.0.0",
     "mocha": "10.2.0",
     "selenium-webdriver": "4.10.0",
     "typescript": "5.1.6"
