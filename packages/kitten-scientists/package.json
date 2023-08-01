@@ -26,7 +26,7 @@
   "dependencies": {
     "date-fns": "2.30.0",
     "semver": "7.5.3",
-    "tslib": "2.6.0"
+    "tslib": "2.6.1"
   },
   "devDependencies": {
     "@kitten-science/action-release-info": "workspace:*",
