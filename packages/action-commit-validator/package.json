@@ -24,7 +24,7 @@
     "tslib": "2.6.0"
   },
   "devDependencies": {
-    "@types/node": "^20.4.2",
+    "@types/node": "^20.5.8",
     "json-schema-to-ts": "2.9.1",
     "typescript": "5.1.6"
   }
