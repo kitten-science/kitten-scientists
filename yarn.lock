@@ -754,7 +754,7 @@ __metadata:
     "@types/node": 20.4.2
     tslib: 2.6.0
     typescript: 5.1.6
-    yaml: 2.3.1
+    yaml: 2.3.2
   languageName: unknown
   linkType: soft
 
@@ -5031,10 +5031,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:2.3.1":
-  version: 2.3.1
-  resolution: "yaml@npm:2.3.1"
-  checksum: ed4c21a907fb1cd60a25177612fa46d95064a144623d269199817908475fe85bef20fb17406e3bdc175351b6488056a6f84beb7836e8c262646546a0220188e3
+"yaml@npm:2.3.2":
+  version: 2.3.2
+  resolution: "yaml@npm:2.3.2"
+  checksum: c2aac464015f037911c5b819475e81e52119e5495e3d43fe7cb82b5a84d59d66a86049dc85d8e90658636c1c04dde177ae196818deaf76c1bda4d34209d5c087
   languageName: node
   linkType: hard
 
