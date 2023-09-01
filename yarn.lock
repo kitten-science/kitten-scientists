@@ -101,17 +101,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:7.22.5":
-  version: 7.22.5
-  resolution: "@babel/eslint-parser@npm:7.22.5"
+"@babel/eslint-parser@npm:7.22.11":
+  version: 7.22.11
+  resolution: "@babel/eslint-parser@npm:7.22.11"
   dependencies:
     "@nicolo-ribaudo/eslint-scope-5-internals": 5.1.1-v1
     eslint-visitor-keys: ^2.1.0
-    semver: ^6.3.0
+    semver: ^6.3.1
   peerDependencies:
-    "@babel/core": ">=7.11.0"
+    "@babel/core": ^7.11.0
     eslint: ^7.5.0 || ^8.0.0
-  checksum: 070de521c139f53b9cb10a94c9089834aba887ebfac136fc890bafc8e43effc6042e4161d8f379441f65db1042d04126b557403dad551912a94c717d14eafd74
+  checksum: 2f627c2095900479ed3691a8996ce3e740d87843e28757b196ea9842b0b7af155a59e2abe31ed842d0080415ae13f1522910ed2f2de428a09e5c95ac2b017575
   languageName: node
   linkType: hard
 
@@ -3194,7 +3194,7 @@ __metadata:
   resolution: "kitten-scientists@workspace:."
   dependencies:
     "@babel/core": 7.22.5
-    "@babel/eslint-parser": 7.22.5
+    "@babel/eslint-parser": 7.22.11
     "@babel/plugin-syntax-import-assertions": 7.22.5
     "@types/babel__core": 7.20.1
     "@types/eslint": 8.44.0
@@ -4275,6 +4275,15 @@ __metadata:
   bin:
     semver: ./bin/semver.js
   checksum: 1f4959e15bcfbaf727e964a4920f9260141bb8805b399793160da4e7de128e42a7d1f79c1b7d5cd21a6073fba0d55feb9966f5fef3e5ccb8e1d7ead3d7527458
+  languageName: node
+  linkType: hard
+
+"semver@npm:^6.3.1":
+  version: 6.3.1
+  resolution: "semver@npm:6.3.1"
+  bin:
+    semver: bin/semver.js
+  checksum: e3d79b609071caa78bcb6ce2ad81c7966a46a7431d9d58b8800cfa9cb6a63699b3899a0e4bcce36167a284578212d9ae6942b6929ba4aa5015c079a67751d42d
   languageName: node
   linkType: hard
 
