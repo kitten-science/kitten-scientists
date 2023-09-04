@@ -790,7 +790,7 @@ __metadata:
   dependencies:
     "@kitten-science/action-release-info": "workspace:*"
     "@types/dojo": 1.9.45
-    "@types/jquery": 3.5.16
+    "@types/jquery": 3.5.18
     "@types/semver": ^7
     date-fns: 2.30.0
     semver: 7.5.4
@@ -1061,12 +1061,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jquery@npm:3.5.16":
-  version: 3.5.16
-  resolution: "@types/jquery@npm:3.5.16"
+"@types/jquery@npm:3.5.18":
+  version: 3.5.18
+  resolution: "@types/jquery@npm:3.5.18"
   dependencies:
     "@types/sizzle": "*"
-  checksum: f40f6528f91e52e2cf5c08ad9d0ed7aad4392b366e3b4228cd3e57d4e0d82c850f0694a9c2779065acb2353e372d337e2fb1dc6861c8c5849bd6538ce2f002e8
+  checksum: 1284e05c5ceefae2060902ea7a3337d8bf9e0e2a56884fbb619610de4d9aa5e000e92e4ca98dd1cb6437add446da4c773969a7b4af93bf60381364f978f9d58b
   languageName: node
   linkType: hard
 
@@ -4258,7 +4258,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.5.4":
+"semver@npm:7.5.4, semver@npm:^7.5.4":
   version: 7.5.4
   resolution: "semver@npm:7.5.4"
   dependencies:
@@ -4295,17 +4295,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: cffd30102de68a9f8cac9ef57b43c2173dc999da4fc5189872b421f9c9e2660f70243b8e964781ac6dc48ba2542647bb672beeb4d756c89c4a9e05e1144fa40a
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.5.4":
-  version: 7.5.4
-  resolution: "semver@npm:7.5.4"
-  dependencies:
-    lru-cache: ^6.0.0
-  bin:
-    semver: bin/semver.js
-  checksum: 5160b06975a38b11c1ab55950cb5b8a23db78df88275d3d8a42ccf1f29e55112ac995b3a26a522c36e3b5f76b0445f1eef70d696b8c7862a2b4303d7b0e7609e
   languageName: node
   linkType: hard
 
