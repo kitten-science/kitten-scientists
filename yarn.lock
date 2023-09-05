@@ -3208,7 +3208,7 @@ __metadata:
     lint-staged: 13.2.3
     prettier: 3.0.3
     prettier-package-json: 2.8.0
-    prettier-plugin-organize-imports: 3.2.2
+    prettier-plugin-organize-imports: 3.2.3
     prettier-plugin-sh: 0.13.1
     tslib: 2.6.0
     typescript: 5.1.6
@@ -3972,9 +3972,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-organize-imports@npm:3.2.2":
-  version: 3.2.2
-  resolution: "prettier-plugin-organize-imports@npm:3.2.2"
+"prettier-plugin-organize-imports@npm:3.2.3":
+  version: 3.2.3
+  resolution: "prettier-plugin-organize-imports@npm:3.2.3"
   peerDependencies:
     "@volar/vue-language-plugin-pug": ^1.0.4
     "@volar/vue-typescript": ^1.0.4
@@ -3985,7 +3985,7 @@ __metadata:
       optional: true
     "@volar/vue-typescript":
       optional: true
-  checksum: b49433485059ae9df77d8d89fdb5ef7b4e270329fd3792f9962a552efe86a76d6ab49d9a33860bc250d6707265643d59060add5b2389aa668013bad613601dda
+  checksum: 30a9c083998b056680b110ad2dcae796649fd1e31739ccfe3d38901fe0a63b3f2a85490cd2083a223291f86b8758fbaa21425681e1f0cc794ca4da378d2b5e28
   languageName: node
   linkType: hard
 
@@ -4258,7 +4258,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.5.4":
+"semver@npm:7.5.4, semver@npm:^7.5.4":
   version: 7.5.4
   resolution: "semver@npm:7.5.4"
   dependencies:
@@ -4295,17 +4295,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: cffd30102de68a9f8cac9ef57b43c2173dc999da4fc5189872b421f9c9e2660f70243b8e964781ac6dc48ba2542647bb672beeb4d756c89c4a9e05e1144fa40a
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.5.4":
-  version: 7.5.4
-  resolution: "semver@npm:7.5.4"
-  dependencies:
-    lru-cache: ^6.0.0
-  bin:
-    semver: bin/semver.js
-  checksum: 5160b06975a38b11c1ab55950cb5b8a23db78df88275d3d8a42ccf1f29e55112ac995b3a26a522c36e3b5f76b0445f1eef70d696b8c7862a2b4303d7b0e7609e
   languageName: node
   linkType: hard
 

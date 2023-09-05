@@ -41,7 +41,7 @@
     "lint-staged": "13.2.3",
     "prettier": "3.0.3",
     "prettier-package-json": "2.8.0",
-    "prettier-plugin-organize-imports": "3.2.2",
+    "prettier-plugin-organize-imports": "3.2.3",
     "prettier-plugin-sh": "0.13.1",
     "typescript": "5.1.6"
   },
