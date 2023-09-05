@@ -741,7 +741,7 @@ __metadata:
     "@types/node": ^20.5.9
     json-schema-to-ts: 2.9.2
     tslib: 2.6.0
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -753,7 +753,7 @@ __metadata:
     "@actions/github": 5.1.1
     "@types/node": 20.5.9
     tslib: 2.6.0
-    typescript: 5.1.6
+    typescript: 5.2.2
     yaml: 2.3.2
   languageName: unknown
   linkType: soft
@@ -766,7 +766,7 @@ __metadata:
     "@actions/github": 5.1.1
     "@types/node": ^20.5.9
     tslib: 2.6.0
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -795,7 +795,7 @@ __metadata:
     date-fns: 2.30.0
     semver: 7.5.4
     tslib: 2.6.0
-    typescript: 5.1.6
+    typescript: 5.2.2
     vite: 4.4.9
     vite-plugin-userscript: 0.1.3
   languageName: unknown
@@ -812,7 +812,7 @@ __metadata:
     mocha: 10.2.0
     selenium-webdriver: 4.10.0
     tslib: 2.6.0
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -3232,7 +3232,7 @@ __metadata:
     prettier-plugin-organize-imports: 3.2.3
     prettier-plugin-sh: 0.13.1
     tslib: 2.6.0
-    typescript: 5.1.6
+    typescript: 5.2.2
   languageName: unknown
   linkType: soft
 
@@ -4783,23 +4783,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.1.6":
-  version: 5.1.6
-  resolution: "typescript@npm:5.1.6"
+"typescript@npm:5.2.2":
+  version: 5.2.2
+  resolution: "typescript@npm:5.2.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 45ac28e2df8365fd28dac42f5d62edfe69a7203d5ec646732cadc04065331f34f9078f81f150fde42ed9754eed6fa3b06a8f3523c40b821e557b727f1992e025
+  checksum: 91ae3e6193d0ddb8656d4c418a033f0f75dec5e077ebbc2bd6d76439b93f35683936ee1bdc0e9cf94ec76863aa49f27159b5788219b50e1cd0cd6d110aa34b07
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.1.6#~builtin<compat/typescript>":
-  version: 5.1.6
-  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=d73830"
+"typescript@patch:typescript@5.2.2#~builtin<compat/typescript>":
+  version: 5.2.2
+  resolution: "typescript@patch:typescript@npm%3A5.2.2#~builtin<compat/typescript>::version=5.2.2&hash=d73830"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: c134abcd9fc5c393db30498db18d8e89453efae14e11a39c1adb6238138d4c152472e497499b8a67b0c87ca6eafcb26b0eb02f962f240c233c2e0ad3785f8742
+  checksum: 303979762f9b8932c53f8149e866521a1265168b5c0fde8cc8ad83ac3d0e8ede8096cb02dff5f2de048e7f118a6f61902f81da12d5972c7fb582f09f2f18d169
   languageName: node
   linkType: hard
 
