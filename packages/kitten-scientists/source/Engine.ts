@@ -98,7 +98,7 @@ export class Engine {
     this.settings = new EngineSettings();
 
     this._i18nData = i18nData;
-    this.setLanguage(gameLanguage);
+    this.setLanguage(gameLanguage, false);
 
     this._host = host;
     this._activitySummary = new ActivitySummary(this._host);
@@ -129,7 +129,7 @@ export class Engine {
     return language in this._i18nData;
   }
 
-  setLanguage(language: GameLanguage | SupportedLanguage) {
+  setLanguage(language: GameLanguage | SupportedLanguage, rebuildUI = true) {
     const previousLanguage = this.settings.language.selected;
     if (!this.isLanguageSupported(language)) {
       cwarn(
@@ -141,7 +141,7 @@ export class Engine {
       this.settings.language.selected = language as SupportedLanguage;
     }
 
-    if (previousLanguage !== this.settings.language.selected) {
+    if (previousLanguage !== this.settings.language.selected && rebuildUI) {
       this._host.rebuildUi();
     }
   }
