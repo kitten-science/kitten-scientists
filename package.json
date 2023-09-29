@@ -23,27 +23,27 @@
     "packages/*"
   ],
   "dependencies": {
-    "tslib": "2.6.0"
+    "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@babel/core": "7.22.15",
-    "@babel/eslint-parser": "7.22.11",
+    "@babel/core": "7.23.0",
+    "@babel/eslint-parser": "7.22.15",
     "@babel/plugin-syntax-import-assertions": "7.22.5",
     "@types/babel__core": "7.20.1",
     "@types/eslint": "8.44.2",
     "@types/node": "20.5.9",
     "@types/prettier": "3.0.0",
     "@types/web": "0.0.107",
-    "@typescript-eslint/eslint-plugin": "6.6.0",
-    "@typescript-eslint/parser": "5.60.1",
-    "eslint": "8.48.0",
+    "@typescript-eslint/eslint-plugin": "6.7.3",
+    "@typescript-eslint/parser": "6.7.3",
+    "eslint": "8.50.0",
     "eslint-plugin-jsdoc": "46.5.1",
     "lint-staged": "13.2.3",
     "prettier": "3.0.3",
     "prettier-package-json": "2.8.0",
     "prettier-plugin-organize-imports": "3.2.3",
     "prettier-plugin-sh": "0.13.1",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "keywords": [
     "kitten",
