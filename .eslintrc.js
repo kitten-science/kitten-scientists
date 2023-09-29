@@ -41,6 +41,7 @@ module.exports = {
         "jsdoc/require-param-type": "off",
         "jsdoc/require-returns": ["off", { checkGetters: false }],
         "jsdoc/require-returns-type": "off",
+        "jsdoc/tag-lines": ["warn", "any", { startLines: 1 }],
       },
     },
   ],
