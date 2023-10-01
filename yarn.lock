@@ -1172,11 +1172,11 @@ __metadata:
   linkType: hard
 
 "@types/selenium-webdriver@npm:^4":
-  version: 4.1.9
-  resolution: "@types/selenium-webdriver@npm:4.1.9"
+  version: 4.1.17
+  resolution: "@types/selenium-webdriver@npm:4.1.17"
   dependencies:
     "@types/ws": "*"
-  checksum: a188b0ac10839e9860ac2683797ccff14eaa6ae30e9e595acf11c914232124c0bd25b9c8074d0291212b91d97749647619749f15e283dbf0df67ae5cef5a919b
+  checksum: f95c851b1ba39bebeb45a8a87dd64319f696c27ec91657159acbcab4849215dc2eaa0feba7a95612fd8b05dc221008e8cfd4bf69ed4f55929cebaf31db528e9a
   languageName: node
   linkType: hard
 
