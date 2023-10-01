@@ -1087,13 +1087,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:8.44.2":
-  version: 8.44.2
-  resolution: "@types/eslint@npm:8.44.2"
+"@types/eslint@npm:8.44.3":
+  version: 8.44.3
+  resolution: "@types/eslint@npm:8.44.3"
   dependencies:
     "@types/estree": "*"
     "@types/json-schema": "*"
-  checksum: 3c402215f7f495f9267a51fecd6a6d056eb8b3b031a1c472286b7d23a397257327eb03712befa7da60614dd63d31235d27dbc5c586b6a408798dafb8ee0c5eb2
+  checksum: d9d681efe461ec8934800a89773be251a200c9d4528ca2330bb99f4ca3bd6b2d053034d2b5fe645a1567331af2c89e364aed4be8c839f10a1028a3cbe2856b01
   languageName: node
   linkType: hard
 
@@ -3212,7 +3212,7 @@ __metadata:
     "@babel/eslint-parser": 7.22.15
     "@babel/plugin-syntax-import-assertions": 7.22.5
     "@types/babel__core": 7.20.1
-    "@types/eslint": 8.44.2
+    "@types/eslint": 8.44.3
     "@types/node": 20.5.9
     "@types/prettier": 3.0.0
     "@types/web": 0.0.115
