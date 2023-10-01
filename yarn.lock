@@ -2246,9 +2246,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsdoc@npm:46.5.1":
-  version: 46.5.1
-  resolution: "eslint-plugin-jsdoc@npm:46.5.1"
+"eslint-plugin-jsdoc@npm:46.8.2":
+  version: 46.8.2
+  resolution: "eslint-plugin-jsdoc@npm:46.8.2"
   dependencies:
     "@es-joy/jsdoccomment": ~0.40.1
     are-docs-informative: ^0.0.2
@@ -2261,7 +2261,7 @@ __metadata:
     spdx-expression-parse: ^3.0.1
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0
-  checksum: 49c0fadea61e4062f57c8927b69b2d6e34ac6e6e5190605d1a43ebf98293e284c933523997048cf4a9c7d66935fddf7ae9169f64c56e0e72a35e016584308347
+  checksum: ccf38567ddd73d7c57bf144d0fe9c1fe4a54e407353b3577bf036e9919a8ef96e7e385834ee383b64c7c2090b15a0f84a55b9dc5f50539ff399a3f7b91d26b48
   languageName: node
   linkType: hard
 
@@ -3219,7 +3219,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 6.7.3
     "@typescript-eslint/parser": 6.7.3
     eslint: 8.50.0
-    eslint-plugin-jsdoc: 46.5.1
+    eslint-plugin-jsdoc: 46.8.2
     lint-staged: 14.0.1
     prettier: 3.0.3
     prettier-package-json: 2.8.0
