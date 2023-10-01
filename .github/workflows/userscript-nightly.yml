@@ -18,7 +18,7 @@ jobs:
     outputs:
       should_run: ${{ steps.should_run.outputs.should_run }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: print latest_commit
         run: echo ${{ github.sha }}
 
@@ -38,7 +38,7 @@ jobs:
       pull-requests: read
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           cache: yarn
