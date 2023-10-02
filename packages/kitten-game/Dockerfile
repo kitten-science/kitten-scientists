@@ -1,4 +1,4 @@
-FROM node:18-buster
+FROM node:20-bookworm
 
 ARG BRANCH=master
 
