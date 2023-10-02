@@ -1039,16 +1039,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:7.20.1":
-  version: 7.20.1
-  resolution: "@types/babel__core@npm:7.20.1"
+"@types/babel__core@npm:7.20.2":
+  version: 7.20.2
+  resolution: "@types/babel__core@npm:7.20.2"
   dependencies:
     "@babel/parser": ^7.20.7
     "@babel/types": ^7.20.7
     "@types/babel__generator": "*"
     "@types/babel__template": "*"
     "@types/babel__traverse": "*"
-  checksum: c83402fc7ef8abd1f94ffe350b8bde9a35ccb6c3624bc8e39b6a7e1a675d112f6b70ac1b05391a579ca3b126baffe66b0b94f954edef086c4482b97d293c3659
+  checksum: 4bd4bc0803ddd17af37871a8139e5b6c80b182f5f6d716c6484da1286522eba84750ffc527539bc39496876e7193f316b7493b99caa37af2b4e6ef345ee2ff8c
   languageName: node
   linkType: hard
 
@@ -3211,7 +3211,7 @@ __metadata:
     "@babel/core": 7.23.0
     "@babel/eslint-parser": 7.22.15
     "@babel/plugin-syntax-import-assertions": 7.22.5
-    "@types/babel__core": 7.20.1
+    "@types/babel__core": 7.20.2
     "@types/eslint": 8.44.3
     "@types/node": 20.8.0
     "@types/prettier": 3.0.0
