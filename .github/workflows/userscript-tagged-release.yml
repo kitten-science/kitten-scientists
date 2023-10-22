@@ -18,8 +18,8 @@ jobs:
       pull-requests: read
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3
         with:
           cache: yarn
           node-version: 18
@@ -29,7 +29,7 @@ jobs:
 
       - run: yarn kitten-scientists:release
 
-      - uses: marvinpinto/action-automatic-releases@v1.2.1
+      - uses: marvinpinto/action-automatic-releases@919008cf3f741b179569b7a6fb4d8860689ab7f0 # v1.2.1
         with:
           # Create only as draft, so we can add a description on the web UI.
           draft: true

@@ -18,7 +18,7 @@ jobs:
     outputs:
       should_run: ${{ steps.should_run.outputs.should_run }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: print latest_commit
         run: echo ${{ github.sha }}
 
@@ -38,8 +38,8 @@ jobs:
       pull-requests: read
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3
         with:
           cache: yarn
           node-version: 18
@@ -52,7 +52,7 @@ jobs:
           export KS_VERSION=$(yarn kitten-scientists:version)
           echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
       - run: yarn kitten-scientists:release
-      - uses: marvinpinto/action-automatic-releases@v1.2.1
+      - uses: marvinpinto/action-automatic-releases@919008cf3f741b179569b7a6fb4d8860689ab7f0 # v1.2.1
         with:
           automatic_release_tag: nightly
           draft: false
