@@ -1,5 +1,11 @@
 {
-  "extends": ["config:base", ":disableDependencyDashboard"],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "branchConcurrentLimit": 0,
+  "extends": ["config:best-practices"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true
+  },
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
@@ -7,6 +13,9 @@
       "automerge": true
     }
   ],
+  "pinDigests": true,
   "postUpdateOptions": ["yarnDedupeHighest"],
-  "prConcurrentLimit": 0
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 5,
+  "rangeStrategy": "pin"
 }
