@@ -32,7 +32,7 @@
     "@kitten-science/action-release-info": "workspace:*",
     "@types/dojo": "1.9.46",
     "@types/jquery": "3.5.24",
-    "@types/semver": "7.5.3",
+    "@types/semver": "7.5.4",
     "typescript": "5.2.2",
     "vite": "4.4.9",
     "vite-plugin-userscript": "0.1.3"

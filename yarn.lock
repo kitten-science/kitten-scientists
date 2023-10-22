@@ -669,7 +669,7 @@ __metadata:
     "@kitten-science/action-release-info": "workspace:*"
     "@types/dojo": 1.9.46
     "@types/jquery": 3.5.24
-    "@types/semver": 7.5.3
+    "@types/semver": 7.5.4
     date-fns: 2.30.0
     semver: 7.5.4
     tslib: 2.6.2
@@ -1003,10 +1003,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:7.5.3, @types/semver@npm:^7.5.0":
-  version: 7.5.3
-  resolution: "@types/semver@npm:7.5.3"
-  checksum: 1dedcf5f50a5a345e817fdf1273a14d0c57de80eb1d47bf3f17563062be53a2c99b78755a8c88c794a03757f9cd05da61b2849bf109e1b71e30fca895529c2b0
+"@types/semver@npm:7.5.4, @types/semver@npm:^7.5.0":
+  version: 7.5.4
+  resolution: "@types/semver@npm:7.5.4"
+  checksum: dee66a71d9f089c118be74b5937d4fef42864d68d9472a3f4f5399b9e3ad74d56a8e155020c846667b9ecf9de78fdb9ea55a53fff5067af28e06779b282b6c40
   languageName: node
   linkType: hard
 
