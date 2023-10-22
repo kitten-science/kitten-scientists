@@ -616,7 +616,7 @@ __metadata:
   dependencies:
     "@actions/core": 1.10.1
     "@actions/github": 5.1.1
-    "@types/node": 20.8.0
+    "@types/node": 20.8.7
     json-schema-to-ts: 2.9.2
     tslib: 2.6.2
     typescript: 5.2.2
@@ -629,7 +629,7 @@ __metadata:
   dependencies:
     "@actions/core": 1.10.1
     "@actions/github": 5.1.1
-    "@types/node": 20.8.0
+    "@types/node": 20.8.7
     tslib: 2.6.2
     typescript: 5.2.2
     yaml: 2.3.2
@@ -642,7 +642,7 @@ __metadata:
   dependencies:
     "@actions/core": 1.10.1
     "@actions/github": 5.1.1
-    "@types/node": 20.8.0
+    "@types/node": 20.8.7
     tslib: 2.6.2
     typescript: 5.2.2
   languageName: unknown
@@ -962,10 +962,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:20.8.0":
-  version: 20.8.0
-  resolution: "@types/node@npm:20.8.0"
-  checksum: 9ee3b9116bdb85bf519fe373f0faafdec048b6e3e34b1d97c20a3331f3d3ae0a87b08696805758447694869620d6359c81c18fdee30751a8fb4231bffa8f5482
+"@types/node@npm:*, @types/node@npm:20.8.7":
+  version: 20.8.7
+  resolution: "@types/node@npm:20.8.7"
+  dependencies:
+    undici-types: ~5.25.1
+  checksum: e82b87e7f3f4c12acc5803db21f9144d5e87c20841db9ae98746958e038064700ab04294d08a3714a3df8bd710a974998e2e423443a5d031840cbba17fa126a7
   languageName: node
   linkType: hard
 
@@ -2999,7 +3001,7 @@ __metadata:
     "@babel/plugin-syntax-import-assertions": 7.22.5
     "@types/babel__core": 7.20.3
     "@types/eslint": 8.44.3
-    "@types/node": 20.8.0
+    "@types/node": 20.8.7
     "@types/prettier": 3.0.0
     "@types/web": 0.0.115
     "@typescript-eslint/eslint-plugin": 6.7.3
@@ -4486,6 +4488,13 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 303979762f9b8932c53f8149e866521a1265168b5c0fde8cc8ad83ac3d0e8ede8096cb02dff5f2de048e7f118a6f61902f81da12d5972c7fb582f09f2f18d169
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.25.1":
+  version: 5.25.3
+  resolution: "undici-types@npm:5.25.3"
+  checksum: 60a47c6db451c00d27186d86a41fbd9677fa1f6d1a5350bff342c3985bd79fc3f5a638ebf56bbce21df46c701a687db43b3fbd588e1726e58047cea14d182fef
   languageName: node
   linkType: hard
 
