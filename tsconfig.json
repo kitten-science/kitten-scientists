@@ -14,9 +14,6 @@
       "path": "packages/action-release-info"
     },
     {
-      "path": "packages/tests"
-    },
-    {
       "path": "packages/kitten-scientists"
     }
   ]

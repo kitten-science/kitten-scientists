@@ -117,7 +117,9 @@
 
 -   Description:
 
-    _documentation pending_
+    Build the Kitten Scientists userscript.
+
+    This builds the version of the script that is also used in the development container.
 
 ## kitten-scientists:preview
 
@@ -130,7 +132,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Build a development release version of the userscript.
 
 ## kitten-scientists:release
 
@@ -144,7 +146,9 @@
 
 -   Description:
 
-    _documentation pending_
+    Build a release version of the Kitten Scientists userscript.
+
+    This is usually only used from CI to build both the regular version of the script, as well as a minified build. When you use this locally, it still builds both files, but clears the output directory between builds. So you end up with only the regular version.
 
 ## kitten-scientists:version
 
@@ -157,7 +161,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Returns the version for the Kitten Scientists userscript.
 
 ## kitten-scientists:watch
 
@@ -170,7 +174,11 @@
 
 -   Description:
 
-    _documentation pending_
+    Builds the Kitten Scientists userscript and watches all files for changes. If changes are detected, the script is rebuilt.
+
+    !!! warning
+
+        This watcher has caused problems in the past, generating broken output. Use at your own risk.
 
 ## lint:all
 
@@ -184,32 +192,6 @@
 -   Description:
 
     Check source code for style issues.
-
-## tests:build
-
--   Project: `@kitten-science/tests`
--   Source:
-
-    ```shell
-    tsc --build
-    ```
-
--   Description:
-
-    Build tests.
-
-## tests:run
-
--   Project: `@kitten-science/tests`
--   Source:
-
-    ```shell
-    mocha ./build/tests/*.spec.js
-    ```
-
--   Description:
-
-    Execute tests.
 
 ## typecheck:all
 

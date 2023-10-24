@@ -77,7 +77,8 @@
       "scriptName": "kitten-scientists:build",
       "scriptCode": "vite --config vite.config.inject.js build",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Build the Kitten Scientists userscript.\n\nThis builds the version of the script that is also used in the development container."
     },
     {
       "manifestPath": "packages/kitten-scientists/package.json",
@@ -85,7 +86,8 @@
       "scriptName": "kitten-scientists:preview",
       "scriptCode": "DEV_BUILD=true vite --config vite.config.userscript.js build",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Build a development release version of the userscript."
     },
     {
       "manifestPath": "packages/kitten-scientists/package.json",
@@ -93,7 +95,8 @@
       "scriptName": "kitten-scientists:release",
       "scriptCode": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Build a release version of the Kitten Scientists userscript.\n\nThis is usually only used from CI to build both the regular version of the script, as well as a minified build. When you use this locally, it still builds both files, but clears the output directory between builds. So you end up with only the regular version."
     },
     {
       "manifestPath": "packages/kitten-scientists/package.json",
@@ -101,7 +104,8 @@
       "scriptName": "kitten-scientists:version",
       "scriptCode": "node version.cjs",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Returns the version for the Kitten Scientists userscript."
     },
     {
       "manifestPath": "packages/kitten-scientists/package.json",
@@ -109,7 +113,8 @@
       "scriptName": "kitten-scientists:watch",
       "scriptCode": "vite --config vite.config.inject.js build --watch",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Builds the Kitten Scientists userscript and watches all files for changes. If changes are detected, the script is rebuilt.\n\n!!! warning\n\n    This watcher has caused problems in the past, generating broken output. Use at your own risk."
     },
     {
       "manifestPath": "package.json",
@@ -119,24 +124,6 @@
       "isGlobal": true,
       "isRootManifest": true,
       "description": "Check source code for style issues."
-    },
-    {
-      "manifestPath": "packages/tests/package.json",
-      "projectName": "@kitten-science/tests",
-      "scriptName": "tests:build",
-      "scriptCode": "tsc --build",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Build tests."
-    },
-    {
-      "manifestPath": "packages/tests/package.json",
-      "projectName": "@kitten-science/tests",
-      "scriptName": "tests:run",
-      "scriptCode": "mocha ./build/tests/*.spec.js",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Execute tests."
     },
     {
       "manifestPath": "package.json",
