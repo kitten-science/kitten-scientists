@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "@kitten-science/action-automatic-releases",
+  "version": "latest",
+  "license": "MIT",
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
+  "homepage": "https://github.com/kitten-science/kitten-scientists",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitten-science/kitten-scientists.git",
+    "directory": "packages/action-automatic-releases"
+  },
+  "bugs": {
+    "url": "https://github.com/kitten-science/kitten-scientists/issues"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./build/index.mjs"
+  },
+  "types": "./build/index.d.mts",
+  "dependencies": {
+    "@actions/core": "1.10.1",
+    "@actions/github": "5.1.1",
+    "@octokit/rest": "20.0.2",
+    "conventional-changelog-angular": "6.0.0",
+    "conventional-commits-parser": "5.0.0",
+    "globby": "11.1.0",
+    "md5-file": "5.0.0",
+    "semver": "7.5.4",
+    "tslib": "2.6.2"
+  },
+  "devDependencies": {
+    "@octokit/types": "12",
+    "@types/conventional-commits-parser": "3.0.5",
+    "@types/node": "20.8.7",
+    "@types/semver": "7.5.4",
+    "typescript": "5.2.2"
+  }
+}
