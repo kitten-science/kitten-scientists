@@ -35,5 +35,5 @@ inputs:
     description: Require all commits to specify a scope.
     required: false
 runs:
-  using: node16
+  using: node20
   main: build/main.js

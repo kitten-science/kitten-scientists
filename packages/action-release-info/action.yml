@@ -12,5 +12,5 @@ inputs:
     description: Needs `secrets.GITHUB_TOKEN` to talk to the API.
     required: true
 runs:
-  using: node16
+  using: node20
   main: build/main.js
