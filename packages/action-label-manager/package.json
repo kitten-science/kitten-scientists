@@ -30,7 +30,7 @@
     "@actions/core": "1.10.1",
     "@actions/github": "5.1.1",
     "tslib": "2.6.2",
-    "yaml": "2.3.2"
+    "yaml": "2.3.3"
   },
   "devDependencies": {
     "@kie/mock-github": "2.0.0",
