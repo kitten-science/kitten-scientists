@@ -23,6 +23,7 @@ jobs:
 
       - run: yarn build:all
       - run: yarn lint:all
+      - run: yarn test:all
       - run: yarn kitten-scientists:build
 
       - run: yarn workspace @kitten-science/action-commit-validator tsc --build

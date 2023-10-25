@@ -1,4 +1,4 @@
-import { ReleaseChannel, ReleaseInfo } from "@kitten-science/action-release-info";
+import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
 import JQuery from "jquery";
 import gt from "semver/functions/gt";
 import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine";
@@ -6,7 +6,7 @@ import { ScienceSettings } from "./settings/ScienceSettings";
 import { SpaceSettings } from "./settings/SpaceSettings";
 import { WorkshopSettings } from "./settings/WorkshopSettings";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log";
-import { isNil, Maybe, mustExist } from "./tools/Maybe";
+import { Maybe, isNil, mustExist } from "./tools/Maybe";
 import { sleep } from "./tools/Sleep";
 import { GamePage } from "./types";
 import { UserInterface } from "./ui/UserInterface";
@@ -80,7 +80,7 @@ export class UserScript {
   constructor(
     gamePage: GamePage,
     i18nEngine: I18nEngine,
-    gameLanguage: GameLanguage = FallbackLanguage
+    gameLanguage: GameLanguage = FallbackLanguage,
   ) {
     cinfo(`Kitten Scientists ${ksVersion("v")} constructed.`);
     cinfo(`You are on the '${String(KS_RELEASE_CHANNEL)}' release channel.`);
@@ -143,13 +143,13 @@ export class UserScript {
 
     try {
       const response = await fetch("https://ks.rm-rf.link/release-info.json");
-      const releaseInfo = (await response.json()) as ReleaseInfo;
+      const releaseInfo = (await response.json()) as ReleaseInfoSchema;
       cdebug(releaseInfo);
 
       if (!isNil(KS_VERSION) && gt(releaseInfo[KS_RELEASE_CHANNEL].version, KS_VERSION)) {
         cinfo("Looks like there's a new version out!");
         cinfo(
-          `We have '${KS_VERSION}' and there is '${releaseInfo[KS_RELEASE_CHANNEL].version}' available.`
+          `We have '${KS_VERSION}' and there is '${releaseInfo[KS_RELEASE_CHANNEL].version}' available.`,
         );
       }
     } catch (error) {
@@ -242,7 +242,7 @@ export class UserScript {
   };
 
   private static _tryEngineStateFromSaveData(
-    saveData: Record<string, unknown>
+    saveData: Record<string, unknown>,
   ): EngineState | undefined {
     if ("ks" in saveData === false) {
       cdebug("Failed: `ks` not found in save data.");
@@ -281,7 +281,7 @@ export class UserScript {
         "server/load",
         (saveData: { ks?: { state?: Array<EngineState> } }) => {
           cinfo(
-            "`server/load` signal caught. Looking for Kitten Scientists engine state in save data..."
+            "`server/load` signal caught. Looking for Kitten Scientists engine state in save data...",
           );
 
           const state = UserScript._tryEngineStateFromSaveData(saveData);
@@ -292,7 +292,7 @@ export class UserScript {
 
           cinfo("Found! Provided save data will be used as seed for next userscript instance.");
           UserScript._possibleEngineState = state;
-        }
+        },
       );
     }
 
@@ -323,7 +323,7 @@ export class UserScript {
     const instance = new UserScript(
       mustExist(UserScript.window.gamePage),
       mustExist(UserScript.window.$I),
-      localStorage["com.nuclearunicorn.kittengame.language"] as GameLanguage | undefined
+      localStorage["com.nuclearunicorn.kittengame.language"] as GameLanguage | undefined,
     );
 
     if (!isNil(UserScript._possibleEngineState)) {

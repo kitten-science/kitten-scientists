@@ -1,10 +1,9 @@
 import * as core from "@actions/core";
 import { GitHub } from "@actions/github/lib/utils";
 import { GetResponseDataTypeFromEndpointMethod } from "@octokit/types";
-import defaultChangelogOpts from "conventional-changelog-angular/conventional-recommended-bump";
+import defaultChangelogOpts from "conventional-changelog-angular/conventional-recommended-bump.js";
 import { Commit } from "conventional-commits-parser";
-import fs from "fs";
-import { CommitsSinceRelease } from "./main.js";
+import { CommitsSinceRelease } from "./AutomaticReleases";
 
 export const getShortSHA = (sha: string): string => {
   const coreAbbrev = 7;
@@ -166,8 +165,11 @@ export const getChangelogOptions = () => {
 };
 
 // istanbul ignore next
-export const octokitLogger = (...args: Array<string | Record<string, unknown>>): string => {
+export const octokitLogger = (
+  ...args: Array<string | Record<string, unknown> | undefined>
+): string => {
   return args
+    .filter(arg => arg !== undefined)
     .map(arg => {
       if (typeof arg === "string") {
         return arg;
@@ -186,13 +188,4 @@ export const octokitLogger = (...args: Array<string | Record<string, unknown>>):
       return JSON.stringify(argCopy);
     })
     .reduce((acc, val) => `${acc} ${val}`, "");
-};
-
-export const dumpGitHubEventPayload = (): void => {
-  const ghpath: string = process.env["GITHUB_EVENT_PATH"] || "";
-  if (!ghpath) {
-    throw new Error("Environment variable GITHUB_EVENT_PATH does not appear to be set.");
-  }
-  const contents = fs.readFileSync(ghpath, "utf8");
-  core.info(`GitHub payload: ${contents}`);
 };

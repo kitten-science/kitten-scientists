@@ -13,4 +13,4 @@ inputs:
     required: true
 runs:
   using: node16
-  main: build/main.mjs
+  main: build/main.js
