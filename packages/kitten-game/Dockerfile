@@ -1,4 +1,4 @@
-FROM node:20-bookworm@sha256:bd20621deff56cb66c6cd10772d26db1a0d480f2b08609eb96b799ba6260f3ed
+FROM node:20-bookworm@sha256:7d7f550d54aca36219dd3d0b2fa971cbd8ff156c814343ee6bb1e085f709817b
 
 ARG BRANCH=master
 
