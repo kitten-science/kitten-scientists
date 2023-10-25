@@ -5,7 +5,7 @@ import { lstatSync, readFileSync } from "fs";
 import globby from "globby";
 import md5File from "md5-file";
 import path from "path";
-import { NewGitHubRelease } from "./main.js";
+import { NewGitHubRelease } from "./AutomaticReleases";
 
 export const uploadReleaseArtifacts = async (
   client: InstanceType<typeof GitHub>,

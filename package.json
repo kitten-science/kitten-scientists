@@ -17,6 +17,8 @@
     "build:all": "tsc --build",
     "clean:all": "rm -rf packages/*/build packages/*/tsconfig.tsbuildinfo",
     "lint:all": "eslint . --ext .ts",
+    "test:all": "yarn workspaces foreach --verbose --parallel run test",
+    "test:coverage:all": "yarn workspaces foreach --verbose --parallel run test:coverage",
     "typecheck:all": "tsc --noEmit --incremental false"
   },
   "workspaces": [

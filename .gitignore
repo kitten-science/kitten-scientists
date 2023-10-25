@@ -10,4 +10,5 @@ node_modules
 tsconfig.tsbuildinfo
 
 /packages/*/build/*
+/packages/*/coverage/*
 /packages/*/output/*
