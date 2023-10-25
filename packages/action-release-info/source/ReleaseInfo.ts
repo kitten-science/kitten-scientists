@@ -43,7 +43,7 @@ export type ReleaseInfoOptions = {
 };
 
 export const findUserscript = <TAsset extends { name: string }>(
-  assets: Array<TAsset> | null,
+  assets: Array<TAsset> | undefined,
   minified = false,
 ): TAsset => {
   if (!assets) {
@@ -78,7 +78,7 @@ export class ReleaseInfo {
   async main() {
     const { context, core, octokit } = this.#options;
 
-    // TODO: Instead of rasing this manually, we should properly search for it.
+    // TODO: Instead of raising this manually, we should properly search for it.
     const latestStableVersion = "v2.0.0-beta.7";
 
     core.info("Looking for dev build...");
