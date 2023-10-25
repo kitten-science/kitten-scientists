@@ -657,7 +657,7 @@ __metadata:
     "@types/chai": ^4
     "@types/conventional-commits-parser": 3.0.5
     "@types/mocha": ^10
-    "@types/node": 20.8.7
+    "@types/node": 20.8.9
     "@types/semver": 7.5.4
     c8: 8.0.1
     chai: 4.3.10
@@ -681,7 +681,7 @@ __metadata:
     "@kie/mock-github": 2.0.0
     "@types/chai": ^4
     "@types/mocha": ^10
-    "@types/node": 20.8.7
+    "@types/node": 20.8.9
     c8: 8.0.1
     chai: 4.3.10
     json-schema-to-ts: 2.9.2
@@ -700,7 +700,7 @@ __metadata:
     "@kie/mock-github": 2.0.0
     "@types/chai": ^4
     "@types/mocha": ^10
-    "@types/node": 20.8.7
+    "@types/node": 20.8.9
     c8: 8.0.1
     chai: 4.3.10
     mocha: 10.2.0
@@ -719,7 +719,7 @@ __metadata:
     "@kie/mock-github": 2.0.0
     "@types/chai": ^4
     "@types/mocha": ^10
-    "@types/node": 20.8.7
+    "@types/node": 20.8.9
     c8: 8.0.1
     chai: 4.3.10
     mocha: 10.2.0
@@ -1189,12 +1189,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:20.8.7":
-  version: 20.8.7
-  resolution: "@types/node@npm:20.8.7"
+"@types/node@npm:*, @types/node@npm:20.8.9":
+  version: 20.8.9
+  resolution: "@types/node@npm:20.8.9"
   dependencies:
-    undici-types: ~5.25.1
-  checksum: e82b87e7f3f4c12acc5803db21f9144d5e87c20841db9ae98746958e038064700ab04294d08a3714a3df8bd710a974998e2e423443a5d031840cbba17fa126a7
+    undici-types: ~5.26.4
+  checksum: 6fb5604ac087c8be9aeb9ee1413fae2e691c603c9a691bd722e113597b883f21e8380a44d114ab894b435a491bfc939c8478cd57bcf890c585b961343b124964
   languageName: node
   linkType: hard
 
@@ -3527,7 +3527,7 @@ __metadata:
     "@babel/plugin-syntax-import-assertions": 7.22.5
     "@types/babel__core": 7.20.3
     "@types/eslint": 8.44.3
-    "@types/node": 20.8.7
+    "@types/node": 20.8.9
     "@types/prettier": 3.0.0
     "@types/web": 0.0.119
     "@typescript-eslint/eslint-plugin": 6.9.0
@@ -5176,10 +5176,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~5.25.1":
-  version: 5.25.3
-  resolution: "undici-types@npm:5.25.3"
-  checksum: 60a47c6db451c00d27186d86a41fbd9677fa1f6d1a5350bff342c3985bd79fc3f5a638ebf56bbce21df46c701a687db43b3fbd588e1726e58047cea14d182fef
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: bb673d7876c2d411b6eb6c560e0c571eef4a01c1c19925175d16e3a30c4c428181fb8d7ae802a261f283e4166a0ac435e2f505743aa9e45d893f9a3df017b501
   languageName: node
   linkType: hard
 
