@@ -754,7 +754,7 @@ __metadata:
     semver: 7.5.4
     tslib: 2.6.2
     typescript: 5.2.2
-    vite: 4.4.9
+    vite: 4.5.0
     vite-plugin-userscript: 0.1.3
   languageName: unknown
   linkType: soft
@@ -5323,9 +5323,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.4.9":
-  version: 4.4.9
-  resolution: "vite@npm:4.4.9"
+"vite@npm:4.5.0":
+  version: 4.5.0
+  resolution: "vite@npm:4.5.0"
   dependencies:
     esbuild: ^0.18.10
     fsevents: ~2.3.2
@@ -5359,7 +5359,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 80dbc632fd75b5866567c8fd605115c9d5718654dbf173f509cfd55c53f39dfbee24f62660e57fd5b11eb93f469a65abdbe6bae880ec8392bb70a5d0d7b6e6a9
+  checksum: 7e21e9e4b80656ae5ee61e8c5edb5e8f589139c2b22c43e89d054c65a0194f1c1ef066fbc770204173c7eb244c798265042f988adda5880ad74337a053b28b7f
   languageName: node
   linkType: hard
 
