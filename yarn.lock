@@ -732,7 +732,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kitten-science/documentation@workspace:packages/documentation"
   dependencies:
-    node-scripts-docs: 0.1.0
+    node-scripts-docs: 0.2.0
   languageName: unknown
   linkType: soft
 
@@ -2655,7 +2655,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9":
+"fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
   version: 3.3.1
   resolution: "fast-glob@npm:3.3.1"
   dependencies:
@@ -2990,7 +2990,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globby@npm:11.1.0, globby@npm:^11, globby@npm:^11.1.0":
+"globby@npm:11.1.0, globby@npm:^11.1.0":
   version: 11.1.0
   resolution: "globby@npm:11.1.0"
   dependencies:
@@ -3001,6 +3001,19 @@ __metadata:
     merge2: ^1.4.1
     slash: ^3.0.0
   checksum: b39511b4afe4bd8a7aead3a27c4ade2b9968649abab0a6c28b1a90141b96ca68ca5db1302f7c7bd29eab66bf51e13916b8e0a3d0ac08f75e1e84a39b35691189
+  languageName: node
+  linkType: hard
+
+"globby@npm:^13.2.2":
+  version: 13.2.2
+  resolution: "globby@npm:13.2.2"
+  dependencies:
+    dir-glob: ^3.0.1
+    fast-glob: ^3.3.0
+    ignore: ^5.2.4
+    merge2: ^1.4.1
+    slash: ^4.0.0
+  checksum: a8d7cc7cbe5e1b2d0f81d467bbc5bc2eac35f74eaded3a6c85fc26d7acc8e6de22d396159db8a2fc340b8a342e74cac58de8f4aee74146d3d146921a76062664
   languageName: node
   linkType: hard
 
@@ -3722,12 +3735,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:4.2.5":
-  version: 4.2.5
-  resolution: "marked@npm:4.2.5"
+"marked@npm:9.1.2":
+  version: 9.1.2
+  resolution: "marked@npm:9.1.2"
   bin:
     marked: bin/marked.js
-  checksum: 998f4c4e00dbf99e5fdca8332000eda156b6f7d4375bdc9577a89dd468e0205044b3826ef55ef31b02ea61b9913b374029944e9138d31f1d2d9bb90c8f773579
+  checksum: 3566a5925a3104eed01625cbd3727be309b08f1a29576e3ed91b61496c1b9da5bab68cb2928587220e5423f3720d979427c6b993e47e7a2e81d33c89fc97ce89
   languageName: node
   linkType: hard
 
@@ -3858,10 +3871,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:1.2.7":
-  version: 1.2.7
-  resolution: "minimist@npm:1.2.7"
-  checksum: 8808da67ca50ee19ab2d69051d77ee78572e67297fd8a1635ecc757a15106ccdfb5b8c4d11d84750120142f1684e5329a141295728c755e5d149eedd73cc6572
+"minimist@npm:1.2.8":
+  version: 1.2.8
+  resolution: "minimist@npm:1.2.8"
+  checksum: 19d3fcdca050087b84c2029841a093691a91259a47def2f18222f41e7645a0b7c44ef4b40e88a1e58a40c84d2ef0ee6047c55594d298146d0eb3f6b737c20ce6
   languageName: node
   linkType: hard
 
@@ -4103,18 +4116,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-scripts-docs@npm:0.1.0":
-  version: 0.1.0
-  resolution: "node-scripts-docs@npm:0.1.0"
+"node-scripts-docs@npm:0.2.0":
+  version: 0.2.0
+  resolution: "node-scripts-docs@npm:0.2.0"
   dependencies:
     elapsed-time: 0.0.1
-    globby: ^11
-    marked: 4.2.5
-    minimist: 1.2.7
-    tslib: 2.4.1
+    globby: ^13.2.2
+    marked: 9.1.2
+    minimist: 1.2.8
+    tslib: 2.6.2
   bin:
     nsd: output/node-scripts-docs.js
-  checksum: 76fb79399bad962cf27bd18a3add2419b62a5b9ecd037e2f1a78a879cbc4e06fb151ed641d221314a532d1e0b7d722ca281e4a1e1ff27fd46bd399d7c80d6d19
+  checksum: 5f8f5e697a08ed8dc35fef092a219adf480ca9ef14ce0f0176ac253420c89494962261868d51afa7609153cac731b4ac8ae293cacd30eceea0d68270d895885b
   languageName: node
   linkType: hard
 
@@ -4796,6 +4809,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"slash@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "slash@npm:4.0.0"
+  checksum: b522ca75d80d107fd30d29df0549a7b2537c83c4c4ecd12cd7d4ea6c8aaca2ab17ada002e7a1d78a9d736a0261509f26ea5b489082ee443a3a810586ef8eff18
+  languageName: node
+  linkType: hard
+
 "slice-ansi@npm:^5.0.0":
   version: 5.0.0
   resolution: "slice-ansi@npm:5.0.0"
@@ -5095,13 +5115,6 @@ __metadata:
   peerDependencies:
     typescript: ">=4.2.0"
   checksum: 9408338819c3aca2a709f0bc54e3f874227901506cacb1163612a6c8a43df224174feb965a5eafdae16f66fc68fd7bfee8d3275d0fa73fbb8699e03ed26520c9
-  languageName: node
-  linkType: hard
-
-"tslib@npm:2.4.1":
-  version: 2.4.1
-  resolution: "tslib@npm:2.4.1"
-  checksum: 9ac0e4fd1033861f0b4f0d848dc3009ebcc3aa4757a06e8602a2d8a7aed252810e3540e54e70709f06c0f95311faa8584f769bcbede48aff785eb7e4d399b9ec
   languageName: node
   linkType: hard
 
