@@ -10,10 +10,10 @@ let injectedHtml = indexHtml.replace(
     // Break caching through dynamic query parameter.
     script.src = "kitten-scientists/kitten-scientists.inject.js?t=" + new Date().valueOf();
     document.body.appendChild(script);
-  </script></body>`
+  </script></body>`,
 );
 injectedHtml = injectedHtml.replace(
   /<title>.+<\/title>/,
-  "<title>☣ Kitten Scientists Development Environment</title>"
+  "<title>☣ Kitten Scientists Development Environment</title>",
 );
 fs.writeFileSync("index.html", injectedHtml);

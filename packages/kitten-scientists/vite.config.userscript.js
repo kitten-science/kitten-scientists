@@ -25,7 +25,7 @@ const versionString = [
 ].join("");
 
 const filename = ["kitten-scientists", `-${versionString}`, minify ? ".min" : "", ".user.js"].join(
-  ""
+  "",
 );
 
 const KS_RELEASE_CHANNEL = JSON.stringify(process.env.KS_RELEASE_CHANNEL ?? "fixed");
