@@ -1,34 +1,34 @@
-import { BonfireManager } from "./BonfireManager";
+import { BonfireManager } from "./BonfireManager.js";
 import {
   ActivityClass,
   ActivitySummary,
   ActivitySummarySection,
   ActivityTypeClass,
-} from "./helper/ActivitySummary";
+} from "./helper/ActivitySummary.js";
 import de from "./i18n/de.json";
 import en from "./i18n/en.json";
 import he from "./i18n/he.json";
 import zh from "./i18n/zh.json";
-import { ReligionManager } from "./ReligionManager";
-import { ScienceManager } from "./ScienceManager";
-import { BonfireSettings } from "./settings/BonfireSettings";
-import { EngineSettings } from "./settings/EngineSettings";
-import { ReligionSettings } from "./settings/ReligionSettings";
-import { ScienceSettings } from "./settings/ScienceSettings";
-import { SpaceSettings } from "./settings/SpaceSettings";
-import { TimeControlSettings } from "./settings/TimeControlSettings";
-import { TimeSettings } from "./settings/TimeSettings";
-import { TradeSettings } from "./settings/TradeSettings";
-import { VillageSettings } from "./settings/VillageSettings";
-import { WorkshopSettings } from "./settings/WorkshopSettings";
-import { SpaceManager } from "./SpaceManager";
-import { TimeControlManager } from "./TimeControlManager";
-import { TimeManager } from "./TimeManager";
-import { cdebug, cerror, cinfo, cwarn } from "./tools/Log";
-import { TradeManager } from "./TradeManager";
-import { FallbackLanguage, ksVersion, UserScript } from "./UserScript";
-import { VillageManager } from "./VillageManager";
-import { WorkshopManager } from "./WorkshopManager";
+import { ReligionManager } from "./ReligionManager.js";
+import { ScienceManager } from "./ScienceManager.js";
+import { BonfireSettings } from "./settings/BonfireSettings.js";
+import { EngineSettings } from "./settings/EngineSettings.js";
+import { ReligionSettings } from "./settings/ReligionSettings.js";
+import { ScienceSettings } from "./settings/ScienceSettings.js";
+import { SpaceSettings } from "./settings/SpaceSettings.js";
+import { TimeControlSettings } from "./settings/TimeControlSettings.js";
+import { TimeSettings } from "./settings/TimeSettings.js";
+import { TradeSettings } from "./settings/TradeSettings.js";
+import { VillageSettings } from "./settings/VillageSettings.js";
+import { WorkshopSettings } from "./settings/WorkshopSettings.js";
+import { SpaceManager } from "./SpaceManager.js";
+import { TimeControlManager } from "./TimeControlManager.js";
+import { TimeManager } from "./TimeManager.js";
+import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
+import { TradeManager } from "./TradeManager.js";
+import { FallbackLanguage, ksVersion, UserScript } from "./UserScript.js";
+import { VillageManager } from "./VillageManager.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 const i18nData = { de, en, he, zh };
 
@@ -109,7 +109,7 @@ export class Engine {
     this.religionManager = new ReligionManager(
       this._host,
       this.bonfireManager,
-      this.workshopManager
+      this.workshopManager,
     );
     this.scienceManager = new ScienceManager(this._host, this.workshopManager);
     this.spaceManager = new SpaceManager(this._host, this.workshopManager);
@@ -118,7 +118,7 @@ export class Engine {
       this.bonfireManager,
       this.religionManager,
       this.spaceManager,
-      this.workshopManager
+      this.workshopManager,
     );
     this.timeManager = new TimeManager(this._host, this.workshopManager);
     this.tradeManager = new TradeManager(this._host, this.workshopManager);
@@ -133,7 +133,7 @@ export class Engine {
     const previousLanguage = this.settings.language.selected;
     if (!this.isLanguageSupported(language)) {
       cwarn(
-        `Requested language '${language}' is not available. Falling back to '${FallbackLanguage}'.`
+        `Requested language '${language}' is not available. Falling back to '${FallbackLanguage}'.`,
       );
       this.settings.language.selected = FallbackLanguage;
     } else {
@@ -162,7 +162,7 @@ export class Engine {
     const version = ksVersion();
     if (settings.v !== version) {
       cwarn(
-        `Attempting to load engine state with version tag '${settings.v}' when engine is at version '${version}'!`
+        `Attempting to load engine state with version tag '${settings.v}' when engine is at version '${version}'!`,
       );
     }
 
@@ -260,7 +260,7 @@ export class Engine {
 
           this._timeoutMainLoop = window.setTimeout(
             loop,
-            Math.max(10, this._host.engine.settings.interval - timeTaken)
+            Math.max(10, this._host.engine.settings.interval - timeTaken),
           );
         })
         .catch(error => {
@@ -320,7 +320,7 @@ export class Engine {
    */
   i18n<TKittenGameLiteral extends `$${string}`>(
     key: keyof typeof i18nData.en | TKittenGameLiteral,
-    args: Array<number | string> = []
+    args: Array<number | string> = [],
   ): string {
     let value;
 
@@ -354,7 +354,7 @@ export class Engine {
   iactivity(
     i18nLiteral: keyof (typeof i18nData)["en"],
     i18nArgs: Array<number | string> = [],
-    logStyle?: ActivityClass
+    logStyle?: ActivityClass,
   ): void {
     const text = this.i18n(i18nLiteral, i18nArgs);
     if (logStyle) {
@@ -367,7 +367,7 @@ export class Engine {
 
   imessage(
     i18nLiteral: keyof (typeof i18nData)["en"],
-    i18nArgs: Array<number | string> = []
+    i18nArgs: Array<number | string> = [],
   ): void {
     this._printOutput("ks-default", "#aa50fe", this.i18n(i18nLiteral, i18nArgs));
   }

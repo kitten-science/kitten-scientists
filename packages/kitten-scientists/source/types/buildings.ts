@@ -1,4 +1,4 @@
-import { GamePage, Price } from ".";
+import { GamePage, Price } from "./index.js";
 
 export type Building =
   | "academy"

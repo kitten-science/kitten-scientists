@@ -1,4 +1,4 @@
-import { GamePage } from "../types";
+import { GamePage } from "../types/index.js";
 
 export class SavegameLoader {
   private readonly _gamePage: GamePage;

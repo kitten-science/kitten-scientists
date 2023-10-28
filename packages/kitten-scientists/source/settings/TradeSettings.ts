@@ -1,14 +1,14 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { Race, Season } from "../types";
-import { EmbassySettings } from "./EmbassySettings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Race, Season } from "../types/index.js";
+import { EmbassySettings } from "./EmbassySettings.js";
 import {
   Requirement,
   Setting,
   SettingBuySellTrigger,
   SettingLimited,
   SettingTrigger,
-} from "./Settings";
+} from "./Settings.js";
 
 export class TradeSettingsItem extends SettingLimited {
   readonly #race: Race;
@@ -34,7 +34,7 @@ export class TradeSettingsItem extends SettingLimited {
     autumn: boolean,
     winter: boolean,
     spring: boolean,
-    require: Requirement = false
+    require: Requirement = false,
   ) {
     super(enabled, limited);
     this.#race = race;
@@ -74,7 +74,7 @@ export class TradeSettings extends SettingTrigger {
         true,
         true,
         true,
-        "unobtainium"
+        "unobtainium",
       ),
       lizards: new TradeSettingsItem("lizards", true, true, true, false, false, false, "minerals"),
       nagas: new TradeSettingsItem("nagas", true, true, true, false, false, true),
@@ -85,7 +85,7 @@ export class TradeSettings extends SettingTrigger {
     buildEmbassies = new EmbassySettings(),
     feedLeviathans = new Setting(false),
     tradeBlackcoin = new SettingBuySellTrigger(false, 1090.0, 1095.0, 10000),
-    unlockRaces = new Setting(true)
+    unlockRaces = new Setting(true),
   ) {
     super(enabled, trigger);
     this.races = races;

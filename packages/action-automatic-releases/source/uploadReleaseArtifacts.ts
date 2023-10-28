@@ -1,11 +1,11 @@
 import * as core from "@actions/core";
-import { Context } from "@actions/github/lib/context";
-import { GitHub } from "@actions/github/lib/utils";
+import { Context } from "@actions/github/lib/context.js";
+import { GitHub } from "@actions/github/lib/utils.js";
 import { lstatSync, readFileSync } from "fs";
 import globby from "globby";
 import md5File from "md5-file";
 import path from "path";
-import { NewGitHubRelease } from "./AutomaticReleases";
+import { NewGitHubRelease } from "./AutomaticReleases.js";
 
 export const uploadReleaseArtifacts = async (
   client: InstanceType<typeof GitHub>,

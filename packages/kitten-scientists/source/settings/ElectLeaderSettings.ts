@@ -1,6 +1,6 @@
-import { isNil, Maybe } from "../tools/Maybe";
-import { Job, Trait } from "../types";
-import { Setting, SettingOptions } from "./Settings";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Job, Trait } from "../types/index.js";
+import { Setting, SettingOptions } from "./Settings.js";
 
 export class ElectLeaderSettings extends Setting {
   readonly job: SettingOptions<Job>;
@@ -27,7 +27,7 @@ export class ElectLeaderSettings extends Setting {
       { label: "Philosopher", value: "wise" },
       { label: "Scientist", value: "scientist" },
       { label: "None", value: "none" },
-    ])
+    ]),
   ) {
     super(enabled);
     this.job = job;

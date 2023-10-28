@@ -1,8 +1,8 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { TimeItemVariant } from "../types";
-import { Setting, SettingTrigger } from "./Settings";
-import { TimeItem } from "./TimeSettings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { TimeItemVariant } from "../types/index.js";
+import { Setting, SettingTrigger } from "./Settings.js";
+import { TimeItem } from "./TimeSettings.js";
 
 export class ResetTimeBuildingSetting extends SettingTrigger {
   readonly #building: TimeItem;
@@ -34,65 +34,65 @@ export class ResetTimeSettings extends Setting {
         "blastFurnace",
         TimeItemVariant.Chronoforge,
         false,
-        -1
+        -1,
       ),
       chronocontrol: new ResetTimeBuildingSetting(
         "chronocontrol",
         TimeItemVariant.VoidSpace,
         false,
-        -1
+        -1,
       ),
       cryochambers: new ResetTimeBuildingSetting(
         "cryochambers",
         TimeItemVariant.VoidSpace,
         false,
-        -1
+        -1,
       ),
       ressourceRetrieval: new ResetTimeBuildingSetting(
         "ressourceRetrieval",
         TimeItemVariant.Chronoforge,
         false,
-        -1
+        -1,
       ),
       temporalAccelerator: new ResetTimeBuildingSetting(
         "temporalAccelerator",
         TimeItemVariant.Chronoforge,
         false,
-        -1
+        -1,
       ),
       temporalBattery: new ResetTimeBuildingSetting(
         "temporalBattery",
         TimeItemVariant.Chronoforge,
         false,
-        -1
+        -1,
       ),
       temporalImpedance: new ResetTimeBuildingSetting(
         "temporalImpedance",
         TimeItemVariant.Chronoforge,
         false,
-        -1
+        -1,
       ),
       temporalPress: new ResetTimeBuildingSetting(
         "temporalPress",
         TimeItemVariant.Chronoforge,
         false,
-        -1
+        -1,
       ),
       timeBoiler: new ResetTimeBuildingSetting(
         "timeBoiler",
         TimeItemVariant.Chronoforge,
         false,
-        -1
+        -1,
       ),
       voidHoover: new ResetTimeBuildingSetting("voidHoover", TimeItemVariant.VoidSpace, false, -1),
       voidResonator: new ResetTimeBuildingSetting(
         "voidResonator",
         TimeItemVariant.VoidSpace,
         false,
-        -1
+        -1,
       ),
       voidRift: new ResetTimeBuildingSetting("voidRift", TimeItemVariant.VoidSpace, false, -1),
-    }
+    },
   ) {
     super(enabled);
     this.buildings = buildings;

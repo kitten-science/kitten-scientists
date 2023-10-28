@@ -1,4 +1,4 @@
-import { GameTab, Price } from ".";
+import { GameTab, Price } from "./index.js";
 
 export type Upgrade =
   | "advancedAutomation"

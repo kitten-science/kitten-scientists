@@ -1,5 +1,5 @@
-import { BuildButton, GameTab, Job, Price } from ".";
-import { GamePage } from "./gamePage";
+import { GamePage } from "./gamePage.js";
+import { BuildButton, GameTab, Job, Price } from "./index.js";
 
 export type ScienceTab = GameTab & {
   policyPanel: BuildButton;

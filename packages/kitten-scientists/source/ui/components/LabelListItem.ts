@@ -1,5 +1,5 @@
-import { UserScript } from "../../UserScript";
-import { ListItem, ListItemOptions } from "./ListItem";
+import { UserScript } from "../../UserScript.js";
+import { ListItem, ListItemOptions } from "./ListItem.js";
 
 export type LabelListItemOptions = ListItemOptions & {
   /**

@@ -1,6 +1,6 @@
-import { objectEntries } from "../tools/Entries";
-import { Resource } from "../types";
-import { UserScript } from "../UserScript";
+import { objectEntries } from "../tools/Entries.js";
+import { Resource } from "../types/index.js";
+import { UserScript } from "../UserScript.js";
 
 /**
  * The `CacheManager` apparently stores a state of resources in stock.

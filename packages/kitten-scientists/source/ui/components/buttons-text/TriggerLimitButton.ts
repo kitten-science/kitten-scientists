@@ -1,8 +1,8 @@
-import { SettingTrigger } from "../../../settings/Settings";
-import { UserScript } from "../../../UserScript";
-import { SettingsSectionUi } from "../../SettingsSectionUi";
-import { TriggerButtonBehavior } from "../buttons-icon/TriggerButton";
-import { TextButton } from "../TextButton";
+import { SettingTrigger } from "../../../settings/Settings.js";
+import { UserScript } from "../../../UserScript.js";
+import { SettingsSectionUi } from "../../SettingsSectionUi.js";
+import { TriggerButtonBehavior } from "../buttons-icon/TriggerButton.js";
+import { TextButton } from "../TextButton.js";
 
 export class TriggerLimitButton extends TextButton {
   readonly behavior: TriggerButtonBehavior = "percentage";
@@ -12,13 +12,13 @@ export class TriggerLimitButton extends TextButton {
     host: UserScript,
     label: string,
     setting: SettingTrigger,
-    handler: { onClick?: () => void } = {}
+    handler: { onClick?: () => void } = {},
   ) {
     super(host, label, {
       onClick: () => {
         const value = SettingsSectionUi.promptLimit(
           host.engine.i18n("ui.trigger.setinteger", [label]),
-          setting.trigger.toString()
+          setting.trigger.toString(),
         );
 
         if (value !== null) {
@@ -45,7 +45,7 @@ export class TriggerLimitButton extends TextButton {
     this.element.text(
       this._host.engine.i18n("ui.trigger", [
         SettingsSectionUi.renderLimit(this.setting.trigger, this._host),
-      ])
+      ]),
     );
   }
 }

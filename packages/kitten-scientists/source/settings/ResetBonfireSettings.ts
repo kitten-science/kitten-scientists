@@ -1,7 +1,7 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { BonfireItem } from "./BonfireSettings";
-import { Setting, SettingTrigger } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { BonfireItem } from "./BonfireSettings.js";
+import { Setting, SettingTrigger } from "./Settings.js";
 
 export class ResetBonfireBuildingSetting extends SettingTrigger {
   readonly #building: BonfireItem;
@@ -69,7 +69,7 @@ export class ResetBonfireSettings extends Setting {
       zebraOutpost: new ResetBonfireBuildingSetting("zebraOutpost", false, -1),
       zebraWorkshop: new ResetBonfireBuildingSetting("zebraWorkshop", false, -1),
       ziggurat: new ResetBonfireBuildingSetting("ziggurat", false, -1),
-    }
+    },
   ) {
     super(enabled);
     this.buildings = buildings;

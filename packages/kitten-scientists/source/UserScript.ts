@@ -1,15 +1,15 @@
 import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
 import JQuery from "jquery";
-import gt from "semver/functions/gt";
-import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine";
-import { ScienceSettings } from "./settings/ScienceSettings";
-import { SpaceSettings } from "./settings/SpaceSettings";
-import { WorkshopSettings } from "./settings/WorkshopSettings";
-import { cdebug, cerror, cinfo, cwarn } from "./tools/Log";
-import { Maybe, isNil, mustExist } from "./tools/Maybe";
-import { sleep } from "./tools/Sleep";
-import { GamePage } from "./types";
-import { UserInterface } from "./ui/UserInterface";
+import gt from "semver/functions/gt.js";
+import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine.js";
+import { ScienceSettings } from "./settings/ScienceSettings.js";
+import { SpaceSettings } from "./settings/SpaceSettings.js";
+import { WorkshopSettings } from "./settings/WorkshopSettings.js";
+import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
+import { Maybe, isNil, mustExist } from "./tools/Maybe.js";
+import { sleep } from "./tools/Sleep.js";
+import { GamePage } from "./types/index.js";
+import { UserInterface } from "./ui/UserInterface.js";
 
 declare global {
   const KS_RELEASE_CHANNEL: ReleaseChannel;

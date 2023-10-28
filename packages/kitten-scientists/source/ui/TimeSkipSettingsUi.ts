@@ -1,17 +1,17 @@
-import { Icons } from "../images/Icons";
-import { TimeSkipSettings } from "../settings/TimeSkipSettings";
-import { ucfirst } from "../tools/Format";
-import { UserScript } from "../UserScript";
-import { ButtonListItem } from "./components/ButtonListItem";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { MaxButton } from "./components/buttons-text/MaxButton";
-import { CyclesList } from "./components/CyclesList";
-import { LabelListItem } from "./components/LabelListItem";
-import { Panel } from "./components/Panel";
-import { SeasonsList } from "./components/SeasonsList";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
+import { Icons } from "../images/Icons.js";
+import { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
+import { ucfirst } from "../tools/Format.js";
+import { UserScript } from "../UserScript.js";
+import { ButtonListItem } from "./components/ButtonListItem.js";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
+import { MaxButton } from "./components/buttons-text/MaxButton.js";
+import { CyclesList } from "./components/CyclesList.js";
+import { LabelListItem } from "./components/LabelListItem.js";
+import { Panel } from "./components/Panel.js";
+import { SeasonsList } from "./components/SeasonsList.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
   private readonly _trigger: TriggerButton;
@@ -22,7 +22,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
   constructor(
     host: UserScript,
     settings: TimeSkipSettings,
-    options?: SettingsPanelOptions<SettingsPanel<TimeSkipSettings>>
+    options?: SettingsPanelOptions<SettingsPanel<TimeSkipSettings>>,
   ) {
     const label = host.engine.i18n("option.time.skip");
     super(host, label, settings, options);
@@ -40,7 +40,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
       }),
       {
         children: [new CyclesList(this._host, this.setting.cycles)],
-      }
+      },
     );
     this._seasons = new Panel(
       this._host,
@@ -56,7 +56,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
               this._host.engine.imessage("time.skip.season.disable", [label]),
           }),
         ],
-      }
+      },
     );
 
     this.addChild(
@@ -69,7 +69,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
         ],
         hasDisableAll: false,
         hasEnableAll: false,
-      })
+      }),
     );
   }
 }

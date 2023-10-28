@@ -1,9 +1,9 @@
-import { BonfireBuildingSetting } from "../settings/BonfireSettings";
-import { ReligionSettingsItem } from "../settings/ReligionSettings";
-import { Setting, SettingMax } from "../settings/Settings";
-import { UserScript } from "../UserScript";
-import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
+import { BonfireBuildingSetting } from "../settings/BonfireSettings.js";
+import { ReligionSettingsItem } from "../settings/ReligionSettings.js";
+import { Setting, SettingMax } from "../settings/Settings.js";
+import { UserScript } from "../UserScript.js";
+import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export type Toggleable = {
   get isExpanded(): boolean;
@@ -16,13 +16,13 @@ export type Toggleable = {
  * `SettingsPanel` or `Panel` directly.
  */
 export abstract class SettingsSectionUi<
-  TSetting extends Setting = Setting
+  TSetting extends Setting = Setting,
 > extends SettingsPanel<TSetting> {
   constructor(
     host: UserScript,
     label: string,
     settings: TSetting,
-    options?: SettingsPanelOptions<SettingsPanel<TSetting>>
+    options?: SettingsPanelOptions<SettingsPanel<TSetting>>,
   ) {
     super(host, label, settings, options);
   }
@@ -31,7 +31,7 @@ export abstract class SettingsSectionUi<
     option: BonfireBuildingSetting | ReligionSettingsItem | SettingMax,
     label: string,
     delimiter = false,
-    upgradeIndicator = false
+    upgradeIndicator = false,
   ) {
     return new SettingMaxListItem(this._host, label, option, {
       delimiter,

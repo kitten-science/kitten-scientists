@@ -1,9 +1,9 @@
-import { difference } from "../tools/Array";
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { cwarn } from "../tools/Log";
-import { isNil, Maybe } from "../tools/Maybe";
-import { GamePage, Policy } from "../types";
-import { Setting } from "./Settings";
+import { difference } from "../tools/Array.js";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { cwarn } from "../tools/Log.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { GamePage, Policy } from "../types/index.js";
+import { Setting } from "./Settings.js";
 
 export class PolicySetting extends Setting {
   readonly #policy: Policy;
@@ -66,7 +66,7 @@ export class PolicySettings extends Setting {
       transkittenism: new PolicySetting("transkittenism", false),
       zebraRelationsAppeasement: new PolicySetting("zebraRelationsAppeasement", false),
       zebraRelationsBellicosity: new PolicySetting("zebraRelationsBellicosity", false),
-    }
+    },
   ) {
     super(enabled);
     this.policies = policies;

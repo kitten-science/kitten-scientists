@@ -1,18 +1,18 @@
-import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings";
-import { ucfirst } from "../tools/Format";
-import { Race } from "../types";
-import { UserScript } from "../UserScript";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { HeaderListItem } from "./components/HeaderListItem";
-import { SeasonsList } from "./components/SeasonsList";
-import { SettingBuySellTriggerListItem } from "./components/SettingBuySellTriggerListItem";
-import { SettingLimitedListItem } from "./components/SettingLimitedListItem";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
-import { UiComponent } from "./components/UiComponent";
-import { EmbassySettingsUi } from "./EmbassySettingsUi";
-import { SettingsSectionUi } from "./SettingsSectionUi";
+import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
+import { ucfirst } from "../tools/Format.js";
+import { Race } from "../types/index.js";
+import { UserScript } from "../UserScript.js";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
+import { HeaderListItem } from "./components/HeaderListItem.js";
+import { SeasonsList } from "./components/SeasonsList.js";
+import { SettingBuySellTriggerListItem } from "./components/SettingBuySellTriggerListItem.js";
+import { SettingLimitedListItem } from "./components/SettingLimitedListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
+import { UiComponent } from "./components/UiComponent.js";
+import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
 
 export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
   private readonly _trigger: TriggerButton;
@@ -38,43 +38,43 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       this._getTradeOption(
         "lizards",
         this.setting.races.lizards,
-        this._host.engine.i18n("$trade.race.lizards")
+        this._host.engine.i18n("$trade.race.lizards"),
       ),
       this._getTradeOption(
         "sharks",
         this.setting.races.sharks,
-        this._host.engine.i18n("$trade.race.sharks")
+        this._host.engine.i18n("$trade.race.sharks"),
       ),
       this._getTradeOption(
         "griffins",
         this.setting.races.griffins,
-        this._host.engine.i18n("$trade.race.griffins")
+        this._host.engine.i18n("$trade.race.griffins"),
       ),
       this._getTradeOption(
         "nagas",
         this.setting.races.nagas,
-        this._host.engine.i18n("$trade.race.nagas")
+        this._host.engine.i18n("$trade.race.nagas"),
       ),
       this._getTradeOption(
         "zebras",
         this.setting.races.zebras,
-        this._host.engine.i18n("$trade.race.zebras")
+        this._host.engine.i18n("$trade.race.zebras"),
       ),
       this._getTradeOption(
         "spiders",
         this.setting.races.spiders,
-        this._host.engine.i18n("$trade.race.spiders")
+        this._host.engine.i18n("$trade.race.spiders"),
       ),
       this._getTradeOption(
         "dragons",
         this.setting.races.dragons,
         this._host.engine.i18n("$trade.race.dragons"),
-        true
+        true,
       ),
       this._getTradeOption(
         "leviathans",
         this.setting.races.leviathans,
-        this._host.engine.i18n("$trade.race.leviathans")
+        this._host.engine.i18n("$trade.race.leviathans"),
       ),
     ];
     listRaces.addChildren(this._races);
@@ -92,7 +92,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.autofeed"),
           ]),
-      }
+      },
     );
     listRaces.addChild(this._feedLeviathans);
 
@@ -111,7 +111,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.crypto"),
           ]),
-      }
+      },
     );
     listRaces.addChild(this._tradeBlackcoin);
     this.addChild(listRaces);
@@ -138,7 +138,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("ui.upgrade.races"),
           ]),
-      }
+      },
     );
     listAddition.addChild(this._unlockRaces);
     this.addChild(listAddition);
@@ -149,7 +149,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     option: TradeSettingsItem,
     i18nName: string,
     delimiter = false,
-    upgradeIndicator = false
+    upgradeIndicator = false,
   ) {
     const settingItem = new SettingLimitedListItem(this._host, i18nName, option, {
       onCheck: () => this._host.engine.imessage("status.sub.enable", [i18nName]),

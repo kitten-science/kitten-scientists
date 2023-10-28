@@ -1,4 +1,4 @@
-import { BuildButton, GameTab, Job, Kitten } from ".";
+import { BuildButton, GameTab, Job, Kitten } from "./index.js";
 
 export type VillageTab = GameTab & {
   censusPanel: {

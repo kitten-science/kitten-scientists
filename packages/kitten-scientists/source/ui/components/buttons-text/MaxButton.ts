@@ -1,7 +1,7 @@
-import { SettingMax } from "../../../settings/Settings";
-import { UserScript } from "../../../UserScript";
-import { SettingsSectionUi } from "../../SettingsSectionUi";
-import { TextButton } from "../TextButton";
+import { SettingMax } from "../../../settings/Settings.js";
+import { UserScript } from "../../../UserScript.js";
+import { SettingsSectionUi } from "../../SettingsSectionUi.js";
+import { TextButton } from "../TextButton.js";
 
 export class MaxButton extends TextButton {
   readonly setting: SettingMax;
@@ -10,13 +10,13 @@ export class MaxButton extends TextButton {
     host: UserScript,
     label: string,
     setting: SettingMax,
-    handler: { onClick?: () => void } = {}
+    handler: { onClick?: () => void } = {},
   ) {
     super(host, label, {
       onClick: () => {
         const value = SettingsSectionUi.promptLimit(
           host.engine.i18n("ui.max.set", [label]),
-          setting.max.toString()
+          setting.max.toString(),
         );
 
         if (value !== null) {
@@ -43,7 +43,7 @@ export class MaxButton extends TextButton {
     this.element.text(
       this._host.engine.i18n("ui.max", [
         SettingsSectionUi.renderLimit(this.setting.max, this._host),
-      ])
+      ]),
     );
   }
 }

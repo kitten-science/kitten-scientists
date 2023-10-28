@@ -1,5 +1,5 @@
-import { cinfo, cwarn } from "./Log";
-import { isNil } from "./Maybe";
+import { cinfo, cwarn } from "./Log.js";
+import { isNil } from "./Maybe.js";
 
 /**
  * Provides type-safe means to iterate over the entries
@@ -9,7 +9,7 @@ import { isNil } from "./Maybe";
  * @returns An array of key-value tuples.
  */
 export function objectEntries<TKeys extends string, TValues>(
-  subject: Partial<Record<TKeys, TValues>>
+  subject: Partial<Record<TKeys, TValues>>,
 ): Array<[TKeys, TValues]> {
   return Object.entries(subject) as Array<[TKeys, TValues]>;
 }
@@ -26,7 +26,7 @@ export function objectEntries<TKeys extends string, TValues>(
 export function consumeEntries<TKeys extends string, TValues>(
   subject: Partial<Record<TKeys, TValues>>,
   source: Partial<Record<TKeys, TValues>> | undefined,
-  consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown
+  consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown,
 ): Partial<Record<TKeys, TValues>> {
   if (isNil(source)) {
     return subject;
@@ -54,7 +54,7 @@ export function consumeEntries<TKeys extends string, TValues>(
 export function consumeEntriesPedantic<TKeys extends string, TValues>(
   subject: Partial<Record<TKeys, TValues>>,
   source: Partial<Record<TKeys, TValues>> | undefined,
-  consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown
+  consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown,
 ): Partial<Record<TKeys, TValues>> {
   if (isNil(source)) {
     cwarn("No source data was provided.");
@@ -71,7 +71,7 @@ export function consumeEntriesPedantic<TKeys extends string, TValues>(
   for (const [key] of objectEntries(source)) {
     if (key in subject === false) {
       cwarn(
-        `Entry '${key}' was found in source, but it is not expected by the subject schema. This entry will be ignored.`
+        `Entry '${key}' was found in source, but it is not expected by the subject schema. This entry will be ignored.`,
       );
     }
   }

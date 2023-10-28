@@ -1,11 +1,11 @@
-import { isNil, Maybe } from "../tools/Maybe";
-import { ResetBonfireSettings } from "./ResetBonfireSettings";
-import { ResetReligionSettings } from "./ResetReligionSettings";
-import { ResetResourcesSettings } from "./ResetResourcesSettings";
-import { ResetSpaceSettings } from "./ResetSpaceSettings";
-import { ResetTimeSettings } from "./ResetTimeSettings";
-import { ResetUpgradeSettings } from "./ResetUpgradeSettings";
-import { Setting } from "./Settings";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { ResetBonfireSettings } from "./ResetBonfireSettings.js";
+import { ResetReligionSettings } from "./ResetReligionSettings.js";
+import { ResetResourcesSettings } from "./ResetResourcesSettings.js";
+import { ResetSpaceSettings } from "./ResetSpaceSettings.js";
+import { ResetTimeSettings } from "./ResetTimeSettings.js";
+import { ResetUpgradeSettings } from "./ResetUpgradeSettings.js";
+import { Setting } from "./Settings.js";
 
 export class ResetSettings extends Setting {
   bonfire: ResetBonfireSettings;
@@ -22,7 +22,7 @@ export class ResetSettings extends Setting {
     resources = new ResetResourcesSettings(),
     space = new ResetSpaceSettings(),
     time = new ResetTimeSettings(),
-    upgrades = new ResetUpgradeSettings()
+    upgrades = new ResetUpgradeSettings(),
   ) {
     super(enabled);
     this.bonfire = bonfire;

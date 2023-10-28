@@ -1,4 +1,4 @@
-import { Resource, ResourceCraftable } from ".";
+import { Resource, ResourceCraftable } from "./index.js";
 
 export type ResourceInfo = {
   craftable: boolean;

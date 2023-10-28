@@ -1,12 +1,12 @@
-import { TickContext } from "./Engine";
-import { ScienceSettings } from "./settings/ScienceSettings";
-import { TabManager } from "./TabManager";
-import { cerror } from "./tools/Log";
-import { isNil } from "./tools/Maybe";
-import { PolicyInfo, ScienceTab, TechInfo } from "./types";
-import { UpgradeManager } from "./UpgradeManager";
-import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
+import { TickContext } from "./Engine.js";
+import { ScienceSettings } from "./settings/ScienceSettings.js";
+import { TabManager } from "./TabManager.js";
+import { cerror } from "./tools/Log.js";
+import { isNil } from "./tools/Maybe.js";
+import { PolicyInfo, ScienceTab, TechInfo } from "./types/index.js";
+import { UpgradeManager } from "./UpgradeManager.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 export class ScienceManager extends UpgradeManager {
   readonly manager: TabManager<ScienceTab>;
@@ -16,7 +16,7 @@ export class ScienceManager extends UpgradeManager {
   constructor(
     host: UserScript,
     workshopManager: WorkshopManager,
-    settings = new ScienceSettings()
+    settings = new ScienceSettings(),
   ) {
     super(host);
     this.settings = settings;

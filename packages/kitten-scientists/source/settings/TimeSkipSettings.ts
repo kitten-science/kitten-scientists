@@ -1,7 +1,7 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { Cycle, Season } from "../types";
-import { Setting, SettingTriggerMax } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Cycle, Season } from "../types/index.js";
+import { Setting, SettingTriggerMax } from "./Settings.js";
 
 export class TimeSkipSettings extends SettingTriggerMax {
   readonly cycles: Record<Cycle, Setting>;
@@ -42,7 +42,7 @@ export class TimeSkipSettings extends SettingTriggerMax {
       autumn: new Setting(false),
       winter: new Setting(false),
     },
-    ignoreOverheat = new Setting(false)
+    ignoreOverheat = new Setting(false),
   ) {
     super(false, 5);
     this.cycles = cycles;

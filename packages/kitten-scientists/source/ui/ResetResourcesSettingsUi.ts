@@ -1,14 +1,14 @@
-import { Icons } from "../images/Icons";
+import { Icons } from "../images/Icons.js";
 import {
   ResetResourcesSettings,
   ResetResourcesSettingsItem,
-} from "../settings/ResetResourcesSettings";
-import { ucfirst } from "../tools/Format";
-import { UserScript } from "../UserScript";
-import { StockButton } from "./components/buttons-text/StockButton";
-import { IconSettingsPanel } from "./components/IconSettingsPanel";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
+} from "../settings/ResetResourcesSettings.js";
+import { ucfirst } from "../tools/Format.js";
+import { UserScript } from "../UserScript.js";
+import { StockButton } from "./components/buttons-text/StockButton.js";
+import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
 
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;
@@ -25,8 +25,8 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
       this._resources.push(
         this._addNewResourceOption(
           ucfirst(this._host.engine.i18n(`$resources.${setting.resource}.title`)),
-          setting
-        )
+          setting,
+        ),
       );
     }
 

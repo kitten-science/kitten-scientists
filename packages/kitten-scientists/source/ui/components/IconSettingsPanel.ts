@@ -1,7 +1,7 @@
-import { Setting } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { LabelListItem } from "./LabelListItem";
-import { Panel, PanelOptions } from "./Panel";
+import { Setting } from "../../settings/Settings.js";
+import { UserScript } from "../../UserScript.js";
+import { LabelListItem } from "./LabelListItem.js";
+import { Panel, PanelOptions } from "./Panel.js";
 
 export type IconSettingsPanelOptions = PanelOptions & {
   /**
@@ -25,7 +25,7 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Panel
     host: UserScript,
     label: string,
     setting: TSetting,
-    options?: Partial<IconSettingsPanelOptions>
+    options?: Partial<IconSettingsPanelOptions>,
   ) {
     super(host, new LabelListItem(host, label, { icon: options?.icon }), {
       initiallyExpanded: options?.initiallyExpanded,

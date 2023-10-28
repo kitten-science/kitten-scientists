@@ -1,7 +1,7 @@
-import { SettingLimited } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { LimitedButton } from "./LimitedButton";
-import { SettingListItem, SettingListItemOptions } from "./SettingListItem";
+import { SettingLimited } from "../../settings/Settings.js";
+import { UserScript } from "../../UserScript.js";
+import { LimitedButton } from "./LimitedButton.js";
+import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
 export type SettingLimitedListItemOptions = SettingListItemOptions & {
   /**
@@ -31,7 +31,7 @@ export class SettingLimitedListItem extends SettingListItem {
     host: UserScript,
     label: string,
     setting: SettingLimited,
-    options?: Partial<SettingLimitedListItemOptions>
+    options?: Partial<SettingLimitedListItemOptions>,
   ) {
     super(host, label, setting, options);
 

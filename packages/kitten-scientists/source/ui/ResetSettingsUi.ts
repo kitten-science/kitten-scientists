@@ -1,13 +1,13 @@
-import { ResetSettings } from "../settings/ResetSettings";
-import { UserScript } from "../UserScript";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
-import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi";
-import { ResetReligionSettingsUi } from "./ResetReligionSettingsUi";
-import { ResetResourcesSettingsUi } from "./ResetResourcesSettingsUi";
-import { ResetSpaceSettingsUi } from "./ResetSpaceSettingsUi";
-import { ResetTimeSettingsUi } from "./ResetTimeSettingsUi";
-import { ResetUpgradesSettingsUi } from "./ResetUpgradesSettingsUi";
+import { ResetSettings } from "../settings/ResetSettings.js";
+import { UserScript } from "../UserScript.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi.js";
+import { ResetReligionSettingsUi } from "./ResetReligionSettingsUi.js";
+import { ResetResourcesSettingsUi } from "./ResetResourcesSettingsUi.js";
+import { ResetSpaceSettingsUi } from "./ResetSpaceSettingsUi.js";
+import { ResetTimeSettingsUi } from "./ResetTimeSettingsUi.js";
+import { ResetUpgradesSettingsUi } from "./ResetUpgradesSettingsUi.js";
 
 export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   private readonly _bonfireUi: ResetBonfireSettingsUi;
@@ -20,7 +20,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   constructor(
     host: UserScript,
     settings: ResetSettings,
-    options?: SettingsPanelOptions<SettingsPanel<ResetSettings>>
+    options?: SettingsPanelOptions<SettingsPanel<ResetSettings>>,
   ) {
     super(host, host.engine.i18n("option.time.reset"), settings, options);
 

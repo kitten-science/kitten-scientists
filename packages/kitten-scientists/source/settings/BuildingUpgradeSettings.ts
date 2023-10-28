@@ -1,7 +1,7 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { StagedBuilding } from "../types";
-import { Setting } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { StagedBuilding } from "../types/index.js";
+import { Setting } from "./Settings.js";
 
 export class BuildingUpgradeSetting extends Setting {
   readonly #upgrade: StagedBuilding;
@@ -28,7 +28,7 @@ export class BuildingUpgradeSettings extends Setting {
       dataCenter: new BuildingUpgradeSetting("dataCenter", true),
       hydroplant: new BuildingUpgradeSetting("hydroplant", true),
       solarfarm: new BuildingUpgradeSetting("solarfarm", true),
-    }
+    },
   ) {
     super(enabled);
     this.buildings = buildings;

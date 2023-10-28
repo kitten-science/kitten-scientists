@@ -1,6 +1,6 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { Setting } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Setting } from "./Settings.js";
 
 export enum LogFilterItemVariant {
   Build = "ks-activity type_ks-build",
@@ -97,7 +97,7 @@ export class LogFilterSettings extends Setting {
       distribute: new LogFilterSettingsItem(LogFilterItemVariant.Distribute),
       promote: new LogFilterSettingsItem(LogFilterItemVariant.Promote),
       misc: new LogFilterSettingsItem(LogFilterItemVariant.Misc),
-    }
+    },
   ) {
     super(enabled);
     this.filters = filters;

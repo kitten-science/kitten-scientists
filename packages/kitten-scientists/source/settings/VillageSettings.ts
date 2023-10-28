@@ -1,8 +1,8 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { Job } from "../types";
-import { ElectLeaderSettings } from "./ElectLeaderSettings";
-import { Setting, SettingMax, SettingTrigger } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Job } from "../types/index.js";
+import { ElectLeaderSettings } from "./ElectLeaderSettings.js";
+import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
 export type VillageJobSettings = Record<Job, SettingMax>;
 
@@ -31,7 +31,7 @@ export class VillageSettings extends Setting {
     hunt = new SettingTrigger(true, 0.98),
     promoteKittens = new SettingTrigger(true, 1),
     promoteLeader = new Setting(true),
-    electLeader = new ElectLeaderSettings()
+    electLeader = new ElectLeaderSettings(),
   ) {
     super(enabled);
     this.jobs = jobs;

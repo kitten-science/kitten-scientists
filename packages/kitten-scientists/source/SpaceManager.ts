@@ -1,9 +1,9 @@
-import { Automation, TickContext } from "./Engine";
-import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings";
-import { TabManager } from "./TabManager";
-import { cwarn } from "./tools/Log";
-import { mustExist } from "./tools/Maybe";
+import { Automation, TickContext } from "./Engine.js";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import { SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
+import { TabManager } from "./TabManager.js";
+import { cwarn } from "./tools/Log.js";
+import { mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -11,9 +11,9 @@ import {
   SpaceBuildingInfo,
   SpaceBuildings,
   SpaceTab,
-} from "./types";
-import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
+} from "./types/index.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 export class SpaceManager implements Automation {
   private readonly _host: UserScript;
@@ -51,7 +51,7 @@ export class SpaceManager implements Automation {
    * @param builds The buildings to build.
    */
   autoBuild(
-    builds: Partial<Record<SpaceBuildings, SpaceBuildingSetting>> = this.settings.buildings
+    builds: Partial<Record<SpaceBuildings, SpaceBuildingSetting>> = this.settings.buildings,
   ) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
@@ -154,7 +154,7 @@ export class SpaceManager implements Automation {
   }
 
   getBuildButton(
-    name: string
+    name: string,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
     const panels = this.manager.tab.planetPanels;
 

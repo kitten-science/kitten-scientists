@@ -1,6 +1,6 @@
-import { Icons } from "../../../images/Icons";
-import { UserScript } from "../../../UserScript";
-import { IconButton } from "../IconButton";
+import { Icons } from "../../../images/Icons.js";
+import { UserScript } from "../../../UserScript.js";
+import { IconButton } from "../IconButton.js";
 
 /**
  * A button that is intended to disable something when clicked.

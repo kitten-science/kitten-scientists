@@ -1,14 +1,14 @@
-import { Automation, TickContext } from "./Engine";
-import { MaterialsCache } from "./helper/MaterialsCache";
-import { TradeSettings } from "./settings/TradeSettings";
-import { TabManager } from "./TabManager";
-import { objectEntries } from "./tools/Entries";
-import { ucfirst } from "./tools/Format";
-import { cwarn } from "./tools/Log";
-import { isNil, Maybe, mustExist } from "./tools/Maybe";
-import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types";
-import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
+import { Automation, TickContext } from "./Engine.js";
+import { MaterialsCache } from "./helper/MaterialsCache.js";
+import { TradeSettings } from "./settings/TradeSettings.js";
+import { TabManager } from "./TabManager.js";
+import { objectEntries } from "./tools/Entries.js";
+import { ucfirst } from "./tools/Format.js";
+import { cwarn } from "./tools/Log.js";
+import { isNil, Maybe, mustExist } from "./tools/Maybe.js";
+import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types/index.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 export class TradeManager implements Automation {
   private readonly _host: UserScript;
@@ -243,7 +243,7 @@ export class TradeManager implements Automation {
           res.maxValue > 0
             ? Math.min(
                 mustExist(meanOutput[out]) * mustExist(tradesDone[name]),
-                Math.max(res.maxValue - res.value, 0)
+                Math.max(res.maxValue - res.value, 0),
               )
             : outValue * mustExist(tradesDone[name]);
       }
@@ -581,7 +581,7 @@ export class TradeManager implements Automation {
   trade(name: Race, amount: number): void {
     if (!name || 1 > amount) {
       cwarn(
-        "KS trade checks are not functioning properly, please create an issue on the github page."
+        "KS trade checks are not functioning properly, please create an issue on the github page.",
       );
     }
 
@@ -590,7 +590,7 @@ export class TradeManager implements Automation {
 
     if (!button.model.enabled || !this.settings.races[name].enabled) {
       cwarn(
-        "KS trade checks are not functioning properly, please create an issue on the github page."
+        "KS trade checks are not functioning properly, please create an issue on the github page.",
       );
     }
 

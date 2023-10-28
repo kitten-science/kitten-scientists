@@ -1,8 +1,8 @@
-import { isNil, Maybe } from "../tools/Maybe";
-import { GamePage } from "../types";
-import { PolicySettings } from "./PolicySettings";
-import { Setting } from "./Settings";
-import { TechSettings } from "./TechSettings";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { GamePage } from "../types/index.js";
+import { PolicySettings } from "./PolicySettings.js";
+import { Setting } from "./Settings.js";
+import { TechSettings } from "./TechSettings.js";
 
 export type ScienceItem = "policies" | "techs";
 export type ScienceSettingsItem = TechSettings | PolicySettings;
@@ -16,7 +16,7 @@ export class ScienceSettings extends Setting {
     enabled = false,
     policies = new PolicySettings(),
     techs = new TechSettings(),
-    observe = new Setting(true)
+    observe = new Setting(true),
   ) {
     super(enabled);
     this.policies = policies;

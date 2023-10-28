@@ -1,8 +1,8 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { UnicornItemVariant } from "../types";
-import { FaithItem, UnicornItem } from "./ReligionSettings";
-import { Setting, SettingTrigger } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { UnicornItemVariant } from "../types/index.js";
+import { FaithItem, UnicornItem } from "./ReligionSettings.js";
+import { Setting, SettingTrigger } from "./Settings.js";
 
 export class ResetReligionBuildingSetting extends SettingTrigger {
   readonly #building: FaithItem | UnicornItem;
@@ -19,7 +19,7 @@ export class ResetReligionBuildingSetting extends SettingTrigger {
     building: FaithItem | UnicornItem,
     variant: UnicornItemVariant,
     enabled = false,
-    trigger = 1
+    trigger = 1,
   ) {
     super(enabled, trigger);
     this.#building = building;
@@ -42,178 +42,178 @@ export class ResetReligionSettings extends Setting {
         "apocripha",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       basilica: new ResetReligionBuildingSetting(
         "basilica",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       blackCore: new ResetReligionBuildingSetting(
         "blackCore",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blackLibrary: new ResetReligionBuildingSetting(
         "blackLibrary",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blackNexus: new ResetReligionBuildingSetting(
         "blackNexus",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blackObelisk: new ResetReligionBuildingSetting(
         "blackObelisk",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blackPyramid: new ResetReligionBuildingSetting(
         "blackPyramid",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       blackRadiance: new ResetReligionBuildingSetting(
         "blackRadiance",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blazar: new ResetReligionBuildingSetting(
         "blazar",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       darkNova: new ResetReligionBuildingSetting(
         "darkNova",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       goldenSpire: new ResetReligionBuildingSetting(
         "goldenSpire",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       holyGenocide: new ResetReligionBuildingSetting(
         "holyGenocide",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       ivoryCitadel: new ResetReligionBuildingSetting(
         "ivoryCitadel",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       ivoryTower: new ResetReligionBuildingSetting(
         "ivoryTower",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       marker: new ResetReligionBuildingSetting("marker", UnicornItemVariant.Ziggurat, false, -1),
       scholasticism: new ResetReligionBuildingSetting(
         "scholasticism",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       singularity: new ResetReligionBuildingSetting(
         "singularity",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       skyPalace: new ResetReligionBuildingSetting(
         "skyPalace",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       solarchant: new ResetReligionBuildingSetting(
         "solarchant",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       solarRevolution: new ResetReligionBuildingSetting(
         "solarRevolution",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       stainedGlass: new ResetReligionBuildingSetting(
         "stainedGlass",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       sunAltar: new ResetReligionBuildingSetting(
         "sunAltar",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       sunspire: new ResetReligionBuildingSetting(
         "sunspire",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       templars: new ResetReligionBuildingSetting(
         "templars",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       transcendence: new ResetReligionBuildingSetting(
         "transcendence",
         UnicornItemVariant.OrderOfTheSun,
         false,
-        -1
+        -1,
       ),
       unicornGraveyard: new ResetReligionBuildingSetting(
         "unicornGraveyard",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       unicornNecropolis: new ResetReligionBuildingSetting(
         "unicornNecropolis",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       unicornPasture: new ResetReligionBuildingSetting(
         "unicornPasture",
         UnicornItemVariant.UnicornPasture,
         false,
-        -1
+        -1,
       ),
       unicornTomb: new ResetReligionBuildingSetting(
         "unicornTomb",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       unicornUtopia: new ResetReligionBuildingSetting(
         "unicornUtopia",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
-    }
+    },
   ) {
     super(enabled);
     this.buildings = buildings;

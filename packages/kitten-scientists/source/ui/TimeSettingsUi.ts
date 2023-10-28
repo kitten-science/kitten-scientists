@@ -1,11 +1,11 @@
-import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings";
-import { UserScript } from "../UserScript";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { HeaderListItem } from "./components/HeaderListItem";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsSectionUi } from "./SettingsSectionUi";
+import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings.js";
+import { UserScript } from "../UserScript.js";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
+import { HeaderListItem } from "./components/HeaderListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
 
 export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   private readonly _trigger: TriggerButton;
@@ -25,53 +25,53 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     this._buildings = [
       this._getTimeSetting(
         this.setting.buildings.temporalBattery,
-        this._host.engine.i18n("$time.cfu.temporalBattery.label")
+        this._host.engine.i18n("$time.cfu.temporalBattery.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.blastFurnace,
-        this._host.engine.i18n("$time.cfu.blastFurnace.label")
+        this._host.engine.i18n("$time.cfu.blastFurnace.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.timeBoiler,
-        this._host.engine.i18n("$time.cfu.timeBoiler.label")
+        this._host.engine.i18n("$time.cfu.timeBoiler.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.temporalAccelerator,
-        this._host.engine.i18n("$time.cfu.temporalAccelerator.label")
+        this._host.engine.i18n("$time.cfu.temporalAccelerator.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.temporalImpedance,
-        this._host.engine.i18n("$time.cfu.temporalImpedance.label")
+        this._host.engine.i18n("$time.cfu.temporalImpedance.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.ressourceRetrieval,
-        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label")
+        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.temporalPress,
         this._host.engine.i18n("$time.cfu.temporalPress.label"),
-        true
+        true,
       ),
 
       this._getTimeSetting(
         this.setting.buildings.cryochambers,
-        this._host.engine.i18n("$time.vsu.cryochambers.label")
+        this._host.engine.i18n("$time.vsu.cryochambers.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.voidHoover,
-        this._host.engine.i18n("$time.vsu.voidHoover.label")
+        this._host.engine.i18n("$time.vsu.voidHoover.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.voidRift,
-        this._host.engine.i18n("$time.vsu.voidRift.label")
+        this._host.engine.i18n("$time.vsu.voidRift.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.chronocontrol,
-        this._host.engine.i18n("$time.vsu.chronocontrol.label")
+        this._host.engine.i18n("$time.vsu.chronocontrol.label"),
       ),
       this._getTimeSetting(
         this.setting.buildings.voidResonator,
-        this._host.engine.i18n("$time.vsu.voidResonator.label")
+        this._host.engine.i18n("$time.vsu.voidResonator.label"),
       ),
     ];
     listBuildings.addChildren(this._buildings);
@@ -95,7 +95,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.fix.cry"),
           ]),
-      }
+      },
     );
     listAddition.addChild(this._fixCryochamber);
 
@@ -112,7 +112,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.chronofurnace"),
           ]),
-      }
+      },
     );
     listAddition.addChild(this._turnOnChronoFurnace);
     this.addChild(listAddition);

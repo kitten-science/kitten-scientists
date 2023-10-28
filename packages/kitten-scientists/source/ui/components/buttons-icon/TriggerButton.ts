@@ -1,8 +1,8 @@
-import { Icons } from "../../../images/Icons";
-import { SettingTrigger } from "../../../settings/Settings";
-import { UserScript } from "../../../UserScript";
-import { SettingsSectionUi } from "../../SettingsSectionUi";
-import { IconButton } from "../IconButton";
+import { Icons } from "../../../images/Icons.js";
+import { SettingTrigger } from "../../../settings/Settings.js";
+import { UserScript } from "../../../UserScript.js";
+import { SettingsSectionUi } from "../../SettingsSectionUi.js";
+import { IconButton } from "../IconButton.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 
@@ -15,7 +15,7 @@ export class TriggerButton extends IconButton {
     label: string,
     setting: SettingTrigger,
     behavior: TriggerButtonBehavior = "percentage",
-    handler: { onClick?: () => void } = {}
+    handler: { onClick?: () => void } = {},
   ) {
     super(host, Icons.Trigger, "");
 
@@ -26,11 +26,11 @@ export class TriggerButton extends IconButton {
         this.behavior === "percentage"
           ? SettingsSectionUi.promptPercentage(
               host.engine.i18n("ui.trigger.setpercentage", [label]),
-              SettingsSectionUi.renderPercentage(setting.trigger)
+              SettingsSectionUi.renderPercentage(setting.trigger),
             )
           : SettingsSectionUi.promptLimit(
               host.engine.i18n("ui.trigger.setinteger", [label]),
-              setting.trigger.toFixed()
+              setting.trigger.toFixed(),
             );
 
       if (value !== null) {

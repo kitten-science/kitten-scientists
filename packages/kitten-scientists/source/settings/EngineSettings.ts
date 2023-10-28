@@ -1,10 +1,10 @@
-import { SupportedLanguage } from "../Engine";
-import { isNil, Maybe } from "../tools/Maybe";
-import { FallbackLanguage } from "../UserScript";
-import { LogFilterSettings } from "./LogFilterSettings";
-import { ResourcesSettings } from "./ResourcesSettings";
-import { Setting, SettingOptions } from "./Settings";
-import { StateSettings } from "./StateSettings";
+import { SupportedLanguage } from "../Engine.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { FallbackLanguage } from "../UserScript.js";
+import { LogFilterSettings } from "./LogFilterSettings.js";
+import { ResourcesSettings } from "./ResourcesSettings.js";
+import { Setting, SettingOptions } from "./Settings.js";
+import { StateSettings } from "./StateSettings.js";
 
 export class EngineSettings extends Setting {
   /**
@@ -26,7 +26,7 @@ export class EngineSettings extends Setting {
     filters = new LogFilterSettings(),
     resources = new ResourcesSettings(),
     states = new StateSettings(),
-    language = FallbackLanguage
+    language = FallbackLanguage,
   ) {
     super(enabled);
     this.filters = filters;

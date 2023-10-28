@@ -1,10 +1,10 @@
-import { ScienceSettings } from "../settings/ScienceSettings";
-import { UserScript } from "../UserScript";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { PolicySettingsUi } from "./PolicySettingsUi";
-import { SettingsSectionUi } from "./SettingsSectionUi";
-import { TechSettingsUi } from "./TechSettingsUi";
+import { ScienceSettings } from "../settings/ScienceSettings.js";
+import { UserScript } from "../UserScript.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { PolicySettingsUi } from "./PolicySettingsUi.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
+import { TechSettingsUi } from "./TechSettingsUi.js";
 
 export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
   private readonly _items: Array<SettingListItem>;
@@ -31,7 +31,7 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.observe"),
           ]),
-      }
+      },
     );
 
     this._items = [this._policiesUi, this._techsUi, this._observeStars];

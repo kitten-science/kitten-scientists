@@ -1,14 +1,14 @@
-import { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings";
-import { UserScript } from "../UserScript";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
+import { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings.js";
+import { UserScript } from "../UserScript.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSettings> {
   constructor(
     host: UserScript,
     settings: BuildingUpgradeSettings,
-    options?: SettingsPanelOptions<SettingsPanel<BuildingUpgradeSettings>>
+    options?: SettingsPanelOptions<SettingsPanel<BuildingUpgradeSettings>>,
   ) {
     super(host, host.engine.i18n("ui.upgrade.buildings"), settings, options);
 

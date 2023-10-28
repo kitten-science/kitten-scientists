@@ -1,7 +1,7 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { Resource } from "../types";
-import { Setting } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Resource } from "../types/index.js";
+import { Setting } from "./Settings.js";
 
 export class ResetResourcesSettingsItem extends Setting {
   readonly #resource: Resource;
@@ -84,7 +84,7 @@ export class ResetResourcesSettings extends Setting {
       wood: new ResetResourcesSettingsItem("wood", false, 0),
       wrappingPaper: new ResetResourcesSettingsItem("wrappingPaper", false, 0),
       zebras: new ResetResourcesSettingsItem("zebras", false, 0),
-    }
+    },
   ) {
     super(enabled);
     this.resources = resources;

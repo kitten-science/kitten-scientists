@@ -1,7 +1,7 @@
-import { Setting } from "../../settings/Settings";
-import { isNil } from "../../tools/Maybe";
-import { UserScript } from "../../UserScript";
-import { LabelListItem, LabelListItemOptions } from "./LabelListItem";
+import { Setting } from "../../settings/Settings.js";
+import { isNil } from "../../tools/Maybe.js";
+import { UserScript } from "../../UserScript.js";
+import { LabelListItem, LabelListItemOptions } from "./LabelListItem.js";
 
 export type SettingListItemOptions = LabelListItemOptions & {
   /**
@@ -39,7 +39,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     host: UserScript,
     label: string,
     setting: TSetting,
-    options?: Partial<SettingListItemOptions>
+    options?: Partial<SettingListItemOptions>,
   ) {
     super(host, label, options);
 

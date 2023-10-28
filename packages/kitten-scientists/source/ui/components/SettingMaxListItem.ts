@@ -1,7 +1,7 @@
-import { SettingMax } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { MaxButton } from "./buttons-text/MaxButton";
-import { SettingListItem, SettingListItemOptions } from "./SettingListItem";
+import { SettingMax } from "../../settings/Settings.js";
+import { UserScript } from "../../UserScript.js";
+import { MaxButton } from "./buttons-text/MaxButton.js";
+import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
 export class SettingMaxListItem extends SettingListItem<SettingMax> {
   readonly maxButton: MaxButton;
@@ -20,7 +20,7 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
     host: UserScript,
     label: string,
     setting: SettingMax,
-    options?: Partial<SettingListItemOptions>
+    options?: Partial<SettingListItemOptions>,
   ) {
     super(host, label, setting, options);
 

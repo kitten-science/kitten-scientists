@@ -1,7 +1,7 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types";
-import { Setting, SettingMax, SettingTrigger } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types/index.js";
+import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
 /**
  * The upgrades on the Time tab that we have options for.
@@ -52,7 +52,7 @@ export class TimeSettings extends SettingTrigger {
       voidRift: new TimeSettingsItem("voidRift", TimeItemVariant.VoidSpace),
     },
     fixCryochambers = new Setting(false),
-    turnOnChronoFurnace = new Setting(false)
+    turnOnChronoFurnace = new Setting(false),
   ) {
     super(enabled, trigger);
     this.buildings = buildings;

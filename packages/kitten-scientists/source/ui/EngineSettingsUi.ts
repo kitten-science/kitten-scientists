@@ -1,8 +1,8 @@
-import { EngineSettings } from "../settings/EngineSettings";
-import { ucfirst } from "../tools/Format";
-import { UserScript } from "../UserScript";
-import { ExpandoButton } from "./components/ExpandoButton";
-import { SettingListItem } from "./components/SettingListItem";
+import { EngineSettings } from "../settings/EngineSettings.js";
+import { ucfirst } from "../tools/Format.js";
+import { UserScript } from "../UserScript.js";
+import { ExpandoButton } from "./components/ExpandoButton.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 
 export class EngineSettingsUi {
   readonly element: JQuery<HTMLElement>;

@@ -1,4 +1,4 @@
-import { ConstructorOf, is } from "./Maybe";
+import { ConstructorOf, is } from "./Maybe.js";
 
 export const shuffleArray = <T>(array: Array<T>) => {
   for (let index = array.length - 1; index > 0; index--) {

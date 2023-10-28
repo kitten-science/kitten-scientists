@@ -1,6 +1,6 @@
-import { isNil } from "../../tools/Maybe";
-import { UserScript } from "../../UserScript";
-import { UiComponent, UiComponentOptions } from "./UiComponent";
+import { isNil } from "../../tools/Maybe.js";
+import { UserScript } from "../../UserScript.js";
+import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type TextButtonOptions = UiComponentOptions & {
   readonly title: string;

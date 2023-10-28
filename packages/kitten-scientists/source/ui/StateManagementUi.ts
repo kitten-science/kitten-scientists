@@ -1,22 +1,22 @@
 import { formatDistanceToNow } from "date-fns";
-import { EngineState } from "../Engine";
-import { Icons } from "../images/Icons";
-import { StateSettings } from "../settings/StateSettings";
-import { cerror } from "../tools/Log";
-import { isNil } from "../tools/Maybe";
-import { SavegameLoader } from "../tools/SavegameLoader";
-import { UserScript } from "../UserScript";
-import { ButtonListItem } from "./components/ButtonListItem";
-import { CopyButton } from "./components/buttons-icon/CopyButton";
-import { DeleteButton } from "./components/buttons-icon/DeleteButton";
-import { UpdateButton } from "./components/buttons-icon/UpdateButton";
-import { ExplainerListItem } from "./components/ExplainerListItem";
-import { HeaderListItem } from "./components/HeaderListItem";
-import { LabelListItem } from "./components/LabelListItem";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
-import { TextButton } from "./components/TextButton";
+import { EngineState } from "../Engine.js";
+import { UserScript } from "../UserScript.js";
+import { Icons } from "../images/Icons.js";
+import { StateSettings } from "../settings/StateSettings.js";
+import { cerror } from "../tools/Log.js";
+import { isNil } from "../tools/Maybe.js";
+import { SavegameLoader } from "../tools/SavegameLoader.js";
+import { ButtonListItem } from "./components/ButtonListItem.js";
+import { ExplainerListItem } from "./components/ExplainerListItem.js";
+import { HeaderListItem } from "./components/HeaderListItem.js";
+import { LabelListItem } from "./components/LabelListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
+import { TextButton } from "./components/TextButton.js";
+import { CopyButton } from "./components/buttons-icon/CopyButton.js";
+import { DeleteButton } from "./components/buttons-icon/DeleteButton.js";
+import { UpdateButton } from "./components/buttons-icon/UpdateButton.js";
 
 export type StoredState = {
   label?: string;
@@ -43,13 +43,13 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
         children: [
           new ExplainerListItem(
             host,
-            "This is highly experimental.\nAbsolutely BACKUP YOUR GAME before even looking at anything here, or you will regret it!"
+            "This is highly experimental.\nAbsolutely BACKUP YOUR GAME before even looking at anything here, or you will regret it!",
           ),
           new SettingListItem(
             host,
             "Do NOT confirm destructive actions. (Danger!)",
             this.setting.noConfirm,
-            { delimiter: true }
+            { delimiter: true },
           ),
 
           new HeaderListItem(host, "Copy to clipboard"),
@@ -58,7 +58,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             new TextButton(host, "KS settings only", {
               onClick: () => void this.copySettings().catch(console.error),
               title: "Copy only the settings of Kitten Scientists",
-            })
+            }),
           ),
           new ButtonListItem(
             host,
@@ -66,7 +66,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               onClick: () => void this.copySaveGame().catch(console.error),
               title: "Copy the entire Kittens Game save.",
             }),
-            { delimiter: true }
+            { delimiter: true },
           ),
           new SettingListItem(host, "Compress data", this.setting.compress, { delimiter: true }),
 
@@ -76,7 +76,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             new TextButton(host, "KS settings only", {
               onClick: () => this.loadSettings(),
               title: "Load only the settings of Kitten Scientists",
-            })
+            }),
           ),
           new ButtonListItem(
             host,
@@ -84,7 +84,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               onClick: () => void this.loadSaveGame()?.catch(console.error),
               title: "Load an entire Kittens Game save.",
             }),
-            { delimiter: true }
+            { delimiter: true },
           ),
 
           new HeaderListItem(host, "Local states"),
@@ -93,7 +93,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             new TextButton(host, "Store current", {
               onClick: () => this.storeState(),
               title: "Create a new state snapshot.",
-            })
+            }),
           ),
           new ButtonListItem(
             host,
@@ -101,7 +101,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               onClick: () => this.importState(),
               title: "Store a state that you have in your clipboard.",
             }),
-            { delimiter: true }
+            { delimiter: true },
           ),
           new ButtonListItem(
             host,
@@ -109,7 +109,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               onClick: () => this.resetState(),
               title: "Reset absolutely all KS settings to factory defaults.",
             }),
-            { delimiter: true }
+            { delimiter: true },
           ),
 
           new HeaderListItem(host, "Load stored state"),
@@ -117,7 +117,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
         ],
         hasDisableAll: false,
         hasEnableAll: false,
-      })
+      }),
     );
 
     this._loadStates();
@@ -162,7 +162,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
         `${state.label ?? "unlabeled state"} (${formatDistanceToNow(new Date(state.timestamp), {
           addSuffix: true,
         })})`,
-        { onClick: () => this.loadState(state.state), title: state.timestamp }
+        { onClick: () => this.loadState(state.state), title: state.timestamp },
       );
 
       const listItem = new ButtonListItem(this._host, button);
@@ -174,14 +174,14 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       const copyButton = new CopyButton(this._host);
       copyButton.element.on(
         "click",
-        () => void this.copySettings(state.state).catch(console.error)
+        () => void this.copySettings(state.state).catch(console.error),
       );
       listItem.addChild(copyButton);
 
       const updateButton = new UpdateButton(this._host);
       updateButton.element.on(
         "click",
-        () => void this.updateState(state, this._host.engine.stateSerialize())
+        () => void this.updateState(state, this._host.engine.stateSerialize()),
       );
       listItem.addChild(updateButton);
 
@@ -207,7 +207,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
   loadSettings() {
     const input = window.prompt(
-      "Your current settings will be replaced!\nPaste your settings here:"
+      "Your current settings will be replaced!\nPaste your settings here:",
     );
     if (isNil(input)) {
       return;
@@ -227,7 +227,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
   async loadSaveGame() {
     const input = window.prompt(
-      "⚠ YOU WILL LOSE YOUR CURRENT SAVE IF YOU DO THIS! ⚠\nPaste your (un/compressed) savegame here:"
+      "⚠ YOU WILL LOSE YOUR CURRENT SAVE IF YOU DO THIS! ⚠\nPaste your (un/compressed) savegame here:",
     );
     if (isNil(input)) {
       return;

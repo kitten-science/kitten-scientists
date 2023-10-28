@@ -1,11 +1,11 @@
-import { EmbassySettings } from "../settings/EmbassySettings";
-import { SettingMax } from "../settings/Settings";
-import { UserScript } from "../UserScript";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
+import { EmbassySettings } from "../settings/EmbassySettings.js";
+import { SettingMax } from "../settings/Settings.js";
+import { UserScript } from "../UserScript.js";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   private readonly _trigger: TriggerButton;
@@ -14,7 +14,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   constructor(
     host: UserScript,
     settings: EmbassySettings,
-    options?: SettingsPanelOptions<SettingsPanel<EmbassySettings>>
+    options?: SettingsPanelOptions<SettingsPanel<EmbassySettings>>,
   ) {
     const label = host.engine.i18n("option.embassies");
     super(host, label, settings, options);
@@ -27,35 +27,35 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
     this._races = [
       this._makeEmbassySetting(
         this.setting.races.lizards,
-        this._host.engine.i18n(`$trade.race.lizards`)
+        this._host.engine.i18n(`$trade.race.lizards`),
       ),
       this._makeEmbassySetting(
         this.setting.races.sharks,
-        this._host.engine.i18n(`$trade.race.sharks`)
+        this._host.engine.i18n(`$trade.race.sharks`),
       ),
       this._makeEmbassySetting(
         this.setting.races.griffins,
-        this._host.engine.i18n(`$trade.race.griffins`)
+        this._host.engine.i18n(`$trade.race.griffins`),
       ),
       this._makeEmbassySetting(
         this.setting.races.nagas,
-        this._host.engine.i18n(`$trade.race.nagas`)
+        this._host.engine.i18n(`$trade.race.nagas`),
       ),
       this._makeEmbassySetting(
         this.setting.races.zebras,
-        this._host.engine.i18n(`$trade.race.zebras`)
+        this._host.engine.i18n(`$trade.race.zebras`),
       ),
       this._makeEmbassySetting(
         this.setting.races.spiders,
-        this._host.engine.i18n(`$trade.race.spiders`)
+        this._host.engine.i18n(`$trade.race.spiders`),
       ),
       this._makeEmbassySetting(
         this.setting.races.dragons,
-        this._host.engine.i18n(`$trade.race.dragons`)
+        this._host.engine.i18n(`$trade.race.dragons`),
       ),
       this._makeEmbassySetting(
         this.setting.races.leviathans,
-        this._host.engine.i18n(`$trade.race.leviathans`)
+        this._host.engine.i18n(`$trade.race.leviathans`),
       ),
     ];
     listRaces.addChildren(this._races);

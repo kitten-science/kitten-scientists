@@ -1,8 +1,8 @@
-import { SettingOptions } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { Fieldset } from "./Fieldset";
-import { RadioItem } from "./RadioItem";
-import { UiComponent, UiComponentOptions } from "./UiComponent";
+import { SettingOptions } from "../../settings/Settings.js";
+import { UserScript } from "../../UserScript.js";
+import { Fieldset } from "./Fieldset.js";
+import { RadioItem } from "./RadioItem.js";
+import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type OptionsListItemOptions = UiComponentOptions & {
   readonly onCheck: () => void;
@@ -28,7 +28,7 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
     host: UserScript,
     label: string,
     setting: TSetting,
-    options?: Partial<Omit<OptionsListItemOptions, "children">>
+    options?: Partial<Omit<OptionsListItemOptions, "children">>,
   ) {
     super(host, options);
 
@@ -43,7 +43,7 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
         new RadioItem(host, setting, option, label, {
           onCheck: options?.onCheck,
           readOnly: options?.readOnly,
-        })
+        }),
       );
     }
     this.fieldset.addChildren(this._options);

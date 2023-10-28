@@ -1,16 +1,16 @@
-import { Building, BuildingMeta } from "./buildings";
-import { GamePage } from "./gamePage";
+import { Building, BuildingMeta } from "./buildings.js";
+import { GamePage } from "./gamePage.js";
 import {
   ReligionUpgrades,
   TranscendenceUpgradeInfo,
   TranscendenceUpgrades,
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
-} from "./religion";
-import { TechInfo } from "./science";
-import { SpaceBuildings } from "./space";
-import { ChronoForgeUpgrades, VoidSpaceUpgradeInfo, VoidSpaceUpgrades } from "./time";
-import { UpgradeInfo } from "./workshop";
+} from "./religion.js";
+import { TechInfo } from "./science.js";
+import { SpaceBuildings } from "./space.js";
+import { ChronoForgeUpgrades, VoidSpaceUpgradeInfo, VoidSpaceUpgrades } from "./time.js";
+import { UpgradeInfo } from "./workshop.js";
 
 export type Season = "autumn" | "spring" | "summer" | "winter";
 export type Cycle =
@@ -156,7 +156,7 @@ export type BuildButton<
     | RefineTearsBtnController
     | ShatterTCBtnController
     | TechButtonController
-    | TransformBtnController
+    | TransformBtnController,
 > = {
   children: Array<BuildButton>;
   controller: TController;
@@ -364,11 +364,11 @@ declare global {
   const game: GamePage;
 }
 
-export * from "./buildings";
-export * from "./gamePage";
-export * from "./religion";
-export * from "./science";
-export * from "./space";
-export * from "./time";
-export * from "./trade";
-export * from "./workshop";
+export * from "./buildings.js";
+export * from "./gamePage.js";
+export * from "./religion.js";
+export * from "./science.js";
+export * from "./space.js";
+export * from "./time.js";
+export * from "./trade.js";
+export * from "./workshop.js";

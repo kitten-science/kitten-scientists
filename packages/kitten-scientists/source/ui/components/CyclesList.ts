@@ -1,9 +1,9 @@
-import { Setting } from "../../settings/Settings";
-import { Cycle } from "../../types";
-import { UserScript } from "../../UserScript";
-import { SettingListItem } from "./SettingListItem";
-import { SettingsList } from "./SettingsList";
-import { UiComponentOptions } from "./UiComponent";
+import { Setting } from "../../settings/Settings.js";
+import { Cycle } from "../../types/index.js";
+import { UserScript } from "../../UserScript.js";
+import { SettingListItem } from "./SettingListItem.js";
+import { SettingsList } from "./SettingsList.js";
+import { UiComponentOptions } from "./UiComponent.js";
 
 export type SettingWithCycles = Record<Cycle, Setting>;
 
@@ -64,43 +64,43 @@ export class CyclesList extends SettingsList {
 
     this.charon = this._makeCycle(
       `⍙ ${this._host.engine.i18n("$space.planet.charon.label")}`,
-      this.setting.charon
+      this.setting.charon,
     );
     this.umbra = this._makeCycle(
       `⍦ ${this._host.engine.i18n("$space.planet.umbra.label")}`,
-      this.setting.umbra
+      this.setting.umbra,
     );
     this.yarn = this._makeCycle(
       `⍧ ${this._host.engine.i18n("$space.planet.yarn.label")}`,
-      this.setting.yarn
+      this.setting.yarn,
     );
     this.helios = this._makeCycle(
       `⌒ ${this._host.engine.i18n("$space.planet.helios.label")}`,
-      this.setting.helios
+      this.setting.helios,
     );
     this.cath = this._makeCycle(
       `⌾ ${this._host.engine.i18n("$space.planet.cath.label")}`,
-      this.setting.cath
+      this.setting.cath,
     );
     this.redmoon = this._makeCycle(
       `⍜ ${this._host.engine.i18n("$space.planet.moon.label")}`,
-      this.setting.redmoon
+      this.setting.redmoon,
     );
     this.dune = this._makeCycle(
       `⍫ ${this._host.engine.i18n("$space.planet.dune.label")}`,
-      this.setting.dune
+      this.setting.dune,
     );
     this.piscine = this._makeCycle(
       `⎈ ${this._host.engine.i18n("$space.planet.piscine.label")}`,
-      this.setting.piscine
+      this.setting.piscine,
     );
     this.terminus = this._makeCycle(
       `⍝ ${this._host.engine.i18n("$space.planet.terminus.label")}`,
-      this.setting.terminus
+      this.setting.terminus,
     );
     this.kairo = this._makeCycle(
       `℣ ${this._host.engine.i18n("$space.planet.kairo.label")}`,
-      this.setting.kairo
+      this.setting.kairo,
     );
 
     this.addChildren([

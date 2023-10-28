@@ -1,6 +1,6 @@
 import core from "@actions/core";
-import { Context } from "@actions/github/lib/context";
-import { type GitHub } from "@actions/github/lib/utils";
+import { Context } from "@actions/github/lib/context.js";
+import { type GitHub } from "@actions/github/lib/utils.js";
 import { writeFileSync } from "node:fs";
 
 export type ReleaseMeta = {

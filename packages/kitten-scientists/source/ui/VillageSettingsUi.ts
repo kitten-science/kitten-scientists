@@ -1,13 +1,13 @@
-import { SettingMax } from "../settings/Settings";
-import { VillageSettings } from "../settings/VillageSettings";
-import { UserScript } from "../UserScript";
-import { HeaderListItem } from "./components/HeaderListItem";
-import { OptionsListItem } from "./components/OptionsListItem";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingMaxListItem } from "./components/SettingMaxListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
-import { SettingsSectionUi } from "./SettingsSectionUi";
+import { SettingMax } from "../settings/Settings.js";
+import { VillageSettings } from "../settings/VillageSettings.js";
+import { UserScript } from "../UserScript.js";
+import { HeaderListItem } from "./components/HeaderListItem.js";
+import { OptionsListItem } from "./components/OptionsListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
 
 export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   private readonly _jobs: Array<SettingListItem>;
@@ -25,35 +25,35 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     this._jobs = [
       this._getDistributeOption(
         this.setting.jobs.woodcutter,
-        this._host.engine.i18n("$village.job.woodcutter")
+        this._host.engine.i18n("$village.job.woodcutter"),
       ),
       this._getDistributeOption(
         this.setting.jobs.farmer,
-        this._host.engine.i18n("$village.job.farmer")
+        this._host.engine.i18n("$village.job.farmer"),
       ),
       this._getDistributeOption(
         this.setting.jobs.scholar,
-        this._host.engine.i18n("$village.job.scholar")
+        this._host.engine.i18n("$village.job.scholar"),
       ),
       this._getDistributeOption(
         this.setting.jobs.hunter,
-        this._host.engine.i18n("$village.job.hunter")
+        this._host.engine.i18n("$village.job.hunter"),
       ),
       this._getDistributeOption(
         this.setting.jobs.miner,
-        this._host.engine.i18n("$village.job.miner")
+        this._host.engine.i18n("$village.job.miner"),
       ),
       this._getDistributeOption(
         this.setting.jobs.priest,
-        this._host.engine.i18n("$village.job.priest")
+        this._host.engine.i18n("$village.job.priest"),
       ),
       this._getDistributeOption(
         this.setting.jobs.geologist,
-        this._host.engine.i18n("$village.job.geologist")
+        this._host.engine.i18n("$village.job.geologist"),
       ),
       this._getDistributeOption(
         this.setting.jobs.engineer,
-        this._host.engine.i18n("$village.job.engineer")
+        this._host.engine.i18n("$village.job.engineer"),
       ),
     ];
     listJobs.addChildren(this._jobs);
@@ -75,7 +75,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
           this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.hunt")]),
         onUnCheck: () =>
           this._host.engine.imessage("status.sub.disable", [this._host.engine.i18n("option.hunt")]),
-      }
+      },
     );
     listAddition.addChild(this._hunt);
 
@@ -92,7 +92,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.festival"),
           ]),
-      }
+      },
     );
     listAddition.addChild(this._festivals);
 
@@ -109,7 +109,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.promotekittens"),
           ]),
-      }
+      },
     );
     listAddition.addChild(this._promoteKittens);
 
@@ -126,7 +126,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.promote"),
           ]),
-      }
+      },
     );
     listAddition.addChild(this._promoteLeader);
 
