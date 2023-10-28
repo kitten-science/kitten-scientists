@@ -2,7 +2,7 @@ import * as core from "@actions/core";
 import { Context } from "@actions/github/lib/context.js";
 import { GitHub } from "@actions/github/lib/utils.js";
 import { lstatSync, readFileSync } from "fs";
-import globby from "globby";
+import { globby } from "globby";
 import md5File from "md5-file";
 import path from "path";
 import { NewGitHubRelease } from "./AutomaticReleases.js";
