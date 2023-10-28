@@ -1,5 +1,5 @@
-import { UserScript } from "../../UserScript";
-import { UiComponent, UiComponentOptions } from "./UiComponent";
+import { UserScript } from "../../UserScript.js";
+import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 /**
  * A button that is visually represented through an SVG element.
@@ -19,7 +19,7 @@ export class IconButton extends UiComponent {
     host: UserScript,
     pathData: string,
     title: string,
-    options?: Partial<UiComponentOptions>
+    options?: Partial<UiComponentOptions>,
   ) {
     super(host, options);
 

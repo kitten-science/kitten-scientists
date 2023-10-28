@@ -1,9 +1,9 @@
-import { SettingBuySellTrigger } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton";
-import { BuyButton } from "./buttons-text/BuyButton";
-import { SellButton } from "./buttons-text/SellButton";
-import { SettingListItem, SettingListItemOptions } from "./SettingListItem";
+import { SettingBuySellTrigger } from "../../settings/Settings.js";
+import { UserScript } from "../../UserScript.js";
+import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton.js";
+import { BuyButton } from "./buttons-text/BuyButton.js";
+import { SellButton } from "./buttons-text/SellButton.js";
+import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
 export type SettingBuySellTriggerListItemOptions = SettingListItemOptions & {
   behavior: TriggerButtonBehavior;
@@ -18,7 +18,7 @@ export class SettingBuySellTriggerListItem extends SettingListItem {
     host: UserScript,
     label: string,
     setting: SettingBuySellTrigger,
-    options?: Partial<SettingBuySellTriggerListItemOptions>
+    options?: Partial<SettingBuySellTriggerListItemOptions>,
   ) {
     super(host, label, setting, options);
 

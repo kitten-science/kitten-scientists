@@ -1,5 +1,5 @@
-import { cerror } from "../../tools/Log";
-import { UserScript } from "../../UserScript";
+import { cerror } from "../../tools/Log.js";
+import { UserScript } from "../../UserScript.js";
 
 export type UiComponentOptions<TChild extends UiComponent = UiComponent> = {
   readonly children: Array<TChild>;

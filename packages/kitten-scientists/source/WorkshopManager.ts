@@ -1,15 +1,15 @@
-import { Automation, TickContext } from "./Engine";
-import { MaterialsCache } from "./helper/MaterialsCache";
-import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings";
-import { TabManager } from "./TabManager";
-import { objectEntries } from "./tools/Entries";
-import { cerror } from "./tools/Log";
-import { isNil, mustExist } from "./tools/Maybe";
-import { Resource, ResourceCraftable, UpgradeInfo } from "./types";
-import { CraftableInfo, ResourceInfo } from "./types/craft";
-import { VillageTab } from "./types/village";
-import { UpgradeManager } from "./UpgradeManager";
-import { UserScript } from "./UserScript";
+import { Automation, TickContext } from "./Engine.js";
+import { TabManager } from "./TabManager.js";
+import { UpgradeManager } from "./UpgradeManager.js";
+import { UserScript } from "./UserScript.js";
+import { MaterialsCache } from "./helper/MaterialsCache.js";
+import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
+import { objectEntries } from "./tools/Entries.js";
+import { cerror } from "./tools/Log.js";
+import { isNil, mustExist } from "./tools/Maybe.js";
+import { CraftableInfo, ResourceInfo } from "./types/craft.js";
+import { Resource, ResourceCraftable, UpgradeInfo } from "./types/index.js";
+import { VillageTab } from "./types/village.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
   readonly settings: WorkshopSettings;
@@ -88,7 +88,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @param crafts The resources to build.
    */
   autoCraft(
-    crafts: Partial<Record<ResourceCraftable, CraftSettingsItem>> = this.settings.resources
+    crafts: Partial<Record<ResourceCraftable, CraftSettingsItem>> = this.settings.resources,
   ) {
     const craftRequests = new Map<
       CraftSettingsItem,
@@ -129,7 +129,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
       const allMaterialsAboveTrigger =
         requiredMaterials.filter(
-          material => material.value / material.maxValue < this.settings.trigger
+          material => material.value / material.maxValue < this.settings.trigger,
         ).length === 0;
 
       if (!allMaterialsAboveTrigger) {
@@ -270,7 +270,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this._host.engine.iactivity(
       "act.craft",
       [this._host.gamePage.getDisplayValueExt(amount), resourceName],
-      "ks-craft"
+      "ks-craft",
     );
   }
 
@@ -367,7 +367,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   getTickVal(
     resource: ResourceInfo,
     cacheManager?: MaterialsCache,
-    preTrade: boolean | undefined = undefined
+    preTrade: boolean | undefined = undefined,
   ): number | "ignore" {
     let production = this._host.gamePage.getResourcePerTick(resource.name, true);
 
@@ -608,7 +608,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       // How happy beyond 100% are we?
       const happyCon = this._host.gamePage.village.happiness - 1;
       const catnipDemandWorkerRatioGlobal = this._host.gamePage.getEffect(
-        "catnipDemandWorkerRatioGlobal"
+        "catnipDemandWorkerRatioGlobal",
       );
 
       // Determine the effect of kittens without jobs.

@@ -1,11 +1,11 @@
-import { BonfireManager } from "./BonfireManager";
-import { Engine, TickContext } from "./Engine";
-import { ReligionManager } from "./ReligionManager";
-import { CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings";
-import { SpaceManager } from "./SpaceManager";
-import { TabManager } from "./TabManager";
-import { objectEntries } from "./tools/Entries";
-import { isNil, mustExist } from "./tools/Maybe";
+import { BonfireManager } from "./BonfireManager.js";
+import { Engine, TickContext } from "./Engine.js";
+import { ReligionManager } from "./ReligionManager.js";
+import { CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
+import { SpaceManager } from "./SpaceManager.js";
+import { TabManager } from "./TabManager.js";
+import { objectEntries } from "./tools/Entries.js";
+import { isNil, mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -17,9 +17,9 @@ import {
   TimeTab,
   VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
-} from "./types";
-import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
+} from "./types/index.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 export class TimeControlManager {
   private readonly _host: UserScript;
@@ -36,7 +36,7 @@ export class TimeControlManager {
     religionManager: ReligionManager,
     spaceManager: SpaceManager,
     workshopManager: WorkshopManager,
-    settings = new TimeControlSettings()
+    settings = new TimeControlSettings(),
   ) {
     this._host = host;
     this.settings = settings;
@@ -81,7 +81,7 @@ export class TimeControlManager {
     // If we don't have a given item, but we *could* buy it, then we act
     // as if we already had it.
     const check = (
-      buttons: Array<BuildButton<string, ButtonModernModel, ButtonModernController>>
+      buttons: Array<BuildButton<string, ButtonModernModel, ButtonModernController>>,
     ) => {
       if (checkList.length !== 0) {
         for (const button of buttons) {
@@ -154,7 +154,7 @@ export class TimeControlManager {
       check(
         this._bonfireManager.manager.tab.children as Array<
           BuildButton<string, ButtonModernModel, ButtonModernController>
-        >
+        >,
       ) ||
       checkList.length
     ) {
@@ -217,17 +217,17 @@ export class TimeControlManager {
       check(
         this._religionManager.manager.tab.zgUpgradeButtons as Array<
           BuildButton<string, ButtonModernModel, ButtonModernController>
-        >
+        >,
       ) ||
       check(
         this._religionManager.manager.tab.rUpgradeButtons as Array<
           BuildButton<string, ButtonModernModel, ButtonModernController>
-        >
+        >,
       ) ||
       check(
         this._religionManager.manager.tab.children[0].children[0].children as Array<
           BuildButton<string, ButtonModernModel, ButtonModernController>
-        >
+        >,
       ) ||
       checkList.length
     ) {
@@ -253,12 +253,12 @@ export class TimeControlManager {
       check(
         this.manager.tab.children[2].children[0].children as Array<
           BuildButton<string, ButtonModernModel, ButtonModernController>
-        >
+        >,
       ) ||
       check(
         this.manager.tab.children[3].children[0].children as Array<
           BuildButton<string, ButtonModernModel, ButtonModernController>
-        >
+        >,
       ) ||
       checkList.length
     ) {
@@ -284,7 +284,7 @@ export class TimeControlManager {
     for (const [, entry] of objectEntries(this.settings.reset.upgrades.upgrades)) {
       if (entry.enabled) {
         const upgrade = mustExist(
-          this._host.gamePage.workshop.upgrades.find(subject => subject.name === entry.upgrade)
+          this._host.gamePage.workshop.upgrades.find(subject => subject.name === entry.upgrade),
         );
         checkedList.push({ name: upgrade.label, trigger: 1, val: upgrade.researched ? 1 : 0 });
         if (!upgrade.researched) {
@@ -401,7 +401,7 @@ export class TimeControlManager {
 
     // If we have less time crystals than our required trigger value, bail out.
     const shatterCostIncreaseChallenge = this._host.gamePage.getEffect(
-      "shatterCostIncreaseChallenge"
+      "shatterCostIncreaseChallenge",
     );
     const timeCrystalsAvailable = this._workshopManager.getValueAvailable("timeCrystal");
     if (
@@ -453,8 +453,8 @@ export class TimeControlManager {
           : (heatMax - heatNow) / factor,
         maxSkips,
         timeCrystalsAvailable / (1 + shatterCostIncreaseChallenge),
-        0 < shatterVoidCost ? voidAvailable / shatterVoidCost : Number.POSITIVE_INFINITY
-      )
+        0 < shatterVoidCost ? voidAvailable / shatterVoidCost : Number.POSITIVE_INFINITY,
+      ),
     );
 
     // The amount of skips to perform.
@@ -502,7 +502,7 @@ export class TimeControlManager {
 
   getBuild(
     name: ChronoForgeUpgrades | VoidSpaceUpgrades,
-    variant: TimeItemVariant
+    variant: TimeItemVariant,
   ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
     if (variant === TimeItemVariant.Chronoforge) {
       return this._host.gamePage.time.getCFU(name as ChronoForgeUpgrades) ?? null;

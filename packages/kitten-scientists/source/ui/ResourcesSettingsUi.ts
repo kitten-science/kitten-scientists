@@ -1,13 +1,13 @@
-import { Icons } from "../images/Icons";
-import { ResourcesSettings, ResourcesSettingsItem } from "../settings/ResourcesSettings";
-import { ucfirst } from "../tools/Format";
-import { UserScript } from "../UserScript";
-import { ConsumeButton } from "./components/buttons-text/ConsumeButton";
-import { StockButton } from "./components/buttons-text/StockButton";
-import { LabelListItem } from "./components/LabelListItem";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
+import { Icons } from "../images/Icons.js";
+import { ResourcesSettings, ResourcesSettingsItem } from "../settings/ResourcesSettings.js";
+import { ucfirst } from "../tools/Format.js";
+import { UserScript } from "../UserScript.js";
+import { ConsumeButton } from "./components/buttons-text/ConsumeButton.js";
+import { StockButton } from "./components/buttons-text/StockButton.js";
+import { LabelListItem } from "./components/LabelListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;
@@ -15,7 +15,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   constructor(
     host: UserScript,
     settings: ResourcesSettings,
-    options?: SettingsPanelOptions<SettingsPanel<ResourcesSettings>>
+    options?: SettingsPanelOptions<SettingsPanel<ResourcesSettings>>,
   ) {
     const label = host.engine.i18n("ui.resources");
     super(host, label, settings, {
@@ -27,7 +27,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
 
     // Add all the current resources
     const preparedResources: Array<[ResourcesSettingsItem, string]> = Object.values(
-      this.setting.resources
+      this.setting.resources,
     ).map(resource => [
       resource,
       ucfirst(this._host.engine.i18n(`$resources.${resource.resource}.title`)),

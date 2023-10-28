@@ -1,7 +1,7 @@
-import { SettingLimitedMax } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { MaxButton } from "./buttons-text/MaxButton";
-import { SettingLimitedListItem, SettingLimitedListItemOptions } from "./SettingLimitedListItem";
+import { SettingLimitedMax } from "../../settings/Settings.js";
+import { UserScript } from "../../UserScript.js";
+import { MaxButton } from "./buttons-text/MaxButton.js";
+import { SettingLimitedListItem, SettingLimitedListItemOptions } from "./SettingLimitedListItem.js";
 
 export class SettingLimitedMaxListItem extends SettingLimitedListItem {
   readonly maxButton: MaxButton;
@@ -22,7 +22,7 @@ export class SettingLimitedMaxListItem extends SettingLimitedListItem {
     host: UserScript,
     label: string,
     setting: SettingLimitedMax,
-    options?: Partial<SettingLimitedListItemOptions>
+    options?: Partial<SettingLimitedListItemOptions>,
   ) {
     super(host, label, setting, options);
 

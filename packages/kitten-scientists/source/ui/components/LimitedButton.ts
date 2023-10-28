@@ -1,6 +1,6 @@
-import { SettingLimited } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { UiComponent, UiComponentOptions } from "./UiComponent";
+import { SettingLimited } from "../../settings/Settings.js";
+import { UserScript } from "../../UserScript.js";
+import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type LimitedButtonOptions = UiComponentOptions & {
   readonly onLimitedCheck: () => void;

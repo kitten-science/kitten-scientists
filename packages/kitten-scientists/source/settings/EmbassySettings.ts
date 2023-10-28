@@ -1,7 +1,7 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { Race } from "../types";
-import { SettingMax, SettingTrigger } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Race } from "../types/index.js";
+import { SettingMax, SettingTrigger } from "./Settings.js";
 
 export class EmbassySetting extends SettingMax {
   readonly #race: Race;
@@ -32,7 +32,7 @@ export class EmbassySettings extends SettingTrigger {
       sharks: new EmbassySetting("sharks", true),
       spiders: new EmbassySetting("spiders", true),
       zebras: new EmbassySetting("zebras", true),
-    }
+    },
   ) {
     super(enabled);
     this.races = races;

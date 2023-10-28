@@ -1,3 +1,5 @@
+import { CycleIndices } from "../settings/TimeControlSettings.js";
+import { CraftableInfo, ResourceInfo } from "./craft.js";
 import {
   AllBuildings,
   BuildButton,
@@ -23,21 +25,19 @@ import {
   WorkshopTab,
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
-} from ".";
-import { CycleIndices } from "../settings/TimeControlSettings";
-import { CraftableInfo, ResourceInfo } from "./craft";
-import { ReligionTab } from "./religion";
-import { PolicyInfo, TechInfo as TechnologyInfo, Technology } from "./science";
-import { Missions, SpaceBuildings, SpaceTab } from "./space";
+} from "./index.js";
+import { ReligionTab } from "./religion.js";
+import { PolicyInfo, Technology, TechInfo as TechnologyInfo } from "./science.js";
+import { Missions, SpaceBuildings, SpaceTab } from "./space.js";
 import {
   ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
   TimeTab,
   VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
-} from "./time";
-import { TradeTab } from "./trade";
-import { JobInfo, VillageTab } from "./village";
+} from "./time.js";
+import { TradeTab } from "./trade.js";
+import { JobInfo, VillageTab } from "./village.js";
 
 export type GamePage = {
   bld: {
@@ -136,7 +136,7 @@ export type GamePage = {
       | "unicornsGlobalRatio"
       | "unicornsPerTickBase"
       | "unicornsRatioReligion"
-      | "uplinkDCRatio"
+      | "uplinkDCRatio",
   ) => number;
   /**
    * Calculate limited diminishing returns.
@@ -338,7 +338,7 @@ export type GamePage = {
     TimeTab,
     GameTab,
     GameTab,
-    GameTab
+    GameTab,
   ];
   time: {
     /**
@@ -364,7 +364,7 @@ export type GamePage = {
       title: string,
       message: string,
       callbackOk: () => void,
-      callbackCancel: () => void
+      callbackCancel: () => void,
     ) => void;
     render: () => void;
   };
@@ -372,7 +372,7 @@ export type GamePage = {
     assignJob: (job: unknown, count: number) => void;
     getEffectLeader: <TDefaultObject>(
       role: "manager" | "scientist",
-      defaultObject: TDefaultObject
+      defaultObject: TDefaultObject,
     ) => TDefaultObject;
     getFreeKittens: () => number;
     getJob: (name: string) => unknown;
@@ -415,7 +415,7 @@ export type GamePage = {
   villageTab: VillageTab;
   workshop: {
     get: (
-      technology: "chronoforge" | "cryocomputing" | "goldOre" | "machineLearning" | "uplink"
+      technology: "chronoforge" | "cryocomputing" | "goldOre" | "machineLearning" | "uplink",
     ) => { researched: boolean };
     getCraft: (name: ResourceCraftable) => CraftableInfo | undefined;
     getCraftPrice: (craft: CraftableInfo) => Array<Price>;

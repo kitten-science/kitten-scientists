@@ -1,6 +1,6 @@
-import { UserScript } from "../../../UserScript";
-import { SettingsSectionUi } from "../../SettingsSectionUi";
-import { TextButton } from "../TextButton";
+import { UserScript } from "../../../UserScript.js";
+import { SettingsSectionUi } from "../../SettingsSectionUi.js";
+import { TextButton } from "../TextButton.js";
 
 export type SettingWithStock = { stock: number };
 
@@ -11,13 +11,13 @@ export class StockButton extends TextButton {
     host: UserScript,
     label: string,
     setting: SettingWithStock,
-    handler: { onClick?: () => void } = {}
+    handler: { onClick?: () => void } = {},
   ) {
     super(host, label, {
       onClick: () => {
         const value = SettingsSectionUi.promptLimit(
           this._host.engine.i18n("resources.stock.set", [label]),
-          setting.stock.toString()
+          setting.stock.toString(),
         );
 
         if (value !== null) {
@@ -42,7 +42,7 @@ export class StockButton extends TextButton {
     this.element.text(
       this._host.engine.i18n("resources.stock", [
         SettingsSectionUi.renderLimit(this.setting.stock, this._host),
-      ])
+      ]),
     );
   }
 }

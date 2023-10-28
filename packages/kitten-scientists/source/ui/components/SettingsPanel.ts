@@ -1,9 +1,9 @@
-import { Setting } from "../../settings/Settings";
-import { isNil, mustExist } from "../../tools/Maybe";
-import { UserScript } from "../../UserScript";
-import { LabelListItem } from "./LabelListItem";
-import { Panel, PanelOptions } from "./Panel";
-import { SettingListItem } from "./SettingListItem";
+import { Setting } from "../../settings/Settings.js";
+import { isNil, mustExist } from "../../tools/Maybe.js";
+import { UserScript } from "../../UserScript.js";
+import { LabelListItem } from "./LabelListItem.js";
+import { Panel, PanelOptions } from "./Panel.js";
+import { SettingListItem } from "./SettingListItem.js";
 
 export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem> = PanelOptions & {
   readonly settingItem: TListItem;
@@ -11,7 +11,7 @@ export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem
 
 export class SettingsPanel<
     TSetting extends Setting = Setting,
-    TListItem extends LabelListItem = LabelListItem
+    TListItem extends LabelListItem = LabelListItem,
   >
   extends Panel
   implements SettingListItem
@@ -47,7 +47,7 @@ export class SettingsPanel<
     host: UserScript,
     label: string,
     setting: TSetting,
-    options?: Partial<SettingsPanelOptions<TListItem>>
+    options?: Partial<SettingsPanelOptions<TListItem>>,
   ) {
     const settingItem = !isNil(options?.settingItem)
       ? mustExist(options?.settingItem)

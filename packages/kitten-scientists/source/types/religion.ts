@@ -5,7 +5,7 @@ import {
   GameTab,
   Price,
   TransformBtnController,
-} from ".";
+} from "./index.js";
 
 export type ReligionTab = GameTab & {
   /**

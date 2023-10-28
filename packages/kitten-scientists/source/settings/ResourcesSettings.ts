@@ -1,8 +1,8 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { Resource } from "../types";
-import { WorkshopManager } from "../WorkshopManager";
-import { Setting } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Resource } from "../types/index.js";
+import { WorkshopManager } from "../WorkshopManager.js";
+import { Setting } from "./Settings.js";
 
 export class ResourcesSettingsItem extends Setting {
   readonly #resource: Resource;
@@ -17,7 +17,7 @@ export class ResourcesSettingsItem extends Setting {
     resource: Resource,
     enabled: boolean,
     consume = WorkshopManager.DEFAULT_CONSUME_RATE,
-    stock = 0
+    stock = 0,
   ) {
     super(enabled);
     this.#resource = resource;
@@ -91,7 +91,7 @@ export class ResourcesSettings extends Setting {
       wood: new ResourcesSettingsItem("wood", false, 1, 0),
       wrappingPaper: new ResourcesSettingsItem("wrappingPaper", false, 1, 0),
       zebras: new ResourcesSettingsItem("zebras", false, 1, 0),
-    }
+    },
   ) {
     super(true);
     this.resources = resources;

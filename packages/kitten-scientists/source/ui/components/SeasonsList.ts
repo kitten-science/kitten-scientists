@@ -1,8 +1,8 @@
-import { Setting } from "../../settings/Settings";
-import { Season } from "../../types";
-import { UserScript } from "../../UserScript";
-import { SettingListItem } from "./SettingListItem";
-import { SettingsList, SettingsListOptions } from "./SettingsList";
+import { Setting } from "../../settings/Settings.js";
+import { Season } from "../../types/index.js";
+import { UserScript } from "../../UserScript.js";
+import { SettingListItem } from "./SettingListItem.js";
+import { SettingsList, SettingsListOptions } from "./SettingsList.js";
 
 export type SettingWithSeasons = Record<Season, Setting>;
 
@@ -45,7 +45,7 @@ export class SeasonsList extends SettingsList {
   constructor(
     host: UserScript,
     setting: SettingWithSeasons,
-    options?: Partial<SeasonsListOptions>
+    options?: Partial<SeasonsListOptions>,
   ) {
     super(host, options);
     this.setting = setting;
@@ -68,22 +68,22 @@ export class SeasonsList extends SettingsList {
     this.spring = this._makeSeason(
       this._host.engine.i18n(`$calendar.season.spring`),
       this.setting.spring,
-      options
+      options,
     );
     this.summer = this._makeSeason(
       this._host.engine.i18n(`$calendar.season.summer`),
       this.setting.summer,
-      options
+      options,
     );
     this.autumn = this._makeSeason(
       this._host.engine.i18n(`$calendar.season.autumn`),
       this.setting.autumn,
-      options
+      options,
     );
     this.winter = this._makeSeason(
       this._host.engine.i18n(`$calendar.season.winter`),
       this.setting.winter,
-      options
+      options,
     );
 
     this.addChildren([this.spring, this.summer, this.autumn, this.winter]);
@@ -95,7 +95,7 @@ export class SeasonsList extends SettingsList {
     handler?: Partial<{
       onCheck: (label: string, setting: Setting) => void;
       onUnCheck: (label: string, setting: Setting) => void;
-    }>
+    }>,
   ) {
     return new SettingListItem(this._host, label, setting, {
       onCheck: () => handler?.onCheck?.(label, setting),

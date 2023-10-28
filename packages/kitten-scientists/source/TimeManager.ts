@@ -1,9 +1,9 @@
-import { TickContext } from "./Engine";
-import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { TimeItem, TimeSettings, TimeSettingsItem } from "./settings/TimeSettings";
-import { TabManager } from "./TabManager";
-import { cwarn } from "./tools/Log";
-import { mustExist } from "./tools/Maybe";
+import { TickContext } from "./Engine.js";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import { TimeItem, TimeSettings, TimeSettingsItem } from "./settings/TimeSettings.js";
+import { TabManager } from "./TabManager.js";
+import { cwarn } from "./tools/Log.js";
+import { mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -15,9 +15,9 @@ import {
   TimeTab,
   VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
-} from "./types";
-import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
+} from "./types/index.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 export class TimeManager {
   private readonly _host: UserScript;
@@ -86,7 +86,7 @@ export class TimeManager {
         this.build(
           build.id as ChronoForgeUpgrades | VoidSpaceUpgrades,
           build.variant as TimeItemVariant,
-          build.count
+          build.count,
         );
         refreshRequired = true;
       }
@@ -100,7 +100,7 @@ export class TimeManager {
   build(
     name: ChronoForgeUpgrades | VoidSpaceUpgrades,
     variant: TimeItemVariant,
-    amount: number
+    amount: number,
   ): void {
     const build = mustExist(this.getBuild(name, variant));
     const button = this.getBuildButton(name, variant);
@@ -125,7 +125,7 @@ export class TimeManager {
 
   getBuild(
     name: ChronoForgeUpgrades | VoidSpaceUpgrades,
-    variant: TimeItemVariant
+    variant: TimeItemVariant,
   ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
     if (variant === TimeItemVariant.Chronoforge) {
       return this._host.gamePage.time.getCFU(name as ChronoForgeUpgrades) ?? null;
@@ -136,7 +136,7 @@ export class TimeManager {
 
   getBuildButton(
     name: ChronoForgeUpgrades | VoidSpaceUpgrades,
-    variant: TimeItemVariant
+    variant: TimeItemVariant,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
     let buttons: Array<BuildButton>;
     if (variant === TimeItemVariant.Chronoforge) {
@@ -178,7 +178,7 @@ export class TimeManager {
           (didHappen: boolean) => {
             fixHappened = didHappen;
             fixed += didHappen ? 1 : 0;
-          }
+          },
         );
       } while (fixHappened);
 

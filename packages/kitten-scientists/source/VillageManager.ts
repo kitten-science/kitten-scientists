@@ -1,13 +1,13 @@
-import { Automation, TickContext } from "./Engine";
-import { MaterialsCache } from "./helper/MaterialsCache";
-import { VillageSettings } from "./settings/VillageSettings";
-import { TabManager } from "./TabManager";
-import { objectEntries } from "./tools/Entries";
-import { isNil, mustExist } from "./tools/Maybe";
-import { Resource } from "./types";
-import { JobInfo, VillageTab } from "./types/village";
-import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
+import { Automation, TickContext } from "./Engine.js";
+import { MaterialsCache } from "./helper/MaterialsCache.js";
+import { VillageSettings } from "./settings/VillageSettings.js";
+import { TabManager } from "./TabManager.js";
+import { objectEntries } from "./tools/Entries.js";
+import { isNil, mustExist } from "./tools/Maybe.js";
+import { Resource } from "./types/index.js";
+import { JobInfo, VillageTab } from "./types/village.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 export class VillageManager implements Automation {
   private readonly _host: UserScript;
@@ -19,7 +19,7 @@ export class VillageManager implements Automation {
   constructor(
     host: UserScript,
     workshopManager: WorkshopManager,
-    settings = new VillageSettings()
+    settings = new VillageSettings(),
   ) {
     this._host = host;
     this.settings = settings;
@@ -93,7 +93,7 @@ export class VillageManager implements Automation {
       // that single open farmer position first. This might prevent kitten death in
       // certain scenarios.
       const noFarmersAssigned = !isNil(
-        jobsNotCapped.find(job => job.job.name === "farmer" && job.count === 0)
+        jobsNotCapped.find(job => job.job.name === "farmer" && job.count === 0),
       );
 
       // Find the job with the least kittens assigned and assign a kitten to that job.
@@ -105,7 +105,7 @@ export class VillageManager implements Automation {
       this._host.engine.iactivity(
         "act.distribute",
         [this._host.engine.i18n(`$village.job.${jobName}` as const)],
-        "ks-distribute"
+        "ks-distribute",
       );
     }
     this._host.engine.storeForSummary("distribute", freeKittens);
@@ -118,7 +118,7 @@ export class VillageManager implements Automation {
     const trait = this.settings.electLeader.trait.selected;
 
     const leaderCandidates = kittens.filter(
-      kitten => kitten.job === job && kitten.trait.name === trait
+      kitten => kitten.job === job && kitten.trait.name === trait,
     );
 
     if (leaderCandidates.length === 0) {
@@ -189,7 +189,7 @@ export class VillageManager implements Automation {
       ) {
         this._host.engine.iactivity("act.promote", [rank + 1], "ks-promote");
         this._host.gamePage.tabs[1].censusPanel.census.renderGovernment(
-          this._host.gamePage.tabs[1].censusPanel.census
+          this._host.gamePage.tabs[1].censusPanel.census,
         );
         this._host.gamePage.tabs[1].censusPanel.census.update();
         this._host.engine.storeForSummary("promote", 1);
@@ -274,7 +274,7 @@ export class VillageManager implements Automation {
         (craftManager.getTickVal(
           craftManager.getResource("manpower"),
           cacheManager,
-          true
+          true,
         ) as number) >
       1500;
     const cultureProfitable =
@@ -282,7 +282,7 @@ export class VillageManager implements Automation {
         (craftManager.getTickVal(
           craftManager.getResource("culture"),
           cacheManager,
-          true
+          true,
         ) as number) >
       5000;
     const parchProfitable =
@@ -290,7 +290,7 @@ export class VillageManager implements Automation {
         (craftManager.getTickVal(
           craftManager.getResource("parchment"),
           cacheManager,
-          true
+          true,
         ) as number) >
       2500;
 

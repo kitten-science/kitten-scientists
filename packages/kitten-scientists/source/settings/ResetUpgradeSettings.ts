@@ -1,7 +1,7 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { Upgrade } from "../types";
-import { Setting } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Upgrade } from "../types/index.js";
+import { Setting } from "./Settings.js";
 
 export class ResetUpgradeSetting extends Setting {
   readonly #upgrade: Upgrade;
@@ -159,7 +159,7 @@ export class ResetUpgradeSettings extends Setting {
       voidAspiration: new ResetUpgradeSetting("voidAspiration", false),
       voidEnergy: new ResetUpgradeSetting("voidEnergy", false),
       voidReactors: new ResetUpgradeSetting("voidReactors", false),
-    }
+    },
   ) {
     super(enabled);
     this.upgrades = upgrades;

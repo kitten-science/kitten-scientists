@@ -1,11 +1,11 @@
-import { BonfireSettings } from "../settings/BonfireSettings";
-import { UserScript } from "../UserScript";
-import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton";
-import { HeaderListItem } from "./components/HeaderListItem";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsSectionUi } from "./SettingsSectionUi";
+import { BonfireSettings } from "../settings/BonfireSettings.js";
+import { UserScript } from "../UserScript.js";
+import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
+import { HeaderListItem } from "./components/HeaderListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
 
 export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   private readonly _trigger: TriggerButton;
@@ -26,201 +26,201 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.food")),
         this._getBuildOption(
           this.setting.buildings.field,
-          this._host.engine.i18n("$buildings.field.label")
+          this._host.engine.i18n("$buildings.field.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.pasture,
-          this._host.engine.i18n("$buildings.pasture.label")
+          this._host.engine.i18n("$buildings.pasture.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.solarFarm,
           this._host.engine.i18n("$buildings.solarfarm.label"),
           false,
-          true
+          true,
         ),
         this._getBuildOption(
           this.setting.buildings.aqueduct,
-          this._host.engine.i18n("$buildings.aqueduct.label")
+          this._host.engine.i18n("$buildings.aqueduct.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.hydroPlant,
           this._host.engine.i18n("$buildings.hydroplant.label"),
           true,
-          true
+          true,
         ),
 
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.population")),
         this._getBuildOption(
           this.setting.buildings.hut,
-          this._host.engine.i18n("$buildings.hut.label")
+          this._host.engine.i18n("$buildings.hut.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.logHouse,
-          this._host.engine.i18n("$buildings.logHouse.label")
+          this._host.engine.i18n("$buildings.logHouse.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.mansion,
           this._host.engine.i18n("$buildings.mansion.label"),
-          true
+          true,
         ),
 
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.science")),
         this._getBuildOption(
           this.setting.buildings.library,
-          this._host.engine.i18n("$buildings.library.label")
+          this._host.engine.i18n("$buildings.library.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.dataCenter,
           this._host.engine.i18n("$buildings.dataCenter.label"),
           false,
-          true
+          true,
         ),
         this._getBuildOption(
           this.setting.buildings.academy,
-          this._host.engine.i18n("$buildings.academy.label")
+          this._host.engine.i18n("$buildings.academy.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.observatory,
-          this._host.engine.i18n("$buildings.observatory.label")
+          this._host.engine.i18n("$buildings.observatory.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.biolab,
           this._host.engine.i18n("$buildings.biolab.label"),
-          true
+          true,
         ),
 
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.storage")),
         this._getBuildOption(
           this.setting.buildings.barn,
-          this._host.engine.i18n("$buildings.barn.label")
+          this._host.engine.i18n("$buildings.barn.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.harbor,
-          this._host.engine.i18n("$buildings.harbor.label")
+          this._host.engine.i18n("$buildings.harbor.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.warehouse,
           this._host.engine.i18n("$buildings.warehouse.label"),
-          true
+          true,
         ),
 
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.resource")),
         this._getBuildOption(
           this.setting.buildings.mine,
-          this._host.engine.i18n("$buildings.mine.label")
+          this._host.engine.i18n("$buildings.mine.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.quarry,
-          this._host.engine.i18n("$buildings.quarry.label")
+          this._host.engine.i18n("$buildings.quarry.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.lumberMill,
-          this._host.engine.i18n("$buildings.lumberMill.label")
+          this._host.engine.i18n("$buildings.lumberMill.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.oilWell,
-          this._host.engine.i18n("$buildings.oilWell.label")
+          this._host.engine.i18n("$buildings.oilWell.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.accelerator,
           this._host.engine.i18n("$buildings.accelerator.label"),
-          true
+          true,
         ),
 
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.industry")),
         this._getBuildOption(
           this.setting.buildings.steamworks,
-          this._host.engine.i18n("$buildings.steamworks.label")
+          this._host.engine.i18n("$buildings.steamworks.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.magneto,
-          this._host.engine.i18n("$buildings.magneto.label")
+          this._host.engine.i18n("$buildings.magneto.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.smelter,
-          this._host.engine.i18n("$buildings.smelter.label")
+          this._host.engine.i18n("$buildings.smelter.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.calciner,
-          this._host.engine.i18n("$buildings.calciner.label")
+          this._host.engine.i18n("$buildings.calciner.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.factory,
-          this._host.engine.i18n("$buildings.factory.label")
+          this._host.engine.i18n("$buildings.factory.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.reactor,
           this._host.engine.i18n("$buildings.reactor.label"),
-          true
+          true,
         ),
 
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.culture")),
         this._getBuildOption(
           this.setting.buildings.amphitheatre,
-          this._host.engine.i18n("$buildings.amphitheatre.label")
+          this._host.engine.i18n("$buildings.amphitheatre.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.broadcastTower,
           this._host.engine.i18n("$buildings.broadcasttower.label"),
           false,
-          true
+          true,
         ),
         this._getBuildOption(
           this.setting.buildings.chapel,
-          this._host.engine.i18n("$buildings.chapel.label")
+          this._host.engine.i18n("$buildings.chapel.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.temple,
           this._host.engine.i18n("$buildings.temple.label"),
-          true
+          true,
         ),
 
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.other")),
         this._getBuildOption(
           this.setting.buildings.workshop,
-          this._host.engine.i18n("$buildings.workshop.label")
+          this._host.engine.i18n("$buildings.workshop.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.tradepost,
-          this._host.engine.i18n("$buildings.tradepost.label")
+          this._host.engine.i18n("$buildings.tradepost.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.mint,
-          this._host.engine.i18n("$buildings.mint.label")
+          this._host.engine.i18n("$buildings.mint.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.brewery,
           this._host.engine.i18n("$buildings.brewery.label"),
-          true
+          true,
         ),
 
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.megastructures")),
         this._getBuildOption(
           this.setting.buildings.ziggurat,
-          this._host.engine.i18n("$buildings.ziggurat.label")
+          this._host.engine.i18n("$buildings.ziggurat.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.chronosphere,
-          this._host.engine.i18n("$buildings.chronosphere.label")
+          this._host.engine.i18n("$buildings.chronosphere.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.aiCore,
           this._host.engine.i18n("$buildings.aicore.label"),
-          true
+          true,
         ),
 
         new HeaderListItem(this._host, this._host.engine.i18n("$buildings.group.zebraBuildings")),
         this._getBuildOption(
           this.setting.buildings.zebraOutpost,
-          this._host.engine.i18n("$buildings.zebraOutpost.label")
+          this._host.engine.i18n("$buildings.zebraOutpost.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.zebraWorkshop,
-          this._host.engine.i18n("$buildings.zebraWorkshop.label")
+          this._host.engine.i18n("$buildings.zebraWorkshop.label"),
         ),
         this._getBuildOption(
           this.setting.buildings.zebraForge,
-          this._host.engine.i18n("$buildings.zebraForge.label")
+          this._host.engine.i18n("$buildings.zebraForge.label"),
         ),
       ],
       onReset: () => {
@@ -238,7 +238,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
 
     this._buildingUpgradeUi = new BuildingUpgradeSettingsUi(
       this._host,
-      this.setting.upgradeBuildings
+      this.setting.upgradeBuildings,
     );
     listAddition.addChild(this._buildingUpgradeUi);
 
@@ -255,7 +255,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.steamworks"),
           ]),
-      }
+      },
     );
     listAddition.addChild(this._turnOnSteamworks);
 
@@ -272,7 +272,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.magnetos"),
           ]),
-      }
+      },
     );
     listAddition.addChild(this._turnOnMagnetos);
 

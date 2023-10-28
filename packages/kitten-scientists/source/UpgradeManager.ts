@@ -1,7 +1,7 @@
-import { TabManager } from "./TabManager";
-import { mustExist } from "./tools/Maybe";
-import { BuildButton, ScienceTab } from "./types";
-import { UserScript } from "./UserScript";
+import { TabManager } from "./TabManager.js";
+import { mustExist } from "./tools/Maybe.js";
+import { BuildButton, ScienceTab } from "./types/index.js";
+import { UserScript } from "./UserScript.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: UserScript;
@@ -13,7 +13,7 @@ export abstract class UpgradeManager {
 
   async upgrade(
     upgrade: { label: string },
-    variant: "policy" | "science" | "workshop"
+    variant: "policy" | "science" | "workshop",
   ): Promise<boolean> {
     const button = this.getUpgradeButton(upgrade, variant);
 
@@ -29,7 +29,7 @@ export abstract class UpgradeManager {
     this._host.gamePage.opts.noConfirm = true;
     const success = await UpgradeManager.skipConfirm(
       () =>
-        new Promise(resolve => controller.buyItem(button.model, new MouseEvent("click"), resolve))
+        new Promise(resolve => controller.buyItem(button.model, new MouseEvent("click"), resolve)),
     );
 
     if (!success) {
@@ -70,7 +70,7 @@ export abstract class UpgradeManager {
 
   getUpgradeButton(
     upgrade: { label: string },
-    variant: "policy" | "science" | "workshop"
+    variant: "policy" | "science" | "workshop",
   ): BuildButton | null {
     let buttons;
     if (variant === "workshop") {

@@ -1,8 +1,8 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { GamePage, SpaceBuildings } from "../types";
-import { MissionSettings } from "./MissionSettings";
-import { SettingMax, SettingTrigger } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { GamePage, SpaceBuildings } from "../types/index.js";
+import { MissionSettings } from "./MissionSettings.js";
+import { SettingMax, SettingTrigger } from "./Settings.js";
 
 export class SpaceBuildingSetting extends SettingMax {
   readonly #building: SpaceBuildings;
@@ -51,7 +51,7 @@ export class SpaceSettings extends SettingTrigger {
       tectonic: new SpaceBuildingSetting("tectonic"),
       terraformingStation: new SpaceBuildingSetting("terraformingStation"),
     },
-    unlockMissions = new MissionSettings()
+    unlockMissions = new MissionSettings(),
   ) {
     super(enabled, trigger);
     this.buildings = buildings;

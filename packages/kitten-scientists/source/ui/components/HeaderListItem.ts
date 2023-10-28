@@ -1,6 +1,6 @@
-import { UserScript } from "../../UserScript";
-import { ListItem } from "./ListItem";
-import { UiComponent, UiComponentOptions } from "./UiComponent";
+import { UserScript } from "../../UserScript.js";
+import { ListItem } from "./ListItem.js";
+import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export class HeaderListItem extends UiComponent implements ListItem {
   readonly element: JQuery<HTMLElement>;

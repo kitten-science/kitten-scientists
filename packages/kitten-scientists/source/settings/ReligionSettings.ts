@@ -1,7 +1,7 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { UnicornItemVariant } from "../types";
-import { Setting, SettingMax, SettingTrigger } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { UnicornItemVariant } from "../types/index.js";
+import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
 export type FaithItem =
   | "apocripha"
@@ -55,7 +55,7 @@ export class ReligionSettingsItem extends SettingMax {
     building: FaithItem | UnicornItem,
     variant: UnicornItemVariant,
     enabled = false,
-    max = -1
+    max = -1,
   ) {
     super(enabled, max);
     this.#building = building;
@@ -120,37 +120,37 @@ export class ReligionSettings extends SettingTrigger {
         "blackCore",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blackLibrary: new ReligionSettingsItem(
         "blackLibrary",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blackNexus: new ReligionSettingsItem(
         "blackNexus",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blackObelisk: new ReligionSettingsItem(
         "blackObelisk",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blackPyramid: new ReligionSettingsItem(
         "blackPyramid",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       blackRadiance: new ReligionSettingsItem(
         "blackRadiance",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       blazar: new ReligionSettingsItem("blazar", UnicornItemVariant.Cryptotheology, false, -1),
       darkNova: new ReligionSettingsItem("darkNova", UnicornItemVariant.Cryptotheology, false, -1),
@@ -158,19 +158,19 @@ export class ReligionSettings extends SettingTrigger {
         "goldenSpire",
         UnicornItemVariant.OrderOfTheSun,
         true,
-        -1
+        -1,
       ),
       holyGenocide: new ReligionSettingsItem(
         "holyGenocide",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       ivoryCitadel: new ReligionSettingsItem(
         "ivoryCitadel",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       ivoryTower: new ReligionSettingsItem("ivoryTower", UnicornItemVariant.Ziggurat, false, -1),
       marker: new ReligionSettingsItem("marker", UnicornItemVariant.Ziggurat, false, -1),
@@ -178,32 +178,32 @@ export class ReligionSettings extends SettingTrigger {
         "scholasticism",
         UnicornItemVariant.OrderOfTheSun,
         true,
-        -1
+        -1,
       ),
       singularity: new ReligionSettingsItem(
         "singularity",
         UnicornItemVariant.Cryptotheology,
         false,
-        -1
+        -1,
       ),
       skyPalace: new ReligionSettingsItem("skyPalace", UnicornItemVariant.Ziggurat, false, -1),
       solarchant: new ReligionSettingsItem(
         "solarchant",
         UnicornItemVariant.OrderOfTheSun,
         true,
-        -1
+        -1,
       ),
       solarRevolution: new ReligionSettingsItem(
         "solarRevolution",
         UnicornItemVariant.OrderOfTheSun,
         true,
-        -1
+        -1,
       ),
       stainedGlass: new ReligionSettingsItem(
         "stainedGlass",
         UnicornItemVariant.OrderOfTheSun,
         true,
-        -1
+        -1,
       ),
       sunAltar: new ReligionSettingsItem("sunAltar", UnicornItemVariant.OrderOfTheSun, true, -1),
       sunspire: new ReligionSettingsItem("sunspire", UnicornItemVariant.Ziggurat, false, -1),
@@ -212,32 +212,32 @@ export class ReligionSettings extends SettingTrigger {
         "transcendence",
         UnicornItemVariant.OrderOfTheSun,
         true,
-        -1
+        -1,
       ),
       unicornGraveyard: new ReligionSettingsItem(
         "unicornGraveyard",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       unicornNecropolis: new ReligionSettingsItem(
         "unicornNecropolis",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
       unicornPasture: new ReligionSettingsItem(
         "unicornPasture",
         UnicornItemVariant.UnicornPasture,
         true,
-        -1
+        -1,
       ),
       unicornTomb: new ReligionSettingsItem("unicornTomb", UnicornItemVariant.Ziggurat, false, -1),
       unicornUtopia: new ReligionSettingsItem(
         "unicornUtopia",
         UnicornItemVariant.Ziggurat,
         false,
-        -1
+        -1,
       ),
     },
     bestUnicornBuilding = new Setting(false),
@@ -247,7 +247,7 @@ export class ReligionSettings extends SettingTrigger {
     refineTimeCrystals = new SettingTrigger(false, 15000),
     autoPraise = new SettingTrigger(true, 0.98),
     adore = new SettingTrigger(false, 0.75),
-    transcend = new Setting(false)
+    transcend = new Setting(false),
   ) {
     super(enabled, trigger);
     this.buildings = buildings;

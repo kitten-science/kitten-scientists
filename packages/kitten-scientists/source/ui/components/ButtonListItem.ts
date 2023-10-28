@@ -1,6 +1,6 @@
-import { UserScript } from "../../UserScript";
-import { ListItem, ListItemOptions } from "./ListItem";
-import { TextButton } from "./TextButton";
+import { UserScript } from "../../UserScript.js";
+import { ListItem, ListItemOptions } from "./ListItem.js";
+import { TextButton } from "./TextButton.js";
 
 export class ButtonListItem extends ListItem {
   readonly button: TextButton;

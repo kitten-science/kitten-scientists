@@ -1,8 +1,8 @@
-import { MissionSettings } from "../settings/MissionSettings";
-import { UserScript } from "../UserScript";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
+import { MissionSettings } from "../settings/MissionSettings.js";
+import { UserScript } from "../UserScript.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
   private readonly _missions: Array<SettingListItem>;
@@ -10,7 +10,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
   constructor(
     host: UserScript,
     settings: MissionSettings,
-    options?: SettingsPanelOptions<SettingsPanel<MissionSettings>>
+    options?: SettingsPanelOptions<SettingsPanel<MissionSettings>>,
   ) {
     super(host, host.engine.i18n("ui.upgrade.missions"), settings, options);
 

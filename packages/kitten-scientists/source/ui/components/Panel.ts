@@ -1,8 +1,8 @@
-import { is } from "../../tools/Maybe";
-import { UserScript } from "../../UserScript";
-import { Container } from "./Container";
-import { ExpandoButton } from "./ExpandoButton";
-import { UiComponent, UiComponentOptions } from "./UiComponent";
+import { is } from "../../tools/Maybe.js";
+import { UserScript } from "../../UserScript.js";
+import { Container } from "./Container.js";
+import { ExpandoButton } from "./ExpandoButton.js";
+import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponentOptions<TChild> & {
   /**
@@ -19,7 +19,7 @@ export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponent
  */
 export class Panel<
   TChild extends UiComponent = UiComponent,
-  THead extends UiComponent = UiComponent
+  THead extends UiComponent = UiComponent,
 > extends UiComponent {
   protected readonly container: UiComponent;
   readonly element: JQuery<HTMLElement>;

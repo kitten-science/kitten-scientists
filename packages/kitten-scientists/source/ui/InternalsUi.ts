@@ -1,15 +1,15 @@
-import { Icons } from "../images/Icons";
-import { EngineSettings } from "../settings/EngineSettings";
-import { isNil } from "../tools/Maybe";
-import { UserScript } from "../UserScript";
-import { ButtonListItem } from "./components/ButtonListItem";
-import { LabelListItem } from "./components/LabelListItem";
-import { OptionsListItem } from "./components/OptionsListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel } from "./components/SettingsPanel";
-import { TextButton } from "./components/TextButton";
-import { UiComponent } from "./components/UiComponent";
-import { SettingsSectionUi } from "./SettingsSectionUi";
+import { Icons } from "../images/Icons.js";
+import { EngineSettings } from "../settings/EngineSettings.js";
+import { isNil } from "../tools/Maybe.js";
+import { UserScript } from "../UserScript.js";
+import { ButtonListItem } from "./components/ButtonListItem.js";
+import { LabelListItem } from "./components/LabelListItem.js";
+import { OptionsListItem } from "./components/OptionsListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
+import { TextButton } from "./components/TextButton.js";
+import { UiComponent } from "./components/UiComponent.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
 
 export class InternalsUi extends SettingsPanel<EngineSettings> {
   constructor(host: UserScript, settings: EngineSettings) {
@@ -24,7 +24,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                 onClick: () => {
                   const newInterval = SettingsSectionUi.promptLimit(
                     "Enter a new interval at which KS should run (in milliseconds):",
-                    settings.interval.toString()
+                    settings.interval.toString(),
                   );
                   if (isNil(newInterval)) {
                     return;
@@ -35,7 +35,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                 onRefresh: (subject: UiComponent) => {
                   (subject as TextButton).element.text(`Interval: ${settings.interval}`);
                 },
-              })
+              }),
             ),
             new OptionsListItem(host, "Language", settings.language, {
               onCheck: () => {

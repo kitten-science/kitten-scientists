@@ -1,7 +1,7 @@
-import { SettingTrigger } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { TriggerLimitButton } from "./buttons-text/TriggerLimitButton";
-import { SettingListItem, SettingListItemOptions } from "./SettingListItem";
+import { SettingTrigger } from "../../settings/Settings.js";
+import { UserScript } from "../../UserScript.js";
+import { TriggerLimitButton } from "./buttons-text/TriggerLimitButton.js";
+import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
 export class SettingTriggerLimitListItem extends SettingListItem {
   readonly triggerButton: TriggerLimitButton;
@@ -10,7 +10,7 @@ export class SettingTriggerLimitListItem extends SettingListItem {
     host: UserScript,
     label: string,
     setting: SettingTrigger,
-    options?: Partial<SettingListItemOptions>
+    options?: Partial<SettingListItemOptions>,
   ) {
     super(host, label, setting, options);
 

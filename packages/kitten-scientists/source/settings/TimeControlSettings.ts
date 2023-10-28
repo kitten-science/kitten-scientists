@@ -1,7 +1,7 @@
-import { isNil, Maybe } from "../tools/Maybe";
-import { ResetSettings } from "./ResetSettings";
-import { Setting, SettingTrigger } from "./Settings";
-import { TimeSkipSettings } from "./TimeSkipSettings";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { ResetSettings } from "./ResetSettings.js";
+import { Setting, SettingTrigger } from "./Settings.js";
+import { TimeSkipSettings } from "./TimeSkipSettings.js";
 
 export type CycleIndices = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
@@ -16,7 +16,7 @@ export class TimeControlSettings extends Setting {
     enabled = false,
     accelerateTime = new SettingTrigger(true, 1),
     reset = new ResetSettings(),
-    timeSkip = new TimeSkipSettings()
+    timeSkip = new TimeSkipSettings(),
   ) {
     super(enabled);
     this.accelerateTime = accelerateTime;

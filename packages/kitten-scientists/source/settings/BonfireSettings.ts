@@ -1,8 +1,8 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { Building } from "../types";
-import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings";
-import { Setting, SettingMax, SettingTrigger } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Building } from "../types/index.js";
+import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings.js";
+import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
 /**
  * One of the building options in the KS menu.
@@ -103,7 +103,7 @@ export class BonfireSettings extends SettingTrigger {
     },
     turnOnSteamworks = new Setting(true),
     turnOnMagnetos = new Setting(false),
-    upgradeBuildings = new BuildingUpgradeSettings()
+    upgradeBuildings = new BuildingUpgradeSettings(),
   ) {
     super(enabled, trigger);
     this.buildings = buildings;

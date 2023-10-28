@@ -1,7 +1,7 @@
-import { BonfireItem } from "../settings/BonfireSettings";
-import { AllItems } from "../settings/Settings";
-import { objectEntries } from "../tools/Entries";
-import { isNil, mustExist } from "../tools/Maybe";
+import { BonfireItem } from "../settings/BonfireSettings.js";
+import { AllItems } from "../settings/Settings.js";
+import { objectEntries } from "../tools/Entries.js";
+import { isNil, mustExist } from "../tools/Maybe.js";
 import {
   AllBuildings,
   BuildButton,
@@ -21,9 +21,9 @@ import {
   UpgradeInfo,
   VoidSpaceUpgradeInfo,
   ZiggurathUpgradeInfo,
-} from "../types";
-import { UserScript } from "../UserScript";
-import { WorkshopManager } from "../WorkshopManager";
+} from "../types/index.js";
+import { UserScript } from "../UserScript.js";
+import { WorkshopManager } from "../WorkshopManager.js";
 
 export type BulkBuildListItem = {
   count: number;
@@ -80,7 +80,7 @@ export class BulkPurchaseHelper {
       >
     >,
     trigger: number,
-    sourceTab?: "bonfire" | "space"
+    sourceTab?: "bonfire" | "space",
   ): Array<BulkBuildListItem> {
     const buildsPerformed: Array<BulkBuildListItem> = [];
     const potentialBuilds: Array<{
@@ -142,7 +142,7 @@ export class BulkPurchaseHelper {
       const prices = mustExist(
         this._isStagedBuild(buildMetaData)
           ? buildMetaData.stages[buildMetaData.stage].prices
-          : buildMetaData.prices
+          : buildMetaData.prices,
       );
       const priceRatio = this.getPriceRatio(buildMetaData, sourceTab);
 
@@ -177,7 +177,7 @@ export class BulkPurchaseHelper {
         const pricesDiscount = this._host.gamePage.getLimitedDR(
           // @ts-expect-error getEffect will return 0 for invalid effects. So this is safe either way.
           this._host.gamePage.getEffect(`${name}CostReduction` as const),
-          1
+          1,
         );
         const priceModifier = 1 - pricesDiscount;
 
@@ -185,7 +185,7 @@ export class BulkPurchaseHelper {
         for (const price of prices) {
           const resPriceDiscount = this._host.gamePage.getLimitedDR(
             this._host.gamePage.getEffect(`${price.name}CostReduction` as const),
-            1
+            1,
           );
           const resPriceModifier = 1 - resPriceDiscount;
           itemPrices.push({
@@ -237,7 +237,7 @@ export class BulkPurchaseHelper {
       potentialBuild.count = buildCount;
 
       const performedBuild = mustExist(
-        buildsPerformed.find(build => build.id === potentialBuild.id)
+        buildsPerformed.find(build => build.id === potentialBuild.id),
       );
       performedBuild.count = potentialBuild.count;
     }
@@ -287,7 +287,7 @@ export class BulkPurchaseHelper {
         | ZiggurathUpgradeInfo
       >
     >,
-    resources: Record<Resource, number> = {} as Record<Resource, number>
+    resources: Record<Resource, number> = {} as Record<Resource, number>,
   ) {
     // This variable makes no sense.
     // It _seems_ like it should indicate how many buildings of a specific build slot have been built.
@@ -401,7 +401,7 @@ export class BulkPurchaseHelper {
           if (buildCacheItem.limit && buildCacheItem.limit !== -1) {
             buildCacheItem.count = Math.max(
               0,
-              Math.min(buildCacheItem.count, buildCacheItem.limit - buildCacheItem.val)
+              Math.min(buildCacheItem.count, buildCacheItem.limit - buildCacheItem.val),
             );
           }
 
@@ -448,7 +448,7 @@ export class BulkPurchaseHelper {
   construct(
     model: ButtonModernModel,
     button: BuildButton<string, ButtonModernModel, ButtonModernController>,
-    amount: number
+    amount: number,
   ): number {
     // TODO: Replace this with a call to gamePage.build()
     const meta = model.metadata;
@@ -483,7 +483,7 @@ export class BulkPurchaseHelper {
 
   private _isStagedBuild(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: any
+    data: any,
   ): data is {
     stage: number;
     stages: Array<{
@@ -512,7 +512,7 @@ export class BulkPurchaseHelper {
       | TranscendenceUpgradeInfo
       | VoidSpaceUpgradeInfo
       | ZiggurathUpgradeInfo,
-    source?: "bonfire" | "space"
+    source?: "bonfire" | "space",
   ): number {
     // If the building has stages, use the ratio for the current stage.
     const ratio =
@@ -550,12 +550,12 @@ export class BulkPurchaseHelper {
     build: { name: AllBuildings; val: number },
     prices: Array<Price>,
     priceRatio: number,
-    source?: "bonfire" | "space"
+    source?: "bonfire" | "space",
   ): boolean {
     // Determine price reduction on this build.
     const pricesDiscount = this._host.gamePage.getLimitedDR(
       this._host.gamePage.getEffect(`${build.name}CostReduction` as const),
-      1
+      1,
     );
     const priceModifier = 1 - pricesDiscount;
 
@@ -565,7 +565,7 @@ export class BulkPurchaseHelper {
     for (const price of prices) {
       const resourcePriceDiscount = this._host.gamePage.getLimitedDR(
         this._host.gamePage.getEffect(`${price.name}CostReduction` as const),
-        1
+        1,
       );
       const resourcePriceModifier = 1 - resourcePriceDiscount;
       const finalResourcePrice = price.val * priceModifier * resourcePriceModifier;
@@ -575,7 +575,7 @@ export class BulkPurchaseHelper {
       if (source && source === "space" && price.name === "oil") {
         const oilModifier = this._host.gamePage.getLimitedDR(
           this._host.gamePage.getEffect("oilReductionRatio"),
-          0.75
+          0.75,
         );
         const oilPrice = finalResourcePrice * (1 - oilModifier);
         if (this._workshopManager.getValueAvailable("oil") < oilPrice * Math.pow(1.05, build.val)) {
@@ -586,7 +586,7 @@ export class BulkPurchaseHelper {
       } else if (build.name === "cryochambers" && price.name === "karma") {
         const karmaModifier = this._host.gamePage.getLimitedDR(
           0.01 * this._host.gamePage.prestige.getBurnedParagonRatio(),
-          1.0
+          1.0,
         );
         const karmaPrice = finalResourcePrice * (1 - karmaModifier);
         if (

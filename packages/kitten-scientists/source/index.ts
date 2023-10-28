@@ -1,5 +1,5 @@
-import { cerror } from "./tools/Log";
-import { UserScript } from "./UserScript";
+import { cerror } from "./tools/Log.js";
+import { UserScript } from "./UserScript.js";
 
 (async () => {
   await UserScript.waitForGame();

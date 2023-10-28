@@ -1,10 +1,10 @@
-import { is, isNil } from "../../tools/Maybe";
-import { UserScript } from "../../UserScript";
-import { DisableButton } from "./buttons-icon/DisableButton";
-import { EnableButton } from "./buttons-icon/EnableButton";
-import { ResetButton } from "./buttons-icon/ResetButton";
-import { SettingListItem } from "./SettingListItem";
-import { UiComponent, UiComponentOptions } from "./UiComponent";
+import { is, isNil } from "../../tools/Maybe.js";
+import { UserScript } from "../../UserScript.js";
+import { DisableButton } from "./buttons-icon/DisableButton.js";
+import { EnableButton } from "./buttons-icon/EnableButton.js";
+import { ResetButton } from "./buttons-icon/ResetButton.js";
+import { SettingListItem } from "./SettingListItem.js";
+import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type SettingsListOptions = UiComponentOptions & {
   readonly hasEnableAll?: boolean;

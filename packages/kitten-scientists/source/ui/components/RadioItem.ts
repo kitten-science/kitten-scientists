@@ -1,7 +1,7 @@
-import { SettingOptions } from "../../settings/Settings";
-import { isNil } from "../../tools/Maybe";
-import { UserScript } from "../../UserScript";
-import { UiComponent, UiComponentOptions } from "./UiComponent";
+import { SettingOptions } from "../../settings/Settings.js";
+import { isNil } from "../../tools/Maybe.js";
+import { UserScript } from "../../UserScript.js";
+import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type RadioItemOptions = UiComponentOptions & {
   /**
@@ -49,7 +49,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     setting: TSetting,
     option: TSetting["options"][0],
     groupKey: string,
-    options?: Partial<RadioItemOptions>
+    options?: Partial<RadioItemOptions>,
   ) {
     super(host, options);
 

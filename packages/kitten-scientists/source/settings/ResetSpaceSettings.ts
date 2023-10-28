@@ -1,7 +1,7 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { SpaceBuildings } from "../types";
-import { Setting, SettingTrigger } from "./Settings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { SpaceBuildings } from "../types/index.js";
+import { Setting, SettingTrigger } from "./Settings.js";
 
 export class ResetSpaceBuildingSetting extends SettingTrigger {
   readonly #building: SpaceBuildings;
@@ -46,7 +46,7 @@ export class ResetSpaceSettings extends Setting {
       sunlifter: new ResetSpaceBuildingSetting("sunlifter", false, -1),
       tectonic: new ResetSpaceBuildingSetting("tectonic", false, -1),
       terraformingStation: new ResetSpaceBuildingSetting("terraformingStation", false, -1),
-    }
+    },
   ) {
     super(enabled);
     this.buildings = buildings;

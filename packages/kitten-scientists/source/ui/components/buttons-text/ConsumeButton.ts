@@ -1,6 +1,6 @@
-import { UserScript } from "../../../UserScript";
-import { SettingsSectionUi } from "../../SettingsSectionUi";
-import { TextButton } from "../TextButton";
+import { UserScript } from "../../../UserScript.js";
+import { SettingsSectionUi } from "../../SettingsSectionUi.js";
+import { TextButton } from "../TextButton.js";
 
 export type SettingWithConsume = { consume: number };
 
@@ -11,13 +11,13 @@ export class ConsumeButton extends TextButton {
     host: UserScript,
     label: string,
     setting: SettingWithConsume,
-    handler: { onClick?: () => void } = {}
+    handler: { onClick?: () => void } = {},
   ) {
     super(host, label, {
       onClick: () => {
         const value = SettingsSectionUi.promptPercentage(
           this._host.engine.i18n("resources.consume.set", [label]),
-          SettingsSectionUi.renderPercentage(setting.consume)
+          SettingsSectionUi.renderPercentage(setting.consume),
         );
 
         if (value !== null) {
@@ -42,7 +42,7 @@ export class ConsumeButton extends TextButton {
     this.element.text(
       this._host.engine.i18n("resources.consume", [
         SettingsSectionUi.renderPercentage(this.setting.consume),
-      ])
+      ]),
     );
   }
 }

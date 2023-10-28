@@ -1,21 +1,21 @@
-import { Icons } from "../images/Icons";
-import { isNil, mustExist } from "../tools/Maybe";
-import { ksVersion, UserScript } from "../UserScript";
-import { BonfireSettingsUi } from "./BonfireSettingsUi";
-import { UiComponent } from "./components/UiComponent";
-import { EngineSettingsUi } from "./EngineSettingsUi";
-import { InternalsUi } from "./InternalsUi";
-import { LogFiltersSettingsUi } from "./LogFilterSettingsUi";
-import { ReligionSettingsUi } from "./ReligionSettingsUi";
-import { ResourcesSettingsUi } from "./ResourcesSettingsUi";
-import { ScienceSettingsUi } from "./ScienceSettingsUi";
-import { SpaceSettingsUi } from "./SpaceSettingsUi";
-import { StateManagementUi } from "./StateManagementUi";
-import { TimeControlSettingsUi } from "./TimeControlSettingsUi";
-import { TimeSettingsUi } from "./TimeSettingsUi";
-import { TradeSettingsUi } from "./TradeSettingsUi";
-import { VillageSettingsUi } from "./VillageSettingsUi";
-import { WorkshopSettingsUi } from "./WorkshopSettingsUi";
+import { Icons } from "../images/Icons.js";
+import { isNil, mustExist } from "../tools/Maybe.js";
+import { ksVersion, UserScript } from "../UserScript.js";
+import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
+import { UiComponent } from "./components/UiComponent.js";
+import { EngineSettingsUi } from "./EngineSettingsUi.js";
+import { InternalsUi } from "./InternalsUi.js";
+import { LogFiltersSettingsUi } from "./LogFilterSettingsUi.js";
+import { ReligionSettingsUi } from "./ReligionSettingsUi.js";
+import { ResourcesSettingsUi } from "./ResourcesSettingsUi.js";
+import { ScienceSettingsUi } from "./ScienceSettingsUi.js";
+import { SpaceSettingsUi } from "./SpaceSettingsUi.js";
+import { StateManagementUi } from "./StateManagementUi.js";
+import { TimeControlSettingsUi } from "./TimeControlSettingsUi.js";
+import { TimeSettingsUi } from "./TimeSettingsUi.js";
+import { TradeSettingsUi } from "./TradeSettingsUi.js";
+import { VillageSettingsUi } from "./VillageSettingsUi.js";
+import { WorkshopSettingsUi } from "./WorkshopSettingsUi.js";
 
 export class UserInterface extends UiComponent {
   readonly element: JQuery<HTMLElement>;
@@ -139,26 +139,26 @@ export class UserInterface extends UiComponent {
       `#ks {
         margin-bottom: 10px;
         padding-right: 10px;
-      }`
+      }`,
     );
     this._addRule(
       `#ks #ks-version {
         margin: 2px 0 2px 2px;
-      }`
+      }`,
     );
     this._addRule("#ks ul { list-style: none; margin: 0; padding: 0; }");
     this._addRule('#ks ul:after { clear: both; content: " "; display: block; height: 0; }');
     this._addRule(
       `#ks .ks-checkbox {
         margin: 1px 5px 2px 2px;
-       }`
+       }`,
     );
     this._addRule(
       `#ks .ks-fieldset {
         border-bottom: none;
         border-right: none;
         border-top: none;
-       }`
+       }`,
     );
     this._addRule(
       `#ks ul li { 
@@ -166,7 +166,7 @@ export class UserInterface extends UiComponent {
         width: 100%;
         border-bottom: 1px solid transparent;
         transition: .3s;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li .ks-panel-content { 
@@ -174,18 +174,18 @@ export class UserInterface extends UiComponent {
         padding-left: 16px;
         margin-left: 8px;
         margin-top: 5px;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul .ks-setting.ks-expanded { 
         margin-bottom: 10px;
-      }`
+      }`,
     );
     // Hover guides
     this._addRule(
       `#ks ul .ks-setting:not(.ks-expanded):hover { 
         border-bottom: 1px solid rgba(185, 185, 185, 0.5);
-      }`
+      }`,
     );
 
     // Setting: Label
@@ -194,12 +194,12 @@ export class UserInterface extends UiComponent {
         display: inline-block;
         min-width: 120px;
         opacity: 0.8;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-label:hover {
         opacity: 1;
-      }`
+      }`,
     );
     // Setting: +/- Expando Toggle
     this._addRule(
@@ -211,7 +211,7 @@ export class UserInterface extends UiComponent {
         min-width: 10px;
         padding: 0px 3px;
         text-align: center;
-      }`
+      }`,
     );
     // Setting: Icon Button
     this._addRule(
@@ -222,12 +222,12 @@ export class UserInterface extends UiComponent {
         padding-right: 3px;
         line-height: 0;
         opacity: 0.8;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-icon-button:hover {
         opacity: 1;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-icon-label {
@@ -235,7 +235,7 @@ export class UserInterface extends UiComponent {
         margin-right: 4px;
         margin-left: 2px;
         vertical-align: middle;
-      }`
+      }`,
     );
     // Setting: Text Button
     this._addRule(
@@ -245,12 +245,12 @@ export class UserInterface extends UiComponent {
         max-width: 315px;
         user-select: none;
         opacity: 0.8;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-text-button:hover {
         opacity: 1;
-      }`
+      }`,
     );
 
     // Setting: Header
@@ -260,7 +260,7 @@ export class UserInterface extends UiComponent {
         font-weight: bold;
         min-width: 100px;
         user-select: none;
-      }`
+      }`,
     );
     // Setting: Explainer
     this._addRule(
@@ -272,7 +272,7 @@ export class UserInterface extends UiComponent {
         padding: 4px;
         user-select: none;
         white-space: break-spaces;
-      }`
+      }`,
     );
 
     // Setting: List
@@ -280,39 +280,39 @@ export class UserInterface extends UiComponent {
       // This compensates the floating tools below the list.
       `#ks ul li.ks-setting .ks-list-container {
         margin-bottom: 4px;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-list.ks-items-list {
         user-select: none;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-list ~ .ks-list-tools {
         border-top: 1px dotted grey;
         margin-left: 0px;
         margin-top: 2px;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-list ~ .ks-list-tools .ks-icon-button {
         display: inline-block;
         float: none;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-max-button {
         float: right;
         padding-right: 5px;
         padding-top: 2px;
-      }`
+      }`,
     );
     // The stock buttons should layout similarly to ks-label.
     this._addRule(
       `#ks ul li.ks-setting .ks-stock-button {
         display: inline-block;
         min-width: 86px;
-      }`
+      }`,
     );
     // blackcoin buy/sell threshold buttons
     this._addRule(
@@ -321,7 +321,7 @@ export class UserInterface extends UiComponent {
         float: right;
         padding-right: 10px;
         min-width: 86px;
-      }`
+      }`,
     );
     this._addRule(
       `#ks ul li.ks-setting .ks-sell-button {
@@ -329,14 +329,14 @@ export class UserInterface extends UiComponent {
         float: right;
         padding-right: 10px;
         min-width: 86px;
-      }`
+      }`,
     );
 
     // Style settings that act as UI delimiters.
     this._addRule(
       `#ks ul .ks-delimiter {
         margin-bottom: 10px;
-      }`
+      }`,
     );
 
     // Rules needed to enable stock warning.
@@ -351,7 +351,7 @@ export class UserInterface extends UiComponent {
         cursor: pointer;
         display: inline-block;
         vertical-align: middle;
-      }`
+      }`,
     );
 
     // Ensure the right column gets a scrollbar, when our content extends it too far down.

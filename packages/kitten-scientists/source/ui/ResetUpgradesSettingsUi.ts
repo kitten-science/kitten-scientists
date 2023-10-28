@@ -1,10 +1,10 @@
-import { Icons } from "../images/Icons";
-import { ResetUpgradeSettings } from "../settings/ResetUpgradeSettings";
-import { Setting } from "../settings/Settings";
-import { UserScript } from "../UserScript";
-import { IconSettingsPanel } from "./components/IconSettingsPanel";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
+import { Icons } from "../images/Icons.js";
+import { ResetUpgradeSettings } from "../settings/ResetUpgradeSettings.js";
+import { Setting } from "../settings/Settings.js";
+import { UserScript } from "../UserScript.js";
+import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
 
 export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSettings> {
   constructor(host: UserScript, settings: ResetUpgradeSettings) {
@@ -43,7 +43,7 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
     option: Setting,
     i18nName: string,
     delimiter = false,
-    upgradeIndicator = false
+    upgradeIndicator = false,
   ) {
     return new SettingListItem(this._host, i18nName, option, {
       delimiter,

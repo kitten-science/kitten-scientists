@@ -1,9 +1,9 @@
-import { LogFilterSettings, LogFilterSettingsItem } from "../settings/LogFilterSettings";
-import { UserScript } from "../UserScript";
-import { ExplainerListItem } from "./components/ExplainerListItem";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsSectionUi } from "./SettingsSectionUi";
+import { LogFilterSettings, LogFilterSettingsItem } from "../settings/LogFilterSettings.js";
+import { UserScript } from "../UserScript.js";
+import { ExplainerListItem } from "./components/ExplainerListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
 
 export class LogFiltersSettingsUi extends SettingsSectionUi<LogFilterSettings> {
   private readonly _filters: Array<SettingListItem>;

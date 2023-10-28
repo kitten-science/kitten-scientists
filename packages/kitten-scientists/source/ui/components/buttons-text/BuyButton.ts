@@ -1,7 +1,7 @@
-import { SettingBuy } from "../../../settings/Settings";
-import { UserScript } from "../../../UserScript";
-import { SettingsSectionUi } from "../../SettingsSectionUi";
-import { TextButton } from "../TextButton";
+import { SettingBuy } from "../../../settings/Settings.js";
+import { UserScript } from "../../../UserScript.js";
+import { SettingsSectionUi } from "../../SettingsSectionUi.js";
+import { TextButton } from "../TextButton.js";
 
 export class BuyButton extends TextButton {
   readonly setting: SettingBuy;
@@ -10,13 +10,13 @@ export class BuyButton extends TextButton {
     host: UserScript,
     label: string,
     setting: SettingBuy,
-    handler: { onClick?: () => void } = {}
+    handler: { onClick?: () => void } = {},
   ) {
     super(host, label, {
       onClick: () => {
         const value = SettingsSectionUi.promptFloat(
           host.engine.i18n("blackcoin.buy.threshold"),
-          setting.buy.toString()
+          setting.buy.toString(),
         );
 
         if (value !== null) {
@@ -41,7 +41,7 @@ export class BuyButton extends TextButton {
 
     this.element.prop("title", this.setting.buy.toFixed(3));
     this.element.text(
-      this._host.engine.i18n("ui.buy", [SettingsSectionUi.renderFloat(this.setting.buy)])
+      this._host.engine.i18n("ui.buy", [SettingsSectionUi.renderFloat(this.setting.buy)]),
     );
   }
 }

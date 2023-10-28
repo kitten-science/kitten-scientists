@@ -1,9 +1,15 @@
-import { Automation, TickContext } from "./Engine";
-import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { BonfireBuildingSetting, BonfireItem, BonfireSettings } from "./settings/BonfireSettings";
-import { TabManager } from "./TabManager";
-import { cwarn } from "./tools/Log";
-import { isNil, mustExist } from "./tools/Maybe";
+import { Automation, TickContext } from "./Engine.js";
+import { TabManager } from "./TabManager.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import {
+  BonfireBuildingSetting,
+  BonfireItem,
+  BonfireSettings,
+} from "./settings/BonfireSettings.js";
+import { cwarn } from "./tools/Log.js";
+import { isNil, mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   Building,
@@ -12,9 +18,7 @@ import {
   ButtonModernController,
   ButtonModernModel,
   GameTab,
-} from "./types";
-import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
+} from "./types/index.js";
 
 export type BonfireTab = GameTab;
 
@@ -28,7 +32,7 @@ export class BonfireManager implements Automation {
   constructor(
     host: UserScript,
     workshopManager: WorkshopManager,
-    settings = new BonfireSettings()
+    settings = new BonfireSettings(),
   ) {
     this._host = host;
     this.settings = settings;
@@ -55,7 +59,7 @@ export class BonfireManager implements Automation {
    * @param builds The buildings to build.
    */
   autoBuild(
-    builds: Partial<Record<BonfireItem, BonfireBuildingSetting>> = this.settings.buildings
+    builds: Partial<Record<BonfireItem, BonfireBuildingSetting>> = this.settings.buildings,
   ) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
@@ -68,7 +72,7 @@ export class BonfireManager implements Automation {
     const metaData: Partial<Record<BonfireItem, BuildingMeta>> = {};
     for (const build of Object.values(builds)) {
       metaData[build.building] = this.getBuild(
-        (build.baseBuilding ?? build.building) as Building
+        (build.baseBuilding ?? build.building) as Building,
       ).meta;
     }
 
@@ -312,7 +316,7 @@ export class BonfireManager implements Automation {
 
   getBuildButton(
     name: Building,
-    stage?: number
+    stage?: number,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
     const buttons = this.manager.tab.children;
     const build = this.getBuild(name);

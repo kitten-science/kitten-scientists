@@ -1,14 +1,14 @@
-import { UpgradeSettings } from "../settings/UpgradeSettings";
-import { UserScript } from "../UserScript";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
+import { UpgradeSettings } from "../settings/UpgradeSettings.js";
+import { UserScript } from "../UserScript.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
   constructor(
     host: UserScript,
     settings: UpgradeSettings,
-    options?: SettingsPanelOptions<SettingsPanel<UpgradeSettings>>
+    options?: SettingsPanelOptions<SettingsPanel<UpgradeSettings>>,
   ) {
     super(host, host.engine.i18n("ui.upgrade.upgrades"), settings, options);
 

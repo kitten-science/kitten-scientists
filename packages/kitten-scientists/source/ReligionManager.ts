@@ -1,16 +1,16 @@
-import { BonfireManager } from "./BonfireManager";
-import { Automation, TickContext } from "./Engine";
-import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper";
-import { BonfireBuildingSetting } from "./settings/BonfireSettings";
+import { BonfireManager } from "./BonfireManager.js";
+import { Automation, TickContext } from "./Engine.js";
+import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import {
   FaithItem,
   ReligionSettings,
   ReligionSettingsItem,
   UnicornItem,
-} from "./settings/ReligionSettings";
-import { TabManager } from "./TabManager";
-import { cwarn } from "./tools/Log";
-import { isNil, mustExist } from "./tools/Maybe";
+} from "./settings/ReligionSettings.js";
+import { TabManager } from "./TabManager.js";
+import { cwarn } from "./tools/Log.js";
+import { isNil, mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -23,9 +23,9 @@ import {
   UnicornItemVariant,
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
-} from "./types";
-import { UserScript } from "./UserScript";
-import { WorkshopManager } from "./WorkshopManager";
+} from "./types/index.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 export class ReligionManager implements Automation {
   private readonly _host: UserScript;
@@ -39,7 +39,7 @@ export class ReligionManager implements Automation {
     host: UserScript,
     bonfireManager: BonfireManager,
     workshopManager: WorkshopManager,
-    settings = new ReligionSettings()
+    settings = new ReligionSettings(),
   ) {
     this._host = host;
     this.settings = settings;
@@ -85,8 +85,8 @@ export class ReligionManager implements Automation {
       // a bonfire building.
       const builds = Object.fromEntries(
         Object.entries(this.settings.buildings).filter(
-          ([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture
-        )
+          ([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture,
+        ),
       );
       // Build a unicorn pasture if possible.
       const maxPastures =
@@ -99,7 +99,7 @@ export class ReligionManager implements Automation {
           unicornPasture: new BonfireBuildingSetting(
             "unicornPasture",
             this.settings.buildings.unicornPasture.enabled,
-            this.settings.buildings.unicornPasture.max
+            this.settings.buildings.unicornPasture.max,
           ),
         });
       }
@@ -118,12 +118,12 @@ export class ReligionManager implements Automation {
       this._bonfireManager.build(bestUnicornBuilding, 0, 1);
     } else {
       const buildingButton = mustExist(
-        this.getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat)
+        this.getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat),
       );
 
       let tearsNeeded = 0;
       const priceTears = mustExist(mustExist(buildingButton.model).prices).find(
-        subject => subject.name === "tears"
+        subject => subject.name === "tears",
       );
       if (!isNil(priceTears)) {
         tearsNeeded = priceTears.val;
@@ -143,20 +143,20 @@ export class ReligionManager implements Automation {
         const maxSacrifice = Math.floor(
           (this._workshopManager.getValue("unicorns") -
             this._workshopManager.getStock("unicorns")) /
-            2500
+            2500,
         );
 
         // How many sacrifices would we need, so we'd end up with enough tears.
         const needSacrifice = Math.ceil(
           (tearsNeeded - tearsAvailableForUse) /
-            this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on
+            this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on,
         );
 
         // Sacrifice some unicorns to get the tears to buy the building.
         if (needSacrifice < maxSacrifice) {
           this._host.gamePage.religionTab.sacrificeBtn.controller._transform(
             this._host.gamePage.religionTab.sacrificeBtn.model,
-            needSacrifice
+            needSacrifice,
           );
           // iactivity?
           // TODO: ☝ Yeah, seems like a good idea.
@@ -171,7 +171,7 @@ export class ReligionManager implements Automation {
       const build = this._bulkManager.bulk(
         buildRequest,
         this.getBuildMetaData(buildRequest),
-        this.settings.trigger
+        this.settings.trigger,
       );
       if (0 < build.length && 0 < build[0].count) {
         // We force only building 1 of the best unicorn building, because
@@ -192,8 +192,8 @@ export class ReligionManager implements Automation {
     ];
     const builds = Object.fromEntries(
       Object.entries(this.settings.buildings).filter(
-        ([k, v]) => !alreadyHandled.includes(v.building)
-      )
+        ([k, v]) => !alreadyHandled.includes(v.building),
+      ),
     );
     this._buildReligionBuildings(builds);
   }
@@ -215,7 +215,7 @@ export class ReligionManager implements Automation {
         this.build(
           build.id as ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
           mustExist(build.variant) as UnicornItemVariant,
-          build.count
+          build.count,
         );
         refreshRequired = true;
       }
@@ -305,7 +305,7 @@ export class ReligionManager implements Automation {
     let bestAmortization = Infinity;
     let bestBuilding: ZiggurathUpgrades | null = null;
     const unicornsPerTickBase = mustExist(
-      this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"]
+      this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"],
     );
     const pastureProduction =
       unicornsPerTickBase *
@@ -384,7 +384,7 @@ export class ReligionManager implements Automation {
   build(
     name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
     variant: UnicornItemVariant,
-    amount: number
+    amount: number,
   ): void {
     const build = this.getBuild(name, variant);
     if (build === null) {
@@ -456,7 +456,7 @@ export class ReligionManager implements Automation {
    */
   getBuild(
     name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
-    variant: UnicornItemVariant
+    variant: UnicornItemVariant,
   ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo | null {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
@@ -478,7 +478,7 @@ export class ReligionManager implements Automation {
    */
   getBuildButton(
     name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
-    variant: UnicornItemVariant
+    variant: UnicornItemVariant,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
     let buttons: Array<BuildButton>;
     switch (variant) {
@@ -529,7 +529,7 @@ export class ReligionManager implements Automation {
       this._host.engine.storeForSummary(
         this._host.engine.i18n("$resources.unicorns.title"),
         1,
-        "refine"
+        "refine",
       );
     }
   }
@@ -553,7 +553,7 @@ export class ReligionManager implements Automation {
       this._host.engine.storeForSummary(
         this._host.engine.i18n("$resources.alicorn.title"),
         1,
-        "refine"
+        "refine",
       );
     }
   }
@@ -577,7 +577,7 @@ export class ReligionManager implements Automation {
       this._host.engine.storeForSummary(
         this._host.engine.i18n("$resources.tears.title"),
         1,
-        "refine"
+        "refine",
       );
     }
   }
@@ -601,7 +601,7 @@ export class ReligionManager implements Automation {
       this._host.engine.storeForSummary(
         this._host.engine.i18n("$resources.timeCrystal.title"),
         cost,
-        "refine"
+        "refine",
       );
     }
   }
@@ -655,7 +655,7 @@ export class ReligionManager implements Automation {
     // How much solar revolution bonus we'll have after adoring.
     const solarRevolutionAfterAdore = this._host.gamePage.getLimitedDR(
       this._host.gamePage.getUnlimitedDR(worshipAfterAdore, 1000) / 100,
-      maxSolarRevolution
+      maxSolarRevolution,
     );
     // After adoring the galaxy, we want a single praise to be able to reach the trigger
     // level of solar revolution bonus.
@@ -670,7 +670,7 @@ export class ReligionManager implements Automation {
           this._host.gamePage.getDisplayValueExt(worship),
           this._host.gamePage.getDisplayValueExt(epiphanyIncrease),
         ],
-        "ks-adore"
+        "ks-adore",
       );
       this._host.engine.storeForSummary("adore", epiphanyIncrease);
       // TODO: Not sure what the point of updating these values would be
@@ -692,7 +692,7 @@ export class ReligionManager implements Automation {
       // How much our adoration ratio increases from transcending.
       const adoreIncreaseRatio = Math.pow(
         (transcendenceTierCurrent + 2) / (transcendenceTierCurrent + 1),
-        2
+        2,
       );
       // The amount of worship needed to upgrade to the next level.
       const needNextLevel =
@@ -728,7 +728,7 @@ export class ReligionManager implements Automation {
         this._host.gamePage.msg(
           this._host.engine.i18n("$religion.transcend.msg.success", [
             this._host.gamePage.religion.transcendenceTier,
-          ])
+          ]),
         );
         // ========================================================================================================
         // DO TRANSCEND END
@@ -739,7 +739,7 @@ export class ReligionManager implements Automation {
         this._host.engine.iactivity(
           "act.transcend",
           [this._host.gamePage.getDisplayValueExt(needNextLevel), transcendenceTierCurrent],
-          "ks-transcend"
+          "ks-transcend",
         );
         this._host.engine.storeForSummary("transcend", 1);
       }
@@ -764,7 +764,7 @@ export class ReligionManager implements Automation {
         this._host.gamePage.getDisplayValueExt(faith.value),
         this._host.gamePage.getDisplayValueExt(worshipIncrease),
       ],
-      "ks-praise"
+      "ks-praise",
     );
 
     // Now finally praise the sun.

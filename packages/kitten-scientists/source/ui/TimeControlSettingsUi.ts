@@ -1,11 +1,11 @@
-import { TimeControlSettings } from "../settings/TimeControlSettings";
-import { UserScript } from "../UserScript";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem";
-import { ResetSettingsUi } from "./ResetSettingsUi";
-import { SettingsSectionUi } from "./SettingsSectionUi";
-import { TimeSkipSettingsUi } from "./TimeSkipSettingsUi";
+import { TimeControlSettings } from "../settings/TimeControlSettings.js";
+import { UserScript } from "../UserScript.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import { ResetSettingsUi } from "./ResetSettingsUi.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
+import { TimeSkipSettingsUi } from "./TimeSkipSettingsUi.js";
 
 export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings> {
   protected readonly _items: Array<SettingListItem>;
@@ -29,7 +29,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       {
         onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-      }
+      },
     );
     this._timeSkipUi = new TimeSkipSettingsUi(this._host, this.setting.timeSkip);
     this._resetUi = new ResetSettingsUi(this._host, this.setting.reset);

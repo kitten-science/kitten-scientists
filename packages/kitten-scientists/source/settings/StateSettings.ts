@@ -1,5 +1,5 @@
-import { isNil, Maybe } from "../tools/Maybe";
-import { Setting } from "./Settings";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Setting } from "./Settings.js";
 
 export class StateSettings extends Setting {
   readonly noConfirm: Setting;

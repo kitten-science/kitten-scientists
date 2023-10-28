@@ -1,8 +1,8 @@
-import { isNil, Maybe } from "../tools/Maybe";
-import { Resource, SpaceBuildings } from "../types";
-import { BonfireItem } from "./BonfireSettings";
-import { FaithItem, ReligionItem } from "./ReligionSettings";
-import { TimeItem } from "./TimeSettings";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { Resource, SpaceBuildings } from "../types/index.js";
+import { BonfireItem } from "./BonfireSettings.js";
+import { FaithItem, ReligionItem } from "./ReligionSettings.js";
+import { TimeItem } from "./TimeSettings.js";
 
 export type Requirement = Resource | false;
 

@@ -1,7 +1,7 @@
-import { SettingTrigger } from "../../settings/Settings";
-import { UserScript } from "../../UserScript";
-import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton";
-import { SettingListItem, SettingListItemOptions } from "./SettingListItem";
+import { SettingTrigger } from "../../settings/Settings.js";
+import { UserScript } from "../../UserScript.js";
+import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton.js";
+import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
 export type SettingTriggerListItemOptions = SettingListItemOptions & {
   readonly behavior: TriggerButtonBehavior;
@@ -14,7 +14,7 @@ export class SettingTriggerListItem extends SettingListItem {
     host: UserScript,
     label: string,
     setting: SettingTrigger,
-    options?: Partial<SettingTriggerListItemOptions>
+    options?: Partial<SettingTriggerListItemOptions>,
   ) {
     super(host, label, setting, options);
 

@@ -1,8 +1,8 @@
-import { TechSettings } from "../settings/TechSettings";
-import { UserScript } from "../UserScript";
-import { SettingListItem } from "./components/SettingListItem";
-import { SettingsList } from "./components/SettingsList";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel";
+import { TechSettings } from "../settings/TechSettings.js";
+import { UserScript } from "../UserScript.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class TechSettingsUi extends SettingsPanel<TechSettings> {
   protected readonly _techs: Array<SettingListItem>;
@@ -10,7 +10,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
   constructor(
     host: UserScript,
     settings: TechSettings,
-    options?: SettingsPanelOptions<SettingsPanel<TechSettings>>
+    options?: SettingsPanelOptions<SettingsPanel<TechSettings>>,
   ) {
     super(host, host.engine.i18n("ui.upgrade.techs"), settings, options);
 

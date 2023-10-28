@@ -1,8 +1,8 @@
-import { consumeEntriesPedantic } from "../tools/Entries";
-import { isNil, Maybe } from "../tools/Maybe";
-import { GamePage, ResourceCraftable } from "../types";
-import { Setting, SettingLimitedMax, SettingTrigger } from "./Settings";
-import { UpgradeSettings } from "./UpgradeSettings";
+import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { isNil, Maybe } from "../tools/Maybe.js";
+import { GamePage, ResourceCraftable } from "../types/index.js";
+import { Setting, SettingLimitedMax, SettingTrigger } from "./Settings.js";
+import { UpgradeSettings } from "./UpgradeSettings.js";
 
 export class CraftSettingsItem extends SettingLimitedMax {
   readonly #resource: ResourceCraftable;
@@ -50,7 +50,7 @@ export class WorkshopSettings extends SettingTrigger {
       wood: new CraftSettingsItem("wood"),
     },
     unlockUpgrades = new UpgradeSettings(),
-    shipOverride = new Setting(true)
+    shipOverride = new Setting(true),
   ) {
     super(enabled, trigger);
     this.resources = resources;

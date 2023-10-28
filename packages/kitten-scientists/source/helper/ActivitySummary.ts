@@ -1,6 +1,6 @@
-import { roundToTwo, ucfirst } from "../tools/Format";
-import { mustExist } from "../tools/Maybe";
-import { UserScript } from "../UserScript";
+import { roundToTwo, ucfirst } from "../tools/Format.js";
+import { mustExist } from "../tools/Maybe.js";
+import { UserScript } from "../UserScript.js";
 
 /**
  * The different sections of the summary.
@@ -104,8 +104,8 @@ export class ActivitySummary {
         summary.push(
           this._host.engine.i18n(`summary.${name}` as const, [
             this._host.gamePage.getDisplayValueExt(amount),
-          ])
-        )
+          ]),
+        ),
       );
     }
 
@@ -133,7 +133,7 @@ export class ActivitySummary {
           this._host.engine.i18n("summary.building", [
             this._host.gamePage.getDisplayValueExt(amount),
             ucfirst(name),
-          ])
+          ]),
         );
       });
     }
@@ -146,7 +146,7 @@ export class ActivitySummary {
           this._host.engine.i18n("summary.refine", [
             this._host.gamePage.getDisplayValueExt(amount),
             ucfirst(name),
-          ])
+          ]),
         );
       });
     }
@@ -158,7 +158,7 @@ export class ActivitySummary {
           this._host.engine.i18n("summary.sun", [
             this._host.gamePage.getDisplayValueExt(amount),
             ucfirst(name),
-          ])
+          ]),
         );
       });
     }
@@ -171,7 +171,7 @@ export class ActivitySummary {
           this._host.engine.i18n("summary.craft", [
             this._host.gamePage.getDisplayValueExt(amount),
             ucfirst(name),
-          ])
+          ]),
         );
       });
     }
@@ -184,7 +184,7 @@ export class ActivitySummary {
           this._host.engine.i18n("summary.trade", [
             this._host.gamePage.getDisplayValueExt(amount),
             ucfirst(name),
-          ])
+          ]),
         );
       });
     }
