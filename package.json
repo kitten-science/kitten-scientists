@@ -16,7 +16,7 @@
   "scripts": {
     "build:all": "tsc --build",
     "clean:all": "rm -rf packages/*/build packages/*/tsconfig.tsbuildinfo",
-    "lint:all": "eslint . --ext .ts",
+    "lint:all": "eslint . --ext .ts && prettier --check packages",
     "test:all": "yarn workspaces foreach --all --parallel --verbose run test",
     "test:coverage:all": "yarn workspaces foreach --all --parallel --verbose run test:coverage",
     "typecheck:all": "tsc --noEmit --incremental false"
