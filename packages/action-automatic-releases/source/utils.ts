@@ -1,9 +1,11 @@
 import * as core from "@actions/core";
 import { GitHub } from "@actions/github/lib/utils.js";
 import { GetResponseDataTypeFromEndpointMethod } from "@octokit/types";
-import defaultChangelogOpts from "conventional-changelog-angular/conventional-recommended-bump.js";
+import createPreset from "conventional-changelog-angular";
 import { Commit } from "conventional-commits-parser";
 import { CommitsSinceRelease } from "./AutomaticReleases.js";
+
+const defaultChangelogOpts = createPreset().recommendedBumpOpts;
 
 export const getShortSHA = (sha: string): string => {
   const coreAbbrev = 7;
