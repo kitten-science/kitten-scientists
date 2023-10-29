@@ -5,8 +5,6 @@ import createPreset from "conventional-changelog-angular";
 import { Commit } from "conventional-commits-parser";
 import { CommitsSinceRelease } from "./AutomaticReleases.js";
 
-const defaultChangelogOpts = createPreset().recommendedBumpOpts;
-
 export const getShortSHA = (sha: string): string => {
   const coreAbbrev = 7;
   return sha.substring(0, coreAbbrev);
@@ -158,8 +156,8 @@ export const parseGitTag = (inputRef: string): string => {
   return resMatch[2];
 };
 
-export const getChangelogOptions = () => {
-  const defaultOpts = defaultChangelogOpts;
+export const getChangelogOptions = async () => {
+  const defaultOpts = (await createPreset()).recommendedBumpOpts;
   defaultOpts["mergePattern"] = "^Merge pull request #(.*) from (.*)$";
   defaultOpts["mergeCorrespondence"] = ["issueId", "source"];
   core.debug(`Changelog options: ${JSON.stringify(defaultOpts)}`);
