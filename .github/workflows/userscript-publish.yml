@@ -33,8 +33,10 @@ jobs:
         run: |
           export KS_VERSION=$(yarn kitten-scientists:version)
           echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
+
       - run: yarn kitten-scientists:release
-      - uses: marvinpinto/action-automatic-releases@919008cf3f741b179569b7a6fb4d8860689ab7f0 # v1.2.1
+
+      - uses: ./packages/action-automatic-releases
         with:
           automatic_release_tag: next
           draft: false

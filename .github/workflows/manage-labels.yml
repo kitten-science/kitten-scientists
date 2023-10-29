@@ -28,4 +28,4 @@ jobs:
 
       - uses: ./packages/action-label-manager
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          repo_token: ${{ secrets.GITHUB_TOKEN }}

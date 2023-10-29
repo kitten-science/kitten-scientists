@@ -60,4 +60,4 @@ jobs:
             fix
             refactor
             test
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
