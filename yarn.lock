@@ -661,7 +661,7 @@ __metadata:
     "@types/semver": "npm:7.5.4"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
-    conventional-changelog-angular: "npm:6.0.0"
+    conventional-changelog-angular: "npm:7.0.0"
     conventional-commits-parser: "npm:5.0.0"
     globby: "npm:13.2.2"
     md5-file: "npm:5.0.0"
@@ -2030,12 +2030,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-angular@npm:6.0.0":
-  version: 6.0.0
-  resolution: "conventional-changelog-angular@npm:6.0.0"
+"conventional-changelog-angular@npm:7.0.0":
+  version: 7.0.0
+  resolution: "conventional-changelog-angular@npm:7.0.0"
   dependencies:
     compare-func: "npm:^2.0.0"
-  checksum: a661ff7b79d4b829ccf8f424ef1bb210e777c1152a1ba5b2ba0a8639529c315755b82a6f84684f1b552c4e8ed6696bfe57317c5f7b868274e9a72b2bf13081ba
+  checksum: 90e73e25e224059b02951b6703b5f8742dc2a82c1fea62163978e6735fd3ab04350897a8fc6f443ec6b672d6b66e28a0820e833e544a0101f38879e5e6289b7e
   languageName: node
   linkType: hard
 
