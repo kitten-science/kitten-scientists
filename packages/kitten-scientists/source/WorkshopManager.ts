@@ -1,3 +1,4 @@
+import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { Automation, TickContext } from "./Engine.js";
 import { TabManager } from "./TabManager.js";
 import { UpgradeManager } from "./UpgradeManager.js";
@@ -6,7 +7,6 @@ import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { cerror } from "./tools/Log.js";
-import { isNil, mustExist } from "./tools/Maybe.js";
 import { CraftableInfo, ResourceInfo } from "./types/craft.js";
 import { Resource, ResourceCraftable, UpgradeInfo } from "./types/index.js";
 import { VillageTab } from "./types/village.js";

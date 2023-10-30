@@ -1,4 +1,4 @@
-import { isNil } from "../../tools/Maybe.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../../UserScript.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 

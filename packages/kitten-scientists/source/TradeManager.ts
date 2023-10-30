@@ -1,14 +1,14 @@
+import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { Automation, TickContext } from "./Engine.js";
+import { TabManager } from "./TabManager.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { TradeSettings } from "./settings/TradeSettings.js";
-import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { ucfirst } from "./tools/Format.js";
 import { cwarn } from "./tools/Log.js";
-import { isNil, Maybe, mustExist } from "./tools/Maybe.js";
 import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types/index.js";
-import { UserScript } from "./UserScript.js";
-import { WorkshopManager } from "./WorkshopManager.js";
 
 export class TradeManager implements Automation {
   private readonly _host: UserScript;

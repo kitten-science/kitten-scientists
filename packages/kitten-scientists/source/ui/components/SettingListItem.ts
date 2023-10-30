@@ -1,6 +1,6 @@
-import { Setting } from "../../settings/Settings.js";
-import { isNil } from "../../tools/Maybe.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../../UserScript.js";
+import { Setting } from "../../settings/Settings.js";
 import { LabelListItem, LabelListItemOptions } from "./LabelListItem.js";
 
 export type SettingListItemOptions = LabelListItemOptions & {

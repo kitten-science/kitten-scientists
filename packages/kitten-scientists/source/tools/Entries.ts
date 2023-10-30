@@ -1,5 +1,5 @@
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { cinfo, cwarn } from "./Log.js";
-import { isNil } from "./Maybe.js";
 
 /**
  * Provides type-safe means to iterate over the entries

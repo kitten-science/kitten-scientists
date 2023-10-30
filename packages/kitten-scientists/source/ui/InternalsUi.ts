@@ -1,7 +1,8 @@
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { EngineSettings } from "../settings/EngineSettings.js";
-import { isNil } from "../tools/Maybe.js";
-import { UserScript } from "../UserScript.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import { OptionsListItem } from "./components/OptionsListItem.js";
@@ -9,7 +10,6 @@ import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { TextButton } from "./components/TextButton.js";
 import { UiComponent } from "./components/UiComponent.js";
-import { SettingsSectionUi } from "./SettingsSectionUi.js";
 
 export class InternalsUi extends SettingsPanel<EngineSettings> {
   constructor(host: UserScript, settings: EngineSettings) {

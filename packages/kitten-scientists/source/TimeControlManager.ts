@@ -1,11 +1,13 @@
+import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { BonfireManager } from "./BonfireManager.js";
 import { Engine, TickContext } from "./Engine.js";
 import { ReligionManager } from "./ReligionManager.js";
-import { CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { SpaceManager } from "./SpaceManager.js";
 import { TabManager } from "./TabManager.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
+import { CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
-import { isNil, mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -18,8 +20,6 @@ import {
   VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
 } from "./types/index.js";
-import { UserScript } from "./UserScript.js";
-import { WorkshopManager } from "./WorkshopManager.js";
 
 export class TimeControlManager {
   private readonly _host: UserScript;

@@ -1,5 +1,5 @@
+import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { isNil, Maybe } from "../tools/Maybe.js";
 import { Race } from "../types/index.js";
 import { SettingMax, SettingTrigger } from "./Settings.js";
 

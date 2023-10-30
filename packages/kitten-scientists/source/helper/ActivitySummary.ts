@@ -1,6 +1,6 @@
-import { roundToTwo, ucfirst } from "../tools/Format.js";
-import { mustExist } from "../tools/Maybe.js";
+import { mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
+import { roundToTwo, ucfirst } from "../tools/Format.js";
 
 /**
  * The different sections of the summary.

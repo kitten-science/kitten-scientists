@@ -1,6 +1,6 @@
-import { Setting } from "../../settings/Settings.js";
-import { isNil, mustExist } from "../../tools/Maybe.js";
+import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../../UserScript.js";
+import { Setting } from "../../settings/Settings.js";
 import { LabelListItem } from "./LabelListItem.js";
 import { Panel, PanelOptions } from "./Panel.js";
 import { SettingListItem } from "./SettingListItem.js";

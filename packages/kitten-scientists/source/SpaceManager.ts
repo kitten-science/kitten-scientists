@@ -1,9 +1,11 @@
+import { mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { Automation, TickContext } from "./Engine.js";
+import { TabManager } from "./TabManager.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
-import { TabManager } from "./TabManager.js";
 import { cwarn } from "./tools/Log.js";
-import { mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -12,8 +14,6 @@ import {
   SpaceBuildings,
   SpaceTab,
 } from "./types/index.js";
-import { UserScript } from "./UserScript.js";
-import { WorkshopManager } from "./WorkshopManager.js";
 
 export class SpaceManager implements Automation {
   private readonly _host: UserScript;

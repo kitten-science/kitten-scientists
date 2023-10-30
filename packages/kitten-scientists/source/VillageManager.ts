@@ -1,13 +1,13 @@
+import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { Automation, TickContext } from "./Engine.js";
-import { MaterialsCache } from "./helper/MaterialsCache.js";
-import { VillageSettings } from "./settings/VillageSettings.js";
 import { TabManager } from "./TabManager.js";
-import { objectEntries } from "./tools/Entries.js";
-import { isNil, mustExist } from "./tools/Maybe.js";
-import { Resource } from "./types/index.js";
-import { JobInfo, VillageTab } from "./types/village.js";
 import { UserScript } from "./UserScript.js";
 import { WorkshopManager } from "./WorkshopManager.js";
+import { MaterialsCache } from "./helper/MaterialsCache.js";
+import { VillageSettings } from "./settings/VillageSettings.js";
+import { objectEntries } from "./tools/Entries.js";
+import { Resource } from "./types/index.js";
+import { JobInfo, VillageTab } from "./types/village.js";
 
 export class VillageManager implements Automation {
   private readonly _host: UserScript;

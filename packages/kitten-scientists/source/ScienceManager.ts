@@ -1,12 +1,12 @@
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { TickContext } from "./Engine.js";
-import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { TabManager } from "./TabManager.js";
-import { cerror } from "./tools/Log.js";
-import { isNil } from "./tools/Maybe.js";
-import { PolicyInfo, ScienceTab, TechInfo } from "./types/index.js";
 import { UpgradeManager } from "./UpgradeManager.js";
 import { UserScript } from "./UserScript.js";
 import { WorkshopManager } from "./WorkshopManager.js";
+import { ScienceSettings } from "./settings/ScienceSettings.js";
+import { cerror } from "./tools/Log.js";
+import { PolicyInfo, ScienceTab, TechInfo } from "./types/index.js";
 
 export class ScienceManager extends UpgradeManager {
   readonly manager: TabManager<ScienceTab>;

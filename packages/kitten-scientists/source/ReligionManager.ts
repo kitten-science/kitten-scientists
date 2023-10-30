@@ -1,5 +1,9 @@
+import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { BonfireManager } from "./BonfireManager.js";
 import { Automation, TickContext } from "./Engine.js";
+import { TabManager } from "./TabManager.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import {
@@ -8,9 +12,7 @@ import {
   ReligionSettingsItem,
   UnicornItem,
 } from "./settings/ReligionSettings.js";
-import { TabManager } from "./TabManager.js";
 import { cwarn } from "./tools/Log.js";
-import { isNil, mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -24,8 +26,6 @@ import {
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
 } from "./types/index.js";
-import { UserScript } from "./UserScript.js";
-import { WorkshopManager } from "./WorkshopManager.js";
 
 export class ReligionManager implements Automation {
   private readonly _host: UserScript;

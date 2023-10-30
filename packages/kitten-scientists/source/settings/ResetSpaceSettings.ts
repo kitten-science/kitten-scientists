@@ -1,5 +1,5 @@
+import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { isNil, Maybe } from "../tools/Maybe.js";
 import { SpaceBuildings } from "../types/index.js";
 import { Setting, SettingTrigger } from "./Settings.js";
 

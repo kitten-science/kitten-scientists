@@ -1,6 +1,6 @@
-import { isNil } from "./tools/Maybe.js";
-import { GameTab, TabId } from "./types/index.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "./UserScript.js";
+import { GameTab, TabId } from "./types/index.js";
 
 export class TabManager<TTab extends GameTab = GameTab> {
   private readonly _host: UserScript;

@@ -1,7 +1,7 @@
-import { difference } from "../tools/Array.js";
+import { difference } from "@oliversalzburg/js-utils/array.js";
+import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { isNil, Maybe } from "../tools/Maybe.js";
 import { GamePage, Policy } from "../types/index.js";
 import { Setting } from "./Settings.js";
 

@@ -1,4 +1,6 @@
 import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
+import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
+import { sleep } from "@oliversalzburg/js-utils/sleep.js";
 import JQuery from "jquery";
 import gt from "semver/functions/gt.js";
 import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine.js";
@@ -6,8 +8,6 @@ import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
-import { Maybe, isNil, mustExist } from "./tools/Maybe.js";
-import { sleep } from "./tools/Sleep.js";
 import { GamePage } from "./types/index.js";
 import { UserInterface } from "./ui/UserInterface.js";
 

@@ -1,8 +1,7 @@
+import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
+import { UserScript, ksVersion } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
-import { isNil, mustExist } from "../tools/Maybe.js";
-import { ksVersion, UserScript } from "../UserScript.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
-import { UiComponent } from "./components/UiComponent.js";
 import { EngineSettingsUi } from "./EngineSettingsUi.js";
 import { InternalsUi } from "./InternalsUi.js";
 import { LogFiltersSettingsUi } from "./LogFilterSettingsUi.js";
@@ -16,6 +15,7 @@ import { TimeSettingsUi } from "./TimeSettingsUi.js";
 import { TradeSettingsUi } from "./TradeSettingsUi.js";
 import { VillageSettingsUi } from "./VillageSettingsUi.js";
 import { WorkshopSettingsUi } from "./WorkshopSettingsUi.js";
+import { UiComponent } from "./components/UiComponent.js";
 
 export class UserInterface extends UiComponent {
   readonly element: JQuery<HTMLElement>;

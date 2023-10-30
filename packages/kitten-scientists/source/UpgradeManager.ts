@@ -1,7 +1,7 @@
+import { mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { TabManager } from "./TabManager.js";
-import { mustExist } from "./tools/Maybe.js";
-import { BuildButton, ScienceTab } from "./types/index.js";
 import { UserScript } from "./UserScript.js";
+import { BuildButton, ScienceTab } from "./types/index.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: UserScript;

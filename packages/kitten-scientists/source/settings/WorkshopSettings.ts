@@ -1,5 +1,5 @@
+import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { isNil, Maybe } from "../tools/Maybe.js";
 import { GamePage, ResourceCraftable } from "../types/index.js";
 import { Setting, SettingLimitedMax, SettingTrigger } from "./Settings.js";
 import { UpgradeSettings } from "./UpgradeSettings.js";

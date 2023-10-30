@@ -1,10 +1,10 @@
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { formatDistanceToNow } from "date-fns";
 import { EngineState } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { StateSettings } from "../settings/StateSettings.js";
 import { cerror } from "../tools/Log.js";
-import { isNil } from "../tools/Maybe.js";
 import { SavegameLoader } from "../tools/SavegameLoader.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { ExplainerListItem } from "./components/ExplainerListItem.js";

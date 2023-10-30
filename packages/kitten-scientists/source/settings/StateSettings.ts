@@ -1,4 +1,4 @@
-import { isNil, Maybe } from "../tools/Maybe.js";
+import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { Setting } from "./Settings.js";
 
 export class StateSettings extends Setting {

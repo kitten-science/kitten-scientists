@@ -1,9 +1,11 @@
+import { mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { TickContext } from "./Engine.js";
+import { TabManager } from "./TabManager.js";
+import { UserScript } from "./UserScript.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { TimeItem, TimeSettings, TimeSettingsItem } from "./settings/TimeSettings.js";
-import { TabManager } from "./TabManager.js";
 import { cwarn } from "./tools/Log.js";
-import { mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -16,8 +18,6 @@ import {
   VoidSpaceUpgradeInfo,
   VoidSpaceUpgrades,
 } from "./types/index.js";
-import { UserScript } from "./UserScript.js";
-import { WorkshopManager } from "./WorkshopManager.js";
 
 export class TimeManager {
   private readonly _host: UserScript;

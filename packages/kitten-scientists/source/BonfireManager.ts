@@ -1,3 +1,4 @@
+import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { Automation, TickContext } from "./Engine.js";
 import { TabManager } from "./TabManager.js";
 import { UserScript } from "./UserScript.js";
@@ -9,7 +10,6 @@ import {
   BonfireSettings,
 } from "./settings/BonfireSettings.js";
 import { cwarn } from "./tools/Log.js";
-import { isNil, mustExist } from "./tools/Maybe.js";
 import {
   BuildButton,
   Building,

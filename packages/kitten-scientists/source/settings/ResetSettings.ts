@@ -1,4 +1,4 @@
-import { isNil, Maybe } from "../tools/Maybe.js";
+import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { ResetBonfireSettings } from "./ResetBonfireSettings.js";
 import { ResetReligionSettings } from "./ResetReligionSettings.js";
 import { ResetResourcesSettings } from "./ResetResourcesSettings.js";
