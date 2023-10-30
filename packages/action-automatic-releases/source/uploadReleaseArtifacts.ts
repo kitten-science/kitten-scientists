@@ -1,12 +1,15 @@
 import * as core from "@actions/core";
 import { Context } from "@actions/github/lib/context.js";
 import { GitHub } from "@actions/github/lib/utils.js";
+import { RestEndpointMethodTypes } from "@octokit/rest";
 import { lstatSync, readFileSync } from "fs";
 import { globby } from "globby";
 import md5File from "md5-file";
 import path from "path";
 import { NewGitHubRelease } from "./AutomaticReleases.js";
 
+export type UploadReleaseAssetOptions =
+  RestEndpointMethodTypes["repos"]["uploadReleaseAsset"]["parameters"];
 export const uploadReleaseArtifacts = async (
   client: InstanceType<typeof GitHub>,
   context: Context,
@@ -23,17 +26,17 @@ export const uploadReleaseArtifacts = async (
     for (const filePath of paths) {
       core.info(`Uploading: ${filePath}`);
       const nameWithExt = path.basename(filePath);
-      const uploadArgs = {
+      const uploadArgs: UploadReleaseAssetOptions = {
         owner: context.repo.owner,
         repo: context.repo.repo,
         release_id: release.id,
         url: release.upload_url,
         headers: {
           "content-length": lstatSync(filePath).size,
-          "content-type": "application/octet-stream",
+          "content-type": "text/plain; charset=utf-8",
         },
         name: nameWithExt,
-        data: readFileSync(filePath).toString("binary"),
+        data: readFileSync(filePath, { encoding: "utf-8" }),
       };
 
       try {
