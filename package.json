@@ -33,7 +33,7 @@
     "@babel/plugin-syntax-import-assertions": "7.22.5",
     "@types/babel__core": "7.20.3",
     "@types/eslint": "8.44.6",
-    "@types/node": "20.8.9",
+    "@types/node": "20.8.10",
     "@types/prettier": "3.0.0",
     "@types/web": "0.0.119",
     "@typescript-eslint/eslint-plugin": "6.9.1",
