@@ -11,11 +11,10 @@ cd "$(dirname "$0")"
 
 main() {
   cd ..
-  export DOCKER_SCAN_SUGGEST=false
-  docker build -t squidfunk/mkdocs-material .
+  podman build -t squidfunk/mkdocs-material .
 
   cd ../..
-  docker run --rm -it -p 8000:8000 -v "${PWD}":/docs squidfunk/mkdocs-material serve --config-file packages/documentation/mkdocs.yml
+  podman run --rm -it -p 8000:8000 -v "${PWD}":/docs squidfunk/mkdocs-material serve --config-file packages/documentation/mkdocs.yml
 }
 
 main "$@"

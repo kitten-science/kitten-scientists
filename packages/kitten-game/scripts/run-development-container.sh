@@ -17,13 +17,13 @@ main() {
   yarn devcontainer:build "$BRANCH"
 
   echo "Removing previous container..."
-  docker stop kitten-game > /dev/null || true
-  docker rm kitten-game > /dev/null || true
+  podman stop kitten-game > /dev/null || true
+  podman rm kitten-game > /dev/null || true
   echo "Previous container removed or non-existent."
   echo ""
 
   echo "Starting new container..."
-  docker run \
+  podman run \
     --detach \
     --mount type=bind,source="${BASEDIR}/../../kitten-scientists/output",target=/kitten-game/kitten-scientists \
     --name kitten-game \

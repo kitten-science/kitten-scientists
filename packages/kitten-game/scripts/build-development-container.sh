@@ -14,8 +14,7 @@ main() {
 
   echo "Building development container on $BRANCH branch..."
   cd ..
-  export DOCKER_SCAN_SUGGEST=false
-  docker build \
+  podman build \
     --build-arg BRANCH="$BRANCH" \
     --tag kitten-game .
   echo "Done."
