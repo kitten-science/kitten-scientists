@@ -1,21 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "branchConcurrentLimit": 0,
-  "extends": ["config:best-practices"],
-  "lockFileMaintenance": {
-    "enabled": true,
-    "automerge": true
-  },
-  "packageRules": [
-    {
-      "matchDepTypes": ["devDependencies"],
-      "matchPackagePatterns": ["^@types/"],
-      "automerge": true
-    }
-  ],
-  "pinDigests": true,
-  "postUpdateOptions": ["yarnDedupeHighest"],
-  "prConcurrentLimit": 0,
-  "prHourlyLimit": 5,
-  "rangeStrategy": "pin"
+  "extends": ["local>oliversalzburg/renovate-config"]
 }
