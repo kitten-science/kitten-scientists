@@ -749,7 +749,7 @@ __metadata:
     "@kitten-science/action-release-info": "workspace:*"
     "@oliversalzburg/js-utils": "npm:0.0.4"
     "@types/dojo": "npm:1.9.46"
-    "@types/jquery": "npm:3.5.25"
+    "@types/jquery": "npm:3.5.26"
     "@types/semver": "npm:7.5.4"
     date-fns: "npm:2.30.0"
     semver: "npm:7.5.4"
@@ -1180,12 +1180,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jquery@npm:3.5.25":
-  version: 3.5.25
-  resolution: "@types/jquery@npm:3.5.25"
+"@types/jquery@npm:3.5.26":
+  version: 3.5.26
+  resolution: "@types/jquery@npm:3.5.26"
   dependencies:
     "@types/sizzle": "npm:*"
-  checksum: 9d222da5db49968a2d2bb48cd7705e872de16db0c5b2197627a910cf14e591f7065a5f7a37c626763eccdbd63ca4652b3475541e0cfdcebd4677bce51f16ed36
+  checksum: 18cdff5e03b3e882c7fd05c4bd653485658041fb921f0b166646dd57bb0ac4e3c1469d78041959cdfe1b2889f340261ef744486a477f2de2ac945fc533a42f00
   languageName: node
   linkType: hard
 
