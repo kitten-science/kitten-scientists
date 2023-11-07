@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@kitten-science/action-release-info": "workspace:*",
-    "@types/dojo": "1.9.46",
+    "@types/dojo": "1.9.47",
     "@types/jquery": "3.5.26",
     "@types/semver": "7.5.4",
     "typescript": "5.2.2",

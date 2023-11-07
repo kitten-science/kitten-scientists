@@ -748,7 +748,7 @@ __metadata:
   dependencies:
     "@kitten-science/action-release-info": "workspace:*"
     "@oliversalzburg/js-utils": "npm:0.0.4"
-    "@types/dojo": "npm:1.9.46"
+    "@types/dojo": "npm:1.9.47"
     "@types/jquery": "npm:3.5.26"
     "@types/semver": "npm:7.5.4"
     date-fns: "npm:2.30.0"
@@ -1149,10 +1149,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/dojo@npm:1.9.46":
-  version: 1.9.46
-  resolution: "@types/dojo@npm:1.9.46"
-  checksum: f6d3b4a62fb13f19d9d141f6983e8c20f1526872f22e8f84ed843bf8bd75a263989eac25003b351dd4809c62c3403980a6e5ce15410f426f39d70cdc5b9052c0
+"@types/dojo@npm:1.9.47":
+  version: 1.9.47
+  resolution: "@types/dojo@npm:1.9.47"
+  checksum: 265f394ac8b199eff0f20fef87594ffe34e883e27b842956b91b86a64522c0fe73be826398c83807a4d073b4cc7ea4501458d5c02504f2a28d0ad6e5b25f6b48
   languageName: node
   linkType: hard
 
