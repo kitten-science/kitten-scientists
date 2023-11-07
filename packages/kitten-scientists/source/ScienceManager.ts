@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/lib/nil.js";
 import { TickContext } from "./Engine.js";
 import { TabManager } from "./TabManager.js";
 import { UpgradeManager } from "./UpgradeManager.js";

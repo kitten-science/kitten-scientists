@@ -1,4 +1,4 @@
-import { mustExist } from "@oliversalzburg/js-utils/nil.js";
+import { mustExist } from "@oliversalzburg/js-utils/lib/nil.js";
 import { Automation, TickContext } from "./Engine.js";
 import { TabManager } from "./TabManager.js";
 import { UserScript } from "./UserScript.js";

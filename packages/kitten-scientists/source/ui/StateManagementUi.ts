@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/lib/nil.js";
 import { formatDistanceToNow } from "date-fns";
 import { EngineState } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
