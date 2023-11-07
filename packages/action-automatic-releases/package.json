@@ -39,7 +39,7 @@
   "devDependencies": {
     "@kie/mock-github": "2.0.0",
     "@octokit/types": "12.2.0",
-    "@types/chai": "4.3.9",
+    "@types/chai": "4.3.10",
     "@types/conventional-commits-parser": "3.0.6",
     "@types/mocha": "10.0.4",
     "@types/node": "20.8.10",
