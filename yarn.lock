@@ -653,7 +653,7 @@ __metadata:
     "@actions/github": "npm:5.1.1"
     "@kie/mock-github": "npm:2.0.0"
     "@octokit/rest": "npm:20.0.2"
-    "@octokit/types": "npm:12.1.1"
+    "@octokit/types": "npm:12.2.0"
     "@types/chai": "npm:4.3.9"
     "@types/conventional-commits-parser": "npm:3.0.6"
     "@types/mocha": "npm:10.0.4"
@@ -1060,12 +1060,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:12.1.1, @octokit/types@npm:^12.0.0, @octokit/types@npm:^12.1.1":
-  version: 12.1.1
-  resolution: "@octokit/types@npm:12.1.1"
+"@octokit/types@npm:12.2.0, @octokit/types@npm:^12.0.0, @octokit/types@npm:^12.1.1":
+  version: 12.2.0
+  resolution: "@octokit/types@npm:12.2.0"
   dependencies:
     "@octokit/openapi-types": "npm:^19.0.2"
-  checksum: 9c72d969b2c2c7ff03d285636c4cad43ddc55e540ff7a1a75279095219a27c629b5a753cc186aba65f645fa6be52eeb873d070bae0dc8180bdb48f3155bed574
+  checksum: 04564d891c80fadcf07f1bbbe1bcff278ecf05a3fbfcbdb9b3e6e350a6f22c226f8f7e8c3435fea4bfbfaa4ee0375fbfa6c5ceaf6738a1570d2bf7d0c899fb81
   languageName: node
   linkType: hard
 
