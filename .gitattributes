@@ -4,7 +4,7 @@
 kitten-scientists.user.orig.js linguist-vendored
 
 # In general, use LF for text
-* text eol=lf
+* text=auto eol=lf
 
 # Windows CMD does not like LF in batch files
 *.bat text eol=crlf
