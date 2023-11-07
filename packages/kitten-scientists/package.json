@@ -24,7 +24,7 @@
   },
   "types": "./build/index.ts",
   "dependencies": {
-    "@oliversalzburg/js-utils": "0.0.4",
+    "@oliversalzburg/js-utils": "0.0.7",
     "date-fns": "2.30.0",
     "semver": "7.5.4",
     "tslib": "2.6.2"
