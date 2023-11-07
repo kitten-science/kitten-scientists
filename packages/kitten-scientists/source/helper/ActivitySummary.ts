@@ -1,4 +1,4 @@
-import { mustExist } from "@oliversalzburg/js-utils/nil.js";
+import { mustExist } from "@oliversalzburg/js-utils/lib/nil.js";
 import { UserScript } from "../UserScript.js";
 import { roundToTwo, ucfirst } from "../tools/Format.js";
 

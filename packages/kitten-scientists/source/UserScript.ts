@@ -1,6 +1,6 @@
 import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
-import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
-import { sleep } from "@oliversalzburg/js-utils/sleep.js";
+import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/lib/nil.js";
+import { sleep } from "@oliversalzburg/js-utils/lib/sleep.js";
 import JQuery from "jquery";
 import gt from "semver/functions/gt.js";
 import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine.js";
