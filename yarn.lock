@@ -655,7 +655,7 @@ __metadata:
     "@octokit/rest": "npm:20.0.2"
     "@octokit/types": "npm:12.1.1"
     "@types/chai": "npm:4.3.9"
-    "@types/conventional-commits-parser": "npm:3.0.5"
+    "@types/conventional-commits-parser": "npm:3.0.6"
     "@types/mocha": "npm:10.0.3"
     "@types/node": "npm:20.8.10"
     "@types/semver": "npm:7.5.4"
@@ -1140,12 +1140,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/conventional-commits-parser@npm:3.0.5":
-  version: 3.0.5
-  resolution: "@types/conventional-commits-parser@npm:3.0.5"
+"@types/conventional-commits-parser@npm:3.0.6":
+  version: 3.0.6
+  resolution: "@types/conventional-commits-parser@npm:3.0.6"
   dependencies:
     "@types/node": "npm:*"
-  checksum: f51facbbcfdde38e8ca56eef2ec61ab90345373f27110db36cf89867628de6a4feb5018e1952337b462cfcd2cf7fb2c1f0e6d78aacace543e3722a6164e9ecab
+  checksum: 634cf82141baeaefe0fe2cf104d1956853e51d72b1b400292924bc7c83ab0105c4323f028b8cf03376797ef6cdf7cd8b1718b28795907311e2790f33d0742318
   languageName: node
   linkType: hard
 
