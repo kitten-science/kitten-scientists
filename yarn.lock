@@ -657,7 +657,7 @@ __metadata:
     "@types/chai": "npm:4.3.10"
     "@types/conventional-commits-parser": "npm:3.0.6"
     "@types/mocha": "npm:10.0.4"
-    "@types/node": "npm:20.8.10"
+    "@types/node": "npm:20.9.0"
     "@types/semver": "npm:7.5.5"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
@@ -681,7 +681,7 @@ __metadata:
     "@kie/mock-github": "npm:2.0.0"
     "@types/chai": "npm:4.3.10"
     "@types/mocha": "npm:10.0.4"
-    "@types/node": "npm:20.8.10"
+    "@types/node": "npm:20.9.0"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
     json-schema-to-ts: "npm:2.9.2"
@@ -700,7 +700,7 @@ __metadata:
     "@kie/mock-github": "npm:2.0.0"
     "@types/chai": "npm:4.3.10"
     "@types/mocha": "npm:10.0.4"
-    "@types/node": "npm:20.8.10"
+    "@types/node": "npm:20.9.0"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
     mocha: "npm:10.2.0"
@@ -719,7 +719,7 @@ __metadata:
     "@kie/mock-github": "npm:2.0.0"
     "@types/chai": "npm:4.3.10"
     "@types/mocha": "npm:10.0.4"
-    "@types/node": "npm:20.8.10"
+    "@types/node": "npm:20.9.0"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
     mocha: "npm:10.2.0"
@@ -1203,12 +1203,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:20.8.10":
-  version: 20.8.10
-  resolution: "@types/node@npm:20.8.10"
+"@types/node@npm:*, @types/node@npm:20.9.0":
+  version: 20.9.0
+  resolution: "@types/node@npm:20.9.0"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: caaa3ae9294f1bfdacb029a916c64af63cbcea613a52f53ea86f93c91779859af177b2b68113ef835194519f5e76cadda08559929b68297f1a8a568c207f9f66
+  checksum: 755d07de735eafda4e20af75ad9d03bdbfddef327d790e9a896142eac7493db5d8501591376e1c8227aa12eeb88e522bc727c6024504842ed40e539e8a466db9
   languageName: node
   linkType: hard
 
@@ -3487,7 +3487,7 @@ __metadata:
     "@babel/plugin-syntax-import-assertions": "npm:7.22.5"
     "@types/babel__core": "npm:7.20.4"
     "@types/eslint": "npm:8.44.7"
-    "@types/node": "npm:20.8.10"
+    "@types/node": "npm:20.9.0"
     "@types/prettier": "npm:3.0.0"
     "@types/web": "npm:0.0.119"
     "@typescript-eslint/eslint-plugin": "npm:6.10.0"
