@@ -2,11 +2,14 @@ import core from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { ReleaseInfo } from "./ReleaseInfo.js";
 
+const isMainModule = import.meta.url.endsWith(process.argv[1]);
+
 /**
  * Execute the release info action.
  */
 export const main = async (): Promise<void> => {
   try {
+    core.info("Generating release information...");
     const repo_token = core.getInput("repo_token", { required: true });
     const releaseInfo = new ReleaseInfo({
       context,
@@ -19,3 +22,7 @@ export const main = async (): Promise<void> => {
     if (error instanceof Error) core.setFailed(error.message);
   }
 };
+
+if (isMainModule) {
+  main().catch(console.error);
+}
