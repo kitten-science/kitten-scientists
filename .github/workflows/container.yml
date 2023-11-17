@@ -41,7 +41,7 @@ jobs:
       - name: Build Kitten Scientists
         run: |
           yarn kitten-scientists:build
-          cp packages/kitten-scientists/output/* packages/kitten-game/kitten-scientists/
+          cp packages/kitten-scientists/output/* packages/kittensgame/kitten-scientists/
 
       - name: Log in to the Container registry
         uses: docker/login-action@master
@@ -61,7 +61,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@master
         with:
-          context: packages/kitten-game
+          context: packages/kittensgame
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

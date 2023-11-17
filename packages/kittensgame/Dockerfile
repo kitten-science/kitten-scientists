@@ -4,13 +4,13 @@ ARG BRANCH=master
 
 EXPOSE 8080
 
-RUN git clone https://bitbucket.org/bloodrizer/kitten-game.git \
-  && cd kitten-game \
+RUN git clone https://github.com/nuclear-unicorn/kittensgame.git \
+  && cd kittensgame \
   && git checkout $BRANCH \
   && yarn install
 
 # Copy the script that injects kitten-scientists.inject.js into index.html and execute it.
-WORKDIR /kitten-game
+WORKDIR /kittensgame
 COPY "kitten-scientists" "kitten-scientists"
 COPY "inject-scientists.js" "inject-scientists.js"
 RUN node inject-scientists.js

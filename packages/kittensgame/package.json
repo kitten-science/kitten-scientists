@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@kitten-science/kitten-game",
+  "name": "@kitten-science/kittensgame",
   "version": "latest",
   "description": "Containerized version of the Kittens Game",
   "license": "MIT",

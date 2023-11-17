@@ -12,15 +12,12 @@ cd "$(dirname "$0")"
 main() {
   BRANCH=${1:-master}
 
-  echo "Re-Building development container on $BRANCH branch..."
+  echo "Building development container on $BRANCH branch..."
   cd ..
   podman build \
     --build-arg BRANCH="$BRANCH" \
-    --no-cache \
-    --tag kitten-game .
+    --tag kittensgame .
   echo "Done."
-  echo
-  echo "Remember to restart your development container if it's already running!"
 }
 
 main "$@"

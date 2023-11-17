@@ -32,7 +32,7 @@ This will [build a fresh version of the userscript](./reference/Repository%20Scr
 
 The development container provides a version of Kittens Game that already a Kitten Scientists version injected into it, based on your local development state.
 
-When the container is built, it downloads the latest version of the game from <https://bitbucket.org/bloodrizer/kitten-game>.
+When the container is built, it downloads the latest version of the game from <https://github.com/nuclear-unicorn/kittensgame>.
 
 1.  Manual Refresh (recommended)
 

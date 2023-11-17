@@ -28,7 +28,7 @@
 
 ## devcontainer:build
 
--   Project: `@kitten-science/kitten-game`
+-   Project: `@kitten-science/kittensgame`
 -   Source:
 
     ```shell
@@ -41,7 +41,7 @@
 
 ## devcontainer:rebuild
 
--   Project: `@kitten-science/kitten-game`
+-   Project: `@kitten-science/kittensgame`
 -   Source:
 
     ```shell
@@ -56,7 +56,7 @@
 
 ## devcontainer:run
 
--   Project: `@kitten-science/kitten-game`
+-   Project: `@kitten-science/kittensgame`
 -   Source:
 
     ```shell
@@ -186,12 +186,142 @@
 -   Source:
 
     ```shell
-    eslint . --ext .ts
+    eslint . --ext .ts && prettier --check packages
     ```
 
 -   Description:
 
     Check source code for style issues.
+
+## test:all
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    yarn workspaces foreach --all --parallel --verbose run test
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## test:coverage
+
+-   Project: `@kitten-science/action-automatic-releases`
+-   Source:
+
+    ```shell
+    c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## test:coverage
+
+-   Project: `@kitten-science/action-commit-validator`
+-   Source:
+
+    ```shell
+    c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## test:coverage
+
+-   Project: `@kitten-science/action-label-manager`
+-   Source:
+
+    ```shell
+    c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## test:coverage
+
+-   Project: `@kitten-science/action-release-info`
+-   Source:
+
+    ```shell
+    c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## test:coverage:all
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    yarn workspaces foreach --all --parallel --verbose run test:coverage
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## test:inspect
+
+-   Project: `@kitten-science/action-automatic-releases`
+-   Source:
+
+    ```shell
+    node $(yarn bin mocha) --inspect ./build/*.test.js
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## test:inspect
+
+-   Project: `@kitten-science/action-commit-validator`
+-   Source:
+
+    ```shell
+    node $(yarn bin mocha) --inspect ./build/*.test.js
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## test:inspect
+
+-   Project: `@kitten-science/action-label-manager`
+-   Source:
+
+    ```shell
+    node $(yarn bin mocha) --inspect ./build/*.test.js
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## test:inspect
+
+-   Project: `@kitten-science/action-release-info`
+-   Source:
+
+    ```shell
+    node $(yarn bin mocha) --inspect ./build/*.test.js
+    ```
+
+-   Description:
+
+    _documentation pending_
 
 ## typecheck:all
 

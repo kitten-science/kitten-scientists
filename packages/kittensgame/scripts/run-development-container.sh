@@ -17,18 +17,18 @@ main() {
   yarn devcontainer:build "$BRANCH"
 
   echo "Removing previous container..."
-  podman stop kitten-game > /dev/null || true
-  podman rm kitten-game > /dev/null || true
+  podman stop kittensgame > /dev/null || true
+  podman rm kittensgame > /dev/null || true
   echo "Previous container removed or non-existent."
   echo ""
 
   echo "Starting new container..."
   podman run \
     --detach \
-    --mount type=bind,source="${BASEDIR}/../../kitten-scientists/output",target=/kitten-game/kitten-scientists \
-    --name kitten-game \
+    --mount type=bind,source="${BASEDIR}/../../kitten-scientists/output",target=/kittensgame/kitten-scientists \
+    --name kittensgame \
     --publish 8100:8080 \
-    kitten-game
+    kittensgame
   echo "Container started."
 
   echo ""
