@@ -320,9 +320,19 @@ export type TechButtonController = BuildingNotStackableBtnController & {
   new (game: GamePage): TechButtonController;
 };
 
-export type TransformBtnController = ButtonModernController & {
-  new (game: GamePage): TransformBtnController;
+export type Link = {
+  visible: boolean;
+  title: string;
+  tooltip: string;
+  getDisplayValueExt: () => string;
+  handler: (event: Event, callback: (success: boolean) => void) => void;
+};
+
+export type TransformBtnController<TOptions = Record<string, unknown>> = ButtonModernController & {
+  new (game: GamePage, options: TOptions): TransformBtnController<TOptions>;
   _transform: (model: ButtonModel, amt: number) => boolean;
+  _newLink: (model: ButtonModel, divider: number) => Link;
+  controllerOpts: TOptions;
 };
 
 export type ClassList = {

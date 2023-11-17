@@ -22,6 +22,7 @@ import {
   ReligionUpgrades,
   TranscendenceUpgradeInfo,
   TranscendenceUpgrades,
+  TransformBtnController,
   UnicornItemVariant,
   ZiggurathUpgradeInfo,
   ZiggurathUpgrades,
@@ -57,7 +58,7 @@ export class ReligionManager implements Automation {
     this._autoBuild();
 
     if (this.settings.sacrificeUnicorns.enabled) {
-      await this._autoSacrificeUnicorns();
+      this._autoSacrificeUnicorns();
     }
 
     if (this.settings.sacrificeAlicorns.enabled) {
@@ -510,7 +511,7 @@ export class ReligionManager implements Automation {
     return null;
   }
 
-  private async _autoSacrificeUnicorns() {
+  private _autoSacrificeUnicorns() {
     const unicorns = this._workshopManager.getResource("unicorns");
     const available = this._workshopManager.getValueAvailable("unicorns");
     if (
@@ -518,19 +519,37 @@ export class ReligionManager implements Automation {
       this.settings.sacrificeUnicorns.trigger <= available &&
       this.settings.sacrificeUnicorns.trigger <= unicorns.value
     ) {
+      const unicornsForSacrifice = available - this.settings.sacrificeUnicorns.trigger;
+      const sacrificePercentage = unicornsForSacrifice / available;
+      const percentageInverse = 1 / sacrificePercentage;
+
       const controller = this._host.gamePage.religionTab.sacrificeBtn.controller;
       const model = this._host.gamePage.religionTab.sacrificeBtn.model;
 
-      await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
+      const customController = new classes.ui.religion.TransformBtnController(
+        game,
+        controller.controllerOpts,
+      ) as TransformBtnController;
 
-      const cost = mustExist(model.prices?.[0]).val;
+      const link = customController._newLink(model, percentageInverse);
+      link.handler(new Event("decoy"), (success: boolean) => {
+        if (!success) {
+          return;
+        }
 
-      this._host.engine.iactivity("act.sacrificeUnicorns", [cost], "ks-faith");
-      this._host.engine.storeForSummary(
-        this._host.engine.i18n("$resources.unicorns.title"),
-        1,
-        "refine",
-      );
+        const cost = unicornsForSacrifice;
+
+        this._host.engine.iactivity(
+          "act.sacrificeUnicorns",
+          [this._host.gamePage.getDisplayValueExt(cost)],
+          "ks-faith",
+        );
+        this._host.engine.storeForSummary(
+          this._host.engine.i18n("$resources.unicorns.title"),
+          1,
+          "refine",
+        );
+      });
     }
   }
 
