@@ -741,7 +741,7 @@ __metadata:
   resolution: "@kitten-science/kitten-scientists@workspace:packages/kitten-scientists"
   dependencies:
     "@kitten-science/action-release-info": "workspace:*"
-    "@oliversalzburg/js-utils": "npm:0.0.13"
+    "@oliversalzburg/js-utils": "npm:0.0.18"
     "@types/dojo": "npm:1.9.47"
     "@types/jquery": "npm:3.5.27"
     "@types/semver": "npm:7.5.5"
@@ -1078,10 +1078,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oliversalzburg/js-utils@npm:0.0.13":
-  version: 0.0.13
-  resolution: "@oliversalzburg/js-utils@npm:0.0.13"
-  checksum: be95fde23b4b22d1aa233efe7251e83dd389a261a25021ce7446149ca1cdfe30690de0d6f5f9bb86224981be5b9ad254979610e6691190d1e2cdc6e4b6987a7e
+"@oliversalzburg/js-utils@npm:0.0.18":
+  version: 0.0.18
+  resolution: "@oliversalzburg/js-utils@npm:0.0.18"
+  checksum: e6104b9aab2393e101a8ec821a4c2e1879ae423e8a67e3f784d1ce0a3ea8164ce66c3163b6487bd9ed8a4673f194242a8a0b55d401828b8073a67611c4d5b6e7
   languageName: node
   linkType: hard
 
