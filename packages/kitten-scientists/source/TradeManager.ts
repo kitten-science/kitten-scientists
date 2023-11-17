@@ -77,7 +77,7 @@ export class TradeManager implements Automation {
       // Check if the race is enabled, in season, unlocked, and we can actually afford it.
       if (
         !trade.enabled ||
-        !trade.seasons[season] ||
+        !trade.seasons[season].enabled ||
         !race.unlocked ||
         !this.singleTradePossible(trade.race)
       ) {
