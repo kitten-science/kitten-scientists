@@ -338,7 +338,10 @@ export class UserScript {
   }
 
   private static _isGameLoaded(): boolean {
-    return !isNil(UserScript.window.game);
+    return (
+      !isNil(UserScript.window.game) &&
+      !Object.prototype.toString.apply(UserScript.window.game).includes("HTMLDivElement")
+    );
   }
 
   static get window(): Window {
