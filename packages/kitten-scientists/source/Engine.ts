@@ -155,6 +155,8 @@ export class Engine {
    * This is intended to make loading of previous settings snapshots more intuitive.
    */
   stateLoad(settings: EngineState, retainMetaBehavior = false) {
+    this.stop(false);
+
     // For now, we only log a warning on mismatching tags.
     // Ideally, we would perform semver comparison, but that is
     // excessive at this point in time. The goal should be a stable
