@@ -1,6 +1,7 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/lib/nil.js";
 import { UserScript, ksVersion } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
+import { cwarn } from "../tools/Log.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
 import { EngineSettingsUi } from "./EngineSettingsUi.js";
 import { InternalsUi } from "./InternalsUi.js";
@@ -73,6 +74,7 @@ export class UserInterface extends UiComponent {
     const optionsListElement = $("<ul/>");
     optionsListElement.append(this._engineUi.element);
     this._sections.forEach(section => optionsListElement.append(section.element));
+    ks.append(optionsListElement);
 
     // Make _engineUI's expando button hide/show the other option groups
     const expando = this._engineUi.expando;
@@ -114,9 +116,13 @@ export class UserInterface extends UiComponent {
 
     $("#clearLog").prepend(this.showActivity);
 
-    // add the options above the game log
+    // Add Kitten Scientists above the game log.
     const right = $("#rightColumn");
-    right.prepend(ks.append(optionsListElement));
+    if (right.attr("id") === undefined) {
+      cwarn("Unable to find right column to inject UI into. Running headless.");
+    } else {
+      right.prepend(ks);
+    }
 
     this.element = ks;
   }
