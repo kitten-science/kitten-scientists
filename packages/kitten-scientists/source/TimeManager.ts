@@ -1,4 +1,4 @@
-import { mustExist } from "@oliversalzburg/js-utils/lib/nil.js";
+import { isNil, mustExist } from "@oliversalzburg/js-utils/lib/nil.js";
 import { TickContext } from "./Engine.js";
 import { TabManager } from "./TabManager.js";
 import { UserScript } from "./UserScript.js";
@@ -65,9 +65,15 @@ export class TimeManager {
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<TimeItem, ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>> = {};
     for (const build of Object.values(builds)) {
-      metaData[build.building] = mustExist(this.getBuild(build.building, build.variant));
+      const buildMeta = this.getBuild(build.building, build.variant);
+      metaData[build.building] = mustExist(buildMeta);
 
-      const model = mustExist(this.getBuildButton(build.building, build.variant)).model;
+      const buildButton = this.getBuildButton(build.building, build.variant);
+      if (isNil(buildButton)) {
+        // Not available in this build of KG.
+        continue;
+      }
+      const model = buildButton.model;
       const panel =
         build.variant === TimeItemVariant.Chronoforge
           ? this.manager.tab.cfPanel
@@ -192,7 +198,11 @@ export class TimeManager {
   turnOnChronoFurnace() {
     const chronoFurnace = this._host.game.time.getCFU("blastFurnace");
     if (!mustExist(chronoFurnace.isAutomationEnabled)) {
-      const button = mustExist(this.getBuildButton("blastFurnace", TimeItemVariant.Chronoforge));
+      const button = this.getBuildButton("blastFurnace", TimeItemVariant.Chronoforge);
+      if (isNil(button)) {
+        // Not available in this build of KG.
+        return;
+      }
       button.controller.handleToggleAutomationLinkClick(button.model);
     }
   }
