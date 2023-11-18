@@ -118,8 +118,15 @@ export class UserInterface extends UiComponent {
 
     // Add Kitten Scientists above the game log.
     const right = $("#rightColumn");
-    if (right.attr("id") === undefined) {
-      cwarn("Unable to find right column to inject UI into. Running headless.");
+    if (right.length === 0) {
+      // Try to fall back to options page.
+      const optionsPageContent = $("#optionsPage .full-screen-position .page .page-content");
+      if (optionsPageContent.length === 0) {
+        cwarn("Unable to find right column to inject UI into. Running headless.");
+      } else {
+        optionsPageContent.append(ks);
+        ks.attr("style", "border-top:1px solid grey; padding:15px");
+      }
     } else {
       right.prepend(ks);
     }
