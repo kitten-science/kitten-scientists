@@ -30,11 +30,11 @@ export class ScienceManager extends UpgradeManager {
     }
 
     // If techs (science items) are enabled...
-    if (this.settings.techs.enabled && this._host.gamePage.tabs[2].visible) {
+    if (this.settings.techs.enabled && this._host.game.tabs[2].visible) {
       await this.autoUnlock();
     }
 
-    if (this.settings.policies.enabled && this._host.gamePage.tabs[2].visible) {
+    if (this.settings.policies.enabled && this._host.game.tabs[2].visible) {
       await this.autoPolicy();
     }
 
@@ -47,7 +47,7 @@ export class ScienceManager extends UpgradeManager {
   async autoUnlock() {
     this.manager.render();
 
-    const techs = this._host.gamePage.science.techs;
+    const techs = this._host.game.science.techs;
     const toUnlock = new Array<TechInfo>();
 
     workLoop: for (const setting of Object.values(this.settings.techs.techs)) {
@@ -66,7 +66,7 @@ export class ScienceManager extends UpgradeManager {
       }
 
       let prices = UserScript.window.dojo.clone(tech.prices);
-      prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
+      prices = this._host.game.village.getEffectLeader("scientist", prices);
       for (const resource of prices) {
         if (this._workshopManager.getValueAvailable(resource.name) < resource.val) {
           continue workLoop;
@@ -84,7 +84,7 @@ export class ScienceManager extends UpgradeManager {
   async autoPolicy() {
     this.manager.render();
 
-    const policies = this._host.gamePage.science.policies;
+    const policies = this._host.game.science.policies;
     const toUnlock = new Array<PolicyInfo>();
 
     for (const setting of Object.values(this.settings.policies.policies)) {
@@ -101,8 +101,8 @@ export class ScienceManager extends UpgradeManager {
       if (!targetPolicy.researched && !targetPolicy.blocked && targetPolicy.unlocked) {
         if (
           targetPolicy.requiredLeaderJob === undefined ||
-          (this._host.gamePage.village.leader !== null &&
-            this._host.gamePage.village.leader.job === targetPolicy.requiredLeaderJob)
+          (this._host.game.village.leader !== null &&
+            this._host.game.village.leader.job === targetPolicy.requiredLeaderJob)
         ) {
           toUnlock.push(targetPolicy);
         }
@@ -118,8 +118,8 @@ export class ScienceManager extends UpgradeManager {
    * If there is currently an astronomical event, observe it.
    */
   observeStars(): void {
-    if (this._host.gamePage.calendar.observeBtn !== null) {
-      this._host.gamePage.calendar.observeHandler();
+    if (this._host.game.calendar.observeBtn !== null) {
+      this._host.game.calendar.observeHandler();
       this._host.engine.iactivity("act.observe", [], "ks-star");
       this._host.engine.storeForSummary("stars", 1);
     }

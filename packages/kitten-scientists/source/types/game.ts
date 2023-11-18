@@ -39,7 +39,7 @@ import {
 import { TradeTab } from "./trade.js";
 import { JobInfo, VillageTab } from "./village.js";
 
-export type GamePage = {
+export type Game = {
   bld: {
     /** @deprecated Use `getBuildingExt()` instead. */
     get: (build: Building) => BuildingMeta;
@@ -75,7 +75,7 @@ export type GamePage = {
     currentChallenge: Challenge;
     challenges: Array<{ pending: boolean }>;
     getChallenge: (challenge: Challenge) => {
-      calculateEffects: (model: unknown, game: GamePage) => void;
+      calculateEffects: (model: unknown, game: Game) => void;
       researched: number;
     };
     isActive: (challenge: Challenge) => boolean;
@@ -92,11 +92,11 @@ export type GamePage = {
      * @deprecated Use `buyBcoin` instead.
      */
     buyEcoin: () => void;
-    calculateStandingFromPolicies: (race: Race, host: GamePage) => number;
+    calculateStandingFromPolicies: (race: Race, host: Game) => number;
     feedElders: () => void;
     get: (race: Race) => RaceInfo;
     getMarkerCap: () => number;
-    calculateTradeBonusFromPolicies: (race: Race, host: GamePage) => number;
+    calculateTradeBonusFromPolicies: (race: Race, host: Game) => number;
     getTradeRatio: () => number;
     races: Array<RaceInfo>;
     sellBcoin: () => void;
@@ -292,7 +292,7 @@ export type GamePage = {
   };
   space: {
     getBuilding: (building: SpaceBuildings) => {
-      calculateEffects: (self: unknown, game: GamePage) => void;
+      calculateEffects: (self: unknown, game: Game) => void;
       /**
        * An internationalized description for this space building.
        */

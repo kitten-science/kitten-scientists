@@ -1,4 +1,4 @@
-import { GamePage } from "./gamePage.js";
+import { Game } from "./game.js";
 import { BuildButton, GameTab, Job, Price } from "./index.js";
 
 export type ScienceTab = GameTab & {
@@ -114,7 +114,7 @@ export type Technology =
 export type PolicyInfo = {
   blocked: boolean;
   blocks: Array<Policy>;
-  calculateEffects: (self: unknown, game: GamePage) => void;
+  calculateEffects: (self: unknown, game: Game) => void;
   description: string;
   effects: {
     goldPriceRatio?: number;

@@ -78,7 +78,7 @@ export class MaterialsCache {
       return 0;
     }
 
-    const currentTick = this._host.gamePage.timer.ticksTotal;
+    const currentTick = this._host.game.timer.ticksTotal;
     const startingTick = this._cache[0].timeStamp;
 
     // Adjust the cached value by the amount of ticks that have passed

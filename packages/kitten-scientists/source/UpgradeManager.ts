@@ -23,10 +23,10 @@ export abstract class UpgradeManager {
 
     const controller =
       variant === "policy"
-        ? new classes.ui.PolicyBtnController(this._host.gamePage)
-        : new com.nuclearunicorn.game.ui.TechButtonController(this._host.gamePage);
+        ? new classes.ui.PolicyBtnController(this._host.game)
+        : new com.nuclearunicorn.game.ui.TechButtonController(this._host.game);
 
-    this._host.gamePage.opts.noConfirm = true;
+    this._host.game.opts.noConfirm = true;
     const success = await UpgradeManager.skipConfirm(
       () =>
         new Promise(resolve => controller.buyItem(button.model, new MouseEvent("click"), resolve)),

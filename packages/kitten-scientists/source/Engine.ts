@@ -408,7 +408,7 @@ export class Engine {
     }
 
     // update the color of the message immediately after adding
-    const msg = this._host.gamePage.msg(...args, cssClasses);
+    const msg = this._host.game.msg(...args, cssClasses);
     $(msg.span).css("color", color);
 
     cdebug(...args);

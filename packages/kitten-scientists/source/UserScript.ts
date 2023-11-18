@@ -8,7 +8,7 @@ import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
-import { GamePage } from "./types/index.js";
+import { Game } from "./types/index.js";
 import { UserInterface } from "./ui/UserInterface.js";
 
 declare global {
@@ -23,7 +23,8 @@ declare global {
       clone: <T>(subject: T) => T;
       subscribe: (event: string, handler: (...args: any[]) => void) => void;
     };
-    gamePage?: Maybe<GamePage>;
+    game?: Maybe<Game>;
+    gamePage?: Maybe<Game>;
     LZString: {
       compressToBase64: (input: string) => string;
       compressToUTF16: (input: string) => string;
@@ -56,7 +57,7 @@ const TIMEOUT_OVERRIDE = !isNil(localStorage["ks.timeout"])
   : undefined;
 
 export class UserScript {
-  readonly gamePage: GamePage;
+  readonly game: Game;
 
   /**
    * A function in the game that allows to retrieve translated messages.
@@ -77,15 +78,11 @@ export class UserScript {
   private _userInterface: UserInterface;
   engine: Engine;
 
-  constructor(
-    gamePage: GamePage,
-    i18nEngine: I18nEngine,
-    gameLanguage: GameLanguage = FallbackLanguage,
-  ) {
+  constructor(game: Game, i18nEngine: I18nEngine, gameLanguage: GameLanguage = FallbackLanguage) {
     cinfo(`Kitten Scientists ${ksVersion("v")} constructed.`);
     cinfo(`You are on the '${String(KS_RELEASE_CHANNEL)}' release channel.`);
 
-    this.gamePage = gamePage;
+    this.game = game;
     this.i18nEngine = i18nEngine;
 
     this.engine = new Engine(this, gameLanguage);
@@ -109,15 +106,15 @@ export class UserScript {
    * Issues should be logged to the console.
    */
   validateGame() {
-    ScienceSettings.validateGame(this.gamePage, this.engine.scienceManager.settings);
-    SpaceSettings.validateGame(this.gamePage, this.engine.spaceManager.settings);
-    WorkshopSettings.validateGame(this.gamePage, this.engine.workshopManager.settings);
+    ScienceSettings.validateGame(this.game, this.engine.scienceManager.settings);
+    SpaceSettings.validateGame(this.game, this.engine.spaceManager.settings);
+    WorkshopSettings.validateGame(this.game, this.engine.workshopManager.settings);
   }
 
   run(): void {
     // Increase messages displayed in log
     // TODO: This should be configurable.
-    this.gamePage.console.maxMessages = 1000;
+    this.game.console.maxMessages = 1000;
 
     this.refreshUi();
 
@@ -218,7 +215,7 @@ export class UserScript {
 
   installSaveManager() {
     cinfo("Installing save game manager...");
-    this.gamePage.managers.push(this._saveManager);
+    this.game.managers.push(this._saveManager);
   }
 
   private _saveManager = {
@@ -264,7 +261,7 @@ export class UserScript {
     return state[0];
   }
 
-  static async waitForGame(timeout = TIMEOUT_OVERRIDE ?? TIMEOUT_DEFAULT): Promise<GamePage> {
+  static async waitForGame(timeout = TIMEOUT_OVERRIDE ?? TIMEOUT_DEFAULT): Promise<Game> {
     const signals: Array<Promise<unknown>> = [sleep(2000)];
 
     if (isNil(UserScript._gameStartSignal) && typeof UserScript.window.dojo !== "undefined") {
@@ -301,11 +298,13 @@ export class UserScript {
     }
 
     if (timeout < 0) {
-      throw new Error("Unable to find game page. Giving up.");
+      throw new Error(
+        "Unable to find game. Giving up. Maybe the game is not exported at `window.game`?",
+      );
     }
 
     if (UserScript._isGameLoaded()) {
-      return mustExist(UserScript.window.gamePage);
+      return mustExist(UserScript.window.game);
     }
 
     cdebug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
@@ -321,7 +320,7 @@ export class UserScript {
    */
   static getDefaultInstance(): UserScript {
     const instance = new UserScript(
-      mustExist(UserScript.window.gamePage),
+      mustExist(UserScript.window.game),
       mustExist(UserScript.window.$I),
       localStorage["com.nuclearunicorn.kittengame.language"] as GameLanguage | undefined,
     );
@@ -339,7 +338,7 @@ export class UserScript {
   }
 
   private static _isGameLoaded(): boolean {
-    return !isNil(UserScript.window.gamePage);
+    return !isNil(UserScript.window.game);
   }
 
   static get window(): Window {

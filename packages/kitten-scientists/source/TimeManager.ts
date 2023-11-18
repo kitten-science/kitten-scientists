@@ -93,7 +93,7 @@ export class TimeManager {
     }
 
     if (refreshRequired) {
-      this._host.gamePage.ui.render();
+      this._host.game.ui.render();
     }
   }
 
@@ -128,9 +128,9 @@ export class TimeManager {
     variant: TimeItemVariant,
   ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
     if (variant === TimeItemVariant.Chronoforge) {
-      return this._host.gamePage.time.getCFU(name as ChronoForgeUpgrades) ?? null;
+      return this._host.game.time.getCFU(name as ChronoForgeUpgrades) ?? null;
     } else {
-      return this._host.gamePage.time.getVSU(name as VoidSpaceUpgrades) ?? null;
+      return this._host.game.time.getVSU(name as VoidSpaceUpgrades) ?? null;
     }
   }
 
@@ -162,7 +162,7 @@ export class TimeManager {
   fixCryochambers() {
     // Fix used cryochambers
     // If the option is enabled and we have used cryochambers...
-    if (0 < this._host.gamePage.time.getVSU("usedCryochambers").val) {
+    if (0 < this._host.game.time.getVSU("usedCryochambers").val) {
       const btn = this.manager.tab.vsPanel.children[0].children[0];
 
       let fixed = 0;
@@ -190,7 +190,7 @@ export class TimeManager {
   }
 
   turnOnChronoFurnace() {
-    const chronoFurnace = this._host.gamePage.time.getCFU("blastFurnace");
+    const chronoFurnace = this._host.game.time.getCFU("blastFurnace");
     if (!mustExist(chronoFurnace.isAutomationEnabled)) {
       const button = mustExist(this.getBuildButton("blastFurnace", TimeItemVariant.Chronoforge));
       button.controller.handleToggleAutomationLinkClick(button.model);

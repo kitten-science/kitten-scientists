@@ -2,7 +2,7 @@ import { difference } from "@oliversalzburg/js-utils/lib/array.js";
 import { Maybe, isNil } from "@oliversalzburg/js-utils/lib/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { GamePage, Technology } from "../types/index.js";
+import { Game, Technology } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class TechSetting extends Setting {
@@ -94,7 +94,7 @@ export class TechSettings extends Setting {
     this.techs = techs;
   }
 
-  static validateGame(game: GamePage, settings: TechSettings) {
+  static validateGame(game: Game, settings: TechSettings) {
     const inSettings = Object.keys(settings.techs);
     const inGame = game.science.techs.map(tech => tech.name);
 

@@ -37,13 +37,13 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   }
 
   async autoUnlock() {
-    if (!this._host.gamePage.tabs[3].visible) {
+    if (!this._host.game.tabs[3].visible) {
       return;
     }
 
     this.manager.render();
 
-    const upgrades = this._host.gamePage.workshop.upgrades;
+    const upgrades = this._host.game.workshop.upgrades;
     const toUnlock = new Array<UpgradeInfo>();
 
     workLoop: for (const setting of Object.values(this.settings.unlockUpgrades.upgrades)) {
@@ -63,7 +63,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
       // Create a copy of the prices for this upgrade, so that we can apply effects to it.
       let prices = UserScript.window.dojo.clone(upgrade.prices);
-      prices = this._host.gamePage.village.getEffectLeader("scientist", prices);
+      prices = this._host.game.village.getEffectLeader("scientist", prices);
       for (const resource of prices) {
         // If we can't afford this resource price, continue with the next upgrade.
         if (this.getValueAvailable(resource.name) < resource.val) {
@@ -205,7 +205,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
           continue;
         }
 
-        const ratio = this._host.gamePage.getResCraftRatio(craft.resource);
+        const ratio = this._host.game.getResCraftRatio(craft.resource);
 
         // Quantity of source and target resource currently available.
         const availableSource =
@@ -257,11 +257,11 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     }
 
     const craft = this.getCraft(name);
-    const ratio = this._host.gamePage.getResCraftRatio(craft.name);
+    const ratio = this._host.game.getResCraftRatio(craft.name);
 
-    this._host.gamePage.craft(craft.name, amount);
+    this._host.game.craft(craft.name, amount);
 
-    const resourceName = mustExist(this._host.gamePage.resPool.get(name)).title;
+    const resourceName = mustExist(this._host.game.resPool.get(name)).title;
 
     // Determine actual amount after crafting upgrades
     amount = parseFloat((amount * (1 + ratio)).toFixed(2));
@@ -269,14 +269,14 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this._host.engine.storeForSummary(resourceName, amount, "craft");
     this._host.engine.iactivity(
       "act.craft",
-      [this._host.gamePage.getDisplayValueExt(amount), resourceName],
+      [this._host.game.getDisplayValueExt(amount), resourceName],
       "ks-craft",
     );
   }
 
   private _canCraft(name: ResourceCraftable, amount: number): boolean {
     // Can't craft anything but wood until workshop is unlocked.
-    if (!this._host.gamePage.workshopTab.visible && name !== "wood") {
+    if (!this._host.game.workshopTab.visible && name !== "wood") {
       return false;
     }
 
@@ -287,7 +287,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     if (craft.unlocked && enabled) {
       result = true;
 
-      const prices = this._host.gamePage.workshop.getCraftPrice(craft);
+      const prices = this._host.game.workshop.getCraftPrice(craft);
       for (const price of prices) {
         const value = this.getValueAvailable(price.name);
 
@@ -307,7 +307,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @returns The information object for the resource.
    */
   getCraft(name: ResourceCraftable): CraftableInfo {
-    const craft = this._host.gamePage.workshop.getCraft(name);
+    const craft = this._host.game.workshop.getCraft(name);
     if (!craft) {
       throw new Error(`Unable to find craft '${name}'`);
     }
@@ -322,7 +322,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    */
   singleCraftPossible(name: ResourceCraftable): boolean {
     // Can't craft anything but wood until workshop is unlocked.
-    if (!this._host.gamePage.workshopTab.visible && name !== "wood") {
+    if (!this._host.game.workshopTab.visible && name !== "wood") {
       return false;
     }
 
@@ -346,7 +346,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     const materials: Partial<Record<Resource, number>> = {};
     const craft = this.getCraft(name);
 
-    const prices = this._host.gamePage.workshop.getCraftPrice(craft);
+    const prices = this._host.game.workshop.getCraftPrice(craft);
 
     for (const price of prices) {
       materials[price.name] = price.val;
@@ -369,7 +369,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     cacheManager?: MaterialsCache,
     preTrade: boolean | undefined = undefined,
   ): number | "ignore" {
-    let production = this._host.gamePage.getResourcePerTick(resource.name, true);
+    let production = this._host.game.getResourcePerTick(resource.name, true);
 
     // For craftable resources, we also want to take into account how much of them
     // we *could* craft.
@@ -378,7 +378,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       const materials = this.getMaterials(resource.name as ResourceCraftable);
       for (const [mat, amount] of objectEntries<Resource, number>(materials)) {
         const rat =
-          (1 + this._host.gamePage.getResCraftRatio(resource.name as ResourceCraftable)) / amount;
+          (1 + this._host.game.getResCraftRatio(resource.name as ResourceCraftable)) / amount;
         // Currently preTrade is only true for the festival stuff, so including furs from hunting is ideal.
         const addProd = this.getTickVal(this.getResource(mat));
         if (addProd === "ignore") {
@@ -415,8 +415,8 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   getAverageHunt(): Partial<Record<Resource, number>> {
     const output: Partial<Record<Resource, number>> = {};
     const hunterRatio =
-      this._host.gamePage.getEffect("hunterRatio") +
-      this._host.gamePage.village.getEffectLeader("manager", 0);
+      this._host.game.getEffect("hunterRatio") +
+      this._host.game.village.getEffectLeader("manager", 0);
 
     output["furs"] = 40 + 32.5 * hunterRatio;
 
@@ -430,7 +430,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       output["bloodstone"] = this.getValue("bloodstone") === 0 ? 0.05 : 0.0005;
     }
 
-    if (this._host.gamePage.ironWill && this._host.gamePage.workshop.get("goldOre").researched) {
+    if (this._host.game.ironWill && this._host.game.workshop.get("goldOre").researched) {
       output["gold"] = 0.625 + 0.625 * hunterRatio;
     }
 
@@ -444,7 +444,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @returns The information object for the resource.
    */
   getResource(name: Resource): ResourceInfo {
-    const res = this._host.gamePage.resPool.get(name);
+    const res = this._host.game.resPool.get(name);
     if (isNil(res)) {
       throw new Error(`Unable to find resource ${name}`);
     }
@@ -488,8 +488,8 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     // If the resource is catnip, ensure to not use so much that we can't satisfy
     // consumption by kittens.
     if ("catnip" === name) {
-      const pastureMeta = this._host.gamePage.bld.getBuildingExt("pasture").meta;
-      const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
+      const pastureMeta = this._host.game.bld.getBuildingExt("pasture").meta;
+      const aqueductMeta = this._host.game.bld.getBuildingExt("aqueduct").meta;
       const pastures = pastureMeta.stage === 0 ? pastureMeta.val : 0;
       const aqueducts = aqueductMeta.stage === 0 ? aqueductMeta.val : 0;
       // How many catnip per tick do we have available? This can be negative.
@@ -528,46 +528,46 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    */
   getPotentialCatnip(worstWeather: boolean, pastures: number, aqueducts: number): number {
     // Start of by checking how much catnip we produce per tick at base level.
-    let productionField = this._host.gamePage.getEffect("catnipPerTickBase");
+    let productionField = this._host.game.getEffect("catnipPerTickBase");
 
     if (worstWeather) {
       // Assume fields run at -90%
       productionField *= 0.1;
       // Factor in cold harshness.
       productionField *=
-        1 + this._host.gamePage.getLimitedDR(this._host.gamePage.getEffect("coldHarshness"), 1);
+        1 + this._host.game.getLimitedDR(this._host.game.getEffect("coldHarshness"), 1);
     } else {
       productionField *=
-        this._host.gamePage.calendar.getWeatherMod({ name: "catnip" }) +
-        this._host.gamePage.calendar.getCurSeason().modifiers["catnip"];
+        this._host.game.calendar.getWeatherMod({ name: "catnip" }) +
+        this._host.game.calendar.getCurSeason().modifiers["catnip"];
     }
 
     // When the communism policy is active,
-    if (this._host.gamePage.science.getPolicy("communism").researched) {
+    if (this._host.game.science.getPolicy("communism").researched) {
       productionField = 0;
     }
 
     // Get base production values for jobs.
-    const resourceProduction = this._host.gamePage.village.getResProduction();
+    const resourceProduction = this._host.game.village.getResProduction();
     // Check how much catnip we're producing through kitten jobs.
     const productionVillager = resourceProduction.catnip
-      ? resourceProduction.catnip * (1 + this._host.gamePage.getEffect("catnipJobRatio"))
+      ? resourceProduction.catnip * (1 + this._host.game.getEffect("catnipJobRatio"))
       : 0;
 
     // Base production is catnip fields + farmers.
     let baseProd = productionField + productionVillager;
 
     // Determine the effect of other buildings on the production value.
-    let hydroponics = this._host.gamePage.space.getBuilding("hydroponics").val;
+    let hydroponics = this._host.game.space.getBuilding("hydroponics").val;
     // Index 21 is the "pawgan rituals" metaphysics upgrade. This makes no sense.
     // This likely wants index 22, which is "numeromancy", which has effects on
     // catnip production in cycles at index 2 and 7.
     // TODO: Fix this so the upgrade is properly taken into account.
-    if (this._host.gamePage.prestige.meta[0].meta[21].researched) {
-      if (this._host.gamePage.calendar.cycle === 2) {
+    if (this._host.game.prestige.meta[0].meta[21].researched) {
+      if (this._host.game.calendar.cycle === 2) {
         hydroponics *= 2;
       }
-      if (this._host.gamePage.calendar.cycle === 7) {
+      if (this._host.game.calendar.cycle === 7) {
         hydroponics *= 0.5;
       }
     }
@@ -576,43 +576,38 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     baseProd *= 1 + 0.03 * aqueducts + 0.025 * hydroponics;
 
     // Apply paragon bonus, except during the "winter is coming" challenge.
-    const isWinterComing = this._host.gamePage.challenges.currentChallenge === "winterIsComing";
-    const paragonBonus = isWinterComing
-      ? 0
-      : this._host.gamePage.prestige.getParagonProductionRatio();
+    const isWinterComing = this._host.game.challenges.currentChallenge === "winterIsComing";
+    const paragonBonus = isWinterComing ? 0 : this._host.game.prestige.getParagonProductionRatio();
     baseProd *= 1 + paragonBonus;
 
     // Apply faith bonus.
-    baseProd *= 1 + this._host.gamePage.religion.getSolarRevolutionRatio();
+    baseProd *= 1 + this._host.game.religion.getSolarRevolutionRatio();
 
     // Unless the user disabled the "global donate bonus", apply it.
-    if (!this._host.gamePage.opts.disableCMBR) {
-      baseProd *= 1 + this._host.gamePage.getCMBRBonus();
+    if (!this._host.game.opts.disableCMBR) {
+      baseProd *= 1 + this._host.game.getCMBRBonus();
     }
 
     // Apply the effects of possibly running festival.
-    baseProd = this._host.gamePage.calendar.cycleEffectsFestival({ catnip: baseProd })["catnip"];
+    baseProd = this._host.game.calendar.cycleEffectsFestival({ catnip: baseProd })["catnip"];
 
     // Determine our demand for catnip. This is usually a negative value.
-    let baseDemand = this._host.gamePage.village.getResConsumption()["catnip"];
+    let baseDemand = this._host.game.village.getResConsumption()["catnip"];
     // Pastures and unicron pastures reduce catnip demand. Factor that in.
-    const unicornPastures = this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.val;
+    const unicornPastures = this._host.game.bld.getBuildingExt("unicornPasture").meta.val;
     baseDemand *=
-      1 + this._host.gamePage.getLimitedDR(pastures * -0.005 + unicornPastures * -0.0015, 1.0);
+      1 + this._host.game.getLimitedDR(pastures * -0.005 + unicornPastures * -0.0015, 1.0);
 
     // If we have any kittens and happiness over 100%.
-    if (
-      this._host.gamePage.village.sim.kittens.length > 0 &&
-      this._host.gamePage.village.happiness > 1
-    ) {
+    if (this._host.game.village.sim.kittens.length > 0 && this._host.game.village.happiness > 1) {
       // How happy beyond 100% are we?
-      const happyCon = this._host.gamePage.village.happiness - 1;
-      const catnipDemandWorkerRatioGlobal = this._host.gamePage.getEffect(
+      const happyCon = this._host.game.village.happiness - 1;
+      const catnipDemandWorkerRatioGlobal = this._host.game.getEffect(
         "catnipDemandWorkerRatioGlobal",
       );
 
       // Determine the effect of kittens without jobs.
-      if (this._host.gamePage.challenges.currentChallenge === "anarchy") {
+      if (this._host.game.challenges.currentChallenge === "anarchy") {
         // During anarchy, they have no effect. They eat all the catnip.
         baseDemand *= 1 + happyCon * (1 + catnipDemandWorkerRatioGlobal);
       } else {
@@ -623,8 +618,8 @@ export class WorkshopManager extends UpgradeManager implements Automation {
           happyCon *
             (1 + catnipDemandWorkerRatioGlobal) *
             (1 -
-              this._host.gamePage.village.getFreeKittens() /
-                this._host.gamePage.village.sim.kittens.length);
+              this._host.game.village.getFreeKittens() /
+                this._host.game.village.sim.kittens.length);
       }
     }
 
@@ -632,7 +627,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     baseProd += baseDemand;
 
     // Subtract possible catnip consumers, like breweries.
-    baseProd += this._host.gamePage.getResourcePerTickConvertion("catnip");
+    baseProd += this._host.game.getResourcePerTickConvertion("catnip");
 
     // Might need to eventually factor in time acceleration using this._host.gamePage.timeAccelerationRatio().
     return baseProd;
@@ -650,7 +645,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         continue;
       }
 
-      const isBelow = this._host.gamePage.resPool.get(name).value < resource.stock;
+      const isBelow = this._host.game.resPool.get(name).value < resource.stock;
 
       const resourceCells = [
         // Resource table on the top.

@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/lib/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { GamePage, ResourceCraftable } from "../types/index.js";
+import { Game, ResourceCraftable } from "../types/index.js";
 import { Setting, SettingLimitedMax, SettingTrigger } from "./Settings.js";
 import { UpgradeSettings } from "./UpgradeSettings.js";
 
@@ -58,7 +58,7 @@ export class WorkshopSettings extends SettingTrigger {
     this.unlockUpgrades = unlockUpgrades;
   }
 
-  static validateGame(game: GamePage, settings: WorkshopSettings) {
+  static validateGame(game: Game, settings: WorkshopSettings) {
     UpgradeSettings.validateGame(game, settings.unlockUpgrades);
   }
 

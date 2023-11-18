@@ -2,7 +2,7 @@ import { difference } from "@oliversalzburg/js-utils/lib/array.js";
 import { Maybe, isNil } from "@oliversalzburg/js-utils/lib/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { GamePage, Missions } from "../types/index.js";
+import { Game, Missions } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class MissionSetting extends Setting {
@@ -63,7 +63,7 @@ export class MissionSettings extends Setting {
     this.missions = missions;
   }
 
-  static validateGame(game: GamePage, settings: MissionSettings) {
+  static validateGame(game: Game, settings: MissionSettings) {
     const inSettings = Object.keys(settings.missions);
     // TODO: Find a better place in the game where this information is *always* available.
     const inGame = (game.space.programs ?? []).map(program => program.name);

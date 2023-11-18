@@ -1,7 +1,7 @@
 import {
   BuildButton,
   ButtonModernModel,
-  GamePage,
+  Game,
   GameTab,
   Price,
   TransformBtnController,
@@ -110,7 +110,7 @@ export type AbstractReligionUpgradeInfo = {
 };
 
 export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
-  calculateEffects: (self: unknown, game: GamePage) => void;
+  calculateEffects: (self: unknown, game: Game) => void;
   /**
    * An internationalized description for this religion upgrade.
    */
@@ -129,7 +129,7 @@ export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
 };
 
 export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
-  calculateEffects: (self: unknown, game: GamePage) => void;
+  calculateEffects: (self: unknown, game: Game) => void;
   defaultUnlocked: boolean;
 
   /**
@@ -151,7 +151,7 @@ export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
 };
 
 export type TranscendenceUpgradeInfo = AbstractReligionUpgradeInfo & {
-  calculateEffects: (self: unknown, game: GamePage) => void;
+  calculateEffects: (self: unknown, game: Game) => void;
 
   /**
    * An internationalized description for this space building.

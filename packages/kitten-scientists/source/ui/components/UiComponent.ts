@@ -110,7 +110,7 @@ export abstract class UiComponent extends EventTarget {
       return "∞";
     }
 
-    return host.gamePage.getDisplayValueExt(value);
+    return host.game.getDisplayValueExt(value);
   }
 
   static renderPercentage(value: number): string {

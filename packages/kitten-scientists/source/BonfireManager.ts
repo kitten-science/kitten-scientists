@@ -89,23 +89,23 @@ export class BonfireManager implements Automation {
     }
 
     if (refreshRequired) {
-      this._host.gamePage.ui.render();
+      this._host.game.ui.render();
     }
   }
 
   autoUpgrade() {
     // Get current count of pastures.
     const pastures =
-      this._host.gamePage.bld.getBuildingExt("pasture").meta.stage === 0
-        ? this._host.gamePage.bld.getBuildingExt("pasture").meta.val
+      this._host.game.bld.getBuildingExt("pasture").meta.stage === 0
+        ? this._host.game.bld.getBuildingExt("pasture").meta.val
         : 0;
     // Get current count of aqueducts.
     const aqueducts =
-      this._host.gamePage.bld.getBuildingExt("aqueduct").meta.stage === 0
-        ? this._host.gamePage.bld.getBuildingExt("aqueduct").meta.val
+      this._host.game.bld.getBuildingExt("aqueduct").meta.stage === 0
+        ? this._host.game.bld.getBuildingExt("aqueduct").meta.val
         : 0;
 
-    const pastureMeta = this._host.gamePage.bld.getBuildingExt("pasture").meta;
+    const pastureMeta = this._host.game.bld.getBuildingExt("pasture").meta;
     // If pastures haven't been upgraded to solar farms yet...
     if (
       this.settings.upgradeBuildings.buildings.solarfarm.enabled &&
@@ -130,9 +130,9 @@ export class BonfireManager implements Automation {
           this._host.engine.iactivity("upgrade.building.pasture", [], "ks-upgrade");
 
           // Upgrade the pasture.
-          this._host.gamePage.ui.render();
+          this._host.game.ui.render();
           this.build("pasture", 1, 1);
-          this._host.gamePage.ui.render();
+          this._host.game.ui.render();
 
           // TODO: Why do we return here and not just unlock more buildings?
           return;
@@ -140,7 +140,7 @@ export class BonfireManager implements Automation {
       }
     }
 
-    const aqueductMeta = this._host.gamePage.bld.getBuildingExt("aqueduct").meta;
+    const aqueductMeta = this._host.game.bld.getBuildingExt("aqueduct").meta;
     // If aqueducts haven't been upgraded to hydro plants yet...
     if (
       this.settings.upgradeBuildings.buildings.hydroplant.enabled &&
@@ -160,56 +160,49 @@ export class BonfireManager implements Automation {
 
           // TODO: Why do we do this for the aqueduct and not for the pasture?
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          aqueductMeta.calculateEffects!(aqueductMeta, this._host.gamePage);
+          aqueductMeta.calculateEffects!(aqueductMeta, this._host.game);
 
           this._host.engine.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
 
-          this._host.gamePage.ui.render();
+          this._host.game.ui.render();
           this.build("aqueduct", 1, 1);
-          this._host.gamePage.ui.render();
+          this._host.game.ui.render();
 
           return;
         }
       }
     }
 
-    const libraryMeta = this._host.gamePage.bld.getBuildingExt("library").meta;
+    const libraryMeta = this._host.game.bld.getBuildingExt("library").meta;
     if (
       this.settings.upgradeBuildings.buildings.dataCenter.enabled &&
       libraryMeta.unlocked &&
       libraryMeta.stage === 0 &&
       mustExist(libraryMeta.stages)[1].stageUnlocked
     ) {
-      let energyConsumptionRate = this._host.gamePage.workshop.get("cryocomputing").researched
-        ? 1
-        : 2;
-      if (this._host.gamePage.challenges.currentChallenge === "energy") {
+      let energyConsumptionRate = this._host.game.workshop.get("cryocomputing").researched ? 1 : 2;
+      if (this._host.game.challenges.currentChallenge === "energy") {
         energyConsumptionRate *= 2;
       }
 
       // This indicates how valuable a data center is, compared to a single library.
       // We check for possible upgrades, that would make them more valuable.
       let libToDat = 3;
-      if (this._host.gamePage.workshop.get("uplink").researched) {
+      if (this._host.game.workshop.get("uplink").researched) {
         libToDat *=
-          1 +
-          this._host.gamePage.bld.get("biolab").val *
-            this._host.gamePage.getEffect("uplinkDCRatio");
+          1 + this._host.game.bld.get("biolab").val * this._host.game.getEffect("uplinkDCRatio");
       }
-      if (this._host.gamePage.workshop.get("machineLearning").researched) {
+      if (this._host.game.workshop.get("machineLearning").researched) {
         libToDat *=
-          1 +
-          this._host.gamePage.bld.get("aiCore").on *
-            this._host.gamePage.getEffect("dataCenterAIRatio");
+          1 + this._host.game.bld.get("aiCore").on * this._host.game.getEffect("dataCenterAIRatio");
       }
 
       // We now have the energy consumption of data centers and the value of data centers.
       // Assuming, we would upgrade to data centers and buy as many as we need to have value
       // equal to our current libraries, and that wouldn't cap our energy, upgrade them.
       if (
-        this._host.gamePage.resPool.energyProd >=
-        this._host.gamePage.resPool.energyCons +
-          (energyConsumptionRate * libraryMeta.val) / libToDat
+        this._host.game.resPool.energyProd >=
+        this._host.game.resPool.energyCons + (energyConsumptionRate * libraryMeta.val) / libToDat
       ) {
         const prices = mustExist(libraryMeta.stages)[1].prices;
         if (this._bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
@@ -219,17 +212,17 @@ export class BonfireManager implements Automation {
           libraryMeta.val = 0;
           libraryMeta.stage = 1;
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          libraryMeta.calculateEffects!(libraryMeta, this._host.gamePage);
+          libraryMeta.calculateEffects!(libraryMeta, this._host.game);
           this._host.engine.iactivity("upgrade.building.library", [], "ks-upgrade");
-          this._host.gamePage.ui.render();
+          this._host.game.ui.render();
           this.build("library", 1, 1);
-          this._host.gamePage.ui.render();
+          this._host.game.ui.render();
           return;
         }
       }
     }
 
-    const amphitheatreMeta = this._host.gamePage.bld.getBuildingExt("amphitheatre").meta;
+    const amphitheatreMeta = this._host.game.bld.getBuildingExt("amphitheatre").meta;
     // If amphitheathres haven't been upgraded to broadcast towers yet...
     // This seems to be identical to the pasture upgrade.
     if (
@@ -250,9 +243,9 @@ export class BonfireManager implements Automation {
 
         this._host.engine.iactivity("upgrade.building.amphitheatre", [], "ks-upgrade");
 
-        this._host.gamePage.ui.render();
+        this._host.game.ui.render();
         this.build("amphitheatre", 1, 1);
-        this._host.gamePage.ui.render();
+        this._host.game.ui.render();
 
         return;
       }
@@ -262,7 +255,7 @@ export class BonfireManager implements Automation {
   autoMisc() {
     // Auto turn on steamworks
     if (this.settings.turnOnSteamworks.enabled) {
-      const steamworks = this._host.gamePage.bld.getBuildingExt("steamworks");
+      const steamworks = this._host.game.bld.getBuildingExt("steamworks");
       if (steamworks.meta.val && steamworks.meta.on === 0) {
         const button = mustExist(this.getBuildButton("steamworks"));
         button.controller.onAll(button.model);
@@ -271,7 +264,7 @@ export class BonfireManager implements Automation {
 
     // Auto turn on magnetos
     if (this.settings.turnOnMagnetos.enabled) {
-      const magnetos = this._host.gamePage.bld.getBuildingExt("magneto");
+      const magnetos = this._host.game.bld.getBuildingExt("magneto");
       if (magnetos.meta.val && magnetos.meta.on < magnetos.meta.val) {
         const button = mustExist(this.getBuildButton("magneto"));
         button.controller.onAll(button.model);
@@ -311,7 +304,7 @@ export class BonfireManager implements Automation {
   }
 
   getBuild(name: Building): BuildingExt {
-    return this._host.gamePage.bld.getBuildingExt(name);
+    return this._host.game.bld.getBuildingExt(name);
   }
 
   getBuildButton(

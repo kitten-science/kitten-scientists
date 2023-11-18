@@ -57,7 +57,7 @@ export class VillageManager implements Automation {
   }
 
   autoDistributeKittens() {
-    const freeKittens = this._host.gamePage.village.getFreeKittens();
+    const freeKittens = this._host.game.village.getFreeKittens();
     if (!freeKittens) {
       return;
     }
@@ -65,7 +65,7 @@ export class VillageManager implements Automation {
     for (let assignedKitten = 0; assignedKitten < freeKittens; ++assignedKitten) {
       // Find all jobs where we haven't assigned the maximum desired kittens yet.
       const jobsNotCapped = new Array<{ job: JobInfo; count: number; toCap: number }>();
-      for (const job of this._host.gamePage.village.jobs) {
+      for (const job of this._host.game.village.jobs) {
         // Skip disabled jobs and those that haven't been unlocked;
         const enabled = this.settings.jobs[job.name].enabled;
         const unlocked = job.unlocked;
@@ -73,7 +73,7 @@ export class VillageManager implements Automation {
           continue;
         }
 
-        const maxKittensInJob = this._host.gamePage.village.getJobLimit(job.name);
+        const maxKittensInJob = this._host.game.village.getJobLimit(job.name);
         const maxKittensToAssign =
           this.settings.jobs[job.name].max === -1
             ? Number.POSITIVE_INFINITY
@@ -100,7 +100,7 @@ export class VillageManager implements Automation {
       jobsNotCapped.sort((a, b) => a.count - b.count);
       const jobName = noFarmersAssigned ? "farmer" : jobsNotCapped[0].job.name;
 
-      this._host.gamePage.village.assignJob(this._host.gamePage.village.getJob(jobName), 1);
+      this._host.game.village.assignJob(this._host.game.village.getJob(jobName), 1);
       this.manager.render();
       this._host.engine.iactivity(
         "act.distribute",
@@ -112,8 +112,8 @@ export class VillageManager implements Automation {
   }
 
   autoElect(): void {
-    const kittens = this._host.gamePage.village.sim.kittens;
-    const leader = this._host.gamePage.village.leader;
+    const kittens = this._host.game.village.sim.kittens;
+    const leader = this._host.game.village.leader;
     const job = this.settings.electLeader.job.selected;
     const trait = this.settings.electLeader.trait.selected;
 
@@ -133,7 +133,7 @@ export class VillageManager implements Automation {
       }
     }
 
-    this._host.gamePage.villageTab.censusPanel.census.makeLeader(bestLeader);
+    this._host.game.villageTab.censusPanel.census.makeLeader(bestLeader);
     this._host.engine.iactivity("act.elect");
   }
 
@@ -145,27 +145,27 @@ export class VillageManager implements Automation {
 
     for (
       let kittenIndex = 0;
-      kittenIndex < this._host.gamePage.village.sim.kittens.length;
+      kittenIndex < this._host.game.village.sim.kittens.length;
       kittenIndex++
     ) {
       let tier = -1;
       const engineerSpeciality =
-        this._host.gamePage.village.sim.kittens[kittenIndex].engineerSpeciality;
+        this._host.game.village.sim.kittens[kittenIndex].engineerSpeciality;
       // If this kitten has no engineer specialty, skip it.
       if (isNil(engineerSpeciality)) {
         continue;
       }
 
       // Check which rank would be ideal for their craft.
-      tier = mustExist(this._host.gamePage.workshop.getCraft(engineerSpeciality)).tier;
+      tier = mustExist(this._host.game.workshop.getCraft(engineerSpeciality)).tier;
       // If the rank has already been reached, check next kitten.
-      if (tier <= this._host.gamePage.village.sim.kittens[kittenIndex].rank) {
+      if (tier <= this._host.game.village.sim.kittens[kittenIndex].rank) {
         continue;
       }
 
       // We have found an engineer that isn't at their ideal rank.
       // No need to look further.
-      this._host.gamePage.village.promoteKittens();
+      this._host.game.village.promoteKittens();
       return;
     }
   }
@@ -173,25 +173,25 @@ export class VillageManager implements Automation {
   autoPromoteLeader(): void {
     // If we have Civil Service unlocked and a leader elected.
     if (
-      this._host.gamePage.science.get("civil").researched &&
-      this._host.gamePage.village.leader !== null
+      this._host.game.science.get("civil").researched &&
+      this._host.game.village.leader !== null
     ) {
-      const leader = this._host.gamePage.village.leader;
+      const leader = this._host.game.village.leader;
       const rank = leader.rank;
       const gold = this._workshopManager.getResource("gold");
       const goldStock = this._workshopManager.getStock("gold");
 
-      // this._host.gamePage.village.sim.goldToPromote will check gold
-      // this._host.gamePage.village.sim.promote check both gold and exp
+      // this._host.game.village.sim.goldToPromote will check gold
+      // this._host.game.village.sim.promote check both gold and exp
       if (
-        this._host.gamePage.village.sim.goldToPromote(rank, rank + 1, gold.value - goldStock)[0] &&
-        this._host.gamePage.village.sim.promote(leader, rank + 1) === 1
+        this._host.game.village.sim.goldToPromote(rank, rank + 1, gold.value - goldStock)[0] &&
+        this._host.game.village.sim.promote(leader, rank + 1) === 1
       ) {
         this._host.engine.iactivity("act.promote", [rank + 1], "ks-promote");
-        this._host.gamePage.tabs[1].censusPanel.census.renderGovernment(
-          this._host.gamePage.tabs[1].censusPanel.census,
+        this._host.game.tabs[1].censusPanel.census.renderGovernment(
+          this._host.game.tabs[1].censusPanel.census,
         );
-        this._host.gamePage.tabs[1].censusPanel.census.update();
+        this._host.game.tabs[1].censusPanel.census.update();
         this._host.engine.storeForSummary("promote", 1);
       }
     }
@@ -201,7 +201,7 @@ export class VillageManager implements Automation {
     const manpower = this._workshopManager.getResource("manpower");
     const trigger = this.settings.hunt.trigger ?? 0;
 
-    if (manpower.value < 100 || this._host.gamePage.challenges.isActive("pacifism")) {
+    if (manpower.value < 100 || this._host.game.challenges.isActive("pacifism")) {
       return;
     }
 
@@ -230,12 +230,12 @@ export class VillageManager implements Automation {
       if (!isNil(cacheManager)) {
         cacheManager.pushToCache({
           materials: trueOutput,
-          timeStamp: this._host.gamePage.timer.ticksTotal,
+          timeStamp: this._host.game.timer.ticksTotal,
         });
       }
 
       // Now actually perform the hunts.
-      this._host.gamePage.village.huntAll();
+      this._host.game.village.huntAll();
     }
   }
 
@@ -243,8 +243,8 @@ export class VillageManager implements Automation {
     // If we haven't researched festivals yet, or still have more than 400 days left on one,
     // don't hold (another) one.
     if (
-      !this._host.gamePage.science.get("drama").researched ||
-      400 < this._host.gamePage.calendar.festivalDays
+      !this._host.game.science.get("drama").researched ||
+      400 < this._host.game.calendar.festivalDays
     ) {
       return;
     }
@@ -252,8 +252,8 @@ export class VillageManager implements Automation {
     // If we don't have stacked festivals researched yet, and we still have days left on one,
     // don't hold one.
     if (
-      !this._host.gamePage.prestige.getPerk("carnivals").researched &&
-      0 < this._host.gamePage.calendar.festivalDays
+      !this._host.game.prestige.getPerk("carnivals").researched &&
+      0 < this._host.game.calendar.festivalDays
     ) {
       return;
     }
@@ -302,9 +302,9 @@ export class VillageManager implements Automation {
     this.manager.render();
 
     // Now we hold the festival.
-    if (this._host.gamePage.villageTab.festivalBtn.model.enabled) {
-      const beforeDays = this._host.gamePage.calendar.festivalDays;
-      this._host.gamePage.villageTab.festivalBtn.onClick();
+    if (this._host.game.villageTab.festivalBtn.model.enabled) {
+      const beforeDays = this._host.game.calendar.festivalDays;
+      this._host.game.villageTab.festivalBtn.onClick();
       this._host.engine.storeForSummary("festival");
       if (beforeDays > 0) {
         this._host.engine.iactivity("festival.extend", [], "ks-festival");

@@ -194,10 +194,10 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   async copySaveGame() {
-    const saveData = this._host.gamePage.save();
+    const saveData = this._host.game.save();
     const saveDataString = JSON.stringify(saveData);
     const encodedData = this.setting.compress.enabled
-      ? this._host.gamePage.compressLZData(saveDataString)
+      ? this._host.game.compressLZData(saveDataString)
       : saveDataString;
 
     await window.navigator.clipboard.writeText(encodedData);
@@ -244,13 +244,13 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     try {
       JSON.parse(input) as Record<string, unknown>;
       // No parser exception? This is plain JSON. We need to compress it for the savegame loader.
-      const compressed = this._host.gamePage.compressLZData(input);
+      const compressed = this._host.game.compressLZData(input);
       subjectData = compressed;
     } catch (error) {
       /* expected, as we assume compressed input */
     }
 
-    await new SavegameLoader(this._host.gamePage).load(subjectData);
+    await new SavegameLoader(this._host.game).load(subjectData);
 
     this._host.engine.imessage("savegame.loaded");
   }

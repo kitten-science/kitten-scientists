@@ -68,7 +68,7 @@ export class TradeManager implements Automation {
     // The races we might want to trade with during this frame.
     const trades: Array<Race> = [];
 
-    const season = this._host.gamePage.calendar.getCurSeason().name;
+    const season = this._host.game.calendar.getCurSeason().name;
 
     // Determine how many races we will trade with this cycle.
     for (const trade of Object.values(this.settings.races)) {
@@ -253,7 +253,7 @@ export class TradeManager implements Automation {
     if (!isNil(cacheManager)) {
       cacheManager.pushToCache({
         materials: tradeNet,
-        timeStamp: this._host.gamePage.timer.ticksTotal,
+        timeStamp: this._host.game.timer.ticksTotal,
       });
     }
 
@@ -268,7 +268,7 @@ export class TradeManager implements Automation {
   }
 
   autoBuildEmbassies() {
-    if (!this._host.gamePage.diplomacy.races[0].embassyPrices) {
+    if (!this._host.game.diplomacy.races[0].embassyPrices) {
       return;
     }
 
@@ -282,7 +282,7 @@ export class TradeManager implements Automation {
       return;
     }
 
-    const racePanels = this._host.gamePage.diplomacyTab.racePanels;
+    const racePanels = this._host.game.diplomacyTab.racePanels;
     cultureVal = this._workshopManager.getValueAvailable("culture");
 
     const embassyBulk: Partial<
@@ -306,7 +306,7 @@ export class TradeManager implements Automation {
       }
 
       const name = racePanels[panelIndex].race.name;
-      const race = this._host.gamePage.diplomacy.get(name);
+      const race = this._host.game.diplomacy.get(name);
       const max =
         this.settings.buildEmbassies.races[name].max === -1
           ? Number.POSITIVE_INFINITY
@@ -384,13 +384,13 @@ export class TradeManager implements Automation {
     }
 
     if (refreshRequired) {
-      this._host.gamePage.ui.render();
+      this._host.game.ui.render();
     }
   }
 
   autoFeedElders() {
-    const leviathanInfo = this._host.gamePage.diplomacy.get("leviathans");
-    const necrocorns = this._host.gamePage.resPool.get("necrocorn");
+    const leviathanInfo = this._host.game.diplomacy.get("leviathans");
+    const necrocorns = this._host.game.resPool.get("necrocorn");
 
     if (!leviathanInfo.unlocked || necrocorns.value === 0) {
       return;
@@ -399,8 +399,8 @@ export class TradeManager implements Automation {
     if (1 <= necrocorns.value) {
       // If feeding the elders would increase their energy level towards the
       // cap, do it.
-      if (leviathanInfo.energy < this._host.gamePage.diplomacy.getMarkerCap()) {
-        this._host.gamePage.diplomacy.feedElders();
+      if (leviathanInfo.energy < this._host.game.diplomacy.getMarkerCap()) {
+        this._host.game.diplomacy.feedElders();
         this._host.engine.iactivity("act.feed");
         this._host.engine.storeForSummary("feed", 1);
       }
@@ -408,23 +408,23 @@ export class TradeManager implements Automation {
       // We can reach this branch if we have partial necrocorns from resets.
       // The partial necrocorns will then be feed to the elders to bring us back
       // to even zero.
-      if (0.25 * (1 + this._host.gamePage.getEffect("corruptionBoostRatio")) < 1) {
+      if (0.25 * (1 + this._host.game.getEffect("corruptionBoostRatio")) < 1) {
         this._host.engine.storeForSummary("feed", necrocorns.value);
-        this._host.gamePage.diplomacy.feedElders();
+        this._host.game.diplomacy.feedElders();
         this._host.engine.iactivity("dispose.necrocorn");
       }
     }
   }
 
   autoUnlock() {
-    if (!this._host.gamePage.tabs[4].visible) {
+    if (!this._host.game.tabs[4].visible) {
       return;
     }
 
     // Check how many races we could reasonably unlock at this point.
-    const maxRaces = this._host.gamePage.diplomacy.get("leviathans").unlocked ? 8 : 7;
+    const maxRaces = this._host.game.diplomacy.get("leviathans").unlocked ? 8 : 7;
     // If we haven't unlocked that many races yet...
-    if (this._host.gamePage.diplomacyTab.racePanels.length < maxRaces) {
+    if (this._host.game.diplomacyTab.racePanels.length < maxRaces) {
       let refreshRequired = false;
 
       // Get the currently available catpower.
@@ -434,10 +434,10 @@ export class TradeManager implements Automation {
       //       gets to the check for the zebras and doesn't explore again, as they're
       //       already unlocked. Then it takes another iteration to unlock the other race.
       // Send explorers if we haven't discovered the lizards yet.
-      if (!this._host.gamePage.diplomacy.get("lizards").unlocked) {
+      if (!this._host.game.diplomacy.get("lizards").unlocked) {
         if (manpower >= 1000) {
-          this._host.gamePage.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.game.resPool.get("manpower").value -= 1000;
+          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
@@ -445,10 +445,10 @@ export class TradeManager implements Automation {
       }
 
       // Do exactly the same for the sharks.
-      if (!this._host.gamePage.diplomacy.get("sharks").unlocked) {
+      if (!this._host.game.diplomacy.get("sharks").unlocked) {
         if (manpower >= 1000) {
-          this._host.gamePage.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.game.resPool.get("manpower").value -= 1000;
+          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
@@ -456,10 +456,10 @@ export class TradeManager implements Automation {
       }
 
       // Do exactly the same for the griffins.
-      if (!this._host.gamePage.diplomacy.get("griffins").unlocked) {
+      if (!this._host.game.diplomacy.get("griffins").unlocked) {
         if (manpower >= 1000) {
-          this._host.gamePage.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.game.resPool.get("manpower").value -= 1000;
+          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
@@ -468,12 +468,12 @@ export class TradeManager implements Automation {
 
       // For nagas, we additionally need enough culture.
       if (
-        !this._host.gamePage.diplomacy.get("nagas").unlocked &&
-        this._host.gamePage.resPool.get("culture").value >= 1500
+        !this._host.game.diplomacy.get("nagas").unlocked &&
+        this._host.game.resPool.get("culture").value >= 1500
       ) {
         if (manpower >= 1000) {
-          this._host.gamePage.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.game.resPool.get("manpower").value -= 1000;
+          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
@@ -482,12 +482,12 @@ export class TradeManager implements Automation {
 
       // Zebras require us to have a ship.
       if (
-        !this._host.gamePage.diplomacy.get("zebras").unlocked &&
-        this._host.gamePage.resPool.get("ship").value >= 1
+        !this._host.game.diplomacy.get("zebras").unlocked &&
+        this._host.game.resPool.get("ship").value >= 1
       ) {
         if (manpower >= 1000) {
-          this._host.gamePage.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          this._host.game.resPool.get("manpower").value -= 1000;
+          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
@@ -496,13 +496,13 @@ export class TradeManager implements Automation {
 
       // For spiders, we need 100 ships and 125000 science.
       if (
-        !this._host.gamePage.diplomacy.get("spiders").unlocked &&
-        mustExist(this._host.gamePage.resPool.get("ship")).value >= 100 &&
-        mustExist(this._host.gamePage.resPool.get("science")).maxValue > 125000
+        !this._host.game.diplomacy.get("spiders").unlocked &&
+        mustExist(this._host.game.resPool.get("ship")).value >= 100 &&
+        mustExist(this._host.game.resPool.get("science")).maxValue > 125000
       ) {
         if (manpower >= 1000) {
-          mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
-          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          mustExist(this._host.game.resPool.get("manpower")).value -= 1000;
+          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
@@ -511,12 +511,12 @@ export class TradeManager implements Automation {
 
       // Dragons require nuclear fission to be researched.
       if (
-        !this._host.gamePage.diplomacy.get("dragons").unlocked &&
-        this._host.gamePage.science.get("nuclearFission").researched
+        !this._host.game.diplomacy.get("dragons").unlocked &&
+        this._host.game.science.get("nuclearFission").researched
       ) {
         if (manpower >= 1000) {
-          mustExist(this._host.gamePage.resPool.get("manpower")).value -= 1000;
-          const unlockedRace = this._host.gamePage.diplomacy.unlockRandomRace();
+          mustExist(this._host.game.resPool.get("manpower")).value -= 1000;
+          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           refreshRequired = true;
@@ -524,15 +524,15 @@ export class TradeManager implements Automation {
       }
 
       if (refreshRequired) {
-        this._host.gamePage.ui.render();
+        this._host.game.ui.render();
       }
     }
   }
 
   autoTradeBlackcoin() {
-    const coinPrice = this._host.gamePage.calendar.cryptoPrice;
-    const relicsInitial = this._host.gamePage.resPool.get("relic").value;
-    const coinsInitial = this._host.gamePage.resPool.get("blackcoin").value;
+    const coinPrice = this._host.game.calendar.cryptoPrice;
+    const relicsInitial = this._host.game.resPool.get("relic").value;
+    const coinsInitial = this._host.game.resPool.get("blackcoin").value;
     let coinsExchanged = 0.0;
     let relicsExchanged = 0.0;
 
@@ -545,27 +545,27 @@ export class TradeManager implements Automation {
       (this.settings.tradeBlackcoin.trigger ?? 0) < relicsInitial
     ) {
       // function name changed in v1.4.8.0
-      if (typeof this._host.gamePage.diplomacy.buyEcoin === "function") {
-        this._host.gamePage.diplomacy.buyEcoin();
+      if (typeof this._host.game.diplomacy.buyEcoin === "function") {
+        this._host.game.diplomacy.buyEcoin();
       } else {
-        this._host.gamePage.diplomacy.buyBcoin();
+        this._host.game.diplomacy.buyBcoin();
       }
 
-      const currentCoin = this._host.gamePage.resPool.get("blackcoin").value;
+      const currentCoin = this._host.game.resPool.get("blackcoin").value;
       coinsExchanged = Math.round(currentCoin - coinsInitial);
       this._host.engine.iactivity("blackcoin.buy", [coinsExchanged]);
     } else if (
       coinPrice > (this.settings.tradeBlackcoin.sell ?? 1050.0) &&
-      0 < this._host.gamePage.resPool.get("blackcoin").value
+      0 < this._host.game.resPool.get("blackcoin").value
     ) {
       // function name changed in v1.4.8.0
-      if (typeof this._host.gamePage.diplomacy.sellEcoin === "function") {
-        this._host.gamePage.diplomacy.sellEcoin();
+      if (typeof this._host.game.diplomacy.sellEcoin === "function") {
+        this._host.game.diplomacy.sellEcoin();
       } else {
-        this._host.gamePage.diplomacy.sellBcoin();
+        this._host.game.diplomacy.sellBcoin();
       }
 
-      const relicsCurrent = mustExist(this._host.gamePage.resPool.get("relic")).value;
+      const relicsCurrent = mustExist(this._host.game.resPool.get("relic")).value;
       relicsExchanged = Math.round(relicsCurrent - relicsInitial);
 
       this._host.engine.iactivity("blackcoin.sell", [relicsExchanged]);
@@ -594,7 +594,7 @@ export class TradeManager implements Automation {
       );
     }
 
-    this._host.gamePage.diplomacy.tradeMultiple(race, amount);
+    this._host.game.diplomacy.tradeMultiple(race, amount);
     this._host.engine.storeForSummary(race.title, amount, "trade");
     this._host.engine.iactivity("act.trade", [amount, ucfirst(race.title)], "ks-trade");
   }
@@ -677,15 +677,15 @@ export class TradeManager implements Automation {
   getAverageTrade(race: RaceInfo): Partial<Record<Resource, number>> {
     // TODO: This is a lot of magic. It's possible some of it was copied directly from the game.
     const standingRatio =
-      this._host.gamePage.getEffect("standingRatio") +
-      this._host.gamePage.diplomacy.calculateStandingFromPolicies(race.name, this._host.gamePage);
+      this._host.game.getEffect("standingRatio") +
+      this._host.game.diplomacy.calculateStandingFromPolicies(race.name, this._host.game);
 
     const raceRatio = 1 + race.energy * 0.02;
 
     const tradeRatio =
       1 +
-      this._host.gamePage.diplomacy.getTradeRatio() +
-      this._host.gamePage.diplomacy.calculateTradeBonusFromPolicies(race.name, this._host.gamePage);
+      this._host.game.diplomacy.getTradeRatio() +
+      this._host.game.diplomacy.calculateTradeBonusFromPolicies(race.name, this._host.game);
 
     const failedRatio = race.standing < 0 ? race.standing + standingRatio : 0;
     const successRatio = 0 < failedRatio ? 1 + failedRatio : 1;
@@ -701,17 +701,17 @@ export class TradeManager implements Automation {
 
       let mean = 0;
       const tradeChance = race.embassyPrices
-        ? item.chance * (1 + this._host.gamePage.getLimitedDR(0.01 * race.embassyLevel, 0.75))
+        ? item.chance * (1 + this._host.game.getLimitedDR(0.01 * race.embassyLevel, 0.75))
         : item.chance;
       if (race.name === "zebras" && item.name === "titanium") {
-        const shipCount = this._host.gamePage.resPool.get("ship").value;
+        const shipCount = this._host.game.resPool.get("ship").value;
         const titaniumProbability = Math.min(0.15 + shipCount * 0.0035, 1);
         const titaniumRatio = 1 + shipCount / 50;
         mean = 1.5 * titaniumRatio * (successRatio * titaniumProbability);
       } else {
         const seasionRatio = !item.seasons
           ? 1
-          : 1 + item.seasons[this._host.gamePage.calendar.getCurSeason().name];
+          : 1 + item.seasons[this._host.game.calendar.getCurSeason().name];
         const normBought = (successRatio - bonusRatio) * Math.min(tradeChance / 100, 1);
         const normBonus = bonusRatio * Math.min(tradeChance / 100, 1);
         mean = (normBought + 1.25 * normBonus) * item.value * raceRatio * seasionRatio * tradeRatio;
@@ -739,7 +739,7 @@ export class TradeManager implements Automation {
       // Do we have enough embassies to receive the item?
       !(item.minLevel && race.embassyLevel < item.minLevel) &&
       // TODO: These seem a bit too magical.
-      (this._host.gamePage.resPool.get(item.name).unlocked ||
+      (this._host.game.resPool.get(item.name).unlocked ||
         item.name === "titanium" ||
         item.name === "uranium" ||
         race.name === "leviathans")
@@ -845,8 +845,8 @@ export class TradeManager implements Automation {
    */
   getMaterials(race: Maybe<Race> = null): Partial<Record<Resource, number>> {
     const materials: Partial<Record<Resource, number>> = {
-      manpower: 50 - this._host.gamePage.getEffect("tradeCatpowerDiscount"),
-      gold: 15 - this._host.gamePage.getEffect("tradeGoldDiscount"),
+      manpower: 50 - this._host.game.getEffect("tradeCatpowerDiscount"),
+      gold: 15 - this._host.game.getEffect("tradeGoldDiscount"),
     };
 
     if (isNil(race)) {
@@ -869,7 +869,7 @@ export class TradeManager implements Automation {
    * @returns The information object for the given race.
    */
   getRace(name: Race): RaceInfo {
-    const raceInfo = this._host.gamePage.diplomacy.get(name);
+    const raceInfo = this._host.game.diplomacy.get(name);
     if (isNil(raceInfo)) {
       throw new Error(`Unable to retrieve race '${name}'`);
     }

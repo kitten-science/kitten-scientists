@@ -127,8 +127,8 @@ export class BulkPurchaseHelper {
       // Also, don't build more cryochambers than you have chronospheres, as they'll stay unused.
       if (
         name === "cryochambers" &&
-        (mustExist(this._host.gamePage.time.getVSU("usedCryochambers")).val > 0 ||
-          this._host.gamePage.bld.getBuildingExt("chronosphere").meta.val <= buildMetaData.val)
+        (mustExist(this._host.game.time.getVSU("usedCryochambers")).val > 0 ||
+          this._host.game.bld.getBuildingExt("chronosphere").meta.val <= buildMetaData.val)
       ) {
         continue;
       }
@@ -174,17 +174,17 @@ export class BulkPurchaseHelper {
 
         // Get cost reduction modifier.
         // TODO: This seems to be a bug, it should be `build.name`, but only if it is set.
-        const pricesDiscount = this._host.gamePage.getLimitedDR(
+        const pricesDiscount = this._host.game.getLimitedDR(
           // @ts-expect-error getEffect will return 0 for invalid effects. So this is safe either way.
-          this._host.gamePage.getEffect(`${name}CostReduction` as const),
+          this._host.game.getEffect(`${name}CostReduction` as const),
           1,
         );
         const priceModifier = 1 - pricesDiscount;
 
         // Determine the actual prices for this building.
         for (const price of prices) {
-          const resPriceDiscount = this._host.gamePage.getLimitedDR(
-            this._host.gamePage.getEffect(`${price.name}CostReduction` as const),
+          const resPriceDiscount = this._host.game.getLimitedDR(
+            this._host.game.getEffect(`${price.name}CostReduction` as const),
             1,
           );
           const resPriceModifier = 1 - resPriceDiscount;
@@ -227,7 +227,7 @@ export class BulkPurchaseHelper {
 
     // Create a copy of the currently available resources.
     const tempPool: Record<Resource, number> = {} as Record<Resource, number>;
-    for (const res of this._host.gamePage.resPool.resources) {
+    for (const res of this._host.game.resPool.resources) {
       tempPool[res.name] = this._workshopManager.getValueAvailable(res.name);
     }
 
@@ -324,17 +324,16 @@ export class BulkPurchaseHelper {
         if (source && source === "space" && prices[priceIndex].name === "oil") {
           spaceOil = true;
 
-          const oilReductionRatio = this._host.gamePage.getEffect("oilReductionRatio");
+          const oilReductionRatio = this._host.game.getEffect("oilReductionRatio");
           oilPrice =
-            prices[priceIndex].val *
-            (1 - this._host.gamePage.getLimitedDR(oilReductionRatio, 0.75));
+            prices[priceIndex].val * (1 - this._host.game.getLimitedDR(oilReductionRatio, 0.75));
         } else if (buildCacheItem.id === "cryochambers" && prices[priceIndex].name === "karma") {
           cryoKarma = true;
 
-          const burnedParagonRatio = this._host.gamePage.prestige.getBurnedParagonRatio();
+          const burnedParagonRatio = this._host.game.prestige.getBurnedParagonRatio();
           karmaPrice =
             prices[priceIndex].val *
-            (1 - this._host.gamePage.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
+            (1 - this._host.game.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
         }
 
         if (spaceOil) {
@@ -362,7 +361,7 @@ export class BulkPurchaseHelper {
           // Is this the resource retrieval build? This one is limited to 100 units.
           (buildCacheItem.id === "ressourceRetrieval" && unknown_k + buildMetaData.val >= 100) ||
           (buildCacheItem.id === "cryochambers" &&
-            this._host.gamePage.bld.getBuildingExt("chronosphere").meta.val <=
+            this._host.game.bld.getBuildingExt("chronosphere").meta.val <=
               unknown_k + buildMetaData.val)
         ) {
           // Go through all prices that we have already checked.
@@ -370,10 +369,10 @@ export class BulkPurchaseHelper {
             // TODO: This seems to just be `spaceOil`.
             // TODO: A lot of this code seems to be a duplication from a few lines above.
             if (source && source === "space" && prices[priceIndex2].name === "oil") {
-              const oilReductionRatio = this._host.gamePage.getEffect("oilReductionRatio");
+              const oilReductionRatio = this._host.game.getEffect("oilReductionRatio");
               const oilPriceRefund =
                 prices[priceIndex2].val *
-                (1 - this._host.gamePage.getLimitedDR(oilReductionRatio, 0.75));
+                (1 - this._host.game.getLimitedDR(oilReductionRatio, 0.75));
 
               tempPool["oil"] += oilPriceRefund * Math.pow(1.05, unknown_k + buildMetaData.val);
 
@@ -382,10 +381,10 @@ export class BulkPurchaseHelper {
               buildCacheItem.id === "cryochambers" &&
               prices[priceIndex2].name === "karma"
             ) {
-              const burnedParagonRatio = this._host.gamePage.prestige.getBurnedParagonRatio();
+              const burnedParagonRatio = this._host.game.prestige.getBurnedParagonRatio();
               const karmaPriceRefund =
                 prices[priceIndex2].val *
-                (1 - this._host.gamePage.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
+                (1 - this._host.game.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
 
               tempPool["karma"] +=
                 karmaPriceRefund * Math.pow(priceRatio, unknown_k + buildMetaData.val);
@@ -450,7 +449,7 @@ export class BulkPurchaseHelper {
     button: BuildButton<string, ButtonModernModel, ButtonModernController>,
     amount: number,
   ): number {
-    // TODO: Replace this with a call to gamePage.build()
+    // TODO: Replace this with a call to game.build()
     const meta = model.metadata;
     let counter = 0;
 
@@ -460,7 +459,7 @@ export class BulkPurchaseHelper {
       amount = vsMeta.limitBuild - vsMeta.val;
     }
 
-    if ((model.enabled && button.controller.hasResources(model)) || this._host.gamePage.devMode) {
+    if ((model.enabled && button.controller.hasResources(model)) || this._host.game.devMode) {
       while (button.controller.hasResources(model) && amount > 0) {
         model.prices = button.controller.getPrices(model);
         button.controller.payPrice(model);
@@ -469,13 +468,13 @@ export class BulkPurchaseHelper {
         amount--;
       }
       if (vsMeta.breakIronWill) {
-        this._host.gamePage.ironWill = false;
+        this._host.game.ironWill = false;
       }
       if ((meta as UpgradeInfo).unlocks) {
-        this._host.gamePage.unlock((meta as UpgradeInfo).unlocks);
+        this._host.game.unlock((meta as UpgradeInfo).unlocks);
       }
       if ((meta as VoidSpaceUpgradeInfo).upgrades) {
-        this._host.gamePage.upgrade((meta as VoidSpaceUpgradeInfo).upgrades);
+        this._host.game.upgrade((meta as VoidSpaceUpgradeInfo).upgrades);
       }
     }
     return counter;
@@ -524,11 +523,11 @@ export class BulkPurchaseHelper {
     let ratioDiff = 0;
     if (source && source === "bonfire") {
       ratioDiff =
-        this._host.gamePage.getEffect(`${data.name}PriceRatio` as const) +
-        this._host.gamePage.getEffect("priceRatio") +
-        this._host.gamePage.getEffect("mapPriceReduction");
+        this._host.game.getEffect(`${data.name}PriceRatio` as const) +
+        this._host.game.getEffect("priceRatio") +
+        this._host.game.getEffect("mapPriceReduction");
 
-      ratioDiff = this._host.gamePage.getLimitedDR(ratioDiff, ratio - 1);
+      ratioDiff = this._host.game.getLimitedDR(ratioDiff, ratio - 1);
     }
 
     return ratio + ratioDiff;
@@ -553,8 +552,8 @@ export class BulkPurchaseHelper {
     source?: "bonfire" | "space",
   ): boolean {
     // Determine price reduction on this build.
-    const pricesDiscount = this._host.gamePage.getLimitedDR(
-      this._host.gamePage.getEffect(`${build.name}CostReduction` as const),
+    const pricesDiscount = this._host.game.getLimitedDR(
+      this._host.game.getEffect(`${build.name}CostReduction` as const),
       1,
     );
     const priceModifier = 1 - pricesDiscount;
@@ -563,8 +562,8 @@ export class BulkPurchaseHelper {
     // Return `false` if we can't afford something, otherwise `true` is
     // returned by default.
     for (const price of prices) {
-      const resourcePriceDiscount = this._host.gamePage.getLimitedDR(
-        this._host.gamePage.getEffect(`${price.name}CostReduction` as const),
+      const resourcePriceDiscount = this._host.game.getLimitedDR(
+        this._host.game.getEffect(`${price.name}CostReduction` as const),
         1,
       );
       const resourcePriceModifier = 1 - resourcePriceDiscount;
@@ -573,8 +572,8 @@ export class BulkPurchaseHelper {
       // For space builds that consume oil, take the oil price reduction into account.
       // This is caused by space elevators.
       if (source && source === "space" && price.name === "oil") {
-        const oilModifier = this._host.gamePage.getLimitedDR(
-          this._host.gamePage.getEffect("oilReductionRatio"),
+        const oilModifier = this._host.game.getLimitedDR(
+          this._host.game.getEffect("oilReductionRatio"),
           0.75,
         );
         const oilPrice = finalResourcePrice * (1 - oilModifier);
@@ -584,8 +583,8 @@ export class BulkPurchaseHelper {
 
         // For cryochambers, take burned paragon into account for the karma cost.
       } else if (build.name === "cryochambers" && price.name === "karma") {
-        const karmaModifier = this._host.gamePage.getLimitedDR(
-          0.01 * this._host.gamePage.prestige.getBurnedParagonRatio(),
+        const karmaModifier = this._host.game.getLimitedDR(
+          0.01 * this._host.game.prestige.getBurnedParagonRatio(),
           1.0,
         );
         const karmaPrice = finalResourcePrice * (1 - karmaModifier);

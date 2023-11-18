@@ -79,18 +79,18 @@ export class SpaceManager implements Automation {
     }
 
     if (refreshRequired) {
-      this._host.gamePage.ui.render();
+      this._host.game.ui.render();
     }
   }
 
   autoUnlock() {
-    if (!this._host.gamePage.tabs[6].visible) {
+    if (!this._host.game.tabs[6].visible) {
       return;
     }
 
     this.manager.render();
 
-    const missions = this._host.gamePage.space.meta[0].meta;
+    const missions = this._host.game.space.meta[0].meta;
     missionLoop: for (let i = 0; i < missions.length; i++) {
       // If the mission is already purchased or not available yet, continue with the next one.
       if (
@@ -150,7 +150,7 @@ export class SpaceManager implements Automation {
   }
 
   getBuild(name: SpaceBuildings): SpaceBuildingInfo {
-    return this._host.gamePage.space.getBuilding(name);
+    return this._host.game.space.getBuilding(name);
   }
 
   getBuildButton(

@@ -1,5 +1,5 @@
 import { Building, BuildingMeta } from "./buildings.js";
-import { GamePage } from "./gamePage.js";
+import { Game } from "./game.js";
 import {
   ReligionUpgrades,
   TranscendenceUpgradeInfo,
@@ -223,7 +223,7 @@ export type ButtonModelDefaults = {
 export type ButtonModel = { options: ButtonControllerOptions } & ButtonModelDefaults;
 
 export type ButtonController = {
-  new (game: GamePage, controllerOpts?: ButtonControllerOptions): ButtonController;
+  new (game: Game, controllerOpts?: ButtonControllerOptions): ButtonController;
   fetchModel: (options: ButtonControllerOptions) => ButtonModel;
   fetchExtendedModel: (model: ButtonModel) => void;
   initModel: (options: ButtonControllerOptions) => ButtonModel;
@@ -255,7 +255,7 @@ export type ButtonModernModel = {
     | ZiggurathUpgradeInfo;
 } & ButtonModel;
 export type ButtonModernController = ButtonController & {
-  new (game: GamePage): ButtonModernController;
+  new (game: Game): ButtonModernController;
   initModel: (options: ButtonControllerOptions) => ButtonModernModel;
   fetchModel: (options: ButtonControllerOptions) => ButtonModernModel;
   getMetadata: (model: ButtonModernModel) => BuildingMeta | null;
@@ -278,46 +278,46 @@ export type ButtonModernController = ButtonController & {
 };
 
 export type BuildingBtnController = ButtonModernController & {
-  new (game: GamePage): BuildingBtnController;
+  new (game: Game): BuildingBtnController;
 };
 
 export type BuildingNotStackableBtnController = BuildingBtnController & {
-  new (game: GamePage): BuildingNotStackableBtnController;
+  new (game: Game): BuildingNotStackableBtnController;
 };
 
 export type BuildingStackableBtnController = BuildingBtnController & {
-  new (game: GamePage): BuildingStackableBtnController;
+  new (game: Game): BuildingStackableBtnController;
   _buyItem_step2: (model: ButtonModel, event: Event, callback: (success: boolean) => void) => void;
   build: (model: ButtonModel, maxBld: number) => void;
   incrementValue: (model: ButtonModel) => void;
 };
 
 export type EmbassyButtonController = BuildingStackableBtnController & {
-  new (game: GamePage): EmbassyButtonController;
+  new (game: Game): EmbassyButtonController;
 };
 
 export type FixCryochamberBtnController = ButtonModernController & {
-  new (game: GamePage): EmbassyButtonController;
+  new (game: Game): EmbassyButtonController;
   doFixCryochamber: (model: ButtonModernModel) => boolean;
 };
 
 export type PolicyBtnController = BuildingNotStackableBtnController & {
-  new (game: GamePage): PolicyBtnController;
-  shouldBeBough: (model: ButtonModel, game: GamePage) => boolean;
+  new (game: Game): PolicyBtnController;
+  shouldBeBough: (model: ButtonModel, game: Game) => boolean;
 };
 
 export type RefineTearsBtnController = ButtonModernController & {
-  new (game: GamePage): ButtonModernController;
+  new (game: Game): ButtonModernController;
   refine: () => void;
 };
 
 export type ShatterTCBtnController = ButtonModernController & {
-  new (game: GamePage): ButtonModernController;
+  new (game: Game): ButtonModernController;
   doShatterAmt: (model: ButtonModel, amt: number) => void;
 };
 
 export type TechButtonController = BuildingNotStackableBtnController & {
-  new (game: GamePage): TechButtonController;
+  new (game: Game): TechButtonController;
 };
 
 export type Link = {
@@ -329,7 +329,7 @@ export type Link = {
 };
 
 export type TransformBtnController<TOptions = Record<string, unknown>> = ButtonModernController & {
-  new (game: GamePage, options: TOptions): TransformBtnController<TOptions>;
+  new (game: Game, options: TOptions): TransformBtnController<TOptions>;
   _transform: (model: ButtonModel, amt: number) => boolean;
   _newLink: (model: ButtonModel, divider: number) => Link;
   controllerOpts: TOptions;
@@ -371,11 +371,11 @@ export type ComInterface = {
 declare global {
   const classes: ClassList;
   const com: ComInterface;
-  const game: GamePage;
+  const game: Game;
 }
 
 export * from "./buildings.js";
-export * from "./gamePage.js";
+export * from "./game.js";
 export * from "./religion.js";
 export * from "./science.js";
 export * from "./space.js";

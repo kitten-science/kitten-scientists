@@ -66,7 +66,7 @@ export class TimeControlManager {
 
   async autoReset(engine: Engine) {
     // Don't reset if there's a challenge running.
-    if (this._host.gamePage.challenges.currentChallenge) {
+    if (this._host.game.challenges.currentChallenge) {
       return;
     }
 
@@ -92,7 +92,7 @@ export class TimeControlManager {
           const index = checkList.indexOf(name);
           if (index !== -1) {
             checkList.splice(index, 1);
-            if (this._host.gamePage.resPool.hasRes(mustExist(button.model.prices))) {
+            if (this._host.game.resPool.hasRes(mustExist(button.model.prices))) {
               return true;
             }
           }
@@ -108,7 +108,7 @@ export class TimeControlManager {
         let bld;
         try {
           // @ts-expect-error Obvious error here. For upgraded buildings, it needs special handling.
-          bld = this._host.gamePage.bld.getBuildingExt(name);
+          bld = this._host.game.bld.getBuildingExt(name);
         } catch (error) {
           bld = null;
         }
@@ -136,7 +136,7 @@ export class TimeControlManager {
     // actually a bonfire item.
     const unicornPasture = this.settings.reset.religion.buildings.unicornPasture;
     if (unicornPasture.enabled) {
-      const bld = this._host.gamePage.bld.getBuildingExt("unicornPasture");
+      const bld = this._host.game.bld.getBuildingExt("unicornPasture");
       checkedList.push({
         name: mustExist(bld.meta.label),
         trigger: unicornPasture.trigger,
@@ -165,7 +165,7 @@ export class TimeControlManager {
     // This is identical to regular buildings.
     for (const [name, entry] of objectEntries(this.settings.reset.space.buildings)) {
       if (entry.enabled) {
-        const bld = this._host.gamePage.space.getBuilding(name);
+        const bld = this._host.game.space.getBuilding(name);
         checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
         if (0 < entry.trigger) {
           if (bld.val < entry.trigger) {
@@ -186,7 +186,7 @@ export class TimeControlManager {
           const index = checkList.indexOf(name);
           if (index !== -1) {
             checkList.splice(index, 1);
-            if (this._host.gamePage.resPool.hasRes(mustExist(model.prices))) {
+            if (this._host.game.resPool.hasRes(mustExist(model.prices))) {
               break;
             }
           }
@@ -268,7 +268,7 @@ export class TimeControlManager {
     // check resources
     for (const [name, entry] of objectEntries(this.settings.reset.resources.resources)) {
       if (entry.enabled) {
-        const res = mustExist(this._host.gamePage.resPool.get(name));
+        const res = mustExist(this._host.game.resPool.get(name));
         checkedList.push({
           name: this._host.engine.i18n(`$resources.${entry.resource}.title`),
           trigger: entry.stock,
@@ -284,7 +284,7 @@ export class TimeControlManager {
     for (const [, entry] of objectEntries(this.settings.reset.upgrades.upgrades)) {
       if (entry.enabled) {
         const upgrade = mustExist(
-          this._host.gamePage.workshop.upgrades.find(subject => subject.name === entry.upgrade),
+          this._host.game.workshop.upgrades.find(subject => subject.name === entry.upgrade),
         );
         checkedList.push({ name: upgrade.label, trigger: 1, val: upgrade.researched ? 1 : 0 });
         if (!upgrade.researched) {
@@ -312,8 +312,8 @@ export class TimeControlManager {
         await sleep(500);
         this._host.engine.imessage("reset.check", [
           checked.name,
-          this._host.gamePage.getDisplayValueExt(checked.trigger),
-          this._host.gamePage.getDisplayValueExt(checked.val),
+          this._host.game.getDisplayValueExt(checked.trigger),
+          this._host.game.getDisplayValueExt(checked.val),
         ]);
       }
 
@@ -355,12 +355,12 @@ export class TimeControlManager {
     //=============================================================
     for (
       let challengeIndex = 0;
-      challengeIndex < this._host.gamePage.challenges.challenges.length;
+      challengeIndex < this._host.game.challenges.challenges.length;
       challengeIndex++
     ) {
-      this._host.gamePage.challenges.challenges[challengeIndex].pending = false;
+      this._host.game.challenges.challenges[challengeIndex].pending = false;
     }
-    this._host.gamePage.resetAutomatic();
+    this._host.game.resetAutomatic();
     //=============================================================
   }
 
@@ -369,40 +369,38 @@ export class TimeControlManager {
 
     // If there's no available flux (we went below the limit)
     if (temporalFluxAvailable <= 0) {
-      if (this._host.gamePage.time.isAccelerated) {
+      if (this._host.game.time.isAccelerated) {
         // Stop the acceleration
-        this._host.gamePage.time.isAccelerated = false;
+        this._host.game.time.isAccelerated = false;
       }
       return;
     }
 
-    if (this._host.gamePage.time.isAccelerated) {
+    if (this._host.game.time.isAccelerated) {
       return;
     }
 
-    const temporalFlux = this._host.gamePage.resPool.get("temporalFlux");
+    const temporalFlux = this._host.game.resPool.get("temporalFlux");
 
     if (temporalFlux.maxValue * this.settings.accelerateTime.trigger <= temporalFlux.value) {
-      this._host.gamePage.time.isAccelerated = true;
+      this._host.game.time.isAccelerated = true;
       this._host.engine.iactivity("act.accelerate", [], "ks-accelerate");
       this._host.engine.storeForSummary("accelerate", 1);
     }
   }
 
   timeSkip() {
-    if (!this._host.gamePage.workshop.get("chronoforge").researched) {
+    if (!this._host.game.workshop.get("chronoforge").researched) {
       return;
     }
 
     // Don't time skip while we're in a temporal paradox.
-    if (this._host.gamePage.calendar.day < 0) {
+    if (this._host.game.calendar.day < 0) {
       return;
     }
 
     // If we have less time crystals than our required trigger value, bail out.
-    const shatterCostIncreaseChallenge = this._host.gamePage.getEffect(
-      "shatterCostIncreaseChallenge",
-    );
+    const shatterCostIncreaseChallenge = this._host.game.getEffect("shatterCostIncreaseChallenge");
     const timeCrystalsAvailable = this._workshopManager.getValueAvailable("timeCrystal");
     if (
       timeCrystalsAvailable < this.settings.timeSkip.trigger ||
@@ -411,36 +409,34 @@ export class TimeControlManager {
       return;
     }
 
-    const shatterVoidCost = this._host.gamePage.getEffect("shatterVoidCost");
+    const shatterVoidCost = this._host.game.getEffect("shatterVoidCost");
     const voidAvailable = this._workshopManager.getValueAvailable("void");
     if (voidAvailable < shatterVoidCost) {
       return;
     }
 
     // If skipping during this season was disabled, bail out.
-    const season = this._host.gamePage.calendar.season;
-    if (
-      !this.settings.timeSkip.seasons[this._host.gamePage.calendar.seasons[season].name].enabled
-    ) {
+    const season = this._host.game.calendar.season;
+    if (!this.settings.timeSkip.seasons[this._host.game.calendar.seasons[season].name].enabled) {
       return;
     }
 
     // If skipping during this cycle was disabled, bail out.
-    const currentCycle = this._host.gamePage.calendar.cycle;
+    const currentCycle = this._host.game.calendar.cycle;
     if (!this.settings.timeSkip.cyclesList[currentCycle].enabled) {
       return;
     }
 
     // If we have too much stored heat, wait for it to cool down.
-    const heatMax = this._host.gamePage.getEffect("heatMax");
-    const heatNow = this._host.gamePage.time.heat;
+    const heatMax = this._host.game.getEffect("heatMax");
+    const heatNow = this._host.game.time.heat;
     if (!this.settings.timeSkip.ignoreOverheat.enabled) {
       if (heatMax <= heatNow) {
         return;
       }
     }
 
-    const factor = this._host.gamePage.challenges.getChallenge("1000Years").researched ? 5 : 10;
+    const factor = this._host.game.challenges.getChallenge("1000Years").researched ? 5 : 10;
     // The maximum years to skip, based on the user configuration.
     const maxSkips =
       -1 === this.settings.timeSkip.max ? Number.POSITIVE_INFINITY : this.settings.timeSkip.max;
@@ -460,9 +456,9 @@ export class TimeControlManager {
     // The amount of skips to perform.
     let willSkip = 0;
 
-    const yearsPerCycle = this._host.gamePage.calendar.yearsPerCycle;
-    const remainingYearsCurrentCycle = yearsPerCycle - this._host.gamePage.calendar.cycleYear;
-    const cyclesPerEra = this._host.gamePage.calendar.cyclesPerEra;
+    const yearsPerCycle = this._host.game.calendar.yearsPerCycle;
+    const remainingYearsCurrentCycle = yearsPerCycle - this._host.game.calendar.cycleYear;
+    const cyclesPerEra = this._host.game.calendar.cyclesPerEra;
     // If the cycle has more years remaining than we can even skip, skip all of them.
     // I guess the idea here is to not skip through years of another cycle, if that
     // cycle may not be enabled for skipping.
@@ -493,7 +489,7 @@ export class TimeControlManager {
     }
     // If we found we can skip any years, do so now.
     if (0 < willSkip) {
-      const shatter = this._host.gamePage.timeTab.cfPanel.children[0].children[0]; // check?
+      const shatter = this._host.game.timeTab.cfPanel.children[0].children[0]; // check?
       this._host.engine.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
       (shatter.controller as ShatterTCBtnController).doShatterAmt(shatter.model, willSkip);
       this._host.engine.storeForSummary("time.skip", willSkip);
@@ -505,9 +501,9 @@ export class TimeControlManager {
     variant: TimeItemVariant,
   ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
     if (variant === TimeItemVariant.Chronoforge) {
-      return this._host.gamePage.time.getCFU(name as ChronoForgeUpgrades) ?? null;
+      return this._host.game.time.getCFU(name as ChronoForgeUpgrades) ?? null;
     } else {
-      return this._host.gamePage.time.getVSU(name as VoidSpaceUpgrades) ?? null;
+      return this._host.game.time.getVSU(name as VoidSpaceUpgrades) ?? null;
     }
   }
 }

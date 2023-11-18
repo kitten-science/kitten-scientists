@@ -78,8 +78,8 @@ export class ActivitySummary {
 
   resetActivity(): void {
     this._sections = new Map<ActivitySummarySection, Map<string, number>>();
-    this._lastday = this._host.gamePage.calendar.day;
-    this._lastyear = this._host.gamePage.calendar.year;
+    this._lastday = this._host.game.calendar.day;
+    this._lastyear = this._host.game.calendar.year;
   }
 
   storeActivity(name: string, amount = 1, section: ActivitySummarySection = "other"): void {
@@ -103,7 +103,7 @@ export class ActivitySummary {
       section.forEach((amount, name) =>
         summary.push(
           this._host.engine.i18n(`summary.${name}` as const, [
-            this._host.gamePage.getDisplayValueExt(amount),
+            this._host.game.getDisplayValueExt(amount),
           ]),
         ),
       );
@@ -131,7 +131,7 @@ export class ActivitySummary {
       section.forEach((amount, name) => {
         summary.push(
           this._host.engine.i18n("summary.building", [
-            this._host.gamePage.getDisplayValueExt(amount),
+            this._host.game.getDisplayValueExt(amount),
             ucfirst(name),
           ]),
         );
@@ -144,7 +144,7 @@ export class ActivitySummary {
       section.forEach((amount, name) => {
         summary.push(
           this._host.engine.i18n("summary.refine", [
-            this._host.gamePage.getDisplayValueExt(amount),
+            this._host.game.getDisplayValueExt(amount),
             ucfirst(name),
           ]),
         );
@@ -156,7 +156,7 @@ export class ActivitySummary {
       section.forEach((amount, name) => {
         summary.push(
           this._host.engine.i18n("summary.sun", [
-            this._host.gamePage.getDisplayValueExt(amount),
+            this._host.game.getDisplayValueExt(amount),
             ucfirst(name),
           ]),
         );
@@ -169,7 +169,7 @@ export class ActivitySummary {
       section.forEach((amount, name) => {
         summary.push(
           this._host.engine.i18n("summary.craft", [
-            this._host.gamePage.getDisplayValueExt(amount),
+            this._host.game.getDisplayValueExt(amount),
             ucfirst(name),
           ]),
         );
@@ -182,7 +182,7 @@ export class ActivitySummary {
       section.forEach((amount, name) => {
         summary.push(
           this._host.engine.i18n("summary.trade", [
-            this._host.gamePage.getDisplayValueExt(amount),
+            this._host.game.getDisplayValueExt(amount),
             ucfirst(name),
           ]),
         );
@@ -190,8 +190,8 @@ export class ActivitySummary {
     }
 
     if (this._lastday && this._lastyear) {
-      let years = this._host.gamePage.calendar.year - this._lastyear;
-      let days = this._host.gamePage.calendar.day - this._lastday;
+      let years = this._host.game.calendar.year - this._lastyear;
+      let days = this._host.game.calendar.day - this._lastday;
 
       if (days < 0) {
         years -= 1;

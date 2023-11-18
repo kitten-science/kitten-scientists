@@ -2,7 +2,7 @@ import { difference } from "@oliversalzburg/js-utils/lib/array.js";
 import { Maybe, isNil } from "@oliversalzburg/js-utils/lib/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { GamePage, Upgrade } from "../types/index.js";
+import { Game, Upgrade } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class UpgradeSetting extends Setting {
@@ -167,7 +167,7 @@ export class UpgradeSettings extends Setting {
     this.upgrades = upgrades;
   }
 
-  static validateGame(game: GamePage, settings: UpgradeSettings) {
+  static validateGame(game: Game, settings: UpgradeSettings) {
     const inSettings = Object.keys(settings.upgrades);
     const inGame = game.workshop.upgrades.map(upgrade => upgrade.name);
 

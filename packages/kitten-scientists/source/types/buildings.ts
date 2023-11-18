@@ -1,4 +1,4 @@
-import { GamePage, Price } from "./index.js";
+import { Game, Price } from "./index.js";
 
 export type Building =
   | "academy"
@@ -42,9 +42,9 @@ export type Building =
 
 export type StagedBuilding = "broadcasttower" | "dataCenter" | "hydroplant" | "solarfarm";
 
-// Returned from gamePage.bld.getBuildingExt()
+// Returned from game.bld.getBuildingExt()
 export type BuildingMeta = {
-  calculateEffects?: (model: unknown, game: GamePage) => void;
+  calculateEffects?: (model: unknown, game: Game) => void;
   description?: string;
   effects: { unicornsPerTickBase?: number };
   flavor?: string;
@@ -56,8 +56,8 @@ export type BuildingMeta = {
   prices?: Array<Price>;
   stage?: number;
   stages?: Array<{
-    calculateEffects?: (model: unknown, game: GamePage) => void;
-    calculateEnergyProduction?: (game: GamePage, season: unknown) => void;
+    calculateEffects?: (model: unknown, game: Game) => void;
+    calculateEnergyProduction?: (game: Game, season: unknown) => void;
     description: string;
     effects?: { catnipDemandRatio?: number };
     flavor?: string;

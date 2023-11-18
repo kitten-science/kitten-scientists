@@ -2,7 +2,7 @@ import { difference } from "@oliversalzburg/js-utils/lib/array.js";
 import { Maybe, isNil } from "@oliversalzburg/js-utils/lib/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { GamePage, Policy } from "../types/index.js";
+import { Game, Policy } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class PolicySetting extends Setting {
@@ -72,7 +72,7 @@ export class PolicySettings extends Setting {
     this.policies = policies;
   }
 
-  static validateGame(game: GamePage, settings: PolicySettings) {
+  static validateGame(game: Game, settings: PolicySettings) {
     const inSettings = Object.keys(settings.policies);
     const inGame = game.science.policies.map(policy => policy.name);
 

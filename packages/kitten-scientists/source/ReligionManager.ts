@@ -94,7 +94,7 @@ export class ReligionManager implements Automation {
         -1 === this.settings.buildings.unicornPasture.max
           ? Number.POSITIVE_INFINITY
           : this.settings.buildings.unicornPasture.max;
-      const meta = this._host.gamePage.bld.getBuildingExt("unicornPasture").meta;
+      const meta = this._host.game.bld.getBuildingExt("unicornPasture").meta;
       if (this.settings.buildings.unicornPasture.enabled && meta.val < maxPastures) {
         this._bonfireManager.autoBuild({
           unicornPasture: new BonfireBuildingSetting(
@@ -133,10 +133,7 @@ export class ReligionManager implements Automation {
       const tearsAvailableForUse =
         this._workshopManager.getValue("tears") - this._workshopManager.getStock("tears");
 
-      if (
-        !isNil(this._host.gamePage.religionTab.sacrificeBtn) &&
-        tearsAvailableForUse < tearsNeeded
-      ) {
+      if (!isNil(this._host.game.religionTab.sacrificeBtn) && tearsAvailableForUse < tearsNeeded) {
         // if no ziggurat, getBestUnicornBuilding will return unicornPasture
         // TODO: ☝ Yeah. So?
 
@@ -150,13 +147,13 @@ export class ReligionManager implements Automation {
         // How many sacrifices would we need, so we'd end up with enough tears.
         const needSacrifice = Math.ceil(
           (tearsNeeded - tearsAvailableForUse) /
-            this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on,
+            this._host.game.bld.getBuildingExt("ziggurat").meta.on,
         );
 
         // Sacrifice some unicorns to get the tears to buy the building.
         if (needSacrifice < maxSacrifice) {
-          this._host.gamePage.religionTab.sacrificeBtn.controller._transform(
-            this._host.gamePage.religionTab.sacrificeBtn.model,
+          this._host.game.religionTab.sacrificeBtn.controller._transform(
+            this._host.game.religionTab.sacrificeBtn.model,
             needSacrifice,
           );
           // iactivity?
@@ -224,7 +221,7 @@ export class ReligionManager implements Automation {
 
     // If we built any religion buildings, refresh the UI.
     if (refreshRequired) {
-      this._host.gamePage.ui.render();
+      this._host.game.ui.render();
     }
   }
 
@@ -253,19 +250,18 @@ export class ReligionManager implements Automation {
 
     // How many unicorns are produced per second.
     const unicornsPerSecondBase =
-      this._host.gamePage.getEffect("unicornsPerTickBase") *
-      this._host.gamePage.getTicksPerSecondUI();
+      this._host.game.getEffect("unicornsPerTickBase") * this._host.game.getTicksPerSecondUI();
     // Unicorn ratio modifier. For example, through "unicorn selection".
-    const globalRatio = this._host.gamePage.getEffect("unicornsGlobalRatio") + 1;
+    const globalRatio = this._host.game.getEffect("unicornsGlobalRatio") + 1;
     // The unicorn ratio modifier through religion buildings.
-    const religionRatio = this._host.gamePage.getEffect("unicornsRatioReligion") + 1;
+    const religionRatio = this._host.game.getEffect("unicornsRatioReligion") + 1;
     // The ratio modifier through paragon.
-    const paragonRatio = this._host.gamePage.prestige.getParagonProductionRatio() + 1;
+    const paragonRatio = this._host.game.prestige.getParagonProductionRatio() + 1;
     // Bonus from collected faith.
-    const faithBonus = this._host.gamePage.religion.getSolarRevolutionRatio() + 1;
+    const faithBonus = this._host.game.religion.getSolarRevolutionRatio() + 1;
 
-    const currentCycleIndex = this._host.gamePage.calendar.cycle;
-    const currentCycle = this._host.gamePage.calendar.cycles[currentCycleIndex];
+    const currentCycleIndex = this._host.game.calendar.cycle;
+    const currentCycle = this._host.game.calendar.cycles[currentCycleIndex];
 
     // The modifier applied by the current cycle and holding a festival.
     let cycleBonus = 1;
@@ -274,8 +270,8 @@ export class ReligionManager implements Automation {
     if (currentCycle.festivalEffects["unicorns"] !== undefined) {
       // Numeromancy is the metaphysics upgrade that grants bonuses based on cycles.
       if (
-        this._host.gamePage.prestige.getPerk("numeromancy").researched &&
-        this._host.gamePage.calendar.festivalDays
+        this._host.game.prestige.getPerk("numeromancy").researched &&
+        this._host.game.calendar.festivalDays
       ) {
         cycleBonus = currentCycle.festivalEffects["unicorns"];
       }
@@ -285,19 +281,19 @@ export class ReligionManager implements Automation {
       unicornsPerSecondBase * globalRatio * religionRatio * paragonRatio * faithBonus * cycleBonus;
 
     // Based on how many zigguraths we have.
-    const ziggurathRatio = Math.max(this._host.gamePage.bld.getBuildingExt("ziggurat").meta.on, 1);
+    const ziggurathRatio = Math.max(this._host.game.bld.getBuildingExt("ziggurat").meta.on, 1);
     // How many unicorns do we receive in a unicorn rift?
     const baseUnicornsPerRift =
-      500 * (1 + this._host.gamePage.getEffect("unicornsRatioReligion") * 0.1);
+      500 * (1 + this._host.game.getEffect("unicornsRatioReligion") * 0.1);
 
     // How likely are unicorn rifts to happen? The unicornmancy metaphysics upgrade increases this chance.
     let riftChanceRatio = 1;
-    if (this._host.gamePage.prestige.getPerk("unicornmancy").researched) {
+    if (this._host.game.prestige.getPerk("unicornmancy").researched) {
       riftChanceRatio *= 1.1;
     }
     // ?
     const unicornRiftChange =
-      ((this._host.gamePage.getEffect("riftChance") * riftChanceRatio) / (10000 * 2)) *
+      ((this._host.game.getEffect("riftChance") * riftChanceRatio) / (10000 * 2)) *
       baseUnicornsPerRift;
 
     // We now want to determine how quickly the cost of given building is neutralized
@@ -306,11 +302,11 @@ export class ReligionManager implements Automation {
     let bestAmortization = Infinity;
     let bestBuilding: ZiggurathUpgrades | null = null;
     const unicornsPerTickBase = mustExist(
-      this._host.gamePage.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"],
+      this._host.game.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"],
     );
     const pastureProduction =
       unicornsPerTickBase *
-      this._host.gamePage.getTicksPerSecondUI() *
+      this._host.game.getTicksPerSecondUI() *
       globalRatio *
       religionRatio *
       paragonRatio *
@@ -344,9 +340,9 @@ export class ReligionManager implements Automation {
         }
 
         // Determine the effect the building will have on unicorn production and unicorn rifts.
-        const buildingInfo = mustExist(this._host.gamePage.religion.getZU(button.id));
+        const buildingInfo = mustExist(this._host.game.religion.getZU(button.id));
         let religionBonus = religionRatio;
-        let riftChance = this._host.gamePage.getEffect("riftChance");
+        let riftChance = this._host.game.getEffect("riftChance");
         for (const effect in buildingInfo.effects) {
           if (effect === "unicornsRatioReligion") {
             religionBonus += mustExist(buildingInfo.effects.unicornsRatioReligion);
@@ -439,7 +435,7 @@ export class ReligionManager implements Automation {
         const model = mustExist(this.getBuildButton(build.building, build.variant)).model;
         const panel =
           build.variant === UnicornItemVariant.Cryptotheology
-            ? this._host.gamePage.science.get("cryptotheology").researched
+            ? this._host.game.science.get("cryptotheology").researched
             : true;
         buildMetaData.rHidden = !(model.visible && model.enabled && panel);
       }
@@ -461,11 +457,11 @@ export class ReligionManager implements Automation {
   ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo | null {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
-        return this._host.gamePage.religion.getZU(name as ZiggurathUpgrades) ?? null;
+        return this._host.game.religion.getZU(name as ZiggurathUpgrades) ?? null;
       case UnicornItemVariant.OrderOfTheSun:
-        return this._host.gamePage.religion.getRU(name as ReligionUpgrades) ?? null;
+        return this._host.game.religion.getRU(name as ReligionUpgrades) ?? null;
       case UnicornItemVariant.Cryptotheology:
-        return this._host.gamePage.religion.getTU(name as TranscendenceUpgrades) ?? null;
+        return this._host.game.religion.getTU(name as TranscendenceUpgrades) ?? null;
     }
     return null;
   }
@@ -515,7 +511,7 @@ export class ReligionManager implements Automation {
     const unicorns = this._workshopManager.getResource("unicorns");
     const available = this._workshopManager.getValueAvailable("unicorns");
     if (
-      !isNil(this._host.gamePage.religionTab.sacrificeBtn) &&
+      !isNil(this._host.game.religionTab.sacrificeBtn) &&
       this.settings.sacrificeUnicorns.trigger <= available &&
       this.settings.sacrificeUnicorns.trigger <= unicorns.value
     ) {
@@ -523,8 +519,8 @@ export class ReligionManager implements Automation {
       const sacrificePercentage = unicornsForSacrifice / available;
       const percentageInverse = 1 / sacrificePercentage;
 
-      const controller = this._host.gamePage.religionTab.sacrificeBtn.controller;
-      const model = this._host.gamePage.religionTab.sacrificeBtn.model;
+      const controller = this._host.game.religionTab.sacrificeBtn.controller;
+      const model = this._host.game.religionTab.sacrificeBtn.model;
 
       const customController = new classes.ui.religion.TransformBtnController(
         game,
@@ -541,7 +537,7 @@ export class ReligionManager implements Automation {
 
         this._host.engine.iactivity(
           "act.sacrificeUnicorns",
-          [this._host.gamePage.getDisplayValueExt(cost)],
+          [this._host.game.getDisplayValueExt(cost)],
           "ks-faith",
         );
         this._host.engine.storeForSummary(
@@ -557,12 +553,12 @@ export class ReligionManager implements Automation {
     const alicorns = this._workshopManager.getResource("alicorn");
     const available = this._workshopManager.getValueAvailable("alicorn");
     if (
-      !isNil(this._host.gamePage.religionTab.sacrificeAlicornsBtn) &&
+      !isNil(this._host.game.religionTab.sacrificeAlicornsBtn) &&
       this.settings.sacrificeAlicorns.trigger <= available &&
       this.settings.sacrificeAlicorns.trigger <= alicorns.value
     ) {
-      const controller = this._host.gamePage.religionTab.sacrificeAlicornsBtn.controller;
-      const model = this._host.gamePage.religionTab.sacrificeAlicornsBtn.model;
+      const controller = this._host.game.religionTab.sacrificeAlicornsBtn.controller;
+      const model = this._host.game.religionTab.sacrificeAlicornsBtn.model;
 
       await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
 
@@ -582,13 +578,13 @@ export class ReligionManager implements Automation {
     const available = this._workshopManager.getValueAvailable("tears");
     const sorrow = this._workshopManager.getResource("sorrow");
     if (
-      !isNil(this._host.gamePage.religionTab.refineBtn) &&
+      !isNil(this._host.game.religionTab.refineBtn) &&
       this.settings.refineTears.trigger <= available &&
       this.settings.refineTears.trigger <= tears.value &&
       sorrow.value < sorrow.maxValue
     ) {
-      const controller = new classes.ui.religion.RefineTearsBtnController(this._host.gamePage);
-      const model = this._host.gamePage.religionTab.refineBtn.model;
+      const controller = new classes.ui.religion.RefineTearsBtnController(this._host.game);
+      const model = this._host.game.religionTab.refineBtn.model;
 
       await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
 
@@ -605,12 +601,12 @@ export class ReligionManager implements Automation {
     const timeCrystals = this._workshopManager.getResource("timeCrystal");
     const available = this._workshopManager.getValueAvailable("timeCrystal");
     if (
-      !isNil(this._host.gamePage.religionTab.refineTCBtn) &&
+      !isNil(this._host.game.religionTab.refineTCBtn) &&
       this.settings.refineTimeCrystals.trigger <= available &&
       this.settings.refineTimeCrystals.trigger <= timeCrystals.value
     ) {
-      const controller = this._host.gamePage.religionTab.refineTCBtn.controller;
-      const model = this._host.gamePage.religionTab.refineTCBtn.model;
+      const controller = this._host.game.religionTab.refineTCBtn.controller;
+      const model = this._host.game.religionTab.refineTCBtn.model;
 
       await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
 
@@ -638,7 +634,7 @@ export class ReligionManager implements Automation {
       // Adore the galaxy (worship → epiphany)
       if (
         this.settings.adore.enabled &&
-        mustExist(this._host.gamePage.religion.getRU("apocripha")).on
+        mustExist(this._host.game.religion.getRU("apocripha")).on
       ) {
         this._autoAdore(this.settings.adore.trigger);
       }
@@ -652,15 +648,15 @@ export class ReligionManager implements Automation {
   private _autoAdore(trigger: number) {
     const faith = this._workshopManager.getResource("faith");
 
-    const worship = this._host.gamePage.religion.faith;
-    const epiphany = this._host.gamePage.religion.faithRatio;
-    const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence")).on;
+    const worship = this._host.game.religion.faith;
+    const epiphany = this._host.game.religion.faithRatio;
+    const transcendenceReached = mustExist(this._host.game.religion.getRU("transcendence")).on;
     const transcendenceTierCurrent = transcendenceReached
-      ? this._host.gamePage.religion.transcendenceTier
+      ? this._host.game.religion.transcendenceTier
       : 0;
     // game version: 1.4.8.1
     // solarRevolutionLimit is increased by black obelisks.
-    const maxSolarRevolution = 10 + this._host.gamePage.getEffect("solarRevolutionLimit");
+    const maxSolarRevolution = 10 + this._host.game.getEffect("solarRevolutionLimit");
     // The absolute value at which to trigger adoring the galaxy.
     const triggerSolarRevolution = maxSolarRevolution * trigger;
     // How much epiphany we'll get from converting our worship.
@@ -670,40 +666,36 @@ export class ReligionManager implements Automation {
     const epiphanyAfterAdore = epiphany + epiphanyIncrease;
     // How much worship we'll have after adoring.
     const worshipAfterAdore =
-      0.01 + faith.value * (1 + this._host.gamePage.getUnlimitedDR(epiphanyAfterAdore, 0.1) * 0.1);
+      0.01 + faith.value * (1 + this._host.game.getUnlimitedDR(epiphanyAfterAdore, 0.1) * 0.1);
     // How much solar revolution bonus we'll have after adoring.
-    const solarRevolutionAfterAdore = this._host.gamePage.getLimitedDR(
-      this._host.gamePage.getUnlimitedDR(worshipAfterAdore, 1000) / 100,
+    const solarRevolutionAfterAdore = this._host.game.getLimitedDR(
+      this._host.game.getUnlimitedDR(worshipAfterAdore, 1000) / 100,
       maxSolarRevolution,
     );
     // After adoring the galaxy, we want a single praise to be able to reach the trigger
     // level of solar revolution bonus.
     if (triggerSolarRevolution <= solarRevolutionAfterAdore) {
       // Perform the actual adoration.
-      this._host.gamePage.religion._resetFaithInternal(1.01);
+      this._host.game.religion._resetFaithInternal(1.01);
 
       // Log the action.
       this._host.engine.iactivity(
         "act.adore",
         [
-          this._host.gamePage.getDisplayValueExt(worship),
-          this._host.gamePage.getDisplayValueExt(epiphanyIncrease),
+          this._host.game.getDisplayValueExt(worship),
+          this._host.game.getDisplayValueExt(epiphanyIncrease),
         ],
         "ks-adore",
       );
       this._host.engine.storeForSummary("adore", epiphanyIncrease);
-      // TODO: Not sure what the point of updating these values would be
-      //       We're at the end of the branch.
-      //epiphany = this._host.gamePage.religion.faithRatio;
-      //worship = this._host.gamePage.religion.faith;
     }
   }
 
   private _autoTranscend() {
-    let epiphany = this._host.gamePage.religion.faithRatio;
-    const transcendenceReached = mustExist(this._host.gamePage.religion.getRU("transcendence")).on;
+    let epiphany = this._host.game.religion.faithRatio;
+    const transcendenceReached = mustExist(this._host.game.religion.getRU("transcendence")).on;
     let transcendenceTierCurrent = transcendenceReached
-      ? this._host.gamePage.religion.transcendenceTier
+      ? this._host.game.religion.transcendenceTier
       : 0;
 
     // Transcend
@@ -715,8 +707,8 @@ export class ReligionManager implements Automation {
       );
       // The amount of worship needed to upgrade to the next level.
       const needNextLevel =
-        this._host.gamePage.religion._getTranscendTotalPrice(transcendenceTierCurrent + 1) -
-        this._host.gamePage.religion._getTranscendTotalPrice(transcendenceTierCurrent);
+        this._host.game.religion._getTranscendTotalPrice(transcendenceTierCurrent + 1) -
+        this._host.game.religion._getTranscendTotalPrice(transcendenceTierCurrent);
 
       // We want to determine the ideal value for when to transcend.
       // TODO: How exactly this works isn't understood yet.
@@ -729,35 +721,35 @@ export class ReligionManager implements Automation {
         x / (k * k - 1);
 
       if (epiphanyRecommend <= epiphany) {
-        // code copy from kittens game's religion.js: this._host.gamePage.religion.transcend()
-        // this._host.gamePage.religion.transcend() need confirm by player
+        // code copy from kittens game's religion.js: this._host.game.religion.transcend()
+        // this._host.game.religion.transcend() need confirm by player
         // game version: 1.4.8.1
         // ========================================================================================================
         // DO TRANSCEND START
         // ========================================================================================================
-        this._host.gamePage.religion.faithRatio -= needNextLevel;
-        this._host.gamePage.religion.tcratio += needNextLevel;
-        this._host.gamePage.religion.transcendenceTier += 1;
+        this._host.game.religion.faithRatio -= needNextLevel;
+        this._host.game.religion.tcratio += needNextLevel;
+        this._host.game.religion.transcendenceTier += 1;
 
-        const atheism = mustExist(this._host.gamePage.challenges.getChallenge("atheism"));
-        atheism.calculateEffects(atheism, this._host.gamePage);
-        const blackObelisk = mustExist(this._host.gamePage.religion.getTU("blackObelisk"));
-        blackObelisk.calculateEffects(blackObelisk, this._host.gamePage);
+        const atheism = mustExist(this._host.game.challenges.getChallenge("atheism"));
+        atheism.calculateEffects(atheism, this._host.game);
+        const blackObelisk = mustExist(this._host.game.religion.getTU("blackObelisk"));
+        blackObelisk.calculateEffects(blackObelisk, this._host.game);
 
-        this._host.gamePage.msg(
+        this._host.game.msg(
           this._host.engine.i18n("$religion.transcend.msg.success", [
-            this._host.gamePage.religion.transcendenceTier,
+            this._host.game.religion.transcendenceTier,
           ]),
         );
         // ========================================================================================================
         // DO TRANSCEND END
         // ========================================================================================================
 
-        epiphany = this._host.gamePage.religion.faithRatio;
-        transcendenceTierCurrent = this._host.gamePage.religion.transcendenceTier;
+        epiphany = this._host.game.religion.faithRatio;
+        transcendenceTierCurrent = this._host.game.religion.transcendenceTier;
         this._host.engine.iactivity(
           "act.transcend",
-          [this._host.gamePage.getDisplayValueExt(needNextLevel), transcendenceTierCurrent],
+          [this._host.game.getDisplayValueExt(needNextLevel), transcendenceTierCurrent],
           "ks-transcend",
         );
         this._host.engine.storeForSummary("transcend", 1);
@@ -768,10 +760,10 @@ export class ReligionManager implements Automation {
   private _autoPraise() {
     const faith = this._workshopManager.getResource("faith");
     let apocryphaBonus;
-    if (!this._host.gamePage.religion.getFaithBonus) {
-      apocryphaBonus = this._host.gamePage.religion.getApocryphaBonus();
+    if (!this._host.game.religion.getFaithBonus) {
+      apocryphaBonus = this._host.game.religion.getApocryphaBonus();
     } else {
-      apocryphaBonus = this._host.gamePage.religion.getFaithBonus();
+      apocryphaBonus = this._host.game.religion.getFaithBonus();
     }
 
     // Determine how much worship we'll gain and log it.
@@ -780,13 +772,13 @@ export class ReligionManager implements Automation {
     this._host.engine.iactivity(
       "act.praise",
       [
-        this._host.gamePage.getDisplayValueExt(faith.value),
-        this._host.gamePage.getDisplayValueExt(worshipIncrease),
+        this._host.game.getDisplayValueExt(faith.value),
+        this._host.game.getDisplayValueExt(worshipIncrease),
       ],
       "ks-praise",
     );
 
     // Now finally praise the sun.
-    this._host.gamePage.religion.praise();
+    this._host.game.religion.praise();
   }
 }

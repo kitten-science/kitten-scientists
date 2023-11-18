@@ -1,10 +1,10 @@
-import { GamePage } from "../types/index.js";
+import { Game } from "../types/index.js";
 
 export class SavegameLoader {
-  private readonly _gamePage: GamePage;
+  private readonly _game: Game;
 
-  constructor(gamePage: GamePage) {
-    this._gamePage = gamePage;
+  constructor(game: Game) {
+    this._game = game;
   }
 
   /**
@@ -21,7 +21,7 @@ export class SavegameLoader {
         return;
       }
 
-      this._gamePage.saveImportDropboxText(data, error => {
+      this._game.saveImportDropboxText(data, error => {
         if (error) {
           reject(error);
           return;
