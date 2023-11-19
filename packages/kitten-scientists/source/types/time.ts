@@ -79,6 +79,7 @@ export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
   flavor: string;
   limitBuild: 0;
   name: VoidSpaceUpgrades;
+  fixPrices?: Array<Price>;
   upgrades: {
     voidSpace: Array<"cryochambers">;
   };
