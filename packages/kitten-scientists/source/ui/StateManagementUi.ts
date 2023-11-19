@@ -130,7 +130,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     try {
       while (!isNil(state)) {
         const stateObject = JSON.parse(state) as StoredState;
-        this._host.unknownAsEngineStateOrThrow(stateObject.state);
+        UserScript.unknownAsEngineStateOrThrow(stateObject.state);
         this.states.push(stateObject);
         state = localStorage.getItem(`ks.state.${++stateIndex}`);
       }
@@ -220,7 +220,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       return;
     }
 
-    this._host.importSettings(input);
+    this._host.importSettingsFromString(input);
 
     this._host.engine.imessage("settings.loaded");
   }
@@ -294,7 +294,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       return;
     }
 
-    const state = this._host.decodeSettings(input);
+    const state = UserScript.decodeSettings(input);
 
     this.storeState(state);
   }
