@@ -1,4 +1,4 @@
-import { is } from "@oliversalzburg/js-utils/lib/nil.js";
+import { is } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../../UserScript.js";
 import { Container } from "./Container.js";
 import { ExpandoButton } from "./ExpandoButton.js";

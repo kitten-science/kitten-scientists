@@ -1,4 +1,4 @@
-import { mustExist } from "@oliversalzburg/js-utils/lib/nil.js";
+import { mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { TabManager } from "./TabManager.js";
 import { UserScript } from "./UserScript.js";
 import { BuildButton, ScienceTab } from "./types/index.js";

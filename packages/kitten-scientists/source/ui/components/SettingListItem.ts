@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/lib/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../../UserScript.js";
 import { Setting } from "../../settings/Settings.js";
 import { LabelListItem, LabelListItemOptions } from "./LabelListItem.js";

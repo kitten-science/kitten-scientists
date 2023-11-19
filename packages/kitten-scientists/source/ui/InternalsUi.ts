@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/lib/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { EngineSettings } from "../settings/EngineSettings.js";

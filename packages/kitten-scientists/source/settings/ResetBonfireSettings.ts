@@ -1,4 +1,4 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/lib/nil.js";
+import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { BonfireItem } from "./BonfireSettings.js";
 import { Setting, SettingTrigger } from "./Settings.js";
