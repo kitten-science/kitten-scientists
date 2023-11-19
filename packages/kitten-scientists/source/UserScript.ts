@@ -111,6 +111,9 @@ export class UserScript {
     WorkshopSettings.validateGame(this.game, this.engine.workshopManager.settings);
   }
 
+  /**
+   * Start the user script after loading and configuring it.
+   */
   run(): void {
     // Increase messages displayed in log
     // TODO: This should be configurable.
@@ -132,6 +135,9 @@ export class UserScript {
     });
   }
 
+  /**
+   * Check which versions of KS are currently published.
+   */
   async runUpdateCheck() {
     if (KS_RELEASE_CHANNEL === "fixed") {
       cdebug("No update check on 'fixed' release channel.");
@@ -155,37 +161,24 @@ export class UserScript {
     }
   }
 
+  /**
+   * Requests the user interface to refresh.
+   */
   refreshUi() {
     this._userInterface.refreshUi();
   }
 
-  getSettings(): EngineState {
-    return this.engine.stateSerialize();
-  }
-  encodeSettings(settings: EngineState, compress = true) {
+  //#region Settings
+  /**
+   * Encodes an engine states into a string.
+   *
+   * @param settings The engine state to encode.
+   * @param compress Should we use LZString compression?
+   * @returns The settings encoded into a string.
+   */
+  static encodeSettings(settings: EngineState, compress = true): string {
     const settingsString = JSON.stringify(settings);
     return compress ? window.LZString.compressToBase64(settingsString) : settingsString;
-  }
-  async copySettings(settings = this.getSettings(), compress = true) {
-    const encodedSettings = this.encodeSettings(settings, compress);
-    await window.navigator.clipboard.writeText(encodedSettings);
-    this.engine.imessage("settings.copied");
-  }
-
-  setSettings(settings: EngineState) {
-    cinfo("Loading engine state...");
-    this.engine.stateLoad(settings);
-    this._userInterface.refreshUi();
-  }
-
-  unknownAsEngineStateOrThrow(subject?: { v?: string }): EngineState {
-    const v = subject?.v;
-    if (!isNil(v) && typeof v === "string") {
-      if (v.startsWith("2")) {
-        return subject as EngineState;
-      }
-    }
-    throw new Error("Not a valid engine state.");
   }
 
   /**
@@ -195,23 +188,81 @@ export class UserScript {
    * @param compressedSettings An engine state that has previously been serialized to a string.
    * @returns The engine state, if valid.
    */
-  decodeSettings(compressedSettings: string): EngineState {
+  static decodeSettings(compressedSettings: string): EngineState {
     try {
       const naiveParse = JSON.parse(compressedSettings) as { v?: string };
-      return this.unknownAsEngineStateOrThrow(naiveParse);
+      return UserScript.unknownAsEngineStateOrThrow(naiveParse);
     } catch (error) {
       /* expected, as we assume the input to be compressed. */
     }
 
     const settingsString = window.LZString.decompressFromBase64(compressedSettings);
     const parsed = JSON.parse(settingsString) as Record<string, unknown>;
-    return this.unknownAsEngineStateOrThrow(parsed);
+    return UserScript.unknownAsEngineStateOrThrow(parsed);
   }
-  importSettings(compressedSettings: string) {
-    const settings = this.decodeSettings(compressedSettings);
+
+  /**
+   * Retrieves the state from the engine.
+   *
+   * @returns The engine state.
+   */
+  getSettings(): EngineState {
+    return this.engine.stateSerialize();
+  }
+
+  /**
+   * Updates the engine with a new state.
+   *
+   * @param settings The engine state to apply.
+   */
+  setSettings(settings: EngineState) {
+    cinfo("Loading engine state...");
+    this.engine.stateLoad(settings);
+    this._userInterface.refreshUi();
+  }
+
+  /**
+   * Loads an encoded state into the engine.
+   *
+   * @param encodedSettings The encoded settings.
+   */
+  importSettingsFromString(encodedSettings: string) {
+    const settings = UserScript.decodeSettings(encodedSettings);
     this.setSettings(settings);
     this.engine.imessage("settings.imported");
   }
+
+  /**
+   * Copies an engine state to the clipboard.
+   *
+   * @param settings The engine state to copy to the clipboard.
+   * The default is this engine's current state.
+   * @param compress Should the state be compressed?
+   */
+  async copySettings(settings = this.getSettings(), compress = true) {
+    const encodedSettings = UserScript.encodeSettings(settings, compress);
+    await window.navigator.clipboard.writeText(encodedSettings);
+    this.engine.imessage("settings.copied");
+  }
+
+  /**
+   * Determines if an object is an engine state, and throws an
+   * exception otherwise.
+   *
+   * @param subject The object that is hopefully an engine state.
+   * @param subject.v The version in the engine state.
+   * @returns An engine state.
+   */
+  static unknownAsEngineStateOrThrow(subject?: { v?: string }): EngineState {
+    const v = subject?.v;
+    if (!isNil(v) && typeof v === "string") {
+      if (v.startsWith("2")) {
+        return subject as EngineState;
+      }
+    }
+    throw new Error("Not a valid engine state.");
+  }
+  //#endregion
 
   installSaveManager() {
     cinfo("Installing save game manager...");
