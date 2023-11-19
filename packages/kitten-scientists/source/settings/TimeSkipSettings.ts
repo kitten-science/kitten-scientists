@@ -1,4 +1,4 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/lib/nil.js";
+import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Cycle, Season } from "../types/index.js";
 import { Setting, SettingTriggerMax } from "./Settings.js";

@@ -1,4 +1,4 @@
-import { isNil, mustExist } from "@oliversalzburg/js-utils/lib/nil.js";
+import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript, ksVersion } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { cwarn } from "../tools/Log.js";

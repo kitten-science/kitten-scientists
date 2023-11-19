@@ -1,4 +1,4 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/lib/nil.js";
+import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { Resource, SpaceBuildings } from "../types/index.js";
 import { BonfireItem } from "./BonfireSettings.js";
 import { FaithItem, ReligionItem } from "./ReligionSettings.js";
