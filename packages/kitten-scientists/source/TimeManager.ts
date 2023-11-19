@@ -24,12 +24,14 @@ export class TimeManager {
   readonly settings: TimeSettings;
   readonly manager: TabManager<TimeTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
+  private readonly _workshopManager: WorkshopManager;
 
   constructor(host: UserScript, workshopManager: WorkshopManager, settings = new TimeSettings()) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Time");
     this._bulkManager = new BulkPurchaseHelper(this._host, workshopManager);
+    this._workshopManager = workshopManager;
   }
 
   tick(context: TickContext) {
@@ -166,32 +168,40 @@ export class TimeManager {
   }
 
   fixCryochambers() {
-    // Fix used cryochambers
-    // If the option is enabled and we have used cryochambers...
-    if (0 < this._host.game.time.getVSU("usedCryochambers").val) {
-      const btn = this.manager.tab.vsPanel.children[0].children[0];
+    if (this._host.game.time.getVSU("usedCryochambers").val < 1) {
+      return;
+    }
 
-      let fixed = 0;
-      let fixHappened;
-      do {
-        fixHappened = false;
-
-        (btn.controller as FixCryochamberBtnController).buyItem(
-          btn.model as ButtonModernModel,
-          new MouseEvent("click"),
-          // This callback is invoked at the end of the `buyItem` call.
-          // Thus, the callback should be invoked before this loop ends.
-          (didHappen: boolean) => {
-            fixHappened = didHappen;
-            fixed += didHappen ? 1 : 0;
-          },
-        );
-      } while (fixHappened);
-
-      if (0 < fixed) {
-        this._host.engine.iactivity("act.fix.cry", [fixed], "ks-fixCry");
-        this._host.engine.storeForSummary("fix.cry", fixed);
+    const prices = mustExist(this._host.game.time.getVSU("usedCryochambers").fixPrices);
+    for (const price of prices) {
+      const available = this._workshopManager.getValueAvailable(price.name);
+      if (available < price.val) {
+        return;
       }
+    }
+
+    const btn = this.manager.tab.vsPanel.children[0].children[0];
+
+    let fixed = 0;
+    let fixHappened;
+    do {
+      fixHappened = false;
+
+      (btn.controller as FixCryochamberBtnController).buyItem(
+        btn.model as ButtonModernModel,
+        new MouseEvent("click"),
+        // This callback is invoked at the end of the `buyItem` call.
+        // Thus, the callback should be invoked before this loop ends.
+        (didHappen: boolean) => {
+          fixHappened = didHappen;
+          fixed += didHappen ? 1 : 0;
+        },
+      );
+    } while (fixHappened);
+
+    if (0 < fixed) {
+      this._host.engine.iactivity("act.fix.cry", [fixed], "ks-fixCry");
+      this._host.engine.storeForSummary("fix.cry", fixed);
     }
   }
 
