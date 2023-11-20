@@ -28,7 +28,7 @@
         },
         "interval": {
           "description": "The duration between iterations of the engine.",
-          "maximum": 60000,
+          "maximum": 9007199254740991,
           "minimum": 1,
           "type": "number"
         },

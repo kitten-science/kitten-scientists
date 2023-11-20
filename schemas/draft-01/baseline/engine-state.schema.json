@@ -24,7 +24,7 @@
         },
         "interval": {
           "description": "The duration between iterations of the engine.",
-          "maximum": 60000,
+          "maximum": 9007199254740991,
           "minimum": 1,
           "type": "number"
         },
@@ -587,7 +587,7 @@
             "trigger": {
               "description": "Sacrifice when we have this many alicorns.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
@@ -605,7 +605,7 @@
             "trigger": {
               "description": "Sacrifice when we have this many unicorns.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
@@ -623,7 +623,7 @@
             "trigger": {
               "description": "Refine when we have this many tears.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
@@ -641,7 +641,7 @@
             "trigger": {
               "description": "Refine when we have this many time crystals.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
@@ -1137,7 +1137,7 @@
             "trigger": {
               "description": "Amount of time crystals we need to have available.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             },
             "max": {
@@ -2123,19 +2123,19 @@
             "trigger": {
               "description": "How many relics should you have to sell?",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             },
             "buy": {
               "description": "Buy starting at this price.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             },
             "sell": {
               "description": "Sell at this price.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
