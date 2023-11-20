@@ -1,7 +1,6 @@
 {
   "search.exclude": {
-    "**/.yarn": true,
-    "**/.pnp.*": true
+    "**/.yarn": true
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -78,5 +77,11 @@
     "userscript",
     "Ziggurath",
     "zigguraths"
+  ],
+  "json.schemas": [
+    {
+      "fileMatch": ["*.engine-state.json", "*.engine-state.json5", "*.engine-state.jsonc"],
+      "url": "./schemas/draft-01/engine-state.schema.json"
+    }
   ]
 }

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "#/schemas/draft-01/workshop-resource.schema.json",
+  "title": "Workshop Resource",
+  "description": "Kitten Scientists Workshop Resource",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "description": "Should we craft this resource?",
+      "type": "boolean"
+    },
+    "limited": {
+      "type": "boolean"
+    },
+    "max": {
+      "description": "Stop crafting when we have this many items stocked.",
+      "type": "number"
+    }
+  },
+  "required": ["enabled"],
+  "type": "object"
+}

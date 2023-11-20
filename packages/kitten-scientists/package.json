@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "@kitten-science/kitten-scientists",
   "version": "2.0.0-beta.8",
   "description": "Add-on for the wonderful incremental browser game: https://kittensgame.com/web/",

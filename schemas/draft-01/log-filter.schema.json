@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "#/schemas/draft-01/log-filter.schema.json",
+  "title": "Log Filter",
+  "description": "Kitten Scientists Log Filter",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "description": "Is this filter enabled?",
+      "type": "boolean"
+    }
+  },
+  "required": ["enabled"],
+  "type": "object"
+}

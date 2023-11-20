@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "#/schemas/draft-01/resource-control.schema.json",
+  "title": "Resource Control",
+  "description": "Kitten Scientists Resource Control",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "description": "Is this resource under control?",
+      "type": "boolean"
+    },
+    "consume": {
+      "type": "number"
+    },
+    "stock": {
+      "type": "number"
+    }
+  },
+  "required": ["enabled"],
+  "type": "object"
+}

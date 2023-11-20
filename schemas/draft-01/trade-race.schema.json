@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "#/schemas/draft-01/trade-race.schema.json",
+  "title": "Trade Race",
+  "description": "Kitten Scientists Trade Race",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "description": "Should we automatically trade with this race?",
+      "type": "boolean"
+    },
+    "limited": {
+      "description": "Should we use limited trading with this race?",
+      "type": "boolean"
+    },
+    "seasons": {
+      "additionalProperties": false,
+      "description": "The seasons during which to trade with this race.",
+      "properties": {
+        "autumn": { "$ref": "./trade-season.schema.json" },
+        "spring": { "$ref": "./trade-season.schema.json" },
+        "summer": { "$ref": "./trade-season.schema.json" },
+        "winter": { "$ref": "./trade-season.schema.json" }
+      },
+      "required": ["autumn", "spring", "summer", "winter"],
+      "type": "object"
+    }
+  },
+  "required": ["enabled"],
+  "type": "object"
+}

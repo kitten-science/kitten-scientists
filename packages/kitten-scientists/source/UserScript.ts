@@ -210,6 +210,10 @@ export class UserScript {
     return this.engine.stateSerialize();
   }
 
+  getSettingsAsJson(): string {
+    return JSON.stringify(this.getSettings());
+  }
+
   /**
    * Updates the engine with a new state.
    *
