@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "#/schemas/draft-01/trade-embassy.schema.json",
+  "title": "Trade Embassy",
+  "description": "Kitten Scientists Trade Embassy",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "description": "Should we build embassies for this race?",
+      "type": "boolean"
+    },
+    "max": {
+      "description": "How many embassies should we build?",
+      "type": "number"
+    }
+  },
+  "required": ["enabled"],
+  "type": "object"
+}

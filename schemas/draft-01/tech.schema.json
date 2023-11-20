@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "#/schemas/draft-01/tech.schema.json",
+  "title": "Technology",
+  "description": "Kitten Scientists Technology",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "description": "Should this technology be researched automatically?",
+      "type": "boolean"
+    }
+  },
+  "required": ["enabled"],
+  "type": "object"
+}

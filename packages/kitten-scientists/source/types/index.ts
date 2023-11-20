@@ -73,7 +73,6 @@ export type Resource =
   | "paragon"
   | "relic"
   | "science"
-  | "slab"
   | "sorrow"
   | "spice"
   | "starchart"
