@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/workshop-upgrade.schema.json",
+  "$id": "/schemas/draft-01/baseline/workshop-upgrade.schema.json",
   "title": "Workshop Upgrade",
   "description": "Kitten Scientists Workshop Upgrade",
   "additionalProperties": false,

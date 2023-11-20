@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/tech.schema.json",
-  "title": "Technology",
-  "description": "Kitten Scientists Technology",
+  "$id": "/schemas/draft-01/baseline/time-skip-cycle.schema.json",
+  "title": "Time Skip Cycle",
+  "description": "Kitten Scientists Time Skip Cycle",
   "additionalProperties": false,
   "properties": {
     "enabled": {
-      "description": "Should this technology be researched automatically?",
+      "description": "Should we skip during this cycle?",
       "type": "boolean"
     }
   },

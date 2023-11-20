@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/trade-race.schema.json",
+  "$id": "/schemas/draft-01/baseline/trade-race.schema.json",
   "title": "Trade Race",
   "description": "Kitten Scientists Trade Race",
   "additionalProperties": false,
@@ -22,10 +22,10 @@
         "summer": { "$ref": "./trade-season.schema.json" },
         "winter": { "$ref": "./trade-season.schema.json" }
       },
-      "minProperties": 1,
+      "required": ["autumn", "spring", "summer", "winter"],
       "type": "object"
     }
   },
-  "minProperties": 1,
+  "required": ["enabled", "limited", "seasons"],
   "type": "object"
 }

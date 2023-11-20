@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/trade-embassy.schema.json",
+  "$id": "/schemas/draft-01/baseline/trade-embassy.schema.json",
   "title": "Trade Embassy",
   "description": "Kitten Scientists Trade Embassy",
   "additionalProperties": false,
@@ -14,6 +14,6 @@
       "type": "number"
     }
   },
-  "minProperties": 1,
+  "required": ["enabled", "max"],
   "type": "object"
 }

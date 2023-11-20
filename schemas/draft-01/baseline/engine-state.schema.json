@@ -1,18 +1,22 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "#/schemas/draft-01/engine-state.schema.json",
-  "title": "Engine State",
-  "description": "Kitten Scientists Engine State",
+  "$id": "/schemas/draft-01/baseline/engine-state.schema.json",
+  "title": "Engine State Baseline",
+  "description": "Kitten Scientists Engine State Basline",
   "additionalProperties": false,
   "properties": {
-    "$schema": { "type": "string" },
+    "$schema": {
+      "description": "The engine state JSON schema for the document. Ideally, points to this document.",
+      "type": "string"
+    },
     "v": {
-      "description": "The semantic version number of the engine this state relates to.",
+      "description": "The semantic version number of the engine this baseline relates to.",
       "pattern": "^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-.+)$",
       "type": "string"
     },
     "engine": {
       "additionalProperties": false,
+      "description": "Settings relating to KS itself.",
       "properties": {
         "enabled": {
           "description": "Is the engine enabled?",
@@ -26,6 +30,7 @@
         },
         "language": {
           "additionalProperties": false,
+          "description": "Language settings.",
           "properties": {
             "selected": {
               "description": "The language KS runs at.",
@@ -33,10 +38,12 @@
               "type": "string"
             }
           },
+          "required": ["selected"],
           "type": "object"
         },
         "filters": {
           "additionalProperties": false,
+          "description": "Log filters.",
           "properties": {
             "enabled": {
               "description": "Should log filtering be enabled?",
@@ -44,6 +51,7 @@
             },
             "filters": {
               "additionalProperties": false,
+              "description": "Log filter configuration.",
               "properties": {
                 "build": { "$ref": "./log-filter.schema.json" },
                 "craft": { "$ref": "./log-filter.schema.json" },
@@ -63,9 +71,30 @@
                 "promote": { "$ref": "./log-filter.schema.json" },
                 "misc": { "$ref": "./log-filter.schema.json" }
               },
+              "required": [
+                "build",
+                "craft",
+                "upgrade",
+                "research",
+                "trade",
+                "hunt",
+                "praise",
+                "adore",
+                "transcend",
+                "faith",
+                "accelerate",
+                "timeSkip",
+                "festival",
+                "star",
+                "distribute",
+                "promote",
+                "misc"
+              ],
               "type": "object"
             }
-          }
+          },
+          "required": ["enabled", "filters"],
+          "type": "object"
         },
         "resources": {
           "additionalProperties": false,
@@ -138,13 +167,75 @@
                 "wrappingPaper": { "$ref": "./resource-control.schema.json" },
                 "zebras": { "$ref": "./resource-control.schema.json" }
               },
+              "required": [
+                "alloy",
+                "beam",
+                "blueprint",
+                "compedium",
+                "concrate",
+                "eludium",
+                "gear",
+                "kerosene",
+                "manuscript",
+                "megalith",
+                "parchment",
+                "plate",
+                "scaffold",
+                "ship",
+                "slab",
+                "steel",
+                "tanker",
+                "thorium",
+                "wood",
+                "alicorn",
+                "antimatter",
+                "blackcoin",
+                "bloodstone",
+                "burnedParagon",
+                "catnip",
+                "coal",
+                "culture",
+                "elderBox",
+                "faith",
+                "furs",
+                "gflops",
+                "gold",
+                "hashrates",
+                "iron",
+                "ivory",
+                "karma",
+                "kittens",
+                "manpower",
+                "minerals",
+                "necrocorn",
+                "oil",
+                "paragon",
+                "relic",
+                "science",
+                "sorrow",
+                "spice",
+                "starchart",
+                "tears",
+                "temporalFlux",
+                "timeCrystal",
+                "titanium",
+                "tMythril",
+                "unicorns",
+                "unobtainium",
+                "uranium",
+                "void",
+                "wrappingPaper",
+                "zebras"
+              ],
               "type": "object"
             }
           },
+          "required": ["enabled", "resources"],
           "type": "object"
         },
         "states": {
           "additionalProperties": false,
+          "description": "State Management",
           "properties": {
             "enabled": {
               "description": "Should engine states be enabled?\nSetting this to `false` has no effect, as state management is always active.",
@@ -152,32 +243,39 @@
             },
             "noConfirm": {
               "additionalProperties": false,
-              "description": "Should we skip asking for confirmation for destructive operations?",
+              "description": "Confirmation of changes.",
               "properties": {
                 "enabled": {
+                  "description": "Should we skip asking for confirmation for destructive operations?",
                   "type": "boolean"
                 }
               },
+              "required": ["enabled"],
               "type": "object"
             },
             "compress": {
               "additionalProperties": false,
-              "description": "Should copied data be compressed with KG-internal LZString compression?",
+              "description": "Compression settings.",
               "properties": {
                 "enabled": {
+                  "description": "Should copied data be compressed with KG-internal LZString compression?",
                   "type": "boolean"
                 }
               },
+              "required": ["enabled"],
               "type": "object"
             }
           },
+          "required": ["enabled", "noConfirm", "compress"],
           "type": "object"
         }
       },
+      "required": ["enabled", "interval", "language", "filters", "resources", "states"],
       "type": "object"
     },
     "bonfire": {
       "additionalProperties": false,
+      "description": "Features relating to the Bonfire tab.",
       "properties": {
         "enabled": {
           "description": "Is the bonfire automation enabled?",
@@ -185,6 +283,8 @@
         },
         "trigger": {
           "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
           "type": "number"
         },
         "buildings": {
@@ -226,7 +326,6 @@
             "steamworks": { "$ref": "./building-bonfire.schema.json" },
             "temple": { "$ref": "./building-bonfire.schema.json" },
             "tradepost": { "$ref": "./building-bonfire.schema.json" },
-            "unicornPasture": { "$ref": "./building-bonfire.schema.json" },
             "warehouse": { "$ref": "./building-bonfire.schema.json" },
             "workshop": { "$ref": "./building-bonfire.schema.json" },
             "zebraForge": { "$ref": "./building-bonfire.schema.json" },
@@ -234,6 +333,49 @@
             "zebraWorkshop": { "$ref": "./building-bonfire.schema.json" },
             "ziggurat": { "$ref": "./building-bonfire.schema.json" }
           },
+          "required": [
+            "academy",
+            "accelerator",
+            "aiCore",
+            "amphitheatre",
+            "aqueduct",
+            "barn",
+            "biolab",
+            "brewery",
+            "broadcastTower",
+            "calciner",
+            "chapel",
+            "chronosphere",
+            "dataCenter",
+            "factory",
+            "field",
+            "harbor",
+            "hut",
+            "hydroPlant",
+            "library",
+            "logHouse",
+            "lumberMill",
+            "magneto",
+            "mansion",
+            "mine",
+            "mint",
+            "observatory",
+            "oilWell",
+            "pasture",
+            "quarry",
+            "reactor",
+            "smelter",
+            "solarFarm",
+            "steamworks",
+            "temple",
+            "tradepost",
+            "warehouse",
+            "workshop",
+            "zebraForge",
+            "zebraOutpost",
+            "zebraWorkshop",
+            "ziggurat"
+          ],
           "type": "object"
         },
         "turnOnSteamworks": {
@@ -245,6 +387,7 @@
               "type": "boolean"
             }
           },
+          "required": ["enabled"],
           "type": "object"
         },
         "turnOnMagnetos": {
@@ -256,6 +399,7 @@
               "type": "boolean"
             }
           },
+          "required": ["enabled"],
           "type": "object"
         },
         "upgradeBuildings": {
@@ -268,9 +412,11 @@
             },
             "buildings": {
               "additionalProperties": false,
+              "description": "Which buildings to upgrade.",
               "properties": {
                 "broadcasttower": {
                   "additionalProperties": false,
+                  "description": "Broadcast Tower",
                   "properties": {
                     "enabled": {
                       "description": "Automatically upgrade Amphitheatres to Broadcast Towers?",
@@ -282,6 +428,7 @@
                 },
                 "dataCenter": {
                   "additionalProperties": false,
+                  "description": "Data Center",
                   "properties": {
                     "enabled": {
                       "description": "Automatically upgrade Libraries to Data Centers?",
@@ -293,6 +440,7 @@
                 },
                 "hydroplant": {
                   "additionalProperties": false,
+                  "description": "Hydro Plant",
                   "properties": {
                     "enabled": {
                       "description": "Automatically upgrade Aqueducts to Hydro Plants?",
@@ -304,6 +452,7 @@
                 },
                 "solarfarm": {
                   "additionalProperties": false,
+                  "description": "Solar Farm",
                   "properties": {
                     "enabled": {
                       "description": "Automatically upgrade Pastures to Solar Farms?",
@@ -314,17 +463,27 @@
                   "type": "object"
                 }
               },
+              "required": ["broadcasttower", "dataCenter", "hydroplant", "solarfarm"],
               "type": "object"
             }
           },
-          "required": ["enabled"],
+          "required": ["enabled", "buildings"],
           "type": "object"
         }
       },
+      "required": [
+        "enabled",
+        "trigger",
+        "buildings",
+        "turnOnSteamworks",
+        "turnOnMagnetos",
+        "upgradeBuildings"
+      ],
       "type": "object"
     },
     "religion": {
       "additionalProperties": false,
+      "description": "Features relating to the Religion tab.",
       "properties": {
         "enabled": {
           "description": "Is the religion automation enabled?",
@@ -332,6 +491,8 @@
         },
         "trigger": {
           "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
           "type": "number"
         },
         "buildings": {
@@ -369,104 +530,191 @@
             "unicornTomb": { "$ref": "./building-religion.schema.json" },
             "unicornUtopia": { "$ref": "./building-religion.schema.json" }
           },
+          "required": [
+            "apocripha",
+            "basilica",
+            "blackCore",
+            "blackLibrary",
+            "blackNexus",
+            "blackObelisk",
+            "blackPyramid",
+            "blackRadiance",
+            "blazar",
+            "darkNova",
+            "goldenSpire",
+            "holyGenocide",
+            "ivoryCitadel",
+            "ivoryTower",
+            "marker",
+            "scholasticism",
+            "singularity",
+            "skyPalace",
+            "solarchant",
+            "solarRevolution",
+            "stainedGlass",
+            "sunAltar",
+            "sunspire",
+            "templars",
+            "transcendence",
+            "unicornGraveyard",
+            "unicornNecropolis",
+            "unicornPasture",
+            "unicornTomb",
+            "unicornUtopia"
+          ],
           "type": "object"
         },
         "bestUnicornBuilding": {
           "additionalProperties": false,
-          "description": "Should we enforce to always build the most lucrative building first?",
+          "description": "Best Unicorn building",
           "properties": {
             "enabled": {
+              "description": "Should we enforce to always build the most lucrative building first?",
               "type": "boolean"
             }
           },
+          "required": ["enabled"],
           "type": "object"
         },
         "sacrificeAlicorns": {
           "additionalProperties": false,
+          "description": "Sacrifice Alicorns",
           "properties": {
             "enabled": {
+              "description": "Should we sacrifice alicorns?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Sacrifice when we have this many alicorns.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
               "type": "number"
             }
           },
+          "required": ["enabled", "trigger"],
           "type": "object"
         },
         "sacrificeUnicorns": {
           "additionalProperties": false,
+          "description": "Sacrifice Unicorns",
           "properties": {
             "enabled": {
+              "description": "Should we sacrifice unicorns?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Sacrifice when we have this many unicorns.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
               "type": "number"
             }
           },
+          "required": ["enabled", "trigger"],
           "type": "object"
         },
         "refineTears": {
           "additionalProperties": false,
+          "description": "Refine Unicorn Tears",
           "properties": {
             "enabled": {
+              "description": "Should we refine unicorn tears into BLS?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Refine when we have this many tears.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
               "type": "number"
             }
           },
+          "required": ["enabled", "trigger"],
           "type": "object"
         },
         "refineTimeCrystals": {
           "additionalProperties": false,
+          "description": "Refine Time Crystals",
           "properties": {
             "enabled": {
+              "description": "Should we refine time crystals into relics?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Refine when we have this many time crystals.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
               "type": "number"
             }
           },
+          "required": ["enabled", "trigger"],
           "type": "object"
         },
         "autoPraise": {
           "additionalProperties": false,
+          "description": "Praising",
           "properties": {
             "enabled": {
+              "description": "Should we praise the sun?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Praise when we have this much faith.",
+              "minimum": 0,
+              "maximum": 1,
               "type": "number"
             }
           },
+          "required": ["enabled", "trigger"],
           "type": "object"
         },
         "adore": {
           "additionalProperties": false,
+          "description": "Adore the galaxy",
           "properties": {
             "enabled": {
+              "description": "Should we adore the galaxy?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Adore when we have this much epiphany.",
+              "maximum": 1,
+              "minimum": 0,
               "type": "number"
             }
           },
+          "required": ["enabled", "trigger"],
           "type": "object"
         },
         "transcend": {
           "additionalProperties": false,
+          "description": "Transcen",
           "properties": {
             "enabled": {
+              "description": "Should we transcend whenever it would be lucrative?",
               "type": "boolean"
             }
           },
+          "required": ["enabled"],
           "type": "object"
         }
       },
+      "required": [
+        "enabled",
+        "trigger",
+        "buildings",
+        "bestUnicornBuilding",
+        "sacrificeAlicorns",
+        "sacrificeUnicorns",
+        "refineTears",
+        "refineTimeCrystals",
+        "autoPraise",
+        "adore",
+        "transcend"
+      ],
       "type": "object"
     },
     "science": {
       "additionalProperties": false,
+      "description": "Features relating to the Science tab.",
       "properties": {
         "enabled": {
           "description": "Is the science automation enabled?",
@@ -525,9 +773,52 @@
                 "zebraRelationsAppeasement": { "$ref": "./policy.schema.json" },
                 "zebraRelationsBellicosity": { "$ref": "./policy.schema.json" }
               },
+              "required": [
+                "authocracy",
+                "bigStickPolicy",
+                "carnivale",
+                "cityOnAHill",
+                "clearCutting",
+                "communism",
+                "conservation",
+                "culturalExchange",
+                "diplomacy",
+                "environmentalism",
+                "epicurianism",
+                "expansionism",
+                "extravagance",
+                "fascism",
+                "frugality",
+                "fullIndustrialization",
+                "isolationism",
+                "knowledgeSharing",
+                "liberalism",
+                "liberty",
+                "militarizeSpace",
+                "monarchy",
+                "mysticism",
+                "necrocracy",
+                "openWoodlands",
+                "outerSpaceTreaty",
+                "radicalXenophobia",
+                "rationality",
+                "rationing",
+                "republic",
+                "socialism",
+                "stoicism",
+                "stripMining",
+                "sustainability",
+                "technocracy",
+                "theocracy",
+                "tradition",
+                "transkittenism",
+                "zebraRelationsAppeasement",
+                "zebraRelationsBellicosity"
+              ],
               "type": "object"
             }
           },
+          "required": ["enabled", "policies"],
           "type": "object"
         },
         "techs": {
@@ -605,9 +896,74 @@
                 "voidSpace": { "$ref": "./tech.schema.json" },
                 "writing": { "$ref": "./tech.schema.json" }
               },
+              "required": [
+                "acoustics",
+                "advExogeology",
+                "agriculture",
+                "ai",
+                "animal",
+                "antimatter",
+                "archeology",
+                "archery",
+                "architecture",
+                "artificialGravity",
+                "astronomy",
+                "biochemistry",
+                "biology",
+                "blackchain",
+                "brewery",
+                "calendar",
+                "chemistry",
+                "chronophysics",
+                "civil",
+                "combustion",
+                "construction",
+                "cryptotheology",
+                "currency",
+                "dimensionalPhysics",
+                "drama",
+                "ecology",
+                "electricity",
+                "electronics",
+                "engineering",
+                "exogeology",
+                "exogeophysics",
+                "genetics",
+                "hydroponics",
+                "industrialization",
+                "machinery",
+                "math",
+                "mechanization",
+                "metal",
+                "metalurgy",
+                "metaphysics",
+                "mining",
+                "nanotechnology",
+                "navigation",
+                "nuclearFission",
+                "oilProcessing",
+                "orbitalEngineering",
+                "paradoxalKnowledge",
+                "particlePhysics",
+                "philosophy",
+                "physics",
+                "quantumCryptography",
+                "robotics",
+                "rocketry",
+                "sattelites",
+                "steel",
+                "superconductors",
+                "tachyonTheory",
+                "terraformation",
+                "theology",
+                "thorium",
+                "voidSpace",
+                "writing"
+              ],
               "type": "object"
             }
           },
+          "required": ["enabled", "techs"],
           "type": "object"
         },
         "observe": {
@@ -619,14 +975,16 @@
               "type": "boolean"
             }
           },
+          "required": ["enabled"],
           "type": "object"
         }
       },
-      "required": ["enabled"],
+      "required": ["enabled", "policies", "techs", "observe"],
       "type": "object"
     },
     "space": {
       "additionalProperties": false,
+      "description": "Features relating to the Space tab.",
       "properties": {
         "enabled": {
           "description": "Is the space automation enabled?",
@@ -634,6 +992,8 @@
         },
         "trigger": {
           "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
           "type": "number"
         },
         "buildings": {
@@ -663,6 +1023,30 @@
             "tectonic": { "$ref": "./building-space.schema.json" },
             "terraformingStation": { "$ref": "./building-space.schema.json" }
           },
+          "required": [
+            "containmentChamber",
+            "cryostation",
+            "entangler",
+            "heatsink",
+            "hrHarvester",
+            "hydrofracturer",
+            "hydroponics",
+            "moltenCore",
+            "moonBase",
+            "moonOutpost",
+            "orbitalArray",
+            "planetCracker",
+            "researchVessel",
+            "sattelite",
+            "spaceBeacon",
+            "spaceElevator",
+            "spaceStation",
+            "spiceRefinery",
+            "sunforge",
+            "sunlifter",
+            "tectonic",
+            "terraformingStation"
+          ],
           "type": "object"
         },
         "unlockMissions": {
@@ -691,17 +1075,34 @@
                 "umbraMission": { "$ref": "./space-mission.schema.json" },
                 "yarnMission": { "$ref": "./space-mission.schema.json" }
               },
+              "required": [
+                "centaurusSystemMission",
+                "charonMission",
+                "duneMission",
+                "furthestRingMission",
+                "heliosMission",
+                "kairoMission",
+                "moonMission",
+                "orbitalLaunch",
+                "piscineMission",
+                "rorschachMission",
+                "terminusMission",
+                "umbraMission",
+                "yarnMission"
+              ],
               "type": "object"
             }
           },
-          "required": ["enabled"],
+          "required": ["enabled", "missions"],
           "type": "object"
         }
       },
+      "required": ["enabled", "trigger", "buildings", "unlockMissions"],
       "type": "object"
     },
     "timeControl": {
       "additionalProperties": false,
+      "description": "Features relating to controlling time in the game.",
       "properties": {
         "enabled": {
           "description": "Is the time control enabled?",
@@ -709,33 +1110,43 @@
         },
         "accelerateTime": {
           "additionalProperties": false,
-          "description": "Settings for time accelleration.",
+          "description": "Accelerate time.",
           "properties": {
             "enabled": {
               "description": "Should we accelerate time automatically?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Accelerate time when we have this much temporal flux.",
+              "maximum": 1,
+              "minimum": 0,
               "type": "number"
             }
           },
+          "required": ["enabled", "trigger"],
           "type": "object"
         },
         "timeSkip": {
           "additionalProperties": false,
+          "description": "Skip through time.",
           "properties": {
             "enabled": {
               "description": "Should time skipping be enabled?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Amount of time crystals we need to have available.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
               "type": "number"
             },
             "max": {
+              "description": "How many years to skip at most.",
               "type": "number"
             },
             "cycles": {
               "additionalProperties": false,
+              "description": "The cycles during which to skip.",
               "properties": {
                 "charon": { "$ref": "./time-skip-cycle.schema.json" },
                 "umbra": { "$ref": "./time-skip-cycle.schema.json" },
@@ -748,22 +1159,38 @@
                 "terminus": { "$ref": "./time-skip-cycle.schema.json" },
                 "kairo": { "$ref": "./time-skip-cycle.schema.json" }
               },
+              "required": [
+                "charon",
+                "umbra",
+                "yarn",
+                "helios",
+                "cath",
+                "redmoon",
+                "dune",
+                "piscine",
+                "terminus",
+                "kairo"
+              ],
               "type": "object"
             },
             "seasons": {
               "additionalProperties": false,
+              "description": "The seasons during which to skip.",
               "properties": {
                 "spring": { "$ref": "./time-skip-season.schema.json" },
                 "summer": { "$ref": "./time-skip-season.schema.json" },
                 "autumn": { "$ref": "./time-skip-season.schema.json" },
                 "winter": { "$ref": "./time-skip-season.schema.json" }
               },
+              "required": ["spring", "summer", "autumn", "winter"],
               "type": "object"
             },
             "ignoreOverheat": {
               "additionalProperties": false,
+              "description": "Handle overheating from time skips.",
               "properties": {
                 "enabled": {
+                  "description": "Should we ignore overheating and just skip as much as configured?",
                   "type": "boolean"
                 }
               },
@@ -771,11 +1198,12 @@
               "type": "object"
             }
           },
-          "required": ["enabled"],
+          "required": ["enabled", "trigger", "max", "cycles", "seasons", "ignoreOverheat"],
           "type": "object"
         },
         "reset": {
           "additionalProperties": false,
+          "description": "Reset the game.",
           "properties": {
             "enabled": {
               "description": "Should reset automation be enabled?",
@@ -783,6 +1211,7 @@
             },
             "bonfire": {
               "additionalProperties": false,
+              "description": "Bonfire requirements.",
               "properties": {
                 "enabled": {
                   "description": "Ignored, as reset sub-sections are always enabled.",
@@ -834,14 +1263,58 @@
                     "zebraWorkshop": { "$ref": "./reset-building.schema.json" },
                     "ziggurat": { "$ref": "./reset-building.schema.json" }
                   },
+                  "required": [
+                    "academy",
+                    "accelerator",
+                    "aiCore",
+                    "amphitheatre",
+                    "aqueduct",
+                    "barn",
+                    "biolab",
+                    "brewery",
+                    "broadcastTower",
+                    "calciner",
+                    "chapel",
+                    "chronosphere",
+                    "dataCenter",
+                    "factory",
+                    "field",
+                    "harbor",
+                    "hut",
+                    "hydroPlant",
+                    "library",
+                    "logHouse",
+                    "lumberMill",
+                    "magneto",
+                    "mansion",
+                    "mine",
+                    "mint",
+                    "observatory",
+                    "oilWell",
+                    "pasture",
+                    "quarry",
+                    "reactor",
+                    "smelter",
+                    "solarFarm",
+                    "steamworks",
+                    "temple",
+                    "tradepost",
+                    "warehouse",
+                    "workshop",
+                    "zebraForge",
+                    "zebraOutpost",
+                    "zebraWorkshop",
+                    "ziggurat"
+                  ],
                   "type": "object"
                 }
               },
-              "required": ["buildings"],
+              "required": ["enabled", "buildings"],
               "type": "object"
             },
             "religion": {
               "additionalProperties": false,
+              "description": "Religion requirements.",
               "properties": {
                 "enabled": {
                   "description": "Ignored, as reset sub-sections are always enabled.",
@@ -851,7 +1324,6 @@
                   "additionalProperties": false,
                   "description": "The religion buildings that must be built for a reset to be possible.",
                   "properties": {
-                    "academy": { "$ref": "./reset-building.schema.json" },
                     "apocripha": { "$ref": "./reset-building.schema.json" },
                     "basilica": { "$ref": "./reset-building.schema.json" },
                     "blackCore": { "$ref": "./reset-building.schema.json" },
@@ -883,14 +1355,47 @@
                     "unicornTomb": { "$ref": "./reset-building.schema.json" },
                     "unicornUtopia": { "$ref": "./reset-building.schema.json" }
                   },
+                  "required": [
+                    "apocripha",
+                    "basilica",
+                    "blackCore",
+                    "blackLibrary",
+                    "blackNexus",
+                    "blackObelisk",
+                    "blackPyramid",
+                    "blackRadiance",
+                    "blazar",
+                    "darkNova",
+                    "goldenSpire",
+                    "holyGenocide",
+                    "ivoryCitadel",
+                    "ivoryTower",
+                    "marker",
+                    "scholasticism",
+                    "singularity",
+                    "skyPalace",
+                    "solarchant",
+                    "solarRevolution",
+                    "stainedGlass",
+                    "sunAltar",
+                    "sunspire",
+                    "templars",
+                    "transcendence",
+                    "unicornGraveyard",
+                    "unicornNecropolis",
+                    "unicornPasture",
+                    "unicornTomb",
+                    "unicornUtopia"
+                  ],
                   "type": "object"
                 }
               },
-              "required": ["buildings"],
+              "required": ["enabled", "buildings"],
               "type": "object"
             },
             "resources": {
               "additionalProperties": false,
+              "description": "Resource requirements.",
               "properties": {
                 "enabled": {
                   "description": "Ignored, as reset sub-sections are always enabled.",
@@ -959,13 +1464,75 @@
                     "wrappingPaper": { "$ref": "./reset-resource.schema.json" },
                     "zebras": { "$ref": "./reset-resource.schema.json" }
                   },
+                  "required": [
+                    "alicorn",
+                    "alloy",
+                    "antimatter",
+                    "beam",
+                    "blackcoin",
+                    "bloodstone",
+                    "blueprint",
+                    "burnedParagon",
+                    "catnip",
+                    "coal",
+                    "compedium",
+                    "concrate",
+                    "culture",
+                    "elderBox",
+                    "eludium",
+                    "faith",
+                    "furs",
+                    "gear",
+                    "gold",
+                    "gflops",
+                    "hashrates",
+                    "iron",
+                    "ivory",
+                    "karma",
+                    "kerosene",
+                    "kittens",
+                    "manpower",
+                    "manuscript",
+                    "megalith",
+                    "minerals",
+                    "necrocorn",
+                    "oil",
+                    "paragon",
+                    "parchment",
+                    "plate",
+                    "relic",
+                    "scaffold",
+                    "science",
+                    "ship",
+                    "slab",
+                    "sorrow",
+                    "spice",
+                    "starchart",
+                    "steel",
+                    "tanker",
+                    "tears",
+                    "temporalFlux",
+                    "thorium",
+                    "timeCrystal",
+                    "tMythril",
+                    "titanium",
+                    "unicorns",
+                    "unobtainium",
+                    "uranium",
+                    "void",
+                    "wood",
+                    "wrappingPaper",
+                    "zebras"
+                  ],
                   "type": "object"
                 }
               },
+              "required": ["enabled", "resources"],
               "type": "object"
             },
             "space": {
               "additionalProperties": false,
+              "description": "Space requirements.",
               "properties": {
                 "enabled": {
                   "description": "Ignored, as reset sub-sections are always enabled.",
@@ -998,14 +1565,39 @@
                     "tectonic": { "$ref": "./reset-building.schema.json" },
                     "terraformingStation": { "$ref": "./reset-building.schema.json" }
                   },
+                  "required": [
+                    "containmentChamber",
+                    "cryostation",
+                    "entangler",
+                    "heatsink",
+                    "hrHarvester",
+                    "hydrofracturer",
+                    "hydroponics",
+                    "moltenCore",
+                    "moonBase",
+                    "moonOutpost",
+                    "orbitalArray",
+                    "planetCracker",
+                    "researchVessel",
+                    "sattelite",
+                    "spaceBeacon",
+                    "spaceElevator",
+                    "spaceStation",
+                    "spiceRefinery",
+                    "sunforge",
+                    "sunlifter",
+                    "tectonic",
+                    "terraformingStation"
+                  ],
                   "type": "object"
                 }
               },
-              "required": ["buildings"],
+              "required": ["enabled", "buildings"],
               "type": "object"
             },
             "time": {
               "additionalProperties": false,
+              "description": "Time requirements.",
               "properties": {
                 "enabled": {
                   "description": "Ignored, as reset sub-sections are always enabled.",
@@ -1028,14 +1620,29 @@
                     "voidResonator": { "$ref": "./reset-building.schema.json" },
                     "voidRift": { "$ref": "./reset-building.schema.json" }
                   },
+                  "required": [
+                    "blastFurnace",
+                    "chronocontrol",
+                    "cryochambers",
+                    "ressourceRetrieval",
+                    "temporalAccelerator",
+                    "temporalBattery",
+                    "temporalImpedance",
+                    "temporalPress",
+                    "timeBoiler",
+                    "voidHoover",
+                    "voidResonator",
+                    "voidRift"
+                  ],
                   "type": "object"
                 }
               },
-              "required": ["buildings"],
+              "required": ["enabled", "buildings"],
               "type": "object"
             },
             "upgrades": {
               "additionalProperties": false,
+              "description": "Upgrade requirements.",
               "properties": {
                 "enabled": {
                   "description": "Ignored, as reset sub-sections are always enabled.",
@@ -1183,20 +1790,162 @@
                     "voidEnergy": { "$ref": "./reset-upgrade.schema.json" },
                     "voidReactors": { "$ref": "./reset-upgrade.schema.json" }
                   },
+                  "required": [
+                    "advancedAutomation",
+                    "advancedRefinement",
+                    "aiBases",
+                    "aiEngineers",
+                    "alloyArmor",
+                    "alloyAxe",
+                    "alloyBarns",
+                    "alloySaw",
+                    "alloyWarehouses",
+                    "amBases",
+                    "amDrive",
+                    "amFission",
+                    "amReactors",
+                    "amReactorsMK2",
+                    "assistance",
+                    "astrolabe",
+                    "astrophysicists",
+                    "augumentation",
+                    "automatedPlants",
+                    "barges",
+                    "biofuel",
+                    "bolas",
+                    "cadSystems",
+                    "caravanserai",
+                    "carbonSequestration",
+                    "cargoShips",
+                    "celestialMechanics",
+                    "chronoEngineers",
+                    "chronoforge",
+                    "coalFurnace",
+                    "coldFusion",
+                    "combustionEngine",
+                    "compositeBow",
+                    "concreteBarns",
+                    "concreteHuts",
+                    "concreteWarehouses",
+                    "crossbow",
+                    "cryocomputing",
+                    "darkEnergy",
+                    "deepMining",
+                    "distorsion",
+                    "electrolyticSmelting",
+                    "eludiumCracker",
+                    "eludiumHuts",
+                    "eludiumReflectors",
+                    "energyRifts",
+                    "enrichedThorium",
+                    "enrichedUranium",
+                    "factoryAutomation",
+                    "factoryLogistics",
+                    "factoryOptimization",
+                    "factoryProcessing",
+                    "factoryRobotics",
+                    "fluidizedReactors",
+                    "fluxCondensator",
+                    "fuelInjectors",
+                    "geodesy",
+                    "gmo",
+                    "goldOre",
+                    "hubbleTelescope",
+                    "huntingArmor",
+                    "hydroPlantTurbines",
+                    "internet",
+                    "invisibleBlackHand",
+                    "ironAxes",
+                    "ironHoes",
+                    "ironwood",
+                    "lhc",
+                    "logistics",
+                    "longRangeSpaceships",
+                    "machineLearning",
+                    "mineralAxes",
+                    "mineralHoes",
+                    "miningDrill",
+                    "mWReactor",
+                    "nanosuits",
+                    "neuralNetworks",
+                    "nuclearPlants",
+                    "nuclearSmelters",
+                    "offsetPress",
+                    "oilDistillation",
+                    "oilRefinery",
+                    "orbitalGeodesy",
+                    "oxidation",
+                    "photolithography",
+                    "photovoltaic",
+                    "pneumaticPress",
+                    "printingPress",
+                    "pumpjack",
+                    "pyrolysis",
+                    "qdot",
+                    "railgun",
+                    "reactorVessel",
+                    "refrigeration",
+                    "register",
+                    "reinforcedBarns",
+                    "reinforcedSaw",
+                    "reinforcedWarehouses",
+                    "relicStation",
+                    "rotaryKiln",
+                    "satelliteRadio",
+                    "satnav",
+                    "seti",
+                    "silos",
+                    "solarSatellites",
+                    "spaceEngineers",
+                    "spaceManufacturing",
+                    "spiceNavigation",
+                    "starlink",
+                    "stasisChambers",
+                    "steelArmor",
+                    "steelAxe",
+                    "steelPlants",
+                    "steelSaw",
+                    "stoneBarns",
+                    "storageBunkers",
+                    "strenghtenBuild",
+                    "tachyonAccelerators",
+                    "thinFilm",
+                    "thoriumEngine",
+                    "thoriumReactors",
+                    "titaniumAxe",
+                    "titaniumBarns",
+                    "titaniumMirrors",
+                    "titaniumSaw",
+                    "titaniumWarehouses",
+                    "turnSmoothly",
+                    "unicornSelection",
+                    "unobtainiumAxe",
+                    "unobtainiumDrill",
+                    "unobtainiumHuts",
+                    "unobtainiumReflectors",
+                    "unobtainiumSaw",
+                    "uplink",
+                    "voidAspiration",
+                    "voidEnergy",
+                    "voidReactors"
+                  ],
                   "type": "object"
                 }
               },
-              "required": ["upgrades"],
+              "required": ["enabled", "upgrades"],
               "type": "object"
             }
           },
+          "required": ["enabled", "bonfire", "religion", "resources", "space", "time", "upgrades"],
           "type": "object"
         }
       },
+      "required": ["enabled", "accelerateTime", "timeSkip", "reset"],
       "type": "object"
     },
     "time": {
       "additionalProperties": false,
+      "description": "Features relating to the Time tab.",
       "properties": {
         "enabled": {
           "description": "Is the time automation enabled?",
@@ -1204,6 +1953,8 @@
         },
         "trigger": {
           "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
           "type": "number"
         },
         "buildings": {
@@ -1219,38 +1970,57 @@
             "temporalImpedance": { "$ref": "./building-time.schema.json" },
             "temporalPress": { "$ref": "./building-time.schema.json" },
             "timeBoiler": { "$ref": "./building-time.schema.json" },
-            "usedCryochambers": { "$ref": "./building-time.schema.json" },
             "voidHoover": { "$ref": "./building-time.schema.json" },
             "voidResonator": { "$ref": "./building-time.schema.json" },
             "voidRift": { "$ref": "./building-time.schema.json" }
           },
+          "required": [
+            "blastFurnace",
+            "chronocontrol",
+            "cryochambers",
+            "ressourceRetrieval",
+            "temporalAccelerator",
+            "temporalBattery",
+            "temporalImpedance",
+            "temporalPress",
+            "timeBoiler",
+            "voidHoover",
+            "voidResonator",
+            "voidRift"
+          ],
           "type": "object"
         },
         "fixCryochambers": {
           "additionalProperties": false,
+          "description": "Cryochambers",
           "properties": {
             "enabled": {
               "description": "Should cryochambers be fixed automatically?",
               "type": "boolean"
             }
           },
+          "required": ["enabled"],
           "type": "object"
         },
         "turnOnChronoFurnace": {
           "additionalProperties": false,
+          "description": "Chrono Furnace",
           "properties": {
             "enabled": {
               "description": "Should chrono furnaces be turned on automatically?",
               "type": "boolean"
             }
           },
+          "required": ["enabled"],
           "type": "object"
         }
       },
+      "required": ["enabled", "trigger", "buildings", "fixCryochambers", "turnOnChronoFurnace"],
       "type": "object"
     },
     "trade": {
       "additionalProperties": false,
+      "description": "Features relating to the Trade tab.",
       "properties": {
         "enabled": {
           "description": "Is the trade automation enabled?",
@@ -1258,10 +2028,13 @@
         },
         "trigger": {
           "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
           "type": "number"
         },
         "races": {
           "additionalProperties": false,
+          "description": "Trading",
           "properties": {
             "dragons": { "$ref": "./trade-race.schema.json" },
             "griffins": { "$ref": "./trade-race.schema.json" },
@@ -1272,10 +2045,21 @@
             "spiders": { "$ref": "./trade-race.schema.json" },
             "zebras": { "$ref": "./trade-race.schema.json" }
           },
+          "required": [
+            "dragons",
+            "griffins",
+            "nagas",
+            "leviathans",
+            "lizards",
+            "sharks",
+            "spiders",
+            "zebras"
+          ],
           "type": "object"
         },
         "feedLeviathans": {
           "additionalProperties": false,
+          "description": "Leviathan Feedin",
           "properties": {
             "enabled": {
               "description": "Should we feed leviathans whenever possible?",
@@ -1287,6 +2071,7 @@
         },
         "buildEmbassies": {
           "additionalProperties": false,
+          "description": "Embassies",
           "properties": {
             "enabled": {
               "description": "Should we build embassies?",
@@ -1294,10 +2079,13 @@
             },
             "trigger": {
               "description": "What's the trigger value for this automation?",
+              "maximum": 1,
+              "minimum": 0,
               "type": "number"
             },
             "races": {
               "additionalProperties": false,
+              "description": "Embassy Settings",
               "properties": {
                 "dragons": { "$ref": "./trade-embassy.schema.json" },
                 "griffins": { "$ref": "./trade-embassy.schema.json" },
@@ -1308,35 +2096,55 @@
                 "spiders": { "$ref": "./trade-embassy.schema.json" },
                 "zebras": { "$ref": "./trade-embassy.schema.json" }
               },
+              "required": [
+                "dragons",
+                "griffins",
+                "leviathans",
+                "lizards",
+                "nagas",
+                "sharks",
+                "spiders",
+                "zebras"
+              ],
               "type": "object"
             }
           },
-          "required": ["enabled"],
+          "required": ["enabled", "trigger", "races"],
           "type": "object"
         },
         "tradeBlackcoin": {
           "additionalProperties": false,
+          "description": "Blackcoin",
           "properties": {
             "enabled": {
               "description": "Should we trade blackcoin?",
               "type": "boolean"
             },
             "trigger": {
-              "description": "What's the trigger value for this automation?",
+              "description": "How many relics should you have to sell?",
+              "maximum": 9007199254740991,
+              "minimum": 0,
               "type": "number"
             },
             "buy": {
+              "description": "Buy starting at this price.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
               "type": "number"
             },
             "sell": {
+              "description": "Sell at this price.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
               "type": "number"
             }
           },
-          "required": ["enabled"],
+          "required": ["enabled", "trigger", "buy", "sell"],
           "type": "object"
         },
         "unlockRaces": {
           "additionalProperties": false,
+          "description": "Send Explorers",
           "properties": {
             "enabled": {
               "description": "Should we explore new races?",
@@ -1347,10 +2155,20 @@
           "type": "object"
         }
       },
+      "required": [
+        "enabled",
+        "trigger",
+        "races",
+        "feedLeviathans",
+        "buildEmbassies",
+        "tradeBlackcoin",
+        "unlockRaces"
+      ],
       "type": "object"
     },
     "village": {
       "additionalProperties": false,
+      "description": "Features relating to the Village tab.",
       "properties": {
         "enabled": {
           "description": "Is the village automation enabled?",
@@ -1358,6 +2176,7 @@
         },
         "jobs": {
           "additionalProperties": false,
+          "description": "Kitten Job Assignment",
           "properties": {
             "engineer": { "$ref": "./village-job.schema.json" },
             "farmer": { "$ref": "./village-job.schema.json" },
@@ -1368,10 +2187,21 @@
             "scholar": { "$ref": "./village-job.schema.json" },
             "woodcutter": { "$ref": "./village-job.schema.json" }
           },
+          "required": [
+            "engineer",
+            "farmer",
+            "geologist",
+            "hunter",
+            "miner",
+            "priest",
+            "scholar",
+            "woodcutter"
+          ],
           "type": "object"
         },
         "holdFestivals": {
           "additionalProperties": false,
+          "description": "Festivals",
           "properties": {
             "enabled": {
               "description": "Should we hold festivals?",
@@ -1383,34 +2213,43 @@
         },
         "hunt": {
           "additionalProperties": false,
+          "description": "Hunting",
           "properties": {
             "enabled": {
               "description": "Should we send hunters on hunts?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Amount of catpower to have available.",
+              "maximum": 1,
+              "minimum": 0,
               "type": "number"
             }
           },
-          "required": ["enabled"],
+          "required": ["enabled", "trigger"],
           "type": "object"
         },
         "promoteKittens": {
           "additionalProperties": false,
+          "description": "Kitten Promotion",
           "properties": {
             "enabled": {
               "description": "Should we promote kittens?",
               "type": "boolean"
             },
             "trigger": {
+              "description": "Promotion resources to have available.",
+              "maximum": 1,
+              "minimum": 0,
               "type": "number"
             }
           },
-          "required": ["enabled"],
+          "required": ["enabled", "trigger"],
           "type": "object"
         },
         "promoteLeader": {
           "additionalProperties": false,
+          "description": "Leader Promotion",
           "properties": {
             "enabled": {
               "description": "Should we promote our leader?",
@@ -1422,6 +2261,7 @@
         },
         "electLeader": {
           "additionalProperties": false,
+          "description": "Leader Election",
           "properties": {
             "enabled": {
               "description": "Should we elect a leader?",
@@ -1432,6 +2272,7 @@
               "description": "Which job should the leader have?",
               "properties": {
                 "selected": {
+                  "description": "The job of the leader.",
                   "enum": [
                     "engineer",
                     "farmer",
@@ -1452,6 +2293,7 @@
               "description": "Which trait should the leader have?",
               "properties": {
                 "selected": {
+                  "description": "The trait of the leader.",
                   "enum": [
                     "chemist",
                     "engineer",
@@ -1472,10 +2314,20 @@
           "type": "object"
         }
       },
+      "required": [
+        "enabled",
+        "jobs",
+        "holdFestivals",
+        "hunt",
+        "promoteKittens",
+        "promoteLeader",
+        "electLeader"
+      ],
       "type": "object"
     },
     "workshop": {
       "additionalProperties": false,
+      "description": "Features relating to the Workshop tab.",
       "properties": {
         "enabled": {
           "description": "Is the workshop automation enabled?",
@@ -1483,10 +2335,13 @@
         },
         "trigger": {
           "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
           "type": "number"
         },
         "resources": {
           "additionalProperties": false,
+          "description": "Resource crafting settings",
           "properties": {
             "alloy": { "$ref": "./workshop-resource.schema.json" },
             "beam": { "$ref": "./workshop-resource.schema.json" },
@@ -1508,12 +2363,35 @@
             "thorium": { "$ref": "./workshop-resource.schema.json" },
             "wood": { "$ref": "./workshop-resource.schema.json" }
           },
+          "required": [
+            "alloy",
+            "beam",
+            "blueprint",
+            "compedium",
+            "concrate",
+            "eludium",
+            "gear",
+            "kerosene",
+            "manuscript",
+            "megalith",
+            "parchment",
+            "plate",
+            "scaffold",
+            "ship",
+            "slab",
+            "steel",
+            "tanker",
+            "thorium",
+            "wood"
+          ],
           "type": "object"
         },
         "shipOverride": {
           "additionalProperties": false,
+          "description": "Ship override",
           "properties": {
             "enabled": {
+              "description": "Treat ships as unlimited crafting until we have 243?",
               "type": "boolean"
             }
           },
@@ -1522,12 +2400,15 @@
         },
         "unlockUpgrades": {
           "additionalProperties": false,
+          "description": "Unlock Workshop upgrades",
           "properties": {
             "enabled": {
+              "description": "Should we purchase Workshop upgrades?",
               "type": "boolean"
             },
             "upgrades": {
               "additionalProperties": false,
+              "description": "Which Workshop upgrades should we purchase?",
               "properties": {
                 "advancedAutomation": { "$ref": "./workshop-upgrade.schema.json" },
                 "advancedRefinement": { "$ref": "./workshop-upgrade.schema.json" },
@@ -1667,19 +2548,160 @@
                 "voidEnergy": { "$ref": "./workshop-upgrade.schema.json" },
                 "voidReactors": { "$ref": "./workshop-upgrade.schema.json" }
               },
+              "required": [
+                "advancedAutomation",
+                "advancedRefinement",
+                "aiBases",
+                "aiEngineers",
+                "alloyArmor",
+                "alloyAxe",
+                "alloyBarns",
+                "alloySaw",
+                "alloyWarehouses",
+                "amBases",
+                "amDrive",
+                "amFission",
+                "amReactors",
+                "amReactorsMK2",
+                "assistance",
+                "astrolabe",
+                "astrophysicists",
+                "augumentation",
+                "automatedPlants",
+                "barges",
+                "biofuel",
+                "bolas",
+                "cadSystems",
+                "caravanserai",
+                "carbonSequestration",
+                "cargoShips",
+                "celestialMechanics",
+                "chronoEngineers",
+                "chronoforge",
+                "coalFurnace",
+                "coldFusion",
+                "combustionEngine",
+                "compositeBow",
+                "concreteBarns",
+                "concreteHuts",
+                "concreteWarehouses",
+                "crossbow",
+                "cryocomputing",
+                "darkEnergy",
+                "deepMining",
+                "distorsion",
+                "electrolyticSmelting",
+                "eludiumCracker",
+                "eludiumHuts",
+                "eludiumReflectors",
+                "energyRifts",
+                "enrichedThorium",
+                "enrichedUranium",
+                "factoryAutomation",
+                "factoryLogistics",
+                "factoryOptimization",
+                "factoryProcessing",
+                "factoryRobotics",
+                "fluidizedReactors",
+                "fluxCondensator",
+                "fuelInjectors",
+                "geodesy",
+                "gmo",
+                "goldOre",
+                "hubbleTelescope",
+                "huntingArmor",
+                "hydroPlantTurbines",
+                "internet",
+                "invisibleBlackHand",
+                "ironAxes",
+                "ironHoes",
+                "ironwood",
+                "lhc",
+                "logistics",
+                "longRangeSpaceships",
+                "machineLearning",
+                "mineralAxes",
+                "mineralHoes",
+                "miningDrill",
+                "mWReactor",
+                "nanosuits",
+                "neuralNetworks",
+                "nuclearPlants",
+                "nuclearSmelters",
+                "offsetPress",
+                "oilDistillation",
+                "oilRefinery",
+                "orbitalGeodesy",
+                "oxidation",
+                "photolithography",
+                "photovoltaic",
+                "pneumaticPress",
+                "printingPress",
+                "pumpjack",
+                "pyrolysis",
+                "qdot",
+                "railgun",
+                "reactorVessel",
+                "refrigeration",
+                "register",
+                "reinforcedBarns",
+                "reinforcedSaw",
+                "reinforcedWarehouses",
+                "relicStation",
+                "rotaryKiln",
+                "satelliteRadio",
+                "satnav",
+                "seti",
+                "silos",
+                "solarSatellites",
+                "spaceEngineers",
+                "spaceManufacturing",
+                "spiceNavigation",
+                "starlink",
+                "stasisChambers",
+                "steelArmor",
+                "steelAxe",
+                "steelPlants",
+                "steelSaw",
+                "stoneBarns",
+                "storageBunkers",
+                "strenghtenBuild",
+                "tachyonAccelerators",
+                "thinFilm",
+                "thoriumEngine",
+                "thoriumReactors",
+                "titaniumAxe",
+                "titaniumBarns",
+                "titaniumMirrors",
+                "titaniumSaw",
+                "titaniumWarehouses",
+                "turnSmoothly",
+                "unicornSelection",
+                "unobtainiumAxe",
+                "unobtainiumDrill",
+                "unobtainiumHuts",
+                "unobtainiumReflectors",
+                "unobtainiumSaw",
+                "uplink",
+                "voidAspiration",
+                "voidEnergy",
+                "voidReactors"
+              ],
               "type": "object"
             }
           },
-          "required": ["enabled"],
+          "required": ["enabled", "upgrades"],
           "type": "object"
         }
       },
-      "required": ["enabled"],
+      "required": ["enabled", "trigger", "resources", "shipOverride", "unlockUpgrades"],
       "type": "object"
     }
   },
   "required": [
+    "$schema",
     "v",
+    "engine",
     "bonfire",
     "religion",
     "science",

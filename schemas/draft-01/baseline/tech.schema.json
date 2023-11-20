@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/tech.schema.json",
+  "$id": "/schemas/draft-01/baseline/tech.schema.json",
   "title": "Technology",
   "description": "Kitten Scientists Technology",
   "additionalProperties": false,

@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/building-space.schema.json",
-  "title": "Space Building",
-  "description": "Kitten Scientists Space Building",
+  "$id": "/schemas/draft-01/baseline/building-time.schema.json",
+  "title": "Time Building",
+  "description": "Kitten Scientists Time Building",
   "additionalProperties": false,
   "properties": {
     "enabled": {
@@ -14,6 +14,6 @@
       "type": "number"
     }
   },
-  "minProperties": 1,
+  "required": ["enabled", "max"],
   "type": "object"
 }

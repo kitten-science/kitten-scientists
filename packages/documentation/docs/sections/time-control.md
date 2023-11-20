@@ -12,6 +12,7 @@ Allows you to configure when KS should automatically combust TCs to skip years.
 
 For a skip to be triggered, all of these have to be true:
 
+1. We have **Trigger** amount of TCs available.
 1. We are within an enabled **Cycle**.
 1. We are within an enabled **Season**.
 

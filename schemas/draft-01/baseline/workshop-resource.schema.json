@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/workshop-resource.schema.json",
+  "$id": "/schemas/draft-01/baseline/workshop-resource.schema.json",
   "title": "Workshop Resource",
   "description": "Kitten Scientists Workshop Resource",
   "additionalProperties": false,
@@ -18,6 +18,6 @@
       "type": "number"
     }
   },
-  "minProperties": 1,
+  "required": ["enabled", "limited", "max"],
   "type": "object"
 }

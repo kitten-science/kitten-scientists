@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/tech.schema.json",
-  "title": "Technology",
-  "description": "Kitten Scientists Technology",
+  "$id": "/schemas/draft-01/baseline/log-filter.schema.json",
+  "title": "Log Filter",
+  "description": "Kitten Scientists Log Filter",
   "additionalProperties": false,
   "properties": {
     "enabled": {
-      "description": "Should this technology be researched automatically?",
+      "description": "Is this filter enabled?",
       "type": "boolean"
     }
   },

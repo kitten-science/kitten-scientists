@@ -1,0 +1,1867 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "/schemas/draft-01/settings-profile.schema.json",
+  "title": "Settings Profile",
+  "description": "Kitten Scientists Settings Profile",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "description": "The engine state JSON schema for the document. Ideally, points to this document.",
+      "type": "string"
+    },
+    "v": {
+      "description": "The semantic version number of this profile relates to.",
+      "pattern": "^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-.+)$",
+      "type": "string"
+    },
+    "baseline": {
+      "description": "The URL of a KS settings baseline that this profile extends.",
+      "type": "string"
+    },
+    "engine": {
+      "additionalProperties": false,
+      "description": "Settings relating to KS itself.",
+      "properties": {
+        "enabled": {
+          "description": "Is the engine enabled?",
+          "type": "boolean"
+        },
+        "interval": {
+          "description": "The duration between iterations of the engine.",
+          "maximum": 60000,
+          "minimum": 1,
+          "type": "number"
+        },
+        "language": {
+          "additionalProperties": false,
+          "description": "Language settings.",
+          "properties": {
+            "selected": {
+              "description": "The language KS runs at.",
+              "enum": ["cn", "de", "en", "he"],
+              "type": "string"
+            }
+          },
+          "required": ["selected"],
+          "type": "object"
+        },
+        "filters": {
+          "additionalProperties": false,
+          "description": "Log filters.",
+          "properties": {
+            "enabled": {
+              "description": "Should log filtering be enabled?",
+              "type": "boolean"
+            },
+            "filters": {
+              "additionalProperties": false,
+              "description": "Log filter configuration.",
+              "properties": {
+                "build": { "$ref": "./log-filter.schema.json" },
+                "craft": { "$ref": "./log-filter.schema.json" },
+                "upgrade": { "$ref": "./log-filter.schema.json" },
+                "research": { "$ref": "./log-filter.schema.json" },
+                "trade": { "$ref": "./log-filter.schema.json" },
+                "hunt": { "$ref": "./log-filter.schema.json" },
+                "praise": { "$ref": "./log-filter.schema.json" },
+                "adore": { "$ref": "./log-filter.schema.json" },
+                "transcend": { "$ref": "./log-filter.schema.json" },
+                "faith": { "$ref": "./log-filter.schema.json" },
+                "accelerate": { "$ref": "./log-filter.schema.json" },
+                "timeSkip": { "$ref": "./log-filter.schema.json" },
+                "festival": { "$ref": "./log-filter.schema.json" },
+                "star": { "$ref": "./log-filter.schema.json" },
+                "distribute": { "$ref": "./log-filter.schema.json" },
+                "promote": { "$ref": "./log-filter.schema.json" },
+                "misc": { "$ref": "./log-filter.schema.json" }
+              },
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "resources": {
+          "additionalProperties": false,
+          "description": "The resource control settings section.",
+          "properties": {
+            "enabled": {
+              "description": "Is the resource control enabled?\nSetting this to `false` has no effect, as resource control is always active.",
+              "type": "boolean"
+            },
+            "resources": {
+              "additionalProperties": false,
+              "description": "The resource control settings of this state.",
+              "properties": {
+                "alloy": { "$ref": "./resource-control.schema.json" },
+                "beam": { "$ref": "./resource-control.schema.json" },
+                "blueprint": { "$ref": "./resource-control.schema.json" },
+                "compedium": { "$ref": "./resource-control.schema.json" },
+                "concrate": { "$ref": "./resource-control.schema.json" },
+                "eludium": { "$ref": "./resource-control.schema.json" },
+                "gear": { "$ref": "./resource-control.schema.json" },
+                "kerosene": { "$ref": "./resource-control.schema.json" },
+                "manuscript": { "$ref": "./resource-control.schema.json" },
+                "megalith": { "$ref": "./resource-control.schema.json" },
+                "parchment": { "$ref": "./resource-control.schema.json" },
+                "plate": { "$ref": "./resource-control.schema.json" },
+                "scaffold": { "$ref": "./resource-control.schema.json" },
+                "ship": { "$ref": "./resource-control.schema.json" },
+                "slab": { "$ref": "./resource-control.schema.json" },
+                "steel": { "$ref": "./resource-control.schema.json" },
+                "tanker": { "$ref": "./resource-control.schema.json" },
+                "thorium": { "$ref": "./resource-control.schema.json" },
+                "wood": { "$ref": "./resource-control.schema.json" },
+                "alicorn": { "$ref": "./resource-control.schema.json" },
+                "antimatter": { "$ref": "./resource-control.schema.json" },
+                "blackcoin": { "$ref": "./resource-control.schema.json" },
+                "bloodstone": { "$ref": "./resource-control.schema.json" },
+                "burnedParagon": { "$ref": "./resource-control.schema.json" },
+                "catnip": { "$ref": "./resource-control.schema.json" },
+                "coal": { "$ref": "./resource-control.schema.json" },
+                "culture": { "$ref": "./resource-control.schema.json" },
+                "elderBox": { "$ref": "./resource-control.schema.json" },
+                "faith": { "$ref": "./resource-control.schema.json" },
+                "furs": { "$ref": "./resource-control.schema.json" },
+                "gflops": { "$ref": "./resource-control.schema.json" },
+                "gold": { "$ref": "./resource-control.schema.json" },
+                "hashrates": { "$ref": "./resource-control.schema.json" },
+                "iron": { "$ref": "./resource-control.schema.json" },
+                "ivory": { "$ref": "./resource-control.schema.json" },
+                "karma": { "$ref": "./resource-control.schema.json" },
+                "kittens": { "$ref": "./resource-control.schema.json" },
+                "manpower": { "$ref": "./resource-control.schema.json" },
+                "minerals": { "$ref": "./resource-control.schema.json" },
+                "necrocorn": { "$ref": "./resource-control.schema.json" },
+                "oil": { "$ref": "./resource-control.schema.json" },
+                "paragon": { "$ref": "./resource-control.schema.json" },
+                "relic": { "$ref": "./resource-control.schema.json" },
+                "science": { "$ref": "./resource-control.schema.json" },
+                "sorrow": { "$ref": "./resource-control.schema.json" },
+                "spice": { "$ref": "./resource-control.schema.json" },
+                "starchart": { "$ref": "./resource-control.schema.json" },
+                "tears": { "$ref": "./resource-control.schema.json" },
+                "temporalFlux": { "$ref": "./resource-control.schema.json" },
+                "timeCrystal": { "$ref": "./resource-control.schema.json" },
+                "titanium": { "$ref": "./resource-control.schema.json" },
+                "tMythril": { "$ref": "./resource-control.schema.json" },
+                "unicorns": { "$ref": "./resource-control.schema.json" },
+                "unobtainium": { "$ref": "./resource-control.schema.json" },
+                "uranium": { "$ref": "./resource-control.schema.json" },
+                "void": { "$ref": "./resource-control.schema.json" },
+                "wrappingPaper": { "$ref": "./resource-control.schema.json" },
+                "zebras": { "$ref": "./resource-control.schema.json" }
+              },
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "states": {
+          "additionalProperties": false,
+          "description": "State Management",
+          "properties": {
+            "enabled": {
+              "description": "Should engine states be enabled?\nSetting this to `false` has no effect, as state management is always active.",
+              "type": "boolean"
+            },
+            "noConfirm": {
+              "additionalProperties": false,
+              "description": "Confirmation of changes.",
+              "properties": {
+                "enabled": {
+                  "description": "Should we skip asking for confirmation for destructive operations?",
+                  "type": "boolean"
+                }
+              },
+              "required": ["enabled"],
+              "type": "object"
+            },
+            "compress": {
+              "additionalProperties": false,
+              "description": "Compression settings.",
+              "properties": {
+                "enabled": {
+                  "description": "Should copied data be compressed with KG-internal LZString compression?",
+                  "type": "boolean"
+                }
+              },
+              "required": ["enabled"],
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "bonfire": {
+      "additionalProperties": false,
+      "description": "Features relating to the Bonfire tab.",
+      "properties": {
+        "enabled": {
+          "description": "Is the bonfire automation enabled?",
+          "type": "boolean"
+        },
+        "trigger": {
+          "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "buildings": {
+          "additionalProperties": false,
+          "description": "Configuration for which buildings to build automatically.",
+          "properties": {
+            "academy": { "$ref": "./building-bonfire.schema.json" },
+            "accelerator": { "$ref": "./building-bonfire.schema.json" },
+            "aiCore": { "$ref": "./building-bonfire.schema.json" },
+            "amphitheatre": { "$ref": "./building-bonfire.schema.json" },
+            "aqueduct": { "$ref": "./building-bonfire.schema.json" },
+            "barn": { "$ref": "./building-bonfire.schema.json" },
+            "biolab": { "$ref": "./building-bonfire.schema.json" },
+            "brewery": { "$ref": "./building-bonfire.schema.json" },
+            "broadcastTower": { "$ref": "./building-bonfire.schema.json" },
+            "calciner": { "$ref": "./building-bonfire.schema.json" },
+            "chapel": { "$ref": "./building-bonfire.schema.json" },
+            "chronosphere": { "$ref": "./building-bonfire.schema.json" },
+            "dataCenter": { "$ref": "./building-bonfire.schema.json" },
+            "factory": { "$ref": "./building-bonfire.schema.json" },
+            "field": { "$ref": "./building-bonfire.schema.json" },
+            "harbor": { "$ref": "./building-bonfire.schema.json" },
+            "hut": { "$ref": "./building-bonfire.schema.json" },
+            "hydroPlant": { "$ref": "./building-bonfire.schema.json" },
+            "library": { "$ref": "./building-bonfire.schema.json" },
+            "logHouse": { "$ref": "./building-bonfire.schema.json" },
+            "lumberMill": { "$ref": "./building-bonfire.schema.json" },
+            "magneto": { "$ref": "./building-bonfire.schema.json" },
+            "mansion": { "$ref": "./building-bonfire.schema.json" },
+            "mine": { "$ref": "./building-bonfire.schema.json" },
+            "mint": { "$ref": "./building-bonfire.schema.json" },
+            "observatory": { "$ref": "./building-bonfire.schema.json" },
+            "oilWell": { "$ref": "./building-bonfire.schema.json" },
+            "pasture": { "$ref": "./building-bonfire.schema.json" },
+            "quarry": { "$ref": "./building-bonfire.schema.json" },
+            "reactor": { "$ref": "./building-bonfire.schema.json" },
+            "smelter": { "$ref": "./building-bonfire.schema.json" },
+            "solarFarm": { "$ref": "./building-bonfire.schema.json" },
+            "steamworks": { "$ref": "./building-bonfire.schema.json" },
+            "temple": { "$ref": "./building-bonfire.schema.json" },
+            "tradepost": { "$ref": "./building-bonfire.schema.json" },
+            "warehouse": { "$ref": "./building-bonfire.schema.json" },
+            "workshop": { "$ref": "./building-bonfire.schema.json" },
+            "zebraForge": { "$ref": "./building-bonfire.schema.json" },
+            "zebraOutpost": { "$ref": "./building-bonfire.schema.json" },
+            "zebraWorkshop": { "$ref": "./building-bonfire.schema.json" },
+            "ziggurat": { "$ref": "./building-bonfire.schema.json" }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "turnOnSteamworks": {
+          "additionalProperties": false,
+          "description": "Should Steamworks be turned on if they are turned off?",
+          "properties": {
+            "enabled": {
+              "description": "Turn the Steamworks on?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        },
+        "turnOnMagnetos": {
+          "additionalProperties": false,
+          "description": "Should Magnetos be turned on if they are turned off?",
+          "properties": {
+            "enabled": {
+              "description": "Turn the Magnetos on?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        },
+        "upgradeBuildings": {
+          "additionalProperties": false,
+          "description": "Configuration for building upgrades.",
+          "properties": {
+            "enabled": {
+              "description": "Should buildings be upgraded automatically?",
+              "type": "boolean"
+            },
+            "buildings": {
+              "additionalProperties": false,
+              "description": "Which buildings to upgrade.",
+              "properties": {
+                "broadcasttower": {
+                  "additionalProperties": false,
+                  "description": "Broadcast Tower",
+                  "properties": {
+                    "enabled": {
+                      "description": "Automatically upgrade Amphitheatres to Broadcast Towers?",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["enabled"],
+                  "type": "object"
+                },
+                "dataCenter": {
+                  "additionalProperties": false,
+                  "description": "Data Center",
+                  "properties": {
+                    "enabled": {
+                      "description": "Automatically upgrade Libraries to Data Centers?",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["enabled"],
+                  "type": "object"
+                },
+                "hydroplant": {
+                  "additionalProperties": false,
+                  "description": "Hydro Plant",
+                  "properties": {
+                    "enabled": {
+                      "description": "Automatically upgrade Aqueducts to Hydro Plants?",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["enabled"],
+                  "type": "object"
+                },
+                "solarfarm": {
+                  "additionalProperties": false,
+                  "description": "Solar Farm",
+                  "properties": {
+                    "enabled": {
+                      "description": "Automatically upgrade Pastures to Solar Farms?",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["enabled"],
+                  "type": "object"
+                }
+              },
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "religion": {
+      "additionalProperties": false,
+      "description": "Features relating to the Religion tab.",
+      "properties": {
+        "enabled": {
+          "description": "Is the religion automation enabled?",
+          "type": "boolean"
+        },
+        "trigger": {
+          "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "buildings": {
+          "additionalProperties": false,
+          "description": "Configuration for which buildings to build automatically.",
+          "properties": {
+            "apocripha": { "$ref": "./building-religion.schema.json" },
+            "basilica": { "$ref": "./building-religion.schema.json" },
+            "blackCore": { "$ref": "./building-religion.schema.json" },
+            "blackLibrary": { "$ref": "./building-religion.schema.json" },
+            "blackNexus": { "$ref": "./building-religion.schema.json" },
+            "blackObelisk": { "$ref": "./building-religion.schema.json" },
+            "blackPyramid": { "$ref": "./building-religion.schema.json" },
+            "blackRadiance": { "$ref": "./building-religion.schema.json" },
+            "blazar": { "$ref": "./building-religion.schema.json" },
+            "darkNova": { "$ref": "./building-religion.schema.json" },
+            "goldenSpire": { "$ref": "./building-religion.schema.json" },
+            "holyGenocide": { "$ref": "./building-religion.schema.json" },
+            "ivoryCitadel": { "$ref": "./building-religion.schema.json" },
+            "ivoryTower": { "$ref": "./building-religion.schema.json" },
+            "marker": { "$ref": "./building-religion.schema.json" },
+            "scholasticism": { "$ref": "./building-religion.schema.json" },
+            "singularity": { "$ref": "./building-religion.schema.json" },
+            "skyPalace": { "$ref": "./building-religion.schema.json" },
+            "solarchant": { "$ref": "./building-religion.schema.json" },
+            "solarRevolution": { "$ref": "./building-religion.schema.json" },
+            "stainedGlass": { "$ref": "./building-religion.schema.json" },
+            "sunAltar": { "$ref": "./building-religion.schema.json" },
+            "sunspire": { "$ref": "./building-religion.schema.json" },
+            "templars": { "$ref": "./building-religion.schema.json" },
+            "transcendence": { "$ref": "./building-religion.schema.json" },
+            "unicornGraveyard": { "$ref": "./building-religion.schema.json" },
+            "unicornNecropolis": { "$ref": "./building-religion.schema.json" },
+            "unicornPasture": { "$ref": "./building-religion.schema.json" },
+            "unicornTomb": { "$ref": "./building-religion.schema.json" },
+            "unicornUtopia": { "$ref": "./building-religion.schema.json" }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "bestUnicornBuilding": {
+          "additionalProperties": false,
+          "description": "Best Unicorn building",
+          "properties": {
+            "enabled": {
+              "description": "Should we enforce to always build the most lucrative building first?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        },
+        "sacrificeAlicorns": {
+          "additionalProperties": false,
+          "description": "Sacrifice Alicorns",
+          "properties": {
+            "enabled": {
+              "description": "Should we sacrifice alicorns?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Sacrifice when we have this many alicorns.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "sacrificeUnicorns": {
+          "additionalProperties": false,
+          "description": "Sacrifice Unicorns",
+          "properties": {
+            "enabled": {
+              "description": "Should we sacrifice unicorns?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Sacrifice when we have this many unicorns.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "refineTears": {
+          "additionalProperties": false,
+          "description": "Refine Unicorn Tears",
+          "properties": {
+            "enabled": {
+              "description": "Should we refine unicorn tears into BLS?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Refine when we have this many tears.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "refineTimeCrystals": {
+          "additionalProperties": false,
+          "description": "Refine Time Crystals",
+          "properties": {
+            "enabled": {
+              "description": "Should we refine time crystals into relics?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Refine when we have this many time crystals.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "autoPraise": {
+          "additionalProperties": false,
+          "description": "Praising",
+          "properties": {
+            "enabled": {
+              "description": "Should we praise the sun?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Praise when we have this much faith.",
+              "minimum": 0,
+              "maximum": 1,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "adore": {
+          "additionalProperties": false,
+          "description": "Adore the galaxy",
+          "properties": {
+            "enabled": {
+              "description": "Should we adore the galaxy?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Adore when we have this much epiphany.",
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "transcend": {
+          "additionalProperties": false,
+          "description": "Transcen",
+          "properties": {
+            "enabled": {
+              "description": "Should we transcend whenever it would be lucrative?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "science": {
+      "additionalProperties": false,
+      "description": "Features relating to the Science tab.",
+      "properties": {
+        "enabled": {
+          "description": "Is the science automation enabled?",
+          "type": "boolean"
+        },
+        "policies": {
+          "additionalProperties": false,
+          "description": "Settings for automatic policy enforcement.",
+          "properties": {
+            "enabled": {
+              "description": "Is the policy automation enabled?",
+              "type": "boolean"
+            },
+            "policies": {
+              "additionalProperties": false,
+              "description": "The policies to automatically enforce.",
+              "properties": {
+                "authocracy": { "$ref": "./policy.schema.json" },
+                "bigStickPolicy": { "$ref": "./policy.schema.json" },
+                "carnivale": { "$ref": "./policy.schema.json" },
+                "cityOnAHill": { "$ref": "./policy.schema.json" },
+                "clearCutting": { "$ref": "./policy.schema.json" },
+                "communism": { "$ref": "./policy.schema.json" },
+                "conservation": { "$ref": "./policy.schema.json" },
+                "culturalExchange": { "$ref": "./policy.schema.json" },
+                "diplomacy": { "$ref": "./policy.schema.json" },
+                "environmentalism": { "$ref": "./policy.schema.json" },
+                "epicurianism": { "$ref": "./policy.schema.json" },
+                "expansionism": { "$ref": "./policy.schema.json" },
+                "extravagance": { "$ref": "./policy.schema.json" },
+                "fascism": { "$ref": "./policy.schema.json" },
+                "frugality": { "$ref": "./policy.schema.json" },
+                "fullIndustrialization": { "$ref": "./policy.schema.json" },
+                "isolationism": { "$ref": "./policy.schema.json" },
+                "knowledgeSharing": { "$ref": "./policy.schema.json" },
+                "liberalism": { "$ref": "./policy.schema.json" },
+                "liberty": { "$ref": "./policy.schema.json" },
+                "militarizeSpace": { "$ref": "./policy.schema.json" },
+                "monarchy": { "$ref": "./policy.schema.json" },
+                "mysticism": { "$ref": "./policy.schema.json" },
+                "necrocracy": { "$ref": "./policy.schema.json" },
+                "openWoodlands": { "$ref": "./policy.schema.json" },
+                "outerSpaceTreaty": { "$ref": "./policy.schema.json" },
+                "radicalXenophobia": { "$ref": "./policy.schema.json" },
+                "rationality": { "$ref": "./policy.schema.json" },
+                "rationing": { "$ref": "./policy.schema.json" },
+                "republic": { "$ref": "./policy.schema.json" },
+                "socialism": { "$ref": "./policy.schema.json" },
+                "stoicism": { "$ref": "./policy.schema.json" },
+                "stripMining": { "$ref": "./policy.schema.json" },
+                "sustainability": { "$ref": "./policy.schema.json" },
+                "technocracy": { "$ref": "./policy.schema.json" },
+                "theocracy": { "$ref": "./policy.schema.json" },
+                "tradition": { "$ref": "./policy.schema.json" },
+                "transkittenism": { "$ref": "./policy.schema.json" },
+                "zebraRelationsAppeasement": { "$ref": "./policy.schema.json" },
+                "zebraRelationsBellicosity": { "$ref": "./policy.schema.json" }
+              },
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "techs": {
+          "additionalProperties": false,
+          "description": "Settings for automatic technology research.",
+          "properties": {
+            "enabled": {
+              "description": "Is the technology research automation enabled?",
+              "type": "boolean"
+            },
+            "techs": {
+              "additionalProperties": false,
+              "description": "The technologies to automatically research.",
+              "properties": {
+                "acoustics": { "$ref": "./tech.schema.json" },
+                "advExogeology": { "$ref": "./tech.schema.json" },
+                "agriculture": { "$ref": "./tech.schema.json" },
+                "ai": { "$ref": "./tech.schema.json" },
+                "animal": { "$ref": "./tech.schema.json" },
+                "antimatter": { "$ref": "./tech.schema.json" },
+                "archeology": { "$ref": "./tech.schema.json" },
+                "archery": { "$ref": "./tech.schema.json" },
+                "architecture": { "$ref": "./tech.schema.json" },
+                "artificialGravity": { "$ref": "./tech.schema.json" },
+                "astronomy": { "$ref": "./tech.schema.json" },
+                "biochemistry": { "$ref": "./tech.schema.json" },
+                "biology": { "$ref": "./tech.schema.json" },
+                "blackchain": { "$ref": "./tech.schema.json" },
+                "brewery": { "$ref": "./tech.schema.json" },
+                "calendar": { "$ref": "./tech.schema.json" },
+                "chemistry": { "$ref": "./tech.schema.json" },
+                "chronophysics": { "$ref": "./tech.schema.json" },
+                "civil": { "$ref": "./tech.schema.json" },
+                "combustion": { "$ref": "./tech.schema.json" },
+                "construction": { "$ref": "./tech.schema.json" },
+                "cryptotheology": { "$ref": "./tech.schema.json" },
+                "currency": { "$ref": "./tech.schema.json" },
+                "dimensionalPhysics": { "$ref": "./tech.schema.json" },
+                "drama": { "$ref": "./tech.schema.json" },
+                "ecology": { "$ref": "./tech.schema.json" },
+                "electricity": { "$ref": "./tech.schema.json" },
+                "electronics": { "$ref": "./tech.schema.json" },
+                "engineering": { "$ref": "./tech.schema.json" },
+                "exogeology": { "$ref": "./tech.schema.json" },
+                "exogeophysics": { "$ref": "./tech.schema.json" },
+                "genetics": { "$ref": "./tech.schema.json" },
+                "hydroponics": { "$ref": "./tech.schema.json" },
+                "industrialization": { "$ref": "./tech.schema.json" },
+                "machinery": { "$ref": "./tech.schema.json" },
+                "math": { "$ref": "./tech.schema.json" },
+                "mechanization": { "$ref": "./tech.schema.json" },
+                "metal": { "$ref": "./tech.schema.json" },
+                "metalurgy": { "$ref": "./tech.schema.json" },
+                "metaphysics": { "$ref": "./tech.schema.json" },
+                "mining": { "$ref": "./tech.schema.json" },
+                "nanotechnology": { "$ref": "./tech.schema.json" },
+                "navigation": { "$ref": "./tech.schema.json" },
+                "nuclearFission": { "$ref": "./tech.schema.json" },
+                "oilProcessing": { "$ref": "./tech.schema.json" },
+                "orbitalEngineering": { "$ref": "./tech.schema.json" },
+                "paradoxalKnowledge": { "$ref": "./tech.schema.json" },
+                "particlePhysics": { "$ref": "./tech.schema.json" },
+                "philosophy": { "$ref": "./tech.schema.json" },
+                "physics": { "$ref": "./tech.schema.json" },
+                "quantumCryptography": { "$ref": "./tech.schema.json" },
+                "robotics": { "$ref": "./tech.schema.json" },
+                "rocketry": { "$ref": "./tech.schema.json" },
+                "sattelites": { "$ref": "./tech.schema.json" },
+                "steel": { "$ref": "./tech.schema.json" },
+                "superconductors": { "$ref": "./tech.schema.json" },
+                "tachyonTheory": { "$ref": "./tech.schema.json" },
+                "terraformation": { "$ref": "./tech.schema.json" },
+                "theology": { "$ref": "./tech.schema.json" },
+                "thorium": { "$ref": "./tech.schema.json" },
+                "voidSpace": { "$ref": "./tech.schema.json" },
+                "writing": { "$ref": "./tech.schema.json" }
+              },
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "observe": {
+          "additionalProperties": false,
+          "description": "Settings for automatic astronomical event observation.",
+          "properties": {
+            "enabled": {
+              "description": "Should we observe astronomical events?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "space": {
+      "additionalProperties": false,
+      "description": "Features relating to the Space tab.",
+      "properties": {
+        "enabled": {
+          "description": "Is the space automation enabled?",
+          "type": "boolean"
+        },
+        "trigger": {
+          "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "buildings": {
+          "additionalProperties": false,
+          "description": "Configuration for which buildings to build automatically.",
+          "properties": {
+            "containmentChamber": { "$ref": "./building-space.schema.json" },
+            "cryostation": { "$ref": "./building-space.schema.json" },
+            "entangler": { "$ref": "./building-space.schema.json" },
+            "heatsink": { "$ref": "./building-space.schema.json" },
+            "hrHarvester": { "$ref": "./building-space.schema.json" },
+            "hydrofracturer": { "$ref": "./building-space.schema.json" },
+            "hydroponics": { "$ref": "./building-space.schema.json" },
+            "moltenCore": { "$ref": "./building-space.schema.json" },
+            "moonBase": { "$ref": "./building-space.schema.json" },
+            "moonOutpost": { "$ref": "./building-space.schema.json" },
+            "orbitalArray": { "$ref": "./building-space.schema.json" },
+            "planetCracker": { "$ref": "./building-space.schema.json" },
+            "researchVessel": { "$ref": "./building-space.schema.json" },
+            "sattelite": { "$ref": "./building-space.schema.json" },
+            "spaceBeacon": { "$ref": "./building-space.schema.json" },
+            "spaceElevator": { "$ref": "./building-space.schema.json" },
+            "spaceStation": { "$ref": "./building-space.schema.json" },
+            "spiceRefinery": { "$ref": "./building-space.schema.json" },
+            "sunforge": { "$ref": "./building-space.schema.json" },
+            "sunlifter": { "$ref": "./building-space.schema.json" },
+            "tectonic": { "$ref": "./building-space.schema.json" },
+            "terraformingStation": { "$ref": "./building-space.schema.json" }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "unlockMissions": {
+          "additionalProperties": false,
+          "description": "Configuration for which space missions to conduct automatically.",
+          "properties": {
+            "enabled": {
+              "description": "Is the space automation enabled?",
+              "type": "boolean"
+            },
+            "missions": {
+              "additionalProperties": false,
+              "description": "Which missions to conduct automatically.",
+              "properties": {
+                "centaurusSystemMission": { "$ref": "./space-mission.schema.json" },
+                "charonMission": { "$ref": "./space-mission.schema.json" },
+                "duneMission": { "$ref": "./space-mission.schema.json" },
+                "furthestRingMission": { "$ref": "./space-mission.schema.json" },
+                "heliosMission": { "$ref": "./space-mission.schema.json" },
+                "kairoMission": { "$ref": "./space-mission.schema.json" },
+                "moonMission": { "$ref": "./space-mission.schema.json" },
+                "orbitalLaunch": { "$ref": "./space-mission.schema.json" },
+                "piscineMission": { "$ref": "./space-mission.schema.json" },
+                "rorschachMission": { "$ref": "./space-mission.schema.json" },
+                "terminusMission": { "$ref": "./space-mission.schema.json" },
+                "umbraMission": { "$ref": "./space-mission.schema.json" },
+                "yarnMission": { "$ref": "./space-mission.schema.json" }
+              },
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "timeControl": {
+      "additionalProperties": false,
+      "description": "Features relating to controlling time in the game.",
+      "properties": {
+        "enabled": {
+          "description": "Is the time control enabled?",
+          "type": "boolean"
+        },
+        "accelerateTime": {
+          "additionalProperties": false,
+          "description": "Accelerate time.",
+          "properties": {
+            "enabled": {
+              "description": "Should we accelerate time automatically?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Accelerate time when we have this much temporal flux.",
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "timeSkip": {
+          "additionalProperties": false,
+          "description": "Skip through time.",
+          "properties": {
+            "enabled": {
+              "description": "Should time skipping be enabled?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Amount of time crystals we need to have available.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "number"
+            },
+            "max": {
+              "description": "How many years to skip at most.",
+              "type": "number"
+            },
+            "cycles": {
+              "additionalProperties": false,
+              "description": "The cycles during which to skip.",
+              "properties": {
+                "charon": { "$ref": "./time-skip-cycle.schema.json" },
+                "umbra": { "$ref": "./time-skip-cycle.schema.json" },
+                "yarn": { "$ref": "./time-skip-cycle.schema.json" },
+                "helios": { "$ref": "./time-skip-cycle.schema.json" },
+                "cath": { "$ref": "./time-skip-cycle.schema.json" },
+                "redmoon": { "$ref": "./time-skip-cycle.schema.json" },
+                "dune": { "$ref": "./time-skip-cycle.schema.json" },
+                "piscine": { "$ref": "./time-skip-cycle.schema.json" },
+                "terminus": { "$ref": "./time-skip-cycle.schema.json" },
+                "kairo": { "$ref": "./time-skip-cycle.schema.json" }
+              },
+              "minProperties": 1,
+              "type": "object"
+            },
+            "seasons": {
+              "additionalProperties": false,
+              "description": "The seasons during which to skip.",
+              "properties": {
+                "spring": { "$ref": "./time-skip-season.schema.json" },
+                "summer": { "$ref": "./time-skip-season.schema.json" },
+                "autumn": { "$ref": "./time-skip-season.schema.json" },
+                "winter": { "$ref": "./time-skip-season.schema.json" }
+              },
+              "minProperties": 1,
+              "type": "object"
+            },
+            "ignoreOverheat": {
+              "additionalProperties": false,
+              "description": "Handle overheating from time skips.",
+              "properties": {
+                "enabled": {
+                  "description": "Should we ignore overheating and just skip as much as configured?",
+                  "type": "boolean"
+                }
+              },
+              "required": ["enabled"],
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "reset": {
+          "additionalProperties": false,
+          "description": "Reset the game.",
+          "properties": {
+            "enabled": {
+              "description": "Should reset automation be enabled?",
+              "type": "boolean"
+            },
+            "bonfire": {
+              "additionalProperties": false,
+              "description": "Bonfire requirements.",
+              "properties": {
+                "enabled": {
+                  "description": "Ignored, as reset sub-sections are always enabled.",
+                  "type": "boolean"
+                },
+                "buildings": {
+                  "additionalProperties": false,
+                  "description": "The bonfire buildings that must be built for a reset to be possible.",
+                  "properties": {
+                    "academy": { "$ref": "./reset-building.schema.json" },
+                    "accelerator": { "$ref": "./reset-building.schema.json" },
+                    "aiCore": { "$ref": "./reset-building.schema.json" },
+                    "amphitheatre": { "$ref": "./reset-building.schema.json" },
+                    "aqueduct": { "$ref": "./reset-building.schema.json" },
+                    "barn": { "$ref": "./reset-building.schema.json" },
+                    "biolab": { "$ref": "./reset-building.schema.json" },
+                    "brewery": { "$ref": "./reset-building.schema.json" },
+                    "broadcastTower": { "$ref": "./reset-building.schema.json" },
+                    "calciner": { "$ref": "./reset-building.schema.json" },
+                    "chapel": { "$ref": "./reset-building.schema.json" },
+                    "chronosphere": { "$ref": "./reset-building.schema.json" },
+                    "dataCenter": { "$ref": "./reset-building.schema.json" },
+                    "factory": { "$ref": "./reset-building.schema.json" },
+                    "field": { "$ref": "./reset-building.schema.json" },
+                    "harbor": { "$ref": "./reset-building.schema.json" },
+                    "hut": { "$ref": "./reset-building.schema.json" },
+                    "hydroPlant": { "$ref": "./reset-building.schema.json" },
+                    "library": { "$ref": "./reset-building.schema.json" },
+                    "logHouse": { "$ref": "./reset-building.schema.json" },
+                    "lumberMill": { "$ref": "./reset-building.schema.json" },
+                    "magneto": { "$ref": "./reset-building.schema.json" },
+                    "mansion": { "$ref": "./reset-building.schema.json" },
+                    "mine": { "$ref": "./reset-building.schema.json" },
+                    "mint": { "$ref": "./reset-building.schema.json" },
+                    "observatory": { "$ref": "./reset-building.schema.json" },
+                    "oilWell": { "$ref": "./reset-building.schema.json" },
+                    "pasture": { "$ref": "./reset-building.schema.json" },
+                    "quarry": { "$ref": "./reset-building.schema.json" },
+                    "reactor": { "$ref": "./reset-building.schema.json" },
+                    "smelter": { "$ref": "./reset-building.schema.json" },
+                    "solarFarm": { "$ref": "./reset-building.schema.json" },
+                    "steamworks": { "$ref": "./reset-building.schema.json" },
+                    "temple": { "$ref": "./reset-building.schema.json" },
+                    "tradepost": { "$ref": "./reset-building.schema.json" },
+                    "warehouse": { "$ref": "./reset-building.schema.json" },
+                    "workshop": { "$ref": "./reset-building.schema.json" },
+                    "zebraForge": { "$ref": "./reset-building.schema.json" },
+                    "zebraOutpost": { "$ref": "./reset-building.schema.json" },
+                    "zebraWorkshop": { "$ref": "./reset-building.schema.json" },
+                    "ziggurat": { "$ref": "./reset-building.schema.json" }
+                  },
+                  "minProperties": 1,
+                  "type": "object"
+                }
+              },
+              "minProperties": 1,
+              "type": "object"
+            },
+            "religion": {
+              "additionalProperties": false,
+              "description": "Religion requirements.",
+              "properties": {
+                "enabled": {
+                  "description": "Ignored, as reset sub-sections are always enabled.",
+                  "type": "boolean"
+                },
+                "buildings": {
+                  "additionalProperties": false,
+                  "description": "The religion buildings that must be built for a reset to be possible.",
+                  "properties": {
+                    "apocripha": { "$ref": "./reset-building.schema.json" },
+                    "basilica": { "$ref": "./reset-building.schema.json" },
+                    "blackCore": { "$ref": "./reset-building.schema.json" },
+                    "blackLibrary": { "$ref": "./reset-building.schema.json" },
+                    "blackNexus": { "$ref": "./reset-building.schema.json" },
+                    "blackObelisk": { "$ref": "./reset-building.schema.json" },
+                    "blackPyramid": { "$ref": "./reset-building.schema.json" },
+                    "blackRadiance": { "$ref": "./reset-building.schema.json" },
+                    "blazar": { "$ref": "./reset-building.schema.json" },
+                    "darkNova": { "$ref": "./reset-building.schema.json" },
+                    "goldenSpire": { "$ref": "./reset-building.schema.json" },
+                    "holyGenocide": { "$ref": "./reset-building.schema.json" },
+                    "ivoryCitadel": { "$ref": "./reset-building.schema.json" },
+                    "ivoryTower": { "$ref": "./reset-building.schema.json" },
+                    "marker": { "$ref": "./reset-building.schema.json" },
+                    "scholasticism": { "$ref": "./reset-building.schema.json" },
+                    "singularity": { "$ref": "./reset-building.schema.json" },
+                    "skyPalace": { "$ref": "./reset-building.schema.json" },
+                    "solarchant": { "$ref": "./reset-building.schema.json" },
+                    "solarRevolution": { "$ref": "./reset-building.schema.json" },
+                    "stainedGlass": { "$ref": "./reset-building.schema.json" },
+                    "sunAltar": { "$ref": "./reset-building.schema.json" },
+                    "sunspire": { "$ref": "./reset-building.schema.json" },
+                    "templars": { "$ref": "./reset-building.schema.json" },
+                    "transcendence": { "$ref": "./reset-building.schema.json" },
+                    "unicornGraveyard": { "$ref": "./reset-building.schema.json" },
+                    "unicornNecropolis": { "$ref": "./reset-building.schema.json" },
+                    "unicornPasture": { "$ref": "./reset-building.schema.json" },
+                    "unicornTomb": { "$ref": "./reset-building.schema.json" },
+                    "unicornUtopia": { "$ref": "./reset-building.schema.json" }
+                  },
+                  "minProperties": 1,
+                  "type": "object"
+                }
+              },
+              "minProperties": 1,
+              "type": "object"
+            },
+            "resources": {
+              "additionalProperties": false,
+              "description": "Resource requirements.",
+              "properties": {
+                "enabled": {
+                  "description": "Ignored, as reset sub-sections are always enabled.",
+                  "type": "boolean"
+                },
+                "resources": {
+                  "additionalProperties": false,
+                  "description": "The resources we need to have in stock for a reset to be possible.",
+                  "properties": {
+                    "alicorn": { "$ref": "./reset-resource.schema.json" },
+                    "alloy": { "$ref": "./reset-resource.schema.json" },
+                    "antimatter": { "$ref": "./reset-resource.schema.json" },
+                    "beam": { "$ref": "./reset-resource.schema.json" },
+                    "blackcoin": { "$ref": "./reset-resource.schema.json" },
+                    "bloodstone": { "$ref": "./reset-resource.schema.json" },
+                    "blueprint": { "$ref": "./reset-resource.schema.json" },
+                    "burnedParagon": { "$ref": "./reset-resource.schema.json" },
+                    "catnip": { "$ref": "./reset-resource.schema.json" },
+                    "coal": { "$ref": "./reset-resource.schema.json" },
+                    "compedium": { "$ref": "./reset-resource.schema.json" },
+                    "concrate": { "$ref": "./reset-resource.schema.json" },
+                    "culture": { "$ref": "./reset-resource.schema.json" },
+                    "elderBox": { "$ref": "./reset-resource.schema.json" },
+                    "eludium": { "$ref": "./reset-resource.schema.json" },
+                    "faith": { "$ref": "./reset-resource.schema.json" },
+                    "furs": { "$ref": "./reset-resource.schema.json" },
+                    "gear": { "$ref": "./reset-resource.schema.json" },
+                    "gold": { "$ref": "./reset-resource.schema.json" },
+                    "gflops": { "$ref": "./reset-resource.schema.json" },
+                    "hashrates": { "$ref": "./reset-resource.schema.json" },
+                    "iron": { "$ref": "./reset-resource.schema.json" },
+                    "ivory": { "$ref": "./reset-resource.schema.json" },
+                    "karma": { "$ref": "./reset-resource.schema.json" },
+                    "kerosene": { "$ref": "./reset-resource.schema.json" },
+                    "kittens": { "$ref": "./reset-resource.schema.json" },
+                    "manpower": { "$ref": "./reset-resource.schema.json" },
+                    "manuscript": { "$ref": "./reset-resource.schema.json" },
+                    "megalith": { "$ref": "./reset-resource.schema.json" },
+                    "minerals": { "$ref": "./reset-resource.schema.json" },
+                    "necrocorn": { "$ref": "./reset-resource.schema.json" },
+                    "oil": { "$ref": "./reset-resource.schema.json" },
+                    "paragon": { "$ref": "./reset-resource.schema.json" },
+                    "parchment": { "$ref": "./reset-resource.schema.json" },
+                    "plate": { "$ref": "./reset-resource.schema.json" },
+                    "relic": { "$ref": "./reset-resource.schema.json" },
+                    "scaffold": { "$ref": "./reset-resource.schema.json" },
+                    "science": { "$ref": "./reset-resource.schema.json" },
+                    "ship": { "$ref": "./reset-resource.schema.json" },
+                    "slab": { "$ref": "./reset-resource.schema.json" },
+                    "sorrow": { "$ref": "./reset-resource.schema.json" },
+                    "spice": { "$ref": "./reset-resource.schema.json" },
+                    "starchart": { "$ref": "./reset-resource.schema.json" },
+                    "steel": { "$ref": "./reset-resource.schema.json" },
+                    "tanker": { "$ref": "./reset-resource.schema.json" },
+                    "tears": { "$ref": "./reset-resource.schema.json" },
+                    "temporalFlux": { "$ref": "./reset-resource.schema.json" },
+                    "thorium": { "$ref": "./reset-resource.schema.json" },
+                    "timeCrystal": { "$ref": "./reset-resource.schema.json" },
+                    "tMythril": { "$ref": "./reset-resource.schema.json" },
+                    "titanium": { "$ref": "./reset-resource.schema.json" },
+                    "unicorns": { "$ref": "./reset-resource.schema.json" },
+                    "unobtainium": { "$ref": "./reset-resource.schema.json" },
+                    "uranium": { "$ref": "./reset-resource.schema.json" },
+                    "void": { "$ref": "./reset-resource.schema.json" },
+                    "wood": { "$ref": "./reset-resource.schema.json" },
+                    "wrappingPaper": { "$ref": "./reset-resource.schema.json" },
+                    "zebras": { "$ref": "./reset-resource.schema.json" }
+                  },
+                  "minProperties": 1,
+                  "type": "object"
+                }
+              },
+              "minProperties": 1,
+              "type": "object"
+            },
+            "space": {
+              "additionalProperties": false,
+              "description": "Space requirements.",
+              "properties": {
+                "enabled": {
+                  "description": "Ignored, as reset sub-sections are always enabled.",
+                  "type": "boolean"
+                },
+                "buildings": {
+                  "additionalProperties": false,
+                  "description": "The space buildings that must be built for a reset to be possible.",
+                  "properties": {
+                    "containmentChamber": { "$ref": "./reset-building.schema.json" },
+                    "cryostation": { "$ref": "./reset-building.schema.json" },
+                    "entangler": { "$ref": "./reset-building.schema.json" },
+                    "heatsink": { "$ref": "./reset-building.schema.json" },
+                    "hrHarvester": { "$ref": "./reset-building.schema.json" },
+                    "hydrofracturer": { "$ref": "./reset-building.schema.json" },
+                    "hydroponics": { "$ref": "./reset-building.schema.json" },
+                    "moltenCore": { "$ref": "./reset-building.schema.json" },
+                    "moonBase": { "$ref": "./reset-building.schema.json" },
+                    "moonOutpost": { "$ref": "./reset-building.schema.json" },
+                    "orbitalArray": { "$ref": "./reset-building.schema.json" },
+                    "planetCracker": { "$ref": "./reset-building.schema.json" },
+                    "researchVessel": { "$ref": "./reset-building.schema.json" },
+                    "sattelite": { "$ref": "./reset-building.schema.json" },
+                    "spaceBeacon": { "$ref": "./reset-building.schema.json" },
+                    "spaceElevator": { "$ref": "./reset-building.schema.json" },
+                    "spaceStation": { "$ref": "./reset-building.schema.json" },
+                    "spiceRefinery": { "$ref": "./reset-building.schema.json" },
+                    "sunforge": { "$ref": "./reset-building.schema.json" },
+                    "sunlifter": { "$ref": "./reset-building.schema.json" },
+                    "tectonic": { "$ref": "./reset-building.schema.json" },
+                    "terraformingStation": { "$ref": "./reset-building.schema.json" }
+                  },
+                  "minProperties": 1,
+                  "type": "object"
+                }
+              },
+              "minProperties": 1,
+              "type": "object"
+            },
+            "time": {
+              "additionalProperties": false,
+              "description": "Time requirements.",
+              "properties": {
+                "enabled": {
+                  "description": "Ignored, as reset sub-sections are always enabled.",
+                  "type": "boolean"
+                },
+                "buildings": {
+                  "additionalProperties": false,
+                  "description": "The time buildings that must be built for a reset to be possible.",
+                  "properties": {
+                    "blastFurnace": { "$ref": "./reset-building.schema.json" },
+                    "chronocontrol": { "$ref": "./reset-building.schema.json" },
+                    "cryochambers": { "$ref": "./reset-building.schema.json" },
+                    "ressourceRetrieval": { "$ref": "./reset-building.schema.json" },
+                    "temporalAccelerator": { "$ref": "./reset-building.schema.json" },
+                    "temporalBattery": { "$ref": "./reset-building.schema.json" },
+                    "temporalImpedance": { "$ref": "./reset-building.schema.json" },
+                    "temporalPress": { "$ref": "./reset-building.schema.json" },
+                    "timeBoiler": { "$ref": "./reset-building.schema.json" },
+                    "voidHoover": { "$ref": "./reset-building.schema.json" },
+                    "voidResonator": { "$ref": "./reset-building.schema.json" },
+                    "voidRift": { "$ref": "./reset-building.schema.json" }
+                  },
+                  "minProperties": 1,
+                  "type": "object"
+                }
+              },
+              "minProperties": 1,
+              "type": "object"
+            },
+            "upgrades": {
+              "additionalProperties": false,
+              "description": "Upgrade requirements.",
+              "properties": {
+                "enabled": {
+                  "description": "Ignored, as reset sub-sections are always enabled.",
+                  "type": "boolean"
+                },
+                "upgrades": {
+                  "additionalProperties": false,
+                  "description": "The upgrades we must have researched for a reset to be possible.",
+                  "properties": {
+                    "advancedAutomation": { "$ref": "./reset-upgrade.schema.json" },
+                    "advancedRefinement": { "$ref": "./reset-upgrade.schema.json" },
+                    "aiBases": { "$ref": "./reset-upgrade.schema.json" },
+                    "aiEngineers": { "$ref": "./reset-upgrade.schema.json" },
+                    "alloyArmor": { "$ref": "./reset-upgrade.schema.json" },
+                    "alloyAxe": { "$ref": "./reset-upgrade.schema.json" },
+                    "alloyBarns": { "$ref": "./reset-upgrade.schema.json" },
+                    "alloySaw": { "$ref": "./reset-upgrade.schema.json" },
+                    "alloyWarehouses": { "$ref": "./reset-upgrade.schema.json" },
+                    "amBases": { "$ref": "./reset-upgrade.schema.json" },
+                    "amDrive": { "$ref": "./reset-upgrade.schema.json" },
+                    "amFission": { "$ref": "./reset-upgrade.schema.json" },
+                    "amReactors": { "$ref": "./reset-upgrade.schema.json" },
+                    "amReactorsMK2": { "$ref": "./reset-upgrade.schema.json" },
+                    "assistance": { "$ref": "./reset-upgrade.schema.json" },
+                    "astrolabe": { "$ref": "./reset-upgrade.schema.json" },
+                    "astrophysicists": { "$ref": "./reset-upgrade.schema.json" },
+                    "augumentation": { "$ref": "./reset-upgrade.schema.json" },
+                    "automatedPlants": { "$ref": "./reset-upgrade.schema.json" },
+                    "barges": { "$ref": "./reset-upgrade.schema.json" },
+                    "biofuel": { "$ref": "./reset-upgrade.schema.json" },
+                    "bolas": { "$ref": "./reset-upgrade.schema.json" },
+                    "cadSystems": { "$ref": "./reset-upgrade.schema.json" },
+                    "caravanserai": { "$ref": "./reset-upgrade.schema.json" },
+                    "carbonSequestration": { "$ref": "./reset-upgrade.schema.json" },
+                    "cargoShips": { "$ref": "./reset-upgrade.schema.json" },
+                    "celestialMechanics": { "$ref": "./reset-upgrade.schema.json" },
+                    "chronoEngineers": { "$ref": "./reset-upgrade.schema.json" },
+                    "chronoforge": { "$ref": "./reset-upgrade.schema.json" },
+                    "coalFurnace": { "$ref": "./reset-upgrade.schema.json" },
+                    "coldFusion": { "$ref": "./reset-upgrade.schema.json" },
+                    "combustionEngine": { "$ref": "./reset-upgrade.schema.json" },
+                    "compositeBow": { "$ref": "./reset-upgrade.schema.json" },
+                    "concreteBarns": { "$ref": "./reset-upgrade.schema.json" },
+                    "concreteHuts": { "$ref": "./reset-upgrade.schema.json" },
+                    "concreteWarehouses": { "$ref": "./reset-upgrade.schema.json" },
+                    "crossbow": { "$ref": "./reset-upgrade.schema.json" },
+                    "cryocomputing": { "$ref": "./reset-upgrade.schema.json" },
+                    "darkEnergy": { "$ref": "./reset-upgrade.schema.json" },
+                    "deepMining": { "$ref": "./reset-upgrade.schema.json" },
+                    "distorsion": { "$ref": "./reset-upgrade.schema.json" },
+                    "electrolyticSmelting": { "$ref": "./reset-upgrade.schema.json" },
+                    "eludiumCracker": { "$ref": "./reset-upgrade.schema.json" },
+                    "eludiumHuts": { "$ref": "./reset-upgrade.schema.json" },
+                    "eludiumReflectors": { "$ref": "./reset-upgrade.schema.json" },
+                    "energyRifts": { "$ref": "./reset-upgrade.schema.json" },
+                    "enrichedThorium": { "$ref": "./reset-upgrade.schema.json" },
+                    "enrichedUranium": { "$ref": "./reset-upgrade.schema.json" },
+                    "factoryAutomation": { "$ref": "./reset-upgrade.schema.json" },
+                    "factoryLogistics": { "$ref": "./reset-upgrade.schema.json" },
+                    "factoryOptimization": { "$ref": "./reset-upgrade.schema.json" },
+                    "factoryProcessing": { "$ref": "./reset-upgrade.schema.json" },
+                    "factoryRobotics": { "$ref": "./reset-upgrade.schema.json" },
+                    "fluidizedReactors": { "$ref": "./reset-upgrade.schema.json" },
+                    "fluxCondensator": { "$ref": "./reset-upgrade.schema.json" },
+                    "fuelInjectors": { "$ref": "./reset-upgrade.schema.json" },
+                    "geodesy": { "$ref": "./reset-upgrade.schema.json" },
+                    "gmo": { "$ref": "./reset-upgrade.schema.json" },
+                    "goldOre": { "$ref": "./reset-upgrade.schema.json" },
+                    "hubbleTelescope": { "$ref": "./reset-upgrade.schema.json" },
+                    "huntingArmor": { "$ref": "./reset-upgrade.schema.json" },
+                    "hydroPlantTurbines": { "$ref": "./reset-upgrade.schema.json" },
+                    "internet": { "$ref": "./reset-upgrade.schema.json" },
+                    "invisibleBlackHand": { "$ref": "./reset-upgrade.schema.json" },
+                    "ironAxes": { "$ref": "./reset-upgrade.schema.json" },
+                    "ironHoes": { "$ref": "./reset-upgrade.schema.json" },
+                    "ironwood": { "$ref": "./reset-upgrade.schema.json" },
+                    "lhc": { "$ref": "./reset-upgrade.schema.json" },
+                    "logistics": { "$ref": "./reset-upgrade.schema.json" },
+                    "longRangeSpaceships": { "$ref": "./reset-upgrade.schema.json" },
+                    "machineLearning": { "$ref": "./reset-upgrade.schema.json" },
+                    "mineralAxes": { "$ref": "./reset-upgrade.schema.json" },
+                    "mineralHoes": { "$ref": "./reset-upgrade.schema.json" },
+                    "miningDrill": { "$ref": "./reset-upgrade.schema.json" },
+                    "mWReactor": { "$ref": "./reset-upgrade.schema.json" },
+                    "nanosuits": { "$ref": "./reset-upgrade.schema.json" },
+                    "neuralNetworks": { "$ref": "./reset-upgrade.schema.json" },
+                    "nuclearPlants": { "$ref": "./reset-upgrade.schema.json" },
+                    "nuclearSmelters": { "$ref": "./reset-upgrade.schema.json" },
+                    "offsetPress": { "$ref": "./reset-upgrade.schema.json" },
+                    "oilDistillation": { "$ref": "./reset-upgrade.schema.json" },
+                    "oilRefinery": { "$ref": "./reset-upgrade.schema.json" },
+                    "orbitalGeodesy": { "$ref": "./reset-upgrade.schema.json" },
+                    "oxidation": { "$ref": "./reset-upgrade.schema.json" },
+                    "photolithography": { "$ref": "./reset-upgrade.schema.json" },
+                    "photovoltaic": { "$ref": "./reset-upgrade.schema.json" },
+                    "pneumaticPress": { "$ref": "./reset-upgrade.schema.json" },
+                    "printingPress": { "$ref": "./reset-upgrade.schema.json" },
+                    "pumpjack": { "$ref": "./reset-upgrade.schema.json" },
+                    "pyrolysis": { "$ref": "./reset-upgrade.schema.json" },
+                    "qdot": { "$ref": "./reset-upgrade.schema.json" },
+                    "railgun": { "$ref": "./reset-upgrade.schema.json" },
+                    "reactorVessel": { "$ref": "./reset-upgrade.schema.json" },
+                    "refrigeration": { "$ref": "./reset-upgrade.schema.json" },
+                    "register": { "$ref": "./reset-upgrade.schema.json" },
+                    "reinforcedBarns": { "$ref": "./reset-upgrade.schema.json" },
+                    "reinforcedSaw": { "$ref": "./reset-upgrade.schema.json" },
+                    "reinforcedWarehouses": { "$ref": "./reset-upgrade.schema.json" },
+                    "relicStation": { "$ref": "./reset-upgrade.schema.json" },
+                    "rotaryKiln": { "$ref": "./reset-upgrade.schema.json" },
+                    "satelliteRadio": { "$ref": "./reset-upgrade.schema.json" },
+                    "satnav": { "$ref": "./reset-upgrade.schema.json" },
+                    "seti": { "$ref": "./reset-upgrade.schema.json" },
+                    "silos": { "$ref": "./reset-upgrade.schema.json" },
+                    "solarSatellites": { "$ref": "./reset-upgrade.schema.json" },
+                    "spaceEngineers": { "$ref": "./reset-upgrade.schema.json" },
+                    "spaceManufacturing": { "$ref": "./reset-upgrade.schema.json" },
+                    "spiceNavigation": { "$ref": "./reset-upgrade.schema.json" },
+                    "starlink": { "$ref": "./reset-upgrade.schema.json" },
+                    "stasisChambers": { "$ref": "./reset-upgrade.schema.json" },
+                    "steelArmor": { "$ref": "./reset-upgrade.schema.json" },
+                    "steelAxe": { "$ref": "./reset-upgrade.schema.json" },
+                    "steelPlants": { "$ref": "./reset-upgrade.schema.json" },
+                    "steelSaw": { "$ref": "./reset-upgrade.schema.json" },
+                    "stoneBarns": { "$ref": "./reset-upgrade.schema.json" },
+                    "storageBunkers": { "$ref": "./reset-upgrade.schema.json" },
+                    "strenghtenBuild": { "$ref": "./reset-upgrade.schema.json" },
+                    "tachyonAccelerators": { "$ref": "./reset-upgrade.schema.json" },
+                    "thinFilm": { "$ref": "./reset-upgrade.schema.json" },
+                    "thoriumEngine": { "$ref": "./reset-upgrade.schema.json" },
+                    "thoriumReactors": { "$ref": "./reset-upgrade.schema.json" },
+                    "titaniumAxe": { "$ref": "./reset-upgrade.schema.json" },
+                    "titaniumBarns": { "$ref": "./reset-upgrade.schema.json" },
+                    "titaniumMirrors": { "$ref": "./reset-upgrade.schema.json" },
+                    "titaniumSaw": { "$ref": "./reset-upgrade.schema.json" },
+                    "titaniumWarehouses": { "$ref": "./reset-upgrade.schema.json" },
+                    "turnSmoothly": { "$ref": "./reset-upgrade.schema.json" },
+                    "unicornSelection": { "$ref": "./reset-upgrade.schema.json" },
+                    "unobtainiumAxe": { "$ref": "./reset-upgrade.schema.json" },
+                    "unobtainiumDrill": { "$ref": "./reset-upgrade.schema.json" },
+                    "unobtainiumHuts": { "$ref": "./reset-upgrade.schema.json" },
+                    "unobtainiumReflectors": { "$ref": "./reset-upgrade.schema.json" },
+                    "unobtainiumSaw": { "$ref": "./reset-upgrade.schema.json" },
+                    "uplink": { "$ref": "./reset-upgrade.schema.json" },
+                    "voidAspiration": { "$ref": "./reset-upgrade.schema.json" },
+                    "voidEnergy": { "$ref": "./reset-upgrade.schema.json" },
+                    "voidReactors": { "$ref": "./reset-upgrade.schema.json" }
+                  },
+                  "minProperties": 1,
+                  "type": "object"
+                }
+              },
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "time": {
+      "additionalProperties": false,
+      "description": "Features relating to the Time tab.",
+      "properties": {
+        "enabled": {
+          "description": "Is the time automation enabled?",
+          "type": "boolean"
+        },
+        "trigger": {
+          "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "buildings": {
+          "additionalProperties": false,
+          "description": "Configuration for which buildings to build automatically.",
+          "properties": {
+            "blastFurnace": { "$ref": "./building-time.schema.json" },
+            "chronocontrol": { "$ref": "./building-time.schema.json" },
+            "cryochambers": { "$ref": "./building-time.schema.json" },
+            "ressourceRetrieval": { "$ref": "./building-time.schema.json" },
+            "temporalAccelerator": { "$ref": "./building-time.schema.json" },
+            "temporalBattery": { "$ref": "./building-time.schema.json" },
+            "temporalImpedance": { "$ref": "./building-time.schema.json" },
+            "temporalPress": { "$ref": "./building-time.schema.json" },
+            "timeBoiler": { "$ref": "./building-time.schema.json" },
+            "voidHoover": { "$ref": "./building-time.schema.json" },
+            "voidResonator": { "$ref": "./building-time.schema.json" },
+            "voidRift": { "$ref": "./building-time.schema.json" }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "fixCryochambers": {
+          "additionalProperties": false,
+          "description": "Cryochambers",
+          "properties": {
+            "enabled": {
+              "description": "Should cryochambers be fixed automatically?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        },
+        "turnOnChronoFurnace": {
+          "additionalProperties": false,
+          "description": "Chrono Furnace",
+          "properties": {
+            "enabled": {
+              "description": "Should chrono furnaces be turned on automatically?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "trade": {
+      "additionalProperties": false,
+      "description": "Features relating to the Trade tab.",
+      "properties": {
+        "enabled": {
+          "description": "Is the trade automation enabled?",
+          "type": "boolean"
+        },
+        "trigger": {
+          "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "races": {
+          "additionalProperties": false,
+          "description": "Trading",
+          "properties": {
+            "dragons": { "$ref": "./trade-race.schema.json" },
+            "griffins": { "$ref": "./trade-race.schema.json" },
+            "nagas": { "$ref": "./trade-race.schema.json" },
+            "leviathans": { "$ref": "./trade-race.schema.json" },
+            "lizards": { "$ref": "./trade-race.schema.json" },
+            "sharks": { "$ref": "./trade-race.schema.json" },
+            "spiders": { "$ref": "./trade-race.schema.json" },
+            "zebras": { "$ref": "./trade-race.schema.json" }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "feedLeviathans": {
+          "additionalProperties": false,
+          "description": "Leviathan Feedin",
+          "properties": {
+            "enabled": {
+              "description": "Should we feed leviathans whenever possible?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        },
+        "buildEmbassies": {
+          "additionalProperties": false,
+          "description": "Embassies",
+          "properties": {
+            "enabled": {
+              "description": "Should we build embassies?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "What's the trigger value for this automation?",
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            "races": {
+              "additionalProperties": false,
+              "description": "Embassy Settings",
+              "properties": {
+                "dragons": { "$ref": "./trade-embassy.schema.json" },
+                "griffins": { "$ref": "./trade-embassy.schema.json" },
+                "leviathans": { "$ref": "./trade-embassy.schema.json" },
+                "lizards": { "$ref": "./trade-embassy.schema.json" },
+                "nagas": { "$ref": "./trade-embassy.schema.json" },
+                "sharks": { "$ref": "./trade-embassy.schema.json" },
+                "spiders": { "$ref": "./trade-embassy.schema.json" },
+                "zebras": { "$ref": "./trade-embassy.schema.json" }
+              },
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "tradeBlackcoin": {
+          "additionalProperties": false,
+          "description": "Blackcoin",
+          "properties": {
+            "enabled": {
+              "description": "Should we trade blackcoin?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "How many relics should you have to sell?",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "number"
+            },
+            "buy": {
+              "description": "Buy starting at this price.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "number"
+            },
+            "sell": {
+              "description": "Sell at this price.",
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "unlockRaces": {
+          "additionalProperties": false,
+          "description": "Send Explorers",
+          "properties": {
+            "enabled": {
+              "description": "Should we explore new races?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "village": {
+      "additionalProperties": false,
+      "description": "Features relating to the Village tab.",
+      "properties": {
+        "enabled": {
+          "description": "Is the village automation enabled?",
+          "type": "boolean"
+        },
+        "jobs": {
+          "additionalProperties": false,
+          "description": "Kitten Job Assignment",
+          "properties": {
+            "engineer": { "$ref": "./village-job.schema.json" },
+            "farmer": { "$ref": "./village-job.schema.json" },
+            "geologist": { "$ref": "./village-job.schema.json" },
+            "hunter": { "$ref": "./village-job.schema.json" },
+            "miner": { "$ref": "./village-job.schema.json" },
+            "priest": { "$ref": "./village-job.schema.json" },
+            "scholar": { "$ref": "./village-job.schema.json" },
+            "woodcutter": { "$ref": "./village-job.schema.json" }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "holdFestivals": {
+          "additionalProperties": false,
+          "description": "Festivals",
+          "properties": {
+            "enabled": {
+              "description": "Should we hold festivals?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        },
+        "hunt": {
+          "additionalProperties": false,
+          "description": "Hunting",
+          "properties": {
+            "enabled": {
+              "description": "Should we send hunters on hunts?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Amount of catpower to have available.",
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "promoteKittens": {
+          "additionalProperties": false,
+          "description": "Kitten Promotion",
+          "properties": {
+            "enabled": {
+              "description": "Should we promote kittens?",
+              "type": "boolean"
+            },
+            "trigger": {
+              "description": "Promotion resources to have available.",
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "promoteLeader": {
+          "additionalProperties": false,
+          "description": "Leader Promotion",
+          "properties": {
+            "enabled": {
+              "description": "Should we promote our leader?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        },
+        "electLeader": {
+          "additionalProperties": false,
+          "description": "Leader Election",
+          "properties": {
+            "enabled": {
+              "description": "Should we elect a leader?",
+              "type": "boolean"
+            },
+            "job": {
+              "additionalProperties": false,
+              "description": "Which job should the leader have?",
+              "properties": {
+                "selected": {
+                  "description": "The job of the leader.",
+                  "enum": [
+                    "engineer",
+                    "farmer",
+                    "geologist",
+                    "hunter",
+                    "miner",
+                    "priest",
+                    "scholar",
+                    "woodcutter"
+                  ]
+                }
+              },
+              "required": ["selected"],
+              "type": "object"
+            },
+            "trait": {
+              "additionalProperties": false,
+              "description": "Which trait should the leader have?",
+              "properties": {
+                "selected": {
+                  "description": "The trait of the leader.",
+                  "enum": [
+                    "chemist",
+                    "engineer",
+                    "manager",
+                    "metallurgist",
+                    "merchant",
+                    "none",
+                    "scientist",
+                    "wise"
+                  ]
+                }
+              },
+              "required": ["selected"],
+              "type": "object"
+            }
+          },
+          "minProperties": 1,
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    },
+    "workshop": {
+      "additionalProperties": false,
+      "description": "Features relating to the Workshop tab.",
+      "properties": {
+        "enabled": {
+          "description": "Is the workshop automation enabled?",
+          "type": "boolean"
+        },
+        "trigger": {
+          "description": "What's the trigger value for this automation?",
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "resources": {
+          "additionalProperties": false,
+          "description": "Resource crafting settings",
+          "properties": {
+            "alloy": { "$ref": "./workshop-resource.schema.json" },
+            "beam": { "$ref": "./workshop-resource.schema.json" },
+            "blueprint": { "$ref": "./workshop-resource.schema.json" },
+            "compedium": { "$ref": "./workshop-resource.schema.json" },
+            "concrate": { "$ref": "./workshop-resource.schema.json" },
+            "eludium": { "$ref": "./workshop-resource.schema.json" },
+            "gear": { "$ref": "./workshop-resource.schema.json" },
+            "kerosene": { "$ref": "./workshop-resource.schema.json" },
+            "manuscript": { "$ref": "./workshop-resource.schema.json" },
+            "megalith": { "$ref": "./workshop-resource.schema.json" },
+            "parchment": { "$ref": "./workshop-resource.schema.json" },
+            "plate": { "$ref": "./workshop-resource.schema.json" },
+            "scaffold": { "$ref": "./workshop-resource.schema.json" },
+            "ship": { "$ref": "./workshop-resource.schema.json" },
+            "slab": { "$ref": "./workshop-resource.schema.json" },
+            "steel": { "$ref": "./workshop-resource.schema.json" },
+            "tanker": { "$ref": "./workshop-resource.schema.json" },
+            "thorium": { "$ref": "./workshop-resource.schema.json" },
+            "wood": { "$ref": "./workshop-resource.schema.json" }
+          },
+          "minProperties": 1,
+          "type": "object"
+        },
+        "shipOverride": {
+          "additionalProperties": false,
+          "description": "Ship override",
+          "properties": {
+            "enabled": {
+              "description": "Treat ships as unlimited crafting until we have 243?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        },
+        "unlockUpgrades": {
+          "additionalProperties": false,
+          "description": "Unlock Workshop upgrades",
+          "properties": {
+            "enabled": {
+              "description": "Should we purchase Workshop upgrades?",
+              "type": "boolean"
+            },
+            "upgrades": {
+              "additionalProperties": false,
+              "description": "Which Workshop upgrades should we purchase?",
+              "properties": {
+                "advancedAutomation": { "$ref": "./workshop-upgrade.schema.json" },
+                "advancedRefinement": { "$ref": "./workshop-upgrade.schema.json" },
+                "aiBases": { "$ref": "./workshop-upgrade.schema.json" },
+                "aiEngineers": { "$ref": "./workshop-upgrade.schema.json" },
+                "alloyArmor": { "$ref": "./workshop-upgrade.schema.json" },
+                "alloyAxe": { "$ref": "./workshop-upgrade.schema.json" },
+                "alloyBarns": { "$ref": "./workshop-upgrade.schema.json" },
+                "alloySaw": { "$ref": "./workshop-upgrade.schema.json" },
+                "alloyWarehouses": { "$ref": "./workshop-upgrade.schema.json" },
+                "amBases": { "$ref": "./workshop-upgrade.schema.json" },
+                "amDrive": { "$ref": "./workshop-upgrade.schema.json" },
+                "amFission": { "$ref": "./workshop-upgrade.schema.json" },
+                "amReactors": { "$ref": "./workshop-upgrade.schema.json" },
+                "amReactorsMK2": { "$ref": "./workshop-upgrade.schema.json" },
+                "assistance": { "$ref": "./workshop-upgrade.schema.json" },
+                "astrolabe": { "$ref": "./workshop-upgrade.schema.json" },
+                "astrophysicists": { "$ref": "./workshop-upgrade.schema.json" },
+                "augumentation": { "$ref": "./workshop-upgrade.schema.json" },
+                "automatedPlants": { "$ref": "./workshop-upgrade.schema.json" },
+                "barges": { "$ref": "./workshop-upgrade.schema.json" },
+                "biofuel": { "$ref": "./workshop-upgrade.schema.json" },
+                "bolas": { "$ref": "./workshop-upgrade.schema.json" },
+                "cadSystems": { "$ref": "./workshop-upgrade.schema.json" },
+                "caravanserai": { "$ref": "./workshop-upgrade.schema.json" },
+                "carbonSequestration": { "$ref": "./workshop-upgrade.schema.json" },
+                "cargoShips": { "$ref": "./workshop-upgrade.schema.json" },
+                "celestialMechanics": { "$ref": "./workshop-upgrade.schema.json" },
+                "chronoEngineers": { "$ref": "./workshop-upgrade.schema.json" },
+                "chronoforge": { "$ref": "./workshop-upgrade.schema.json" },
+                "coalFurnace": { "$ref": "./workshop-upgrade.schema.json" },
+                "coldFusion": { "$ref": "./workshop-upgrade.schema.json" },
+                "combustionEngine": { "$ref": "./workshop-upgrade.schema.json" },
+                "compositeBow": { "$ref": "./workshop-upgrade.schema.json" },
+                "concreteBarns": { "$ref": "./workshop-upgrade.schema.json" },
+                "concreteHuts": { "$ref": "./workshop-upgrade.schema.json" },
+                "concreteWarehouses": { "$ref": "./workshop-upgrade.schema.json" },
+                "crossbow": { "$ref": "./workshop-upgrade.schema.json" },
+                "cryocomputing": { "$ref": "./workshop-upgrade.schema.json" },
+                "darkEnergy": { "$ref": "./workshop-upgrade.schema.json" },
+                "deepMining": { "$ref": "./workshop-upgrade.schema.json" },
+                "distorsion": { "$ref": "./workshop-upgrade.schema.json" },
+                "electrolyticSmelting": { "$ref": "./workshop-upgrade.schema.json" },
+                "eludiumCracker": { "$ref": "./workshop-upgrade.schema.json" },
+                "eludiumHuts": { "$ref": "./workshop-upgrade.schema.json" },
+                "eludiumReflectors": { "$ref": "./workshop-upgrade.schema.json" },
+                "energyRifts": { "$ref": "./workshop-upgrade.schema.json" },
+                "enrichedThorium": { "$ref": "./workshop-upgrade.schema.json" },
+                "enrichedUranium": { "$ref": "./workshop-upgrade.schema.json" },
+                "factoryAutomation": { "$ref": "./workshop-upgrade.schema.json" },
+                "factoryLogistics": { "$ref": "./workshop-upgrade.schema.json" },
+                "factoryOptimization": { "$ref": "./workshop-upgrade.schema.json" },
+                "factoryProcessing": { "$ref": "./workshop-upgrade.schema.json" },
+                "factoryRobotics": { "$ref": "./workshop-upgrade.schema.json" },
+                "fluidizedReactors": { "$ref": "./workshop-upgrade.schema.json" },
+                "fluxCondensator": { "$ref": "./workshop-upgrade.schema.json" },
+                "fuelInjectors": { "$ref": "./workshop-upgrade.schema.json" },
+                "geodesy": { "$ref": "./workshop-upgrade.schema.json" },
+                "gmo": { "$ref": "./workshop-upgrade.schema.json" },
+                "goldOre": { "$ref": "./workshop-upgrade.schema.json" },
+                "hubbleTelescope": { "$ref": "./workshop-upgrade.schema.json" },
+                "huntingArmor": { "$ref": "./workshop-upgrade.schema.json" },
+                "hydroPlantTurbines": { "$ref": "./workshop-upgrade.schema.json" },
+                "internet": { "$ref": "./workshop-upgrade.schema.json" },
+                "invisibleBlackHand": { "$ref": "./workshop-upgrade.schema.json" },
+                "ironAxes": { "$ref": "./workshop-upgrade.schema.json" },
+                "ironHoes": { "$ref": "./workshop-upgrade.schema.json" },
+                "ironwood": { "$ref": "./workshop-upgrade.schema.json" },
+                "lhc": { "$ref": "./workshop-upgrade.schema.json" },
+                "logistics": { "$ref": "./workshop-upgrade.schema.json" },
+                "longRangeSpaceships": { "$ref": "./workshop-upgrade.schema.json" },
+                "machineLearning": { "$ref": "./workshop-upgrade.schema.json" },
+                "mineralAxes": { "$ref": "./workshop-upgrade.schema.json" },
+                "mineralHoes": { "$ref": "./workshop-upgrade.schema.json" },
+                "miningDrill": { "$ref": "./workshop-upgrade.schema.json" },
+                "mWReactor": { "$ref": "./workshop-upgrade.schema.json" },
+                "nanosuits": { "$ref": "./workshop-upgrade.schema.json" },
+                "neuralNetworks": { "$ref": "./workshop-upgrade.schema.json" },
+                "nuclearPlants": { "$ref": "./workshop-upgrade.schema.json" },
+                "nuclearSmelters": { "$ref": "./workshop-upgrade.schema.json" },
+                "offsetPress": { "$ref": "./workshop-upgrade.schema.json" },
+                "oilDistillation": { "$ref": "./workshop-upgrade.schema.json" },
+                "oilRefinery": { "$ref": "./workshop-upgrade.schema.json" },
+                "orbitalGeodesy": { "$ref": "./workshop-upgrade.schema.json" },
+                "oxidation": { "$ref": "./workshop-upgrade.schema.json" },
+                "photolithography": { "$ref": "./workshop-upgrade.schema.json" },
+                "photovoltaic": { "$ref": "./workshop-upgrade.schema.json" },
+                "pneumaticPress": { "$ref": "./workshop-upgrade.schema.json" },
+                "printingPress": { "$ref": "./workshop-upgrade.schema.json" },
+                "pumpjack": { "$ref": "./workshop-upgrade.schema.json" },
+                "pyrolysis": { "$ref": "./workshop-upgrade.schema.json" },
+                "qdot": { "$ref": "./workshop-upgrade.schema.json" },
+                "railgun": { "$ref": "./workshop-upgrade.schema.json" },
+                "reactorVessel": { "$ref": "./workshop-upgrade.schema.json" },
+                "refrigeration": { "$ref": "./workshop-upgrade.schema.json" },
+                "register": { "$ref": "./workshop-upgrade.schema.json" },
+                "reinforcedBarns": { "$ref": "./workshop-upgrade.schema.json" },
+                "reinforcedSaw": { "$ref": "./workshop-upgrade.schema.json" },
+                "reinforcedWarehouses": { "$ref": "./workshop-upgrade.schema.json" },
+                "relicStation": { "$ref": "./workshop-upgrade.schema.json" },
+                "rotaryKiln": { "$ref": "./workshop-upgrade.schema.json" },
+                "satelliteRadio": { "$ref": "./workshop-upgrade.schema.json" },
+                "satnav": { "$ref": "./workshop-upgrade.schema.json" },
+                "seti": { "$ref": "./workshop-upgrade.schema.json" },
+                "silos": { "$ref": "./workshop-upgrade.schema.json" },
+                "solarSatellites": { "$ref": "./workshop-upgrade.schema.json" },
+                "spaceEngineers": { "$ref": "./workshop-upgrade.schema.json" },
+                "spaceManufacturing": { "$ref": "./workshop-upgrade.schema.json" },
+                "spiceNavigation": { "$ref": "./workshop-upgrade.schema.json" },
+                "starlink": { "$ref": "./workshop-upgrade.schema.json" },
+                "stasisChambers": { "$ref": "./workshop-upgrade.schema.json" },
+                "steelArmor": { "$ref": "./workshop-upgrade.schema.json" },
+                "steelAxe": { "$ref": "./workshop-upgrade.schema.json" },
+                "steelPlants": { "$ref": "./workshop-upgrade.schema.json" },
+                "steelSaw": { "$ref": "./workshop-upgrade.schema.json" },
+                "stoneBarns": { "$ref": "./workshop-upgrade.schema.json" },
+                "storageBunkers": { "$ref": "./workshop-upgrade.schema.json" },
+                "strenghtenBuild": { "$ref": "./workshop-upgrade.schema.json" },
+                "tachyonAccelerators": { "$ref": "./workshop-upgrade.schema.json" },
+                "thinFilm": { "$ref": "./workshop-upgrade.schema.json" },
+                "thoriumEngine": { "$ref": "./workshop-upgrade.schema.json" },
+                "thoriumReactors": { "$ref": "./workshop-upgrade.schema.json" },
+                "titaniumAxe": { "$ref": "./workshop-upgrade.schema.json" },
+                "titaniumBarns": { "$ref": "./workshop-upgrade.schema.json" },
+                "titaniumMirrors": { "$ref": "./workshop-upgrade.schema.json" },
+                "titaniumSaw": { "$ref": "./workshop-upgrade.schema.json" },
+                "titaniumWarehouses": { "$ref": "./workshop-upgrade.schema.json" },
+                "turnSmoothly": { "$ref": "./workshop-upgrade.schema.json" },
+                "unicornSelection": { "$ref": "./workshop-upgrade.schema.json" },
+                "unobtainiumAxe": { "$ref": "./workshop-upgrade.schema.json" },
+                "unobtainiumDrill": { "$ref": "./workshop-upgrade.schema.json" },
+                "unobtainiumHuts": { "$ref": "./workshop-upgrade.schema.json" },
+                "unobtainiumReflectors": { "$ref": "./workshop-upgrade.schema.json" },
+                "unobtainiumSaw": { "$ref": "./workshop-upgrade.schema.json" },
+                "uplink": { "$ref": "./workshop-upgrade.schema.json" },
+                "voidAspiration": { "$ref": "./workshop-upgrade.schema.json" },
+                "voidEnergy": { "$ref": "./workshop-upgrade.schema.json" },
+                "voidReactors": { "$ref": "./workshop-upgrade.schema.json" }
+              },
+              "minProperties": 1,
+              "type": "object"
+            }
+          },
+          "required": ["enabled", "upgrades"],
+          "type": "object"
+        }
+      },
+      "minProperties": 1,
+      "type": "object"
+    }
+  },
+  "required": ["$schema", "v", "baseline"],
+  "minProperties": 3,
+  "type": "object"
+}

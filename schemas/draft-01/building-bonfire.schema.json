@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "#/schemas/draft-01/building-bonfire.schema.json",
+  "$id": "/schemas/draft-01/building-bonfire.schema.json",
   "title": "Bonfire Building",
   "description": "Kitten Scientists Bonfire Building",
   "additionalProperties": false,
@@ -14,6 +14,6 @@
       "type": "number"
     }
   },
-  "required": ["enabled", "max"],
+  "minProperties": 1,
   "type": "object"
 }

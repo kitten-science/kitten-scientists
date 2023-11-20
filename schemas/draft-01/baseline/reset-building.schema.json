@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/reset-building.schema.json",
+  "$id": "/schemas/draft-01/baseline/reset-building.schema.json",
   "title": "Reset Building",
   "description": "Kitten Scientists Reset Building",
   "additionalProperties": false,
@@ -16,6 +16,6 @@
       "type": "number"
     }
   },
-  "minProperties": 1,
+  "required": ["enabled", "trigger"],
   "type": "object"
 }
