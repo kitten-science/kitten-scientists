@@ -14,13 +14,6 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences:
-      custom_fences:
-        - name: blockdiag
-          class: blockdiag
-          format: !!python/name:blockdiag_fences.blockdiag.fence_img_format
-        - name: seqdiag
-          class: seqdiag
-          format: !!python/name:blockdiag_fences.blockdiag.fence_img_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tilde
