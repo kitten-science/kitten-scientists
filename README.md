@@ -1,4 +1,6 @@
 # Kitten Scientists v2
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkitten-science%2Fkitten-scientists.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkitten-science%2Fkitten-scientists?ref=badge_shield)
+
 
 Kitten Scientists (KS) is a simple automation userscript for the complex [Kittens Game](https://kittensgame.com/web/).
 
@@ -73,3 +75,7 @@ A lot of thanks goes out to all the amazing people who contributed to the origin
 -   [zelenay](https://github.com/zelenay)
 
 > If you want to see a live view of contributors for _this_ repository, you can see it at <https://github.com/kitten-science/kitten-scientists/graphs/contributors>.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkitten-science%2Fkitten-scientists.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkitten-science%2Fkitten-scientists?ref=badge_large)
