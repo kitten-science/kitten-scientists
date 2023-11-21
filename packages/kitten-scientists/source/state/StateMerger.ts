@@ -14,7 +14,7 @@ export class StateMerger {
 
     for (const child of this.state.children) {
       let childState = mustExist(child.state);
-      if (child.children.length !== 0) {
+      if (child.children.size !== 0) {
         childState = new StateMerger(child).merge(stateSubject);
       }
 

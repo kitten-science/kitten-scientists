@@ -1,11 +1,10 @@
+import { TreeNode } from "@oliversalzburg/js-utils";
 import { UserScript } from "../UserScript.js";
 import { StateLoader } from "./StateLoader.js";
 import { StateMerger } from "./StateMerger.js";
 
-export class State {
+export class State extends TreeNode<State> {
   readonly originUrl: string;
-  readonly parent: State | undefined;
-  readonly children = new Array<State>();
 
   readonly loader: StateLoader;
 
@@ -14,8 +13,8 @@ export class State {
   }
 
   constructor(originUrl: string, parent?: State) {
+    super(parent);
     this.originUrl = originUrl;
-    this.parent = parent;
     this.loader = new StateLoader(this);
   }
 

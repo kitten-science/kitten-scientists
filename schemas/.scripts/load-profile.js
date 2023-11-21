@@ -8,7 +8,7 @@ const state = new State(
 );
 
 const profile = await state.resolve();
-profile.report.aggregateLog();
+profile.report.aggregate(console);
 
 const engineState = state.merge();
 writeFileSync("load-profile.result.json", JSON.stringify(engineState, undefined, 2));

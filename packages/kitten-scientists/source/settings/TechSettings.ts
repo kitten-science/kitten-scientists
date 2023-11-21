@@ -1,4 +1,4 @@
-import { difference } from "@oliversalzburg/js-utils/array.js";
+import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
