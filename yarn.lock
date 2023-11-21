@@ -732,7 +732,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kitten-science/documentation@workspace:packages/documentation"
   dependencies:
-    node-scripts-docs: "npm:1.0.0"
+    node-scripts-docs: "npm:1.0.1"
   languageName: unknown
   linkType: soft
 
@@ -2711,7 +2711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0, fast-glob@npm:^3.3.2":
+"fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.2":
   version: 3.3.2
   resolution: "fast-glob@npm:3.3.2"
   dependencies:
@@ -3027,19 +3027,6 @@ __metadata:
   dependencies:
     type-fest: "npm:^0.20.2"
   checksum: fc05e184b3be59bffa2580f28551a12a758c3a18df4be91444202982c76f13f52821ad54ffaf7d3f2a4d2498fdf54aeaca8d4540fd9e860a9edb09d34ef4c507
-  languageName: node
-  linkType: hard
-
-"globby@npm:13.2.2":
-  version: 13.2.2
-  resolution: "globby@npm:13.2.2"
-  dependencies:
-    dir-glob: "npm:^3.0.1"
-    fast-glob: "npm:^3.3.0"
-    ignore: "npm:^5.2.4"
-    merge2: "npm:^1.4.1"
-    slash: "npm:^4.0.0"
-  checksum: a8d7cc7cbe5e1b2d0f81d467bbc5bc2eac35f74eaded3a6c85fc26d7acc8e6de22d396159db8a2fc340b8a342e74cac58de8f4aee74146d3d146921a76062664
   languageName: node
   linkType: hard
 
@@ -3768,12 +3755,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:9.1.2":
-  version: 9.1.2
-  resolution: "marked@npm:9.1.2"
+"marked@npm:10.0.0":
+  version: 10.0.0
+  resolution: "marked@npm:10.0.0"
   bin:
     marked: bin/marked.js
-  checksum: 3566a5925a3104eed01625cbd3727be309b08f1a29576e3ed91b61496c1b9da5bab68cb2928587220e5423f3720d979427c6b993e47e7a2e81d33c89fc97ce89
+  checksum: 5882b04a5f0d619757b281f09a67eb8f9e966299083748b51b144b482c56527161cc4dee3ef8e334926c84b7c6ad2bb5c48af5855a52c6ae460131175e3fb93f
   languageName: node
   linkType: hard
 
@@ -4148,18 +4135,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-scripts-docs@npm:1.0.0":
-  version: 1.0.0
-  resolution: "node-scripts-docs@npm:1.0.0"
+"node-scripts-docs@npm:1.0.1":
+  version: 1.0.1
+  resolution: "node-scripts-docs@npm:1.0.1"
   dependencies:
     elapsed-time: "npm:0.0.1"
-    globby: "npm:13.2.2"
-    marked: "npm:9.1.2"
+    globby: "npm:14.0.0"
+    marked: "npm:10.0.0"
     minimist: "npm:1.2.8"
     tslib: "npm:2.6.2"
   bin:
     nsd: output/node-scripts-docs.js
-  checksum: 89ca426b785d2339fd3c8a5bfbbfafedb6f888f93c5fef7e5e29eb7460f1b040c9c8bdb089d9b35d81ffbea241c9dcc94afdf2accb22786db75d8f86da0c25f1
+  checksum: 0c52caa952d74188fdfc35251fa5ed7788f9b2d57daf03ea61eb8820c1c0bd3f3a3188c3c91a7f08517602c25aea69c86860a8987ed83adab72f6c2fe46bca7a
   languageName: node
   linkType: hard
 
@@ -4858,13 +4845,6 @@ __metadata:
   version: 3.0.0
   resolution: "slash@npm:3.0.0"
   checksum: e18488c6a42bdfd4ac5be85b2ced3ccd0224773baae6ad42cfbb9ec74fc07f9fa8396bd35ee638084ead7a2a0818eb5e7151111544d4731ce843019dab4be47b
-  languageName: node
-  linkType: hard
-
-"slash@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "slash@npm:4.0.0"
-  checksum: b522ca75d80d107fd30d29df0549a7b2537c83c4c4ecd12cd7d4ea6c8aaca2ab17ada002e7a1d78a9d736a0261509f26ea5b489082ee443a3a810586ef8eff18
   languageName: node
   linkType: hard
 

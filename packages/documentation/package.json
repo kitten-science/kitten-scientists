@@ -12,7 +12,7 @@
     "docs:serve": ".scripts/serve.sh"
   },
   "devDependencies": {
-    "node-scripts-docs": "1.0.0"
+    "node-scripts-docs": "1.0.1"
   },
   "engines": {
     "node": "^20.0.0"
