@@ -1,6 +1,24 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { cinfo, cwarn } from "./Log.js";
 
+export const deepMergeLeft = (
+  a: Record<string, unknown>,
+  b: Record<string, unknown>,
+): Record<string, unknown> => {
+  const subject: Record<string, unknown> = { ...a };
+  for (const [key, value] of Object.entries(b)) {
+    if (typeof value === "object") {
+      subject[key] = deepMergeLeft(
+        key in a ? (a[key] as Record<string, unknown>) : {},
+        b[key] as Record<string, unknown>,
+      );
+      continue;
+    }
+    subject[key] = b[key] ?? a[key];
+  }
+  return subject;
+};
+
 /**
  * Provides type-safe means to iterate over the entries
  * in a partially filled structure with typed keys.

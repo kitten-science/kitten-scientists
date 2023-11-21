@@ -14,9 +14,13 @@
       "pattern": "^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-.+)$",
       "type": "string"
     },
-    "baseline": {
-      "description": "The URL of a KS settings baseline that this profile extends.",
-      "type": "string"
+    "extends": {
+      "description": "The URLs of KS settings profiles to extend.",
+      "items": {
+        "pattern": "^https://",
+        "type": "string"
+      },
+      "type": "array"
     },
     "engine": {
       "additionalProperties": false,
@@ -38,7 +42,7 @@
           "properties": {
             "selected": {
               "description": "The language KS runs at.",
-              "enum": ["cn", "de", "en", "he"],
+              "enum": ["de", "en", "he", "zh"],
               "type": "string"
             }
           },
@@ -434,7 +438,7 @@
             "trigger": {
               "description": "Sacrifice when we have this many alicorns.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
@@ -452,7 +456,7 @@
             "trigger": {
               "description": "Sacrifice when we have this many unicorns.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
@@ -470,7 +474,7 @@
             "trigger": {
               "description": "Refine when we have this many tears.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
@@ -488,7 +492,7 @@
             "trigger": {
               "description": "Refine when we have this many time crystals.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
@@ -831,7 +835,7 @@
             "trigger": {
               "description": "Amount of time crystals we need to have available.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             },
             "max": {
@@ -1469,19 +1473,19 @@
             "trigger": {
               "description": "How many relics should you have to sell?",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             },
             "buy": {
               "description": "Buy starting at this price.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             },
             "sell": {
               "description": "Sell at this price.",
               "maximum": 9007199254740991,
-              "minimum": 0,
+              "minimum": -1,
               "type": "number"
             }
           },
@@ -1861,7 +1865,7 @@
       "type": "object"
     }
   },
-  "required": ["$schema", "v", "baseline"],
+  "required": ["$schema", "v"],
   "minProperties": 3,
   "type": "object"
 }

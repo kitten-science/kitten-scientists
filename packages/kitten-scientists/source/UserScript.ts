@@ -1,6 +1,6 @@
 import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
+import { sleep } from "@oliversalzburg/js-utils/async.js";
 import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
-import { sleep } from "@oliversalzburg/js-utils/sleep.js";
 import JQuery from "jquery";
 import gt from "semver/functions/gt.js";
 import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine.js";
@@ -52,9 +52,10 @@ const TIMEOUT_DEFAULT = 2 * 60 * 1000;
 // Allows the user to define a timeout override in their browser's web storage.
 // This allows users to extend the timeout period, in case their local configuration
 // requires it.
-const TIMEOUT_OVERRIDE = !isNil(localStorage["ks.timeout"])
-  ? Number(localStorage["ks.timeout"])
-  : undefined;
+const TIMEOUT_OVERRIDE =
+  "localStorage" in globalThis && !isNil(localStorage["ks.timeout"])
+    ? Number(localStorage["ks.timeout"])
+    : undefined;
 
 export class UserScript {
   readonly game: Game;

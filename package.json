@@ -14,6 +14,7 @@
   "bugs": {
     "url": "https://github.com/kitten-science/kitten-scientists/issues"
   },
+  "type": "module",
   "scripts": {
     "build:all": "tsc --build",
     "clean:all": "rm -rf packages/*/build packages/*/tsconfig.tsbuildinfo",

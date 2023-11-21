@@ -1,0 +1,3177 @@
+{
+  "v": "2.0.0-beta.8",
+  "$schema": "https://github.com/kitten-science/kitten-scientists/raw/main/schemas/draft-01/settings-profile.schema.json",
+  "engine": {
+    "enabled": true,
+    "interval": 1000,
+    "language": {
+      "selected": "en"
+    },
+    "filters": {
+      "enabled": false,
+      "filters": {
+        "build": {
+          "enabled": false
+        },
+        "craft": {
+          "enabled": false
+        },
+        "upgrade": {
+          "enabled": false
+        },
+        "research": {
+          "enabled": false
+        },
+        "trade": {
+          "enabled": false
+        },
+        "hunt": {
+          "enabled": false
+        },
+        "praise": {
+          "enabled": false
+        },
+        "adore": {
+          "enabled": false
+        },
+        "transcend": {
+          "enabled": false
+        },
+        "faith": {
+          "enabled": false
+        },
+        "accelerate": {
+          "enabled": false
+        },
+        "timeSkip": {
+          "enabled": false
+        },
+        "festival": {
+          "enabled": false
+        },
+        "star": {
+          "enabled": false
+        },
+        "distribute": {
+          "enabled": false
+        },
+        "promote": {
+          "enabled": false
+        },
+        "misc": {
+          "enabled": false
+        }
+      }
+    },
+    "resources": {
+      "enabled": false,
+      "resources": {
+        "alicorn": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "alloy": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "antimatter": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "beam": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "blackcoin": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "bloodstone": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "blueprint": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "burnedParagon": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "catnip": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "coal": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "compedium": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "concrate": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "culture": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "elderBox": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "eludium": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "faith": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "furs": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "gear": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "gflops": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "gold": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "hashrates": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "iron": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "ivory": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "karma": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "kerosene": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "kittens": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "manpower": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "manuscript": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "megalith": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "minerals": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "necrocorn": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "oil": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "paragon": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "parchment": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "plate": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "relic": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "scaffold": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "science": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "ship": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "slab": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "sorrow": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "spice": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "starchart": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "steel": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "tanker": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "tears": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "temporalFlux": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "thorium": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "timeCrystal": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "titanium": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "tMythril": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "unicorns": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "unobtainium": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "uranium": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "void": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "wood": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "wrappingPaper": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        },
+        "zebras": {
+          "enabled": false,
+          "consume": 0,
+          "stock": -1
+        }
+      }
+    },
+    "states": {
+      "enabled": false,
+      "noConfirm": {
+        "enabled": false
+      },
+      "compress": {
+        "enabled": false
+      }
+    }
+  },
+  "bonfire": {
+    "enabled": true,
+    "trigger": 0,
+    "buildings": {
+      "academy": {
+        "enabled": false,
+        "max": 0
+      },
+      "accelerator": {
+        "enabled": false,
+        "max": 0
+      },
+      "aiCore": {
+        "enabled": false,
+        "max": 0
+      },
+      "amphitheatre": {
+        "enabled": false,
+        "max": 0
+      },
+      "aqueduct": {
+        "enabled": false,
+        "max": 0
+      },
+      "barn": {
+        "enabled": false,
+        "max": 0
+      },
+      "biolab": {
+        "enabled": false,
+        "max": 0
+      },
+      "brewery": {
+        "enabled": false,
+        "max": 0
+      },
+      "broadcastTower": {
+        "enabled": false,
+        "max": 0
+      },
+      "calciner": {
+        "enabled": false,
+        "max": 0
+      },
+      "chapel": {
+        "enabled": false,
+        "max": 0
+      },
+      "chronosphere": {
+        "enabled": false,
+        "max": 0
+      },
+      "dataCenter": {
+        "enabled": false,
+        "max": 0
+      },
+      "factory": {
+        "enabled": false,
+        "max": 0
+      },
+      "field": {
+        "enabled": true,
+        "max": -1
+      },
+      "harbor": {
+        "enabled": false,
+        "max": 0
+      },
+      "hut": {
+        "enabled": true,
+        "max": -1
+      },
+      "hydroPlant": {
+        "enabled": false,
+        "max": 0
+      },
+      "library": {
+        "enabled": false,
+        "max": 0
+      },
+      "logHouse": {
+        "enabled": false,
+        "max": 0
+      },
+      "lumberMill": {
+        "enabled": false,
+        "max": 0
+      },
+      "magneto": {
+        "enabled": false,
+        "max": 0
+      },
+      "mansion": {
+        "enabled": false,
+        "max": 0
+      },
+      "mine": {
+        "enabled": false,
+        "max": 0
+      },
+      "mint": {
+        "enabled": false,
+        "max": 0
+      },
+      "observatory": {
+        "enabled": false,
+        "max": 0
+      },
+      "oilWell": {
+        "enabled": false,
+        "max": 0
+      },
+      "pasture": {
+        "enabled": false,
+        "max": 0
+      },
+      "quarry": {
+        "enabled": false,
+        "max": 0
+      },
+      "reactor": {
+        "enabled": false,
+        "max": 0
+      },
+      "smelter": {
+        "enabled": false,
+        "max": 0
+      },
+      "solarFarm": {
+        "enabled": false,
+        "max": 0
+      },
+      "steamworks": {
+        "enabled": false,
+        "max": 0
+      },
+      "temple": {
+        "enabled": false,
+        "max": 0
+      },
+      "tradepost": {
+        "enabled": false,
+        "max": 0
+      },
+      "warehouse": {
+        "enabled": false,
+        "max": 0
+      },
+      "workshop": {
+        "enabled": false,
+        "max": 0
+      },
+      "zebraForge": {
+        "enabled": false,
+        "max": 0
+      },
+      "zebraOutpost": {
+        "enabled": false,
+        "max": 0
+      },
+      "zebraWorkshop": {
+        "enabled": false,
+        "max": 0
+      },
+      "ziggurat": {
+        "enabled": false,
+        "max": 0
+      }
+    },
+    "turnOnSteamworks": {
+      "enabled": false
+    },
+    "turnOnMagnetos": {
+      "enabled": false
+    },
+    "upgradeBuildings": {
+      "enabled": false,
+      "buildings": {
+        "broadcasttower": {
+          "enabled": false
+        },
+        "dataCenter": {
+          "enabled": false
+        },
+        "hydroplant": {
+          "enabled": false
+        },
+        "solarfarm": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "religion": {
+    "enabled": false,
+    "trigger": 1,
+    "buildings": {
+      "apocripha": {
+        "enabled": false,
+        "max": 0
+      },
+      "basilica": {
+        "enabled": false,
+        "max": 0
+      },
+      "blackCore": {
+        "enabled": false,
+        "max": 0
+      },
+      "blackLibrary": {
+        "enabled": false,
+        "max": 0
+      },
+      "blackNexus": {
+        "enabled": false,
+        "max": 0
+      },
+      "blackObelisk": {
+        "enabled": false,
+        "max": 0
+      },
+      "blackPyramid": {
+        "enabled": false,
+        "max": 0
+      },
+      "blackRadiance": {
+        "enabled": false,
+        "max": 0
+      },
+      "blazar": {
+        "enabled": false,
+        "max": 0
+      },
+      "darkNova": {
+        "enabled": false,
+        "max": 0
+      },
+      "goldenSpire": {
+        "enabled": false,
+        "max": 0
+      },
+      "holyGenocide": {
+        "enabled": false,
+        "max": 0
+      },
+      "ivoryCitadel": {
+        "enabled": false,
+        "max": 0
+      },
+      "ivoryTower": {
+        "enabled": false,
+        "max": 0
+      },
+      "marker": {
+        "enabled": false,
+        "max": 0
+      },
+      "scholasticism": {
+        "enabled": false,
+        "max": 0
+      },
+      "singularity": {
+        "enabled": false,
+        "max": 0
+      },
+      "skyPalace": {
+        "enabled": false,
+        "max": 0
+      },
+      "solarchant": {
+        "enabled": false,
+        "max": 0
+      },
+      "solarRevolution": {
+        "enabled": false,
+        "max": 0
+      },
+      "stainedGlass": {
+        "enabled": false,
+        "max": 0
+      },
+      "sunAltar": {
+        "enabled": false,
+        "max": 0
+      },
+      "sunspire": {
+        "enabled": false,
+        "max": 0
+      },
+      "templars": {
+        "enabled": false,
+        "max": 0
+      },
+      "transcendence": {
+        "enabled": false,
+        "max": 0
+      },
+      "unicornGraveyard": {
+        "enabled": false,
+        "max": 0
+      },
+      "unicornNecropolis": {
+        "enabled": false,
+        "max": 0
+      },
+      "unicornPasture": {
+        "enabled": false,
+        "max": 0
+      },
+      "unicornTomb": {
+        "enabled": false,
+        "max": 0
+      },
+      "unicornUtopia": {
+        "enabled": false,
+        "max": 0
+      }
+    },
+    "bestUnicornBuilding": {
+      "enabled": false
+    },
+    "sacrificeAlicorns": {
+      "enabled": false,
+      "trigger": -1
+    },
+    "sacrificeUnicorns": {
+      "enabled": false,
+      "trigger": -1
+    },
+    "refineTears": {
+      "enabled": false,
+      "trigger": -1
+    },
+    "refineTimeCrystals": {
+      "enabled": false,
+      "trigger": -1
+    },
+    "autoPraise": {
+      "enabled": false,
+      "trigger": 1
+    },
+    "adore": {
+      "enabled": false,
+      "trigger": 1
+    },
+    "transcend": {
+      "enabled": false
+    }
+  },
+  "science": {
+    "enabled": false,
+    "policies": {
+      "enabled": false,
+      "policies": {
+        "authocracy": {
+          "enabled": false
+        },
+        "bigStickPolicy": {
+          "enabled": false
+        },
+        "carnivale": {
+          "enabled": false
+        },
+        "cityOnAHill": {
+          "enabled": false
+        },
+        "clearCutting": {
+          "enabled": false
+        },
+        "communism": {
+          "enabled": false
+        },
+        "conservation": {
+          "enabled": false
+        },
+        "culturalExchange": {
+          "enabled": false
+        },
+        "diplomacy": {
+          "enabled": false
+        },
+        "environmentalism": {
+          "enabled": false
+        },
+        "epicurianism": {
+          "enabled": false
+        },
+        "expansionism": {
+          "enabled": false
+        },
+        "extravagance": {
+          "enabled": false
+        },
+        "fascism": {
+          "enabled": false
+        },
+        "frugality": {
+          "enabled": false
+        },
+        "fullIndustrialization": {
+          "enabled": false
+        },
+        "isolationism": {
+          "enabled": false
+        },
+        "knowledgeSharing": {
+          "enabled": false
+        },
+        "liberalism": {
+          "enabled": false
+        },
+        "liberty": {
+          "enabled": false
+        },
+        "militarizeSpace": {
+          "enabled": false
+        },
+        "monarchy": {
+          "enabled": false
+        },
+        "mysticism": {
+          "enabled": false
+        },
+        "necrocracy": {
+          "enabled": false
+        },
+        "openWoodlands": {
+          "enabled": false
+        },
+        "outerSpaceTreaty": {
+          "enabled": false
+        },
+        "radicalXenophobia": {
+          "enabled": false
+        },
+        "rationality": {
+          "enabled": false
+        },
+        "rationing": {
+          "enabled": false
+        },
+        "republic": {
+          "enabled": false
+        },
+        "socialism": {
+          "enabled": false
+        },
+        "stoicism": {
+          "enabled": false
+        },
+        "stripMining": {
+          "enabled": false
+        },
+        "sustainability": {
+          "enabled": false
+        },
+        "technocracy": {
+          "enabled": false
+        },
+        "theocracy": {
+          "enabled": false
+        },
+        "tradition": {
+          "enabled": false
+        },
+        "transkittenism": {
+          "enabled": false
+        },
+        "zebraRelationsAppeasement": {
+          "enabled": false
+        },
+        "zebraRelationsBellicosity": {
+          "enabled": false
+        }
+      }
+    },
+    "techs": {
+      "enabled": false,
+      "techs": {
+        "acoustics": {
+          "enabled": false
+        },
+        "advExogeology": {
+          "enabled": false
+        },
+        "agriculture": {
+          "enabled": false
+        },
+        "ai": {
+          "enabled": false
+        },
+        "animal": {
+          "enabled": false
+        },
+        "antimatter": {
+          "enabled": false
+        },
+        "archeology": {
+          "enabled": false
+        },
+        "archery": {
+          "enabled": false
+        },
+        "architecture": {
+          "enabled": false
+        },
+        "artificialGravity": {
+          "enabled": false
+        },
+        "astronomy": {
+          "enabled": false
+        },
+        "biochemistry": {
+          "enabled": false
+        },
+        "biology": {
+          "enabled": false
+        },
+        "blackchain": {
+          "enabled": false
+        },
+        "brewery": {
+          "enabled": false
+        },
+        "calendar": {
+          "enabled": false
+        },
+        "chemistry": {
+          "enabled": false
+        },
+        "chronophysics": {
+          "enabled": false
+        },
+        "civil": {
+          "enabled": false
+        },
+        "combustion": {
+          "enabled": false
+        },
+        "construction": {
+          "enabled": false
+        },
+        "cryptotheology": {
+          "enabled": false
+        },
+        "currency": {
+          "enabled": false
+        },
+        "dimensionalPhysics": {
+          "enabled": false
+        },
+        "drama": {
+          "enabled": false
+        },
+        "ecology": {
+          "enabled": false
+        },
+        "electricity": {
+          "enabled": false
+        },
+        "electronics": {
+          "enabled": false
+        },
+        "engineering": {
+          "enabled": false
+        },
+        "exogeology": {
+          "enabled": false
+        },
+        "exogeophysics": {
+          "enabled": false
+        },
+        "genetics": {
+          "enabled": false
+        },
+        "hydroponics": {
+          "enabled": false
+        },
+        "industrialization": {
+          "enabled": false
+        },
+        "machinery": {
+          "enabled": false
+        },
+        "math": {
+          "enabled": false
+        },
+        "mechanization": {
+          "enabled": false
+        },
+        "metal": {
+          "enabled": false
+        },
+        "metalurgy": {
+          "enabled": false
+        },
+        "metaphysics": {
+          "enabled": false
+        },
+        "mining": {
+          "enabled": false
+        },
+        "nanotechnology": {
+          "enabled": false
+        },
+        "navigation": {
+          "enabled": false
+        },
+        "nuclearFission": {
+          "enabled": false
+        },
+        "oilProcessing": {
+          "enabled": false
+        },
+        "orbitalEngineering": {
+          "enabled": false
+        },
+        "paradoxalKnowledge": {
+          "enabled": false
+        },
+        "particlePhysics": {
+          "enabled": false
+        },
+        "philosophy": {
+          "enabled": false
+        },
+        "physics": {
+          "enabled": false
+        },
+        "quantumCryptography": {
+          "enabled": false
+        },
+        "robotics": {
+          "enabled": false
+        },
+        "rocketry": {
+          "enabled": false
+        },
+        "sattelites": {
+          "enabled": false
+        },
+        "steel": {
+          "enabled": false
+        },
+        "superconductors": {
+          "enabled": false
+        },
+        "tachyonTheory": {
+          "enabled": false
+        },
+        "terraformation": {
+          "enabled": false
+        },
+        "theology": {
+          "enabled": false
+        },
+        "thorium": {
+          "enabled": false
+        },
+        "voidSpace": {
+          "enabled": false
+        },
+        "writing": {
+          "enabled": false
+        }
+      }
+    },
+    "observe": {
+      "enabled": false
+    }
+  },
+  "space": {
+    "enabled": false,
+    "trigger": 1,
+    "buildings": {
+      "containmentChamber": {
+        "enabled": false,
+        "max": 0
+      },
+      "cryostation": {
+        "enabled": false,
+        "max": 0
+      },
+      "entangler": {
+        "enabled": false,
+        "max": 0
+      },
+      "heatsink": {
+        "enabled": false,
+        "max": 0
+      },
+      "hrHarvester": {
+        "enabled": false,
+        "max": 0
+      },
+      "hydrofracturer": {
+        "enabled": false,
+        "max": 0
+      },
+      "hydroponics": {
+        "enabled": false,
+        "max": 0
+      },
+      "moltenCore": {
+        "enabled": false,
+        "max": 0
+      },
+      "moonBase": {
+        "enabled": false,
+        "max": 0
+      },
+      "moonOutpost": {
+        "enabled": false,
+        "max": 0
+      },
+      "orbitalArray": {
+        "enabled": false,
+        "max": 0
+      },
+      "planetCracker": {
+        "enabled": false,
+        "max": 0
+      },
+      "researchVessel": {
+        "enabled": false,
+        "max": 0
+      },
+      "sattelite": {
+        "enabled": false,
+        "max": 0
+      },
+      "spaceBeacon": {
+        "enabled": false,
+        "max": 0
+      },
+      "spaceElevator": {
+        "enabled": false,
+        "max": 0
+      },
+      "spaceStation": {
+        "enabled": false,
+        "max": 0
+      },
+      "spiceRefinery": {
+        "enabled": false,
+        "max": 0
+      },
+      "sunforge": {
+        "enabled": false,
+        "max": 0
+      },
+      "sunlifter": {
+        "enabled": false,
+        "max": 0
+      },
+      "tectonic": {
+        "enabled": false,
+        "max": 0
+      },
+      "terraformingStation": {
+        "enabled": false,
+        "max": 0
+      }
+    },
+    "unlockMissions": {
+      "enabled": false,
+      "missions": {
+        "centaurusSystemMission": {
+          "enabled": false
+        },
+        "charonMission": {
+          "enabled": false
+        },
+        "duneMission": {
+          "enabled": false
+        },
+        "furthestRingMission": {
+          "enabled": false
+        },
+        "heliosMission": {
+          "enabled": false
+        },
+        "kairoMission": {
+          "enabled": false
+        },
+        "moonMission": {
+          "enabled": false
+        },
+        "orbitalLaunch": {
+          "enabled": false
+        },
+        "piscineMission": {
+          "enabled": false
+        },
+        "rorschachMission": {
+          "enabled": false
+        },
+        "terminusMission": {
+          "enabled": false
+        },
+        "umbraMission": {
+          "enabled": false
+        },
+        "yarnMission": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "timeControl": {
+    "enabled": false,
+    "accelerateTime": {
+      "enabled": false,
+      "trigger": 1
+    },
+    "timeSkip": {
+      "enabled": false,
+      "trigger": -1,
+      "max": 0,
+      "cycles": {
+        "charon": {
+          "enabled": false
+        },
+        "umbra": {
+          "enabled": false
+        },
+        "yarn": {
+          "enabled": false
+        },
+        "helios": {
+          "enabled": false
+        },
+        "cath": {
+          "enabled": false
+        },
+        "redmoon": {
+          "enabled": false
+        },
+        "dune": {
+          "enabled": false
+        },
+        "piscine": {
+          "enabled": false
+        },
+        "terminus": {
+          "enabled": false
+        },
+        "kairo": {
+          "enabled": false
+        }
+      },
+      "seasons": {
+        "spring": {
+          "enabled": false
+        },
+        "summer": {
+          "enabled": false
+        },
+        "autumn": {
+          "enabled": false
+        },
+        "winter": {
+          "enabled": false
+        }
+      },
+      "ignoreOverheat": {
+        "enabled": false
+      }
+    },
+    "reset": {
+      "enabled": false,
+      "bonfire": {
+        "enabled": false,
+        "buildings": {
+          "academy": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "accelerator": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "aiCore": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "amphitheatre": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "aqueduct": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "barn": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "biolab": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "brewery": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "broadcastTower": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "calciner": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "chapel": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "chronosphere": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "dataCenter": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "factory": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "field": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "harbor": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "hut": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "hydroPlant": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "library": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "logHouse": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "lumberMill": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "magneto": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "mansion": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "mine": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "mint": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "observatory": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "oilWell": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "pasture": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "quarry": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "reactor": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "smelter": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "solarFarm": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "steamworks": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "temple": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "tradepost": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "warehouse": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "workshop": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "zebraForge": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "zebraOutpost": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "zebraWorkshop": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "ziggurat": {
+            "enabled": false,
+            "trigger": -1
+          }
+        }
+      },
+      "religion": {
+        "enabled": false,
+        "buildings": {
+          "apocripha": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "basilica": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "blackCore": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "blackLibrary": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "blackNexus": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "blackObelisk": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "blackPyramid": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "blackRadiance": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "blazar": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "darkNova": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "goldenSpire": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "holyGenocide": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "ivoryCitadel": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "ivoryTower": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "marker": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "scholasticism": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "singularity": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "skyPalace": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "solarchant": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "solarRevolution": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "stainedGlass": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "sunAltar": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "sunspire": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "templars": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "transcendence": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "unicornGraveyard": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "unicornNecropolis": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "unicornPasture": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "unicornTomb": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "unicornUtopia": {
+            "enabled": false,
+            "trigger": -1
+          }
+        }
+      },
+      "resources": {
+        "enabled": false,
+        "resources": {
+          "alicorn": {
+            "enabled": false,
+            "stock": -1
+          },
+          "alloy": {
+            "enabled": false,
+            "stock": -1
+          },
+          "antimatter": {
+            "enabled": false,
+            "stock": -1
+          },
+          "beam": {
+            "enabled": false,
+            "stock": -1
+          },
+          "blackcoin": {
+            "enabled": false,
+            "stock": -1
+          },
+          "bloodstone": {
+            "enabled": false,
+            "stock": -1
+          },
+          "blueprint": {
+            "enabled": false,
+            "stock": -1
+          },
+          "burnedParagon": {
+            "enabled": false,
+            "stock": -1
+          },
+          "catnip": {
+            "enabled": false,
+            "stock": -1
+          },
+          "coal": {
+            "enabled": false,
+            "stock": -1
+          },
+          "compedium": {
+            "enabled": false,
+            "stock": -1
+          },
+          "concrate": {
+            "enabled": false,
+            "stock": -1
+          },
+          "culture": {
+            "enabled": false,
+            "stock": -1
+          },
+          "elderBox": {
+            "enabled": false,
+            "stock": -1
+          },
+          "eludium": {
+            "enabled": false,
+            "stock": -1
+          },
+          "faith": {
+            "enabled": false,
+            "stock": -1
+          },
+          "furs": {
+            "enabled": false,
+            "stock": -1
+          },
+          "gear": {
+            "enabled": false,
+            "stock": -1
+          },
+          "gold": {
+            "enabled": false,
+            "stock": -1
+          },
+          "gflops": {
+            "enabled": false,
+            "stock": -1
+          },
+          "hashrates": {
+            "enabled": false,
+            "stock": -1
+          },
+          "iron": {
+            "enabled": false,
+            "stock": -1
+          },
+          "ivory": {
+            "enabled": false,
+            "stock": -1
+          },
+          "karma": {
+            "enabled": false,
+            "stock": -1
+          },
+          "kerosene": {
+            "enabled": false,
+            "stock": -1
+          },
+          "kittens": {
+            "enabled": false,
+            "stock": -1
+          },
+          "manpower": {
+            "enabled": false,
+            "stock": -1
+          },
+          "manuscript": {
+            "enabled": false,
+            "stock": -1
+          },
+          "megalith": {
+            "enabled": false,
+            "stock": -1
+          },
+          "minerals": {
+            "enabled": false,
+            "stock": -1
+          },
+          "necrocorn": {
+            "enabled": false,
+            "stock": -1
+          },
+          "oil": {
+            "enabled": false,
+            "stock": -1
+          },
+          "paragon": {
+            "enabled": false,
+            "stock": -1
+          },
+          "parchment": {
+            "enabled": false,
+            "stock": -1
+          },
+          "plate": {
+            "enabled": false,
+            "stock": -1
+          },
+          "relic": {
+            "enabled": false,
+            "stock": -1
+          },
+          "scaffold": {
+            "enabled": false,
+            "stock": -1
+          },
+          "science": {
+            "enabled": false,
+            "stock": -1
+          },
+          "ship": {
+            "enabled": false,
+            "stock": -1
+          },
+          "slab": {
+            "enabled": false,
+            "stock": -1
+          },
+          "sorrow": {
+            "enabled": false,
+            "stock": -1
+          },
+          "spice": {
+            "enabled": false,
+            "stock": -1
+          },
+          "starchart": {
+            "enabled": false,
+            "stock": -1
+          },
+          "steel": {
+            "enabled": false,
+            "stock": -1
+          },
+          "tanker": {
+            "enabled": false,
+            "stock": -1
+          },
+          "tears": {
+            "enabled": false,
+            "stock": -1
+          },
+          "temporalFlux": {
+            "enabled": false,
+            "stock": -1
+          },
+          "thorium": {
+            "enabled": false,
+            "stock": -1
+          },
+          "timeCrystal": {
+            "enabled": false,
+            "stock": -1
+          },
+          "tMythril": {
+            "enabled": false,
+            "stock": -1
+          },
+          "titanium": {
+            "enabled": false,
+            "stock": -1
+          },
+          "unicorns": {
+            "enabled": false,
+            "stock": -1
+          },
+          "unobtainium": {
+            "enabled": false,
+            "stock": -1
+          },
+          "uranium": {
+            "enabled": false,
+            "stock": -1
+          },
+          "void": {
+            "enabled": false,
+            "stock": -1
+          },
+          "wood": {
+            "enabled": false,
+            "stock": -1
+          },
+          "wrappingPaper": {
+            "enabled": false,
+            "stock": -1
+          },
+          "zebras": {
+            "enabled": false,
+            "stock": -1
+          }
+        }
+      },
+      "space": {
+        "enabled": false,
+        "buildings": {
+          "containmentChamber": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "cryostation": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "entangler": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "heatsink": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "hrHarvester": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "hydrofracturer": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "hydroponics": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "moltenCore": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "moonBase": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "moonOutpost": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "orbitalArray": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "planetCracker": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "researchVessel": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "sattelite": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "spaceBeacon": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "spaceElevator": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "spaceStation": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "spiceRefinery": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "sunforge": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "sunlifter": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "tectonic": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "terraformingStation": {
+            "enabled": false,
+            "trigger": -1
+          }
+        }
+      },
+      "time": {
+        "enabled": false,
+        "buildings": {
+          "blastFurnace": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "chronocontrol": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "cryochambers": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "ressourceRetrieval": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "temporalAccelerator": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "temporalBattery": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "temporalImpedance": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "temporalPress": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "timeBoiler": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "voidHoover": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "voidResonator": {
+            "enabled": false,
+            "trigger": -1
+          },
+          "voidRift": {
+            "enabled": false,
+            "trigger": -1
+          }
+        }
+      },
+      "upgrades": {
+        "enabled": false,
+        "upgrades": {
+          "advancedAutomation": {
+            "enabled": false
+          },
+          "advancedRefinement": {
+            "enabled": false
+          },
+          "aiBases": {
+            "enabled": false
+          },
+          "aiEngineers": {
+            "enabled": false
+          },
+          "alloyArmor": {
+            "enabled": false
+          },
+          "alloyAxe": {
+            "enabled": false
+          },
+          "alloyBarns": {
+            "enabled": false
+          },
+          "alloySaw": {
+            "enabled": false
+          },
+          "alloyWarehouses": {
+            "enabled": false
+          },
+          "amBases": {
+            "enabled": false
+          },
+          "amDrive": {
+            "enabled": false
+          },
+          "amFission": {
+            "enabled": false
+          },
+          "amReactors": {
+            "enabled": false
+          },
+          "amReactorsMK2": {
+            "enabled": false
+          },
+          "assistance": {
+            "enabled": false
+          },
+          "astrolabe": {
+            "enabled": false
+          },
+          "astrophysicists": {
+            "enabled": false
+          },
+          "augumentation": {
+            "enabled": false
+          },
+          "automatedPlants": {
+            "enabled": false
+          },
+          "barges": {
+            "enabled": false
+          },
+          "biofuel": {
+            "enabled": false
+          },
+          "bolas": {
+            "enabled": false
+          },
+          "cadSystems": {
+            "enabled": false
+          },
+          "caravanserai": {
+            "enabled": false
+          },
+          "carbonSequestration": {
+            "enabled": false
+          },
+          "cargoShips": {
+            "enabled": false
+          },
+          "celestialMechanics": {
+            "enabled": false
+          },
+          "chronoEngineers": {
+            "enabled": false
+          },
+          "chronoforge": {
+            "enabled": false
+          },
+          "coalFurnace": {
+            "enabled": false
+          },
+          "coldFusion": {
+            "enabled": false
+          },
+          "combustionEngine": {
+            "enabled": false
+          },
+          "compositeBow": {
+            "enabled": false
+          },
+          "concreteBarns": {
+            "enabled": false
+          },
+          "concreteHuts": {
+            "enabled": false
+          },
+          "concreteWarehouses": {
+            "enabled": false
+          },
+          "crossbow": {
+            "enabled": false
+          },
+          "cryocomputing": {
+            "enabled": false
+          },
+          "darkEnergy": {
+            "enabled": false
+          },
+          "deepMining": {
+            "enabled": false
+          },
+          "distorsion": {
+            "enabled": false
+          },
+          "electrolyticSmelting": {
+            "enabled": false
+          },
+          "eludiumCracker": {
+            "enabled": false
+          },
+          "eludiumHuts": {
+            "enabled": false
+          },
+          "eludiumReflectors": {
+            "enabled": false
+          },
+          "energyRifts": {
+            "enabled": false
+          },
+          "enrichedThorium": {
+            "enabled": false
+          },
+          "enrichedUranium": {
+            "enabled": false
+          },
+          "factoryAutomation": {
+            "enabled": false
+          },
+          "factoryLogistics": {
+            "enabled": false
+          },
+          "factoryOptimization": {
+            "enabled": false
+          },
+          "factoryProcessing": {
+            "enabled": false
+          },
+          "factoryRobotics": {
+            "enabled": false
+          },
+          "fluidizedReactors": {
+            "enabled": false
+          },
+          "fluxCondensator": {
+            "enabled": false
+          },
+          "fuelInjectors": {
+            "enabled": false
+          },
+          "geodesy": {
+            "enabled": false
+          },
+          "gmo": {
+            "enabled": false
+          },
+          "goldOre": {
+            "enabled": false
+          },
+          "hubbleTelescope": {
+            "enabled": false
+          },
+          "huntingArmor": {
+            "enabled": false
+          },
+          "hydroPlantTurbines": {
+            "enabled": false
+          },
+          "internet": {
+            "enabled": false
+          },
+          "invisibleBlackHand": {
+            "enabled": false
+          },
+          "ironAxes": {
+            "enabled": false
+          },
+          "ironHoes": {
+            "enabled": false
+          },
+          "ironwood": {
+            "enabled": false
+          },
+          "lhc": {
+            "enabled": false
+          },
+          "logistics": {
+            "enabled": false
+          },
+          "longRangeSpaceships": {
+            "enabled": false
+          },
+          "machineLearning": {
+            "enabled": false
+          },
+          "mineralAxes": {
+            "enabled": false
+          },
+          "mineralHoes": {
+            "enabled": false
+          },
+          "miningDrill": {
+            "enabled": false
+          },
+          "mWReactor": {
+            "enabled": false
+          },
+          "nanosuits": {
+            "enabled": false
+          },
+          "neuralNetworks": {
+            "enabled": false
+          },
+          "nuclearPlants": {
+            "enabled": false
+          },
+          "nuclearSmelters": {
+            "enabled": false
+          },
+          "offsetPress": {
+            "enabled": false
+          },
+          "oilDistillation": {
+            "enabled": false
+          },
+          "oilRefinery": {
+            "enabled": false
+          },
+          "orbitalGeodesy": {
+            "enabled": false
+          },
+          "oxidation": {
+            "enabled": false
+          },
+          "photolithography": {
+            "enabled": false
+          },
+          "photovoltaic": {
+            "enabled": false
+          },
+          "pneumaticPress": {
+            "enabled": false
+          },
+          "printingPress": {
+            "enabled": false
+          },
+          "pumpjack": {
+            "enabled": false
+          },
+          "pyrolysis": {
+            "enabled": false
+          },
+          "qdot": {
+            "enabled": false
+          },
+          "railgun": {
+            "enabled": false
+          },
+          "reactorVessel": {
+            "enabled": false
+          },
+          "refrigeration": {
+            "enabled": false
+          },
+          "register": {
+            "enabled": false
+          },
+          "reinforcedBarns": {
+            "enabled": false
+          },
+          "reinforcedSaw": {
+            "enabled": false
+          },
+          "reinforcedWarehouses": {
+            "enabled": false
+          },
+          "relicStation": {
+            "enabled": false
+          },
+          "rotaryKiln": {
+            "enabled": false
+          },
+          "satelliteRadio": {
+            "enabled": false
+          },
+          "satnav": {
+            "enabled": false
+          },
+          "seti": {
+            "enabled": false
+          },
+          "silos": {
+            "enabled": false
+          },
+          "solarSatellites": {
+            "enabled": false
+          },
+          "spaceEngineers": {
+            "enabled": false
+          },
+          "spaceManufacturing": {
+            "enabled": false
+          },
+          "spiceNavigation": {
+            "enabled": false
+          },
+          "starlink": {
+            "enabled": false
+          },
+          "stasisChambers": {
+            "enabled": false
+          },
+          "steelArmor": {
+            "enabled": false
+          },
+          "steelAxe": {
+            "enabled": false
+          },
+          "steelPlants": {
+            "enabled": false
+          },
+          "steelSaw": {
+            "enabled": false
+          },
+          "stoneBarns": {
+            "enabled": false
+          },
+          "storageBunkers": {
+            "enabled": false
+          },
+          "strenghtenBuild": {
+            "enabled": false
+          },
+          "tachyonAccelerators": {
+            "enabled": false
+          },
+          "thinFilm": {
+            "enabled": false
+          },
+          "thoriumEngine": {
+            "enabled": false
+          },
+          "thoriumReactors": {
+            "enabled": false
+          },
+          "titaniumAxe": {
+            "enabled": false
+          },
+          "titaniumBarns": {
+            "enabled": false
+          },
+          "titaniumMirrors": {
+            "enabled": false
+          },
+          "titaniumSaw": {
+            "enabled": false
+          },
+          "titaniumWarehouses": {
+            "enabled": false
+          },
+          "turnSmoothly": {
+            "enabled": false
+          },
+          "unicornSelection": {
+            "enabled": false
+          },
+          "unobtainiumAxe": {
+            "enabled": false
+          },
+          "unobtainiumDrill": {
+            "enabled": false
+          },
+          "unobtainiumHuts": {
+            "enabled": false
+          },
+          "unobtainiumReflectors": {
+            "enabled": false
+          },
+          "unobtainiumSaw": {
+            "enabled": false
+          },
+          "uplink": {
+            "enabled": false
+          },
+          "voidAspiration": {
+            "enabled": false
+          },
+          "voidEnergy": {
+            "enabled": false
+          },
+          "voidReactors": {
+            "enabled": false
+          }
+        }
+      }
+    }
+  },
+  "time": {
+    "enabled": false,
+    "trigger": 1,
+    "buildings": {
+      "blastFurnace": {
+        "enabled": false,
+        "max": 0
+      },
+      "chronocontrol": {
+        "enabled": false,
+        "max": 0
+      },
+      "cryochambers": {
+        "enabled": false,
+        "max": 0
+      },
+      "ressourceRetrieval": {
+        "enabled": false,
+        "max": 0
+      },
+      "temporalAccelerator": {
+        "enabled": false,
+        "max": 0
+      },
+      "temporalBattery": {
+        "enabled": false,
+        "max": 0
+      },
+      "temporalImpedance": {
+        "enabled": false,
+        "max": 0
+      },
+      "temporalPress": {
+        "enabled": false,
+        "max": 0
+      },
+      "timeBoiler": {
+        "enabled": false,
+        "max": 0
+      },
+      "voidHoover": {
+        "enabled": false,
+        "max": 0
+      },
+      "voidResonator": {
+        "enabled": false,
+        "max": 0
+      },
+      "voidRift": {
+        "enabled": false,
+        "max": 0
+      }
+    },
+    "fixCryochambers": {
+      "enabled": false
+    },
+    "turnOnChronoFurnace": {
+      "enabled": false
+    }
+  },
+  "trade": {
+    "enabled": false,
+    "trigger": 1,
+    "races": {
+      "dragons": {
+        "enabled": false,
+        "limited": true,
+        "seasons": {
+          "summer": {
+            "enabled": false
+          },
+          "autumn": {
+            "enabled": false
+          },
+          "winter": {
+            "enabled": false
+          },
+          "spring": {
+            "enabled": false
+          }
+        }
+      },
+      "griffins": {
+        "enabled": false,
+        "limited": true,
+        "seasons": {
+          "summer": {
+            "enabled": false
+          },
+          "autumn": {
+            "enabled": false
+          },
+          "winter": {
+            "enabled": false
+          },
+          "spring": {
+            "enabled": false
+          }
+        }
+      },
+      "leviathans": {
+        "enabled": false,
+        "limited": false,
+        "seasons": {
+          "summer": {
+            "enabled": false
+          },
+          "autumn": {
+            "enabled": false
+          },
+          "winter": {
+            "enabled": false
+          },
+          "spring": {
+            "enabled": false
+          }
+        }
+      },
+      "lizards": {
+        "enabled": false,
+        "limited": true,
+        "seasons": {
+          "summer": {
+            "enabled": false
+          },
+          "autumn": {
+            "enabled": false
+          },
+          "winter": {
+            "enabled": false
+          },
+          "spring": {
+            "enabled": false
+          }
+        }
+      },
+      "nagas": {
+        "enabled": false,
+        "limited": true,
+        "seasons": {
+          "summer": {
+            "enabled": false
+          },
+          "autumn": {
+            "enabled": false
+          },
+          "winter": {
+            "enabled": false
+          },
+          "spring": {
+            "enabled": false
+          }
+        }
+      },
+      "sharks": {
+        "enabled": false,
+        "limited": true,
+        "seasons": {
+          "summer": {
+            "enabled": false
+          },
+          "autumn": {
+            "enabled": false
+          },
+          "winter": {
+            "enabled": false
+          },
+          "spring": {
+            "enabled": false
+          }
+        }
+      },
+      "spiders": {
+        "enabled": false,
+        "limited": true,
+        "seasons": {
+          "summer": {
+            "enabled": false
+          },
+          "autumn": {
+            "enabled": false
+          },
+          "winter": {
+            "enabled": false
+          },
+          "spring": {
+            "enabled": false
+          }
+        }
+      },
+      "zebras": {
+        "enabled": false,
+        "limited": true,
+        "seasons": {
+          "summer": {
+            "enabled": false
+          },
+          "autumn": {
+            "enabled": false
+          },
+          "winter": {
+            "enabled": false
+          },
+          "spring": {
+            "enabled": false
+          }
+        }
+      }
+    },
+    "feedLeviathans": {
+      "enabled": false
+    },
+    "buildEmbassies": {
+      "enabled": false,
+      "trigger": 1,
+      "races": {
+        "dragons": {
+          "enabled": false,
+          "max": 0
+        },
+        "griffins": {
+          "enabled": false,
+          "max": 0
+        },
+        "leviathans": {
+          "enabled": false,
+          "max": 0
+        },
+        "lizards": {
+          "enabled": false,
+          "max": 0
+        },
+        "nagas": {
+          "enabled": false,
+          "max": 0
+        },
+        "sharks": {
+          "enabled": false,
+          "max": 0
+        },
+        "spiders": {
+          "enabled": false,
+          "max": 0
+        },
+        "zebras": {
+          "enabled": false,
+          "max": 0
+        }
+      }
+    },
+    "tradeBlackcoin": {
+      "enabled": false,
+      "trigger": -1,
+      "buy": 0,
+      "sell": 9007199254740991
+    },
+    "unlockRaces": {
+      "enabled": false
+    }
+  },
+  "village": {
+    "enabled": false,
+    "jobs": {
+      "engineer": {
+        "enabled": false,
+        "max": 0
+      },
+      "farmer": {
+        "enabled": false,
+        "max": 0
+      },
+      "geologist": {
+        "enabled": false,
+        "max": 0
+      },
+      "hunter": {
+        "enabled": false,
+        "max": 0
+      },
+      "miner": {
+        "enabled": false,
+        "max": 0
+      },
+      "priest": {
+        "enabled": false,
+        "max": 0
+      },
+      "scholar": {
+        "enabled": false,
+        "max": 0
+      },
+      "woodcutter": {
+        "enabled": false,
+        "max": 0
+      }
+    },
+    "holdFestivals": {
+      "enabled": false
+    },
+    "hunt": {
+      "enabled": false,
+      "trigger": 1
+    },
+    "promoteKittens": {
+      "enabled": false,
+      "trigger": 1
+    },
+    "promoteLeader": {
+      "enabled": false
+    },
+    "electLeader": {
+      "enabled": false,
+      "job": {
+        "selected": "scholar"
+      },
+      "trait": {
+        "selected": "wise"
+      }
+    }
+  },
+  "workshop": {
+    "enabled": false,
+    "trigger": 1,
+    "resources": {
+      "alloy": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "beam": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "blueprint": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "compedium": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "concrate": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "eludium": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "gear": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "kerosene": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "manuscript": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "megalith": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "parchment": {
+        "enabled": false,
+        "limited": false,
+        "max": 0
+      },
+      "plate": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "scaffold": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "ship": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "slab": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "steel": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "tanker": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "thorium": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      },
+      "wood": {
+        "enabled": false,
+        "limited": true,
+        "max": 0
+      }
+    },
+    "shipOverride": {
+      "enabled": false
+    },
+    "unlockUpgrades": {
+      "enabled": false,
+      "upgrades": {
+        "advancedAutomation": {
+          "enabled": false
+        },
+        "advancedRefinement": {
+          "enabled": false
+        },
+        "aiBases": {
+          "enabled": false
+        },
+        "aiEngineers": {
+          "enabled": false
+        },
+        "alloyArmor": {
+          "enabled": false
+        },
+        "alloyAxe": {
+          "enabled": false
+        },
+        "alloyBarns": {
+          "enabled": false
+        },
+        "alloySaw": {
+          "enabled": false
+        },
+        "alloyWarehouses": {
+          "enabled": false
+        },
+        "amBases": {
+          "enabled": false
+        },
+        "amDrive": {
+          "enabled": false
+        },
+        "amFission": {
+          "enabled": false
+        },
+        "amReactors": {
+          "enabled": false
+        },
+        "amReactorsMK2": {
+          "enabled": false
+        },
+        "assistance": {
+          "enabled": false
+        },
+        "astrolabe": {
+          "enabled": false
+        },
+        "astrophysicists": {
+          "enabled": false
+        },
+        "augumentation": {
+          "enabled": false
+        },
+        "automatedPlants": {
+          "enabled": false
+        },
+        "barges": {
+          "enabled": false
+        },
+        "biofuel": {
+          "enabled": false
+        },
+        "bolas": {
+          "enabled": false
+        },
+        "cadSystems": {
+          "enabled": false
+        },
+        "caravanserai": {
+          "enabled": false
+        },
+        "carbonSequestration": {
+          "enabled": false
+        },
+        "cargoShips": {
+          "enabled": false
+        },
+        "celestialMechanics": {
+          "enabled": false
+        },
+        "chronoEngineers": {
+          "enabled": false
+        },
+        "chronoforge": {
+          "enabled": false
+        },
+        "coalFurnace": {
+          "enabled": false
+        },
+        "coldFusion": {
+          "enabled": false
+        },
+        "combustionEngine": {
+          "enabled": false
+        },
+        "compositeBow": {
+          "enabled": false
+        },
+        "concreteBarns": {
+          "enabled": false
+        },
+        "concreteHuts": {
+          "enabled": false
+        },
+        "concreteWarehouses": {
+          "enabled": false
+        },
+        "crossbow": {
+          "enabled": false
+        },
+        "cryocomputing": {
+          "enabled": false
+        },
+        "darkEnergy": {
+          "enabled": false
+        },
+        "deepMining": {
+          "enabled": false
+        },
+        "distorsion": {
+          "enabled": false
+        },
+        "electrolyticSmelting": {
+          "enabled": false
+        },
+        "eludiumCracker": {
+          "enabled": false
+        },
+        "eludiumHuts": {
+          "enabled": false
+        },
+        "eludiumReflectors": {
+          "enabled": false
+        },
+        "energyRifts": {
+          "enabled": false
+        },
+        "enrichedThorium": {
+          "enabled": false
+        },
+        "enrichedUranium": {
+          "enabled": false
+        },
+        "factoryAutomation": {
+          "enabled": false
+        },
+        "factoryLogistics": {
+          "enabled": false
+        },
+        "factoryOptimization": {
+          "enabled": false
+        },
+        "factoryProcessing": {
+          "enabled": false
+        },
+        "factoryRobotics": {
+          "enabled": false
+        },
+        "fluidizedReactors": {
+          "enabled": false
+        },
+        "fluxCondensator": {
+          "enabled": false
+        },
+        "fuelInjectors": {
+          "enabled": false
+        },
+        "geodesy": {
+          "enabled": false
+        },
+        "gmo": {
+          "enabled": false
+        },
+        "goldOre": {
+          "enabled": false
+        },
+        "hubbleTelescope": {
+          "enabled": false
+        },
+        "huntingArmor": {
+          "enabled": false
+        },
+        "hydroPlantTurbines": {
+          "enabled": false
+        },
+        "internet": {
+          "enabled": false
+        },
+        "invisibleBlackHand": {
+          "enabled": false
+        },
+        "ironAxes": {
+          "enabled": false
+        },
+        "ironHoes": {
+          "enabled": false
+        },
+        "ironwood": {
+          "enabled": false
+        },
+        "lhc": {
+          "enabled": false
+        },
+        "logistics": {
+          "enabled": false
+        },
+        "longRangeSpaceships": {
+          "enabled": false
+        },
+        "machineLearning": {
+          "enabled": false
+        },
+        "mineralAxes": {
+          "enabled": false
+        },
+        "mineralHoes": {
+          "enabled": false
+        },
+        "miningDrill": {
+          "enabled": false
+        },
+        "mWReactor": {
+          "enabled": false
+        },
+        "nanosuits": {
+          "enabled": false
+        },
+        "neuralNetworks": {
+          "enabled": false
+        },
+        "nuclearPlants": {
+          "enabled": false
+        },
+        "nuclearSmelters": {
+          "enabled": false
+        },
+        "offsetPress": {
+          "enabled": false
+        },
+        "oilDistillation": {
+          "enabled": false
+        },
+        "oilRefinery": {
+          "enabled": false
+        },
+        "orbitalGeodesy": {
+          "enabled": false
+        },
+        "oxidation": {
+          "enabled": false
+        },
+        "photolithography": {
+          "enabled": false
+        },
+        "photovoltaic": {
+          "enabled": false
+        },
+        "pneumaticPress": {
+          "enabled": false
+        },
+        "printingPress": {
+          "enabled": false
+        },
+        "pumpjack": {
+          "enabled": false
+        },
+        "pyrolysis": {
+          "enabled": false
+        },
+        "qdot": {
+          "enabled": false
+        },
+        "railgun": {
+          "enabled": false
+        },
+        "reactorVessel": {
+          "enabled": false
+        },
+        "refrigeration": {
+          "enabled": false
+        },
+        "register": {
+          "enabled": false
+        },
+        "reinforcedBarns": {
+          "enabled": false
+        },
+        "reinforcedSaw": {
+          "enabled": false
+        },
+        "reinforcedWarehouses": {
+          "enabled": false
+        },
+        "relicStation": {
+          "enabled": false
+        },
+        "rotaryKiln": {
+          "enabled": false
+        },
+        "satelliteRadio": {
+          "enabled": false
+        },
+        "satnav": {
+          "enabled": false
+        },
+        "seti": {
+          "enabled": false
+        },
+        "silos": {
+          "enabled": false
+        },
+        "solarSatellites": {
+          "enabled": false
+        },
+        "spaceEngineers": {
+          "enabled": false
+        },
+        "spaceManufacturing": {
+          "enabled": false
+        },
+        "spiceNavigation": {
+          "enabled": false
+        },
+        "starlink": {
+          "enabled": false
+        },
+        "stasisChambers": {
+          "enabled": false
+        },
+        "steelArmor": {
+          "enabled": false
+        },
+        "steelAxe": {
+          "enabled": false
+        },
+        "steelPlants": {
+          "enabled": false
+        },
+        "steelSaw": {
+          "enabled": false
+        },
+        "stoneBarns": {
+          "enabled": false
+        },
+        "storageBunkers": {
+          "enabled": false
+        },
+        "strenghtenBuild": {
+          "enabled": false
+        },
+        "tachyonAccelerators": {
+          "enabled": false
+        },
+        "thinFilm": {
+          "enabled": false
+        },
+        "thoriumEngine": {
+          "enabled": false
+        },
+        "thoriumReactors": {
+          "enabled": false
+        },
+        "titaniumAxe": {
+          "enabled": false
+        },
+        "titaniumBarns": {
+          "enabled": false
+        },
+        "titaniumMirrors": {
+          "enabled": false
+        },
+        "titaniumSaw": {
+          "enabled": false
+        },
+        "titaniumWarehouses": {
+          "enabled": false
+        },
+        "turnSmoothly": {
+          "enabled": false
+        },
+        "unicornSelection": {
+          "enabled": false
+        },
+        "unobtainiumAxe": {
+          "enabled": false
+        },
+        "unobtainiumDrill": {
+          "enabled": false
+        },
+        "unobtainiumHuts": {
+          "enabled": false
+        },
+        "unobtainiumReflectors": {
+          "enabled": false
+        },
+        "unobtainiumSaw": {
+          "enabled": false
+        },
+        "uplink": {
+          "enabled": false
+        },
+        "voidAspiration": {
+          "enabled": false
+        },
+        "voidEnergy": {
+          "enabled": false
+        },
+        "voidReactors": {
+          "enabled": false
+        }
+      }
+    }
+  }
+}

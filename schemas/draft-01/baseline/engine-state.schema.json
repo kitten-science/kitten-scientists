@@ -34,7 +34,7 @@
           "properties": {
             "selected": {
               "description": "The language KS runs at.",
-              "enum": ["cn", "de", "en", "he"],
+              "enum": ["de", "en", "he", "zh"],
               "type": "string"
             }
           },

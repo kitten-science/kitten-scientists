@@ -25,7 +25,7 @@
   },
   "types": "./build/index.ts",
   "dependencies": {
-    "@oliversalzburg/js-utils": "0.0.20",
+    "@oliversalzburg/js-utils": "0.0.21",
     "date-fns": "2.30.0",
     "semver": "7.5.4",
     "tslib": "2.6.2"
@@ -35,6 +35,7 @@
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.28",
     "@types/semver": "7.5.6",
+    "@types/web": "0.0.119",
     "typescript": "5.3.2",
     "vite": "5.0.0",
     "vite-plugin-userscript": "0.1.3"
