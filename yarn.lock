@@ -657,7 +657,7 @@ __metadata:
     "@types/chai": "npm:4.3.11"
     "@types/conventional-commits-parser": "npm:3.0.6"
     "@types/mocha": "npm:10.0.6"
-    "@types/node": "npm:20.9.3"
+    "@types/node": "npm:20.9.4"
     "@types/semver": "npm:7.5.6"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
@@ -681,7 +681,7 @@ __metadata:
     "@kie/mock-github": "npm:2.0.0"
     "@types/chai": "npm:4.3.11"
     "@types/mocha": "npm:10.0.6"
-    "@types/node": "npm:20.9.3"
+    "@types/node": "npm:20.9.4"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
     json-schema-to-ts: "npm:2.9.2"
@@ -700,7 +700,7 @@ __metadata:
     "@kie/mock-github": "npm:2.0.0"
     "@types/chai": "npm:4.3.11"
     "@types/mocha": "npm:10.0.6"
-    "@types/node": "npm:20.9.3"
+    "@types/node": "npm:20.9.4"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
     mocha: "npm:10.2.0"
@@ -719,7 +719,7 @@ __metadata:
     "@kie/mock-github": "npm:2.0.0"
     "@types/chai": "npm:4.3.11"
     "@types/mocha": "npm:10.0.6"
-    "@types/node": "npm:20.9.3"
+    "@types/node": "npm:20.9.4"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
     mocha: "npm:10.2.0"
@@ -1295,12 +1295,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:20.9.3":
-  version: 20.9.3
-  resolution: "@types/node@npm:20.9.3"
+"@types/node@npm:*, @types/node@npm:20.9.4":
+  version: 20.9.4
+  resolution: "@types/node@npm:20.9.4"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 0f61809f00241d0f1db23f8d938ef287138754819150d026e57d2246fec0330ba4b771781ff0d2ed1ea0dd42953850424b495956ff89d06d0bf3995d53da75b1
+  checksum: c8b48ace4c7e17715fa901201c98275f8e5268cf5895a8d149777eb0ec6c3ef6c831ff3917e92da5453a5dbe13f230caa50b348a0601b0d50eb9e628010c0364
   languageName: node
   linkType: hard
 
@@ -3580,7 +3580,7 @@ __metadata:
     "@babel/plugin-syntax-import-assertions": "npm:7.23.3"
     "@types/babel__core": "npm:7.20.5"
     "@types/eslint": "npm:8.44.7"
-    "@types/node": "npm:20.9.3"
+    "@types/node": "npm:20.9.4"
     "@types/prettier": "npm:3.0.0"
     "@types/web": "npm:0.0.119"
     "@typescript-eslint/eslint-plugin": "npm:6.12.0"
