@@ -656,7 +656,7 @@ __metadata:
     "@octokit/types": "npm:12.3.0"
     "@types/chai": "npm:4.3.11"
     "@types/conventional-commits-parser": "npm:3.0.6"
-    "@types/mocha": "npm:10.0.5"
+    "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.9.3"
     "@types/semver": "npm:7.5.6"
     c8: "npm:8.0.1"
@@ -680,7 +680,7 @@ __metadata:
     "@actions/github": "npm:5.1.1"
     "@kie/mock-github": "npm:2.0.0"
     "@types/chai": "npm:4.3.11"
-    "@types/mocha": "npm:10.0.5"
+    "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.9.3"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
@@ -699,7 +699,7 @@ __metadata:
     "@actions/github": "npm:5.1.1"
     "@kie/mock-github": "npm:2.0.0"
     "@types/chai": "npm:4.3.11"
-    "@types/mocha": "npm:10.0.5"
+    "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.9.3"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
@@ -718,7 +718,7 @@ __metadata:
     "@actions/github": "npm:5.1.1"
     "@kie/mock-github": "npm:2.0.0"
     "@types/chai": "npm:4.3.11"
-    "@types/mocha": "npm:10.0.5"
+    "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.9.3"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
@@ -1288,10 +1288,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mocha@npm:10.0.5":
-  version: 10.0.5
-  resolution: "@types/mocha@npm:10.0.5"
-  checksum: f959c2c673a853bde8e37eee374a2c4d13c5311a216b9de876189eeb54aabc3d11b18e9dc8db671d6619be614a0a8354c2555fcf6e7c533145f7115403fd1faf
+"@types/mocha@npm:10.0.6":
+  version: 10.0.6
+  resolution: "@types/mocha@npm:10.0.6"
+  checksum: 4526c9e88388f9e1004c6d3937c5488a39908810f26b927173c58d52b43057f3895627dc06538e96706e08b88158885f869ec6311f6b58fd72bdef715f26d6c3
   languageName: node
   linkType: hard
 
