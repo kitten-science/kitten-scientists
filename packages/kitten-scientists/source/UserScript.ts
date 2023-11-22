@@ -7,6 +7,7 @@ import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine.j
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
+import { State } from "./state/State.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
 import { Game } from "./types/index.js";
 import { UserInterface } from "./ui/UserInterface.js";
@@ -235,6 +236,12 @@ export class UserScript {
     const settings = UserScript.decodeSettings(encodedSettings);
     this.setSettings(settings);
     this.engine.imessage("settings.imported");
+  }
+
+  async importSettingsFromUrl(url: string) {
+    const importState = new State(url);
+    const settings = await importState.resolve();
+    settings.report.aggregate(console);
   }
 
   /**
