@@ -30,6 +30,6 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./schemas s3://kitten-science-website/schemas/working-draft
-          aws s3 sync ./presets s3://kitten-science-website/baselines
-          aws s3 sync ./presets s3://kitten-science-website/presets
+          aws s3 sync ./schemas/working-draft s3://kitten-science-website/schemas/working-draft --delete
+          aws s3 sync ./baselines s3://kitten-science-website/baselines --delete
+          aws s3 sync ./presets s3://kitten-science-website/presets --delete
