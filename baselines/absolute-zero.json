@@ -1,5 +1,5 @@
 {
-  "$schema": "https://github.com/kitten-science/kitten-scientists/raw/main/schemas/draft-01/baseline/engine-state.schema.json",
+  "$schema": "https://kitten-science.com/schemas/working-draft/baseline/engine-state.schema.json",
   "v": "2.0.0-beta.8",
   "engine": {
     "enabled": false,

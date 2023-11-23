@@ -1,10 +1,10 @@
 {
-  "$schema": "https://github.com/kitten-science/kitten-scientists/raw/main/schemas/draft-01/settings-profile.schema.json",
+  "$schema": "https://kitten-science.com/schemas/working-draft/settings-profile.schema.json",
   "v": "2.0.0-beta.8",
   "extends": [
-    "https://github.com/kitten-science/kitten-scientists/raw/main/baselines/absolute-zero.json",
-    "https://github.com/kitten-science/kitten-scientists/raw/main/presets/enable-engine.json",
-    "https://github.com/kitten-science/kitten-scientists/raw/main/presets/build-fields.json",
-    "https://github.com/kitten-science/kitten-scientists/raw/main/presets/build-huts.json"
+    "https://kitten-science.com/baselines/absolute-zero.json",
+    "https://kitten-science.com/presets/enable-engine.json",
+    "https://kitten-science.com/presets/build-fields.json",
+    "https://kitten-science.com/presets/build-huts.json"
   ]
 }
