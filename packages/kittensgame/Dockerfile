@@ -1,4 +1,4 @@
-FROM docker.io/library/node:20.9.0-bookworm@sha256:146bbe4eaee99ae885be2a0a767f63a4b96032141d70d80e590f10e0d7ebabcb
+FROM docker.io/library/node:20.10.0-bookworm@sha256:445acd9b2ef7e9de665424053bf95652e0b8995ef36500557d48faf29300170a
 
 ARG BRANCH=master
 
