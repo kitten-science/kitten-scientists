@@ -35,7 +35,7 @@
     "@babel/plugin-syntax-import-assertions": "7.23.3",
     "@types/babel__core": "7.20.5",
     "@types/eslint": "8.44.7",
-    "@types/node": "20.9.4",
+    "@types/node": "20.9.5",
     "@types/prettier": "3.0.0",
     "@types/web": "0.0.119",
     "@typescript-eslint/eslint-plugin": "6.12.0",
