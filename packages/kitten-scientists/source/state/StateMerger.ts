@@ -23,7 +23,7 @@ export class StateMerger {
 
     // Clean up merged state.
     (stateSubject as Record<string, string>).$schema =
-      "https://github.com/kitten-science/kitten-scientists/raw/main/schemas/draft-01/settings-profile.schema.json";
+      "https://schema.kitten-science.com/working-draft/settings-profile.schema.json";
     delete stateSubject.extends;
 
     return stateSubject;
