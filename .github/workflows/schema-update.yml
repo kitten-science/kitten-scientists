@@ -7,6 +7,9 @@ on:
     paths:
       - ".github/workflows/schema-update.yml"
       - "packages/action-schema-update/*"
+      - "baselines/*"
+      - "presets/*"
+      - "schemas/*"
   workflow_dispatch:
 
 concurrency: schema-update
@@ -30,6 +33,12 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./schemas/working-draft s3://kitten-science-website/schemas/working-draft --delete
-          aws s3 sync ./baselines s3://kitten-science-website/baselines --delete
-          aws s3 sync ./presets s3://kitten-science-website/presets --delete
+          aws s3 sync ./schemas/working-draft s3://kitten-science-website/schemas/working-draft \
+            --cache-control "public; s-maxage=60" \
+            --delete
+          aws s3 sync ./baselines s3://kitten-science-website/baselines --delete \
+            --cache-control "public; s-maxage=60" \
+            --delete
+          aws s3 sync ./presets s3://kitten-science-website/presets --delete \
+            --cache-control "public; s-maxage=60" \
+            --delete
