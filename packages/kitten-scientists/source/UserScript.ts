@@ -147,7 +147,7 @@ export class UserScript {
     }
 
     try {
-      const response = await fetch("https://ks.rm-rf.link/release-info.json");
+      const response = await fetch("https://kitten-science.com/release-info.json");
       const releaseInfo = (await response.json()) as ReleaseInfoSchema;
       cdebug(releaseInfo);
 
