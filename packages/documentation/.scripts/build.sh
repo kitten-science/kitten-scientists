@@ -10,11 +10,8 @@ fi
 cd "$(dirname "$0")"
 
 main() {
-  cd ..
-  podman build -t squidfunk/mkdocs-material .
-
-  cd ../..
-  podman run --rm -it -v "${PWD}":/docs squidfunk/mkdocs-material build --config-file packages/documentation/mkdocs.yml --site-dir public
+  cd ../../..
+  podman run --rm -v "${PWD}":/docs docker.io/squidfunk/mkdocs-material build --config-file packages/documentation/mkdocs.yml --site-dir public
 }
 
 main "$@"
