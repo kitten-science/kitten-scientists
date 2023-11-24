@@ -81,7 +81,7 @@
   "json.schemas": [
     {
       "fileMatch": ["*.engine-state.json", "*.engine-state.json5", "*.engine-state.jsonc"],
-      "url": "./schemas/draft-01/engine-state.schema.json"
+      "url": ".https://schema.kitten-science.com/working-draft/engine-state.schema.json"
     }
   ]
 }

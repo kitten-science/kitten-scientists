@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/reset-building.schema.json",
+  "$id": "https://schema.kitten-science.com/working-draft/reset-building.schema.json",
   "title": "Reset Building",
   "description": "Kitten Scientists Reset Building",
   "additionalProperties": false,

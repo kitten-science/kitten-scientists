@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/baseline/building-bonfire.schema.json",
+  "$id": "https://schema.kitten-science.com/working-draft/baseline/building-bonfire.schema.json",
   "title": "Bonfire Building",
   "description": "Kitten Scientists Bonfire Building",
   "additionalProperties": false,

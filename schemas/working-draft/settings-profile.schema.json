@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/settings-profile.schema.json",
+  "$id": "https://schema.kitten-science.com/working-draft/settings-profile.schema.json",
   "title": "Settings Profile",
   "description": "Kitten Scientists Settings Profile",
   "additionalProperties": false,

@@ -1,6 +1,6 @@
 {
   // Exported snapshots should likely always be baselines, as they contain everything.
-  "$schema": "https://github.com/kitten-science/kitten-scientists/raw/main/schemas/draft-01/baseline/engine-state.schema.json",
+  "$schema": "https://schema.kitten-science.com/working-draft/baseline/engine-state.schema.json",
   "v": "2.0.0-beta.8-live",
   "engine": {
     "enabled": true,

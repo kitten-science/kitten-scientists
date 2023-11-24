@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/building-religion.schema.json",
+  "$id": "https://schema.kitten-science.com/working-draft/building-religion.schema.json",
   "title": "Religion Building",
   "description": "Kitten Scientists Religion Building",
   "additionalProperties": false,

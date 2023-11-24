@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/baseline/resource-control.schema.json",
+  "$id": "https://schema.kitten-science.com/working-draft/baseline/resource-control.schema.json",
   "title": "Resource Control",
   "description": "Kitten Scientists Resource Control",
   "additionalProperties": false,

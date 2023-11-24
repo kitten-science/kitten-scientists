@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/baseline/reset-upgrade.schema.json",
+  "$id": "https://schema.kitten-science.com/working-draft/baseline/reset-upgrade.schema.json",
   "title": "Reset Upgrade",
   "description": "Kitten Scientists Reset Upgrade",
   "additionalProperties": false,

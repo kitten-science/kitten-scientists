@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "/schemas/draft-01/baseline/engine-state.schema.json",
+  "$id": "https://schema.kitten-science.com/working-draft/baseline/engine-state.schema.json",
   "title": "Engine State Baseline",
   "description": "Kitten Scientists Engine State Basline",
   "additionalProperties": false,
