@@ -10,6 +10,8 @@ const state = new State(
 const profile = await state.resolve();
 profile.report.aggregate(console);
 
+await state.validate();
+
 const engineState = state.merge();
 writeFileSync("load-profile.result.json", JSON.stringify(engineState, undefined, 2));
 console.info("Result written to 'load-profile.result.json'.");

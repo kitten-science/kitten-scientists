@@ -238,10 +238,27 @@ export class UserScript {
     this.engine.imessage("settings.imported");
   }
 
+  /**
+   * Import settings from a URL.
+   * This is an experimental feature, and only allows using profiles from
+   * https://kitten-science.com/ at this time.
+   *
+   * @param url - The URL of the profile to load.
+   */
   async importSettingsFromUrl(url: string) {
     const importState = new State(url);
     const settings = await importState.resolve();
     settings.report.aggregate(console);
+
+    const stateIsValid = await importState.validate();
+    if (!stateIsValid) {
+      cerror("Imported state is invalid and not imported.");
+      return;
+    }
+
+    const state = importState.merge();
+    this.setSettings(state);
+    this.engine.imessage("settings.imported");
   }
 
   /**

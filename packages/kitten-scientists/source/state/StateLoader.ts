@@ -77,11 +77,10 @@ export class StateLoader extends TreeNode<StateLoader> {
       return this.report;
     }
 
-    // TODO: Validate again JSON schema.
     this.#data = data;
     const bases = await this.#resolveBases(this.#data, cache);
     if (bases.length === 0) {
-      this.report.log("🍁 Profile is a leaf node and should be a baseline!");
+      this.report.log("🍁 Profile is a leaf node.");
     } else {
       this.report.log("🌳 Profile is a tree node.");
     }
