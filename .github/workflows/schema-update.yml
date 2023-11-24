@@ -35,6 +35,7 @@ jobs:
         run: |
           aws s3 sync ./schemas/working-draft s3://kitten-science-website/schemas/working-draft \
             --cache-control "public; s-maxage=60" \
+            --content-type "application/schema+json" \
             --delete
           aws s3 sync ./baselines s3://kitten-science-website/baselines --delete \
             --cache-control "public; s-maxage=60" \
