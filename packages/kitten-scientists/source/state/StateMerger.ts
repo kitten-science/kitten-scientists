@@ -10,7 +10,7 @@ export class StateMerger {
   }
 
   merge<T extends Record<string, unknown>>(base: T): T {
-    let stateSubject = deepMergeLeft(base, mustExist(this.state.state)) as T;
+    let stateSubject = base;
 
     for (const child of this.state.children) {
       let childState = mustExist(child.state);
@@ -20,6 +20,8 @@ export class StateMerger {
 
       stateSubject = deepMergeLeft(stateSubject, childState) as T;
     }
+
+    stateSubject = deepMergeLeft(stateSubject, mustExist(this.state.state)) as T;
 
     // Clean up merged state.
     (stateSubject as Record<string, string>).$schema =
