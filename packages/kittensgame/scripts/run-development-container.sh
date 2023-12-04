@@ -27,6 +27,7 @@ main() {
     --detach \
     --mount type=bind,source="${BASEDIR}/../../kitten-scientists/output",target=/kittensgame/kitten-scientists \
     --name kittensgame \
+    --publish 8086:8086 \
     --publish 8100:8080 \
     kittensgame
   echo "Container started."
