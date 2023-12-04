@@ -5,6 +5,8 @@ import { StateLoader } from "./StateLoader.js";
 import { StateMerger } from "./StateMerger.js";
 
 export class State extends TreeNode<State> {
+  static ALLOW_DATA_URL_IMPORT = false;
+
   readonly originUrl: string;
 
   readonly loader: StateLoader;
@@ -16,9 +18,12 @@ export class State extends TreeNode<State> {
   constructor(originUrl: string, parent?: State) {
     super(parent);
     if (!originUrl.startsWith("https://kitten-science.com/")) {
-      throw new InvalidOperationError(
-        "While state import is experimental, you can only import from 'https://kitten-science.com/'!",
-      );
+      // Make an exception for data URLs, if the exception was explicitly allowed.
+      if (!originUrl.startsWith("data:") || !State.ALLOW_DATA_URL_IMPORT) {
+        throw new InvalidOperationError(
+          "While state import is experimental, you can only import from 'https://kitten-science.com/'!",
+        );
+      }
     }
 
     this.originUrl = originUrl;
