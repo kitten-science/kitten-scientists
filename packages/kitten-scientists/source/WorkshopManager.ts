@@ -468,10 +468,23 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @returns How many items of the resource to always keep in stock.
    */
   getStock(name: Resource): number {
-    const res = this._host.engine.settings.resources.resources[name];
-    const stock = res && res.enabled ? res.stock : 0;
+    const resource = this._host.engine.settings.resources.resources[name];
+    const stock = resource && resource.enabled ? resource.stock : 0;
 
-    return !stock ? 0 : stock;
+    return stock;
+  }
+
+  /**
+   * Retrieve the consume rate for a resource.
+   *
+   * @param name - The resource.
+   * @returns The consume rate for the resource.
+   */
+  getConsume(name: Resource): number {
+    const resource = this._host.engine.settings.resources.resources[name];
+    const consume = resource && resource.enabled ? resource.consume : 1;
+
+    return consume;
   }
 
   /**
@@ -511,9 +524,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     value = Math.max(value - stock, 0);
 
     // Determine the consume rate.
-    // If the consume rate is 0.6, we'll always only make 60% of the resource available.
-    const resourceSettings = this._host.engine.settings.resources.resources[name];
-    const consume = resourceSettings.consume;
+    const consume = this.getConsume(name);
 
     return value * consume;
   }
