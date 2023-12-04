@@ -6,7 +6,7 @@
     "enabled": true,
     "trigger": 0,
     "buildings": {
-      "hut": {
+      "field": {
         "enabled": true,
         "max": -1
       }
