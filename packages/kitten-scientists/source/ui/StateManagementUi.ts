@@ -7,7 +7,6 @@ import { StateSettings } from "../settings/StateSettings.js";
 import { cerror } from "../tools/Log.js";
 import { SavegameLoader } from "../tools/SavegameLoader.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
-import { ExplainerListItem } from "./components/ExplainerListItem.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -29,8 +28,9 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   readonly stateList: SettingsList;
 
   constructor(host: UserScript, settings: StateSettings) {
-    super(host, "State Management", settings, {
-      settingItem: new LabelListItem(host, "State Management", { icon: Icons.State }),
+    const label = host.engine.i18n("state.title");
+    super(host, label, settings, {
+      settingItem: new LabelListItem(host, label, { icon: Icons.State }),
     });
 
     this.stateList = new SettingsList(host, {
@@ -41,78 +41,74 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.addChild(
       new SettingsList(host, {
         children: [
-          new ExplainerListItem(
-            host,
-            "This is highly experimental.\nAbsolutely BACKUP YOUR GAME before even looking at anything here, or you will regret it!",
-          ),
           new SettingListItem(
             host,
-            "Do NOT confirm destructive actions. (Danger!)",
+            this._host.engine.i18n("state.noConfirm"),
             this.setting.noConfirm,
             { delimiter: true },
           ),
 
-          new HeaderListItem(host, "Copy to clipboard"),
+          new HeaderListItem(host, this._host.engine.i18n("state.copy")),
           new ButtonListItem(
             host,
-            new TextButton(host, "KS settings only", {
+            new TextButton(host, this._host.engine.i18n("state.ksOnly"), {
               onClick: () => void this.copySettings().catch(console.error),
-              title: "Copy only the settings of Kitten Scientists",
+              title: this._host.engine.i18n("state.ksOnlyTitleCopy"),
             }),
           ),
           new ButtonListItem(
             host,
-            new TextButton(host, "KG save game", {
+            new TextButton(host, this._host.engine.i18n("state.kgSave"), {
               onClick: () => void this.copySaveGame().catch(console.error),
-              title: "Copy the entire Kittens Game save.",
+              title: this._host.engine.i18n("state.kgSaveTitleCopy"),
             }),
             { delimiter: true },
           ),
           new SettingListItem(host, "Compress data", this.setting.compress, { delimiter: true }),
 
-          new HeaderListItem(host, "Load from clipboard"),
+          new HeaderListItem(host, this._host.engine.i18n("state.load")),
           new ButtonListItem(
             host,
-            new TextButton(host, "KS settings only", {
+            new TextButton(host, this._host.engine.i18n("state.ksOnly"), {
               onClick: () => this.loadSettings(),
-              title: "Load only the settings of Kitten Scientists",
+              title: this._host.engine.i18n("state.ksOnlyTitleLoad"),
             }),
           ),
           new ButtonListItem(
             host,
-            new TextButton(host, "KG save game", {
+            new TextButton(host, this._host.engine.i18n("state.kgSave"), {
               onClick: () => void this.loadSaveGame()?.catch(console.error),
-              title: "Load an entire Kittens Game save.",
+              title: this._host.engine.i18n("state.kgSaveTitleLoad"),
             }),
             { delimiter: true },
           ),
 
-          new HeaderListItem(host, "Local states"),
+          new HeaderListItem(host, this._host.engine.i18n("state.local")),
           new ButtonListItem(
             host,
-            new TextButton(host, "Store current", {
+            new TextButton(host, this._host.engine.i18n("state.storeCurrent"), {
               onClick: () => this.storeState(),
-              title: "Create a new state snapshot.",
+              title: this._host.engine.i18n("state.storeCurrentTitle"),
             }),
           ),
           new ButtonListItem(
             host,
-            new TextButton(host, "Import from clipboard", {
+            new TextButton(host, this._host.engine.i18n("state.import"), {
               onClick: () => this.importState(),
-              title: "Store a state that you have in your clipboard.",
+              title: this._host.engine.i18n("state.importTitle"),
             }),
             { delimiter: true },
           ),
           new ButtonListItem(
             host,
-            new TextButton(host, "Reset to factory defaults", {
+            new TextButton(host, this._host.engine.i18n("state.reset"), {
               onClick: () => this.resetState(),
-              title: "Reset absolutely all KS settings to factory defaults.",
+              title: this._host.engine.i18n("state.resetTitle"),
             }),
             { delimiter: true },
           ),
 
-          new HeaderListItem(host, "Load stored state"),
+          new HeaderListItem(host, this._host.engine.i18n("state.loadStored")),
           this.stateList,
         ],
         hasDisableAll: false,
@@ -156,10 +152,11 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     super.refreshUi();
 
     this.stateList.removeChildren(this.stateList.children);
+    const unlabeled = this._host.engine.i18n("state.unlabled");
     for (const state of this.states) {
       const button = new TextButton(
         this._host,
-        `${state.label ?? "unlabeled state"} (${formatDistanceToNow(new Date(state.timestamp), {
+        `${state.label ?? unlabeled} (${formatDistanceToNow(new Date(state.timestamp), {
           addSuffix: true,
         })})`,
         { onClick: () => this.loadState(state.state), title: state.timestamp },
@@ -206,9 +203,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   loadSettings() {
-    const input = window.prompt(
-      "Your current settings will be replaced!\nPaste your settings here:",
-    );
+    const input = window.prompt(this._host.engine.i18n("state.loadPrompt"));
     if (isNil(input)) {
       return;
     }
@@ -226,9 +221,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   async loadSaveGame() {
-    const input = window.prompt(
-      "⚠ YOU WILL LOSE YOUR CURRENT SAVE IF YOU DO THIS! ⚠\nPaste your (un/compressed) savegame here:",
-    );
+    const input = window.prompt(this._host.engine.i18n("state.loadPromptGame"));
     if (isNil(input)) {
       return;
     }
@@ -289,7 +282,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   importState() {
-    const input = window.prompt("Paste your (un/compressed) settings here :");
+    const input = window.prompt(this._host.engine.i18n("state.paste"));
     if (isNil(input)) {
       return;
     }
