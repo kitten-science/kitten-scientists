@@ -1,0 +1,199 @@
+{
+  "$schema": "https://kitten-science.com/schemas/working-draft/settings-profile.schema.json",
+  "v": "2.0.0-beta.8",
+  "extends": ["https://kitten-science.com/baselines/absolute-zero.json"],
+  "engine": {
+    "enabled": true,
+    "interval": 1000
+  },
+  "bonfire": {
+    "enabled": true,
+    "trigger": 0,
+    "buildings": {
+      "academy": {
+        "enabled": true,
+        "max": 5
+      },
+      "amphitheatre": {
+        "enabled": true,
+        "max": 10
+      },
+      "field": {
+        "enabled": true,
+        "max": -1
+      },
+      "hut": {
+        "enabled": true,
+        "max": -1
+      },
+      "library": {
+        "enabled": true,
+        "max": 20
+      },
+      "lumberMill": {
+        "enabled": true,
+        "max": 2
+      },
+      "mine": {
+        "enabled": true,
+        "max": 10
+      },
+      "smelter": {
+        "enabled": true,
+        "max": 20
+      },
+      "temple": {
+        "enabled": true,
+        "max": 1
+      },
+      "workshop": {
+        "enabled": true,
+        "max": 10
+      }
+    }
+  },
+  "religion": {
+    "enabled": true,
+    "trigger": 0,
+    "buildings": {
+      "solarRevolution": {
+        "enabled": true,
+        "max": 1
+      },
+      "unicornPasture": {
+        "enabled": true,
+        "max": -1
+      }
+    }
+  },
+  "science": {
+    "enabled": true,
+    "observe": {
+      "enabled": true
+    },
+    "techs": {
+      "enabled": true,
+      "techs": {
+        "agriculture": {
+          "enabled": true
+        },
+        "animal": {
+          "enabled": true
+        },
+        "archery": {
+          "enabled": true
+        },
+        "calendar": {
+          "enabled": true
+        },
+        "civil": {
+          "enabled": true
+        },
+        "construction": {
+          "enabled": true
+        },
+        "currency": {
+          "enabled": true
+        },
+        "engineering": {
+          "enabled": true
+        },
+        "math": {
+          "enabled": true
+        },
+        "metal": {
+          "enabled": true
+        },
+        "mining": {
+          "enabled": true
+        },
+        "philosophy": {
+          "enabled": true
+        },
+        "theology": {
+          "enabled": true
+        },
+        "writing": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "village": {
+    "enabled": true,
+    "hunt": {
+      "enabled": true,
+      "trigger": 0.1
+    },
+    "jobs": {
+      "farmer": {
+        "enabled": true,
+        "max": 3
+      },
+      "hunter": {
+        "enabled": true,
+        "max": 10
+      },
+      "miner": {
+        "enabled": true,
+        "max": 1
+      },
+      "scholar": {
+        "enabled": true,
+        "max": 2
+      },
+      "woodcutter": {
+        "enabled": true,
+        "max": 4
+      }
+    }
+  },
+  "workshop": {
+    "enabled": true,
+    "trigger": 0,
+    "resources": {
+      "parchment": {
+        "enabled": true,
+        "limited": false,
+        "max": 25
+      },
+      "manuscript": {
+        "enabled": true,
+        "limited": false,
+        "max": 50
+      },
+      "plate": {
+        "enabled": true,
+        "limited": false,
+        "max": 15
+      },
+      "slab": {
+        "enabled": true,
+        "limited": false,
+        "max": 25
+      },
+      "wood": {
+        "enabled": true,
+        "limited": false,
+        "max": 10
+      }
+    },
+    "unlockUpgrades": {
+      "enabled": true,
+      "upgrades": {
+        "bolas": {
+          "enabled": true
+        },
+        "celestialMechanics": {
+          "enabled": true
+        },
+        "goldOre": {
+          "enabled": true
+        },
+        "mineralAxes": {
+          "enabled": true
+        }
+      }
+    }
+  }
+}
