@@ -39,6 +39,7 @@ export type Automation = {
   tick(context: TickContext): void | Promise<void>;
 };
 export type EngineState = {
+  $schema?: string;
   v: string;
   engine: EngineSettings;
   bonfire: BonfireSettings;
@@ -223,6 +224,7 @@ export class Engine {
    */
   stateSerialize(): EngineState {
     return {
+      $schema: "https://kitten-science.com/schemas/working-draft/settings-profile.schema.json",
       v: ksVersion(),
       engine: this.settings,
       bonfire: this.bonfireManager.settings,
