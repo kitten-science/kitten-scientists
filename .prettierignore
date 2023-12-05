@@ -1,6 +1,6 @@
 /packages/*/build/
 /packages/*/output/
+/packages/documentation/public/*
 
 # yarn internals are already pretty enough
 .yarn/
-.pnp.js

@@ -12,3 +12,4 @@ tsconfig.tsbuildinfo
 /packages/*/build/*
 /packages/*/coverage/*
 /packages/*/output/*
+/packages/documentation/public/*
