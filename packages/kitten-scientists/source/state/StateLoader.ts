@@ -31,10 +31,12 @@ export class StateLoader extends TreeNode<StateLoader> {
   constructor(state: State) {
     super(state.parent?.loader);
 
+    const reportOrigin = state.originUrl;
+
     this.state = state;
     this.report = state.parent
-      ? mustExist(state.parent.loader).report.child(new Report(state.originUrl))
-      : new Report(state.originUrl);
+      ? mustExist(state.parent.loader).report.child(new Report(reportOrigin))
+      : new Report(reportOrigin);
   }
 
   async load(cache = this.cache): Promise<Report> {
