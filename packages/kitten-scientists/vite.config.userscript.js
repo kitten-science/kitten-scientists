@@ -23,7 +23,7 @@ const versionString = [
     ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}`
     : "",
 ].join("");
-const updateURL = `htpps://kitten-science.com/${
+const updateURL = `https://kitten-science.com/${
   isNightlyBuild ? "nightly.js" : isDevBuild ? "dev.js" : "stable.js"
 }`;
 
