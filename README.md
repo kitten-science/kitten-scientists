@@ -2,7 +2,7 @@
 
 Kitten Scientists (KS) is a simple automation userscript for the complex [Kittens Game](https://kittensgame.com/web/).
 
-For a full explanation of how everything in Kitten Scientists works, please visit the [**full documentation**](https://kitten-science.github.io/kitten-scientists/).
+For a full explanation of how everything in Kitten Scientists works, please visit the [**full documentation**](https://kitten-science.com/).
 
 ## Quick Start
 
