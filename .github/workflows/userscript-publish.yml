@@ -15,29 +15,36 @@ jobs:
   pre-release:
     runs-on: ubuntu-latest
     permissions:
+      actions: write
       contents: write
       packages: write
       pull-requests: read
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: Select NodeJS version
         uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4
         with:
           # renovate: datasource=docker depName=node versioning=node
           node-version: "20.10.0"
-      - run: yarn install --immutable
-      - run: yarn build:all
-      - run: yarn lint:all
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Build everything
+        run: yarn build:all
+      - name: Lint
+        run: yarn lint:all
 
       - name: Get version
         run: |
           export KS_VERSION=$(yarn kitten-scientists:version)
           echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
 
-      - run: yarn kitten-scientists:release
+      - name: Build release
+        run: yarn kitten-scientists:release
 
-      - uses: ./packages/action-automatic-releases
+      - name: Generate GitHub release
+        uses: ./packages/action-automatic-releases
         with:
           automatic_release_tag: next
           draft: false
@@ -46,3 +53,8 @@ jobs:
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: Development Build v${{ env.KS_VERSION }}
+
+      - name: Update release information
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run release-info.yml
