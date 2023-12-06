@@ -43,25 +43,25 @@ jobs:
         uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
         with:
           aws-region: eu-west-1
-          role-to-assume: arn:aws:iam::022327457572:role/kitten-science-website-maintainer
+          role-to-assume: arn:aws:iam::022327457572:role/kitten-science-us0-maintainer
           role-session-name: GitHubActions
 
       - name: Deploy to S3
         run: |
-          aws s3 cp release-info.json s3://kitten-science-website
+          aws s3 cp release-info.json s3://kitten-science-us0
 
           aws s3api put-object \
-            --bucket kitten-science-website \
+            --bucket kitten-science-us0 \
             --key dev.js \
             --cache-control "public, s-maxage=60" \
             --website-redirect-location "${{ steps.release-info.outputs.dev-url-default }}"
           aws s3api put-object \
-            --bucket kitten-science-website \
+            --bucket kitten-science-us0 \
             --key nightly.js \
             --cache-control "public, s-maxage=86400" \
             --website-redirect-location "${{ steps.release-info.outputs.nightly-url-default }}"
           aws s3api put-object \
-            --bucket kitten-science-website \
+            --bucket kitten-science-us0 \
             --key stable.js \
             --cache-control "public, s-maxage=86400" \
             --website-redirect-location "${{ steps.release-info.outputs.stable-url-default }}"
