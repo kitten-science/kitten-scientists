@@ -23,6 +23,9 @@ const versionString = [
     ? `-${String(process.env.GITHUB_SHA).substring(0, 7)}`
     : "",
 ].join("");
+const updateURL = `https://kitten-science.com/${
+  isNightlyBuild ? "nightly.js" : isDevBuild ? "dev.js" : "stable.js"
+}`;
 
 const filename = ["kitten-scientists", `-${versionString}`, minify ? ".min" : "", ".user.js"].join(
   "",
@@ -39,6 +42,7 @@ export default defineConfig({
         description: manifest.description,
         homepage: manifest.homepage,
         supportURL: manifest.bugs.url,
+        updateURL,
       },
     }),
   ],

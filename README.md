@@ -2,7 +2,7 @@
 
 Kitten Scientists (KS) is a simple automation userscript for the complex [Kittens Game](https://kittensgame.com/web/).
 
-For a full explanation of how everything in Kitten Scientists works, please visit the [**full documentation**](https://kitten-science.github.io/kitten-scientists/).
+For a full explanation of how everything in Kitten Scientists works, please visit the [**full documentation**](https://kitten-science.com/).
 
 ## Quick Start
 
@@ -15,10 +15,10 @@ Grab the [latest stable build](https://github.com/kitten-science/kitten-scientis
 ### Bookmarklet
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.7/kitten-scientists-2.0.0-beta.7.user.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://kitten-science.com/stable.js';d.body.appendChild(s);})();
 ```
 
-This bookmarklet points to the latest stable release. Come back here regularly to see if new versions are available 🙂
+This bookmarklet points to the latest stable release. If there's a new release, you will automatically use that one.
 
 ## Contributors
 
