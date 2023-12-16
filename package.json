@@ -44,7 +44,7 @@
     "@types/web": "0.0.127",
     "@typescript-eslint/eslint-plugin": "6.14.0",
     "@typescript-eslint/parser": "6.14.0",
-    "eslint": "8.55.0",
+    "eslint": "8.56.0",
     "eslint-plugin-jsdoc": "46.9.1",
     "lint-staged": "15.2.0",
     "prettier": "3.1.1",
