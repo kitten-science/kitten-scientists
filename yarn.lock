@@ -684,7 +684,7 @@ __metadata:
     "@types/node": "npm:20.10.5"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
-    json-schema-to-ts: "npm:2.9.2"
+    json-schema-to-ts: "npm:2.12.0"
     mocha: "npm:10.2.0"
     tslib: "npm:2.6.2"
     typescript: "npm:5.3.3"
@@ -3523,14 +3523,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema-to-ts@npm:2.9.2":
-  version: 2.9.2
-  resolution: "json-schema-to-ts@npm:2.9.2"
+"json-schema-to-ts@npm:2.12.0":
+  version: 2.12.0
+  resolution: "json-schema-to-ts@npm:2.12.0"
   dependencies:
     "@babel/runtime": "npm:^7.18.3"
     "@types/json-schema": "npm:^7.0.9"
-    ts-algebra: "npm:^1.2.0"
-  checksum: e6e5258ebc4a2c13d013c2e423140ec0fbbe4af0706b574a2d63672f9d8619e32fa7fb9771aa43d55b83890a6e3234976f98f990c606bf2bbc24bb4b08dfd676
+    ts-algebra: "npm:^1.2.2"
+  checksum: e6aabb8470983e8242ae3120fa2a411f36d0e3cb12e37e838a2955edee9e26a412010a33bc01617e51b0b3df758c7a50a4d9b470070b22bca276f8056b5a8ed4
   languageName: node
   linkType: hard
 
@@ -5186,7 +5186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-algebra@npm:^1.2.0":
+"ts-algebra@npm:^1.2.2":
   version: 1.2.2
   resolution: "ts-algebra@npm:1.2.2"
   checksum: dabfb7fad18b3bb56ed6b14404c2d9d7d41f181df599d50ad6643c6ff1afc459524969d80898183f9e5c66378163799991bfac799790899034ae8cfc99904c74
