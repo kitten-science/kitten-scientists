@@ -684,7 +684,7 @@ __metadata:
     "@types/node": "npm:20.10.5"
     c8: "npm:8.0.1"
     chai: "npm:4.3.10"
-    json-schema-to-ts: "npm:2.12.0"
+    json-schema-to-ts: "npm:3.0.0"
     mocha: "npm:10.2.0"
     tslib: "npm:2.6.2"
     typescript: "npm:5.3.3"
@@ -3523,14 +3523,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema-to-ts@npm:2.12.0":
-  version: 2.12.0
-  resolution: "json-schema-to-ts@npm:2.12.0"
+"json-schema-to-ts@npm:3.0.0":
+  version: 3.0.0
+  resolution: "json-schema-to-ts@npm:3.0.0"
   dependencies:
     "@babel/runtime": "npm:^7.18.3"
     "@types/json-schema": "npm:^7.0.9"
     ts-algebra: "npm:^1.2.2"
-  checksum: e6aabb8470983e8242ae3120fa2a411f36d0e3cb12e37e838a2955edee9e26a412010a33bc01617e51b0b3df758c7a50a4d9b470070b22bca276f8056b5a8ed4
+  checksum: eda922f02aa05570044524df5da8b1d43a95c3a3020466f671eaf20b89b2c96949b759bcde928e57db0c6e44b4d989a6ffcd2eb150536ee5acce474ac2ba3c56
   languageName: node
   linkType: hard
 
