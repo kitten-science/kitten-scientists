@@ -745,7 +745,7 @@ __metadata:
     "@types/dojo": "npm:1.9.48"
     "@types/jquery": "npm:3.5.29"
     "@types/semver": "npm:7.5.6"
-    "@types/web": "npm:0.0.128"
+    "@types/web": "npm:0.0.129"
     ajv: "npm:8.12.0"
     date-fns: "npm:2.30.0"
     semver: "npm:7.5.4"
@@ -1347,10 +1347,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/web@npm:0.0.128":
-  version: 0.0.128
-  resolution: "@types/web@npm:0.0.128"
-  checksum: b588ee75517238966db4b89a90be0f3a789eaed3adf41005bac1f58780539a175d95d81ac09b65ab4c059284398aceddbbc7cdd96e2896bb85aa3bdc72e66b86
+"@types/web@npm:0.0.129":
+  version: 0.0.129
+  resolution: "@types/web@npm:0.0.129"
+  checksum: 486ca168930f8c6ceea737a2fddcc5aeaa9ac10094345d17733a198f256d9147274e205d87220935ba133ae8e344b76449dffc86ff220568a0fde74bc741c0b6
   languageName: node
   linkType: hard
 
@@ -3611,7 +3611,7 @@ __metadata:
     "@types/eslint": "npm:8.56.0"
     "@types/node": "npm:20.10.5"
     "@types/prettier": "npm:3.0.0"
-    "@types/web": "npm:0.0.128"
+    "@types/web": "npm:0.0.129"
     "@typescript-eslint/eslint-plugin": "npm:6.15.0"
     "@typescript-eslint/parser": "npm:6.15.0"
     eslint: "npm:8.56.0"
