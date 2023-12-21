@@ -9,9 +9,6 @@ import { SettingsSectionUi } from "./SettingsSectionUi.js";
 
 export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   private readonly _trigger: TriggerButton;
-  private readonly _buildingUpgradeUi: BuildingUpgradeSettingsUi;
-  private readonly _turnOnSteamworks: SettingListItem;
-  private readonly _turnOnMagnetos: SettingListItem;
 
   constructor(host: UserScript, settings: BonfireSettings) {
     const label = host.engine.i18n("ui.build");
@@ -236,45 +233,61 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     });
     listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
 
-    this._buildingUpgradeUi = new BuildingUpgradeSettingsUi(
-      this._host,
-      this.setting.upgradeBuildings,
-    );
-    listAddition.addChild(this._buildingUpgradeUi);
+    listAddition.addChild(new BuildingUpgradeSettingsUi(this._host, this.setting.upgradeBuildings));
 
-    this._turnOnSteamworks = new SettingListItem(
-      this._host,
-      this._host.engine.i18n("option.steamworks"),
-      this.setting.turnOnSteamworks,
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.steamworks"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.sub.disable", [
-            this._host.engine.i18n("option.steamworks"),
-          ]),
-      },
+    listAddition.addChild(
+      new SettingListItem(
+        this._host,
+        this._host.engine.i18n("option.catnip"),
+        this.setting.gatherCatnip,
+        {
+          onCheck: () =>
+            this._host.engine.imessage("status.sub.enable", [
+              this._host.engine.i18n("option.catnip"),
+            ]),
+          onUnCheck: () =>
+            this._host.engine.imessage("status.sub.disable", [
+              this._host.engine.i18n("option.catnip"),
+            ]),
+        },
+      ),
     );
-    listAddition.addChild(this._turnOnSteamworks);
 
-    this._turnOnMagnetos = new SettingListItem(
-      this._host,
-      this._host.engine.i18n("option.magnetos"),
-      this.setting.turnOnMagnetos,
-      {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.magnetos"),
-          ]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.sub.disable", [
-            this._host.engine.i18n("option.magnetos"),
-          ]),
-      },
+    listAddition.addChild(
+      new SettingListItem(
+        this._host,
+        this._host.engine.i18n("option.steamworks"),
+        this.setting.turnOnSteamworks,
+        {
+          onCheck: () =>
+            this._host.engine.imessage("status.sub.enable", [
+              this._host.engine.i18n("option.steamworks"),
+            ]),
+          onUnCheck: () =>
+            this._host.engine.imessage("status.sub.disable", [
+              this._host.engine.i18n("option.steamworks"),
+            ]),
+        },
+      ),
     );
-    listAddition.addChild(this._turnOnMagnetos);
+
+    listAddition.addChild(
+      new SettingListItem(
+        this._host,
+        this._host.engine.i18n("option.magnetos"),
+        this.setting.turnOnMagnetos,
+        {
+          onCheck: () =>
+            this._host.engine.imessage("status.sub.enable", [
+              this._host.engine.i18n("option.magnetos"),
+            ]),
+          onUnCheck: () =>
+            this._host.engine.imessage("status.sub.disable", [
+              this._host.engine.i18n("option.magnetos"),
+            ]),
+        },
+      ),
+    );
 
     this.addChild(listAddition);
   }

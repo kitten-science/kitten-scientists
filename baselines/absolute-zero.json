@@ -1,5 +1,5 @@
 {
-  "$schema": "https://kitten-science.com/schemas/working-draft/baseline/engine-state.schema.json",
+  "$schema": "https://schema.kitten-science.com/working-draft/baseline/engine-state.schema.json",
   "v": "2.0.0-beta.8",
   "engine": {
     "enabled": false,
@@ -142,6 +142,7 @@
       "zebraWorkshop": { "enabled": false, "max": 0 },
       "ziggurat": { "enabled": false, "max": 0 }
     },
+    "gatherCatnip": { "enabled": false },
     "turnOnSteamworks": { "enabled": false },
     "turnOnMagnetos": { "enabled": false },
     "upgradeBuildings": {

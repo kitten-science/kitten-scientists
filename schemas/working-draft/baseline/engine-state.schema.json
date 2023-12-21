@@ -686,6 +686,18 @@
           ],
           "type": "object"
         },
+        "gatherCatnip": {
+          "additionalProperties": false,
+          "description": "Should we automatically gather catnip?",
+          "properties": {
+            "enabled": {
+              "description": "Turn auto gathering on?",
+              "type": "boolean"
+            }
+          },
+          "required": ["enabled"],
+          "type": "object"
+        },
         "turnOnSteamworks": {
           "additionalProperties": false,
           "description": "Should Steamworks be turned on if they are turned off?",
@@ -783,6 +795,7 @@
         "enabled",
         "trigger",
         "buildings",
+        "gatherCatnip",
         "turnOnSteamworks",
         "turnOnMagnetos",
         "upgradeBuildings"

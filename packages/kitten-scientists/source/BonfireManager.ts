@@ -275,6 +275,17 @@ export class BonfireManager implements Automation {
     if (this.settings.upgradeBuildings.enabled) {
       this.autoUpgrade();
     }
+
+    if (this.settings.gatherCatnip.enabled) {
+      this.autoGather();
+    }
+  }
+
+  autoGather(): void {
+    const controller = new classes.game.ui.GatherCatnipButtonController(this._host.game);
+    for (let clicks = 0; clicks < Math.floor(this._host.engine.settings.interval / 20); ++clicks) {
+      controller.buyItem(null, null, () => {});
+    }
   }
 
   build(name: Building, stage: number | undefined, amount: number): void {

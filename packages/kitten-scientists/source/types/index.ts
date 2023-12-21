@@ -240,7 +240,11 @@ export type ButtonController = {
   rejustPrice: (model: ButtonModel, ratio: number) => void;
   payPrice: (model: ButtonModel) => void;
   clickHandler: (model: ButtonModel, event: Event) => void;
-  buyItem: (model: ButtonModel, event: Event, callback: (success: boolean) => void) => void;
+  buyItem: (
+    model: ButtonModel | null,
+    event: Event | null,
+    callback: (success: boolean) => void,
+  ) => void;
   refund: (model: ButtonModel) => void;
 };
 
@@ -300,6 +304,10 @@ export type FixCryochamberBtnController = ButtonModernController & {
   doFixCryochamber: (model: ButtonModernModel) => boolean;
 };
 
+export type GatherCatnipButtonController = ButtonModernController & {
+  new (game: Game): GatherCatnipButtonController;
+};
+
 export type PolicyBtnController = BuildingNotStackableBtnController & {
   new (game: Game): PolicyBtnController;
   shouldBeBough: (model: ButtonModel, game: Game) => boolean;
@@ -338,6 +346,11 @@ export type ClassList = {
   diplomacy: {
     ui: {
       EmbassyButtonController: EmbassyButtonController;
+    };
+  };
+  game: {
+    ui: {
+      GatherCatnipButtonController: GatherCatnipButtonController;
     };
   };
   ui: {

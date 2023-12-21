@@ -51,6 +51,7 @@ export type BonfireBuildingSettings = Record<string, BonfireBuildingSetting>;
 export class BonfireSettings extends SettingTrigger {
   buildings: BonfireBuildingSettings;
 
+  gatherCatnip: Setting;
   turnOnSteamworks: Setting;
   turnOnMagnetos: Setting;
   upgradeBuildings: BuildingUpgradeSettings;
@@ -101,12 +102,14 @@ export class BonfireSettings extends SettingTrigger {
       zebraWorkshop: new BonfireBuildingSetting("zebraWorkshop", false),
       ziggurat: new BonfireBuildingSetting("ziggurat", true),
     },
+    gatherCatnip = new Setting(true),
     turnOnSteamworks = new Setting(true),
     turnOnMagnetos = new Setting(false),
     upgradeBuildings = new BuildingUpgradeSettings(),
   ) {
     super(enabled, trigger);
     this.buildings = buildings;
+    this.gatherCatnip = gatherCatnip;
     this.turnOnSteamworks = turnOnSteamworks;
     this.turnOnMagnetos = turnOnMagnetos;
     this.upgradeBuildings = upgradeBuildings;
@@ -124,11 +127,10 @@ export class BonfireSettings extends SettingTrigger {
       building.max = item?.max ?? building.max;
     });
 
+    this.gatherCatnip.enabled = settings.gatherCatnip?.enabled ?? this.gatherCatnip.enabled;
     this.turnOnSteamworks.enabled =
       settings.turnOnSteamworks?.enabled ?? this.turnOnSteamworks.enabled;
-
     this.turnOnMagnetos.enabled = settings.turnOnMagnetos?.enabled ?? this.turnOnMagnetos.enabled;
-
     this.upgradeBuildings.load(settings.upgradeBuildings);
   }
 }

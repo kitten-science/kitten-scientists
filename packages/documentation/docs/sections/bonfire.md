@@ -18,6 +18,10 @@ You can select which upgrade will be automatically purchased by enabling them un
 
 ## Additional Options
 
+### Gather Catnip
+
+Gathers catnip for you.
+
 ### Turn on Steamworks
 
 Turns on the Steamworks building as soon as the first one is purchased, and keeps them turned on.
