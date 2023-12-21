@@ -28,6 +28,7 @@ export class BuildingUpgradeSettings extends Setting {
       dataCenter: new BuildingUpgradeSetting("dataCenter", true),
       hydroplant: new BuildingUpgradeSetting("hydroplant", true),
       solarfarm: new BuildingUpgradeSetting("solarfarm", true),
+      spaceport: new BuildingUpgradeSetting("spaceport", true),
     },
   ) {
     super(enabled);

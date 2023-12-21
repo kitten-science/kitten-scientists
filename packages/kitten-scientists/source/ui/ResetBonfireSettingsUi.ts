@@ -50,7 +50,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
         this._host.engine.i18n("$buildings.pasture.label"),
       ),
       this._getResetOption(
-        this.setting.buildings.solarFarm,
+        this.setting.buildings.solarfarm,
         this._host.engine.i18n("$buildings.solarfarm.label"),
       ),
       this._getResetOption(
@@ -66,7 +66,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
         this._host.engine.i18n("$buildings.aqueduct.label"),
       ),
       this._getResetOption(
-        this.setting.buildings.hydroPlant,
+        this.setting.buildings.hydroplant,
         this._host.engine.i18n("$buildings.hydroplant.label"),
       ),
       this._getResetOption(
@@ -132,7 +132,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
         this._host.engine.i18n("$buildings.amphitheatre.label"),
       ),
       this._getResetOption(
-        this.setting.buildings.broadcastTower,
+        this.setting.buildings.broadcasttower,
         this._host.engine.i18n("$buildings.broadcasttower.label"),
       ),
       this._getResetOption(
@@ -180,6 +180,10 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
       this._getResetOption(
         this.setting.buildings.warehouse,
         this._host.engine.i18n("$buildings.warehouse.label"),
+      ),
+      this._getResetOption(
+        this.setting.buildings.spaceport,
+        this._host.engine.i18n("$buildings.spaceport.label"),
         true,
       ),
 

@@ -223,6 +223,7 @@
   "upgrade.building.aqueduct": "Upgraded aqueducts to hydro plants!",
   "upgrade.building.library": "Upgraded libraries to data centers!",
   "upgrade.building.pasture": "Upgraded pastures to solar farms!",
+  "upgrade.building.warehouse": "Upgraded warehouses to spaceports!",
   "upgrade.policy": "Kittens have passed {0}",
   "upgrade.race": "Kittens met the {0}",
   "upgrade.space.mission": "Kittens conducted a mission to {0}",
