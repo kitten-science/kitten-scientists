@@ -8,13 +8,13 @@
 
 The file you need to put into your userscript manager is available from the [Releases page](https://github.com/kitten-science/kitten-scientists/releases) of KS. You can also
 
-KS is released in 3 variants. For each variant we have a _stable_ URL that never changes, and points to the actual release `.js` file. For convenience, you can load that directly in your userscript manager, or you can download the specific version you want, without the indirection. If you're unsure, pick the shorter URL.
+KS is released in 3 variants:
 
 1. The **latest stable** release.
 
     This is a release with a familiar version number, that has been designated as a reasonably stable version to use. At this time, that is:
 
-    <https://kitten-science.com/stable.js> → <https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.7>.
+    <https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.7>
 
 1. The **nightly** release.
 
@@ -22,13 +22,13 @@ KS is released in 3 variants. For each variant we have a _stable_ URL that never
 
     These builds usually have a time stamp in their filename, like `20230103`, which designates the night they were built on.
 
-    <https://kitten-science.com/nightly.js> → <https://github.com/kitten-science/kitten-scientists/releases/tag/nightly>
+    <https://github.com/kitten-science/kitten-scientists/releases/tag/nightly>
 
 1. The **latest** release.
 
     This is built after every single change to the codebase. It should be considered highly unstable and experimental, although it usually isn't.
 
-    <https://kitten-science.com/dev.js> → <https://github.com/kitten-science/kitten-scientists/releases/tag/latest>
+    <https://github.com/kitten-science/kitten-scientists/releases/tag/latest>
 
 For each of these releases on GitHub, you will usually find 2 important files:
 
@@ -50,6 +50,8 @@ To use bookmarklets, just create a new bookmark in your browser and enter the te
 ```
 javascript:(function(){var d=document,s=d.createElement('script');s.src='https://kitten-science.com/stable.js';d.body.appendChild(s);})();
 ```
+
+This bookmarklet uses <https://kitten-science.com/stable.js>, the stable release. You can also replace that URL with the [nightly](https://kitten-science.com/nightly.js) or [development](https://kitten-science.com/dev.js) build.
 
 ## Container
 
