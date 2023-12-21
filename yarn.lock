@@ -747,7 +747,7 @@ __metadata:
     "@types/semver": "npm:7.5.6"
     "@types/web": "npm:0.0.130"
     ajv: "npm:8.12.0"
-    date-fns: "npm:3.0.4"
+    date-fns: "npm:3.0.5"
     semver: "npm:7.5.4"
     tslib: "npm:2.6.2"
     typescript: "npm:5.3.3"
@@ -2175,10 +2175,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:3.0.4":
-  version: 3.0.4
-  resolution: "date-fns@npm:3.0.4"
-  checksum: e0dd84daaed853a2594afc323421c26a7b29f84d4b26af690601ce0ec1c73e81191188ba2a229a2c0692ac31de923c652a09d3d38d10843dca4e99815a168232
+"date-fns@npm:3.0.5":
+  version: 3.0.5
+  resolution: "date-fns@npm:3.0.5"
+  checksum: 25667a6810f8e5d31aef59952809ac3be40c7da518752864cca179854d804b9a0d9334f85cce9bf71fe0e43cfda3378db2ed1dd7571f908e6eaeba4237b03466
   languageName: node
   linkType: hard
 
