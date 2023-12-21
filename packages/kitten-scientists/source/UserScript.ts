@@ -127,7 +127,7 @@ export class UserScript {
       this.engine.start(true);
     }
 
-    cinfo("Kitten Scientists initialized.");
+    this.engine.imessage("status.ks.init");
 
     this.runUpdateCheck().catch(console.error);
 
@@ -152,10 +152,11 @@ export class UserScript {
       cdebug(releaseInfo);
 
       if (!isNil(KS_VERSION) && gt(releaseInfo[KS_RELEASE_CHANNEL].version, KS_VERSION)) {
-        cinfo("Looks like there's a new version out!");
-        cinfo(
-          `We have '${KS_VERSION}' and there is '${releaseInfo[KS_RELEASE_CHANNEL].version}' available.`,
-        );
+        this.engine.imessage("status.ks.upgrade", [
+          releaseInfo[KS_RELEASE_CHANNEL].version,
+          KS_VERSION,
+          releaseInfo[KS_RELEASE_CHANNEL].url.release,
+        ]);
       }
     } catch (error) {
       cwarn("Update check failed.");
