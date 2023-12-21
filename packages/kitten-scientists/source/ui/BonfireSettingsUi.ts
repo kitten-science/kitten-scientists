@@ -30,7 +30,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
           this._host.engine.i18n("$buildings.pasture.label"),
         ),
         this._getBuildOption(
-          this.setting.buildings.solarFarm,
+          this.setting.buildings.solarfarm,
           this._host.engine.i18n("$buildings.solarfarm.label"),
           false,
           true,
@@ -40,7 +40,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
           this._host.engine.i18n("$buildings.aqueduct.label"),
         ),
         this._getBuildOption(
-          this.setting.buildings.hydroPlant,
+          this.setting.buildings.hydroplant,
           this._host.engine.i18n("$buildings.hydroplant.label"),
           true,
           true,
@@ -98,6 +98,11 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         this._getBuildOption(
           this.setting.buildings.warehouse,
           this._host.engine.i18n("$buildings.warehouse.label"),
+        ),
+        this._getBuildOption(
+          this.setting.buildings.spaceport,
+          this._host.engine.i18n("$buildings.spaceport.label"),
+          true,
           true,
         ),
 
@@ -157,7 +162,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
           this._host.engine.i18n("$buildings.amphitheatre.label"),
         ),
         this._getBuildOption(
-          this.setting.buildings.broadcastTower,
+          this.setting.buildings.broadcasttower,
           this._host.engine.i18n("$buildings.broadcasttower.label"),
           false,
           true,

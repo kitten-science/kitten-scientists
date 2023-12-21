@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Building } from "../types/index.js";
+import { Building, StagedBuilding } from "../types/index.js";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings.js";
 import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
@@ -9,7 +9,7 @@ import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
  * These are not identical to `Building`!
  * `Building` is IDs of buildings as defined by KG. KS defines upgrade stages as well.
  */
-export type BonfireItem = Building | "broadcastTower" | "dataCenter" | "hydroPlant" | "solarFarm";
+export type BonfireItem = Building | StagedBuilding;
 
 export class BonfireBuildingSetting extends SettingMax {
   /**
@@ -46,7 +46,10 @@ export class BonfireBuildingSetting extends SettingMax {
   }
 }
 
-export type BonfireBuildingSettings = Record<string, BonfireBuildingSetting>;
+export type BonfireBuildingSettings = Record<
+  Exclude<BonfireItem, "unicornPasture">,
+  BonfireBuildingSetting
+>;
 
 export class BonfireSettings extends SettingTrigger {
   buildings: BonfireBuildingSettings;
@@ -68,7 +71,7 @@ export class BonfireSettings extends SettingTrigger {
       barn: new BonfireBuildingSetting("barn", true),
       biolab: new BonfireBuildingSetting("biolab", false),
       brewery: new BonfireBuildingSetting("brewery"),
-      broadcastTower: new BonfireBuildingSetting("broadcastTower", true, -1, "amphitheatre"),
+      broadcasttower: new BonfireBuildingSetting("broadcasttower", true, -1, "amphitheatre"),
       calciner: new BonfireBuildingSetting("calciner", false),
       chapel: new BonfireBuildingSetting("chapel", true),
       chronosphere: new BonfireBuildingSetting("chronosphere", true),
@@ -77,7 +80,7 @@ export class BonfireSettings extends SettingTrigger {
       field: new BonfireBuildingSetting("field", true),
       harbor: new BonfireBuildingSetting("harbor"),
       hut: new BonfireBuildingSetting("hut", false),
-      hydroPlant: new BonfireBuildingSetting("hydroPlant", true, -1, "aqueduct"),
+      hydroplant: new BonfireBuildingSetting("hydroplant", true, -1, "aqueduct"),
       library: new BonfireBuildingSetting("library", true),
       logHouse: new BonfireBuildingSetting("logHouse", false),
       lumberMill: new BonfireBuildingSetting("lumberMill", true),
@@ -91,7 +94,8 @@ export class BonfireSettings extends SettingTrigger {
       quarry: new BonfireBuildingSetting("quarry", true),
       reactor: new BonfireBuildingSetting("reactor", false),
       smelter: new BonfireBuildingSetting("smelter", true),
-      solarFarm: new BonfireBuildingSetting("solarFarm", true, -1, "pasture"),
+      solarfarm: new BonfireBuildingSetting("solarfarm", true, -1, "pasture"),
+      spaceport: new BonfireBuildingSetting("spaceport", true, -1, "warehouse"),
       steamworks: new BonfireBuildingSetting("steamworks"),
       temple: new BonfireBuildingSetting("temple", true),
       tradepost: new BonfireBuildingSetting("tradepost", true),

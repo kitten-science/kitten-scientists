@@ -40,7 +40,12 @@ export type Building =
   | "zebraWorkshop"
   | "ziggurat";
 
-export type StagedBuilding = "broadcasttower" | "dataCenter" | "hydroplant" | "solarfarm";
+export type StagedBuilding =
+  | "broadcasttower"
+  | "dataCenter"
+  | "hydroplant"
+  | "solarfarm"
+  | "spaceport";
 
 // Returned from game.bld.getBuildingExt()
 export type BuildingMeta = {

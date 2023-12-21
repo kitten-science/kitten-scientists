@@ -222,6 +222,30 @@ export class BonfireManager implements Automation {
       }
     }
 
+    const warehouseMeta = this._host.game.bld.getBuildingExt("warehouse").meta;
+    if (
+      this.settings.upgradeBuildings.buildings.spaceport.enabled &&
+      warehouseMeta.unlocked &&
+      warehouseMeta.stage === 0 &&
+      mustExist(warehouseMeta.stages)[1].stageUnlocked
+    ) {
+      const prices = mustExist(warehouseMeta.stages)[1].prices;
+      if (this._bulkManager.singleBuildPossible(warehouseMeta, prices, 1)) {
+        const button = mustExist(this.getBuildButton("warehouse", 0));
+        button.controller.sellInternal(button.model, 0);
+        warehouseMeta.on = 0;
+        warehouseMeta.val = 0;
+        warehouseMeta.stage = 1;
+
+        this._host.engine.iactivity("upgrade.building.warehouse", [], "ks-upgrade");
+
+        this._host.game.ui.render();
+        this.build("warehouse", 1, 1);
+        this._host.game.ui.render();
+
+        return;
+      }
+    }
     const amphitheatreMeta = this._host.game.bld.getBuildingExt("amphitheatre").meta;
     // If amphitheathres haven't been upgraded to broadcast towers yet...
     // This seems to be identical to the pasture upgrade.
