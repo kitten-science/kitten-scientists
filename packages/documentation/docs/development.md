@@ -86,7 +86,7 @@ To develop without containers, you can build a development version of the usersc
 
 ## Type-Checking
 
-To fill the **Problems** panel in VS Code with all current, type-related errors, run the [`typecheck:all`](/reference/Repository Scripts/#typecheckall) npm task in VS Code.
+To fill the **Problems** panel in VS Code with all current, type-related errors, run the [`typecheck:all`](./reference/Repository%20Scripts/index.md#typecheckall) npm task in VS Code.
 
 ## Commit Standards
 
