@@ -2,6 +2,8 @@ import core from "@actions/core";
 import github from "@actions/github";
 import { CommitValidator } from "./CommitValidator.js";
 
+const isMainModule = import.meta.url.endsWith(process.argv[1]);
+
 /**
  * Execute the commit validator action.
  */
@@ -29,3 +31,7 @@ export const main = async (): Promise<void> => {
     if (error instanceof Error) core.setFailed(error.message);
   }
 };
+
+if (isMainModule) {
+  main().catch(console.error);
+}

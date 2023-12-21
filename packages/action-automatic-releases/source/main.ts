@@ -3,6 +3,8 @@ import { context, getOctokit } from "@actions/github";
 import { AutomaticReleases } from "./AutomaticReleases.js";
 import { octokitLogger } from "./utils.js";
 
+const isMainModule = import.meta.url.endsWith(process.argv[1]);
+
 export const main = async (): Promise<void> => {
   try {
     const repo_token = core.getInput("repo_token", { required: true });
@@ -25,3 +27,7 @@ export const main = async (): Promise<void> => {
     throw error;
   }
 };
+
+if (isMainModule) {
+  main().catch(console.error);
+}
