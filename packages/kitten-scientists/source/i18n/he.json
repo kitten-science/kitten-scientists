@@ -134,6 +134,8 @@
   "status.auto.enable": "הפעל {0} אוטומטי",
   "status.ks.disable": "מבטל את המדעניתלתול!",
   "status.ks.enable": "מאפשר את המדעניתלתול!",
+  "status.ks.init": "Kitten Scientists initialized.",
+  "status.ks.upgrade": "Kitten Scientists {0} (ours is {1}) is available at {2}.",
   "status.reset.check.disable": "כבה בדיקת {0} לפני איפוס ציר הזמן",
   "status.reset.check.enable": "הדלק בדיקת {0} לפני איפוס ציר הזמן",
   "status.resource.disable": "כבה ניהול משאבי {0}",

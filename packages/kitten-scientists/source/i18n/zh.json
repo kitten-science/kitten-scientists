@@ -134,6 +134,8 @@
   "status.auto.enable": "启用自动化 {0}",
   "status.ks.disable": "太敬业了，该歇了",
   "status.ks.enable": "神说，要有猫猫珂学家!",
+  "status.ks.init": "Kitten Scientists initialized.",
+  "status.ks.upgrade": "Kitten Scientists {0} (ours is {1}) is available at {2}.",
   "status.reset.check.disable": "在重启时间线前不检查 {0}",
   "status.reset.check.enable": "在重启时间线前检查 {0}",
   "status.resource.disable": "Disabled {0} resource management",

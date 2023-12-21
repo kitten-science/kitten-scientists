@@ -134,6 +134,8 @@
   "status.auto.enable": "Auto {0} aktiviert",
   "status.ks.disable": "Deaktiviere die Kätzchenwissenschaftler!",
   "status.ks.enable": "Aktiviere die Kätzchenwissenschaftler!",
+  "status.ks.init": "Kitten Scientists initialized.",
+  "status.ks.upgrade": "Kitten Scientists {0} (ours is {1}) is available at {2}.",
   "status.reset.check.disable": "Disable check {0} before Reset Timeline",
   "status.reset.check.enable": "Enable check {0} before Reset Timeline",
   "status.resource.disable": "{0} Ressourcenverwaltung deaktiviert",
