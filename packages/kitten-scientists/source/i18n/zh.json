@@ -40,6 +40,7 @@
   "filter.disable": "取消过滤 {0}",
   "filter.distribute": "猫口分配",
   "filter.enable": "过滤 {0}",
+  "filter.explainer": "Disabled items are hidden from the log.",
   "filter.faith": "太阳秩序",
   "filter.festival": "节日",
   "filter.hunt": "狩猎",
