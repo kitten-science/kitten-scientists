@@ -40,6 +40,7 @@
   "filter.disable": "נכבו {0} רשומות",
   "filter.distribute": "חלוקה",
   "filter.enable": "הופעלו {0} רשומות",
+  "filter.explainer": "Disabled items are hidden from the log.",
   "filter.faith": "מסדר השמש",
   "filter.festival": "חגיגות",
   "filter.hunt": "ציד",
