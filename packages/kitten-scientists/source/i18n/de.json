@@ -40,6 +40,7 @@
   "filter.disable": "{0} Protokollnachrichten deaktiviert",
   "filter.distribute": "Verteilen",
   "filter.enable": "{0} Protokollnachrichten aktiviert",
+  "filter.explainer": "Disabled items are hidden from the log.",
   "filter.faith": "Orden der Sonne",
   "filter.festival": "Festivals",
   "filter.hunt": "Jagen",
