@@ -302,6 +302,10 @@ export class Engine {
   private async _iterate(): Promise<void> {
     const context = { tick: new Date().getTime() };
 
+    if (this.settings.filters.disableKGLog.enabled) {
+      this._maintainKGLogFilters();
+    }
+
     // The order in which these actions are performed is probably
     // semi-intentional and should be preserved or improved.
     await this.scienceManager.tick(context);
@@ -313,6 +317,20 @@ export class Engine {
     this.timeManager.tick(context);
     this.villageManager.tick(context);
     await this.timeControlManager.tick(context);
+  }
+
+  /**
+   * Ensures all log filters in KG are unchecked. This means the events will not be logged.
+   */
+  private _maintainKGLogFilters(): void {
+    for (const filter of Object.values(this._host.game.console.filters)) {
+      filter.enabled = false;
+    }
+
+    const filterCheckboxes = window.document.querySelectorAll("[id^=filter-]");
+    for (const checkbox of filterCheckboxes) {
+      (checkbox as HTMLInputElement).checked = false;
+    }
   }
 
   /**

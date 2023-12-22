@@ -76,6 +76,7 @@ export type LogFilterSettingsItems = {
 
 export class LogFilterSettings extends Setting {
   filters: LogFilterSettingsItems;
+  disableKGLog: Setting;
 
   constructor(
     enabled = false,
@@ -98,9 +99,11 @@ export class LogFilterSettings extends Setting {
       promote: new LogFilterSettingsItem(LogFilterItemVariant.Promote),
       misc: new LogFilterSettingsItem(LogFilterItemVariant.Misc),
     },
+    disableKGLog = new Setting(false),
   ) {
     super(enabled);
     this.filters = filters;
+    this.disableKGLog = disableKGLog;
   }
 
   load(settings: Maybe<Partial<LogFilterSettings>>) {
@@ -113,5 +116,6 @@ export class LogFilterSettings extends Setting {
     consumeEntriesPedantic(this.filters, settings.filters, (filter, item) => {
       filter.enabled = item?.enabled ?? filter.enabled;
     });
+    this.disableKGLog.enabled = settings.disableKGLog?.enabled ?? this.disableKGLog.enabled;
   }
 }

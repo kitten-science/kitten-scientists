@@ -82,6 +82,7 @@ export type Game = {
   };
   compressLZData: (data: string) => string;
   console: {
+    filters: Record<string, { enabled: boolean; title: string; unlocked: boolean }>;
     maxMessages: number;
   };
   craft: (name: string, amount: number) => void;

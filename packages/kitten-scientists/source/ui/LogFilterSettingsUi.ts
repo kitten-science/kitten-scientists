@@ -12,6 +12,14 @@ export class LogFiltersSettingsUi extends SettingsSectionUi<LogFilterSettings> {
     const label = host.engine.i18n("ui.filter");
     super(host, label, settings);
 
+    this.addChild(
+      new SettingsList(host, {
+        children: [new SettingListItem(host, "All KG log entries.", settings.disableKGLog)],
+        hasDisableAll: false,
+        hasEnableAll: false,
+      }),
+    );
+
     const buttonTemplates = [
       {
         name: "buildFilter" as const,

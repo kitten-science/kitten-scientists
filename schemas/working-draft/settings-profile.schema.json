@@ -389,6 +389,17 @@
               },
               "minProperties": 1,
               "type": "object"
+            },
+            "disableKGLog": {
+              "additionalProperties": false,
+              "description": "Filter all of KG's own messages.",
+              "properties": {
+                "enabled": {
+                  "description": "Should all of KG's internal messages be filtered from the log?",
+                  "type": "boolean"
+                }
+              },
+              "required": ["enabled"]
             }
           },
           "minProperties": 1,

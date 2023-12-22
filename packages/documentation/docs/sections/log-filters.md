@@ -2,6 +2,10 @@
 
 You can control which events will be logged to the game log. Disable any option if the log message in that category get too excessive.
 
+## All KG log entries
+
+This will just uncheck all the log filters in KG itself, so that logging behavior remains consistent throughout resets.
+
 ## Adoring
 
 -   The galaxy has been adored on the [Religion](./religion.md) tab.
