@@ -74,6 +74,10 @@ export type GameLanguage =
   | "zht";
 export type SupportedLanguage = "de" | "en" | "he" | "zh";
 
+export type TranslatedString<TKittenGameLiteral extends `$${string}`> =
+  | keyof typeof i18nData.en
+  | TKittenGameLiteral;
+
 export class Engine {
   /**
    * All i18n literals of the userscript.
@@ -341,7 +345,7 @@ export class Engine {
    * @returns The translated string.
    */
   i18n<TKittenGameLiteral extends `$${string}`>(
-    key: keyof typeof i18nData.en | TKittenGameLiteral,
+    key: TranslatedString<TKittenGameLiteral>,
     args: Array<number | string> = [],
   ): string {
     let value;

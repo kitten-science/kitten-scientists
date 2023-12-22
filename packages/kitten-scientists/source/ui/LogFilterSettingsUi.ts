@@ -121,6 +121,6 @@ export class LogFiltersSettingsUi extends SettingsSectionUi<LogFilterSettings> {
     listFilters.addChildren(this._filters);
     this.addChild(listFilters);
 
-    this.addChild(new ExplainerListItem(this._host, "Disabled items are hidden from the log."));
+    this.addChild(new ExplainerListItem(this._host, "filter.explainer"));
   }
 }
