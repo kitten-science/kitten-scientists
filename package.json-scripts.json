@@ -36,10 +36,19 @@
     {
       "manifestPath": "package.json",
       "projectName": "kitten-scientists",
+      "scriptName": "build",
+      "scriptCode": "yarn run build:all",
+      "isGlobal": false,
+      "isRootManifest": true
+    },
+    {
+      "manifestPath": "package.json",
+      "projectName": "kitten-scientists",
       "scriptName": "build:all",
       "scriptCode": "tsc --build",
       "isGlobal": true,
-      "isRootManifest": true
+      "isRootManifest": true,
+      "description": "Builds all TypeScript workspaces."
     },
     {
       "manifestPath": "packages/action-automatic-releases/package.json",
@@ -76,10 +85,19 @@
     {
       "manifestPath": "package.json",
       "projectName": "kitten-scientists",
+      "scriptName": "clean",
+      "scriptCode": "yarn run clean:all",
+      "isGlobal": false,
+      "isRootManifest": true
+    },
+    {
+      "manifestPath": "package.json",
+      "projectName": "kitten-scientists",
       "scriptName": "clean:all",
       "scriptCode": "rm -rf packages/*/build packages/*/tsconfig.tsbuildinfo",
       "isGlobal": true,
-      "isRootManifest": true
+      "isRootManifest": true,
+      "description": "Cleans all TypeScript build output from all workspaces."
     },
     {
       "manifestPath": "packages/kittensgame/package.json",
@@ -88,7 +106,7 @@
       "scriptCode": "bash ./scripts/build-development-container.sh",
       "isGlobal": true,
       "isRootManifest": false,
-      "description": "Builds the Development Container."
+      "description": "Builds the [Development Container](../../development.md#development-with-kittens-game-container)."
     },
     {
       "manifestPath": "packages/kittensgame/package.json",
@@ -97,7 +115,7 @@
       "scriptCode": "bash ./scripts/rebuild-development-container.sh",
       "isGlobal": true,
       "isRootManifest": false,
-      "description": "Rebuilds the development container.\n\nYou're going to want to rebuild your development container every once in a while to ensure you're using the latest version of Kittens Game in your container."
+      "description": "Rebuilds the [Development Container](../../development.md#development-with-kittens-game-container).\n\nYou're going to want to rebuild your development container every once in a while to ensure you're using the latest version of Kittens Game in your container."
     },
     {
       "manifestPath": "packages/kittensgame/package.json",
@@ -106,7 +124,7 @@
       "scriptCode": "bash ./scripts/run-development-container.sh",
       "isGlobal": true,
       "isRootManifest": false,
-      "description": "Builds the development container and starts it."
+      "description": "Builds the [Development Container](../../development.md#development-with-kittens-game-container) and starts it."
     },
     {
       "manifestPath": "packages/documentation/package.json",
@@ -124,7 +142,7 @@
       "scriptCode": "nsd --cwd=$INIT_CWD --docs-location=\"packages/documentation/docs/reference/Repository Scripts/\"",
       "isGlobal": true,
       "isRootManifest": false,
-      "description": "Update the scripts documentation that you are looking at right now."
+      "description": "Update the scripts reference that you are looking at right now."
     },
     {
       "manifestPath": "packages/documentation/package.json",
@@ -183,6 +201,14 @@
     {
       "manifestPath": "package.json",
       "projectName": "kitten-scientists",
+      "scriptName": "lint",
+      "scriptCode": "yarn run lint:all",
+      "isGlobal": false,
+      "isRootManifest": true
+    },
+    {
+      "manifestPath": "package.json",
+      "projectName": "kitten-scientists",
       "scriptName": "lint:all",
       "scriptCode": "eslint . --ext .ts && prettier --check packages",
       "isGlobal": true,
@@ -224,10 +250,19 @@
     {
       "manifestPath": "package.json",
       "projectName": "kitten-scientists",
-      "scriptName": "test:all",
-      "scriptCode": "yarn workspaces foreach --all --parallel --verbose run test",
-      "isGlobal": true,
+      "scriptName": "test",
+      "scriptCode": "yarn run test:all",
+      "isGlobal": false,
       "isRootManifest": true
+    },
+    {
+      "manifestPath": "package.json",
+      "projectName": "kitten-scientists",
+      "scriptName": "test:all",
+      "scriptCode": "yarn workspaces foreach --all --exclude kitten-scientists --parallel --verbose run test",
+      "isGlobal": true,
+      "isRootManifest": true,
+      "description": "Runs unit tests in all workspaces."
     },
     {
       "manifestPath": "packages/action-automatic-releases/package.json",
@@ -235,7 +270,8 @@
       "scriptName": "test:coverage",
       "scriptCode": "c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Runs unit tests in all workspaces and collects code coverage information."
     },
     {
       "manifestPath": "packages/action-commit-validator/package.json",
@@ -243,7 +279,8 @@
       "scriptName": "test:coverage",
       "scriptCode": "c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Runs unit tests in all workspaces and collects code coverage information."
     },
     {
       "manifestPath": "packages/action-label-manager/package.json",
@@ -251,7 +288,8 @@
       "scriptName": "test:coverage",
       "scriptCode": "c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Runs unit tests in all workspaces and collects code coverage information."
     },
     {
       "manifestPath": "packages/action-release-info/package.json",
@@ -259,15 +297,17 @@
       "scriptName": "test:coverage",
       "scriptCode": "c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Runs unit tests in all workspaces and collects code coverage information."
     },
     {
       "manifestPath": "package.json",
       "projectName": "kitten-scientists",
       "scriptName": "test:coverage:all",
-      "scriptCode": "yarn workspaces foreach --all --parallel --verbose run test:coverage",
+      "scriptCode": "yarn workspaces foreach --all --exclude kitten-scientists --parallel --verbose run test:coverage",
       "isGlobal": true,
-      "isRootManifest": true
+      "isRootManifest": true,
+      "description": "Runs the `test:coverage` script in all workspaces."
     },
     {
       "manifestPath": "packages/action-automatic-releases/package.json",
@@ -275,7 +315,8 @@
       "scriptName": "test:inspect",
       "scriptCode": "node $(yarn bin mocha) --inspect ./build/*.test.js",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Runs unit tests and lets you attach a debugger."
     },
     {
       "manifestPath": "packages/action-commit-validator/package.json",
@@ -283,7 +324,8 @@
       "scriptName": "test:inspect",
       "scriptCode": "node $(yarn bin mocha) --inspect ./build/*.test.js",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Runs unit tests and lets you attach a debugger."
     },
     {
       "manifestPath": "packages/action-label-manager/package.json",
@@ -291,7 +333,8 @@
       "scriptName": "test:inspect",
       "scriptCode": "node $(yarn bin mocha) --inspect ./build/*.test.js",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Runs unit tests and lets you attach a debugger."
     },
     {
       "manifestPath": "packages/action-release-info/package.json",
@@ -299,7 +342,8 @@
       "scriptName": "test:inspect",
       "scriptCode": "node $(yarn bin mocha) --inspect ./build/*.test.js",
       "isGlobal": true,
-      "isRootManifest": false
+      "isRootManifest": false,
+      "description": "Runs unit tests and lets you attach a debugger."
     },
     {
       "manifestPath": "package.json",

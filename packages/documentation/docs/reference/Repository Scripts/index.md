@@ -1,5 +1,18 @@
 # Full reference
 
+## build
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    yarn run build:all
+    ```
+
+-   Description:
+
+    _documentation pending_
+
 ## build:all
 
 -   Project: `kitten-scientists`
@@ -7,6 +20,19 @@
 
     ```shell
     tsc --build
+    ```
+
+-   Description:
+
+    Builds all TypeScript workspaces.
+
+## clean
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    yarn run clean:all
     ```
 
 -   Description:
@@ -24,7 +50,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Cleans all TypeScript build output from all workspaces.
 
 ## devcontainer:build
 
@@ -37,7 +63,7 @@
 
 -   Description:
 
-    Builds the Development Container.
+    Builds the [Development Container](../../development.md#development-with-kittens-game-container).
 
 ## devcontainer:rebuild
 
@@ -50,7 +76,7 @@
 
 -   Description:
 
-    Rebuilds the development container.
+    Rebuilds the [Development Container](../../development.md#development-with-kittens-game-container).
 
     You're going to want to rebuild your development container every once in a while to ensure you're using the latest version of Kittens Game in your container.
 
@@ -65,7 +91,7 @@
 
 -   Description:
 
-    Builds the development container and starts it.
+    Builds the [Development Container](../../development.md#development-with-kittens-game-container) and starts it.
 
 ## docs:build
 
@@ -91,7 +117,7 @@
 
 -   Description:
 
-    Update the scripts documentation that you are looking at right now.
+    Update the scripts reference that you are looking at right now.
 
 ## docs:serve
 
@@ -180,6 +206,19 @@
 
         This watcher has caused problems in the past, generating broken output. Use at your own risk.
 
+## lint
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    yarn run lint:all
+    ```
+
+-   Description:
+
+    _documentation pending_
+
 ## lint:all
 
 -   Project: `kitten-scientists`
@@ -193,18 +232,31 @@
 
     Check source code for style issues.
 
+## test
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    yarn run test:all
+    ```
+
+-   Description:
+
+    _documentation pending_
+
 ## test:all
 
 -   Project: `kitten-scientists`
 -   Source:
 
     ```shell
-    yarn workspaces foreach --all --parallel --verbose run test
+    yarn workspaces foreach --all --exclude kitten-scientists --parallel --verbose run test
     ```
 
 -   Description:
 
-    _documentation pending_
+    Runs unit tests in all workspaces.
 
 ## test:coverage
 
@@ -217,7 +269,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Runs unit tests in all workspaces and collects code coverage information.
 
 ## test:coverage
 
@@ -230,7 +282,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Runs unit tests in all workspaces and collects code coverage information.
 
 ## test:coverage
 
@@ -243,7 +295,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Runs unit tests in all workspaces and collects code coverage information.
 
 ## test:coverage
 
@@ -256,7 +308,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Runs unit tests in all workspaces and collects code coverage information.
 
 ## test:coverage:all
 
@@ -264,12 +316,12 @@
 -   Source:
 
     ```shell
-    yarn workspaces foreach --all --parallel --verbose run test:coverage
+    yarn workspaces foreach --all --exclude kitten-scientists --parallel --verbose run test:coverage
     ```
 
 -   Description:
 
-    _documentation pending_
+    Runs the `test:coverage` script in all workspaces.
 
 ## test:inspect
 
@@ -282,7 +334,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Runs unit tests and lets you attach a debugger.
 
 ## test:inspect
 
@@ -295,7 +347,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Runs unit tests and lets you attach a debugger.
 
 ## test:inspect
 
@@ -308,7 +360,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Runs unit tests and lets you attach a debugger.
 
 ## test:inspect
 
@@ -321,7 +373,7 @@
 
 -   Description:
 
-    _documentation pending_
+    Runs unit tests and lets you attach a debugger.
 
 ## typecheck:all
 
