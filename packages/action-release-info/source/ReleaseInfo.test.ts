@@ -64,22 +64,22 @@ const mockHappyPath = (moctokit: Moctokit) => {
     .getReleaseByTag({
       owner: "kitten-science",
       repo: "kitten-scientists",
-      tag: "v2.0.0-beta.7",
+      tag: "v2.0.0-beta.8",
     })
     .reply({
       status: 200,
       data: {
-        name: "v2.0.0-beta.7",
-        html_url: "https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.7",
+        name: "v2.0.0-beta.8",
+        html_url: "https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.8",
         assets: [
           {
             browser_download_url:
-              "https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.7/kitten-scientists-2.0.0-beta.7.min.user.js",
+              "https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.8/kitten-scientists-2.0.0-beta.7.min.user.js",
             name: "kitten-scientists-2.0.0-beta.7.min.user.js",
           },
           {
             browser_download_url:
-              "https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.7/kitten-scientists-2.0.0-beta.7.user.js",
+              "https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.8/kitten-scientists-2.0.0-beta.7.user.js",
             name: "kitten-scientists-2.0.0-beta.7.user.js",
           },
         ],
@@ -135,13 +135,13 @@ it("fails without assets", async () => {
     .getReleaseByTag({
       owner: "kitten-science",
       repo: "kitten-scientists",
-      tag: "v2.0.0-beta.7",
+      tag: "v2.0.0-beta.8",
     })
     .reply({
       status: 200,
       data: {
-        name: "v2.0.0-beta.7",
-        html_url: "https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.7",
+        name: "v2.0.0-beta.8",
+        html_url: "https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.8",
         assets: undefined,
       },
     });
@@ -209,17 +209,17 @@ it("fails if no usescript in release", async () => {
     .getReleaseByTag({
       owner: "kitten-science",
       repo: "kitten-scientists",
-      tag: "v2.0.0-beta.7",
+      tag: "v2.0.0-beta.8",
     })
     .reply({
       status: 200,
       data: {
-        name: "v2.0.0-beta.7",
-        html_url: "https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.7",
+        name: "v2.0.0-beta.8",
+        html_url: "https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.8",
         assets: [
           {
             browser_download_url:
-              "https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.7/README.md",
+              "https://github.com/kitten-science/kitten-scientists/releases/download/v2.0.0-beta.8/README.md",
             name: "README.md",
           },
         ],
