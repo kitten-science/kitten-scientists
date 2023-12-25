@@ -1,7 +1,7 @@
-import { Setting } from "../../settings/Settings.js";
 import { UserScript } from "../../UserScript.js";
+import { Setting } from "../../settings/Settings.js";
+import { CollapsiblePanel, PanelOptions } from "./CollapsiblePanel.js";
 import { LabelListItem } from "./LabelListItem.js";
-import { Panel, PanelOptions } from "./Panel.js";
 
 export type IconSettingsPanelOptions = PanelOptions & {
   /**
@@ -10,7 +10,7 @@ export type IconSettingsPanelOptions = PanelOptions & {
   icon: string;
 };
 
-export class IconSettingsPanel<TSetting extends Setting = Setting> extends Panel {
+export class IconSettingsPanel<TSetting extends Setting = Setting> extends CollapsiblePanel {
   readonly setting: TSetting;
 
   /**

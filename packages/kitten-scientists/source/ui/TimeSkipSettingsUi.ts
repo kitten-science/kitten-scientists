@@ -1,23 +1,23 @@
+import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
-import { UserScript } from "../UserScript.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
-import { MaxButton } from "./components/buttons-text/MaxButton.js";
+import { CollapsiblePanel } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { LabelListItem } from "./components/LabelListItem.js";
-import { Panel } from "./components/Panel.js";
 import { SeasonsList } from "./components/SeasonsList.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
+import { MaxButton } from "./components/buttons-text/MaxButton.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
   private readonly _trigger: TriggerButton;
   private readonly _maximum: MaxButton;
-  private readonly _cycles: Panel<CyclesList, LabelListItem>;
-  private readonly _seasons: Panel<SeasonsList, LabelListItem>;
+  private readonly _cycles: CollapsiblePanel<CyclesList, LabelListItem>;
+  private readonly _seasons: CollapsiblePanel<SeasonsList, LabelListItem>;
 
   constructor(
     host: UserScript,
@@ -33,7 +33,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
 
     this._maximum = new MaxButton(this._host, label, this.setting);
 
-    this._cycles = new Panel(
+    this._cycles = new CollapsiblePanel(
       this._host,
       new LabelListItem(host, ucfirst(this._host.engine.i18n("ui.cycles")), {
         icon: Icons.Cycles,
@@ -42,7 +42,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
         children: [new CyclesList(this._host, this.setting.cycles)],
       },
     );
-    this._seasons = new Panel(
+    this._seasons = new CollapsiblePanel(
       this._host,
       new LabelListItem(host, ucfirst(this._host.engine.i18n("trade.seasons")), {
         icon: Icons.Seasons,

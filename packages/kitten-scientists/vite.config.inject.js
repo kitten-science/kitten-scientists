@@ -9,7 +9,7 @@ const KS_VERSION = JSON.stringify(process.env.KS_VERSION ?? `${manifest.version}
 export default defineConfig({
   build: {
     lib: {
-      entry: "source/index.ts",
+      entry: "source/entrypoint-userscript.ts",
       name: "kitten-scientists",
     },
     minify: false,

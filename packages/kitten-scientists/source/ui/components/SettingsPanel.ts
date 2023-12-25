@@ -1,8 +1,8 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../../UserScript.js";
 import { Setting } from "../../settings/Settings.js";
+import { CollapsiblePanel, PanelOptions } from "./CollapsiblePanel.js";
 import { LabelListItem } from "./LabelListItem.js";
-import { Panel, PanelOptions } from "./Panel.js";
 import { SettingListItem } from "./SettingListItem.js";
 
 export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem> = PanelOptions & {
@@ -13,7 +13,7 @@ export class SettingsPanel<
     TSetting extends Setting = Setting,
     TListItem extends LabelListItem = LabelListItem,
   >
-  extends Panel
+  extends CollapsiblePanel
   implements SettingListItem
 {
   readonly setting: TSetting;

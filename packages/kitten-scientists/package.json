@@ -14,7 +14,10 @@
     "url": "https://github.com/kitten-science/kitten-scientists/issues"
   },
   "type": "module",
-  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./*.js": "./build/*.js"
+  },
   "scripts": {
     "kitten-scientists:build": "vite --config vite.config.inject.js build",
     "kitten-scientists:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
@@ -23,7 +26,7 @@
     "kitten-scientists:watch": "vite --config vite.config.inject.js build --watch",
     "whoami": "echo kitten-scientists"
   },
-  "types": "./build/index.ts",
+  "types": "./build/index.d.ts",
   "dependencies": {
     "@oliversalzburg/js-utils": "0.0.27",
     "ajv": "8.12.0",

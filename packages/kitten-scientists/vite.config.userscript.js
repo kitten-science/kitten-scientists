@@ -49,7 +49,7 @@ export default defineConfig({
   build: {
     emptyOutDir: !isCi,
     lib: {
-      entry: "source/index.ts",
+      entry: "source/entrypoint-userscript.ts",
       name: "kitten-scientists",
     },
     minify: minify ? "esbuild" : false,

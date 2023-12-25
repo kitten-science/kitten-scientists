@@ -17,7 +17,7 @@ export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponent
  * The panel also has a head element, which is extended to create the panel
  * behavior.
  */
-export class Panel<
+export class CollapsiblePanel<
   TChild extends UiComponent = UiComponent,
   THead extends UiComponent = UiComponent,
 > extends UiComponent {
@@ -26,7 +26,7 @@ export class Panel<
   protected readonly _expando: ExpandoButton;
   protected readonly _head: THead;
   protected _mainChildVisible: boolean;
-  protected readonly parent: Panel | undefined;
+  protected readonly parent: CollapsiblePanel | undefined;
 
   get isExpanded() {
     return this._mainChildVisible;
@@ -107,8 +107,8 @@ export class Panel<
     if (toggleNested) {
       const toggleChildren = (children: Set<UiComponent>) => {
         for (const child of children) {
-          if (is(child, Panel)) {
-            (child as Panel).toggle(expand, toggleNested);
+          if (is(child, CollapsiblePanel)) {
+            (child as CollapsiblePanel).toggle(expand, toggleNested);
           } else {
             toggleChildren((child as UiComponent).children);
           }
