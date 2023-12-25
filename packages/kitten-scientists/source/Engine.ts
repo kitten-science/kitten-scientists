@@ -228,7 +228,7 @@ export class Engine {
    */
   stateSerialize(): EngineState {
     return {
-      $schema: "https://kitten-science.com/schemas/working-draft/settings-profile.schema.json",
+      $schema: "https://schema.kitten-science.com/working-draft/settings-profile.schema.json",
       v: ksVersion(),
       engine: this.settings,
       bonfire: this.bonfireManager.settings,
