@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "name": "@kitten-science/snapshot-analyzer",
+  "version": "0.0.1",
+  "description": "Displays information about Kittten Scientists settings.",
+  "license": "MIT",
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
+  "type": "module",
+  "main": "index.html",
+  "scripts": {
+    "snapshot-analyzer:build": "vite build",
+    "snapshot-analyzer:serve": "vite serve"
+  },
+  "dependencies": {
+    "@kitten-science/kitten-scientists": "workspace:*",
+    "@oliversalzburg/js-utils": "0.0.27",
+    "lz-string": "1.5.0",
+    "tslib": "2.6.2"
+  },
+  "devDependencies": {
+    "typescript": "5.3.3",
+    "vite": "5.0.10",
+    "vite-plugin-html": "3.2.0"
+  },
+  "engines": {
+    "node": "^20.0.0"
+  }
+}
