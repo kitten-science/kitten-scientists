@@ -12,9 +12,10 @@ cd "$(dirname "$0")"
 main() {
   BASEDIR=$(pwd)
   BRANCH=${1:-master}
+  REPO=${2:-https://github.com/nuclear-unicorn/kittensgame.git}
 
   yarn kitten-scientists:build
-  yarn devcontainer:build "$BRANCH"
+  yarn devcontainer:build "$BRANCH" "$REPO"
 
   echo "Removing previous container..."
   podman stop kittensgame > /dev/null || true

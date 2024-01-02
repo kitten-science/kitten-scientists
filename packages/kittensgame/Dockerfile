@@ -1,12 +1,14 @@
 FROM docker.io/library/node:20.10.0-bookworm@sha256:8d0f16fe841577f9317ab49011c6d819e1fa81f8d4af7ece7ae0ac815e07ac84
 
+ARG REPO=https://github.com/nuclear-unicorn/kittensgame.git
 ARG BRANCH=master
 
 EXPOSE 8080
 EXPOSE 8086
 
-RUN git clone --branch $BRANCH --single-branch https://github.com/nuclear-unicorn/kittensgame.git \
+RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
   && cd kittensgame \
+  && git pull \
   && yarn add -D watch-http-server \
   && yarn install
 

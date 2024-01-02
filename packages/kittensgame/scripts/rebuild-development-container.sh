@@ -11,11 +11,13 @@ cd "$(dirname "$0")"
 
 main() {
   BRANCH=${1:-master}
+  REPO=${2:-https://github.com/nuclear-unicorn/kittensgame.git}
 
-  echo "Re-Building development container on $BRANCH branch..."
+  echo "Re-Building development container on $BRANCH branch of $REPO..."
   cd ..
   podman build \
     --build-arg BRANCH="$BRANCH" \
+    --build-arg REPO="$REPO" \
     --no-cache \
     --tag kittensgame .
   echo "Done."
