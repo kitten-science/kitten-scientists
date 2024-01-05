@@ -9,6 +9,15 @@
       content="Displays information about Kittten Scientists settings."
     />
     <meta property="og:url" content="https://kitten-science.com/snapshot-analyzer/" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/themes/dark.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/themes/light.css"
+    />
+
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <style>
       html,
@@ -22,17 +31,79 @@
       body {
         display: flex;
         flex-direction: column;
+        gap: 0.3em;
 
-        textarea {
-          flex: 1;
+        * {
+          padding: 0.3em;
         }
+      }
+
+      #textarea {
+        flex: 1;
+        overflow: auto;
+      }
+
+      /* user invalid styles */
+      sl-input[data-user-invalid]::part(base),
+      sl-select[data-user-invalid]::part(combobox),
+      sl-checkbox[data-user-invalid]::part(control) {
+        border-color: var(--sl-color-danger-600);
+      }
+
+      [data-user-invalid]::part(form-control-label),
+      [data-user-invalid]::part(form-control-help-text),
+      sl-checkbox[data-user-invalid]::part(label) {
+        color: var(--sl-color-danger-700);
+      }
+
+      sl-checkbox[data-user-invalid]::part(control) {
+        outline: none;
+      }
+
+      sl-input:focus-within[data-user-invalid]::part(base),
+      sl-select:focus-within[data-user-invalid]::part(combobox),
+      sl-checkbox:focus-within[data-user-invalid]::part(control) {
+        border-color: var(--sl-color-danger-600);
+        box-shadow: 0 0 0 var(--sl-focus-ring-width) var(--sl-color-danger-300);
+      }
+
+      /* User valid styles */
+      sl-input[data-user-valid]::part(base),
+      sl-select[data-user-valid]::part(combobox),
+      sl-checkbox[data-user-valid]::part(control) {
+        border-color: var(--sl-color-success-600);
+      }
+
+      [data-user-valid]::part(form-control-label),
+      [data-user-valid]::part(form-control-help-text),
+      sl-checkbox[data-user-valid]::part(label) {
+        color: var(--sl-color-success-700);
+      }
+
+      sl-checkbox[data-user-valid]::part(control) {
+        background-color: var(--sl-color-success-600);
+        outline: none;
+      }
+
+      sl-input:focus-within[data-user-valid]::part(base),
+      sl-select:focus-within[data-user-valid]::part(combobox),
+      sl-checkbox:focus-within[data-user-valid]::part(control) {
+        border-color: var(--sl-color-success-600);
+        box-shadow: 0 0 0 var(--sl-focus-ring-width) var(--sl-color-success-300);
       }
     </style>
   </head>
 
   <body>
-    <input id="input" type="text" placeholder="Paste KS settings export here." />
-    <textarea id="parsed" placeholder="Parsed settings will be shown here." readonly></textarea>
+    <sl-input id="input" type="text" placeholder="Paste KS settings export here."></sl-input>
+    <div id="textarea">
+      <sl-textarea
+        id="parsed"
+        placeholder="Parsed settings will be shown here."
+        readonly
+        resize="auto"
+      ></sl-textarea>
+    </div>
   </body>
   <script src="main.ts" type="module"></script>
 </html>
