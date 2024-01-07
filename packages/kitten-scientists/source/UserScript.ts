@@ -241,8 +241,6 @@ export class UserScript {
 
   /**
    * Import settings from a URL.
-   * This is an experimental feature, and only allows using profiles from
-   * https://kitten-science.com/ at this time.
    *
    * @param url - The URL of the profile to load.
    */
@@ -283,8 +281,8 @@ export class UserScript {
    * @param subject.v The version in the engine state.
    * @returns An engine state.
    */
-  static unknownAsEngineStateOrThrow(subject?: { v?: string }): EngineState {
-    const v = subject?.v;
+  static unknownAsEngineStateOrThrow(subject?: unknown): EngineState {
+    const v = (subject as { v?: string })?.v;
     if (!isNil(v) && typeof v === "string") {
       if (v.startsWith("2")) {
         return subject as EngineState;
