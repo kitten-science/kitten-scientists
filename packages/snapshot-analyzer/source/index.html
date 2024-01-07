@@ -36,11 +36,10 @@
         * {
           padding: 0.3em;
         }
-      }
-
-      #textarea {
-        flex: 1;
-        overflow: auto;
+        *:first-child {
+          flex: 1;
+          overflow: auto;
+        }
       }
 
       /* user invalid styles */
@@ -95,15 +94,7 @@
   </head>
 
   <body>
-    <sl-input id="input" type="text" placeholder="Paste KS settings export here."></sl-input>
-    <div id="textarea">
-      <sl-textarea
-        id="parsed"
-        placeholder="Parsed settings will be shown here."
-        readonly
-        resize="auto"
-      ></sl-textarea>
-    </div>
+    <ks-snapshot-analyzer></ks-snapshot-analyzer>
   </body>
-  <script src="main.ts" type="module"></script>
+  <script src="./index.ts" type="module"></script>
 </html>

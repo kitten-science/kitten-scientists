@@ -791,7 +791,7 @@ __metadata:
   resolution: "@kitten-science/kitten-scientists@workspace:packages/kitten-scientists"
   dependencies:
     "@kitten-science/action-release-info": "workspace:*"
-    "@oliversalzburg/js-utils": "npm:0.0.27"
+    "@oliversalzburg/js-utils": "npm:0.0.28-dev.35"
     "@types/dojo": "npm:1.9.48"
     "@types/jquery": "npm:3.5.29"
     "@types/semver": "npm:7.5.6"
@@ -817,8 +817,10 @@ __metadata:
   resolution: "@kitten-science/snapshot-analyzer@workspace:packages/snapshot-analyzer"
   dependencies:
     "@kitten-science/kitten-scientists": "workspace:*"
-    "@oliversalzburg/js-utils": "npm:0.0.27"
+    "@oliversalzburg/js-utils": "npm:0.0.28-dev.35"
     "@shoelace-style/shoelace": "npm:2.12.0"
+    lit: "npm:3.1.0"
+    lit-html: "npm:3.1.0"
     lz-string: "npm:1.5.0"
     tslib: "npm:2.6.2"
     typescript: "npm:5.3.3"
@@ -1168,10 +1170,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oliversalzburg/js-utils@npm:0.0.27":
-  version: 0.0.27
-  resolution: "@oliversalzburg/js-utils@npm:0.0.27"
-  checksum: fa994cd8c63a8e8d78cddac06004f216c349de18c9e87b1d5d7eaa0114a8324531a254900ae623e1bc4ca291ebe98f665e4f55c8b735f311bf72652998eaf6ad
+"@oliversalzburg/js-utils@npm:0.0.28-dev.35":
+  version: 0.0.28-dev.35
+  resolution: "@oliversalzburg/js-utils@npm:0.0.28-dev.35"
+  checksum: 9a2ac74f1cd0bcac3f6c836561335169938072d13f7f9437e2fd8ab07b925f8bae76375d5b72dee58c09dc05f8dbd6e2ca339c52fd4891fde137c950aa352aec
   languageName: node
   linkType: hard
 
@@ -4039,7 +4041,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lit-html@npm:^3.1.0":
+"lit-html@npm:3.1.0, lit-html@npm:^3.1.0":
   version: 3.1.0
   resolution: "lit-html@npm:3.1.0"
   dependencies:
@@ -4048,7 +4050,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lit@npm:^3.0.0":
+"lit@npm:3.1.0, lit@npm:^3.0.0":
   version: 3.1.0
   resolution: "lit@npm:3.1.0"
   dependencies:
