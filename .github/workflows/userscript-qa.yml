@@ -49,6 +49,7 @@ jobs:
             deps-dev
             filters
             i18n
+            schema
             settings
             ui
           accepted_types: |
