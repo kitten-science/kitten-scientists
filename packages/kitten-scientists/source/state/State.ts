@@ -1,12 +1,10 @@
-import { InvalidOperationError, TreeNode } from "@oliversalzburg/js-utils";
+import { TreeNode } from "@oliversalzburg/js-utils";
 import AjvModule, { SchemaObject } from "ajv";
 import { UserScript } from "../UserScript.js";
 import { StateLoader } from "./StateLoader.js";
 import { StateMerger } from "./StateMerger.js";
 
 export class State extends TreeNode<State> {
-  static ALLOW_DATA_URL_IMPORT = false;
-
   readonly originUrl: string;
 
   readonly loader: StateLoader;
@@ -17,14 +15,6 @@ export class State extends TreeNode<State> {
 
   constructor(originUrl: string, parent?: State) {
     super(parent);
-    if (!originUrl.startsWith("https://kitten-science.com/")) {
-      // Make an exception for data URLs, if the exception was explicitly allowed.
-      if (!originUrl.startsWith("data:") || !State.ALLOW_DATA_URL_IMPORT) {
-        throw new InvalidOperationError(
-          "While state import is experimental, you can only import from 'https://kitten-science.com/'!",
-        );
-      }
-    }
 
     this.originUrl = originUrl;
     this.loader = new StateLoader(this);
@@ -56,14 +46,16 @@ export class State extends TreeNode<State> {
       const isValidBaseline = validateBaseline(data);
       const isValidProfile = validateProfile(data);
       if (isValidProfile && !isValidBaseline) {
-        console.log(`VALID Profile: ${loader.state.originUrl})`);
+        console.log(`VALID Profile: ${loader.state.originUrl}`);
         return true;
       }
       if (isValidProfile && isValidBaseline) {
-        console.log(`VALID Baseline: ${loader.state.originUrl})`);
+        console.log(`VALID Baseline: ${loader.state.originUrl}`);
         return true;
       }
-      console.log(`INVALID: ${loader.state.originUrl})`);
+      console.log(`INVALID: ${loader.state.originUrl}`);
+      console.debug(validateBaseline.errors);
+      console.debug(validateProfile.errors);
       return false;
     };
 
