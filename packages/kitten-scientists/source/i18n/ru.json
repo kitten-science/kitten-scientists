@@ -1,8 +1,8 @@
 {
-  "act.accelerate": "Accelerate time!",
+  "act.accelerate": "Ускорить время!",
   "act.adore": "Adore the galaxy! Accumulated {0} worship to {1} epiphany",
-  "act.build": "Kittens have built a new {0}",
-  "act.builds": "Kittens have built a new {0} {1} times",
+  "act.build": "Котята построили {0}",
+  "act.builds": "Котята построили {0} {1} раз",
   "act.craft": "Kittens have crafted {0} {1}",
   "act.distribute": "Distributed a kitten to {0}",
   "act.elect": "Kittens have elected a new leader.",
