@@ -16,7 +16,7 @@
     "@oliversalzburg/js-utils": "0.0.28-dev.35",
     "@shoelace-style/shoelace": "2.12.0",
     "lit": "3.1.1",
-    "lit-html": "3.1.0",
+    "lit-html": "3.1.1",
     "lz-string": "1.5.0",
     "tslib": "2.6.2"
   },

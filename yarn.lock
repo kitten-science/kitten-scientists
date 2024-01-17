@@ -820,7 +820,7 @@ __metadata:
     "@oliversalzburg/js-utils": "npm:0.0.28-dev.35"
     "@shoelace-style/shoelace": "npm:2.12.0"
     lit: "npm:3.1.1"
-    lit-html: "npm:3.1.0"
+    lit-html: "npm:3.1.1"
     lz-string: "npm:1.5.0"
     tslib: "npm:2.6.2"
     typescript: "npm:5.3.3"
@@ -4041,16 +4041,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lit-html@npm:3.1.0":
-  version: 3.1.0
-  resolution: "lit-html@npm:3.1.0"
-  dependencies:
-    "@types/trusted-types": "npm:^2.0.2"
-  checksum: ecd6d0c97715cc92092d14f329acd04eea37886a947a07f32bd96dd89d44253689a9e4e9c787412e184657c2af5547332ba07f2cfcabda8d4c0db36863a93cc0
-  languageName: node
-  linkType: hard
-
-"lit-html@npm:^3.1.0":
+"lit-html@npm:3.1.1, lit-html@npm:^3.1.0":
   version: 3.1.1
   resolution: "lit-html@npm:3.1.1"
   dependencies:
