@@ -819,7 +819,7 @@ __metadata:
     "@kitten-science/kitten-scientists": "workspace:*"
     "@oliversalzburg/js-utils": "npm:0.0.28-dev.35"
     "@shoelace-style/shoelace": "npm:2.12.0"
-    lit: "npm:3.1.0"
+    lit: "npm:3.1.1"
     lit-html: "npm:3.1.0"
     lz-string: "npm:1.5.0"
     tslib: "npm:2.6.2"
@@ -4059,18 +4059,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lit@npm:3.1.0":
-  version: 3.1.0
-  resolution: "lit@npm:3.1.0"
-  dependencies:
-    "@lit/reactive-element": "npm:^2.0.0"
-    lit-element: "npm:^4.0.0"
-    lit-html: "npm:^3.1.0"
-  checksum: 7ca12c1b1593373d16b51b2220677d8936b4061de4f278ef2a85f15726bb4365a8eed89a0294816a10d6124dca81f02e83b5dfed9a6031e135a7bc68924eea6b
-  languageName: node
-  linkType: hard
-
-"lit@npm:^3.0.0":
+"lit@npm:3.1.1, lit@npm:^3.0.0":
   version: 3.1.1
   resolution: "lit@npm:3.1.1"
   dependencies:
