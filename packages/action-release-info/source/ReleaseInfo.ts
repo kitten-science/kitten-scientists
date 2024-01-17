@@ -125,8 +125,8 @@ export class ReleaseInfo {
         version: latestBuildStable.data.tag_name,
         date: latestBuildStable.data.published_at ?? latestBuildStable.data.created_at,
         url: {
-          default: findUserscript(latestBuildStable.data.assets)!.browser_download_url,
-          minified: findUserscript(latestBuildStable.data.assets, true)!.browser_download_url,
+          default: findUserscript(latestBuildStable.data.assets).browser_download_url,
+          minified: findUserscript(latestBuildStable.data.assets, true).browser_download_url,
           release: latestBuildStable.data.html_url,
         },
       },
