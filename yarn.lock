@@ -818,7 +818,7 @@ __metadata:
   dependencies:
     "@kitten-science/kitten-scientists": "workspace:*"
     "@oliversalzburg/js-utils": "npm:0.0.28-dev.35"
-    "@shoelace-style/shoelace": "npm:2.12.0"
+    "@shoelace-style/shoelace": "npm:2.13.1"
     lit: "npm:3.1.1"
     lit-html: "npm:3.1.1"
     lz-string: "npm:1.5.0"
@@ -1299,9 +1299,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shoelace-style/shoelace@npm:2.12.0":
-  version: 2.12.0
-  resolution: "@shoelace-style/shoelace@npm:2.12.0"
+"@shoelace-style/shoelace@npm:2.13.1":
+  version: 2.13.1
+  resolution: "@shoelace-style/shoelace@npm:2.13.1"
   dependencies:
     "@ctrl/tinycolor": "npm:^4.0.2"
     "@floating-ui/dom": "npm:^1.5.3"
@@ -1311,7 +1311,7 @@ __metadata:
     composed-offset-position: "npm:^0.0.4"
     lit: "npm:^3.0.0"
     qr-creator: "npm:^1.0.0"
-  checksum: 55c7158cf5fa04f93692717529bd7b7c69cdcb02af4ef8383283de6259ed0bb65f20580b3d92b1e1c983d86609fe7c830b31eca1e3a38d251f42472afc141aaf
+  checksum: 342bb8ffdab9027bf96f8be3cb0d94497658f13501db42632ff394c31156172d6f9dc61be1088458cd618f7d29ad34b1db7ec18debff9d2059c7b734f6c52735
   languageName: node
   linkType: hard
 
