@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@kitten-science/kitten-scientists": "workspace:*",
-    "@oliversalzburg/js-utils": "0.0.28-dev.35",
+    "@oliversalzburg/js-utils": "0.0.28-dev.57",
     "@shoelace-style/shoelace": "2.13.1",
     "lit": "3.1.1",
     "lit-html": "3.1.1",
