@@ -4,8 +4,8 @@
     "experimentalDecorators": true,
     "outDir": "build",
     "rootDir": "source",
-    "useDefineForClassFields": false,
+    "useDefineForClassFields": false
   },
   "include": ["../../@types", "source"],
-  "references": [],
+  "references": []
 }
