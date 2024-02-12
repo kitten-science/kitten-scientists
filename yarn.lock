@@ -710,7 +710,7 @@ __metadata:
     "@types/node": "npm:20.11.17"
     "@types/semver": "npm:7.5.7"
     c8: "npm:9.1.0"
-    chai: "npm:5.0.3"
+    chai: "npm:5.1.0"
     conventional-changelog-angular: "npm:7.0.0"
     conventional-commits-parser: "npm:5.0.0"
     globby: "npm:14.0.1"
@@ -733,7 +733,7 @@ __metadata:
     "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.11.17"
     c8: "npm:9.1.0"
-    chai: "npm:5.0.3"
+    chai: "npm:5.1.0"
     json-schema-to-ts: "npm:3.0.0"
     mocha: "npm:10.3.0"
     tslib: "npm:2.6.2"
@@ -752,7 +752,7 @@ __metadata:
     "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.11.17"
     c8: "npm:9.1.0"
-    chai: "npm:5.0.3"
+    chai: "npm:5.1.0"
     mocha: "npm:10.3.0"
     tslib: "npm:2.6.2"
     typescript: "npm:5.3.3"
@@ -771,7 +771,7 @@ __metadata:
     "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.11.17"
     c8: "npm:9.1.0"
-    chai: "npm:5.0.3"
+    chai: "npm:5.1.0"
     mocha: "npm:10.3.0"
     tslib: "npm:2.6.2"
     typescript: "npm:5.3.3"
@@ -2059,16 +2059,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chai@npm:5.0.3":
-  version: 5.0.3
-  resolution: "chai@npm:5.0.3"
+"chai@npm:5.1.0":
+  version: 5.1.0
+  resolution: "chai@npm:5.1.0"
   dependencies:
     assertion-error: "npm:^2.0.1"
     check-error: "npm:^2.0.0"
     deep-eql: "npm:^5.0.1"
     loupe: "npm:^3.1.0"
     pathval: "npm:^2.0.0"
-  checksum: 10c0/9e5ee04b4ba16d4a3c8804d085ae27eef9d0b76fce46bd949212bc11553094258835e488abd699b866220509ea1958085f0aeae063798ee6c78d8991e11adb7f
+  checksum: 10c0/15ff6799051f5e0080440297451f1ef47164b4e825105c8df75100a24d60e0aea24455cff7287afbff091ba7bedc6b42e12d6f0f8bfb5b47cc1bdb446336bba0
   languageName: node
   linkType: hard
 
