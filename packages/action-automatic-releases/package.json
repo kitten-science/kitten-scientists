@@ -32,7 +32,7 @@
     "@octokit/rest": "20.0.2",
     "conventional-changelog-angular": "7.0.0",
     "conventional-commits-parser": "5.0.0",
-    "globby": "14.0.0",
+    "globby": "14.0.1",
     "md5-file": "5.0.0",
     "semver": "7.6.0",
     "tslib": "2.6.2"
