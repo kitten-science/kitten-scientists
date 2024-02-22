@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
         with:
           # renovate: datasource=docker depName=node versioning=node
-          node-version: "20.11.0"
+          node-version: "20.11.1"
       - run: yarn install --immutable
       - run: yarn build:all
 
