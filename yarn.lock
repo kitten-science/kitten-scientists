@@ -708,7 +708,7 @@ __metadata:
     "@types/conventional-commits-parser": "npm:5.0.0"
     "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.11.20"
-    "@types/semver": "npm:7.5.7"
+    "@types/semver": "npm:7.5.8"
     c8: "npm:9.1.0"
     chai: "npm:5.1.0"
     conventional-changelog-angular: "npm:7.0.0"
@@ -794,7 +794,7 @@ __metadata:
     "@oliversalzburg/js-utils": "npm:0.0.28-dev.57"
     "@types/dojo": "npm:1.9.48"
     "@types/jquery": "npm:3.5.29"
-    "@types/semver": "npm:7.5.7"
+    "@types/semver": "npm:7.5.8"
     "@types/web": "npm:0.0.140"
     ajv: "npm:8.12.0"
     date-fns: "npm:3.3.1"
@@ -1472,10 +1472,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:7.5.7, @types/semver@npm:^7.5.0":
-  version: 7.5.7
-  resolution: "@types/semver@npm:7.5.7"
-  checksum: 10c0/fb72d8b86a7779650f14ae89542f1da2ab624adb8188d98754b1d29a2fe3d41f0348bf9435b60ad145df1812fd2a09b3256779aa23b532c199f3dee59619a1eb
+"@types/semver@npm:7.5.8, @types/semver@npm:^7.5.0":
+  version: 7.5.8
+  resolution: "@types/semver@npm:7.5.8"
+  checksum: 10c0/8663ff927234d1c5fcc04b33062cb2b9fcfbe0f5f351ed26c4d1e1581657deebd506b41ff7fdf89e787e3d33ce05854bc01686379b89e9c49b564c4cfa988efa
   languageName: node
   linkType: hard
 

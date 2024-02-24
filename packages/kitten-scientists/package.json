@@ -38,7 +38,7 @@
     "@kitten-science/action-release-info": "workspace:*",
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.29",
-    "@types/semver": "7.5.7",
+    "@types/semver": "7.5.8",
     "@types/web": "0.0.140",
     "typescript": "5.3.3",
     "vite": "5.1.4",
