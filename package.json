@@ -36,7 +36,7 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@babel/core": "7.23.9",
+    "@babel/core": "7.24.0",
     "@babel/eslint-parser": "7.23.10",
     "@babel/plugin-syntax-import-assertions": "7.23.3",
     "@types/babel__core": "7.20.5",
