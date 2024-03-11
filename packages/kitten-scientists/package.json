@@ -39,7 +39,7 @@
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.29",
     "@types/semver": "7.5.8",
-    "@types/web": "0.0.140",
+    "@types/web": "0.0.141",
     "typescript": "5.4.2",
     "vite": "5.1.5",
     "vite-plugin-userscript": "0.1.3"
