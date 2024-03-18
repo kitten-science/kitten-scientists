@@ -37,7 +37,7 @@
     "@kie/mock-github": "2.0.1",
     "@types/chai": "4.3.12",
     "@types/mocha": "10.0.6",
-    "@types/node": "20.11.28",
+    "@types/node": "20.11.29",
     "c8": "9.1.0",
     "chai": "5.1.0",
     "mocha": "10.3.0",
