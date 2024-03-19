@@ -94,9 +94,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:7.23.10":
-  version: 7.23.10
-  resolution: "@babel/eslint-parser@npm:7.23.10"
+"@babel/eslint-parser@npm:7.24.1":
+  version: 7.24.1
+  resolution: "@babel/eslint-parser@npm:7.24.1"
   dependencies:
     "@nicolo-ribaudo/eslint-scope-5-internals": "npm:5.1.1-v1"
     eslint-visitor-keys: "npm:^2.1.0"
@@ -104,7 +104,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.11.0
     eslint: ^7.5.0 || ^8.0.0
-  checksum: 10c0/dfc091d44c86c72658d53abe66c778f7aa436672d66ae99a0b72857c968defed4749c18d2d3a35b1f61c77a193761ae7a71997dbe43c4c7cffcf945bd106bd67
+  checksum: 10c0/76b066be5245fa24ea5726bea24ceca75811599dce43db5e120e91283f3a27be150a2b0559a8472bec2824f6abc66fb29e90b3f1889c596ec855a811fc83dc90
   languageName: node
   linkType: hard
 
@@ -1394,13 +1394,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:8.56.5":
-  version: 8.56.5
-  resolution: "@types/eslint@npm:8.56.5"
+"@types/eslint@npm:8.56.6":
+  version: 8.56.6
+  resolution: "@types/eslint@npm:8.56.6"
   dependencies:
     "@types/estree": "npm:*"
     "@types/json-schema": "npm:*"
-  checksum: 10c0/1d5d70ea107c63adfaf63020f85859c404f90c21ada2a655376b8e76109df354643797e30c7afc3b2de84797d9f5ce9f03f53a5d29a186706a44afd90f76597c
+  checksum: 10c0/52124f0868b14f21b4c8c21cb3c6065e0671df3f64c0bb3d37efe12e41b3434f478461f5ba0dabf368cd927ddc9b36d5592e7f61b939463576ab69c3bf8f3b12
   languageName: node
   linkType: hard
 
@@ -4000,10 +4000,10 @@ __metadata:
   resolution: "kitten-scientists@workspace:."
   dependencies:
     "@babel/core": "npm:7.24.1"
-    "@babel/eslint-parser": "npm:7.23.10"
+    "@babel/eslint-parser": "npm:7.24.1"
     "@babel/plugin-syntax-import-assertions": "npm:7.24.1"
     "@types/babel__core": "npm:7.20.5"
-    "@types/eslint": "npm:8.56.5"
+    "@types/eslint": "npm:8.56.6"
     "@types/node": "npm:20.11.30"
     "@types/prettier": "npm:3.0.0"
     "@types/web": "npm:0.0.142"
