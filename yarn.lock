@@ -704,7 +704,7 @@ __metadata:
     "@actions/github": "npm:5.1.1"
     "@kie/mock-github": "npm:2.0.1"
     "@octokit/rest": "npm:20.0.2"
-    "@octokit/types": "npm:12.6.0"
+    "@octokit/types": "npm:13.0.0"
     "@types/chai": "npm:4.3.14"
     "@types/conventional-commits-parser": "npm:5.0.0"
     "@types/mocha": "npm:10.0.6"
@@ -1039,6 +1039,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/openapi-types@npm:^21.0.0":
+  version: 21.0.0
+  resolution: "@octokit/openapi-types@npm:21.0.0"
+  checksum: 10c0/4305c4584e1a4caa91c27c3ccdbcade12a9f0af5517263b12f805ed2bc4c9cb2d04ce9f1d66c1867d6c0a4e61704e30a2f58feba6c5d92a64c8219a62f8fcb00
+  languageName: node
+  linkType: hard
+
 "@octokit/plugin-paginate-rest@npm:^2.17.0":
   version: 2.21.3
   resolution: "@octokit/plugin-paginate-rest@npm:2.21.3"
@@ -1153,7 +1160,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:12.6.0, @octokit/types@npm:^12.0.0, @octokit/types@npm:^12.6.0":
+"@octokit/types@npm:13.0.0":
+  version: 13.0.0
+  resolution: "@octokit/types@npm:13.0.0"
+  dependencies:
+    "@octokit/openapi-types": "npm:^21.0.0"
+  checksum: 10c0/81ad907ddc3c0bed935048e096b30a36142e98239996c0141b6eddaea3e62cd44c342d81bca856122f72d280eda1499a3941a7a60858400161fe29ba0b03b41c
+  languageName: node
+  linkType: hard
+
+"@octokit/types@npm:^12.0.0, @octokit/types@npm:^12.6.0":
   version: 12.6.0
   resolution: "@octokit/types@npm:12.6.0"
   dependencies:
