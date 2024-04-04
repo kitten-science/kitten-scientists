@@ -1,4 +1,4 @@
-FROM docker.io/library/node:20.12.0-bookworm@sha256:bf0ef0687ffbd6c7742e1919177826c8bf1756a68b51f003dcfe3a13c31c65fe
+FROM docker.io/library/node:20.12.1-bookworm@sha256:d1b84e4aa4b90f6bb9640d87bd5e45ed4f79f782fb00ee7c62e72dfcedfa2f62
 
 ARG REPO=https://github.com/nuclear-unicorn/kittensgame.git
 ARG BRANCH=master
