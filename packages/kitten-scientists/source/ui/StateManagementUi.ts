@@ -64,7 +64,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             }),
             { delimiter: true },
           ),
-          new SettingListItem(host, "Compress data", this.setting.compress, { delimiter: true }),
+          new SettingListItem(
+            host,
+            this._host.engine.i18n("state.compress"),
+            this.setting.compress,
+            { delimiter: true },
+          ),
 
           new HeaderListItem(host, this._host.engine.i18n("state.load")),
           new ButtonListItem(
