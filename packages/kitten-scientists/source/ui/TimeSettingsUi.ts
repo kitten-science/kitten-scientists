@@ -81,7 +81,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
+    listAddition.addChild(new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")));
     this._fixCryochamber = new SettingListItem(
       this._host,
       this._host.engine.i18n("option.fix.cry"),

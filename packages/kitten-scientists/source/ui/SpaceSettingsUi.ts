@@ -155,7 +155,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
+    listAddition.addChild(new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")));
 
     this._missionsUi = new MissionSettingsUi(this._host, this.setting.unlockMissions);
     listAddition.addChild(this._missionsUi);

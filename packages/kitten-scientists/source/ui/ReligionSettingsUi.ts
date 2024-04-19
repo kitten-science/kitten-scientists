@@ -206,7 +206,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
 
     const listAddition = new SettingsList(this._host, {
       children: [
-        new HeaderListItem(this._host, "Additional options"),
+        new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")),
         new SettingTriggerListItem(
           this._host,
           this._host.engine.i18n("option.faith.sacrificeUnicorns"),

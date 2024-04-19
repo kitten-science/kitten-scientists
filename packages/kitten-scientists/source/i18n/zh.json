@@ -182,6 +182,7 @@
   "trade.season.enable": "启用在 {1} 与 {0} 的交易",
   "trade.seasons": "季节",
   "trade.unlimited": "取消与 {0} 交易的限制",
+  "ui.additional": "附加选项",
   "ui.build": "营火",
   "ui.buy": "Buy: {0}",
   "ui.close": "关闭",

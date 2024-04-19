@@ -120,7 +120,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
+    listAddition.addChild(new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")));
 
     this._embassiesUi = new EmbassySettingsUi(this._host, this.setting.buildEmbassies);
     listAddition.addChild(this._embassiesUi);
