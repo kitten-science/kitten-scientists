@@ -132,6 +132,7 @@
   "state.reset": "Reset to factory defaults",
   "state.resetTitle": "Reset absolutely all KS settings to factory defaults.",
   "state.storeCurrent": "Store current",
+  "state.storeCurrent.prompt": "Label for this state",
   "state.storeCurrentTitle": "Create a new state snapshot.",
   "state.title": "State Management",
   "state.unlabled": "unlabeled state",
