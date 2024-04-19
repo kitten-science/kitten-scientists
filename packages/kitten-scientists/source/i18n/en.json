@@ -59,6 +59,8 @@
   "option.chronofurnace": "Turn on Chrono Furnaces",
   "option.crypto": "Trade Blackcoin",
   "option.elect": "Elect leader",
+  "option.elect.job": "Job",
+  "option.elect.trait": "Trait",
   "option.embassies": "Build Embassies",
   "option.faith.adore": "Adore the Galaxy",
   "option.faith.best.unicorn": "Build Best Unicorn Building First",
