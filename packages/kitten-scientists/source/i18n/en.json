@@ -108,6 +108,7 @@
   "settings.copied": "Settings copied to clipboard.",
   "settings.imported": "Settings imported.",
   "settings.loaded": "Settings loaded.",
+  "state.compress": "Compress data",
   "state.confirmDestruction": "Are you sure?",
   "state.copy": "Copy to clipboard",
   "state.deleted": "State loaded.",

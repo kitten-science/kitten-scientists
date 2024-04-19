@@ -108,6 +108,7 @@
   "settings.copied": "Settings copied to clipboard.",
   "settings.imported": "Settings imported.",
   "settings.loaded": "已载入设置。",
+  "state.compress": "压缩数据",
   "state.confirmDestruction": "你确定吗？",
   "state.copy": "Copy to clipboard",
   "state.deleted": "已载入状态。",
