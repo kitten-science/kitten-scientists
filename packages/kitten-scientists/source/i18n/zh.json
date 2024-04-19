@@ -80,6 +80,7 @@
   "option.shipOverride": "强制243船",
   "option.steamworks": "启动蒸汽工房",
   "option.time.reset": "重启时间线 (危险!)",
+  "option.time.skip.ignoreOverheat": "忽略过热",
   "option.time.skip": "时间跳转",
   "reset.after": "初次见面，可爱的猫猫科学家为您服务",
   "reset.cancel.activity": "喵斯顿，我们有麻烦了",
