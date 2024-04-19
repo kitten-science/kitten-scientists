@@ -14,16 +14,18 @@ import { UiComponent } from "./components/UiComponent.js";
 export class InternalsUi extends SettingsPanel<EngineSettings> {
   constructor(host: UserScript, settings: EngineSettings) {
     super(host, "Internals", settings, {
-      settingItem: new LabelListItem(host, "Internals", { icon: Icons.Settings }),
+      settingItem: new LabelListItem(host, host.engine.i18n("ui.internals"), {
+        icon: Icons.Settings,
+      }),
       children: [
         new SettingsList(host, {
           children: [
             new ButtonListItem(
               host,
-              new TextButton(host, `Interval: ${settings.interval}`, {
+              new TextButton(host, host.engine.i18n("ui.internals.interval", [settings.interval]), {
                 onClick: () => {
                   const newInterval = SettingsSectionUi.promptLimit(
-                    "Enter a new interval at which KS should run (in milliseconds):",
+                    host.engine.i18n("ui.internals.interval.input"),
                     settings.interval.toString(),
                   );
                   if (isNil(newInterval)) {
@@ -33,11 +35,13 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                   this.refreshUi();
                 },
                 onRefresh: (subject: UiComponent) => {
-                  (subject as TextButton).element.text(`Interval: ${settings.interval}`);
+                  (subject as TextButton).element.text(
+                    host.engine.i18n("ui.internals.interval", [settings.interval]),
+                  );
                 },
               }),
             ),
-            new OptionsListItem(host, "Language", settings.language, {
+            new OptionsListItem(host, host.engine.i18n("ui.language"), settings.language, {
               onCheck: () => {
                 this._host.rebuildUi();
               },
