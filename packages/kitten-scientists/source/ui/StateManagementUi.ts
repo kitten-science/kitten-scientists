@@ -266,7 +266,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   storeState(state?: EngineState) {
-    let label = window.prompt("Label for this state") ?? undefined;
+    let label = window.prompt(this._host.engine.i18n("state.storeCurrent.prompt")) ?? undefined;
     // Normalize empty string to "no label".
     label = label === "" ? undefined : label;
 
