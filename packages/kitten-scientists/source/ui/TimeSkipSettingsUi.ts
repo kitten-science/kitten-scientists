@@ -65,7 +65,11 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
           new ButtonListItem(host, this._maximum, { delimiter: true }),
           this._cycles,
           this._seasons,
-          new SettingListItem(this._host, "Ignore overheat", this.setting.ignoreOverheat),
+          new SettingListItem(
+            this._host,
+            this._host.engine.i18n("option.time.skip.ignoreOverheat"),
+            this.setting.ignoreOverheat,
+          ),
         ],
         hasDisableAll: false,
         hasEnableAll: false,

@@ -80,6 +80,7 @@
   "option.shipOverride": "Force Ships to 243",
   "option.steamworks": "Turn on Steamworks",
   "option.time.reset": "Reset Timeline (Danger!)",
+  "option.time.skip.ignoreOverheat": "Ignore overheat",
   "option.time.skip": "Time Skip",
   "reset.after": "Nice to meet you, the cute Kittens Scientists will serve you",
   "reset.cancel.activity": "Meoston, We Have a Problem",
