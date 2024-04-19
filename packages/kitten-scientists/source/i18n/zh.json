@@ -131,7 +131,7 @@
   "state.paste": "在这里粘贴您的设置(压缩或未压缩过的) ：",
   "state.reset": "恢复到默认设置",
   "state.resetTitle": "将所有猫国建设者设置完全重置为默认设置。",
-  "state.storeCurrent": "存储当前",
+  "state.storeCurrent": "存储当前状态",
   "state.storeCurrentTitle": "创建一个新状态快照。",
   "state.title": "状态管理器",
   "state.unlabled": "未标记的状态",
