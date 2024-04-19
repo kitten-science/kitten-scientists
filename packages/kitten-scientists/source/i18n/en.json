@@ -182,6 +182,7 @@
   "trade.season.enable": "Enabled trading with {0} in the {1}",
   "trade.seasons": "seasons",
   "trade.unlimited": "Trading with {0}: unlimited",
+  "ui.additional": "Additional options",
   "ui.build": "Bonfire",
   "ui.buy": "Buy: {0}",
   "ui.close": "close",

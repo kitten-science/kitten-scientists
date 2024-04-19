@@ -64,7 +64,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       hasEnableAll: false,
     });
 
-    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
+    listAddition.addChild(new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")));
 
     this._hunt = new SettingTriggerListItem(
       this._host,

@@ -236,7 +236,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(this._host, "Additional options"));
+    listAddition.addChild(new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")));
 
     listAddition.addChild(new BuildingUpgradeSettingsUi(this._host, this.setting.upgradeBuildings));
 
