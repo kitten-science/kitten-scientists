@@ -132,6 +132,7 @@
   "state.reset": "恢复到默认设置",
   "state.resetTitle": "将所有小猫科学家设置完全重置为默认设置。",
   "state.storeCurrent": "存储当前状态",
+  "state.storeCurrent.prompt": "输入一个该状态的标签",
   "state.storeCurrentTitle": "创建一个新状态快照。",
   "state.title": "状态管理器",
   "state.unlabled": "未标记的状态",
