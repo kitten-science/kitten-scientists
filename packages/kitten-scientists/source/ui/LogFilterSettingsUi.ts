@@ -14,7 +14,9 @@ export class LogFiltersSettingsUi extends SettingsSectionUi<LogFilterSettings> {
 
     this.addChild(
       new SettingsList(host, {
-        children: [new SettingListItem(host, "All KG log entries.", settings.disableKGLog)],
+        children: [
+          new SettingListItem(host, this._host.engine.i18n("filter.allKG"), settings.disableKGLog),
+        ],
         hasDisableAll: false,
         hasEnableAll: false,
       }),
