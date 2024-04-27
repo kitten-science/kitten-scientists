@@ -1,8 +1,10 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { Locale, de, enUS, he, zhCN } from "date-fns/locale";
 import { EngineState } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { StateSettings } from "../settings/StateSettings.js";
 import { cerror } from "../tools/Log.js";
 import { SavegameLoader } from "../tools/SavegameLoader.js";
@@ -26,8 +28,9 @@ export type StoredState = {
 export class StateManagementUi extends SettingsPanel<StateSettings> {
   readonly states = new Array<StoredState>();
   readonly stateList: SettingsList;
+  readonly locale: Locale;
 
-  constructor(host: UserScript, settings: StateSettings) {
+  constructor(host: UserScript, settings: StateSettings, language: SettingOptions) {
     const label = host.engine.i18n("state.title");
     super(host, label, settings, {
       settingItem: new LabelListItem(host, label, { icon: Icons.State }),
@@ -37,6 +40,15 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       hasEnableAll: false,
       hasDisableAll: false,
     });
+
+    this.locale =
+      language.selected === "zh"
+        ? zhCN
+        : language.selected === "he"
+          ? he
+          : language.selected === "de"
+            ? de
+            : enUS;
 
     this.addChild(
       new SettingsList(host, {
@@ -163,6 +175,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
         this._host,
         `${state.label ?? unlabeled} (${formatDistanceToNow(new Date(state.timestamp), {
           addSuffix: true,
+          locale: this.locale,
         })})`,
         { onClick: () => this.loadState(state.state), title: state.timestamp },
       );
