@@ -1,3 +1,4 @@
+import { TranslatedString } from "../Engine.js";
 import { SettingMax } from "../settings/Settings.js";
 import { VillageSettings } from "../settings/VillageSettings.js";
 import { UserScript } from "../UserScript.js";
@@ -129,6 +130,18 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       },
     );
     listAddition.addChild(this._promoteLeader);
+
+    this.setting.electLeader.job.options.forEach(option => {
+      option.label = this._host.engine.i18n(
+        <TranslatedString<`$${string}`>>("$village.job." + option.value),
+      );
+    });
+
+    this.setting.electLeader.trait.options.forEach(option => {
+      option.label = this._host.engine.i18n(
+        <TranslatedString<`$${string}`>>("$village.trait." + option.value),
+      );
+    });
 
     this._electLeader = new SettingListItem(
       this._host,
