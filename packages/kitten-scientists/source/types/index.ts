@@ -109,6 +109,7 @@ export const TabIds = [
 export type TabId = (typeof TabIds)[number];
 
 export const Jobs = [
+  "any",
   "engineer",
   "farmer",
   "geologist",
