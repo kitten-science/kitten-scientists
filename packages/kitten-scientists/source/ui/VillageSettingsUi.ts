@@ -100,7 +100,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     listAddition.addChild(this._promoteLeader);
 
     this.setting.electLeader.job.options.forEach(option => {
-      option.label = this._host.engine.i18n(`$village.job.${option.value}`);
+      if (option.value === "any") {
+        option.label = this._host.engine.i18n("option.elect.job.any");
+      } else {
+        option.label = this._host.engine.i18n(`$village.job.${option.value}`);
+      }
     });
 
     this.setting.electLeader.trait.options.forEach(option => {

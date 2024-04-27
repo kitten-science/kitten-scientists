@@ -118,7 +118,7 @@ export class VillageManager implements Automation {
     const trait = this.settings.electLeader.trait.selected;
 
     const leaderCandidates = kittens.filter(
-      kitten => kitten.job === job && kitten.trait.name === trait,
+      kitten => (kitten.job === job || job === "any") && kitten.trait.name === trait,
     );
 
     if (leaderCandidates.length === 0) {
@@ -128,7 +128,11 @@ export class VillageManager implements Automation {
     leaderCandidates.sort((a, b) => b.rank - a.rank);
     const bestLeader = leaderCandidates[0];
     if (!isNil(leader)) {
-      if (leader.trait.name === trait && leader.job === job && bestLeader.rank <= leader.rank) {
+      if (
+        leader.trait.name === trait &&
+        (leader.job === job || job === "any") &&
+        bestLeader.rank <= leader.rank
+      ) {
         return;
       }
     }
