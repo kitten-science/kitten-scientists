@@ -56,7 +56,7 @@ export class UserInterface extends UiComponent {
       new TimeSettingsUi(this._host, engine.timeManager.settings),
       new TimeControlSettingsUi(this._host, engine.timeControlManager.settings),
       new LogFiltersSettingsUi(this._host, engine.settings.filters),
-      new StateManagementUi(this._host, engine.settings.states),
+      new StateManagementUi(this._host, engine.settings.states, engine.settings.language),
       new InternalsUi(this._host, engine.settings),
     ];
 
