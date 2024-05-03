@@ -698,7 +698,7 @@ __metadata:
     "@kie/mock-github": "npm:2.0.1"
     "@octokit/rest": "npm:20.1.0"
     "@octokit/types": "npm:13.5.0"
-    "@types/chai": "npm:4.3.14"
+    "@types/chai": "npm:4.3.15"
     "@types/conventional-commits-parser": "npm:5.0.0"
     "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.12.8"
@@ -723,7 +723,7 @@ __metadata:
     "@actions/core": "npm:1.10.1"
     "@actions/github": "npm:5.1.1"
     "@kie/mock-github": "npm:2.0.1"
-    "@types/chai": "npm:4.3.14"
+    "@types/chai": "npm:4.3.15"
     "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.12.8"
     c8: "npm:9.1.0"
@@ -742,7 +742,7 @@ __metadata:
     "@actions/core": "npm:1.10.1"
     "@actions/github": "npm:5.1.1"
     "@kie/mock-github": "npm:2.0.1"
-    "@types/chai": "npm:4.3.14"
+    "@types/chai": "npm:4.3.15"
     "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.12.8"
     c8: "npm:9.1.0"
@@ -761,7 +761,7 @@ __metadata:
     "@actions/core": "npm:1.10.1"
     "@actions/github": "npm:5.1.1"
     "@kie/mock-github": "npm:2.0.1"
-    "@types/chai": "npm:4.3.14"
+    "@types/chai": "npm:4.3.15"
     "@types/mocha": "npm:10.0.6"
     "@types/node": "npm:20.12.8"
     c8: "npm:9.1.0"
@@ -1401,10 +1401,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chai@npm:4.3.14":
-  version: 4.3.14
-  resolution: "@types/chai@npm:4.3.14"
-  checksum: 10c0/7712594c1e457cb99c7227d0fe1afcbb900bbd1369494ec2d2b0d79a383057a09ab13d23d7b300287394b99995a8c017aa55e6b9a369b77910bc10310ba504af
+"@types/chai@npm:4.3.15":
+  version: 4.3.15
+  resolution: "@types/chai@npm:4.3.15"
+  checksum: 10c0/a942fe35f7043e131efd68ca1822463768c417dc4ab263d7ef00f36d046e9700e24fadd0a92777dd0ea7e83d969035235fcbba32f6bde785a6c6f10aca543a7b
   languageName: node
   linkType: hard
 
