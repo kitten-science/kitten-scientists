@@ -19,6 +19,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
-      - uses: oliversalzburg/action-label-manager@v0.0.5
+      - uses: oliversalzburg/action-label-manager@9d2cf2082e1bac8d7b3a57169c95625e2bac1b4a # v0.0.5
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
