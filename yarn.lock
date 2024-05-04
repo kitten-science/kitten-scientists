@@ -735,25 +735,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kitten-science/action-label-manager@workspace:packages/action-label-manager":
-  version: 0.0.0-use.local
-  resolution: "@kitten-science/action-label-manager@workspace:packages/action-label-manager"
-  dependencies:
-    "@actions/core": "npm:1.10.1"
-    "@actions/github": "npm:5.1.1"
-    "@kie/mock-github": "npm:2.0.1"
-    "@types/chai": "npm:4.3.15"
-    "@types/mocha": "npm:10.0.6"
-    "@types/node": "npm:20.12.8"
-    c8: "npm:9.1.0"
-    chai: "npm:5.1.0"
-    mocha: "npm:10.4.0"
-    tslib: "npm:2.6.2"
-    typescript: "npm:5.4.5"
-    yaml: "npm:2.4.2"
-  languageName: unknown
-  linkType: soft
-
 "@kitten-science/action-release-info@workspace:*, @kitten-science/action-release-info@workspace:packages/action-release-info":
   version: 0.0.0-use.local
   resolution: "@kitten-science/action-release-info@workspace:packages/action-release-info"
@@ -6173,15 +6154,6 @@ __metadata:
   version: 2.3.4
   resolution: "yaml@npm:2.3.4"
   checksum: 10c0/cf03b68f8fef5e8516b0f0b54edaf2459f1648317fc6210391cf606d247e678b449382f4bd01f77392538429e306c7cba8ff46ff6b37cac4de9a76aff33bd9e1
-  languageName: node
-  linkType: hard
-
-"yaml@npm:2.4.2":
-  version: 2.4.2
-  resolution: "yaml@npm:2.4.2"
-  bin:
-    yaml: bin.mjs
-  checksum: 10c0/280ddb2e43ffa7d91a95738e80c8f33e860749cdc25aa6d9e4d350a28e174fd7e494e4aa023108aaee41388e451e3dc1292261d8f022aabcf90df9c63d647549
   languageName: node
   linkType: hard
 

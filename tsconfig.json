@@ -8,9 +8,6 @@
       "path": "packages/action-commit-validator"
     },
     {
-      "path": "packages/action-label-manager"
-    },
-    {
       "path": "packages/action-release-info"
     },
     {
