@@ -53,6 +53,7 @@ export type Game = {
     cyclesPerEra: number;
     cycleYear: number;
     day: number;
+    daysPerSeason: number;
 
     /**
      * How many festival days are remaining?
@@ -68,6 +69,8 @@ export type Game = {
     observeHandler: () => void;
     season: number;
     seasons: Array<{ name: Season }>;
+    seasonsPerYear: number;
+    ticksPerDay: number;
     year: number;
     yearsPerCycle: number;
   };
@@ -133,6 +136,7 @@ export type Game = {
       | "shatterVoidCost"
       | "solarRevolutionLimit"
       | "standingRatio"
+      | "temporalFluxProduction"
       | "tradeCatpowerDiscount"
       | "tradeGoldDiscount"
       | "unicornsGlobalRatio"
@@ -355,6 +359,7 @@ export type Game = {
     heat: number;
     isAccelerated: boolean;
   };
+  timeAccelerationRatio: () => number;
   timer: {
     ticksTotal: number;
   };
