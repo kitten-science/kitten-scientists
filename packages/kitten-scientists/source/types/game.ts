@@ -123,6 +123,7 @@ export type Game = {
       | "corruptionBoostRatio"
       | "dataCenterAIRatio"
       | "heatMax"
+      | "heatPerTick"
       | "hunterRatio"
       | "mapPriceReduction"
       | "oilReductionRatio"
@@ -341,6 +342,7 @@ export type Game = {
     GameTab,
     GameTab,
   ];
+  ticksPerSecond: number;
   time: {
     /**
      * Get ChronoForge upgrade.

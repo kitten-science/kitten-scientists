@@ -1,9 +1,11 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
+import { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Cycle, Season } from "../types/index.js";
 import { Setting, SettingTriggerMax } from "./Settings.js";
 
 export class TimeSkipSettings extends SettingTriggerMax {
+  readonly activeHeatTransfer: TimeSkipHeatSettings;
   readonly cycles: Record<Cycle, Setting>;
   readonly seasons: Record<Season, Setting>;
   readonly ignoreOverheat: Setting;
@@ -43,11 +45,13 @@ export class TimeSkipSettings extends SettingTriggerMax {
       winter: new Setting(false),
     },
     ignoreOverheat = new Setting(false),
+    activeHeatTransfer = new TimeSkipHeatSettings(),
   ) {
     super(false, 5);
     this.cycles = cycles;
     this.seasons = seasons;
     this.ignoreOverheat = ignoreOverheat;
+    this.activeHeatTransfer = activeHeatTransfer;
   }
 
   load(settings: Maybe<Partial<TimeSkipSettings>>) {
@@ -64,5 +68,6 @@ export class TimeSkipSettings extends SettingTriggerMax {
       season.enabled = item?.enabled ?? season.enabled;
     });
     this.ignoreOverheat.load(settings.ignoreOverheat);
+    this.activeHeatTransfer.load(settings.activeHeatTransfer);
   }
 }
