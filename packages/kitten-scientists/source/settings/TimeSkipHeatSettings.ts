@@ -5,6 +5,7 @@ import { Setting, SettingTrigger } from "./Settings.js";
 
 export class TimeSkipHeatSettings extends SettingTrigger {
   readonly cycles: Record<Cycle, Setting>;
+  readonly activeHeatTransferStatus: Setting;
 
   get cyclesList(): Array<Setting> {
     return [
@@ -34,9 +35,11 @@ export class TimeSkipHeatSettings extends SettingTrigger {
       terminus: new Setting(true),
       kairo: new Setting(true),
     },
+    activeHeatTransferStatus = new Setting(false),
   ) {
     super(false, 0);
     this.cycles = cycles;
+    this.activeHeatTransferStatus = activeHeatTransferStatus;
   }
 
   load(settings: Maybe<Partial<TimeSkipHeatSettings>>) {
@@ -49,5 +52,6 @@ export class TimeSkipHeatSettings extends SettingTrigger {
     consumeEntriesPedantic(this.cycles, settings.cycles, (cycle, item) => {
       cycle.enabled = item?.enabled ?? cycle.enabled;
     });
+    this.activeHeatTransferStatus.load(settings.activeHeatTransferStatus);
   }
 }
