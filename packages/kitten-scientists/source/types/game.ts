@@ -79,6 +79,7 @@ export type Game = {
     currentChallenge: Challenge;
     challenges: Array<{ pending: boolean }>;
     getChallenge: (challenge: Challenge) => {
+      active: boolean;
       calculateEffects: (model: unknown, game: Game) => void;
       researched: number;
     };
