@@ -478,7 +478,8 @@ export class TimeControlManager {
           // Heat Transfer during selected cycles
           return;
         } else {
-          maxSkipsActiveHeatTransfer = this._host.game.calendar.yearsPerCycle;
+          maxSkipsActiveHeatTransfer =
+            this._host.game.calendar.yearsPerCycle - this._host.game.calendar.cycleYear;
         }
       } else if (heatNow >= heatMax - heatPerSecond * 10) {
         this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled = true;
