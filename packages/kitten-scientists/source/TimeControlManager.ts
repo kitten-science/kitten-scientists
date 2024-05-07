@@ -454,7 +454,10 @@ export class TimeControlManager {
         // Get temporalFlux
         const temporalFluxProduction = this._host.game.getEffect("temporalFluxProduction");
         const daysPerYear =
-          this._host.game.calendar.daysPerSeason * this._host.game.calendar.seasonsPerYear;
+          (this._host.game.calendar.daysPerSeason +
+            10 +
+            this._host.game.getEffect("temporalParadoxDay")) *
+          this._host.game.calendar.seasonsPerYear;
         const daysPerTicks =
           (1 + this._host.game.timeAccelerationRatio()) / this._host.game.calendar.ticksPerDay;
         const SecondPerYear = daysPerYear / daysPerTicks / this._host.game.ticksPerSecond;
