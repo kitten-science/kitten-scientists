@@ -438,6 +438,7 @@ export class TimeControlManager {
       }
     }
 
+    let maxSkipsActiveHeatTransfer = Number.POSITIVE_INFINITY;
     // Active Heat Transfer
     if (
       !this.settings.timeSkip.ignoreOverheat.enabled &&
@@ -471,11 +472,15 @@ export class TimeControlManager {
           fluxEnabled &&
           flux
         ) {
+          maxSkipsActiveHeatTransfer =
+            (SecondPerYear * this._host.game.ticksPerSecond) / temporalFluxProduction;
           this._host.engine.iactivity("act.time.getTemporalFlux", [], "ks-timeSkip");
           this._host.engine.storeForSummary("time.getTemporalFlux", 1);
         } else if (this.settings.timeSkip.activeHeatTransfer.cyclesList[currentCycle].enabled) {
           // Heat Transfer during selected cycles
           return;
+        } else {
+          maxSkipsActiveHeatTransfer = this._host.game.calendar.yearsPerCycle;
         }
       } else if (heatNow >= heatMax - heatPerSecond * 10) {
         this.activeHeatTransferStatus = true;
@@ -496,6 +501,7 @@ export class TimeControlManager {
           ? Number.POSITIVE_INFINITY
           : (heatMax - heatNow) / factor,
         maxSkips,
+        maxSkipsActiveHeatTransfer,
         timeCrystalsAvailable / (1 + shatterCostIncreaseChallenge),
         0 < shatterVoidCost ? voidAvailable / shatterVoidCost : Number.POSITIVE_INFINITY,
       ),
