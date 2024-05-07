@@ -458,21 +458,22 @@ export class TimeControlManager {
             10 +
             this._host.game.getEffect("temporalParadoxDay")) *
           this._host.game.calendar.seasonsPerYear;
-        const daysPerTicks =
-          (1 + this._host.game.timeAccelerationRatio()) / this._host.game.calendar.ticksPerDay;
+        const ticksPerDay = this._host.game.calendar.ticksPerDay;
+        const daysPerTicks = (1 + this._host.game.timeAccelerationRatio()) / ticksPerDay;
         const ticksPerYear = daysPerYear / daysPerTicks;
         const temporalFlux = this._host.game.resPool.get("temporalFlux");
         const fluxEnabled = temporalFlux.maxValue > ticksPerYear;
         const flux = temporalFlux.value < ticksPerYear;
         if (
+          !season &&
+          this._host.game.calendar.day < 10 &&
           temporalFluxProduction > factor / heatPerTick &&
           this.settings.accelerateTime.enabled &&
-          this._host.game.calendar.day < 10 &&
           fluxEnabled &&
           flux
         ) {
           maxSkipsActiveHeatTransfer = Math.ceil(
-            (ticksPerYear - temporalFlux.value) / temporalFluxProduction,
+            (ticksPerYear + ticksPerDay * 10 - temporalFlux.value) / temporalFluxProduction,
           );
           this._host.engine.iactivity("act.time.getTemporalFlux", [], "ks-timeSkip");
           this._host.engine.storeForSummary("time.getTemporalFlux", 1);
