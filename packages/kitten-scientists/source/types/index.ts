@@ -215,6 +215,7 @@ export type Challenge =
   | "anarchy"
   | "atheism"
   | "energy"
+  | "ironWill"
   | "pacifism"
   | "winterIsComing";
 
