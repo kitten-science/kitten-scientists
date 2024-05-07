@@ -69,6 +69,7 @@ export const TranscendenceUpgrades = [
   "blazar",
   "darkNova",
   "holyGenocide",
+  "mausoleum",
   "singularity",
 ] as const;
 export type TranscendenceUpgrade = (typeof TranscendenceUpgrades)[number];
