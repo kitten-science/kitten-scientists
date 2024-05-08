@@ -1,15 +1,15 @@
-import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
+import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsSectionUi } from "./SettingsSectionUi.js";
+import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
 
 export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   private readonly _trigger: TriggerButton;
-  private readonly _buildings: Array<SettingListItem>;
   private readonly _fixCryochamber: SettingListItem;
   private readonly _turnOnChronoFurnace: SettingListItem;
 
@@ -21,60 +21,26 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
-    const listBuildings = new SettingsList(this._host);
-    this._buildings = [
-      this._getTimeSetting(
-        this.setting.buildings.temporalBattery,
-        this._host.engine.i18n("$time.cfu.temporalBattery.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.blastFurnace,
-        this._host.engine.i18n("$time.cfu.blastFurnace.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.timeBoiler,
-        this._host.engine.i18n("$time.cfu.timeBoiler.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.temporalAccelerator,
-        this._host.engine.i18n("$time.cfu.temporalAccelerator.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.temporalImpedance,
-        this._host.engine.i18n("$time.cfu.temporalImpedance.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.ressourceRetrieval,
-        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.temporalPress,
-        this._host.engine.i18n("$time.cfu.temporalPress.label"),
-        true,
-      ),
-
-      this._getTimeSetting(
-        this.setting.buildings.cryochambers,
-        this._host.engine.i18n("$time.vsu.cryochambers.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.voidHoover,
-        this._host.engine.i18n("$time.vsu.voidHoover.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.voidRift,
-        this._host.engine.i18n("$time.vsu.voidRift.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.chronocontrol,
-        this._host.engine.i18n("$time.vsu.chronocontrol.label"),
-      ),
-      this._getTimeSetting(
-        this.setting.buildings.voidResonator,
-        this._host.engine.i18n("$time.vsu.voidResonator.label"),
-      ),
-    ];
-    listBuildings.addChildren(this._buildings);
+    const listBuildings = new SettingsList(this._host, {
+      children: [
+        new HeaderListItem(this._host, this._host.engine.i18n("$workshop.chronoforge.label")),
+        ...this._host.game.time.chronoforgeUpgrades
+          .filter(item => !isNil(this.setting.buildings[item.name]))
+          .map(building =>
+            this._getTimeSetting(
+              this.setting.buildings[building.name],
+              building.label,
+              building.name === this._host.game.time.chronoforgeUpgrades.at(-1)?.name,
+            ),
+          ),
+        new HeaderListItem(this._host, this._host.engine.i18n("$science.voidSpace.label")),
+        ...this._host.game.time.voidspaceUpgrades
+          .filter(item => !isNil(this.setting.buildings[item.name]))
+          .map(building =>
+            this._getTimeSetting(this.setting.buildings[building.name], building.label),
+          ),
+      ],
+    });
     this.addChild(listBuildings);
 
     const listAddition = new SettingsList(this._host, {
