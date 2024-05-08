@@ -117,7 +117,11 @@ export class UserInterface extends UiComponent {
     $("#clearLog").prepend(this.showActivity);
 
     // Add Kitten Scientists above the game log.
-    const right = $("#rightColumn");
+    $("#rightColumn").after(
+      '<div id="ksColumn" class="column"><br><br><br><br><br><br><br><br><br><br></div>',
+    );
+    const id = localStorage["ks.Column"] as string | undefined;
+    const right = $(isNil(id) ? "#rightColumn" : id);
     if (right.length === 0) {
       // Try to fall back to options page.
       const optionsPageContent = $("#optionsPage .full-screen-position .page .page-content");
@@ -148,6 +152,17 @@ export class UserInterface extends UiComponent {
 
   private _installCss(): void {
     // Basic layout for our own list-based options menus.
+    this._addRule(
+      `#ksColumn {
+        min-width: 250px;
+        max-width: 440px;
+        vertical-align: top;
+        padding-left: 8px;
+        top: 20px;
+        position: relative;
+        overflow-y: auto;
+      }`,
+    );
     this._addRule(
       `#ks {
         margin-bottom: 10px;

@@ -17,6 +17,8 @@ export class EngineSettings extends Setting {
    */
   language: SettingOptions<SupportedLanguage>;
 
+  ksColumn: Setting;
+
   filters: LogFilterSettings;
   resources: ResourcesSettings;
   readonly states: StateSettings;
@@ -27,6 +29,7 @@ export class EngineSettings extends Setting {
     resources = new ResourcesSettings(),
     states = new StateSettings(),
     language = FallbackLanguage,
+    ksColumn = new Setting(false),
   ) {
     super(enabled);
     this.filters = filters;
@@ -38,6 +41,7 @@ export class EngineSettings extends Setting {
       { label: "עִברִית", value: "he" },
       { label: "中文", value: "zh" },
     ]);
+    this.ksColumn = ksColumn;
   }
 
   load(settings: Maybe<Partial<EngineSettings>>, retainMetaBehavior = false) {
@@ -52,6 +56,7 @@ export class EngineSettings extends Setting {
       this.states.load(settings.states);
       this.language.load(settings.language);
     }
+    this.ksColumn.load(settings.ksColumn);
 
     this.filters.load(settings.filters);
     this.resources.load(settings.resources);
