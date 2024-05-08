@@ -41,6 +41,10 @@ import { JobInfo, VillageTab } from "./village.js";
 
 export type Game = {
   bld: {
+    buildingGroups: Array<{
+      title: string;
+      buildings: Array<Building>;
+    }>;
     /** @deprecated Use `getBuildingExt()` instead. */
     get: (build: Building) => BuildingMeta;
     getBuildingExt: (building: Building) => BuildingExt;
@@ -247,8 +251,11 @@ export type Game = {
 
     praise: () => void;
 
+    religionUpgrades: Array<ReligionUpgradeInfo>;
     tcratio: number;
     transcendenceTier: number;
+    transcendenceUpgrades: Array<TranscendenceUpgradeInfo>;
+    zigguratUpgrades: Array<ZiggurathUpgradeInfo>;
 
     /**
      * Determine the price (worship) to reach the given transcendence tier.
@@ -326,7 +333,8 @@ export type Game = {
       val: number;
     };
     meta: Array<{ meta: Array<{ label: string; name: string; unlocked: boolean; val: number }> }>;
-    programs: Array<{ name: Missions }>;
+    planets: Array<{ label: string; buildings: Array<{ name: SpaceBuildings; label: string }> }>;
+    programs: Array<{ name: Missions; label: string }>;
   };
   tabs: [
     GameTab,
@@ -342,6 +350,7 @@ export type Game = {
     GameTab,
   ];
   time: {
+    chronoforgeUpgrades: Array<ChronoForgeUpgradeInfo>;
     /**
      * Get ChronoForge upgrade.
      */
@@ -352,6 +361,10 @@ export type Game = {
     getVSU: (name: VoidSpaceUpgrades) => VoidSpaceUpgradeInfo;
     heat: number;
     isAccelerated: boolean;
+    voidspaceUpgrades: Array<{
+      name: Exclude<VoidSpaceUpgrades, "usedCryochambers">;
+      label: string;
+    }>;
   };
   timer: {
     ticksTotal: number;
@@ -415,6 +428,7 @@ export type Game = {
   };
   villageTab: VillageTab;
   workshop: {
+    crafts: Array<CraftableInfo>;
     get: (
       technology: "chronoforge" | "cryocomputing" | "goldOre" | "machineLearning" | "uplink",
     ) => { researched: boolean };
