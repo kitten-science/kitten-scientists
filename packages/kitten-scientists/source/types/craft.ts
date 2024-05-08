@@ -9,4 +9,9 @@ export type ResourceInfo = {
   value: number;
 };
 
-export type CraftableInfo = { name: ResourceCraftable; tier: number; unlocked: boolean };
+export type CraftableInfo = {
+  name: ResourceCraftable;
+  label: string;
+  tier: number;
+  unlocked: boolean;
+};
