@@ -206,6 +206,7 @@
   "ui.internals.interval.input": "输入 KS 运行的新时间间隔 (单位: 毫秒)",
   "ui.itemsHide": "隐藏选项",
   "ui.itemsShow": "显示选项",
+  "ui.ksColumn": "显示在第四栏",
   "ui.language": "语言",
   "ui.limit": "限制",
   "ui.max.set": "设置 {0} 的最大值",
