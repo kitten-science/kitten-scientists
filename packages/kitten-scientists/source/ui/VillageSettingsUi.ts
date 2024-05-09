@@ -1,5 +1,4 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
-import { TranslatedString } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
 import { SettingMax } from "../settings/Settings.js";
 import { VillageSettings } from "../settings/VillageSettings.js";
@@ -101,15 +100,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     listAddition.addChild(this._promoteLeader);
 
     this.setting.electLeader.job.options.forEach(option => {
-      option.label = this._host.engine.i18n(
-        <TranslatedString<`$${string}`>>("$village.job." + option.value),
-      );
+      option.label = this._host.engine.i18n(`$village.job.${option.value}`);
     });
 
     this.setting.electLeader.trait.options.forEach(option => {
-      option.label = this._host.engine.i18n(
-        <TranslatedString<`$${string}`>>("$village.trait." + option.value),
-      );
+      option.label = this._host.engine.i18n(`$village.trait.${option.value}`);
     });
 
     this._electLeader = new SettingListItem(
