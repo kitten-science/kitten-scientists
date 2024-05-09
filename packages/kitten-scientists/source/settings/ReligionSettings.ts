@@ -1,44 +1,42 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { UnicornItemVariant } from "../types/index.js";
+import {
+  ReligionUpgrades,
+  ReligionUpgradesArray,
+  TranscendenceUpgrades,
+  TranscendenceUpgradesArray,
+  UnicornItemVariant,
+  ZiggurathUpgrades,
+  ZiggurathUpgradesArray,
+} from "../types/index.js";
 import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
-export type FaithItem =
-  | "apocripha"
-  | "basilica"
-  | "blackCore"
-  | "blackLibrary"
-  | "blackNexus"
-  | "blackObelisk"
-  | "blackPyramid"
-  | "blackRadiance"
-  | "blazar"
-  | "darkNova"
-  | "goldenSpire"
-  | "holyGenocide"
-  | "marker"
-  | "scholasticism"
-  | "singularity"
-  | "solarchant"
-  | "solarRevolution"
-  | "stainedGlass"
-  | "sunAltar"
-  | "templars"
-  | "transcendence"
-  | "unicornGraveyard"
-  | "unicornNecropolis";
+export type FaithItem = Exclude<ReligionItem, UnicornItem>;
 
-export type UnicornItem =
-  | "ivoryCitadel"
-  | "ivoryTower"
-  | "skyPalace"
-  | "sunspire"
-  | "unicornPasture"
-  | "unicornTomb"
-  | "unicornUtopia";
+export const UnicornItemArray = [
+  "ivoryCitadel",
+  "ivoryTower",
+  "skyPalace",
+  "sunspire",
+  "unicornPasture",
+  "unicornTomb",
+  "unicornUtopia",
+] as const;
+export type UnicornItem = (typeof UnicornItemArray)[number];
 
-export type ReligionItem = FaithItem | UnicornItem;
+export type ReligionItem = ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades;
 export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
+
+export const ReligionOptionsArray = [
+  "sacrificeUnicorns",
+  "sacrificeAlicorns",
+  "refineTears",
+  "refineTimeCrystals",
+  "transcend",
+  "adore",
+  "autoPraise",
+] as const;
+export type ReligionOptions = (typeof ReligionOptionsArray)[number];
 
 export class ReligionSettingsItem extends SettingMax {
   readonly #building: FaithItem | UnicornItem;
@@ -63,9 +61,7 @@ export class ReligionSettingsItem extends SettingMax {
   }
 }
 
-export type ReligionSettingsItems = {
-  [item in FaithItem | UnicornItem]: ReligionSettingsItem;
-};
+export type ReligionSettingsItems = Record<FaithItem | UnicornItem, ReligionSettingsItem>;
 
 export class ReligionSettings extends SettingTrigger {
   buildings: ReligionSettingsItems;
@@ -113,133 +109,6 @@ export class ReligionSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = 1,
-    buildings: ReligionSettingsItems = {
-      apocripha: new ReligionSettingsItem("apocripha", UnicornItemVariant.OrderOfTheSun, false, -1),
-      basilica: new ReligionSettingsItem("basilica", UnicornItemVariant.OrderOfTheSun, true, -1),
-      blackCore: new ReligionSettingsItem(
-        "blackCore",
-        UnicornItemVariant.Cryptotheology,
-        false,
-        -1,
-      ),
-      blackLibrary: new ReligionSettingsItem(
-        "blackLibrary",
-        UnicornItemVariant.Cryptotheology,
-        false,
-        -1,
-      ),
-      blackNexus: new ReligionSettingsItem(
-        "blackNexus",
-        UnicornItemVariant.Cryptotheology,
-        false,
-        -1,
-      ),
-      blackObelisk: new ReligionSettingsItem(
-        "blackObelisk",
-        UnicornItemVariant.Cryptotheology,
-        false,
-        -1,
-      ),
-      blackPyramid: new ReligionSettingsItem(
-        "blackPyramid",
-        UnicornItemVariant.Ziggurat,
-        false,
-        -1,
-      ),
-      blackRadiance: new ReligionSettingsItem(
-        "blackRadiance",
-        UnicornItemVariant.Cryptotheology,
-        false,
-        -1,
-      ),
-      blazar: new ReligionSettingsItem("blazar", UnicornItemVariant.Cryptotheology, false, -1),
-      darkNova: new ReligionSettingsItem("darkNova", UnicornItemVariant.Cryptotheology, false, -1),
-      goldenSpire: new ReligionSettingsItem(
-        "goldenSpire",
-        UnicornItemVariant.OrderOfTheSun,
-        true,
-        -1,
-      ),
-      holyGenocide: new ReligionSettingsItem(
-        "holyGenocide",
-        UnicornItemVariant.Cryptotheology,
-        false,
-        -1,
-      ),
-      ivoryCitadel: new ReligionSettingsItem(
-        "ivoryCitadel",
-        UnicornItemVariant.Ziggurat,
-        false,
-        -1,
-      ),
-      ivoryTower: new ReligionSettingsItem("ivoryTower", UnicornItemVariant.Ziggurat, false, -1),
-      marker: new ReligionSettingsItem("marker", UnicornItemVariant.Ziggurat, false, -1),
-      scholasticism: new ReligionSettingsItem(
-        "scholasticism",
-        UnicornItemVariant.OrderOfTheSun,
-        true,
-        -1,
-      ),
-      singularity: new ReligionSettingsItem(
-        "singularity",
-        UnicornItemVariant.Cryptotheology,
-        false,
-        -1,
-      ),
-      skyPalace: new ReligionSettingsItem("skyPalace", UnicornItemVariant.Ziggurat, false, -1),
-      solarchant: new ReligionSettingsItem(
-        "solarchant",
-        UnicornItemVariant.OrderOfTheSun,
-        true,
-        -1,
-      ),
-      solarRevolution: new ReligionSettingsItem(
-        "solarRevolution",
-        UnicornItemVariant.OrderOfTheSun,
-        true,
-        -1,
-      ),
-      stainedGlass: new ReligionSettingsItem(
-        "stainedGlass",
-        UnicornItemVariant.OrderOfTheSun,
-        true,
-        -1,
-      ),
-      sunAltar: new ReligionSettingsItem("sunAltar", UnicornItemVariant.OrderOfTheSun, true, -1),
-      sunspire: new ReligionSettingsItem("sunspire", UnicornItemVariant.Ziggurat, false, -1),
-      templars: new ReligionSettingsItem("templars", UnicornItemVariant.OrderOfTheSun, true, -1),
-      transcendence: new ReligionSettingsItem(
-        "transcendence",
-        UnicornItemVariant.OrderOfTheSun,
-        true,
-        -1,
-      ),
-      unicornGraveyard: new ReligionSettingsItem(
-        "unicornGraveyard",
-        UnicornItemVariant.Ziggurat,
-        false,
-        -1,
-      ),
-      unicornNecropolis: new ReligionSettingsItem(
-        "unicornNecropolis",
-        UnicornItemVariant.Ziggurat,
-        false,
-        -1,
-      ),
-      unicornPasture: new ReligionSettingsItem(
-        "unicornPasture",
-        UnicornItemVariant.UnicornPasture,
-        true,
-        -1,
-      ),
-      unicornTomb: new ReligionSettingsItem("unicornTomb", UnicornItemVariant.Ziggurat, false, -1),
-      unicornUtopia: new ReligionSettingsItem(
-        "unicornUtopia",
-        UnicornItemVariant.Ziggurat,
-        false,
-        -1,
-      ),
-    },
     bestUnicornBuilding = new Setting(false),
     sacrificeAlicorns = new SettingTrigger(false, 25),
     sacrificeUnicorns = new SettingTrigger(false, 1000000),
@@ -250,7 +119,7 @@ export class ReligionSettings extends SettingTrigger {
     transcend = new Setting(false),
   ) {
     super(enabled, trigger);
-    this.buildings = buildings;
+    this.buildings = this.initBuildings();
     this.bestUnicornBuilding = bestUnicornBuilding;
     this.sacrificeAlicorns = sacrificeAlicorns;
     this.sacrificeUnicorns = sacrificeUnicorns;
@@ -259,6 +128,30 @@ export class ReligionSettings extends SettingTrigger {
     this.autoPraise = autoPraise;
     this.adore = adore;
     this.transcend = transcend;
+  }
+
+  private initBuildings(): ReligionSettingsItems {
+    const defaultOffBuilding: ReligionUpgrades[] = ["apocripha"];
+    const items = {} as ReligionSettingsItems;
+    ReligionUpgradesArray.forEach(item => {
+      items[item] = new ReligionSettingsItem(
+        item,
+        UnicornItemVariant.OrderOfTheSun,
+        !defaultOffBuilding.includes(item),
+      );
+    });
+    TranscendenceUpgradesArray.forEach(item => {
+      items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Cryptotheology, false);
+    });
+    ZiggurathUpgradesArray.forEach(item => {
+      items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Ziggurat, false);
+    });
+    items["unicornPasture"] = new ReligionSettingsItem(
+      "unicornPasture",
+      UnicornItemVariant.UnicornPasture,
+      true,
+    );
+    return items;
   }
 
   load(settings: Maybe<Partial<ReligionSettings>>) {

@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Game, ResourceCraftable } from "../types/index.js";
+import { Game, ResourceCraftable, ResourceCraftableArray } from "../types/index.js";
 import { Setting, SettingLimitedMax, SettingTrigger } from "./Settings.js";
 import { UpgradeSettings } from "./UpgradeSettings.js";
 
@@ -28,34 +28,21 @@ export class WorkshopSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = 0.95,
-    resources: WorkshopResourceSettings = {
-      alloy: new CraftSettingsItem("alloy"),
-      beam: new CraftSettingsItem("beam"),
-      blueprint: new CraftSettingsItem("blueprint"),
-      compedium: new CraftSettingsItem("compedium"),
-      concrate: new CraftSettingsItem("concrate"),
-      eludium: new CraftSettingsItem("eludium"),
-      gear: new CraftSettingsItem("gear"),
-      kerosene: new CraftSettingsItem("kerosene"),
-      manuscript: new CraftSettingsItem("manuscript"),
-      megalith: new CraftSettingsItem("megalith"),
-      parchment: new CraftSettingsItem("parchment", true, false),
-      plate: new CraftSettingsItem("plate"),
-      scaffold: new CraftSettingsItem("scaffold"),
-      ship: new CraftSettingsItem("ship"),
-      slab: new CraftSettingsItem("slab"),
-      steel: new CraftSettingsItem("steel"),
-      tanker: new CraftSettingsItem("tanker"),
-      thorium: new CraftSettingsItem("thorium"),
-      wood: new CraftSettingsItem("wood"),
-    },
     unlockUpgrades = new UpgradeSettings(),
     shipOverride = new Setting(true),
   ) {
     super(enabled, trigger);
-    this.resources = resources;
+    this.resources = this.initResources();
     this.shipOverride = shipOverride;
     this.unlockUpgrades = unlockUpgrades;
+  }
+
+  private initResources(): WorkshopResourceSettings {
+    const items = {} as WorkshopResourceSettings;
+    ResourceCraftableArray.forEach(item => {
+      items[item] = new CraftSettingsItem(item, true, item !== "parchment");
+    });
+    return items;
   }
 
   static validateGame(game: Game, settings: WorkshopSettings) {

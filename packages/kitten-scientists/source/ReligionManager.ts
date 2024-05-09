@@ -8,9 +8,11 @@ import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import {
   FaithItem,
+  ReligionItem,
   ReligionSettings,
   ReligionSettingsItem,
   UnicornItem,
+  UnicornItemArray,
 } from "./settings/ReligionSettings.js";
 import { cwarn } from "./tools/Log.js";
 import {
@@ -179,15 +181,7 @@ export class ReligionManager implements Automation {
     }
   }
   private _buildNonUnicornBuildings() {
-    const alreadyHandled: Array<FaithItem | UnicornItem> = [
-      "unicornPasture",
-      "unicornTomb",
-      "ivoryTower",
-      "ivoryCitadel",
-      "skyPalace",
-      "unicornUtopia",
-      "sunspire",
-    ];
+    const alreadyHandled: Array<FaithItem | UnicornItem> = [...UnicornItemArray];
     const builds = Object.fromEntries(
       Object.entries(this.settings.buildings).filter(
         ([k, v]) => !alreadyHandled.includes(v.building),
@@ -211,7 +205,7 @@ export class ReligionManager implements Automation {
     for (const build of buildList) {
       if (0 < build.count) {
         this.build(
-          build.id as ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
+          build.id as ReligionItem | "unicornPasture",
           mustExist(build.variant) as UnicornItemVariant,
           build.count,
         );
@@ -233,20 +227,15 @@ export class ReligionManager implements Automation {
    * @see https://github.com/Bioniclegenius/NummonCalc/blob/112f716e2fde9956dfe520021b0400cba7b7113e/NummonCalc.js#L490
    * @returns The best unicorn building.
    */
-  getBestUnicornBuilding(): ZiggurathUpgrades | null {
+  getBestUnicornBuilding(): ZiggurathUpgrades | "unicornPasture" | null {
     const pastureButton = this._bonfireManager.getBuildButton("unicornPasture");
     if (pastureButton === null) {
       return null;
     }
 
-    const validBuildings: Array<ZiggurathUpgrades> = [
-      "unicornTomb",
-      "ivoryTower",
-      "ivoryCitadel",
-      "skyPalace",
-      "unicornUtopia",
-      "sunspire",
-    ];
+    const validBuildings: Array<ZiggurathUpgrades | "unicornPasture"> = [
+      ...UnicornItemArray,
+    ].filter(item => item !== "unicornPasture");
 
     // How many unicorns are produced per second.
     const unicornsPerSecondBase =
@@ -300,7 +289,7 @@ export class ReligionManager implements Automation {
     // by its effect on production of unicorns.
 
     let bestAmortization = Infinity;
-    let bestBuilding: ZiggurathUpgrades | null = null;
+    let bestBuilding: ZiggurathUpgrades | "unicornPasture" | null = null;
     const unicornsPerTickBase = mustExist(
       this._host.game.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"],
     );
@@ -378,11 +367,7 @@ export class ReligionManager implements Automation {
     return bestBuilding;
   }
 
-  build(
-    name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
-    variant: UnicornItemVariant,
-    amount: number,
-  ): void {
+  build(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant, amount: number): void {
     const build = this.getBuild(name, variant);
     if (build === null) {
       throw new Error(`Unable to build '${name}'. Build information not available.`);
@@ -452,7 +437,7 @@ export class ReligionManager implements Automation {
    * @returns The build information for the upgrade.
    */
   getBuild(
-    name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
+    name: ReligionItem | "unicornPasture",
     variant: UnicornItemVariant,
   ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo | null {
     switch (variant) {
@@ -474,7 +459,7 @@ export class ReligionManager implements Automation {
    * @returns The button to buy the upgrade, or `null`.
    */
   getBuildButton(
-    name: ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades,
+    name: ReligionItem | "unicornPasture",
     variant: UnicornItemVariant,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
     let buttons: Array<BuildButton>;

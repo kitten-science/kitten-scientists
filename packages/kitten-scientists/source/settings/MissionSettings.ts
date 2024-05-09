@@ -2,7 +2,7 @@ import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { Game, Missions } from "../types/index.js";
+import { Game, Missions, MissionsArray } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class MissionSetting extends Setting {
@@ -23,44 +23,17 @@ export type MissionMissionSettings = Record<Missions, MissionSetting>;
 export class MissionSettings extends Setting {
   missions: MissionMissionSettings;
 
-  get missionsList(): Array<MissionSetting> {
-    return [
-      this.missions.orbitalLaunch,
-      this.missions.moonMission,
-      this.missions.duneMission,
-      this.missions.piscineMission,
-      this.missions.heliosMission,
-      this.missions.terminusMission,
-      this.missions.kairoMission,
-      this.missions.rorschachMission,
-      this.missions.yarnMission,
-      this.missions.umbraMission,
-      this.missions.charonMission,
-      this.missions.centaurusSystemMission,
-      this.missions.furthestRingMission,
-    ];
+  constructor(enabled = false) {
+    super(enabled);
+    this.missions = this.initMissions();
   }
 
-  constructor(
-    enabled = false,
-    missions: MissionMissionSettings = {
-      centaurusSystemMission: new MissionSetting("centaurusSystemMission", true),
-      charonMission: new MissionSetting("charonMission", true),
-      duneMission: new MissionSetting("duneMission", true),
-      furthestRingMission: new MissionSetting("furthestRingMission", true),
-      heliosMission: new MissionSetting("heliosMission", true),
-      kairoMission: new MissionSetting("kairoMission", true),
-      moonMission: new MissionSetting("moonMission", true),
-      orbitalLaunch: new MissionSetting("orbitalLaunch", true),
-      piscineMission: new MissionSetting("piscineMission", true),
-      rorschachMission: new MissionSetting("rorschachMission", true),
-      terminusMission: new MissionSetting("terminusMission", true),
-      umbraMission: new MissionSetting("umbraMission", true),
-      yarnMission: new MissionSetting("yarnMission", true),
-    },
-  ) {
-    super(enabled);
-    this.missions = missions;
+  private initMissions(): MissionMissionSettings {
+    const items = {} as MissionMissionSettings;
+    MissionsArray.forEach(item => {
+      items[item] = new MissionSetting(item, true);
+    });
+    return items;
   }
 
   static validateGame(game: Game, settings: MissionSettings) {
