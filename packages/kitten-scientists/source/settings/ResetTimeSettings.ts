@@ -1,6 +1,10 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { TimeItemVariant } from "../types/index.js";
+import {
+  ChronoForgeUpgradesArray,
+  TimeItemVariant,
+  VoidSpaceUpgradesArray,
+} from "../types/index.js";
 import { Setting, SettingTrigger } from "./Settings.js";
 import { TimeItem } from "./TimeSettings.js";
 
@@ -15,7 +19,7 @@ export class ResetTimeBuildingSetting extends SettingTrigger {
     return this.#variant;
   }
 
-  constructor(id: TimeItem, variant: TimeItemVariant, enabled = false, trigger = 1) {
+  constructor(id: TimeItem, variant: TimeItemVariant, enabled = false, trigger = -1) {
     super(enabled, trigger);
     this.#building = id;
     this.#variant = variant;
@@ -27,75 +31,21 @@ export type ResetTimeBuildingSettings = Record<TimeItem, ResetTimeBuildingSettin
 export class ResetTimeSettings extends Setting {
   readonly buildings: ResetTimeBuildingSettings;
 
-  constructor(
-    enabled = false,
-    buildings: ResetTimeBuildingSettings = {
-      blastFurnace: new ResetTimeBuildingSetting(
-        "blastFurnace",
-        TimeItemVariant.Chronoforge,
-        false,
-        -1,
-      ),
-      chronocontrol: new ResetTimeBuildingSetting(
-        "chronocontrol",
-        TimeItemVariant.VoidSpace,
-        false,
-        -1,
-      ),
-      cryochambers: new ResetTimeBuildingSetting(
-        "cryochambers",
-        TimeItemVariant.VoidSpace,
-        false,
-        -1,
-      ),
-      ressourceRetrieval: new ResetTimeBuildingSetting(
-        "ressourceRetrieval",
-        TimeItemVariant.Chronoforge,
-        false,
-        -1,
-      ),
-      temporalAccelerator: new ResetTimeBuildingSetting(
-        "temporalAccelerator",
-        TimeItemVariant.Chronoforge,
-        false,
-        -1,
-      ),
-      temporalBattery: new ResetTimeBuildingSetting(
-        "temporalBattery",
-        TimeItemVariant.Chronoforge,
-        false,
-        -1,
-      ),
-      temporalImpedance: new ResetTimeBuildingSetting(
-        "temporalImpedance",
-        TimeItemVariant.Chronoforge,
-        false,
-        -1,
-      ),
-      temporalPress: new ResetTimeBuildingSetting(
-        "temporalPress",
-        TimeItemVariant.Chronoforge,
-        false,
-        -1,
-      ),
-      timeBoiler: new ResetTimeBuildingSetting(
-        "timeBoiler",
-        TimeItemVariant.Chronoforge,
-        false,
-        -1,
-      ),
-      voidHoover: new ResetTimeBuildingSetting("voidHoover", TimeItemVariant.VoidSpace, false, -1),
-      voidResonator: new ResetTimeBuildingSetting(
-        "voidResonator",
-        TimeItemVariant.VoidSpace,
-        false,
-        -1,
-      ),
-      voidRift: new ResetTimeBuildingSetting("voidRift", TimeItemVariant.VoidSpace, false, -1),
-    },
-  ) {
+  constructor(enabled = false) {
     super(enabled);
-    this.buildings = buildings;
+    this.buildings = this.initBuildings();
+  }
+
+  private initBuildings(): ResetTimeBuildingSettings {
+    const items = {} as ResetTimeBuildingSettings;
+    ChronoForgeUpgradesArray.forEach(item => {
+      items[item] = new ResetTimeBuildingSetting(item, TimeItemVariant.Chronoforge);
+    });
+    VoidSpaceUpgradesArray.forEach(item => {
+      if (item === "usedCryochambers") return;
+      items[item] = new ResetTimeBuildingSetting(item, TimeItemVariant.VoidSpace);
+    });
+    return items;
   }
 
   load(settings: Maybe<Partial<ResetTimeSettings>>) {

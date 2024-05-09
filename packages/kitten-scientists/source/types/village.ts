@@ -11,4 +11,4 @@ export type VillageTab = GameTab & {
   festivalBtn: BuildButton;
 };
 
-export type JobInfo = { name: Job; unlocked: boolean; value: number };
+export type JobInfo = { name: Job; title: string; unlocked: boolean; value: number };

@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Job } from "../types/index.js";
+import { Job, JobArray } from "../types/index.js";
 import { ElectLeaderSettings } from "./ElectLeaderSettings.js";
 import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
@@ -17,16 +17,6 @@ export class VillageSettings extends Setting {
 
   constructor(
     enabled = false,
-    jobs: VillageJobSettings = {
-      engineer: new SettingMax(true, 1),
-      farmer: new SettingMax(true, 1),
-      geologist: new SettingMax(true, 1),
-      hunter: new SettingMax(true, 1),
-      miner: new SettingMax(true, 1),
-      priest: new SettingMax(true, 1),
-      scholar: new SettingMax(true, 1),
-      woodcutter: new SettingMax(true, 1),
-    },
     holdFestivals = new Setting(true),
     hunt = new SettingTrigger(true, 0.98),
     promoteKittens = new SettingTrigger(true, 1),
@@ -34,12 +24,20 @@ export class VillageSettings extends Setting {
     electLeader = new ElectLeaderSettings(),
   ) {
     super(enabled);
-    this.jobs = jobs;
+    this.jobs = this.initJobs();
     this.holdFestivals = holdFestivals;
     this.hunt = hunt;
     this.promoteKittens = promoteKittens;
     this.promoteLeader = promoteLeader;
     this.electLeader = electLeader;
+  }
+
+  private initJobs(): VillageJobSettings {
+    const items = {} as VillageJobSettings;
+    JobArray.forEach(item => {
+      items[item] = new SettingMax(true, 1);
+    });
+    return items;
   }
 
   load(settings: Maybe<Partial<VillageSettings>>) {

@@ -17,22 +17,26 @@ export type TimeTab = GameTab & {
   vsPanel: Panel;
 };
 
-export type ChronoForgeUpgrades =
-  | "blastFurnace"
-  | "ressourceRetrieval"
-  | "temporalAccelerator"
-  | "temporalBattery"
-  | "temporalImpedance"
-  | "temporalPress"
-  | "timeBoiler";
+export const ChronoForgeUpgradesArray = [
+  "blastFurnace",
+  "ressourceRetrieval",
+  "temporalAccelerator",
+  "temporalBattery",
+  "temporalImpedance",
+  "temporalPress",
+  "timeBoiler",
+] as const;
+export type ChronoForgeUpgrades = (typeof ChronoForgeUpgradesArray)[number];
 
-export type VoidSpaceUpgrades =
-  | "cryochambers"
-  | "usedCryochambers"
-  | "voidHoover"
-  | "voidRift"
-  | "chronocontrol"
-  | "voidResonator";
+export const VoidSpaceUpgradesArray = [
+  "cryochambers",
+  "usedCryochambers",
+  "voidHoover",
+  "voidRift",
+  "chronocontrol",
+  "voidResonator",
+] as const;
+export type VoidSpaceUpgrades = (typeof VoidSpaceUpgradesArray)[number];
 
 export type AbstractTimeUpgradeInfo = {
   /**

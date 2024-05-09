@@ -14,6 +14,7 @@ import {
   ButtonModernModel,
   ChronoForgeUpgradeInfo,
   ChronoForgeUpgrades,
+  CycleArray,
   ShatterTCBtnController,
   TimeItemVariant,
   TimeTab,
@@ -423,7 +424,7 @@ export class TimeControlManager {
 
     // If skipping during this cycle was disabled, bail out.
     const currentCycle = this._host.game.calendar.cycle;
-    if (!this.settings.timeSkip.cyclesList[currentCycle].enabled) {
+    if (!this.settings.timeSkip.cycles[CycleArray[currentCycle]].enabled) {
       return;
     }
 
@@ -470,8 +471,8 @@ export class TimeControlManager {
       let skipCycles = 1;
       while (
         yearsPerCycle < canSkip &&
-        this.settings.timeSkip.cyclesList[
-          ((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices
+        this.settings.timeSkip.cycles[
+          CycleArray[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
         ].enabled
       ) {
         willSkip += yearsPerCycle;
@@ -479,8 +480,8 @@ export class TimeControlManager {
         skipCycles += 1;
       }
       if (
-        this.settings.timeSkip.cyclesList[
-          ((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices
+        this.settings.timeSkip.cycles[
+          CycleArray[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
         ].enabled &&
         0 < canSkip
       ) {

@@ -8,15 +8,17 @@ export type TradeTab = GameTab & {
   }>;
 };
 
-export type Race =
-  | "dragons"
-  | "griffins"
-  | "nagas"
-  | "leviathans"
-  | "lizards"
-  | "sharks"
-  | "spiders"
-  | "zebras";
+export const RaceArray = [
+  "dragons",
+  "griffins",
+  "nagas",
+  "leviathans",
+  "lizards",
+  "sharks",
+  "spiders",
+  "zebras",
+] as const;
+export type Race = (typeof RaceArray)[number];
 
 export type TradeInfo = {
   chance: number;

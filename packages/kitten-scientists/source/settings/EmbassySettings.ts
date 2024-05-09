@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Race } from "../types/index.js";
+import { Race, RaceArray } from "../types/index.js";
 import { SettingMax, SettingTrigger } from "./Settings.js";
 
 export class EmbassySetting extends SettingMax {
@@ -21,21 +21,17 @@ export type EmbassyRaceSettings = Record<Race, SettingMax>;
 export class EmbassySettings extends SettingTrigger {
   races: EmbassyRaceSettings;
 
-  constructor(
-    enabled = false,
-    races: EmbassyRaceSettings = {
-      dragons: new EmbassySetting("dragons", true),
-      griffins: new EmbassySetting("griffins", true),
-      leviathans: new EmbassySetting("leviathans", true),
-      lizards: new EmbassySetting("lizards", true),
-      nagas: new EmbassySetting("nagas", true),
-      sharks: new EmbassySetting("sharks", true),
-      spiders: new EmbassySetting("spiders", true),
-      zebras: new EmbassySetting("zebras", true),
-    },
-  ) {
+  constructor(enabled = false) {
     super(enabled);
-    this.races = races;
+    this.races = this.initRaces();
+  }
+
+  private initRaces(): EmbassyRaceSettings {
+    const items = {} as EmbassyRaceSettings;
+    RaceArray.forEach(item => {
+      items[item] = new EmbassySetting(item, true);
+    });
+    return items;
   }
 
   load(settings: Maybe<Partial<EmbassySettings>>) {

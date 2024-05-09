@@ -1,53 +1,37 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Cycle, Season } from "../types/index.js";
+import { Cycle, CycleArray, Season, SeasonArray } from "../types/index.js";
 import { Setting, SettingTriggerMax } from "./Settings.js";
 
+export type CyclesSettings = Record<Cycle, Setting>;
+export type SeasonsSettings = Record<Season, Setting>;
+
 export class TimeSkipSettings extends SettingTriggerMax {
-  readonly cycles: Record<Cycle, Setting>;
-  readonly seasons: Record<Season, Setting>;
+  readonly cycles: CyclesSettings;
+  readonly seasons: SeasonsSettings;
   readonly ignoreOverheat: Setting;
 
-  get cyclesList(): Array<Setting> {
-    return [
-      this.cycles.charon,
-      this.cycles.umbra,
-      this.cycles.yarn,
-      this.cycles.helios,
-      this.cycles.cath,
-      this.cycles.redmoon,
-      this.cycles.dune,
-      this.cycles.piscine,
-      this.cycles.terminus,
-      this.cycles.kairo,
-    ];
+  constructor(ignoreOverheat = new Setting(false)) {
+    super(false, 5);
+    this.cycles = this.initCycles();
+    this.seasons = this.initSeason();
+    this.ignoreOverheat = ignoreOverheat;
   }
 
-  constructor(
-    cycles = {
-      charon: new Setting(true),
-      umbra: new Setting(true),
-      yarn: new Setting(true),
-      helios: new Setting(true),
-      cath: new Setting(true),
-      redmoon: new Setting(false),
-      dune: new Setting(true),
-      piscine: new Setting(true),
-      terminus: new Setting(true),
-      kairo: new Setting(true),
-    },
-    seasons = {
-      spring: new Setting(true),
-      summer: new Setting(false),
-      autumn: new Setting(false),
-      winter: new Setting(false),
-    },
-    ignoreOverheat = new Setting(false),
-  ) {
-    super(false, 5);
-    this.cycles = cycles;
-    this.seasons = seasons;
-    this.ignoreOverheat = ignoreOverheat;
+  private initCycles(): CyclesSettings {
+    const items = {} as CyclesSettings;
+    CycleArray.forEach(item => {
+      items[item] = new Setting(item !== "redmoon");
+    });
+    return items;
+  }
+
+  private initSeason(): SeasonsSettings {
+    const items = {} as SeasonsSettings;
+    SeasonArray.forEach(item => {
+      items[item] = new Setting(item === "spring");
+    });
+    return items;
   }
 
   load(settings: Maybe<Partial<TimeSkipSettings>>) {

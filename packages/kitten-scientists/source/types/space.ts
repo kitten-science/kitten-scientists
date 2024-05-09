@@ -5,44 +5,48 @@ export type SpaceTab = GameTab & {
   planetPanels: Array<Panel>;
 };
 
-export type Missions =
-  | "centaurusSystemMission"
-  | "charonMission"
-  | "duneMission"
-  | "furthestRingMission"
-  | "heliosMission"
-  | "kairoMission"
-  | "moonMission"
-  | "orbitalLaunch"
-  | "piscineMission"
-  | "rorschachMission"
-  | "terminusMission"
-  | "umbraMission"
-  | "yarnMission";
+export const MissionsArray = [
+  "centaurusSystemMission",
+  "charonMission",
+  "duneMission",
+  "furthestRingMission",
+  "heliosMission",
+  "kairoMission",
+  "moonMission",
+  "orbitalLaunch",
+  "piscineMission",
+  "rorschachMission",
+  "terminusMission",
+  "umbraMission",
+  "yarnMission",
+] as const;
+export type Missions = (typeof MissionsArray)[number];
 
-export type SpaceBuildings =
-  | "containmentChamber"
-  | "cryostation"
-  | "entangler"
-  | "heatsink"
-  | "hrHarvester"
-  | "hydrofracturer"
-  | "hydroponics"
-  | "moltenCore"
-  | "moonBase"
-  | "moonOutpost"
-  | "orbitalArray"
-  | "planetCracker"
-  | "researchVessel"
-  | "sattelite"
-  | "spaceBeacon"
-  | "spaceElevator"
-  | "spaceStation"
-  | "spiceRefinery"
-  | "sunforge"
-  | "sunlifter"
-  | "tectonic"
-  | "terraformingStation";
+export const SpaceBuildingsArray = [
+  "containmentChamber",
+  "cryostation",
+  "entangler",
+  "heatsink",
+  "hrHarvester",
+  "hydrofracturer",
+  "hydroponics",
+  "moltenCore",
+  "moonBase",
+  "moonOutpost",
+  "orbitalArray",
+  "planetCracker",
+  "researchVessel",
+  "sattelite",
+  "spaceBeacon",
+  "spaceElevator",
+  "spaceStation",
+  "spiceRefinery",
+  "sunforge",
+  "sunlifter",
+  "tectonic",
+  "terraformingStation",
+] as const;
+export type SpaceBuildings = (typeof SpaceBuildingsArray)[number];
 
 export type SpaceBuildingInfo = {
   /**

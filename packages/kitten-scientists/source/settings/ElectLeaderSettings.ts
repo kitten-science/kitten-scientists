@@ -1,5 +1,5 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
-import { Job, Trait } from "../types/index.js";
+import { Job, JobArray, Trait, TraitArray } from "../types/index.js";
 import { Setting, SettingOptions } from "./Settings.js";
 
 export class ElectLeaderSettings extends Setting {
@@ -8,26 +8,18 @@ export class ElectLeaderSettings extends Setting {
 
   constructor(
     enabled = false,
-    job = new SettingOptions<Job>("priest", [
-      { label: "Engineer", value: "engineer" },
-      { label: "Farmer", value: "farmer" },
-      { label: "Geologist", value: "geologist" },
-      { label: "Hunter", value: "hunter" },
-      { label: "Miner", value: "miner" },
-      { label: "Priest", value: "priest" },
-      { label: "Scholar", value: "scholar" },
-      { label: "Woodcutter", value: "woodcutter" },
-    ]),
-    trait = new SettingOptions<Trait>("wise", [
-      { label: "Artisan", value: "engineer" },
-      { label: "Chemist", value: "chemist" },
-      { label: "Manager", value: "manager" },
-      { label: "Merchant", value: "merchant" },
-      { label: "Metallurgist", value: "metallurgist" },
-      { label: "Philosopher", value: "wise" },
-      { label: "Scientist", value: "scientist" },
-      { label: "None", value: "none" },
-    ]),
+    job = new SettingOptions<Job>(
+      "priest",
+      JobArray.map(item => {
+        return { label: "", value: item };
+      }),
+    ),
+    trait = new SettingOptions<Trait>(
+      "wise",
+      TraitArray.map(item => {
+        return { label: "", value: item };
+      }),
+    ),
   ) {
     super(enabled);
     this.job = job;

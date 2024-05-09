@@ -10,6 +10,7 @@ import {
   BuildButton,
   ButtonModernController,
   ButtonModernModel,
+  Missions,
   SpaceBuildingInfo,
   SpaceBuildings,
   SpaceTab,
@@ -96,7 +97,7 @@ export class SpaceManager implements Automation {
       if (
         0 < missions[i].val ||
         !missions[i].unlocked ||
-        !this.settings.unlockMissions.missionsList[i].enabled
+        !this.settings.unlockMissions.missions[missions[i].name as Missions].enabled
       ) {
         continue;
       }
