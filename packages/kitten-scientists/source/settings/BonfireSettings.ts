@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Building, StagedBuilding } from "../types/index.js";
+import { Building, BuildingArray, StagedBuilding, StagedBuildingArray } from "../types/index.js";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings.js";
 import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
@@ -35,7 +35,7 @@ export class BonfireBuildingSetting extends SettingMax {
     return this.#stage;
   }
 
-  constructor(building: BonfireItem, enabled = false, max = -1, baseStage?: Building) {
+  constructor(building: BonfireItem, enabled = false, max = -1, baseStage?: Building | false) {
     super(enabled, max);
 
     this.#building = building;
@@ -62,61 +62,54 @@ export class BonfireSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = 0,
-    buildings: BonfireBuildingSettings = {
-      academy: new BonfireBuildingSetting("academy", true),
-      accelerator: new BonfireBuildingSetting("accelerator", false),
-      aiCore: new BonfireBuildingSetting("aiCore"),
-      amphitheatre: new BonfireBuildingSetting("amphitheatre", true),
-      aqueduct: new BonfireBuildingSetting("aqueduct", true),
-      barn: new BonfireBuildingSetting("barn", true),
-      biolab: new BonfireBuildingSetting("biolab", false),
-      brewery: new BonfireBuildingSetting("brewery"),
-      broadcasttower: new BonfireBuildingSetting("broadcasttower", true, -1, "amphitheatre"),
-      calciner: new BonfireBuildingSetting("calciner", false),
-      chapel: new BonfireBuildingSetting("chapel", true),
-      chronosphere: new BonfireBuildingSetting("chronosphere", true),
-      dataCenter: new BonfireBuildingSetting("dataCenter", true, -1, "library"),
-      factory: new BonfireBuildingSetting("factory", true),
-      field: new BonfireBuildingSetting("field", true),
-      harbor: new BonfireBuildingSetting("harbor"),
-      hut: new BonfireBuildingSetting("hut", false),
-      hydroplant: new BonfireBuildingSetting("hydroplant", true, -1, "aqueduct"),
-      library: new BonfireBuildingSetting("library", true),
-      logHouse: new BonfireBuildingSetting("logHouse", false),
-      lumberMill: new BonfireBuildingSetting("lumberMill", true),
-      magneto: new BonfireBuildingSetting("magneto"),
-      mansion: new BonfireBuildingSetting("mansion", false),
-      mine: new BonfireBuildingSetting("mine", true),
-      mint: new BonfireBuildingSetting("mint"),
-      observatory: new BonfireBuildingSetting("observatory", true),
-      oilWell: new BonfireBuildingSetting("oilWell", true),
-      pasture: new BonfireBuildingSetting("pasture", true),
-      quarry: new BonfireBuildingSetting("quarry", true),
-      reactor: new BonfireBuildingSetting("reactor", false),
-      smelter: new BonfireBuildingSetting("smelter", true),
-      solarfarm: new BonfireBuildingSetting("solarfarm", true, -1, "pasture"),
-      spaceport: new BonfireBuildingSetting("spaceport", true, -1, "warehouse"),
-      steamworks: new BonfireBuildingSetting("steamworks"),
-      temple: new BonfireBuildingSetting("temple", true),
-      tradepost: new BonfireBuildingSetting("tradepost", true),
-      warehouse: new BonfireBuildingSetting("warehouse"),
-      workshop: new BonfireBuildingSetting("workshop", true),
-      zebraForge: new BonfireBuildingSetting("zebraForge", false),
-      zebraOutpost: new BonfireBuildingSetting("zebraOutpost", true),
-      zebraWorkshop: new BonfireBuildingSetting("zebraWorkshop", false),
-      ziggurat: new BonfireBuildingSetting("ziggurat", true),
-    },
     gatherCatnip = new Setting(true),
     turnOnSteamworks = new Setting(true),
     turnOnMagnetos = new Setting(false),
     upgradeBuildings = new BuildingUpgradeSettings(),
   ) {
     super(enabled, trigger);
-    this.buildings = buildings;
+    this.buildings = this.initBuildings();
     this.gatherCatnip = gatherCatnip;
     this.turnOnSteamworks = turnOnSteamworks;
     this.turnOnMagnetos = turnOnMagnetos;
     this.upgradeBuildings = upgradeBuildings;
+  }
+
+  private initBuildings(): BonfireBuildingSettings {
+    const defaultOffBuilding: BonfireItem[] = [
+      "accelerator",
+      "biolab",
+      "calciner",
+      "hut",
+      "logHouse",
+      "mansion",
+      "reactor",
+      "zebraForge",
+      "zebraWorkshop",
+    ];
+    const baseStage: Partial<Record<StagedBuilding, Building>> = {
+      broadcasttower: "amphitheatre",
+      dataCenter: "library",
+      hydroplant: "aqueduct",
+      solarfarm: "pasture",
+      spaceport: "warehouse",
+    };
+    const items = {} as BonfireBuildingSettings;
+
+    BuildingArray.forEach(item => {
+      if (item === "unicornPasture") return;
+      items[item] = new BonfireBuildingSetting(item, !defaultOffBuilding.includes(item));
+    });
+    StagedBuildingArray.forEach(item => {
+      items[item] = new BonfireBuildingSetting(
+        item,
+        !defaultOffBuilding.includes(item),
+        -1,
+        baseStage[item],
+      );
+    });
+
+    return items;
   }
 
   load(settings: Maybe<Partial<BonfireSettings>>) {

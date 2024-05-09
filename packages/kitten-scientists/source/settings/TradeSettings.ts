@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Race, Season } from "../types/index.js";
+import { Race, RaceArray, Season } from "../types/index.js";
 import { EmbassySettings } from "./EmbassySettings.js";
 import {
   Requirement,
@@ -48,9 +48,7 @@ export class TradeSettingsItem extends SettingLimited {
   }
 }
 
-export type TradeSettingsItems = {
-  [item in Race]: TradeSettingsItem;
-};
+export type TradeSettingsItems = Record<Race, TradeSettingsItem>;
 
 export class TradeSettings extends SettingTrigger {
   races: TradeSettingsItems;
@@ -63,37 +61,50 @@ export class TradeSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = 1,
-    races = {
-      dragons: new TradeSettingsItem("dragons", true, true, true, true, true, true, "titanium"),
-      griffins: new TradeSettingsItem("griffins", true, true, false, true, false, false, "wood"),
-      leviathans: new TradeSettingsItem(
-        "leviathans",
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        "unobtainium",
-      ),
-      lizards: new TradeSettingsItem("lizards", true, true, true, false, false, false, "minerals"),
-      nagas: new TradeSettingsItem("nagas", true, true, true, false, false, true),
-      sharks: new TradeSettingsItem("sharks", true, true, false, false, true, false, "iron"),
-      spiders: new TradeSettingsItem("spiders", true, true, true, true, false, true),
-      zebras: new TradeSettingsItem("zebras", true, true, true, true, true, true),
-    },
     buildEmbassies = new EmbassySettings(),
     feedLeviathans = new Setting(false),
     tradeBlackcoin = new SettingBuySellTrigger(false, 1090.0, 1095.0, 10000),
     unlockRaces = new Setting(true),
   ) {
     super(enabled, trigger);
-    this.races = races;
-
+    this.races = this.initRaces();
     this.buildEmbassies = buildEmbassies;
     this.feedLeviathans = feedLeviathans;
     this.tradeBlackcoin = tradeBlackcoin;
     this.unlockRaces = unlockRaces;
+  }
+
+  private initRaces(): TradeSettingsItems {
+    const defaultSeasons: Partial<Record<Race, Array<boolean>>> = {
+      griffins: [false, true, false, false],
+      lizards: [true, false, false, false],
+      nagas: [true, false, false, true],
+      sharks: [false, false, true, false],
+      spiders: [true, true, false, true],
+    };
+    const defaultRequire: Partial<Record<Race, Requirement>> = {
+      dragons: "titanium",
+      griffins: "wood",
+      leviathans: "unobtainium",
+      lizards: "minerals",
+      sharks: "iron",
+    };
+    const items = {} as TradeSettingsItems;
+    RaceArray.forEach(item => {
+      const seasons = defaultSeasons[item] ?? [true, true, true, true];
+      const require = defaultRequire[item] ?? false;
+      items[item] = new TradeSettingsItem(
+        item,
+        true,
+        true,
+        seasons[0],
+        seasons[1],
+        seasons[2],
+        seasons[3],
+        require,
+      );
+    });
+    return items;
   }
 
   load(settings: Maybe<Partial<TradeSettings>>) {

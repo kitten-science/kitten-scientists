@@ -3,43 +3,45 @@ import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Setting } from "./Settings.js";
 
 export enum LogFilterItemVariant {
-  Build = "ks-activity type_ks-build",
-  Craft = "ks-activity type_ks-craft",
-  Upgrade = "ks-activity type_ks-upgrade",
-  Research = "ks-activity type_ks-research",
-  Trade = "ks-activity type_ks-trade",
-  Hunt = "ks-activity type_ks-hunt",
-  Praise = "ks-activity type_ks-praise",
-  Adore = "ks-activity type_ks-adore",
-  Transcend = "ks-activity type_ks-transcend",
-  Faith = "ks-activity type_ks-faith",
-  Accelerate = "ks-activity type_ks-accelerate",
-  TimeSkip = "ks-activity type_ks-timeSkip",
-  Festival = "ks-activity type_ks-festival",
-  Star = "ks-activity type_ks-star",
-  Distribute = "ks-activity type_ks-distribute",
-  Promote = "ks-activity type_ks-promote",
-  Misc = "ks-activity",
+  build = "ks-activity type_ks-build",
+  craft = "ks-activity type_ks-craft",
+  upgrade = "ks-activity type_ks-upgrade",
+  research = "ks-activity type_ks-research",
+  trade = "ks-activity type_ks-trade",
+  hunt = "ks-activity type_ks-hunt",
+  praise = "ks-activity type_ks-praise",
+  adore = "ks-activity type_ks-adore",
+  transcend = "ks-activity type_ks-transcend",
+  faith = "ks-activity type_ks-faith",
+  accelerate = "ks-activity type_ks-accelerate",
+  timeSkip = "ks-activity type_ks-timeSkip",
+  festival = "ks-activity type_ks-festival",
+  star = "ks-activity type_ks-star",
+  distribute = "ks-activity type_ks-distribute",
+  promote = "ks-activity type_ks-promote",
+  misc = "ks-activity",
 }
 
-export type FilterItem =
-  | "accelerateFilter"
-  | "adoreFilter"
-  | "buildFilter"
-  | "craftFilter"
-  | "distributeFilter"
-  | "faithFilter"
-  | "festivalFilter"
-  | "huntFilter"
-  | "miscFilter"
-  | "praiseFilter"
-  | "promoteFilter"
-  | "researchFilter"
-  | "starFilter"
-  | "timeSkipFilter"
-  | "tradeFilter"
-  | "transcendFilter"
-  | "upgradeFilter";
+export const FilterItemArray = [
+  "accelerate",
+  "adore",
+  "build",
+  "craft",
+  "distribute",
+  "faith",
+  "festival",
+  "hunt",
+  "misc",
+  "praise",
+  "promote",
+  "research",
+  "star",
+  "timeSkip",
+  "trade",
+  "transcend",
+  "upgrade",
+] as const;
+export type FilterItem = (typeof FilterItemArray)[number];
 
 export class LogFilterSettingsItem extends Setting {
   readonly #variant: LogFilterItemVariant;
@@ -54,56 +56,24 @@ export class LogFilterSettingsItem extends Setting {
   }
 }
 
-export type LogFilterSettingsItems = {
-  build: LogFilterSettingsItem;
-  craft: LogFilterSettingsItem;
-  upgrade: LogFilterSettingsItem;
-  research: LogFilterSettingsItem;
-  trade: LogFilterSettingsItem;
-  hunt: LogFilterSettingsItem;
-  praise: LogFilterSettingsItem;
-  adore: LogFilterSettingsItem;
-  transcend: LogFilterSettingsItem;
-  faith: LogFilterSettingsItem;
-  accelerate: LogFilterSettingsItem;
-  timeSkip: LogFilterSettingsItem;
-  festival: LogFilterSettingsItem;
-  star: LogFilterSettingsItem;
-  distribute: LogFilterSettingsItem;
-  promote: LogFilterSettingsItem;
-  misc: LogFilterSettingsItem;
-};
+export type LogFilterSettingsItems = Record<FilterItem, LogFilterSettingsItem>;
 
 export class LogFilterSettings extends Setting {
   filters: LogFilterSettingsItems;
   disableKGLog: Setting;
 
-  constructor(
-    enabled = false,
-    filters: LogFilterSettingsItems = {
-      build: new LogFilterSettingsItem(LogFilterItemVariant.Build),
-      craft: new LogFilterSettingsItem(LogFilterItemVariant.Craft),
-      upgrade: new LogFilterSettingsItem(LogFilterItemVariant.Upgrade),
-      research: new LogFilterSettingsItem(LogFilterItemVariant.Research),
-      trade: new LogFilterSettingsItem(LogFilterItemVariant.Trade),
-      hunt: new LogFilterSettingsItem(LogFilterItemVariant.Hunt),
-      praise: new LogFilterSettingsItem(LogFilterItemVariant.Praise),
-      adore: new LogFilterSettingsItem(LogFilterItemVariant.Adore),
-      transcend: new LogFilterSettingsItem(LogFilterItemVariant.Transcend),
-      faith: new LogFilterSettingsItem(LogFilterItemVariant.Faith),
-      accelerate: new LogFilterSettingsItem(LogFilterItemVariant.Accelerate),
-      timeSkip: new LogFilterSettingsItem(LogFilterItemVariant.TimeSkip),
-      festival: new LogFilterSettingsItem(LogFilterItemVariant.Festival),
-      star: new LogFilterSettingsItem(LogFilterItemVariant.Star),
-      distribute: new LogFilterSettingsItem(LogFilterItemVariant.Distribute),
-      promote: new LogFilterSettingsItem(LogFilterItemVariant.Promote),
-      misc: new LogFilterSettingsItem(LogFilterItemVariant.Misc),
-    },
-    disableKGLog = new Setting(false),
-  ) {
+  constructor(enabled = false, disableKGLog = new Setting(false)) {
     super(enabled);
-    this.filters = filters;
+    this.filters = this.initFilters();
     this.disableKGLog = disableKGLog;
+  }
+
+  private initFilters(): LogFilterSettingsItems {
+    const items = {} as LogFilterSettingsItems;
+    FilterItemArray.forEach(item => {
+      items[item] = new LogFilterSettingsItem(LogFilterItemVariant[item]);
+    });
+    return items;
   }
 
   load(settings: Maybe<Partial<LogFilterSettings>>) {

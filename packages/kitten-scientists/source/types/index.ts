@@ -12,111 +12,125 @@ import { SpaceBuildings } from "./space.js";
 import { ChronoForgeUpgrades, VoidSpaceUpgradeInfo, VoidSpaceUpgrades } from "./time.js";
 import { UpgradeInfo } from "./workshop.js";
 
-export type Season = "autumn" | "spring" | "summer" | "winter";
-export type Cycle =
-  | "charon"
-  | "umbra"
-  | "yarn"
-  | "helios"
-  | "cath"
-  | "redmoon"
-  | "dune"
-  | "piscine"
-  | "terminus"
-  | "kairo";
+export const SeasonArray = ["autumn", "spring", "summer", "winter"] as const;
+export type Season = (typeof SeasonArray)[number];
 
-export type ResourceCraftable =
-  | "alloy"
-  | "beam"
-  | "blueprint"
-  | "compedium"
-  | "concrate"
-  | "eludium"
-  | "gear"
-  | "kerosene"
-  | "manuscript"
-  | "megalith"
-  | "parchment"
-  | "plate"
-  | "scaffold"
-  | "ship"
-  | "slab"
-  | "steel"
-  | "tanker"
-  | "thorium"
-  | "wood";
+export const CycleArray = [
+  "charon",
+  "umbra",
+  "yarn",
+  "helios",
+  "cath",
+  "redmoon",
+  "dune",
+  "piscine",
+  "terminus",
+  "kairo",
+] as const;
+export type Cycle = (typeof CycleArray)[number];
 
-export type Resource =
-  | ResourceCraftable
-  | "alicorn"
-  | "antimatter"
-  | "blackcoin"
-  | "bloodstone"
-  | "burnedParagon"
-  | "catnip"
-  | "coal"
-  | "culture"
-  | "elderBox"
-  | "faith"
-  | "furs"
-  | "gflops"
-  | "gold"
-  | "hashrates"
-  | "iron"
-  | "ivory"
-  | "karma"
-  | "kittens"
-  | "manpower"
-  | "minerals"
-  | "necrocorn"
-  | "oil"
-  | "paragon"
-  | "relic"
-  | "science"
-  | "sorrow"
-  | "spice"
-  | "starchart"
-  | "tears"
-  | "temporalFlux"
-  | "timeCrystal"
-  | "titanium"
-  | "tMythril"
-  | "unicorns"
-  | "unobtainium"
-  | "uranium"
-  | "void"
-  | "wrappingPaper"
-  | "zebras";
+export const ResourceCraftableArray = [
+  "alloy",
+  "beam",
+  "blueprint",
+  "compedium",
+  "concrate",
+  "eludium",
+  "gear",
+  "kerosene",
+  "manuscript",
+  "megalith",
+  "parchment",
+  "plate",
+  "scaffold",
+  "ship",
+  "slab",
+  "steel",
+  "tanker",
+  "thorium",
+  "wood",
+] as const;
+export type ResourceCraftable = (typeof ResourceCraftableArray)[number];
 
-export type TabId =
-  | "Bonfire"
-  | "Religion"
-  | "Science"
-  | "Space"
-  | "Time"
-  | "Trade"
-  | "Village"
-  | "Workshop";
+export const ResourceArray = [
+  ...ResourceCraftableArray,
+  "alicorn",
+  "antimatter",
+  "blackcoin",
+  "bloodstone",
+  "burnedParagon",
+  "catnip",
+  "coal",
+  "culture",
+  "elderBox",
+  "faith",
+  "furs",
+  "gflops",
+  "gold",
+  "hashrates",
+  "iron",
+  "ivory",
+  "karma",
+  "kittens",
+  "manpower",
+  "minerals",
+  "necrocorn",
+  "oil",
+  "paragon",
+  "relic",
+  "science",
+  "sorrow",
+  "spice",
+  "starchart",
+  "tears",
+  "temporalFlux",
+  "timeCrystal",
+  "titanium",
+  "tMythril",
+  "unicorns",
+  "unobtainium",
+  "uranium",
+  "void",
+  "wrappingPaper",
+  "zebras",
+] as const;
+export type Resource = (typeof ResourceArray)[number];
 
-export type Job =
-  | "engineer"
-  | "farmer"
-  | "geologist"
-  | "hunter"
-  | "miner"
-  | "priest"
-  | "scholar"
-  | "woodcutter";
+export const TabIdArray = [
+  "Bonfire",
+  "Religion",
+  "Science",
+  "Space",
+  "Time",
+  "Trade",
+  "Village",
+  "Workshop",
+] as const;
+export type TabId = (typeof TabIdArray)[number];
 
-export type Trait =
-  | "chemist"
-  | "engineer"
-  | "manager"
-  | "metallurgist"
-  | "merchant"
-  | "none"
-  | "scientist"
-  | "wise";
+export const JobArray = [
+  "engineer",
+  "farmer",
+  "geologist",
+  "hunter",
+  "miner",
+  "priest",
+  "scholar",
+  "woodcutter",
+] as const;
+export type Job = (typeof JobArray)[number];
+
+export const TraitArray = [
+  "chemist",
+  "engineer",
+  "manager",
+  "metallurgist",
+  "merchant",
+  "none",
+  "scientist",
+  "wise",
+] as const;
+export type Trait = (typeof TraitArray)[number];
 
 export type AllBuildings =
   | Building

@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { StagedBuilding } from "../types/index.js";
+import { StagedBuilding, StagedBuildingArray } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class BuildingUpgradeSetting extends Setting {
@@ -21,18 +21,17 @@ export type BuildingUpdateBuildingSettings = Record<StagedBuilding, BuildingUpgr
 export class BuildingUpgradeSettings extends Setting {
   buildings: BuildingUpdateBuildingSettings;
 
-  constructor(
-    enabled = false,
-    buildings: BuildingUpdateBuildingSettings = {
-      broadcasttower: new BuildingUpgradeSetting("broadcasttower", true),
-      dataCenter: new BuildingUpgradeSetting("dataCenter", true),
-      hydroplant: new BuildingUpgradeSetting("hydroplant", true),
-      solarfarm: new BuildingUpgradeSetting("solarfarm", true),
-      spaceport: new BuildingUpgradeSetting("spaceport", true),
-    },
-  ) {
+  constructor(enabled = false) {
     super(enabled);
-    this.buildings = buildings;
+    this.buildings = this.initBuildings();
+  }
+
+  private initBuildings(): BuildingUpdateBuildingSettings {
+    const items = {} as BuildingUpdateBuildingSettings;
+    StagedBuildingArray.forEach(item => {
+      items[item] = new BuildingUpgradeSetting(item, true);
+    });
+    return items;
   }
 
   load(settings: Maybe<Partial<BuildingUpgradeSettings>>) {

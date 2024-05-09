@@ -46,39 +46,46 @@ export enum UnicornItemVariant {
   UnicornPasture = "zp",
 }
 
-export type ReligionUpgrades =
-  | "apocripha"
-  | "basilica"
-  | "goldenSpire"
-  | "scholasticism"
-  | "solarchant"
-  | "solarRevolution"
-  | "stainedGlass"
-  | "sunAltar"
-  | "templars"
-  | "transcendence";
-export type TranscendenceUpgrades =
-  | "blackCore"
-  | "blackLibrary"
-  | "blackNexus"
-  | "blackObelisk"
-  | "blackRadiance"
-  | "blazar"
-  | "darkNova"
-  | "holyGenocide"
-  | "singularity";
-export type ZiggurathUpgrades =
-  | "blackPyramid"
-  | "ivoryCitadel"
-  | "ivoryTower"
-  | "marker"
-  | "skyPalace"
-  | "sunspire"
-  | "unicornPasture"
-  | "unicornGraveyard"
-  | "unicornNecropolis"
-  | "unicornTomb"
-  | "unicornUtopia";
+export const ReligionUpgradesArray = [
+  "apocripha",
+  "basilica",
+  "goldenSpire",
+  "scholasticism",
+  "solarRevolution",
+  "solarchant",
+  "stainedGlass",
+  "sunAltar",
+  "templars",
+  "transcendence",
+] as const;
+export type ReligionUpgrades = (typeof ReligionUpgradesArray)[number];
+
+export const TranscendenceUpgradesArray = [
+  "blackCore",
+  "blackLibrary",
+  "blackNexus",
+  "blackObelisk",
+  "blackRadiance",
+  "blazar",
+  "darkNova",
+  "holyGenocide",
+  "singularity",
+] as const;
+export type TranscendenceUpgrades = (typeof TranscendenceUpgradesArray)[number];
+
+export const ZiggurathUpgradesArray = [
+  "blackPyramid",
+  "ivoryCitadel",
+  "ivoryTower",
+  "marker",
+  "skyPalace",
+  "sunspire",
+  "unicornGraveyard",
+  "unicornNecropolis",
+  "unicornTomb",
+  "unicornUtopia",
+] as const;
+export type ZiggurathUpgrades = (typeof ZiggurathUpgradesArray)[number];
 
 export type AbstractReligionUpgradeInfo = {
   /**
