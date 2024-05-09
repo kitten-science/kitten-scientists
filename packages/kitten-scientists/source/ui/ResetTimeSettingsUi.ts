@@ -1,11 +1,12 @@
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { ResetTimeSettings } from "../settings/ResetTimeSettings.js";
 import { SettingTrigger } from "../settings/Settings.js";
-import { UserScript } from "../UserScript.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
-import { SettingsList } from "./components/SettingsList.js";
 import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
 
 export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
   private readonly _buildings: Array<SettingTriggerListItem>;
@@ -17,56 +18,20 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
     });
 
     this._buildings = [
-      this._getResetOption(
-        this.setting.buildings.temporalBattery,
-        this._host.engine.i18n("$time.cfu.temporalBattery.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.blastFurnace,
-        this._host.engine.i18n("$time.cfu.blastFurnace.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.timeBoiler,
-        this._host.engine.i18n("$time.cfu.timeBoiler.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.temporalAccelerator,
-        this._host.engine.i18n("$time.cfu.temporalAccelerator.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.temporalImpedance,
-        this._host.engine.i18n("$time.cfu.temporalImpedance.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.ressourceRetrieval,
-        this._host.engine.i18n("$time.cfu.ressourceRetrieval.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.temporalPress,
-        this._host.engine.i18n("$time.cfu.temporalPress.label"),
-        true,
-      ),
-
-      this._getResetOption(
-        this.setting.buildings.cryochambers,
-        this._host.engine.i18n("$time.vsu.cryochambers.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.voidHoover,
-        this._host.engine.i18n("$time.vsu.voidHoover.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.voidRift,
-        this._host.engine.i18n("$time.vsu.voidRift.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.chronocontrol,
-        this._host.engine.i18n("$time.vsu.chronocontrol.label"),
-      ),
-      this._getResetOption(
-        this.setting.buildings.voidResonator,
-        this._host.engine.i18n("$time.vsu.voidResonator.label"),
-      ),
+      ...this._host.game.time.chronoforgeUpgrades
+        .filter(item => !isNil(this.setting.buildings[item.name]))
+        .map(building =>
+          this._getResetOption(
+            this.setting.buildings[building.name],
+            building.label,
+            building.name === this._host.game.time.chronoforgeUpgrades.at(-1)?.name,
+          ),
+        ),
+      ...this._host.game.time.voidspaceUpgrades
+        .filter(item => !isNil(this.setting.buildings[item.name]))
+        .map(building =>
+          this._getResetOption(this.setting.buildings[building.name], building.label),
+        ),
     ];
 
     const listBuildings = new SettingsList(this._host);

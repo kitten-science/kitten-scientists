@@ -1,17 +1,17 @@
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { TranslatedString } from "../Engine.js";
+import { UserScript } from "../UserScript.js";
 import { SettingMax } from "../settings/Settings.js";
 import { VillageSettings } from "../settings/VillageSettings.js";
-import { UserScript } from "../UserScript.js";
+import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { OptionsListItem } from "./components/OptionsListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
-import { SettingsList } from "./components/SettingsList.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
-import { SettingsSectionUi } from "./SettingsSectionUi.js";
+import { SettingsList } from "./components/SettingsList.js";
 
 export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
-  private readonly _jobs: Array<SettingListItem>;
   private readonly _hunt: SettingTriggerListItem;
   private readonly _festivals: SettingListItem;
   private readonly _promoteKittens: SettingTriggerListItem;
@@ -22,42 +22,11 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
     const label = host.engine.i18n("ui.distribute");
     super(host, label, settings);
 
-    const listJobs = new SettingsList(this._host);
-    this._jobs = [
-      this._getDistributeOption(
-        this.setting.jobs.woodcutter,
-        this._host.engine.i18n("$village.job.woodcutter"),
-      ),
-      this._getDistributeOption(
-        this.setting.jobs.farmer,
-        this._host.engine.i18n("$village.job.farmer"),
-      ),
-      this._getDistributeOption(
-        this.setting.jobs.scholar,
-        this._host.engine.i18n("$village.job.scholar"),
-      ),
-      this._getDistributeOption(
-        this.setting.jobs.hunter,
-        this._host.engine.i18n("$village.job.hunter"),
-      ),
-      this._getDistributeOption(
-        this.setting.jobs.miner,
-        this._host.engine.i18n("$village.job.miner"),
-      ),
-      this._getDistributeOption(
-        this.setting.jobs.priest,
-        this._host.engine.i18n("$village.job.priest"),
-      ),
-      this._getDistributeOption(
-        this.setting.jobs.geologist,
-        this._host.engine.i18n("$village.job.geologist"),
-      ),
-      this._getDistributeOption(
-        this.setting.jobs.engineer,
-        this._host.engine.i18n("$village.job.engineer"),
-      ),
-    ];
-    listJobs.addChildren(this._jobs);
+    const listJobs = new SettingsList(this._host, {
+      children: this._host.game.village.jobs
+        .filter(item => !isNil(this.setting.jobs[item.name]))
+        .map(job => this._getDistributeOption(this.setting.jobs[job.name], job.title)),
+    });
     this.addChild(listJobs);
 
     const listAddition = new SettingsList(this._host, {

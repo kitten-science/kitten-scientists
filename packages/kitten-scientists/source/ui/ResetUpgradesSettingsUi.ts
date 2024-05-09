@@ -1,7 +1,8 @@
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { ResetUpgradeSettings } from "../settings/ResetUpgradeSettings.js";
 import { Setting } from "../settings/Settings.js";
-import { UserScript } from "../UserScript.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -13,29 +14,11 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
       icon: Icons.Workshop,
     });
 
-    const items = [];
-    for (const setting of Object.values(this.setting.upgrades)) {
-      const label = this._host.engine.i18n(`$workshop.${setting.upgrade}.label`);
-      const button = this._getResetOption(setting, label);
-
-      items.push({ label: label, button: button });
-    }
-    // Ensure buttons are added into UI with their labels alphabetized.
-    items.sort((a, b) => a.label.localeCompare(b.label));
-
-    let lastLetter = items[0].label.charCodeAt(0);
-    let lastItem = items[0];
-    for (const item of items) {
-      const subject = item.label.charCodeAt(0);
-      if (subject !== lastLetter) {
-        lastLetter = subject;
-        lastItem.button.element.addClass("ks-delimiter");
-      }
-      lastItem = item;
-    }
-
-    const itemsList = new SettingsList(this._host);
-    items.forEach(button => itemsList.addChild(button.button));
+    const itemsList = new SettingsList(this._host, {
+      children: this._host.game.workshop.upgrades
+        .filter(item => !isNil(this.setting.upgrades[item.name]))
+        .map(upgrade => this._getResetOption(this.setting.upgrades[upgrade.name], upgrade.label)),
+    });
     this.addChild(itemsList);
   }
 

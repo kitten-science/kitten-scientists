@@ -1,14 +1,15 @@
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import {
   ResetResourcesSettings,
   ResetResourcesSettingsItem,
 } from "../settings/ResetResourcesSettings.js";
 import { ucfirst } from "../tools/Format.js";
-import { UserScript } from "../UserScript.js";
-import { StockButton } from "./components/buttons-text/StockButton.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { StockButton } from "./components/buttons-text/StockButton.js";
 
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;
@@ -20,15 +21,11 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     });
 
     // Add all the current resources
-    this._resources = [];
-    for (const setting of Object.values(this.setting.resources)) {
-      this._resources.push(
-        this._addNewResourceOption(
-          ucfirst(this._host.engine.i18n(`$resources.${setting.resource}.title`)),
-          setting,
-        ),
+    this._resources = this._host.game.resPool.resources
+      .filter(item => !isNil(this.setting.resources[item.name]))
+      .map(resource =>
+        this._addNewResourceOption(ucfirst(resource.title), this.setting.resources[resource.name]),
       );
-    }
 
     const listResources = new SettingsList(this._host);
     listResources.addChildren(this._resources);
