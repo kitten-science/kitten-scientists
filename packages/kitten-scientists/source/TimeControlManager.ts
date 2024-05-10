@@ -452,16 +452,33 @@ export class TimeControlManager {
           this.activeHeatTransferStatus = false;
           this._host.engine.iactivity("act.time.activeHeatTransferEnd", [], "ks-timeSkip");
         }
-        // Heat Transfer during selected cycles
-        if (this.settings.timeSkip.activeHeatTransfer.cycles[CycleArray[currentCycle]].enabled) {
+        // Get temporalFlux
+        const temporalFluxProduction = this._host.game.getEffect("temporalFluxProduction");
+        const daysPerYear =
+          this._host.game.calendar.daysPerSeason * this._host.game.calendar.seasonsPerYear;
+        const daysPerTicks =
+          (1 + this._host.game.timeAccelerationRatio()) / this._host.game.calendar.ticksPerDay;
+        const SecondPerYear = daysPerYear / daysPerTicks / this._host.game.ticksPerSecond;
+        const temporalFlux = this._host.game.resPool.get("temporalFlux");
+        const fluxEnabled = temporalFlux.maxValue / this._host.game.ticksPerSecond > SecondPerYear;
+        const flux = temporalFlux.value / this._host.game.ticksPerSecond < SecondPerYear;
+        if (
+          temporalFluxProduction &&
+          this.settings.accelerateTime.enabled &&
+          this._host.game.calendar.day < 10 &&
+          fluxEnabled &&
+          flux
+        ) {
+          this._host.engine.iactivity("act.time.getTemporalFlux", [], "ks-timeSkip");
+          this._host.engine.storeForSummary("time.getTemporalFlux", 1);
+        } else if (this.settings.timeSkip.activeHeatTransfer.cycles[Cycles[currentCycle]].enabled) {
+          // Heat Transfer during selected cycles
           return;
         }
-      } else {
-        if (heatNow >= heatMax - heatPerSecond * 10) {
-          this.activeHeatTransferStatus = true;
-          this._host.engine.iactivity("act.time.activeHeatTransferStart", [], "ks-timeSkip");
-          this._host.engine.storeForSummary("time.activeHeatTransferStart", 1);
-        }
+      } else if (heatNow >= heatMax - heatPerSecond * 10) {
+        this.activeHeatTransferStatus = true;
+        this._host.engine.iactivity("act.time.activeHeatTransferStart", [], "ks-timeSkip");
+        this._host.engine.storeForSummary("time.activeHeatTransferStart", 1);
       }
     }
 
