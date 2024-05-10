@@ -1,7 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { SupportedLanguage } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { ResourcesSettings, ResourcesSettingsItem } from "../settings/ResourcesSettings.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { ucfirst } from "../tools/Format.js";
 import { Resource } from "../types/index.js";
 import { LabelListItem } from "./components/LabelListItem.js";
@@ -17,6 +19,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   constructor(
     host: UserScript,
     settings: ResourcesSettings,
+    language: SettingOptions<SupportedLanguage>,
     options?: SettingsPanelOptions<SettingsPanel<ResourcesSettings>>,
   ) {
     const label = host.engine.i18n("ui.resources");
@@ -49,8 +52,11 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
         )
         .map(resource => [this.setting.resources[resource.name], ucfirst(resource.title)]);
 
+    if (language.selected !== "zh") {
+      preparedResources.sort((a, b) => a[1].localeCompare(b[1]));
+    }
     this._resources = [];
-    for (const [setting, title] of preparedResources.sort((a, b) => a[1].localeCompare(b[1]))) {
+    for (const [setting, title] of preparedResources) {
       this._resources.push(this._makeResourceSetting(title, setting));
     }
     const listResource = new SettingsList(this._host);

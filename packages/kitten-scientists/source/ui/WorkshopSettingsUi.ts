@@ -1,5 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { SupportedLanguage } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
@@ -13,7 +15,11 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
   private readonly _trigger: TriggerButton;
   private readonly _crafts: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: WorkshopSettings) {
+  constructor(
+    host: UserScript,
+    settings: WorkshopSettings,
+    language: SettingOptions<SupportedLanguage>,
+  ) {
     const label = host.engine.i18n("ui.craft");
     super(host, label, settings);
 
@@ -67,7 +73,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
 
     this.addChild(
       new SettingsList(this._host, {
-        children: [new UpgradeSettingsUi(this._host, this.setting.unlockUpgrades)],
+        children: [new UpgradeSettingsUi(this._host, this.setting.unlockUpgrades, language)],
         hasDisableAll: false,
         hasEnableAll: false,
       }),

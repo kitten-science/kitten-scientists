@@ -1,7 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { Locale, de, enUS, he, zhCN } from "date-fns/locale";
-import { EngineState } from "../Engine.js";
+import { EngineState, SupportedLanguage } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { SettingOptions } from "../settings/Settings.js";
@@ -30,7 +30,11 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   readonly stateList: SettingsList;
   readonly locale: Locale;
 
-  constructor(host: UserScript, settings: StateSettings, language: SettingOptions) {
+  constructor(
+    host: UserScript,
+    settings: StateSettings,
+    language: SettingOptions<SupportedLanguage>,
+  ) {
     const label = host.engine.i18n("state.title");
     super(host, label, settings, {
       settingItem: new LabelListItem(host, label, { icon: Icons.State }),
