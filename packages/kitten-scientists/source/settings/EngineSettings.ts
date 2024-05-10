@@ -56,7 +56,7 @@ export class EngineSettings extends Setting {
       this.states.load(settings.states);
       this.language.load(settings.language);
     }
-    this.ksColumn.load(settings.ksColumn);
+    this.ksColumn.enabled = localStorage["ks.Column"] === "#ksColumn";
 
     this.filters.load(settings.filters);
     this.resources.load(settings.resources);
