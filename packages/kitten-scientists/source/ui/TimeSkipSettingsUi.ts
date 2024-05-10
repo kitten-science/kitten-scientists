@@ -2,6 +2,7 @@ import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
 import { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
+import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { CollapsiblePanel } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
@@ -18,6 +19,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
   private readonly _maximum: MaxButton;
   private readonly _cycles: CollapsiblePanel<CyclesList, LabelListItem>;
   private readonly _seasons: CollapsiblePanel<SeasonsList, LabelListItem>;
+  private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
 
   constructor(
     host: UserScript,
@@ -39,7 +41,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
         icon: Icons.Cycles,
       }),
       {
-        children: [new CyclesList(this._host, this.setting.cycles)],
+        children: [new CyclesList(this._host, this.setting.cycles, "skip")],
       },
     );
     this._seasons = new CollapsiblePanel(
@@ -58,6 +60,10 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
         ],
       },
     );
+    this._activeHeatTransferUI = new TimeSkipHeatSettingsUi(
+      this._host,
+      this.setting.activeHeatTransfer,
+    );
 
     this.addChild(
       new SettingsList(this._host, {
@@ -70,6 +76,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
             this._host.engine.i18n("option.time.skip.ignoreOverheat"),
             this.setting.ignoreOverheat,
           ),
+          this._activeHeatTransferUI,
         ],
         hasDisableAll: false,
         hasEnableAll: false,
