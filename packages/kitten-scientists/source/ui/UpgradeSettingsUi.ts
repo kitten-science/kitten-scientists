@@ -1,5 +1,6 @@
-import { UpgradeSettings } from "../settings/UpgradeSettings.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
+import { UpgradeSettings } from "../settings/UpgradeSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
@@ -13,9 +14,10 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     super(host, host.engine.i18n("ui.upgrade.upgrades"), settings, options);
 
     const items = [];
-    for (const setting of Object.values(this.setting.upgrades)) {
-      const label = this._host.engine.i18n(`$workshop.${setting.upgrade}.label`);
-      const button = new SettingListItem(this._host, label, setting, {
+    for (const upgrade of this._host.game.workshop.upgrades) {
+      if (isNil(this.setting.upgrades[upgrade.name])) continue;
+      const label = upgrade.label;
+      const button = new SettingListItem(this._host, label, this.setting.upgrades[upgrade.name], {
         onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
       });

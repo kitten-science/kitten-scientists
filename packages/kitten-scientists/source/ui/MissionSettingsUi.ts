@@ -1,5 +1,6 @@
-import { MissionSettings } from "../settings/MissionSettings.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
+import { MissionSettings } from "../settings/MissionSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
@@ -14,22 +15,18 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
   ) {
     super(host, host.engine.i18n("ui.upgrade.missions"), settings, options);
 
-    const items = [];
-    for (const setting of Object.values(this.setting.missions)) {
-      const label = this._host.engine.i18n(`$space.${setting.mission}.label`);
-      const button = new SettingListItem(this._host, label, setting, {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-      });
+    // Missions should be sorted by KG. For example, when going to the sun just choose the top five Checkbox instead of looking through the list
+    this._missions = this._host.game.space.programs
+      .filter(item => !isNil(this.setting.missions[item.name]))
+      .map(
+        mission =>
+          new SettingListItem(this._host, mission.label, this.setting.missions[mission.name], {
+            onCheck: () => this._host.engine.imessage("status.sub.enable", [mission.label]),
+            onUnCheck: () => this._host.engine.imessage("status.sub.disable", [mission.label]),
+          }),
+      );
 
-      items.push({ label: label, button: button });
-    }
-    // Ensure buttons are added into UI with their labels alphabetized.
-    items.sort((a, b) => a.label.localeCompare(b.label));
-    const itemsList = new SettingsList(this._host);
-    items.forEach(button => itemsList.addChild(button.button));
+    const itemsList = new SettingsList(this._host, { children: this._missions });
     this.addChild(itemsList);
-
-    this._missions = items.map(button => button.button);
   }
 }
