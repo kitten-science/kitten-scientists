@@ -1,6 +1,8 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { SupportedLanguage } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
 import { PolicySettings } from "../settings/PolicySettings.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
@@ -9,6 +11,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
   constructor(
     host: UserScript,
     settings: PolicySettings,
+    language: SettingOptions<SupportedLanguage>,
     options?: SettingsPanelOptions<SettingsPanel<PolicySettings>>,
   ) {
     super(host, host.engine.i18n("ui.upgrade.policies"), settings, options);
@@ -25,7 +28,9 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
       items.push({ label: label, button: button });
     }
     // Ensure buttons are added into UI with their labels alphabetized.
-    items.sort((a, b) => a.label.localeCompare(b.label));
+    if (language.selected !== "zh") {
+      items.sort((a, b) => a.label.localeCompare(b.label));
+    }
     const itemsList = new SettingsList(this._host);
     items.forEach(button => itemsList.addChild(button.button));
     this.addChild(itemsList);

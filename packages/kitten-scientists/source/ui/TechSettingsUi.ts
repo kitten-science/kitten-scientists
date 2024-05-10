@@ -1,5 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { SupportedLanguage } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { TechSettings } from "../settings/TechSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -11,6 +13,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
   constructor(
     host: UserScript,
     settings: TechSettings,
+    language: SettingOptions<SupportedLanguage>,
     options?: SettingsPanelOptions<SettingsPanel<TechSettings>>,
   ) {
     super(host, host.engine.i18n("ui.upgrade.techs"), settings, options);
@@ -27,7 +30,9 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
       items.push({ label: label, button: button });
     }
     // Ensure buttons are added into UI with their labels alphabetized.
-    items.sort((a, b) => a.label.localeCompare(b.label));
+    if (language.selected !== "zh") {
+      items.sort((a, b) => a.label.localeCompare(b.label));
+    }
     const itemsList = new SettingsList(this._host);
     items.forEach(button => itemsList.addChild(button.button));
     this.addChild(itemsList);

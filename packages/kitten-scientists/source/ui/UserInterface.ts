@@ -47,9 +47,9 @@ export class UserInterface extends UiComponent {
     this._sections = [
       new BonfireSettingsUi(this._host, engine.bonfireManager.settings),
       new VillageSettingsUi(this._host, engine.villageManager.settings),
-      new ScienceSettingsUi(this._host, engine.scienceManager.settings),
-      new WorkshopSettingsUi(this._host, engine.workshopManager.settings),
-      new ResourcesSettingsUi(this._host, engine.settings.resources),
+      new ScienceSettingsUi(this._host, engine.scienceManager.settings, engine.settings.language),
+      new WorkshopSettingsUi(this._host, engine.workshopManager.settings, engine.settings.language),
+      new ResourcesSettingsUi(this._host, engine.settings.resources, engine.settings.language),
       new TradeSettingsUi(this._host, engine.tradeManager.settings),
       new ReligionSettingsUi(this._host, engine.religionManager.settings),
       new SpaceSettingsUi(this._host, engine.spaceManager.settings),

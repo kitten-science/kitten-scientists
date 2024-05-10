@@ -1,10 +1,12 @@
-import { ScienceSettings } from "../settings/ScienceSettings.js";
+import { SupportedLanguage } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
-import { SettingListItem } from "./components/SettingListItem.js";
-import { SettingsList } from "./components/SettingsList.js";
+import { ScienceSettings } from "../settings/ScienceSettings.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { PolicySettingsUi } from "./PolicySettingsUi.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { TechSettingsUi } from "./TechSettingsUi.js";
+import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingsList } from "./components/SettingsList.js";
 
 export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
   private readonly _items: Array<SettingListItem>;
@@ -12,11 +14,15 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
   private readonly _techsUi: TechSettingsUi;
   protected readonly _observeStars: SettingListItem;
 
-  constructor(host: UserScript, settings: ScienceSettings) {
+  constructor(
+    host: UserScript,
+    settings: ScienceSettings,
+    language: SettingOptions<SupportedLanguage>,
+  ) {
     super(host, host.engine.i18n("ui.upgrade"), settings);
 
-    this._policiesUi = new PolicySettingsUi(this._host, this.setting.policies);
-    this._techsUi = new TechSettingsUi(this._host, this.setting.techs);
+    this._policiesUi = new PolicySettingsUi(this._host, this.setting.policies, language);
+    this._techsUi = new TechSettingsUi(this._host, this.setting.techs, language);
 
     this._observeStars = new SettingListItem(
       this._host,
