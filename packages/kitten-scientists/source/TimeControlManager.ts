@@ -30,6 +30,7 @@ export class TimeControlManager {
   private readonly _religionManager: ReligionManager;
   private readonly _spaceManager: SpaceManager;
   private readonly _workshopManager: WorkshopManager;
+  private activeHeatTransferStatus: boolean;
 
   constructor(
     host: UserScript,
@@ -47,6 +48,7 @@ export class TimeControlManager {
     this._religionManager = religionManager;
     this._spaceManager = spaceManager;
     this._workshopManager = workshopManager;
+    this.activeHeatTransferStatus = false;
   }
 
   async tick(context: TickContext) {
@@ -434,6 +436,32 @@ export class TimeControlManager {
     if (!this.settings.timeSkip.ignoreOverheat.enabled) {
       if (heatMax <= heatNow) {
         return;
+      }
+    }
+
+    // Active Heat Transfer
+    if (
+      !this.settings.timeSkip.ignoreOverheat.enabled &&
+      this.settings.timeSkip.activeHeatTransfer.enabled
+    ) {
+      const heatPerSecond =
+        this._host.game.getEffect("heatPerTick") * this._host.game.ticksPerSecond;
+      if (this.activeHeatTransferStatus) {
+        // Heat Transfer to specified value
+        if (heatNow <= heatMax * this.settings.timeSkip.activeHeatTransfer.trigger) {
+          this.activeHeatTransferStatus = false;
+          this._host.engine.iactivity("act.time.activeHeatTransferEnd", [], "ks-timeSkip");
+        }
+        // Heat Transfer during selected cycles
+        if (this.settings.timeSkip.activeHeatTransfer.cycles[CycleArray[currentCycle]].enabled) {
+          return;
+        }
+      } else {
+        if (heatNow >= heatMax - heatPerSecond * 10) {
+          this.activeHeatTransferStatus = true;
+          this._host.engine.iactivity("act.time.activeHeatTransferStart", [], "ks-timeSkip");
+          this._host.engine.storeForSummary("time.activeHeatTransferStart", 1);
+        }
       }
     }
 
