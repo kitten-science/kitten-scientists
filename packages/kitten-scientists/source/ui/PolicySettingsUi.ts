@@ -1,5 +1,6 @@
-import { PolicySettings } from "../settings/PolicySettings.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
+import { PolicySettings } from "../settings/PolicySettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
@@ -13,16 +14,15 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     super(host, host.engine.i18n("ui.upgrade.policies"), settings, options);
 
     const items = [];
-    for (const setting of Object.values(this.setting.policies)) {
-      const policyLabel = this._host.engine.i18n(
-        `$policy.${setting.policy === "authocracy" ? "autocracy" : setting.policy}.label`,
-      );
-      const policyButton = new SettingListItem(this._host, policyLabel, setting, {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [policyLabel]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [policyLabel]),
+    for (const policie of this._host.game.science.policies) {
+      if (isNil(this.setting.policies[policie.name])) continue;
+      const label = policie.label;
+      const button = new SettingListItem(this._host, label, this.setting.policies[policie.name], {
+        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
+        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
       });
 
-      items.push({ label: policyLabel, button: policyButton });
+      items.push({ label: label, button: button });
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
