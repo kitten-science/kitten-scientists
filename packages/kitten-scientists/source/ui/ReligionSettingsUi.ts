@@ -1,6 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
-import { ReligionItem } from "../index.js";
+import { UnicornItemArray, ZiggurathUpgrades } from "../index.js";
 import { ReligionOptionsArray, ReligionSettings } from "../settings/ReligionSettings.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
@@ -25,14 +25,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
-    const unicornsArray: Array<ReligionItem> = [
-      "ivoryCitadel",
-      "ivoryTower",
-      "skyPalace",
-      "sunspire",
-      "unicornTomb",
-      "unicornUtopia",
-    ];
+    const unicornsArray: Array<ZiggurathUpgrades | "unicornPasture"> = [...UnicornItemArray];
 
     this._unicornBuildings = [
       this._getBuildOption(
