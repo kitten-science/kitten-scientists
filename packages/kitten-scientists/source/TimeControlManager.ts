@@ -30,7 +30,6 @@ export class TimeControlManager {
   private readonly _religionManager: ReligionManager;
   private readonly _spaceManager: SpaceManager;
   private readonly _workshopManager: WorkshopManager;
-  private activeHeatTransferStatus: boolean;
 
   constructor(
     host: UserScript,
@@ -48,7 +47,6 @@ export class TimeControlManager {
     this._religionManager = religionManager;
     this._spaceManager = spaceManager;
     this._workshopManager = workshopManager;
-    this.activeHeatTransferStatus = false;
   }
 
   async tick(context: TickContext) {
@@ -447,10 +445,10 @@ export class TimeControlManager {
     ) {
       const heatPerSecond =
         this._host.game.getEffect("heatPerTick") * this._host.game.ticksPerSecond;
-      if (this.activeHeatTransferStatus) {
+      if (this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled) {
         // Heat Transfer to specified value
         if (heatNow <= heatMax * this.settings.timeSkip.activeHeatTransfer.trigger) {
-          this.activeHeatTransferStatus = false;
+          this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled = false;
           this._host.engine.iactivity("act.time.activeHeatTransferEnd", [], "ks-timeSkip");
         }
         // Get temporalFlux
@@ -484,7 +482,7 @@ export class TimeControlManager {
           maxSkipsActiveHeatTransfer = this._host.game.calendar.yearsPerCycle;
         }
       } else if (heatNow >= heatMax - heatPerSecond * 10) {
-        this.activeHeatTransferStatus = true;
+        this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled = true;
         this._host.engine.iactivity("act.time.activeHeatTransferStart", [], "ks-timeSkip");
         this._host.engine.storeForSummary("time.activeHeatTransferStart", 1);
       }

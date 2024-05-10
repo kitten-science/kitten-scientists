@@ -6,10 +6,12 @@ import { CyclesSettings } from "./TimeSkipSettings.js";
 
 export class TimeSkipHeatSettings extends SettingTrigger {
   readonly cycles: CyclesSettings;
+  readonly activeHeatTransferStatus: Setting;
 
-  constructor() {
+  constructor(activeHeatTransferStatus = new Setting(false)) {
     super(false, 0);
     this.cycles = this.initCycles();
+    this.activeHeatTransferStatus = activeHeatTransferStatus;
   }
 
   private initCycles(): CyclesSettings {
@@ -30,5 +32,6 @@ export class TimeSkipHeatSettings extends SettingTrigger {
     consumeEntriesPedantic(this.cycles, settings.cycles, (cycle, item) => {
       cycle.enabled = item?.enabled ?? cycle.enabled;
     });
+    this.activeHeatTransferStatus.load(settings.activeHeatTransferStatus);
   }
 }
