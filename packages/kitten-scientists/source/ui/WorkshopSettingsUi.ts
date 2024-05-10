@@ -4,6 +4,7 @@ import { UserScript } from "../UserScript.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
 import { ucfirst } from "../tools/Format.js";
+import { ResourceCraftable } from "../types/index.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem.js";
@@ -27,8 +28,18 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
+    let excludeCraftsArray: Array<ResourceCraftable> = [];
+    if (!game.challenges.getChallenge("ironWill").active) {
+      this.setting.resources.bloodstone.enabled = false;
+      this.setting.resources.tMythril.enabled = false;
+      excludeCraftsArray = ["bloodstone", "tMythril"];
+    }
+
     const preparedCrafts: Array<[CraftSettingsItem, string]> = this._host.game.workshop.crafts
-      .filter(item => !isNil(this.setting.resources[item.name]))
+      .filter(
+        item =>
+          !excludeCraftsArray.includes(item.name) && !isNil(this.setting.resources[item.name]),
+      )
       .map(resource => [this.setting.resources[resource.name], ucfirst(resource.label)]);
 
     this._crafts = [];
