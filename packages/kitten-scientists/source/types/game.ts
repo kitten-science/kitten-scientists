@@ -142,6 +142,7 @@ export type Game = {
       | "solarRevolutionLimit"
       | "standingRatio"
       | "temporalFluxProduction"
+      | "temporalParadoxDay"
       | "tradeCatpowerDiscount"
       | "tradeGoldDiscount"
       | "unicornsGlobalRatio"
