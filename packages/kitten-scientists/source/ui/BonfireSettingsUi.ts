@@ -22,14 +22,6 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
-    const stagedBuildingArray: Array<StagedBuilding> = [
-      "solarfarm",
-      "hydroplant",
-      "dataCenter",
-      "spaceport",
-      "broadcasttower",
-    ];
-
     this._buildings = [];
     for (const buildingGroup of this._host.game.bld.buildingGroups) {
       this._buildings.push(new HeaderListItem(this._host, buildingGroup.title));
@@ -37,7 +29,9 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         if (building === "unicornPasture" || isNil(this.setting.buildings[building])) continue;
         const meta = this._host.game.bld.getBuildingExt(building).meta;
         if (!isNil(meta.stages)) {
-          const name = stagedBuildingArray.shift() as StagedBuilding;
+          const name = Object.values(this.setting.buildings).find(
+            item => item.baseBuilding === building,
+          )?.building as StagedBuilding;
           this._buildings.push(
             this._getBuildOption(this.setting.buildings[building], meta.stages[0].label),
             this._getBuildOption(this.setting.buildings[name], meta.stages[1].label, false, true),
