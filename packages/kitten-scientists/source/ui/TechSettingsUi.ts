@@ -1,5 +1,6 @@
-import { TechSettings } from "../settings/TechSettings.js";
+import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
+import { TechSettings } from "../settings/TechSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
@@ -15,9 +16,10 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
     super(host, host.engine.i18n("ui.upgrade.techs"), settings, options);
 
     const items = [];
-    for (const setting of Object.values(this.setting.techs)) {
-      const label = this._host.engine.i18n(`$science.${setting.tech}.label`);
-      const button = new SettingListItem(this._host, label, setting, {
+    for (const tech of this._host.game.science.techs) {
+      if (isNil(this.setting.techs[tech.name])) continue;
+      const label = tech.label;
+      const button = new SettingListItem(this._host, label, this.setting.techs[tech.name], {
         onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
         onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
       });
