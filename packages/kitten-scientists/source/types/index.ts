@@ -32,6 +32,7 @@ export type Cycle = (typeof Cycles)[number];
 export const ResourcesCraftable = [
   "alloy",
   "beam",
+  "bloodstone",
   "blueprint",
   "compedium",
   "concrate",
@@ -47,6 +48,7 @@ export const ResourcesCraftable = [
   "slab",
   "steel",
   "tanker",
+  "tMythril",
   "thorium",
   "wood",
 ] as const;
@@ -57,7 +59,6 @@ export const Resources = [
   "alicorn",
   "antimatter",
   "blackcoin",
-  "bloodstone",
   "burnedParagon",
   "catnip",
   "coal",
@@ -86,7 +87,6 @@ export const Resources = [
   "temporalFlux",
   "timeCrystal",
   "titanium",
-  "tMythril",
   "unicorns",
   "unobtainium",
   "uranium",
