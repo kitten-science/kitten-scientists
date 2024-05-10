@@ -437,14 +437,15 @@ export class TimeControlManager {
       }
     }
 
+    const factor = this._host.game.challenges.getChallenge("1000Years").researched ? 5 : 10;
     let maxSkipsActiveHeatTransfer = Number.POSITIVE_INFINITY;
     // Active Heat Transfer
     if (
       !this.settings.timeSkip.ignoreOverheat.enabled &&
       this.settings.timeSkip.activeHeatTransfer.enabled
     ) {
-      const heatPerSecond =
-        this._host.game.getEffect("heatPerTick") * this._host.game.ticksPerSecond;
+      const heatPerTick = this._host.game.getEffect("heatPerTick");
+      const ticksPerSecond = this._host.game.ticksPerSecond;
       if (this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled) {
         // Heat Transfer to specified value
         if (heatNow <= heatMax * this.settings.timeSkip.activeHeatTransfer.trigger) {
@@ -460,19 +461,20 @@ export class TimeControlManager {
           this._host.game.calendar.seasonsPerYear;
         const daysPerTicks =
           (1 + this._host.game.timeAccelerationRatio()) / this._host.game.calendar.ticksPerDay;
-        const SecondPerYear = daysPerYear / daysPerTicks / this._host.game.ticksPerSecond;
+        const ticksPerYear = daysPerYear / daysPerTicks;
         const temporalFlux = this._host.game.resPool.get("temporalFlux");
-        const fluxEnabled = temporalFlux.maxValue / this._host.game.ticksPerSecond > SecondPerYear;
-        const flux = temporalFlux.value / this._host.game.ticksPerSecond < SecondPerYear;
+        const fluxEnabled = temporalFlux.maxValue > ticksPerYear;
+        const flux = temporalFlux.value < ticksPerYear;
         if (
-          temporalFluxProduction &&
+          temporalFluxProduction > factor / heatPerTick &&
           this.settings.accelerateTime.enabled &&
           this._host.game.calendar.day < 10 &&
           fluxEnabled &&
           flux
         ) {
-          maxSkipsActiveHeatTransfer =
-            (SecondPerYear * this._host.game.ticksPerSecond) / temporalFluxProduction;
+          maxSkipsActiveHeatTransfer = Math.ceil(
+            (ticksPerYear - temporalFlux.value) / temporalFluxProduction,
+          );
           this._host.engine.iactivity("act.time.getTemporalFlux", [], "ks-timeSkip");
           this._host.engine.storeForSummary("time.getTemporalFlux", 1);
         } else if (this.settings.timeSkip.activeHeatTransfer.cycles[Cycles[currentCycle]].enabled) {
@@ -482,14 +484,13 @@ export class TimeControlManager {
           maxSkipsActiveHeatTransfer =
             this._host.game.calendar.yearsPerCycle - this._host.game.calendar.cycleYear;
         }
-      } else if (heatNow >= heatMax - heatPerSecond * 10) {
+      } else if (heatNow >= heatMax - heatPerTick * ticksPerSecond * 10) {
         this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled = true;
         this._host.engine.iactivity("act.time.activeHeatTransferStart", [], "ks-timeSkip");
         this._host.engine.storeForSummary("time.activeHeatTransferStart", 1);
       }
     }
 
-    const factor = this._host.game.challenges.getChallenge("1000Years").researched ? 5 : 10;
     // The maximum years to skip, based on the user configuration.
     const maxSkips =
       -1 === this.settings.timeSkip.max ? Number.POSITIVE_INFINITY : this.settings.timeSkip.max;
