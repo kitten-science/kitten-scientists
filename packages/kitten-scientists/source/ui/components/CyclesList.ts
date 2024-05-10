@@ -7,10 +7,13 @@ import { UiComponentOptions } from "./UiComponent.js";
 
 export type SettingWithCycles = Record<Cycle, Setting>;
 
+export type CycleCheckboxBehavior = "skip" | "heatTransfer";
+
 /**
  * A list of settings correlating to the planetary cycles in the game.
  */
 export class CyclesList extends SettingsList {
+  readonly behavior: CycleCheckboxBehavior;
   readonly setting: SettingWithCycles;
 
   readonly charon: SettingListItem;
@@ -29,11 +32,18 @@ export class CyclesList extends SettingsList {
    *
    * @param host A reference to the host.
    * @param setting The settings that correlate to this list.
+   * @param behavior Control cycle check box log output
    * @param options Options for this list.
    */
-  constructor(host: UserScript, setting: SettingWithCycles, options?: Partial<UiComponentOptions>) {
+  constructor(
+    host: UserScript,
+    setting: SettingWithCycles,
+    behavior: CycleCheckboxBehavior = "skip",
+    options?: Partial<UiComponentOptions>,
+  ) {
     super(host, options);
     this.setting = setting;
+    this.behavior = behavior;
 
     this.addEventListener("enableAll", () => {
       this.setting.charon.enabled = true;
@@ -119,8 +129,20 @@ export class CyclesList extends SettingsList {
 
   private _makeCycle(label: string, setting: Setting) {
     return new SettingListItem(this._host, label, setting, {
-      onCheck: () => this._host.engine.imessage("time.skip.cycle.enable", [label]),
-      onUnCheck: () => this._host.engine.imessage("time.skip.cycle.disable", [label]),
+      onCheck: () =>
+        this._host.engine.imessage(
+          this.behavior === "heatTransfer"
+            ? "time.HeatTransfer.cycle.enable"
+            : "time.skip.cycle.enable",
+          [label],
+        ),
+      onUnCheck: () =>
+        this._host.engine.imessage(
+          this.behavior === "heatTransfer"
+            ? "time.HeatTransfer.cycle.disable"
+            : "time.skip.cycle.disable",
+          [label],
+        ),
     });
   }
 
