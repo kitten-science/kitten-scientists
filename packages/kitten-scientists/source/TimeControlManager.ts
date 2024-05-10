@@ -453,27 +453,29 @@ export class TimeControlManager {
           this._host.engine.iactivity("act.time.activeHeatTransferEnd", [], "ks-timeSkip");
         }
         // Get temporalFlux
+        // TODO: More judgment(e.g. determining crystal cost)? Or should the players decide for themselves(Add options)?
         const temporalFluxProduction = this._host.game.getEffect("temporalFluxProduction");
         const daysPerYear =
           (this._host.game.calendar.daysPerSeason +
             10 +
             this._host.game.getEffect("temporalParadoxDay")) *
           this._host.game.calendar.seasonsPerYear;
-        const daysPerTicks =
-          (1 + this._host.game.timeAccelerationRatio()) / this._host.game.calendar.ticksPerDay;
+        const ticksPerDay = this._host.game.calendar.ticksPerDay;
+        const daysPerTicks = (1 + this._host.game.timeAccelerationRatio()) / ticksPerDay;
         const ticksPerYear = daysPerYear / daysPerTicks;
         const temporalFlux = this._host.game.resPool.get("temporalFlux");
         const fluxEnabled = temporalFlux.maxValue > ticksPerYear;
         const flux = temporalFlux.value < ticksPerYear;
         if (
+          !season &&
+          this._host.game.calendar.day < 10 &&
           temporalFluxProduction > factor / heatPerTick &&
           this.settings.accelerateTime.enabled &&
-          this._host.game.calendar.day < 10 &&
           fluxEnabled &&
           flux
         ) {
           maxSkipsActiveHeatTransfer = Math.ceil(
-            (ticksPerYear - temporalFlux.value) / temporalFluxProduction,
+            (ticksPerYear + ticksPerDay * 10 - temporalFlux.value) / temporalFluxProduction,
           );
           this._host.engine.iactivity("act.time.getTemporalFlux", [], "ks-timeSkip");
           this._host.engine.storeForSummary("time.getTemporalFlux", 1);
