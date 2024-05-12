@@ -225,7 +225,11 @@ export class UserScript {
   setSettings(settings: EngineState) {
     cinfo("Loading engine state...");
     this.engine.stateLoad(settings);
-    this._userInterface.refreshUi();
+    if (settings.engine.ksColumn.enabled) {
+      this.rebuildUi();
+    } else {
+      this._userInterface.refreshUi();
+    }
   }
 
   /**

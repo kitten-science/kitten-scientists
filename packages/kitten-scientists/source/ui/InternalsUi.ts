@@ -43,14 +43,8 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
               }),
             ),
             new SettingListItem(host, host.engine.i18n("ui.ksColumn"), settings.ksColumn, {
-              onCheck: () => {
-                localStorage.setItem("ks.Column", "#ksColumn");
-                this._host.rebuildUi();
-              },
-              onUnCheck: () => {
-                localStorage.setItem("ks.Column", "#rightColumn");
-                this._host.rebuildUi();
-              },
+              onCheck: () => this._host.rebuildUi(),
+              onUnCheck: () => this._host.rebuildUi(),
             }),
             new OptionsListItem(host, host.engine.i18n("ui.language"), settings.language, {
               onCheck: () => {
