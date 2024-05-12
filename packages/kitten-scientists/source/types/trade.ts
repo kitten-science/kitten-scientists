@@ -8,7 +8,7 @@ export type TradeTab = GameTab & {
   }>;
 };
 
-export const RaceArray = [
+export const Races = [
   "dragons",
   "griffins",
   "nagas",
@@ -18,7 +18,7 @@ export const RaceArray = [
   "spiders",
   "zebras",
 ] as const;
-export type Race = (typeof RaceArray)[number];
+export type Race = (typeof Races)[number];
 
 export type TradeInfo = {
   chance: number;

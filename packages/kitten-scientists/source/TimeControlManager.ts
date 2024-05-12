@@ -12,14 +12,14 @@ import {
   BuildButton,
   ButtonModernController,
   ButtonModernModel,
+  ChronoForgeUpgrade,
   ChronoForgeUpgradeInfo,
-  ChronoForgeUpgrades,
-  CycleArray,
+  Cycles,
   ShatterTCBtnController,
   TimeItemVariant,
   TimeTab,
+  VoidSpaceUpgrade,
   VoidSpaceUpgradeInfo,
-  VoidSpaceUpgrades,
 } from "./types/index.js";
 
 export class TimeControlManager {
@@ -424,7 +424,7 @@ export class TimeControlManager {
 
     // If skipping during this cycle was disabled, bail out.
     const currentCycle = this._host.game.calendar.cycle;
-    if (!this.settings.timeSkip.cycles[CycleArray[currentCycle]].enabled) {
+    if (!this.settings.timeSkip.cycles[Cycles[currentCycle]].enabled) {
       return;
     }
 
@@ -472,7 +472,7 @@ export class TimeControlManager {
       while (
         yearsPerCycle < canSkip &&
         this.settings.timeSkip.cycles[
-          CycleArray[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
+          Cycles[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
         ].enabled
       ) {
         willSkip += yearsPerCycle;
@@ -481,7 +481,7 @@ export class TimeControlManager {
       }
       if (
         this.settings.timeSkip.cycles[
-          CycleArray[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
+          Cycles[((currentCycle + skipCycles) % cyclesPerEra) as CycleIndices]
         ].enabled &&
         0 < canSkip
       ) {
@@ -498,13 +498,13 @@ export class TimeControlManager {
   }
 
   getBuild(
-    name: ChronoForgeUpgrades | VoidSpaceUpgrades,
+    name: ChronoForgeUpgrade | VoidSpaceUpgrade,
     variant: TimeItemVariant,
   ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
     if (variant === TimeItemVariant.Chronoforge) {
-      return this._host.game.time.getCFU(name as ChronoForgeUpgrades) ?? null;
+      return this._host.game.time.getCFU(name as ChronoForgeUpgrade) ?? null;
     } else {
-      return this._host.game.time.getVSU(name as VoidSpaceUpgrades) ?? null;
+      return this._host.game.time.getVSU(name as VoidSpaceUpgrade) ?? null;
     }
   }
 }

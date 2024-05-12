@@ -1,22 +1,22 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { SpaceBuildings, SpaceBuildingsArray } from "../types/index.js";
+import { SpaceBuilding, SpaceBuildings } from "../types/index.js";
 import { Setting, SettingTrigger } from "./Settings.js";
 
 export class ResetSpaceBuildingSetting extends SettingTrigger {
-  readonly #building: SpaceBuildings;
+  readonly #building: SpaceBuilding;
 
   get building() {
     return this.#building;
   }
 
-  constructor(building: SpaceBuildings, enabled = false, trigger = -1) {
+  constructor(building: SpaceBuilding, enabled = false, trigger = -1) {
     super(enabled, trigger);
     this.#building = building;
   }
 }
 
-export type ResetSpaceBuildingSettings = Record<SpaceBuildings, SettingTrigger>;
+export type ResetSpaceBuildingSettings = Record<SpaceBuilding, SettingTrigger>;
 
 export class ResetSpaceSettings extends Setting {
   readonly buildings: ResetSpaceBuildingSettings;
@@ -28,7 +28,7 @@ export class ResetSpaceSettings extends Setting {
 
   private initBuildings(): ResetSpaceBuildingSettings {
     const items = {} as ResetSpaceBuildingSettings;
-    SpaceBuildingsArray.forEach(item => {
+    SpaceBuildings.forEach(item => {
       items[item] = new ResetSpaceBuildingSetting(item);
     });
     return items;

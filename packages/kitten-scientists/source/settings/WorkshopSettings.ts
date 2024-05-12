@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Game, ResourceCraftable, ResourceCraftableArray } from "../types/index.js";
+import { Game, ResourceCraftable, ResourcesCraftable } from "../types/index.js";
 import { Setting, SettingLimitedMax, SettingTrigger } from "./Settings.js";
 import { UpgradeSettings } from "./UpgradeSettings.js";
 
@@ -39,7 +39,7 @@ export class WorkshopSettings extends SettingTrigger {
 
   private initResources(): WorkshopResourceSettings {
     const items = {} as WorkshopResourceSettings;
-    ResourceCraftableArray.forEach(item => {
+    ResourcesCraftable.forEach(item => {
       items[item] = new CraftSettingsItem(item, true, item !== "parchment");
     });
     return items;

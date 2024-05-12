@@ -10,9 +10,9 @@ import {
   BuildButton,
   ButtonModernController,
   ButtonModernModel,
-  Missions,
+  Mission,
+  SpaceBuilding,
   SpaceBuildingInfo,
-  SpaceBuildings,
   SpaceTab,
 } from "./types/index.js";
 
@@ -52,7 +52,7 @@ export class SpaceManager implements Automation {
    * @param builds The buildings to build.
    */
   autoBuild(
-    builds: Partial<Record<SpaceBuildings, SpaceBuildingSetting>> = this.settings.buildings,
+    builds: Partial<Record<SpaceBuilding, SpaceBuildingSetting>> = this.settings.buildings,
   ) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
@@ -62,7 +62,7 @@ export class SpaceManager implements Automation {
     this.manager.render();
 
     // Get the current metadata for all the referenced buildings.
-    const metaData: Partial<Record<SpaceBuildings, SpaceBuildingInfo>> = {};
+    const metaData: Partial<Record<SpaceBuilding, SpaceBuildingInfo>> = {};
     for (const build of Object.values(builds)) {
       metaData[build.building] = this.getBuild(build.building);
     }
@@ -74,7 +74,7 @@ export class SpaceManager implements Automation {
     // Build all entries in the build list, where we can build any items.
     for (const build of buildList) {
       if (build.count > 0) {
-        this.build(build.id as SpaceBuildings, build.count);
+        this.build(build.id as SpaceBuilding, build.count);
         refreshRequired = true;
       }
     }
@@ -97,7 +97,7 @@ export class SpaceManager implements Automation {
       if (
         0 < missions[i].val ||
         !missions[i].unlocked ||
-        !this.settings.unlockMissions.missions[missions[i].name as Missions].enabled
+        !this.settings.unlockMissions.missions[missions[i].name as Mission].enabled
       ) {
         continue;
       }
@@ -122,7 +122,7 @@ export class SpaceManager implements Automation {
     }
   }
 
-  build(name: SpaceBuildings, amount: number): void {
+  build(name: SpaceBuilding, amount: number): void {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name);
 
@@ -150,7 +150,7 @@ export class SpaceManager implements Automation {
     }
   }
 
-  getBuild(name: SpaceBuildings): SpaceBuildingInfo {
+  getBuild(name: SpaceBuilding): SpaceBuildingInfo {
     return this._host.game.space.getBuilding(name);
   }
 

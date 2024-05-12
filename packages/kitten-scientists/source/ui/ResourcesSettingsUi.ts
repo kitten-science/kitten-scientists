@@ -26,17 +26,18 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
         icon: Icons.Resources,
       }),
     });
-    const excludeResourcesArray: Array<Resource> = [
-      "kittens",
-      "zebras",
-      "temporalFlux",
-      "gflops",
-      "hashrates",
-      "paragon",
+
+    const ignoredResources: Array<Resource> = [
+      "blackcoin",
       "burnedParagon",
       "elderBox",
+      "gflops",
+      "hashrates",
+      "kittens",
+      "paragon",
+      "temporalFlux",
       "wrappingPaper",
-      "blackcoin",
+      "zebras",
     ];
 
     // Add all the current resources
@@ -44,7 +45,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
       this._host.game.resPool.resources
         .filter(
           item =>
-            !excludeResourcesArray.includes(item.name) && !isNil(this.setting.resources[item.name]),
+            !ignoredResources.includes(item.name) && !isNil(this.setting.resources[item.name]),
         )
         .map(resource => [this.setting.resources[resource.name], ucfirst(resource.title)]);
 

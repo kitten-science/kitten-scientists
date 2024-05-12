@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Race, RaceArray, Season } from "../types/index.js";
+import { Race, Races, Season } from "../types/index.js";
 import { EmbassySettings } from "./EmbassySettings.js";
 import {
   Requirement,
@@ -90,7 +90,7 @@ export class TradeSettings extends SettingTrigger {
       sharks: "iron",
     };
     const items = {} as TradeSettingsItems;
-    RaceArray.forEach(item => {
+    Races.forEach(item => {
       const seasons = defaultSeasons[item] ?? [true, true, true, true];
       const require = defaultRequire[item] ?? false;
       items[item] = new TradeSettingsItem(

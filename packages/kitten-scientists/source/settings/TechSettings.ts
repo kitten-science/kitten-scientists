@@ -2,7 +2,7 @@ import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { Game, Technology, TechnologyArray } from "../types/index.js";
+import { Game, Technologies, Technology } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class TechSetting extends Setting {
@@ -30,7 +30,7 @@ export class TechSettings extends Setting {
 
   private initTechs(): TechTechSettings {
     const items = {} as TechTechSettings;
-    TechnologyArray.forEach(item => {
+    Technologies.forEach(item => {
       items[item] = new TechSetting(item, true);
     });
     return items;

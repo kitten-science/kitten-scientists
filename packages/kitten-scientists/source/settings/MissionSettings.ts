@@ -2,23 +2,23 @@ import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { Game, Missions, MissionsArray } from "../types/index.js";
+import { Game, Mission, Missions } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class MissionSetting extends Setting {
-  readonly #mission: Missions;
+  readonly #mission: Mission;
 
   get mission() {
     return this.#mission;
   }
 
-  constructor(mission: Missions, enabled = false) {
+  constructor(mission: Mission, enabled = false) {
     super(enabled);
     this.#mission = mission;
   }
 }
 
-export type MissionMissionSettings = Record<Missions, MissionSetting>;
+export type MissionMissionSettings = Record<Mission, MissionSetting>;
 
 export class MissionSettings extends Setting {
   missions: MissionMissionSettings;
@@ -30,7 +30,7 @@ export class MissionSettings extends Setting {
 
   private initMissions(): MissionMissionSettings {
     const items = {} as MissionMissionSettings;
-    MissionsArray.forEach(item => {
+    Missions.forEach(item => {
       items[item] = new MissionSetting(item, true);
     });
     return items;
