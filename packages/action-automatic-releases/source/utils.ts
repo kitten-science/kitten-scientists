@@ -2,7 +2,7 @@ import * as core from "@actions/core";
 import { GitHub } from "@actions/github/lib/utils.js";
 import { GetResponseDataTypeFromEndpointMethod } from "@octokit/types";
 import createPreset from "conventional-changelog-angular";
-import { Commit } from "conventional-commits-parser";
+import { CommitMeta, CommitNote, CommitReference } from "conventional-commits-parser";
 import { CommitsSinceRelease } from "./AutomaticReleases.js";
 
 export const getShortSHA = (sha: string): string => {
@@ -63,11 +63,11 @@ export type ParsedCommits = {
   header: string;
   body: string;
   footer: string;
-  notes: Commit.Note[];
+  notes: CommitNote[];
   extra: ParsedCommitsExtra;
-  references: Commit.Reference[];
+  references: CommitReference[];
   mentions: string[];
-  revert: Commit.Revert | null;
+  revert: CommitMeta | null;
 };
 
 const getFormattedChangelogEntry = (parsedCommit: ParsedCommits): string => {
