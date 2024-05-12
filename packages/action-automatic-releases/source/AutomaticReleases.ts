@@ -5,7 +5,7 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod,
 } from "@octokit/types";
-import { Commit, sync as commitParser } from "conventional-commits-parser";
+import { Commit, CommitParser } from "conventional-commits-parser";
 import semverLt from "semver/functions/lt.js";
 import semverRcompare from "semver/functions/rcompare.js";
 import semverValid from "semver/functions/valid.js";
@@ -338,7 +338,7 @@ export class AutomaticReleases {
       const clOptions = await getChangelogOptions();
       const parsedCommitMsg: Exclude<Commit, "type"> & {
         type?: ConventionalCommitTypes | string | null;
-      } = commitParser(commit.commit.message, clOptions);
+      } = new CommitParser(clOptions).parse(commit.commit.message);
 
       // istanbul ignore next
       if (parsedCommitMsg.merge) {
