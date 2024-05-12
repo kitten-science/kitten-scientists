@@ -2,7 +2,7 @@ import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { Game, Policy, PolicyArray } from "../types/index.js";
+import { Game, Policies, Policy } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class PolicySetting extends Setting {
@@ -30,7 +30,7 @@ export class PolicySettings extends Setting {
 
   private initPolicies(): PolicyPolicySettings {
     const items = {} as PolicyPolicySettings;
-    PolicyArray.forEach(item => {
+    Policies.forEach(item => {
       items[item] = new PolicySetting(item, true);
     });
     return items;

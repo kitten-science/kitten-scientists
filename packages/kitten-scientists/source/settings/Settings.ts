@@ -1,5 +1,5 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
-import { Resource, SpaceBuildings } from "../types/index.js";
+import { Resource, SpaceBuilding } from "../types/index.js";
 import { BonfireItem } from "./BonfireSettings.js";
 import { ReligionItem } from "./ReligionSettings.js";
 import { TimeItem } from "./TimeSettings.js";
@@ -9,7 +9,7 @@ export type Requirement = Resource | false;
 /**
  * The type names of all supported buildings.
  */
-export type AllItems = BonfireItem | ReligionItem | SpaceBuildings | TimeItem;
+export type AllItems = BonfireItem | ReligionItem | SpaceBuilding | TimeItem;
 
 export class Setting {
   enabled: boolean;

@@ -1,10 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import {
-  ChronoForgeUpgradesArray,
-  TimeItemVariant,
-  VoidSpaceUpgradesArray,
-} from "../types/index.js";
+import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types/index.js";
 import { Setting, SettingTrigger } from "./Settings.js";
 import { TimeItem } from "./TimeSettings.js";
 
@@ -38,10 +34,10 @@ export class ResetTimeSettings extends Setting {
 
   private initBuildings(): ResetTimeBuildingSettings {
     const items = {} as ResetTimeBuildingSettings;
-    ChronoForgeUpgradesArray.forEach(item => {
+    ChronoForgeUpgrades.forEach(item => {
       items[item] = new ResetTimeBuildingSetting(item, TimeItemVariant.Chronoforge);
     });
-    VoidSpaceUpgradesArray.forEach(item => {
+    VoidSpaceUpgrades.forEach(item => {
       if (item === "usedCryochambers") return;
       items[item] = new ResetTimeBuildingSetting(item, TimeItemVariant.VoidSpace);
     });

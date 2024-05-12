@@ -5,7 +5,7 @@ export type ScienceTab = GameTab & {
   policyPanel: BuildButton;
 };
 
-export const PolicyArray = [
+export const Policies = [
   "authocracy",
   "bigStickPolicy",
   "carnivale",
@@ -47,9 +47,9 @@ export const PolicyArray = [
   "zebraRelationsAppeasement",
   "zebraRelationsBellicosity",
 ] as const;
-export type Policy = (typeof PolicyArray)[number];
+export type Policy = (typeof Policies)[number];
 
-export const TechnologyArray = [
+export const Technologies = [
   "acoustics",
   "advExogeology",
   "agriculture",
@@ -113,7 +113,7 @@ export const TechnologyArray = [
   "voidSpace",
   "writing",
 ] as const;
-export type Technology = (typeof TechnologyArray)[number];
+export type Technology = (typeof Technologies)[number];
 
 export type PolicyInfo = {
   blocked: boolean;

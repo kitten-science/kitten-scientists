@@ -1,7 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
 import { Icons } from "../images/Icons.js";
-import { UnicornItemArray, ZiggurathUpgrades } from "../index.js";
+import { UnicornItems, ZiggurathUpgrade } from "../index.js";
 import { ResetReligionSettings } from "../settings/ResetReligionSettings.js";
 import { SettingTrigger } from "../settings/Settings.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
@@ -18,7 +18,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
       icon: Icons.Religion,
     });
 
-    const unicornsArray: Array<ZiggurathUpgrades | "unicornPasture"> = [...UnicornItemArray];
+    const unicornsArray: Array<ZiggurathUpgrade | "unicornPasture"> = [...UnicornItems];
 
     this._buildings = [
       this._getResetOption(

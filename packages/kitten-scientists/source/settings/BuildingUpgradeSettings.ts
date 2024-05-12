@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { StagedBuilding, StagedBuildingArray } from "../types/index.js";
+import { StagedBuilding, StagedBuildings } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class BuildingUpgradeSetting extends Setting {
@@ -28,7 +28,7 @@ export class BuildingUpgradeSettings extends Setting {
 
   private initBuildings(): BuildingUpdateBuildingSettings {
     const items = {} as BuildingUpdateBuildingSettings;
-    StagedBuildingArray.forEach(item => {
+    StagedBuildings.forEach(item => {
       items[item] = new BuildingUpgradeSetting(item, true);
     });
     return items;

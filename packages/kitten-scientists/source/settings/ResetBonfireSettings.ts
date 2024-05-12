@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { BuildingArray, StagedBuildingArray } from "../types/index.js";
+import { Buildings, StagedBuildings } from "../types/index.js";
 import { BonfireItem } from "./BonfireSettings.js";
 import { Setting, SettingTrigger } from "./Settings.js";
 
@@ -33,7 +33,7 @@ export class ResetBonfireSettings extends Setting {
 
   private initBuildings(): ResetBonfireBuildingSettings {
     const items = {} as ResetBonfireBuildingSettings;
-    [...BuildingArray, ...StagedBuildingArray].forEach(item => {
+    [...Buildings, ...StagedBuildings].forEach(item => {
       if (item === "unicornPasture") return;
       items[item] = new ResetBonfireBuildingSetting(item);
     });

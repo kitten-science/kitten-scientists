@@ -1,7 +1,7 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { WorkshopManager } from "../WorkshopManager.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Resource, ResourceArray } from "../types/index.js";
+import { Resource, Resources } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class ResourcesSettingsItem extends Setting {
@@ -42,7 +42,7 @@ export class ResourcesSettings extends Setting {
       starchart: { e: true, c: WorkshopManager.DEFAULT_CONSUME_RATE, s: 500 },
     };
     const items = {} as ResourcesResourceSettings;
-    ResourceArray.forEach(item => {
+    Resources.forEach(item => {
       const value = defaults[item] ?? { e: false, c: WorkshopManager.DEFAULT_CONSUME_RATE, s: 0 };
       items[item] = new ResourcesSettingsItem(item, value.e, value.c, value.s);
     });

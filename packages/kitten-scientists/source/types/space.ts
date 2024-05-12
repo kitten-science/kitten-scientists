@@ -5,7 +5,7 @@ export type SpaceTab = GameTab & {
   planetPanels: Array<Panel>;
 };
 
-export const MissionsArray = [
+export const Missions = [
   "centaurusSystemMission",
   "charonMission",
   "duneMission",
@@ -20,9 +20,9 @@ export const MissionsArray = [
   "umbraMission",
   "yarnMission",
 ] as const;
-export type Missions = (typeof MissionsArray)[number];
+export type Mission = (typeof Missions)[number];
 
-export const SpaceBuildingsArray = [
+export const SpaceBuildings = [
   "containmentChamber",
   "cryostation",
   "entangler",
@@ -46,14 +46,14 @@ export const SpaceBuildingsArray = [
   "tectonic",
   "terraformingStation",
 ] as const;
-export type SpaceBuildings = (typeof SpaceBuildingsArray)[number];
+export type SpaceBuilding = (typeof SpaceBuildings)[number];
 
 export type SpaceBuildingInfo = {
   /**
    * An internationalized label for this space building.
    */
   label: string;
-  name: SpaceBuildings;
+  name: SpaceBuilding;
   priceRatio: number;
   prices: Array<Price>;
 

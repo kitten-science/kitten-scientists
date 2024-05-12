@@ -10,13 +10,13 @@ import {
   BuildButton,
   ButtonModernController,
   ButtonModernModel,
+  ChronoForgeUpgrade,
   ChronoForgeUpgradeInfo,
-  ChronoForgeUpgrades,
   FixCryochamberBtnController,
   TimeItemVariant,
   TimeTab,
+  VoidSpaceUpgrade,
   VoidSpaceUpgradeInfo,
-  VoidSpaceUpgrades,
 } from "./types/index.js";
 
 export class TimeManager {
@@ -92,7 +92,7 @@ export class TimeManager {
     for (const build of buildList) {
       if (build.count > 0) {
         this.build(
-          build.id as ChronoForgeUpgrades | VoidSpaceUpgrades,
+          build.id as ChronoForgeUpgrade | VoidSpaceUpgrade,
           build.variant as TimeItemVariant,
           build.count,
         );
@@ -106,7 +106,7 @@ export class TimeManager {
   }
 
   build(
-    name: ChronoForgeUpgrades | VoidSpaceUpgrades,
+    name: ChronoForgeUpgrade | VoidSpaceUpgrade,
     variant: TimeItemVariant,
     amount: number,
   ): void {
@@ -132,18 +132,18 @@ export class TimeManager {
   }
 
   getBuild(
-    name: ChronoForgeUpgrades | VoidSpaceUpgrades,
+    name: ChronoForgeUpgrade | VoidSpaceUpgrade,
     variant: TimeItemVariant,
   ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
     if (variant === TimeItemVariant.Chronoforge) {
-      return this._host.game.time.getCFU(name as ChronoForgeUpgrades) ?? null;
+      return this._host.game.time.getCFU(name as ChronoForgeUpgrade) ?? null;
     } else {
-      return this._host.game.time.getVSU(name as VoidSpaceUpgrades) ?? null;
+      return this._host.game.time.getVSU(name as VoidSpaceUpgrade) ?? null;
     }
   }
 
   getBuildButton(
-    name: ChronoForgeUpgrades | VoidSpaceUpgrades,
+    name: ChronoForgeUpgrade | VoidSpaceUpgrade,
     variant: TimeItemVariant,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
     let buttons: Array<BuildButton>;

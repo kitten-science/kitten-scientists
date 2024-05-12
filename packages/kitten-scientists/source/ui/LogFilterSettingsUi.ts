@@ -1,4 +1,4 @@
-import { FilterItemArray, LogFilterSettings } from "../settings/LogFilterSettings.js";
+import { FilterItems, LogFilterSettings } from "../settings/LogFilterSettings.js";
 import { UserScript } from "../UserScript.js";
 import { ExplainerListItem } from "./components/ExplainerListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -21,7 +21,7 @@ export class LogFiltersSettingsUi extends SettingsSectionUi<LogFilterSettings> {
     );
 
     const listFilters = new SettingsList(this._host, {
-      children: FilterItemArray.map(item => {
+      children: FilterItems.map(item => {
         return { name: item, label: this._host.engine.i18n(`filter.${item}`) };
       })
         .sort((a, b) => a.label.localeCompare(b.label))

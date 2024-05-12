@@ -12,7 +12,7 @@ import {
   ReligionSettings,
   ReligionSettingsItem,
   UnicornItem,
-  UnicornItemArray,
+  UnicornItems,
 } from "./settings/ReligionSettings.js";
 import { cwarn } from "./tools/Log.js";
 import {
@@ -20,14 +20,14 @@ import {
   ButtonModernController,
   ButtonModernModel,
   ReligionTab,
+  ReligionUpgrade,
   ReligionUpgradeInfo,
-  ReligionUpgrades,
+  TranscendenceUpgrade,
   TranscendenceUpgradeInfo,
-  TranscendenceUpgrades,
   TransformBtnController,
   UnicornItemVariant,
+  ZiggurathUpgrade,
   ZiggurathUpgradeInfo,
-  ZiggurathUpgrades,
 } from "./types/index.js";
 
 export class ReligionManager implements Automation {
@@ -181,7 +181,7 @@ export class ReligionManager implements Automation {
     }
   }
   private _buildNonUnicornBuildings() {
-    const alreadyHandled: Array<FaithItem | UnicornItem> = [...UnicornItemArray];
+    const alreadyHandled: Array<FaithItem | UnicornItem> = [...UnicornItems];
     const builds = Object.fromEntries(
       Object.entries(this.settings.buildings).filter(
         ([k, v]) => !alreadyHandled.includes(v.building),
@@ -227,15 +227,15 @@ export class ReligionManager implements Automation {
    * @see https://github.com/Bioniclegenius/NummonCalc/blob/112f716e2fde9956dfe520021b0400cba7b7113e/NummonCalc.js#L490
    * @returns The best unicorn building.
    */
-  getBestUnicornBuilding(): ZiggurathUpgrades | "unicornPasture" | null {
+  getBestUnicornBuilding(): ZiggurathUpgrade | "unicornPasture" | null {
     const pastureButton = this._bonfireManager.getBuildButton("unicornPasture");
     if (pastureButton === null) {
       return null;
     }
 
-    const validBuildings: Array<ZiggurathUpgrades | "unicornPasture"> = [
-      ...UnicornItemArray,
-    ].filter(item => item !== "unicornPasture");
+    const validBuildings: Array<ZiggurathUpgrade | "unicornPasture"> = [...UnicornItems].filter(
+      item => item !== "unicornPasture",
+    );
 
     // How many unicorns are produced per second.
     const unicornsPerSecondBase =
@@ -289,7 +289,7 @@ export class ReligionManager implements Automation {
     // by its effect on production of unicorns.
 
     let bestAmortization = Infinity;
-    let bestBuilding: ZiggurathUpgrades | "unicornPasture" | null = null;
+    let bestBuilding: ZiggurathUpgrade | "unicornPasture" | null = null;
     const unicornsPerTickBase = mustExist(
       this._host.game.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"],
     );
@@ -442,11 +442,11 @@ export class ReligionManager implements Automation {
   ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo | null {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
-        return this._host.game.religion.getZU(name as ZiggurathUpgrades) ?? null;
+        return this._host.game.religion.getZU(name as ZiggurathUpgrade) ?? null;
       case UnicornItemVariant.OrderOfTheSun:
-        return this._host.game.religion.getRU(name as ReligionUpgrades) ?? null;
+        return this._host.game.religion.getRU(name as ReligionUpgrade) ?? null;
       case UnicornItemVariant.Cryptotheology:
-        return this._host.game.religion.getTU(name as TranscendenceUpgrades) ?? null;
+        return this._host.game.religion.getTU(name as TranscendenceUpgrade) ?? null;
     }
     return null;
   }
