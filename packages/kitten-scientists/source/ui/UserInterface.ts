@@ -120,7 +120,7 @@ export class UserInterface extends UiComponent {
     const id = localStorage["ks.Column"] as string | undefined;
     if (id === "#ksColumn" && !$("#ksColumn").length) {
       $("#rightColumn").after(
-        '<div id="ksColumn" class="column"><br><br><br><br><br><br><br><br><br><br></div>',
+        '<div id="ksColumn" class="column"><span class="ksSpacer"></span></div>',
       );
     } else {
       $("#ksColumn").remove();
@@ -165,6 +165,12 @@ export class UserInterface extends UiComponent {
         top: 20px;
         position: relative;
         overflow-y: auto;
+      }`,
+    );
+    this._addRule(
+      `.ksSpacer {
+        display: block;
+        margin-bottom: 100px;
       }`,
     );
     this._addRule(
