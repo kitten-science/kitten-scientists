@@ -206,7 +206,7 @@
   "ui.internals.interval.input": "Enter a new interval at which KS should run (in milliseconds):",
   "ui.itemsHide": "Hide options",
   "ui.itemsShow": "Show options",
-  "ui.ksColumn": "Shown in the fourth column",
+  "ui.ksColumn": "Display in fourth column",
   "ui.language": "Language",
   "ui.limit": "Limited",
   "ui.max.set": "Maximum for {0}",
