@@ -157,7 +157,7 @@ export const parseGitTag = (inputRef: string): string => {
 };
 
 export const getChangelogOptions = async () => {
-  const defaultOpts = (await createPreset()).recommendedBumpOpts;
+  const defaultOpts = (await createPreset()).parser;
   defaultOpts["mergePattern"] = "^Merge pull request #(.*) from (.*)$";
   defaultOpts["mergeCorrespondence"] = ["issueId", "source"];
   core.debug(`Changelog options: ${JSON.stringify(defaultOpts)}`);
