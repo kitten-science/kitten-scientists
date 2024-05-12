@@ -1,19 +1,19 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import {
+  ReligionUpgrade,
   ReligionUpgrades,
-  ReligionUpgradesArray,
+  TranscendenceUpgrade,
   TranscendenceUpgrades,
-  TranscendenceUpgradesArray,
   UnicornItemVariant,
+  ZiggurathUpgrade,
   ZiggurathUpgrades,
-  ZiggurathUpgradesArray,
 } from "../types/index.js";
 import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
 export type FaithItem = Exclude<ReligionItem, UnicornItem>;
 
-export const UnicornItemArray = [
+export const UnicornItems = [
   "ivoryCitadel",
   "ivoryTower",
   "skyPalace",
@@ -22,12 +22,12 @@ export const UnicornItemArray = [
   "unicornTomb",
   "unicornUtopia",
 ] as const;
-export type UnicornItem = (typeof UnicornItemArray)[number];
+export type UnicornItem = (typeof UnicornItems)[number];
 
-export type ReligionItem = ReligionUpgrades | TranscendenceUpgrades | ZiggurathUpgrades;
+export type ReligionItem = ReligionUpgrade | TranscendenceUpgrade | ZiggurathUpgrade;
 export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
 
-export const ReligionOptionsArray = [
+export const ReligionOptions = [
   "sacrificeUnicorns",
   "sacrificeAlicorns",
   "refineTears",
@@ -36,7 +36,7 @@ export const ReligionOptionsArray = [
   "adore",
   "autoPraise",
 ] as const;
-export type ReligionOptions = (typeof ReligionOptionsArray)[number];
+export type ReligionOption = (typeof ReligionOptions)[number];
 
 export class ReligionSettingsItem extends SettingMax {
   readonly #building: FaithItem | UnicornItem;
@@ -131,19 +131,19 @@ export class ReligionSettings extends SettingTrigger {
   }
 
   private initBuildings(): ReligionSettingsItems {
-    const defaultOffBuilding: ReligionUpgrades[] = ["apocripha"];
+    const defaultOffBuilding: ReligionUpgrade[] = ["apocripha"];
     const items = {} as ReligionSettingsItems;
-    ReligionUpgradesArray.forEach(item => {
+    ReligionUpgrades.forEach(item => {
       items[item] = new ReligionSettingsItem(
         item,
         UnicornItemVariant.OrderOfTheSun,
         !defaultOffBuilding.includes(item),
       );
     });
-    TranscendenceUpgradesArray.forEach(item => {
+    TranscendenceUpgrades.forEach(item => {
       items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Cryptotheology, false);
     });
-    ZiggurathUpgradesArray.forEach(item => {
+    ZiggurathUpgrades.forEach(item => {
       items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Ziggurat, false);
     });
     items["unicornPasture"] = new ReligionSettingsItem(

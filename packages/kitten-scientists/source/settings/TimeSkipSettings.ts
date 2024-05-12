@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Cycle, CycleArray, Season, SeasonArray } from "../types/index.js";
+import { Cycle, Cycles, Season, Seasons } from "../types/index.js";
 import { Setting, SettingTriggerMax } from "./Settings.js";
 
 export type CyclesSettings = Record<Cycle, Setting>;
@@ -20,7 +20,7 @@ export class TimeSkipSettings extends SettingTriggerMax {
 
   private initCycles(): CyclesSettings {
     const items = {} as CyclesSettings;
-    CycleArray.forEach(item => {
+    Cycles.forEach(item => {
       items[item] = new Setting(item !== "redmoon");
     });
     return items;
@@ -28,7 +28,7 @@ export class TimeSkipSettings extends SettingTriggerMax {
 
   private initSeason(): SeasonsSettings {
     const items = {} as SeasonsSettings;
-    SeasonArray.forEach(item => {
+    Seasons.forEach(item => {
       items[item] = new Setting(item === "spring");
     });
     return items;

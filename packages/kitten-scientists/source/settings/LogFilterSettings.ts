@@ -22,7 +22,7 @@ export enum LogFilterItemVariant {
   misc = "ks-activity",
 }
 
-export const FilterItemArray = [
+export const FilterItems = [
   "accelerate",
   "adore",
   "build",
@@ -41,7 +41,7 @@ export const FilterItemArray = [
   "transcend",
   "upgrade",
 ] as const;
-export type FilterItem = (typeof FilterItemArray)[number];
+export type FilterItem = (typeof FilterItems)[number];
 
 export class LogFilterSettingsItem extends Setting {
   readonly #variant: LogFilterItemVariant;
@@ -70,7 +70,7 @@ export class LogFilterSettings extends Setting {
 
   private initFilters(): LogFilterSettingsItems {
     const items = {} as LogFilterSettingsItems;
-    FilterItemArray.forEach(item => {
+    FilterItems.forEach(item => {
       items[item] = new LogFilterSettingsItem(LogFilterItemVariant[item]);
     });
     return items;

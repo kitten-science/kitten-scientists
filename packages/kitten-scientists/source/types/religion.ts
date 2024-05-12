@@ -21,7 +21,7 @@ export type ReligionTab = GameTab & {
   /**
    * Religion upgrade (Order of the sun) buttons.
    */
-  rUpgradeButtons: Array<BuildButton<ReligionUpgrades>>;
+  rUpgradeButtons: Array<BuildButton<ReligionUpgrade>>;
 
   /**
    * Sacrifice alicorns.
@@ -36,7 +36,7 @@ export type ReligionTab = GameTab & {
   /**
    * Ziggurath upgrade buttons.
    */
-  zgUpgradeButtons: Array<BuildButton<ZiggurathUpgrades>>;
+  zgUpgradeButtons: Array<BuildButton<ZiggurathUpgrade>>;
 };
 
 export enum UnicornItemVariant {
@@ -46,7 +46,7 @@ export enum UnicornItemVariant {
   UnicornPasture = "zp",
 }
 
-export const ReligionUpgradesArray = [
+export const ReligionUpgrades = [
   "apocripha",
   "basilica",
   "goldenSpire",
@@ -58,9 +58,9 @@ export const ReligionUpgradesArray = [
   "templars",
   "transcendence",
 ] as const;
-export type ReligionUpgrades = (typeof ReligionUpgradesArray)[number];
+export type ReligionUpgrade = (typeof ReligionUpgrades)[number];
 
-export const TranscendenceUpgradesArray = [
+export const TranscendenceUpgrades = [
   "blackCore",
   "blackLibrary",
   "blackNexus",
@@ -71,9 +71,9 @@ export const TranscendenceUpgradesArray = [
   "holyGenocide",
   "singularity",
 ] as const;
-export type TranscendenceUpgrades = (typeof TranscendenceUpgradesArray)[number];
+export type TranscendenceUpgrade = (typeof TranscendenceUpgrades)[number];
 
-export const ZiggurathUpgradesArray = [
+export const ZiggurathUpgrades = [
   "blackPyramid",
   "ivoryCitadel",
   "ivoryTower",
@@ -85,7 +85,7 @@ export const ZiggurathUpgradesArray = [
   "unicornTomb",
   "unicornUtopia",
 ] as const;
-export type ZiggurathUpgrades = (typeof ZiggurathUpgradesArray)[number];
+export type ZiggurathUpgrade = (typeof ZiggurathUpgrades)[number];
 
 export type AbstractReligionUpgradeInfo = {
   /**
@@ -129,7 +129,7 @@ export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
 
   faith: number;
 
-  name: ReligionUpgrades;
+  name: ReligionUpgrade;
   noStackable: boolean;
   on: boolean;
   priceRatio: number;
@@ -149,7 +149,7 @@ export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
     unicornsRatioReligion?: number;
   };
 
-  name: ZiggurathUpgrades;
+  name: ZiggurathUpgrade;
   priceRatio: number;
 
   unlocks: {
@@ -171,7 +171,7 @@ export type TranscendenceUpgradeInfo = AbstractReligionUpgradeInfo & {
 
   flavor: string;
 
-  name: TranscendenceUpgrades;
+  name: TranscendenceUpgrade;
   priceRatio?: number;
   tier: number;
   unlocks: {

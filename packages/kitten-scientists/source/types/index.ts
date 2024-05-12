@@ -1,21 +1,21 @@
 import { Building, BuildingMeta } from "./buildings.js";
 import { Game } from "./game.js";
 import {
-  ReligionUpgrades,
+  ReligionUpgrade,
+  TranscendenceUpgrade,
   TranscendenceUpgradeInfo,
-  TranscendenceUpgrades,
+  ZiggurathUpgrade,
   ZiggurathUpgradeInfo,
-  ZiggurathUpgrades,
 } from "./religion.js";
 import { TechInfo } from "./science.js";
-import { SpaceBuildings } from "./space.js";
-import { ChronoForgeUpgrades, VoidSpaceUpgradeInfo, VoidSpaceUpgrades } from "./time.js";
+import { SpaceBuilding } from "./space.js";
+import { ChronoForgeUpgrade, VoidSpaceUpgrade, VoidSpaceUpgradeInfo } from "./time.js";
 import { UpgradeInfo } from "./workshop.js";
 
-export const SeasonArray = ["autumn", "spring", "summer", "winter"] as const;
-export type Season = (typeof SeasonArray)[number];
+export const Seasons = ["autumn", "spring", "summer", "winter"] as const;
+export type Season = (typeof Seasons)[number];
 
-export const CycleArray = [
+export const Cycles = [
   "charon",
   "umbra",
   "yarn",
@@ -27,9 +27,9 @@ export const CycleArray = [
   "terminus",
   "kairo",
 ] as const;
-export type Cycle = (typeof CycleArray)[number];
+export type Cycle = (typeof Cycles)[number];
 
-export const ResourceCraftableArray = [
+export const ResourcesCraftable = [
   "alloy",
   "beam",
   "blueprint",
@@ -50,10 +50,10 @@ export const ResourceCraftableArray = [
   "thorium",
   "wood",
 ] as const;
-export type ResourceCraftable = (typeof ResourceCraftableArray)[number];
+export type ResourceCraftable = (typeof ResourcesCraftable)[number];
 
-export const ResourceArray = [
-  ...ResourceCraftableArray,
+export const Resources = [
+  ...ResourcesCraftable,
   "alicorn",
   "antimatter",
   "blackcoin",
@@ -94,9 +94,9 @@ export const ResourceArray = [
   "wrappingPaper",
   "zebras",
 ] as const;
-export type Resource = (typeof ResourceArray)[number];
+export type Resource = (typeof Resources)[number];
 
-export const TabIdArray = [
+export const TabIds = [
   "Bonfire",
   "Religion",
   "Science",
@@ -106,9 +106,9 @@ export const TabIdArray = [
   "Village",
   "Workshop",
 ] as const;
-export type TabId = (typeof TabIdArray)[number];
+export type TabId = (typeof TabIds)[number];
 
-export const JobArray = [
+export const Jobs = [
   "engineer",
   "farmer",
   "geologist",
@@ -118,9 +118,9 @@ export const JobArray = [
   "scholar",
   "woodcutter",
 ] as const;
-export type Job = (typeof JobArray)[number];
+export type Job = (typeof Jobs)[number];
 
-export const TraitArray = [
+export const Traits = [
   "chemist",
   "engineer",
   "manager",
@@ -130,16 +130,16 @@ export const TraitArray = [
   "scientist",
   "wise",
 ] as const;
-export type Trait = (typeof TraitArray)[number];
+export type Trait = (typeof Traits)[number];
 
 export type AllBuildings =
   | Building
-  | ChronoForgeUpgrades
-  | ReligionUpgrades
-  | SpaceBuildings
-  | TranscendenceUpgrades
-  | VoidSpaceUpgrades
-  | ZiggurathUpgrades;
+  | ChronoForgeUpgrade
+  | ReligionUpgrade
+  | SpaceBuilding
+  | TranscendenceUpgrade
+  | VoidSpaceUpgrade
+  | ZiggurathUpgrade;
 
 /**
  * A combination of a resource and an amount.

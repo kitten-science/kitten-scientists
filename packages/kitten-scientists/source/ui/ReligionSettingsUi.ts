@@ -1,7 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { UserScript } from "../UserScript.js";
-import { UnicornItemArray, ZiggurathUpgrades } from "../index.js";
-import { ReligionOptionsArray, ReligionSettings } from "../settings/ReligionSettings.js";
+import { UnicornItems, ZiggurathUpgrade } from "../index.js";
+import { ReligionOptions, ReligionSettings } from "../settings/ReligionSettings.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -25,7 +25,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 
-    const unicornsArray: Array<ZiggurathUpgrades | "unicornPasture"> = [...UnicornItemArray];
+    const unicornsArray: Array<ZiggurathUpgrade | "unicornPasture"> = [...UnicornItems];
 
     this._unicornBuildings = [
       this._getBuildOption(
@@ -129,7 +129,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
     const listAddition = new SettingsList(this._host, {
       children: [
         new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")),
-        ...ReligionOptionsArray.map(item => {
+        ...ReligionOptions.map(item => {
           const label = this._host.engine.i18n(`option.faith.${item}`);
           if (item === "transcend") {
             return new SettingListItem(this._host, label, this.setting[item], {

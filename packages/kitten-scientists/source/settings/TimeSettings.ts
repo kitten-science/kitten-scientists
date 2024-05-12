@@ -1,18 +1,18 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import {
+  ChronoForgeUpgrade,
   ChronoForgeUpgrades,
-  ChronoForgeUpgradesArray,
   TimeItemVariant,
+  VoidSpaceUpgrade,
   VoidSpaceUpgrades,
-  VoidSpaceUpgradesArray,
 } from "../types/index.js";
 import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
 /**
  * The upgrades on the Time tab that we have options for.
  */
-export type TimeItem = Exclude<ChronoForgeUpgrades | VoidSpaceUpgrades, "usedCryochambers">;
+export type TimeItem = Exclude<ChronoForgeUpgrade | VoidSpaceUpgrade, "usedCryochambers">;
 
 export class TimeSettingsItem extends SettingMax {
   readonly #building: TimeItem;
@@ -54,10 +54,10 @@ export class TimeSettings extends SettingTrigger {
 
   private initBuildings(): TimeBuildingsSettings {
     const items = {} as TimeBuildingsSettings;
-    ChronoForgeUpgradesArray.forEach(item => {
+    ChronoForgeUpgrades.forEach(item => {
       items[item] = new TimeSettingsItem(item, TimeItemVariant.Chronoforge);
     });
-    VoidSpaceUpgradesArray.forEach(item => {
+    VoidSpaceUpgrades.forEach(item => {
       if (item === "usedCryochambers") return;
       items[item] = new TimeSettingsItem(item, TimeItemVariant.VoidSpace);
     });

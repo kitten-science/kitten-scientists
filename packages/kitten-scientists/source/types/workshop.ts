@@ -1,6 +1,6 @@
 import { GameTab, Price } from "./index.js";
 
-export const UpgradeArray = [
+export const Upgrades = [
   "advancedAutomation",
   "advancedRefinement",
   "aiBases",
@@ -139,7 +139,7 @@ export const UpgradeArray = [
   "voidEnergy",
   "voidReactors",
 ] as const;
-export type Upgrade = (typeof UpgradeArray)[number];
+export type Upgrade = (typeof Upgrades)[number];
 
 export type UpgradeInfo = {
   description: string;

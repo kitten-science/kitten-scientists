@@ -1,5 +1,5 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
-import { Job, JobArray, Trait, TraitArray } from "../types/index.js";
+import { Job, Jobs, Trait, Traits } from "../types/index.js";
 import { Setting, SettingOptions } from "./Settings.js";
 
 export class ElectLeaderSettings extends Setting {
@@ -10,13 +10,13 @@ export class ElectLeaderSettings extends Setting {
     enabled = false,
     job = new SettingOptions<Job>(
       "priest",
-      JobArray.map(item => {
+      Jobs.map(item => {
         return { label: "", value: item };
       }),
     ),
     trait = new SettingOptions<Trait>(
       "wise",
-      TraitArray.map(item => {
+      Traits.map(item => {
         return { label: "", value: item };
       }),
     ),

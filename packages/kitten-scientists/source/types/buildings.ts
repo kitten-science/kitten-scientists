@@ -1,6 +1,6 @@
 import { Game, Price } from "./index.js";
 
-export const BuildingArray = [
+export const Buildings = [
   "academy",
   "accelerator",
   "aiCore",
@@ -40,16 +40,16 @@ export const BuildingArray = [
   "zebraWorkshop",
   "ziggurat",
 ] as const;
-export type Building = (typeof BuildingArray)[number];
+export type Building = (typeof Buildings)[number];
 
-export const StagedBuildingArray = [
+export const StagedBuildings = [
   "broadcasttower",
   "dataCenter",
   "hydroplant",
   "solarfarm",
   "spaceport",
 ] as const;
-export type StagedBuilding = (typeof StagedBuildingArray)[number];
+export type StagedBuilding = (typeof StagedBuildings)[number];
 
 // Returned from game.bld.getBuildingExt()
 export type BuildingMeta = {

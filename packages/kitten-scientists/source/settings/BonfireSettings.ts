@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Building, BuildingArray, StagedBuilding, StagedBuildingArray } from "../types/index.js";
+import { Building, Buildings, StagedBuilding, StagedBuildings } from "../types/index.js";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings.js";
 import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
@@ -96,11 +96,11 @@ export class BonfireSettings extends SettingTrigger {
     };
     const items = {} as BonfireBuildingSettings;
 
-    BuildingArray.forEach(item => {
+    Buildings.forEach(item => {
       if (item === "unicornPasture") return;
       items[item] = new BonfireBuildingSetting(item, !defaultOffBuilding.includes(item));
     });
-    StagedBuildingArray.forEach(item => {
+    StagedBuildings.forEach(item => {
       items[item] = new BonfireBuildingSetting(
         item,
         !defaultOffBuilding.includes(item),

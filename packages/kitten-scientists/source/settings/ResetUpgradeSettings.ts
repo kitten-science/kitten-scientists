@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Upgrade, UpgradeArray } from "../types/index.js";
+import { Upgrade, Upgrades } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class ResetUpgradeSettingsItem extends Setting {
@@ -28,7 +28,7 @@ export class ResetUpgradeSettings extends Setting {
 
   private initUpgrades(): ResetUpgradeSettingsItems {
     const items = {} as ResetUpgradeSettingsItems;
-    UpgradeArray.forEach(item => {
+    Upgrades.forEach(item => {
       items[item] = new ResetUpgradeSettingsItem(item);
     });
     return items;

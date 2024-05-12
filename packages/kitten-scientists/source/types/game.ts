@@ -13,28 +13,28 @@ import {
   Price,
   Race,
   RaceInfo,
+  ReligionUpgrade,
   ReligionUpgradeInfo,
-  ReligionUpgrades,
   Resource,
   ResourceCraftable,
   Season,
   TabId,
+  TranscendenceUpgrade,
   TranscendenceUpgradeInfo,
-  TranscendenceUpgrades,
   UpgradeInfo,
   WorkshopTab,
+  ZiggurathUpgrade,
   ZiggurathUpgradeInfo,
-  ZiggurathUpgrades,
 } from "./index.js";
 import { ReligionTab } from "./religion.js";
 import { PolicyInfo, Technology, TechInfo as TechnologyInfo } from "./science.js";
-import { Missions, SpaceBuildings, SpaceTab } from "./space.js";
+import { Mission, SpaceBuilding, SpaceTab } from "./space.js";
 import {
+  ChronoForgeUpgrade,
   ChronoForgeUpgradeInfo,
-  ChronoForgeUpgrades,
   TimeTab,
+  VoidSpaceUpgrade,
   VoidSpaceUpgradeInfo,
-  VoidSpaceUpgrades,
 } from "./time.js";
 import { TradeTab } from "./trade.js";
 import { JobInfo, VillageTab } from "./village.js";
@@ -232,7 +232,7 @@ export type Game = {
     /**
      * Get religion upgrades.
      */
-    getRU: (name: ReligionUpgrades) => ReligionUpgradeInfo | undefined;
+    getRU: (name: ReligionUpgrade) => ReligionUpgradeInfo | undefined;
 
     /**
      * The modifier produced from collected faith.
@@ -243,12 +243,12 @@ export type Game = {
     /**
      * Get transcendence upgrades.
      */
-    getTU: (name: TranscendenceUpgrades) => TranscendenceUpgradeInfo | undefined;
+    getTU: (name: TranscendenceUpgrade) => TranscendenceUpgradeInfo | undefined;
 
     /**
      * Get ziggurath upgrades.
      */
-    getZU: (name: ZiggurathUpgrades) => ZiggurathUpgradeInfo | undefined;
+    getZU: (name: ZiggurathUpgrade) => ZiggurathUpgradeInfo | undefined;
 
     praise: () => void;
 
@@ -300,7 +300,7 @@ export type Game = {
     techs: Array<TechnologyInfo>;
   };
   space: {
-    getBuilding: (building: SpaceBuildings) => {
+    getBuilding: (building: SpaceBuilding) => {
       calculateEffects: (self: unknown, game: Game) => void;
       /**
        * An internationalized description for this space building.
@@ -318,7 +318,7 @@ export type Game = {
        * An internationalized label for this space building.
        */
       label: string;
-      name: SpaceBuildings;
+      name: SpaceBuilding;
       priceRatio: number;
       prices: Array<Price>;
       requiredTech: Array<"sattelites">;
@@ -334,8 +334,8 @@ export type Game = {
       val: number;
     };
     meta: Array<{ meta: Array<{ label: string; name: string; unlocked: boolean; val: number }> }>;
-    planets: Array<{ label: string; buildings: Array<{ name: SpaceBuildings; label: string }> }>;
-    programs: Array<{ name: Missions; label: string }>;
+    planets: Array<{ label: string; buildings: Array<{ name: SpaceBuilding; label: string }> }>;
+    programs: Array<{ name: Mission; label: string }>;
   };
   tabs: [
     GameTab,
@@ -355,15 +355,15 @@ export type Game = {
     /**
      * Get ChronoForge upgrade.
      */
-    getCFU: (name: ChronoForgeUpgrades) => ChronoForgeUpgradeInfo;
+    getCFU: (name: ChronoForgeUpgrade) => ChronoForgeUpgradeInfo;
     /**
      * Get Void Space upgrade.
      */
-    getVSU: (name: VoidSpaceUpgrades) => VoidSpaceUpgradeInfo;
+    getVSU: (name: VoidSpaceUpgrade) => VoidSpaceUpgradeInfo;
     heat: number;
     isAccelerated: boolean;
     voidspaceUpgrades: Array<{
-      name: Exclude<VoidSpaceUpgrades, "usedCryochambers">;
+      name: Exclude<VoidSpaceUpgrade, "usedCryochambers">;
       label: string;
     }>;
   };

@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Resource, ResourceArray } from "../types/index.js";
+import { Resource, Resources } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class ResetResourcesSettingsItem extends Setting {
@@ -30,7 +30,7 @@ export class ResetResourcesSettings extends Setting {
 
   private initResources(): ResetResourcesResourceSettings {
     const items = {} as ResetResourcesResourceSettings;
-    ResourceArray.forEach(item => {
+    Resources.forEach(item => {
       items[item] = new ResetResourcesSettingsItem(item);
     });
     return items;
