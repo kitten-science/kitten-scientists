@@ -117,15 +117,14 @@ export class UserInterface extends UiComponent {
     $("#clearLog").prepend(this.showActivity);
 
     // Add Kitten Scientists above the game log.
-    const id = localStorage["ks.Column"] as string | undefined;
-    if (id === "#ksColumn" && !$("#ksColumn").length) {
+    if (engine.settings.ksColumn.enabled) {
       $("#rightColumn").after(
         '<div id="ksColumn" class="column"><span class="ksSpacer"></span></div>',
       );
     } else {
       $("#ksColumn").remove();
     }
-    const right = $(isNil(id) ? "#rightColumn" : id);
+    const right = $(engine.settings.ksColumn.enabled ? "#ksColumn" : "#rightColumn");
     if (right.length === 0) {
       // Try to fall back to options page.
       const optionsPageContent = $("#optionsPage .full-screen-position .page .page-content");
