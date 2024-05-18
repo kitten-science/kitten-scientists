@@ -225,12 +225,64 @@
 -   Source:
 
     ```shell
-    eslint . --ext .ts && prettier --check packages
+    yarn run lint:eslint && yarn run lint:prettier
     ```
 
 -   Description:
 
     Check source code for style issues.
+
+## lint:eslint
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    eslint . --ext .ts
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## lint:prettier
+
+-   Project: `kitten-scientists`
+-   Source:
+
+    ```shell
+    prettier --check packages
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## snapshot-analyzer:build
+
+-   Project: `@kitten-science/snapshot-analyzer`
+-   Source:
+
+    ```shell
+    vite build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## snapshot-analyzer:serve
+
+-   Project: `@kitten-science/snapshot-analyzer`
+-   Source:
+
+    ```shell
+    vite serve
+    ```
+
+-   Description:
+
+    _documentation pending_
 
 ## test
 
@@ -273,32 +325,6 @@
 
 ## test:coverage
 
--   Project: `@kitten-science/action-commit-validator`
--   Source:
-
-    ```shell
-    c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js
-    ```
-
--   Description:
-
-    Runs unit tests in all workspaces and collects code coverage information.
-
-## test:coverage
-
--   Project: `@kitten-science/action-label-manager`
--   Source:
-
-    ```shell
-    c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js
-    ```
-
--   Description:
-
-    Runs unit tests in all workspaces and collects code coverage information.
-
-## test:coverage
-
 -   Project: `@kitten-science/action-release-info`
 -   Source:
 
@@ -326,32 +352,6 @@
 ## test:inspect
 
 -   Project: `@kitten-science/action-automatic-releases`
--   Source:
-
-    ```shell
-    node $(yarn bin mocha) --inspect ./build/*.test.js
-    ```
-
--   Description:
-
-    Runs unit tests and lets you attach a debugger.
-
-## test:inspect
-
--   Project: `@kitten-science/action-commit-validator`
--   Source:
-
-    ```shell
-    node $(yarn bin mocha) --inspect ./build/*.test.js
-    ```
-
--   Description:
-
-    Runs unit tests and lets you attach a debugger.
-
-## test:inspect
-
--   Project: `@kitten-science/action-label-manager`
 -   Source:
 
     ```shell

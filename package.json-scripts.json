@@ -10,22 +10,6 @@
       "isRootManifest": false
     },
     {
-      "manifestPath": "packages/action-commit-validator/package.json",
-      "projectName": "@kitten-science/action-commit-validator",
-      "scriptName": "build",
-      "scriptCode": "yarn tsc",
-      "isGlobal": false,
-      "isRootManifest": false
-    },
-    {
-      "manifestPath": "packages/action-label-manager/package.json",
-      "projectName": "@kitten-science/action-label-manager",
-      "scriptName": "build",
-      "scriptCode": "yarn tsc",
-      "isGlobal": false,
-      "isRootManifest": false
-    },
-    {
       "manifestPath": "packages/action-release-info/package.json",
       "projectName": "@kitten-science/action-release-info",
       "scriptName": "build",
@@ -53,22 +37,6 @@
     {
       "manifestPath": "packages/action-automatic-releases/package.json",
       "projectName": "@kitten-science/action-automatic-releases",
-      "scriptName": "clean",
-      "scriptCode": "rm -rf ./build ./tsconfig.tsbuildinfo",
-      "isGlobal": false,
-      "isRootManifest": false
-    },
-    {
-      "manifestPath": "packages/action-commit-validator/package.json",
-      "projectName": "@kitten-science/action-commit-validator",
-      "scriptName": "clean",
-      "scriptCode": "rm -rf ./build ./tsconfig.tsbuildinfo",
-      "isGlobal": false,
-      "isRootManifest": false
-    },
-    {
-      "manifestPath": "packages/action-label-manager/package.json",
-      "projectName": "@kitten-science/action-label-manager",
       "scriptName": "clean",
       "scriptCode": "rm -rf ./build ./tsconfig.tsbuildinfo",
       "isGlobal": false,
@@ -210,30 +178,46 @@
       "manifestPath": "package.json",
       "projectName": "kitten-scientists",
       "scriptName": "lint:all",
-      "scriptCode": "eslint . --ext .ts && prettier --check packages",
+      "scriptCode": "yarn run lint:eslint && yarn run lint:prettier",
       "isGlobal": true,
       "isRootManifest": true,
       "description": "Check source code for style issues."
     },
     {
+      "manifestPath": "package.json",
+      "projectName": "kitten-scientists",
+      "scriptName": "lint:eslint",
+      "scriptCode": "eslint . --ext .ts",
+      "isGlobal": true,
+      "isRootManifest": true
+    },
+    {
+      "manifestPath": "package.json",
+      "projectName": "kitten-scientists",
+      "scriptName": "lint:prettier",
+      "scriptCode": "prettier --check packages",
+      "isGlobal": true,
+      "isRootManifest": true
+    },
+    {
+      "manifestPath": "packages/snapshot-analyzer/package.json",
+      "projectName": "@kitten-science/snapshot-analyzer",
+      "scriptName": "snapshot-analyzer:build",
+      "scriptCode": "vite build",
+      "isGlobal": true,
+      "isRootManifest": false
+    },
+    {
+      "manifestPath": "packages/snapshot-analyzer/package.json",
+      "projectName": "@kitten-science/snapshot-analyzer",
+      "scriptName": "snapshot-analyzer:serve",
+      "scriptCode": "vite serve",
+      "isGlobal": true,
+      "isRootManifest": false
+    },
+    {
       "manifestPath": "packages/action-automatic-releases/package.json",
       "projectName": "@kitten-science/action-automatic-releases",
-      "scriptName": "test",
-      "scriptCode": "node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
-      "isGlobal": false,
-      "isRootManifest": false
-    },
-    {
-      "manifestPath": "packages/action-commit-validator/package.json",
-      "projectName": "@kitten-science/action-commit-validator",
-      "scriptName": "test",
-      "scriptCode": "node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
-      "isGlobal": false,
-      "isRootManifest": false
-    },
-    {
-      "manifestPath": "packages/action-label-manager/package.json",
-      "projectName": "@kitten-science/action-label-manager",
       "scriptName": "test",
       "scriptCode": "node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
       "isGlobal": false,
@@ -274,24 +258,6 @@
       "description": "Runs unit tests in all workspaces and collects code coverage information."
     },
     {
-      "manifestPath": "packages/action-commit-validator/package.json",
-      "projectName": "@kitten-science/action-commit-validator",
-      "scriptName": "test:coverage",
-      "scriptCode": "c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Runs unit tests in all workspaces and collects code coverage information."
-    },
-    {
-      "manifestPath": "packages/action-label-manager/package.json",
-      "projectName": "@kitten-science/action-label-manager",
-      "scriptName": "test:coverage",
-      "scriptCode": "c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Runs unit tests in all workspaces and collects code coverage information."
-    },
-    {
       "manifestPath": "packages/action-release-info/package.json",
       "projectName": "@kitten-science/action-release-info",
       "scriptName": "test:coverage",
@@ -312,24 +278,6 @@
     {
       "manifestPath": "packages/action-automatic-releases/package.json",
       "projectName": "@kitten-science/action-automatic-releases",
-      "scriptName": "test:inspect",
-      "scriptCode": "node $(yarn bin mocha) --inspect ./build/*.test.js",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Runs unit tests and lets you attach a debugger."
-    },
-    {
-      "manifestPath": "packages/action-commit-validator/package.json",
-      "projectName": "@kitten-science/action-commit-validator",
-      "scriptName": "test:inspect",
-      "scriptCode": "node $(yarn bin mocha) --inspect ./build/*.test.js",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Runs unit tests and lets you attach a debugger."
-    },
-    {
-      "manifestPath": "packages/action-label-manager/package.json",
-      "projectName": "@kitten-science/action-label-manager",
       "scriptName": "test:inspect",
       "scriptCode": "node $(yarn bin mocha) --inspect ./build/*.test.js",
       "isGlobal": true,

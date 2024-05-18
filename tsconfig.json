@@ -5,9 +5,6 @@
       "path": "packages/action-automatic-releases"
     },
     {
-      "path": "packages/action-commit-validator"
-    },
-    {
       "path": "packages/action-release-info"
     },
     {
