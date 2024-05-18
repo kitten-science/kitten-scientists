@@ -30,7 +30,8 @@ jobs:
 
       - run: yarn kitten-scientists:release
 
-      - uses: ./packages/action-automatic-releases
+      - name: Generate GitHub release
+        uses: oliversalzburg/action-automatic-releases@main
         with:
           # Create only as draft, so we can add a description on the web UI.
           draft: true

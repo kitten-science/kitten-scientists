@@ -53,7 +53,8 @@ jobs:
           export KS_VERSION=$(yarn kitten-scientists:version)
           echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
       - run: yarn kitten-scientists:release
-      - uses: ./packages/action-automatic-releases
+      - name: Generate GitHub release
+        uses: oliversalzburg/action-automatic-releases@main
         with:
           automatic_release_tag: nightly
           draft: false
