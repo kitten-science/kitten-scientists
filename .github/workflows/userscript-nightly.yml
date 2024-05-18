@@ -54,7 +54,7 @@ jobs:
           echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
       - run: yarn kitten-scientists:release
       - name: Generate GitHub release
-        uses: oliversalzburg/action-automatic-semantic-releases@950f324c5b393977906acc34b028dd5ab78766c6 # v0.0.4
+        uses: oliversalzburg/action-automatic-semantic-releases@f8f612aa2f426482e1f64f96b840ae6a45f3d3fd # v0.0.5
         with:
           automatic_release_tag: nightly
           draft: false
