@@ -24,9 +24,7 @@ jobs:
       - run: yarn test:all
       - run: yarn kitten-scientists:build
 
-      - run: yarn workspace @kitten-science/action-commit-validator tsc --build
-
-      - uses: ./packages/action-commit-validator
+      - uses: oliversalzburg/action-commit-validator@main
         if: github.event_name == 'pull_request'
         with:
           accept_breaking_changes: false
