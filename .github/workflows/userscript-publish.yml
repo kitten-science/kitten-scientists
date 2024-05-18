@@ -44,7 +44,7 @@ jobs:
         run: yarn kitten-scientists:release
 
       - name: Generate GitHub release
-        uses: oliversalzburg/action-automatic-releases@main
+        uses: oliversalzburg/action-automatic-semantic-releases@v0.0.4
         with:
           automatic_release_tag: next
           draft: false
