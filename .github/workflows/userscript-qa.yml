@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
 
       - name: Validate commit messages
         uses: oliversalzburg/action-commit-validator@d2d4febb6b8c29d22afa98d8b9fd39f442758e37 # v0.0.4
