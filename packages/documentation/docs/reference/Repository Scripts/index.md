@@ -312,19 +312,6 @@
 
 ## test:coverage
 
--   Project: `@kitten-science/action-automatic-releases`
--   Source:
-
-    ```shell
-    c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js
-    ```
-
--   Description:
-
-    Runs unit tests in all workspaces and collects code coverage information.
-
-## test:coverage
-
 -   Project: `@kitten-science/action-release-info`
 -   Source:
 
@@ -348,19 +335,6 @@
 -   Description:
 
     Runs the `test:coverage` script in all workspaces.
-
-## test:inspect
-
--   Project: `@kitten-science/action-automatic-releases`
--   Source:
-
-    ```shell
-    node $(yarn bin mocha) --inspect ./build/*.test.js
-    ```
-
--   Description:
-
-    Runs unit tests and lets you attach a debugger.
 
 ## test:inspect
 

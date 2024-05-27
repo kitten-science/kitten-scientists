@@ -2,9 +2,6 @@
   "files": [],
   "references": [
     {
-      "path": "packages/action-automatic-releases"
-    },
-    {
       "path": "packages/action-release-info"
     },
     {
