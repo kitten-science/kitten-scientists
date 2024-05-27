@@ -25,8 +25,38 @@ export type StoredState = {
   timestamp: string;
 };
 
+/**
+ * Unique wraps an object to prevent accidental sharing of references by
+ * returning cloned versions instead.
+ */
+class Unique<T> {
+  private _elem: T;
+
+  constructor(elem: T) {
+    this._elem = structuredClone(elem);
+  }
+
+  unwrap() {
+    return structuredClone(this._elem);
+  }
+
+  replace(elem: T) {
+    this._elem = structuredClone(elem);
+  }
+
+  toJSON() {
+    return this.unwrap();
+  }
+}
+
 export class StateManagementUi extends SettingsPanel<StateSettings> {
-  readonly states = new Array<StoredState>();
+  /**
+   * The states persisted to local storage. They use Unique<T> so that when we
+   * provide a state to the engine to load or get a state from the engine to
+   * save, we are not accidentally sharing a reference to a live object.
+   */
+  readonly states = new Array<Unique<StoredState>>();
+
   readonly stateList: SettingsList;
   readonly locale: Locale;
 
@@ -148,7 +178,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       while (!isNil(state)) {
         const stateObject = JSON.parse(state) as StoredState;
         UserScript.unknownAsEngineStateOrThrow(stateObject.state);
-        this.states.push(stateObject);
+        this.states.push(new Unique(stateObject));
         state = localStorage.getItem(`ks.state.${++stateIndex}`);
       }
     } catch (error) {
@@ -174,7 +204,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     this.stateList.removeChildren(this.stateList.children);
     const unlabeled = this._host.engine.i18n("state.unlabled");
-    for (const state of this.states) {
+    for (const stateSlot of this.states) {
+      const state = stateSlot.unwrap();
       const button = new TextButton(
         this._host,
         `${state.label ?? unlabeled} (${formatDistanceToNow(new Date(state.timestamp), {
@@ -187,7 +218,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       const listItem = new ButtonListItem(this._host, button);
 
       const deleteButton = new DeleteButton(this._host);
-      deleteButton.element.on("click", () => this.deleteState(state));
+      deleteButton.element.on("click", () => this.deleteState(stateSlot));
       listItem.addChild(deleteButton);
 
       const copyButton = new CopyButton(this._host);
@@ -200,7 +231,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       const updateButton = new UpdateButton(this._host);
       updateButton.element.on(
         "click",
-        () => void this.updateState(state, this._host.engine.stateSerialize()),
+        () => void this.updateState(stateSlot, this._host.engine.stateSerialize()),
       );
       listItem.addChild(updateButton);
 
@@ -292,11 +323,13 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       label = label.substring(0, 127);
     }
 
-    this.states.push({
-      label,
-      state: state ?? this._host.engine.stateSerialize(),
-      timestamp: new Date().toISOString(),
-    });
+    this.states.push(
+      new Unique({
+        label,
+        state: state ?? this._host.engine.stateSerialize(),
+        timestamp: new Date().toISOString(),
+      }),
+    );
 
     this._storeStates();
 
@@ -328,7 +361,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this._host.engine.imessage("state.loaded");
   }
 
-  updateState(state: StoredState, newState: EngineState) {
+  updateState(state: Unique<StoredState>, newState: EngineState) {
     if (
       !this.setting.noConfirm.enabled &&
       !window.confirm(this._host.engine.i18n("state.confirmDestruction"))
@@ -336,23 +369,18 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       return;
     }
 
-    const index = this.states.indexOf(state);
-    if (index < 0) {
-      return;
-    }
-
-    this.states[index] = {
-      label: state.label,
+    state.replace({
+      label: state.unwrap().label,
       state: newState,
       timestamp: new Date().toISOString(),
-    };
+    });
     this._storeStates();
     this.refreshUi();
 
     this._host.engine.imessage("state.updated");
   }
 
-  deleteState(state: StoredState) {
+  deleteState(state: Unique<StoredState>) {
     if (
       !this.setting.noConfirm.enabled &&
       !window.confirm(this._host.engine.i18n("state.confirmDestruction"))
