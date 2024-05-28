@@ -61,6 +61,7 @@
   "option.crypto": "Trade Blackcoin",
   "option.elect": "지도자 설정",
   "option.elect.job": "Job",
+  "option.elect.job.any": "Any",
   "option.elect.trait": "Trait",
   "option.embassies": "Build Embassies",
   "option.faith.adore": "은하계 숭배",

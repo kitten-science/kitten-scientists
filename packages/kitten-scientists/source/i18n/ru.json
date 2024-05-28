@@ -61,6 +61,7 @@
   "option.crypto": "Trade Blackcoin",
   "option.elect": "Elect leader",
   "option.elect.job": "Job",
+  "option.elect.job.any": "Any",
   "option.elect.trait": "Trait",
   "option.embassies": "Build Embassies",
   "option.faith.adore": "Adore the Galaxy",
