@@ -52,7 +52,7 @@ jobs:
         run: yarn kitten-scientists:release
 
       - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@897ed5eab6ed058a474202017ada7f40bfa52940 # v1.0.0
+        uses: actions/attest-build-provenance@173725a1209d09b31f9d30a3890cf2757ebbff0d # v1.1.2
         with:
           subject-path: packages/kitten-scientists/output/*
 
