@@ -704,7 +704,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kitten-science/documentation@workspace:packages/documentation"
   dependencies:
-    node-scripts-docs: "npm:1.0.1"
+    node-scripts-docs: "npm:1.0.3"
   languageName: unknown
   linkType: soft
 
@@ -1133,10 +1133,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sindresorhus/merge-streams@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@sindresorhus/merge-streams@npm:1.0.0"
-  checksum: 10c0/43d077170845dc621002e9730aea567e6e126e84b3bbff01b8575266efdb2c81d223939d3bec24020e53960c154b4640bef7746aeb245abd94c5d32972dd6854
+"@sindresorhus/merge-streams@npm:^2.1.0":
+  version: 2.3.0
+  resolution: "@sindresorhus/merge-streams@npm:2.3.0"
+  checksum: 10c0/69ee906f3125fb2c6bb6ec5cdd84e8827d93b49b3892bce8b62267116cc7e197b5cccf20c160a1d32c26014ecd14470a72a5e3ee37a58f1d6dadc0db1ccf3894
   languageName: node
   linkType: hard
 
@@ -3117,17 +3117,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globby@npm:14.0.0":
-  version: 14.0.0
-  resolution: "globby@npm:14.0.0"
+"globby@npm:14.0.1":
+  version: 14.0.1
+  resolution: "globby@npm:14.0.1"
   dependencies:
-    "@sindresorhus/merge-streams": "npm:^1.0.0"
+    "@sindresorhus/merge-streams": "npm:^2.1.0"
     fast-glob: "npm:^3.3.2"
     ignore: "npm:^5.2.4"
     path-type: "npm:^5.0.0"
     slash: "npm:^5.1.0"
     unicorn-magic: "npm:^0.1.0"
-  checksum: 10c0/6d98738a419f948ef23da019275b15ca5c65bb7e354ecea52a3015f4dae6b28a713fcf73bf3aab1c04039f4f62da71cff191a7ececc37c0e4c9b4320a047505f
+  checksum: 10c0/749a6be91cf455c161ebb5c9130df3991cb9fd7568425db850a8279a6cf45acd031c5069395beb7aeb4dd606b64f0d6ff8116c93726178d8e6182fee58c2736d
   languageName: node
   linkType: hard
 
@@ -3890,12 +3890,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:10.0.0":
-  version: 10.0.0
-  resolution: "marked@npm:10.0.0"
+"marked@npm:12.0.2":
+  version: 12.0.2
+  resolution: "marked@npm:12.0.2"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/5882b04a5f0d619757b281f09a67eb8f9e966299083748b51b144b482c56527161cc4dee3ef8e334926c84b7c6ad2bb5c48af5855a52c6ae460131175e3fb93f
+  checksum: 10c0/45ae2e1e3f06b30a5b5f64efc6cde9830c81d1d024fd7668772a3217f1bc0f326e66a6b8970482d9783edf1f581fecac7023a7fa160f2c14dbcc16e064b4eafb
   languageName: node
   linkType: hard
 
@@ -4273,18 +4273,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-scripts-docs@npm:1.0.1":
-  version: 1.0.1
-  resolution: "node-scripts-docs@npm:1.0.1"
+"node-scripts-docs@npm:1.0.3":
+  version: 1.0.3
+  resolution: "node-scripts-docs@npm:1.0.3"
   dependencies:
+    "@oliversalzburg/js-utils": "npm:0.0.39"
     elapsed-time: "npm:0.0.1"
-    globby: "npm:14.0.0"
-    marked: "npm:10.0.0"
+    globby: "npm:14.0.1"
+    marked: "npm:12.0.2"
     minimist: "npm:1.2.8"
     tslib: "npm:2.6.2"
   bin:
     nsd: output/node-scripts-docs.js
-  checksum: 10c0/0c52caa952d74188fdfc35251fa5ed7788f9b2d57daf03ea61eb8820c1c0bd3f3a3188c3c91a7f08517602c25aea69c86860a8987ed83adab72f6c2fe46bca7a
+  checksum: 10c0/b01ca3eef268fe50712091eaf455de5a7510cbb021610b4a348ca70bdb1fd200994859267504a89b0022c45457620efdd530218c00bc9de7e26593e14a8537d4
   languageName: node
   linkType: hard
 
