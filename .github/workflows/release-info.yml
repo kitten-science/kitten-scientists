@@ -24,9 +24,11 @@ jobs:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
       - name: Select NodeJS version
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
-        with:
+        env:
           # renovate: datasource=docker depName=node versioning=node
-          node-version: "20.12.2"
+          NODE_VERSION: "20.14.0"
+        with:
+          node-version: ${{ env.NODE_VERSION }}
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build the release-info action
