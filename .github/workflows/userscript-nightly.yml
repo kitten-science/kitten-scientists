@@ -55,6 +55,20 @@ jobs:
           export KS_VERSION=$(yarn kitten-scientists:version)
           echo "KS_VERSION=$KS_VERSION" >> $GITHUB_ENV
       - run: yarn kitten-scientists:release
+      - name: Generate SBOM
+        uses: anchore/sbom-action@e8d2a6937ecead383dfe75190d104edd1f9c5751 # v0
+        with:
+          format: spdx-json
+          output-file: sbom.spdx.json
+          upload-artifact: false
+          upload-release-assets: false
+
+      - name: Attest SBOM
+        uses: actions/attest-sbom@v1
+        with:
+          subject-path: packages/kitten-scientists/output/*
+          sbom-path: sbom.spdx.json
+
       - name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@bc429dc1af8c036b5f8c11fef7bcb0becfd5064d # v0.0.13
         with:
@@ -62,6 +76,7 @@ jobs:
           draft: false
           files: |
             packages/kitten-scientists/output/*
+            sbom.spdx.json
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: Nightly Build v${{ env.KS_VERSION }}
