@@ -30,7 +30,8 @@ jobs:
       - run: yarn build:all
       - run: yarn lint:all
 
-      - run: yarn kitten-scientists:release
+      - name: Build release
+        run: yarn kitten-scientists:release
 
       - name: Generate SBOM
         uses: anchore/sbom-action@e8d2a6937ecead383dfe75190d104edd1f9c5751 # v0
