@@ -24,6 +24,29 @@ Usually, KS will not combust any more TCs when you have already reached your chr
 
 You can ignore this, when moving forward through time is more important than saving the time crystals.
 
+### Active Heat Transfer
+
+Allows you to configure KS to Heat Transfer at specified Cycle.
+
+For **Active Heat Transfer** to be triggered, all of these have to be true:
+
+1. The [**Ignore overheat**](#ignore-overheat) option is not enabled.
+1. The **Heat Max** has been exceeded.
+1. We are within an enabled **Cycle**.
+
+KS will maintain the Heat Transfer state until the Heat drops below the trigger threshold.
+
+### Get Temporal Flux
+
+For **Get Temporal Flux** to be triggered, all of these have to be true:
+
+1. The [**Tempus Fugit**](#tempus-fugit) option is enabled.
+1. The Temporal Flux acquired from the combust TCs can accelerate the required Heat Transfer time for generating Temporal Heat.
+1. The **total** amount of Temporal Flux can accelerate a year's time.
+1. The amount of Temporal Flux is insufficient to accelerate the next year.
+
+KS will prepare to accelerate the Temporal Flux for the next year in the first 10 days of each year.
+
 ## Reset Timeline
 
 This automation allows you to reset your entire game, when all your configured conditions are met.
