@@ -87,9 +87,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:7.24.6":
-  version: 7.24.6
-  resolution: "@babel/eslint-parser@npm:7.24.6"
+"@babel/eslint-parser@npm:7.24.7":
+  version: 7.24.7
+  resolution: "@babel/eslint-parser@npm:7.24.7"
   dependencies:
     "@nicolo-ribaudo/eslint-scope-5-internals": "npm:5.1.1-v1"
     eslint-visitor-keys: "npm:^2.1.0"
@@ -97,7 +97,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.11.0
     eslint: ^7.5.0 || ^8.0.0 || ^9.0.0
-  checksum: 10c0/9c2e79e4cd68ba46e219dc2a5f55e74f843333707f3834e1a66aefb5a05f3509798de02abf436fd15decbc56e7d7cacef94473467576d9fb487134cc31633fb8
+  checksum: 10c0/5f001cd9876a578dd6960d836d17925c4a75c8723f2bcab622127dd653c8d5c3ec3f9bbbb87ce8920f062bb415c3883c4baf040bf7429344dd1e8b314a678b79
   languageName: node
   linkType: hard
 
@@ -2574,9 +2574,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsdoc@npm:48.2.7":
-  version: 48.2.7
-  resolution: "eslint-plugin-jsdoc@npm:48.2.7"
+"eslint-plugin-jsdoc@npm:48.2.8":
+  version: 48.2.8
+  resolution: "eslint-plugin-jsdoc@npm:48.2.8"
   dependencies:
     "@es-joy/jsdoccomment": "npm:~0.43.1"
     are-docs-informative: "npm:^0.0.2"
@@ -2588,7 +2588,7 @@ __metadata:
     spdx-expression-parse: "npm:^4.0.0"
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
-  checksum: 10c0/74d0f95b3d880dd4221dbc0b9341266a6cce3b8ca8d3e30032223af3552364643d6b82ad733d9bc06a20f0d640f21e4d8f5a4b00901d1771572625178b8c40c3
+  checksum: 10c0/bf9d060aee4ba28148aff104dcc7d0fc7002a8e4f9dafb27d9ac5f928868687606219c2bfcc5216aa37003cf0353ae8e8ac4fd47dd28a22da22fd1967117e56a
   languageName: node
   linkType: hard
 
@@ -3692,7 +3692,7 @@ __metadata:
   resolution: "kitten-scientists@workspace:."
   dependencies:
     "@babel/core": "npm:7.24.7"
-    "@babel/eslint-parser": "npm:7.24.6"
+    "@babel/eslint-parser": "npm:7.24.7"
     "@babel/plugin-syntax-import-assertions": "npm:7.24.7"
     "@types/babel__core": "npm:7.20.5"
     "@types/eslint": "npm:8.56.10"
@@ -3702,7 +3702,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:7.12.0"
     "@typescript-eslint/parser": "npm:7.12.0"
     eslint: "npm:8.57.0"
-    eslint-plugin-jsdoc: "npm:48.2.7"
+    eslint-plugin-jsdoc: "npm:48.2.8"
     lint-staged: "npm:15.2.5"
     prettier: "npm:3.3.1"
     prettier-package-json: "npm:2.8.0"
