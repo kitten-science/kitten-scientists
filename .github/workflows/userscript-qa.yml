@@ -1,4 +1,4 @@
-name: Pull Request
+name: QA
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   qa:
+    name: Run QA
     runs-on: ubuntu-22.04
     permissions:
       contents: read
