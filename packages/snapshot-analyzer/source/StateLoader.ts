@@ -37,8 +37,8 @@ export class StateLoader {
     if (rootObject === null) {
       try {
         const decompressed = decompressFromBase64(source);
-        rootObject = UserScript.decodeSettings(decompressed) ?? null;
-      } catch (error) {
+        rootObject = UserScript.decodeSettings(decompressed);
+      } catch (_error) {
         // Assuming `window.LZString is undefined`, as KS tried to decompress the input.
         // This is an indicator that the input wasn't a valid lz-string compressed JSON string in the first place.
       }
@@ -47,8 +47,8 @@ export class StateLoader {
     // Interpret as base64-encoded JSON
     if (rootObject === null) {
       try {
-        rootObject = UserScript.decodeSettings(source) ?? null;
-      } catch (error) {
+        rootObject = UserScript.decodeSettings(source);
+      } catch (_error) {
         // Assuming `window.LZString is undefined`, as KS tried to decompress the input.
         // This is an indicator that the input could not be interpreted as a JSON string.
       }
@@ -58,7 +58,7 @@ export class StateLoader {
     if (rootObject === null) {
       try {
         rootObject = JSON.parse(source) ?? null;
-      } catch (error) {
+      } catch (_error) {
         // Assuming `unexpected character at line 1 column 1` or other parsing error.
         // This indicates that the input is not a valid JSON string.
       }

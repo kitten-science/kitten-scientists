@@ -21,8 +21,12 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
       if (isNil(this.setting.policies[policie.name])) continue;
       const label = policie.label;
       const button = new SettingListItem(this._host, label, this.setting.policies[policie.name], {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+        onCheck: () => {
+          this._host.engine.imessage("status.sub.enable", [label]);
+        },
+        onUnCheck: () => {
+          this._host.engine.imessage("status.sub.disable", [label]);
+        },
       });
 
       items.push({ label: label, button: button });
@@ -32,7 +36,9 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
       items.sort((a, b) => a.label.localeCompare(b.label));
     }
     const itemsList = new SettingsList(this._host);
-    items.forEach(button => itemsList.addChild(button.button));
+    items.forEach(button => {
+      itemsList.addChild(button.button);
+    });
     this.addChild(itemsList);
   }
 }

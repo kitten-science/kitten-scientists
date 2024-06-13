@@ -75,8 +75,12 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   private _makeResourceSetting(title: string, setting: ResourcesSettingsItem) {
     // The overall container for this resource item.
     const container = new SettingListItem(this._host, title, setting, {
-      onCheck: () => this._host.engine.imessage("status.resource.enable", [title]),
-      onUnCheck: () => this._host.engine.imessage("status.resource.disable", [title]),
+      onCheck: () => {
+        this._host.engine.imessage("status.resource.enable", [title]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.resource.disable", [title]);
+      },
     });
 
     // How many items to stock.

@@ -112,7 +112,7 @@ export class ActivitySummary {
     // Technologies.
     if (this._sections.has("research")) {
       const section = mustExist(this._sections.get("research"));
-      section.forEach((amount, name) => {
+      section.forEach((_amount, name) => {
         summary.push(this._host.engine.i18n("summary.tech", [ucfirst(name)]));
       });
     }
@@ -120,7 +120,7 @@ export class ActivitySummary {
     // Upgrades.
     if (this._sections.has("upgrade")) {
       const section = mustExist(this._sections.get("upgrade"));
-      section.forEach((amount, name) => {
+      section.forEach((_amount, name) => {
         summary.push(this._host.engine.i18n("summary.upgrade", [ucfirst(name)]));
       });
     }

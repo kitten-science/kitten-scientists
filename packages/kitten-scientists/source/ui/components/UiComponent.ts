@@ -15,7 +15,7 @@ export abstract class UiComponent extends EventTarget {
   /**
    * The main DOM element for this component, in a JQuery wrapper.
    */
-  abstract readonly element: JQuery<HTMLElement>;
+  abstract readonly element: JQuery;
 
   readonly children = new Set<UiComponent>();
 

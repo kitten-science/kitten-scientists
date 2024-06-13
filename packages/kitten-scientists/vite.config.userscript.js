@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import { metablock } from "vite-plugin-userscript";
-import manifest from "./package.json" assert { type: "json" };
+import manifest from "./package.json" with { type: "json" };
 
 const isCi = Boolean(process.env.CI);
 const isDevBuild = String(process.env.DEV_BUILD) === "true";

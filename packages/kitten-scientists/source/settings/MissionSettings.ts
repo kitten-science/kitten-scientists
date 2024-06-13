@@ -38,8 +38,7 @@ export class MissionSettings extends Setting {
 
   static validateGame(game: Game, settings: MissionSettings) {
     const inSettings = Object.keys(settings.missions);
-    // TODO: Find a better place in the game where this information is *always* available.
-    const inGame = (game.space.programs ?? []).map(program => program.name);
+    const inGame = game.space.programs.map(program => program.name);
 
     const missingInSettings = difference(inGame, inSettings);
     const redundantInSettings = difference(inSettings, inGame);

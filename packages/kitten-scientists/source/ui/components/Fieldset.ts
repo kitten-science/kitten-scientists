@@ -6,7 +6,7 @@ export type FieldsetOptions = UiComponentOptions & {
 };
 
 export class Fieldset extends UiComponent {
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
 
   /**
    * Constructs a `Fieldset`.

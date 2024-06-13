@@ -22,7 +22,7 @@ export class CollapsiblePanel<
   THead extends UiComponent = UiComponent,
 > extends UiComponent {
   protected readonly container: UiComponent;
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
   protected readonly _expando: ExpandoButton;
   protected readonly _head: THead;
   protected _mainChildVisible: boolean;

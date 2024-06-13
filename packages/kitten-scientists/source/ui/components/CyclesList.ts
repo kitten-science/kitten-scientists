@@ -129,20 +129,22 @@ export class CyclesList extends SettingsList {
 
   private _makeCycle(label: string, setting: Setting) {
     return new SettingListItem(this._host, label, setting, {
-      onCheck: () =>
+      onCheck: () => {
         this._host.engine.imessage(
           this.behavior === "heatTransfer"
             ? "time.HeatTransfer.cycle.enable"
             : "time.skip.cycle.enable",
           [label],
-        ),
-      onUnCheck: () =>
+        );
+      },
+      onUnCheck: () => {
         this._host.engine.imessage(
           this.behavior === "heatTransfer"
             ? "time.HeatTransfer.cycle.disable"
             : "time.skip.cycle.disable",
           [label],
-        ),
+        );
+      },
     });
   }
 

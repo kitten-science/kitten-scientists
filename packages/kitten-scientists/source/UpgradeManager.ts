@@ -29,7 +29,9 @@ export abstract class UpgradeManager {
     this._host.game.opts.noConfirm = true;
     const success = await UpgradeManager.skipConfirm(
       () =>
-        new Promise(resolve => controller.buyItem(button.model, new MouseEvent("click"), resolve)),
+        new Promise(resolve => {
+          controller.buyItem(button.model, new MouseEvent("click"), resolve);
+        }),
     );
 
     if (!success) {
@@ -43,6 +45,7 @@ export abstract class UpgradeManager {
       this._host.engine.iactivity("upgrade.upgrade", [label], "ks-upgrade");
     } else if (variant === "policy") {
       this._host.engine.iactivity("upgrade.policy", [label]);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     } else if (variant === "science") {
       this._host.engine.storeForSummary(label, 1, "research");
       this._host.engine.iactivity("upgrade.tech", [label], "ks-research");
@@ -77,6 +80,7 @@ export abstract class UpgradeManager {
       buttons = this.manager.tab.buttons;
     } else if (variant === "policy") {
       buttons = (this.manager.tab as ScienceTab).policyPanel.children;
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     } else if (variant === "science") {
       buttons = this.manager.tab.buttons;
     }

@@ -23,8 +23,8 @@ export type SettingsListOptions = UiComponentOptions & {
  * This construct is also sometimes referred to as an "items list" for historic reasons.
  */
 export class SettingsList extends UiComponent {
-  readonly element: JQuery<HTMLElement>;
-  readonly list: JQuery<HTMLElement>;
+  readonly element: JQuery;
+  readonly list: JQuery;
 
   readonly disableAllButton: DisableButton | undefined;
   readonly enableAllButton: EnableButton | undefined;
@@ -108,7 +108,9 @@ export class SettingsList extends UiComponent {
       const onReset = toolOptions.onReset;
       if (!isNil(onReset)) {
         this.resetButton = new ResetButton(this._host);
-        this.resetButton.element.on("click", () => onReset());
+        this.resetButton.element.on("click", () => {
+          onReset();
+        });
         tools.append(this.resetButton.element);
       }
 

@@ -2,7 +2,7 @@ import { UserScript } from "../../UserScript.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export class ExpandoButton extends UiComponent {
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
 
   /**
    * Constructs an expando element that is commonly used to expand and

@@ -25,7 +25,7 @@ export type BonfireTab = GameTab;
 export class BonfireManager implements Automation {
   private readonly _host: UserScript;
   readonly settings: BonfireSettings;
-  readonly manager: TabManager<BonfireTab>;
+  readonly manager: TabManager;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
@@ -42,7 +42,7 @@ export class BonfireManager implements Automation {
     this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
   }
 
-  tick(context: TickContext) {
+  tick(_context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }

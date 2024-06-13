@@ -149,7 +149,7 @@ export type UpgradeInfo = {
   prices: Array<Price>;
   researched: boolean;
   unlocked: boolean;
-  unlocks: { upgrades: Array<unknown> };
+  unlocks?: { upgrades: Array<unknown> };
 };
 
 export type WorkshopTab = GameTab;

@@ -53,7 +53,7 @@ export type Game = {
     cryptoPrice: number;
     cycle: CycleIndices;
     cycleEffectsFestival: (options: { catnip: number }) => { catnip: number };
-    cycles: Array<{ festivalEffects: { unicorns: number }; title: string }>;
+    cycles: Array<{ festivalEffects: { unicorns?: number }; title: string }>;
     cyclesPerEra: number;
     cycleYear: number;
     day: number;
@@ -79,7 +79,7 @@ export type Game = {
     yearsPerCycle: number;
   };
   challenges: {
-    currentChallenge: Challenge;
+    currentChallenge?: Challenge;
     challenges: Array<{ pending: boolean }>;
     getChallenge: (challenge: Challenge) => {
       active: boolean;

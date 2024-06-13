@@ -131,7 +131,7 @@ export class ReligionSettings extends SettingTrigger {
   }
 
   private initBuildings(): ReligionSettingsItems {
-    const defaultOffBuilding: ReligionUpgrade[] = ["apocripha"];
+    const defaultOffBuilding: Array<ReligionUpgrade> = ["apocripha"];
     const items = {} as ReligionSettingsItems;
     ReligionUpgrades.forEach(item => {
       items[item] = new ReligionSettingsItem(

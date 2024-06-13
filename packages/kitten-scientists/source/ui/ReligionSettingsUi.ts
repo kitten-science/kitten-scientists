@@ -112,8 +112,12 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
             ),
           ),
       ],
-      onEnableAll: () => this.refreshUi(),
-      onDisableAll: () => this.refreshUi(),
+      onEnableAll: () => {
+        this.refreshUi();
+      },
+      onDisableAll: () => {
+        this.refreshUi();
+      },
       onReset: () => {
         const defaults = new ReligionSettings();
         this.setting.load({
@@ -133,16 +137,23 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
           const label = this._host.engine.i18n(`option.faith.${item}`);
           if (item === "transcend") {
             return new SettingListItem(this._host, label, this.setting[item], {
-              onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-              onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-            });
-          } else {
-            return new SettingTriggerListItem(this._host, label, this.setting[item], {
-              behavior: "integer",
-              onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-              onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+              onCheck: () => {
+                this._host.engine.imessage("status.sub.enable", [label]);
+              },
+              onUnCheck: () => {
+                this._host.engine.imessage("status.sub.disable", [label]);
+              },
             });
           }
+          return new SettingTriggerListItem(this._host, label, this.setting[item], {
+            behavior: "integer",
+            onCheck: () => {
+              this._host.engine.imessage("status.sub.enable", [label]);
+            },
+            onUnCheck: () => {
+              this._host.engine.imessage("status.sub.disable", [label]);
+            },
+          });
         }),
       ],
       hasDisableAll: false,

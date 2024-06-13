@@ -23,7 +23,7 @@ export class TradeManager implements Automation {
     this._workshopManager = workshopManager;
   }
 
-  tick(context: TickContext) {
+  tick(_context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }
@@ -277,7 +277,7 @@ export class TradeManager implements Automation {
 
     const culture = this._workshopManager.getResource("culture");
     let cultureVal = 0;
-    const trigger = this.settings.buildEmbassies.trigger ?? 0;
+    const trigger = this.settings.buildEmbassies.trigger;
     if (culture.value / culture.maxValue < trigger) {
       return;
     }
@@ -323,7 +323,7 @@ export class TradeManager implements Automation {
       embassyBulk[name] = {
         val: 0,
         max,
-        basePrice: race.embassyPrices[0].val,
+        basePrice: mustExist(race.embassyPrices?.[0]).val,
         currentEm: race.embassyLevel,
         priceSum: 0,
         race: race,
@@ -541,8 +541,8 @@ export class TradeManager implements Automation {
     // Exchanges up to a certain threshold, in order to keep a good exchange rate, then waits
     // for a higher threshold before exchanging for relics.
     if (
-      coinPrice < (this.settings.tradeBlackcoin.buy ?? 950.0) &&
-      (this.settings.tradeBlackcoin.trigger ?? 0) < relicsInitial
+      coinPrice < this.settings.tradeBlackcoin.buy &&
+      this.settings.tradeBlackcoin.trigger < relicsInitial
     ) {
       // function name changed in v1.4.8.0
       if (typeof this._host.game.diplomacy.buyEcoin === "function") {
@@ -555,7 +555,7 @@ export class TradeManager implements Automation {
       coinsExchanged = Math.round(currentCoin - coinsInitial);
       this._host.engine.iactivity("blackcoin.buy", [coinsExchanged]);
     } else if (
-      coinPrice > (this.settings.tradeBlackcoin.sell ?? 1050.0) &&
+      coinPrice > this.settings.tradeBlackcoin.sell &&
       0 < this._host.game.resPool.get("blackcoin").value
     ) {
       // function name changed in v1.4.8.0
@@ -579,12 +579,6 @@ export class TradeManager implements Automation {
    * @param amount How often to trade with the race.
    */
   trade(name: Race, amount: number): void {
-    if (!name || 1 > amount) {
-      cwarn(
-        "KS trade checks are not functioning properly, please create an issue on the github page.",
-      );
-    }
-
     const race = this.getRace(name);
     const button = this.getTradeButton(race.name);
 
@@ -750,11 +744,11 @@ export class TradeManager implements Automation {
    * Determine how many trades are at least possible.
    *
    * @param name The race to trade with.
-   * @param limited Is the race set to be limited.
-   * @param trigConditions Ignored
+   * @param _limited Is the race set to be limited.
+   * @param _trigConditions Ignored
    * @returns The lowest number of trades possible with this race.
    */
-  getLowestTradeAmount(name: Race | null, limited: boolean, trigConditions: unknown): number {
+  getLowestTradeAmount(name: Race | null, _limited: boolean, _trigConditions: unknown): number {
     let amount: number | undefined = undefined;
     const materials = this.getMaterials(name);
 

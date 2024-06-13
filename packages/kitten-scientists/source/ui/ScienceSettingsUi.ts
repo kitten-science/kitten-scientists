@@ -29,14 +29,16 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
       this._host.engine.i18n("option.observe"),
       this.setting.observe,
       {
-        onCheck: () =>
+        onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.observe"),
-          ]),
-        onUnCheck: () =>
+          ]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.observe"),
-          ]),
+          ]);
+        },
       },
     );
 

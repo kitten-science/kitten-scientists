@@ -58,14 +58,16 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
             this._host.engine.i18n("option.shipOverride"),
             this.setting.shipOverride,
             {
-              onCheck: () =>
+              onCheck: () => {
                 this._host.engine.imessage("status.sub.enable", [
                   this._host.engine.i18n("option.shipOverride"),
-                ]),
-              onUnCheck: () =>
+                ]);
+              },
+              onUnCheck: () => {
                 this._host.engine.imessage("status.sub.disable", [
                   this._host.engine.i18n("option.shipOverride"),
-                ]),
+                ]);
+              },
               upgradeIndicator: true,
             },
           ),
@@ -99,10 +101,18 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
   ) {
     return new SettingLimitedMaxListItem(this._host, label, option, {
       delimiter,
-      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
-      onLimitedCheck: () => this._host.engine.imessage("craft.limited", [label]),
-      onLimitedUnCheck: () => this._host.engine.imessage("craft.unlimited", [label]),
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [label]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [label]);
+      },
+      onLimitedCheck: () => {
+        this._host.engine.imessage("craft.limited", [label]);
+      },
+      onLimitedUnCheck: () => {
+        this._host.engine.imessage("craft.unlimited", [label]);
+      },
       upgradeIndicator,
     });
   }

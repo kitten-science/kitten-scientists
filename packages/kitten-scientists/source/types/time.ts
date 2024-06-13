@@ -75,7 +75,7 @@ export type ChronoForgeUpgradeInfo = AbstractTimeUpgradeInfo & {
 };
 
 export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
-  breakIronWill: true;
+  breakIronWill: boolean;
 
   effects: {
     maxKittens?: number;
@@ -84,7 +84,7 @@ export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
   limitBuild: 0;
   name: VoidSpaceUpgrade;
   fixPrices?: Array<Price>;
-  upgrades: {
+  upgrades?: {
     voidSpace: Array<"cryochambers">;
   };
   val: number;

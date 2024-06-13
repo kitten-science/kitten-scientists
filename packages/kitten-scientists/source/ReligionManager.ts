@@ -52,7 +52,7 @@ export class ReligionManager implements Automation {
     this._bonfireManager = bonfireManager;
   }
 
-  async tick(context: TickContext) {
+  async tick(_context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }
@@ -88,7 +88,7 @@ export class ReligionManager implements Automation {
       // a bonfire building.
       const builds = Object.fromEntries(
         Object.entries(this.settings.buildings).filter(
-          ([k, v]) => v.variant !== UnicornItemVariant.UnicornPasture,
+          ([, building]) => building.variant !== UnicornItemVariant.UnicornPasture,
         ),
       );
       // Build a unicorn pasture if possible.
@@ -184,7 +184,7 @@ export class ReligionManager implements Automation {
     const alreadyHandled: Array<FaithItem | UnicornItem> = [...UnicornItems];
     const builds = Object.fromEntries(
       Object.entries(this.settings.buildings).filter(
-        ([k, v]) => !alreadyHandled.includes(v.building),
+        ([, building]) => !alreadyHandled.includes(building.building),
       ),
     );
     this._buildReligionBuildings(builds);
@@ -545,7 +545,9 @@ export class ReligionManager implements Automation {
       const controller = this._host.game.religionTab.sacrificeAlicornsBtn.controller;
       const model = this._host.game.religionTab.sacrificeAlicornsBtn.model;
 
-      await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
+      await new Promise(resolve => {
+        controller.buyItem(model, new MouseEvent("click"), resolve);
+      });
 
       const cost = mustExist(model.prices?.[0]).val;
 
@@ -571,7 +573,9 @@ export class ReligionManager implements Automation {
       const controller = new classes.ui.religion.RefineTearsBtnController(this._host.game);
       const model = this._host.game.religionTab.refineBtn.model;
 
-      await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
+      await new Promise(resolve => {
+        controller.buyItem(model, new MouseEvent("click"), resolve);
+      });
 
       this._host.engine.iactivity("act.refineTears", [], "ks-faith");
       this._host.engine.storeForSummary(
@@ -593,7 +597,9 @@ export class ReligionManager implements Automation {
       const controller = this._host.game.religionTab.refineTCBtn.controller;
       const model = this._host.game.religionTab.refineTCBtn.model;
 
-      await new Promise(resolve => controller.buyItem(model, new MouseEvent("click"), resolve));
+      await new Promise(resolve => {
+        controller.buyItem(model, new MouseEvent("click"), resolve);
+      });
 
       const cost = mustExist(model.prices?.[0]).val;
 
@@ -744,12 +750,7 @@ export class ReligionManager implements Automation {
 
   private _autoPraise() {
     const faith = this._workshopManager.getResource("faith");
-    let apocryphaBonus;
-    if (!this._host.game.religion.getFaithBonus) {
-      apocryphaBonus = this._host.game.religion.getApocryphaBonus();
-    } else {
-      apocryphaBonus = this._host.game.religion.getFaithBonus();
-    }
+    const apocryphaBonus = this._host.game.religion.getApocryphaBonus();
 
     // Determine how much worship we'll gain and log it.
     const worshipIncrease = faith.value * (1 + apocryphaBonus);

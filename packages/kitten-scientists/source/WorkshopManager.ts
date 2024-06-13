@@ -23,9 +23,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this.manager = new TabManager(this._host, "Workshop");
   }
 
-  tick(context: TickContext) {
+  tick(_context: TickContext) {
     if (!this.settings.enabled) {
-      return;
+      return Promise.resolve();
     }
 
     this.autoCraft();
@@ -34,6 +34,8 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     if (this.settings.unlockUpgrades.enabled) {
       return this.autoUnlock();
     }
+
+    return Promise.resolve();
   }
 
   async autoUnlock() {
@@ -249,7 +251,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   craft(name: ResourceCraftable, amount: number): void {
     amount = Math.floor(amount);
 
-    if (!name || amount < 1) {
+    if (amount < 1) {
       return;
     }
     if (!this._canCraft(name, amount)) {
@@ -469,7 +471,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    */
   getStock(name: Resource): number {
     const resource = this._host.engine.settings.resources.resources[name];
-    const stock = resource && resource.enabled ? resource.stock : 0;
+    const stock = resource.enabled ? resource.stock : 0;
 
     return stock;
   }
@@ -482,7 +484,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    */
   getConsume(name: Resource): number {
     const resource = this._host.engine.settings.resources.resources[name];
-    const consume = resource && resource.enabled ? resource.consume : 1;
+    const consume = resource.enabled ? resource.consume : 1;
 
     return consume;
   }
@@ -664,10 +666,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         // Craft table on the bottom.
         ...$(`#game .res-row.resource_${name} .res-cell.resource-value`),
       ];
-
-      if (!resourceCells) {
-        continue;
-      }
 
       for (const resourceCell of resourceCells) {
         resourceCell.classList.add(isBelow ? "ks-stock-below" : "ks-stock-above");

@@ -2,7 +2,7 @@ import { BuildButton, GameTab, Price, Resource, Season } from "./index.js";
 
 export type TradeTab = GameTab & {
   racePanels: Array<{
-    embassyButton: BuildButton;
+    embassyButton?: BuildButton;
     race: RaceInfo;
     tradeBtn: BuildButton;
   }>;
@@ -23,11 +23,11 @@ export type Race = (typeof Races)[number];
 export type TradeInfo = {
   chance: number;
   /**
-   * How many embassies you need to receive this resource.F
+   * How many embassies you need to receive this resource.
    */
   minLevel: number;
   name: Resource;
-  seasons: Record<Season, number>;
+  seasons?: Record<Season, number>;
   value: number;
   width: number;
 };
@@ -38,7 +38,7 @@ export type RaceInfo = {
    * How many embassies you have.
    */
   embassyLevel: number;
-  embassyPrices: Array<Price>;
+  embassyPrices?: Array<Price>;
   energy: number;
   name: Race;
   sells: Array<TradeInfo>;

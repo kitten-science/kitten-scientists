@@ -1,3 +1,5 @@
+"use strict";
+
 const manifest = require("./package.json");
 
 const isDevBuild = String(process.env.DEV_BUILD) === "true";

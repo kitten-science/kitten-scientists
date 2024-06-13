@@ -40,10 +40,12 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this._host.engine.i18n("option.hunt"),
       this.setting.hunt,
       {
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.hunt")]),
-        onUnCheck: () =>
-          this._host.engine.imessage("status.sub.disable", [this._host.engine.i18n("option.hunt")]),
+        onCheck: () => {
+          this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.hunt")]);
+        },
+        onUnCheck: () => {
+          this._host.engine.imessage("status.sub.disable", [this._host.engine.i18n("option.hunt")]);
+        },
       },
     );
     listAddition.addChild(this._hunt);
@@ -53,14 +55,16 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this._host.engine.i18n("option.festival"),
       this.setting.holdFestivals,
       {
-        onCheck: () =>
+        onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.festival"),
-          ]),
-        onUnCheck: () =>
+          ]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.festival"),
-          ]),
+          ]);
+        },
       },
     );
     listAddition.addChild(this._festivals);
@@ -70,14 +74,16 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this._host.engine.i18n("option.promotekittens"),
       this.setting.promoteKittens,
       {
-        onCheck: () =>
+        onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.promotekittens"),
-          ]),
-        onUnCheck: () =>
+          ]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.promotekittens"),
-          ]),
+          ]);
+        },
       },
     );
     listAddition.addChild(this._promoteKittens);
@@ -87,14 +93,16 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
       this._host.engine.i18n("option.promote"),
       this.setting.promoteLeader,
       {
-        onCheck: () =>
+        onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.promote"),
-          ]),
-        onUnCheck: () =>
+          ]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.promote"),
-          ]),
+          ]);
+        },
       },
     );
     listAddition.addChild(this._promoteLeader);
@@ -128,12 +136,14 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
             this.setting.electLeader.trait,
           ),
         ],
-        onCheck: () =>
-          this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.elect")]),
-        onUnCheck: () =>
+        onCheck: () => {
+          this._host.engine.imessage("status.sub.enable", [this._host.engine.i18n("option.elect")]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.elect"),
-          ]),
+          ]);
+        },
       },
     );
     listAddition.addChild(this._electLeader);
@@ -144,8 +154,12 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   private _getDistributeOption(option: SettingMax, label: string, delimiter = false) {
     return new SettingMaxListItem(this._host, label, option, {
       delimiter,
-      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [label]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [label]);
+      },
     });
   }
 }

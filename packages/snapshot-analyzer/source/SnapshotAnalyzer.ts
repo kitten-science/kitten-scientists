@@ -145,7 +145,7 @@ export class SnapshotAnalyzer extends LitElement {
       const anything = await new StateLoader().loadAnything(this._snapshotInput);
       this._snapshot = anything.engineState;
       this._snapshotRoot = anything.engineStateRoot as EngineState;
-    } catch (error) {
+    } catch (_error) {
       this._snapshot = null;
     }
 

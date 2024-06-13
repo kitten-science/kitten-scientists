@@ -3,7 +3,7 @@ import { UserScript } from "../../UserScript.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends UiComponent {
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
 
   /**
    * Construct an element to explain an area of the UI.

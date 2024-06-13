@@ -50,10 +50,14 @@ export class SettingsPanel<
     options?: Partial<SettingsPanelOptions<TListItem>>,
   ) {
     const settingItem = !isNil(options?.settingItem)
-      ? mustExist(options?.settingItem)
+      ? mustExist(options.settingItem)
       : (new SettingListItem(host, label, setting, {
-          onCheck: () => host.engine.imessage("status.auto.enable", [label]),
-          onUnCheck: () => host.engine.imessage("status.auto.disable", [label]),
+          onCheck: () => {
+            host.engine.imessage("status.auto.enable", [label]);
+          },
+          onUnCheck: () => {
+            host.engine.imessage("status.auto.disable", [label]);
+          },
         }) as unknown as TListItem);
     super(host, settingItem, options);
 
