@@ -15,7 +15,7 @@ export type LabelListItemOptions = ListItemOptions & {
 };
 
 export class LabelListItem extends ListItem {
-  readonly elementLabel: JQuery<HTMLElement>;
+  readonly elementLabel: JQuery;
 
   /**
    * Construct a new label list item.

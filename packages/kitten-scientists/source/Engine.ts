@@ -1,4 +1,14 @@
+import { Maybe, isNil, unknownToError } from "@oliversalzburg/js-utils";
 import { BonfireManager } from "./BonfireManager.js";
+import { ReligionManager } from "./ReligionManager.js";
+import { ScienceManager } from "./ScienceManager.js";
+import { SpaceManager } from "./SpaceManager.js";
+import { TimeControlManager } from "./TimeControlManager.js";
+import { TimeManager } from "./TimeManager.js";
+import { TradeManager } from "./TradeManager.js";
+import { FallbackLanguage, UserScript, ksVersion } from "./UserScript.js";
+import { VillageManager } from "./VillageManager.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 import {
   ActivityClass,
   ActivitySummary,
@@ -9,8 +19,6 @@ import de from "./i18n/de.json" assert { type: "json" };
 import en from "./i18n/en.json" assert { type: "json" };
 import he from "./i18n/he.json" assert { type: "json" };
 import zh from "./i18n/zh.json" assert { type: "json" };
-import { ReligionManager } from "./ReligionManager.js";
-import { ScienceManager } from "./ScienceManager.js";
 import { BonfireSettings } from "./settings/BonfireSettings.js";
 import { EngineSettings } from "./settings/EngineSettings.js";
 import { ReligionSettings } from "./settings/ReligionSettings.js";
@@ -21,14 +29,7 @@ import { TimeSettings } from "./settings/TimeSettings.js";
 import { TradeSettings } from "./settings/TradeSettings.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
-import { SpaceManager } from "./SpaceManager.js";
-import { TimeControlManager } from "./TimeControlManager.js";
-import { TimeManager } from "./TimeManager.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
-import { TradeManager } from "./TradeManager.js";
-import { FallbackLanguage, ksVersion, UserScript } from "./UserScript.js";
-import { VillageManager } from "./VillageManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
 
 const i18nData = { de, en, he, zh };
 
@@ -184,16 +185,36 @@ export class Engine {
       }
     };
 
-    attemptLoad(() => this.settings.load(settings.engine, retainMetaBehavior), "engine");
-    attemptLoad(() => this.bonfireManager.settings.load(settings.bonfire), "bonfire");
-    attemptLoad(() => this.religionManager.settings.load(settings.religion), "religion");
-    attemptLoad(() => this.scienceManager.settings.load(settings.science), "science");
-    attemptLoad(() => this.spaceManager.settings.load(settings.space), "space");
-    attemptLoad(() => this.timeControlManager.settings.load(settings.timeControl), "time control");
-    attemptLoad(() => this.timeManager.settings.load(settings.time), "time");
-    attemptLoad(() => this.tradeManager.settings.load(settings.trade), "trade");
-    attemptLoad(() => this.villageManager.settings.load(settings.village), "village");
-    attemptLoad(() => this.workshopManager.settings.load(settings.workshop), "workshop");
+    attemptLoad(() => {
+      this.settings.load(settings.engine, retainMetaBehavior);
+    }, "engine");
+    attemptLoad(() => {
+      this.bonfireManager.settings.load(settings.bonfire);
+    }, "bonfire");
+    attemptLoad(() => {
+      this.religionManager.settings.load(settings.religion);
+    }, "religion");
+    attemptLoad(() => {
+      this.scienceManager.settings.load(settings.science);
+    }, "science");
+    attemptLoad(() => {
+      this.spaceManager.settings.load(settings.space);
+    }, "space");
+    attemptLoad(() => {
+      this.timeControlManager.settings.load(settings.timeControl);
+    }, "time control");
+    attemptLoad(() => {
+      this.timeManager.settings.load(settings.time);
+    }, "time");
+    attemptLoad(() => {
+      this.tradeManager.settings.load(settings.trade);
+    }, "trade");
+    attemptLoad(() => {
+      this.villageManager.settings.load(settings.village);
+    }, "village");
+    attemptLoad(() => {
+      this.workshopManager.settings.load(settings.workshop);
+    }, "workshop");
 
     this.setLanguage(this.settings.language.selected);
 
@@ -271,8 +292,8 @@ export class Engine {
             Math.max(10, this._host.engine.settings.interval - timeTaken),
           );
         })
-        .catch(error => {
-          cwarn(error as string);
+        .catch((error: unknown) => {
+          cwarn(unknownToError(error));
         });
     };
     this._timeoutMainLoop = window.setTimeout(loop, this._host.engine.settings.interval);
@@ -361,7 +382,9 @@ export class Engine {
         key as keyof (typeof i18nData)[SupportedLanguage]
       ];
 
-    if (typeof value === "undefined" || value === null) {
+    const check: Maybe<string> = value;
+
+    if (isNil(check)) {
       value = i18nData[FallbackLanguage][key as keyof (typeof i18nData)[SupportedLanguage]];
       if (!value) {
         cwarn(`i18n key '${key}' not found in default language.`);
@@ -369,10 +392,8 @@ export class Engine {
       }
       cwarn(`i18n key '${key}' not found in selected language.`);
     }
-    if (args) {
-      for (let argIndex = 0; argIndex < args.length; ++argIndex) {
-        value = value.replace(`{${argIndex}}`, `${args[argIndex]}`);
-      }
+    for (let argIndex = 0; argIndex < args.length; ++argIndex) {
+      value = value.replace(`{${argIndex}}`, `${args[argIndex]}`);
     }
     return value;
   }

@@ -12,7 +12,7 @@ export type OptionsListItemOptions = UiComponentOptions & {
 export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
   readonly fieldset: Fieldset;
   readonly setting: TSetting;
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
   readonly _options: Array<RadioItem>;
 
   /**

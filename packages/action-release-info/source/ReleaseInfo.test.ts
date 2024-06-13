@@ -2,6 +2,7 @@ import core from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { Context } from "@actions/github/lib/context.js";
 import { Moctokit } from "@kie/mock-github";
+import { unknownToError } from "@oliversalzburg/js-utils";
 import { expect } from "chai";
 import { rm, stat } from "fs/promises";
 import { it } from "mocha";
@@ -91,6 +92,7 @@ beforeEach(() => {
   process.env.GITHUB_REPOSITORY = "kitten-science/kitten-scientists";
   for (const key of Object.keys(process.env)) {
     if (key.startsWith("INPUT_")) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete process.env[key];
     }
   }
@@ -157,7 +159,9 @@ it("fails without assets", async () => {
     .then(() => {
       throw new Error("Expected unit to throw.");
     })
-    .catch((error: Error) => expect(error.message).to.match(/No assets found in release./));
+    .catch((error: unknown) =>
+      expect(unknownToError(error).message).to.match(/No assets found in release./),
+    );
 });
 
 it("fails if no usescript in release", async () => {
@@ -237,7 +241,9 @@ it("fails if no usescript in release", async () => {
     .then(() => {
       throw new Error("Expected unit to throw.");
     })
-    .catch((error: Error) => expect(error.message).to.match(/Couldn't find userscript in assets./));
+    .catch((error: unknown) =>
+      expect(unknownToError(error).message).to.match(/Couldn't find userscript in assets./),
+    );
 });
 
 it("runs", async () => {

@@ -22,7 +22,7 @@
     "clean:all": "rm -rf packages/*/build packages/*/tsconfig.tsbuildinfo",
     "lint": "yarn run lint:all",
     "lint:all": "yarn run lint:eslint && yarn run lint:prettier",
-    "lint:eslint": "eslint . --ext .ts",
+    "lint:eslint": "eslint .",
     "lint:prettier": "prettier --check packages",
     "test": "yarn run test:all",
     "test:all": "yarn workspaces foreach --all --exclude kitten-scientists --parallel --verbose run test",
@@ -36,24 +36,20 @@
     "tslib": "2.6.2"
   },
   "devDependencies": {
-    "@babel/core": "7.24.7",
-    "@babel/eslint-parser": "7.24.7",
-    "@babel/plugin-syntax-import-assertions": "7.24.7",
-    "@types/babel__core": "7.20.5",
+    "@eslint/js": "9.4.0",
     "@types/eslint": "8.56.10",
     "@types/node": "20.14.2",
     "@types/prettier": "3.0.0",
     "@types/web": "0.0.148",
-    "@typescript-eslint/eslint-plugin": "7.13.0",
-    "@typescript-eslint/parser": "7.13.0",
-    "eslint": "8.57.0",
-    "eslint-plugin-jsdoc": "48.2.9",
+    "eslint": "9.4.0",
+    "eslint-config-prettier": "9.1.0",
     "lint-staged": "15.2.7",
     "prettier": "3.3.2",
     "prettier-package-json": "2.8.0",
     "prettier-plugin-organize-imports": "3.2.4",
     "prettier-plugin-sh": "0.14.0",
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "typescript-eslint": "8.0.0-alpha.30"
   },
   "keywords": [
     "kitten",

@@ -76,7 +76,7 @@ export class BonfireSettings extends SettingTrigger {
   }
 
   private initBuildings(): BonfireBuildingSettings {
-    const defaultOffBuilding: BonfireItem[] = [
+    const defaultOffBuilding: Array<BonfireItem> = [
       "accelerator",
       "biolab",
       "calciner",

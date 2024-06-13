@@ -1,4 +1,5 @@
 import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils";
 import { sleep } from "@oliversalzburg/js-utils/async.js";
 import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
 import JQuery from "jquery";
@@ -22,7 +23,7 @@ declare global {
     $I?: Maybe<I18nEngine>;
     dojo: {
       clone: <T>(subject: T) => T;
-      subscribe: (event: string, handler: (...args: any[]) => void) => void;
+      subscribe: (event: string, handler: (...args: Array<any>) => void) => void;
     };
     game?: Maybe<Game>;
     gamePage?: Maybe<Game>;
@@ -129,7 +130,7 @@ export class UserScript {
 
     this.engine.imessage("status.ks.init");
 
-    this.runUpdateCheck().catch(console.error);
+    this.runUpdateCheck().catch(redirectErrorsToConsole(console));
 
     UserScript.window.dojo.subscribe("game/beforesave", (saveData: Record<string, unknown>) => {
       cinfo("Injecting Kitten Scientists engine state into save data...");
@@ -195,7 +196,7 @@ export class UserScript {
     try {
       const naiveParse = JSON.parse(compressedSettings) as { v?: string };
       return UserScript.unknownAsEngineStateOrThrow(naiveParse);
-    } catch (error) {
+    } catch (_error) {
       /* expected, as we assume the input to be compressed. */
     }
 
@@ -286,7 +287,7 @@ export class UserScript {
    * @returns An engine state.
    */
   static unknownAsEngineStateOrThrow(subject?: unknown): EngineState {
-    const v = (subject as { v?: string })?.v;
+    const v = (subject as { v?: string }).v;
     if (!isNil(v) && typeof v === "string") {
       if (v.startsWith("2")) {
         return subject as EngineState;
@@ -315,7 +316,7 @@ export class UserScript {
       this.refreshUi();
     },
     resetState: () => null,
-    save: (saveData: Record<string, unknown>) => {
+    save: (_saveData: Record<string, unknown>) => {
       // We ignore the manager invocation, because we already handle the
       // `game/beforesave` event, which is intended for external consumers.
     },
@@ -324,21 +325,21 @@ export class UserScript {
   private static _tryEngineStateFromSaveData(
     saveData: Record<string, unknown>,
   ): EngineState | undefined {
-    if ("ks" in saveData === false) {
+    if (!("ks" in saveData)) {
       cdebug("Failed: `ks` not found in save data.");
-      return;
+      return undefined;
     }
 
     const ksData = saveData.ks as { state?: Array<EngineState> };
-    if ("state" in ksData === false) {
+    if (!("state" in ksData)) {
       cdebug("Failed: `ks.state` not found in save data.");
-      return;
+      return undefined;
     }
 
     const state = ksData.state;
     if (!Array.isArray(state)) {
       cdebug("Failed: `ks.state` not `Array`.");
-      return;
+      return undefined;
     }
 
     return state[0];
@@ -429,8 +430,8 @@ export class UserScript {
 
   static get window(): Window {
     try {
-      return unsafeWindow as Window;
-    } catch (error) {
+      return mustExist(unsafeWindow);
+    } catch (_error) {
       return window;
     }
   }

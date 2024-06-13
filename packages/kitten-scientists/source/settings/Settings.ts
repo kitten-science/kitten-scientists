@@ -188,7 +188,7 @@ export class SettingBuySellTrigger extends SettingTrigger implements SettingBuy,
   buy: number;
   sell: number;
 
-  constructor(enabled = false, buy = 0.0, sell = 1000.0, trigger = 1) {
+  constructor(enabled = false, buy = 950.0, sell = 1000.0, trigger = 1) {
     super(enabled, trigger);
     this.buy = buy;
     this.sell = sell;

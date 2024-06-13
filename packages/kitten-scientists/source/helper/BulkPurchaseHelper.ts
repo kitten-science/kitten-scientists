@@ -114,7 +114,7 @@ export class BulkPurchaseHelper {
         continue;
       }
       // If the building isn't unlocked, skip it.
-      if (buildMetaData.unlocked === false) {
+      if (!buildMetaData.unlocked) {
         continue;
       }
 
@@ -308,6 +308,13 @@ export class BulkPurchaseHelper {
     const source = buildCacheItem.source;
     let maxItemsBuilt = false;
 
+    if (prices.length === 0) {
+      return 0;
+    }
+
+    // There is actually no strong guarantee that `maxItemsBuilt` changes in the loops below.
+    // This could end up being an infinite loop under unexpected conditions.
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (!maxItemsBuilt) {
       // Go through the prices for this build.
       for (let priceIndex = 0; priceIndex < prices.length; priceIndex++) {

@@ -19,8 +19,8 @@ import { WorkshopSettingsUi } from "./WorkshopSettingsUi.js";
 import { UiComponent } from "./components/UiComponent.js";
 
 export class UserInterface extends UiComponent {
-  readonly element: JQuery<HTMLElement>;
-  readonly showActivity: JQuery<HTMLElement>;
+  readonly element: JQuery;
+  readonly showActivity: JQuery;
 
   private _engineUi: EngineSettingsUi;
   private _sections: Array<
@@ -112,7 +112,9 @@ export class UserInterface extends UiComponent {
       title: this._host.engine.i18n("summary.show"),
     }).addClass("ks-show-activity");
 
-    this.showActivity.on("click", () => this._host.engine.displayActivitySummary());
+    this.showActivity.on("click", () => {
+      this._host.engine.displayActivitySummary();
+    });
 
     $("#clearLog").prepend(this.showActivity);
 

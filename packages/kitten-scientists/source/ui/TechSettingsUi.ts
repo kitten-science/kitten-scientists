@@ -23,8 +23,12 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
       if (isNil(this.setting.techs[tech.name])) continue;
       const label = tech.label;
       const button = new SettingListItem(this._host, label, this.setting.techs[tech.name], {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+        onCheck: () => {
+          this._host.engine.imessage("status.sub.enable", [label]);
+        },
+        onUnCheck: () => {
+          this._host.engine.imessage("status.sub.disable", [label]);
+        },
       });
 
       items.push({ label: label, button: button });
@@ -34,7 +38,9 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
       items.sort((a, b) => a.label.localeCompare(b.label));
     }
     const itemsList = new SettingsList(this._host);
-    items.forEach(button => itemsList.addChild(button.button));
+    items.forEach(button => {
+      itemsList.addChild(button.button);
+    });
     this.addChild(itemsList);
 
     this._techs = items.map(button => button.button);

@@ -22,7 +22,7 @@ export type SettingListItemOptions = LabelListItemOptions & {
 
 export class SettingListItem<TSetting extends Setting = Setting> extends LabelListItem {
   readonly setting: TSetting;
-  readonly checkbox?: JQuery<HTMLElement>;
+  readonly checkbox?: JQuery;
 
   readOnly: boolean;
 
@@ -51,10 +51,10 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     checkbox.prop("disabled", this.readOnly);
 
     checkbox.on("change", () => {
-      if (checkbox.is(":checked") && setting.enabled === false) {
+      if (checkbox.is(":checked") && !setting.enabled) {
         setting.enabled = true;
         options?.onCheck?.();
-      } else if (!checkbox.is(":checked") && setting.enabled === true) {
+      } else if (!checkbox.is(":checked") && setting.enabled) {
         setting.enabled = false;
         options?.onUnCheck?.();
       }

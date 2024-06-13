@@ -47,14 +47,16 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       this._host.engine.i18n("option.autofeed"),
       this.setting.feedLeviathans,
       {
-        onCheck: () =>
+        onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.autofeed"),
-          ]),
-        onUnCheck: () =>
+          ]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.autofeed"),
-          ]),
+          ]);
+        },
       },
     );
     listRaces.addChild(this._feedLeviathans);
@@ -66,14 +68,16 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       {
         behavior: "integer",
         delimiter: true,
-        onCheck: () =>
+        onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.crypto"),
-          ]),
-        onUnCheck: () =>
+          ]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.crypto"),
-          ]),
+          ]);
+        },
       },
     );
     listRaces.addChild(this._tradeBlackcoin);
@@ -93,14 +97,16 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       this._host.engine.i18n("ui.upgrade.races"),
       this.setting.unlockRaces,
       {
-        onCheck: () =>
+        onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("ui.upgrade.races"),
-          ]),
-        onUnCheck: () =>
+          ]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("ui.upgrade.races"),
-          ]),
+          ]);
+        },
       },
     );
     listAddition.addChild(this._unlockRaces);
@@ -114,10 +120,18 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     upgradeIndicator = false,
   ) {
     const settingItem = new SettingLimitedListItem(this._host, i18nName, option, {
-      onCheck: () => this._host.engine.imessage("status.sub.enable", [i18nName]),
-      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [i18nName]),
-      onLimitedCheck: () => this._host.engine.imessage("trade.limited", [i18nName]),
-      onLimitedUnCheck: () => this._host.engine.imessage("trade.unlimited", [i18nName]),
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [i18nName]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [i18nName]);
+      },
+      onLimitedCheck: () => {
+        this._host.engine.imessage("trade.limited", [i18nName]);
+      },
+      onLimitedUnCheck: () => {
+        this._host.engine.imessage("trade.unlimited", [i18nName]);
+      },
       delimiter,
       upgradeIndicator,
     });
@@ -126,10 +140,12 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
     });
 
     const seasons = new SeasonsList(this._host, option.seasons, {
-      onCheck: (label: string) =>
-        this._host.engine.imessage("trade.season.enable", [ucfirst(i18nName), label]),
-      onUnCheck: (label: string) =>
-        this._host.engine.imessage("trade.season.disable", [ucfirst(i18nName), label]),
+      onCheck: (label: string) => {
+        this._host.engine.imessage("trade.season.enable", [ucfirst(i18nName), label]);
+      },
+      onUnCheck: (label: string) => {
+        this._host.engine.imessage("trade.season.disable", [ucfirst(i18nName), label]);
+      },
     });
     panel.addChild(seasons);
 

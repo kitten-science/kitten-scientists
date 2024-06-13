@@ -9,7 +9,7 @@ export type ListItemOptions = UiComponentOptions & {
 };
 
 export class ListItem extends UiComponent {
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
 
   /**
    * Construct a new simple list item with only a label.

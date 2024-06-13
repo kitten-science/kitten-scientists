@@ -8,7 +8,7 @@ export type TextButtonOptions = UiComponentOptions & {
 };
 
 export class TextButton extends UiComponent {
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
   readOnly: boolean;
 
   constructor(host: UserScript, label: string, options?: Partial<TextButtonOptions>) {

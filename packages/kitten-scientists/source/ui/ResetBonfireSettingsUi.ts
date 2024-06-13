@@ -46,8 +46,12 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
   ) {
     return new SettingTriggerLimitListItem(this._host, i18nName, option, {
       delimiter,
-      onCheck: () => this._host.engine.imessage("status.reset.check.enable", [i18nName]),
-      onUnCheck: () => this._host.engine.imessage("status.reset.check.disable", [i18nName]),
+      onCheck: () => {
+        this._host.engine.imessage("status.reset.check.enable", [i18nName]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.reset.check.disable", [i18nName]);
+      },
       upgradeIndicator,
     });
   }

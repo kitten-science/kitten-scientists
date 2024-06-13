@@ -9,8 +9,8 @@ export type LimitedButtonOptions = UiComponentOptions & {
 
 export class LimitedButton extends UiComponent {
   readonly setting: SettingLimited;
-  readonly element: JQuery<HTMLElement>;
-  readonly checkbox: JQuery<HTMLElement>;
+  readonly element: JQuery;
+  readonly checkbox: JQuery;
 
   constructor(host: UserScript, setting: SettingLimited, options?: Partial<LimitedButtonOptions>) {
     super(host, options);
@@ -26,10 +26,10 @@ export class LimitedButton extends UiComponent {
     });
 
     checkbox.on("change", () => {
-      if (checkbox.is(":checked") && setting.limited === false) {
+      if (checkbox.is(":checked") && !setting.limited) {
         setting.limited = true;
         options?.onLimitedCheck?.();
-      } else if (!checkbox.is(":checked") && setting.limited === true) {
+      } else if (!checkbox.is(":checked") && setting.limited) {
         setting.limited = false;
         options?.onLimitedUnCheck?.();
       }

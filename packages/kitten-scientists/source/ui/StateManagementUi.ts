@@ -1,3 +1,4 @@
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils";
 import { isNil } from "@oliversalzburg/js-utils/nil.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { Locale, de, enUS, he, zhCN } from "date-fns/locale";
@@ -98,14 +99,14 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
           new ButtonListItem(
             host,
             new TextButton(host, this._host.engine.i18n("state.ksOnly"), {
-              onClick: () => void this.copySettings().catch(console.error),
+              onClick: () => void this.copySettings().catch(redirectErrorsToConsole(console)),
               title: this._host.engine.i18n("state.ksOnlyTitleCopy"),
             }),
           ),
           new ButtonListItem(
             host,
             new TextButton(host, this._host.engine.i18n("state.kgSave"), {
-              onClick: () => void this.copySaveGame().catch(console.error),
+              onClick: () => void this.copySaveGame().catch(redirectErrorsToConsole(console)),
               title: this._host.engine.i18n("state.kgSaveTitleCopy"),
             }),
             { delimiter: true },
@@ -121,14 +122,16 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
           new ButtonListItem(
             host,
             new TextButton(host, this._host.engine.i18n("state.ksOnly"), {
-              onClick: () => this.loadSettings(),
+              onClick: () => {
+                this.loadSettings();
+              },
               title: this._host.engine.i18n("state.ksOnlyTitleLoad"),
             }),
           ),
           new ButtonListItem(
             host,
             new TextButton(host, this._host.engine.i18n("state.kgSave"), {
-              onClick: () => void this.loadSaveGame()?.catch(console.error),
+              onClick: () => void this.loadSaveGame().catch(redirectErrorsToConsole(console)),
               title: this._host.engine.i18n("state.kgSaveTitleLoad"),
             }),
             { delimiter: true },
@@ -138,14 +141,18 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
           new ButtonListItem(
             host,
             new TextButton(host, this._host.engine.i18n("state.storeCurrent"), {
-              onClick: () => this.storeState(),
+              onClick: () => {
+                this.storeState();
+              },
               title: this._host.engine.i18n("state.storeCurrentTitle"),
             }),
           ),
           new ButtonListItem(
             host,
             new TextButton(host, this._host.engine.i18n("state.import"), {
-              onClick: () => this.importState(),
+              onClick: () => {
+                this.importState();
+              },
               title: this._host.engine.i18n("state.importTitle"),
             }),
             { delimiter: true },
@@ -153,7 +160,9 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
           new ButtonListItem(
             host,
             new TextButton(host, this._host.engine.i18n("state.reset"), {
-              onClick: () => this.resetState(),
+              onClick: () => {
+                this.resetState();
+              },
               title: this._host.engine.i18n("state.resetTitle"),
             }),
             { delimiter: true },
@@ -212,27 +221,33 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
           addSuffix: true,
           locale: this.locale,
         })})`,
-        { onClick: () => this.loadState(state.state), title: state.timestamp },
+        {
+          onClick: () => {
+            this.loadState(state.state);
+          },
+          title: state.timestamp,
+        },
       );
 
       const listItem = new ButtonListItem(this._host, button);
 
       const deleteButton = new DeleteButton(this._host);
-      deleteButton.element.on("click", () => this.deleteState(stateSlot));
+      deleteButton.element.on("click", () => {
+        this.deleteState(stateSlot);
+      });
       listItem.addChild(deleteButton);
 
       const copyButton = new CopyButton(this._host);
       copyButton.element.on(
         "click",
-        () => void this.copySettings(state.state).catch(console.error),
+        () => void this.copySettings(state.state).catch(redirectErrorsToConsole(console)),
       );
       listItem.addChild(copyButton);
 
       const updateButton = new UpdateButton(this._host);
-      updateButton.element.on(
-        "click",
-        () => void this.updateState(stateSlot, this._host.engine.stateSerialize()),
-      );
+      updateButton.element.on("click", () => {
+        this.updateState(stateSlot, this._host.engine.stateSerialize());
+      });
       listItem.addChild(updateButton);
 
       this.stateList.addChild(listItem);
@@ -292,7 +307,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       // No parser exception? This is plain JSON. We need to compress it for the savegame loader.
       const compressed = this._host.game.compressLZData(input);
       subjectData = compressed;
-    } catch (error) {
+    } catch (_error) {
       /* expected, as we assume compressed input */
     }
 

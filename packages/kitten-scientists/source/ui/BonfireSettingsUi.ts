@@ -66,14 +66,16 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         this._host.engine.i18n("option.catnip"),
         this.setting.gatherCatnip,
         {
-          onCheck: () =>
+          onCheck: () => {
             this._host.engine.imessage("status.sub.enable", [
               this._host.engine.i18n("option.catnip"),
-            ]),
-          onUnCheck: () =>
+            ]);
+          },
+          onUnCheck: () => {
             this._host.engine.imessage("status.sub.disable", [
               this._host.engine.i18n("option.catnip"),
-            ]),
+            ]);
+          },
         },
       ),
     );
@@ -84,14 +86,16 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         this._host.engine.i18n("option.steamworks"),
         this.setting.turnOnSteamworks,
         {
-          onCheck: () =>
+          onCheck: () => {
             this._host.engine.imessage("status.sub.enable", [
               this._host.engine.i18n("option.steamworks"),
-            ]),
-          onUnCheck: () =>
+            ]);
+          },
+          onUnCheck: () => {
             this._host.engine.imessage("status.sub.disable", [
               this._host.engine.i18n("option.steamworks"),
-            ]),
+            ]);
+          },
         },
       ),
     );
@@ -102,14 +106,16 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
         this._host.engine.i18n("option.magnetos"),
         this.setting.turnOnMagnetos,
         {
-          onCheck: () =>
+          onCheck: () => {
             this._host.engine.imessage("status.sub.enable", [
               this._host.engine.i18n("option.magnetos"),
-            ]),
-          onUnCheck: () =>
+            ]);
+          },
+          onUnCheck: () => {
             this._host.engine.imessage("status.sub.disable", [
               this._host.engine.i18n("option.magnetos"),
-            ]),
+            ]);
+          },
         },
       ),
     );

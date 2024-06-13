@@ -53,14 +53,16 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       this._host.engine.i18n("option.fix.cry"),
       this.setting.fixCryochambers,
       {
-        onCheck: () =>
+        onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.fix.cry"),
-          ]),
-        onUnCheck: () =>
+          ]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.fix.cry"),
-          ]),
+          ]);
+        },
       },
     );
     listAddition.addChild(this._fixCryochamber);
@@ -70,14 +72,16 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
       this._host.engine.i18n("option.chronofurnace"),
       this.setting.turnOnChronoFurnace,
       {
-        onCheck: () =>
+        onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [
             this._host.engine.i18n("option.chronofurnace"),
-          ]),
-        onUnCheck: () =>
+          ]);
+        },
+        onUnCheck: () => {
           this._host.engine.imessage("status.sub.disable", [
             this._host.engine.i18n("option.chronofurnace"),
-          ]),
+          ]);
+        },
       },
     );
     listAddition.addChild(this._turnOnChronoFurnace);
@@ -87,8 +91,12 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   private _getTimeSetting(setting: TimeSettingsItem, label: string, delimiter = false) {
     return new SettingMaxListItem(this._host, label, setting, {
       delimiter,
-      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [label]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [label]);
+      },
     });
   }
 }

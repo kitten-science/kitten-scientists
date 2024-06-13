@@ -1,5 +1,6 @@
 import core from "@actions/core";
 import { context, getOctokit } from "@actions/github";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils";
 import { ReleaseInfo } from "./ReleaseInfo.js";
 
 const isMainModule = import.meta.url.endsWith(process.argv[1]);
@@ -24,5 +25,5 @@ export const main = async (): Promise<void> => {
 };
 
 if (isMainModule) {
-  main().catch(console.error);
+  main().catch(redirectErrorsToConsole(console));
 }

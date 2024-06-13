@@ -5,7 +5,7 @@ import { UiComponent, UiComponentOptions } from "./UiComponent.js";
  * A button that is visually represented through an SVG element.
  */
 export class IconButton extends UiComponent {
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
 
   /**
    * Constructs a `IconButton`.

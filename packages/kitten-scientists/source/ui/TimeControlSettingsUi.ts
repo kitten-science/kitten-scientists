@@ -27,8 +27,12 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       this._host.engine.i18n("option.accelerate"),
       this.setting.accelerateTime,
       {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+        onCheck: () => {
+          this._host.engine.imessage("status.sub.enable", [label]);
+        },
+        onUnCheck: () => {
+          this._host.engine.imessage("status.sub.disable", [label]);
+        },
       },
     );
     this._timeSkipUi = new TimeSkipSettingsUi(this._host, this.setting.timeSkip);

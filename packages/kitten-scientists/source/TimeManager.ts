@@ -34,7 +34,7 @@ export class TimeManager {
     this._workshopManager = workshopManager;
   }
 
-  tick(context: TickContext) {
+  tick(_context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }
@@ -82,7 +82,7 @@ export class TimeManager {
           : this.manager.tab.vsPanel;
 
       const buildingMetaData = mustExist(metaData[build.building]);
-      buildingMetaData.tHidden = !model.visible || !model.enabled || !panel?.visible;
+      buildingMetaData.tHidden = !model.visible || !model.enabled || !panel.visible;
     }
 
     // Let the bulkmanager determine the builds we can make.
@@ -134,12 +134,11 @@ export class TimeManager {
   getBuild(
     name: ChronoForgeUpgrade | VoidSpaceUpgrade,
     variant: TimeItemVariant,
-  ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
+  ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo {
     if (variant === TimeItemVariant.Chronoforge) {
-      return this._host.game.time.getCFU(name as ChronoForgeUpgrade) ?? null;
-    } else {
-      return this._host.game.time.getVSU(name as VoidSpaceUpgrade) ?? null;
+      return this._host.game.time.getCFU(name as ChronoForgeUpgrade);
     }
+    return this._host.game.time.getVSU(name as VoidSpaceUpgrade);
   }
 
   getBuildButton(
@@ -154,7 +153,7 @@ export class TimeManager {
     }
 
     const build = this.getBuild(name, variant);
-    if (build === null) {
+    if (isNil(build)) {
       throw new Error(`Unable to retrieve build information for '${name}'`);
     }
 

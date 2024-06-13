@@ -1,9 +1,8 @@
 import { BonfireBuildingSetting } from "../settings/BonfireSettings.js";
 import { ReligionSettingsItem } from "../settings/ReligionSettings.js";
 import { Setting, SettingMax } from "../settings/Settings.js";
-import { UserScript } from "../UserScript.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
 export type Toggleable = {
   get isExpanded(): boolean;
@@ -18,15 +17,6 @@ export type Toggleable = {
 export abstract class SettingsSectionUi<
   TSetting extends Setting = Setting,
 > extends SettingsPanel<TSetting> {
-  constructor(
-    host: UserScript,
-    label: string,
-    settings: TSetting,
-    options?: SettingsPanelOptions<SettingsPanel<TSetting>>,
-  ) {
-    super(host, label, settings, options);
-  }
-
   protected _getBuildOption(
     option: BonfireBuildingSetting | ReligionSettingsItem | SettingMax,
     label: string,
@@ -35,8 +25,12 @@ export abstract class SettingsSectionUi<
   ) {
     return new SettingMaxListItem(this._host, label, option, {
       delimiter,
-      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [label]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [label]);
+      },
       upgradeIndicator,
     });
   }

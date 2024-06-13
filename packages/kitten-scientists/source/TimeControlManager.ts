@@ -49,7 +49,7 @@ export class TimeControlManager {
     this._workshopManager = workshopManager;
   }
 
-  async tick(context: TickContext) {
+  async tick(_context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }
@@ -86,9 +86,6 @@ export class TimeControlManager {
     ) => {
       if (checkList.length !== 0) {
         for (const button of buttons) {
-          if (!button.model.metadata) {
-            continue;
-          }
           const name = button.model.metadata.name;
           const index = checkList.indexOf(name);
           if (index !== -1) {
@@ -110,7 +107,7 @@ export class TimeControlManager {
         try {
           // @ts-expect-error Obvious error here. For upgraded buildings, it needs special handling.
           bld = this._host.game.bld.getBuildingExt(name);
-        } catch (error) {
+        } catch (_error) {
           bld = null;
         }
         if (isNil(bld)) {
@@ -302,7 +299,8 @@ export class TimeControlManager {
     const sleep = async (time = 1500) => {
       return new Promise((resolve, reject) => {
         if (!this._host.engine.settings.enabled) {
-          return reject(new Error("canceled by player"));
+          reject(new Error("canceled by player"));
+          return;
         }
         setTimeout(resolve, time);
       });
@@ -347,7 +345,7 @@ export class TimeControlManager {
       await sleep();
       this._host.engine.iactivity("reset.last.message");
       await sleep();
-    } catch (error) {
+    } catch (_error) {
       this._host.engine.imessage("reset.cancel.message");
       this._host.engine.iactivity("reset.cancel.activity");
       return;
@@ -556,11 +554,10 @@ export class TimeControlManager {
   getBuild(
     name: ChronoForgeUpgrade | VoidSpaceUpgrade,
     variant: TimeItemVariant,
-  ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo | null {
+  ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo {
     if (variant === TimeItemVariant.Chronoforge) {
-      return this._host.game.time.getCFU(name as ChronoForgeUpgrade) ?? null;
-    } else {
-      return this._host.game.time.getVSU(name as VoidSpaceUpgrade) ?? null;
+      return this._host.game.time.getCFU(name as ChronoForgeUpgrade);
     }
+    return this._host.game.time.getVSU(name as VoidSpaceUpgrade);
   }
 }

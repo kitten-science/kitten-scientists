@@ -32,8 +32,12 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
 
   private _makeEmbassySetting(option: SettingMax, label: string) {
     return new SettingMaxListItem(this._host, label, option, {
-      onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [label]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [label]);
+      },
     });
   }
 }

@@ -5,7 +5,7 @@ import { ExpandoButton } from "./components/ExpandoButton.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 
 export class EngineSettingsUi {
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
   readonly expando: ExpandoButton;
   private readonly _element: SettingListItem;
   private readonly _settings: EngineSettings;
@@ -17,8 +17,12 @@ export class EngineSettingsUi {
 
     // Our main element is a list item.
     this._element = new SettingListItem(host, label, settings, {
-      onCheck: () => host.engine.start(true),
-      onUnCheck: () => host.engine.stop(true),
+      onCheck: () => {
+        host.engine.start(true);
+      },
+      onUnCheck: () => {
+        host.engine.stop(true);
+      },
     });
     this.element = this._element.element;
 

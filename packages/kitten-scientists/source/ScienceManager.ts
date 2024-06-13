@@ -24,7 +24,7 @@ export class ScienceManager extends UpgradeManager {
     this._workshopManager = workshopManager;
   }
 
-  async tick(context: TickContext) {
+  async tick(_context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }

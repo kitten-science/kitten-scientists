@@ -9,8 +9,9 @@ export const deepMergeLeft = (
   for (const [key, value] of Object.entries(b)) {
     if (typeof value === "object") {
       subject[key] = deepMergeLeft(
-        key in a ? (a[key] as Record<string, unknown>) : {},
-        b[key] as Record<string, unknown>,
+        // @ts-expect-error This is just naughty business.
+        key in a ? a[key] : {},
+        b[key],
       );
       continue;
     }
@@ -80,14 +81,14 @@ export function consumeEntriesPedantic<TKeys extends string, TValues>(
   }
 
   for (const [key, value] of objectEntries(subject)) {
-    if (key in source === false) {
+    if (!(key in source)) {
       cinfo(`Entry '${key}' is missing in source. Using default value.`);
     }
     consumer(value, source[key]);
   }
 
   for (const [key] of objectEntries(source)) {
-    if (key in subject === false) {
+    if (!(key in subject)) {
       cwarn(
         `Entry '${key}' was found in source, but it is not expected by the subject schema. This entry will be ignored.`,
       );

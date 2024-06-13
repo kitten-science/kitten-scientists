@@ -32,7 +32,7 @@ export class SpaceManager implements Automation {
     this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
   }
 
-  tick(context: TickContext) {
+  tick(_context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }

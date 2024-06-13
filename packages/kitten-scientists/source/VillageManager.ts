@@ -28,7 +28,7 @@ export class VillageManager implements Automation {
     this._workshopManager = workshopManager;
   }
 
-  tick(context: TickContext) {
+  tick(_context: TickContext) {
     if (!this.settings.enabled) {
       return;
     }
@@ -203,7 +203,7 @@ export class VillageManager implements Automation {
 
   autoHunt(cacheManager?: MaterialsCache) {
     const manpower = this._workshopManager.getResource("manpower");
-    const trigger = this.settings.hunt.trigger ?? 0;
+    const trigger = this.settings.hunt.trigger;
 
     if (manpower.value < 100 || this._host.game.challenges.isActive("pacifism")) {
       return;

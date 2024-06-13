@@ -43,8 +43,12 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
   private _addNewResourceOption(title: string, setting: ResetResourcesSettingsItem) {
     // The overall container for this resource item.
     const container = new SettingListItem(this._host, title, setting, {
-      onCheck: () => this._host.engine.imessage("status.sub.enable", [title]),
-      onUnCheck: () => this._host.engine.imessage("status.sub.disable", [title]),
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [title]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [title]);
+      },
     });
 
     // How many items to stock.

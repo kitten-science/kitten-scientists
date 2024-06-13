@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import manifest from "./package.json" assert { type: "json" };
+import manifest from "./package.json" with { type: "json" };
 
 const filename = "kitten-scientists.inject.js";
 

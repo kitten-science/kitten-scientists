@@ -21,8 +21,12 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
       if (isNil(this.setting.upgrades[upgrade.name])) continue;
       const label = upgrade.label;
       const button = new SettingListItem(this._host, label, this.setting.upgrades[upgrade.name], {
-        onCheck: () => this._host.engine.imessage("status.sub.enable", [label]),
-        onUnCheck: () => this._host.engine.imessage("status.sub.disable", [label]),
+        onCheck: () => {
+          this._host.engine.imessage("status.sub.enable", [label]);
+        },
+        onUnCheck: () => {
+          this._host.engine.imessage("status.sub.disable", [label]);
+        },
       });
 
       items.push({ label: label, button: button });
@@ -43,7 +47,9 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
       }
     }
     const itemsList = new SettingsList(this._host);
-    items.forEach(button => itemsList.addChild(button.button));
+    items.forEach(button => {
+      itemsList.addChild(button.button);
+    });
     this.addChild(itemsList);
   }
 }

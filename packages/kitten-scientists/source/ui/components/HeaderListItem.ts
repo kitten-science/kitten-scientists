@@ -3,7 +3,7 @@ import { ListItem } from "./ListItem.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export class HeaderListItem extends UiComponent implements ListItem {
-  readonly element: JQuery<HTMLElement>;
+  readonly element: JQuery;
   get elementLabel() {
     return this.element;
   }

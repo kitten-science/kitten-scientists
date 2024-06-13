@@ -28,8 +28,12 @@ export class LogFiltersSettingsUi extends SettingsSectionUi<LogFilterSettings> {
         .map(
           item =>
             new SettingListItem(this._host, item.label, this.setting.filters[item.name], {
-              onCheck: () => this._host.engine.imessage("filter.enable", [item.label]),
-              onUnCheck: () => this._host.engine.imessage("filter.disable", [item.label]),
+              onCheck: () => {
+                this._host.engine.imessage("filter.enable", [item.label]);
+              },
+              onUnCheck: () => {
+                this._host.engine.imessage("filter.disable", [item.label]);
+              },
             }),
         ),
     });

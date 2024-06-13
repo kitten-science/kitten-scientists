@@ -21,8 +21,12 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
       .map(
         mission =>
           new SettingListItem(this._host, mission.label, this.setting.missions[mission.name], {
-            onCheck: () => this._host.engine.imessage("status.sub.enable", [mission.label]),
-            onUnCheck: () => this._host.engine.imessage("status.sub.disable", [mission.label]),
+            onCheck: () => {
+              this._host.engine.imessage("status.sub.enable", [mission.label]);
+            },
+            onUnCheck: () => {
+              this._host.engine.imessage("status.sub.disable", [mission.label]);
+            },
           }),
       );
 

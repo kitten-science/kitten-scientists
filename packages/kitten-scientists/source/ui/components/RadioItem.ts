@@ -29,8 +29,8 @@ export type RadioItemOptions = UiComponentOptions & {
 export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
   readonly setting: TSetting;
   readonly option: TSetting["options"][0];
-  readonly element: JQuery<HTMLElement>;
-  readonly input: JQuery<HTMLElement>;
+  readonly element: JQuery;
+  readonly input: JQuery;
 
   readOnly: boolean;
 
@@ -74,7 +74,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     input.on("change", () => {
       this.setting.selected = option.value;
       if (!isNil(options?.onCheck)) {
-        options?.onCheck();
+        options.onCheck();
       }
     });
 

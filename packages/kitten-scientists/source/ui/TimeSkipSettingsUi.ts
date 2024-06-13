@@ -52,10 +52,12 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
       {
         children: [
           new SeasonsList(this._host, this.setting.seasons, {
-            onCheck: (label: string) =>
-              this._host.engine.imessage("time.skip.season.enable", [label]),
-            onUnCheck: (label: string) =>
-              this._host.engine.imessage("time.skip.season.disable", [label]),
+            onCheck: (label: string) => {
+              this._host.engine.imessage("time.skip.season.enable", [label]);
+            },
+            onUnCheck: (label: string) => {
+              this._host.engine.imessage("time.skip.season.disable", [label]);
+            },
           }),
         ],
       },

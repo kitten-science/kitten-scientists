@@ -10,7 +10,7 @@ export class State extends TreeNode<State> {
   readonly loader: StateLoader;
 
   get state() {
-    return this.loader?.data;
+    return this.loader.data;
   }
 
   constructor(originUrl: string, parent?: State) {
