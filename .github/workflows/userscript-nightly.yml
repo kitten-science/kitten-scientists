@@ -33,7 +33,10 @@ jobs:
     if: ${{ needs.check_date.outputs.should_run != 'false' }}
     runs-on: ubuntu-22.04
     permissions:
+      actions: write
+      attestations: write
       contents: write
+      id-token: write
       packages: write
       pull-requests: read
 
