@@ -68,7 +68,7 @@ jobs:
           upload-release-assets: false
 
       - name: Attest SBOM
-        uses: actions/attest-sbom@ab8de8941e9379f0d11c52d884644bd45ede62e6 # v1
+        uses: actions/attest-sbom@91d05efbc376a456f8abf965e8929c5c04ece8af # v1
         with:
           subject-path: packages/kitten-scientists/output/*
           sbom-path: sbom.spdx.json
