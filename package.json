@@ -40,7 +40,7 @@
     "@types/eslint": "8.56.10",
     "@types/node": "20.14.2",
     "@types/prettier": "3.0.0",
-    "@types/web": "0.0.148",
+    "@types/web": "0.0.149",
     "eslint": "9.5.0",
     "eslint-config-prettier": "9.1.0",
     "lint-staged": "15.2.7",
