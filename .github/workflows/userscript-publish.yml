@@ -2,9 +2,8 @@ name: Publish Kitten Scientists Push
 
 on:
   push:
-    branches: [main]
-
-  # Allows you to run this workflow manually from the Actions tab.
+    branches:
+      - main
   workflow_dispatch:
 
 env:

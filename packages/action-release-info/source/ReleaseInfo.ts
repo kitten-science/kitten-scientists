@@ -140,6 +140,5 @@ export class ReleaseInfo {
     core.setOutput("dev-url-default", releaseInfo.dev.url.default);
     core.setOutput("nightly-url-default", releaseInfo.nightly.url.default);
     core.setOutput("stable-url-default", releaseInfo.stable.url.default);
-    console.dir(releaseInfo);
   }
 }

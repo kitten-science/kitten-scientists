@@ -3,14 +3,31 @@ import { UserScript } from "../../../UserScript.js";
 import { SettingsSectionUi } from "../../SettingsSectionUi.js";
 import { TextButton } from "../TextButton.js";
 
+interface BuyButtonHandlers {
+  onClick?: () => void;
+}
+
+/**
+ * A UI button that signifies a "buy" action.
+ */
 export class BuyButton extends TextButton {
+  /**
+   * The setting this button refers to.
+   */
   readonly setting: SettingBuy;
 
+  /**
+   * Consturct a new BuyButton.
+   * @param host - The userscript this button is hosted in.
+   * @param label - The label of the button.
+   * @param setting - The setting this button refers to.
+   * @param handler - Custom handlers for events on the button.
+   */
   constructor(
     host: UserScript,
     label: string,
     setting: SettingBuy,
-    handler: { onClick?: () => void } = {},
+    handler: BuyButtonHandlers = {},
   ) {
     super(host, label, {
       onClick: () => {
@@ -36,6 +53,9 @@ export class BuyButton extends TextButton {
     this.setting = setting;
   }
 
+  /**
+   * Refresh the UI of this button.
+   */
   refreshUi() {
     super.refreshUi();
 

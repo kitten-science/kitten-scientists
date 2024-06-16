@@ -14,7 +14,7 @@ await state.validate();
 
 const engineState = state.merge();
 writeFileSync("load-profile.result.json", JSON.stringify(engineState, undefined, 2));
-console.info("Result written to 'load-profile.result.json'.");
+process.stderr.write("Result written to 'load-profile.result.json'.\n");
 
 const exit = performance.now();
-console.log(`Took ${Math.round(exit - entry)}ms.`);
+process.stderr.write(`Took ${Math.round(exit - entry)}ms.\n`);

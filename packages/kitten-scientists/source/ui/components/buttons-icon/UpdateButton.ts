@@ -7,10 +7,9 @@ import { IconButton } from "../IconButton.js";
  */
 export class UpdateButton extends IconButton {
   /**
-   * Constructs a `UpdateButton`.
-   *
-   * @param host A reference to the host.
-   * @param title The `title` of the button.
+   * Constructs an `UpdateButton`.
+   * @param host - A reference to the host.
+   * @param title - The `title` of the button.
    */
   constructor(host: UserScript, title = "Update") {
     super(host, Icons.Sync, title);
