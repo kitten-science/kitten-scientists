@@ -446,7 +446,7 @@ __metadata:
     "@kie/mock-github": "npm:2.0.1"
     "@oliversalzburg/js-utils": "npm:0.0.46"
     "@types/chai": "npm:4.3.16"
-    "@types/mocha": "npm:10.0.6"
+    "@types/mocha": "npm:10.0.7"
     "@types/node": "npm:20.14.8"
     c8: "npm:10.1.2"
     chai: "npm:5.1.1"
@@ -948,10 +948,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mocha@npm:10.0.6":
-  version: 10.0.6
-  resolution: "@types/mocha@npm:10.0.6"
-  checksum: 10c0/4526c9e88388f9e1004c6d3937c5488a39908810f26b927173c58d52b43057f3895627dc06538e96706e08b88158885f869ec6311f6b58fd72bdef715f26d6c3
+"@types/mocha@npm:10.0.7":
+  version: 10.0.7
+  resolution: "@types/mocha@npm:10.0.7"
+  checksum: 10c0/48a2df4dd02b6e66a11129dca6a23cf0cc3995faf8525286eb851043685bd8b7444780f4bb29a1c42df7559ed63294e5308bfce3a6b862ad2e0359cb21c21329
   languageName: node
   linkType: hard
 
