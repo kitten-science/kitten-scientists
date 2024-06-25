@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
         env:
           # renovate: datasource=docker depName=node versioning=node
-          NODE_VERSION: "20.14.0"
+          NODE_VERSION: "20.15.0"
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: yarn install --immutable
