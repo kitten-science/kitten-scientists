@@ -450,7 +450,7 @@ __metadata:
     "@types/node": "npm:20.14.8"
     c8: "npm:10.1.2"
     chai: "npm:5.1.1"
-    mocha: "npm:10.5.0"
+    mocha: "npm:10.5.1"
     tslib: "npm:2.6.3"
     typescript: "npm:5.4.5"
   languageName: unknown
@@ -3716,9 +3716,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mocha@npm:10.5.0":
-  version: 10.5.0
-  resolution: "mocha@npm:10.5.0"
+"mocha@npm:10.5.1":
+  version: 10.5.1
+  resolution: "mocha@npm:10.5.1"
   dependencies:
     ansi-colors: "npm:4.1.1"
     browser-stdout: "npm:1.3.1"
@@ -3743,7 +3743,7 @@ __metadata:
   bin:
     _mocha: bin/_mocha
     mocha: bin/mocha.js
-  checksum: 10c0/f59f170b9a574efbf79a4b411aa1e03fd90eb31af5d51afc136c8f5a803699e916d91f4b9981d5ed813b4d594d55bd0df4e602f58d9cc6520d51cdf688256db4
+  checksum: 10c0/0e5a4c9012b8942d42e4c2e9579a50a30458d00b286a88b11a10fef37930d3c38f3c9a01d32ca83c9bc32971583c36a91526fd90f70c2568fe42a1bb71ac1f36
   languageName: node
   linkType: hard
 
