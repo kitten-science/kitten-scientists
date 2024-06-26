@@ -16,7 +16,7 @@ export type ReligionTab = GameTab & {
   /**
    * Refine time crystals.
    */
-  refineTCBtn?: BuildButton;
+  refineTCBtn?: BuildButton<string, ButtonModernModel, TransformBtnController> | null;
 
   /**
    * Religion upgrade (Order of the sun) buttons.
@@ -102,7 +102,7 @@ export type AbstractReligionUpgradeInfo = {
   /**
    * Has this upgrade been unlocked?
    */
-  unlocked: boolean;
+  unlocked?: boolean;
 
   /**
    * How many of these do you have?

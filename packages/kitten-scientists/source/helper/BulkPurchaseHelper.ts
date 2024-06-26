@@ -114,7 +114,7 @@ export class BulkPurchaseHelper {
         continue;
       }
       // If the building isn't unlocked, skip it.
-      if (!buildMetaData.unlocked) {
+      if (buildMetaData.unlocked === false) {
         continue;
       }
 
