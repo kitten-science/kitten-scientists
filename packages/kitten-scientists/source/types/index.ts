@@ -331,6 +331,13 @@ export type PolicyBtnController = BuildingNotStackableBtnController & {
 
 export type RefineTearsBtnController = ButtonModernController & {
   new (game: Game): ButtonModernController;
+  _newLink: (model: ButtonModel, divider: number) => Link;
+  buyItem: (
+    model: ButtonModel | null,
+    event: Event | null,
+    callback: (success: boolean) => void,
+    count: number,
+  ) => void;
   refine: () => void;
 };
 
