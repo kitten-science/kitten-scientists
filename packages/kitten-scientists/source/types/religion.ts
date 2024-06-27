@@ -4,6 +4,7 @@ import {
   Game,
   GameTab,
   Price,
+  RefineTearsBtnController,
   TransformBtnController,
 } from "./index.js";
 
@@ -11,7 +12,7 @@ export type ReligionTab = GameTab & {
   /**
    * Refine tears.
    */
-  refineBtn?: BuildButton;
+  refineBtn?: BuildButton<string, ButtonModernModel, RefineTearsBtnController> | null;
 
   /**
    * Refine time crystals.
