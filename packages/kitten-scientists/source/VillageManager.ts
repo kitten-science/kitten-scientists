@@ -6,6 +6,7 @@ import { WorkshopManager } from "./WorkshopManager.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
 import { objectEntries } from "./tools/Entries.js";
+import { negativeOneToInfinity } from "./tools/Format.js";
 import { Resource } from "./types/index.js";
 import { JobInfo, VillageTab } from "./types/village.js";
 
@@ -74,10 +75,7 @@ export class VillageManager implements Automation {
         }
 
         const maxKittensInJob = this._host.game.village.getJobLimit(job.name);
-        const maxKittensToAssign =
-          this.settings.jobs[job.name].max === -1
-            ? Number.POSITIVE_INFINITY
-            : this.settings.jobs[job.name].max;
+        const maxKittensToAssign = negativeOneToInfinity(this.settings.jobs[job.name].max);
         const kittensInJob = job.value;
         if (kittensInJob < maxKittensInJob && kittensInJob < maxKittensToAssign) {
           jobsNotCapped.push({ job, count: kittensInJob, toCap: maxKittensInJob - kittensInJob });

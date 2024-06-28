@@ -6,6 +6,7 @@ import { UserScript } from "./UserScript.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { objectEntries } from "./tools/Entries.js";
+import { negativeOneToInfinity } from "./tools/Format.js";
 import { cerror } from "./tools/Log.js";
 import { CraftableInfo, ResourceInfo } from "./types/craft.js";
 import { Resource, ResourceCraftable, UpgradeInfo } from "./types/index.js";
@@ -112,8 +113,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       }
 
       const current = !craft.max ? false : this.getResource(craft.resource);
-
-      const max = craft.max === -1 ? Number.POSITIVE_INFINITY : craft.max;
+      const max = negativeOneToInfinity(craft.max);
       if (current && max < current.value) {
         continue;
       }
