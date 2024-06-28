@@ -72,7 +72,7 @@ export class SpaceManager implements Automation {
     }
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, trigger, "space");
+    const buildList = bulkManager.bulk(builds, metaData, trigger, "Space");
 
     let refreshRequired = false;
     // Build all entries in the build list, where we can build any items.
