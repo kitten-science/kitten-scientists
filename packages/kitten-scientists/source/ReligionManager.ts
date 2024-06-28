@@ -14,6 +14,7 @@ import {
   UnicornItem,
   UnicornItems,
 } from "./settings/ReligionSettings.js";
+import { negativeOneToInfinity } from "./tools/Format.js";
 import { cwarn } from "./tools/Log.js";
 import {
   BuildButton,
@@ -92,10 +93,7 @@ export class ReligionManager implements Automation {
         ),
       );
       // Build a unicorn pasture if possible.
-      const maxPastures =
-        -1 === this.settings.buildings.unicornPasture.max
-          ? Number.POSITIVE_INFINITY
-          : this.settings.buildings.unicornPasture.max;
+      const maxPastures = negativeOneToInfinity(this.settings.buildings.unicornPasture.max);
       const meta = this._host.game.bld.getBuildingExt("unicornPasture").meta;
       if (this.settings.buildings.unicornPasture.enabled && meta.val < maxPastures) {
         this._bonfireManager.autoBuild({
@@ -172,6 +170,7 @@ export class ReligionManager implements Automation {
         buildRequest,
         this.getBuildMetaData(buildRequest),
         this.settings.trigger,
+        "Religion",
       );
       if (0 < build.length && 0 < build[0].count) {
         // We force only building 1 of the best unicorn building, because
@@ -199,7 +198,7 @@ export class ReligionManager implements Automation {
     > = this.getBuildMetaData(builds);
 
     // Let the bulk manager figure out which of the builds to actually build.
-    const buildList = this._bulkManager.bulk(builds, metaData, this.settings.trigger);
+    const buildList = this._bulkManager.bulk(builds, metaData, this.settings.trigger, "Religion");
 
     let refreshRequired = false;
     for (const build of buildList) {

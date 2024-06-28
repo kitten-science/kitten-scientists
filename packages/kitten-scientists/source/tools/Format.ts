@@ -15,3 +15,7 @@ export function ucfirst(input: string): string {
 export function roundToTwo(input: number): number {
   return Math.round(input * 100) / 100;
 }
+
+export function negativeOneToInfinity(value: number): number {
+  return value === -1 ? Number.POSITIVE_INFINITY : value;
+}

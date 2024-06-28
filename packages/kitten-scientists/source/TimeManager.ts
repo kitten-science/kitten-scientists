@@ -90,7 +90,7 @@ export class TimeManager {
     }
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, trigger);
+    const buildList = bulkManager.bulk(builds, metaData, trigger, "Time");
 
     let refreshRequired = false;
     for (const build of buildList) {

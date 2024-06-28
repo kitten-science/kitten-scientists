@@ -77,7 +77,7 @@ export class BonfireManager implements Automation {
     }
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, trigger, "bonfire");
+    const buildList = bulkManager.bulk(builds, metaData, trigger, "Bonfire");
 
     let refreshRequired = false;
     // Build all entries in the build list, where we can build any items.
