@@ -6,7 +6,7 @@ import { WorkshopManager } from "./WorkshopManager.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { TradeSettings } from "./settings/TradeSettings.js";
 import { objectEntries } from "./tools/Entries.js";
-import { ucfirst } from "./tools/Format.js";
+import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cwarn } from "./tools/Log.js";
 import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types/index.js";
 
@@ -309,10 +309,7 @@ export class TradeManager implements Automation {
 
       const name = racePanels[panelIndex].race.name;
       const race = this._host.game.diplomacy.get(name);
-      const max =
-        this.settings.buildEmbassies.races[name].max === -1
-          ? Number.POSITIVE_INFINITY
-          : this.settings.buildEmbassies.races[name].max;
+      const max = negativeOneToInfinity(this.settings.buildEmbassies.races[name].max);
 
       if (
         !this.settings.buildEmbassies.races[name].enabled ||
