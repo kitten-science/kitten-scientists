@@ -1,9 +1,11 @@
+import { difference, shuffleArray } from "@oliversalzburg/js-utils/data/array.js";
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { WorkshopManager } from "../WorkshopManager.js";
 import { BonfireItem } from "../settings/BonfireSettings.js";
 import { AllItems } from "../settings/Settings.js";
 import { objectEntries } from "../tools/Entries.js";
+import { negativeOneToInfinity } from "../tools/Format.js";
 import {
   AllBuildings,
   BuildButton,
@@ -17,6 +19,7 @@ import {
   ReligionUpgradeInfo,
   Resource,
   SpaceBuildingInfo,
+  TabId,
   TimeItemVariant,
   TranscendenceUpgradeInfo,
   UnicornItemVariant,
@@ -32,6 +35,27 @@ export type BulkBuildListItem = {
   name?: AllBuildings;
   stage?: number;
   variant?: TimeItemVariant | UnicornItemVariant;
+};
+
+type BuildRequest = {
+  id: AllItems;
+  prices: Array<Price>;
+  priceRatio: number;
+  source: TabId;
+  limit: number;
+  val: number;
+};
+
+type PotentialBuild = {
+  id: AllItems;
+  name: string;
+  spot: number;
+  count: number;
+  prices: Array<Price>;
+  priceRatio: number;
+  source: TabId;
+  limit: number;
+  val: number;
 };
 
 export class BulkPurchaseHelper {
@@ -80,20 +104,10 @@ export class BulkPurchaseHelper {
       >
     >,
     trigger: number,
-    sourceTab?: "bonfire" | "space",
+    sourceTab: TabId,
   ): Array<BulkBuildListItem> {
     const buildsPerformed: Array<BulkBuildListItem> = [];
-    const potentialBuilds: Array<{
-      id: AllItems;
-      name?: AllBuildings;
-      count: number;
-      spot: number;
-      prices: Array<Price>;
-      priceRatio: number;
-      source?: "bonfire" | "space";
-      limit: number;
-      val: number;
-    }> = [];
+    const potentialBuilds: Array<PotentialBuild> = [];
 
     // How many builds are on the list.
     let counter = 0;
@@ -173,7 +187,6 @@ export class BulkPurchaseHelper {
         const itemPrices = [];
 
         // Get cost reduction modifier.
-        // TODO: This seems to be a bug, it should be `build.name`, but only if it is set.
         const pricesDiscount = this._host.game.getLimitedDR(
           // @ts-expect-error getEffect will return 0 for invalid effects. So this is safe either way.
           this._host.game.getEffect(`${name}CostReduction` as const),
@@ -226,16 +239,73 @@ export class BulkPurchaseHelper {
     }
 
     // Create a copy of the currently available resources.
-    const tempPool: Record<Resource, number> = {} as Record<Resource, number>;
+    // We need a copy, because `_getPossibleBuildCount` modifies this data.
+    const currentResourcePool: Record<Resource, number> = {} as Record<Resource, number>;
     for (const res of this._host.game.resPool.resources) {
-      tempPool[res.name] = this._workshopManager.getValueAvailable(res.name);
+      currentResourcePool[res.name] = this._workshopManager.getValueAvailable(res.name);
     }
 
-    for (const potentialBuild of potentialBuilds) {
-      // The item in the builds cache, that we're currently processing.
-      const buildCount = this._getPossibleBuildCount(potentialBuild, metaData, tempPool);
-      potentialBuild.count = buildCount;
+    let iterations = 0;
+    const buildsCommitted = new Array<PotentialBuild>();
+    while (iterations < 1e5) {
+      // Randomize the potential builds each iteration. This should help evening out
+      // build requests for buildings that regularly appear first in the list.
+      const candidatesThisIteration = shuffleArray(difference(potentialBuilds, buildsCommitted));
 
+      let buildThisIteration = 0;
+      const committedThisIteration = [];
+      let tempPool = { ...currentResourcePool };
+      // Pay already committed builds from the temp pool.
+      for (const committedBuild of buildsCommitted) {
+        const possibleInstances = this._precalculateBuilds(
+          {
+            ...committedBuild,
+            limit: committedBuild.val + committedBuild.count,
+          },
+          metaData,
+          tempPool,
+        );
+        tempPool = possibleInstances.remainingResources;
+      }
+
+      // Now see what we can do with the rest of the pool.
+      for (const potentialBuild of candidatesThisIteration) {
+        const targetInstanceCount = potentialBuild.count + 1;
+        const possibleInstances = this._precalculateBuilds(
+          {
+            ...potentialBuild,
+            limit: Math.min(
+              negativeOneToInfinity(potentialBuild.limit),
+              potentialBuild.val + targetInstanceCount,
+            ),
+          },
+          metaData,
+          tempPool,
+        );
+
+        if (possibleInstances.count < targetInstanceCount) {
+          committedThisIteration.push(potentialBuild);
+          continue;
+        }
+
+        potentialBuild.count = targetInstanceCount;
+        tempPool = possibleInstances.remainingResources;
+
+        buildThisIteration++;
+      }
+
+      buildsCommitted.push(...committedThisIteration);
+
+      iterations++;
+
+      if (buildThisIteration === 0) {
+        break;
+      }
+    }
+
+    console.debug(`Took '${iterations}' iterations to evaluate bulk build request.`);
+
+    for (const potentialBuild of potentialBuilds) {
       const performedBuild = mustExist(
         buildsPerformed.find(build => build.id === potentialBuild.id),
       );
@@ -263,18 +333,8 @@ export class BulkPurchaseHelper {
    * @returns The number of items that could be built. If this is non-zero, the `resources` will have been adjusted
    * to reflect the number of builds made.
    */
-  private _getPossibleBuildCount(
-    buildCacheItem: {
-      id: AllItems;
-      name?: AllBuildings;
-      count: number;
-      spot: number;
-      prices: Array<Price>;
-      priceRatio: number;
-      source?: "bonfire" | "space";
-      limit: number;
-      val: number;
-    },
+  private _precalculateBuilds(
+    buildCacheItem: BuildRequest,
     metaData: Partial<
       Record<
         AllItems,
@@ -288,16 +348,11 @@ export class BulkPurchaseHelper {
       >
     >,
     resources: Record<Resource, number> = {} as Record<Resource, number>,
-  ) {
-    // This variable makes no sense.
-    // It _seems_ like it should indicate how many buildings of a specific build slot have been built.
-    // But what it actually holds is how many builds have been performed.
-    // It might be a "best effort" to try to predict how prices would develop if the builds were made.
-    // Some testing suggests that this is a bug. If you start a fresh KG in dev mode and give all resources,
-    // with all bonfire builds enabled in KS, not all resources will be spent.
-    // I assume this is due to the fact that the script believes it has already built 30 libraries,
-    // when it was only 30 catnip fields (and only catnip was spent).
-    let unknown_k = 0;
+  ): {
+    count: number;
+    remainingResources: Record<Resource, number>;
+  } {
+    let buildsPossible = 0;
 
     const tempPool = Object.assign({}, resources);
 
@@ -309,7 +364,7 @@ export class BulkPurchaseHelper {
     let maxItemsBuilt = false;
 
     if (prices.length === 0) {
-      return 0;
+      return { count: 0, remainingResources: tempPool };
     }
 
     // There is actually no strong guarantee that `maxItemsBuilt` changes in the loops below.
@@ -328,7 +383,7 @@ export class BulkPurchaseHelper {
         let karmaPrice = Infinity;
 
         // Determine the new state of the flags above.
-        if (source && source === "space" && prices[priceIndex].name === "oil") {
+        if (source === "Space" && prices[priceIndex].name === "oil") {
           spaceOil = true;
 
           const oilReductionRatio = this._host.game.getEffect("oilReductionRatio");
@@ -345,14 +400,15 @@ export class BulkPurchaseHelper {
 
         if (spaceOil) {
           maxItemsBuilt =
-            tempPool["oil"] < oilPrice * Math.pow(1.05, unknown_k + buildMetaData.val);
+            tempPool["oil"] < oilPrice * Math.pow(1.05, buildsPossible + buildMetaData.val);
         } else if (cryoKarma) {
           maxItemsBuilt =
-            tempPool["karma"] < karmaPrice * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+            tempPool["karma"] <
+            karmaPrice * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
         } else {
           maxItemsBuilt =
             tempPool[prices[priceIndex].name] <
-            prices[priceIndex].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+            prices[priceIndex].val * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
         }
 
         // Check if any special builds have reached their reasonable limit of units to build.
@@ -364,24 +420,26 @@ export class BulkPurchaseHelper {
           // are example of non-stackable builds.
           ("noStackable" in buildMetaData &&
             buildMetaData.noStackable &&
-            unknown_k + buildMetaData.val >= 1) ||
+            buildsPossible + buildMetaData.val >= 1) ||
           // Is this the resource retrieval build? This one is limited to 100 units.
-          (buildCacheItem.id === "ressourceRetrieval" && unknown_k + buildMetaData.val >= 100) ||
+          (buildCacheItem.id === "ressourceRetrieval" &&
+            buildsPossible + buildMetaData.val >= 100) ||
           (buildCacheItem.id === "cryochambers" &&
             this._host.game.bld.getBuildingExt("chronosphere").meta.val <=
-              unknown_k + buildMetaData.val)
+              buildsPossible + buildMetaData.val)
         ) {
           // Go through all prices that we have already checked.
           for (let priceIndex2 = 0; priceIndex2 < priceIndex; priceIndex2++) {
             // TODO: This seems to just be `spaceOil`.
             // TODO: A lot of this code seems to be a duplication from a few lines above.
-            if (source && source === "space" && prices[priceIndex2].name === "oil") {
+            if (source === "Space" && prices[priceIndex2].name === "oil") {
               const oilReductionRatio = this._host.game.getEffect("oilReductionRatio");
               const oilPriceRefund =
                 prices[priceIndex2].val *
                 (1 - this._host.game.getLimitedDR(oilReductionRatio, 0.75));
 
-              tempPool["oil"] += oilPriceRefund * Math.pow(1.05, unknown_k + buildMetaData.val);
+              tempPool["oil"] +=
+                oilPriceRefund * Math.pow(1.05, buildsPossible + buildMetaData.val);
 
               // TODO: This seems to just be `cryoKarma`.
             } else if (
@@ -394,10 +452,10 @@ export class BulkPurchaseHelper {
                 (1 - this._host.game.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
 
               tempPool["karma"] +=
-                karmaPriceRefund * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+                karmaPriceRefund * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
             } else {
               const refundVal =
-                prices[priceIndex2].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+                prices[priceIndex2].val * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
               tempPool[prices[priceIndex2].name] +=
                 prices[priceIndex2].name === "void" ? Math.ceil(refundVal) : refundVal;
             }
@@ -405,26 +463,24 @@ export class BulkPurchaseHelper {
 
           // Is this a limited build? If so, don't build more than the limit.
           if (buildCacheItem.limit && buildCacheItem.limit !== -1) {
-            buildCacheItem.count = Math.max(
+            buildsPossible = Math.max(
               0,
-              Math.min(buildCacheItem.count, buildCacheItem.limit - buildCacheItem.val),
+              Math.min(buildsPossible, buildCacheItem.limit - buildCacheItem.val),
             );
           }
 
-          // As we have reached our reasonable limit for this build, store the count
-          // and remove the build from the builds cache.
-          Object.assign(resources, tempPool);
-          return buildCacheItem.count;
+          return { count: buildsPossible, remainingResources: tempPool };
         }
 
         // Deduct the cost of this price from the temporary resource cache.
         if (spaceOil) {
-          tempPool["oil"] -= oilPrice * Math.pow(1.05, unknown_k + buildMetaData.val);
+          tempPool["oil"] -= oilPrice * Math.pow(1.05, buildsPossible + buildMetaData.val);
         } else if (cryoKarma) {
-          tempPool["karma"] -= karmaPrice * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+          tempPool["karma"] -=
+            karmaPrice * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
         } else {
           const newPriceValue =
-            prices[priceIndex].val * Math.pow(priceRatio, unknown_k + buildMetaData.val);
+            prices[priceIndex].val * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
           tempPool[prices[priceIndex].name] -=
             prices[priceIndex].name === "void" ? Math.ceil(newPriceValue) : newPriceValue;
         }
@@ -432,13 +488,10 @@ export class BulkPurchaseHelper {
         // Check the next price...
       }
 
-      // We're starting to make sense of this variable, as we refactored out this method.
-      ++unknown_k;
-      ++buildCacheItem.count;
+      ++buildsPossible;
     }
 
-    Object.assign(resources, tempPool);
-    return buildCacheItem.count;
+    return { count: buildsPossible, remainingResources: tempPool };
   }
 
   /**
@@ -518,7 +571,7 @@ export class BulkPurchaseHelper {
       | TranscendenceUpgradeInfo
       | VoidSpaceUpgradeInfo
       | ZiggurathUpgradeInfo,
-    source?: "bonfire" | "space",
+    source?: TabId,
   ): number {
     // If the building has stages, use the ratio for the current stage.
     const ratio =
@@ -528,7 +581,7 @@ export class BulkPurchaseHelper {
         : (data.priceRatio ?? 0);
 
     let ratioDiff = 0;
-    if (source && source === "bonfire") {
+    if (source && source === "Bonfire") {
       ratioDiff =
         this._host.game.getEffect(`${data.name}PriceRatio` as const) +
         this._host.game.getEffect("priceRatio") +
@@ -556,7 +609,7 @@ export class BulkPurchaseHelper {
     build: { name: AllBuildings; val: number },
     prices: Array<Price>,
     priceRatio: number,
-    source?: "bonfire" | "space",
+    source?: TabId,
   ): boolean {
     // Determine price reduction on this build.
     const pricesDiscount = this._host.game.getLimitedDR(
@@ -578,7 +631,7 @@ export class BulkPurchaseHelper {
 
       // For space builds that consume oil, take the oil price reduction into account.
       // This is caused by space elevators.
-      if (source && source === "space" && price.name === "oil") {
+      if (source && source === "Space" && price.name === "oil") {
         const oilModifier = this._host.game.getLimitedDR(
           this._host.game.getEffect("oilReductionRatio"),
           0.75,
