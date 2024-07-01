@@ -60,7 +60,7 @@ export class ReligionManager implements Automation {
     this._autoBuild();
 
     if (this.settings.sacrificeUnicorns.enabled) {
-      this._autoSacrificeUnicorns();
+      await this._autoSacrificeUnicorns();
     }
 
     if (this.settings.sacrificeAlicorns.enabled) {
@@ -492,7 +492,27 @@ export class ReligionManager implements Automation {
     return null;
   }
 
-  private _autoSacrificeUnicorns() {
+  private _transformBtnSacrificeHelper(
+    available: number,
+    total: number,
+    controller: TransformBtnController,
+    model: ButtonModernModel,
+  ) {
+    const conversionPercentage = available / total;
+    const percentageInverse = 1 / conversionPercentage;
+
+    const customController = new classes.ui.religion.TransformBtnController(
+      game,
+      controller.controllerOpts,
+    ) as TransformBtnController;
+
+    const link = customController._newLink(model, percentageInverse);
+    return new Promise<boolean>(resolve => {
+      link.handler(new Event("decoy"), resolve);
+    });
+  }
+
+  private async _autoSacrificeUnicorns() {
     const unicorns = this._workshopManager.getResource("unicorns");
     const available = this._workshopManager.getValueAvailable("unicorns");
     if (
@@ -500,37 +520,24 @@ export class ReligionManager implements Automation {
       this.settings.sacrificeUnicorns.trigger <= available &&
       this.settings.sacrificeUnicorns.trigger <= unicorns.value
     ) {
-      const unicornsForSacrifice = available - this.settings.sacrificeUnicorns.trigger;
-      const sacrificePercentage = unicornsForSacrifice / available;
-      const percentageInverse = 1 / sacrificePercentage;
-
       const controller = this._host.game.religionTab.sacrificeBtn.controller;
       const model = this._host.game.religionTab.sacrificeBtn.model;
 
-      const customController = new classes.ui.religion.TransformBtnController(
-        game,
-        controller.controllerOpts,
-      ) as TransformBtnController;
+      await this._transformBtnSacrificeHelper(available, unicorns.value, controller, model);
 
-      const link = customController._newLink(model, percentageInverse);
-      link.handler(new Event("decoy"), (success: boolean) => {
-        if (!success) {
-          return;
-        }
+      const availableNow = this._workshopManager.getValueAvailable("unicorns");
+      const cost = available - availableNow;
 
-        const cost = unicornsForSacrifice;
-
-        this._host.engine.iactivity(
-          "act.sacrificeUnicorns",
-          [this._host.game.getDisplayValueExt(cost)],
-          "ks-faith",
-        );
-        this._host.engine.storeForSummary(
-          this._host.engine.i18n("$resources.unicorns.title"),
-          1,
-          "refine",
-        );
-      });
+      this._host.engine.iactivity(
+        "act.sacrificeUnicorns",
+        [this._host.game.getDisplayValueExt(cost)],
+        "ks-faith",
+      );
+      this._host.engine.storeForSummary(
+        this._host.engine.i18n("$resources.unicorns.title"),
+        cost,
+        "refine",
+      );
     }
   }
 
@@ -545,16 +552,19 @@ export class ReligionManager implements Automation {
       const controller = this._host.game.religionTab.sacrificeAlicornsBtn.controller;
       const model = this._host.game.religionTab.sacrificeAlicornsBtn.model;
 
-      await new Promise(resolve => {
-        controller.buyItem(model, new MouseEvent("click"), resolve);
-      });
+      await this._transformBtnSacrificeHelper(available, alicorns.value, controller, model);
 
-      const cost = mustExist(model.prices?.[0]).val;
+      const availableNow = this._workshopManager.getValueAvailable("alicorn");
+      const cost = available - availableNow;
 
-      this._host.engine.iactivity("act.sacrificeAlicorns", [cost], "ks-faith");
+      this._host.engine.iactivity(
+        "act.sacrificeAlicorns",
+        [this._host.game.getDisplayValueExt(cost)],
+        "ks-faith",
+      );
       this._host.engine.storeForSummary(
         this._host.engine.i18n("$resources.alicorn.title"),
-        1,
+        cost,
         "refine",
       );
     }
@@ -570,17 +580,26 @@ export class ReligionManager implements Automation {
       this.settings.refineTears.trigger <= tears.value &&
       sorrow.value < sorrow.maxValue
     ) {
-      const controller = new classes.ui.religion.RefineTearsBtnController(this._host.game);
+      const availableForConversion = available - this.settings.refineTears.trigger;
+
+      const controller = this._host.game.religionTab.refineBtn.controller;
       const model = this._host.game.religionTab.refineBtn.model;
 
       await new Promise(resolve => {
-        controller.buyItem(model, new MouseEvent("click"), resolve);
+        controller.buyItem(model, new Event("decoy"), resolve, availableForConversion);
       });
 
-      this._host.engine.iactivity("act.refineTears", [], "ks-faith");
+      const availableNow = this._workshopManager.getValueAvailable("tears");
+      const cost = available - availableNow;
+
+      this._host.engine.iactivity(
+        "act.refineTears",
+        [this._host.game.getDisplayValueExt(cost)],
+        "ks-faith",
+      );
       this._host.engine.storeForSummary(
         this._host.engine.i18n("$resources.tears.title"),
-        1,
+        cost,
         "refine",
       );
     }
@@ -597,13 +616,16 @@ export class ReligionManager implements Automation {
       const controller = this._host.game.religionTab.refineTCBtn.controller;
       const model = this._host.game.religionTab.refineTCBtn.model;
 
-      await new Promise(resolve => {
-        controller.buyItem(model, new MouseEvent("click"), resolve);
-      });
+      await this._transformBtnSacrificeHelper(available, timeCrystals.value, controller, model);
 
-      const cost = mustExist(model.prices?.[0]).val;
+      const availableNow = this._workshopManager.getValueAvailable("timeCrystal");
+      const cost = available - availableNow;
 
-      this._host.engine.iactivity("act.refineTCs", [cost], "ks-faith");
+      this._host.engine.iactivity(
+        "act.refineTCs",
+        [this._host.game.getDisplayValueExt(cost)],
+        "ks-faith",
+      );
       this._host.engine.storeForSummary(
         this._host.engine.i18n("$resources.timeCrystal.title"),
         cost,
