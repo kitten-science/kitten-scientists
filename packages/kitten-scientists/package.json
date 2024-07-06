@@ -40,7 +40,7 @@
     "@types/jquery": "3.5.30",
     "@types/semver": "7.5.8",
     "@types/web": "0.0.151",
-    "typescript": "5.4.5",
+    "typescript": "5.5.3",
     "vite": "5.3.3",
     "vite-plugin-userscript": "0.1.3"
   },
