@@ -1,5 +1,6 @@
 export * from "./BonfireSettingsUi.js";
 export * from "./BuildingUpgradeSettingsUi.js";
+export * from "./components/index.js";
 export * from "./EmbassySettingsUi.js";
 export * from "./EngineSettingsUi.js";
 export * from "./InternalsUi.js";
@@ -28,4 +29,3 @@ export * from "./UpgradeSettingsUi.js";
 export * from "./UserInterface.js";
 export * from "./VillageSettingsUi.js";
 export * from "./WorkshopSettingsUi.js";
-export * from "./components/index.js";
