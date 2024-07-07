@@ -13,7 +13,7 @@
   "act.praise": "태양 만세! {1}번의 숭배로 {0}개의 신앙을 모았습니다",
   "act.promote": "지도자를 [등급 {0}]로 승진시켰습니다!",
   "act.refineTCs": "{0}개의 시간 결정을 제련했습니다",
-  "act.refineTears": "Refined tears into BLS",
+  "act.refineTears": "Refined {0} tears into BLS",
   "act.sacrificeAlicorns": "알리콘 {0}마리를 제물로 바치기",
   "act.sacrificeUnicorns": "유니콘 {0}마리를 제물로 바치기",
   "act.sun.discover": "고양이들이 {0}을(를) 발견했습니다",
