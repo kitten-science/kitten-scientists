@@ -1,2 +1,2 @@
-export * from "./ReleaseInfo.js";
 export * from "./main.js";
+export * from "./ReleaseInfo.js";
