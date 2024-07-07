@@ -170,12 +170,12 @@ export class TradeManager implements Automation {
       if (maxTrades < trades.length) {
         // ...find a random race to trade with
         const randomRaceIndex = Math.floor(Math.random() * trades.length);
+        const tradeIndex = trades[randomRaceIndex];
         // Init the counter if necessary.
-        if (!tradesDone[trades[randomRaceIndex]]) {
-          tradesDone[trades[randomRaceIndex]] = 0;
+        if (isNil(tradesDone[tradeIndex])) {
+          tradesDone[tradeIndex] = 0;
         }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        tradesDone[trades[randomRaceIndex]]! += 1;
+        tradesDone[tradeIndex] += 1;
         maxTrades -= 1;
 
         // As we are constrained on resources, don't trade with this race again.
@@ -194,6 +194,7 @@ export class TradeManager implements Automation {
       // by the time we get to them).
       let minTrades = Math.floor(maxTrades / trades.length);
       let minTradeIndex = 0;
+      const tradeIndex = trades[minTradeIndex];
       for (let tradeIndex = 0; tradeIndex < trades.length; ++tradeIndex) {
         if (maxByRace[tradeIndex] < minTrades) {
           minTrades = maxByRace[tradeIndex];
@@ -202,11 +203,10 @@ export class TradeManager implements Automation {
       }
 
       // Store this trade in the trades we've "done".
-      if (!tradesDone[trades[minTradeIndex]]) {
-        tradesDone[trades[minTradeIndex]] = 0;
+      if (isNil(tradesDone[tradeIndex])) {
+        tradesDone[tradeIndex] = 0;
       }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      tradesDone[trades[minTradeIndex]]! += minTrades;
+      tradesDone[tradeIndex] += minTrades;
       maxTrades -= minTrades;
       trades.splice(minTradeIndex, 1);
       maxByRace.splice(minTradeIndex, 1);
@@ -228,8 +228,7 @@ export class TradeManager implements Automation {
         if (!tradeNet[mat]) {
           tradeNet[mat] = 0;
         }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        tradeNet[mat]! -= matAmount * amount;
+        tradeNet[mat] -= matAmount * amount;
       }
 
       const meanOutput = this.getAverageTrade(race);
@@ -238,8 +237,7 @@ export class TradeManager implements Automation {
         if (!tradeNet[out]) {
           tradeNet[out] = 0;
         }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        tradeNet[out]! +=
+        tradeNet[out] +=
           res.maxValue > 0
             ? Math.min(
                 mustExist(meanOutput[out]) * mustExist(tradesDone[name]),
