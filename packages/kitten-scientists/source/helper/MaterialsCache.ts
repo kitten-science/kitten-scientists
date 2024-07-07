@@ -39,8 +39,7 @@ export class MaterialsCache {
       if (!this._cacheSum[mat]) {
         this._cacheSum[mat] = 0;
       }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this._cacheSum[mat]! += amount;
+      this._cacheSum[mat] += amount;
     }
 
     // Iterate over all entries in the cache.
@@ -55,8 +54,7 @@ export class MaterialsCache {
           if (!this._cacheSum[mat]) {
             this._cacheSum[mat] = 0;
           }
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          this._cacheSum[mat]! -= amount;
+          this._cacheSum[mat] -= amount;
         }
         this._cache.shift();
         cacheIndex--;
@@ -84,7 +82,6 @@ export class MaterialsCache {
     // Adjust the cached value by the amount of ticks that have passed
     // since the last time the cache was updated.
     // TODO: Why? This seems arbitrary, just like this entire cache manager.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this._cacheSum[resource]! / (currentTick - startingTick);
+    return this._cacheSum[resource] / (currentTick - startingTick);
   }
 }
