@@ -1,4 +1,4 @@
-import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
+import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { UserScript } from "../../UserScript.js";
 import { Setting } from "../../settings/Settings.js";
 import { CollapsiblePanel, PanelOptions } from "./CollapsiblePanel.js";

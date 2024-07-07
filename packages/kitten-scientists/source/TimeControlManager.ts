@@ -1,4 +1,4 @@
-import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
+import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { BonfireManager } from "./BonfireManager.js";
 import { Engine, TickContext } from "./Engine.js";
 import { ReligionManager } from "./ReligionManager.js";

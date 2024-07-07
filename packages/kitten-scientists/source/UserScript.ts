@@ -1,7 +1,7 @@
 import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils";
-import { sleep } from "@oliversalzburg/js-utils/async.js";
-import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
+import { sleep } from "@oliversalzburg/js-utils/async/async.js";
+import { isNil, Maybe, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import JQuery from "jquery";
 import gt from "semver/functions/gt.js";
 import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine.js";

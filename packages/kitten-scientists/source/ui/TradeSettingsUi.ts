@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { UserScript } from "../UserScript.js";
 import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
 import { ucfirst } from "../tools/Format.js";

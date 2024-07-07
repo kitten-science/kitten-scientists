@@ -1,8 +1,8 @@
 import { UserScript } from "@kitten-science/kitten-scientists/UserScript.js";
 import { State } from "@kitten-science/kitten-scientists/state/State.js";
-import { InvalidArgumentError } from "@oliversalzburg/js-utils";
-import { PermissionViolationError } from "@oliversalzburg/js-utils/error/PermissionViolationError.js";
-import { base64Encode } from "@oliversalzburg/js-utils/string.js";
+import { base64Encode } from "@oliversalzburg/js-utils/data/string.js";
+import { InvalidArgumentError } from "@oliversalzburg/js-utils/errors/InvalidArgumentError.js";
+import { PermissionViolationError } from "@oliversalzburg/js-utils/errors/PermissionViolationError.js";
 import { decompressFromBase64 } from "lz-string";
 
 export class StateLoader {

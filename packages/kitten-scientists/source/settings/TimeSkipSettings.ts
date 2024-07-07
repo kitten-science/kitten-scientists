@@ -1,4 +1,4 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
+import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Cycle, Cycles, Season, Seasons } from "../types/index.js";
