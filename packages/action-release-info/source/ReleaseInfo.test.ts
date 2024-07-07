@@ -2,7 +2,7 @@ import core from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { Context } from "@actions/github/lib/context.js";
 import { Moctokit } from "@kie/mock-github";
-import { unknownToError } from "@oliversalzburg/js-utils";
+import { unknownToError } from "@oliversalzburg/js-utils/errors/error-serializer.js";
 import { expect } from "chai";
 import { rm, stat } from "fs/promises";
 import { it } from "mocha";

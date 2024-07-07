@@ -1,4 +1,4 @@
-import { isNil, mustExist } from "@oliversalzburg/js-utils/nil.js";
+import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { UserScript } from "../UserScript.js";
 import { WorkshopManager } from "../WorkshopManager.js";
 import { BonfireItem } from "../settings/BonfireSettings.js";

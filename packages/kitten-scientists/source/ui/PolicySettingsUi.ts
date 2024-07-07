@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { SupportedLanguage } from "../Engine.js";
 import { UserScript } from "../UserScript.js";
 import { PolicySettings } from "../settings/PolicySettings.js";

@@ -1,4 +1,4 @@
-import { mustExist } from "@oliversalzburg/js-utils/nil.js";
+import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { deepMergeLeft } from "../tools/Entries.js";
 import { State } from "./State.js";
 

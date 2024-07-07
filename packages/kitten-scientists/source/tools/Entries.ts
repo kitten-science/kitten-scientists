@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { cinfo, cwarn } from "./Log.js";
 
 export const deepMergeLeft = (

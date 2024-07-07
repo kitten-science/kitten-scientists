@@ -1,4 +1,4 @@
-import { TreeNode } from "@oliversalzburg/js-utils";
+import { TreeNode } from "@oliversalzburg/js-utils/data/tree.js";
 import AjvModule, { SchemaObject } from "ajv";
 import { UserScript } from "../UserScript.js";
 import { StateLoader } from "./StateLoader.js";

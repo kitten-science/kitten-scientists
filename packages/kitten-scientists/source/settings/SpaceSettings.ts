@@ -1,4 +1,4 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/nil.js";
+import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Game, SpaceBuilding, SpaceBuildings } from "../types/index.js";
 import { MissionSettings } from "./MissionSettings.js";

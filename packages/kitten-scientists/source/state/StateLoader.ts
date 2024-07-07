@@ -1,7 +1,8 @@
-import { TreeNode, retry } from "@oliversalzburg/js-utils";
-import { errorToRecord, unknownToError } from "@oliversalzburg/js-utils/error-serializer.js";
+import { retry } from "@oliversalzburg/js-utils/async/async.js";
+import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { TreeNode } from "@oliversalzburg/js-utils/data/tree.js";
+import { errorToRecord, unknownToError } from "@oliversalzburg/js-utils/errors/error-serializer.js";
 import { Report } from "@oliversalzburg/js-utils/log/report.js";
-import { mustExist } from "@oliversalzburg/js-utils/nil.js";
 import { State } from "./State.js";
 
 export interface ResolverStateView {

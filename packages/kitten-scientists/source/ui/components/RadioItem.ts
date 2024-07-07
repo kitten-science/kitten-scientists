@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { UserScript } from "../../UserScript.js";
 import { SettingOptions } from "../../settings/Settings.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";

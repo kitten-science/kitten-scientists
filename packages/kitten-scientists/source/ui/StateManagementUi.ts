@@ -1,5 +1,5 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils";
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { Locale, de, enUS, he, zhCN } from "date-fns/locale";
 import { EngineState, SupportedLanguage } from "../Engine.js";

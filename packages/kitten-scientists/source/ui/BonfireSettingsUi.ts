@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { UserScript } from "../UserScript.js";
 import { BonfireSettings } from "../settings/BonfireSettings.js";
 import { StagedBuilding } from "../types/index.js";

@@ -1,4 +1,5 @@
-import { Maybe, isNil, unknownToError } from "@oliversalzburg/js-utils";
+import { isNil, Maybe } from "@oliversalzburg/js-utils/data/nil.js";
+import { unknownToError } from "@oliversalzburg/js-utils/errors/error-serializer.js";
 import { BonfireManager } from "./BonfireManager.js";
 import { ReligionManager } from "./ReligionManager.js";
 import { ScienceManager } from "./ScienceManager.js";
@@ -6,7 +7,7 @@ import { SpaceManager } from "./SpaceManager.js";
 import { TimeControlManager } from "./TimeControlManager.js";
 import { TimeManager } from "./TimeManager.js";
 import { TradeManager } from "./TradeManager.js";
-import { FallbackLanguage, UserScript, ksVersion } from "./UserScript.js";
+import { FallbackLanguage, ksVersion, UserScript } from "./UserScript.js";
 import { VillageManager } from "./VillageManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import {

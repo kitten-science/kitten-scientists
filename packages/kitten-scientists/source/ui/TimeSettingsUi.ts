@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { UserScript } from "../UserScript.js";
 import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";

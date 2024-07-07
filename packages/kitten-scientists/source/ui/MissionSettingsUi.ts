@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { UserScript } from "../UserScript.js";
 import { MissionSettings } from "../settings/MissionSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
