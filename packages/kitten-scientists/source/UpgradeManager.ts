@@ -1,4 +1,3 @@
-import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
 import { BuildButton, ScienceTab } from "./types/index.js";
@@ -15,9 +14,15 @@ export abstract class UpgradeManager {
     upgrade: { label: string },
     variant: "policy" | "science" | "workshop",
   ): Promise<boolean> {
-    const button = this.getUpgradeButton(upgrade, variant);
+    const button = this._getUpgradeButton(upgrade, variant);
 
-    if (!button || !button.model.enabled) {
+    if (!button || !button.model) {
+      return false;
+    }
+
+    if (!button.model.enabled) {
+      console.warn("Upgrade request on disabled button!");
+      button.render();
       return false;
     }
 
@@ -71,7 +76,7 @@ export abstract class UpgradeManager {
     }
   }
 
-  getUpgradeButton(
+  private _getUpgradeButton(
     upgrade: { label: string },
     variant: "policy" | "science" | "workshop",
   ): BuildButton | null {
@@ -85,11 +90,7 @@ export abstract class UpgradeManager {
       buttons = this.manager.tab.buttons;
     }
 
-    for (const button of mustExist(buttons)) {
-      if (button.model.name === upgrade.label) {
-        return button;
-      }
-    }
-    return null;
+    return (buttons?.find(button => button.model?.name === upgrade.label) ??
+      null) as BuildButton | null;
   }
 }

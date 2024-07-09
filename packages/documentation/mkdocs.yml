@@ -73,4 +73,5 @@ nav:
   - Development:
       - Getting Started: development.md
       - Repository Scripts: reference/Repository Scripts/index.md
+  - Kitten DnA: dna.md
   - Kitten Engineers: engineers.md

@@ -1,5 +1,5 @@
 import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, TickContext } from "./Engine.js";
+import { Automation, FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
@@ -27,7 +27,7 @@ export class TradeManager implements Automation {
     this._workshopManager = workshopManager;
   }
 
-  tick(_context: TickContext) {
+  tick(context: FrameContext) {
     if (!this.settings.enabled) {
       return;
     }
@@ -37,10 +37,10 @@ export class TradeManager implements Automation {
     this.autoTrade();
 
     if (this.settings.unlockRaces.enabled) {
-      this.autoUnlock();
+      this.autoUnlock(context);
     }
     if (this.settings.buildEmbassies.enabled) {
-      this.autoBuildEmbassies();
+      this.autoBuildEmbassies(context);
     }
     if (this.settings.feedLeviathans.enabled) {
       this.autoFeedElders();
@@ -91,7 +91,7 @@ export class TradeManager implements Automation {
       // Additionally, we now check if the trade button is enabled, which kinda makes all previous
       // checks moot, but whatever :D
       const button = this.getTradeButton(race.name);
-      if (!button.model.enabled) {
+      if (!button?.model?.enabled) {
         continue;
       }
 
@@ -269,7 +269,7 @@ export class TradeManager implements Automation {
     }
   }
 
-  autoBuildEmbassies() {
+  autoBuildEmbassies(context: FrameContext) {
     if (!this._host.game.diplomacy.races[0].embassyPrices) {
       return;
     }
@@ -334,8 +334,6 @@ export class TradeManager implements Automation {
       return;
     }
 
-    let refreshRequired = false;
-
     while (bulkTracker.length > 0) {
       for (let raceIndex = 0; raceIndex < bulkTracker.length; raceIndex++) {
         const name = bulkTracker[raceIndex];
@@ -352,7 +350,7 @@ export class TradeManager implements Automation {
           cultureVal -= nextPrice;
           emBulk.priceSum += nextPrice;
           emBulk.val += 1;
-          refreshRequired = true;
+          context.requestGameUiRefresh = true;
         } else {
           bulkTracker.splice(raceIndex, 1);
           --raceIndex;
@@ -380,10 +378,6 @@ export class TradeManager implements Automation {
       } else {
         this._host.engine.iactivity("build.embassy", [emBulk.val, emBulk.race.title], "ks-build");
       }
-    }
-
-    if (refreshRequired) {
-      this._host.game.ui.render();
     }
   }
 
@@ -415,7 +409,7 @@ export class TradeManager implements Automation {
     }
   }
 
-  autoUnlock() {
+  autoUnlock(context: FrameContext) {
     if (!this._host.game.tabs[4].visible) {
       return;
     }
@@ -424,8 +418,6 @@ export class TradeManager implements Automation {
     const maxRaces = this._host.game.diplomacy.get("leviathans").unlocked ? 8 : 7;
     // If we haven't unlocked that many races yet...
     if (this._host.game.diplomacyTab.racePanels.length < maxRaces) {
-      let refreshRequired = false;
-
       // Get the currently available catpower.
       let manpower = this._workshopManager.getValueAvailable("manpower");
       // TODO: These should be checked in reverse order. Otherwise the check for lizards
@@ -439,7 +431,7 @@ export class TradeManager implements Automation {
           const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          refreshRequired = true;
+          context.requestGameUiRefresh = true;
         }
       }
 
@@ -450,7 +442,7 @@ export class TradeManager implements Automation {
           const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          refreshRequired = true;
+          context.requestGameUiRefresh = true;
         }
       }
 
@@ -461,7 +453,7 @@ export class TradeManager implements Automation {
           const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          refreshRequired = true;
+          context.requestGameUiRefresh = true;
         }
       }
 
@@ -475,7 +467,7 @@ export class TradeManager implements Automation {
           const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          refreshRequired = true;
+          context.requestGameUiRefresh = true;
         }
       }
 
@@ -489,7 +481,7 @@ export class TradeManager implements Automation {
           const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          refreshRequired = true;
+          context.requestGameUiRefresh = true;
         }
       }
 
@@ -504,7 +496,7 @@ export class TradeManager implements Automation {
           const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          refreshRequired = true;
+          context.requestGameUiRefresh = true;
         }
       }
 
@@ -518,12 +510,8 @@ export class TradeManager implements Automation {
           const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
-          refreshRequired = true;
+          context.requestGameUiRefresh = true;
         }
-      }
-
-      if (refreshRequired) {
-        this._host.game.ui.render();
       }
     }
   }
@@ -581,7 +569,7 @@ export class TradeManager implements Automation {
     const race = this.getRace(name);
     const button = this.getTradeButton(race.name);
 
-    if (!button.model.enabled || !this.settings.races[name].enabled) {
+    if (!button?.model?.enabled || !this.settings.races[name].enabled) {
       cwarn(
         "KS trade checks are not functioning properly, please create an issue on the github page.",
       );
@@ -875,12 +863,9 @@ export class TradeManager implements Automation {
    * @param race The race to get the button reference for.
    * @returns The reference to the trade button.
    */
-  getTradeButton(race: string): BuildButton {
+  getTradeButton(race: string): BuildButton | null {
     const panel = this.manager.tab.racePanels.find(subject => subject.race.name === race);
-    if (isNil(panel)) {
-      throw new Error(`Unable to find trade button for '${race}'`);
-    }
-    return panel.tradeBtn;
+    return panel?.tradeBtn ?? null;
   }
 
   /**

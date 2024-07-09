@@ -26,7 +26,7 @@ export class UserScriptLoader {
 
   private _possibleEngineState: unknown;
 
-  private static _tryEngineStateFromSaveData(saveDataKey: string, saveData: unknown): unknown {
+  static tryEngineStateFromSaveData(saveDataKey: string, saveData: unknown): unknown {
     const saveDataProxy = saveData as Record<string, unknown>;
     if (!(saveDataKey in saveDataProxy)) {
       cdebug(`Failed: \`${saveDataKey}\` not found in save data.`);
@@ -70,25 +70,36 @@ export class UserScriptLoader {
         this._gameStartSignalResolver = resolve;
       });
 
-      UserScriptLoader.window.dojo.subscribe("game/start", () => {
-        cdebug("`game/start` signal caught. Fast-tracking script load...");
+      const subGameStart = UserScriptLoader.window.dojo.subscribe("game/start", () => {
+        cdebug(`'game/start' signal caught. Fast-tracking script load for '${saveDataKey}'...`);
         mustExist(this._gameStartSignalResolver)(true);
+        UserScriptLoader.window.dojo.unsubscribe(subGameStart);
       });
 
       if (saveDataKey !== undefined) {
-        UserScriptLoader.window.dojo.subscribe("server/load", (saveData: unknown) => {
-          cinfo("`server/load` signal caught. Looking for script state in save data...");
+        const subServerLoad = UserScriptLoader.window.dojo.subscribe(
+          "server/load",
+          (saveData: unknown) => {
+            cinfo(
+              `'server/load' signal caught. Looking for script state with key '${saveDataKey}' in save data...`,
+            );
 
-          const state = UserScriptLoader._tryEngineStateFromSaveData(saveDataKey, saveData);
+            const state = UserScriptLoader.tryEngineStateFromSaveData(saveDataKey, saveData);
 
-          if (!state) {
-            cinfo("The Kittens Game save data did not contain a script state.");
-            return;
-          }
+            if (!state) {
+              cinfo(
+                `The Kittens Game save data did not contain a script state for '${saveDataKey}'.`,
+              );
+              return;
+            }
 
-          cinfo("Found! Provided save data will be used as seed for next script instance.");
-          this._possibleEngineState = state;
-        });
+            cinfo(
+              `Found key '${saveDataKey}'! Provided save data will be used as seed for next script instance.`,
+            );
+            this._possibleEngineState = state;
+            UserScriptLoader.window.dojo.unsubscribe(subServerLoad);
+          },
+        );
       }
     }
 

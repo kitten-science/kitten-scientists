@@ -36,14 +36,6 @@ export class KittenScientists {
    */
   readonly i18nEngine: I18nEngine;
 
-  /**
-   * Stores if we caught the `game/start` signal from the game.
-   */
-  //private static _gameStartSignal: Promise<boolean>;
-  //private static _gameStartSignalResolver: undefined | ((value: boolean) => void);
-
-  private static _possibleEngineState: EngineState | undefined = undefined;
-
   private _userInterface: UserInterface;
   engine: Engine;
 
@@ -112,8 +104,24 @@ export class KittenScientists {
       (saveData: Record<string, unknown>) => {
         cinfo("Injecting Kitten Scientists engine state into save data...");
         saveData.ks = { state: [this.getSettings()] };
+        document.dispatchEvent(
+          new CustomEvent<typeof saveData>("ks.reportSavegame", { detail: saveData }),
+        );
       },
     );
+    UserScriptLoader.window.dojo.subscribe("server/load", (saveData: unknown) => {
+      const state = UserScriptLoader.tryEngineStateFromSaveData("ks", saveData) as
+        | EngineState
+        | undefined;
+
+      if (!state) {
+        cinfo("The Kittens Game save data did not contain a script state.");
+        return;
+      }
+
+      cinfo("Found! Loading settings...");
+      this.engine.stateLoad(state);
+    });
   }
 
   /**
@@ -284,8 +292,12 @@ export class KittenScientists {
     load: (saveData: Record<string, unknown>) => {
       cinfo("Looking for Kitten Scientists engine state in save data...");
 
-      const state = KittenScientists._tryEngineStateFromSaveData(saveData);
+      const state = UserScriptLoader.tryEngineStateFromSaveData("ks", saveData) as
+        | EngineState
+        | undefined;
+
       if (!state) {
+        cinfo("The Kittens Game save data did not contain a script state.");
         return;
       }
 
@@ -299,27 +311,4 @@ export class KittenScientists {
       // `game/beforesave` event, which is intended for external consumers.
     },
   };
-
-  private static _tryEngineStateFromSaveData(
-    saveData: Record<string, unknown>,
-  ): EngineState | undefined {
-    if (!("ks" in saveData)) {
-      cdebug("Failed: `ks` not found in save data.");
-      return undefined;
-    }
-
-    const ksData = saveData.ks as { state?: Array<EngineState> };
-    if (!("state" in ksData)) {
-      cdebug("Failed: `ks.state` not found in save data.");
-      return undefined;
-    }
-
-    const state = ksData.state;
-    if (!Array.isArray(state)) {
-      cdebug("Failed: `ks.state` not `Array`.");
-      return undefined;
-    }
-
-    return state[0];
-  }
 }

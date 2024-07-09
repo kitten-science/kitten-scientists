@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "private": true,
+  "name": "@kitten-science/kitten-analysts",
+  "version": "0.0.1",
+  "description": "Kitten Analysts",
+  "license": "MIT",
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
+  "homepage": "https://github.com/kitten-science/kitten-scientists",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitten-science/kitten-scientists.git",
+    "directory": "packages/kitten-analysts"
+  },
+  "bugs": {
+    "url": "https://github.com/kitten-science/kitten-scientists/issues"
+  },
+  "type": "module",
+  "exports": {
+    "./*.js": "./build/*.js"
+  },
+  "scripts": {
+    "build": "yarn run build:all",
+    "kitten-analysts:build": "node build.js && vite --config vite.config.inject.js build",
+    "kitten-analysts:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
+    "kitten-analysts:release": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
+    "kitten-analysts:start": "node output/entrypoint-backend.js",
+    "kittenscience:build": "bash ./scripts/build-container.sh",
+    "kittenscience:rebuild": "bash ./scripts/rebuild-container.sh",
+    "kittenscience:run": "bash ./scripts/run-container.sh",
+    "kittenscience:stop": "bash ./scripts/stop-container.sh",
+    "lint": "yarn run lint:all",
+    "test": "echo This project has no tests.",
+    "whoami": "echo kitten-analysts"
+  },
+  "dependencies": {
+    "@kitten-science/kitten-scientists": "workspace:*",
+    "@koa/bodyparser": "5.1.1",
+    "@koa/cors": "5.0.0",
+    "@oliversalzburg/js-utils": "0.0.59",
+    "jsdom": "24.1.0",
+    "koa": "2.15.3",
+    "koa-router": "12.0.1",
+    "prom-client": "15.1.3",
+    "tslib": "2.6.3",
+    "uuid": "10.0.0",
+    "ws": "8.18.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "21.1.7",
+    "@types/koa": "^2",
+    "@types/koa__cors": "^5",
+    "@types/koa-router": "7.4.8",
+    "@types/node": "20.14.10",
+    "@types/uuid": "^10",
+    "@types/ws": "^8",
+    "esbuild": "0.23.0",
+    "typescript": "5.5.3",
+    "vite": "5.4.0",
+    "vite-plugin-userscript": "0.1.3"
+  },
+  "keywords": [
+    "kittensgame"
+  ],
+  "engines": {
+    "node": ">= 20"
+  },
+  "packageManager": "yarn@4.3.1"
+}

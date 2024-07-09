@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "private": true,
-  "name": "@kitten-science/kittensgame",
+  "name": "@kitten-science/devcontainer",
   "version": "latest",
   "description": "Containerized version of the Kittens Game",
   "license": "MIT",
@@ -14,10 +14,18 @@
   "bugs": {
     "url": "https://github.com/kitten-science/kitten-scientists/issues"
   },
-  "main": "Dockerfile",
   "scripts": {
-    "devcontainer:build": "bash ./scripts/build-development-container.sh",
-    "devcontainer:rebuild": "bash ./scripts/rebuild-development-container.sh",
-    "devcontainer:run": "bash ./scripts/run-development-container.sh"
-  }
+    "build": "yarn run build:all",
+    "devcontainer:build": "bash ./scripts/build-container.sh",
+    "devcontainer:rebuild": "bash ./scripts/rebuild-container.sh",
+    "devcontainer:run": "bash ./scripts/run-container.sh",
+    "devcontainer:stop": "bash ./scripts/stop-container.sh",
+    "lint": "yarn run lint:all",
+    "test": "echo This project has no tests.",
+    "whoami": "echo devcontainer"
+  },
+  "engines": {
+    "node": ">= 20"
+  },
+  "packageManager": "yarn@4.3.1"
 }

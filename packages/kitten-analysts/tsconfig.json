@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "build",
+    "rootDir": "source",
+    "types": ["@types/node"]
+  },
+  "include": ["../../@types", "source"],
+  "references": [{ "path": "../kitten-scientists" }]
+}

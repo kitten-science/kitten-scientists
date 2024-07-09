@@ -1,5 +1,6 @@
 import { isNil, Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { unknownToError } from "@oliversalzburg/js-utils/errors/error-serializer.js";
+import { measure, measureAsync } from "@oliversalzburg/js-utils/measurement/performance.js";
 import { BonfireManager } from "./BonfireManager.js";
 import {
   ActivityClass,
@@ -35,11 +36,15 @@ import { WorkshopManager } from "./WorkshopManager.js";
 
 const i18nData = { de, en, he, zh };
 
-export type TickContext = {
-  tick: number;
+export type FrameContext = {
+  requestGameUiRefresh: boolean;
+
+  entry: number;
+  exit: number;
+  measurements: Record<string, number | undefined>;
 };
 export type Automation = {
-  tick(context: TickContext): void | Promise<void>;
+  tick(context: FrameContext): void | Promise<void>;
 };
 export type EngineState = {
   $schema?: string;
@@ -277,11 +282,21 @@ export class Engine {
     }
 
     const loop = () => {
-      const entry = Date.now();
-      this._iterate()
+      const context: FrameContext = {
+        requestGameUiRefresh: false,
+        entry: new Date().getTime(),
+        exit: 0,
+        measurements: {},
+      };
+
+      this._iterate(context)
         .then(() => {
-          const exit = Date.now();
-          const timeTaken = exit - entry;
+          context.exit = new Date().getTime();
+          const timeTaken = context.exit - context.entry;
+
+          document.dispatchEvent(
+            new CustomEvent<typeof context>("ks.reportFrame", { detail: context }),
+          );
 
           // Check if the main loop was terminated during
           // the last iteration.
@@ -326,9 +341,7 @@ export class Engine {
   /**
    * The main loop of the automation script.
    */
-  private async _iterate(): Promise<void> {
-    const context = { tick: new Date().getTime() };
-
+  private async _iterate(context: FrameContext): Promise<void> {
     // The logic here is inverted, because _disabled_ items are hidden from the log.
     if (!this.settings.filters.disableKGLog.enabled) {
       this._maintainKGLogFilters();
@@ -336,15 +349,49 @@ export class Engine {
 
     // The order in which these actions are performed is probably
     // semi-intentional and should be preserved or improved.
-    await this.scienceManager.tick(context);
-    this.bonfireManager.tick(context);
-    this.spaceManager.tick(context);
-    await this.workshopManager.tick(context);
-    this.tradeManager.tick(context);
-    await this.religionManager.tick(context);
-    this.timeManager.tick(context);
-    this.villageManager.tick(context);
-    await this.timeControlManager.tick(context);
+    let [, duration] = await measureAsync(() => this.scienceManager.tick(context));
+    context.measurements["scienceManager"] = duration;
+
+    [, duration] = measure(() => {
+      this.bonfireManager.tick(context);
+    });
+    context.measurements["bonfireManager"] = duration;
+
+    [, duration] = measure(() => {
+      this.spaceManager.tick(context);
+    });
+    context.measurements["spaceManager"] = duration;
+
+    [, duration] = await measureAsync(() => this.workshopManager.tick(context));
+    context.measurements["workshopManager"] = duration;
+
+    [, duration] = measure(() => {
+      this.tradeManager.tick(context);
+    });
+    context.measurements["tradeManager"] = duration;
+
+    [, duration] = await measureAsync(() => this.religionManager.tick(context));
+    context.measurements["religionManager"] = duration;
+
+    [, duration] = measure(() => {
+      this.timeManager.tick(context);
+    });
+    context.measurements["timeManager"] = duration;
+
+    [, duration] = measure(() => {
+      this.villageManager.tick(context);
+    });
+    context.measurements["villageManager"] = duration;
+
+    [, duration] = await measureAsync(() => this.timeControlManager.tick(context));
+    context.measurements["timeControlManager"] = duration;
+
+    [, duration] = measure(() => {
+      if (context.requestGameUiRefresh) {
+        this._host.game.ui.render();
+      }
+    });
+    context.measurements["gameUiRefresh"] = duration;
   }
 
   /**
