@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingTrigger } from "../../../settings/Settings.js";
-import { UserScript } from "../../../UserScript.js";
 import { SettingsSectionUi } from "../../SettingsSectionUi.js";
 import { TriggerButtonBehavior } from "../buttons-icon/TriggerButton.js";
 import { TextButton } from "../TextButton.js";
@@ -9,7 +9,7 @@ export class TriggerLimitButton extends TextButton {
   readonly setting: SettingTrigger;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingTrigger,
     handler: { onClick?: () => void } = {},

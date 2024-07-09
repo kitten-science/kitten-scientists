@@ -1,12 +1,12 @@
+import { KittenScientists } from "../KittenScientists.js";
 import { FilterItems, LogFilterSettings } from "../settings/LogFilterSettings.js";
-import { UserScript } from "../UserScript.js";
 import { ExplainerListItem } from "./components/ExplainerListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
 
 export class LogFiltersSettingsUi extends SettingsSectionUi<LogFilterSettings> {
-  constructor(host: UserScript, settings: LogFilterSettings) {
+  constructor(host: KittenScientists, settings: LogFilterSettings) {
     const label = host.engine.i18n("ui.filter");
     super(host, label, settings);
 

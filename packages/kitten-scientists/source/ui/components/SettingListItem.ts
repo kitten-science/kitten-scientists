@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { Setting } from "../../settings/Settings.js";
 import { LabelListItem, LabelListItemOptions } from "./LabelListItem.js";
 
@@ -36,7 +36,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
    * @param options Options for this list item.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: TSetting,
     options?: Partial<SettingListItemOptions>,

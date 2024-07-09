@@ -1,5 +1,5 @@
 import { is } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { Container } from "./Container.js";
 import { ExpandoButton } from "./ExpandoButton.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
@@ -39,7 +39,7 @@ export class CollapsiblePanel<
    * @param head Another component to host in the head of the panel.
    * @param options Options for this panel.
    */
-  constructor(host: UserScript, head: THead, options?: Partial<PanelOptions<TChild>>) {
+  constructor(host: KittenScientists, head: THead, options?: Partial<PanelOptions<TChild>>) {
     super(host, options);
 
     this.container = new Container(host);

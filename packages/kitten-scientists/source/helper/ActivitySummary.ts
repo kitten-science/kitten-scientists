@@ -1,5 +1,5 @@
 import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { roundToTwo, ucfirst } from "../tools/Format.js";
 
 /**
@@ -54,7 +54,7 @@ export type ActivityClass = `ks-${Activity}`;
 export type ActivityTypeClass = `type_${ActivityClass}`;
 
 export class ActivitySummary {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
 
   /**
    * The day at which the activity summary was last reset.
@@ -71,7 +71,7 @@ export class ActivitySummary {
    */
   private _sections = new Map<ActivitySummarySection, Map<string, number>>();
 
-  constructor(host: UserScript) {
+  constructor(host: KittenScientists) {
     this._host = host;
     this.resetActivity();
   }

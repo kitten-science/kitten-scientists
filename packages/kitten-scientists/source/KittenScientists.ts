@@ -1,44 +1,21 @@
 import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
-import { sleep } from "@oliversalzburg/js-utils/async/async.js";
-import { isNil, Maybe, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import JQuery from "jquery";
 import gt from "semver/functions/gt.js";
-import { Engine, EngineState, GameLanguage, SupportedLanguage } from "./Engine.js";
+import { Engine, EngineState, GameLanguage } from "./Engine.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { State } from "./state/State.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
-import { Game } from "./types/index.js";
+import { Game, I18nEngine } from "./types/index.js";
 import { UserInterface } from "./ui/UserInterface.js";
+import { FallbackLanguage, UserScriptLoader } from "./UserScriptLoader.js";
 
 declare global {
   const KS_RELEASE_CHANNEL: ReleaseChannel;
   const KS_VERSION: string | undefined;
-
-  let unsafeWindow: Window | undefined;
-  interface Window {
-    $: JQuery;
-    $I?: Maybe<I18nEngine>;
-    dojo: {
-      clone: <T>(subject: T) => T;
-      subscribe: (event: string, handler: (...args: Array<any>) => void) => void;
-    };
-    game?: Maybe<Game>;
-    gamePage?: Maybe<Game>;
-    LZString: {
-      compressToBase64: (input: string) => string;
-      compressToUTF16: (input: string) => string;
-      decompressFromBase64: (input: string) => string;
-      decompressFromUTF16: (input: string) => string;
-    };
-  }
 }
-
-export type I18nEngine = (key: string, args?: Array<number | string>) => string;
-
-export const FallbackLanguage: GameLanguage & SupportedLanguage = "en";
 
 export const ksVersion = (prefix = "") => {
   if (isNil(KS_VERSION)) {
@@ -48,18 +25,7 @@ export const ksVersion = (prefix = "") => {
   return `${prefix}${KS_VERSION}`;
 };
 
-// How long to wait for KG to load, in milliseconds.
-const TIMEOUT_DEFAULT = 2 * 60 * 1000;
-
-// Allows the user to define a timeout override in their browser's web storage.
-// This allows users to extend the timeout period, in case their local configuration
-// requires it.
-const TIMEOUT_OVERRIDE =
-  "localStorage" in globalThis && !isNil(localStorage["ks.timeout"])
-    ? Number(localStorage["ks.timeout"])
-    : undefined;
-
-export class UserScript {
+export class KittenScientists {
   readonly game: Game;
 
   /**
@@ -73,15 +39,20 @@ export class UserScript {
   /**
    * Stores if we caught the `game/start` signal from the game.
    */
-  private static _gameStartSignal: Promise<boolean>;
-  private static _gameStartSignalResolver: undefined | ((value: boolean) => void);
+  //private static _gameStartSignal: Promise<boolean>;
+  //private static _gameStartSignalResolver: undefined | ((value: boolean) => void);
 
   private static _possibleEngineState: EngineState | undefined = undefined;
 
   private _userInterface: UserInterface;
   engine: Engine;
 
-  constructor(game: Game, i18nEngine: I18nEngine, gameLanguage: GameLanguage = FallbackLanguage) {
+  constructor(
+    game: Game,
+    i18nEngine: I18nEngine,
+    gameLanguage: GameLanguage = FallbackLanguage,
+    engineState?: EngineState,
+  ) {
     cinfo(`Kitten Scientists ${ksVersion("v")} constructed.`);
     cinfo(`You are on the '${String(KS_RELEASE_CHANNEL)}' release channel.`);
 
@@ -90,6 +61,10 @@ export class UserScript {
 
     this.engine = new Engine(this, gameLanguage);
     this._userInterface = this._constructUi();
+
+    if (!isNil(engineState)) {
+      this.setSettings(engineState);
+    }
   }
 
   private _constructUi() {
@@ -132,10 +107,13 @@ export class UserScript {
 
     this.runUpdateCheck().catch(redirectErrorsToConsole(console));
 
-    UserScript.window.dojo.subscribe("game/beforesave", (saveData: Record<string, unknown>) => {
-      cinfo("Injecting Kitten Scientists engine state into save data...");
-      saveData.ks = { state: [this.getSettings()] };
-    });
+    UserScriptLoader.window.dojo.subscribe(
+      "game/beforesave",
+      (saveData: Record<string, unknown>) => {
+        cinfo("Injecting Kitten Scientists engine state into save data...");
+        saveData.ks = { state: [this.getSettings()] };
+      },
+    );
   }
 
   /**
@@ -195,14 +173,14 @@ export class UserScript {
   static decodeSettings(compressedSettings: string): EngineState {
     try {
       const naiveParse = JSON.parse(compressedSettings) as { v?: string };
-      return UserScript.unknownAsEngineStateOrThrow(naiveParse);
+      return KittenScientists.unknownAsEngineStateOrThrow(naiveParse);
     } catch (_error) {
       /* expected, as we assume the input to be compressed. */
     }
 
     const settingsString = window.LZString.decompressFromBase64(compressedSettings);
     const parsed = JSON.parse(settingsString) as Record<string, unknown>;
-    return UserScript.unknownAsEngineStateOrThrow(parsed);
+    return KittenScientists.unknownAsEngineStateOrThrow(parsed);
   }
 
   /**
@@ -239,7 +217,7 @@ export class UserScript {
    * @param encodedSettings The encoded settings.
    */
   importSettingsFromString(encodedSettings: string) {
-    const settings = UserScript.decodeSettings(encodedSettings);
+    const settings = KittenScientists.decodeSettings(encodedSettings);
     this.setSettings(settings);
     this.engine.imessage("settings.imported");
   }
@@ -273,7 +251,7 @@ export class UserScript {
    * @param compress Should the state be compressed?
    */
   async copySettings(settings = this.getSettings(), compress = true) {
-    const encodedSettings = UserScript.encodeSettings(settings, compress);
+    const encodedSettings = KittenScientists.encodeSettings(settings, compress);
     await window.navigator.clipboard.writeText(encodedSettings);
     this.engine.imessage("settings.copied");
   }
@@ -306,7 +284,7 @@ export class UserScript {
     load: (saveData: Record<string, unknown>) => {
       cinfo("Looking for Kitten Scientists engine state in save data...");
 
-      const state = UserScript._tryEngineStateFromSaveData(saveData);
+      const state = KittenScientists._tryEngineStateFromSaveData(saveData);
       if (!state) {
         return;
       }
@@ -343,96 +321,5 @@ export class UserScript {
     }
 
     return state[0];
-  }
-
-  static async waitForGame(timeout = TIMEOUT_OVERRIDE ?? TIMEOUT_DEFAULT): Promise<Game> {
-    const signals: Array<Promise<unknown>> = [sleep(2000)];
-
-    if (isNil(UserScript._gameStartSignal) && typeof UserScript.window.dojo !== "undefined") {
-      UserScript._gameStartSignal = new Promise(resolve => {
-        UserScript._gameStartSignalResolver = resolve;
-      });
-
-      UserScript.window.dojo.subscribe("game/start", () => {
-        cdebug("`game/start` signal caught. Fast-tracking script load...");
-        mustExist(UserScript._gameStartSignalResolver)(true);
-      });
-
-      UserScript.window.dojo.subscribe(
-        "server/load",
-        (saveData: { ks?: { state?: Array<EngineState> } }) => {
-          cinfo(
-            "`server/load` signal caught. Looking for Kitten Scientists engine state in save data...",
-          );
-
-          const state = UserScript._tryEngineStateFromSaveData(saveData);
-          if (!state) {
-            cinfo("The Kittens Game save data did not contain an engine state.");
-            return;
-          }
-
-          cinfo("Found! Provided save data will be used as seed for next userscript instance.");
-          UserScript._possibleEngineState = state;
-        },
-      );
-    }
-
-    if (!isNil(UserScript._gameStartSignal)) {
-      signals.push(UserScript._gameStartSignal);
-    }
-
-    if (timeout < 0) {
-      throw new Error(
-        "Unable to find game. Giving up. Maybe the game is not exported at `window.game`?",
-      );
-    }
-
-    if (UserScript._isGameLoaded()) {
-      return mustExist(UserScript.window.game);
-    }
-
-    cdebug(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`);
-
-    await Promise.race(signals);
-    return UserScript.waitForGame(timeout - 2000);
-  }
-
-  /**
-   * Returns an instance of the userscript in our default configuration.
-   *
-   * @returns The default userscript instance.
-   */
-  static getDefaultInstance(): UserScript {
-    const instance = new UserScript(
-      mustExist(UserScript.window.game),
-      mustExist(UserScript.window.$I),
-      localStorage["com.nuclearunicorn.kittengame.language"] as GameLanguage | undefined,
-    );
-
-    if (!isNil(UserScript._possibleEngineState)) {
-      try {
-        instance.setSettings(UserScript._possibleEngineState);
-      } catch (error) {
-        cerror("The previous engine state could not be processed!", error);
-      }
-    }
-
-    instance.installSaveManager();
-    return instance;
-  }
-
-  private static _isGameLoaded(): boolean {
-    return (
-      !isNil(UserScript.window.game) &&
-      !Object.prototype.toString.apply(UserScript.window.game).includes("HTMLDivElement")
-    );
-  }
-
-  static get window(): Window {
-    try {
-      return mustExist(unsafeWindow);
-    } catch (_error) {
-      return window;
-    }
   }
 }

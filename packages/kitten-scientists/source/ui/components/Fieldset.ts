@@ -1,4 +1,4 @@
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type FieldsetOptions = UiComponentOptions & {
@@ -15,7 +15,7 @@ export class Fieldset extends UiComponent {
    * @param label The label on the fieldset.
    * @param options Options for the fieldset.
    */
-  constructor(host: UserScript, label: string, options?: Partial<FieldsetOptions>) {
+  constructor(host: KittenScientists, label: string, options?: Partial<FieldsetOptions>) {
     super(host, options);
 
     const element = $("<fieldset/>").addClass("ks-fieldset");

@@ -1,6 +1,6 @@
+import { KittenScientists } from "../KittenScientists.js";
 import { objectEntries } from "../tools/Entries.js";
 import { Resource } from "../types/index.js";
-import { UserScript } from "../UserScript.js";
 
 /**
  * The `CacheManager` apparently stores a state of resources in stock.
@@ -8,7 +8,7 @@ import { UserScript } from "../UserScript.js";
  * the overall stock cache.
  */
 export class MaterialsCache {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
 
   private readonly _cache = new Array<{
     materials: Partial<Record<Resource, number>>;
@@ -16,7 +16,7 @@ export class MaterialsCache {
   }>();
   private readonly _cacheSum: Partial<Record<Resource, number>> = {};
 
-  constructor(host: UserScript) {
+  constructor(host: KittenScientists) {
     this._host = host;
   }
 

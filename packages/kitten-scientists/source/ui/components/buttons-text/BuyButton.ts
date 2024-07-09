@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingBuy } from "../../../settings/Settings.js";
-import { UserScript } from "../../../UserScript.js";
 import { SettingsSectionUi } from "../../SettingsSectionUi.js";
 import { TextButton } from "../TextButton.js";
 
@@ -7,7 +7,7 @@ export class BuyButton extends TextButton {
   readonly setting: SettingBuy;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingBuy,
     handler: { onClick?: () => void } = {},

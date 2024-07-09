@@ -1,5 +1,5 @@
 import { TranslatedString } from "../../Engine.js";
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends UiComponent {
@@ -14,7 +14,7 @@ export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends 
    * @param options - Options for this explainer.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     key: TranslatedString<TKittenGameLiteral>,
     options?: Partial<UiComponentOptions>,
   ) {

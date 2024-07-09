@@ -1,6 +1,6 @@
 import { TreeNode } from "@oliversalzburg/js-utils/data/tree.js";
 import AjvModule, { SchemaObject } from "ajv";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { StateLoader } from "./StateLoader.js";
 import { StateMerger } from "./StateMerger.js";
 
@@ -76,6 +76,8 @@ export class State extends TreeNode<State> {
   }
 
   merge() {
-    return new StateMerger(this).merge(UserScript.unknownAsEngineStateOrThrow({ v: "2.0.0" }));
+    return new StateMerger(this).merge(
+      KittenScientists.unknownAsEngineStateOrThrow({ v: "2.0.0" }),
+    );
   }
 }

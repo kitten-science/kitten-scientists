@@ -1,6 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { SupportedLanguage } from "../Engine.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { UpgradeSettings } from "../settings/UpgradeSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -9,7 +9,7 @@ import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: UpgradeSettings,
     language: SettingOptions<SupportedLanguage>,
     options?: SettingsPanelOptions<SettingsPanel<UpgradeSettings>>,

@@ -1,10 +1,10 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { BonfireManager } from "./BonfireManager.js";
 import { Engine, TickContext } from "./Engine.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { ReligionManager } from "./ReligionManager.js";
 import { SpaceManager } from "./SpaceManager.js";
 import { TabManager } from "./TabManager.js";
-import { UserScript } from "./UserScript.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import { CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
@@ -23,7 +23,7 @@ import {
 } from "./types/index.js";
 
 export class TimeControlManager {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
   readonly settings: TimeControlSettings;
   readonly manager: TabManager<TimeTab>;
   private readonly _bonfireManager: BonfireManager;
@@ -32,7 +32,7 @@ export class TimeControlManager {
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     bonfireManager: BonfireManager,
     religionManager: ReligionManager,
     spaceManager: SpaceManager,

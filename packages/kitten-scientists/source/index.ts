@@ -1,6 +1,7 @@
 export * from "./BonfireManager.js";
 export * from "./Engine.js";
 export * from "./helper/index.js";
+export * from "./KittenScientists.js";
 export * from "./ReligionManager.js";
 export * from "./ScienceManager.js";
 export * from "./settings/index.js";
@@ -12,5 +13,4 @@ export * from "./TradeManager.js";
 export * from "./types/index.js";
 export * from "./ui/index.js";
 export * from "./UpgradeManager.js";
-export * from "./UserScript.js";
 export * from "./VillageManager.js";

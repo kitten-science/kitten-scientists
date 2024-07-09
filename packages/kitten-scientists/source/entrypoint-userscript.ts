@@ -1,10 +1,9 @@
+import { KittenScientists } from "./KittenScientists.js";
 import { cerror } from "./tools/Log.js";
-import { UserScript } from "./UserScript.js";
+import { UserScriptLoader } from "./UserScriptLoader.js";
 
 (async () => {
-  await UserScript.waitForGame();
-
-  const userScript = UserScript.getDefaultInstance();
+  const userScript = await new UserScriptLoader().waitForGame(KittenScientists, "ks");
 
   // @ts-expect-error Manipulating global containers is naughty, be we want to expose the script host.
   window.kittenScientists = userScript;

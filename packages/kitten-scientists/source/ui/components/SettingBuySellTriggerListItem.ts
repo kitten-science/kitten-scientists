@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { SettingBuySellTrigger } from "../../settings/Settings.js";
-import { UserScript } from "../../UserScript.js";
 import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton.js";
 import { BuyButton } from "./buttons-text/BuyButton.js";
 import { SellButton } from "./buttons-text/SellButton.js";
@@ -15,7 +15,7 @@ export class SettingBuySellTriggerListItem extends SettingListItem {
   readonly triggerButton: TriggerButton;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingBuySellTrigger,
     options?: Partial<SettingBuySellTriggerListItemOptions>,

@@ -1,5 +1,5 @@
 import { Icons } from "../../../images/Icons.js";
-import { UserScript } from "../../../UserScript.js";
+import { KittenScientists } from "../../../KittenScientists.js";
 import { IconButton } from "../IconButton.js";
 
 /**
@@ -12,7 +12,7 @@ export class CopyButton extends IconButton {
    * @param host A reference to the host.
    * @param title The `title` of the button.
    */
-  constructor(host: UserScript, title = "Copy to clipboard") {
+  constructor(host: KittenScientists, title = "Copy to clipboard") {
     super(host, Icons.Copy, title);
   }
 }

@@ -1,7 +1,7 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Automation, TickContext } from "./Engine.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { UserScript } from "./UserScript.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
@@ -10,14 +10,14 @@ import { Resource } from "./types/index.js";
 import { JobInfo, VillageTab } from "./types/village.js";
 
 export class VillageManager implements Automation {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
   readonly settings: VillageSettings;
   readonly manager: TabManager<VillageTab>;
   private readonly _cacheManager: MaterialsCache;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     workshopManager: WorkshopManager,
     settings = new VillageSettings(),
   ) {

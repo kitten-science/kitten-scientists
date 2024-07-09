@@ -1,5 +1,5 @@
 import { Icons } from "../../../images/Icons.js";
-import { UserScript } from "../../../UserScript.js";
+import { KittenScientists } from "../../../KittenScientists.js";
 import { IconButton } from "../IconButton.js";
 
 /**
@@ -11,7 +11,7 @@ export class DisableButton extends IconButton {
    *
    * @param host A reference to the host.
    */
-  constructor(host: UserScript) {
+  constructor(host: KittenScientists) {
     super(host, Icons.CheckboxUnCheck, host.engine.i18n("ui.disable.all"));
   }
 }

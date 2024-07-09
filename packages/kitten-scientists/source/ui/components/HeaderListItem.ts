@@ -1,4 +1,4 @@
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { ListItem } from "./ListItem.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
@@ -16,7 +16,7 @@ export class HeaderListItem extends UiComponent implements ListItem {
    * @param text The text to appear on the header element.
    * @param options Options for the header.
    */
-  constructor(host: UserScript, text: string, options?: Partial<UiComponentOptions>) {
+  constructor(host: KittenScientists, text: string, options?: Partial<UiComponentOptions>) {
     super(host, options);
 
     const element = $("<li/>", { text }).addClass("ks-header");

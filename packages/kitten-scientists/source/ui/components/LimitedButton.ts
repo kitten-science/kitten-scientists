@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { SettingLimited } from "../../settings/Settings.js";
-import { UserScript } from "../../UserScript.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type LimitedButtonOptions = UiComponentOptions & {
@@ -12,7 +12,11 @@ export class LimitedButton extends UiComponent {
   readonly element: JQuery;
   readonly checkbox: JQuery;
 
-  constructor(host: UserScript, setting: SettingLimited, options?: Partial<LimitedButtonOptions>) {
+  constructor(
+    host: KittenScientists,
+    setting: SettingLimited,
+    options?: Partial<LimitedButtonOptions>,
+  ) {
     super(host, options);
 
     const element = $("<div/>").addClass("ks-text-button");

@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { ResetUpgradeSettings } from "../settings/ResetUpgradeSettings.js";
 import { Setting } from "../settings/Settings.js";
@@ -8,7 +8,7 @@ import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
 export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSettings> {
-  constructor(host: UserScript, settings: ResetUpgradeSettings) {
+  constructor(host: KittenScientists, settings: ResetUpgradeSettings) {
     const label = host.engine.i18n("ui.upgrades");
     super(host, label, settings, {
       icon: Icons.Workshop,

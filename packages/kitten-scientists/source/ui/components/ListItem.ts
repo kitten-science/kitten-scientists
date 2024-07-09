@@ -1,4 +1,4 @@
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type ListItemOptions = UiComponentOptions & {
@@ -17,7 +17,7 @@ export class ListItem extends UiComponent {
    * @param host The userscript instance.
    * @param options Options for the list item.
    */
-  constructor(host: UserScript, options?: Partial<ListItemOptions>) {
+  constructor(host: KittenScientists, options?: Partial<ListItemOptions>) {
     super(host, options);
 
     const element = $("<li/>");

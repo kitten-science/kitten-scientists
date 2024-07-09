@@ -1,5 +1,5 @@
 import { is, isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { SettingListItem } from "./SettingListItem.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 import { DisableButton } from "./buttons-icon/DisableButton.js";
@@ -36,7 +36,7 @@ export class SettingsList extends UiComponent {
    * @param host A reference to the host.
    * @param options Which tools should be available on the list?
    */
-  constructor(host: UserScript, options?: Partial<SettingsListOptions>) {
+  constructor(host: KittenScientists, options?: Partial<SettingsListOptions>) {
     super(host, { ...options, children: [] });
 
     const toolOptions = {

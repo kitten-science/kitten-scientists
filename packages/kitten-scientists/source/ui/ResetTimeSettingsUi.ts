@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { ResetTimeSettings } from "../settings/ResetTimeSettings.js";
 import { SettingTrigger } from "../settings/Settings.js";
@@ -11,7 +11,7 @@ import { SettingsList } from "./components/SettingsList.js";
 export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
   private readonly _buildings: Array<SettingTriggerListItem>;
 
-  constructor(host: UserScript, settings: ResetTimeSettings) {
+  constructor(host: KittenScientists, settings: ResetTimeSettings) {
     const label = host.engine.i18n("ui.time");
     super(host, label, settings, {
       icon: Icons.Time,

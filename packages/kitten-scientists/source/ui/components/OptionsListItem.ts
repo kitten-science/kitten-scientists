@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { SettingOptions } from "../../settings/Settings.js";
-import { UserScript } from "../../UserScript.js";
 import { Fieldset } from "./Fieldset.js";
 import { RadioItem } from "./RadioItem.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
@@ -25,7 +25,7 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
    * @param options Options for the list item.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: TSetting,
     options?: Partial<Omit<OptionsListItemOptions, "children">>,

@@ -1,4 +1,4 @@
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { ListItem, ListItemOptions } from "./ListItem.js";
 
 export type LabelListItemOptions = ListItemOptions & {
@@ -24,7 +24,7 @@ export class LabelListItem extends ListItem {
    * @param label The label on the setting element.
    * @param options Options for the list item.
    */
-  constructor(host: UserScript, label: string, options?: Partial<LabelListItemOptions>) {
+  constructor(host: KittenScientists, label: string, options?: Partial<LabelListItemOptions>) {
     super(host, options);
 
     this.elementLabel = $("<label/>", {

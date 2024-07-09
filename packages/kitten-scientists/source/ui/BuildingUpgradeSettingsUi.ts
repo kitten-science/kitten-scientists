@@ -1,12 +1,12 @@
+import { KittenScientists } from "../KittenScientists.js";
 import { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings.js";
-import { UserScript } from "../UserScript.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSettings> {
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: BuildingUpgradeSettings,
     options?: SettingsPanelOptions<SettingsPanel<BuildingUpgradeSettings>>,
   ) {

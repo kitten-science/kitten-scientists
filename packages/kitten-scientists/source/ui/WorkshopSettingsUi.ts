@@ -1,6 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { SupportedLanguage } from "../Engine.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
 import { ucfirst } from "../tools/Format.js";
@@ -17,7 +17,7 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
   private readonly _crafts: Array<SettingListItem>;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: WorkshopSettings,
     language: SettingOptions<SupportedLanguage>,
   ) {

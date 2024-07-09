@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { cerror } from "../../tools/Log.js";
-import { UserScript } from "../../UserScript.js";
 
 export type UiComponentOptions<TChild extends UiComponent = UiComponent> = {
   readonly children: Array<TChild>;
@@ -10,7 +10,7 @@ export abstract class UiComponent extends EventTarget {
   /**
    * A reference to the host itself.
    */
-  protected readonly _host: UserScript;
+  protected readonly _host: KittenScientists;
 
   /**
    * The main DOM element for this component, in a JQuery wrapper.
@@ -28,7 +28,7 @@ export abstract class UiComponent extends EventTarget {
    * @param host A reference to the host.
    * @param options The options for this component.
    */
-  constructor(host: UserScript, options?: Partial<UiComponentOptions>) {
+  constructor(host: KittenScientists, options?: Partial<UiComponentOptions>) {
     super();
     this._host = host;
     this._onRefresh = options?.onRefresh;
@@ -105,7 +105,7 @@ export abstract class UiComponent extends EventTarget {
     return UiComponent.renderLimit(value, this._host);
   }
 
-  static renderLimit(value: number, host: UserScript) {
+  static renderLimit(value: number, host: KittenScientists) {
     if (value < 0 || value === Number.POSITIVE_INFINITY) {
       return "∞";
     }

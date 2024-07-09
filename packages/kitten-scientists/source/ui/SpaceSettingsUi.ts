@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { SpaceSettings } from "../settings/SpaceSettings.js";
 import { MissionSettingsUi } from "./MissionSettingsUi.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
@@ -11,7 +11,7 @@ export class SpaceSettingsUi extends SettingsSectionUi<SpaceSettings> {
   private readonly _trigger: TriggerButton;
   private readonly _missionsUi: MissionSettingsUi;
 
-  constructor(host: UserScript, settings: SpaceSettings) {
+  constructor(host: KittenScientists, settings: SpaceSettings) {
     const label = host.engine.i18n("ui.space");
     super(host, label, settings);
 

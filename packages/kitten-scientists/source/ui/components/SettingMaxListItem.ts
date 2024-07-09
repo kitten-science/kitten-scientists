@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { SettingMax } from "../../settings/Settings.js";
-import { UserScript } from "../../UserScript.js";
 import { MaxButton } from "./buttons-text/MaxButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
@@ -17,7 +17,7 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
    * @param options Options for the list item.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingMax,
     options?: Partial<SettingListItemOptions>,

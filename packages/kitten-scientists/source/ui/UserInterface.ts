@@ -1,5 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript, ksVersion } from "../UserScript.js";
+import { KittenScientists, ksVersion } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { cwarn } from "../tools/Log.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
@@ -39,7 +39,7 @@ export class UserInterface extends UiComponent {
     | InternalsUi
   >;
 
-  constructor(host: UserScript) {
+  constructor(host: KittenScientists) {
     super(host);
 
     const engine = this._host.engine;

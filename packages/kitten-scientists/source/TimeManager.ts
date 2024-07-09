@@ -1,7 +1,7 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { TickContext } from "./Engine.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { UserScript } from "./UserScript.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { TimeItem, TimeSettings, TimeSettingsItem } from "./settings/TimeSettings.js";
@@ -20,13 +20,17 @@ import {
 } from "./types/index.js";
 
 export class TimeManager {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
   readonly settings: TimeSettings;
   readonly manager: TabManager<TimeTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, workshopManager: WorkshopManager, settings = new TimeSettings()) {
+  constructor(
+    host: KittenScientists,
+    workshopManager: WorkshopManager,
+    settings = new TimeSettings(),
+  ) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Time");

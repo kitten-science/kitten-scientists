@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type TextButtonOptions = UiComponentOptions & {
@@ -11,7 +11,7 @@ export class TextButton extends UiComponent {
   readonly element: JQuery;
   readOnly: boolean;
 
-  constructor(host: UserScript, label: string, options?: Partial<TextButtonOptions>) {
+  constructor(host: KittenScientists, label: string, options?: Partial<TextButtonOptions>) {
     super(host, options);
 
     const element = $("<div/>").addClass("ks-text-button").text(label);

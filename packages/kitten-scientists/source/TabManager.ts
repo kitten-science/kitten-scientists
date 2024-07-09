@@ -1,12 +1,12 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "./UserScript.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { GameTab, TabId } from "./types/index.js";
 
 export class TabManager<TTab extends GameTab = GameTab> {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
   tab: TTab;
 
-  constructor(host: UserScript, name: TabId) {
+  constructor(host: KittenScientists, name: TabId) {
     this._host = host;
 
     const tab = this._host.game.tabs.find(subject => subject.tabId === name) as TTab;

@@ -1,4 +1,4 @@
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export class ExpandoButton extends UiComponent {
@@ -11,7 +11,7 @@ export class ExpandoButton extends UiComponent {
    * @param host A reference to the host.
    * @param options Options for this expando.
    */
-  constructor(host: UserScript, options?: Partial<UiComponentOptions>) {
+  constructor(host: KittenScientists, options?: Partial<UiComponentOptions>) {
     super(host, options);
 
     const element = $("<div/>", {

@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { MissionSettings } from "../settings/MissionSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -9,7 +9,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
   private readonly _missions: Array<SettingListItem>;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: MissionSettings,
     options?: SettingsPanelOptions<SettingsPanel<MissionSettings>>,
   ) {

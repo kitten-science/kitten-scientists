@@ -1,6 +1,6 @@
+import { KittenScientists } from "../KittenScientists.js";
 import { EngineSettings } from "../settings/EngineSettings.js";
 import { ucfirst } from "../tools/Format.js";
-import { UserScript } from "../UserScript.js";
 import { ExpandoButton } from "./components/ExpandoButton.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 
@@ -10,7 +10,7 @@ export class EngineSettingsUi {
   private readonly _element: SettingListItem;
   private readonly _settings: EngineSettings;
 
-  constructor(host: UserScript, settings: EngineSettings) {
+  constructor(host: KittenScientists, settings: EngineSettings) {
     this._settings = settings;
 
     const label = ucfirst(host.engine.i18n("ui.engine"));

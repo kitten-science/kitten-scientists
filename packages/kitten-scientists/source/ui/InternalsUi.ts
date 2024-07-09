@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { EngineSettings } from "../settings/EngineSettings.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
@@ -13,7 +13,7 @@ import { TextButton } from "./components/TextButton.js";
 import { UiComponent } from "./components/UiComponent.js";
 
 export class InternalsUi extends SettingsPanel<EngineSettings> {
-  constructor(host: UserScript, settings: EngineSettings) {
+  constructor(host: KittenScientists, settings: EngineSettings) {
     super(host, "Internals", settings, {
       settingItem: new LabelListItem(host, host.engine.i18n("ui.internals"), {
         icon: Icons.Settings,

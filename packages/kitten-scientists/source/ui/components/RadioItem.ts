@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { SettingOptions } from "../../settings/Settings.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
@@ -45,7 +45,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
    * @param options Options for this radio item.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     setting: TSetting,
     option: TSetting["options"][0],
     groupKey: string,

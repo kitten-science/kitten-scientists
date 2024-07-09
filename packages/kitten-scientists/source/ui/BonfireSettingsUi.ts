@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { BonfireSettings } from "../settings/BonfireSettings.js";
 import { StagedBuilding } from "../types/index.js";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
@@ -14,7 +14,7 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
   private readonly _trigger: TriggerButton;
   private readonly _buildings: Array<HeaderListItem | SettingMaxListItem>;
 
-  constructor(host: UserScript, settings: BonfireSettings) {
+  constructor(host: KittenScientists, settings: BonfireSettings) {
     const label = host.engine.i18n("ui.build");
     super(host, label, settings);
 

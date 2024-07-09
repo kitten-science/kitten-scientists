@@ -1,4 +1,4 @@
-import { UserScript } from "../../../UserScript.js";
+import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingsSectionUi } from "../../SettingsSectionUi.js";
 import { TextButton } from "../TextButton.js";
 
@@ -8,7 +8,7 @@ export class StockButton extends TextButton {
   readonly setting: SettingWithStock;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingWithStock,
     handler: { onClick?: () => void } = {},

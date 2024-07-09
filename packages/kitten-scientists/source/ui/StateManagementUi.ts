@@ -3,7 +3,7 @@ import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { Locale, de, enUS, he, zhCN } from "date-fns/locale";
 import { EngineState, SupportedLanguage } from "../Engine.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { StateSettings } from "../settings/StateSettings.js";
@@ -62,7 +62,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   readonly locale: Locale;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: StateSettings,
     language: SettingOptions<SupportedLanguage>,
   ) {
@@ -186,7 +186,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     try {
       while (!isNil(state)) {
         const stateObject = JSON.parse(state) as StoredState;
-        UserScript.unknownAsEngineStateOrThrow(stateObject.state);
+        KittenScientists.unknownAsEngineStateOrThrow(stateObject.state);
         this.states.push(new Unique(stateObject));
         state = localStorage.getItem(`ks.state.${++stateIndex}`);
       }
@@ -357,7 +357,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       return;
     }
 
-    const state = UserScript.decodeSettings(input);
+    const state = KittenScientists.decodeSettings(input);
 
     this.storeState(state);
   }

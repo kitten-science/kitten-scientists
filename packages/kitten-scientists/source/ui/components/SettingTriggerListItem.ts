@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { SettingTrigger } from "../../settings/Settings.js";
-import { UserScript } from "../../UserScript.js";
 import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
@@ -11,7 +11,7 @@ export class SettingTriggerListItem extends SettingListItem {
   readonly triggerButton: TriggerButton;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingTrigger,
     options?: Partial<SettingTriggerListItemOptions>,

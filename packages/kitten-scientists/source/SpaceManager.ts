@@ -1,7 +1,7 @@
 import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Automation, TickContext } from "./Engine.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { UserScript } from "./UserScript.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
@@ -17,13 +17,17 @@ import {
 } from "./types/index.js";
 
 export class SpaceManager implements Automation {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
   readonly settings: SpaceSettings;
   readonly manager: TabManager<SpaceTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, workshopManager: WorkshopManager, settings = new SpaceSettings()) {
+  constructor(
+    host: KittenScientists,
+    workshopManager: WorkshopManager,
+    settings = new SpaceSettings(),
+  ) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Space");

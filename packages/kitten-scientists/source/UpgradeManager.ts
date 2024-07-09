@@ -1,13 +1,13 @@
 import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { UserScript } from "./UserScript.js";
 import { BuildButton, ScienceTab } from "./types/index.js";
 
 export abstract class UpgradeManager {
-  protected readonly _host: UserScript;
+  protected readonly _host: KittenScientists;
   abstract manager: TabManager;
 
-  constructor(host: UserScript) {
+  constructor(host: KittenScientists) {
     this._host = host;
   }
 

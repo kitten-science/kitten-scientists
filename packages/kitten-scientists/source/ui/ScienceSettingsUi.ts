@@ -1,5 +1,5 @@
 import { SupportedLanguage } from "../Engine.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { ScienceSettings } from "../settings/ScienceSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { PolicySettingsUi } from "./PolicySettingsUi.js";
@@ -15,7 +15,7 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
   protected readonly _observeStars: SettingListItem;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: ScienceSettings,
     language: SettingOptions<SupportedLanguage>,
   ) {

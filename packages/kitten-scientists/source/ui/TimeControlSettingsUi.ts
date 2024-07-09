@@ -1,5 +1,5 @@
+import { KittenScientists } from "../KittenScientists.js";
 import { TimeControlSettings } from "../settings/TimeControlSettings.js";
-import { UserScript } from "../UserScript.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
@@ -14,7 +14,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   private readonly _timeSkipUi: TimeSkipSettingsUi;
   private readonly _resetUi: ResetSettingsUi;
 
-  constructor(host: UserScript, settings: TimeControlSettings) {
+  constructor(host: KittenScientists, settings: TimeControlSettings) {
     const label = host.engine.i18n("ui.timeCtrl");
     super(host, label, settings);
 

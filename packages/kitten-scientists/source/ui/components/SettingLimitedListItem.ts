@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { SettingLimited } from "../../settings/Settings.js";
-import { UserScript } from "../../UserScript.js";
 import { LimitedButton } from "./LimitedButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
@@ -28,7 +28,7 @@ export class SettingLimitedListItem extends SettingListItem {
    * @param options Options for the list item.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingLimited,
     options?: Partial<SettingLimitedListItemOptions>,

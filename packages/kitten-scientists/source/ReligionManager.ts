@@ -1,8 +1,8 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { BonfireManager } from "./BonfireManager.js";
 import { Automation, TickContext } from "./Engine.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { UserScript } from "./UserScript.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
@@ -31,7 +31,7 @@ import {
 } from "./types/index.js";
 
 export class ReligionManager implements Automation {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
   readonly settings: ReligionSettings;
   readonly manager: TabManager<ReligionTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
@@ -39,7 +39,7 @@ export class ReligionManager implements Automation {
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     bonfireManager: BonfireManager,
     workshopManager: WorkshopManager,
     settings = new ReligionSettings(),

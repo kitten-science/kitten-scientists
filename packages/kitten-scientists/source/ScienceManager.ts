@@ -1,12 +1,13 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { TickContext } from "./Engine.js";
-import { TabManager } from "./TabManager.js";
-import { UpgradeManager } from "./UpgradeManager.js";
-import { UserScript } from "./UserScript.js";
-import { WorkshopManager } from "./WorkshopManager.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
+import { TabManager } from "./TabManager.js";
 import { cerror } from "./tools/Log.js";
 import { PolicyInfo, ScienceTab, TechInfo } from "./types/index.js";
+import { UpgradeManager } from "./UpgradeManager.js";
+import { UserScriptLoader } from "./UserScriptLoader.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 export class ScienceManager extends UpgradeManager {
   readonly manager: TabManager<ScienceTab>;
@@ -14,7 +15,7 @@ export class ScienceManager extends UpgradeManager {
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     workshopManager: WorkshopManager,
     settings = new ScienceSettings(),
   ) {
@@ -65,7 +66,7 @@ export class ScienceManager extends UpgradeManager {
         continue;
       }
 
-      let prices = UserScript.window.dojo.clone(tech.prices);
+      let prices = UserScriptLoader.window.dojo.clone(tech.prices);
       prices = this._host.game.village.getEffectLeader("scientist", prices);
       for (const resource of prices) {
         if (this._workshopManager.getValueAvailable(resource.name) < resource.val) {

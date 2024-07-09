@@ -1,4 +1,4 @@
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { Setting } from "../../settings/Settings.js";
 import { CollapsiblePanel, PanelOptions } from "./CollapsiblePanel.js";
 import { LabelListItem } from "./LabelListItem.js";
@@ -22,7 +22,7 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Colla
    * @param options Options for the panel.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: TSetting,
     options?: Partial<IconSettingsPanelOptions>,

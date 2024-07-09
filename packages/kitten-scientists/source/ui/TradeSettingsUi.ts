@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
@@ -20,7 +20,7 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
   private readonly _tradeBlackcoin: SettingBuySellTriggerListItem;
   private readonly _unlockRaces: SettingListItem;
 
-  constructor(host: UserScript, settings: TradeSettings) {
+  constructor(host: KittenScientists, settings: TradeSettings) {
     const label = host.engine.i18n("ui.trade");
     super(host, label, settings);
 

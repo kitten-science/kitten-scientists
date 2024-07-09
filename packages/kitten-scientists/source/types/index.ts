@@ -1,3 +1,5 @@
+import { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
+import "jquery";
 import { Building, BuildingMeta } from "./buildings.js";
 import { Game } from "./game.js";
 import {
@@ -403,10 +405,29 @@ export type ComInterface = {
   };
 };
 
+export type I18nEngine = (key: string, args?: Array<number | string>) => string;
+
 declare global {
   const classes: ClassList;
   const com: ComInterface;
   const game: Game;
+  let unsafeWindow: Window | undefined;
+  interface Window {
+    $: JQuery;
+    $I?: Maybe<I18nEngine>;
+    dojo: {
+      clone: <T>(subject: T) => T;
+      subscribe: (event: string, handler: (...args: Array<any>) => void) => void;
+    };
+    game?: Maybe<Game>;
+    gamePage?: Maybe<Game>;
+    LZString: {
+      compressToBase64: (input: string) => string;
+      compressToUTF16: (input: string) => string;
+      decompressFromBase64: (input: string) => string;
+      decompressFromUTF16: (input: string) => string;
+    };
+  }
 }
 
 export * from "./buildings.js";

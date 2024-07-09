@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { UnicornItems, ZiggurathUpgrade } from "../index.js";
 import { ReligionOptions, ReligionSettings } from "../settings/ReligionSettings.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
@@ -16,7 +16,7 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
   private readonly _unicornBuildings: Array<SettingMaxListItem>;
   private readonly _bestUnicornBuilding: SettingListItem;
 
-  constructor(host: UserScript, settings: ReligionSettings) {
+  constructor(host: KittenScientists, settings: ReligionSettings) {
     const label = host.engine.i18n("ui.faith");
     super(host, label, settings);
 

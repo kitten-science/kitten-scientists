@@ -1,15 +1,6 @@
 import { isNil, Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { unknownToError } from "@oliversalzburg/js-utils/errors/error-serializer.js";
 import { BonfireManager } from "./BonfireManager.js";
-import { ReligionManager } from "./ReligionManager.js";
-import { ScienceManager } from "./ScienceManager.js";
-import { SpaceManager } from "./SpaceManager.js";
-import { TimeControlManager } from "./TimeControlManager.js";
-import { TimeManager } from "./TimeManager.js";
-import { TradeManager } from "./TradeManager.js";
-import { FallbackLanguage, ksVersion, UserScript } from "./UserScript.js";
-import { VillageManager } from "./VillageManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
 import {
   ActivityClass,
   ActivitySummary,
@@ -20,6 +11,9 @@ import de from "./i18n/de.json" assert { type: "json" };
 import en from "./i18n/en.json" assert { type: "json" };
 import he from "./i18n/he.json" assert { type: "json" };
 import zh from "./i18n/zh.json" assert { type: "json" };
+import { KittenScientists, ksVersion } from "./KittenScientists.js";
+import { ReligionManager } from "./ReligionManager.js";
+import { ScienceManager } from "./ScienceManager.js";
 import { BonfireSettings } from "./settings/BonfireSettings.js";
 import { EngineSettings } from "./settings/EngineSettings.js";
 import { ReligionSettings } from "./settings/ReligionSettings.js";
@@ -30,7 +24,14 @@ import { TimeSettings } from "./settings/TimeSettings.js";
 import { TradeSettings } from "./settings/TradeSettings.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
+import { SpaceManager } from "./SpaceManager.js";
+import { TimeControlManager } from "./TimeControlManager.js";
+import { TimeManager } from "./TimeManager.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
+import { TradeManager } from "./TradeManager.js";
+import { FallbackLanguage } from "./UserScriptLoader.js";
+import { VillageManager } from "./VillageManager.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 const i18nData = { de, en, he, zh };
 
@@ -86,7 +87,7 @@ export class Engine {
    */
   private readonly _i18nData: typeof i18nData;
 
-  readonly _host: UserScript;
+  readonly _host: KittenScientists;
   readonly settings: EngineSettings;
   readonly bonfireManager: BonfireManager;
   readonly religionManager: ReligionManager;
@@ -101,7 +102,7 @@ export class Engine {
   private _activitySummary: ActivitySummary;
   private _timeoutMainLoop: number | undefined = undefined;
 
-  constructor(host: UserScript, gameLanguage: GameLanguage) {
+  constructor(host: KittenScientists, gameLanguage: GameLanguage) {
     this.settings = new EngineSettings();
 
     this._i18nData = i18nData;

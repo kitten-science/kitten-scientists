@@ -1,15 +1,16 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Automation, TickContext } from "./Engine.js";
-import { TabManager } from "./TabManager.js";
-import { UpgradeManager } from "./UpgradeManager.js";
-import { UserScript } from "./UserScript.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
+import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { cerror } from "./tools/Log.js";
 import { CraftableInfo, ResourceInfo } from "./types/craft.js";
 import { Resource, ResourceCraftable, UpgradeInfo } from "./types/index.js";
 import { VillageTab } from "./types/village.js";
+import { UpgradeManager } from "./UpgradeManager.js";
+import { UserScriptLoader } from "./UserScriptLoader.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
   readonly settings: WorkshopSettings;
@@ -17,7 +18,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
   static readonly DEFAULT_CONSUME_RATE = 1;
 
-  constructor(host: UserScript, settings = new WorkshopSettings()) {
+  constructor(host: KittenScientists, settings = new WorkshopSettings()) {
     super(host);
     this.settings = settings;
     this.manager = new TabManager(this._host, "Workshop");
@@ -64,7 +65,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       }
 
       // Create a copy of the prices for this upgrade, so that we can apply effects to it.
-      let prices = UserScript.window.dojo.clone(upgrade.prices);
+      let prices = UserScriptLoader.window.dojo.clone(upgrade.prices);
       prices = this._host.game.village.getEffectLeader("scientist", prices);
       for (const resource of prices) {
         // If we can't afford this resource price, continue with the next upgrade.

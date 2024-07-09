@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { SettingMax } from "../settings/Settings.js";
 import { VillageSettings } from "../settings/VillageSettings.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
@@ -17,7 +17,7 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
   private readonly _promoteLeader: SettingListItem;
   private readonly _electLeader: SettingListItem;
 
-  constructor(host: UserScript, settings: VillageSettings) {
+  constructor(host: KittenScientists, settings: VillageSettings) {
     const label = host.engine.i18n("ui.distribute");
     super(host, label, settings);
 

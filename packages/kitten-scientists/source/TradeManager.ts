@@ -1,7 +1,7 @@
 import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Automation, TickContext } from "./Engine.js";
+import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { UserScript } from "./UserScript.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { TradeSettings } from "./settings/TradeSettings.js";
@@ -11,12 +11,16 @@ import { cwarn } from "./tools/Log.js";
 import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types/index.js";
 
 export class TradeManager implements Automation {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
   readonly settings: TradeSettings;
   readonly manager: TabManager<TradeTab>;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, workshopManager: WorkshopManager, settings = new TradeSettings()) {
+  constructor(
+    host: KittenScientists,
+    workshopManager: WorkshopManager,
+    settings = new TradeSettings(),
+  ) {
     this._host = host;
     this.settings = settings;
     this.manager = new TabManager(this._host, "Trade");

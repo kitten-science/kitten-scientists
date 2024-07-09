@@ -1,4 +1,4 @@
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -9,7 +9,7 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
   private readonly _trigger: TriggerButton;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: TimeSkipHeatSettings,
     options?: SettingsPanelOptions<SettingsPanel<TimeSkipHeatSettings>>,
   ) {

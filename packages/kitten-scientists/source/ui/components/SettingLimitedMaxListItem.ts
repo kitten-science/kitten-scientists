@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { SettingLimitedMax } from "../../settings/Settings.js";
-import { UserScript } from "../../UserScript.js";
 import { MaxButton } from "./buttons-text/MaxButton.js";
 import { SettingLimitedListItem, SettingLimitedListItemOptions } from "./SettingLimitedListItem.js";
 
@@ -19,7 +19,7 @@ export class SettingLimitedMaxListItem extends SettingLimitedListItem {
    * @param options Options for the list item.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingLimitedMax,
     options?: Partial<SettingLimitedListItemOptions>,

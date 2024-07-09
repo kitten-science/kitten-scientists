@@ -1,6 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { SupportedLanguage } from "../Engine.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { TechSettings } from "../settings/TechSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -11,7 +11,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
   protected readonly _techs: Array<SettingListItem>;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: TechSettings,
     language: SettingOptions<SupportedLanguage>,
     options?: SettingsPanelOptions<SettingsPanel<TechSettings>>,

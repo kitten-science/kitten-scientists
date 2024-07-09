@@ -1,4 +1,4 @@
-import { UserScript } from "@kitten-science/kitten-scientists/UserScript.js";
+import { KittenScientists } from "@kitten-science/kitten-scientists/KittenScientists.js";
 import { State } from "@kitten-science/kitten-scientists/state/State.js";
 import { base64Encode } from "@oliversalzburg/js-utils/data/string.js";
 import { InvalidArgumentError } from "@oliversalzburg/js-utils/errors/InvalidArgumentError.js";
@@ -37,7 +37,7 @@ export class StateLoader {
     if (rootObject === null) {
       try {
         const decompressed = decompressFromBase64(source);
-        rootObject = UserScript.decodeSettings(decompressed);
+        rootObject = KittenScientists.decodeSettings(decompressed);
       } catch (_error) {
         // Assuming `window.LZString is undefined`, as KS tried to decompress the input.
         // This is an indicator that the input wasn't a valid lz-string compressed JSON string in the first place.
@@ -47,7 +47,7 @@ export class StateLoader {
     // Interpret as base64-encoded JSON
     if (rootObject === null) {
       try {
-        rootObject = UserScript.decodeSettings(source);
+        rootObject = KittenScientists.decodeSettings(source);
       } catch (_error) {
         // Assuming `window.LZString is undefined`, as KS tried to decompress the input.
         // This is an indicator that the input could not be interpreted as a JSON string.

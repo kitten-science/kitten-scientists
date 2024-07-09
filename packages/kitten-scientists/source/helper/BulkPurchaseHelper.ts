@@ -1,5 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { WorkshopManager } from "../WorkshopManager.js";
 import { BonfireItem } from "../settings/BonfireSettings.js";
 import { AllItems } from "../settings/Settings.js";
@@ -35,10 +35,10 @@ export type BulkBuildListItem = {
 };
 
 export class BulkPurchaseHelper {
-  private readonly _host: UserScript;
+  private readonly _host: KittenScientists;
   private readonly _workshopManager: WorkshopManager;
 
-  constructor(host: UserScript, workshopManager: WorkshopManager) {
+  constructor(host: KittenScientists, workshopManager: WorkshopManager) {
     this._host = host;
     this._workshopManager = workshopManager;
   }

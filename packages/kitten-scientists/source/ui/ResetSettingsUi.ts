@@ -1,5 +1,5 @@
+import { KittenScientists } from "../KittenScientists.js";
 import { ResetSettings } from "../settings/ResetSettings.js";
-import { UserScript } from "../UserScript.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi.js";
@@ -18,7 +18,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   private readonly _upgradesUi: ResetUpgradesSettingsUi;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: ResetSettings,
     options?: SettingsPanelOptions<SettingsPanel<ResetSettings>>,
   ) {

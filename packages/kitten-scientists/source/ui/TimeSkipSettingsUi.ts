@@ -1,4 +1,4 @@
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
@@ -22,7 +22,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
   private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: TimeSkipSettings,
     options?: SettingsPanelOptions<SettingsPanel<TimeSkipSettings>>,
   ) {

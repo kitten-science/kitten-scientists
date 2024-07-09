@@ -1,6 +1,6 @@
 import { Icons } from "../../../images/Icons.js";
+import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingTrigger } from "../../../settings/Settings.js";
-import { UserScript } from "../../../UserScript.js";
 import { SettingsSectionUi } from "../../SettingsSectionUi.js";
 import { IconButton } from "../IconButton.js";
 
@@ -11,7 +11,7 @@ export class TriggerButton extends IconButton {
   readonly setting: SettingTrigger;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingTrigger,
     behavior: TriggerButtonBehavior = "percentage",

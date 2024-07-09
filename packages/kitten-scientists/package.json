@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
+  "private": true,
   "name": "@kitten-science/kitten-scientists",
   "version": "2.0.0-beta.9",
   "description": "Add-on for the wonderful incremental browser game: https://kittensgame.com/web/",
@@ -8,7 +9,8 @@
   "homepage": "https://github.com/kitten-science/kitten-scientists",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kitten-science/kitten-scientists.git"
+    "url": "git+https://github.com/kitten-science/kitten-scientists.git",
+    "directory": "packages/kitten-scientists"
   },
   "bugs": {
     "url": "https://github.com/kitten-science/kitten-scientists/issues"
@@ -45,11 +47,9 @@
     "vite-plugin-userscript": "0.1.3"
   },
   "keywords": [
-    "kitten",
-    "kittens",
-    "scientists"
+    "kittensgame"
   ],
   "engines": {
-    "node": "^20.0.0"
+    "node": ">= 20"
   }
 }

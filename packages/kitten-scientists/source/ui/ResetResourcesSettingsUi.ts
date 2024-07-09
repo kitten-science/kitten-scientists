@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import {
   ResetResourcesSettings,
@@ -14,7 +14,7 @@ import { StockButton } from "./components/buttons-text/StockButton.js";
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;
 
-  constructor(host: UserScript, settings: ResetResourcesSettings) {
+  constructor(host: KittenScientists, settings: ResetResourcesSettings) {
     const label = host.engine.i18n("ui.resources");
     super(host, label, settings, {
       icon: Icons.Resources,

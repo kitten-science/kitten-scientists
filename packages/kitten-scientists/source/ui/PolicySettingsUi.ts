@@ -1,6 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { SupportedLanguage } from "../Engine.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { PolicySettings } from "../settings/PolicySettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -9,7 +9,7 @@ import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.
 
 export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: PolicySettings,
     language: SettingOptions<SupportedLanguage>,
     options?: SettingsPanelOptions<SettingsPanel<PolicySettings>>,

@@ -7,5 +7,5 @@
     "useDefineForClassFields": false
   },
   "include": ["../../@types", "source"],
-  "references": []
+  "references": [{ "path": "../kitten-scientists" }]
 }

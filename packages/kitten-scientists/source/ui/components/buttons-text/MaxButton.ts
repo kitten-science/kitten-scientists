@@ -1,5 +1,5 @@
+import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingMax } from "../../../settings/Settings.js";
-import { UserScript } from "../../../UserScript.js";
 import { SettingsSectionUi } from "../../SettingsSectionUi.js";
 import { TextButton } from "../TextButton.js";
 
@@ -7,7 +7,7 @@ export class MaxButton extends TextButton {
   readonly setting: SettingMax;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     label: string,
     setting: SettingMax,
     handler: { onClick?: () => void } = {},

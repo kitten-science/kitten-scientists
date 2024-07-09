@@ -15,6 +15,7 @@ export default defineConfig({
     minify: false,
     outDir: "output",
     rollupOptions: {
+      external: ["jquery"],
       output: {
         extend: true,
         format: "umd",

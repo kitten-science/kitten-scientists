@@ -55,6 +55,7 @@ export default defineConfig({
     minify: minify ? "esbuild" : false,
     outDir: "output",
     rollupOptions: {
+      external: ["jquery"],
       output: {
         extend: true,
         format: "umd",

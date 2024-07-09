@@ -1,6 +1,6 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { Setting } from "../../settings/Settings.js";
 import { Cycle } from "../../types/index.js";
-import { UserScript } from "../../UserScript.js";
 import { SettingListItem } from "./SettingListItem.js";
 import { SettingsList } from "./SettingsList.js";
 import { UiComponentOptions } from "./UiComponent.js";
@@ -36,7 +36,7 @@ export class CyclesList extends SettingsList {
    * @param options Options for this list.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     setting: SettingWithCycles,
     behavior: CycleCheckboxBehavior = "skip",
     options?: Partial<UiComponentOptions>,

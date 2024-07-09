@@ -1,6 +1,6 @@
+import { KittenScientists } from "../../KittenScientists.js";
 import { Setting } from "../../settings/Settings.js";
 import { Season } from "../../types/index.js";
-import { UserScript } from "../../UserScript.js";
 import { SettingListItem } from "./SettingListItem.js";
 import { SettingsList, SettingsListOptions } from "./SettingsList.js";
 
@@ -43,7 +43,7 @@ export class SeasonsList extends SettingsList {
    * @param options Options for this list
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     setting: SettingWithSeasons,
     options?: Partial<SeasonsListOptions>,
   ) {

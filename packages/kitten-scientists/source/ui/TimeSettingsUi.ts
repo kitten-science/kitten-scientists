@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
@@ -13,7 +13,7 @@ export class TimeSettingsUi extends SettingsSectionUi<TimeSettings> {
   private readonly _fixCryochamber: SettingListItem;
   private readonly _turnOnChronoFurnace: SettingListItem;
 
-  constructor(host: UserScript, settings: TimeSettings) {
+  constructor(host: KittenScientists, settings: TimeSettings) {
     const label = host.engine.i18n("ui.time");
     super(host, label, settings);
 

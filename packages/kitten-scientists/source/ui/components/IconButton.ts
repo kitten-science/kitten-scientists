@@ -1,4 +1,4 @@
-import { UserScript } from "../../UserScript.js";
+import { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 /**
@@ -16,7 +16,7 @@ export class IconButton extends UiComponent {
    * @param options Options for the icon button.
    */
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     pathData: string,
     title: string,
     options?: Partial<UiComponentOptions>,

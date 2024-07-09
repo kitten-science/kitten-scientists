@@ -1,6 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { SupportedLanguage } from "../Engine.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { ResourcesSettings, ResourcesSettingsItem } from "../settings/ResourcesSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
@@ -17,7 +17,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   private readonly _resources: Array<SettingListItem>;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: ResourcesSettings,
     language: SettingOptions<SupportedLanguage>,
     options?: SettingsPanelOptions<SettingsPanel<ResourcesSettings>>,

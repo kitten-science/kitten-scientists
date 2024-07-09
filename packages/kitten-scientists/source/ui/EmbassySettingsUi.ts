@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { EmbassySettings } from "../settings/EmbassySettings.js";
 import { SettingMax } from "../settings/Settings.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
@@ -11,7 +11,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   private readonly _trigger: TriggerButton;
 
   constructor(
-    host: UserScript,
+    host: KittenScientists,
     settings: EmbassySettings,
     options?: SettingsPanelOptions<SettingsPanel<EmbassySettings>>,
   ) {

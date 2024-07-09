@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { UserScript } from "../UserScript.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { ResetSpaceSettings } from "../settings/ResetSpaceSettings.js";
 import { SettingTrigger } from "../settings/Settings.js";
@@ -11,7 +11,7 @@ import { SettingsList } from "./components/SettingsList.js";
 export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> {
   private readonly _buildings: Array<SettingTriggerListItem>;
 
-  constructor(host: UserScript, settings: ResetSpaceSettings) {
+  constructor(host: KittenScientists, settings: ResetSpaceSettings) {
     const label = host.engine.i18n("ui.space");
     super(host, label, settings, {
       icon: Icons.Space,
