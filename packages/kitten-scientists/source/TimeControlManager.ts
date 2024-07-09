@@ -1,6 +1,6 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { BonfireManager } from "./BonfireManager.js";
-import { Engine, TickContext } from "./Engine.js";
+import { Engine, FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { ReligionManager } from "./ReligionManager.js";
 import { SpaceManager } from "./SpaceManager.js";
@@ -50,7 +50,7 @@ export class TimeControlManager {
     this._workshopManager = workshopManager;
   }
 
-  async tick(_context: TickContext) {
+  async tick(_context: FrameContext) {
     if (!this.settings.enabled) {
       return;
     }
@@ -87,6 +87,10 @@ export class TimeControlManager {
     ) => {
       if (checkList.length !== 0) {
         for (const button of buttons) {
+          if (isNil(button.model)) {
+            continue;
+          }
+
           const name = button.model.metadata.name;
           const index = checkList.indexOf(name);
           if (index !== -1) {
@@ -177,7 +181,7 @@ export class TimeControlManager {
     }
 
     if (checkList.length === 0) {
-      const panels = this._spaceManager.manager.tab.planetPanels;
+      const panels = mustExist(this._spaceManager.manager.tab.planetPanels);
       for (const panel of panels) {
         for (const panelButton of panel.children) {
           const model = panelButton.model as ButtonModernModel;
@@ -545,6 +549,9 @@ export class TimeControlManager {
     // If we found we can skip any years, do so now.
     if (0 < willSkip) {
       const shatter = this._host.game.timeTab.cfPanel.children[0].children[0]; // check?
+      if (isNil(shatter.model)) {
+        return;
+      }
       this._host.engine.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
       (shatter.controller as ShatterTCBtnController).doShatterAmt(shatter.model, willSkip);
       this._host.engine.storeForSummary("time.skip", willSkip);

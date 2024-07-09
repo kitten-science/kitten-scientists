@@ -1,6 +1,6 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { BonfireManager } from "./BonfireManager.js";
-import { Automation, TickContext } from "./Engine.js";
+import { Automation, FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
@@ -53,36 +53,40 @@ export class ReligionManager implements Automation {
     this._bonfireManager = bonfireManager;
   }
 
-  async tick(_context: TickContext) {
+  async tick(context: FrameContext) {
     if (!this.settings.enabled) {
       return;
     }
 
-    this._autoBuild();
+    // We must call `.render()` here, because evaluation of availability of our options
+    // is only performed when the game renders the contents of that tab.
+    this.manager.render();
+
+    this._autoBuild(context);
 
     if (this.settings.sacrificeUnicorns.enabled) {
       await this._autoSacrificeUnicorns();
     }
 
     if (this.settings.sacrificeAlicorns.enabled) {
-      await this._autoSacrificeAlicorns();
+      await this._autoSacrificeAlicorns(context);
     }
 
     if (this.settings.refineTears.enabled) {
-      await this._autoTears();
+      await this._autoTears(context);
     }
 
     if (this.settings.refineTimeCrystals.enabled) {
-      await this._autoTCs();
+      await this._autoTCs(context);
     }
 
     this._autoTAP();
   }
 
-  private _autoBuild() {
+  private _autoBuild(context: FrameContext) {
     if (this.settings.bestUnicornBuilding.enabled) {
       this._buildBestUnicornBuilding();
-      this._buildNonUnicornBuildings();
+      this._buildNonUnicornBuildings(context);
     } else {
       // Create the list of builds, excluding the unicorn pasture.
       // The unicorn pasture requires a special build path, because it's really
@@ -96,7 +100,7 @@ export class ReligionManager implements Automation {
       const maxPastures = negativeOneToInfinity(this.settings.buildings.unicornPasture.max);
       const meta = this._host.game.bld.getBuildingExt("unicornPasture").meta;
       if (this.settings.buildings.unicornPasture.enabled && meta.val < maxPastures) {
-        this._bonfireManager.autoBuild({
+        this._bonfireManager.autoBuild(context, {
           unicornPasture: new BonfireBuildingSetting(
             "unicornPasture",
             this.settings.buildings.unicornPasture.enabled,
@@ -105,7 +109,7 @@ export class ReligionManager implements Automation {
         });
       }
       // And then we build all other possible religion buildings.
-      this._buildReligionBuildings(builds);
+      this._buildReligionBuildings(context, builds);
     }
   }
 
@@ -118,12 +122,13 @@ export class ReligionManager implements Automation {
     if (bestUnicornBuilding === "unicornPasture") {
       this._bonfireManager.build(bestUnicornBuilding, 0, 1);
     } else {
-      const buildingButton = mustExist(
-        this.getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat),
-      );
+      const buildingButton = this._getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat);
+      if (isNil(buildingButton?.model)) {
+        return;
+      }
 
       let tearsNeeded = 0;
-      const priceTears = mustExist(mustExist(buildingButton.model).prices).find(
+      const priceTears = mustExist(buildingButton.model.prices).find(
         subject => subject.name === "tears",
       );
       if (!isNil(priceTears)) {
@@ -151,7 +156,10 @@ export class ReligionManager implements Automation {
         );
 
         // Sacrifice some unicorns to get the tears to buy the building.
-        if (needSacrifice < maxSacrifice) {
+        if (
+          needSacrifice < maxSacrifice &&
+          !isNil(this._host.game.religionTab.sacrificeBtn.model)
+        ) {
           this._host.game.religionTab.sacrificeBtn.controller._transform(
             this._host.game.religionTab.sacrificeBtn.model,
             needSacrifice,
@@ -179,17 +187,20 @@ export class ReligionManager implements Automation {
       }
     }
   }
-  private _buildNonUnicornBuildings() {
+  private _buildNonUnicornBuildings(context: FrameContext) {
     const alreadyHandled: Array<FaithItem | UnicornItem> = [...UnicornItems];
     const builds = Object.fromEntries(
       Object.entries(this.settings.buildings).filter(
         ([, building]) => !alreadyHandled.includes(building.building),
       ),
     );
-    this._buildReligionBuildings(builds);
+    this._buildReligionBuildings(context, builds);
   }
 
-  private _buildReligionBuildings(builds: Partial<Record<FaithItem, ReligionSettingsItem>>): void {
+  private _buildReligionBuildings(
+    context: FrameContext,
+    builds: Partial<Record<FaithItem, ReligionSettingsItem>>,
+  ): void {
     // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
     this.manager.render();
 
@@ -200,7 +211,6 @@ export class ReligionManager implements Automation {
     // Let the bulk manager figure out which of the builds to actually build.
     const buildList = this._bulkManager.bulk(builds, metaData, this.settings.trigger, "Religion");
 
-    let refreshRequired = false;
     for (const build of buildList) {
       if (0 < build.count) {
         this.build(
@@ -208,13 +218,8 @@ export class ReligionManager implements Automation {
           mustExist(build.variant) as UnicornItemVariant,
           build.count,
         );
-        refreshRequired = true;
+        context.requestGameUiRefresh = true;
       }
-    }
-
-    // If we built any religion buildings, refresh the UI.
-    if (refreshRequired) {
-      this._host.game.ui.render();
     }
   }
 
@@ -304,7 +309,7 @@ export class ReligionManager implements Automation {
     // If the unicorn pasture amortizes itself in less than infinity ticks,
     // set it as the default. This is likely to protect against cases where
     // production of unicorns is 0.
-    const pastureAmortization = mustExist(pastureButton.model.prices)[0].val / pastureProduction;
+    const pastureAmortization = mustExist(pastureButton.model?.prices)[0].val / pastureProduction;
     if (pastureAmortization < bestAmortization) {
       bestAmortization = pastureAmortization;
       bestBuilding = "unicornPasture";
@@ -313,7 +318,7 @@ export class ReligionManager implements Automation {
     // For all ziggurath upgrade buttons...
     for (const button of this.manager.tab.zgUpgradeButtons) {
       // ...that are in the "valid" buildings (are unicorn-related) and visible (unlocked)...
-      if (validBuildings.includes(button.id) && button.model.visible) {
+      if (validBuildings.includes(button.id) && button.model?.visible) {
         // Determine a price value for this building.
         let unicornPrice = 0;
         for (const price of mustExist(button.model.prices)) {
@@ -372,8 +377,15 @@ export class ReligionManager implements Automation {
       throw new Error(`Unable to build '${name}'. Build information not available.`);
     }
 
-    const button = this.getBuildButton(name, variant);
-    if (!button || !button.model.enabled) return;
+    const button = this._getBuildButton(name, variant);
+
+    if (!button?.model) {
+      return;
+    }
+
+    if (!button.model.enabled) {
+      return;
+    }
 
     const amountTemp = amount;
     const label = build.label;
@@ -413,15 +425,15 @@ export class ReligionManager implements Automation {
 
       // If an item is marked as `rHidden`, it wouldn't be build.
       // TODO: Why not remove it from the `builds` then?
-      if (!this.getBuildButton(build.building, build.variant)) {
+      if (!this._getBuildButton(build.building, build.variant)) {
         buildMetaData.rHidden = true;
       } else {
-        const model = mustExist(this.getBuildButton(build.building, build.variant)).model;
+        const model = mustExist(this._getBuildButton(build.building, build.variant)).model;
         const panel =
           build.variant === UnicornItemVariant.Cryptotheology
             ? this._host.game.science.get("cryptotheology").researched
             : true;
-        buildMetaData.rHidden = !(model.visible && model.enabled && panel);
+        buildMetaData.rHidden = !(model?.visible && model.enabled && panel);
       }
     }
 
@@ -457,7 +469,7 @@ export class ReligionManager implements Automation {
    * @param variant The variant of the upgrade.
    * @returns The button to buy the upgrade, or `null`.
    */
-  getBuildButton(
+  private _getBuildButton(
     name: ReligionItem | "unicornPasture",
     variant: UnicornItemVariant,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
@@ -476,19 +488,18 @@ export class ReligionManager implements Automation {
         throw new Error(`Invalid variant '${variant}'`);
     }
 
+    if (buttons.length === 0) {
+      // Series of upgrades is not unlocked yet.
+      return null;
+    }
+
     const build = this.getBuild(name, variant);
     if (build === null) {
       throw new Error(`Unable to retrieve build information for '${name}'`);
     }
 
-    for (const button of buttons) {
-      const haystack = button.model.name;
-      if (haystack.indexOf(build.label) !== -1) {
-        return button as BuildButton<string, ButtonModernModel, ButtonModernController>;
-      }
-    }
-
-    return null;
+    return (buttons.find(button => button.model?.name.startsWith(build.label)) ??
+      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
   }
 
   private _transformBtnSacrificeHelper(
@@ -522,6 +533,10 @@ export class ReligionManager implements Automation {
       const controller = this._host.game.religionTab.sacrificeBtn.controller;
       const model = this._host.game.religionTab.sacrificeBtn.model;
 
+      if (isNil(model)) {
+        return;
+      }
+
       await this._transformBtnSacrificeHelper(available, unicorns.value, controller, model);
 
       const availableNow = this._workshopManager.getValueAvailable("unicorns");
@@ -540,7 +555,7 @@ export class ReligionManager implements Automation {
     }
   }
 
-  private async _autoSacrificeAlicorns() {
+  private async _autoSacrificeAlicorns(context: FrameContext) {
     const alicorns = this._workshopManager.getResource("alicorn");
     const available = this._workshopManager.getValueAvailable("alicorn");
     if (
@@ -548,8 +563,14 @@ export class ReligionManager implements Automation {
       this.settings.sacrificeAlicorns.trigger <= available &&
       this.settings.sacrificeAlicorns.trigger <= alicorns.value
     ) {
+      this._host.game.religionTab.sacrificeAlicornsBtn.render();
       const controller = this._host.game.religionTab.sacrificeAlicornsBtn.controller;
       const model = this._host.game.religionTab.sacrificeAlicornsBtn.model;
+
+      if (isNil(model)) {
+        context.requestGameUiRefresh = true;
+        return;
+      }
 
       await this._transformBtnSacrificeHelper(available, alicorns.value, controller, model);
 
@@ -569,7 +590,7 @@ export class ReligionManager implements Automation {
     }
   }
 
-  private async _autoTears() {
+  private async _autoTears(context: FrameContext) {
     const tears = this._workshopManager.getResource("tears");
     const available = this._workshopManager.getValueAvailable("tears");
     const sorrow = this._workshopManager.getResource("sorrow");
@@ -581,8 +602,17 @@ export class ReligionManager implements Automation {
     ) {
       const availableForConversion = available - this.settings.refineTears.trigger;
 
+      if (availableForConversion < 10000) {
+        return;
+      }
+
       const controller = this._host.game.religionTab.refineBtn.controller;
       const model = this._host.game.religionTab.refineBtn.model;
+
+      if (isNil(model)) {
+        context.requestGameUiRefresh = true;
+        return;
+      }
 
       await new Promise(resolve => {
         controller.buyItem(model, new Event("decoy"), resolve, availableForConversion);
@@ -604,7 +634,7 @@ export class ReligionManager implements Automation {
     }
   }
 
-  private async _autoTCs() {
+  private async _autoTCs(context: FrameContext) {
     const timeCrystals = this._workshopManager.getResource("timeCrystal");
     const available = this._workshopManager.getValueAvailable("timeCrystal");
     if (
@@ -614,6 +644,11 @@ export class ReligionManager implements Automation {
     ) {
       const controller = this._host.game.religionTab.refineTCBtn.controller;
       const model = this._host.game.religionTab.refineTCBtn.model;
+
+      if (isNil(model)) {
+        context.requestGameUiRefresh = true;
+        return;
+      }
 
       await this._transformBtnSacrificeHelper(available, timeCrystals.value, controller, model);
 

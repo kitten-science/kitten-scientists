@@ -1,8 +1,8 @@
 import { GameTab, Panel, Price } from "./index.js";
 
 export type SpaceTab = GameTab & {
-  GCPanel: Panel;
-  planetPanels: Array<Panel>;
+  GCPanel: Panel | null;
+  planetPanels: Array<Panel> | null;
 };
 
 export const Missions = [

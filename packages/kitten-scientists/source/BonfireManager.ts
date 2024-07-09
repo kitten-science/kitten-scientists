@@ -1,5 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, TickContext } from "./Engine.js";
+import { Automation, FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
@@ -42,13 +42,17 @@ export class BonfireManager implements Automation {
     this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
   }
 
-  tick(_context: TickContext) {
+  tick(context: FrameContext) {
     if (!this.settings.enabled) {
       return;
     }
 
-    this.autoBuild();
-    this.autoMisc();
+    // We must call `.render()` here, because evaluation of availability of our options
+    // is only performed when the game renders the contents of that tab.
+    this.manager.render();
+
+    this.autoBuild(context);
+    this.autoMisc(context);
   }
 
   /**
@@ -59,14 +63,11 @@ export class BonfireManager implements Automation {
    * @param builds The buildings to build.
    */
   autoBuild(
+    context: FrameContext,
     builds: Partial<Record<BonfireItem, BonfireBuildingSetting>> = this.settings.buildings,
   ) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
-
-    // Render the tab to make sure that the buttons actually exist in the DOM.
-    // TODO: Is this really required?
-    this.manager.render();
 
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<BonfireItem, BuildingMeta>> = {};
@@ -79,21 +80,14 @@ export class BonfireManager implements Automation {
     // Let the bulkmanager determine the builds we can make.
     const buildList = bulkManager.bulk(builds, metaData, trigger, "Bonfire");
 
-    let refreshRequired = false;
     // Build all entries in the build list, where we can build any items.
-    for (const build of buildList) {
-      if (build.count > 0) {
-        this.build((build.name || build.id) as Building, build.stage, build.count);
-        refreshRequired = true;
-      }
-    }
-
-    if (refreshRequired) {
-      this._host.game.ui.render();
+    for (const build of buildList.filter(item => 0 < item.count)) {
+      this.build((build.name || build.id) as Building, build.stage, build.count);
+      context.requestGameUiRefresh = true;
     }
   }
 
-  autoUpgrade() {
+  autoUpgrade(context: FrameContext) {
     // Get current count of pastures.
     const pastures =
       this._host.game.bld.getBuildingExt("pasture").meta.stage === 0
@@ -117,25 +111,24 @@ export class BonfireManager implements Automation {
       if (this._workshopManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
         const prices = mustExist(pastureMeta.stages)[1].prices;
         if (this._bulkManager.singleBuildPossible(pastureMeta, prices, 1)) {
-          const button = mustExist(this.getBuildButton("pasture", 0));
-          // We need to perform the process like this to avoid UI confirmations
-          // for selling items.
-          // Sell all pastures (to regain the resources).
-          button.controller.sellInternal(button.model, 0);
-          // Manually update the metadata, as we bypassed the full selling logic.
-          pastureMeta.on = 0;
-          pastureMeta.val = 0;
-          pastureMeta.stage = 1;
+          const button = this.getBuildButton("pasture", 0);
+          if (!isNil(button?.model)) {
+            // We need to perform the process like this to avoid UI confirmations
+            // for selling items.
+            // Sell all pastures (to regain the resources).
+            button.controller.sellInternal(button.model, 0);
+            // Manually update the metadata, as we bypassed the full selling logic.
+            pastureMeta.on = 0;
+            pastureMeta.val = 0;
+            pastureMeta.stage = 1;
 
-          this._host.engine.iactivity("upgrade.building.pasture", [], "ks-upgrade");
+            this._host.engine.iactivity("upgrade.building.pasture", [], "ks-upgrade");
 
-          // Upgrade the pasture.
-          this._host.game.ui.render();
-          this.build("pasture", 1, 1);
-          this._host.game.ui.render();
-
-          // TODO: Why do we return here and not just unlock more buildings?
-          return;
+            // Upgrade the pasture.
+            this._host.game.ui.render();
+            this.build("pasture", 1, 1);
+            context.requestGameUiRefresh = true;
+          }
         }
       }
     }
@@ -152,23 +145,23 @@ export class BonfireManager implements Automation {
       if (this._workshopManager.getPotentialCatnip(true, pastures, 0) > 0) {
         const prices = mustExist(aqueductMeta.stages)[1].prices;
         if (this._bulkManager.singleBuildPossible(aqueductMeta, prices, 1)) {
-          const button = mustExist(this.getBuildButton("aqueduct", 0));
-          button.controller.sellInternal(button.model, 0);
-          aqueductMeta.on = 0;
-          aqueductMeta.val = 0;
-          aqueductMeta.stage = 1;
+          const button = this.getBuildButton("aqueduct", 0);
+          if (!isNil(button?.model)) {
+            button.controller.sellInternal(button.model, 0);
+            aqueductMeta.on = 0;
+            aqueductMeta.val = 0;
+            aqueductMeta.stage = 1;
 
-          // TODO: Why do we do this for the aqueduct and not for the pasture?
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          aqueductMeta.calculateEffects!(aqueductMeta, this._host.game);
+            // TODO: Why do we do this for the aqueduct and not for the pasture?
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            aqueductMeta.calculateEffects!(aqueductMeta, this._host.game);
 
-          this._host.engine.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
+            this._host.engine.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
 
-          this._host.game.ui.render();
-          this.build("aqueduct", 1, 1);
-          this._host.game.ui.render();
-
-          return;
+            this._host.game.ui.render();
+            this.build("aqueduct", 1, 1);
+            context.requestGameUiRefresh = true;
+          }
         }
       }
     }
@@ -207,6 +200,10 @@ export class BonfireManager implements Automation {
         const prices = mustExist(libraryMeta.stages)[1].prices;
         if (this._bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
           const button = mustExist(this.getBuildButton("library", 0));
+          if (isNil(button.model)) {
+            return;
+          }
+
           button.controller.sellInternal(button.model, 0);
           libraryMeta.on = 0;
           libraryMeta.val = 0;
@@ -216,7 +213,7 @@ export class BonfireManager implements Automation {
           this._host.engine.iactivity("upgrade.building.library", [], "ks-upgrade");
           this._host.game.ui.render();
           this.build("library", 1, 1);
-          this._host.game.ui.render();
+          context.requestGameUiRefresh = true;
           return;
         }
       }
@@ -231,21 +228,24 @@ export class BonfireManager implements Automation {
     ) {
       const prices = mustExist(warehouseMeta.stages)[1].prices;
       if (this._bulkManager.singleBuildPossible(warehouseMeta, prices, 1)) {
-        const button = mustExist(this.getBuildButton("warehouse", 0));
-        button.controller.sellInternal(button.model, 0);
-        warehouseMeta.on = 0;
-        warehouseMeta.val = 0;
-        warehouseMeta.stage = 1;
+        const button = this.getBuildButton("warehouse", 0);
+        if (!isNil(button?.model)) {
+          button.controller.sellInternal(button.model, 0);
+          warehouseMeta.on = 0;
+          warehouseMeta.val = 0;
+          warehouseMeta.stage = 1;
 
-        this._host.engine.iactivity("upgrade.building.warehouse", [], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.building.warehouse", [], "ks-upgrade");
 
-        this._host.game.ui.render();
-        this.build("warehouse", 1, 1);
-        this._host.game.ui.render();
+          this._host.game.ui.render();
+          this.build("warehouse", 1, 1);
+          context.requestGameUiRefresh = true;
 
-        return;
+          return;
+        }
       }
     }
+
     const amphitheatreMeta = this._host.game.bld.getBuildingExt("amphitheatre").meta;
     // If amphitheathres haven't been upgraded to broadcast towers yet...
     // This seems to be identical to the pasture upgrade.
@@ -259,29 +259,33 @@ export class BonfireManager implements Automation {
       //       if you don't have enough resources to build several more.
       const prices = mustExist(amphitheatreMeta.stages)[1].prices;
       if (this._bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
-        const button = mustExist(this.getBuildButton("amphitheatre", 0));
-        button.controller.sellInternal(button.model, 0);
-        amphitheatreMeta.on = 0;
-        amphitheatreMeta.val = 0;
-        amphitheatreMeta.stage = 1;
+        const button = this.getBuildButton("amphitheatre", 0);
+        if (!isNil(button?.model)) {
+          button.controller.sellInternal(button.model, 0);
+          amphitheatreMeta.on = 0;
+          amphitheatreMeta.val = 0;
+          amphitheatreMeta.stage = 1;
 
-        this._host.engine.iactivity("upgrade.building.amphitheatre", [], "ks-upgrade");
+          this._host.engine.iactivity("upgrade.building.amphitheatre", [], "ks-upgrade");
 
-        this._host.game.ui.render();
-        this.build("amphitheatre", 1, 1);
-        this._host.game.ui.render();
-
-        return;
+          this._host.game.ui.render();
+          this.build("amphitheatre", 1, 1);
+          context.requestGameUiRefresh = true;
+        }
       }
     }
   }
 
-  autoMisc() {
+  autoMisc(context: FrameContext) {
     // Auto turn on steamworks
     if (this.settings.turnOnSteamworks.enabled) {
       const steamworks = this._host.game.bld.getBuildingExt("steamworks");
       if (steamworks.meta.val && steamworks.meta.on === 0) {
         const button = mustExist(this.getBuildButton("steamworks"));
+        if (isNil(button.model)) {
+          return;
+        }
+
         button.controller.onAll(button.model);
       }
     }
@@ -291,13 +295,17 @@ export class BonfireManager implements Automation {
       const magnetos = this._host.game.bld.getBuildingExt("magneto");
       if (magnetos.meta.val && magnetos.meta.on < magnetos.meta.val) {
         const button = mustExist(this.getBuildButton("magneto"));
+        if (isNil(button.model)) {
+          return;
+        }
+
         button.controller.onAll(button.model);
       }
     }
 
     // If buildings (upgrades of bonfire items) are enabled...
     if (this.settings.upgradeBuildings.enabled) {
-      this.autoUpgrade();
+      this.autoUpgrade(context);
     }
 
     if (this.settings.gatherCatnip.enabled) {
@@ -316,9 +324,14 @@ export class BonfireManager implements Automation {
     const build = this.getBuild(name);
     const button = this.getBuildButton(name, stage);
 
-    if (!button || !button.model.enabled) {
+    if (!button?.model) {
       return;
     }
+
+    if (!button.model.enabled) {
+      return;
+    }
+
     const amountTemp = amount;
     const label = this._getBuildLabel(build.meta, stage);
     amount = this._bulkManager.construct(button.model, button, amount);
@@ -349,14 +362,10 @@ export class BonfireManager implements Automation {
     const buttons = this.manager.tab.children;
     const build = this.getBuild(name);
     const label = this._getBuildLabel(build.meta, stage);
-
-    for (const button of buttons) {
-      const haystack = button.model.name;
-      if (haystack.indexOf(label) !== -1) {
-        return button as BuildButton<string, ButtonModernModel, ButtonModernController>;
-      }
-    }
-
-    return null;
+    return (buttons.find(button => button.model?.name.startsWith(label)) ?? null) as BuildButton<
+      string,
+      ButtonModernModel,
+      ButtonModernController
+    > | null;
   }
 }

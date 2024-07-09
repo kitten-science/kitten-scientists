@@ -1,7 +1,7 @@
 import { BuildButton, GameTab, Job, Kitten } from "./index.js";
 
 export type VillageTab = GameTab & {
-  censusPanel: {
+  censusPanel?: {
     census: {
       makeLeader: (kitten: Kitten) => void;
       renderGovernment: (model: unknown) => void;

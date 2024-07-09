@@ -13,13 +13,16 @@ main() {
   BRANCH=${1:-master}
   REPO=${2:-https://github.com/nuclear-unicorn/kittensgame.git}
 
-  echo "Building development container on $BRANCH branch of $REPO..."
+  echo "Re-Building development container on $BRANCH branch of $REPO..."
   cd ..
   podman build \
     --build-arg BRANCH="$BRANCH" \
     --build-arg REPO="$REPO" \
-    --tag kittensgame .
+    --no-cache \
+    --tag devcontainer .
   echo "Done."
+  echo
+  echo "Remember to restart your development container if it's already running!"
 }
 
 main "$@"
