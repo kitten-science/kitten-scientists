@@ -329,7 +329,8 @@ export class Engine {
   private async _iterate(): Promise<void> {
     const context = { tick: new Date().getTime() };
 
-    if (this.settings.filters.disableKGLog.enabled) {
+    // The logic here is inverted, because _disabled_ items are hidden from the log.
+    if (!this.settings.filters.disableKGLog.enabled) {
       this._maintainKGLogFilters();
     }
 
