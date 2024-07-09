@@ -15,6 +15,7 @@
     "node-scripts-docs": "1.0.3"
   },
   "engines": {
-    "node": "^20.0.0"
-  }
+    "node": ">= 20"
+  },
+  "packageManager": "yarn@4.3.1"
 }

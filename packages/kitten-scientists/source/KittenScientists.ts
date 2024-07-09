@@ -36,14 +36,6 @@ export class KittenScientists {
    */
   readonly i18nEngine: I18nEngine;
 
-  /**
-   * Stores if we caught the `game/start` signal from the game.
-   */
-  //private static _gameStartSignal: Promise<boolean>;
-  //private static _gameStartSignalResolver: undefined | ((value: boolean) => void);
-
-  private static _possibleEngineState: EngineState | undefined = undefined;
-
   private _userInterface: UserInterface;
   engine: Engine;
 
@@ -112,6 +104,9 @@ export class KittenScientists {
       (saveData: Record<string, unknown>) => {
         cinfo("Injecting Kitten Scientists engine state into save data...");
         saveData.ks = { state: [this.getSettings()] };
+        document.dispatchEvent(
+          new CustomEvent<typeof saveData>("ks.reportSavegame", { detail: saveData }),
+        );
       },
     );
   }
