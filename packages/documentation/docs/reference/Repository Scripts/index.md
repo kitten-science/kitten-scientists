@@ -19,7 +19,7 @@
 -   Source:
 
     ```shell
-    tsc --build
+    scripts/build-all.sh
     ```
 
 -   Description:
@@ -45,7 +45,7 @@
 -   Source:
 
     ```shell
-    rm -rf packages/*/build packages/*/tsconfig.tsbuildinfo
+    rm -rf packages/*/{build,output,tsconfig.tsbuildinfo}
     ```
 
 -   Description:
@@ -54,11 +54,11 @@
 
 ## devcontainer:build
 
--   Project: `@kitten-science/kittensgame`
+-   Project: `@kitten-science/devcontainer`
 -   Source:
 
     ```shell
-    bash ./scripts/build-development-container.sh
+    bash ./scripts/build-container.sh
     ```
 
 -   Description:
@@ -67,11 +67,11 @@
 
 ## devcontainer:rebuild
 
--   Project: `@kitten-science/kittensgame`
+-   Project: `@kitten-science/devcontainer`
 -   Source:
 
     ```shell
-    bash ./scripts/rebuild-development-container.sh
+    bash ./scripts/rebuild-container.sh
     ```
 
 -   Description:
@@ -82,16 +82,29 @@
 
 ## devcontainer:run
 
--   Project: `@kitten-science/kittensgame`
+-   Project: `@kitten-science/devcontainer`
 -   Source:
 
     ```shell
-    bash ./scripts/run-development-container.sh
+    bash ./scripts/run-container.sh
     ```
 
 -   Description:
 
     Builds the [Development Container](../../development.md#development-with-kittens-game-container) and starts it.
+
+## devcontainer:stop
+
+-   Project: `@kitten-science/devcontainer`
+-   Source:
+
+    ```shell
+    bash ./scripts/stop-container.sh
+    ```
+
+-   Description:
+
+    _documentation pending_
 
 ## docs:build
 
@@ -131,6 +144,125 @@
 -   Description:
 
     Start the [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) development server to work on the documentation.
+
+## kitten-analysts:build
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    node build.js && vite --config vite.config.inject.js build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-analysts:preview
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    DEV_BUILD=true vite --config vite.config.userscript.js build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-analysts:release
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    MINIFY=true vite --config vite.config.userscript.js build
+    vite --config vite.config.userscript.js build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-analysts:start
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    node output/entrypoint-backend.js
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-engineers:build
+
+-   Project: `@kitten-science/kitten-engineers`
+-   Source:
+
+    ```shell
+    vite --config vite.config.inject.js build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-engineers:preview
+
+-   Project: `@kitten-science/kitten-engineers`
+-   Source:
+
+    ```shell
+    DEV_BUILD=true vite --config vite.config.userscript.js build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-engineers:release
+
+-   Project: `@kitten-science/kitten-engineers`
+-   Source:
+
+    ```shell
+    MINIFY=true vite --config vite.config.userscript.js build
+    vite --config vite.config.userscript.js build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-engineers:version
+
+-   Project: `@kitten-science/kitten-engineers`
+-   Source:
+
+    ```shell
+    node version.cjs
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kitten-engineers:watch
+
+-   Project: `@kitten-science/kitten-engineers`
+-   Source:
+
+    ```shell
+    vite --config vite.config.inject.js build --watch
+    ```
+
+-   Description:
+
+    _documentation pending_
 
 ## kitten-scientists:build
 
@@ -205,6 +337,58 @@
     !!! warning
 
         This watcher has caused problems in the past, generating broken output. Use at your own risk.
+
+## kittenscience:build
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    bash ./scripts/build-container.sh
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kittenscience:rebuild
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    bash ./scripts/rebuild-container.sh
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kittenscience:run
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    bash ./scripts/run-container.sh
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## kittenscience:stop
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    bash ./scripts/stop-container.sh
+    ```
+
+-   Description:
+
+    _documentation pending_
 
 ## lint
 

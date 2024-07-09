@@ -1,5 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, TickContext } from "./Engine.js";
+import { Automation, FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
@@ -29,7 +29,7 @@ export class VillageManager implements Automation {
     this._workshopManager = workshopManager;
   }
 
-  tick(_context: TickContext) {
+  tick(_context: FrameContext) {
     if (!this.settings.enabled) {
       return;
     }
@@ -135,7 +135,7 @@ export class VillageManager implements Automation {
       }
     }
 
-    this._host.game.villageTab.censusPanel.census.makeLeader(bestLeader);
+    this._host.game.villageTab.censusPanel?.census.makeLeader(bestLeader);
     this._host.engine.iactivity("act.elect");
   }
 
@@ -190,10 +190,10 @@ export class VillageManager implements Automation {
         this._host.game.village.sim.promote(leader, rank + 1) === 1
       ) {
         this._host.engine.iactivity("act.promote", [rank + 1], "ks-promote");
-        this._host.game.tabs[1].censusPanel.census.renderGovernment(
-          this._host.game.tabs[1].censusPanel.census,
+        this._host.game.villageTab.censusPanel?.census.renderGovernment(
+          this._host.game.villageTab.censusPanel.census,
         );
-        this._host.game.tabs[1].censusPanel.census.update();
+        this._host.game.villageTab.censusPanel?.census.update();
         this._host.engine.storeForSummary("promote", 1);
       }
     }
@@ -304,7 +304,7 @@ export class VillageManager implements Automation {
     this.manager.render();
 
     // Now we hold the festival.
-    if (this._host.game.villageTab.festivalBtn.model.enabled) {
+    if (this._host.game.villageTab.festivalBtn.model?.enabled) {
       const beforeDays = this._host.game.calendar.festivalDays;
       this._host.game.villageTab.festivalBtn.onClick();
       this._host.engine.storeForSummary("festival");

@@ -48,6 +48,7 @@ export type Game = {
     /** @deprecated Use `getBuildingExt()` instead. */
     get: (build: Building) => BuildingMeta;
     getBuildingExt: (building: Building) => BuildingExt;
+    meta: [{ meta: Array<BuildingMeta> }];
   };
   calendar: {
     cryptoPrice: number;
@@ -256,6 +257,11 @@ export type Game = {
      */
     getZU: (name: ZiggurathUpgrade) => ZiggurathUpgradeInfo | undefined;
 
+    meta: Array<{
+      meta: Array<ReligionUpgradeInfo | ZiggurathUpgradeInfo | TranscendenceUpgradeInfo>;
+      provider: { getEffect: (bld: unknown, effect: unknown) => unknown };
+    }>;
+
     praise: () => void;
 
     religionUpgrades: Array<ReligionUpgradeInfo>;
@@ -280,15 +286,7 @@ export type Game = {
     get: (name: Resource) => ResourceInfo;
     energyCons: number;
     energyProd: number;
-    resources: Array<{
-      craftable: boolean;
-      maxValue: number;
-      name: Resource;
-      title: string;
-      type: "common" | "uncommon";
-      value: number;
-      visible: boolean;
-    }>;
+    resources: Array<ResourceInfo>;
     hasRes: (resources: Array<Price>) => boolean;
   };
   /**
@@ -339,9 +337,38 @@ export type Game = {
       };
       val: number;
     };
-    meta: Array<{ meta: Array<{ label: string; name: string; unlocked: boolean; val: number }> }>;
+    meta: Array<{
+      meta: Array<{ label: string; name: string; unlocked: boolean; val: number; on: number }>;
+    }>;
     planets: Array<{ label: string; buildings: Array<{ name: SpaceBuilding; label: string }> }>;
     programs: Array<{ name: Mission; label: string }>;
+  };
+  stats: {
+    statGroups: Array<{
+      title: string;
+      group: Array<{
+        name:
+          | "averageKittens"
+          | "buildingsConstructed"
+          | "eventsObserved"
+          | "kittensDead"
+          | "timePlayed"
+          | "totalChallengesCompleted"
+          | "totalClicks"
+          | "totalCrafts"
+          | "totalKittens"
+          | "totalParagon"
+          | "totalResets"
+          | "totalTrades"
+          | "totalYears"
+          | "transcendenceTier"
+          | "unicornsSacrificed";
+        title: string;
+        val: number;
+        unlocked: boolean;
+        defaultUnlocked: boolean;
+      }>;
+    }>;
   };
   tabs: [
     GameTab,

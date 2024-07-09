@@ -1,5 +1,5 @@
-import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, TickContext } from "./Engine.js";
+import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { Automation, FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
@@ -36,19 +36,19 @@ export class SpaceManager implements Automation {
     this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
   }
 
-  tick(_context: TickContext) {
+  tick(context: FrameContext) {
     if (!this.settings.enabled) {
       return;
     }
 
-    // Render the tab to make sure that the buttons actually exist in the DOM.
-    // TODO: Is this really required?
+    // We must call `.render()` here, because evaluation of availability of our options
+    // is only performed when the game renders the contents of that tab.
     this.manager.render();
 
-    this.autoBuild();
+    this.autoBuild(context);
 
     if (this.settings.unlockMissions.enabled) {
-      this.autoUnlock();
+      this.autoUnlock(context);
     }
   }
 
@@ -60,6 +60,7 @@ export class SpaceManager implements Automation {
    * @param builds The buildings to build.
    */
   autoBuild(
+    context: FrameContext,
     builds: Partial<Record<SpaceBuilding, SpaceBuildingSetting>> = this.settings.buildings,
   ) {
     const bulkManager = this._bulkManager;
@@ -74,21 +75,19 @@ export class SpaceManager implements Automation {
     // Let the bulkmanager determine the builds we can make.
     const buildList = bulkManager.bulk(builds, metaData, trigger, "Space");
 
-    let refreshRequired = false;
     // Build all entries in the build list, where we can build any items.
     for (const build of buildList) {
-      if (build.count > 0) {
-        this.build(build.id as SpaceBuilding, build.count);
-        refreshRequired = true;
+      if (build.count <= 0) {
+        continue;
       }
-    }
-
-    if (refreshRequired) {
-      this._host.game.ui.render();
+      if (0 === this.build(build.id as SpaceBuilding, build.count)) {
+        continue;
+      }
+      context.requestGameUiRefresh = true;
     }
   }
 
-  autoUnlock() {
+  autoUnlock(context: FrameContext) {
     if (!this._host.game.tabs[6].visible) {
       return;
     }
@@ -104,8 +103,12 @@ export class SpaceManager implements Automation {
         continue;
       }
 
-      const model = this.manager.tab.GCPanel.children[i];
-      const prices = mustExist(model.model.prices);
+      const model = this.manager.tab.GCPanel?.children[i];
+      if (isNil(model)) {
+        return;
+      }
+
+      const prices = mustExist(model.model?.prices);
       for (const resource of prices) {
         // If we can't afford this resource price, continue with the next mission.
         if (this._workshopManager.getValueAvailable(resource.name) < resource.val) {
@@ -116,6 +119,7 @@ export class SpaceManager implements Automation {
       // Start the mission by clicking the button.
       // TODO: Move this into the SpaceManager?
       model.domNode.click();
+      context.requestGameUiRefresh = true;
       if (i === 7 || i === 12) {
         this._host.engine.iactivity("upgrade.space.mission", [missions[i].label], "ks-upgrade");
       } else {
@@ -124,17 +128,17 @@ export class SpaceManager implements Automation {
     }
   }
 
-  build(name: SpaceBuilding, amount: number): void {
+  build(name: SpaceBuilding, amount: number): number {
     const build = this.getBuild(name);
-    const button = this.getBuildButton(name);
 
-    if (
-      !build.unlocked ||
-      !button ||
-      !button.model.enabled ||
-      !this.settings.buildings[name].enabled
-    ) {
-      return;
+    const button = this._getBuildButton(name);
+
+    if (!build.unlocked || !button?.model || !this.settings.buildings[name].enabled) {
+      return 0;
+    }
+
+    if (!button.model.enabled) {
+      return 0;
     }
 
     const amountTemp = amount;
@@ -150,22 +154,27 @@ export class SpaceManager implements Automation {
     } else {
       this._host.engine.iactivity("act.builds", [label, amount], "ks-build");
     }
+
+    return amount;
   }
 
   getBuild(name: SpaceBuilding): SpaceBuildingInfo {
     return this._host.game.space.getBuilding(name);
   }
 
-  getBuildButton(
-    name: string,
+  private _getBuildButton(
+    id: string,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
     const panels = this.manager.tab.planetPanels;
 
+    if (isNil(panels)) {
+      return null;
+    }
+
     for (const panel of panels) {
-      for (const child of panel.children) {
-        if (child.id === name) {
-          return child as BuildButton<string, ButtonModernModel, ButtonModernController>;
-        }
+      const button = panel.children.find(child => child.id === id);
+      if (!isNil(button)) {
+        return button as BuildButton<string, ButtonModernModel, ButtonModernController>;
       }
     }
 

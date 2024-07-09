@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { TickContext } from "./Engine.js";
+import { FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { TabManager } from "./TabManager.js";
@@ -25,11 +25,13 @@ export class ScienceManager extends UpgradeManager {
     this._workshopManager = workshopManager;
   }
 
-  async tick(_context: TickContext) {
+  async tick(_context: FrameContext) {
     if (!this.settings.enabled) {
       return;
     }
 
+    // We must call `.render()` here, because evaluation of availability of our options
+    // is only performed when the game renders the contents of that tab.
     this.manager.render();
 
     // If techs (science items) are enabled...

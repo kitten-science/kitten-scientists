@@ -1,5 +1,6 @@
 import { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
-import "jquery";
+import type JQuery from "jquery";
+import { KittenScientists } from "../index.js";
 import { Building, BuildingMeta } from "./buildings.js";
 import { Game } from "./game.js";
 import {
@@ -154,13 +155,50 @@ export type Panel = {
   visible: boolean;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type Control = {
+  /* intentionally left blank. exists for clarity */
+};
+
+export type Button<
+  TModel extends ButtonModel = ButtonModel,
+  TController extends ButtonController = ButtonController,
+> = Control & {
+  model: TModel | null;
+  controller: TController;
+  game: Game;
+
+  domNode: HTMLDivElement;
+  container: unknown;
+
+  tab: string | null;
+
+  buttonTitle: string | null;
+  new (opts: unknown, game: Game): Button;
+  setOpts: (opts: unknown) => void;
+
+  init: () => void;
+  updateVisible: () => void;
+  updateEnabled: () => void;
+  update: () => void;
+
+  render: (btnContainer: unknown) => void;
+  animate: () => void;
+  onClick: (event: MouseEvent) => void;
+  onKeyPress: (event: KeyboardEvent) => void;
+  afterRender: () => void;
+
+  addLink: (linkModel: unknown) => void;
+  addLinkList: (links: Array<unknown>) => void;
+};
+
 /**
  * Not necessarily a button, but a KG UI element.
  */
 export type BuildButton<
   T = string,
   TModel extends ButtonModel = ButtonModel,
-  TController =
+  TController extends ButtonController =
     | BuildingBtnController
     | BuildingNotStackableBtnController
     | BuildingStackableBtnController
@@ -173,13 +211,14 @@ export type BuildButton<
     | ShatterTCBtnController
     | TechButtonController
     | TransformBtnController,
-> = {
+> = Button<TModel, TController> & {
   children: Array<BuildButton>;
   controller: TController;
   domNode: HTMLDivElement;
   id: T;
-  model: TModel;
+  model: TModel | null;
   onClick: () => void;
+  render: () => void;
 };
 
 export type GameTab = {
@@ -247,7 +286,15 @@ export type ButtonController = {
   defaults: () => ButtonModelDefaults;
   createPriceLineModel: (model: ButtonModel, price: unknown) => unknown;
   hasResources: (model: ButtonModel, prices?: Array<unknown>) => boolean;
+  /**
+   * Updates the `enabled` field in the model of the button.
+   * @param model The button this controller is associated with.
+   */
   updateEnabled: (model: ButtonModel) => void;
+  /**
+   * Does nothing by default. Can invoke custom handler.
+   * @param model The button this controller is associated with.
+   */
   updateVisible: (model: ButtonModel) => void;
   getPrices: (model: ButtonModel) => Array<Price>;
   getName: (model: ButtonModel) => string;
@@ -417,10 +464,15 @@ declare global {
     $I?: Maybe<I18nEngine>;
     dojo: {
       clone: <T>(subject: T) => T;
-      subscribe: (event: string, handler: (...args: Array<any>) => void) => void;
+      subscribe: <TEvent extends string>(
+        event: TEvent,
+        handler: (...args: Array<any>) => void,
+      ) => [TEvent, number];
+      unsubscribe: (handle: [string, number]) => void;
     };
     game?: Maybe<Game>;
     gamePage?: Maybe<Game>;
+    kittenScientists?: KittenScientists;
     LZString: {
       compressToBase64: (input: string) => string;
       compressToUTF16: (input: string) => string;

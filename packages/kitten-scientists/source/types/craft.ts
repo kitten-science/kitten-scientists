@@ -1,10 +1,14 @@
 import { Resource, ResourceCraftable } from "./index.js";
 
 export type ResourceInfo = {
-  craftable: boolean;
+  color?: string;
+  craftable?: boolean;
+  description?: string;
   maxValue: number;
   name: Resource;
+  tag?: string;
   title: string;
+  type: "common" | "uncommon";
   unlocked: boolean;
   value: number;
 };

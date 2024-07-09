@@ -17,9 +17,9 @@
   "type": "module",
   "scripts": {
     "build": "yarn run build:all",
-    "build:all": "tsc --build",
+    "build:all": "scripts/build-all.sh",
     "clean": "yarn run clean:all",
-    "clean:all": "rm -rf packages/*/build packages/*/tsconfig.tsbuildinfo",
+    "clean:all": "rm -rf packages/*/{build,output,tsconfig.tsbuildinfo}",
     "lint": "yarn run lint:all",
     "lint:all": "yarn run lint:eslint && yarn run lint:prettier",
     "lint:eslint": "eslint .",

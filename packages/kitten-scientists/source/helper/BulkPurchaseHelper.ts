@@ -6,6 +6,7 @@ import { BonfireItem } from "../settings/BonfireSettings.js";
 import { AllItems } from "../settings/Settings.js";
 import { objectEntries } from "../tools/Entries.js";
 import { negativeOneToInfinity } from "../tools/Format.js";
+import { cdebug } from "../tools/Log.js";
 import {
   AllBuildings,
   BuildButton,
@@ -303,7 +304,7 @@ export class BulkPurchaseHelper {
       }
     }
 
-    console.debug(`Took '${iterations}' iterations to evaluate bulk build request.`);
+    cdebug(`Took '${iterations}' iterations to evaluate bulk build request.`);
 
     for (const potentialBuild of potentialBuilds) {
       const performedBuild = mustExist(

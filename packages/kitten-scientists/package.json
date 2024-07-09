@@ -21,6 +21,7 @@
     "./*.js": "./build/*.js"
   },
   "scripts": {
+    "build": "yarn run build:all",
     "kitten-scientists:build": "vite --config vite.config.inject.js build",
     "kitten-scientists:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
     "kitten-scientists:release": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
@@ -51,5 +52,6 @@
   ],
   "engines": {
     "node": ">= 20"
-  }
+  },
+  "packageManager": "yarn@4.3.1"
 }

@@ -1,6 +1,7 @@
 import { TreeNode } from "@oliversalzburg/js-utils/data/tree.js";
-import AjvModule, { SchemaObject } from "ajv";
+import { Ajv, SchemaObject } from "ajv";
 import { KittenScientists } from "../KittenScientists.js";
+import { cdebug } from "../tools/Log.js";
 import { StateLoader } from "./StateLoader.js";
 import { StateMerger } from "./StateMerger.js";
 
@@ -35,8 +36,6 @@ export class State extends TreeNode<State> {
     const schemaBaseline = (await schemaBaselineRequest.json()) as SchemaObject;
     const schemaProfile = (await schemaProfileRequest.json()) as SchemaObject;
 
-    // FIXME: https://github.com/ajv-validator/ajv/issues/2047
-    const Ajv = AjvModule.default;
     const ajv = new Ajv({ allErrors: true, verbose: true });
     const validateBaseline = ajv.compile(schemaBaseline);
     const validateProfile = ajv.compile(schemaProfile);
@@ -54,8 +53,8 @@ export class State extends TreeNode<State> {
         return true;
       }
       console.log(`INVALID: ${loader.state.originUrl}`);
-      console.debug(validateBaseline.errors);
-      console.debug(validateProfile.errors);
+      cdebug(validateBaseline.errors);
+      cdebug(validateProfile.errors);
       return false;
     };
 

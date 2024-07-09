@@ -14,23 +14,33 @@ main() {
   BRANCH=${1:-master}
   REPO=${2:-https://github.com/nuclear-unicorn/kittensgame.git}
 
-  yarn kitten-scientists:build
+  echo "Building everything..."
+  yarn build:all
+  echo "Done building everything."
+
+  echo "Building Devcontainer..."
   yarn devcontainer:build "$BRANCH" "$REPO"
+  echo "Done building Devcontainer."
 
   echo "Removing previous container..."
-  podman stop kittensgame > /dev/null || true
-  podman rm kittensgame > /dev/null || true
+  podman kill devcontainer || true
+  podman rm devcontainer || true
   echo "Previous container removed or non-existent."
+
   echo ""
 
   echo "Starting new container..."
+  # 8086 Live-Reload Websocket from Development HTTP Server
+  # 8100 Kittens Game Browser UI
   podman run \
     --detach \
+    --mount type=bind,source="${BASEDIR}/../../kitten-analysts/output",target=/kittensgame/kitten-analysts \
+    --mount type=bind,source="${BASEDIR}/../../kitten-engineers/output",target=/kittensgame/kitten-engineers \
     --mount type=bind,source="${BASEDIR}/../../kitten-scientists/output",target=/kittensgame/kitten-scientists \
-    --name kittensgame \
+    --name devcontainer \
     --publish 8086:8086 \
     --publish 8100:8080 \
-    kittensgame
+    devcontainer
   echo "Container started."
 
   echo ""

@@ -1,5 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { TickContext } from "./Engine.js";
+import { FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
@@ -38,7 +38,7 @@ export class TimeManager {
     this._workshopManager = workshopManager;
   }
 
-  tick(_context: TickContext) {
+  tick(context: FrameContext) {
     if (!this.settings.enabled) {
       return;
     }
@@ -47,7 +47,7 @@ export class TimeManager {
     // TODO: Is this really required?
     this.manager.render();
 
-    this.autoBuild();
+    this.autoBuild(context);
 
     if (this.settings.fixCryochambers.enabled) {
       this.fixCryochambers();
@@ -64,7 +64,10 @@ export class TimeManager {
    *
    * @param builds The buildings to build.
    */
-  autoBuild(builds: Partial<Record<TimeItem, TimeSettingsItem>> = this.settings.buildings) {
+  autoBuild(
+    context: FrameContext,
+    builds: Partial<Record<TimeItem, TimeSettingsItem>> = this.settings.buildings,
+  ) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
 
@@ -86,13 +89,12 @@ export class TimeManager {
           : this.manager.tab.vsPanel;
 
       const buildingMetaData = mustExist(metaData[build.building]);
-      buildingMetaData.tHidden = !model.visible || !model.enabled || !panel.visible;
+      buildingMetaData.tHidden = !model?.visible || !model.enabled || !panel.visible;
     }
 
     // Let the bulkmanager determine the builds we can make.
     const buildList = bulkManager.bulk(builds, metaData, trigger, "Time");
 
-    let refreshRequired = false;
     for (const build of buildList) {
       if (build.count > 0) {
         this.build(
@@ -100,12 +102,8 @@ export class TimeManager {
           build.variant as TimeItemVariant,
           build.count,
         );
-        refreshRequired = true;
+        context.requestGameUiRefresh = true;
       }
-    }
-
-    if (refreshRequired) {
-      this._host.game.ui.render();
     }
   }
 
@@ -117,7 +115,7 @@ export class TimeManager {
     const build = mustExist(this.getBuild(name, variant));
     const button = this.getBuildButton(name, variant);
 
-    if (!button || !button.model.enabled) {
+    if (!button || !button.model?.enabled) {
       return;
     }
     const amountTemp = amount;
@@ -161,13 +159,8 @@ export class TimeManager {
       throw new Error(`Unable to retrieve build information for '${name}'`);
     }
 
-    for (const button of buttons) {
-      if (button.model.name.startsWith(build.label)) {
-        return button as BuildButton<string, ButtonModernModel, ButtonModernController>;
-      }
-    }
-
-    return null;
+    return (buttons.find(button => button.model?.name.startsWith(build.label)) ??
+      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
   }
 
   fixCryochambers() {
@@ -212,8 +205,7 @@ export class TimeManager {
     const chronoFurnace = this._host.game.time.getCFU("blastFurnace");
     if (!mustExist(chronoFurnace.isAutomationEnabled)) {
       const button = this.getBuildButton("blastFurnace", TimeItemVariant.Chronoforge);
-      if (isNil(button)) {
-        // Not available in this build of KG.
+      if (isNil(button?.model)) {
         return;
       }
       button.controller.handleToggleAutomationLinkClick(button.model);

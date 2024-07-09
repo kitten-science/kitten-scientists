@@ -10,19 +10,20 @@ fi
 cd "$(dirname "$0")"
 
 main() {
+  cd ..
+
   BRANCH=${1:-master}
   REPO=${2:-https://github.com/nuclear-unicorn/kittensgame.git}
 
-  echo "Re-Building development container on $BRANCH branch of $REPO..."
-  cd ..
-  podman build \
+  echo "Building development container on $BRANCH branch of $REPO..."
+  buildah bud \
     --build-arg BRANCH="$BRANCH" \
     --build-arg REPO="$REPO" \
-    --no-cache \
-    --tag kittensgame .
+    --file ./Containerfile \
+    --tag localhost/devcontainer:latest \
+    ../..
+
   echo "Done."
-  echo
-  echo "Remember to restart your development container if it's already running!"
 }
 
 main "$@"

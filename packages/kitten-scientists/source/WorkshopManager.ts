@@ -1,5 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, TickContext } from "./Engine.js";
+import { Automation, FrameContext } from "./Engine.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
@@ -25,7 +25,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this.manager = new TabManager(this._host, "Workshop");
   }
 
-  tick(_context: TickContext) {
+  tick(_context: FrameContext) {
     if (!this.settings.enabled) {
       return Promise.resolve();
     }
@@ -34,6 +34,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this.refreshStock();
 
     if (this.settings.unlockUpgrades.enabled) {
+      this.manager.render();
       return this.autoUnlock();
     }
 
@@ -41,11 +42,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   }
 
   async autoUnlock() {
-    if (!this._host.game.tabs[3].visible) {
+    if (!this._host.game.workshopTab.visible) {
       return;
     }
-
-    this.manager.render();
 
     const upgrades = this._host.game.workshop.upgrades;
     const toUnlock = new Array<UpgradeInfo>();
@@ -76,7 +75,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       }
 
       toUnlock.push(upgrade);
-      await this.upgrade(upgrade, "workshop");
     }
 
     for (const item of toUnlock) {
