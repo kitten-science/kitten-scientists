@@ -31,7 +31,7 @@
   "types": "./build/index.d.ts",
   "dependencies": {
     "@oliversalzburg/js-utils": "0.0.59",
-    "ajv": "8.16.0",
+    "ajv": "8.17.1",
     "date-fns": "3.6.0",
     "semver": "7.6.2",
     "tslib": "2.6.3"
