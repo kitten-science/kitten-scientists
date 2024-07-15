@@ -32,6 +32,8 @@ export class TradeManager implements Automation {
       return;
     }
 
+    this.manager.render();
+
     this.autoTrade();
 
     if (this.settings.unlockRaces.enabled) {
@@ -61,8 +63,6 @@ export class TradeManager implements Automation {
     ) {
       return;
     }
-
-    this.manager.render();
 
     // If we can't make any trades, bail out.
     if (!this.singleTradePossible()) {

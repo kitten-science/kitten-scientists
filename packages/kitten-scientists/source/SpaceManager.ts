@@ -41,6 +41,10 @@ export class SpaceManager implements Automation {
       return;
     }
 
+    // Render the tab to make sure that the buttons actually exist in the DOM.
+    // TODO: Is this really required?
+    this.manager.render();
+
     this.autoBuild();
 
     if (this.settings.unlockMissions.enabled) {
@@ -60,10 +64,6 @@ export class SpaceManager implements Automation {
   ) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
-
-    // Render the tab to make sure that the buttons actually exist in the DOM.
-    // TODO: Is this really required?
-    this.manager.render();
 
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<SpaceBuilding, SpaceBuildingInfo>> = {};
@@ -92,8 +92,6 @@ export class SpaceManager implements Automation {
     if (!this._host.game.tabs[6].visible) {
       return;
     }
-
-    this.manager.render();
 
     const missions = this._host.game.space.meta[0].meta;
     missionLoop: for (let i = 0; i < missions.length; i++) {

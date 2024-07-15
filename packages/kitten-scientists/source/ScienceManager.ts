@@ -30,6 +30,8 @@ export class ScienceManager extends UpgradeManager {
       return;
     }
 
+    this.manager.render();
+
     // If techs (science items) are enabled...
     if (this.settings.techs.enabled && this._host.game.tabs[2].visible) {
       await this.autoUnlock();
@@ -46,8 +48,6 @@ export class ScienceManager extends UpgradeManager {
   }
 
   async autoUnlock() {
-    this.manager.render();
-
     const techs = this._host.game.science.techs;
     const toUnlock = new Array<TechInfo>();
 
@@ -83,8 +83,6 @@ export class ScienceManager extends UpgradeManager {
   }
 
   async autoPolicy() {
-    this.manager.render();
-
     const policies = this._host.game.science.policies;
     const toUnlock = new Array<PolicyInfo>();
 

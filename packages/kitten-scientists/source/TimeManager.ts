@@ -43,6 +43,10 @@ export class TimeManager {
       return;
     }
 
+    // Render the tab to make sure that the buttons actually exist in the DOM.
+    // TODO: Is this really required?
+    this.manager.render();
+
     this.autoBuild();
 
     if (this.settings.fixCryochambers.enabled) {
@@ -63,10 +67,6 @@ export class TimeManager {
   autoBuild(builds: Partial<Record<TimeItem, TimeSettingsItem>> = this.settings.buildings) {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
-
-    // Render the tab to make sure that the buttons actually exist in the DOM.
-    // TODO: Is this really required?
-    this.manager.render();
 
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<TimeItem, ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>> = {};
