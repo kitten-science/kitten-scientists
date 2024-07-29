@@ -33,7 +33,7 @@
     "@oliversalzburg/js-utils": "0.0.59",
     "ajv": "8.17.1",
     "date-fns": "3.6.0",
-    "semver": "7.6.2",
+    "semver": "7.6.3",
     "tslib": "2.6.3"
   },
   "devDependencies": {
