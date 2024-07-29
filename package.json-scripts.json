@@ -171,7 +171,7 @@
       "manifestPath": "package.json",
       "projectName": "kitten-scientists",
       "scriptName": "lint:eslint",
-      "scriptCode": "eslint . --ext .ts",
+      "scriptCode": "eslint .",
       "isGlobal": true,
       "isRootManifest": true
     },
@@ -182,22 +182,6 @@
       "scriptCode": "prettier --check packages",
       "isGlobal": true,
       "isRootManifest": true
-    },
-    {
-      "manifestPath": "packages/snapshot-analyzer/package.json",
-      "projectName": "@kitten-science/snapshot-analyzer",
-      "scriptName": "snapshot-analyzer:build",
-      "scriptCode": "vite build",
-      "isGlobal": true,
-      "isRootManifest": false
-    },
-    {
-      "manifestPath": "packages/snapshot-analyzer/package.json",
-      "projectName": "@kitten-science/snapshot-analyzer",
-      "scriptName": "snapshot-analyzer:serve",
-      "scriptCode": "vite serve",
-      "isGlobal": true,
-      "isRootManifest": false
     },
     {
       "manifestPath": "packages/action-release-info/package.json",

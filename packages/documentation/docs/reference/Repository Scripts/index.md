@@ -238,7 +238,7 @@
 -   Source:
 
     ```shell
-    eslint . --ext .ts
+    eslint .
     ```
 
 -   Description:
@@ -252,32 +252,6 @@
 
     ```shell
     prettier --check packages
-    ```
-
--   Description:
-
-    _documentation pending_
-
-## snapshot-analyzer:build
-
--   Project: `@kitten-science/snapshot-analyzer`
--   Source:
-
-    ```shell
-    vite build
-    ```
-
--   Description:
-
-    _documentation pending_
-
-## snapshot-analyzer:serve
-
--   Project: `@kitten-science/snapshot-analyzer`
--   Source:
-
-    ```shell
-    vite serve
     ```
 
 -   Description:
