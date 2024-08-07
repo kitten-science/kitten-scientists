@@ -8,6 +8,7 @@ import { TabManager } from "./TabManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import { CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
+import { negativeOneToInfinity } from "./tools/Format.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -492,8 +493,7 @@ export class TimeControlManager {
     }
 
     // The maximum years to skip, based on the user configuration.
-    const maxSkips =
-      -1 === this.settings.timeSkip.max ? Number.POSITIVE_INFINITY : this.settings.timeSkip.max;
+    const maxSkips = negativeOneToInfinity(this.settings.timeSkip.max);
 
     // The amount of skips we can perform.
     let canSkip = Math.floor(
