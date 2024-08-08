@@ -1,4 +1,6 @@
-# Kitten Scientists v2
+# Kitten Science
+
+## Kitten Scientists
 
 KS is a userscript for [Kittens Game](https://kittensgame.com/web/), which allows you to automate most tasks in the game.
 
@@ -9,6 +11,10 @@ KS was originally developed by [Cameron Condry](https://github.com/cameroncondry
 !!! question
 
     Please help us [translate KS into more languages](https://crowdin.com/project/kitten-scientists) on Crowdin.
+
+## More Science
+
+Since the Kitten Scientists started their work years ago, a lot of research has been done. The Kitten Scientists hope to open up unheard of areas of interest soon.
 
 <!-- prettier-ignore-start -->
 *[KG]: Kittens Game
