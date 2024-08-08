@@ -23,7 +23,7 @@ plugins:
   - search
 repo_name: kitten-science/kitten-scientists
 repo_url: https://github.com/kitten-science/kitten-scientists
-site_name: Kitten Scientists
+site_name: Kitten Science
 theme:
   favicon: assets/images/favicon.ico
   features:
