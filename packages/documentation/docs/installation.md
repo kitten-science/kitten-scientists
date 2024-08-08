@@ -6,7 +6,7 @@
 
     If you don't have a userscript manager yet, [Tampermonkey](https://www.tampermonkey.net/) is a good solution for the most popular browsers.
 
-The file you need to put into your userscript manager is available from the [Releases page](https://github.com/kitten-science/kitten-scientists/releases) of KS. You can also
+The file you need to put into your userscript manager is available from the [Releases page](https://github.com/kitten-science/kitten-scientists/releases) of KS.
 
 KS is released in 3 variants:
 
