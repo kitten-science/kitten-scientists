@@ -1,10 +1,11 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, TickContext } from "./Engine.js";
+import { Automation, FrameContext } from "./Engine.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
+import { negativeOneToInfinity } from "./tools/Format.js";
 import { cerror } from "./tools/Log.js";
 import { CraftableInfo, ResourceInfo } from "./types/craft.js";
 import { Resource, ResourceCraftable, UpgradeInfo } from "./types/index.js";
@@ -24,7 +25,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this.manager = new TabManager(this._host, "Workshop");
   }
 
-  tick(_context: TickContext) {
+  tick(_context: FrameContext) {
     if (!this.settings.enabled) {
       return Promise.resolve();
     }
@@ -33,6 +34,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this.refreshStock();
 
     if (this.settings.unlockUpgrades.enabled) {
+      this.manager.render();
       return this.autoUnlock();
     }
 
@@ -40,11 +42,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
   }
 
   async autoUnlock() {
-    if (!this._host.game.tabs[3].visible) {
+    if (!this._host.game.workshopTab.visible) {
       return;
     }
-
-    this.manager.render();
 
     const upgrades = this._host.game.workshop.upgrades;
     const toUnlock = new Array<UpgradeInfo>();
@@ -75,7 +75,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       }
 
       toUnlock.push(upgrade);
-      await this.upgrade(upgrade, "workshop");
     }
 
     for (const item of toUnlock) {
@@ -113,8 +112,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       }
 
       const current = !craft.max ? false : this.getResource(craft.resource);
-
-      const max = craft.max === -1 ? Number.POSITIVE_INFINITY : craft.max;
+      const max = negativeOneToInfinity(craft.max);
       if (current && max < current.value) {
         continue;
       }

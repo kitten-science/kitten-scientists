@@ -12,11 +12,11 @@ RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
   && yarn add -D watch-http-server \
   && yarn install
 
-# Copy the script that injects kitten-scientists.inject.js into index.html and execute it.
 WORKDIR /kittensgame
+COPY "kitten-analysts" "kitten-analysts"
 COPY "kitten-scientists" "kitten-scientists"
-COPY "inject-scientists.js" "inject-scientists.js"
-RUN node inject-scientists.js
+COPY "inject-scripts.js" "inject-scripts.js"
+RUN node inject-scripts.js
 
 # Start the development server that serves the Kittens Game.
 CMD [ "/bin/bash", "-c", "yarn run watch-http-server" ]

@@ -5,6 +5,12 @@
       "path": "packages/action-release-info"
     },
     {
+      "path": "packages/kitten-analysts"
+    },
+    {
+      "path": "packages/kitten-engineers"
+    },
+    {
       "path": "packages/kitten-scientists"
     }
   ]
