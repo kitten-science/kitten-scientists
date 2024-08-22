@@ -3,7 +3,7 @@ import { cerror } from "../../tools/Log.js";
 
 export type UiComponentOptions<TChild extends UiComponent = UiComponent> = {
   readonly children: Array<TChild>;
-  readonly onRefresh: <T extends UiComponent>(subject: T) => void;
+  readonly onRefresh: (subject: UiComponent) => void;
 };
 
 export abstract class UiComponent extends EventTarget {
