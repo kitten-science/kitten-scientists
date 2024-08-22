@@ -33,7 +33,7 @@
     "tslib": "2.6.3"
   },
   "devDependencies": {
-    "@kie/mock-github": "2.0.1",
+    "@kie/mock-github": "3.0.0-beta.1",
     "@types/chai": "4.3.17",
     "@types/mocha": "10.0.7",
     "@types/node": "20.16.1",
