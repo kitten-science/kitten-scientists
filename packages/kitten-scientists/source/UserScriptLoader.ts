@@ -17,14 +17,14 @@ const TIMEOUT_OVERRIDE =
     ? Number(localStorage["ks.timeout"])
     : undefined;
 
-export class UserScriptLoader<TEngineState> {
+export class UserScriptLoader {
   /**
    * Stores if we caught the `game/start` signal from the game.
    */
   private _gameStartSignal: Promise<boolean> | undefined;
   private _gameStartSignalResolver: undefined | ((value: boolean) => void);
 
-  private _possibleEngineState: TEngineState | undefined;
+  private _possibleEngineState: unknown;
 
   private static _tryEngineStateFromSaveData(saveDataKey: string, saveData: unknown): unknown {
     const saveDataProxy = saveData as Record<string, unknown>;
@@ -79,9 +79,7 @@ export class UserScriptLoader<TEngineState> {
         UserScriptLoader.window.dojo.subscribe("server/load", (saveData: unknown) => {
           cinfo("`server/load` signal caught. Looking for script state in save data...");
 
-          const state = UserScriptLoader._tryEngineStateFromSaveData(saveDataKey, saveData) as
-            | TEngineState
-            | undefined;
+          const state = UserScriptLoader._tryEngineStateFromSaveData(saveDataKey, saveData);
 
           if (!state) {
             cinfo("The Kittens Game save data did not contain a script state.");
