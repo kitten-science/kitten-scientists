@@ -525,7 +525,7 @@ export class BulkPurchaseHelper {
       // TODO: This seems weird. Why not take the price ratio of the stage as the default?
       this._isStagedBuild(data)
         ? data.priceRatio || data.stages[data.stage].priceRatio
-        : data.priceRatio ?? 0;
+        : (data.priceRatio ?? 0);
 
     let ratioDiff = 0;
     if (source && source === "bonfire") {
