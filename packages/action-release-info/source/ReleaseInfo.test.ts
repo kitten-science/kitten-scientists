@@ -151,7 +151,7 @@ it("fails without assets", async () => {
   const releaseInfo = new ReleaseInfo({
     context,
     core,
-    octokit: getOctokit("invalid-token"),
+    octokit: getOctokit("invalid-token", { request: { fetch } }),
   });
 
   await releaseInfo
@@ -233,7 +233,7 @@ it("fails if no usescript in release", async () => {
   const releaseInfo = new ReleaseInfo({
     context,
     core,
-    octokit: getOctokit("invalid-token"),
+    octokit: getOctokit("invalid-token", { request: { fetch } }),
   });
 
   await releaseInfo
@@ -254,7 +254,7 @@ it("runs", async () => {
   const releaseInfo = new ReleaseInfo({
     context,
     core,
-    octokit: getOctokit("invalid-token"),
+    octokit: getOctokit("invalid-token", { request: { fetch } }),
   });
 
   await releaseInfo.main();
@@ -270,7 +270,7 @@ it("writes release info to file", async () => {
   const releaseInfo = new ReleaseInfo({
     context: new Context(),
     core,
-    octokit: getOctokit("invalid-token"),
+    octokit: getOctokit("invalid-token", { request: { fetch } }),
   });
 
   await releaseInfo.main();
