@@ -34,7 +34,7 @@
     "ajv": "8.17.1",
     "date-fns": "3.6.0",
     "semver": "7.6.3",
-    "tslib": "2.6.3"
+    "tslib": "2.7.0"
   },
   "devDependencies": {
     "@kitten-science/action-release-info": "workspace:*",

@@ -390,7 +390,7 @@ __metadata:
     c8: "npm:10.1.2"
     chai: "npm:5.1.1"
     mocha: "npm:10.7.3"
-    tslib: "npm:2.6.3"
+    tslib: "npm:2.7.0"
     typescript: "npm:5.5.4"
   languageName: unknown
   linkType: soft
@@ -416,7 +416,7 @@ __metadata:
     ajv: "npm:8.17.1"
     date-fns: "npm:3.6.0"
     semver: "npm:7.6.3"
-    tslib: "npm:2.6.3"
+    tslib: "npm:2.7.0"
     typescript: "npm:5.5.4"
     vite: "npm:5.4.2"
     vite-plugin-userscript: "npm:0.1.3"
@@ -2930,7 +2930,7 @@ __metadata:
     prettier-package-json: "npm:2.8.0"
     prettier-plugin-organize-imports: "npm:4.0.0"
     prettier-plugin-sh: "npm:0.14.0"
-    tslib: "npm:2.6.3"
+    tslib: "npm:2.7.0"
     typescript: "npm:5.5.4"
     typescript-eslint: "npm:8.2.0"
   languageName: unknown
@@ -4380,10 +4380,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.6.3, tslib@npm:^2.6.2":
-  version: 2.6.3
-  resolution: "tslib@npm:2.6.3"
-  checksum: 10c0/2598aef53d9dbe711af75522464b2104724d6467b26a60f2bdac8297d2b5f1f6b86a71f61717384aa8fd897240467aaa7bcc36a0700a0faf751293d1331db39a
+"tslib@npm:2.7.0, tslib@npm:^2.6.2":
+  version: 2.7.0
+  resolution: "tslib@npm:2.7.0"
+  checksum: 10c0/469e1d5bf1af585742128827000711efa61010b699cb040ab1800bcd3ccdd37f63ec30642c9e07c4439c1db6e46345582614275daca3e0f4abae29b0083f04a6
   languageName: node
   linkType: hard
 
