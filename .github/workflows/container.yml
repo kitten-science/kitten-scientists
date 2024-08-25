@@ -8,6 +8,8 @@ env:
   DEV_BUILD: ${{ github.ref_name == 'main' }}
   IMAGE_NAME: ${{ github.repository }}
   KS_RELEASE_CHANNEL: fixed
+  # renovate: datasource=node-version depName=node versioning=node
+  NODE_VERSION: "20.17.0"
   REGISTRY: ghcr.io
 
 jobs:
@@ -24,8 +26,7 @@ jobs:
       - name: Select NodeJS version
         uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
         env:
-          # renovate: datasource=docker depName=node versioning=node
-          NODE_VERSION: "20.17.0"
+          node-version: ${{ env.NODE_VERSION }}
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: yarn install --immutable

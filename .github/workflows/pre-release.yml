@@ -18,7 +18,7 @@ concurrency:
 
 env:
   DEV_BUILD: true
-  # renovate: datasource=docker depName=node versioning=node
+  # renovate: datasource=node-version depName=node versioning=node
   NODE_VERSION: "20.17.0"
   KS_RELEASE_CHANNEL: dev
 
