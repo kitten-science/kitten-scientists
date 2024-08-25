@@ -1,30 +1,42 @@
-name: Pre-Release
+name: Nightly
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: "30 2 * * *"
   workflow_dispatch:
-    inputs:
-      wants-github-release:
-        default: false
-        description: Create a GitHub release?
-        required: false
-        type: boolean
 
 concurrency:
-  group: pre-release
-  cancel-in-progress: false
+  group: nightly
+  cancel-in-progress: true
 
 env:
-  DEV_BUILD: true
-  KS_RELEASE_CHANNEL: dev
+  DEV_BUILD: false
+  KS_RELEASE_CHANNEL: nightly
+  NIGHTLY_BUILD: true
   # renovate: datasource=node-version depName=node versioning=node
-  NODE_VERSION: "20.17.0"
+  NODE_VERSION: "22.7.0"
 
 jobs:
+  check_date:
+    runs-on: ubuntu-22.04
+    name: Check latest commit
+    outputs:
+      should_run: ${{ steps.should_run.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: print latest_commit
+        run: echo ${{ github.sha }}
+
+      - id: should_run
+        continue-on-error: true
+        name: check latest commit is less than a day
+        if: ${{ github.event_name == 'schedule' }}
+        run: test -z $(git rev-list  --after="24 hours"  ${{ github.sha }}) && echo "name=should_run::false" >> $GITHUB_OUTPUT
+
   versions:
     name: Versions
+    needs:
+      - check_date
     outputs:
       RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
     permissions:
@@ -48,14 +60,17 @@ jobs:
 
   qa:
     name: 🔹 QA
+    needs:
+      - check_date
     uses: ./.github/workflows/qa.yml
 
-  pre-release:
-    if: github.event.commits[1] != null || ( !startsWith(github.event.commits[0].message, 'chore(deps):') && !startsWith(github.event.commits[0].message, 'fix(deps):') )
-    name: Pre-Release
+  nightly:
+    name: Nightly
     needs:
+      - check_date
       - qa
       - versions
+    if: ${{ needs.check_date.outputs.should_run != 'false' }}
     permissions:
       actions: write
       attestations: write
@@ -103,7 +118,7 @@ jobs:
       - name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@bc429dc1af8c036b5f8c11fef7bcb0becfd5064d # v0.0.13
         with:
-          automatic_release_tag: next
+          automatic_release_tag: nightly
           draft: false
           files: |
             packages/kitten-analysts/output/kitten-analysts-*
@@ -111,25 +126,7 @@ jobs:
             packages/kitten-scientists/output/kitten-scientists-*
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          title: Development Build v${{ needs.versions.outputs.RELEASE_VERSION }}
-
-  update-release-info:
-    name: 🔹 Update Release Info
-    needs:
-      - pre-release
-    permissions:
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/release-info.yml
-
-  deploy-documentation:
-    name: 🔹 Deploy Documentation
-    needs:
-      - qa
-    permissions:
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/documentation-deploy.yml
+          title: Nightly Build v${{ needs.versions.outputs.RELEASE_VERSION }}
 
   publish-devcontainer:
     name: 🔹 Publish Devcontainer
@@ -151,7 +148,7 @@ jobs:
       containerfile: packages/devcontainer/Containerfile
       image_description: Kitten Science Development Container
       image_name: kitten-science/devcontainer
-      image_tag: ${{ needs.versions.outputs.RELEASE_VERSION }}
+      image_tag: nightly
       image_title: devcontainer
       is_latest: false
       push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
@@ -176,7 +173,7 @@ jobs:
       containerfile: packages/kitten-analysts/backend.Containerfile
       image_description: Kitten Science Analytics Backend
       image_name: kitten-science/ksa-backend
-      image_tag: ${{ needs.versions.outputs.RELEASE_VERSION }}
+      image_tag: nightly
       image_title: ksa-backend
       is_latest: false
       push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
@@ -201,7 +198,7 @@ jobs:
       containerfile: packages/kitten-analysts/game.Containerfile
       image_description: Kittens Game with Kitten Science Analytics
       image_name: kitten-science/ksa-game
-      image_tag: ${{ needs.versions.outputs.RELEASE_VERSION }}
+      image_tag: nightly
       image_title: ksa-game
       is_latest: false
       push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
@@ -226,7 +223,7 @@ jobs:
       containerfile: packages/kitten-analysts/ui.Containerfile
       image_description: Headless Kittens Game
       image_name: kitten-science/ksa-ui
-      image_tag: ${{ needs.versions.outputs.RELEASE_VERSION }}
+      image_tag: nightly
       image_title: ksa-ui
       is_latest: false
       push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}

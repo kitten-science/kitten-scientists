@@ -76,7 +76,7 @@ jobs:
     with:
       artifact-name: devcontainer-output
       artifact-contents: |
-        package.json
+        node_modules
         packages/*/output
       containerfile: packages/devcontainer/Containerfile
       working-directory: packages/devcontainer
@@ -88,7 +88,7 @@ jobs:
     with:
       artifact-name: ksa-backend-output
       artifact-contents: |
-        package.json
+        node_modules
         packages/*/output
       containerfile: packages/kitten-analysts/backend.Containerfile
       working-directory: packages/kitten-analysts
@@ -100,7 +100,7 @@ jobs:
     with:
       artifact-name: ksa-game-output
       artifact-contents: |
-        package.json
+        node_modules
         packages/*/output
       containerfile: packages/kitten-analysts/game.Containerfile
       working-directory: packages/kitten-analysts
@@ -112,7 +112,7 @@ jobs:
     with:
       artifact-name: ksa-ui-output
       artifact-contents: |
-        package.json
+        node_modules
         packages/*/output
       containerfile: packages/kitten-analysts/ui.Containerfile
       working-directory: packages/kitten-analysts
