@@ -1,0 +1,113 @@
+name: QA
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  qa-commit:
+    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
+    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
+    name: QA Commit
+    permissions:
+      contents: read
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+
+      - name: Validate commit messages
+        uses: oliversalzburg/action-commit-validator@3d55a588a712a905f073a6a6b1cdeb7af8a37c41 # v0.0.10
+        if: github.event_name == 'pull_request'
+        with:
+          accept_breaking_changes: false
+          accept_emoji: false
+          accepted_scopes: |
+            bonfire
+            religion
+            science
+            space
+            time
+            trade
+            village
+            workshop
+
+            api
+            build
+            container
+            core
+            deps
+            deps-dev
+            filters
+            i18n
+            schema
+            settings
+            ui
+          accepted_types: |
+            chore
+            ci
+            docs
+            feat
+            fix
+            refactor
+            test
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+  qa:
+    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
+    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
+    name: 🔹 QA
+    uses: oliversalzburg/workflows/.github/workflows/qa-browser-app.yml@main
+
+  qa-devcontainer:
+    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
+    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
+    name: 🔹 QA Devcontainer
+    uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
+    with:
+      containerfile: packages/devcontainer/Containerfile
+      working-directory: packages/devcontainer
+  qa-ksa-backend:
+    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
+    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
+    name: 🔹 QA Backend
+    uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
+    with:
+      containerfile: packages/kitten-analysts/backend.Containerfile
+      working-directory: packages/kitten-analysts
+  qa-ksa-game:
+    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
+    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
+    name: 🔹 QA Game
+    uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
+    with:
+      containerfile: packages/kitten-analysts/game.Containerfile
+      working-directory: packages/kitten-analysts
+  qa-ksa-ui:
+    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
+    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
+    name: 🔹 QA UI
+    uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
+    with:
+      containerfile: packages/kitten-analysts/ui.Containerfile
+      working-directory: packages/kitten-analysts
+
+  qa-passed:
+    needs:
+      - qa-commit
+      - qa
+      - qa-devcontainer
+      - qa-ksa-backend
+      - qa-ksa-game
+      - qa-ksa-ui
+    name: QA Passed
+    if: always()
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Failure
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+      - name: Success
+        if: ${{ success() && !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
