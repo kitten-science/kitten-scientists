@@ -67,8 +67,11 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      # We track the release version through KS only.
       - name: Set release version
-        run: echo "RELEASE_VERSION=$(node scripts/release-version.cjs)" >> $GITHUB_ENV
+        run: |
+          cd packages/kitten-scientists
+          echo "RELEASE_VERSION=$(node ../../scripts/release-version.cjs)" >> $GITHUB_ENV
 
       - name: Build everything
         run: yarn build:all
@@ -85,9 +88,9 @@ jobs:
           automatic_release_tag: next
           draft: false
           files: |
-            packages/kitten-analysts/output/*
-            packages/kitten-engineers/output/*
-            packages/kitten-scientists/output/*
+            packages/kitten-analysts/output/kitten-analysts-*
+            packages/kitten-engineers/output/kitten-engineers-*
+            packages/kitten-scientists/output/kitten-scientists-*
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: Development Build v${{ env.RELEASE_VERSION }}
