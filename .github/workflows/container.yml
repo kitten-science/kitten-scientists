@@ -1,12 +1,7 @@
 name: Publish Container
 
 on:
-  push:
-    branches: ["main"]
-    tags:
-      - "v*"
-
-  # Allows you to run this workflow manually from the Actions tab
+  workflow_call:
   workflow_dispatch:
 
 env:
