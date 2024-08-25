@@ -151,7 +151,7 @@ jobs:
       image_tag: nightly
       image_title: devcontainer
       is_latest: false
-      push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+      push: true
 
   publish-ksa-backend:
     name: 🔹 Publish Backend
@@ -176,7 +176,7 @@ jobs:
       image_tag: nightly
       image_title: ksa-backend
       is_latest: false
-      push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+      push: true
 
   publish-ksa-game:
     name: 🔹 Publish Game
@@ -201,7 +201,7 @@ jobs:
       image_tag: nightly
       image_title: ksa-game
       is_latest: false
-      push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+      push: true
 
   publish-ksa-ui:
     name: 🔹 Publish UI
@@ -226,4 +226,4 @@ jobs:
       image_tag: nightly
       image_title: ksa-ui
       is_latest: false
-      push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+      push: true
