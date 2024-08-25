@@ -4,7 +4,7 @@ import manifest from "./package.json" with { type: "json" };
 const filename = "kitten-scientists.inject.js";
 
 const KS_RELEASE_CHANNEL = JSON.stringify(process.env.KS_RELEASE_CHANNEL ?? "fixed");
-const KS_VERSION = JSON.stringify(process.env.KS_VERSION ?? `${manifest.version}-live`);
+const KS_VERSION = JSON.stringify(process.env.RELEASE_VERSION ?? `${manifest.version}-live`);
 
 export default defineConfig({
   build: {

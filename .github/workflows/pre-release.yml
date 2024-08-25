@@ -23,26 +23,6 @@ env:
   KS_RELEASE_CHANNEL: dev
 
 jobs:
-  versions:
-    name: Versions
-    outputs:
-      RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
-    permissions:
-      contents: read
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-
-      - name: Select NodeJS version
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: https://registry.npmjs.org
-
-      - name: Determine versions
-        run: echo "RELEASE_VERSION=$(node scripts/release-version.cjs)" >> $GITHUB_ENV
-
   qa:
     name: 🔹 QA
     uses: ./.github/workflows/qa.yml
@@ -51,7 +31,6 @@ jobs:
     if: github.event.commits[1] != null || ( !startsWith(github.event.commits[0].message, 'chore(deps):') && !startsWith(github.event.commits[0].message, 'fix(deps):') )
     name: Pre-Release
     needs:
-      - versions
       - qa
     permissions:
       actions: write
@@ -88,6 +67,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Set release version
+        run: echo "RELEASE_VERSION=$(node scripts/release-version.cjs)" >> $GITHUB_ENV
+
       - name: Build everything
         run: yarn build:all
 
@@ -107,7 +89,7 @@ jobs:
             sbom.spdx.json
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          title: Development Build v${{ env.KS_VERSION }}
+          title: Development Build v${{ env.RELEASE_VERSION }}
 
   update-release-info:
     name: 🔹 Update Release Info
