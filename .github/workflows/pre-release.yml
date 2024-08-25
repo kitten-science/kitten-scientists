@@ -12,7 +12,9 @@ on:
         required: false
         type: boolean
 
-concurrency: pre-release
+concurrency:
+  group: pre-release
+  cancel-in-progress: false
 
 env:
   DEV_BUILD: true
