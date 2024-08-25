@@ -29,7 +29,7 @@
     "@kitten-science/kitten-analysts": "workspace:*",
     "@kitten-science/kitten-scientists": "workspace:*",
     "@oliversalzburg/js-utils": "0.0.59",
-    "tslib": "2.6.3"
+    "tslib": "2.7.0"
   },
   "devDependencies": {
     "typescript": "5.5.3",
