@@ -44,7 +44,6 @@ jobs:
       - name: Build Kitten Scientists
         run: |
           yarn kitten-scientists:build
-          cp packages/kitten-scientists/output/* packages/kittensgame/kitten-scientists/
 
       - name: Log in to the Container registry
         uses: docker/login-action@master
