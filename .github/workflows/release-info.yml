@@ -1,17 +1,14 @@
 name: Update Release Info
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/release-info.yml"
-      - "packages/action-release-info/*"
-  schedule:
-    - cron: 0 4 * * *
+  workflow_call:
   workflow_dispatch:
 
 concurrency: release-info
+
+env:
+  # renovate: datasource=node-version depName=node versioning=node
+  NODE_VERSION: "22.7.0"
 
 jobs:
   release-info:
@@ -21,16 +18,31 @@ jobs:
 
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+
       - name: Select NodeJS version
         uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
-        env:
-          # renovate: datasource=docker depName=node versioning=node
-          NODE_VERSION: "20.17.0"
         with:
           node-version: ${{ env.NODE_VERSION }}
+          registry-url: ${{ inputs.registry-url }}
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          yarn config set enableGlobalCache false
+
+      - name: Load cached dependencies
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
+        with:
+          path: .yarn/cache
+          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node${{ env.NODE_VERSION }}
+
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install
+
       - name: Build the release-info action
         run: yarn workspace @kitten-science/action-release-info tsc --build
 

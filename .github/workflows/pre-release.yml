@@ -1,0 +1,126 @@
+name: Pre-Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      wants-github-release:
+        default: false
+        description: Create a GitHub release?
+        required: false
+        type: boolean
+
+concurrency: pre-release
+
+env:
+  DEV_BUILD: true
+  # renovate: datasource=docker depName=node versioning=node
+  NODE_VERSION: "20.17.0"
+  KS_RELEASE_CHANNEL: dev
+
+jobs:
+  versions:
+    name: Versions
+    outputs:
+      RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+    permissions:
+      contents: read
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+
+      - name: Select NodeJS version
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: https://registry.npmjs.org
+
+      - name: Determine versions
+        run: echo "RELEASE_VERSION=$(node scripts/release-version.cjs)" >> $GITHUB_ENV
+
+  qa:
+    name: 🔹 QA
+    uses: ./.github/workflows/qa.yml
+
+  pre-release:
+    if: github.event.commits[1] != null || ( !startsWith(github.event.commits[0].message, 'chore(deps):') && !startsWith(github.event.commits[0].message, 'fix(deps):') )
+    name: Pre-Release
+    needs:
+      - versions
+      - qa
+    permissions:
+      actions: write
+      attestations: write
+      contents: write
+      id-token: write
+      packages: write
+      pull-requests: read
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+
+      - name: Select NodeJS version
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: https://registry.npmjs.org
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          yarn config set enableGlobalCache false
+
+      - name: Load cached dependencies
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
+        with:
+          path: .yarn/cache
+          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build everything
+        run: yarn build:all
+
+      - name: Build release
+        run: |
+          yarn kitten-analysts:release
+          yarn kitten-engineers:release
+          yarn kitten-scientists:release
+
+      - name: Generate GitHub release
+        uses: oliversalzburg/action-automatic-semantic-releases@bc429dc1af8c036b5f8c11fef7bcb0becfd5064d # v0.0.13
+        with:
+          automatic_release_tag: next
+          draft: false
+          files: |
+            packages/kitten-scientists/output/*
+            sbom.spdx.json
+          prerelease: true
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          title: Development Build v${{ env.KS_VERSION }}
+
+  update-release-info:
+    name: 🔹 Update Release Info
+    needs:
+      - pre-release
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/release-info.yml
+
+  deploy-documentation:
+    name: 🔹 Deploy Documentation
+    needs:
+      - pre-release
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/documentation-deploy.yml
