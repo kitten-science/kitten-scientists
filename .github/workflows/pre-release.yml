@@ -85,8 +85,9 @@ jobs:
           automatic_release_tag: next
           draft: false
           files: |
+            packages/kitten-analysts/output/*
+            packages/kitten-engineers/output/*
             packages/kitten-scientists/output/*
-            sbom.spdx.json
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: Development Build v${{ env.RELEASE_VERSION }}
