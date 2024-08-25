@@ -151,7 +151,7 @@ jobs:
       containerfile: packages/devcontainer/Containerfile
       image_description: Kitten Science Development Container
       image_name: kitten-science/devcontainer
-      image_tag: ${{ needs.versions.outputs.RELEASE_VERSION }}
+      image_tag: next
       image_title: devcontainer
       is_latest: false
       push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
@@ -176,7 +176,7 @@ jobs:
       containerfile: packages/kitten-analysts/backend.Containerfile
       image_description: Kitten Science Analytics Backend
       image_name: kitten-science/ksa-backend
-      image_tag: ${{ needs.versions.outputs.RELEASE_VERSION }}
+      image_tag: next
       image_title: ksa-backend
       is_latest: false
       push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
@@ -201,7 +201,7 @@ jobs:
       containerfile: packages/kitten-analysts/game.Containerfile
       image_description: Kittens Game with Kitten Science Analytics
       image_name: kitten-science/ksa-game
-      image_tag: ${{ needs.versions.outputs.RELEASE_VERSION }}
+      image_tag: next
       image_title: ksa-game
       is_latest: false
       push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
@@ -226,7 +226,7 @@ jobs:
       containerfile: packages/kitten-analysts/ui.Containerfile
       image_description: Headless Kittens Game
       image_name: kitten-science/ksa-ui
-      image_tag: ${{ needs.versions.outputs.RELEASE_VERSION }}
+      image_tag: next
       image_title: ksa-ui
       is_latest: false
       push: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
