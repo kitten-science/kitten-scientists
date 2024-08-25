@@ -74,6 +74,9 @@ jobs:
     name: 🔹 QA Devcontainer
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
+      artifact-name: devcontainer-output
+      artifact-contents: |
+        packages/*/output
       containerfile: packages/devcontainer/Containerfile
       working-directory: packages/devcontainer
   qa-ksa-backend:
@@ -82,6 +85,9 @@ jobs:
     name: 🔹 QA Backend
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
+      artifact-name: ksa-backend-output
+      artifact-contents: |
+        packages/*/output
       containerfile: packages/kitten-analysts/backend.Containerfile
       working-directory: packages/kitten-analysts
   qa-ksa-game:
@@ -90,6 +96,9 @@ jobs:
     name: 🔹 QA Game
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
+      artifact-name: ksa-game-output
+      artifact-contents: |
+        packages/*/output
       containerfile: packages/kitten-analysts/game.Containerfile
       working-directory: packages/kitten-analysts
   qa-ksa-ui:
@@ -98,6 +107,9 @@ jobs:
     name: 🔹 QA UI
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
+      artifact-name: ksa-ui-output
+      artifact-contents: |
+        packages/*/output
       containerfile: packages/kitten-analysts/ui.Containerfile
       working-directory: packages/kitten-analysts
 
