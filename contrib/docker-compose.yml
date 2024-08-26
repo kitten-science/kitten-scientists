@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+  backend:
+    image: ghcr.io/kitten-science/ksa-backend:next
+    ports:
+      # KGNet Interface
+      - "7780:7780/tcp"
+      # Prometheus Exporter
+      - "9091:9091/tcp"
+      # Kitten Analysts Websocket
+      - "9093:9093"
+
+    volumes:
+      - type: volume
+        source: local_storage
+        target: /local_storage
+        read_only: false
+
+  # Actual Kittens Game instance
+  game:
+    image: ghcr.io/kitten-science/ksa-game:next
+    ports:
+      # Kittens Game Browser UI
+      - "9080:8080/tcp"
+
+  # Headless container
+  ui:
+    image: ghcr.io/kitten-science/ksa-ui:next
+    volumes:
+      - type: volume
+        source: local_storage
+        target: /local_storage
+        read_only: false
+
+volumes:
+  local_storage:
