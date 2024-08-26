@@ -9,6 +9,7 @@ import Koa from "koa";
 import Router from "koa-router";
 import { writeFileSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
+import { AddressInfo } from "node:net";
 import { join } from "node:path";
 import { exponentialBuckets, Histogram, linearBuckets, Registry } from "prom-client";
 import { v4 as uuid } from "uuid";
@@ -249,7 +250,13 @@ export class KittensGameRemote {
     message: KittenAnalystsMessage<TMessage>,
   ): Promise<Array<KittenAnalystsMessage<TMessage> | null>> {
     const clientRequests = [...this.sockets.values()].map(socket =>
-      this.#sendMessageToSocket({ ...message, location: "ws://localhost:9093/" }, socket),
+      this.#sendMessageToSocket(
+        {
+          ...message,
+          location: `ws://${(this.wss.address() as AddressInfo | null)?.address ?? "localhost"}:9093/`,
+        },
+        socket,
+      ),
     );
 
     return Promise.all(clientRequests);

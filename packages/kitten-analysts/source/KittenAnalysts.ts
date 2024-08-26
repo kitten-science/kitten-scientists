@@ -107,7 +107,7 @@ export class KittenAnalysts {
   #withAnalyticsBackend = false;
 
   constructor(game: Game, i18nEngine: I18nEngine) {
-    cwarn("Kitten Analysts constructed. YOUR GAME IS BEING MANIPULATED!");
+    cwarn("Kitten Analysts constructed.");
 
     this.game = game;
     this.i18nEngine = i18nEngine;
@@ -151,13 +151,14 @@ export class KittenAnalysts {
 
     this.#withAnalyticsBackend = true;
 
+    cwarn("MANIPULATING YOUR GAME!");
     // Manipulate game to use internal URL for KGNet.
     // KG would always return this exact URL itself, if it was running on localhost.
     // Because we might not be accessing the current instance of the game through localhost,
     // we need to override the entire method to _always_ return this URL.
-    this.game.server.getServerUrl = () => "http://localhost:7780";
+    this.game.server.getServerUrl = () => `http://${location.hostname}:7780`;
 
-    this.ws = new WebSocket("ws://localhost:9093/");
+    this.ws = new WebSocket(`ws://${location.hostname}:9093/`);
 
     this.ws.onerror = error => {
       cwarn("Error on WS connection! Closing and reconnecting...", error);
