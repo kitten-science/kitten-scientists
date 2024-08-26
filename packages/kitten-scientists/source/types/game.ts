@@ -1,3 +1,4 @@
+import { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import { CycleIndices } from "../settings/TimeControlSettings.js";
 import { CraftableInfo, ResourceInfo } from "./craft.js";
 import {
@@ -38,6 +39,35 @@ import {
 } from "./time.js";
 import { TradeTab } from "./trade.js";
 import { JobInfo, VillageTab } from "./village.js";
+
+type Server = {
+  showMotd: boolean;
+  motdTitle: string | null;
+  motdContent: string | null;
+
+  game: Game | null;
+  motdContentPrevious: string | null;
+  motdFreshMessage: string | null;
+
+  userProfile: unknown;
+  chiral: null;
+
+  lastBackup: null;
+  saveData: null;
+
+  setUserProfile: (userProfile: unknown) => void;
+  getServerUrl: () => string;
+  refresh: () => void;
+  _xhr: (url: string, method: string, data: unknown, handler: AnyFunction) => Promise<unknown>;
+  syncUserProfile: () => void;
+  syncSaveData: () => Promise<unknown>;
+  pushSave: () => void;
+  pushSaveMetadata: (guid: string, metadata: unknown) => Promise<unknown>;
+  loadSave: (guid: string) => void;
+  save: (saveData: unknown) => void;
+  sendCommand: (command: unknown) => void;
+  setChiral: (data: unknown) => void;
+};
 
 export type Game = {
   bld: {
@@ -303,6 +333,7 @@ export type Game = {
     policies: Array<PolicyInfo>;
     techs: Array<TechnologyInfo>;
   };
+  server: Server;
   space: {
     getBuilding: (building: SpaceBuilding) => {
       calculateEffects: (self: unknown, game: Game) => void;

@@ -10,6 +10,7 @@ declare global {
   interface Window {
     kittenAnalysts?: KittenAnalysts;
   }
+  const KSA_CONNECT_BACKEND: string | undefined;
 }
 
 export type KittenAnalystsMessageId =
@@ -87,13 +88,6 @@ export class KittenAnalysts {
   readonly game: Game;
 
   /**
-   * Should the Kitten Analysts report information to the Kitten DnA backend?
-   * Because this only makes sense in a strict development environment, this
-   * should usually be kept disabled for most users.
-   */
-  reportToBackend = false;
-
-  /**
    * The websocket we're using to talk to the backend.
    */
   ws: WebSocket | null = null;
@@ -110,27 +104,32 @@ export class KittenAnalysts {
 
   #interval = -1;
   #timeoutReconnect = -1;
+  #withAnalyticsBackend = false;
 
   constructor(game: Game, i18nEngine: I18nEngine) {
-    cinfo(`Kitten Analysts constructed.`);
+    cwarn("Kitten Analysts constructed. YOUR GAME IS BEING MANIPULATED!");
 
     this.game = game;
     this.i18nEngine = i18nEngine;
-
-    // Assume Kitten Science DNA context if we're on localhost with the default port of KSA.
-    if (this.location.startsWith("http://localhost:9080")) {
-      this.reportToBackend = true;
-    }
   }
 
   /**
    * Start the user script after loading and configuring it.
    */
   run() {
-    this.connect();
+    const withAnalyticsBackend = Boolean(KSA_CONNECT_BACKEND);
+
+    this.connect(withAnalyticsBackend);
   }
 
-  connect() {
+  /**
+   * Connect the Kitten Analysts to all systems.
+   * @param withAnalyticsBackend Should the Kitten Analysts report information to the
+   * Kitten DnA backend? Because this only makes sense in a strict development environment,
+   * this should usually be kept disabled for most users.
+   * @returns Nothing
+   */
+  connect(withAnalyticsBackend: boolean) {
     if (this.ws !== null) {
       return;
     }
@@ -146,9 +145,17 @@ export class KittenAnalysts {
     document.removeEventListener("ks.reportSavegame", this.reportSavegameListener);
     document.addEventListener("ks.reportSavegame", this.reportSavegameListener);
 
-    if (!this.reportToBackend) {
+    if (!withAnalyticsBackend) {
       return;
     }
+
+    this.#withAnalyticsBackend = true;
+
+    // Manipulate game to use internal URL for KGNet.
+    // KG would always return this exact URL itself, if it was running on localhost.
+    // Because we might not be accessing the current instance of the game through localhost,
+    // we need to override the entire method to _always_ return this URL.
+    this.game.server.getServerUrl = () => "http://localhost:7780";
 
     this.ws = new WebSocket("ws://localhost:9093/");
 
@@ -323,7 +330,7 @@ export class KittenAnalysts {
     cinfo("Reconnecting...");
 
     this.#timeoutReconnect = window.setTimeout(() => {
-      this.connect();
+      this.connect(this.#withAnalyticsBackend);
     }, 5000);
   }
 
