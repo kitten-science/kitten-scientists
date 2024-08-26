@@ -1069,13 +1069,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:9.6.0":
-  version: 9.6.0
-  resolution: "@types/eslint@npm:9.6.0"
+"@types/eslint@npm:9.6.1":
+  version: 9.6.1
+  resolution: "@types/eslint@npm:9.6.1"
   dependencies:
     "@types/estree": "npm:*"
     "@types/json-schema": "npm:*"
-  checksum: 10c0/69301356bc73b85e381ae00931291de2e96d1cc49a112c592c74ee32b2f85412203dea6a333b4315fd9839bb14f364f265cbfe7743fc5a78492ee0326dd6a2c1
+  checksum: 10c0/69ba24fee600d1e4c5abe0df086c1a4d798abf13792d8cfab912d76817fe1a894359a1518557d21237fbaf6eda93c5ab9309143dee4c59ef54336d1b3570420e
   languageName: node
   linkType: hard
 
@@ -3693,7 +3693,7 @@ __metadata:
   resolution: "kitten-scientists@workspace:."
   dependencies:
     "@eslint/js": "npm:9.9.1"
-    "@types/eslint": "npm:9.6.0"
+    "@types/eslint": "npm:9.6.1"
     "@types/node": "npm:22.5.0"
     "@types/web": "npm:0.0.157"
     eslint: "npm:9.9.1"
