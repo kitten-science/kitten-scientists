@@ -559,7 +559,7 @@ __metadata:
     "@actions/github": "npm:6.0.0"
     "@kie/mock-github": "npm:3.0.0-beta.1"
     "@oliversalzburg/js-utils": "npm:0.0.59"
-    "@types/chai": "npm:4.3.18"
+    "@types/chai": "npm:4.3.19"
     "@types/mocha": "npm:10.0.7"
     "@types/node": "npm:22.5.0"
     c8: "npm:10.1.2"
@@ -1027,10 +1027,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chai@npm:4.3.18":
-  version: 4.3.18
-  resolution: "@types/chai@npm:4.3.18"
-  checksum: 10c0/e6b86d8c32b1d2bce1e62b8c22a29182c4e5866ede4a93cc862386d881e11bfd2ef20b12fc4ef5fa1202fe21f15a11b43738e14691779c3dcb493bd40494b232
+"@types/chai@npm:4.3.19":
+  version: 4.3.19
+  resolution: "@types/chai@npm:4.3.19"
+  checksum: 10c0/8fd573192e486803c4d04185f2b0fab554660d9a1300dbed5bde9747ab8bef15f462a226f560ed5ca48827eecaf8d71eed64aa653ff9aec72fb2eae272e43a84
   languageName: node
   linkType: hard
 
