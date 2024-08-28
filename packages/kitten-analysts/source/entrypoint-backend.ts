@@ -140,13 +140,7 @@ export class KittensGameRemote {
     });
 
     const interval = setInterval(() => {
-      this.wss.clients.forEach(ws => {
-        const socket = [...this.sockets.values()].find(socket => socket.ws === ws);
-        if (isNil(socket)) {
-          console.warn("KSA-BE: Invalid socket reference!");
-          return;
-        }
-
+      [...this.sockets.values()].forEach(socket => {
         if (!socket.isAlive) {
           socket.ws.terminate();
           this.sockets.delete(socket);
