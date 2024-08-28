@@ -9,15 +9,16 @@ export const kg_resource_value = (cache: MessageCache, remote: KittensGameRemote
     remote,
     help: "How many of the given resource are in your resource pool.",
     name: "kg_resource_value",
-    labelNames: ["name", "label", "location", "craftable"],
+    labelNames: ["guid", "name", "label", "location", "craftable"],
     require: "getResourcePool",
-    extract(location, element, subject) {
+    extract(guid, location, element, subject) {
       subject.set(
         {
-          name: element.name,
+          craftable: element.craftable.toString(),
+          guid,
           label: ucfirst(element.label),
           location,
-          craftable: element.craftable.toString(),
+          name: element.name,
         },
         roundTo(element.value, 2),
       );

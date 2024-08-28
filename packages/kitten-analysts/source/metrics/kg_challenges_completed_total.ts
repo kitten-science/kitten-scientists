@@ -8,15 +8,16 @@ export const kg_challenges_completed_total = (cache: MessageCache, remote: Kitte
     remote,
     help: "Amount of challenges you have completed.",
     name: "kg_challenges_completed_total",
-    labelNames: ["label", "location", "type"],
+    labelNames: ["guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(location, element, subject) {
+    extract(guid, location, element, subject) {
       if (element.name !== "totalChallengesCompleted") {
         return;
       }
 
       subject.set(
         {
+          guid,
           label: ucfirst(element.label),
           location,
           type: element.type,

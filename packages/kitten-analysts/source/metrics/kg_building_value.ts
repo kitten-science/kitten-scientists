@@ -8,14 +8,15 @@ export const kg_building_value = (cache: MessageCache, remote: KittensGameRemote
     remote,
     help: "How many of the given building have been built.",
     name: "kg_building_value",
-    labelNames: ["name", "label", "location", "tab"],
+    labelNames: ["guid", "name", "label", "location", "tab"],
     require: "getBuildings",
-    extract(location, element, subject) {
+    extract(guid, location, element, subject) {
       subject.set(
         {
-          name: element.name,
+          guid,
           label: ucfirst(element.label),
           location,
+          name: element.name,
           tab: element.tab,
         },
         element.value,

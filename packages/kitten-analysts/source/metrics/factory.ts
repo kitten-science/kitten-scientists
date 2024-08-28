@@ -23,7 +23,7 @@ export const gaugeFactory = <
   name: string;
   labelNames: Array<string>;
   require: TMessage;
-  extract: (location: string, element: TData[number], subject: Gauge) => void;
+  extract: (guid: string, location: string, element: TData[number], subject: Gauge) => void;
 }) =>
   new Gauge({
     help: instructions.help,
@@ -46,7 +46,7 @@ export const gaugeFactory = <
           continue;
         }
         for (const entity of mustExist(clientResponse.data) as TData) {
-          instructions.extract(clientResponse.location, entity, this);
+          instructions.extract(clientResponse.guid, clientResponse.location, entity, this);
         }
       }
     },

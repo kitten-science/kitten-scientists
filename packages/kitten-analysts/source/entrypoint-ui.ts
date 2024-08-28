@@ -13,7 +13,7 @@ const main = async () => {
     runScripts: "dangerously",
   });
 
-  const ephemeralPath = join(LOCAL_STORAGE_PATH, "ks-internal-savestate.json");
+  const ephemeralPath = join(LOCAL_STORAGE_PATH, "ka-internal-savestate.json");
 
   try {
     const lsEntry = "com.nuclearunicorn.kittengame.savedata";

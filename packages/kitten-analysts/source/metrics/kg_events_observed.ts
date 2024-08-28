@@ -8,15 +8,16 @@ export const kg_events_observed = (cache: MessageCache, remote: KittensGameRemot
     remote,
     help: "How many rare events you have observed.",
     name: "kg_events_observed",
-    labelNames: ["label", "location", "type"],
+    labelNames: ["guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(location, element, subject) {
+    extract(guid, location, element, subject) {
       if (element.name !== "eventsObserved") {
         return;
       }
 
       subject.set(
         {
+          guid,
           label: ucfirst(element.label),
           location,
           type: element.type,

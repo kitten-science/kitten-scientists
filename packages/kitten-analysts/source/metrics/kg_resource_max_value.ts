@@ -9,11 +9,12 @@ export const kg_resource_max_value = (cache: MessageCache, remote: KittensGameRe
     remote,
     help: "The current limit of your storage pool for the given resource.",
     name: "kg_resource_max_value",
-    labelNames: ["name", "label", "location", "craftable"],
+    labelNames: ["guid", "name", "label", "location", "craftable"],
     require: "getResourcePool",
-    extract(location, element, subject) {
+    extract(guid, location, element, subject) {
       subject.set(
         {
+          guid,
           name: element.name,
           label: ucfirst(element.label),
           location,

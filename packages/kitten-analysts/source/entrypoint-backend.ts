@@ -48,7 +48,7 @@ const ks_iterate_duration = new Histogram({
   name: "ks_iterate_duration",
   help: "How long each iteration of KS took.",
   buckets: [...linearBuckets(0, 1, 100), ...exponentialBuckets(100, 1.125, 30)],
-  labelNames: ["location", "manager"],
+  labelNames: ["guid", "location", "manager"],
 });
 
 // KGNet Savegame Storage
@@ -93,10 +93,10 @@ export interface KGNetSavePersisted {
   size: number;
 }
 const saveStore = new Map<string, KGNetSavePersisted>();
-saveStore.set("ks-internal-savestate", {
-  guid: "ks-internal-savestate",
+saveStore.set("ka-internal-savestate", {
+  guid: "ka-internal-savestate",
   archived: false,
-  label: "Ephemeral Background Game",
+  label: "Background Game",
   index: {
     calendar: {
       day: 0,
@@ -181,14 +181,17 @@ export class KittensGameRemote {
           const delta = payload.exit - payload.entry;
           console.info(`=> Received frame report (${message.location}).`, delta);
 
-          ks_iterate_duration.observe({ location: message.location, manager: "all" }, delta);
+          ks_iterate_duration.observe(
+            { guid: message.guid, location: message.location, manager: "all" },
+            delta,
+          );
           for (const [measurement, timeTaken] of Object.entries(payload.measurements)) {
             if (isNil(timeTaken)) {
               continue;
             }
 
             ks_iterate_duration.observe(
-              { location: message.location, manager: measurement },
+              { guid: message.guid, location: message.location, manager: measurement },
               timeTaken,
             );
           }
@@ -199,31 +202,33 @@ export class KittensGameRemote {
           const payload = message.data as KGNetSaveFromAnalysts;
           console.info(`=> Received savegame (${message.location}).`);
 
+          const isHeadlessReport = message.location.includes("headless.html");
+          if (isHeadlessReport) {
+            payload.telemetry.guid = "ka-internal-savestate";
+          }
+
           const calendar = payload.calendar;
           const saveDataCompressed = compressToUTF16(JSON.stringify(payload));
           const savegame: KGNetSavePersisted = {
             archived: false,
-            guid: "ks-internal-savestate",
+            guid: payload.telemetry.guid,
             index: { calendar: { day: calendar.day, year: calendar.year } },
-            label: "Ephemeral Background Game",
+            label: isHeadlessReport ? "Background Game" : `Browser Game\n${payload.telemetry.guid}`,
             saveData: saveDataCompressed,
             size: saveDataCompressed.length,
             timestamp: Date.now(),
           };
 
-          // For the headless session, write the savegame to the ephemeral state.
-          // Otherwise, ignore the report. We expect UI session to report through KGNet.
-          if (message.location.includes("headless.html")) {
-            saveStore.set("ks-internal-savestate", savegame);
-            try {
-              writeFileSync(
-                `${LOCAL_STORAGE_PATH}/ks-internal-savestate.json`,
-                JSON.stringify(savegame),
-              );
-              console.debug(`=> Savegame persisted to disc.`);
-            } catch (error) {
-              console.error("!> Error while persisting savegame to disc!", error);
-            }
+          saveStore.set(payload.telemetry.guid, savegame);
+
+          try {
+            writeFileSync(
+              `${LOCAL_STORAGE_PATH}/${payload.telemetry.guid}.json`,
+              JSON.stringify(savegame),
+            );
+            console.debug(`=> Savegame persisted to disc.`);
+          } catch (error) {
+            console.error("!> Error while persisting savegame to disc!", error);
           }
 
           return;
@@ -427,7 +432,7 @@ routerNetwork.post("/kgnet/save/upload", context => {
       archived: false,
       guid: gameGUID,
       index: { calendar: { day: calendar.day, year: calendar.year } },
-      label: "Browser UI Save",
+      label: `Browser Game\n${gameGUID}`,
       saveData: gameSave.saveData,
       size: context.request.length,
       timestamp: Date.now(),
@@ -437,18 +442,18 @@ routerNetwork.post("/kgnet/save/upload", context => {
 
     const savegameEphemeral: KGNetSavePersisted = {
       archived: false,
-      guid: "ks-internal-savestate",
+      guid: "ka-internal-savestate",
       index: { calendar: { day: calendar.day, year: calendar.year } },
-      label: "Ephemeral Background Game",
+      label: "Background Game",
       saveData: gameSave.saveData,
       size: context.request.length,
       timestamp: Date.now(),
     };
     writeFileSync(
-      `${LOCAL_STORAGE_PATH}/ks-internal-savestate.json`,
+      `${LOCAL_STORAGE_PATH}/ka-internal-savestate.json`,
       JSON.stringify(savegameEphemeral),
     );
-    saveStore.set("ks-internal-savestate", savegameEphemeral);
+    saveStore.set("ka-internal-savestate", savegameEphemeral);
     console.debug(`=> Savegame persisted to disc.`);
 
     console.warn(`=> Injecting savegame into headless session...`);

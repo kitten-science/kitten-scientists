@@ -8,15 +8,16 @@ export const kg_years_total = (cache: MessageCache, remote: KittensGameRemote) =
     remote,
     help: "How many years you've played.",
     name: "kg_years_total",
-    labelNames: ["label", "location", "type"],
+    labelNames: ["guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(location, element, subject) {
+    extract(guid, location, element, subject) {
       if (element.name !== "totalYears") {
         return;
       }
 
       subject.set(
         {
+          guid,
           label: ucfirst(element.label),
           location,
           type: element.type,
