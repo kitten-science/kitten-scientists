@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   backend:
-    image: ghcr.io/kitten-science/ksa-backend:next
+    image: ghcr.io/kitten-science/ksa-backend:next@sha256:9fb4a6b7bb87b510be6b0fe2394c142aaeaa84ed9c6c4518f2a4601d768e8570
     ports:
       # KGNet Interface
       - "7780:7780/tcp"
@@ -19,14 +19,14 @@ services:
 
   # Actual Kittens Game instance
   game:
-    image: ghcr.io/kitten-science/ksa-game:next
+    image: ghcr.io/kitten-science/ksa-game:next@sha256:9f164a8f199dc68de56bd8b0349c388573ce47b252dde450de59a5558a650a76
     ports:
       # Kittens Game Browser UI
       - "9080:8080/tcp"
 
   # Headless container
   ui:
-    image: ghcr.io/kitten-science/ksa-ui:next
+    image: ghcr.io/kitten-science/ksa-ui:next@sha256:da7963cc52a850c3cbea367efb28bdcd82bec5a3b61d438001bac6c52c28a30d
     volumes:
       - type: volume
         source: local_storage
