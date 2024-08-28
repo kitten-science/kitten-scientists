@@ -10,6 +10,10 @@ services:
       - "9091:9091/tcp"
       # Kitten Analysts Websocket
       - "9093:9093"
+      # Kittens Game Browser UI
+      # Port is exposed by ksa-game. We publish it here, because all services
+      # share their network interface with ksa-backend.
+      - "9080:8080/tcp"
 
     volumes:
       - type: volume
@@ -20,13 +24,12 @@ services:
   # Actual Kittens Game instance
   game:
     image: ghcr.io/kitten-science/ksa-game:next
-    ports:
-      # Kittens Game Browser UI
-      - "9080:8080/tcp"
+    network_mode: service:backend
 
   # Headless container
   ui:
     image: ghcr.io/kitten-science/ksa-ui:next
+    network_mode: service:backend
     volumes:
       - type: volume
         source: local_storage
