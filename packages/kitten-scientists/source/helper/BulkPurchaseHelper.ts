@@ -502,15 +502,12 @@ export class BulkPurchaseHelper {
    * @param button The build button.
    * @param amount How many items to build.
    * @returns How many items were built.
-   * @see `build`@`core.js`
-   * @deprecated This should just call `build()` on the game page. I don't understand why it shouldn't.
    */
   construct(
     model: ButtonModernModel,
     button: BuildButton<string, ButtonModernModel, ButtonModernController>,
     amount: number,
   ): number {
-    // TODO: Replace this with a call to game.build()
     const meta = model.metadata;
     let counter = 0;
 

@@ -531,12 +531,7 @@ export class TradeManager implements Automation {
       coinPrice < this.settings.tradeBlackcoin.buy &&
       this.settings.tradeBlackcoin.trigger < relicsInitial
     ) {
-      // function name changed in v1.4.8.0
-      if (typeof this._host.game.diplomacy.buyEcoin === "function") {
-        this._host.game.diplomacy.buyEcoin();
-      } else {
-        this._host.game.diplomacy.buyBcoin();
-      }
+      this._host.game.diplomacy.buyBcoin();
 
       const currentCoin = this._host.game.resPool.get("blackcoin").value;
       coinsExchanged = Math.round(currentCoin - coinsInitial);
@@ -545,12 +540,7 @@ export class TradeManager implements Automation {
       coinPrice > this.settings.tradeBlackcoin.sell &&
       0 < this._host.game.resPool.get("blackcoin").value
     ) {
-      // function name changed in v1.4.8.0
-      if (typeof this._host.game.diplomacy.sellEcoin === "function") {
-        this._host.game.diplomacy.sellEcoin();
-      } else {
-        this._host.game.diplomacy.sellBcoin();
-      }
+      this._host.game.diplomacy.sellBcoin();
 
       const relicsCurrent = mustExist(this._host.game.resPool.get("relic")).value;
       relicsExchanged = Math.round(relicsCurrent - relicsInitial);
