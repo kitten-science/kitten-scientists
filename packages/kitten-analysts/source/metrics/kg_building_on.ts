@@ -8,11 +8,12 @@ export const kg_building_on = (cache: MessageCache, remote: KittensGameRemote) =
     remote,
     help: "How many of the given building are turned on.",
     name: "kg_building_on",
-    labelNames: ["guid", "name", "label", "location", "tab"],
+    labelNames: ["client_type", "client_type", "guid", "name", "label", "location", "tab"],
     require: "getBuildings",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,

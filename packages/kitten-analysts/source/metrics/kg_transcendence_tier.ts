@@ -8,15 +8,16 @@ export const kg_transcendence_tier = (cache: MessageCache, remote: KittensGameRe
     remote,
     help: "Your current transcendence tier.",
     name: "kg_transcendence_tier",
-    labelNames: ["guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       if (element.name !== "transcendenceTier") {
         return;
       }
 
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,

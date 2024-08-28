@@ -8,15 +8,16 @@ export const kg_paragon_total = (cache: MessageCache, remote: KittensGameRemote)
     remote,
     help: "How many paragons you have earned throughout your game.",
     name: "kg_paragon_total",
-    labelNames: ["guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       if (element.name !== "totalParagon") {
         return;
       }
 
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,

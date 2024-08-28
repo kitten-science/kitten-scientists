@@ -8,15 +8,16 @@ export const kg_kittens_total = (cache: MessageCache, remote: KittensGameRemote)
     remote,
     help: "How many kittens you've had throughout your game.",
     name: "kg_kittens_total",
-    labelNames: ["guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       if (element.name !== "totalKittens") {
         return;
       }
 
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,

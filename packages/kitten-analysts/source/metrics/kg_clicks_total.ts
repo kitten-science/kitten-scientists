@@ -8,15 +8,16 @@ export const kg_clicks_total = (cache: MessageCache, remote: KittensGameRemote) 
     remote,
     help: "How many times you have clicked.",
     name: "kg_clicks_total",
-    labelNames: ["guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       if (element.name !== "totalClicks") {
         return;
       }
 
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,

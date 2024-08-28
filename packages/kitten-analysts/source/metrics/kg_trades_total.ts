@@ -8,15 +8,16 @@ export const kg_trades_total = (cache: MessageCache, remote: KittensGameRemote) 
     remote,
     help: "How many trades you've completed.",
     name: "kg_trades_total",
-    labelNames: ["guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       if (element.name !== "totalTrades") {
         return;
       }
 
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,

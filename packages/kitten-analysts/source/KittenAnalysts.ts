@@ -64,6 +64,8 @@ export interface KittenAnalystsMessage<
    */
   data?: TData;
 
+  client_type: "backend" | "browser" | "headless";
+
   /**
    * The HTTP URL that identifies the context of the client that sent the message.
    */
@@ -181,7 +183,12 @@ export class KittenAnalysts {
 
     this.ws.onopen = () => {
       cinfo("WS connection established.");
-      this.postMessage({ type: "connected", location: this.location, guid: game.telemetry.guid });
+      this.postMessage({
+        type: "connected",
+        client_type: this.location.includes("headless.html") ? "headless" : "browser",
+        location: this.location,
+        guid: game.telemetry.guid,
+      });
     };
 
     this.ws.onmessage = event => {
@@ -246,11 +253,12 @@ export class KittenAnalysts {
         );
 
         return {
-          type: message.type,
-          location: this.location,
-          guid: game.telemetry.guid,
-          responseId: message.responseId,
+          client_type: this.location.includes("headless.html") ? "headless" : "browser",
           data: [...bonfire, ...space, ...religion],
+          guid: game.telemetry.guid,
+          location: this.location,
+          responseId: message.responseId,
+          type: message.type,
         };
 
         break;
@@ -265,11 +273,12 @@ export class KittenAnalysts {
         }));
 
         return {
-          type: message.type,
-          location: this.location,
-          guid: game.telemetry.guid,
-          responseId: message.responseId,
+          client_type: this.location.includes("headless.html") ? "headless" : "browser",
           data,
+          guid: game.telemetry.guid,
+          location: this.location,
+          responseId: message.responseId,
+          type: message.type,
         };
 
         break;
@@ -285,11 +294,12 @@ export class KittenAnalysts {
         );
 
         return {
-          type: message.type,
-          location: this.location,
-          guid: game.telemetry.guid,
-          responseId: message.responseId,
+          client_type: this.location.includes("headless.html") ? "headless" : "browser",
           data,
+          guid: game.telemetry.guid,
+          location: this.location,
+          responseId: message.responseId,
+          type: message.type,
         };
 
         break;
@@ -308,20 +318,22 @@ export class KittenAnalysts {
   reportFrameListener = (event: Event): void => {
     const location = window.location.toString().replace(/#$/, "");
     this.postMessage({
-      type: "reportFrame",
-      location,
-      guid: game.telemetry.guid,
+      client_type: location.includes("headless.html") ? "headless" : "browser",
       data: (event as CustomEvent<unknown>).detail,
+      guid: game.telemetry.guid,
+      location,
+      type: "reportFrame",
     });
   };
 
   reportSavegameListener = (event: Event): void => {
     const location = window.location.toString().replace(/#$/, "");
     this.postMessage({
-      type: "reportSavegame",
-      location,
-      guid: game.telemetry.guid,
+      client_type: location.includes("headless.html") ? "headless" : "browser",
       data: (event as CustomEvent<unknown>).detail,
+      guid: game.telemetry.guid,
+      location,
+      type: "reportSavegame",
     });
   };
 

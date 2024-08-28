@@ -8,15 +8,16 @@ export const kg_resets_total = (cache: MessageCache, remote: KittensGameRemote) 
     remote,
     help: "How many times you've reset your game.",
     name: "kg_resets_total",
-    labelNames: ["guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       if (element.name !== "totalResets") {
         return;
       }
 
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,

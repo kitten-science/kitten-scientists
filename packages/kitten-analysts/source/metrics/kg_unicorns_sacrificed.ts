@@ -8,15 +8,16 @@ export const kg_unicorns_sacrificed = (cache: MessageCache, remote: KittensGameR
     remote,
     help: "How many unicorns you have sacrificed so far.",
     name: "kg_unicorns_sacrificed",
-    labelNames: ["guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       if (element.name !== "unicornsSacrificed") {
         return;
       }
 
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,

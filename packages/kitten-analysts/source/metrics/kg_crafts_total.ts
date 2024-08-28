@@ -8,15 +8,16 @@ export const kg_crafts_total = (cache: MessageCache, remote: KittensGameRemote) 
     remote,
     help: "How many times you have crafted.",
     name: "kg_crafts_total",
-    labelNames: ["guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       if (element.name !== "totalCrafts") {
         return;
       }
 
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,

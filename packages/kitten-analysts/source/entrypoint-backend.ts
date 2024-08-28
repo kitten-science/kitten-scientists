@@ -48,7 +48,7 @@ const ks_iterate_duration = new Histogram({
   name: "ks_iterate_duration",
   help: "How long each iteration of KS took.",
   buckets: [...linearBuckets(0, 1, 100), ...exponentialBuckets(100, 1.125, 30)],
-  labelNames: ["guid", "location", "manager"],
+  labelNames: ["client_type", "guid", "location", "manager"],
 });
 
 // KGNet Savegame Storage
@@ -68,8 +68,10 @@ interface KGNetSaveFromGame {
 }
 interface KGNetSaveUpdate {
   guid: string;
-  "metadata[archived]"?: string;
-  "metadata[label]"?: string;
+  metadata?: {
+    archived: string;
+    label: string;
+  };
 }
 interface KGNetSaveFromAnalysts {
   telemetry: {
@@ -187,7 +189,12 @@ export class KittensGameRemote {
           console.info(`=> Received frame report (${message.location}).`, delta);
 
           ks_iterate_duration.observe(
-            { guid: message.guid, location: message.location, manager: "all" },
+            {
+              client_type: message.location.includes("headless.html") ? "headless" : "browser",
+              guid: message.guid,
+              location: message.location,
+              manager: "all",
+            },
             delta,
           );
           for (const [measurement, timeTaken] of Object.entries(payload.measurements)) {
@@ -196,7 +203,12 @@ export class KittensGameRemote {
             }
 
             ks_iterate_duration.observe(
-              { guid: message.guid, location: message.location, manager: measurement },
+              {
+                client_type: message.location.includes("headless.html") ? "headless" : "browser",
+                guid: message.guid,
+                location: message.location,
+                manager: measurement,
+              },
               timeTaken,
             );
           }
@@ -256,12 +268,13 @@ export class KittensGameRemote {
   }
 
   sendMessage<TMessage extends KittenAnalystsMessageId>(
-    message: Omit<KittenAnalystsMessage<TMessage>, "location" | "guid">,
+    message: Omit<KittenAnalystsMessage<TMessage>, "client_type" | "location" | "guid">,
   ): Promise<Array<KittenAnalystsMessage<TMessage> | null>> {
     const clientRequests = [...this.sockets.values()].map(socket =>
       this.#sendMessageToSocket(
         {
           ...message,
+          client_type: "backend",
           guid: "ka-backend",
           location: this.location,
         },
@@ -466,6 +479,7 @@ routerNetwork.post("/kgnet/save/upload", context => {
       .toHeadless({
         type: "injectSavegame",
         data: savegame,
+        client_type: "backend",
         location: `ws://${(remote.wss.address() as AddressInfo | null)?.address ?? "localhost"}:9093/`,
         guid: "ka-backend",
       })
@@ -487,12 +501,12 @@ routerNetwork.post("/kgnet/save/update", context => {
     const gameGUID = gameSave.guid;
     const existingSave = saveStore.get(gameGUID);
     if (isNil(existingSave)) {
-      console.warn(`Couldn't find existing savegame with ID '${gameGUID}'!`);
+      console.warn(`=> Couldn't find existing savegame with ID '${gameGUID}'! Update is ignored.`);
       return;
     }
 
-    existingSave.archived = gameSave["metadata[archived]"] === "true";
-    existingSave.label = gameSave["metadata[label]"] ?? existingSave.label;
+    existingSave.archived = gameSave.metadata?.archived === "true";
+    existingSave.label = gameSave.metadata?.label ?? existingSave.label;
     writeFileSync(`${LOCAL_STORAGE_PATH}/${gameGUID}.json`, JSON.stringify(existingSave));
     saveStore.set(gameGUID, existingSave);
     console.debug(`=> Savegame persisted to disc.`);

@@ -8,15 +8,16 @@ export const kg_kittens_average = (cache: MessageCache, remote: KittensGameRemot
     remote,
     help: "How many kittens were born per century at average.",
     name: "kg_kittens_average",
-    labelNames: ["guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"],
     require: "getStatistics",
-    extract(guid, location, element, subject) {
+    extract(client_type, guid, location, element, subject) {
       if (element.name !== "averageKittens") {
         return;
       }
 
       subject.set(
         {
+          client_type,
           guid,
           label: ucfirst(element.label),
           location,
