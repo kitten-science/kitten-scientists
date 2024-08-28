@@ -1,4 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>oliversalzburg/renovate-config:javascript"]
+  "extends": ["local>oliversalzburg/renovate-config:javascript"],
+  "ignorePaths": ["**/node_modules/**", "contrib/**"]
 }
