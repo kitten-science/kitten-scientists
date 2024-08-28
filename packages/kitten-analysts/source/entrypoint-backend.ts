@@ -66,6 +66,11 @@ interface KGNetSaveFromGame {
    */
   saveData: string;
 }
+interface KGNetSaveUpdate {
+  guid: string;
+  "metadata[archived]"?: string;
+  "metadata[label]"?: string;
+}
 interface KGNetSaveFromAnalysts {
   telemetry: {
     guid: string;
@@ -220,7 +225,6 @@ export class KittensGameRemote {
           };
 
           saveStore.set(payload.telemetry.guid, savegame);
-
           try {
             writeFileSync(
               `${LOCAL_STORAGE_PATH}/${payload.telemetry.guid}.json`,
@@ -437,8 +441,8 @@ routerNetwork.post("/kgnet/save/upload", context => {
       size: context.request.length,
       timestamp: Date.now(),
     };
-    writeFileSync(`${LOCAL_STORAGE_PATH}/${gameGUID}.json`, JSON.stringify(savegame));
     saveStore.set(gameGUID, savegame);
+    writeFileSync(`${LOCAL_STORAGE_PATH}/${gameGUID}.json`, JSON.stringify(savegame));
 
     const savegameEphemeral: KGNetSavePersisted = {
       archived: false,
@@ -449,22 +453,49 @@ routerNetwork.post("/kgnet/save/upload", context => {
       size: context.request.length,
       timestamp: Date.now(),
     };
+    saveStore.set("ka-internal-savestate", savegameEphemeral);
     writeFileSync(
       `${LOCAL_STORAGE_PATH}/ka-internal-savestate.json`,
       JSON.stringify(savegameEphemeral),
     );
-    saveStore.set("ka-internal-savestate", savegameEphemeral);
+
     console.debug(`=> Savegame persisted to disc.`);
 
     console.warn(`=> Injecting savegame into headless session...`);
     remote
       .toHeadless({
         type: "injectSavegame",
-        data: savegameEphemeral,
+        data: savegame,
         location: `ws://${(remote.wss.address() as AddressInfo | null)?.address ?? "localhost"}:9093/`,
         guid: "ka-backend",
       })
       .catch(redirectErrorsToConsole(console));
+
+    context.body = [...saveStore.values()];
+    context.status = 200;
+    return;
+  } catch (error) {
+    console.error(error);
+    context.status = 500;
+  }
+});
+routerNetwork.post("/kgnet/save/update", context => {
+  try {
+    console.debug(`=> Received savegame update.`);
+
+    const gameSave = context.request.body as KGNetSaveUpdate;
+    const gameGUID = gameSave.guid;
+    const existingSave = saveStore.get(gameGUID);
+    if (isNil(existingSave)) {
+      console.warn(`Couldn't find existing savegame with ID '${gameGUID}'!`);
+      return;
+    }
+
+    existingSave.archived = gameSave["metadata[archived]"] === "true";
+    existingSave.label = gameSave["metadata[label]"] ?? existingSave.label;
+    writeFileSync(`${LOCAL_STORAGE_PATH}/${gameGUID}.json`, JSON.stringify(existingSave));
+    saveStore.set(gameGUID, existingSave);
+    console.debug(`=> Savegame persisted to disc.`);
 
     context.body = [...saveStore.values()];
     context.status = 200;
