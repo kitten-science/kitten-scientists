@@ -17,19 +17,19 @@ main() {
   echo "Building Game container..."
   buildah bud \
     --file ./game.Containerfile \
-    --tag localhost/ksa-game:latest \
+    --tag localhost/ka-game:latest \
     ../..
 
   echo "Building Backend container..."
   buildah bud \
     --file ./backend.Containerfile \
-    --tag localhost/ksa-backend:latest \
+    --tag localhost/ka-backend:latest \
     ../..
 
   echo "Building UI container..."
   buildah bud \
     --file ./ui.Containerfile \
-    --tag localhost/ksa-ui:latest \
+    --tag localhost/ka-ui:latest \
     ../..
 
   echo "Done."

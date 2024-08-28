@@ -15,13 +15,13 @@ main() {
   yarn build:all
 
   echo "Removing previous containers..."
-  podman kill ksa-game || true
-  podman kill ksa-backend || true
-  podman kill ksa-ui || true
+  podman kill ka-game || true
+  podman kill ka-backend || true
+  podman kill ka-ui || true
 
-  podman rm ksa-game || true
-  podman rm ksa-backend || true
-  podman rm ksa-ui || true
+  podman rm ka-game || true
+  podman rm ka-backend || true
+  podman rm ka-ui || true
 
   echo "Previous containers removed or non-existent."
 
@@ -51,21 +51,21 @@ main() {
   echo "Running new containers..."
   podman run \
     --detach \
-    --name ksa-game \
+    --name ka-game \
     --pod kittenscience \
-    localhost/ksa-game:latest
+    localhost/ka-game:latest
 
   podman run \
     --detach \
-    --name ksa-backend \
+    --name ka-backend \
     --pod kittenscience \
-    localhost/ksa-backend:latest
+    localhost/ka-backend:latest
 
   podman run \
     --detach \
-    --name ksa-ui \
+    --name ka-ui \
     --pod kittenscience \
-    localhost/ksa-ui:latest
+    localhost/ka-ui:latest
 
   echo "Containers running."
 }

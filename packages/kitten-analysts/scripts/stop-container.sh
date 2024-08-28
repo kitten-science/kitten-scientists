@@ -11,13 +11,13 @@ cd "$(dirname "$0")"
 
 main() {
   echo "Removing containers..."
-  podman kill ksa-game || true
-  podman kill ksa-backend || true
-  podman kill ksa-ui || true
+  podman kill ka-game || true
+  podman kill ka-backend || true
+  podman kill ka-ui || true
 
-  podman rm ksa-game || true
-  podman rm ksa-backend || true
-  podman rm ksa-ui || true
+  podman rm ka-game || true
+  podman rm ka-backend || true
+  podman rm ka-ui || true
 
   echo "Containers removed or non-existent."
 

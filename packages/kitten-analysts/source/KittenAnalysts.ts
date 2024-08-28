@@ -10,7 +10,7 @@ declare global {
   interface Window {
     kittenAnalysts?: KittenAnalysts;
   }
-  const KSA_CONNECT_BACKEND: string | undefined;
+  const KA_CONNECT_BACKEND: string | undefined;
 }
 
 export type KittenAnalystsMessageId =
@@ -67,7 +67,12 @@ export interface KittenAnalystsMessage<
   /**
    * The HTTP URL that identifies the context of the client that sent the message.
    */
-  location?: string;
+  location: string;
+
+  /**
+   * The telemetry guid of the client that sent the message.
+   */
+  guid: string;
 
   /**
    * If the message requires a response, it should declare a `responseId`, which the receiver
@@ -117,7 +122,7 @@ export class KittenAnalysts {
    * Start the user script after loading and configuring it.
    */
   run() {
-    const withAnalyticsBackend = Boolean(KSA_CONNECT_BACKEND);
+    const withAnalyticsBackend = Boolean(KA_CONNECT_BACKEND);
 
     this.connect(withAnalyticsBackend);
   }
@@ -176,7 +181,7 @@ export class KittenAnalysts {
 
     this.ws.onopen = () => {
       cinfo("WS connection established.");
-      this.postMessage({ type: "connected", location: this.location });
+      this.postMessage({ type: "connected", location: this.location, guid: game.telemetry.guid });
     };
 
     this.ws.onmessage = event => {
@@ -243,6 +248,7 @@ export class KittenAnalysts {
         return {
           type: message.type,
           location: this.location,
+          guid: game.telemetry.guid,
           responseId: message.responseId,
           data: [...bonfire, ...space, ...religion],
         };
@@ -261,6 +267,7 @@ export class KittenAnalysts {
         return {
           type: message.type,
           location: this.location,
+          guid: game.telemetry.guid,
           responseId: message.responseId,
           data,
         };
@@ -280,6 +287,7 @@ export class KittenAnalysts {
         return {
           type: message.type,
           location: this.location,
+          guid: game.telemetry.guid,
           responseId: message.responseId,
           data,
         };
@@ -302,6 +310,7 @@ export class KittenAnalysts {
     this.postMessage({
       type: "reportFrame",
       location,
+      guid: game.telemetry.guid,
       data: (event as CustomEvent<unknown>).detail,
     });
   };
@@ -311,6 +320,7 @@ export class KittenAnalysts {
     this.postMessage({
       type: "reportSavegame",
       location,
+      guid: game.telemetry.guid,
       data: (event as CustomEvent<unknown>).detail,
     });
   };

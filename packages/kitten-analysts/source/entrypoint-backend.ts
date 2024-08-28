@@ -115,17 +115,19 @@ interface RemoteConnection {
   isAlive: boolean;
 }
 export class KittensGameRemote {
-  wss: WebSocketServer;
-  sockets = new Set<RemoteConnection>();
-  #lastKnownHeadlessSocket: RemoteConnection | null = null;
-
+  location: string;
   pendingRequests = new Map<string, { resolve: AnyFunction; reject: AnyFunction }>();
+  sockets = new Set<RemoteConnection>();
+  wss: WebSocketServer;
+
+  #lastKnownHeadlessSocket: RemoteConnection | null = null;
 
   constructor(port = 9093) {
     this.wss = new WebSocketServer({ port });
+    this.location = `ws://${(this.wss.address() as AddressInfo | null)?.address ?? "localhost"}:9093/`;
 
     this.wss.on("listening", () => {
-      process.stderr.write(`KSA-BE: WS server listening on port ${port}...\n`);
+      process.stderr.write(`WS server listening on port ${port}...\n`);
     });
 
     // eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -168,7 +170,7 @@ export class KittensGameRemote {
     // eslint-disable-next-line @typescript-eslint/no-base-to-string
     const message = JSON.parse(data.toString()) as KittenAnalystsMessage<KittenAnalystsMessageId>;
 
-    if (message.location?.includes("headless.html")) {
+    if (message.location.includes("headless.html")) {
       this.#lastKnownHeadlessSocket = { isAlive: true, ws: socket };
     }
 
@@ -177,7 +179,7 @@ export class KittensGameRemote {
         case "reportFrame": {
           const payload = message.data as FrameContext;
           const delta = payload.exit - payload.entry;
-          console.info(`KSA-BE: => Received frame report (${message.location}).`, delta);
+          console.info(`=> Received frame report (${message.location}).`, delta);
 
           ks_iterate_duration.observe({ location: message.location, manager: "all" }, delta);
           for (const [measurement, timeTaken] of Object.entries(payload.measurements)) {
@@ -195,7 +197,7 @@ export class KittensGameRemote {
         }
         case "reportSavegame": {
           const payload = message.data as KGNetSaveFromAnalysts;
-          console.info(`KSA-BE: => Received savegame (${message.location}).`);
+          console.info(`=> Received savegame (${message.location}).`);
 
           const calendar = payload.calendar;
           const saveDataCompressed = compressToUTF16(JSON.stringify(payload));
@@ -211,33 +213,29 @@ export class KittensGameRemote {
 
           // For the headless session, write the savegame to the ephemeral state.
           // Otherwise, ignore the report. We expect UI session to report through KGNet.
-          if (message.location?.includes("headless.html")) {
+          if (message.location.includes("headless.html")) {
             saveStore.set("ks-internal-savestate", savegame);
             try {
               writeFileSync(
                 `${LOCAL_STORAGE_PATH}/ks-internal-savestate.json`,
                 JSON.stringify(savegame),
               );
-              console.debug(`KSA-BE: => Savegame persisted to disc.`);
+              console.debug(`=> Savegame persisted to disc.`);
             } catch (error) {
-              console.error("KSA-BE: !> Error while persisting savegame to disc!", error);
+              console.error("!> Error while persisting savegame to disc!", error);
             }
           }
 
           return;
         }
         default:
-          console.warn(
-            `KSA-BE: !> Report with type '${message.type}' is unexpected! Message ignored.`,
-          );
+          console.warn(`!> Report with type '${message.type}' is unexpected! Message ignored.`);
           return;
       }
     }
 
     if (!this.pendingRequests.has(message.responseId)) {
-      console.warn(
-        `KSA-BE: !> Response ID '${message.responseId}' is unexpected! Message ignored.`,
-      );
+      console.warn(`!> Response ID '${message.responseId}' is unexpected! Message ignored.`);
       return;
     }
 
@@ -245,17 +243,18 @@ export class KittensGameRemote {
     this.pendingRequests.delete(message.responseId);
 
     pendingRequest?.resolve(message);
-    console.debug(`KSA-BE: => Request ID '${message.responseId}' was resolved.`);
+    console.debug(`=> Request ID '${message.responseId}' was resolved.`);
   }
 
   sendMessage<TMessage extends KittenAnalystsMessageId>(
-    message: KittenAnalystsMessage<TMessage>,
+    message: Omit<KittenAnalystsMessage<TMessage>, "location" | "guid">,
   ): Promise<Array<KittenAnalystsMessage<TMessage> | null>> {
     const clientRequests = [...this.sockets.values()].map(socket =>
       this.#sendMessageToSocket(
         {
           ...message,
-          location: `ws://${(this.wss.address() as AddressInfo | null)?.address ?? "localhost"}:9093/`,
+          guid: "ka-backend",
+          location: this.location,
         },
         socket,
       ),
@@ -271,11 +270,11 @@ export class KittensGameRemote {
     const requestId = uuid();
     message.responseId = requestId;
 
-    console.debug(`KSA-BE: <= ${identifyExchange(message)}...`);
+    console.debug(`<= ${identifyExchange(message)}...`);
 
     const request = new Promise<KittenAnalystsMessage<TMessage> | null>((resolve, reject) => {
       if (!socket.isAlive || socket.ws.readyState === WebSocket.CLOSED) {
-        console.warn("KSA-BE: Send request can't be handled, because socket is dead!");
+        console.warn("Send request can't be handled, because socket is dead!");
         socket.isAlive = false;
         resolve(null);
         return;
@@ -419,7 +418,7 @@ routerNetwork.get("/kgnet/save", context => {
 
 routerNetwork.post("/kgnet/save/upload", context => {
   try {
-    console.debug(`KSA-BE: => Received savegame.`);
+    console.debug(`=> Received savegame.`);
 
     const gameSave = context.request.body as KGNetSaveFromGame;
     const gameGUID = gameSave.guid;
@@ -450,11 +449,16 @@ routerNetwork.post("/kgnet/save/upload", context => {
       JSON.stringify(savegameEphemeral),
     );
     saveStore.set("ks-internal-savestate", savegameEphemeral);
-    console.debug(`KSA-BE: => Savegame persisted to disc.`);
+    console.debug(`=> Savegame persisted to disc.`);
 
-    console.warn(`KSA-BE: => Injecting savegame into headless session...`);
+    console.warn(`=> Injecting savegame into headless session...`);
     remote
-      .toHeadless({ type: "injectSavegame", data: savegameEphemeral })
+      .toHeadless({
+        type: "injectSavegame",
+        data: savegameEphemeral,
+        location: `ws://${(remote.wss.address() as AddressInfo | null)?.address ?? "localhost"}:9093/`,
+        guid: "ka-backend",
+      })
       .catch(redirectErrorsToConsole(console));
 
     context.body = [...saveStore.values()];

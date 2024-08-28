@@ -153,7 +153,7 @@ jobs:
       is_latest: false
       push: true
 
-  publish-ksa-backend:
+  publish-ka-backend:
     name: 🔹 Publish Backend
     needs:
       - qa
@@ -168,17 +168,17 @@ jobs:
       security-events: write
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
-      artifact-name: ksa-backend-output
+      artifact-name: ka-backend-output
       attest: false
       containerfile: packages/kitten-analysts/backend.Containerfile
       image_description: Kitten Science Analytics Backend
-      image_name: kitten-science/ksa-backend
+      image_name: kitten-science/ka-backend
       image_tag: nightly
-      image_title: ksa-backend
+      image_title: ka-backend
       is_latest: false
       push: true
 
-  publish-ksa-game:
+  publish-ka-game:
     name: 🔹 Publish Game
     needs:
       - qa
@@ -193,17 +193,17 @@ jobs:
       security-events: write
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
-      artifact-name: ksa-game-output
+      artifact-name: ka-game-output
       attest: false
       containerfile: packages/kitten-analysts/game.Containerfile
       image_description: Kittens Game with Kitten Science Analytics
-      image_name: kitten-science/ksa-game
+      image_name: kitten-science/ka-game
       image_tag: nightly
-      image_title: ksa-game
+      image_title: ka-game
       is_latest: false
       push: true
 
-  publish-ksa-ui:
+  publish-ka-ui:
     name: 🔹 Publish UI
     needs:
       - qa
@@ -218,12 +218,12 @@ jobs:
       security-events: write
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
-      artifact-name: ksa-ui-output
+      artifact-name: ka-ui-output
       attest: false
       containerfile: packages/kitten-analysts/ui.Containerfile
       image_description: Headless Kittens Game
-      image_name: kitten-science/ksa-ui
+      image_name: kitten-science/ka-ui
       image_tag: nightly
-      image_title: ksa-ui
+      image_title: ka-ui
       is_latest: false
       push: true

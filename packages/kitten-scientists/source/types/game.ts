@@ -414,6 +414,11 @@ export type Game = {
     GameTab,
     GameTab,
   ];
+  telemetry: {
+    buildRevision: number;
+    guid: string;
+    version: string;
+  };
   ticksPerSecond: number;
   time: {
     chronoforgeUpgrades: Array<ChronoForgeUpgradeInfo>;

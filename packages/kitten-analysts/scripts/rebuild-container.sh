@@ -19,21 +19,21 @@ main() {
   buildah bud \
     --file ./game.Containerfile \
     --no-cache \
-    --tag localhost/ksa-game:latest \
+    --tag localhost/ka-game:latest \
     ../..
 
   echo "Re-Building Backend container..."
   buildah bud \
     --file ./backend.Containerfile \
     --no-cache \
-    --tag localhost/ksa-backend:latest \
+    --tag localhost/ka-backend:latest \
     ../..
 
   echo "Re-Building UI container..."
   buildah bud \
     --file ./ui.Containerfile \
     --no-cache \
-    --tag localhost/ksa-ui:latest \
+    --tag localhost/ka-ui:latest \
     ../..
 
   echo "Done."

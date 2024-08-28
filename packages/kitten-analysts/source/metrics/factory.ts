@@ -46,7 +46,7 @@ export const gaugeFactory = <
           continue;
         }
         for (const entity of mustExist(clientResponse.data) as TData) {
-          instructions.extract(clientResponse.location ?? "", entity, this);
+          instructions.extract(clientResponse.location, entity, this);
         }
       }
     },

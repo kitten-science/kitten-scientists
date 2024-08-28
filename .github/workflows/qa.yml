@@ -80,37 +80,37 @@ jobs:
         packages/*/output
       containerfile: packages/devcontainer/Containerfile
       working-directory: packages/devcontainer
-  qa-ksa-backend:
+  qa-ka-backend:
     # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
     if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
     name: 🔹 QA Backend
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
-      artifact-name: ksa-backend-output
+      artifact-name: ka-backend-output
       artifact-contents: |
         node_modules
         packages/*/output
       containerfile: packages/kitten-analysts/backend.Containerfile
       working-directory: packages/kitten-analysts
-  qa-ksa-game:
+  qa-ka-game:
     # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
     if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
     name: 🔹 QA Game
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
-      artifact-name: ksa-game-output
+      artifact-name: ka-game-output
       artifact-contents: |
         node_modules
         packages/*/output
       containerfile: packages/kitten-analysts/game.Containerfile
       working-directory: packages/kitten-analysts
-  qa-ksa-ui:
+  qa-ka-ui:
     # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
     if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
     name: 🔹 QA UI
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
-      artifact-name: ksa-ui-output
+      artifact-name: ka-ui-output
       artifact-contents: |
         node_modules
         packages/*/output
@@ -122,9 +122,9 @@ jobs:
       - qa-commit
       - qa
       - qa-devcontainer
-      - qa-ksa-backend
-      - qa-ksa-game
-      - qa-ksa-ui
+      - qa-ka-backend
+      - qa-ka-game
+      - qa-ka-ui
     name: QA Passed
     # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
     if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
