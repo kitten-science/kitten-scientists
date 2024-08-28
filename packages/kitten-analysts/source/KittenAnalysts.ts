@@ -289,9 +289,7 @@ export class KittenAnalysts {
       case "injectSavegame": {
         cwarn("=> Injecting savegame...");
         const data = message.data as KGNetSavePersisted;
-        new SavegameLoader(this.game)
-          .load(data.saveData as string)
-          .catch(redirectErrorsToConsole(console));
+        new SavegameLoader(this.game).load(data.saveData).catch(redirectErrorsToConsole(console));
         break;
       }
     }

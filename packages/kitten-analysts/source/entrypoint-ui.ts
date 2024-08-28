@@ -1,9 +1,10 @@
 import { redirectErrorsToStream } from "@oliversalzburg/js-utils/errors/stream.js";
 import { readFile } from "fs/promises";
 import { JSDOM } from "jsdom";
+import { decompressFromUTF16 } from "lz-string";
 import { join } from "path";
+import { KGNetSavePersisted } from "./entrypoint-backend.js";
 import { LOCAL_STORAGE_PATH } from "./globals.js";
-import "./KittenAnalysts.js";
 
 const main = async () => {
   const dom = await JSDOM.fromURL("http://localhost:8080/headless.html", {
@@ -16,11 +17,25 @@ const main = async () => {
 
   try {
     const lsEntry = "com.nuclearunicorn.kittengame.savedata";
+    process.stderr.write(`Reading '${ephemeralPath}'...\n`);
     const value = await readFile(ephemeralPath, "utf-8");
-    process.stderr.write(`Setting '${lsEntry}' to contents of '${ephemeralPath}'...\n`);
-    dom.window.localStorage.setItem(lsEntry, value);
+
+    process.stderr.write(`File contents: '${value.substring(0, 30).replaceAll("\n", "")}'\n`);
+
+    const cloudSave = JSON.parse(value) as KGNetSavePersisted;
+
+    process.stderr.write(`Cloud save is typeof: '${typeof cloudSave}'\n`);
+    process.stderr.write(`Cloud save save data is typeof: '${typeof cloudSave.saveData}'\n`);
+
+    const saveDataString = decompressFromUTF16(cloudSave.saveData);
+    process.stderr.write(
+      `Decompressed data string: '${saveDataString.substring(0, 30).replaceAll("\n", "")}'\n`,
+    );
+
+    process.stderr.write(`Setting '${lsEntry}' to save game from '${ephemeralPath}'...\n`);
+    dom.window.localStorage.setItem(lsEntry, saveDataString);
   } catch (_error) {
-    process.stderr.write(`Unable to save state from '${ephemeralPath}'.\n`);
+    process.stderr.write(`Unable to read save state from '${ephemeralPath}'.\n`);
   }
 
   process.stderr.write("Successfully initialized.\n");

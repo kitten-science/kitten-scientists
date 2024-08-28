@@ -7,6 +7,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import Koa from "koa";
 import Router from "koa-router";
+import { compressToUTF16 } from "lz-string";
 import { writeFileSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { AddressInfo } from "node:net";
@@ -60,7 +61,10 @@ interface KGNetSaveFromGame {
       year: number;
     };
   };
-  saveData: unknown;
+  /**
+   * lz-string compressed UTF-16.
+   */
+  saveData: string;
 }
 interface KGNetSaveFromAnalysts {
   telemetry: {
@@ -82,7 +86,10 @@ export interface KGNetSavePersisted {
   };
   label: string;
   timestamp: number;
-  saveData: unknown;
+  /**
+   * lz-string compressed UTF-16.
+   */
+  saveData: string;
   size: number;
 }
 const saveStore = new Map<string, KGNetSavePersisted>();
@@ -97,7 +104,7 @@ saveStore.set("ks-internal-savestate", {
     },
   },
   timestamp: 0,
-  saveData: {},
+  saveData: "",
   size: 0,
 });
 
@@ -191,13 +198,14 @@ export class KittensGameRemote {
           console.info(`KSA-BE: => Received savegame (${message.location}).`);
 
           const calendar = payload.calendar;
+          const saveDataCompressed = compressToUTF16(JSON.stringify(payload));
           const savegame: KGNetSavePersisted = {
             archived: false,
             guid: "ks-internal-savestate",
             index: { calendar: { day: calendar.day, year: calendar.year } },
             label: "Ephemeral Background Game",
-            saveData: payload,
-            size: JSON.stringify(payload).length,
+            saveData: saveDataCompressed,
+            size: saveDataCompressed.length,
             timestamp: Date.now(),
           };
 
