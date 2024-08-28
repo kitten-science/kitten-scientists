@@ -78,7 +78,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "kg_resets_total{location=\"$location\"}",
+          "expr": "kg_resets_total{location=\"$location\", instance=\"$instance\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": true,
@@ -174,7 +174,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "kg_paragon_total{type=\"all_time\", location=~\"$location\"}",
+          "expr": "kg_paragon_total{type=\"all_time\", location=\"$location\", instance=\"$instance\"}",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -191,7 +191,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "kg_resource_value{name=\"paragon\", location=~\"$location\"}",
+          "expr": "kg_resource_value{name=\"paragon\", location=\"$location\", instance=\"$instance\"}",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -210,10 +210,11 @@
         "type": "prometheus",
         "uid": "edfubm2gdhedcf"
       },
+      "description": "How many kittens are currently alive?",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisBorderShow": false,
@@ -244,7 +245,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "dashed"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -256,35 +257,27 @@
                 "value": null
               },
               {
-                "color": "blue",
-                "value": 16
-              },
-              {
-                "color": "orange",
-                "value": 100
-              },
-              {
                 "color": "red",
-                "value": 1000
+                "value": 80
               }
             ]
           },
-          "unit": "ms"
+          "unit": "short"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 8,
+        "h": 5,
+        "w": 4,
         "x": 6,
         "y": 0
       },
-      "id": 3,
+      "id": 15,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "right",
+          "placement": "bottom",
           "showLegend": false
         },
         "tooltip": {
@@ -299,109 +292,121 @@
             "uid": "edfubm2gdhedcf"
           },
           "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.99, avg by(le) (rate(ks_iterate_duration_bucket{manager=\"all\", location=~\"$location\"}[$__rate_interval])))",
-          "format": "heatmap",
-          "fullMetaSearch": false,
-          "includeNullMetadata": false,
-          "instant": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "edfubm2gdhedcf"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, avg by(le) (rate(ks_iterate_duration_bucket{manager=\"all\", location=~\"$location\"}[$__rate_interval])))",
-          "format": "heatmap",
+          "editorMode": "builder",
+          "expr": "kg_resource_value{location=\"$location\", name=\"kittens\", instance=\"$instance\"}",
           "fullMetaSearch": false,
           "hide": false,
-          "includeNullMetadata": false,
+          "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "{{name}}",
           "range": true,
           "refId": "B",
           "useBackend": false
+        }
+      ],
+      "title": "Kittens",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "edfubm2gdhedcf"
+      },
+      "description": "How many time crystals are currently in stock?",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
         },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 10,
+        "y": 0
+      },
+      "id": 16,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "edfubm2gdhedcf"
           },
           "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.9, avg by(le) (rate(ks_iterate_duration_bucket{manager=\"all\", location=~\"$location\"}[$__rate_interval])))",
-          "format": "heatmap",
+          "editorMode": "builder",
+          "expr": "kg_resource_value{location=\"$location\", name=\"timeCrystal\", instance=\"$instance\"}",
           "fullMetaSearch": false,
           "hide": false,
-          "includeNullMetadata": false,
+          "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "{{name}}",
           "range": true,
-          "refId": "C",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "edfubm2gdhedcf"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.75, avg by(le) (rate(ks_iterate_duration_bucket{manager=\"all\", location=~\"$location\"}[$__rate_interval])))",
-          "format": "heatmap",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": false,
-          "instant": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "D",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "edfubm2gdhedcf"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.5, avg by(le) (rate(ks_iterate_duration_bucket{manager=\"all\", location=~\"$location\"}[$__rate_interval])))",
-          "format": "heatmap",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": false,
-          "instant": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "E",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "edfubm2gdhedcf"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.25, avg by(le) (rate(ks_iterate_duration_bucket{manager=\"all\", location=~\"$location\"}[$__rate_interval])))",
-          "format": "heatmap",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": false,
-          "instant": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "F",
+          "refId": "B",
           "useBackend": false
         }
       ],
-      "title": "KS Iteration Duration",
+      "title": "Time Crystals",
       "type": "timeseries"
     },
     {
@@ -499,7 +504,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.99, avg by(le, manager) (rate(ks_iterate_duration_bucket{manager!=\"all\", location=~\"$location\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, avg by(le, manager) (rate(ks_iterate_duration_bucket{manager!=\"all\", location=\"$location\", instance=\"$instance\"}[$__rate_interval])))",
           "format": "heatmap",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
@@ -570,7 +575,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "kg_transcendence_tier{location=\"$location\"}",
+          "expr": "kg_transcendence_tier{location=\"$location\", instance=\"$instance\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": true,
@@ -669,7 +674,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "rate(kg_crafts_total{type=\"current\", location=~\"$location\"}[$__rate_interval])",
+          "expr": "rate(kg_crafts_total{type=\"current\", location=\"$location\", instance=\"$instance\"}[$__rate_interval])",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -681,6 +686,108 @@
         }
       ],
       "title": "Craft Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "edfubm2gdhedcf"
+      },
+      "description": "How much unobtainium is currently in stock?",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 10,
+        "y": 5
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "edfubm2gdhedcf"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "kg_resource_value{location=\"$location\", name=\"unobtainium\", instance=\"$instance\"}",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "B",
+          "useBackend": false
+        }
+      ],
+      "title": "Unobtainium",
       "type": "timeseries"
     },
     {
@@ -769,7 +876,7 @@
       "id": 1,
       "options": {
         "legend": {
-          "calcs": ["firstNotNull", "lastNotNull"],
+          "calcs": ["max", "last"],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
@@ -789,7 +896,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max by(label) (kg_resource_value{craftable=\"false\", location=~\"$location\"})",
+          "expr": "max by(label) (kg_resource_value{craftable=\"false\", location=\"$location\", instance=\"$instance\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "instant": false,
@@ -877,7 +984,7 @@
       "id": 8,
       "options": {
         "legend": {
-          "calcs": ["firstNotNull", "lastNotNull"],
+          "calcs": ["max", "last"],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
@@ -897,7 +1004,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max by(label) (kg_resource_value{craftable=\"true\", location=~\"$location\"})",
+          "expr": "max by(label) (kg_resource_value{craftable=\"true\", location=\"$location\", instance=\"$instance\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "instant": false,
@@ -996,7 +1103,7 @@
       "id": 2,
       "options": {
         "legend": {
-          "calcs": ["firstNotNull", "lastNotNull"],
+          "calcs": ["max", "last"],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
@@ -1017,7 +1124,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "max by(label) (kg_building_value{tab=\"bonfire\", location=~\"$location\"})",
+          "expr": "max by(label) (kg_building_value{tab=\"bonfire\", location=\"$location\", instance=\"$instance\"})",
           "format": "time_series",
           "fullMetaSearch": false,
           "hide": false,
@@ -1105,7 +1212,7 @@
       "id": 14,
       "options": {
         "legend": {
-          "calcs": ["firstNotNull", "lastNotNull"],
+          "calcs": ["max", "last"],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
@@ -1126,7 +1233,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "max by(label) (kg_building_value{tab=\"religion\", location=\"$location\"})",
+          "expr": "max by(label) (kg_building_value{tab=\"religion\", location=\"$location\", instance=\"$instance\"})",
           "format": "time_series",
           "fullMetaSearch": false,
           "hide": false,
@@ -1214,7 +1321,7 @@
       "id": 4,
       "options": {
         "legend": {
-          "calcs": ["firstNotNull", "lastNotNull"],
+          "calcs": ["max", "last"],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
@@ -1235,7 +1342,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "max by(label) (kg_building_value{tab=\"space\", location=~\"$location\"})",
+          "expr": "max by(label) (kg_building_value{tab=\"space\", location=\"$location\", instance=\"$instance\"})",
           "format": "time_series",
           "fullMetaSearch": false,
           "hide": false,
@@ -1258,6 +1365,35 @@
     "list": [
       {
         "current": {
+          "selected": true,
+          "text": "workstation.labnet:9091",
+          "value": "workstation.labnet:9091"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "edfubm2gdhedcf"
+        },
+        "definition": "label_values(kg_resource_value,instance)",
+        "description": "The Kitten Analysts exporter instance to show data from.",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Instance",
+        "multi": false,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(kg_resource_value,instance)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
           "selected": false,
           "text": "http://localhost:9080/",
           "value": "http://localhost:9080/"
@@ -1266,7 +1402,7 @@
           "type": "prometheus",
           "uid": "edfubm2gdhedcf"
         },
-        "definition": "label_values(location)",
+        "definition": "label_values(kg_resource_value{instance=\"$instance\"},location)",
         "description": "The browser URL where Kitten Analysts are running.",
         "hide": 0,
         "includeAll": false,
@@ -1276,7 +1412,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(location)",
+          "query": "label_values(kg_resource_value{instance=\"$instance\"},location)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -1288,13 +1424,13 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Kittens",
   "uid": "edr9sjxz9yk8wc",
-  "version": 30,
+  "version": 41,
   "weekStart": ""
 }
