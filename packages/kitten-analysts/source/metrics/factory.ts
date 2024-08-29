@@ -1,22 +1,30 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Gauge } from "prom-client";
 import { MessageCache } from "../entrypoint-backend.js";
-import { PayloadBuildings, PayloadResources, PayloadStatistics } from "../KittenAnalysts.js";
+import {
+  PayloadBuildings,
+  PayloadResources,
+  PayloadStatistics,
+  PayloadTechnologies,
+} from "../KittenAnalysts.js";
 import { KittensGameRemote } from "../network/KittensGameRemote.js";
 
 export const gaugeFactory = <
-  TMessage extends "getBuildings" | "getResourcePool" | "getStatistics",
+  TMessage extends "getBuildings" | "getResourcePool" | "getStatistics" | "getTechnologies",
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   TData extends
     | PayloadBuildings
     | PayloadResources
-    | PayloadStatistics = TMessage extends "getBuildings"
+    | PayloadStatistics
+    | PayloadTechnologies = TMessage extends "getBuildings"
     ? PayloadBuildings
     : TMessage extends "getResourcePool"
       ? PayloadResources
       : TMessage extends "getStatistics"
         ? PayloadStatistics
-        : never,
+        : TMessage extends "getTechnologies"
+          ? PayloadTechnologies
+          : never,
 >(instructions: {
   cache: MessageCache;
   remote: KittensGameRemote;

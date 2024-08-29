@@ -1,6 +1,6 @@
 import { SavegameLoader } from "@kitten-science/kitten-scientists/tools/SavegameLoader.js";
 import { Game } from "@kitten-science/kitten-scientists/types/game.js";
-import { I18nEngine } from "@kitten-science/kitten-scientists/types/index.js";
+import { I18nEngine, TabId } from "@kitten-science/kitten-scientists/types/index.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { KGNetSavePersisted } from "./globals.js";
 import { cdebug, cinfo, cwarn } from "./tools/Log.js";
@@ -18,6 +18,7 @@ export type KittenAnalystsMessageId =
   | "getBuildings"
   | "getResourcePool"
   | "getStatistics"
+  | "getTechnologies"
   | "injectSavegame"
   | "reportFrame"
   | "reportSavegame";
@@ -26,7 +27,7 @@ export type PayloadBuildings = Array<{
   label: string;
   name: string;
   on: number;
-  tab: string;
+  tab: TabId;
   value: number;
 }>;
 export type PayloadResources = Array<{
@@ -42,6 +43,13 @@ export type PayloadStatistics = Array<{
   type: "all_time" | "current";
   value: number;
 }>;
+export type PayloadTechnologies = Array<{
+  label: string;
+  name: string;
+  researched: boolean;
+  tab: TabId;
+  unlocked: boolean;
+}>;
 
 export interface KittenAnalystsMessage<
   TMessage extends KittenAnalystsMessageId,
@@ -51,13 +59,15 @@ export interface KittenAnalystsMessage<
       ? PayloadResources
       : TMessage extends "getStatistics"
         ? PayloadStatistics
-        : TMessage extends "reportFrame"
-          ? unknown
-          : TMessage extends "reportSavegame"
+        : TMessage extends "getTechnologies"
+          ? PayloadTechnologies
+          : TMessage extends "reportFrame"
             ? unknown
-            : TMessage extends "injectSavegame"
-              ? KGNetSavePersisted
-              : never,
+            : TMessage extends "reportSavegame"
+              ? unknown
+              : TMessage extends "injectSavegame"
+                ? KGNetSavePersisted
+                : never,
 > {
   /**
    * The payload of the message.
@@ -219,7 +229,7 @@ export class KittenAnalysts {
               value: index === building.stage ? building.val : 0,
               on: index === building.stage ? building.on : 0,
               label: stage.label,
-              tab: "bonfire",
+              tab: "Bonfire",
             }));
           }
           return {
@@ -227,7 +237,7 @@ export class KittenAnalysts {
             value: building.val,
             on: building.on,
             label: building.label ?? building.name,
-            tab: "bonfire",
+            tab: "Bonfire",
           };
         });
         const space: PayloadBuildings = game.space.meta.flatMap((meta, index) =>
@@ -239,7 +249,7 @@ export class KittenAnalysts {
                 value: building.val,
                 on: building.on,
                 label: building.label,
-                tab: "space",
+                tab: "Space",
               })),
         );
         const religion: PayloadBuildings = game.religion.meta.flatMap(meta =>
@@ -248,7 +258,7 @@ export class KittenAnalysts {
             value: building.val,
             on: 0,
             label: building.label,
-            tab: "religion",
+            tab: "Religion",
           })),
         );
 
@@ -260,8 +270,6 @@ export class KittenAnalysts {
           responseId: message.responseId,
           type: message.type,
         };
-
-        break;
       }
       case "getResourcePool": {
         const resources: PayloadResources = game.resPool.resources.map(resource => ({
@@ -303,8 +311,6 @@ export class KittenAnalysts {
           responseId: message.responseId,
           type: message.type,
         };
-
-        break;
       }
       case "getStatistics": {
         const data: PayloadStatistics = game.stats.statGroups.flatMap((group, index) =>
@@ -324,8 +330,24 @@ export class KittenAnalysts {
           responseId: message.responseId,
           type: message.type,
         };
+      }
+      case "getTechnologies": {
+        const data: PayloadTechnologies = game.science.techs.map(tech => ({
+          name: tech.name,
+          label: tech.label,
+          researched: tech.researched,
+          unlocked: tech.unlocked,
+          tab: "Science",
+        }));
 
-        break;
+        return {
+          client_type: this.location.includes("headless.html") ? "headless" : "browser",
+          data,
+          guid: game.telemetry.guid,
+          location: this.location,
+          responseId: message.responseId,
+          type: message.type,
+        };
       }
       case "injectSavegame": {
         cwarn("=> Injecting savegame...");

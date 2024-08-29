@@ -20,6 +20,7 @@ import {
   PayloadBuildings,
   PayloadResources,
   PayloadStatistics,
+  PayloadTechnologies,
 } from "./KittenAnalysts.js";
 import { kg_building_on } from "./metrics/kg_building_on.js";
 import { kg_building_value } from "./metrics/kg_building_value.js";
@@ -35,6 +36,8 @@ import { kg_paragon_total } from "./metrics/kg_paragon_total.js";
 import { kg_resets_total } from "./metrics/kg_resets_total.js";
 import { kg_resource_max_value } from "./metrics/kg_resource_max_value.js";
 import { kg_resource_value } from "./metrics/kg_resource_value.js";
+import { kg_tech_researched } from "./metrics/kg_tech_researched.js";
+import { kg_tech_unlocked } from "./metrics/kg_tech_unlocked.js";
 import { kg_trades_total } from "./metrics/kg_trades_total.js";
 import { kg_transcendence_tier } from "./metrics/kg_transcendence_tier.js";
 import { kg_unicorns_sacrificed } from "./metrics/kg_unicorns_sacrificed.js";
@@ -74,7 +77,7 @@ const cache = new Map<
   Promise<
     Array<KittenAnalystsMessage<
       KittenAnalystsMessageId,
-      PayloadBuildings | PayloadResources | PayloadStatistics
+      PayloadBuildings | PayloadResources | PayloadStatistics | PayloadTechnologies
     > | null>
   >
 >();
@@ -102,6 +105,8 @@ register.registerMetric(kg_kittens_dead(cache, remote));
 register.registerMetric(kg_kittens_total(cache, remote));
 register.registerMetric(kg_paragon_total(cache, remote));
 register.registerMetric(kg_resets_total(cache, remote));
+register.registerMetric(kg_tech_researched(cache, remote));
+register.registerMetric(kg_tech_unlocked(cache, remote));
 register.registerMetric(kg_trades_total(cache, remote));
 register.registerMetric(kg_transcendence_tier(cache, remote));
 register.registerMetric(kg_unicorns_sacrificed(cache, remote));
