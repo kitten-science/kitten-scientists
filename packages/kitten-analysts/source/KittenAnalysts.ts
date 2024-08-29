@@ -264,17 +264,40 @@ export class KittenAnalysts {
         break;
       }
       case "getResourcePool": {
-        const data: PayloadResources = game.resPool.resources.map(resource => ({
+        const resources: PayloadResources = game.resPool.resources.map(resource => ({
           name: resource.name,
           value: resource.value,
           maxValue: resource.maxValue,
           label: resource.title,
           craftable: resource.craftable ?? false,
         }));
+        const pseudoResources: PayloadResources = [
+          {
+            craftable: false,
+            label: "Worship",
+            maxValue: Infinity,
+            name: "worship",
+            value: game.religion.faith,
+          },
+          {
+            craftable: false,
+            label: "Epiphany",
+            maxValue: Infinity,
+            name: "epiphany",
+            value: game.religion.faithRatio,
+          },
+          {
+            craftable: false,
+            label: "Necrocorn Deficit",
+            maxValue: Infinity,
+            name: "necrocornDeficit",
+            value: game.religion.pactsManager.necrocornDeficit,
+          },
+        ];
 
         return {
           client_type: this.location.includes("headless.html") ? "headless" : "browser",
-          data,
+          data: [...resources, ...pseudoResources],
           guid: game.telemetry.guid,
           location: this.location,
           responseId: message.responseId,

@@ -292,6 +292,10 @@ export type Game = {
       provider: { getEffect: (bld: unknown, effect: unknown) => unknown };
     }>;
 
+    pactsManager: {
+      necrocornDeficit: number;
+    };
+
     praise: () => void;
 
     religionUpgrades: Array<ReligionUpgradeInfo>;
