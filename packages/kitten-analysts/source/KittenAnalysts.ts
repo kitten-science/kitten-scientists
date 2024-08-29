@@ -2,7 +2,7 @@ import { SavegameLoader } from "@kitten-science/kitten-scientists/tools/Savegame
 import { Game } from "@kitten-science/kitten-scientists/types/game.js";
 import { I18nEngine } from "@kitten-science/kitten-scientists/types/index.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { KGNetSavePersisted } from "./entrypoint-backend.js";
+import { KGNetSavePersisted } from "./globals.js";
 import { cdebug, cinfo, cwarn } from "./tools/Log.js";
 import { identifyExchange } from "./tools/MessageFormat.js";
 
@@ -288,7 +288,7 @@ export class KittenAnalysts {
           },
           {
             craftable: false,
-            label: "Necrocorn Deficit",
+            label: "Necrocorn deficit",
             maxValue: Infinity,
             name: "necrocornDeficit",
             value: game.religion.pactsManager.necrocornDeficit,

@@ -1,5 +1,6 @@
 import { ucfirst } from "@kitten-science/kitten-scientists/tools/Format.js";
-import { KittensGameRemote, MessageCache } from "../entrypoint-backend.js";
+import { MessageCache } from "../entrypoint-backend.js";
+import { KittensGameRemote } from "../network/KittensGameRemote.js";
 import { gaugeFactory } from "./factory.js";
 
 export const kg_events_observed = (cache: MessageCache, remote: KittensGameRemote) =>
@@ -8,7 +9,7 @@ export const kg_events_observed = (cache: MessageCache, remote: KittensGameRemot
     remote,
     help: "How many rare events you have observed.",
     name: "kg_events_observed",
-    labelNames: ["client_type", "guid", "label", "location", "type"],
+    labelNames: ["client_type", "guid", "label", "location", "type"] as const,
     require: "getStatistics",
     extract(client_type, guid, location, element, subject) {
       if (element.name !== "eventsObserved") {

@@ -1,7 +1,8 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Gauge } from "prom-client";
-import { KittensGameRemote, MessageCache } from "../entrypoint-backend.js";
+import { MessageCache } from "../entrypoint-backend.js";
 import { PayloadBuildings, PayloadResources, PayloadStatistics } from "../KittenAnalysts.js";
+import { KittensGameRemote } from "../network/KittensGameRemote.js";
 
 export const gaugeFactory = <
   TMessage extends "getBuildings" | "getResourcePool" | "getStatistics",

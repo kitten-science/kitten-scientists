@@ -3,11 +3,13 @@ import { readFile } from "fs/promises";
 import { JSDOM } from "jsdom";
 import { decompressFromUTF16 } from "lz-string";
 import { join } from "path";
-import { KGNetSavePersisted } from "./entrypoint-backend.js";
-import { LOCAL_STORAGE_PATH } from "./globals.js";
+import { KGNetSavePersisted, LOCAL_STORAGE_PATH } from "./globals.js";
+
+const HOSTNAME_KG = process.env.HOSTNAME_KG ?? "localhost";
+const PORT_HTTP_KG = process.env.PORT_HTTP_KG ? Number(process.env.PORT_HTTP_KG) : 8080;
 
 const main = async () => {
-  const dom = await JSDOM.fromURL("http://localhost:8080/headless.html", {
+  const dom = await JSDOM.fromURL(`http://${HOSTNAME_KG}:${PORT_HTTP_KG}/headless.html`, {
     pretendToBeVisual: true,
     resources: "usable",
     runScripts: "dangerously",

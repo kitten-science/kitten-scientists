@@ -1,6 +1,7 @@
 import { ucfirst } from "@kitten-science/kitten-scientists/tools/Format.js";
 import { roundTo } from "@oliversalzburg/js-utils/math/core.js";
-import { KittensGameRemote, MessageCache } from "../entrypoint-backend.js";
+import { MessageCache } from "../entrypoint-backend.js";
+import { KittensGameRemote } from "../network/KittensGameRemote.js";
 import { gaugeFactory } from "./factory.js";
 
 export const kg_resource_value = (cache: MessageCache, remote: KittensGameRemote) =>
@@ -9,7 +10,7 @@ export const kg_resource_value = (cache: MessageCache, remote: KittensGameRemote
     remote,
     help: "How many of the given resource are in your resource pool.",
     name: "kg_resource_value",
-    labelNames: ["client_type", "guid", "name", "label", "location", "craftable"],
+    labelNames: ["client_type", "guid", "name", "label", "location", "craftable"] as const,
     require: "getResourcePool",
     extract(client_type, guid, location, element, subject) {
       subject.set(
