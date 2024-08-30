@@ -1,6 +1,18 @@
 import "@kitten-science/kitten-analysts/KittenAnalysts.js";
-import { Game, I18nEngine } from "@kitten-science/kitten-scientists/types/index.js";
+import { Game, I18nEngine, Resources } from "@kitten-science/kitten-scientists/types/index.js";
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { AssignMiner } from "./examples/assign-miner-operator.js";
+import { AssignWoodcutter } from "./examples/assign-woodcutter-operator.js";
+import { BuildCatnipField } from "./examples/build-catnip-field-operator.js";
+import { BuildHut } from "./examples/build-hut-operator.js";
+import { BuildLogHouse } from "./examples/build-log-house-operator.js";
+import { ConsumeStockResourceFactory } from "./examples/consume-stock-resource.js";
+import { GatherCatnip } from "./examples/gather-catnip-operator.js";
+import { RefineCatnip } from "./examples/refine-catnip-operator.js";
+import { TradeLizards } from "./examples/trade-lizards-operator.js";
+import { TradeNagas } from "./examples/trade-nagas-operator.js";
+import { GraphPrinter } from "./GraphPrinter.js";
+import { GraphSolver, Operator } from "./GraphSolver.js";
 import { cinfo } from "./tools/Log.js";
 
 declare global {
@@ -64,17 +76,30 @@ export class KittenEngineers {
     if (isNil(window.kittenScientists) || isNil(window.kittenAnalysts)) {
       return;
     }
-    /* Disabled for the time being...
-    foo(this.game, window.kittenScientists.engine.stateSerialize(), {
-      buildings: mustExist(
-        window.kittenAnalysts.processMessage({
-          location: "internal://",
-          responseId: "internal",
-          type: "getBuildings",
-        })?.data,
-      ) as PayloadBuildings,
-    });
-    */
+
+    return;
+
+    // Build the list of available operators.
+    const root = new BuildHut();
+    const operators: Array<Operator> = [
+      root,
+      new AssignMiner(),
+      new AssignWoodcutter(),
+      new BuildCatnipField(),
+      new BuildLogHouse(),
+      new GatherCatnip(),
+      new RefineCatnip(),
+      new TradeLizards(),
+      new TradeNagas(),
+    ];
+
+    for (const OperatorConstructor of ConsumeStockResourceFactory(Resources)) {
+      operators.push(new OperatorConstructor());
+    }
+
+    const solver = new GraphSolver(operators);
+    const graph = solver.solve(root);
+    new GraphPrinter().print(graph);
   };
   savegameHandler = () => {};
 

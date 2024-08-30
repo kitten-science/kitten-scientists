@@ -16,6 +16,8 @@ declare global {
 export type KittenAnalystsMessageId =
   | "connected"
   | "getBuildings"
+  | "getCalendar"
+  | "getRaces"
   | "getResourcePool"
   | "getStatistics"
   | "getTechnologies"
@@ -24,17 +26,40 @@ export type KittenAnalystsMessageId =
   | "reportSavegame";
 
 export type PayloadBuildings = Array<{
+  group: string;
   label: string;
   name: string;
   on: number;
   tab: TabId;
   value: number;
 }>;
+export type PayloadCalendar = Array<{
+  cryptoPrice: number;
+  cycle: number;
+  cycleYear: number;
+  day: number;
+  eventChance: number;
+  festivalDays: number;
+  futureSeasonTemporalParadox: number;
+  season: number;
+  seasonsPerYear: number;
+  year: number;
+  yearsPerCycle: number;
+}>;
+export type PayloadRaces = Array<{
+  embassyLevel: number;
+  energy: number;
+  name: string;
+  standing: number;
+  title: string;
+  unlocked: boolean;
+}>;
 export type PayloadResources = Array<{
   craftable: boolean;
   label: string;
   maxValue: number;
   name: string;
+  rate: number;
   value: number;
 }>;
 export type PayloadStatistics = Array<{
@@ -55,19 +80,23 @@ export interface KittenAnalystsMessage<
   TMessage extends KittenAnalystsMessageId,
   TData = TMessage extends "getBuildings"
     ? PayloadBuildings
-    : TMessage extends "getResourcePool"
-      ? PayloadResources
-      : TMessage extends "getStatistics"
-        ? PayloadStatistics
-        : TMessage extends "getTechnologies"
-          ? PayloadTechnologies
-          : TMessage extends "reportFrame"
-            ? unknown
-            : TMessage extends "reportSavegame"
-              ? unknown
-              : TMessage extends "injectSavegame"
-                ? KGNetSavePersisted
-                : never,
+    : TMessage extends "getCalendar"
+      ? PayloadCalendar
+      : TMessage extends "getRaces"
+        ? PayloadRaces
+        : TMessage extends "getResourcePool"
+          ? PayloadResources
+          : TMessage extends "getStatistics"
+            ? PayloadStatistics
+            : TMessage extends "getTechnologies"
+              ? PayloadTechnologies
+              : TMessage extends "reportFrame"
+                ? unknown
+                : TMessage extends "reportSavegame"
+                  ? unknown
+                  : TMessage extends "injectSavegame"
+                    ? KGNetSavePersisted
+                    : never,
 > {
   /**
    * The payload of the message.
@@ -225,46 +254,126 @@ export class KittenAnalysts {
         const bonfire: PayloadBuildings = game.bld.meta[0].meta.flatMap(building => {
           if (building.stages) {
             return building.stages.map((stage, index) => ({
-              name: building.name,
-              value: index === building.stage ? building.val : 0,
-              on: index === building.stage ? building.on : 0,
+              group: "upgrade",
               label: stage.label,
+              name: building.name,
+              on: index === building.stage ? building.on : 0,
               tab: "Bonfire",
+              value: index === building.stage ? building.val : 0,
             }));
           }
           return {
-            name: building.name,
-            value: building.val,
-            on: building.on,
+            group: "base",
             label: building.label ?? building.name,
+            name: building.name,
+            on: building.on,
             tab: "Bonfire",
+            value: building.val,
           };
         });
+
+        const religionGroups = ["ziggurats", "orderOfTheSun", "cryptotheology", "pacts"];
+        const religion: PayloadBuildings = game.religion.meta.flatMap((meta, index) =>
+          meta.meta.map(building => ({
+            group: religionGroups[index],
+            label: building.label,
+            name: building.name,
+            on: 0,
+            tab: "Religion",
+            value: building.val,
+          })),
+        );
+
+        const spaceGroups = [
+          "groundControl",
+          "cath",
+          "moon",
+          "dune",
+          "piscine",
+          "helios",
+          "terminus",
+          "kairo",
+          "yarn",
+          "umbra",
+          "charon",
+          "centaurusSystem",
+          "furthestRing",
+        ];
         const space: PayloadBuildings = game.space.meta.flatMap((meta, index) =>
           // index 0 is moon missions
           index === 0
             ? []
             : meta.meta.map(building => ({
-                name: building.name,
-                value: building.val,
-                on: building.on,
+                group: spaceGroups[index],
                 label: building.label,
+                name: building.name,
+                on: building.on,
                 tab: "Space",
+                value: building.val,
               })),
         );
-        const religion: PayloadBuildings = game.religion.meta.flatMap(meta =>
-          meta.meta.map(building => ({
-            name: building.name,
-            value: building.val,
-            on: 0,
-            label: building.label,
-            tab: "Religion",
+
+        const timeGroups = ["chronoForge", "voidSpace"];
+        const time: PayloadBuildings = game.time.meta.flatMap((meta, index) =>
+          meta.meta.map(item => ({
+            group: timeGroups[index],
+            label: item.label,
+            name: item.name,
+            on: "on" in item ? (item.on ?? 0) : 0,
+            tab: "Time",
+            value: item.val,
           })),
         );
 
         return {
           client_type: this.location.includes("headless.html") ? "headless" : "browser",
-          data: [...bonfire, ...space, ...religion],
+          data: [...bonfire, ...religion, ...space, ...time],
+          guid: game.telemetry.guid,
+          location: this.location,
+          responseId: message.responseId,
+          type: message.type,
+        };
+      }
+
+      case "getCalendar": {
+        const data: PayloadCalendar = [
+          {
+            cryptoPrice: game.calendar.cryptoPrice,
+            cycle: game.calendar.cycle,
+            cycleYear: game.calendar.cycleYear,
+            day: game.calendar.day,
+            eventChance: game.calendar.eventChance,
+            festivalDays: game.calendar.festivalDays,
+            futureSeasonTemporalParadox: game.calendar.futureSeasonTemporalParadox,
+            season: game.calendar.season,
+            seasonsPerYear: game.calendar.seasonsPerYear,
+            year: game.calendar.year,
+            yearsPerCycle: game.calendar.yearsPerCycle,
+          },
+        ];
+        return {
+          client_type: this.location.includes("headless.html") ? "headless" : "browser",
+          data,
+          guid: game.telemetry.guid,
+          location: this.location,
+          responseId: message.responseId,
+          type: message.type,
+        };
+      }
+
+      case "getRaces": {
+        const data: PayloadRaces = game.diplomacy.races.map(race => ({
+          embassyLevel: race.embassyLevel,
+          energy: race.energy,
+          name: race.name,
+          standing: race.standing,
+          title: race.title,
+          unlocked: race.unlocked,
+        }));
+
+        return {
+          client_type: this.location.includes("headless.html") ? "headless" : "browser",
+          data,
           guid: game.telemetry.guid,
           location: this.location,
           responseId: message.responseId,
@@ -272,19 +381,37 @@ export class KittenAnalysts {
         };
       }
       case "getResourcePool": {
-        const resources: PayloadResources = game.resPool.resources.map(resource => ({
-          name: resource.name,
-          value: resource.value,
-          maxValue: resource.maxValue,
-          label: resource.title,
-          craftable: resource.craftable ?? false,
-        }));
+        const isTimeParadox = this.game.calendar.day < 0;
+
+        const resources: PayloadResources = this.game.resPool.resources.map(resource => {
+          let rate =
+            (isTimeParadox ? 0 : this.game.getResourcePerTick(resource.name, true)) *
+            this.game.getTicksPerSecondUI();
+          if (resource.calculatePerDay === true) {
+            rate =
+              this.game.getResourcePerDay(resource.name) *
+              (resource.name === "necrocorn" ? 1 + this.game.timeAccelerationRatio() : 1);
+          } else if (resource.calculatePerYear) {
+            rate = this.game.getResourceOnYearProduction(resource.name);
+          }
+
+          return {
+            name: resource.name,
+            value: resource.value,
+            maxValue: resource.maxValue,
+            label: resource.title,
+            craftable: resource.craftable ?? false,
+            rate: rate,
+          };
+        });
+
         const pseudoResources: PayloadResources = [
           {
             craftable: false,
             label: "Worship",
             maxValue: Infinity,
             name: "worship",
+            rate: 0,
             value: game.religion.faith,
           },
           {
@@ -292,6 +419,7 @@ export class KittenAnalysts {
             label: "Epiphany",
             maxValue: Infinity,
             name: "epiphany",
+            rate: 0,
             value: game.religion.faithRatio,
           },
           {
@@ -299,6 +427,7 @@ export class KittenAnalysts {
             label: "Necrocorn deficit",
             maxValue: Infinity,
             name: "necrocornDeficit",
+            rate: 0,
             value: game.religion.pactsManager.necrocornDeficit,
           },
         ];

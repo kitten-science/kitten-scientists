@@ -3,7 +3,7 @@ FROM docker.io/library/node:22.8.0-bookworm@sha256:8ec02324cb37718197de92e516777
 LABEL "org.opencontainers.image.description"="Kittens Game with Kitten Science DNA"
 
 ARG REPO=https://github.com/kitten-science/kittensgame.git
-ARG BRANCH=feat/kgnet-iteration
+ARG BRANCH=feat/caching
 
 EXPOSE 8080
 

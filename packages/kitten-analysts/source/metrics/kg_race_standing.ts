@@ -3,26 +3,24 @@ import { MessageCache } from "../entrypoint-backend.js";
 import { KittensGameRemote } from "../network/KittensGameRemote.js";
 import { gaugeFactory } from "./factory.js";
 
-export const kg_building_value = (cache: MessageCache, remote: KittensGameRemote) =>
+export const kg_race_standing = (cache: MessageCache, remote: KittensGameRemote) =>
   gaugeFactory({
     cache,
     remote,
-    help: "How many of the given building have been built.",
-    name: "kg_building_value",
-    labelNames: ["client_type", "group", "guid", "name", "label", "location", "tab"] as const,
-    require: "getBuildings",
+    help: "Your current standing with the given race.",
+    name: "kg_race_standing",
+    labelNames: ["client_type", "guid", "name", "label", "location"] as const,
+    require: "getRaces",
     extract(client_type, guid, location, element, subject) {
       subject.set(
         {
           client_type,
-          group: element.group,
           guid,
-          label: ucfirst(element.label),
+          label: ucfirst(element.title),
           location,
           name: element.name,
-          tab: element.tab,
         },
-        element.value,
+        element.standing,
       );
     },
   });
