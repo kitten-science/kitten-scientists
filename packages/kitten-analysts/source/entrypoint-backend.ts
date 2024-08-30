@@ -18,6 +18,8 @@ import {
   KittenAnalystsMessage,
   KittenAnalystsMessageId,
   PayloadBuildings,
+  PayloadCalendar,
+  PayloadRaces,
   PayloadResources,
   PayloadStatistics,
   PayloadTechnologies,
@@ -28,13 +30,19 @@ import { kg_buildings_constructed } from "./metrics/kg_buildings_constructed.js"
 import { kg_challenges_completed_total } from "./metrics/kg_challenges_completed_total.js";
 import { kg_clicks_total } from "./metrics/kg_clicks_total.js";
 import { kg_crafts_total } from "./metrics/kg_crafts_total.js";
+import { kg_crypto_price } from "./metrics/kg_crypto_price.js";
+import { kg_embassy_level } from "./metrics/kg_embassy_level.js";
 import { kg_events_observed } from "./metrics/kg_events_observed.js";
+import { kg_festival_days } from "./metrics/kg_festival_days.js";
 import { kg_kittens_average } from "./metrics/kg_kittens_average.js";
 import { kg_kittens_dead } from "./metrics/kg_kittens_dead.js";
 import { kg_kittens_total } from "./metrics/kg_kittens_total.js";
 import { kg_paragon_total } from "./metrics/kg_paragon_total.js";
+import { kg_race_energy } from "./metrics/kg_race_energy.js";
+import { kg_race_standing } from "./metrics/kg_race_standing.js";
 import { kg_resets_total } from "./metrics/kg_resets_total.js";
 import { kg_resource_max_value } from "./metrics/kg_resource_max_value.js";
+import { kg_resource_rate } from "./metrics/kg_resource_rate.js";
 import { kg_resource_value } from "./metrics/kg_resource_value.js";
 import { kg_tech_researched } from "./metrics/kg_tech_researched.js";
 import { kg_tech_unlocked } from "./metrics/kg_tech_unlocked.js";
@@ -77,7 +85,12 @@ const cache = new Map<
   Promise<
     Array<KittenAnalystsMessage<
       KittenAnalystsMessageId,
-      PayloadBuildings | PayloadResources | PayloadStatistics | PayloadTechnologies
+      | PayloadBuildings
+      | PayloadCalendar
+      | PayloadRaces
+      | PayloadResources
+      | PayloadStatistics
+      | PayloadTechnologies
     > | null>
   >
 >();
@@ -92,6 +105,14 @@ register.registerMetric(kg_building_on(cache, remote));
 
 register.registerMetric(kg_resource_value(cache, remote));
 register.registerMetric(kg_resource_max_value(cache, remote));
+register.registerMetric(kg_resource_rate(cache, remote));
+
+register.registerMetric(kg_embassy_level(cache, remote));
+register.registerMetric(kg_race_energy(cache, remote));
+register.registerMetric(kg_race_standing(cache, remote));
+
+register.registerMetric(kg_crypto_price(cache, remote));
+register.registerMetric(kg_festival_days(cache, remote));
 
 // Metrics from in-game Stats
 
@@ -216,7 +237,7 @@ routerNetwork.post("/kgnet/save/upload", context => {
     remote
       .toHeadless({
         type: "injectSavegame",
-        data: savegame,
+        data: savegameEphemeral,
       })
       .catch(redirectErrorsToConsole(console));
 

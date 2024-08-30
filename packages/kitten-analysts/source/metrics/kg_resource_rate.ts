@@ -3,26 +3,25 @@ import { MessageCache } from "../entrypoint-backend.js";
 import { KittensGameRemote } from "../network/KittensGameRemote.js";
 import { gaugeFactory } from "./factory.js";
 
-export const kg_building_value = (cache: MessageCache, remote: KittensGameRemote) =>
+export const kg_resource_rate = (cache: MessageCache, remote: KittensGameRemote) =>
   gaugeFactory({
     cache,
     remote,
-    help: "How many of the given building have been built.",
-    name: "kg_building_value",
-    labelNames: ["client_type", "group", "guid", "name", "label", "location", "tab"] as const,
-    require: "getBuildings",
+    help: "How many of the given resource are produced every second.",
+    name: "kg_resource_rate",
+    labelNames: ["client_type", "guid", "name", "label", "location", "craftable"] as const,
+    require: "getResourcePool",
     extract(client_type, guid, location, element, subject) {
       subject.set(
         {
           client_type,
-          group: element.group,
+          craftable: element.craftable.toString(),
           guid,
           label: ucfirst(element.label),
           location,
           name: element.name,
-          tab: element.tab,
         },
-        element.value,
+        element.rate,
       );
     },
   });

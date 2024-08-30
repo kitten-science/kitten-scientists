@@ -1,6 +1,8 @@
 import { Resource, ResourceCraftable } from "./index.js";
 
 export type ResourceInfo = {
+  calculatePerDay?: boolean;
+  calculatePerYear?: boolean;
   color?: string;
   craftable?: boolean;
   description?: string;

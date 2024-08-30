@@ -90,10 +90,14 @@ export type Game = {
     day: number;
     daysPerSeason: number;
 
+    eventChance: number;
+
     /**
      * How many festival days are remaining?
      */
     festivalDays: number;
+
+    futureSeasonTemporalParadox: number;
 
     getCurSeason: () => { modifiers: { catnip: number }; name: Season };
     /**
@@ -149,7 +153,13 @@ export type Game = {
   };
   diplomacyTab: TradeTab;
   getCMBRBonus: () => number;
-  getDisplayValueExt: (value: number) => string;
+  getDisplayValueExt: (
+    value: number,
+    prefix?: boolean,
+    usePerTickHack?: boolean,
+    precision?: number,
+    postifx?: string,
+  ) => string;
   getEffect: (
     effect:
       | `${AllBuildings}CostReduction`
@@ -195,6 +205,9 @@ export type Game = {
    */
   getResCraftRatio: (name: ResourceCraftable) => number;
 
+  getResourcePerDay: (resName: Resource) => number;
+  getResourceOnYearProduction: (resName: Resource) => number;
+
   /**
    * Determine how much of the given resource is produced per tick.
    *
@@ -237,6 +250,7 @@ export type Game = {
      * Should `confirm()` calls be skipped in the game?
      */
     noConfirm: boolean;
+    usePerSecondValues: boolean;
   };
   prestige: {
     /**
@@ -436,6 +450,10 @@ export type Game = {
     getVSU: (name: VoidSpaceUpgrade) => VoidSpaceUpgradeInfo;
     heat: number;
     isAccelerated: boolean;
+    meta: Array<{
+      meta: Array<ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>;
+      provider: { getEffect: (item: unknown, effect: unknown) => unknown };
+    }>;
     voidspaceUpgrades: Array<{
       name: Exclude<VoidSpaceUpgrade, "usedCryochambers">;
       label: string;

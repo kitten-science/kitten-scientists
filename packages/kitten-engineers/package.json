@@ -16,6 +16,9 @@
     "url": "https://github.com/kitten-science/kitten-scientists/issues"
   },
   "type": "module",
+  "exports": {
+    "./*.js": "./build/*.js"
+  },
   "scripts": {
     "build": "yarn run build:all",
     "kitten-engineers:build": "vite --config vite.config.inject.js build",

@@ -3,6 +3,8 @@ import { Gauge } from "prom-client";
 import { MessageCache } from "../entrypoint-backend.js";
 import {
   PayloadBuildings,
+  PayloadCalendar,
+  PayloadRaces,
   PayloadResources,
   PayloadStatistics,
   PayloadTechnologies,
@@ -10,21 +12,33 @@ import {
 import { KittensGameRemote } from "../network/KittensGameRemote.js";
 
 export const gaugeFactory = <
-  TMessage extends "getBuildings" | "getResourcePool" | "getStatistics" | "getTechnologies",
+  TMessage extends
+    | "getBuildings"
+    | "getCalendar"
+    | "getRaces"
+    | "getResourcePool"
+    | "getStatistics"
+    | "getTechnologies",
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   TData extends
     | PayloadBuildings
+    | PayloadCalendar
+    | PayloadRaces
     | PayloadResources
     | PayloadStatistics
     | PayloadTechnologies = TMessage extends "getBuildings"
     ? PayloadBuildings
-    : TMessage extends "getResourcePool"
-      ? PayloadResources
-      : TMessage extends "getStatistics"
-        ? PayloadStatistics
-        : TMessage extends "getTechnologies"
-          ? PayloadTechnologies
-          : never,
+    : TMessage extends "getCalendar"
+      ? PayloadCalendar
+      : TMessage extends "getRaces"
+        ? PayloadRaces
+        : TMessage extends "getResourcePool"
+          ? PayloadResources
+          : TMessage extends "getStatistics"
+            ? PayloadStatistics
+            : TMessage extends "getTechnologies"
+              ? PayloadTechnologies
+              : never,
 >(instructions: {
   cache: MessageCache;
   remote: KittensGameRemote;
