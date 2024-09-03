@@ -608,7 +608,7 @@ __metadata:
     tslib: "npm:2.7.0"
     typescript: "npm:5.5.4"
     uuid: "npm:10.0.0"
-    vite: "npm:5.4.2"
+    vite: "npm:5.4.3"
     vite-plugin-userscript: "npm:0.1.3"
     ws: "npm:8.18.0"
   languageName: unknown
@@ -623,7 +623,7 @@ __metadata:
     "@oliversalzburg/js-utils": "npm:0.1.0"
     tslib: "npm:2.7.0"
     typescript: "npm:5.5.4"
-    vite: "npm:5.4.2"
+    vite: "npm:5.4.3"
     vite-plugin-userscript: "npm:0.1.3"
   languageName: unknown
   linkType: soft
@@ -643,7 +643,7 @@ __metadata:
     semver: "npm:7.6.3"
     tslib: "npm:2.7.0"
     typescript: "npm:5.5.4"
-    vite: "npm:5.4.2"
+    vite: "npm:5.4.3"
     vite-plugin-userscript: "npm:0.1.3"
   languageName: unknown
   linkType: soft
@@ -4514,14 +4514,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.41":
-  version: 8.4.43
-  resolution: "postcss@npm:8.4.43"
+"postcss@npm:^8.4.43":
+  version: 8.4.44
+  resolution: "postcss@npm:8.4.44"
   dependencies:
     nanoid: "npm:^3.3.7"
     picocolors: "npm:^1.0.1"
     source-map-js: "npm:^1.2.0"
-  checksum: 10c0/7cc9c6393ca00fcdca6fef8d119218df9357389b9fed30b6d4b463fc0e85159595a877f4ac0a2a565ea4c447cab1f424e527e68d8b7d40b8c94a6684663d45c5
+  checksum: 10c0/53c33338261a3d4f4198f8893e9dfe8b828d8d9186142ee85f02d228f04245c5bbe31239411a357a556ad20ed96f28db24d0921d63edc428fdc9133289371a1d
   languageName: node
   linkType: hard
 
@@ -5549,13 +5549,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:5.4.2":
-  version: 5.4.2
-  resolution: "vite@npm:5.4.2"
+"vite@npm:5.4.3":
+  version: 5.4.3
+  resolution: "vite@npm:5.4.3"
   dependencies:
     esbuild: "npm:^0.21.3"
     fsevents: "npm:~2.3.3"
-    postcss: "npm:^8.4.41"
+    postcss: "npm:^8.4.43"
     rollup: "npm:^4.20.0"
   peerDependencies:
     "@types/node": ^18.0.0 || >=20.0.0
@@ -5588,7 +5588,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10c0/23e347ca8aa6f0a774227e4eb7abae228f12c6806a727b046aa75e7ee37ffc2d68cff74360e12a42c347f79adc294e2363bc723b957bf4b382b5a8fb39e4df9d
+  checksum: 10c0/7afe601bcba82f81980c718fc171ba8f0c45e3bffaeb7ef831b64b84e396f963c3c87818b74da4c8e817d1bce1c179f1efae3bcb14d2e94b4eb635071722c8f2
   languageName: node
   linkType: hard
 
