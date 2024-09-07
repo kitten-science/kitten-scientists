@@ -1,11 +1,50 @@
 import { PayloadBuildings } from "@kitten-science/kitten-analysts/KittenAnalysts.js";
 import { EngineState } from "@kitten-science/kitten-scientists/Engine.js";
 import { Game } from "@kitten-science/kitten-scientists/types/game.js";
-import { Buildings, Resources } from "@kitten-science/kitten-scientists/types/index.js";
+import {
+  Buildings,
+  ChronoForgeUpgrades,
+  Jobs,
+  Policies,
+  ReligionUpgrades,
+  Resources,
+  SpaceBuildings,
+  StagedBuildings,
+  Technologies,
+  TranscendenceUpgrades,
+  Upgrades,
+  VoidSpaceUpgrades,
+  ZiggurathUpgrades,
+} from "@kitten-science/kitten-scientists/types/index.js";
 import { TreeNode } from "@oliversalzburg/js-utils/data/tree.js";
+import { GraphJudge } from "./GraphJudge";
 
-export const Solutions = [...Buildings, ...Resources] as const;
+export const Solutions = [
+  ...Buildings,
+  ...ChronoForgeUpgrades,
+  ...Jobs,
+  ...Policies,
+  ...ReligionUpgrades,
+  ...Resources,
+  ...SpaceBuildings,
+  ...StagedBuildings,
+  ...Technologies,
+  ...TranscendenceUpgrades,
+  ...Upgrades,
+  ...VoidSpaceUpgrades,
+  ...ZiggurathUpgrades,
+  "energy",
+  "epiphany",
+  "happiness",
+  "necrocornDeficit",
+  "transcendenceTier",
+  "worship",
+] as const;
 export type Solution = (typeof Solutions)[number];
+
+export interface SnapshotCollection {
+  buildings: PayloadBuildings;
+}
 
 export interface Operator extends TreeNode<Operator> {
   name: string;
@@ -15,22 +54,40 @@ export interface Operator extends TreeNode<Operator> {
 
   ancestors: Set<Operator>;
 
-  calculateCost: () => number;
-  execute: (
-    game: Game,
+  scoreSolution: (
+    solution: Solution,
+    judge: GraphJudge<Operator>,
+    _game: Game,
     state: EngineState,
-    snapshots: { buildings: PayloadBuildings },
-  ) => EngineState;
+    snapshots: SnapshotCollection,
+  ) => number;
+  execute: (game: Game, state: EngineState, snapshots: SnapshotCollection) => EngineState;
 }
 
 export class GraphSolver {
   operators: Iterable<Operator>;
-  constructor(operators: Iterable<Operator>) {
+  threshold: number;
+  constructor(operators: Iterable<Operator>, threshold: number) {
     this.operators = operators;
+    this.threshold = threshold;
   }
 
-  solve(node: Operator, root: Operator = node, parents: Iterable<Operator> = []): Operator {
+  solve(
+    node: Operator,
+    root: Operator = node,
+    parents: Iterable<Operator> = [],
+    depth = 0,
+  ): Operator {
+    if (depth > this.threshold) {
+      return root;
+    }
+
     for (const operator of this.operators) {
+      // We might want to allow some operators to solve themselves,
+      // but it seems counter-productive for the time being.
+      if (operator === node) {
+        continue;
+      }
       if (!operator.solves.some(solution => node.requires.includes(solution))) {
         continue;
       }
@@ -46,7 +103,7 @@ export class GraphSolver {
       }
 
       root.ancestors.add(operator);
-      this.solve(operator, root, [...parents, node]);
+      this.solve(operator, root, [...parents, node], depth + 1);
     }
 
     return root;

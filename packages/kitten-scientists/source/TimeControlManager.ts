@@ -9,6 +9,7 @@ import { WorkshopManager } from "./WorkshopManager.js";
 import { CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
+import { cdebug, cwarn } from "./tools/Log.js";
 import {
   BuildButton,
   ButtonModernController,
@@ -66,7 +67,7 @@ export class TimeControlManager {
     }
   }
 
-  async autoReset(engine: Engine) {
+  async autoReset(engine: Engine): Promise<unknown> {
     // Don't reset if there's a challenge running.
     if (this._host.game.challenges.currentChallenge) {
       return;
@@ -127,6 +128,7 @@ export class TimeControlManager {
         if (0 < entry.trigger) {
           // If the required amount of buildings hasn't been built yet, bail out.
           if (bld.meta.val < entry.trigger) {
+            cdebug("Auto-Reset: Missing bonfire buildings.");
             return;
           }
         } else {
@@ -147,6 +149,7 @@ export class TimeControlManager {
       });
       if (0 < unicornPasture.trigger) {
         if (bld.meta.val < unicornPasture.trigger) {
+          cdebug("Auto-Reset: Missing unicorn pastures.");
           return;
         }
       } else {
@@ -161,6 +164,7 @@ export class TimeControlManager {
       ) ||
       checkList.length
     ) {
+      cdebug("Auto-Reset: Missing unicorn pastures.");
       return;
     }
 
@@ -172,6 +176,7 @@ export class TimeControlManager {
         checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
         if (0 < entry.trigger) {
           if (bld.val < entry.trigger) {
+            cdebug("Auto-Reset: Missing space buildings.");
             return;
           }
         } else {
@@ -209,6 +214,7 @@ export class TimeControlManager {
       checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
       if (0 < entry.trigger) {
         if (bld.val < entry.trigger) {
+          cdebug("Auto-Reset: Missing religion buildings.");
           return;
         }
       } else {
@@ -234,6 +240,7 @@ export class TimeControlManager {
       ) ||
       checkList.length
     ) {
+      cdebug("Auto-Reset: Missing religion buildings.");
       return;
     }
 
@@ -244,6 +251,7 @@ export class TimeControlManager {
         checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
         if (0 < entry.trigger) {
           if (bld.val < entry.trigger) {
+            cdebug("Auto-Reset: Missing time buildings.");
             return;
           }
         } else {
@@ -265,6 +273,7 @@ export class TimeControlManager {
       ) ||
       checkList.length
     ) {
+      cdebug("Auto-Reset: Missing time buildings.");
       return;
     }
 
@@ -278,6 +287,7 @@ export class TimeControlManager {
           val: res.value,
         });
         if (res.value < entry.stock) {
+          cdebug("Auto-Reset: Missing resources.");
           return;
         }
       }
@@ -291,6 +301,7 @@ export class TimeControlManager {
         );
         checkedList.push({ name: upgrade.label, trigger: 1, val: upgrade.researched ? 1 : 0 });
         if (!upgrade.researched) {
+          cdebug("Auto-Reset: Missing upgrades.");
           return;
         }
       }
@@ -299,6 +310,7 @@ export class TimeControlManager {
     // We have now determined that we either have all items or could buy all items.
 
     // stop!
+    cwarn("Auto-Reset: STOPPING ENGINE.");
     engine.stop(false);
 
     const sleep = async (time = 1500) => {
