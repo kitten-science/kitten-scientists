@@ -16,7 +16,7 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
     const label = host.engine.i18n("option.time.activeHeatTransfer");
     super(host, label, settings, options);
 
-    this._trigger = new TriggerButton(host, label, settings, "percentage");
+    this._trigger = new TriggerButton(host, label, settings);
     this._trigger.element.insertAfter(this._expando.element);
     this.children.add(this._trigger);
 

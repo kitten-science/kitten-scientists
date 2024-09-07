@@ -1,6 +1,6 @@
 import { Icons } from "../../../images/Icons.js";
 import { KittenScientists } from "../../../KittenScientists.js";
-import { SettingTrigger } from "../../../settings/Settings.js";
+import { SettingThreshold, SettingTrigger } from "../../../settings/Settings.js";
 import { SettingsSectionUi } from "../../SettingsSectionUi.js";
 import { IconButton } from "../IconButton.js";
 
@@ -8,22 +8,21 @@ export type TriggerButtonBehavior = "integer" | "percentage";
 
 export class TriggerButton extends IconButton {
   readonly behavior: TriggerButtonBehavior;
-  readonly setting: SettingTrigger;
+  readonly setting: SettingTrigger | SettingThreshold;
 
   constructor(
     host: KittenScientists,
     label: string,
-    setting: SettingTrigger,
-    behavior: TriggerButtonBehavior = "percentage",
+    setting: SettingTrigger | SettingThreshold,
     handler: { onClick?: () => void } = {},
   ) {
     super(host, Icons.Trigger, "");
 
-    this.behavior = behavior;
+    this.behavior = setting instanceof SettingTrigger ? "percentage" : "integer";
 
     this.element.on("click", () => {
       const value =
-        this.behavior === "percentage"
+        this.setting instanceof SettingTrigger
           ? SettingsSectionUi.promptPercentage(
               host.engine.i18n("ui.trigger.setpercentage", [label]),
               SettingsSectionUi.renderPercentage(setting.trigger),

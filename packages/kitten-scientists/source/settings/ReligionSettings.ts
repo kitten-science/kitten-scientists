@@ -9,7 +9,7 @@ import {
   ZiggurathUpgrade,
   ZiggurathUpgrades,
 } from "../types/index.js";
-import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
+import { Setting, SettingMax, SettingThreshold, SettingTrigger } from "./Settings.js";
 
 export type FaithItem = Exclude<ReligionItem, UnicornItem>;
 
@@ -74,22 +74,22 @@ export class ReligionSettings extends SettingTrigger {
   /**
    * Sacrifice alicorns for time crystals.
    */
-  sacrificeAlicorns: SettingTrigger;
+  sacrificeAlicorns: SettingThreshold;
 
   /**
    * Sacrifice unicorns for tears.
    */
-  sacrificeUnicorns: SettingTrigger;
+  sacrificeUnicorns: SettingThreshold;
 
   /**
    * Refine tears into BLS.
    */
-  refineTears: SettingTrigger;
+  refineTears: SettingThreshold;
 
   /**
    * Refine time crystals into relics.
    */
-  refineTimeCrystals: SettingTrigger;
+  refineTimeCrystals: SettingThreshold;
 
   /**
    * Praise the sun.

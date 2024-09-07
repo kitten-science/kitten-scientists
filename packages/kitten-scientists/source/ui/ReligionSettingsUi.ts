@@ -146,7 +146,6 @@ export class ReligionSettingsUi extends SettingsSectionUi<ReligionSettings> {
             });
           }
           return new SettingTriggerListItem(this._host, label, this.setting[item], {
-            behavior: "integer",
             onCheck: () => {
               this._host.engine.imessage("status.sub.enable", [label]);
             },

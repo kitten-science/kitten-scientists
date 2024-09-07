@@ -7,9 +7,9 @@ import {
   ZiggurathUpgrades,
 } from "../types/index.js";
 import { FaithItem, UnicornItem } from "./ReligionSettings.js";
-import { Setting, SettingTrigger } from "./Settings.js";
+import { Setting, SettingThreshold } from "./Settings.js";
 
-export class ResetReligionBuildingSetting extends SettingTrigger {
+export class ResetReligionBuildingSetting extends SettingThreshold {
   readonly #building: FaithItem | UnicornItem;
   readonly #variant: UnicornItemVariant;
 

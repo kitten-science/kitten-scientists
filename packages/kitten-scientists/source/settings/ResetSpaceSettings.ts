@@ -1,9 +1,9 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { SpaceBuilding, SpaceBuildings } from "../types/index.js";
-import { Setting, SettingTrigger } from "./Settings.js";
+import { Setting, SettingThreshold } from "./Settings.js";
 
-export class ResetSpaceBuildingSetting extends SettingTrigger {
+export class ResetSpaceBuildingSetting extends SettingThreshold {
   readonly #building: SpaceBuilding;
 
   get building() {
@@ -16,7 +16,7 @@ export class ResetSpaceBuildingSetting extends SettingTrigger {
   }
 }
 
-export type ResetSpaceBuildingSettings = Record<SpaceBuilding, SettingTrigger>;
+export type ResetSpaceBuildingSettings = Record<SpaceBuilding, SettingThreshold>;
 
 export class ResetSpaceSettings extends Setting {
   readonly buildings: ResetSpaceBuildingSettings;
