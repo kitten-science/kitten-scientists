@@ -66,7 +66,6 @@ export class TradeSettingsUi extends SettingsSectionUi<TradeSettings> {
       this._host.engine.i18n("option.crypto"),
       this.setting.tradeBlackcoin,
       {
-        behavior: "integer",
         delimiter: true,
         onCheck: () => {
           this._host.engine.imessage("status.sub.enable", [

@@ -18,7 +18,7 @@ export class SettingTriggerListItem extends SettingListItem {
   ) {
     super(host, label, setting, options);
 
-    this.triggerButton = new TriggerButton(host, label, setting, options?.behavior);
+    this.triggerButton = new TriggerButton(host, label, setting);
     this.element.append(this.triggerButton.element);
   }
 

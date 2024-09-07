@@ -1,10 +1,10 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { ChronoForgeUpgrades, TimeItemVariant, VoidSpaceUpgrades } from "../types/index.js";
-import { Setting, SettingTrigger } from "./Settings.js";
+import { Setting, SettingThreshold } from "./Settings.js";
 import { TimeItem } from "./TimeSettings.js";
 
-export class ResetTimeBuildingSetting extends SettingTrigger {
+export class ResetTimeBuildingSetting extends SettingThreshold {
   readonly #building: TimeItem;
   readonly #variant: TimeItemVariant;
 

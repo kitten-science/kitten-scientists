@@ -5,7 +5,7 @@ import { EmbassySettings } from "./EmbassySettings.js";
 import {
   Requirement,
   Setting,
-  SettingBuySellTrigger,
+  SettingBuySellThreshold,
   SettingLimited,
   SettingTrigger,
 } from "./Settings.js";
@@ -55,7 +55,7 @@ export class TradeSettings extends SettingTrigger {
 
   feedLeviathans: Setting;
   buildEmbassies: EmbassySettings;
-  tradeBlackcoin: SettingBuySellTrigger;
+  tradeBlackcoin: SettingBuySellThreshold;
   unlockRaces: Setting;
 
   constructor(
@@ -63,7 +63,7 @@ export class TradeSettings extends SettingTrigger {
     trigger = 1,
     buildEmbassies = new EmbassySettings(),
     feedLeviathans = new Setting(false),
-    tradeBlackcoin = new SettingBuySellTrigger(false, 1090.0, 1095.0, 10000),
+    tradeBlackcoin = new SettingBuySellThreshold(false, 1090.0, 1095.0, 10000),
     unlockRaces = new Setting(true),
   ) {
     super(enabled, trigger);

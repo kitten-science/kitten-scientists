@@ -49,6 +49,10 @@ export class SettingLimited extends Setting {
   }
 }
 
+/**
+ * A setting that also includes a trigger value.
+ * Trigger values range from 0 to 1. They reflect a percentage.
+ */
 export class SettingTrigger extends Setting {
   trigger: number;
 
@@ -58,6 +62,28 @@ export class SettingTrigger extends Setting {
   }
 
   load(setting: Maybe<Partial<SettingTrigger>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
+    super.load(setting);
+    this.trigger = setting.trigger ?? this.trigger;
+  }
+}
+
+/**
+ * A setting that also includes an absolute value trigger.
+ * Trigger values range from 0 to Infinity, while -1 designates Infinity explicitly.
+ */
+export class SettingThreshold extends Setting {
+  trigger: number;
+
+  constructor(enabled = false, trigger = 1) {
+    super(enabled);
+    this.trigger = trigger;
+  }
+
+  load(setting: Maybe<Partial<SettingThreshold>>) {
     if (isNil(setting)) {
       return;
     }
@@ -184,7 +210,7 @@ export class SettingSell extends Setting {
   }
 }
 
-export class SettingBuySellTrigger extends SettingTrigger implements SettingBuy, SettingSell {
+export class SettingBuySellThreshold extends SettingThreshold implements SettingBuy, SettingSell {
   buy: number;
   sell: number;
 
@@ -194,7 +220,7 @@ export class SettingBuySellTrigger extends SettingTrigger implements SettingBuy,
     this.sell = sell;
   }
 
-  load(setting: Maybe<Partial<SettingBuySellTrigger>>) {
+  load(setting: Maybe<Partial<SettingBuySellThreshold>>) {
     if (isNil(setting)) {
       return;
     }

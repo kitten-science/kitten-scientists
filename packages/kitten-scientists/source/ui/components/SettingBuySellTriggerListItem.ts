@@ -1,13 +1,9 @@
 import { KittenScientists } from "../../KittenScientists.js";
-import { SettingBuySellTrigger } from "../../settings/Settings.js";
-import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton.js";
+import { SettingBuySellThreshold } from "../../settings/Settings.js";
+import { TriggerButton } from "./buttons-icon/TriggerButton.js";
 import { BuyButton } from "./buttons-text/BuyButton.js";
 import { SellButton } from "./buttons-text/SellButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
-
-export type SettingBuySellTriggerListItemOptions = SettingListItemOptions & {
-  behavior: TriggerButtonBehavior;
-};
 
 export class SettingBuySellTriggerListItem extends SettingListItem {
   readonly buyButton: BuyButton;
@@ -17,13 +13,13 @@ export class SettingBuySellTriggerListItem extends SettingListItem {
   constructor(
     host: KittenScientists,
     label: string,
-    setting: SettingBuySellTrigger,
-    options?: Partial<SettingBuySellTriggerListItemOptions>,
+    setting: SettingBuySellThreshold,
+    options?: Partial<SettingListItemOptions>,
   ) {
     super(host, label, setting, options);
 
     const triggerLabel = host.engine.i18n("blackcoin.buy.trigger");
-    this.triggerButton = new TriggerButton(host, triggerLabel, setting, options?.behavior);
+    this.triggerButton = new TriggerButton(host, triggerLabel, setting);
     this.element.append(this.triggerButton.element);
 
     this.sellButton = new SellButton(host, label, setting);
