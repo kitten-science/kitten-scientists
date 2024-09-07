@@ -1,7 +1,7 @@
 import { PayloadBuildings } from "@kitten-science/kitten-analysts/KittenAnalysts.js";
-import { Resource } from "@kitten-science/kitten-scientists";
 import { EngineState } from "@kitten-science/kitten-scientists/Engine.js";
 import { Game } from "@kitten-science/kitten-scientists/types/game.js";
+import { Resource } from "@kitten-science/kitten-scientists/types/index.js";
 import { TreeNode } from "@oliversalzburg/js-utils/data/tree.js";
 import { Operator } from "../GraphSolver.js";
 

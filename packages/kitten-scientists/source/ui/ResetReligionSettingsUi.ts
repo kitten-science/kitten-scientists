@@ -1,9 +1,10 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import { UnicornItems, ZiggurathUpgrade } from "../index.js";
+import { UnicornItems } from "../settings/ReligionSettings.js";
 import { ResetReligionSettings } from "../settings/ResetReligionSettings.js";
 import { SettingTrigger } from "../settings/Settings.js";
+import { ZiggurathUpgrade } from "../types/religion.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";

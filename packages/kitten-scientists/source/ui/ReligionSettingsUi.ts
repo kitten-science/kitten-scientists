@@ -1,7 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
-import { UnicornItems, ZiggurathUpgrade } from "../index.js";
-import { ReligionOptions, ReligionSettings } from "../settings/ReligionSettings.js";
+import { ReligionOptions, ReligionSettings, UnicornItems } from "../settings/ReligionSettings.js";
+import { ZiggurathUpgrade } from "../types/index.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";

@@ -1,6 +1,6 @@
 import { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type JQuery from "jquery";
-import { KittenScientists } from "../index.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Building, BuildingMeta } from "./buildings.js";
 import { Game } from "./game.js";
 import {

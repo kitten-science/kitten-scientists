@@ -17,7 +17,6 @@
   },
   "type": "module",
   "exports": {
-    ".": "./build/index.js",
     "./*.js": "./build/*.js"
   },
   "scripts": {
