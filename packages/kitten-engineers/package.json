@@ -35,7 +35,7 @@
     "tslib": "2.7.0"
   },
   "devDependencies": {
-    "typescript": "5.5.4",
+    "typescript": "5.6.2",
     "vite": "5.4.3",
     "vite-plugin-userscript": "0.1.3"
   },
