@@ -1,4 +1,4 @@
-import { difference, shuffleArray } from "@oliversalzburg/js-utils/data/array.js";
+import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { WorkshopManager } from "../WorkshopManager.js";
@@ -249,9 +249,7 @@ export class BulkPurchaseHelper {
     let iterations = 0;
     const buildsCommitted = new Array<PotentialBuild>();
     while (iterations < 1e5) {
-      // Randomize the potential builds each iteration. This should help evening out
-      // build requests for buildings that regularly appear first in the list.
-      const candidatesThisIteration = shuffleArray(difference(potentialBuilds, buildsCommitted));
+      const candidatesThisIteration = difference(potentialBuilds, buildsCommitted);
 
       let buildThisIteration = 0;
       const committedThisIteration = [];
