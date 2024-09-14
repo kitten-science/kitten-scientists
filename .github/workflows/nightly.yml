@@ -144,7 +144,6 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
       artifact-name: devcontainer-output
-      attest: false
       containerfile: packages/devcontainer/Containerfile
       image_description: Kitten Science Development Container
       image_name: kitten-science/devcontainer
@@ -152,6 +151,7 @@ jobs:
       image_title: devcontainer
       is_latest: false
       push: true
+      with-sarif: false
 
   publish-ka-backend:
     name: 🔹 Publish Backend
@@ -169,7 +169,6 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
       artifact-name: ka-backend-output
-      attest: false
       containerfile: packages/kitten-analysts/backend.Containerfile
       image_description: Kitten Science Analytics Backend
       image_name: kitten-science/ka-backend
@@ -194,7 +193,6 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
       artifact-name: ka-game-output
-      attest: false
       containerfile: packages/kitten-analysts/game.Containerfile
       image_description: Kittens Game with Kitten Science Analytics
       image_name: kitten-science/ka-game
@@ -219,7 +217,6 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
       artifact-name: ka-ui-output
-      attest: false
       containerfile: packages/kitten-analysts/ui.Containerfile
       image_description: Headless Kittens Game
       image_name: kitten-science/ka-ui
