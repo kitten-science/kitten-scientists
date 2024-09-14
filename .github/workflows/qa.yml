@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Validate commit messages
-        uses: oliversalzburg/action-commit-validator@3d55a588a712a905f073a6a6b1cdeb7af8a37c41 # v0.0.10
+        uses: oliversalzburg/action-commit-validator@9f598fbfb8d3a3af41b147488a93d117d357d510 # v0.0.12
         if: github.event_name == 'pull_request'
         with:
           accept_breaking_changes: false
