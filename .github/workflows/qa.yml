@@ -127,7 +127,7 @@ jobs:
       - qa-ka-ui
     name: QA Passed
     # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
-    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
+    if: always() && ( github.event_name != 'pull_request' || github.actor != 'renovate[bot]' )
     runs-on: ubuntu-22.04
     steps:
       - name: Failure
