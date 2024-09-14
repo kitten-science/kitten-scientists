@@ -31,7 +31,7 @@
   "dependencies": {
     "@kitten-science/kitten-analysts": "workspace:*",
     "@kitten-science/kitten-scientists": "workspace:*",
-    "@oliversalzburg/js-utils": "0.1.0",
+    "@oliversalzburg/js-utils": "0.1.1",
     "tslib": "2.7.0"
   },
   "devDependencies": {
