@@ -101,6 +101,7 @@ jobs:
           yarn kitten-scientists:release
 
       - name: Generate GitHub release
+        if: success() && inputs.wants-github-release
         uses: oliversalzburg/action-automatic-semantic-releases@bc429dc1af8c036b5f8c11fef7bcb0becfd5064d # v0.0.13
         with:
           automatic_release_tag: next
