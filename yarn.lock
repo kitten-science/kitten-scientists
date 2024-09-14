@@ -567,7 +567,7 @@ __metadata:
     "@actions/core": "npm:1.10.1"
     "@actions/github": "npm:6.0.0"
     "@kie/mock-github": "npm:3.0.0-beta.1"
-    "@oliversalzburg/js-utils": "npm:0.1.0"
+    "@oliversalzburg/js-utils": "npm:0.1.1"
     "@types/chai": "npm:4.3.19"
     "@types/mocha": "npm:10.0.7"
     "@types/node": "npm:22.5.4"
@@ -600,7 +600,7 @@ __metadata:
     "@kitten-science/kitten-scientists": "workspace:*"
     "@koa/bodyparser": "npm:5.1.1"
     "@koa/cors": "npm:5.0.0"
-    "@oliversalzburg/js-utils": "npm:0.1.0"
+    "@oliversalzburg/js-utils": "npm:0.1.1"
     "@types/jsdom": "npm:21.1.7"
     "@types/koa": "npm:2.15.0"
     "@types/koa-router": "npm:7.4.8"
@@ -629,7 +629,7 @@ __metadata:
   dependencies:
     "@kitten-science/kitten-analysts": "workspace:*"
     "@kitten-science/kitten-scientists": "workspace:*"
-    "@oliversalzburg/js-utils": "npm:0.1.0"
+    "@oliversalzburg/js-utils": "npm:0.1.1"
     tslib: "npm:2.7.0"
     typescript: "npm:5.6.2"
     vite: "npm:5.4.3"
@@ -642,7 +642,7 @@ __metadata:
   resolution: "@kitten-science/kitten-scientists@workspace:packages/kitten-scientists"
   dependencies:
     "@kitten-science/action-release-info": "workspace:*"
-    "@oliversalzburg/js-utils": "npm:0.1.0"
+    "@oliversalzburg/js-utils": "npm:0.1.1"
     "@types/dojo": "npm:1.9.48"
     "@types/jquery": "npm:3.5.30"
     "@types/semver": "npm:7.5.8"
@@ -878,10 +878,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oliversalzburg/js-utils@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@oliversalzburg/js-utils@npm:0.1.0"
-  checksum: 10c0/d6923e700f01e46f7ddf9bffba8981c0ff8a5478f09416fc79d3e14eb658f7dde73bb6227a3a0fd4c0dd82cc7a0532b96fbe70abe4ee30b0befffb33bd5b839f
+"@oliversalzburg/js-utils@npm:0.1.1":
+  version: 0.1.1
+  resolution: "@oliversalzburg/js-utils@npm:0.1.1"
+  checksum: 10c0/e007d0f60d614510c07fd8a7eb6da6a924bb75643a03a257e86a75799c40978cc33cd9f32b4f284962f2c7ca00b469aebb519ed5459f0d43086e673c6b8b4441
   languageName: node
   linkType: hard
 

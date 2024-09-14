@@ -30,7 +30,7 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@oliversalzburg/js-utils": "0.1.0",
+    "@oliversalzburg/js-utils": "0.1.1",
     "ajv": "8.17.1",
     "date-fns": "3.6.0",
     "semver": "7.6.3",
