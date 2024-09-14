@@ -50,7 +50,7 @@ export class UserScriptLoader {
 
   async waitForGame<TUserScript>(
     UserScript: ConstructorOf<TUserScript>,
-    saveDataKey?: string | undefined,
+    saveDataKey?: string,
     timeout = TIMEOUT_OVERRIDE ?? TIMEOUT_DEFAULT,
   ): Promise<TUserScript> {
     if (UserScriptLoader._isGameLoaded()) {
