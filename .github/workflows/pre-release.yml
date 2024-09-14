@@ -148,11 +148,11 @@ jobs:
     with:
       artifact-name: devcontainer-output
       containerfile: packages/devcontainer/Containerfile
-      image_description: Kitten Science Development Container
-      image_name: kitten-science/devcontainer
-      image_tag: next
-      image_title: devcontainer
-      is_latest: false
+      image-description: Kitten Science Development Container
+      image-name: kitten-science/devcontainer
+      image-tag: next
+      image-title: devcontainer
+      is-latest: false
       push: true
 
   publish-ka-backend:
@@ -172,11 +172,11 @@ jobs:
     with:
       artifact-name: ka-backend-output
       containerfile: packages/kitten-analysts/backend.Containerfile
-      image_description: Kitten Science Analytics Backend
-      image_name: kitten-science/ka-backend
-      image_tag: next
-      image_title: ka-backend
-      is_latest: false
+      image-description: Kitten Science Analytics Backend
+      image-name: kitten-science/ka-backend
+      image-tag: next
+      image-title: ka-backend
+      is-latest: false
       push: true
 
   publish-ka-game:
@@ -196,11 +196,11 @@ jobs:
     with:
       artifact-name: ka-game-output
       containerfile: packages/kitten-analysts/game.Containerfile
-      image_description: Kittens Game with Kitten Science Analytics
-      image_name: kitten-science/ka-game
-      image_tag: next
-      image_title: ka-game
-      is_latest: false
+      image-description: Kittens Game with Kitten Science Analytics
+      image-name: kitten-science/ka-game
+      image-tag: next
+      image-title: ka-game
+      is-latest: false
       push: true
 
   publish-ka-ui:
@@ -220,9 +220,9 @@ jobs:
     with:
       artifact-name: ka-ui-output
       containerfile: packages/kitten-analysts/ui.Containerfile
-      image_description: Headless Kittens Game
-      image_name: kitten-science/ka-ui
-      image_tag: next
-      image_title: ka-ui
-      is_latest: false
+      image-description: Headless Kittens Game
+      image-name: kitten-science/ka-ui
+      image-tag: next
+      image-title: ka-ui
+      is-latest: false
       push: true
