@@ -303,6 +303,19 @@ export class BonfireManager implements Automation {
       }
     }
 
+    // Auto turn on reactors
+    if (this.settings.turnOnReactors.enabled) {
+      const reactors = this._host.game.bld.getBuildingExt("reactor");
+      if (reactors.meta.val && reactors.meta.on < reactors.meta.val) {
+        const button = mustExist(this.getBuildButton("reactor"));
+        if (isNil(button.model)) {
+          return;
+        }
+
+        button.controller.onAll(button.model);
+      }
+    }
+
     // If buildings (upgrades of bonfire items) are enabled...
     if (this.settings.upgradeBuildings.enabled) {
       this.autoUpgrade(context);

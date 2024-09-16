@@ -55,8 +55,9 @@ export class BonfireSettings extends SettingTrigger {
   buildings: BonfireBuildingSettings;
 
   gatherCatnip: Setting;
-  turnOnSteamworks: Setting;
   turnOnMagnetos: Setting;
+  turnOnSteamworks: Setting;
+  turnOnReactors: Setting;
   upgradeBuildings: BuildingUpgradeSettings;
 
   constructor(
@@ -65,6 +66,7 @@ export class BonfireSettings extends SettingTrigger {
     gatherCatnip = new Setting(true),
     turnOnSteamworks = new Setting(true),
     turnOnMagnetos = new Setting(false),
+    turnOnReactors = new Setting(false),
     upgradeBuildings = new BuildingUpgradeSettings(),
   ) {
     super(enabled, trigger);
@@ -72,6 +74,7 @@ export class BonfireSettings extends SettingTrigger {
     this.gatherCatnip = gatherCatnip;
     this.turnOnSteamworks = turnOnSteamworks;
     this.turnOnMagnetos = turnOnMagnetos;
+    this.turnOnReactors = turnOnReactors;
     this.upgradeBuildings = upgradeBuildings;
   }
 
@@ -128,6 +131,7 @@ export class BonfireSettings extends SettingTrigger {
     this.turnOnSteamworks.enabled =
       settings.turnOnSteamworks?.enabled ?? this.turnOnSteamworks.enabled;
     this.turnOnMagnetos.enabled = settings.turnOnMagnetos?.enabled ?? this.turnOnMagnetos.enabled;
+    this.turnOnReactors.enabled = settings.turnOnReactors?.enabled ?? this.turnOnReactors.enabled;
     this.upgradeBuildings.load(settings.upgradeBuildings);
   }
 }

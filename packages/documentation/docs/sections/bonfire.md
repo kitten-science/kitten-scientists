@@ -29,3 +29,7 @@ Turns on the Steamworks building as soon as the first one is purchased, and keep
 ### Turn on Magnetos
 
 Turns on the Magnetos building as soon as the first one is purchased, and keeps them turned on.
+
+### Turn on Reactors
+
+Turns on the Reactors building as soon as the first one is purchased, and keeps them turned on.

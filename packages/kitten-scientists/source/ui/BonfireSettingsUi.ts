@@ -120,6 +120,26 @@ export class BonfireSettingsUi extends SettingsSectionUi<BonfireSettings> {
       ),
     );
 
+    listAddition.addChild(
+      new SettingListItem(
+        this._host,
+        this._host.engine.i18n("option.reactors"),
+        this.setting.turnOnReactors,
+        {
+          onCheck: () => {
+            this._host.engine.imessage("status.sub.enable", [
+              this._host.engine.i18n("option.reactors"),
+            ]);
+          },
+          onUnCheck: () => {
+            this._host.engine.imessage("status.sub.disable", [
+              this._host.engine.i18n("option.reactors"),
+            ]);
+          },
+        },
+      ),
+    );
+
     this.addChild(listAddition);
   }
 }
