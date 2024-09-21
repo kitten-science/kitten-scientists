@@ -183,11 +183,15 @@ export class BonfireManager implements Automation {
       let libToDat = 3;
       if (this._host.game.workshop.get("uplink").researched) {
         libToDat *=
-          1 + this._host.game.bld.get("biolab").val * this._host.game.getEffect("uplinkDCRatio");
+          1 +
+          this._host.game.bld.getBuildingExt("biolab").meta.val *
+            this._host.game.getEffect("uplinkDCRatio");
       }
       if (this._host.game.workshop.get("machineLearning").researched) {
         libToDat *=
-          1 + this._host.game.bld.get("aiCore").on * this._host.game.getEffect("dataCenterAIRatio");
+          1 +
+          this._host.game.bld.getBuildingExt("aiCore").meta.on *
+            this._host.game.getEffect("dataCenterAIRatio");
       }
 
       // We now have the energy consumption of data centers and the value of data centers.
