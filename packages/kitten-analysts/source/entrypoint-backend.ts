@@ -4,6 +4,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import Koa from "koa";
 import Router from "koa-router";
+import { compressToUTF16, decompressFromUTF16 } from "lz-string";
 import { writeFileSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -12,6 +13,7 @@ import {
   KGNetSaveFromGame,
   KGNetSavePersisted,
   KGNetSaveUpdate,
+  KGSaveData,
   LOCAL_STORAGE_PATH,
 } from "./globals.js";
 import {
@@ -57,6 +59,7 @@ const PORT_HTTP_METRICS = process.env.PORT_WS_BACKEND
   ? Number(process.env.PORT_HTTP_METRICS)
   : 9091;
 const PORT_WS_BACKEND = process.env.PORT_WS_BACKEND ? Number(process.env.PORT_WS_BACKEND) : 9093;
+const PROTOCOL_DEBUG = Boolean(process.env.PROTOCOL_DEBUG);
 
 const saveStore = new Map<string, KGNetSavePersisted>();
 saveStore.set("ka-internal-savestate", {
@@ -76,7 +79,7 @@ saveStore.set("ka-internal-savestate", {
 
 // Websocket stuff
 
-const remote = new KittensGameRemote(saveStore, PORT_WS_BACKEND);
+const remote = new KittensGameRemote(saveStore, PORT_WS_BACKEND, PROTOCOL_DEBUG);
 
 // Prometheus stuff
 
@@ -199,7 +202,7 @@ routerNetwork.get("/kgnet/save", context => {
 
 routerNetwork.post("/kgnet/save/upload", context => {
   try {
-    console.debug(`=> Received savegame.`);
+    if (PROTOCOL_DEBUG) process.stderr.write(`=> Received savegame.`);
 
     const gameSave = context.request.body as KGNetSaveFromGame;
     const gameGUID = gameSave.guid;
@@ -216,12 +219,17 @@ routerNetwork.post("/kgnet/save/upload", context => {
     saveStore.set(gameGUID, savegame);
     writeFileSync(`${LOCAL_STORAGE_PATH}/${gameGUID}.json`, JSON.stringify(savegame));
 
+    // Rebuild payload to also contain the fixed-string telemetry GUID.
+    const uncompressed = JSON.parse(decompressFromUTF16(gameSave.saveData)) as KGSaveData;
+    uncompressed.telemetry.guid = "ka-internal-savestate";
+    const recompressedSaveData = compressToUTF16(JSON.stringify(uncompressed));
+
     const savegameEphemeral: KGNetSavePersisted = {
       archived: false,
       guid: "ka-internal-savestate",
       index: { calendar: { day: calendar.day, year: calendar.year } },
       label: "Background Game",
-      saveData: gameSave.saveData,
+      saveData: recompressedSaveData,
       size: context.request.length,
       timestamp: Date.now(),
     };
@@ -231,9 +239,9 @@ routerNetwork.post("/kgnet/save/upload", context => {
       JSON.stringify(savegameEphemeral),
     );
 
-    console.debug(`=> Savegame persisted to disc.`);
+    process.stderr.write(`=> Savegame persisted to disc.\n`);
 
-    console.warn(`=> Injecting savegame into headless session...`);
+    process.stderr.write(`=> Injecting savegame into headless session...\n`);
     remote
       .toHeadless({
         type: "injectSavegame",
@@ -251,13 +259,15 @@ routerNetwork.post("/kgnet/save/upload", context => {
 });
 routerNetwork.post("/kgnet/save/update", context => {
   try {
-    console.debug(`=> Received savegame update.`);
+    process.stderr.write(`=> Received savegame update.\n`);
 
     const gameSave = context.request.body as KGNetSaveUpdate;
     const gameGUID = gameSave.guid;
     const existingSave = saveStore.get(gameGUID);
     if (isNil(existingSave)) {
-      console.warn(`=> Couldn't find existing savegame with ID '${gameGUID}'! Update is ignored.`);
+      process.stderr.write(
+        `=> Couldn't find existing savegame with ID '${gameGUID}'! Update is ignored.\n`,
+      );
       return;
     }
 
@@ -265,7 +275,7 @@ routerNetwork.post("/kgnet/save/update", context => {
     existingSave.label = gameSave.metadata?.label ?? existingSave.label;
     writeFileSync(`${LOCAL_STORAGE_PATH}/${gameGUID}.json`, JSON.stringify(existingSave));
     saveStore.set(gameGUID, existingSave);
-    console.debug(`=> Savegame persisted to disc.`);
+    process.stderr.write(`=> Savegame persisted to disc.\n`);
 
     context.body = [...saveStore.values()];
     context.status = 200;

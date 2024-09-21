@@ -9,7 +9,6 @@ import { v4 as uuid } from "uuid";
 import { AddressInfo, RawData, WebSocket, WebSocketServer } from "ws";
 import { KGNetSaveFromAnalysts, KGNetSavePersisted, LOCAL_STORAGE_PATH } from "../globals.js";
 import { KittenAnalystsMessage, KittenAnalystsMessageId } from "../KittenAnalysts.js";
-import { cwarn } from "../tools/Log.js";
 import { identifyExchange } from "../tools/MessageFormat.js";
 
 interface RemoteConnection {
@@ -20,6 +19,7 @@ export class KittensGameRemote {
   location: string;
   port: number;
   pendingRequests = new Map<string, { resolve: AnyFunction; reject: AnyFunction }>();
+  printProtocolMessages: boolean;
   saveStore: Map<string, KGNetSavePersisted>;
   sockets = new Set<RemoteConnection>();
   wss: WebSocketServer;
@@ -33,8 +33,13 @@ export class KittensGameRemote {
 
   #lastKnownHeadlessSocket: RemoteConnection | null = null;
 
-  constructor(saveStore: Map<string, KGNetSavePersisted>, port = 9093) {
+  constructor(
+    saveStore: Map<string, KGNetSavePersisted>,
+    port = 9093,
+    printProtocolMessages = false,
+  ) {
     this.port = port;
+    this.printProtocolMessages = printProtocolMessages;
     this.saveStore = saveStore;
     this.wss = new WebSocketServer({ port });
     this.location = `ws://${(this.wss.address() as AddressInfo | null)?.address ?? "localhost"}:${this.port}/`;
@@ -92,7 +97,8 @@ export class KittensGameRemote {
         case "reportFrame": {
           const payload = message.data as FrameContext;
           const delta = payload.exit - payload.entry;
-          console.info(`=> Received frame report (${message.location}).`, delta);
+          if (this.printProtocolMessages)
+            process.stderr.write(`=> Received frame report (${message.location}).\n`);
 
           this.ks_iterate_duration.observe(
             {
@@ -123,7 +129,8 @@ export class KittensGameRemote {
         }
         case "reportSavegame": {
           const payload = message.data as KGNetSaveFromAnalysts;
-          console.info(`=> Received savegame (${message.location}).`);
+          if (this.printProtocolMessages)
+            process.stderr.write(`=> Received savegame (${message.location}).\n`);
 
           const isHeadlessReport = message.location.includes("headless.html");
           if (isHeadlessReport) {
@@ -148,7 +155,7 @@ export class KittensGameRemote {
               `${LOCAL_STORAGE_PATH}/${payload.telemetry.guid}.json`,
               JSON.stringify(savegame),
             );
-            console.debug(`=> Savegame persisted to disc.`);
+            process.stderr.write(`=> Savegame persisted to disc.\n`);
           } catch (error) {
             console.error("!> Error while persisting savegame to disc!", error);
           }
@@ -156,13 +163,17 @@ export class KittensGameRemote {
           return;
         }
         default:
-          console.warn(`!> Report with type '${message.type}' is unexpected! Message ignored.`);
+          process.stderr.write(
+            `!> Report with type '${message.type}' is unexpected! Message ignored.\n`,
+          );
           return;
       }
     }
 
     if (!this.pendingRequests.has(message.responseId)) {
-      console.warn(`!> Response ID '${message.responseId}' is unexpected! Message ignored.`);
+      process.stderr.write(
+        `!> Response ID '${message.responseId}' is unexpected! Message ignored.\n`,
+      );
       return;
     }
 
@@ -170,7 +181,8 @@ export class KittensGameRemote {
     this.pendingRequests.delete(message.responseId);
 
     pendingRequest?.resolve(message);
-    console.debug(`=> Request ID '${message.responseId}' was resolved.`);
+    if (this.printProtocolMessages)
+      process.stderr.write(`=> Request ID '${message.responseId}' was resolved.\n`);
   }
 
   sendMessage<TMessage extends KittenAnalystsMessageId>(
@@ -198,11 +210,15 @@ export class KittensGameRemote {
     const requestId = uuid();
     message.responseId = requestId;
 
-    console.debug(`<= ${identifyExchange(message)}...`);
+    if (this.printProtocolMessages) process.stderr.write(`<= ${identifyExchange(message)}...\n`);
 
     const request = new Promise<KittenAnalystsMessage<TMessage> | null>((resolve, reject) => {
-      if (!socket.isAlive || socket.ws.readyState === WebSocket.CLOSED) {
-        console.warn("Send request can't be handled, because socket is dead!");
+      if (
+        !socket.isAlive ||
+        socket.ws.readyState === WebSocket.CLOSED ||
+        socket.ws.readyState === WebSocket.CLOSING
+      ) {
+        process.stderr.write("Send request can't be handled, because socket is dead!\n");
         socket.isAlive = false;
         resolve(null);
         return;
@@ -223,13 +239,13 @@ export class KittensGameRemote {
     message: Omit<KittenAnalystsMessage<TMessage>, "client_type" | "location" | "guid">,
   ): Promise<KittenAnalystsMessage<TMessage> | null> {
     if (isNil(this.#lastKnownHeadlessSocket)) {
-      cwarn("No headless connection registered. Message is dropped.");
+      process.stderr.write("No headless connection registered. Message is dropped!\n");
       return Promise.resolve(null);
     }
 
     if (!this.#lastKnownHeadlessSocket.isAlive) {
-      cwarn(
-        "Trying to send to headless session, but last known headless socket is no longer alive. Request is dropped!",
+      process.stderr.write(
+        "Trying to send to headless session, but last known headless socket is no longer alive. Request is dropped!\n",
       );
       return Promise.resolve(null);
     }
