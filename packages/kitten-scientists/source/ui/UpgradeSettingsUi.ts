@@ -1,7 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { SupportedLanguage } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
-import { SettingOptions } from "../settings/Settings.js";
+import { Setting, SettingOptions } from "../settings/Settings.js";
 import { UpgradeSettings } from "../settings/UpgradeSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -16,40 +16,48 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
   ) {
     super(host, host.engine.i18n("ui.upgrade.upgrades"), settings, options);
 
-    const items = [];
-    for (const upgrade of this._host.game.workshop.upgrades) {
-      if (isNil(this.setting.upgrades[upgrade.name])) continue;
-      const label = upgrade.label;
-      const button = new SettingListItem(this._host, label, this.setting.upgrades[upgrade.name], {
-        onCheck: () => {
-          this._host.engine.imessage("status.sub.enable", [label]);
-        },
-        onUnCheck: () => {
-          this._host.engine.imessage("status.sub.disable", [label]);
-        },
-      });
+    const upgrades = this._host.game.workshop.upgrades.filter(
+      upgrade => !isNil(this.setting.upgrades[upgrade.name]),
+    );
 
-      items.push({ label: label, button: button });
-    }
+    const localeSupportsSortMethod = language.selected !== "zh";
     // Ensure buttons are added into UI with their labels alphabetized.
-    if (language.selected !== "zh") {
-      items.sort((a, b) => a.label.localeCompare(b.label));
-
-      let lastLetter = items[0].label.charCodeAt(0);
-      let lastItem = items[0];
-      for (const item of items) {
-        const subject = item.label.charCodeAt(0);
-        if (subject !== lastLetter) {
-          lastLetter = subject;
-          lastItem.button.element.addClass("ks-delimiter");
-        }
-        lastItem = item;
-      }
+    // This approach is not applicable to all locales!
+    if (localeSupportsSortMethod) {
+      upgrades.sort((a, b) => a.label.localeCompare(b.label));
     }
-    const itemsList = new SettingsList(this._host);
-    items.forEach(button => {
-      itemsList.addChild(button.button);
+
+    let lastLabel = upgrades[0].label;
+    const children = upgrades.reduce<Array<SettingListItem>>((items, upgrade) => {
+      const delimiter = localeSupportsSortMethod && lastLabel[0] !== upgrade.label[0];
+      items.push(
+        this._getUpgradeOption(this.setting.upgrades[upgrade.name], upgrade.label, delimiter),
+      );
+      lastLabel = upgrade.label;
+      return items;
+    }, []);
+
+    const itemsList = new SettingsList(this._host, {
+      children,
     });
     this.addChild(itemsList);
+  }
+
+  private _getUpgradeOption(
+    option: Setting,
+    i18nName: string,
+    delimiter = false,
+    upgradeIndicator = false,
+  ) {
+    return new SettingListItem(this._host, i18nName, option, {
+      delimiter,
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [i18nName]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [i18nName]);
+      },
+      upgradeIndicator,
+    });
   }
 }

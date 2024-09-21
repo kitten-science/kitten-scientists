@@ -1,4 +1,6 @@
+import { SupportedLanguage } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -14,7 +16,11 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
   private readonly _timeSkipUi: TimeSkipSettingsUi;
   private readonly _resetUi: ResetSettingsUi;
 
-  constructor(host: KittenScientists, settings: TimeControlSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: TimeControlSettings,
+    language: SettingOptions<SupportedLanguage>,
+  ) {
     const label = host.engine.i18n("ui.timeCtrl");
     super(host, label, settings);
 
@@ -36,7 +42,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       },
     );
     this._timeSkipUi = new TimeSkipSettingsUi(this._host, this.setting.timeSkip);
-    this._resetUi = new ResetSettingsUi(this._host, this.setting.reset);
+    this._resetUi = new ResetSettingsUi(this._host, this.setting.reset, language);
 
     this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];
 

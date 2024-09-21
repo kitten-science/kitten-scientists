@@ -54,7 +54,11 @@ export class UserInterface extends UiComponent {
       new ReligionSettingsUi(this._host, engine.religionManager.settings),
       new SpaceSettingsUi(this._host, engine.spaceManager.settings),
       new TimeSettingsUi(this._host, engine.timeManager.settings),
-      new TimeControlSettingsUi(this._host, engine.timeControlManager.settings),
+      new TimeControlSettingsUi(
+        this._host,
+        engine.timeControlManager.settings,
+        engine.settings.language,
+      ),
       new LogFiltersSettingsUi(this._host, engine.settings.filters),
       new StateManagementUi(this._host, engine.settings.states, engine.settings.language),
       new InternalsUi(this._host, engine.settings),

@@ -1,5 +1,7 @@
+import { SupportedLanguage } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { ResetSettings } from "../settings/ResetSettings.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
 import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi.js";
@@ -20,6 +22,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   constructor(
     host: KittenScientists,
     settings: ResetSettings,
+    language: SettingOptions<SupportedLanguage>,
     options?: SettingsPanelOptions<SettingsPanel<ResetSettings>>,
   ) {
     super(host, host.engine.i18n("option.time.reset"), settings, options);
@@ -33,7 +36,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
     this._resourcesUi = new ResetResourcesSettingsUi(this._host, this.setting.resources);
     this._spaceUi = new ResetSpaceSettingsUi(this._host, this.setting.space);
     this._timeUi = new ResetTimeSettingsUi(this._host, this.setting.time);
-    this._upgradesUi = new ResetUpgradesSettingsUi(this._host, this.setting.upgrades);
+    this._upgradesUi = new ResetUpgradesSettingsUi(this._host, this.setting.upgrades, language);
 
     list.addChildren([
       this._bonfireUi,
