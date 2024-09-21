@@ -17,6 +17,7 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
     const itemsList = new SettingsList(this._host, {
       children: this._host.game.workshop.upgrades
         .filter(item => !isNil(this.setting.upgrades[item.name]))
+        .sort((a, b) => a.name.localeCompare(b.name))
         .map(upgrade => this._getResetOption(this.setting.upgrades[upgrade.name], upgrade.label)),
     });
     this.addChild(itemsList);
