@@ -1,5 +1,19 @@
 import { Game } from "./game.js";
-import { BuildButton, GameTab, Job, Price } from "./index.js";
+import {
+  BuildButton,
+  Building,
+  BuildingEffects,
+  Challenge,
+  ChronoForgeUpgrade,
+  GameTab,
+  Job,
+  Price,
+  ResourceCraftable,
+  StagedBuilding,
+  TabId,
+  Upgrade,
+  VoidSpaceUpgrade,
+} from "./index.js";
 
 export type ScienceTab = GameTab & {
   policyPanel: BuildButton;
@@ -123,11 +137,7 @@ export type PolicyInfo = {
   blocks: Array<Policy>;
   calculateEffects: (self: unknown, game: Game) => void;
   description: string;
-  effects: {
-    goldPriceRatio?: number;
-    happinessKittenProductionRatio?: number;
-    maxKittens?: number;
-  };
+  effects: Partial<BuildingEffects>;
   label: string;
   name: Policy;
   prices: Array<Price>;
@@ -140,6 +150,21 @@ export type PolicyInfo = {
   unlocks: { policies: Array<Policy> };
 };
 
+export type Unlocks = {
+  buildings: Array<Building>;
+  challenges: Array<Challenge>;
+  chronoforge: Array<ChronoForgeUpgrade>;
+  crafts: Array<ResourceCraftable>;
+  jobs: Array<Job>;
+  policies: Array<Policy>;
+  stages: Array<StagedBuilding>;
+  tabs: Array<TabId>;
+  tech: Array<Technology>;
+  upgrades: Array<Upgrade>;
+  voidSpace: Array<VoidSpaceUpgrade>;
+  zebraUpgrades: Array<unknown>;
+};
+
 export type TechInfo = {
   description: string;
   effectDesdc: string;
@@ -149,5 +174,5 @@ export type TechInfo = {
   prices: Array<Price>;
   researched: boolean;
   unlocked: boolean;
-  unlocks: { upgrades: Array<unknown> };
+  unlocks?: Partial<Unlocks>;
 };

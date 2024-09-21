@@ -1,4 +1,4 @@
-import { GameTab, Price } from "./index.js";
+import { BuildingEffects, GameTab, Price, Unlocks } from "./index.js";
 
 export const Upgrades = [
   "advancedAutomation",
@@ -143,13 +143,13 @@ export type Upgrade = (typeof Upgrades)[number];
 
 export type UpgradeInfo = {
   description: string;
-  effects: Record<string, number>;
+  effects?: Partial<BuildingEffects>;
   label: string;
   name: Upgrade;
   prices: Array<Price>;
   researched: boolean;
   unlocked: boolean;
-  unlocks?: { upgrades: Array<unknown> };
+  unlocks?: Partial<Unlocks>;
 };
 
 export type WorkshopTab = GameTab;

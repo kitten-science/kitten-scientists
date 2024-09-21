@@ -1,4 +1,4 @@
-import { Resource, ResourceCraftable } from "./index.js";
+import { Price, Resource, ResourceCraftable } from "./index.js";
 
 export type ResourceInfo = {
   calculatePerDay?: boolean;
@@ -18,6 +18,10 @@ export type ResourceInfo = {
 export type CraftableInfo = {
   name: ResourceCraftable;
   label: string;
+  description: string;
+  prices: Array<Price>;
+  ignoreBonuses?: boolean;
+  progressHandicap: number;
   tier: number;
-  unlocked: boolean;
+  unlocked?: boolean;
 };

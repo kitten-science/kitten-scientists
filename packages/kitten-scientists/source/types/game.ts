@@ -5,6 +5,7 @@ import {
   AllBuildings,
   BuildButton,
   Building,
+  BuildingEffects,
   BuildingExt,
   BuildingMeta,
   Challenge,
@@ -360,12 +361,7 @@ export type Game = {
        */
       description: string;
 
-      effects: {
-        energyConsumption?: number;
-        energyProduction?: number;
-        observatoryRatio?: number;
-        starchartPerTickBaseSpace?: number;
-      };
+      effects: Partial<BuildingEffects>;
 
       /**
        * An internationalized label for this space building.
@@ -387,7 +383,15 @@ export type Game = {
       val: number;
     };
     meta: Array<{
-      meta: Array<{ label: string; name: string; unlocked: boolean; val: number; on: number }>;
+      meta: Array<{
+        effects?: Partial<BuildingEffects>;
+        label: string;
+        name: string;
+        on: number;
+        prices: Array<Price>;
+        unlocked: boolean;
+        val: number;
+      }>;
     }>;
     planets: Array<{ label: string; buildings: Array<{ name: SpaceBuilding; label: string }> }>;
     programs: Array<{ name: Mission; label: string }>;

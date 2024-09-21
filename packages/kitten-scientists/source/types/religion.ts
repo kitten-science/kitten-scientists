@@ -1,11 +1,13 @@
 import {
   BuildButton,
+  BuildingEffects,
   ButtonModernModel,
   Game,
   GameTab,
   Price,
   RefineTearsBtnController,
   TransformBtnController,
+  Unlocks,
 } from "./index.js";
 
 export type ReligionTab = GameTab & {
@@ -116,6 +118,8 @@ export type AbstractReligionUpgradeInfo = {
    * be refactored later.
    */
   rHidden?: boolean;
+
+  unlocks?: Partial<Unlocks>;
 };
 
 export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
@@ -125,9 +129,7 @@ export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
    */
   description: string;
 
-  effects: {
-    faithRatioReligion?: number;
-  };
+  effects: Partial<BuildingEffects>;
 
   faith: number;
 
@@ -146,17 +148,10 @@ export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
    */
   description: string;
 
-  effects: {
-    riftChance?: number;
-    unicornsRatioReligion?: number;
-  };
+  effects: Partial<BuildingEffects>;
 
   name: ZiggurathUpgrade;
   priceRatio: number;
-
-  unlocks: {
-    zigguratUpgrades: Array<"ivoryTower">;
-  };
 };
 
 export type TranscendenceUpgradeInfo = AbstractReligionUpgradeInfo & {
@@ -167,16 +162,11 @@ export type TranscendenceUpgradeInfo = AbstractReligionUpgradeInfo & {
    */
   description: string;
 
-  effects: {
-    solarRevolutionLimit?: number;
-  };
+  effects: Partial<BuildingEffects>;
 
   flavor: string;
 
   name: TranscendenceUpgrade;
   priceRatio?: number;
   tier: number;
-  unlocks: {
-    zigguratUpgrades: Array<"ivoryTower">;
-  };
 };

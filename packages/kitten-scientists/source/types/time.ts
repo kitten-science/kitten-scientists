@@ -1,4 +1,4 @@
-import { GameTab, Panel, Price } from "./index.js";
+import { BuildingEffects, GameTab, Panel, Price } from "./index.js";
 
 export enum TimeItemVariant {
   Chronoforge = "chrono",
@@ -62,11 +62,7 @@ export type AbstractTimeUpgradeInfo = {
 };
 
 export type ChronoForgeUpgradeInfo = AbstractTimeUpgradeInfo & {
-  effects: {
-    heatMax?: number;
-    heatPerTick?: number;
-    temporalFluxMax?: number;
-  };
+  effects: Partial<BuildingEffects>;
   heat?: number;
   isAutomationEnabled?: boolean;
   on?: number;
@@ -77,9 +73,7 @@ export type ChronoForgeUpgradeInfo = AbstractTimeUpgradeInfo & {
 export type VoidSpaceUpgradeInfo = AbstractTimeUpgradeInfo & {
   breakIronWill: boolean;
 
-  effects: {
-    maxKittens?: number;
-  };
+  effects: Partial<BuildingEffects>;
   flavor: string;
   limitBuild: 0;
   name: VoidSpaceUpgrade;

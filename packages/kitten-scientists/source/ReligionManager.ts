@@ -295,7 +295,7 @@ export class ReligionManager implements Automation {
     let bestAmortization = Infinity;
     let bestBuilding: ZiggurathUpgrade | "unicornPasture" | null = null;
     const unicornsPerTickBase = mustExist(
-      this._host.game.bld.getBuildingExt("unicornPasture").meta.effects["unicornsPerTickBase"],
+      this._host.game.bld.getBuildingExt("unicornPasture").meta.effects?.["unicornsPerTickBase"],
     );
     const pastureProduction =
       unicornsPerTickBase *
