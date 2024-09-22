@@ -33,7 +33,7 @@ export class GraphPrinter {
     }
     if (0 < requirements.size) {
       console.warn(
-        `${"  ".repeat(indent)}🗲 parent was left partially unsolved: ${[...requirements].join(", ")}`,
+        `${"  ".repeat(indent)}🗲 parent was left partially unsolved: ${[...requirements.values()].join(", ")}`,
       );
     }
   }
