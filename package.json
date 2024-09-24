@@ -36,11 +36,11 @@
     "tslib": "2.7.0"
   },
   "devDependencies": {
-    "@eslint/js": "9.11.0",
+    "@eslint/js": "9.11.1",
     "@types/eslint": "9.6.1",
     "@types/node": "22.6.1",
     "@types/web": "0.0.165",
-    "eslint": "9.11.0",
+    "eslint": "9.11.1",
     "eslint-config-prettier": "9.1.0",
     "lint-staged": "15.2.10",
     "prettier": "3.3.3",
@@ -48,7 +48,7 @@
     "prettier-plugin-organize-imports": "4.1.0",
     "prettier-plugin-sh": "0.14.0",
     "typescript": "5.6.2",
-    "typescript-eslint": "8.6.0"
+    "typescript-eslint": "8.7.0"
   },
   "keywords": [
     "kitten",
