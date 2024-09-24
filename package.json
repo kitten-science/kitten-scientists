@@ -39,7 +39,7 @@
     "@eslint/js": "9.11.0",
     "@types/eslint": "9.6.1",
     "@types/node": "22.6.1",
-    "@types/web": "0.0.164",
+    "@types/web": "0.0.165",
     "eslint": "9.11.0",
     "eslint-config-prettier": "9.1.0",
     "lint-staged": "15.2.10",
