@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@kie/mock-github": "3.0.0-beta.1",
-    "@types/chai": "4.3.20",
+    "@types/chai": "5.0.0",
     "@types/mocha": "10.0.8",
     "@types/node": "22.7.3",
     "c8": "10.1.2",
