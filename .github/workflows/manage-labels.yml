@@ -16,7 +16,7 @@ jobs:
     permissions:
       contents: read
       issues: write
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - uses: oliversalzburg/action-label-manager@0c59a48ae34a7195755566681d7ae15bfd718caa # v0.0.15
