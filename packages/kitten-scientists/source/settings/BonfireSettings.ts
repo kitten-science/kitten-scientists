@@ -15,8 +15,9 @@ export class BonfireBuildingSetting extends SettingMax {
   /**
    * In case this is an upgrade of another building, this is the name of the
    * base building.
+   * Otherwise, it should be identical to the `building`.
    */
-  readonly #baseBuilding: Building | undefined = undefined;
+  readonly #baseBuilding: Building;
   get baseBuilding() {
     return this.#baseBuilding;
   }
@@ -42,6 +43,8 @@ export class BonfireBuildingSetting extends SettingMax {
     if (baseStage) {
       this.#stage = 1;
       this.#baseBuilding = baseStage;
+    } else {
+      this.#baseBuilding = building as Building;
     }
   }
 }
@@ -50,6 +53,14 @@ export type BonfireBuildingSettings = Record<
   Exclude<BonfireItem, "unicornPasture">,
   BonfireBuildingSetting
 >;
+
+export const baseStage: Partial<Record<StagedBuilding, Building>> = {
+  broadcasttower: "amphitheatre",
+  dataCenter: "library",
+  hydroplant: "aqueduct",
+  solarfarm: "pasture",
+  spaceport: "warehouse",
+};
 
 export class BonfireSettings extends SettingTrigger {
   buildings: BonfireBuildingSettings;
@@ -90,13 +101,6 @@ export class BonfireSettings extends SettingTrigger {
       "zebraForge",
       "zebraWorkshop",
     ];
-    const baseStage: Partial<Record<StagedBuilding, Building>> = {
-      broadcasttower: "amphitheatre",
-      dataCenter: "library",
-      hydroplant: "aqueduct",
-      solarfarm: "pasture",
-      spaceport: "warehouse",
-    };
     const items = {} as BonfireBuildingSettings;
 
     Buildings.forEach(item => {
