@@ -1,4 +1,4 @@
-import { Game } from "../types/index.js";
+import { Game, KGSaveData } from "../types/index.js";
 
 export class SavegameLoader {
   private readonly _game: Game;
@@ -30,5 +30,10 @@ export class SavegameLoader {
         resolve();
       });
     });
+  }
+
+  loadRaw(data: KGSaveData): Promise<void> {
+    const compressed = this._game.compressLZData(JSON.stringify(data));
+    return this.load(compressed);
   }
 }

@@ -1,10 +1,9 @@
 import { is, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { Icons } from "../../images/Icons.js";
 import { KittenScientists } from "../../KittenScientists.js";
+import { IconButton } from "./IconButton.js";
 import { SettingListItem } from "./SettingListItem.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
-import { DisableButton } from "./buttons-icon/DisableButton.js";
-import { EnableButton } from "./buttons-icon/EnableButton.js";
-import { ResetButton } from "./buttons-icon/ResetButton.js";
 
 export type SettingsListOptions = UiComponentOptions & {
   readonly hasEnableAll?: boolean;
@@ -26,9 +25,9 @@ export class SettingsList extends UiComponent {
   readonly element: JQuery;
   readonly list: JQuery;
 
-  readonly disableAllButton: DisableButton | undefined;
-  readonly enableAllButton: EnableButton | undefined;
-  readonly resetButton: ResetButton | undefined;
+  readonly disableAllButton: IconButton | undefined;
+  readonly enableAllButton: IconButton | undefined;
+  readonly resetButton: IconButton | undefined;
 
   /**
    * Constructs a `SettingsList`.
@@ -58,32 +57,42 @@ export class SettingsList extends UiComponent {
 
       if (toolOptions.hasEnableAll) {
         const onEnableAll = options?.onEnableAll;
-        this.enableAllButton = new EnableButton(this._host);
-        this.enableAllButton.element.on("click", () => {
-          const event = new Event("enableAll", { cancelable: true });
-          this.dispatchEvent(event);
-          if (event.defaultPrevented) {
-            return;
-          }
+        this.enableAllButton = new IconButton(
+          this._host,
+          Icons.CheckboxCheck,
+          host.engine.i18n("ui.enable.all"),
+          {
+            onClick: () => {
+              const event = new Event("enableAll", { cancelable: true });
+              this.dispatchEvent(event);
+              if (event.defaultPrevented) {
+                return;
+              }
 
-          for (const child of this.children) {
-            if (is(child, SettingListItem)) {
-              (child as SettingListItem).setting.enabled = true;
-            }
-          }
+              for (const child of this.children) {
+                if (is(child, SettingListItem)) {
+                  (child as SettingListItem).setting.enabled = true;
+                }
+              }
 
-          if (!isNil(onEnableAll)) {
-            onEnableAll();
-          }
+              if (!isNil(onEnableAll)) {
+                onEnableAll();
+              }
 
-          this.refreshUi();
-        });
+              this.refreshUi();
+            },
+          },
+        );
         tools.append(this.enableAllButton.element);
       }
 
       if (toolOptions.hasDisableAll) {
         const onDisableAll = options?.onDisableAll;
-        this.disableAllButton = new DisableButton(this._host);
+        this.disableAllButton = new IconButton(
+          this._host,
+          Icons.CheckboxUnCheck,
+          host.engine.i18n("ui.disable.all"),
+        );
         this.disableAllButton.element.on("click", () => {
           const event = new Event("disableAll", { cancelable: true });
           this.dispatchEvent(event);
@@ -107,10 +116,16 @@ export class SettingsList extends UiComponent {
 
       const onReset = toolOptions.onReset;
       if (!isNil(onReset)) {
-        this.resetButton = new ResetButton(this._host);
-        this.resetButton.element.on("click", () => {
-          onReset();
-        });
+        this.resetButton = new IconButton(
+          this._host,
+          Icons.Reset,
+          host.engine.i18n("ui.disable.all"),
+          {
+            onClick: () => {
+              onReset();
+            },
+          },
+        );
         tools.append(this.resetButton.element);
       }
 

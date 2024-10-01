@@ -47,7 +47,6 @@ export type Automation = {
   tick(context: FrameContext): void | Promise<void>;
 };
 export type EngineState = {
-  $schema?: string;
   v: string;
   engine: EngineSettings;
   bonfire: BonfireSettings;
@@ -233,8 +232,8 @@ export class Engine {
     }
   }
 
-  stateReset() {
-    this.stateLoad({
+  static get DEFAULT_STATE() {
+    return {
       v: ksVersion(),
       engine: new EngineSettings(),
       bonfire: new BonfireSettings(),
@@ -246,7 +245,11 @@ export class Engine {
       trade: new TradeSettings(),
       village: new VillageSettings(),
       workshop: new WorkshopSettings(),
-    });
+    };
+  }
+
+  stateReset() {
+    this.stateLoad(Engine.DEFAULT_STATE);
   }
 
   /**
@@ -256,7 +259,6 @@ export class Engine {
    */
   stateSerialize(): EngineState {
     return {
-      $schema: "https://schema.kitten-science.com/working-draft/settings-profile.schema.json",
       v: ksVersion(),
       engine: this.settings,
       bonfire: this.bonfireManager.settings,

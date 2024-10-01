@@ -1,9 +1,10 @@
+import { KGNetSavePersisted } from "@kitten-science/kitten-scientists/types/index.js";
 import { redirectErrorsToStream } from "@oliversalzburg/js-utils/errors/stream.js";
 import { readFile } from "fs/promises";
 import { JSDOM } from "jsdom";
 import { decompressFromUTF16 } from "lz-string";
 import { join } from "path";
-import { KGNetSavePersisted, LOCAL_STORAGE_PATH } from "./globals.js";
+import { LOCAL_STORAGE_PATH } from "./globals.js";
 
 const HOSTNAME_KG = process.env.HOSTNAME_KG ?? "localhost";
 const PORT_HTTP_KG = process.env.PORT_HTTP_KG ? Number(process.env.PORT_HTTP_KG) : 8080;

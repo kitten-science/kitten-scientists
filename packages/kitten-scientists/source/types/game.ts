@@ -10,6 +10,7 @@ import {
   BuildingMeta,
   Challenge,
   GameTab,
+  KGSaveData,
   Kitten,
   Policy,
   Price,
@@ -130,6 +131,7 @@ export type Game = {
     maxMessages: number;
   };
   craft: (name: string, amount: number) => void;
+  decompressLZData: (lzData: string) => string;
   devMode: boolean;
   diplomacy: {
     buyBcoin: () => void;
@@ -341,7 +343,7 @@ export type Game = {
   /**
    * Saves the game and returns the save game.
    */
-  save(): string;
+  save(): KGSaveData;
   /**
    * Import a savegame blob.
    */

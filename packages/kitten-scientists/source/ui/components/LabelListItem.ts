@@ -35,7 +35,7 @@ export class LabelListItem extends ListItem {
 
     if (options?.icon) {
       const iconElement = $("<div/>", {
-        html: `<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="${options.icon}"/></svg>`,
+        html: `<svg style="width: 15px; height: 15px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${options.icon}"/></svg>`,
       }).addClass("ks-icon-label");
       iconElement.insertBefore(this.elementLabel);
     }

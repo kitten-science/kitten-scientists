@@ -1,4 +1,8 @@
 import { FrameContext } from "@kitten-science/kitten-scientists/Engine.js";
+import {
+  KGNetSaveFromAnalysts,
+  KGNetSavePersisted,
+} from "@kitten-science/kitten-scientists/types/index.js";
 import { sleep } from "@oliversalzburg/js-utils/async/async.js";
 import { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
@@ -6,7 +10,7 @@ import { compressToUTF16 } from "lz-string";
 import { writeFileSync } from "node:fs";
 import { exponentialBuckets, Histogram, linearBuckets } from "prom-client";
 import { AddressInfo, RawData, WebSocket, WebSocketServer } from "ws";
-import { KGNetSaveFromAnalysts, KGNetSavePersisted, LOCAL_STORAGE_PATH } from "../globals.js";
+import { LOCAL_STORAGE_PATH } from "../globals.js";
 import { KittenAnalystsMessage, KittenAnalystsMessageId } from "../KittenAnalysts.js";
 import { identifyExchange } from "../tools/MessageFormat.js";
 

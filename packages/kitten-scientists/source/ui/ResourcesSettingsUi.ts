@@ -14,8 +14,6 @@ import { ConsumeButton } from "./components/buttons-text/ConsumeButton.js";
 import { StockButton } from "./components/buttons-text/StockButton.js";
 
 export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
-  private readonly _resources: Array<SettingListItem>;
-
   constructor(
     host: KittenScientists,
     settings: ResourcesSettings,
@@ -43,25 +41,20 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
       "zebras",
     ];
 
-    // Add all the current resources
-    const preparedResources: Array<[ResourcesSettingsItem, string]> =
-      this._host.game.resPool.resources
-        .filter(
-          item =>
-            !ignoredResources.includes(item.name) && !isNil(this.setting.resources[item.name]),
-        )
-        .map(resource => [this.setting.resources[resource.name], ucfirst(resource.title)]);
-
-    if (language.selected !== "zh") {
-      preparedResources.sort((a, b) => a[1].localeCompare(b[1]));
-    }
-    this._resources = [];
-    for (const [setting, title] of preparedResources) {
-      this._resources.push(this._makeResourceSetting(title, setting));
-    }
-    const listResource = new SettingsList(this._host);
-    listResource.addChildren(this._resources);
-    this.addChild(listResource);
+    this.addChild(
+      new SettingsList(this._host, {
+        children: this._host.game.resPool.resources
+          .filter(
+            item =>
+              !ignoredResources.includes(item.name) && !isNil(this.setting.resources[item.name]),
+          )
+          .sort((a, b) => (language.selected !== "zh" ? a.title.localeCompare(b.title) : 0))
+          .map(
+            resource => [this.setting.resources[resource.name], ucfirst(resource.title)] as const,
+          )
+          .map(([setting, title]) => this._makeResourceSetting(title, setting)),
+      }),
+    );
   }
 
   /**

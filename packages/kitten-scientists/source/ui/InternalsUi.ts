@@ -4,6 +4,7 @@ import { Icons } from "../images/Icons.js";
 import { EngineSettings } from "../settings/EngineSettings.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
+import { Delimiter } from "./components/Delimiter.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import { OptionsListItem } from "./components/OptionsListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -42,6 +43,8 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                 },
               }),
             ),
+            new Delimiter(host),
+
             new SettingListItem(host, host.engine.i18n("ui.ksColumn"), settings.ksColumn, {
               onCheck: () => {
                 this._host.rebuildUi();
@@ -50,12 +53,16 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                 this._host.rebuildUi();
               },
             }),
+            new Delimiter(host),
+
             new OptionsListItem(host, host.engine.i18n("ui.language"), settings.language, {
               onCheck: () => {
                 this._host.rebuildUi();
               },
             }),
           ],
+          hasDisableAll: false,
+          hasEnableAll: false,
         }),
       ],
     });

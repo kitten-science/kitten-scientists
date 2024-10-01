@@ -226,7 +226,7 @@ export class UserInterface extends UiComponent {
     );
     // Hover guides
     this._addRule(
-      `#ks ul .ks-setting:not(.ks-expanded):hover { 
+      `#ks ul .ks-setting:not(.ks-expanded):not(.ks-toolbar):hover { 
         border-bottom: 1px solid rgba(185, 185, 185, 0.5);
       }`,
     );
@@ -254,6 +254,42 @@ export class UserInterface extends UiComponent {
         min-width: 10px;
         padding: 0px 3px;
         text-align: center;
+      }`,
+    );
+    // Setting: Toolbar
+    this._addRule(
+      `#ks ul li.ks-setting.ks-toolbar {
+        border-bottom: 1px dotted rgba(255, 255, 255, 0.2);
+        padding: 0 0 2px 0;
+        margin: 0 0 3px 0;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li.ks-setting.ks-toolbar > * {
+        margin: 0 3px 0 0;
+      }`,
+    );
+    // Setting: Button
+    this._addRule(
+      `#ks ul li.ks-setting .ks-button {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        display: inline-block;
+        padding: 0 2px;
+        transition: border .3s;
+        opacity: 0.8;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li.ks-setting .ks-button:hover {
+        border: 1px solid rgba(255, 255, 255, 1);
+        opacity: 1;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li.ks-setting .ks-button .ks-button-icon {
+        margin: 0 2px 0 0;
+        vertical-align: sub;
       }`,
     );
     // Setting: Icon Button
@@ -378,6 +414,7 @@ export class UserInterface extends UiComponent {
     // Style settings that act as UI delimiters.
     this._addRule(
       `#ks ul .ks-delimiter {
+        clear: left;
         margin-bottom: 10px;
       }`,
     );
