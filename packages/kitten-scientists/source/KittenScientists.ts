@@ -6,8 +6,7 @@ import { Engine, EngineState, GameLanguage } from "./Engine.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
-import { State } from "./state/State.js";
-import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
+import { cdebug, cinfo, cwarn } from "./tools/Log.js";
 import { Game, I18nEngine } from "./types/index.js";
 import { UserInterface } from "./ui/UserInterface.js";
 import { FallbackLanguage, UserScriptLoader } from "./UserScriptLoader.js";
@@ -227,28 +226,6 @@ export class KittenScientists {
   importSettingsFromString(encodedSettings: string) {
     const settings = KittenScientists.decodeSettings(encodedSettings);
     this.setSettings(settings);
-    this.engine.imessage("settings.imported");
-  }
-
-  /**
-   * Import settings from a URL.
-   *
-   * @param url - The URL of the profile to load.
-   */
-  async importSettingsFromUrl(url: string) {
-    const importState = new State(url);
-    const settings = await importState.resolve();
-    settings.report.aggregate(console);
-
-    const stateIsValid = await importState.validate();
-    if (!stateIsValid) {
-      cerror("Imported state is invalid and not imported.");
-      return;
-    }
-
-    const state = importState.merge();
-    this.setSettings(state);
-    this.engine.imessage("settings.imported");
   }
 
   /**
@@ -261,7 +238,6 @@ export class KittenScientists {
   async copySettings(settings = this.getSettings(), compress = true) {
     const encodedSettings = KittenScientists.encodeSettings(settings, compress);
     await window.navigator.clipboard.writeText(encodedSettings);
-    this.engine.imessage("settings.copied");
   }
 
   /**

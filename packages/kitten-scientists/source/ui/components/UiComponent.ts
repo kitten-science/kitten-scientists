@@ -3,6 +3,7 @@ import { cerror } from "../../tools/Log.js";
 
 export type UiComponentOptions<TChild extends UiComponent = UiComponent> = {
   readonly children: Array<TChild>;
+  readonly onClick: (subject: UiComponent) => void;
   readonly onRefresh: (subject: UiComponent) => void;
 };
 
@@ -19,6 +20,7 @@ export abstract class UiComponent extends EventTarget {
 
   readonly children = new Set<UiComponent>();
 
+  private readonly _onClick: UiComponentOptions["onClick"] | undefined;
   private readonly _onRefresh: UiComponentOptions["onRefresh"] | undefined;
 
   /**
@@ -31,7 +33,12 @@ export abstract class UiComponent extends EventTarget {
   constructor(host: KittenScientists, options?: Partial<UiComponentOptions>) {
     super();
     this._host = host;
+    this._onClick = options?.onClick;
     this._onRefresh = options?.onRefresh;
+  }
+
+  click() {
+    this._onClick?.(this);
   }
 
   refreshUi() {

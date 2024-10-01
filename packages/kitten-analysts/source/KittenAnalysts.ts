@@ -1,8 +1,11 @@
 import { SavegameLoader } from "@kitten-science/kitten-scientists/tools/SavegameLoader.js";
 import { Game } from "@kitten-science/kitten-scientists/types/game.js";
-import { I18nEngine, TabId } from "@kitten-science/kitten-scientists/types/index.js";
+import {
+  I18nEngine,
+  KGNetSavePersisted,
+  TabId,
+} from "@kitten-science/kitten-scientists/types/index.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { KGNetSavePersisted } from "./globals.js";
 import { cdebug, cinfo, cwarn } from "./tools/Log.js";
 import { identifyExchange } from "./tools/MessageFormat.js";
 

@@ -96,3 +96,27 @@ export function consumeEntriesPedantic<TKeys extends string, TValues>(
   }
   return subject;
 }
+
+/**
+ * Unique wraps an object to prevent accidental sharing of references by
+ * returning cloned versions instead.
+ */
+export class Unique<T> {
+  private _elem: T;
+
+  constructor(elem: T) {
+    this._elem = structuredClone(elem);
+  }
+
+  unwrap() {
+    return structuredClone(this._elem);
+  }
+
+  replace(elem: T) {
+    this._elem = structuredClone(elem);
+  }
+
+  toJSON() {
+    return this.unwrap();
+  }
+}

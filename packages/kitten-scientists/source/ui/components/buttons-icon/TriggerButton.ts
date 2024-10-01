@@ -3,6 +3,7 @@ import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingThreshold, SettingTrigger } from "../../../settings/Settings.js";
 import { SettingsSectionUi } from "../../SettingsSectionUi.js";
 import { IconButton } from "../IconButton.js";
+import { UiComponentOptions } from "../UiComponent.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 
@@ -14,9 +15,9 @@ export class TriggerButton extends IconButton {
     host: KittenScientists,
     label: string,
     setting: SettingTrigger | SettingThreshold,
-    handler: { onClick?: () => void } = {},
+    options?: Partial<UiComponentOptions>,
   ) {
-    super(host, Icons.Trigger, "");
+    super(host, Icons.Trigger, "", options);
 
     this.behavior = setting instanceof SettingTrigger ? "percentage" : "integer";
 
@@ -37,11 +38,8 @@ export class TriggerButton extends IconButton {
         this.refreshUi();
       }
 
-      if (handler.onClick) {
-        handler.onClick();
-      }
+      this.click();
     });
-
     this.setting = setting;
   }
 

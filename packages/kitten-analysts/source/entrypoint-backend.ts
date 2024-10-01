@@ -1,3 +1,9 @@
+import {
+  KGNetSaveFromGame,
+  KGNetSavePersisted,
+  KGNetSaveUpdate,
+  KGSaveData,
+} from "@kitten-science/kitten-scientists/types/index.js";
 import { bodyParser } from "@koa/bodyparser";
 import cors from "@koa/cors";
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
@@ -9,13 +15,7 @@ import { writeFileSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { Registry } from "prom-client";
-import {
-  KGNetSaveFromGame,
-  KGNetSavePersisted,
-  KGNetSaveUpdate,
-  KGSaveData,
-  LOCAL_STORAGE_PATH,
-} from "./globals.js";
+import { LOCAL_STORAGE_PATH } from "./globals.js";
 import {
   KittenAnalystsMessage,
   KittenAnalystsMessageId,
