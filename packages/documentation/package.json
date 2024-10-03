@@ -7,9 +7,9 @@
   "license": "MIT",
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "scripts": {
-    "docs:build": ".scripts/build.sh",
+    "docs:build": "make docs",
     "docs:nsd": "nsd --cwd=$INIT_CWD --docs-location=\"packages/documentation/docs/reference/Repository Scripts/\"",
-    "docs:serve": ".scripts/serve.sh"
+    "docs:serve": "make serve"
   },
   "devDependencies": {
     "node-scripts-docs": "1.0.4"
