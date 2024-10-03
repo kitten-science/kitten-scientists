@@ -8,10 +8,10 @@ import {
   ActivitySummarySection,
   ActivityTypeClass,
 } from "./helper/ActivitySummary.js";
-import en from "./i18n/en.json" assert { type: "json" };
-import de from "./i18n/translations/de.json" assert { type: "json" };
-import he from "./i18n/translations/he.json" assert { type: "json" };
-import zh from "./i18n/translations/zh.json" assert { type: "json" };
+import en from "./i18n/en-US.json" assert { type: "json" };
+import de from "./i18n/translations/de-DE.json" assert { type: "json" };
+import he from "./i18n/translations/he-IL.json" assert { type: "json" };
+import zh from "./i18n/translations/zh-CN.json" assert { type: "json" };
 import { KittenScientists, ksVersion } from "./KittenScientists.js";
 import { ReligionManager } from "./ReligionManager.js";
 import { ScienceManager } from "./ScienceManager.js";
