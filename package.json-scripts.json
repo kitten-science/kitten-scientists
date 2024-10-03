@@ -122,7 +122,7 @@
       "manifestPath": "packages/documentation/package.json",
       "projectName": "@kitten-science/documentation",
       "scriptName": "docs:build",
-      "scriptCode": ".scripts/build.sh",
+      "scriptCode": "make docs",
       "isGlobal": true,
       "isRootManifest": false,
       "description": "Build the documentation."
@@ -140,7 +140,7 @@
       "manifestPath": "packages/documentation/package.json",
       "projectName": "@kitten-science/documentation",
       "scriptName": "docs:serve",
-      "scriptCode": ".scripts/serve.sh",
+      "scriptCode": "make serve",
       "isGlobal": true,
       "isRootManifest": false,
       "description": "Start the [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) development server to work on the documentation."
