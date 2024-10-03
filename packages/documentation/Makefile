@@ -1,6 +1,6 @@
 .venv:
 	python3 -m venv .venv
-	. .venv/bin/activate; pip install mkdocs-material
+	. .venv/bin/activate; pip install -r requirements.txt
 
 public: .venv
 	yarn nsd --cwd=../.. --docs-location="packages/documentation/docs/reference/Repository Scripts/"

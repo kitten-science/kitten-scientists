@@ -4,6 +4,14 @@ on:
   workflow_call:
   workflow_dispatch:
 
+concurrency: documentation-deploy
+
+env:
+  # renovate: datasource=node-version depName=node versioning=node
+  NODE_VERSION: "22.9.0"
+  # renovate: datasource=python-version depName=python versioning=python
+  PYTHON_VERSION: "3.12.6"
+
 jobs:
   deploy:
     if: github.event.commits[1] != null || ( !startsWith(github.event.commits[0].message, 'chore(deps):') && !startsWith(github.event.commits[0].message, 'fix(deps):') )
@@ -14,16 +22,37 @@ jobs:
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Select NodeJS version
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
       - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5
         with:
           cache: pip
-          python-version: 3.x
+          cache-dependency-path: packages/documentation/requirements.txt
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          yarn config set enableGlobalCache false
+
+      - name: Load cached dependencies
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
+        with:
+          path: .yarn/cache
+          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: yarn install
 
       - name: Build documentation
         run: |
           cd packages/documentation
           make public
-          mv public ../../docs/${{ github.ref }}
+          mv public ../../docs/main
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
