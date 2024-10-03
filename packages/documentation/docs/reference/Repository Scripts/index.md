@@ -112,7 +112,7 @@
 -   Source:
 
     ```shell
-    .scripts/build.sh
+    make docs
     ```
 
 -   Description:
@@ -138,7 +138,7 @@
 -   Source:
 
     ```shell
-    .scripts/serve.sh
+    make serve
     ```
 
 -   Description:
@@ -177,8 +177,7 @@
 -   Source:
 
     ```shell
-    MINIFY=true vite --config vite.config.userscript.js build
-    vite --config vite.config.userscript.js build
+    MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build
     ```
 
 -   Description:
@@ -230,8 +229,7 @@
 -   Source:
 
     ```shell
-    MINIFY=true vite --config vite.config.userscript.js build
-    vite --config vite.config.userscript.js build
+    MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build
     ```
 
 -   Description:
@@ -298,8 +296,7 @@
 -   Source:
 
     ```shell
-    MINIFY=true vite --config vite.config.userscript.js build
-    vite --config vite.config.userscript.js build
+    MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build
     ```
 
 -   Description:
@@ -519,3 +516,4 @@
 -   Description:
 
     Run the TypeScript compiler to find problems with the code.
+

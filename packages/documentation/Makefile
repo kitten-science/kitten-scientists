@@ -2,7 +2,8 @@
 	python3 -m venv .venv
 	. .venv/bin/activate; pip install mkdocs-material
 
-docs: .venv
+public: .venv
+	yarn nsd --cwd=../.. --docs-location="packages/documentation/docs/reference/Repository Scripts/"
 	. .venv/bin/activate; mkdocs build --config-file mkdocs.yml --site-dir public
 
 serve: .venv

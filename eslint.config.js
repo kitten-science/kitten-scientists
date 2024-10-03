@@ -11,6 +11,7 @@ export default tseslint.config(
       "_site/",
       ".yarn/",
       ".git/",
+      "docs/",
       "lib/",
       "node_modules/",
 

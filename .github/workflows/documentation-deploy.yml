@@ -16,15 +16,14 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5
         with:
+          cache: pip
           python-version: 3.x
-
-      - name: Install mkdocs-material
-        run: pip install mkdocs-material
 
       - name: Build documentation
         run: |
           cd packages/documentation
-          .scripts/build.sh
+          make public
+          mv public ../../docs/${{ github.ref }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
@@ -35,5 +34,5 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./packages/documentation/public/ s3://kitten-science-us0/ \
+          aws s3 sync ./docs/ s3://kitten-science-us0/ \
             --cache-control "public, s-maxage=3600, maxage=3600"
