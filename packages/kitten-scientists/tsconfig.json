@@ -5,6 +5,6 @@
     "rootDir": "source",
     "types": ["@types/web"]
   },
-  "include": ["../../@types", "source", "source/i18n/*.json"],
+  "include": ["../../@types", "source", "source/i18n/**/*.json"],
   "references": [{ "path": "../action-release-info" }]
 }
