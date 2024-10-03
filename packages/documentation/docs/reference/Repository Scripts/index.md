@@ -106,45 +106,6 @@
 
     _documentation pending_
 
-## docs:build
-
--   Project: `@kitten-science/documentation`
--   Source:
-
-    ```shell
-    make docs
-    ```
-
--   Description:
-
-    Build the documentation.
-
-## docs:nsd
-
--   Project: `@kitten-science/documentation`
--   Source:
-
-    ```shell
-    nsd --cwd=$INIT_CWD --docs-location="packages/documentation/docs/reference/Repository Scripts/"
-    ```
-
--   Description:
-
-    Update the scripts reference that you are looking at right now.
-
-## docs:serve
-
--   Project: `@kitten-science/documentation`
--   Source:
-
-    ```shell
-    make serve
-    ```
-
--   Description:
-
-    Start the [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) development server to work on the documentation.
-
 ## kitten-analysts:build
 
 -   Project: `@kitten-science/kitten-analysts`

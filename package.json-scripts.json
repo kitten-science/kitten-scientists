@@ -119,33 +119,6 @@
       "isRootManifest": false
     },
     {
-      "manifestPath": "packages/documentation/package.json",
-      "projectName": "@kitten-science/documentation",
-      "scriptName": "docs:build",
-      "scriptCode": "make docs",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Build the documentation."
-    },
-    {
-      "manifestPath": "packages/documentation/package.json",
-      "projectName": "@kitten-science/documentation",
-      "scriptName": "docs:nsd",
-      "scriptCode": "nsd --cwd=$INIT_CWD --docs-location=\"packages/documentation/docs/reference/Repository Scripts/\"",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Update the scripts reference that you are looking at right now."
-    },
-    {
-      "manifestPath": "packages/documentation/package.json",
-      "projectName": "@kitten-science/documentation",
-      "scriptName": "docs:serve",
-      "scriptCode": "make serve",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Start the [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) development server to work on the documentation."
-    },
-    {
       "manifestPath": "packages/kitten-analysts/package.json",
       "projectName": "@kitten-science/kitten-analysts",
       "scriptName": "kitten-analysts:build",
