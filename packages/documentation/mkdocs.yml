@@ -75,8 +75,9 @@ nav:
       - Log Filters: sections/log-filters.md
       - State Management: sections/state-management.md
       - Internals: sections/internals.md
+  - Advanced:
+      - Kitten DnA: advanced/dna.md
   - Development:
-      - Getting Started: development.md
+      - Getting Started: development/development.md
+      - Kitten Engineers: development/engineers.md
       - Repository Scripts: reference/Repository Scripts/index.md
-  - Kitten DnA: dna.md
-  - Kitten Engineers: engineers.md
