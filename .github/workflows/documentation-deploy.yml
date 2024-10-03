@@ -10,7 +10,7 @@ env:
   # renovate: datasource=node-version depName=node versioning=node
   NODE_VERSION: "22.9.0"
   # renovate: datasource=python-version depName=python versioning=python
-  PYTHON_VERSION: "3.12.6"
+  PYTHON_VERSION: "3.12.7"
 
 jobs:
   deploy:
