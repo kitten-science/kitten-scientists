@@ -44,7 +44,6 @@
     "lz-string": "1.5.0",
     "prom-client": "15.1.3",
     "tslib": "2.7.0",
-    "uuid": "10.0.0",
     "ws": "8.18.0"
   },
   "devDependencies": {
@@ -53,7 +52,6 @@
     "@types/koa__cors": "5.0.0",
     "@types/koa-router": "7.4.8",
     "@types/node": "22.7.4",
-    "@types/uuid": "10.0.0",
     "@types/ws": "8.5.12",
     "esbuild": "0.24.0",
     "typescript": "5.6.2",

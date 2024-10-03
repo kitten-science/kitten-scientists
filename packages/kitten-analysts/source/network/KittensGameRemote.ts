@@ -5,7 +5,6 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { compressToUTF16 } from "lz-string";
 import { writeFileSync } from "node:fs";
 import { exponentialBuckets, Histogram, linearBuckets } from "prom-client";
-import { v4 as uuid } from "uuid";
 import { AddressInfo, RawData, WebSocket, WebSocketServer } from "ws";
 import { KGNetSaveFromAnalysts, KGNetSavePersisted, LOCAL_STORAGE_PATH } from "../globals.js";
 import { KittenAnalystsMessage, KittenAnalystsMessageId } from "../KittenAnalysts.js";
@@ -207,7 +206,7 @@ export class KittensGameRemote {
     message: KittenAnalystsMessage<TMessage>,
     socket: RemoteConnection,
   ): Promise<KittenAnalystsMessage<TMessage> | null> {
-    const requestId = uuid();
+    const requestId = crypto.randomUUID();
     message.responseId = requestId;
 
     if (this.printProtocolMessages) process.stderr.write(`<= ${identifyExchange(message)}...\n`);
