@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { KittenScientists } from "../KittenScientists.js";
+import { KittenScientists, ksVersion } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { EngineSettings } from "../settings/EngineSettings.js";
 import { SettingsSectionUi } from "./SettingsSectionUi.js";
@@ -60,6 +60,9 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                 this._host.rebuildUi();
               },
             }),
+            new Delimiter(host),
+
+            new LabelListItem(host, `Kitten Scientists ${ksVersion("v")}`),
           ],
           hasDisableAll: false,
           hasEnableAll: false,

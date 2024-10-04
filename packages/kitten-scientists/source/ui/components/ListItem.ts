@@ -12,7 +12,7 @@ export class ListItem extends UiComponent {
   readonly element: JQuery;
 
   /**
-   * Construct a new simple list item with only a label.
+   * Construct a new simple list item with only a container element.
    *
    * @param host The userscript instance.
    * @param options Options for the list item.

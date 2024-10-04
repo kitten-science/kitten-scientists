@@ -1,5 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { KittenScientists, ksVersion } from "../KittenScientists.js";
+import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { cwarn } from "../tools/Log.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
@@ -66,14 +66,7 @@ export class UserInterface extends UiComponent {
 
     this._installCss();
 
-    const version = "Kitten Scientists " + ksVersion("v");
-
     const ks = $("<div/>", { id: "ks" });
-    const optionsTitleElement = $("<div/>", {
-      id: "ks-version",
-      text: version,
-    });
-    ks.append(optionsTitleElement);
 
     const optionsListElement = $("<ul/>");
     optionsListElement.append(this._engineUi.element);
@@ -143,7 +136,6 @@ export class UserInterface extends UiComponent {
     } else {
       right.prepend(ks);
     }
-
     this.element = ks;
   }
 
@@ -180,13 +172,8 @@ export class UserInterface extends UiComponent {
     );
     this._addRule(
       `#ks {
-        margin-bottom: 10px;
+        margin: 5px 0 10px 0;
         padding-right: 10px;
-      }`,
-    );
-    this._addRule(
-      `#ks #ks-version {
-        margin: 2px 0 2px 2px;
       }`,
     );
     this._addRule("#ks ul { list-style: none; margin: 0; padding: 0; }");
