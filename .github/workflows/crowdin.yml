@@ -7,13 +7,15 @@ on:
 jobs:
   synchronize-with-crowdin:
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        with:
+          # See https://github.com/crowdin/github-action/blob/master/EXAMPLES.md#run-test-workflows-on-all-commits-of-a-pr
+          token: ${{ secrets.CROWDIN_GH_TOKEN }}
 
       - name: crowdin action
         uses: crowdin/github-action@95d6e895e871c3c7acf0cfb962f296baa41e63c6 # v2
