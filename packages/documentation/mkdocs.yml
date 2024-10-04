@@ -59,7 +59,10 @@ theme:
 
 nav:
   - Home: index.md
-  - Installation: installation.md
+  - Installation:
+      - Quick Start: installation/quick-start.md
+      - Minified Builds: installation/minified-builds.md
+      - Containers: installation/containers.md
   - User Interface:
       - Overview: sections/overview.md
       - Bonfire: sections/bonfire.md
