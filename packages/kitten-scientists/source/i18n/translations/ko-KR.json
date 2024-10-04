@@ -190,7 +190,7 @@
   "summary.time.getTemporalFlux": "Burn crystal to gain time flux {0} times",
   "summary.time.reset.content": "Gained {0} Karma.<br>Gained {1} Paragon",
   "summary.time.reset.title": "Summary of the last {0} timelines",
-  "summary.time.skip": "Skiped {0} years",
+  "summary.time.skip": "Skipped {0} years",
   "summary.trade": "Traded {0} times with {1}",
   "summary.transcend": "Transcended {0} times",
   "summary.upgrade": "Upgraded {0}",
