@@ -8,7 +8,7 @@ The file you need to put into your userscript manager is available from the [Rel
 
     <https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.8>
 
-    This is a release with a familiar version number, that has been designated as a reasonably stable version to use. At this time, that is:
+    This is a release with a familiar version number, that has been designated as a reasonably stable version to use.
     
 
 1. The **nightly** release.
