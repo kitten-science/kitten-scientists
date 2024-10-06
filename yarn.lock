@@ -684,7 +684,7 @@ __metadata:
     "@types/dojo": "npm:1.9.48"
     "@types/jquery": "npm:3.5.31"
     "@types/semver": "npm:7.5.8"
-    "@types/web": "npm:0.0.168"
+    "@types/web": "npm:0.0.169"
     ajv: "npm:8.17.1"
     date-fns: "npm:4.1.0"
     semver: "npm:7.6.3"
@@ -1342,10 +1342,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/web@npm:0.0.168":
-  version: 0.0.168
-  resolution: "@types/web@npm:0.0.168"
-  checksum: 10c0/132c7b35516b9dc9768c6062d0f4e849cc28531f96d448c6b5b065bb4be7ac1b9b26185ae96af4803d96ceb0611f00c0c652fd0292f64f9a6552dc5f07cbec84
+"@types/web@npm:0.0.169":
+  version: 0.0.169
+  resolution: "@types/web@npm:0.0.169"
+  checksum: 10c0/3a4196703c22d086b921058943b13c1d7750e25008c371a33d6183a7ff59d693596187543e57dffabd94de45f7d2fde024ead6a483420755b0557fa713e28879
   languageName: node
   linkType: hard
 
@@ -3700,7 +3700,7 @@ __metadata:
     "@eslint/js": "npm:9.12.0"
     "@types/eslint": "npm:9.6.1"
     "@types/node": "npm:22.7.4"
-    "@types/web": "npm:0.0.168"
+    "@types/web": "npm:0.0.169"
     eslint: "npm:9.12.0"
     eslint-config-prettier: "npm:9.1.0"
     lint-staged: "npm:15.2.10"
