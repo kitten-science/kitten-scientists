@@ -126,6 +126,7 @@
   "state.copy": "Copy to clipboard",
   "state.deleted.game": "Save '{0}' deleted.",
   "state.deleted.state": "State '{0}' deleted.",
+  "state.edit": "Rename",
   "state.exportAll": "Backup",
   "state.exportAllTitle": "Stores all local states in a single file and downloads it.",
   "state.import": "Import from clipboard",
