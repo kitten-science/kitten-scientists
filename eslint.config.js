@@ -15,6 +15,7 @@ export default tseslint.config(
       "lib/",
       "node_modules/",
 
+      "packages/documentation/.venv/",
       "packages/documentation/public/",
 
       "packages/*/build/",

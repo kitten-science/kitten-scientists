@@ -5,6 +5,7 @@ docs/
 
 packages/*/build/
 packages/*/output/
+packages/documentation/.venv/*
 packages/documentation/public/*
 
 packages/kitten-analysts/examples/*

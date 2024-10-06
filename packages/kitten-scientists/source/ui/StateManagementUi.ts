@@ -267,6 +267,13 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
                       this._host.engine.imessage("state.copied.game", [game.label]);
                     },
                   }),
+                  new IconButton(this._host, Icons.Edit, this._host.engine.i18n("state.edit"), {
+                    onClick: () => {
+                      this.storeGame(game.game);
+                      this.deleteGame(gameSlot, true);
+                      this._host.engine.imessage("state.updated.game", [game.label]);
+                    },
+                  }),
                   new IconButton(this._host, Icons.Save, this._host.engine.i18n("update"), {
                     onClick: () => {
                       this.updateGame(gameSlot, this._host.game.save());
@@ -318,6 +325,13 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
                     onClick: () => {
                       this.copyState(state.state).catch(redirectErrorsToConsole(console));
                       this._host.engine.imessage("state.copied.state", [state.label]);
+                    },
+                  }),
+                  new IconButton(this._host, Icons.Edit, this._host.engine.i18n("state.edit"), {
+                    onClick: () => {
+                      this.storeState(state.state);
+                      this.deleteState(stateSlot, true);
+                      this._host.engine.imessage("state.updated.state", [state.label]);
                     },
                   }),
                   new IconButton(this._host, Icons.Save, this._host.engine.i18n("update"), {
@@ -389,18 +403,20 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this._host.engine.imessage("state.imported.game");
   }
 
-  storeGame(game?: KGSaveData) {
-    let label = window.prompt(this._host.engine.i18n("state.storeGame.prompt")) ?? undefined;
+  storeGame(game?: KGSaveData, label?: string) {
+    let gameLabel =
+      label ?? window.prompt(this._host.engine.i18n("state.storeGame.prompt")) ?? undefined;
 
     // Normalize empty string to "no label".
-    label = (label === "" ? undefined : label) ?? this._host.engine.i18n("state.unlabledGame");
+    gameLabel =
+      (gameLabel === "" ? undefined : gameLabel) ?? this._host.engine.i18n("state.unlabledGame");
 
     // Ensure labels aren't excessively long.
-    label = label.substring(0, 127);
+    gameLabel = gameLabel.substring(0, 127);
 
     this.games.push(
       new Unique({
-        label,
+        label: gameLabel,
         game: game ?? this._host.game.save(),
         timestamp: new Date().toISOString(),
       }),
@@ -410,18 +426,20 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.refreshUi();
   }
 
-  storeState(state?: EngineState) {
-    let label = window.prompt(this._host.engine.i18n("state.storeState.prompt")) ?? undefined;
+  storeState(state?: EngineState, label?: string) {
+    let stateLabel =
+      label ?? window.prompt(this._host.engine.i18n("state.storeState.prompt")) ?? undefined;
 
     // Normalize empty string to "no label".
-    label = (label === "" ? undefined : label) ?? this._host.engine.i18n("state.unlabledState");
+    stateLabel =
+      (stateLabel === "" ? undefined : stateLabel) ?? this._host.engine.i18n("state.unlabledState");
 
     // Ensure labels aren't excessively long.
-    label = label.substring(0, 127);
+    stateLabel = stateLabel.substring(0, 127);
 
     this.states.push(
       new Unique({
-        label,
+        label: stateLabel,
         state: state ?? this._host.engine.stateSerialize(),
         timestamp: new Date().toISOString(),
       }),
@@ -494,8 +512,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.refreshUi();
   }
 
-  deleteGame(game: Unique<StoredGame>) {
-    if (this._destructiveActionPrevented()) {
+  deleteGame(game: Unique<StoredGame>, force = false) {
+    if (!force && this._destructiveActionPrevented()) {
       return;
     }
 
@@ -509,8 +527,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.refreshUi();
   }
 
-  deleteState(state: Unique<StoredState>) {
-    if (this._destructiveActionPrevented()) {
+  deleteState(state: Unique<StoredState>, force = false) {
+    if (!force && this._destructiveActionPrevented()) {
       return;
     }
 
