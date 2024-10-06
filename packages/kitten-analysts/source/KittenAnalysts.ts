@@ -200,17 +200,18 @@ export class KittenAnalysts {
 
     this.#withAnalyticsBackend = true;
 
-    cwarn("MANIPULATING YOUR GAME!");
     // Manipulate game to use internal URL for KGNet.
     // KG would always return this exact URL itself, if it was running on localhost.
     // Because we might not be accessing the current instance of the game through localhost,
     // we need to override the entire method to _always_ return this URL.
     this.game.server.getServerUrl = () => `http://${location.hostname}:7780`;
 
-    this.ws = new WebSocket(`ws://${location.hostname}:9093/`);
+    const wsTarget = `ws://${location.hostname}:9093/`;
+    cinfo(`Connecting ${wsTarget}...`);
+    this.ws = new WebSocket(wsTarget);
 
     this.ws.onerror = error => {
-      cwarn("Error on WS connection! Closing and reconnecting...", error);
+      cwarn("Error on WS connection! Closing and reconnecting...", error.type);
       // This should also trigger the `onclose` handler below and, thus, the reconnect.
       this.ws?.close();
       this.ws = null;

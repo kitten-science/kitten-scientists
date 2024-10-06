@@ -12,15 +12,10 @@ If you are not running the Kitten Science DnA environment, Kitten Analysts will 
 
 ## How can I use it?
 
-!!! warning
-
-    The current implementation expects you to have `podman` available for container networking. If you don't have it available, the command will fail and there is no alternative for now. Sorry.
-
-Ideally, you only have to build and run the environment with two commands:
+You should be able to bring up the environment with:
 
 ```shell
-yarn kittenscience:build
-yarn kittenscience:run
+yarn ka:compose:up
 ```
 
 The resulting pod should expose 4 ports:

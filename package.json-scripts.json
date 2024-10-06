@@ -119,9 +119,18 @@
       "isRootManifest": false
     },
     {
+      "manifestPath": "packages/documentation/package.json",
+      "projectName": "@kitten-science/documentation",
+      "scriptName": "docs:nsd",
+      "scriptCode": "make nsd",
+      "isGlobal": true,
+      "isRootManifest": false,
+      "description": "Update the scripts reference that you are looking at right now."
+    },
+    {
       "manifestPath": "packages/kitten-analysts/package.json",
       "projectName": "@kitten-science/kitten-analysts",
-      "scriptName": "kitten-analysts:build",
+      "scriptName": "ka:build",
       "scriptCode": "node build.js && vite --config vite.config.inject.js build",
       "isGlobal": true,
       "isRootManifest": false
@@ -129,7 +138,31 @@
     {
       "manifestPath": "packages/kitten-analysts/package.json",
       "projectName": "@kitten-science/kitten-analysts",
-      "scriptName": "kitten-analysts:preview",
+      "scriptName": "ka:compose:build",
+      "scriptCode": "docker-compose build",
+      "isGlobal": true,
+      "isRootManifest": false
+    },
+    {
+      "manifestPath": "packages/kitten-analysts/package.json",
+      "projectName": "@kitten-science/kitten-analysts",
+      "scriptName": "ka:compose:down",
+      "scriptCode": "docker-compose down",
+      "isGlobal": true,
+      "isRootManifest": false
+    },
+    {
+      "manifestPath": "packages/kitten-analysts/package.json",
+      "projectName": "@kitten-science/kitten-analysts",
+      "scriptName": "ka:compose:up",
+      "scriptCode": "docker-compose up",
+      "isGlobal": true,
+      "isRootManifest": false
+    },
+    {
+      "manifestPath": "packages/kitten-analysts/package.json",
+      "projectName": "@kitten-science/kitten-analysts",
+      "scriptName": "ka:preview",
       "scriptCode": "DEV_BUILD=true vite --config vite.config.userscript.js build",
       "isGlobal": true,
       "isRootManifest": false
@@ -137,7 +170,7 @@
     {
       "manifestPath": "packages/kitten-analysts/package.json",
       "projectName": "@kitten-science/kitten-analysts",
-      "scriptName": "kitten-analysts:release",
+      "scriptName": "ka:release",
       "scriptCode": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
       "isGlobal": true,
       "isRootManifest": false
@@ -145,7 +178,7 @@
     {
       "manifestPath": "packages/kitten-analysts/package.json",
       "projectName": "@kitten-science/kitten-analysts",
-      "scriptName": "kitten-analysts:start",
+      "scriptName": "ka:start",
       "scriptCode": "node output/entrypoint-backend.js",
       "isGlobal": true,
       "isRootManifest": false
@@ -153,7 +186,7 @@
     {
       "manifestPath": "packages/kitten-engineers/package.json",
       "projectName": "@kitten-science/kitten-engineers",
-      "scriptName": "kitten-engineers:build",
+      "scriptName": "ke:build",
       "scriptCode": "vite --config vite.config.inject.js build",
       "isGlobal": true,
       "isRootManifest": false
@@ -161,7 +194,7 @@
     {
       "manifestPath": "packages/kitten-engineers/package.json",
       "projectName": "@kitten-science/kitten-engineers",
-      "scriptName": "kitten-engineers:preview",
+      "scriptName": "ke:preview",
       "scriptCode": "DEV_BUILD=true vite --config vite.config.userscript.js build",
       "isGlobal": true,
       "isRootManifest": false
@@ -169,7 +202,7 @@
     {
       "manifestPath": "packages/kitten-engineers/package.json",
       "projectName": "@kitten-science/kitten-engineers",
-      "scriptName": "kitten-engineers:release",
+      "scriptName": "ke:release",
       "scriptCode": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
       "isGlobal": true,
       "isRootManifest": false
@@ -177,7 +210,7 @@
     {
       "manifestPath": "packages/kitten-engineers/package.json",
       "projectName": "@kitten-science/kitten-engineers",
-      "scriptName": "kitten-engineers:version",
+      "scriptName": "ke:version",
       "scriptCode": "node version.cjs",
       "isGlobal": true,
       "isRootManifest": false
@@ -185,7 +218,7 @@
     {
       "manifestPath": "packages/kitten-engineers/package.json",
       "projectName": "@kitten-science/kitten-engineers",
-      "scriptName": "kitten-engineers:watch",
+      "scriptName": "ke:watch",
       "scriptCode": "vite --config vite.config.inject.js build --watch",
       "isGlobal": true,
       "isRootManifest": false
@@ -193,7 +226,7 @@
     {
       "manifestPath": "packages/kitten-scientists/package.json",
       "projectName": "@kitten-science/kitten-scientists",
-      "scriptName": "kitten-scientists:build",
+      "scriptName": "ks:build",
       "scriptCode": "vite --config vite.config.inject.js build",
       "isGlobal": true,
       "isRootManifest": false,
@@ -202,7 +235,7 @@
     {
       "manifestPath": "packages/kitten-scientists/package.json",
       "projectName": "@kitten-science/kitten-scientists",
-      "scriptName": "kitten-scientists:preview",
+      "scriptName": "ks:preview",
       "scriptCode": "DEV_BUILD=true vite --config vite.config.userscript.js build",
       "isGlobal": true,
       "isRootManifest": false,
@@ -211,7 +244,7 @@
     {
       "manifestPath": "packages/kitten-scientists/package.json",
       "projectName": "@kitten-science/kitten-scientists",
-      "scriptName": "kitten-scientists:release",
+      "scriptName": "ks:release",
       "scriptCode": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
       "isGlobal": true,
       "isRootManifest": false,
@@ -220,7 +253,7 @@
     {
       "manifestPath": "packages/kitten-scientists/package.json",
       "projectName": "@kitten-science/kitten-scientists",
-      "scriptName": "kitten-scientists:version",
+      "scriptName": "ks:version",
       "scriptCode": "node version.cjs",
       "isGlobal": true,
       "isRootManifest": false,
@@ -229,43 +262,11 @@
     {
       "manifestPath": "packages/kitten-scientists/package.json",
       "projectName": "@kitten-science/kitten-scientists",
-      "scriptName": "kitten-scientists:watch",
+      "scriptName": "ks:watch",
       "scriptCode": "vite --config vite.config.inject.js build --watch",
       "isGlobal": true,
       "isRootManifest": false,
       "description": "Builds the Kitten Scientists userscript and watches all files for changes. If changes are detected, the script is rebuilt.\n\n!!! warning\n\n    This watcher has caused problems in the past, generating broken output. Use at your own risk."
-    },
-    {
-      "manifestPath": "packages/kitten-analysts/package.json",
-      "projectName": "@kitten-science/kitten-analysts",
-      "scriptName": "kittenscience:build",
-      "scriptCode": "bash ./scripts/build-container.sh",
-      "isGlobal": true,
-      "isRootManifest": false
-    },
-    {
-      "manifestPath": "packages/kitten-analysts/package.json",
-      "projectName": "@kitten-science/kitten-analysts",
-      "scriptName": "kittenscience:rebuild",
-      "scriptCode": "bash ./scripts/rebuild-container.sh",
-      "isGlobal": true,
-      "isRootManifest": false
-    },
-    {
-      "manifestPath": "packages/kitten-analysts/package.json",
-      "projectName": "@kitten-science/kitten-analysts",
-      "scriptName": "kittenscience:run",
-      "scriptCode": "bash ./scripts/run-container.sh",
-      "isGlobal": true,
-      "isRootManifest": false
-    },
-    {
-      "manifestPath": "packages/kitten-analysts/package.json",
-      "projectName": "@kitten-science/kitten-analysts",
-      "scriptName": "kittenscience:stop",
-      "scriptCode": "bash ./scripts/stop-container.sh",
-      "isGlobal": true,
-      "isRootManifest": false
     },
     {
       "manifestPath": "packages/devcontainer/package.json",
@@ -278,6 +279,22 @@
     {
       "manifestPath": "packages/kitten-analysts/package.json",
       "projectName": "@kitten-science/kitten-analysts",
+      "scriptName": "lint",
+      "scriptCode": "yarn run lint:all",
+      "isGlobal": false,
+      "isRootManifest": false
+    },
+    {
+      "manifestPath": "packages/kitten-engineers/package.json",
+      "projectName": "@kitten-science/kitten-engineers",
+      "scriptName": "lint",
+      "scriptCode": "yarn run lint:all",
+      "isGlobal": false,
+      "isRootManifest": false
+    },
+    {
+      "manifestPath": "packages/kitten-scientists/package.json",
+      "projectName": "@kitten-science/kitten-scientists",
       "scriptName": "lint",
       "scriptCode": "yarn run lint:all",
       "isGlobal": false,
@@ -341,6 +358,22 @@
       "isRootManifest": false
     },
     {
+      "manifestPath": "packages/kitten-engineers/package.json",
+      "projectName": "@kitten-science/kitten-engineers",
+      "scriptName": "test",
+      "scriptCode": "echo This project has no tests.",
+      "isGlobal": false,
+      "isRootManifest": false
+    },
+    {
+      "manifestPath": "packages/kitten-scientists/package.json",
+      "projectName": "@kitten-science/kitten-scientists",
+      "scriptName": "test",
+      "scriptCode": "echo This project has no tests.",
+      "isGlobal": false,
+      "isRootManifest": false
+    },
+    {
       "manifestPath": "package.json",
       "projectName": "kitten-scientists",
       "scriptName": "test",
@@ -356,24 +389,6 @@
       "isGlobal": true,
       "isRootManifest": true,
       "description": "Runs unit tests in all workspaces."
-    },
-    {
-      "manifestPath": "packages/action-release-info/package.json",
-      "projectName": "@kitten-science/action-release-info",
-      "scriptName": "test:coverage",
-      "scriptCode": "c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js",
-      "isGlobal": true,
-      "isRootManifest": false,
-      "description": "Runs unit tests in all workspaces and collects code coverage information."
-    },
-    {
-      "manifestPath": "package.json",
-      "projectName": "kitten-scientists",
-      "scriptName": "test:coverage:all",
-      "scriptCode": "yarn workspaces foreach --all --exclude kitten-scientists --parallel --verbose run test:coverage",
-      "isGlobal": true,
-      "isRootManifest": true,
-      "description": "Runs the `test:coverage` script in all workspaces."
     },
     {
       "manifestPath": "packages/action-release-info/package.json",

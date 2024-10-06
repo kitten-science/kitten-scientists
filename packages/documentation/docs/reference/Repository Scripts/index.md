@@ -106,7 +106,20 @@
 
     _documentation pending_
 
-## kitten-analysts:build
+## docs:nsd
+
+-   Project: `@kitten-science/documentation`
+-   Source:
+
+    ```shell
+    make nsd
+    ```
+
+-   Description:
+
+    Update the scripts reference that you are looking at right now.
+
+## ka:build
 
 -   Project: `@kitten-science/kitten-analysts`
 -   Source:
@@ -119,7 +132,46 @@
 
     _documentation pending_
 
-## kitten-analysts:preview
+## ka:compose:build
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    docker-compose build
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## ka:compose:down
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    docker-compose down
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## ka:compose:up
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    docker-compose up
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## ka:preview
 
 -   Project: `@kitten-science/kitten-analysts`
 -   Source:
@@ -132,7 +184,7 @@
 
     _documentation pending_
 
-## kitten-analysts:release
+## ka:release
 
 -   Project: `@kitten-science/kitten-analysts`
 -   Source:
@@ -145,7 +197,7 @@
 
     _documentation pending_
 
-## kitten-analysts:start
+## ka:start
 
 -   Project: `@kitten-science/kitten-analysts`
 -   Source:
@@ -158,7 +210,7 @@
 
     _documentation pending_
 
-## kitten-engineers:build
+## ke:build
 
 -   Project: `@kitten-science/kitten-engineers`
 -   Source:
@@ -171,7 +223,7 @@
 
     _documentation pending_
 
-## kitten-engineers:preview
+## ke:preview
 
 -   Project: `@kitten-science/kitten-engineers`
 -   Source:
@@ -184,7 +236,7 @@
 
     _documentation pending_
 
-## kitten-engineers:release
+## ke:release
 
 -   Project: `@kitten-science/kitten-engineers`
 -   Source:
@@ -197,7 +249,7 @@
 
     _documentation pending_
 
-## kitten-engineers:version
+## ke:version
 
 -   Project: `@kitten-science/kitten-engineers`
 -   Source:
@@ -210,7 +262,7 @@
 
     _documentation pending_
 
-## kitten-engineers:watch
+## ke:watch
 
 -   Project: `@kitten-science/kitten-engineers`
 -   Source:
@@ -223,7 +275,7 @@
 
     _documentation pending_
 
-## kitten-scientists:build
+## ks:build
 
 -   Project: `@kitten-science/kitten-scientists`
 -   Source:
@@ -238,7 +290,7 @@
 
     This builds the version of the script that is also used in the development container.
 
-## kitten-scientists:preview
+## ks:preview
 
 -   Project: `@kitten-science/kitten-scientists`
 -   Source:
@@ -251,7 +303,7 @@
 
     Build a development release version of the userscript.
 
-## kitten-scientists:release
+## ks:release
 
 -   Project: `@kitten-science/kitten-scientists`
 -   Source:
@@ -266,7 +318,7 @@
 
     This is usually only used from CI to build both the regular version of the script, as well as a minified build. When you use this locally, it still builds both files, but clears the output directory between builds. So you end up with only the regular version.
 
-## kitten-scientists:version
+## ks:version
 
 -   Project: `@kitten-science/kitten-scientists`
 -   Source:
@@ -279,7 +331,7 @@
 
     Returns the version for the Kitten Scientists userscript.
 
-## kitten-scientists:watch
+## ks:watch
 
 -   Project: `@kitten-science/kitten-scientists`
 -   Source:
@@ -295,58 +347,6 @@
     !!! warning
 
         This watcher has caused problems in the past, generating broken output. Use at your own risk.
-
-## kittenscience:build
-
--   Project: `@kitten-science/kitten-analysts`
--   Source:
-
-    ```shell
-    bash ./scripts/build-container.sh
-    ```
-
--   Description:
-
-    _documentation pending_
-
-## kittenscience:rebuild
-
--   Project: `@kitten-science/kitten-analysts`
--   Source:
-
-    ```shell
-    bash ./scripts/rebuild-container.sh
-    ```
-
--   Description:
-
-    _documentation pending_
-
-## kittenscience:run
-
--   Project: `@kitten-science/kitten-analysts`
--   Source:
-
-    ```shell
-    bash ./scripts/run-container.sh
-    ```
-
--   Description:
-
-    _documentation pending_
-
-## kittenscience:stop
-
--   Project: `@kitten-science/kitten-analysts`
--   Source:
-
-    ```shell
-    bash ./scripts/stop-container.sh
-    ```
-
--   Description:
-
-    _documentation pending_
 
 ## lint
 
@@ -425,32 +425,6 @@
 -   Description:
 
     Runs unit tests in all workspaces.
-
-## test:coverage
-
--   Project: `@kitten-science/action-release-info`
--   Source:
-
-    ```shell
-    c8 --reporter html-spa --reporter text node --enable-source-maps $(yarn bin mocha) ./build/*.test.js
-    ```
-
--   Description:
-
-    Runs unit tests in all workspaces and collects code coverage information.
-
-## test:coverage:all
-
--   Project: `kitten-scientists`
--   Source:
-
-    ```shell
-    yarn workspaces foreach --all --exclude kitten-scientists --parallel --verbose run test:coverage
-    ```
-
--   Description:
-
-    Runs the `test:coverage` script in all workspaces.
 
 ## test:inspect
 

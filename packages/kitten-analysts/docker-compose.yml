@@ -5,17 +5,18 @@ services:
     build:
       context: ../..
       dockerfile: packages/kitten-analysts/backend.Containerfile
-    expose:
+    ports:
       # KGNet Interface
-      - "7780/tcp"
+      - "7780:7780/tcp"
+      # Kittens Game Browser UI
+      - "9080:8080/tcp"
       # Prometheus Exporter
-      - "9091/tcp"
+      - "9091:9091/tcp"
       # Kitten Analysts Websocket
-      - "9093/udp"
-
+      - "9093:9093"
     volumes:
       - type: bind
-        source: packages/kitten-analysts/examples
+        source: ../../packages/kitten-analysts/examples
         target: /local_storage
         read_only: false
 
@@ -24,20 +25,18 @@ services:
     build:
       context: ../..
       dockerfile: packages/kitten-analysts/game.Containerfile
-    expose:
-      # Kittens Game Browser UI
-      - "9080/tcp"
+    network_mode: service:backend
     volumes:
       - type: bind
-        source: packages/kitten-analysts/output
+        source: ../../packages/kitten-analysts/output
         target: /kittensgame/kitten-analysts
         read_only: true
       - type: bind
-        source: packages/kitten-engineers/output
+        source: ../../packages/kitten-engineers/output
         target: /kittensgame/kitten-engineers
         read_only: true
       - type: bind
-        source: packages/kitten-scientists/output
+        source: ../../packages/kitten-scientists/output
         target: /kittensgame/kitten-scientists
         read_only: true
 
@@ -46,8 +45,9 @@ services:
     build:
       context: ../..
       dockerfile: packages/kitten-analysts/ui.Containerfile
+    network_mode: service:backend
     volumes:
       - type: bind
-        source: packages/kitten-analysts/examples
+        source: ../../packages/kitten-analysts/examples
         target: /local_storage
         read_only: false

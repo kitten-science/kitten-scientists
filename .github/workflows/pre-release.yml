@@ -96,9 +96,9 @@ jobs:
           RELEASE_VERSION: ${{ needs.versions.outputs.RELEASE_VERSION }}
         run: |
           yarn build:all
-          yarn kitten-analysts:release
-          yarn kitten-engineers:release
-          yarn kitten-scientists:release
+          yarn ka:release
+          yarn ke:release
+          yarn ks:release
 
       - name: Generate GitHub release
         if: success() && inputs.wants-github-release

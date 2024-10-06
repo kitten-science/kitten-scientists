@@ -6,6 +6,9 @@
   "description": "Documentation for Kitten Scientists",
   "license": "MIT",
   "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
+  "scripts": {
+    "docs:nsd": "make nsd"
+  },
   "devDependencies": {
     "node-scripts-docs": "1.0.4"
   },

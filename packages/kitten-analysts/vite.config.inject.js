@@ -22,6 +22,6 @@ export default defineConfig({
     sourcemap: "inline",
   },
   define: {
-    KA_CONNECT_BACKEND: "true",
+    KA_CONNECT_BACKEND: JSON.stringify("true"),
   },
 });

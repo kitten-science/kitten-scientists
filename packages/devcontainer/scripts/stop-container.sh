@@ -11,8 +11,8 @@ cd "$(dirname "$0")"
 
 main() {
   echo "Removing container..."
-  podman kill devcontainer || true
-  podman rm devcontainer || true
+  docker kill devcontainer || true
+  docker rm devcontainer || true
   echo "Previous container removed or non-existent."
 }
 

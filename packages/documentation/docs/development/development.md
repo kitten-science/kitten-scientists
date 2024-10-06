@@ -16,7 +16,7 @@ The development environment is expected to be a POSIX-compliant system. On Windo
 
 You will need [NodeJS](https://nodejs.org/) to be able to work with the project. The project uses [yarn](https://yarnpkg.com/) as a package and project manager, which is usually integrated with recent NodeJS versions.
 
-Additionally, you will need to have [Podman](https://podman.io/get-started) available, to use the container-based Kittens Game development server. If you do not have Podman, you can still build a release version of the script and drop that into your userscript manager. You can also use Docker, or other container engines, but the existing tooling is built around `podman`.
+Additionally, you will need to have [Docker](https://www.docker.com/) available, to use the container-based Kittens Game development server.
 
 ## General Development
 

@@ -21,11 +21,13 @@
   },
   "scripts": {
     "build": "yarn run build:all",
-    "kitten-scientists:build": "vite --config vite.config.inject.js build",
-    "kitten-scientists:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
-    "kitten-scientists:release": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
-    "kitten-scientists:version": "node version.cjs",
-    "kitten-scientists:watch": "vite --config vite.config.inject.js build --watch",
+    "ks:build": "vite --config vite.config.inject.js build",
+    "ks:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
+    "ks:release": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
+    "ks:version": "node version.cjs",
+    "ks:watch": "vite --config vite.config.inject.js build --watch",
+    "lint": "yarn run lint:all",
+    "test": "echo This project has no tests.",
     "whoami": "echo kitten-scientists"
   },
   "types": "./build/index.d.ts",

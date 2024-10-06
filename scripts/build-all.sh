@@ -19,11 +19,11 @@ main() {
 
   # Build the individual user scripts.
   echo "Building user scripts..."
-  yarn kitten-analysts:build
+  yarn ka:build
   echo "Done with Kitten Analysts."
-  yarn kitten-engineers:build
+  yarn ke:build
   echo "Done with Kitten Engineers."
-  yarn kitten-scientists:build
+  yarn ks:build
   echo "Done with Kitten Scientists."
 }
 

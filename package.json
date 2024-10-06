@@ -26,7 +26,6 @@
     "lint:prettier": "prettier --check packages",
     "test": "yarn run test:all",
     "test:all": "yarn workspaces foreach --all --exclude kitten-scientists --parallel --verbose run test",
-    "test:coverage:all": "yarn workspaces foreach --all --exclude kitten-scientists --parallel --verbose run test:coverage",
     "typecheck:all": "tsc --noEmit --incremental false"
   },
   "workspaces": [

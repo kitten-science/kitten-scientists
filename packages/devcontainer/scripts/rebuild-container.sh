@@ -16,7 +16,7 @@ main() {
   REPO=${2:-https://github.com/nuclear-unicorn/kittensgame.git}
 
   echo "Re-Building development container on $BRANCH branch of $REPO..."
-  buildah bud \
+  docker build \
     --build-arg BRANCH="$BRANCH" \
     --build-arg REPO="$REPO" \
     --file ./Containerfile \

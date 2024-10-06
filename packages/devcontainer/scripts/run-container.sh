@@ -23,8 +23,8 @@ main() {
   echo "Done building Devcontainer."
 
   echo "Removing previous container..."
-  podman kill devcontainer || true
-  podman rm devcontainer || true
+  docker kill devcontainer || true
+  docker rm devcontainer || true
   echo "Previous container removed or non-existent."
 
   echo ""
@@ -32,7 +32,7 @@ main() {
   echo "Starting new container..."
   # 8086 Live-Reload Websocket from Development HTTP Server
   # 8100 Kittens Game Browser UI
-  podman run \
+  docker run \
     --detach \
     --mount type=bind,source="${BASEDIR}/../../kitten-analysts/output",target=/kittensgame/kitten-analysts \
     --mount type=bind,source="${BASEDIR}/../../kitten-engineers/output",target=/kittensgame/kitten-engineers \
@@ -44,7 +44,7 @@ main() {
   echo "Container started."
 
   echo ""
-  echo "Kitten game should be running at http://127.0.0.1:8100"
+  echo "Kittens Game should be running at http://127.0.0.1:8100"
 }
 
 main "$@"
