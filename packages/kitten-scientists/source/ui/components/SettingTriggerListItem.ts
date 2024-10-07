@@ -1,5 +1,5 @@
 import { KittenScientists } from "../../KittenScientists.js";
-import { SettingTrigger } from "../../settings/Settings.js";
+import { SettingThreshold, SettingTrigger } from "../../settings/Settings.js";
 import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
@@ -13,7 +13,7 @@ export class SettingTriggerListItem extends SettingListItem {
   constructor(
     host: KittenScientists,
     label: string,
-    setting: SettingTrigger,
+    setting: SettingThreshold | SettingTrigger,
     options?: Partial<SettingTriggerListItemOptions>,
   ) {
     super(host, label, setting, options);
