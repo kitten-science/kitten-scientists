@@ -535,7 +535,9 @@ export class TradeManager implements Automation {
 
       const currentCoin = this._host.game.resPool.get("blackcoin").value;
       coinsExchanged = Math.round(currentCoin - coinsInitial);
-      this._host.engine.iactivity("blackcoin.buy", [coinsExchanged]);
+      this._host.engine.iactivity("blackcoin.buy", [
+        this._host.game.getDisplayValueExt(coinsExchanged),
+      ]);
     } else if (
       coinPrice > this.settings.tradeBlackcoin.sell &&
       0 < this._host.game.resPool.get("blackcoin").value
@@ -545,7 +547,9 @@ export class TradeManager implements Automation {
       const relicsCurrent = mustExist(this._host.game.resPool.get("relic")).value;
       relicsExchanged = Math.round(relicsCurrent - relicsInitial);
 
-      this._host.engine.iactivity("blackcoin.sell", [relicsExchanged]);
+      this._host.engine.iactivity("blackcoin.sell", [
+        this._host.game.getDisplayValueExt(relicsExchanged),
+      ]);
     }
   }
 
