@@ -54,6 +54,10 @@ import { kg_unicorns_sacrificed } from "./metrics/kg_unicorns_sacrificed.js";
 import { kg_years_total } from "./metrics/kg_years_total.js";
 import { KittensGameRemote } from "./network/KittensGameRemote.js";
 
+export interface KGNetChiralCommand {
+  command: string;
+}
+
 const PORT_HTTP_KGNET = process.env.PORT_HTTP_KGNET ? Number(process.env.PORT_HTTP_KGNET) : 7780;
 const PORT_HTTP_METRICS = process.env.PORT_WS_BACKEND
   ? Number(process.env.PORT_HTTP_METRICS)
@@ -279,6 +283,20 @@ routerNetwork.post("/kgnet/save/update", context => {
 
     context.body = [...saveStore.values()];
     context.status = 200;
+    return;
+  } catch (error) {
+    console.error(error);
+    context.status = 500;
+  }
+});
+
+routerNetwork.post("/kgnet/chiral/game/command/", context => {
+  try {
+    //const payload = context.request.body as KGNetChiralCommand;
+    context.status = 200;
+    context.body = JSON.stringify({
+      clientState: `Command received at ${new Date().toISOString()}.`,
+    });
     return;
   } catch (error) {
     console.error(error);
