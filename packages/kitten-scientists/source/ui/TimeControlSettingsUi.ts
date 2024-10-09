@@ -28,16 +28,17 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
       hasDisableAll: false,
       hasEnableAll: false,
     });
+    const accelerateLabel = this._host.engine.i18n("option.accelerate");
     this._accelerateTime = new SettingTriggerListItem(
       this._host,
-      this._host.engine.i18n("option.accelerate"),
+      accelerateLabel,
       this.setting.accelerateTime,
       {
         onCheck: () => {
-          this._host.engine.imessage("status.sub.enable", [label]);
+          this._host.engine.imessage("status.sub.enable", [accelerateLabel]);
         },
         onUnCheck: () => {
-          this._host.engine.imessage("status.sub.disable", [label]);
+          this._host.engine.imessage("status.sub.disable", [accelerateLabel]);
         },
       },
     );
