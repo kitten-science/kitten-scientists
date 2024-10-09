@@ -46,7 +46,7 @@
     "prettier-package-json": "2.8.0",
     "prettier-plugin-organize-imports": "4.1.0",
     "prettier-plugin-sh": "0.14.0",
-    "typescript": "5.6.2",
+    "typescript": "5.6.3",
     "typescript-eslint": "8.8.1"
   },
   "keywords": [
