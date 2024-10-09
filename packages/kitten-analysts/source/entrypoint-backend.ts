@@ -324,4 +324,11 @@ async function main() {
   });
 }
 
+["SIGINT", "SIGTERM", "SIGQUIT"].forEach(signal =>
+  process.on(signal, () => {
+    remote.closeAll();
+    process.exit();
+  }),
+);
+
 main().catch(redirectErrorsToConsole(console));

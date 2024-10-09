@@ -87,6 +87,13 @@ export class KittensGameRemote {
     });
   }
 
+  closeAll() {
+    for (const socket of this.sockets) {
+      socket.ws.close();
+    }
+    this.wss.close();
+  }
+
   handleMessage(socket: WebSocket, data: RawData) {
     // eslint-disable-next-line @typescript-eslint/no-base-to-string
     const message = JSON.parse(data.toString()) as KittenAnalystsMessage<KittenAnalystsMessageId>;

@@ -44,4 +44,6 @@ const main = async () => {
   process.stderr.write("Successfully initialized.\n");
 };
 
+["SIGINT", "SIGTERM", "SIGQUIT"].forEach(signal => process.on(signal, () => process.exit()));
+
 main().catch(redirectErrorsToStream(process.stderr));
