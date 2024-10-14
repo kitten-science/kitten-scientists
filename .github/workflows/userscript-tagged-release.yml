@@ -47,7 +47,7 @@ jobs:
           sbom-path: sbom.spdx.json
 
       - name: Generate GitHub release
-        uses: oliversalzburg/action-automatic-semantic-releases@c15b3e27cb2a4b54acd424e2fb5b57248b7fe5f0 # v0.0.20
+        uses: oliversalzburg/action-automatic-semantic-releases@b71ef9d38dc33685ba2884a5bb6bce5a3037d3bf # v0.0.21
         with:
           # Create only as draft, so we can add a description on the web UI.
           draft: true
