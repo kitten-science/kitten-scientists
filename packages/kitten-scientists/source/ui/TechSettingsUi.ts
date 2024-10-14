@@ -3,46 +3,56 @@ import { SupportedLanguage } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { TechSettings } from "../settings/TechSettings.js";
+import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
 export class TechSettingsUi extends SettingsPanel<TechSettings> {
-  protected readonly _techs: Array<SettingListItem>;
-
   constructor(
     host: KittenScientists,
     settings: TechSettings,
     language: SettingOptions<SupportedLanguage>,
-    options?: SettingsPanelOptions<SettingsPanel<TechSettings>>,
+    options?: PanelOptions,
   ) {
-    super(host, host.engine.i18n("ui.upgrade.techs"), settings, options);
-
-    const items = [];
-    for (const tech of this._host.game.science.techs) {
-      if (isNil(this.setting.techs[tech.name])) continue;
-      const label = tech.label;
-      const button = new SettingListItem(this._host, label, this.setting.techs[tech.name], {
+    const label = host.engine.i18n("ui.upgrade.techs");
+    super(
+      host,
+      settings,
+      new SettingListItem(host, label, settings, {
         onCheck: () => {
-          this._host.engine.imessage("status.sub.enable", [label]);
+          host.engine.imessage("status.auto.enable", [label]);
         },
         onUnCheck: () => {
-          this._host.engine.imessage("status.sub.disable", [label]);
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+      options,
+    );
+
+    const localeSupportsSortMethod = language.selected !== "zh";
+
+    const items = [];
+    for (const tech of localeSupportsSortMethod
+      ? this._host.game.science.techs.sort((a, b) => a.label.localeCompare(b.label))
+      : this._host.game.science.techs) {
+      if (isNil(this.setting.techs[tech.name])) {
+        continue;
+      }
+
+      const button = new SettingListItem(this._host, tech.label, this.setting.techs[tech.name], {
+        onCheck: () => {
+          this._host.engine.imessage("status.sub.enable", [tech.label]);
+        },
+        onUnCheck: () => {
+          this._host.engine.imessage("status.sub.disable", [tech.label]);
         },
       });
 
-      items.push({ label: label, button: button });
+      items.push(button);
     }
-    // Ensure buttons are added into UI with their labels alphabetized.
-    if (language.selected !== "zh") {
-      items.sort((a, b) => a.label.localeCompare(b.label));
-    }
-    const itemsList = new SettingsList(this._host);
-    items.forEach(button => {
-      itemsList.addChild(button.button);
-    });
-    this.addChild(itemsList);
 
-    this._techs = items.map(button => button.button);
+    const itemsList = new SettingsList(this._host, { children: items });
+    this.addChild(itemsList);
   }
 }

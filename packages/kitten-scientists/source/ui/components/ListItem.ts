@@ -21,7 +21,6 @@ export class ListItem extends UiComponent {
     super(host, options);
 
     const element = $("<li/>");
-    element.addClass("ks-setting");
 
     if (options?.delimiter === true) {
       element.addClass("ks-delimiter");

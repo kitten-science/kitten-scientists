@@ -4,34 +4,37 @@ import { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
-import { CollapsiblePanel } from "./components/CollapsiblePanel.js";
+import { CollapsiblePanel, PanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import { SeasonsList } from "./components/SeasonsList.js";
 import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import { MaxButton } from "./components/buttons-text/MaxButton.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
-  private readonly _trigger: TriggerButton;
   private readonly _maximum: MaxButton;
-  private readonly _cycles: CollapsiblePanel<CyclesList, LabelListItem>;
-  private readonly _seasons: CollapsiblePanel<SeasonsList, LabelListItem>;
+  private readonly _cycles: CollapsiblePanel<CyclesList>;
+  private readonly _seasons: CollapsiblePanel<SeasonsList>;
   private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
 
-  constructor(
-    host: KittenScientists,
-    settings: TimeSkipSettings,
-    options?: SettingsPanelOptions<SettingsPanel<TimeSkipSettings>>,
-  ) {
+  constructor(host: KittenScientists, settings: TimeSkipSettings, options?: PanelOptions) {
     const label = host.engine.i18n("option.time.skip");
-    super(host, label, settings, options);
-
-    this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertAfter(this._expando.element);
-    this.children.add(this._trigger);
+    super(
+      host,
+      settings,
+      new SettingTriggerListItem(host, label, settings, {
+        onCheck: () => {
+          host.engine.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+      options,
+    );
 
     this._maximum = new MaxButton(this._host, label, this.setting);
 

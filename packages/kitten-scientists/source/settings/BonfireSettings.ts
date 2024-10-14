@@ -79,17 +79,6 @@ export class BonfireSettings extends SettingTrigger {
   }
 
   private initBuildings(): BonfireBuildingSettings {
-    const defaultOffBuilding: Array<BonfireItem> = [
-      "accelerator",
-      "biolab",
-      "calciner",
-      "hut",
-      "logHouse",
-      "mansion",
-      "reactor",
-      "zebraForge",
-      "zebraWorkshop",
-    ];
     const baseStage: Partial<Record<StagedBuilding, Building>> = {
       broadcasttower: "amphitheatre",
       dataCenter: "library",
@@ -97,19 +86,14 @@ export class BonfireSettings extends SettingTrigger {
       solarfarm: "pasture",
       spaceport: "warehouse",
     };
-    const items = {} as BonfireBuildingSettings;
 
+    const items = {} as BonfireBuildingSettings;
     Buildings.forEach(item => {
       if (item === "unicornPasture") return;
-      items[item] = new BonfireBuildingSetting(item, !defaultOffBuilding.includes(item));
+      items[item] = new BonfireBuildingSetting(item);
     });
     StagedBuildings.forEach(item => {
-      items[item] = new BonfireBuildingSetting(
-        item,
-        !defaultOffBuilding.includes(item),
-        -1,
-        baseStage[item],
-      );
+      items[item] = new BonfireBuildingSetting(item, false, -1, baseStage[item]);
     });
 
     return items;

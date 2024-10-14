@@ -1,6 +1,6 @@
 import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingTrigger } from "../../../settings/Settings.js";
-import { SettingsSectionUi } from "../../SettingsSectionUi.js";
+import { AbstractBuildSettingsPanel } from "../../SettingsSectionUi.js";
 import { TriggerButtonBehavior } from "../buttons-icon/TriggerButton.js";
 import { TextButton } from "../TextButton.js";
 
@@ -16,7 +16,7 @@ export class TriggerLimitButton extends TextButton {
   ) {
     super(host, label, {
       onClick: () => {
-        const value = SettingsSectionUi.promptLimit(
+        const value = AbstractBuildSettingsPanel.promptLimit(
           host.engine.i18n("ui.trigger.setinteger", [label]),
           setting.trigger.toString(),
         );
@@ -44,7 +44,7 @@ export class TriggerLimitButton extends TextButton {
     this.element.prop("title", this.setting.trigger.toFixed());
     this.element.text(
       this._host.engine.i18n("ui.trigger", [
-        SettingsSectionUi.renderLimit(this.setting.trigger, this._host),
+        AbstractBuildSettingsPanel.renderLimit(this.setting.trigger, this._host),
       ]),
     );
   }

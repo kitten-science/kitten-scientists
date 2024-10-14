@@ -2,14 +2,15 @@ import { SupportedLanguage } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { TimeControlSettings } from "../settings/TimeControlSettings.js";
+import { PaddingButton } from "./components/buttons-icon/PaddingButton.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { ResetSettingsUi } from "./ResetSettingsUi.js";
-import { SettingsSectionUi } from "./SettingsSectionUi.js";
+import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { TimeSkipSettingsUi } from "./TimeSkipSettingsUi.js";
 
-export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings> {
+export class TimeControlSettingsUi extends AbstractBuildSettingsPanel<TimeControlSettings> {
   protected readonly _items: Array<SettingListItem>;
 
   private readonly _accelerateTime: SettingTriggerListItem;
@@ -22,7 +23,18 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
     language: SettingOptions<SupportedLanguage>,
   ) {
     const label = host.engine.i18n("ui.timeCtrl");
-    super(host, label, settings);
+    super(
+      host,
+      settings,
+      new SettingListItem(host, label, settings, {
+        onCheck: () => {
+          host.engine.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+    );
 
     const list = new SettingsList(this._host, {
       hasDisableAll: false,
@@ -42,6 +54,7 @@ export class TimeControlSettingsUi extends SettingsSectionUi<TimeControlSettings
         },
       },
     );
+    this._accelerateTime.head.addChild(new PaddingButton(host));
     this._timeSkipUi = new TimeSkipSettingsUi(this._host, this.setting.timeSkip);
     this._resetUi = new ResetSettingsUi(this._host, this.setting.reset, language);
 

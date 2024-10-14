@@ -41,7 +41,9 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     setting: TSetting,
     options?: Partial<SettingListItemOptions>,
   ) {
-    super(host, label, options);
+    super(host, label, { ...options, children: [] });
+
+    this.element.addClass("ks-setting");
 
     const checkbox = $("<input/>", {
       type: "checkbox",
@@ -63,8 +65,9 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     this.elementLabel.prepend(checkbox);
 
     this.checkbox = checkbox;
-    this.addChildren(options?.children);
     this.setting = setting;
+
+    this.addChildren(options?.children);
   }
 
   refreshUi() {

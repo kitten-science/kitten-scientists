@@ -1,5 +1,6 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { Icons } from "../../../images/Icons.js";
+import { KittenScientists } from "../../../KittenScientists.js";
+import { UiComponent, UiComponentOptions } from "../UiComponent.js";
 
 export class ExpandoButton extends UiComponent {
   readonly element: JQuery;
@@ -15,20 +16,24 @@ export class ExpandoButton extends UiComponent {
     super(host, options);
 
     const element = $("<div/>", {
+      html: `
+      <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="down"><path d="${Icons.ExpandCircleDown}"/></svg>
+      <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="up"><path d="${Icons.ExpandCircleUp}"/></svg>`,
       title: host.engine.i18n("ui.itemsShow"),
-      text: "+",
-    }).addClass("ks-expando-button");
+    })
+      .addClass("ks-icon-button")
+      .addClass("ks-expando-button");
 
     this.element = element;
     this.addChildren(options?.children);
   }
 
   setCollapsed() {
+    this.element.removeClass("expanded");
     this.element.prop("title", this._host.engine.i18n("ui.itemsShow"));
-    this.element.text("+");
   }
   setExpanded() {
+    this.element.addClass("expanded");
     this.element.prop("title", this._host.engine.i18n("ui.itemsHide"));
-    this.element.text("-");
   }
 }

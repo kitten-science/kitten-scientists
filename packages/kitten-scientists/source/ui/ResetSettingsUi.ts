@@ -2,8 +2,10 @@ import { SupportedLanguage } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { ResetSettings } from "../settings/ResetSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
+import { PanelOptions } from "./components/CollapsiblePanel.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi.js";
 import { ResetReligionSettingsUi } from "./ResetReligionSettingsUi.js";
 import { ResetResourcesSettingsUi } from "./ResetResourcesSettingsUi.js";
@@ -23,9 +25,22 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
     host: KittenScientists,
     settings: ResetSettings,
     language: SettingOptions<SupportedLanguage>,
-    options?: SettingsPanelOptions<SettingsPanel<ResetSettings>>,
+    options?: PanelOptions,
   ) {
-    super(host, host.engine.i18n("option.time.reset"), settings, options);
+    const label = host.engine.i18n("option.time.reset");
+    super(
+      host,
+      settings,
+      new SettingListItem(host, label, settings, {
+        onCheck: () => {
+          host.engine.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+      options,
+    );
 
     const list = new SettingsList(this._host, {
       hasDisableAll: false,

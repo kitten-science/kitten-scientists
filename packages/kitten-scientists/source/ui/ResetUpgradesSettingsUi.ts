@@ -31,19 +31,29 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
     }
 
     let lastLabel = upgrades[0].label;
-    const children = upgrades.reduce<Array<SettingListItem>>((items, upgrade) => {
-      const delimiter = localeSupportsSortMethod && lastLabel[0] !== upgrade.label[0];
-      items.push(
-        this._getResetOption(this.setting.upgrades[upgrade.name], upgrade.label, delimiter),
-      );
-      lastLabel = upgrade.label;
-      return items;
-    }, []);
+    let lastElement: SettingListItem;
 
-    const itemsList = new SettingsList(this._host, {
-      children,
-    });
-    this.addChild(itemsList);
+    this.addChild(
+      new SettingsList(this._host, {
+        children: upgrades.reduce<Array<SettingListItem>>((items, upgrade) => {
+          if (
+            !isNil(lastElement) &&
+            localeSupportsSortMethod &&
+            lastLabel[0] !== upgrade.label[0]
+          ) {
+            lastElement.element.addClass("ks-delimiter");
+          }
+
+          const element = this._getResetOption(this.setting.upgrades[upgrade.name], upgrade.label);
+
+          lastElement = element;
+          items.push(element);
+
+          lastLabel = upgrade.label;
+          return items;
+        }, []),
+      }),
+    );
   }
 
   private _getResetOption(

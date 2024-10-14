@@ -11,7 +11,7 @@ import { ucfirst } from "../tools/Format.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { StockButton } from "./components/buttons-text/StockButton.js";
+import { StockButton } from "./components/buttons-icon/StockButton.js";
 
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
   constructor(
@@ -60,7 +60,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
 
     // How many items to stock.
     const stockElement = new StockButton(this._host, title, setting);
-    container.addChild(stockElement);
+    container.head.addChild(stockElement);
 
     return container;
   }

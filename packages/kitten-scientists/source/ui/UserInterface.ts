@@ -174,6 +174,7 @@ export class UserInterface extends UiComponent {
       `#ks {
         margin: 5px 0 10px 0;
         padding-right: 10px;
+        font-size: 14px;
       }`,
     );
     this._addRule("#ks ul { list-style: none; margin: 0; padding: 0; }");
@@ -190,16 +191,44 @@ export class UserInterface extends UiComponent {
         border-top: none;
        }`,
     );
+
+    // List Item Generic
     this._addRule(
-      `#ks ul li { 
-        float: left;
+      `#ks ul li .ks-head {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         width: 100%;
+
         border-bottom: 1px solid transparent;
         transition: .3s;
       }`,
     );
     this._addRule(
-      `#ks ul li .ks-panel-content { 
+      `#ks ul li .ks-head .ks-label {
+        flex: 1;
+        white-space: nowrap;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li .ks-head .ks-fill-space {
+        flex: 1;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li .ks-head > .ks-button {
+        flex: 1;
+        margin-right: 8px;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li .ks-head > .ks-text-button {
+        flex: 1;
+        margin-right: 8px;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li .ks-panel-content {
         border-left: 1px dashed grey;
         padding-left: 16px;
         margin-left: 8px;
@@ -207,58 +236,62 @@ export class UserInterface extends UiComponent {
       }`,
     );
     this._addRule(
-      `#ks ul .ks-setting.ks-expanded { 
+      `#ks ul li.ks-expanded {
         margin-bottom: 10px;
       }`,
     );
     // Hover guides
     this._addRule(
-      `#ks ul .ks-setting:not(.ks-expanded):not(.ks-toolbar):hover { 
+      `#ks ul .ks-setting {
+        border-bottom: 1px solid transparent;
+      }`,
+    );
+    this._addRule(
+      `#ks ul .ks-setting:not(.ks-expanded):hover {
         border-bottom: 1px solid rgba(185, 185, 185, 0.5);
       }`,
     );
 
     // Setting: Label
     this._addRule(
-      `#ks ul li.ks-setting .ks-label {
+      `#ks ul li .ks-label {
         display: inline-block;
+        flex: 1;
         min-width: 120px;
         opacity: 0.8;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-label:hover {
+      `#ks ul li .ks-label:hover {
         opacity: 1;
       }`,
     );
     // Setting: +/- Expando Toggle
     this._addRule(
-      `#ks ul li.ks-setting .ks-expando-button {
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        cursor: pointer;
-        display: block;
-        float: right;
-        min-width: 10px;
-        padding: 0px 3px;
-        text-align: center;
+      `#ks ul li .ks-expando-button:not(.expanded) .up {
+        display: none;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li .ks-expando-button.expanded .down {
+        display: none;
       }`,
     );
     // Setting: Toolbar
     this._addRule(
-      `#ks ul li.ks-setting.ks-toolbar {
-        border-bottom: 1px dotted rgba(255, 255, 255, 0.2);
+      `#ks ul li.ks-toolbar {
         padding: 0 0 2px 0;
         margin: 0 0 3px 0;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting.ks-toolbar > * {
+      `#ks ul li.ks-toolbar > * {
         margin: 0 3px 0 0;
       }`,
     );
     // Setting: Button
     this._addRule(
-      `#ks ul li.ks-setting .ks-button {
+      `#ks ul li .ks-button {
         border: 1px solid rgba(255, 255, 255, 0.2);
         cursor: pointer;
         display: inline-block;
@@ -268,35 +301,44 @@ export class UserInterface extends UiComponent {
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-button:hover {
+      `#ks ul li .ks-button.ks-consume-button {
+        border: 1px solid transparent;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li .ks-button.ks-stock-button {
+        border: 1px solid transparent;
+      }`,
+    );
+    this._addRule(
+      `#ks ul li .ks-button:hover {
         border: 1px solid rgba(255, 255, 255, 1);
         opacity: 1;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-button .ks-button-icon {
+      `#ks ul li .ks-button .ks-button-icon {
         margin: 0 2px 0 0;
         vertical-align: sub;
       }`,
     );
     // Setting: Icon Button
     this._addRule(
-      `#ks ul li.ks-setting .ks-icon-button {
+      `#ks ul li .ks-icon-button {
         cursor: pointer;
         display: block;
-        float: right;
         padding-right: 3px;
         line-height: 0;
         opacity: 0.8;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-icon-button:hover {
+      `#ks ul li .ks-icon-button:hover {
         opacity: 1;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-icon-label {
+      `#ks ul li .ks-icon-label {
         display: inline-block;
         margin-right: 4px;
         margin-left: 2px;
@@ -305,32 +347,37 @@ export class UserInterface extends UiComponent {
     );
     // Setting: Text Button
     this._addRule(
-      `#ks ul li.ks-setting .ks-text-button {
-        cursor: pointer;
+      `#ks ul li .ks-text-button {
         display: inline-block;
-        max-width: 315px;
-        user-select: none;
+        white-space: nowrap;
         opacity: 0.8;
+
+        cursor: pointer;
+        user-select: none;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-text-button:hover {
+      `#ks ul li .ks-text-button:hover {
         opacity: 1;
       }`,
     );
 
     // Setting: Header
     this._addRule(
-      `#ks ul li.ks-setting .ks-header {
-        display: inline-block;
-        font-weight: bold;
+      `#ks ul li .ks-header {
+        display: block;
+        margin-bottom: 3px;
         min-width: 100px;
+
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+
+        font-weight: bold;
         user-select: none;
       }`,
     );
     // Setting: Explainer
     this._addRule(
-      `#ks ul li.ks-setting .ks-explainer {
+      `#ks ul li .ks-explainer {
         color: #888;
         display: inline-block;
         min-width: 100px;
@@ -344,55 +391,50 @@ export class UserInterface extends UiComponent {
     // Setting: List
     this._addRule(
       // This compensates the floating tools below the list.
-      `#ks ul li.ks-setting .ks-list-container {
+      `#ks ul li .ks-list-container {
         margin-bottom: 4px;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-list.ks-items-list {
+      `#ks ul li .ks-list.ks-items-list {
         user-select: none;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-list ~ .ks-list-tools {
+      `#ks ul li .ks-list ~ .ks-list-tools {
         border-top: 1px dotted grey;
         margin-left: 0px;
         margin-top: 2px;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-list ~ .ks-list-tools .ks-icon-button {
+      `#ks ul li .ks-list ~ .ks-list-tools .ks-icon-button {
         display: inline-block;
-        float: none;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-max-button {
-        float: right;
+      `#ks ul li .ks-max-button {
         padding-right: 5px;
         padding-top: 2px;
       }`,
     );
     // The stock buttons should layout similarly to ks-label.
     this._addRule(
-      `#ks ul li.ks-setting .ks-stock-button {
+      `#ks ul li .ks-stock-button {
         display: inline-block;
-        min-width: 86px;
       }`,
     );
     // blackcoin buy/sell threshold buttons
     this._addRule(
-      `#ks ul li.ks-setting .ks-buy-button {
+      `#ks ul li .ks-buy-button {
         display: inline-block;
-        float: right;
         padding-right: 10px;
         min-width: 86px;
       }`,
     );
     this._addRule(
-      `#ks ul li.ks-setting .ks-sell-button {
+      `#ks ul li .ks-sell-button {
         display: inline-block;
-        float: right;
         padding-right: 10px;
         min-width: 86px;
       }`,

@@ -9,6 +9,7 @@ export type ButtonOptions = UiComponentOptions & {
  * A button that has a label and can optionally have an SVG icon.
  */
 export class Button extends UiComponent {
+  protected readonly _iconElement: JQuery | undefined;
   readonly element: JQuery;
   readOnly: boolean;
 
@@ -30,11 +31,10 @@ export class Button extends UiComponent {
 
     const element = $("<div/>", { title: options?.title }).addClass("ks-button").text(label);
     if (pathData !== null) {
-      element.prepend(
-        $(
-          `<svg class="ks-button-icon" style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
-        ),
+      this._iconElement = $(
+        `<svg class="ks-button-icon" style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
       );
+      element.prepend(this._iconElement);
     }
 
     element.on("click", () => {
@@ -48,5 +48,15 @@ export class Button extends UiComponent {
     this.element = element;
     this.addChildren(options?.children);
     this.readOnly = false;
+  }
+
+  updateLabel(label: string) {
+    this.element.text(label);
+    if (this._iconElement !== undefined) {
+      this.element.prepend(this._iconElement);
+    }
+  }
+  updateTitle(title: string) {
+    this.element.prop("title", title);
   }
 }

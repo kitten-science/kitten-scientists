@@ -6,27 +6,30 @@ import { ResourcesSettings, ResourcesSettingsItem } from "../settings/ResourcesS
 import { SettingOptions } from "../settings/Settings.js";
 import { ucfirst } from "../tools/Format.js";
 import { Resource } from "../types/index.js";
+import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
-import { ConsumeButton } from "./components/buttons-text/ConsumeButton.js";
-import { StockButton } from "./components/buttons-text/StockButton.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
+import { ConsumeButton } from "./components/buttons-icon/ConsumeButton.js";
+import { StockButton } from "./components/buttons-icon/StockButton.js";
 
 export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   constructor(
     host: KittenScientists,
     settings: ResourcesSettings,
     language: SettingOptions<SupportedLanguage>,
-    options?: SettingsPanelOptions<SettingsPanel<ResourcesSettings>>,
+    options?: PanelOptions,
   ) {
     const label = host.engine.i18n("ui.resources");
-    super(host, label, settings, {
-      ...options,
-      settingItem: new LabelListItem(host, label, {
+    super(
+      host,
+      settings,
+      new LabelListItem(host, label, {
         icon: Icons.Resources,
       }),
-    });
+      options,
+    );
 
     const ignoredResources: Array<Resource> = [
       "blackcoin",
@@ -78,12 +81,11 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
 
     // How many items to stock.
     const stockElement = new StockButton(this._host, title, setting);
-    stockElement.element.addClass("ks-stock-button");
-    container.addChild(stockElement);
+    container.head.addChild(stockElement);
 
     // The consume rate for the resource.
     const consumeElement = new ConsumeButton(this._host, title, setting);
-    container.addChild(consumeElement);
+    container.head.addChild(consumeElement);
 
     return container;
   }

@@ -3,12 +3,23 @@ import { FilterItems, LogFilterSettings } from "../settings/LogFilterSettings.js
 import { ExplainerListItem } from "./components/ExplainerListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsSectionUi } from "./SettingsSectionUi.js";
+import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 
-export class LogFiltersSettingsUi extends SettingsSectionUi<LogFilterSettings> {
+export class LogFiltersSettingsUi extends AbstractBuildSettingsPanel<LogFilterSettings> {
   constructor(host: KittenScientists, settings: LogFilterSettings) {
     const label = host.engine.i18n("ui.filter");
-    super(host, label, settings);
+    super(
+      host,
+      settings,
+      new SettingListItem(host, label, settings, {
+        onCheck: () => {
+          host.engine.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+    );
 
     this.addChild(
       new SettingsList(host, {

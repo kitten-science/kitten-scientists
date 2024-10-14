@@ -658,18 +658,21 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    */
   refreshStock() {
     for (const [name, resource] of objectEntries(this._host.engine.settings.resources.resources)) {
-      if (resource.stock === 0) {
-        continue;
-      }
-
-      const isBelow = this._host.game.resPool.get(name).value < resource.stock;
-
       const resourceCells = [
         // Resource table on the top.
         ...$(`#game .res-row.resource_${name} .res-cell.resAmount`),
         // Craft table on the bottom.
         ...$(`#game .res-row.resource_${name} .res-cell.resource-value`),
       ];
+
+      if (!resource.enabled || resource.stock === 0) {
+        for (const resourceCell of resourceCells) {
+          resourceCell.classList.remove("ks-stock-above", "ks-stock-below");
+        }
+        continue;
+      }
+
+      const isBelow = this._host.game.resPool.get(name).value < resource.stock;
 
       for (const resourceCell of resourceCells) {
         resourceCell.classList.add(isBelow ? "ks-stock-below" : "ks-stock-above");

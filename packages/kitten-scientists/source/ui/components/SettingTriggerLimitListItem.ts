@@ -15,7 +15,7 @@ export class SettingTriggerLimitListItem extends SettingListItem {
     super(host, label, setting, options);
 
     this.triggerButton = new TriggerLimitButton(host, label, setting);
-    this.element.append(this.triggerButton.element);
+    this.head.addChild(this.triggerButton);
   }
 
   refreshUi() {

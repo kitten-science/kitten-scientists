@@ -25,7 +25,7 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
     super(host, label, setting, options);
 
     this.maxButton = new MaxButton(host, label, setting);
-    this.element.append(this.maxButton.element);
+    this.head.addChild(this.maxButton);
   }
 
   refreshUi() {

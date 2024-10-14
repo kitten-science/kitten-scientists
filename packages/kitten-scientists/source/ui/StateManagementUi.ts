@@ -17,6 +17,7 @@ import { Delimiter } from "./components/Delimiter.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { IconButton } from "./components/IconButton.js";
 import { LabelListItem } from "./components/LabelListItem.js";
+import { ListItem } from "./components/ListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -54,9 +55,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     language: SettingOptions<SupportedLanguage>,
   ) {
     const label = host.engine.i18n("state.title");
-    super(host, label, settings, {
-      settingItem: new LabelListItem(host, label, { icon: Icons.State }),
-    });
+    super(host, settings, new LabelListItem(host, label, { icon: Icons.State }));
 
     this.gameList = new SettingsList(host, {
       hasEnableAll: false,
@@ -84,19 +83,18 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             this._host.engine.i18n("state.noConfirm"),
             this.setting.noConfirm,
           ),
-          new Delimiter(host),
+          new ListItem(host, { children: [new Delimiter(host)] }),
 
           new HeaderListItem(host, this._host.engine.i18n("state.local")),
-          new ButtonListItem(
-            host,
+          new ToolbarListItem(host, [
             new Button(host, this._host.engine.i18n("state.import"), Icons.Import, {
               onClick: () => {
                 this.import();
               },
               title: this._host.engine.i18n("state.importTitle"),
             }),
-          ),
-          new Delimiter(host),
+          ]),
+          new ListItem(host, { children: [new Delimiter(host)] }),
 
           new HeaderListItem(host, this._host.engine.i18n("state.localStates")),
           new ToolbarListItem(host, [
@@ -127,8 +125,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               title: this._host.engine.i18n("state.exportAllTitle"),
             }),
           ]),
-          this.stateList,
-          new Delimiter(host),
+          new ListItem(host, { children: [this.stateList] }),
+          new ListItem(host, { children: [new Delimiter(host)] }),
 
           new HeaderListItem(host, this._host.engine.i18n("state.localGames")),
           new ToolbarListItem(host, [
@@ -147,7 +145,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               title: this._host.engine.i18n("state.copy.game"),
             }),
           ]),
-          this.gameList,
+          new ListItem(host, { children: [this.gameList] }),
           new SettingListItem(
             host,
             this._host.engine.i18n("state.compress"),
