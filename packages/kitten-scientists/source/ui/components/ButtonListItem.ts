@@ -6,10 +6,14 @@ export class ButtonListItem extends ListItem {
   readonly button: TextButton;
 
   constructor(host: KittenScientists, button: TextButton, options?: Partial<ListItemOptions>) {
-    super(host, options);
+    super(host, { ...options, children: [] });
 
     this.button = button;
+
+    this.element.addClass("ks-head");
     this.element.append(button.element);
+
+    this.addChildren(options?.children);
   }
 
   refreshUi(): void {

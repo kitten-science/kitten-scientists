@@ -11,10 +11,13 @@ export class TextButton extends UiComponent {
   readonly element: JQuery;
   readOnly: boolean;
 
-  constructor(host: KittenScientists, label: string, options?: Partial<TextButtonOptions>) {
+  constructor(host: KittenScientists, label?: string, options?: Partial<TextButtonOptions>) {
     super(host, options);
 
-    const element = $("<div/>").addClass("ks-text-button").text(label);
+    const element = $("<div/>").addClass("ks-text-button");
+    if (label !== undefined) {
+      element.text(label);
+    }
 
     const title = options?.title;
     if (!isNil(title)) {

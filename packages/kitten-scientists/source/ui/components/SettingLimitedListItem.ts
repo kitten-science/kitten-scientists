@@ -36,7 +36,7 @@ export class SettingLimitedListItem extends SettingListItem {
     super(host, label, setting, options);
 
     this.limitedButton = new LimitedButton(host, setting, options);
-    this.element.append(this.limitedButton.element);
+    this.head.addChild(this.limitedButton);
   }
 
   refreshUi() {

@@ -147,6 +147,24 @@ export class SettingTriggerMax extends SettingTrigger implements SettingMax {
   }
 }
 
+export class SettingThresholdMax extends SettingThreshold implements SettingMax {
+  max: number;
+
+  constructor(enabled = false, trigger = 1, max = -1) {
+    super(enabled, trigger);
+    this.max = max;
+  }
+
+  load(setting: Maybe<Partial<SettingTriggerMax>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
+    super.load(setting);
+    this.max = setting.max ?? this.max;
+  }
+}
+
 export class SettingOptions<T = string> {
   readonly #options: Array<{ label: string; value: T }>;
   selected: T;

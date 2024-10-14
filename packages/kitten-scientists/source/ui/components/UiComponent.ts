@@ -98,14 +98,14 @@ export abstract class UiComponent extends EventTarget {
     return numericValue;
   }
 
-  static promptPercentage(text: string, defaultValue: string): number | null {
-    const value = window.prompt(text, defaultValue);
+  static promptPercentage(text: string, defaultValue: number): number | null {
+    const value = window.prompt(text, (defaultValue * 100).toFixed(0));
     if (value === null || value === "") {
       return null;
     }
 
     // Cap value between 0 and 1.
-    return Math.max(0, Math.min(1, parseFloat(value)));
+    return Math.max(0, Math.min(1, parseFloat(value) / 100));
   }
 
   protected _renderLimit(value: number): string {
@@ -121,7 +121,7 @@ export abstract class UiComponent extends EventTarget {
   }
 
   static renderPercentage(value: number): string {
-    return value.toFixed(3);
+    return Math.round(100 * value).toFixed(0);
   }
 
   static promptFloat(text: string, defaultValue: string): number | null {

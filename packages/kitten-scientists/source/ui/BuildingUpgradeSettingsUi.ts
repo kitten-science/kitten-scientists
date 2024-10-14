@@ -1,16 +1,26 @@
 import { KittenScientists } from "../KittenScientists.js";
 import { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings.js";
+import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
 export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSettings> {
-  constructor(
-    host: KittenScientists,
-    settings: BuildingUpgradeSettings,
-    options?: SettingsPanelOptions<SettingsPanel<BuildingUpgradeSettings>>,
-  ) {
-    super(host, host.engine.i18n("ui.upgrade.buildings"), settings, options);
+  constructor(host: KittenScientists, settings: BuildingUpgradeSettings, options?: PanelOptions) {
+    const label = host.engine.i18n("ui.upgrade.buildings");
+    super(
+      host,
+      settings,
+      new SettingListItem(host, label, settings, {
+        onCheck: () => {
+          host.engine.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+      options,
+    );
 
     const items = [];
     for (const setting of Object.values(this.setting.buildings)) {

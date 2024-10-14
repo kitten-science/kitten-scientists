@@ -1,20 +1,15 @@
 import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingBuy } from "../../../settings/Settings.js";
-import { SettingsSectionUi } from "../../SettingsSectionUi.js";
+import { AbstractBuildSettingsPanel } from "../../SettingsSectionUi.js";
 import { TextButton } from "../TextButton.js";
 
 export class BuyButton extends TextButton {
   readonly setting: SettingBuy;
 
-  constructor(
-    host: KittenScientists,
-    label: string,
-    setting: SettingBuy,
-    handler: { onClick?: () => void } = {},
-  ) {
-    super(host, label, {
+  constructor(host: KittenScientists, setting: SettingBuy, handler: { onClick?: () => void } = {}) {
+    super(host, undefined, {
       onClick: () => {
-        const value = SettingsSectionUi.promptFloat(
+        const value = AbstractBuildSettingsPanel.promptLimit(
           host.engine.i18n("blackcoin.buy.threshold"),
           setting.buy.toString(),
         );
@@ -41,7 +36,9 @@ export class BuyButton extends TextButton {
 
     this.element.prop("title", this.setting.buy.toFixed(3));
     this.element.text(
-      this._host.engine.i18n("ui.buy", [SettingsSectionUi.renderFloat(this.setting.buy)]),
+      this._host.engine.i18n("ui.buy", [
+        AbstractBuildSettingsPanel.renderLimit(this.setting.buy, this._host),
+      ]),
     );
   }
 }

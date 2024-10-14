@@ -3,40 +3,41 @@ import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { ResetTimeSettings } from "../settings/ResetTimeSettings.js";
 import { SettingTrigger } from "../settings/Settings.js";
+import { HeaderListItem } from "./components/HeaderListItem.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
 export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
-  private readonly _buildings: Array<SettingTriggerListItem>;
-
   constructor(host: KittenScientists, settings: ResetTimeSettings) {
     const label = host.engine.i18n("ui.time");
     super(host, label, settings, {
       icon: Icons.Time,
     });
 
-    this._buildings = [
-      ...this._host.game.time.chronoforgeUpgrades
-        .filter(item => !isNil(this.setting.buildings[item.name]))
-        .map(building =>
-          this._getResetOption(
-            this.setting.buildings[building.name],
-            building.label,
-            building.name === this._host.game.time.chronoforgeUpgrades.at(-1)?.name,
-          ),
-        ),
-      ...this._host.game.time.voidspaceUpgrades
-        .filter(item => !isNil(this.setting.buildings[item.name]))
-        .map(building =>
-          this._getResetOption(this.setting.buildings[building.name], building.label),
-        ),
-    ];
+    this.addChild(
+      new SettingsList(this._host, {
+        children: [
+          new HeaderListItem(this._host, this._host.engine.i18n("$workshop.chronoforge.label")),
+          ...this._host.game.time.chronoforgeUpgrades
+            .filter(item => !isNil(this.setting.buildings[item.name]))
+            .map(building =>
+              this._getResetOption(
+                this.setting.buildings[building.name],
+                building.label,
+                building.name === this._host.game.time.chronoforgeUpgrades.at(-1)?.name,
+              ),
+            ),
 
-    const listBuildings = new SettingsList(this._host);
-    listBuildings.addChildren(this._buildings);
-    this.addChild(listBuildings);
+          new HeaderListItem(this._host, this._host.engine.i18n("$science.voidSpace.label")),
+          ...this._host.game.time.voidspaceUpgrades
+            .filter(item => !isNil(this.setting.buildings[item.name]))
+            .map(building =>
+              this._getResetOption(this.setting.buildings[building.name], building.label),
+            ),
+        ],
+      }),
+    );
   }
 
   private _getResetOption(

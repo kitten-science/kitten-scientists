@@ -5,15 +5,14 @@ import { SettingOptions } from "../settings/Settings.js";
 import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { ResourceCraftable } from "../types/index.js";
-import { SettingsSectionUi } from "./SettingsSectionUi.js";
+import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
 
-export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
-  private readonly _trigger: TriggerButton;
+export class WorkshopSettingsUi extends AbstractBuildSettingsPanel<WorkshopSettings> {
   private readonly _crafts: Array<SettingListItem>;
 
   constructor(
@@ -22,11 +21,18 @@ export class WorkshopSettingsUi extends SettingsSectionUi<WorkshopSettings> {
     language: SettingOptions<SupportedLanguage>,
   ) {
     const label = host.engine.i18n("ui.craft");
-    super(host, label, settings);
-
-    this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertAfter(this._expando.element);
-    this.children.add(this._trigger);
+    super(
+      host,
+      settings,
+      new SettingTriggerListItem(host, label, settings, {
+        onCheck: () => {
+          host.engine.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+    );
 
     let excludeCraftsArray: Array<ResourceCraftable> = [];
     if (!game.challenges.getChallenge("ironWill").active) {

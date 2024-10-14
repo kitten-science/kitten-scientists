@@ -2,7 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingMax } from "../settings/Settings.js";
 import { VillageSettings } from "../settings/VillageSettings.js";
-import { SettingsSectionUi } from "./SettingsSectionUi.js";
+import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { OptionsListItem } from "./components/OptionsListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -10,7 +10,7 @@ import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
-export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
+export class VillageSettingsUi extends AbstractBuildSettingsPanel<VillageSettings> {
   private readonly _hunt: SettingTriggerListItem;
   private readonly _festivals: SettingListItem;
   private readonly _promoteKittens: SettingTriggerListItem;
@@ -19,7 +19,18 @@ export class VillageSettingsUi extends SettingsSectionUi<VillageSettings> {
 
   constructor(host: KittenScientists, settings: VillageSettings) {
     const label = host.engine.i18n("ui.distribute");
-    super(host, label, settings);
+    super(
+      host,
+      settings,
+      new SettingListItem(host, label, settings, {
+        onCheck: () => {
+          host.engine.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+    );
 
     const listJobs = new SettingsList(this._host, {
       children: this._host.game.village.jobs

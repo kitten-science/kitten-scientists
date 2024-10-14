@@ -116,16 +116,11 @@ export class SettingsList extends UiComponent {
 
       const onReset = toolOptions.onReset;
       if (!isNil(onReset)) {
-        this.resetButton = new IconButton(
-          this._host,
-          Icons.Reset,
-          host.engine.i18n("ui.disable.all"),
-          {
-            onClick: () => {
-              onReset();
-            },
+        this.resetButton = new IconButton(this._host, Icons.Reset, host.engine.i18n("ui.reset"), {
+          onClick: () => {
+            onReset();
           },
-        );
+        });
         tools.append(this.resetButton.element);
       }
 

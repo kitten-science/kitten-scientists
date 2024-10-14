@@ -1,4 +1,3 @@
-import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
 import { Setting } from "../../settings/Settings.js";
 import { CollapsiblePanel, PanelOptions } from "./CollapsiblePanel.js";
@@ -27,6 +26,9 @@ export class SettingsPanel<
   get elementLabel() {
     return this._head.element;
   }
+  get head() {
+    return this._head;
+  }
 
   get readOnly() {
     return true;
@@ -38,27 +40,17 @@ export class SettingsPanel<
   /**
    * Constructs a settings panel that is used to contain a major section of the UI.
    *
-   * @param host A reference to the host.
-   * @param label The label to put main checkbox of this section.
-   * @param setting An setting for which this is the settings panel.
-   * @param options Options for this panel.
+   * @param host - A reference to the host.
+   * @param settingItem - The UI element to be placed in the head of the panel.
+   * @param setting - An setting for which this is the settings panel.
+   * @param options - Options for this panel.
    */
   constructor(
     host: KittenScientists,
-    label: string,
     setting: TSetting,
+    settingItem: TListItem,
     options?: Partial<SettingsPanelOptions<TListItem>>,
   ) {
-    const settingItem = !isNil(options?.settingItem)
-      ? mustExist(options.settingItem)
-      : (new SettingListItem(host, label, setting, {
-          onCheck: () => {
-            host.engine.imessage("status.auto.enable", [label]);
-          },
-          onUnCheck: () => {
-            host.engine.imessage("status.auto.disable", [label]);
-          },
-        }) as unknown as TListItem);
     super(host, settingItem, options);
 
     this.settingItem = settingItem;

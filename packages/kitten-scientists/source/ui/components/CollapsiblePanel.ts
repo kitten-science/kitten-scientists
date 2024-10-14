@@ -1,7 +1,8 @@
 import { is } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
+import { ExpandoButton } from "./buttons-icon/ExpandoButton.js";
 import { Container } from "./Container.js";
-import { ExpandoButton } from "./ExpandoButton.js";
+import { LabelListItem } from "./LabelListItem.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponentOptions<TChild> & {
@@ -19,7 +20,7 @@ export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponent
  */
 export class CollapsiblePanel<
   TChild extends UiComponent = UiComponent,
-  THead extends UiComponent = UiComponent,
+  THead extends LabelListItem = LabelListItem,
 > extends UiComponent {
   protected readonly container: UiComponent;
   readonly element: JQuery;
@@ -54,8 +55,9 @@ export class CollapsiblePanel<
     expando.element.on("click", () => {
       this.toggle();
     });
+    head.head.addChild(expando);
 
-    head.element.append(expando.element, this.container.element);
+    head.element.append(this.container.element);
 
     if (options?.initiallyExpanded) {
       this.container.element.show();

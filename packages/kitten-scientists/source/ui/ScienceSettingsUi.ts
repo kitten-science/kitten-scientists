@@ -3,12 +3,12 @@ import { KittenScientists } from "../KittenScientists.js";
 import { ScienceSettings } from "../settings/ScienceSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { PolicySettingsUi } from "./PolicySettingsUi.js";
-import { SettingsSectionUi } from "./SettingsSectionUi.js";
+import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { TechSettingsUi } from "./TechSettingsUi.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
-export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
+export class ScienceSettingsUi extends AbstractBuildSettingsPanel<ScienceSettings> {
   private readonly _items: Array<SettingListItem>;
   private readonly _policiesUi: PolicySettingsUi;
   private readonly _techsUi: TechSettingsUi;
@@ -19,7 +19,19 @@ export class ScienceSettingsUi extends SettingsSectionUi<ScienceSettings> {
     settings: ScienceSettings,
     language: SettingOptions<SupportedLanguage>,
   ) {
-    super(host, host.engine.i18n("ui.upgrade"), settings);
+    const label = host.engine.i18n("ui.upgrade");
+    super(
+      host,
+      settings,
+      new SettingListItem(host, label, settings, {
+        onCheck: () => {
+          host.engine.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+    );
 
     this._policiesUi = new PolicySettingsUi(this._host, this.setting.policies, language);
     this._techsUi = new TechSettingsUi(this._host, this.setting.techs, language);

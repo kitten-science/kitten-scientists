@@ -2,12 +2,12 @@ import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Cycle, Cycles, Season, Seasons } from "../types/index.js";
-import { Setting, SettingTriggerMax } from "./Settings.js";
+import { Setting, SettingThresholdMax } from "./Settings.js";
 
 export type CyclesSettings = Record<Cycle, Setting>;
 export type SeasonsSettings = Record<Season, Setting>;
 
-export class TimeSkipSettings extends SettingTriggerMax {
+export class TimeSkipSettings extends SettingThresholdMax {
   readonly cycles: CyclesSettings;
   readonly seasons: SeasonsSettings;
   readonly activeHeatTransfer: TimeSkipHeatSettings;

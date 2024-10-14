@@ -4,17 +4,12 @@ import { Setting, SettingMax } from "../settings/Settings.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export type Toggleable = {
-  get isExpanded(): boolean;
-  toggle: (expand: boolean | undefined) => void;
-};
-
 /**
  * Base class for UI sections.
  * This exists mostly for historic reasons. New implementations likely want to use
  * `SettingsPanel` or `Panel` directly.
  */
-export abstract class SettingsSectionUi<
+export abstract class AbstractBuildSettingsPanel<
   TSetting extends Setting = Setting,
 > extends SettingsPanel<TSetting> {
   protected _getBuildOption(

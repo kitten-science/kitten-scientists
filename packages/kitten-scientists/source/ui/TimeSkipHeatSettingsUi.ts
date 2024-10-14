@@ -1,24 +1,27 @@
 import { KittenScientists } from "../KittenScientists.js";
 import { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
+import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, SettingsPanelOptions } from "./components/SettingsPanel.js";
-import { TriggerButton } from "./components/buttons-icon/TriggerButton.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
 export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> {
-  private readonly _trigger: TriggerButton;
-
-  constructor(
-    host: KittenScientists,
-    settings: TimeSkipHeatSettings,
-    options?: SettingsPanelOptions<SettingsPanel<TimeSkipHeatSettings>>,
-  ) {
+  constructor(host: KittenScientists, settings: TimeSkipHeatSettings, options?: PanelOptions) {
     const label = host.engine.i18n("option.time.activeHeatTransfer");
-    super(host, label, settings, options);
-
-    this._trigger = new TriggerButton(host, label, settings);
-    this._trigger.element.insertAfter(this._expando.element);
-    this.children.add(this._trigger);
+    super(
+      host,
+      settings,
+      new SettingTriggerListItem(host, label, settings, {
+        onCheck: () => {
+          host.engine.imessage("status.auto.enable", [label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.auto.disable", [label]);
+        },
+      }),
+      options,
+    );
 
     this.addChild(
       new SettingsList(this._host, {
