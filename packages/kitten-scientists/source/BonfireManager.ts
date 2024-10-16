@@ -5,6 +5,7 @@ import { TabManager } from "./TabManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import {
+  baseStage,
   BonfireBuildingSetting,
   BonfireItem,
   BonfireSettings,
@@ -18,6 +19,9 @@ import {
   ButtonModernController,
   ButtonModernModel,
   GameTab,
+  Resource,
+  Resources,
+  StagedBuilding,
 } from "./types/index.js";
 
 export type BonfireTab = GameTab;
@@ -69,16 +73,56 @@ export class BonfireManager implements Automation {
     const bulkManager = this._bulkManager;
     const trigger = this.settings.trigger;
 
+    const toBuild = Object.fromEntries(
+      Object.entries(builds)
+        .filter(([, build]) => {
+          const meta = this.getBuildMeta(build.building as Building);
+          // Don't order capped buildings
+          if (-1 < build.max && build.max <= meta.val) {
+            return false;
+          }
+
+          if (this.isStorageBuilding(build.building)) {
+            const anyResourceCapped = Object.keys(mustExist(meta.effects)).some(effect => {
+              const resource = effect.replace(/Max$/, "") as Resource;
+              if (!Resources.includes(resource)) {
+                return false;
+              }
+
+              return this.isStorageCapped(resource);
+            });
+
+            if (!anyResourceCapped) {
+              return false;
+            }
+          }
+
+          return true;
+        })
+        .map(([name, build]) => {
+          const meta = this.getBuildMeta(build.building as Building);
+          return [
+            name as BonfireItem,
+            this.isStorageBuilding(build.building)
+              ? new BonfireBuildingSetting(
+                  name as BonfireItem,
+                  build.enabled,
+                  meta.val + 1,
+                  name !== build.baseBuilding ? build.baseBuilding : undefined,
+                )
+              : build,
+          ];
+        }),
+    );
+
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<BonfireItem, BuildingMeta>> = {};
-    for (const build of Object.values(builds)) {
-      metaData[build.building] = this.getBuild(
-        (build.baseBuilding ?? build.building) as Building,
-      ).meta;
+    for (const build of Object.values(toBuild)) {
+      metaData[build.building] = this.getBuildMeta(build.building);
     }
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, trigger, "Bonfire");
+    const buildList = bulkManager.bulk(toBuild, metaData, trigger, "Bonfire");
 
     // Build all entries in the build list, where we can build any items.
     for (const build of buildList.filter(item => 0 < item.count)) {
@@ -371,6 +415,19 @@ export class BonfireManager implements Automation {
   getBuild(name: Building): BuildingExt {
     return this._host.game.bld.getBuildingExt(name);
   }
+  getBuildMeta(name: BonfireItem): BuildingMeta {
+    const isStage = name in baseStage;
+    const lookup: Building = isStage
+      ? mustExist(baseStage[name as StagedBuilding])
+      : (name as Building);
+    const build = this.getBuild(lookup);
+
+    let meta = build.meta;
+    if (!isNil(build.meta.stage)) {
+      meta = { ...meta, ...build.meta.stages?.[isStage ? 1 : 0] };
+    }
+    return meta;
+  }
 
   getBuildButton(
     name: Building,
@@ -384,5 +441,14 @@ export class BonfireManager implements Automation {
       ButtonModernModel,
       ButtonModernController
     > | null;
+  }
+
+  isStorageBuilding(building: BonfireItem): boolean {
+    return ["barn", "warehouse", "harbor"].includes(building);
+  }
+
+  isStorageCapped(resource: Resource): boolean {
+    const item = this._host.game.resPool.get(resource);
+    return item.maxValue - item.value < 1;
   }
 }
