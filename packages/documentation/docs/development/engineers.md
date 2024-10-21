@@ -6,7 +6,7 @@ KE is a future extension to KS, that will take over decision-making in the KG au
 
 Let's first have a look at KS, and at what it is _supposed_ to be. KS should really just follow simple instructions as directly as possible. When you tell it to build a hut, it should just build that hut, no strings attached.
 
-But that's not how KS behaves in all areas. Some features provide exceptions to existing logic, or they replace it (for example, [building the best unicorn building first](./sections/religion.md#ziggurats)). If you look at it very strictly, even triggers are a sort of decision-making component that conflicts with just implementing strict instructions.
+But that's not how KS behaves in all areas. Some features provide exceptions to existing logic, or they replace it (for example, [building the best unicorn building first](../sections/religion.md#ziggurats)). If you look at it very strictly, even triggers are a sort of decision-making component that conflicts with just implementing strict instructions.
 
 Over the years, there have been many feature requests that would have expanded the dynamic behavior of KS even further, but there is more defensive stance on integrating features like that today. The reason for that is often that KE would likely be a better place to implement the requested feature. Adding too many dynamic behaviors into KS can make the overall behavior very hard to control. In the past, this has lead developers to include exceptions in completely unrelated areas of the code base, leading to issues that were very hard to understand.
 
@@ -39,7 +39,7 @@ Manipulating settings in KS is also only one of the types of actions that KE sho
 1. Load entire settings states into KS.
 1. Trigger actions in KG directly.
 
-Specifically loading entire settings states is probably going to be the major way people are going to interact with KE, as most people will not be interested in the manual labor of writing actions, as shown above, to modify KS behavior. The recent development of [state management](./sections/state-management.md) has been the initial foundational work for this feature. KS has also been continously extended to provide an API that allows developers to control it externally. This API is currently being solidified. We provide extensive schemata for the KS settings structure, which allow developers to author settings profiles, which can also be composed from other profiles, and be shared online.
+Specifically loading entire settings states is probably going to be the major way people are going to interact with KE, as most people will not be interested in the manual labor of writing actions, as shown above, to modify KS behavior. The recent development of [state management](../sections/state-management.md) has been the initial foundational work for this feature. KS has also been continously extended to provide an API that allows developers to control it externally. This API is currently being solidified. We provide extensive schemata for the KS settings structure, which allow developers to author settings profiles, which can also be composed from other profiles, and be shared online.
 
 In theory, users can already make use of this behavior today, but pre-authored settings profiles will likely not catch on until the feature is documented properly.
 

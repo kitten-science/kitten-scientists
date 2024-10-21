@@ -28,8 +28,10 @@ repo_name: kitten-science/kitten-scientists
 repo_url: https://github.com/kitten-science/kitten-scientists
 site_name: Kitten Science
 theme:
+  custom_dir: overrides
   favicon: assets/images/favicon.ico
   features:
+    - announce.dismiss
     - content.code.copy
     - content.action.edit
     - content.action.view

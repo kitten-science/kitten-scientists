@@ -63,7 +63,7 @@
 
 -   Description:
 
-    Builds the [Development Container](../../development.md#development-with-kittens-game-container).
+    Builds the [Development Container](../../development/development.md#development-with-kittens-game-container).
 
 ## devcontainer:rebuild
 
@@ -76,7 +76,7 @@
 
 -   Description:
 
-    Rebuilds the [Development Container](../../development.md#development-with-kittens-game-container).
+    Rebuilds the [Development Container](../../development/development.md#development-with-kittens-game-container).
 
     You're going to want to rebuild your development container every once in a while to ensure you're using the latest version of Kittens Game in your container.
 
@@ -91,7 +91,7 @@
 
 -   Description:
 
-    Builds the [Development Container](../../development.md#development-with-kittens-game-container) and starts it.
+    Builds the [Development Container](../../development/development.md#development-with-kittens-game-container) and starts it.
 
 ## devcontainer:stop
 
