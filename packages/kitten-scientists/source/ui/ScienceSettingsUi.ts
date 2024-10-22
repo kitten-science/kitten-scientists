@@ -3,12 +3,12 @@ import { KittenScientists } from "../KittenScientists.js";
 import { ScienceSettings } from "../settings/ScienceSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { PolicySettingsUi } from "./PolicySettingsUi.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { TechSettingsUi } from "./TechSettingsUi.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class ScienceSettingsUi extends AbstractBuildSettingsPanel<ScienceSettings> {
+export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
   private readonly _items: Array<SettingListItem>;
   private readonly _policiesUi: PolicySettingsUi;
   private readonly _techsUi: TechSettingsUi;

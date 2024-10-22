@@ -2,15 +2,15 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingMax } from "../settings/Settings.js";
 import { VillageSettings } from "../settings/VillageSettings.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { OptionsListItem } from "./components/OptionsListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class VillageSettingsUi extends AbstractBuildSettingsPanel<VillageSettings> {
+export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
   private readonly _hunt: SettingTriggerListItem;
   private readonly _festivals: SettingListItem;
   private readonly _promoteKittens: SettingTriggerListItem;

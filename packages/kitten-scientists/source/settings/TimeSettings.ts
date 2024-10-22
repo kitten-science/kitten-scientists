@@ -7,14 +7,14 @@ import {
   VoidSpaceUpgrade,
   VoidSpaceUpgrades,
 } from "../types/index.js";
-import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
+import { Setting, SettingTrigger, SettingTriggerMax } from "./Settings.js";
 
 /**
  * The upgrades on the Time tab that we have options for.
  */
 export type TimeItem = Exclude<ChronoForgeUpgrade | VoidSpaceUpgrade, "usedCryochambers">;
 
-export class TimeSettingsItem extends SettingMax {
+export class TimeSettingsItem extends SettingTriggerMax {
   readonly #building: TimeItem;
   readonly #variant: TimeItemVariant;
 
@@ -42,7 +42,7 @@ export class TimeSettings extends SettingTrigger {
 
   constructor(
     enabled = false,
-    trigger = 1,
+    trigger = -1,
     fixCryochambers = new Setting(false),
     turnOnChronoFurnace = new Setting(false),
   ) {
@@ -74,6 +74,7 @@ export class TimeSettings extends SettingTrigger {
     consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
       building.enabled = item?.enabled ?? building.enabled;
       building.max = item?.max ?? building.max;
+      building.trigger = item?.trigger ?? building.trigger;
     });
 
     this.fixCryochambers.load(settings.fixCryochambers);

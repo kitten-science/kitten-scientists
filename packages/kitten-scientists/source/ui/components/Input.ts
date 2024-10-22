@@ -4,6 +4,7 @@ import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 export type InputOptions = UiComponentOptions & {
   readonly onChange?: (value: string) => void;
   readonly onEnter?: (currentValue: string) => void;
+  readonly onEscape?: (currentValue: string) => void;
   readonly selected?: boolean;
   readonly value?: string;
 };
@@ -39,8 +40,13 @@ export class Input extends UiComponent {
     }
 
     this.element.on("keyup", (event: JQuery.KeyUpEvent) => {
-      if (event.key === "Enter") {
-        options?.onEnter?.(this.element[0].value);
+      switch (event.key) {
+        case "Enter":
+          options?.onEnter?.(this.element[0].value);
+          break;
+        case "Escape":
+          options?.onEscape?.(this.element[0].value);
+          break;
       }
     });
 

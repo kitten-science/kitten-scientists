@@ -5,14 +5,14 @@ import { SettingOptions } from "../settings/Settings.js";
 import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { ResourceCraftable } from "../types/index.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
 import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class WorkshopSettingsUi extends AbstractBuildSettingsPanel<WorkshopSettings> {
+export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
   private readonly _crafts: Array<SettingListItem>;
 
   constructor(

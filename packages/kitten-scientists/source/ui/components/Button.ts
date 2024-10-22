@@ -1,7 +1,8 @@
 import { KittenScientists } from "../../KittenScientists.js";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { IconButtonOptions } from "./IconButton.js";
+import { UiComponent } from "./UiComponent.js";
 
-export type ButtonOptions = UiComponentOptions & {
+export type ButtonOptions = IconButtonOptions & {
   readonly title: string;
 };
 
@@ -12,6 +13,7 @@ export class Button extends UiComponent {
   protected readonly _iconElement: JQuery | undefined;
   readonly element: JQuery;
   readOnly: boolean;
+  inactive: boolean;
 
   /**
    * Constructs a `Button`.
@@ -49,7 +51,12 @@ export class Button extends UiComponent {
     });
 
     this.addChildren(options?.children);
-    this.readOnly = false;
+    this.readOnly = options?.readOnly ?? false;
+    this.inactive = options?.inactive ?? false;
+
+    this.element.on("click", () => {
+      this.click();
+    });
   }
 
   updateLabel(label: string) {
@@ -60,5 +67,29 @@ export class Button extends UiComponent {
   }
   updateTitle(title: string) {
     this.element.prop("title", title);
+  }
+
+  override click() {
+    if (this.readOnly) {
+      return;
+    }
+
+    super.click();
+  }
+
+  override refreshUi(): void {
+    super.refreshUi();
+
+    if (this.readOnly) {
+      this.element.addClass("ks-readonly");
+    } else {
+      this.element.removeClass("ks-readonly");
+    }
+
+    if (this.inactive) {
+      this.element.addClass("ks-inactive");
+    } else {
+      this.element.removeClass("ks-inactive");
+    }
   }
 }

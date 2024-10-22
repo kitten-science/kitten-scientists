@@ -1,10 +1,11 @@
 import { KittenScientists } from "../../KittenScientists.js";
 import { SettingThreshold, SettingTrigger } from "../../settings/Settings.js";
-import { TriggerButton, TriggerButtonBehavior } from "./buttons-icon/TriggerButton.js";
+import { TriggerButton } from "./buttons-icon/TriggerButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
 export type SettingTriggerListItemOptions = SettingListItemOptions & {
-  readonly behavior: TriggerButtonBehavior;
+  readonly onRefreshTrigger: (subject: SettingTriggerListItem) => void;
+  readonly onSetTrigger: (subject: SettingTriggerListItem) => void;
 };
 
 export class SettingTriggerListItem extends SettingListItem {
@@ -18,7 +19,12 @@ export class SettingTriggerListItem extends SettingListItem {
   ) {
     super(host, label, setting, options);
 
-    this.triggerButton = new TriggerButton(host, label, setting);
+    this.triggerButton = new TriggerButton(host, label, setting, {
+      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,
+      onRefreshTitle: options?.onRefreshTrigger
+        ? () => options.onRefreshTrigger?.(this)
+        : undefined,
+    });
     this.head.addChild(this.triggerButton);
   }
 

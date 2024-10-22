@@ -15,8 +15,8 @@ export class ResetTimeBuildingSetting extends SettingThreshold {
     return this.#variant;
   }
 
-  constructor(id: TimeItem, variant: TimeItemVariant, enabled = false, trigger = -1) {
-    super(enabled, trigger);
+  constructor(id: TimeItem, variant: TimeItemVariant, enabled = false, threshold = -1) {
+    super(enabled, threshold);
     this.#building = id;
     this.#variant = variant;
   }
