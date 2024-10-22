@@ -29,8 +29,13 @@ export class ResetBonfireBuildingSetting extends SettingThreshold {
     return this.#stage;
   }
 
-  constructor(building: BonfireItem, enabled = false, trigger = -1, baseStage?: Building | false) {
-    super(enabled, trigger);
+  constructor(
+    building: BonfireItem,
+    enabled = false,
+    threshold = -1,
+    baseStage?: Building | false,
+  ) {
+    super(enabled, threshold);
 
     this.#building = building;
     if (baseStage) {

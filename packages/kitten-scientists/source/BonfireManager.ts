@@ -67,7 +67,6 @@ export class BonfireManager implements Automation {
     builds: Partial<Record<BonfireItem, BonfireBuildingSetting>> = this.settings.buildings,
   ) {
     const bulkManager = this._bulkManager;
-    const trigger = this.settings.trigger;
 
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<BonfireItem, BuildingMeta>> = {};
@@ -78,7 +77,7 @@ export class BonfireManager implements Automation {
     }
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, trigger, "Bonfire");
+    const buildList = bulkManager.bulk(builds, metaData, this.settings.trigger, "Bonfire");
 
     // Build all entries in the build list, where we can build any items.
     for (const build of buildList.filter(item => 0 < item.count)) {

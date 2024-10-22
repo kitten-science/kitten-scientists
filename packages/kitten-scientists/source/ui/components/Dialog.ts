@@ -3,6 +3,7 @@ import { KittenScientists } from "../../KittenScientists.js";
 import { Button } from "./Button.js";
 import { Container } from "./Container.js";
 import { Delimiter } from "./Delimiter.js";
+import { HeaderListItem } from "./HeaderListItem.js";
 import { Input } from "./Input.js";
 import { Paragraph } from "./Paragraph.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
@@ -11,9 +12,10 @@ export type DialogOptions = UiComponentOptions & {
   readonly hasCancel?: boolean;
   readonly hasClose?: boolean;
   readonly onCancel?: () => void;
-  readonly onConfirm?: (result: string | undefined) => void;
+  readonly onConfirm?: (result: string) => void;
   readonly prompt?: boolean;
   readonly promptValue?: string;
+  readonly childrenAfterPrompt?: Array<UiComponent>;
 };
 
 export class Dialog extends UiComponent {
@@ -27,7 +29,7 @@ export class Dialog extends UiComponent {
    * @param options - Options for the dialog.
    */
   constructor(host: KittenScientists, options?: Partial<DialogOptions>) {
-    super(host, options);
+    super(host, { ...options, children: [] });
 
     this.element = $<HTMLDialogElement>("<dialog/>")
       .addClass("dialog")
@@ -63,10 +65,15 @@ export class Dialog extends UiComponent {
                 this.close();
                 options.onConfirm?.(this.returnValue);
               },
+              onEscape: (_value: string) => {
+                this.close();
+                options.onCancel?.();
+              },
               selected: true,
               value: options.promptValue,
             })
           : undefined,
+        ...(options?.childrenAfterPrompt ?? []),
         new Delimiter(host),
         new Container(host, {
           children: coalesceArray([
@@ -109,15 +116,30 @@ export class Dialog extends UiComponent {
   static async prompt(
     host: KittenScientists,
     text: string,
+    title?: string,
     initialValue?: string,
+    explainer?: string,
   ): Promise<string | undefined> {
     return new Promise(resolve => {
       new Dialog(host, {
-        children: [new Paragraph(host, text)],
+        children: coalesceArray([
+          title ? new HeaderListItem(host, title) : undefined,
+          new Paragraph(host, text),
+        ]),
+        childrenAfterPrompt: explainer
+          ? [
+              new Container(host, {
+                children: [new Paragraph(host, explainer)],
+                classes: ["ks-explainer"],
+              }),
+            ]
+          : [],
+        hasCancel: true,
+        hasClose: false,
         onCancel: () => {
           resolve(undefined);
         },
-        onConfirm: (result: string | undefined) => {
+        onConfirm: (result: string) => {
           resolve(result);
         },
         prompt: true,

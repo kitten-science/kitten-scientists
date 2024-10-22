@@ -2,7 +2,7 @@ import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Building, Buildings, StagedBuilding, StagedBuildings } from "../types/index.js";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings.js";
-import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
+import { Setting, SettingTrigger, SettingTriggerMax } from "./Settings.js";
 
 /**
  * One of the building options in the KS menu.
@@ -11,7 +11,7 @@ import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
  */
 export type BonfireItem = Building | StagedBuilding;
 
-export class BonfireBuildingSetting extends SettingMax {
+export class BonfireBuildingSetting extends SettingTriggerMax {
   /**
    * In case this is an upgrade of another building, this is the name of the
    * base building.
@@ -35,8 +35,14 @@ export class BonfireBuildingSetting extends SettingMax {
     return this.#stage;
   }
 
-  constructor(building: BonfireItem, enabled = false, max = -1, baseStage?: Building | false) {
-    super(enabled, max);
+  constructor(
+    building: BonfireItem,
+    enabled = false,
+    trigger = -1,
+    max = -1,
+    baseStage?: Building | false,
+  ) {
+    super(enabled, trigger, max);
 
     this.#building = building;
     if (baseStage) {
@@ -62,7 +68,7 @@ export class BonfireSettings extends SettingTrigger {
 
   constructor(
     enabled = false,
-    trigger = 0,
+    trigger = -1,
     gatherCatnip = new Setting(true),
     turnOnSteamworks = new Setting(true),
     turnOnMagnetos = new Setting(false),
@@ -93,7 +99,7 @@ export class BonfireSettings extends SettingTrigger {
       items[item] = new BonfireBuildingSetting(item);
     });
     StagedBuildings.forEach(item => {
-      items[item] = new BonfireBuildingSetting(item, false, -1, baseStage[item]);
+      items[item] = new BonfireBuildingSetting(item, false, -1, -1, baseStage[item]);
     });
 
     return items;
@@ -109,6 +115,7 @@ export class BonfireSettings extends SettingTrigger {
     consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
       building.enabled = item?.enabled ?? building.enabled;
       building.max = item?.max ?? building.max;
+      building.trigger = item?.trigger ?? building.trigger;
     });
 
     this.gatherCatnip.enabled = settings.gatherCatnip?.enabled ?? this.gatherCatnip.enabled;

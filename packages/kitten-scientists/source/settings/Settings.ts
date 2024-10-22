@@ -78,9 +78,9 @@ export class SettingTrigger extends Setting {
 export class SettingThreshold extends Setting {
   trigger: number;
 
-  constructor(enabled = false, trigger = 1) {
+  constructor(enabled = false, threshold = 1) {
     super(enabled);
-    this.trigger = trigger;
+    this.trigger = threshold;
   }
 
   load(setting: Maybe<Partial<SettingThreshold>>) {

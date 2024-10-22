@@ -2,17 +2,17 @@ import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Game, SpaceBuilding, SpaceBuildings } from "../types/index.js";
 import { MissionSettings } from "./MissionSettings.js";
-import { SettingMax, SettingTrigger } from "./Settings.js";
+import { SettingTrigger, SettingTriggerMax } from "./Settings.js";
 
-export class SpaceBuildingSetting extends SettingMax {
+export class SpaceBuildingSetting extends SettingTriggerMax {
   readonly #building: SpaceBuilding;
 
   get building() {
     return this.#building;
   }
 
-  constructor(building: SpaceBuilding, enabled = false) {
-    super(enabled);
+  constructor(building: SpaceBuilding) {
+    super();
     this.#building = building;
   }
 }
@@ -24,7 +24,7 @@ export class SpaceSettings extends SettingTrigger {
 
   unlockMissions: MissionSettings;
 
-  constructor(enabled = false, trigger = 0, unlockMissions = new MissionSettings()) {
+  constructor(enabled = false, trigger = -1, unlockMissions = new MissionSettings()) {
     super(enabled, trigger);
     this.buildings = this.initBuildings();
     this.unlockMissions = unlockMissions;
@@ -52,6 +52,7 @@ export class SpaceSettings extends SettingTrigger {
     consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
       building.enabled = item?.enabled ?? building.enabled;
       building.max = item?.max ?? building.max;
+      building.trigger = item?.trigger ?? building.trigger;
     });
 
     this.unlockMissions.load(settings.unlockMissions);

@@ -1,3 +1,4 @@
+import { roundTo } from "@oliversalzburg/js-utils/math/core.js";
 import { KittenScientists } from "../../KittenScientists.js";
 import { cerror } from "../../tools/Log.js";
 
@@ -21,8 +22,8 @@ export abstract class UiComponent extends EventTarget {
 
   readonly children = new Set<UiComponent>();
 
-  private readonly _onClick: UiComponentOptions["onClick"] | undefined;
-  private readonly _onRefresh: UiComponentOptions["onRefresh"] | undefined;
+  protected readonly _onClick: UiComponentOptions["onClick"] | undefined;
+  protected readonly _onRefresh: UiComponentOptions["onRefresh"] | undefined;
 
   /**
    * Constructs the base `UiComponent`.
@@ -106,7 +107,12 @@ export abstract class UiComponent extends EventTarget {
     }
 
     // Cap value between 0 and 1.
-    return Math.max(0, Math.min(1, parseFloat(value) / 100));
+    return UiComponent.parsePercentage(value);
+  }
+
+  static parsePercentage(value: string): number {
+    const cleanedValue = value.trim().replace(/%$/, "");
+    return Math.max(0, Math.min(1, parseFloat(cleanedValue) / 100));
   }
 
   protected _renderLimit(value: number): string {
@@ -122,7 +128,7 @@ export abstract class UiComponent extends EventTarget {
   }
 
   static renderPercentage(value: number): string {
-    return Math.round(100 * value).toFixed(0);
+    return roundTo(100 * value, 3).toString();
   }
 
   static promptFloat(text: string, defaultValue: string): number | null {

@@ -206,6 +206,8 @@ export class UserInterface extends UiComponent {
     );
     this._addRule(
       `.ks-head .ks-label {
+        align-items: flex-start;
+        display: flex;
         flex: 1;
         white-space: nowrap;
       }`,
@@ -335,11 +337,22 @@ export class UserInterface extends UiComponent {
         padding-right: 3px;
         line-height: 0;
         opacity: 0.8;
+        transition: .3s;
+      }`,
+    );
+    this._addRule(
+      `.ks-icon-button.ks-inactive {
+        opacity: 0.2;
       }`,
     );
     this._addRule(
       `.ks-icon-button:hover {
         opacity: 1;
+      }`,
+    );
+    this._addRule(
+      `.ks-icon-button.ks-inactive:hover {
+        opacity: 0.4;
       }`,
     );
     this._addRule(
@@ -390,6 +403,11 @@ export class UserInterface extends UiComponent {
         padding: 4px;
         user-select: none;
         white-space: break-spaces;
+      }`,
+    );
+    this._addRule(
+      `.ks-explainer p {
+        margin: 0;
       }`,
     );
 

@@ -71,10 +71,10 @@ export class BulkPurchaseHelper {
   /**
    * Take a hash of potential builds and determine how many of them can be built.
    *
-   * @param builds All potential builds.
-   * @param metaData The metadata for the potential builds.
-   * @param trigger The configured trigger threshold for these builds.
-   * @param sourceTab The tab these builds originate from.
+   * @param builds - All potential builds.
+   * @param metaData - The metadata for the potential builds.
+   * @param sectionTrigger - The configured trigger threshold for the section of these builds.
+   * @param sourceTab - The tab these builds originate from.
    * @returns All the possible builds.
    */
   bulk(
@@ -88,6 +88,7 @@ export class BulkPurchaseHelper {
           baseBuilding?: Building;
           building?: AllBuildings | BonfireItem;
           stage?: number;
+          trigger: number;
           variant?: TimeItemVariant | UnicornItemVariant;
         }
       >
@@ -104,7 +105,7 @@ export class BulkPurchaseHelper {
         | ZiggurathUpgradeInfo
       >
     >,
-    trigger: number,
+    sectionTrigger: number,
     sourceTab: TabId,
   ): Array<BulkBuildListItem> {
     const buildsPerformed: Array<BulkBuildListItem> = [];
@@ -172,8 +173,11 @@ export class BulkPurchaseHelper {
         .map(price => this._workshopManager.getResource(price.name))
         .filter(material => 0 < material.maxValue);
       const allMaterialsAboveTrigger =
-        requiredMaterials.filter(material => material.value / material.maxValue < trigger)
-          .length === 0;
+        requiredMaterials.filter(
+          material =>
+            material.value / material.maxValue <
+            (build.trigger < 0 ? sectionTrigger : build.trigger),
+        ).length === 0;
 
       if (allMaterialsAboveTrigger) {
         // If the build is for a stage that the building isn't currently at, skip it.

@@ -10,8 +10,8 @@ export class ResetSpaceBuildingSetting extends SettingThreshold {
     return this.#building;
   }
 
-  constructor(building: SpaceBuilding, enabled = false, trigger = -1) {
-    super(enabled, trigger);
+  constructor(building: SpaceBuilding, enabled = false, threshold = -1) {
+    super(enabled, threshold);
     this.#building = building;
   }
 }

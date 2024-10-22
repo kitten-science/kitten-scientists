@@ -9,7 +9,7 @@ import {
   ZiggurathUpgrade,
   ZiggurathUpgrades,
 } from "../types/index.js";
-import { Setting, SettingMax, SettingThreshold, SettingTrigger } from "./Settings.js";
+import { Setting, SettingThreshold, SettingTrigger, SettingTriggerMax } from "./Settings.js";
 
 export type FaithItem = Exclude<ReligionItem, UnicornItem>;
 
@@ -38,7 +38,7 @@ export const ReligionOptions = [
 ] as const;
 export type ReligionOption = (typeof ReligionOptions)[number];
 
-export class ReligionSettingsItem extends SettingMax {
+export class ReligionSettingsItem extends SettingTriggerMax {
   readonly #building: FaithItem | UnicornItem;
   readonly #variant: UnicornItemVariant;
 
@@ -49,13 +49,8 @@ export class ReligionSettingsItem extends SettingMax {
     return this.#variant;
   }
 
-  constructor(
-    building: FaithItem | UnicornItem,
-    variant: UnicornItemVariant,
-    enabled = false,
-    max = -1,
-  ) {
-    super(enabled, max);
+  constructor(building: FaithItem | UnicornItem, variant: UnicornItemVariant, enabled = false) {
+    super(enabled);
     this.#building = building;
     this.#variant = variant;
   }
@@ -108,7 +103,7 @@ export class ReligionSettings extends SettingTrigger {
 
   constructor(
     enabled = false,
-    trigger = 1,
+    trigger = -1,
     bestUnicornBuilding = new Setting(false),
     sacrificeAlicorns = new SettingThreshold(false, 25),
     sacrificeUnicorns = new SettingThreshold(false, 1000000),
@@ -164,6 +159,7 @@ export class ReligionSettings extends SettingTrigger {
     consumeEntriesPedantic(this.buildings, settings.buildings, (building, item) => {
       building.enabled = item?.enabled ?? building.enabled;
       building.max = item?.max ?? building.max;
+      building.trigger = item?.trigger ?? building.trigger;
     });
 
     this.bestUnicornBuilding.load(settings.bestUnicornBuilding);

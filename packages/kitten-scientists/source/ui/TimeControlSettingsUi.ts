@@ -5,12 +5,12 @@ import { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import { PaddingButton } from "./components/buttons-icon/PaddingButton.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { ResetSettingsUi } from "./ResetSettingsUi.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { TimeSkipSettingsUi } from "./TimeSkipSettingsUi.js";
 
-export class TimeControlSettingsUi extends AbstractBuildSettingsPanel<TimeControlSettings> {
+export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
   protected readonly _items: Array<SettingListItem>;
 
   private readonly _accelerateTime: SettingTriggerListItem;

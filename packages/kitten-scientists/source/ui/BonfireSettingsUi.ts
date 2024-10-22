@@ -1,18 +1,20 @@
-import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { coalesceArray, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { BonfireSettings } from "../settings/BonfireSettings.js";
-import { StagedBuilding } from "../types/index.js";
+import { Building, StagedBuilding } from "../types/index.js";
+import { BuildSectionTools } from "./BuildSectionTools.js";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
+import { Delimiter } from "./components/Delimiter.js";
+import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
-import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
+import { UiComponent } from "./components/UiComponent.js";
 
-export class BonfireSettingsUi extends AbstractBuildSettingsPanel<BonfireSettings> {
-  private readonly _buildings: Array<HeaderListItem | SettingMaxListItem>;
-
+export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
   constructor(host: KittenScientists, settings: BonfireSettings) {
     const label = host.engine.i18n("ui.build");
     super(
@@ -25,137 +27,162 @@ export class BonfireSettingsUi extends AbstractBuildSettingsPanel<BonfireSetting
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
         },
+        onRefresh: item => {
+          (item as SettingTriggerListItem).triggerButton.inactive = settings.trigger < 0;
+        },
+        onRefreshTrigger: item => {
+          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+            settings.trigger < 0
+              ? host.engine.i18n("ui.trigger.section.inactive")
+              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+          ]);
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.prompt.percentage"),
+            host.engine.i18n("ui.trigger.section.prompt", [
+              label,
+              settings.trigger !== -1
+                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                : host.engine.i18n("ui.infinity"),
+            ]),
+            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            host.engine.i18n("ui.trigger.section.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined) {
+                return;
+              }
+
+              if (value === "" || value.startsWith("-")) {
+                settings.trigger = -1;
+                return;
+              }
+
+              settings.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              this.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
+        },
       }),
     );
 
-    this._buildings = [];
-    for (const buildingGroup of this._host.game.bld.buildingGroups) {
-      this._buildings.push(new HeaderListItem(this._host, buildingGroup.title));
-      for (const building of buildingGroup.buildings) {
-        if (building === "unicornPasture" || isNil(this.setting.buildings[building])) {
-          continue;
-        }
+    // Post-super() child insertion, so we can use this._getBuildOptions().
+    // We want the ability to use `this` in our callbacks, to construct more complex
+    // usage scenarios where we need access to the entire UI section.
+    this.addChildren([
+      new SettingsList(host, {
+        children: coalesceArray(
+          host.game.bld.buildingGroups.flatMap(buildingGroup => [
+            new HeaderListItem(host, buildingGroup.title),
+            ...buildingGroup.buildings.flatMap(building =>
+              this._getBuildOptions(host, settings, label, building),
+            ),
+            buildingGroup !== host.game.bld.buildingGroups[host.game.bld.buildingGroups.length - 1]
+              ? new Delimiter(host)
+              : undefined,
+          ]),
+        ),
+        onReset: () => {
+          this.setting.load({ buildings: new BonfireSettings().buildings });
+          this.refreshUi();
+        },
+      }),
+      new SettingsList(host, {
+        children: [
+          new HeaderListItem(host, host.engine.i18n("ui.additional")),
+          new BuildingUpgradeSettingsUi(host, settings.upgradeBuildings),
+          new SettingListItem(host, host.engine.i18n("option.catnip"), settings.gatherCatnip, {
+            onCheck: () => {
+              host.engine.imessage("status.sub.enable", [host.engine.i18n("option.catnip")]);
+            },
+            onUnCheck: () => {
+              host.engine.imessage("status.sub.disable", [host.engine.i18n("option.catnip")]);
+            },
+          }),
+          new SettingListItem(
+            host,
+            host.engine.i18n("option.steamworks"),
+            settings.turnOnSteamworks,
+            {
+              onCheck: () => {
+                host.engine.imessage("status.sub.enable", [host.engine.i18n("option.steamworks")]);
+              },
+              onUnCheck: () => {
+                host.engine.imessage("status.sub.disable", [host.engine.i18n("option.steamworks")]);
+              },
+            },
+          ),
+          new SettingListItem(host, host.engine.i18n("option.magnetos"), settings.turnOnMagnetos, {
+            onCheck: () => {
+              host.engine.imessage("status.sub.enable", [host.engine.i18n("option.magnetos")]);
+            },
+            onUnCheck: () => {
+              host.engine.imessage("status.sub.disable", [host.engine.i18n("option.magnetos")]);
+            },
+          }),
+          new SettingListItem(host, host.engine.i18n("option.reactors"), settings.turnOnReactors, {
+            onCheck: () => {
+              host.engine.imessage("status.sub.enable", [host.engine.i18n("option.reactors")]);
+            },
+            onUnCheck: () => {
+              host.engine.imessage("status.sub.disable", [host.engine.i18n("option.reactors")]);
+            },
+          }),
+        ],
+        hasDisableAll: false,
+        hasEnableAll: false,
+      }),
+    ]);
+  }
 
-        const meta = this._host.game.bld.getBuildingExt(building).meta;
-        if (!isNil(meta.stages)) {
-          const name = Object.values(this.setting.buildings).find(
-            item => item.baseBuilding === building,
-          )?.building as StagedBuilding;
-          this._buildings.push(
-            this._getBuildOption(this.setting.buildings[building], meta.stages[0].label),
-            this._getBuildOption(this.setting.buildings[name], meta.stages[1].label, false, true),
-          );
-        } else if (!isNil(meta.label)) {
-          this._buildings.push(this._getBuildOption(this.setting.buildings[building], meta.label));
-        }
-      }
-
-      // Add padding after each group. Except for the last group, which ends the list.
-      if (
-        buildingGroup !==
-        this._host.game.bld.buildingGroups[this._host.game.bld.buildingGroups.length - 1]
-      ) {
-        this._buildings.at(-1)?.element.addClass("ks-delimiter");
-      }
+  private _getBuildOptions(
+    host: KittenScientists,
+    settings: BonfireSettings,
+    sectionLabel: string,
+    building: Building,
+  ) {
+    if (building === "unicornPasture" || isNil(settings.buildings[building])) {
+      return [];
     }
 
-    const listBuildings = new SettingsList(this._host, {
-      children: this._buildings,
-      onReset: () => {
-        this.setting.load({ buildings: new BonfireSettings().buildings });
-        this.refreshUi();
-      },
-    });
-    this.addChild(listBuildings);
+    const meta = host.game.bld.getBuildingExt(building).meta;
+    if (!isNil(meta.stages)) {
+      const name = Object.values(settings.buildings).find(item => item.baseBuilding === building)
+        ?.building as StagedBuilding;
+      return [
+        BuildSectionTools.getBuildOption(
+          host,
+          settings.buildings[building],
+          settings,
+          meta.stages[0].label,
+          sectionLabel,
+        ),
+        BuildSectionTools.getBuildOption(
+          host,
+          settings.buildings[name],
+          settings,
+          meta.stages[1].label,
+          sectionLabel,
+          false,
+          true,
+        ),
+      ];
+    } else if (!isNil(meta.label)) {
+      return [
+        BuildSectionTools.getBuildOption(
+          host,
+          settings.buildings[building],
+          settings,
+          meta.label,
+          sectionLabel,
+        ),
+      ];
+    }
 
-    const listAddition = new SettingsList(this._host, {
-      hasDisableAll: false,
-      hasEnableAll: false,
-    });
-    listAddition.addChild(new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")));
-
-    listAddition.addChild(new BuildingUpgradeSettingsUi(this._host, this.setting.upgradeBuildings));
-
-    listAddition.addChild(
-      new SettingListItem(
-        this._host,
-        this._host.engine.i18n("option.catnip"),
-        this.setting.gatherCatnip,
-        {
-          onCheck: () => {
-            this._host.engine.imessage("status.sub.enable", [
-              this._host.engine.i18n("option.catnip"),
-            ]);
-          },
-          onUnCheck: () => {
-            this._host.engine.imessage("status.sub.disable", [
-              this._host.engine.i18n("option.catnip"),
-            ]);
-          },
-        },
-      ),
-    );
-
-    listAddition.addChild(
-      new SettingListItem(
-        this._host,
-        this._host.engine.i18n("option.steamworks"),
-        this.setting.turnOnSteamworks,
-        {
-          onCheck: () => {
-            this._host.engine.imessage("status.sub.enable", [
-              this._host.engine.i18n("option.steamworks"),
-            ]);
-          },
-          onUnCheck: () => {
-            this._host.engine.imessage("status.sub.disable", [
-              this._host.engine.i18n("option.steamworks"),
-            ]);
-          },
-        },
-      ),
-    );
-
-    listAddition.addChild(
-      new SettingListItem(
-        this._host,
-        this._host.engine.i18n("option.magnetos"),
-        this.setting.turnOnMagnetos,
-        {
-          onCheck: () => {
-            this._host.engine.imessage("status.sub.enable", [
-              this._host.engine.i18n("option.magnetos"),
-            ]);
-          },
-          onUnCheck: () => {
-            this._host.engine.imessage("status.sub.disable", [
-              this._host.engine.i18n("option.magnetos"),
-            ]);
-          },
-        },
-      ),
-    );
-
-    listAddition.addChild(
-      new SettingListItem(
-        this._host,
-        this._host.engine.i18n("option.reactors"),
-        this.setting.turnOnReactors,
-        {
-          onCheck: () => {
-            this._host.engine.imessage("status.sub.enable", [
-              this._host.engine.i18n("option.reactors"),
-            ]);
-          },
-          onUnCheck: () => {
-            this._host.engine.imessage("status.sub.disable", [
-              this._host.engine.i18n("option.reactors"),
-            ]);
-          },
-        },
-      ),
-    );
-
-    this.addChild(listAddition);
+    return [];
   }
 }

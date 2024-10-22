@@ -1,14 +1,17 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { KittenScientists } from "../KittenScientists.js";
-import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
+import { TimeSettings } from "../settings/TimeSettings.js";
+import { BuildSectionTools } from "./BuildSectionTools.js";
+import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
-import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
+import { UiComponent } from "./components/UiComponent.js";
 
-export class TimeSettingsUi extends AbstractBuildSettingsPanel<TimeSettings> {
+export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
   constructor(host: KittenScientists, settings: TimeSettings) {
     const label = host.engine.i18n("ui.time");
     super(
@@ -21,6 +24,46 @@ export class TimeSettingsUi extends AbstractBuildSettingsPanel<TimeSettings> {
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
         },
+        onRefresh: item => {
+          (item as SettingTriggerListItem).triggerButton.inactive = settings.trigger < 0;
+        },
+        onRefreshTrigger: item => {
+          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+            settings.trigger < 0
+              ? host.engine.i18n("ui.trigger.section.inactive")
+              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+          ]);
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.prompt.percentage"),
+            host.engine.i18n("ui.trigger.section.prompt", [
+              label,
+              settings.trigger !== -1
+                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                : host.engine.i18n("ui.infinity"),
+            ]),
+            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            host.engine.i18n("ui.trigger.section.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined) {
+                return;
+              }
+
+              if (value === "" || value.startsWith("-")) {
+                settings.trigger = -1;
+                return;
+              }
+
+              settings.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              this.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
+        },
       }),
     );
 
@@ -31,9 +74,12 @@ export class TimeSettingsUi extends AbstractBuildSettingsPanel<TimeSettings> {
           ...this._host.game.time.chronoforgeUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(building =>
-              this._getTimeSetting(
+              BuildSectionTools.getBuildOption(
+                host,
                 this.setting.buildings[building.name],
+                this.setting,
                 building.label,
+                label,
                 building.name === this._host.game.time.chronoforgeUpgrades.at(-1)?.name,
               ),
             ),
@@ -42,7 +88,13 @@ export class TimeSettingsUi extends AbstractBuildSettingsPanel<TimeSettings> {
           ...this._host.game.time.voidspaceUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(building =>
-              this._getTimeSetting(this.setting.buildings[building.name], building.label),
+              BuildSectionTools.getBuildOption(
+                host,
+                this.setting.buildings[building.name],
+                this.setting,
+                building.label,
+                label,
+              ),
             ),
         ],
       }),
@@ -89,17 +141,5 @@ export class TimeSettingsUi extends AbstractBuildSettingsPanel<TimeSettings> {
         hasEnableAll: false,
       }),
     ]);
-  }
-
-  private _getTimeSetting(setting: TimeSettingsItem, label: string, delimiter = false) {
-    return new SettingMaxListItem(this._host, label, setting, {
-      delimiter,
-      onCheck: () => {
-        this._host.engine.imessage("status.sub.enable", [label]);
-      },
-      onUnCheck: () => {
-        this._host.engine.imessage("status.sub.disable", [label]);
-      },
-    });
   }
 }
