@@ -1,14 +1,14 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { TimeSettings, TimeSettingsItem } from "../settings/TimeSettings.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class TimeSettingsUi extends AbstractBuildSettingsPanel<TimeSettings> {
+export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
   constructor(host: KittenScientists, settings: TimeSettings) {
     const label = host.engine.i18n("ui.time");
     super(

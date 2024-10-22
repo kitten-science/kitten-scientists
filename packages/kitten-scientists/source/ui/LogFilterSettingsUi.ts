@@ -3,9 +3,9 @@ import { FilterItems, LogFilterSettings } from "../settings/LogFilterSettings.js
 import { ExplainerListItem } from "./components/ExplainerListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class LogFiltersSettingsUi extends AbstractBuildSettingsPanel<LogFilterSettings> {
+export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
   constructor(host: KittenScientists, settings: LogFilterSettings) {
     const label = host.engine.i18n("ui.filter");
     super(

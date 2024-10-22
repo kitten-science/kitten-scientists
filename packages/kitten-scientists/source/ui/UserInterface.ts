@@ -333,6 +333,11 @@ export class UserInterface extends UiComponent {
       }`,
     );
     this._addRule(
+      `#ks ul li .ks-icon-button.ks-inactive {
+        opacity: 0.3;
+      }`,
+    );
+    this._addRule(
       `#ks ul li .ks-icon-button:hover {
         opacity: 1;
       }`,

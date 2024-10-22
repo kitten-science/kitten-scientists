@@ -1,9 +1,8 @@
 import { Icons } from "../../../images/Icons.js";
 import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingThreshold, SettingTrigger } from "../../../settings/Settings.js";
-import { AbstractBuildSettingsPanel } from "../../SettingsSectionUi.js";
 import { IconButton } from "../IconButton.js";
-import { UiComponentOptions } from "../UiComponent.js";
+import { UiComponent, UiComponentOptions } from "../UiComponent.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 
@@ -24,11 +23,11 @@ export class TriggerButton extends IconButton {
     this.element.on("click", () => {
       const value =
         this.setting instanceof SettingTrigger
-          ? AbstractBuildSettingsPanel.promptPercentage(
+          ? UiComponent.promptPercentage(
               host.engine.i18n("ui.trigger.setpercentage", [label]),
               setting.trigger,
             )
-          : AbstractBuildSettingsPanel.promptLimit(
+          : UiComponent.promptLimit(
               host.engine.i18n("ui.trigger.setinteger", [label]),
               setting.trigger.toFixed(),
             );
@@ -48,8 +47,8 @@ export class TriggerButton extends IconButton {
 
     this.element[0].title = this._host.engine.i18n("ui.trigger", [
       this.behavior === "percentage"
-        ? `${AbstractBuildSettingsPanel.renderPercentage(this.setting.trigger)}%`
-        : AbstractBuildSettingsPanel.renderLimit(this.setting.trigger, this._host),
+        ? `${UiComponent.renderPercentage(this.setting.trigger)}%`
+        : UiComponent.renderLimit(this.setting.trigger, this._host),
     ]);
   }
 }

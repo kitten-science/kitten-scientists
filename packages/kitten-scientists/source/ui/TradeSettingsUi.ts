@@ -13,9 +13,8 @@ import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 
-export class TradeSettingsUi extends AbstractBuildSettingsPanel<TradeSettings> {
+export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
   constructor(host: KittenScientists, settings: TradeSettings) {
     const label = host.engine.i18n("ui.trade");
     super(

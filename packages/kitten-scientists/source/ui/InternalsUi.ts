@@ -2,7 +2,6 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists, ksVersion } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { EngineSettings } from "../settings/EngineSettings.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { LabelListItem } from "./components/LabelListItem.js";
@@ -32,7 +31,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                   host.engine.i18n("ui.internals.interval", [settings.interval]),
                   {
                     onClick: () => {
-                      const newInterval = AbstractBuildSettingsPanel.promptLimit(
+                      const newInterval = UiComponent.promptLimit(
                         host.engine.i18n("ui.internals.interval.input"),
                         settings.interval.toString(),
                       );

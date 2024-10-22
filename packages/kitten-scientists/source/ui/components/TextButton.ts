@@ -24,21 +24,30 @@ export class TextButton extends UiComponent {
       element.prop("title", title);
     }
 
-    const onClick = options?.onClick;
-    if (!isNil(onClick)) {
-      element.on("click", () => {
-        if (this.readOnly) {
-          return;
-        }
-
-        if (!isNil(onClick)) {
-          onClick();
-        }
-      });
-    }
-
     this.element = element;
     this.addChildren(options?.children);
     this.readOnly = false;
+
+    this.element.on("click", () => {
+      this.click();
+    });
+  }
+
+  override click() {
+    if (this.readOnly) {
+      return;
+    }
+
+    super.click();
+  }
+
+  override refreshUi(): void {
+    super.refreshUi();
+
+    if (this.readOnly) {
+      this.element.addClass("ks-readonly");
+    } else {
+      this.element.removeClass("ks-readonly");
+    }
   }
 }
