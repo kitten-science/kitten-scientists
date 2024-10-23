@@ -18,7 +18,7 @@ jobs:
       issues: write
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: oliversalzburg/action-label-manager@0c59a48ae34a7195755566681d7ae15bfd718caa # v0.0.15
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
