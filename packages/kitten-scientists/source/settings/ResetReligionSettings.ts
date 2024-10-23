@@ -24,9 +24,9 @@ export class ResetReligionBuildingSetting extends SettingThreshold {
     building: FaithItem | UnicornItem,
     variant: UnicornItemVariant,
     enabled = false,
-    trigger = -1,
+    threshold = -1,
   ) {
-    super(enabled, trigger);
+    super(enabled, threshold);
     this.#building = building;
     this.#variant = variant;
   }

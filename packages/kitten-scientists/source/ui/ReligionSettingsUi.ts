@@ -1,17 +1,18 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { ReligionOptions, ReligionSettings, UnicornItems } from "../settings/ReligionSettings.js";
+import { SettingTriggerMax } from "../settings/Settings.js";
 import { ZiggurathUpgrade } from "../types/index.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
-import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import { SettingTriggerMaxListItem } from "./components/SettingTriggerMaxListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class ReligionSettingsUi extends AbstractBuildSettingsPanel<ReligionSettings> {
-  private readonly _unicornBuildings: Array<SettingMaxListItem>;
+export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
+  private readonly _unicornBuildings: Array<SettingTriggerMaxListItem>;
   private readonly _bestUnicornBuilding: SettingListItem;
 
   constructor(host: KittenScientists, settings: ReligionSettings) {
@@ -158,5 +159,23 @@ export class ReligionSettingsUi extends AbstractBuildSettingsPanel<ReligionSetti
       building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;
     }
     super.refreshUi();
+  }
+
+  private _getBuildOption(
+    option: SettingTriggerMax,
+    label: string,
+    delimiter = false,
+    upgradeIndicator = false,
+  ) {
+    return new SettingTriggerMaxListItem(this._host, label, option, {
+      delimiter,
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [label]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [label]);
+      },
+      upgradeIndicator,
+    });
   }
 }

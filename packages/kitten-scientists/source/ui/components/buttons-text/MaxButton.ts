@@ -1,7 +1,7 @@
 import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingMax } from "../../../settings/Settings.js";
-import { AbstractBuildSettingsPanel } from "../../SettingsSectionUi.js";
 import { TextButton } from "../TextButton.js";
+import { UiComponent } from "../UiComponent.js";
 
 export class MaxButton extends TextButton {
   readonly setting: SettingMax;
@@ -14,7 +14,7 @@ export class MaxButton extends TextButton {
   ) {
     super(host, label, {
       onClick: () => {
-        const value = AbstractBuildSettingsPanel.promptLimit(
+        const value = UiComponent.promptLimit(
           host.engine.i18n("ui.max.set", [label]),
           setting.max.toString(),
         );
@@ -41,9 +41,7 @@ export class MaxButton extends TextButton {
 
     this.element.prop("title", this.setting.max.toFixed());
     this.element.text(
-      this._host.engine.i18n("ui.max", [
-        AbstractBuildSettingsPanel.renderLimit(this.setting.max, this._host),
-      ]),
+      this._host.engine.i18n("ui.max", [UiComponent.renderLimit(this.setting.max, this._host)]),
     );
   }
 }

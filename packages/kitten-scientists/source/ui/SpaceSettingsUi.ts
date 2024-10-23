@@ -1,13 +1,15 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
+import { SettingTriggerMax } from "../settings/Settings.js";
 import { SpaceSettings } from "../settings/SpaceSettings.js";
 import { MissionSettingsUi } from "./MissionSettingsUi.js";
-import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import { SettingTriggerMaxListItem } from "./components/SettingTriggerMaxListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class SpaceSettingsUi extends AbstractBuildSettingsPanel<SpaceSettings> {
+export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
   private readonly _missionsUi: MissionSettingsUi;
 
   constructor(host: KittenScientists, settings: SpaceSettings) {
@@ -57,5 +59,23 @@ export class SpaceSettingsUi extends AbstractBuildSettingsPanel<SpaceSettings> {
     this._missionsUi = new MissionSettingsUi(this._host, this.setting.unlockMissions);
     listAddition.addChild(this._missionsUi);
     this.addChild(listAddition);
+  }
+
+  private _getBuildOption(
+    option: SettingTriggerMax,
+    label: string,
+    delimiter = false,
+    upgradeIndicator = false,
+  ) {
+    return new SettingTriggerMaxListItem(this._host, label, option, {
+      delimiter,
+      onCheck: () => {
+        this._host.engine.imessage("status.sub.enable", [label]);
+      },
+      onUnCheck: () => {
+        this._host.engine.imessage("status.sub.disable", [label]);
+      },
+      upgradeIndicator,
+    });
   }
 }

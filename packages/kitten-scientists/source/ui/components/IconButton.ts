@@ -1,11 +1,18 @@
 import { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
+export type IconButtonOptions = UiComponentOptions & {
+  readonly readOnly: boolean;
+  readonly inactive: boolean;
+};
+
 /**
  * A button that is visually represented through an SVG element.
  */
 export class IconButton extends UiComponent {
   readonly element: JQuery;
+  readOnly: boolean;
+  inactive: boolean;
 
   /**
    * Constructs an `IconButton`.
@@ -19,7 +26,7 @@ export class IconButton extends UiComponent {
     host: KittenScientists,
     pathData: string,
     title: string,
-    options?: Partial<UiComponentOptions>,
+    options?: Partial<IconButtonOptions>,
   ) {
     super(host, options);
 
@@ -30,9 +37,35 @@ export class IconButton extends UiComponent {
 
     this.element = element;
     this.addChildren(options?.children);
+    this.readOnly = options?.readOnly ?? false;
+    this.inactive = options?.inactive ?? false;
 
     this.element.on("click", () => {
       this.click();
     });
+  }
+
+  override click() {
+    if (this.readOnly) {
+      return;
+    }
+
+    super.click();
+  }
+
+  override refreshUi(): void {
+    super.refreshUi();
+
+    if (this.readOnly) {
+      this.element.addClass("ks-readonly");
+    } else {
+      this.element.removeClass("ks-readonly");
+    }
+
+    if (this.inactive) {
+      this.element.addClass("ks-inactive");
+    } else {
+      this.element.removeClass("ks-inactive");
+    }
   }
 }

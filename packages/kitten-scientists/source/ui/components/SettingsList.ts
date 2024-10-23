@@ -6,11 +6,11 @@ import { SettingListItem } from "./SettingListItem.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type SettingsListOptions = UiComponentOptions & {
-  readonly hasEnableAll?: boolean;
-  readonly hasDisableAll?: boolean;
-  readonly onEnableAll?: () => void;
-  readonly onDisableAll?: () => void;
-  readonly onReset?: () => void;
+  readonly hasEnableAll: boolean;
+  readonly hasDisableAll: boolean;
+  readonly onEnableAll: () => void;
+  readonly onDisableAll: () => void;
+  readonly onReset: () => void;
 };
 
 /**
