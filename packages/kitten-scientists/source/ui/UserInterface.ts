@@ -448,6 +448,20 @@ export class UserInterface extends UiComponent {
       }`,
     );
 
+    // Dialogs
+    this._addRule(
+      `::backdrop {
+        background-image: linear-gradient(
+          45deg,
+          magenta,
+          rebeccapurple,
+          dodgerblue,
+          green
+        );
+        opacity: 0.75;
+      }`,
+    );
+
     // Rules needed to enable stock warning.
     this._addRule(`
       #ks #toggle-list-resources .stockWarn *,

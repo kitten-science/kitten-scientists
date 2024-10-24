@@ -35,7 +35,11 @@ export class LabelListItem extends ListItem {
 
     this.elementLabel = $("<label/>", {
       text: `${options?.upgradeIndicator === true ? `⮤ ` : ""}${label}`,
-    }).addClass("ks-label");
+    })
+      .addClass("ks-label")
+      .on("click", () => {
+        this.click();
+      });
     this.head.element.append(this.elementLabel);
 
     const spacer = new Container(host);

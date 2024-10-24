@@ -5,6 +5,7 @@ import { EngineSettings } from "../settings/EngineSettings.js";
 import { AbstractBuildSettingsPanel } from "./SettingsSectionUi.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Delimiter } from "./components/Delimiter.js";
+import { Dialog } from "./components/Dialog.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import { OptionsListItem } from "./components/OptionsListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -69,7 +70,11 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
               }),
               new Delimiter(host),
 
-              new LabelListItem(host, `Kitten Scientists ${ksVersion("v")}`),
+              new LabelListItem(host, `Kitten Scientists ${ksVersion("v")}`, {
+                onClick: () => {
+                  new Dialog(host).show();
+                },
+              }),
             ],
             hasDisableAll: false,
             hasEnableAll: false,
