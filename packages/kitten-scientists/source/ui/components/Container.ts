@@ -11,11 +11,12 @@ export class Container extends UiComponent {
    * @param options Options for the container.
    */
   constructor(host: KittenScientists, options?: Partial<UiComponentOptions>) {
-    super(host, options);
+    super(host, { ...options, children: [], classes: [] });
 
-    const element = $("<div/>");
+    this.element = $("<div/>");
 
-    this.element = element;
+    options?.classes?.forEach(className => this.element.addClass(className));
+
     this.addChildren(options?.children);
   }
 }

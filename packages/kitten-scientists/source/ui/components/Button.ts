@@ -24,20 +24,23 @@ export class Button extends UiComponent {
   constructor(
     host: KittenScientists,
     label: string,
-    pathData: string | null,
+    pathData: string | null = null,
     options?: Partial<ButtonOptions>,
   ) {
-    super(host, options);
+    super(host, { ...options, children: [], classes: [] });
 
-    const element = $("<div/>", { title: options?.title }).addClass("ks-button").text(label);
+    this.element = $("<div/>", { title: options?.title }).addClass("ks-button").text(label);
+
     if (pathData !== null) {
       this._iconElement = $(
         `<svg class="ks-button-icon" style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
       );
-      element.prepend(this._iconElement);
+      this.element.prepend(this._iconElement);
     }
 
-    element.on("click", () => {
+    options?.classes?.forEach(className => this.element.addClass(className));
+
+    this.element.on("click", () => {
       if (this.readOnly) {
         return;
       }
@@ -45,7 +48,6 @@ export class Button extends UiComponent {
       this.click();
     });
 
-    this.element = element;
     this.addChildren(options?.children);
     this.readOnly = false;
   }

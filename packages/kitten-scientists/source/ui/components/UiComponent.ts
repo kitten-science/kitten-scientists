@@ -3,6 +3,7 @@ import { cerror } from "../../tools/Log.js";
 
 export type UiComponentOptions<TChild extends UiComponent = UiComponent> = {
   readonly children: Array<TChild>;
+  readonly classes: Array<string>;
   readonly onClick: (subject: UiComponent) => void;
   readonly onRefresh: (subject: UiComponent) => void;
 };
