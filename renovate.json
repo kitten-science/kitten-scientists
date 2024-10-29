@@ -6,6 +6,10 @@
     {
       "matchPackageNames": ["*"],
       "automerge": false
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "extends": ["schedule:weekly"]
     }
   ]
 }
