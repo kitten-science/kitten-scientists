@@ -52,9 +52,6 @@ export class TimeManager {
     if (this.settings.fixCryochambers.enabled) {
       this.fixCryochambers();
     }
-    if (this.settings.turnOnChronoFurnace.enabled) {
-      this.turnOnChronoFurnace();
-    }
   }
 
   /**
@@ -198,17 +195,6 @@ export class TimeManager {
     if (0 < fixed) {
       this._host.engine.iactivity("act.fix.cry", [fixed], "ks-fixCry");
       this._host.engine.storeForSummary("fix.cry", fixed);
-    }
-  }
-
-  turnOnChronoFurnace() {
-    const chronoFurnace = this._host.game.time.getCFU("blastFurnace");
-    if (!mustExist(chronoFurnace.isAutomationEnabled)) {
-      const button = this.getBuildButton("blastFurnace", TimeItemVariant.Chronoforge);
-      if (isNil(button?.model)) {
-        return;
-      }
-      button.controller.handleToggleAutomationLinkClick(button.model);
     }
   }
 }

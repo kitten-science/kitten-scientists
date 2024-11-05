@@ -38,18 +38,11 @@ export class TimeSettings extends SettingTrigger {
   buildings: TimeBuildingsSettings;
 
   fixCryochambers: Setting;
-  turnOnChronoFurnace: Setting;
 
-  constructor(
-    enabled = false,
-    trigger = -1,
-    fixCryochambers = new Setting(false),
-    turnOnChronoFurnace = new Setting(false),
-  ) {
+  constructor(enabled = false, trigger = -1, fixCryochambers = new Setting(false)) {
     super(enabled, trigger);
     this.buildings = this.initBuildings();
     this.fixCryochambers = fixCryochambers;
-    this.turnOnChronoFurnace = turnOnChronoFurnace;
   }
 
   private initBuildings(): TimeBuildingsSettings {
@@ -78,6 +71,5 @@ export class TimeSettings extends SettingTrigger {
     });
 
     this.fixCryochambers.load(settings.fixCryochambers);
-    this.turnOnChronoFurnace.load(settings.turnOnChronoFurnace);
   }
 }
