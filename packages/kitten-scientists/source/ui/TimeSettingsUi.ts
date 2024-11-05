@@ -119,23 +119,6 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
               },
             },
           ),
-          new SettingListItem(
-            this._host,
-            this._host.engine.i18n("option.chronofurnace"),
-            this.setting.turnOnChronoFurnace,
-            {
-              onCheck: () => {
-                this._host.engine.imessage("status.sub.enable", [
-                  this._host.engine.i18n("option.chronofurnace"),
-                ]);
-              },
-              onUnCheck: () => {
-                this._host.engine.imessage("status.sub.disable", [
-                  this._host.engine.i18n("option.chronofurnace"),
-                ]);
-              },
-            },
-          ),
         ],
         hasDisableAll: false,
         hasEnableAll: false,
