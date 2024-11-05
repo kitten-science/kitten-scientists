@@ -32,20 +32,6 @@ jobs:
       - name: Build release
         run: yarn kitten-scientists:release
 
-      - name: Generate SBOM
-        uses: anchore/sbom-action@1ca97d9028b51809cf6d3c934c3e160716e1b605 # v0
-        with:
-          format: spdx-json
-          output-file: sbom.spdx.json
-          upload-artifact: false
-          upload-release-assets: false
-
-      - name: Attest SBOM
-        uses: actions/attest-sbom@5026d3663739160db546203eeaffa6aa1c51a4d6 # v1
-        with:
-          subject-path: packages/kitten-scientists/output/*
-          sbom-path: sbom.spdx.json
-
       - name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@b71ef9d38dc33685ba2884a5bb6bce5a3037d3bf # v0.0.21
         with:
@@ -53,7 +39,6 @@ jobs:
           draft: true
           files: |
             packages/kitten-scientists/output/*
-            sbom.spdx.json
           prerelease: false
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ github.ref_name }}
