@@ -3,9 +3,9 @@ import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
 import { Game, Technologies, Technology } from "../types/index.js";
-import { Setting } from "./Settings.js";
+import { SettingTrigger } from "./Settings.js";
 
-export class TechSetting extends Setting {
+export class TechSetting extends SettingTrigger {
   readonly #tech: Technology;
 
   get tech() {
@@ -13,18 +13,18 @@ export class TechSetting extends Setting {
   }
 
   constructor(tech: Technology, enabled = false) {
-    super(enabled);
+    super(enabled, -1);
     this.#tech = tech;
   }
 }
 
 export type TechTechSettings = Record<Technology, TechSetting>;
 
-export class TechSettings extends Setting {
+export class TechSettings extends SettingTrigger {
   techs: TechTechSettings;
 
   constructor(enabled = false) {
-    super(enabled);
+    super(enabled, 0);
     this.techs = this.initTechs();
   }
 
@@ -60,6 +60,7 @@ export class TechSettings extends Setting {
 
     consumeEntriesPedantic(this.techs, settings.techs, (tech, item) => {
       tech.enabled = item?.enabled ?? tech.enabled;
+      tech.trigger = item?.trigger ?? tech.trigger;
     });
   }
 }

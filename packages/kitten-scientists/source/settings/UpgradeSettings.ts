@@ -3,9 +3,9 @@ import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
 import { Game, Upgrade, Upgrades } from "../types/index.js";
-import { Setting } from "./Settings.js";
+import { SettingTrigger } from "./Settings.js";
 
-export class UpgradeSettingsItem extends Setting {
+export class UpgradeSettingsItem extends SettingTrigger {
   readonly #upgrade: Upgrade;
 
   get upgrade() {
@@ -13,18 +13,18 @@ export class UpgradeSettingsItem extends Setting {
   }
 
   constructor(upgrade: Upgrade, enabled = false) {
-    super(enabled);
+    super(enabled, -1);
     this.#upgrade = upgrade;
   }
 }
 
 export type UpgradeSettingsItems = Record<Upgrade, UpgradeSettingsItem>;
 
-export class UpgradeSettings extends Setting {
+export class UpgradeSettings extends SettingTrigger {
   readonly upgrades: UpgradeSettingsItems;
 
   constructor(enabled = false) {
-    super(enabled);
+    super(enabled, 0);
     this.upgrades = this.initUpgrades();
   }
 
@@ -60,6 +60,7 @@ export class UpgradeSettings extends Setting {
 
     consumeEntriesPedantic(this.upgrades, settings.upgrades, (upgrade, item) => {
       upgrade.enabled = item?.enabled ?? upgrade.enabled;
+      upgrade.trigger = item?.trigger ?? upgrade.trigger;
     });
   }
 }

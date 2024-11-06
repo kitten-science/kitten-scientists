@@ -56,7 +56,7 @@ export class SettingLimited extends Setting {
 export class SettingTrigger extends Setting {
   trigger: number;
 
-  constructor(enabled = false, trigger = 1) {
+  constructor(enabled = false, trigger = -1) {
     super(enabled);
     this.trigger = trigger;
   }

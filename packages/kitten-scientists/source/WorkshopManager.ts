@@ -1,5 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, FrameContext } from "./Engine.js";
+import { Automation, Engine, FrameContext } from "./Engine.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
@@ -67,9 +67,14 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       // Create a copy of the prices for this upgrade, so that we can apply effects to it.
       let prices = UserScriptLoader.window.dojo.clone(upgrade.prices);
       prices = this._host.game.village.getEffectLeader("scientist", prices);
-      for (const resource of prices) {
-        // If we can't afford this resource price, continue with the next upgrade.
-        if (this.getValueAvailable(resource.name) < resource.val) {
+      for (const price of prices) {
+        const available = this.getValueAvailable(price.name);
+        const resource = this.getResource(price.name);
+        const trigger = Engine.evaluateSubSectionTrigger(
+          this.settings.unlockUpgrades.trigger,
+          setting.trigger,
+        );
+        if (available < resource.maxValue * trigger || available < price.val) {
           continue workLoop;
         }
       }
