@@ -1,12 +1,16 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { SupportedLanguage } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
-import { Setting, SettingOptions } from "../settings/Settings.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { UpgradeSettings } from "../settings/UpgradeSettings.js";
+import { PaddingButton } from "./components/buttons-icon/PaddingButton.js";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { Dialog } from "./components/Dialog.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import { UiComponent } from "./components/UiComponent.js";
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
   constructor(
@@ -19,71 +23,133 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     super(
       host,
       settings,
-      new SettingListItem(host, label, settings, {
+      new SettingTriggerListItem(host, label, settings, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
         },
+        onRefresh: item => {
+          (item as SettingTriggerListItem).triggerButton.inactive = settings.trigger < 0;
+        },
+        onRefreshTrigger: item => {
+          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+            settings.trigger < 0
+              ? host.engine.i18n("ui.trigger.section.inactive")
+              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+          ]);
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.prompt.percentage"),
+            host.engine.i18n("ui.trigger.section.prompt", [
+              label,
+              settings.trigger !== -1
+                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                : host.engine.i18n("ui.infinity"),
+            ]),
+            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            host.engine.i18n("ui.trigger.section.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined) {
+                return;
+              }
+
+              if (value === "" || value.startsWith("-")) {
+                settings.trigger = -1;
+                return;
+              }
+
+              settings.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              this.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
+        },
       }),
       options,
     );
 
-    const upgrades = this._host.game.workshop.upgrades.filter(
+    const upgrades = host.game.workshop.upgrades.filter(
       upgrade => !isNil(this.setting.upgrades[upgrade.name]),
     );
 
     const localeSupportsSortMethod = language.selected !== "zh";
-    // Ensure buttons are added into UI with their labels alphabetized.
-    // This approach is not applicable to all locales!
-    if (localeSupportsSortMethod) {
-      upgrades.sort((a, b) => a.label.localeCompare(b.label));
+
+    const items = [];
+    let lastLabel = upgrades[0].label;
+    let lastElement: SettingTriggerListItem | undefined;
+    for (const upgrade of localeSupportsSortMethod
+      ? upgrades.sort((a, b) => a.label.localeCompare(b.label))
+      : upgrades) {
+      if (!isNil(lastElement) && localeSupportsSortMethod && lastLabel[0] !== upgrade.label[0]) {
+        lastElement.element.addClass("ks-delimiter");
+      }
+
+      const option = this.setting.upgrades[upgrade.name];
+
+      const element = new SettingTriggerListItem(host, upgrade.label, option, {
+        onCheck: () => {
+          host.engine.imessage("status.sub.enable", [upgrade.label]);
+        },
+        onUnCheck: () => {
+          host.engine.imessage("status.sub.disable", [upgrade.label]);
+        },
+        onRefresh: () => {
+          element.triggerButton.inactive = option.trigger === -1;
+        },
+        onRefreshTrigger: () => {
+          element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+            option.trigger < 0
+              ? settings.trigger < 0
+                ? host.engine.i18n("ui.trigger.build.blocked", [label])
+                : `${UiComponent.renderPercentage(settings.trigger)}% (${host.engine.i18n("ui.trigger.build.inherited")})`
+              : `${UiComponent.renderPercentage(option.trigger)}%`,
+          ]);
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.prompt.percentage"),
+            host.engine.i18n("ui.trigger.section.prompt", [
+              label,
+              option.trigger !== -1
+                ? `${Dialog.renderPercentage(option.trigger)}%`
+                : host.engine.i18n("ui.trigger.build.inherited"),
+            ]),
+            option.trigger !== -1 ? Dialog.renderPercentage(option.trigger) : "",
+            host.engine.i18n("ui.trigger.build.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined) {
+                return;
+              }
+
+              if (value === "" || value.startsWith("-")) {
+                option.trigger = -1;
+                return;
+              }
+
+              option.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              element.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
+        },
+      });
+      element.head.addChild(new PaddingButton(host));
+
+      lastElement = element;
+      items.push(element);
+
+      lastLabel = upgrade.label;
     }
 
-    let lastLabel = upgrades[0].label;
-    let lastElement: SettingListItem;
-
-    this.addChild(
-      new SettingsList(this._host, {
-        children: upgrades.reduce<Array<SettingListItem>>((items, upgrade) => {
-          if (
-            !isNil(lastElement) &&
-            localeSupportsSortMethod &&
-            lastLabel[0] !== upgrade.label[0]
-          ) {
-            lastElement.element.addClass("ks-delimiter");
-          }
-
-          const element = this._getUpgradeOption(
-            this.setting.upgrades[upgrade.name],
-            upgrade.label,
-          );
-          lastElement = element;
-          items.push(element);
-
-          lastLabel = upgrade.label;
-          return items;
-        }, []),
-      }),
-    );
-  }
-
-  private _getUpgradeOption(
-    option: Setting,
-    i18nName: string,
-    delimiter = false,
-    upgradeIndicator = false,
-  ) {
-    return new SettingListItem(this._host, i18nName, option, {
-      delimiter,
-      onCheck: () => {
-        this._host.engine.imessage("status.sub.enable", [i18nName]);
-      },
-      onUnCheck: () => {
-        this._host.engine.imessage("status.sub.disable", [i18nName]);
-      },
-      upgradeIndicator,
-    });
+    this.addChild(new SettingsList(host, { children: items }));
   }
 }

@@ -512,4 +512,12 @@ export class Engine {
 
     cdebug(...args);
   }
+
+  static evaluateSubSectionTrigger(sectionTrigger: number, subSectionTrigger: number): number {
+    return sectionTrigger < 0
+      ? subSectionTrigger
+      : subSectionTrigger < 0
+        ? sectionTrigger
+        : subSectionTrigger;
+  }
 }

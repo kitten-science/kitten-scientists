@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { FrameContext } from "./Engine.js";
+import { Engine, FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { TabManager } from "./TabManager.js";
@@ -70,8 +70,14 @@ export class ScienceManager extends UpgradeManager {
 
       let prices = UserScriptLoader.window.dojo.clone(tech.prices);
       prices = this._host.game.village.getEffectLeader("scientist", prices);
-      for (const resource of prices) {
-        if (this._workshopManager.getValueAvailable(resource.name) < resource.val) {
+      for (const price of prices) {
+        const available = this._workshopManager.getValueAvailable(price.name);
+        const resource = this._workshopManager.getResource(price.name);
+        const trigger = Engine.evaluateSubSectionTrigger(
+          this.settings.techs.trigger,
+          setting.trigger,
+        );
+        if (available < resource.maxValue * trigger || available < price.val) {
           continue workLoop;
         }
       }
