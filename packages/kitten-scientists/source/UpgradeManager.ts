@@ -1,5 +1,6 @@
 import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
+import { cwarn } from "./tools/Log.js";
 import { BuildButton, ScienceTab } from "./types/index.js";
 
 export abstract class UpgradeManager {
@@ -21,7 +22,7 @@ export abstract class UpgradeManager {
     }
 
     if (!button.model.enabled) {
-      console.warn("Upgrade request on disabled button!");
+      cwarn(`${button.model.name} Upgrade request on disabled button!`);
       button.render();
       return false;
     }

@@ -96,7 +96,7 @@
   "reset.cancel.activity": "Meoston, We Have a Problem",
   "reset.cancel.message": "Timeline Reset canceled",
   "reset.check": "Trigger for {0}: {1}, you have {2}",
-  "reset.checked": "All conditions are met, the timeline will restart in next few seconds!",
+  "reset.checked": "All conditions are met, the timeline will restart in the next few seconds!",
   "reset.countdown.0": "0 - Temporal rifts opened!",
   "reset.countdown.1": "1 - Time engine start",
   "reset.countdown.10": "10 - Harvesting catnip",
