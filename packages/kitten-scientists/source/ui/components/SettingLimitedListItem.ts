@@ -3,7 +3,7 @@ import { SettingLimited } from "../../settings/Settings.js";
 import { LimitedButton } from "./LimitedButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
-export type SettingLimitedListItemOptions = SettingListItemOptions & {
+export type SettingListItemOptionsLimited = {
   /**
    * Is called when the "Limited" checkbox is checked.
    */
@@ -31,7 +31,7 @@ export class SettingLimitedListItem extends SettingListItem {
     host: KittenScientists,
     label: string,
     setting: SettingLimited,
-    options?: Partial<SettingLimitedListItemOptions>,
+    options?: Partial<SettingListItemOptions & SettingListItemOptionsLimited>,
   ) {
     super(host, label, setting, options);
 

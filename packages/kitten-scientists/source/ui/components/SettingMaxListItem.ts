@@ -3,6 +3,10 @@ import { SettingMax } from "../../settings/Settings.js";
 import { MaxButton } from "./buttons-text/MaxButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
+export type SettingListItemOptionsMax = {
+  readonly onSetMax: (subject: SettingMaxListItem) => void;
+};
+
 export class SettingMaxListItem extends SettingListItem<SettingMax> {
   readonly maxButton: MaxButton;
 
@@ -20,7 +24,7 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
     host: KittenScientists,
     label: string,
     setting: SettingMax,
-    options?: Partial<SettingListItemOptions>,
+    options?: Partial<SettingListItemOptions & SettingListItemOptionsMax>,
   ) {
     super(host, label, setting, options);
 

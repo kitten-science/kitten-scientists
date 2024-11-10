@@ -1,7 +1,9 @@
 import { KittenScientists } from "../../KittenScientists.js";
 import { SettingLimitedMax } from "../../settings/Settings.js";
 import { MaxButton } from "./buttons-text/MaxButton.js";
-import { SettingLimitedListItem, SettingLimitedListItemOptions } from "./SettingLimitedListItem.js";
+import { SettingLimitedListItem, SettingListItemOptionsLimited } from "./SettingLimitedListItem.js";
+import { SettingListItemOptions } from "./SettingListItem.js";
+import { SettingListItemOptionsMax } from "./SettingMaxListItem.js";
 
 export class SettingLimitedMaxListItem extends SettingLimitedListItem {
   readonly maxButton: MaxButton;
@@ -22,7 +24,9 @@ export class SettingLimitedMaxListItem extends SettingLimitedListItem {
     host: KittenScientists,
     label: string,
     setting: SettingLimitedMax,
-    options?: Partial<SettingLimitedListItemOptions>,
+    options?: Partial<
+      SettingListItemOptions & SettingListItemOptionsLimited & SettingListItemOptionsMax
+    >,
   ) {
     super(host, label, setting, options);
 

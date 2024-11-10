@@ -3,7 +3,7 @@ import { SettingThreshold, SettingTrigger } from "../../settings/Settings.js";
 import { TriggerButton } from "./buttons-icon/TriggerButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
-export type SettingTriggerListItemOptions = SettingListItemOptions & {
+export type SettingListItemOptionsTrigger = {
   readonly onRefreshTrigger: (subject: SettingTriggerListItem) => void;
   readonly onSetTrigger: (subject: SettingTriggerListItem) => void;
 };
@@ -15,7 +15,7 @@ export class SettingTriggerListItem extends SettingListItem {
     host: KittenScientists,
     label: string,
     setting: SettingThreshold | SettingTrigger,
-    options?: Partial<SettingTriggerListItemOptions>,
+    options?: Partial<SettingListItemOptions & SettingListItemOptionsTrigger>,
   ) {
     super(host, label, setting, options);
 

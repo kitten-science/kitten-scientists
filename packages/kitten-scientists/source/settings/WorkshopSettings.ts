@@ -3,10 +3,10 @@ import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
 import { Game, ResourceCraftable, ResourcesCraftable } from "../types/index.js";
-import { Setting, SettingLimitedMax, SettingTrigger } from "./Settings.js";
+import { Setting, SettingLimitedMaxTrigger, SettingTrigger } from "./Settings.js";
 import { UpgradeSettings } from "./UpgradeSettings.js";
 
-export class CraftSettingsItem extends SettingLimitedMax {
+export class CraftSettingsItem extends SettingLimitedMaxTrigger {
   readonly #resource: ResourceCraftable;
 
   get resource() {
@@ -75,6 +75,7 @@ export class WorkshopSettings extends SettingTrigger {
       resource.enabled = item?.enabled ?? resource.enabled;
       resource.limited = item?.limited ?? resource.limited;
       resource.max = item?.max ?? resource.max;
+      resource.trigger = item?.trigger ?? resource.trigger;
     });
 
     this.unlockUpgrades.load(settings.unlockUpgrades);

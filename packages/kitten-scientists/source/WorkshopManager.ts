@@ -185,24 +185,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         const materialAmount = mustExist(materials[material.resource]);
 
         const materialResource = this.getResource(material.resource);
-        const materialCraft =
-          material.resource in this.settings.resources
-            ? this.settings.resources[material.resource as ResourceCraftable]
-            : undefined;
 
         if (
           // For unlimited crafts, assign all resources.
           !craft.limited ||
-          // For materials that have a resource cap, also assign all resources.
-          // It makes no sense to apply source material balancing here. If we did, we'd stop
-          // crafting resources when the source material becomes capped. We would never be able
-          // to get enough source stock so the balancing would allow for more crafts.
-          0 < materialResource.maxValue ||
-          // For materials that are also crafted, if they have already been crafted to their `max`,
-          // treat them the same as capped source materials, to avoid the same conflict.
-          (!isNil(materialCraft) && -1 < materialCraft.max
-            ? materialCraft.max - materialResource.value < 1
-            : false) ||
           // Handle the ship override.
           (craft.resource === "ship" &&
             this.settings.shipOverride.enabled &&
@@ -229,12 +215,31 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
         // How many crafts were hypothetically done to produce the current amount of target resource.
         const craftsDone = availableTarget / recipeProduces;
+        // The "order of magnitude" (how many powers of 10) of the existing target resource.
+        const orderDone = Math.max(0, Math.floor(Math.log(craftsDone) / Math.LN10 + 0.000000001));
 
-        // Craft only when the craftsPossible >= craftsDone.
         // Crafting gets progressively more expensive as the amount of the target increases.
         // This heuristic gives other, cheaper, targets a chance to get built from the same source resource.
-        // There is no checking if there actually exists a different target that could get built.
-        amount = Math.min(amount, craftsPossible - craftsDone, material.consume / materialAmount);
+        amount = Math.min(
+          // Whatever was previously assumed as the best amount.
+          amount,
+          // We want to craft the lowest amount of these values, as we're in the "limited" mode.
+          Math.min(
+            // We take the possible crafts as the baseline
+            craftsPossible -
+              // If the source material is one that has a storage capacity, and the storage is full,
+              // then we want to allow all possible crafts to be crafted. So we subtract 0.
+              (0 < materialResource.maxValue && materialResource.maxValue <= materialResource.value
+                ? 0
+                : // If the resource is not capped, we subtract the crafts we have already done.
+                  craftsDone),
+            // The safe limit is to buy the next higher order of magnitude of items, to not
+            // waste all resources if the target resource is very low, like after a reset with chronospheres.
+            Math.pow(10, orderDone + 1),
+          ),
+          // The amount of resources we could craft, based on our consume rate.
+          material.consume / materialAmount,
+        );
       }
 
       request.countRequested = Math.max(
