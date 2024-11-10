@@ -13,7 +13,7 @@ declare global {
   interface Window {
     kittenAnalysts?: KittenAnalysts;
   }
-  const KA_CONNECT_BACKEND: string | undefined;
+  const KA_CONNECT_BACKEND: boolean | undefined;
 }
 
 export type KittenAnalystsMessageId =

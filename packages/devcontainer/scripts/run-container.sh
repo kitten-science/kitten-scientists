@@ -15,7 +15,7 @@ main() {
   REPO=${2:-https://github.com/nuclear-unicorn/kittensgame.git}
 
   echo "Building everything..."
-  yarn build:all
+  KA_CONNECT_BACKEND="" yarn build:all
   echo "Done building everything."
 
   echo "Building Devcontainer..."
