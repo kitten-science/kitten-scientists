@@ -189,6 +189,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
           material.resource in this.settings.resources
             ? this.settings.resources[material.resource as ResourceCraftable]
             : undefined;
+
         if (
           // For unlimited crafts, assign all resources.
           !craft.limited ||
@@ -235,6 +236,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         // There is no checking if there actually exists a different target that could get built.
         amount = Math.min(amount, craftsPossible - craftsDone, material.consume / materialAmount);
       }
+
       request.countRequested = Math.max(
         0,
         craft.max === -1

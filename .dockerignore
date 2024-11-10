@@ -2,7 +2,5 @@
 .yarn
 contrib
 docs
-node_modules
 packages/action-release-info
 packages/documentation
-
