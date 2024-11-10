@@ -53,10 +53,6 @@ export class Button extends UiComponent {
     this.addChildren(options?.children);
     this.readOnly = options?.readOnly ?? false;
     this.inactive = options?.inactive ?? false;
-
-    this.element.on("click", () => {
-      this.click();
-    });
   }
 
   updateLabel(label: string) {
