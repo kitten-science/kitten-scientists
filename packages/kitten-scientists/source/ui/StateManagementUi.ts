@@ -390,14 +390,15 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     }
 
     // If game contains KS settings, import those separately.
+    let stateLabel: string | undefined;
     if ("ks" in subjectData && !isNil(subjectData.ks)) {
       const state = subjectData.ks.state[0];
-      this.storeState(state);
+      stateLabel = this.storeState(state);
       this._host.engine.imessage("state.imported.state");
       delete subjectData.ks;
     }
 
-    this.storeGame(subjectData);
+    this.storeGame(subjectData, stateLabel);
     this._host.engine.imessage("state.imported.game");
   }
 
@@ -424,7 +425,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.refreshUi();
   }
 
-  storeState(state?: EngineState, label?: string) {
+  storeState(state?: EngineState, label?: string): string {
     let stateLabel =
       label ?? window.prompt(this._host.engine.i18n("state.storeState.prompt")) ?? undefined;
 
@@ -445,6 +446,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     this._storeStates();
     this.refreshUi();
+
+    return stateLabel;
   }
 
   storeStateFactoryDefaults() {
