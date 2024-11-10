@@ -1,4 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { SupportedLanguage } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions } from "../settings/Settings.js";
@@ -6,11 +7,14 @@ import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSetting
 import { ucfirst } from "../tools/Format.js";
 import { ResourceCraftable } from "../types/index.js";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
-import { SettingLimitedMaxListItem } from "./components/SettingLimitedMaxListItem.js";
+import { Dialog } from "./components/Dialog.js";
+import { SettingLimitedMaxTriggerListItem } from "./components/SettingLimitedMaxTriggerListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { UiComponent } from "./components/UiComponent.js";
+import { PaddingButton } from "./components/buttons-icon/PaddingButton.js";
 
 export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
   private readonly _crafts: Array<SettingListItem>;
@@ -31,6 +35,46 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
         },
+        onRefresh: item => {
+          (item as SettingTriggerListItem).triggerButton.inactive = settings.trigger < 0;
+        },
+        onRefreshTrigger: item => {
+          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+            settings.trigger < 0
+              ? host.engine.i18n("ui.trigger.section.inactive")
+              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+          ]);
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.prompt.percentage"),
+            host.engine.i18n("ui.trigger.section.prompt", [
+              label,
+              settings.trigger !== -1
+                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                : host.engine.i18n("ui.infinity"),
+            ]),
+            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            host.engine.i18n("ui.trigger.section.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined) {
+                return;
+              }
+
+              if (value === "" || value.startsWith("-")) {
+                settings.trigger = -1;
+                return;
+              }
+
+              settings.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              this.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
+        },
       }),
     );
 
@@ -49,15 +93,68 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
       .map(resource => [this.setting.resources[resource.name], ucfirst(resource.label)]);
 
     this._crafts = [];
-    for (const [setting, label] of preparedCrafts) {
-      this._crafts.push(
-        this._getCraftOption(
-          setting,
-          label,
-          setting.resource === "kerosene" || setting.resource === "blueprint",
-        ),
-      );
-      if (setting.resource === "ship") {
+    for (const [option, label] of preparedCrafts) {
+      const element = new SettingLimitedMaxTriggerListItem(this._host, label, option, {
+        delimiter: option.resource === "kerosene" || option.resource === "blueprint",
+        onCheck: () => {
+          this._host.engine.imessage("status.sub.enable", [label]);
+        },
+        onUnCheck: () => {
+          this._host.engine.imessage("status.sub.disable", [label]);
+        },
+        onLimitedCheck: () => {
+          this._host.engine.imessage("craft.limited", [label]);
+        },
+        onLimitedUnCheck: () => {
+          this._host.engine.imessage("craft.unlimited", [label]);
+        },
+        onRefresh: () => {
+          element.triggerButton.inactive = option.trigger === -1;
+        },
+        onRefreshTrigger: () => {
+          element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+            option.trigger < 0
+              ? settings.trigger < 0
+                ? host.engine.i18n("ui.trigger.build.blocked", [label])
+                : `${UiComponent.renderPercentage(settings.trigger)}% (${host.engine.i18n("ui.trigger.build.inherited")})`
+              : `${UiComponent.renderPercentage(option.trigger)}%`,
+          ]);
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.prompt.percentage"),
+            host.engine.i18n("ui.trigger.section.prompt", [
+              label,
+              option.trigger !== -1
+                ? `${Dialog.renderPercentage(option.trigger)}%`
+                : host.engine.i18n("ui.trigger.build.inherited"),
+            ]),
+            option.trigger !== -1 ? Dialog.renderPercentage(option.trigger) : "",
+            host.engine.i18n("ui.trigger.build.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined) {
+                return;
+              }
+
+              if (value === "" || value.startsWith("-")) {
+                option.trigger = -1;
+                return;
+              }
+
+              option.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              element.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
+        },
+      });
+      element.head.addChild(new PaddingButton(host));
+      this._crafts.push(element);
+
+      if (option.resource === "ship") {
         this._crafts.push(
           new SettingListItem(
             this._host,
@@ -97,29 +194,5 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
         hasEnableAll: false,
       }),
     );
-  }
-
-  private _getCraftOption(
-    option: CraftSettingsItem,
-    label: string,
-    delimiter = false,
-    upgradeIndicator = false,
-  ) {
-    return new SettingLimitedMaxListItem(this._host, label, option, {
-      delimiter,
-      onCheck: () => {
-        this._host.engine.imessage("status.sub.enable", [label]);
-      },
-      onUnCheck: () => {
-        this._host.engine.imessage("status.sub.disable", [label]);
-      },
-      onLimitedCheck: () => {
-        this._host.engine.imessage("craft.limited", [label]);
-      },
-      onLimitedUnCheck: () => {
-        this._host.engine.imessage("craft.unlimited", [label]);
-      },
-      upgradeIndicator,
-    });
   }
 }

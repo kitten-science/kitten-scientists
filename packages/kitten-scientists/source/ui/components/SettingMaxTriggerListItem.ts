@@ -4,14 +4,10 @@ import { PaddingButton } from "./buttons-icon/PaddingButton.js";
 import { TriggerButton } from "./buttons-icon/TriggerButton.js";
 import { MaxButton } from "./buttons-text/MaxButton.js";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
+import { SettingListItemOptionsMax } from "./SettingMaxListItem.js";
+import { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
 
-export type SettingTriggerMaxListItemOptions = SettingListItemOptions & {
-  readonly onRefreshTrigger: (subject: SettingTriggerMaxListItem) => void;
-  readonly onSetMax: (subject: SettingTriggerMaxListItem) => void;
-  readonly onSetTrigger: (subject: SettingTriggerMaxListItem) => void;
-};
-
-export class SettingTriggerMaxListItem extends SettingListItem<SettingTriggerMax> {
+export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax> {
   readonly maxButton: MaxButton;
   readonly triggerButton: TriggerButton;
 
@@ -19,7 +15,9 @@ export class SettingTriggerMaxListItem extends SettingListItem<SettingTriggerMax
     host: KittenScientists,
     label: string,
     setting: SettingTriggerMax,
-    options?: Partial<SettingTriggerMaxListItemOptions>,
+    options?: Partial<
+      SettingListItemOptions & SettingListItemOptionsMax & SettingListItemOptionsTrigger
+    >,
   ) {
     super(host, label, setting, options);
 

@@ -5,7 +5,7 @@ import { ResetSpaceSettings } from "../settings/ResetSpaceSettings.js";
 import { SettingTrigger } from "../settings/Settings.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
-import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
 export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> {
@@ -41,7 +41,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    return new SettingTriggerLimitListItem(this._host, i18nName, option, {
+    return new SettingTriggerListItem(this._host, i18nName, option, {
       delimiter,
       onCheck: () => {
         this._host.engine.imessage("status.reset.check.enable", [i18nName]);

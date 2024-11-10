@@ -6,7 +6,6 @@ import { SettingTrigger } from "../settings/Settings.js";
 import { StagedBuilding } from "../types/index.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
-import { SettingTriggerLimitListItem } from "./components/SettingTriggerLimitListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
@@ -61,7 +60,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    return new SettingTriggerLimitListItem(this._host, i18nName, option, {
+    return new SettingTriggerListItem(this._host, i18nName, option, {
       delimiter,
       onCheck: () => {
         this._host.engine.imessage("status.reset.check.enable", [i18nName]);

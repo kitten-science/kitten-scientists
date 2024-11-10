@@ -8,14 +8,14 @@ import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
-import { SettingTriggerMaxListItem } from "./components/SettingTriggerMaxListItem.js";
+import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { UiComponent } from "./components/UiComponent.js";
 
 export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
-  private readonly _unicornBuildings: Array<SettingTriggerMaxListItem>;
+  private readonly _unicornBuildings: Array<SettingMaxTriggerListItem>;
   private readonly _bestUnicornBuilding: SettingListItem;
 
   constructor(host: KittenScientists, settings: ReligionSettings) {

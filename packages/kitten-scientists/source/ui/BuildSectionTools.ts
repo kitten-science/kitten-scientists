@@ -2,7 +2,7 @@ import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
 import { Dialog } from "./components/Dialog.js";
-import { SettingTriggerMaxListItem } from "./components/SettingTriggerMaxListItem.js";
+import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { UiComponent } from "./components/UiComponent.js";
 
 export const BuildSectionTools = {
@@ -15,7 +15,7 @@ export const BuildSectionTools = {
     delimiter = false,
     upgradeIndicator = false,
   ) => {
-    const buildOption = new SettingTriggerMaxListItem(host, label, option, {
+    const buildOption = new SettingMaxTriggerListItem(host, label, option, {
       delimiter,
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [label]);
