@@ -15,8 +15,6 @@ concurrency:
 
 jobs:
   qa-commit:
-    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
-    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
     name: QA Commit
     permissions:
       contents: read
@@ -64,14 +62,10 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
 
   qa:
-    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
-    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
     name: 🔹 QA
     uses: oliversalzburg/workflows/.github/workflows/qa-browser-app.yml@main
 
   qa-devcontainer:
-    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
-    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
     name: 🔹 QA Devcontainer
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
@@ -82,8 +76,6 @@ jobs:
       containerfile: packages/devcontainer/Containerfile
       working-directory: packages/devcontainer
   qa-ka-backend:
-    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
-    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
     name: 🔹 QA Backend
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
@@ -94,8 +86,6 @@ jobs:
       containerfile: packages/kitten-analysts/backend.Containerfile
       working-directory: packages/kitten-analysts
   qa-ka-game:
-    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
-    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
     name: 🔹 QA Game
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
@@ -106,8 +96,6 @@ jobs:
       containerfile: packages/kitten-analysts/game.Containerfile
       working-directory: packages/kitten-analysts
   qa-ka-ui:
-    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
-    if: github.event_name != 'pull_request' || github.actor != 'renovate[bot]'
     name: 🔹 QA UI
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
@@ -127,8 +115,6 @@ jobs:
       - qa-ka-game
       - qa-ka-ui
     name: QA Passed
-    # We don't need to run this on Renovate PRs. We will already test the `renovate/foo` branch.
-    if: always() && ( github.event_name != 'pull_request' || github.actor != 'renovate[bot]' )
     runs-on: ubuntu-24.04
     steps:
       - name: Failure
