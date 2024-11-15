@@ -25,12 +25,13 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     });
 
     this.addChild(
-      new SettingsList(this._host, {
-        children: this._host.game.resPool.resources
+      new SettingsList(host, {
+        children: host.game.resPool.resources
           .filter(item => !isNil(this.setting.resources[item.name]))
           .sort((a, b) => (language.selected !== "zh" ? a.title.localeCompare(b.title) : 0))
           .map(resource =>
             this._makeResourceSetting(
+              host,
               ucfirst(resource.title),
               this.setting.resources[resource.name],
             ),
@@ -47,19 +48,23 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
    * @param setting The option that is being controlled.
    * @returns A new option with stock value.
    */
-  private _makeResourceSetting(title: string, setting: ResetResourcesSettingsItem) {
+  private _makeResourceSetting(
+    host: KittenScientists,
+    title: string,
+    setting: ResetResourcesSettingsItem,
+  ) {
     // The overall container for this resource item.
-    const container = new SettingListItem(this._host, title, setting, {
+    const container = new SettingListItem(host, title, setting, {
       onCheck: () => {
-        this._host.engine.imessage("status.sub.enable", [title]);
+        host.engine.imessage("status.sub.enable", [title]);
       },
       onUnCheck: () => {
-        this._host.engine.imessage("status.sub.disable", [title]);
+        host.engine.imessage("status.sub.disable", [title]);
       },
     });
 
     // How many items to stock.
-    const stockElement = new StockButton(this._host, title, setting);
+    const stockElement = new StockButton(host, title, setting);
     container.head.addChild(stockElement);
 
     return container;

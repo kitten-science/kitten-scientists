@@ -42,26 +42,22 @@ export class UserInterface extends UiComponent {
   constructor(host: KittenScientists) {
     super(host);
 
-    const engine = this._host.engine;
-    this._engineUi = new EngineSettingsUi(this._host, engine.settings);
+    const engine = host.engine;
+    this._engineUi = new EngineSettingsUi(host, engine.settings);
     this._sections = [
-      new BonfireSettingsUi(this._host, engine.bonfireManager.settings),
-      new VillageSettingsUi(this._host, engine.villageManager.settings),
-      new ScienceSettingsUi(this._host, engine.scienceManager.settings, engine.settings.language),
-      new WorkshopSettingsUi(this._host, engine.workshopManager.settings, engine.settings.language),
-      new ResourcesSettingsUi(this._host, engine.settings.resources, engine.settings.language),
-      new TradeSettingsUi(this._host, engine.tradeManager.settings),
-      new ReligionSettingsUi(this._host, engine.religionManager.settings),
-      new SpaceSettingsUi(this._host, engine.spaceManager.settings),
-      new TimeSettingsUi(this._host, engine.timeManager.settings),
-      new TimeControlSettingsUi(
-        this._host,
-        engine.timeControlManager.settings,
-        engine.settings.language,
-      ),
-      new LogFiltersSettingsUi(this._host, engine.settings.filters),
-      new StateManagementUi(this._host, engine.settings.states, engine.settings.language),
-      new InternalsUi(this._host, engine.settings),
+      new BonfireSettingsUi(host, engine.bonfireManager.settings),
+      new VillageSettingsUi(host, engine.villageManager.settings),
+      new ScienceSettingsUi(host, engine.scienceManager.settings, engine.settings.language),
+      new WorkshopSettingsUi(host, engine.workshopManager.settings, engine.settings.language),
+      new ResourcesSettingsUi(host, engine.settings.resources, engine.settings.language),
+      new TradeSettingsUi(host, engine.tradeManager.settings),
+      new ReligionSettingsUi(host, engine.religionManager.settings),
+      new SpaceSettingsUi(host, engine.spaceManager.settings),
+      new TimeSettingsUi(host, engine.timeManager.settings),
+      new TimeControlSettingsUi(host, engine.timeControlManager.settings, engine.settings.language),
+      new LogFiltersSettingsUi(host, engine.settings.filters),
+      new StateManagementUi(host, engine.settings.states, engine.settings.language),
+      new InternalsUi(host, engine.settings),
     ];
 
     this._installCss();
@@ -106,11 +102,11 @@ export class UserInterface extends UiComponent {
     // Set up the "show activity summary" area.
     this.showActivity = $("<span/>", {
       html: `<svg style="width: 15px; height: 15px;" viewBox="0 0 48 48"><path fill="currentColor" d="${Icons.Summary}"/></svg>`,
-      title: this._host.engine.i18n("summary.show"),
+      title: host.engine.i18n("summary.show"),
     }).addClass("ks-show-activity");
 
     this.showActivity.on("click", () => {
-      this._host.engine.displayActivitySummary();
+      host.engine.displayActivitySummary();
     });
 
     $("#clearLog").prepend(this.showActivity);

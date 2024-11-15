@@ -19,54 +19,60 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
     });
 
     this._buildings = [];
-    for (const buildingGroup of this._host.game.bld.buildingGroups) {
-      this._buildings.push(new HeaderListItem(this._host, buildingGroup.title));
+    for (const buildingGroup of host.game.bld.buildingGroups) {
+      this._buildings.push(new HeaderListItem(host, buildingGroup.title));
       for (const building of buildingGroup.buildings) {
         if (building === "unicornPasture" || isNil(this.setting.buildings[building])) {
           continue;
         }
 
-        const meta = this._host.game.bld.getBuildingExt(building).meta;
+        const meta = host.game.bld.getBuildingExt(building).meta;
         if (!isNil(meta.stages)) {
           const name = Object.values(this.setting.buildings).find(
             item => item.baseBuilding === building,
           )?.building as StagedBuilding;
           this._buildings.push(
-            this._getResetOption(this.setting.buildings[building], meta.stages[0].label),
-            this._getResetOption(this.setting.buildings[name], meta.stages[1].label, false, true),
+            this._getResetOption(host, this.setting.buildings[building], meta.stages[0].label),
+            this._getResetOption(
+              host,
+              this.setting.buildings[name],
+              meta.stages[1].label,
+              false,
+              true,
+            ),
           );
         } else if (!isNil(meta.label)) {
-          this._buildings.push(this._getResetOption(this.setting.buildings[building], meta.label));
+          this._buildings.push(
+            this._getResetOption(host, this.setting.buildings[building], meta.label),
+          );
         }
       }
 
       // Add padding after each group. Except for the last group, which ends the list.
-      if (
-        buildingGroup !==
-        this._host.game.bld.buildingGroups[this._host.game.bld.buildingGroups.length - 1]
-      ) {
+      if (buildingGroup !== host.game.bld.buildingGroups[host.game.bld.buildingGroups.length - 1]) {
         this._buildings.at(-1)?.element.addClass("ks-delimiter");
       }
     }
 
-    const listBuildings = new SettingsList(this._host);
+    const listBuildings = new SettingsList(host);
     listBuildings.addChildren(this._buildings);
     this.addChild(listBuildings);
   }
 
   private _getResetOption(
+    host: KittenScientists,
     option: SettingTrigger,
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    return new SettingTriggerListItem(this._host, i18nName, option, {
+    return new SettingTriggerListItem(host, i18nName, option, {
       delimiter,
       onCheck: () => {
-        this._host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [i18nName]);
       },
       onUnCheck: () => {
-        this._host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [i18nName]);
       },
       upgradeIndicator,
     });

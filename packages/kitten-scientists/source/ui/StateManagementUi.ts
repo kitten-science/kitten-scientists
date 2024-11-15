@@ -78,79 +78,71 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.addChild(
       new SettingsList(host, {
         children: [
-          new SettingListItem(
-            host,
-            this._host.engine.i18n("state.noConfirm"),
-            this.setting.noConfirm,
-          ),
+          new SettingListItem(host, host.engine.i18n("state.noConfirm"), this.setting.noConfirm),
           new ListItem(host, { children: [new Delimiter(host)] }),
 
-          new HeaderListItem(host, this._host.engine.i18n("state.local")),
+          new HeaderListItem(host, host.engine.i18n("state.local")),
           new ToolbarListItem(host, [
-            new Button(host, this._host.engine.i18n("state.import"), Icons.Import, {
+            new Button(host, host.engine.i18n("state.import"), Icons.Import, {
               onClick: () => {
                 this.import();
               },
-              title: this._host.engine.i18n("state.importTitle"),
+              title: host.engine.i18n("state.importTitle"),
             }),
           ]),
           new ListItem(host, { children: [new Delimiter(host)] }),
 
-          new HeaderListItem(host, this._host.engine.i18n("state.localStates")),
+          new HeaderListItem(host, host.engine.i18n("state.localStates")),
           new ToolbarListItem(host, [
-            new Button(host, this._host.engine.i18n("state.store"), Icons.SaveAs, {
+            new Button(host, host.engine.i18n("state.store"), Icons.SaveAs, {
               onClick: () => {
                 this.storeState();
               },
-              title: this._host.engine.i18n("state.storeState"),
+              title: host.engine.i18n("state.storeState"),
             }),
-            new Button(host, this._host.engine.i18n("state.copy"), Icons.Copy, {
+            new Button(host, host.engine.i18n("state.copy"), Icons.Copy, {
               onClick: () => {
                 this.copyState().catch(redirectErrorsToConsole(console));
-                this._host.engine.imessage("state.copied.stateCurrent");
+                host.engine.imessage("state.copied.stateCurrent");
               },
-              title: this._host.engine.i18n("state.copy.state"),
+              title: host.engine.i18n("state.copy.state"),
             }),
-            new Button(host, this._host.engine.i18n("state.new"), Icons.Draft, {
+            new Button(host, host.engine.i18n("state.new"), Icons.Draft, {
               onClick: () => {
                 this.storeStateFactoryDefaults();
-                this._host.engine.imessage("state.stored.state");
+                host.engine.imessage("state.stored.state");
               },
-              title: this._host.engine.i18n("state.storeFactory"),
+              title: host.engine.i18n("state.storeFactory"),
             }),
             new Button(host, host.engine.i18n("state.exportAll"), Icons.Sync, {
               onClick: () => {
                 this.exportStateAll();
               },
-              title: this._host.engine.i18n("state.exportAllTitle"),
+              title: host.engine.i18n("state.exportAllTitle"),
             }),
           ]),
           new ListItem(host, { children: [this.stateList] }),
           new ListItem(host, { children: [new Delimiter(host)] }),
 
-          new HeaderListItem(host, this._host.engine.i18n("state.localGames")),
+          new HeaderListItem(host, host.engine.i18n("state.localGames")),
           new ToolbarListItem(host, [
-            new Button(host, this._host.engine.i18n("state.store"), Icons.SaveAs, {
+            new Button(host, host.engine.i18n("state.store"), Icons.SaveAs, {
               onClick: () => {
                 this.storeGame();
-                this._host.engine.imessage("state.stored.game");
+                host.engine.imessage("state.stored.game");
               },
-              title: this._host.engine.i18n("state.storeGame"),
+              title: host.engine.i18n("state.storeGame"),
             }),
-            new Button(host, this._host.engine.i18n("state.copy"), Icons.Copy, {
+            new Button(host, host.engine.i18n("state.copy"), Icons.Copy, {
               onClick: () => {
                 this.copyGame().catch(redirectErrorsToConsole(console));
-                this._host.engine.imessage("state.copied.gameCurrent");
+                host.engine.imessage("state.copied.gameCurrent");
               },
-              title: this._host.engine.i18n("state.copy.game"),
+              title: host.engine.i18n("state.copy.game"),
             }),
           ]),
           new ListItem(host, { children: [this.gameList] }),
-          new SettingListItem(
-            host,
-            this._host.engine.i18n("state.compress"),
-            this.setting.compress,
-          ),
+          new SettingListItem(host, host.engine.i18n("state.compress"), this.setting.compress),
         ],
         hasDisableAll: false,
         hasEnableAll: false,

@@ -23,7 +23,12 @@ export class SettingLimitedMaxTriggerListItem extends SettingLimitedMaxListItem 
   ) {
     super(host, label, setting, options);
 
-    this.triggerButton = new TriggerButton(host, label, setting);
+    this.triggerButton = new TriggerButton(host, label, setting, {
+      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,
+      onRefreshTitle: options?.onRefreshTrigger
+        ? () => options.onRefreshTrigger?.(this)
+        : undefined,
+    });
     this.head.addChild(this.triggerButton);
   }
 

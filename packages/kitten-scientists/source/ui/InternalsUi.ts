@@ -53,17 +53,17 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
 
               new SettingListItem(host, host.engine.i18n("ui.ksColumn"), settings.ksColumn, {
                 onCheck: () => {
-                  this._host.rebuildUi();
+                  host.rebuildUi();
                 },
                 onUnCheck: () => {
-                  this._host.rebuildUi();
+                  host.rebuildUi();
                 },
               }),
               new Delimiter(host),
 
               new OptionsListItem(host, host.engine.i18n("ui.language"), settings.language, {
                 onCheck: () => {
-                  this._host.rebuildUi();
+                  host.rebuildUi();
                 },
               }),
               new Delimiter(host),

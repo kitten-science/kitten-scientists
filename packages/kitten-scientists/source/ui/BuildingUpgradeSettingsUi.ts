@@ -24,13 +24,13 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
 
     const items = [];
     for (const setting of Object.values(this.setting.buildings)) {
-      const label = this._host.engine.i18n(`$buildings.${setting.upgrade}.label`);
-      const button = new SettingListItem(this._host, label, setting, {
+      const label = host.engine.i18n(`$buildings.${setting.upgrade}.label`);
+      const button = new SettingListItem(host, label, setting, {
         onCheck: () => {
-          this._host.engine.imessage("status.sub.enable", [label]);
+          host.engine.imessage("status.sub.enable", [label]);
         },
         onUnCheck: () => {
-          this._host.engine.imessage("status.sub.disable", [label]);
+          host.engine.imessage("status.sub.disable", [label]);
         },
       });
 
@@ -38,7 +38,7 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
-    const itemsList = new SettingsList(this._host);
+    const itemsList = new SettingsList(host);
     items.forEach(button => {
       itemsList.addChild(button.button);
     });

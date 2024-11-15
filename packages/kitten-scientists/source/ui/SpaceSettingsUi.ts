@@ -70,11 +70,11 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
     );
 
     this.addChild(
-      new SettingsList(this._host, {
-        children: this._host.game.space.planets
+      new SettingsList(host, {
+        children: host.game.space.planets
           .filter(planet => 0 < planet.buildings.length)
           .flatMap((planet, indexPlanet, arrayPlant) => [
-            new HeaderListItem(this._host, planet.label),
+            new HeaderListItem(host, planet.label),
             ...planet.buildings
               .filter(item => !isNil(this.setting.buildings[item.name]))
               .map((building, indexBuilding, arrayBuilding) =>
@@ -95,13 +95,13 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
       }),
     );
 
-    const listAddition = new SettingsList(this._host, {
+    const listAddition = new SettingsList(host, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")));
+    listAddition.addChild(new HeaderListItem(host, host.engine.i18n("ui.additional")));
 
-    this._missionsUi = new MissionSettingsUi(this._host, this.setting.unlockMissions);
+    this._missionsUi = new MissionSettingsUi(host, this.setting.unlockMissions);
     listAddition.addChild(this._missionsUi);
     this.addChild(listAddition);
   }

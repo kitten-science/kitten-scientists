@@ -31,15 +31,15 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     );
 
     const items = [];
-    for (const policie of this._host.game.science.policies) {
+    for (const policie of host.game.science.policies) {
       if (isNil(this.setting.policies[policie.name])) continue;
       const label = policie.label;
-      const button = new SettingListItem(this._host, label, this.setting.policies[policie.name], {
+      const button = new SettingListItem(host, label, this.setting.policies[policie.name], {
         onCheck: () => {
-          this._host.engine.imessage("status.sub.enable", [label]);
+          host.engine.imessage("status.sub.enable", [label]);
         },
         onUnCheck: () => {
-          this._host.engine.imessage("status.sub.disable", [label]);
+          host.engine.imessage("status.sub.disable", [label]);
         },
       });
 
@@ -49,7 +49,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     if (language.selected !== "zh") {
       items.sort((a, b) => a.label.localeCompare(b.label));
     }
-    const itemsList = new SettingsList(this._host);
+    const itemsList = new SettingsList(host);
     items.forEach(button => {
       itemsList.addChild(button.button);
     });

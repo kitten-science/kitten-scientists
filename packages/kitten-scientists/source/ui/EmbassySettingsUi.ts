@@ -25,21 +25,21 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
       options,
     );
 
-    const listRaces = new SettingsList(this._host, {
-      children: this._host.game.diplomacy.races
+    const listRaces = new SettingsList(host, {
+      children: host.game.diplomacy.races
         .filter(item => !isNil(this.setting.races[item.name]))
-        .map(races => this._makeEmbassySetting(this.setting.races[races.name], races.title)),
+        .map(races => this._makeEmbassySetting(host, this.setting.races[races.name], races.title)),
     });
     this.addChild(listRaces);
   }
 
-  private _makeEmbassySetting(option: SettingMax, label: string) {
-    return new SettingMaxListItem(this._host, label, option, {
+  private _makeEmbassySetting(host: KittenScientists, option: SettingMax, label: string) {
+    return new SettingMaxListItem(host, label, option, {
       onCheck: () => {
-        this._host.engine.imessage("status.sub.enable", [label]);
+        host.engine.imessage("status.sub.enable", [label]);
       },
       onUnCheck: () => {
-        this._host.engine.imessage("status.sub.disable", [label]);
+        host.engine.imessage("status.sub.disable", [label]);
       },
     });
   }

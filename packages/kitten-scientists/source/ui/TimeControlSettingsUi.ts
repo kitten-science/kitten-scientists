@@ -36,27 +36,27 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
       }),
     );
 
-    const list = new SettingsList(this._host, {
+    const list = new SettingsList(host, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    const accelerateLabel = this._host.engine.i18n("option.accelerate");
+    const accelerateLabel = host.engine.i18n("option.accelerate");
     this._accelerateTime = new SettingTriggerListItem(
-      this._host,
+      host,
       accelerateLabel,
       this.setting.accelerateTime,
       {
         onCheck: () => {
-          this._host.engine.imessage("status.sub.enable", [accelerateLabel]);
+          host.engine.imessage("status.sub.enable", [accelerateLabel]);
         },
         onUnCheck: () => {
-          this._host.engine.imessage("status.sub.disable", [accelerateLabel]);
+          host.engine.imessage("status.sub.disable", [accelerateLabel]);
         },
       },
     );
     this._accelerateTime.head.addChild(new PaddingButton(host));
-    this._timeSkipUi = new TimeSkipSettingsUi(this._host, this.setting.timeSkip);
-    this._resetUi = new ResetSettingsUi(this._host, this.setting.reset, language);
+    this._timeSkipUi = new TimeSkipSettingsUi(host, this.setting.timeSkip);
+    this._resetUi = new ResetSettingsUi(host, this.setting.reset, language);
 
     this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];
 

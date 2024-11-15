@@ -16,24 +16,25 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
     });
 
     this.addChild(
-      new SettingsList(this._host, {
+      new SettingsList(host, {
         children: [
-          new HeaderListItem(this._host, this._host.engine.i18n("$workshop.chronoforge.label")),
-          ...this._host.game.time.chronoforgeUpgrades
+          new HeaderListItem(host, host.engine.i18n("$workshop.chronoforge.label")),
+          ...host.game.time.chronoforgeUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(building =>
               this._getResetOption(
+                host,
                 this.setting.buildings[building.name],
                 building.label,
-                building.name === this._host.game.time.chronoforgeUpgrades.at(-1)?.name,
+                building.name === host.game.time.chronoforgeUpgrades.at(-1)?.name,
               ),
             ),
 
-          new HeaderListItem(this._host, this._host.engine.i18n("$science.voidSpace.label")),
-          ...this._host.game.time.voidspaceUpgrades
+          new HeaderListItem(host, host.engine.i18n("$science.voidSpace.label")),
+          ...host.game.time.voidspaceUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(building =>
-              this._getResetOption(this.setting.buildings[building.name], building.label),
+              this._getResetOption(host, this.setting.buildings[building.name], building.label),
             ),
         ],
       }),
@@ -41,18 +42,19 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
   }
 
   private _getResetOption(
+    host: KittenScientists,
     option: SettingTrigger,
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    return new SettingTriggerListItem(this._host, i18nName, option, {
+    return new SettingTriggerListItem(host, i18nName, option, {
       delimiter,
       onCheck: () => {
-        this._host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [i18nName]);
       },
       onUnCheck: () => {
-        this._host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [i18nName]);
       },
       upgradeIndicator,
     });

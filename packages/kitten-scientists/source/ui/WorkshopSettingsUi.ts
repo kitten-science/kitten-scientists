@@ -85,7 +85,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
       excludeCraftsArray = ["bloodstone", "tMythril"];
     }
 
-    const preparedCrafts: Array<[CraftSettingsItem, string]> = this._host.game.workshop.crafts
+    const preparedCrafts: Array<[CraftSettingsItem, string]> = host.game.workshop.crafts
       .filter(
         item =>
           !excludeCraftsArray.includes(item.name) && !isNil(this.setting.resources[item.name]),
@@ -94,19 +94,19 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
 
     this._crafts = [];
     for (const [option, label] of preparedCrafts) {
-      const element = new SettingLimitedMaxTriggerListItem(this._host, label, option, {
+      const element = new SettingLimitedMaxTriggerListItem(host, label, option, {
         delimiter: option.resource === "kerosene" || option.resource === "blueprint",
         onCheck: () => {
-          this._host.engine.imessage("status.sub.enable", [label]);
+          host.engine.imessage("status.sub.enable", [label]);
         },
         onUnCheck: () => {
-          this._host.engine.imessage("status.sub.disable", [label]);
+          host.engine.imessage("status.sub.disable", [label]);
         },
         onLimitedCheck: () => {
-          this._host.engine.imessage("craft.limited", [label]);
+          host.engine.imessage("craft.limited", [label]);
         },
         onLimitedUnCheck: () => {
-          this._host.engine.imessage("craft.unlimited", [label]);
+          host.engine.imessage("craft.unlimited", [label]);
         },
         onRefresh: () => {
           element.triggerButton.inactive = option.trigger === -1;
@@ -157,18 +157,18 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
       if (option.resource === "ship") {
         this._crafts.push(
           new SettingListItem(
-            this._host,
-            this._host.engine.i18n("option.shipOverride"),
+            host,
+            host.engine.i18n("option.shipOverride"),
             this.setting.shipOverride,
             {
               onCheck: () => {
-                this._host.engine.imessage("status.sub.enable", [
-                  this._host.engine.i18n("option.shipOverride"),
+                host.engine.imessage("status.sub.enable", [
+                  host.engine.i18n("option.shipOverride"),
                 ]);
               },
               onUnCheck: () => {
-                this._host.engine.imessage("status.sub.disable", [
-                  this._host.engine.i18n("option.shipOverride"),
+                host.engine.imessage("status.sub.disable", [
+                  host.engine.i18n("option.shipOverride"),
                 ]);
               },
               upgradeIndicator: true,
@@ -178,7 +178,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
       }
     }
 
-    const listCrafts = new SettingsList(this._host, {
+    const listCrafts = new SettingsList(host, {
       children: this._crafts,
       onReset: () => {
         this.setting.load({ resources: new WorkshopSettings().resources });
@@ -188,8 +188,8 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
     this.addChild(listCrafts);
 
     this.addChild(
-      new SettingsList(this._host, {
-        children: [new UpgradeSettingsUi(this._host, this.setting.unlockUpgrades, language)],
+      new SettingsList(host, {
+        children: [new UpgradeSettingsUi(host, this.setting.unlockUpgrades, language)],
         hasDisableAll: false,
         hasEnableAll: false,
       }),

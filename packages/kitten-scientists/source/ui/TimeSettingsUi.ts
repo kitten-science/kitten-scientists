@@ -68,10 +68,10 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
     );
 
     this.addChildren([
-      new SettingsList(this._host, {
+      new SettingsList(host, {
         children: [
-          new HeaderListItem(this._host, this._host.engine.i18n("$workshop.chronoforge.label")),
-          ...this._host.game.time.chronoforgeUpgrades
+          new HeaderListItem(host, host.engine.i18n("$workshop.chronoforge.label")),
+          ...host.game.time.chronoforgeUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(building =>
               BuildSectionTools.getBuildOption(
@@ -80,12 +80,12 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
                 this.setting,
                 building.label,
                 label,
-                building.name === this._host.game.time.chronoforgeUpgrades.at(-1)?.name,
+                building.name === host.game.time.chronoforgeUpgrades.at(-1)?.name,
               ),
             ),
 
-          new HeaderListItem(this._host, this._host.engine.i18n("$science.voidSpace.label")),
-          ...this._host.game.time.voidspaceUpgrades
+          new HeaderListItem(host, host.engine.i18n("$science.voidSpace.label")),
+          ...host.game.time.voidspaceUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(building =>
               BuildSectionTools.getBuildOption(
@@ -99,23 +99,19 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
         ],
       }),
 
-      new SettingsList(this._host, {
+      new SettingsList(host, {
         children: [
-          new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")),
+          new HeaderListItem(host, host.engine.i18n("ui.additional")),
           new SettingListItem(
-            this._host,
-            this._host.engine.i18n("option.fix.cry"),
+            host,
+            host.engine.i18n("option.fix.cry"),
             this.setting.fixCryochambers,
             {
               onCheck: () => {
-                this._host.engine.imessage("status.sub.enable", [
-                  this._host.engine.i18n("option.fix.cry"),
-                ]);
+                host.engine.imessage("status.sub.enable", [host.engine.i18n("option.fix.cry")]);
               },
               onUnCheck: () => {
-                this._host.engine.imessage("status.sub.disable", [
-                  this._host.engine.i18n("option.fix.cry"),
-                ]);
+                host.engine.imessage("status.sub.disable", [host.engine.i18n("option.fix.cry")]);
               },
             },
           ),

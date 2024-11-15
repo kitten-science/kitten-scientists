@@ -25,6 +25,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
         children: [
           new HeaderListItem(host, host.engine.i18n("$religion.panel.ziggurat.label")),
           this._getResetOption(
+            host,
             this.setting.buildings.unicornPasture,
             host.engine.i18n("$buildings.unicornPasture.label"),
           ),
@@ -36,6 +37,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
             )
             .map(zigguratUpgrade =>
               this._getResetOption(
+                host,
                 this.setting.buildings[zigguratUpgrade.name],
                 zigguratUpgrade.label,
               ),
@@ -48,7 +50,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
                 !unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
             )
             .map(upgrade =>
-              this._getResetOption(this.setting.buildings[upgrade.name], upgrade.label),
+              this._getResetOption(host, this.setting.buildings[upgrade.name], upgrade.label),
             ),
           new Delimiter(host),
 
@@ -57,6 +59,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(upgrade =>
               this._getResetOption(
+                host,
                 this.setting.buildings[upgrade.name],
                 upgrade.label,
                 upgrade.name === host.game.religion.religionUpgrades.at(-1)?.name,
@@ -67,7 +70,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
           ...host.game.religion.transcendenceUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(upgrade =>
-              this._getResetOption(this.setting.buildings[upgrade.name], upgrade.label),
+              this._getResetOption(host, this.setting.buildings[upgrade.name], upgrade.label),
             ),
         ],
       }),
@@ -75,18 +78,19 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
   }
 
   private _getResetOption(
+    host: KittenScientists,
     option: SettingTrigger,
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    return new SettingTriggerListItem(this._host, i18nName, option, {
+    return new SettingTriggerListItem(host, i18nName, option, {
       delimiter,
       onCheck: () => {
-        this._host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [i18nName]);
       },
       onUnCheck: () => {
-        this._host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [i18nName]);
       },
       upgradeIndicator,
     });

@@ -30,14 +30,15 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
       }),
     );
 
-    const listRaces = new SettingsList(this._host, {
-      children: this._host.game.diplomacy.races
+    const listRaces = new SettingsList(host, {
+      children: host.game.diplomacy.races
         .filter(item => !isNil(this.setting.races[item.name]))
         .map(races =>
           this._getTradeOption(
+            host,
             this.setting.races[races.name],
             races.title,
-            races.name === this._host.game.diplomacy.races.at(-2)?.name,
+            races.name === host.game.diplomacy.races.at(-2)?.name,
           ),
         ),
       hasDisableAll: false,
@@ -45,23 +46,14 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
     });
 
     listRaces.addChild(
-      new SettingListItem(
-        this._host,
-        this._host.engine.i18n("option.autofeed"),
-        this.setting.feedLeviathans,
-        {
-          onCheck: () => {
-            this._host.engine.imessage("status.sub.enable", [
-              this._host.engine.i18n("option.autofeed"),
-            ]);
-          },
-          onUnCheck: () => {
-            this._host.engine.imessage("status.sub.disable", [
-              this._host.engine.i18n("option.autofeed"),
-            ]);
-          },
+      new SettingListItem(host, host.engine.i18n("option.autofeed"), this.setting.feedLeviathans, {
+        onCheck: () => {
+          host.engine.imessage("status.sub.enable", [host.engine.i18n("option.autofeed")]);
         },
-      ),
+        onUnCheck: () => {
+          host.engine.imessage("status.sub.disable", [host.engine.i18n("option.autofeed")]);
+        },
+      }),
     );
 
     listRaces.addChild(
@@ -69,19 +61,15 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
         host,
         this.setting.tradeBlackcoin,
         new SettingTriggerListItem(
-          this._host,
-          this._host.engine.i18n("option.crypto"),
+          host,
+          host.engine.i18n("option.crypto"),
           this.setting.tradeBlackcoin,
           {
             onCheck: () => {
-              this._host.engine.imessage("status.sub.enable", [
-                this._host.engine.i18n("option.crypto"),
-              ]);
+              host.engine.imessage("status.sub.enable", [host.engine.i18n("option.crypto")]);
             },
             onUnCheck: () => {
-              this._host.engine.imessage("status.sub.disable", [
-                this._host.engine.i18n("option.crypto"),
-              ]);
+              host.engine.imessage("status.sub.disable", [host.engine.i18n("option.crypto")]);
             },
           },
         ),
@@ -95,66 +83,58 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
     );
     this.addChild(listRaces);
 
-    const listAddition = new SettingsList(this._host, {
+    const listAddition = new SettingsList(host, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(this._host, this._host.engine.i18n("ui.additional")));
+    listAddition.addChild(new HeaderListItem(host, host.engine.i18n("ui.additional")));
 
-    listAddition.addChild(new EmbassySettingsUi(this._host, this.setting.buildEmbassies));
+    listAddition.addChild(new EmbassySettingsUi(host, this.setting.buildEmbassies));
 
     listAddition.addChild(
-      new SettingListItem(
-        this._host,
-        this._host.engine.i18n("ui.upgrade.races"),
-        this.setting.unlockRaces,
-        {
-          onCheck: () => {
-            this._host.engine.imessage("status.sub.enable", [
-              this._host.engine.i18n("ui.upgrade.races"),
-            ]);
-          },
-          onUnCheck: () => {
-            this._host.engine.imessage("status.sub.disable", [
-              this._host.engine.i18n("ui.upgrade.races"),
-            ]);
-          },
+      new SettingListItem(host, host.engine.i18n("ui.upgrade.races"), this.setting.unlockRaces, {
+        onCheck: () => {
+          host.engine.imessage("status.sub.enable", [host.engine.i18n("ui.upgrade.races")]);
         },
-      ),
+        onUnCheck: () => {
+          host.engine.imessage("status.sub.disable", [host.engine.i18n("ui.upgrade.races")]);
+        },
+      }),
     );
     this.addChild(listAddition);
   }
 
   private _getTradeOption(
+    host: KittenScientists,
     option: TradeSettingsItem,
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const settingItem = new SettingLimitedListItem(this._host, i18nName, option, {
+    const settingItem = new SettingLimitedListItem(host, i18nName, option, {
       onCheck: () => {
-        this._host.engine.imessage("status.sub.enable", [i18nName]);
+        host.engine.imessage("status.sub.enable", [i18nName]);
       },
       onUnCheck: () => {
-        this._host.engine.imessage("status.sub.disable", [i18nName]);
+        host.engine.imessage("status.sub.disable", [i18nName]);
       },
       onLimitedCheck: () => {
-        this._host.engine.imessage("trade.limited", [i18nName]);
+        host.engine.imessage("trade.limited", [i18nName]);
       },
       onLimitedUnCheck: () => {
-        this._host.engine.imessage("trade.unlimited", [i18nName]);
+        host.engine.imessage("trade.unlimited", [i18nName]);
       },
       delimiter,
       upgradeIndicator,
     });
-    const panel = new SettingsPanel(this._host, option, settingItem);
+    const panel = new SettingsPanel(host, option, settingItem);
 
-    const seasons = new SeasonsList(this._host, option.seasons, {
+    const seasons = new SeasonsList(host, option.seasons, {
       onCheck: (label: string) => {
-        this._host.engine.imessage("trade.season.enable", [ucfirst(i18nName), label]);
+        host.engine.imessage("trade.season.enable", [ucfirst(i18nName), label]);
       },
       onUnCheck: (label: string) => {
-        this._host.engine.imessage("trade.season.disable", [ucfirst(i18nName), label]);
+        host.engine.imessage("trade.season.disable", [ucfirst(i18nName), label]);
       },
     });
     panel.addChild(seasons);

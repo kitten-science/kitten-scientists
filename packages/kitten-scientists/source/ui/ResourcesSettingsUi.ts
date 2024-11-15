@@ -45,8 +45,8 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     ];
 
     this.addChild(
-      new SettingsList(this._host, {
-        children: this._host.game.resPool.resources
+      new SettingsList(host, {
+        children: host.game.resPool.resources
           .filter(
             item =>
               !ignoredResources.includes(item.name) && !isNil(this.setting.resources[item.name]),
@@ -55,7 +55,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
           .map(
             resource => [this.setting.resources[resource.name], ucfirst(resource.title)] as const,
           )
-          .map(([setting, title]) => this._makeResourceSetting(title, setting)),
+          .map(([setting, title]) => this._makeResourceSetting(host, title, setting)),
       }),
     );
   }
@@ -68,23 +68,27 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
    * @param setting The option that is being controlled.
    * @returns A new option with stock and consume values.
    */
-  private _makeResourceSetting(title: string, setting: ResourcesSettingsItem) {
+  private _makeResourceSetting(
+    host: KittenScientists,
+    title: string,
+    setting: ResourcesSettingsItem,
+  ) {
     // The overall container for this resource item.
-    const container = new SettingListItem(this._host, title, setting, {
+    const container = new SettingListItem(host, title, setting, {
       onCheck: () => {
-        this._host.engine.imessage("status.resource.enable", [title]);
+        host.engine.imessage("status.resource.enable", [title]);
       },
       onUnCheck: () => {
-        this._host.engine.imessage("status.resource.disable", [title]);
+        host.engine.imessage("status.resource.disable", [title]);
       },
     });
 
     // How many items to stock.
-    const stockElement = new StockButton(this._host, title, setting);
+    const stockElement = new StockButton(host, title, setting);
     container.head.addChild(stockElement);
 
     // The consume rate for the resource.
-    const consumeElement = new ConsumeButton(this._host, title, setting);
+    const consumeElement = new ConsumeButton(host, title, setting);
     container.head.addChild(consumeElement);
 
     return container;

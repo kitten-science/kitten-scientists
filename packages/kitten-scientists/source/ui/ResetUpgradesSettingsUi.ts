@@ -19,7 +19,7 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
       icon: Icons.Workshop,
     });
 
-    const upgrades = this._host.game.workshop.upgrades.filter(
+    const upgrades = host.game.workshop.upgrades.filter(
       upgrade => !isNil(this.setting.upgrades[upgrade.name]),
     );
 
@@ -34,7 +34,7 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
     let lastElement: SettingListItem;
 
     this.addChild(
-      new SettingsList(this._host, {
+      new SettingsList(host, {
         children: upgrades.reduce<Array<SettingListItem>>((items, upgrade) => {
           if (
             !isNil(lastElement) &&
@@ -44,7 +44,11 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
             lastElement.element.addClass("ks-delimiter");
           }
 
-          const element = this._getResetOption(this.setting.upgrades[upgrade.name], upgrade.label);
+          const element = this._getResetOption(
+            host,
+            this.setting.upgrades[upgrade.name],
+            upgrade.label,
+          );
 
           lastElement = element;
           items.push(element);
@@ -57,18 +61,19 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
   }
 
   private _getResetOption(
+    host: KittenScientists,
     option: Setting,
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    return new SettingListItem(this._host, i18nName, option, {
+    return new SettingListItem(host, i18nName, option, {
       delimiter,
       onCheck: () => {
-        this._host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [i18nName]);
       },
       onUnCheck: () => {
-        this._host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [i18nName]);
       },
       upgradeIndicator,
     });

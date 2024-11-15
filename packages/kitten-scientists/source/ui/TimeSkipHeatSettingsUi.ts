@@ -24,8 +24,8 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
     );
 
     this.addChild(
-      new SettingsList(this._host, {
-        children: [new CyclesList(this._host, this.setting.cycles, "heatTransfer")],
+      new SettingsList(host, {
+        children: [new CyclesList(host, this.setting.cycles, "heatTransfer")],
         hasDisableAll: false,
         hasEnableAll: false,
       }),

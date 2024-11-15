@@ -16,15 +16,16 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
     });
 
     this.addChild(
-      new SettingsList(this._host, {
-        children: this._host.game.space.planets
+      new SettingsList(host, {
+        children: host.game.space.planets
           .filter(plant => 0 < plant.buildings.length)
           .flatMap((planet, indexPlanet, arrayPlant) => [
-            new HeaderListItem(this._host, planet.label),
+            new HeaderListItem(host, planet.label),
             ...planet.buildings
               .filter(item => !isNil(this.setting.buildings[item.name]))
               .map((building, indexBuilding, arrayBuilding) =>
                 this._getResetOption(
+                  host,
                   this.setting.buildings[building.name],
                   building.label,
                   indexPlanet < arrayPlant.length - 1 && indexBuilding === arrayBuilding.length - 1,
@@ -36,18 +37,19 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
   }
 
   private _getResetOption(
+    host: KittenScientists,
     option: SettingTrigger,
     i18nName: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    return new SettingTriggerListItem(this._host, i18nName, option, {
+    return new SettingTriggerListItem(host, i18nName, option, {
       delimiter,
       onCheck: () => {
-        this._host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [i18nName]);
       },
       onUnCheck: () => {
-        this._host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [i18nName]);
       },
       upgradeIndicator,
     });

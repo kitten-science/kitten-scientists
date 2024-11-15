@@ -33,30 +33,26 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
       }),
     );
 
-    this._policiesUi = new PolicySettingsUi(this._host, this.setting.policies, language);
-    this._techsUi = new TechSettingsUi(this._host, this.setting.techs, language);
+    this._policiesUi = new PolicySettingsUi(host, this.setting.policies, language);
+    this._techsUi = new TechSettingsUi(host, this.setting.techs, language);
 
     this._observeStars = new SettingListItem(
-      this._host,
-      this._host.engine.i18n("option.observe"),
+      host,
+      host.engine.i18n("option.observe"),
       this.setting.observe,
       {
         onCheck: () => {
-          this._host.engine.imessage("status.sub.enable", [
-            this._host.engine.i18n("option.observe"),
-          ]);
+          host.engine.imessage("status.sub.enable", [host.engine.i18n("option.observe")]);
         },
         onUnCheck: () => {
-          this._host.engine.imessage("status.sub.disable", [
-            this._host.engine.i18n("option.observe"),
-          ]);
+          host.engine.imessage("status.sub.disable", [host.engine.i18n("option.observe")]);
         },
       },
     );
 
     this._items = [this._policiesUi, this._techsUi, this._observeStars];
 
-    const itemsList = new SettingsList(this._host, {
+    const itemsList = new SettingsList(host, {
       hasDisableAll: false,
       hasEnableAll: false,
     });

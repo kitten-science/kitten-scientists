@@ -42,16 +42,16 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
       options,
     );
 
-    const list = new SettingsList(this._host, {
+    const list = new SettingsList(host, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    this._bonfireUi = new ResetBonfireSettingsUi(this._host, this.setting.bonfire);
-    this._religionUi = new ResetReligionSettingsUi(this._host, this.setting.religion);
-    this._resourcesUi = new ResetResourcesSettingsUi(this._host, this.setting.resources, language);
-    this._spaceUi = new ResetSpaceSettingsUi(this._host, this.setting.space);
-    this._timeUi = new ResetTimeSettingsUi(this._host, this.setting.time);
-    this._upgradesUi = new ResetUpgradesSettingsUi(this._host, this.setting.upgrades, language);
+    this._bonfireUi = new ResetBonfireSettingsUi(host, this.setting.bonfire);
+    this._religionUi = new ResetReligionSettingsUi(host, this.setting.religion);
+    this._resourcesUi = new ResetResourcesSettingsUi(host, this.setting.resources, language);
+    this._spaceUi = new ResetSpaceSettingsUi(host, this.setting.space);
+    this._timeUi = new ResetTimeSettingsUi(host, this.setting.time);
+    this._upgradesUi = new ResetUpgradesSettingsUi(host, this.setting.upgrades, language);
 
     list.addChildren([
       this._bonfireUi,

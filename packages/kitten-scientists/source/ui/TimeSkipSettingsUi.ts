@@ -36,49 +36,46 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings> {
       options,
     );
 
-    this._maximum = new MaxButton(this._host, label, this.setting);
+    this._maximum = new MaxButton(host, label, this.setting);
 
     this._cycles = new CollapsiblePanel(
-      this._host,
-      new LabelListItem(host, ucfirst(this._host.engine.i18n("ui.cycles")), {
+      host,
+      new LabelListItem(host, ucfirst(host.engine.i18n("ui.cycles")), {
         icon: Icons.Cycles,
       }),
       {
-        children: [new CyclesList(this._host, this.setting.cycles, "skip")],
+        children: [new CyclesList(host, this.setting.cycles, "skip")],
       },
     );
     this._seasons = new CollapsiblePanel(
-      this._host,
-      new LabelListItem(host, ucfirst(this._host.engine.i18n("trade.seasons")), {
+      host,
+      new LabelListItem(host, ucfirst(host.engine.i18n("trade.seasons")), {
         icon: Icons.Seasons,
       }),
       {
         children: [
-          new SeasonsList(this._host, this.setting.seasons, {
+          new SeasonsList(host, this.setting.seasons, {
             onCheck: (label: string) => {
-              this._host.engine.imessage("time.skip.season.enable", [label]);
+              host.engine.imessage("time.skip.season.enable", [label]);
             },
             onUnCheck: (label: string) => {
-              this._host.engine.imessage("time.skip.season.disable", [label]);
+              host.engine.imessage("time.skip.season.disable", [label]);
             },
           }),
         ],
       },
     );
-    this._activeHeatTransferUI = new TimeSkipHeatSettingsUi(
-      this._host,
-      this.setting.activeHeatTransfer,
-    );
+    this._activeHeatTransferUI = new TimeSkipHeatSettingsUi(host, this.setting.activeHeatTransfer);
 
     this.addChild(
-      new SettingsList(this._host, {
+      new SettingsList(host, {
         children: [
           new ButtonListItem(host, this._maximum, { delimiter: true }),
           this._cycles,
           this._seasons,
           new SettingListItem(
-            this._host,
-            this._host.engine.i18n("option.time.skip.ignoreOverheat"),
+            host,
+            host.engine.i18n("option.time.skip.ignoreOverheat"),
             this.setting.ignoreOverheat,
           ),
           this._activeHeatTransferUI,
