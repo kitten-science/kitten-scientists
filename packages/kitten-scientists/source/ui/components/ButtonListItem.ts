@@ -1,5 +1,6 @@
 import { KittenScientists } from "../../KittenScientists.js";
 import { ListItem, ListItemOptions } from "./ListItem.js";
+import stylesListItem from "./ListItem.module.css";
 import { TextButton } from "./TextButton.js";
 
 export class ButtonListItem extends ListItem {
@@ -10,7 +11,7 @@ export class ButtonListItem extends ListItem {
 
     this.button = button;
 
-    this.element.addClass("ks-head");
+    this.element.addClass(stylesListItem.head);
     this.element.append(button.element);
 
     this.addChildren(options?.children);

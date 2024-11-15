@@ -3,6 +3,7 @@ import { Icons } from "../../images/Icons.js";
 import { KittenScientists } from "../../KittenScientists.js";
 import { IconButton } from "./IconButton.js";
 import { SettingListItem } from "./SettingListItem.js";
+import styles from "./SettingsList.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type SettingsListOptions = UiComponentOptions & {
@@ -46,14 +47,14 @@ export class SettingsList extends UiComponent {
     const hasTools =
       toolOptions.hasDisableAll || toolOptions.hasEnableAll || !isNil(toolOptions.onReset);
 
-    const container = $("<div/>").addClass("ks-list-container");
+    const container = $("<div/>").addClass(styles.listContainer);
 
-    this.list = $("<ul/>").addClass("ks-list").addClass("ks-items-list");
+    this.list = $("<ul/>").addClass(styles.list).addClass(styles.itemsList);
 
     container.append(this.list);
 
     if (hasTools) {
-      const tools = $("<div/>").addClass("ks-list-tools");
+      const tools = $("<div/>").addClass(styles.listTools);
 
       if (toolOptions.hasEnableAll) {
         const onEnableAll = options?.onEnableAll;

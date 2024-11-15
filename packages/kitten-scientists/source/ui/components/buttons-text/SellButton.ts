@@ -1,7 +1,10 @@
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingSell } from "../../../settings/Settings.js";
+import { Dialog } from "../Dialog.js";
 import { TextButton } from "../TextButton.js";
 import { UiComponent } from "../UiComponent.js";
+import styles from "./SellButton.module.css";
 
 export class SellButton extends TextButton {
   readonly setting: SettingSell;
@@ -13,24 +16,39 @@ export class SellButton extends TextButton {
   ) {
     super(host, undefined, {
       onClick: () => {
-        const value = UiComponent.promptLimit(
-          host.engine.i18n("blackcoin.sell.threshold"),
+        Dialog.prompt(
+          host,
+          host.engine.i18n("blackcoin.sell.prompt"),
+          host.engine.i18n("blackcoin.sell.promptTitle", [
+            UiComponent.renderAbsolute(setting.sell, host),
+          ]),
           setting.sell.toString(),
-        );
+          host.engine.i18n("blackcoin.sell.promptExplainer"),
+        )
+          .then(value => {
+            if (value === undefined) {
+              return;
+            }
 
-        if (value !== null) {
-          setting.sell = value;
-          this.refreshUi();
-        }
+            if (value === "" || value.startsWith("-")) {
+              setting.sell = -1;
+              return;
+            }
 
-        if (handler.onClick) {
-          handler.onClick();
-        }
+            setting.sell = UiComponent.parseAbsolute(value) ?? setting.sell;
+          })
+          .then(() => {
+            this.refreshUi();
+
+            if (handler.onClick) {
+              handler.onClick();
+            }
+          })
+          .catch(redirectErrorsToConsole(console));
       },
-      title: setting.sell.toFixed(3),
     });
 
-    this.element.addClass("ks-sell-button");
+    this.element.addClass(styles.sellButton);
 
     this.setting = setting;
   }
@@ -38,9 +56,16 @@ export class SellButton extends TextButton {
   refreshUi() {
     super.refreshUi();
 
-    this.element.prop("title", this.setting.sell.toFixed(3));
+    this.element.prop(
+      "title",
+      this._host.engine.i18n("blackcoin.sell.title", [
+        UiComponent.renderAbsolute(this.setting.sell, this._host),
+      ]),
+    );
     this.element.text(
-      this._host.engine.i18n("ui.sell", [UiComponent.renderLimit(this.setting.sell, this._host)]),
+      this._host.engine.i18n("blackcoin.sell", [
+        UiComponent.renderAbsolute(this.setting.sell, this._host),
+      ]),
     );
   }
 }

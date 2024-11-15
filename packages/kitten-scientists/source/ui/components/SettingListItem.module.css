@@ -1,0 +1,17 @@
+.setting {
+  border-bottom: 1px solid transparent;
+
+  transition: 0.3s;
+
+  &.expanded {
+    margin-bottom: 10px;
+  }
+
+  &:not(.expanded):hover {
+    border-bottom: 1px dashed rgba(160, 160, 160, 0.2);
+  }
+}
+
+.checkbox {
+  margin: 1px 5px 2px 2px;
+}

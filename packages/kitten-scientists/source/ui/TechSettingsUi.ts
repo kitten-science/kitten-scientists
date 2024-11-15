@@ -1,12 +1,13 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLanguage } from "../Engine.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { TechSettings } from "../settings/TechSettings.js";
-import { PaddingButton } from "./components/buttons-icon/PaddingButton.js";
+import stylesButton from "./components/Button.module.css";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
@@ -16,7 +17,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
   constructor(
     host: KittenScientists,
     settings: TechSettings,
-    language: SettingOptions<SupportedLanguage>,
+    language: SettingOptions<SupportedLocale>,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade.techs");
@@ -31,7 +32,8 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
           host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive = settings.trigger < 0;
+          (item as SettingTriggerListItem).triggerButton.inactive =
+            !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
@@ -74,16 +76,11 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
       options,
     );
 
-    const localeSupportsSortMethod = language.selected !== "zh";
+    const techs = host.game.science.techs.filter(tech => !isNil(this.setting.techs[tech.name]));
 
     const items = [];
-    for (const tech of localeSupportsSortMethod
-      ? host.game.science.techs.sort((a, b) => a.label.localeCompare(b.label))
-      : host.game.science.techs) {
-      if (isNil(this.setting.techs[tech.name])) {
-        continue;
-      }
-
+    let lastLabel = techs[0].label;
+    for (const tech of techs.sort((a, b) => a.label.localeCompare(b.label, language.selected))) {
       const option = this.setting.techs[tech.name];
 
       const element = new SettingTriggerListItem(host, tech.label, option, {
@@ -94,7 +91,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
           host.engine.imessage("status.sub.disable", [tech.label]);
         },
         onRefresh: () => {
-          element.triggerButton.inactive = option.trigger === -1;
+          element.triggerButton.inactive = !option.enabled || option.trigger === -1;
         },
         onRefreshTrigger: () => {
           element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
@@ -136,9 +133,17 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
             .catch(redirectErrorsToConsole(console));
         },
       });
-      element.head.addChild(new PaddingButton(host));
+      element.triggerButton.element.addClass(stylesButton.lastHeadAction);
+
+      if (host.engine.localeSupportsFirstLetterSplits(language.selected)) {
+        if (lastLabel[0] !== tech.label[0]) {
+          element.element.addClass(stylesLabelListItem.splitter);
+        }
+      }
 
       items.push(element);
+
+      lastLabel = tech.label;
     }
 
     this.addChild(new SettingsList(host, { children: items }));

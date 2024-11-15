@@ -1,6 +1,8 @@
 import { KittenScientists } from "../KittenScientists.js";
 import { FilterItems, LogFilterSettings } from "../settings/LogFilterSettings.js";
+import { Container } from "./components/Container.js";
 import { ExplainerListItem } from "./components/ExplainerListItem.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -12,6 +14,7 @@ export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
       host,
       settings,
       new SettingListItem(host, label, settings, {
+        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },

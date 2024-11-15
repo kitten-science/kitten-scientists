@@ -1,6 +1,8 @@
 import { KittenScientists } from "../KittenScientists.js";
 import { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings.js";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
+import { Container } from "./components/Container";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -12,6 +14,7 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
       host,
       settings,
       new SettingListItem(host, label, settings, {
+        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },

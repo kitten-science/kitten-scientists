@@ -1,9 +1,11 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { SupportedLanguage } from "../Engine.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { PolicySettings } from "../settings/PolicySettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
+import { Container } from "./components/Container.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -12,7 +14,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
   constructor(
     host: KittenScientists,
     settings: PolicySettings,
-    language: SettingOptions<SupportedLanguage>,
+    language: SettingOptions<SupportedLocale>,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade.policies");
@@ -20,6 +22,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
       host,
       settings,
       new SettingListItem(host, label, settings, {
+        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -30,29 +33,37 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
       options,
     );
 
+    const policies = host.game.science.policies.filter(
+      policy => !isNil(this.setting.policies[policy.name]),
+    );
+
     const items = [];
-    for (const policie of host.game.science.policies) {
-      if (isNil(this.setting.policies[policie.name])) continue;
-      const label = policie.label;
-      const button = new SettingListItem(host, label, this.setting.policies[policie.name], {
+    let lastLabel = policies[0].label;
+    for (const policy of policies.sort((a, b) =>
+      a.label.localeCompare(b.label, language.selected),
+    )) {
+      const option = this.setting.policies[policy.name];
+
+      const element = new SettingListItem(host, policy.label, option, {
         onCheck: () => {
-          host.engine.imessage("status.sub.enable", [label]);
+          host.engine.imessage("status.sub.enable", [policy.label]);
         },
         onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [label]);
+          host.engine.imessage("status.sub.disable", [policy.label]);
         },
       });
 
-      items.push({ label: label, button: button });
+      if (host.engine.localeSupportsFirstLetterSplits(language.selected)) {
+        if (lastLabel[0] !== policy.label[0]) {
+          element.element.addClass(stylesLabelListItem.splitter);
+        }
+      }
+
+      items.push(element);
+
+      lastLabel = policy.label;
     }
-    // Ensure buttons are added into UI with their labels alphabetized.
-    if (language.selected !== "zh") {
-      items.sort((a, b) => a.label.localeCompare(b.label));
-    }
-    const itemsList = new SettingsList(host);
-    items.forEach(button => {
-      itemsList.addChild(button.button);
-    });
-    this.addChild(itemsList);
+
+    this.addChild(new SettingsList(host, { children: items }));
   }
 }

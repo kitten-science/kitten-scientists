@@ -1,14 +1,20 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingMax } from "../settings/Settings.js";
 import { VillageSettings } from "../settings/VillageSettings.js";
+import stylesButton from "./components/Button.module.css";
+import { Container } from "./components/Container.js";
+import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { OptionsListItem } from "./components/OptionsListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { UiComponent } from "./components/UiComponent.js";
 
 export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
   private readonly _hunt: SettingTriggerListItem;
@@ -23,6 +29,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
       host,
       settings,
       new SettingListItem(host, label, settings, {
+        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -57,8 +64,34 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
         onUnCheck: () => {
           host.engine.imessage("status.sub.disable", [host.engine.i18n("option.hunt")]);
         },
+        onRefresh: () => {
+          this._hunt.triggerButton.inactive = !this.setting.hunt.enabled;
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.prompt.percentage"),
+            host.engine.i18n("ui.trigger.hunt.prompt", [
+              `${UiComponent.renderPercentage(this.setting.hunt.trigger)}%`,
+            ]),
+            UiComponent.renderPercentage(this.setting.hunt.trigger),
+            host.engine.i18n("ui.trigger.hunt.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined || value === "" || value.startsWith("-")) {
+                return;
+              }
+
+              this.setting.hunt.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              this._hunt.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
+        },
       },
     );
+    this._hunt.triggerButton.element.addClass(stylesButton.lastHeadAction);
     listAddition.addChild(this._hunt);
 
     this._festivals = new SettingListItem(
@@ -87,8 +120,35 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
         onUnCheck: () => {
           host.engine.imessage("status.sub.disable", [host.engine.i18n("option.promotekittens")]);
         },
+        onRefresh: () => {
+          this._promoteKittens.triggerButton.inactive =
+            !this.setting.promoteKittens.enabled || this.setting.promoteKittens.trigger === -1;
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.promoteKittens.promptTitle"),
+            host.engine.i18n("ui.trigger.promoteKittens.prompt", [
+              `${UiComponent.renderPercentage(this.setting.promoteKittens.trigger)}%`,
+            ]),
+            UiComponent.renderPercentage(this.setting.promoteKittens.trigger),
+            host.engine.i18n("ui.trigger.promoteKittens.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined || value === "" || value.startsWith("-")) {
+                return;
+              }
+
+              this.setting.promoteKittens.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              this.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
+        },
       },
     );
+    this._promoteKittens.triggerButton.element.addClass(stylesButton.lastHeadAction);
     listAddition.addChild(this._promoteKittens);
 
     this._promoteLeader = new SettingListItem(
@@ -154,7 +214,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     label: string,
     delimiter = false,
   ) {
-    return new SettingMaxListItem(host, label, option, {
+    const item = new SettingMaxListItem(host, label, option, {
+      childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
       delimiter,
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [label]);
@@ -162,6 +223,55 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
       onUnCheck: () => {
         host.engine.imessage("status.sub.disable", [label]);
       },
+      onRefresh: () => {
+        item.maxButton.inactive = !option.enabled || option.max === 0 || option.max === -1;
+      },
+      onRefreshMax: () => {
+        item.maxButton.updateLabel(UiComponent.renderAbsolute(option.max, host));
+        item.maxButton.element[0].title =
+          option.max < 0
+            ? host.engine.i18n("ui.max.distribute.titleInfinite", [label])
+            : option.max === 0
+              ? host.engine.i18n("ui.max.distribute.titleZero", [label])
+              : host.engine.i18n("ui.max.distribute.title", [
+                  UiComponent.renderAbsolute(option.max, host),
+                  label,
+                ]);
+      },
+      onSetMax: () => {
+        Dialog.prompt(
+          host,
+          host.engine.i18n("ui.max.distribute.prompt", [label]),
+          host.engine.i18n("ui.max.distribute.promptTitle", [
+            label,
+            UiComponent.renderAbsolute(option.max, host),
+          ]),
+          UiComponent.renderAbsolute(option.max, host),
+          host.engine.i18n("ui.max.distribute.promptExplainer"),
+        )
+          .then(value => {
+            if (value === undefined) {
+              return;
+            }
+
+            if (value === "" || value.startsWith("-")) {
+              option.max = -1;
+              return;
+            }
+
+            if (value === "0") {
+              option.enabled = false;
+            }
+
+            option.max = UiComponent.parseAbsolute(value) ?? option.max;
+          })
+          .then(() => {
+            this.refreshUi();
+          })
+          .catch(redirectErrorsToConsole(console));
+      },
     });
+    item.maxButton.element.addClass(stylesButton.lastHeadAction);
+    return item;
   }
 }

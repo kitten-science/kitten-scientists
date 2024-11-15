@@ -1,10 +1,10 @@
 import { sleep } from "@oliversalzburg/js-utils/async/async.js";
 import { ConstructorOf } from "@oliversalzburg/js-utils/core.js";
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { EngineState, GameLanguage, SupportedLanguage } from "./Engine.js";
+import { EngineState, GameLanguage, SupportedLocale } from "./Engine.js";
 import { cdebug, cinfo } from "./tools/Log.js";
 
-export const FallbackLanguage: GameLanguage & SupportedLanguage = "en";
+export const FallbackLocale: SupportedLocale = "en-US";
 
 // How long to wait for KG to load, in milliseconds.
 const TIMEOUT_DEFAULT = 2 * 60 * 1000;

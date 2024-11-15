@@ -13,7 +13,7 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
   readonly fieldset: Fieldset;
   readonly setting: TSetting;
   readonly element: JQuery;
-  readonly _options: Array<RadioItem>;
+  readonly _items: Array<RadioItem>;
 
   /**
    * Construct a new options setting element.
@@ -37,16 +37,16 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
     this.fieldset = new Fieldset(host, label);
     this.addChild(this.fieldset);
 
-    this._options = new Array<RadioItem>();
+    this._items = new Array<RadioItem>();
     for (const option of setting.options) {
-      this._options.push(
+      this._items.push(
         new RadioItem(host, setting, option, label, {
           onCheck: options?.onCheck,
           readOnly: options?.readOnly,
         }),
       );
     }
-    this.fieldset.addChildren(this._options);
+    this.fieldset.addChildren(this._items);
 
     this.setting = setting;
   }
@@ -54,7 +54,7 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
   refreshUi() {
     super.refreshUi();
 
-    for (const option of this._options) {
+    for (const option of this._items) {
       if (option.option.value === this.setting.selected) {
         option.input.prop("checked", true);
         break;

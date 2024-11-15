@@ -1,4 +1,5 @@
 import { KittenScientists } from "../../KittenScientists.js";
+import styles from "./HeaderListItem.module.css";
 import { ListItem } from "./ListItem.js";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
@@ -19,7 +20,7 @@ export class HeaderListItem extends UiComponent implements ListItem {
   constructor(host: KittenScientists, text: string, options?: Partial<UiComponentOptions>) {
     super(host, options);
 
-    const element = $("<li/>", { text }).addClass("ks-header");
+    const element = $("<li/>", { text }).addClass(styles.header);
 
     this.element = element;
     this.addChildren(options?.children);

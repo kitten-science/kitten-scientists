@@ -1,6 +1,8 @@
 import { Icons } from "../../../images/Icons.js";
 import { KittenScientists } from "../../../KittenScientists.js";
+import stylesIconButton from "../IconButton.module.css";
 import { UiComponent, UiComponentOptions } from "../UiComponent.js";
+import styles from "./ExpandoButton.module.css";
 
 export class ExpandoButton extends UiComponent {
   readonly element: JQuery;
@@ -17,23 +19,24 @@ export class ExpandoButton extends UiComponent {
 
     const element = $("<div/>", {
       html: `
-      <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="down"><path d="${Icons.ExpandCircleDown}"/></svg>
-      <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="up"><path d="${Icons.ExpandCircleUp}"/></svg>`,
+      <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="${styles.down}"><path d="${Icons.ExpandCircleDown}"/></svg>
+      <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="${styles.up}"><path d="${Icons.ExpandCircleUp}"/></svg>
+      `,
       title: host.engine.i18n("ui.itemsShow"),
     })
-      .addClass("ks-icon-button")
-      .addClass("ks-expando-button");
+      .addClass(stylesIconButton.iconButton)
+      .addClass(styles.expandoButton);
 
     this.element = element;
     this.addChildren(options?.children);
   }
 
   setCollapsed() {
-    this.element.removeClass("expanded");
+    this.element.removeClass(styles.expanded);
     this.element.prop("title", this._host.engine.i18n("ui.itemsShow"));
   }
   setExpanded() {
-    this.element.addClass("expanded");
+    this.element.addClass(styles.expanded);
     this.element.prop("title", this._host.engine.i18n("ui.itemsHide"));
   }
 }

@@ -1,0 +1,14 @@
+.head {
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+
+  transition: 0.3s;
+
+  > .headFlexItem {
+    flex: 1;
+    margin-right: 8px;
+  }
+}

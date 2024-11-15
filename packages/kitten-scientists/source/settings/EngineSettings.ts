@@ -1,6 +1,6 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { SupportedLanguage } from "../Engine.js";
-import { FallbackLanguage } from "../UserScriptLoader.js";
+import { SupportedLocale } from "../Engine.js";
+import { FallbackLocale } from "../UserScriptLoader.js";
 import { LogFilterSettings } from "./LogFilterSettings.js";
 import { ResourcesSettings } from "./ResourcesSettings.js";
 import { Setting, SettingOptions } from "./Settings.js";
@@ -15,7 +15,7 @@ export class EngineSettings extends Setting {
   /**
    * The currently selected language.
    */
-  language: SettingOptions<SupportedLanguage>;
+  locale: SettingOptions<SupportedLocale>;
 
   ksColumn: Setting;
 
@@ -28,18 +28,18 @@ export class EngineSettings extends Setting {
     filters = new LogFilterSettings(),
     resources = new ResourcesSettings(),
     states = new StateSettings(),
-    language = FallbackLanguage,
+    language = FallbackLocale,
     ksColumn = new Setting(false),
   ) {
     super(enabled);
     this.filters = filters;
     this.resources = resources;
     this.states = states;
-    this.language = new SettingOptions<SupportedLanguage>(language, [
-      { label: "Deutsch", value: "de" },
-      { label: "English", value: "en" },
-      { label: "עִברִית", value: "he" },
-      { label: "中文", value: "zh" },
+    this.locale = new SettingOptions<SupportedLocale>(language, [
+      { label: "Deutsch", value: "de-DE" },
+      { label: "English", value: "en-US" },
+      { label: "עִברִית", value: "he-IL" },
+      { label: "中文", value: "zh-CN" },
     ]);
     this.ksColumn = ksColumn;
   }
@@ -54,7 +54,7 @@ export class EngineSettings extends Setting {
     if (!retainMetaBehavior) {
       this.interval = settings.interval ?? this.interval;
       this.states.load(settings.states);
-      this.language.load(settings.language);
+      this.locale.load(settings.locale);
       this.ksColumn.load(settings.ksColumn);
     }
 

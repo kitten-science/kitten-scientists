@@ -274,10 +274,10 @@ export class TimeControlManager {
         const res = mustExist(this._host.game.resPool.get(name));
         checkedList.push({
           name: this._host.engine.i18n(`$resources.${entry.resource}.title`),
-          trigger: entry.stock,
+          trigger: entry.trigger,
           val: res.value,
         });
-        if (res.value < entry.stock) {
+        if (res.value < entry.trigger) {
           return;
         }
       }

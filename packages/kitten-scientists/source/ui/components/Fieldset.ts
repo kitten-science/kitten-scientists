@@ -1,4 +1,7 @@
 import { KittenScientists } from "../../KittenScientists.js";
+import stylesDelimiter from "./Delimiter.module.css";
+import styles from "./Fieldset.module.css";
+import stylesLabel from "./LabelListItem.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type FieldsetOptions = UiComponentOptions & {
@@ -18,11 +21,11 @@ export class Fieldset extends UiComponent {
   constructor(host: KittenScientists, label: string, options?: Partial<FieldsetOptions>) {
     super(host, options);
 
-    const element = $("<fieldset/>").addClass("ks-fieldset");
+    const element = $("<fieldset/>").addClass(styles.fieldset);
     if (options?.delimiter) {
-      element.addClass("ks-delimiter");
+      element.addClass(stylesDelimiter.delimiter);
     }
-    const legend = $("<legend/>").text(label).addClass("ks-label");
+    const legend = $("<legend/>").text(label).addClass(stylesLabel.label);
     element.append(legend);
 
     this.element = element;

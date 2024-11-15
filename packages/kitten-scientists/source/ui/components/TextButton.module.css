@@ -1,0 +1,11 @@
+.textButton {
+  display: inline-block;
+  white-space: nowrap;
+  opacity: 0.8;
+
+  cursor: pointer;
+  user-select: none;
+}
+.textButton:hover {
+  opacity: 1;
+}

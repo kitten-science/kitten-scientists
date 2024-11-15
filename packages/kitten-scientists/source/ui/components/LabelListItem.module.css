@@ -1,0 +1,28 @@
+.label {
+  align-content: center;
+  display: inline-block;
+  flex: 0 1 fit-content;
+  opacity: 0.8;
+
+  white-space: nowrap;
+
+  transition: 0.3s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.splitter .label::first-letter {
+  font-weight: bold;
+}
+
+.iconLabel {
+  display: inline-block;
+  margin-right: 4px;
+  margin-left: 2px;
+  vertical-align: middle;
+}
+.fillSpace {
+  flex: 1;
+}

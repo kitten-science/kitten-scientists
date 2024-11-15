@@ -1,9 +1,11 @@
-import { SupportedLanguage } from "../Engine.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { ScienceSettings } from "../settings/ScienceSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { PolicySettingsUi } from "./PolicySettingsUi.js";
 import { TechSettingsUi } from "./TechSettingsUi.js";
+import { Container } from "./components/Container.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -17,13 +19,14 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
   constructor(
     host: KittenScientists,
     settings: ScienceSettings,
-    language: SettingOptions<SupportedLanguage>,
+    language: SettingOptions<SupportedLocale>,
   ) {
     const label = host.engine.i18n("ui.upgrade");
     super(
       host,
       settings,
       new SettingListItem(host, label, settings, {
+        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },

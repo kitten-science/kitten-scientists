@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import { metablock } from "vite-plugin-userscript";
 import manifest from "./package.json" with { type: "json" };
 
@@ -35,17 +36,6 @@ const KS_RELEASE_CHANNEL = JSON.stringify(process.env.KS_RELEASE_CHANNEL ?? "fix
 const KS_VERSION = JSON.stringify(versionString);
 
 export default defineConfig({
-  plugins: [
-    metablock({
-      override: {
-        version: versionString,
-        description: manifest.description,
-        homepage: manifest.homepage,
-        supportURL: manifest.bugs.url,
-        updateURL,
-      },
-    }),
-  ],
   build: {
     emptyOutDir: !isCi,
     lib: {
@@ -67,4 +57,16 @@ export default defineConfig({
     KS_RELEASE_CHANNEL,
     KS_VERSION,
   },
+  plugins: [
+    metablock({
+      override: {
+        version: versionString,
+        description: manifest.description,
+        homepage: manifest.homepage,
+        supportURL: manifest.bugs.url,
+        updateURL,
+      },
+    }),
+    cssInjectedByJsPlugin(),
+  ],
 });

@@ -1,0 +1,13 @@
+.expandoButton:not(.expanded) .up {
+  display: none;
+}
+.expandoButton:not(.expanded) .down {
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+.expandoButton.expanded .down {
+  display: none;
+}

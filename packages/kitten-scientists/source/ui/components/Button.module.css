@@ -1,0 +1,72 @@
+.button {
+  display: flex;
+  align-items: end;
+
+  cursor: pointer;
+  transition: 0.3s;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.inactive {
+    opacity: 0.2;
+
+    &:hover {
+      opacity: 0.4;
+    }
+  }
+
+  .buttonIcon {
+    margin: 0 2px 0 0;
+    vertical-align: sub;
+  }
+
+  &.alignRight {
+    justify-content: end;
+  }
+
+  &.large {
+    padding: 5px 10px;
+  }
+
+  &.bordered {
+    border: 1px solid rgba(180, 180, 180, 0.2);
+
+    &:not(.large) {
+      padding: 0 2px;
+    }
+
+    &:hover {
+      border: 1px solid rgba(180, 180, 180, 1);
+    }
+  }
+
+  &.headAction {
+    min-width: 50px;
+  }
+  &.lastHeadAction {
+    padding-right: 20px;
+  }
+
+  &.consumeButton {
+    border: 1px solid transparent;
+  }
+  &.stockButton {
+    border: 1px solid transparent;
+  }
+}
+
+.button:not(.bordered) + .button:not(.bordered):before {
+  content: "";
+  display: inline-block;
+  height: 1em;
+  border-left: 1px solid transparent;
+}
+.button:not(.bordered):not(.inactive).alignRight + .button:not(.bordered):not(.inactive):before {
+  content: "";
+  display: inline-block;
+  height: 1em;
+  border-left: 1px solid rgba(180, 180, 180, 0.4);
+}

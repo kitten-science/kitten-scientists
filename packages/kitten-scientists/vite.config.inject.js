@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import manifest from "./package.json" with { type: "json" };
 
 const filename = "kitten-scientists.inject.js";
@@ -28,4 +29,5 @@ export default defineConfig({
     KS_RELEASE_CHANNEL,
     KS_VERSION,
   },
+  plugins: [cssInjectedByJsPlugin()],
 });

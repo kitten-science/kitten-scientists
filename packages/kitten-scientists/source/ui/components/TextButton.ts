@@ -1,5 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
+import stylesTextButton from "./TextButton.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type TextButtonOptions = UiComponentOptions & {
@@ -14,7 +15,7 @@ export class TextButton extends UiComponent {
   constructor(host: KittenScientists, label?: string, options?: Partial<TextButtonOptions>) {
     super(host, options);
 
-    const element = $("<div/>").addClass("ks-text-button");
+    const element = $("<div/>").addClass(stylesTextButton.textButton);
     if (label !== undefined) {
       element.text(label);
     }

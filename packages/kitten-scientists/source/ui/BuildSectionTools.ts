@@ -24,7 +24,20 @@ export const BuildSectionTools = {
         host.engine.imessage("status.sub.disable", [label]);
       },
       onRefresh: () => {
-        buildOption.triggerButton.inactive = option.trigger === -1;
+        buildOption.maxButton.inactive = !option.enabled || option.max === 0 || option.max === -1;
+        buildOption.triggerButton.inactive = !option.enabled || option.trigger === -1;
+      },
+      onRefreshMax: () => {
+        buildOption.maxButton.updateLabel(UiComponent.renderAbsolute(option.max, host));
+        buildOption.maxButton.element[0].title =
+          option.max < 0
+            ? host.engine.i18n("ui.max.build.titleInfinite", [label])
+            : option.max === 0
+              ? host.engine.i18n("ui.max.build.titleZero", [label])
+              : host.engine.i18n("ui.max.build.title", [
+                  UiComponent.renderAbsolute(option.max, host),
+                  label,
+                ]);
       },
       onRefreshTrigger: () => {
         buildOption.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
@@ -35,11 +48,43 @@ export const BuildSectionTools = {
             : `${UiComponent.renderPercentage(option.trigger)}%`,
         ]);
       },
+      onSetMax: () => {
+        Dialog.prompt(
+          host,
+          host.engine.i18n("ui.max.prompt.absolute"),
+          host.engine.i18n("ui.max.build.prompt", [
+            label,
+            UiComponent.renderAbsolute(option.max, host),
+          ]),
+          option.max.toString(),
+          host.engine.i18n("ui.max.build.promptExplainer"),
+        )
+          .then(value => {
+            if (value === undefined) {
+              return;
+            }
+
+            if (value === "" || value.startsWith("-")) {
+              option.max = -1;
+              return;
+            }
+
+            if (value === "0") {
+              option.enabled = false;
+            }
+
+            option.max = UiComponent.parseAbsolute(value) ?? option.max;
+          })
+          .then(() => {
+            buildOption.refreshUi();
+          })
+          .catch(redirectErrorsToConsole(console));
+      },
       onSetTrigger: () => {
         Dialog.prompt(
           host,
           host.engine.i18n("ui.trigger.prompt.percentage"),
-          host.engine.i18n("ui.trigger.section.prompt", [
+          host.engine.i18n("ui.trigger.build.prompt", [
             label,
             option.trigger !== -1
               ? `${Dialog.renderPercentage(option.trigger)}%`

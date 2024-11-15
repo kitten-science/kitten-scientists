@@ -1,20 +1,18 @@
 import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Resource, Resources } from "../types/index.js";
-import { Setting } from "./Settings.js";
+import { Setting, SettingThreshold } from "./Settings.js";
 
-export class ResetResourcesSettingsItem extends Setting {
+export class ResetResourcesSettingsItem extends SettingThreshold {
   readonly #resource: Resource;
-  stock = 0;
 
   get resource() {
     return this.#resource;
   }
 
-  constructor(resource: Resource, enabled = false, stock = 0) {
-    super(enabled);
+  constructor(resource: Resource, enabled = false, threshold = -1) {
+    super(enabled, threshold);
     this.#resource = resource;
-    this.stock = stock;
   }
 }
 
@@ -45,7 +43,7 @@ export class ResetResourcesSettings extends Setting {
 
     consumeEntriesPedantic(this.resources, settings.resources, (resource, item) => {
       resource.enabled = item?.enabled ?? resource.enabled;
-      resource.stock = item?.stock ?? resource.stock;
+      resource.trigger = item?.trigger ?? resource.trigger;
     });
   }
 }

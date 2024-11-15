@@ -1,15 +1,17 @@
 import { is } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
-import { ExpandoButton } from "./buttons-icon/ExpandoButton.js";
+import { ExpandoButton } from "./buttons/ExpandoButton.js";
+import styles from "./CollapsiblePanel.module.css";
 import { Container } from "./Container.js";
 import { LabelListItem } from "./LabelListItem.js";
+import stylesSettingListItem from "./SettingListItem.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponentOptions<TChild> & {
   /**
    * Should the main child be expanded right away?
    */
-  initiallyExpanded: boolean;
+  readonly initiallyExpanded: boolean;
 };
 
 /**
@@ -44,7 +46,7 @@ export class CollapsiblePanel<
     super(host, options);
 
     this.container = new Container(host);
-    this.container.element.addClass("ks-panel-content");
+    this.container.element.addClass(styles.panelContent);
     this.children.add(this.container);
 
     this._head = head;
@@ -95,13 +97,13 @@ export class CollapsiblePanel<
         // Reflect expanded state on expando.
         this._expando.setExpanded();
         // Reflect expanded state for CSS.
-        this._head.element.addClass("ks-expanded");
+        this._head.element.addClass(stylesSettingListItem.expanded);
         // This is NOT a DOM event! It can only be caught by listening on this panel directly.
         this.dispatchEvent(new CustomEvent("panelShown"));
       } else {
         this.container.element.hide();
         this._expando.setCollapsed();
-        this._head.element.removeClass("ks-expanded");
+        this._head.element.removeClass(stylesSettingListItem.expanded);
         this.dispatchEvent(new CustomEvent("panelHidden"));
       }
     }

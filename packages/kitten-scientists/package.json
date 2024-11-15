@@ -46,6 +46,7 @@
     "@types/web": "0.0.184",
     "typescript": "5.7.2",
     "vite": "6.0.1",
+    "vite-plugin-css-injected-by-js": "3.5.2",
     "vite-plugin-userscript": "0.1.3"
   },
   "keywords": [

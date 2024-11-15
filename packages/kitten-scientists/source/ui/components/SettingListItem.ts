@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
 import { Setting } from "../../settings/Settings.js";
 import { LabelListItem, LabelListItemOptions } from "./LabelListItem.js";
+import styles from "./SettingListItem.module.css";
 
 export type SettingListItemOptions = LabelListItemOptions & {
   /**
@@ -26,6 +27,8 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
 
   readOnly: boolean;
 
+  static #nextId = 0;
+
   /**
    * Construct a new setting element.
    * This is a simple checkbox with a label.
@@ -43,11 +46,13 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
   ) {
     super(host, label, { ...options, children: [] });
 
-    this.element.addClass("ks-setting");
+    this.element.addClass(styles.setting);
 
+    const id = `ks-setting${SettingListItem.#nextId++}`;
     const checkbox = $("<input/>", {
+      id,
       type: "checkbox",
-    }).addClass("ks-checkbox");
+    }).addClass(styles.checkbox);
 
     this.readOnly = options?.readOnly ?? false;
     checkbox.prop("disabled", this.readOnly);
@@ -56,13 +61,16 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
       if (checkbox.is(":checked") && !setting.enabled) {
         setting.enabled = true;
         options?.onCheck?.();
+        this.refreshUi();
       } else if (!checkbox.is(":checked") && setting.enabled) {
         setting.enabled = false;
         options?.onUnCheck?.();
+        this.refreshUi();
       }
     });
 
-    this.elementLabel.prepend(checkbox);
+    this.elementLabel.before(checkbox);
+    this.elementLabel.prop("for", id);
 
     this.checkbox = checkbox;
     this.setting = setting;

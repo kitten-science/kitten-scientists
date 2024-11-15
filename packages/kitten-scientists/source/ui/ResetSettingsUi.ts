@@ -1,8 +1,10 @@
-import { SupportedLanguage } from "../Engine.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { ResetSettings } from "../settings/ResetSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
+import { Container } from "./components/Container.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -24,7 +26,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   constructor(
     host: KittenScientists,
     settings: ResetSettings,
-    language: SettingOptions<SupportedLanguage>,
+    language: SettingOptions<SupportedLocale>,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("option.time.reset");
@@ -32,6 +34,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
       host,
       settings,
       new SettingListItem(host, label, settings, {
+        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },

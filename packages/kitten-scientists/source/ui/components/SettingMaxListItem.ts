@@ -1,9 +1,12 @@
 import { KittenScientists } from "../../KittenScientists.js";
 import { SettingMax } from "../../settings/Settings.js";
-import { MaxButton } from "./buttons-text/MaxButton.js";
+import { MaxButton } from "./buttons/MaxButton.js";
+import { Container } from "./Container.js";
+import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
 export type SettingListItemOptionsMax = {
+  readonly onRefreshMax: (subject: SettingMaxListItem) => void;
   readonly onSetMax: (subject: SettingMaxListItem) => void;
 };
 
@@ -28,8 +31,15 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
   ) {
     super(host, label, setting, options);
 
-    this.maxButton = new MaxButton(host, label, setting);
-    this.head.addChild(this.maxButton);
+    this.maxButton = new MaxButton(host, setting, {
+      border: false,
+      onClick: options?.onSetMax ? () => options.onSetMax?.(this) : undefined,
+      onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.(this) : undefined,
+    });
+    this.head.addChildren([
+      new Container(host, { classes: [stylesLabelListItem.fillSpace] }),
+      this.maxButton,
+    ]);
   }
 
   refreshUi() {
