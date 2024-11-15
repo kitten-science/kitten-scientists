@@ -27,10 +27,11 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
           host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive = settings.trigger < 0;
+          (item as SettingTriggerListItem).triggerButton.inactive =
+            !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
-          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
               : `${UiComponent.renderPercentage(settings.trigger)}%`,

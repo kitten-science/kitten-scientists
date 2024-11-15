@@ -1,8 +1,11 @@
 import { KittenScientists } from "../../KittenScientists.js";
+import styles from "./Button.module.css";
 import { IconButtonOptions } from "./IconButton.js";
 import { UiComponent } from "./UiComponent.js";
 
 export type ButtonOptions = IconButtonOptions & {
+  readonly border: boolean;
+  readonly alignment: "left" | "right";
   readonly title: string;
 };
 
@@ -10,6 +13,8 @@ export type ButtonOptions = IconButtonOptions & {
  * A button that has a label and can optionally have an SVG icon.
  */
 export class Button extends UiComponent {
+  declare readonly _options: Partial<ButtonOptions>;
+
   protected readonly _iconElement: JQuery | undefined;
   readonly element: JQuery;
   readOnly: boolean;
@@ -31,13 +36,25 @@ export class Button extends UiComponent {
   ) {
     super(host, { ...options, children: [], classes: [] });
 
-    this.element = $("<div/>", { title: options?.title }).addClass("ks-button").text(label);
+    this.element = $("<div/>", { title: options?.title }).addClass(styles.button).text(label);
+
+    if (options?.border !== false) {
+      this.element.addClass(styles.bordered);
+    }
+
+    if (options?.alignment === "right") {
+      this.element.addClass(styles.alignRight);
+    }
 
     if (pathData !== null) {
       this._iconElement = $(
-        `<svg class="ks-button-icon" style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
+        `<svg class="${styles.buttonIcon}" style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
       );
-      this.element.prepend(this._iconElement);
+      if (options?.alignment === "right") {
+        this.element.append(this._iconElement);
+      } else {
+        this.element.prepend(this._iconElement);
+      }
     }
 
     options?.classes?.forEach(className => this.element.addClass(className));
@@ -58,7 +75,11 @@ export class Button extends UiComponent {
   updateLabel(label: string) {
     this.element.text(label);
     if (this._iconElement !== undefined) {
-      this.element.prepend(this._iconElement);
+      if (this._options.alignment === "right") {
+        this.element.append(this._iconElement);
+      } else {
+        this.element.prepend(this._iconElement);
+      }
     }
   }
   updateTitle(title: string) {
@@ -83,9 +104,9 @@ export class Button extends UiComponent {
     }
 
     if (this.inactive) {
-      this.element.addClass("ks-inactive");
+      this.element.addClass(styles.inactive);
     } else {
-      this.element.removeClass("ks-inactive");
+      this.element.removeClass(styles.inactive);
     }
   }
 }

@@ -1,18 +1,23 @@
 import { KittenScientists } from "../../KittenScientists.js";
 import { Container } from "./Container.js";
+import styles from "./LabelListItem.module.css";
 import { ListItem, ListItemOptions } from "./ListItem.js";
+import stylesListItem from "./ListItem.module.css";
+import { UiComponent } from "./UiComponent.js";
 
 export type LabelListItemOptions = ListItemOptions & {
+  readonly childrenHead: Array<UiComponent>;
+
   /**
    * When set to an SVG path, will be used as an icon on the label.
    */
-  icon: string;
+  readonly icon: string;
 
   /**
    * Should an indicator be rendered in front of the element,
    * to indicate that this is an upgrade of a prior setting?
    */
-  upgradeIndicator: boolean;
+  readonly upgradeIndicator: boolean;
 };
 
 export class LabelListItem extends ListItem {
@@ -30,26 +35,27 @@ export class LabelListItem extends ListItem {
     super(host, options);
 
     this.head = new Container(host);
-    this.head.element.addClass("ks-head");
+    this.head.element.addClass(stylesListItem.head);
     this.addChild(this.head);
 
     this.elementLabel = $("<label/>", {
       text: `${options?.upgradeIndicator === true ? `⮤ ` : ""}${label}`,
     })
-      .addClass("ks-label")
+      .addClass(styles.label)
+      .addClass(stylesListItem.label)
       .on("click", () => {
         this.click();
       });
     this.head.element.append(this.elementLabel);
 
-    const spacer = new Container(host);
-    spacer.element.addClass("ks-fill-space");
-    this.head.addChild(spacer);
+    options?.childrenHead?.forEach(child => {
+      this.head.addChild(child);
+    });
 
     if (options?.icon) {
       const iconElement = $("<div/>", {
         html: `<svg style="width: 15px; height: 15px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${options.icon}"/></svg>`,
-      }).addClass("ks-icon-label");
+      }).addClass(styles.iconLabel);
       this.elementLabel.prepend(iconElement);
     }
   }

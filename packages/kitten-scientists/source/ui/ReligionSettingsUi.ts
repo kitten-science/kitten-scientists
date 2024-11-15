@@ -4,6 +4,7 @@ import { KittenScientists } from "../KittenScientists.js";
 import { ReligionOptions, ReligionSettings, UnicornItems } from "../settings/ReligionSettings.js";
 import { ZiggurathUpgrade } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
+import stylesButton from "./components/Button.module.css";
 import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
@@ -31,10 +32,11 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
           host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive = settings.trigger < 0;
+          (item as SettingTriggerListItem).triggerButton.inactive =
+            !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
-          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
               : `${UiComponent.renderPercentage(settings.trigger)}%`,
@@ -204,14 +206,58 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                 },
               });
             }
-            return new SettingTriggerListItem(host, label, this.setting[item], {
+
+            const element = new SettingTriggerListItem(host, label, this.setting[item], {
+              classes: [stylesButton.lastHeadAction],
               onCheck: () => {
                 host.engine.imessage("status.sub.enable", [label]);
               },
               onUnCheck: () => {
                 host.engine.imessage("status.sub.disable", [label]);
               },
+              onRefresh: element => {
+                (element as SettingTriggerListItem).triggerButton.inactive =
+                  !this.setting[item].enabled || this.setting[item].trigger === -1;
+              },
+              onSetTrigger: () => {
+                Dialog.prompt(
+                  host,
+                  host.engine.i18n(
+                    element.triggerButton.behavior === "integer"
+                      ? "ui.trigger.setinteger"
+                      : "ui.trigger.setpercentage",
+                    [label],
+                  ),
+                  host.engine.i18n("ui.trigger.build.prompt", [
+                    label,
+                    element.triggerButton.behavior === "integer"
+                      ? UiComponent.renderAbsolute(this.setting[item].trigger, host)
+                      : UiComponent.renderPercentage(this.setting[item].trigger),
+                  ]),
+                  element.triggerButton.behavior === "integer"
+                    ? UiComponent.renderAbsolute(this.setting[item].trigger, host)
+                    : UiComponent.renderPercentage(this.setting[item].trigger),
+                  host.engine.i18n(
+                    element.triggerButton.behavior === "integer"
+                      ? "ui.trigger.setinteger.promptExplainer"
+                      : "ui.trigger.setpercentage.promptExplainer",
+                  ),
+                )
+                  .then(value => {
+                    if (value === undefined || value === "" || value.startsWith("-")) {
+                      return;
+                    }
+
+                    this.setting[item].trigger = UiComponent.parsePercentage(value);
+                  })
+                  .then(() => {
+                    this.refreshUi();
+                  })
+                  .catch(redirectErrorsToConsole(console));
+              },
             });
+            element.triggerButton.element.addClass(stylesButton.lastHeadAction);
+            return element;
           }),
         ],
         hasDisableAll: false,

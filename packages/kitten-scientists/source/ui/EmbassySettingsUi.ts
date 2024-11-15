@@ -1,12 +1,16 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { EmbassySettings } from "../settings/EmbassySettings.js";
 import { SettingMax } from "../settings/Settings.js";
+import stylesButton from "./components/Button.module.css";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
+import { Dialog } from "./components/Dialog.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import { UiComponent } from "./components/UiComponent.js";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   constructor(host: KittenScientists, settings: EmbassySettings, options?: PanelOptions) {
@@ -21,6 +25,32 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
         },
+        onRefresh: item => {
+          (item as SettingTriggerListItem).triggerButton.inactive =
+            !settings.enabled || settings.trigger === -1;
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.embassies.prompt"),
+            host.engine.i18n("ui.trigger.embassies.promptTitle", [
+              `${UiComponent.renderPercentage(settings.trigger)}%`,
+            ]),
+            UiComponent.renderPercentage(settings.trigger),
+            host.engine.i18n("ui.trigger.embassies.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined || value === "" || value.startsWith("-")) {
+                return;
+              }
+
+              settings.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              this.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
+        },
       }),
       options,
     );
@@ -34,13 +64,62 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   }
 
   private _makeEmbassySetting(host: KittenScientists, option: SettingMax, label: string) {
-    return new SettingMaxListItem(host, label, option, {
+    const element = new SettingMaxListItem(host, label, option, {
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [label]);
       },
       onUnCheck: () => {
         host.engine.imessage("status.sub.disable", [label]);
       },
+      onRefresh: () => {
+        element.maxButton.inactive = !option.enabled || option.max === -1;
+      },
+      onRefreshMax: () => {
+        element.maxButton.updateLabel(UiComponent.renderAbsolute(option.max, host));
+        element.maxButton.element[0].title =
+          option.max < 0
+            ? host.engine.i18n("ui.max.embassy.titleInfinite", [label])
+            : option.max === 0
+              ? host.engine.i18n("ui.max.embassy.titleZero", [label])
+              : host.engine.i18n("ui.max.embassy.title", [
+                  UiComponent.renderAbsolute(option.max, host),
+                  label,
+                ]);
+      },
+      onSetMax: () => {
+        Dialog.prompt(
+          host,
+          host.engine.i18n("ui.max.prompt.absolute"),
+          host.engine.i18n("ui.max.build.prompt", [
+            label,
+            UiComponent.renderAbsolute(option.max, host),
+          ]),
+          UiComponent.renderAbsolute(option.max, host),
+          host.engine.i18n("ui.max.build.promptExplainer"),
+        )
+          .then(value => {
+            if (value === undefined) {
+              return;
+            }
+
+            if (value === "" || value.startsWith("-")) {
+              option.max = -1;
+              return;
+            }
+
+            if (value === "0") {
+              option.enabled = false;
+            }
+
+            option.max = UiComponent.parseAbsolute(value) ?? option.max;
+          })
+          .then(() => {
+            this.refreshUi();
+          })
+          .catch(redirectErrorsToConsole(console));
+      },
     });
+    element.maxButton.element.addClass(stylesButton.lastHeadAction);
+    return element;
   }
 }

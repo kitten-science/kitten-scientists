@@ -1,4 +1,5 @@
 import { KittenScientists } from "../../KittenScientists.js";
+import styles from "./Delimiter.module.css";
 import { UiComponent } from "./UiComponent.js";
 
 export class Delimiter extends UiComponent {
@@ -14,7 +15,7 @@ export class Delimiter extends UiComponent {
   constructor(host: KittenScientists) {
     super(host, {});
 
-    const element = $("<div/>").addClass("ks-delimiter");
+    const element = $("<div/>").addClass(styles.delimiter);
     this.element = element;
   }
 }

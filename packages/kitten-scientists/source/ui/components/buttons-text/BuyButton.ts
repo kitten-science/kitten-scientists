@@ -1,7 +1,10 @@
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingBuy } from "../../../settings/Settings.js";
+import { Dialog } from "../Dialog.js";
 import { TextButton } from "../TextButton.js";
 import { UiComponent } from "../UiComponent.js";
+import styles from "./BuyButton.module.css";
 
 export class BuyButton extends TextButton {
   readonly setting: SettingBuy;
@@ -9,24 +12,39 @@ export class BuyButton extends TextButton {
   constructor(host: KittenScientists, setting: SettingBuy, handler: { onClick?: () => void } = {}) {
     super(host, undefined, {
       onClick: () => {
-        const value = UiComponent.promptLimit(
-          host.engine.i18n("blackcoin.buy.threshold"),
+        Dialog.prompt(
+          host,
+          host.engine.i18n("blackcoin.buy.prompt"),
+          host.engine.i18n("blackcoin.buy.promptTitle", [
+            UiComponent.renderAbsolute(setting.buy, host),
+          ]),
           setting.buy.toString(),
-        );
+          host.engine.i18n("blackcoin.buy.promptExplainer"),
+        )
+          .then(value => {
+            if (value === undefined) {
+              return;
+            }
 
-        if (value !== null) {
-          setting.buy = value;
-          this.refreshUi();
-        }
+            if (value === "" || value.startsWith("-")) {
+              setting.buy = -1;
+              return;
+            }
 
-        if (handler.onClick) {
-          handler.onClick();
-        }
+            setting.buy = UiComponent.parseAbsolute(value) ?? setting.buy;
+          })
+          .then(() => {
+            this.refreshUi();
+
+            if (handler.onClick) {
+              handler.onClick();
+            }
+          })
+          .catch(redirectErrorsToConsole(console));
       },
-      title: setting.buy.toFixed(3),
     });
 
-    this.element.addClass("ks-buy-button");
+    this.element.addClass(styles.buyButton);
 
     this.setting = setting;
   }
@@ -34,9 +52,16 @@ export class BuyButton extends TextButton {
   refreshUi() {
     super.refreshUi();
 
-    this.element.prop("title", this.setting.buy.toFixed(3));
+    this.element.prop(
+      "title",
+      this._host.engine.i18n("blackcoin.buy.title", [
+        UiComponent.renderAbsolute(this.setting.buy, this._host),
+      ]),
+    );
     this.element.text(
-      this._host.engine.i18n("ui.buy", [UiComponent.renderLimit(this.setting.buy, this._host)]),
+      this._host.engine.i18n("blackcoin.buy", [
+        UiComponent.renderAbsolute(this.setting.buy, this._host),
+      ]),
     );
   }
 }

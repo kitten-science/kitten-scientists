@@ -1,4 +1,5 @@
 import { KittenScientists } from "../../KittenScientists.js";
+import styles from "./IconButton.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type IconButtonOptions = UiComponentOptions & {
@@ -33,7 +34,7 @@ export class IconButton extends UiComponent {
     const element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
       title,
-    }).addClass("ks-icon-button");
+    }).addClass(styles.iconButton);
 
     this.element = element;
     this.addChildren(options?.children);
@@ -63,9 +64,9 @@ export class IconButton extends UiComponent {
     }
 
     if (this.inactive) {
-      this.element.addClass("ks-inactive");
+      this.element.addClass(styles.inactive);
     } else {
-      this.element.removeClass("ks-inactive");
+      this.element.removeClass(styles.inactive);
     }
   }
 }

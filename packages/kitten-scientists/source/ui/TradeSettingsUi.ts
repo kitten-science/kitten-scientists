@@ -1,10 +1,12 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingBuySellThreshold } from "../settings/Settings.js";
 import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { BuyButton } from "./components/buttons-text/BuyButton.js";
 import { SellButton } from "./components/buttons-text/SellButton.js";
+import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SeasonsList } from "./components/SeasonsList.js";
 import { SettingLimitedListItem } from "./components/SettingLimitedListItem.js";
@@ -12,6 +14,7 @@ import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import { UiComponent } from "./components/UiComponent.js";
 import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
 
 export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
@@ -26,6 +29,47 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+        },
+        onRefresh: item => {
+          (item as SettingTriggerListItem).triggerButton.inactive =
+            !settings.enabled || settings.trigger === -1;
+        },
+        onRefreshTrigger: item => {
+          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
+            settings.trigger < 0
+              ? host.engine.i18n("ui.trigger.section.inactive")
+              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+          ]);
+        },
+        onSetTrigger: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.trigger.prompt.percentage"),
+            host.engine.i18n("ui.trigger.section.prompt", [
+              label,
+              settings.trigger !== -1
+                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                : host.engine.i18n("ui.infinity"),
+            ]),
+            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            host.engine.i18n("ui.trigger.section.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined) {
+                return;
+              }
+
+              if (value === "" || value.startsWith("-")) {
+                settings.trigger = -1;
+                return;
+              }
+
+              settings.trigger = UiComponent.parsePercentage(value);
+            })
+            .then(() => {
+              this.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
         },
       }),
     );
@@ -71,6 +115,33 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
             onUnCheck: () => {
               host.engine.imessage("status.sub.disable", [host.engine.i18n("option.crypto")]);
             },
+            onRefresh: item => {
+              (item as SettingTriggerListItem).triggerButton.inactive =
+                !this.setting.tradeBlackcoin.enabled || this.setting.tradeBlackcoin.trigger === -1;
+            },
+            onSetTrigger: () => {
+              Dialog.prompt(
+                host,
+                host.engine.i18n("ui.trigger.crypto.promptTitle"),
+                host.engine.i18n("ui.trigger.crypto.prompt", [
+                  UiComponent.renderAbsolute(this.setting.tradeBlackcoin.trigger, host),
+                ]),
+                UiComponent.renderAbsolute(this.setting.tradeBlackcoin.trigger, host),
+                host.engine.i18n("ui.trigger.crypto.promptExplainer"),
+              )
+                .then(value => {
+                  if (value === undefined || value === "" || value.startsWith("-")) {
+                    return;
+                  }
+
+                  this.setting.tradeBlackcoin.trigger =
+                    UiComponent.parseAbsolute(value) ?? this.setting.tradeBlackcoin.trigger;
+                })
+                .then(() => {
+                  this.refreshUi();
+                })
+                .catch(redirectErrorsToConsole(console));
+            },
           },
         ),
         {
@@ -111,7 +182,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const settingItem = new SettingLimitedListItem(host, i18nName, option, {
+    const element = new SettingLimitedListItem(host, i18nName, option, {
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [i18nName]);
       },
@@ -124,10 +195,13 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
       onLimitedUnCheck: () => {
         host.engine.imessage("trade.unlimited", [i18nName]);
       },
+      onRefresh: () => {
+        element.limitedButton.inactive = !option.enabled || !option.limited;
+      },
       delimiter,
       upgradeIndicator,
     });
-    const panel = new SettingsPanel(host, option, settingItem);
+    const panel = new SettingsPanel(host, option, element);
 
     const seasons = new SeasonsList(host, option.seasons, {
       onCheck: (label: string) => {

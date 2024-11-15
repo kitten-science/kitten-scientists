@@ -1,6 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLanguage } from "../Engine.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
@@ -8,13 +8,12 @@ import { ucfirst } from "../tools/Format.js";
 import { ResourceCraftable } from "../types/index.js";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
 import { Dialog } from "./components/Dialog.js";
-import { SettingLimitedMaxTriggerListItem } from "./components/SettingLimitedMaxTriggerListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { UiComponent } from "./components/UiComponent.js";
-import { PaddingButton } from "./components/buttons-icon/PaddingButton.js";
+import { WorkshopCraftListItem } from "./components/WorkshopCraftListItem.js";
 
 export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
   private readonly _crafts: Array<SettingListItem>;
@@ -22,7 +21,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
   constructor(
     host: KittenScientists,
     settings: WorkshopSettings,
-    language: SettingOptions<SupportedLanguage>,
+    language: SettingOptions<SupportedLocale>,
   ) {
     const label = host.engine.i18n("ui.craft");
     super(
@@ -36,10 +35,11 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
           host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive = settings.trigger < 0;
+          (item as SettingTriggerListItem).triggerButton.inactive =
+            !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
-          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
               : `${UiComponent.renderPercentage(settings.trigger)}%`,
@@ -94,7 +94,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
 
     this._crafts = [];
     for (const [option, label] of preparedCrafts) {
-      const element = new SettingLimitedMaxTriggerListItem(host, label, option, {
+      const element = new WorkshopCraftListItem(host, label, option, {
         delimiter: option.resource === "kerosene" || option.resource === "blueprint",
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [label]);
@@ -109,7 +109,21 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
           host.engine.imessage("craft.unlimited", [label]);
         },
         onRefresh: () => {
-          element.triggerButton.inactive = option.trigger === -1;
+          element.limitedButton.inactive = !option.enabled || !option.limited;
+          element.maxButton.inactive = !option.enabled || option.max === -1;
+          element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+        },
+        onRefreshMax: () => {
+          element.maxButton.updateLabel(UiComponent.renderAbsolute(option.max, host));
+          element.maxButton.element[0].title =
+            option.max < 0
+              ? host.engine.i18n("ui.max.craft.titleInfinite", [label])
+              : option.max === 0
+                ? host.engine.i18n("ui.max.craft.titleZero", [label])
+                : host.engine.i18n("ui.max.craft.title", [
+                    UiComponent.renderAbsolute(option.max, host),
+                    label,
+                  ]);
         },
         onRefreshTrigger: () => {
           element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
@@ -119,6 +133,38 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
                 : `${UiComponent.renderPercentage(settings.trigger)}% (${host.engine.i18n("ui.trigger.build.inherited")})`
               : `${UiComponent.renderPercentage(option.trigger)}%`,
           ]);
+        },
+        onSetMax: () => {
+          Dialog.prompt(
+            host,
+            host.engine.i18n("ui.max.craft.prompt", [label]),
+            host.engine.i18n("ui.max.craft.promptTitle", [
+              label,
+              UiComponent.renderAbsolute(option.max, host),
+            ]),
+            UiComponent.renderAbsolute(option.max, host),
+            host.engine.i18n("ui.max.craft.promptExplainer"),
+          )
+            .then(value => {
+              if (value === undefined) {
+                return;
+              }
+
+              if (value === "" || value.startsWith("-")) {
+                option.max = -1;
+                return;
+              }
+
+              if (value === "0") {
+                option.enabled = false;
+              }
+
+              option.max = UiComponent.parseAbsolute(value) ?? option.max;
+            })
+            .then(() => {
+              this.refreshUi();
+            })
+            .catch(redirectErrorsToConsole(console));
         },
         onSetTrigger: () => {
           Dialog.prompt(
@@ -151,7 +197,6 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
             .catch(redirectErrorsToConsole(console));
         },
       });
-      element.head.addChild(new PaddingButton(host));
       this._crafts.push(element);
 
       if (option.resource === "ship") {

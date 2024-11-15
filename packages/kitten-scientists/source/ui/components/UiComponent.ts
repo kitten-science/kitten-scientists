@@ -15,6 +15,8 @@ export abstract class UiComponent extends EventTarget {
    */
   protected readonly _host: KittenScientists;
 
+  protected readonly _options: Partial<UiComponentOptions>;
+
   /**
    * The main DOM element for this component, in a JQuery wrapper.
    */
@@ -35,6 +37,7 @@ export abstract class UiComponent extends EventTarget {
   constructor(host: KittenScientists, options?: Partial<UiComponentOptions>) {
     super();
     this._host = host;
+    this._options = options ?? {};
     this._onClick = options?.onClick;
     this._onRefresh = options?.onRefresh;
   }
@@ -78,20 +81,24 @@ export abstract class UiComponent extends EventTarget {
     }
   }
 
-  static promptLimit(text: string, defaultValue: string): number | null {
-    const value = window.prompt(text, defaultValue);
+  /**
+   * Turns a string like 52.7 into the number 52.7
+   * @param value - String representation of an absolute value.
+   * @returns A number between 0 and Infinity, where Infinity is represented as -1.
+   */
+  static parseAbsolute(value: string | null): number | null {
     if (value === null || value === "") {
       return null;
     }
 
-    const hasSuffix = /[KMGT]$/.test(value);
+    const hasSuffix = /[KMGTP]$/i.test(value);
     const baseValue = value.substring(0, value.length - (hasSuffix ? 1 : 0));
 
     let numericValue =
       value.includes("e") || hasSuffix ? parseFloat(baseValue) : parseInt(baseValue);
     if (hasSuffix) {
-      const suffix = value.substring(value.length - 1);
-      numericValue = numericValue * Math.pow(1000, ["", "K", "M", "G", "T"].indexOf(suffix));
+      const suffix = value.substring(value.length - 1).toUpperCase();
+      numericValue = numericValue * Math.pow(1000, ["", "K", "M", "G", "T", "P"].indexOf(suffix));
     }
     if (numericValue === Number.POSITIVE_INFINITY || numericValue < 0) {
       numericValue = -1;
@@ -100,26 +107,28 @@ export abstract class UiComponent extends EventTarget {
     return numericValue;
   }
 
-  static promptPercentage(text: string, defaultValue: number): number | null {
-    const value = window.prompt(text, (defaultValue * 100).toFixed(0));
-    if (value === null || value === "") {
-      return null;
-    }
-
-    // Cap value between 0 and 1.
-    return UiComponent.parsePercentage(value);
-  }
-
+  /**
+   * Turns a string like 52.7 into the number 0.527
+   * @param value - String representation of a percentage.
+   * @returns A number between 0 and 1 representing the described percentage.
+   */
   static parsePercentage(value: string): number {
     const cleanedValue = value.trim().replace(/%$/, "");
     return Math.max(0, Math.min(1, parseFloat(cleanedValue) / 100));
   }
 
   protected _renderLimit(value: number): string {
-    return UiComponent.renderLimit(value, this._host);
+    return UiComponent.renderAbsolute(value, this._host);
   }
 
-  static renderLimit(value: number, host: KittenScientists) {
+  /**
+   * Turns a number into a game-native string representation.
+   * Infinity, either by actual value or by -1 representation, is rendered as a symbol.
+   * @param value - The number to render as a string.
+   * @param host - The host instance which we can use to let the game render values for us.
+   * @returns A string representing the given number.
+   */
+  static renderAbsolute(value: number, host: KittenScientists) {
     if (value < 0 || value === Number.POSITIVE_INFINITY) {
       return "∞";
     }
@@ -127,6 +136,11 @@ export abstract class UiComponent extends EventTarget {
     return host.game.getDisplayValueExt(value);
   }
 
+  /**
+   * Turns a number like 0.527 into a string like 52.7
+   * @param value - The number to render as a string.
+   * @returns A string representing the given percentage.
+   */
   static renderPercentage(value: number): string {
     return roundTo(100 * value, 3).toString();
   }

@@ -1,4 +1,5 @@
 import { KittenScientists } from "../../../KittenScientists.js";
+import stylesIconButton from "../IconButton.module.css";
 import { UiComponent, UiComponentOptions } from "../UiComponent.js";
 
 export class PaddingButton extends UiComponent {
@@ -15,7 +16,7 @@ export class PaddingButton extends UiComponent {
 
     const element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;"></svg>`,
-    }).addClass("ks-icon-button");
+    }).addClass(stylesIconButton.iconButton);
 
     this.element = element;
     this.addChildren(options?.children);

@@ -1,6 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
 import { SettingOptions } from "../../settings/Settings.js";
+import stylesDelimiter from "./Delimiter.module.css";
+import stylesLabel from "./LabelListItem.module.css";
+import stylesSettingListItem from "./SettingListItem.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type RadioItemOptions = UiComponentOptions & {
@@ -54,15 +57,15 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     super(host, options);
 
     const element = $(`<div/>`);
-    element.addClass("ks-setting");
+    element.addClass(stylesSettingListItem.setting);
 
     if (options?.delimiter === true) {
-      element.addClass("ks-delimiter");
+      element.addClass(stylesDelimiter.delimiter);
     }
 
     const elementLabel = $("<label/>", {
       text: `${options?.upgradeIndicator ? `⮤ ` : ""}${option.label}`,
-    }).addClass("ks-label");
+    }).addClass(stylesLabel.label);
 
     const input = $("<input/>", {
       name: groupKey,

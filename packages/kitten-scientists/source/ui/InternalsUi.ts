@@ -1,12 +1,16 @@
-import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { KittenScientists, ksVersion } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { EngineSettings } from "../settings/EngineSettings.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
+import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";
+import { Dialog } from "./components/Dialog.js";
 import { LabelListItem } from "./components/LabelListItem.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { OptionsListItem } from "./components/OptionsListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
+import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { TextButton } from "./components/TextButton.js";
@@ -18,6 +22,8 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
       host,
       settings,
       new LabelListItem(host, host.engine.i18n("ui.internals"), {
+        classes: [stylesSettingListItem.setting],
+        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         icon: Icons.Settings,
       }),
       {
@@ -31,15 +37,30 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                   host.engine.i18n("ui.internals.interval", [settings.interval]),
                   {
                     onClick: () => {
-                      const newInterval = UiComponent.promptLimit(
-                        host.engine.i18n("ui.internals.interval.input"),
-                        settings.interval.toString(),
-                      );
-                      if (isNil(newInterval)) {
-                        return;
-                      }
-                      settings.interval = newInterval;
-                      this.refreshUi();
+                      Dialog.prompt(
+                        host,
+                        host.engine.i18n("ui.internals.interval.prompt"),
+                        host.engine.i18n("ui.internals.interval.promptTitle", [
+                          UiComponent.renderAbsolute(settings.interval, host),
+                        ]),
+                        UiComponent.renderAbsolute(settings.interval, host),
+                        host.engine.i18n("ui.internals.interval.promptExplainer"),
+                      )
+                        .then(value => {
+                          if (value === undefined || value === "" || value.startsWith("-")) {
+                            return;
+                          }
+
+                          if (value === "0") {
+                            settings.enabled = false;
+                          }
+
+                          settings.interval = UiComponent.parseAbsolute(value) ?? settings.interval;
+                        })
+                        .then(() => {
+                          this.refreshUi();
+                        })
+                        .catch(redirectErrorsToConsole(console));
                     },
                     onRefresh: (subject: UiComponent) => {
                       (subject as TextButton).element.text(
@@ -61,7 +82,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
               }),
               new Delimiter(host),
 
-              new OptionsListItem(host, host.engine.i18n("ui.language"), settings.language, {
+              new OptionsListItem(host, host.engine.i18n("ui.language"), settings.locale, {
                 onCheck: () => {
                   host.rebuildUi();
                 },

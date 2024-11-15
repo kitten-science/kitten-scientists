@@ -1,10 +1,13 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { SupportedLanguage } from "../Engine.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { ResetUpgradeSettings } from "../settings/ResetUpgradeSettings.js";
 import { Setting, SettingOptions } from "../settings/Settings.js";
+import { Container } from "./components/Container.js";
+import stylesDelimiter from "./components/Delimiter.module.css";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
@@ -12,10 +15,11 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
   constructor(
     host: KittenScientists,
     settings: ResetUpgradeSettings,
-    language: SettingOptions<SupportedLanguage>,
+    language: SettingOptions<SupportedLocale>,
   ) {
     const label = host.engine.i18n("ui.upgrades");
     super(host, label, settings, {
+      childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Workshop,
     });
 
@@ -23,41 +27,32 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
       upgrade => !isNil(this.setting.upgrades[upgrade.name]),
     );
 
-    const localeSupportsSortMethod = language.selected !== "zh";
-    // Ensure buttons are added into UI with their labels alphabetized.
-    // This approach is not applicable to all locales!
-    if (localeSupportsSortMethod) {
-      upgrades.sort((a, b) => a.label.localeCompare(b.label));
+    const items = [];
+    let lastLabel = upgrades[0].label;
+    let lastElement: SettingListItem | undefined;
+    for (const upgrade of upgrades.sort((a, b) =>
+      a.label.localeCompare(b.label, language.selected),
+    )) {
+      const option = this.setting.upgrades[upgrade.name];
+
+      const element = this._getResetOption(host, option, upgrade.label);
+
+      if (host.engine.localeSupportsFirstLetterSplits(language.selected)) {
+        if (lastLabel[0] !== upgrade.label[0]) {
+          if (!isNil(lastElement)) {
+            lastElement.element.addClass(stylesDelimiter.delimiter);
+          }
+          element.element.addClass(stylesLabelListItem.splitter);
+        }
+      }
+
+      lastElement = element;
+      items.push(element);
+
+      lastLabel = upgrade.label;
     }
 
-    let lastLabel = upgrades[0].label;
-    let lastElement: SettingListItem;
-
-    this.addChild(
-      new SettingsList(host, {
-        children: upgrades.reduce<Array<SettingListItem>>((items, upgrade) => {
-          if (
-            !isNil(lastElement) &&
-            localeSupportsSortMethod &&
-            lastLabel[0] !== upgrade.label[0]
-          ) {
-            lastElement.element.addClass("ks-delimiter");
-          }
-
-          const element = this._getResetOption(
-            host,
-            this.setting.upgrades[upgrade.name],
-            upgrade.label,
-          );
-
-          lastElement = element;
-          items.push(element);
-
-          lastLabel = upgrade.label;
-          return items;
-        }, []),
-      }),
-    );
+    this.addChild(new SettingsList(host, { children: items }));
   }
 
   private _getResetOption(

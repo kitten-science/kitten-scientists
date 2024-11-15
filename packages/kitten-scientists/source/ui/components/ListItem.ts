@@ -1,11 +1,12 @@
 import { KittenScientists } from "../../KittenScientists.js";
+import stylesDelimiter from "./Delimiter.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type ListItemOptions = UiComponentOptions & {
   /**
    * Should there be additional padding below this element?
    */
-  delimiter: boolean;
+  readonly delimiter: boolean;
 };
 
 export class ListItem extends UiComponent {
@@ -20,13 +21,14 @@ export class ListItem extends UiComponent {
   constructor(host: KittenScientists, options?: Partial<ListItemOptions>) {
     super(host, options);
 
-    const element = $("<li/>");
+    this.element = $("<li/>");
+
+    options?.classes?.forEach(className => this.element.addClass(className));
 
     if (options?.delimiter === true) {
-      element.addClass("ks-delimiter");
+      this.element.addClass(stylesDelimiter.delimiter);
     }
 
-    this.element = element;
     this.addChildren(options?.children);
   }
 }

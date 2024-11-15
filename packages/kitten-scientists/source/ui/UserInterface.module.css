@@ -1,0 +1,67 @@
+:global #ksColumn {
+  min-width: 250px;
+  max-width: 440px;
+  vertical-align: top;
+  padding-left: 8px;
+  top: 20px;
+  position: relative;
+  overflow-y: auto;
+}
+:global #footerLinks {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  line-height: 0;
+
+  a {
+    line-height: 1;
+    padding-right: 10px;
+    opacity: 0.5;
+    transition: 0.3s;
+    text-decoration: none;
+    text-transform: lowercase;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+.spacer {
+  display: block;
+  margin-bottom: 100px;
+}
+.ui {
+  margin: 5px 0 10px 0;
+  padding-right: 10px;
+  font-size: 14px;
+}
+.ui ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.showActivity {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Rules needed to enable stock warning. */
+
+.ui #toggle-list-resources .stockWarn *,
+.ui #toggle-reset-list-resources .stockWarn * {
+  color: #dd1e00;
+}
+
+/* Ensure the right column gets a scrollbar, when our content extends it too far down. */
+:global #game #rightColumn {
+  overflow-y: auto;
+}
+
+:global #game .res-row .res-cell.ks-stock-above {
+  color: green;
+}
+:global #game .res-row .res-cell.ks-stock-below {
+  color: red;
+}

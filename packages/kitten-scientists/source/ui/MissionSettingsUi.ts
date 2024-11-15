@@ -2,6 +2,8 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { MissionSettings } from "../settings/MissionSettings.js";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
+import { Container } from "./components/Container.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -15,6 +17,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
       host,
       settings,
       new SettingListItem(host, label, settings, {
+        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },

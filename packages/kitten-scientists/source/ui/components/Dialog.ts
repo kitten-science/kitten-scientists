@@ -1,11 +1,15 @@
 import { coalesceArray } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
 import { Button } from "./Button.js";
+import stylesButton from "./Button.module.css";
 import { Container } from "./Container.js";
 import { Delimiter } from "./Delimiter.js";
+import styles from "./Dialog.module.css";
+import stylesExplainer from "./ExplainerLiteItem.module.css";
 import { HeaderListItem } from "./HeaderListItem.js";
 import { Input } from "./Input.js";
 import { Paragraph } from "./Paragraph.js";
+import stylesToolbarListItem from "./ToolbarListItem.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type DialogOptions = UiComponentOptions & {
@@ -34,13 +38,13 @@ export class Dialog extends UiComponent {
     this.element = $<HTMLDialogElement>("<dialog/>")
       .addClass("dialog")
       .addClass("help")
-      .addClass("ks-dialog")
-      .addClass("ks-ui");
+      .addClass(styles.dialog);
+    //.addClass(stylesUserInterface.ui);
 
     if (options?.hasClose !== false) {
       this.addChild(
         new Button(host, "close", null, {
-          classes: ["close"],
+          classes: [styles.close],
           onClick: () => {
             this.close();
             options?.onCancel?.();
@@ -78,7 +82,7 @@ export class Dialog extends UiComponent {
         new Container(host, {
           children: coalesceArray([
             new Button(host, "OK", null, {
-              classes: ["large"],
+              classes: [stylesButton.large],
               onClick: () => {
                 this.close();
                 options?.onConfirm?.(this.returnValue);
@@ -86,7 +90,7 @@ export class Dialog extends UiComponent {
             }),
             options?.hasCancel
               ? new Button(host, "Cancel", null, {
-                  classes: ["large"],
+                  classes: [stylesButton.large],
                   onClick: () => {
                     this.close();
                     options.onCancel?.();
@@ -94,7 +98,7 @@ export class Dialog extends UiComponent {
                 })
               : undefined,
           ]),
-          classes: ["ks-toolbar"],
+          classes: [stylesToolbarListItem.toolbar],
         }),
       ]),
     );
@@ -130,7 +134,7 @@ export class Dialog extends UiComponent {
           ? [
               new Container(host, {
                 children: [new Paragraph(host, explainer)],
-                classes: ["ks-explainer"],
+                classes: [stylesExplainer.explainer],
               }),
             ]
           : [],

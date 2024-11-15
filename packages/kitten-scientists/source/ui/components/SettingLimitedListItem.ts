@@ -1,6 +1,8 @@
 import { KittenScientists } from "../../KittenScientists.js";
 import { SettingLimited } from "../../settings/Settings.js";
-import { LimitedButton } from "./LimitedButton.js";
+import { LimitedButton } from "./buttons/LimitedButton.js";
+import { Container } from "./Container.js";
+import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
 
 export type SettingListItemOptionsLimited = {
@@ -35,8 +37,13 @@ export class SettingLimitedListItem extends SettingListItem {
   ) {
     super(host, label, setting, options);
 
-    this.limitedButton = new LimitedButton(host, setting, options);
-    this.head.addChild(this.limitedButton);
+    this.limitedButton = new LimitedButton(host, setting, {
+      ...options,
+    });
+    this.head.addChildren([
+      new Container(host, { classes: [stylesLabelListItem.fillSpace] }),
+      this.limitedButton,
+    ]);
   }
 
   refreshUi() {

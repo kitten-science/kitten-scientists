@@ -1,0 +1,10 @@
+.header {
+  display: block;
+  margin-bottom: 3px;
+  min-width: 100px;
+
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+
+  font-weight: bold;
+  user-select: none;
+}

@@ -2,7 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { Locale, de, enUS, he, zhCN } from "date-fns/locale";
-import { Engine, EngineState, SupportedLanguage } from "../Engine.js";
+import { Engine, EngineState, SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { SettingOptions } from "../settings/Settings.js";
@@ -13,10 +13,12 @@ import { SavegameLoader } from "../tools/SavegameLoader.js";
 import { KGSaveData } from "../types/index.js";
 import { Button } from "./components/Button.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
+import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { IconButton } from "./components/IconButton.js";
 import { LabelListItem } from "./components/LabelListItem.js";
+import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { ListItem } from "./components/ListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -52,10 +54,17 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   constructor(
     host: KittenScientists,
     settings: StateSettings,
-    language: SettingOptions<SupportedLanguage>,
+    locale: SettingOptions<SupportedLocale>,
   ) {
     const label = host.engine.i18n("state.title");
-    super(host, settings, new LabelListItem(host, label, { icon: Icons.State }));
+    super(
+      host,
+      settings,
+      new LabelListItem(host, label, {
+        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+        icon: Icons.State,
+      }),
+    );
 
     this.gameList = new SettingsList(host, {
       hasEnableAll: false,
@@ -67,11 +76,11 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     });
 
     this.locale =
-      language.selected === "zh"
+      locale.selected === "zh-CN"
         ? zhCN
-        : language.selected === "he"
+        : locale.selected === "he-IL"
           ? he
-          : language.selected === "de"
+          : locale.selected === "de-DE"
             ? de
             : enUS;
 
@@ -100,12 +109,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               },
               title: host.engine.i18n("state.storeState"),
             }),
-            new Button(host, host.engine.i18n("state.copy"), Icons.Copy, {
+            new Button(host, host.engine.i18n("copy"), Icons.Copy, {
               onClick: () => {
                 this.copyState().catch(redirectErrorsToConsole(console));
                 host.engine.imessage("state.copied.stateCurrent");
               },
-              title: host.engine.i18n("state.copy.state"),
+              title: host.engine.i18n("state.copy.stateCurrent"),
             }),
             new Button(host, host.engine.i18n("state.new"), Icons.Draft, {
               onClick: () => {
@@ -133,12 +142,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               },
               title: host.engine.i18n("state.storeGame"),
             }),
-            new Button(host, host.engine.i18n("state.copy"), Icons.Copy, {
+            new Button(host, host.engine.i18n("copy"), Icons.Copy, {
               onClick: () => {
                 this.copyGame().catch(redirectErrorsToConsole(console));
                 host.engine.imessage("state.copied.gameCurrent");
               },
-              title: host.engine.i18n("state.copy.game"),
+              title: host.engine.i18n("state.copy.gameCurrent"),
             }),
           ]),
           new ListItem(host, { children: [this.gameList] }),
@@ -245,31 +254,52 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               ),
               {
                 children: [
-                  new IconButton(this._host, Icons.Save, this._host.engine.i18n("update"), {
-                    onClick: () => {
-                      this.updateGame(gameSlot, this._host.game.save());
-                      this._host.engine.imessage("state.updated.game", [game.label]);
+                  new Container(this._host, { classes: [stylesLabelListItem.fillSpace] }),
+                  new IconButton(
+                    this._host,
+                    Icons.Save,
+                    this._host.engine.i18n("state.update.game"),
+                    {
+                      onClick: () => {
+                        this.updateGame(gameSlot, this._host.game.save());
+                        this._host.engine.imessage("state.updated.game", [game.label]);
+                      },
                     },
-                  }),
-                  new IconButton(this._host, Icons.Edit, this._host.engine.i18n("state.edit"), {
-                    onClick: () => {
-                      this.storeGame(game.game);
-                      this.deleteGame(gameSlot, true);
-                      this._host.engine.imessage("state.updated.game", [game.label]);
+                  ),
+                  new IconButton(
+                    this._host,
+                    Icons.Edit,
+                    this._host.engine.i18n("state.edit.game"),
+                    {
+                      onClick: () => {
+                        this.storeGame(game.game);
+                        this.deleteGame(gameSlot, true);
+                        this._host.engine.imessage("state.updated.game", [game.label]);
+                      },
                     },
-                  }),
-                  new IconButton(this._host, Icons.Copy, this._host.engine.i18n("copy"), {
-                    onClick: () => {
-                      this.copyGame(game.game).catch(redirectErrorsToConsole(console));
-                      this._host.engine.imessage("state.copied.game", [game.label]);
+                  ),
+                  new IconButton(
+                    this._host,
+                    Icons.Copy,
+                    this._host.engine.i18n("state.copy.game"),
+                    {
+                      onClick: () => {
+                        this.copyGame(game.game).catch(redirectErrorsToConsole(console));
+                        this._host.engine.imessage("state.copied.game", [game.label]);
+                      },
                     },
-                  }),
-                  new IconButton(this._host, Icons.Delete, this._host.engine.i18n("delete"), {
-                    onClick: () => {
-                      this.deleteGame(gameSlot);
-                      this._host.engine.imessage("state.deleted.game", [game.label]);
+                  ),
+                  new IconButton(
+                    this._host,
+                    Icons.Delete,
+                    this._host.engine.i18n("state.delete.game"),
+                    {
+                      onClick: () => {
+                        this.deleteGame(gameSlot);
+                        this._host.engine.imessage("state.deleted.game", [game.label]);
+                      },
                     },
-                  }),
+                  ),
                 ],
               },
             ),
@@ -305,31 +335,52 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
               ),
               {
                 children: [
-                  new IconButton(this._host, Icons.Save, this._host.engine.i18n("update"), {
-                    onClick: () => {
-                      this.updateState(stateSlot, this._host.engine.stateSerialize());
-                      this._host.engine.imessage("state.updated.state", [state.label]);
+                  new Container(this._host, { classes: [stylesLabelListItem.fillSpace] }),
+                  new IconButton(
+                    this._host,
+                    Icons.Save,
+                    this._host.engine.i18n("state.update.state"),
+                    {
+                      onClick: () => {
+                        this.updateState(stateSlot, this._host.engine.stateSerialize());
+                        this._host.engine.imessage("state.updated.state", [state.label]);
+                      },
                     },
-                  }),
-                  new IconButton(this._host, Icons.Edit, this._host.engine.i18n("state.edit"), {
-                    onClick: () => {
-                      this.storeState(state.state);
-                      this.deleteState(stateSlot, true);
-                      this._host.engine.imessage("state.updated.state", [state.label]);
+                  ),
+                  new IconButton(
+                    this._host,
+                    Icons.Edit,
+                    this._host.engine.i18n("state.edit.state"),
+                    {
+                      onClick: () => {
+                        this.storeState(state.state);
+                        this.deleteState(stateSlot, true);
+                        this._host.engine.imessage("state.updated.state", [state.label]);
+                      },
                     },
-                  }),
-                  new IconButton(this._host, Icons.Copy, this._host.engine.i18n("copy"), {
-                    onClick: () => {
-                      this.copyState(state.state).catch(redirectErrorsToConsole(console));
-                      this._host.engine.imessage("state.copied.state", [state.label]);
+                  ),
+                  new IconButton(
+                    this._host,
+                    Icons.Copy,
+                    this._host.engine.i18n("state.copy.state"),
+                    {
+                      onClick: () => {
+                        this.copyState(state.state).catch(redirectErrorsToConsole(console));
+                        this._host.engine.imessage("state.copied.state", [state.label]);
+                      },
                     },
-                  }),
-                  new IconButton(this._host, Icons.Delete, this._host.engine.i18n("delete"), {
-                    onClick: () => {
-                      this.deleteState(stateSlot);
-                      this._host.engine.imessage("state.deleted.state", [state.label]);
+                  ),
+                  new IconButton(
+                    this._host,
+                    Icons.Delete,
+                    this._host.engine.i18n("state.delete.state"),
+                    {
+                      onClick: () => {
+                        this.deleteState(stateSlot);
+                        this._host.engine.imessage("state.deleted.state", [state.label]);
+                      },
                     },
-                  }),
+                  ),
                 ],
               },
             ),

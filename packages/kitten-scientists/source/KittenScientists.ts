@@ -9,7 +9,7 @@ import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { cdebug, cinfo, cwarn } from "./tools/Log.js";
 import { Game, I18nEngine } from "./types/index.js";
 import { UserInterface } from "./ui/UserInterface.js";
-import { FallbackLanguage, UserScriptLoader } from "./UserScriptLoader.js";
+import { UserScriptLoader } from "./UserScriptLoader.js";
 
 declare global {
   const KS_RELEASE_CHANNEL: ReleaseChannel;
@@ -41,7 +41,7 @@ export class KittenScientists {
   constructor(
     game: Game,
     i18nEngine: I18nEngine,
-    gameLanguage: GameLanguage = FallbackLanguage,
+    gameLanguage: GameLanguage = "en",
     engineState?: EngineState,
   ) {
     cinfo(`Kitten Scientists ${ksVersion("v")} constructed.`);

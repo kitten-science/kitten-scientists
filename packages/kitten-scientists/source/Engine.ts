@@ -1,4 +1,4 @@
-import { isNil, Maybe } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, Maybe, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { unknownToError } from "@oliversalzburg/js-utils/errors/error-serializer.js";
 import { measure, measureAsync } from "@oliversalzburg/js-utils/measurement/performance.js";
 import { BonfireManager } from "./BonfireManager.js";
@@ -8,10 +8,10 @@ import {
   ActivitySummarySection,
   ActivityTypeClass,
 } from "./helper/ActivitySummary.js";
-import en from "./i18n/en-US.json" assert { type: "json" };
-import de from "./i18n/translations/de-DE.json" assert { type: "json" };
-import he from "./i18n/translations/he-IL.json" assert { type: "json" };
-import zh from "./i18n/translations/zh-CN.json" assert { type: "json" };
+import enUS from "./i18n/en-US.json" assert { type: "json" };
+import deDE from "./i18n/translations/de-DE.json" assert { type: "json" };
+import heIL from "./i18n/translations/he-IL.json" assert { type: "json" };
+import zhCN from "./i18n/translations/zh-CN.json" assert { type: "json" };
 import { KittenScientists, ksVersion } from "./KittenScientists.js";
 import { ReligionManager } from "./ReligionManager.js";
 import { ScienceManager } from "./ScienceManager.js";
@@ -30,11 +30,11 @@ import { TimeControlManager } from "./TimeControlManager.js";
 import { TimeManager } from "./TimeManager.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
 import { TradeManager } from "./TradeManager.js";
-import { FallbackLanguage } from "./UserScriptLoader.js";
+import { FallbackLocale } from "./UserScriptLoader.js";
 import { VillageManager } from "./VillageManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 
-const i18nData = { de, en, he, zh };
+const i18nData = { ["de-DE"]: deDE, ["en-US"]: enUS, ["he-IL"]: heIL, ["zh-CN"]: zhCN };
 
 export type FrameContext = {
   requestGameUiRefresh: boolean;
@@ -79,10 +79,10 @@ export type GameLanguage =
   | "uk"
   | "zh"
   | "zht";
-export type SupportedLanguage = "de" | "en" | "he" | "zh";
+export type SupportedLocale = "de-DE" | "en-US" | "he-IL" | "zh-CN";
 
 export type TranslatedString<TKittenGameLiteral extends `$${string}`> =
-  | keyof typeof i18nData.en
+  | keyof (typeof i18nData)["en-US"]
   | TKittenGameLiteral;
 
 export class Engine {
@@ -138,22 +138,54 @@ export class Engine {
   }
 
   isLanguageSupported(language: string): boolean {
-    return language in this._i18nData;
+    return Object.keys(this._i18nData).some(locale => locale.startsWith(`${language}-`));
   }
 
-  setLanguage(language: GameLanguage | SupportedLanguage, rebuildUI = true) {
-    const previousLanguage = this.settings.language.selected;
+  isLocaleSupported(locale: string): boolean {
+    return locale in this._i18nData;
+  }
+
+  localeSupportsFirstLetterSplits(locale = this.settings.locale.selected): boolean {
+    return locale !== "zh-CN";
+  }
+
+  localeForLanguage(language: string): SupportedLocale | undefined {
+    return (Object.keys(this._i18nData) as ReadonlyArray<SupportedLocale>).find(locale =>
+      locale.startsWith(`${language}-`),
+    );
+  }
+
+  setLanguage(language: GameLanguage, rebuildUI = true) {
+    const previousLocale = this.settings.locale.selected;
     if (!this.isLanguageSupported(language)) {
       cwarn(
-        `Requested language '${language}' is not available. Falling back to '${FallbackLanguage}'.`,
+        `Requested language '${language}' is not available. Falling back to '${FallbackLocale}'.`,
       );
-      this.settings.language.selected = FallbackLanguage;
+      this.settings.locale.selected = FallbackLocale;
     } else {
-      cinfo(`Selecting language '${language}'.`);
-      this.settings.language.selected = language as SupportedLanguage;
+      const locale = mustExist(this.localeForLanguage(language));
+      cinfo(`Selecting language '${locale}'.`);
+      this.settings.locale.selected = locale;
     }
 
-    if (previousLanguage !== this.settings.language.selected && rebuildUI) {
+    if (previousLocale !== this.settings.locale.selected && rebuildUI) {
+      this._host.rebuildUi();
+    }
+  }
+
+  setLocale(locale: SupportedLocale, rebuildUI = true) {
+    const previousLocale = this.settings.locale.selected;
+    if (!this.isLocaleSupported(locale)) {
+      cwarn(
+        `Requested language '${locale}' is not available. Falling back to '${FallbackLocale}'.`,
+      );
+      this.settings.locale.selected = FallbackLocale;
+    } else {
+      cinfo(`Selecting language '${locale}'.`);
+      this.settings.locale.selected = locale;
+    }
+
+    if (previousLocale !== this.settings.locale.selected && rebuildUI) {
       this._host.rebuildUi();
     }
   }
@@ -222,7 +254,7 @@ export class Engine {
       this.workshopManager.settings.load(settings.workshop);
     }, "workshop");
 
-    this.setLanguage(this.settings.language.selected);
+    this.setLocale(this.settings.locale.selected);
 
     // Ensure the main engine setting is respected.
     if (this.settings.enabled) {
@@ -430,14 +462,14 @@ export class Engine {
 
     value =
       value ??
-      this._i18nData[this.settings.language.selected][
-        key as keyof (typeof i18nData)[SupportedLanguage]
+      this._i18nData[this.settings.locale.selected][
+        key as keyof (typeof i18nData)[SupportedLocale]
       ];
 
     const check: Maybe<string> = value;
 
     if (isNil(check)) {
-      value = i18nData[FallbackLanguage][key as keyof (typeof i18nData)[SupportedLanguage]];
+      value = i18nData[FallbackLocale][key as keyof (typeof i18nData)[SupportedLocale]];
       if (!value) {
         cwarn(`i18n key '${key}' not found in default language.`);
         return `$${key}`;
@@ -451,7 +483,7 @@ export class Engine {
   }
 
   iactivity(
-    i18nLiteral: keyof (typeof i18nData)["en"],
+    i18nLiteral: keyof (typeof i18nData)["en-US"],
     i18nArgs: Array<number | string> = [],
     logStyle?: ActivityClass,
   ): void {
@@ -465,7 +497,7 @@ export class Engine {
   }
 
   imessage(
-    i18nLiteral: keyof (typeof i18nData)["en"],
+    i18nLiteral: keyof (typeof i18nData)["en-US"],
     i18nArgs: Array<number | string> = [],
   ): void {
     this._printOutput("ks-default", "#aa50fe", this.i18n(i18nLiteral, i18nArgs));

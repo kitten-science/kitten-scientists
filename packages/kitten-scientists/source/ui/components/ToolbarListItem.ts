@@ -2,9 +2,10 @@ import { KittenScientists } from "../../KittenScientists.js";
 import { Button } from "./Button.js";
 import { IconButton } from "./IconButton.js";
 import { ListItem, ListItemOptions } from "./ListItem.js";
+import styles from "./ToolbarListItem.module.css";
 
 export class ToolbarListItem extends ListItem {
-  readonly buttons: Array<IconButton>;
+  readonly buttons: Array<Button | IconButton>;
 
   constructor(
     host: KittenScientists,
@@ -13,7 +14,7 @@ export class ToolbarListItem extends ListItem {
   ) {
     super(host, options);
 
-    this.element.addClass("ks-toolbar");
+    this.element.addClass(styles.toolbar);
     this.buttons = buttons;
     for (const button of buttons) {
       this.element.append(button.element);

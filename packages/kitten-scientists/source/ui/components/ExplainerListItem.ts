@@ -1,5 +1,6 @@
 import { TranslatedString } from "../../Engine.js";
 import { KittenScientists } from "../../KittenScientists.js";
+import styles from "./ExplainerLiteItem.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends UiComponent {
@@ -20,7 +21,7 @@ export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends 
   ) {
     super(host);
 
-    const element = $("<li/>", { text: host.engine.i18n(key) }).addClass("ks-explainer");
+    const element = $("<li/>", { text: host.engine.i18n(key) }).addClass(styles.explainer);
 
     this.element = element;
     this.addChildren(options?.children);
