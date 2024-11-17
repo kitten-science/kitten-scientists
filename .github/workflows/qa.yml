@@ -114,6 +114,7 @@ jobs:
       - qa-ka-backend
       - qa-ka-game
       - qa-ka-ui
+    if: always()
     name: QA Passed
     runs-on: ubuntu-24.04
     steps:
