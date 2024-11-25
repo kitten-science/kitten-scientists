@@ -37,7 +37,7 @@
   "devDependencies": {
     "@eslint/js": "9.15.0",
     "@types/eslint": "9.6.1",
-    "@types/node": "22.9.3",
+    "@types/node": "22.9.4",
     "@types/web": "0.0.183",
     "eslint": "9.15.0",
     "eslint-config-prettier": "9.1.0",
