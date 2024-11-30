@@ -30,6 +30,7 @@ import { TimeControlManager } from "./TimeControlManager.js";
 import { TimeManager } from "./TimeManager.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
 import { TradeManager } from "./TradeManager.js";
+import { Cycle, Cycles, Planet } from "./types/index.js";
 import { FallbackLocale } from "./UserScriptLoader.js";
 import { VillageManager } from "./VillageManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
@@ -440,6 +441,27 @@ export class Engine {
     for (const checkbox of filterCheckboxes) {
       (checkbox as HTMLInputElement).checked = false;
     }
+  }
+
+  symbolForCycle(cycle: Cycle): string {
+    return this._host.game.calendar.cycles.find(entry => entry.name === cycle)?.uglyph ?? "";
+  }
+
+  labelForCycle(cycle: Cycle): string {
+    const symbol = this.symbolForCycle(cycle);
+    const label = this._host.engine.i18n(
+      `$space.planet.${cycle === "redmoon" ? "moon" : cycle}.label`,
+    );
+    return `${symbol} ${label}`;
+  }
+
+  labelForPlanet(planet: Planet): string {
+    const cycleCandidate: string = planet === "moon" ? ("redmoon" as Cycle) : planet;
+    const cycle: Cycle | undefined = Cycles.includes(cycleCandidate as Cycle)
+      ? (cycleCandidate as Cycle)
+      : undefined;
+    const label = this._host.engine.i18n(`$space.planet.${planet}.label`);
+    return cycle === undefined ? label : `${this.symbolForCycle(cycle)} ${label}`;
   }
 
   /**

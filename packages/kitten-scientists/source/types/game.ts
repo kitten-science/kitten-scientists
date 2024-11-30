@@ -9,6 +9,7 @@ import {
   BuildingExt,
   BuildingMeta,
   Challenge,
+  Cycle,
   GameTab,
   KGSaveData,
   Kitten,
@@ -31,7 +32,7 @@ import {
 } from "./index.js";
 import { ReligionTab } from "./religion.js";
 import { PolicyInfo, Technology, TechInfo as TechnologyInfo } from "./science.js";
-import { Mission, SpaceBuilding, SpaceTab } from "./space.js";
+import { Mission, PlanetMeta, SpaceBuilding, SpaceTab } from "./space.js";
 import {
   ChronoForgeUpgrade,
   ChronoForgeUpgradeInfo,
@@ -71,6 +72,58 @@ type Server = {
   setChiral: (data: unknown) => void;
 };
 
+export type CycleEffects = {
+  "cryostation-coalMax": number;
+  "cryostation-ironMax": number;
+  "cryostation-mineralsMax": number;
+  "cryostation-oilMax": number;
+  "cryostation-titaniumMax": number;
+  "cryostation-unobtainiumMax": number;
+  "cryostation-uraniumMax": number;
+  "cryostation-woodMax": number;
+  "entangler-gflopsConsumption": number;
+  "hrHarvester-energyProduction": number;
+  "hydrofracturer-oilPerTickAutoprodSpace": number;
+  "hydroponics-catnipRatio": number;
+  "moonOutpost-unobtainiumPerTickSpace": number;
+  "planetCracker-uraniumPerTickSpace": number;
+  "researchVessel-starchartPerTickBaseSpace": number;
+  "sattelite-observatoryRatio": number;
+  "sattelite-starchartPerTickBaseSpace": number;
+  "spaceBeacon-starchartPerTickBaseSpace": number;
+  "spaceElevator-prodTransferBonus": number;
+  "spaceStation-scienceRatio": number;
+  "sunlifter-energyProduction": number;
+};
+
+export type FestivalEffects = {
+  catnip: number;
+  coal: number;
+  culture: number;
+  faith: number;
+  gold: number;
+  iron: number;
+  manpower: number;
+  minerals: number;
+  oil: number;
+  science: number;
+  starchart: number;
+  titanium: number;
+  unicorns: number;
+  unobtainium: number;
+  uranium: number;
+  wood: number;
+};
+
+export type CycleMeta = {
+  name: Cycle;
+  effects: Partial<CycleEffects>;
+  festivalEffects: Partial<FestivalEffects>;
+  glyph: string;
+  uglyph: string;
+  title: string;
+};
+
 export type Game = {
   bld: {
     buildingGroups: Array<{
@@ -85,8 +138,8 @@ export type Game = {
   calendar: {
     cryptoPrice: number;
     cycle: CycleIndices;
-    cycleEffectsFestival: (options: { catnip: number }) => { catnip: number };
-    cycles: Array<{ festivalEffects: { unicorns?: number }; title: string }>;
+    cycleEffectsFestival: (options: Partial<FestivalEffects>) => Partial<FestivalEffects>;
+    cycles: Array<CycleMeta>;
     cyclesPerEra: number;
     cycleYear: number;
     day: number;
@@ -194,6 +247,7 @@ export type Game = {
       | "unicornsRatioReligion"
       | "uplinkDCRatio",
   ) => number;
+
   /**
    * Calculate limited diminishing returns.
    */
@@ -395,7 +449,7 @@ export type Game = {
         val: number;
       }>;
     }>;
-    planets: Array<{ label: string; buildings: Array<{ name: SpaceBuilding; label: string }> }>;
+    planets: Array<PlanetMeta>;
     programs: Array<{ name: Mission; label: string }>;
   };
   stats: {

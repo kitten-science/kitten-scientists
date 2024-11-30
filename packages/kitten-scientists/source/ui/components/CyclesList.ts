@@ -16,17 +16,6 @@ export class CyclesList extends SettingsList {
   readonly behavior: CycleCheckboxBehavior;
   readonly setting: SettingWithCycles;
 
-  readonly charon: SettingListItem;
-  readonly umbra: SettingListItem;
-  readonly yarn: SettingListItem;
-  readonly helios: SettingListItem;
-  readonly cath: SettingListItem;
-  readonly redmoon: SettingListItem;
-  readonly dune: SettingListItem;
-  readonly piscine: SettingListItem;
-  readonly terminus: SettingListItem;
-  readonly kairo: SettingListItem;
-
   /**
    * Constructs a `SeasonsList`.
    *
@@ -72,62 +61,22 @@ export class CyclesList extends SettingsList {
       this.refreshUi();
     });
 
-    this.charon = this._makeCycle(
-      `⍙ ${this._host.engine.i18n("$space.planet.charon.label")}`,
-      this.setting.charon,
-    );
-    this.umbra = this._makeCycle(
-      `⍦ ${this._host.engine.i18n("$space.planet.umbra.label")}`,
-      this.setting.umbra,
-    );
-    this.yarn = this._makeCycle(
-      `⍧ ${this._host.engine.i18n("$space.planet.yarn.label")}`,
-      this.setting.yarn,
-    );
-    this.helios = this._makeCycle(
-      `⌒ ${this._host.engine.i18n("$space.planet.helios.label")}`,
-      this.setting.helios,
-    );
-    this.cath = this._makeCycle(
-      `⌾ ${this._host.engine.i18n("$space.planet.cath.label")}`,
-      this.setting.cath,
-    );
-    this.redmoon = this._makeCycle(
-      `⍜ ${this._host.engine.i18n("$space.planet.moon.label")}`,
-      this.setting.redmoon,
-    );
-    this.dune = this._makeCycle(
-      `⍫ ${this._host.engine.i18n("$space.planet.dune.label")}`,
-      this.setting.dune,
-    );
-    this.piscine = this._makeCycle(
-      `⎈ ${this._host.engine.i18n("$space.planet.piscine.label")}`,
-      this.setting.piscine,
-    );
-    this.terminus = this._makeCycle(
-      `⍝ ${this._host.engine.i18n("$space.planet.terminus.label")}`,
-      this.setting.terminus,
-    );
-    this.kairo = this._makeCycle(
-      `℣ ${this._host.engine.i18n("$space.planet.kairo.label")}`,
-      this.setting.kairo,
-    );
-
     this.addChildren([
-      this.charon,
-      this.umbra,
-      this.yarn,
-      this.helios,
-      this.cath,
-      this.redmoon,
-      this.dune,
-      this.piscine,
-      this.terminus,
-      this.kairo,
+      this._makeCycle("charon", this.setting.charon),
+      this._makeCycle("umbra", this.setting.umbra),
+      this._makeCycle("yarn", this.setting.yarn),
+      this._makeCycle("helios", this.setting.helios),
+      this._makeCycle("cath", this.setting.cath),
+      this._makeCycle("redmoon", this.setting.redmoon),
+      this._makeCycle("dune", this.setting.dune),
+      this._makeCycle("piscine", this.setting.piscine),
+      this._makeCycle("terminus", this.setting.terminus),
+      this._makeCycle("kairo", this.setting.kairo),
     ]);
   }
 
-  private _makeCycle(label: string, setting: Setting) {
+  private _makeCycle(cycle: Cycle, setting: Setting) {
+    const label = this._host.engine.labelForCycle(cycle);
     return new SettingListItem(this._host, label, setting, {
       onCheck: () => {
         this._host.engine.imessage(
@@ -146,20 +95,5 @@ export class CyclesList extends SettingsList {
         );
       },
     });
-  }
-
-  refreshUi() {
-    super.refreshUi();
-
-    this.charon.refreshUi();
-    this.umbra.refreshUi();
-    this.yarn.refreshUi();
-    this.helios.refreshUi();
-    this.cath.refreshUi();
-    this.redmoon.refreshUi();
-    this.dune.refreshUi();
-    this.piscine.refreshUi();
-    this.terminus.refreshUi();
-    this.kairo.refreshUi();
   }
 }

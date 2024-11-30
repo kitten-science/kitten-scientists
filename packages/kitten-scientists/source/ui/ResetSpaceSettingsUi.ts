@@ -26,7 +26,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
         children: host.game.space.planets
           .filter(plant => 0 < plant.buildings.length)
           .flatMap((planet, indexPlanet, arrayPlant) => [
-            new HeaderListItem(host, planet.label),
+            new HeaderListItem(host, host.engine.labelForPlanet(planet.name)),
             ...planet.buildings
               .filter(item => !isNil(this.setting.buildings[item.name]))
               .map((building, indexBuilding, arrayBuilding) =>
