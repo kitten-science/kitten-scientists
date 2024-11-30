@@ -122,8 +122,7 @@ export class UserScriptLoader {
   private static _isGameLoaded(): boolean {
     return (
       !isNil(UserScriptLoader.window.game) &&
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      !UserScriptLoader.window.game.toString().includes("HTMLDivElement")
+      !Object.prototype.toString.apply(UserScriptLoader.window.game).includes("HTMLDivElement")
     );
   }
 

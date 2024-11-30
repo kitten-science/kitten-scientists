@@ -6,7 +6,7 @@ import { Engine, EngineState, GameLanguage } from "./Engine.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
-import { cdebug, cinfo, cwarn } from "./tools/Log.js";
+import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
 import { Game, I18nEngine } from "./types/index.js";
 import { UserInterface } from "./ui/UserInterface.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
@@ -49,9 +49,13 @@ export class KittenScientists {
 
     this.game = game;
     this.i18nEngine = i18nEngine;
-
-    this.engine = new Engine(this, gameLanguage);
-    this._userInterface = this._constructUi();
+    try {
+      this.engine = new Engine(this, gameLanguage);
+      this._userInterface = this._constructUi();
+    } catch (error: unknown) {
+      cerror("Failed to construct core components.", error);
+      throw error;
+    }
 
     if (!isNil(engineState)) {
       this.setSettings(engineState);
