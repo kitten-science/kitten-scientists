@@ -9,13 +9,13 @@ export class ElectLeaderSettings extends Setting {
   constructor(
     enabled = false,
     job = new SettingOptions<Job>(
-      "priest",
+      "any",
       Jobs.map(item => {
         return { label: "", value: item };
       }),
     ),
     trait = new SettingOptions<Trait>(
-      "wise",
+      "none",
       Traits.map(item => {
         return { label: "", value: item };
       }),

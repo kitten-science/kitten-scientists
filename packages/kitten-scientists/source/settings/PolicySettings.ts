@@ -31,7 +31,7 @@ export class PolicySettings extends Setting {
   private initPolicies(): PolicyPolicySettings {
     const items = {} as PolicyPolicySettings;
     Policies.forEach(item => {
-      items[item] = new PolicySetting(item, true);
+      items[item] = new PolicySetting(item);
     });
     return items;
   }

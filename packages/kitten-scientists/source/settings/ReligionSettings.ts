@@ -104,14 +104,14 @@ export class ReligionSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = -1,
-    bestUnicornBuilding = new Setting(false),
+    bestUnicornBuilding = new Setting(),
     sacrificeAlicorns = new SettingThreshold(false, 25),
     sacrificeUnicorns = new SettingThreshold(false, 1000000),
     refineTears = new SettingThreshold(false, 10000),
     refineTimeCrystals = new SettingThreshold(false, 15000),
-    autoPraise = new SettingTrigger(true, 0.98),
+    autoPraise = new SettingTrigger(false, 1),
     adore = new SettingTrigger(false, 0.75),
-    transcend = new Setting(false),
+    transcend = new Setting(),
   ) {
     super(enabled, trigger);
     this.buildings = this.initBuildings();
@@ -126,25 +126,19 @@ export class ReligionSettings extends SettingTrigger {
   }
 
   private initBuildings(): ReligionSettingsItems {
-    const defaultOffBuilding: Array<ReligionUpgrade> = ["apocripha"];
     const items = {} as ReligionSettingsItems;
     ReligionUpgrades.forEach(item => {
-      items[item] = new ReligionSettingsItem(
-        item,
-        UnicornItemVariant.OrderOfTheSun,
-        !defaultOffBuilding.includes(item),
-      );
+      items[item] = new ReligionSettingsItem(item, UnicornItemVariant.OrderOfTheSun);
     });
     TranscendenceUpgrades.forEach(item => {
-      items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Cryptotheology, false);
+      items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Cryptotheology);
     });
     ZiggurathUpgrades.forEach(item => {
-      items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Ziggurat, false);
+      items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Ziggurat);
     });
     items["unicornPasture"] = new ReligionSettingsItem(
       "unicornPasture",
       UnicornItemVariant.UnicornPasture,
-      true,
     );
     return items;
   }

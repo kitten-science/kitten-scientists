@@ -14,7 +14,7 @@ export class TimeControlSettings extends Setting {
 
   constructor(
     enabled = false,
-    accelerateTime = new SettingTrigger(true, 1),
+    accelerateTime = new SettingTrigger(false, 1),
     reset = new ResetSettings(),
     timeSkip = new TimeSkipSettings(),
   ) {

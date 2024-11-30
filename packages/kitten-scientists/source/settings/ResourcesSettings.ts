@@ -15,7 +15,7 @@ export class ResourcesSettingsItem extends Setting {
 
   constructor(
     resource: Resource,
-    enabled: boolean,
+    enabled = false,
     consume = WorkshopManager.DEFAULT_CONSUME_RATE,
     stock = 0,
   ) {
@@ -37,14 +37,9 @@ export class ResourcesSettings extends Setting {
   }
 
   private initResources(): ResourcesResourceSettings {
-    const defaults: Partial<Record<Resource, { e: boolean; c: number; s: number }>> = {
-      furs: { e: true, c: WorkshopManager.DEFAULT_CONSUME_RATE, s: 1000 },
-      starchart: { e: true, c: WorkshopManager.DEFAULT_CONSUME_RATE, s: 500 },
-    };
     const items = {} as ResourcesResourceSettings;
     Resources.forEach(item => {
-      const value = defaults[item] ?? { e: false, c: WorkshopManager.DEFAULT_CONSUME_RATE, s: 0 };
-      items[item] = new ResourcesSettingsItem(item, value.e, value.c, value.s);
+      items[item] = new ResourcesSettingsItem(item);
     });
     return items;
   }

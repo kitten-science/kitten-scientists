@@ -39,7 +39,7 @@ export class TimeSettings extends SettingTrigger {
 
   fixCryochambers: Setting;
 
-  constructor(enabled = false, trigger = -1, fixCryochambers = new Setting(false)) {
+  constructor(enabled = false, trigger = -1, fixCryochambers = new Setting()) {
     super(enabled, trigger);
     this.buildings = this.initBuildings();
     this.fixCryochambers = fixCryochambers;

@@ -13,7 +13,7 @@ export class CraftSettingsItem extends SettingLimitedMaxTrigger {
     return this.#resource;
   }
 
-  constructor(resource: ResourceCraftable, enabled = true, limited = true) {
+  constructor(resource: ResourceCraftable, enabled = false, limited = false) {
     super(enabled, limited);
     this.#resource = resource;
   }
@@ -31,7 +31,7 @@ export class WorkshopSettings extends SettingTrigger {
     enabled = false,
     trigger = 0.95,
     unlockUpgrades = new UpgradeSettings(),
-    shipOverride = new Setting(true),
+    shipOverride = new Setting(),
   ) {
     super(enabled, trigger);
     this.resources = this.initResources();
@@ -42,7 +42,7 @@ export class WorkshopSettings extends SettingTrigger {
   private initResources(): WorkshopResourceSettings {
     const items = {} as WorkshopResourceSettings;
     ResourcesCraftable.forEach(item => {
-      items[item] = new CraftSettingsItem(item, true, item !== "parchment");
+      items[item] = new CraftSettingsItem(item);
     });
     return items;
   }

@@ -29,7 +29,7 @@ export class BuildingUpgradeSettings extends Setting {
   private initBuildings(): BuildingUpdateBuildingSettings {
     const items = {} as BuildingUpdateBuildingSettings;
     StagedBuildings.forEach(item => {
-      items[item] = new BuildingUpgradeSetting(item, true);
+      items[item] = new BuildingUpgradeSetting(item);
     });
     return items;
   }

@@ -69,10 +69,10 @@ export class BonfireSettings extends SettingTrigger {
   constructor(
     enabled = false,
     trigger = -1,
-    gatherCatnip = new Setting(true),
-    turnOnSteamworks = new Setting(true),
-    turnOnMagnetos = new Setting(false),
-    turnOnReactors = new Setting(false),
+    gatherCatnip = new Setting(),
+    turnOnSteamworks = new Setting(),
+    turnOnMagnetos = new Setting(),
+    turnOnReactors = new Setting(),
     upgradeBuildings = new BuildingUpgradeSettings(),
   ) {
     super(enabled, trigger);

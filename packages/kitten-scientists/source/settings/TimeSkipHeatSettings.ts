@@ -8,8 +8,8 @@ export class TimeSkipHeatSettings extends SettingTrigger {
   readonly cycles: CyclesSettings;
   readonly activeHeatTransferStatus: Setting;
 
-  constructor(activeHeatTransferStatus = new Setting(false)) {
-    super(false, 0);
+  constructor(activeHeatTransferStatus = new Setting()) {
+    super(false, 1);
     this.cycles = this.initCycles();
     this.activeHeatTransferStatus = activeHeatTransferStatus;
   }
@@ -17,7 +17,7 @@ export class TimeSkipHeatSettings extends SettingTrigger {
   private initCycles(): CyclesSettings {
     const items = {} as CyclesSettings;
     Cycles.forEach(item => {
-      items[item] = new Setting(true);
+      items[item] = new Setting();
     });
     return items;
   }

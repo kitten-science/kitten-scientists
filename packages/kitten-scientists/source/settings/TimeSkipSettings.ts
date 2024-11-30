@@ -13,10 +13,7 @@ export class TimeSkipSettings extends SettingThresholdMax {
   readonly activeHeatTransfer: TimeSkipHeatSettings;
   readonly ignoreOverheat: Setting;
 
-  constructor(
-    ignoreOverheat = new Setting(false),
-    activeHeatTransfer = new TimeSkipHeatSettings(),
-  ) {
+  constructor(ignoreOverheat = new Setting(), activeHeatTransfer = new TimeSkipHeatSettings()) {
     super(false, 5);
     this.cycles = this.initCycles();
     this.seasons = this.initSeason();
@@ -27,7 +24,7 @@ export class TimeSkipSettings extends SettingThresholdMax {
   private initCycles(): CyclesSettings {
     const items = {} as CyclesSettings;
     Cycles.forEach(item => {
-      items[item] = new Setting(item !== "redmoon");
+      items[item] = new Setting();
     });
     return items;
   }
@@ -35,7 +32,7 @@ export class TimeSkipSettings extends SettingThresholdMax {
   private initSeason(): SeasonsSettings {
     const items = {} as SeasonsSettings;
     Seasons.forEach(item => {
-      items[item] = new Setting(item === "spring");
+      items[item] = new Setting();
     });
     return items;
   }

@@ -17,10 +17,10 @@ export class VillageSettings extends Setting {
 
   constructor(
     enabled = false,
-    holdFestivals = new Setting(true),
-    hunt = new SettingTrigger(true, 0.98),
-    promoteKittens = new SettingTrigger(true, 1),
-    promoteLeader = new Setting(true),
+    holdFestivals = new Setting(),
+    hunt = new SettingTrigger(false, 0.98),
+    promoteKittens = new SettingTrigger(false, 1),
+    promoteLeader = new Setting(),
     electLeader = new ElectLeaderSettings(),
   ) {
     super(enabled);
@@ -35,7 +35,7 @@ export class VillageSettings extends Setting {
   private initJobs(): VillageJobSettings {
     const items = {} as VillageJobSettings;
     Jobs.forEach(item => {
-      items[item] = new SettingMax(true, 1);
+      items[item] = new SettingMax(false, -1);
     });
     return items;
   }

@@ -62,7 +62,7 @@ export class LogFilterSettings extends Setting {
   filters: LogFilterSettingsItems;
   disableKGLog: Setting;
 
-  constructor(enabled = false, disableKGLog = new Setting(false)) {
+  constructor(enabled = false, disableKGLog = new Setting(true)) {
     super(enabled);
     this.filters = this.initFilters();
     this.disableKGLog = disableKGLog;

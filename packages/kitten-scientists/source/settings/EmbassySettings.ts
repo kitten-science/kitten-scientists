@@ -29,7 +29,7 @@ export class EmbassySettings extends SettingTrigger {
   private initRaces(): EmbassyRaceSettings {
     const items = {} as EmbassyRaceSettings;
     Races.forEach(item => {
-      items[item] = new EmbassySetting(item, true);
+      items[item] = new EmbassySetting(item);
     });
     return items;
   }

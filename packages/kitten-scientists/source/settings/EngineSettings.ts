@@ -29,7 +29,7 @@ export class EngineSettings extends Setting {
     resources = new ResourcesSettings(),
     states = new StateSettings(),
     language = FallbackLocale,
-    ksColumn = new Setting(false),
+    ksColumn = new Setting(),
   ) {
     super(enabled);
     this.filters = filters;

@@ -16,7 +16,7 @@ export class ScienceSettings extends Setting {
     enabled = false,
     policies = new PolicySettings(),
     techs = new TechSettings(),
-    observe = new Setting(true),
+    observe = new Setting(),
   ) {
     super(enabled);
     this.policies = policies;

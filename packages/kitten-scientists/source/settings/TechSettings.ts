@@ -31,7 +31,7 @@ export class TechSettings extends SettingTrigger {
   private initTechs(): TechTechSettings {
     const items = {} as TechTechSettings;
     Technologies.forEach(item => {
-      items[item] = new TechSetting(item, true);
+      items[item] = new TechSetting(item);
     });
     return items;
   }

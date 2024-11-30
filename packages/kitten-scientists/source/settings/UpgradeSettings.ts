@@ -31,7 +31,7 @@ export class UpgradeSettings extends SettingTrigger {
   private initUpgrades(): UpgradeSettingsItems {
     const items = {} as UpgradeSettingsItems;
     Upgrades.forEach(item => {
-      items[item] = new UpgradeSettingsItem(item, true);
+      items[item] = new UpgradeSettingsItem(item);
     });
     return items;
   }

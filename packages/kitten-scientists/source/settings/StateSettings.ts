@@ -5,7 +5,7 @@ export class StateSettings extends Setting {
   readonly noConfirm: Setting;
   readonly compress: Setting;
 
-  constructor(noConfirm = new Setting(false), compress = new Setting(true)) {
+  constructor(noConfirm = new Setting(), compress = new Setting(true)) {
     super(true);
     this.noConfirm = noConfirm;
     this.compress = compress;

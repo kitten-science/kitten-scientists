@@ -31,7 +31,7 @@ export class MissionSettings extends Setting {
   private initMissions(): MissionMissionSettings {
     const items = {} as MissionMissionSettings;
     Missions.forEach(item => {
-      items[item] = new MissionSetting(item, true);
+      items[item] = new MissionSetting(item);
     });
     return items;
   }

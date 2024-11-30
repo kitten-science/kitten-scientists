@@ -62,9 +62,9 @@ export class TradeSettings extends SettingTrigger {
     enabled = false,
     trigger = 1,
     buildEmbassies = new EmbassySettings(),
-    feedLeviathans = new Setting(false),
+    feedLeviathans = new Setting(),
     tradeBlackcoin = new SettingBuySellThreshold(false, 1090.0, 1095.0, 10000),
-    unlockRaces = new Setting(true),
+    unlockRaces = new Setting(),
   ) {
     super(enabled, trigger);
     this.races = this.initRaces();
@@ -75,13 +75,6 @@ export class TradeSettings extends SettingTrigger {
   }
 
   private initRaces(): TradeSettingsItems {
-    const defaultSeasons: Partial<Record<Race, Array<boolean>>> = {
-      griffins: [false, true, false, false],
-      lizards: [true, false, false, false],
-      nagas: [true, false, false, true],
-      sharks: [false, false, true, false],
-      spiders: [true, true, false, true],
-    };
     const defaultRequire: Partial<Record<Race, Requirement>> = {
       dragons: "titanium",
       griffins: "wood",
@@ -91,18 +84,8 @@ export class TradeSettings extends SettingTrigger {
     };
     const items = {} as TradeSettingsItems;
     Races.forEach(item => {
-      const seasons = defaultSeasons[item] ?? [true, true, true, true];
       const require = defaultRequire[item] ?? false;
-      items[item] = new TradeSettingsItem(
-        item,
-        true,
-        true,
-        seasons[0],
-        seasons[1],
-        seasons[2],
-        seasons[3],
-        require,
-      );
+      items[item] = new TradeSettingsItem(item, false, false, false, false, false, false, require);
     });
     return items;
   }
