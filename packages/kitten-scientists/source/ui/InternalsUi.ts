@@ -22,7 +22,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
       host,
       settings,
       new LabelListItem(host, host.engine.i18n("ui.internals"), {
-        classes: [stylesSettingListItem.setting],
+        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         icon: Icons.Settings,
       }),

@@ -1,7 +1,6 @@
 import { is } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
 import { ExpandoButton } from "./buttons/ExpandoButton.js";
-import styles from "./CollapsiblePanel.module.css";
 import { Container } from "./Container.js";
 import { LabelListItem } from "./LabelListItem.js";
 import stylesSettingListItem from "./SettingListItem.module.css";
@@ -46,7 +45,7 @@ export class CollapsiblePanel<
     super(host, options);
 
     this.container = new Container(host);
-    this.container.element.addClass(styles.panelContent);
+    this.container.element.addClass(stylesSettingListItem.panelContent);
     this.children.add(this.container);
 
     this._head = head;

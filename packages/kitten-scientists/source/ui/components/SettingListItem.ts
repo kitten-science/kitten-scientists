@@ -81,6 +81,12 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
   refreshUi() {
     super.refreshUi();
 
+    if (this.setting.enabled) {
+      this.element.addClass(styles.checked);
+    } else {
+      this.element.removeClass(styles.checked);
+    }
+
     if (!isNil(this.checkbox)) {
       this.checkbox.prop("checked", this.setting.enabled);
       this.checkbox.prop("disabled", this.readOnly);
