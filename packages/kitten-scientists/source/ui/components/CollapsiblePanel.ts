@@ -61,10 +61,10 @@ export class CollapsiblePanel<
     head.element.append(this.container.element);
 
     if (options?.initiallyExpanded) {
-      this.container.element.show();
+      this.container.element.removeClass(stylesSettingListItem.hidden);
       expando.setExpanded();
     } else {
-      this.container.element.hide();
+      this.container.element.addClass(stylesSettingListItem.hidden);
     }
 
     this._mainChildVisible = options?.initiallyExpanded ?? false;
@@ -92,7 +92,7 @@ export class CollapsiblePanel<
         // Refresh panel UI on expand.
         this.container.refreshUi();
         // Show the DOM element.
-        this.container.element.show();
+        this.container.element.removeClass(stylesSettingListItem.hidden);
         // Reflect expanded state on expando.
         this._expando.setExpanded();
         // Reflect expanded state for CSS.
@@ -100,7 +100,7 @@ export class CollapsiblePanel<
         // This is NOT a DOM event! It can only be caught by listening on this panel directly.
         this.dispatchEvent(new CustomEvent("panelShown"));
       } else {
-        this.container.element.hide();
+        this.container.element.addClass(stylesSettingListItem.hidden);
         this._expando.setCollapsed();
         this._head.element.removeClass(stylesSettingListItem.expanded);
         this.dispatchEvent(new CustomEvent("panelHidden"));

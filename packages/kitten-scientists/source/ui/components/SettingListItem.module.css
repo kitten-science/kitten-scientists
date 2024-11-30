@@ -1,7 +1,7 @@
 .setting {
   border-bottom: 1px solid transparent;
 
-  transition: 0.3s;
+  transition: border-bottom 0.3s;
 
   .checkbox {
     margin: 1px 5px 2px 2px;
@@ -13,6 +13,10 @@
     margin-left: 8px;
     margin-top: 1px;
     opacity: 0.5;
+
+    &.hidden {
+      display: none;
+    }
   }
 
   &.checked > .panelContent {

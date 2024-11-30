@@ -31,7 +31,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
       settings,
       new LabelListItem(host, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
-        classes: [stylesSettingListItem.setting],
+        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         icon: Icons.Resources,
       }),
       options,

@@ -21,6 +21,7 @@ import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { ListItem } from "./components/ListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
+import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { TextButton } from "./components/TextButton.js";
@@ -62,6 +63,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       settings,
       new LabelListItem(host, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+        classes: [stylesSettingListItem.setting],
         icon: Icons.State,
       }),
     );
