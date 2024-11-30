@@ -58,15 +58,18 @@ export default defineConfig({
     KS_VERSION,
   },
   plugins: [
-    metablock({
-      override: {
-        version: versionString,
-        description: manifest.description,
-        homepage: manifest.homepage,
-        supportURL: manifest.bugs.url,
-        updateURL,
-      },
-    }),
     cssInjectedByJsPlugin(),
+    {
+      ...metablock({
+        override: {
+          version: versionString,
+          description: manifest.description,
+          homepage: manifest.homepage,
+          supportURL: manifest.bugs.url,
+          updateURL,
+        },
+      }),
+      enforce: "post",
+    },
   ],
 });
