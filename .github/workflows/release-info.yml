@@ -62,20 +62,20 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 cp release-info.json s3://kitten-science-us0
+          aws s3 cp release-info.json s3://kitten-science-us0/main
 
           aws s3api put-object \
             --bucket kitten-science-us0 \
-            --key dev.js \
+            --key main/dev.js \
             --cache-control "public, s-maxage=60" \
             --website-redirect-location "${{ steps.release-info.outputs.dev-url-default }}"
           aws s3api put-object \
             --bucket kitten-science-us0 \
-            --key nightly.js \
+            --key main/nightly.js \
             --cache-control "public, s-maxage=86400" \
             --website-redirect-location "${{ steps.release-info.outputs.nightly-url-default }}"
           aws s3api put-object \
             --bucket kitten-science-us0 \
-            --key stable.js \
+            --key main/stable.js \
             --cache-control "public, s-maxage=86400" \
             --website-redirect-location "${{ steps.release-info.outputs.stable-url-default }}"
