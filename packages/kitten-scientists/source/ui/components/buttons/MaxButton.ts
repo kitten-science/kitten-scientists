@@ -16,16 +16,12 @@ export class MaxButton extends Button {
     super(host, "", null, {
       ...options,
       classes: [styles.maxButton, ...(options?.classes ?? [])],
-      onClick: undefined,
     });
 
     if (isNil(options?.onClick)) {
       throw new InvalidOperationError("Missing click handler on MaxButton.");
     }
 
-    this.element.on("click", () => {
-      options.onClick?.(this);
-    });
     this.setting = setting;
   }
 }

@@ -1,6 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
-import stylesTextButton from "./TextButton.module.css";
+import stylesButton from "./Button.module.css";
+import styles from "./TextButton.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type TextButtonOptions = UiComponentOptions & {
@@ -15,7 +16,7 @@ export class TextButton extends UiComponent {
   constructor(host: KittenScientists, label?: string, options?: Partial<TextButtonOptions>) {
     super(host, options);
 
-    const element = $("<div/>").addClass(stylesTextButton.textButton);
+    const element = $("<div/>").addClass(styles.textButton);
     if (label !== undefined) {
       element.text(label);
     }
@@ -46,9 +47,9 @@ export class TextButton extends UiComponent {
     super.refreshUi();
 
     if (this.readOnly) {
-      this.element.addClass("ks-readonly");
+      this.element.addClass(stylesButton.readonly);
     } else {
-      this.element.removeClass("ks-readonly");
+      this.element.removeClass(stylesButton.readonly);
     }
   }
 }

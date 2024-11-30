@@ -22,7 +22,7 @@ export class TriggerButton extends Button {
     setting: SettingTrigger | SettingThreshold,
     options?: Partial<TriggerButtonOptions>,
   ) {
-    super(host, "", Icons.Trigger, { ...options, onClick: undefined });
+    super(host, "", Icons.Trigger, options);
 
     this._onRefreshTitle = options?.onRefreshTitle;
 
@@ -32,9 +32,6 @@ export class TriggerButton extends Button {
       throw new InvalidOperationError("Missing click handler on TriggerButton.");
     }
 
-    this.element.on("click", () => {
-      options.onClick?.(this);
-    });
     this.setting = setting;
   }
 

@@ -77,19 +77,28 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
 
     const unicornsArray: Array<ZiggurathUpgrade | "unicornPasture"> = [...UnicornItems];
 
-    this._unicornBuildings = host.game.religion.zigguratUpgrades
-      .filter(
-        item => unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
-      )
-      .map(zigguratUpgrade =>
-        BuildSectionTools.getBuildOption(
-          host,
-          this.setting.buildings[zigguratUpgrade.name],
-          this.setting,
-          zigguratUpgrade.label,
-          label,
+    this._unicornBuildings = [
+      BuildSectionTools.getBuildOption(
+        host,
+        this.setting.buildings.unicornPasture,
+        this.setting,
+        host.engine.i18n("$buildings.unicornPasture.label"),
+        label,
+      ),
+      ...host.game.religion.zigguratUpgrades
+        .filter(
+          item => unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
+        )
+        .map(zigguratUpgrade =>
+          BuildSectionTools.getBuildOption(
+            host,
+            this.setting.buildings[zigguratUpgrade.name],
+            this.setting,
+            zigguratUpgrade.label,
+            label,
+          ),
         ),
-      );
+    ];
 
     this._bestUnicornBuilding = new SettingListItem(
       host,
@@ -120,14 +129,6 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
       new SettingsList(host, {
         children: [
           new HeaderListItem(host, host.engine.i18n("$religion.panel.ziggurat.label")),
-          BuildSectionTools.getBuildOption(
-            host,
-            this.setting.buildings.unicornPasture,
-            this.setting,
-            host.engine.i18n("$buildings.unicornPasture.label"),
-            label,
-          ),
-
           ...this._unicornBuildings,
           this._bestUnicornBuilding,
           new Delimiter(host),
@@ -266,10 +267,11 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
     ]);
   }
 
-  refreshUi() {
+  override refreshUi() {
     for (const building of this._unicornBuildings) {
       building.readOnly = this._bestUnicornBuilding.setting.enabled;
       building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;
+      building.triggerButton.readOnly = this._bestUnicornBuilding.setting.enabled;
     }
     super.refreshUi();
   }

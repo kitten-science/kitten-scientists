@@ -6,6 +6,7 @@ import { TriggerButton } from "./buttons/TriggerButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
+import stylesSettingListItem from "./SettingListItem.module.css";
 import { SettingListItemOptionsMax } from "./SettingMaxListItem.js";
 import { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
 
@@ -44,5 +45,15 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
       this.maxButton,
       this.triggerButton,
     ]);
+  }
+
+  override refreshUi(): void {
+    super.refreshUi();
+
+    if (this.readOnly) {
+      this.element.addClass(stylesSettingListItem.readonly);
+    } else {
+      this.element.removeClass(stylesSettingListItem.readonly);
+    }
   }
 }

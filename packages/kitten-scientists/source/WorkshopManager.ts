@@ -618,7 +618,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     }
 
     // Apply the effects of possibly running festival.
-    baseProd = this._host.game.calendar.cycleEffectsFestival({ catnip: baseProd })["catnip"];
+    baseProd = mustExist(
+      this._host.game.calendar.cycleEffectsFestival({ catnip: baseProd })["catnip"],
+    );
 
     // Determine our demand for catnip. This is usually a negative value.
     let baseDemand = this._host.game.village.getResConsumption()["catnip"];

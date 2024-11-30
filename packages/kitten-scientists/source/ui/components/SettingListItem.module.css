@@ -3,6 +3,10 @@
 
   transition: 0.3s;
 
+  .checkbox {
+    margin: 1px 5px 2px 2px;
+  }
+
   &.expanded {
     margin-bottom: 10px;
   }
@@ -10,8 +14,9 @@
   &:not(.expanded):hover {
     border-bottom: 1px dashed rgba(160, 160, 160, 0.2);
   }
-}
 
-.checkbox {
-  margin: 1px 5px 2px 2px;
+  &.readonly {
+    cursor: default;
+    pointer-events: none;
+  }
 }

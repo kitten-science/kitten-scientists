@@ -98,9 +98,9 @@ export class Button extends UiComponent {
     super.refreshUi();
 
     if (this.readOnly) {
-      this.element.addClass("ks-readonly");
+      this.element.addClass(styles.readonly);
     } else {
-      this.element.removeClass("ks-readonly");
+      this.element.removeClass(styles.readonly);
     }
 
     if (this.inactive) {
