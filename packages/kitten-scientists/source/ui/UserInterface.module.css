@@ -12,6 +12,7 @@
   flex-direction: column;
   text-align: right;
   line-height: 0;
+  margin-bottom: 1em;
 
   a {
     line-height: 1;
@@ -24,6 +25,16 @@
     &:hover {
       opacity: 1;
     }
+  }
+}
+:global #crowdjet-expand-container {
+  position: absolute !important;
+  bottom: 10px !important;
+  right: 0 !important;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
   }
 }
 .spacer {
