@@ -451,7 +451,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     // Normalize empty string to "no label".
     gameLabel =
-      (gameLabel === "" ? undefined : gameLabel) ?? this._host.engine.i18n("state.unlabledGame");
+      (gameLabel === "" ? undefined : gameLabel) ?? this._host.engine.i18n("state.unlabeledGame");
 
     // Ensure labels aren't excessively long.
     gameLabel = gameLabel.substring(0, 127);
@@ -474,7 +474,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     // Normalize empty string to "no label".
     stateLabel =
-      (stateLabel === "" ? undefined : stateLabel) ?? this._host.engine.i18n("state.unlabledState");
+      (stateLabel === "" ? undefined : stateLabel) ??
+      this._host.engine.i18n("state.unlabeledState");
 
     // Ensure labels aren't excessively long.
     stateLabel = stateLabel.substring(0, 127);
