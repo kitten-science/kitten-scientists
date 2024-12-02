@@ -62,6 +62,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
+          aws s3 cp release-info.json s3://kitten-science-us0/v2.0.0-beta.8/release-info.json
           aws s3 cp release-info.json s3://kitten-science-us0/main/release-info.json
 
           aws s3api put-object \
