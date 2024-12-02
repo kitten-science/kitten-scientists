@@ -37,7 +37,7 @@
     "@types/mocha": "10.0.10",
     "@types/node": "22.10.1",
     "chai": "5.1.2",
-    "mocha": "10.8.2",
+    "mocha": "11.0.1",
     "typescript": "5.7.2"
   },
   "packageManager": "yarn@4.5.3"
