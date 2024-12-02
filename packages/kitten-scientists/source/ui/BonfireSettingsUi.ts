@@ -95,7 +95,6 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
       new SettingsList(host, {
         children: [
           new HeaderListItem(host, host.engine.i18n("ui.additional")),
-          new BuildingUpgradeSettingsUi(host, settings.upgradeBuildings),
           new SettingListItem(host, host.engine.i18n("option.catnip"), settings.gatherCatnip, {
             onCheck: () => {
               host.engine.imessage("status.sub.enable", [host.engine.i18n("option.catnip")]);
@@ -133,6 +132,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
               host.engine.imessage("status.sub.disable", [host.engine.i18n("option.reactors")]);
             },
           }),
+          new BuildingUpgradeSettingsUi(host, settings.upgradeBuildings),
         ],
         hasDisableAll: false,
         hasEnableAll: false,
