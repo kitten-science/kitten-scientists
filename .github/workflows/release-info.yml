@@ -67,6 +67,22 @@ jobs:
 
           aws s3api put-object \
             --bucket kitten-science-us0 \
+            --key v2.0.0-beta.8/dev.js \
+            --cache-control "public, s-maxage=60" \
+            --website-redirect-location "${{ steps.release-info.outputs.dev-url-default }}"
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key v2.0.0-beta.8/nightly.js \
+            --cache-control "public, s-maxage=86400" \
+            --website-redirect-location "${{ steps.release-info.outputs.nightly-url-default }}"
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key v2.0.0-beta.8/stable.js \
+            --cache-control "public, s-maxage=86400" \
+            --website-redirect-location "${{ steps.release-info.outputs.stable-url-default }}"
+
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
             --key main/dev.js \
             --cache-control "public, s-maxage=60" \
             --website-redirect-location "${{ steps.release-info.outputs.dev-url-default }}"
