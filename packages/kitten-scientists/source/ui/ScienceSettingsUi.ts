@@ -46,9 +46,11 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
       {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [host.engine.i18n("option.observe")]);
+          this.refreshUi();
         },
         onUnCheck: () => {
           host.engine.imessage("status.sub.disable", [host.engine.i18n("option.observe")]);
+          this.refreshUi();
         },
       },
     );
@@ -61,5 +63,15 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
     });
     itemsList.addChildren([this._techsUi, this._policiesUi, this._observeStars]);
     this.addChild(itemsList);
+  }
+
+  override refreshUi(): void {
+    super.refreshUi();
+
+    if (this.setting.observe.enabled) {
+      $("#observeButton").hide();
+    } else {
+      $("#observeButton").show();
+    }
   }
 }
