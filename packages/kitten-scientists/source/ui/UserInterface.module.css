@@ -10,8 +10,10 @@
 :global #footerLinks {
   display: flex;
   flex-direction: column;
+  position: fixed;
   text-align: right;
   line-height: 0;
+  right: -5px !important;
   margin-bottom: 1em;
 
   a {
@@ -28,9 +30,9 @@
   }
 }
 :global #crowdjet-expand-container {
-  position: absolute !important;
+  position: fixed !important;
   bottom: 10px !important;
-  right: 0 !important;
+  right: -10px !important;
   opacity: 0.5;
 
   &:hover {
