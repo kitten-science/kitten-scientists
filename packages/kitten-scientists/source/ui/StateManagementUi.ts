@@ -62,8 +62,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       host,
       settings,
       new LabelListItem(host, label, {
-        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
-        classes: [stylesSettingListItem.setting],
+        childrenHead: [
+          new Container(host, {
+            classes: [stylesLabelListItem.fillSpace],
+          }),
+        ],
+        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         icon: Icons.State,
       }),
     );
