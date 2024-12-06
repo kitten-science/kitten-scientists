@@ -504,6 +504,23 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.storeState(Engine.DEFAULT_STATE);
   }
 
+  storeAutoSave(state: EngineState) {
+    const existing = this.states.find(state => state.unwrap().label === "Auto-Save");
+    if (!isNil(existing)) {
+      existing.replace({
+        ...existing.unwrap(),
+        state,
+      });
+
+      this._storeStates();
+      this.refreshUi();
+
+      return;
+    }
+
+    this.storeState(state, "Auto-Save");
+  }
+
   exportStateAll() {
     const statesJson = this.states
       .map(state => KittenScientists.encodeSettings(state.unwrap().state, false))

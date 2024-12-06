@@ -106,7 +106,9 @@ export class KittenScientists {
       "game/beforesave",
       (saveData: Record<string, unknown>) => {
         cinfo("Injecting Kitten Scientists engine state into save data...");
-        saveData.ks = { state: [this.getSettings()] };
+        const state = this.getSettings();
+        saveData.ks = { state: [state] };
+        this._userInterface.stateManagementUi.storeAutoSave(state);
         document.dispatchEvent(
           new CustomEvent<typeof saveData>("ks.reportSavegame", { detail: saveData }),
         );
