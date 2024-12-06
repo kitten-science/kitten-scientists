@@ -38,12 +38,18 @@ export class UserInterface extends UiComponent {
     | StateManagementUi
     | InternalsUi
   >;
+  stateManagementUi: StateManagementUi;
 
   constructor(host: KittenScientists) {
     super(host);
 
     const engine = host.engine;
     this._engineUi = new EngineSettingsUi(host, engine.settings);
+    this.stateManagementUi = new StateManagementUi(
+      host,
+      engine.settings.states,
+      engine.settings.locale,
+    );
     this._sections = [
       new BonfireSettingsUi(host, engine.bonfireManager.settings),
       new VillageSettingsUi(host, engine.villageManager.settings),
@@ -56,7 +62,7 @@ export class UserInterface extends UiComponent {
       new TimeSettingsUi(host, engine.timeManager.settings),
       new TimeControlSettingsUi(host, engine.timeControlManager.settings, engine.settings.locale),
       new LogFiltersSettingsUi(host, engine.settings.filters),
-      new StateManagementUi(host, engine.settings.states, engine.settings.locale),
+      this.stateManagementUi,
       new InternalsUi(host, engine.settings),
     ];
 

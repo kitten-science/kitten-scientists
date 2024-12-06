@@ -8,7 +8,7 @@ import { Icons } from "../images/Icons.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { StateSettings } from "../settings/StateSettings.js";
 import { Unique } from "../tools/Entries.js";
-import { cerror } from "../tools/Log.js";
+import { cerror, cinfo } from "../tools/Log.js";
 import { SavegameLoader } from "../tools/SavegameLoader.js";
 import { KGSaveData } from "../types/index.js";
 import { Button } from "./components/Button.js";
@@ -442,7 +442,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     let stateLabel: string | undefined;
     if ("ks" in subjectData && !isNil(subjectData.ks)) {
       const state = subjectData.ks.state[0];
-      stateLabel = this.storeState(state);
+      stateLabel = this.storeState(state) ?? undefined;
       this._host.engine.imessage("state.imported.state");
       delete subjectData.ks;
     }
@@ -451,9 +451,16 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this._host.engine.imessage("state.imported.game");
   }
 
-  storeGame(game?: KGSaveData, label?: string) {
-    let gameLabel =
-      label ?? window.prompt(this._host.engine.i18n("state.storeGame.prompt")) ?? undefined;
+  storeGame(game?: KGSaveData, label?: string): string | null {
+    let gameLabel = label;
+
+    if (isNil(gameLabel)) {
+      gameLabel = window.prompt(this._host.engine.i18n("state.storeGame.prompt")) ?? undefined;
+    }
+
+    if (isNil(gameLabel)) {
+      return null;
+    }
 
     // Normalize empty string to "no label".
     gameLabel =
@@ -472,11 +479,20 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     this._storeGames();
     this.refreshUi();
+
+    return gameLabel;
   }
 
-  storeState(state?: EngineState, label?: string): string {
-    let stateLabel =
-      label ?? window.prompt(this._host.engine.i18n("state.storeState.prompt")) ?? undefined;
+  storeState(state?: EngineState, label?: string): string | null {
+    let stateLabel = label;
+
+    if (isNil(stateLabel)) {
+      stateLabel = window.prompt(this._host.engine.i18n("state.storeState.prompt")) ?? undefined;
+    }
+
+    if (isNil(stateLabel)) {
+      return null;
+    }
 
     // Normalize empty string to "no label".
     stateLabel =
@@ -502,6 +518,26 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
   storeStateFactoryDefaults() {
     this.storeState(Engine.DEFAULT_STATE);
+  }
+
+  storeAutoSave(state: EngineState) {
+    const existing = this.states.find(state => state.unwrap().label === "Auto-Save");
+    if (!isNil(existing)) {
+      cinfo("Updating existing Auto-Save...");
+      existing.replace({
+        ...existing.unwrap(),
+        state,
+        timestamp: new Date().toISOString(),
+      });
+
+      this._storeStates();
+      this.refreshUi();
+
+      return;
+    }
+
+    cinfo("Storing new Auto-Save...");
+    this.storeState(state, "Auto-Save");
   }
 
   exportStateAll() {
