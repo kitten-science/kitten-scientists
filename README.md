@@ -4,6 +4,8 @@ Kitten Scientists (KS) is a simple automation userscript for the complex [Kitten
 
 For a full explanation of how everything in Kitten Scientists works, please visit the [**full documentation**](https://kitten-science.com/).
 
+[![Pre-Release](https://github.com/kitten-science/kitten-scientists/actions/workflows/pre-release.yml/badge.svg)](https://github.com/kitten-science/kitten-scientists/actions/workflows/pre-release.yml) [![Crowdin](https://badges.crowdin.net/kitten-scientists/localized.svg)](https://crowdin.com/project/kitten-scientists)
+
 ## Quick Start
 
 ### Option 1: Userscript Manager (recommended)
