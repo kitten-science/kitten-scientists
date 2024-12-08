@@ -68,8 +68,18 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 cp release-info.json s3://kitten-science-us0/v2.0.0-beta.8/release-info.json
-          aws s3 cp release-info.json s3://kitten-science-us0/main/release-info.json
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key v2.0.0-beta.8/release-info.json \
+            --cache-control "public, s-maxage=3600" \
+            --content-type "application/json" \
+            --body release-info.json
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key main/release-info.json \
+            --cache-control "public, s-maxage=3600" \
+            --content-type "application/json" \
+            --body release-info.json
 
           aws s3api put-object \
             --bucket kitten-science-us0 \
