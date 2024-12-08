@@ -71,10 +71,34 @@ jobs:
           aws s3 cp release-info.json s3://kitten-science-us0/v2.0.0-beta.8/release-info.json
           aws s3 cp release-info.json s3://kitten-science-us0/main/release-info.json
 
-          aws s3 cp dev.js s3://kitten-science-us0/v2.0.0-beta.8/dev.js
-          aws s3 cp nightly.js s3://kitten-science-us0/v2.0.0-beta.8/nightly.js
-          aws s3 cp stable.js s3://kitten-science-us0/v2.0.0-beta.8/stable.js
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key v2.0.0-beta.8/dev.js \
+            --cache-control "public, s-maxage=60" \
+            --body dev.js
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key v2.0.0-beta.8/nightly.js \
+            --cache-control "public, s-maxage=86400" \
+            --body nightly.js
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key v2.0.0-beta.8/stable.js \
+            --cache-control "public, s-maxage=604800" \
+            --body stable.js
 
-          aws s3 cp dev.js s3://kitten-science-us0/main/dev.js
-          aws s3 cp nightly.js s3://kitten-science-us0/main/nightly.js
-          aws s3 cp stable.js s3://kitten-science-us0/main/stable.js
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key main/dev.js \
+            --cache-control "public, s-maxage=60" \
+            --body dev.js
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key main/nightly.js \
+            --cache-control "public, s-maxage=86400" \
+            --body nightly.js
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key main/stable.js \
+            --cache-control "public, s-maxage=604800" \
+            --body stable.js
