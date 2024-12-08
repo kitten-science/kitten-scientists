@@ -1,5 +1,6 @@
+import { SupportedLocale } from "../../Engine.js";
 import { KittenScientists } from "../../KittenScientists.js";
-import { SettingThreshold, SettingTrigger } from "../../settings/Settings.js";
+import { SettingOptions, SettingThreshold, SettingTrigger } from "../../settings/Settings.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
@@ -15,13 +16,14 @@ export class SettingTriggerListItem extends SettingListItem {
 
   constructor(
     host: KittenScientists,
-    label: string,
     setting: SettingThreshold | SettingTrigger,
+    locale: SettingOptions<SupportedLocale>,
+    label: string,
     options?: Partial<SettingListItemOptions & SettingListItemOptionsTrigger>,
   ) {
     super(host, label, setting, options);
 
-    this.triggerButton = new TriggerButton(host, setting, {
+    this.triggerButton = new TriggerButton(host, setting, locale, {
       alignment: "right",
       border: false,
       onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,

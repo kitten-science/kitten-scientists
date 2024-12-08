@@ -1,6 +1,8 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { SpaceSettings } from "../settings/SpaceSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { MissionSettingsUi } from "./MissionSettingsUi.js";
@@ -14,12 +16,16 @@ import { UiComponent } from "./components/UiComponent.js";
 export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
   private readonly _missionsUi: MissionSettingsUi;
 
-  constructor(host: KittenScientists, settings: SpaceSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: SpaceSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     const label = host.engine.i18n("ui.space");
     super(
       host,
       settings,
-      new SettingTriggerListItem(host, label, settings, {
+      new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -34,7 +40,7 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -44,10 +50,12 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1
+              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -82,6 +90,7 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
                 BuildSectionTools.getBuildOption(
                   host,
                   this.setting.buildings[building.name],
+                  locale,
                   this.setting,
                   building.label,
                   label,

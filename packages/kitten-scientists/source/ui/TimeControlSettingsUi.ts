@@ -25,7 +25,7 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
   constructor(
     host: KittenScientists,
     settings: TimeControlSettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
   ) {
     const label = host.engine.i18n("ui.timeCtrl");
     super(
@@ -49,8 +49,9 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
     const accelerateLabel = host.engine.i18n("option.accelerate");
     this._accelerateTime = new SettingTriggerListItem(
       host,
-      accelerateLabel,
       this.setting.accelerateTime,
+      locale,
+      accelerateLabel,
       {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [accelerateLabel]);
@@ -67,9 +68,13 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
             host,
             host.engine.i18n("ui.trigger.accelerateTime.prompt"),
             host.engine.i18n("ui.trigger.accelerateTime.promptTitle", [
-              `${UiComponent.renderPercentage(this.setting.accelerateTime.trigger)}%`,
+              UiComponent.renderPercentage(
+                this.setting.accelerateTime.trigger,
+                locale.selected,
+                true,
+              ),
             ]),
-            UiComponent.renderPercentage(this.setting.accelerateTime.trigger),
+            UiComponent.renderPercentage(this.setting.accelerateTime.trigger, locale.selected),
             host.engine.i18n("ui.trigger.accelerateTime.promptExplainer"),
           )
             .then(value => {
@@ -87,8 +92,8 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
       },
     );
     this._accelerateTime.triggerButton.element.addClass(stylesButton.lastHeadAction);
-    this._timeSkipUi = new TimeSkipSettingsUi(host, this.setting.timeSkip);
-    this._resetUi = new ResetSettingsUi(host, this.setting.reset, language);
+    this._timeSkipUi = new TimeSkipSettingsUi(host, this.setting.timeSkip, locale);
+    this._resetUi = new ResetSettingsUi(host, this.setting.reset, locale);
 
     this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];
 

@@ -139,10 +139,16 @@ export abstract class UiComponent extends EventTarget {
   /**
    * Turns a number like 0.527 into a string like 52.7
    * @param value - The number to render as a string.
+   * @param locale - The locale in which to render the percentage.
+   * @param withUnit - Should the percentage sign be included in the output?
    * @returns A string representing the given percentage.
    */
-  static renderPercentage(value: number): string {
-    return roundTo(100 * value, 3).toString();
+  static renderPercentage(value: number, locale?: string, withUnit?: boolean): string {
+    return locale
+      ? new Intl.NumberFormat(locale, { style: withUnit ? "percent" : "decimal" }).format(
+          withUnit ? value : value * 100,
+        )
+      : `${roundTo(value * 100, 3).toString()}${withUnit ? "%" : ""}`;
   }
 
   static promptFloat(text: string, defaultValue: string): number | null {

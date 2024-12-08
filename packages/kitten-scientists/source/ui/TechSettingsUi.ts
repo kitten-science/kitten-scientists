@@ -17,14 +17,14 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
   constructor(
     host: KittenScientists,
     settings: TechSettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade.techs");
     super(
       host,
       settings,
-      new SettingTriggerListItem(host, label, settings, {
+      new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -39,7 +39,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -49,10 +49,12 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1
+              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -80,10 +82,10 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
 
     const items = [];
     let lastLabel = techs[0].label;
-    for (const tech of techs.sort((a, b) => a.label.localeCompare(b.label, language.selected))) {
+    for (const tech of techs.sort((a, b) => a.label.localeCompare(b.label, locale.selected))) {
       const option = this.setting.techs[tech.name];
 
-      const element = new SettingTriggerListItem(host, tech.label, option, {
+      const element = new SettingTriggerListItem(host, option, locale, tech.label, {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [tech.label]);
         },
@@ -98,8 +100,8 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
             option.trigger < 0
               ? settings.trigger < 0
                 ? host.engine.i18n("ui.trigger.build.blocked", [label])
-                : `${UiComponent.renderPercentage(settings.trigger)}% (${host.engine.i18n("ui.trigger.build.inherited")})`
-              : `${UiComponent.renderPercentage(option.trigger)}%`,
+                : `${UiComponent.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+              : UiComponent.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -109,10 +111,12 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               option.trigger !== -1
-                ? `${Dialog.renderPercentage(option.trigger)}%`
+                ? UiComponent.renderPercentage(option.trigger, locale.selected, true)
                 : host.engine.i18n("ui.trigger.build.inherited"),
             ]),
-            option.trigger !== -1 ? Dialog.renderPercentage(option.trigger) : "",
+            option.trigger !== -1
+              ? UiComponent.renderPercentage(option.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.build.promptExplainer"),
           )
             .then(value => {
@@ -135,7 +139,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
-      if (host.engine.localeSupportsFirstLetterSplits(language.selected)) {
+      if (host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== tech.label[0]) {
           element.element.addClass(stylesLabelListItem.splitter);
         }

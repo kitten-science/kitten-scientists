@@ -1,9 +1,10 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { ResetSpaceSettings } from "../settings/ResetSpaceSettings.js";
-import { SettingTrigger } from "../settings/Settings.js";
+import { SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
@@ -14,7 +15,11 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
 export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> {
-  constructor(host: KittenScientists, settings: ResetSpaceSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: ResetSpaceSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     const label = host.engine.i18n("ui.space");
     super(host, label, settings, {
       childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
@@ -33,6 +38,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
                 this._getResetOption(
                   host,
                   this.setting.buildings[building.name],
+                  locale,
                   building.label,
                   indexPlanet < arrayPlant.length - 1 && indexBuilding === arrayBuilding.length - 1,
                 ),
@@ -45,17 +51,18 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
   private _getResetOption(
     host: KittenScientists,
     option: SettingTrigger,
-    i18nName: string,
+    locale: SettingOptions<SupportedLocale>,
+    label: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingTriggerListItem(host, i18nName, option, {
+    const element = new SettingTriggerListItem(host, option, locale, label, {
       delimiter,
       onCheck: () => {
-        host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [label]);
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -65,7 +72,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
           host,
           host.engine.i18n("ui.trigger.prompt.absolute"),
           host.engine.i18n("ui.trigger.build.prompt", [
-            i18nName,
+            label,
             option.trigger !== -1
               ? option.trigger.toString()
               : host.engine.i18n("ui.trigger.inactive"),

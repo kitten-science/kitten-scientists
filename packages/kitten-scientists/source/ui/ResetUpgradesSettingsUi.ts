@@ -15,7 +15,7 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
   constructor(
     host: KittenScientists,
     settings: ResetUpgradeSettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
   ) {
     const label = host.engine.i18n("ui.upgrades");
     super(host, label, settings, {
@@ -31,13 +31,13 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
     let lastLabel = upgrades[0].label;
     let lastElement: SettingListItem | undefined;
     for (const upgrade of upgrades.sort((a, b) =>
-      a.label.localeCompare(b.label, language.selected),
+      a.label.localeCompare(b.label, locale.selected),
     )) {
       const option = this.setting.upgrades[upgrade.name];
 
       const element = this._getResetOption(host, option, upgrade.label);
 
-      if (host.engine.localeSupportsFirstLetterSplits(language.selected)) {
+      if (host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== upgrade.label[0]) {
           if (!isNil(lastElement)) {
             lastElement.element.addClass(stylesDelimiter.delimiter);

@@ -26,7 +26,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   constructor(
     host: KittenScientists,
     settings: ResetSettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("option.time.reset");
@@ -49,12 +49,12 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    this._bonfireUi = new ResetBonfireSettingsUi(host, this.setting.bonfire);
-    this._religionUi = new ResetReligionSettingsUi(host, this.setting.religion);
-    this._resourcesUi = new ResetResourcesSettingsUi(host, this.setting.resources, language);
-    this._spaceUi = new ResetSpaceSettingsUi(host, this.setting.space);
-    this._timeUi = new ResetTimeSettingsUi(host, this.setting.time);
-    this._upgradesUi = new ResetUpgradesSettingsUi(host, this.setting.upgrades, language);
+    this._bonfireUi = new ResetBonfireSettingsUi(host, this.setting.bonfire, locale);
+    this._religionUi = new ResetReligionSettingsUi(host, this.setting.religion, locale);
+    this._resourcesUi = new ResetResourcesSettingsUi(host, this.setting.resources, locale);
+    this._spaceUi = new ResetSpaceSettingsUi(host, this.setting.space, locale);
+    this._timeUi = new ResetTimeSettingsUi(host, this.setting.time, locale);
+    this._upgradesUi = new ResetUpgradesSettingsUi(host, this.setting.upgrades, locale);
 
     list.addChildren([
       this._bonfireUi,

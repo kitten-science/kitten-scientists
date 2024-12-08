@@ -1,5 +1,7 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "packages/kitten-scientists/source/Engine.js";
 import { ResourcesSettingsItem } from "packages/kitten-scientists/source/settings/ResourcesSettings.js";
+import { SettingOptions } from "packages/kitten-scientists/source/settings/Settings.js";
 import { Icons } from "../../../images/Icons.js";
 import { KittenScientists } from "../../../KittenScientists.js";
 import { Button, ButtonOptions } from "../Button.js";
@@ -13,8 +15,9 @@ export class ConsumeButton extends Button {
 
   constructor(
     host: KittenScientists,
-    resourceName: string,
     setting: ResourcesSettingsItem,
+    locale: SettingOptions<SupportedLocale>,
+    resourceName: string,
     options?: Partial<ButtonOptions>,
   ) {
     super(host, "", Icons.DataUsage, {
@@ -25,9 +28,9 @@ export class ConsumeButton extends Button {
           host.engine.i18n("resources.consume.prompt"),
           host.engine.i18n("resources.consume.promptTitle", [
             resourceName,
-            `${UiComponent.renderPercentage(setting.consume)}%`,
+            UiComponent.renderPercentage(setting.consume, locale.selected, true),
           ]),
-          UiComponent.renderPercentage(setting.consume),
+          UiComponent.renderPercentage(setting.consume, locale.selected),
           host.engine.i18n("resources.consume.promptExplainer"),
         )
           .then(value => {
@@ -61,7 +64,11 @@ export class ConsumeButton extends Button {
   refreshUi() {
     super.refreshUi();
 
-    const consumeValue = `${UiComponent.renderPercentage(this.setting.consume)}%`;
+    const consumeValue = UiComponent.renderPercentage(
+      this.setting.consume,
+      this._host.engine.settings.locale.selected,
+      true,
+    );
     const title =
       this.setting.consume === 0
         ? this._host.engine.i18n("resources.consume.titleZero", [this.resourceName])

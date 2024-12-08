@@ -1,5 +1,6 @@
+import { SupportedLocale } from "../../Engine.js";
 import { KittenScientists } from "../../KittenScientists.js";
-import { SettingTriggerMax } from "../../settings/Settings.js";
+import { SettingOptions, SettingTriggerMax } from "../../settings/Settings.js";
 import stylesButton from "./Button.module.css";
 import { MaxButton } from "./buttons/MaxButton.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
@@ -16,8 +17,9 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
 
   constructor(
     host: KittenScientists,
-    label: string,
     setting: SettingTriggerMax,
+    locale: SettingOptions<SupportedLocale>,
+    label: string,
     options?: Partial<
       SettingListItemOptions & SettingListItemOptionsMax & SettingListItemOptionsTrigger
     >,
@@ -31,7 +33,7 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
       onClick: options?.onSetMax ? () => options.onSetMax?.(this) : undefined,
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.(this) : undefined,
     });
-    this.triggerButton = new TriggerButton(host, setting, {
+    this.triggerButton = new TriggerButton(host, setting, locale, {
       border: false,
       classes: [stylesButton.lastHeadAction],
       onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,

@@ -1,6 +1,8 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
@@ -23,12 +25,17 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
   private readonly _seasons: CollapsiblePanel<SeasonsList>;
   private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
 
-  constructor(host: KittenScientists, settings: TimeSkipSettings, options?: PanelOptions) {
+  constructor(
+    host: KittenScientists,
+    settings: TimeSkipSettings,
+    locale: SettingOptions<SupportedLocale>,
+    options?: PanelOptions,
+  ) {
     const label = host.engine.i18n("option.time.skip");
     super(
       host,
       settings,
-      new SettingMaxTriggerListItem(host, label, settings, {
+      new SettingMaxTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -147,7 +154,11 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
         ],
       },
     );
-    this._activeHeatTransferUI = new TimeSkipHeatSettingsUi(host, this.setting.activeHeatTransfer);
+    this._activeHeatTransferUI = new TimeSkipHeatSettingsUi(
+      host,
+      this.setting.activeHeatTransfer,
+      locale,
+    );
 
     this.addChild(
       new SettingsList(host, {

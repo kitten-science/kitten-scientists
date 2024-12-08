@@ -1,8 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
+import { SupportedLocale } from "packages/kitten-scientists/source/Engine.js";
 import { Icons } from "../../../images/Icons.js";
 import { KittenScientists } from "../../../KittenScientists.js";
-import { SettingThreshold, SettingTrigger } from "../../../settings/Settings.js";
+import { SettingOptions, SettingThreshold, SettingTrigger } from "../../../settings/Settings.js";
 import { Button, ButtonOptions } from "../Button.js";
 import { UiComponent } from "../UiComponent.js";
 
@@ -20,6 +21,7 @@ export class TriggerButton extends Button {
   constructor(
     host: KittenScientists,
     setting: SettingTrigger | SettingThreshold,
+    _locale: SettingOptions<SupportedLocale>,
     options?: Partial<TriggerButtonOptions>,
   ) {
     super(host, "", Icons.Trigger, options);
@@ -47,7 +49,11 @@ export class TriggerButton extends Button {
       this.behavior === "percentage"
         ? this.setting.trigger < 0
           ? this._host.engine.i18n("ui.infinity")
-          : `${UiComponent.renderPercentage(this.setting.trigger)}%`
+          : UiComponent.renderPercentage(
+              this.setting.trigger,
+              this._host.engine.settings.locale.selected,
+              true,
+            )
         : UiComponent.renderAbsolute(this.setting.trigger, this._host);
 
     this.element[0].title = this._host.engine.i18n("ui.trigger", [triggerValue]);

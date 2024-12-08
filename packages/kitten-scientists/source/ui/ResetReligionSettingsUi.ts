@@ -1,10 +1,11 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { UnicornItems } from "../settings/ReligionSettings.js";
 import { ResetReligionSettings } from "../settings/ResetReligionSettings.js";
-import { SettingTrigger } from "../settings/Settings.js";
+import { SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import { ZiggurathUpgrade } from "../types/religion.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
@@ -17,7 +18,11 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
 export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSettings> {
-  constructor(host: KittenScientists, settings: ResetReligionSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: ResetReligionSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     const label = host.engine.i18n("ui.faith");
     super(host, label, settings, {
       childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
@@ -33,6 +38,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
           this._getResetOption(
             host,
             this.setting.buildings.unicornPasture,
+            locale,
             host.engine.i18n("$buildings.unicornPasture.label"),
           ),
 
@@ -45,6 +51,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
               this._getResetOption(
                 host,
                 this.setting.buildings[zigguratUpgrade.name],
+                locale,
                 zigguratUpgrade.label,
               ),
             ),
@@ -56,7 +63,12 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
                 !unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
             )
             .map(upgrade =>
-              this._getResetOption(host, this.setting.buildings[upgrade.name], upgrade.label),
+              this._getResetOption(
+                host,
+                this.setting.buildings[upgrade.name],
+                locale,
+                upgrade.label,
+              ),
             ),
           new Delimiter(host),
 
@@ -67,6 +79,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
               this._getResetOption(
                 host,
                 this.setting.buildings[upgrade.name],
+                locale,
                 upgrade.label,
                 upgrade.name === host.game.religion.religionUpgrades.at(-1)?.name,
               ),
@@ -76,7 +89,12 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
           ...host.game.religion.transcendenceUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(upgrade =>
-              this._getResetOption(host, this.setting.buildings[upgrade.name], upgrade.label),
+              this._getResetOption(
+                host,
+                this.setting.buildings[upgrade.name],
+                locale,
+                upgrade.label,
+              ),
             ),
         ],
       }),
@@ -86,17 +104,18 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
   private _getResetOption(
     host: KittenScientists,
     option: SettingTrigger,
-    i18nName: string,
+    locale: SettingOptions<SupportedLocale>,
+    label: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingTriggerListItem(host, i18nName, option, {
+    const element = new SettingTriggerListItem(host, option, locale, label, {
       delimiter,
       onCheck: () => {
-        host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [label]);
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -106,7 +125,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
           host,
           host.engine.i18n("ui.trigger.prompt.absolute"),
           host.engine.i18n("ui.trigger.build.prompt", [
-            i18nName,
+            label,
             option.trigger !== -1
               ? option.trigger.toString()
               : host.engine.i18n("ui.trigger.inactive"),

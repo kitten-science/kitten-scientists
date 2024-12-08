@@ -1,6 +1,8 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { TimeSettings } from "../settings/TimeSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { Dialog } from "./components/Dialog.js";
@@ -12,12 +14,16 @@ import { SettingsPanel } from "./components/SettingsPanel.js";
 import { UiComponent } from "./components/UiComponent.js";
 
 export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
-  constructor(host: KittenScientists, settings: TimeSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: TimeSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     const label = host.engine.i18n("ui.time");
     super(
       host,
       settings,
-      new SettingTriggerListItem(host, label, settings, {
+      new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -32,7 +38,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -42,10 +48,12 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1
+              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -78,6 +86,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
               BuildSectionTools.getBuildOption(
                 host,
                 this.setting.buildings[building.name],
+                locale,
                 this.setting,
                 building.label,
                 label,
@@ -92,6 +101,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
               BuildSectionTools.getBuildOption(
                 host,
                 this.setting.buildings[building.name],
+                locale,
                 this.setting,
                 building.label,
                 label,

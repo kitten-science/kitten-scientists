@@ -1,9 +1,10 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { ResetTimeSettings } from "../settings/ResetTimeSettings.js";
-import { SettingTrigger } from "../settings/Settings.js";
+import { SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
@@ -14,7 +15,11 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 
 export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
-  constructor(host: KittenScientists, settings: ResetTimeSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: ResetTimeSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     const label = host.engine.i18n("ui.time");
     super(host, label, settings, {
       childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
@@ -31,6 +36,7 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
               this._getResetOption(
                 host,
                 this.setting.buildings[building.name],
+                locale,
                 building.label,
                 building.name === host.game.time.chronoforgeUpgrades.at(-1)?.name,
               ),
@@ -40,7 +46,12 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
           ...host.game.time.voidspaceUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(building =>
-              this._getResetOption(host, this.setting.buildings[building.name], building.label),
+              this._getResetOption(
+                host,
+                this.setting.buildings[building.name],
+                locale,
+                building.label,
+              ),
             ),
         ],
       }),
@@ -50,17 +61,18 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
   private _getResetOption(
     host: KittenScientists,
     option: SettingTrigger,
-    i18nName: string,
+    locale: SettingOptions<SupportedLocale>,
+    label: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingTriggerListItem(host, i18nName, option, {
+    const element = new SettingTriggerListItem(host, option, locale, label, {
       delimiter,
       onCheck: () => {
-        host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [label]);
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -70,7 +82,7 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
           host,
           host.engine.i18n("ui.trigger.prompt.absolute"),
           host.engine.i18n("ui.trigger.build.prompt", [
-            i18nName,
+            label,
             option.trigger !== -1
               ? option.trigger.toString()
               : host.engine.i18n("ui.trigger.inactive"),

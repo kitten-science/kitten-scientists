@@ -1,5 +1,7 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
@@ -10,12 +12,17 @@ import { SettingsPanel } from "./components/SettingsPanel.js";
 import { UiComponent } from "./components/UiComponent.js";
 
 export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> {
-  constructor(host: KittenScientists, settings: TimeSkipHeatSettings, options?: PanelOptions) {
+  constructor(
+    host: KittenScientists,
+    settings: TimeSkipHeatSettings,
+    locale: SettingOptions<SupportedLocale>,
+    options?: PanelOptions,
+  ) {
     const label = host.engine.i18n("option.time.activeHeatTransfer");
     super(
       host,
       settings,
-      new SettingTriggerListItem(host, label, settings, {
+      new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -30,9 +37,9 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
             host,
             host.engine.i18n("ui.trigger.activeHeatTransfer.promptTitle"),
             host.engine.i18n("ui.trigger.activeHeatTransfer.prompt", [
-              `${UiComponent.renderPercentage(settings.trigger)}%`,
+              UiComponent.renderPercentage(settings.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(settings.trigger),
+            UiComponent.renderPercentage(settings.trigger, locale.selected),
             host.engine.i18n("ui.trigger.activeHeatTransfer.promptExplainer"),
           )
             .then(value => {

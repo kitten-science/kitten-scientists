@@ -21,13 +21,13 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
   constructor(
     host: KittenScientists,
     settings: WorkshopSettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
   ) {
     const label = host.engine.i18n("ui.craft");
     super(
       host,
       settings,
-      new SettingTriggerListItem(host, label, settings, {
+      new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -42,7 +42,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -52,10 +52,12 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1
+              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -94,7 +96,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
 
     this._crafts = [];
     for (const [option, label] of preparedCrafts) {
-      const element = new WorkshopCraftListItem(host, label, option, {
+      const element = new WorkshopCraftListItem(host, option, locale, label, {
         delimiter: option.resource === "kerosene" || option.resource === "blueprint",
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [label]);
@@ -130,8 +132,8 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
             option.trigger < 0
               ? settings.trigger < 0
                 ? host.engine.i18n("ui.trigger.build.blocked", [label])
-                : `${UiComponent.renderPercentage(settings.trigger)}% (${host.engine.i18n("ui.trigger.build.inherited")})`
-              : `${UiComponent.renderPercentage(option.trigger)}%`,
+                : `${UiComponent.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+              : UiComponent.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
         onSetMax: () => {
@@ -173,10 +175,12 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               option.trigger !== -1
-                ? `${Dialog.renderPercentage(option.trigger)}%`
+                ? UiComponent.renderPercentage(option.trigger, locale.selected, true)
                 : host.engine.i18n("ui.trigger.build.inherited"),
             ]),
-            option.trigger !== -1 ? Dialog.renderPercentage(option.trigger) : "",
+            option.trigger !== -1
+              ? UiComponent.renderPercentage(option.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.build.promptExplainer"),
           )
             .then(value => {
@@ -234,7 +238,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
 
     this.addChild(
       new SettingsList(host, {
-        children: [new UpgradeSettingsUi(host, this.setting.unlockUpgrades, language)],
+        children: [new UpgradeSettingsUi(host, this.setting.unlockUpgrades, locale)],
         hasDisableAll: false,
         hasEnableAll: false,
       }),

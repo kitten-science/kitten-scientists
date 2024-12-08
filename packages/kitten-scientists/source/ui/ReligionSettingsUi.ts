@@ -1,7 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { ReligionOptions, ReligionSettings, UnicornItems } from "../settings/ReligionSettings.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { ZiggurathUpgrade } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import stylesButton from "./components/Button.module.css";
@@ -19,12 +21,16 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
   private readonly _unicornBuildings: Array<SettingMaxTriggerListItem>;
   private readonly _bestUnicornBuilding: SettingListItem;
 
-  constructor(host: KittenScientists, settings: ReligionSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: ReligionSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     const label = host.engine.i18n("ui.faith");
     super(
       host,
       settings,
-      new SettingTriggerListItem(host, label, settings, {
+      new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -39,7 +45,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -49,10 +55,12 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1
+              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -81,6 +89,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
       BuildSectionTools.getBuildOption(
         host,
         this.setting.buildings.unicornPasture,
+        locale,
         this.setting,
         host.engine.i18n("$buildings.unicornPasture.label"),
         label,
@@ -93,6 +102,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
           BuildSectionTools.getBuildOption(
             host,
             this.setting.buildings[zigguratUpgrade.name],
+            locale,
             this.setting,
             zigguratUpgrade.label,
             label,
@@ -142,6 +152,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
               BuildSectionTools.getBuildOption(
                 host,
                 this.setting.buildings[upgrade.name],
+                locale,
                 this.setting,
                 upgrade.label,
                 label,
@@ -156,6 +167,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
               BuildSectionTools.getBuildOption(
                 host,
                 this.setting.buildings[upgrade.name],
+                locale,
                 this.setting,
                 upgrade.label,
                 label,
@@ -170,6 +182,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
               BuildSectionTools.getBuildOption(
                 host,
                 this.setting.buildings[upgrade.name],
+                locale,
                 this.setting,
                 upgrade.label,
                 label,
@@ -208,7 +221,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
               });
             }
 
-            const element = new SettingTriggerListItem(host, label, this.setting[item], {
+            const element = new SettingTriggerListItem(host, this.setting[item], locale, label, {
               classes: [stylesButton.lastHeadAction],
               onCheck: () => {
                 host.engine.imessage("status.sub.enable", [label]);
@@ -233,11 +246,11 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                     label,
                     element.triggerButton.behavior === "integer"
                       ? UiComponent.renderAbsolute(this.setting[item].trigger, host)
-                      : UiComponent.renderPercentage(this.setting[item].trigger),
+                      : UiComponent.renderPercentage(this.setting[item].trigger, locale.selected),
                   ]),
                   element.triggerButton.behavior === "integer"
                     ? UiComponent.renderAbsolute(this.setting[item].trigger, host)
-                    : UiComponent.renderPercentage(this.setting[item].trigger),
+                    : UiComponent.renderPercentage(this.setting[item].trigger, locale.selected),
                   host.engine.i18n(
                     element.triggerButton.behavior === "integer"
                       ? "ui.trigger.setinteger.promptExplainer"

@@ -11,7 +11,6 @@ import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
 export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
-  private readonly _items: Array<SettingListItem>;
   private readonly _policiesUi: PolicySettingsUi;
   private readonly _techsUi: TechSettingsUi;
   protected readonly _observeStars: SettingListItem;
@@ -19,7 +18,7 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
   constructor(
     host: KittenScientists,
     settings: ScienceSettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
   ) {
     const label = host.engine.i18n("ui.upgrade");
     super(
@@ -36,8 +35,8 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
       }),
     );
 
-    this._policiesUi = new PolicySettingsUi(host, this.setting.policies, language);
-    this._techsUi = new TechSettingsUi(host, this.setting.techs, language);
+    this._policiesUi = new PolicySettingsUi(host, this.setting.policies, locale);
+    this._techsUi = new TechSettingsUi(host, this.setting.techs, locale);
 
     this._observeStars = new SettingListItem(
       host,
@@ -54,8 +53,6 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
         },
       },
     );
-
-    this._items = [this._policiesUi, this._techsUi, this._observeStars];
 
     const itemsList = new SettingsList(host, {
       hasDisableAll: false,

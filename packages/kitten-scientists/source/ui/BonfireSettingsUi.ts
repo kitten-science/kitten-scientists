@@ -1,7 +1,9 @@
 import { coalesceArray, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { BonfireSettings } from "../settings/BonfireSettings.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { Building, StagedBuilding } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
@@ -15,12 +17,16 @@ import { SettingsPanel } from "./components/SettingsPanel.js";
 import { UiComponent } from "./components/UiComponent.js";
 
 export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
-  constructor(host: KittenScientists, settings: BonfireSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: BonfireSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     const label = host.engine.i18n("ui.build");
     super(
       host,
       settings,
-      new SettingTriggerListItem(host, label, settings, {
+      new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -35,7 +41,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -45,10 +51,12 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1
+              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -80,7 +88,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           host.game.bld.buildingGroups.flatMap(buildingGroup => [
             new HeaderListItem(host, buildingGroup.title),
             ...buildingGroup.buildings.flatMap(building =>
-              this._getBuildOptions(host, settings, label, building),
+              this._getBuildOptions(host, settings, locale, label, building),
             ),
             buildingGroup !== host.game.bld.buildingGroups[host.game.bld.buildingGroups.length - 1]
               ? new Delimiter(host)
@@ -143,6 +151,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
   private _getBuildOptions(
     host: KittenScientists,
     settings: BonfireSettings,
+    locale: SettingOptions<SupportedLocale>,
     sectionLabel: string,
     building: Building,
   ) {
@@ -158,6 +167,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
         BuildSectionTools.getBuildOption(
           host,
           settings.buildings[building],
+          locale,
           settings,
           meta.stages[0].label,
           sectionLabel,
@@ -165,6 +175,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
         BuildSectionTools.getBuildOption(
           host,
           settings.buildings[name],
+          locale,
           settings,
           meta.stages[1].label,
           sectionLabel,
@@ -177,6 +188,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
         BuildSectionTools.getBuildOption(
           host,
           settings.buildings[building],
+          locale,
           settings,
           meta.label,
           sectionLabel,

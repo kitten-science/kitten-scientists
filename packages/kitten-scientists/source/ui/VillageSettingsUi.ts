@@ -1,7 +1,8 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
-import { SettingMax } from "../settings/Settings.js";
+import { SettingMax, SettingOptions } from "../settings/Settings.js";
 import { VillageSettings } from "../settings/VillageSettings.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
@@ -23,7 +24,11 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
   private readonly _promoteLeader: SettingListItem;
   private readonly _electLeader: SettingListItem;
 
-  constructor(host: KittenScientists, settings: VillageSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: VillageSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     const label = host.engine.i18n("ui.distribute");
     super(
       host,
@@ -55,8 +60,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 
     this._hunt = new SettingTriggerListItem(
       host,
-      host.engine.i18n("option.hunt"),
       this.setting.hunt,
+      locale,
+      host.engine.i18n("option.hunt"),
       {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [host.engine.i18n("option.hunt")]);
@@ -72,9 +78,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
             host,
             host.engine.i18n("ui.trigger.prompt.percentage"),
             host.engine.i18n("ui.trigger.hunt.prompt", [
-              `${UiComponent.renderPercentage(this.setting.hunt.trigger)}%`,
+              UiComponent.renderPercentage(this.setting.hunt.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(this.setting.hunt.trigger),
+            UiComponent.renderPercentage(this.setting.hunt.trigger, locale.selected),
             host.engine.i18n("ui.trigger.hunt.promptExplainer"),
           )
             .then(value => {
@@ -111,8 +117,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 
     this._promoteKittens = new SettingTriggerListItem(
       host,
-      host.engine.i18n("option.promotekittens"),
       this.setting.promoteKittens,
+      locale,
+      host.engine.i18n("option.promotekittens"),
       {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [host.engine.i18n("option.promotekittens")]);
@@ -129,9 +136,13 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
             host,
             host.engine.i18n("ui.trigger.promoteKittens.promptTitle"),
             host.engine.i18n("ui.trigger.promoteKittens.prompt", [
-              `${UiComponent.renderPercentage(this.setting.promoteKittens.trigger)}%`,
+              UiComponent.renderPercentage(
+                this.setting.promoteKittens.trigger,
+                locale.selected,
+                true,
+              ),
             ]),
-            UiComponent.renderPercentage(this.setting.promoteKittens.trigger),
+            UiComponent.renderPercentage(this.setting.promoteKittens.trigger, locale.selected),
             host.engine.i18n("ui.trigger.promoteKittens.promptExplainer"),
           )
             .then(value => {

@@ -1,8 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { EmbassySettings } from "../settings/EmbassySettings.js";
-import { SettingMax } from "../settings/Settings.js";
+import { SettingMax, SettingOptions } from "../settings/Settings.js";
 import stylesButton from "./components/Button.module.css";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
@@ -13,12 +14,17 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { UiComponent } from "./components/UiComponent.js";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
-  constructor(host: KittenScientists, settings: EmbassySettings, options?: PanelOptions) {
+  constructor(
+    host: KittenScientists,
+    settings: EmbassySettings,
+    locale: SettingOptions<SupportedLocale>,
+    options?: PanelOptions,
+  ) {
     const label = host.engine.i18n("option.embassies");
     super(
       host,
       settings,
-      new SettingTriggerListItem(host, label, settings, {
+      new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -34,9 +40,9 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
             host,
             host.engine.i18n("ui.trigger.embassies.prompt"),
             host.engine.i18n("ui.trigger.embassies.promptTitle", [
-              `${UiComponent.renderPercentage(settings.trigger)}%`,
+              UiComponent.renderPercentage(settings.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(settings.trigger),
+            UiComponent.renderPercentage(settings.trigger, locale.selected),
             host.engine.i18n("ui.trigger.embassies.promptExplainer"),
           )
             .then(value => {

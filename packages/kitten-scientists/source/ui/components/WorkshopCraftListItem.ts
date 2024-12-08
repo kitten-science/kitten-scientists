@@ -1,4 +1,6 @@
+import { SupportedLocale } from "../../Engine.js";
 import { KittenScientists } from "../../KittenScientists.js";
+import { SettingOptions } from "../../settings/Settings.js";
 import { CraftSettingsItem } from "../../settings/WorkshopSettings.js";
 import stylesButton from "./Button.module.css";
 import { LimitedButton } from "./buttons/LimitedButton.js";
@@ -19,8 +21,9 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
 
   constructor(
     host: KittenScientists,
-    label: string,
     setting: CraftSettingsItem,
+    locale: SettingOptions<SupportedLocale>,
+    label: string,
     options?: Partial<
       SettingListItemOptions &
         SettingListItemOptionsLimited &
@@ -43,7 +46,7 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.(this) : undefined,
     });
 
-    this.triggerButton = new TriggerButton(host, setting, {
+    this.triggerButton = new TriggerButton(host, setting, locale, {
       border: false,
       classes: [stylesButton.lastHeadAction],
       onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,

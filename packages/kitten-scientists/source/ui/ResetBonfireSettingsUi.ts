@@ -1,9 +1,10 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { ResetBonfireSettings } from "../settings/ResetBonfireSettings.js";
-import { SettingTrigger } from "../settings/Settings.js";
+import { SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import { StagedBuilding } from "../types/index.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
@@ -18,7 +19,11 @@ import { SettingsList } from "./components/SettingsList.js";
 export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettings> {
   private readonly _buildings: Array<HeaderListItem | SettingTriggerListItem>;
 
-  constructor(host: KittenScientists, settings: ResetBonfireSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: ResetBonfireSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     const label = host.engine.i18n("ui.build");
     super(host, label, settings, {
       childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
@@ -39,10 +44,16 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
             item => item.baseBuilding === building,
           )?.building as StagedBuilding;
           this._buildings.push(
-            this._getResetOption(host, this.setting.buildings[building], meta.stages[0].label),
+            this._getResetOption(
+              host,
+              this.setting.buildings[building],
+              locale,
+              meta.stages[0].label,
+            ),
             this._getResetOption(
               host,
               this.setting.buildings[name],
+              locale,
               meta.stages[1].label,
               false,
               true,
@@ -50,7 +61,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
           );
         } else if (!isNil(meta.label)) {
           this._buildings.push(
-            this._getResetOption(host, this.setting.buildings[building], meta.label),
+            this._getResetOption(host, this.setting.buildings[building], locale, meta.label),
           );
         }
       }
@@ -69,17 +80,18 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
   private _getResetOption(
     host: KittenScientists,
     option: SettingTrigger,
-    i18nName: string,
+    locale: SettingOptions<SupportedLocale>,
+    label: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingTriggerListItem(host, i18nName, option, {
+    const element = new SettingTriggerListItem(host, option, locale, label, {
       delimiter,
       onCheck: () => {
-        host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [label]);
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -89,7 +101,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
           host,
           host.engine.i18n("ui.trigger.prompt.absolute"),
           host.engine.i18n("ui.trigger.build.prompt", [
-            i18nName,
+            label,
             option.trigger !== -1
               ? option.trigger.toString()
               : host.engine.i18n("ui.trigger.inactive"),

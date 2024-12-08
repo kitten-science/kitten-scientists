@@ -14,7 +14,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
   constructor(
     host: KittenScientists,
     settings: PolicySettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade.policies");
@@ -39,9 +39,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
 
     const items = [];
     let lastLabel = policies[0].label;
-    for (const policy of policies.sort((a, b) =>
-      a.label.localeCompare(b.label, language.selected),
-    )) {
+    for (const policy of policies.sort((a, b) => a.label.localeCompare(b.label, locale.selected))) {
       const option = this.setting.policies[policy.name];
 
       const element = new SettingListItem(host, policy.label, option, {
@@ -53,7 +51,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
         },
       });
 
-      if (host.engine.localeSupportsFirstLetterSplits(language.selected)) {
+      if (host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== policy.label[0]) {
           element.element.addClass(stylesLabelListItem.splitter);
         }

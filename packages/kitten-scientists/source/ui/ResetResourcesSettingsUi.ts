@@ -20,7 +20,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
   constructor(
     host: KittenScientists,
     settings: ResetResourcesSettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
   ) {
     const label = host.engine.i18n("ui.resources");
     super(host, label, settings, {
@@ -33,11 +33,11 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     const items = [];
     let lastLabel = resources[0].title;
     for (const resource of resources.toSorted((a, b) =>
-      a.title.localeCompare(b.title, language.selected),
+      a.title.localeCompare(b.title, locale.selected),
     )) {
       const option = this.setting.resources[resource.name];
 
-      const element = new SettingTriggerListItem(host, ucfirst(resource.title), option, {
+      const element = new SettingTriggerListItem(host, option, locale, ucfirst(resource.title), {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [resource.title]);
         },
@@ -81,7 +81,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
-      if (host.engine.localeSupportsFirstLetterSplits(language.selected)) {
+      if (host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== resource.title[0]) {
           element.element.addClass(stylesLabelListItem.splitter);
         }
@@ -99,21 +99,22 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
    * Creates a UI element that reflects stock values for a given resource.
    * This is currently only used for the time/reset section.
    *
-   * @param i18nName The title to apply to the option.
+   * @param label The title to apply to the option.
    * @param option The option that is being controlled.
    * @returns A new option with stock value.
    */
   private _makeResourceSetting(
     host: KittenScientists,
     option: ResetResourcesSettingsItem,
-    i18nName: string,
+    locale: SettingOptions<SupportedLocale>,
+    label: string,
   ) {
-    const element = new SettingTriggerListItem(host, i18nName, option, {
+    const element = new SettingTriggerListItem(host, option, locale, label, {
       onCheck: () => {
-        host.engine.imessage("status.sub.enable", [i18nName]);
+        host.engine.imessage("status.sub.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.sub.disable", [i18nName]);
+        host.engine.imessage("status.sub.disable", [label]);
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -123,7 +124,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
           host,
           host.engine.i18n("ui.trigger.prompt.absolute"),
           host.engine.i18n("ui.trigger.build.prompt", [
-            i18nName,
+            label,
             option.trigger !== -1
               ? option.trigger.toString()
               : host.engine.i18n("ui.trigger.inactive"),

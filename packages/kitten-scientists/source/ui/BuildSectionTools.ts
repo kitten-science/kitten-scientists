@@ -1,6 +1,7 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
-import { SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
+import { SettingOptions, SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
 import { Dialog } from "./components/Dialog.js";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { UiComponent } from "./components/UiComponent.js";
@@ -9,13 +10,14 @@ export const BuildSectionTools = {
   getBuildOption: (
     host: KittenScientists,
     option: SettingTriggerMax,
+    locale: SettingOptions<SupportedLocale>,
     sectionSetting: SettingTrigger,
     label: string,
     sectionLabel: string,
     delimiter = false,
     upgradeIndicator = false,
   ) => {
-    const buildOption = new SettingMaxTriggerListItem(host, label, option, {
+    const buildOption = new SettingMaxTriggerListItem(host, option, locale, label, {
       delimiter,
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [label]);
@@ -44,8 +46,8 @@ export const BuildSectionTools = {
           option.trigger < 0
             ? sectionSetting.trigger < 0
               ? host.engine.i18n("ui.trigger.build.blocked", [sectionLabel])
-              : `${UiComponent.renderPercentage(sectionSetting.trigger)}% (${host.engine.i18n("ui.trigger.build.inherited")})`
-            : `${UiComponent.renderPercentage(option.trigger)}%`,
+              : `${UiComponent.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+            : UiComponent.renderPercentage(option.trigger, locale.selected, true),
         ]);
       },
       onSetMax: () => {
@@ -87,10 +89,12 @@ export const BuildSectionTools = {
           host.engine.i18n("ui.trigger.build.prompt", [
             label,
             option.trigger !== -1
-              ? `${Dialog.renderPercentage(option.trigger)}%`
+              ? UiComponent.renderPercentage(option.trigger, locale.selected, true)
               : host.engine.i18n("ui.trigger.build.inherited"),
           ]),
-          option.trigger !== -1 ? Dialog.renderPercentage(option.trigger) : "",
+          option.trigger !== -1
+            ? UiComponent.renderPercentage(option.trigger, locale.selected)
+            : "",
           host.engine.i18n("ui.trigger.build.promptExplainer"),
         )
           .then(value => {

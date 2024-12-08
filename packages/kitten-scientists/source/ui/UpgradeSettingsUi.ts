@@ -18,14 +18,14 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
   constructor(
     host: KittenScientists,
     settings: UpgradeSettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade.upgrades");
     super(
       host,
       settings,
-      new SettingTriggerListItem(host, label, settings, {
+      new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
         },
@@ -40,7 +40,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
             settings.trigger === -1
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : `${UiComponent.renderPercentage(settings.trigger)}%`,
+              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -50,10 +50,12 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? `${UiComponent.renderPercentage(settings.trigger)}%`
+                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1
+              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -85,11 +87,11 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     let lastLabel = upgrades[0].label;
     let lastElement: SettingTriggerListItem | undefined;
     for (const upgrade of upgrades.sort((a, b) =>
-      a.label.localeCompare(b.label, language.selected),
+      a.label.localeCompare(b.label, locale.selected),
     )) {
       const option = this.setting.upgrades[upgrade.name];
 
-      const element = new SettingTriggerListItem(host, upgrade.label, option, {
+      const element = new SettingTriggerListItem(host, option, locale, upgrade.label, {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [upgrade.label]);
         },
@@ -104,8 +106,8 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
             option.trigger < 0
               ? settings.trigger < 0
                 ? host.engine.i18n("ui.trigger.build.blocked", [label])
-                : `${UiComponent.renderPercentage(settings.trigger)}% (${host.engine.i18n("ui.trigger.build.inherited")})`
-              : `${UiComponent.renderPercentage(option.trigger)}%`,
+                : `${UiComponent.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+              : UiComponent.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -115,10 +117,12 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               option.trigger !== -1
-                ? `${Dialog.renderPercentage(option.trigger)}%`
+                ? UiComponent.renderPercentage(option.trigger, locale.selected, true)
                 : host.engine.i18n("ui.trigger.build.inherited"),
             ]),
-            option.trigger !== -1 ? Dialog.renderPercentage(option.trigger) : "",
+            option.trigger !== -1
+              ? UiComponent.renderPercentage(option.trigger, locale.selected)
+              : "",
             host.engine.i18n("ui.trigger.build.promptExplainer"),
           )
             .then(value => {
@@ -141,7 +145,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
-      if (host.engine.localeSupportsFirstLetterSplits(language.selected)) {
+      if (host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== upgrade.label[0]) {
           if (!isNil(lastElement)) {
             lastElement.element.addClass(stylesDelimiter.delimiter);

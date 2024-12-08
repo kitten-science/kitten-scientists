@@ -22,7 +22,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   constructor(
     host: KittenScientists,
     settings: ResourcesSettings,
-    language: SettingOptions<SupportedLocale>,
+    locale: SettingOptions<SupportedLocale>,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("ui.resources");
@@ -57,11 +57,11 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
             item =>
               !ignoredResources.includes(item.name) && !isNil(this.setting.resources[item.name]),
           )
-          .sort((a, b) => a.title.localeCompare(b.title, language.selected))
+          .sort((a, b) => a.title.localeCompare(b.title, locale.selected))
           .map(
             resource => [this.setting.resources[resource.name], ucfirst(resource.title)] as const,
           )
-          .map(([setting, title]) => this._makeResourceSetting(host, setting, title)),
+          .map(([setting, title]) => this._makeResourceSetting(host, setting, locale, title)),
       }),
     );
   }
@@ -70,27 +70,28 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
    * Creates a UI element that reflects stock and consume values for a given resource.
    * This is currently only used for the craft section.
    *
-   * @param i18nName The title to apply to the option.
+   * @param label The title to apply to the option.
    * @param option The option that is being controlled.
    * @returns A new option with stock and consume values.
    */
   private _makeResourceSetting(
     host: KittenScientists,
     option: ResourcesSettingsItem,
-    i18nName: string,
+    locale: SettingOptions<SupportedLocale>,
+    label: string,
   ) {
-    const element = new SettingListItem(host, i18nName, option, {
+    const element = new SettingListItem(host, label, option, {
       childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
       onCheck: () => {
-        host.engine.imessage("status.resource.enable", [i18nName]);
+        host.engine.imessage("status.resource.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.resource.disable", [i18nName]);
+        host.engine.imessage("status.resource.disable", [label]);
       },
     });
 
     // How many items to stock.
-    const stockElement = new StockButton(host, i18nName, option, {
+    const stockElement = new StockButton(host, label, option, {
       alignment: "right",
       border: false,
       classes: [stylesButton.headAction],
@@ -101,7 +102,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     element.head.addChild(stockElement);
 
     // The consume rate for the resource.
-    const consumeElement = new ConsumeButton(host, i18nName, option, {
+    const consumeElement = new ConsumeButton(host, option, locale, label, {
       border: false,
       classes: [stylesButton.lastHeadAction],
       onRefresh: () => {
