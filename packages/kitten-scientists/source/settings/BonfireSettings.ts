@@ -39,7 +39,7 @@ export class BonfireBuildingSetting extends SettingTriggerMax {
     building: BonfireItem,
     enabled = false,
     trigger = -1,
-    max = -1,
+    max = 0,
     baseStage?: Building | false,
   ) {
     super(enabled, trigger, max);

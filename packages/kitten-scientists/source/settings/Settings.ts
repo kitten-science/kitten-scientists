@@ -96,7 +96,7 @@ export class SettingThreshold extends Setting {
 export class SettingMax extends Setting {
   max: number;
 
-  constructor(enabled = false, max = -1) {
+  constructor(enabled = false, max = 0) {
     super(enabled);
     this.max = max;
   }
@@ -114,7 +114,7 @@ export class SettingMax extends Setting {
 export class SettingLimitedMax extends SettingLimited implements SettingMax {
   max: number;
 
-  constructor(enabled = false, limited = false, max = -1) {
+  constructor(enabled = false, limited = false, max = 0) {
     super(enabled, limited);
     this.max = max;
   }
@@ -132,7 +132,7 @@ export class SettingLimitedMax extends SettingLimited implements SettingMax {
 export class SettingLimitedMaxTrigger extends SettingLimitedMax implements SettingTrigger {
   trigger: number;
 
-  constructor(enabled = false, limited = false, max = -1, trigger = -1) {
+  constructor(enabled = false, limited = false, max = 0, trigger = -1) {
     super(enabled, limited, max);
     this.trigger = trigger;
   }
@@ -150,7 +150,7 @@ export class SettingLimitedMaxTrigger extends SettingLimitedMax implements Setti
 export class SettingTriggerMax extends SettingTrigger implements SettingMax {
   max: number;
 
-  constructor(enabled = false, trigger = 1, max = -1) {
+  constructor(enabled = false, trigger = 1, max = 0) {
     super(enabled, trigger);
     this.max = max;
   }
@@ -168,7 +168,7 @@ export class SettingTriggerMax extends SettingTrigger implements SettingMax {
 export class SettingThresholdMax extends SettingThreshold implements SettingMax {
   max: number;
 
-  constructor(enabled = false, trigger = 1, max = -1) {
+  constructor(enabled = false, trigger = 1, max = 0) {
     super(enabled, trigger);
     this.max = max;
   }
