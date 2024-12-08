@@ -120,7 +120,10 @@ export class KittenScientists {
         | undefined;
 
       if (!state) {
-        cinfo("The Kittens Game save data did not contain a script state.");
+        cinfo(
+          "The Kittens Game save data did not contain a script state. Trying to load Auto-Save settings...",
+        );
+        this._userInterface.stateManagementUi.loadAutoSave();
         return;
       }
 

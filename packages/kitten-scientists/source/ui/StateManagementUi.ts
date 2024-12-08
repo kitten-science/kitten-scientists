@@ -569,6 +569,17 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this._host.refreshUi();
   }
 
+  loadAutoSave() {
+    const existing = this.states.find(state => state.unwrap().label === "Auto-Save");
+    if (isNil(existing)) {
+      cinfo("No Auto-Save settings found.");
+      return;
+    }
+
+    cinfo("Loading Auto-Save...");
+    this.loadState(existing.unwrap().state);
+  }
+
   updateGame(game: Unique<StoredGame>, newGame: KGSaveData) {
     if (this._destructiveActionPrevented()) {
       return;
