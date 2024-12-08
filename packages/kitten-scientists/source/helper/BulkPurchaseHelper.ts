@@ -1,5 +1,6 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { Engine } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { WorkshopManager } from "../WorkshopManager.js";
 import { BonfireItem } from "../settings/BonfireSettings.js";
@@ -115,9 +116,11 @@ export class BulkPurchaseHelper {
     let counter = 0;
 
     for (const [name, build] of objectEntries(builds)) {
+      const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, build.trigger);
       const buildMetaData = mustExist(metaData[name]);
+
       // If the build is disabled, skip it.
-      if (!build.enabled) {
+      if (!build.enabled || trigger < 0) {
         continue;
       }
 
@@ -173,11 +176,8 @@ export class BulkPurchaseHelper {
         .map(price => this._workshopManager.getResource(price.name))
         .filter(material => 0 < material.maxValue);
       const allMaterialsAboveTrigger =
-        requiredMaterials.filter(
-          material =>
-            material.value / material.maxValue <
-            (build.trigger < 0 ? sectionTrigger : build.trigger),
-        ).length === 0;
+        requiredMaterials.filter(material => material.value / material.maxValue < trigger)
+          .length === 0;
 
       if (allMaterialsAboveTrigger) {
         // If the build is for a stage that the building isn't currently at, skip it.
