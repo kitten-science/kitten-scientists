@@ -38,6 +38,9 @@ export class KittenScientists {
   private _userInterface: UserInterface;
   engine: Engine;
 
+  private _gameBeforeSaveHandle: ["game/beforesave", number] | undefined;
+  private _serverLoadHandle: ["server/load", number] | undefined;
+
   constructor(
     game: Game,
     i18nEngine: I18nEngine,
@@ -85,6 +88,23 @@ export class KittenScientists {
   }
 
   /**
+   * Removes Kitten Scientists from the browser.
+   */
+  unload(): void {
+    this.engine.stop();
+    this._userInterface.destroy();
+    if (this._gameBeforeSaveHandle !== undefined) {
+      UserScriptLoader.window.dojo.unsubscribe(this._gameBeforeSaveHandle);
+      this._gameBeforeSaveHandle = undefined;
+    }
+    if (this._serverLoadHandle !== undefined) {
+      UserScriptLoader.window.dojo.unsubscribe(this._serverLoadHandle);
+      this._gameBeforeSaveHandle = undefined;
+    }
+    delete window.kittenScientists;
+  }
+
+  /**
    * Start the user script after loading and configuring it.
    */
   run(): void {
@@ -102,7 +122,11 @@ export class KittenScientists {
 
     this.runUpdateCheck().catch(redirectErrorsToConsole(console));
 
-    UserScriptLoader.window.dojo.subscribe(
+    if (this._gameBeforeSaveHandle !== undefined) {
+      UserScriptLoader.window.dojo.unsubscribe(this._gameBeforeSaveHandle);
+      this._gameBeforeSaveHandle = undefined;
+    }
+    this._gameBeforeSaveHandle = UserScriptLoader.window.dojo.subscribe(
       "game/beforesave",
       (saveData: Record<string, unknown>) => {
         cinfo("Injecting Kitten Scientists engine state into save data...");
@@ -114,22 +138,30 @@ export class KittenScientists {
         );
       },
     );
-    UserScriptLoader.window.dojo.subscribe("server/load", (saveData: unknown) => {
-      const state = UserScriptLoader.tryEngineStateFromSaveData("ks", saveData) as
-        | EngineState
-        | undefined;
 
-      if (!state) {
-        cinfo(
-          "The Kittens Game save data did not contain a script state. Trying to load Auto-Save settings...",
-        );
-        this._userInterface.stateManagementUi.loadAutoSave();
-        return;
-      }
+    if (this._serverLoadHandle !== undefined) {
+      UserScriptLoader.window.dojo.unsubscribe(this._serverLoadHandle);
+      this._gameBeforeSaveHandle = undefined;
+    }
+    this._serverLoadHandle = UserScriptLoader.window.dojo.subscribe(
+      "server/load",
+      (saveData: unknown) => {
+        const state = UserScriptLoader.tryEngineStateFromSaveData("ks", saveData) as
+          | EngineState
+          | undefined;
 
-      cinfo("Found! Loading settings...");
-      this.engine.stateLoad(state);
-    });
+        if (!state) {
+          cinfo(
+            "The Kittens Game save data did not contain a script state. Trying to load Auto-Save settings...",
+          );
+          this._userInterface.stateManagementUi.loadAutoSave();
+          return;
+        }
+
+        cinfo("Found! Loading settings...");
+        this.engine.stateLoad(state);
+      },
+    );
   }
 
   /**
