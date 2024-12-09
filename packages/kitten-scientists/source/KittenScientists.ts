@@ -101,6 +101,10 @@ export class KittenScientists {
       UserScriptLoader.window.dojo.unsubscribe(this._serverLoadHandle);
       this._gameBeforeSaveHandle = undefined;
     }
+    const managerIndex = this.game.managers.indexOf(this._saveManager);
+    if (-1 < managerIndex) {
+      this.game.managers.splice(managerIndex, 1);
+    }
     delete window.kittenScientists;
   }
 
