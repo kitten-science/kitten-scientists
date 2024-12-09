@@ -5,7 +5,6 @@ import { Icons } from "../../../images/Icons.js";
 import { KittenScientists } from "../../../KittenScientists.js";
 import { SettingOptions, SettingThreshold, SettingTrigger } from "../../../settings/Settings.js";
 import { Button, ButtonOptions } from "../Button.js";
-import { UiComponent } from "../UiComponent.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 
@@ -46,17 +45,11 @@ export class TriggerButton extends Button {
     }
 
     const triggerValue =
-      this.behavior === "percentage"
-        ? this.setting.trigger < 0
-          ? this._host.engine.i18n("ui.infinity")
-          : UiComponent.renderPercentage(
-              this.setting.trigger,
-              this._host.engine.settings.locale.selected,
-              true,
-            )
-        : UiComponent.renderAbsolute(this.setting.trigger, this._host);
+      this.behavior === "integer"
+        ? this._host.renderAbsolute(this.setting.trigger, "invariant")
+        : this._host.renderPercentage(this.setting.trigger, "invariant", true);
 
-    this.element[0].title = this._host.engine.i18n("ui.trigger", [triggerValue]);
+    this.updateTitle(this._host.engine.i18n("ui.trigger", [triggerValue]));
     this.updateLabel(triggerValue);
   }
 }

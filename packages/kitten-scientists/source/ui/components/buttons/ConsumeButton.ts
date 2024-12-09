@@ -7,7 +7,6 @@ import { KittenScientists } from "../../../KittenScientists.js";
 import { Button, ButtonOptions } from "../Button.js";
 import stylesButton from "../Button.module.css";
 import { Dialog } from "../Dialog.js";
-import { UiComponent } from "../UiComponent.js";
 
 export class ConsumeButton extends Button {
   readonly setting: ResourcesSettingsItem;
@@ -28,9 +27,9 @@ export class ConsumeButton extends Button {
           host.engine.i18n("resources.consume.prompt"),
           host.engine.i18n("resources.consume.promptTitle", [
             resourceName,
-            UiComponent.renderPercentage(setting.consume, locale.selected, true),
+            host.renderPercentage(setting.consume, locale.selected, true),
           ]),
-          UiComponent.renderPercentage(setting.consume),
+          host.renderPercentage(setting.consume),
           host.engine.i18n("resources.consume.promptExplainer"),
         )
           .then(value => {
@@ -42,7 +41,7 @@ export class ConsumeButton extends Button {
               return;
             }
 
-            setting.consume = UiComponent.parsePercentage(value);
+            setting.consume = host.parsePercentage(value);
           })
           .then(() => {
             this.refreshUi();
@@ -64,7 +63,7 @@ export class ConsumeButton extends Button {
   refreshUi() {
     super.refreshUi();
 
-    const consumeValue = UiComponent.renderPercentage(
+    const consumeValue = this._host.renderPercentage(
       this.setting.consume,
       this._host.engine.settings.locale.selected,
       true,

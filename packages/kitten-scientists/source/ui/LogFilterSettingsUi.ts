@@ -13,7 +13,7 @@ export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
     super(
       host,
       settings,
-      new SettingListItem(host, label, settings, {
+      new SettingListItem(host, settings, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
@@ -27,7 +27,7 @@ export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
     this.addChild(
       new SettingsList(host, {
         children: [
-          new SettingListItem(host, host.engine.i18n("filter.allKG"), settings.disableKGLog),
+          new SettingListItem(host, settings.disableKGLog, host.engine.i18n("filter.allKG")),
         ],
         hasDisableAll: false,
         hasEnableAll: false,
@@ -41,7 +41,7 @@ export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
         .sort((a, b) => a.label.localeCompare(b.label))
         .map(
           item =>
-            new SettingListItem(host, item.label, this.setting.filters[item.name], {
+            new SettingListItem(host, this.setting.filters[item.name], item.label, {
               onCheck: () => {
                 host.engine.imessage("filter.enable", [item.label]);
               },

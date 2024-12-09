@@ -40,8 +40,8 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
    */
   constructor(
     host: KittenScientists,
-    label: string,
     setting: TSetting,
+    label: string,
     options?: Partial<SettingListItemOptions>,
   ) {
     super(host, label, { ...options, children: [] });

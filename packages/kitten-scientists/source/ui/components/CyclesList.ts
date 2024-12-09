@@ -77,7 +77,7 @@ export class CyclesList extends SettingsList {
 
   private _makeCycle(cycle: Cycle, setting: Setting) {
     const label = this._host.engine.labelForCycle(cycle);
-    return new SettingListItem(this._host, label, setting, {
+    return new SettingListItem(this._host, setting, label, {
       onCheck: () => {
         this._host.engine.imessage(
           this.behavior === "heatTransfer"

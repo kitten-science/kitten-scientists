@@ -31,7 +31,7 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
         SettingListItemOptionsTrigger
     >,
   ) {
-    super(host, label, setting, options);
+    super(host, setting, label, options);
 
     this.limitedButton = new LimitedButton(host, setting, {
       ...options,

@@ -1,4 +1,3 @@
-import { roundTo } from "@oliversalzburg/js-utils/math/core.js";
 import { KittenScientists } from "../../KittenScientists.js";
 import { cerror } from "../../tools/Log.js";
 
@@ -79,88 +78,5 @@ export abstract class UiComponent extends EventTarget {
     for (const child of children) {
       this.removeChild(child);
     }
-  }
-
-  /**
-   * Turns a string like 52.7 into the number 52.7
-   * @param value - String representation of an absolute value.
-   * @returns A number between 0 and Infinity, where Infinity is represented as -1.
-   */
-  static parseAbsolute(value: string | null): number | null {
-    if (value === null || value === "") {
-      return null;
-    }
-
-    const hasSuffix = /[KMGTP]$/i.test(value);
-    const baseValue = value.substring(0, value.length - (hasSuffix ? 1 : 0));
-
-    let numericValue =
-      value.includes("e") || hasSuffix ? parseFloat(baseValue) : parseInt(baseValue);
-    if (hasSuffix) {
-      const suffix = value.substring(value.length - 1).toUpperCase();
-      numericValue = numericValue * Math.pow(1000, ["", "K", "M", "G", "T", "P"].indexOf(suffix));
-    }
-    if (numericValue === Number.POSITIVE_INFINITY || numericValue < 0) {
-      numericValue = -1;
-    }
-
-    return numericValue;
-  }
-
-  /**
-   * Turns a string like 52.7 into the number 0.527
-   * @param value - String representation of a percentage.
-   * @returns A number between 0 and 1 representing the described percentage.
-   */
-  static parsePercentage(value: string): number {
-    const cleanedValue = value.trim().replace(/%$/, "");
-    return Math.max(0, Math.min(1, parseFloat(cleanedValue) / 100));
-  }
-
-  protected _renderLimit(value: number): string {
-    return UiComponent.renderAbsolute(value, this._host);
-  }
-
-  /**
-   * Turns a number into a game-native string representation.
-   * Infinity, either by actual value or by -1 representation, is rendered as a symbol.
-   * @param value - The number to render as a string.
-   * @param host - The host instance which we can use to let the game render values for us.
-   * @returns A string representing the given number.
-   */
-  static renderAbsolute(value: number, host: KittenScientists) {
-    if (value < 0 || value === Number.POSITIVE_INFINITY) {
-      return "∞";
-    }
-
-    return host.game.getDisplayValueExt(value);
-  }
-
-  /**
-   * Turns a number like 0.527 into a string like 52.7
-   * @param value - The number to render as a string.
-   * @param locale - The locale in which to render the percentage.
-   * @param withUnit - Should the percentage sign be included in the output?
-   * @returns A string representing the given percentage.
-   */
-  static renderPercentage(value: number, locale?: string, withUnit?: boolean): string {
-    return locale
-      ? new Intl.NumberFormat(locale, { style: withUnit ? "percent" : "decimal" }).format(
-          withUnit ? value : value * 100,
-        )
-      : `${roundTo(value * 100, 3).toString()}${withUnit ? "%" : ""}`;
-  }
-
-  static promptFloat(text: string, defaultValue: string): number | null {
-    const value = window.prompt(text, defaultValue);
-    if (value === null || value === "") {
-      return null;
-    }
-
-    return parseFloat(value);
-  }
-
-  static renderFloat(value: number): string {
-    return value.toFixed(3);
   }
 }

@@ -18,7 +18,7 @@ export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
       SettingListItemOptions & SettingListItemOptionsLimited & SettingListItemOptionsTrigger
     >,
   ) {
-    super(host, label, setting, options);
+    super(host, setting, label, options);
 
     this.triggerButton = new TriggerButton(host, setting, locale, {
       onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,

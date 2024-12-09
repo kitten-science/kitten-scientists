@@ -13,7 +13,7 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
     super(
       host,
       settings,
-      new SettingListItem(host, label, settings, {
+      new SettingListItem(host, settings, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
@@ -28,7 +28,7 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
     const items = [];
     for (const setting of Object.values(this.setting.buildings)) {
       const label = host.engine.i18n(`$buildings.${setting.upgrade}.label`);
-      const button = new SettingListItem(host, label, setting, {
+      const button = new SettingListItem(host, setting, label, {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [label]);
         },

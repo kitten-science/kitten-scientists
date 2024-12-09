@@ -58,17 +58,17 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
   private _getResetOption(
     host: KittenScientists,
     option: Setting,
-    i18nName: string,
+    label: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    return new SettingListItem(host, i18nName, option, {
+    return new SettingListItem(host, option, label, {
       delimiter,
       onCheck: () => {
-        host.engine.imessage("status.reset.check.enable", [i18nName]);
+        host.engine.imessage("status.reset.check.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.reset.check.disable", [i18nName]);
+        host.engine.imessage("status.reset.check.disable", [label]);
       },
       upgradeIndicator,
     });

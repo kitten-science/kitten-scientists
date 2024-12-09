@@ -12,7 +12,6 @@ import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { UiComponent } from "./components/UiComponent.js";
 import { WorkshopCraftListItem } from "./components/WorkshopCraftListItem.js";
 
 export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
@@ -42,7 +41,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
+              : host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -52,10 +51,10 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
+                ? host.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -68,7 +67,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
                 return;
               }
 
-              settings.trigger = UiComponent.parsePercentage(value);
+              settings.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();
@@ -114,24 +113,21 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
         },
         onRefreshMax: () => {
-          element.maxButton.updateLabel(UiComponent.renderAbsolute(option.max, host));
+          element.maxButton.updateLabel(host.renderAbsolute(option.max));
           element.maxButton.element[0].title =
             option.max < 0
               ? host.engine.i18n("ui.max.craft.titleInfinite", [label])
               : option.max === 0
                 ? host.engine.i18n("ui.max.craft.titleZero", [label])
-                : host.engine.i18n("ui.max.craft.title", [
-                    UiComponent.renderAbsolute(option.max, host),
-                    label,
-                  ]);
+                : host.engine.i18n("ui.max.craft.title", [host.renderAbsolute(option.max), label]);
         },
         onRefreshTrigger: () => {
           element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
             option.trigger < 0
               ? settings.trigger < 0
                 ? host.engine.i18n("ui.trigger.build.blocked", [label])
-                : `${UiComponent.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
-              : UiComponent.renderPercentage(option.trigger, locale.selected, true),
+                : `${host.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+              : host.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
         onSetMax: () => {
@@ -140,9 +136,9 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
             host.engine.i18n("ui.max.craft.prompt", [label]),
             host.engine.i18n("ui.max.craft.promptTitle", [
               label,
-              UiComponent.renderAbsolute(option.max, host),
+              host.renderAbsolute(option.max, locale.selected),
             ]),
-            UiComponent.renderAbsolute(option.max, host),
+            host.renderAbsolute(option.max),
             host.engine.i18n("ui.max.craft.promptExplainer"),
           )
             .then(value => {
@@ -159,7 +155,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
                 option.enabled = false;
               }
 
-              option.max = UiComponent.parseAbsolute(value) ?? option.max;
+              option.max = host.parseAbsolute(value) ?? option.max;
             })
             .then(() => {
               this.refreshUi();
@@ -173,10 +169,10 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               option.trigger !== -1
-                ? UiComponent.renderPercentage(option.trigger, locale.selected, true)
+                ? host.renderPercentage(option.trigger, locale.selected, true)
                 : host.engine.i18n("ui.trigger.build.inherited"),
             ]),
-            option.trigger !== -1 ? UiComponent.renderPercentage(option.trigger) : "",
+            option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
             host.engine.i18n("ui.trigger.build.promptExplainer"),
           )
             .then(value => {
@@ -189,7 +185,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
                 return;
               }
 
-              option.trigger = UiComponent.parsePercentage(value);
+              option.trigger = host.parsePercentage(value);
             })
             .then(() => {
               element.refreshUi();
@@ -203,8 +199,8 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
         this._crafts.push(
           new SettingListItem(
             host,
-            host.engine.i18n("option.shipOverride"),
             this.setting.shipOverride,
+            host.engine.i18n("option.shipOverride"),
             {
               onCheck: () => {
                 host.engine.imessage("status.sub.enable", [

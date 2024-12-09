@@ -80,7 +80,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     locale: SettingOptions<SupportedLocale>,
     label: string,
   ) {
-    const element = new SettingListItem(host, label, option, {
+    const element = new SettingListItem(host, option, label, {
       childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
       onCheck: () => {
         host.engine.imessage("status.resource.enable", [label]);
@@ -91,7 +91,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     });
 
     // How many items to stock.
-    const stockElement = new StockButton(host, label, option, {
+    const stockElement = new StockButton(host, option, locale, label, {
       alignment: "right",
       border: false,
       classes: [stylesButton.headAction],

@@ -24,7 +24,7 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
       SettingListItemOptions & SettingListItemOptionsMax & SettingListItemOptionsTrigger
     >,
   ) {
-    super(host, label, setting, options);
+    super(host, setting, label, options);
 
     this.maxButton = new MaxButton(host, setting, {
       alignment: "right",

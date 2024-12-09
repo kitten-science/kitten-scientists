@@ -16,7 +16,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
     super(
       host,
       settings,
-      new SettingListItem(host, label, settings, {
+      new SettingListItem(host, settings, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
@@ -33,7 +33,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
       .filter(item => !isNil(this.setting.missions[item.name]))
       .map(
         mission =>
-          new SettingListItem(host, mission.label, this.setting.missions[mission.name], {
+          new SettingListItem(host, this.setting.missions[mission.name], mission.label, {
             onCheck: () => {
               host.engine.imessage("status.sub.enable", [mission.label]);
             },

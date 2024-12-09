@@ -9,7 +9,6 @@ import { Dialog } from "./components/Dialog.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> {
   constructor(
@@ -37,9 +36,9 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
             host,
             host.engine.i18n("ui.trigger.activeHeatTransfer.promptTitle"),
             host.engine.i18n("ui.trigger.activeHeatTransfer.prompt", [
-              UiComponent.renderPercentage(settings.trigger, locale.selected, true),
+              host.renderPercentage(settings.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(settings.trigger),
+            host.renderPercentage(settings.trigger),
             host.engine.i18n("ui.trigger.activeHeatTransfer.promptExplainer"),
           )
             .then(value => {
@@ -47,7 +46,7 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
                 return;
               }
 
-              settings.trigger = UiComponent.parsePercentage(value);
+              settings.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();

@@ -11,7 +11,6 @@ import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
   private readonly _missionsUi: MissionSettingsUi;
@@ -40,7 +39,7 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
+              : host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -50,10 +49,10 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
+                ? host.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -66,7 +65,7 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
                 return;
               }
 
-              settings.trigger = UiComponent.parsePercentage(value);
+              settings.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();

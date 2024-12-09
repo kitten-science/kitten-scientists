@@ -18,7 +18,6 @@ import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingMaxTriggerListItem> {
   private readonly _cycles: CollapsiblePanel<CyclesList>;
@@ -49,14 +48,14 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
             !settings.enabled || settings.trigger === -1;
         },
         onRefreshMax: item => {
-          item.maxButton.updateLabel(UiComponent.renderAbsolute(settings.max, host));
+          item.maxButton.updateLabel(host.renderAbsolute(settings.max));
           item.maxButton.element[0].title =
             settings.max < 0
               ? host.engine.i18n("ui.max.timeSkip.titleInfinite", [label])
               : settings.max === 0
                 ? host.engine.i18n("ui.max.timeSkip.titleZero", [label])
                 : host.engine.i18n("ui.max.timeSkip.title", [
-                    UiComponent.renderAbsolute(settings.max, host),
+                    host.renderAbsolute(settings.max),
                     label,
                   ]);
         },
@@ -64,7 +63,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : `${UiComponent.renderFloat(settings.trigger)} TC`,
+              : `${host.renderFloat(settings.trigger, locale.selected)} TC`,
           ]);
         },
         onSetMax: () => {
@@ -72,9 +71,9 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
             host,
             host.engine.i18n("ui.max.timeSkip.prompt"),
             host.engine.i18n("ui.max.timeSkip.promptTitle", [
-              UiComponent.renderAbsolute(settings.max, host),
+              host.renderAbsolute(settings.max, locale.selected),
             ]),
-            UiComponent.renderAbsolute(settings.max, host),
+            host.renderAbsolute(settings.max),
             host.engine.i18n("ui.max.timeSkip.promptExplainer"),
           )
             .then(value => {
@@ -91,7 +90,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
                 settings.enabled = false;
               }
 
-              settings.max = UiComponent.parseAbsolute(value) ?? settings.max;
+              settings.max = host.parseAbsolute(value) ?? settings.max;
             })
             .then(() => {
               this.refreshUi();
@@ -103,9 +102,9 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
             host,
             host.engine.i18n("ui.trigger.timeSkip.prompt"),
             host.engine.i18n("ui.trigger.timeSkip.promptTitle", [
-              UiComponent.renderAbsolute(settings.trigger, host),
+              host.renderAbsolute(settings.trigger, locale.selected),
             ]),
-            UiComponent.renderAbsolute(settings.trigger, host),
+            host.renderAbsolute(settings.trigger),
             host.engine.i18n("ui.trigger.timeSkip.promptExplainer"),
           )
             .then(value => {
@@ -113,7 +112,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
                 return;
               }
 
-              settings.trigger = UiComponent.parsePercentage(value);
+              settings.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();
@@ -163,13 +162,12 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     this.addChild(
       new SettingsList(host, {
         children: [
-          //new ButtonListItem(host, this._maximum, { delimiter: true }),
           this._cycles,
           this._seasons,
           new SettingListItem(
             host,
-            host.engine.i18n("option.time.skip.ignoreOverheat"),
             this.setting.ignoreOverheat,
+            host.engine.i18n("option.time.skip.ignoreOverheat"),
           ),
           this._activeHeatTransferUI,
         ],

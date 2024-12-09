@@ -11,7 +11,6 @@ import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
-import { UiComponent } from "./components/UiComponent.js";
 import { ResetSettingsUi } from "./ResetSettingsUi.js";
 import { TimeSkipSettingsUi } from "./TimeSkipSettingsUi.js";
 
@@ -31,7 +30,7 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
     super(
       host,
       settings,
-      new SettingListItem(host, label, settings, {
+      new SettingListItem(host, settings, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
@@ -68,13 +67,9 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
             host,
             host.engine.i18n("ui.trigger.accelerateTime.prompt"),
             host.engine.i18n("ui.trigger.accelerateTime.promptTitle", [
-              UiComponent.renderPercentage(
-                this.setting.accelerateTime.trigger,
-                locale.selected,
-                true,
-              ),
+              host.renderPercentage(this.setting.accelerateTime.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(this.setting.accelerateTime.trigger),
+            host.renderPercentage(this.setting.accelerateTime.trigger),
             host.engine.i18n("ui.trigger.accelerateTime.promptExplainer"),
           )
             .then(value => {
@@ -82,7 +77,7 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
                 return;
               }
 
-              this.setting.accelerateTime.trigger = UiComponent.parsePercentage(value);
+              this.setting.accelerateTime.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();

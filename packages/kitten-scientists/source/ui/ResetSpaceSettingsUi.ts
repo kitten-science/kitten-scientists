@@ -74,10 +74,10 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
           host.engine.i18n("ui.trigger.build.prompt", [
             label,
             option.trigger !== -1
-              ? option.trigger.toString()
+              ? host.renderAbsolute(option.trigger, locale.selected)
               : host.engine.i18n("ui.trigger.inactive"),
           ]),
-          option.trigger !== -1 ? option.trigger.toString() : "",
+          option.trigger !== -1 ? host.renderAbsolute(option.trigger) : "",
           host.engine.i18n("ui.trigger.reset.promptExplainer"),
         )
           .then(value => {

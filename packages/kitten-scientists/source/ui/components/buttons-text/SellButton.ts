@@ -1,9 +1,9 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "packages/kitten-scientists/source/Engine.js";
 import { KittenScientists } from "../../../KittenScientists.js";
-import { SettingSell } from "../../../settings/Settings.js";
+import { SettingOptions, SettingSell } from "../../../settings/Settings.js";
 import { Dialog } from "../Dialog.js";
 import { TextButton } from "../TextButton.js";
-import { UiComponent } from "../UiComponent.js";
 import styles from "./SellButton.module.css";
 
 export class SellButton extends TextButton {
@@ -12,6 +12,7 @@ export class SellButton extends TextButton {
   constructor(
     host: KittenScientists,
     setting: SettingSell,
+    locale: SettingOptions<SupportedLocale>,
     handler: { onClick?: () => void } = {},
   ) {
     super(host, undefined, {
@@ -20,9 +21,9 @@ export class SellButton extends TextButton {
           host,
           host.engine.i18n("blackcoin.sell.prompt"),
           host.engine.i18n("blackcoin.sell.promptTitle", [
-            UiComponent.renderAbsolute(setting.sell, host),
+            host.renderAbsolute(setting.sell, locale.selected),
           ]),
-          setting.sell.toString(),
+          host.renderAbsolute(setting.sell),
           host.engine.i18n("blackcoin.sell.promptExplainer"),
         )
           .then(value => {
@@ -35,7 +36,7 @@ export class SellButton extends TextButton {
               return;
             }
 
-            setting.sell = UiComponent.parseAbsolute(value) ?? setting.sell;
+            setting.sell = host.parseAbsolute(value) ?? setting.sell;
           })
           .then(() => {
             this.refreshUi();
@@ -59,13 +60,11 @@ export class SellButton extends TextButton {
     this.element.prop(
       "title",
       this._host.engine.i18n("blackcoin.sell.title", [
-        UiComponent.renderAbsolute(this.setting.sell, this._host),
+        this._host.renderAbsolute(this.setting.sell),
       ]),
     );
     this.element.text(
-      this._host.engine.i18n("blackcoin.sell", [
-        UiComponent.renderAbsolute(this.setting.sell, this._host),
-      ]),
+      this._host.engine.i18n("blackcoin.sell", [this._host.renderAbsolute(this.setting.sell)]),
     );
   }
 }

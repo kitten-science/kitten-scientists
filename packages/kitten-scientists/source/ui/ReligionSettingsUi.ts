@@ -15,7 +15,6 @@ import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListIte
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
   private readonly _unicornBuildings: Array<SettingMaxTriggerListItem>;
@@ -45,7 +44,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
+              : host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -55,10 +54,10 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
+                ? host.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -71,7 +70,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                 return;
               }
 
-              settings.trigger = UiComponent.parsePercentage(value);
+              settings.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();
@@ -110,8 +109,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
 
     this._bestUnicornBuilding = new SettingListItem(
       host,
-      host.engine.i18n("option.faith.best.unicorn"),
       this.setting.bestUnicornBuilding,
+      host.engine.i18n("option.faith.best.unicorn"),
       {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [
@@ -209,7 +208,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
           ...ReligionOptions.map(item => {
             const label = host.engine.i18n(`option.faith.${item}`);
             if (item === "transcend") {
-              return new SettingListItem(host, label, this.setting[item], {
+              return new SettingListItem(host, this.setting[item], label, {
                 onCheck: () => {
                   host.engine.imessage("status.sub.enable", [label]);
                 },
@@ -243,12 +242,12 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                   host.engine.i18n("ui.trigger.build.prompt", [
                     label,
                     element.triggerButton.behavior === "integer"
-                      ? UiComponent.renderAbsolute(this.setting[item].trigger, host)
-                      : UiComponent.renderPercentage(this.setting[item].trigger, locale.selected),
+                      ? host.renderAbsolute(this.setting[item].trigger, locale.selected)
+                      : host.renderPercentage(this.setting[item].trigger, locale.selected, true),
                   ]),
                   element.triggerButton.behavior === "integer"
-                    ? UiComponent.renderAbsolute(this.setting[item].trigger, host)
-                    : UiComponent.renderPercentage(this.setting[item].trigger),
+                    ? host.renderAbsolute(this.setting[item].trigger)
+                    : host.renderPercentage(this.setting[item].trigger),
                   host.engine.i18n(
                     element.triggerButton.behavior === "integer"
                       ? "ui.trigger.setinteger.promptExplainer"
@@ -260,7 +259,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                       return;
                     }
 
-                    this.setting[item].trigger = UiComponent.parsePercentage(value);
+                    this.setting[item].trigger = host.parsePercentage(value);
                   })
                   .then(() => {
                     this.refreshUi();

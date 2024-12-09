@@ -31,11 +31,11 @@ export class SettingLimitedListItem extends SettingListItem {
    */
   constructor(
     host: KittenScientists,
-    label: string,
     setting: SettingLimited,
+    label: string,
     options?: Partial<SettingListItemOptions & SettingListItemOptionsLimited>,
   ) {
-    super(host, label, setting, options);
+    super(host, setting, label, options);
 
     this.limitedButton = new LimitedButton(host, setting, {
       ...options,

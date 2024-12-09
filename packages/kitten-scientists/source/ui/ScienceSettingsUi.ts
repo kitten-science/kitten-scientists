@@ -24,7 +24,7 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
     super(
       host,
       settings,
-      new SettingListItem(host, label, settings, {
+      new SettingListItem(host, settings, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
@@ -40,8 +40,8 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
 
     this._observeStars = new SettingListItem(
       host,
-      host.engine.i18n("option.observe"),
       this.setting.observe,
+      host.engine.i18n("option.observe"),
       {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [host.engine.i18n("option.observe")]);

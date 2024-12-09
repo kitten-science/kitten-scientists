@@ -15,7 +15,6 @@ import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
-import { UiComponent } from "./components/UiComponent.js";
 import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
 
 export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
@@ -43,7 +42,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
+              : host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -53,10 +52,10 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
+                ? host.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -69,7 +68,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
                 return;
               }
 
-              settings.trigger = UiComponent.parsePercentage(value);
+              settings.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();
@@ -95,7 +94,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
     });
 
     listRaces.addChild(
-      new SettingListItem(host, host.engine.i18n("option.autofeed"), this.setting.feedLeviathans, {
+      new SettingListItem(host, this.setting.feedLeviathans, host.engine.i18n("option.autofeed"), {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [host.engine.i18n("option.autofeed")]);
         },
@@ -130,9 +129,9 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
                 host,
                 host.engine.i18n("ui.trigger.crypto.promptTitle"),
                 host.engine.i18n("ui.trigger.crypto.prompt", [
-                  UiComponent.renderAbsolute(this.setting.tradeBlackcoin.trigger, host),
+                  host.renderAbsolute(this.setting.tradeBlackcoin.trigger, locale.selected),
                 ]),
-                UiComponent.renderAbsolute(this.setting.tradeBlackcoin.trigger, host),
+                host.renderAbsolute(this.setting.tradeBlackcoin.trigger),
                 host.engine.i18n("ui.trigger.crypto.promptExplainer"),
               )
                 .then(value => {
@@ -141,7 +140,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
                   }
 
                   this.setting.tradeBlackcoin.trigger =
-                    UiComponent.parseAbsolute(value) ?? this.setting.tradeBlackcoin.trigger;
+                    host.parseAbsolute(value) ?? this.setting.tradeBlackcoin.trigger;
                 })
                 .then(() => {
                   this.refreshUi();
@@ -152,8 +151,8 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
         ),
         {
           children: [
-            new BuyButton(host, this.setting.tradeBlackcoin),
-            new SellButton(host, this.setting.tradeBlackcoin),
+            new BuyButton(host, this.setting.tradeBlackcoin, locale),
+            new SellButton(host, this.setting.tradeBlackcoin, locale),
           ],
         },
       ),
@@ -169,7 +168,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
     listAddition.addChild(new EmbassySettingsUi(host, this.setting.buildEmbassies, locale));
 
     listAddition.addChild(
-      new SettingListItem(host, host.engine.i18n("ui.upgrade.races"), this.setting.unlockRaces, {
+      new SettingListItem(host, this.setting.unlockRaces, host.engine.i18n("ui.upgrade.races"), {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [host.engine.i18n("ui.upgrade.races")]);
         },
@@ -184,22 +183,22 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
   private _getTradeOption(
     host: KittenScientists,
     option: TradeSettingsItem,
-    i18nName: string,
+    label: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingLimitedListItem(host, i18nName, option, {
+    const element = new SettingLimitedListItem(host, option, label, {
       onCheck: () => {
-        host.engine.imessage("status.sub.enable", [i18nName]);
+        host.engine.imessage("status.sub.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.sub.disable", [i18nName]);
+        host.engine.imessage("status.sub.disable", [label]);
       },
       onLimitedCheck: () => {
-        host.engine.imessage("trade.limited", [i18nName]);
+        host.engine.imessage("trade.limited", [label]);
       },
       onLimitedUnCheck: () => {
-        host.engine.imessage("trade.unlimited", [i18nName]);
+        host.engine.imessage("trade.unlimited", [label]);
       },
       onRefresh: () => {
         element.limitedButton.inactive = !option.enabled || !option.limited;
@@ -211,10 +210,10 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
 
     const seasons = new SeasonsList(host, option.seasons, {
       onCheck: (label: string) => {
-        host.engine.imessage("trade.season.enable", [ucfirst(i18nName), label]);
+        host.engine.imessage("trade.season.enable", [ucfirst(label), label]);
       },
       onUnCheck: (label: string) => {
-        host.engine.imessage("trade.season.disable", [ucfirst(i18nName), label]);
+        host.engine.imessage("trade.season.disable", [ucfirst(label), label]);
       },
     });
     panel.addChild(seasons);

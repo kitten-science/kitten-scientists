@@ -2,10 +2,7 @@ import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console
 import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import {
-  ResetResourcesSettings,
-  ResetResourcesSettingsItem,
-} from "../settings/ResetResourcesSettings.js";
+import { ResetResourcesSettings } from "../settings/ResetResourcesSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { ucfirst } from "../tools/Format.js";
 import stylesButton from "./components/Button.module.css";
@@ -50,14 +47,14 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
         onSetTrigger: () => {
           Dialog.prompt(
             host,
-            host.engine.i18n("ui.trigger.prompt.absolute"),
+            host.engine.i18n("ui.trigger.prompt.float"),
             host.engine.i18n("ui.trigger.build.prompt", [
               resource.title,
               option.trigger !== -1
-                ? option.trigger.toString()
+                ? host.renderAbsolute(option.trigger, locale.selected)
                 : host.engine.i18n("ui.trigger.inactive"),
             ]),
-            option.trigger !== -1 ? option.trigger.toString() : "",
+            option.trigger !== -1 ? host.renderAbsolute(option.trigger) : "",
             host.engine.i18n("ui.trigger.reset.promptExplainer"),
           )
             .then(value => {
@@ -93,65 +90,5 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     }
 
     this.addChild(new SettingsList(host, { children: items }));
-  }
-
-  /**
-   * Creates a UI element that reflects stock values for a given resource.
-   * This is currently only used for the time/reset section.
-   *
-   * @param label The title to apply to the option.
-   * @param option The option that is being controlled.
-   * @returns A new option with stock value.
-   */
-  private _makeResourceSetting(
-    host: KittenScientists,
-    option: ResetResourcesSettingsItem,
-    locale: SettingOptions<SupportedLocale>,
-    label: string,
-  ) {
-    const element = new SettingTriggerListItem(host, option, locale, label, {
-      onCheck: () => {
-        host.engine.imessage("status.sub.enable", [label]);
-      },
-      onUnCheck: () => {
-        host.engine.imessage("status.sub.disable", [label]);
-      },
-      onRefresh: () => {
-        element.triggerButton.inactive = !option.enabled || option.trigger === -1;
-      },
-      onSetTrigger: () => {
-        Dialog.prompt(
-          host,
-          host.engine.i18n("ui.trigger.prompt.absolute"),
-          host.engine.i18n("ui.trigger.build.prompt", [
-            label,
-            option.trigger !== -1
-              ? option.trigger.toString()
-              : host.engine.i18n("ui.trigger.inactive"),
-          ]),
-          option.trigger !== -1 ? option.trigger.toString() : "",
-          host.engine.i18n("ui.trigger.reset.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
-
-            if (value === "" || value.startsWith("-")) {
-              option.trigger = -1;
-              option.enabled = false;
-              return;
-            }
-
-            option.trigger = Number(value);
-          })
-          .then(() => {
-            element.refreshUi();
-          })
-          .catch(redirectErrorsToConsole(console));
-      },
-    });
-    element.triggerButton.element.addClass(stylesButton.lastHeadAction);
-    return element;
   }
 }

@@ -12,7 +12,6 @@ import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
   constructor(
@@ -40,7 +39,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
             settings.trigger === -1
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
+              : host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -50,10 +49,10 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
+                ? host.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -66,7 +65,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
                 return;
               }
 
-              settings.trigger = UiComponent.parsePercentage(value);
+              settings.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();
@@ -104,8 +103,8 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
             option.trigger < 0
               ? settings.trigger < 0
                 ? host.engine.i18n("ui.trigger.build.blocked", [label])
-                : `${UiComponent.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
-              : UiComponent.renderPercentage(option.trigger, locale.selected, true),
+                : `${host.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+              : host.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -115,10 +114,10 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               option.trigger !== -1
-                ? UiComponent.renderPercentage(option.trigger, locale.selected, true)
+                ? host.renderPercentage(option.trigger, locale.selected, true)
                 : host.engine.i18n("ui.trigger.build.inherited"),
             ]),
-            option.trigger !== -1 ? UiComponent.renderPercentage(option.trigger) : "",
+            option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
             host.engine.i18n("ui.trigger.build.promptExplainer"),
           )
             .then(value => {
@@ -131,7 +130,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
                 return;
               }
 
-              option.trigger = UiComponent.parsePercentage(value);
+              option.trigger = host.parsePercentage(value);
             })
             .then(() => {
               element.refreshUi();

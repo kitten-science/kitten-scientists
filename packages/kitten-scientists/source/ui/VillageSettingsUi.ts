@@ -15,7 +15,6 @@ import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
   private readonly _hunt: SettingTriggerListItem;
@@ -33,7 +32,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     super(
       host,
       settings,
-      new SettingListItem(host, label, settings, {
+      new SettingListItem(host, settings, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
@@ -47,7 +46,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     const listJobs = new SettingsList(host, {
       children: host.game.village.jobs
         .filter(item => !isNil(this.setting.jobs[item.name]))
-        .map(job => this._getDistributeOption(host, this.setting.jobs[job.name], job.title)),
+        .map(job =>
+          this._getDistributeOption(host, this.setting.jobs[job.name], locale.selected, job.title),
+        ),
     });
     this.addChild(listJobs);
 
@@ -78,9 +79,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
             host,
             host.engine.i18n("ui.trigger.prompt.percentage"),
             host.engine.i18n("ui.trigger.hunt.prompt", [
-              UiComponent.renderPercentage(this.setting.hunt.trigger, locale.selected, true),
+              host.renderPercentage(this.setting.hunt.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(this.setting.hunt.trigger),
+            host.renderPercentage(this.setting.hunt.trigger),
             host.engine.i18n("ui.trigger.hunt.promptExplainer"),
           )
             .then(value => {
@@ -88,7 +89,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
                 return;
               }
 
-              this.setting.hunt.trigger = UiComponent.parsePercentage(value);
+              this.setting.hunt.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this._hunt.refreshUi();
@@ -102,8 +103,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 
     this._festivals = new SettingListItem(
       host,
-      host.engine.i18n("option.festival"),
       this.setting.holdFestivals,
+      host.engine.i18n("option.festival"),
       {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [host.engine.i18n("option.festival")]);
@@ -136,13 +137,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
             host,
             host.engine.i18n("ui.trigger.promoteKittens.promptTitle"),
             host.engine.i18n("ui.trigger.promoteKittens.prompt", [
-              UiComponent.renderPercentage(
-                this.setting.promoteKittens.trigger,
-                locale.selected,
-                true,
-              ),
+              host.renderPercentage(this.setting.promoteKittens.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(this.setting.promoteKittens.trigger),
+            host.renderPercentage(this.setting.promoteKittens.trigger),
             host.engine.i18n("ui.trigger.promoteKittens.promptExplainer"),
           )
             .then(value => {
@@ -150,7 +147,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
                 return;
               }
 
-              this.setting.promoteKittens.trigger = UiComponent.parsePercentage(value);
+              this.setting.promoteKittens.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();
@@ -164,8 +161,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 
     this._promoteLeader = new SettingListItem(
       host,
-      host.engine.i18n("option.promote"),
       this.setting.promoteLeader,
+      host.engine.i18n("option.promote"),
       {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [host.engine.i18n("option.promote")]);
@@ -191,8 +188,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 
     this._electLeader = new SettingListItem(
       host,
-      host.engine.i18n("option.elect"),
       this.setting.electLeader,
+      host.engine.i18n("option.elect"),
       {
         children: [
           new OptionsListItem(
@@ -222,10 +219,11 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
   private _getDistributeOption(
     host: KittenScientists,
     option: SettingMax,
+    locale: SupportedLocale,
     label: string,
     delimiter = false,
   ) {
-    const item = new SettingMaxListItem(host, label, option, {
+    const item = new SettingMaxListItem(host, option, label, {
       childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
       delimiter,
       onCheck: () => {
@@ -238,14 +236,14 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
         item.maxButton.inactive = !option.enabled || option.max === 0 || option.max === -1;
       },
       onRefreshMax: () => {
-        item.maxButton.updateLabel(UiComponent.renderAbsolute(option.max, host));
+        item.maxButton.updateLabel(host.renderAbsolute(option.max));
         item.maxButton.element[0].title =
           option.max < 0
             ? host.engine.i18n("ui.max.distribute.titleInfinite", [label])
             : option.max === 0
               ? host.engine.i18n("ui.max.distribute.titleZero", [label])
               : host.engine.i18n("ui.max.distribute.title", [
-                  UiComponent.renderAbsolute(option.max, host),
+                  host.renderAbsolute(option.max),
                   label,
                 ]);
       },
@@ -255,9 +253,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
           host.engine.i18n("ui.max.distribute.prompt", [label]),
           host.engine.i18n("ui.max.distribute.promptTitle", [
             label,
-            UiComponent.renderAbsolute(option.max, host),
+            host.renderAbsolute(option.max, locale),
           ]),
-          UiComponent.renderAbsolute(option.max, host),
+          host.renderAbsolute(option.max),
           host.engine.i18n("ui.max.distribute.promptExplainer"),
         )
           .then(value => {
@@ -274,7 +272,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
               option.enabled = false;
             }
 
-            option.max = UiComponent.parseAbsolute(value) ?? option.max;
+            option.max = host.parseAbsolute(value) ?? option.max;
           })
           .then(() => {
             this.refreshUi();

@@ -14,7 +14,6 @@ import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
   constructor(
@@ -41,7 +40,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
-              : UiComponent.renderPercentage(settings.trigger, locale.selected, true),
+              : host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: () => {
@@ -51,10 +50,10 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
             host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
+                ? host.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
+            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -67,7 +66,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
                 return;
               }
 
-              settings.trigger = UiComponent.parsePercentage(value);
+              settings.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();
@@ -101,7 +100,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
       new SettingsList(host, {
         children: [
           new HeaderListItem(host, host.engine.i18n("ui.additional")),
-          new SettingListItem(host, host.engine.i18n("option.catnip"), settings.gatherCatnip, {
+          new SettingListItem(host, settings.gatherCatnip, host.engine.i18n("option.catnip"), {
             onCheck: () => {
               host.engine.imessage("status.sub.enable", [host.engine.i18n("option.catnip")]);
             },
@@ -111,8 +110,8 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           }),
           new SettingListItem(
             host,
-            host.engine.i18n("option.steamworks"),
             settings.turnOnSteamworks,
+            host.engine.i18n("option.steamworks"),
             {
               onCheck: () => {
                 host.engine.imessage("status.sub.enable", [host.engine.i18n("option.steamworks")]);
@@ -122,7 +121,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
               },
             },
           ),
-          new SettingListItem(host, host.engine.i18n("option.magnetos"), settings.turnOnMagnetos, {
+          new SettingListItem(host, settings.turnOnMagnetos, host.engine.i18n("option.magnetos"), {
             onCheck: () => {
               host.engine.imessage("status.sub.enable", [host.engine.i18n("option.magnetos")]);
             },
@@ -130,7 +129,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
               host.engine.imessage("status.sub.disable", [host.engine.i18n("option.magnetos")]);
             },
           }),
-          new SettingListItem(host, host.engine.i18n("option.reactors"), settings.turnOnReactors, {
+          new SettingListItem(host, settings.turnOnReactors, host.engine.i18n("option.reactors"), {
             onCheck: () => {
               host.engine.imessage("status.sub.enable", [host.engine.i18n("option.reactors")]);
             },

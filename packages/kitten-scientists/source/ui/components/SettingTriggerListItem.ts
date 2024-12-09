@@ -21,7 +21,7 @@ export class SettingTriggerListItem extends SettingListItem {
     label: string,
     options?: Partial<SettingListItemOptions & SettingListItemOptionsTrigger>,
   ) {
-    super(host, label, setting, options);
+    super(host, setting, label, options);
 
     this.triggerButton = new TriggerButton(host, setting, locale, {
       alignment: "right",

@@ -93,7 +93,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.addChild(
       new SettingsList(host, {
         children: [
-          new SettingListItem(host, host.engine.i18n("state.noConfirm"), this.setting.noConfirm),
+          new SettingListItem(host, this.setting.noConfirm, host.engine.i18n("state.noConfirm")),
           new ListItem(host, { children: [new Delimiter(host)] }),
 
           new HeaderListItem(host, host.engine.i18n("state.local")),
@@ -157,7 +157,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             }),
           ]),
           new ListItem(host, { children: [this.gameList] }),
-          new SettingListItem(host, host.engine.i18n("state.compress"), this.setting.compress),
+          new SettingListItem(host, this.setting.compress, host.engine.i18n("state.compress")),
         ],
         hasDisableAll: false,
         hasEnableAll: false,

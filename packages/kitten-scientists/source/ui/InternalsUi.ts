@@ -1,7 +1,9 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { SupportedLocale } from "../Engine.js";
 import { KittenScientists, ksVersion } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { EngineSettings } from "../settings/EngineSettings.js";
+import { SettingOptions } from "../settings/Settings.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";
@@ -17,7 +19,11 @@ import { TextButton } from "./components/TextButton.js";
 import { UiComponent } from "./components/UiComponent.js";
 
 export class InternalsUi extends SettingsPanel<EngineSettings> {
-  constructor(host: KittenScientists, settings: EngineSettings) {
+  constructor(
+    host: KittenScientists,
+    settings: EngineSettings,
+    locale: SettingOptions<SupportedLocale>,
+  ) {
     super(
       host,
       settings,
@@ -41,9 +47,9 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                         host,
                         host.engine.i18n("ui.internals.interval.prompt"),
                         host.engine.i18n("ui.internals.interval.promptTitle", [
-                          UiComponent.renderAbsolute(settings.interval, host),
+                          host.renderAbsolute(settings.interval, locale.selected),
                         ]),
-                        UiComponent.renderAbsolute(settings.interval, host),
+                        host.renderAbsolute(settings.interval),
                         host.engine.i18n("ui.internals.interval.promptExplainer"),
                       )
                         .then(value => {
@@ -55,7 +61,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                             settings.enabled = false;
                           }
 
-                          settings.interval = UiComponent.parseAbsolute(value) ?? settings.interval;
+                          settings.interval = host.parseAbsolute(value) ?? settings.interval;
                         })
                         .then(() => {
                           this.refreshUi();
@@ -72,7 +78,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
               ),
               new Delimiter(host),
 
-              new SettingListItem(host, host.engine.i18n("ui.ksColumn"), settings.ksColumn, {
+              new SettingListItem(host, settings.ksColumn, host.engine.i18n("ui.ksColumn"), {
                 onCheck: () => {
                   host.rebuildUi();
                 },

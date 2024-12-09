@@ -11,7 +11,6 @@ import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   constructor(
@@ -40,9 +39,9 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
             host,
             host.engine.i18n("ui.trigger.embassies.prompt"),
             host.engine.i18n("ui.trigger.embassies.promptTitle", [
-              UiComponent.renderPercentage(settings.trigger, locale.selected, true),
+              host.renderPercentage(settings.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(settings.trigger),
+            host.renderPercentage(settings.trigger),
             host.engine.i18n("ui.trigger.embassies.promptExplainer"),
           )
             .then(value => {
@@ -50,7 +49,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
                 return;
               }
 
-              settings.trigger = UiComponent.parsePercentage(value);
+              settings.trigger = host.parsePercentage(value);
             })
             .then(() => {
               this.refreshUi();
@@ -64,13 +63,25 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
     const listRaces = new SettingsList(host, {
       children: host.game.diplomacy.races
         .filter(item => !isNil(this.setting.races[item.name]))
-        .map(races => this._makeEmbassySetting(host, this.setting.races[races.name], races.title)),
+        .map(races =>
+          this._makeEmbassySetting(
+            host,
+            this.setting.races[races.name],
+            locale.selected,
+            races.title,
+          ),
+        ),
     });
     this.addChild(listRaces);
   }
 
-  private _makeEmbassySetting(host: KittenScientists, option: SettingMax, label: string) {
-    const element = new SettingMaxListItem(host, label, option, {
+  private _makeEmbassySetting(
+    host: KittenScientists,
+    option: SettingMax,
+    locale: SupportedLocale,
+    label: string,
+  ) {
+    const element = new SettingMaxListItem(host, option, label, {
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [label]);
       },
@@ -81,26 +92,20 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
         element.maxButton.inactive = !option.enabled || option.max === -1;
       },
       onRefreshMax: () => {
-        element.maxButton.updateLabel(UiComponent.renderAbsolute(option.max, host));
+        element.maxButton.updateLabel(host.renderAbsolute(option.max));
         element.maxButton.element[0].title =
           option.max < 0
             ? host.engine.i18n("ui.max.embassy.titleInfinite", [label])
             : option.max === 0
               ? host.engine.i18n("ui.max.embassy.titleZero", [label])
-              : host.engine.i18n("ui.max.embassy.title", [
-                  UiComponent.renderAbsolute(option.max, host),
-                  label,
-                ]);
+              : host.engine.i18n("ui.max.embassy.title", [host.renderAbsolute(option.max), label]);
       },
       onSetMax: () => {
         Dialog.prompt(
           host,
           host.engine.i18n("ui.max.prompt.absolute"),
-          host.engine.i18n("ui.max.build.prompt", [
-            label,
-            UiComponent.renderAbsolute(option.max, host),
-          ]),
-          UiComponent.renderAbsolute(option.max, host),
+          host.engine.i18n("ui.max.build.prompt", [label, host.renderAbsolute(option.max, locale)]),
+          host.renderAbsolute(option.max),
           host.engine.i18n("ui.max.build.promptExplainer"),
         )
           .then(value => {
@@ -117,7 +122,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
               option.enabled = false;
             }
 
-            option.max = UiComponent.parseAbsolute(value) ?? option.max;
+            option.max = host.parseAbsolute(value) ?? option.max;
           })
           .then(() => {
             this.refreshUi();

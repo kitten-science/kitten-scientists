@@ -21,7 +21,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     super(
       host,
       settings,
-      new SettingListItem(host, label, settings, {
+      new SettingListItem(host, settings, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
@@ -42,7 +42,7 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     for (const policy of policies.sort((a, b) => a.label.localeCompare(b.label, locale.selected))) {
       const option = this.setting.policies[policy.name];
 
-      const element = new SettingListItem(host, policy.label, option, {
+      const element = new SettingListItem(host, option, policy.label, {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [policy.label]);
         },

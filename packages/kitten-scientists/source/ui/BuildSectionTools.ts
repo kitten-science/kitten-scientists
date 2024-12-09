@@ -4,7 +4,6 @@ import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions, SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
 import { Dialog } from "./components/Dialog.js";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export const BuildSectionTools = {
   getBuildOption: (
@@ -30,24 +29,21 @@ export const BuildSectionTools = {
         buildOption.triggerButton.inactive = !option.enabled || option.trigger === -1;
       },
       onRefreshMax: () => {
-        buildOption.maxButton.updateLabel(UiComponent.renderAbsolute(option.max, host));
+        buildOption.maxButton.updateLabel(host.renderAbsolute(option.max));
         buildOption.maxButton.element[0].title =
           option.max < 0
             ? host.engine.i18n("ui.max.build.titleInfinite", [label])
             : option.max === 0
               ? host.engine.i18n("ui.max.build.titleZero", [label])
-              : host.engine.i18n("ui.max.build.title", [
-                  UiComponent.renderAbsolute(option.max, host),
-                  label,
-                ]);
+              : host.engine.i18n("ui.max.build.title", [host.renderAbsolute(option.max), label]);
       },
       onRefreshTrigger: () => {
         buildOption.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
           option.trigger < 0
             ? sectionSetting.trigger < 0
               ? host.engine.i18n("ui.trigger.build.blocked", [sectionLabel])
-              : `${UiComponent.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
-            : UiComponent.renderPercentage(option.trigger, locale.selected, true),
+              : `${host.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+            : host.renderPercentage(option.trigger, locale.selected, true),
         ]);
       },
       onSetMax: () => {
@@ -56,9 +52,9 @@ export const BuildSectionTools = {
           host.engine.i18n("ui.max.prompt.absolute"),
           host.engine.i18n("ui.max.build.prompt", [
             label,
-            UiComponent.renderAbsolute(option.max, host),
+            host.renderAbsolute(option.max, locale.selected),
           ]),
-          option.max.toString(),
+          host.renderAbsolute(option.max),
           host.engine.i18n("ui.max.build.promptExplainer"),
         )
           .then(value => {
@@ -75,7 +71,7 @@ export const BuildSectionTools = {
               option.enabled = false;
             }
 
-            option.max = UiComponent.parseAbsolute(value) ?? option.max;
+            option.max = host.parseAbsolute(value) ?? option.max;
           })
           .then(() => {
             buildOption.refreshUi();
@@ -89,10 +85,10 @@ export const BuildSectionTools = {
           host.engine.i18n("ui.trigger.build.prompt", [
             label,
             option.trigger !== -1
-              ? UiComponent.renderPercentage(option.trigger, locale.selected, true)
+              ? host.renderPercentage(option.trigger, locale.selected, true)
               : host.engine.i18n("ui.trigger.build.inherited"),
           ]),
-          option.trigger !== -1 ? UiComponent.renderPercentage(option.trigger) : "",
+          option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
           host.engine.i18n("ui.trigger.build.promptExplainer"),
         )
           .then(value => {
@@ -105,7 +101,7 @@ export const BuildSectionTools = {
               return;
             }
 
-            option.trigger = UiComponent.parsePercentage(value);
+            option.trigger = host.parsePercentage(value);
           })
           .then(() => {
             buildOption.refreshUi();

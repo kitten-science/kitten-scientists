@@ -11,7 +11,7 @@ export class EngineSettingsUi extends SettingListItem {
 
   constructor(host: KittenScientists, settings: EngineSettings) {
     const label = ucfirst(host.engine.i18n("ui.engine"));
-    super(host, label, settings, {
+    super(host, settings, label, {
       childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
       onCheck: () => {
         host.engine.start(true);

@@ -97,7 +97,7 @@ export class SeasonsList extends SettingsList {
       onUnCheck: (label: string, setting: Setting) => void;
     }>,
   ) {
-    return new SettingListItem(this._host, label, setting, {
+    return new SettingListItem(this._host, setting, label, {
       onCheck: () => handler?.onCheck?.(label, setting),
       onUnCheck: () => handler?.onUnCheck?.(label, setting),
     });

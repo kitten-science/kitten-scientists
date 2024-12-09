@@ -25,11 +25,11 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
    */
   constructor(
     host: KittenScientists,
-    label: string,
     setting: SettingMax,
+    label: string,
     options?: Partial<SettingListItemOptions & SettingListItemOptionsMax>,
   ) {
-    super(host, label, setting, options);
+    super(host, setting, label, options);
 
     this.maxButton = new MaxButton(host, setting, {
       border: false,

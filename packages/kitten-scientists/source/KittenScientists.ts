@@ -2,7 +2,7 @@ import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-releas
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import gt from "semver/functions/gt.js";
-import { Engine, EngineState, GameLanguage } from "./Engine.js";
+import { Engine, EngineState, GameLanguage, SupportedLocale } from "./Engine.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
@@ -202,6 +202,95 @@ export class KittenScientists {
     this._userInterface.refreshUi();
   }
 
+  /**
+   * Turns a string like 52.7 into the number 52.7
+   * @param value - String representation of an absolute value.
+   * @returns A number between 0 and Infinity, where Infinity is represented as -1.
+   */
+  parseFloat(value: string | null): number | null {
+    if (value === null || value === "") {
+      return null;
+    }
+
+    const hasSuffix = /[KMGTP]$/i.test(value);
+    const baseValue = value.substring(0, value.length - (hasSuffix ? 1 : 0));
+
+    let numericValue =
+      value.includes("e") || hasSuffix ? parseFloat(baseValue) : parseInt(baseValue);
+    if (hasSuffix) {
+      const suffix = value.substring(value.length - 1).toUpperCase();
+      numericValue = numericValue * Math.pow(1000, ["", "K", "M", "G", "T", "P"].indexOf(suffix));
+    }
+    if (numericValue === Number.POSITIVE_INFINITY || numericValue < 0) {
+      numericValue = -1;
+    }
+
+    return numericValue;
+  }
+
+  parseAbsolute(value: string | null): number | null {
+    const floatValue = this.parseFloat(value);
+    return floatValue !== null ? Math.round(floatValue) : null;
+  }
+
+  /**
+   * Turns a string like 52.7 into the number 0.527
+   * @param value - String representation of a percentage.
+   * @returns A number between 0 and 1 representing the described percentage.
+   */
+  parsePercentage(value: string): number {
+    const cleanedValue = value.trim().replace(/%$/, "");
+    return Math.max(0, Math.min(1, parseFloat(cleanedValue) / 100));
+  }
+
+  /**
+   * Turns a number into a game-native string representation.
+   * Infinity, either by actual value or by -1 representation, is rendered as a symbol.
+   * @param value - The number to render as a string.
+   * @param host - The host instance which we can use to let the game render values for us.
+   * @returns A string representing the given number.
+   */
+  renderAbsolute(value: number, locale: SupportedLocale | "invariant" = "invariant") {
+    if (value < 0 || value === Number.POSITIVE_INFINITY) {
+      return "∞";
+    }
+
+    return locale !== "invariant"
+      ? new Intl.NumberFormat(locale, { style: "decimal", maximumFractionDigits: 0 }).format(value)
+      : this.game.getDisplayValueExt(value, false, false);
+  }
+
+  /**
+   * Turns a number like 0.527 into a string like 52.7
+   * @param value - The number to render as a string.
+   * @param locale - The locale in which to render the percentage.
+   * @param withUnit - Should the percentage sign be included in the output?
+   * @returns A string representing the given percentage.
+   */
+  renderPercentage(
+    value: number,
+    locale: SupportedLocale | "invariant" = "invariant",
+    withUnit?: boolean,
+  ): string {
+    if (value < 0 || value === Number.POSITIVE_INFINITY) {
+      return "∞";
+    }
+
+    return locale !== "invariant"
+      ? new Intl.NumberFormat(locale, { style: "percent" }).format(value)
+      : `${this.game.getDisplayValueExt(value * 100, false, false)}${withUnit ? "%" : ""}`;
+  }
+
+  renderFloat(value: number, locale: SupportedLocale | "invariant" = "invariant"): string {
+    if (value < 0 || value === Number.POSITIVE_INFINITY) {
+      return "∞";
+    }
+
+    return locale !== "invariant"
+      ? new Intl.NumberFormat(locale, { style: "decimal" }).format(value)
+      : this.game.getDisplayValueExt(value, false, false);
+  }
+
   //#region Settings
   /**
    * Encodes an engine states into a string.
@@ -304,6 +393,7 @@ export class KittenScientists {
   }
   //#endregion
 
+  //#region SaveManager
   installSaveManager() {
     cinfo("Installing save game manager...");
     this.game.managers.push(this._saveManager);
@@ -332,4 +422,5 @@ export class KittenScientists {
       // `game/beforesave` event, which is intended for external consumers.
     },
   };
+  //#endregion
 }
