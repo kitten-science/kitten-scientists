@@ -54,9 +54,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
                 ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1
-              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
-              : "",
+            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {

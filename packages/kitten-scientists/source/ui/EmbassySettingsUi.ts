@@ -42,7 +42,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
             host.engine.i18n("ui.trigger.embassies.promptTitle", [
               UiComponent.renderPercentage(settings.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(settings.trigger, locale.selected),
+            UiComponent.renderPercentage(settings.trigger),
             host.engine.i18n("ui.trigger.embassies.promptExplainer"),
           )
             .then(value => {

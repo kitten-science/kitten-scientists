@@ -58,9 +58,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                 ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1
-              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
-              : "",
+            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -250,7 +248,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                   ]),
                   element.triggerButton.behavior === "integer"
                     ? UiComponent.renderAbsolute(this.setting[item].trigger, host)
-                    : UiComponent.renderPercentage(this.setting[item].trigger, locale.selected),
+                    : UiComponent.renderPercentage(this.setting[item].trigger),
                   host.engine.i18n(
                     element.triggerButton.behavior === "integer"
                       ? "ui.trigger.setinteger.promptExplainer"

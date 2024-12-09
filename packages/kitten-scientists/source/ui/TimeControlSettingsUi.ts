@@ -74,7 +74,7 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
                 true,
               ),
             ]),
-            UiComponent.renderPercentage(this.setting.accelerateTime.trigger, locale.selected),
+            UiComponent.renderPercentage(this.setting.accelerateTime.trigger),
             host.engine.i18n("ui.trigger.accelerateTime.promptExplainer"),
           )
             .then(value => {

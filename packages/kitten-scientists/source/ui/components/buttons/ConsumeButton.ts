@@ -30,7 +30,7 @@ export class ConsumeButton extends Button {
             resourceName,
             UiComponent.renderPercentage(setting.consume, locale.selected, true),
           ]),
-          UiComponent.renderPercentage(setting.consume, locale.selected),
+          UiComponent.renderPercentage(setting.consume),
           host.engine.i18n("resources.consume.promptExplainer"),
         )
           .then(value => {

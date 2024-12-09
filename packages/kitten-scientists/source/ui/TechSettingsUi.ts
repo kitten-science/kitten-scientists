@@ -52,9 +52,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
                 ? UiComponent.renderPercentage(settings.trigger, locale.selected, true)
                 : host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1
-              ? UiComponent.renderPercentage(settings.trigger, locale.selected)
-              : "",
+            settings.trigger !== -1 ? UiComponent.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
@@ -114,9 +112,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
                 ? UiComponent.renderPercentage(option.trigger, locale.selected, true)
                 : host.engine.i18n("ui.trigger.build.inherited"),
             ]),
-            option.trigger !== -1
-              ? UiComponent.renderPercentage(option.trigger, locale.selected)
-              : "",
+            option.trigger !== -1 ? UiComponent.renderPercentage(option.trigger) : "",
             host.engine.i18n("ui.trigger.build.promptExplainer"),
           )
             .then(value => {

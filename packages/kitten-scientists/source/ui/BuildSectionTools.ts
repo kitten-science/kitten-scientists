@@ -92,9 +92,7 @@ export const BuildSectionTools = {
               ? UiComponent.renderPercentage(option.trigger, locale.selected, true)
               : host.engine.i18n("ui.trigger.build.inherited"),
           ]),
-          option.trigger !== -1
-            ? UiComponent.renderPercentage(option.trigger, locale.selected)
-            : "",
+          option.trigger !== -1 ? UiComponent.renderPercentage(option.trigger) : "",
           host.engine.i18n("ui.trigger.build.promptExplainer"),
         )
           .then(value => {

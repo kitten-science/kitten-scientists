@@ -80,7 +80,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
             host.engine.i18n("ui.trigger.hunt.prompt", [
               UiComponent.renderPercentage(this.setting.hunt.trigger, locale.selected, true),
             ]),
-            UiComponent.renderPercentage(this.setting.hunt.trigger, locale.selected),
+            UiComponent.renderPercentage(this.setting.hunt.trigger),
             host.engine.i18n("ui.trigger.hunt.promptExplainer"),
           )
             .then(value => {
@@ -142,7 +142,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
                 true,
               ),
             ]),
-            UiComponent.renderPercentage(this.setting.promoteKittens.trigger, locale.selected),
+            UiComponent.renderPercentage(this.setting.promoteKittens.trigger),
             host.engine.i18n("ui.trigger.promoteKittens.promptExplainer"),
           )
             .then(value => {
