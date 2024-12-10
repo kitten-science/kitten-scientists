@@ -67,6 +67,7 @@ export class KittenScientists {
 
   private _constructUi() {
     const ui = new UserInterface(this);
+    ui.stateManagementUi.loadAutoSave();
     ui.refreshUi();
     return ui;
   }
@@ -158,7 +159,6 @@ export class KittenScientists {
           cinfo(
             "The Kittens Game save data did not contain a script state. Trying to load Auto-Save settings...",
           );
-          this._userInterface.stateManagementUi.loadAutoSave();
           return;
         }
 

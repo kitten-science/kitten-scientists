@@ -92,6 +92,15 @@ export class Engine {
    */
   private readonly _i18nData: typeof i18nData;
 
+  /**
+   * Was any state loaded into this engine at any point in time?
+   */
+  private _isLoaded: boolean = false;
+
+  get isLoaded(): boolean {
+    return this._isLoaded;
+  }
+
   readonly _host: KittenScientists;
   readonly settings: EngineSettings;
   readonly bonfireManager: BonfireManager;
@@ -200,6 +209,8 @@ export class Engine {
    * This is intended to make loading of previous settings snapshots more intuitive.
    */
   stateLoad(settings: EngineState, retainMetaBehavior = false) {
+    this._isLoaded = true;
+
     this.stop(false);
 
     // For now, we only log a warning on mismatching tags.

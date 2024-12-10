@@ -570,6 +570,11 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   loadAutoSave() {
+    if (this._host.engine.isLoaded) {
+      cinfo("Not attempting to load Auto-Save, because a state is already loaded.");
+      return;
+    }
+
     const existing = this.states.find(state => state.unwrap().label === "Auto-Save");
     if (isNil(existing)) {
       cinfo("No Auto-Save settings found.");
@@ -577,7 +582,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     }
 
     cinfo("Loading Auto-Save...");
-    this.loadState(existing.unwrap().state);
+    this._host.engine.stateLoad(existing.unwrap().state, false);
   }
 
   updateGame(game: Unique<StoredGame>, newGame: KGSaveData) {
