@@ -29,5 +29,5 @@ export default defineConfig({
     KS_RELEASE_CHANNEL,
     KS_VERSION,
   },
-  plugins: [cssInjectedByJsPlugin()],
+  plugins: [cssInjectedByJsPlugin({ styleId: "ks-styles" })],
 });
