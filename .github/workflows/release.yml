@@ -11,12 +11,8 @@ on:
         description: Only create a test release, without moving the tags?
         required: false
         type: boolean
-      dry-run-tag:
-        description: Tag to assume, instead of trigger source.
-        type: string
-        required: false
       wants-github-release:
-        default: false
+        default: true
         description: Create a GitHub release?
         required: false
         type: boolean
@@ -112,7 +108,6 @@ jobs:
         if: success() && inputs.wants-github-release
         uses: oliversalzburg/action-automatic-semantic-releases@f585631353f7d8999e6207df51e9ef64589bb6be # v0.1.0
         with:
-          automatic_release_tag: ${{ inputs.dry-run-tag }}
           draft: true
           dry_run: ${{ inputs.dry-run }}
           files: |
