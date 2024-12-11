@@ -109,14 +109,13 @@ jobs:
         if: success() && inputs.wants-github-release
         uses: oliversalzburg/action-automatic-semantic-releases@f585631353f7d8999e6207df51e9ef64589bb6be # v0.1.0
         with:
-          automatic_release_tag: next
-          draft: false
+          draft: true
           dry_run: ${{ inputs.dry-run }}
           files: |
             packages/kitten-analysts/output/kitten-analysts-*
             packages/kitten-engineers/output/kitten-engineers-*
             packages/kitten-scientists/output/kitten-scientists-*
-          prerelease: true
+          prerelease: false
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: v${{ needs.versions.outputs.RELEASE_VERSION }}
 
