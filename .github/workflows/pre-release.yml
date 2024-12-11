@@ -6,6 +6,16 @@ on:
       - main
   workflow_dispatch:
     inputs:
+      dry-run:
+        default: true
+        description: Only create a test release, without moving the tags?
+        required: false
+        type: boolean
+      dry-run-tag:
+        default: next
+        description: Floating release tag to assume.
+        type: string
+        required: false
       wants-github-release:
         default: false
         description: Create a GitHub release?
@@ -104,8 +114,9 @@ jobs:
         if: success() && inputs.wants-github-release
         uses: oliversalzburg/action-automatic-semantic-releases@f585631353f7d8999e6207df51e9ef64589bb6be # v0.1.0
         with:
-          automatic_release_tag: next
-          draft: false
+          automatic_release_tag: ${{ inputs.dry-run-tag }}
+          draft: ${{ inputs.dry-run }}
+          dry_run: ${{ inputs.dry-run }}
           files: |
             packages/kitten-analysts/output/kitten-analysts-*
             packages/kitten-engineers/output/kitten-engineers-*
