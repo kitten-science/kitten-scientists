@@ -11,6 +11,10 @@ on:
         description: Only create a test release, without moving the tags?
         required: false
         type: boolean
+      dry-run-tag:
+        description: Tag to assume, instead of trigger source.
+        type: string
+        required: false
       wants-github-release:
         default: false
         description: Create a GitHub release?
@@ -56,7 +60,6 @@ jobs:
     uses: ./.github/workflows/qa.yml
 
   release:
-    if: github.event.commits[1] != null || ( !startsWith(github.event.commits[0].message, 'chore(deps):') && !startsWith(github.event.commits[0].message, 'fix(deps):') )
     name: Release
     needs:
       - qa
@@ -109,6 +112,7 @@ jobs:
         if: success() && inputs.wants-github-release
         uses: oliversalzburg/action-automatic-semantic-releases@f585631353f7d8999e6207df51e9ef64589bb6be # v0.1.0
         with:
+          automatic_release_tag: ${{ inputs.dry-run-tag }}
           draft: true
           dry_run: ${{ inputs.dry-run }}
           files: |
