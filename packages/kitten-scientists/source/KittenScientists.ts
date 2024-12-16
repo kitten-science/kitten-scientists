@@ -47,7 +47,11 @@ export class KittenScientists {
     gameLanguage: GameLanguage = "en",
     engineState?: EngineState,
   ) {
-    cinfo(`Kitten Scientists ${ksVersion("v")} constructed.`);
+    cinfo(`Kitten Scientists ${ksVersion("v")} constructed. Checking for previous instances...`);
+    if ("kittenScientists" in UserScriptLoader.window) {
+      cwarn("Detected existing KS instance. Trying to unload it...");
+      UserScriptLoader.window.kittenScientists?.unload();
+    }
     cinfo(`You are on the '${String(KS_RELEASE_CHANNEL)}' release channel.`);
 
     this.game = game;
@@ -92,6 +96,7 @@ export class KittenScientists {
    * Removes Kitten Scientists from the browser.
    */
   unload(): void {
+    cwarn("Unloading Kitten Scientists...");
     this.engine.stop();
     this._userInterface.destroy();
     if (this._gameBeforeSaveHandle !== undefined) {
@@ -107,6 +112,7 @@ export class KittenScientists {
       this.game.managers.splice(managerIndex, 1);
     }
     delete window.kittenScientists;
+    cwarn("Kitten Scientists have been unloaded!");
   }
 
   /**
