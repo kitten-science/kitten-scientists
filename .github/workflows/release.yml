@@ -124,9 +124,11 @@ jobs:
             packages/kitten-analysts/output/kitten-analysts-*
             packages/kitten-engineers/output/kitten-engineers-*
             packages/kitten-scientists/output/kitten-scientists-*
+          merge_similar: true
           prerelease: false
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: v${{ needs.versions.outputs.RELEASE_VERSION }}
+          with_authors: false
 
   update-release-info:
     name: 🔹 Update Release Info
