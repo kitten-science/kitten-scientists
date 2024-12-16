@@ -33,7 +33,7 @@ jobs:
         run: yarn kitten-scientists:release
 
       - name: Generate GitHub release
-        uses: oliversalzburg/action-automatic-semantic-releases@023f807d4889819c3a45a1a00fd778d3416c482b # v0.2.0
+        uses: oliversalzburg/action-automatic-semantic-releases@cd4b2b48214f13b7626ee8dc06fd33333dd90c07 # v0.2.1
         with:
           # Create only as draft, so we can add a description on the web UI.
           draft: true
