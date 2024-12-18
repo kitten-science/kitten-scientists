@@ -1,4 +1,4 @@
-import { BuildButton, GameTab, Job, Kitten } from "./index.js";
+import { BuildButton, GameTab, Job } from "./index.js";
 
 export type VillageTab = GameTab & {
   censusPanel?: {
@@ -8,8 +8,6 @@ export type VillageTab = GameTab & {
     };
   };
   festivalBtn: BuildButton;
-  makeLeader: (kitten: Kitten) => void;
-  removeLeader: () => void;
 };
 
 export type JobInfo = { name: Job; title: string; unlocked: boolean; value: number };

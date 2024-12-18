@@ -135,7 +135,7 @@ export class VillageManager implements Automation {
       }
     }
 
-    this._host.game.villageTab.makeLeader(bestLeader);
+    this._host.game.village.makeLeader(bestLeader);
     this._host.engine.iactivity("act.elect");
   }
 

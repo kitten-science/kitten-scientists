@@ -560,6 +560,8 @@ export type Game = {
     huntAll: () => void;
     jobs: Array<JobInfo>;
     leader: Kitten | null;
+    makeLeader: (kitten: Kitten) => void;
+    removeLeader: () => void;
     /**
      * @deprecated
      */
