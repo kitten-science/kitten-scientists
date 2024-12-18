@@ -13,7 +13,7 @@ export class CraftSettingsItem extends SettingLimitedMaxTrigger {
     return this.#resource;
   }
 
-  constructor(resource: ResourceCraftable, enabled = false, limited = false) {
+  constructor(resource: ResourceCraftable, enabled = false, limited = true) {
     super(enabled, limited);
     this.#resource = resource;
   }
