@@ -128,6 +128,16 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: Nightly Build v${{ needs.versions.outputs.RELEASE_VERSION }}
 
+  update-release-info:
+    name: 🔹 Update Release Info
+    if: success() && !inputs.dry-run
+    needs:
+      - nightly
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/release-info.yml
+
   publish-devcontainer:
     name: 🔹 Publish Devcontainer
     needs:

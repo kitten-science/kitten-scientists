@@ -62,9 +62,9 @@ jobs:
 
       - name: Grab Kitten Scientists Artifacts
         run: |
-          curl --location "${{ steps.release-info.outputs.dev-url-default }}" --output dev.js
-          curl --location "${{ steps.release-info.outputs.nightly-url-default }}" --output nightly.js
-          curl --location "${{ steps.release-info.outputs.stable-url-default }}" --output stable.js
+          curl --location --silent "${{ steps.release-info.outputs.dev-url-default }}" --output dev.js
+          curl --location --silent "${{ steps.release-info.outputs.nightly-url-default }}" --output nightly.js
+          curl --location --silent "${{ steps.release-info.outputs.stable-url-default }}" --output stable.js
 
       - name: Deploy to S3
         run: |
