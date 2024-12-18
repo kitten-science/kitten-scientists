@@ -64,7 +64,7 @@ export class SpaceManager implements Automation {
     builds: Partial<Record<SpaceBuilding, SpaceBuildingSetting>> = this.settings.buildings,
   ) {
     const bulkManager = this._bulkManager;
-    const trigger = this.settings.trigger;
+    const sectionTrigger = this.settings.trigger;
 
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<SpaceBuilding, SpaceBuildingInfo>> = {};
@@ -73,7 +73,7 @@ export class SpaceManager implements Automation {
     }
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, trigger, "Space");
+    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger, "Space");
 
     // Build all entries in the build list, where we can build any items.
     for (const build of buildList) {

@@ -119,6 +119,8 @@ export class ReligionManager implements Automation {
       return;
     }
 
+    const sectionTrigger = this.settings.trigger;
+
     if (bestUnicornBuilding === "unicornPasture") {
       this._bonfireManager.build(bestUnicornBuilding, 0, 1);
     } else {
@@ -177,7 +179,7 @@ export class ReligionManager implements Automation {
       const build = this._bulkManager.bulk(
         buildRequest,
         this.getBuildMetaData(buildRequest),
-        this.settings.trigger,
+        sectionTrigger,
         "Religion",
       );
       if (0 < build.length && 0 < build[0].count) {
@@ -207,9 +209,10 @@ export class ReligionManager implements Automation {
     const metaData: Partial<
       Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
     > = this.getBuildMetaData(builds);
+    const sectionTrigger = this.settings.trigger;
 
     // Let the bulk manager figure out which of the builds to actually build.
-    const buildList = this._bulkManager.bulk(builds, metaData, this.settings.trigger, "Religion");
+    const buildList = this._bulkManager.bulk(builds, metaData, sectionTrigger, "Religion");
 
     for (const build of buildList) {
       if (0 < build.count) {

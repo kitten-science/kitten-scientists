@@ -53,13 +53,13 @@ export class TradeManager implements Automation {
   autoTrade(cacheManager?: MaterialsCache) {
     const catpower = this._workshopManager.getResource("manpower");
     const gold = this._workshopManager.getResource("gold");
-    const requireTrigger = this.settings.trigger;
+    const sectionTrigger = this.settings.trigger;
 
     // We should only trade if catpower and gold hit the trigger value.
     // Trades can additionally require specific resources. We will check for those later.
     if (
-      catpower.value / catpower.maxValue < requireTrigger ||
-      gold.value / gold.maxValue < requireTrigger
+      catpower.value / catpower.maxValue < sectionTrigger ||
+      gold.value / gold.maxValue < sectionTrigger
     ) {
       return;
     }
@@ -108,7 +108,7 @@ export class TradeManager implements Automation {
         // the required resource must be over the trigger value.
         // Additionally, gold must also be over the trigger value.
         !require ||
-        requireTrigger <= require.value / require.maxValue
+        sectionTrigger <= require.value / require.maxValue
       ) {
         trades.push(trade.race);
       }
@@ -144,8 +144,8 @@ export class TradeManager implements Automation {
         : this._workshopManager.getResource(tradeSettings.require);
       // Have the trigger conditions for this trade been met?
       const trigConditions =
-        (!require || requireTrigger <= require.value / require.maxValue) &&
-        requireTrigger <= gold.value / gold.maxValue;
+        (!require || sectionTrigger <= require.value / require.maxValue) &&
+        sectionTrigger <= gold.value / gold.maxValue;
       // How many trades could we do?
       const tradePos = this.getLowestTradeAmount(race, tradeSettings.limited, trigConditions);
       // If no trades are possible, remove the race.

@@ -107,6 +107,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         }>;
       }
     >();
+    const sectionTrigger = this.settings.trigger;
 
     // Find all resources we would want to craft.
     // For crafts that require resources with a capacity, those resources must
@@ -133,10 +134,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         .map(material => this.getResource(material))
         .filter(material => 0 < material.maxValue);
 
+      const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, craft.trigger);
       const allMaterialsAboveTrigger =
-        requiredMaterials.filter(
-          material => material.value / material.maxValue < this.settings.trigger,
-        ).length === 0;
+        requiredMaterials.filter(material => material.value / material.maxValue < trigger)
+          .length === 0;
 
       if (!allMaterialsAboveTrigger) {
         continue;

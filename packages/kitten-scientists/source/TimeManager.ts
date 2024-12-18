@@ -66,7 +66,7 @@ export class TimeManager {
     builds: Partial<Record<TimeItem, TimeSettingsItem>> = this.settings.buildings,
   ) {
     const bulkManager = this._bulkManager;
-    const trigger = this.settings.trigger;
+    const sectionTrigger = this.settings.trigger;
 
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<TimeItem, ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>> = {};
@@ -90,7 +90,7 @@ export class TimeManager {
     }
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, trigger, "Time");
+    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger, "Time");
 
     for (const build of buildList) {
       if (build.count > 0) {
