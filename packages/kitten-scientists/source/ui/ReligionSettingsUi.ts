@@ -119,6 +119,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
           for (const building of this._unicornBuildings) {
             building.setting.enabled = true;
             building.setting.max = -1;
+            building.setting.trigger = -1;
           }
           this.refreshUi();
         },

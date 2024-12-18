@@ -2,7 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { KittenScientists } from "../../KittenScientists.js";
 import { Setting } from "../../settings/Settings.js";
 import { LabelListItem, LabelListItemOptions } from "./LabelListItem.js";
-import styles from "./SettingListItem.module.css";
+import { default as styles, default as stylesSettingListItem } from "./SettingListItem.module.css";
 
 export type SettingListItemOptions = LabelListItemOptions & {
   /**
@@ -85,6 +85,12 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
       this.element.addClass(styles.checked);
     } else {
       this.element.removeClass(styles.checked);
+    }
+
+    if (this.readOnly) {
+      this.element.addClass(stylesSettingListItem.readonly);
+    } else {
+      this.element.removeClass(stylesSettingListItem.readonly);
     }
 
     if (!isNil(this.checkbox)) {
