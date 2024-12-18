@@ -414,10 +414,6 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       return;
     }
 
-    if (this._destructiveActionPrevented()) {
-      return;
-    }
-
     try {
       // decodeSettings throws if the input is not a valid engine state.
       const state = KittenScientists.decodeSettings(input);
