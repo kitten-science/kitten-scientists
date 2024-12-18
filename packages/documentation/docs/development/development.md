@@ -187,6 +187,8 @@ yarn kitten-scientists:release
 
 1. Make sure to also update the `.github/bug_report.yml` to mention the latest version number.
 
+1. Ultimately, search the entire project code base for the previous version string, like `2.0.0-beta.8`. Make sure to also search for `beta.8`, `beta8`, and references to _future_ releases that need to point to the new future release!
+
 !!! note
 
     Don't forget to publish the drafted release on GitHub!
