@@ -99,7 +99,7 @@ export class BonfireSettings extends SettingTrigger {
       items[item] = new BonfireBuildingSetting(item);
     });
     StagedBuildings.forEach(item => {
-      items[item] = new BonfireBuildingSetting(item, false, -1, -1, baseStage[item]);
+      items[item] = new BonfireBuildingSetting(item, false, -1, 0, baseStage[item]);
     });
 
     return items;
