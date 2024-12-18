@@ -65,9 +65,13 @@ jobs:
           curl --location --silent "${{ steps.release-info.outputs.dev-url-default }}" --output dev.js
           curl --location --silent "${{ steps.release-info.outputs.nightly-url-default }}" --output nightly.js
           curl --location --silent "${{ steps.release-info.outputs.stable-url-default }}" --output stable.js
+          curl --location --silent "${{ steps.release-info.outputs.dev-url-minified }}" --output dev.min.js
+          curl --location --silent "${{ steps.release-info.outputs.nightly-url-minified }}" --output nightly.min.js
+          curl --location --silent "${{ steps.release-info.outputs.stable-url-minified }}" --output stable.min.js
 
       - name: Deploy to S3
         run: |
+          # Put the release-info.json
           aws s3api put-object \
             --bucket kitten-science-us0 \
             --key v2.0.0-beta.8/release-info.json \
@@ -81,40 +85,46 @@ jobs:
             --content-type "application/json" \
             --body release-info.json
 
-          aws s3api put-object \
-            --bucket kitten-science-us0 \
-            --key v2.0.0-beta.8/dev.js \
-            --cache-control "public, s-maxage=600" \
-            --content-type "text/javascript" \
-            --body dev.js
-          aws s3api put-object \
-            --bucket kitten-science-us0 \
-            --key v2.0.0-beta.8/nightly.js \
-            --cache-control "public, s-maxage=3600" \
-            --content-type "text/javascript" \
-            --body nightly.js
-          aws s3api put-object \
-            --bucket kitten-science-us0 \
-            --key v2.0.0-beta.8/stable.js \
-            --cache-control "public, s-maxage=604800" \
-            --content-type "text/javascript" \
-            --body stable.js
+          for PREFIX in "v2.0.0-beta.8" "main"; do
+            # Put the dev scripts on the channel.
+            aws s3api put-object \
+              --bucket kitten-science-us0 \
+              --key $PREFIX/dev.js \
+              --cache-control "public, s-maxage=600" \
+              --content-type "text/javascript" \
+              --body dev.js
+            aws s3api put-object \
+              --bucket kitten-science-us0 \
+              --key $PREFIX/dev.min.js \
+              --cache-control "public, s-maxage=600" \
+              --content-type "text/javascript" \
+              --body dev.min.js
 
-          aws s3api put-object \
-            --bucket kitten-science-us0 \
-            --key main/dev.js \
-            --cache-control "public, s-maxage=600" \
-            --content-type "text/javascript" \
-            --body dev.js
-          aws s3api put-object \
-            --bucket kitten-science-us0 \
-            --key main/nightly.js \
-            --cache-control "public, s-maxage=3600" \
-            --content-type "text/javascript" \
-            --body nightly.js
-          aws s3api put-object \
-            --bucket kitten-science-us0 \
-            --key main/stable.js \
-            --cache-control "public, s-maxage=604800" \
-            --content-type "text/javascript" \
-            --body stable.js
+            # Put the nightly scripts on the channel.
+            aws s3api put-object \
+              --bucket kitten-science-us0 \
+              --key $PREFIX/nightly.js \
+              --cache-control "public, s-maxage=3600" \
+              --content-type "text/javascript" \
+              --body nightly.js
+            aws s3api put-object \
+              --bucket kitten-science-us0 \
+              --key $PREFIX/nightly.min.js \
+              --cache-control "public, s-maxage=3600" \
+              --content-type "text/javascript" \
+              --body nightly.min.js
+
+            # Put the stable scripts on the channel.
+            aws s3api put-object \
+              --bucket kitten-science-us0 \
+              --key $PREFIX/stable.js \
+              --cache-control "public, s-maxage=604800" \
+              --content-type "text/javascript" \
+              --body stable.js
+            aws s3api put-object \
+              --bucket kitten-science-us0 \
+              --key $PREFIX/stable.min.js \
+              --cache-control "public, s-maxage=604800" \
+              --content-type "text/javascript" \
+              --body stable.min.js
+          done
