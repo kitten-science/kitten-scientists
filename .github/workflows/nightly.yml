@@ -116,7 +116,7 @@ jobs:
           yarn ks:release
 
       - name: Generate GitHub release
-        uses: oliversalzburg/action-automatic-semantic-releases@08afc1891d7c5cacc4313c1371671dbcc844be33 # v0.2.9
+        uses: oliversalzburg/action-automatic-semantic-releases@a7c8a97c409fc2b56611cce0d2bc467194ab135b # v0.2.10
         with:
           automatic_release_tag: nightly
           draft: false
