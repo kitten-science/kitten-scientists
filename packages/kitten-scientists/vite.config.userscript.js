@@ -58,7 +58,7 @@ export default defineConfig({
     KS_VERSION,
   },
   plugins: [
-    cssInjectedByJsPlugin({ styleId: "ks-styles" }),
+    cssInjectedByJsPlugin({ styleId: "ks-styles", topExecutionPriority: false }),
     {
       ...metablock({
         override: {
