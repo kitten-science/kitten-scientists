@@ -45,7 +45,7 @@
     "@types/semver": "7.5.8",
     "@types/web": "0.0.187",
     "typescript": "5.7.2",
-    "vite": "6.0.3",
+    "vite": "6.0.4",
     "vite-plugin-css-injected-by-js": "3.5.2",
     "vite-plugin-userscript": "0.1.3"
   },
