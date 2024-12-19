@@ -260,7 +260,10 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                       return;
                     }
 
-                    this.setting[item].trigger = host.parsePercentage(value);
+                    this.setting[item].trigger =
+                      (element.triggerButton.behavior === "integer"
+                        ? host.parseAbsolute(value)
+                        : host.parsePercentage(value)) ?? this.setting[item].trigger;
                   })
                   .then(() => {
                     this.refreshUi();
