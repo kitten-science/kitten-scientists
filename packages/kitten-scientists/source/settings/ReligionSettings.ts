@@ -105,12 +105,12 @@ export class ReligionSettings extends SettingTrigger {
     enabled = false,
     trigger = -1,
     bestUnicornBuilding = new Setting(),
-    sacrificeAlicorns = new SettingThreshold(false, 25),
-    sacrificeUnicorns = new SettingThreshold(false, 1000000),
-    refineTears = new SettingThreshold(false, 10000),
-    refineTimeCrystals = new SettingThreshold(false, 15000),
+    sacrificeAlicorns = new SettingThreshold(false, -1),
+    sacrificeUnicorns = new SettingThreshold(false, -1),
+    refineTears = new SettingThreshold(false, -1),
+    refineTimeCrystals = new SettingThreshold(false, -1),
     autoPraise = new SettingTrigger(false, 1),
-    adore = new SettingTrigger(false, 0.75),
+    adore = new SettingTrigger(false, 1),
     transcend = new Setting(),
   ) {
     super(enabled, trigger);
