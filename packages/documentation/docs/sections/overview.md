@@ -10,11 +10,13 @@ Refer to the individual section documentation pages for details of the automatio
 
 ### Panels
 
-The UI of KS is made up of _panels_. You recognize a panel from the little `+` symbol on it. When you click on the `+`, the panel expands and the `+` turns into a `-`. When you now click the `-`, the panel collapses again.
+The UI of KS is made up of _panels_. You recognize a panel from the little :material-chevron-down: symbol on it. When you click on the :material-chevron-down:, the panel expands and the :material-chevron-down: turns into a :material-chevron-up:. When you now click the :material-chevron-up:, the panel collapses again.
 
 !!! note
 
-    The `+`/`-` button is often referred to as an _expando_.
+    The :material-chevron-down:/:material-chevron-up: button is sometimes referred to as an _expando_.
+
+When you use the expando on the top-most entry, you can expand/collapse all panels at once.
 
 Most panels are also [settings](#settings). Which means that they have a **checkbox** as their top element, which is always visible, even when the panel is collapsed. When you _disable_ this setting, it causes any automation that is controlled through that section of the UI to be bypassed.
 
@@ -42,9 +44,9 @@ A _settings list_ is a series of settings that have are grouped with each other.
 
 ### Triggers
 
-One common option to see is the _trigger_, symbolized by a little lightning. A trigger usually communicates at which threshold an automation should become active. Which resource this threshold refers to, is documented with the individual automations.
+One common option to see is the _trigger_, symbolized by a little lightning :material-lightning-bolt-outline:. A trigger usually communicates at which threshold an automation should become active. Which resource this threshold refers to, is documented with the individual automations.
 
-Triggers can be absolute values or, most commonly, a percentage. This percentage then usually refers to your storage capacity for a given resource. When you enter a percentage value into KS, it expects you to provide it as a value between `0` and `1`. So if you wanted a trigger value at ¾ of your storage capacity, you'd enter `0.75`.
+Triggers can be absolute values, or a percentage. This percentage then usually refers to your storage capacity for a given resource. When you enter a percentage value into KS, it expects you to provide it as a value between `0` and `100`. So if you wanted a trigger value at ¾ of your storage capacity, you'd enter `75`.
 
 ### Limits
 
@@ -56,7 +58,7 @@ Another common option is the _limit_. This will usually prevent an automation fr
 
 !!! hint
 
-    When entering limits, you can usually use the KG notations for big numbers. So `9.5M` will become `9,500,000`. You _have to_ use upper-case letters for this to work though.
+    When entering limits, you can usually use the KG notations for big numbers. So `9.5M` will become `9,500,000`.
 
 <!-- prettier-ignore-start -->
 *[KG]: Kittens Game

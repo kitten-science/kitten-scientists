@@ -10,6 +10,14 @@ By default, this is `2000` milliseconds, which is `2` seconds.
 
     Lowering this value can cause instability or freeze your game, because so many browser resources will be spent on KS. If you want to speed up KS, lower the interval gradually.
 
+## Fourth Column UI
+
+Puts KS into a dedicated column in the UI, right next to the log.
+
+!!! danger
+
+    If you're using the **Sleek** theme, this will break your UI.
+
 ## Language
 
 Allows you to select a language different from the language used in KG.
