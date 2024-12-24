@@ -1,5 +1,11 @@
 # Space
 
+## Section Trigger
+
+This section has a trigger :material-lightning-bolt-outline: on itself. This is the _default trigger_ for the buildings in this section.
+
+If you do not set a trigger for an individual building, that building will be triggered according to the default trigger.
+
 ## Planet Buildings
 
 When you enable a building, this building will be built if all of these are true:
