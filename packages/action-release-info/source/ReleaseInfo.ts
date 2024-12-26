@@ -79,7 +79,7 @@ export class ReleaseInfo {
     const { context, core, octokit } = this.#options;
 
     // TODO: Instead of raising this manually, we should properly search for it.
-    const latestStableVersion = "v2.0.0-beta.8";
+    const latestStableVersion = "v2.0.0-beta.9";
 
     core.info("Looking for dev build...");
     const latestBuildDev = await octokit.rest.repos.getReleaseByTag({
