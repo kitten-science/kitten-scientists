@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "typescript": "5.7.2",
-    "vite": "6.0.5",
+    "vite": "6.0.6",
     "vite-plugin-css-injected-by-js": "3.5.2",
     "vite-plugin-userscript": "0.1.3"
   },
