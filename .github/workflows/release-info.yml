@@ -73,7 +73,7 @@ jobs:
         run: |
           # These files are intended for auto-update mechanisms.
           # We don't need to care to put the "correct" versions into their correlating prefixes.
-          for PREFIX in "v2.0.0-beta.8" "v2.0.0-beta.9" "main"; do
+          for PREFIX in "v2.0.0-beta.8" "v2.0.0-beta.9" "v2.0.0-beta.10" "main"; do
             # Put the release-info.json
             aws s3api put-object \
               --bucket kitten-science-us0 \

@@ -1,6 +1,552 @@
-# v2.0.0-beta.9
+# v2.0.0-beta.10
 
 _in progress_
+
+# v2.0.0-beta.9
+
+Another year of KS development finally concludes today. Beta 9 is ready and it's a big one.
+
+[Last year, there was a lot of talk about settings profiles](https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.8), and how we imagine them to play a major role in the future of KS. This did not come true.
+
+We also imagined that we would make big strides with "Kitten Engineers", which would finally resolve some long-standing pain points with KS. Kitten Engineers _did happen_, but it was a complete failure, in regards to the original plans. If you were hoping for any solutions in this area, you will be disappointed.
+
+However, KS has improved core behaviors, and gives users a lot more control. We also changed the default settings of KS to incentivize exploration and experimentation, instead of giving the impressions that the default settings are a good default - they never were.
+
+## Noteable Changes
+
+1. New UI
+
+    The user interface of KS has gone through several iterations in this release cycle. We know that UI changes are never something users really look forward to, unless the UI was horrible to begin with.
+
+    We noticed that different themes make the KS UI layout very unpredictable, and often produces undesirable results. The verbose UI of KS often caused excessive line breaks, which caused confusing UI, or made it aesthetically unpleasing. We rewrote almost the entire UI code to use more modern layout options, and replace text with icons. We understand that this is a thin line to walk. Some of the UI changes are confusing. You will need some time to adjust.
+
+    Sometimes trigger buttons will just be the regular old lightning icon, sometimes they display their trigger value next to them. There is no pattern when we do show the value and when not. It's mostly random, depending on what "feels right".
+
+    Sometimes you have a limit value right next to a trigger, which is entirely different from a trigger that also displays its value. There are very subtle visual hints to help you distinguish the individual cases, but this is non-obvious to long-term users especially.
+
+1. Many sections now allow their individual items to be triggered by their own individual trigger, instead of just having a single trigger for the entire section.
+
+    The triggers on the section itself still exist, but they are now the _default_ trigger for builds, unless the builds have their own trigger set. This is more confusing to explain than to experience. Just try out clicking on the new buttons, and let yourself be guided.
+
+1. The default settings are now complete garbage.
+
+    While this sounds like a step backwards, we hope to encourage users to find the settings that are correct _for them_, instead of blindly enabling options with default settings, because they might _feel_ like a good idea. Make educated decisions. KS will perform your tasks, but it does not play the game for you.
+
+1. Experimental purchasing mechanics.
+
+    While we are aware that this new approach has bugs, we still hope that it is an improvement over the previous purchasing algorithm. Ultimately, a lot of purchasing decisions in KS are deferred to a single component. This component makes decisions on purchasing that often felt not ideal. We tuned this behavior to allow more constructions, with more even distribution of spending the available budget.
+
+    There are still a lot of known issues with this approach, but it seems to provide better results as-is in real gameplay. That's why this half-cooked change is now in the mainline stable build. We hope that most users will feel the benefits, and don't notice the edge case bugs.
+
+1. Eco Mode
+
+    The "Limited" option in KS has always been confusing. We now renamed it to "Eco Mode" to make it more abstract, and prevent people from forming an idea of what the feature _should_ be. Forget everything you know about "Limited Mode". The new thinking is: Either you want to craft the thing as much and as fast as possible, or you want to take a more conservative approach, whatever that means.
+
+    Until we solidify what Eco Mode actually is, we hope that users will feel more comfortable with the less descriptive option, that just provides an acceptable feeling of aggressive vs conservative investment.
+
+1. Kitten Analysts
+
+    During this development cycle, an excessive amount of energy has been poured into Kitten Analysts, which contribute exactly zero to your KG gameplay as a regular user. So what is Kitten Analysts, if we invested so much time into something so useless?
+
+    Kitten Analysts is the component that elevates Kitten Scientists from a single game extension to the actual Kitten Science framework we're aiming for long-term. Kitten Analysts only works in environments where you run the entire game directly on your own computer. If you're a bookmarklet, or a userscript user, Kitten Analysts will not and never will work for you. If you've previously used our "devcontainer" setup, Kitten Science is the replacement for that.
+
+    Kitten Analysts provides a Prometheus exporter for game data, allowing you to track long-term progress, and compare strategies. Additionally, it contains a container-based background-play solution, which should allow you to have your game be played on a remote system while you're offline.
+
+    We consider this work substantial for future development of KS, but we are aware that very few users will be able to benefit from this work directly. Feel free to reach out on GitHub if you want to get your own Kitten Science setup started. The documentation on this subject will be limited for quite some time, to also not confuse users with excessive information on edge cases.
+
+## Features (76/+12 unlisted)
+
+-   Auto-save settings (f897e2711052a3f873ba2dc8aabb01f69b0d1dcc)
+-   Backport KA improvements from KE branch (fe715a68ccb663d257aece4fb3662fc8beea9084)
+-   Configuration approach for KA connection (651615a9f5701caad7d7b320adc06db6209aafab)
+-   Drop internally managed GitHub Action Workflow (50405bbaaf91810230be236dbd8213b56a5afff6)
+-   Drop snapshots/schemata (765c3bce3038e4f3416cb0b0100ce7c58d2ff0d8)
+-   Enable Chiral interaction in Kitten Science (8febf9e71a4fb95b295c731fe05b53eb5315be57)
+-   Identify client type in metrics (34cd6027cb3244ecf3ac7e35f4eb97b386017098)
+-   Improved location tracking (16915487bf60937d0ef7a6c30d87bb1e7dd08ae8)
+-   Include pseudo resources in resource pool metrics (83115c9b2f549b4bfdd9ce8966e3decd27c447d8)
+-   Integrate into KGNet in all injected contexts (f6382d584dbba294b3d52a3c7ef328b31b0d19b3)
+-   Kitten Data and Analytics [#598](https://github.com/kitten-science/kitten-scientists/pull/598) (1f22c6de6421d45fcf6b232a5be9ead67db12e56)
+-   More versatile snapshot analyzer UI (96d105aef632b5cf556da824071b1d1d34711a7e)
+-   Operators [#624](https://github.com/kitten-science/kitten-scientists/pull/624) (8d29d47a3c693be502d841e22530f22935699e13)
+-   Protocol cleanup (5b0630f97f9d828b7a92ed0ce9c161f670091b0a)
+-   Rebuild socket liveliness checks (4b61aa41f4ab56bd10ed039db365f7812ecd2a5e)
+-   Remove automatic-releases action from repo (caee3c15619d2db13af2d6b51a7bafb4b870505b)
+-   Remove commit validator CI action from repo (13d63fda11dac9202d8286241dce55de04ff3a44)
+-   Remove randomness from purchasing strategy (866afc4ff15c58ea1b418075be1a5d0c1f8d6c23)
+-   Track game instances through telemetry GUID (346ccd210a3fe98edc81cc5a2b18041977686ed2)
+-   Track technologies (adc6b9c3d15916c373af9c0f38eb45fa1fb1791d)
+-   Update savegames in KGNet (a181e2a20f8b3837cfe97a48b9682dd0b5b2db74)
+-   Validation (5a555d7e8b05ac6a82c82e3ff2fac862ff24587a)
+-   **api**: Add array object of Game type [#544](https://github.com/kitten-science/kitten-scientists/pull/544) (b7f5308a9f12b5949584556d12e8227b23f1ca2d)
+-   **api**: Tracked the latest KG [#551](https://github.com/kitten-science/kitten-scientists/pull/551) (c4fd7e7425f5582d4f35ff00e1d381bbe5eda94d)
+-   **bonfire**: Add option to turn on reactors (82ad54457c736e40ddb56f7f3c23f82e6c814dd8)
+-   **container**: Make it easier to run Kitten Science (11e1bb4c5c9605929d246792e6a3d5756127e435)
+-   **core**: Ability to `.unload()` KS (fa3568a80faea64018f93fed361c0ce3df385693)
+-   **core**: Auto-load auto-saved settings (6f2f6fd6552decb8faf40a81c3f7f9fccad8b065)
+-   **core**: Backport improved typedefs from KE branch (9a8db48a129ab0ae0ac6a3a01957b03362291ec0)
+-   **core**: Entirely remove `index` documents (e2de2fb4422f7dc6a00265e99cd1e3343474f207)
+-   **core**: Establish neutral default settings (6bef8bbc9a75460e8fbce7015339f3b2ec3d09d8)
+-   **core**: Implement new bulk purchase strategy [#591](https://github.com/kitten-science/kitten-scientists/pull/591) (9f8a25fa1062843983dc93539c9faca007b7dd3e)
+-   **core**: Individual triggers for build items [#744](https://github.com/kitten-science/kitten-scientists/pull/744) (5766d344a5a1c5e9c8ad0544a61d14ab78dd8e38)
+-   **core**: Lift state loader restrictions (515b1622da93d1996c1e9fa8a5016f3fd9f016a9)
+-   **core**: Unload existing KS instances on load (16486f91bd20034eea3f009e883953700b416f45)
+-   **devcontainer**: Alternate repo selection (90e713fe529d121d12c202a45d10d614fb9d5efe)
+-   **i18n**: Additional options translate (97d006bea4078708bc927253ef2b2c99fa298077)
+-   **i18n**: Elect leader (bf01cb38e2f45b8a74bc288a0d242cf698f0f2fa)
+-   **i18n**: Elect Leader traits and job [#518](https://github.com/kitten-science/kitten-scientists/pull/518) (ffce853ad5f90891dc0f04b245fe3b34cf15e563)
+-   **i18n**: Ignore overheat (ccf8c6fc97152197b98dd3028b2feb64f4c34a37)
+-   **i18n**: Internals (b6781c1829767a8df407a0495112072ed88807a7)
+-   **i18n**: Locale-native percentage rendering (714636955ada21a3a95d1d880e829f018fd0c0f4)
+-   **i18n**: Log Filter KG log [#518](https://github.com/kitten-science/kitten-scientists/pull/518) (27ba92c878d20558d35a65aa6e48d04289ade94f)
+-   **i18n**: Migrate to full locale specifier (824483258e43b69d7f5273efb68769befec890d2)
+-   **i18n**: Move translations into subfolder (7dea5159ce4e692f4db6ec6f7f2c5a26c5f4ce8c)
+-   **i18n**: New Crowdin translations by GitHub Action [#695](https://github.com/kitten-science/kitten-scientists/pull/695) (b3d0f670da33a1ec5da788f6fb0abb53d23545a1)
+    <sup>10 similar commits not listed: fd594222711d42a11e7678b396d8bc43fde20786, 3d5d302ded4f968f9975e60d78aa836bc0e3d27d, fa3cd1ac3bb7f4c7011f828dd5e8b7e05d1e7069, b066dbbebe6e20a078c30b41caf7226f0c7b7b38, f546789ee426ad08dcc0bb164db5613899dee0b6, 9855897575a53dd2630777b31b1ea351e91a73e6, 705859c793c831e9b9317ee01b2a56c172314e06, 32c50d8b52a28d0e6c688d9d3010f66680e11555, 7ab4315b054d65efec753aae8a9ac6bf67c4b926, 963f8832a31db38a315f522cb668f9fc8928220a</sup>
+-   **i18n**: New Crowdin updates (#582) (f78a6978c5e4dda675e56c86b32d44594d806f40)
+-   **i18n**: State Management: Compress data (21bc0a53868554b96c884533d282881f91506d25)
+-   **i18n**: Store current input prompt (717e5fe6a628ac06e70c9a1a7fcbd75167ba3919)
+-   **i18n**: Time to Load stored state [#518](https://github.com/kitten-science/kitten-scientists/pull/518) (9c34d3b8557baa4ee8de0a0ee9958010e4171323)
+-   **i18n**: Update l10n data (97418e2718b0392c5e0d708c44d4990604e47d6e)
+-   **i18n**: Update translation files (d1bdba0faf4d61c41706f07a7fdf3228a5f5f5e8)
+-   **i18n**: Update translations (77387507032fe0073921b7e3c85a1ef280a70e54)
+    <sup>2 similar commits not listed: d6fcef5d19164add07de14b163365777fb5b39be, b28b66dc12fb3b20b52f3187b815f1712d4e236d</sup>
+-   **religion**: Bulk process Ziggurats resources [#590](https://github.com/kitten-science/kitten-scientists/pull/590) (c208990fade93f50429078e98341694bc83f275b)
+-   **science**: Individual triggers for technologies [#781](https://github.com/kitten-science/kitten-scientists/pull/781) (a58bbaabd0e64a0cadf9d85f3455a1821d8c0e1e)
+-   **settings**: Execute validateGame on Crafts [#551](https://github.com/kitten-science/kitten-scientists/pull/551) (3e63daf4b047718698f0b0455cad741b7cf1ddcd)
+-   **time**: Active Heat Transfer (dcd1ea454474699ca65467aef848140e8949111f)
+-   **time**: Active Heat Transfer to Get temporalFlux (2953e93a824306ca18fb7058cadaf49d7fe2c510)
+-   **time**: Remove Chrono Furnace automation [#777](https://github.com/kitten-science/kitten-scientists/pull/777) (6b65326207546fd4249ec47ca50237c4043e0761)
+-   **ui**: Add cycle symbols to planets (2411eef7c1abdab5079dc4437004e56cbdfa38a9)
+-   **ui**: Align upgrade selections (93d2edde3d2a7498eba6c97f3807a834847f3aae)
+-   **ui**: Beta 9 Polish [#792](https://github.com/kitten-science/kitten-scientists/pull/792) (934d4820d2e2ec90341a2978a1ae51277e297533)
+-   **ui**: Dialogs [#756](https://github.com/kitten-science/kitten-scientists/pull/756) (abceaa53f9aacf80dcfca78b4dfd74039be74232)
+-   **ui**: Dim inactive sections (c5ebc53916e3115cf6bc0a4ad04bfdc31e2de1ed)
+-   **ui**: Hide "observe sky" area (9e0f896a9f71a1116fdd8a025219a3fef23c588f)
+-   **ui**: Hide building category selection (584fff922a3eab0fbcf6eb97e9bc6f761684e652)
+-   **ui**: Implement more consistent UI [#716](https://github.com/kitten-science/kitten-scientists/pull/716) (8102d108831d9b4a49986a4453bbfb1758ee40cb)
+-   **ui**: Move version into Internals section (1f7a70004d46bec37280cd8f8dbe202fa5583cb0)
+-   **ui**: Only IW displays exclusive resources [#551](https://github.com/kitten-science/kitten-scientists/pull/551) (ca9c15aa6465bec6a7a8d3a69011872c0af016a3)
+-   **ui**: Overhaul state management, entire UI [#685](https://github.com/kitten-science/kitten-scientists/pull/685) (1a0b90443597f5e5768de6cc2b2cefcae3252b65)
+-   **ui**: Rebuild l10n for numeric values (73d73fc615c78201240525859616faf430c9d60b)
+-   **ui**: Rename states/games in state management (3f7f2ddd255289bd2652caea1b3dfc924aa23628)
+-   **ui**: Shown in the fourth column [#545](https://github.com/kitten-science/kitten-scientists/pull/545) (bd1892e29f85aec4552251c65348adf975675a71)
+-   **ui**: Sort upgrades in auto-reset UI (60ec7b09e67956c2fb90a079b0081b9926d37c59)
+-   **village**: Leader can join any job [#551](https://github.com/kitten-science/kitten-scientists/pull/551) (7c5f8e9c69094b574f442ff835a9715ea535508a)
+-   **workshop**: New crafting mechanics [#785](https://github.com/kitten-science/kitten-scientists/pull/785) (ef29b9ae4552796c9f5d6a95f3c5bd08de4615bb)
+
+## Bug Fixes (74/+2 unlisted)
+
+-   beta8 release info missing (dcb8a477f48c1c788659f34db57a1faaa20767d8)
+-   Breaking changes [#529](https://github.com/kitten-science/kitten-scientists/pull/529) (1b6765ad0384affb7a6483af94633b408e779b51)
+-   Changelog preset integration (ce74fccd98758155a7ab404cf37a9385c5c20bc4)
+-   Deprecations (33bf180b029a53c4851ae6633b9cec12a6559c23)
+-   Devcontainer regressions (813808980072372f2d4879c57b0d22c9fcf1e856)
+-   GitHub Actions tests [#364](https://github.com/kitten-science/kitten-scientists/pull/364) (147419f66247728cdd3ff2b2e87a537fcf8fbf30)
+-   Import `core` only as type (f53f6d9805655850da84c7abe9dda461dbb14bbe)
+-   Import paths [#595](https://github.com/kitten-science/kitten-scientists/pull/595) (0b536c29108922d3a3a838d2f5738c1001712fd7)
+-   Lint [#600](https://github.com/kitten-science/kitten-scientists/pull/600) (978c6f90b03dcce4fab9e25afcbc4d3732bed09d)
+-   Long save labels (84468785b296393623d2e90f2fb7f6522c3f7c76)
+-   Networking in compose (638db65a980052e18b6a5e62f9d51d87126f663e)
+-   Redundant type information (802422c0591392522c7d3beafd49eb3f9f997bcc)
+-   Redundant type params [#606](https://github.com/kitten-science/kitten-scientists/pull/606) (3d8b731da44cb88947d83754bd96105c9eaf7c1e)
+-   Release version determination (034915002385fd80b941f820c5518af95bbd72b2)
+-   Save data handover unstable (a81238f06fe89eaf6e682d2f0ba6476d52cd0666)
+-   Semver ranges (9ad1122384d83ae2fc61353b28b30170346782cb)
+-   Sourcemaps no longer aligned (a7a59fa0c0cbbe1a004722e944494e100efb9481)
+-   Unnecessary expression [#465](https://github.com/kitten-science/kitten-scientists/pull/465) (86f98f3e1686f82f69978d9a66daf393963e81b4)
+-   Update import order [#586](https://github.com/kitten-science/kitten-scientists/pull/586) (ecbd7ed57c4cf22ea296c60215dbf6032619df49)
+-   Version not bumped (c943d042a52299b02abd85d1f5ac00db5198beb4)
+-   **api**: Remove expectations from loader input (9834b9c855928f728eb164621c6a26ed82c112da)
+-   **bonfire**: Deprecated method usage (73dc5a93014bfbf8914b4bbb9b1eff247d3ad17e)
+-   **bonfire**: Upgraded buildings are unlimited by default (7608f65e41361779cb32b7029c319e4ec1872edb)
+-   **ci**: Host KS bookmarklet directly (a92e33eeee950ac530c6e5ba7e2d0535badab901)
+-   **container**: Containers don't shutdown cleanly (cb62d99d61622fc694c6532f84b4d7a03544c2c8)
+-   **core**: Catch errors during script constructions (539b262debcb883d9cb820f26098575e009feca6)
+-   **core**: CSS not unloaded during `.unload()` (316649738b8a3aa0b565953b1bdc4c9253fe6a1d)
+-   **core**: Import treated as destructive action (80026b1147c2b7a423963c1aad7ebff6efe578a2)
+-   **core**: Inconsistent trigger handling [#631](https://github.com/kitten-science/kitten-scientists/pull/631) (9860bf2386316ac9ee0ed32a06150918abedf4e7)
+-   **core**: Invalid userscript metablock (3041a48e5abfb1217f56c2085f9e932dfa89a0a1)
+-   **core**: Load auto-save on UI construction (e33174e58bcf78c2e3baccb50f57464065bdc0f8)
+-   **core**: Max value defaults to infinity (8bdd540bbded497059992841bc4762899d092bae)
+-   **core**: Savegame manager not unloaded (824267ca105e05442308737fa4cab151cec79c13)
+-   **core**: Subsection trigger handling (fc26e23957eed757622e9debadba2d63297c4330)
+-   **i18n**: Enable/Enabled inconsistencies in log messages (eefc674035ad1c3980fa50b47eee4d116048dd8f)
+-   **i18n**: HTML entities in translation file (972af2a04af7b7706da951964fe671aff3db2676)
+-   **i18n**: Slightly better wording (ec757a7b927dc2fe14d1e4dde8f957c7bac0a11a)
+-   **i18n**: Typo (fa0fc926b592cfa18f1fa3c57d92e1185ac23f43)
+    <sup>2 similar commits not listed: 0b1ae1553235c2dfd6617e3c6ab719c30598bfac, 39a15cb862363dc0e3129512ac32fc14f68a2c1d</sup>
+-   **i18n**: Typo in literal (2fdc473e5acef484e0e2992992342f643d2aaf83)
+-   **log**: KG log messages not hidden from the log (d2cb601378f09c6742e66ade483b7e00f8416184)
+-   **religion**: Opinionated trigger default values (1ea22edfd2d05e5a98c7ec76e15fecfd4bc77429)
+-   **religion**: Order of the Sun items not built (bb34d6b2eceedea19b79775c623e33edfb1709fa)
+-   **religion**: Trigger values are not handled correctly (b4158aae0526564ab425728b6ecef15db828172e)
+-   **religion**: Triggers always parsed as percentage (cb2eea5c7426f33c101a6fc572608202b30cbd3b)
+-   **schema**: Missing `gatherCatnip` property (9fdf79e98938b2b06e6fa7fba3faebcb1cebabd4)
+-   **settings**: avoid sharing references with engine [#561](https://github.com/kitten-science/kitten-scientists/pull/561) (41329ddb4f2dfb6fdc098bc0b8d0bb3f5f5d0a23)
+-   **settings**: ksColumn Setting load [#545](https://github.com/kitten-science/kitten-scientists/pull/545) (69a802e57fbf306fc2c75c539e874a131552778d)
+-   **time**: daysPerSeason increases the number of temporalParadox days (dbe6027dc6232bde518e0e549be72a72e242ec58)
+-   **time**: Ensure that the Temporal Flux obtained each time the Combust TC is greater than the time required for Heat Transfer (c4deee288f30022da1a59152a8600d6e8811ede8)
+-   **time**: Maximum amount of time allowed to be skipped during active HeatTransfer (e979be01026136286d6e89e76d4bbbf86654d1c6)
+-   **time**: Reserve 10 days for TemporalFlux (68c2ed2afd1aae25954d83039db3aea9b78b7755)
+-   **time**: Save activeHeatTransferStatus (2e56f37463896f89f40f0ae90acb8613924d5cc5)
+-   **time**: Skip to the beginning of the Cycle (59501a80b1af13c41e74549176bd12c96f69bb7f)
+-   **trade**: Traded Blackcoin amount not normalized as expected (7c719c6b821dbd555bd0494f8031c16c1ff4e8b9)
+-   **ui**: Best unicorn UI is inconsistent (a4e50d8f4a7c463b52dd132259adc704f0fd6f72)
+-   **ui**: Buttons trigger their action twice (92cb2a7cc70bbb4f3907003dcf720c048d5d3ae2)
+-   **ui**: Delete redundant #ksColumn [#545](https://github.com/kitten-science/kitten-scientists/pull/545) (d922f6261c1f85f9211718bb94269704bef22335)
+-   **ui**: Footer links layout (7d83c029555d10bf1d6e58700213f91885a472aa)
+-   **ui**: Game translation button conflict (a2bd179a6753e97bc277afb0f4ba1238cedc6ea2)
+-   **ui**: Move upgrade settings (3babc6b6a2d05a49cdbc58700ab565bc444bd952)
+-   **ui**: Partially revert 714636955ada21a3a95d1d880e829f018fd0c0f4 (978893e1bd22156748b91cd69c872c1373e6a533)
+-   **ui**: Read-only elements sometimes not rendered correctly (dd7da4792f0fc8392843dc963553c7fff095a9a4)
+-   **ui**: Require only 1 label input on import (8f22a2cc0f70d1af1b48a18b84e4a7626928cac4)
+-   **ui**: Revert setting a fixed font-size for KS (2e27dc4b109db42d9d87ae12a21cd5db552a2252)
+-   **ui**: Section without checkbox are dimmed (44f81cb52bbaf56b0207e7e58bc53e7e1ec31a38)
+-   **ui**: Tempus Fugit toggle has wrong status message (5a7984a0a857b90cc286bc1401c9de8e780aadb2)
+-   **ui**: Triggers not behaving as expected (8b3576ef9dfda53b3a4ac98dd7fe50dc81dd59db)
+-   **ui**: Typos, layout regressions (045c328f40b0401ec17c33b3624f447e7d354a68)
+-   **ui**: Weird transition when collapsing panels (fd6978c68398f769d77b02b9bb40ab414dfe270c)
+-   **village**: Leader election is broken (f03f3e9438bcb3ad15e4539e693194d5f911f93b)
+-   **village**: Leader election still broken (631ab1e239904d652a327e904df3c74fb123b79b)
+-   **workshop**: Eco mode not enabled by default (0f761034c7ee715c9e6959a78f21abb929528460)
+-   **workshop**: Excessive crafts (cdd28793a9f4ec2dc06d74611c412a1f69b5058c)
+-   **workshop**: Trigger not evaluated correctly (55c380c3e6113b9d7192e8da30dc2b86c6391398)
+
+## Documentation (24)
+
+-   Add example compose file to run KS DNA (4282ecc7ea84853c75a84328559e4f0c47bb23b5)
+-   Add pointer towards development docs (06560df101058ae3fc7ee9b811900736ddbdcf37)
+-   Add revision dates (e749ab13fa0480b37efe347f51c39bf3da2a854f)
+-   Add status badges (f8174230a496f8a8082b852058185e3328dcc66a)
+-   Beta 9 updates (99e964ff4c84e3326958426792db27e7a882c8bc)
+-   Clarify version bump process (c2cc4d156bd43a9ebce18e30b8614aebcc8100a2)
+-   Clean up installation instructions (7aa560d8b6a7a7cc0430cda79c1585c8c6381a3b)
+-   Clean up installation split (469d4bda6d3d94a44aa068c6f0f8eda118fffcb5)
+-   Clean up start page (58ad609d9de74cbce334432f7b3361b98062924a)
+-   Explain section triggers (a5a257a630cdfbdae73cba009db6179548bda5ef)
+-   Fix broken links, add version banner (9870b7ae7df610227f55bbea4cc3a51278f1c8d5)
+-   Fix deployment pipeline (6652217cfc64d8b2302e7dc19036440736c52d13)
+-   Fix site name (824905199cf10bb05f2c0d07ee7c8c114c91ecec)
+-   Hint at more science (04a5e0158127c2a6c8510a3f24f4582474781918)
+-   Prepare for versioned documentation [#687](https://github.com/kitten-science/kitten-scientists/pull/687) (351e67688cb4bd4a2aa34a8b170ff364f1556ad2)
+-   Restructure installation (2ba7aa1f3ee45e0a9ec7c430edb7df2b1c8dfe05)
+-   Restructure main areas (80e5c194ea04a6e02829d6cbcc815022f1f2b643)
+-   Set correct versions in beta.8 docs (57cef651754ff1d4967b179eeb92dd3826209457)
+-   Slightly clearer layout (6ff60f2a5d50015d9202e39f2d74b73d58ff97d0)
+-   Store beta.8 documentation [#687](https://github.com/kitten-science/kitten-scientists/pull/687) (2c31666ccd524f940fee46218c76802d7d71c1bc)
+-   Update CHANGELOG (55d8c9800142a24e21a8a2f67e3e10934ce22c54)
+-   Update Grafana dashboard (271bb244e4510d30a26284ea973f83dc2b51cb0d)
+-   Use revised version of beta8 docs (942fa64cc4b5810b7d494328e53a824984c74b95)
+-   **time**: Active Heat Transfer document (9c891fcb0a1e2738d11ccb3cbfd63ddc65069d31)
+
+## Code Refactoring (13/+1 unlisted)
+
+-   Extract user script loader into discrete component (95ce4b9057ab465f6f9b564295d6a44d06f93eb9)
+-   Improve type safety [#586](https://github.com/kitten-science/kitten-scientists/pull/586) (fa7ef994d986f0df1cd2d1f0c609fe3adf8f32c5)
+-   Unify singular/plural naming for data structures [#544](https://github.com/kitten-science/kitten-scientists/pull/544) (072186a5dbe9c015e6e89dd1541e397cab0e8512)
+-   **settings**: Use loops to replace lengthy code [#544](https://github.com/kitten-science/kitten-scientists/pull/544) (9c15af0d9fafb79c8cd2c6081c2f9a049a38421d)
+-   **ui**: Build TranslatedString using `` [#551](https://github.com/kitten-science/kitten-scientists/pull/551) (52af0e118f9b38efd71152ee304577e90dd5f0a1)
+-   **ui**: Optimize array generation [#544](https://github.com/kitten-science/kitten-scientists/pull/544) (06d7bb3e1014e55897c9d04129581f626e37cee6)
+-   **ui**: Replace br with span [#545](https://github.com/kitten-science/kitten-scientists/pull/545) (7aa64bbafcadbc69ab7d5a0ec0f7e9af773ffe06)
+-   **ui**: Resource control excludes some resources [#544](https://github.com/kitten-science/kitten-scientists/pull/544) (bce673e677af8070ccc53e3ccad1ca668ef77eb6)
+-   **ui**: Sequence(Same as KG) of KG items in Chinese language [#551](https://github.com/kitten-science/kitten-scientists/pull/551) (7e88f0ee6312c73aee6a4f7a0396a274262df8e2)
+-   **ui**: Use .load instead of localStorage [#545](https://github.com/kitten-science/kitten-scientists/pull/545) (b7e11a6d4d7699c92713ab9ad5d75e877669153c)
+-   **ui**: Use KG array as index and directly use KG label [#544](https://github.com/kitten-science/kitten-scientists/pull/544) (6498b79012563f9901244ffb3f8635dc96ced525)
+-   **ui**: Use loops to replace lengthy code [#544](https://github.com/kitten-science/kitten-scientists/pull/544) (0a8021fbe96b419feab079d14b8ca3b8e3903542)
+    <sup>1 similar commit not listed: 7ccecdfa0045fb5e09781afb19b6e3902e6eea39</sup>
+-   **ui**: Use the Array build in types [#544](https://github.com/kitten-science/kitten-scientists/pull/544) (a32070d9ad02005958f1f91747f8ba56e2fd1a88)
+
+## Performance Improvements (1)
+
+-   Reduce `render()` calls (95fb41c400588422a268b5bbb545c426128ce7aa)
+
+## Continuous Integration (62)
+
+-   Add release pipeline (c7dbe4f0c7dee221ee911c52a3a294950aef233a)
+-   Allow manual QA (5221114743405e7a857f937ff1c5e570d4f8ab87)
+-   Attest SBOM (e002a011e3cb93149e59757633e0994aea140210)
+-   Bump commit validation (172ee659cdad960f454503ae4f7f170be627fe33)
+-   Cleanup releases (d8ad51a885f4ffe1a464773e274abf8642421a44)
+-   Consolidate changelog settings (090979d17ecf8df48c35f2e2d8683da068e8929a)
+-   Consolidate QA jobs (859541b309ba319b03560bc82becf700116bec1a)
+-   Create publishing artifacts for OCI (5761d089a3ea5701a4e3fea0c19396e6a82ede46)
+-   Disable Renovate automerge (5b5694f4bf8bafd779ff2ce621fee86b843a4480)
+-   Do less work on dependency upgrades (ebce51e709804bf1f03490f200e5890a8e5b5bf7)
+-   Don't mark release as pre-release (e80f799ea1d00d7a6297f9287c5c77389e69e158)
+-   Don't publish development builds for dependency upgrades (529bacacaeae741a09d5c70f184dc4c00dd92237)
+-   Dry-run pre-releases (beafef0fb8ed4a90caa4f4873a8acb0e3e42b852)
+-   Dry-run releases (b4d205962b2527b9fd90cd0cb269730b49ab3a4e)
+-   Ensure redirects exist in stable (e7a530670e70ecf961ca1beaaaf2c5ecc73afdeb)
+-   Fix action version (bb0db9b9e37b8ca6b2a223ca17cfc289129a38b9)
+-   Fix bookmarklet cache settings (808d02d2ac23f3d3c58429747a6bbfe8f94d227e)
+-   Fix bookmarklet content-type (c0cc4e3064b33e2a1a642d9802810aa6383821aa)
+-   Fix container build (7a09af57be11ab0a402787176d6acbc4b69b4ba7)
+-   Fix invalid release info path (b667e77810781c5b7fcbdad04a5a8a6388f65824)
+-   Fix missing permissions for nightly builds (c5c40754413a5b70050e90719ba76c30e35edb4b)
+-   Fix NodeJS versions (f69eed3be2d89c48c8068a880351e9c122a62639)
+-   Fix pre-release concurrency (796fb79df2668ed745700998fea709c17f48811c)
+-   Fix QA check not running (a56ace8756c7641b0b4d36e1b0fbb0c649c1fa30)
+-   Fix QA not running (3dbcad4b65fd543bf66559cdf20b651e69d2be04)
+-   Fix release channel for stable build (f54001192fe82aa6507c073ebc1c4359ed5881c4)
+-   Fix Renovate automerge behavior (2e24b9341fcca672bd88a966ff567ef01a9ef1e4)
+-   Fix script locations (61c4f9a491703cdb4b035666158e5a020f02676e)
+-   Fix unmaintained versions (074358229cd965ae654780c0c7d9b418161778c8)
+-   Improved preview tags (f06bb97f77dbff829a46deef572e3049a06feaca)
+-   New pre-release pipeline (7f2c95702865b44a82739df5b7eda07ed2e8bdac)
+-   Only create development release on-demand (7cff99e538bfa1f80640a212c68bca371a7141e2)
+-   Override release tag (71306f3bb8b0cd6ec474b27efb87c5407ed2e691)
+-   Publish Devcontainer (d890b6e2bdecdc56a4dcc9213fef04bef0cef04e)
+-   Publish into beta.9 distribution (25b03d6884946a5dd27e53210415dc8448fadbae)
+-   Publish minified scripts (551060a543b621d13d6970c3ecb3ca33bacb0589)
+-   Push containers (f3305b3da8df22af924beb3536e6075ac8a5d49f)
+-   Rebuild nightly, add more containers (c3bc3316f30f92c076d23f3b84c83314916465bc)
+-   Reduce active workflows (5c3a80fc9a90aafe81faea9f85d0577b9f5a4d7b)
+-   Reduce build complexity for OCI (061baa6a1bfe957aad4cdd8255f714b3c86873cd)
+-   Reduce cache time for unstable builds (bbc9e71e94d3285aa063cf867d1deadb9a58bd6d)
+-   Release experiment (d832c337493edc73602e2f2854fc6baaeb5e0ed6)
+-   Release info not generated nightly (dc0ac5c876ac200abe536505a9e7e23ee1f503bd)
+-   Remove redundant attestation (f17f5b7ff0765d0c6c4b68cd4a2b459305e23bb9)
+-   Remove SBOMs (8d8b6642c6597244031d645b6ac5fd500a431a2b)
+-   Remove useless CodeQL BS (d730bf94f1edbeb9346470aad9cd5c3a22ff2d50)
+-   Skip QA for Renovate PR (0545d9d8647dfcf8dffa62c3986f4da1c05fc500)
+-   Sync Crowdin on-demand (354a36db0d28298252b01a3ff64802bb1a252194)
+-   Try attestation (e4e75550224f4ac82af202f3d75fb11b85e076f2)
+-   Try external label manager (73319d95a5306d33def2a399c7c89efd1c454eeb)
+-   Try upgrading devDeps less often (1020145921a5161fc53265ba6b236b3c2c1dbeff)
+-   Update release contents (06a8dcbf90d4d2047e820281f5bde9f91554bb0d)
+-   Update validation (e20d9cee603a500363d560c5e15042ed8a0da000)
+-   Upload `release-info.json` properly (bc8f6a3bf2763fd4f9af569fa4ff25f74ebbc855)
+-   Use new parameter names (0c64d3430d8fa1821c08ded6acda9703e243c488)
+-   Use tagged release (8d989a0c37603e9573b396f9f0edfb9a05ee5f04)
+-   Use upstream action (795e3af7c2b5244e4b334fc80a359f1bd19506fc)
+-   Use upstream commit validator (bd8c4e1c22ba5c960ac9c42c09248feaebf0eacf)
+-   Validate commit message first (9a229566441207b5a981fb9074fa2cc5c7b1925f)
+-   **i18n**: Add Crowdin pipeline (b484d65f6785c9de0230f51bc3fe976f1d770c9f)
+-   **i18n**: Fix missing permissions (6bdf5e60ba7cb06d91d1131c15098b617f107a7f)
+-   **i18n**: Fix pipeline not triggering checks (6f51a66230f5f91a5df0b913798523f8e04a9198)
+
+## Chores (15)
+
+-   Align container base images (24bc233de2572ffbae792bf9b23f0608f29d9370)
+-   Align Node typedef versions (7327f658fbf9899665195f5b4a59e9135715c0d9)
+-   Bump version v2.0.0-beta.9 (d2649c62c1bd008c1caf58539fd1ac615f7b5385)
+-   Don't maintain dependencies in `contrib` (f6b34ad2922ffdf5819f9eb3bb4d305aa1f9f797)
+-   Don't track changes to example savegames (3ec2e81748ae81bf0dbd9eb50a1dab236378b274)
+-   Fix prettier lint [#466](https://github.com/kitten-science/kitten-scientists/pull/466) (583d032b9d2e453d7f2cf1c2651d66066b033efc)
+-   Fix tsconfig again [#480](https://github.com/kitten-science/kitten-scientists/pull/480) (59625bcb071a0ddbcb5d009ad338f0e97793dbe0)
+-   gitattributes not set correctly (4806698335312ef6cc5b72f8c7d3e15f8e93fc87)
+-   Remove redundant dependency `uuid` (84b46c801b522cd54c1991c50c18da5ae8abe719)
+-   Update container build context (71cd74618afb777b47e34f32e66f01364b2f048b)
+-   Update Renovate preset (4449319466717dafff3bfc9763c2fc093a7e1093)
+-   **i18n**: Delete untranslated locales (67d3c489720ed451f2953f481b00da8611c74a9f)
+-   **i18n**: Update Crowdin configuration file (3a258e3d72b2dfee14bb72fa779efc5d705d769e)
+-   **i18n**: Update translation (570bf3ae0bd6ba84c7262992967772ab5c88c1b8)
+-   **i18n**: Update translations (67678857b114b42296ac12933acf9a4d15df3842)
+
+## Dependency Changes
+
+<details>
+<summary>Bug Fixes (25/+32 unlisted)</summary>
+
+-   **deps**: update dependency @actions/core to v1.11.0 [#686](https://github.com/kitten-science/kitten-scientists/pull/686) (87f3770f8dce377ceb45ddb6a9b78a4e78d57987)
+    <sup>1 similar commit not listed: 9450706fd4638b074c961d08aa7c8db4b35996b9</sup>
+-   **deps**: update dependency @actions/github to v6 [#364](https://github.com/kitten-science/kitten-scientists/pull/364) (22efb93a0e285029f8c7478b4794d6ec24ae291c)
+-   **deps**: update dependency @octokit/rest to v20.1.1 [#526](https://github.com/kitten-science/kitten-scientists/pull/526) (2d0aa2cf935c49d2eb00ddcb1f262db42002e48b)
+-   **deps**: update dependency @oliversalzburg/js-utils to v0.0.28 [#471](https://github.com/kitten-science/kitten-scientists/pull/471) (59cf18eef641220741f329e0ba079b43bb65e561)
+-   **deps**: update dependency @oliversalzburg/js-utils to v0.0.28-dev.57 [#455](https://github.com/kitten-science/kitten-scientists/pull/455) (c07f4b9f7a2315445f662f2c50837eeefb686b3b)
+-   **deps**: update dependency @oliversalzburg/js-utils to v0.0.29 [#527](https://github.com/kitten-science/kitten-scientists/pull/527) (df53cd88ff2d664601ccbf795f4deab54a6614eb)
+    <sup>12 similar commits not listed: afda6c4b4bfb45b3ad06ce18038084de82e1f237, 98024586cd9252cbdc77caff135f5d6e10fba43e, 7fc78860cd872a6563f09136c2db21bef7e56c35, b7ab8bb3c23b37788533396d0153cdc32ebadc9f, 8c4577422ca83facb82c6ab10b5c7fc1832b2c73, e1a1624b9b79f3502001b5d14360d97534ceca51, d9fb4e1de3fb5fb82883efbbe7b4fb14c7c8a0ac, 0f26bcc4b9e04baef456e1529074669e942521ac, 97ff165aae9c458033c7d516f7b3793799fe1756, 07ba21835c7e2a5ed82eef7c68fbbe3e790c4b07, 9e9091b9efcb300abab889b1a66a6a0252600f3c, df791f08c1342c83813c45c6c9b02c04e6c0b84c</sup>
+-   **deps**: update dependency @shoelace-style/shoelace to v2.13.1 [#470](https://github.com/kitten-science/kitten-scientists/pull/470) (a6d817d0f4f6219e61a5366dead908ab08e02be3)
+    <sup>3 similar commits not listed: 396da1b45d3e31c76f2c35bfe1245703ac01b964, 10e31d7d662fcf7854a67675cccd9a4ae0e39fe2, eca3ed4abbe35a89269307e3afae573fbe51b14e</sup>
+-   **deps**: update dependency ajv to v8.13.0 [#521](https://github.com/kitten-science/kitten-scientists/pull/521) (9cff101a1474a12399c1966574fee53a4014544a)
+    <sup>3 similar commits not listed: ab81a7aee3e246beccf364a4702c7f85ae7d342c, cf36aa0f35b5a43804a1ab181634b2750e1f1dff, 4380cb847c59a443816415d4702a114ea382ebe3</sup>
+-   **deps**: update dependency conventional-changelog-angular to v8 [#528](https://github.com/kitten-science/kitten-scientists/pull/528) (affadb9b7f1ae4d1b9c27bdae348a729c84e0231)
+-   **deps**: update dependency conventional-commits-parser to v6 [#529](https://github.com/kitten-science/kitten-scientists/pull/529) (f76e4bf8dd79f4b4eea63565ae2ed09410c5c2eb)
+-   **deps**: update dependency date-fns to v3.1.0 [#454](https://github.com/kitten-science/kitten-scientists/pull/454) (f7bd8fde726625c58dcc83dfd83deadc03a9f40c)
+    <sup>4 similar commits not listed: f4346247ba40b5a3dfc102fd26c4f926c9a8a5cd, 4e0a72384128b6b90fdab2625aed553bbe1f7efc, da0dc93f56056b1733ded0d5e8600881a025bfe3, 74da60468e74d08c867176a78c9d1e33e5d516ff</sup>
+-   **deps**: update dependency date-fns to v4 [#654](https://github.com/kitten-science/kitten-scientists/pull/654) (db76247d561dc082f24ae7f5a1013f0557222454)
+-   **deps**: update dependency date-fns to v4.1.0 [#658](https://github.com/kitten-science/kitten-scientists/pull/658) (201852e8f44b7ea27ec475b0a4f5ca9ba927c47d)
+-   **deps**: update dependency globby to v14.0.1 [#486](https://github.com/kitten-science/kitten-scientists/pull/486) (3a1af7594ed80fd5a3a950cf772fd3e5e04b29e2)
+-   **deps**: update dependency jsdom to v24.1.3 [#616](https://github.com/kitten-science/kitten-scientists/pull/616) (3fc8541343073ebbd9944f941fbfaa336c433d95)
+-   **deps**: update dependency jsdom to v25 [#618](https://github.com/kitten-science/kitten-scientists/pull/618) (58f26cffa0bef47cac0b3bb6c7b9001981dbda6e)
+-   **deps**: update dependency jsdom to v25.0.1 [#668](https://github.com/kitten-science/kitten-scientists/pull/668) (095b00e5c74cee1785ce8b7d9f69ebe1b69ad125)
+-   **deps**: update dependency koa-router to v13 [#642](https://github.com/kitten-science/kitten-scientists/pull/642) (d10a9113fc4b70e9fcbbbcdad78165389fce3f03)
+-   **deps**: update dependency lit to v3.1.1 [#459](https://github.com/kitten-science/kitten-scientists/pull/459) (73e37eb0c52c3d8978aa1a925736fa0dce50decc)
+-   **deps**: update dependency lit-html to v3.1.1 [#460](https://github.com/kitten-science/kitten-scientists/pull/460) (280128d802aabcfdcda0bec74bb8af704b243bb6)
+-   **deps**: update dependency semver to v7.6.0 [#482](https://github.com/kitten-science/kitten-scientists/pull/482) (24866fc15464646a3999e9488bcede7a2a58dde1)
+    <sup>2 similar commits not listed: e90e292e7153692e055207a8e27d5be3ed1abfd2, f513f730a9c96a121d6c4b57421fe67c09c3b2d6</sup>
+-   **deps**: update dependency tslib to v2.6.3 [#576](https://github.com/kitten-science/kitten-scientists/pull/576) (a7bb9b75f2caaa92ee3e3d1dddec4339bed5d94c)
+    <sup>4 similar commits not listed: 0e86cd3adfb0d6bea4e93aace66f54d5844a4311, e805c73fd93ff0e73c02b21b4eef8e3b4cdf0bf0, 2d11be48eda2d5b6a4bb7b8028e32cbd47b7bcc1, 2c64f27b454087feb07b97524556fe6485fe3dff</sup>
+-   **deps**: update dependency yaml to v2.4.1 [#496](https://github.com/kitten-science/kitten-scientists/pull/496) (c2107cbc71f3fd52368fc3dea16bc4d032488ca3)
+    <sup>1 similar commit not listed: 4d7abdd1461d4787e868a0fdc517c98a24a37cb0</sup>
+-   **deps**: update lit to v3.1.2 [#478](https://github.com/kitten-science/kitten-scientists/pull/478) (52892cd829f7888cde6acd9b76d3d252b1cdc374)
+    <sup>2 similar commits not listed: b6e1cdc7f4cc0fa17116a3364b090bb7812212da, 38a19dd91c422a8dd5b0ac18a11d94356078caaf</sup>
+-   **deps**: update octokit monorepo [#509](https://github.com/kitten-science/kitten-scientists/pull/509) (58ec49340a1510453c71cb4da30e30f150e71cac)
+</details>
+
+<details>
+<summary>Chores (98/+540 unlisted)</summary>
+
+-   **deps**: Bump express from 4.19.1 to 4.19.2 [#507](https://github.com/kitten-science/kitten-scientists/pull/507) (77d0ec16374df9769b6320fc4bf6219308e0079c)
+    <sup>1 similar commit not listed: b78d04380748dbbb4310dda4da7e6bbf5e3750cc</sup>
+-   **deps**: lock file maintenance [#453](https://github.com/kitten-science/kitten-scientists/pull/453) (4e4bb5fceb257444641e012f12b2e69c509a2581)
+    <sup>45 similar commits not listed: e03c425ba8df2a2cdf6ef2632b412e9c2638b91f, 266e35df8934814c02223ad91f0ec13e95af2cc1, 314602d08717247634ff65dca7d039a6f0931625, 3ae2d406d32be5eb38f7a425b9c55c983169464c, e88faa03dbed22127130879957fb9f69a9224a5c, f047993f99dfcff515cdd85db25eca2471c581f6, 402bbe0b117c24b800f449996fe36f9735b46c93, 091042d901e6219e1777ba6802a77df7f624846f, ccc9df167f437cb005b47b463a0ecd14b7a9d8bb, 630b777ae50b9142b9869423306ee962d27bc0fe, c6765ee8b1e3ea586376ae795734f695457547a9, e8ddfff563cae45494877ab18e88360a72827672, 30d808841c33055a81e6094930fefa9c047be532, c5211b26b1cc7f120dc00d87aac311769570f40a, 73301dc5b8020d98f09aa3caa1f42c09e3a88c44, 89faad4cc0facf8c7d483e3a49e4af890626bcb3, 58ed08c5a5fbc2a2c6d434fd913368e7b08b53aa, 911f5a428a739afab881a32e19e20952bdf3718a, 3fb44a8ed6c6ddd0c9826c1552a2d74dab2f63f2, b349f172aaffd5679827899c86c3cf56297a60b2, 8533e936b4b45478d2fb345dcf1196fe569c452d, 333d01009a9bd3f1c88ec03fa6b04d12764ae613, ed1535a240233016218184233c2f1b89b4ec1128, c8b246ced5901010925199058581c6e9112885e4, aa1bf129005920c6ac9b2a3f55d369685da9807e, cc98b0e27c201dd23edb528dff4e3d0e94e48a06, 18731d6379850e5d3d3730c0371110fa698f6bd0, 7d37c74b85123e48b2b0f50495bbe6365f498b50, e0888c987055263569ae3e08ee61f6a3c85a910f, 329ef332f06ecf1121b23d6def3be73c7b237757, 10a7b827872ba055912a539fafbed9028cc74779, 11275e1e3fd8edb0cbdabe60a83acc35e01d6714, 03f810ffad19f42dd30a3cd027b7aa6d0b714a24, 439f9cf3ff3f70eda4401795f1872d8ed9f8c811, 0e688faa1a714972deeb392591a977cb59e4cc57, fe79f2d5b6d559af9a961c1c7e5f835d8c3a5cff, f2481852a405351fb72295346b0dd4f607eef115, bcd1a5a8bf483be2eb691f0a7e0e6c53efa2acbd, 8be0dc9c153bfbf631b555006267c80aa3ec7dfa, 91471219c6c1a712e0a40118f3750aeb77b6631b, 31a34af8d8750a690fb74afeb6103721314e0b4e, 0f16e4795e9cdbdcded95a066c8d61395d5a9e5f, 169e3e68b83515702322f9f432557ae3f2e9a354, 9e18a9f80deb67a9edc4c52212c7c05a3876a521, 8a06a5edce390d663329aa743b38fc11876018c2</sup>
+-   **deps**: lock file maintenance (#783) [#783](https://github.com/kitten-science/kitten-scientists/pull/783) (930c77775d9e1e01bc2fb1b2d88e975c992e6d6d)
+    <sup>7 similar commits not listed: f739b98206a884d526a890a3c91e1ae7691d2385, 567d6fd96cb2f7cbe78cfdb0f4828eeebc1b13f7, 612b5a1cce7a9c11f524a9404a4d4e31cc497dd2, 4880dfc7004721892c4fd4b0b57ea7a26aa53338, acecc45e791bdbb90eec6867eab779beb23b98c4, 35b24ed5b60c1b2a36b7b0381b3ad961d94b8265, 8c079a36828c96deb1d39fc9ef52b00861a745c5</sup>
+-   **deps**: pin actions/attest-sbom action to aaa2d0a [#571](https://github.com/kitten-science/kitten-scientists/pull/571) (8ceff2bf80c89bf0d3296fa9f50130ddbd79055e)
+-   **deps**: pin dependencies (9f0d45b35b09035328440af93f66b54cab766508)
+    <sup>1 similar commit not listed: 8d2fa730933cb6ed94507b4df3c52e1e2076cd3f</sup>
+-   **deps**: pin docker.io/library/node docker tag to 54b7a9a (7979110c8918b549be8037651eeccbcc0b37a98e)
+-   **deps**: pin oliversalzburg/action-automatic-semantic-releases action to 950f324 [#554](https://github.com/kitten-science/kitten-scientists/pull/554) (b2d1641384f4bf5589f91b436ba8ae1de8585ecc)
+-   **deps**: pin oliversalzburg/action-commit-validator action to d2d4feb [#553](https://github.com/kitten-science/kitten-scientists/pull/553) (900b385c400c2d73bd2835bef6f52f69b4991e4a)
+-   **deps**: update actions/attest-build-provenance action to v1.1.2 [#568](https://github.com/kitten-science/kitten-scientists/pull/568) (67b86997c73474d972d3c383baf678a561598279)
+-   **deps**: update actions/attest-sbom digest to 3d6693d (5b938a793350e4a01dbb39c72f826a3ddb34b135)
+    <sup>6 similar commits not listed: 90870e459318f3076bae9a31bc035f19d94491b9, 2ee7861d6de489591b2e1012f248864a80728d5f, daf7b9bf7b18a5fae95df6ddf1f409f4559ba8b1, 8b053d3c2f9942199218049b7af65c3c741e0e1e, 653047660ae3017681e1dc79eec9acb991e2d88c, 80a45329c18fb24bbe8427eaad3741b55d9c3d65</sup>
+-   **deps**: update actions/cache digest to 1bd1e32 (11b8a1746feed76f309cbf9b791bd7734ebc29a4)
+    <sup>3 similar commits not listed: d45292e90908386dfa597688b157b16be5aa5cdb, f938b9fc2d52da543a6fde64b9c591dedc015ddc, af79dd58e8fcf967aabb96a16bc023251c0ac033</sup>
+-   **deps**: update actions/checkout digest to 0ad4b8f (dad4b54e6a0defc3aa71a2e8772741e6bf045434)
+    <sup>7 similar commits not listed: 9d36f00762ddbc59f63caebd03643c592722fdab, de0ae75d56be0abc2e8c64a5dc1b9d534cfc50a5, c5c4299ce512139a2e61aee24f85451ad9a9b4dc, 3ef93c99dc1eac63e6a45b1b7bf03c919912158b, ffd138f4bc270e400042fca4e34e78ceef5415de, ea46c044dea3cb30b544d925b9f061d12ecb5b7c, cbb9fb93d5cfe8ecb96895e1230f280c5a7e2980</sup>
+-   **deps**: update actions/setup-node digest to 0a44ba7 [#661](https://github.com/kitten-science/kitten-scientists/pull/661) (fe337a0715b91d70b980b8720b406f9e52ab349d)
+    <sup>3 similar commits not listed: f2d53ff2720ec1280738d4d2453da6534786b363, f2b8d158d3967dfd1dd2ee098a6d86805fc3cf47, c745ca69f93e86ddf8254cf416a97626a90ca614</sup>
+-   **deps**: update actions/setup-python digest to 0b93645 [#753](https://github.com/kitten-science/kitten-scientists/pull/753) (7207c62f11cab9a64073e828368d129aae65ccf5)
+    <sup>3 similar commits not listed: b2f631f8d4b5c60a5af71a8c6a31b241af06e3d2, 63741b12d4434585f7cc8a0becb479225c7f6214, d534193779cf019b3f2b747a7b6deaf1ebd3c064</sup>
+-   **deps**: update anchore/sbom-action digest to 1ca97d9 [#742](https://github.com/kitten-science/kitten-scientists/pull/742) (ca11ab63896da0917f1e00fe7769c2ea1a4de287)
+    <sup>5 similar commits not listed: 55d3a29c41baf76482a4260eb5b35db4213471ff, 1cc884a7236f1d3b11f5f7dd5f6aef4f33a2e1ec, 005936e8ae6cc1c0432051af53eeb602be308ab0, 673c83c07496970f03b3ce5308b1fde46dd6a143, 2870423e5aaaa6ac3b2494361d54a03c0a4b1500</sup>
+-   **deps**: update aws-actions/configure-aws-credentials action to v4.0.2 [#483](https://github.com/kitten-science/kitten-scientists/pull/483) (e41534176a710dbbb32505e027a2079764083e66)
+-   **deps**: update babel monorepo to v7.24.1 (6fbded9517e1ba6041bd7d2551cc9d6dc3d876d6)
+    <sup>2 similar commits not listed: 94e2a34110d541e83543c8150f3dd548d8da0476, f6164458b10a6e43de36b3ed3219bf3261323b49</sup>
+-   **deps**: update crowdin/github-action digest to 2d540f1 [#759](https://github.com/kitten-science/kitten-scientists/pull/759) (9739869fbf04117a9e87038264719589d5c6852c)
+    <sup>1 similar commit not listed: c42569489b5fbc42c567dfdaa4649428f9212d70</sup>
+-   **deps**: update dependency @babel/core to v7.23.7 (2a8728fb962052d9201ddab64691c5d5a8c18e66)
+    <sup>5 similar commits not listed: 664b0be206156dd69006e299d4597e6d647ef9ca, b39ddd90750946297569218b784fe7777a595861, 0767f92afdba182fccfd030c1f71890ceef4da51, d24056d31f87feb64828e59c4c2cb9dc316bcf42, 8df42c903a9fb3c2176ad76f63922871a2b6cd92</sup>
+-   **deps**: update dependency @babel/eslint-parser to v7.23.10 (79f3fdd8ff00cc2180f8c829f6fff8a1635dc570)
+    <sup>2 similar commits not listed: 33bbfa8acaa556a42061cc29589043a2c1113e9c, 5c071e51e1f801fb9425c91227eacd6743c49b59</sup>
+-   **deps**: update dependency @kie/mock-github to v2.0.1 (44ca5d1ac77fc141880c847bf059925c034f2e73)
+-   **deps**: update dependency @octokit/types to v12.5.0 (723555428814c8962ed62e6d7d7c60b04454f47a)
+    <sup>1 similar commit not listed: dee61f463961bcff67f0fc64e3171c035a781c52</sup>
+-   **deps**: update dependency @octokit/types to v13 (a1184a2e079401dd09dff191caba12a8f173a33b)
+-   **deps**: update dependency @octokit/types to v13.5.0 (425fecffc9f24e24a431d05fa8735047a77774a5)
+-   **deps**: update dependency @types/chai to v4.3.12 (aa4c6fd009b45125f1130b2cc584f26b0db28ea8)
+    <sup>8 similar commits not listed: debc188183743236d703e347a247c3de18490cbc, 3470d8ca75f598f618f28ecd57947db1015c859a, d0a311a4f8ce053c266017886a4ce88eecc8f5aa, c34a67a7da5727d2e51b5cf5fb2242b3def3f851, 5c6f5dad616c8ac01d98ef149b8646ae72013894, 8bd9ab7b046b7e27af166753797afcac92607a52, 365e023813fb2a2b1002ecaaae185d3a5f4faca2, e2de8e8c181e169cc1377e70df8520dbfd55f349</sup>
+-   **deps**: update dependency @types/chai to v5 [#673](https://github.com/kitten-science/kitten-scientists/pull/673) (cd96a9ee8d6e1b64652768bb0c024ffcc488c780)
+-   **deps**: update dependency @types/chai to v5.0.1 [#762](https://github.com/kitten-science/kitten-scientists/pull/762) (4e3fd50e7e808a9c478fa735a10bdb873cff28b8)
+-   **deps**: update dependency @types/conventional-commits-parser to v5 (93e2ec9fd2e28b64acc637f66e614a56fa23bf42)
+-   **deps**: update dependency @types/eslint to v8.56.1 (79207e9ddb10d9ebf2cf0a6353f92969a9b993d8)
+    <sup>8 similar commits not listed: fceff5d115338cb8a5f2b5272b74e62d9dd8c246, acd9d254d31b27317e46e85086f0ee338bf0a211, ceb1023a9d5e46a573715b18df3e0f57921fec1b, d4122fd13259e60d43c320c2fce6bde1c96630df, f3a4f5a53dd8841741c823a0ad914ce35c313868, bfbc39617c5a8dff3c0a840e7291c4e9370e33d5, b9ddc557606a195a2363f0a297eb13ca16c714bc, bdbf1e057615409a5437171161cdc8bdc3ee2f74</sup>
+-   **deps**: update dependency @types/eslint to v9 (68b4f7c3dba9c70f1cb60cb691b15271e94c52d8)
+-   **deps**: update dependency @types/eslint to v9.6.1 (22beafc874017d4a7f6f708ad853c89a0882187b)
+-   **deps**: update dependency @types/jquery to v3.5.30 [#538](https://github.com/kitten-science/kitten-scientists/pull/538) (f0df9b2c0db727de57cd54791d621fcc84ea17b7)
+    <sup>2 similar commits not listed: 3a42c7b9581caa5e1e0b053521d04856c3c83b55, 2db39ba5d24ee6f63f93197096bf5b82840759a1</sup>
+-   **deps**: update dependency @types/mocha to v10.0.10 (b9225fb16c3684884b266fde6c6bad2257cbd4be)
+    <sup>3 similar commits not listed: 8bd26591ef62274d01f3bb64838142d11dd293fc, ffeb51fee2dab35e64f13079aea42994751296bf, dc7d1ceba71068b31872eaa92176c88011d438bd</sup>
+-   **deps**: update dependency @types/node to v20.10.6 (788995eafe2d5c3c10e0432b2ec2fb686d2c0861)
+    <sup>78 similar commits not listed: dafe1486c68af7f4de868ea32261c141e8472154, 45ea5672b6645d7933cce89dd97cd9e446d19153, 6aff264ceeac0b0e421489ce29e8f77c5c7e07bc, 89da29f3c2668d8d92aa1ce6a202fa32311ed4b5, d2b44f5c7f701aa6191a38e572a78882eb2e95aa, d22c6374f83f7e6989198666923a1eb671f6e2a9, 1c96fd202048318438dfe917d2d6da399cfe6af2, 6efa27af661cab5bae2e80e89d68535d3d26bf0e, e2040650e4505bce51c69840bff131918d2b8ecb, de2fc3fc583f89ddfb46f82edf8d857bf510b80a, 0d099dcac1c336290029d772d123d6792bc02dbe, b3f6c219f07004251cd4343256710272821ba9df, aef0476d5560723fde429f903dc91f57c31d8764, 5fc50100bb6a8c5dc5f4dbae550fc7602403214a, 531921f2f5b4f71c4e8b8608a6522c56b3175629, 02aee714d2a4e1950d7f4cea4837e9343000f481, 3aa97431e6cb4455c1ec775cd358ae26ca73bfab, fbbd806b426dd28ee63c422bc00c684c9265dbe3, 02e8d45206d0f21246c144d5c5fb1670e4df7a8f, 0c0b3a7071f55759e43de06f9a65c714c7d34505, e55e48fdec784ef95aa5931bc90edc473ac58275, b24da12011be10a1242fd76856421acf3cf39813, 8a268eee32505ec8654f36fb7441ac24ecde8989, e42c35e09cc62fcf5e403ca74696328cc28dd2be, 16fa2f6d5d52e57b922c91feef4e32fe928a7f75, d37113814d8a3aec1cec60ed2cc2dcff4f2a9191, 60580708af9524e9d564c13dec72953144cb6b3f, 7b66115de67462d83c72891242d43f52d5ff96c3, bc9f74dafde8228a4d4c9b2dd335b898add17f7e, 1780bdb68390d831292fcb2acb6657bb31226c57, e923d0c02cf93d8736c7819a378291f0c30c470f, c164c81362fa2359a85bdc383d03b1259b73382e, 2c90118904c01bc59bcc7722cc9082e9e39beb04, 4b2e89b3c0cb7d42acdb419cea6af2cf6e3be7c7, a344c93f25031b3859527aa380742e1c70c4f607, fbac42caa3d540ebce0e7b1db4a33d04622c5347, 7302b2cbab09a5483aae36d956a0a09c4e226375, 7db2782c04198c6b42bc660212dee9e83c209afd, a14c424b8c81875b4b6b0748bc5f5c1930c572d7, 3328dc40d284fd43587da1599d0d9c9af57bf057, c082c35bf3941670fa49cb06b5db15420cf5c59e, eb14a082c1110f8629ae2db01547cb561fa78098, 852f32bc796122088a7f42597c360ef18041cca7, 9f42a38951ae9ef5ccbb38283b4f49e676db5351, d130c4e9d461aa40d17eb93b8e94a48cdfb756c1, 10e760d7441510662c2fe42742dd80a4f1ea1ed0, 634b35d8f0ed9175615a78eedf2c300ff929e508, 3d50aebdc2e610af89d5125870f77c9be1e65c49, bc52d579b43e47857afcafc389e5d8c50ec756c8, 866b85222ddb4f9fa8874aef9d790a78b75126c2, 0ce41a6c880cd56bec54646ed2e72a1a70435a95, 62216c0c4fe97fc13d494e1e71d8bf716bc63bff, c0e62ce14d050b9947850cc4c36f567b6a750a2f, 914c94cf8a5a4b250b4b8319a810b8281443370b, 07762cc4a26dcd5de93d2fd0d061774c0f0813ec, 34e20e84c9ee5be126158118fd55902be323bc1f, bfd0a713f234e3217427e086d8698da3e7ce709f, a266f31379a717ab30464066c50c2993c66bef0c, 0418c849cd6e5b2dc54d18c80bf64c25490f170a, d0873f0c250ee6d4e838fa82c9de759a98af6ac2, bea580b1a9b928fc625f0a3dc62bebfa98446f4a, de62e87097b262d8709d69233679f1bb3197e43d, 28405aa81ab2e0bd189423efe3f3722cb276ba26, 337addf04884b00321bed7f3c7f2fa4b7ae4ba1b, d5d0fe61f16ac4e6c8df07e5e6a6ac3d30d2c595, 4c209a0c2b541136f50b987139750dc658e56332, b92131e451a4cfe6076fbbb18396dee07285112b, 1df22622b70a9bff9fa7b446bcb0667e8523772a, a87bdb5bed64eff4c15cdc8c3d4c81e9138991c2, 16857b67837151f65658bfe250bd68f27c71201f, 1ded86338ec68640a7cfef05242909dc145fa35f, d1323188cb5d0e9af932a0ccd0444f338147f416, e059bf854e1489a32886b24dd19ad68090c2ed56, e6f461c7ae424cbec12fabe7385b5f9e2fa55212, a355302aa64135b12f15d1082441dc5d7be25901, 2672b7fbab903a59d45006ee443da21f1cb16f1e, a4ef976f1444c1fa2dd15f7651077c568c2453d3, 09a37982b38b8f3747c50bf3810586a0d2507e7b</sup>
+-   **deps**: update dependency @types/semver to v7.5.7 (8e024e28ec3e498a744bcf941eb82ce220b0916d)
+    <sup>1 similar commit not listed: df1d2c89135946a82ed2a1a135cfe762fd5da789</sup>
+-   **deps**: update dependency @types/web to v0.0.131 (087f97db8a313a9f39f73804c072e5f549691cdb)
+    <sup>56 similar commits not listed: 23377b57128a4bb9ae85d10251235fe7494f3d5b, 13b9fc0ebe7390fa59ad369b625665eac91f3cdf, 999c43313df1df069445b00e6d39840aa5a35d3a, 6a9ca0f4a9a7e9523da960f8296f65f8fd75f28e, 67ceee85de0535205193574eb9e4737e57b71e9b, 4a0bb636a51e234da2d2144924b1d9c441774ca8, 2a5c9e178c900942553f455671f2f9fa9de5b2dd, f5ebaad72f9830675cc705d4f56e6d23d79b49c8, b12ecd73176a5a19d10bc6447fa341605178b7a3, 276813c70e0f8a12b74ec34095ac2948ae0705c4, cdbf7985469670cc8950f164303e143a88f40bc9, 2e1b027eec06f54bb937f9776dc1f7b18397e134, 4d7f05981a93783f6b3b842e515012b49ba13b54, 27014f3e8c2b00629b678a9c92925686a9f743dc, d40c6ffd5f0a72965af8955cdc399d88a80f3739, bf81794ec9318c64bb9572d631aa765985dc98ca, e9a83ca03831f95c09bb33272580df3bce01adbe, d45f3fc8d9daca226dc12c0ca234a1e495f56f36, 4e8c19ffde92ddc0d15a29968fbacac60928fd50, 713878f057a5b00f4fc2d347aec21eafdf037095, ae07b5b7f2c56d1026fb2dcd1f8713c229989122, eb794f7b9d9724770e1e68209ef2fd897eb51a8a, 686d83b5bb66914a24012aa99870d2c20c543fef, e5ef2a810109c48a6827ddc68f5e245d54895ab3, 1488c8d0b8bdb07e97a04ca142caad6dbd293ed4, c1b5d62d10b7a9933020b9dccf34c181da70511e, e23ff553685bb9784b4c588e56a31b5064bafe6b, 67b988b7dd154ef36c2bc7e63e445cea7b828d58, c18a9025ff9d53328b842196b9411db45b032729, 5b6853abfad2021c6589fe7d562ab5cac6a61264, c70ab255133765199c8ebf947211833390f28245, 71502131b61aeb70eaf0813b35a0e06c38c0fcc9, d90540e223b4193c57361fb600d3d2a83d11fbcd, afffca9a76cf5c34a655f095cb4652be0438a98d, dd3b45685190bb99efe6a20ebbb6a145712a547f, 0f2eac859811b8bb9d46f85400df7c964958a1b8, b74fb0ecdf0b9b981fe31bf967b03d574d564897, b3b7a6e7379c514497a79edf5711562516a579da, 07fbbf4483fc1abb3510f8890e269dc47b180f65, 3b843eb9084817d8c2a4ecd1574f88f82655f43e, 1bbc47a10e20d7abe16b083e14b9b9302dbf3faf, c09a27f712e178252836221af4dd3f7d97f3fc10, 438316bee39e6c21d53ef2f42406f2c2cece90d7, ceb7efb6c66169118e15f6de5988091fafe05481, 98e6f828c0e873f9e7cc6e454011cea6d86e2b0b, 3afc3c4ceb3ad5962620d12d287c4eeed4f09130, d58dfb58205100b6338c14760cc206a84fe4356d, 42796d1379afc8ee91184209fa3124e4a386247a, 9a8c5a91d1318cadfcaeba5036360c16e3c80b9f, a7d78c2107fdd843fb32655922906f647a9417d7, aa99baaf3b46e87e330b61804e1bbf67a7265c3b, 6a1fb7380acabec6e44f020e361f6eeadec8b5c6, 1808ccc700e8d501f482d5417a5c7e435247bbf7, ffbb0b066af5adacdb2a2b63964cd0607903f9aa, 4bbf5f4f519b67f583e24f23d912006c51871e27, f1653efdd0297cd9f5101b1d11ca27b1c297b742</sup>
+-   **deps**: update dependency @types/ws to v8.5.13 [#773](https://github.com/kitten-science/kitten-scientists/pull/773) (62512705817111a9a4fe8355fe7eabd8fec25232)
+-   **deps**: update dependency c8 to v10 (479ad0db1be4ddc2799ebfc270f201a2743d1d57)
+-   **deps**: update dependency c8 to v10.1.0 (25184a5f960fd21a4654e5b88b82163fff185b72)
+    <sup>2 similar commits not listed: 76bcba1c121313480e022322e0626562fa9488bc, 25b51b0b86f6bc5fa9b6955cfbf3f5e3346935ac</sup>
+-   **deps**: update dependency c8 to v9 (04765f9d8fdd121cc830f38a4bab736e9668f56c)
+-   **deps**: update dependency c8 to v9.1.0 (947dd0fc550234f60db6b6b0324318758b25cea8)
+-   **deps**: update dependency chai to v5 (a6c35353edcc6b24e06a61da394729139657a812)
+-   **deps**: update dependency chai to v5.0.3 (714724fe3a92d981d698ab68b42931ac796468e5)
+    <sup>3 similar commits not listed: 38c90227b023bc0d6ec2c674323146b53946d487, 96b34304409f9fe7c21a8be8ac67b23380884250, 9bd7238104134e44e1b72e84c095a37bbaf3d53b</sup>
+-   **deps**: update dependency esbuild to v0.23.1 (691237d2dc4a50ad65ce3b5c163f711b9f711302)
+    <sup>1 similar commit not listed: a1064c89056df7387428bd9fd514ab848a9d2375</sup>
+-   **deps**: update dependency esbuild to v0.24.1 (#848) [#848](https://github.com/kitten-science/kitten-scientists/pull/848) (e61922aef9f8ce0dea31ddef05fddc832aa26c8c)
+-   **deps**: update dependency esbuild to v0.24.2 (10ad065766fde73e606de4b2ffbaf16b81f079c7)
+-   **deps**: update dependency eslint to v8.57.0 (aa20b878b2a0fae1f909c821b1cc3ed445d79db8)
+-   **deps**: update dependency eslint-plugin-jsdoc to v46.10.1 (d84ba19f0b907486a41a7fd8b6418eec77deb54d)
+-   **deps**: update dependency eslint-plugin-jsdoc to v47 (02a48cbb7eda8745af01a75bf879f5eac86702e5)
+-   **deps**: update dependency eslint-plugin-jsdoc to v47.0.2 (65e62f18a610a5240f6216d17034f7c771e3e337)
+-   **deps**: update dependency eslint-plugin-jsdoc to v48 (d8812b6d8aa164a8eabc282bad2b3f01b1b44d92)
+-   **deps**: update dependency eslint-plugin-jsdoc to v48.0.3 (48c6164e753e26b3c90e44ebc61ed26c953d3e33)
+    <sup>12 similar commits not listed: 5505efe26690e0a6e318e47f2df62a4d40fcc885, 244a1d8bc22c2c28beeb8ec90ee9c318e65cbb67, 540f3e8f4acbecfeca83cf5d888c4500fd4c2df6, 73a33154fded153dffbd0df53a0a3c922f2f98ae, 1018b3076a6c32e04f8af016e7c59695e98c7d1a, 6ab0b80ae27ae7dabe34adec5861e94e085cd822, cbdff8f65e3439d31ed65d8caaeb619c7741124a, e5f5c4901c829d990956e9dd358ff012db9684b6, 48e1c2c02f63cd5539a7d01c5a81e42c178f447f, e344af79e02a4cbf20aab02a90435e57ccc6865c, 29b1adf564c47a997b093eb3862d89c119016b4b, b2cb72b0904ea978e7a00e26c99b0c34fe7caa01</sup>
+-   **deps**: update dependency json-schema-to-ts to v3.0.1 (f18c4d644129e5abb1208b4e0a78ae03b2912d2c)
+    <sup>1 similar commit not listed: f159c6872869dd68707c3f9813a8f38096206f62</sup>
+-   **deps**: update dependency lint-staged to v15.2.1 (c2cc60176ef8a7f4e8d08588728637d85f6e018a)
+    <sup>9 similar commits not listed: 8138db487b3897d5b9e84352c505bf8d3f586b76, 23e57260fda1beb56cb1a6d9793fbb5d0b98bcf3, 3532ec24d6f45b2d8876fb1bf4d20f7fef217c65, 1724ed59250423f50d21d1a5b5363092490835cd, dbbd897779b927a877e5fdaf192f0121ee03d0a8, 0bb0814b13009712a54cff67089f0c8920118bf8, 2e10cc845f066da0fdcb3eebc9f0dd04dce72b33, afa90cbb271dd8818a13c3064e6938a2e90a4ed4, 4f99ebbaeddfbadf180c5e32af5ae48b62d9394a</sup>
+-   **deps**: update dependency mkdocs-git-revision-date-localized-plugin to v1.3.0 [#746](https://github.com/kitten-science/kitten-scientists/pull/746) (b2900dfea35aa079f66dbb5ed601b0abe3254eeb)
+-   **deps**: update dependency mkdocs-material to v9.5.40 [#712](https://github.com/kitten-science/kitten-scientists/pull/712) (1ce8c373bf2bddd87faa32ab06b0286f767c238e)
+    <sup>8 similar commits not listed: 520d47cc7a92913a419574689600d8d45fc92d44, eaf59b9064bffbcda2447132bacddaeaa90b34a2, 6e74d2caeed4e69636c5a5a8ba2957ca13ddf8ae, d17468c1abd8bb30f4d2e63e33fa3cde150a7f21, 645ed0eb6913522f967eb161c22dc2cd2cfb80c3, 72235cad21aa7eed60ec5c9294e4b81f64196872, 0291df32278c8c6ab63aa720bb730f82dfa386cf, 2709437c2e44c5bc0a4783735a71b3d5aadf10f8</sup>
+-   **deps**: update dependency mocha to v10.3.0 (75ac1031a98959f314b7c374be02eeac8babf7a7)
+    <sup>8 similar commits not listed: be1a0f59b6e86149353918b676092c0fb78cf5b4, a25e124f12071761e42b9494ef808e29c84f8aef, 5c86c9d93e67081ddd4b5460c9029cb848526af1, 0f44707d16d57fe5ec5999c08d3ab84ac12d1dc6, cca7db5b8825f7de5d3fa0e18879142f10bd4e42, ee223f5ed73fb95e990411e346ec148d63ea8def, e0c18f8192df9aa7b4ec2174fa2d2874a8bfed35, f34c3ec3a2145c477556c2854f48185b2acb81aa</sup>
+-   **deps**: update dependency mocha to v11 (eda2b192edbb4b4e133d0fbf3c8e6be54b92be07)
+-   **deps**: update dependency node to v20.18.0 [#691](https://github.com/kitten-science/kitten-scientists/pull/691) (d74219929fc892a48dfab1b04b3273376b599db4)
+-   **deps**: update dependency node to v22 [#766](https://github.com/kitten-science/kitten-scientists/pull/766) (249bf2e65970b1c671bb889c6c4961b00abf716b)
+-   **deps**: update dependency node to v22.8.0 [#628](https://github.com/kitten-science/kitten-scientists/pull/628) (d6d1f8a851c6d545ca2a36f87b627e2ec961cff4)
+-   **deps**: update dependency node-scripts-docs to v1.0.3 (7cd140f2aaba420e3143fd678bdaa9241ab50492)
+    <sup>1 similar commit not listed: 7b6563b1483f2f45169b5af119764b08d72ee794</sup>
+-   **deps**: update dependency prettier to v3.2.1 (7f93de34728a8f2083d3c87cb1bc1da9cd3e8fd9)
+    <sup>6 similar commits not listed: 8ac06ed9c673fbfadee338a01fad9ed50471803e, 9f6331cfbbab433e45ad853d7fd8b6abdff11fb5, 915f5d82937c173d2535b8367985726df10c7694, df29861849554ba8d71bd211e7fd6539d94280c4, 6bc07d8d4b8ce35831068995b47368cf1d83f10f, 14268019dc3d9280d97f64b931735a9c6d788d01</sup>
+-   **deps**: update dependency prettier-plugin-organize-imports to v4 (afb3a83fe9743f007092ca5b287b1863b715f633)
+-   **deps**: update dependency prettier-plugin-organize-imports to v4.1.0 [#664](https://github.com/kitten-science/kitten-scientists/pull/664) (2b0d2f82a07ffe12c604bef7b1d043fb0ad56d5f)
+-   **deps**: update dependency python to v3.12.7 [#688](https://github.com/kitten-science/kitten-scientists/pull/688) (7d396e0abcec21b5d7149d27e2985dbb24a06b1a)
+    <sup>2 similar commits not listed: db695619ba9ea5654971be99c58ed152582cfb71, bc6f799b2d50f1784735c2b779141085b27fdafb</sup>
+-   **deps**: update dependency typescript to v5.4.2 (01e555e1b4a7dc16c41e651874c85827d35f3386)
+    <sup>9 similar commits not listed: 8e06454ed652e06bc3ea080addbe629dca495b8d, b34ee84ca4ad580473b8038cd5d2e240c172f6be, afbe0534aa026f3b677e72c9b266457322f46839, 5132a66632ddcf0e6aac81262d743f70ba66af08, df4aaaca7789e792e2ae954e01338883e275f891, c62309a488b3fedcdcc7b985ab00e9bb8c579f89, c6d5529bb07ca378eff0b2adcc82c37e2dd45750, 7ad3e5c9456eb0dec47cd8c0430de128d5e6a225, 3c4cfb37fa7e2d74474dcafeb582b2cabea116c6</sup>
+-   **deps**: update dependency typescript-eslint to v8.0.0-alpha.33 (b1e0952bd8f8f6f8e0d884c73d8829461a4848d8)
+    <sup>16 similar commits not listed: 630ea4df80514562784f16a77f15fb6872d00771, 40d34ea6b36dad705bec41ad4d69d7bddc7e9542, 23d0fb1fa5fa2c4b0661552e48666ba0fa197e31, 8d041d076db8f50fcab9bcc30fdb34604467598f, 1c14e7823f8e0b77105a68e9d8044c60b4d357f7, 08704d7ffcac68f32c710ce9584c9ce42e40b086, ce0e787d0cc2b6c175584dc15309b66bcd88c7fb, 5957e210a01c8ae89966cb372cea0cc44dcf827f, 771814532e9846cc7e24db2a7cb5bcc2a23c61af, 7c7bf27447da386f499f037b861992390efe2838, cb3ce0b28d0884376e3920ec6077c38df5aed9a4, 1661f1e3a2e12e34eb8e7f95def6bfed644c8595, b51082cb90a9dd156b1f9468cc8ecf65ee9c668e, 90aef51bc7fd40e102905255ddea151fdfef3895, c7256dba621ed2a471c7a9e506ffc5c19ad9e446, b284503651dec863cf29f826487028c271ad9f70</sup>
+-   **deps**: update dependency typescript-eslint to v8.10.0 [#727](https://github.com/kitten-science/kitten-scientists/pull/727) (944b04c50cd5a200f4fd149882b027ef8ad51303)
+    <sup>13 similar commits not listed: d17ecd476ce7d31a51677eb6e47cefd063eac072, a2210143f9cef40b8af7f6395e615ad38b6590f2, bfe88be1fb115ed539dbaf4a8c3b0ffebbf1bf28, 894f8434898ce7ca4dfb3e0d95b79909fe7c594e, b7d065760f6861d25463802f7129f206fe4efece, e0a0c429d880b51048705e451b8b6ed961d6c120, 1f941de8804c63b7ef0577f422015222ad6a31d4, f845d58e895cb5641e77722cd86ea6834ad58de8, 08b8a34484aa3c1650b6714ff6c237e69fea88c3, d6af5fb28f8776afcf307d40093a4642db67fc4c, 885613b5f7ed05a587a9601b9121497f6dfc4876, af65245ae9a15cd041954f0474111a4bbc5fd675, 3a6a714303610184149059c2117845d5a9900ebf</sup>
+-   **deps**: update dependency ubuntu to v24 [#678](https://github.com/kitten-science/kitten-scientists/pull/678) (3e89c03377467950f1d3b5897a6bcc00ebab4f68)
+-   **deps**: update dependency vite to v5.0.11 (3ce8b2f9b72e68d4adddc45e7c7c31a2551df894)
+    <sup>38 similar commits not listed: 7f67146e90f70d020bc7c8d918f6c92d5b284b63, 9aeffa76a64e288dc63e7bf5a6601b2d0156cd48, 797b88ba103055b0087068ccce08f2eef205e95a, d2aaac81ca13a4b060dfa5a5636ff497401b0339, 7520367281a354e5b5637f321836ac2cfa778aa4, cfa95906b2a5d0d5b484a04db752f786f30f80e4, 5afe737db9251b5772d9e6473110eb888583cdc4, 54a8e230be772b0f073106a00855b4687f52cfb9, 2bea9dca0fcd8aca2bbb0fa80205577a68764783, cc8b8a4182f599f97b9f634c234281ae82c0f8c7, 06793e75ad9ec657856169e021f265c417853611, 7505e593bd830d91bf0cb1ed12a6dc8c4964eab9, 00a67b714b6d36acbaa637b64fc7621c945da366, 617c88635ae9b86d0244d8edab92c10d02955c94, 52582c9580b9adc086f307ddc741f5c429fd355b, cd0bc35c153557177c9006c1a56b56298d32df70, 13cc97435ef4ff6b143ed34ebb91037eb1dba4c0, 0d2ffb858c410756006f03ddd5cf1bf272c371a0, e9f663562109a0037d7e1c475d85946ac6d3da6b, d426cad45a1e16250fcba2eb96d747c37717e36e, bebb31fe29065bfd5818f837cb65f23db01977e2, 35ccd0a0b73fd83e7f8bda3665c62e74a9d43622, 71173864f081417eccb992d6cb72e4f7d0c8c5b8, 303bfadcfe4deddb1fb5154bb43334db3c46d407, 493d64aa2e934be5ccafda19cab6e0f100afdc80, 46bab20c85d4cc92f0d00c366b215738f585df2a, 66a1ebe75f439938c9f66d11462ef22dd17d32af, 458f571fea4fd9b34303030acbefca34fdb95626, 8ce27f1898e7f24c4c15e095f49edc35c331e149, d8407609cef212e234550d861c6c30cdff3437fb, 778d47f061ffa41fb5e56795c40579ac247877c3, 50b140c1b595657bf9ab0127c3e51e1d1d3535ca, 34625f4a24e6b11dadfbcc97b46ba5dc6ee22299, 4e5f8559a461a379a6a059953b7e464076f68695, 8cdf81a80f3b6e788250cf96083738522a9e42bf, 2bed7516e0556432c45c724be8684af1f7fd872d, 0319a4587a89e7ddc0ee3008f3d0b4cd500c262a, e3d0caf2eecb316aa24b14202260a74f073927ff</sup>
+-   **deps**: update dependency vite to v6 (c12cf48d9bbba3914af4ffb7e7ab86da57e85fd4)
+-   **deps**: update dependency vite to v6.0.1 (a9adc52878b6110a1c944d4abddc62af84f3c192)
+    <sup>4 similar commits not listed: d1c6851fa5e0dfa61f2cfc21ed14b7e7414fdfbc, 025d4fe5a5bd77a94897bac2b294b561876b2620, bfb6ac7dad4963146fca759ec2ee312905b3e251, e7028e604a16e97649adbc174dcb165fff225919</sup>
+-   **deps**: update dependency vite-plugin-html to v3.2.1 (d8e104fe4dd421ce352f171661d58fee3894243e)
+    <sup>1 similar commit not listed: a4a8fae86217d9327b3c768ffc6036e95ae4803d</sup>
+-   **deps**: update docker.io/library/node docker tag to v20.17.0 (8224089a034ba71363aee6ec00bd3b451ddaa472)
+    <sup>1 similar commit not listed: d2eb54920e0558321df26581fe06ade157f32d6c</sup>
+-   **deps**: update docker.io/library/node:20.15.1-bookworm docker digest to 6326b52 (229497782821a6ddc7f3cc0d6e361d43f672b06d)
+    <sup>2 similar commits not listed: 23bdbc956050f2016b11c2db15c21a8736d9815a, 3271c8f4da0b93031cb2e33c6306baf236e43956</sup>
+-   **deps**: update eslint (69bbd0d5947b886701468cf6ca058e9f6a7fe1ba)
+    <sup>8 similar commits not listed: 9d2386a47c12aa54dfd96fbf191dfc8925588474, 1db4d8fecbd9eba32394f3f331c606f128f3d2b4, 6df3ecfd2d42dcffed8b93b9f5d6d6fe8cf68d2b, 20ffdaa918928bd922595f007908af031e9ddece, 122c2936256928dc33431af975258d704c0420ca, 9cb8cd4bd9d472997a9f628f5af5dbd8687785af, bfaae4078aa4224e57a3032d6e6d56dbbc6ea477, bf212578a3219265d734373a9342c7d061d07e00</sup>
+-   **deps**: update eslint (#793) [#793](https://github.com/kitten-science/kitten-scientists/pull/793) (65e2c8b04b221a80a88567cf67ae09ad4b97d359)
+-   **deps**: update eslint to v6.16.0 (b8a4945664188dac66744fb42ac1759c7d382cda)
+    <sup>6 similar commits not listed: 7470e4acc7470094ba93200a5286420c98b09f81, a07ff4d017f4ec1a3d8294dd4d727f66240df5eb, 8ee1b13fb0f2da0ff205ecdbdc174c4decc12597, 2e4064228f31bd6c10b6301eac6cdbef0bcb630a, efcc3d889ce11fbe256a5c606ff698bd25d94d7b, 1e90a9faa58157fced17be39322d1eb9d353b7be</sup>
+-   **deps**: update eslint to v7 (82a66225c28f8441782e0aec6844fb6d59e436a7)
+-   **deps**: update eslint to v7.0.2 (f1058ec8019573b6a31aa315e3478ce964cdfb6d)
+    <sup>17 similar commits not listed: 39bf0b4184b8c498b36814f99db82cb171e011aa, 7b4087fc40a07e3cb6bb1bdeda80bc183e5f47fb, f8334924faf01f519eb3af92ebd271d3905c433c, ceaedccfbbfc3ae03a4ebd61c3c3d471525ede08, bc6f8dd954b7b21c9f4aea610d73d644bad4c8b4, 6fcf1c017539f210c8d9726f3e93ff50aa6d96ce, 2531320bb5d70bca80f44f82c381e3cc22d1b6c3, 960adf8c8bd7e86f037f562482eff92dce3643d7, 1ef7879759460445f5ec8e42861c4b49b59adaf5, cc8b9acb0c64b186e82faeab9d7999a5b51ad154, b028af051bbfd37e17f6268c30547deb0e0771ad, fc7695f34319a3a222b31f7fb901789eac772b93, be9208d43a6a897925d35f5ed884dcf58b077cbd, f18eb5426e52e9887c87d23628d4d5a1218119a8, c458f29d02b2755722480cd172b088a72a19a2e3, 7e4763eb7b13b39af2f8a68ebcde2273bd83a7d9, fdbfa0289ce7e95c817b8d5c3a4a94a2a90f90d0</sup>
+-   **deps**: update eslint to v9.15.0 (#791) [#791](https://github.com/kitten-science/kitten-scientists/pull/791) (6345c7c7379332b634b4e540b31760a46489ba1b)
+-   **deps**: update eslint to v9.16.0 (91feceac4a07b0f10609af2866c9a42afa2ebb48)
+    <sup>6 similar commits not listed: df3470d334ee8b776717e612b0f717dd2921cee8, 5b029f74d61d37c30c1e3100500ac6a422a1efc9, 6f8c556703f12b785da5b296d14c2de04a20ad9f, 33c39ed799075fec68aa6eba02f541a67be534a8, afb7dcde5a76fb82fdd7adaf5cc8e0c7c3c847f9, 53a1ba2831b5fb2f5201cf1bee80635909fcac08</sup>
+-   **deps**: update github/codeql-action digest to 05963f4 (e5284c3bdc505a26ce1cc1d44a5b957f02d1706c)
+    <sup>16 similar commits not listed: 791fcd61b7cf28cd5aa3e021e0daf9e1b2a65d15, 4f596c93a2c88df0ef78da29640a7c54bd9a8b7e, dafb26272da964808dbded13e57c8644bba0d10d, 5c6974d905fb8810199bc9999d5824cc8eafda05, 9ed862db50942475401dc854a3db01afb2caa9c7, 36d4c71d1e65843d6bac76e65c97b03088921717, 02dc62333a2a4d7dfc3c06675117a879387e11d0, 22a19b4a46135eeac59f560aef0062544bbdce3b, c5279645371de8cdf39489f7c00751519cbb3833, 527aefbcca8fd2524268e6b9a5b4c31869186ed8, ca55e4e005eb5c0a94c36710d0899f435c04c2ec, 6ba9f946309d6fcbbe407d8d4f0d10a69f0e59ad, e58a6ece31cc8ec656f82543672052ae22060a56, 28d63162f7f4f2bc51a8371a7a3b7fc18742c75d, 3f27fa83569c9537fa4b9c3a4bd00a5dae7d84bb, 56b9969c743968413977e4ffe0ec5ec264b485c6</sup>
+-   **deps**: update node docker tag to v20.17.0 (c0bcfcb28ae4e96c49b31d54e407d48d53ef8918)
+    <sup>1 similar commit not listed: e92c9f12ba6ba2fd2c4b99923d542dac09017967</sup>
+-   **deps**: update node.js [#725](https://github.com/kitten-science/kitten-scientists/pull/725) (191866eb62f73b7b5fbe52f30abe13ab76263ab6)
+-   **deps**: update node.js to 02cd220 (3497398cf795e26a4ed9bdb0603757feeb5f49ef)
+    <sup>36 similar commits not listed: 728219da2652cfa9bd5e6d83adf6aa616f4c0bff, f40f98c3f368fdd8f1ab618303309fa5e6a0c8d4, 4d2171756e62c75d7ba5ddec1245bb03cf1bd994, ab263bd27c6497da6124d23d3b0f72c96ec58974, 921b9af24fd8e1b35153e7f074090606e891d95b, 88d8ffae585cff52b237f885f423f6062c4b9783, 38d9de32c17d86b31364176828db2298deef77b5, a1439aa57ad517b283e1efeabda21699e8f76969, 2cb1832316517303297892e1049334a3a7bf9890, 1b281aa2124e0b092ec0acad5de9d9f39a690579, 167bc11fb0fe88b94132422637bca53b6f0ea33a, 87fa0904734f012b69d8df406a306fc3f5b78282, 30be90f62b20f47953240582c674b02ca50acf4a, f3b954a7999127c61f422596b38291431f3dc4f4, 07827f4aca859dbaab80903c5a12ee9144fc46d5, ed7adaaf08acf59703f2c5ba2bd3269a100a25ad, 627c0f27e6b556103782bc983cc2b528ae510dcf, 7a6aa2236daae0b221f468c968c9efa1f381641f, eec0df4b0385464d616a4bbad840e6b2226c4c02, 8ea17b18e7dce0425e4cfd78bb3c33588a711510, bbc7435d0f38ddde2d9c7086601dbc3b37a7d972, ce79b130402c52e8b0b4fed18ce72d4e5b2acb9c, 27e48ff59c17f48f973108c9a4f8f1c64716cf32, 71569569a1fc6472f7268427eeea8f615d02f6b9, a7ee3710cfb3fa8e28ab0c70d9de6a75a29afc3f, ff8a52de8f4df432484019631fbc2d3ba812bff8, dc09a66b1eac5d54a5785f921ec2fe05ddb8cc7a, 511c4df9d33572735418c83f1d1ac65df0e0f3d8, 41acbb6f973a8915f764556189718d85099e32f7, 61c04113ddf6311ea0abd3cbc23d6d1d185b0023, 6d4a997774bdfbfbe7e2879abcec4f0e17af45b1, 2d765ecfd8b6d88234636ab4b75dc6b612f854b8, 44a6e2bab1a61d190bac618883b4bda5da1d39e8, c917f45330744b181e86bb6ee723692b1a2fdd3d, 5c8799954863482b5a0ee66034fec5042291c949, 994e320b56f171a9097f8ea44013c7e4995e382c</sup>
+-   **deps**: update node.js to f496dba (#784) [#784](https://github.com/kitten-science/kitten-scientists/pull/784) (15c602057fef191173187c59a1c1c574f1d5b863)
+-   **deps**: update node.js to f7354aa (af65198cc39a63839746891a562998d3b7669f34)
+    <sup>1 similar commit not listed: 43c327100d2e9b491eb52bf0274aad27441db8b4</sup>
+-   **deps**: update node.js to v20.11.0 [#462](https://github.com/kitten-science/kitten-scientists/pull/462) (00114665f92a45912105dd6266771cdc65af8c12)
+    <sup>24 similar commits not listed: 8542f6060fa5e9d6baf1efa5f2f0e27183a3e2ee, ea7a973742bea2a42345530d3262f1898b3a1b34, 8c899bcbdf463fddd62bdca5a3861852a2ea3b25, c5ac8c9c874c21c9ae3ad3775b704449a050e7f8, 88018b70176c0e55daed98050da08bf85d79246c, 48c0ba29d3e60780acb8b216b6f9cc1a32c2a4c0, 0c8ebaa4c2d9735515b07733f66b470f89c19e77, ec80103a14b35cb6e9230ec79b59f2dfaf903022, 4ed5fb24a8a9a6eb86dbc9068b962470b3c6de43, b78edcb413a25afcbb4bcee280be6f386abb38b5, 07c67e602df9b56780a75d0c62a12fb85be34f28, 50adce272584c8e21aef2d85bc7a028b60e398da, f57095ca3932330d60776ec3a2ea84bd76c143e3, 5de4075407f86dd5c91805adae5519f6a5c1744c, c1f78faf0449fe4ed428a7ec3bfd48731d2db406, 01d4641e427a5aeb5e77a7bdbcbdf0c0de63dfbf, 479574360a6a95b370777d295b85c10c86017537, 3279d65456c858edbad34076957fdb58b5dd8c6e, d669b455c72762101004638f494d111b24864a7f, 72bf200371ab7abde22ea2a2b27cea117d37f43b, 215d3bcf59a29255d01b64ed067eb0059e28a6cb, 7b73ec3a156a2f0570f94617057579d9e77a6032, 216f5d708262ecce594d14dcb0f27b709a45a521, 33bb3975d4bfa54c0d33c701a43facffffcae94f</sup>
+-   **deps**: update oliversalzburg/action-automatic-semantic-releases action to v0.0.12 [#562](https://github.com/kitten-science/kitten-scientists/pull/562) (f941688af6dd2bfe61a104ca5694ba52ccf2b8eb)
+    <sup>23 similar commits not listed: da33e0e6a92f4703669717bb55df62a9d88650b6, 95f6b95f1acc31e679ad909b156ed3beab73d164, fe218eca5c8b2d10bab9ee43b0831cdd6f7d6a10, 59853f91c3cef5845137a3949f60e19a0304edde, d9d85a3b3bbc82fb50306801549ac56d1afd6ef5, 088b53a143e1413c6f28788cc6f964daeafb64cf, a70472fab91d57f59439a7afa05aea3af0b6fb8a, f2d908bc28dbba91ec4c55f5b057121b12ff5201, 1da840c5783bc7371e79cfe9ae60c8b66aa7cd9e, 0c84080ef73661237d6013b622cfdc350529b527, 54bfd0f0f7b9eaa5e03453ef6ced1ec7c5d4df1f, 0c12b3043c850c4f093674a9cbb3a2d6874ece5f, 22431fc1475ef07e8a65a112044c99a95c1a795b, 0402e30d789596e801e2feb22b192a5cf11c5b2e, 27bae885fbe5fa38419fa25eedbcbb6aaae2bba4, 13af7a0347ef04e19fb683bcb687e98ff4f7786b, 3a8aa3c34012159b07babe2f58e1e038e47beffe, dc1805ed7e3da24ce8582845624a2ff50647d93e, 76ec877a4d434cbc7cb0ce0c498c47724482c6d9, 21b7d17a48b34bfdf13b4f04a6ec868fad92a766, 44a0851e8913d13c14da705452e8ca951fe998d2, 4d08ce64419e4b5028d32c955c00d45c97b18469, 656860ced4ca253cab510ac72ae124552588398d</sup>
+-   **deps**: update oliversalzburg/action-commit-validator action to v0.0.10 [#572](https://github.com/kitten-science/kitten-scientists/pull/572) (e5ebd2ddb92cf3dc987502128336be99b184a65b)
+    <sup>3 similar commits not listed: bd06f6ce905ddb1fc0176d421eee8676402b14d1, 87fa5f5c9604bc99c2e42c728086d780340fa4e2, 7e81088ce0f4a62d4ba1b0708d16c39b4666ccde</sup>
+-   **deps**: update oliversalzburg/action-commit-validator action to v1 [#837](https://github.com/kitten-science/kitten-scientists/pull/837) (67f189ebef1ca5611713ad5f06c019a3430561db)
+-   **deps**: update oliversalzburg/action-label-manager action to v0.0.12 [#552](https://github.com/kitten-science/kitten-scientists/pull/552) (1835b35532037a68bf10e2ae26538d45c122f532)
+    <sup>4 similar commits not listed: a0f89da00e577519ac1a858abd6bd0945ea42c24, 2eaff7ce3fb25694bca61044c7c28c3b5b4b3c28, 36c506f574e23d0792e4806bf7ee558f07fd3637, fe99b5ddef4db4d414601cb9820d5db8f1b63fae</sup>
+-   **deps**: update oliversalzburg/action-label-manager action to v1 [#838](https://github.com/kitten-science/kitten-scientists/pull/838) (5a3ef7964315963f048ec559b4dadd8ec5eec9a9)
+-   **deps**: update prettier [#466](https://github.com/kitten-science/kitten-scientists/pull/466) (f44bffe19e37e33b034ee547681e86a4b1545d4e)
+-   **deps**: update yarn to v4.1.0 [#474](https://github.com/kitten-science/kitten-scientists/pull/474) (91349cbaedb0a093eb1252817718b512ad900fbb)
+    <sup>10 similar commits not listed: a1afd1e59d24f1d2792d76af6373af27370d80b0, bef12b22f07066aced77e1b1e6edc8cfc20c7fd4, 0f55f797eed9cfa8ce472ca93101e8bb04abf09a, ae137a8f94d3e7f80ff34f5f2572c4c91f2a94e8, 100de609d4c6e81487ef0e098cc89d21a65616f2, 6c0746679657e46dadda93c40cf1298fd1f8f21d, 0fc01a380db84e0a81b18eec7734c96f9271cc60, fc50cce0f9b1a252c9f91982f92e99fbcf1e4f88, a9cfe73be26f4b83303200b30c67f665081899d2, 4830c16743a2f0f779fed10734f76cb2b5efa639</sup>
+-   **deps**: Upgrade to ESLint@9 [#581](https://github.com/kitten-science/kitten-scientists/pull/581) (7b6fa5293de8b217a1175f8c5c5cc9c822b5e59e)
+</details>
+
+## Commits without convention (2/+1 unlisted)
+
+-   Revert "chore(deps): update eslint to v9.15.0 (#791)" (6e072167d9d28814840773452d8e521bb291a935)
+-   Update Crowdin configuration file (8f5fd3a938a1162daedf135293e163fba99d07ef)
+    <sup>1 similar commit not listed: efc0e4c7920e41429770b0141ac8682bdcc19dab</sup>
 
 # v2.0.0-beta.8
 
