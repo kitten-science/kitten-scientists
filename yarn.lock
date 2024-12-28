@@ -443,7 +443,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kitten-science/documentation@workspace:packages/documentation"
   dependencies:
-    node-scripts-docs: "npm:1.0.4"
+    node-scripts-docs: "npm:2.0.0"
   languageName: unknown
   linkType: soft
 
@@ -723,13 +723,6 @@ __metadata:
   dependencies:
     "@octokit/openapi-types": "npm:^22.2.0"
   checksum: 10c0/ea51afb21b667b25dad9e5daae1701da1b362a4d6ed9609f6d3f9f219e5389bf50f7e53ae029ca190750e278be3ab963cac648a95ad248f245a5fda16a4f1ed1
-  languageName: node
-  linkType: hard
-
-"@oliversalzburg/js-utils@npm:0.1.1":
-  version: 0.1.1
-  resolution: "@oliversalzburg/js-utils@npm:0.1.1"
-  checksum: 10c0/e007d0f60d614510c07fd8a7eb6da6a924bb75643a03a257e86a75799c40978cc33cd9f32b4f284962f2c7ca00b469aebb519ed5459f0d43086e673c6b8b4441
   languageName: node
   linkType: hard
 
@@ -3487,12 +3480,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:14.1.2":
-  version: 14.1.2
-  resolution: "marked@npm:14.1.2"
+"marked@npm:15.0.4":
+  version: 15.0.4
+  resolution: "marked@npm:15.0.4"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/fb636a97a2f11acf4cca092836020281ff3bc573f3295b4f4639135a6188e4815b910ec8572eb5686e25580c9c383daf605b4a00fcb5e5626e5c65914755e4bd
+  checksum: 10c0/e2bfd9178e5242cc814aaf8020f3c2e954c047652c498dac0732f4b711d5e3ab80dbc54b964799d80470d6c515a24905e554c4a40f87b05dedc26e4e36cfdfdb
   languageName: node
   linkType: hard
 
@@ -3819,19 +3812,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-scripts-docs@npm:1.0.4":
-  version: 1.0.4
-  resolution: "node-scripts-docs@npm:1.0.4"
+"node-scripts-docs@npm:2.0.0":
+  version: 2.0.0
+  resolution: "node-scripts-docs@npm:2.0.0"
   dependencies:
-    "@oliversalzburg/js-utils": "npm:0.1.1"
+    "@oliversalzburg/js-utils": "npm:0.2.2"
     elapsed-time: "npm:0.0.1"
     globby: "npm:14.0.2"
-    marked: "npm:14.1.2"
+    marked: "npm:15.0.4"
     minimist: "npm:1.2.8"
-    tslib: "npm:2.7.0"
+    tslib: "npm:2.8.1"
+  peerDependencies:
+    prettier: <=3.3.3
+  peerDependenciesMeta:
+    prettier:
+      optional: true
   bin:
     nsd: output/node-scripts-docs.js
-  checksum: 10c0/a490336ff05d2d0bd6bdf0870b410f051033ee32662ca02f005dcfcb178e3bff9d708da585c385ab505dd1a279608d17d65d8b121fae5afbc90a7d824f91a493
+  checksum: 10c0/76a18b9479e317f6a0874eb9fe16655ab89e9eed2b960d805f9adfb43b281cf62aa05cb1e79f9ec48861d824ff7c0923175d75f4cb1a09da90fa8598afd55ce9
   languageName: node
   linkType: hard
 
@@ -4906,13 +4904,6 @@ __metadata:
   peerDependencies:
     typescript: ">=4.2.0"
   checksum: 10c0/e65dc6e7e8141140c23e1dc94984bf995d4f6801919c71d6dc27cf0cd51b100a91ffcfe5217626193e5bea9d46831e8586febdc7e172df3f1091a7384299e23a
-  languageName: node
-  linkType: hard
-
-"tslib@npm:2.7.0":
-  version: 2.7.0
-  resolution: "tslib@npm:2.7.0"
-  checksum: 10c0/469e1d5bf1af585742128827000711efa61010b699cb040ab1800bcd3ccdd37f63ec30642c9e07c4439c1db6e46345582614275daca3e0f4abae29b0083f04a6
   languageName: node
   linkType: hard
 

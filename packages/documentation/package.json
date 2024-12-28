@@ -10,7 +10,7 @@
     "docs:nsd": "make nsd"
   },
   "devDependencies": {
-    "node-scripts-docs": "1.0.4"
+    "node-scripts-docs": "2.0.0"
   },
   "engines": {
     "node": ">= 20"
