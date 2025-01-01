@@ -114,13 +114,13 @@ jobs:
             aws s3api put-object \
               --bucket kitten-science-us0 \
               --key $PREFIX/stable.js \
-              --cache-control "public, s-maxage=604800" \
+              --cache-control "public, s-maxage=86400" \
               --content-type "text/javascript" \
               --body stable.js
             aws s3api put-object \
               --bucket kitten-science-us0 \
               --key $PREFIX/stable.min.js \
-              --cache-control "public, s-maxage=604800" \
+              --cache-control "public, s-maxage=86400" \
               --content-type "text/javascript" \
               --body stable.min.js
           done
