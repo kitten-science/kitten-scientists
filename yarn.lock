@@ -503,6 +503,8 @@ __metadata:
     "@types/web": "npm:0.0.188"
     ajv: "npm:8.17.1"
     date-fns: "npm:4.1.0"
+    rollup: "npm:4.29.1"
+    rollup-plugin-cleanup: "npm:3.2.1"
     semver: "npm:7.6.3"
     tslib: "npm:2.8.1"
     typescript: "npm:5.7.2"
@@ -2371,6 +2373,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"estree-walker@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "estree-walker@npm:0.6.1"
+  checksum: 10c0/6dabc855faa04a1ffb17b6a9121b6008ba75ab5a163ad9dc3d7fca05cfda374c5f5e91418d783496620ca75e99a73c40874d8b75f23b4117508cc8bde78e7b41
+  languageName: node
+  linkType: hard
+
 "esutils@npm:^2.0.2":
   version: 2.0.3
   resolution: "esutils@npm:2.0.3"
@@ -3120,6 +3129,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-cleanup@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "js-cleanup@npm:1.2.0"
+  dependencies:
+    magic-string: "npm:^0.25.7"
+    perf-regexes: "npm:^1.0.1"
+    skip-regex: "npm:^1.0.2"
+  checksum: 10c0/a154ed8315cf97e1993203ddf769a54a766d40d34412ae8e024adfdfcb33666c4714a2dac129d2faa9ac05b6dc85efa54a3cfba459dca24123be0e9747532af3
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -3458,6 +3478,15 @@ __metadata:
   bin:
     lz-string: bin/bin.js
   checksum: 10c0/36128e4de34791838abe979b19927c26e67201ca5acf00880377af7d765b38d1c60847e01c5ec61b1a260c48029084ab3893a3925fd6e48a04011364b089991b
+  languageName: node
+  linkType: hard
+
+"magic-string@npm:^0.25.7":
+  version: 0.25.9
+  resolution: "magic-string@npm:0.25.9"
+  dependencies:
+    sourcemap-codec: "npm:^1.4.8"
+  checksum: 10c0/37f5e01a7e8b19a072091f0b45ff127cda676232d373ce2c551a162dd4053c575ec048b9cbb4587a1f03adb6c5d0fd0dd49e8ab070cd2c83a4992b2182d9cb56
   languageName: node
   linkType: hard
 
@@ -4082,6 +4111,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"perf-regexes@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "perf-regexes@npm:1.0.1"
+  checksum: 10c0/f0b4e7fd9fabc6c4252a91c1eaea14d3e68d4078541440e7fcb71f5c26138e305f93a5c3eb4501be4b1b177fd38ef17b750fb27470c6fd1959b0fa345bb9b02a
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.0.0, picocolors@npm:^1.1.1":
   version: 1.1.1
   resolution: "picocolors@npm:1.1.1"
@@ -4353,7 +4389,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^4.23.0":
+"rollup-plugin-cleanup@npm:3.2.1":
+  version: 3.2.1
+  resolution: "rollup-plugin-cleanup@npm:3.2.1"
+  dependencies:
+    js-cleanup: "npm:^1.2.0"
+    rollup-pluginutils: "npm:^2.8.2"
+  peerDependencies:
+    rollup: ">=2.0"
+  checksum: 10c0/2533a5680d0ce5b2734488486e0cb33dbac486dfec434c58b5596ece17971118e19effdf040820d29f72725a3a6904d85a951390a9a17c1598d2023b52342174
+  languageName: node
+  linkType: hard
+
+"rollup-pluginutils@npm:^2.8.2":
+  version: 2.8.2
+  resolution: "rollup-pluginutils@npm:2.8.2"
+  dependencies:
+    estree-walker: "npm:^0.6.1"
+  checksum: 10c0/20947bec5a5dd68b5c5c8423911e6e7c0ad834c451f1a929b1f4e2bc08836ad3f1a722ef2bfcbeca921870a0a283f13f064a317dc7a6768496e98c9a641ba290
+  languageName: node
+  linkType: hard
+
+"rollup@npm:4.29.1, rollup@npm:^4.23.0":
   version: 4.29.1
   resolution: "rollup@npm:4.29.1"
   dependencies:
@@ -4613,6 +4670,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"skip-regex@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "skip-regex@npm:1.0.2"
+  checksum: 10c0/24c32b8697d5576d0944cf7e35f629b7e3b1afac70ce13eef009dccca1c044151725db2b6ee2fb5a1b57c598a2c6ef956f81fab5a871c31d4b371476ac684bf4
+  languageName: node
+  linkType: hard
+
 "slash@npm:^5.1.0":
   version: 5.1.0
   resolution: "slash@npm:5.1.0"
@@ -4686,6 +4750,13 @@ __metadata:
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
   checksum: 10c0/7bda1fc4c197e3c6ff17de1b8b2c20e60af81b63a52cb32ec5a5d67a20a7d42651e2cb34ebe93833c5a2a084377e17455854fee3e21e7925c64a51b6a52b0faf
+  languageName: node
+  linkType: hard
+
+"sourcemap-codec@npm:^1.4.8":
+  version: 1.4.8
+  resolution: "sourcemap-codec@npm:1.4.8"
+  checksum: 10c0/f099279fdaae070ff156df7414bbe39aad69cdd615454947ed3e19136bfdfcb4544952685ee73f56e17038f4578091e12b17b283ed8ac013882916594d95b9e6
   languageName: node
   linkType: hard
 
