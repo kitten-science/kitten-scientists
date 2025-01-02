@@ -147,6 +147,24 @@ export class SettingLimitedMaxTrigger extends SettingLimitedMax implements Setti
   }
 }
 
+export class SettingLimitedTrigger extends SettingLimited implements SettingTrigger {
+  trigger: number;
+
+  constructor(enabled = false, limited = false, trigger = -1) {
+    super(enabled, limited);
+    this.trigger = trigger;
+  }
+
+  load(setting: Maybe<Partial<SettingLimitedTrigger>>) {
+    if (isNil(setting)) {
+      return;
+    }
+
+    super.load(setting);
+    this.trigger = setting.trigger ?? this.trigger;
+  }
+}
+
 export class SettingTriggerMax extends SettingTrigger implements SettingMax {
   max: number;
 

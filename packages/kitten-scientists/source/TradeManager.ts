@@ -1,13 +1,14 @@
 import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, FrameContext } from "./Engine.js";
+import { Automation, Engine, FrameContext } from "./Engine.js";
 import { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
-import { TradeSettings } from "./settings/TradeSettings.js";
+import { TradeSettings, TradeSettingsItem } from "./settings/TradeSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cwarn } from "./tools/Log.js";
+import { ResourceInfo } from "./types/craft.js";
 import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types/index.js";
 
 export class TradeManager implements Automation {
@@ -55,17 +56,8 @@ export class TradeManager implements Automation {
     const gold = this._workshopManager.getResource("gold");
     const sectionTrigger = this.settings.trigger;
 
-    // We should only trade if catpower and gold hit the trigger value.
-    // Trades can additionally require specific resources. We will check for those later.
-    if (
-      catpower.value / catpower.maxValue < sectionTrigger ||
-      gold.value / gold.maxValue < sectionTrigger
-    ) {
-      return;
-    }
-
     // If we can't make any trades, bail out.
-    if (!this.singleTradePossible()) {
+    if (!this.singleTradePossible(sectionTrigger, catpower, gold)) {
       return;
     }
 
@@ -83,7 +75,7 @@ export class TradeManager implements Automation {
         !trade.enabled ||
         !trade.seasons[season].enabled ||
         !race.unlocked ||
-        !this.singleTradePossible(trade.race)
+        !this.singleTradePossible(sectionTrigger, catpower, gold, trade)
       ) {
         continue;
       }
@@ -95,6 +87,7 @@ export class TradeManager implements Automation {
         continue;
       }
 
+      const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, trade.trigger);
       // Determine which resource the race requires for trading, if any.
       const require = trade.require ? this._workshopManager.getResource(trade.require) : false;
 
@@ -108,7 +101,7 @@ export class TradeManager implements Automation {
         // the required resource must be over the trigger value.
         // Additionally, gold must also be over the trigger value.
         !require ||
-        sectionTrigger <= require.value / require.maxValue
+        trigger <= require.value / require.maxValue
       ) {
         trades.push(trade.race);
       }
@@ -138,16 +131,21 @@ export class TradeManager implements Automation {
     for (let tradeIndex = 0; tradeIndex < trades.length; tradeIndex++) {
       const race = trades[tradeIndex];
       const tradeSettings = this.settings.races[race];
+
       // Does this trade require a certain resource?
       const require = !tradeSettings.require
         ? false
         : this._workshopManager.getResource(tradeSettings.require);
+
       // Have the trigger conditions for this trade been met?
+      const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, tradeSettings.trigger);
       const trigConditions =
-        (!require || sectionTrigger <= require.value / require.maxValue) &&
-        sectionTrigger <= gold.value / gold.maxValue;
+        (!require || trigger <= require.value / require.maxValue) &&
+        trigger <= gold.value / gold.maxValue;
+
       // How many trades could we do?
       const tradePos = this.getLowestTradeAmount(race, tradeSettings.limited, trigConditions);
+
       // If no trades are possible, remove the race.
       if (tradePos < 1) {
         trades.splice(tradeIndex, 1);
@@ -865,12 +863,27 @@ export class TradeManager implements Automation {
   /**
    * Determine if at least a single trade can be made.
    *
-   * @param name The race to trade with. If not specified, all races are checked.
+   * @param trade - The trade option to check. If not specified, all races are checked.
    * @returns If the requested trade is possible.
    */
-  singleTradePossible(name?: Race): boolean {
+  singleTradePossible(
+    sectionTrigger: number,
+    catpower: ResourceInfo,
+    gold: ResourceInfo,
+    trade?: TradeSettingsItem,
+  ): boolean {
+    const trigger = trade
+      ? Engine.evaluateSubSectionTrigger(sectionTrigger, trade.trigger)
+      : sectionTrigger;
+
+    // We should only trade if catpower and gold hit the trigger value.
+    // Trades can additionally require specific resources. We will check for those later.
+    if (catpower.value / catpower.maxValue < trigger || gold.value / gold.maxValue < trigger) {
+      return false;
+    }
+
     // Get the materials required to trade with the race.
-    const materials = this.getMaterials(name);
+    const materials = this.getMaterials(trade?.race);
     for (const [resource, amount] of objectEntries<Resource, number>(materials)) {
       // Check if we have a sufficient amount of that resource in storage.
       if (this._workshopManager.getValueAvailable(resource) < amount) {
