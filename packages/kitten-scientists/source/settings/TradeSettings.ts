@@ -6,11 +6,11 @@ import {
   Requirement,
   Setting,
   SettingBuySellThreshold,
-  SettingLimited,
+  SettingLimitedTrigger,
   SettingTrigger,
 } from "./Settings.js";
 
-export class TradeSettingsItem extends SettingLimited {
+export class TradeSettingsItem extends SettingLimitedTrigger {
   readonly #race: Race;
   readonly seasons: Record<Season, Setting>;
 
