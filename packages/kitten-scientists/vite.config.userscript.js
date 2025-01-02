@@ -1,3 +1,4 @@
+import cleanup from "rollup-plugin-cleanup";
 import { defineConfig } from "vite";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import { metablock } from "vite-plugin-userscript";
@@ -51,6 +52,7 @@ export default defineConfig({
         format: "umd",
         entryFileNames: filename,
       },
+      plugins: [cleanup({ comments: "none", extensions: ["js", "ts"] })],
     },
   },
   define: {

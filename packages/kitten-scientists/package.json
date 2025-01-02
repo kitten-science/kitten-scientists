@@ -44,6 +44,8 @@
     "@types/jquery": "3.5.32",
     "@types/semver": "7.5.8",
     "@types/web": "0.0.188",
+    "rollup": "4.29.1",
+    "rollup-plugin-cleanup": "3.2.1",
     "typescript": "5.7.2",
     "vite": "6.0.6",
     "vite-plugin-css-injected-by-js": "3.5.2",
