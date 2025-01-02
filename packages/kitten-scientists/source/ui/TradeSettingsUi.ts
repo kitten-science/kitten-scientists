@@ -2,7 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
-import { SettingBuySellThreshold, SettingOptions } from "../settings/Settings.js";
+import { SettingBuySellThreshold, SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { BuyButton } from "./components/buttons-text/BuyButton.js";
@@ -10,7 +10,7 @@ import { SellButton } from "./components/buttons-text/SellButton.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SeasonsList } from "./components/SeasonsList.js";
-import { SettingLimitedListItem } from "./components/SettingLimitedListItem.js";
+import { SettingLimitedTriggerListItem } from "./components/SettingLimitedTriggerListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -85,7 +85,10 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
           this._getTradeOption(
             host,
             this.setting.races[races.name],
+            locale,
+            settings,
             races.title,
+            label,
             races.name === host.game.diplomacy.races.at(-2)?.name,
           ),
         ),
@@ -183,11 +186,14 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
   private _getTradeOption(
     host: KittenScientists,
     option: TradeSettingsItem,
+    locale: SettingOptions<SupportedLocale>,
+    sectionSetting: SettingTrigger,
     label: string,
+    sectionLabel: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingLimitedListItem(host, option, label, {
+    const element = new SettingLimitedTriggerListItem(host, option, locale, label, {
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [label]);
       },
@@ -202,6 +208,46 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
       },
       onRefresh: () => {
         element.limitedButton.inactive = !option.enabled || !option.limited;
+        element.triggerButton.inactive = !option.enabled || option.trigger < 0;
+      },
+      onRefreshTrigger: () => {
+        element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+          option.trigger < 0
+            ? sectionSetting.trigger < 0
+              ? host.engine.i18n("ui.trigger.build.blocked", [sectionLabel])
+              : `${host.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+            : host.renderPercentage(option.trigger, locale.selected, true),
+        ]);
+      },
+      onSetTrigger: () => {
+        Dialog.prompt(
+          host,
+          host.engine.i18n("ui.trigger.prompt.percentage"),
+          host.engine.i18n("ui.trigger.build.prompt", [
+            label,
+            option.trigger !== -1
+              ? host.renderPercentage(option.trigger, locale.selected, true)
+              : host.engine.i18n("ui.trigger.build.inherited"),
+          ]),
+          option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
+          host.engine.i18n("ui.trigger.build.promptExplainer"),
+        )
+          .then(value => {
+            if (value === undefined) {
+              return;
+            }
+
+            if (value === "" || value.startsWith("-")) {
+              option.trigger = -1;
+              return;
+            }
+
+            option.trigger = host.parsePercentage(value);
+          })
+          .then(() => {
+            element.refreshUi();
+          })
+          .catch(redirectErrorsToConsole(console));
       },
       delimiter,
       upgradeIndicator,
