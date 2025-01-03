@@ -99,6 +99,7 @@ export class KittenScientists {
     cwarn("Unloading Kitten Scientists...");
     this.engine.stop();
     this._userInterface.destroy();
+    $("#ks-styles").remove();
     if (this._gameBeforeSaveHandle !== undefined) {
       UserScriptLoader.window.dojo.unsubscribe(this._gameBeforeSaveHandle);
       this._gameBeforeSaveHandle = undefined;

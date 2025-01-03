@@ -144,7 +144,6 @@ export class UserInterface extends UiComponent {
   destroy() {
     this.showActivity.remove();
     this.element.remove();
-    $("#ks-styles").remove();
   }
 
   refreshUi(): void {
