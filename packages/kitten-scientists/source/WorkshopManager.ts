@@ -246,6 +246,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       const availableTarget = this.getValueAvailable(craft.resource);
       const recipeProduces = 1 + this._host.game.getResCraftRatio(craft.resource);
 
+      // In any case, autoCraft amount should not exceed Number.MAX_VALUE
+      const craftsMaxLimit = Number.MAX_VALUE / recipeProduces - availableTarget / recipeProduces;
+      amount = Math.min(amount, craftsMaxLimit);
+
       request.countRequested = Math.max(
         0,
         craft.max === -1
