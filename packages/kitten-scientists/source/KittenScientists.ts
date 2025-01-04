@@ -262,7 +262,7 @@ export class KittenScientists {
       return "∞";
     }
 
-    return locale !== "invariant"
+    return locale !== "invariant" && Math.floor(Math.log10(value)) < 9
       ? new Intl.NumberFormat(locale, { style: "decimal", maximumFractionDigits: 0 }).format(value)
       : this.game.getDisplayValueExt(value, false, false);
   }
