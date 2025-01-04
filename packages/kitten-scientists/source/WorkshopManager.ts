@@ -243,11 +243,14 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         );
       }
 
+      const availableTarget = this.getValueAvailable(craft.resource);
+      const recipeProduces = 1 + this._host.game.getResCraftRatio(craft.resource);
+
       request.countRequested = Math.max(
         0,
         craft.max === -1
           ? amount
-          : Math.min(amount, craft.max - this._host.game.resPool.get(craft.resource).value),
+          : Math.min(amount, (craft.max - availableTarget) / recipeProduces),
       );
     }
 
