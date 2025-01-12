@@ -14,15 +14,24 @@
   "bugs": {
     "url": "https://github.com/kitten-science/kitten-scientists/issues"
   },
+  "type": "module",
   "scripts": {
     "build": "yarn run build:all",
     "devcontainer:build": "bash ./scripts/build-container.sh",
+    "devcontainer:prepare": "node build.js",
     "devcontainer:rebuild": "bash ./scripts/rebuild-container.sh",
     "devcontainer:run": "bash ./scripts/run-container.sh",
     "devcontainer:stop": "bash ./scripts/stop-container.sh",
     "lint": "yarn run lint:all",
     "test": "echo This project has no tests.",
     "whoami": "echo devcontainer"
+  },
+  "dependencies": {
+    "@oliversalzburg/js-utils": "0.2.2",
+    "cheerio": "1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.2"
   },
   "engines": {
     "node": ">= 20"
