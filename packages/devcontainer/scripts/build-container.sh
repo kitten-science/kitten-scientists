@@ -12,6 +12,8 @@ cd "$(dirname "$0")"
 main() {
   cd ..
 
+  node build.js
+
   BRANCH=${1:-master}
   REPO=${2:-https://github.com/nuclear-unicorn/kittensgame.git}
 

@@ -17,6 +17,8 @@ main() {
   yarn tsc --build
   echo "Done building with tsc."
 
+  yarn devcontainer:prepare
+
   # Build the individual user scripts.
   echo "Building user scripts..."
   yarn ka:build
