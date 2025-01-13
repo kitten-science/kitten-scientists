@@ -5,13 +5,16 @@
   line-height: 0;
   opacity: 0.8;
   transition: 0.3s;
-}
-.iconButton.inactive {
-  opacity: 0.2;
-}
-.iconButton:hover {
-  opacity: 1;
-}
-.iconButton.inactive:hover {
-  opacity: 0.4;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.inactive {
+    opacity: 0.4;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
 }
