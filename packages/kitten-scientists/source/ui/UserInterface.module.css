@@ -69,6 +69,17 @@
 /* Ensure the right column gets a scrollbar, when our content extends it too far down. */
 :global #game #rightColumn {
   overflow-y: auto;
+
+  /* Fix some double-scrollbar issues in the right column, when KS is loaded. */
+  #rightTabLog {
+    overflow-y: visible;
+
+    #gameLog {
+      height: auto;
+      min-height: auto;
+      overflow-y: visible;
+    }
+  }
 }
 
 :global #game .res-row .res-cell.ks-stock-above {
