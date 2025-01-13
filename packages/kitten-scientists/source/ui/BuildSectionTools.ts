@@ -16,10 +16,46 @@ export const BuildSectionTools = {
     delimiter = false,
     upgradeIndicator = false,
   ) => {
+    const onSetMax = () => {
+      Dialog.prompt(
+        host,
+        host.engine.i18n("ui.max.prompt.absolute"),
+        host.engine.i18n("ui.max.build.prompt", [
+          label,
+          host.renderAbsolute(option.max, locale.selected),
+        ]),
+        host.renderAbsolute(option.max),
+        host.engine.i18n("ui.max.build.promptExplainer"),
+      )
+        .then(value => {
+          if (value === undefined) {
+            return;
+          }
+
+          if (value === "" || value.startsWith("-")) {
+            option.max = -1;
+            return;
+          }
+
+          if (value === "0") {
+            option.enabled = false;
+          }
+
+          option.max = host.parseAbsolute(value) ?? option.max;
+        })
+        .then(() => {
+          element.refreshUi();
+        })
+        .catch(redirectErrorsToConsole(console));
+    };
+
     const element = new SettingMaxTriggerListItem(host, option, locale, label, {
       delimiter,
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [label]);
+        if (option.max === 0) {
+          onSetMax();
+        }
       },
       onUnCheck: () => {
         host.engine.imessage("status.sub.disable", [label]);
@@ -53,38 +89,7 @@ export const BuildSectionTools = {
             : host.renderPercentage(option.trigger, locale.selected, true),
         ]);
       },
-      onSetMax: () => {
-        Dialog.prompt(
-          host,
-          host.engine.i18n("ui.max.prompt.absolute"),
-          host.engine.i18n("ui.max.build.prompt", [
-            label,
-            host.renderAbsolute(option.max, locale.selected),
-          ]),
-          host.renderAbsolute(option.max),
-          host.engine.i18n("ui.max.build.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
-
-            if (value === "" || value.startsWith("-")) {
-              option.max = -1;
-              return;
-            }
-
-            if (value === "0") {
-              option.enabled = false;
-            }
-
-            option.max = host.parseAbsolute(value) ?? option.max;
-          })
-          .then(() => {
-            element.refreshUi();
-          })
-          .catch(redirectErrorsToConsole(console));
-      },
+      onSetMax,
       onSetTrigger: () => {
         Dialog.prompt(
           host,

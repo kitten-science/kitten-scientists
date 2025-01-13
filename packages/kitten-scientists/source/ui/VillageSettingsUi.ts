@@ -235,22 +235,59 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     label: string,
     delimiter = false,
   ) {
-    const item = new SettingMaxListItem(host, option, label, {
+    const onSetMax = () => {
+      Dialog.prompt(
+        host,
+        host.engine.i18n("ui.max.distribute.prompt", [label]),
+        host.engine.i18n("ui.max.distribute.promptTitle", [
+          label,
+          host.renderAbsolute(option.max, locale),
+        ]),
+        host.renderAbsolute(option.max),
+        host.engine.i18n("ui.max.distribute.promptExplainer"),
+      )
+        .then(value => {
+          if (value === undefined) {
+            return;
+          }
+
+          if (value === "" || value.startsWith("-")) {
+            option.max = -1;
+            return;
+          }
+
+          if (value === "0") {
+            option.enabled = false;
+          }
+
+          option.max = host.parseAbsolute(value) ?? option.max;
+        })
+        .then(() => {
+          this.refreshUi();
+        })
+        .catch(redirectErrorsToConsole(console));
+    };
+
+    const element = new SettingMaxListItem(host, option, label, {
       childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
       delimiter,
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [label]);
+        if (option.max === 0) {
+          onSetMax();
+        }
       },
       onUnCheck: () => {
         host.engine.imessage("status.sub.disable", [label]);
       },
       onRefresh: () => {
-        item.maxButton.inactive = !option.enabled || option.max === -1;
-        item.maxButton.ineffective = sectionSetting.enabled && option.enabled && option.max === 0;
+        element.maxButton.inactive = !option.enabled || option.max === -1;
+        element.maxButton.ineffective =
+          sectionSetting.enabled && option.enabled && option.max === 0;
       },
       onRefreshMax: () => {
-        item.maxButton.updateLabel(host.renderAbsolute(option.max));
-        item.maxButton.element[0].title =
+        element.maxButton.updateLabel(host.renderAbsolute(option.max));
+        element.maxButton.element[0].title =
           option.max < 0
             ? host.engine.i18n("ui.max.distribute.titleInfinite", [label])
             : option.max === 0
@@ -260,40 +297,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
                   label,
                 ]);
       },
-      onSetMax: () => {
-        Dialog.prompt(
-          host,
-          host.engine.i18n("ui.max.distribute.prompt", [label]),
-          host.engine.i18n("ui.max.distribute.promptTitle", [
-            label,
-            host.renderAbsolute(option.max, locale),
-          ]),
-          host.renderAbsolute(option.max),
-          host.engine.i18n("ui.max.distribute.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
-
-            if (value === "" || value.startsWith("-")) {
-              option.max = -1;
-              return;
-            }
-
-            if (value === "0") {
-              option.enabled = false;
-            }
-
-            option.max = host.parseAbsolute(value) ?? option.max;
-          })
-          .then(() => {
-            this.refreshUi();
-          })
-          .catch(redirectErrorsToConsole(console));
-      },
+      onSetMax,
     });
-    item.maxButton.element.addClass(stylesButton.lastHeadAction);
-    return item;
+    element.maxButton.element.addClass(stylesButton.lastHeadAction);
+    return element;
   }
 }

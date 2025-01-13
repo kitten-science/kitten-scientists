@@ -83,9 +83,42 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
     sectionSetting: EmbassySettings,
     label: string,
   ) {
+    const onSetMax = () => {
+      Dialog.prompt(
+        host,
+        host.engine.i18n("ui.max.prompt.absolute"),
+        host.engine.i18n("ui.max.build.prompt", [label, host.renderAbsolute(option.max, locale)]),
+        host.renderAbsolute(option.max),
+        host.engine.i18n("ui.max.build.promptExplainer"),
+      )
+        .then(value => {
+          if (value === undefined) {
+            return;
+          }
+
+          if (value === "" || value.startsWith("-")) {
+            option.max = -1;
+            return;
+          }
+
+          if (value === "0") {
+            option.enabled = false;
+          }
+
+          option.max = host.parseAbsolute(value) ?? option.max;
+        })
+        .then(() => {
+          this.refreshUi();
+        })
+        .catch(redirectErrorsToConsole(console));
+    };
+
     const element = new SettingMaxListItem(host, option, label, {
       onCheck: () => {
         host.engine.imessage("status.sub.enable", [label]);
+        if (option.max === 0) {
+          onSetMax();
+        }
       },
       onUnCheck: () => {
         host.engine.imessage("status.sub.disable", [label]);
@@ -104,35 +137,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
               ? host.engine.i18n("ui.max.embassy.titleZero", [label])
               : host.engine.i18n("ui.max.embassy.title", [host.renderAbsolute(option.max), label]);
       },
-      onSetMax: () => {
-        Dialog.prompt(
-          host,
-          host.engine.i18n("ui.max.prompt.absolute"),
-          host.engine.i18n("ui.max.build.prompt", [label, host.renderAbsolute(option.max, locale)]),
-          host.renderAbsolute(option.max),
-          host.engine.i18n("ui.max.build.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
-
-            if (value === "" || value.startsWith("-")) {
-              option.max = -1;
-              return;
-            }
-
-            if (value === "0") {
-              option.enabled = false;
-            }
-
-            option.max = host.parseAbsolute(value) ?? option.max;
-          })
-          .then(() => {
-            this.refreshUi();
-          })
-          .catch(redirectErrorsToConsole(console));
-      },
+      onSetMax,
     });
     element.maxButton.element.addClass(stylesButton.lastHeadAction);
     return element;
