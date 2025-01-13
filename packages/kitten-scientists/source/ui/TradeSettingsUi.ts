@@ -208,7 +208,20 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
       },
       onRefresh: () => {
         element.limitedButton.inactive = !option.enabled || !option.limited;
-        element.triggerButton.inactive = !option.enabled || option.trigger < 0;
+        element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+        element.triggerButton.ineffective =
+          sectionSetting.enabled &&
+          option.enabled &&
+          sectionSetting.trigger === -1 &&
+          option.trigger === -1;
+
+        panel.expando.ineffective =
+          sectionSetting.enabled &&
+          option.enabled &&
+          !option.seasons.autumn.enabled &&
+          !option.seasons.spring.enabled &&
+          !option.seasons.summer.enabled &&
+          !option.seasons.winter.enabled;
       },
       onRefreshTrigger: () => {
         element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
@@ -257,9 +270,11 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
     const seasons = new SeasonsList(host, option.seasons, {
       onCheck: (label: string) => {
         host.engine.imessage("trade.season.enable", [ucfirst(label), label]);
+        element.refreshUi();
       },
       onUnCheck: (label: string) => {
         host.engine.imessage("trade.season.disable", [ucfirst(label), label]);
+        element.refreshUi();
       },
     });
     panel.addChild(seasons);

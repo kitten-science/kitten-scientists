@@ -59,8 +59,11 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
           host.engine.imessage("status.sub.disable", [accelerateLabel]);
         },
         onRefresh: () => {
-          this._accelerateTime.triggerButton.inactive =
-            !this.setting.accelerateTime.enabled || this.setting.accelerateTime.trigger === -1;
+          this._accelerateTime.triggerButton.inactive = !this.setting.accelerateTime.enabled;
+          this._accelerateTime.triggerButton.ineffective =
+            this.setting.enabled &&
+            this.setting.accelerateTime.enabled &&
+            this.setting.accelerateTime.trigger === -1;
         },
         onSetTrigger: () => {
           Dialog.prompt(

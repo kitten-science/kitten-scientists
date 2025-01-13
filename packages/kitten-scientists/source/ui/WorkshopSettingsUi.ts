@@ -110,7 +110,10 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
         onRefresh: () => {
           element.limitedButton.inactive = !option.enabled || !option.limited;
           element.maxButton.inactive = !option.enabled || option.max === -1;
+          element.maxButton.ineffective = settings.enabled && option.enabled && option.max === 0;
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+          element.triggerButton.ineffective =
+            settings.enabled && option.enabled && settings.trigger === -1 && option.trigger === -1;
         },
         onRefreshMax: () => {
           element.maxButton.updateLabel(host.renderAbsolute(option.max));

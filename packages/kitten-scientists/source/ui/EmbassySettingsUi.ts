@@ -68,6 +68,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
             host,
             this.setting.races[races.name],
             locale.selected,
+            settings,
             races.title,
           ),
         ),
@@ -79,6 +80,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
     host: KittenScientists,
     option: SettingMax,
     locale: SupportedLocale,
+    sectionSetting: EmbassySettings,
     label: string,
   ) {
     const element = new SettingMaxListItem(host, option, label, {
@@ -90,6 +92,8 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
       },
       onRefresh: () => {
         element.maxButton.inactive = !option.enabled || option.max === -1;
+        element.maxButton.ineffective =
+          sectionSetting.enabled && option.enabled && option.max === 0;
       },
       onRefreshMax: () => {
         element.maxButton.updateLabel(host.renderAbsolute(option.max));

@@ -37,6 +37,7 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
                 host,
                 this.setting.buildings[building.name],
                 locale,
+                settings,
                 building.label,
                 building.name === host.game.time.chronoforgeUpgrades.at(-1)?.name,
               ),
@@ -50,6 +51,7 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
                 host,
                 this.setting.buildings[building.name],
                 locale,
+                settings,
                 building.label,
               ),
             ),
@@ -62,6 +64,7 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
     host: KittenScientists,
     option: SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
+    sectionSetting: ResetTimeSettings,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -76,6 +79,8 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+        element.triggerButton.ineffective =
+          sectionSetting.enabled && option.enabled && option.trigger === -1;
       },
       onSetTrigger: () => {
         Dialog.prompt(

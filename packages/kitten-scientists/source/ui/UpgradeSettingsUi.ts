@@ -97,6 +97,8 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+          element.triggerButton.ineffective =
+            settings.enabled && option.enabled && settings.trigger === -1 && option.trigger === -1;
         },
         onRefreshTrigger: () => {
           element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
