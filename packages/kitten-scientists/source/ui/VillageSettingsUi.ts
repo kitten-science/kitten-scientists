@@ -47,7 +47,13 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
       children: host.game.village.jobs
         .filter(item => !isNil(this.setting.jobs[item.name]))
         .map(job =>
-          this._getDistributeOption(host, this.setting.jobs[job.name], locale.selected, job.title),
+          this._getDistributeOption(
+            host,
+            this.setting.jobs[job.name],
+            locale.selected,
+            settings,
+            job.title,
+          ),
         ),
     });
     this.addChild(listJobs);
@@ -73,6 +79,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
         },
         onRefresh: () => {
           this._hunt.triggerButton.inactive = !this.setting.hunt.enabled;
+          this._hunt.triggerButton.ineffective =
+            this.setting.enabled && this.setting.hunt.enabled && this.setting.hunt.trigger === -1;
         },
         onSetTrigger: () => {
           Dialog.prompt(
@@ -129,8 +137,11 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
           host.engine.imessage("status.sub.disable", [host.engine.i18n("option.promotekittens")]);
         },
         onRefresh: () => {
-          this._promoteKittens.triggerButton.inactive =
-            !this.setting.promoteKittens.enabled || this.setting.promoteKittens.trigger === -1;
+          this._promoteKittens.triggerButton.inactive = !this.setting.promoteKittens.enabled;
+          this._promoteKittens.triggerButton.ineffective =
+            this.setting.enabled &&
+            this.setting.promoteKittens.enabled &&
+            this.setting.promoteKittens.trigger === -1;
         },
         onSetTrigger: () => {
           Dialog.prompt(
@@ -220,6 +231,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     host: KittenScientists,
     option: SettingMax,
     locale: SupportedLocale,
+    sectionSetting: VillageSettings,
     label: string,
     delimiter = false,
   ) {
@@ -233,7 +245,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
         host.engine.imessage("status.sub.disable", [label]);
       },
       onRefresh: () => {
-        item.maxButton.inactive = !option.enabled || option.max === 0 || option.max === -1;
+        item.maxButton.inactive = !option.enabled || option.max === -1;
+        item.maxButton.ineffective = sectionSetting.enabled && option.enabled && option.max === 0;
       },
       onRefreshMax: () => {
         item.maxButton.updateLabel(host.renderAbsolute(option.max));

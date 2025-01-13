@@ -39,6 +39,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
                   host,
                   this.setting.buildings[building.name],
                   locale,
+                  settings,
                   building.label,
                   indexPlanet < arrayPlant.length - 1 && indexBuilding === arrayBuilding.length - 1,
                 ),
@@ -52,6 +53,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
     host: KittenScientists,
     option: SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
+    sectionSetting: ResetSpaceSettings,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -66,6 +68,8 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+        element.triggerButton.ineffective =
+          sectionSetting.enabled && option.enabled && option.trigger === -1;
       },
       onSetTrigger: () => {
         Dialog.prompt(

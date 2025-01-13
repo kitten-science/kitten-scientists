@@ -1,11 +1,12 @@
 import { Icons } from "../../../images/Icons.js";
 import { KittenScientists } from "../../../KittenScientists.js";
-import stylesIconButton from "../IconButton.module.css";
+import stylesButton from "../Button.module.css";
 import { UiComponent, UiComponentOptions } from "../UiComponent.js";
 import styles from "./ExpandoButton.module.css";
 
 export class ExpandoButton extends UiComponent {
   readonly element: JQuery;
+  ineffective: boolean;
 
   /**
    * Constructs an expando element that is commonly used to expand and
@@ -24,11 +25,12 @@ export class ExpandoButton extends UiComponent {
       `,
       title: host.engine.i18n("ui.itemsShow"),
     })
-      .addClass(stylesIconButton.iconButton)
+      .addClass(stylesButton.iconButton)
       .addClass(styles.expandoButton);
 
     this.element = element;
     this.addChildren(options?.children);
+    this.ineffective = false;
   }
 
   setCollapsed() {
@@ -38,5 +40,15 @@ export class ExpandoButton extends UiComponent {
   setExpanded() {
     this.element.addClass(styles.expanded);
     this.element.prop("title", this._host.engine.i18n("ui.itemsHide"));
+  }
+
+  override refreshUi(): void {
+    super.refreshUi();
+
+    if (this.ineffective) {
+      this.element.addClass(stylesButton.ineffective);
+    } else {
+      this.element.removeClass(stylesButton.ineffective);
+    }
   }
 }

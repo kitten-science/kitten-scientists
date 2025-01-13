@@ -43,6 +43,8 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+          element.triggerButton.ineffective =
+            settings.enabled && option.enabled && option.trigger === -1;
         },
         onSetTrigger: () => {
           Dialog.prompt(

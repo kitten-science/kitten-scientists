@@ -39,6 +39,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
             host,
             this.setting.buildings.unicornPasture,
             locale,
+            settings,
             host.engine.i18n("$buildings.unicornPasture.label"),
           ),
 
@@ -52,6 +53,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
                 host,
                 this.setting.buildings[zigguratUpgrade.name],
                 locale,
+                settings,
                 zigguratUpgrade.label,
               ),
             ),
@@ -67,6 +69,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
                 host,
                 this.setting.buildings[upgrade.name],
                 locale,
+                settings,
                 upgrade.label,
               ),
             ),
@@ -80,6 +83,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
                 host,
                 this.setting.buildings[upgrade.name],
                 locale,
+                settings,
                 upgrade.label,
                 upgrade.name === host.game.religion.religionUpgrades.at(-1)?.name,
               ),
@@ -93,6 +97,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
                 host,
                 this.setting.buildings[upgrade.name],
                 locale,
+                settings,
                 upgrade.label,
               ),
             ),
@@ -105,6 +110,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
     host: KittenScientists,
     option: SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
+    sectionSetting: ResetReligionSettings,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -119,6 +125,8 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+        element.triggerButton.ineffective =
+          sectionSetting.enabled && option.enabled && option.trigger === -1;
       },
       onSetTrigger: () => {
         Dialog.prompt(

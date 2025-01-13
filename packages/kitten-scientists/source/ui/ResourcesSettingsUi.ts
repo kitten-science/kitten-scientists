@@ -107,6 +107,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
       classes: [stylesButton.lastHeadAction],
       onRefresh: () => {
         consumeElement.inactive = !option.enabled || option.consume !== 100;
+        consumeElement.ineffective = option.enabled && option.consume === 0;
       },
     });
     element.head.addChild(consumeElement);

@@ -48,12 +48,14 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
               host,
               this.setting.buildings[building],
               locale,
+              settings,
               meta.stages[0].label,
             ),
             this._getResetOption(
               host,
               this.setting.buildings[name],
               locale,
+              settings,
               meta.stages[1].label,
               false,
               true,
@@ -61,7 +63,13 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
           );
         } else if (!isNil(meta.label)) {
           this._buildings.push(
-            this._getResetOption(host, this.setting.buildings[building], locale, meta.label),
+            this._getResetOption(
+              host,
+              this.setting.buildings[building],
+              locale,
+              settings,
+              meta.label,
+            ),
           );
         }
       }
@@ -81,6 +89,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
     host: KittenScientists,
     option: SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
+    sectionSetting: ResetBonfireSettings,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -95,6 +104,8 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+        element.triggerButton.ineffective =
+          sectionSetting.enabled && option.enabled && option.trigger === -1;
       },
       onSetTrigger: () => {
         Dialog.prompt(

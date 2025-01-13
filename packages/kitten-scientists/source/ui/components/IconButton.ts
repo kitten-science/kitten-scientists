@@ -1,5 +1,5 @@
 import { KittenScientists } from "../../KittenScientists.js";
-import styles from "./IconButton.module.css";
+import stylesButton from "./Button.module.css";
 import { UiComponent, UiComponentOptions } from "./UiComponent.js";
 
 export type IconButtonOptions = UiComponentOptions & {
@@ -34,7 +34,7 @@ export class IconButton extends UiComponent {
     const element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
       title,
-    }).addClass(styles.iconButton);
+    }).addClass(stylesButton.iconButton);
 
     this.element = element;
     this.addChildren(options?.children);
@@ -58,15 +58,15 @@ export class IconButton extends UiComponent {
     super.refreshUi();
 
     if (this.readOnly) {
-      this.element.addClass(styles.readonly);
+      this.element.addClass(stylesButton.readonly);
     } else {
-      this.element.removeClass(styles.readonly);
+      this.element.removeClass(stylesButton.readonly);
     }
 
     if (this.inactive) {
-      this.element.addClass(styles.inactive);
+      this.element.addClass(stylesButton.inactive);
     } else {
-      this.element.removeClass(styles.inactive);
+      this.element.removeClass(stylesButton.inactive);
     }
   }
 }

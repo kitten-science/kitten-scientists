@@ -30,6 +30,10 @@ export class CollapsiblePanel<
   protected _mainChildVisible: boolean;
   protected readonly parent: CollapsiblePanel | undefined;
 
+  get expando() {
+    return this._expando;
+  }
+
   get isExpanded() {
     return this._mainChildVisible;
   }

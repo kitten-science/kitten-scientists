@@ -19,6 +19,7 @@ export class Button extends UiComponent {
   readonly element: JQuery;
   readOnly: boolean;
   inactive: boolean;
+  ineffective: boolean;
 
   /**
    * Constructs a `Button`.
@@ -70,6 +71,7 @@ export class Button extends UiComponent {
     this.addChildren(options?.children);
     this.readOnly = options?.readOnly ?? false;
     this.inactive = options?.inactive ?? false;
+    this.ineffective = false;
   }
 
   updateLabel(label: string) {
@@ -107,6 +109,12 @@ export class Button extends UiComponent {
       this.element.addClass(styles.inactive);
     } else {
       this.element.removeClass(styles.inactive);
+    }
+
+    if (this.ineffective) {
+      this.element.addClass(styles.ineffective);
+    } else {
+      this.element.removeClass(styles.ineffective);
     }
   }
 }
