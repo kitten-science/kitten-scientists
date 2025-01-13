@@ -211,7 +211,7 @@ export class VillageManager implements Automation {
       // Determine how many hunts are being performed.
       const huntCount = Math.floor(manpower.value / 100);
       this._host.engine.storeForSummary("hunt", huntCount);
-      this._host.engine.iactivity("act.hunt", [huntCount], "ks-hunt");
+      this._host.engine.iactivity("act.hunt", [this._host.renderAbsolute(huntCount)], "ks-hunt");
 
       const averageOutput = this._workshopManager.getAverageHunt();
       const trueOutput: Partial<Record<Resource, number>> = {};
