@@ -360,7 +360,11 @@ export class BonfireManager implements Automation {
     if (amount === 1) {
       this._host.engine.iactivity("act.build", [label], "ks-build");
     } else {
-      this._host.engine.iactivity("act.builds", [label, amount], "ks-build");
+      this._host.engine.iactivity(
+        "act.builds",
+        [label, this._host.renderAbsolute(amount)],
+        "ks-build",
+      );
     }
   }
 

@@ -126,7 +126,11 @@ export class TimeManager {
     if (amount === 1) {
       this._host.engine.iactivity("act.build", [label], "ks-build");
     } else {
-      this._host.engine.iactivity("act.builds", [label, amount], "ks-build");
+      this._host.engine.iactivity(
+        "act.builds",
+        [label, this._host.renderAbsolute(amount)],
+        "ks-build",
+      );
     }
   }
 
@@ -193,7 +197,7 @@ export class TimeManager {
     } while (fixHappened);
 
     if (0 < fixed) {
-      this._host.engine.iactivity("act.fix.cry", [fixed], "ks-fixCry");
+      this._host.engine.iactivity("act.fix.cry", [this._host.renderAbsolute(fixed)], "ks-fixCry");
       this._host.engine.storeForSummary("fix.cry", fixed);
     }
   }

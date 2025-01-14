@@ -533,9 +533,7 @@ export class TradeManager implements Automation {
 
       const currentCoin = this._host.game.resPool.get("blackcoin").value;
       coinsExchanged = Math.round(currentCoin - coinsInitial);
-      this._host.engine.iactivity("act.blackcoin.buy", [
-        this._host.game.getDisplayValueExt(coinsExchanged),
-      ]);
+      this._host.engine.iactivity("act.blackcoin.buy", [this._host.renderAbsolute(coinsExchanged)]);
     } else if (
       coinPrice > this.settings.tradeBlackcoin.sell &&
       0 < this._host.game.resPool.get("blackcoin").value
@@ -546,7 +544,7 @@ export class TradeManager implements Automation {
       relicsExchanged = Math.round(relicsCurrent - relicsInitial);
 
       this._host.engine.iactivity("act.blackcoin.sell", [
-        this._host.game.getDisplayValueExt(relicsExchanged),
+        this._host.renderAbsolute(relicsExchanged),
       ]);
     }
   }
@@ -569,7 +567,11 @@ export class TradeManager implements Automation {
 
     this._host.game.diplomacy.tradeMultiple(race, amount);
     this._host.engine.storeForSummary(race.title, amount, "trade");
-    this._host.engine.iactivity("act.trade", [amount, ucfirst(race.title)], "ks-trade");
+    this._host.engine.iactivity(
+      "act.trade",
+      [this._host.renderAbsolute(amount), ucfirst(race.title)],
+      "ks-trade",
+    );
   }
 
   /**
