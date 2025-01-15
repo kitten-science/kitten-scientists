@@ -6,9 +6,10 @@ import { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { Dialog } from "./components/Dialog.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import styles from "./TimeSkipHeatSettingsUi.module.css";
 
 export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> {
   constructor(
@@ -27,9 +28,22 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          settings.activeHeatTransferStatus.enabled = false;
         },
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive = !settings.enabled;
+          (item as SettingTriggerListItem).triggerButton.ineffective =
+            settings.enabled && settings.trigger === -1;
+          this.expando.ineffective =
+            settings.enabled && !Object.values(settings.cycles).some(cycle => cycle.enabled);
+
+          if (settings.activeHeatTransferStatus.enabled) {
+            this.head.elementLabel.attr("data-ks-active-from", "◎");
+            this.head.elementLabel.attr("data-ks-active-to", "◎");
+            this.head.elementLabel.addClass(styles.active);
+          } else {
+            this.head.elementLabel.removeClass(styles.active);
+          }
         },
         onSetTrigger: () => {
           Dialog.prompt(

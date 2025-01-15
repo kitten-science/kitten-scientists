@@ -39,31 +39,33 @@
     opacity: 1;
   }
 }
+
 .spacer {
   display: block;
   margin-bottom: 100px;
 }
+
 .ui {
   margin: 5px 0 10px 0;
   padding-right: 10px;
-}
-.ui ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Rules needed to enable stock warning. */
+  #toggle-list-resources .stockWarn *,
+  #toggle-reset-list-resources .stockWarn * {
+    color: #dd1e00;
+  }
 }
 
 .showActivity {
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
-}
-
-/* Rules needed to enable stock warning. */
-
-.ui #toggle-list-resources .stockWarn *,
-.ui #toggle-reset-list-resources .stockWarn * {
-  color: #dd1e00;
 }
 
 /* Ensure the right column gets a scrollbar, when our content extends it too far down. */
