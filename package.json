@@ -38,7 +38,7 @@
     "@eslint/js": "9.18.0",
     "@types/eslint": "9.6.1",
     "@types/node": "22.10.7",
-    "@types/web": "0.0.196",
+    "@types/web": "0.0.197",
     "eslint": "9.18.0",
     "eslint-config-prettier": "10.0.1",
     "lint-staged": "15.4.1",
