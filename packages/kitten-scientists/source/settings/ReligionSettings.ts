@@ -66,6 +66,8 @@ export class ReligionSettings extends SettingTrigger {
    */
   bestUnicornBuilding: Setting;
 
+  bestUnicornBuildingCurrent: ZiggurathUpgrade | "unicornPasture" | null;
+
   /**
    * Sacrifice alicorns for time crystals.
    */
@@ -123,6 +125,7 @@ export class ReligionSettings extends SettingTrigger {
     this.autoPraise = autoPraise;
     this.adore = adore;
     this.transcend = transcend;
+    this.bestUnicornBuildingCurrent = null;
   }
 
   private initBuildings(): ReligionSettingsItems {
@@ -164,5 +167,7 @@ export class ReligionSettings extends SettingTrigger {
     this.autoPraise.load(settings.autoPraise);
     this.adore.load(settings.adore);
     this.transcend.load(settings.transcend);
+    this.bestUnicornBuildingCurrent =
+      settings.bestUnicornBuildingCurrent ?? this.bestUnicornBuildingCurrent;
   }
 }

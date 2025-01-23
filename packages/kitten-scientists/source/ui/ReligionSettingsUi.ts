@@ -15,9 +15,13 @@ import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListIte
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
+import stylesTimeSkipHeatSettings from "./TimeSkipHeatSettingsUi.module.css";
 
 export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
-  private readonly _unicornBuildings: Array<SettingMaxTriggerListItem>;
+  private readonly _unicornBuildings: Map<
+    ZiggurathUpgrade | "unicornPasture",
+    SettingMaxTriggerListItem
+  >;
   private readonly _bestUnicornBuilding: SettingListItem;
 
   constructor(
@@ -82,30 +86,37 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
 
     const unicornsArray: Array<ZiggurathUpgrade | "unicornPasture"> = [...UnicornItems];
 
-    this._unicornBuildings = [
-      BuildSectionTools.getBuildOption(
-        host,
-        this.setting.buildings.unicornPasture,
-        locale,
-        this.setting,
-        host.engine.i18n("$buildings.unicornPasture.label"),
-        label,
-      ),
+    this._unicornBuildings = new Map([
+      [
+        "unicornPasture",
+        BuildSectionTools.getBuildOption(
+          host,
+          this.setting.buildings.unicornPasture,
+          locale,
+          this.setting,
+          host.engine.i18n("$buildings.unicornPasture.label"),
+          label,
+        ),
+      ],
       ...host.game.religion.zigguratUpgrades
         .filter(
           item => unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
         )
-        .map(zigguratUpgrade =>
-          BuildSectionTools.getBuildOption(
-            host,
-            this.setting.buildings[zigguratUpgrade.name],
-            locale,
-            this.setting,
-            zigguratUpgrade.label,
-            label,
-          ),
+        .map(
+          zigguratUpgrade =>
+            [
+              zigguratUpgrade.name,
+              BuildSectionTools.getBuildOption(
+                host,
+                this.setting.buildings[zigguratUpgrade.name],
+                locale,
+                this.setting,
+                zigguratUpgrade.label,
+                label,
+              ),
+            ] as [ZiggurathUpgrade | "unicornPasture", SettingMaxTriggerListItem],
         ),
-    ];
+    ]);
 
     this._bestUnicornBuilding = new SettingListItem(
       host,
@@ -116,7 +127,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
           host.engine.imessage("status.sub.enable", [
             host.engine.i18n("option.faith.best.unicorn"),
           ]);
-          for (const building of this._unicornBuildings) {
+          for (const building of this._unicornBuildings.values()) {
             building.setting.enabled = true;
             building.setting.max = -1;
             building.setting.trigger = -1;
@@ -137,7 +148,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
       new SettingsList(host, {
         children: [
           new HeaderListItem(host, host.engine.i18n("$religion.panel.ziggurat.label")),
-          ...this._unicornBuildings,
+          ...this._unicornBuildings.values(),
           this._bestUnicornBuilding,
           new Delimiter(host),
 
@@ -282,10 +293,22 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
   }
 
   override refreshUi() {
-    for (const building of this._unicornBuildings) {
+    for (const [buildingName, building] of this._unicornBuildings.entries()) {
       building.readOnly = this._bestUnicornBuilding.setting.enabled;
       building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;
       building.triggerButton.readOnly = this._bestUnicornBuilding.setting.enabled;
+
+      building.elementLabel.attr("data-ks-active-from", "❊");
+      building.elementLabel.attr("data-ks-active-to", "✮");
+
+      if (
+        this.setting.bestUnicornBuilding.enabled &&
+        this.setting.bestUnicornBuildingCurrent === buildingName
+      ) {
+        building.elementLabel.addClass(stylesTimeSkipHeatSettings.active);
+      } else {
+        building.elementLabel.removeClass(stylesTimeSkipHeatSettings.active);
+      }
     }
     super.refreshUi();
   }
