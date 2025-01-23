@@ -485,7 +485,7 @@ __metadata:
     "@oliversalzburg/js-utils": "npm:0.2.2"
     "@types/chai": "npm:5.0.1"
     "@types/mocha": "npm:10.0.10"
-    "@types/node": "npm:22.10.9"
+    "@types/node": "npm:22.10.10"
     chai: "npm:5.1.2"
     mocha: "npm:11.1.0"
     tslib: "npm:2.8.1"
@@ -523,7 +523,7 @@ __metadata:
     "@types/koa": "npm:2.15.0"
     "@types/koa-router": "npm:7.4.8"
     "@types/koa__cors": "npm:5.0.0"
-    "@types/node": "npm:22.10.9"
+    "@types/node": "npm:22.10.10"
     "@types/ws": "npm:8.5.14"
     esbuild: "npm:0.24.2"
     jsdom: "npm:26.0.0"
@@ -1169,12 +1169,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:22.10.9":
-  version: 22.10.9
-  resolution: "@types/node@npm:22.10.9"
+"@types/node@npm:*, @types/node@npm:22.10.10":
+  version: 22.10.10
+  resolution: "@types/node@npm:22.10.10"
   dependencies:
     undici-types: "npm:~6.20.0"
-  checksum: 10c0/ed2d7b2cf20ce520e04711eab48e9cd7d6a835d2859fbdc5d9a8c5e00a97c1f872a409f789783c473062b29beaf1cddf4b1c7ad03ae3fe433b072b7cf9fff741
+  checksum: 10c0/3425772d4513cd5dbdd87c00acda088113c03a97445f84f6a89744c60a66990b56c9d3a7213d09d57b6b944ae8ff45f985565e0c1846726112588e33a22dd12b
   languageName: node
   linkType: hard
 
@@ -3497,7 +3497,7 @@ __metadata:
   dependencies:
     "@eslint/js": "npm:9.18.0"
     "@types/eslint": "npm:9.6.1"
-    "@types/node": "npm:22.10.9"
+    "@types/node": "npm:22.10.10"
     "@types/web": "npm:0.0.197"
     eslint: "npm:9.18.0"
     eslint-config-prettier: "npm:10.0.1"
