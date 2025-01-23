@@ -115,16 +115,24 @@ export class ReligionManager implements Automation {
 
   private _buildBestUnicornBuilding() {
     const bestUnicornBuilding = this.getBestUnicornBuilding();
-    if (bestUnicornBuilding === null) {
+    if (this.settings.bestUnicornBuildingCurrent !== bestUnicornBuilding) {
+      this.settings.bestUnicornBuildingCurrent = bestUnicornBuilding;
+      this._host.refreshUi();
+    }
+
+    if (this.settings.bestUnicornBuildingCurrent === null) {
       return;
     }
 
     const sectionTrigger = this.settings.trigger;
 
-    if (bestUnicornBuilding === "unicornPasture") {
-      this._bonfireManager.build(bestUnicornBuilding, 0, 1);
+    if (this.settings.bestUnicornBuildingCurrent === "unicornPasture") {
+      this._bonfireManager.build(this.settings.bestUnicornBuildingCurrent, 0, 1);
     } else {
-      const buildingButton = this._getBuildButton(bestUnicornBuilding, UnicornItemVariant.Ziggurat);
+      const buildingButton = this._getBuildButton(
+        this.settings.bestUnicornBuildingCurrent,
+        UnicornItemVariant.Ziggurat,
+      );
       if (isNil(buildingButton?.model)) {
         return;
       }
@@ -175,7 +183,10 @@ export class ReligionManager implements Automation {
       }
 
       // Let the BulkManager figure out if the build can be made.
-      const buildRequest = { [bestUnicornBuilding]: this.settings.buildings[bestUnicornBuilding] };
+      const buildRequest = {
+        [this.settings.bestUnicornBuildingCurrent]:
+          this.settings.buildings[this.settings.bestUnicornBuildingCurrent],
+      };
       const build = this._bulkManager.bulk(
         buildRequest,
         this.getBuildMetaData(buildRequest),
@@ -185,7 +196,7 @@ export class ReligionManager implements Automation {
       if (0 < build.length && 0 < build[0].count) {
         // We force only building 1 of the best unicorn building, because
         // afterwards the best unicorn building is likely going to change.
-        this.build(bestUnicornBuilding, UnicornItemVariant.Ziggurat, 1);
+        this.build(this.settings.bestUnicornBuildingCurrent, UnicornItemVariant.Ziggurat, 1);
       }
     }
   }

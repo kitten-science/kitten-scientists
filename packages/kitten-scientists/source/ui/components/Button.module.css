@@ -30,7 +30,7 @@
     }
   }
 
-  &.ineffective {
+  &.ineffective:not(.inactive) {
     color: red;
     animation: hail-rainbow 1.5s linear infinite;
   }
@@ -56,7 +56,7 @@
     }
   }
 
-  &.ineffective {
+  &.ineffective:not(.inactive) {
     color: red;
     animation: hail-rainbow 1.5s linear infinite;
   }
