@@ -29,7 +29,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
 
     const items = [];
     let lastLabel = resources[0].title;
-    for (const resource of resources.toSorted((a, b) =>
+    for (const resource of [...resources].sort((a, b) =>
       a.title.localeCompare(b.title, locale.selected),
     )) {
       const option = this.setting.resources[resource.name];
