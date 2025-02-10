@@ -2,4 +2,4 @@ You are welcome to [open a discussion](https://github.com/kitten-science/kitten-
 
 You can also help [translating KS](https://crowdin.com/project/kitten-scientists), either by contributing missing translations or reviewing the existing entries.
 
-Please see our [Development Guide](https://kitten-science.com/development/) for in-depth information about development practices.
+Please see our [Development Guide](https://kitten-science.com/development/development/) for in-depth information about development practices.
