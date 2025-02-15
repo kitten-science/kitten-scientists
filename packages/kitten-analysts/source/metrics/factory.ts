@@ -4,6 +4,7 @@ import { MessageCache } from "../entrypoint-backend.js";
 import {
   PayloadBuildings,
   PayloadCalendar,
+  PayloadPollution,
   PayloadRaces,
   PayloadResources,
   PayloadStatistics,
@@ -15,6 +16,7 @@ export const gaugeFactory = <
   TMessage extends
     | "getBuildings"
     | "getCalendar"
+    | "getPollution"
     | "getRaces"
     | "getResourcePool"
     | "getStatistics"
@@ -23,6 +25,7 @@ export const gaugeFactory = <
   TData extends
     | PayloadBuildings
     | PayloadCalendar
+    | PayloadPollution
     | PayloadRaces
     | PayloadResources
     | PayloadStatistics
@@ -30,15 +33,17 @@ export const gaugeFactory = <
     ? PayloadBuildings
     : TMessage extends "getCalendar"
       ? PayloadCalendar
-      : TMessage extends "getRaces"
-        ? PayloadRaces
-        : TMessage extends "getResourcePool"
-          ? PayloadResources
-          : TMessage extends "getStatistics"
-            ? PayloadStatistics
-            : TMessage extends "getTechnologies"
-              ? PayloadTechnologies
-              : never,
+      : TMessage extends "getPollution"
+        ? PayloadPollution
+        : TMessage extends "getRaces"
+          ? PayloadRaces
+          : TMessage extends "getResourcePool"
+            ? PayloadResources
+            : TMessage extends "getStatistics"
+              ? PayloadStatistics
+              : TMessage extends "getTechnologies"
+                ? PayloadTechnologies
+                : never,
 >(instructions: {
   cache: MessageCache;
   remote: KittensGameRemote;

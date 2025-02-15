@@ -24,6 +24,7 @@
     "ka:build": "node build.js && vite --config vite.config.inject.js build",
     "ka:compose:build": "docker-compose build",
     "ka:compose:down": "docker-compose down",
+    "ka:compose:refresh": "yarn run ka:compose:build; yarn run ka:compose:down; yarn run ka:compose:up -d",
     "ka:compose:up": "docker-compose up",
     "ka:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
     "ka:release": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",

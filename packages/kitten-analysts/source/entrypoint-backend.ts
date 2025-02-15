@@ -21,6 +21,7 @@ import {
   KittenAnalystsMessageId,
   PayloadBuildings,
   PayloadCalendar,
+  PayloadPollution,
   PayloadRaces,
   PayloadResources,
   PayloadStatistics,
@@ -40,6 +41,8 @@ import { kg_kittens_average } from "./metrics/kg_kittens_average.js";
 import { kg_kittens_dead } from "./metrics/kg_kittens_dead.js";
 import { kg_kittens_total } from "./metrics/kg_kittens_total.js";
 import { kg_paragon_total } from "./metrics/kg_paragon_total.js";
+import { kg_pollution_production } from "./metrics/kg_pollution_prodution.js";
+import { kg_pollution_total } from "./metrics/kg_pollution_total.js";
 import { kg_race_energy } from "./metrics/kg_race_energy.js";
 import { kg_race_standing } from "./metrics/kg_race_standing.js";
 import { kg_resets_total } from "./metrics/kg_resets_total.js";
@@ -94,6 +97,7 @@ const cache = new Map<
       KittenAnalystsMessageId,
       | PayloadBuildings
       | PayloadCalendar
+      | PayloadPollution
       | PayloadRaces
       | PayloadResources
       | PayloadStatistics
@@ -120,6 +124,9 @@ register.registerMetric(kg_race_standing(cache, remote));
 
 register.registerMetric(kg_crypto_price(cache, remote));
 register.registerMetric(kg_festival_days(cache, remote));
+
+register.registerMetric(kg_pollution_production(cache, remote));
+register.registerMetric(kg_pollution_total(cache, remote));
 
 // Metrics from in-game Stats
 

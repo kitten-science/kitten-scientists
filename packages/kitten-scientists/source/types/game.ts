@@ -130,6 +130,7 @@ export type Game = {
       title: string;
       buildings: Array<Building>;
     }>;
+    cathPollution: number;
     /** @deprecated Use `getBuildingExt()` instead. */
     get: (build: Building) => BuildingMeta;
     getBuildingExt: (building: Building) => BuildingExt;

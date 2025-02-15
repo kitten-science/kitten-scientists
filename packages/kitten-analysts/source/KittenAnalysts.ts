@@ -5,6 +5,7 @@ import {
   KGNetSavePersisted,
   TabId,
 } from "@kitten-science/kitten-scientists/types/index.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { cdebug, cinfo, cwarn } from "./tools/Log.js";
 import { identifyExchange } from "./tools/MessageFormat.js";
@@ -20,6 +21,7 @@ export type KittenAnalystsMessageId =
   | "connected"
   | "getBuildings"
   | "getCalendar"
+  | "getPollution"
   | "getRaces"
   | "getResourcePool"
   | "getStatistics"
@@ -48,6 +50,11 @@ export type PayloadCalendar = Array<{
   seasonsPerYear: number;
   year: number;
   yearsPerCycle: number;
+}>;
+export type PayloadPollution = Array<{
+  label: string;
+  name: string;
+  pollution: number;
 }>;
 export type PayloadRaces = Array<{
   embassyLevel: number;
@@ -85,21 +92,23 @@ export interface KittenAnalystsMessage<
     ? PayloadBuildings
     : TMessage extends "getCalendar"
       ? PayloadCalendar
-      : TMessage extends "getRaces"
-        ? PayloadRaces
-        : TMessage extends "getResourcePool"
-          ? PayloadResources
-          : TMessage extends "getStatistics"
-            ? PayloadStatistics
-            : TMessage extends "getTechnologies"
-              ? PayloadTechnologies
-              : TMessage extends "reportFrame"
-                ? unknown
-                : TMessage extends "reportSavegame"
+      : TMessage extends "getPollution"
+        ? PayloadPollution
+        : TMessage extends "getRaces"
+          ? PayloadRaces
+          : TMessage extends "getResourcePool"
+            ? PayloadResources
+            : TMessage extends "getStatistics"
+              ? PayloadStatistics
+              : TMessage extends "getTechnologies"
+                ? PayloadTechnologies
+                : TMessage extends "reportFrame"
                   ? unknown
-                  : TMessage extends "injectSavegame"
-                    ? KGNetSavePersisted
-                    : never,
+                  : TMessage extends "reportSavegame"
+                    ? unknown
+                    : TMessage extends "injectSavegame"
+                      ? KGNetSavePersisted
+                      : never,
 > {
   /**
    * The payload of the message.
@@ -361,6 +370,44 @@ export class KittenAnalysts {
           guid: game.telemetry.guid,
           location: this.location,
           responseId: message.responseId,
+          type: message.type,
+        };
+      }
+
+      case "getPollution": {
+        const producers = game.bld.meta[0].meta.filter(
+          _ => !isNil(_.effects?.cathPollutionPerTickProd),
+        );
+        const consumers = game.bld.meta[0].meta.filter(
+          _ => !isNil(_.effects?.cathPollutionPerTickCon),
+        );
+
+        const data: PayloadPollution = [
+          {
+            label: "Total",
+            name: "cathPollution",
+            // Could be simplified, but this syntax matches the function getPollutionMod of the game.
+            pollution: (game.bld.cathPollution / 10000000) * 100,
+          },
+          ...producers.map(_ => ({
+            label: _.label ?? "",
+            name: _.name,
+            pollution: (_.effects?.cathPollutionPerTickProd ?? 0) * _.on,
+          })),
+          ...consumers.map(_ => ({
+            label: _.label ?? "",
+            name: _.name,
+            pollution: (_.effects?.cathPollutionPerTickCon ?? 0) * _.on,
+          })),
+        ];
+
+        return {
+          client_type: this.location.includes("headless.html") ? "headless" : "browser",
+          data,
+          guid: game.telemetry.guid,
+          location: this.location,
+          responseId: message.responseId,
+
           type: message.type,
         };
       }
