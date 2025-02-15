@@ -29,7 +29,7 @@ env:
   DEV_BUILD: false
   KS_RELEASE_CHANNEL: stable
   # renovate: datasource=node-version depName=node versioning=node
-  NODE_VERSION: "22.13.1"
+  NODE_VERSION: "22.14.0"
 
 jobs:
   versions:
