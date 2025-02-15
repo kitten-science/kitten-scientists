@@ -112,7 +112,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
                 return;
               }
 
-              settings.trigger = host.parsePercentage(value);
+              settings.trigger = host.parseAbsolute(value) ?? settings.trigger;
             })
             .then(() => {
               this.refreshUi();
