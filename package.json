@@ -42,7 +42,7 @@
     "eslint": "9.20.1",
     "eslint-config-prettier": "10.0.1",
     "lint-staged": "15.4.3",
-    "prettier": "3.3.3",
+    "prettier": "3.5.1",
     "prettier-package-json": "2.8.0",
     "prettier-plugin-organize-imports": "4.1.0",
     "prettier-plugin-sh": "0.14.0",
