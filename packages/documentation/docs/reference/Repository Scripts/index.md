@@ -65,6 +65,19 @@
 
     Builds the [Development Container](../../development/development.md#development-with-kittens-game-container).
 
+## devcontainer:prepare
+
+-   Project: `@kitten-science/devcontainer`
+-   Source:
+
+    ```shell
+    node build.js
+    ```
+
+-   Description:
+
+    _documentation pending_
+
 ## devcontainer:rebuild
 
 -   Project: `@kitten-science/devcontainer`
@@ -152,6 +165,19 @@
 
     ```shell
     docker-compose down
+    ```
+
+-   Description:
+
+    _documentation pending_
+
+## ka:compose:refresh
+
+-   Project: `@kitten-science/kitten-analysts`
+-   Source:
+
+    ```shell
+    yarn run ka:compose:build; yarn run ka:compose:down; yarn run ka:compose:up -d
     ```
 
 -   Description:
