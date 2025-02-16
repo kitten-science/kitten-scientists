@@ -1,6 +1,6 @@
 # Kitten Scientists MVPs
 
-KS was originally developed by [Cameron Condry](https://github.com/cameroncondry) in the [Kitten Scientists 1.5 project]((https://github.com/cameroncondry/cbc-kitten-scientists) and has since been extended by many great contributors. The v2 of KS is a major effort to rewrite the entire script with more modern approaches, fix all issues in the script, and add new features.
+KS was originally developed by [Cameron Condry](https://github.com/cameroncondry) in the [Kitten Scientists 1.5 project](https://github.com/cameroncondry/cbc-kitten-scientists) and has since been extended by many great contributors. The v2 of KS is a major effort to rewrite the entire script with more modern approaches, fix all issues in the script, and add new features.
 
 ## Previous Contributors
 
