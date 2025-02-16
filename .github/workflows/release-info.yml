@@ -62,12 +62,12 @@ jobs:
 
       - name: Grab Kitten Scientists Artifacts
         run: |
-          curl --location --silent "${{ steps.release-info.outputs.dev-url-default }}" --output dev.js
-          curl --location --silent "${{ steps.release-info.outputs.nightly-url-default }}" --output nightly.js
-          curl --location --silent "${{ steps.release-info.outputs.stable-url-default }}" --output stable.js
-          curl --location --silent "${{ steps.release-info.outputs.dev-url-minified }}" --output dev.min.js
-          curl --location --silent "${{ steps.release-info.outputs.nightly-url-minified }}" --output nightly.min.js
-          curl --location --silent "${{ steps.release-info.outputs.stable-url-minified }}" --output stable.min.js
+          curl --location --silent "${{ steps.release-info.outputs.dev-url-default }}" --output dev.js || true
+          curl --location --silent "${{ steps.release-info.outputs.nightly-url-default }}" --output nightly.js || true
+          curl --location --silent "${{ steps.release-info.outputs.stable-url-default }}" --output stable.js || true
+          curl --location --silent "${{ steps.release-info.outputs.dev-url-minified }}" --output dev.min.js || true
+          curl --location --silent "${{ steps.release-info.outputs.nightly-url-minified }}" --output nightly.min.js || true
+          curl --location --silent "${{ steps.release-info.outputs.stable-url-minified }}" --output stable.min.js || true
 
       - name: Deploy to S3
         run: |
@@ -88,13 +88,13 @@ jobs:
               --key $PREFIX/dev.js \
               --cache-control "public, s-maxage=600" \
               --content-type "text/javascript" \
-              --body dev.js
+              --body dev.js || true
             aws s3api put-object \
               --bucket kitten-science-us0 \
               --key $PREFIX/dev.min.js \
               --cache-control "public, s-maxage=600" \
               --content-type "text/javascript" \
-              --body dev.min.js
+              --body dev.min.js || true
 
             # Put the nightly scripts on the channel.
             aws s3api put-object \
@@ -102,13 +102,13 @@ jobs:
               --key $PREFIX/nightly.js \
               --cache-control "public, s-maxage=3600" \
               --content-type "text/javascript" \
-              --body nightly.js
+              --body nightly.js || true
             aws s3api put-object \
               --bucket kitten-science-us0 \
               --key $PREFIX/nightly.min.js \
               --cache-control "public, s-maxage=3600" \
               --content-type "text/javascript" \
-              --body nightly.min.js
+              --body nightly.min.js || true
 
             # Put the stable scripts on the channel.
             aws s3api put-object \
@@ -116,11 +116,11 @@ jobs:
               --key $PREFIX/stable.js \
               --cache-control "public, s-maxage=86400" \
               --content-type "text/javascript" \
-              --body stable.js
+              --body stable.js || true
             aws s3api put-object \
               --bucket kitten-science-us0 \
               --key $PREFIX/stable.min.js \
               --cache-control "public, s-maxage=86400" \
               --content-type "text/javascript" \
-              --body stable.min.js
+              --body stable.min.js || true
           done

@@ -82,54 +82,90 @@ export class ReleaseInfo {
     const latestStableVersion = "v2.0.0-beta.9";
 
     core.info("Looking for dev build...");
-    const latestBuildDev = await octokit.rest.repos.getReleaseByTag({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      tag: "next",
-    });
+    const latestBuildDev = await octokit.rest.repos
+      .getReleaseByTag({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        tag: "next",
+      })
+      .catch(() => null);
 
     core.info("Looking for nightly build...");
-    const latestBuildNightly = await octokit.rest.repos.getReleaseByTag({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      tag: "nightly",
-    });
+    const latestBuildNightly = await octokit.rest.repos
+      .getReleaseByTag({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        tag: "nightly",
+      })
+      .catch(() => null);
 
     core.info("Looking for stable build...");
-    const latestBuildStable = await octokit.rest.repos.getReleaseByTag({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      tag: latestStableVersion,
-    });
+    const latestBuildStable = await octokit.rest.repos
+      .getReleaseByTag({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        tag: latestStableVersion,
+      })
+      .catch(() => null);
 
     const releaseInfo: ReleaseInfoSchema = {
-      dev: {
-        version: extractVersionFromTitle(latestBuildDev.data.name),
-        date: latestBuildDev.data.published_at ?? latestBuildDev.data.created_at,
-        url: {
-          default: findUserscript(latestBuildDev.data.assets).browser_download_url,
-          minified: findUserscript(latestBuildDev.data.assets, true).browser_download_url,
-          release: latestBuildDev.data.html_url,
-        },
-      },
-      nightly: {
-        version: extractVersionFromTitle(latestBuildNightly.data.name),
-        date: latestBuildNightly.data.published_at ?? latestBuildNightly.data.created_at,
-        url: {
-          default: findUserscript(latestBuildNightly.data.assets).browser_download_url,
-          minified: findUserscript(latestBuildNightly.data.assets, true).browser_download_url,
-          release: latestBuildNightly.data.html_url,
-        },
-      },
-      stable: {
-        version: latestBuildStable.data.tag_name,
-        date: latestBuildStable.data.published_at ?? latestBuildStable.data.created_at,
-        url: {
-          default: findUserscript(latestBuildStable.data.assets).browser_download_url,
-          minified: findUserscript(latestBuildStable.data.assets, true).browser_download_url,
-          release: latestBuildStable.data.html_url,
-        },
-      },
+      dev: latestBuildDev
+        ? {
+            version: extractVersionFromTitle(latestBuildDev.data.name),
+            date: latestBuildDev.data.published_at ?? latestBuildDev.data.created_at,
+            url: {
+              default: findUserscript(latestBuildDev.data.assets).browser_download_url,
+              minified: findUserscript(latestBuildDev.data.assets, true).browser_download_url,
+              release: latestBuildDev.data.html_url,
+            },
+          }
+        : {
+            date: "",
+            url: {
+              default: "",
+              minified: "",
+              release: "",
+            },
+            version: "",
+          },
+      nightly: latestBuildNightly
+        ? {
+            version: extractVersionFromTitle(latestBuildNightly.data.name),
+            date: latestBuildNightly.data.published_at ?? latestBuildNightly.data.created_at,
+            url: {
+              default: findUserscript(latestBuildNightly.data.assets).browser_download_url,
+              minified: findUserscript(latestBuildNightly.data.assets, true).browser_download_url,
+              release: latestBuildNightly.data.html_url,
+            },
+          }
+        : {
+            date: "",
+            url: {
+              default: "",
+              minified: "",
+              release: "",
+            },
+            version: "",
+          },
+      stable: latestBuildStable
+        ? {
+            version: latestBuildStable.data.tag_name,
+            date: latestBuildStable.data.published_at ?? latestBuildStable.data.created_at,
+            url: {
+              default: findUserscript(latestBuildStable.data.assets).browser_download_url,
+              minified: findUserscript(latestBuildStable.data.assets, true).browser_download_url,
+              release: latestBuildStable.data.html_url,
+            },
+          }
+        : {
+            date: "",
+            url: {
+              default: "",
+              minified: "",
+              release: "",
+            },
+            version: "",
+          },
     };
 
     const filename = core.getInput("filename", { required: false });
