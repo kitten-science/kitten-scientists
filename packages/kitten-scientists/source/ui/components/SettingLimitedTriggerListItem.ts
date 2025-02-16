@@ -5,8 +5,15 @@ import { TriggerButton } from "./buttons/TriggerButton.js";
 import { SettingLimitedListItem, SettingListItemOptionsLimited } from "./SettingLimitedListItem.js";
 import { SettingListItemOptions } from "./SettingListItem.js";
 import { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
+import { UiComponent } from "./UiComponent.js";
 
-export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
+export class SettingLimitedTriggerListItem<
+  TOptions extends SettingListItemOptions<UiComponent> &
+    SettingListItemOptionsLimited &
+    SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
+    SettingListItemOptionsLimited &
+    SettingListItemOptionsTrigger,
+> extends SettingLimitedListItem {
   readonly triggerButton: TriggerButton;
 
   constructor(
@@ -14,9 +21,7 @@ export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
     setting: SettingLimitedTrigger,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: Partial<
-      SettingListItemOptions & SettingListItemOptionsLimited & SettingListItemOptionsTrigger
-    >,
+    options?: Partial<TOptions>,
   ) {
     super(host, setting, label, options);
 

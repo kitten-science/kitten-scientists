@@ -1,15 +1,18 @@
 import { KittenScientists } from "../../KittenScientists.js";
 import stylesDelimiter from "./Delimiter.module.css";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, UiComponentInterface, UiComponentOptions } from "./UiComponent.js";
 
-export type ListItemOptions = UiComponentOptions & {
-  /**
-   * Should there be additional padding below this element?
-   */
-  readonly delimiter: boolean;
-};
+export type ListItemOptions<TChild extends UiComponentInterface = UiComponentInterface> =
+  UiComponentOptions<TChild> & {
+    /**
+     * Should there be additional padding below this element?
+     */
+    readonly delimiter: boolean;
+  };
 
-export class ListItem extends UiComponent {
+export class ListItem<
+  TOptions extends ListItemOptions<UiComponent> = ListItemOptions<UiComponent>,
+> extends UiComponent<TOptions> {
   readonly element: JQuery;
 
   /**
@@ -18,7 +21,7 @@ export class ListItem extends UiComponent {
    * @param host The userscript instance.
    * @param options Options for the list item.
    */
-  constructor(host: KittenScientists, options?: Partial<ListItemOptions>) {
+  constructor(host: KittenScientists, options?: Partial<TOptions>) {
     super(host, options);
 
     this.element = $("<li/>");

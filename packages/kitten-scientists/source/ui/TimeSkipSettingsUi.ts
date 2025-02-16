@@ -20,8 +20,8 @@ import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingMaxTriggerListItem> {
-  private readonly _cycles: CollapsiblePanel<CyclesList>;
-  private readonly _seasons: CollapsiblePanel<SeasonsList>;
+  private readonly _cycles: CollapsiblePanel<PanelOptions<CyclesList>>;
+  private readonly _seasons: CollapsiblePanel<PanelOptions<SeasonsList>>;
   private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
 
   constructor(
@@ -124,7 +124,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     );
     this.settingItem.triggerButton.element.removeClass(stylesButton.lastHeadAction);
 
-    this._cycles = new CollapsiblePanel(
+    this._cycles = new CollapsiblePanel<PanelOptions<CyclesList>>(
       host,
       new LabelListItem(host, ucfirst(host.engine.i18n("ui.cycles")), {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
@@ -134,7 +134,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
         children: [new CyclesList(host, this.setting.cycles, "skip")],
       },
     );
-    this._seasons = new CollapsiblePanel(
+    this._seasons = new CollapsiblePanel<PanelOptions<SeasonsList>>(
       host,
       new LabelListItem(host, ucfirst(host.engine.i18n("trade.seasons")), {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],

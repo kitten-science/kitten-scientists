@@ -3,25 +3,30 @@ import { KittenScientists } from "../../KittenScientists.js";
 import { Setting } from "../../settings/Settings.js";
 import { LabelListItem, LabelListItemOptions } from "./LabelListItem.js";
 import { default as styles, default as stylesSettingListItem } from "./SettingListItem.module.css";
+import { UiComponent, UiComponentInterface } from "./UiComponent.js";
 
-export type SettingListItemOptions = LabelListItemOptions & {
-  /**
-   * Will be invoked when the user checks the checkbox.
-   */
-  readonly onCheck: () => void;
+export type SettingListItemOptions<TChild extends UiComponentInterface = UiComponentInterface> =
+  LabelListItemOptions<TChild> & {
+    /**
+     * Will be invoked when the user checks the checkbox.
+     */
+    readonly onCheck: () => void;
 
-  /**
-   * Will be invoked when the user unchecks the checkbox.
-   */
-  readonly onUnCheck: () => void;
+    /**
+     * Will be invoked when the user unchecks the checkbox.
+     */
+    readonly onUnCheck: () => void;
 
-  /**
-   * Should the user be prevented from changing the value of the input?
-   */
-  readonly readOnly: boolean;
-};
+    /**
+     * Should the user be prevented from changing the value of the input?
+     */
+    readonly readOnly: boolean;
+  };
 
-export class SettingListItem<TSetting extends Setting = Setting> extends LabelListItem {
+export class SettingListItem<
+  TSetting extends Setting = Setting,
+  TOptions extends SettingListItemOptions<UiComponent> = SettingListItemOptions<UiComponent>,
+> extends LabelListItem<TOptions> {
   readonly setting: TSetting;
   readonly checkbox?: JQuery;
 
@@ -42,7 +47,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     host: KittenScientists,
     setting: TSetting,
     label: string,
-    options?: Partial<SettingListItemOptions>,
+    options: Partial<TOptions> = {},
   ) {
     super(host, label, { ...options, children: [] });
 
@@ -54,17 +59,17 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
       type: "checkbox",
     }).addClass(styles.checkbox);
 
-    this.readOnly = options?.readOnly ?? false;
+    this.readOnly = options.readOnly ?? false;
     checkbox.prop("disabled", this.readOnly);
 
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && !setting.enabled) {
         setting.enabled = true;
-        options?.onCheck?.();
+        options.onCheck?.();
         this.refreshUi();
       } else if (!checkbox.is(":checked") && setting.enabled) {
         setting.enabled = false;
-        options?.onUnCheck?.();
+        options.onUnCheck?.();
         this.refreshUi();
       }
     });
@@ -75,7 +80,19 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     this.checkbox = checkbox;
     this.setting = setting;
 
-    this.addChildren(options?.children);
+    this.addChildren(options.children);
+  }
+
+  check() {
+    this.setting.enabled = true;
+    this._options.onCheck?.();
+    this.refreshUi();
+  }
+
+  uncheck() {
+    this.setting.enabled = false;
+    this._options.onUnCheck?.();
+    this.refreshUi();
   }
 
   refreshUi() {

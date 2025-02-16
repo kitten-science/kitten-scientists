@@ -4,6 +4,7 @@ import { LimitedButton } from "./buttons/LimitedButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
+import { UiComponent } from "./UiComponent.js";
 
 export type SettingListItemOptionsLimited = {
   /**
@@ -17,7 +18,11 @@ export type SettingListItemOptionsLimited = {
   readonly onLimitedUnCheck: () => void;
 };
 
-export class SettingLimitedListItem extends SettingListItem {
+export class SettingLimitedListItem<
+  TOptions extends SettingListItemOptions<UiComponent> &
+    SettingListItemOptionsLimited = SettingListItemOptions<UiComponent> &
+    SettingListItemOptionsLimited,
+> extends SettingListItem {
   readonly limitedButton: LimitedButton;
 
   /**
@@ -33,7 +38,7 @@ export class SettingLimitedListItem extends SettingListItem {
     host: KittenScientists,
     setting: SettingLimited,
     label: string,
-    options?: Partial<SettingListItemOptions & SettingListItemOptionsLimited>,
+    options?: Partial<TOptions>,
   ) {
     super(host, setting, label, options);
 

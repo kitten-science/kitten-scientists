@@ -20,9 +20,9 @@ export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponent
  * behavior.
  */
 export class CollapsiblePanel<
-  TChild extends UiComponent = UiComponent,
+  TOptions extends PanelOptions = PanelOptions,
   THead extends LabelListItem = LabelListItem,
-> extends UiComponent {
+> extends UiComponent<TOptions> {
   protected readonly container: UiComponent;
   readonly element: JQuery;
   protected readonly _expando: ExpandoButton;
@@ -45,7 +45,7 @@ export class CollapsiblePanel<
    * @param head Another component to host in the head of the panel.
    * @param options Options for this panel.
    */
-  constructor(host: KittenScientists, head: THead, options?: Partial<PanelOptions<TChild>>) {
+  constructor(host: KittenScientists, head: THead, options?: Partial<TOptions>) {
     super(host, options);
 
     this.container = new Container(host);
@@ -112,12 +112,12 @@ export class CollapsiblePanel<
     }
 
     if (toggleNested) {
-      const toggleChildren = (children: Set<UiComponent>) => {
+      const toggleChildren = (children: Set<TOptions["children"][0]>) => {
         for (const child of children) {
           if (is(child, CollapsiblePanel)) {
             (child as CollapsiblePanel).toggle(expand, toggleNested);
           } else {
-            toggleChildren((child as UiComponent).children);
+            toggleChildren((child as UiComponent<TOptions>).children);
           }
         }
       };

@@ -4,13 +4,17 @@ import { MaxButton } from "./buttons/MaxButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
+import { UiComponent } from "./UiComponent.js";
 
 export type SettingListItemOptionsMax = {
   readonly onRefreshMax: (subject: SettingMaxListItem) => void;
   readonly onSetMax: (subject: SettingMaxListItem) => void;
 };
 
-export class SettingMaxListItem extends SettingListItem<SettingMax> {
+export class SettingMaxListItem<
+  TOptions extends SettingListItemOptions<UiComponent> &
+    SettingListItemOptionsMax = SettingListItemOptions<UiComponent> & SettingListItemOptionsMax,
+> extends SettingListItem<SettingMax> {
   readonly maxButton: MaxButton;
 
   /**
@@ -27,7 +31,7 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
     host: KittenScientists,
     setting: SettingMax,
     label: string,
-    options?: Partial<SettingListItemOptions & SettingListItemOptionsMax>,
+    options?: Partial<TOptions>,
   ) {
     super(host, setting, label, options);
 

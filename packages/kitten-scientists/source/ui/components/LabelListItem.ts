@@ -3,24 +3,27 @@ import { Container } from "./Container.js";
 import styles from "./LabelListItem.module.css";
 import { ListItem, ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
-import { UiComponent } from "./UiComponent.js";
+import { UiComponent, UiComponentInterface } from "./UiComponent.js";
 
-export type LabelListItemOptions = ListItemOptions & {
-  readonly childrenHead: Array<UiComponent>;
+export type LabelListItemOptions<TChild extends UiComponentInterface = UiComponentInterface> =
+  ListItemOptions<TChild> & {
+    readonly childrenHead: Array<UiComponent>;
 
-  /**
-   * When set to an SVG path, will be used as an icon on the label.
-   */
-  readonly icon: string;
+    /**
+     * When set to an SVG path, will be used as an icon on the label.
+     */
+    readonly icon: string;
 
-  /**
-   * Should an indicator be rendered in front of the element,
-   * to indicate that this is an upgrade of a prior setting?
-   */
-  readonly upgradeIndicator: boolean;
-};
+    /**
+     * Should an indicator be rendered in front of the element,
+     * to indicate that this is an upgrade of a prior setting?
+     */
+    readonly upgradeIndicator: boolean;
+  };
 
-export class LabelListItem extends ListItem {
+export class LabelListItem<
+  TOptions extends LabelListItemOptions<UiComponent> = LabelListItemOptions<UiComponent>,
+> extends ListItem<TOptions> {
   readonly head: Container;
   readonly elementLabel: JQuery;
 
@@ -31,7 +34,7 @@ export class LabelListItem extends ListItem {
    * @param label The label on the setting element.
    * @param options Options for the list item.
    */
-  constructor(host: KittenScientists, label: string, options?: Partial<LabelListItemOptions>) {
+  constructor(host: KittenScientists, label: string, options?: Partial<TOptions>) {
     super(host, options);
 
     this.head = new Container(host);
