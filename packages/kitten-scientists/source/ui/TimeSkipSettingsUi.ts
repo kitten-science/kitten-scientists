@@ -3,6 +3,7 @@ import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { SettingOptions } from "../settings/Settings.js";
+import { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
@@ -15,6 +16,7 @@ import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SeasonsList } from "./components/SeasonsList.js";
 import { SettingListItem } from "./components/SettingListItem.js";
+import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -28,6 +30,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     host: KittenScientists,
     settings: TimeSkipSettings,
     locale: SettingOptions<SupportedLocale>,
+    sectionSetting: TimeControlSettings,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("option.time.skip");
@@ -37,15 +40,29 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       new SettingMaxTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
         },
         onRefresh: item => {
-          (item as SettingMaxTriggerListItem).maxButton.inactive =
-            !settings.enabled || settings.max === -1;
-          (item as SettingMaxTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger === -1;
+          const element = item as SettingMaxTriggerListItem;
+
+          element.maxButton.inactive = !settings.enabled || settings.max === -1;
+          element.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+
+          element.maxButton.ineffective =
+            sectionSetting.enabled && settings.enabled && settings.max === 0;
+
+          this._cycles.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.cycles).some(cycle => cycle.enabled);
+          this._seasons.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.seasons).some(season => season.enabled);
         },
         onRefreshMax: item => {
           item.maxButton.updateLabel(host.renderAbsolute(settings.max));
@@ -127,16 +144,29 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     this._cycles = new CollapsiblePanel<PanelOptions<CyclesList>>(
       host,
       new LabelListItem(host, ucfirst(host.engine.i18n("ui.cycles")), {
+        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         icon: Icons.Cycles,
       }),
       {
-        children: [new CyclesList(host, this.setting.cycles, "skip")],
+        children: [
+          new CyclesList(host, this.setting.cycles, {
+            onCheck: (label: string) => {
+              host.engine.imessage("time.skip.cycle.enable", [label]);
+              this.refreshUi();
+            },
+            onUnCheck: (label: string) => {
+              host.engine.imessage("time.skip.cycle.disable", [label]);
+              this.refreshUi();
+            },
+          }),
+        ],
       },
     );
     this._seasons = new CollapsiblePanel<PanelOptions<SeasonsList>>(
       host,
       new LabelListItem(host, ucfirst(host.engine.i18n("trade.seasons")), {
+        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         icon: Icons.Seasons,
       }),
@@ -145,9 +175,11 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
           new SeasonsList(host, this.setting.seasons, {
             onCheck: (label: string) => {
               host.engine.imessage("time.skip.season.enable", [label]);
+              this.refreshUi();
             },
             onUnCheck: (label: string) => {
               host.engine.imessage("time.skip.season.disable", [label]);
+              this.refreshUi();
             },
           }),
         ],
@@ -157,6 +189,8 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       host,
       this.setting.activeHeatTransfer,
       locale,
+      settings,
+      sectionSetting,
     );
 
     this.addChild(

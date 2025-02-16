@@ -4,15 +4,16 @@ import { KittenScientists } from "../../KittenScientists.js";
 import { IconButton } from "./IconButton.js";
 import { SettingListItem } from "./SettingListItem.js";
 import styles from "./SettingsList.module.css";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, UiComponentInterface, UiComponentOptions } from "./UiComponent.js";
 
-export type SettingsListOptions = UiComponentOptions & {
-  readonly hasEnableAll: boolean;
-  readonly hasDisableAll: boolean;
-  readonly onEnableAll: () => void;
-  readonly onDisableAll: () => void;
-  readonly onReset: () => void;
-};
+export type SettingsListOptions<TChild extends UiComponentInterface = UiComponentInterface> =
+  UiComponentOptions<TChild> & {
+    readonly hasEnableAll: boolean;
+    readonly hasDisableAll: boolean;
+    readonly onEnableAll: () => void;
+    readonly onDisableAll: () => void;
+    readonly onReset: () => void;
+  };
 
 /**
  * The `SettingsList` is a `<ul>` designed to host `SettingListItem` instances.
@@ -22,7 +23,9 @@ export type SettingsListOptions = UiComponentOptions & {
  *
  * This construct is also sometimes referred to as an "items list" for historic reasons.
  */
-export class SettingsList extends UiComponent {
+export class SettingsList<
+  TOptions extends SettingsListOptions<UiComponent> = SettingsListOptions<UiComponent>,
+> extends UiComponent<TOptions> {
   readonly element: JQuery;
   readonly list: JQuery;
 
@@ -36,7 +39,7 @@ export class SettingsList extends UiComponent {
    * @param host A reference to the host.
    * @param options Which tools should be available on the list?
    */
-  constructor(host: KittenScientists, options?: Partial<SettingsListOptions>) {
+  constructor(host: KittenScientists, options: Partial<TOptions> = {}) {
     super(host, { ...options, children: [] });
 
     const toolOptions = {
@@ -57,7 +60,7 @@ export class SettingsList extends UiComponent {
       const tools = $("<div/>").addClass(styles.listTools);
 
       if (toolOptions.hasEnableAll) {
-        const onEnableAll = options?.onEnableAll;
+        const onEnableAll = options.onEnableAll;
         this.enableAllButton = new IconButton(
           this._host,
           Icons.CheckboxCheck,
@@ -88,7 +91,7 @@ export class SettingsList extends UiComponent {
       }
 
       if (toolOptions.hasDisableAll) {
-        const onDisableAll = options?.onDisableAll;
+        const onDisableAll = options.onDisableAll;
         this.disableAllButton = new IconButton(
           this._host,
           Icons.CheckboxUnCheck,
@@ -129,7 +132,7 @@ export class SettingsList extends UiComponent {
     }
 
     this.element = container;
-    this.addChildren(options?.children);
+    this.addChildren(options.children);
   }
 
   override addChild(child: UiComponent) {

@@ -17,7 +17,7 @@ export class SettingMaxTriggerListItem<
     SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
     SettingListItemOptionsMax &
     SettingListItemOptionsTrigger,
-> extends SettingListItem<SettingTriggerMax> {
+> extends SettingListItem<SettingTriggerMax, TOptions> {
   readonly maxButton: MaxButton;
   readonly triggerButton: TriggerButton;
 

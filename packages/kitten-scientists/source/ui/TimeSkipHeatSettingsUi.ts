@@ -2,10 +2,13 @@ import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console
 import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { SettingOptions } from "../settings/Settings.js";
+import { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
+import { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { Dialog } from "./components/Dialog.js";
+import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
@@ -16,6 +19,8 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
     host: KittenScientists,
     settings: TimeSkipHeatSettings,
     locale: SettingOptions<SupportedLocale>,
+    sectionSetting: TimeSkipSettings,
+    sectionParentSetting: TimeControlSettings,
     options?: PanelOptions,
   ) {
     const label = host.engine.i18n("option.time.activeHeatTransfer");
@@ -33,9 +38,16 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive = !settings.enabled;
           (item as SettingTriggerListItem).triggerButton.ineffective =
-            settings.enabled && settings.trigger === -1;
+            sectionParentSetting.enabled &&
+            sectionSetting.enabled &&
+            settings.enabled &&
+            settings.trigger === -1;
+
           this.expando.ineffective =
-            settings.enabled && !Object.values(settings.cycles).some(cycle => cycle.enabled);
+            sectionParentSetting.enabled &&
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.cycles).some(cycle => cycle.enabled);
 
           if (settings.activeHeatTransferStatus.enabled) {
             this.head.elementLabel.attr("data-ks-active-from", "◎");
@@ -73,7 +85,19 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
 
     this.addChild(
       new SettingsList(host, {
-        children: [new CyclesList(host, this.setting.cycles, "heatTransfer")],
+        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
+        children: [
+          new CyclesList(host, this.setting.cycles, {
+            onCheck: (label: string) => {
+              host.engine.imessage("time.heatTransfer.cycle.enable", [label]);
+              this.refreshUi();
+            },
+            onUnCheck: (label: string) => {
+              host.engine.imessage("time.heatTransfer.cycle.disable", [label]);
+              this.refreshUi();
+            },
+          }),
+        ],
         hasDisableAll: false,
         hasEnableAll: false,
       }),

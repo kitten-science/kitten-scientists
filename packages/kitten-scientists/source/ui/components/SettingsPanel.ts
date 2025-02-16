@@ -37,6 +37,16 @@ export class SettingsPanel<
     /* noop */
   }
 
+  check() {
+    this.setting.enabled = true;
+    this.refreshUi();
+  }
+
+  uncheck() {
+    this.setting.enabled = false;
+    this.refreshUi();
+  }
+
   /**
    * Constructs a settings panel that is used to contain a major section of the UI.
    *

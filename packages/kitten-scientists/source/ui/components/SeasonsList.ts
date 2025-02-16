@@ -6,7 +6,7 @@ import { SettingsList, SettingsListOptions } from "./SettingsList.js";
 
 export type SettingWithSeasons = Record<Season, Setting>;
 
-export type SeasonsListOptions = SettingsListOptions & {
+export type SeasonsListOptions = SettingsListOptions<SettingListItem> & {
   /**
    * Called when a season is checked.
    *
@@ -51,17 +51,17 @@ export class SeasonsList extends SettingsList {
     this.setting = setting;
 
     this.addEventListener("enableAll", () => {
-      this.setting.autumn.enabled = true;
-      this.setting.spring.enabled = true;
-      this.setting.summer.enabled = true;
-      this.setting.winter.enabled = true;
+      this.autumn.check();
+      this.spring.check();
+      this.summer.check();
+      this.winter.check();
       this.refreshUi();
     });
     this.addEventListener("disableAll", () => {
-      this.setting.autumn.enabled = false;
-      this.setting.spring.enabled = false;
-      this.setting.summer.enabled = false;
-      this.setting.winter.enabled = false;
+      this.autumn.uncheck();
+      this.spring.uncheck();
+      this.summer.uncheck();
+      this.winter.uncheck();
       this.refreshUi();
     });
 

@@ -34,9 +34,11 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
         },
       }),
     );
@@ -90,7 +92,7 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
       },
     );
     this._accelerateTime.triggerButton.element.addClass(stylesButton.lastHeadAction);
-    this._timeSkipUi = new TimeSkipSettingsUi(host, this.setting.timeSkip, locale);
+    this._timeSkipUi = new TimeSkipSettingsUi(host, this.setting.timeSkip, locale, settings);
     this._resetUi = new ResetSettingsUi(host, this.setting.reset, locale);
 
     this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];

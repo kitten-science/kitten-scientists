@@ -31,8 +31,8 @@ export abstract class UiComponent<TOptions extends UiComponentOptions = UiCompon
 
   readonly children = new Set<TOptions["children"][0]>();
 
-  protected readonly _onClick: UiComponentOptions["onClick"] | undefined;
-  protected readonly _onRefresh: UiComponentOptions["onRefresh"] | undefined;
+  protected readonly _onClick: TOptions["onClick"] | undefined;
+  protected readonly _onRefresh: TOptions["onRefresh"] | undefined;
 
   /**
    * Constructs the base `UiComponent`.
