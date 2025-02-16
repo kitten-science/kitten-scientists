@@ -95,6 +95,14 @@
     {
       "manifestPath": "packages/devcontainer/package.json",
       "projectName": "@kitten-science/devcontainer",
+      "scriptName": "devcontainer:prepare",
+      "scriptCode": "node build.js",
+      "isGlobal": true,
+      "isRootManifest": false
+    },
+    {
+      "manifestPath": "packages/devcontainer/package.json",
+      "projectName": "@kitten-science/devcontainer",
       "scriptName": "devcontainer:rebuild",
       "scriptCode": "bash ./scripts/rebuild-container.sh",
       "isGlobal": true,
@@ -148,6 +156,14 @@
       "projectName": "@kitten-science/kitten-analysts",
       "scriptName": "ka:compose:down",
       "scriptCode": "docker-compose down",
+      "isGlobal": true,
+      "isRootManifest": false
+    },
+    {
+      "manifestPath": "packages/kitten-analysts/package.json",
+      "projectName": "@kitten-science/kitten-analysts",
+      "scriptName": "ka:compose:refresh",
+      "scriptCode": "yarn run ka:compose:build; yarn run ka:compose:down; yarn run ka:compose:up -d",
       "isGlobal": true,
       "isRootManifest": false
     },
