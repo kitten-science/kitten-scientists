@@ -60,8 +60,8 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
         onSetTrigger: () => {
           Dialog.prompt(
             host,
-            host.engine.i18n("ui.trigger.activeHeatTransfer.promptTitle"),
-            host.engine.i18n("ui.trigger.activeHeatTransfer.prompt", [
+            host.engine.i18n("ui.trigger.activeHeatTransfer.prompt"),
+            host.engine.i18n("ui.trigger.activeHeatTransfer.promptTitle", [
               host.renderPercentage(settings.trigger, locale.selected, true),
             ]),
             host.renderPercentage(settings.trigger),
