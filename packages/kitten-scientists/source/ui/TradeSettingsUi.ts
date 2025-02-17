@@ -227,8 +227,8 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
         element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
           option.trigger < 0
             ? sectionSetting.trigger < 0
-              ? host.engine.i18n("ui.trigger.build.blocked", [sectionLabel])
-              : `${host.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+              ? host.engine.i18n("ui.trigger.section.blocked", [sectionLabel])
+              : `${host.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.section.inherited")})`
             : host.renderPercentage(option.trigger, locale.selected, true),
         ]);
       },
@@ -236,14 +236,14 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
         Dialog.prompt(
           host,
           host.engine.i18n("ui.trigger.prompt.percentage"),
-          host.engine.i18n("ui.trigger.build.prompt", [
+          host.engine.i18n("ui.trigger.section.prompt", [
             label,
             option.trigger !== -1
               ? host.renderPercentage(option.trigger, locale.selected, true)
-              : host.engine.i18n("ui.trigger.build.inherited"),
+              : host.engine.i18n("ui.trigger.section.inherited"),
           ]),
           option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
-          host.engine.i18n("ui.trigger.build.promptExplainer"),
+          host.engine.i18n("ui.trigger.section.promptExplainer"),
         )
           .then(value => {
             if (value === undefined) {

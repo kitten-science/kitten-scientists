@@ -98,8 +98,8 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
           element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
             option.trigger < 0
               ? settings.trigger < 0
-                ? host.engine.i18n("ui.trigger.build.blocked", [label])
-                : `${host.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
+                ? host.engine.i18n("ui.trigger.section.blocked", [label])
+                : `${host.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.section.inherited")})`
               : host.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
@@ -111,10 +111,10 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
               label,
               option.trigger !== -1
                 ? host.renderPercentage(option.trigger, locale.selected, true)
-                : host.engine.i18n("ui.trigger.build.inherited"),
+                : host.engine.i18n("ui.trigger.section.inherited"),
             ]),
             option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
-            host.engine.i18n("ui.trigger.build.promptExplainer"),
+            host.engine.i18n("ui.trigger.section.promptExplainer"),
           )
             .then(value => {
               if (value === undefined) {
