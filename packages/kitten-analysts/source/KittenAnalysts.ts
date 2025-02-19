@@ -4,6 +4,8 @@ import {
   I18nEngine,
   KGNetSavePersisted,
   TabId,
+  TechnologiesIgnored,
+  TechnologyIgnored,
 } from "@kitten-science/kitten-scientists/types/index.js";
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
@@ -512,13 +514,15 @@ export class KittenAnalysts {
         };
       }
       case "getTechnologies": {
-        const data: PayloadTechnologies = game.science.techs.map(tech => ({
-          name: tech.name,
-          label: tech.label,
-          researched: tech.researched,
-          unlocked: tech.unlocked,
-          tab: "Science",
-        }));
+        const data: PayloadTechnologies = game.science.techs
+          .filter(tech => !TechnologiesIgnored.includes(tech.name as TechnologyIgnored))
+          .map(tech => ({
+            name: tech.name,
+            label: tech.label,
+            researched: tech.researched,
+            unlocked: tech.unlocked,
+            tab: "Science",
+          }));
 
         return {
           client_type: this.location.includes("headless.html") ? "headless" : "browser",
