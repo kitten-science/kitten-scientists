@@ -259,6 +259,7 @@ export type Challenge =
   | "energy"
   | "ironWill"
   | "pacifism"
+  | "postApocalypse"
   | "winterIsComing";
 
 export type ButtonControllerOptions = Record<string, unknown>;

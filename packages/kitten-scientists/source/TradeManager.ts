@@ -736,13 +736,19 @@ export class TradeManager implements Automation {
 
     let total: number | undefined = undefined;
     for (const [resource, required] of objectEntries(materials)) {
-      // If this resource is manpower, the amount of trades it allows is straight forward.
       if (resource === "manpower") {
-        total = this._workshopManager.getValueAvailable(resource) / required;
+        let manpowerCost = required;
+        if (this._host.game.challenges.isActive("postApocalypse")) {
+          manpowerCost = required * (1 + this._host.game.bld.getPollutionLevel());
+        }
+        total = this._workshopManager.getValueAvailable(resource) / manpowerCost;
+      } else if (resource === "gold") {
+        let goldCost = required;
+        if (this._host.game.challenges.isActive("postApocalypse")) {
+          goldCost = required * (1 + this._host.game.bld.getPollutionLevel());
+        }
+        total = this._workshopManager.getValueAvailable(resource) / goldCost;
       } else {
-        // For other resources, use a different path to determine the available resource
-        // amount.
-        // TODO: It's unclear how this works
         total = this._workshopManager.getValueAvailable(resource) / required;
       }
 

@@ -134,6 +134,7 @@ export type Game = {
     /** @deprecated Use `getBuildingExt()` instead. */
     get: (build: Building) => BuildingMeta;
     getBuildingExt: (building: Building) => BuildingExt;
+    getPollutionLevel(): number;
     meta: [{ meta: Array<BuildingMeta> }];
   };
   calendar: {
