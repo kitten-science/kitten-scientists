@@ -10,7 +10,7 @@
     "incremental": true,
     "lib": ["DOM", "ESNext"],
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
