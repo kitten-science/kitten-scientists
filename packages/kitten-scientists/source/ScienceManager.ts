@@ -77,7 +77,7 @@ export class ScienceManager extends UpgradeManager {
           this.settings.techs.trigger,
           setting.trigger,
         );
-        if (available < resource.maxValue * trigger || available < price.val) {
+        if (trigger < 0 || available < resource.maxValue * trigger || available < price.val) {
           continue workLoop;
         }
       }

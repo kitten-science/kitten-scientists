@@ -74,7 +74,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
           this.settings.unlockUpgrades.trigger,
           setting.trigger,
         );
-        if (available < resource.maxValue * trigger || available < price.val) {
+        if (trigger < 0 || available < resource.maxValue * trigger || available < price.val) {
           continue workLoop;
         }
       }
@@ -113,7 +113,8 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     // For crafts that require resources with a capacity, those resources must
     // be at or above the trigger for them to be considered to be crafted.
     for (const craft of Object.values(crafts)) {
-      if (!craft.enabled) {
+      const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, craft.trigger);
+      if (trigger < 0 || !craft.enabled) {
         continue;
       }
 
@@ -134,7 +135,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         .map(material => this.getResource(material))
         .filter(material => 0 < material.maxValue);
 
-      const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, craft.trigger);
       const allMaterialsAboveTrigger =
         requiredMaterials.filter(material => material.value / material.maxValue < trigger)
           .length === 0;

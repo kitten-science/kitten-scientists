@@ -69,9 +69,11 @@ export class TradeManager implements Automation {
     // Determine how many races we will trade with this cycle.
     for (const trade of Object.values(this.settings.races)) {
       const race = this.getRace(trade.race);
+      const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, trade.trigger);
 
       // Check if the race is enabled, in season, unlocked, and we can actually afford it.
       if (
+        trigger < 0 ||
         !trade.enabled ||
         !trade.seasons[season].enabled ||
         !race.unlocked ||
@@ -87,7 +89,6 @@ export class TradeManager implements Automation {
         continue;
       }
 
-      const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, trade.trigger);
       // Determine which resource the race requires for trading, if any.
       const require = trade.require ? this._workshopManager.getResource(trade.require) : false;
 
@@ -877,6 +878,16 @@ export class TradeManager implements Automation {
     const trigger = trade
       ? Engine.evaluateSubSectionTrigger(sectionTrigger, trade.trigger)
       : sectionTrigger;
+
+    if (trigger < 0 && trade === undefined) {
+      // We will have to check all potential trades individually.
+      return true;
+    }
+
+    if (trigger < 0 && trade !== undefined) {
+      // This will never trigger.
+      return false;
+    }
 
     // We should only trade if catpower and gold hit the trigger value.
     // Trades can additionally require specific resources. We will check for those later.
