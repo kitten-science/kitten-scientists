@@ -66,6 +66,8 @@ export const Policies = [
 ] as const;
 export type Policy = (typeof Policies)[number];
 
+export const TechnologiesIgnored = ["brewery"] as const;
+export type TechnologyIgnored = (typeof TechnologiesIgnored)[number];
 export const Technologies = [
   "acoustics",
   "advExogeology",
@@ -81,7 +83,6 @@ export const Technologies = [
   "biochemistry",
   "biology",
   "blackchain",
-  "brewery",
   "calendar",
   "chemistry",
   "chronophysics",
