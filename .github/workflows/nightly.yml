@@ -116,7 +116,8 @@ jobs:
           yarn ks:release
 
       - name: Generate GitHub release
-        uses: oliversalzburg/action-automatic-semantic-releases@4a17ee55de219e82bae381c8e4e464ba66652c5c # v0.3.4
+        id: changelog
+        uses: oliversalzburg/action-automatic-semantic-releases@main
         with:
           automatic_release_tag: nightly
           draft: false
@@ -129,6 +130,18 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           title: Nightly Build v${{ needs.versions.outputs.RELEASE_VERSION }}
           with_authors: false
+
+      - name: Show change counts
+        env:
+          MAJOR: ${{ steps.changelog.outputs.major }}
+          MINOR: ${{ steps.changelog.outputs.minor }}
+          PATCH: ${{ steps.changelog.outputs.patch }}
+          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle }}
+        run: |
+          echo Major changes: $MAJOR
+          echo Minor changes: $MINOR
+          echo Patch changes: $PATCH
+          echo Lifecycle changes: $LIFECYCLE
 
   update-release-info:
     name: 🔹 Update Release Info

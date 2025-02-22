@@ -33,8 +33,42 @@ env:
   NODE_VERSION: "22.14.0"
 
 jobs:
+  changelog:
+    name: Changelog
+    outputs:
+      major: ${{ steps.changelog.outputs.major }}
+      minor: ${{ steps.changelog.outputs.minor }}
+      patch: ${{ steps.changelog.outputs.patch }}
+      lifecycle: ${{ steps.changelog.outputs.lifecycle }}
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Generate Changelog
+        id: changelog
+        uses: oliversalzburg/action-automatic-semantic-releases@main
+        with:
+          automatic_release_tag: ${{ inputs.dry-run-tag || 'next' }}
+          changelog_artifact: changelog.json
+          dry_run: true
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Show change counts
+        env:
+          MAJOR: ${{ steps.changelog.outputs.major }}
+          MINOR: ${{ steps.changelog.outputs.minor }}
+          PATCH: ${{ steps.changelog.outputs.patch }}
+          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle }}
+        run: |
+          echo Major changes: $MAJOR
+          echo Minor changes: $MINOR
+          echo Patch changes: $PATCH
+          echo Lifecycle changes: $LIFECYCLE
+
   versions:
     name: Versions
+    needs:
+      - changelog
     outputs:
       RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
     permissions:
@@ -64,6 +98,7 @@ jobs:
     if: github.event.commits[1] != null || ( !startsWith(github.event.commits[0].message, 'chore(deps):') && !startsWith(github.event.commits[0].message, 'fix(deps):') )
     name: Pre-Release
     needs:
+      - changelog
       - qa
       - versions
     permissions:
@@ -112,7 +147,8 @@ jobs:
 
       - name: Generate GitHub release
         if: success() && inputs.wants-github-release
-        uses: oliversalzburg/action-automatic-semantic-releases@4a17ee55de219e82bae381c8e4e464ba66652c5c # v0.3.4
+        id: changelog
+        uses: oliversalzburg/action-automatic-semantic-releases@main
         with:
           automatic_release_tag: ${{ inputs.dry-run-tag }}
           draft: ${{ inputs.dry-run }}
