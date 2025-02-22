@@ -60,7 +60,7 @@ jobs:
 
       - name: Generate Changelog
         id: changelog
-        uses: oliversalzburg/action-automatic-semantic-releases@main
+        uses: oliversalzburg/action-automatic-semantic-releases@v0.4.12
         with:
           automatic-release-tag: ${{ inputs.dry-run-tag || 'next' }}
           changelog-artifact: changelog.json
@@ -147,7 +147,7 @@ jobs:
       - name: Generate GitHub release
         if: success() && inputs.wants-github-release
         id: changelog
-        uses: oliversalzburg/action-automatic-semantic-releases@main
+        uses: oliversalzburg/action-automatic-semantic-releases@v0.4.12
         with:
           changelog-artifact: changelog.json
           draft: ${{ inputs.dry-run }}
