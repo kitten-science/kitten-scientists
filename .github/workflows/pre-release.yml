@@ -35,15 +35,23 @@ env:
 jobs:
   changelog:
     name: Changelog
-    outputs:
-      major: ${{ steps.changelog.outputs.major }}
-      minor: ${{ steps.changelog.outputs.minor }}
-      patch: ${{ steps.changelog.outputs.patch }}
-      lifecycle: ${{ steps.changelog.outputs.lifecycle }}
     permissions:
       contents: read
     runs-on: ubuntu-24.04
     steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            package.json
+          sparse-checkout-cone-mode: false
+
+      - name: Extract current version
+        run: |
+          cd packages/kitten-scientists
+          echo "ROOT_VERSION=$(jq --raw-output '.version' package.json)" >> $GITHUB_ENV
+
       - name: Generate Changelog
         id: changelog
         uses: oliversalzburg/action-automatic-semantic-releases@main
@@ -51,20 +59,23 @@ jobs:
           automatic_release_tag: ${{ inputs.dry-run-tag || 'next' }}
           changelog_artifact: changelog.json
           dry_run: true
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
           publish: false
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          root_version: ${{ env.ROOT_VERSION }}
 
       - name: Show change counts
         env:
-          MAJOR: ${{ steps.changelog.outputs.major }}
-          MINOR: ${{ steps.changelog.outputs.minor }}
-          PATCH: ${{ steps.changelog.outputs.patch }}
-          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle }}
+          MAJOR: ${{ steps.changelog.outputs.major_total }}
+          MINOR: ${{ steps.changelog.outputs.minor_total }}
+          PATCH: ${{ steps.changelog.outputs.patch_total }}
+          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle_total }}
+          VERSION: ${{ steps.changelog.outputs.version_dev_extended }}
         run: |
           echo Major changes: $MAJOR
           echo Minor changes: $MINOR
           echo Patch changes: $PATCH
           echo Lifecycle changes: $LIFECYCLE
+          echo Pre-Release should use version: $VERSION
 
   versions:
     name: Versions
@@ -78,6 +89,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
 
       - name: Select NodeJS version
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
