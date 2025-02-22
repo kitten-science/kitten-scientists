@@ -35,6 +35,12 @@ env:
 jobs:
   changelog:
     name: Changelog
+    outputs:
+      major: ${{ steps.changelog.outputs.major_total }}
+      minor: ${{ steps.changelog.outputs.minor_total }}
+      patch: ${{ steps.changelog.outputs.patch_total }}
+      lifecycle: ${{ steps.changelog.outputs.lifecycle_total }}
+      version: ${{ steps.changelog.outputs.version_dev_extended }}
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -77,46 +83,15 @@ jobs:
           echo Lifecycle changes: $LIFECYCLE
           echo Pre-Release should use version: $VERSION
 
-  versions:
-    name: Versions
-    needs:
-      - changelog
-    outputs:
-      RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
-    permissions:
-      contents: read
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          persist-credentials: false
-
-      - name: Select NodeJS version
-        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: https://registry.npmjs.org
-
-      # We track the release version through KS only.
-      - name: Determine versions
-        run: |
-          cd packages/kitten-scientists
-          echo "RELEASE_VERSION=$(node ../../scripts/release-version.cjs)" >> $GITHUB_ENV
-
   qa:
     name: 🔹 QA
-    needs:
-      - versions
     uses: ./.github/workflows/qa.yml
 
   pre-release:
-    if: github.event.commits[1] != null || ( !startsWith(github.event.commits[0].message, 'chore(deps):') && !startsWith(github.event.commits[0].message, 'fix(deps):') )
     name: Pre-Release
     needs:
       - changelog
       - qa
-      - versions
     permissions:
       actions: write
       attestations: write
@@ -129,6 +104,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
 
       - name: Select NodeJS version
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
@@ -154,7 +131,7 @@ jobs:
 
       - name: Build release
         env:
-          RELEASE_VERSION: ${{ needs.versions.outputs.RELEASE_VERSION }}
+          RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
         run: |
           yarn build:all
           yarn ka:release
@@ -176,7 +153,7 @@ jobs:
           merge_similar: true
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          title: Development Build v${{ needs.versions.outputs.RELEASE_VERSION }}
+          title: Development Build v${{ needs.changelog.outputs.version }}
           with_authors: false
 
   update-release-info:
@@ -201,7 +178,6 @@ jobs:
     name: 🔹 Publish Devcontainer
     needs:
       - qa
-      - versions
     permissions:
       attestations: write
       contents: read
@@ -225,7 +201,6 @@ jobs:
     name: 🔹 Publish Backend
     needs:
       - qa
-      - versions
     permissions:
       attestations: write
       contents: read
@@ -249,7 +224,6 @@ jobs:
     name: 🔹 Publish Game
     needs:
       - qa
-      - versions
     permissions:
       attestations: write
       contents: read
@@ -273,7 +247,6 @@ jobs:
     name: 🔹 Publish UI
     needs:
       - qa
-      - versions
     permissions:
       attestations: write
       contents: read

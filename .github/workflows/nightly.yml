@@ -33,44 +33,73 @@ jobs:
         if: ${{ github.event_name == 'schedule' }}
         run: test -z $(git rev-list  --after="24 hours"  ${{ github.sha }}) && echo "name=should_run::false" >> $GITHUB_OUTPUT
 
-  versions:
-    name: Versions
+  changelog:
+    if: success() && ${{ needs.check_date.outputs.should_run != 'false' }}
+    name: Changelog
     needs:
       - check_date
     outputs:
-      RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+      major: ${{ steps.changelog.outputs.major_total }}
+      minor: ${{ steps.changelog.outputs.minor_total }}
+      patch: ${{ steps.changelog.outputs.patch_total }}
+      lifecycle: ${{ steps.changelog.outputs.lifecycle_total }}
+      version: ${{ steps.changelog.outputs.version_nightly_extended }}
     permissions:
       contents: read
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Select NodeJS version
-        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: https://registry.npmjs.org
+          persist-credentials: false
+          sparse-checkout: |
+            package.json
+          sparse-checkout-cone-mode: false
 
-      # We track the release version through KS only.
-      - name: Determine versions
+      - name: Extract current version
         run: |
           cd packages/kitten-scientists
-          echo "RELEASE_VERSION=$(node ../../scripts/release-version.cjs)" >> $GITHUB_ENV
+          echo "ROOT_VERSION=$(jq --raw-output '.version' package.json)" >> $GITHUB_ENV
+
+      - name: Generate Changelog
+        id: changelog
+        uses: oliversalzburg/action-automatic-semantic-releases@main
+        with:
+          automatic_release_tag: nightly
+          changelog_artifact: changelog.json
+          dry_run: true
+          publish: false
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          root_version: ${{ env.ROOT_VERSION }}
+
+      - name: Show change counts
+        env:
+          MAJOR: ${{ steps.changelog.outputs.major_total }}
+          MINOR: ${{ steps.changelog.outputs.minor_total }}
+          PATCH: ${{ steps.changelog.outputs.patch_total }}
+          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle_total }}
+          VERSION: ${{ steps.changelog.outputs.version_dev_extended }}
+        run: |
+          echo Major changes: $MAJOR
+          echo Minor changes: $MINOR
+          echo Patch changes: $PATCH
+          echo Lifecycle changes: $LIFECYCLE
+          echo Pre-Release should use version: $VERSION
 
   qa:
+    if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 QA
     needs:
       - check_date
     uses: ./.github/workflows/qa.yml
 
   nightly:
+    if: success() && needs.check_date.outputs.should_run != 'false' && ( needs.changelog.outputs.major != '0' || needs.changelog.outputs.minor != '0' || needs.changelog.outputs.patch != '0' )
     name: Nightly
     needs:
       - check_date
+      - changelog
       - qa
-      - versions
-    if: ${{ needs.check_date.outputs.should_run != 'false' }}
     permissions:
       actions: write
       attestations: write
@@ -108,7 +137,7 @@ jobs:
 
       - name: Build release
         env:
-          RELEASE_VERSION: ${{ needs.versions.outputs.RELEASE_VERSION }}
+          RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
         run: |
           yarn build:all
           yarn ka:release
@@ -128,7 +157,7 @@ jobs:
           merge_similar: true
           prerelease: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          title: Nightly Build v${{ needs.versions.outputs.RELEASE_VERSION }}
+          title: Nightly Build v${{ needs.changelog.outputs.version }}
           with_authors: false
 
       - name: Show change counts
@@ -144,9 +173,10 @@ jobs:
           echo Lifecycle changes: $LIFECYCLE
 
   update-release-info:
+    if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 Update Release Info
-    if: success() && !inputs.dry-run
     needs:
+      - check_date
       - nightly
     permissions:
       contents: read
@@ -154,10 +184,11 @@ jobs:
     uses: ./.github/workflows/release-info.yml
 
   publish-devcontainer:
+    if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 Publish Devcontainer
     needs:
+      - check_date
       - qa
-      - versions
     permissions:
       attestations: write
       contents: read
@@ -179,10 +210,11 @@ jobs:
       with-sarif: false
 
   publish-ka-backend:
+    if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 Publish Backend
     needs:
+      - check_date
       - qa
-      - versions
     permissions:
       attestations: write
       contents: read
@@ -203,10 +235,11 @@ jobs:
       push: true
 
   publish-ka-game:
+    if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 Publish Game
     needs:
+      - check_date
       - qa
-      - versions
     permissions:
       attestations: write
       contents: read
@@ -227,10 +260,11 @@ jobs:
       push: true
 
   publish-ka-ui:
+    if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 Publish UI
     needs:
+      - check_date
       - qa
-      - versions
     permissions:
       attestations: write
       contents: read
