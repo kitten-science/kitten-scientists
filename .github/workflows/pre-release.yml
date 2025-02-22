@@ -92,6 +92,8 @@ jobs:
 
   qa:
     name: 🔹 QA
+    needs:
+      - versions
     uses: ./.github/workflows/qa.yml
 
   pre-release:
