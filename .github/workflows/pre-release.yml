@@ -144,11 +144,18 @@ jobs:
           yarn ke:release
           yarn ks:release
 
-      - name: Generate GitHub release
+      - if: success() && inputs.wants-github-release
+        name: Download changelog
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
+        with:
+          name: changelog.json
+
+      - id: changelog
         if: success() && inputs.wants-github-release
-        id: changelog
+        name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@f38d6eab641dc632653c13a1ddb486e01e7f3e3c # v0.4.14
         with:
+          automatic-release-tag: ${{ inputs.dry-run-tag || 'next' }}
           changelog-artifact: changelog.json
           draft: ${{ inputs.dry-run }}
           dry-run: ${{ inputs.dry-run }}
