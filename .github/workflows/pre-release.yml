@@ -52,6 +52,7 @@ jobs:
           changelog_artifact: changelog.json
           dry_run: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+          publish: false
 
       - name: Show change counts
         env:
