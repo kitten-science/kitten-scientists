@@ -11,11 +11,11 @@ const isMainModule = import.meta.url.endsWith(process.argv[1]);
 export const main = async (): Promise<void> => {
   try {
     core.info("Generating release information...");
-    const repo_token = core.getInput("repo_token", { required: true });
+    const token = core.getInput("repo-token", { required: true });
     const releaseInfo = new ReleaseInfo({
       context,
       core,
-      octokit: getOctokit(repo_token),
+      octokit: getOctokit(token),
     });
 
     await releaseInfo.main();

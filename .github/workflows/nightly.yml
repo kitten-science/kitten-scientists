@@ -39,11 +39,11 @@ jobs:
     needs:
       - check_date
     outputs:
-      major: ${{ steps.changelog.outputs.major_total }}
-      minor: ${{ steps.changelog.outputs.minor_total }}
-      patch: ${{ steps.changelog.outputs.patch_total }}
-      lifecycle: ${{ steps.changelog.outputs.lifecycle_total }}
-      version: ${{ steps.changelog.outputs.version_nightly_extended }}
+      major: ${{ steps.changelog.outputs.major-total }}
+      minor: ${{ steps.changelog.outputs.minor-total }}
+      patch: ${{ steps.changelog.outputs.patch-total }}
+      lifecycle: ${{ steps.changelog.outputs.lifecycle-total }}
+      version: ${{ steps.changelog.outputs.version-nightly-extended }}
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -65,20 +65,26 @@ jobs:
         id: changelog
         uses: oliversalzburg/action-automatic-semantic-releases@main
         with:
-          automatic_release_tag: nightly
-          changelog_artifact: changelog.json
-          dry_run: true
+          automatic-release-tag: nightly
+          changelog-artifact: changelog.json
+          dry-run: true
           publish: false
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          root_version: ${{ env.ROOT_VERSION }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          root-version: ${{ env.ROOT_VERSION }}
+
+      - name: Store Changelog
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
+        with:
+          name: changelog.json
+          path: changelog.json
 
       - name: Show change counts
         env:
-          MAJOR: ${{ steps.changelog.outputs.major_total }}
-          MINOR: ${{ steps.changelog.outputs.minor_total }}
-          PATCH: ${{ steps.changelog.outputs.patch_total }}
-          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle_total }}
-          VERSION: ${{ steps.changelog.outputs.version_dev_extended }}
+          MAJOR: ${{ steps.changelog.outputs.major-total }}
+          MINOR: ${{ steps.changelog.outputs.minor-total }}
+          PATCH: ${{ steps.changelog.outputs.patch-total }}
+          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle-total }}
+          VERSION: ${{ steps.changelog.outputs.version-dev-extended }}
         run: |
           echo Major changes: $MAJOR
           echo Minor changes: $MINOR
@@ -148,17 +154,17 @@ jobs:
         id: changelog
         uses: oliversalzburg/action-automatic-semantic-releases@main
         with:
-          automatic_release_tag: nightly
+          automatic-release-tag: nightly
           draft: false
           files: |
             packages/kitten-analysts/output/kitten-analysts-*
             packages/kitten-engineers/output/kitten-engineers-*
             packages/kitten-scientists/output/kitten-scientists-*
-          merge_similar: true
+          merge-similar: true
           prerelease: true
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           title: Nightly Build v${{ needs.changelog.outputs.version }}
-          with_authors: false
+          with-authors: false
 
       - name: Show change counts
         env:

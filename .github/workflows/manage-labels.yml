@@ -21,4 +21,4 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: oliversalzburg/action-label-manager@a9a10781220dedf23a23b0029a05ad56f1c68163 # v1.0.1
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

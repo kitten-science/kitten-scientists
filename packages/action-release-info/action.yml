@@ -8,7 +8,7 @@ inputs:
       The name of the file into which to write the release info.
       Release info is still printed to console if `filename` is empty.
     required: false
-  repo_token:
+  repo-token:
     description: Needs `secrets.GITHUB_TOKEN` to talk to the API.
     required: true
 runs:

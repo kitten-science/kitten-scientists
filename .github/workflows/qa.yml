@@ -28,9 +28,9 @@ jobs:
         uses: oliversalzburg/action-commit-validator@269d07f3078565cc7497531dfb805e167e9f48e7 # v1.0.1
         if: github.event_name == 'pull_request'
         with:
-          accept_breaking_changes: false
-          accept_emoji: false
-          accepted_scopes: |
+          accept-breaking-changes: false
+          accept-emoji: false
+          accepted-scopes: |
             bonfire
             religion
             science
@@ -51,7 +51,7 @@ jobs:
             schema
             settings
             ui
-          accepted_types: |
+          accepted-types: |
             chore
             ci
             docs
@@ -59,7 +59,7 @@ jobs:
             fix
             refactor
             test
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   qa:
     name: 🔹 QA
