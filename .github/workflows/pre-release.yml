@@ -60,7 +60,7 @@ jobs:
 
       - name: Generate Changelog
         id: changelog
-        uses: oliversalzburg/action-automatic-semantic-releases@f38d6eab641dc632653c13a1ddb486e01e7f3e3c # v0.4.14
+        uses: oliversalzburg/action-automatic-semantic-releases@063308a0ead5f66b72f123156204c2085b6b8bd0 # v0.4.15
         with:
           automatic-release-tag: ${{ inputs.dry-run-tag || 'next' }}
           changelog-artifact: changelog.json
@@ -153,7 +153,7 @@ jobs:
       - id: changelog
         if: success() && inputs.wants-github-release
         name: Generate GitHub release
-        uses: oliversalzburg/action-automatic-semantic-releases@f38d6eab641dc632653c13a1ddb486e01e7f3e3c # v0.4.14
+        uses: oliversalzburg/action-automatic-semantic-releases@063308a0ead5f66b72f123156204c2085b6b8bd0 # v0.4.15
         with:
           automatic-release-tag: ${{ inputs.dry-run-tag || 'next' }}
           changelog-artifact: changelog.json
