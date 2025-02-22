@@ -445,7 +445,7 @@ export class Engine {
    */
   private _maintainKGLogFilters(): void {
     for (const filter of Object.values(this._host.game.console.filters)) {
-      filter.enabled = true;
+      filter.enabled = false;
     }
 
     const filterCheckboxes = window.document.querySelectorAll("[id^=filter-]");
