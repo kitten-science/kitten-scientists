@@ -4,9 +4,13 @@
     color: red;
     text-shadow: 0 0 10px red;
   }
-  50% {
-    color: black;
-    text-shadow: none;
+  33% {
+    color: #888;
+    text-shadow: 0 0 10px yellow;
+  }
+  66% {
+    color: white;
+    text-shadow: 0 0 10px black;
   }
 }
 
@@ -30,19 +34,18 @@
     }
   }
 
-  &.ineffective:not(.inactive) {
+  &.ineffective {
     color: red;
-    animation: hail-rainbow 1.5s linear infinite;
+    animation: hail-rainbow 5s linear infinite;
   }
 }
 
 .button {
-  display: flex;
   align-items: end;
-
   cursor: pointer;
-  transition: 0.3s;
+  display: flex;
   opacity: 0.8;
+  transition: 0.3s;
 
   &:hover {
     opacity: 1;
@@ -56,9 +59,9 @@
     }
   }
 
-  &.ineffective:not(.inactive) {
+  &.ineffective {
     color: red;
-    animation: hail-rainbow 1.5s linear infinite;
+    animation: hail-rainbow 5s linear infinite;
   }
 
   &.readonly {

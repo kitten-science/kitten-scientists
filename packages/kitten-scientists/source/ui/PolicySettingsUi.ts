@@ -2,11 +2,12 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { PolicySettings } from "../settings/PolicySettings.js";
+import { ScienceSettings } from "../settings/ScienceSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingListItem, SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
@@ -15,7 +16,8 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
     host: KittenScientists,
     settings: PolicySettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions,
+    sectionSetting: ScienceSettings,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("ui.upgrade.policies");
     super(
@@ -25,9 +27,19 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+          options?.onUnCheck?.();
+        },
+        onRefresh: _item => {
+          this.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.policies).some(policy => policy.enabled);
         },
       }),
       options,
@@ -45,9 +57,11 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
       const element = new SettingListItem(host, option, policy.label, {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [policy.label]);
+          this.refreshUi();
         },
         onUnCheck: () => {
           host.engine.imessage("status.sub.disable", [policy.label]);
+          this.refreshUi();
         },
       });
 

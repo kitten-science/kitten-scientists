@@ -75,7 +75,7 @@ export class SettingsList<
 
               for (const child of this.children) {
                 if (is(child, SettingListItem)) {
-                  (child as SettingListItem).setting.enabled = true;
+                  (child as SettingListItem).check();
                 }
               }
 
@@ -106,7 +106,7 @@ export class SettingsList<
 
           for (const child of this.children) {
             if (is(child, SettingListItem)) {
-              (child as SettingListItem).setting.enabled = false;
+              (child as SettingListItem).uncheck();
             }
           }
           if (!isNil(onDisableAll)) {

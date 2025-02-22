@@ -13,7 +13,7 @@ import { SettingsPanel } from "./components/SettingsPanel.js";
 export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
   private readonly _policiesUi: PolicySettingsUi;
   private readonly _techsUi: TechSettingsUi;
-  protected readonly _observeStars: SettingListItem;
+  private readonly _observeStars: SettingListItem;
 
   constructor(
     host: KittenScientists,
@@ -28,15 +28,38 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+        },
+        onRefresh: _item => {
+          this.expando.ineffective =
+            settings.enabled &&
+            !settings.policies.enabled &&
+            !settings.techs.enabled &&
+            !settings.observe.enabled;
         },
       }),
     );
 
-    this._policiesUi = new PolicySettingsUi(host, this.setting.policies, locale);
-    this._techsUi = new TechSettingsUi(host, this.setting.techs, locale);
+    this._policiesUi = new PolicySettingsUi(host, settings.policies, locale, settings, {
+      onCheck: () => {
+        this.refreshUi();
+      },
+      onUnCheck: () => {
+        this.refreshUi();
+      },
+    });
+    this._techsUi = new TechSettingsUi(host, settings.techs, locale, settings, {
+      onCheck: () => {
+        this.refreshUi();
+      },
+      onUnCheck: () => {
+        this.refreshUi();
+      },
+    });
 
     this._observeStars = new SettingListItem(
       host,

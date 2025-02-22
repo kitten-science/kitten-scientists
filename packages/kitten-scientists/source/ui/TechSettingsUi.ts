@@ -2,12 +2,14 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
+import { ScienceSettings } from "../settings/ScienceSettings.js";
 import { SettingOptions } from "../settings/Settings.js";
 import { TechSettings } from "../settings/TechSettings.js";
 import stylesButton from "./components/Button.module.css";
 import { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
+import { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
@@ -17,7 +19,8 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
     host: KittenScientists,
     settings: TechSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions,
+    sectionSetting: ScienceSettings,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("ui.upgrade.techs");
     super(
@@ -26,13 +29,28 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
       new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+          options?.onUnCheck?.();
         },
         onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger === -1;
+          const element = item as SettingTriggerListItem;
+
+          element.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          element.triggerButton.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            settings.trigger === -1 &&
+            !Object.values(settings.techs).some(tech => tech.enabled && 0 <= tech.trigger);
+
+          this.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.techs).some(tech => tech.enabled);
         },
         onRefreshTrigger: item => {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
@@ -85,14 +103,20 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
       const element = new SettingTriggerListItem(host, option, locale, tech.label, {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [tech.label]);
+          this.refreshUi();
         },
         onUnCheck: () => {
           host.engine.imessage("status.sub.disable", [tech.label]);
+          this.refreshUi();
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
           element.triggerButton.ineffective =
-            settings.enabled && option.enabled && settings.trigger === -1 && option.trigger === -1;
+            sectionSetting.enabled &&
+            settings.enabled &&
+            option.enabled &&
+            settings.trigger === -1 &&
+            option.trigger === -1;
         },
         onRefreshTrigger: () => {
           element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
@@ -129,7 +153,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
               option.trigger = host.parsePercentage(value);
             })
             .then(() => {
-              element.refreshUi();
+              this.refreshUi();
             })
             .catch(redirectErrorsToConsole(console));
         },
