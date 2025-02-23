@@ -9,8 +9,9 @@ export default tseslint.config(
   {
     ignores: [
       "_site/",
-      ".yarn/",
       ".git/",
+      ".github/",
+      ".yarn/",
       "docs/",
       "lib/",
       "node_modules/",
