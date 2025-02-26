@@ -27,7 +27,7 @@
     "whoami": "echo devcontainer"
   },
   "dependencies": {
-    "@oliversalzburg/js-utils": "0.2.3",
+    "@oliversalzburg/js-utils": "0.2.8",
     "cheerio": "1.0.0"
   },
   "devDependencies": {
