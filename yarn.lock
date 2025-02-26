@@ -482,7 +482,7 @@ __metadata:
     "@actions/core": "npm:1.11.1"
     "@actions/github": "npm:6.0.0"
     "@kie/mock-github": "npm:3.0.0-beta.1"
-    "@oliversalzburg/js-utils": "npm:0.2.3"
+    "@oliversalzburg/js-utils": "npm:0.2.8"
     "@types/chai": "npm:5.0.1"
     "@types/mocha": "npm:10.0.10"
     "@types/node": "npm:22.13.5"
@@ -497,7 +497,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kitten-science/devcontainer@workspace:packages/devcontainer"
   dependencies:
-    "@oliversalzburg/js-utils": "npm:0.2.3"
+    "@oliversalzburg/js-utils": "npm:0.2.8"
     cheerio: "npm:1.0.0"
     esbuild: "npm:0.25.0"
   languageName: unknown
@@ -518,7 +518,7 @@ __metadata:
     "@kitten-science/kitten-scientists": "workspace:*"
     "@koa/bodyparser": "npm:5.1.1"
     "@koa/cors": "npm:5.0.0"
-    "@oliversalzburg/js-utils": "npm:0.2.3"
+    "@oliversalzburg/js-utils": "npm:0.2.8"
     "@types/jsdom": "npm:21.1.7"
     "@types/koa": "npm:2.15.0"
     "@types/koa-router": "npm:7.4.8"
@@ -546,7 +546,7 @@ __metadata:
   dependencies:
     "@kitten-science/kitten-analysts": "workspace:*"
     "@kitten-science/kitten-scientists": "workspace:*"
-    "@oliversalzburg/js-utils": "npm:0.2.3"
+    "@oliversalzburg/js-utils": "npm:0.2.8"
     tslib: "npm:2.8.1"
     typescript: "npm:5.7.3"
     vite: "npm:6.2.0"
@@ -560,7 +560,7 @@ __metadata:
   resolution: "@kitten-science/kitten-scientists@workspace:packages/kitten-scientists"
   dependencies:
     "@kitten-science/action-release-info": "workspace:*"
-    "@oliversalzburg/js-utils": "npm:0.2.3"
+    "@oliversalzburg/js-utils": "npm:0.2.8"
     "@types/dojo": "npm:1.9.48"
     "@types/jquery": "npm:3.5.32"
     "@types/semver": "npm:7.5.8"
@@ -799,10 +799,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oliversalzburg/js-utils@npm:0.2.3":
-  version: 0.2.3
-  resolution: "@oliversalzburg/js-utils@npm:0.2.3"
-  checksum: 10c0/15eb02b796bc5878b335f57675f3fc9cdd23ec70db71f83d48e814705b47f9bb15986375b822c58a8e396e391ad6a2a055e11bbf2f01e783db08fd4e6926ce1d
+"@oliversalzburg/js-utils@npm:0.2.8":
+  version: 0.2.8
+  resolution: "@oliversalzburg/js-utils@npm:0.2.8"
+  checksum: 10c0/f42c46176852109fffdd2c4e4d8bb3b8c6fec8f5fce3659424148350ca39238aa61af02bc06af2fe3fa74b57e3b194b74b90457f9820f19f331127e68fa27c88
   languageName: node
   linkType: hard
 
