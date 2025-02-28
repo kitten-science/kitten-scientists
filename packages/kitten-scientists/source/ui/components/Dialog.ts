@@ -1,5 +1,5 @@
 import { coalesceArray } from "@oliversalzburg/js-utils/data/nil.js";
-import { KittenScientists } from "../../KittenScientists.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import { Button } from "./Button.js";
 import stylesButton from "./Button.module.css";
 import { Container } from "./Container.js";
@@ -10,7 +10,7 @@ import { HeaderListItem } from "./HeaderListItem.js";
 import { Input } from "./Input.js";
 import { Paragraph } from "./Paragraph.js";
 import stylesToolbarListItem from "./ToolbarListItem.module.css";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type DialogOptions = UiComponentOptions & {
   readonly hasCancel?: boolean;

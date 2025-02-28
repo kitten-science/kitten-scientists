@@ -1,12 +1,12 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, FrameContext } from "./Engine.js";
-import { KittenScientists } from "./KittenScientists.js";
+import type { Automation, FrameContext } from "./Engine.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
-import { SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
+import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
 import { cwarn } from "./tools/Log.js";
-import {
+import type {
   BuildButton,
   ButtonModernController,
   ButtonModernModel,
@@ -129,6 +129,7 @@ export class SpaceManager implements Automation {
   }
 
   build(name: SpaceBuilding, amount: number): number {
+    let amountCalculated = amount;
     const build = this.getBuild(name);
 
     const button = this._getBuildButton(name);
@@ -141,25 +142,25 @@ export class SpaceManager implements Automation {
       return 0;
     }
 
-    const amountTemp = amount;
+    const amountTemp = amountCalculated;
     const label = build.label;
-    amount = this._bulkManager.construct(button.model, button, amount);
-    if (amount !== amountTemp) {
-      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
+    amountCalculated = this._bulkManager.construct(button.model, button, amountCalculated);
+    if (amountCalculated !== amountTemp) {
+      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
-    this._host.engine.storeForSummary(label, amount, "build");
+    this._host.engine.storeForSummary(label, amountCalculated, "build");
 
-    if (amount === 1) {
+    if (amountCalculated === 1) {
       this._host.engine.iactivity("act.build", [label], "ks-build");
     } else {
       this._host.engine.iactivity(
         "act.builds",
-        [label, this._host.renderAbsolute(amount)],
+        [label, this._host.renderAbsolute(amountCalculated)],
         "ks-build",
       );
     }
 
-    return amount;
+    return amountCalculated;
   }
 
   getBuild(name: SpaceBuilding): SpaceBuildingInfo {

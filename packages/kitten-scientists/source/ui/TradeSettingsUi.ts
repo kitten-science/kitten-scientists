@@ -1,21 +1,25 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { SettingBuySellThreshold, SettingOptions, SettingTrigger } from "../settings/Settings.js";
-import { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type {
+  SettingBuySellThreshold,
+  SettingOptions,
+  SettingTrigger,
+} from "../settings/Settings.js";
+import type { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
 import { ucfirst } from "../tools/Format.js";
-import { BuyButton } from "./components/buttons-text/BuyButton.js";
-import { SellButton } from "./components/buttons-text/SellButton.js";
+import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SeasonsList } from "./components/SeasonsList.js";
 import { SettingLimitedTriggerListItem } from "./components/SettingLimitedTriggerListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
-import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
+import { BuyButton } from "./components/buttons-text/BuyButton.js";
+import { SellButton } from "./components/buttons-text/SellButton.js";
 
 export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
   constructor(

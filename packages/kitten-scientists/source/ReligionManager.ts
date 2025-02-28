@@ -1,34 +1,34 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { BonfireManager } from "./BonfireManager.js";
-import { Automation, FrameContext } from "./Engine.js";
-import { KittenScientists } from "./KittenScientists.js";
+import type { BonfireManager } from "./BonfireManager.js";
+import type { Automation, FrameContext } from "./Engine.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import {
-  FaithItem,
-  ReligionItem,
+  type FaithItem,
+  type ReligionItem,
   ReligionSettings,
-  ReligionSettingsItem,
-  UnicornItem,
+  type ReligionSettingsItem,
+  type UnicornItem,
   UnicornItems,
 } from "./settings/ReligionSettings.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cwarn } from "./tools/Log.js";
 import {
-  BuildButton,
-  ButtonModernController,
-  ButtonModernModel,
-  ReligionTab,
-  ReligionUpgrade,
-  ReligionUpgradeInfo,
-  TranscendenceUpgrade,
-  TranscendenceUpgradeInfo,
-  TransformBtnController,
+  type BuildButton,
+  type ButtonModernController,
+  type ButtonModernModel,
+  type ReligionTab,
+  type ReligionUpgrade,
+  type ReligionUpgradeInfo,
+  type TranscendenceUpgrade,
+  type TranscendenceUpgradeInfo,
+  type TransformBtnController,
   UnicornItemVariant,
-  ZiggurathUpgrade,
-  ZiggurathUpgradeInfo,
+  type ZiggurathUpgrade,
+  type ZiggurathUpgradeInfo,
 } from "./types/index.js";
 
 export class ReligionManager implements Automation {
@@ -274,13 +274,13 @@ export class ReligionManager implements Automation {
     let cycleBonus = 1;
     // If the current cycle has an effect on unicorn production during festivals
     // TODO: Simplify
-    if (currentCycle.festivalEffects["unicorns"] !== undefined) {
+    if (currentCycle.festivalEffects.unicorns !== undefined) {
       // Numeromancy is the metaphysics upgrade that grants bonuses based on cycles.
       if (
         this._host.game.prestige.getPerk("numeromancy").researched &&
         this._host.game.calendar.festivalDays
       ) {
-        cycleBonus = currentCycle.festivalEffects["unicorns"];
+        cycleBonus = currentCycle.festivalEffects.unicorns;
       }
     }
 
@@ -306,10 +306,10 @@ export class ReligionManager implements Automation {
     // We now want to determine how quickly the cost of given building is neutralized
     // by its effect on production of unicorns.
 
-    let bestAmortization = Infinity;
+    let bestAmortization = Number.POSITIVE_INFINITY;
     let bestBuilding: ZiggurathUpgrade | "unicornPasture" | null = null;
     const unicornsPerTickBase = mustExist(
-      this._host.game.bld.getBuildingExt("unicornPasture").meta.effects?.["unicornsPerTickBase"],
+      this._host.game.bld.getBuildingExt("unicornPasture").meta.effects?.unicornsPerTickBase,
     );
     const pastureProduction =
       unicornsPerTickBase *
@@ -386,6 +386,7 @@ export class ReligionManager implements Automation {
   }
 
   build(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant, amount: number): void {
+    let amountCalculated = amount;
     const build = this.getBuild(name, variant);
     if (build === null) {
       throw new Error(`Unable to build '${name}'. Build information not available.`);
@@ -401,32 +402,32 @@ export class ReligionManager implements Automation {
       return;
     }
 
-    const amountTemp = amount;
+    const amountTemp = amountCalculated;
     const label = build.label;
-    amount = this._bulkManager.construct(button.model, button, amount);
-    if (amount !== amountTemp) {
-      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
+    amountCalculated = this._bulkManager.construct(button.model, button, amountCalculated);
+    if (amountCalculated !== amountTemp) {
+      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
 
     if (variant === UnicornItemVariant.OrderOfTheSun) {
-      this._host.engine.storeForSummary(label, amount, "faith");
-      if (amount === 1) {
+      this._host.engine.storeForSummary(label, amountCalculated, "faith");
+      if (amountCalculated === 1) {
         this._host.engine.iactivity("act.sun.discover", [label], "ks-faith");
       } else {
         this._host.engine.iactivity(
           "act.sun.discovers",
-          [label, this._host.renderAbsolute(amount)],
+          [label, this._host.renderAbsolute(amountCalculated)],
           "ks-faith",
         );
       }
     } else {
-      this._host.engine.storeForSummary(label, amount, "build");
-      if (amount === 1) {
+      this._host.engine.storeForSummary(label, amountCalculated, "build");
+      if (amountCalculated === 1) {
         this._host.engine.iactivity("act.build", [label], "ks-build");
       } else {
         this._host.engine.iactivity(
           "act.builds",
-          [label, this._host.renderAbsolute(amount)],
+          [label, this._host.renderAbsolute(amountCalculated)],
           "ks-build",
         );
       }
@@ -770,10 +771,8 @@ export class ReligionManager implements Automation {
     // Transcend
     if (transcendenceReached) {
       // How much our adoration ratio increases from transcending.
-      const adoreIncreaseRatio = Math.pow(
-        (transcendenceTierCurrent + 2) / (transcendenceTierCurrent + 1),
-        2,
-      );
+      const adoreIncreaseRatio =
+        ((transcendenceTierCurrent + 2) / (transcendenceTierCurrent + 1)) ** 2;
       // The amount of worship needed to upgrade to the next level.
       const needNextLevel =
         this._host.game.religion._getTranscendTotalPrice(transcendenceTierCurrent + 1) -

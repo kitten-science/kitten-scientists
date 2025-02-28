@@ -1,7 +1,7 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { WorkshopManager } from "../WorkshopManager.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Resource, Resources } from "../types/index.js";
+import { type Resource, Resources } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class ResourcesSettingsItem extends Setting {
@@ -38,9 +38,9 @@ export class ResourcesSettings extends Setting {
 
   private initResources(): ResourcesResourceSettings {
     const items = {} as ResourcesResourceSettings;
-    Resources.forEach(item => {
+    for (const item of Resources) {
       items[item] = new ResourcesSettingsItem(item);
-    });
+    }
     return items;
   }
 

@@ -1,7 +1,7 @@
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { ScienceSettings } from "../settings/ScienceSettings.js";
-import { SettingOptions } from "../settings/Settings.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { ScienceSettings } from "../settings/ScienceSettings.js";
+import type { SettingOptions } from "../settings/Settings.js";
 import { PolicySettingsUi } from "./PolicySettingsUi.js";
 import { TechSettingsUi } from "./TechSettingsUi.js";
 import { Container } from "./components/Container.js";

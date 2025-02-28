@@ -1,4 +1,4 @@
-import { KittenScientists } from "../KittenScientists.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { cwarn } from "../tools/Log.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
@@ -72,7 +72,9 @@ export class UserInterface extends UiComponent {
 
     const optionsListElement = $("<ul/>");
     optionsListElement.append(this._engineUi.element);
-    this._sections.forEach(section => optionsListElement.append(section.element));
+    for (const section of this._sections) {
+      optionsListElement.append(section.element);
+    }
     ks.append(optionsListElement);
 
     // Make _engineUI's expando button hide/show the other option groups

@@ -1,22 +1,22 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { FrameContext } from "./Engine.js";
-import { KittenScientists } from "./KittenScientists.js";
+import type { FrameContext } from "./Engine.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
-import { TimeItem, TimeSettings, TimeSettingsItem } from "./settings/TimeSettings.js";
+import { type TimeItem, TimeSettings, type TimeSettingsItem } from "./settings/TimeSettings.js";
 import { cwarn } from "./tools/Log.js";
 import {
-  BuildButton,
-  ButtonModernController,
-  ButtonModernModel,
-  ChronoForgeUpgrade,
-  ChronoForgeUpgradeInfo,
-  FixCryochamberBtnController,
+  type BuildButton,
+  type ButtonModernController,
+  type ButtonModernModel,
+  type ChronoForgeUpgrade,
+  type ChronoForgeUpgradeInfo,
+  type FixCryochamberBtnController,
   TimeItemVariant,
-  TimeTab,
-  VoidSpaceUpgrade,
-  VoidSpaceUpgradeInfo,
+  type TimeTab,
+  type VoidSpaceUpgrade,
+  type VoidSpaceUpgradeInfo,
 } from "./types/index.js";
 
 export class TimeManager {
@@ -109,26 +109,27 @@ export class TimeManager {
     variant: TimeItemVariant,
     amount: number,
   ): void {
+    let amountCalculated = amount;
     const build = mustExist(this.getBuild(name, variant));
     const button = this.getBuildButton(name, variant);
 
     if (!button || !button.model?.enabled) {
       return;
     }
-    const amountTemp = amount;
+    const amountTemp = amountCalculated;
     const label = build.label;
-    amount = this._bulkManager.construct(button.model, button, amount);
-    if (amount !== amountTemp) {
-      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
+    amountCalculated = this._bulkManager.construct(button.model, button, amountCalculated);
+    if (amountCalculated !== amountTemp) {
+      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
-    this._host.engine.storeForSummary(label, amount, "build");
+    this._host.engine.storeForSummary(label, amountCalculated, "build");
 
-    if (amount === 1) {
+    if (amountCalculated === 1) {
       this._host.engine.iactivity("act.build", [label], "ks-build");
     } else {
       this._host.engine.iactivity(
         "act.builds",
-        [label, this._host.renderAbsolute(amount)],
+        [label, this._host.renderAbsolute(amountCalculated)],
         "ks-build",
       );
     }
@@ -180,7 +181,7 @@ export class TimeManager {
     const btn = this.manager.tab.vsPanel.children[0].children[0];
 
     let fixed = 0;
-    let fixHappened;
+    let fixHappened: boolean;
     do {
       fixHappened = false;
 

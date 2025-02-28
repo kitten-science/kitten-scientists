@@ -1,8 +1,8 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { Game, Policies, Policy } from "../types/index.js";
+import { type Game, Policies, type Policy } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class PolicySetting extends Setting {
@@ -30,9 +30,9 @@ export class PolicySettings extends Setting {
 
   private initPolicies(): PolicyPolicySettings {
     const items = {} as PolicyPolicySettings;
-    Policies.forEach(item => {
+    for (const item of Policies) {
       items[item] = new PolicySetting(item);
-    });
+    }
     return items;
   }
 

@@ -1,6 +1,6 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Job, Jobs } from "../types/index.js";
+import { type Job, Jobs } from "../types/index.js";
 import { ElectLeaderSettings } from "./ElectLeaderSettings.js";
 import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
@@ -34,9 +34,9 @@ export class VillageSettings extends Setting {
 
   private initJobs(): VillageJobSettings {
     const items = {} as VillageJobSettings;
-    Jobs.forEach(item => {
+    for (const item of Jobs) {
       items[item] = new SettingMax(false, -1);
-    });
+    }
     return items;
   }
 

@@ -1,9 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { KittenScientists } from "../../KittenScientists.js";
-import { Setting } from "../../settings/Settings.js";
-import { LabelListItem, LabelListItemOptions } from "./LabelListItem.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { Setting } from "../../settings/Settings.js";
+import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
 import { default as styles, default as stylesSettingListItem } from "./SettingListItem.module.css";
-import { UiComponent, UiComponentInterface } from "./UiComponent.js";
+import type { UiComponent, UiComponentInterface } from "./UiComponent.js";
 
 export type SettingListItemOptions<TChild extends UiComponentInterface = UiComponentInterface> =
   LabelListItemOptions<TChild> & {

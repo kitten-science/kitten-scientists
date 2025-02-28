@@ -1,8 +1,8 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { Setting } from "../../settings/Settings.js";
-import { CollapsiblePanel, PanelOptions } from "./CollapsiblePanel.js";
-import { LabelListItem } from "./LabelListItem.js";
-import { SettingListItem } from "./SettingListItem.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { Setting } from "../../settings/Settings.js";
+import { CollapsiblePanel, type PanelOptions } from "./CollapsiblePanel.js";
+import type { LabelListItem } from "./LabelListItem.js";
+import type { SettingListItem } from "./SettingListItem.js";
 
 export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem> = PanelOptions & {
   readonly settingItem: TListItem;
@@ -33,7 +33,7 @@ export class SettingsPanel<
   get readOnly() {
     return true;
   }
-  set readOnly(value: boolean) {
+  set readOnly(_value: boolean) {
     /* noop */
   }
 

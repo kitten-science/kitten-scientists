@@ -39,6 +39,7 @@
     "tslib": "2.8.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@kitten-science/action-release-info": "workspace:*",
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.32",

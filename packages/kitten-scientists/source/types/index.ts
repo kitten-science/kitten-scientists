@@ -1,19 +1,19 @@
-import { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
+import type { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type JQuery from "jquery";
-import { KittenScientists } from "../KittenScientists.js";
-import { Building, BuildingMeta } from "./buildings.js";
-import { Game } from "./game.js";
-import {
+import type { KittenScientists } from "../KittenScientists.js";
+import type { Building, BuildingMeta } from "./buildings.js";
+import type { Game } from "./game.js";
+import type {
   ReligionUpgrade,
   TranscendenceUpgrade,
   TranscendenceUpgradeInfo,
   ZiggurathUpgrade,
   ZiggurathUpgradeInfo,
 } from "./religion.js";
-import { TechInfo } from "./science.js";
-import { SpaceBuilding } from "./space.js";
-import { ChronoForgeUpgrade, VoidSpaceUpgrade, VoidSpaceUpgradeInfo } from "./time.js";
-import { UpgradeInfo } from "./workshop.js";
+import type { TechInfo } from "./science.js";
+import type { SpaceBuilding } from "./space.js";
+import type { ChronoForgeUpgrade, VoidSpaceUpgrade, VoidSpaceUpgradeInfo } from "./time.js";
+import type { UpgradeInfo } from "./workshop.js";
 
 export const Seasons = ["autumn", "spring", "summer", "winter"] as const;
 export type Season = (typeof Seasons)[number];
@@ -155,7 +155,7 @@ export type Panel = {
   visible: boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
 export type Control = {
   /* intentionally left blank. exists for clarity */
 };
@@ -467,6 +467,7 @@ declare global {
       clone: <T>(subject: T) => T;
       subscribe: <TEvent extends string>(
         event: TEvent,
+        // biome-ignore lint/suspicious/noExplicitAny: Not our type.
         handler: (...args: Array<any>) => void,
       ) => [TEvent, number];
       unsubscribe: (handle: [string, number]) => void;

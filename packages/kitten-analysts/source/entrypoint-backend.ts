@@ -1,4 +1,7 @@
-import {
+import { writeFileSync } from "node:fs";
+import { readFile, readdir } from "node:fs/promises";
+import { join } from "node:path";
+import type {
   KGNetSaveFromGame,
   KGNetSavePersisted,
   KGNetSaveUpdate,
@@ -11,12 +14,8 @@ import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console
 import Koa from "koa";
 import Router from "koa-router";
 import { compressToUTF16, decompressFromUTF16 } from "lz-string";
-import { writeFileSync } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { Registry } from "prom-client";
-import { LOCAL_STORAGE_PATH } from "./globals.js";
-import {
+import type {
   KittenAnalystsMessage,
   KittenAnalystsMessageId,
   PayloadBuildings,
@@ -27,6 +26,7 @@ import {
   PayloadStatistics,
   PayloadTechnologies,
 } from "./KittenAnalysts.js";
+import { LOCAL_STORAGE_PATH } from "./globals.js";
 import { kg_building_on } from "./metrics/kg_building_on.js";
 import { kg_building_value } from "./metrics/kg_building_value.js";
 import { kg_buildings_constructed } from "./metrics/kg_buildings_constructed.js";
@@ -213,7 +213,7 @@ routerNetwork.get("/kgnet/save", context => {
 
 routerNetwork.post("/kgnet/save/upload", context => {
   try {
-    if (PROTOCOL_DEBUG) process.stderr.write(`=> Received savegame.`);
+    if (PROTOCOL_DEBUG) process.stderr.write("=> Received savegame.");
 
     const gameSave = context.request.body as KGNetSaveFromGame;
     const gameGUID = gameSave.guid;
@@ -250,9 +250,9 @@ routerNetwork.post("/kgnet/save/upload", context => {
       JSON.stringify(savegameEphemeral),
     );
 
-    process.stderr.write(`=> Savegame persisted to disc.\n`);
+    process.stderr.write("=> Savegame persisted to disc.\n");
 
-    process.stderr.write(`=> Injecting savegame into headless session...\n`);
+    process.stderr.write("=> Injecting savegame into headless session...\n");
     remote
       .toHeadless({
         type: "injectSavegame",
@@ -270,7 +270,7 @@ routerNetwork.post("/kgnet/save/upload", context => {
 });
 routerNetwork.post("/kgnet/save/update", context => {
   try {
-    process.stderr.write(`=> Received savegame update.\n`);
+    process.stderr.write("=> Received savegame update.\n");
 
     const gameSave = context.request.body as KGNetSaveUpdate;
     const gameGUID = gameSave.guid;
@@ -286,7 +286,7 @@ routerNetwork.post("/kgnet/save/update", context => {
     existingSave.label = gameSave.metadata?.label ?? existingSave.label;
     writeFileSync(`${LOCAL_STORAGE_PATH}/${gameGUID}.json`, JSON.stringify(existingSave));
     saveStore.set(gameGUID, existingSave);
-    process.stderr.write(`=> Savegame persisted to disc.\n`);
+    process.stderr.write("=> Savegame persisted to disc.\n");
 
     context.body = [...saveStore.values()];
     context.status = 200;
@@ -349,11 +349,11 @@ async function main() {
   });
 }
 
-["SIGINT", "SIGTERM", "SIGQUIT"].forEach(signal =>
+for (const signal of ["SIGINT", "SIGTERM", "SIGQUIT"]) {
   process.on(signal, () => {
     remote.closeAll();
     process.exit();
-  }),
-);
+  });
+}
 
 main().catch(redirectErrorsToConsole(console));

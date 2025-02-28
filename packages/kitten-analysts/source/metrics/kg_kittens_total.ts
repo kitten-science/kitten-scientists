@@ -1,6 +1,6 @@
 import { ucfirst } from "@kitten-science/kitten-scientists/tools/Format.js";
-import { MessageCache } from "../entrypoint-backend.js";
-import { KittensGameRemote } from "../network/KittensGameRemote.js";
+import type { MessageCache } from "../entrypoint-backend.js";
+import type { KittensGameRemote } from "../network/KittensGameRemote.js";
 import { gaugeFactory } from "./factory.js";
 
 export const kg_kittens_total = (cache: MessageCache, remote: KittensGameRemote) =>

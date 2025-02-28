@@ -1,4 +1,4 @@
-import { BuildButton, GameTab, Price, Resource, Season } from "./index.js";
+import type { BuildButton, GameTab, Price, Resource, Season } from "./index.js";
 
 export type TradeTab = GameTab & {
   racePanels: Array<{

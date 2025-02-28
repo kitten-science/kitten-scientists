@@ -1,6 +1,6 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Game, SpaceBuilding, SpaceBuildings } from "../types/index.js";
+import { type Game, type SpaceBuilding, SpaceBuildings } from "../types/index.js";
 import { MissionSettings } from "./MissionSettings.js";
 import { SettingTrigger, SettingTriggerMax } from "./Settings.js";
 
@@ -32,9 +32,9 @@ export class SpaceSettings extends SettingTrigger {
 
   private initBuildings(): SpaceBuildingSettings {
     const items = {} as SpaceBuildingSettings;
-    SpaceBuildings.forEach(item => {
+    for (const item of SpaceBuildings) {
       items[item] = new SpaceBuildingSetting(item);
-    });
+    }
     return items;
   }
 

@@ -1,8 +1,8 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
-import { KittenScientists } from "../../../KittenScientists.js";
-import { SettingMax } from "../../../settings/Settings.js";
-import { Button, ButtonOptions } from "../Button.js";
+import type { KittenScientists } from "../../../KittenScientists.js";
+import type { SettingMax } from "../../../settings/Settings.js";
+import { Button, type ButtonOptions } from "../Button.js";
 import styles from "./MaxButton.module.css";
 
 export type MaxButtonOptions = ButtonOptions & {

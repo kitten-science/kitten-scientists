@@ -1,7 +1,7 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Cycle, Cycles, Season, Seasons } from "../types/index.js";
+import { type Cycle, Cycles, type Season, Seasons } from "../types/index.js";
 import { Setting, SettingThresholdMax } from "./Settings.js";
 
 export type CyclesSettings = Record<Cycle, Setting>;
@@ -23,17 +23,17 @@ export class TimeSkipSettings extends SettingThresholdMax {
 
   private initCycles(): CyclesSettings {
     const items = {} as CyclesSettings;
-    Cycles.forEach(item => {
+    for (const item of Cycles) {
       items[item] = new Setting();
-    });
+    }
     return items;
   }
 
   private initSeason(): SeasonsSettings {
     const items = {} as SeasonsSettings;
-    Seasons.forEach(item => {
+    for (const item of Seasons) {
       items[item] = new Setting();
-    });
+    }
     return items;
   }
 

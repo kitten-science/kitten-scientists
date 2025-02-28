@@ -1,15 +1,15 @@
-import { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
+import type { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import gt from "semver/functions/gt.js";
-import { Engine, EngineState, GameLanguage, SupportedLocale } from "./Engine.js";
+import { Engine, type EngineState, type GameLanguage, type SupportedLocale } from "./Engine.js";
+import { UserScriptLoader } from "./UserScriptLoader.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
-import { Game, I18nEngine } from "./types/index.js";
+import type { Game, I18nEngine } from "./types/index.js";
 import { UserInterface } from "./ui/UserInterface.js";
-import { UserScriptLoader } from "./UserScriptLoader.js";
 
 declare global {
   const KS_RELEASE_CHANNEL: ReleaseChannel;
@@ -18,7 +18,7 @@ declare global {
 
 export const ksVersion = (prefix = "") => {
   if (isNil(KS_VERSION)) {
-    throw Error(`Build error: KS_VERSION is not defined.`);
+    throw Error("Build error: KS_VERSION is not defined.");
   }
 
   return `${prefix}${KS_VERSION}`;
@@ -112,7 +112,7 @@ export class KittenScientists {
     if (-1 < managerIndex) {
       this.game.managers.splice(managerIndex, 1);
     }
-    delete window.kittenScientists;
+    window.kittenScientists = undefined;
     cwarn("Kitten Scientists have been unloaded!");
   }
 
@@ -223,10 +223,10 @@ export class KittenScientists {
     const baseValue = value.substring(0, value.length - (hasSuffix ? 1 : 0));
 
     let numericValue =
-      value.includes("e") || hasSuffix ? parseFloat(baseValue) : parseInt(baseValue);
+      value.includes("e") || hasSuffix ? Number.parseFloat(baseValue) : Number.parseInt(baseValue);
     if (hasSuffix) {
       const suffix = value.substring(value.length - 1).toUpperCase();
-      numericValue = numericValue * Math.pow(1000, ["", "K", "M", "G", "T", "P"].indexOf(suffix));
+      numericValue = numericValue * 1000 ** ["", "K", "M", "G", "T", "P"].indexOf(suffix);
     }
     if (numericValue === Number.POSITIVE_INFINITY || numericValue < 0) {
       numericValue = -1;
@@ -247,7 +247,7 @@ export class KittenScientists {
    */
   parsePercentage(value: string): number {
     const cleanedValue = value.trim().replace(/%$/, "");
-    return Math.max(0, Math.min(1, parseFloat(cleanedValue) / 100));
+    return Math.max(0, Math.min(1, Number.parseFloat(cleanedValue) / 100));
   }
 
   /**

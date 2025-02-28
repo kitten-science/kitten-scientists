@@ -1,8 +1,8 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { SettingOptions } from "../../settings/Settings.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { SettingOptions } from "../../settings/Settings.js";
 import { Fieldset } from "./Fieldset.js";
 import { RadioItem } from "./RadioItem.js";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type OptionsListItemOptions = UiComponentOptions & {
   readonly onCheck: () => void;
@@ -32,7 +32,7 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
   ) {
     super(host, options);
 
-    this.element = $(`<li/>`);
+    this.element = $("<li/>");
 
     this.fieldset = new Fieldset(host, label);
     this.addChild(this.fieldset);

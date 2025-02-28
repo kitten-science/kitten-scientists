@@ -1,10 +1,10 @@
 import { is } from "@oliversalzburg/js-utils/data/nil.js";
-import { KittenScientists } from "../../KittenScientists.js";
-import { ExpandoButton } from "./buttons/ExpandoButton.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import { Container } from "./Container.js";
-import { LabelListItem } from "./LabelListItem.js";
+import type { LabelListItem } from "./LabelListItem.js";
 import stylesSettingListItem from "./SettingListItem.module.css";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
+import { ExpandoButton } from "./buttons/ExpandoButton.js";
 
 export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponentOptions<TChild> & {
   /**

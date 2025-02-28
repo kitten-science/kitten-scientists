@@ -1,5 +1,5 @@
-import { cerror } from "@kitten-science/kitten-scientists/tools/Log.js";
 import { UserScriptLoader } from "@kitten-science/kitten-scientists/UserScriptLoader.js";
+import { cerror } from "@kitten-science/kitten-scientists/tools/Log.js";
 import { KittenEngineers } from "./KittenEngineers.js";
 
 (async () => {

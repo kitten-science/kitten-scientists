@@ -1,9 +1,9 @@
-import { KGNetSavePersisted } from "@kitten-science/kitten-scientists/types/index.js";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+import type { KGNetSavePersisted } from "@kitten-science/kitten-scientists/types/index.js";
 import { redirectErrorsToStream } from "@oliversalzburg/js-utils/errors/stream.js";
-import { readFile } from "fs/promises";
 import { JSDOM } from "jsdom";
 import { decompressFromUTF16 } from "lz-string";
-import { join } from "path";
 import { LOCAL_STORAGE_PATH } from "./globals.js";
 
 const HOSTNAME_KG = process.env.HOSTNAME_KG ?? "localhost";
@@ -44,6 +44,10 @@ const main = async () => {
   process.stderr.write("Successfully initialized.\n");
 };
 
-["SIGINT", "SIGTERM", "SIGQUIT"].forEach(signal => process.on(signal, () => process.exit()));
+for (const signal of ["SIGINT", "SIGTERM", "SIGQUIT"]) {
+  process.on(signal, () => {
+    process.exit();
+  });
+}
 
 main().catch(redirectErrorsToStream(process.stderr));

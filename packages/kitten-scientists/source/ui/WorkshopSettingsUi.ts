@@ -1,11 +1,11 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { SettingOptions } from "../settings/Settings.js";
-import { CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { SettingOptions } from "../settings/Settings.js";
+import { type CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
 import { ucfirst } from "../tools/Format.js";
-import { ResourceCraftable } from "../types/index.js";
+import type { ResourceCraftable } from "../types/index.js";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
 import { Dialog } from "./components/Dialog.js";
 import { SettingListItem } from "./components/SettingListItem.js";

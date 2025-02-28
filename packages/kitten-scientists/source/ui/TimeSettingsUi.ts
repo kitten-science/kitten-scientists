@@ -1,9 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { SettingOptions } from "../settings/Settings.js";
-import { TimeSettings } from "../settings/TimeSettings.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { SettingOptions } from "../settings/Settings.js";
+import type { TimeSettings } from "../settings/TimeSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";

@@ -1,6 +1,6 @@
-import { KittenScientists } from "../KittenScientists.js";
-import { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings.js";
-import { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings.js";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -42,9 +42,9 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));
     const itemsList = new SettingsList(host);
-    items.forEach(button => {
+    for (const button of items) {
       itemsList.addChild(button.button);
-    });
+    }
     this.addChild(itemsList);
   }
 }

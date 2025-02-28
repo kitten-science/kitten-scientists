@@ -1,16 +1,16 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
-import { Locale, de, enUS, he, zhCN } from "date-fns/locale";
-import { Engine, EngineState, SupportedLocale } from "../Engine.js";
+import { type Locale, de, enUS, he, zhCN } from "date-fns/locale";
+import { Engine, type EngineState, type SupportedLocale } from "../Engine.js";
 import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import { SettingOptions } from "../settings/Settings.js";
-import { StateSettings } from "../settings/StateSettings.js";
+import type { SettingOptions } from "../settings/Settings.js";
+import type { StateSettings } from "../settings/StateSettings.js";
 import { Unique } from "../tools/Entries.js";
 import { cerror, cinfo } from "../tools/Log.js";
 import { SavegameLoader } from "../tools/SavegameLoader.js";
-import { KGSaveData } from "../types/index.js";
+import type { KGSaveData } from "../types/index.js";
 import { Button } from "./components/Button.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Container } from "./components/Container.js";
@@ -425,7 +425,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     }
 
     // Attempt to parse as KG save.
-    let subjectData;
+    let subjectData: KGSaveData;
     try {
       subjectData = JSON.parse(input) as KGSaveData;
     } catch (_error) {
@@ -440,7 +440,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       const state = subjectData.ks.state[0];
       stateLabel = this.storeState(state) ?? undefined;
       this._host.engine.imessage("state.imported.state");
-      delete subjectData.ks;
+      subjectData.ks = undefined;
     }
 
     this.storeGame(subjectData, stateLabel);

@@ -1,12 +1,12 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import { UnicornItems } from "../settings/ReligionSettings.js";
-import { ResetReligionSettings } from "../settings/ResetReligionSettings.js";
-import { SettingOptions, SettingTrigger } from "../settings/Settings.js";
-import { ZiggurathUpgrade } from "../types/religion.js";
+import type { ResetReligionSettings } from "../settings/ResetReligionSettings.js";
+import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
+import type { ZiggurathUpgrade } from "../types/religion.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";

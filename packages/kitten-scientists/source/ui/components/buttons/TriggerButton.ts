@@ -1,10 +1,14 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
-import { SupportedLocale } from "packages/kitten-scientists/source/Engine.js";
+import type { SupportedLocale } from "packages/kitten-scientists/source/Engine.js";
+import type { KittenScientists } from "../../../KittenScientists.js";
 import { Icons } from "../../../images/Icons.js";
-import { KittenScientists } from "../../../KittenScientists.js";
-import { SettingOptions, SettingThreshold, SettingTrigger } from "../../../settings/Settings.js";
-import { Button, ButtonOptions } from "../Button.js";
+import {
+  type SettingOptions,
+  type SettingThreshold,
+  SettingTrigger,
+} from "../../../settings/Settings.js";
+import { Button, type ButtonOptions } from "../Button.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 

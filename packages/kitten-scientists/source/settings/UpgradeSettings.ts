@@ -1,8 +1,8 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { Game, Upgrade, Upgrades } from "../types/index.js";
+import { type Game, type Upgrade, Upgrades } from "../types/index.js";
 import { SettingTrigger } from "./Settings.js";
 
 export class UpgradeSettingsItem extends SettingTrigger {
@@ -30,9 +30,9 @@ export class UpgradeSettings extends SettingTrigger {
 
   private initUpgrades(): UpgradeSettingsItems {
     const items = {} as UpgradeSettingsItems;
-    Upgrades.forEach(item => {
+    for (const item of Upgrades) {
       items[item] = new UpgradeSettingsItem(item);
-    });
+    }
     return items;
   }
 

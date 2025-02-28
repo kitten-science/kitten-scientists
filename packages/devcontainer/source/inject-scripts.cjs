@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-"use strict";
-
-const fs = require("fs");
+const fs = require("node:fs");
 
 const indexHtml = fs.readFileSync("index.html", "utf8");
 let injectedHtml = indexHtml.replace(

@@ -1,5 +1,5 @@
-import { KittenScientists } from "../KittenScientists.js";
-import { FilterItems, LogFilterSettings } from "../settings/LogFilterSettings.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import { FilterItems, type LogFilterSettings } from "../settings/LogFilterSettings.js";
 import { Container } from "./components/Container.js";
 import { ExplainerListItem } from "./components/ExplainerListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";

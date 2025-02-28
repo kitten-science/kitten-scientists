@@ -1,7 +1,7 @@
+import type { KittenScientists } from "../../../KittenScientists.js";
 import { Icons } from "../../../images/Icons.js";
-import { KittenScientists } from "../../../KittenScientists.js";
 import stylesButton from "../Button.module.css";
-import { UiComponent, UiComponentOptions } from "../UiComponent.js";
+import { UiComponent, type UiComponentOptions } from "../UiComponent.js";
 import styles from "./ExpandoButton.module.css";
 
 export class ExpandoButton extends UiComponent {

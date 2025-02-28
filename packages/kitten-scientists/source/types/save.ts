@@ -1,6 +1,6 @@
 // KGNet Savegame Storage
 
-import { EngineState } from "../Engine";
+import type { EngineState } from "../Engine";
 
 export interface KGSaveData {
   ach: unknown;

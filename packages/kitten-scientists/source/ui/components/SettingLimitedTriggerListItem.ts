@@ -1,11 +1,14 @@
-import { SupportedLocale } from "../../Engine.js";
-import { KittenScientists } from "../../KittenScientists.js";
-import { SettingLimitedTrigger, SettingOptions } from "../../settings/Settings.js";
+import type { SupportedLocale } from "../../Engine.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { SettingLimitedTrigger, SettingOptions } from "../../settings/Settings.js";
+import {
+  SettingLimitedListItem,
+  type SettingListItemOptionsLimited,
+} from "./SettingLimitedListItem.js";
+import type { SettingListItemOptions } from "./SettingListItem.js";
+import type { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
+import type { UiComponent } from "./UiComponent.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
-import { SettingLimitedListItem, SettingListItemOptionsLimited } from "./SettingLimitedListItem.js";
-import { SettingListItemOptions } from "./SettingListItem.js";
-import { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
-import { UiComponent } from "./UiComponent.js";
 
 export class SettingLimitedTriggerListItem<
   TOptions extends SettingListItemOptions<UiComponent> &

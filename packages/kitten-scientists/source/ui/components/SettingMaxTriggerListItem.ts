@@ -1,15 +1,15 @@
-import { SupportedLocale } from "../../Engine.js";
-import { KittenScientists } from "../../KittenScientists.js";
-import { SettingOptions, SettingTriggerMax } from "../../settings/Settings.js";
+import type { SupportedLocale } from "../../Engine.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { SettingOptions, SettingTriggerMax } from "../../settings/Settings.js";
 import stylesButton from "./Button.module.css";
-import { MaxButton } from "./buttons/MaxButton.js";
-import { TriggerButton } from "./buttons/TriggerButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
-import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
-import { SettingListItemOptionsMax } from "./SettingMaxListItem.js";
-import { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
-import { UiComponent } from "./UiComponent.js";
+import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
+import type { SettingListItemOptionsMax } from "./SettingMaxListItem.js";
+import type { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
+import type { UiComponent } from "./UiComponent.js";
+import { MaxButton } from "./buttons/MaxButton.js";
+import { TriggerButton } from "./buttons/TriggerButton.js";
 
 export class SettingMaxTriggerListItem<
   TOptions extends SettingListItemOptions<UiComponent> &

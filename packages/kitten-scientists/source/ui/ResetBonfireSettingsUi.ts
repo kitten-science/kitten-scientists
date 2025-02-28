@@ -1,11 +1,11 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import { ResetBonfireSettings } from "../settings/ResetBonfireSettings.js";
-import { SettingOptions, SettingTrigger } from "../settings/Settings.js";
-import { StagedBuilding } from "../types/index.js";
+import type { ResetBonfireSettings } from "../settings/ResetBonfireSettings.js";
+import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
+import type { StagedBuilding } from "../types/index.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import stylesDelimiter from "./components/Delimiter.module.css";

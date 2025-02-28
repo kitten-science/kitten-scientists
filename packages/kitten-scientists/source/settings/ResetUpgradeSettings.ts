@@ -1,6 +1,6 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Upgrade, Upgrades } from "../types/index.js";
+import { type Upgrade, Upgrades } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class ResetUpgradeSettingsItem extends Setting {
@@ -28,9 +28,9 @@ export class ResetUpgradeSettings extends Setting {
 
   private initUpgrades(): ResetUpgradeSettingsItems {
     const items = {} as ResetUpgradeSettingsItems;
-    Upgrades.forEach(item => {
+    for (const item of Upgrades) {
       items[item] = new ResetUpgradeSettingsItem(item);
-    });
+    }
     return items;
   }
 

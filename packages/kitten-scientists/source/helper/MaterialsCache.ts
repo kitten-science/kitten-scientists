@@ -1,6 +1,6 @@
-import { KittenScientists } from "../KittenScientists.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { objectEntries } from "../tools/Entries.js";
-import { Resource } from "../types/index.js";
+import type { Resource } from "../types/index.js";
 
 /**
  * The `CacheManager` apparently stores a state of resources in stock.

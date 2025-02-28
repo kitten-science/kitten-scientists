@@ -1,26 +1,27 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { BonfireManager } from "./BonfireManager.js";
-import { Engine, FrameContext } from "./Engine.js";
-import { KittenScientists } from "./KittenScientists.js";
-import { ReligionManager } from "./ReligionManager.js";
-import { SpaceManager } from "./SpaceManager.js";
+import type { BonfireManager } from "./BonfireManager.js";
+import type { Engine, FrameContext } from "./Engine.js";
+import type { KittenScientists } from "./KittenScientists.js";
+import type { ReligionManager } from "./ReligionManager.js";
+import type { SpaceManager } from "./SpaceManager.js";
 import { TabManager } from "./TabManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
-import { CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
+import { type CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import {
-  BuildButton,
-  ButtonModernController,
-  ButtonModernModel,
-  ChronoForgeUpgrade,
-  ChronoForgeUpgradeInfo,
+  type BuildButton,
+  type BuildingExt,
+  type ButtonModernController,
+  type ButtonModernModel,
+  type ChronoForgeUpgrade,
+  type ChronoForgeUpgradeInfo,
   Cycles,
-  ShatterTCBtnController,
+  type ShatterTCBtnController,
   TimeItemVariant,
-  TimeTab,
-  VoidSpaceUpgrade,
-  VoidSpaceUpgradeInfo,
+  type TimeTab,
+  type VoidSpaceUpgrade,
+  type VoidSpaceUpgradeInfo,
 } from "./types/index.js";
 
 export class TimeControlManager {
@@ -108,7 +109,7 @@ export class TimeControlManager {
     for (const [name, entry] of objectEntries(this.settings.reset.bonfire.buildings))
       if (entry.enabled) {
         // TODO: Obvious error here. For upgraded buildings, it needs special handling.
-        let bld;
+        let bld: BuildingExt | null;
         try {
           // @ts-expect-error Obvious error here. For upgraded buildings, it needs special handling.
           bld = this._host.game.bld.getBuildingExt(name);

@@ -1,10 +1,10 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import { ResetSpaceSettings } from "../settings/ResetSpaceSettings.js";
-import { SettingOptions, SettingTrigger } from "../settings/Settings.js";
+import type { ResetSpaceSettings } from "../settings/ResetSpaceSettings.js";
+import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";

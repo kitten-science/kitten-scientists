@@ -1,6 +1,6 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Building, Buildings, StagedBuilding, StagedBuildings } from "../types/index.js";
+import { type Building, Buildings, type StagedBuilding, StagedBuildings } from "../types/index.js";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings.js";
 import { Setting, SettingTrigger, SettingTriggerMax } from "./Settings.js";
 
@@ -94,13 +94,15 @@ export class BonfireSettings extends SettingTrigger {
     };
 
     const items = {} as BonfireBuildingSettings;
-    Buildings.forEach(item => {
-      if (item === "unicornPasture") return;
+    for (const item of Buildings) {
+      if (item === "unicornPasture") {
+        continue;
+      }
       items[item] = new BonfireBuildingSetting(item);
-    });
-    StagedBuildings.forEach(item => {
+    }
+    for (const item of StagedBuildings) {
       items[item] = new BonfireBuildingSetting(item, false, -1, 0, baseStage[item]);
-    });
+    }
 
     return items;
   }

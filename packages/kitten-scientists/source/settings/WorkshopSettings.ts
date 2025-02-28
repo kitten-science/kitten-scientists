@@ -1,8 +1,8 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { Game, ResourceCraftable, ResourcesCraftable } from "../types/index.js";
+import { type Game, type ResourceCraftable, ResourcesCraftable } from "../types/index.js";
 import { Setting, SettingLimitedMaxTrigger, SettingTrigger } from "./Settings.js";
 import { UpgradeSettings } from "./UpgradeSettings.js";
 
@@ -41,9 +41,9 @@ export class WorkshopSettings extends SettingTrigger {
 
   private initResources(): WorkshopResourceSettings {
     const items = {} as WorkshopResourceSettings;
-    ResourcesCraftable.forEach(item => {
+    for (const item of ResourcesCraftable) {
       items[item] = new CraftSettingsItem(item);
-    });
+    }
     return items;
   }
 

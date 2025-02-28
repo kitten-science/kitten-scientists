@@ -1,9 +1,9 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import { ResetResourcesSettings } from "../settings/ResetResourcesSettings.js";
-import { SettingOptions } from "../settings/Settings.js";
+import type { ResetResourcesSettings } from "../settings/ResetResourcesSettings.js";
+import type { SettingOptions } from "../settings/Settings.js";
 import { ucfirst } from "../tools/Format.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";

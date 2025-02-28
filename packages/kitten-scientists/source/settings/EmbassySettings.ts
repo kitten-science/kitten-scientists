@@ -1,6 +1,6 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Race, Races } from "../types/index.js";
+import { type Race, Races } from "../types/index.js";
 import { SettingMax, SettingTrigger } from "./Settings.js";
 
 export class EmbassySetting extends SettingMax {
@@ -28,9 +28,9 @@ export class EmbassySettings extends SettingTrigger {
 
   private initRaces(): EmbassyRaceSettings {
     const items = {} as EmbassyRaceSettings;
-    Races.forEach(item => {
+    for (const item of Races) {
       items[item] = new EmbassySetting(item);
-    });
+    }
     return items;
   }
 

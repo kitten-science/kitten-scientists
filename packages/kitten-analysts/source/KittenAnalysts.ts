@@ -1,11 +1,11 @@
 import { SavegameLoader } from "@kitten-science/kitten-scientists/tools/SavegameLoader.js";
-import { Game } from "@kitten-science/kitten-scientists/types/game.js";
+import type { Game } from "@kitten-science/kitten-scientists/types/game.js";
 import {
-  I18nEngine,
-  KGNetSavePersisted,
-  TabId,
+  type I18nEngine,
+  type KGNetSavePersisted,
+  type TabId,
   TechnologiesIgnored,
-  TechnologyIgnored,
+  type TechnologyIgnored,
 } from "@kitten-science/kitten-scientists/types/index.js";
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
@@ -462,7 +462,7 @@ export class KittenAnalysts {
           {
             craftable: false,
             label: "Worship",
-            maxValue: Infinity,
+            maxValue: Number.POSITIVE_INFINITY,
             name: "worship",
             rate: 0,
             value: game.religion.faith,
@@ -470,7 +470,7 @@ export class KittenAnalysts {
           {
             craftable: false,
             label: "Epiphany",
-            maxValue: Infinity,
+            maxValue: Number.POSITIVE_INFINITY,
             name: "epiphany",
             rate: 0,
             value: game.religion.faithRatio,
@@ -478,7 +478,7 @@ export class KittenAnalysts {
           {
             craftable: false,
             label: "Necrocorn deficit",
-            maxValue: Infinity,
+            maxValue: Number.POSITIVE_INFINITY,
             name: "necrocornDeficit",
             rate: 0,
             value: game.religion.pactsManager.necrocornDeficit,
@@ -611,6 +611,4 @@ export class KittenAnalysts {
     window.clearInterval(this.#interval);
     this.#interval = -1;
   }
-
-  snapshot() {}
 }

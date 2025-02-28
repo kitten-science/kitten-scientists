@@ -1,9 +1,9 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { Button } from "./Button.js";
-import { IconButton } from "./IconButton.js";
-import { ListItem, ListItemOptions } from "./ListItem.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { Button } from "./Button.js";
+import type { IconButton } from "./IconButton.js";
+import { ListItem, type ListItemOptions } from "./ListItem.js";
 import styles from "./ToolbarListItem.module.css";
-import { UiComponent } from "./UiComponent.js";
+import type { UiComponent } from "./UiComponent.js";
 
 export class ToolbarListItem<
   TOptions extends ListItemOptions<UiComponent> = ListItemOptions<UiComponent>,

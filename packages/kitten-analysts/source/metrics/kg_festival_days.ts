@@ -1,5 +1,5 @@
-import { MessageCache } from "../entrypoint-backend.js";
-import { KittensGameRemote } from "../network/KittensGameRemote.js";
+import type { MessageCache } from "../entrypoint-backend.js";
+import type { KittensGameRemote } from "../network/KittensGameRemote.js";
 import { gaugeFactory } from "./factory.js";
 
 export const kg_festival_days = (cache: MessageCache, remote: KittensGameRemote) =>

@@ -1,10 +1,10 @@
 import { is, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import { Icons } from "../../images/Icons.js";
-import { KittenScientists } from "../../KittenScientists.js";
 import { IconButton } from "./IconButton.js";
 import { SettingListItem } from "./SettingListItem.js";
 import styles from "./SettingsList.module.css";
-import { UiComponent, UiComponentInterface, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
 
 export type SettingsListOptions<TChild extends UiComponentInterface = UiComponentInterface> =
   UiComponentOptions<TChild> & {

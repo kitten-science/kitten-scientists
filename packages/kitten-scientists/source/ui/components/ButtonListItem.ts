@@ -1,8 +1,8 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { ListItem, ListItemOptions } from "./ListItem.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import { ListItem, type ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
-import { TextButton } from "./TextButton.js";
-import { UiComponent } from "./UiComponent.js";
+import type { TextButton } from "./TextButton.js";
+import type { UiComponent } from "./UiComponent.js";
 
 export class ButtonListItem<
   TOptions extends ListItemOptions<UiComponent> = ListItemOptions<UiComponent>,

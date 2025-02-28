@@ -1,15 +1,15 @@
-import { Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, Engine, FrameContext } from "./Engine.js";
-import { KittenScientists } from "./KittenScientists.js";
+import { type Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Automation, Engine, type FrameContext } from "./Engine.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
-import { MaterialsCache } from "./helper/MaterialsCache.js";
-import { TradeSettings, TradeSettingsItem } from "./settings/TradeSettings.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
+import type { MaterialsCache } from "./helper/MaterialsCache.js";
+import { TradeSettings, type TradeSettingsItem } from "./settings/TradeSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cwarn } from "./tools/Log.js";
-import { ResourceInfo } from "./types/craft.js";
-import { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types/index.js";
+import type { ResourceInfo } from "./types/craft.js";
+import type { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types/index.js";
 
 export class TradeManager implements Automation {
   private readonly _host: KittenScientists;
@@ -344,7 +344,7 @@ export class TradeManager implements Automation {
           continue;
         }
 
-        const nextPrice = emBulk.basePrice * Math.pow(1.15, emBulk.currentEm + emBulk.val);
+        const nextPrice = emBulk.basePrice * 1.15 ** (emBulk.currentEm + emBulk.val);
         if (nextPrice <= cultureVal) {
           cultureVal -= nextPrice;
           emBulk.priceSum += nextPrice;

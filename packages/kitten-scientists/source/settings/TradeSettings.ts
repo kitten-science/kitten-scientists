@@ -1,9 +1,9 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Race, Races, Season } from "../types/index.js";
+import { type Race, Races, type Season } from "../types/index.js";
 import { EmbassySettings } from "./EmbassySettings.js";
 import {
-  Requirement,
+  type Requirement,
   Setting,
   SettingBuySellThreshold,
   SettingLimitedTrigger,
@@ -83,10 +83,10 @@ export class TradeSettings extends SettingTrigger {
       sharks: "iron",
     };
     const items = {} as TradeSettingsItems;
-    Races.forEach(item => {
+    for (const item of Races) {
       const require = defaultRequire[item] ?? false;
       items[item] = new TradeSettingsItem(item, false, false, false, false, false, false, require);
-    });
+    }
     return items;
   }
 

@@ -1,10 +1,10 @@
-import { KittenScientists } from "../KittenScientists.js";
-import { EngineSettings } from "../settings/EngineSettings.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { EngineSettings } from "../settings/EngineSettings.js";
 import { ucfirst } from "../tools/Format.js";
-import { ExpandoButton } from "./components/buttons/ExpandoButton.js";
 import { Container } from "./components/Container";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
+import { ExpandoButton } from "./components/buttons/ExpandoButton.js";
 
 export class EngineSettingsUi extends SettingListItem {
   readonly expando: ExpandoButton;

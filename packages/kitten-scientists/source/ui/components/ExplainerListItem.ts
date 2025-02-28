@@ -1,7 +1,7 @@
-import { TranslatedString } from "../../Engine.js";
-import { KittenScientists } from "../../KittenScientists.js";
+import type { TranslatedString } from "../../Engine.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import styles from "./ExplainerLiteItem.module.css";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends UiComponent {
   readonly element: JQuery;

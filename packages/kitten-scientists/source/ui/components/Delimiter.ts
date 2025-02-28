@@ -1,4 +1,4 @@
-import { KittenScientists } from "../../KittenScientists.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import styles from "./Delimiter.module.css";
 import { UiComponent } from "./UiComponent.js";
 

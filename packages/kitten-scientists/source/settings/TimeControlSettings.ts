@@ -1,4 +1,4 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { ResetSettings } from "./ResetSettings.js";
 import { Setting, SettingTrigger } from "./Settings.js";
 import { TimeSkipSettings } from "./TimeSkipSettings.js";

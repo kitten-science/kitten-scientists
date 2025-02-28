@@ -1,7 +1,7 @@
-import type core from "@actions/core";
-import { Context } from "@actions/github/lib/context.js";
-import { type GitHub } from "@actions/github/lib/utils.js";
 import { writeFileSync } from "node:fs";
+import type core from "@actions/core";
+import type { Context } from "@actions/github/lib/context.js";
+import type { GitHub } from "@actions/github/lib/utils.js";
 
 export type ReleaseMeta = {
   /**

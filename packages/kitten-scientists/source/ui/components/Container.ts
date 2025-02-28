@@ -1,5 +1,5 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export class Container extends UiComponent {
   readonly element: JQuery;
@@ -15,7 +15,9 @@ export class Container extends UiComponent {
 
     this.element = $("<div/>");
 
-    options?.classes?.forEach(className => this.element.addClass(className));
+    for (const className of options?.classes ?? []) {
+      this.element.addClass(className);
+    }
 
     this.addChildren(options?.children);
   }

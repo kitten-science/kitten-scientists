@@ -1,6 +1,6 @@
-import { KittenScientists } from "../../KittenScientists.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import styles from "./HeaderListItem.module.css";
-import { ListItem, ListItemOptions } from "./ListItem.js";
+import type { ListItem, ListItemOptions } from "./ListItem.js";
 import { UiComponent } from "./UiComponent.js";
 
 export class HeaderListItem<

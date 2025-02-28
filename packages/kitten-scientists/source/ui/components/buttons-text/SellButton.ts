@@ -1,7 +1,7 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "packages/kitten-scientists/source/Engine.js";
-import { KittenScientists } from "../../../KittenScientists.js";
-import { SettingOptions, SettingSell } from "../../../settings/Settings.js";
+import type { SupportedLocale } from "packages/kitten-scientists/source/Engine.js";
+import type { KittenScientists } from "../../../KittenScientists.js";
+import type { SettingOptions, SettingSell } from "../../../settings/Settings.js";
 import { Dialog } from "../Dialog.js";
 import { TextButton } from "../TextButton.js";
 import styles from "./SellButton.module.css";

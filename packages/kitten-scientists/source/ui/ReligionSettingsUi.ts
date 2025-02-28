@@ -1,21 +1,21 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { ReligionOptions, ReligionSettings, UnicornItems } from "../settings/ReligionSettings.js";
-import { SettingOptions } from "../settings/Settings.js";
-import { ZiggurathUpgrade } from "../types/index.js";
+import type { SettingOptions } from "../settings/Settings.js";
+import type { ZiggurathUpgrade } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
+import stylesTimeSkipHeatSettings from "./TimeSkipHeatSettingsUi.module.css";
 import stylesButton from "./components/Button.module.css";
 import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
-import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
+import type { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
-import stylesTimeSkipHeatSettings from "./TimeSkipHeatSettingsUi.module.css";
 
 export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
   private readonly _unicornBuildings: Map<
