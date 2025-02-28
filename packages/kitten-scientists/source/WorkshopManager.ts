@@ -1,17 +1,17 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, Engine, FrameContext } from "./Engine.js";
-import { MaterialsCache } from "./helper/MaterialsCache.js";
-import { KittenScientists } from "./KittenScientists.js";
-import { CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
+import { type Automation, Engine, type FrameContext } from "./Engine.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
+import { UpgradeManager } from "./UpgradeManager.js";
+import { UserScriptLoader } from "./UserScriptLoader.js";
+import type { MaterialsCache } from "./helper/MaterialsCache.js";
+import { type CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cerror } from "./tools/Log.js";
-import { CraftableInfo, ResourceInfo } from "./types/craft.js";
-import { Resource, ResourceCraftable, UpgradeInfo } from "./types/index.js";
-import { VillageTab } from "./types/village.js";
-import { UpgradeManager } from "./UpgradeManager.js";
-import { UserScriptLoader } from "./UserScriptLoader.js";
+import type { CraftableInfo, ResourceInfo } from "./types/craft.js";
+import type { Resource, ResourceCraftable, UpgradeInfo } from "./types/index.js";
+import type { VillageTab } from "./types/village.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
   readonly settings: WorkshopSettings;
@@ -236,7 +236,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
                   craftsDone),
             // The safe limit is to buy the next higher order of magnitude of items, to not
             // waste all resources if the target resource is very low, like after a reset with chronospheres.
-            Math.pow(10, orderDone + 1),
+            10 ** (orderDone + 1),
           ),
           // The amount of resources we could craft, based on our consume rate.
           material.consume / materialAmount,
@@ -273,29 +273,29 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @param amount How many items of the resource to craft.
    */
   craft(name: ResourceCraftable, amount: number): void {
-    amount = Math.floor(amount);
+    let amountCalculated = Math.floor(amount);
 
-    if (amount < 1) {
+    if (amountCalculated < 1) {
       return;
     }
-    if (!this._canCraft(name, amount)) {
+    if (!this._canCraft(name, amountCalculated)) {
       return;
     }
 
     const craft = this.getCraft(name);
     const ratio = this._host.game.getResCraftRatio(craft.name);
 
-    this._host.game.craft(craft.name, amount);
+    this._host.game.craft(craft.name, amountCalculated);
 
     const resourceName = mustExist(this._host.game.resPool.get(name)).title;
 
     // Determine actual amount after crafting upgrades
-    amount = parseFloat((amount * (1 + ratio)).toFixed(2));
+    amountCalculated = Number.parseFloat((amountCalculated * (1 + ratio)).toFixed(2));
 
-    this._host.engine.storeForSummary(resourceName, amount, "craft");
+    this._host.engine.storeForSummary(resourceName, amountCalculated, "craft");
     this._host.engine.iactivity(
       "act.craft",
-      [this._host.game.getDisplayValueExt(amount), resourceName],
+      [this._host.game.getDisplayValueExt(amountCalculated), resourceName],
       "ks-craft",
     );
   }
@@ -444,20 +444,20 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       this._host.game.getEffect("hunterRatio") +
       this._host.game.village.getEffectLeader("manager", 0);
 
-    output["furs"] = 40 + 32.5 * hunterRatio;
+    output.furs = 40 + 32.5 * hunterRatio;
 
-    output["ivory"] =
+    output.ivory =
       50 * Math.min(0.225 + 0.01 * hunterRatio, 0.5) +
       40 * hunterRatio * Math.min(0.225 + 0.01 * hunterRatio, 0.5);
 
-    output["unicorns"] = 0.05;
+    output.unicorns = 0.05;
 
     if (this.getValue("zebras") >= 10) {
-      output["bloodstone"] = this.getValue("bloodstone") === 0 ? 0.05 : 0.0005;
+      output.bloodstone = this.getValue("bloodstone") === 0 ? 0.05 : 0.0005;
     }
 
     if (this._host.game.ironWill && this._host.game.workshop.get("goldOre").researched) {
-      output["gold"] = 0.625 + 0.625 * hunterRatio;
+      output.gold = 0.625 + 0.625 * hunterRatio;
     }
 
     return output;
@@ -576,7 +576,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     } else {
       productionField *=
         this._host.game.calendar.getWeatherMod({ name: "catnip" }) +
-        this._host.game.calendar.getCurSeason().modifiers["catnip"];
+        this._host.game.calendar.getCurSeason().modifiers.catnip;
     }
 
     // When the communism policy is active,
@@ -627,11 +627,11 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
     // Apply the effects of possibly running festival.
     baseProd = mustExist(
-      this._host.game.calendar.cycleEffectsFestival({ catnip: baseProd })["catnip"],
+      this._host.game.calendar.cycleEffectsFestival({ catnip: baseProd }).catnip,
     );
 
     // Determine our demand for catnip. This is usually a negative value.
-    let baseDemand = this._host.game.village.getResConsumption()["catnip"];
+    let baseDemand = this._host.game.village.getResConsumption().catnip;
     // Pastures and unicron pastures reduce catnip demand. Factor that in.
     const unicornPastures = this._host.game.bld.getBuildingExt("unicornPasture").meta.val;
     baseDemand *=

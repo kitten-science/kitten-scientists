@@ -1,20 +1,27 @@
-import { isNil, Maybe, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { unknownToError } from "@oliversalzburg/js-utils/errors/error-serializer.js";
 import { measure, measureAsync } from "@oliversalzburg/js-utils/measurement/performance.js";
 import { BonfireManager } from "./BonfireManager.js";
+import { type KittenScientists, ksVersion } from "./KittenScientists.js";
+import { ReligionManager } from "./ReligionManager.js";
+import { ScienceManager } from "./ScienceManager.js";
+import { SpaceManager } from "./SpaceManager.js";
+import { TimeControlManager } from "./TimeControlManager.js";
+import { TimeManager } from "./TimeManager.js";
+import { TradeManager } from "./TradeManager.js";
+import { FallbackLocale } from "./UserScriptLoader.js";
+import { VillageManager } from "./VillageManager.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 import {
-  ActivityClass,
+  type ActivityClass,
   ActivitySummary,
-  ActivitySummarySection,
-  ActivityTypeClass,
+  type ActivitySummarySection,
+  type ActivityTypeClass,
 } from "./helper/ActivitySummary.js";
 import enUS from "./i18n/en-US.json" assert { type: "json" };
 import deDE from "./i18n/translations/de-DE.json" assert { type: "json" };
 import heIL from "./i18n/translations/he-IL.json" assert { type: "json" };
 import zhCN from "./i18n/translations/zh-CN.json" assert { type: "json" };
-import { KittenScientists, ksVersion } from "./KittenScientists.js";
-import { ReligionManager } from "./ReligionManager.js";
-import { ScienceManager } from "./ScienceManager.js";
 import { BonfireSettings } from "./settings/BonfireSettings.js";
 import { EngineSettings } from "./settings/EngineSettings.js";
 import { ReligionSettings } from "./settings/ReligionSettings.js";
@@ -25,17 +32,10 @@ import { TimeSettings } from "./settings/TimeSettings.js";
 import { TradeSettings } from "./settings/TradeSettings.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
-import { SpaceManager } from "./SpaceManager.js";
-import { TimeControlManager } from "./TimeControlManager.js";
-import { TimeManager } from "./TimeManager.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
-import { TradeManager } from "./TradeManager.js";
-import { Cycle, Cycles, Planet } from "./types/index.js";
-import { FallbackLocale } from "./UserScriptLoader.js";
-import { VillageManager } from "./VillageManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
+import { type Cycle, Cycles, type Planet } from "./types/index.js";
 
-const i18nData = { ["de-DE"]: deDE, ["en-US"]: enUS, ["he-IL"]: heIL, ["zh-CN"]: zhCN };
+const i18nData = { "de-DE": deDE, "en-US": enUS, "he-IL": heIL, "zh-CN": zhCN };
 
 export type FrameContext = {
   requestGameUiRefresh: boolean;
@@ -95,7 +95,7 @@ export class Engine {
   /**
    * Was any state loaded into this engine at any point in time?
    */
-  private _isLoaded: boolean = false;
+  private _isLoaded = false;
 
   get isLoaded(): boolean {
     return this._isLoaded;
@@ -396,48 +396,48 @@ export class Engine {
     // The order in which these actions are performed is probably
     // semi-intentional and should be preserved or improved.
     let [, duration] = await measureAsync(() => this.scienceManager.tick(context));
-    context.measurements["scienceManager"] = duration;
+    context.measurements.scienceManager = duration;
 
     [, duration] = measure(() => {
       this.bonfireManager.tick(context);
     });
-    context.measurements["bonfireManager"] = duration;
+    context.measurements.bonfireManager = duration;
 
     [, duration] = measure(() => {
       this.spaceManager.tick(context);
     });
-    context.measurements["spaceManager"] = duration;
+    context.measurements.spaceManager = duration;
 
     [, duration] = await measureAsync(() => this.workshopManager.tick(context));
-    context.measurements["workshopManager"] = duration;
+    context.measurements.workshopManager = duration;
 
     [, duration] = measure(() => {
       this.tradeManager.tick(context);
     });
-    context.measurements["tradeManager"] = duration;
+    context.measurements.tradeManager = duration;
 
     [, duration] = await measureAsync(() => this.religionManager.tick(context));
-    context.measurements["religionManager"] = duration;
+    context.measurements.religionManager = duration;
 
     [, duration] = measure(() => {
       this.timeManager.tick(context);
     });
-    context.measurements["timeManager"] = duration;
+    context.measurements.timeManager = duration;
 
     [, duration] = measure(() => {
       this.villageManager.tick(context);
     });
-    context.measurements["villageManager"] = duration;
+    context.measurements.villageManager = duration;
 
     [, duration] = await measureAsync(() => this.timeControlManager.tick(context));
-    context.measurements["timeControlManager"] = duration;
+    context.measurements.timeControlManager = duration;
 
     [, duration] = measure(() => {
       if (context.requestGameUiRefresh) {
         this._host.game.ui.render();
       }
     });
-    context.measurements["gameUiRefresh"] = duration;
+    context.measurements.gameUiRefresh = duration;
   }
 
   /**
@@ -486,7 +486,7 @@ export class Engine {
     key: TranslatedString<TKittenGameLiteral>,
     args: Array<number | string> = [],
   ): string {
-    let value;
+    let value: string | undefined;
 
     // Key is to be translated through KG engine.
     if (key.startsWith("$")) {

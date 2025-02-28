@@ -1,8 +1,8 @@
-import { KittenScientists } from "../../KittenScientists.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import stylesDelimiter from "./Delimiter.module.css";
 import styles from "./Fieldset.module.css";
 import stylesLabel from "./LabelListItem.module.css";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type FieldsetOptions = UiComponentOptions & {
   readonly delimiter: boolean;

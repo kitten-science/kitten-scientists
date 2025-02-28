@@ -1,4 +1,4 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Setting } from "./Settings.js";
 
@@ -70,9 +70,9 @@ export class LogFilterSettings extends Setting {
 
   private initFilters(): LogFilterSettingsItems {
     const items = {} as LogFilterSettingsItems;
-    FilterItems.forEach(item => {
+    for (const item of FilterItems) {
       items[item] = new LogFilterSettingsItem(LogFilterItemVariant[item]);
-    });
+    }
     return items;
   }
 

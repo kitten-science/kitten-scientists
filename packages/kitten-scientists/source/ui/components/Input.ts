@@ -1,5 +1,5 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type InputOptions = UiComponentOptions & {
   readonly onChange?: (value: string) => void;
@@ -24,7 +24,9 @@ export class Input extends UiComponent {
 
     this.element = $<HTMLInputElement>('<input type="text"/>').addClass("ks-input");
 
-    options?.classes?.forEach(className => this.element.addClass(className));
+    for (const className of options?.classes ?? []) {
+      this.element.addClass(className);
+    }
 
     if (options?.onChange) {
       this.element.on("change", () => options.onChange?.(this.element[0].value));

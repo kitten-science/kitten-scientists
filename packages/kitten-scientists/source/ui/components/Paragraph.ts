@@ -1,5 +1,5 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export class Paragraph extends UiComponent {
   readonly element: JQuery<HTMLParagraphElement>;
@@ -16,7 +16,9 @@ export class Paragraph extends UiComponent {
 
     this.element = $<HTMLParagraphElement>("<p/>").text(text);
 
-    options?.classes?.forEach(className => this.element.addClass(className));
+    for (const className of options?.classes ?? []) {
+      this.element.addClass(className);
+    }
 
     this.addChildren(options?.children);
   }

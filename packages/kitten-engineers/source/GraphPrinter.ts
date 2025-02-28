@@ -1,4 +1,4 @@
-import { Operator } from "./GraphSolver.js";
+import type { Operator } from "./GraphSolver.js";
 
 export class GraphPrinter {
   print(node: Operator, seen = new Set<Operator>(), indent = 0) {

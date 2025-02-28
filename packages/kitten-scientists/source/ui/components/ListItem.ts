@@ -1,6 +1,6 @@
-import { KittenScientists } from "../../KittenScientists.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import stylesDelimiter from "./Delimiter.module.css";
-import { UiComponent, UiComponentInterface, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
 
 export type ListItemOptions<TChild extends UiComponentInterface = UiComponentInterface> =
   UiComponentOptions<TChild> & {
@@ -26,7 +26,9 @@ export class ListItem<
 
     this.element = $("<li/>");
 
-    options?.classes?.forEach(className => this.element.addClass(className));
+    for (const className of options?.classes ?? []) {
+      this.element.addClass(className);
+    }
 
     if (options?.delimiter === true) {
       this.element.addClass(stylesDelimiter.delimiter);

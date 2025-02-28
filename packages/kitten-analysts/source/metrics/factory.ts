@@ -1,7 +1,6 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Gauge } from "prom-client";
-import { MessageCache } from "../entrypoint-backend.js";
-import {
+import type {
   PayloadBuildings,
   PayloadCalendar,
   PayloadPollution,
@@ -10,7 +9,8 @@ import {
   PayloadStatistics,
   PayloadTechnologies,
 } from "../KittenAnalysts.js";
-import { KittensGameRemote } from "../network/KittensGameRemote.js";
+import type { MessageCache } from "../entrypoint-backend.js";
+import type { KittensGameRemote } from "../network/KittensGameRemote.js";
 
 export const gaugeFactory = <
   TMessage extends

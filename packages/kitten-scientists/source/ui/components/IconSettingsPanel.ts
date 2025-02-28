@@ -1,7 +1,7 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { Setting } from "../../settings/Settings.js";
-import { CollapsiblePanel, PanelOptions } from "./CollapsiblePanel.js";
-import { LabelListItem, LabelListItemOptions } from "./LabelListItem.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { Setting } from "../../settings/Settings.js";
+import { CollapsiblePanel, type PanelOptions } from "./CollapsiblePanel.js";
+import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
 
 export type IconSettingsPanelOptions = LabelListItemOptions &
   PanelOptions & {

@@ -1,9 +1,9 @@
-import { PayloadBuildings } from "@kitten-science/kitten-analysts/KittenAnalysts.js";
-import { EngineState } from "@kitten-science/kitten-scientists/Engine.js";
-import { Game } from "@kitten-science/kitten-scientists/types/game.js";
-import { Resource } from "@kitten-science/kitten-scientists/types/index.js";
+import type { PayloadBuildings } from "@kitten-science/kitten-analysts/KittenAnalysts.js";
+import type { EngineState } from "@kitten-science/kitten-scientists/Engine.js";
+import type { Game } from "@kitten-science/kitten-scientists/types/game.js";
+import type { Resource } from "@kitten-science/kitten-scientists/types/index.js";
 import { TreeNode } from "@oliversalzburg/js-utils/data/tree.js";
-import { Operator } from "../GraphSolver.js";
+import type { Operator } from "../GraphSolver.js";
 
 export const ConsumeStockResourceFactory = function* (resources: Iterable<Resource>) {
   for (const resource of resources) {

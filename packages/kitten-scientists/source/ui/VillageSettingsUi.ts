@@ -1,9 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { SettingMax, SettingOptions } from "../settings/Settings.js";
-import { VillageSettings } from "../settings/VillageSettings.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { SettingMax, SettingOptions } from "../settings/Settings.js";
+import type { VillageSettings } from "../settings/VillageSettings.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
@@ -185,17 +185,17 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     );
     listAddition.addChild(this._promoteLeader);
 
-    this.setting.electLeader.job.options.forEach(option => {
+    for (const option of this.setting.electLeader.job.options) {
       if (option.value === "any") {
         option.label = host.engine.i18n("option.elect.job.any");
       } else {
         option.label = host.engine.i18n(`$village.job.${option.value}`);
       }
-    });
+    }
 
-    this.setting.electLeader.trait.options.forEach(option => {
+    for (const option of this.setting.electLeader.trait.options) {
       option.label = host.engine.i18n(`$village.trait.${option.value}`);
-    });
+    }
 
     this._electLeader = new SettingListItem(
       host,

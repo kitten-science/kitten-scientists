@@ -1,6 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { KittenScientists } from "./KittenScientists.js";
-import { GameTab, TabId } from "./types/index.js";
+import type { KittenScientists } from "./KittenScientists.js";
+import type { GameTab, TabId } from "./types/index.js";
 
 export class TabManager<TTab extends GameTab = GameTab> {
   private readonly _host: KittenScientists;

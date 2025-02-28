@@ -1,14 +1,14 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, FrameContext } from "./Engine.js";
-import { KittenScientists } from "./KittenScientists.js";
+import type { Automation, FrameContext } from "./Engine.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
-import { Resource } from "./types/index.js";
-import { JobInfo, VillageTab } from "./types/village.js";
+import type { Resource } from "./types/index.js";
+import type { JobInfo, VillageTab } from "./types/village.js";
 
 export class VillageManager implements Automation {
   private readonly _host: KittenScientists;

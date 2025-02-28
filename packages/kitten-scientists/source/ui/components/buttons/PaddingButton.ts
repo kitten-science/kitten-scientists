@@ -1,6 +1,6 @@
-import { KittenScientists } from "../../../KittenScientists.js";
+import type { KittenScientists } from "../../../KittenScientists.js";
 import stylesButton from "../Button.module.css";
-import { UiComponent, UiComponentOptions } from "../UiComponent.js";
+import { UiComponent, type UiComponentOptions } from "../UiComponent.js";
 
 export class PaddingButton extends UiComponent {
   readonly element: JQuery;

@@ -1,18 +1,18 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { ScienceSettings } from "../settings/ScienceSettings.js";
-import { SettingOptions } from "../settings/Settings.js";
-import { TechSettings } from "../settings/TechSettings.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { ScienceSettings } from "../settings/ScienceSettings.js";
+import type { SettingOptions } from "../settings/Settings.js";
+import type { TechSettings } from "../settings/TechSettings.js";
 import stylesButton from "./components/Button.module.css";
-import { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItemOptions } from "./components/SettingListItem.js";
+import type { SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 
 export class TechSettingsUi extends SettingsPanel<TechSettings> {
   constructor(

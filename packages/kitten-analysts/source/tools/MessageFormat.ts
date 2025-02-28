@@ -1,4 +1,4 @@
-import { KittenAnalystsMessage, KittenAnalystsMessageId } from "../KittenAnalysts.js";
+import type { KittenAnalystsMessage, KittenAnalystsMessageId } from "../KittenAnalysts.js";
 
 export const identifyMessage = (message: KittenAnalystsMessage<KittenAnalystsMessageId>) =>
   `${message.type}<${message.responseId ?? "terminal"}>`;

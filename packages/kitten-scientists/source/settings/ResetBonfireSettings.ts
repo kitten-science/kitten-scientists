@@ -1,7 +1,7 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Building, Buildings, StagedBuilding, StagedBuildings } from "../types/index.js";
-import { BonfireItem } from "./BonfireSettings.js";
+import { type Building, Buildings, type StagedBuilding, StagedBuildings } from "../types/index.js";
+import type { BonfireItem } from "./BonfireSettings.js";
 import { Setting, SettingThreshold } from "./Settings.js";
 
 export class ResetBonfireBuildingSetting extends SettingThreshold {
@@ -69,13 +69,15 @@ export class ResetBonfireSettings extends Setting {
     };
 
     const items = {} as ResetBonfireBuildingSettings;
-    Buildings.forEach(item => {
-      if (item === "unicornPasture") return;
+    for (const item of Buildings) {
+      if (item === "unicornPasture") {
+        continue;
+      }
       items[item] = new ResetBonfireBuildingSetting(item);
-    });
-    StagedBuildings.forEach(item => {
+    }
+    for (const item of StagedBuildings) {
       items[item] = new ResetBonfireBuildingSetting(item, false, -1, baseStage[item]);
-    });
+    }
 
     return items;
   }

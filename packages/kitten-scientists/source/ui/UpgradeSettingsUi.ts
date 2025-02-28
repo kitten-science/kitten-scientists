@@ -1,17 +1,17 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { SettingOptions } from "../settings/Settings.js";
-import { UpgradeSettings } from "../settings/UpgradeSettings.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { SettingOptions } from "../settings/Settings.js";
+import type { UpgradeSettings } from "../settings/UpgradeSettings.js";
 import stylesButton from "./components/Button.module.css";
-import { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import stylesDelimiter from "./components/Delimiter.module.css";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
   constructor(

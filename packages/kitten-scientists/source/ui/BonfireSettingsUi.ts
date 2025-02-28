@@ -1,10 +1,10 @@
 import { coalesceArray, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { BonfireSettings } from "../settings/BonfireSettings.js";
-import { SettingOptions } from "../settings/Settings.js";
-import { Building, StagedBuilding } from "../types/index.js";
+import type { SettingOptions } from "../settings/Settings.js";
+import type { Building, StagedBuilding } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
 import { Delimiter } from "./components/Delimiter.js";
@@ -180,7 +180,8 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           true,
         ),
       ];
-    } else if (!isNil(meta.label)) {
+    }
+    if (!isNil(meta.label)) {
       return [
         BuildSectionTools.getBuildOption(
           host,

@@ -1,5 +1,5 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { SupportedLocale } from "../Engine.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import type { SupportedLocale } from "../Engine.js";
 import { FallbackLocale } from "../UserScriptLoader.js";
 import { LogFilterSettings } from "./LogFilterSettings.js";
 import { ResourcesSettings } from "./ResourcesSettings.js";

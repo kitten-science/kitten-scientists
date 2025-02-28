@@ -1,4 +1,4 @@
-import { BuildingEffects, GameTab, Panel, Price } from "./index.js";
+import type { BuildingEffects, GameTab, Panel, Price } from "./index.js";
 
 export enum TimeItemVariant {
   Chronoforge = "chrono",

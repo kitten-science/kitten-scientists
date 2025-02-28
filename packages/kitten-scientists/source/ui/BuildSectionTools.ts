@@ -1,7 +1,7 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { SettingOptions, SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { SettingOptions, SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
 import { Dialog } from "./components/Dialog.js";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 

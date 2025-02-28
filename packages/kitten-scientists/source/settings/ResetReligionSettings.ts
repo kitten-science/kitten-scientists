@@ -1,4 +1,4 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import {
   ReligionUpgrades,
@@ -6,7 +6,7 @@ import {
   UnicornItemVariant,
   ZiggurathUpgrades,
 } from "../types/index.js";
-import { FaithItem, UnicornItem } from "./ReligionSettings.js";
+import type { FaithItem, UnicornItem } from "./ReligionSettings.js";
 import { Setting, SettingThreshold } from "./Settings.js";
 
 export class ResetReligionBuildingSetting extends SettingThreshold {
@@ -47,16 +47,16 @@ export class ResetReligionSettings extends Setting {
 
   private initBuildings(): ResetReligionBuildingSettings {
     const items = {} as ResetReligionBuildingSettings;
-    ReligionUpgrades.forEach(item => {
+    for (const item of ReligionUpgrades) {
       items[item] = new ResetReligionBuildingSetting(item, UnicornItemVariant.OrderOfTheSun);
-    });
-    TranscendenceUpgrades.forEach(item => {
+    }
+    for (const item of TranscendenceUpgrades) {
       items[item] = new ResetReligionBuildingSetting(item, UnicornItemVariant.Cryptotheology);
-    });
-    ZiggurathUpgrades.forEach(item => {
+    }
+    for (const item of ZiggurathUpgrades) {
       items[item] = new ResetReligionBuildingSetting(item, UnicornItemVariant.Ziggurat);
-    });
-    items["unicornPasture"] = new ResetReligionBuildingSetting(
+    }
+    items.unicornPasture = new ResetReligionBuildingSetting(
       "unicornPasture",
       UnicornItemVariant.UnicornPasture,
     );

@@ -1,4 +1,4 @@
-import { Price, Resource, ResourceCraftable } from "./index.js";
+import type { Price, Resource, ResourceCraftable } from "./index.js";
 
 export type ResourceInfo = {
   calculatePerDay?: boolean;

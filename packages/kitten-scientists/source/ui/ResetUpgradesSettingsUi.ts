@@ -1,9 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import { ResetUpgradeSettings } from "../settings/ResetUpgradeSettings.js";
-import { Setting, SettingOptions } from "../settings/Settings.js";
+import type { ResetUpgradeSettings } from "../settings/ResetUpgradeSettings.js";
+import type { Setting, SettingOptions } from "../settings/Settings.js";
 import { Container } from "./components/Container.js";
 import stylesDelimiter from "./components/Delimiter.module.css";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";

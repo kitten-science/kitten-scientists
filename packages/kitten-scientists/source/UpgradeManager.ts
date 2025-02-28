@@ -1,7 +1,7 @@
-import { KittenScientists } from "./KittenScientists.js";
-import { TabManager } from "./TabManager.js";
+import type { KittenScientists } from "./KittenScientists.js";
+import type { TabManager } from "./TabManager.js";
 import { cwarn } from "./tools/Log.js";
-import { BuildButton, ScienceTab } from "./types/index.js";
+import type { BuildButton, ScienceTab } from "./types/index.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: KittenScientists;
@@ -81,7 +81,7 @@ export abstract class UpgradeManager {
     upgrade: { label: string },
     variant: "policy" | "science" | "workshop",
   ): BuildButton | null {
-    let buttons;
+    let buttons: Array<BuildButton> | undefined;
     if (variant === "workshop") {
       buttons = this.manager.tab.buttons;
     } else if (variant === "policy") {

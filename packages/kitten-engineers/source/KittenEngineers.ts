@@ -1,6 +1,12 @@
 import "@kitten-science/kitten-analysts/KittenAnalysts.js";
-import { Game, I18nEngine, Resources } from "@kitten-science/kitten-scientists/types/index.js";
+import {
+  type Game,
+  type I18nEngine,
+  Resources,
+} from "@kitten-science/kitten-scientists/types/index.js";
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { GraphPrinter } from "./GraphPrinter.js";
+import { GraphSolver, type Operator } from "./GraphSolver.js";
 import { AssignMiner } from "./examples/assign-miner-operator.js";
 import { AssignWoodcutter } from "./examples/assign-woodcutter-operator.js";
 import { BuildCatnipField } from "./examples/build-catnip-field-operator.js";
@@ -11,8 +17,6 @@ import { GatherCatnip } from "./examples/gather-catnip-operator.js";
 import { RefineCatnip } from "./examples/refine-catnip-operator.js";
 import { TradeLizards } from "./examples/trade-lizards-operator.js";
 import { TradeNagas } from "./examples/trade-nagas-operator.js";
-import { GraphPrinter } from "./GraphPrinter.js";
-import { GraphSolver, Operator } from "./GraphSolver.js";
 import { cinfo } from "./tools/Log.js";
 
 declare global {
@@ -34,7 +38,7 @@ export class KittenEngineers {
   #interval = -1;
 
   constructor(game: Game, i18nEngine: I18nEngine) {
-    cinfo(`Kitten Engineers constructed.`);
+    cinfo("Kitten Engineers constructed.");
 
     this.game = game;
     this.i18nEngine = i18nEngine;
@@ -101,7 +105,9 @@ export class KittenEngineers {
     const graph = solver.solve(root);
     new GraphPrinter().print(graph);
   };
-  savegameHandler = () => {};
+  savegameHandler = () => {
+    /* intentionally left blank */
+  };
 
   snapshot() {
     // Collect snapshot and apply rules

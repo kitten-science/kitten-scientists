@@ -1,4 +1,4 @@
-import { Game, KGSaveData } from "../types/index.js";
+import type { Game, KGSaveData } from "../types/index.js";
 
 export class SavegameLoader {
   private readonly _game: Game;

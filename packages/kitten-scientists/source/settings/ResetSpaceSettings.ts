@@ -1,6 +1,6 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { SpaceBuilding, SpaceBuildings } from "../types/index.js";
+import { type SpaceBuilding, SpaceBuildings } from "../types/index.js";
 import { Setting, SettingThreshold } from "./Settings.js";
 
 export class ResetSpaceBuildingSetting extends SettingThreshold {
@@ -28,9 +28,9 @@ export class ResetSpaceSettings extends Setting {
 
   private initBuildings(): ResetSpaceBuildingSettings {
     const items = {} as ResetSpaceBuildingSettings;
-    SpaceBuildings.forEach(item => {
+    for (const item of SpaceBuildings) {
       items[item] = new ResetSpaceBuildingSetting(item);
-    });
+    }
     return items;
   }
 

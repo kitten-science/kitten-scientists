@@ -1,12 +1,12 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import {
-  ReligionUpgrade,
+  type ReligionUpgrade,
   ReligionUpgrades,
-  TranscendenceUpgrade,
+  type TranscendenceUpgrade,
   TranscendenceUpgrades,
   UnicornItemVariant,
-  ZiggurathUpgrade,
+  type ZiggurathUpgrade,
   ZiggurathUpgrades,
 } from "../types/index.js";
 import { Setting, SettingThreshold, SettingTrigger, SettingTriggerMax } from "./Settings.js";
@@ -130,16 +130,16 @@ export class ReligionSettings extends SettingTrigger {
 
   private initBuildings(): ReligionSettingsItems {
     const items = {} as ReligionSettingsItems;
-    ReligionUpgrades.forEach(item => {
+    for (const item of ReligionUpgrades) {
       items[item] = new ReligionSettingsItem(item, UnicornItemVariant.OrderOfTheSun);
-    });
-    TranscendenceUpgrades.forEach(item => {
+    }
+    for (const item of TranscendenceUpgrades) {
       items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Cryptotheology);
-    });
-    ZiggurathUpgrades.forEach(item => {
+    }
+    for (const item of ZiggurathUpgrades) {
       items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Ziggurat);
-    });
-    items["unicornPasture"] = new ReligionSettingsItem(
+    }
+    items.unicornPasture = new ReligionSettingsItem(
       "unicornPasture",
       UnicornItemVariant.UnicornPasture,
     );

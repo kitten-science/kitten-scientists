@@ -1,7 +1,7 @@
-import { AnyFunction } from "@oliversalzburg/js-utils/core.js";
-import { CycleIndices } from "../settings/TimeControlSettings.js";
-import { CraftableInfo, ResourceInfo } from "./craft.js";
-import {
+import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
+import type { CycleIndices } from "../settings/TimeControlSettings.js";
+import type { CraftableInfo, ResourceInfo } from "./craft.js";
+import type {
   AllBuildings,
   BuildButton,
   Building,
@@ -30,18 +30,18 @@ import {
   ZiggurathUpgrade,
   ZiggurathUpgradeInfo,
 } from "./index.js";
-import { ReligionTab } from "./religion.js";
-import { PolicyInfo, Technology, TechInfo as TechnologyInfo } from "./science.js";
-import { Mission, PlanetMeta, SpaceBuilding, SpaceTab } from "./space.js";
-import {
+import type { ReligionTab } from "./religion.js";
+import type { PolicyInfo, Technology, TechInfo as TechnologyInfo } from "./science.js";
+import type { Mission, PlanetMeta, SpaceBuilding, SpaceTab } from "./space.js";
+import type {
   ChronoForgeUpgrade,
   ChronoForgeUpgradeInfo,
   TimeTab,
   VoidSpaceUpgrade,
   VoidSpaceUpgradeInfo,
 } from "./time.js";
-import { TradeTab } from "./trade.js";
-import { JobInfo, VillageTab } from "./village.js";
+import type { TradeTab } from "./trade.js";
+import type { JobInfo, VillageTab } from "./village.js";
 
 type Server = {
   showMotd: boolean;

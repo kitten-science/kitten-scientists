@@ -1,4 +1,4 @@
-import { BuildingEffects, GameTab, Price, Unlocks } from "./index.js";
+import type { BuildingEffects, GameTab, Price, Unlocks } from "./index.js";
 
 export const Upgrades = [
   "advancedAutomation",

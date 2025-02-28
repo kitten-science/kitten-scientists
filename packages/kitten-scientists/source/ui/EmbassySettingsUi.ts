@@ -1,16 +1,16 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { EmbassySettings } from "../settings/EmbassySettings.js";
-import { SettingMax, SettingOptions } from "../settings/Settings.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { EmbassySettings } from "../settings/EmbassySettings.js";
+import type { SettingMax, SettingOptions } from "../settings/Settings.js";
 import stylesButton from "./components/Button.module.css";
-import { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
   constructor(

@@ -1,10 +1,10 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { SettingLimited } from "../../settings/Settings.js";
-import { LimitedButton } from "./buttons/LimitedButton.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { SettingLimited } from "../../settings/Settings.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
-import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
-import { UiComponent } from "./UiComponent.js";
+import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
+import type { UiComponent } from "./UiComponent.js";
+import { LimitedButton } from "./buttons/LimitedButton.js";
 
 export type SettingListItemOptionsLimited = {
   /**

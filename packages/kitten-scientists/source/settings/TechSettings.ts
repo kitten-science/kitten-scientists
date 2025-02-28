@@ -1,13 +1,13 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cinfo, cwarn } from "../tools/Log.js";
 import {
-  Game,
+  type Game,
   Technologies,
   TechnologiesIgnored,
-  Technology,
-  TechnologyIgnored,
+  type Technology,
+  type TechnologyIgnored,
 } from "../types/index.js";
 import { SettingTrigger } from "./Settings.js";
 
@@ -38,9 +38,9 @@ export class TechSettings extends SettingTrigger {
 
   private initTechs(): TechTechSettings {
     const items = {} as TechTechSettings;
-    Technologies.forEach(item => {
+    for (const item of Technologies) {
       items[item] = new TechSetting(item);
-    });
+    }
     return items;
   }
 

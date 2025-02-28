@@ -1,8 +1,8 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { Setting } from "../../settings/Settings.js";
-import { Cycle } from "../../types/index.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { Setting } from "../../settings/Settings.js";
+import type { Cycle } from "../../types/index.js";
 import { SettingListItem } from "./SettingListItem.js";
-import { SettingsList, SettingsListOptions } from "./SettingsList.js";
+import { SettingsList, type SettingsListOptions } from "./SettingsList.js";
 
 export type SettingWithCycles = Record<Cycle, Setting>;
 
@@ -47,15 +47,15 @@ export class CyclesList extends SettingsList<SeasonsListOptions> {
     this.setting = setting;
 
     this.addEventListener("enableAll", () => {
-      this.children.forEach(child => {
+      for (const child of this.children) {
         child.check();
-      });
+      }
       this.refreshUi();
     });
     this.addEventListener("disableAll", () => {
-      this.children.forEach(child => {
+      for (const child of this.children) {
         child.uncheck();
-      });
+      }
       this.refreshUi();
     });
 

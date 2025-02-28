@@ -1,9 +1,9 @@
-import { KittenScientists } from "../../KittenScientists.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import { Container } from "./Container.js";
 import styles from "./LabelListItem.module.css";
-import { ListItem, ListItemOptions } from "./ListItem.js";
+import { ListItem, type ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
-import { UiComponent, UiComponentInterface } from "./UiComponent.js";
+import type { UiComponent, UiComponentInterface } from "./UiComponent.js";
 
 export type LabelListItemOptions<TChild extends UiComponentInterface = UiComponentInterface> =
   ListItemOptions<TChild> & {
@@ -42,7 +42,7 @@ export class LabelListItem<
     this.addChild(this.head);
 
     this.elementLabel = $("<label/>", {
-      text: `${options?.upgradeIndicator === true ? `⮤ ` : ""}${label}`,
+      text: `${options?.upgradeIndicator === true ? "⮤ " : ""}${label}`,
     })
       .addClass(styles.label)
       .addClass(stylesListItem.label)
@@ -51,9 +51,9 @@ export class LabelListItem<
       });
     this.head.element.append(this.elementLabel);
 
-    options?.childrenHead?.forEach(child => {
+    for (const child of options?.childrenHead ?? []) {
       this.head.addChild(child);
-    });
+    }
 
     if (options?.icon) {
       const iconElement = $("<div/>", {

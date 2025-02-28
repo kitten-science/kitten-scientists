@@ -1,7 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { MissionSettings } from "../settings/MissionSettings.js";
-import { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { MissionSettings } from "../settings/MissionSettings.js";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";

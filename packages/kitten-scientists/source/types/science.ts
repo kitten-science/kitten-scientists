@@ -1,5 +1,5 @@
-import { Game } from "./game.js";
-import {
+import type { Game } from "./game.js";
+import type {
   BuildButton,
   Building,
   BuildingEffects,

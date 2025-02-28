@@ -1,6 +1,6 @@
+import { readFile, writeFile } from "node:fs/promises";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import * as cheerio from "cheerio";
-import { readFile, writeFile } from "fs/promises";
 
 const main = async () => {
   const indexHtml = await readFile("index.html", { encoding: "utf8" });

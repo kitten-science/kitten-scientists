@@ -1,4 +1,4 @@
-import { KittenScientists } from "../../KittenScientists.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import { cerror } from "../../tools/Log.js";
 
 export type UiComponentInterface = EventTarget & {

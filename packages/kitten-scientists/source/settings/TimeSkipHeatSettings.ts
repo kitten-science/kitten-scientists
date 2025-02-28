@@ -1,8 +1,8 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Cycles } from "../types/index.js";
 import { Setting, SettingTrigger } from "./Settings.js";
-import { CyclesSettings } from "./TimeSkipSettings.js";
+import type { CyclesSettings } from "./TimeSkipSettings.js";
 
 export class TimeSkipHeatSettings extends SettingTrigger {
   readonly cycles: CyclesSettings;
@@ -16,9 +16,9 @@ export class TimeSkipHeatSettings extends SettingTrigger {
 
   private initCycles(): CyclesSettings {
     const items = {} as CyclesSettings;
-    Cycles.forEach(item => {
+    for (const item of Cycles) {
       items[item] = new Setting();
-    });
+    }
     return items;
   }
 

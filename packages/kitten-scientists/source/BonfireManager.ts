@@ -1,16 +1,16 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { Automation, FrameContext } from "./Engine.js";
-import { KittenScientists } from "./KittenScientists.js";
+import type { Automation, FrameContext } from "./Engine.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { TabManager } from "./TabManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import {
-  BonfireBuildingSetting,
-  BonfireItem,
+  type BonfireBuildingSetting,
+  type BonfireItem,
   BonfireSettings,
 } from "./settings/BonfireSettings.js";
 import { cwarn } from "./tools/Log.js";
-import {
+import type {
   BuildButton,
   Building,
   BuildingExt,
@@ -154,7 +154,7 @@ export class BonfireManager implements Automation {
 
             // TODO: Why do we do this for the aqueduct and not for the pasture?
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            aqueductMeta.calculateEffects!(aqueductMeta, this._host.game);
+            aqueductMeta.calculateEffects?.(aqueductMeta, this._host.game);
 
             this._host.engine.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
 
@@ -213,7 +213,7 @@ export class BonfireManager implements Automation {
           libraryMeta.val = 0;
           libraryMeta.stage = 1;
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          libraryMeta.calculateEffects!(libraryMeta, this._host.game);
+          libraryMeta.calculateEffects?.(libraryMeta, this._host.game);
           this._host.engine.iactivity("upgrade.building.library", [], "ks-upgrade");
           this._host.game.ui.render();
           this.build("library", 1, 1);
@@ -333,11 +333,14 @@ export class BonfireManager implements Automation {
   autoGather(): void {
     const controller = new classes.game.ui.GatherCatnipButtonController(this._host.game);
     for (let clicks = 0; clicks < Math.floor(this._host.engine.settings.interval / 20); ++clicks) {
-      controller.buyItem(null, null, () => {});
+      controller.buyItem(null, null, () => {
+        /* intentionally left blank */
+      });
     }
   }
 
   build(name: Building, stage: number | undefined, amount: number): void {
+    let amountCalculated = amount;
     const build = this.getBuild(name);
     const button = this.getBuildButton(name, stage);
 
@@ -349,20 +352,20 @@ export class BonfireManager implements Automation {
       return;
     }
 
-    const amountTemp = amount;
+    const amountTemp = amountCalculated;
     const label = this._getBuildLabel(build.meta, stage);
-    amount = this._bulkManager.construct(button.model, button, amount);
-    if (amount !== amountTemp) {
-      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amount}`);
+    amountCalculated = this._bulkManager.construct(button.model, button, amountCalculated);
+    if (amountCalculated !== amountTemp) {
+      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
-    this._host.engine.storeForSummary(label, amount, "build");
+    this._host.engine.storeForSummary(label, amountCalculated, "build");
 
-    if (amount === 1) {
+    if (amountCalculated === 1) {
       this._host.engine.iactivity("act.build", [label], "ks-build");
     } else {
       this._host.engine.iactivity(
         "act.builds",
-        [label, this._host.renderAbsolute(amount)],
+        [label, this._host.renderAbsolute(amountCalculated)],
         "ks-build",
       );
     }

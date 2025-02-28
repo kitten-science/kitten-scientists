@@ -1,8 +1,8 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { Setting } from "../../settings/Settings.js";
-import { Season } from "../../types/index.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { Setting } from "../../settings/Settings.js";
+import type { Season } from "../../types/index.js";
 import { SettingListItem } from "./SettingListItem.js";
-import { SettingsList, SettingsListOptions } from "./SettingsList.js";
+import { SettingsList, type SettingsListOptions } from "./SettingsList.js";
 
 export type SettingWithSeasons = Record<Season, Setting>;
 
@@ -66,22 +66,22 @@ export class SeasonsList extends SettingsList {
     });
 
     this.spring = this._makeSeason(
-      this._host.engine.i18n(`$calendar.season.spring`),
+      this._host.engine.i18n("$calendar.season.spring"),
       this.setting.spring,
       options,
     );
     this.summer = this._makeSeason(
-      this._host.engine.i18n(`$calendar.season.summer`),
+      this._host.engine.i18n("$calendar.season.summer"),
       this.setting.summer,
       options,
     );
     this.autumn = this._makeSeason(
-      this._host.engine.i18n(`$calendar.season.autumn`),
+      this._host.engine.i18n("$calendar.season.autumn"),
       this.setting.autumn,
       options,
     );
     this.winter = this._makeSeason(
-      this._host.engine.i18n(`$calendar.season.winter`),
+      this._host.engine.i18n("$calendar.season.winter"),
       this.setting.winter,
       options,
     );

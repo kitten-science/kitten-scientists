@@ -1,13 +1,13 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { PolicySettings } from "../settings/PolicySettings.js";
-import { ScienceSettings } from "../settings/ScienceSettings.js";
-import { SettingOptions } from "../settings/Settings.js";
-import { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { SupportedLocale } from "../Engine.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { PolicySettings } from "../settings/PolicySettings.js";
+import type { ScienceSettings } from "../settings/ScienceSettings.js";
+import type { SettingOptions } from "../settings/Settings.js";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem, SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 

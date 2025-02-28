@@ -1,6 +1,6 @@
-import { KittenScientists } from "../../KittenScientists.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import styles from "./Button.module.css";
-import { IconButtonOptions } from "./IconButton.js";
+import type { IconButtonOptions } from "./IconButton.js";
 import { UiComponent } from "./UiComponent.js";
 
 export type ButtonOptions = IconButtonOptions & {
@@ -58,7 +58,9 @@ export class Button extends UiComponent {
       }
     }
 
-    options?.classes?.forEach(className => this.element.addClass(className));
+    for (const className of options?.classes ?? []) {
+      this.element.addClass(className);
+    }
 
     this.element.on("click", () => {
       if (this.readOnly) {

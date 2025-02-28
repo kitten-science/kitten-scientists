@@ -1,17 +1,17 @@
-import { FrameContext } from "@kitten-science/kitten-scientists/Engine.js";
-import {
+import { writeFileSync } from "node:fs";
+import type { FrameContext } from "@kitten-science/kitten-scientists/Engine.js";
+import type {
   KGNetSaveFromAnalysts,
   KGNetSavePersisted,
 } from "@kitten-science/kitten-scientists/types/index.js";
 import { sleep } from "@oliversalzburg/js-utils/async/async.js";
-import { AnyFunction } from "@oliversalzburg/js-utils/core.js";
+import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { compressToUTF16 } from "lz-string";
-import { writeFileSync } from "node:fs";
-import { exponentialBuckets, Histogram, linearBuckets } from "prom-client";
-import { AddressInfo, RawData, WebSocket, WebSocketServer } from "ws";
+import { Histogram, exponentialBuckets, linearBuckets } from "prom-client";
+import { type AddressInfo, type RawData, WebSocket, WebSocketServer } from "ws";
+import type { KittenAnalystsMessage, KittenAnalystsMessageId } from "../KittenAnalysts.js";
 import { LOCAL_STORAGE_PATH } from "../globals.js";
-import { KittenAnalystsMessage, KittenAnalystsMessageId } from "../KittenAnalysts.js";
 import { identifyExchange } from "../tools/MessageFormat.js";
 
 interface RemoteConnection {
@@ -70,16 +70,16 @@ export class KittensGameRemote {
     });
 
     const interval = setInterval(() => {
-      [...this.sockets.values()].forEach(socket => {
+      for (const socket of [...this.sockets.values()]) {
         if (!socket.isAlive) {
           socket.ws.terminate();
           this.sockets.delete(socket);
-          return;
+          continue;
         }
 
         socket.isAlive = false;
         socket.ws.ping();
-      });
+      }
     }, 30000);
 
     this.wss.on("close", () => {
@@ -165,7 +165,7 @@ export class KittensGameRemote {
               `${LOCAL_STORAGE_PATH}/${payload.telemetry.guid}.json`,
               JSON.stringify(savegame),
             );
-            process.stderr.write(`=> Savegame persisted to disc.\n`);
+            process.stderr.write("=> Savegame persisted to disc.\n");
           } catch (error) {
             console.error("!> Error while persisting savegame to disc!", error);
           }

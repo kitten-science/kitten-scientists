@@ -1,8 +1,8 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { KittenScientists } from "../../KittenScientists.js";
+import type { KittenScientists } from "../../KittenScientists.js";
 import stylesButton from "./Button.module.css";
 import styles from "./TextButton.module.css";
-import { UiComponent, UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type TextButtonOptions = UiComponentOptions & {
   readonly title: string;

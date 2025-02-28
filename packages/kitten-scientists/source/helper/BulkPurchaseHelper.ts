@@ -1,14 +1,14 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Engine } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
-import { WorkshopManager } from "../WorkshopManager.js";
-import { BonfireItem } from "../settings/BonfireSettings.js";
-import { AllItems } from "../settings/Settings.js";
+import type { KittenScientists } from "../KittenScientists.js";
+import type { WorkshopManager } from "../WorkshopManager.js";
+import type { BonfireItem } from "../settings/BonfireSettings.js";
+import type { AllItems } from "../settings/Settings.js";
 import { objectEntries } from "../tools/Entries.js";
 import { negativeOneToInfinity } from "../tools/Format.js";
 import { cdebug } from "../tools/Log.js";
-import {
+import type {
   AllBuildings,
   BuildButton,
   Building,
@@ -381,9 +381,9 @@ export class BulkPurchaseHelper {
         // Is this a karma cost for building cryochambers?
         let cryoKarma = false;
         // The actual, discounted oil price for the build.
-        let oilPrice = Infinity;
+        let oilPrice = Number.POSITIVE_INFINITY;
         // The actual, discounted karma price for the build.
-        let karmaPrice = Infinity;
+        let karmaPrice = Number.POSITIVE_INFINITY;
 
         // Determine the new state of the flags above.
         if (source === "Space" && prices[priceIndex].name === "oil") {
@@ -402,16 +402,14 @@ export class BulkPurchaseHelper {
         }
 
         if (spaceOil) {
-          maxItemsBuilt =
-            tempPool["oil"] < oilPrice * Math.pow(1.05, buildsPossible + buildMetaData.val);
+          maxItemsBuilt = tempPool.oil < oilPrice * 1.05 ** (buildsPossible + buildMetaData.val);
         } else if (cryoKarma) {
           maxItemsBuilt =
-            tempPool["karma"] <
-            karmaPrice * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
+            tempPool.karma < karmaPrice * priceRatio ** (buildsPossible + buildMetaData.val);
         } else {
           maxItemsBuilt =
             tempPool[prices[priceIndex].name] <
-            prices[priceIndex].val * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
+            prices[priceIndex].val * priceRatio ** (buildsPossible + buildMetaData.val);
         }
 
         // Check if any special builds have reached their reasonable limit of units to build.
@@ -441,8 +439,7 @@ export class BulkPurchaseHelper {
                 prices[priceIndex2].val *
                 (1 - this._host.game.getLimitedDR(oilReductionRatio, 0.75));
 
-              tempPool["oil"] +=
-                oilPriceRefund * Math.pow(1.05, buildsPossible + buildMetaData.val);
+              tempPool.oil += oilPriceRefund * 1.05 ** (buildsPossible + buildMetaData.val);
 
               // TODO: This seems to just be `cryoKarma`.
             } else if (
@@ -454,11 +451,11 @@ export class BulkPurchaseHelper {
                 prices[priceIndex2].val *
                 (1 - this._host.game.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
 
-              tempPool["karma"] +=
-                karmaPriceRefund * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
+              tempPool.karma +=
+                karmaPriceRefund * priceRatio ** (buildsPossible + buildMetaData.val);
             } else {
               const refundVal =
-                prices[priceIndex2].val * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
+                prices[priceIndex2].val * priceRatio ** (buildsPossible + buildMetaData.val);
               tempPool[prices[priceIndex2].name] +=
                 prices[priceIndex2].name === "void" ? Math.ceil(refundVal) : refundVal;
             }
@@ -477,13 +474,12 @@ export class BulkPurchaseHelper {
 
         // Deduct the cost of this price from the temporary resource cache.
         if (spaceOil) {
-          tempPool["oil"] -= oilPrice * Math.pow(1.05, buildsPossible + buildMetaData.val);
+          tempPool.oil -= oilPrice * 1.05 ** (buildsPossible + buildMetaData.val);
         } else if (cryoKarma) {
-          tempPool["karma"] -=
-            karmaPrice * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
+          tempPool.karma -= karmaPrice * priceRatio ** (buildsPossible + buildMetaData.val);
         } else {
           const newPriceValue =
-            prices[priceIndex].val * Math.pow(priceRatio, buildsPossible + buildMetaData.val);
+            prices[priceIndex].val * priceRatio ** (buildsPossible + buildMetaData.val);
           tempPool[prices[priceIndex].name] -=
             prices[priceIndex].name === "void" ? Math.ceil(newPriceValue) : newPriceValue;
         }
@@ -512,20 +508,21 @@ export class BulkPurchaseHelper {
   ): number {
     const meta = model.metadata;
     let counter = 0;
+    let amountCalculated = amount;
 
     // For limited builds, only construct up to the max.
     const vsMeta = meta as VoidSpaceUpgradeInfo;
-    if (!isNil(vsMeta.limitBuild) && vsMeta.limitBuild - vsMeta.val < amount) {
-      amount = vsMeta.limitBuild - vsMeta.val;
+    if (!isNil(vsMeta.limitBuild) && vsMeta.limitBuild - vsMeta.val < amountCalculated) {
+      amountCalculated = vsMeta.limitBuild - vsMeta.val;
     }
 
     if ((model.enabled && button.controller.hasResources(model)) || this._host.game.devMode) {
-      while (button.controller.hasResources(model) && amount > 0) {
+      while (button.controller.hasResources(model) && amountCalculated > 0) {
         model.prices = button.controller.getPrices(model);
         button.controller.payPrice(model);
         (button.controller as BuildingStackableBtnController).incrementValue(model);
         counter++;
-        amount--;
+        amountCalculated--;
       }
       if (vsMeta.breakIronWill) {
         this._host.game.ironWill = false;
@@ -541,7 +538,7 @@ export class BulkPurchaseHelper {
   }
 
   private _isStagedBuild(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     data: any,
   ): data is {
     stage: number;
@@ -637,7 +634,7 @@ export class BulkPurchaseHelper {
           0.75,
         );
         const oilPrice = finalResourcePrice * (1 - oilModifier);
-        if (this._workshopManager.getValueAvailable("oil") < oilPrice * Math.pow(1.05, build.val)) {
+        if (this._workshopManager.getValueAvailable("oil") < oilPrice * 1.05 ** build.val) {
           return false;
         }
 
@@ -650,14 +647,14 @@ export class BulkPurchaseHelper {
         const karmaPrice = finalResourcePrice * (1 - karmaModifier);
         if (
           this._workshopManager.getValueAvailable("karma") <
-          karmaPrice * Math.pow(priceRatio, build.val)
+          karmaPrice * priceRatio ** build.val
         ) {
           return false;
         }
       } else {
         if (
           this._workshopManager.getValueAvailable(price.name) <
-          finalResourcePrice * Math.pow(priceRatio, build.val)
+          finalResourcePrice * priceRatio ** build.val
         ) {
           return false;
         }

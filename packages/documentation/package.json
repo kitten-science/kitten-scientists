@@ -10,6 +10,7 @@
     "docs:nsd": "make nsd"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "node-scripts-docs": "2.0.0"
   },
   "engines": {

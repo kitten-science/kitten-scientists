@@ -1,4 +1,4 @@
-import { Game, Price } from "./index.js";
+import type { Game, Price } from "./index.js";
 
 export const Buildings = [
   "academy",

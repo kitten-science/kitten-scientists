@@ -1,9 +1,9 @@
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
-import { SupportedLocale } from "../Engine.js";
-import { KittenScientists, ksVersion } from "../KittenScientists.js";
+import type { SupportedLocale } from "../Engine.js";
+import { type KittenScientists, ksVersion } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import { EngineSettings } from "../settings/EngineSettings.js";
-import { SettingOptions } from "../settings/Settings.js";
+import type { EngineSettings } from "../settings/EngineSettings.js";
+import type { SettingOptions } from "../settings/Settings.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";
@@ -16,7 +16,7 @@ import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { TextButton } from "./components/TextButton.js";
-import { UiComponent } from "./components/UiComponent.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class InternalsUi extends SettingsPanel<EngineSettings> {
   constructor(

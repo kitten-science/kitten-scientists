@@ -1,6 +1,6 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { Resource, Resources } from "../types/index.js";
+import { type Resource, Resources } from "../types/index.js";
 import { Setting, SettingThreshold } from "./Settings.js";
 
 export class ResetResourcesSettingsItem extends SettingThreshold {
@@ -28,9 +28,9 @@ export class ResetResourcesSettings extends Setting {
 
   private initResources(): ResetResourcesResourceSettings {
     const items = {} as ResetResourcesResourceSettings;
-    Resources.forEach(item => {
+    for (const item of Resources) {
       items[item] = new ResetResourcesSettingsItem(item);
-    });
+    }
     return items;
   }
 

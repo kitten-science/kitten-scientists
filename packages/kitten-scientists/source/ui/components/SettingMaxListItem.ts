@@ -1,10 +1,10 @@
-import { KittenScientists } from "../../KittenScientists.js";
-import { SettingMax } from "../../settings/Settings.js";
-import { MaxButton } from "./buttons/MaxButton.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { SettingMax } from "../../settings/Settings.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
-import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
-import { UiComponent } from "./UiComponent.js";
+import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
+import type { UiComponent } from "./UiComponent.js";
+import { MaxButton } from "./buttons/MaxButton.js";
 
 export type SettingListItemOptionsMax = {
   readonly onRefreshMax: (subject: SettingMaxListItem) => void;

@@ -1,9 +1,9 @@
-import { SettingLimited } from "packages/kitten-scientists/source/settings/Settings.js";
+import type { SettingLimited } from "packages/kitten-scientists/source/settings/Settings.js";
+import type { KittenScientists } from "../../../KittenScientists.js";
 import { Icons } from "../../../images/Icons.js";
-import { KittenScientists } from "../../../KittenScientists.js";
 import { Button } from "../Button.js";
 import stylesButton from "../Button.module.css";
-import { UiComponentOptions } from "../UiComponent.js";
+import type { UiComponentOptions } from "../UiComponent.js";
 
 export type LimitedButtonOptions = UiComponentOptions & {
   readonly onLimitedCheck: () => void;
@@ -33,7 +33,9 @@ export class LimitedButton extends Button {
       this.refreshUi();
     });
 
-    options?.classes?.forEach(className => this.element.addClass(className));
+    for (const className of options?.classes ?? []) {
+      this.element.addClass(className);
+    }
   }
 
   refreshUi() {

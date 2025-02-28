@@ -1,5 +1,5 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { Job, Jobs, Trait, Traits } from "../types/index.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Job, Jobs, type Trait, Traits } from "../types/index.js";
 import { Setting, SettingOptions } from "./Settings.js";
 
 export class ElectLeaderSettings extends Setting {

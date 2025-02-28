@@ -1,19 +1,19 @@
-import { SupportedLocale } from "../../Engine.js";
-import { KittenScientists } from "../../KittenScientists.js";
-import { SettingOptions } from "../../settings/Settings.js";
-import { CraftSettingsItem } from "../../settings/WorkshopSettings.js";
+import type { SupportedLocale } from "../../Engine.js";
+import type { KittenScientists } from "../../KittenScientists.js";
+import type { SettingOptions } from "../../settings/Settings.js";
+import type { CraftSettingsItem } from "../../settings/WorkshopSettings.js";
 import stylesButton from "./Button.module.css";
-import { LimitedButton } from "./buttons/LimitedButton.js";
-import { MaxButton } from "./buttons/MaxButton.js";
-import { TriggerButton } from "./buttons/TriggerButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import stylesListItem from "./ListItem.module.css";
-import { SettingListItemOptionsLimited } from "./SettingLimitedListItem.js";
-import { SettingListItem, SettingListItemOptions } from "./SettingListItem.js";
-import { SettingListItemOptionsMax } from "./SettingMaxListItem.js";
-import { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
-import { UiComponent } from "./UiComponent.js";
+import type { SettingListItemOptionsLimited } from "./SettingLimitedListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
+import type { SettingListItemOptionsMax } from "./SettingMaxListItem.js";
+import type { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
+import type { UiComponent } from "./UiComponent.js";
+import { LimitedButton } from "./buttons/LimitedButton.js";
+import { MaxButton } from "./buttons/MaxButton.js";
+import { TriggerButton } from "./buttons/TriggerButton.js";
 
 export class WorkshopCraftListItem<
   TOptions extends SettingListItemOptions<UiComponent> &

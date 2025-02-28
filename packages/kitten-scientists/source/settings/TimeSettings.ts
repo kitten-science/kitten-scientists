@@ -1,10 +1,10 @@
-import { Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import {
-  ChronoForgeUpgrade,
+  type ChronoForgeUpgrade,
   ChronoForgeUpgrades,
   TimeItemVariant,
-  VoidSpaceUpgrade,
+  type VoidSpaceUpgrade,
   VoidSpaceUpgrades,
 } from "../types/index.js";
 import { Setting, SettingTrigger, SettingTriggerMax } from "./Settings.js";
@@ -47,13 +47,15 @@ export class TimeSettings extends SettingTrigger {
 
   private initBuildings(): TimeBuildingsSettings {
     const items = {} as TimeBuildingsSettings;
-    ChronoForgeUpgrades.forEach(item => {
+    for (const item of ChronoForgeUpgrades) {
       items[item] = new TimeSettingsItem(item, TimeItemVariant.Chronoforge);
-    });
-    VoidSpaceUpgrades.forEach(item => {
-      if (item === "usedCryochambers") return;
+    }
+    for (const item of VoidSpaceUpgrades) {
+      if (item === "usedCryochambers") {
+        continue;
+      }
       items[item] = new TimeSettingsItem(item, TimeItemVariant.VoidSpace);
-    });
+    }
     return items;
   }
 

@@ -1,5 +1,5 @@
 import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { KittenScientists } from "../KittenScientists.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { roundToTwo, ucfirst } from "../tools/Format.js";
 
 /**
