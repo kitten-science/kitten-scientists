@@ -200,3 +200,20 @@ jobs:
       image-title: devcontainer
       is-latest: false
       push: true
+
+  publish-npm:
+    name: 🔹 Publish npm
+    needs:
+      - changelog
+      - qa
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
+      pages: write
+      pull-requests: read
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
+    with:
+      version: ${{ inputs.is-canary && needs.changelog.outputs.version-dev-extended || needs.changelog.outputs.version-current }}
