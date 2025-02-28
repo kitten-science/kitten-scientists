@@ -8,7 +8,7 @@ clean:
 	rm --force --recursive lib node_modules output tsconfig.tsbuildinfo
 
 docs:
-	@echo "This project has no documentation."
+	@echo "Documentation build will be restored soon."
 
 git-hook:
 	echo "make pretty" > .git/hooks/pre-commit
