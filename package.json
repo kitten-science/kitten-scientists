@@ -43,7 +43,7 @@
     "@types/node": "22.13.5",
     "@types/web": "0.0.206",
     "eslint": "9.21.0",
-    "eslint-config-prettier": "10.0.1",
+    "eslint-config-prettier": "10.0.2",
     "lint-staged": "15.4.3",
     "prettier": "3.3.3",
     "prettier-package-json": "2.8.0",
