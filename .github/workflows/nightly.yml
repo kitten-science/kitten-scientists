@@ -58,7 +58,6 @@ jobs:
 
       - name: Extract current version
         run: |
-          cd packages/kitten-scientists
           echo "ROOT_VERSION=$(jq --raw-output '.version' package.json)" >> $GITHUB_ENV
 
       - name: Generate Changelog
@@ -138,17 +137,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node${{ env.NODE_VERSION }}
 
-      - name: Install dependencies
-        run: yarn install
-
       - name: Build release
         env:
           RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
         run: |
-          yarn build:all
-          yarn ka:release
-          yarn ke:release
-          yarn ks:release
+          make devcontainer userscript
 
       - name: Download changelog
         uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4

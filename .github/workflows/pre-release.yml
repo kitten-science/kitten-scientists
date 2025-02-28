@@ -55,7 +55,6 @@ jobs:
 
       - name: Extract current version
         run: |
-          cd packages/kitten-scientists
           echo "ROOT_VERSION=$(jq --raw-output '.version' package.json)" >> $GITHUB_ENV
 
       - name: Generate Changelog
@@ -132,17 +131,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node${{ env.NODE_VERSION }}
 
-      - name: Install dependencies
-        run: yarn install
-
       - name: Build release
         env:
           RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
         run: |
-          yarn build:all
-          yarn ka:release
-          yarn ke:release
-          yarn ks:release
+          make devcontainer userscript
 
       - if: success() && inputs.wants-github-release
         name: Download changelog
@@ -160,9 +153,7 @@ jobs:
           draft: ${{ inputs.dry-run }}
           dry-run: ${{ inputs.dry-run }}
           files: |
-            packages/kitten-analysts/output/kitten-analysts-*
-            packages/kitten-engineers/output/kitten-engineers-*
-            packages/kitten-scientists/output/kitten-scientists-*
+            output/*
           merge-similar: true
           prerelease: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -181,7 +172,7 @@ jobs:
   deploy-documentation:
     name: 🔹 Deploy Documentation
     needs:
-      - qa
+      - pre-release
     permissions:
       contents: read
       id-token: write
@@ -190,7 +181,7 @@ jobs:
   publish-devcontainer:
     name: 🔹 Publish Devcontainer
     needs:
-      - qa
+      - pre-release
     permissions:
       attestations: write
       contents: read
@@ -202,79 +193,10 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
       artifact-name: devcontainer-output
-      containerfile: packages/devcontainer/Containerfile
+      containerfile: container/Containerfile
       image-description: Kitten Science Development Container
       image-name: kitten-science/devcontainer
       image-tag: next
       image-title: devcontainer
-      is-latest: false
-      push: true
-
-  publish-ka-backend:
-    name: 🔹 Publish Backend
-    needs:
-      - qa
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: ka-backend-output
-      containerfile: packages/kitten-analysts/backend.Containerfile
-      image-description: Kitten Science Analytics Backend
-      image-name: kitten-science/ka-backend
-      image-tag: next
-      image-title: ka-backend
-      is-latest: false
-      push: true
-
-  publish-ka-game:
-    name: 🔹 Publish Game
-    needs:
-      - qa
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: ka-game-output
-      containerfile: packages/kitten-analysts/game.Containerfile
-      image-description: Kittens Game with Kitten Science Analytics
-      image-name: kitten-science/ka-game
-      image-tag: next
-      image-title: ka-game
-      is-latest: false
-      push: true
-
-  publish-ka-ui:
-    name: 🔹 Publish UI
-    needs:
-      - qa
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: ka-ui-output
-      containerfile: packages/kitten-analysts/ui.Containerfile
-      image-description: Headless Kittens Game
-      image-name: kitten-science/ka-ui
-      image-tag: next
-      image-title: ka-ui
       is-latest: false
       push: true

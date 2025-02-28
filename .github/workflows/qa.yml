@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
 
       - name: Validate commit messages
         uses: oliversalzburg/action-commit-validator@9e8790c9ddf43af8762a8f802ca677c057ddf3f5 # v2.0.0
@@ -71,56 +73,9 @@ jobs:
     with:
       artifact-name: devcontainer-output
       artifact-contents: |
+        container/output
+        container/overlay
         node_modules
-        packages/*/output
-      containerfile: packages/devcontainer/Containerfile
-      working-directory: packages/devcontainer
-  qa-ka-backend:
-    name: 🔹 QA Backend
-    uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
-    with:
-      artifact-name: ka-backend-output
-      artifact-contents: |
-        node_modules
-        packages/*/output
-      containerfile: packages/kitten-analysts/backend.Containerfile
-      working-directory: packages/kitten-analysts
-  qa-ka-game:
-    name: 🔹 QA Game
-    uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
-    with:
-      artifact-name: ka-game-output
-      artifact-contents: |
-        node_modules
-        packages/*/output
-      containerfile: packages/kitten-analysts/game.Containerfile
-      working-directory: packages/kitten-analysts
-  qa-ka-ui:
-    name: 🔹 QA UI
-    uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
-    with:
-      artifact-name: ka-ui-output
-      artifact-contents: |
-        node_modules
-        packages/*/output
-      containerfile: packages/kitten-analysts/ui.Containerfile
-      working-directory: packages/kitten-analysts
+        output
+      containerfile: container/Containerfile
 
-  qa-passed:
-    needs:
-      - qa-commit
-      - qa
-      - qa-devcontainer
-      - qa-ka-backend
-      - qa-ka-game
-      - qa-ka-ui
-    if: always()
-    name: QA Passed
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Failure
-        if: ${{ contains(needs.*.result, 'failure') }}
-        run: exit 1
-      - name: Success
-        if: ${{ success() && !(contains(needs.*.result, 'failure')) }}
-        run: exit 0

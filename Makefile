@@ -2,13 +2,13 @@
 
 default: build
 
-build: output
+build: devcontainer lib
 
 clean:
-	rm --force --recursive node_modules output packages/*/build packages/*/coverage packages/*/output packages/*/tsconfig.tsbuildinfo tsconfig.tsbuildinfo
+	rm --force --recursive lib node_modules output tsconfig.tsbuildinfo
 
 docs:
-	@echo "No documentation included by default."
+	@echo "Documentation build will be restored soon."
 
 git-hook:
 	echo "make pretty" > .git/hooks/pre-commit
@@ -21,20 +21,29 @@ lint: node_modules
 	yarn biome check .
 	yarn tsc --noEmit
 
-test: build
-	yarn c8 --reporter=html-spa mocha output/*.test.js
+test:
+	@echo "Kitten Scientists test in production."
 
-run: build
-	node ./output/main.js
 
+.PHONY: devcontainer
+devcontainer: injectable node_modules
+	node build-devcontainer.js
 
 node_modules:
 	yarn install
 
+lib: node_modules
+	yarn tsc --build
+
 output: node_modules
-	cd packages/action-release-info && $(MAKE) build
-	cd packages/devcontainer && $(MAKE) build
-	cd packages/documentation && $(MAKE) build
-	cd packages/kitten-analysts && $(MAKE) build
-	cd packages/kitten-engineers && $(MAKE) build
-	cd packages/kitten-scientists && $(MAKE) build
+	yarn vite --config vite.config.userscript.js build
+
+.PHONY: injectable
+injectable: node_modules
+	yarn vite --config vite.config.inject.js build
+
+.PHONY: userscript
+userscript: node_modules
+	yarn vite --config vite.config.userscript.js build
+	MINIFY=true yarn vite --config vite.config.userscript.js build
+

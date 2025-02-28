@@ -5,15 +5,11 @@
     "ignoreUnknown": false,
     "ignore": [
       "**/.yarn/",
+      "container/output/",
+      "container/overlay/",
       "docs/",
-      "packages/*/build/*",
-      "packages/*/coverage/*",
-      "packages/*/output/*",
-      "packages/documentation/.venv/*",
-      "packages/documentation/overrides/*",
-      "packages/documentation/public/*",
-      "packages/kitten-analysts/examples/*",
-      "packages/*/package.json",
+      "lib/",
+      "output/",
       "package.json"
     ]
   },

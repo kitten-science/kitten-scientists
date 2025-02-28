@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5
         with:
           cache: pip
-          cache-dependency-path: packages/documentation/requirements.txt
+          cache-dependency-path: requirements.txt
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Enable Corepack
@@ -47,14 +47,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node${{ env.NODE_VERSION }}
 
-      - name: Install dependencies
-        run: yarn install
-
       - name: Build documentation
         run: |
-          cd packages/documentation
-          make public
-          mv public ../../docs/main
+          make docs
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
@@ -64,6 +59,7 @@ jobs:
           role-session-name: GitHubActions
 
       - name: Deploy to S3
+        if: false
         run: |
           aws s3 sync ./docs/ s3://kitten-science-us0/ \
             --cache-control "public, s-maxage=3600, maxage=3600"

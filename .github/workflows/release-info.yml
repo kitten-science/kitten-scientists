@@ -40,15 +40,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node${{ env.NODE_VERSION }}
 
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Build the release-info action
-        run: yarn workspace @kitten-science/action-release-info tsc --build
-
       - name: Generate release information
         id: release-info
-        uses: ./packages/action-release-info
+        uses: kitten-science/action-release-info@main
         with:
           filename: release-info.json
           repo-token: ${{ secrets.GITHUB_TOKEN }}

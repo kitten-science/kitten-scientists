@@ -32,33 +32,60 @@ env:
   NODE_VERSION: "22.14.0"
 
 jobs:
-  versions:
-    name: Versions
+  changelog:
+    name: Changelog
     outputs:
-      RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+      major: ${{ steps.changelog.outputs.major-total }}
+      minor: ${{ steps.changelog.outputs.minor-total }}
+      patch: ${{ steps.changelog.outputs.patch-total }}
+      lifecycle: ${{ steps.changelog.outputs.lifecycle-total }}
+      version: ${{ steps.changelog.outputs.version-dev-extended }}
     permissions:
       contents: read
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Select NodeJS version
-        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: https://registry.npmjs.org
+          persist-credentials: false
+          sparse-checkout: |
+            package.json
+          sparse-checkout-cone-mode: false
 
-      - name: Determine versions
-        if: "${{ inputs.dry-run-tag == '' }}"
+      - name: Extract current version
         run: |
-          cd packages/kitten-scientists
-          echo "RELEASE_VERSION=$(node ../../scripts/release-version.cjs)" >> $GITHUB_ENV
-      - name: Set versions
-        if: "${{ inputs.dry-run-tag != '' }}"
+          echo "ROOT_VERSION=$(jq --raw-output '.version' package.json)" >> $GITHUB_ENV
+
+      - name: Generate Changelog
+        id: changelog
+        uses: oliversalzburg/action-automatic-semantic-releases@b9b98292517b8c8e0174f7430c269ac70990bf95 # v0.5.3
+        with:
+          automatic-release-tag: ${{ inputs.dry-run-tag || 'next' }}
+          changelog-artifact: changelog.json
+          dry-run: true
+          publish: false
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          root-version: ${{ env.ROOT_VERSION }}
+
+      - name: Store Changelog
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
+        with:
+          name: changelog.json
+          path: changelog.json
+
+      - name: Show change counts
+        env:
+          MAJOR: ${{ steps.changelog.outputs.major-total }}
+          MINOR: ${{ steps.changelog.outputs.minor-total }}
+          PATCH: ${{ steps.changelog.outputs.patch-total }}
+          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle-total }}
+          VERSION: ${{ steps.changelog.outputs.version-dev-extended }}
         run: |
-          cd packages/kitten-scientists
-          echo "RELEASE_VERSION=${{ inputs.dry-run-tag }}" >> $GITHUB_ENV
+          echo Major changes: $MAJOR
+          echo Minor changes: $MINOR
+          echo Patch changes: $PATCH
+          echo Lifecycle changes: $LIFECYCLE
+          echo Pre-Release should use version: $VERSION
 
   qa:
     name: 🔹 QA
@@ -81,6 +108,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
 
       - name: Select NodeJS version
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
@@ -101,17 +130,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node${{ env.NODE_VERSION }}
 
-      - name: Install dependencies
-        run: yarn install
-
       - name: Build release
         env:
-          RELEASE_VERSION: ${{ needs.versions.outputs.RELEASE_VERSION }}
+          RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
         run: |
-          yarn build:all
-          yarn ka:release
-          yarn ke:release
-          yarn ks:release
+          make devcontainer userscript
 
       - name: Generate GitHub release
         if: success() && inputs.wants-github-release
@@ -121,9 +144,7 @@ jobs:
           draft: true
           dry-run: ${{ inputs.dry-run }}
           files: |
-            packages/kitten-analysts/output/kitten-analysts-*
-            packages/kitten-engineers/output/kitten-engineers-*
-            packages/kitten-scientists/output/kitten-scientists-*
+            output/*
           merge-similar: true
           prerelease: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -167,85 +188,10 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
       artifact-name: devcontainer-output
-      containerfile: packages/devcontainer/Containerfile
+      containerfile: container/Containerfile
       image-description: Kitten Science Development Container
       image-name: kitten-science/devcontainer
       image-tag: next
       image-title: devcontainer
-      is-latest: false
-      push: true
-
-  publish-ka-backend:
-    name: 🔹 Publish Backend
-    if: success() && !inputs.dry-run
-    needs:
-      - qa
-      - versions
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: ka-backend-output
-      containerfile: packages/kitten-analysts/backend.Containerfile
-      image-description: Kitten Science Analytics Backend
-      image-name: kitten-science/ka-backend
-      image-tag: next
-      image-title: ka-backend
-      is-latest: false
-      push: true
-
-  publish-ka-game:
-    name: 🔹 Publish Game
-    if: success() && !inputs.dry-run
-    needs:
-      - qa
-      - versions
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: ka-game-output
-      containerfile: packages/kitten-analysts/game.Containerfile
-      image-description: Kittens Game with Kitten Science Analytics
-      image-name: kitten-science/ka-game
-      image-tag: next
-      image-title: ka-game
-      is-latest: false
-      push: true
-
-  publish-ka-ui:
-    name: 🔹 Publish UI
-    if: success() && !inputs.dry-run
-    needs:
-      - qa
-      - versions
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: ka-ui-output
-      containerfile: packages/kitten-analysts/ui.Containerfile
-      image-description: Headless Kittens Game
-      image-name: kitten-science/ka-ui
-      image-tag: next
-      image-title: ka-ui
       is-latest: false
       push: true
