@@ -486,6 +486,7 @@ declare global {
 
 export * from "./buildings.js";
 export * from "./game.js";
+export * from "./releases.js";
 export * from "./religion.js";
 export * from "./save.js";
 export * from "./science.js";

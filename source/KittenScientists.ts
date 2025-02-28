@@ -1,4 +1,3 @@
-import type { ReleaseChannel, ReleaseInfoSchema } from "@kitten-science/action-release-info";
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import gt from "semver/functions/gt.js";
@@ -9,6 +8,7 @@ import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
 import type { Game, I18nEngine } from "./types/index.js";
+import type { ReleaseChannel, ReleaseInfoSchema } from "./types/releases.js";
 import { UserInterface } from "./ui/UserInterface.js";
 
 declare global {
