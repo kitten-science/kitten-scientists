@@ -2,7 +2,7 @@
 
 default: build
 
-build: lib
+build: devcontainer lib
 
 clean:
 	rm --force --recursive lib node_modules output tsconfig.tsbuildinfo
@@ -25,6 +25,10 @@ test:
 	@echo "Kitten Scientists test in production."
 
 
+.PHONY: devcontainer
+devcontainer: injectable lib node_modules
+	cd container && node build.js
+
 node_modules:
 	yarn install
 
@@ -33,6 +37,10 @@ lib: node_modules
 
 output: node_modules
 	yarn vite --config vite.config.userscript.js build
+
+.PHONY: injectable
+injectable: node_modules
+	yarn vite --config vite.config.inject.js build
 
 .PHONY: userscript
 userscript: node_modules

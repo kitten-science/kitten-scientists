@@ -16,7 +16,10 @@
   },
   "type": "module",
   "exports": {
-    "./*.js": "./lib/*.js"
+    "./*.js": {
+      "types": "./lib/*.d.ts",
+      "default": "./lib/*.js"
+    }
   },
   "files": [
     "lib"
@@ -32,7 +35,6 @@
     "test": "echo This project has no tests.",
     "whoami": "echo kitten-scientists"
   },
-  "types": "./build/index.d.ts",
   "dependencies": {
     "@oliversalzburg/js-utils": "0.2.8",
     "ajv": "8.17.1",
@@ -44,8 +46,10 @@
     "@biomejs/biome": "1.9.4",
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.32",
+    "@types/node": "22.13.5",
     "@types/semver": "7.5.8",
     "@types/web": "0.0.206",
+    "cheerio": "1.0.0",
     "rollup": "4.34.8",
     "rollup-plugin-cleanup": "3.2.1",
     "typescript": "5.7.3",
