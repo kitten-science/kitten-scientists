@@ -74,7 +74,6 @@ jobs:
       artifact-name: devcontainer-output
       artifact-contents: |
         node_modules
-        packages/*/output
-      containerfile: packages/devcontainer/Containerfile
-      working-directory: packages/devcontainer
+        output
+      containerfile: container/Containerfile
 
