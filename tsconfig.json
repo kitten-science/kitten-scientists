@@ -1,18 +1,28 @@
 {
-  "extends": "./tsconfig.base.json",
-  "files": [],
-  "references": [
-    {
-      "path": "packages/action-release-info"
-    },
-    {
-      "path": "packages/kitten-analysts"
-    },
-    {
-      "path": "packages/kitten-engineers"
-    },
-    {
-      "path": "packages/kitten-scientists"
-    }
-  ]
+  "$schema": "https://json.schemastore.org/tsconfig.json",
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "checkJs": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "lib": ["ESNext"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "lib",
+    "resolveJsonModule": true,
+    "rootDir": "source",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ESNext",
+    "types": ["@types/web"],
+    "useDefineForClassFields": true
+  },
+  "include": ["@types", "source", "source/i18n/**/*.json"]
 }
