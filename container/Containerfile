@@ -13,11 +13,11 @@ RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
   && yarn install
 
 WORKDIR /kittensgame
-COPY "packages/kitten-analysts/output" "kitten-analysts"
-COPY "packages/kitten-engineers/output" "kitten-engineers"
-COPY "packages/kitten-scientists/output" "kitten-scientists"
-COPY "packages/devcontainer/output/inject-scripts.mjs" "inject-scripts.mjs"
-COPY "packages/devcontainer/output/rewrite-index.mjs" "rewrite-index.mjs"
+#COPY "packages/kitten-analysts/output" "kitten-analysts"
+#COPY "packages/kitten-engineers/output" "kitten-engineers"
+COPY "output" "kitten-scientists"
+COPY "container/output/inject-scripts.mjs" "inject-scripts.mjs"
+COPY "container/output/rewrite-index.mjs" "rewrite-index.mjs"
 RUN node rewrite-index.mjs
 RUN node inject-scripts.mjs
 

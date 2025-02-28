@@ -6,10 +6,7 @@
 !.yarn/versions
 .pnp.*
 
-node_modules
+lib/
+node_modules/
+output/
 tsconfig.tsbuildinfo
-
-/packages/*/build/*
-/packages/*/coverage/*
-/packages/*/output/*
-/packages/documentation/public/*
