@@ -161,6 +161,7 @@ jobs:
           with-authors: false
 
   update-release-info:
+    if: success() && !inputs.dry-run
     name: 🔹 Update Release Info
     needs:
       - pre-release

@@ -152,8 +152,8 @@ jobs:
           with-authors: false
 
   update-release-info:
-    name: 🔹 Update Release Info
     if: success() && !inputs.dry-run
+    name: 🔹 Update Release Info
     needs:
       - release
     permissions:
