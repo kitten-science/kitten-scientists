@@ -8,8 +8,7 @@
   "homepage": "https://github.com/kitten-science/kitten-scientists",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kitten-science/kitten-scientists.git",
-    "directory": "packages/kitten-scientists"
+    "url": "git+https://github.com/kitten-science/kitten-scientists.git"
   },
   "bugs": {
     "url": "https://github.com/kitten-science/kitten-scientists/issues"

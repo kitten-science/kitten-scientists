@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - .github/labels.yml
-      - packages/action-label-manager/**
   workflow_dispatch:
 
 concurrency: manage-labels

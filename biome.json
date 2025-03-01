@@ -98,12 +98,6 @@
       "docs/",
       "lib/",
       "node_modules/",
-      "packages/documentation/.venv/",
-      "packages/documentation/public/",
-      "packages/*/build/",
-      "packages/*/coverage/",
-      "packages/*/output/",
-      "packages/*/vite.config.*",
       "*.config.*"
     ]
   },

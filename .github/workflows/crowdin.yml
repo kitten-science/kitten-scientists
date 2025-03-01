@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - packages/kitten-scientists/source/i18n/
+      - source/i18n/
   schedule:
     - cron: "30 2 * * *"
   workflow_dispatch:
