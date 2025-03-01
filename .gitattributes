@@ -1,7 +1,7 @@
 .yarn/cache/*.zip binary
 .yarn linguist-vendored
 
-docs/ linguist-generated
+docs/** linguist-documentation
 
 # In general, use LF for text
 * text=auto eol=lf
