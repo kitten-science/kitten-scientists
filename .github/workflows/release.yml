@@ -39,7 +39,7 @@ jobs:
       minor: ${{ steps.changelog.outputs.minor-total }}
       patch: ${{ steps.changelog.outputs.patch-total }}
       lifecycle: ${{ steps.changelog.outputs.lifecycle-total }}
-      version: ${{ steps.changelog.outputs.version-dev-extended }}
+      version: ${{ steps.changelog.outputs.version }}
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -79,7 +79,7 @@ jobs:
           MINOR: ${{ steps.changelog.outputs.minor-total }}
           PATCH: ${{ steps.changelog.outputs.patch-total }}
           LIFECYCLE: ${{ steps.changelog.outputs.lifecycle-total }}
-          VERSION: ${{ steps.changelog.outputs.version-dev-extended }}
+          VERSION: ${{ steps.changelog.outputs.version }}
         run: |
           echo Major changes: $MAJOR
           echo Minor changes: $MINOR
