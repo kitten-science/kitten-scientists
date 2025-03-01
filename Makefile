@@ -5,10 +5,9 @@ default: build
 build: devcontainer lib
 
 clean:
-	rm --force --recursive lib node_modules output tsconfig.tsbuildinfo
+	rm --force --recursive .venv docs/current/public lib node_modules output tsconfig.tsbuildinfo
 
-docs:
-	@echo "Documentation build will be restored soon."
+docs: docs/current/public
 
 git-hook:
 	echo "make pretty" > .git/hooks/pre-commit
@@ -46,3 +45,14 @@ injectable: node_modules
 userscript: node_modules
 	yarn vite --config vite.config.userscript.js build
 	MINIFY=true yarn vite --config vite.config.userscript.js build
+
+.venv:
+	python3 -m venv .venv
+	. .venv/bin/activate; pip install -r requirements.txt
+
+docs/current/public: .venv
+	. .venv/bin/activate; cd docs/current/; mkdocs build --config-file mkdocs.yml --site-dir public
+
+.PHONY: docs-serve
+docs-serve: .venv
+	. .venv/bin/activate; cd docs/current/; mkdocs serve --config-file mkdocs.yml

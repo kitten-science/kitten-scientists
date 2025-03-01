@@ -1,7 +1,7 @@
 copyright: Oliver Salzburg and Kitten Science Contributors
 dev_addr: 0.0.0.0:8000
 docs_dir: docs
-edit_uri: edit/main/packages/documentation/docs/
+edit_uri: edit/main/docs/current/
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -91,5 +91,4 @@ nav:
   - Development:
       - Getting Started: development/development.md
       - Kitten Engineers: development/engineers.md
-      - Repository Scripts: reference/Repository Scripts/index.md
   - Hall of Honor: hall-of-honor.md
