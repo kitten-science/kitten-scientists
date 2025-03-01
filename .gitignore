@@ -6,6 +6,10 @@
 !.yarn/versions
 .pnp.*
 
+container/lib/
+container/output/
+container/overlay/
+
 lib/
 node_modules/
 output/

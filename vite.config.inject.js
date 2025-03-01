@@ -15,7 +15,7 @@ export default defineConfig({
       name: "kitten-scientists",
     },
     minify: false,
-    outDir: "container/overlay",
+    outDir: "output",
     rollupOptions: {
       external: ["jquery"],
       output: {

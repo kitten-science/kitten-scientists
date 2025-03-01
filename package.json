@@ -18,10 +18,14 @@
     "./*.js": {
       "types": "./lib/*.d.ts",
       "default": "./lib/*.js"
+    },
+    "./injectable.js": {
+      "default": "./output/kitten-scientists.inject.js"
     }
   },
   "files": [
-    "lib"
+    "lib",
+    "output"
   ],
   "scripts": {
     "build": "yarn run build:all",

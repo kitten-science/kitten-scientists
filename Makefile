@@ -40,6 +40,7 @@ output: node_modules
 .PHONY: injectable
 injectable: node_modules
 	yarn vite --config vite.config.inject.js build
+	mkdir --parents container/overlay/ && cp output/kitten-scientists.inject.js container/overlay/kitten-scientists.inject.js
 
 .PHONY: userscript
 userscript: node_modules
