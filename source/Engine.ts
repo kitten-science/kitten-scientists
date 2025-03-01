@@ -18,10 +18,10 @@ import {
   type ActivitySummarySection,
   type ActivityTypeClass,
 } from "./helper/ActivitySummary.js";
-import enUS from "./i18n/en-US.json" assert { type: "json" };
-import deDE from "./i18n/translations/de-DE.json" assert { type: "json" };
-import heIL from "./i18n/translations/he-IL.json" assert { type: "json" };
-import zhCN from "./i18n/translations/zh-CN.json" assert { type: "json" };
+import enUS from "./i18n/en-US.json" with { type: "json" };
+import deDE from "./i18n/translations/de-DE.json" with { type: "json" };
+import heIL from "./i18n/translations/he-IL.json" with { type: "json" };
+import zhCN from "./i18n/translations/zh-CN.json" with { type: "json" };
 import { BonfireSettings } from "./settings/BonfireSettings.js";
 import { EngineSettings } from "./settings/EngineSettings.js";
 import { ReligionSettings } from "./settings/ReligionSettings.js";
