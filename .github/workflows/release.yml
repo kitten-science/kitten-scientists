@@ -195,7 +195,7 @@ jobs:
       push: ${{ github.event_name == 'push' || inputs.dry-run == false }}
 
   publish-npm:
-    if: success() && github.event_name == 'workflow_dispatch' && inputs.dry-run == false
+    if: success() && ( ( github.event_name == 'workflow_dispatch' && inputs.dry-run == false ) || github.event_name == 'push' )
     name: 🔹 Publish npm
     needs:
       - changelog
