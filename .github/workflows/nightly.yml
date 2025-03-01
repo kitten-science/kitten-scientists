@@ -83,7 +83,7 @@ jobs:
           MINOR: ${{ steps.changelog.outputs.minor-total }}
           PATCH: ${{ steps.changelog.outputs.patch-total }}
           LIFECYCLE: ${{ steps.changelog.outputs.lifecycle-total }}
-          VERSION: ${{ steps.changelog.outputs.version-dev-extended }}
+          VERSION: ${{ steps.changelog.outputs.version-nigthly-extended }}
         run: |
           echo Major changes: $MAJOR
           echo Minor changes: $MINOR
