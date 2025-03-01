@@ -156,9 +156,7 @@ jobs:
           changelog-artifact: changelog.json
           draft: false
           files: |
-            packages/kitten-analysts/output/kitten-analysts-*
-            packages/kitten-engineers/output/kitten-engineers-*
-            packages/kitten-scientists/output/kitten-scientists-*
+            output/*
           merge-similar: true
           prerelease: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -181,7 +179,6 @@ jobs:
     if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 Update Release Info
     needs:
-      - check_date
       - nightly
     permissions:
       contents: read
@@ -192,8 +189,7 @@ jobs:
     if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 Publish Devcontainer
     needs:
-      - check_date
-      - qa
+      - nightly
     permissions:
       attestations: write
       contents: read
@@ -205,7 +201,7 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
       artifact-name: devcontainer-output
-      containerfile: packages/devcontainer/Containerfile
+      containerfile: container/Containerfile
       image-description: Kitten Science Development Container
       image-name: kitten-science/devcontainer
       image-tag: nightly
@@ -213,78 +209,3 @@ jobs:
       is-latest: false
       push: true
       with-sarif: false
-
-  publish-ka-backend:
-    if: success() && needs.check_date.outputs.should_run != 'false'
-    name: 🔹 Publish Backend
-    needs:
-      - check_date
-      - qa
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: ka-backend-output
-      containerfile: packages/kitten-analysts/backend.Containerfile
-      image-description: Kitten Science Analytics Backend
-      image-name: kitten-science/ka-backend
-      image-tag: nightly
-      image-title: ka-backend
-      is-latest: false
-      push: true
-
-  publish-ka-game:
-    if: success() && needs.check_date.outputs.should_run != 'false'
-    name: 🔹 Publish Game
-    needs:
-      - check_date
-      - qa
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: ka-game-output
-      containerfile: packages/kitten-analysts/game.Containerfile
-      image-description: Kittens Game with Kitten Science Analytics
-      image-name: kitten-science/ka-game
-      image-tag: nightly
-      image-title: ka-game
-      is-latest: false
-      push: true
-
-  publish-ka-ui:
-    if: success() && needs.check_date.outputs.should_run != 'false'
-    name: 🔹 Publish UI
-    needs:
-      - check_date
-      - qa
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: ka-ui-output
-      containerfile: packages/kitten-analysts/ui.Containerfile
-      image-description: Headless Kittens Game
-      image-name: kitten-science/ka-ui
-      image-tag: nightly
-      image-title: ka-ui
-      is-latest: false
-      push: true

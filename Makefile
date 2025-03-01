@@ -46,4 +46,3 @@ injectable: node_modules
 userscript: node_modules
 	yarn vite --config vite.config.userscript.js build
 	MINIFY=true yarn vite --config vite.config.userscript.js build
-
