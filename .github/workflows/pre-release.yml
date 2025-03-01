@@ -203,6 +203,7 @@ jobs:
       push: true
 
   publish-npm:
+    if: success() && !inputs.dry-run
     name: 🔹 Publish npm
     needs:
       - changelog
