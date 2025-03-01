@@ -176,7 +176,6 @@ jobs:
           echo Lifecycle changes: $LIFECYCLE
 
   update-release-info:
-    if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 Update Release Info
     needs:
       - nightly
@@ -185,8 +184,17 @@ jobs:
       id-token: write
     uses: ./.github/workflows/release-info.yml
 
+  deploy-documentation:
+    if: success() && inputs.wants-github-release
+    name: 🔹 Deploy Documentation
+    needs:
+      - nightly
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/documentation-deploy.yml
+
   publish-devcontainer:
-    if: success() && needs.check_date.outputs.should_run != 'false'
     name: 🔹 Publish Devcontainer
     needs:
       - nightly

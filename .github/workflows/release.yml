@@ -137,7 +137,7 @@ jobs:
           make devcontainer userscript
 
       - name: Generate GitHub release
-        if: success() && inputs.wants-github-release
+        if: success() && ( github.event_name == 'push' || inputs.wants-github-release )
         uses: oliversalzburg/action-automatic-semantic-releases@b9b98292517b8c8e0174f7430c269ac70990bf95 # v0.5.3
         with:
           automatic-release-tag: ${{ inputs.dry-run-tag }}
@@ -152,7 +152,7 @@ jobs:
           with-authors: false
 
   update-release-info:
-    if: success() && !inputs.dry-run
+    if: success() && ( github.event_name == 'push' || inputs.dry-run == false )
     name: 🔹 Update Release Info
     needs:
       - release
@@ -162,10 +162,10 @@ jobs:
     uses: ./.github/workflows/release-info.yml
 
   deploy-documentation:
+    if: success() && ( github.event_name == 'push' || inputs.dry-run == false )
     name: 🔹 Deploy Documentation
-    if: success() && !inputs.dry-run
     needs:
-      - qa
+      - release
     permissions:
       contents: read
       id-token: write
@@ -173,10 +173,8 @@ jobs:
 
   publish-devcontainer:
     name: 🔹 Publish Devcontainer
-    if: success() && !inputs.dry-run
     needs:
-      - qa
-      - versions
+      - release
     permissions:
       attestations: write
       contents: read
@@ -194,10 +192,10 @@ jobs:
       image-tag: next
       image-title: devcontainer
       is-latest: false
-      push: true
+      push: ${{ github.event_name == 'push' || inputs.dry-run == false }}
 
   publish-npm:
-    if: success() && !inputs.dry-run
+    if: success() && github.event_name == 'workflow_dispatch' && inputs.dry-run == false
     name: 🔹 Publish npm
     needs:
       - changelog

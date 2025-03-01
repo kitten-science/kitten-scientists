@@ -161,7 +161,7 @@ jobs:
           with-authors: false
 
   update-release-info:
-    if: success() && !inputs.dry-run
+    if: success() && inputs.wants-github-release
     name: 🔹 Update Release Info
     needs:
       - pre-release
@@ -171,6 +171,7 @@ jobs:
     uses: ./.github/workflows/release-info.yml
 
   deploy-documentation:
+    if: success() && inputs.wants-github-release
     name: 🔹 Deploy Documentation
     needs:
       - pre-release
@@ -180,6 +181,7 @@ jobs:
     uses: ./.github/workflows/documentation-deploy.yml
 
   publish-devcontainer:
+    if: success() && inputs.wants-github-release
     name: 🔹 Publish Devcontainer
     needs:
       - pre-release
@@ -200,10 +202,10 @@ jobs:
       image-tag: next
       image-title: devcontainer
       is-latest: false
-      push: true
+      push: ${{ github.event_name == 'push' || inputs.dry-run == false }}
 
   publish-npm:
-    if: success() && !inputs.dry-run
+    if: success() && github.event_name == 'workflow_dispatch' && inputs.dry-run == false
     name: 🔹 Publish npm
     needs:
       - changelog
