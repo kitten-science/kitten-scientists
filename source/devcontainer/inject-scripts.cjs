@@ -6,16 +6,11 @@ const indexHtml = fs.readFileSync("index.html", "utf8");
 let injectedHtml = indexHtml.replace(
   "</body>",
   `<script>
-    const scripts = [
-      // "kitten-analysts",
-      // "kitten-engineers",
-      "kitten-scientists"
-    ];
+    const scripts = [ "kitten-science/kitten-scientists.inject.js" ];
 
     for (const subject of scripts) {
       const script = document.createElement("script");
-      // Break caching through dynamic query parameter.
-      script.src = subject + ".inject.js?t=" + new Date().valueOf();
+      script.src = subject;
       document.body.appendChild(script);
     }
   </script></body>`,
