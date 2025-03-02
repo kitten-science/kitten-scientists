@@ -10,7 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DEV_BUILD: false
   KS_RELEASE_CHANNEL: nightly
   NIGHTLY_BUILD: true
   # renovate: datasource=node-version depName=node versioning=node
@@ -118,7 +117,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Select NodeJS version
+      - name: Select Node.js version
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
         with:
           node-version: ${{ env.NODE_VERSION }}
