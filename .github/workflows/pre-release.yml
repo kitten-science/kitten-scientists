@@ -49,11 +49,11 @@ jobs:
   params:
     name: Determine configuration
     outputs:
-      move-tags: ${{ github.event_name == 'workflow_dispatch' && inputs.move-tags || false }}
-      publish-documentation: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-documentation || false }}
-      publish-github-release: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-github-release || false }}
-      publish-npm: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-npm || false }}
-      publish-oci: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-oci || false }}
+      move-tags: ${{ github.event_name == 'workflow_dispatch' && inputs.move-tags || 'false' }}
+      publish-documentation: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-documentation || 'false' }}
+      publish-github-release: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-github-release || 'false' }}
+      publish-npm: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-npm || 'false' }}
+      publish-oci: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-oci || 'false' }}
       release-tag: ${{ github.event_name == 'workflow_dispatch' && inputs.release-tag || 'dev' }}
       release-channel: dev
     permissions:
@@ -91,8 +91,8 @@ jobs:
         run: |
           echo "root-version=$(jq --raw-output '.version' package.json)" >> $GITHUB_OUTPUT
 
-      - name: Generate Changelog
-        id: changelog
+      - id: changelog
+        name: Generate Changelog
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
           automatic-release-tag: ${{ needs.params.outputs.release-tag }}
@@ -163,14 +163,14 @@ jobs:
         with:
           name: changelog.json
 
-      - if: success() && ${{ needs.params.outputs.publish-github-release }}
+      - if: success() && needs.params.outputs.publish-github-release == 'true'
         name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
           automatic-release-tag: ${{ needs.params.outputs.release-tag }}
           changelog-artifact: changelog.json
           draft: true
-          dry-run: ${{ needs.params.outputs.move-tags == false }}
+          dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
           files: |
             output/*
           merge-similar: true
@@ -182,7 +182,7 @@ jobs:
   update-release-info:
     # The Release Info action uses GitHub releases as source of truth.
     # If we didn't publish a release, there is no need to update the information.
-    if: success() && needs.params.outputs.publish-github-release
+    if: success() && needs.params.outputs.publish-github-release == 'true'
     name: 🔹 Update Release Info
     needs:
       - params
@@ -193,7 +193,7 @@ jobs:
     uses: ./.github/workflows/release-info.yml
 
   deploy-documentation:
-    if: success() && needs.params.outputs.publish-documentation
+    if: success() && needs.params.outputs.publish-documentation == 'true'
     name: 🔹 Deploy Documentation
     needs:
       - params
@@ -204,7 +204,7 @@ jobs:
     uses: ./.github/workflows/documentation-deploy.yml
 
   publish-devcontainer:
-    if: success() && needs.params.outputs.publish-oci
+    if: success() && needs.params.outputs.publish-oci == 'true'
     name: 🔹 Publish Devcontainer
     needs:
       - params
@@ -229,7 +229,7 @@ jobs:
       push: true
 
   publish-npm:
-    if: success() && needs.params.outputs.publish-npm
+    if: success() && needs.params.outputs.publish-npm == 'true'
     name: 🔹 Publish npm
     needs:
       - changelog
@@ -245,6 +245,5 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
     with:
-      is-canary: true
       npm-dist-tag: ${{ needs.params.outputs.release-tag }}
       version: ${{ needs.changelog.outputs.version }}
