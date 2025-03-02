@@ -211,4 +211,5 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
     with:
       is-canary: false
+      npm-dist-tag: latest
       version: ${{ needs.changelog.outputs.version }}

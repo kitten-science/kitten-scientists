@@ -217,3 +217,23 @@ jobs:
       is-latest: false
       push: true
       with-sarif: false
+
+  publish-npm:
+    name: 🔹 Publish npm
+    needs:
+      - changelog
+      - check_date
+      - qa
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
+      pages: write
+      pull-requests: read
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
+    with:
+      is-canary: true
+      npm-dist-tag: nightly
+      version: ${{ needs.changelog.outputs.version }}
