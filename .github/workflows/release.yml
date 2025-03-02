@@ -26,7 +26,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  KS_RELEASE_CHANNEL: stable
+  RELEASE_CHANNEL: stable
   # renovate: datasource=node-version depName=node versioning=node
   NODE_VERSION: "22.14.0"
 

@@ -11,10 +11,10 @@ const filename = ["kitten-scientists", `-${versionString}`, minify ? ".min" : ""
   "",
 );
 
-const KS_RELEASE_CHANNEL = JSON.stringify(process.env.KS_RELEASE_CHANNEL ?? "fixed");
+const RELEASE_CHANNEL = JSON.stringify(process.env.RELEASE_CHANNEL ?? "fixed");
 const KS_VERSION = JSON.stringify(versionString);
 
-const updateURL = `https://kitten-science.com/${KS_RELEASE_CHANNEL}.js`;
+const updateURL = `https://kitten-science.com/${RELEASE_CHANNEL}.js`;
 
 export default defineConfig({
   build: {
@@ -36,7 +36,7 @@ export default defineConfig({
     },
   },
   define: {
-    KS_RELEASE_CHANNEL,
+    RELEASE_CHANNEL,
     KS_VERSION,
   },
   plugins: [

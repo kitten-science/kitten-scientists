@@ -12,7 +12,7 @@ import type { ReleaseChannel, ReleaseInfoSchema } from "./types/releases.js";
 import { UserInterface } from "./ui/UserInterface.js";
 
 declare global {
-  const KS_RELEASE_CHANNEL: ReleaseChannel;
+  const RELEASE_CHANNEL: ReleaseChannel;
   const KS_VERSION: string | undefined;
 }
 
@@ -52,7 +52,7 @@ export class KittenScientists {
       cwarn("Detected existing KS instance. Trying to unload it...");
       UserScriptLoader.window.kittenScientists?.unload();
     }
-    cinfo(`You are on the '${String(KS_RELEASE_CHANNEL)}' release channel.`);
+    cinfo(`You are on the '${String(RELEASE_CHANNEL)}' release channel.`);
 
     this.game = game;
     this.i18nEngine = i18nEngine;
@@ -179,7 +179,7 @@ export class KittenScientists {
    * Check which versions of KS are currently published.
    */
   async runUpdateCheck() {
-    if (KS_RELEASE_CHANNEL === "fixed") {
+    if (RELEASE_CHANNEL === "fixed") {
       cdebug("No update check on 'fixed' release channel.");
       return;
     }
@@ -189,11 +189,11 @@ export class KittenScientists {
       const releaseInfo = (await response.json()) as ReleaseInfoSchema;
       cdebug(releaseInfo);
 
-      if (!isNil(KS_VERSION) && gt(releaseInfo[KS_RELEASE_CHANNEL].version, KS_VERSION)) {
+      if (!isNil(KS_VERSION) && gt(releaseInfo[RELEASE_CHANNEL].version, KS_VERSION)) {
         this.engine.imessage("status.ks.upgrade", [
-          releaseInfo[KS_RELEASE_CHANNEL].version,
+          releaseInfo[RELEASE_CHANNEL].version,
           KS_VERSION,
-          releaseInfo[KS_RELEASE_CHANNEL].url.release,
+          releaseInfo[RELEASE_CHANNEL].url.release,
         ]);
       }
     } catch (error) {

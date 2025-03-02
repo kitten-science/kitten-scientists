@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  KS_RELEASE_CHANNEL: nightly
+  RELEASE_CHANNEL: nightly
   NIGHTLY_BUILD: true
   # renovate: datasource=node-version depName=node versioning=node
   NODE_VERSION: "22.14.0"

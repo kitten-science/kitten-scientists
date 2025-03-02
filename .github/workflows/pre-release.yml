@@ -154,6 +154,7 @@ jobs:
 
       - name: Build release
         env:
+          RELEASE_CHANNEL: ${{ needs.params.outputs.release-channel }}
           RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
         run: |
           make devcontainer injectable userscript
