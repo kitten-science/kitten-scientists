@@ -163,7 +163,7 @@ jobs:
         with:
           name: changelog.json
 
-      - if: success() && ${{ needs.params.outputs.publish-github-release }}
+      - if: success() && needs.params.outputs.publish-github-release
         name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
