@@ -49,7 +49,7 @@ jobs:
   params:
     name: Determine configuration
     outputs:
-      move-tags: ${{ github.event_name == 'workflow_dispatch' && inputs.move-tags || true }}
+      move-tags: ${{ github.event_name == 'workflow_dispatch' && inputs.move-tags || false }}
       publish-documentation: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-documentation || false }}
       publish-github-release: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-github-release || false }}
       publish-npm: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-npm || false }}
