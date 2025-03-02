@@ -60,7 +60,6 @@ jobs:
         id: changelog
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
-          automatic-release-tag: ${{ inputs.dry-run-tag || 'next' }}
           changelog-artifact: changelog.json
           dry-run: true
           publish: false
@@ -189,7 +188,7 @@ jobs:
       containerfile: container/Containerfile
       image-description: Kitten Science Development Container
       image-name: kitten-science/devcontainer
-      image-tag: next
+      image-tag: latest
       image-title: devcontainer
       is-latest: false
       push: ${{ github.event_name == 'push' || inputs.dry-run == false }}

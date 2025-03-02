@@ -12,7 +12,7 @@ on:
         required: false
         type: boolean
       dry-run-tag:
-        default: next
+        default: dev
         description: Floating release tag to assume.
         type: string
         required: false
@@ -61,7 +61,7 @@ jobs:
         id: changelog
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
-          automatic-release-tag: ${{ inputs.dry-run-tag || 'next' }}
+          automatic-release-tag: ${{ inputs.dry-run-tag || 'dev' }}
           changelog-artifact: changelog.json
           dry-run: true
           publish: false
@@ -147,7 +147,7 @@ jobs:
         name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
-          automatic-release-tag: ${{ inputs.dry-run-tag || 'next' }}
+          automatic-release-tag: ${{ inputs.dry-run-tag || 'dev' }}
           changelog-artifact: changelog.json
           draft: ${{ inputs.dry-run }}
           dry-run: ${{ inputs.dry-run }}
@@ -198,7 +198,7 @@ jobs:
       containerfile: container/Containerfile
       image-description: Kitten Science Development Container
       image-name: kitten-science/devcontainer
-      image-tag: next
+      image-tag: ${{ inputs.dry-run-tag || 'dev' }}
       image-title: devcontainer
       is-latest: false
       push: ${{ github.event_name == 'push' || inputs.dry-run == false }}
@@ -220,5 +220,5 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
     with:
       is-canary: true
-      npm-dist-tag: next
+      npm-dist-tag: ${{ inputs.dry-run-tag || 'dev' }}
       version: ${{ needs.changelog.outputs.version }}
