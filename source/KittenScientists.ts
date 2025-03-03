@@ -13,15 +13,15 @@ import { UserInterface } from "./ui/UserInterface.js";
 
 declare global {
   const RELEASE_CHANNEL: ReleaseChannel;
-  const KS_VERSION: string | undefined;
+  const RELEASE_VERSION: string | undefined;
 }
 
 export const ksVersion = (prefix = "") => {
-  if (isNil(KS_VERSION)) {
-    throw Error("Build error: KS_VERSION is not defined.");
+  if (isNil(RELEASE_VERSION)) {
+    throw Error("Build error: RELEASE_VERSION is not defined.");
   }
 
-  return `${prefix}${KS_VERSION}`;
+  return `${prefix}${RELEASE_VERSION}`;
 };
 
 export class KittenScientists {
@@ -189,10 +189,10 @@ export class KittenScientists {
       const releaseInfo = (await response.json()) as ReleaseInfoSchema;
       cdebug(releaseInfo);
 
-      if (!isNil(KS_VERSION) && gt(releaseInfo[RELEASE_CHANNEL].version, KS_VERSION)) {
+      if (!isNil(RELEASE_VERSION) && gt(releaseInfo[RELEASE_CHANNEL].version, RELEASE_VERSION)) {
         this.engine.imessage("status.ks.upgrade", [
           releaseInfo[RELEASE_CHANNEL].version,
-          KS_VERSION,
+          RELEASE_VERSION,
           releaseInfo[RELEASE_CHANNEL].url.release,
         ]);
       }

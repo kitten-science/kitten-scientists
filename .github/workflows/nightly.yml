@@ -4,44 +4,65 @@ on:
   schedule:
     - cron: "30 2 * * *"
   workflow_dispatch:
+    inputs:
+      move-tags:
+        default: false
+        description: Allow tags to be moved? Requires GitHub Release.
+        required: false
+        type: boolean
+      publish-documentation:
+        default: false
+        description: Update the documentation website?
+        required: false
+        type: boolean
+      publish-github-release:
+        default: false
+        description: Create a GitHub release?
+        required: false
+        type: boolean
+      publish-npm:
+        default: false
+        description: Publish npm package?
+        type: boolean
+        required: false
+      release-tag:
+        default: nightly
+        description: Floating pre-release tag to use.
+        type: string
+        required: true
 
 concurrency:
   group: nightly
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
-  RELEASE_CHANNEL: nightly
-  NIGHTLY_BUILD: true
   # renovate: datasource=node-version depName=node versioning=node
   NODE_VERSION: "22.14.0"
 
 jobs:
-  check_date:
-    runs-on: ubuntu-24.04
-    name: Check latest commit
+  params:
+    name: Determine configuration
     outputs:
-      should_run: ${{ steps.should_run.outputs.should_run }}
+      move-tags: ${{ github.event_name == 'workflow_dispatch' && inputs.move-tags || 'false' }}
+      publish-documentation: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-documentation || 'false' }}
+      publish-github-release: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-github-release || 'false' }}
+      publish-npm: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-npm || 'false' }}
+      release-tag: ${{ github.event_name == 'workflow_dispatch' && inputs.release-tag || 'nightly' }}
+      release-channel: nightly
+    permissions:
+      contents: none
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - name: print latest_commit
-        run: echo ${{ github.sha }}
-
-      - id: should_run
-        continue-on-error: true
-        name: check latest commit is less than a day
-        if: ${{ github.event_name == 'schedule' }}
-        run: test -z $(git rev-list  --after="24 hours"  ${{ github.sha }}) && echo "name=should_run::false" >> $GITHUB_OUTPUT
+      - if: false
+        name: Noop
+        run: exit 0
 
   changelog:
-    if: success() && ${{ needs.check_date.outputs.should_run != 'false' }}
     name: Changelog
     needs:
-      - check_date
+      - params
     outputs:
-      major: ${{ steps.changelog.outputs.major-total }}
-      minor: ${{ steps.changelog.outputs.minor-total }}
-      patch: ${{ steps.changelog.outputs.patch-total }}
-      lifecycle: ${{ steps.changelog.outputs.lifecycle-total }}
+      has-changed: ${{ 0 < steps.changelog.outputs.major-total || 0 < steps.changelog.outputs.minor-total || 0 < steps.changelog.outputs.patch-total }}
       version: ${{ steps.changelog.outputs.version-nightly-extended }}
     permissions:
       contents: read
@@ -51,58 +72,53 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
-          sparse-checkout: |
-            package.json
+          sparse-checkout: package.json
           sparse-checkout-cone-mode: false
 
-      - name: Extract current version
-        run: |
-          echo "ROOT_VERSION=$(jq --raw-output '.version' package.json)" >> $GITHUB_ENV
+      - id: version
+        name: Extract current version
+        run: echo "root-version=$(jq --raw-output '.version' package.json)" >> $GITHUB_OUTPUT
 
-      - name: Generate Changelog
-        id: changelog
+      - id: changelog
+        name: Generate changelog
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
-          automatic-release-tag: nightly
+          automatic-release-tag: ${{ needs.params.outputs.release-tag }}
           changelog-artifact: changelog.json
           dry-run: true
           publish: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          root-version: ${{ env.ROOT_VERSION }}
+          root-version: ${{ steps.version.outputs.root-version }}
 
-      - name: Store Changelog
+      - name: Store changelog
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
         with:
           name: changelog.json
           path: changelog.json
 
-      - name: Show change counts
-        env:
-          MAJOR: ${{ steps.changelog.outputs.major-total }}
-          MINOR: ${{ steps.changelog.outputs.minor-total }}
-          PATCH: ${{ steps.changelog.outputs.patch-total }}
-          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle-total }}
-          VERSION: ${{ steps.changelog.outputs.version-nigthly-extended }}
-        run: |
-          echo Major changes: $MAJOR
-          echo Minor changes: $MINOR
-          echo Patch changes: $PATCH
-          echo Lifecycle changes: $LIFECYCLE
-          echo Pre-Release should use version: $VERSION
+  skip:
+    if: success() && !needs.changelog.outputs.has-changed
+    name: Skip
+    needs:
+      - changelog
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Print skip reason
+        run: echo "No behavior changes since the last nightly were detected."
 
   qa:
-    if: success() && needs.check_date.outputs.should_run != 'false'
+    if: success() && needs.changelog.outputs.has-changed
     name: 🔹 QA
     needs:
-      - check_date
+      - changelog
     uses: ./.github/workflows/qa.yml
 
   nightly:
-    if: success() && needs.check_date.outputs.should_run != 'false' && ( needs.changelog.outputs.major != '0' || needs.changelog.outputs.minor != '0' || needs.changelog.outputs.patch != '0' )
+    if: success() && needs.changelog.outputs.has-changed
     name: Nightly
     needs:
-      - check_date
       - changelog
+      - params
       - qa
     permissions:
       actions: write
@@ -116,6 +132,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
 
       - name: Select Node.js version
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
@@ -133,46 +151,33 @@ jobs:
         with:
           path: .yarn/cache
           key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node${{ env.NODE_VERSION }}
+          restore-keys: ${{ runner.os }}-node${{ env.NODE_VERSION }}
 
       - name: Build release
         env:
+          RELEASE_CHANNEL: ${{ needs.params.outputs.release-channel }}
           RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
-        run: |
-          make devcontainer userscript
+        run: make devcontainer injectable userscript
 
       - name: Download changelog
         uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
         with:
           name: changelog.json
 
-      - name: Generate GitHub release
-        id: changelog
+      - if: success() && needs.params.outputs.publish-github-release == 'true'
+        name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
-          automatic-release-tag: nightly
+          automatic-release-tag: ${{ needs.params.outputs.release-tag }}
           changelog-artifact: changelog.json
           draft: false
-          files: |
-            output/*
+          dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
+          files: output/*
           merge-similar: true
           prerelease: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           title: Nightly Build v${{ needs.changelog.outputs.version }}
           with-authors: false
-
-      - name: Show change counts
-        env:
-          MAJOR: ${{ steps.changelog.outputs.major }}
-          MINOR: ${{ steps.changelog.outputs.minor }}
-          PATCH: ${{ steps.changelog.outputs.patch }}
-          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle }}
-        run: |
-          echo Major changes: $MAJOR
-          echo Minor changes: $MINOR
-          echo Patch changes: $PATCH
-          echo Lifecycle changes: $LIFECYCLE
 
   update-release-info:
     name: 🔹 Update Release Info
@@ -218,11 +223,12 @@ jobs:
       with-sarif: false
 
   publish-npm:
+    if: success() && needs.params.outputs.publish-npm && needs.changelog.outputs.has-changed
     name: 🔹 Publish npm
     needs:
       - changelog
-      - check_date
-      - qa
+      - params
+      - nightly
     permissions:
       contents: write
       id-token: write
@@ -233,6 +239,5 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
     with:
-      is-canary: true
-      npm-dist-tag: nightly
+      npm-dist-tag: ${{ needs.params.outputs.release-tag }}
       version: ${{ needs.changelog.outputs.version }}

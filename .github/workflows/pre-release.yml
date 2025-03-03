@@ -69,10 +69,6 @@ jobs:
     needs:
       - params
     outputs:
-      major: ${{ steps.changelog.outputs.major-total }}
-      minor: ${{ steps.changelog.outputs.minor-total }}
-      patch: ${{ steps.changelog.outputs.patch-total }}
-      lifecycle: ${{ steps.changelog.outputs.lifecycle-total }}
       version: ${{ steps.changelog.outputs.version-dev-extended }}
     permissions:
       contents: read
@@ -82,17 +78,15 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
-          sparse-checkout: |
-            package.json
+          sparse-checkout: package.json
           sparse-checkout-cone-mode: false
 
       - id: version
         name: Extract current version
-        run: |
-          echo "root-version=$(jq --raw-output '.version' package.json)" >> $GITHUB_OUTPUT
+        run: echo "root-version=$(jq --raw-output '.version' package.json)" >> $GITHUB_OUTPUT
 
       - id: changelog
-        name: Generate Changelog
+        name: Generate changelog
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
           automatic-release-tag: ${{ needs.params.outputs.release-tag }}
@@ -102,7 +96,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           root-version: ${{ steps.version.outputs.root-version }}
 
-      - name: Store Changelog
+      - name: Store changelog
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
         with:
           name: changelog.json
@@ -149,15 +143,13 @@ jobs:
         with:
           path: .yarn/cache
           key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node${{ env.NODE_VERSION }}
+          restore-keys: ${{ runner.os }}-node${{ env.NODE_VERSION }}
 
       - name: Build release
         env:
           RELEASE_CHANNEL: ${{ needs.params.outputs.release-channel }}
           RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
-        run: |
-          make devcontainer injectable userscript
+        run: make devcontainer injectable userscript
 
       - name: Download changelog
         uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
@@ -172,8 +164,7 @@ jobs:
           changelog-artifact: changelog.json
           draft: true
           dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
-          files: |
-            output/*
+          files: output/*
           merge-similar: true
           prerelease: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}

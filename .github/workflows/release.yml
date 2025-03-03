@@ -6,38 +6,63 @@ on:
       - "v*"
   workflow_dispatch:
     inputs:
-      dry-run:
-        default: true
-        description: Only create a test release, without moving the tags?
+      move-tags:
+        default: false
+        description: Allow tags to be moved? Requires GitHub Release.
         required: false
         type: boolean
-      dry-run-tag:
-        description: Release tag to assume.
-        type: string
+      publish-documentation:
+        default: false
+        description: Update the documentation website?
         required: false
-      wants-github-release:
-        default: true
+        type: boolean
+      publish-github-release:
+        default: false
         description: Create a GitHub release?
         required: false
         type: boolean
+      publish-npm:
+        default: false
+        description: Publish npm package?
+        type: boolean
+        required: false
+      release-tag:
+        default: latest
+        description: Floating release tag to use.
+        type: string
+        required: true
 
 concurrency:
   group: release
   cancel-in-progress: false
 
 env:
-  RELEASE_CHANNEL: stable
   # renovate: datasource=node-version depName=node versioning=node
   NODE_VERSION: "22.14.0"
 
 jobs:
+  params:
+    name: Determine configuration
+    outputs:
+      move-tags: ${{ github.event_name == 'workflow_dispatch' && inputs.move-tags || 'false' }}
+      publish-documentation: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-documentation || 'false' }}
+      publish-github-release: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-github-release || 'false' }}
+      publish-npm: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-npm || 'false' }}
+      release-tag: ${{ github.event_name == 'workflow_dispatch' && inputs.release-tag || 'latest' }}
+      release-channel: stable
+    permissions:
+      contents: none
+    runs-on: ubuntu-24.04
+    steps:
+      - if: false
+        name: Noop
+        run: exit 0
+
   changelog:
     name: Changelog
+    needs:
+      - params
     outputs:
-      major: ${{ steps.changelog.outputs.major-total }}
-      minor: ${{ steps.changelog.outputs.minor-total }}
-      patch: ${{ steps.changelog.outputs.patch-total }}
-      lifecycle: ${{ steps.changelog.outputs.lifecycle-total }}
       version: ${{ steps.changelog.outputs.version-current }}
     permissions:
       contents: read
@@ -47,43 +72,28 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
-          sparse-checkout: |
-            package.json
+          sparse-checkout: package.json
           sparse-checkout-cone-mode: false
 
-      - name: Extract current version
-        run: |
-          echo "ROOT_VERSION=$(jq --raw-output '.version' package.json)" >> $GITHUB_ENV
+      - id: version
+        name: Extract current version
+        run: echo "root-version=$(jq --raw-output '.version' package.json)" >> $GITHUB_OUTPUT
 
-      - name: Generate Changelog
-        id: changelog
+      - id: changelog
+        name: Generate changelog
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
           changelog-artifact: changelog.json
           dry-run: true
           publish: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          root-version: ${{ env.ROOT_VERSION }}
+          root-version: ${{ steps.version.outputs.root-version }}
 
-      - name: Store Changelog
+      - name: Store changelog
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
         with:
           name: changelog.json
           path: changelog.json
-
-      - name: Show change counts
-        env:
-          MAJOR: ${{ steps.changelog.outputs.major-total }}
-          MINOR: ${{ steps.changelog.outputs.minor-total }}
-          PATCH: ${{ steps.changelog.outputs.patch-total }}
-          LIFECYCLE: ${{ steps.changelog.outputs.lifecycle-total }}
-          VERSION: ${{ steps.changelog.outputs.version-current }}
-        run: |
-          echo Major changes: $MAJOR
-          echo Minor changes: $MINOR
-          echo Patch changes: $PATCH
-          echo Lifecycle changes: $LIFECYCLE
-          echo Pre-Release should use version: $VERSION
 
   qa:
     name: 🔹 QA
@@ -92,8 +102,9 @@ jobs:
   release:
     name: Release
     needs:
+      - changelog
+      - params
       - qa
-      - versions
     permissions:
       actions: write
       attestations: write
@@ -125,28 +136,31 @@ jobs:
         with:
           path: .yarn/cache
           key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node${{ env.NODE_VERSION }}
+          restore-keys: ${{ runner.os }}-node${{ env.NODE_VERSION }}
 
       - name: Build release
         env:
+          RELEASE_CHANNEL: ${{ needs.params.outputs.release-channel }}
           RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
-        run: |
-          make devcontainer userscript
+        run: make devcontainer injectable userscript
 
-      - name: Generate GitHub release
-        if: success() && ( github.event_name == 'push' || inputs.wants-github-release )
+      - name: Download changelog
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
+        with:
+          name: changelog.json
+
+      - if: success() && needs.params.outputs.publish-github-release == 'true'
+        name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@db96c81b334bf45a3e971b5d46ee6b63d523a472 # v0.5.6
         with:
-          automatic-release-tag: ${{ inputs.dry-run-tag }}
+          changelog-artifact: changelog.json
           draft: true
-          dry-run: ${{ inputs.dry-run }}
-          files: |
-            output/*
+          dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
+          files: output/*
           merge-similar: true
           prerelease: false
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          title: v${{ needs.versions.outputs.RELEASE_VERSION }}
+          title: v${{ needs.changelog.outputs.version }}
           with-authors: false
 
   update-release-info:
@@ -193,11 +207,12 @@ jobs:
       push: ${{ github.event_name == 'push' || inputs.dry-run == false }}
 
   publish-npm:
-    if: success() && ( ( github.event_name == 'workflow_dispatch' && inputs.dry-run == false ) || github.event_name == 'push' )
+    if: success() && needs.params.outputs.publish-npm == 'true'
     name: 🔹 Publish npm
     needs:
       - changelog
-      - qa
+      - params
+      - release
     permissions:
       contents: write
       id-token: write
@@ -208,6 +223,5 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
     with:
-      is-canary: false
-      npm-dist-tag: latest
+      npm-dist-tag: ${{ needs.params.outputs.release-tag }}
       version: ${{ needs.changelog.outputs.version }}
