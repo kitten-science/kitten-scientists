@@ -26,6 +26,11 @@ on:
         description: Publish npm package?
         type: boolean
         required: false
+      publish-oci:
+        default: false
+        description: Publish container?
+        type: boolean
+        required: false
       release-tag:
         default: latest
         description: Floating release tag to use.
@@ -48,6 +53,7 @@ jobs:
       publish-documentation: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-documentation || 'false' }}
       publish-github-release: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-github-release || 'false' }}
       publish-npm: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-npm || 'false' }}
+      publish-oci: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-oci || 'false' }}
       release-tag: ${{ github.event_name == 'workflow_dispatch' && inputs.release-tag || 'latest' }}
       release-channel: stable
     permissions:
@@ -164,7 +170,7 @@ jobs:
           with-authors: false
 
   update-release-info:
-    if: success() && ( github.event_name == 'push' || inputs.dry-run == false )
+    if: success() && needs.params.outputs.publish-github-release == 'true'
     name: 🔹 Update Release Info
     needs:
       - release
@@ -174,7 +180,7 @@ jobs:
     uses: ./.github/workflows/release-info.yml
 
   deploy-documentation:
-    if: success() && ( github.event_name == 'push' || inputs.dry-run == false )
+    if: success() && needs.params.outputs.publish-documentation == 'true'
     name: 🔹 Deploy Documentation
     needs:
       - release
@@ -184,6 +190,7 @@ jobs:
     uses: ./.github/workflows/documentation-deploy.yml
 
   publish-devcontainer:
+    if: success() && needs.params.outputs.publish-oci == 'true'
     name: 🔹 Publish Devcontainer
     needs:
       - release

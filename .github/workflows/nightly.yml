@@ -25,6 +25,11 @@ on:
         description: Publish npm package?
         type: boolean
         required: false
+      publish-oci:
+        default: false
+        description: Publish container?
+        type: boolean
+        required: false
       release-tag:
         default: nightly
         description: Floating pre-release tag to use.
@@ -47,6 +52,7 @@ jobs:
       publish-documentation: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-documentation || 'false' }}
       publish-github-release: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-github-release || 'false' }}
       publish-npm: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-npm || 'false' }}
+      publish-oci: ${{ github.event_name == 'workflow_dispatch' && inputs.publish-oci || 'false' }}
       release-tag: ${{ github.event_name == 'workflow_dispatch' && inputs.release-tag || 'nightly' }}
       release-channel: nightly
     permissions:
@@ -97,7 +103,7 @@ jobs:
           path: changelog.json
 
   skip:
-    if: success() && !needs.changelog.outputs.has-changed
+    if: success() && needs.changelog.outputs.has-changed == 'false'
     name: Skip
     needs:
       - changelog
@@ -114,7 +120,7 @@ jobs:
     uses: ./.github/workflows/qa.yml
 
   nightly:
-    if: success() && needs.changelog.outputs.has-changed
+    if: success() && needs.changelog.outputs.has-changed == 'true'
     name: Nightly
     needs:
       - changelog
@@ -180,6 +186,7 @@ jobs:
           with-authors: false
 
   update-release-info:
+    if: success() && needs.params.outputs.publish-github-release == 'true' && needs.changelog.outputs.has-changed == 'true'
     name: 🔹 Update Release Info
     needs:
       - nightly
@@ -189,7 +196,7 @@ jobs:
     uses: ./.github/workflows/release-info.yml
 
   deploy-documentation:
-    if: success() && inputs.wants-github-release
+    if: success() && needs.params.outputs.publish-documentation == 'true' && needs.changelog.outputs.has-changed == 'true'
     name: 🔹 Deploy Documentation
     needs:
       - nightly
@@ -199,6 +206,7 @@ jobs:
     uses: ./.github/workflows/documentation-deploy.yml
 
   publish-devcontainer:
+    if: success() && needs.params.outputs.publish-oci == 'true' && needs.changelog.outputs.has-changed == 'true'
     name: 🔹 Publish Devcontainer
     needs:
       - nightly
@@ -223,7 +231,7 @@ jobs:
       with-sarif: false
 
   publish-npm:
-    if: success() && needs.params.outputs.publish-npm && needs.changelog.outputs.has-changed
+    if: success() && needs.params.outputs.publish-npm == 'true' && needs.changelog.outputs.has-changed == 'true'
     name: 🔹 Publish npm
     needs:
       - changelog
