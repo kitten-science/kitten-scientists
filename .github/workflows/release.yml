@@ -105,11 +105,37 @@ jobs:
     name: 🔹 QA
     uses: ./.github/workflows/qa.yml
 
+  publish-npm:
+    if: success() && needs.params.outputs.publish-npm == 'true'
+    name: 🔹 Publish npm
+    needs:
+      - changelog
+      - params
+      - qa
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
+      pages: write
+      pull-requests: read
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
+    with:
+      npm-dist-tag: ${{ needs.params.outputs.release-tag }}
+      version: ${{ needs.changelog.outputs.version }}
+
   release:
+    if: |
+      always()
+      && contains(needs.*.result, 'success')
+      && !contains(needs.*.result, 'failure')
+      && needs.params.outputs.publish-github-release == 'true'
     name: Release
     needs:
       - changelog
       - params
+      - publish-npm
       - qa
     permissions:
       actions: write
@@ -159,6 +185,9 @@ jobs:
         name: Generate GitHub release
         uses: oliversalzburg/action-automatic-semantic-releases@67ff1f7a549647789a1395859ebcf84fc5951d01 # v0.5.9
         with:
+          body-suffix: |
+
+            ${{ needs.publish-npm.outputs.publish-url && format('Published at <{0}>', needs.publish-npm.outputs.publish-url) }}
           changelog-artifact: changelog.json
           draft: true
           dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
@@ -212,23 +241,3 @@ jobs:
       image-title: devcontainer
       is-latest: false
       push: ${{ github.event_name == 'push' || inputs.dry-run == false }}
-
-  publish-npm:
-    if: success() && needs.params.outputs.publish-npm == 'true'
-    name: 🔹 Publish npm
-    needs:
-      - changelog
-      - params
-      - release
-    permissions:
-      contents: write
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-    uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
-    with:
-      npm-dist-tag: ${{ needs.params.outputs.release-tag }}
-      version: ${{ needs.changelog.outputs.version }}
