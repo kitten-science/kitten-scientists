@@ -218,7 +218,8 @@ jobs:
           automatic-release-tag: ${{ needs.params.outputs.release-tag }}
           body-suffix: |
             
-            ${{ needs.publish-npm.outputs.publish-url && format('Published at <{0}>', needs.publish-npm.outputs.publish-url) }}
+            ${{ needs.publish-devcontainer.outputs.publish-url && format('- Published at <{0}>', needs.publish-devcontainer.outputs.publish-url) }}
+            ${{ needs.publish-npm.outputs.publish-url && format('- Published at <{0}>', needs.publish-npm.outputs.publish-url) }}
           changelog-artifact: changelog.json
           draft: true
           dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
