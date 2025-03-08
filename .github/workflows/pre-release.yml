@@ -124,7 +124,7 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
     with:
       artifact-name: devcontainer-output
-      containerfile: container/Containerfile
+      containerfile: devcontainer/Containerfile
       dist-tag: ${{ needs.params.outputs.release-tag }}
       image-description: Kitten Science Development Container
       image-name: kitten-science/devcontainer

@@ -6,7 +6,7 @@ const indexHtml = fs.readFileSync("index.html", "utf8");
 let injectedHtml = indexHtml.replace(
   "</body>",
   `<script>
-    const scripts = [ "kitten-science/kitten-scientists.inject.js" ];
+    const scripts = [ "overlay/kitten-scientists.inject.js" ];
 
     for (const subject of scripts) {
       const script = document.createElement("script");

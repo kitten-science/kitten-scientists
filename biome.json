@@ -3,15 +3,7 @@
   "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [
-      "**/.yarn/",
-      "container/output/",
-      "container/overlay/",
-      "docs/",
-      "lib/",
-      "output/",
-      "package.json"
-    ]
+    "ignore": ["**/.yarn/", "devcontainer/overlay/", "docs/", "lib/", "output/", "package.json"]
   },
   "formatter": {
     "enabled": true,

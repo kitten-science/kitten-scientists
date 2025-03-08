@@ -11,7 +11,7 @@ esbuild
     external: ["os"],
     format: "esm",
     inject: ["source/devcontainer/cjs-shim.ts"],
-    outdir: "container/overlay",
+    outdir: "output/devcontainer",
     outExtension: { ".js": ".mjs" },
     platform: "node",
     target: "node22",

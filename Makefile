@@ -5,7 +5,7 @@ default: build
 build: devcontainer lib
 
 clean:
-	rm --force --recursive .venv docs/current/public lib node_modules output tsconfig.tsbuildinfo
+	rm --force --recursive .venv devcontainer/overlay docs/current/public lib node_modules output tsconfig.tsbuildinfo
 
 docs: docs/current/public
 
@@ -24,9 +24,16 @@ test:
 	@echo "Kitten Scientists test in production."
 
 
-.PHONY: devcontainer
-devcontainer: injectable node_modules
-	node build-devcontainer.js
+.PHONY: devcontainer devcontainer-oci
+devcontainer: injectable
+	node devcontainer/build-devcontainer.js
+devcontainer-oci: devcontainer
+	docker build \
+		--build-arg BRANCH="master" \
+		--build-arg REPO="https://github.com/nuclear-unicorn/kittensgame.git" \
+		--file devcontainer/Containerfile \
+		--tag localhost/devcontainer:latest \
+		.
 
 node_modules:
 	yarn install
@@ -40,7 +47,7 @@ output: node_modules
 .PHONY: injectable
 injectable: node_modules
 	yarn vite --config vite.config.inject.js build
-	mkdir --parents container/overlay/ && cp output/kitten-scientists.inject.js container/overlay/kitten-scientists.inject.js
+	mkdir --parents devcontainer/overlay/ && cp output/kitten-scientists.inject.js devcontainer/overlay/kitten-scientists.inject.js
 
 .PHONY: userscript
 userscript: node_modules

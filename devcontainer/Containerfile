@@ -8,15 +8,13 @@ EXPOSE 8086
 
 RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
   && cd kittensgame \
-  && git pull \
-  && yarn add -D watch-http-server \
-  && yarn install
+  && yarn add -D watch-http-server
 
 WORKDIR /kittensgame
-COPY "output/kitten-scientists.inject.js" "kitten-science/kitten-scientists.inject.js"
-COPY "container/overlay/*" "./"
-RUN node rewrite-index.mjs
-RUN node inject-scripts.mjs
+COPY "devcontainer/overlay/*" "./overlay/"
+COPY "output/devcontainer/*" "./mod/"
+RUN [ "node", "mod/rewrite-index.mjs" ]
+RUN [ "node", "mod/inject-scripts.mjs" ]
 
 # Start the development server that serves the Kittens Game.
 CMD [ "/bin/bash", "-c", "yarn run watch-http-server" ]

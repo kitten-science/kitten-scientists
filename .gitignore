@@ -6,9 +6,7 @@
 !.yarn/versions
 .pnp.*
 
-container/lib/
-container/output/
-container/overlay/
+devcontainer/overlay/
 
 lib/
 node_modules/
