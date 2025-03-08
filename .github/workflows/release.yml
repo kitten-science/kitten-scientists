@@ -215,8 +215,9 @@ jobs:
         uses: oliversalzburg/action-automatic-semantic-releases@67ff1f7a549647789a1395859ebcf84fc5951d01 # v0.5.9
         with:
           body-suffix: |
-
-            ${{ needs.publish-npm.outputs.publish-url && format('Published at <{0}>', needs.publish-npm.outputs.publish-url) }}
+            ---
+            ${{ needs.publish-devcontainer.outputs.publish-url && format('- Published at <{0}>', needs.publish-devcontainer.outputs.publish-url) }}
+            ${{ needs.publish-npm.outputs.publish-url && format('- Published at <{0}>', needs.publish-npm.outputs.publish-url) }}
           changelog-artifact: changelog.json
           draft: true
           dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
@@ -228,9 +229,12 @@ jobs:
           with-authors: false
 
   update-release-info:
+    # The Release Info action uses GitHub releases as source of truth.
+    # If we didn't publish a release, there is no need to update the information.
     if: success() && needs.params.outputs.publish-github-release == 'true'
     name: 🔹 Update Release Info
     needs:
+      - params
       - release
     permissions:
       contents: read
@@ -241,6 +245,7 @@ jobs:
     if: success() && needs.params.outputs.publish-documentation == 'true'
     name: 🔹 Deploy Documentation
     needs:
+      - params
       - release
     permissions:
       contents: read

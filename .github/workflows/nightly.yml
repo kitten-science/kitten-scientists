@@ -178,6 +178,7 @@ jobs:
     needs:
       - changelog
       - params
+      - publish-devcontainer
       - publish-npm
       - qa
     permissions:
@@ -230,8 +231,9 @@ jobs:
         with:
           automatic-release-tag: ${{ needs.params.outputs.release-tag }}
           body-suffix: |
-            
-            ${{ needs.publish-npm.outputs.publish-url && format('Published at <{0}>', needs.publish-npm.outputs.publish-url) }}
+            ---
+            ${{ needs.publish-devcontainer.outputs.publish-url && format('- Published at <{0}>', needs.publish-devcontainer.outputs.publish-url) }}
+            ${{ needs.publish-npm.outputs.publish-url && format('- Published at <{0}>', needs.publish-npm.outputs.publish-url) }}
           changelog-artifact: changelog.json
           draft: false
           dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
@@ -243,9 +245,12 @@ jobs:
           with-authors: false
 
   update-release-info:
+    # The Release Info action uses GitHub releases as source of truth.
+    # If we didn't publish a release, there is no need to update the information.
     if: success() && needs.params.outputs.publish-github-release == 'true' && needs.changelog.outputs.has-changed == 'true'
     name: 🔹 Update Release Info
     needs:
+      - params
       - nightly
     permissions:
       contents: read
@@ -256,6 +261,7 @@ jobs:
     if: success() && needs.params.outputs.publish-documentation == 'true' && needs.changelog.outputs.has-changed == 'true'
     name: 🔹 Deploy Documentation
     needs:
+      - params
       - nightly
     permissions:
       contents: read
