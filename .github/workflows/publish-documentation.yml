@@ -12,7 +12,7 @@ on:
         description: The URL where the documentation will be available.
         value: ${{ jobs.publish.outputs.publish-url }}
 
-concurrency: documentation-deploy
+concurrency: documentation
 
 env:
   # renovate: datasource=node-version depName=node versioning=node

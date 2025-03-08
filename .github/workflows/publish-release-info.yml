@@ -1,4 +1,4 @@
-name: Update Release Info
+name: Publish
 
 on:
   workflow_call:
@@ -12,6 +12,7 @@ env:
 
 jobs:
   release-info:
+    name: Release Info
     permissions:
       contents: read
       id-token: write

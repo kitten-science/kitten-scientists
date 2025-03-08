@@ -107,7 +107,7 @@ jobs:
 
   publish-devcontainer:
     if: success() && needs.params.outputs.publish-oci == 'true'
-    name: 🔹 Devcontainer
+    name: 🔹 Publish
     needs:
       - changelog
       - params
@@ -135,20 +135,20 @@ jobs:
 
   publish-documentation:
     if: success() && needs.params.outputs.publish-documentation == 'true'
-    name: 🔹 Documentation
+    name: 🔹 Publish
     needs:
       - params
       - qa
     permissions:
       contents: read
       id-token: write
-    uses: ./.github/workflows/documentation-deploy.yml
+    uses: ./.github/workflows/publish-documentation.yml
     with:
       publish-url: https://kitten-science.com
 
   publish-npm:
     if: success() && needs.params.outputs.publish-npm == 'true'
-    name: 🔹 npm
+    name: 🔹 Publish
     needs:
       - changelog
       - params
@@ -248,11 +248,11 @@ jobs:
     # The Release Info action uses GitHub releases as source of truth.
     # If we didn't publish a release, there is no need to update the information.
     if: success() && needs.params.outputs.publish-github-release == 'true'
-    name: 🔹 Update Release Info
+    name: 🔹 Publish
     needs:
       - params
       - release
     permissions:
       contents: read
       id-token: write
-    uses: ./.github/workflows/release-info.yml
+    uses: ./.github/workflows/publish-release-info.yml
