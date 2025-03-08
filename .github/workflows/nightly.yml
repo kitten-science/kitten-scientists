@@ -138,11 +138,11 @@ jobs:
     with:
       artifact-name: devcontainer-output
       containerfile: container/Containerfile
+      dist-tag: nightly
       image-description: Kitten Science Development Container
       image-name: kitten-science/devcontainer
       image-tag: ${{ needs.params.outputs.release-tag }}
       image-title: devcontainer
-      is-latest: ${{ needs.params.outputs.release-tag == 'latest' }}
       push: ${{ needs.params.outputs.move-tags == 'true' }}
       with-sarif: false
       with-sbom: false
