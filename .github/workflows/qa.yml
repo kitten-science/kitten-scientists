@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   qa-commit:
-    name: QA Commit
+    name: Commit
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -64,11 +64,11 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   qa:
-    name: 🔹 QA
+    name: 🔹 Script
     uses: oliversalzburg/workflows/.github/workflows/qa-browser-app.yml@main
 
   qa-devcontainer:
-    name: 🔹 QA Devcontainer
+    name: 🔹 Devcontainer
     uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
     with:
       artifact-name: devcontainer-output

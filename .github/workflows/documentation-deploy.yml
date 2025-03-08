@@ -10,7 +10,7 @@ on:
     outputs:
       publish-url:
         description: The URL where the documentation will be available.
-        value: ${{ inputs.publish-url }}
+        value: ${{ jobs.publish.outputs.publish-url }}
 
 concurrency: documentation-deploy
 
@@ -21,11 +21,13 @@ env:
   PYTHON_VERSION: "3.13.2"
 
 jobs:
-  deploy:
-    runs-on: ubuntu-24.04
+  publish:
+    outputs:
+      publish-url: ${{ steps.details.outputs.publish-url }}
     permissions:
       contents: read
       id-token: write
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -74,3 +76,10 @@ jobs:
         run: |
           aws s3 sync ./docs/ s3://kitten-science-us0/ \
             --cache-control "public, s-maxage=3600, maxage=3600"
+
+      - id: details
+        name: Result
+        run: |
+          PUBLISH_URL="${{ inputs.publish-url }}"
+          echo "publish-url=$PUBLISH_URL" >> "$GITHUB_OUTPUT"
+          echo "Published at <$PUBLISH_URL>" >> $GITHUB_STEP_SUMMARY
