@@ -108,7 +108,7 @@ jobs:
 
   publish-devcontainer:
     if: success() && needs.params.outputs.publish-oci == 'true'
-    name: 🔹 Publish Devcontainer
+    name: 🔹 Devcontainer
     needs:
       - changelog
       - params
@@ -136,7 +136,7 @@ jobs:
 
   publish-documentation:
     if: success() && needs.params.outputs.publish-documentation == 'true'
-    name: 🔹 Deploy Documentation
+    name: 🔹 Documentation
     needs:
       - params
       - qa
@@ -149,7 +149,7 @@ jobs:
 
   publish-npm:
     if: success() && needs.params.outputs.publish-npm == 'true'
-    name: 🔹 Publish npm
+    name: 🔹 npm
     needs:
       - changelog
       - params

@@ -1,4 +1,4 @@
-name: Documentation Deploy
+name: Publish
 
 on:
   workflow_call:
@@ -22,6 +22,7 @@ env:
 
 jobs:
   publish:
+    name: Documentation
     outputs:
       publish-url: ${{ steps.details.outputs.publish-url }}
     permissions:
