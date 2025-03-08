@@ -215,6 +215,7 @@ jobs:
         uses: oliversalzburg/action-automatic-semantic-releases@67ff1f7a549647789a1395859ebcf84fc5951d01 # v0.5.9
         with:
           body-suffix: |
+            
             ---
             ${{ needs.publish-devcontainer.outputs.publish-url && format('- Published at <{0}>', needs.publish-devcontainer.outputs.publish-url) }}
             ${{ needs.publish-npm.outputs.publish-url && format('- Published at <{0}>', needs.publish-npm.outputs.publish-url) }}
