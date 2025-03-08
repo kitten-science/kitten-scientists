@@ -119,6 +119,34 @@ jobs:
       - changelog
     uses: ./.github/workflows/qa.yml
 
+  publish-devcontainer:
+    if: success() && needs.params.outputs.publish-oci == 'true' && needs.changelog.outputs.has-changed == 'true'
+    name: 🔹 Publish Devcontainer
+    needs:
+      - changelog
+      - params
+      - qa
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+      packages: write
+      pages: write
+      pull-requests: read
+      security-events: write
+    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
+    with:
+      artifact-name: devcontainer-output
+      containerfile: container/Containerfile
+      image-description: Kitten Science Development Container
+      image-name: kitten-science/devcontainer
+      image-tag: ${{ needs.params.outputs.release-tag }}
+      image-title: devcontainer
+      is-latest: ${{ needs.params.outputs.release-tag == 'latest' }}
+      push: ${{ needs.params.outputs.move-tags == 'true' }}
+      with-sarif: false
+      with-sbom: false
+
   publish-npm:
     if: success() && needs.params.outputs.publish-npm == 'true' && needs.changelog.outputs.has-changed == 'true'
     name: 🔹 Publish npm
@@ -233,28 +261,3 @@ jobs:
       contents: read
       id-token: write
     uses: ./.github/workflows/documentation-deploy.yml
-
-  publish-devcontainer:
-    if: success() && needs.params.outputs.publish-oci == 'true' && needs.changelog.outputs.has-changed == 'true'
-    name: 🔹 Publish Devcontainer
-    needs:
-      - nightly
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: devcontainer-output
-      containerfile: container/Containerfile
-      image-description: Kitten Science Development Container
-      image-name: kitten-science/devcontainer
-      image-tag: nightly
-      image-title: devcontainer
-      is-latest: false
-      push: true
-      with-sarif: false

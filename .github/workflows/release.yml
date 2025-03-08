@@ -130,6 +130,8 @@ jobs:
       image-title: devcontainer
       is-latest: ${{ needs.params.outputs.release-tag == 'latest' }}
       push: ${{ needs.params.outputs.move-tags == 'true' }}
+      with-sarif: false
+      with-sbom: false
 
   publish-npm:
     if: success() && needs.params.outputs.publish-npm == 'true'
