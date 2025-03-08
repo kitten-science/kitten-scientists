@@ -52,7 +52,7 @@
     "@types/semver": "7.5.8",
     "@types/web": "0.0.208",
     "cheerio": "1.0.0",
-    "rollup": "4.34.9",
+    "rollup": "4.35.0",
     "rollup-plugin-cleanup": "3.2.1",
     "typescript": "5.8.2",
     "vite": "6.2.1",
