@@ -125,10 +125,10 @@ jobs:
     with:
       artifact-name: devcontainer-output
       containerfile: container/Containerfile
-      dist-tag: dev
+      dist-tag: ${{ needs.params.outputs.release-tag }}
       image-description: Kitten Science Development Container
       image-name: kitten-science/devcontainer
-      image-tag: ${{ needs.params.outputs.release-tag }}
+      image-tag: ${{ needs.changelog.outputs.version }}
       image-title: devcontainer
       push: ${{ needs.params.outputs.move-tags == 'true' }}
       with-sarif: false
