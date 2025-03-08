@@ -2,7 +2,15 @@ name: Documentation Deploy
 
 on:
   workflow_call:
-  workflow_dispatch:
+    inputs:
+      publish-url:
+        description: The URL where the documentation will be available.
+        required: true
+        type: string
+    outputs:
+      publish-url:
+        description: The URL where the documentation will be available.
+        value: ${{ inputs.publish-url }}
 
 concurrency: documentation-deploy
 
@@ -14,7 +22,6 @@ env:
 
 jobs:
   deploy:
-    if: github.event.commits[1] != null || ( !startsWith(github.event.commits[0].message, 'chore(deps):') && !startsWith(github.event.commits[0].message, 'fix(deps):') )
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -23,11 +30,15 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
+          # Required to have accurate created/changed timestamps in the documentation.
           fetch-depth: 0
+          persist-credentials: false
+
       - name: Select Node.js version
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+
       - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5
         with:
           cache: pip

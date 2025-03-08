@@ -133,6 +133,19 @@ jobs:
       with-sarif: false
       with-sbom: false
 
+  publish-documentation:
+    if: success() && needs.params.outputs.publish-documentation == 'true'
+    name: 🔹 Deploy Documentation
+    needs:
+      - params
+      - qa
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/documentation-deploy.yml
+    with:
+      publish-url: https://kitten-science.com
+
   publish-npm:
     if: success() && needs.params.outputs.publish-npm == 'true'
     name: 🔹 Publish npm
@@ -164,6 +177,7 @@ jobs:
       - changelog
       - params
       - publish-devcontainer
+      - publish-documentation
       - publish-npm
       - qa
     permissions:
@@ -217,8 +231,9 @@ jobs:
           body-suffix: |
 
             ---
-            ${{ needs.publish-devcontainer.outputs.publish-url && format('- Published at <{0}>', needs.publish-devcontainer.outputs.publish-url) }}
-            ${{ needs.publish-npm.outputs.publish-url && format('- Published at <{0}>', needs.publish-npm.outputs.publish-url) }}
+            ${{ needs.publish-documentation.outputs.publish-url && format('- Documentation published at <{0}>', needs.publish-documentation.outputs.publish-url) }}
+            ${{ needs.publish-devcontainer.outputs.publish-url && format('- Devcontainer published at <{0}>', needs.publish-devcontainer.outputs.publish-url) }}
+            ${{ needs.publish-npm.outputs.publish-url && format('- npm package published at <{0}>', needs.publish-npm.outputs.publish-url) }}
           changelog-artifact: changelog.json
           draft: true
           dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
@@ -241,14 +256,3 @@ jobs:
       contents: read
       id-token: write
     uses: ./.github/workflows/release-info.yml
-
-  deploy-documentation:
-    if: success() && needs.params.outputs.publish-documentation == 'true'
-    name: 🔹 Deploy Documentation
-    needs:
-      - params
-      - release
-    permissions:
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/documentation-deploy.yml
