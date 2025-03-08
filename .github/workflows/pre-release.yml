@@ -106,6 +106,32 @@ jobs:
     name: 🔹 QA
     uses: ./.github/workflows/qa.yml
 
+  publish-devcontainer:
+    if: success() && needs.params.outputs.publish-oci == 'true'
+    name: 🔹 Publish Devcontainer
+    needs:
+      - changelog
+      - params
+      - qa
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+      packages: write
+      pages: write
+      pull-requests: read
+      security-events: write
+    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
+    with:
+      artifact-name: devcontainer-output
+      containerfile: container/Containerfile
+      image-description: Kitten Science Development Container
+      image-name: kitten-science/devcontainer
+      image-tag: ${{ needs.params.outputs.release-tag }}
+      image-title: devcontainer
+      is-latest: ${{ needs.params.outputs.release-tag == 'latest' }}
+      push: ${{ needs.params.outputs.move-tags == 'true' }}
+
   publish-npm:
     if: success() && needs.params.outputs.publish-npm == 'true'
     name: 🔹 Publish npm
@@ -136,6 +162,7 @@ jobs:
     needs:
       - changelog
       - params
+      - publish-devcontainer
       - publish-npm
       - qa
     permissions:
@@ -223,28 +250,3 @@ jobs:
       contents: read
       id-token: write
     uses: ./.github/workflows/documentation-deploy.yml
-
-  publish-devcontainer:
-    if: success() && needs.params.outputs.publish-oci == 'true'
-    name: 🔹 Publish Devcontainer
-    needs:
-      - params
-      - pre-release
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-      packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      artifact-name: devcontainer-output
-      containerfile: container/Containerfile
-      image-description: Kitten Science Development Container
-      image-name: kitten-science/devcontainer
-      image-tag: ${{ needs.params.outputs.release-tag }}
-      image-title: devcontainer
-      is-latest: false
-      push: true
