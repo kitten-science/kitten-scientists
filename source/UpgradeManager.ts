@@ -12,7 +12,7 @@ export abstract class UpgradeManager {
   }
 
   async upgrade(
-    upgrade: { label: string },
+    upgrade: { label: string; name: string },
     variant: "policy" | "science" | "workshop",
   ): Promise<boolean> {
     const button = this._getUpgradeButton(upgrade, variant);
@@ -36,7 +36,13 @@ export abstract class UpgradeManager {
     const success = await UpgradeManager.skipConfirm(
       () =>
         new Promise(resolve => {
-          controller.buyItem(button.model, new MouseEvent("click"), resolve);
+          const buyResult = controller.buyItem(button.model, new MouseEvent("click"));
+
+          if (buyResult.def !== undefined) {
+            buyResult.def.then(resolve);
+          } else {
+            resolve(buyResult.itemBought);
+          }
         }),
     );
 
@@ -78,7 +84,7 @@ export abstract class UpgradeManager {
   }
 
   private _getUpgradeButton(
-    upgrade: { label: string },
+    upgrade: { name: string },
     variant: "policy" | "science" | "workshop",
   ): BuildButton | null {
     let buttons: Array<BuildButton> | undefined;
@@ -91,7 +97,6 @@ export abstract class UpgradeManager {
       buttons = this.manager.tab.buttons;
     }
 
-    return (buttons?.find(button => button.model?.name === upgrade.label) ??
-      null) as BuildButton | null;
+    return (buttons?.find(button => button.id === upgrade.name) ?? null) as BuildButton | null;
   }
 }
