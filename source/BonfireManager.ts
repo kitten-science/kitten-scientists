@@ -333,9 +333,7 @@ export class BonfireManager implements Automation {
   autoGather(): void {
     const controller = new classes.game.ui.GatherCatnipButtonController(this._host.game);
     for (let clicks = 0; clicks < Math.floor(this._host.engine.settings.interval / 20); ++clicks) {
-      controller.buyItem(null, null, () => {
-        /* intentionally left blank */
-      });
+      controller.buyItem(null, null);
     }
   }
 
