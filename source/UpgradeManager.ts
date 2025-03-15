@@ -1,7 +1,14 @@
 import type { KittenScientists } from "./KittenScientists.js";
 import type { TabManager } from "./TabManager.js";
 import { cwarn } from "./tools/Log.js";
-import type { BuildButton, ScienceTab } from "./types/index.js";
+import type {
+  BuildButton,
+  Policy,
+  ScienceTab,
+  Technology,
+  Upgrade,
+  UpgradeInfo,
+} from "./types/index.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: KittenScientists;
@@ -12,7 +19,7 @@ export abstract class UpgradeManager {
   }
 
   async upgrade(
-    upgrade: { label: string },
+    upgrade: { label: string; name: Policy | Upgrade | Technology },
     variant: "policy" | "science" | "workshop",
   ): Promise<boolean> {
     const button = this._getUpgradeButton(upgrade, variant);
@@ -36,7 +43,13 @@ export abstract class UpgradeManager {
     const success = await UpgradeManager.skipConfirm(
       () =>
         new Promise(resolve => {
-          controller.buyItem(button.model, new MouseEvent("click"), resolve);
+          const buyResult = controller.buyItem(button.model, new MouseEvent("click"));
+
+          if (buyResult.def !== undefined) {
+            buyResult.def.then(resolve);
+          } else {
+            resolve(buyResult.itemBought);
+          }
         }),
     );
 
@@ -78,7 +91,7 @@ export abstract class UpgradeManager {
   }
 
   private _getUpgradeButton(
-    upgrade: { label: string },
+    upgrade: { name: Policy | Upgrade | Technology },
     variant: "policy" | "science" | "workshop",
   ): BuildButton | null {
     let buttons: Array<BuildButton> | undefined;
@@ -91,7 +104,6 @@ export abstract class UpgradeManager {
       buttons = this.manager.tab.buttons;
     }
 
-    return (buttons?.find(button => button.model?.name === upgrade.label) ??
-      null) as BuildButton | null;
+    return (buttons?.find(button => button.id === upgrade.name) ?? null) as BuildButton | null;
   }
 }

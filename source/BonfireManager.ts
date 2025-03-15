@@ -333,9 +333,7 @@ export class BonfireManager implements Automation {
   autoGather(): void {
     const controller = new classes.game.ui.GatherCatnipButtonController(this._host.game);
     for (let clicks = 0; clicks < Math.floor(this._host.engine.settings.interval / 20); ++clicks) {
-      controller.buyItem(null, null, () => {
-        /* intentionally left blank */
-      });
+      controller.buyItem(null, null);
     }
   }
 
@@ -386,10 +384,7 @@ export class BonfireManager implements Automation {
     const buttons = this.manager.tab.children;
     const build = this.getBuild(name);
     const label = this._getBuildLabel(build.meta, stage);
-    return (buttons.find(button => button.model?.name.startsWith(label)) ?? null) as BuildButton<
-      string,
-      ButtonModernModel,
-      ButtonModernController
-    > | null;
+    return (buttons.find(button => (button.model?.options.name as string).startsWith(label)) ??
+      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
   }
 }
