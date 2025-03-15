@@ -10,6 +10,7 @@ import {
   type BuildButton,
   type ButtonModernController,
   type ButtonModernModel,
+  type BuyResultOperation,
   type ChronoForgeUpgrade,
   type ChronoForgeUpgradeInfo,
   type FixCryochamberBtnController,
@@ -18,6 +19,7 @@ import {
   type VoidSpaceUpgrade,
   type VoidSpaceUpgradeInfo,
 } from "./types/index.js";
+import { BuyButton } from "./ui/components/buttons-text/BuyButton.js";
 
 export class TimeManager {
   private readonly _host: KittenScientists;
@@ -183,16 +185,21 @@ export class TimeManager {
     do {
       fixHappened = false;
 
-      (btn.controller as FixCryochamberBtnController).buyItem(
+      const buyResult = (btn.controller as FixCryochamberBtnController).buyItem(
         btn.model as ButtonModernModel,
         new MouseEvent("click"),
+      );
+
+      if (buyResult.def !== undefined) {
         // This callback is invoked at the end of the `buyItem` call.
         // Thus, the callback should be invoked before this loop ends.
-        (didHappen: boolean) => {
-          fixHappened = didHappen;
+        buyResult.def.then((didHappen: BuyResultOperation) => {
+          fixHappened = didHappen.itemBought;
           fixed += didHappen ? 1 : 0;
-        },
-      );
+        })
+      } else {
+        fixHappened = buyResult.itemBought;
+      }
     } while (fixHappened);
 
     if (0 < fixed) {
