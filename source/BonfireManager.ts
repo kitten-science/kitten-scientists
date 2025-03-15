@@ -386,10 +386,7 @@ export class BonfireManager implements Automation {
     const buttons = this.manager.tab.children;
     const build = this.getBuild(name);
     const label = this._getBuildLabel(build.meta, stage);
-    return (buttons.find(button => button.model?.name.startsWith(label)) ?? null) as BuildButton<
-      string,
-      ButtonModernModel,
-      ButtonModernController
-    > | null;
+    return (buttons.find(button => (button.model?.options.name as string).startsWith(label)) ??
+      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
   }
 }
