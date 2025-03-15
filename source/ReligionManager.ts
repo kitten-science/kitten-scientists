@@ -516,13 +516,11 @@ export class ReligionManager implements Automation {
       return null;
     }
 
-    const build = this.getBuild(name, variant);
-    if (build === null) {
-      throw new Error(`Unable to retrieve build information for '${name}'`);
-    }
-
-    return (buttons.find(button => button.model?.name.startsWith(build.label)) ??
-      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
+    return (buttons.find(button => button.id === name) ?? null) as BuildButton<
+      string,
+      ButtonModernModel,
+      ButtonModernController
+    > | null;
   }
 
   private _transformBtnSacrificeHelper(
