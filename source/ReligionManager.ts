@@ -73,7 +73,7 @@ export class ReligionManager implements Automation {
     }
 
     if (this.settings.refineTears.enabled) {
-      await this._autoTears(context);
+      this._autoTears(context);
     }
 
     if (this.settings.refineTimeCrystals.enabled) {
@@ -611,7 +611,7 @@ export class ReligionManager implements Automation {
     }
   }
 
-  private async _autoTears(context: FrameContext) {
+  private _autoTears(context: FrameContext) {
     const tears = this._workshopManager.getResource("tears");
     const available = this._workshopManager.getValueAvailable("tears");
     const sorrow = this._workshopManager.getResource("sorrow");
@@ -635,9 +635,7 @@ export class ReligionManager implements Automation {
         return;
       }
 
-      await new Promise(resolve => {
-        controller.buyItem(model, new Event("decoy"), resolve, availableForConversion);
-      });
+      controller.buyItem(model, new Event("decoy"), availableForConversion);
 
       const availableNow = this._workshopManager.getValueAvailable("tears");
       const cost = available - availableNow;
