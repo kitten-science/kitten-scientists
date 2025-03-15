@@ -1,7 +1,7 @@
 import type { KittenScientists } from "./KittenScientists.js";
 import type { TabManager } from "./TabManager.js";
 import { cwarn } from "./tools/Log.js";
-import type { BuildButton, ScienceTab } from "./types/index.js";
+import type { BuildButton, Policy, ScienceTab, Technology, Upgrade, UpgradeInfo } from "./types/index.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: KittenScientists;
@@ -12,7 +12,7 @@ export abstract class UpgradeManager {
   }
 
   async upgrade(
-    upgrade: { label: string; name: string },
+    upgrade: { label: string; name: Policy | Upgrade | Technology },
     variant: "policy" | "science" | "workshop",
   ): Promise<boolean> {
     const button = this._getUpgradeButton(upgrade, variant);
@@ -84,7 +84,7 @@ export abstract class UpgradeManager {
   }
 
   private _getUpgradeButton(
-    upgrade: { name: string },
+    upgrade: { name: Policy | Upgrade | Technology },
     variant: "policy" | "science" | "workshop",
   ): BuildButton | null {
     let buttons: Array<BuildButton> | undefined;
