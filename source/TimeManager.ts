@@ -156,13 +156,11 @@ export class TimeManager {
       buttons = this.manager.tab.children[3].children[0].children;
     }
 
-    const build = this.getBuild(name, variant);
-    if (isNil(build)) {
-      throw new Error(`Unable to retrieve build information for '${name}'`);
-    }
-
-    return (buttons.find(button => button.model?.name.startsWith(build.label)) ??
-      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
+    return (buttons.find(button => button.id === name) ?? null) as BuildButton<
+      string,
+      ButtonModernModel,
+      ButtonModernController
+    > | null;
   }
 
   fixCryochambers() {
