@@ -1,7 +1,14 @@
 import type { KittenScientists } from "./KittenScientists.js";
 import type { TabManager } from "./TabManager.js";
 import { cwarn } from "./tools/Log.js";
-import type { BuildButton, Policy, ScienceTab, Technology, Upgrade, UpgradeInfo } from "./types/index.js";
+import type {
+  BuildButton,
+  Policy,
+  ScienceTab,
+  Technology,
+  Upgrade,
+  UpgradeInfo,
+} from "./types/index.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: KittenScientists;

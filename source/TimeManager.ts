@@ -196,7 +196,7 @@ export class TimeManager {
         buyResult.def.then((didHappen: BuyResultOperation) => {
           fixHappened = didHappen.itemBought;
           fixed += didHappen ? 1 : 0;
-        })
+        });
       } else {
         fixHappened = buyResult.itemBought;
       }
