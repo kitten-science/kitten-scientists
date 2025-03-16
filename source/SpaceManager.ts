@@ -5,15 +5,15 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cdebug, cwarn } from "./tools/Log.js";
 import type {
   BuildButton,
   ButtonModernController,
   ButtonModernModel,
   Mission,
   SpaceBuilding,
-  SpaceBuildingInfo,
   SpaceTab,
+  UnsafeSpaceBuilding,
 } from "./types/index.js";
 
 export class SpaceManager implements Automation {
@@ -67,7 +67,7 @@ export class SpaceManager implements Automation {
     const sectionTrigger = this.settings.trigger;
 
     // Get the current metadata for all the referenced buildings.
-    const metaData: Partial<Record<SpaceBuilding, SpaceBuildingInfo>> = {};
+    const metaData: Partial<Record<SpaceBuilding, UnsafeSpaceBuilding>> = {};
     for (const build of Object.values(builds)) {
       metaData[build.building] = this.getBuild(build.building);
     }
@@ -163,7 +163,7 @@ export class SpaceManager implements Automation {
     return amountCalculated;
   }
 
-  getBuild(name: SpaceBuilding): SpaceBuildingInfo {
+  getBuild(name: SpaceBuilding): UnsafeSpaceBuilding {
     return this._host.game.space.getBuilding(name);
   }
 
@@ -176,11 +176,21 @@ export class SpaceManager implements Automation {
       return null;
     }
 
+    let button: BuildButton<string, ButtonModernModel, ButtonModernController> | null = null;
     for (const panel of panels) {
-      const button = panel.children.find(child => child.id === id);
+      button = (panel.children.find(child => child.id === id) ?? null) as BuildButton<
+        string,
+        ButtonModernModel,
+        ButtonModernController
+      > | null;
+
       if (!isNil(button)) {
-        return button as BuildButton<string, ButtonModernModel, ButtonModernController>;
+        return button;
       }
+    }
+
+    if (button === null) {
+      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
     }
 
     return null;

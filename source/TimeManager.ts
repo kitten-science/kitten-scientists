@@ -5,7 +5,7 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type TimeItem, TimeSettings, type TimeSettingsItem } from "./settings/TimeSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cdebug, cwarn } from "./tools/Log.js";
 import {
   type BuildButton,
   type ButtonModernController,
@@ -76,7 +76,7 @@ export class TimeManager {
       const buildMeta = this.getBuild(build.building, build.variant);
       metaData[build.building] = mustExist(buildMeta);
 
-      const buildButton = this.getBuildButton(build.building, build.variant);
+      const buildButton = this._getBuildButton(build.building, build.variant);
       if (isNil(buildButton)) {
         // Not available in this build of KG.
         continue;
@@ -113,7 +113,7 @@ export class TimeManager {
   ): void {
     let amountCalculated = amount;
     const build = mustExist(this.getBuild(name, variant));
-    const button = this.getBuildButton(name, variant);
+    const button = this._getBuildButton(name, variant);
 
     if (!button || !button.model?.enabled) {
       return;
@@ -147,7 +147,7 @@ export class TimeManager {
     return this._host.game.time.getVSU(name as VoidSpaceUpgrade);
   }
 
-  getBuildButton(
+  private _getBuildButton(
     name: ChronoForgeUpgrade | VoidSpaceUpgrade,
     variant: TimeItemVariant,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
@@ -158,11 +158,13 @@ export class TimeManager {
       buttons = this.manager.tab.children[3].children[0].children;
     }
 
-    return (buttons.find(button => button.id === name) ?? null) as BuildButton<
-      string,
-      ButtonModernModel,
-      ButtonModernController
-    > | null;
+    const button = buttons.find(button => button.id === name) ?? null;
+
+    if (button === null) {
+      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
+    }
+
+    return button;
   }
 
   fixCryochambers() {

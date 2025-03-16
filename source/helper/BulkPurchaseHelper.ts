@@ -20,14 +20,14 @@ import type {
   Price,
   ReligionUpgradeInfo,
   Resource,
-  SpaceBuildingInfo,
   TabId,
   TimeItemVariant,
   TranscendenceUpgradeInfo,
   UnicornItemVariant,
+  UnsafeSpaceBuilding,
+  UnsafeZiggurathUpgrade,
   UpgradeInfo,
   VoidSpaceUpgradeInfo,
-  ZiggurathUpgradeInfo,
 } from "../types/index.js";
 
 export type BulkBuildListItem = {
@@ -100,10 +100,10 @@ export class BulkPurchaseHelper {
         | BuildingMeta
         | ChronoForgeUpgradeInfo
         | ReligionUpgradeInfo
-        | SpaceBuildingInfo
+        | UnsafeSpaceBuilding
         | TranscendenceUpgradeInfo
         | VoidSpaceUpgradeInfo
-        | ZiggurathUpgradeInfo
+        | UnsafeZiggurathUpgrade
       >
     >,
     sectionTrigger: number,
@@ -344,10 +344,10 @@ export class BulkPurchaseHelper {
         | BuildingMeta
         | ChronoForgeUpgradeInfo
         | ReligionUpgradeInfo
-        | SpaceBuildingInfo
+        | UnsafeSpaceBuilding
         | TranscendenceUpgradeInfo
         | VoidSpaceUpgradeInfo
-        | ZiggurathUpgradeInfo
+        | UnsafeZiggurathUpgrade
       >
     >,
     resources: Record<Resource, number> = {} as Record<Resource, number>,
@@ -564,10 +564,10 @@ export class BulkPurchaseHelper {
       | BuildingMeta
       | ChronoForgeUpgradeInfo
       | ReligionUpgradeInfo
-      | SpaceBuildingInfo
+      | UnsafeSpaceBuilding
       | TranscendenceUpgradeInfo
       | VoidSpaceUpgradeInfo
-      | ZiggurathUpgradeInfo,
+      | UnsafeZiggurathUpgrade,
     source?: TabId,
   ): number {
     // If the building has stages, use the ratio for the current stage.

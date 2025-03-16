@@ -15,7 +15,7 @@ import {
   UnicornItems,
 } from "./settings/ReligionSettings.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
-import { cwarn } from "./tools/Log.js";
+import { cdebug, cwarn } from "./tools/Log.js";
 import {
   type BuildButton,
   type ButtonModernController,
@@ -27,8 +27,8 @@ import {
   type TranscendenceUpgradeInfo,
   type TransformBtnController,
   UnicornItemVariant,
+  type UnsafeZiggurathUpgrade,
   type ZiggurathUpgrade,
-  type ZiggurathUpgradeInfo,
 } from "./types/index.js";
 
 export class ReligionManager implements Automation {
@@ -218,7 +218,7 @@ export class ReligionManager implements Automation {
     this.manager.render();
 
     const metaData: Partial<
-      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
+      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | UnsafeZiggurathUpgrade>
     > = this.getBuildMetaData(builds);
     const sectionTrigger = this.settings.trigger;
 
@@ -436,7 +436,7 @@ export class ReligionManager implements Automation {
 
   getBuildMetaData(builds: Partial<Record<FaithItem, ReligionSettingsItem>>) {
     const metaData: Partial<
-      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
+      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | UnsafeZiggurathUpgrade>
     > = {};
     for (const build of Object.values(builds)) {
       const buildInfo = this.getBuild(build.building, build.variant);
@@ -473,7 +473,7 @@ export class ReligionManager implements Automation {
   getBuild(
     name: ReligionItem | "unicornPasture",
     variant: UnicornItemVariant,
-  ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo | null {
+  ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | UnsafeZiggurathUpgrade | null {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
         return this._host.game.religion.getZU(name as ZiggurathUpgrade) ?? null;
@@ -516,11 +516,17 @@ export class ReligionManager implements Automation {
       return null;
     }
 
-    return (buttons.find(button => button.id === name) ?? null) as BuildButton<
+    const button = (buttons.find(button => button.id === name) ?? null) as BuildButton<
       string,
       ButtonModernModel,
       ButtonModernController
     > | null;
+
+    if (button === null) {
+      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
+    }
+
+    return button;
   }
 
   private _transformBtnSacrificeHelper(
@@ -535,7 +541,7 @@ export class ReligionManager implements Automation {
     const customController = new classes.ui.religion.TransformBtnController(
       game,
       controller.controllerOpts,
-    ) as TransformBtnController;
+    );
 
     const link = customController._newLink(model, percentageInverse);
     return new Promise<boolean>(resolve => {
