@@ -10,7 +10,7 @@ let injectedHtml = indexHtml.replace(
 
     for (const subject of scripts) {
       const script = document.createElement("script");
-      script.src = subject;
+      script.src = subject + "?_=" + new Date().getTime();
       document.body.appendChild(script);
     }
   </script></body>`,

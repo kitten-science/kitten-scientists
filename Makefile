@@ -32,6 +32,7 @@ devcontainer-oci: devcontainer
 		--build-arg BRANCH="master" \
 		--build-arg REPO="https://github.com/nuclear-unicorn/kittensgame.git" \
 		--file devcontainer/Containerfile \
+		--no-cache \
 		--tag localhost/devcontainer:latest \
 		.
 
