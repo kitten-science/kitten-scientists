@@ -561,7 +561,7 @@ export class Engine {
   private _printOutput(
     cssClasses: "ks-activity" | `ks-activity ${ActivityTypeClass}` | "ks-default" | "ks-summary",
     color: string,
-    ...args: Array<number | string>
+    message: string,
   ): void {
     if (this.settings.filters.enabled) {
       for (const filterItem of Object.values(this.settings.filters.filters)) {
@@ -572,10 +572,10 @@ export class Engine {
     }
 
     // update the color of the message immediately after adding
-    const msg = this._host.game.msg(...args, cssClasses);
+    const msg = this._host.game.msg(message, cssClasses);
     $(msg.span).css("color", color);
 
-    cdebug(...args);
+    cdebug(message);
   }
 
   static evaluateSubSectionTrigger(sectionTrigger: number, subSectionTrigger: number): number {

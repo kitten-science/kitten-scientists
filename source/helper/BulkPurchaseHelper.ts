@@ -9,26 +9,41 @@ import { objectEntries } from "../tools/Entries.js";
 import { negativeOneToInfinity } from "../tools/Format.js";
 import { cdebug } from "../tools/Log.js";
 import type {
-  AllBuildings,
-  BuildButton,
-  Building,
-  BuildingMeta,
+  BuildingBtnModernController,
+  StagingBldBtn,
+  UnsafeBuilding,
+} from "../types/buildings.js";
+import type {
+  BuildingBtn,
+  BuildingBtnController,
+  BuildingStackableBtn,
   BuildingStackableBtnController,
-  ButtonModernController,
-  ButtonModernModel,
-  ChronoForgeUpgradeInfo,
+  UnsafeBuildingBtnModel,
+  UnsafeBuildingStackableBtnModel,
+} from "../types/core.js";
+import type {
+  AllBuildings,
+  Building,
   Price,
-  ReligionUpgradeInfo,
   Resource,
-  SpaceBuildingInfo,
   TabId,
   TimeItemVariant,
-  TranscendenceUpgradeInfo,
   UnicornItemVariant,
-  UpgradeInfo,
-  VoidSpaceUpgradeInfo,
-  ZiggurathUpgradeInfo,
+  Unlocks,
 } from "../types/index.js";
+import type {
+  UnsafeReligionBtnModel,
+  UnsafeReligionUpgrade,
+  UnsafeTranscendenceUpgrade,
+  UnsafeZiggurathUpgrade,
+} from "../types/religion.js";
+import type { SpaceProgramBtnController, UnsafeSpaceBuilding } from "../types/space.js";
+import type {
+  UnsafeChronoForgeUpgrade,
+  UnsafeFixCryochamberBtnModel,
+  UnsafeVoidSpaceUpgrade,
+} from "../types/time.js";
+import type { UnsafeUpgrade } from "../types/workshop.js";
 
 export type BulkBuildListItem = {
   count: number;
@@ -97,13 +112,15 @@ export class BulkPurchaseHelper {
     metaData: Partial<
       Record<
         AllItems,
-        | BuildingMeta
-        | ChronoForgeUpgradeInfo
-        | ReligionUpgradeInfo
-        | SpaceBuildingInfo
-        | TranscendenceUpgradeInfo
-        | VoidSpaceUpgradeInfo
-        | ZiggurathUpgradeInfo
+        Required<
+          | UnsafeBuilding
+          | UnsafeChronoForgeUpgrade
+          | UnsafeReligionUpgrade
+          | UnsafeSpaceBuilding
+          | UnsafeTranscendenceUpgrade
+          | UnsafeVoidSpaceUpgrade
+          | UnsafeZiggurathUpgrade
+        >
       >
     >,
     sectionTrigger: number,
@@ -193,7 +210,6 @@ export class BulkPurchaseHelper {
 
         // Get cost reduction modifier.
         const pricesDiscount = this._host.game.getLimitedDR(
-          // @ts-expect-error getEffect will return 0 for invalid effects. So this is safe either way.
           this._host.game.getEffect(`${name}CostReduction` as const),
           1,
         );
@@ -341,13 +357,15 @@ export class BulkPurchaseHelper {
     metaData: Partial<
       Record<
         AllItems,
-        | BuildingMeta
-        | ChronoForgeUpgradeInfo
-        | ReligionUpgradeInfo
-        | SpaceBuildingInfo
-        | TranscendenceUpgradeInfo
-        | VoidSpaceUpgradeInfo
-        | ZiggurathUpgradeInfo
+        Required<
+          | UnsafeBuilding
+          | UnsafeChronoForgeUpgrade
+          | UnsafeReligionUpgrade
+          | UnsafeSpaceBuilding
+          | UnsafeTranscendenceUpgrade
+          | UnsafeVoidSpaceUpgrade
+          | UnsafeZiggurathUpgrade
+        >
       >
     >,
     resources: Record<Resource, number> = {} as Record<Resource, number>,
@@ -501,9 +519,9 @@ export class BulkPurchaseHelper {
    * @param amount How many items to build.
    * @returns How many items were built.
    */
-  construct(
-    model: ButtonModernModel,
-    button: BuildButton<string, ButtonModernModel, ButtonModernController>,
+  construct<TModel extends Required<UnsafeBuildingBtnModel | UnsafeBuildingStackableBtnModel>>(
+    model: TModel,
+    controller: BuildingBtnModernController<TModel> | BuildingStackableBtnController<TModel>,
     amount: number,
   ): number {
     const meta = model.metadata;
@@ -511,27 +529,27 @@ export class BulkPurchaseHelper {
     let amountCalculated = amount;
 
     // For limited builds, only construct up to the max.
-    const vsMeta = meta as VoidSpaceUpgradeInfo;
+    const vsMeta = meta as Required<UnsafeVoidSpaceUpgrade>;
     if (!isNil(vsMeta.limitBuild) && vsMeta.limitBuild - vsMeta.val < amountCalculated) {
       amountCalculated = vsMeta.limitBuild - vsMeta.val;
     }
 
-    if ((model.enabled && button.controller.hasResources(model)) || this._host.game.devMode) {
-      while (button.controller.hasResources(model) && amountCalculated > 0) {
-        model.prices = button.controller.getPrices(model);
-        button.controller.payPrice(model);
-        (button.controller as BuildingStackableBtnController).incrementValue(model);
+    if ((model.enabled && controller.hasResources(model)) || this._host.game.devMode) {
+      while (controller.hasResources(model) && amountCalculated > 0) {
+        model.prices = controller.getPrices(model);
+        controller.payPrice(model);
+        controller.incrementValue(model);
         counter++;
         amountCalculated--;
       }
       if (vsMeta.breakIronWill) {
         this._host.game.ironWill = false;
       }
-      if ((meta as UpgradeInfo).unlocks) {
-        this._host.game.unlock((meta as UpgradeInfo).unlocks);
+      if ("unlocks" in meta && !isNil(meta.unlocks)) {
+        this._host.game.unlock(meta.unlocks as Partial<Unlocks>);
       }
-      if ((meta as VoidSpaceUpgradeInfo).upgrades) {
-        this._host.game.upgrade((meta as VoidSpaceUpgradeInfo).upgrades);
+      if ("upgrades" in meta && !isNil(meta.upgrades)) {
+        this._host.game.upgrade(meta.upgrades as Partial<Unlocks>);
       }
     }
     return counter;
@@ -561,13 +579,13 @@ export class BulkPurchaseHelper {
    */
   getPriceRatio(
     data:
-      | BuildingMeta
-      | ChronoForgeUpgradeInfo
-      | ReligionUpgradeInfo
-      | SpaceBuildingInfo
-      | TranscendenceUpgradeInfo
-      | VoidSpaceUpgradeInfo
-      | ZiggurathUpgradeInfo,
+      | UnsafeBuilding
+      | UnsafeChronoForgeUpgrade
+      | UnsafeReligionUpgrade
+      | UnsafeSpaceBuilding
+      | UnsafeTranscendenceUpgrade
+      | UnsafeVoidSpaceUpgrade
+      | UnsafeZiggurathUpgrade,
     source?: TabId,
   ): number {
     // If the building has stages, use the ratio for the current stage.

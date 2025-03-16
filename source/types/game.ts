@@ -1,63 +1,85 @@
 import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
-import type { CycleIndices } from "../settings/TimeControlSettings.js";
-import type { CraftableInfo, ResourceInfo } from "./craft.js";
-import type {
-  AllBuildings,
-  BuildButton,
-  Building,
-  BuildingEffects,
-  BuildingExt,
-  BuildingMeta,
-  Challenge,
-  Cycle,
-  GameTab,
-  KGSaveData,
-  Kitten,
-  Policy,
-  Price,
-  Race,
-  RaceInfo,
-  ReligionUpgrade,
-  ReligionUpgradeInfo,
-  Resource,
-  ResourceCraftable,
-  Season,
-  TabId,
-  TranscendenceUpgrade,
-  TranscendenceUpgradeInfo,
-  UpgradeInfo,
-  WorkshopTab,
-  ZiggurathUpgrade,
-  ZiggurathUpgradeInfo,
-} from "./index.js";
-import type { ReligionTab } from "./religion.js";
-import type { PolicyInfo, Technology, TechInfo as TechnologyInfo } from "./science.js";
-import type { Mission, PlanetMeta, SpaceBuilding, SpaceTab } from "./space.js";
-import type {
-  ChronoForgeUpgrade,
-  ChronoForgeUpgradeInfo,
-  TimeTab,
-  VoidSpaceUpgrade,
-  VoidSpaceUpgradeInfo,
-} from "./time.js";
-import type { TradeTab } from "./trade.js";
-import type { JobInfo, VillageTab } from "./village.js";
+import type { KGSaveData } from "./_save.js";
+import type { AchTab, Achievements } from "./achievements.js";
+import type { BuildingsManager, BuildingsModern } from "./buildings.js";
+import type { Calendar } from "./calendar.js";
+import type { ChallengesManager, ChallengesTab } from "./challenges.js";
+import type { Console, Tab } from "./core.js";
+import type { Diplomacy, DiplomacyManager } from "./diplomacy.js";
+import type { Resource, ResourceCraftable, TabId, Unlocks } from "./index.js";
+import type { Math as KGMath } from "./math.js";
+import type { PrestigeManager } from "./prestige.js";
+import type { ReligionManager, ReligionTab } from "./religion.js";
+import type { ResourceManager } from "./resources.js";
+import type { Library, ScienceManager } from "./science.js";
+import type { SpaceManager, SpaceTab } from "./space.js";
+import type { StatsManager, StatsTab } from "./stats.js";
+import type { QueueTab, TimeManager, TimeTab } from "./time.js";
+import type { DesktopUI } from "./ui.js";
+import type { Village, VillageManager } from "./village.js";
+import type { VoidManager } from "./void.js";
+import type { Workshop, WorkshopManager } from "./workshop.js";
 
-type Server = {
+export type Timer = {
+  handlers: Array<unknown>;
+  scheduledHandlers: Array<unknown>;
+  ticksTotal: number;
+  timestampStart: null;
+  totalUpdateTime: null;
+  addEvent: (handler: unknown, frequency: unknown) => void;
+  update: () => void;
+  scheduleEvent: (handler: unknown) => void;
+  updateScheduledEvents: () => void;
+  beforeUpdate: () => void;
+  afterUpdate: () => void;
+};
+
+export type IDataStorageAware = {
+  new (): IDataStorageAware;
+};
+
+export type Telemetry = IDataStorageAware & {
+  guid: string;
+  game: GamePage;
+  buildRevision: null;
+  version: null;
+  errorCount: number;
+  new (game: GamePage): Telemetry;
+  generateGuid: () => string;
+  save: (data: unknown) => void;
+  load: (data: unknown) => void;
+  logEvent: (eventType: unknown, payload: unknown) => void;
+  logRouteChange: (name: string) => void;
+};
+
+export type Server = {
   showMotd: boolean;
   motdTitle: string | null;
   motdContent: string | null;
-
-  game: Game | null;
+  game: GamePage | null;
   motdContentPrevious: string | null;
-  motdFreshMessage: string | null;
-
-  userProfile: unknown;
+  motdFreshMessage: boolean;
+  /**
+   * KGNet user profile
+   * Represents an active session, if not null, all XHR calls will be made
+   * using session cookies
+   */
+  userProfile: null;
   chiral: null;
-
+  /**
+   * When was the last time save was uploaded to the cloud. (Unix timestamp)
+   */
   lastBackup: null;
+  /**
+   * Current client snapshot of the save data
+   * All operations with the cloud saves should return the save snapshot?
+   */
   saveData: null;
-
+  /**
+   * If KS settings are detected in the save, this will be set to true.
+   */
+  isKSDetected: false;
+  new (game: GamePage): Server;
   setUserProfile: (userProfile: unknown) => void;
   getServerUrl: () => string;
   refresh: () => void;
@@ -72,189 +94,300 @@ type Server = {
   setChiral: (data: unknown) => void;
 };
 
-export type CycleEffects = {
-  "cryostation-coalMax": number;
-  "cryostation-ironMax": number;
-  "cryostation-mineralsMax": number;
-  "cryostation-oilMax": number;
-  "cryostation-titaniumMax": number;
-  "cryostation-unobtainiumMax": number;
-  "cryostation-uraniumMax": number;
-  "cryostation-woodMax": number;
-  "entangler-gflopsConsumption": number;
-  "hrHarvester-energyProduction": number;
-  "hydrofracturer-oilPerTickAutoprodSpace": number;
-  "hydroponics-catnipRatio": number;
-  "moonOutpost-unobtainiumPerTickSpace": number;
-  "planetCracker-uraniumPerTickSpace": number;
-  "researchVessel-starchartPerTickBaseSpace": number;
-  "sattelite-observatoryRatio": number;
-  "sattelite-starchartPerTickBaseSpace": number;
-  "spaceBeacon-starchartPerTickBaseSpace": number;
-  "spaceElevator-prodTransferBonus": number;
-  "spaceStation-scienceRatio": number;
-  "sunlifter-energyProduction": number;
-};
-
-export type FestivalEffects = {
-  catnip: number;
-  coal: number;
-  culture: number;
-  faith: number;
-  gold: number;
-  iron: number;
-  manpower: number;
-  minerals: number;
-  oil: number;
-  science: number;
-  starchart: number;
-  titanium: number;
-  unicorns: number;
-  unobtainium: number;
-  uranium: number;
-  wood: number;
-};
-
-export type CycleMeta = {
-  name: Cycle;
-  effects: Partial<CycleEffects>;
-  festivalEffects: Partial<FestivalEffects>;
-  glyph: string;
-  uglyph: string;
-  title: string;
-};
-
-export type Game = {
-  bld: {
-    buildingGroups: Array<{
-      title: string;
-      buildings: Array<Building>;
-    }>;
-    cathPollution: number;
-    /** @deprecated Use `getBuildingExt()` instead. */
-    get: (build: Building) => BuildingMeta;
-    getBuildingExt: (building: Building) => BuildingExt;
-    getPollutionLevel(): number;
-    meta: [{ meta: Array<BuildingMeta> }];
+export type UndoChange = {
+  _static: {
+    DEFAULT_TTL: number;
   };
-  calendar: {
-    cryptoPrice: number;
-    cycle: CycleIndices;
-    cycleEffectsFestival: (options: Partial<FestivalEffects>) => Partial<FestivalEffects>;
-    cycles: Array<CycleMeta>;
-    cyclesPerEra: number;
-    cycleYear: number;
-    day: number;
-    daysPerSeason: number;
+  ttl: number;
+  events: null;
+  new (): UndoChange;
+  addEvent: (managerId: unknown, data: unknown) => void;
+};
 
-    eventChance: number;
+export type EffectsManager = {
+  game: GamePage;
+  new (game: GamePage): EffectsManager;
+  effectMeta: (effectName: unknown) => unknown;
+  statics: {
+    effectMeta: unknown;
+  };
+};
 
+export type GamePage = {
+  id: string;
+  tabs: Array<Tab>;
+  resPool: ResourceManager;
+  calendar: Calendar;
+  village: VillageManager;
+  console: Console;
+  telemetry: Telemetry;
+  server: Server;
+  math: KGMath;
+  /**
+   * global cache
+   */
+  globalEffectsCached: Record<string, unknown>;
+  /**
+   * how much ticks are performed per second (5 ticks per second, 200 ms per tick)
+   */
+  ticksPerSecond: number;
+  /**
+   * I wonder why someone may need this
+   */
+  isPaused: boolean;
+  isCMBREnabled: boolean;
+  ticksBeforeSave: number;
+  /**
+   * in ticks
+   */
+  autosaveFrequency: number;
+  /**
+   * current building selected in the Building tab by a mouse cursor, should affect resource table rendering
+   * TODO: move me to UI
+   */
+  selectedBuilding: null;
+  setSelectedObject: (object: unknown) => void;
+  clearSelectedObject: () => void;
+  forceShowLimits: boolean;
+  useWorkers: boolean;
+  colorScheme: string;
+  unlockedSchemes: null;
+  timer: Timer;
+  /**
+   * main timer loop
+   */
+  _mainTimer: null;
+  /**
+   * counter for karmic reincarnation
+   */
+  karmaKittens: number;
+  karmaZebras: number;
+  deadKittens: number;
+  /**
+   * true if player has no kittens or housing buildings
+   */
+  ironWill: boolean;
+  saveVersion: number;
+  //FINALLY
+  opts: {
+    disableCMBR: boolean;
     /**
-     * How many festival days are remaining?
+     * Should `confirm()` calls be skipped in the game?
      */
-    festivalDays: number;
-
-    futureSeasonTemporalParadox: number;
-
-    getCurSeason: () => { modifiers: { catnip: number }; name: Season };
-    /**
-     * Get the production modifier contribution of the weather for certain resource.
-     */
-    getWeatherMod: (res: { name: Resource }) => number;
-    observeBtn: BuildButton | null;
-    observeHandler: () => void;
-    season: number;
-    seasons: Array<{ name: Season }>;
-    seasonsPerYear: number;
-    ticksPerDay: number;
-    year: number;
-    yearsPerCycle: number;
+    noConfirm: boolean;
+    usePerSecondValues: boolean;
+    notation: "si";
+    forceHighPrecision: boolean;
+    usePercentageResourceValues: boolean;
+    showNonApplicableButtons: boolean;
+    usePercentageConsumptionValues: boolean;
+    highlightUnavailable: boolean;
+    hideSell: boolean;
+    hideDowngrade: boolean;
+    hideBGImage: boolean;
+    tooltipsInRightColumn: boolean;
+    IWSmelter: boolean;
+    enableRedshift: boolean;
+    enableRedshiftGflops: boolean;
+    batchSize: number;
+    // Used only in KG Mobile, hence it's absence in the rest of the code
+    useLegacyTwoInRowLayout: boolean;
+    forceLZ: boolean;
+    compressSaveFile: boolean;
+    ksEnabled: boolean;
   };
-  challenges: {
-    currentChallenge?: Challenge;
-    challenges: Array<{ pending: boolean }>;
-    getChallenge: (challenge: Challenge) => {
-      active: boolean;
-      calculateEffects: (model: unknown, game: Game) => void;
-      researched: number;
-    };
-    isActive: (challenge: Challenge) => boolean;
-  };
-  compressLZData: (data: string) => string;
-  console: {
-    filters: Record<string, { enabled: boolean; title: string; unlocked: boolean }>;
-    maxMessages: number;
-  };
-  craft: (name: string, amount: number) => void;
-  decompressLZData: (lzData: string) => string;
+  /**
+   * timeout till resetting gather counter, see below
+   */
+  gatherTimeoutHandler: null;
+  /**
+   * how many clicks in a row was performed on a gather button
+   */
+  gatherClicks: number;
+  /**
+   * flag triggering Super Unethical Climax achievement
+   */
+  cheatMode: boolean;
+  /**
+   * flag triggering System Shock achievement
+   */
+  systemShockMode: boolean;
+  /**
+   * Flag for achievements
+   */
+  startedWithoutChronospheres: boolean;
+  /**
+   * how many ticks passed since the start of the game
+   */
+  ticks: number;
+  /**
+   * total time spent on update cycle in milliseconds, useful for debug/fps counter. 1 ticks per second have more calculations
+   */
+  totalUpdateTime: [number, number, number, number, number];
+  totalUpdateTimeTicks: number;
+  totalUpdateTimeCurrent: number;
+  /**
+   * fps breakdows of a render cycle
+   */
+  fps: null;
+  /**
+   * time of last pause
+   */
+  pauseTimestamp: number;
+  /**
+   * Stores the most recent date message to prevent header spam
+   */
+  lastDateMessage: null;
+  effectsMgr: EffectsManager;
+  managers: [
+    WorkshopManager,
+    DiplomacyManager,
+    BuildingsManager,
+    ScienceManager,
+    Achievements,
+    ReligionManager,
+    SpaceManager,
+    TimeManager,
+    PrestigeManager,
+    ChallengesManager,
+    StatsManager,
+    VoidManager,
+    // We need this to inject our own manager into the collection.
+    // Potentially very unsafe!
+    {
+      load: (saveData: Record<string, unknown>) => void;
+      save: (saveData: Record<string, unknown>) => void;
+      resetState: () => void;
+    },
+  ];
+  workshop: WorkshopManager;
+  diplomacy: DiplomacyManager;
+  bld: BuildingsManager;
+  science: ScienceManager;
+  achievements: Achievements;
+  religion: ReligionManager;
+  space: SpaceManager;
+  time: TimeManager;
+  prestige: PrestigeManager;
+  challenges: ChallengesManager;
+  stats: StatsManager;
+  void: VoidManager;
+  bldTab: BuildingsModern;
+  villageTab: Village;
+  libraryTab: Library;
+  workshopTab: Workshop;
+  diplomacyTab: Diplomacy;
+  religionTab: ReligionTab;
+  spaceTab: SpaceTab;
+  timeTab: TimeTab;
+  challengesTab: ChallengesTab;
+  achievementTab: AchTab;
+  statsTab: StatsTab;
+  queueTab: QueueTab;
+  undoChange: UndoChange | null;
+  /**
+   * ui communication layer
+   * Is actually potentially `null`, if the game was never fully initialized.
+   * We don't include `null` in the type to avoid having to check it over and
+   * over again during runtime.
+   */
+  ui: DesktopUI;
+  dropBoxClient: null;
+  /**
+   * Whether the game is in developer mode or no
+   */
+  isLocalhost: boolean;
   devMode: boolean;
-  diplomacy: {
-    buyBcoin: () => void;
-    /**
-     * @deprecated Use `buyBcoin` instead.
-     */
-    buyEcoin: () => void;
-    calculateStandingFromPolicies: (race: Race, host: Game) => number;
-    feedElders: () => void;
-    get: (race: Race) => RaceInfo;
-    getMarkerCap: () => number;
-    calculateTradeBonusFromPolicies: (race: Race, host: Game) => number;
-    getTradeRatio: () => number;
-    races: Array<RaceInfo>;
-    sellBcoin: () => void;
-    /**
-     * @deprecated Use `sellBcoin` instead.
-     */
-    sellEcoin: () => void;
-    tradeMultiple: (race: RaceInfo, amount: number) => void;
-    unlockRandomRace: () => { title: string };
-  };
-  diplomacyTab: TradeTab;
-  getCMBRBonus: () => number;
-  getDisplayValueExt: (
-    value: number,
-    prefix?: boolean,
-    usePerTickHack?: boolean,
-    precision?: number,
-    postifx?: string,
-  ) => string;
-  getEffect: (
-    effect:
-      | `${AllBuildings}CostReduction`
-      | `${Resource}CostReduction`
-      | `${AllBuildings}PriceRatio`
-      | "catnipDemandWorkerRatioGlobal"
-      | "catnipJobRatio"
-      | "catnipPerTickBase"
-      | "coldHarshness"
-      | "corruptionBoostRatio"
-      | "dataCenterAIRatio"
-      | "heatMax"
-      | "heatPerTick"
-      | "hunterRatio"
-      | "mapPriceReduction"
-      | "oilReductionRatio"
-      | "priceRatio"
-      | "riftChance"
-      | "shatterCostIncreaseChallenge"
-      | "shatterVoidCost"
-      | "solarRevolutionLimit"
-      | "standingRatio"
-      | "temporalFluxProduction"
-      | "temporalParadoxDay"
-      | "tradeCatpowerDiscount"
-      | "tradeGoldDiscount"
-      | "unicornsGlobalRatio"
-      | "unicornsPerTickBase"
-      | "unicornsRatioReligion"
-      | "uplinkDCRatio",
-  ) => number;
-
+  mobileSaveOnPause: boolean;
+  winterCatnipPerTick: number;
+  featureFlags: Record<
+    | "MAUSOLEUM_PACTS"
+    | "QUEUE"
+    | "QUEUE_REDSHIFT"
+    | "SPACE_EXPL"
+    | "UNICORN_TEARS_CHALLENGE"
+    | "VILLAGE_MAP",
+    UnsafeFeatureSelection
+  >;
+  /**
+   * Should never be changed, override for KGM
+   */
+  isMobile: () => false;
+  new (containerId: string): GamePage;
+  getFeatureFlag: (flagId: unknown) => boolean;
+  updateWinterCatnip: () => void;
+  setDropboxClient: (dropBoxClient: unknown) => void;
+  heartbeat: () => void;
+  getEffectMeta: (effectName: unknown) => unknown;
+  getEffect: (effectName: unknown) => number;
+  updateCaches: () => void;
   /**
    * Calculate limited diminishing returns.
    */
   getLimitedDR: (effect: number, limit: number) => number;
-
+  /**
+   * Display a message in the console. Returns a <span> node of a text container
+   */
+  msg: (
+    message: string,
+    type?: unknown,
+    tag?: unknown,
+    noBullet?: boolean,
+  ) => { span: HTMLElement };
+  clearLog: () => void;
+  saveUI: () => void;
+  resetState: () => void;
+  _publish: (topic: string, arg: unknown) => void;
+  reload: () => void;
+  /**
+   * Saves the game and returns the save game.
+   */
+  save(): KGSaveData;
+  _prepareSaveData: <TSaveData>(saveData: TSaveData) => TSaveData;
+  _saveDataToString: (saveData: unknown) => string;
+  _wipe: () => void;
+  wipe: () => void;
+  closeOptions: () => void;
+  toggleScheme: (themId: unknown) => void;
+  togglePause: () => void;
+  updateOptionsUI: () => void;
+  /**
+   * Returns a save data JSON from a base64 or utf16 compressed lz blob
+   * Use this instead of LZString.decompressX
+   */
+  decompressLZData: (lzData: string) => string;
+  compressLZData: (json: string, useUTF16?: boolean) => string;
+  _parseLSSaveData: () => unknown;
+  load: () => boolean | undefined;
+  saveExport: () => void;
+  saveImport: () => void;
+  saveToFile: (withFullName: boolean) => void;
+  saveExportDropbox: () => void;
+  getDropboxAuthUrl: () => string;
+  exportToDropbox: (lzdata: string, callback: AnyFunction) => void;
+  saveImportDropbox: () => void;
+  importFromDropbox: (callback: AnyFunction) => void;
+  saveImportDropboxFileRead: (callback: AnyFunction) => void;
+  saveImportDropboxText: (lzdata: string, callback: AnyFunction) => void;
+  _loadSaveJson: (lzdata: string, callback: AnyFunction) => void;
+  migrateSave: <TSave>(save: TSave) => TSave;
+  setUI: (ui: DesktopUI) => void;
+  render: () => void;
+  calcResourcePerTick: (redName: Resource, season: unknown) => number;
+  addGlobalModToStack: <TArray extends Array<unknown>>(array: TArray, resName: Resource) => TArray;
+  getResourcePerTickStack: (
+    resName: Resource,
+    calcAutomatedEffect: unknown,
+    season: unknown,
+  ) => Array<{ name: string; type: string; value: number }> | undefined;
+  getResourcePerDayStack: (
+    resName: Resource,
+  ) => Array<{ name: string; type: string; value: number }> | undefined;
+  getResourceOnYearStack: (
+    resName: Resource,
+  ) => Array<{ name: string; type: string; value: number }> | undefined;
+  getCMBRBonus: () => number;
+  getCraftRatio: (tag: unknown) => number;
   /**
    * The resource craft ratio indicates how many items you receive
    * as the result of a single craft. This is subject to a variety
@@ -263,10 +396,20 @@ export type Game = {
    * @param name The resource to check.
    */
   getResCraftRatio: (name: ResourceCraftable) => number;
-
-  getResourcePerDay: (resName: Resource) => number;
-  getResourceOnYearProduction: (resName: Resource) => number;
-
+  /**
+   * Update all tab managers, resources and UI controls
+   */
+  update: () => void;
+  /**
+   * How many ticks pass per second.
+   * Subject to time acceleration.
+   */
+  getTicksPerSecondUI: () => number;
+  timeAccelerationRatio: () => number;
+  updateModel: () => void;
+  huntAll: (event: Event) => void;
+  praise: (event: Event) => void;
+  updateResources: () => void;
   /**
    * Determine how much of the given resource is produced per tick.
    *
@@ -274,7 +417,8 @@ export type Game = {
    * @param withConversion Should resource convertions be taken into account?
    */
   getResourcePerTick: (resName: Resource, withConversion: boolean) => number;
-
+  getResourcePerDay: (resName: Resource) => number;
+  getResourceOnYearProduction: (resName: Resource) => number;
   /**
    * Determine how much of the resource, per tick, is subject to be converted
    * into another resource. For example, smelters convert wood and minerals.
@@ -282,317 +426,110 @@ export type Game = {
    * @param resName The resource to check.
    */
   getResourcePerTickConvertion: (resName: Resource) => number;
-
+  craft: (name: Resource, amount: number) => void;
+  craftAll: (name: Resource) => void;
+  getRequiredResources: (bld: unknown) => unknown;
+  attachResourceTooltip: (container: HTMLElement, resRef: unknown) => void;
+  getDetailedResMap: (res: unknown) => string;
+  processResourcePerTickStack: (
+    resStack: unknown,
+    res: unknown,
+    depth: number,
+    hasFixed: boolean,
+  ) => string;
+  getStackElemString: (stackElem: unknown, res: unknown) => string;
   /**
-   * How many ticks pass per second.
-   * Subject to time acceleration.
+   * Outputs a formatted representation of time.  If the input is negative or NaN, treats it as zero instead.
+   * @param secondsRaw Either a number or a string representing a number.
+   * @return A string.  For the sake of consistency, all whitespace is trimmed from beginning & end.
    */
-  getTicksPerSecondUI: () => number;
-
+  toDisplaySeconds: (secondsRaw: number) => string;
+  /**
+   * The same as toDisplaySeconds, but converts ingame days into xYears xDays
+   * Just for aestetical pleasness
+   */
+  toDisplayDays: (daysRaw: number) => string;
+  toDisplayPercentage: (percentage: number, precision: number, precisionFixed: boolean) => string;
+  postfixes: Array<{ limit: number; divisor: number; postfix: [string, string] }>;
+  /**
+   * Determines the display name & display value (formatting it as per second, or as a percentage, etc.) of a given effect.
+   * @param effectName	The internal name of the effect.
+   * @param effectValue	The value of the effect.
+   * @param showIfZero	Boolean.  Determines whether we still show an effect with zero value, or if that effect remains hidden.
+   * 					I added it just in case someone wants to use it in the future.
+   * 					If the effect would be hidden for any other reason, then this flag doesn't do anything.
+   * @return	null if the effect shouldn't be displayed (because it's hidden or because it's zero).
+   * 			Otherwise, returns a table with the following keys:
+   * 			displayEffectName = the localized title;
+   * 			displayEffectValue = the value of the effect, formatted & localized properly
+   */
+  getEffectDisplayParams: (
+    effectName: unknown,
+    effectValue: number,
+    showIfZero: boolean,
+  ) => {
+    displayEffectName: string;
+    displayEffectValue: string;
+  } | null;
+  /**
+   * Converts raw resource value (e.g. 12345.67890) to a formatted representation (i.e. 12.34K)
+   * If 'prefix' flag is true, positive value will be prefixed with '+', e.g. ("+12.34K")
+   */
+  getDisplayValueExt: (
+    value: number,
+    prefix?: boolean,
+    usePerTickHack?: boolean,
+    precision?: number,
+    postifx?: string,
+  ) => string;
+  /**
+   * Formats float value to x.xx or x if value is integer
+   */
+  getDisplayValue: (floatVal: number, plusPrefix: boolean, precision: number) => string;
+  fixFloatPointNumber: (number: number) => number;
+  addTab: (tab: Tab) => void;
+  isWebWorkerSupported: () => boolean;
+  timestamp: () => number;
+  start: () => void;
+  frame: () => void;
+  tick: () => void;
+  restartFPSCounters: () => void;
+  reset: () => void;
+  resetAutomatic: () => void;
+  discardParagon: () => void;
+  doDiscardParagon: () => void;
+  _getKarmaKittens: (kittens: number) => number;
+  _getBonusZebras: () => number;
+  getResetPrestige: () => {
+    karmaKittens: number;
+    paragonPoints: number;
+  };
+  _resetInternal: () => void;
+  rand: (ratio: number) => number;
+  updateKarma: () => void;
   /**
    * Calculate unlimited diminishing returns.
    */
   getUnlimitedDR: (value: number, stripe: number) => number;
+  getInverseUnlimitedDR: (value: number, stripe: number) => number;
+  getTab: (tabName: TabId) => Tab;
+  calculateAllEffects: () => void;
+  getUnlockByName: (unlockId: unknown, type: unknown) => unknown;
+  unlock: (list: Partial<Unlocks>) => void;
+  upgrade: (list: Partial<Unlocks>) => void;
+  toggleFilters: () => void;
+  registerUndoChange: () => UndoChange;
+  undo: () => void;
+  checkEldermass: () => void;
+  redeemGift: () => void;
+  unlockAll: () => void;
+  isEldermass: () => boolean;
+  createRandomName: (lenConst: number, charPool?: string) => string;
+  createRandomVarietyAndColor: (ch1: null | number, ch2: null | number) => [string, number];
+};
 
-  /**
-   * Are we in iron will mode?
-   */
-  ironWill: boolean;
-  managers: Array<{
-    load: (saveData: Record<string, unknown>) => void;
-    save: (saveData: Record<string, unknown>) => void;
-  }>;
-  msg: (...args: Array<number | string>) => { span: HTMLElement };
-  opts: {
-    disableCMBR: boolean;
-    /**
-     * Should `confirm()` calls be skipped in the game?
-     */
-    noConfirm: boolean;
-    usePerSecondValues: boolean;
-  };
-  prestige: {
-    /**
-     * The production modifier from burned paragon only.
-     */
-    getBurnedParagonRatio: () => number;
-
-    /**
-     * The production modifier produced by paragon and burned paragon.
-     */
-    getParagonProductionRatio: () => number;
-
-    getPerk: (name: "carnivals" | "numeromancy" | "unicornmancy") => { researched: boolean };
-    meta: Array<{ meta: Array<{ researched: boolean }> }>;
-  };
-  religion: {
-    faith: number;
-    faithRatio: number;
-
-    /**
-     * The modifier applied to faith generation.
-     */
-    getApocryphaBonus: () => number;
-
-    /**
-     * @deprecated No longer exists. Use `getApocryphaBonus()`
-     */
-    getFaithBonus: () => number;
-
-    /**
-     * Get religion upgrades.
-     */
-    getRU: (name: ReligionUpgrade) => ReligionUpgradeInfo | undefined;
-
-    /**
-     * The modifier produced from collected faith.
-     * Subject to challenges.
-     */
-    getSolarRevolutionRatio: () => number;
-
-    /**
-     * Get transcendence upgrades.
-     */
-    getTU: (name: TranscendenceUpgrade) => TranscendenceUpgradeInfo | undefined;
-
-    /**
-     * Get ziggurath upgrades.
-     */
-    getZU: (name: ZiggurathUpgrade) => ZiggurathUpgradeInfo | undefined;
-
-    meta: Array<{
-      meta: Array<ReligionUpgradeInfo | ZiggurathUpgradeInfo | TranscendenceUpgradeInfo>;
-      provider: { getEffect: (bld: unknown, effect: unknown) => unknown };
-    }>;
-
-    pactsManager: {
-      necrocornDeficit: number;
-    };
-
-    praise: () => void;
-
-    religionUpgrades: Array<ReligionUpgradeInfo>;
-    tcratio: number;
-    transcendenceTier: number;
-    transcendenceUpgrades: Array<TranscendenceUpgradeInfo>;
-    zigguratUpgrades: Array<ZiggurathUpgradeInfo>;
-
-    /**
-     * Determine the price (worship) to reach the given transcendence tier.
-     */
-    _getTranscendTotalPrice: (tier: number) => number;
-
-    /**
-     * Reset faith and increase praise bonus according to transcendence tier.
-     */
-    _resetFaithInternal: (bonusRatio: number) => void;
-  };
-  religionTab: ReligionTab;
-  resetAutomatic: () => void;
-  resPool: {
-    get: (name: Resource) => ResourceInfo;
-    energyCons: number;
-    energyProd: number;
-    resources: Array<ResourceInfo>;
-    hasRes: (resources: Array<Price>) => boolean;
-  };
-  /**
-   * Saves the game and returns the save game.
-   */
-  save(): KGSaveData;
-  /**
-   * Import a savegame blob.
-   */
-  saveImportDropboxText(lzdata: string, callback: (error?: Error) => unknown): void;
-  science: {
-    get: (name: Technology) => TechnologyInfo;
-    getPolicy: (name: Policy) => PolicyInfo;
-    policies: Array<PolicyInfo>;
-    techs: Array<TechnologyInfo>;
-  };
-  server: Server;
-  space: {
-    getBuilding: (building: SpaceBuilding) => {
-      calculateEffects: (self: unknown, game: Game) => void;
-      /**
-       * An internationalized description for this space building.
-       */
-      description: string;
-
-      effects: Partial<BuildingEffects>;
-
-      /**
-       * An internationalized label for this space building.
-       */
-      label: string;
-      name: SpaceBuilding;
-      priceRatio: number;
-      prices: Array<Price>;
-      requiredTech: Array<"sattelites">;
-      unlocked: boolean;
-      unlocks: { policies: Array<"militarizeSpace" | "outerSpaceTreaty"> };
-      unlockScheme: {
-        name: "space";
-        threshold: number;
-      };
-      upgrades: {
-        buildings: Array<"observatory">;
-      };
-      val: number;
-    };
-    meta: Array<{
-      meta: Array<{
-        effects?: Partial<BuildingEffects>;
-        label: string;
-        name: string;
-        on: number;
-        prices: Array<Price>;
-        unlocked: boolean;
-        val: number;
-      }>;
-    }>;
-    planets: Array<PlanetMeta>;
-    programs: Array<{ name: Mission; label: string }>;
-  };
-  stats: {
-    statGroups: Array<{
-      title: string;
-      group: Array<{
-        name:
-          | "averageKittens"
-          | "buildingsConstructed"
-          | "eventsObserved"
-          | "kittensDead"
-          | "timePlayed"
-          | "totalChallengesCompleted"
-          | "totalClicks"
-          | "totalCrafts"
-          | "totalKittens"
-          | "totalParagon"
-          | "totalResets"
-          | "totalTrades"
-          | "totalYears"
-          | "transcendenceTier"
-          | "unicornsSacrificed";
-        title: string;
-        val: number;
-        unlocked: boolean;
-        defaultUnlocked: boolean;
-      }>;
-    }>;
-  };
-  tabs: [
-    GameTab,
-    VillageTab,
-    GameTab,
-    GameTab,
-    TradeTab,
-    ReligionTab,
-    SpaceTab,
-    TimeTab,
-    GameTab,
-    GameTab,
-    GameTab,
-  ];
-  telemetry: {
-    buildRevision: number;
-    guid: string;
-    version: string;
-  };
-  ticksPerSecond: number;
-  time: {
-    chronoforgeUpgrades: Array<ChronoForgeUpgradeInfo>;
-    /**
-     * Get ChronoForge upgrade.
-     */
-    getCFU: (name: ChronoForgeUpgrade) => ChronoForgeUpgradeInfo;
-    /**
-     * Get Void Space upgrade.
-     */
-    getVSU: (name: VoidSpaceUpgrade) => VoidSpaceUpgradeInfo;
-    heat: number;
-    isAccelerated: boolean;
-    meta: Array<{
-      meta: Array<ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>;
-      provider: { getEffect: (item: unknown, effect: unknown) => unknown };
-    }>;
-    voidspaceUpgrades: Array<{
-      name: Exclude<VoidSpaceUpgrade, "usedCryochambers">;
-      label: string;
-    }>;
-  };
-  timeAccelerationRatio: () => number;
-  timer: {
-    ticksTotal: number;
-  };
-  timeTab: TimeTab;
-  unlock: (value: unknown) => void;
-  upgrade: (value: unknown) => void;
-  ui: {
-    activeTabId: TabId;
-    confirm: (
-      title: string,
-      message: string,
-      callbackOk: () => void,
-      callbackCancel: () => void,
-    ) => void;
-    render: () => void;
-  };
-  village: {
-    assignJob: (job: unknown, count: number) => void;
-    getEffectLeader: <TDefaultObject>(
-      role: "manager" | "scientist",
-      defaultObject: TDefaultObject,
-    ) => TDefaultObject;
-    getFreeKittens: () => number;
-    getJob: (name: string) => unknown;
-    getJobLimit: (name: string) => number;
-    /**
-     * Get a list of resource consumptions per tick
-     *
-     * @see getResProduction
-     */
-    getResConsumption: () => { catnip: number };
-    /**
-     * Get a list of resource modifiers per tick
-     * This method returns positive villager production that can be multiplied by building bonuses
-     */
-    getResProduction: () => { catnip: number };
-    happiness: number;
-    huntAll: () => void;
-    jobs: Array<JobInfo>;
-    leader: Kitten | null;
-    makeLeader: (kitten: Kitten) => void;
-    removeLeader: () => void;
-    /**
-     * @deprecated
-     */
-    map: {
-      expeditionNode: {
-        x: number;
-        y: number;
-      };
-      explore: (x: number, y: number) => void;
-      toLevel: (x: number, y: number) => number;
-      getExplorationPrice: (x: number, y: number) => number;
-      villageData: Record<string, unknown>;
-    };
-    promoteKittens(): void;
-    sim: {
-      goldToPromote: (rank: number, value0: number, value1: number) => Array<unknown>;
-      kittens: Array<Kitten>;
-      promote: (leader: unknown, rank: number) => number;
-    };
-  };
-  villageTab: VillageTab;
-  workshop: {
-    crafts: Array<CraftableInfo>;
-    get: (
-      technology: "chronoforge" | "cryocomputing" | "goldOre" | "machineLearning" | "uplink",
-    ) => { researched: boolean };
-    getCraft: (name: ResourceCraftable) => CraftableInfo | undefined;
-    getCraftPrice: (craft: CraftableInfo) => Array<Price>;
-    upgrades: Array<UpgradeInfo>;
-  };
-  workshopTab: WorkshopTab;
+export type UnsafeFeatureSelection = {
+  beta: boolean;
+  main: boolean;
+  mobile: boolean;
 };

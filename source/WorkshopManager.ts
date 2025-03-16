@@ -9,13 +9,14 @@ import { type CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSet
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cerror } from "./tools/Log.js";
-import type { CraftableInfo, ResourceInfo } from "./types/craft.js";
-import type { Resource, ResourceCraftable, UpgradeInfo } from "./types/index.js";
-import type { VillageTab } from "./types/village.js";
+import type { Resource, ResourceCraftable } from "./types/index.js";
+import type { ResourceManager, UnsafeResource } from "./types/resources.js";
+import type { Village } from "./types/village.js";
+import type { UnsafeCraft, UnsafeUpgrade } from "./types/workshop.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
   readonly settings: WorkshopSettings;
-  readonly manager: TabManager<VillageTab>;
+  readonly manager: TabManager<Village>;
 
   static readonly DEFAULT_CONSUME_RATE = 1;
 
@@ -47,7 +48,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     }
 
     const upgrades = this._host.game.workshop.upgrades;
-    const toUnlock = new Array<UpgradeInfo>();
+    const toUnlock = new Array<UnsafeUpgrade>();
 
     workLoop: for (const setting of Object.values(this.settings.unlockUpgrades.upgrades)) {
       if (!setting.enabled) {
@@ -332,7 +333,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @param name The name of the craftable resource.
    * @returns The information object for the resource.
    */
-  getCraft(name: ResourceCraftable): CraftableInfo {
+  getCraft(name: ResourceCraftable): UnsafeCraft {
     const craft = this._host.game.workshop.getCraft(name);
     if (!craft) {
       throw new Error(`Unable to find craft '${name}'`);
@@ -391,7 +392,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @returns The amount of resources produced per tick, adjusted arbitrarily.
    */
   getTickVal(
-    resource: ResourceInfo,
+    resource: UnsafeResource,
     cacheManager?: MaterialsCache,
     preTrade: boolean | undefined = undefined,
   ): number | "ignore" {
@@ -469,7 +470,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @param name The resource to retrieve info for.
    * @returns The information object for the resource.
    */
-  getResource(name: Resource): ResourceInfo {
+  getResource(name: Resource): ReturnType<ResourceManager["get"]> {
     const res = this._host.game.resPool.get(name);
     if (isNil(res)) {
       throw new Error(`Unable to find resource ${name}`);
@@ -484,7 +485,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @returns How many items are currently available.
    */
   getValue(name: Resource): number {
-    return this.getResource(name).value;
+    return this.getResource(name).value ?? 0;
   }
 
   /**

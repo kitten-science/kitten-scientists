@@ -2,7 +2,8 @@ import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { type Game, type Mission, Missions } from "../types/index.js";
+import type { GamePage } from "../types/game.js";
+import { type Mission, Missions } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class MissionSetting extends Setting {
@@ -36,7 +37,7 @@ export class MissionSettings extends Setting {
     return items;
   }
 
-  static validateGame(game: Game, settings: MissionSettings) {
+  static validateGame(game: GamePage, settings: MissionSettings) {
     const inSettings = Object.keys(settings.missions);
     const inGame = game.space.programs.map(program => program.name);
 

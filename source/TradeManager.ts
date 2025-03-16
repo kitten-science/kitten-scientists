@@ -8,13 +8,14 @@ import { TradeSettings, type TradeSettingsItem } from "./settings/TradeSettings.
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cwarn } from "./tools/Log.js";
-import type { ResourceInfo } from "./types/craft.js";
-import type { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types/index.js";
+import type { Diplomacy, UnsafeRace, UnsafeTradeSellOffer } from "./types/diplomacy.js";
+import type { Race, Resource } from "./types/index.js";
+import type { UnsafeResource } from "./types/resources.js";
 
 export class TradeManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: TradeSettings;
-  readonly manager: TabManager<TradeTab>;
+  readonly manager: TabManager<Diplomacy>;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
@@ -295,7 +296,7 @@ export class TradeManager implements Automation {
           basePrice: number;
           currentEm: number;
           priceSum: number;
-          race: RaceInfo;
+          race: UnsafeRace;
         }
       >
     > = {};
@@ -427,7 +428,7 @@ export class TradeManager implements Automation {
       if (!this._host.game.diplomacy.get("lizards").unlocked) {
         if (manpower >= 1000) {
           this._host.game.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
+          const unlockedRace = mustExist(this._host.game.diplomacy.unlockRandomRace());
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           context.requestGameUiRefresh = true;
@@ -438,7 +439,7 @@ export class TradeManager implements Automation {
       if (!this._host.game.diplomacy.get("sharks").unlocked) {
         if (manpower >= 1000) {
           this._host.game.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
+          const unlockedRace = mustExist(this._host.game.diplomacy.unlockRandomRace());
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           context.requestGameUiRefresh = true;
@@ -449,7 +450,7 @@ export class TradeManager implements Automation {
       if (!this._host.game.diplomacy.get("griffins").unlocked) {
         if (manpower >= 1000) {
           this._host.game.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
+          const unlockedRace = mustExist(this._host.game.diplomacy.unlockRandomRace());
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           context.requestGameUiRefresh = true;
@@ -463,7 +464,7 @@ export class TradeManager implements Automation {
       ) {
         if (manpower >= 1000) {
           this._host.game.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
+          const unlockedRace = mustExist(this._host.game.diplomacy.unlockRandomRace());
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           context.requestGameUiRefresh = true;
@@ -477,7 +478,7 @@ export class TradeManager implements Automation {
       ) {
         if (manpower >= 1000) {
           this._host.game.resPool.get("manpower").value -= 1000;
-          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
+          const unlockedRace = mustExist(this._host.game.diplomacy.unlockRandomRace());
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           context.requestGameUiRefresh = true;
@@ -492,7 +493,7 @@ export class TradeManager implements Automation {
       ) {
         if (manpower >= 1000) {
           mustExist(this._host.game.resPool.get("manpower")).value -= 1000;
-          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
+          const unlockedRace = mustExist(this._host.game.diplomacy.unlockRandomRace());
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           context.requestGameUiRefresh = true;
@@ -506,7 +507,7 @@ export class TradeManager implements Automation {
       ) {
         if (manpower >= 1000) {
           mustExist(this._host.game.resPool.get("manpower")).value -= 1000;
-          const unlockedRace = this._host.game.diplomacy.unlockRandomRace();
+          const unlockedRace = mustExist(this._host.game.diplomacy.unlockRandomRace());
           this._host.engine.iactivity("upgrade.race", [unlockedRace.title], "ks-upgrade");
           manpower -= 1000;
           context.requestGameUiRefresh = true;
@@ -650,7 +651,7 @@ export class TradeManager implements Automation {
    * @param race The race to check.
    * @returns The resources returned from an average trade and their amount.
    */
-  getAverageTrade(race: RaceInfo): Partial<Record<Resource, number>> {
+  getAverageTrade(race: UnsafeRace): Partial<Record<Resource, number>> {
     // TODO: This is a lot of magic. It's possible some of it was copied directly from the game.
     const standingRatio =
       this._host.game.getEffect("standingRatio") +
@@ -710,7 +711,7 @@ export class TradeManager implements Automation {
    * @param race The race to trade with.
    * @returns `true` if the trade is valid; `false` otherwise.
    */
-  private _isValidTrade(item: TradeInfo, race: RaceInfo): boolean {
+  private _isValidTrade(item: UnsafeTradeSellOffer, race: UnsafeRace): boolean {
     return (
       // Do we have enough embassies to receive the item?
       !(item.minLevel && race.embassyLevel < item.minLevel) &&
@@ -850,7 +851,7 @@ export class TradeManager implements Automation {
    * @param name The race to get the information object for.
    * @returns The information object for the given race.
    */
-  getRace(name: Race): RaceInfo {
+  getRace(name: Race): UnsafeRace {
     const raceInfo = this._host.game.diplomacy.get(name);
     if (isNil(raceInfo)) {
       throw new Error(`Unable to retrieve race '${name}'`);
@@ -864,7 +865,7 @@ export class TradeManager implements Automation {
    * @param race The race to get the button reference for.
    * @returns The reference to the trade button.
    */
-  getTradeButton(race: string): BuildButton | null {
+  getTradeButton(race: string) {
     const panel = this.manager.tab.racePanels.find(subject => subject.race.name === race);
     return panel?.tradeBtn ?? null;
   }
@@ -877,8 +878,8 @@ export class TradeManager implements Automation {
    */
   singleTradePossible(
     sectionTrigger: number,
-    catpower: ResourceInfo,
-    gold: ResourceInfo,
+    catpower: Required<UnsafeResource>,
+    gold: Required<UnsafeResource>,
     trade?: TradeSettingsItem,
   ): boolean {
     const trigger = trade

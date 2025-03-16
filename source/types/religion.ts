@@ -1,116 +1,381 @@
+import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import type {
-  BuildButton,
-  BuildingEffects,
-  ButtonModernModel,
-  Game,
-  GameTab,
+  BuildingStackableBtn,
+  BuildingStackableBtnController,
+  ButtonModern,
+  ButtonModernController,
+  IChildrenAware,
+  IGameAware,
+  Panel,
+  Tab,
+  TabManager,
+  UnsafeBuildingStackableBtnModel,
+  UnsafeBuildingStackableBtnModelDefaults,
+  UnsafeButtonModernModel,
+  UnsafeButtonModernModelDefaults,
+} from "./core.js";
+import type { GamePage } from "./game.js";
+import type {
+  Building,
+  BuildingEffect,
+  BuyItemResultReason,
+  Link,
+  Pact,
   Price,
-  RefineTearsBtnController,
-  TransformBtnController,
+  ReligionUpgrade,
+  Resource,
+  TranscendenceUpgrade,
   Unlocks,
+  UnsafeBuyItemResult,
+  Upgrade,
+  ZiggurathUpgrade,
 } from "./index.js";
 
-export type ReligionTab = GameTab & {
+export type ReligionManager = TabManager & {
+  game: GamePage;
+  pactsManager: PactsManager;
   /**
-   * Refine tears.
+   * your TT level!
    */
-  refineBtn?: BuildButton<string, ButtonModernModel, RefineTearsBtnController> | null;
-
+  transcendenceTier: number;
   /**
-   * Refine time crystals.
+   * an amount of faith temporarily moved to a praised pool (aka worship)
    */
-  refineTCBtn?: BuildButton<string, ButtonModernModel, TransformBtnController> | null;
-
+  faith: number;
   /**
-   * Religion upgrade (Order of the sun) buttons.
+   * an amount of converted faith obtained through the faith reset (aka eupyphany)
    */
-  rUpgradeButtons: Array<BuildButton<ReligionUpgrade>>;
-
+  faithRatio: number;
+  tcratio: number;
+  corruption: number;
+  alicornCounter: number;
   /**
-   * Sacrifice alicorns.
+   * the amount of currently active HG buildings (typically refils during reset)
    */
-  sacrificeAlicornsBtn: BuildButton<string, ButtonModernModel, TransformBtnController> | null;
+  activeHolyGenocide: number;
+  new (game: GamePage): ReligionManager;
+  resetState: () => void;
+  save: (saveData: unknown) => void;
+  load: (saveData: unknown) => void;
+  getCorruptionPerTickProduction: (pretendExistNecrocorn?: boolean | undefined) => number;
+  getCorruptionPerTickConsumption: () => number;
+  getCorruptionDeficitPerTick: () => number;
+  getCorruptionPerTick: (pretendExistNecrocorn?: boolean | undefined) => number;
+  update: () => void;
+  fastforward: (daysOffset: number) => void;
+  corruptNecrocorns: () => number;
+  necrocornsNaiveFastForward: (daysOffset: number, times: number) => void;
+  gesSiphoningAlicornConsumptionPerDay: () => void;
+  necrocornFastForward: (days: number, times: number) => void;
+  triggerOrderOfTheVoid: (numberOfTicks: number) => void;
+  zigguratUpgrades: Array<UnsafeZiggurathUpgrade>;
+  religionUpgrades: Array<UnsafeReligionUpgrade>;
+  transcendenceUpgrades: Array<UnsafeTranscendenceUpgrade>;
+  necrocornDeficitPunishment: () => void;
+  effectsBase: {
+    kittensKarmaPerMinneliaRatio: number;
+    pactNecrocornConsumption: number;
+  };
+  getZU: (name: ZiggurathUpgrade) => Required<UnsafeZiggurathUpgrade>;
+  getRU: (name: ReligionUpgrade) => Required<UnsafeReligionUpgrade>;
+  getTU: (name: TranscendenceUpgrade) => Required<UnsafeTranscendenceUpgrade>;
+  getPact: (name: Pact) => UnsafePact;
+  getSolarRevolutionRatio: () => number;
+  getApocryphaBonus: () => number;
+  getHGScalingBonus: () => number;
+  turnHGOff: () => void;
+  praise: () => void;
+  getApocryphaResetBonus: (bonusRatio: number) => number;
+  resetFaith: (bonusRatio: number, withConfirmation: boolean) => void;
+  _resetFaithInternal: (bonusRatio: number) => void;
+  transcend: () => void;
+  _getTranscendTotalPrice: (tier: number) => number;
+  _getTranscendNextPrice: () => void;
+  unlockAll: () => void;
+  undo: (data: UnsafeReligionUndo) => void;
+};
 
+export type ZigguratBtnController = BuildingStackableBtnController & {
+  defaults: () => UnsafeZigguratBtnModelDefaults;
+  getMetadata: (model: UnsafeZigguratBtnModel) => UnsafeZiggurathUpgrade;
+  getName: (model: UnsafeZigguratBtnModel) => string;
+  getPrices: (model: UnsafeZigguratBtnModel) => Array<Price>;
+};
+
+export type ReligionBtnController = BuildingStackableBtnController & {
+  defaults: () => UnsafeReligionBtnModelDefaults;
+  getMetadata: (model: UnsafeReligionBtnModel) => UnsafeReligionUpgrade;
+  hasSellLink: (model: UnsafeReligionBtnModel) => boolean;
+  getPrices: (model: unknown) => Array<Price>;
+  updateVisible: () => void;
+};
+
+export type TranscendenceBtnController = BuildingStackableBtnController & {
+  defaults: () => UnsafeTranscendenceBtnModelDefaults;
+  getMetadata: (model: UnsafeTranscendenceBtnModel) => UnsafeTranscendenceUpgrade;
+};
+
+export type PraiseBtnController = ButtonModernController & {
+  getName: (model: UnsafeButtonModernModel) => string;
+};
+
+export type ResetFaithBtnController = ButtonModernController & {
+  getName: (model: UnsafeButtonModernModel) => string;
+  updateVisible: (model: UnsafeButtonModernModel) => string;
+};
+
+export type TranscendBtnController = ButtonModernController & {
+  getName: (model: UnsafeButtonModernModel) => string;
+  updateEnabled: (model: UnsafeButtonModernModel) => string;
+  updateVisible: (model: UnsafeButtonModernModel) => string;
+};
+
+export type TransformBtnController<
+  TControllerOpts extends Record<string, unknown> | undefined = Record<string, unknown>,
+> = ButtonModernController<TControllerOpts> & {
+  new (game: GamePage, controllerOpts?: TControllerOpts): TransformBtnController<TControllerOpts>;
+
+  defaults: () => UnsafeTransformBtnModelDefaults;
+  fetchModel: (options: unknown) => UnsafeTransformBtnModel;
+  _newLink: (model: UnsafeTransformBtnModel, divider: number) => Link;
+  buyItem: (model: UnsafeTransformBtnModel, event: Event) => UnsafeBuyItemResult;
+  /**
+   * Calculates the max number of transformations the player can afford to do.
+   * If the resource has a storage cap (such as during a Unicorn Tears Challenge),
+   * it won't give the option to go farther than 1 transformation above that cap.
+   */
+  _canAfford: (model: UnsafeTransformBtnModel, divider: number) => boolean;
+  transform: (
+    model: UnsafeTransformBtnModel,
+    divider: number,
+    event: unknown,
+    callback: (itemBought: boolean, reason: BuyItemResultReason) => void,
+  ) => Link;
+  _transform: (model: UnsafeTransformBtnModel, amt: number) => boolean;
+};
+
+export type MultiLinkBtn<
+  TModel extends UnsafeButtonModernModel,
+  TController extends ButtonModernController | TransformBtnController,
+  TId extends string | undefined = undefined,
+> = ButtonModern<TModel, TController, TId> & {
+  all?: Link;
+  half?: Link;
+  fifth?: Link;
+  renderLinks: () => void;
+  update: () => void;
+};
+
+export type RefineTearsBtnController = ButtonModernController & {
+  defaults: () => UnsafeRefineTearsBtnModelDefaults;
+  fetchModel: (options: unknown) => UnsafeRefineTearsBtnModel;
+  _newLink: (model: UnsafeRefineTearsBtnModel, count: number) => Link;
+  _canAfford: (model: UnsafeRefineTearsBtnModel, count: unknown) => boolean;
+  buyItem: (model: UnsafeRefineTearsBtnModel, event: Event, count: number) => UnsafeBuyItemResult;
+  refine: () => void;
+};
+
+export type CryptotheologyWGT = IChildrenAware<
+  BuildingStackableBtn<
+    UnsafeBuildingStackableBtnModel<{
+      id: Building;
+      name: string;
+      description: string;
+      controller: AnyFunction;
+    }>,
+    TranscendenceBtnController
+  >
+> &
+  IGameAware & {
+    new (game: GamePage): CryptotheologyWGT;
+    render: (container?: HTMLElement) => void;
+    update: () => void;
+  };
+
+export type CryptotheologyPanel = Panel<CryptotheologyWGT> & {
+  visible: boolean;
+};
+
+export type PactsWGT = IChildrenAware<
+  BuildingStackableBtn<
+    UnsafeBuildingStackableBtnModel<{
+      id: Building;
+      name: string;
+      description: string;
+      controller: AnyFunction;
+    }>,
+    PactsBtnController
+  >
+> &
+  IGameAware & {
+    new (game: GamePage): PactsWGT;
+    render: (container?: HTMLElement) => void;
+    update: () => void;
+  };
+
+export type PactsPanel = Panel<PactsWGT> & {
+  visible: boolean;
+};
+
+export type PactsBtnController = BuildingStackableBtnController & {
+  defaults: () => UnsafePactsBtnModelDefaults;
+  getMetadata: (model: UnsafePactsBtnModel) => UnsafePact;
+  updateEnabled: (model: UnsafePactsBtnModel) => void;
+  shouldBeBough: (model: UnsafePactsBtnModel, game: GamePage) => boolean;
+  buyItem: (
+    model: UnsafePactsBtnModel,
+    event: Event,
+  ) => UnsafeBuyItemResult | ReturnType<BuildingStackableBtnController["buyItem"]>;
+  build: (model: UnsafePactsBtnModel, maxBld: number) => number;
+};
+
+export type RefineBtn = ButtonModern<
+  UnsafeRefineTearsBtnModel<{
+    name: string;
+    description: string;
+    prices: Array<Price>;
+    controller: RefineTearsBtnController;
+  }>,
+  RefineTearsBtnController
+> & {
+  renderLinks: () => void;
+  update: () => void;
+};
+
+export type PactsManager = {
+  game: GamePage;
+  necrocornDeficit: number;
+  fractureNecrocornDeficit: number;
+  pacts: Array<UnsafePact>;
+  necrocornDeficitPunishment: () => void;
+  new (game: GamePage): PactsManager;
+  resetState: () => void;
+  getPactsTextSum: () => string;
+  getPactsTextDeficit: () => string;
+  getNecrocornDeficitConsumptionModifier: () => number;
+  getSiphonedCorruption: (days: number) => number;
+  necrocornConsumptionDays: (days: number) => void;
+  pactsMilleniumKarmaKittens: (millenium: number) => number;
+};
+
+export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
   /**
    * Sacrifice unicorns.
    */
-  sacrificeBtn: BuildButton<string, ButtonModernModel, TransformBtnController> | null;
+  sacrificeBtn: MultiLinkBtn<UnsafeTransformBtnModel, TransformBtnController> | null;
+  /**
+   * Sacrifice alicorns.
+   */
+  sacrificeAlicornsBtn: MultiLinkBtn<UnsafeTransformBtnModel, TransformBtnController> | null;
 
   /**
    * Ziggurath upgrade buttons.
    */
-  zgUpgradeButtons: Array<BuildButton<ZiggurathUpgrade>>;
+  zgUpgradeButtons: Array<
+    BuildingStackableBtn<
+      UnsafeBuildingStackableBtnModel<{
+        id: Upgrade;
+        name: string;
+        description: string;
+        prices: Array<Price>;
+        controller: ZigguratBtnController;
+        handler: AnyFunction;
+      }>,
+      ZigguratBtnController,
+      ZiggurathUpgrade
+    >
+  >;
+  /**
+   * Religion upgrade (Order of the sun) buttons.
+   */
+  rUpgradeButtons: Array<
+    BuildingStackableBtn<
+      UnsafeBuildingStackableBtnModel<{
+        id: Upgrade;
+        name: string;
+        description: string;
+        prices: Array<Price>;
+        controller: ReligionBtnController;
+        handler: AnyFunction;
+      }>,
+      ReligionBtnController
+    >
+  >;
+  /**
+   * Religion upgrade (Order of the sun) buttons.
+   */
+  pactUpgradeButtons: Array<unknown>;
+
+  ctPanel: CryptotheologyPanel;
+  ptPanel: PactsPanel;
+  render: (container?: HTMLElement) => void;
+  update: () => void;
+
+  /**
+   * Refine tears.
+   */
+  refineBtn?: RefineBtn;
+
+  /**
+   * Refine time crystals.
+   */
+  refineTCBtn?: MultiLinkBtn<
+    UnsafeTransformBtnModel<{
+      name: string;
+      description: string;
+      prices: [{ name: Resource; val: number }];
+      controller: TransformBtnController;
+      gainMultiplier: () => number;
+      gainedResource: "relic";
+      logTextID: "religion.refineTCsBtn.refine.msg";
+      logfilterID: "tcRefine";
+    }>,
+    TransformBtnController
+  >;
+  praiseBtn?: ButtonModern<
+    UnsafeButtonModernModel<{
+      name: string;
+      description: string;
+      controller: PraiseBtnController;
+      handler: AnyFunction;
+    }>,
+    PraiseBtnController
+  >;
+  adoreBtn?: ButtonModern<
+    UnsafeButtonModernModel<{
+      name: string;
+      description: string;
+      controller: PraiseBtnController;
+      handler: AnyFunction;
+    }>,
+    ResetFaithBtnController
+  >;
+  transcendBtn?: ButtonModern<
+    UnsafeButtonModernModel<{
+      name: string;
+      description: string;
+      controller: TranscendBtnController;
+      handler: AnyFunction;
+    }>,
+    TranscendBtnController
+  >;
 };
 
-export enum UnicornItemVariant {
-  Cryptotheology = "c",
-  OrderOfTheSun = "s",
-  Ziggurat = "z",
-  UnicornPasture = "zp",
-}
-
-export const ReligionUpgrades = [
-  "apocripha",
-  "basilica",
-  "goldenSpire",
-  "scholasticism",
-  "solarRevolution",
-  "solarchant",
-  "stainedGlass",
-  "sunAltar",
-  "templars",
-  "transcendence",
-] as const;
-export type ReligionUpgrade = (typeof ReligionUpgrades)[number];
-
-export const TranscendenceUpgrades = [
-  "blackCore",
-  "blackLibrary",
-  "blackNexus",
-  "blackObelisk",
-  "blackRadiance",
-  "blazar",
-  "darkNova",
-  "holyGenocide",
-  "mausoleum",
-  "singularity",
-] as const;
-export type TranscendenceUpgrade = (typeof TranscendenceUpgrades)[number];
-
-export const ZiggurathUpgrades = [
-  "blackPyramid",
-  "ivoryCitadel",
-  "ivoryTower",
-  "marker",
-  "skyPalace",
-  "sunspire",
-  "unicornGraveyard",
-  "unicornNecropolis",
-  "unicornTomb",
-  "unicornUtopia",
-] as const;
-export type ZiggurathUpgrade = (typeof ZiggurathUpgrades)[number];
-
-export type AbstractReligionUpgradeInfo = {
-  /**
-   * An internationalized label for this religion upgrade.
-   */
+export type UnsafeReligionUpgrade = {
+  name: ReligionUpgrade;
   label: string;
-
   /**
-   * The costs of this upgrade.
+   * An internationalized description for this religion upgrade.
    */
+  description: string;
   prices: Array<Price>;
-
-  /**
-   * Has this upgrade been unlocked?
-   */
+  faith: number;
+  effects?: Partial<Record<BuildingEffect, number>>;
+  calculateEffects: (self: UnsafeReligionUpgrade, game: GamePage) => void;
+  noStackable: boolean;
+  priceRatio: number;
   unlocked?: boolean;
-
-  /**
-   * How many of these do you have?
-   */
-  val: number;
+  researched?: boolean;
 
   /**
    * This flag is set by KS itself to "hide" a given build from being
@@ -119,54 +384,149 @@ export type AbstractReligionUpgradeInfo = {
    */
   rHidden?: boolean;
 
-  unlocks?: Partial<Unlocks>;
+  val?: number;
+  on?: number;
+  isAutomationEnabled?: boolean | null;
+  lackResConvert?: boolean;
+  toggleable?: boolean;
 };
 
-export type ReligionUpgradeInfo = AbstractReligionUpgradeInfo & {
-  calculateEffects: (self: unknown, game: Game) => void;
+export type UnsafeZiggurathUpgrade = {
+  name: ZiggurathUpgrade;
+  label: string;
   /**
    * An internationalized description for this religion upgrade.
    */
   description: string;
-
-  effects: Partial<BuildingEffects>;
-
-  faith: number;
-
-  name: ReligionUpgrade;
-  noStackable: boolean;
-  on: boolean;
+  prices: Array<Price>;
   priceRatio: number;
-};
-
-export type ZiggurathUpgradeInfo = AbstractReligionUpgradeInfo & {
-  calculateEffects: (self: unknown, game: Game) => void;
+  effects?: Partial<Record<BuildingEffect, number>>;
+  calculateEffects: (self: UnsafeZiggurathUpgrade, game: GamePage) => void;
+  unlocked: boolean;
   defaultUnlocked: boolean;
+  unlocks?: Partial<Unlocks>;
 
   /**
-   * An internationalized description for this space building.
+   * This flag is set by KS itself to "hide" a given build from being
+   * processed in the BulkManager. This is likely not ideal and will
+   * be refactored later.
    */
-  description: string;
+  rHidden?: boolean;
 
-  effects: Partial<BuildingEffects>;
-
-  name: ZiggurathUpgrade;
-  priceRatio: number;
+  val?: number;
+  on?: number;
+  noStackable?: boolean;
+  isAutomationEnabled?: boolean | null;
+  lackResConvert?: boolean;
+  toggleable?: boolean;
 };
 
-export type TranscendenceUpgradeInfo = AbstractReligionUpgradeInfo & {
-  calculateEffects: (self: unknown, game: Game) => void;
-
-  /**
-   * An internationalized description for this space building.
-   */
-  description: string;
-
-  effects: Partial<BuildingEffects>;
-
-  flavor: string;
-
+export type UnsafeTranscendenceUpgrade = {
   name: TranscendenceUpgrade;
-  priceRatio?: number;
+  label: string;
+  /**
+   * An internationalized description for this religion upgrade.
+   */
+  description: string;
+  prices: Array<Price>;
+  priceRatio: number;
+  effects?: Partial<Record<BuildingEffect, number>>;
+  calculateEffects?: (self: UnsafeTranscendenceUpgrade, game: GamePage) => void;
+  upgrades?: Partial<Unlocks>;
+  unlocked: boolean;
+  flavor: string;
   tier: number;
+
+  /**
+   * This flag is set by KS itself to "hide" a given build from being
+   * processed in the BulkManager. This is likely not ideal and will
+   * be refactored later.
+   */
+  rHidden?: boolean;
+
+  val?: number;
+  on?: number;
+  noStackable?: boolean;
+  isAutomationEnabled?: boolean | null;
+  lackResConvert?: boolean;
+  toggleable?: boolean;
 };
+
+export type UnsafePact = {
+  name: Pact;
+  label: string;
+  description: string;
+  prices: Array<Price>;
+  unlocks: Partial<Unlocks>;
+  priceRatio: number;
+  effects?: Partial<Record<BuildingEffect, number>>;
+  unlocked: boolean;
+  calculateEffects: (self: UnsafePact, game: GamePage) => void;
+};
+
+export type UnsafeReligionUndo = {
+  action: "refine";
+  resTo: Resource;
+  resFrom: Resource;
+  valTo: number;
+  valFrom: number;
+};
+
+export type UnsafeZigguratBtnModelDefaults = {
+  tooltipName: boolean;
+} & UnsafeBuildingStackableBtnModelDefaults;
+
+export type UnsafeZigguratBtnModel<
+  TModelOptions extends Record<string, unknown> | undefined = Record<string, unknown>,
+> = UnsafeZigguratBtnModelDefaults & UnsafeBuildingStackableBtnModel<TModelOptions>;
+
+export type UnsafeReligionBtnModelDefaults = {
+  tooltipName: boolean;
+} & UnsafeBuildingStackableBtnModelDefaults;
+
+export type UnsafeReligionBtnModel<
+  TModelOptions extends Record<string, unknown> | undefined = Record<string, unknown>,
+> = UnsafeReligionBtnModelDefaults & UnsafeBuildingStackableBtnModel<TModelOptions>;
+
+export type UnsafeTranscendenceBtnModelDefaults = {
+  tooltipName: boolean;
+} & UnsafeBuildingStackableBtnModelDefaults;
+
+export type UnsafeTranscendenceBtnModel<
+  TModelOptions extends Record<string, unknown> | undefined = Record<string, unknown>,
+> = UnsafeTranscendenceBtnModelDefaults & UnsafeBuildingStackableBtnModel<TModelOptions>;
+
+export type UnsafeTransformBtnModelDefaults = {
+  hasResourceHover: boolean;
+  simplePrices: boolean;
+} & UnsafeButtonModernModelDefaults;
+
+export type UnsafeTransformBtnModel<
+  TModelOptions extends Record<string, unknown> | undefined = Record<string, unknown>,
+> = {
+  fifthLink: Link;
+  halfLink: Link;
+  allLink: Link;
+} & UnsafeTransformBtnModelDefaults &
+  UnsafeButtonModernModel<TModelOptions>;
+
+export type UnsafeRefineTearsBtnModelDefaults = {
+  hasResourceHover: boolean;
+} & UnsafeButtonModernModelDefaults;
+
+export type UnsafeRefineTearsBtnModel<
+  TModelOptions extends Record<string, unknown> | undefined = Record<string, unknown>,
+> = {
+  fiveLink: Link;
+  twentyFiveLink: Link;
+  hundredLink: Link;
+} & UnsafeRefineTearsBtnModelDefaults &
+  UnsafeButtonModernModel<TModelOptions>;
+
+export type UnsafePactsBtnModelDefaults = {
+  tooltipName: boolean;
+} & UnsafeBuildingStackableBtnModelDefaults;
+
+export type UnsafePactsBtnModel<
+  TModelOptions extends Record<string, unknown> | undefined = Record<string, unknown>,
+> = UnsafePactsBtnModelDefaults & UnsafeBuildingStackableBtnModel<TModelOptions>;

@@ -1,12 +1,13 @@
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import {
+  type FaithItem,
   ReligionUpgrades,
   TranscendenceUpgrades,
+  type UnicornItem,
   UnicornItemVariant,
   ZiggurathUpgrades,
 } from "../types/index.js";
-import type { FaithItem, UnicornItem } from "./ReligionSettings.js";
 import { Setting, SettingThreshold } from "./Settings.js";
 
 export class ResetReligionBuildingSetting extends SettingThreshold {

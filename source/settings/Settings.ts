@@ -1,7 +1,6 @@
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import type { Resource, SpaceBuilding } from "../types/index.js";
+import type { ReligionItem, Resource, SpaceBuilding } from "../types/index.js";
 import type { BonfireItem } from "./BonfireSettings.js";
-import type { ReligionItem } from "./ReligionSettings.js";
 import type { TimeItem } from "./TimeSettings.js";
 
 export type Requirement = Resource | false;

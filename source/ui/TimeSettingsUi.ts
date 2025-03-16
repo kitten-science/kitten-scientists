@@ -3,7 +3,7 @@ import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
-import type { TimeSettings } from "../settings/TimeSettings.js";
+import type { TimeItem, TimeSettings } from "../settings/TimeSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
@@ -93,11 +93,11 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
 
           new HeaderListItem(host, host.engine.i18n("$science.voidSpace.label")),
           ...host.game.time.voidspaceUpgrades
-            .filter(item => !isNil(this.setting.buildings[item.name]))
+            .filter(item => item.name in this.setting.buildings)
             .map(building =>
               BuildSectionTools.getBuildOption(
                 host,
-                this.setting.buildings[building.name],
+                this.setting.buildings[building.name as TimeItem],
                 locale,
                 this.setting,
                 building.label,

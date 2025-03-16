@@ -8,12 +8,13 @@ import { VillageSettings } from "./settings/VillageSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import type { Resource } from "./types/index.js";
-import type { JobInfo, VillageTab } from "./types/village.js";
+import type { UnsafeResource } from "./types/resources.js";
+import type { UnsafeJob, Village } from "./types/village.js";
 
 export class VillageManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: VillageSettings;
-  readonly manager: TabManager<VillageTab>;
+  readonly manager: TabManager<Village>;
   private readonly _cacheManager: MaterialsCache;
   private readonly _workshopManager: WorkshopManager;
 
@@ -65,7 +66,7 @@ export class VillageManager implements Automation {
 
     for (let assignedKitten = 0; assignedKitten < freeKittens; ++assignedKitten) {
       // Find all jobs where we haven't assigned the maximum desired kittens yet.
-      const jobsNotCapped = new Array<{ job: JobInfo; count: number; toCap: number }>();
+      const jobsNotCapped = new Array<{ job: UnsafeJob; count: number; toCap: number }>();
       for (const job of this._host.game.village.jobs) {
         // Skip disabled jobs and those that haven't been unlocked;
         const enabled = this.settings.jobs[job.name].enabled;
@@ -191,7 +192,7 @@ export class VillageManager implements Automation {
       ) {
         this._host.engine.iactivity("act.promote", [rank + 1], "ks-promote");
         this._host.game.villageTab.censusPanel?.census.renderGovernment(
-          this._host.game.villageTab.censusPanel.census,
+          this._host.game.villageTab.censusPanel.census.container,
         );
         this._host.game.villageTab.censusPanel?.census.update();
         this._host.engine.storeForSummary("promote", 1);
