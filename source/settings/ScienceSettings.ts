@@ -1,5 +1,5 @@
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import type { Game } from "../types/index.js";
+import type { GamePage } from "../types/game.js";
 import { PolicySettings } from "./PolicySettings.js";
 import { Setting } from "./Settings.js";
 import { TechSettings } from "./TechSettings.js";
@@ -24,7 +24,7 @@ export class ScienceSettings extends Setting {
     this.observe = observe;
   }
 
-  static validateGame(game: Game, settings: ScienceSettings) {
+  static validateGame(game: GamePage, settings: ScienceSettings) {
     PolicySettings.validateGame(game, settings.policies);
     TechSettings.validateGame(game, settings.techs);
   }

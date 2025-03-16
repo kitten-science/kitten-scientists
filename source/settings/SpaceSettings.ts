@@ -1,6 +1,7 @@
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { type Game, type SpaceBuilding, SpaceBuildings } from "../types/index.js";
+import type { GamePage } from "../types/game.js";
+import { type SpaceBuilding, SpaceBuildings } from "../types/index.js";
 import { MissionSettings } from "./MissionSettings.js";
 import { SettingTrigger, SettingTriggerMax } from "./Settings.js";
 
@@ -38,7 +39,7 @@ export class SpaceSettings extends SettingTrigger {
     return items;
   }
 
-  static validateGame(game: Game, settings: SpaceSettings) {
+  static validateGame(game: GamePage, settings: SpaceSettings) {
     MissionSettings.validateGame(game, settings.unlockMissions);
   }
 

@@ -5,6 +5,7 @@ import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import type { ResetTimeSettings } from "../settings/ResetTimeSettings.js";
 import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
+import type { TimeItem } from "../settings/TimeSettings.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
@@ -45,11 +46,11 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
 
           new HeaderListItem(host, host.engine.i18n("$science.voidSpace.label")),
           ...host.game.time.voidspaceUpgrades
-            .filter(item => !isNil(this.setting.buildings[item.name]))
+            .filter(item => item.name in this.setting.buildings)
             .map(building =>
               this._getResetOption(
                 host,
-                this.setting.buildings[building.name],
+                this.setting.buildings[building.name as TimeItem],
                 locale,
                 settings,
                 building.label,

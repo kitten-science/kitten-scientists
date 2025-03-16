@@ -5,16 +5,15 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cdebug, cwarn } from "./tools/Log.js";
+import type { BuildingStackableBtn, UnsafeBuildingBtnModel } from "./types/core.js";
+import type { Mission, SpaceBuilding } from "./types/index.js";
 import type {
-  BuildButton,
-  ButtonModernController,
-  ButtonModernModel,
-  Mission,
-  SpaceBuilding,
-  SpaceBuildingInfo,
+  PlanetBuildingBtnController,
   SpaceTab,
-} from "./types/index.js";
+  UnsafePlanet,
+  UnsafeSpaceBuilding,
+} from "./types/space.js";
 
 export class SpaceManager implements Automation {
   private readonly _host: KittenScientists;
@@ -67,7 +66,7 @@ export class SpaceManager implements Automation {
     const sectionTrigger = this.settings.trigger;
 
     // Get the current metadata for all the referenced buildings.
-    const metaData: Partial<Record<SpaceBuilding, SpaceBuildingInfo>> = {};
+    const metaData: Partial<Record<SpaceBuilding, Required<UnsafeSpaceBuilding>>> = {};
     for (const build of Object.values(builds)) {
       metaData[build.building] = this.getBuild(build.building);
     }
@@ -92,7 +91,7 @@ export class SpaceManager implements Automation {
       return;
     }
 
-    const missions = this._host.game.space.meta[0].meta;
+    const missions = this._host.game.space.meta[0].meta as Array<Required<UnsafePlanet>>;
     missionLoop: for (let i = 0; i < missions.length; i++) {
       // If the mission is already purchased or not available yet, continue with the next one.
       if (
@@ -144,7 +143,11 @@ export class SpaceManager implements Automation {
 
     const amountTemp = amountCalculated;
     const label = build.label;
-    amountCalculated = this._bulkManager.construct(button.model, button, amountCalculated);
+    amountCalculated = this._bulkManager.construct(
+      button.model,
+      button.controller,
+      amountCalculated,
+    );
     if (amountCalculated !== amountTemp) {
       cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
@@ -163,26 +166,36 @@ export class SpaceManager implements Automation {
     return amountCalculated;
   }
 
-  getBuild(name: SpaceBuilding): SpaceBuildingInfo {
+  getBuild(name: SpaceBuilding): Required<UnsafeSpaceBuilding> {
     return this._host.game.space.getBuilding(name);
   }
 
-  private _getBuildButton(
-    id: string,
-  ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
+  private _getBuildButton(id: string) {
     const panels = this.manager.tab.planetPanels;
 
     if (isNil(panels)) {
       return null;
     }
 
+    let button: BuildingStackableBtn<
+      UnsafeBuildingBtnModel<{
+        id: SpaceBuilding;
+        planet: UnsafePlanet;
+        controller: PlanetBuildingBtnController;
+      }>,
+      PlanetBuildingBtnController,
+      SpaceBuilding
+    > | null = null;
     for (const panel of panels) {
-      const button = panel.children.find(child => child.id === id);
+      button = panel.children.find(child => child.id === id) ?? null;
+
       if (!isNil(button)) {
-        return button as BuildButton<string, ButtonModernModel, ButtonModernController>;
+        return button;
       }
     }
 
-    return null;
+    if (button === null) {
+      throw new Error(`Couldn't find button for ${id}!`);
+    }
   }
 }

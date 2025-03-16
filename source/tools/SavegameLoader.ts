@@ -1,9 +1,10 @@
-import type { Game, KGSaveData } from "../types/index.js";
+import type { KGSaveData } from "../types/_save.js";
+import type { GamePage } from "../types/game.js";
 
 export class SavegameLoader {
-  private readonly _game: Game;
+  private readonly _game: GamePage;
 
-  constructor(game: Game) {
+  constructor(game: GamePage) {
     this._game = game;
   }
 

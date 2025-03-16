@@ -1,14 +1,18 @@
+import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { InvalidArgumentError } from "@oliversalzburg/js-utils/errors/InvalidArgumentError.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import type { TabManager } from "./TabManager.js";
 import { cwarn } from "./tools/Log.js";
+import type { BuildingResearchBtn, UnsafeBuildingBtnModel } from "./types/core.js";
+import type { Policy, Technology, Upgrade } from "./types/index.js";
 import type {
-  BuildButton,
-  Policy,
-  ScienceTab,
-  Technology,
-  Upgrade,
-  UpgradeInfo,
-} from "./types/index.js";
+  Library,
+  PolicyBtnController,
+  PolicyPanel,
+  TechButtonController,
+  UnsafePolicy,
+} from "./types/science.js";
+import type { Workshop } from "./types/workshop.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: KittenScientists;
@@ -22,7 +26,12 @@ export abstract class UpgradeManager {
     upgrade: { label: string; name: Policy | Upgrade | Technology },
     variant: "policy" | "science" | "workshop",
   ): Promise<boolean> {
-    const button = this._getUpgradeButton(upgrade, variant);
+    const button =
+      variant === "policy"
+        ? this._getUpgradeButtonPolicy(upgrade.name as Policy)
+        : variant === "science"
+          ? this._getUpgradeButtonScience(upgrade.name as Technology)
+          : this._getUpgradeButtonWorkshop(upgrade.name as Upgrade);
 
     if (!button || !button.model) {
       return false;
@@ -36,21 +45,14 @@ export abstract class UpgradeManager {
 
     const controller =
       variant === "policy"
-        ? new classes.ui.PolicyBtnController(this._host.game)
-        : new com.nuclearunicorn.game.ui.TechButtonController(this._host.game);
+        ? (new classes.ui.PolicyBtnController(this._host.game) as PolicyBtnController)
+        : (new com.nuclearunicorn.game.ui.TechButtonController(
+            this._host.game,
+          ) as TechButtonController);
 
     this._host.game.opts.noConfirm = true;
-    const success = await UpgradeManager.skipConfirm(
-      () =>
-        new Promise(resolve => {
-          const buyResult = controller.buyItem(button.model, new MouseEvent("click"));
-
-          if (buyResult.def !== undefined) {
-            buyResult.def.then(resolve);
-          } else {
-            resolve(buyResult.itemBought);
-          }
-        }),
+    const success = UpgradeManager.skipConfirm(() =>
+      controller.buyItem(mustExist(button.model), new MouseEvent("click")),
     );
 
     if (!success) {
@@ -80,7 +82,7 @@ export abstract class UpgradeManager {
    * @param action The function to run without UI confirmation.
    * @returns Whatever `action` returns.
    */
-  static async skipConfirm<T>(action: () => Promise<T>): Promise<T> {
+  static async skipConfirmAsync<T>(action: () => Promise<T>): Promise<T> {
     const originalConfirm = game.ui.confirm;
     try {
       game.ui.confirm = () => true;
@@ -89,21 +91,26 @@ export abstract class UpgradeManager {
       game.ui.confirm = originalConfirm;
     }
   }
-
-  private _getUpgradeButton(
-    upgrade: { name: Policy | Upgrade | Technology },
-    variant: "policy" | "science" | "workshop",
-  ): BuildButton | null {
-    let buttons: Array<BuildButton> | undefined;
-    if (variant === "workshop") {
-      buttons = this.manager.tab.buttons;
-    } else if (variant === "policy") {
-      buttons = (this.manager.tab as ScienceTab).policyPanel.children;
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    } else if (variant === "science") {
-      buttons = this.manager.tab.buttons;
+  static skipConfirm<T>(action: () => T): T {
+    const originalConfirm = game.ui.confirm;
+    try {
+      game.ui.confirm = () => true;
+      return action();
+    } finally {
+      game.ui.confirm = originalConfirm;
     }
+  }
 
-    return (buttons?.find(button => button.id === upgrade.name) ?? null) as BuildButton | null;
+  private _getUpgradeButtonScience(upgrade: Technology) {
+    return mustExist((this.manager.tab as Library).buttons?.find(button => button.id === upgrade));
+  }
+  private _getUpgradeButtonPolicy(upgrade: Policy) {
+    return (
+      (this.manager.tab as Library).policyPanel?.children?.find(button => button.id === upgrade) ??
+      null
+    );
+  }
+  private _getUpgradeButtonWorkshop(upgrade: Upgrade) {
+    return (this.manager.tab as Workshop).buttons?.find(button => button.id === upgrade) ?? null;
   }
 }

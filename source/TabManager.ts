@@ -1,8 +1,9 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { KittenScientists } from "./KittenScientists.js";
-import type { GameTab, TabId } from "./types/index.js";
+import type { Tab } from "./types/core.js";
+import type { TabId } from "./types/index.js";
 
-export class TabManager<TTab extends GameTab = GameTab> {
+export class TabManager<TTab extends Tab = Tab> {
   private readonly _host: KittenScientists;
   tab: TTab;
 

@@ -1,19 +1,454 @@
 import type { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type JQuery from "jquery";
+import "dojo";
 import type { KittenScientists } from "../KittenScientists.js";
-import type { Building, BuildingMeta } from "./buildings.js";
-import type { Game } from "./game.js";
+import type { AchTab, Achievements, AchievementsPanel, BadgesPanel } from "./achievements.js";
 import type {
-  ReligionUpgrade,
-  TranscendenceUpgrade,
-  TranscendenceUpgradeInfo,
-  ZiggurathUpgrade,
-  ZiggurathUpgradeInfo,
+  BuildingBtnModernController,
+  BuildingMeta,
+  BuildingsManager,
+  BuildingsModern,
+  GatherCatnipButtonController,
+  Metadata,
+  RefineCatnipButton,
+  RefineCatnipButtonController,
+  StagingBldBtn,
+  StagingBldBtnController,
+} from "./buildings.js";
+import type { Calendar, Event } from "./calendar.js";
+import type {
+  ChallengeBtnController,
+  ChallengeEffectsPanel,
+  ChallengePanel,
+  ChallengesManager,
+  ChallengesTab,
+  ReserveMan,
+  ReservesPanel,
+} from "./challenges.js";
+import type {
+  BuildingBtn,
+  BuildingBtnController,
+  BuildingNotStackableBtnController,
+  BuildingResearchBtn,
+  BuildingStackableBtn,
+  BuildingStackableBtnController,
+  Button,
+  ButtonController,
+  ButtonModern,
+  ButtonModernController,
+  Console,
+  ContentRowRenderer,
+  Control,
+  IChildrenAware,
+  IGameAware,
+  Panel,
+  Spacer,
+  Tab,
+  TabManager,
+  UnsafeBuildingBtnModel,
+  UnsafeBuildingStackableBtnModel,
+  UnsafeButtonModel,
+  UnsafeButtonModernModel,
+} from "./core.js";
+import type {
+  AutoPinnedButton,
+  AutoPinnedButtonController,
+  CrashBcoinButtonController,
+  Diplomacy,
+  DiplomacyManager,
+  EldersPanel,
+  EmbassyButton,
+  EmbassyButtonController,
+  RacePanel,
+  SendExplorersButton,
+  SendExplorersButtonController,
+  TradeButton,
+  TradeButtonController,
+} from "./diplomacy.js";
+import type {
+  EffectsManager,
+  GamePage,
+  IDataStorageAware,
+  Server,
+  Telemetry,
+  Timer,
+  UndoChange,
+} from "./game.js";
+import type { Math as KGMath } from "./math.js";
+import type {
+  BurnParagonBtnController,
+  PrestigeBtnController,
+  PrestigeManager,
+  PrestigePanel,
+  TurnHGOffButtonController,
+} from "./prestige.js";
+import type {
+  CryptotheologyPanel,
+  CryptotheologyWGT,
+  MultiLinkBtn,
+  PactsBtnController,
+  PactsManager,
+  PactsPanel,
+  PactsWGT,
+  PraiseBtnController,
+  RefineBtn,
+  RefineTearsBtnController,
+  ReligionBtnController,
+  ReligionManager,
+  ReligionTab,
+  ResetFaithBtnController,
+  TranscendBtnController,
+  TranscendenceBtnController,
+  TransformBtnController,
+  ZigguratBtnController,
 } from "./religion.js";
-import type { TechInfo } from "./science.js";
-import type { SpaceBuilding } from "./space.js";
-import type { ChronoForgeUpgrade, VoidSpaceUpgrade, VoidSpaceUpgradeInfo } from "./time.js";
-import type { UpgradeInfo } from "./workshop.js";
+import type { ResourceManager } from "./resources.js";
+import type {
+  Library,
+  PolicyBtnController,
+  PolicyPanel,
+  ScienceManager,
+  TechButtonController,
+} from "./science.js";
+import type {
+  FurthestRingPanel,
+  PlanetBuildingBtnController,
+  PlanetPanel,
+  SpaceManager,
+  SpaceProgramBtnController,
+  SpaceTab,
+} from "./space.js";
+import type { StatsManager, StatsTab } from "./stats.js";
+import type {
+  AccelerateTimeBtn,
+  AccelerateTimeBtnController,
+  ChronoforgeBtnController,
+  ChronoforgeWgt,
+  FixCryochamberBtnController,
+  Manager,
+  QueueTab,
+  ResetWgt,
+  ShatterTCBtn,
+  ShatterTCBtnController,
+  TimeControlWgt,
+  TimeManager,
+  TimeTab,
+  VoidSpaceBtnController,
+  VoidSpaceWgt,
+} from "./time.js";
+import type {
+  Toolbar,
+  ToolbarEnergy,
+  ToolbarHappiness,
+  ToolbarIcon,
+  ToolbarMOTD,
+} from "./toolbar.js";
+import type { DesktopUI, IReactAware, UISystem } from "./ui.js";
+import type {
+  BiomeBtn,
+  BiomeBtnController,
+  Census,
+  CensusPanel,
+  FestivalButton,
+  FestivalButtonController,
+  JobButton,
+  JobButtonController,
+  Kitten,
+  KittenSim,
+  Loadout,
+  LoadoutButton,
+  LoadoutButtonController,
+  LoadoutController,
+  MapOverviewWgt,
+  UpgradeExplorersController,
+  UpgradeHQController,
+  Village,
+  VillageButtonController,
+  VillageManager,
+} from "./village.js";
+import type { RorshachWgt, VoidManager } from "./void.js";
+import type {
+  CraftButton,
+  CraftButtonController,
+  UpgradeButtonController,
+  Workshop,
+  WorkshopManager,
+  ZebraUpgradeButtonController,
+} from "./workshop.js";
+
+export const BuyItemResultReasons = [
+  "already-bought",
+  "cannot-afford",
+  "dev-mode",
+  "item-is-free",
+  "not-enabled",
+  "not-unlocked",
+  "paid-for",
+  "player-denied",
+  "require-confirmation",
+];
+export type BuyItemResultReason = (typeof BuyItemResultReasons)[number];
+
+export type UnsafeBuyItemResult = {
+  itemBought: boolean;
+  reason: BuyItemResultReason;
+};
+export type UnsafeBuyItemResultDeferred = {
+  itemBought: boolean;
+  reason: "require-confirmation";
+  def: dojo.Deferred & {
+    then: (callable: (result: UnsafeBuyItemResult) => void) => void;
+  };
+};
+
+export const Buildings = [
+  "academy",
+  "accelerator",
+  "aiCore",
+  "amphitheatre",
+  "aqueduct",
+  "barn",
+  "biolab",
+  "brewery",
+  "calciner",
+  "chapel",
+  "chronosphere",
+  "factory",
+  "field",
+  "harbor",
+  "hut",
+  "library",
+  "logHouse",
+  "lumberMill",
+  "magneto",
+  "mansion",
+  "mine",
+  "mint",
+  "observatory",
+  "oilWell",
+  "pasture",
+  "quarry",
+  "reactor",
+  "smelter",
+  "steamworks",
+  "temple",
+  "tradepost",
+  "unicornPasture",
+  "warehouse",
+  "workshop",
+  "zebraForge",
+  "zebraOutpost",
+  "zebraWorkshop",
+  "ziggurat",
+] as const;
+export type Building = (typeof Buildings)[number];
+
+export const StagedBuildings = [
+  "broadcasttower",
+  "dataCenter",
+  "hydroplant",
+  "solarfarm",
+  "spaceport",
+] as const;
+export type StagedBuilding = (typeof StagedBuildings)[number];
+
+export const BuildingEffects = [
+  // from game.bld
+  "academyMeteorBonus",
+  "aiLevel",
+  "alicornPerTickCon",
+  "bloodstoneRatio",
+  "cathPollutionPerTickCon",
+  "cathPollutionPerTickProd",
+  "catnipDemandRatio",
+  "catnipMax",
+  "catnipPerTickBase",
+  "catnipPerTickCon",
+  "catnipRatio",
+  "coalMax",
+  "coalPerTickAutoprod",
+  "coalPerTickBase",
+  "coalPerTickCon",
+  "coalRatioGlobal",
+  "craftRatio",
+  "cultureMax",
+  "cultureMaxRatio",
+  "culturePerTickBase",
+  "energyConsumption",
+  "energyProduction",
+  "faithMax",
+  "faithPerTickBase",
+  "festivalArrivalRatio",
+  "festivalRatio",
+  "fursDemandRatio",
+  "fursPerTickProd",
+  "gflopsPerTickBase",
+  "goldMax",
+  "goldPerTickAutoprod",
+  "goldPerTickCon",
+  "happiness",
+  "hunterRatio",
+  "ironMax",
+  "ironPerTickAutoprod",
+  "ironPerTickCon",
+  "ivoryDemandRatio",
+  "ivoryPerTickCon",
+  "ivoryPerTickProd",
+  "magnetoBoostRatio",
+  "magnetoRatio",
+  "manpowerMax",
+  "manpowerPerTickCon",
+  "manuscriptPerTickProd",
+  "maxKittens",
+  "mineralsMax",
+  "mineralsPerTickCon",
+  "mineralsPerTickProd",
+  "mineralsRatio",
+  "oilMax",
+  "oilPerTick",
+  "oilPerTickBase",
+  "oilPerTickCon",
+  "oilPerTickProd",
+  "productionRatio",
+  "refineRatio",
+  "resStasisRatio",
+  "scienceMax",
+  "scienceRatio",
+  "skillXP",
+  "spiceDemandRatio",
+  "spicePerTickCon",
+  "standingRatio",
+  "starAutoSuccessChance",
+  "starEventChance",
+  "steelPerTickProd",
+  "tMythrilCraftRatio",
+  "tMythrilPerTick",
+  "temporalFluxProduction",
+  "thoriumPerTick",
+  "titaniumMax",
+  "titaniumPerTickAutoprod",
+  "titaniumPerTickCon",
+  "tradeRatio",
+  "unhappinessRatio",
+  "unicornsPerTickBase",
+  "uraniumMax",
+  "uraniumPerTick",
+  "uraniumPerTickAutoprod",
+  "uraniumPerTickBase",
+  "woodMax",
+  "woodPerTickCon",
+  "woodRatio",
+  "zebraPreparations",
+
+  // from game.religion
+  "activeHG",
+  "alicornChance",
+  "alicornPerTick",
+  "blackLibraryBonus",
+  "blsCorruptionRatio",
+  "blsLimit",
+  "compendiaTTBoostRatio",
+  "corruptionBoostRatio",
+  "corruptionRatio",
+  "cultureMaxRatioBonus",
+  "deficitRecoveryRatio",
+  "energyProductionRatio",
+  "faithRatioReligion",
+  "globalResourceRatio",
+  "goldMaxRatio",
+  "ivoryMeteorChance",
+  "ivoryMeteorRatio",
+  "maxKittensRatio",
+  "necrocornPerDay",
+  "pactBlackLibraryBoost",
+  "pactDeficitRecoveryRatio",
+  "pactFaithRatio",
+  "pactGlobalProductionRatio",
+  "pactGlobalResourceRatio",
+  "pactSpaceCompendiumRatio",
+  "pactsAvailable",
+  "pyramidFaithRatio",
+  "pyramidGlobalProductionRatio",
+  "pyramidGlobalResourceRatio",
+  "pyramidRecoveryRatio",
+  "pyramidSpaceCompendiumRatio",
+  "relicRefineRatio",
+  "riftChance",
+  "rrRatio",
+  "simScalingRatio",
+  "solarRevolutionLimit",
+  "solarRevolutionRatio",
+  "tcRefineRatio",
+  "timeRatio",
+  "unicornsRatioReligion",
+
+  // from game.workshop.upgrades
+  "acceleratorRatio",
+  "barnRatio",
+  "beaconRelicsPerDay",
+  "biofuelRatio",
+  "broadcastTowerRatio",
+  "cadBlueprintCraftRatio",
+  "calcinerRatio",
+  "calcinerSteelCraftRatio",
+  "calcinerSteelRatio",
+  "calcinerSteelReactorBonus",
+  "catnipDemandWorkerRatioGlobal",
+  "catnipJobRatio",
+  "catnipMaxRatio",
+  "coalRatioGlobalReduction",
+  "coalSuperRatio",
+  "crackerRatio",
+  "dataCenterAIRatio",
+  "eludiumAutomationBonus",
+  "factoryRefineRatio",
+  "harborCoalRatio",
+  "harborRatio",
+  "hutPriceRatio",
+  "hydroPlantRatio",
+  "libraryRatio",
+  "lumberMillRatio",
+  "lunarOutpostRatio",
+  "manpowerJobRatio",
+  "oilWellRatio",
+  "queueCap",
+  "reactorEnergyRatio",
+  "reactorThoriumPerTick",
+  "routeSpeed",
+  "satnavRatio",
+  "shipLimit",
+  "skillMultiplier",
+  "smelterRatio",
+  "solarFarmRatio",
+  "solarFarmSeasonRatio",
+  "spaceScienceRatio",
+  "starchartGlobalRatio",
+  "t1CraftRatio",
+  "t2CraftRatio",
+  "t3CraftRatio",
+  "t4CraftRatio",
+  "t5CraftRatio",
+  "temporalFluxProductionChronosphere",
+  "temporalParadoxDayBonus",
+  "unicornsGlobalRatio",
+  "uplinkDCRatio",
+  "uplinkLabRatio",
+  "uraniumRatio",
+  "warehouseRatio",
+  "woodJobRatio",
+
+  // other tabs
+  "goldPriceRatio",
+  "happinessKittenProductionRatio",
+  "heatMax",
+  "heatPerTick",
+  "observatoryRatio",
+  "starchartPerTickBaseSpace",
+  "temporalFluxMax",
+  "unobtainiumPerTickSpace",
+  "uraniumPerTickCon",
+];
+export type BuildingEffect = (typeof BuildingEffects)[number];
 
 export const Seasons = ["autumn", "spring", "summer", "winter"] as const;
 export type Season = (typeof Seasons)[number];
@@ -136,6 +571,65 @@ export const Traits = [
 ] as const;
 export type Trait = (typeof Traits)[number];
 
+export enum UnicornItemVariant {
+  Cryptotheology = "c",
+  OrderOfTheSun = "s",
+  Ziggurat = "z",
+  UnicornPasture = "zp",
+}
+
+export const ReligionUpgrades = [
+  "apocripha",
+  "basilica",
+  "goldenSpire",
+  "scholasticism",
+  "solarRevolution",
+  "solarchant",
+  "stainedGlass",
+  "sunAltar",
+  "templars",
+  "transcendence",
+] as const;
+export type ReligionUpgrade = (typeof ReligionUpgrades)[number];
+
+export const TranscendenceUpgrades = [
+  "blackCore",
+  "blackLibrary",
+  "blackNexus",
+  "blackObelisk",
+  "blackRadiance",
+  "blazar",
+  "darkNova",
+  "holyGenocide",
+  "mausoleum",
+  "singularity",
+] as const;
+export type TranscendenceUpgrade = (typeof TranscendenceUpgrades)[number];
+
+export const ZiggurathUpgrades = [
+  "blackPyramid",
+  "ivoryCitadel",
+  "ivoryTower",
+  "marker",
+  "skyPalace",
+  "sunspire",
+  "unicornGraveyard",
+  "unicornNecropolis",
+  "unicornTomb",
+  "unicornUtopia",
+] as const;
+export type ZiggurathUpgrade = (typeof ZiggurathUpgrades)[number];
+
+export const Pacts = [
+  "fractured",
+  "pactOfCleansing",
+  "pactOfDestruction",
+  "pactOfExtermination",
+  "pactOfPurity",
+  "payDebt",
+];
+export type Pact = (typeof Pacts)[number];
+
 export type AllBuildings =
   | Building
   | ChronoForgeUpgrade
@@ -145,264 +639,498 @@ export type AllBuildings =
   | VoidSpaceUpgrade
   | ZiggurathUpgrade;
 
+export const Races = [
+  "dragons",
+  "griffins",
+  "nagas",
+  "leviathans",
+  "lizards",
+  "sharks",
+  "spiders",
+  "zebras",
+] as const;
+export type Race = (typeof Races)[number];
+
+export const Policies = [
+  "authocracy",
+  "bigStickPolicy",
+  "carnivale",
+  "cityOnAHill",
+  "clearCutting",
+  "communism",
+  "conservation",
+  "cryochamberExtraction",
+  "culturalExchange",
+  "diplomacy",
+  "dragonRelationsAstrologers",
+  "dragonRelationsDynamicists",
+  "dragonRelationsPhysicists",
+  "environmentalism",
+  "epicurianism",
+  "expansionism",
+  "extravagance",
+  "fascism",
+  "frugality",
+  "fullIndustrialization",
+  "griffinRelationsMachinists",
+  "griffinRelationsMetallurgists",
+  "griffinRelationsScouts",
+  "isolationism",
+  "knowledgeSharing",
+  "liberalism",
+  "liberty",
+  "lizardRelationsDiplomats",
+  "lizardRelationsEcologists",
+  "lizardRelationsPriests",
+  "militarizeSpace",
+  "monarchy",
+  "mysticism",
+  "nagaRelationsArchitects",
+  "nagaRelationsCultists",
+  "nagaRelationsMasons",
+  "necrocracy",
+  "openWoodlands",
+  "outerSpaceTreaty",
+  "radicalXenophobia",
+  "rationality",
+  "rationing",
+  "republic",
+  "scientificCommunism",
+  "sharkRelationsBotanists",
+  "sharkRelationsMerchants",
+  "sharkRelationsScribes",
+  "siphoning",
+  "socialism",
+  "spiderRelationsChemists",
+  "spiderRelationsGeologists",
+  "spiderRelationsPaleontologists",
+  "stoicism",
+  "stripMining",
+  "sustainability",
+  "technocracy",
+  "terraformingInsight",
+  "theocracy",
+  "tradition",
+  "transkittenism",
+  "zebraRelationsAppeasement",
+  "zebraRelationsBellicosity",
+] as const;
+export type Policy = (typeof Policies)[number];
+
+export const TechnologiesIgnored = ["brewery"] as const;
+export type TechnologyIgnored = (typeof TechnologiesIgnored)[number];
+
+export const Technologies = [
+  "acoustics",
+  "advExogeology",
+  "agriculture",
+  "ai",
+  "animal",
+  "antimatter",
+  "archeology",
+  "archery",
+  "architecture",
+  "artificialGravity",
+  "astronomy",
+  "biochemistry",
+  "biology",
+  "blackchain",
+  "calendar",
+  "chemistry",
+  "chronophysics",
+  "civil",
+  "combustion",
+  "construction",
+  "cryptotheology",
+  "currency",
+  "dimensionalPhysics",
+  "drama",
+  "ecology",
+  "electricity",
+  "electronics",
+  "engineering",
+  "exogeology",
+  "exogeophysics",
+  "genetics",
+  "hydroponics",
+  "industrialization",
+  "machinery",
+  "math",
+  "mechanization",
+  "metal",
+  "metalurgy",
+  "metaphysics",
+  "mining",
+  "nanotechnology",
+  "navigation",
+  "nuclearFission",
+  "oilProcessing",
+  "orbitalEngineering",
+  "paradoxalKnowledge",
+  "particlePhysics",
+  "philosophy",
+  "physics",
+  "quantumCryptography",
+  "robotics",
+  "rocketry",
+  "sattelites",
+  "steel",
+  "superconductors",
+  "tachyonTheory",
+  "terraformation",
+  "theology",
+  "thorium",
+  "voidSpace",
+  "writing",
+] as const;
+export type Technology = (typeof Technologies)[number];
+
+export const Missions = [
+  "centaurusSystemMission",
+  "charonMission",
+  "duneMission",
+  "furthestRingMission",
+  "heliosMission",
+  "kairoMission",
+  "moonMission",
+  "orbitalLaunch",
+  "piscineMission",
+  "rorschachMission",
+  "terminusMission",
+  "umbraMission",
+  "yarnMission",
+] as const;
+export type Mission = (typeof Missions)[number];
+
+export const Planets = [
+  "cath",
+  "centaurusSystem",
+  "charon",
+  "dune",
+  "furthestRing",
+  "helios",
+  "kairo",
+  "moon",
+  "piscine",
+  "terminus",
+  "umbra",
+  "yarn",
+] as const;
+export type Planet = (typeof Planets)[number];
+
+export const SpaceBuildings = [
+  "containmentChamber",
+  "cryostation",
+  "entangler",
+  "heatsink",
+  "hrHarvester",
+  "hydrofracturer",
+  "hydroponics",
+  "moltenCore",
+  "moonBase",
+  "moonOutpost",
+  "orbitalArray",
+  "planetCracker",
+  "researchVessel",
+  "sattelite",
+  "spaceBeacon",
+  "spaceElevator",
+  "spaceStation",
+  "spiceRefinery",
+  "sunforge",
+  "sunlifter",
+  "tectonic",
+  "terraformingStation",
+] as const;
+export type SpaceBuilding = (typeof SpaceBuildings)[number];
+
+export const Stats = [
+  "averageKittens",
+  "buildingsConstructed",
+  "eventsObserved",
+  "kittensDead",
+  "timePlayed",
+  "totalChallengesCompleted",
+  "totalClicks",
+  "totalCrafts",
+  "totalKittens",
+  "totalParagon",
+  "totalResets",
+  "totalTrades",
+  "totalYears",
+  "transcendenceTier",
+  "unicornsSacrificed",
+];
+export type Stat = (typeof Stats)[number];
+
+export const ChronoForgeUpgrades = [
+  "blastFurnace",
+  "ressourceRetrieval",
+  "temporalAccelerator",
+  "temporalBattery",
+  "temporalImpedance",
+  "temporalPress",
+  "timeBoiler",
+] as const;
+export type ChronoForgeUpgrade = (typeof ChronoForgeUpgrades)[number];
+
+export const VoidSpaceUpgrades = [
+  "cryochambers",
+  "usedCryochambers",
+  "voidHoover",
+  "voidRift",
+  "chronocontrol",
+  "voidResonator",
+] as const;
+export type VoidSpaceUpgrade = (typeof VoidSpaceUpgrades)[number];
+
+export const Upgrades = [
+  "advancedAutomation",
+  "advancedRefinement",
+  "aiBases",
+  "aiEngineers",
+  "alloyArmor",
+  "alloyAxe",
+  "alloyBarns",
+  "alloySaw",
+  "alloyWarehouses",
+  "amBases",
+  "amDrive",
+  "amFission",
+  "amReactors",
+  "amReactorsMK2",
+  "assistance",
+  "astrolabe",
+  "astrophysicists",
+  "augumentation",
+  "automatedPlants",
+  "barges",
+  "biofuel",
+  "bolas",
+  "cadSystems",
+  "caravanserai",
+  "carbonSequestration",
+  "cargoShips",
+  "celestialMechanics",
+  "chronoEngineers",
+  "chronoforge",
+  "coalFurnace",
+  "coldFusion",
+  "combustionEngine",
+  "compositeBow",
+  "concreteBarns",
+  "concreteHuts",
+  "concreteWarehouses",
+  "crossbow",
+  "cryocomputing",
+  "darkEnergy",
+  "deepMining",
+  "distorsion",
+  "electrolyticSmelting",
+  "eludiumCracker",
+  "eludiumHuts",
+  "eludiumReflectors",
+  "energyRifts",
+  "enrichedThorium",
+  "enrichedUranium",
+  "factoryAutomation",
+  "factoryLogistics",
+  "factoryOptimization",
+  "factoryProcessing",
+  "factoryRobotics",
+  "fluidizedReactors",
+  "fluxCondensator",
+  "fuelInjectors",
+  "geodesy",
+  "gmo",
+  "goldOre",
+  "hubbleTelescope",
+  "huntingArmor",
+  "hydroPlantTurbines",
+  "internet",
+  "invisibleBlackHand",
+  "ironAxes",
+  "ironHoes",
+  "ironwood",
+  "lhc",
+  "logistics",
+  "longRangeSpaceships",
+  "machineLearning",
+  "mineralAxes",
+  "mineralHoes",
+  "miningDrill",
+  "mWReactor",
+  "nanosuits",
+  "neuralNetworks",
+  "nuclearPlants",
+  "nuclearSmelters",
+  "offsetPress",
+  "oilDistillation",
+  "oilRefinery",
+  "orbitalGeodesy",
+  "oxidation",
+  "photolithography",
+  "photovoltaic",
+  "pneumaticPress",
+  "printingPress",
+  "pumpjack",
+  "pyrolysis",
+  "qdot",
+  "railgun",
+  "reactorVessel",
+  "refrigeration",
+  "register",
+  "reinforcedBarns",
+  "reinforcedSaw",
+  "reinforcedWarehouses",
+  "relicStation",
+  "rotaryKiln",
+  "satelliteRadio",
+  "satnav",
+  "seti",
+  "silos",
+  "solarSatellites",
+  "spaceEngineers",
+  "spaceManufacturing",
+  "spiceNavigation",
+  "starlink",
+  "stasisChambers",
+  "steelArmor",
+  "steelAxe",
+  "steelPlants",
+  "steelSaw",
+  "stoneBarns",
+  "storageBunkers",
+  "strenghtenBuild",
+  "tachyonAccelerators",
+  "thinFilm",
+  "thoriumEngine",
+  "thoriumReactors",
+  "titaniumAxe",
+  "titaniumBarns",
+  "titaniumMirrors",
+  "titaniumSaw",
+  "titaniumWarehouses",
+  "turnSmoothly",
+  "unicornSelection",
+  "unobtainiumAxe",
+  "unobtainiumDrill",
+  "unobtainiumHuts",
+  "unobtainiumReflectors",
+  "unobtainiumSaw",
+  "uplink",
+  "voidAspiration",
+  "voidEnergy",
+  "voidReactors",
+] as const;
+export type Upgrade = (typeof Upgrades)[number];
+
+export enum TimeItemVariant {
+  Chronoforge = "chrono",
+  VoidSpace = "void",
+}
+
+export type FaithItem = Exclude<ReligionItem, UnicornItem>;
+
+export const UnicornItems = [
+  "ivoryCitadel",
+  "ivoryTower",
+  "skyPalace",
+  "sunspire",
+  "unicornPasture",
+  "unicornTomb",
+  "unicornUtopia",
+] as const;
+export type UnicornItem = (typeof UnicornItems)[number];
+
+export type ReligionItem = ReligionUpgrade | TranscendenceUpgrade | ZiggurathUpgrade;
+export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
+
+export const ReligionOptions = [
+  "sacrificeUnicorns",
+  "sacrificeAlicorns",
+  "refineTears",
+  "refineTimeCrystals",
+  "transcend",
+  "adore",
+  "autoPraise",
+] as const;
+export type ReligionOption = (typeof ReligionOptions)[number];
+
+export type Unlocks = {
+  buildings: Array<Building>;
+  challenges: Array<Challenge>;
+  chronoforge: Array<ChronoForgeUpgrade>;
+  crafts: Array<ResourceCraftable>;
+  jobs: Array<Job>;
+  policies: Array<Policy>;
+  stages: Array<StagedBuilding>;
+  tabs: Array<TabId>;
+  tech: Array<Technology>;
+  upgrades: Array<Upgrade>;
+  voidSpace: Array<VoidSpaceUpgrade>;
+  zebraUpgrades: Array<unknown>;
+};
+
+export type CycleEffects = {
+  "cryostation-coalMax": number;
+  "cryostation-ironMax": number;
+  "cryostation-mineralsMax": number;
+  "cryostation-oilMax": number;
+  "cryostation-titaniumMax": number;
+  "cryostation-unobtainiumMax": number;
+  "cryostation-uraniumMax": number;
+  "cryostation-woodMax": number;
+  "entangler-gflopsConsumption": number;
+  "hrHarvester-energyProduction": number;
+  "hydrofracturer-oilPerTickAutoprodSpace": number;
+  "hydroponics-catnipRatio": number;
+  "moonOutpost-unobtainiumPerTickSpace": number;
+  "planetCracker-uraniumPerTickSpace": number;
+  "researchVessel-starchartPerTickBaseSpace": number;
+  "sattelite-observatoryRatio": number;
+  "sattelite-starchartPerTickBaseSpace": number;
+  "spaceBeacon-starchartPerTickBaseSpace": number;
+  "spaceElevator-prodTransferBonus": number;
+  "spaceStation-scienceRatio": number;
+  "sunlifter-energyProduction": number;
+};
+
+export type FestivalEffects = {
+  catnip: number;
+  coal: number;
+  culture: number;
+  faith: number;
+  gold: number;
+  iron: number;
+  manpower: number;
+  minerals: number;
+  oil: number;
+  science: number;
+  starchart: number;
+  titanium: number;
+  unicorns: number;
+  unobtainium: number;
+  uranium: number;
+  wood: number;
+};
+
 /**
  * A combination of a resource and an amount.
  */
 export type Price = { name: Resource; val: number };
 
-export type Panel = {
-  children: Array<BuildButton>;
-  visible: boolean;
-};
-
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
-export type Control = {
-  /* intentionally left blank. exists for clarity */
-};
-
-export type Button<
-  TModel extends ButtonModel = ButtonModel,
-  TController extends ButtonController = ButtonController,
-> = Control & {
-  model: TModel | null;
-  controller: TController;
-  game: Game;
-
-  domNode: HTMLDivElement;
-  container: unknown;
-
-  tab: string | null;
-
-  buttonTitle: string | null;
-  new (opts: unknown, game: Game): Button;
-  setOpts: (opts: unknown) => void;
-
-  init: () => void;
-  updateVisible: () => void;
-  updateEnabled: () => void;
-  update: () => void;
-
-  render: (btnContainer: unknown) => void;
-  animate: () => void;
-  onClick: (event: MouseEvent) => void;
-  onKeyPress: (event: KeyboardEvent) => void;
-  afterRender: () => void;
-
-  addLink: (linkModel: unknown) => void;
-  addLinkList: (links: Array<unknown>) => void;
-};
-
-/**
- * Not necessarily a button, but a KG UI element.
- */
-export type BuildButton<
-  T = string,
-  TModel extends ButtonModel = ButtonModel,
-  TController extends ButtonController =
-    | BuildingBtnController
-    | BuildingNotStackableBtnController
-    | BuildingStackableBtnController
-    | ButtonController
-    | ButtonModernController
-    | EmbassyButtonController
-    | FixCryochamberBtnController
-    | PolicyBtnController
-    | RefineTearsBtnController
-    | ShatterTCBtnController
-    | TechButtonController
-    | TransformBtnController,
-> = Button<TModel, TController> & {
-  children: Array<BuildButton>;
-  controller: TController;
-  domNode: HTMLDivElement;
-  id: T;
-  model: TModel | null;
-  onClick: () => void;
-  render: () => void;
-};
-
-export type GameTab = {
-  buttons: Array<BuildButton>;
-  children: Array<BuildButton>;
-  render: () => void;
-  tabId: TabId;
-  visible: boolean;
-};
-
-export type Kitten = {
-  age: number;
-  color: number;
-  engineerSpeciality: ResourceCraftable | null;
-  exp: number;
-  isAdopted: boolean;
-  isLeader: boolean;
-  isSenator: boolean;
-  job: Job;
-  name: string;
-  rank: number;
-  rarity: number;
-  skills: {
-    priest: number;
-  };
-  surname: string;
-  trait: {
-    name: Trait;
-    title: string;
-  };
-  variety: number;
-};
-
-export type Challenge =
-  | "1000Years"
-  | "anarchy"
-  | "atheism"
-  | "energy"
-  | "ironWill"
-  | "pacifism"
-  | "postApocalypse"
-  | "winterIsComing";
-
-export type ButtonControllerOptions = Record<string, unknown>;
-export type ButtonModelDefaults = {
-  name: string;
-  description: string;
-  visible: boolean;
-  enabled: boolean;
-  handler: null;
-  prices: Array<Price> | null;
-  priceRatio: null;
-  twoRow: null;
-  refundPercentage: number;
-  highlightUnavailable: boolean;
-  resourceIsLimited: string;
-  multiplyEffects: boolean;
-};
-export type ButtonModel = { options: ButtonControllerOptions } & ButtonModelDefaults;
-
-export type ButtonController = {
-  new (game: Game, controllerOpts?: ButtonControllerOptions): ButtonController;
-  fetchModel: (options: ButtonControllerOptions) => ButtonModel;
-  fetchExtendedModel: (model: ButtonModel) => void;
-  initModel: (options: ButtonControllerOptions) => ButtonModel;
-  defaults: () => ButtonModelDefaults;
-  createPriceLineModel: (model: ButtonModel, price: unknown) => unknown;
-  hasResources: (model: ButtonModel, prices?: Array<unknown>) => boolean;
-  /**
-   * Updates the `enabled` field in the model of the button.
-   * @param model The button this controller is associated with.
-   */
-  updateEnabled: (model: ButtonModel) => void;
-  /**
-   * Does nothing by default. Can invoke custom handler.
-   * @param model The button this controller is associated with.
-   */
-  updateVisible: (model: ButtonModel) => void;
-  getPrices: (model: ButtonModel) => Array<Price>;
-  getName: (model: ButtonModel) => string;
-  getDescription: (model: ButtonModel) => string;
-  /** @deprecated */
-  adjustPrice: (model: ButtonModel, ratio: number) => void;
-  /** @deprecated */
-  rejustPrice: (model: ButtonModel, ratio: number) => void;
-  payPrice: (model: ButtonModel) => void;
-  clickHandler: (model: ButtonModel, event: Event) => void;
-  buyItem: (model: ButtonModel | null, event: Event | null) => DefferrableBuyResultOperation;
-  refund: (model: ButtonModel) => void;
-};
-
-export type BuyResultOperation = {
-  itemBought: boolean;
-  reason: string;
-};
-
-export type DefferrableBuyResultOperation = {
-  itemBought: boolean;
-  reason: string;
-  def?: {
-    then: (callable: (result: BuyResultOperation) => void) => void;
-  };
-};
-
-export type ButtonModernModel = {
-  metadata:
-    | BuildingMeta
-    | TechInfo
-    | TranscendenceUpgradeInfo
-    | UpgradeInfo
-    | VoidSpaceUpgradeInfo
-    | ZiggurathUpgradeInfo;
-} & ButtonModel;
-export type ButtonModernController = ButtonController & {
-  new (game: Game): ButtonModernController;
-  initModel: (options: ButtonControllerOptions) => ButtonModernModel;
-  fetchModel: (options: ButtonControllerOptions) => ButtonModernModel;
-  getMetadata: (model: ButtonModernModel) => BuildingMeta | null;
-  getEffects: (model: ButtonModernModel) => unknown;
-  getTotalEffects: (model: ButtonModernModel) => unknown;
-  getNextEffectValue: (model: ButtonModernModel, effectName: string) => unknown;
-  getFlavor: (model: ButtonModernModel) => string;
-  hasSellLink: (model: ButtonModernModel) => boolean;
-  metadataHasChanged: (model: ButtonModernModel) => void;
-  off: (model: ButtonModernModel, amt: number) => void;
-  offAll: (model: ButtonModernModel) => void;
-  on: (model: ButtonModernModel, amt: number) => void;
-  onAll: (model: ButtonModernModel) => void;
-  sell: (event: Event, model: ButtonModernModel) => void;
-  sellInternal: (model: ButtonModernModel, end: number) => void;
-  decrementValue: (model: ButtonModernModel) => void;
-  updateVisible: (model: ButtonModernModel) => void;
-  handleTogglableOnOffClick: (model: ButtonModernModel) => void;
-  handleToggleAutomationLinkClick: (model: ButtonModernModel) => void;
-};
-
-export type BuildingBtnController = ButtonModernController & {
-  new (game: Game): BuildingBtnController;
-};
-
-export type BuildingNotStackableBtnController = BuildingBtnController & {
-  new (game: Game): BuildingNotStackableBtnController;
-};
-
-export type BuildingStackableBtnController = BuildingBtnController & {
-  new (game: Game): BuildingStackableBtnController;
-  _buyItem_step2: (model: ButtonModel, event: Event) => DefferrableBuyResultOperation;
-  build: (model: ButtonModel, maxBld: number) => void;
-  incrementValue: (model: ButtonModel) => void;
-};
-
-export type EmbassyButtonController = BuildingStackableBtnController & {
-  new (game: Game): EmbassyButtonController;
-};
-
-export type FixCryochamberBtnController = ButtonModernController & {
-  new (game: Game): EmbassyButtonController;
-  doFixCryochamber: (model: ButtonModernModel) => boolean;
-};
-
-export type GatherCatnipButtonController = ButtonModernController & {
-  new (game: Game): GatherCatnipButtonController;
-};
-
-export type PolicyBtnController = BuildingNotStackableBtnController & {
-  new (game: Game): PolicyBtnController;
-  shouldBeBough: (model: ButtonModel, game: Game) => boolean;
-};
-
-export type RefineTearsBtnController = ButtonModernController & {
-  new (game: Game): ButtonModernController;
-  _newLink: (model: ButtonModel, divider: number) => Link;
-  buyItem: (model: ButtonModel | null, event: Event | null, count: number) => BuyResultOperation;
-  refine: () => void;
-};
-
-export type ShatterTCBtnController = ButtonModernController & {
-  new (game: Game): ButtonModernController;
-  doShatterAmt: (model: ButtonModel, amt: number) => void;
-};
-
-export type TechButtonController = BuildingNotStackableBtnController & {
-  new (game: Game): TechButtonController;
-};
+export const Challenges = [
+  "1000Years",
+  "anarchy",
+  "atheism",
+  "energy",
+  "ironWill",
+  "pacifism",
+  "postApocalypse",
+  "winterIsComing",
+];
+export type Challenge = (typeof Challenges)[number];
 
 export type Link = {
   visible: boolean;
@@ -412,49 +1140,226 @@ export type Link = {
   handler: (event: Event, callback: (success: boolean) => void) => void;
 };
 
-export type TransformBtnController<TOptions = Record<string, unknown>> = ButtonModernController & {
-  new (game: Game, options: TOptions): TransformBtnController<TOptions>;
-  _transform: (model: ButtonModel, amt: number) => boolean;
-  _newLink: (model: ButtonModel, divider: number) => Link;
-  controllerOpts: TOptions;
-};
-
 export type ClassList = {
+  BuildingMeta: BuildingMeta;
   diplomacy: {
     ui: {
+      autoPinnedButtonController: AutoPinnedButtonController;
+      autoPinnedButton: AutoPinnedButton;
+      EldersPanel: EldersPanel;
       EmbassyButtonController: EmbassyButtonController;
+      EmbassyButton: EmbassyButton;
+      RacePanel: RacePanel;
     };
   };
   game: {
+    Server: Server;
+    Telemetry: Telemetry;
+    Timer: Timer;
     ui: {
       GatherCatnipButtonController: GatherCatnipButtonController;
+      RefineCatnipButton: RefineCatnipButton;
+      RefineCatnipButtonController: RefineCatnipButtonController;
+    };
+    UndoChange: UndoChange;
+  };
+  managers: {
+    Achievements: Achievements;
+    BuildingsManager: BuildingsManager;
+    ChallengesManager: ChallengesManager;
+    DiplomacyManager: DiplomacyManager;
+    PrestigeManager: PrestigeManager;
+    ReligionManager: ReligionManager;
+    ResourceManager: ResourceManager;
+    ScienceManager: ScienceManager;
+    SpaceManager: SpaceManager;
+    StatsManager: StatsManager;
+    TimeManager: TimeManager;
+    VillageManager: VillageManager;
+    VoidManager: VoidManager;
+    WorkshopManager: WorkshopManager;
+  };
+  Metadata: Metadata;
+  queue: {
+    manager: Manager;
+  };
+  religion: {
+    pactsManager: PactsManager;
+  };
+  reserveMan: ReserveMan;
+  tab: {
+    ChallengesTab: ChallengesTab;
+    QueueTab: QueueTab;
+    StatsTab: StatsTab;
+    TimeTab: TimeTab;
+  };
+  trade: {
+    ui: {
+      SendExplorersButtonController: SendExplorersButtonController;
+      SendExplorersButton: SendExplorersButton;
     };
   };
   ui: {
+    AchievementsPanel: AchievementsPanel;
+    BadgesPanel: BadgesPanel;
+    btn: {
+      BuildingBtnModernController: BuildingBtnModernController;
+      StagingBldBtnController: StagingBldBtnController;
+      StagingBldBtn: StagingBldBtn<UnsafeBuildingBtnModel, ButtonModernController>;
+    };
     BuildingBtnController: BuildingBtnController;
+    BurnParagonBtnController: BurnParagonBtnController;
     ButtonController: ButtonController;
     ButtonModernController: ButtonModernController;
     BuildingStackableBtnController: BuildingStackableBtnController;
+    ChallengeBtnController: ChallengeBtnController;
+    ChallengeEffectsPanel: ChallengeEffectsPanel;
+    ChallengePanel: ChallengePanel;
+    ChronoforgeWgt: ChronoforgeWgt;
+    CryptotheologyPanel: CryptotheologyPanel;
+    CryptotheologyWGT: CryptotheologyWGT;
+    DesktopUI: DesktopUI;
+    PactsPanel: PactsPanel;
+    PactsWGT: PactsWGT;
     PolicyBtnController: PolicyBtnController;
+    PolicyPanel: PolicyPanel;
+    PrestigeBtnController: PrestigeBtnController;
+    PrestigePanel: PrestigePanel;
+    RorshachWgt: RorshachWgt;
     religion: {
+      MultiLinkBtn: MultiLinkBtn<UnsafeButtonModernModel, ButtonModernController>;
+      RefineBtn: RefineBtn;
       RefineTearsBtnController: RefineTearsBtnController;
       TransformBtnController: TransformBtnController;
     };
+    ReservesPanel: ReservesPanel;
+    ResetWgt: ResetWgt;
+    space: {
+      FurthestRingPanel: FurthestRingPanel;
+      PlanetBuildingBtnController: PlanetBuildingBtnController;
+      PlanetPanel: PlanetPanel;
+    };
     time: {
+      AccelerateTimeBtn: AccelerateTimeBtn;
+      AccelerateTimeBtnController: AccelerateTimeBtnController;
+      ChronoforgeBtnController: ChronoforgeBtnController;
       FixCryochamberBtnController: FixCryochamberBtnController;
+      ShatterTCBtn: ShatterTCBtn;
       ShatterTCBtnController: ShatterTCBtnController;
+      VoidSpaceBtnController: VoidSpaceBtnController;
+    };
+    TimeControlWgt: TimeControlWgt;
+    toolbar: {
+      ToolbarEnergy: ToolbarEnergy;
+      ToolbarHappiness: ToolbarHappiness;
+      ToolbarMOTD: ToolbarMOTD;
+    };
+    Toolbar: Toolbar;
+    ToolbarIcon: ToolbarIcon;
+    TranscendenceBtnController: TranscendenceBtnController;
+    turnHGOffButtonController: TurnHGOffButtonController;
+    UISystem: UISystem;
+    village: {
+      BiomeBtn: BiomeBtn;
+      BiomeBtnController: BiomeBtnController;
+      Census: Census;
+    };
+    VoidSpaceWgt: VoidSpaceWgt;
+  };
+  village: {
+    KittenSim: KittenSim;
+    LoadoutController: LoadoutController;
+    ui: {
+      FestivalButton: FestivalButton;
+      FestivalButtonController: FestivalButtonController;
+      map: {
+        UpgradeExplorersController: UpgradeExplorersController;
+        UpgradeHQController: UpgradeHQController;
+      };
+      MapOverviewWgt: MapOverviewWgt;
+      VillageButtonController: VillageButtonController;
     };
   };
 };
 
 export type ComInterface = {
   nuclearunicorn: {
+    core: {
+      Control: Control;
+      TabManager: TabManager;
+    };
     game: {
+      Calendar: Calendar;
+      calendar: {
+        Event: Event;
+      };
+      EffectsManager: EffectsManager;
+      log: {
+        Console: Console;
+      };
+      Math: KGMath;
       ui: {
+        BuildingBtn: BuildingBtn<UnsafeBuildingBtnModel, ButtonModernController>;
+        BuildingBtnController: BuildingBtnController;
+        BuildingNotStackableBtnController: BuildingNotStackableBtnController;
+        BuildingResearchBtn: BuildingResearchBtn<UnsafeBuildingBtnModel, ButtonModernController>;
+        BuildingStackableBtn: BuildingStackableBtn<
+          UnsafeBuildingStackableBtnModel,
+          BuildingStackableBtnController
+        >;
+        BuildingStackableBtnController: BuildingStackableBtnController;
+        Button: Button<UnsafeButtonModel, ButtonController>;
+        ButtonController: ButtonController;
+        ButtonModern: ButtonModern<UnsafeButtonModernModel, ButtonModernController>;
+        ButtonModernController: ButtonModernController;
+        CensusPanel: CensusPanel;
+        ContentRowRenderer: ContentRowRenderer;
+        CraftButton: CraftButton;
+        CraftButtonController: CraftButtonController;
+        CrashBcoinButtonController: CrashBcoinButtonController;
+        GamePage: GamePage;
+        JobButton: JobButton;
+        JobButtonController: JobButtonController;
+        LoadoutButton: LoadoutButton;
+        LoadoutButtonController: LoadoutButtonController;
+        PactsBtnController: PactsBtnController;
+        Panel: Panel;
+        PraiseBtnController: PraiseBtnController;
+        ReligionBtnController: ReligionBtnController;
+        ResetFaithBtnController: ResetFaithBtnController;
+        SpaceProgramBtnController: SpaceProgramBtnController;
+        Spacer: Spacer;
+        tab: Tab & {
+          AchTab: AchTab;
+          BuildingsModern: BuildingsModern;
+          Diplomacy: Diplomacy;
+          Library: Library;
+          ReligionTab: ReligionTab;
+          SpaceTab: SpaceTab;
+          Village: Village;
+          Workshop: Workshop;
+        };
         TechButtonController: TechButtonController;
+        TradeButton: TradeButton;
+        TradeButtonController: TradeButtonController;
+        TranscendBtnController: TranscendBtnController;
+        UpgradeButtonController: UpgradeButtonController;
+        ZebraUpgradeButtonController: ZebraUpgradeButtonController;
+        ZigguratBtnController: ZigguratBtnController;
+      };
+      village: {
+        Kitten: Kitten;
+        Loadout: Loadout;
       };
     };
   };
+};
+
+export type MixinInterface = {
+  IChildrenAware: IChildrenAware;
+  IDataStorageAware: IDataStorageAware;
+  IGameAware: IGameAware;
+  IReactAware: IReactAware;
 };
 
 export type I18nEngine = (key: string, args?: Array<number | string>) => string;
@@ -462,7 +1367,7 @@ export type I18nEngine = (key: string, args?: Array<number | string>) => string;
 declare global {
   const classes: ClassList;
   const com: ComInterface;
-  const game: Game;
+  const game: GamePage;
   let unsafeWindow: Window | undefined;
   interface Window {
     $: JQuery;
@@ -476,8 +1381,8 @@ declare global {
       ) => [TEvent, number];
       unsubscribe: (handle: [string, number]) => void;
     };
-    game?: Maybe<Game>;
-    gamePage?: Maybe<Game>;
+    game?: Maybe<GamePage>;
+    gamePage?: Maybe<GamePage>;
     kittenScientists?: KittenScientists;
     LZString: {
       compressToBase64: (input: string) => string;
@@ -488,13 +1393,23 @@ declare global {
   }
 }
 
+/*
+export * from "./_releases.js";
+export * from "./_save.js";
+export * from "./achievements.js";
 export * from "./buildings.js";
+export * from "./calendar.js";
+export * from "./challenges.js";
+export * from "./core.js";
+export * from "./diplomacy.js";
 export * from "./game.js";
-export * from "./releases.js";
+export * from "./math.js";
+export * from "./prestige.js";
 export * from "./religion.js";
-export * from "./save.js";
+export * from "./resources.js";
 export * from "./science.js";
 export * from "./space.js";
 export * from "./time.js";
-export * from "./trade.js";
+export * from "./village.js";
 export * from "./workshop.js";
+*/

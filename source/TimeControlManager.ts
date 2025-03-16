@@ -9,20 +9,38 @@ import type { WorkshopManager } from "./WorkshopManager.js";
 import { type CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
+import type { GatherCatnipButtonController, UnsafeBuildingExt } from "./types/buildings.js";
+import type {
+  BuildingBtnController,
+  Button,
+  ButtonController,
+  ButtonModern,
+  ButtonModernController,
+  UnsafeBuildingBtnModel,
+  UnsafeButtonModel,
+  UnsafeButtonModernModel,
+} from "./types/core.js";
 import {
-  type BuildButton,
-  type BuildingExt,
-  type ButtonModernController,
-  type ButtonModernModel,
+  type Building,
   type ChronoForgeUpgrade,
-  type ChronoForgeUpgradeInfo,
   Cycles,
-  type ShatterTCBtnController,
   TimeItemVariant,
-  type TimeTab,
   type VoidSpaceUpgrade,
-  type VoidSpaceUpgradeInfo,
 } from "./types/index.js";
+import type {
+  ReligionBtnController,
+  TranscendBtnController,
+  TranscendenceBtnController,
+  TransformBtnController,
+  ZigguratBtnController,
+} from "./types/religion.js";
+import type {
+  ChronoforgeBtnController,
+  ShatterTCBtn,
+  ShatterTCBtnController,
+  TimeTab,
+  VoidSpaceBtnController,
+} from "./types/time.js";
 
 export class TimeControlManager {
   private readonly _host: KittenScientists;
@@ -83,8 +101,23 @@ export class TimeControlManager {
     // buttons and see if the item appears on the checklist.
     // If we don't have a given item, but we *could* buy it, then we act
     // as if we already had it.
-    const check = (
-      buttons: Array<BuildButton<string, ButtonModernModel, ButtonModernController>>,
+    const check = <
+      T extends Button<
+        UnsafeButtonModel<unknown>,
+        | BuildingBtnController
+        | ButtonController
+        | ButtonModernController
+        | ChronoforgeBtnController
+        | ReligionBtnController
+        | TranscendBtnController
+        | TranscendenceBtnController
+        | TransformBtnController
+        | VoidSpaceBtnController
+        | ZigguratBtnController,
+        string | undefined
+      >,
+    >(
+      buttons: Array<T>,
     ) => {
       if (checkList.length !== 0) {
         for (const button of buttons) {
@@ -92,7 +125,9 @@ export class TimeControlManager {
             continue;
           }
 
-          const name = button.model.metadata.name;
+          const model = button.model as UnsafeBuildingBtnModel<unknown, { name: Building }>;
+
+          const name = model.metadata.name;
           const index = checkList.indexOf(name);
           if (index !== -1) {
             checkList.splice(index, 1);
@@ -109,7 +144,7 @@ export class TimeControlManager {
     for (const [name, entry] of objectEntries(this.settings.reset.bonfire.buildings))
       if (entry.enabled) {
         // TODO: Obvious error here. For upgraded buildings, it needs special handling.
-        let bld: BuildingExt | null;
+        let bld: UnsafeBuildingExt | null;
         try {
           // @ts-expect-error Obvious error here. For upgraded buildings, it needs special handling.
           bld = this._host.game.bld.getBuildingExt(name);
@@ -157,7 +192,20 @@ export class TimeControlManager {
     if (
       check(
         this._bonfireManager.manager.tab.children as Array<
-          BuildButton<string, ButtonModernModel, ButtonModernController>
+          Button<
+            UnsafeButtonModel<unknown>,
+            | BuildingBtnController
+            | ButtonController
+            | ButtonModernController
+            | ChronoforgeBtnController
+            | ReligionBtnController
+            | TranscendBtnController
+            | TranscendenceBtnController
+            | TransformBtnController
+            | VoidSpaceBtnController
+            | ZigguratBtnController,
+            string | undefined
+          >
         >,
       ) ||
       checkList.length
@@ -185,7 +233,7 @@ export class TimeControlManager {
       const panels = mustExist(this._spaceManager.manager.tab.planetPanels);
       for (const panel of panels) {
         for (const panelButton of panel.children) {
-          const model = panelButton.model as ButtonModernModel;
+          const model = mustExist(panelButton.model);
           const name = model.metadata.name;
           const index = checkList.indexOf(name);
           if (index !== -1) {
@@ -220,17 +268,56 @@ export class TimeControlManager {
     if (
       check(
         this._religionManager.manager.tab.zgUpgradeButtons as Array<
-          BuildButton<string, ButtonModernModel, ButtonModernController>
+          Button<
+            UnsafeButtonModel<unknown>,
+            | BuildingBtnController
+            | ButtonController
+            | ButtonModernController
+            | ChronoforgeBtnController
+            | ReligionBtnController
+            | TranscendBtnController
+            | TranscendenceBtnController
+            | TransformBtnController
+            | VoidSpaceBtnController
+            | ZigguratBtnController,
+            string | undefined
+          >
         >,
       ) ||
       check(
         this._religionManager.manager.tab.rUpgradeButtons as Array<
-          BuildButton<string, ButtonModernModel, ButtonModernController>
+          Button<
+            UnsafeButtonModel<unknown>,
+            | BuildingBtnController
+            | ButtonController
+            | ButtonModernController
+            | ChronoforgeBtnController
+            | ReligionBtnController
+            | TranscendBtnController
+            | TranscendenceBtnController
+            | TransformBtnController
+            | VoidSpaceBtnController
+            | ZigguratBtnController,
+            string | undefined
+          >
         >,
       ) ||
       check(
-        this._religionManager.manager.tab.children[0].children[0].children as Array<
-          BuildButton<string, ButtonModernModel, ButtonModernController>
+        this._religionManager.manager.tab.ctPanel.children[0].children as Array<
+          Button<
+            UnsafeButtonModel<unknown>,
+            | BuildingBtnController
+            | ButtonController
+            | ButtonModernController
+            | ChronoforgeBtnController
+            | ReligionBtnController
+            | TranscendBtnController
+            | TranscendenceBtnController
+            | TransformBtnController
+            | VoidSpaceBtnController
+            | ZigguratBtnController,
+            string | undefined
+          >
         >,
       ) ||
       checkList.length
@@ -255,13 +342,39 @@ export class TimeControlManager {
 
     if (
       check(
-        this.manager.tab.children[2].children[0].children as Array<
-          BuildButton<string, ButtonModernModel, ButtonModernController>
+        this.manager.tab.cfPanel.children[0].children as Array<
+          Button<
+            UnsafeButtonModel<unknown>,
+            | BuildingBtnController
+            | ButtonController
+            | ButtonModernController
+            | ChronoforgeBtnController
+            | ReligionBtnController
+            | TranscendBtnController
+            | TranscendenceBtnController
+            | TransformBtnController
+            | VoidSpaceBtnController
+            | ZigguratBtnController,
+            string | undefined
+          >
         >,
       ) ||
       check(
-        this.manager.tab.children[3].children[0].children as Array<
-          BuildButton<string, ButtonModernModel, ButtonModernController>
+        this.manager.tab.vsPanel.children[0].children as Array<
+          Button<
+            UnsafeButtonModel<unknown>,
+            | BuildingBtnController
+            | ButtonController
+            | ButtonModernController
+            | ChronoforgeBtnController
+            | ReligionBtnController
+            | TranscendBtnController
+            | TranscendenceBtnController
+            | TransformBtnController
+            | VoidSpaceBtnController
+            | ZigguratBtnController,
+            string | undefined
+          >
         >,
       ) ||
       checkList.length
@@ -551,7 +664,7 @@ export class TimeControlManager {
     }
     // If we found we can skip any years, do so now.
     if (0 < willSkip) {
-      const shatter = this._host.game.timeTab.cfPanel.children[0].children[0]; // check?
+      const shatter = this._host.game.timeTab.cfPanel.children[0].children[0] as ShatterTCBtn; // check?
       if (isNil(shatter.model)) {
         return;
       }
@@ -561,10 +674,7 @@ export class TimeControlManager {
     }
   }
 
-  getBuild(
-    name: ChronoForgeUpgrade | VoidSpaceUpgrade,
-    variant: TimeItemVariant,
-  ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo {
+  getBuild(name: ChronoForgeUpgrade | VoidSpaceUpgrade, variant: TimeItemVariant) {
     if (variant === TimeItemVariant.Chronoforge) {
       return this._host.game.time.getCFU(name as ChronoForgeUpgrade);
     }

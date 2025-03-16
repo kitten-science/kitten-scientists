@@ -2,7 +2,8 @@ import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { type Game, type Upgrade, Upgrades } from "../types/index.js";
+import type { GamePage } from "../types/game.js";
+import { type Upgrade, Upgrades } from "../types/index.js";
 import { SettingTrigger } from "./Settings.js";
 
 export class UpgradeSettingsItem extends SettingTrigger {
@@ -36,7 +37,7 @@ export class UpgradeSettings extends SettingTrigger {
     return items;
   }
 
-  static validateGame(game: Game, settings: UpgradeSettings) {
+  static validateGame(game: GamePage, settings: UpgradeSettings) {
     const inSettings = Object.keys(settings.upgrades);
     const inGame = game.workshop.upgrades.map(upgrade => upgrade.name);
 

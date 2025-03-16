@@ -2,8 +2,8 @@ import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cinfo, cwarn } from "../tools/Log.js";
+import type { GamePage } from "../types/game.js";
 import {
-  type Game,
   Technologies,
   TechnologiesIgnored,
   type Technology,
@@ -44,7 +44,7 @@ export class TechSettings extends SettingTrigger {
     return items;
   }
 
-  static validateGame(game: Game, settings: TechSettings) {
+  static validateGame(game: GamePage, settings: TechSettings) {
     const inSettings = Object.keys(settings.techs);
     const inGame = game.science.techs.map(tech => tech.name);
 

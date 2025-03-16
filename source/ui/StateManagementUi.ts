@@ -10,7 +10,7 @@ import type { StateSettings } from "../settings/StateSettings.js";
 import { Unique } from "../tools/Entries.js";
 import { cerror, cinfo } from "../tools/Log.js";
 import { SavegameLoader } from "../tools/SavegameLoader.js";
-import type { KGSaveData } from "../types/index.js";
+import type { KGSaveData } from "../types/_save.js";
 import { Button } from "./components/Button.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Container } from "./components/Container.js";

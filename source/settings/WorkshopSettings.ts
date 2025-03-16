@@ -2,7 +2,8 @@ import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cwarn } from "../tools/Log.js";
-import { type Game, type ResourceCraftable, ResourcesCraftable } from "../types/index.js";
+import type { GamePage } from "../types/game.js";
+import { type ResourceCraftable, ResourcesCraftable } from "../types/index.js";
 import { Setting, SettingLimitedMaxTrigger, SettingTrigger } from "./Settings.js";
 import { UpgradeSettings } from "./UpgradeSettings.js";
 
@@ -47,7 +48,7 @@ export class WorkshopSettings extends SettingTrigger {
     return items;
   }
 
-  static validateGame(game: Game, settings: WorkshopSettings) {
+  static validateGame(game: GamePage, settings: WorkshopSettings) {
     const inSettings = Object.keys(settings.resources);
     const inGame = game.workshop.crafts.map(craft => craft.name);
 

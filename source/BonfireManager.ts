@@ -9,23 +9,23 @@ import {
   type BonfireItem,
   BonfireSettings,
 } from "./settings/BonfireSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cdebug, cwarn } from "./tools/Log.js";
 import type {
-  BuildButton,
-  Building,
-  BuildingExt,
   BuildingMeta,
-  ButtonModernController,
-  ButtonModernModel,
-  GameTab,
-} from "./types/index.js";
-
-export type BonfireTab = GameTab;
+  BuildingsModern,
+  GatherCatnipButton,
+  GatherCatnipButtonController,
+  RefineCatnipButton,
+  UnsafeBuilding,
+  UnsafeBuildingExt,
+} from "./types/buildings.js";
+import type { ButtonModern, UnsafeButtonModernModel } from "./types/core.js";
+import type { Building } from "./types/index.js";
 
 export class BonfireManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: BonfireSettings;
-  readonly manager: TabManager;
+  readonly manager: TabManager<BuildingsModern>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
@@ -36,7 +36,7 @@ export class BonfireManager implements Automation {
   ) {
     this._host = host;
     this.settings = settings;
-    this.manager = new TabManager<BonfireTab>(this._host, "Bonfire");
+    this.manager = new TabManager<BuildingsModern>(this._host, "Bonfire");
 
     this._workshopManager = workshopManager;
     this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
@@ -69,7 +69,7 @@ export class BonfireManager implements Automation {
     const bulkManager = this._bulkManager;
 
     // Get the current metadata for all the referenced buildings.
-    const metaData: Partial<Record<BonfireItem, BuildingMeta>> = {};
+    const metaData: Partial<Record<BonfireItem, Required<UnsafeBuilding>>> = {};
     for (const build of Object.values(builds)) {
       metaData[build.building] = this.getBuild(
         (build.baseBuilding ?? build.building) as Building,
@@ -125,7 +125,7 @@ export class BonfireManager implements Automation {
             this._host.engine.iactivity("upgrade.building.pasture", [], "ks-upgrade");
 
             // Upgrade the pasture.
-            this._host.game.ui.render();
+            this._host.game.ui?.render();
             this.build("pasture", 1, 1);
             context.requestGameUiRefresh = true;
           }
@@ -158,7 +158,7 @@ export class BonfireManager implements Automation {
 
             this._host.engine.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
 
-            this._host.game.ui.render();
+            this._host.game.ui?.render();
             this.build("aqueduct", 1, 1);
             context.requestGameUiRefresh = true;
           }
@@ -215,7 +215,7 @@ export class BonfireManager implements Automation {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           libraryMeta.calculateEffects?.(libraryMeta, this._host.game);
           this._host.engine.iactivity("upgrade.building.library", [], "ks-upgrade");
-          this._host.game.ui.render();
+          this._host.game.ui?.render();
           this.build("library", 1, 1);
           context.requestGameUiRefresh = true;
           return;
@@ -241,7 +241,7 @@ export class BonfireManager implements Automation {
 
           this._host.engine.iactivity("upgrade.building.warehouse", [], "ks-upgrade");
 
-          this._host.game.ui.render();
+          this._host.game.ui?.render();
           this.build("warehouse", 1, 1);
           context.requestGameUiRefresh = true;
 
@@ -272,7 +272,7 @@ export class BonfireManager implements Automation {
 
           this._host.engine.iactivity("upgrade.building.amphitheatre", [], "ks-upgrade");
 
-          this._host.game.ui.render();
+          this._host.game.ui?.render();
           this.build("amphitheatre", 1, 1);
           context.requestGameUiRefresh = true;
         }
@@ -333,7 +333,7 @@ export class BonfireManager implements Automation {
   autoGather(): void {
     const controller = new classes.game.ui.GatherCatnipButtonController(this._host.game);
     for (let clicks = 0; clicks < Math.floor(this._host.engine.settings.interval / 20); ++clicks) {
-      controller.buyItem(null, null);
+      controller.buyItem(undefined, null);
     }
   }
 
@@ -352,7 +352,11 @@ export class BonfireManager implements Automation {
 
     const amountTemp = amountCalculated;
     const label = this._getBuildLabel(build.meta, stage);
-    amountCalculated = this._bulkManager.construct(button.model, button, amountCalculated);
+    amountCalculated = this._bulkManager.construct(
+      button.model,
+      button.controller,
+      amountCalculated,
+    );
     if (amountCalculated !== amountTemp) {
       cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
@@ -369,22 +373,32 @@ export class BonfireManager implements Automation {
     }
   }
 
-  private _getBuildLabel(meta: BuildingMeta, stage?: number): string {
+  private _getBuildLabel(meta: UnsafeBuilding, stage?: number): string {
     return meta.stages && !isNil(stage) ? meta.stages[stage].label : mustExist(meta.label);
   }
 
-  getBuild(name: Building): BuildingExt {
-    return this._host.game.bld.getBuildingExt(name);
+  getBuild(name: Building): BuildingMeta<Required<UnsafeBuilding>> {
+    return this._host.game.bld.getBuildingExt(name) as BuildingMeta<Required<UnsafeBuilding>>;
   }
 
-  getBuildButton(
-    name: Building,
-    stage?: number,
-  ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
+  getBuildButton(name: Building, stage?: number) {
     const buttons = this.manager.tab.children;
-    const build = this.getBuild(name);
-    const label = this._getBuildLabel(build.meta, stage);
-    return (buttons.find(button => (button.model?.options.name as string).startsWith(label)) ??
-      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
+
+    const button =
+      (
+        buttons.filter(
+          button =>
+            button instanceof com.nuclearunicorn.game.ui.ButtonModern === false &&
+            button instanceof classes.game.ui.RefineCatnipButton === false,
+        ) as Array<Exclude<(typeof buttons)[number], GatherCatnipButton | RefineCatnipButton>>
+      ).find(
+        button => button.model?.metadata.name === name && button.model?.metadata.stage === stage,
+      ) ?? null;
+
+    if (button === null) {
+      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
+    }
+
+    return button;
   }
 }

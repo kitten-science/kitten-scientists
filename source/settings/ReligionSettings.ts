@@ -1,42 +1,15 @@
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import {
-  type ReligionUpgrade,
+  type FaithItem,
   ReligionUpgrades,
-  type TranscendenceUpgrade,
   TranscendenceUpgrades,
+  type UnicornItem,
   UnicornItemVariant,
   type ZiggurathUpgrade,
   ZiggurathUpgrades,
 } from "../types/index.js";
 import { Setting, SettingThreshold, SettingTrigger, SettingTriggerMax } from "./Settings.js";
-
-export type FaithItem = Exclude<ReligionItem, UnicornItem>;
-
-export const UnicornItems = [
-  "ivoryCitadel",
-  "ivoryTower",
-  "skyPalace",
-  "sunspire",
-  "unicornPasture",
-  "unicornTomb",
-  "unicornUtopia",
-] as const;
-export type UnicornItem = (typeof UnicornItems)[number];
-
-export type ReligionItem = ReligionUpgrade | TranscendenceUpgrade | ZiggurathUpgrade;
-export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
-
-export const ReligionOptions = [
-  "sacrificeUnicorns",
-  "sacrificeAlicorns",
-  "refineTears",
-  "refineTimeCrystals",
-  "transcend",
-  "adore",
-  "autoPraise",
-] as const;
-export type ReligionOption = (typeof ReligionOptions)[number];
 
 export class ReligionSettingsItem extends SettingTriggerMax {
   readonly #building: FaithItem | UnicornItem;

@@ -6,30 +6,30 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
+import { ReligionSettings, type ReligionSettingsItem } from "./settings/ReligionSettings.js";
+import { negativeOneToInfinity } from "./tools/Format.js";
+import { cdebug, cwarn } from "./tools/Log.js";
+import type { UnsafeButtonModernModel } from "./types/core.js";
 import {
   type FaithItem,
   type ReligionItem,
-  ReligionSettings,
-  type ReligionSettingsItem,
-  type UnicornItem,
-  UnicornItems,
-} from "./settings/ReligionSettings.js";
-import { negativeOneToInfinity } from "./tools/Format.js";
-import { cwarn } from "./tools/Log.js";
-import {
-  type BuildButton,
-  type ButtonModernController,
-  type ButtonModernModel,
-  type ReligionTab,
   type ReligionUpgrade,
-  type ReligionUpgradeInfo,
   type TranscendenceUpgrade,
-  type TranscendenceUpgradeInfo,
-  type TransformBtnController,
+  type UnicornItem,
   UnicornItemVariant,
+  UnicornItems,
   type ZiggurathUpgrade,
-  type ZiggurathUpgradeInfo,
 } from "./types/index.js";
+import type {
+  CryptotheologyPanel,
+  CryptotheologyWGT,
+  ReligionTab,
+  TransformBtnController,
+  UnsafeReligionUpgrade,
+  UnsafeTranscendenceUpgrade,
+  UnsafeTransformBtnModel,
+  UnsafeZiggurathUpgrade,
+} from "./types/religion.js";
 
 export class ReligionManager implements Automation {
   private readonly _host: KittenScientists;
@@ -170,7 +170,7 @@ export class ReligionManager implements Automation {
           needSacrifice < maxSacrifice &&
           !isNil(this._host.game.religionTab.sacrificeBtn.model)
         ) {
-          this._host.game.religionTab.sacrificeBtn.controller._transform(
+          this._host.game.religionTab.sacrificeBtn?.controller?._transform(
             this._host.game.religionTab.sacrificeBtn.model,
             needSacrifice,
           );
@@ -218,7 +218,10 @@ export class ReligionManager implements Automation {
     this.manager.render();
 
     const metaData: Partial<
-      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
+      Record<
+        FaithItem,
+        Required<UnsafeReligionUpgrade | UnsafeTranscendenceUpgrade | UnsafeZiggurathUpgrade>
+      >
     > = this.getBuildMetaData(builds);
     const sectionTrigger = this.settings.trigger;
 
@@ -404,7 +407,11 @@ export class ReligionManager implements Automation {
 
     const amountTemp = amountCalculated;
     const label = build.label;
-    amountCalculated = this._bulkManager.construct(button.model, button, amountCalculated);
+    amountCalculated = this._bulkManager.construct(
+      button.model,
+      mustExist(button.controller),
+      amountCalculated,
+    );
     if (amountCalculated !== amountTemp) {
       cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
@@ -436,7 +443,10 @@ export class ReligionManager implements Automation {
 
   getBuildMetaData(builds: Partial<Record<FaithItem, ReligionSettingsItem>>) {
     const metaData: Partial<
-      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
+      Record<
+        FaithItem,
+        Required<UnsafeReligionUpgrade | UnsafeTranscendenceUpgrade | UnsafeZiggurathUpgrade>
+      >
     > = {};
     for (const build of Object.values(builds)) {
       const buildInfo = this.getBuild(build.building, build.variant);
@@ -470,10 +480,7 @@ export class ReligionManager implements Automation {
    * @param variant The variant of the upgrade.
    * @returns The build information for the upgrade.
    */
-  getBuild(
-    name: ReligionItem | "unicornPasture",
-    variant: UnicornItemVariant,
-  ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo | null {
+  getBuild(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant) {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
         return this._host.game.religion.getZU(name as ZiggurathUpgrade) ?? null;
@@ -482,7 +489,7 @@ export class ReligionManager implements Automation {
       case UnicornItemVariant.Cryptotheology:
         return this._host.game.religion.getTU(name as TranscendenceUpgrade) ?? null;
     }
-    return null;
+    throw new Error(`Unknown build: ${name} (${variant})`);
   }
 
   /**
@@ -492,11 +499,11 @@ export class ReligionManager implements Automation {
    * @param variant The variant of the upgrade.
    * @returns The button to buy the upgrade, or `null`.
    */
-  private _getBuildButton(
-    name: ReligionItem | "unicornPasture",
-    variant: UnicornItemVariant,
-  ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
-    let buttons: Array<BuildButton>;
+  private _getBuildButton(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant) {
+    let buttons:
+      | typeof this.manager.tab.zgUpgradeButtons
+      | typeof this.manager.tab.rUpgradeButtons
+      | CryptotheologyWGT["children"];
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
         buttons = this.manager.tab.zgUpgradeButtons;
@@ -505,7 +512,7 @@ export class ReligionManager implements Automation {
         buttons = this.manager.tab.rUpgradeButtons;
         break;
       case UnicornItemVariant.Cryptotheology:
-        buttons = this.manager.tab.children[0].children[0].children;
+        buttons = (this.manager.tab.children[0] as CryptotheologyPanel).children[0].children;
         break;
       default:
         throw new Error(`Invalid variant '${variant}'`);
@@ -516,18 +523,20 @@ export class ReligionManager implements Automation {
       return null;
     }
 
-    return (buttons.find(button => button.id === name) ?? null) as BuildButton<
-      string,
-      ButtonModernModel,
-      ButtonModernController
-    > | null;
+    const button = buttons.find(button => button.id === name) ?? null;
+
+    if (button === null) {
+      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
+    }
+
+    return button;
   }
 
-  private _transformBtnSacrificeHelper(
+  private _transformBtnSacrificeHelper<TOptions extends Record<string, unknown>>(
     available: number,
     total: number,
-    controller: TransformBtnController,
-    model: ButtonModernModel,
+    controller: TransformBtnController<TOptions>,
+    model: UnsafeTransformBtnModel,
   ) {
     const conversionPercentage = available / total;
     const percentageInverse = 1 / conversionPercentage;
@@ -535,7 +544,7 @@ export class ReligionManager implements Automation {
     const customController = new classes.ui.religion.TransformBtnController(
       game,
       controller.controllerOpts,
-    ) as TransformBtnController;
+    ) as TransformBtnController<TOptions>;
 
     const link = customController._newLink(model, percentageInverse);
     return new Promise<boolean>(resolve => {
@@ -796,9 +805,9 @@ export class ReligionManager implements Automation {
         this._host.game.religion.transcendenceTier += 1;
 
         const atheism = mustExist(this._host.game.challenges.getChallenge("atheism"));
-        atheism.calculateEffects(atheism, this._host.game);
+        atheism.calculateEffects?.(atheism, this._host.game);
         const blackObelisk = mustExist(this._host.game.religion.getTU("blackObelisk"));
-        blackObelisk.calculateEffects(blackObelisk, this._host.game);
+        blackObelisk.calculateEffects?.(blackObelisk, this._host.game);
 
         this._host.game.msg(
           this._host.engine.i18n("$religion.transcend.msg.success", [

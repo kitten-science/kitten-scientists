@@ -7,10 +7,10 @@ import { UserScriptLoader } from "./UserScriptLoader.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { cerror } from "./tools/Log.js";
-import type { PolicyInfo, ScienceTab, TechInfo } from "./types/index.js";
+import type { Library, UnsafePolicy, UnsafeTech } from "./types/science.js";
 
 export class ScienceManager extends UpgradeManager {
-  readonly manager: TabManager<ScienceTab>;
+  readonly manager: TabManager<Library>;
   readonly settings: ScienceSettings;
   private readonly _workshopManager: WorkshopManager;
 
@@ -51,7 +51,7 @@ export class ScienceManager extends UpgradeManager {
 
   async autoUnlock() {
     const techs = this._host.game.science.techs;
-    const toUnlock = new Array<TechInfo>();
+    const toUnlock = new Array<UnsafeTech>();
 
     workLoop: for (const setting of Object.values(this.settings.techs.techs)) {
       if (!setting.enabled) {
@@ -92,7 +92,7 @@ export class ScienceManager extends UpgradeManager {
 
   async autoPolicy() {
     const policies = this._host.game.science.policies;
-    const toUnlock = new Array<PolicyInfo>();
+    const toUnlock = new Array<UnsafePolicy>();
 
     for (const setting of Object.values(this.settings.policies.policies)) {
       if (!setting.enabled) {

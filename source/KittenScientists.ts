@@ -7,8 +7,10 @@ import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
-import type { Game, I18nEngine } from "./types/index.js";
-import type { ReleaseChannel, ReleaseInfoSchema } from "./types/releases.js";
+import type { ReleaseChannel, ReleaseInfoSchema } from "./types/_releases.js";
+import type { TabManager } from "./types/core.js";
+import type { GamePage } from "./types/game.js";
+import type { I18nEngine } from "./types/index.js";
 import { UserInterface } from "./ui/UserInterface.js";
 
 declare global {
@@ -25,7 +27,7 @@ export const ksVersion = (prefix = "") => {
 };
 
 export class KittenScientists {
-  readonly game: Game;
+  readonly game: GamePage;
 
   /**
    * A function in the game that allows to retrieve translated messages.
@@ -42,7 +44,7 @@ export class KittenScientists {
   private _serverLoadHandle: ["server/load", number] | undefined;
 
   constructor(
-    game: Game,
+    game: GamePage,
     i18nEngine: I18nEngine,
     gameLanguage: GameLanguage = "en",
     engineState?: EngineState,

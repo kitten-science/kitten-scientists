@@ -5,21 +5,27 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type TimeItem, TimeSettings, type TimeSettingsItem } from "./settings/TimeSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cdebug, cwarn } from "./tools/Log.js";
+import type {
+  BuildingStackableBtn,
+  ButtonModern,
+  UnsafeBuildingBtnModel,
+  UnsafeBuildingStackableBtnModel,
+} from "./types/core.js";
 import {
-  type BuildButton,
-  type ButtonModernController,
-  type ButtonModernModel,
-  type BuyResultOperation,
+  type BuyItemResultReason,
   type ChronoForgeUpgrade,
-  type ChronoForgeUpgradeInfo,
-  type FixCryochamberBtnController,
   TimeItemVariant,
-  type TimeTab,
   type VoidSpaceUpgrade,
-  type VoidSpaceUpgradeInfo,
 } from "./types/index.js";
-import { BuyButton } from "./ui/components/buttons-text/BuyButton.js";
+import type {
+  FixCryochamberBtnController,
+  TimeTab,
+  UnsafeChronoForgeUpgrade,
+  UnsafeFixCryochamberBtnModel,
+  UnsafeVoidSpaceUpgrade,
+  VoidSpaceBtnController,
+} from "./types/time.js";
 
 export class TimeManager {
   private readonly _host: KittenScientists;
@@ -71,12 +77,17 @@ export class TimeManager {
     const sectionTrigger = this.settings.trigger;
 
     // Get the current metadata for all the referenced buildings.
-    const metaData: Partial<Record<TimeItem, ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo>> = {};
+    const metaData: Partial<
+      Record<TimeItem, Required<UnsafeChronoForgeUpgrade | UnsafeVoidSpaceUpgrade>>
+    > = {};
     for (const build of Object.values(builds)) {
       const buildMeta = this.getBuild(build.building, build.variant);
       metaData[build.building] = mustExist(buildMeta);
 
-      const buildButton = this.getBuildButton(build.building, build.variant);
+      const buildButton =
+        build.variant === TimeItemVariant.Chronoforge
+          ? this._getBuildButtonCF(build.building as ChronoForgeUpgrade)
+          : this._getBuildButtonVS(build.building as VoidSpaceUpgrade);
       if (isNil(buildButton)) {
         // Not available in this build of KG.
         continue;
@@ -113,14 +124,30 @@ export class TimeManager {
   ): void {
     let amountCalculated = amount;
     const build = mustExist(this.getBuild(name, variant));
-    const button = this.getBuildButton(name, variant);
+    const button = TimeItemVariant.Chronoforge
+      ? this._getBuildButtonCF(name as ChronoForgeUpgrade)
+      : this._getBuildButtonVS(name as VoidSpaceUpgrade);
 
     if (!button || !button.model?.enabled) {
       return;
     }
+
     const amountTemp = amountCalculated;
     const label = build.label;
-    amountCalculated = this._bulkManager.construct(button.model, button, amountCalculated);
+    const model = button.model as Required<
+      | UnsafeBuildingBtnModel<unknown, UnsafeBuildingBtnModel>
+      | UnsafeBuildingStackableBtnModel<unknown, UnsafeBuildingStackableBtnModel>
+    >;
+    const meta = model.metadata;
+    if (isNil(meta)) {
+      return;
+    }
+
+    amountCalculated = this._bulkManager.construct(
+      meta,
+      mustExist(button.controller),
+      amountCalculated,
+    );
     if (amountCalculated !== amountTemp) {
       cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
@@ -137,31 +164,28 @@ export class TimeManager {
     }
   }
 
-  getBuild(
-    name: ChronoForgeUpgrade | VoidSpaceUpgrade,
-    variant: TimeItemVariant,
-  ): ChronoForgeUpgradeInfo | VoidSpaceUpgradeInfo {
+  getBuild(name: ChronoForgeUpgrade | VoidSpaceUpgrade, variant: TimeItemVariant) {
     if (variant === TimeItemVariant.Chronoforge) {
       return this._host.game.time.getCFU(name as ChronoForgeUpgrade);
     }
     return this._host.game.time.getVSU(name as VoidSpaceUpgrade);
   }
 
-  getBuildButton(
-    name: ChronoForgeUpgrade | VoidSpaceUpgrade,
-    variant: TimeItemVariant,
-  ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
-    let buttons: Array<BuildButton>;
-    if (variant === TimeItemVariant.Chronoforge) {
-      buttons = this.manager.tab.children[2].children[0].children;
-    } else {
-      buttons = this.manager.tab.children[3].children[0].children;
-    }
-
-    return (buttons.find(button => button.id === name) ?? null) as BuildButton<
-      string,
-      ButtonModernModel,
-      ButtonModernController
+  private _getBuildButtonCF(name: ChronoForgeUpgrade) {
+    return (this.manager.tab.children[2].children[0].children.find(button => button.id === name) ??
+      null) as BuildingStackableBtn<
+      UnsafeBuildingStackableBtnModel<{
+        id: ChronoForgeUpgrade;
+        controller: VoidSpaceBtnController;
+      }>,
+      VoidSpaceBtnController
+    > | null;
+  }
+  private _getBuildButtonVS(name: VoidSpaceUpgrade) {
+    return (this.manager.tab.children[3].children[0].children.find(button => button.id === name) ??
+      null) as BuildingStackableBtn<
+      UnsafeBuildingStackableBtnModel<{ id: VoidSpaceUpgrade; controller: VoidSpaceBtnController }>,
+      VoidSpaceBtnController
     > | null;
   }
 
@@ -178,28 +202,18 @@ export class TimeManager {
       }
     }
 
-    const btn = this.manager.tab.vsPanel.children[0].children[0];
+    const btn = this.manager.tab.vsPanel.children[0].children[0] as ButtonModern<
+      UnsafeFixCryochamberBtnModel,
+      FixCryochamberBtnController
+    >;
 
     let fixed = 0;
     let fixHappened: boolean;
     do {
       fixHappened = false;
-
-      const buyResult = (btn.controller as FixCryochamberBtnController).buyItem(
-        btn.model as ButtonModernModel,
-        new MouseEvent("click"),
-      );
-
-      if (buyResult.def !== undefined) {
-        // This callback is invoked at the end of the `buyItem` call.
-        // Thus, the callback should be invoked before this loop ends.
-        buyResult.def.then((didHappen: BuyResultOperation) => {
-          fixHappened = didHappen.itemBought;
-          fixed += didHappen ? 1 : 0;
-        });
-      } else {
-        fixHappened = buyResult.itemBought;
-      }
+      const buyResult = btn.controller.buyItem(mustExist(btn.model), new MouseEvent("click"));
+      fixHappened = buyResult.itemBought;
+      fixed += fixHappened ? 1 : 0;
     } while (fixHappened);
 
     if (0 < fixed) {
