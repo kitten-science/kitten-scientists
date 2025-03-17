@@ -304,7 +304,7 @@ __metadata:
     "@types/jquery": "npm:3.5.32"
     "@types/node": "npm:22.13.10"
     "@types/semver": "npm:7.5.8"
-    "@types/web": "npm:0.0.212"
+    "@types/web": "npm:0.0.213"
     cheerio: "npm:1.0.0"
     date-fns: "npm:4.1.0"
     rollup: "npm:4.35.0"
@@ -533,10 +533,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/web@npm:0.0.212":
-  version: 0.0.212
-  resolution: "@types/web@npm:0.0.212"
-  checksum: 10c0/267bf929c37d994e8d71bb4ba6aca9a340cd8baef001e0ade590183921d444d578a5c926fab0d74b8b8fc2d2847b440deea258fb6e6381b25935b106bad672b3
+"@types/web@npm:0.0.213":
+  version: 0.0.213
+  resolution: "@types/web@npm:0.0.213"
+  checksum: 10c0/1fc2d31a7eeac5ccc7e270c8339c3f9148c1dbc17bf141d46dee60852fd7939eefb673caf2c6c6c775e10ad00b87b33c28f6703b027da48aa19d647d15f4c981
   languageName: node
   linkType: hard
 
