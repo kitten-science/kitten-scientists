@@ -306,12 +306,21 @@ export type ButtonController = {
   rejustPrice: (model: ButtonModel, ratio: number) => void;
   payPrice: (model: ButtonModel) => void;
   clickHandler: (model: ButtonModel, event: Event) => void;
-  buyItem: (
-    model: ButtonModel | null,
-    event: Event | null,
-    callback: (success: boolean) => void,
-  ) => void;
+  buyItem: (model: ButtonModel | null, event: Event | null) => DefferrableBuyResultOperation;
   refund: (model: ButtonModel) => void;
+};
+
+export type BuyResultOperation = {
+  itemBought: boolean;
+  reason: string;
+};
+
+export type DefferrableBuyResultOperation = {
+  itemBought: boolean;
+  reason: string;
+  def?: {
+    then: (callable: (result: BuyResultOperation) => void) => void;
+  };
 };
 
 export type ButtonModernModel = {
@@ -356,7 +365,7 @@ export type BuildingNotStackableBtnController = BuildingBtnController & {
 
 export type BuildingStackableBtnController = BuildingBtnController & {
   new (game: Game): BuildingStackableBtnController;
-  _buyItem_step2: (model: ButtonModel, event: Event, callback: (success: boolean) => void) => void;
+  _buyItem_step2: (model: ButtonModel, event: Event) => DefferrableBuyResultOperation;
   build: (model: ButtonModel, maxBld: number) => void;
   incrementValue: (model: ButtonModel) => void;
 };
@@ -382,12 +391,7 @@ export type PolicyBtnController = BuildingNotStackableBtnController & {
 export type RefineTearsBtnController = ButtonModernController & {
   new (game: Game): ButtonModernController;
   _newLink: (model: ButtonModel, divider: number) => Link;
-  buyItem: (
-    model: ButtonModel | null,
-    event: Event | null,
-    callback: (success: boolean) => void,
-    count: number,
-  ) => void;
+  buyItem: (model: ButtonModel | null, event: Event | null, count: number) => BuyResultOperation;
   refine: () => void;
 };
 

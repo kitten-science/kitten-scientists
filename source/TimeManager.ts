@@ -10,6 +10,7 @@ import {
   type BuildButton,
   type ButtonModernController,
   type ButtonModernModel,
+  type BuyResultOperation,
   type ChronoForgeUpgrade,
   type ChronoForgeUpgradeInfo,
   type FixCryochamberBtnController,
@@ -18,6 +19,7 @@ import {
   type VoidSpaceUpgrade,
   type VoidSpaceUpgradeInfo,
 } from "./types/index.js";
+import { BuyButton } from "./ui/components/buttons-text/BuyButton.js";
 
 export class TimeManager {
   private readonly _host: KittenScientists;
@@ -156,13 +158,11 @@ export class TimeManager {
       buttons = this.manager.tab.children[3].children[0].children;
     }
 
-    const build = this.getBuild(name, variant);
-    if (isNil(build)) {
-      throw new Error(`Unable to retrieve build information for '${name}'`);
-    }
-
-    return (buttons.find(button => button.model?.name.startsWith(build.label)) ??
-      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
+    return (buttons.find(button => button.id === name) ?? null) as BuildButton<
+      string,
+      ButtonModernModel,
+      ButtonModernController
+    > | null;
   }
 
   fixCryochambers() {
@@ -185,16 +185,21 @@ export class TimeManager {
     do {
       fixHappened = false;
 
-      (btn.controller as FixCryochamberBtnController).buyItem(
+      const buyResult = (btn.controller as FixCryochamberBtnController).buyItem(
         btn.model as ButtonModernModel,
         new MouseEvent("click"),
+      );
+
+      if (buyResult.def !== undefined) {
         // This callback is invoked at the end of the `buyItem` call.
         // Thus, the callback should be invoked before this loop ends.
-        (didHappen: boolean) => {
-          fixHappened = didHappen;
+        buyResult.def.then((didHappen: BuyResultOperation) => {
+          fixHappened = didHappen.itemBought;
           fixed += didHappen ? 1 : 0;
-        },
-      );
+        });
+      } else {
+        fixHappened = buyResult.itemBought;
+      }
     } while (fixHappened);
 
     if (0 < fixed) {
