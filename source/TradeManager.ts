@@ -8,13 +8,13 @@ import { TradeSettings, type TradeSettingsItem } from "./settings/TradeSettings.
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cwarn } from "./tools/Log.js";
-import type { ResourceInfo } from "./types/craft.js";
-import type { BuildButton, Race, RaceInfo, Resource, TradeInfo, TradeTab } from "./types/index.js";
+import type { Diplomacy, UnsafeRace } from "./types/diplomacy.js";
+import type { Resource } from "./types/index.js";
 
 export class TradeManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: TradeSettings;
-  readonly manager: TabManager<TradeTab>;
+  readonly manager: TabManager<Diplomacy>;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
@@ -62,7 +62,7 @@ export class TradeManager implements Automation {
     }
 
     // The races we might want to trade with during this frame.
-    const trades: Array<Race> = [];
+    const trades: Array<UnsafeRace> = [];
 
     const season = this._host.game.calendar.getCurSeason().name;
 
@@ -877,8 +877,8 @@ export class TradeManager implements Automation {
    */
   singleTradePossible(
     sectionTrigger: number,
-    catpower: ResourceInfo,
-    gold: ResourceInfo,
+    catpower: UnsafeResource,
+    gold: UnsafeResource,
     trade?: TradeSettingsItem,
   ): boolean {
     const trigger = trade

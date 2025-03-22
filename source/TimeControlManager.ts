@@ -11,7 +11,6 @@ import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import {
   type BuildButton,
-  type BuildingExt,
   type ButtonModernController,
   type ButtonModernModel,
   type ChronoForgeUpgrade,
@@ -20,6 +19,7 @@ import {
   type ShatterTCBtnController,
   TimeItemVariant,
   type TimeTab,
+  type UnsafeBuildingExt,
   type VoidSpaceUpgrade,
   type VoidSpaceUpgradeInfo,
 } from "./types/index.js";
@@ -109,7 +109,7 @@ export class TimeControlManager {
     for (const [name, entry] of objectEntries(this.settings.reset.bonfire.buildings))
       if (entry.enabled) {
         // TODO: Obvious error here. For upgraded buildings, it needs special handling.
-        let bld: BuildingExt | null;
+        let bld: UnsafeBuildingExt | null;
         try {
           // @ts-expect-error Obvious error here. For upgraded buildings, it needs special handling.
           bld = this._host.game.bld.getBuildingExt(name);

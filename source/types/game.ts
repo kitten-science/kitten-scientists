@@ -1,38 +1,23 @@
 import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
-import type { CycleIndices } from "../settings/TimeControlSettings.js";
-import type { CraftableInfo, ResourceInfo } from "./craft.js";
+import type { BuildingsManager, BuildingsModern } from "./buildings.js";
+import type { Calendar } from "./calendar.js";
+import type { ChallengesManager } from "./challenges.js";
+import type { Tab } from "./core.js";
+import type { Diplomacy, DiplomacyManager } from "./diplomacy.js";
 import type {
   AllBuildings,
-  BuildButton,
-  Building,
-  BuildingEffects,
-  BuildingExt,
-  BuildingMeta,
-  Challenge,
-  Cycle,
-  GameTab,
-  KGSaveData,
+  BuildingEffect,
   Kitten,
-  Policy,
   Price,
-  Race,
-  RaceInfo,
-  ReligionUpgrade,
-  ReligionUpgradeInfo,
   Resource,
   ResourceCraftable,
-  Season,
   TabId,
-  TranscendenceUpgrade,
-  TranscendenceUpgradeInfo,
-  UpgradeInfo,
-  WorkshopTab,
-  ZiggurathUpgrade,
-  ZiggurathUpgradeInfo,
 } from "./index.js";
-import type { ReligionTab } from "./religion.js";
-import type { PolicyInfo, Technology, TechInfo as TechnologyInfo } from "./science.js";
-import type { Mission, PlanetMeta, SpaceBuilding, SpaceTab } from "./space.js";
+import type { PrestigeManager } from "./prestige.js";
+import type { ReligionManager, ReligionTab } from "./religion.js";
+import type { UnsafeResource } from "./resources.js";
+import type { ScienceManager, UnsafePolicy, UnsafeTech } from "./science.js";
+import type { SpaceTab, UnsafePlanet } from "./space.js";
 import type {
   ChronoForgeUpgrade,
   ChronoForgeUpgradeInfo,
@@ -40,7 +25,6 @@ import type {
   VoidSpaceUpgrade,
   VoidSpaceUpgradeInfo,
 } from "./time.js";
-import type { TradeTab } from "./trade.js";
 import type { JobInfo, VillageTab } from "./village.js";
 
 type Server = {
@@ -115,71 +99,10 @@ export type FestivalEffects = {
   wood: number;
 };
 
-export type CycleMeta = {
-  name: Cycle;
-  effects: Partial<CycleEffects>;
-  festivalEffects: Partial<FestivalEffects>;
-  glyph: string;
-  uglyph: string;
-  title: string;
-};
-
 export type Game = {
-  bld: {
-    buildingGroups: Array<{
-      title: string;
-      buildings: Array<Building>;
-    }>;
-    cathPollution: number;
-    /** @deprecated Use `getBuildingExt()` instead. */
-    get: (build: Building) => BuildingMeta;
-    getBuildingExt: (building: Building) => BuildingExt;
-    getPollutionLevel(): number;
-    meta: [{ meta: Array<BuildingMeta> }];
-  };
-  calendar: {
-    cryptoPrice: number;
-    cycle: CycleIndices;
-    cycleEffectsFestival: (options: Partial<FestivalEffects>) => Partial<FestivalEffects>;
-    cycles: Array<CycleMeta>;
-    cyclesPerEra: number;
-    cycleYear: number;
-    day: number;
-    daysPerSeason: number;
-
-    eventChance: number;
-
-    /**
-     * How many festival days are remaining?
-     */
-    festivalDays: number;
-
-    futureSeasonTemporalParadox: number;
-
-    getCurSeason: () => { modifiers: { catnip: number }; name: Season };
-    /**
-     * Get the production modifier contribution of the weather for certain resource.
-     */
-    getWeatherMod: (res: { name: Resource }) => number;
-    observeBtn: BuildButton | null;
-    observeHandler: () => void;
-    season: number;
-    seasons: Array<{ name: Season }>;
-    seasonsPerYear: number;
-    ticksPerDay: number;
-    year: number;
-    yearsPerCycle: number;
-  };
-  challenges: {
-    currentChallenge?: Challenge;
-    challenges: Array<{ pending: boolean }>;
-    getChallenge: (challenge: Challenge) => {
-      active: boolean;
-      calculateEffects: (model: unknown, game: Game) => void;
-      researched: number;
-    };
-    isActive: (challenge: Challenge) => boolean;
-  };
+  bld: BuildingsManager;
+  calendar: Calendar;
+  challenges: ChallengesManager;
   compressLZData: (data: string) => string;
   console: {
     filters: Record<string, { enabled: boolean; title: string; unlocked: boolean }>;
@@ -188,28 +111,8 @@ export type Game = {
   craft: (name: string, amount: number) => void;
   decompressLZData: (lzData: string) => string;
   devMode: boolean;
-  diplomacy: {
-    buyBcoin: () => void;
-    /**
-     * @deprecated Use `buyBcoin` instead.
-     */
-    buyEcoin: () => void;
-    calculateStandingFromPolicies: (race: Race, host: Game) => number;
-    feedElders: () => void;
-    get: (race: Race) => RaceInfo;
-    getMarkerCap: () => number;
-    calculateTradeBonusFromPolicies: (race: Race, host: Game) => number;
-    getTradeRatio: () => number;
-    races: Array<RaceInfo>;
-    sellBcoin: () => void;
-    /**
-     * @deprecated Use `sellBcoin` instead.
-     */
-    sellEcoin: () => void;
-    tradeMultiple: (race: RaceInfo, amount: number) => void;
-    unlockRandomRace: () => { title: string };
-  };
-  diplomacyTab: TradeTab;
+  diplomacy: DiplomacyManager;
+  diplomacyTab: Diplomacy;
   getCMBRBonus: () => number;
   getDisplayValueExt: (
     value: number,
@@ -311,89 +214,15 @@ export type Game = {
     noConfirm: boolean;
     usePerSecondValues: boolean;
   };
-  prestige: {
-    /**
-     * The production modifier from burned paragon only.
-     */
-    getBurnedParagonRatio: () => number;
-
-    /**
-     * The production modifier produced by paragon and burned paragon.
-     */
-    getParagonProductionRatio: () => number;
-
-    getPerk: (name: "carnivals" | "numeromancy" | "unicornmancy") => { researched: boolean };
-    meta: Array<{ meta: Array<{ researched: boolean }> }>;
-  };
-  religion: {
-    faith: number;
-    faithRatio: number;
-
-    /**
-     * The modifier applied to faith generation.
-     */
-    getApocryphaBonus: () => number;
-
-    /**
-     * @deprecated No longer exists. Use `getApocryphaBonus()`
-     */
-    getFaithBonus: () => number;
-
-    /**
-     * Get religion upgrades.
-     */
-    getRU: (name: ReligionUpgrade) => ReligionUpgradeInfo | undefined;
-
-    /**
-     * The modifier produced from collected faith.
-     * Subject to challenges.
-     */
-    getSolarRevolutionRatio: () => number;
-
-    /**
-     * Get transcendence upgrades.
-     */
-    getTU: (name: TranscendenceUpgrade) => TranscendenceUpgradeInfo | undefined;
-
-    /**
-     * Get ziggurath upgrades.
-     */
-    getZU: (name: ZiggurathUpgrade) => ZiggurathUpgradeInfo | undefined;
-
-    meta: Array<{
-      meta: Array<ReligionUpgradeInfo | ZiggurathUpgradeInfo | TranscendenceUpgradeInfo>;
-      provider: { getEffect: (bld: unknown, effect: unknown) => unknown };
-    }>;
-
-    pactsManager: {
-      necrocornDeficit: number;
-    };
-
-    praise: () => void;
-
-    religionUpgrades: Array<ReligionUpgradeInfo>;
-    tcratio: number;
-    transcendenceTier: number;
-    transcendenceUpgrades: Array<TranscendenceUpgradeInfo>;
-    zigguratUpgrades: Array<ZiggurathUpgradeInfo>;
-
-    /**
-     * Determine the price (worship) to reach the given transcendence tier.
-     */
-    _getTranscendTotalPrice: (tier: number) => number;
-
-    /**
-     * Reset faith and increase praise bonus according to transcendence tier.
-     */
-    _resetFaithInternal: (bonusRatio: number) => void;
-  };
+  prestige: PrestigeManager;
+  religion: ReligionManager;
   religionTab: ReligionTab;
   resetAutomatic: () => void;
   resPool: {
-    get: (name: Resource) => ResourceInfo;
+    get: (name: Resource) => UnsafeResource;
     energyCons: number;
     energyProd: number;
-    resources: Array<ResourceInfo>;
+    resources: Array<UnsafeResource>;
     hasRes: (resources: Array<Price>) => boolean;
   };
   /**
@@ -404,12 +233,7 @@ export type Game = {
    * Import a savegame blob.
    */
   saveImportDropboxText(lzdata: string, callback: (error?: Error) => unknown): void;
-  science: {
-    get: (name: Technology) => TechnologyInfo;
-    getPolicy: (name: Policy) => PolicyInfo;
-    policies: Array<PolicyInfo>;
-    techs: Array<TechnologyInfo>;
-  };
+  science: ScienceManager;
   server: Server;
   space: {
     getBuilding: (building: SpaceBuilding) => {
@@ -419,7 +243,7 @@ export type Game = {
        */
       description: string;
 
-      effects: Partial<BuildingEffects>;
+      effects: Partial<Record<BuildingEffect, number>>;
 
       /**
        * An internationalized label for this space building.
@@ -442,7 +266,7 @@ export type Game = {
     };
     meta: Array<{
       meta: Array<{
-        effects?: Partial<BuildingEffects>;
+        effects?: Partial<Record<BuildingEffect, number>>;
         label: string;
         name: string;
         on: number;
@@ -451,7 +275,7 @@ export type Game = {
         val: number;
       }>;
     }>;
-    planets: Array<PlanetMeta>;
+    planets: Array<UnsafePlanet>;
     programs: Array<{ name: Mission; label: string }>;
   };
   stats: {
@@ -482,17 +306,17 @@ export type Game = {
     }>;
   };
   tabs: [
-    GameTab,
+    BuildingsModern,
     VillageTab,
-    GameTab,
-    GameTab,
-    TradeTab,
+    Tab,
+    Tab,
+    Diplomacy,
     ReligionTab,
     SpaceTab,
     TimeTab,
-    GameTab,
-    GameTab,
-    GameTab,
+    Tab,
+    Tab,
+    Tab,
   ];
   telemetry: {
     buildRevision: number;

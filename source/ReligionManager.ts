@@ -15,7 +15,7 @@ import {
   UnicornItems,
 } from "./settings/ReligionSettings.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
-import { cwarn } from "./tools/Log.js";
+import { cdebug, cwarn } from "./tools/Log.js";
 import {
   type BuildButton,
   type ButtonModernController,
@@ -27,8 +27,8 @@ import {
   type TranscendenceUpgradeInfo,
   type TransformBtnController,
   UnicornItemVariant,
+  type UnsafeZiggurathUpgrade,
   type ZiggurathUpgrade,
-  type ZiggurathUpgradeInfo,
 } from "./types/index.js";
 
 export class ReligionManager implements Automation {
@@ -73,7 +73,7 @@ export class ReligionManager implements Automation {
     }
 
     if (this.settings.refineTears.enabled) {
-      await this._autoTears(context);
+      this._autoTears(context);
     }
 
     if (this.settings.refineTimeCrystals.enabled) {
@@ -218,7 +218,7 @@ export class ReligionManager implements Automation {
     this.manager.render();
 
     const metaData: Partial<
-      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
+      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | UnsafeZiggurathUpgrade>
     > = this.getBuildMetaData(builds);
     const sectionTrigger = this.settings.trigger;
 
@@ -436,7 +436,7 @@ export class ReligionManager implements Automation {
 
   getBuildMetaData(builds: Partial<Record<FaithItem, ReligionSettingsItem>>) {
     const metaData: Partial<
-      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo>
+      Record<FaithItem, ReligionUpgradeInfo | TranscendenceUpgradeInfo | UnsafeZiggurathUpgrade>
     > = {};
     for (const build of Object.values(builds)) {
       const buildInfo = this.getBuild(build.building, build.variant);
@@ -473,7 +473,7 @@ export class ReligionManager implements Automation {
   getBuild(
     name: ReligionItem | "unicornPasture",
     variant: UnicornItemVariant,
-  ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | ZiggurathUpgradeInfo | null {
+  ): ReligionUpgradeInfo | TranscendenceUpgradeInfo | UnsafeZiggurathUpgrade | null {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
         return this._host.game.religion.getZU(name as ZiggurathUpgrade) ?? null;
@@ -516,13 +516,17 @@ export class ReligionManager implements Automation {
       return null;
     }
 
-    const build = this.getBuild(name, variant);
-    if (build === null) {
-      throw new Error(`Unable to retrieve build information for '${name}'`);
+    const button = (buttons.find(button => button.id === name) ?? null) as BuildButton<
+      string,
+      ButtonModernModel,
+      ButtonModernController
+    > | null;
+
+    if (button === null) {
+      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
     }
 
-    return (buttons.find(button => button.model?.name.startsWith(build.label)) ??
-      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
+    return button;
   }
 
   private _transformBtnSacrificeHelper(
@@ -537,7 +541,7 @@ export class ReligionManager implements Automation {
     const customController = new classes.ui.religion.TransformBtnController(
       game,
       controller.controllerOpts,
-    ) as TransformBtnController;
+    );
 
     const link = customController._newLink(model, percentageInverse);
     return new Promise<boolean>(resolve => {
@@ -613,7 +617,7 @@ export class ReligionManager implements Automation {
     }
   }
 
-  private async _autoTears(context: FrameContext) {
+  private _autoTears(context: FrameContext) {
     const tears = this._workshopManager.getResource("tears");
     const available = this._workshopManager.getValueAvailable("tears");
     const sorrow = this._workshopManager.getResource("sorrow");
@@ -637,9 +641,7 @@ export class ReligionManager implements Automation {
         return;
       }
 
-      await new Promise(resolve => {
-        controller.buyItem(model, new Event("decoy"), resolve, availableForConversion);
-      });
+      controller.buyItem(model, new Event("decoy"), availableForConversion);
 
       const availableNow = this._workshopManager.getValueAvailable("tears");
       const cost = available - availableNow;

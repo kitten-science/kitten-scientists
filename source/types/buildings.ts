@@ -1,256 +1,257 @@
-import type { Game, Price } from "./index.js";
+import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
+import type {
+  BuildingStackableBtn,
+  BuildingStackableBtnController,
+  ButtonModern,
+  ButtonModernController,
+  Tab,
+  TabManager,
+  UnsafeBuildingBtnModel,
+  UnsafeLinkResult,
+} from "./core.js";
+import type { Game } from "./game.js";
+import type { Building, BuildingEffect, Price, UnsafeBuyItemResult } from "./index.js";
 
-export const Buildings = [
-  "academy",
-  "accelerator",
-  "aiCore",
-  "amphitheatre",
-  "aqueduct",
-  "barn",
-  "biolab",
-  "brewery",
-  "calciner",
-  "chapel",
-  "chronosphere",
-  "factory",
-  "field",
-  "harbor",
-  "hut",
-  "library",
-  "logHouse",
-  "lumberMill",
-  "magneto",
-  "mansion",
-  "mine",
-  "mint",
-  "observatory",
-  "oilWell",
-  "pasture",
-  "quarry",
-  "reactor",
-  "smelter",
-  "steamworks",
-  "temple",
-  "tradepost",
-  "unicornPasture",
-  "warehouse",
-  "workshop",
-  "zebraForge",
-  "zebraOutpost",
-  "zebraWorkshop",
-  "ziggurat",
-] as const;
-export type Building = (typeof Buildings)[number];
-
-export const StagedBuildings = [
-  "broadcasttower",
-  "dataCenter",
-  "hydroplant",
-  "solarfarm",
-  "spaceport",
-] as const;
-export type StagedBuilding = (typeof StagedBuildings)[number];
-
-export type BuildingEffects = {
-  // from game.bld
-  academyMeteorBonus: number;
-  aiLevel: number;
-  alicornPerTickCon: number;
-  bloodstoneRatio: number;
-  cathPollutionPerTickCon: number;
-  cathPollutionPerTickProd: number;
-  catnipDemandRatio: number;
-  catnipMax: number;
-  catnipPerTickBase: number;
-  catnipPerTickCon: number;
-  catnipRatio: number;
-  coalMax: number;
-  coalPerTickAutoprod: number;
-  coalPerTickBase: number;
-  coalPerTickCon: number;
-  coalRatioGlobal: number;
-  craftRatio: number;
-  cultureMax: number;
-  cultureMaxRatio: number;
-  culturePerTickBase: number;
-  energyConsumption: number;
-  energyProduction: number;
-  faithMax: number;
-  faithPerTickBase: number;
-  festivalArrivalRatio: number;
-  festivalRatio: number;
-  fursDemandRatio: number;
-  fursPerTickProd: number;
-  gflopsPerTickBase: number;
-  goldMax: number;
-  goldPerTickAutoprod: number;
-  goldPerTickCon: number;
-  happiness: number;
-  hunterRatio: number;
-  ironMax: number;
-  ironPerTickAutoprod: number;
-  ironPerTickCon: number;
-  ivoryDemandRatio: number;
-  ivoryPerTickCon: number;
-  ivoryPerTickProd: number;
-  magnetoBoostRatio: number;
-  magnetoRatio: number;
-  manpowerMax: number;
-  manpowerPerTickCon: number;
-  manuscriptPerTickProd: number;
-  maxKittens: number;
-  mineralsMax: number;
-  mineralsPerTickCon: number;
-  mineralsPerTickProd: number;
-  mineralsRatio: number;
-  oilMax: number;
-  oilPerTick: number;
-  oilPerTickBase: number;
-  oilPerTickCon: number;
-  oilPerTickProd: number;
-  productionRatio: number;
-  refineRatio: number;
-  resStasisRatio: number;
-  scienceMax: number;
-  scienceRatio: number;
-  skillXP: number;
-  spiceDemandRatio: number;
-  spicePerTickCon: number;
-  standingRatio: number;
-  starAutoSuccessChance: number;
-  starEventChance: number;
-  steelPerTickProd: number;
-  tMythrilCraftRatio: number;
-  tMythrilPerTick: number;
-  temporalFluxProduction: number;
-  thoriumPerTick: number;
-  titaniumMax: number;
-  titaniumPerTickAutoprod: number;
-  titaniumPerTickCon: number;
-  tradeRatio: number;
-  unhappinessRatio: number;
-  unicornsPerTickBase: number;
-  uraniumMax: number;
-  uraniumPerTick: number;
-  uraniumPerTickAutoprod: number;
-  uraniumPerTickBase: number;
-  woodMax: number;
-  woodPerTickCon: number;
-  woodRatio: number;
-  zebraPreparations: number;
-
-  // from game.religion
-  activeHG: number;
-  alicornChance: number;
-  alicornPerTick: number;
-  blackLibraryBonus: number;
-  blsCorruptionRatio: number;
-  blsLimit: number;
-  compendiaTTBoostRatio: number;
-  corruptionBoostRatio: number;
-  corruptionRatio: number;
-  cultureMaxRatioBonus: number;
-  deficitRecoveryRatio: number;
-  energyProductionRatio: number;
-  faithRatioReligion: number;
-  globalResourceRatio: number;
-  goldMaxRatio: number;
-  ivoryMeteorChance: number;
-  ivoryMeteorRatio: number;
-  maxKittensRatio: number;
-  necrocornPerDay: number;
-  pactBlackLibraryBoost: number;
-  pactDeficitRecoveryRatio: number;
-  pactFaithRatio: number;
-  pactGlobalProductionRatio: number;
-  pactGlobalResourceRatio: number;
-  pactSpaceCompendiumRatio: number;
-  pactsAvailable: number;
-  pyramidFaithRatio: number;
-  pyramidGlobalProductionRatio: number;
-  pyramidGlobalResourceRatio: number;
-  pyramidRecoveryRatio: number;
-  pyramidSpaceCompendiumRatio: number;
-  relicRefineRatio: number;
-  riftChance: number;
-  rrRatio: number;
-  simScalingRatio: number;
-  solarRevolutionLimit: number;
-  solarRevolutionRatio: number;
-  tcRefineRatio: number;
-  timeRatio: number;
-  unicornsRatioReligion: number;
-
-  // from game.workshop.upgrades
-  acceleratorRatio: number;
-  barnRatio: number;
-  beaconRelicsPerDay: number;
-  biofuelRatio: number;
-  broadcastTowerRatio: number;
-  cadBlueprintCraftRatio: number;
-  calcinerRatio: number;
-  calcinerSteelCraftRatio: number;
-  calcinerSteelRatio: number;
-  calcinerSteelReactorBonus: number;
-  catnipDemandWorkerRatioGlobal: number;
-  catnipJobRatio: number;
-  catnipMaxRatio: number;
-  coalRatioGlobalReduction: number;
-  coalSuperRatio: number;
-  crackerRatio: number;
-  dataCenterAIRatio: number;
-  eludiumAutomationBonus: number;
-  factoryRefineRatio: number;
-  harborCoalRatio: number;
-  harborRatio: number;
-  hutPriceRatio: number;
-  hydroPlantRatio: number;
-  libraryRatio: number;
-  lumberMillRatio: number;
-  lunarOutpostRatio: number;
-  manpowerJobRatio: number;
-  oilWellRatio: number;
-  queueCap: number;
-  reactorEnergyRatio: number;
-  reactorThoriumPerTick: number;
-  routeSpeed: number;
-  satnavRatio: number;
-  shipLimit: number;
-  skillMultiplier: number;
-  smelterRatio: number;
-  solarFarmRatio: number;
-  solarFarmSeasonRatio: number;
-  spaceScienceRatio: number;
-  starchartGlobalRatio: number;
-  t1CraftRatio: number;
-  t2CraftRatio: number;
-  t3CraftRatio: number;
-  t4CraftRatio: number;
-  t5CraftRatio: number;
-  temporalFluxProductionChronosphere: number;
-  temporalParadoxDayBonus: number;
-  unicornsGlobalRatio: number;
-  uplinkDCRatio: number;
-  uplinkLabRatio: number;
-  uraniumRatio: number;
-  warehouseRatio: number;
-  woodJobRatio: number;
-
-  // other tabs
-  goldPriceRatio: number;
-  happinessKittenProductionRatio: number;
-  heatMax: number;
-  heatPerTick: number;
-  observatoryRatio: number;
-  starchartPerTickBaseSpace: number;
-  temporalFluxMax: number;
-  unobtainiumPerTickSpace: number;
-  uraniumPerTickCon: number;
+export type Metadata<TMeta extends Record<string, unknown> = Record<string, unknown>> = {
+  meta: TMeta;
+  new (meta: TMeta): Metadata;
+  getMeta(): TMeta;
+  get<TAttr extends keyof TMeta>(attr: TAttr): TMeta[TAttr];
+  set<TAttr extends keyof TMeta>(attr: TAttr, val: TMeta[TAttr]): void;
 };
-export type BuildingMeta = {
+
+export type BuildingMeta<TMetaCache extends Record<string, unknown> = Record<string, unknown>> =
+  Metadata<TMetaCache> & {
+    _metaCache: TMetaCache;
+    _metaCacheStage: number;
+
+    getMeta(): TMetaCache;
+    get<TAttr extends keyof TMetaCache>(attr: TAttr): TMetaCache[TAttr];
+    set<TAttr extends keyof TMetaCache>(attr: TAttr, val: TMetaCache[TAttr]): void;
+  };
+
+export type BuildingsManager = TabManager & {
+  buildingGroups: Array<{
+    name: string;
+    title: string;
+    buildings: Array<Building>;
+  }>;
+  buildingsData: Array<UnsafeBuildingMeta>;
+  cacheCathPollutionPerTick: () => void;
+  calculatePollutionEffects: () => void;
+  cathPollution: number;
+  cathPollutionFastForward: (ticks: number, simplified: boolean) => void;
+  cathPollutionPerTick: number;
+  devAddStorage: () => void;
+  effectsBase: Record<
+    | "catnipMax"
+    | "woodMax"
+    | "mineralsMax"
+    | "coalMax"
+    | "ironMax"
+    | "titaniumMax"
+    | "goldMax"
+    | "oilMax"
+    | "uraniumMax"
+    | "unobtainiumMax"
+    | "antimatterMax"
+    | "manpowerMax"
+    | "scienceMax"
+    | "cultureMax"
+    | "faithMax"
+    | "hutFakeBought"
+    | "logHouseFakeBought"
+    | "mansionFakeBought",
+    number
+  >;
+  fastforward: (daysOffset: number) => void;
+  game: Game;
+  gatherCatnip: () => void;
+  /** @deprecated Use `getBuildingExt()` instead. */
+  get: (name: Building) => BuildingMeta;
+  getAutoProductionRatio: () => number;
+  getBuildingExt: (name: Building) => UnsafeBuildingExt;
+  getCleanEnergy: () => number;
+  getCleanEnergyProdRatio: () => number;
+  getDetailedPollutionInfo: () => string;
+  getEffect: (effectName: BuildingEffect) => number;
+  /**
+   * returns pollution value at which pollutionDissipationRatio will make pollutionPerTick equal to 0, or -1 if such value doesn't exits
+   */
+  getEquilibriumPollution: () => number;
+  getPollutingEnergy: () => number;
+  getPollutionLevel: () => number;
+  getPollutionLevelBase: () => number;
+  getPollutionRatio: () => number;
+  getPriceRatio: (bld: Building) => number;
+  getPriceRatioWithAccessor: (bld: Building) => number;
+  getPrices: (bldName: Building, additionalBought: number) => Array<Price>;
+  getPricesWithAccessor: (bldName: Building, additionalBought: number) => Array<Price>;
+  getUndissipatedPollutionPerTick: () => number;
+  gflopsFastForward: (ticks: number) => void;
+  groupBuildings: boolean;
+  isUnlockable: (building: Building) => boolean;
+  isUnlocked: (building: Building) => boolean;
+  load: (saveData: unknown) => void;
+  meta: [{ meta: Array<BuildingMeta> }];
+  metaCache: unknown;
+  new (game: Game): BuildingsManager;
+  pollutionEffects: Record<
+    | "catnipPollutionRatio"
+    | "pollutionHappines"
+    | "solarRevolutionPollution"
+    | "pollutionDissipationRatio"
+    | "pollutionArrivalSlowdown",
+    number
+  >;
+  refineCatnip: () => void;
+  resetState: () => void;
+  save: (saveData: unknown) => void;
+  setEffectsCachedExisting: () => void;
+  setEquilibriumPollution: () => void;
+  twoRows: boolean;
+  undo: (data: unknown) => void;
+  update: () => void;
+};
+
+export type GatherCatnipButtonController = ButtonModernController & {
+  new (game: Game): GatherCatnipButtonController;
+  buyItem: (model: unknown, event: unknown) => UnsafeBuyItemResult;
+};
+export type RefineCatnipButtonController = ButtonModernController & {
+  new (game: Game): RefineCatnipButtonController;
+  fetchModel: <TModel extends UnsafeRefineCatnipButtonModel = UnsafeRefineCatnipButtonModel>(
+    options: unknown,
+  ) => TModel;
+  handleX100Click: <TModel extends UnsafeRefineCatnipButtonModel = UnsafeRefineCatnipButtonModel>(
+    model: TModel,
+  ) => void;
+};
+
+export type RefineCatnipButton = ButtonModern<
+  UnsafeRefineCatnipButtonModel,
+  undefined,
+  RefineCatnipButtonController
+> & {
+  new (game: Game): RefineCatnipButton;
+  x100Href: UnsafeLinkResult;
+  update: () => void;
+};
+
+export type BuildingBtnModernController<
+  TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
+  TModel extends UnsafeBuildingBtnModel<TModelMetadata> = UnsafeBuildingBtnModel<TModelMetadata>,
+> = BuildingStackableBtnController<TModelMetadata, TModel> & {
+  getMetadata: (model: TModel) => TModelMetadata | null;
+  getName: (model: TModel) => string;
+  getPrices: (model: TModel) => Array<Price>;
+  hasSellLink: (model: TModel) => boolean;
+  build: (model: TModel, opts: unknown) => void;
+  sell: (event: unknown, model: TModel) => void;
+  decrementValue: (model: TModel) => void;
+  incrementValue: (model: TModel) => void;
+};
+
+export type StagingBldBtnController = BuildingBtnModernController & {
+  stageLinks: null;
+  fetchModel: <
+    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
+    TModel extends UnsafeBuildingBtnModel<TModelMetadata> = UnsafeBuildingBtnModel<TModelMetadata>,
+  >(
+    options: unknown,
+  ) => TModel;
+  getEffects: <
+    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
+    TModel extends UnsafeBuildingBtnModel<TModelMetadata> = UnsafeBuildingBtnModel<TModelMetadata>,
+  >(
+    model: TModel,
+  ) => unknown;
+  getTotalEffects: <
+    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
+    TModel extends UnsafeBuildingBtnModel<TModelMetadata> = UnsafeBuildingBtnModel<TModelMetadata>,
+  >(
+    model: TModel,
+  ) => unknown;
+  getStageLinks: <
+    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
+    TModel extends UnsafeBuildingBtnModel<TModelMetadata> = UnsafeBuildingBtnModel<TModelMetadata>,
+  >(
+    model: TModel,
+  ) => Array<UnsafeStageLink>;
+  downgrade: <
+    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
+    TModel extends UnsafeBuildingBtnModel<TModelMetadata> = UnsafeBuildingBtnModel<TModelMetadata>,
+  >(
+    model: TModel,
+  ) => void;
+  upgrade: <
+    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
+    TModel extends UnsafeBuildingBtnModel<TModelMetadata> = UnsafeBuildingBtnModel<TModelMetadata>,
+  >(
+    model: TModel,
+  ) => void;
+  deltagrade: <
+    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
+    TModel extends UnsafeBuildingBtnModel<TModelMetadata> = UnsafeBuildingBtnModel<TModelMetadata>,
+  >(
+    model: TModel,
+    delta: number,
+  ) => void;
+  getMetadataRaw: <
+    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
+    TModel extends UnsafeBuildingBtnModel<TModelMetadata> = UnsafeBuildingBtnModel<TModelMetadata>,
+  >(
+    model: TModel,
+  ) => TModelMetadata;
+};
+
+export type StagingBldBtn<
+  TModel extends UnsafeBuildingBtnModel<TModelOptions> | undefined = undefined,
+  TModelOptions extends Record<string, unknown> | undefined = TModel extends Record<string, unknown>
+    ? TModel["options"]
+    : undefined,
+  TController extends ButtonModernController | undefined = undefined,
+  TId extends string | undefined = undefined,
+> = BuildingStackableBtn<TModel, TModelOptions, TController, TId> & {
+  stageLinks: Array<unknown>;
+  renderLinks: () => void;
+};
+
+export type BuildingsModern = Tab<
+  | ButtonModern
+  | RefineCatnipButton
+  | BuildingStackableBtn<
+      UnsafeBuildingBtnModel<UnsafeBuildingMeta>,
+      UnsafeBuildingMeta,
+      BuildingBtnModernController
+    >
+  | StagingBldBtn<
+      UnsafeBuildingBtnModel<UnsafeBuildingMeta>,
+      UnsafeBuildingMeta,
+      StagingBldBtnController
+    >
+> & {
+  bldGroups: Array<unknown>;
+  activeGroup: null;
+  new (tabName: unknown): BuildingsModern;
+  render: (content: unknown) => void;
+  renderActiveGroup: (groupContainer: unknown) => void;
+  addCoreBtns: (container: unknown) => void;
+  update: () => void;
+};
+
+export type UnsafeBuildingExt = {
+  meta: BuildingMeta & UnsafeBuildingMeta;
+};
+
+/**
+ * Is not registered as an actual class in KG.
+ * Values inferred from BuildingsManager.buildingsData
+ */
+export type UnsafeBuildingMeta = {
   calculateEffects?: (model: unknown, game: Game) => void;
   description?: string;
-  effects?: Partial<BuildingEffects>;
+  effects?: Partial<Record<BuildingEffect, number>>;
   flavor?: string;
   label?: string;
   name: Building;
@@ -263,7 +264,7 @@ export type BuildingMeta = {
     calculateEffects?: (model: unknown, game: Game) => void;
     calculateEnergyProduction?: (game: Game, season: unknown) => void;
     description: string;
-    effects?: Partial<BuildingEffects>;
+    effects?: Partial<Record<BuildingEffect, number>>;
     flavor?: string;
     label: string;
     priceRatio: number;
@@ -273,11 +274,22 @@ export type BuildingMeta = {
   unlockRatio?: number;
   unlockable?: boolean;
   unlocked: boolean;
+
   /**
    * How many of these do you have?
    */
   val: number;
 };
-export type BuildingExt = {
-  meta: BuildingMeta;
+
+export type UnsafeRefineCatnipButtonModel<
+  TController extends RefineCatnipButtonController | undefined = RefineCatnipButtonController,
+> = {
+  name: string;
+  controller: TController;
+  handler: (btn: unknown) => void;
+  description: string;
+  prices: Array<Price>;
+  twoRow: boolean;
 };
+
+export type UnsafeStageLink = { title: string; handler: AnyFunction; enabled: boolean };

@@ -9,8 +9,13 @@ import { type CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSet
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cerror } from "./tools/Log.js";
-import type { CraftableInfo, ResourceInfo } from "./types/craft.js";
-import type { Resource, ResourceCraftable, UpgradeInfo } from "./types/index.js";
+import type {
+  CraftableInfo,
+  Resource,
+  ResourceCraftable,
+  UnsafeResource,
+  UpgradeInfo,
+} from "./types/index.js";
 import type { VillageTab } from "./types/village.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
@@ -391,7 +396,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @returns The amount of resources produced per tick, adjusted arbitrarily.
    */
   getTickVal(
-    resource: ResourceInfo,
+    resource: UnsafeResource,
     cacheManager?: MaterialsCache,
     preTrade: boolean | undefined = undefined,
   ): number | "ignore" {
@@ -469,7 +474,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * @param name The resource to retrieve info for.
    * @returns The information object for the resource.
    */
-  getResource(name: Resource): ResourceInfo {
+  getResource(name: Resource): UnsafeResource {
     const res = this._host.game.resPool.get(name);
     if (isNil(res)) {
       throw new Error(`Unable to find resource ${name}`);

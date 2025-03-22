@@ -9,23 +9,22 @@ import {
   type BonfireItem,
   BonfireSettings,
 } from "./settings/BonfireSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cdebug, cwarn } from "./tools/Log.js";
 import type {
-  BuildButton,
-  Building,
-  BuildingExt,
   BuildingMeta,
-  ButtonModernController,
-  ButtonModernModel,
-  GameTab,
-} from "./types/index.js";
-
-export type BonfireTab = GameTab;
+  BuildingsModern,
+  RefineCatnipButton,
+  StagingBldBtn,
+  UnsafeBuildingExt,
+  UnsafeBuildingMeta,
+} from "./types/buildings.js";
+import type { BuildingStackableBtn, ButtonModern } from "./types/core.js";
+import type { Building } from "./types/index.js";
 
 export class BonfireManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: BonfireSettings;
-  readonly manager: TabManager;
+  readonly manager: TabManager<BuildingsModern>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
@@ -36,7 +35,7 @@ export class BonfireManager implements Automation {
   ) {
     this._host = host;
     this.settings = settings;
-    this.manager = new TabManager<BonfireTab>(this._host, "Bonfire");
+    this.manager = new TabManager<BuildingsModern>(this._host, "Bonfire");
 
     this._workshopManager = workshopManager;
     this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
@@ -333,9 +332,7 @@ export class BonfireManager implements Automation {
   autoGather(): void {
     const controller = new classes.game.ui.GatherCatnipButtonController(this._host.game);
     for (let clicks = 0; clicks < Math.floor(this._host.engine.settings.interval / 20); ++clicks) {
-      controller.buyItem(null, null, () => {
-        /* intentionally left blank */
-      });
+      controller.buyItem(undefined, null);
     }
   }
 
@@ -371,25 +368,37 @@ export class BonfireManager implements Automation {
     }
   }
 
-  private _getBuildLabel(meta: BuildingMeta, stage?: number): string {
+  private _getBuildLabel(meta: UnsafeBuildingMeta, stage?: number): string {
     return meta.stages && !isNil(stage) ? meta.stages[stage].label : mustExist(meta.label);
   }
 
-  getBuild(name: Building): BuildingExt {
+  getBuild(name: Building): UnsafeBuildingExt {
     return this._host.game.bld.getBuildingExt(name);
   }
 
-  getBuildButton(
-    name: Building,
-    stage?: number,
-  ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
+  getBuildButton(name: Building, stage?: number) {
     const buttons = this.manager.tab.children;
     const build = this.getBuild(name);
     const label = this._getBuildLabel(build.meta, stage);
-    return (buttons.find(button => button.model?.name.startsWith(label)) ?? null) as BuildButton<
-      string,
-      ButtonModernModel,
-      ButtonModernController
-    > | null;
+
+    const button =
+      (
+        buttons.filter(
+          button =>
+            button instanceof classes.ui.btn.StagingBldBtn ||
+            button instanceof com.nuclearunicorn.game.ui.BuildingStackableBtn,
+        ) as Array<Exclude<(typeof buttons)[number], ButtonModern | RefineCatnipButton>>
+      ).find(
+        button =>
+          !isNil(button.model) &&
+          "metadata" in button.model &&
+          (button.model.metadata.name as string).startsWith(label),
+      ) ?? null;
+
+    if (button === null) {
+      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
+    }
+
+    return button;
   }
 }

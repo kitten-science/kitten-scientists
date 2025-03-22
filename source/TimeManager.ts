@@ -5,11 +5,12 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type TimeItem, TimeSettings, type TimeSettingsItem } from "./settings/TimeSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cdebug, cwarn } from "./tools/Log.js";
 import {
   type BuildButton,
   type ButtonModernController,
   type ButtonModernModel,
+  type BuyResultOperation,
   type ChronoForgeUpgrade,
   type ChronoForgeUpgradeInfo,
   type FixCryochamberBtnController,
@@ -18,6 +19,7 @@ import {
   type VoidSpaceUpgrade,
   type VoidSpaceUpgradeInfo,
 } from "./types/index.js";
+import { BuyButton } from "./ui/components/buttons-text/BuyButton.js";
 
 export class TimeManager {
   private readonly _host: KittenScientists;
@@ -74,7 +76,7 @@ export class TimeManager {
       const buildMeta = this.getBuild(build.building, build.variant);
       metaData[build.building] = mustExist(buildMeta);
 
-      const buildButton = this.getBuildButton(build.building, build.variant);
+      const buildButton = this._getBuildButton(build.building, build.variant);
       if (isNil(buildButton)) {
         // Not available in this build of KG.
         continue;
@@ -111,7 +113,7 @@ export class TimeManager {
   ): void {
     let amountCalculated = amount;
     const build = mustExist(this.getBuild(name, variant));
-    const button = this.getBuildButton(name, variant);
+    const button = this._getBuildButton(name, variant);
 
     if (!button || !button.model?.enabled) {
       return;
@@ -145,7 +147,7 @@ export class TimeManager {
     return this._host.game.time.getVSU(name as VoidSpaceUpgrade);
   }
 
-  getBuildButton(
+  private _getBuildButton(
     name: ChronoForgeUpgrade | VoidSpaceUpgrade,
     variant: TimeItemVariant,
   ): BuildButton<string, ButtonModernModel, ButtonModernController> | null {
@@ -156,13 +158,13 @@ export class TimeManager {
       buttons = this.manager.tab.children[3].children[0].children;
     }
 
-    const build = this.getBuild(name, variant);
-    if (isNil(build)) {
-      throw new Error(`Unable to retrieve build information for '${name}'`);
+    const button = buttons.find(button => button.id === name) ?? null;
+
+    if (button === null) {
+      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
     }
 
-    return (buttons.find(button => button.model?.name.startsWith(build.label)) ??
-      null) as BuildButton<string, ButtonModernModel, ButtonModernController> | null;
+    return button;
   }
 
   fixCryochambers() {
@@ -185,16 +187,21 @@ export class TimeManager {
     do {
       fixHappened = false;
 
-      (btn.controller as FixCryochamberBtnController).buyItem(
+      const buyResult = (btn.controller as FixCryochamberBtnController).buyItem(
         btn.model as ButtonModernModel,
         new MouseEvent("click"),
+      );
+
+      if (buyResult.def !== undefined) {
         // This callback is invoked at the end of the `buyItem` call.
         // Thus, the callback should be invoked before this loop ends.
-        (didHappen: boolean) => {
-          fixHappened = didHappen;
+        buyResult.def.then((didHappen: BuyResultOperation) => {
+          fixHappened = didHappen.itemBought;
           fixed += didHappen ? 1 : 0;
-        },
-      );
+        });
+      } else {
+        fixHappened = buyResult.itemBought;
+      }
     } while (fixHappened);
 
     if (0 < fixed) {
