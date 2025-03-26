@@ -66,7 +66,6 @@ export abstract class UpgradeManager {
       this._host.engine.iactivity("upgrade.upgrade", [label], "ks-upgrade");
     } else if (variant === "policy") {
       this._host.engine.iactivity("upgrade.policy", [label]);
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     } else if (variant === "science") {
       this._host.engine.storeForSummary(label, 1, "research");
       this._host.engine.iactivity("upgrade.tech", [label], "ks-research");

@@ -396,7 +396,6 @@ export class BulkPurchaseHelper {
 
     // There is actually no strong guarantee that `maxItemsBuilt` changes in the loops below.
     // This could end up being an infinite loop under unexpected conditions.
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (!maxItemsBuilt) {
       // Go through the prices for this build.
       for (let priceIndex = 0; priceIndex < prices.length; priceIndex++) {
@@ -576,7 +575,6 @@ export class BulkPurchaseHelper {
       prices?: Array<Price>;
     }>;
   } {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return "stage" in data && "stages" in data && !isNil(data.stage) && !isNil(data.stages);
   }
 

@@ -151,7 +151,6 @@ export class BonfireManager implements Automation {
             aqueductMeta.stage = 1;
 
             // TODO: Why do we do this for the aqueduct and not for the pasture?
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             aqueductMeta.calculateEffects?.(aqueductMeta, this._host.game);
 
             this._host.engine.iactivity("upgrade.building.aqueduct", [], "ks-upgrade");
@@ -210,7 +209,6 @@ export class BonfireManager implements Automation {
           libraryMeta.on = 0;
           libraryMeta.val = 0;
           libraryMeta.stage = 1;
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           libraryMeta.calculateEffects?.(libraryMeta, this._host.game);
           this._host.engine.iactivity("upgrade.building.library", [], "ks-upgrade");
           this._host.game.ui?.render();
