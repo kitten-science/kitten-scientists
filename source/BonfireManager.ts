@@ -9,17 +9,15 @@ import {
   type BonfireItem,
   BonfireSettings,
 } from "./settings/BonfireSettings.js";
-import { cdebug, cwarn } from "./tools/Log.js";
+import { cwarn } from "./tools/Log.js";
 import type {
+  BuildingBtnModernController,
   BuildingMeta,
   BuildingsModern,
-  GatherCatnipButton,
-  GatherCatnipButtonController,
-  RefineCatnipButton,
+  StagingBldBtnController,
   UnsafeBuilding,
-  UnsafeBuildingExt,
 } from "./types/buildings.js";
-import type { ButtonModern, UnsafeButtonModernModel } from "./types/core.js";
+import type { UnsafeBuildingBtnModel } from "./types/core.js";
 import type { Building } from "./types/index.js";
 
 export class BonfireManager implements Automation {
@@ -381,24 +379,26 @@ export class BonfireManager implements Automation {
     return this._host.game.bld.getBuildingExt(name) as BuildingMeta<Required<UnsafeBuilding>>;
   }
 
-  getBuildButton(name: Building, stage?: number) {
-    const buttons = this.manager.tab.children;
-
-    const button =
-      (
-        buttons.filter(
-          button =>
-            button instanceof com.nuclearunicorn.game.ui.ButtonModern === false &&
-            button instanceof classes.game.ui.RefineCatnipButton === false,
-        ) as Array<Exclude<(typeof buttons)[number], GatherCatnipButton | RefineCatnipButton>>
-      ).find(
-        button => button.model?.metadata.name === name && button.model?.metadata.stage === stage,
-      ) ?? null;
-
-    if (button === null) {
-      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
-    }
-
-    return button;
+  getBuildButton(name: Building, stage = 0) {
+    const metaRaw = game.bld.get(name);
+    const buildingMeta = (
+      new classes.BuildingMeta(metaRaw) as BuildingMeta<UnsafeBuilding>
+    ).getMeta();
+    const meta = !isNil(buildingMeta.stages) ? buildingMeta.stages[stage] : metaRaw;
+    const controller =
+      "stages" in meta
+        ? (new classes.ui.btn.StagingBldBtnController(
+            this._host.game,
+          ) as StagingBldBtnController<UnsafeBuildingBtnModel>)
+        : (new classes.ui.btn.BuildingBtnModernController(
+            this._host.game,
+          ) as BuildingBtnModernController<UnsafeBuildingBtnModel>);
+    const model = controller.fetchModel<UnsafeBuildingBtnModel>({
+      key: name,
+      name: meta.label,
+      description: meta.description,
+      building: name,
+    });
+    return { model, controller };
   }
 }

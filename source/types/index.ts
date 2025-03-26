@@ -1,6 +1,7 @@
 import type { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type JQuery from "jquery";
 import "dojo";
+import type { ConstructorOf } from "@oliversalzburg/js-utils/core.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { AchTab, Achievements, AchievementsPanel, BadgesPanel } from "./achievements.js";
 import type {
@@ -1141,7 +1142,7 @@ export type Link = {
 };
 
 export type ClassList = {
-  BuildingMeta: BuildingMeta;
+  BuildingMeta: ConstructorOf<BuildingMeta>;
   diplomacy: {
     ui: {
       autoPinnedButtonController: AutoPinnedButtonController;
@@ -1203,9 +1204,9 @@ export type ClassList = {
     AchievementsPanel: AchievementsPanel;
     BadgesPanel: BadgesPanel;
     btn: {
-      BuildingBtnModernController: BuildingBtnModernController;
-      StagingBldBtnController: StagingBldBtnController;
-      StagingBldBtn: StagingBldBtn<UnsafeBuildingBtnModel, ButtonModernController>;
+      BuildingBtnModernController: ConstructorOf<BuildingBtnModernController>;
+      StagingBldBtnController: ConstructorOf<StagingBldBtnController>;
+      StagingBldBtn: ConstructorOf<StagingBldBtn<UnsafeBuildingBtnModel, ButtonModernController>>;
     };
     BuildingBtnController: BuildingBtnController;
     BurnParagonBtnController: BurnParagonBtnController;

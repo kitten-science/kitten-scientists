@@ -77,7 +77,7 @@ export type BuildingsManager = TabManager & {
   game: GamePage;
   gatherCatnip: () => void;
   /** @deprecated Use `getBuildingExt()` instead. */
-  get: (name: Building) => Record<string, unknown>;
+  get: (name: Building) => UnsafeBuilding;
   getAutoProductionRatio: () => number;
   getBuildingExt: (name: Building) => UnsafeBuildingExt;
   getCleanEnergy: () => number;
@@ -197,23 +197,29 @@ export type BuildingsModern = Tab<
   | GatherCatnipButton
   | RefineCatnipButton
   | StagingBldBtn<
-      UnsafeBuildingBtnModel<{
-        name: string;
-        description: string;
-        building: Building;
-        twoRow: boolean;
-        controller: StagingBldBtnController;
-      }>,
+      UnsafeBuildingBtnModel<
+        {
+          name: string;
+          description: string;
+          building: Building;
+          twoRow: boolean;
+          controller: StagingBldBtnController;
+        },
+        UnsafeBuilding
+      >,
       StagingBldBtnController
     >
   | BuildingStackableBtn<
-      UnsafeBuildingStackableBtnModel<{
-        name: string;
-        description: string;
-        building: Building;
-        twoRow: boolean;
-        controller: BuildingBtnModernController;
-      }>,
+      UnsafeBuildingStackableBtnModel<
+        {
+          name: string;
+          description: string;
+          building: Building;
+          twoRow: boolean;
+          controller: BuildingBtnModernController;
+        },
+        UnsafeBuilding
+      >,
       BuildingBtnModernController
     >
 > & {
@@ -266,15 +272,13 @@ export type UnsafeBuilding = {
   toggleable?: boolean;
 };
 
-export type UnsafeRefineCatnipButtonModel<
-  TController extends RefineCatnipButtonController | undefined = RefineCatnipButtonController,
-> = UnsafeButtonModernModel & {
+export type UnsafeRefineCatnipButtonModel = UnsafeButtonModernModel<{
   name: string;
-  controller: TController;
+  controller: RefineCatnipButtonController;
   handler: (btn: unknown) => void;
   description: string;
   prices: Array<Price>;
   twoRow: boolean;
-};
+}>;
 
 export type UnsafeStageLink = { title: string; handler: AnyFunction; enabled: boolean };
