@@ -532,11 +532,11 @@ export class ReligionManager implements Automation {
     return button;
   }
 
-  private _transformBtnSacrificeHelper<TOptions extends Record<string, unknown>>(
+  private _transformBtnSacrificeHelper<TModel extends UnsafeTransformBtnModel>(
     available: number,
     total: number,
-    controller: TransformBtnController<TOptions>,
-    model: UnsafeTransformBtnModel,
+    controller: TransformBtnController<TModel>,
+    model: TModel,
   ) {
     const conversionPercentage = available / total;
     const percentageInverse = 1 / conversionPercentage;
@@ -544,7 +544,7 @@ export class ReligionManager implements Automation {
     const customController = new classes.ui.religion.TransformBtnController(
       game,
       controller.controllerOpts,
-    ) as TransformBtnController<TOptions>;
+    ) as TransformBtnController<TModel, Record<string, unknown>>;
 
     const link = customController._newLink(model, percentageInverse);
     return new Promise<boolean>(resolve => {

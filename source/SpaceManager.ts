@@ -183,11 +183,6 @@ export class SpaceManager implements Automation {
         planet: UnsafePlanet;
         controller: PlanetBuildingBtnController;
       },
-      UnsafeBuildingBtnModel<{
-        id: SpaceBuilding;
-        planet: UnsafePlanet;
-        controller: PlanetBuildingBtnController;
-      }>,
       PlanetBuildingBtnController,
       SpaceBuilding
     > | null = null;

@@ -8,6 +8,7 @@ import type {
   TabManager,
   UnsafeBuildingBtnModel,
   UnsafeBuildingStackableBtnModel,
+  UnsafeButtonModel,
   UnsafeButtonModernModel,
   UnsafeButtonOptions,
   UnsafeLinkResult,
@@ -147,7 +148,6 @@ export type RefineCatnipButton = ButtonModern<
     prices: Array<Price>;
     twoRow: boolean;
   },
-  UnsafeRefineCatnipButtonModel,
   RefineCatnipButtonController
 > & {
   new (game: GamePage): RefineCatnipButton;
@@ -184,10 +184,9 @@ export type StagingBldBtnController<
 
 export type StagingBldBtn<
   TOpts extends UnsafeButtonOptions<TController, TId>,
-  TModel extends UnsafeBuildingBtnModel,
-  TController extends ButtonModernController,
+  TController extends ButtonModernController<UnsafeButtonModel | undefined>,
   TId extends AllBuildings | undefined = undefined,
-> = BuildingStackableBtn<TOpts, TModel, TController, TId> & {
+> = BuildingStackableBtn<TOpts, TController, TId> & {
   stageLinks: Array<unknown>;
   renderLinks: () => void;
 };
@@ -200,7 +199,6 @@ export type BuildingsModern = Tab<
         description: string;
         twoRow: boolean;
       },
-      UnsafeButtonModernModel,
       GatherCatnipButtonController
     >
   | RefineCatnipButton
@@ -212,16 +210,6 @@ export type BuildingsModern = Tab<
         twoRow: boolean;
         controller: StagingBldBtnController;
       },
-      UnsafeBuildingBtnModel<
-        {
-          name: string;
-          description: string;
-          building: Building;
-          twoRow: boolean;
-          controller: StagingBldBtnController;
-        },
-        UnsafeBuilding
-      >,
       StagingBldBtnController
     >
   | BuildingStackableBtn<
@@ -232,16 +220,6 @@ export type BuildingsModern = Tab<
         twoRow: boolean;
         controller: BuildingBtnModernController;
       },
-      UnsafeBuildingStackableBtnModel<
-        {
-          name: string;
-          description: string;
-          building: Building;
-          twoRow: boolean;
-          controller: BuildingBtnModernController;
-        },
-        UnsafeBuilding
-      >,
       BuildingBtnModernController
     >
 > & {

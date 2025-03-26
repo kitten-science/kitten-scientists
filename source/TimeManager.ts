@@ -136,17 +136,14 @@ export class TimeManager {
 
     const amountTemp = amountCalculated;
     const label = build.label;
-    const model = button.model as Required<
-      | UnsafeBuildingBtnModel<unknown, UnsafeBuildingBtnModel>
-      | UnsafeBuildingStackableBtnModel<unknown, UnsafeBuildingStackableBtnModel>
-    >;
+    const model = button.model;
     const meta = model.metadata;
     if (isNil(meta)) {
       return;
     }
 
     amountCalculated = this._bulkManager.construct(
-      meta,
+      model,
       mustExist(button.controller),
       amountCalculated,
     );
@@ -177,22 +174,17 @@ export class TimeManager {
     return (this.manager.tab.children[2].children[0].children.find(button => button.id === name) ??
       null) as BuildingStackableBtn<
       { id: ChronoForgeUpgrade; controller: ChronoforgeBtnController },
-      UnsafeBuildingStackableBtnModel<{
-        id: ChronoForgeUpgrade;
-        controller: ChronoforgeBtnController;
-      }>,
       ChronoforgeBtnController,
       ChronoForgeUpgrade
-    > | null;
+    >;
   }
   private _getBuildButtonVS(name: VoidSpaceUpgrade) {
     return (this.manager.tab.children[3].children[0].children.find(button => button.id === name) ??
       null) as BuildingStackableBtn<
       { id: VoidSpaceUpgrade; controller: VoidSpaceBtnController },
-      UnsafeBuildingStackableBtnModel<{ id: VoidSpaceUpgrade; controller: VoidSpaceBtnController }>,
       VoidSpaceBtnController,
       VoidSpaceUpgrade
-    > | null;
+    >;
   }
 
   fixCryochambers() {
@@ -210,7 +202,6 @@ export class TimeManager {
 
     const btn = this.manager.tab.vsPanel.children[0].children[0] as ButtonModern<
       { name: string; description: string; controller: FixCryochamberBtnController },
-      UnsafeButtonModernModel,
       FixCryochamberBtnController
     >;
 

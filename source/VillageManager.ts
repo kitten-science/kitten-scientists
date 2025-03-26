@@ -9,7 +9,7 @@ import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import type { Resource } from "./types/index.js";
 import type { UnsafeResource } from "./types/resources.js";
-import type { UnsafeJob, Village } from "./types/village.js";
+import type { UnsafeFestivalButtonModel, UnsafeJob, Village } from "./types/village.js";
 
 export class VillageManager implements Automation {
   private readonly _host: KittenScientists;
@@ -305,7 +305,7 @@ export class VillageManager implements Automation {
     this.manager.render();
 
     // Now we hold the festival.
-    if (this._host.game.villageTab.festivalBtn.model?.enabled) {
+    if (this._host.game.villageTab.festivalBtn.model.enabled) {
       const beforeDays = this._host.game.calendar.festivalDays;
       this._host.game.villageTab.festivalBtn.onClick();
       this._host.engine.storeForSummary("festival");

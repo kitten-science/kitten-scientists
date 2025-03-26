@@ -393,7 +393,7 @@ export class BonfireManager implements Automation {
         : (new classes.ui.btn.BuildingBtnModernController(
             this._host.game,
           ) as BuildingBtnModernController<UnsafeBuildingBtnModel>);
-    const model = controller.fetchModel<UnsafeBuildingBtnModel>({
+    const model = controller.fetchModel({
       key: name,
       name: meta.label,
       description: meta.description,

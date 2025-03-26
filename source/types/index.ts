@@ -1224,7 +1224,6 @@ export type ClassList = {
       StagingBldBtnController: StagingBldBtnController;
       StagingBldBtn: StagingBldBtn<
         UnsafeButtonOptions<ButtonModernController>,
-        UnsafeBuildingBtnModel,
         ButtonModernController
       >;
     };
@@ -1250,7 +1249,6 @@ export type ClassList = {
     religion: {
       MultiLinkBtn: MultiLinkBtn<
         UnsafeButtonOptions<ButtonModernController>,
-        UnsafeButtonModernModel,
         ButtonModernController
       >;
       RefineBtn: RefineBtn;
@@ -1326,27 +1324,23 @@ export type ComInterface = {
       ui: {
         BuildingBtn: BuildingBtn<
           UnsafeButtonOptions<ButtonModernController>,
-          UnsafeBuildingBtnModel,
           ButtonModernController
         >;
         BuildingBtnController: BuildingBtnController;
         BuildingNotStackableBtnController: BuildingNotStackableBtnController;
         BuildingResearchBtn: BuildingResearchBtn<
           UnsafeButtonOptions<ButtonModernController>,
-          UnsafeBuildingBtnModel,
           ButtonModernController
         >;
         BuildingStackableBtn: BuildingStackableBtn<
           UnsafeButtonOptions<BuildingStackableBtnController>,
-          UnsafeBuildingStackableBtnModel,
           BuildingStackableBtnController
         >;
         BuildingStackableBtnController: BuildingStackableBtnController;
-        Button: Button<UnsafeButtonOptions<ButtonController>, UnsafeButtonModel, ButtonController>;
+        Button: Button<UnsafeButtonOptions<ButtonController>, ButtonController>;
         ButtonController: ButtonController;
         ButtonModern: ButtonModern<
           UnsafeButtonOptions<ButtonModernController>,
-          UnsafeButtonModernModel,
           ButtonModernController
         >;
         ButtonModernController: ButtonModernController;

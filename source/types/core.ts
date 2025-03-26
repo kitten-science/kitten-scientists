@@ -7,7 +7,7 @@ import type {
   UnsafeBuyItemResult,
   UnsafeBuyItemResultDeferred,
 } from "./index.js";
-import type { TransformBtnController } from "./religion.js";
+import type { TransformBtnController, UnsafeTransformBtnModel } from "./religion.js";
 import type { UnsafePolicyBtnModel } from "./science.js";
 import type { UISystem } from "./ui.js";
 
@@ -77,44 +77,35 @@ export type Console = {
 };
 
 export type ButtonController<
+  TModel extends UnsafeButtonModel | undefined = undefined,
   TControllerOpts extends Record<string, unknown> | undefined = undefined,
 > = {
   game: GamePage;
   controllerOpts: TControllerOpts;
 
-  new (game: GamePage, controllerOpts?: TControllerOpts): ButtonController<TControllerOpts>;
+  new (
+    game: GamePage,
+    controllerOpts?: {
+      updateVisible?: (
+        controller: ButtonController<TModel, TControllerOpts>,
+        model: TModel,
+      ) => void;
+      getName?: (controller: ButtonController<TModel, TControllerOpts>, model: TModel) => string;
+    },
+  ): ButtonController<TModel, TControllerOpts>;
 
-  fetchModel: <
-    TModel extends UnsafeButtonModel<TModelOptions> | undefined = undefined,
-    TModelOptions extends Record<string, unknown> | undefined = TModel extends Record<
-      string,
-      unknown
-    >
-      ? TModel["options"]
-      : undefined,
-  >(
+  fetchModel: <TModelOptions extends Record<string, unknown> | undefined = undefined>(
     options: TModelOptions,
-  ) => TModel;
+  ) => ReturnType<ButtonController<TModel, TControllerOpts>["initModel"]>;
   fetchExtendedModel: <TModel extends UnsafeButtonModel | undefined = undefined>(
     model: TModel,
   ) => void;
-  initModel: <
-    TModel extends UnsafeButtonModel<TModelOptions> | undefined = undefined,
-    TModelOptions extends Record<string, unknown> | undefined = TModel extends Record<
-      string,
-      unknown
-    >
-      ? TModel["options"]
-      : undefined,
-  >(
+  initModel: <TModelOptions extends Record<string, unknown> | undefined = undefined>(
     options: TModelOptions,
   ) => TModel;
   defaults: () => UnsafeButtonModelDefaults;
 
-  createPriceLineModel: (
-    model: unknown,
-    price: Price,
-  ) => { title: string; name: string; val: number; progress: number; displayValue: string };
+  createPriceLineModel: (model: undefined, price: Price) => UnsafePriceLineModel;
   hasResources: <TModel extends UnsafeBuildingBtnModel>(
     model: TModel,
     prices?: Array<Price>,
@@ -163,11 +154,12 @@ export type ButtonController<
 
 export type Button<
   TOpts extends UnsafeButtonOptions<TController, TId>,
-  TModel extends UnsafeButtonModel,
-  TController extends ButtonController | TransformBtnController,
+  TController extends
+    | ButtonController<UnsafeButtonModel | undefined>
+    | TransformBtnController<UnsafeTransformBtnModel | undefined>,
   TId extends string | undefined = undefined,
 > = Control & {
-  model: TModel;
+  model: ReturnType<TController["fetchModel"]>;
   controller: TController;
   game: GamePage;
   domNode: HTMLDivElement;
@@ -175,7 +167,7 @@ export type Button<
   tab: string | null;
   buttonTitle: string | null;
   opts: TOpts;
-  new (opts: TOpts, game: GamePage): Button<TOpts, TModel, TController, TId>;
+  new (opts: TOpts, game: GamePage): Button<TOpts, TController, TId>;
   setOpts: (opts: TOpts) => void;
   id: TId;
 
@@ -195,8 +187,9 @@ export type Button<
 };
 
 export type ButtonModernController<
+  TModel extends UnsafeButtonModel | undefined = undefined,
   TControllerOpts extends Record<string, unknown> | undefined = undefined,
-> = ButtonController<TControllerOpts> & {
+> = ButtonController<TModel, TControllerOpts> & {
   new (game: GamePage): ButtonModernController;
   defaults: () => UnsafeButtonModernModelDefaults;
   getFlavor: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
@@ -220,7 +213,7 @@ export type ButtonModernController<
     price: Price,
     simplePrices: boolean,
     indent?: number,
-  ) => UnsafePriceLineModel;
+  ) => UnsafePriceLineModelExt;
   fetchExtendedModel: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
     model: TModel,
   ) => void;
@@ -238,23 +231,24 @@ export type ButtonModernController<
 
 export type ButtonModern<
   TOpts extends UnsafeButtonOptions<TController, TId>,
-  TModel extends UnsafeButtonModernModel,
-  TController extends ButtonModernController | TransformBtnController,
+  TController extends
+    | ButtonModernController<UnsafeButtonModel | undefined>
+    | TransformBtnController<UnsafeTransformBtnModel | undefined>,
   TId extends string | undefined = undefined,
-> = Button<TOpts, TModel, TController, TId> & {
+> = Button<TOpts, TController, TId> & {
   afterRender: () => void;
   getTooltipHTML: () => string;
   attachTooltip: (htmlProvider: unknown) => void;
   updateTooltip: (container: unknown, tooltip: JQuery<HTMLElement>, htmlProvider: unknown) => void;
   renderLinks: () => void;
   updateLink: (buttonLink: unknown, modelLink: unknown) => void;
-  getSelectedObject: () => TModel;
+  getSelectedObject: () => ButtonModern<TOpts, TController, TId>["model"];
 };
 
 export type BuildingBtnController<
   TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
-> = ButtonModernController & {
-  new (game: GamePage): BuildingBtnController;
+> = ButtonModernController<TModel> & {
+  new (game: GamePage): BuildingBtnController<TModel>;
   initModel: (options?: undefined) => TModel;
   fetchModel: (options: unknown) => TModel;
   getMetadata: (model: unknown) => BuildingMeta<UnsafeBuilding> | null;
@@ -279,10 +273,9 @@ export type BuildingBtnController<
 
 export type BuildingBtn<
   TOpts extends UnsafeButtonOptions<TController, TId>,
-  TModel extends UnsafeBuildingBtnModel | UnsafePolicyBtnModel,
-  TController extends ButtonModernController,
+  TController extends ButtonModernController<UnsafeButtonModel | undefined>,
   TId extends string | undefined = undefined,
-> = ButtonModern<TOpts, TModel, TController, TId> & {
+> = ButtonModern<TOpts, TController, TId> & {
   sellHref: null;
   toggleHref: null;
   renderLinks: () => void;
@@ -311,10 +304,9 @@ export type BuildingStackableBtnController<
 
 export type BuildingStackableBtn<
   TOpts extends UnsafeButtonOptions<TController, TId>,
-  TModel extends UnsafeBuildingBtnModel,
-  TController extends ButtonModernController,
+  TController extends ButtonModernController<UnsafeButtonModel | undefined>,
   TId extends string | undefined = undefined,
-> = BuildingBtn<TOpts, TModel, TController, TId> & {
+> = BuildingBtn<TOpts, TController, TId> & {
   onClick: (event: unknown) => void;
 };
 
@@ -332,10 +324,9 @@ export type BuildingNotStackableBtnController<
 
 export type BuildingResearchBtn<
   TOpts extends UnsafeButtonOptions<TController, TId>,
-  TModel extends UnsafeBuildingBtnModel | UnsafePolicyBtnModel,
-  TController extends ButtonModernController,
+  TController extends ButtonModernController<UnsafeButtonModel | undefined>,
   TId extends string | undefined = undefined,
-> = BuildingBtn<TOpts, TModel, TController, TId>;
+> = BuildingBtn<TOpts, TController, TId>;
 
 export type Spacer = {
   title: string;
@@ -447,6 +438,7 @@ export type UnsafeButtonModel<
   TModelOptions extends Record<string, unknown> | undefined | unknown = unknown,
 > = UnsafeButtonModelDefaults & {
   options: TModelOptions;
+  priceModels?: Array<UnsafePriceLineModel>;
 };
 
 export type UnsafeButtonModernModel<
@@ -481,6 +473,13 @@ export type UnsafeLinkResult = {
   linkHandler: (event: MouseEvent) => void;
 };
 export type UnsafePriceLineModel = {
+  title: string;
+  name: string;
+  val: number;
+  progress: number;
+  displayValue: string;
+};
+export type UnsafePriceLineModelExt = {
   title: string;
   name: string;
   val: number;

@@ -56,8 +56,11 @@ export type SpaceProgramBtnController<
 };
 
 export type PlanetBuildingBtnController<
-  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
-> = BuildingStackableBtnController<TModel> & {
+  TModel extends UnsafeBuildingBtnModel<unknown, UnsafePlanet> = UnsafeBuildingBtnModel<
+    unknown,
+    UnsafePlanet
+  >,
+> = BuildingStackableBtnController<UnsafeBuildingBtnModel<unknown, UnsafePlanet>> & {
   getMetadata: (model: TModel) => UnsafePlanet;
   hasSellLink: (model: unknown) => boolean;
   getPrices: (model: TModel) => Array<Price>;
@@ -70,14 +73,6 @@ export type PlanetPanel = Panel<
       planet: UnsafePlanet;
       controller: PlanetBuildingBtnController;
     },
-    UnsafeBuildingBtnModel<
-      {
-        id: SpaceBuilding;
-        planet: UnsafePlanet;
-        controller: PlanetBuildingBtnController;
-      },
-      UnsafeBuildingBtnModel
-    >,
     PlanetBuildingBtnController,
     SpaceBuilding
   >
@@ -97,7 +92,6 @@ export type SpaceTab = Tab<Panel<RorshachWgt>> & {
   GCPanel: Panel<
     BuildingStackableBtn<
       { id: Mission; controller: SpaceProgramBtnController },
-      UnsafeBuildingStackableBtnModel<{ id: Mission; controller: SpaceProgramBtnController }>,
       SpaceProgramBtnController,
       Mission
     >

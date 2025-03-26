@@ -70,10 +70,6 @@ export type PolicyPanel = Panel<
       id: Policy;
       controller: PolicyBtnController;
     },
-    UnsafePolicyBtnModel<{
-      id: Policy;
-      controller: PolicyBtnController;
-    }>,
     PolicyBtnController,
     Policy
   >
@@ -96,8 +92,7 @@ export type Library = Tab<
   unknown,
   BuildingResearchBtn<
     { id: Technology; controller: TechButtonController },
-    UnsafeBuildingBtnModel,
-    ButtonModernController,
+    TechButtonController,
     Technology
   >
 > & {
@@ -112,8 +107,7 @@ export type Library = Tab<
     tech: UnsafeTech,
   ) => BuildingResearchBtn<
     { id: Technology; controller: TechButtonController },
-    UnsafeBuildingBtnModel,
-    ButtonModernController,
+    TechButtonController,
     Technology
   >;
 };

@@ -63,7 +63,9 @@ export type WorkshopManager = TabManager & {
   unlockAll: () => void;
 };
 
-export type UpgradeButtonController = BuildingNotStackableBtnController & {
+export type UpgradeButtonController<
+  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
+> = BuildingNotStackableBtnController<TModel> & {
   defaults: () => UnsafeUpgradeButtonModelDefaults;
   getMetadata: (model: UnsafeUpgradeButtonModel) => UnsafeUpgrade;
   getPrices: (model: unknown) => Array<Price>;
@@ -92,7 +94,6 @@ export type CraftButton = ButtonModern<
     prices: Array<Price>;
     controller: CraftButtonController;
   },
-  UnsafeButtonModernModel,
   ButtonModernController
 > & {
   craftName: ResourceCraftable;
@@ -101,7 +102,9 @@ export type CraftButton = ButtonModern<
   renderLinks: () => void;
 };
 
-export type ZebraUpgradeButtonController = BuildingNotStackableBtnController & {
+export type ZebraUpgradeButtonController<
+  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
+> = BuildingNotStackableBtnController<TModel> & {
   defaults: () => UnsafeZebraUpgradeButtonModelDefaults;
   getMetadata: (model: UnsafeZebraUpgradeButtonModel) => UnsafeUpgrade;
   getPrices: (model: unknown) => ReturnType<VillageManager["getEffectLeader"]>;
@@ -112,13 +115,11 @@ export type Workshop = Tab<
   unknown,
   | BuildingResearchBtn<
       { id: Upgrade; controller: UpgradeButtonController },
-      UnsafeBuildingBtnModel<{ id: Upgrade; controller: UpgradeButtonController }>,
       UpgradeButtonController,
       Upgrade
     >
   | BuildingResearchBtn<
       { id: Upgrade; controller: ZebraUpgradeButtonController },
-      UnsafeBuildingBtnModel<{ id: Upgrade; controller: ZebraUpgradeButtonController }>,
       ZebraUpgradeButtonController,
       Upgrade
     >
@@ -135,7 +136,6 @@ export type Workshop = Tab<
     upgrade: UnsafeUpgrade,
   ) => BuildingResearchBtn<
     { id: Upgrade; controller: UpgradeButtonController },
-    UnsafeBuildingBtnModel<{ id: Upgrade; controller: UpgradeButtonController }>,
     UpgradeButtonController,
     Upgrade
   >;
@@ -143,7 +143,6 @@ export type Workshop = Tab<
     upgrade: UnsafeUpgrade,
   ) => BuildingResearchBtn<
     { id: Upgrade; controller: ZebraUpgradeButtonController },
-    UnsafeBuildingBtnModel<{ id: Upgrade; controller: ZebraUpgradeButtonController }>,
     ZebraUpgradeButtonController,
     Upgrade
   >;

@@ -37,11 +37,17 @@ import type {
   UnsafeTranscendenceUpgrade,
   UnsafeZiggurathUpgrade,
 } from "../types/religion.js";
-import type { SpaceProgramBtnController, UnsafeSpaceBuilding } from "../types/space.js";
 import type {
+  PlanetBuildingBtnController,
+  SpaceProgramBtnController,
+  UnsafeSpaceBuilding,
+} from "../types/space.js";
+import type {
+  ChronoforgeBtnController,
   UnsafeChronoForgeUpgrade,
   UnsafeFixCryochamberBtnModel,
   UnsafeVoidSpaceUpgrade,
+  VoidSpaceBtnController,
 } from "../types/time.js";
 import type { UnsafeUpgrade } from "../types/workshop.js";
 
@@ -519,9 +525,14 @@ export class BulkPurchaseHelper {
    * @param amount How many items to build.
    * @returns How many items were built.
    */
-  construct<TModel extends Required<UnsafeBuildingBtnModel | UnsafeBuildingStackableBtnModel>>(
+  construct<TModel extends UnsafeBuildingBtnModel | UnsafeBuildingStackableBtnModel>(
     model: TModel,
-    controller: BuildingBtnModernController<TModel> | BuildingStackableBtnController<TModel>,
+    controller:
+      | BuildingBtnModernController<TModel>
+      | BuildingStackableBtnController<TModel>
+      | PlanetBuildingBtnController
+      | ChronoforgeBtnController
+      | VoidSpaceBtnController,
     amount: number,
   ): number {
     const meta = model.metadata;

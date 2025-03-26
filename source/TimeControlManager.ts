@@ -116,7 +116,6 @@ export class TimeControlManager {
           | VoidSpaceBtnController
           | ZigguratBtnController
         >,
-        UnsafeButtonModel<unknown>,
         | BuildingBtnController
         | ButtonController
         | ButtonModernController

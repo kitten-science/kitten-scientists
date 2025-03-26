@@ -9,8 +9,10 @@ import type {
   Panel,
   Tab,
   TabManager,
+  UnsafeBuildingBtnModel,
   UnsafeBuildingStackableBtnModel,
   UnsafeBuildingStackableBtnModelDefaults,
+  UnsafeButtonModel,
   UnsafeButtonModernModel,
   UnsafeButtonModernModelDefaults,
   UnsafeButtonOptions,
@@ -111,7 +113,9 @@ export type ReligionBtnController = BuildingStackableBtnController & {
   updateVisible: () => void;
 };
 
-export type TranscendenceBtnController = BuildingStackableBtnController & {
+export type TranscendenceBtnController<
+  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
+> = BuildingStackableBtnController<TModel> & {
   defaults: () => UnsafeTranscendenceBtnModelDefaults;
   getMetadata: (model: UnsafeTranscendenceBtnModel) => UnsafeTranscendenceUpgrade;
 };
@@ -132,9 +136,13 @@ export type TranscendBtnController = ButtonModernController & {
 };
 
 export type TransformBtnController<
+  TModel extends UnsafeTransformBtnModel | undefined = UnsafeTransformBtnModel,
   TControllerOpts extends Record<string, unknown> | undefined = Record<string, unknown>,
-> = ButtonModernController<TControllerOpts> & {
-  new (game: GamePage, controllerOpts?: TControllerOpts): TransformBtnController<TControllerOpts>;
+> = ButtonModernController<TModel, TControllerOpts> & {
+  new (
+    game: GamePage,
+    controllerOpts?: TControllerOpts,
+  ): TransformBtnController<TModel, TControllerOpts>;
 
   defaults: () => UnsafeTransformBtnModelDefaults;
   fetchModel: (options: unknown) => UnsafeTransformBtnModel;
@@ -157,10 +165,9 @@ export type TransformBtnController<
 
 export type MultiLinkBtn<
   TOpts extends UnsafeButtonOptions<TController, TId>,
-  TModel extends UnsafeButtonModernModel,
   TController extends ButtonModernController | TransformBtnController,
   TId extends string | undefined = undefined,
-> = ButtonModern<TOpts, TModel, TController, TId> & {
+> = ButtonModern<TOpts, TController, TId> & {
   all?: Link;
   half?: Link;
   fifth?: Link;
@@ -185,12 +192,6 @@ export type CryptotheologyWGT = IChildrenAware<
       description: string;
       controller: TranscendenceBtnController;
     },
-    UnsafeBuildingStackableBtnModel<{
-      id: Building;
-      name: string;
-      description: string;
-      controller: AnyFunction;
-    }>,
     TranscendenceBtnController,
     TranscendenceUpgrade
   >
@@ -213,12 +214,6 @@ export type PactsWGT = IChildrenAware<
       description: string;
       controller: PactsBtnController;
     },
-    UnsafeBuildingStackableBtnModel<{
-      id: Building;
-      name: string;
-      description: string;
-      controller: AnyFunction;
-    }>,
     PactsBtnController,
     Pact
   >
@@ -252,12 +247,6 @@ export type RefineBtn = ButtonModern<
     prices: Array<Price>;
     controller: RefineTearsBtnController;
   },
-  UnsafeRefineTearsBtnModel<{
-    name: string;
-    description: string;
-    prices: Array<Price>;
-    controller: RefineTearsBtnController;
-  }>,
   RefineTearsBtnController
 > & {
   renderLinks: () => void;
@@ -291,7 +280,6 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
       prices: Array<Price>;
       controller: TransformBtnController;
     },
-    UnsafeTransformBtnModel,
     TransformBtnController
   > | null;
   /**
@@ -304,7 +292,6 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
       prices: Array<Price>;
       controller: TransformBtnController;
     },
-    UnsafeTransformBtnModel,
     TransformBtnController
   > | null;
 
@@ -321,14 +308,6 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
         controller: ZigguratBtnController;
         handler: AnyFunction;
       },
-      UnsafeBuildingStackableBtnModel<{
-        id: ZiggurathUpgrade;
-        name: string;
-        description: string;
-        prices: Array<Price>;
-        controller: ZigguratBtnController;
-        handler: AnyFunction;
-      }>,
       ZigguratBtnController,
       ZiggurathUpgrade
     >
@@ -346,14 +325,6 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
         controller: ReligionBtnController;
         handler: AnyFunction;
       },
-      UnsafeBuildingStackableBtnModel<{
-        id: Upgrade;
-        name: string;
-        description: string;
-        prices: Array<Price>;
-        controller: ReligionBtnController;
-        handler: AnyFunction;
-      }>,
       ReligionBtnController,
       ReligionUpgrade
     >
@@ -383,16 +354,6 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
       prices: Array<Price>;
       controller: TransformBtnController;
     },
-    UnsafeTransformBtnModel<{
-      name: string;
-      description: string;
-      prices: [{ name: Resource; val: number }];
-      controller: TransformBtnController;
-      gainMultiplier: () => number;
-      gainedResource: "relic";
-      logTextID: "religion.refineTCsBtn.refine.msg";
-      logfilterID: "tcRefine";
-    }>,
     TransformBtnController
   >;
   praiseBtn?: ButtonModern<
@@ -402,12 +363,6 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
       controller: PraiseBtnController;
       handler: AnyFunction;
     },
-    UnsafeButtonModernModel<{
-      name: string;
-      description: string;
-      controller: PraiseBtnController;
-      handler: AnyFunction;
-    }>,
     PraiseBtnController
   >;
   adoreBtn?: ButtonModern<
@@ -417,12 +372,6 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
       controller: ResetFaithBtnController;
       handler: AnyFunction;
     },
-    UnsafeButtonModernModel<{
-      name: string;
-      description: string;
-      controller: PraiseBtnController;
-      handler: AnyFunction;
-    }>,
     ResetFaithBtnController
   >;
   transcendBtn?: ButtonModern<
@@ -432,12 +381,6 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
       controller: TranscendBtnController;
       handler: AnyFunction;
     },
-    UnsafeButtonModernModel<{
-      name: string;
-      description: string;
-      controller: TranscendBtnController;
-      handler: AnyFunction;
-    }>,
     TranscendBtnController
   >;
 };
