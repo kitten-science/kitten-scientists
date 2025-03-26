@@ -162,10 +162,10 @@ export type ButtonController<
 };
 
 export type Button<
+  TOpts extends UnsafeButtonOptions<TController, TId>,
   TModel extends UnsafeButtonModel,
   TController extends ButtonController | TransformBtnController,
   TId extends string | undefined = undefined,
-  TOpts = UnsafeButtonOptions<TController, TId>,
 > = Control & {
   model: TModel;
   controller: TController;
@@ -175,7 +175,7 @@ export type Button<
   tab: string | null;
   buttonTitle: string | null;
   opts: TOpts;
-  new (opts: TOpts, game: GamePage): Button<TModel, TController, TId, TOpts>;
+  new (opts: TOpts, game: GamePage): Button<TOpts, TModel, TController, TId>;
   setOpts: (opts: TOpts) => void;
   id: TId;
 
@@ -237,10 +237,11 @@ export type ButtonModernController<
 };
 
 export type ButtonModern<
+  TOpts extends UnsafeButtonOptions<TController, TId>,
   TModel extends UnsafeButtonModernModel,
   TController extends ButtonModernController | TransformBtnController,
   TId extends string | undefined = undefined,
-> = Button<TModel, TController, TId> & {
+> = Button<TOpts, TModel, TController, TId> & {
   afterRender: () => void;
   getTooltipHTML: () => string;
   attachTooltip: (htmlProvider: unknown) => void;
@@ -277,10 +278,11 @@ export type BuildingBtnController<
 };
 
 export type BuildingBtn<
+  TOpts extends UnsafeButtonOptions<TController, TId>,
   TModel extends UnsafeBuildingBtnModel | UnsafePolicyBtnModel,
   TController extends ButtonModernController,
   TId extends string | undefined = undefined,
-> = ButtonModern<TModel, TController, TId> & {
+> = ButtonModern<TOpts, TModel, TController, TId> & {
   sellHref: null;
   toggleHref: null;
   renderLinks: () => void;
@@ -308,10 +310,11 @@ export type BuildingStackableBtnController<
 };
 
 export type BuildingStackableBtn<
+  TOpts extends UnsafeButtonOptions<TController, TId>,
   TModel extends UnsafeBuildingBtnModel,
   TController extends ButtonModernController,
-  TId extends AllBuildings | undefined = undefined,
-> = BuildingBtn<TModel, TController, TId> & {
+  TId extends string | undefined = undefined,
+> = BuildingBtn<TOpts, TModel, TController, TId> & {
   onClick: (event: unknown) => void;
 };
 
@@ -328,10 +331,11 @@ export type BuildingNotStackableBtnController<
 };
 
 export type BuildingResearchBtn<
+  TOpts extends UnsafeButtonOptions<TController, TId>,
   TModel extends UnsafeBuildingBtnModel | UnsafePolicyBtnModel,
   TController extends ButtonModernController,
   TId extends string | undefined = undefined,
-> = BuildingBtn<TModel, TController, TId>;
+> = BuildingBtn<TOpts, TModel, TController, TId>;
 
 export type Spacer = {
   title: string;
@@ -436,7 +440,7 @@ export type UnsafeButtonModelOptions = {
 
 export type UnsafeButtonOptions<TController, TId extends string | undefined = undefined> = {
   controller: TController;
-  id: TId;
+  id?: TId;
 };
 
 export type UnsafeButtonModel<

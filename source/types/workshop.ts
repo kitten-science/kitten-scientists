@@ -84,7 +84,17 @@ export type CraftButtonController = ButtonModernController & {
   buyItem: (model: UnsafeCraftButtonModel, event: unknown) => UnsafeBuyItemResult;
 };
 
-export type CraftButton = ButtonModern<UnsafeButtonModernModel, ButtonModernController> & {
+export type CraftButton = ButtonModern<
+  {
+    name: string;
+    description: string;
+    craft: ResourceCraftable;
+    prices: Array<Price>;
+    controller: CraftButtonController;
+  },
+  UnsafeButtonModernModel,
+  ButtonModernController
+> & {
   craftName: ResourceCraftable;
   new (opts: { craft: ResourceCraftable }, game: unknown): CraftButton;
   setEnabled: (enabled: unknown) => void;
@@ -100,10 +110,18 @@ export type ZebraUpgradeButtonController = BuildingNotStackableBtnController & {
 
 export type Workshop = Tab<
   unknown,
-  BuildingResearchBtn<
-    UnsafeBuildingBtnModel<{ id: Upgrade; controller: UpgradeButtonController }>,
-    UpgradeButtonController
-  >
+  | BuildingResearchBtn<
+      { id: Upgrade; controller: UpgradeButtonController },
+      UnsafeBuildingBtnModel<{ id: Upgrade; controller: UpgradeButtonController }>,
+      UpgradeButtonController,
+      Upgrade
+    >
+  | BuildingResearchBtn<
+      { id: Upgrade; controller: ZebraUpgradeButtonController },
+      UnsafeBuildingBtnModel<{ id: Upgrade; controller: ZebraUpgradeButtonController }>,
+      ZebraUpgradeButtonController,
+      Upgrade
+    >
 > & {
   tdTop: HTMLTableCellElement | null;
   craftBtns: Array<CraftButton>;
@@ -116,14 +134,18 @@ export type Workshop = Tab<
   createBtn: (
     upgrade: UnsafeUpgrade,
   ) => BuildingResearchBtn<
+    { id: Upgrade; controller: UpgradeButtonController },
     UnsafeBuildingBtnModel<{ id: Upgrade; controller: UpgradeButtonController }>,
-    UpgradeButtonController
+    UpgradeButtonController,
+    Upgrade
   >;
   createZebraUpgradeBtn: (
     upgrade: UnsafeUpgrade,
   ) => BuildingResearchBtn<
-    UnsafeBuildingBtnModel<{ id: Upgrade; controller: UpgradeButtonController }>,
-    UpgradeButtonController
+    { id: Upgrade; controller: ZebraUpgradeButtonController },
+    UnsafeBuildingBtnModel<{ id: Upgrade; controller: ZebraUpgradeButtonController }>,
+    ZebraUpgradeButtonController,
+    Upgrade
   >;
   update: () => void;
   updateTab: () => void;

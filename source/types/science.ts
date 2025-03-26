@@ -66,6 +66,10 @@ export type PolicyBtnController = BuildingNotStackableBtnController<UnsafePolicy
 
 export type PolicyPanel = Panel<
   BuildingResearchBtn<
+    {
+      id: Policy;
+      controller: PolicyBtnController;
+    },
     UnsafePolicyBtnModel<{
       id: Policy;
       controller: PolicyBtnController;
@@ -90,7 +94,12 @@ export type TechButtonController = BuildingNotStackableBtnController<UnsafeTechB
 
 export type Library = Tab<
   unknown,
-  BuildingResearchBtn<UnsafeBuildingBtnModel, ButtonModernController>
+  BuildingResearchBtn<
+    { id: Technology; controller: TechButtonController },
+    UnsafeBuildingBtnModel,
+    ButtonModernController,
+    Technology
+  >
 > & {
   metaphysicsPanel: PrestigePanel | null;
   render: (tabContainer?: HTMLElement) => void;
@@ -101,7 +110,12 @@ export type Library = Tab<
   new (tabName: unknown, game: GamePage): Library;
   createTechBtn: (
     tech: UnsafeTech,
-  ) => BuildingResearchBtn<UnsafeBuildingBtnModel, ButtonModernController>;
+  ) => BuildingResearchBtn<
+    { id: Technology; controller: TechButtonController },
+    UnsafeBuildingBtnModel,
+    ButtonModernController,
+    Technology
+  >;
 };
 
 export type UnsafePolicy = {

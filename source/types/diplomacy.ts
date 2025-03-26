@@ -4,7 +4,6 @@ import type {
   ButtonModernController,
   Panel,
   Tab,
-  UnsafeButtonModel,
   UnsafeButtonModernModel,
 } from "./core.js";
 import type { GamePage } from "./game.js";
@@ -81,7 +80,18 @@ export type TradeButtonController = ButtonModernController & {
   defaults: () => UnsafeTradeButtonModel;
 };
 
-export type TradeButton = ButtonModern<UnsafeTradeButtonModel, TradeButtonController, Resource> & {
+export type TradeButton = ButtonModern<
+  {
+    name: string;
+    description: string;
+    prices: Array<Price>;
+    race: Race;
+    controller: TradeButtonController;
+  },
+  UnsafeTradeButtonModel,
+  TradeButtonController,
+  Resource
+> & {
   race: UnsafeRace;
   trade25Href: null;
   trade100Href: null;
@@ -104,7 +114,15 @@ export type EmbassyButtonController = BuildingStackableBtnController & {
   updateVisible: (model: UnsafeEmbassyButtonModel) => void;
 };
 
-export type EmbassyButton = ButtonModern<UnsafeEmbassyButtonModel, EmbassyButtonController> & {
+export type EmbassyButton = ButtonModern<
+  {
+    prices: Array<Price>;
+    race: Race;
+    controller: EmbassyButtonController;
+  },
+  UnsafeEmbassyButtonModel,
+  EmbassyButtonController
+> & {
   pinLinkHref: null;
   race: UnsafeRace;
   new (opts: { race: UnsafeRace }, game: unknown): EmbassyButton;
@@ -120,7 +138,17 @@ export type AutoPinnedButtonController = ButtonModernController & {
   updateVisible: (model: UnsafeTradeButtonModel) => void;
 };
 
-export type AutoPinnedButton = ButtonModern<UnsafeButtonModernModel, ButtonModernController> & {
+export type AutoPinnedButton = ButtonModern<
+  {
+    name: string;
+    description: string;
+    race: Race;
+    controller: AutoPinnedButtonController;
+    handler: (race: UnsafeRace) => void;
+  },
+  UnsafeButtonModernModel,
+  ButtonModernController
+> & {
   pinLinkHref: null;
   race: UnsafeRace;
   new (opts: { race: UnsafeRace }, game: unknown): AutoPinnedButton;
@@ -133,7 +161,16 @@ export type SendExplorersButtonController = ButtonModernController & {
   clickHandler: (model: unknown, event: unknown) => void;
 };
 
-export type SendExplorersButton = ButtonModern<UnsafeButtonModernModel, ButtonModernController> & {
+export type SendExplorersButton = ButtonModern<
+  {
+    name: string;
+    description: string;
+    prices: Array<Price>;
+    controller: SendExplorersButtonController;
+  },
+  UnsafeButtonModernModel,
+  SendExplorersButtonController
+> & {
   afterRender: () => void;
 };
 
@@ -172,6 +209,7 @@ export type UnsafeRace = {
   standing: number;
   title: string;
   unlocked: boolean;
+  autoPinned?: boolean;
 };
 
 export type UnsafeTradeButtonModel<

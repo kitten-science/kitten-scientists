@@ -50,6 +50,7 @@ import type {
   UnsafeBuildingStackableBtnModel,
   UnsafeButtonModel,
   UnsafeButtonModernModel,
+  UnsafeButtonOptions,
 } from "./core.js";
 import type {
   AutoPinnedButton,
@@ -1058,6 +1059,21 @@ export const ReligionOptions = [
 ] as const;
 export type ReligionOption = (typeof ReligionOptions)[number];
 
+export const Biomes = [
+  "bloodDesert",
+  "boneForest",
+  "desert",
+  "forest",
+  "hills",
+  "mountain",
+  "plains",
+  "rainForest",
+  "swamp",
+  "village",
+  "volcano",
+];
+export type Biome = (typeof Biomes)[number];
+
 export type Unlocks = {
   buildings: Array<Building>;
   challenges: Array<Challenge>;
@@ -1142,7 +1158,7 @@ export type Link = {
 };
 
 export type ClassList = {
-  BuildingMeta: ConstructorOf<BuildingMeta>;
+  BuildingMeta: BuildingMeta;
   diplomacy: {
     ui: {
       autoPinnedButtonController: AutoPinnedButtonController;
@@ -1204,9 +1220,13 @@ export type ClassList = {
     AchievementsPanel: AchievementsPanel;
     BadgesPanel: BadgesPanel;
     btn: {
-      BuildingBtnModernController: ConstructorOf<BuildingBtnModernController>;
-      StagingBldBtnController: ConstructorOf<StagingBldBtnController>;
-      StagingBldBtn: ConstructorOf<StagingBldBtn<UnsafeBuildingBtnModel, ButtonModernController>>;
+      BuildingBtnModernController: BuildingBtnModernController;
+      StagingBldBtnController: StagingBldBtnController;
+      StagingBldBtn: StagingBldBtn<
+        UnsafeButtonOptions<ButtonModernController>,
+        UnsafeBuildingBtnModel,
+        ButtonModernController
+      >;
     };
     BuildingBtnController: BuildingBtnController;
     BurnParagonBtnController: BurnParagonBtnController;
@@ -1228,7 +1248,11 @@ export type ClassList = {
     PrestigePanel: PrestigePanel;
     RorshachWgt: RorshachWgt;
     religion: {
-      MultiLinkBtn: MultiLinkBtn<UnsafeButtonModernModel, ButtonModernController>;
+      MultiLinkBtn: MultiLinkBtn<
+        UnsafeButtonOptions<ButtonModernController>,
+        UnsafeButtonModernModel,
+        ButtonModernController
+      >;
       RefineBtn: RefineBtn;
       RefineTearsBtnController: RefineTearsBtnController;
       TransformBtnController: TransformBtnController;
@@ -1300,18 +1324,31 @@ export type ComInterface = {
       };
       Math: KGMath;
       ui: {
-        BuildingBtn: BuildingBtn<UnsafeBuildingBtnModel, ButtonModernController>;
+        BuildingBtn: BuildingBtn<
+          UnsafeButtonOptions<ButtonModernController>,
+          UnsafeBuildingBtnModel,
+          ButtonModernController
+        >;
         BuildingBtnController: BuildingBtnController;
         BuildingNotStackableBtnController: BuildingNotStackableBtnController;
-        BuildingResearchBtn: BuildingResearchBtn<UnsafeBuildingBtnModel, ButtonModernController>;
+        BuildingResearchBtn: BuildingResearchBtn<
+          UnsafeButtonOptions<ButtonModernController>,
+          UnsafeBuildingBtnModel,
+          ButtonModernController
+        >;
         BuildingStackableBtn: BuildingStackableBtn<
+          UnsafeButtonOptions<BuildingStackableBtnController>,
           UnsafeBuildingStackableBtnModel,
           BuildingStackableBtnController
         >;
         BuildingStackableBtnController: BuildingStackableBtnController;
-        Button: Button<UnsafeButtonModel, ButtonController>;
+        Button: Button<UnsafeButtonOptions<ButtonController>, UnsafeButtonModel, ButtonController>;
         ButtonController: ButtonController;
-        ButtonModern: ButtonModern<UnsafeButtonModernModel, ButtonModernController>;
+        ButtonModern: ButtonModern<
+          UnsafeButtonOptions<ButtonModernController>,
+          UnsafeButtonModernModel,
+          ButtonModernController
+        >;
         ButtonModernController: ButtonModernController;
         CensusPanel: CensusPanel;
         ContentRowRenderer: ContentRowRenderer;

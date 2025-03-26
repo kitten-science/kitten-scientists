@@ -9,6 +9,7 @@ import type {
   UnsafeBuildingBtnModel,
   UnsafeBuildingStackableBtnModel,
   UnsafeButtonModernModel,
+  UnsafeButtonOptions,
   UnsafeLinkResult,
 } from "./core.js";
 import type { GamePage } from "./game.js";
@@ -22,7 +23,7 @@ import type {
 
 export type Metadata<TMeta extends Record<string, unknown> = Record<string, unknown>> = {
   meta: TMeta;
-  new (meta: TMeta): Metadata;
+  new (meta: TMeta): Metadata<TMeta>;
   getMeta(): TMeta;
   get<TAttr extends keyof TMeta>(attr: TAttr): TMeta[TAttr];
   set<TAttr extends keyof TMeta>(attr: TAttr, val: TMeta[TAttr]): void;
@@ -137,18 +138,15 @@ export type RefineCatnipButtonController = ButtonModernController & {
   ) => void;
 };
 
-export type GatherCatnipButton = ButtonModern<
-  UnsafeButtonModernModel<{
-    name: string;
-    controller: GatherCatnipButtonController;
-    description: string;
-    twoRow: boolean;
-  }>,
-  GatherCatnipButtonController,
-  undefined
->;
-
 export type RefineCatnipButton = ButtonModern<
+  {
+    name: string;
+    controller: RefineCatnipButtonController;
+    handler: AnyFunction;
+    description: string;
+    prices: Array<Price>;
+    twoRow: boolean;
+  },
   UnsafeRefineCatnipButtonModel,
   RefineCatnipButtonController
 > & {
@@ -185,18 +183,35 @@ export type StagingBldBtnController<
 };
 
 export type StagingBldBtn<
+  TOpts extends UnsafeButtonOptions<TController, TId>,
   TModel extends UnsafeBuildingBtnModel,
   TController extends ButtonModernController,
   TId extends AllBuildings | undefined = undefined,
-> = BuildingStackableBtn<TModel, TController, TId> & {
+> = BuildingStackableBtn<TOpts, TModel, TController, TId> & {
   stageLinks: Array<unknown>;
   renderLinks: () => void;
 };
 
 export type BuildingsModern = Tab<
-  | GatherCatnipButton
+  | ButtonModern<
+      {
+        name: string;
+        controller: GatherCatnipButtonController;
+        description: string;
+        twoRow: boolean;
+      },
+      UnsafeButtonModernModel,
+      GatherCatnipButtonController
+    >
   | RefineCatnipButton
   | StagingBldBtn<
+      {
+        name: string;
+        description: string;
+        building: Building;
+        twoRow: boolean;
+        controller: StagingBldBtnController;
+      },
       UnsafeBuildingBtnModel<
         {
           name: string;
@@ -210,6 +225,13 @@ export type BuildingsModern = Tab<
       StagingBldBtnController
     >
   | BuildingStackableBtn<
+      {
+        name: string;
+        description: string;
+        building: Building;
+        twoRow: boolean;
+        controller: BuildingBtnModernController;
+      },
       UnsafeBuildingStackableBtnModel<
         {
           name: string;

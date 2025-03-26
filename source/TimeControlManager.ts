@@ -19,6 +19,7 @@ import type {
   UnsafeBuildingBtnModel,
   UnsafeButtonModel,
   UnsafeButtonModernModel,
+  UnsafeButtonOptions,
 } from "./types/core.js";
 import {
   type Building,
@@ -103,6 +104,18 @@ export class TimeControlManager {
     // as if we already had it.
     const check = <
       T extends Button<
+        UnsafeButtonOptions<
+          | BuildingBtnController
+          | ButtonController
+          | ButtonModernController
+          | ChronoforgeBtnController
+          | ReligionBtnController
+          | TranscendBtnController
+          | TranscendenceBtnController
+          | TransformBtnController
+          | VoidSpaceBtnController
+          | ZigguratBtnController
+        >,
         UnsafeButtonModel<unknown>,
         | BuildingBtnController
         | ButtonController
@@ -189,27 +202,8 @@ export class TimeControlManager {
         checkList.push("unicornPasture");
       }
     }
-    if (
-      check(
-        this._bonfireManager.manager.tab.children as Array<
-          Button<
-            UnsafeButtonModel<unknown>,
-            | BuildingBtnController
-            | ButtonController
-            | ButtonModernController
-            | ChronoforgeBtnController
-            | ReligionBtnController
-            | TranscendBtnController
-            | TranscendenceBtnController
-            | TransformBtnController
-            | VoidSpaceBtnController
-            | ZigguratBtnController,
-            string | undefined
-          >
-        >,
-      ) ||
-      checkList.length
-    ) {
+    // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
+    if (check(this._bonfireManager.manager.tab.children) || checkList.length) {
       return;
     }
 
@@ -266,60 +260,12 @@ export class TimeControlManager {
     }
 
     if (
-      check(
-        this._religionManager.manager.tab.zgUpgradeButtons as Array<
-          Button<
-            UnsafeButtonModel<unknown>,
-            | BuildingBtnController
-            | ButtonController
-            | ButtonModernController
-            | ChronoforgeBtnController
-            | ReligionBtnController
-            | TranscendBtnController
-            | TranscendenceBtnController
-            | TransformBtnController
-            | VoidSpaceBtnController
-            | ZigguratBtnController,
-            string | undefined
-          >
-        >,
-      ) ||
-      check(
-        this._religionManager.manager.tab.rUpgradeButtons as Array<
-          Button<
-            UnsafeButtonModel<unknown>,
-            | BuildingBtnController
-            | ButtonController
-            | ButtonModernController
-            | ChronoforgeBtnController
-            | ReligionBtnController
-            | TranscendBtnController
-            | TranscendenceBtnController
-            | TransformBtnController
-            | VoidSpaceBtnController
-            | ZigguratBtnController,
-            string | undefined
-          >
-        >,
-      ) ||
-      check(
-        this._religionManager.manager.tab.ctPanel.children[0].children as Array<
-          Button<
-            UnsafeButtonModel<unknown>,
-            | BuildingBtnController
-            | ButtonController
-            | ButtonModernController
-            | ChronoforgeBtnController
-            | ReligionBtnController
-            | TranscendBtnController
-            | TranscendenceBtnController
-            | TransformBtnController
-            | VoidSpaceBtnController
-            | ZigguratBtnController,
-            string | undefined
-          >
-        >,
-      ) ||
+      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
+      check(this._religionManager.manager.tab.zgUpgradeButtons) ||
+      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
+      check(this._religionManager.manager.tab.rUpgradeButtons) ||
+      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
+      check(this._religionManager.manager.tab.ctPanel.children[0].children) ||
       checkList.length
     ) {
       return;
@@ -341,42 +287,10 @@ export class TimeControlManager {
     }
 
     if (
-      check(
-        this.manager.tab.cfPanel.children[0].children as Array<
-          Button<
-            UnsafeButtonModel<unknown>,
-            | BuildingBtnController
-            | ButtonController
-            | ButtonModernController
-            | ChronoforgeBtnController
-            | ReligionBtnController
-            | TranscendBtnController
-            | TranscendenceBtnController
-            | TransformBtnController
-            | VoidSpaceBtnController
-            | ZigguratBtnController,
-            string | undefined
-          >
-        >,
-      ) ||
-      check(
-        this.manager.tab.vsPanel.children[0].children as Array<
-          Button<
-            UnsafeButtonModel<unknown>,
-            | BuildingBtnController
-            | ButtonController
-            | ButtonModernController
-            | ChronoforgeBtnController
-            | ReligionBtnController
-            | TranscendBtnController
-            | TranscendenceBtnController
-            | TransformBtnController
-            | VoidSpaceBtnController
-            | ZigguratBtnController,
-            string | undefined
-          >
-        >,
-      ) ||
+      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
+      check(this.manager.tab.cfPanel.children[0].children) ||
+      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
+      check(this.manager.tab.vsPanel.children[0].children) ||
       checkList.length
     ) {
       return;

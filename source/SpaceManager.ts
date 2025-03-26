@@ -178,6 +178,11 @@ export class SpaceManager implements Automation {
     }
 
     let button: BuildingStackableBtn<
+      {
+        id: SpaceBuilding;
+        planet: UnsafePlanet;
+        controller: PlanetBuildingBtnController;
+      },
       UnsafeBuildingBtnModel<{
         id: SpaceBuilding;
         planet: UnsafePlanet;

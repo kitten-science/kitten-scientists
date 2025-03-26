@@ -65,6 +65,11 @@ export type PlanetBuildingBtnController<
 
 export type PlanetPanel = Panel<
   BuildingStackableBtn<
+    {
+      id: SpaceBuilding;
+      planet: UnsafePlanet;
+      controller: PlanetBuildingBtnController;
+    },
     UnsafeBuildingBtnModel<
       {
         id: SpaceBuilding;
@@ -91,8 +96,10 @@ export type FurthestRingPanel = PlanetPanel & {
 export type SpaceTab = Tab<Panel<RorshachWgt>> & {
   GCPanel: Panel<
     BuildingStackableBtn<
+      { id: Mission; controller: SpaceProgramBtnController },
       UnsafeBuildingStackableBtnModel<{ id: Mission; controller: SpaceProgramBtnController }>,
-      SpaceProgramBtnController
+      SpaceProgramBtnController,
+      Mission
     >
   > | null;
   planetPanels: Array<PlanetPanel | FurthestRingPanel> | null;

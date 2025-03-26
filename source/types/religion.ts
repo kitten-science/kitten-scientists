@@ -13,6 +13,7 @@ import type {
   UnsafeBuildingStackableBtnModelDefaults,
   UnsafeButtonModernModel,
   UnsafeButtonModernModelDefaults,
+  UnsafeButtonOptions,
 } from "./core.js";
 import type { GamePage } from "./game.js";
 import type {
@@ -155,10 +156,11 @@ export type TransformBtnController<
 };
 
 export type MultiLinkBtn<
+  TOpts extends UnsafeButtonOptions<TController, TId>,
   TModel extends UnsafeButtonModernModel,
   TController extends ButtonModernController | TransformBtnController,
   TId extends string | undefined = undefined,
-> = ButtonModern<TModel, TController, TId> & {
+> = ButtonModern<TOpts, TModel, TController, TId> & {
   all?: Link;
   half?: Link;
   fifth?: Link;
@@ -177,13 +179,20 @@ export type RefineTearsBtnController = ButtonModernController & {
 
 export type CryptotheologyWGT = IChildrenAware<
   BuildingStackableBtn<
+    {
+      id: TranscendenceUpgrade;
+      name: string;
+      description: string;
+      controller: TranscendenceBtnController;
+    },
     UnsafeBuildingStackableBtnModel<{
       id: Building;
       name: string;
       description: string;
       controller: AnyFunction;
     }>,
-    TranscendenceBtnController
+    TranscendenceBtnController,
+    TranscendenceUpgrade
   >
 > &
   IGameAware & {
@@ -198,13 +207,20 @@ export type CryptotheologyPanel = Panel<CryptotheologyWGT> & {
 
 export type PactsWGT = IChildrenAware<
   BuildingStackableBtn<
+    {
+      id: Pact;
+      name: string;
+      description: string;
+      controller: PactsBtnController;
+    },
     UnsafeBuildingStackableBtnModel<{
       id: Building;
       name: string;
       description: string;
       controller: AnyFunction;
     }>,
-    PactsBtnController
+    PactsBtnController,
+    Pact
   >
 > &
   IGameAware & {
@@ -230,6 +246,12 @@ export type PactsBtnController = BuildingStackableBtnController & {
 };
 
 export type RefineBtn = ButtonModern<
+  {
+    name: string;
+    description: string;
+    prices: Array<Price>;
+    controller: RefineTearsBtnController;
+  },
   UnsafeRefineTearsBtnModel<{
     name: string;
     description: string;
@@ -262,19 +284,45 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
   /**
    * Sacrifice unicorns.
    */
-  sacrificeBtn: MultiLinkBtn<UnsafeTransformBtnModel, TransformBtnController> | null;
+  sacrificeBtn: MultiLinkBtn<
+    {
+      name: string;
+      description: string;
+      prices: Array<Price>;
+      controller: TransformBtnController;
+    },
+    UnsafeTransformBtnModel,
+    TransformBtnController
+  > | null;
   /**
    * Sacrifice alicorns.
    */
-  sacrificeAlicornsBtn: MultiLinkBtn<UnsafeTransformBtnModel, TransformBtnController> | null;
+  sacrificeAlicornsBtn: MultiLinkBtn<
+    {
+      name: string;
+      description: string;
+      prices: Array<Price>;
+      controller: TransformBtnController;
+    },
+    UnsafeTransformBtnModel,
+    TransformBtnController
+  > | null;
 
   /**
    * Ziggurath upgrade buttons.
    */
   zgUpgradeButtons: Array<
     BuildingStackableBtn<
+      {
+        id: ZiggurathUpgrade;
+        name: string;
+        description: string;
+        prices: Array<Price>;
+        controller: ZigguratBtnController;
+        handler: AnyFunction;
+      },
       UnsafeBuildingStackableBtnModel<{
-        id: Upgrade;
+        id: ZiggurathUpgrade;
         name: string;
         description: string;
         prices: Array<Price>;
@@ -290,6 +338,14 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
    */
   rUpgradeButtons: Array<
     BuildingStackableBtn<
+      {
+        id: ReligionUpgrade;
+        name: string;
+        description: string;
+        prices: Array<Price>;
+        controller: ReligionBtnController;
+        handler: AnyFunction;
+      },
       UnsafeBuildingStackableBtnModel<{
         id: Upgrade;
         name: string;
@@ -298,7 +354,8 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
         controller: ReligionBtnController;
         handler: AnyFunction;
       }>,
-      ReligionBtnController
+      ReligionBtnController,
+      ReligionUpgrade
     >
   >;
   /**
@@ -320,6 +377,12 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
    * Refine time crystals.
    */
   refineTCBtn?: MultiLinkBtn<
+    {
+      name: string;
+      description: string;
+      prices: Array<Price>;
+      controller: TransformBtnController;
+    },
     UnsafeTransformBtnModel<{
       name: string;
       description: string;
@@ -333,6 +396,12 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
     TransformBtnController
   >;
   praiseBtn?: ButtonModern<
+    {
+      name: string;
+      description: string;
+      controller: PraiseBtnController;
+      handler: AnyFunction;
+    },
     UnsafeButtonModernModel<{
       name: string;
       description: string;
@@ -342,6 +411,12 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
     PraiseBtnController
   >;
   adoreBtn?: ButtonModern<
+    {
+      name: string;
+      description: string;
+      controller: ResetFaithBtnController;
+      handler: AnyFunction;
+    },
     UnsafeButtonModernModel<{
       name: string;
       description: string;
@@ -351,6 +426,12 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
     ResetFaithBtnController
   >;
   transcendBtn?: ButtonModern<
+    {
+      name: string;
+      description: string;
+      controller: TranscendBtnController;
+      handler: AnyFunction;
+    },
     UnsafeButtonModernModel<{
       name: string;
       description: string;

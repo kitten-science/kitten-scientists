@@ -11,6 +11,7 @@ import type {
   ButtonModern,
   UnsafeBuildingBtnModel,
   UnsafeBuildingStackableBtnModel,
+  UnsafeButtonModernModel,
 } from "./types/core.js";
 import {
   type BuyItemResultReason,
@@ -19,6 +20,7 @@ import {
   type VoidSpaceUpgrade,
 } from "./types/index.js";
 import type {
+  ChronoforgeBtnController,
   FixCryochamberBtnController,
   TimeTab,
   UnsafeChronoForgeUpgrade,
@@ -174,18 +176,22 @@ export class TimeManager {
   private _getBuildButtonCF(name: ChronoForgeUpgrade) {
     return (this.manager.tab.children[2].children[0].children.find(button => button.id === name) ??
       null) as BuildingStackableBtn<
+      { id: ChronoForgeUpgrade; controller: ChronoforgeBtnController },
       UnsafeBuildingStackableBtnModel<{
         id: ChronoForgeUpgrade;
-        controller: VoidSpaceBtnController;
+        controller: ChronoforgeBtnController;
       }>,
-      VoidSpaceBtnController
+      ChronoforgeBtnController,
+      ChronoForgeUpgrade
     > | null;
   }
   private _getBuildButtonVS(name: VoidSpaceUpgrade) {
     return (this.manager.tab.children[3].children[0].children.find(button => button.id === name) ??
       null) as BuildingStackableBtn<
+      { id: VoidSpaceUpgrade; controller: VoidSpaceBtnController },
       UnsafeBuildingStackableBtnModel<{ id: VoidSpaceUpgrade; controller: VoidSpaceBtnController }>,
-      VoidSpaceBtnController
+      VoidSpaceBtnController,
+      VoidSpaceUpgrade
     > | null;
   }
 
@@ -203,7 +209,8 @@ export class TimeManager {
     }
 
     const btn = this.manager.tab.vsPanel.children[0].children[0] as ButtonModern<
-      UnsafeFixCryochamberBtnModel,
+      { name: string; description: string; controller: FixCryochamberBtnController },
+      UnsafeButtonModernModel,
       FixCryochamberBtnController
     >;
 

@@ -1,3 +1,4 @@
+import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import type {
   BuildingStackableBtnController,
   ButtonModern,
@@ -11,7 +12,7 @@ import type {
   UnsafeButtonModernModelDefaults,
 } from "./core.js";
 import type { GamePage } from "./game.js";
-import type { Job, Link, Price, Resource, ResourceCraftable, Trait } from "./index.js";
+import type { Biome, Job, Link, Price, Resource, ResourceCraftable, Trait } from "./index.js";
 
 export type VillageManager = TabManager & {
   kittens: number;
@@ -221,7 +222,18 @@ export type BiomeBtnController = ButtonModernController & {
   updateEnabled: (model: UnsafeBiomeBtnModel) => void;
 };
 
-export type BiomeBtn = ButtonModern<UnsafeBiomeBtnModel, BiomeBtnController> & {
+export type BiomeBtn = ButtonModern<
+  {
+    id: Biome;
+    name: string;
+    description: string;
+    prices: Array<Price>;
+    controller: BiomeBtnController;
+  },
+  UnsafeBiomeBtnModel,
+  BiomeBtnController,
+  Biome
+> & {
   renderLinks: () => void;
   update: () => void;
   getTooltipHTML: () => (controller: BiomeBtnController, model: UnsafeBiomeBtnModel) => string;
@@ -267,8 +279,28 @@ export type MapOverviewWgt = IChildrenAware<BiomeBtn> &
   IGameAware & {
     new (game: GamePage): MapOverviewWgt;
     game: GamePage;
-    upgradeExplorersBtn: ButtonModern<UnsafeButtonModernModel, ButtonModernController>;
-    upgradeHQBtn: ButtonModern<UnsafeButtonModernModel, ButtonModernController>;
+    upgradeExplorersBtn: ButtonModern<
+      {
+        name: string;
+        description: string;
+        handler: AnyFunction;
+        prices: Array<Price>;
+        controller: UpgradeExplorersController;
+      },
+      UnsafeButtonModernModel,
+      ButtonModernController
+    >;
+    upgradeHQBtn: ButtonModern<
+      {
+        name: string;
+        description: string;
+        handler: AnyFunction;
+        prices: Array<Price>;
+        controller: UpgradeHQController;
+      },
+      UnsafeButtonModernModel,
+      ButtonModernController
+    >;
     render: (container?: HTMLElement) => void;
     update: () => void;
   };
@@ -359,7 +391,15 @@ export type LoadoutButtonController = ButtonModernController & {
   renameLoadout: (loadout: Loadout) => void;
 };
 
-export type LoadoutButton = ButtonModern<UnsafeButtonModernModel, ButtonModernController> & {
+export type LoadoutButton = ButtonModern<
+  {
+    name: string;
+    loadout: unknown;
+    controller: LoadoutButtonController;
+  },
+  UnsafeButtonModernModel,
+  ButtonModernController
+> & {
   renderLinks: () => void;
   editLinks?: Array<Link>;
   pinLink?: Link;
@@ -383,7 +423,15 @@ export type JobButtonController = ButtonModernController & {
   getFlavor: (model: UnsafeBiomeBtnModel) => UnsafeJob["flavor"];
 };
 
-export type JobButton = ButtonModern<UnsafeButtonModernModel, ButtonModernController> & {
+export type JobButton = ButtonModern<
+  {
+    name: string;
+    job: Job;
+    controller: JobButtonController;
+  },
+  UnsafeButtonModernModel,
+  ButtonModernController
+> & {
   renderLinks: () => void;
   unassignLinks?: Array<Link>;
   assignLinks?: Array<Link>;
@@ -444,7 +492,17 @@ export type FestivalButtonController = VillageButtonController & {
   hasMultipleResources: (amt: number) => boolean;
 };
 
-export type FestivalButton = ButtonModern<UnsafeFestivalButtonModel, ButtonModernController> & {
+export type FestivalButton = ButtonModern<
+  {
+    name: string;
+    description: string;
+    handler: AnyFunction;
+    prices: Array<Price>;
+    controller: FestivalButtonController;
+  },
+  UnsafeFestivalButtonModel,
+  ButtonModernController
+> & {
   renderLinks: () => void;
   x100?: Link;
   x10?: Link;
@@ -454,11 +512,48 @@ export type FestivalButton = ButtonModern<UnsafeFestivalButtonModel, ButtonModer
 export type Village = Tab & {
   tdTop: HTMLTableCellElement | null;
   advModeButtons: Array<unknown>;
-  huntBtn: ButtonModern<UnsafeButtonModernModel, ButtonModernController>;
+  huntBtn: ButtonModern<
+    {
+      name: string;
+      description: string;
+      handler: AnyFunction;
+      prices: Array<Price>;
+      controller: VillageButtonController;
+    },
+    UnsafeButtonModernModel,
+    ButtonModernController
+  >;
   festivalBtn: FestivalButton;
-  optimizeJobsBtn: ButtonModern<UnsafeButtonModernModel, ButtonModernController>;
-  promoteKittensBtn: ButtonModern<UnsafeButtonModernModel, ButtonModernController>;
-  redeemGiftBtn: ButtonModern<UnsafeButtonModernModel, ButtonModernController>;
+  optimizeJobsBtn: ButtonModern<
+    {
+      name: string;
+      description: string;
+      handler: AnyFunction;
+      controller: VillageButtonController;
+    },
+    UnsafeButtonModernModel,
+    ButtonModernController
+  >;
+  promoteKittensBtn: ButtonModern<
+    {
+      name: string;
+      description: string;
+      handler: AnyFunction;
+      controller: VillageButtonController;
+    },
+    UnsafeButtonModernModel,
+    ButtonModernController
+  >;
+  redeemGiftBtn: ButtonModern<
+    {
+      name: string;
+      description: string;
+      handler: AnyFunction;
+      controller: VillageButtonController;
+    },
+    UnsafeButtonModernModel,
+    ButtonModernController
+  >;
   new (tabName: unknown, game: GamePage): Village;
   createJobBtn: (job: Job, game: GamePage) => JobButton;
   createLoadoutBtn: (loadout: Loadout, game: GamePage) => LoadoutButton;
