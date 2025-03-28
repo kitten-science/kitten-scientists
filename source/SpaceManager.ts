@@ -5,14 +5,20 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
-import { cdebug, cwarn } from "./tools/Log.js";
-import type { BuildingStackableBtn, UnsafeBuildingBtnModel } from "./types/core.js";
+import { cwarn } from "./tools/Log.js";
+import type {
+  BuildingStackableBtn,
+  UnsafeBuildingBtnModel,
+  UnsafeBuildingStackableBtnModel,
+} from "./types/core.js";
 import type { Mission, SpaceBuilding } from "./types/index.js";
 import type {
   PlanetBuildingBtnController,
   SpaceTab,
   UnsafePlanet,
+  UnsafePlanetBuildingButtonOptions,
   UnsafeSpaceBuilding,
+  UnsafeSpaceProgramButtonOptions,
 } from "./types/space.js";
 
 export class SpaceManager implements Automation {
@@ -129,25 +135,18 @@ export class SpaceManager implements Automation {
 
   build(name: SpaceBuilding, amount: number): number {
     let amountCalculated = amount;
-    const build = this.getBuild(name);
-
-    const button = this._getBuildButton(name);
-
-    if (!build.unlocked || !button?.model || !this.settings.buildings[name].enabled) {
-      return 0;
-    }
-
-    if (!button.model.enabled) {
-      return 0;
-    }
-
     const amountTemp = amountCalculated;
-    const label = build.label;
-    amountCalculated = this._bulkManager.construct(
-      button.model,
-      button.controller,
-      amountCalculated,
-    );
+    let label: string;
+    const meta = game.space.getBuilding(name);
+    const controller = new classes.ui.space.PlanetBuildingBtnController(
+      this._host.game,
+    ) as PlanetBuildingBtnController<
+      UnsafeBuildingStackableBtnModel<UnsafePlanetBuildingButtonOptions>
+    >;
+    const model = controller.fetchModel(meta);
+    amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+    label = meta.label;
+
     if (amountCalculated !== amountTemp) {
       cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
@@ -177,15 +176,13 @@ export class SpaceManager implements Automation {
       return null;
     }
 
-    let button: BuildingStackableBtn<
-      {
-        id: SpaceBuilding;
-        planet: UnsafePlanet;
-        controller: PlanetBuildingBtnController;
-      },
-      PlanetBuildingBtnController,
-      SpaceBuilding
-    > | null = null;
+    let button: BuildingStackableBtn<{
+      id: SpaceBuilding;
+      planet: UnsafePlanet;
+      controller: PlanetBuildingBtnController<
+        UnsafeBuildingStackableBtnModel<UnsafeSpaceProgramButtonOptions>
+      >;
+    }> | null = null;
     for (const panel of panels) {
       button = panel.children.find(child => child.id === id) ?? null;
 

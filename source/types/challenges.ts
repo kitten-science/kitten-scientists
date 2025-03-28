@@ -1,9 +1,12 @@
+import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import type {
   BuildingBtnController,
+  ButtonController,
   Panel,
   Tab,
   TabManager,
   UnsafeBuildingBtnModel,
+  UnsafeBuildingBtnModernModel,
 } from "./core.js";
 import type { GamePage } from "./game.js";
 import type {
@@ -59,66 +62,17 @@ export type ReserveMan = {
 };
 
 export type ChallengeBtnController<
-  TModel extends UnsafeChallengeBtnModel<unknown> = UnsafeChallengeBtnModel<unknown>,
+  TModel extends UnsafeChallengeBtnModel<UnsafeChallengeButtonOptions> | unknown = unknown,
 > = BuildingBtnController<TModel> & {
   initModel: (options: unknown) => TModel;
-  getMetadata: <
-    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
-    TModel extends
-      UnsafeChallengeBtnModel<TModelMetadata> = UnsafeChallengeBtnModel<TModelMetadata>,
-  >(
-    model: TModel,
-  ) => UnsafeChallenge;
-  getDescription: <
-    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
-    TModel extends
-      UnsafeChallengeBtnModel<TModelMetadata> = UnsafeChallengeBtnModel<TModelMetadata>,
-  >(
-    model: TModel,
-  ) => string;
-  getName: <
-    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
-    TModel extends
-      UnsafeChallengeBtnModel<TModelMetadata> = UnsafeChallengeBtnModel<TModelMetadata>,
-  >(
-    model: TModel,
-  ) => string;
-  getPrices: <
-    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
-    TModel extends
-      UnsafeChallengeBtnModel<TModelMetadata> = UnsafeChallengeBtnModel<TModelMetadata>,
-  >(
-    model: TModel,
-  ) => Array<Price>;
-  buyItem: <
-    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
-    TModel extends
-      UnsafeChallengeBtnModel<TModelMetadata> = UnsafeChallengeBtnModel<TModelMetadata>,
-  >(
-    model: TModel,
-    event: unknown,
-  ) => UnsafeBuyItemResult;
-  togglePending: <
-    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
-    TModel extends
-      UnsafeChallengeBtnModel<TModelMetadata> = UnsafeChallengeBtnModel<TModelMetadata>,
-  >(
-    model: TModel,
-  ) => void;
-  updateVisible: <
-    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
-    TModel extends
-      UnsafeChallengeBtnModel<TModelMetadata> = UnsafeChallengeBtnModel<TModelMetadata>,
-  >(
-    model: TModel,
-  ) => void;
-  updateEnabled: <
-    TModelMetadata extends Record<string, unknown> = Record<string, unknown>,
-    TModel extends
-      UnsafeChallengeBtnModel<TModelMetadata> = UnsafeChallengeBtnModel<TModelMetadata>,
-  >(
-    model: TModel,
-  ) => void;
+  getMetadata: (model: TModel) => UnsafeChallenge;
+  getDescription: (model: TModel) => string;
+  getName: (model: TModel) => string;
+  getPrices: (model: TModel) => Array<Price>;
+  buyItem: (model: TModel, event: unknown) => UnsafeBuyItemResult;
+  togglePending: (model: TModel) => void;
+  updateVisible: (model: TModel) => void;
+  updateEnabled: (model: TModel) => void;
 };
 
 export type ChallengePanel = Panel & {
@@ -206,8 +160,32 @@ export type UnsafeChallenge = {
   researched?: boolean;
 };
 
-export type UnsafeChallengeBtnModel<
-  TModelOptions extends Record<string, unknown> | undefined | unknown = unknown,
-> = {
+export type UnsafeReclaimReservesButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: ButtonController;
+};
+
+export type UnsafeApplyPendingButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: ButtonController;
+};
+
+export type UnsafeShowChallengeEffectsButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: ButtonController;
+};
+
+export type UnsafeChallengeButtonOptions = {
+  id: Challenge;
+  controller: ChallengeBtnController<UnsafeChallengeBtnModel<UnsafeChallengeButtonOptions>>;
+};
+
+export type UnsafeChallengeBtnModel<TModelOptions extends UnsafeChallengeButtonOptions> = {
   multiplyEffects: boolean;
-} & UnsafeBuildingBtnModel<TModelOptions>;
+} & UnsafeBuildingBtnModernModel<TModelOptions>;

@@ -9,7 +9,6 @@ import type {
   Panel,
   Tab,
   TabManager,
-  UnsafeBuildingBtnModel,
   UnsafeBuildingStackableBtnModel,
   UnsafeButtonModernModel,
 } from "./core.js";
@@ -81,15 +80,7 @@ export type AccelerateTimeBtnController = ButtonModernController & {
   buyItem: (model: unknown, event: unknown) => UnsafeBuyItemResult;
 };
 
-export type AccelerateTimeBtn = ButtonModern<
-  {
-    name: string;
-    description: string;
-    prices: Array<Price>;
-    controller: AccelerateTimeBtnController;
-  },
-  AccelerateTimeBtnController
-> & {
+export type AccelerateTimeBtn = ButtonModern<UnsafeAccelerateTimeButtonOptions> & {
   renderLinks: () => void;
   toggle?: Link;
   update: () => void;
@@ -102,11 +93,11 @@ export type TimeControlWgt = IChildrenAware<AccelerateTimeBtn> &
     update: () => void;
   };
 
-export type ShatterTCBtnController = ButtonModernController & {
+export type ShatterTCBtnController = ButtonModernController<UnsafeShatterTCBtnModel> & {
   defaults: () => ReturnType<ButtonModernController["defaults"]> & { hasResourceHover: boolean };
   fetchModel: (options: unknown) => UnsafeShatterTCBtnModel;
   _newLink: (model: UnsafeShatterTCBtnModel) => Link;
-  getName: (model: unknown) => string;
+  getName: (model: UnsafeShatterTCBtnModel) => string;
   getPrices: (model: UnsafeShatterTCBtnModel) => Array<Price>;
   getPricesMultiple: (
     model: UnsafeShatterTCBtnModel,
@@ -121,15 +112,12 @@ export type ShatterTCBtnController = ButtonModernController & {
   updateVisible: (model: UnsafeShatterTCBtnModel) => void;
 };
 
-export type ShatterTCBtn = ButtonModern<
-  {
-    name: string;
-    description: string;
-    prices: Array<Price>;
-    controller: ShatterTCBtnController;
-  },
-  ShatterTCBtnController
-> & {
+export type ShatterTCBtn = ButtonModern<{
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: ShatterTCBtnController;
+}> & {
   renderLinks: () => void;
   tenEras?: Link;
   previousCycle?: Link;
@@ -138,21 +126,17 @@ export type ShatterTCBtn = ButtonModern<
   update: () => void;
 };
 
-export type ChronoforgeBtnController = BuildingStackableBtnController<
-  UnsafeBuildingStackableBtnModel<unknown, UnsafeChronoForgeUpgrade>
-> & {
-  getMetadata: (model: unknown) => UnsafeChronoForgeUpgrade;
-  getName: (model: unknown) => string;
-  handleToggleAutomationLinkClick: (model: unknown) => void;
+export type ChronoforgeBtnController<
+  TModel extends
+    UnsafeBuildingStackableBtnModel<UnsafeChronoforgeUpgradeButtonOptions> = UnsafeBuildingStackableBtnModel<UnsafeChronoforgeUpgradeButtonOptions>,
+> = BuildingStackableBtnController<TModel> & {
+  getMetadata: (model: TModel) => UnsafeChronoForgeUpgrade;
+  getName: (model: TModel) => string;
+  handleToggleAutomationLinkClick: (model: TModel) => void;
 };
 
 export type ChronoforgeWgt = IChildrenAware<
-  | ShatterTCBtn
-  | BuildingStackableBtn<
-      { id: ChronoForgeUpgrade; controller: ChronoforgeBtnController },
-      ChronoforgeBtnController,
-      ChronoForgeUpgrade
-    >
+  ShatterTCBtn | BuildingStackableBtn<UnsafeChronoforgeUpgradeButtonOptions>
 > &
   IGameAware & {
     new (game: GamePage): ChronoforgeWgt;
@@ -160,12 +144,13 @@ export type ChronoforgeWgt = IChildrenAware<
     update: () => void;
   };
 
-export type VoidSpaceBtnController = BuildingStackableBtnController<
-  UnsafeBuildingStackableBtnModel<unknown, UnsafeVoidSpaceUpgrade>
-> & {
-  getMetadata: (model: unknown) => UnsafeVoidSpaceUpgrade;
-  getName: (model: unknown) => string;
-  getPrices: (model: unknown) => Array<Price>;
+export type VoidSpaceBtnController<
+  TModel extends
+    UnsafeBuildingStackableBtnModel<UnsafeVoidSpaceUpgradeButtonOptions> = UnsafeBuildingStackableBtnModel<UnsafeVoidSpaceUpgradeButtonOptions>,
+> = BuildingStackableBtnController<TModel> & {
+  getMetadata: (model: TModel) => UnsafeVoidSpaceUpgrade;
+  getName: (model: TModel) => string;
+  getPrices: (model: TModel) => Array<Price>;
 };
 
 export type FixCryochamberBtnController = ButtonModernController<UnsafeFixCryochamberBtnModel> & {
@@ -178,15 +163,8 @@ export type FixCryochamberBtnController = ButtonModernController<UnsafeFixCryoch
 };
 
 export type VoidSpaceWgt = IChildrenAware<
-  | ButtonModern<
-      { name: string; description: string; controller: FixCryochamberBtnController },
-      FixCryochamberBtnController
-    >
-  | BuildingStackableBtn<
-      { id: VoidSpaceUpgrade; controller: VoidSpaceBtnController },
-      VoidSpaceBtnController,
-      VoidSpaceUpgrade
-    >
+  | ButtonModern<UnsafeFixCryochamberButtonOptions>
+  | BuildingStackableBtn<UnsafeVoidSpaceUpgradeButtonOptions>
 > &
   IGameAware & {
     new (game: GamePage): VoidSpaceWgt;
@@ -195,16 +173,13 @@ export type VoidSpaceWgt = IChildrenAware<
   };
 
 export type ResetWgt = IChildrenAware<
-  ButtonModern<
-    {
-      name: string;
-      description: string;
-      prices: Array<Price>;
-      handler: AnyFunction;
-      controller: ButtonModernController;
-    },
-    ButtonModernController
-  >
+  ButtonModern<{
+    name: string;
+    description: string;
+    prices: Array<Price>;
+    handler: AnyFunction;
+    controller: ButtonModernController;
+  }>
 > &
   IGameAware & {
     new (game: GamePage): ResetWgt;
@@ -337,6 +312,44 @@ export type UnsafeVoidSpaceUpgrade = {
   isAutomationEnabled?: boolean | null;
   lackResConvert?: boolean;
   toggleable?: boolean;
+};
+
+export type UnsafeFixCryochamberButtonOptions = {
+  name: string;
+  description: string;
+  controller: FixCryochamberBtnController;
+};
+
+export type UnsafeResetButtonOptions = {
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  handler: AnyFunction;
+  controller: ButtonModernController;
+};
+
+export type UnsafeShatterTCButtonOptions = {
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: ShatterTCBtnController;
+};
+
+export type UnsafeChronoforgeUpgradeButtonOptions = {
+  id: ChronoForgeUpgrade;
+  controller: ChronoforgeBtnController;
+};
+
+export type UnsafeVoidSpaceUpgradeButtonOptions = {
+  id: VoidSpaceUpgrade;
+  controller: VoidSpaceBtnController;
+};
+
+export type UnsafeAccelerateTimeButtonOptions = {
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: AccelerateTimeBtnController;
 };
 
 export type UnsafeShatterTCBtnModel = UnsafeButtonModernModel & {

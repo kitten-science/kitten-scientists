@@ -1,0 +1,214 @@
+digraph kittensgame {
+    fontname = "Helvetica,Arial,sans-serif";
+    node [fontname = "Helvetica,Arial,sans-serif";];
+    edge [fontname = "Helvetica,Arial,sans-serif";];
+    layout = neato;
+    overlap = false;
+
+    // config.js
+    KGConfig;
+
+    // core.js
+    Control;
+    TabManager -> Control;
+    Console;
+    ButtonController;
+    Button -> Control;
+    ButtonModernController -> ButtonController;
+    ButtonModern -> Button;
+    BuildingBtnController -> ButtonModernController;
+    BuildingBtn -> ButtonModern;
+    BuildingStackableBtnController -> BuildingBtnController;
+    BuildingStackableBtn -> BuildingBtn;
+    BuildingNotStackableBtnController -> BuildingBtnController;
+    BuildingResearchBtn -> BuildingBtn;
+    Spacer;
+    ContentRowRenderer;
+    IGameAware;
+    IChildrenAware;
+    Panel -> ContentRowRenderer;
+    Panel -> IChildrenAware;
+    tab -> ContentRowRenderer;
+    tab -> IChildrenAware;
+
+    // game.js
+    Timer;
+    IDataStorageAware;
+    Telemetry -> IDataStorageAware;
+    Server;
+    UndoChange;
+    EffectsManager;
+    GamePage;
+
+    // i18n.js
+    Lang;
+
+    // js/achievements.js
+    Achievements -> TabManager;
+    AchievementsPanel -> Panel;
+    BadgesPanel -> Panel;
+    AchTab -> tab;
+
+    // js/buildings.js
+    Metadata;
+    BuildingMeta -> Metadata;
+    BuildingsManager -> TabManager;
+    GatherCatnipButtonController -> ButtonModernController;
+    RefineCatnipButtonController -> ButtonModernController;
+    RefineCatnipButton -> ButtonModern;
+    BuildingBtnModernController -> BuildingStackableBtnController;
+    StagingBldBtnController -> BuildingBtnModernController;
+    StagingBldBtn -> BuildingStackableBtn;
+    BuildingsModern -> tab;
+
+    // js/calendar.js
+    Calendar;
+    Event;
+
+    // js/challenges.js
+    ChallengesManager -> TabManager;
+    reserveMan;
+    ChallengeBtnController -> BuildingBtnController;
+    ChallengePanel -> Panel;
+    ReservesPanel -> Panel;
+    ChallengeEffectsPanel -> Panel;
+    ChallengesTab -> tab;
+
+    // js/diplomacy.js
+    DiplomacyManager;
+    RacePanel -> Panel;
+    EldersPanel -> Panel;
+    CrashBcoinButtonController -> ButtonModernController;
+    TradeButtonController -> ButtonModernController;
+    TradeButton -> ButtonModern;
+    EmbassyButtonController -> BuildingStackableBtnController;
+    EmbassyButton -> ButtonModern;
+    autoPinnedButtonController -> ButtonModernController;
+    autoPinnedButton -> ButtonModern;
+    SendExplorersButtonController -> ButtonModernController;
+    SendExplorersButton -> ButtonModern;
+    Diplomacy -> tab;
+
+    // js/math.js
+    Math;
+
+    // js/prestige.js
+    PrestigeManager -> TabManager;
+    PrestigeBtnController -> BuildingNotStackableBtnController;
+    BurnParagonBtnController -> ButtonModernController;
+    turnHGOffButtonController -> ButtonModernController;
+    PrestigePanel -> Panel;
+
+    // js/religion.js
+    ReligionManager -> TabManager;
+    ZigguratBtnController -> BuildingStackableBtnController;
+    ReligionBtnController -> BuildingStackableBtnController;
+    TranscendenceBtnController -> BuildingStackableBtnController;
+    PraiseBtnController -> ButtonModernController;
+    ResetFaithBtnController -> ButtonModernController;
+    TranscendBtnController -> ButtonModernController;
+    TransformBtnController -> ButtonModernController;
+    MultiLinkBtn -> ButtonModern;
+    RefineTearsBtnController -> ButtonModernController;
+    CryptotheologyWGT -> IChildrenAware;
+    CryptotheologyWGT -> IGameAware;
+    CryptotheologyPanel -> Panel;
+    PactsWGT -> IChildrenAware;
+    PactsWGT -> IGameAware;
+    PactsPanel -> Panel;
+    PactsBtnController -> BuildingStackableBtnController;
+    RefineBtn -> ButtonModern;
+    pactsManager;
+    ReligionTab -> tab;
+
+    // js/resources.js
+    ResourceManager -> TabManager;
+
+    // js/science.js
+    ScienceManager -> TabManager;
+    PolicyBtnController -> BuildingNotStackableBtnController;
+    PolicyPanel -> Panel;
+    TechButtonController -> BuildingNotStackableBtnController;
+    Library -> tab;
+
+    // js/space.js
+    SpaceManager -> TabManager;
+    SpaceProgramBtnController -> BuildingStackableBtnController;
+    PlanetBuildingBtnController -> BuildingStackableBtnController;
+    PlanetPanel -> Panel;
+    FurthestRingPanel -> PlanetPanel;
+    SpaceTab -> tab;
+
+    // js/stats.js
+    StatsManager -> TabManager;
+    StatsTab -> tab;
+
+    // js/time.js
+    TimeManager -> TabManager;
+    AccelerateTimeBtnController -> ButtonModernController;
+    AccelerateTimeBtn -> ButtonModern;
+    TimeControlWgt -> IChildrenAware;
+    TimeControlWgt -> IGameAware;
+    ShatterTCBtnController -> ButtonModernController;
+    ShatterTCBtn -> ButtonModern;
+    ChronoforgeBtnController -> BuildingStackableBtnController;
+    ChronoforgeWgt -> IChildrenAware;
+    ChronoforgeWgt -> IGameAware;
+    VoidSpaceBtnController -> BuildingStackableBtnController;
+    FixCryochamberBtnController -> ButtonModernController;
+    VoidSpaceWgt -> IChildrenAware;
+    VoidSpaceWgt -> IGameAware;
+    ResetWgt -> IChildrenAware;
+    ResetWgt -> IGameAware;
+    TimeTab -> tab;
+    manager;
+    QueueTab -> tab;
+
+    // js/toolbar.js
+    Toolbar;
+    ToolbarIcon;
+    ToolbarHappiness -> ToolbarIcon;
+    ToolbarEnergy -> ToolbarIcon;
+    ToolbarMOTD -> ToolbarIcon;
+
+    // js/ui.js
+    IReactAware;
+    UISystem;
+    DesktopUI -> UISystem;
+
+    // js/village.js
+    VillageManager -> TabManager;
+    Kitten;
+    BiomeBtnController -> ButtonModernController;
+    BiomeBtn -> ButtonModern;
+    UpgradeHQController -> BuildingStackableBtnController;
+    UpgradeExplorersController -> BuildingStackableBtnController;
+    MapOverviewWgt -> IChildrenAware;
+    MapOverviewWgt -> IGameAware;
+    KittenSim;
+    LoadoutController;
+    Loadout;
+    LoadoutButtonController -> ButtonModernController;
+    LoadoutButton -> ButtonModern;
+    JobButtonController -> ButtonModernController;
+    JobButton -> ButtonModern;
+    Census;
+    CensusPanel -> Panel;
+    VillageButtonController -> ButtonModernController;
+    FestivalButtonController -> VillageButtonController;
+    FestivalButton -> ButtonModern;
+    Village -> tab;
+
+    // js/void.js
+    VoidManager -> TabManager;
+    RorshachWgt -> IChildrenAware;
+    RorshachWgt -> IGameAware;
+
+    // js/workshop.js
+    WorkshopManager -> TabManager;
+    UpgradeButtonController -> BuildingNotStackableBtnController;
+    CraftButtonController -> ButtonModernController;
+    CraftButton -> ButtonModern;
+    ZebraUpgradeButtonController -> BuildingNotStackableBtnController;
+    workshop -> tab;
+}

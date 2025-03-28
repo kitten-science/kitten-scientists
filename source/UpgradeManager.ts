@@ -1,17 +1,8 @@
 import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import { InvalidArgumentError } from "@oliversalzburg/js-utils/errors/InvalidArgumentError.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import type { TabManager } from "./TabManager.js";
-import { cwarn } from "./tools/Log.js";
-import type { BuildingResearchBtn, UnsafeBuildingBtnModel } from "./types/core.js";
 import type { Policy, Technology, Upgrade } from "./types/index.js";
-import type {
-  Library,
-  PolicyBtnController,
-  PolicyPanel,
-  TechButtonController,
-  UnsafePolicy,
-} from "./types/science.js";
+import type { Library, PolicyBtnController, TechButtonController } from "./types/science.js";
 import type { Workshop } from "./types/workshop.js";
 
 export abstract class UpgradeManager {
@@ -22,38 +13,31 @@ export abstract class UpgradeManager {
     this._host = host;
   }
 
-  async upgrade(
+  upgrade(
     upgrade: { label: string; name: Policy | Upgrade | Technology },
     variant: "policy" | "science" | "workshop",
-  ): Promise<boolean> {
-    const button =
-      variant === "policy"
-        ? this._getUpgradeButtonPolicy(upgrade.name as Policy)
-        : variant === "science"
-          ? this._getUpgradeButtonScience(upgrade.name as Technology)
-          : this._getUpgradeButtonWorkshop(upgrade.name as Upgrade);
-
-    if (!button || !button.model) {
-      return false;
+  ): boolean {
+    let success = false;
+    if (variant === "policy") {
+      const meta = game.science.getPolicy(upgrade.name as Policy);
+      const controller = new classes.ui.PolicyBtnController(this._host.game) as PolicyBtnController;
+      const model = controller.fetchModel(meta);
+      success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
+    } else if (variant === "science") {
+      const meta = game.science.get(upgrade.name as Technology);
+      const controller = new com.nuclearunicorn.game.ui.TechButtonController(
+        this._host.game,
+      ) as TechButtonController;
+      const model = controller.fetchModel(meta);
+      success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
+    } else {
+      const meta = game.workshop.get(upgrade.name as Upgrade);
+      const controller = new com.nuclearunicorn.game.ui.TechButtonController(
+        this._host.game,
+      ) as TechButtonController;
+      const model = controller.fetchModel(meta);
+      success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     }
-
-    if (!button.model.enabled) {
-      cwarn(`${button.model.name} Upgrade request on disabled button!`);
-      button.render();
-      return false;
-    }
-
-    const controller =
-      variant === "policy"
-        ? (new classes.ui.PolicyBtnController(this._host.game) as PolicyBtnController)
-        : (new com.nuclearunicorn.game.ui.TechButtonController(
-            this._host.game,
-          ) as TechButtonController);
-
-    this._host.game.opts.noConfirm = true;
-    const success = UpgradeManager.skipConfirm(() =>
-      controller.buyItem(mustExist(button.model), new MouseEvent("click")),
-    );
 
     if (!success) {
       return false;
@@ -104,12 +88,11 @@ export abstract class UpgradeManager {
     return mustExist((this.manager.tab as Library).buttons?.find(button => button.id === upgrade));
   }
   private _getUpgradeButtonPolicy(upgrade: Policy) {
-    return (
-      (this.manager.tab as Library).policyPanel?.children?.find(button => button.id === upgrade) ??
-      null
+    return mustExist(
+      (this.manager.tab as Library).policyPanel?.children?.find(button => button.id === upgrade),
     );
   }
   private _getUpgradeButtonWorkshop(upgrade: Upgrade) {
-    return (this.manager.tab as Workshop).buttons?.find(button => button.id === upgrade) ?? null;
+    return mustExist((this.manager.tab as Workshop).buttons?.find(button => button.id === upgrade));
   }
 }

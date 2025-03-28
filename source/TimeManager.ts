@@ -5,27 +5,17 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type TimeItem, TimeSettings, type TimeSettingsItem } from "./settings/TimeSettings.js";
-import { cdebug, cwarn } from "./tools/Log.js";
-import type {
-  BuildingStackableBtn,
-  ButtonModern,
-  UnsafeBuildingBtnModel,
-  UnsafeBuildingStackableBtnModel,
-  UnsafeButtonModernModel,
-} from "./types/core.js";
-import {
-  type BuyItemResultReason,
-  type ChronoForgeUpgrade,
-  TimeItemVariant,
-  type VoidSpaceUpgrade,
-} from "./types/index.js";
+import { cwarn } from "./tools/Log.js";
+import type { BuildingStackableBtn, ButtonModern } from "./types/core.js";
+import { type ChronoForgeUpgrade, TimeItemVariant, type VoidSpaceUpgrade } from "./types/index.js";
 import type {
   ChronoforgeBtnController,
-  FixCryochamberBtnController,
   TimeTab,
   UnsafeChronoForgeUpgrade,
-  UnsafeFixCryochamberBtnModel,
+  UnsafeChronoforgeUpgradeButtonOptions,
+  UnsafeFixCryochamberButtonOptions,
   UnsafeVoidSpaceUpgrade,
+  UnsafeVoidSpaceUpgradeButtonOptions,
   VoidSpaceBtnController,
 } from "./types/time.js";
 
@@ -125,28 +115,26 @@ export class TimeManager {
     amount: number,
   ): void {
     let amountCalculated = amount;
-    const build = mustExist(this.getBuild(name, variant));
-    const button = TimeItemVariant.Chronoforge
-      ? this._getBuildButtonCF(name as ChronoForgeUpgrade)
-      : this._getBuildButtonVS(name as VoidSpaceUpgrade);
-
-    if (!button || !button.model?.enabled) {
-      return;
-    }
-
+    let label: string;
     const amountTemp = amountCalculated;
-    const label = build.label;
-    const model = button.model;
-    const meta = model.metadata;
-    if (isNil(meta)) {
-      return;
+    if (variant === TimeItemVariant.Chronoforge) {
+      const meta = game.time.getCFU(name as ChronoForgeUpgrade);
+      const controller = new classes.ui.time.ChronoforgeBtnController(
+        this._host.game,
+      ) as ChronoforgeBtnController;
+      const model = controller.fetchModel(meta);
+      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      label = meta.label;
+    } else {
+      const meta = game.time.getVSU(name as VoidSpaceUpgrade);
+      const controller = new classes.ui.time.VoidSpaceBtnController(
+        this._host.game,
+      ) as VoidSpaceBtnController;
+      const model = controller.fetchModel(meta);
+      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      label = meta.label;
     }
 
-    amountCalculated = this._bulkManager.construct(
-      model,
-      mustExist(button.controller),
-      amountCalculated,
-    );
     if (amountCalculated !== amountTemp) {
       cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
@@ -172,19 +160,11 @@ export class TimeManager {
 
   private _getBuildButtonCF(name: ChronoForgeUpgrade) {
     return (this.manager.tab.children[2].children[0].children.find(button => button.id === name) ??
-      null) as BuildingStackableBtn<
-      { id: ChronoForgeUpgrade; controller: ChronoforgeBtnController },
-      ChronoforgeBtnController,
-      ChronoForgeUpgrade
-    >;
+      null) as BuildingStackableBtn<UnsafeChronoforgeUpgradeButtonOptions>;
   }
   private _getBuildButtonVS(name: VoidSpaceUpgrade) {
     return (this.manager.tab.children[3].children[0].children.find(button => button.id === name) ??
-      null) as BuildingStackableBtn<
-      { id: VoidSpaceUpgrade; controller: VoidSpaceBtnController },
-      VoidSpaceBtnController,
-      VoidSpaceUpgrade
-    >;
+      null) as BuildingStackableBtn<UnsafeVoidSpaceUpgradeButtonOptions>;
   }
 
   fixCryochambers() {
@@ -200,10 +180,8 @@ export class TimeManager {
       }
     }
 
-    const btn = this.manager.tab.vsPanel.children[0].children[0] as ButtonModern<
-      { name: string; description: string; controller: FixCryochamberBtnController },
-      FixCryochamberBtnController
-    >;
+    const btn = this.manager.tab.vsPanel.children[0]
+      .children[0] as ButtonModern<UnsafeFixCryochamberButtonOptions>;
 
     let fixed = 0;
     let fixHappened: boolean;

@@ -9,39 +9,29 @@ import type { WorkshopManager } from "./WorkshopManager.js";
 import { type CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
-import type { GatherCatnipButtonController, UnsafeBuildingExt } from "./types/buildings.js";
 import type {
-  BuildingBtnController,
+  BuildingMeta,
+  UnsafeBuilding,
+  UnsafeUnstagedBuildingButtonOptions,
+} from "./types/buildings.js";
+import type {
+  AllBuildingBtnOptions,
+  AllBuildingStackableBtnOptions,
+  AllButtonIds,
+  AllButtonOptions,
+  BuildingBtn,
   Button,
-  ButtonController,
-  ButtonModern,
-  ButtonModernController,
   UnsafeBuildingBtnModel,
-  UnsafeButtonModel,
-  UnsafeButtonModernModel,
-  UnsafeButtonOptions,
 } from "./types/core.js";
 import {
   type Building,
   type ChronoForgeUpgrade,
   Cycles,
+  type Price,
   TimeItemVariant,
   type VoidSpaceUpgrade,
 } from "./types/index.js";
-import type {
-  ReligionBtnController,
-  TranscendBtnController,
-  TranscendenceBtnController,
-  TransformBtnController,
-  ZigguratBtnController,
-} from "./types/religion.js";
-import type {
-  ChronoforgeBtnController,
-  ShatterTCBtn,
-  ShatterTCBtnController,
-  TimeTab,
-  VoidSpaceBtnController,
-} from "./types/time.js";
+import type { ShatterTCBtn, ShatterTCBtnController, TimeTab } from "./types/time.js";
 
 export class TimeControlManager {
   private readonly _host: KittenScientists;
@@ -103,31 +93,7 @@ export class TimeControlManager {
     // If we don't have a given item, but we *could* buy it, then we act
     // as if we already had it.
     const check = <
-      T extends Button<
-        UnsafeButtonOptions<
-          | BuildingBtnController
-          | ButtonController
-          | ButtonModernController
-          | ChronoforgeBtnController
-          | ReligionBtnController
-          | TranscendBtnController
-          | TranscendenceBtnController
-          | TransformBtnController
-          | VoidSpaceBtnController
-          | ZigguratBtnController
-        >,
-        | BuildingBtnController
-        | ButtonController
-        | ButtonModernController
-        | ChronoforgeBtnController
-        | ReligionBtnController
-        | TranscendBtnController
-        | TranscendenceBtnController
-        | TransformBtnController
-        | VoidSpaceBtnController
-        | ZigguratBtnController,
-        string | undefined
-      >,
+      T extends BuildingBtn<UnsafeBuildingBtnModel<UnsafeUnstagedBuildingButtonOptions>>,
     >(
       buttons: Array<T>,
     ) => {
@@ -137,13 +103,13 @@ export class TimeControlManager {
             continue;
           }
 
-          const model = button.model as UnsafeBuildingBtnModel<unknown, { name: Building }>;
+          const model = button.model as { metadata: { name: string }; prices: Array<Price> };
 
           const name = model.metadata.name;
           const index = checkList.indexOf(name);
           if (index !== -1) {
             checkList.splice(index, 1);
-            if (this._host.game.resPool.hasRes(mustExist(button.model.prices))) {
+            if (this._host.game.resPool.hasRes(mustExist(model.prices))) {
               return true;
             }
           }
@@ -156,7 +122,7 @@ export class TimeControlManager {
     for (const [name, entry] of objectEntries(this.settings.reset.bonfire.buildings))
       if (entry.enabled) {
         // TODO: Obvious error here. For upgraded buildings, it needs special handling.
-        let bld: UnsafeBuildingExt | null;
+        let bld: BuildingMeta<UnsafeBuilding> | null;
         try {
           // @ts-expect-error Obvious error here. For upgraded buildings, it needs special handling.
           bld = this._host.game.bld.getBuildingExt(name);

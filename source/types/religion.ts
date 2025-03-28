@@ -98,14 +98,16 @@ export type ReligionManager = TabManager & {
   undo: (data: UnsafeReligionUndo) => void;
 };
 
-export type ZigguratBtnController = BuildingStackableBtnController & {
+export type ZigguratBtnController = BuildingStackableBtnController<UnsafeZigguratBtnModel> & {
   defaults: () => UnsafeZigguratBtnModelDefaults;
   getMetadata: (model: UnsafeZigguratBtnModel) => UnsafeZiggurathUpgrade;
   getName: (model: UnsafeZigguratBtnModel) => string;
   getPrices: (model: UnsafeZigguratBtnModel) => Array<Price>;
 };
 
-export type ReligionBtnController = BuildingStackableBtnController & {
+export type ReligionBtnController = BuildingStackableBtnController<
+  UnsafeReligionBtnModel<UnsafeReligionButtonOptions>
+> & {
   defaults: () => UnsafeReligionBtnModelDefaults;
   getMetadata: (model: UnsafeReligionBtnModel) => UnsafeReligionUpgrade;
   hasSellLink: (model: UnsafeReligionBtnModel) => boolean;
@@ -114,7 +116,7 @@ export type ReligionBtnController = BuildingStackableBtnController & {
 };
 
 export type TranscendenceBtnController<
-  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
+  TModel extends UnsafeTranscendenceBtnModel | unknown = unknown,
 > = BuildingStackableBtnController<TModel> & {
   defaults: () => UnsafeTranscendenceBtnModelDefaults;
   getMetadata: (model: UnsafeTranscendenceBtnModel) => UnsafeTranscendenceUpgrade;
@@ -163,11 +165,12 @@ export type TransformBtnController<
   _transform: (model: UnsafeTransformBtnModel, amt: number) => boolean;
 };
 
-export type MultiLinkBtn<
-  TOpts extends UnsafeButtonOptions<TController, TId>,
-  TController extends ButtonModernController | TransformBtnController,
-  TId extends string | undefined = undefined,
-> = ButtonModern<TOpts, TController, TId> & {
+export type AllMultiLinkBtnOptions =
+  | UnsafeSacrificeButtonOptions
+  | UnsafeSacrificeAlicornsButtonOptions
+  | UnsafeRefineTCButtonOptions;
+
+export type MultiLinkBtn<TOpts extends AllMultiLinkBtnOptions> = ButtonModern<TOpts> & {
   all?: Link;
   half?: Link;
   fifth?: Link;
@@ -185,16 +188,7 @@ export type RefineTearsBtnController = ButtonModernController & {
 };
 
 export type CryptotheologyWGT = IChildrenAware<
-  BuildingStackableBtn<
-    {
-      id: TranscendenceUpgrade;
-      name: string;
-      description: string;
-      controller: TranscendenceBtnController;
-    },
-    TranscendenceBtnController,
-    TranscendenceUpgrade
-  >
+  BuildingStackableBtn<UnsafeTranscendenceButtonOptions>
 > &
   IGameAware & {
     new (game: GamePage): CryptotheologyWGT;
@@ -206,18 +200,7 @@ export type CryptotheologyPanel = Panel<CryptotheologyWGT> & {
   visible: boolean;
 };
 
-export type PactsWGT = IChildrenAware<
-  BuildingStackableBtn<
-    {
-      id: Pact;
-      name: string;
-      description: string;
-      controller: PactsBtnController;
-    },
-    PactsBtnController,
-    Pact
-  >
-> &
+export type PactsWGT = IChildrenAware<BuildingStackableBtn<UnsafePactsButtonOptions>> &
   IGameAware & {
     new (game: GamePage): PactsWGT;
     render: (container?: HTMLElement) => void;
@@ -228,27 +211,20 @@ export type PactsPanel = Panel<PactsWGT> & {
   visible: boolean;
 };
 
-export type PactsBtnController = BuildingStackableBtnController & {
-  defaults: () => UnsafePactsBtnModelDefaults;
-  getMetadata: (model: UnsafePactsBtnModel) => UnsafePact;
-  updateEnabled: (model: UnsafePactsBtnModel) => void;
-  shouldBeBough: (model: UnsafePactsBtnModel, game: GamePage) => boolean;
-  buyItem: (
-    model: UnsafePactsBtnModel,
-    event: Event,
-  ) => UnsafeBuyItemResult | ReturnType<BuildingStackableBtnController["buyItem"]>;
-  build: (model: UnsafePactsBtnModel, maxBld: number) => number;
-};
+export type PactsBtnController<TModel extends UnsafePactsBtnModel | unknown = unknown> =
+  BuildingStackableBtnController<TModel> & {
+    defaults: () => UnsafePactsBtnModelDefaults;
+    getMetadata: (model: UnsafePactsBtnModel) => UnsafePact;
+    updateEnabled: (model: UnsafePactsBtnModel) => void;
+    shouldBeBough: (model: UnsafePactsBtnModel, game: GamePage) => boolean;
+    buyItem: (
+      model: UnsafePactsBtnModel,
+      event: Event,
+    ) => UnsafeBuyItemResult | ReturnType<BuildingStackableBtnController<TModel>["buyItem"]>;
+    build: (model: UnsafePactsBtnModel, maxBld: number) => number;
+  };
 
-export type RefineBtn = ButtonModern<
-  {
-    name: string;
-    description: string;
-    prices: Array<Price>;
-    controller: RefineTearsBtnController;
-  },
-  RefineTearsBtnController
-> & {
+export type RefineBtn = ButtonModern<UnsafeRefineTearsButtonOptions> & {
   renderLinks: () => void;
   update: () => void;
 };
@@ -273,62 +249,20 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
   /**
    * Sacrifice unicorns.
    */
-  sacrificeBtn: MultiLinkBtn<
-    {
-      name: string;
-      description: string;
-      prices: Array<Price>;
-      controller: TransformBtnController;
-    },
-    TransformBtnController
-  > | null;
+  sacrificeBtn: MultiLinkBtn<UnsafeSacrificeButtonOptions> | null;
   /**
    * Sacrifice alicorns.
    */
-  sacrificeAlicornsBtn: MultiLinkBtn<
-    {
-      name: string;
-      description: string;
-      prices: Array<Price>;
-      controller: TransformBtnController;
-    },
-    TransformBtnController
-  > | null;
+  sacrificeAlicornsBtn: MultiLinkBtn<UnsafeSacrificeAlicornsButtonOptions> | null;
 
   /**
    * Ziggurath upgrade buttons.
    */
-  zgUpgradeButtons: Array<
-    BuildingStackableBtn<
-      {
-        id: ZiggurathUpgrade;
-        name: string;
-        description: string;
-        prices: Array<Price>;
-        controller: ZigguratBtnController;
-        handler: AnyFunction;
-      },
-      ZigguratBtnController,
-      ZiggurathUpgrade
-    >
-  >;
+  zgUpgradeButtons: Array<BuildingStackableBtn<UnsafeZiggurathButtonOptions>>;
   /**
    * Religion upgrade (Order of the sun) buttons.
    */
-  rUpgradeButtons: Array<
-    BuildingStackableBtn<
-      {
-        id: ReligionUpgrade;
-        name: string;
-        description: string;
-        prices: Array<Price>;
-        controller: ReligionBtnController;
-        handler: AnyFunction;
-      },
-      ReligionBtnController,
-      ReligionUpgrade
-    >
-  >;
+  rUpgradeButtons: Array<BuildingStackableBtn<UnsafeReligionButtonOptions>>;
   /**
    * Religion upgrade (Order of the sun) buttons.
    */
@@ -347,42 +281,10 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
   /**
    * Refine time crystals.
    */
-  refineTCBtn?: MultiLinkBtn<
-    {
-      name: string;
-      description: string;
-      prices: Array<Price>;
-      controller: TransformBtnController;
-    },
-    TransformBtnController
-  >;
-  praiseBtn?: ButtonModern<
-    {
-      name: string;
-      description: string;
-      controller: PraiseBtnController;
-      handler: AnyFunction;
-    },
-    PraiseBtnController
-  >;
-  adoreBtn?: ButtonModern<
-    {
-      name: string;
-      description: string;
-      controller: ResetFaithBtnController;
-      handler: AnyFunction;
-    },
-    ResetFaithBtnController
-  >;
-  transcendBtn?: ButtonModern<
-    {
-      name: string;
-      description: string;
-      controller: TranscendBtnController;
-      handler: AnyFunction;
-    },
-    TranscendBtnController
-  >;
+  refineTCBtn?: MultiLinkBtn<UnsafeRefineTCButtonOptions>;
+  praiseBtn?: ButtonModern<UnsafePraiseButtonOptions>;
+  adoreBtn?: ButtonModern<UnsafeResetFaithButtonOptions>;
+  transcendBtn?: ButtonModern<UnsafeTranscendButtonOptions>;
 };
 
 export type UnsafeReligionUpgrade = {
@@ -496,6 +398,87 @@ export type UnsafeReligionUndo = {
   valFrom: number;
 };
 
+export type UnsafePraiseButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: PraiseBtnController;
+};
+
+export type UnsafeResetFaithButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: ResetFaithBtnController;
+};
+
+export type UnsafeTranscendButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: TranscendBtnController;
+};
+
+export type UnsafeTranscendenceButtonOptions = {
+  id: TranscendenceUpgrade;
+  name: string;
+  description: string;
+  controller: TranscendenceBtnController<UnsafeTranscendenceBtnModel>;
+};
+
+export type UnsafePactsButtonOptions = {
+  id: Pact;
+  name: string;
+  description: string;
+  controller: PactsBtnController<UnsafePactsBtnModel>;
+};
+
+export type UnsafeZiggurathButtonOptions = {
+  id: ZiggurathUpgrade;
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: ZigguratBtnController;
+  handler: AnyFunction;
+};
+
+export type UnsafeReligionButtonOptions = {
+  id: ReligionUpgrade;
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: ReligionBtnController;
+  handler: AnyFunction;
+};
+
+export type UnsafeRefineTearsButtonOptions = {
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: RefineTearsBtnController;
+};
+
+export type UnsafeSacrificeButtonOptions = {
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: TransformBtnController;
+};
+
+export type UnsafeSacrificeAlicornsButtonOptions = {
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: TransformBtnController;
+};
+
+export type UnsafeRefineTCButtonOptions = {
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: TransformBtnController;
+};
+
 export type UnsafeZigguratBtnModelDefaults = {
   tooltipName: boolean;
 } & UnsafeBuildingStackableBtnModelDefaults;
@@ -509,7 +492,7 @@ export type UnsafeReligionBtnModelDefaults = {
 } & UnsafeBuildingStackableBtnModelDefaults;
 
 export type UnsafeReligionBtnModel<
-  TModelOptions extends Record<string, unknown> | undefined = Record<string, unknown>,
+  TModelOptions extends UnsafeReligionButtonOptions | unknown = unknown,
 > = UnsafeReligionBtnModelDefaults & UnsafeBuildingStackableBtnModel<TModelOptions>;
 
 export type UnsafeTranscendenceBtnModelDefaults = {
@@ -517,7 +500,7 @@ export type UnsafeTranscendenceBtnModelDefaults = {
 } & UnsafeBuildingStackableBtnModelDefaults;
 
 export type UnsafeTranscendenceBtnModel<
-  TModelOptions extends Record<string, unknown> | undefined = Record<string, unknown>,
+  TModelOptions extends UnsafeTranscendenceButtonOptions | unknown = unknown,
 > = UnsafeTranscendenceBtnModelDefaults & UnsafeBuildingStackableBtnModel<TModelOptions>;
 
 export type UnsafeTransformBtnModelDefaults = {

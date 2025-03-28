@@ -1,4 +1,5 @@
 import type {
+  AllBuildingBtnOptions,
   BuildingNotStackableBtnController,
   BuildingResearchBtn,
   ButtonModern,
@@ -6,6 +7,7 @@ import type {
   Tab,
   TabManager,
   UnsafeBuildingBtnModel,
+  UnsafeBuildingBtnModernModel,
   UnsafeButtonModernModel,
   UnsafeButtonModernModelDefaults,
 } from "./core.js";
@@ -64,7 +66,7 @@ export type WorkshopManager = TabManager & {
 };
 
 export type UpgradeButtonController<
-  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
+  TModel extends UnsafeBuildingBtnModernModel<AllBuildingBtnOptions> | unknown = unknown,
 > = BuildingNotStackableBtnController<TModel> & {
   defaults: () => UnsafeUpgradeButtonModelDefaults;
   getMetadata: (model: UnsafeUpgradeButtonModel) => UnsafeUpgrade;
@@ -86,16 +88,7 @@ export type CraftButtonController = ButtonModernController & {
   buyItem: (model: UnsafeCraftButtonModel, event: unknown) => UnsafeBuyItemResult;
 };
 
-export type CraftButton = ButtonModern<
-  {
-    name: string;
-    description: string;
-    craft: ResourceCraftable;
-    prices: Array<Price>;
-    controller: CraftButtonController;
-  },
-  ButtonModernController
-> & {
+export type CraftButton = ButtonModern<UnsafeCraftButtonOptions> & {
   craftName: ResourceCraftable;
   new (opts: { craft: ResourceCraftable }, game: unknown): CraftButton;
   setEnabled: (enabled: unknown) => void;
@@ -103,7 +96,7 @@ export type CraftButton = ButtonModern<
 };
 
 export type ZebraUpgradeButtonController<
-  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
+  TModel extends UnsafeZebraUpgradeButtonModel | unknown = unknown,
 > = BuildingNotStackableBtnController<TModel> & {
   defaults: () => UnsafeZebraUpgradeButtonModelDefaults;
   getMetadata: (model: UnsafeZebraUpgradeButtonModel) => UnsafeUpgrade;
@@ -113,16 +106,8 @@ export type ZebraUpgradeButtonController<
 
 export type Workshop = Tab<
   unknown,
-  | BuildingResearchBtn<
-      { id: Upgrade; controller: UpgradeButtonController },
-      UpgradeButtonController,
-      Upgrade
-    >
-  | BuildingResearchBtn<
-      { id: Upgrade; controller: ZebraUpgradeButtonController },
-      ZebraUpgradeButtonController,
-      Upgrade
-    >
+  | BuildingResearchBtn<UnsafeUpgradeButtonOptions>
+  | BuildingResearchBtn<UnsafeZebraUpgradeButtonOptions>
 > & {
   tdTop: HTMLTableCellElement | null;
   craftBtns: Array<CraftButton>;
@@ -132,20 +117,10 @@ export type Workshop = Tab<
   render: (tabContainer?: HTMLElement) => void;
   renderResources: (container: HTMLElement) => void;
   renderConsumption: (container: HTMLElement) => void;
-  createBtn: (
-    upgrade: UnsafeUpgrade,
-  ) => BuildingResearchBtn<
-    { id: Upgrade; controller: UpgradeButtonController },
-    UpgradeButtonController,
-    Upgrade
-  >;
+  createBtn: (upgrade: UnsafeUpgrade) => BuildingResearchBtn<UnsafeUpgradeButtonOptions>;
   createZebraUpgradeBtn: (
     upgrade: UnsafeUpgrade,
-  ) => BuildingResearchBtn<
-    { id: Upgrade; controller: ZebraUpgradeButtonController },
-    ZebraUpgradeButtonController,
-    Upgrade
-  >;
+  ) => BuildingResearchBtn<UnsafeZebraUpgradeButtonOptions>;
   update: () => void;
   updateTab: () => void;
 };
@@ -171,6 +146,24 @@ export type UnsafeCraft = {
   progressHandicap: number;
   tier: number;
   unlocked?: boolean;
+};
+
+export type UnsafeUpgradeButtonOptions = {
+  id: Upgrade;
+  controller: UpgradeButtonController<UnsafeBuildingBtnModernModel<AllBuildingBtnOptions>>;
+};
+
+export type UnsafeZebraUpgradeButtonOptions = {
+  id: Upgrade;
+  controller: ZebraUpgradeButtonController<UnsafeZebraUpgradeButtonModel>;
+};
+
+export type UnsafeCraftButtonOptions = {
+  name: string;
+  description: string;
+  craft: ResourceCraftable;
+  prices: Array<Price>;
+  controller: CraftButtonController;
 };
 
 export type UnsafeUpgradeButtonModelDefaults = {
@@ -203,4 +196,4 @@ export type UnsafeZebraUpgradeButtonModelDefaults = {
 
 export type UnsafeZebraUpgradeButtonModel<
   TModelOptions extends Record<string, unknown> | undefined = undefined,
-> = UnsafeZebraUpgradeButtonModelDefaults & UnsafeButtonModernModel<TModelOptions> & {};
+> = UnsafeZebraUpgradeButtonModelDefaults & UnsafeBuildingBtnModernModel<TModelOptions> & {};

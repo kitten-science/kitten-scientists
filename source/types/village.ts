@@ -1,4 +1,5 @@
 import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
+import type { Metadata } from "./buildings.js";
 import type {
   BuildingStackableBtnController,
   ButtonModern,
@@ -8,6 +9,7 @@ import type {
   Panel,
   Tab,
   TabManager,
+  UnsafeBuildingBtnModernModel,
   UnsafeButtonModel,
   UnsafeButtonModernModel,
   UnsafeButtonModernModelDefaults,
@@ -215,7 +217,7 @@ export type Map = {
   }) => void;
 };
 
-export type BiomeBtnController = ButtonModernController & {
+export type BiomeBtnController = ButtonModernController<UnsafeBiomeBtnModel> & {
   fetchModel: (options: { id: string }) => UnsafeBiomeBtnModel;
   clickHandler: (model: UnsafeBiomeBtnModel, event: unknown) => void;
   getName: (model: UnsafeBiomeBtnModel) => string;
@@ -223,23 +225,13 @@ export type BiomeBtnController = ButtonModernController & {
   updateEnabled: (model: UnsafeBiomeBtnModel) => void;
 };
 
-export type BiomeBtn = ButtonModern<
-  {
-    id: Biome;
-    name: string;
-    description: string;
-    prices: Array<Price>;
-    controller: BiomeBtnController;
-  },
-  BiomeBtnController,
-  Biome
-> & {
+export type BiomeBtn = ButtonModern<UnsafeBiomeButtonOptions> & {
   renderLinks: () => void;
   update: () => void;
   getTooltipHTML: () => (controller: BiomeBtnController, model: UnsafeBiomeBtnModel) => string;
 };
 
-export type UpgradeHQController = BuildingStackableBtnController & {
+export type UpgradeHQController = BuildingStackableBtnController<UnsafeUpgradeHQBtnModel> & {
   defaults: () => UnsafeUpgradeHQBtnModel;
   getMetadata: (model: UnsafeUpgradeHQBtnModel) => {
     label: string;
@@ -252,7 +244,7 @@ export type UpgradeHQController = BuildingStackableBtnController & {
     model: unknown,
     event: unknown,
   ) => ReturnType<BuildingStackableBtnController["buyItem"]>;
-  incrementValue: (model: unknown) => void;
+  incrementValue: (model: { metadata: Metadata<UnsafeUpgradeHQBtnModel> }) => void;
   hasSellLink: (model: unknown) => false;
   updateVisible: (model: UnsafeUpgradeHQBtnModel) => void;
 };
@@ -270,7 +262,7 @@ export type UpgradeExplorersController = BuildingStackableBtnController & {
     model: unknown,
     event: unknown,
   ) => ReturnType<BuildingStackableBtnController["buyItem"]>;
-  incrementValue: (model: unknown) => void;
+  incrementValue: (model: { metadata: Metadata<UnsafeUpgradeExplorersBtnModel> }) => void;
   hasSellLink: (model: unknown) => false;
   updateVisible: (model: UnsafeUpgradeExplorersBtnModel) => void;
 };
@@ -279,26 +271,8 @@ export type MapOverviewWgt = IChildrenAware<BiomeBtn> &
   IGameAware & {
     new (game: GamePage): MapOverviewWgt;
     game: GamePage;
-    upgradeExplorersBtn: ButtonModern<
-      {
-        name: string;
-        description: string;
-        handler: AnyFunction;
-        prices: Array<Price>;
-        controller: UpgradeExplorersController;
-      },
-      UpgradeExplorersController
-    >;
-    upgradeHQBtn: ButtonModern<
-      {
-        name: string;
-        description: string;
-        handler: AnyFunction;
-        prices: Array<Price>;
-        controller: UpgradeHQController;
-      },
-      UpgradeHQController
-    >;
+    upgradeExplorersBtn: ButtonModern<UnsafeUpgradeExplorersButtonOptions>;
+    upgradeHQBtn: ButtonModern<UnsafeUpgradeHQButtonOptions>;
     render: (container?: HTMLElement) => void;
     update: () => void;
   };
@@ -389,14 +363,7 @@ export type LoadoutButtonController = ButtonModernController & {
   renameLoadout: (loadout: Loadout) => void;
 };
 
-export type LoadoutButton = ButtonModern<
-  {
-    name: string;
-    loadout: unknown;
-    controller: LoadoutButtonController;
-  },
-  ButtonModernController
-> & {
+export type LoadoutButton = ButtonModern<UnsafeLoadoutButtonOptions> & {
   renderLinks: () => void;
   editLinks?: Array<Link>;
   pinLink?: Link;
@@ -420,14 +387,7 @@ export type JobButtonController = ButtonModernController & {
   getFlavor: (model: UnsafeBiomeBtnModel) => UnsafeJob["flavor"];
 };
 
-export type JobButton = ButtonModern<
-  {
-    name: string;
-    job: Job;
-    controller: JobButtonController;
-  },
-  ButtonModernController
-> & {
+export type JobButton = ButtonModern<UnsafeJobButtonOptions> & {
   renderLinks: () => void;
   unassignLinks?: Array<Link>;
   assignLinks?: Array<Link>;
@@ -489,16 +449,7 @@ export type FestivalButtonController = VillageButtonController<UnsafeFestivalBut
   hasMultipleResources: (amt: number) => boolean;
 };
 
-export type FestivalButton = ButtonModern<
-  {
-    name: string;
-    description: string;
-    handler: AnyFunction;
-    prices: Array<Price>;
-    controller: FestivalButtonController;
-  },
-  FestivalButtonController
-> & {
+export type FestivalButton = ButtonModern<UnsafeFestivalButtonOptions> & {
   renderLinks: () => void;
   x100?: Link;
   x10?: Link;
@@ -508,44 +459,11 @@ export type FestivalButton = ButtonModern<
 export type Village = Tab & {
   tdTop: HTMLTableCellElement | null;
   advModeButtons: Array<unknown>;
-  huntBtn: ButtonModern<
-    {
-      name: string;
-      description: string;
-      handler: AnyFunction;
-      prices: Array<Price>;
-      controller: VillageButtonController;
-    },
-    VillageButtonController
-  >;
+  huntBtn: ButtonModern<UnsafeHuntButtonOptions>;
   festivalBtn: FestivalButton;
-  optimizeJobsBtn: ButtonModern<
-    {
-      name: string;
-      description: string;
-      handler: AnyFunction;
-      controller: VillageButtonController;
-    },
-    VillageButtonController
-  >;
-  promoteKittensBtn: ButtonModern<
-    {
-      name: string;
-      description: string;
-      handler: AnyFunction;
-      controller: VillageButtonController;
-    },
-    VillageButtonController
-  >;
-  redeemGiftBtn: ButtonModern<
-    {
-      name: string;
-      description: string;
-      handler: AnyFunction;
-      controller: VillageButtonController;
-    },
-    VillageButtonController
-  >;
+  optimizeJobsBtn: ButtonModern<UnsafeOptimizeJobsButtonOptions>;
+  promoteKittensBtn: ButtonModern<UnsafePromoteKittensButtonOptions>;
+  redeemGiftBtn: ButtonModern<UnsafeRedeemGiftButtonOptions>;
   new (tabName: unknown, game: GamePage): Village;
   createJobBtn: (job: Job, game: GamePage) => JobButton;
   createLoadoutBtn: (loadout: Loadout, game: GamePage) => LoadoutButton;
@@ -593,11 +511,91 @@ export type UnsafeBiome = {
   unlocked: boolean;
 };
 
+export type UnsafeUpgradeExplorersButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  prices: Array<Price>;
+  controller: UpgradeExplorersController;
+};
+
+export type UnsafeUpgradeHQButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  prices: Array<Price>;
+  controller: UpgradeHQController;
+};
+
+export type UnsafeClearJobsButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: ButtonModernController;
+};
+
+export type UnsafeHuntButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  prices: Array<Price>;
+  controller: VillageButtonController;
+};
+
+export type UnsafeFestivalButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  prices: Array<Price>;
+  controller: FestivalButtonController;
+};
+
+export type UnsafeOptimizeJobsButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: VillageButtonController;
+};
+
+export type UnsafePromoteKittensButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: VillageButtonController;
+};
+
+export type UnsafeRedeemGiftButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: VillageButtonController;
+};
+
+export type UnsafeBiomeButtonOptions = {
+  id: Biome;
+  name: string;
+  description: string;
+  prices: Array<Price>;
+  controller: BiomeBtnController;
+};
+
+export type UnsafeLoadoutButtonOptions = {
+  name: string;
+  loadout: Loadout;
+  controller: LoadoutButtonController;
+};
+
+export type UnsafeJobButtonOptions = {
+  name: string;
+  job: Job;
+  controller: JobButtonController;
+};
+
 export type UnsafeBiomeBtnModel = UnsafeButtonModernModel & {
   biome: UnsafeBiome;
 };
 
-export type UnsafeUpgradeHQBtnModel = UnsafeButtonModernModel & {
+export type UnsafeUpgradeHQBtnModel = UnsafeBuildingBtnModernModel & {
   simplePrices: boolean;
 };
 

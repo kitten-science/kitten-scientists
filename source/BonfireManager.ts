@@ -14,10 +14,17 @@ import type {
   BuildingBtnModernController,
   BuildingMeta,
   BuildingsModern,
+  GatherCatnipButtonController,
   StagingBldBtnController,
   UnsafeBuilding,
+  UnsafeStagingBldButtonOptions,
+  UnsafeUnstagedBuildingButtonOptions,
 } from "./types/buildings.js";
-import type { UnsafeBuildingBtnModel } from "./types/core.js";
+import type {
+  AllBuildingStackableBtnOptions,
+  UnsafeBuildingBtnModel,
+  UnsafeBuildingBtnModernModel,
+} from "./types/core.js";
 import type { Building } from "./types/index.js";
 
 export class BonfireManager implements Automation {
@@ -327,32 +334,38 @@ export class BonfireManager implements Automation {
   }
 
   autoGather(): void {
-    const controller = new classes.game.ui.GatherCatnipButtonController(this._host.game);
+    const controller = new classes.game.ui.GatherCatnipButtonController(
+      this._host.game,
+    ) as GatherCatnipButtonController;
     for (let clicks = 0; clicks < Math.floor(this._host.engine.settings.interval / 20); ++clicks) {
       controller.buyItem(undefined, null);
     }
   }
 
-  build(name: Building, stage: number | undefined, amount: number): void {
+  build(name: Building, _stage: number | undefined, amount: number): void {
     let amountCalculated = amount;
-    const build = this.getBuild(name);
-    const button = this.getBuildButton(name, stage);
-
-    if (!button?.model) {
-      return;
-    }
-
-    if (!button.model.enabled) {
-      return;
-    }
-
     const amountTemp = amountCalculated;
-    const label = this._getBuildLabel(build.meta, stage);
-    amountCalculated = this._bulkManager.construct(
-      button.model,
-      button.controller,
-      amountCalculated,
-    );
+    let label: string;
+    const meta = game.bld.get(name);
+    const metaExt = game.bld.getBuildingExt(name).getMeta();
+    if ("stages" in meta) {
+      const controller = new classes.ui.btn.StagingBldBtnController(
+        this._host.game,
+      ) as StagingBldBtnController<UnsafeBuildingBtnModernModel<UnsafeStagingBldButtonOptions>>;
+      const model = controller.fetchModel(metaExt);
+      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      label = metaExt.label ?? "";
+    } else {
+      const controller = new classes.ui.btn.BuildingBtnModernController(
+        this._host.game,
+      ) as BuildingBtnModernController<
+        UnsafeBuildingBtnModernModel<UnsafeUnstagedBuildingButtonOptions>
+      >;
+      const model = controller.fetchModel(meta);
+      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      label = meta.label ?? "";
+    }
+
     if (amountCalculated !== amountTemp) {
       cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }
@@ -387,10 +400,10 @@ export class BonfireManager implements Automation {
       "stages" in meta
         ? (new classes.ui.btn.StagingBldBtnController(
             this._host.game,
-          ) as StagingBldBtnController<UnsafeBuildingBtnModel>)
+          ) as StagingBldBtnController<UnsafeBuildingBtnModernModel>)
         : (new classes.ui.btn.BuildingBtnModernController(
             this._host.game,
-          ) as BuildingBtnModernController<UnsafeBuildingBtnModel>);
+          ) as BuildingBtnModernController<UnsafeBuildingBtnModernModel>);
     const model = controller.fetchModel({
       key: name,
       name: meta.label,

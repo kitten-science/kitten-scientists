@@ -1,4 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
 import type { BonfireManager } from "./BonfireManager.js";
 import type { Automation, FrameContext } from "./Engine.js";
 import type { KittenScientists } from "./KittenScientists.js";
@@ -9,7 +10,6 @@ import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import { ReligionSettings, type ReligionSettingsItem } from "./settings/ReligionSettings.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cdebug, cwarn } from "./tools/Log.js";
-import type { UnsafeButtonModernModel } from "./types/core.js";
 import {
   type FaithItem,
   type ReligionItem,
@@ -23,9 +23,13 @@ import {
 import type {
   CryptotheologyPanel,
   CryptotheologyWGT,
+  ReligionBtnController,
   ReligionTab,
+  TranscendenceBtnController,
   TransformBtnController,
   UnsafeReligionUpgrade,
+  UnsafeTranscendenceBtnModel,
+  UnsafeTranscendenceButtonOptions,
   UnsafeTranscendenceUpgrade,
   UnsafeTransformBtnModel,
   UnsafeZiggurathUpgrade,
@@ -335,7 +339,7 @@ export class ReligionManager implements Automation {
     // For all ziggurath upgrade buttons...
     for (const button of this.manager.tab.zgUpgradeButtons) {
       // ...that are in the "valid" buildings (are unicorn-related) and visible (unlocked)...
-      if (validBuildings.includes(button.id) && button.model?.visible) {
+      if (validBuildings.includes(button.id) && button.model.visible) {
         // Determine a price value for this building.
         let unicornPrice = 0;
         for (const price of mustExist(button.model.prices)) {
@@ -390,28 +394,38 @@ export class ReligionManager implements Automation {
 
   build(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant, amount: number): void {
     let amountCalculated = amount;
-    const build = this.getBuild(name, variant);
-    if (build === null) {
-      throw new Error(`Unable to build '${name}'. Build information not available.`);
-    }
-
-    const button = this._getBuildButton(name, variant);
-
-    if (!button?.model) {
-      return;
-    }
-
-    if (!button.model.enabled) {
-      return;
-    }
-
     const amountTemp = amountCalculated;
-    const label = build.label;
-    amountCalculated = this._bulkManager.construct(
-      button.model,
-      mustExist(button.controller),
-      amountCalculated,
-    );
+    let label: string;
+    if (variant === UnicornItemVariant.Cryptotheology) {
+      const meta = game.religion.getTU(name as TranscendenceUpgrade);
+      const controller = new classes.ui.TranscendenceBtnController(
+        this._host.game,
+      ) as TranscendenceBtnController<
+        UnsafeTranscendenceBtnModel<UnsafeTranscendenceButtonOptions>
+      >;
+      const model = controller.fetchModel(meta);
+      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      label = meta.label;
+    } else if (variant === UnicornItemVariant.OrderOfTheSun) {
+      const meta = game.religion.getRU(name as ReligionUpgrade);
+      const controller = new com.nuclearunicorn.game.ui.ReligionBtnController(
+        this._host.game,
+      ) as ReligionBtnController;
+      const model = controller.fetchModel(meta);
+      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      label = meta.label;
+    } else if (variant === UnicornItemVariant.Ziggurat) {
+      const meta = game.religion.getZU(name as ZiggurathUpgrade);
+      const controller = new com.nuclearunicorn.game.ui.ReligionBtnController(
+        this._host.game,
+      ) as ReligionBtnController;
+      const model = controller.fetchModel(meta);
+      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      label = meta.label;
+    } else {
+      throw new InvalidOperationError("unsupported");
+    }
+
     if (amountCalculated !== amountTemp) {
       cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
     }

@@ -10,16 +10,18 @@ import { negativeOneToInfinity } from "../tools/Format.js";
 import { cdebug } from "../tools/Log.js";
 import type {
   BuildingBtnModernController,
-  StagingBldBtn,
   UnsafeBuilding,
+  UnsafeStagingBldButtonOptions,
+  UnsafeUnstagedBuildingButtonOptions,
 } from "../types/buildings.js";
 import type {
-  BuildingBtn,
-  BuildingBtnController,
-  BuildingStackableBtn,
+  AllBuildingBtnOptions,
+  AllBuildingStackableBtnOptions,
   BuildingStackableBtnController,
   UnsafeBuildingBtnModel,
+  UnsafeBuildingBtnModernModel,
   UnsafeBuildingStackableBtnModel,
+  UnsafeButtonOptions,
 } from "../types/core.js";
 import type {
   AllBuildings,
@@ -33,23 +35,27 @@ import type {
 } from "../types/index.js";
 import type {
   UnsafeReligionBtnModel,
+  UnsafeReligionButtonOptions,
   UnsafeReligionUpgrade,
+  UnsafeTranscendenceBtnModel,
+  UnsafeTranscendenceButtonOptions,
   UnsafeTranscendenceUpgrade,
   UnsafeZiggurathUpgrade,
 } from "../types/religion.js";
 import type {
   PlanetBuildingBtnController,
-  SpaceProgramBtnController,
+  UnsafePlanetBuildingButtonOptions,
   UnsafeSpaceBuilding,
+  UnsafeSpaceProgramButtonOptions,
 } from "../types/space.js";
 import type {
   ChronoforgeBtnController,
   UnsafeChronoForgeUpgrade,
-  UnsafeFixCryochamberBtnModel,
+  UnsafeChronoforgeUpgradeButtonOptions,
   UnsafeVoidSpaceUpgrade,
+  UnsafeVoidSpaceUpgradeButtonOptions,
   VoidSpaceBtnController,
 } from "../types/time.js";
-import type { UnsafeUpgrade } from "../types/workshop.js";
 
 export type BulkBuildListItem = {
   count: number;
@@ -524,16 +530,28 @@ export class BulkPurchaseHelper {
    * @param amount How many items to build.
    * @returns How many items were built.
    */
-  construct<TModel extends UnsafeBuildingBtnModel | UnsafeBuildingStackableBtnModel>(
-    model: TModel,
-    controller:
-      | BuildingBtnModernController<TModel>
-      | BuildingStackableBtnController<TModel>
-      | PlanetBuildingBtnController
-      | ChronoforgeBtnController
-      | VoidSpaceBtnController,
-    amount: number,
-  ): number {
+  construct<
+    TModel extends
+      | UnsafeBuildingBtnModernModel<UnsafeStagingBldButtonOptions>
+      | UnsafeBuildingBtnModernModel<UnsafeUnstagedBuildingButtonOptions>
+      | UnsafeBuildingStackableBtnModel<UnsafeChronoforgeUpgradeButtonOptions>
+      | UnsafeBuildingStackableBtnModel<UnsafePlanetBuildingButtonOptions>
+      | UnsafeBuildingStackableBtnModel<UnsafeSpaceProgramButtonOptions>
+      | UnsafeBuildingStackableBtnModel<UnsafeVoidSpaceUpgradeButtonOptions>
+      | UnsafeReligionBtnModel<UnsafeReligionButtonOptions>
+      | UnsafeTranscendenceBtnModel<UnsafeTranscendenceButtonOptions>,
+    TController extends BuildingStackableBtnController<TModel>,
+  >(model: TModel, controller: TController, amount: number): number {
+    if ("name" in model === false) {
+      return 0;
+    }
+    if ("controller" in model.options === false) {
+      return 0;
+    }
+    if ("getMetadata" in model.options.controller === false) {
+      return 0;
+    }
+
     const meta = model.metadata;
     let counter = 0;
     let amountCalculated = amount;
@@ -547,7 +565,7 @@ export class BulkPurchaseHelper {
     if ((model.enabled && controller.hasResources(model)) || this._host.game.devMode) {
       while (controller.hasResources(model) && amountCalculated > 0) {
         model.prices = controller.getPrices(model);
-        controller.payPrice(model);
+        controller.payPrice({ prices: model.prices });
         controller.incrementValue(model);
         counter++;
         amountCalculated--;
@@ -555,11 +573,13 @@ export class BulkPurchaseHelper {
       if (vsMeta.breakIronWill) {
         this._host.game.ironWill = false;
       }
-      if ("unlocks" in meta && !isNil(meta.unlocks)) {
-        this._host.game.unlock(meta.unlocks as Partial<Unlocks>);
-      }
-      if ("upgrades" in meta && !isNil(meta.upgrades)) {
-        this._host.game.upgrade(meta.upgrades as Partial<Unlocks>);
+      if (!isNil(meta)) {
+        if ("unlocks" in meta && !isNil(meta.unlocks)) {
+          this._host.game.unlock(meta.unlocks as Partial<Unlocks>);
+        }
+        if ("upgrades" in meta && !isNil(meta.upgrades)) {
+          this._host.game.upgrade(meta.upgrades as Partial<Unlocks>);
+        }
       }
     }
     return counter;

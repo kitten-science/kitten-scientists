@@ -24,7 +24,7 @@ export type SpaceManager = TabManager<Array<UnsafePlanet> | Array<UnsafeSpaceBui
   game: GamePage;
   hideResearched: boolean;
   spaceBuildingsMap: Array<unknown>;
-  programs: Array<UnsafeProgram>;
+  programs: Array<UnsafeSpaceProgram>;
   planets: Array<UnsafePlanet>;
   metaCache: Record<SpaceBuilding, Required<UnsafeSpaceBuilding>>;
   new (game: GamePage): SpaceManager;
@@ -33,7 +33,7 @@ export type SpaceManager = TabManager<Array<UnsafePlanet> | Array<UnsafeSpaceBui
   load: (saveData: unknown) => void;
   update: () => void;
   fastforward: (daysOffset: number) => void;
-  getProgram: (name: Mission) => UnsafeProgram;
+  getProgram: (name: Mission) => UnsafeSpaceProgram;
   getBuilding: <TSpaceBuilding extends SpaceBuilding>(
     name: TSpaceBuilding,
   ) => SpaceManager["metaCache"][TSpaceBuilding];
@@ -43,39 +43,33 @@ export type SpaceManager = TabManager<Array<UnsafePlanet> | Array<UnsafeSpaceBui
   getEffect: (effectName: BuildingEffect) => number;
 };
 
-export type SpaceProgramBtnController<
-  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
-> = BuildingStackableBtnController<TModel> & {
-  getMetadata: (model: TModel) => UnsafeProgram;
-  getPrices: (model: TModel) => Array<Price>;
-  updateVisible: (model: TModel) => void;
-  updateEnabled: (model: TModel) => void;
-  getName: (model: TModel) => string;
-  buyItem: (model: TModel, event: unknown) => UnsafeBuyItemResult;
-  build: (model: TModel, maxBld: unknown) => number;
-};
+export type SpaceProgramBtnController<TModel extends UnsafeBuildingBtnModel> =
+  BuildingStackableBtnController<TModel> & {
+    getMetadata: (model: TModel) => UnsafeSpaceProgram;
+    getPrices: (model: TModel) => Array<Price>;
+    updateVisible: (model: TModel) => void;
+    updateEnabled: (model: TModel) => void;
+    getName: (model: TModel) => string;
+    buyItem: (model: TModel, event: unknown) => UnsafeBuyItemResult;
+    build: (model: TModel, maxBld: unknown) => number;
+  };
 
 export type PlanetBuildingBtnController<
-  TModel extends UnsafeBuildingBtnModel<unknown, UnsafePlanet> = UnsafeBuildingBtnModel<
-    unknown,
-    UnsafePlanet
-  >,
-> = BuildingStackableBtnController<UnsafeBuildingBtnModel<unknown, UnsafePlanet>> & {
+  TModel extends UnsafeBuildingStackableBtnModel | unknown = unknown,
+> = BuildingStackableBtnController<TModel> & {
   getMetadata: (model: TModel) => UnsafePlanet;
   hasSellLink: (model: unknown) => boolean;
   getPrices: (model: TModel) => Array<Price>;
 };
 
 export type PlanetPanel = Panel<
-  BuildingStackableBtn<
-    {
-      id: SpaceBuilding;
-      planet: UnsafePlanet;
-      controller: PlanetBuildingBtnController;
-    },
-    PlanetBuildingBtnController,
-    SpaceBuilding
-  >
+  BuildingStackableBtn<{
+    id: SpaceBuilding;
+    planet: UnsafePlanet;
+    controller: PlanetBuildingBtnController<
+      UnsafeBuildingStackableBtnModel<UnsafeSpaceProgramButtonOptions>
+    >;
+  }>
 > & {
   planet: UnsafePlanet;
   render: () => ReturnType<Panel["render"]>;
@@ -89,13 +83,7 @@ export type FurthestRingPanel = PlanetPanel & {
 };
 
 export type SpaceTab = Tab<Panel<RorshachWgt>> & {
-  GCPanel: Panel<
-    BuildingStackableBtn<
-      { id: Mission; controller: SpaceProgramBtnController },
-      SpaceProgramBtnController,
-      Mission
-    >
-  > | null;
+  GCPanel: Panel<BuildingStackableBtn<UnsafeSpaceProgramButtonOptions>> | null;
   planetPanels: Array<PlanetPanel | FurthestRingPanel> | null;
   aPanel: PlanetPanel;
   render: (container?: HTMLElement) => void;
@@ -103,7 +91,7 @@ export type SpaceTab = Tab<Panel<RorshachWgt>> & {
   update: () => void;
 };
 
-export type UnsafeProgram = {
+export type UnsafeSpaceProgram = {
   name: Mission;
   label: string;
   description: string;
@@ -162,4 +150,15 @@ export type UnsafeSpaceBuilding = {
   isAutomationEnabled?: boolean | null;
   lackResConvert?: boolean;
   toggleable?: boolean;
+};
+
+export type UnsafePlanetBuildingButtonOptions = {
+  id: SpaceBuilding;
+  planet: UnsafePlanet;
+  controller: PlanetBuildingBtnController<UnsafeBuildingStackableBtnModel>;
+};
+
+export type UnsafeSpaceProgramButtonOptions = {
+  id: Mission;
+  controller: SpaceProgramBtnController<UnsafeBuildingStackableBtnModel>;
 };

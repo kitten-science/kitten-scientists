@@ -13,7 +13,7 @@ git-hook:
 	echo "make pretty" > .git/hooks/pre-commit
 
 pretty: node_modules
-	yarn biome check --write --no-errors-on-unmatched
+	yarn biome check --no-errors-on-unmatched --fix --unsafe
 	npm pkg fix
 
 lint: node_modules

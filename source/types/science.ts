@@ -64,16 +64,7 @@ export type PolicyBtnController = BuildingNotStackableBtnController<UnsafePolicy
   onPurchase: (model: UnsafePolicyBtnModel) => void;
 };
 
-export type PolicyPanel = Panel<
-  BuildingResearchBtn<
-    {
-      id: Policy;
-      controller: PolicyBtnController;
-    },
-    PolicyBtnController,
-    Policy
-  >
-> & {
+export type PolicyPanel = Panel<BuildingResearchBtn<UnsafePolicyButtonOptions>> & {
   toggleResearchedSpan: HTMLSpanElement | null;
   toggleBlockedSpan: HTMLSpanElement | null;
   render: (container?: HTMLElement) => void;
@@ -88,14 +79,7 @@ export type TechButtonController = BuildingNotStackableBtnController<UnsafeTechB
   updateVisible: (model: UnsafeTechButtonModel) => void;
 };
 
-export type Library = Tab<
-  unknown,
-  BuildingResearchBtn<
-    { id: Technology; controller: TechButtonController },
-    TechButtonController,
-    Technology
-  >
-> & {
+export type Library = Tab<unknown, BuildingResearchBtn<UnsafeTechButtonOptions>> & {
   metaphysicsPanel: PrestigePanel | null;
   render: (tabContainer?: HTMLElement) => void;
   tdTop?: HTMLTableCellElement;
@@ -103,13 +87,7 @@ export type Library = Tab<
   detailedPollutionInfo?: HTMLSpanElement;
   update: () => void;
   new (tabName: unknown, game: GamePage): Library;
-  createTechBtn: (
-    tech: UnsafeTech,
-  ) => BuildingResearchBtn<
-    { id: Technology; controller: TechButtonController },
-    TechButtonController,
-    Technology
-  >;
+  createTechBtn: (tech: UnsafeTech) => BuildingResearchBtn<UnsafeTechButtonOptions>;
 };
 
 export type UnsafePolicy = {
@@ -140,6 +118,16 @@ export type UnsafeTech = {
   researched: boolean;
   unlocked: boolean;
   unlocks?: Partial<Unlocks>;
+};
+
+export type UnsafePolicyButtonOptions = {
+  id: Policy;
+  controller: PolicyBtnController;
+};
+
+export type UnsafeTechButtonOptions = {
+  id: Technology;
+  controller: TechButtonController;
 };
 
 export type UnsafePolicyBtnModelDefaults = {
