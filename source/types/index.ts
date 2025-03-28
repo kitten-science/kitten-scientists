@@ -27,6 +27,12 @@ import type {
   ReservesPanel,
 } from "./challenges.js";
 import type {
+  AllBuildingBtnOptions,
+  AllBuildingResearchBtnOptions,
+  AllBuildingStackableBtnOptions,
+  AllButtonIds,
+  AllButtonModernOptions,
+  AllButtonOptions,
   BuildingBtn,
   BuildingBtnController,
   BuildingNotStackableBtnController,
@@ -85,6 +91,7 @@ import type {
   TurnHGOffButtonController,
 } from "./prestige.js";
 import type {
+  AllMultiLinkBtnOptions,
   CryptotheologyPanel,
   CryptotheologyWGT,
   MultiLinkBtn,
@@ -1089,6 +1096,47 @@ export type Unlocks = {
   zebraUpgrades: Array<unknown>;
 };
 
+export const Perks = [
+  "adjustmentBureau",
+  "anachronomancy",
+  "ascoh",
+  "astromancy",
+  "binah",
+  "blackCodex",
+  "carnivals",
+  "chesed",
+  "chokhmah",
+  "chronomancy",
+  "codexAgrum",
+  "codexLeviathanianus",
+  "codexLogos",
+  "codexVox",
+  "diplomacy",
+  "divineProportion",
+  "engeneering",
+  "gevurah",
+  "goldenRatio",
+  "hod",
+  "keter",
+  "malkuth",
+  "megalomania",
+  "navigationDiplomacy",
+  "netzach",
+  "numerology",
+  "numeromancy",
+  "pawgan",
+  "renaissance",
+  "tiferet",
+  "unicornmancy",
+  "vitruvianFeline",
+  "voidOrder",
+  "willenfluff",
+  "yesod",
+  "zebraCovenant",
+  "zebraDiplomacy",
+];
+export type Perk = (typeof Perks)[number];
+
 export type CycleEffects = {
   "cryostation-coalMax": number;
   "cryostation-ironMax": number;
@@ -1222,10 +1270,7 @@ export type ClassList = {
     btn: {
       BuildingBtnModernController: BuildingBtnModernController;
       StagingBldBtnController: StagingBldBtnController;
-      StagingBldBtn: StagingBldBtn<
-        UnsafeButtonOptions<ButtonModernController>,
-        ButtonModernController
-      >;
+      StagingBldBtn: StagingBldBtn;
     };
     BuildingBtnController: BuildingBtnController;
     BurnParagonBtnController: BurnParagonBtnController;
@@ -1247,10 +1292,7 @@ export type ClassList = {
     PrestigePanel: PrestigePanel;
     RorshachWgt: RorshachWgt;
     religion: {
-      MultiLinkBtn: MultiLinkBtn<
-        UnsafeButtonOptions<ButtonModernController>,
-        ButtonModernController
-      >;
+      MultiLinkBtn: MultiLinkBtn<AllMultiLinkBtnOptions>;
       RefineBtn: RefineBtn;
       RefineTearsBtnController: RefineTearsBtnController;
       TransformBtnController: TransformBtnController;
@@ -1322,27 +1364,15 @@ export type ComInterface = {
       };
       Math: KGMath;
       ui: {
-        BuildingBtn: BuildingBtn<
-          UnsafeButtonOptions<ButtonModernController>,
-          ButtonModernController
-        >;
+        BuildingBtn: BuildingBtn<AllBuildingBtnOptions>;
         BuildingBtnController: BuildingBtnController;
         BuildingNotStackableBtnController: BuildingNotStackableBtnController;
-        BuildingResearchBtn: BuildingResearchBtn<
-          UnsafeButtonOptions<ButtonModernController>,
-          ButtonModernController
-        >;
-        BuildingStackableBtn: BuildingStackableBtn<
-          UnsafeButtonOptions<BuildingStackableBtnController>,
-          BuildingStackableBtnController
-        >;
+        BuildingResearchBtn: BuildingResearchBtn<AllBuildingResearchBtnOptions>;
+        BuildingStackableBtn: BuildingStackableBtn<AllBuildingStackableBtnOptions>;
         BuildingStackableBtnController: BuildingStackableBtnController;
-        Button: Button<UnsafeButtonOptions<ButtonController>, ButtonController>;
+        Button: Button<AllButtonOptions>;
         ButtonController: ButtonController;
-        ButtonModern: ButtonModern<
-          UnsafeButtonOptions<ButtonModernController>,
-          ButtonModernController
-        >;
+        ButtonModern: ButtonModern<AllButtonModernOptions>;
         ButtonModernController: ButtonModernController;
         CensusPanel: CensusPanel;
         ContentRowRenderer: ContentRowRenderer;
@@ -1359,7 +1389,7 @@ export type ComInterface = {
         PraiseBtnController: PraiseBtnController;
         ReligionBtnController: ReligionBtnController;
         ResetFaithBtnController: ResetFaithBtnController;
-        SpaceProgramBtnController: SpaceProgramBtnController;
+        SpaceProgramBtnController: SpaceProgramBtnController<UnsafeBuildingBtnModel>;
         Spacer: Spacer;
         tab: Tab & {
           AchTab: AchTab;

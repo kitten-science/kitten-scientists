@@ -1,28 +1,20 @@
 import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import type {
+  AllBuildingStackableBtnOptions,
   BuildingStackableBtn,
   BuildingStackableBtnController,
   ButtonModern,
   ButtonModernController,
   Tab,
   TabManager,
-  UnsafeBuildingBtnModel,
-  UnsafeBuildingStackableBtnModel,
-  UnsafeButtonModel,
+  UnsafeBuildingBtnModernModel,
   UnsafeButtonModernModel,
-  UnsafeButtonOptions,
   UnsafeLinkResult,
 } from "./core.js";
 import type { GamePage } from "./game.js";
-import type {
-  AllBuildings,
-  Building,
-  BuildingEffect,
-  Price,
-  UnsafeBuyItemResult,
-} from "./index.js";
+import type { Building, BuildingEffect, Price, UnsafeBuyItemResult } from "./index.js";
 
-export type Metadata<TMeta extends Record<string, unknown> = Record<string, unknown>> = {
+export type Metadata<TMeta extends Record<string, unknown> | unknown = unknown> = {
   meta: TMeta;
   new (meta: TMeta): Metadata<TMeta>;
   getMeta(): TMeta;
@@ -32,7 +24,7 @@ export type Metadata<TMeta extends Record<string, unknown> = Record<string, unkn
 
 export type BuildingMeta<
   TMeta extends UnsafeBuilding = UnsafeBuilding,
-  TMetaCache = TMeta extends { stages: Array<unknown> } ? TMeta & TMeta["stages"][number] : TMeta,
+  TMetaCache = TMeta extends { stages: Array<infer S> } ? TMeta & S : TMeta,
 > = Metadata<TMeta> & {
   _metaCache: TMetaCache;
   _metaCacheStage: number;
@@ -81,7 +73,7 @@ export type BuildingsManager = TabManager & {
   /** @deprecated Use `getBuildingExt()` instead. */
   get: (name: Building) => UnsafeBuilding;
   getAutoProductionRatio: () => number;
-  getBuildingExt: (name: Building) => UnsafeBuildingExt;
+  getBuildingExt: (name: Building) => BuildingMeta<UnsafeBuilding>;
   getCleanEnergy: () => number;
   getCleanEnergyProdRatio: () => number;
   getDetailedPollutionInfo: () => string;
@@ -105,7 +97,7 @@ export type BuildingsManager = TabManager & {
   isUnlocked: (building: Building) => boolean;
   load: (saveData: unknown) => void;
   meta: [{ meta: Array<BuildingMeta> }];
-  metaCache: Record<Building, UnsafeBuildingExt>;
+  metaCache: Record<Building, BuildingMeta<UnsafeBuilding>>;
   new (game: GamePage): BuildingsManager;
   pollutionEffects: Record<
     | "catnipPollutionRatio"
@@ -139,24 +131,14 @@ export type RefineCatnipButtonController = ButtonModernController & {
   ) => void;
 };
 
-export type RefineCatnipButton = ButtonModern<
-  {
-    name: string;
-    controller: RefineCatnipButtonController;
-    handler: AnyFunction;
-    description: string;
-    prices: Array<Price>;
-    twoRow: boolean;
-  },
-  RefineCatnipButtonController
-> & {
+export type RefineCatnipButton = ButtonModern<UnsafeRefineCatnipButtonOptions> & {
   new (game: GamePage): RefineCatnipButton;
   x100Href: UnsafeLinkResult;
   update: () => void;
 };
 
 export type BuildingBtnModernController<
-  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
+  TModel extends UnsafeBuildingBtnModernModel<AllBuildingStackableBtnOptions> | unknown = unknown,
 > = BuildingStackableBtnController<TModel> & {
   getMetadata: (model: TModel) => BuildingMeta<UnsafeBuilding> | null;
   getName: (model: TModel) => string;
@@ -165,11 +147,11 @@ export type BuildingBtnModernController<
   build: (model: TModel) => void;
   sell: (event: unknown, model: TModel) => void;
   decrementValue: (model: TModel) => void;
-  incrementValue: (model: TModel) => void;
+  incrementValue: (model: { metadata: Metadata<TModel>; metaAccessor: unknown }) => void;
 };
 
 export type StagingBldBtnController<
-  TModel extends UnsafeBuildingBtnModel<unknown> = UnsafeBuildingBtnModel<unknown>,
+  TModel extends UnsafeBuildingBtnModernModel<AllBuildingStackableBtnOptions> | unknown = unknown,
 > = BuildingBtnModernController<TModel> & {
   stageLinks: null;
   fetchModel: (options: unknown) => TModel;
@@ -182,46 +164,17 @@ export type StagingBldBtnController<
   getMetadataRaw: (model: TModel) => BuildingMeta<UnsafeBuilding>;
 };
 
-export type StagingBldBtn<
-  TOpts extends UnsafeButtonOptions<TController, TId>,
-  TController extends ButtonModernController<UnsafeButtonModel | undefined>,
-  TId extends AllBuildings | undefined = undefined,
-> = BuildingStackableBtn<TOpts, TController, TId> & {
-  stageLinks: Array<unknown>;
-  renderLinks: () => void;
-};
+export type StagingBldBtn<TOpts extends AllBuildingStackableBtnOptions | unknown = unknown> =
+  BuildingStackableBtn<TOpts> & {
+    stageLinks: Array<unknown>;
+    renderLinks: () => void;
+  };
 
 export type BuildingsModern = Tab<
-  | ButtonModern<
-      {
-        name: string;
-        controller: GatherCatnipButtonController;
-        description: string;
-        twoRow: boolean;
-      },
-      GatherCatnipButtonController
-    >
+  | ButtonModern<UnsafeGatherCatnipButtonOptions>
   | RefineCatnipButton
-  | StagingBldBtn<
-      {
-        name: string;
-        description: string;
-        building: Building;
-        twoRow: boolean;
-        controller: StagingBldBtnController;
-      },
-      StagingBldBtnController
-    >
-  | BuildingStackableBtn<
-      {
-        name: string;
-        description: string;
-        building: Building;
-        twoRow: boolean;
-        controller: BuildingBtnModernController;
-      },
-      BuildingBtnModernController
-    >
+  | StagingBldBtn<AllBuildingStackableBtnOptions>
+  | BuildingStackableBtn<AllBuildingStackableBtnOptions>
 > & {
   bldGroups: Array<unknown>;
   activeGroup: null;
@@ -231,8 +184,6 @@ export type BuildingsModern = Tab<
   addCoreBtns: (container: unknown) => void;
   update: () => void;
 };
-
-export type UnsafeBuildingExt = BuildingMeta<UnsafeBuilding>;
 
 export type UnsafeBuilding = {
   calculateEffects?: (model: unknown, game: GamePage) => void;
@@ -270,6 +221,42 @@ export type UnsafeBuilding = {
   isAutomationEnabled?: boolean | null;
   lackResConvert?: boolean;
   toggleable?: boolean;
+};
+
+export type UnsafeGatherCatnipButtonOptions = {
+  name: string;
+  controller: GatherCatnipButtonController;
+  description: string;
+  twoRow: boolean;
+};
+
+export type UnsafeUnstagedBuildingButtonOptions<
+  TModel extends UnsafeBuildingBtnModernModel<AllBuildingStackableBtnOptions> | unknown = unknown,
+> = {
+  name: string;
+  description: string;
+  building: Building;
+  twoRow: boolean;
+  controller: BuildingBtnModernController<TModel>;
+};
+
+export type UnsafeRefineCatnipButtonOptions = {
+  name: string;
+  controller: RefineCatnipButtonController;
+  handler: AnyFunction;
+  description: string;
+  prices: Array<Price>;
+  twoRow: boolean;
+};
+
+export type UnsafeStagingBldButtonOptions<
+  TModel extends UnsafeBuildingBtnModernModel<AllBuildingStackableBtnOptions> | unknown = unknown,
+> = {
+  name: string;
+  description: string;
+  building: Building;
+  twoRow: boolean;
+  controller: StagingBldBtnController<TModel>;
 };
 
 export type UnsafeRefineCatnipButtonModel = UnsafeButtonModernModel<{

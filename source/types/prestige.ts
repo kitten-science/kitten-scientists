@@ -1,3 +1,4 @@
+import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import type {
   BuildingNotStackableBtnController,
   ButtonModernController,
@@ -7,7 +8,7 @@ import type {
   UnsafeButtonModel,
 } from "./core.js";
 import type { GamePage } from "./game.js";
-import type { Price, Unlocks, UnsafeBuyItemResult } from "./index.js";
+import type { Perk, Price, Unlocks, UnsafeBuyItemResult } from "./index.js";
 
 export type PrestigeManager = TabManager<Array<UnsafePerk>> & {
   perks: Array<UnsafePerk>;
@@ -27,21 +28,17 @@ export type PrestigeManager = TabManager<Array<UnsafePerk>> & {
 };
 
 export type PrestigeBtnController = BuildingNotStackableBtnController & {
-  getMetadata: <TButtonModel extends UnsafeBuildingBtnModel<unknown>>(
-    model: TButtonModel,
-  ) => UnsafePerk;
+  getMetadata: <TButtonModel extends UnsafeBuildingBtnModel>(model: TButtonModel) => UnsafePerk;
   buyItem: (model: unknown, event: unknown) => UnsafeBuyItemResult;
-  updateVisible: <TButtonModel extends UnsafeBuildingBtnModel<unknown>>(
-    model: TButtonModel,
-  ) => void;
+  updateVisible: <TButtonModel extends UnsafeBuildingBtnModel>(model: TButtonModel) => void;
 };
 
 export type BurnParagonBtnController = ButtonModernController & {
-  updateVisible: <TButtonModel extends UnsafeButtonModel<undefined>>(model: TButtonModel) => void;
+  updateVisible: <TButtonModel extends UnsafeButtonModel>(model: TButtonModel) => void;
 };
 
 export type TurnHGOffButtonController = ButtonModernController & {
-  updateVisible: <TButtonModel extends UnsafeButtonModel<undefined>>(model: TButtonModel) => void;
+  updateVisible: <TButtonModel extends UnsafeButtonModel>(model: TButtonModel) => void;
 };
 
 export type PrestigePanel = Panel & {
@@ -51,7 +48,7 @@ export type PrestigePanel = Panel & {
 };
 
 export type UnsafePerk = {
-  name: string;
+  name: Perk;
   label: string;
   description: string;
   prices: Array<Price>;
@@ -60,4 +57,23 @@ export type UnsafePerk = {
   researched: boolean;
   unlocks: Partial<Unlocks>;
   effects: Record<string, number>;
+};
+
+export type UnsafeBurnParagonButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: BurnParagonBtnController;
+};
+
+export type UnsafeTurnHGOffButtonOptions = {
+  name: string;
+  description: string;
+  handler: AnyFunction;
+  controller: TurnHGOffButtonController;
+};
+
+export type UnsafePrestigeButtonOptions = {
+  id: Perk;
+  controller: PrestigeBtnController;
 };
