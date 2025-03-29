@@ -3,7 +3,7 @@ import type { KittenScientists } from "./KittenScientists.js";
 import type { TabManager } from "./TabManager.js";
 import type { Policy, Technology, Upgrade } from "./types/index.js";
 import type { Library, PolicyBtnController, TechButtonController } from "./types/science.js";
-import type { Workshop } from "./types/workshop.js";
+import type { UpgradeButtonController, Workshop } from "./types/workshop.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: KittenScientists;
@@ -31,11 +31,11 @@ export abstract class UpgradeManager {
       const model = controller.fetchModel({ id: itemMetaRaw.name });
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     } else {
-      const meta = game.workshop.get(upgrade.name as Upgrade);
-      const controller = new com.nuclearunicorn.game.ui.TechButtonController(
+      const itemMetaRaw = game.getUnlockByName(upgrade.name, "upgrades");
+      const controller = new com.nuclearunicorn.game.ui.UpgradeButtonController(
         this._host.game,
-      ) as TechButtonController;
-      const model = controller.fetchModel(meta);
+      ) as UpgradeButtonController;
+      const model = controller.fetchModel({ id: itemMetaRaw.name });
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     }
 
