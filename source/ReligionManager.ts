@@ -407,13 +407,13 @@ export class ReligionManager implements Automation {
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
       label = meta.label;
     } else if (variant === UnicornItemVariant.OrderOfTheSun) {
-      const meta = game.religion.getRU(name as ReligionUpgrade);
+      const itemMetaRaw = game.getUnlockByName(name, "religion");
       const controller = new com.nuclearunicorn.game.ui.ReligionBtnController(
         this._host.game,
       ) as ReligionBtnController;
-      const model = controller.fetchModel(meta);
+      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-      label = meta.label;
+      label = itemMetaRaw.label;
     } else if (variant === UnicornItemVariant.Ziggurat) {
       const meta = game.religion.getZU(name as ZiggurathUpgrade);
       const controller = new com.nuclearunicorn.game.ui.ReligionBtnController(

@@ -60,7 +60,7 @@ export class TradeSettings extends SettingTrigger {
 
   constructor(
     enabled = false,
-    trigger = 1,
+    trigger = -1,
     buildEmbassies = new EmbassySettings(),
     feedLeviathans = new Setting(),
     tradeBlackcoin = new SettingBuySellThreshold(false, 1090.0, 1095.0, 10000),

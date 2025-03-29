@@ -35,7 +35,7 @@ export class VillageSettings extends Setting {
   private initJobs(): VillageJobSettings {
     const items = {} as VillageJobSettings;
     for (const item of Jobs) {
-      items[item] = new SettingMax(false, -1);
+      items[item] = new SettingMax(false, 0);
     }
     return items;
   }

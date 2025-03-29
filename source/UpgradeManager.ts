@@ -28,14 +28,14 @@ export abstract class UpgradeManager {
       const controller = new com.nuclearunicorn.game.ui.TechButtonController(
         this._host.game,
       ) as TechButtonController;
-      const model = controller.fetchModel({ id: itemMetaRaw.name });
+      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     } else {
       const itemMetaRaw = game.getUnlockByName(upgrade.name, "upgrades");
       const controller = new com.nuclearunicorn.game.ui.UpgradeButtonController(
         this._host.game,
       ) as UpgradeButtonController;
-      const model = controller.fetchModel({ id: itemMetaRaw.name });
+      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     }
 

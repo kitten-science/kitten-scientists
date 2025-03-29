@@ -167,7 +167,7 @@ export class SettingLimitedTrigger extends SettingLimited implements SettingTrig
 export class SettingTriggerMax extends SettingTrigger implements SettingMax {
   max: number;
 
-  constructor(enabled = false, trigger = 1, max = 0) {
+  constructor(enabled = false, trigger = -1, max = 0) {
     super(enabled, trigger);
     this.max = max;
   }
