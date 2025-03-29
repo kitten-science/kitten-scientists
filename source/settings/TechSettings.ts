@@ -32,7 +32,7 @@ export class TechSettings extends SettingTrigger {
   techs: TechTechSettings;
 
   constructor(enabled = false) {
-    super(enabled, 0);
+    super(enabled, -1);
     this.techs = this.initTechs();
   }
 

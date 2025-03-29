@@ -25,7 +25,7 @@ export class UpgradeSettings extends SettingTrigger {
   readonly upgrades: UpgradeSettingsItems;
 
   constructor(enabled = false) {
-    super(enabled, 0);
+    super(enabled, -1);
     this.upgrades = this.initUpgrades();
   }
 

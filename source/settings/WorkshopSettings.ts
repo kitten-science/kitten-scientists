@@ -30,7 +30,7 @@ export class WorkshopSettings extends SettingTrigger {
 
   constructor(
     enabled = false,
-    trigger = 0.95,
+    trigger = -1,
     unlockUpgrades = new UpgradeSettings(),
     shipOverride = new Setting(),
   ) {

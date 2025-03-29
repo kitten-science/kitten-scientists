@@ -24,11 +24,11 @@ export abstract class UpgradeManager {
       const model = controller.fetchModel(meta);
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     } else if (variant === "science") {
-      const meta = game.science.get(upgrade.name as Technology);
+      const itemMetaRaw = game.getUnlockByName(upgrade.name, "tech");
       const controller = new com.nuclearunicorn.game.ui.TechButtonController(
         this._host.game,
       ) as TechButtonController;
-      const model = controller.fetchModel(meta);
+      const model = controller.fetchModel({ id: itemMetaRaw.name });
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     } else {
       const meta = game.workshop.get(upgrade.name as Upgrade);

@@ -360,7 +360,7 @@ export class BonfireManager implements Automation {
         controller,
       });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-      label = model.name;
+      label = meta.label ?? "";
     } else {
       const controller = new classes.ui.btn.BuildingBtnModernController(
         this._host.game,
@@ -375,7 +375,7 @@ export class BonfireManager implements Automation {
         controller,
       });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-      label = itemMetaRaw.label ?? "";
+      label = meta.label ?? "";
     }
 
     if (amountCalculated !== amountTemp) {
