@@ -28,9 +28,11 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
       new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
         },
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive =

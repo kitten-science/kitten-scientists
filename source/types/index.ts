@@ -15,6 +15,7 @@ import type {
   RefineCatnipButtonController,
   StagingBldBtn,
   StagingBldBtnController,
+  UnsafeBuilding,
 } from "./buildings.js";
 import type { Calendar, Event } from "./calendar.js";
 import type {
@@ -25,6 +26,7 @@ import type {
   ChallengesTab,
   ReserveMan,
   ReservesPanel,
+  UnsafeChallenge,
 } from "./challenges.js";
 import type {
   AllBuildingBtnOptions,
@@ -89,6 +91,7 @@ import type {
   PrestigeManager,
   PrestigePanel,
   TurnHGOffButtonController,
+  UnsafePerk,
 } from "./prestige.js";
 import type {
   AllMultiLinkBtnOptions,
@@ -109,6 +112,10 @@ import type {
   TranscendBtnController,
   TranscendenceBtnController,
   TransformBtnController,
+  UnsafePact,
+  UnsafeReligionUpgrade,
+  UnsafeTranscendenceUpgrade,
+  UnsafeZiggurathUpgrade,
   ZigguratBtnController,
 } from "./religion.js";
 import type { ResourceManager } from "./resources.js";
@@ -118,6 +125,8 @@ import type {
   PolicyPanel,
   ScienceManager,
   TechButtonController,
+  UnsafePolicy,
+  UnsafeTech,
 } from "./science.js";
 import type {
   FurthestRingPanel,
@@ -126,6 +135,8 @@ import type {
   SpaceManager,
   SpaceProgramBtnController,
   SpaceTab,
+  UnsafePlanet,
+  UnsafeSpaceBuilding,
 } from "./space.js";
 import type { StatsManager, StatsTab } from "./stats.js";
 import type {
@@ -142,6 +153,8 @@ import type {
   TimeControlWgt,
   TimeManager,
   TimeTab,
+  UnsafeChronoForgeUpgrade,
+  UnsafeVoidSpaceUpgrade,
   VoidSpaceBtnController,
   VoidSpaceWgt,
 } from "./time.js";
@@ -169,6 +182,8 @@ import type {
   LoadoutButtonController,
   LoadoutController,
   MapOverviewWgt,
+  UnsafeBiome,
+  UnsafeJob,
   UpgradeExplorersController,
   UpgradeHQController,
   Village,
@@ -179,6 +194,8 @@ import type { RorshachWgt, VoidManager } from "./void.js";
 import type {
   CraftButton,
   CraftButtonController,
+  UnsafeCraft,
+  UnsafeUpgrade,
   UpgradeButtonController,
   Workshop,
   WorkshopManager,
@@ -1179,6 +1196,32 @@ export type FestivalEffects = {
   uranium: number;
   wood: number;
 };
+
+export type UnlockTypeMap = {
+  biomes: UnsafeBiome;
+  buildings: UnsafeBuilding;
+  challenges: UnsafeChallenge;
+  chronoforge: UnsafeChronoForgeUpgrade;
+  crafts: UnsafeCraft;
+  jobs: UnsafeJob;
+  pacts: UnsafePact;
+  perks: UnsafePerk;
+  planet: UnsafePlanet;
+  policies: UnsafePolicy;
+  religion: UnsafeReligionUpgrade;
+  schemes: unknown;
+  spaceBuilding: UnsafeSpaceBuilding;
+  spaceMission: UnsafePlanet;
+  stages: UnsafeBuilding;
+  tabs: Tab;
+  tech: UnsafeTech;
+  transcendenceUpgrades: UnsafeTranscendenceUpgrade;
+  upgrades: UnsafeUpgrade;
+  voidSpace: UnsafeVoidSpaceUpgrade;
+  zebraUpgrades: UnsafeUpgrade;
+  zigguratUpgrades: UnsafeZiggurathUpgrade;
+};
+export type Unlock = keyof UnlockTypeMap;
 
 /**
  * A combination of a resource and an amount.

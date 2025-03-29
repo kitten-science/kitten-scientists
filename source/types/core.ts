@@ -194,7 +194,7 @@ export type ButtonController<
   adjustPrice: (model: TModel, ratio: number) => void;
   /** @deprecated */
   rejustPrice: (model: TModel, ratio: number) => void;
-  payPrice: (model: { prices: Array<Price> }) => void;
+  payPrice: (model: TModel) => void;
   payPriceForUndoRefund: (model: TModel) => void;
   clickHandler: (model: TModel, event: Event) => void;
   buyItem: (
@@ -252,40 +252,20 @@ export type ButtonModernController<
 > = ButtonController<TModel, TControllerOpts> & {
   new (game: GamePage): ButtonModernController;
   defaults: () => UnsafeButtonModernModelDefaults;
-  getFlavor: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
-    model: TModel,
-  ) => string;
-  getEffects: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
-    model: TModel,
-  ) => unknown;
-  getTotalEffects: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
-    model: TModel,
-  ) => unknown;
-  getNextEffectValue: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
-    model: TModel,
-    effectName: string,
-  ) => unknown;
-  createPriceLineModel: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
-    model: TModel,
-    price: Price,
-  ) => UnsafePriceLineModel;
+  getFlavor: (model: TModel) => string;
+  getEffects: (model: TModel) => unknown;
+  getTotalEffects: (model: TModel) => unknown;
+  getNextEffectValue: (model: TModel, effectName: string) => unknown;
+  createPriceLineModel: (model: TModel, price: Price) => UnsafePriceLineModel;
   _createPriceLineModel: (
     price: Price,
     simplePrices: boolean,
     indent?: number,
   ) => UnsafePriceLineModelExt;
-  fetchExtendedModel: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
-    model: TModel,
-  ) => void;
-  updateEffectModels: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
-    model: TModel,
-  ) => void;
-  isPrecraftAvailable: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
-    model: TModel,
-  ) => boolean;
-  precraft: <TModel extends UnsafeButtonModernModel<Record<string, unknown>>>(
-    model: TModel,
-  ) => void;
+  fetchExtendedModel: (model: TModel) => void;
+  updateEffectModels: (model: TModel) => void;
+  isPrecraftAvailable: (model: TModel) => boolean;
+  precraft: (model: TModel) => void;
   _precraftRes: (price: Price) => void;
 };
 
@@ -346,10 +326,10 @@ export type BuildingBtnController<
   TModel extends UnsafeBuildingBtnModernModel<AllBuildingBtnOptions> | unknown = unknown,
 > = ButtonModernController<TModel> & {
   new (game: GamePage): BuildingBtnController<TModel>;
-  initModel: (options?: undefined) => TModel;
+  initModel: (options?: unknown | undefined) => TModel;
   fetchModel: (options: unknown) => TModel;
   getMetadata: (
-    model: unknown,
+    model?: unknown | undefined,
   ) => TModel extends { options: { building: infer S extends UnsafeBuilding } }
     ? BuildingMeta<S>
     : null;

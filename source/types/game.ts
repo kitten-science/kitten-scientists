@@ -6,12 +6,19 @@ import type { Calendar } from "./calendar.js";
 import type { ChallengesManager, ChallengesTab } from "./challenges.js";
 import type { Console, Tab } from "./core.js";
 import type { Diplomacy, DiplomacyManager } from "./diplomacy.js";
-import type { Resource, ResourceCraftable, TabId, Unlocks } from "./index.js";
+import type {
+  Resource,
+  ResourceCraftable,
+  TabId,
+  Unlock,
+  UnlockTypeMap,
+  Unlocks,
+} from "./index.js";
 import type { Math as KGMath } from "./math.js";
 import type { PrestigeManager } from "./prestige.js";
 import type { ReligionManager, ReligionTab } from "./religion.js";
 import type { ResourceManager } from "./resources.js";
-import type { Library, ScienceManager } from "./science.js";
+import type { Library, ScienceManager, UnsafeTech } from "./science.js";
 import type { SpaceManager, SpaceTab } from "./space.js";
 import type { StatsManager, StatsTab } from "./stats.js";
 import type { QueueTab, TimeManager, TimeTab } from "./time.js";
@@ -514,7 +521,10 @@ export type GamePage = {
   getInverseUnlimitedDR: (value: number, stripe: number) => number;
   getTab: (tabName: TabId) => Tab;
   calculateAllEffects: () => void;
-  getUnlockByName: (unlockId: unknown, type: unknown) => unknown;
+  getUnlockByName: <TUnlock extends Unlock>(
+    unlockId: unknown,
+    type: TUnlock,
+  ) => UnlockTypeMap[TUnlock];
   unlock: (list: Partial<Unlocks>) => void;
   upgrade: (list: Partial<Unlocks>) => void;
   toggleFilters: () => void;

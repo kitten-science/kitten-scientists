@@ -346,24 +346,36 @@ export class BonfireManager implements Automation {
     let amountCalculated = amount;
     const amountTemp = amountCalculated;
     let label: string;
-    const meta = game.bld.get(name);
-    const metaExt = game.bld.getBuildingExt(name).getMeta();
+    const itemMetaRaw = game.getUnlockByName(name, "buildings");
+    const meta = new classes.BuildingMeta(itemMetaRaw).getMeta();
     if ("stages" in meta) {
       const controller = new classes.ui.btn.StagingBldBtnController(
         this._host.game,
       ) as StagingBldBtnController<UnsafeBuildingBtnModernModel<UnsafeStagingBldButtonOptions>>;
-      const model = controller.fetchModel(metaExt);
+      const model = controller.fetchModel({
+        name: mustExist(meta.label),
+        description: mustExist(meta.description),
+        building: name,
+        twoRow: false,
+        controller,
+      });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-      label = metaExt.label ?? "";
+      label = model.name;
     } else {
       const controller = new classes.ui.btn.BuildingBtnModernController(
         this._host.game,
       ) as BuildingBtnModernController<
         UnsafeBuildingBtnModernModel<UnsafeUnstagedBuildingButtonOptions>
       >;
-      const model = controller.fetchModel(meta);
+      const model = controller.fetchModel({
+        name: mustExist(meta.label),
+        description: mustExist(meta.description),
+        building: name,
+        twoRow: false,
+        controller,
+      });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-      label = meta.label ?? "";
+      label = itemMetaRaw.label ?? "";
     }
 
     if (amountCalculated !== amountTemp) {

@@ -565,7 +565,7 @@ export class BulkPurchaseHelper {
     if ((model.enabled && controller.hasResources(model)) || this._host.game.devMode) {
       while (controller.hasResources(model) && amountCalculated > 0) {
         model.prices = controller.getPrices(model);
-        controller.payPrice({ prices: model.prices });
+        controller.payPrice(model);
         controller.incrementValue(model);
         counter++;
         amountCalculated--;
