@@ -429,6 +429,10 @@ export class ReligionManager implements Automation {
 
     if (amountCalculated !== amountTemp) {
       cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
+      // Bail out to not flood the log with garbage.
+      if (amountCalculated === 0) {
+        return;
+      }
     }
 
     if (variant === UnicornItemVariant.OrderOfTheSun) {
