@@ -19,9 +19,9 @@ export abstract class UpgradeManager {
   ): boolean {
     let success = false;
     if (variant === "policy") {
-      const meta = game.science.getPolicy(upgrade.name as Policy);
+      const itemMetaRaw = game.getUnlockByName(upgrade.name, "policies");
       const controller = new classes.ui.PolicyBtnController(this._host.game) as PolicyBtnController;
-      const model = controller.fetchModel(meta);
+      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     } else if (variant === "science") {
       const itemMetaRaw = game.getUnlockByName(upgrade.name, "tech");
@@ -82,17 +82,5 @@ export abstract class UpgradeManager {
     } finally {
       game.ui.confirm = originalConfirm;
     }
-  }
-
-  private _getUpgradeButtonScience(upgrade: Technology) {
-    return mustExist((this.manager.tab as Library).buttons?.find(button => button.id === upgrade));
-  }
-  private _getUpgradeButtonPolicy(upgrade: Policy) {
-    return mustExist(
-      (this.manager.tab as Library).policyPanel?.children?.find(button => button.id === upgrade),
-    );
-  }
-  private _getUpgradeButtonWorkshop(upgrade: Upgrade) {
-    return mustExist((this.manager.tab as Workshop).buttons?.find(button => button.id === upgrade));
   }
 }
