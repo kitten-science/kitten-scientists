@@ -26,7 +26,7 @@ export class TimeSettingsItem extends SettingTriggerMax {
   }
 
   constructor(building: TimeItem, variant: TimeItemVariant, enabled = false) {
-    super(enabled);
+    super(enabled, -1, 0);
     this.#building = building;
     this.#variant = variant;
   }

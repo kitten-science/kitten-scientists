@@ -118,21 +118,21 @@ export class TimeManager {
     let label: string;
     const amountTemp = amountCalculated;
     if (variant === TimeItemVariant.Chronoforge) {
-      const meta = game.time.getCFU(name as ChronoForgeUpgrade);
+      const itemMetaRaw = game.getUnlockByName(name, "chronoforge");
       const controller = new classes.ui.time.ChronoforgeBtnController(
         this._host.game,
       ) as ChronoforgeBtnController;
-      const model = controller.fetchModel(meta);
+      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-      label = meta.label;
+      label = itemMetaRaw.label;
     } else {
-      const meta = game.time.getVSU(name as VoidSpaceUpgrade);
+      const itemMetaRaw = game.getUnlockByName(name, "voidSpace");
       const controller = new classes.ui.time.VoidSpaceBtnController(
         this._host.game,
       ) as VoidSpaceBtnController;
-      const model = controller.fetchModel(meta);
+      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-      label = meta.label;
+      label = itemMetaRaw.label;
     }
 
     if (amountCalculated !== amountTemp) {
