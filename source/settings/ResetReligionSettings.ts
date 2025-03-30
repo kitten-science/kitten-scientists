@@ -6,7 +6,7 @@ import {
   TranscendenceUpgrades,
   type UnicornItem,
   UnicornItemVariant,
-  ZiggurathUpgrades,
+  ZigguratUpgrades,
 } from "../types/index.js";
 import { Setting, SettingThreshold } from "./Settings.js";
 
@@ -54,7 +54,7 @@ export class ResetReligionSettings extends Setting {
     for (const item of TranscendenceUpgrades) {
       items[item] = new ResetReligionBuildingSetting(item, UnicornItemVariant.Cryptotheology);
     }
-    for (const item of ZiggurathUpgrades) {
+    for (const item of ZigguratUpgrades) {
       items[item] = new ResetReligionBuildingSetting(item, UnicornItemVariant.Ziggurat);
     }
     items.unicornPasture = new ResetReligionBuildingSetting(

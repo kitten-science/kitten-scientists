@@ -40,7 +40,9 @@ import type {
   UnsafeTranscendenceBtnModel,
   UnsafeTranscendenceButtonOptions,
   UnsafeTranscendenceUpgrade,
-  UnsafeZiggurathUpgrade,
+  UnsafeZigguratBtnModel,
+  UnsafeZigguratButtonOptions,
+  UnsafeZigguratUpgrade,
 } from "../types/religion.js";
 import type {
   PlanetBuildingBtnController,
@@ -131,7 +133,7 @@ export class BulkPurchaseHelper {
           | UnsafeSpaceBuilding
           | UnsafeTranscendenceUpgrade
           | UnsafeVoidSpaceUpgrade
-          | UnsafeZiggurathUpgrade
+          | UnsafeZigguratUpgrade
         >
       >
     >,
@@ -376,7 +378,7 @@ export class BulkPurchaseHelper {
           | UnsafeSpaceBuilding
           | UnsafeTranscendenceUpgrade
           | UnsafeVoidSpaceUpgrade
-          | UnsafeZiggurathUpgrade
+          | UnsafeZigguratUpgrade
         >
       >
     >,
@@ -539,7 +541,8 @@ export class BulkPurchaseHelper {
       | UnsafeBuildingStackableBtnModel<UnsafeSpaceProgramButtonOptions>
       | UnsafeBuildingStackableBtnModel<UnsafeVoidSpaceUpgradeButtonOptions>
       | UnsafeReligionBtnModel<UnsafeReligionButtonOptions>
-      | UnsafeTranscendenceBtnModel<UnsafeTranscendenceButtonOptions>,
+      | UnsafeTranscendenceBtnModel<UnsafeTranscendenceButtonOptions>
+      | UnsafeZigguratBtnModel<UnsafeZigguratButtonOptions>,
     TController extends BuildingStackableBtnController<TModel>,
   >(model: TModel, controller: TController, amount: number): number {
     if ("name" in model === false) {
@@ -614,7 +617,7 @@ export class BulkPurchaseHelper {
       | UnsafeSpaceBuilding
       | UnsafeTranscendenceUpgrade
       | UnsafeVoidSpaceUpgrade
-      | UnsafeZiggurathUpgrade,
+      | UnsafeZigguratUpgrade,
     source?: TabId,
   ): number {
     // If the building has stages, use the ratio for the current stage.

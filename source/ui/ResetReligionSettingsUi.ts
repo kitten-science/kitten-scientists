@@ -5,7 +5,7 @@ import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import type { ResetReligionSettings } from "../settings/ResetReligionSettings.js";
 import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
-import { UnicornItems, type ZiggurathUpgrade } from "../types/index.js";
+import { UnicornItems, type ZigguratUpgrade } from "../types/index.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";
@@ -28,7 +28,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
       icon: Icons.Religion,
     });
 
-    const unicornsArray: Array<ZiggurathUpgrade | "unicornPasture"> = [...UnicornItems];
+    const unicornsArray: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems];
 
     this.addChild(
       new SettingsList(host, {

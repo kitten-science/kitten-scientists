@@ -15,7 +15,7 @@ import type {
   Price,
   Resource,
   UnsafeBuyItemResult,
-  ZiggurathUpgrade,
+  ZigguratUpgrade,
 } from "./index.js";
 import type { UnsafeChronoForgeUpgrade } from "./time.js";
 import type { UnsafeUpgrade } from "./workshop.js";
@@ -128,7 +128,7 @@ export type UnsafeChallenge = {
   upgrades?: {
     buildings?: Array<Building>;
     chronoforge?: Array<UnsafeChronoForgeUpgrade>;
-    zigguratUpgrades?: Array<ZiggurathUpgrade>;
+    zigguratUpgrades?: Array<ZigguratUpgrade>;
     upgrades?: Array<UnsafeUpgrade>;
   };
   effects?: Record<string, number>;

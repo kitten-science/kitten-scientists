@@ -4,7 +4,7 @@ import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import { ReligionSettings } from "../settings/ReligionSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
-import { ReligionOptions, UnicornItems, type ZiggurathUpgrade } from "../types/index.js";
+import { ReligionOptions, UnicornItems, type ZigguratUpgrade } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import stylesTimeSkipHeatSettings from "./TimeSkipHeatSettingsUi.module.css";
 import stylesButton from "./components/Button.module.css";
@@ -19,7 +19,7 @@ import { SettingsPanel } from "./components/SettingsPanel.js";
 
 export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
   private readonly _unicornBuildings: Map<
-    ZiggurathUpgrade | "unicornPasture",
+    ZigguratUpgrade | "unicornPasture",
     SettingMaxTriggerListItem
   >;
   private readonly _bestUnicornBuilding: SettingListItem;
@@ -84,7 +84,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
       }),
     );
 
-    const unicornsArray: Array<ZiggurathUpgrade | "unicornPasture"> = [...UnicornItems];
+    const unicornsArray: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems];
 
     this._unicornBuildings = new Map([
       [
@@ -114,7 +114,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                 zigguratUpgrade.label,
                 label,
               ),
-            ] as [ZiggurathUpgrade | "unicornPasture", SettingMaxTriggerListItem],
+            ] as [ZigguratUpgrade | "unicornPasture", SettingMaxTriggerListItem],
         ),
     ]);
 

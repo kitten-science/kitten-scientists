@@ -31,7 +31,7 @@ import type {
   Unlocks,
   UnsafeBuyItemResult,
   Upgrade,
-  ZiggurathUpgrade,
+  ZigguratUpgrade,
 } from "./index.js";
 
 export type ReligionManager = TabManager & {
@@ -71,7 +71,7 @@ export type ReligionManager = TabManager & {
   gesSiphoningAlicornConsumptionPerDay: () => void;
   necrocornFastForward: (days: number, times: number) => void;
   triggerOrderOfTheVoid: (numberOfTicks: number) => void;
-  zigguratUpgrades: Array<UnsafeZiggurathUpgrade>;
+  zigguratUpgrades: Array<UnsafeZigguratUpgrade>;
   religionUpgrades: Array<UnsafeReligionUpgrade>;
   transcendenceUpgrades: Array<UnsafeTranscendenceUpgrade>;
   necrocornDeficitPunishment: () => void;
@@ -79,7 +79,7 @@ export type ReligionManager = TabManager & {
     kittensKarmaPerMinneliaRatio: number;
     pactNecrocornConsumption: number;
   };
-  getZU: (name: ZiggurathUpgrade) => Required<UnsafeZiggurathUpgrade>;
+  getZU: (name: ZigguratUpgrade) => Required<UnsafeZigguratUpgrade>;
   getRU: (name: ReligionUpgrade) => Required<UnsafeReligionUpgrade>;
   getTU: (name: TranscendenceUpgrade) => Required<UnsafeTranscendenceUpgrade>;
   getPact: (name: Pact) => UnsafePact;
@@ -98,9 +98,11 @@ export type ReligionManager = TabManager & {
   undo: (data: UnsafeReligionUndo) => void;
 };
 
-export type ZigguratBtnController = BuildingStackableBtnController<UnsafeZigguratBtnModel> & {
+export type ZigguratBtnController = BuildingStackableBtnController<
+  UnsafeZigguratBtnModel<UnsafeZigguratButtonOptions>
+> & {
   defaults: () => UnsafeZigguratBtnModelDefaults;
-  getMetadata: (model: UnsafeZigguratBtnModel) => UnsafeZiggurathUpgrade;
+  getMetadata: (model: UnsafeZigguratBtnModel) => UnsafeZigguratUpgrade;
   getName: (model: UnsafeZigguratBtnModel) => string;
   getPrices: (model: UnsafeZigguratBtnModel) => Array<Price>;
 };
@@ -256,9 +258,9 @@ export type ReligionTab = Tab<CryptotheologyPanel | PactsPanel> & {
   sacrificeAlicornsBtn: MultiLinkBtn<UnsafeSacrificeAlicornsButtonOptions> | null;
 
   /**
-   * Ziggurath upgrade buttons.
+   * Ziggurat upgrade buttons.
    */
-  zgUpgradeButtons: Array<BuildingStackableBtn<UnsafeZiggurathButtonOptions>>;
+  zgUpgradeButtons: Array<BuildingStackableBtn<UnsafeZigguratButtonOptions>>;
   /**
    * Religion upgrade (Order of the sun) buttons.
    */
@@ -317,8 +319,8 @@ export type UnsafeReligionUpgrade = {
   toggleable?: boolean;
 };
 
-export type UnsafeZiggurathUpgrade = {
-  name: ZiggurathUpgrade;
+export type UnsafeZigguratUpgrade = {
+  name: ZigguratUpgrade;
   label: string;
   /**
    * An internationalized description for this religion upgrade.
@@ -327,7 +329,7 @@ export type UnsafeZiggurathUpgrade = {
   prices: Array<Price>;
   priceRatio: number;
   effects?: Partial<Record<BuildingEffect, number>>;
-  calculateEffects: (self: UnsafeZiggurathUpgrade, game: GamePage) => void;
+  calculateEffects: (self: UnsafeZigguratUpgrade, game: GamePage) => void;
   unlocked: boolean;
   defaultUnlocked: boolean;
   unlocks?: Partial<Unlocks>;
@@ -433,8 +435,8 @@ export type UnsafePactsButtonOptions = {
   controller: PactsBtnController<UnsafePactsBtnModel>;
 };
 
-export type UnsafeZiggurathButtonOptions = {
-  id: ZiggurathUpgrade;
+export type UnsafeZigguratButtonOptions = {
+  id: ZigguratUpgrade;
   name: string;
   description: string;
   prices: Array<Price>;
@@ -484,7 +486,7 @@ export type UnsafeZigguratBtnModelDefaults = {
 } & UnsafeBuildingStackableBtnModelDefaults;
 
 export type UnsafeZigguratBtnModel<
-  TModelOptions extends Record<string, unknown> | undefined = Record<string, unknown>,
+  TModelOptions extends UnsafeZigguratButtonOptions | unknown = unknown,
 > = UnsafeZigguratBtnModelDefaults & UnsafeBuildingStackableBtnModel<TModelOptions>;
 
 export type UnsafeReligionBtnModelDefaults = {

@@ -48,7 +48,7 @@ import type {
   UnsafeResetFaithButtonOptions,
   UnsafeTranscendButtonOptions,
   UnsafeTranscendenceButtonOptions,
-  UnsafeZiggurathButtonOptions,
+  UnsafeZigguratButtonOptions,
 } from "./religion.js";
 import type { UnsafePolicyButtonOptions, UnsafeTechButtonOptions } from "./science.js";
 import type {
@@ -390,7 +390,7 @@ export type AllBuildingStackableBtnOptions =
   | UnsafeUnstagedBuildingButtonOptions
   | UnsafeTranscendenceButtonOptions
   | UnsafePactsButtonOptions
-  | UnsafeZiggurathButtonOptions
+  | UnsafeZigguratButtonOptions
   | UnsafeReligionButtonOptions
   | UnsafePlanetBuildingButtonOptions
   | UnsafeSpaceProgramButtonOptions

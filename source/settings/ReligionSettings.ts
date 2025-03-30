@@ -6,8 +6,8 @@ import {
   TranscendenceUpgrades,
   type UnicornItem,
   UnicornItemVariant,
-  type ZiggurathUpgrade,
-  ZiggurathUpgrades,
+  type ZigguratUpgrade,
+  ZigguratUpgrades,
 } from "../types/index.js";
 import { Setting, SettingThreshold, SettingTrigger, SettingTriggerMax } from "./Settings.js";
 
@@ -39,7 +39,7 @@ export class ReligionSettings extends SettingTrigger {
    */
   bestUnicornBuilding: Setting;
 
-  bestUnicornBuildingCurrent: ZiggurathUpgrade | "unicornPasture" | null;
+  bestUnicornBuildingCurrent: ZigguratUpgrade | "unicornPasture" | null;
 
   /**
    * Sacrifice alicorns for time crystals.
@@ -109,7 +109,7 @@ export class ReligionSettings extends SettingTrigger {
     for (const item of TranscendenceUpgrades) {
       items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Cryptotheology);
     }
-    for (const item of ZiggurathUpgrades) {
+    for (const item of ZigguratUpgrades) {
       items[item] = new ReligionSettingsItem(item, UnicornItemVariant.Ziggurat);
     }
     items.unicornPasture = new ReligionSettingsItem(

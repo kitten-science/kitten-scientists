@@ -18,7 +18,7 @@ import {
   type UnicornItem,
   UnicornItemVariant,
   UnicornItems,
-  type ZiggurathUpgrade,
+  type ZigguratUpgrade,
 } from "./types/index.js";
 import type {
   CryptotheologyPanel,
@@ -32,7 +32,8 @@ import type {
   UnsafeTranscendenceButtonOptions,
   UnsafeTranscendenceUpgrade,
   UnsafeTransformBtnModel,
-  UnsafeZiggurathUpgrade,
+  UnsafeZigguratUpgrade,
+  ZigguratBtnController,
 } from "./types/religion.js";
 
 export class ReligionManager implements Automation {
@@ -224,7 +225,7 @@ export class ReligionManager implements Automation {
     const metaData: Partial<
       Record<
         FaithItem,
-        Required<UnsafeReligionUpgrade | UnsafeTranscendenceUpgrade | UnsafeZiggurathUpgrade>
+        Required<UnsafeReligionUpgrade | UnsafeTranscendenceUpgrade | UnsafeZigguratUpgrade>
       >
     > = this.getBuildMetaData(builds);
     const sectionTrigger = this.settings.trigger;
@@ -252,13 +253,13 @@ export class ReligionManager implements Automation {
    * @see https://github.com/Bioniclegenius/NummonCalc/blob/112f716e2fde9956dfe520021b0400cba7b7113e/NummonCalc.js#L490
    * @returns The best unicorn building.
    */
-  getBestUnicornBuilding(): ZiggurathUpgrade | "unicornPasture" | null {
+  getBestUnicornBuilding(): ZigguratUpgrade | "unicornPasture" | null {
     const pastureButton = this._bonfireManager.getBuildButton("unicornPasture");
     if (pastureButton === null) {
       return null;
     }
 
-    const validBuildings: Array<ZiggurathUpgrade | "unicornPasture"> = [...UnicornItems].filter(
+    const validBuildings: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems].filter(
       item => item !== "unicornPasture",
     );
 
@@ -294,8 +295,8 @@ export class ReligionManager implements Automation {
     const unicornsPerSecond =
       unicornsPerSecondBase * globalRatio * religionRatio * paragonRatio * faithBonus * cycleBonus;
 
-    // Based on how many zigguraths we have.
-    const ziggurathRatio = Math.max(this._host.game.bld.getBuildingExt("ziggurat").meta.on, 1);
+    // Based on how many ziggurats we have.
+    const zigguratRatio = Math.max(this._host.game.bld.getBuildingExt("ziggurat").meta.on, 1);
     // How many unicorns do we receive in a unicorn rift?
     const baseUnicornsPerRift =
       500 * (1 + this._host.game.getEffect("unicornsRatioReligion") * 0.1);
@@ -314,7 +315,7 @@ export class ReligionManager implements Automation {
     // by its effect on production of unicorns.
 
     let bestAmortization = Number.POSITIVE_INFINITY;
-    let bestBuilding: ZiggurathUpgrade | "unicornPasture" | null = null;
+    let bestBuilding: ZigguratUpgrade | "unicornPasture" | null = null;
     const unicornsPerTickBase = mustExist(
       this._host.game.bld.getBuildingExt("unicornPasture").meta.effects?.unicornsPerTickBase,
     );
@@ -336,7 +337,7 @@ export class ReligionManager implements Automation {
       bestBuilding = "unicornPasture";
     }
 
-    // For all ziggurath upgrade buttons...
+    // For all ziggurat upgrade buttons...
     for (const button of this.manager.tab.zgUpgradeButtons) {
       // ...that are in the "valid" buildings (are unicorn-related) and visible (unlocked)...
       if (validBuildings.includes(button.id) && button.model.visible) {
@@ -349,7 +350,7 @@ export class ReligionManager implements Automation {
           }
           // Tears result from unicorn sacrifices, so factor that into the price proportionally.
           if (price.name === "tears") {
-            unicornPrice += (price.val * 2500) / ziggurathRatio;
+            unicornPrice += (price.val * 2500) / zigguratRatio;
           }
         }
 
@@ -397,15 +398,15 @@ export class ReligionManager implements Automation {
     const amountTemp = amountCalculated;
     let label: string;
     if (variant === UnicornItemVariant.Cryptotheology) {
-      const meta = game.religion.getTU(name as TranscendenceUpgrade);
+      const itemMetaRaw = game.getUnlockByName(name, "transcendenceUpgrades");
       const controller = new classes.ui.TranscendenceBtnController(
         this._host.game,
       ) as TranscendenceBtnController<
         UnsafeTranscendenceBtnModel<UnsafeTranscendenceButtonOptions>
       >;
-      const model = controller.fetchModel(meta);
+      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-      label = meta.label;
+      label = itemMetaRaw.label;
     } else if (variant === UnicornItemVariant.OrderOfTheSun) {
       const itemMetaRaw = game.getUnlockByName(name, "religion");
       const controller = new com.nuclearunicorn.game.ui.ReligionBtnController(
@@ -415,13 +416,13 @@ export class ReligionManager implements Automation {
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
       label = itemMetaRaw.label;
     } else if (variant === UnicornItemVariant.Ziggurat) {
-      const meta = game.religion.getZU(name as ZiggurathUpgrade);
-      const controller = new com.nuclearunicorn.game.ui.ReligionBtnController(
+      const itemMetaRaw = game.getUnlockByName(name, "zigguratUpgrades");
+      const controller = new com.nuclearunicorn.game.ui.ZigguratBtnController(
         this._host.game,
-      ) as ReligionBtnController;
-      const model = controller.fetchModel(meta);
+      ) as ZigguratBtnController;
+      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-      label = meta.label;
+      label = itemMetaRaw.label;
     } else {
       throw new InvalidOperationError("unsupported");
     }
@@ -459,7 +460,7 @@ export class ReligionManager implements Automation {
     const metaData: Partial<
       Record<
         FaithItem,
-        Required<UnsafeReligionUpgrade | UnsafeTranscendenceUpgrade | UnsafeZiggurathUpgrade>
+        Required<UnsafeReligionUpgrade | UnsafeTranscendenceUpgrade | UnsafeZigguratUpgrade>
       >
     > = {};
     for (const build of Object.values(builds)) {
@@ -497,7 +498,7 @@ export class ReligionManager implements Automation {
   getBuild(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant) {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
-        return this._host.game.religion.getZU(name as ZiggurathUpgrade) ?? null;
+        return this._host.game.religion.getZU(name as ZigguratUpgrade) ?? null;
       case UnicornItemVariant.OrderOfTheSun:
         return this._host.game.religion.getRU(name as ReligionUpgrade) ?? null;
       case UnicornItemVariant.Cryptotheology:

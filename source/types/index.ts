@@ -115,7 +115,7 @@ import type {
   UnsafePact,
   UnsafeReligionUpgrade,
   UnsafeTranscendenceUpgrade,
-  UnsafeZiggurathUpgrade,
+  UnsafeZigguratUpgrade,
   ZigguratBtnController,
 } from "./religion.js";
 import type { ResourceManager } from "./resources.js";
@@ -632,7 +632,7 @@ export const TranscendenceUpgrades = [
 ] as const;
 export type TranscendenceUpgrade = (typeof TranscendenceUpgrades)[number];
 
-export const ZiggurathUpgrades = [
+export const ZigguratUpgrades = [
   "blackPyramid",
   "ivoryCitadel",
   "ivoryTower",
@@ -644,7 +644,7 @@ export const ZiggurathUpgrades = [
   "unicornTomb",
   "unicornUtopia",
 ] as const;
-export type ZiggurathUpgrade = (typeof ZiggurathUpgrades)[number];
+export type ZigguratUpgrade = (typeof ZigguratUpgrades)[number];
 
 export const Pacts = [
   "fractured",
@@ -663,7 +663,7 @@ export type AllBuildings =
   | SpaceBuilding
   | TranscendenceUpgrade
   | VoidSpaceUpgrade
-  | ZiggurathUpgrade;
+  | ZigguratUpgrade;
 
 export const Races = [
   "dragons",
@@ -1069,7 +1069,7 @@ export const UnicornItems = [
 ] as const;
 export type UnicornItem = (typeof UnicornItems)[number];
 
-export type ReligionItem = ReligionUpgrade | TranscendenceUpgrade | ZiggurathUpgrade;
+export type ReligionItem = ReligionUpgrade | TranscendenceUpgrade | ZigguratUpgrade;
 export type ReligionAdditionItem = "adore" | "autoPraise" | "bestUnicornBuilding" | "transcend";
 
 export const ReligionOptions = [
@@ -1219,7 +1219,7 @@ export type UnlockTypeMap = {
   upgrades: UnsafeUpgrade;
   voidSpace: UnsafeVoidSpaceUpgrade;
   zebraUpgrades: UnsafeUpgrade;
-  zigguratUpgrades: UnsafeZiggurathUpgrade;
+  zigguratUpgrades: UnsafeZigguratUpgrade;
 };
 export type Unlock = keyof UnlockTypeMap;
 
