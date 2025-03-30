@@ -139,7 +139,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
               host.engine.imessage("status.sub.disable", [host.engine.i18n("option.reactors")]);
             },
           }),
-          new BuildingUpgradeSettingsUi(host, settings.upgradeBuildings),
+          new BuildingUpgradeSettingsUi(host, settings.upgradeBuildings, locale, settings),
         ],
         hasDisableAll: false,
         hasEnableAll: false,

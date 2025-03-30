@@ -1,5 +1,8 @@
+import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
+import type { BonfireSettings } from "../settings/BonfireSettings.js";
 import type { BuildingUpgradeSettings } from "../settings/BuildingUpgradeSettings.js";
+import type { SettingOptions } from "../settings/Settings.js";
 import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
@@ -8,7 +11,13 @@ import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
 export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSettings> {
-  constructor(host: KittenScientists, settings: BuildingUpgradeSettings, options?: PanelOptions) {
+  constructor(
+    host: KittenScientists,
+    settings: BuildingUpgradeSettings,
+    locale: SettingOptions<SupportedLocale>,
+    sectionSetting: BonfireSettings,
+    options?: PanelOptions,
+  ) {
     const label = host.engine.i18n("ui.upgrade.buildings");
     super(
       host,
@@ -17,9 +26,17 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+        },
+        onRefresh: _item => {
+          this.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.buildings).some(building => building.enabled);
         },
       }),
       options,
@@ -31,9 +48,11 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
       const button = new SettingListItem(host, setting, label, {
         onCheck: () => {
           host.engine.imessage("status.sub.enable", [label]);
+          this.refreshUi();
         },
         onUnCheck: () => {
           host.engine.imessage("status.sub.disable", [label]);
+          this.refreshUi();
         },
       });
 
