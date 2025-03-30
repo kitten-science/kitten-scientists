@@ -147,6 +147,10 @@ export class SpaceManager implements Automation {
       console.warn(
         cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
       );
+      // Bail out to not flood the log with garbage.
+      if (amountCalculated === 0) {
+        return 0;
+      }
     }
     this._host.engine.storeForSummary(label, amountCalculated, "build");
 
