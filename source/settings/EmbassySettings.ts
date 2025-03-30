@@ -29,6 +29,10 @@ export class EmbassySettings extends SettingTrigger {
   private initRaces(): EmbassyRaceSettings {
     const items = {} as EmbassyRaceSettings;
     for (const item of Races) {
+      // Leviathans have no embassies.
+      if (item === "leviathans") {
+        continue;
+      }
       items[item] = new EmbassySetting(item);
     }
     return items;

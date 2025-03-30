@@ -74,14 +74,14 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
 
     const listRaces = new SettingsList(host, {
       children: host.game.diplomacy.races
-        .filter(item => !isNil(this.setting.races[item.name]))
-        .map(races =>
+        .filter(item => item.name !== "leviathans" && !isNil(this.setting.races[item.name]))
+        .map(race =>
           this._makeEmbassySetting(
             host,
-            this.setting.races[races.name],
+            this.setting.races[race.name],
             locale.selected,
             settings,
-            races.title,
+            race.title,
           ),
         ),
     });
