@@ -117,7 +117,7 @@ export class BonfireManager implements Automation {
             // We need to perform the process like this to avoid UI confirmations
             // for selling items.
             // Sell all pastures (to regain the resources).
-            button.controller.sellInternal(button.model, 0);
+            button.controller.sellInternal(button.model, 0, false);
             // Manually update the metadata, as we bypassed the full selling logic.
             pastureMeta.on = 0;
             pastureMeta.val = 0;
@@ -148,7 +148,7 @@ export class BonfireManager implements Automation {
         if (this._bulkManager.singleBuildPossible(aqueductMeta, prices, 1)) {
           const button = this.getBuildButton("aqueduct", 0);
           if (!isNil(button?.model)) {
-            button.controller.sellInternal(button.model, 0);
+            button.controller.sellInternal(button.model, 0, false);
             aqueductMeta.on = 0;
             aqueductMeta.val = 0;
             aqueductMeta.stage = 1;
@@ -208,7 +208,7 @@ export class BonfireManager implements Automation {
             return;
           }
 
-          button.controller.sellInternal(button.model, 0);
+          button.controller.sellInternal(button.model, 0, false);
           libraryMeta.on = 0;
           libraryMeta.val = 0;
           libraryMeta.stage = 1;
@@ -233,7 +233,7 @@ export class BonfireManager implements Automation {
       if (this._bulkManager.singleBuildPossible(warehouseMeta, prices, 1)) {
         const button = this.getBuildButton("warehouse", 0);
         if (!isNil(button?.model)) {
-          button.controller.sellInternal(button.model, 0);
+          button.controller.sellInternal(button.model, 0, false);
           warehouseMeta.on = 0;
           warehouseMeta.val = 0;
           warehouseMeta.stage = 1;
@@ -264,7 +264,7 @@ export class BonfireManager implements Automation {
       if (this._bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
         const button = this.getBuildButton("amphitheatre", 0);
         if (!isNil(button?.model)) {
-          button.controller.sellInternal(button.model, 0);
+          button.controller.sellInternal(button.model, 0, false);
           amphitheatreMeta.on = 0;
           amphitheatreMeta.val = 0;
           amphitheatreMeta.stage = 1;

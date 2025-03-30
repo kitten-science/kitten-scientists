@@ -340,7 +340,7 @@ export type BuildingBtnController<
   on: (model: TModel, amt?: number) => void;
   onAll: (model: TModel) => void;
   sell: (event: Event, model: TModel) => number;
-  sellInternal: (model: TModel, end: number, requireSellLink?: boolean) => void;
+  sellInternal: (model: TModel, end: number, requireSellLink: boolean) => void;
   decrementValue: (model: TModel, amt?: number) => void;
   updateVisible: (model: { visible?: boolean; metadata: { unlocked: boolean } }) => void;
   handleTogglableOnOffClick: (model: TModel) => void;
