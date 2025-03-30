@@ -1,7 +1,7 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { cwarn } from "../tools/Log.js";
+import { cl, cwarn } from "../tools/Log.js";
 import type { GamePage } from "../types/game.js";
 import { type Mission, Missions } from "../types/index.js";
 import { Setting } from "./Settings.js";
@@ -45,10 +45,10 @@ export class MissionSettings extends Setting {
     const redundantInSettings = difference(inSettings, inGame);
 
     for (const mission of missingInSettings) {
-      cwarn(`The space mission '${mission}' is not tracked in Kitten Scientists!`);
+      console.warn(cl(`The space mission '${mission}' is not tracked in Kitten Scientists!`));
     }
     for (const mission of redundantInSettings) {
-      cwarn(`The space mission '${mission}' is not a space mission in Kittens Game!`);
+      console.warn(cl(`The space mission '${mission}' is not a space mission in Kittens Game!`));
     }
   }
 

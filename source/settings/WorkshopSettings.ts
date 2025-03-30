@@ -1,7 +1,7 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { cwarn } from "../tools/Log.js";
+import { cl, cwarn } from "../tools/Log.js";
 import type { GamePage } from "../types/game.js";
 import { type ResourceCraftable, ResourcesCraftable } from "../types/index.js";
 import { Setting, SettingLimitedMaxTrigger, SettingTrigger } from "./Settings.js";
@@ -56,10 +56,10 @@ export class WorkshopSettings extends SettingTrigger {
     const redundantInSettings = difference(inSettings, inGame);
 
     for (const craft of missingInSettings) {
-      cwarn(`The workshop craft '${craft}' is not tracked in Kitten Scientists!`);
+      console.warn(cl(`The workshop craft '${craft}' is not tracked in Kitten Scientists!`));
     }
     for (const craft of redundantInSettings) {
-      cwarn(`The workshop craft '${craft}' is not an upgrade in Kittens Game!`);
+      console.warn(cl(`The workshop craft '${craft}' is not an upgrade in Kittens Game!`));
     }
 
     UpgradeSettings.validateGame(game, settings.unlockUpgrades);

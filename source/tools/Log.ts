@@ -1,3 +1,5 @@
+export const cl = (...args: Array<unknown>) => ["👩‍🔬", ...args].join(" ");
+
 /**
  * Print a debugging message to the console.
  *

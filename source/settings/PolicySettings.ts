@@ -1,7 +1,7 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { cwarn } from "../tools/Log.js";
+import { cl, cwarn } from "../tools/Log.js";
 import type { GamePage } from "../types/game.js";
 import { Policies, type Policy } from "../types/index.js";
 import { Setting } from "./Settings.js";
@@ -45,10 +45,10 @@ export class PolicySettings extends Setting {
     const redundantInSettings = difference(inSettings, inGame);
 
     for (const policy of missingInSettings) {
-      cwarn(`The policy '${policy}' is not tracked in Kitten Scientists!`);
+      console.warn(cl(`The policy '${policy}' is not tracked in Kitten Scientists!`));
     }
     for (const policy of redundantInSettings) {
-      cwarn(`The policy '${policy}' is not a policy in Kittens Game!`);
+      console.warn(cl(`The policy '${policy}' is not a policy in Kittens Game!`));
     }
   }
 

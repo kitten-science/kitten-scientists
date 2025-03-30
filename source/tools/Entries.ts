@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { cinfo, cwarn } from "./Log.js";
+import { cinfo, cl, cwarn } from "./Log.js";
 
 export const deepMergeLeft = (
   a: Record<string, unknown>,
@@ -76,21 +76,23 @@ export function consumeEntriesPedantic<TKeys extends string, TValues>(
   consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown,
 ): Partial<Record<TKeys, TValues>> {
   if (isNil(source)) {
-    cwarn("No source data was provided.");
+    console.warn(cl("No source data was provided."));
     return subject;
   }
 
   for (const [key, value] of objectEntries(subject)) {
     if (!(key in source)) {
-      cinfo(`Entry '${key}' is missing in source. Using default value.`);
+      console.info(cl(`Entry '${key}' is missing in source. Using default value.`));
     }
     consumer(value, source[key]);
   }
 
   for (const [key] of objectEntries(source)) {
     if (!(key in subject)) {
-      cwarn(
-        `Entry '${key}' was found in source, but it is not expected by the subject schema. This entry will be ignored.`,
+      console.warn(
+        cl(
+          `Entry '${key}' was found in source, but it is not expected by the subject schema. This entry will be ignored.`,
+        ),
       );
     }
   }

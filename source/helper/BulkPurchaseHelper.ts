@@ -7,7 +7,7 @@ import type { BonfireItem } from "../settings/BonfireSettings.js";
 import type { AllItems } from "../settings/Settings.js";
 import { objectEntries } from "../tools/Entries.js";
 import { negativeOneToInfinity } from "../tools/Format.js";
-import { cdebug } from "../tools/Log.js";
+import { cdebug, cl } from "../tools/Log.js";
 import type {
   BuildingBtnModernController,
   UnsafeBuilding,
@@ -336,7 +336,7 @@ export class BulkPurchaseHelper {
       }
     }
 
-    cdebug(`Took '${iterations}' iterations to evaluate bulk build request.`);
+    console.debug(cl(`Took '${iterations}' iterations to evaluate bulk build request.`));
 
     for (const potentialBuild of potentialBuilds) {
       const performedBuild = mustExist(

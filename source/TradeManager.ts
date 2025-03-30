@@ -7,7 +7,7 @@ import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import { TradeSettings, type TradeSettingsItem } from "./settings/TradeSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
-import { cwarn } from "./tools/Log.js";
+import { cl, cwarn } from "./tools/Log.js";
 import type { Diplomacy, UnsafeRace, UnsafeTradeSellOffer } from "./types/diplomacy.js";
 import type { Race, Resource } from "./types/index.js";
 import type { UnsafeResource } from "./types/resources.js";
@@ -364,7 +364,7 @@ export class TradeManager implements Automation {
       }
       cultureVal = this._workshopManager.getValueAvailable("culture");
       if (cultureVal < emBulk.priceSum) {
-        cwarn("Something has gone horribly wrong.", emBulk.priceSum, cultureVal);
+        console.warn(cl("Something has gone horribly wrong.", emBulk.priceSum, cultureVal));
       }
       // We don't want to invoke the embassy build action multiple times, as
       // that would cause lots of log messages.
@@ -562,8 +562,10 @@ export class TradeManager implements Automation {
     const button = this.getTradeButton(race.name);
 
     if (!button?.model?.enabled || !this.settings.races[name].enabled) {
-      cwarn(
-        "KS trade checks are not functioning properly, please create an issue on the github page.",
+      console.warn(
+        cl(
+          "KS trade checks are not functioning properly, please create an issue on the github page.",
+        ),
       );
     }
 

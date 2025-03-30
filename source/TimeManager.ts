@@ -5,7 +5,7 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type TimeItem, TimeSettings, type TimeSettingsItem } from "./settings/TimeSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cl, cwarn } from "./tools/Log.js";
 import type { BuildingStackableBtn, ButtonModern } from "./types/core.js";
 import { type ChronoForgeUpgrade, TimeItemVariant, type VoidSpaceUpgrade } from "./types/index.js";
 import type {
@@ -136,7 +136,9 @@ export class TimeManager {
     }
 
     if (amountCalculated !== amountTemp) {
-      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
+      console.warn(
+        cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+      );
     }
     this._host.engine.storeForSummary(label, amountCalculated, "build");
 

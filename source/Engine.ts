@@ -32,7 +32,7 @@ import { TimeSettings } from "./settings/TimeSettings.js";
 import { TradeSettings } from "./settings/TradeSettings.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
-import { cdebug, cerror, cinfo, cwarn } from "./tools/Log.js";
+import { cdebug, cerror, cinfo, cl, cwarn } from "./tools/Log.js";
 import { type Cycle, Cycles, type Planet } from "./types/index.js";
 
 const i18nData = { "de-DE": deDE, "en-US": enUS, "he-IL": heIL, "zh-CN": zhCN };
@@ -168,13 +168,15 @@ export class Engine {
   setLanguage(language: GameLanguage, rebuildUI = true) {
     const previousLocale = this.settings.locale.selected;
     if (!this.isLanguageSupported(language)) {
-      cwarn(
-        `Requested language '${language}' is not available. Falling back to '${FallbackLocale}'.`,
+      console.warn(
+        cl(
+          `Requested language '${language}' is not available. Falling back to '${FallbackLocale}'.`,
+        ),
       );
       this.settings.locale.selected = FallbackLocale;
     } else {
       const locale = mustExist(this.localeForLanguage(language));
-      cinfo(`Selecting language '${locale}'.`);
+      console.info(cl(`Selecting language '${locale}'.`));
       this.settings.locale.selected = locale;
     }
 
@@ -186,12 +188,12 @@ export class Engine {
   setLocale(locale: SupportedLocale, rebuildUI = true) {
     const previousLocale = this.settings.locale.selected;
     if (!this.isLocaleSupported(locale)) {
-      cwarn(
-        `Requested language '${locale}' is not available. Falling back to '${FallbackLocale}'.`,
+      console.warn(
+        cl(`Requested language '${locale}' is not available. Falling back to '${FallbackLocale}'.`),
       );
       this.settings.locale.selected = FallbackLocale;
     } else {
-      cinfo(`Selecting language '${locale}'.`);
+      console.info(cl(`Selecting language '${locale}'.`));
       this.settings.locale.selected = locale;
     }
 
@@ -219,8 +221,10 @@ export class Engine {
     // state import of most versions anyway.
     const version = ksVersion();
     if (settings.v !== version) {
-      cwarn(
-        `Attempting to load engine state with version tag '${settings.v}' when engine is at version '${version}'!`,
+      console.warn(
+        cl(
+          `Attempting to load engine state with version tag '${settings.v}' when engine is at version '${version}'!`,
+        ),
       );
     }
 
@@ -231,7 +235,7 @@ export class Engine {
       try {
         loader();
       } catch (error) {
-        cerror(`Failed load of ${errorMessage} settings.`, error);
+        console.error(cl(`Failed load of ${errorMessage} settings.`, error));
       }
     };
 
@@ -356,7 +360,7 @@ export class Engine {
           );
         })
         .catch((error: unknown) => {
-          cwarn(unknownToError(error));
+          console.warn(cl(unknownToError(error)));
         });
     };
     this._timeoutMainLoop = window.setTimeout(loop, this._host.engine.settings.interval);
@@ -504,10 +508,10 @@ export class Engine {
     if (isNil(check)) {
       value = i18nData[FallbackLocale][key as keyof (typeof i18nData)[SupportedLocale]];
       if (!value) {
-        cwarn(`i18n key '${key}' not found in default language.`);
+        console.warn(cl(`i18n key '${key}' not found in default language.`));
         return `$${key}`;
       }
-      cwarn(`i18n key '${key}' not found in selected language.`);
+      console.warn(cl(`i18n key '${key}' not found in selected language.`));
     }
     for (let argIndex = 0; argIndex < args.length; ++argIndex) {
       value = value.replace(`{${argIndex}}`, `${args[argIndex]}`);
@@ -575,7 +579,7 @@ export class Engine {
     const msg = this._host.game.msg(message, cssClasses);
     $(msg.span).css("color", color);
 
-    cdebug(message);
+    console.debug(cl(message));
   }
 
   static evaluateSubSectionTrigger(sectionTrigger: number, subSectionTrigger: number): number {

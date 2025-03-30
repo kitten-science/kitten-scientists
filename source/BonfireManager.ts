@@ -9,7 +9,7 @@ import {
   type BonfireItem,
   BonfireSettings,
 } from "./settings/BonfireSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cl, cwarn } from "./tools/Log.js";
 import type {
   BuildingBtnModernController,
   BuildingMeta,
@@ -379,7 +379,9 @@ export class BonfireManager implements Automation {
     }
 
     if (amountCalculated !== amountTemp) {
-      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
+      console.warn(
+        cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+      );
     }
     this._host.engine.storeForSummary(label, amountCalculated, "build");
 

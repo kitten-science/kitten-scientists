@@ -1,7 +1,7 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { cwarn } from "../tools/Log.js";
+import { cl, cwarn } from "../tools/Log.js";
 import type { GamePage } from "../types/game.js";
 import { type Upgrade, Upgrades } from "../types/index.js";
 import { SettingTrigger } from "./Settings.js";
@@ -45,10 +45,10 @@ export class UpgradeSettings extends SettingTrigger {
     const redundantInSettings = difference(inSettings, inGame);
 
     for (const upgrade of missingInSettings) {
-      cwarn(`The workshop upgrade '${upgrade}' is not tracked in Kitten Scientists!`);
+      console.warn(cl(`The workshop upgrade '${upgrade}' is not tracked in Kitten Scientists!`));
     }
     for (const upgrade of redundantInSettings) {
-      cwarn(`The workshop upgrade '${upgrade}' is not an upgrade in Kittens Game!`);
+      console.warn(cl(`The workshop upgrade '${upgrade}' is not an upgrade in Kittens Game!`));
     }
   }
 

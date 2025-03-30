@@ -1,5 +1,5 @@
 import type { KittenScientists } from "../../KittenScientists.js";
-import { cerror } from "../../tools/Log.js";
+import { cerror, cl } from "../../tools/Log.js";
 
 export type UiComponentInterface = EventTarget & {
   get element(): JQuery;
@@ -59,7 +59,7 @@ export abstract class UiComponent<TOptions extends UiComponentOptions = UiCompon
       try {
         child.refreshUi();
       } catch (error) {
-        cerror("Error while refreshing child component!", error);
+        console.error(cl("Error while refreshing child component!", error));
       }
     }
   }

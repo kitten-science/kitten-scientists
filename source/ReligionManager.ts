@@ -9,7 +9,7 @@ import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import { ReligionSettings, type ReligionSettingsItem } from "./settings/ReligionSettings.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
-import { cdebug, cwarn } from "./tools/Log.js";
+import { cdebug, cl, cwarn } from "./tools/Log.js";
 import {
   type FaithItem,
   type ReligionItem,
@@ -428,7 +428,9 @@ export class ReligionManager implements Automation {
     }
 
     if (amountCalculated !== amountTemp) {
-      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
+      console.warn(
+        cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+      );
       // Bail out to not flood the log with garbage.
       if (amountCalculated === 0) {
         return;
@@ -545,7 +547,7 @@ export class ReligionManager implements Automation {
     const button = buttons.find(button => button.id === name) ?? null;
 
     if (button === null) {
-      cdebug(`Couldn't find button for ${name}! This will likely create problems.`);
+      console.debug(cl(`Couldn't find button for ${name}! This will likely create problems.`));
     }
 
     return button;

@@ -1,6 +1,6 @@
 import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import { cwarn } from "../tools/Log.js";
+import { cl, cwarn } from "../tools/Log.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
 import { EngineSettingsUi } from "./EngineSettingsUi.js";
 import { InternalsUi } from "./InternalsUi.js";
@@ -132,7 +132,7 @@ export class UserInterface extends UiComponent {
       // Try to fall back to options page.
       const optionsPageContent = $("#optionsPage .full-screen-position .page .page-content");
       if (optionsPageContent.length === 0) {
-        cwarn("Unable to find right column to inject UI into. Running headless.");
+        console.warn(cl("Unable to find right column to inject UI into. Running headless."));
       } else {
         optionsPageContent.append(ks);
         ks.attr("style", "border-top:1px solid grey; padding:15px");

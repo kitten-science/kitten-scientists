@@ -1,7 +1,7 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { cinfo, cwarn } from "../tools/Log.js";
+import { cinfo, cl, cwarn } from "../tools/Log.js";
 import type { GamePage } from "../types/game.js";
 import {
   Technologies,
@@ -56,15 +56,17 @@ export class TechSettings extends SettingTrigger {
         continue;
       }
 
-      cwarn(`The technology '${tech}' is not tracked in Kitten Scientists!`);
+      console.warn(cl(`The technology '${tech}' is not tracked in Kitten Scientists!`));
     }
     for (const tech of redundantInSettings) {
       if (TechnologiesIgnored.includes(tech as TechnologyIgnored)) {
-        cinfo(`The technology '${tech}' is a technology in Kittens Game, but it's no longer used.`);
+        console.info(
+          cl(`The technology '${tech}' is a technology in Kittens Game, but it's no longer used.`),
+        );
         continue;
       }
 
-      cwarn(`The technology '${tech}' is not a technology in Kittens Game!`);
+      console.warn(cl(`The technology '${tech}' is not a technology in Kittens Game!`));
     }
   }
 

@@ -5,7 +5,7 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
-import { cwarn } from "./tools/Log.js";
+import { cl, cwarn } from "./tools/Log.js";
 import type {
   BuildingStackableBtn,
   UnsafeBuildingBtnModel,
@@ -148,7 +148,9 @@ export class SpaceManager implements Automation {
     label = meta.label;
 
     if (amountCalculated !== amountTemp) {
-      cwarn(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`);
+      console.warn(
+        cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+      );
     }
     this._host.engine.storeForSummary(label, amountCalculated, "build");
 

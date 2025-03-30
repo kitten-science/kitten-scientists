@@ -8,7 +8,7 @@ import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import { type CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
-import { cerror } from "./tools/Log.js";
+import { cerror, cl } from "./tools/Log.js";
 import type { Resource, ResourceCraftable } from "./types/index.js";
 import type { ResourceManager, UnsafeResource } from "./types/resources.js";
 import type { Village } from "./types/village.js";
@@ -57,7 +57,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
       const upgrade = upgrades.find(subject => subject.name === setting.upgrade);
       if (isNil(upgrade)) {
-        cerror(`Upgrade '${setting.upgrade}' not found in game!`);
+        console.error(cl(`Upgrade '${setting.upgrade}' not found in game!`));
         continue;
       }
 

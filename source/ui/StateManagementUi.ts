@@ -8,7 +8,7 @@ import { Icons } from "../images/Icons.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { StateSettings } from "../settings/StateSettings.js";
 import { Unique } from "../tools/Entries.js";
-import { cerror, cinfo } from "../tools/Log.js";
+import { cerror, cinfo, cl } from "../tools/Log.js";
 import { SavegameLoader } from "../tools/SavegameLoader.js";
 import type { KGSaveData } from "../types/_save.js";
 import { Button } from "./components/Button.js";
@@ -179,7 +179,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
         game = localStorage.getItem(`ks.game.${++index}`);
       }
     } catch (error) {
-      cerror(error);
+      console.error(cl(error));
     }
   }
   private _storeGames() {
@@ -208,7 +208,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
         state = localStorage.getItem(`ks.state.${++stateIndex}`);
       }
     } catch (error) {
-      cerror(error);
+      console.error(cl(error));
     }
   }
   private _storeStates() {
@@ -519,7 +519,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   storeAutoSave(state: EngineState) {
     const existing = this.states.find(state => state.unwrap().label === "Auto-Save");
     if (!isNil(existing)) {
-      cinfo("Updating existing Auto-Save...");
+      console.info(cl("Updating existing Auto-Save..."));
       existing.replace({
         ...existing.unwrap(),
         state,
@@ -532,7 +532,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       return;
     }
 
-    cinfo("Storing new Auto-Save...");
+    console.info(cl("Storing new Auto-Save..."));
     this.storeState(state, "Auto-Save");
   }
 
@@ -567,17 +567,17 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
   loadAutoSave() {
     if (this._host.engine.isLoaded) {
-      cinfo("Not attempting to load Auto-Save, because a state is already loaded.");
+      console.info(cl("Not attempting to load Auto-Save, because a state is already loaded."));
       return;
     }
 
     const existing = this.states.find(state => state.unwrap().label === "Auto-Save");
     if (isNil(existing)) {
-      cinfo("No Auto-Save settings found.");
+      console.info(cl("No Auto-Save settings found."));
       return;
     }
 
-    cinfo("Loading Auto-Save...");
+    console.info(cl("Loading Auto-Save..."));
     this._host.engine.stateLoad(existing.unwrap().state, false);
   }
 

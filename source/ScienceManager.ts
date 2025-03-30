@@ -6,7 +6,7 @@ import { UpgradeManager } from "./UpgradeManager.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
-import { cerror } from "./tools/Log.js";
+import { cerror, cl } from "./tools/Log.js";
 import type { Library, UnsafePolicy, UnsafeTech } from "./types/science.js";
 
 export class ScienceManager extends UpgradeManager {
@@ -60,7 +60,7 @@ export class ScienceManager extends UpgradeManager {
 
       const tech = techs.find(subject => subject.name === setting.tech);
       if (isNil(tech)) {
-        cerror(`Tech '${setting.tech}' not found in game!`);
+        console.error(cl(`Tech '${setting.tech}' not found in game!`));
         continue;
       }
 
@@ -101,7 +101,7 @@ export class ScienceManager extends UpgradeManager {
 
       const targetPolicy = policies.find(subject => subject.name === setting.policy);
       if (isNil(targetPolicy)) {
-        cerror(`Policy '${setting.policy}' not found in game!`);
+        console.error(cl(`Policy '${setting.policy}' not found in game!`));
         continue;
       }
 
