@@ -172,7 +172,9 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
     });
     listAddition.addChild(new HeaderListItem(host, host.engine.i18n("ui.additional")));
 
-    listAddition.addChild(new EmbassySettingsUi(host, this.setting.buildEmbassies, locale));
+    listAddition.addChild(
+      new EmbassySettingsUi(host, this.setting.buildEmbassies, locale, settings),
+    );
 
     listAddition.addChild(
       new SettingListItem(host, this.setting.unlockRaces, host.engine.i18n("ui.upgrade.races"), {

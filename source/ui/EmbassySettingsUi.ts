@@ -4,9 +4,11 @@ import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { EmbassySettings } from "../settings/EmbassySettings.js";
 import type { SettingMax, SettingOptions } from "../settings/Settings.js";
+import type { TradeSettings } from "../settings/TradeSettings.js";
 import stylesButton from "./components/Button.module.css";
 import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
+import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -17,7 +19,8 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
     host: KittenScientists,
     settings: EmbassySettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions,
+    sectionSetting: TradeSettings,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("option.embassies");
     super(
@@ -26,13 +29,22 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
       new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+          options?.onUnCheck?.();
         },
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive =
             !settings.enabled || settings.trigger === -1;
+
+          this.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.races).some(race => race.enabled);
         },
         onSetTrigger: () => {
           Dialog.prompt(
