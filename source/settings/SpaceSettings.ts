@@ -13,7 +13,7 @@ export class SpaceBuildingSetting extends SettingTriggerMax {
   }
 
   constructor(building: SpaceBuilding) {
-    super();
+    super(false, -1, 0);
     this.#building = building;
   }
 }

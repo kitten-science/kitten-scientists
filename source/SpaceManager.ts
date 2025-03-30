@@ -133,15 +133,15 @@ export class SpaceManager implements Automation {
     let amountCalculated = amount;
     const amountTemp = amountCalculated;
     let label: string;
-    const meta = game.space.getBuilding(name);
+    const itemMetaRaw = game.getUnlockByName(name, "spaceBuilding");
     const controller = new classes.ui.space.PlanetBuildingBtnController(
       this._host.game,
     ) as PlanetBuildingBtnController<
       UnsafeBuildingStackableBtnModel<UnsafePlanetBuildingButtonOptions>
     >;
-    const model = controller.fetchModel(meta);
+    const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
     amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
-    label = meta.label;
+    label = itemMetaRaw.label;
 
     if (amountCalculated !== amountTemp) {
       console.warn(
