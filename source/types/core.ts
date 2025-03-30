@@ -3,7 +3,6 @@ import type { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type {
   BuildingMeta,
   BuildingsManager,
-  Metadata,
   UnsafeBuilding,
   UnsafeGatherCatnipButtonOptions,
   UnsafeRefineCatnipButtonOptions,
@@ -27,13 +26,7 @@ import type {
   UnsafeTradeButtonOptions,
 } from "./diplomacy.js";
 import type { GamePage } from "./game.js";
-import type {
-  AllBuildings,
-  Price,
-  UnsafeBuyItemResult,
-  UnsafeBuyItemResultDeferred,
-  Upgrade,
-} from "./index.js";
+import type { Price, UnsafeBuyItemResult, UnsafeBuyItemResultDeferred, Upgrade } from "./index.js";
 import type {
   UnsafeBurnParagonButtonOptions,
   UnsafePrestigeButtonOptions,

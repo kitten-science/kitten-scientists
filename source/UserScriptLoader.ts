@@ -2,7 +2,7 @@ import { sleep } from "@oliversalzburg/js-utils/async/async.js";
 import type { ConstructorOf } from "@oliversalzburg/js-utils/core.js";
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { EngineState, GameLanguage, SupportedLocale } from "./Engine.js";
-import { cdebug, cinfo, cl } from "./tools/Log.js";
+import { cl } from "./tools/Log.js";
 
 export const FallbackLocale: SupportedLocale = "en-US";
 

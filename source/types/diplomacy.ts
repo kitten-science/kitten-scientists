@@ -6,9 +6,7 @@ import type {
   ButtonModernController,
   Panel,
   Tab,
-  UnsafeBuildingBtnModel,
   UnsafeBuildingBtnModernModel,
-  UnsafeButtonModel,
   UnsafeButtonModernModel,
 } from "./core.js";
 import type { GamePage } from "./game.js";

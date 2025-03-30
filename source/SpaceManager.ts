@@ -5,12 +5,8 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
-import { cl, cwarn } from "./tools/Log.js";
-import type {
-  BuildingStackableBtn,
-  UnsafeBuildingBtnModel,
-  UnsafeBuildingStackableBtnModel,
-} from "./types/core.js";
+import { cl } from "./tools/Log.js";
+import type { BuildingStackableBtn, UnsafeBuildingStackableBtnModel } from "./types/core.js";
 import type { Mission, SpaceBuilding } from "./types/index.js";
 import type {
   PlanetBuildingBtnController,

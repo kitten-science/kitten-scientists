@@ -1,7 +1,7 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { cl, cwarn } from "../tools/Log.js";
+import { cl } from "../tools/Log.js";
 import type { GamePage } from "../types/game.js";
 import { Policies, type Policy } from "../types/index.js";
 import { Setting } from "./Settings.js";

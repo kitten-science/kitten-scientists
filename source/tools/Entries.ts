@@ -1,5 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { cinfo, cl, cwarn } from "./Log.js";
+import { cl } from "./Log.js";
 
 export const deepMergeLeft = (
   a: Record<string, unknown>,

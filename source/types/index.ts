@@ -1,7 +1,6 @@
 import type { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type JQuery from "jquery";
 import "dojo";
-import type { ConstructorOf } from "@oliversalzburg/js-utils/core.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { AchTab, Achievements, AchievementsPanel, BadgesPanel } from "./achievements.js";
 import type {
@@ -32,7 +31,6 @@ import type {
   AllBuildingBtnOptions,
   AllBuildingResearchBtnOptions,
   AllBuildingStackableBtnOptions,
-  AllButtonIds,
   AllButtonModernOptions,
   AllButtonOptions,
   BuildingBtn,
@@ -55,10 +53,6 @@ import type {
   Tab,
   TabManager,
   UnsafeBuildingBtnModel,
-  UnsafeBuildingStackableBtnModel,
-  UnsafeButtonModel,
-  UnsafeButtonModernModel,
-  UnsafeButtonOptions,
 } from "./core.js";
 import type {
   AutoPinnedButton,

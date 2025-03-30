@@ -1,6 +1,6 @@
 import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
-import { cl, cwarn } from "../tools/Log.js";
+import { cl } from "../tools/Log.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
 import { EngineSettingsUi } from "./EngineSettingsUi.js";
 import { InternalsUi } from "./InternalsUi.js";

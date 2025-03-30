@@ -32,7 +32,7 @@ import { TimeSettings } from "./settings/TimeSettings.js";
 import { TradeSettings } from "./settings/TradeSettings.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
-import { cdebug, cerror, cinfo, cl, cwarn } from "./tools/Log.js";
+import { cl } from "./tools/Log.js";
 import { type Cycle, Cycles, type Planet } from "./types/index.js";
 
 const i18nData = { "de-DE": deDE, "en-US": enUS, "he-IL": heIL, "zh-CN": zhCN };

@@ -8,7 +8,7 @@ import { Icons } from "../images/Icons.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { StateSettings } from "../settings/StateSettings.js";
 import { Unique } from "../tools/Entries.js";
-import { cerror, cinfo, cl } from "../tools/Log.js";
+import { cl } from "../tools/Log.js";
 import { SavegameLoader } from "../tools/SavegameLoader.js";
 import type { KGSaveData } from "../types/_save.js";
 import { Button } from "./components/Button.js";

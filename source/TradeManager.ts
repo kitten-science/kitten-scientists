@@ -7,7 +7,7 @@ import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import { TradeSettings, type TradeSettingsItem } from "./settings/TradeSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
-import { cl, cwarn } from "./tools/Log.js";
+import { cl } from "./tools/Log.js";
 import type { Diplomacy, UnsafeRace, UnsafeTradeSellOffer } from "./types/diplomacy.js";
 import type { Race, Resource } from "./types/index.js";
 import type { UnsafeResource } from "./types/resources.js";

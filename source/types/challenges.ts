@@ -5,7 +5,6 @@ import type {
   Panel,
   Tab,
   TabManager,
-  UnsafeBuildingBtnModel,
   UnsafeBuildingBtnModernModel,
 } from "./core.js";
 import type { GamePage } from "./game.js";

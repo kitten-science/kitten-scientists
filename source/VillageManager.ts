@@ -8,8 +8,7 @@ import { VillageSettings } from "./settings/VillageSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import type { Resource } from "./types/index.js";
-import type { UnsafeResource } from "./types/resources.js";
-import type { UnsafeFestivalButtonModel, UnsafeJob, Village } from "./types/village.js";
+import type { UnsafeJob, Village } from "./types/village.js";
 
 export class VillageManager implements Automation {
   private readonly _host: KittenScientists;

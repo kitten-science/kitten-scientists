@@ -1,6 +1,5 @@
 import type { GamePage } from "./game.js";
 import type { Cycle, CycleEffects, FestivalEffects, Resource, Season } from "./index.js";
-import type { UnsafeResource } from "./resources.js";
 
 export type Calendar = {
   game: GamePage;

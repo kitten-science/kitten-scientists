@@ -5,7 +5,7 @@ import { TabManager } from "./TabManager.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { type TimeItem, TimeSettings, type TimeSettingsItem } from "./settings/TimeSettings.js";
-import { cl, cwarn } from "./tools/Log.js";
+import { cl } from "./tools/Log.js";
 import type { BuildingStackableBtn, ButtonModern } from "./types/core.js";
 import { type ChronoForgeUpgrade, TimeItemVariant, type VoidSpaceUpgrade } from "./types/index.js";
 import type {

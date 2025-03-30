@@ -9,7 +9,7 @@ import {
   type BonfireItem,
   BonfireSettings,
 } from "./settings/BonfireSettings.js";
-import { cl, cwarn } from "./tools/Log.js";
+import { cl } from "./tools/Log.js";
 import type {
   BuildingBtnModernController,
   BuildingMeta,
@@ -20,11 +20,7 @@ import type {
   UnsafeStagingBldButtonOptions,
   UnsafeUnstagedBuildingButtonOptions,
 } from "./types/buildings.js";
-import type {
-  AllBuildingStackableBtnOptions,
-  UnsafeBuildingBtnModel,
-  UnsafeBuildingBtnModernModel,
-} from "./types/core.js";
+import type { UnsafeBuildingBtnModernModel } from "./types/core.js";
 import type { Building } from "./types/index.js";
 
 export class BonfireManager implements Automation {

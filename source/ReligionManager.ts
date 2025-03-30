@@ -9,7 +9,7 @@ import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import { ReligionSettings, type ReligionSettingsItem } from "./settings/ReligionSettings.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
-import { cdebug, cl, cwarn } from "./tools/Log.js";
+import { cl } from "./tools/Log.js";
 import {
   type FaithItem,
   type ReligionItem,

@@ -1,5 +1,5 @@
 import type { KittenScientists } from "../../KittenScientists.js";
-import { cerror, cl } from "../../tools/Log.js";
+import { cl } from "../../tools/Log.js";
 
 export type UiComponentInterface = EventTarget & {
   get element(): JQuery;

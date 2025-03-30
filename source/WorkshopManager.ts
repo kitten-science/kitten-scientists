@@ -8,7 +8,7 @@ import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import { type CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
-import { cerror, cl } from "./tools/Log.js";
+import { cl } from "./tools/Log.js";
 import type { Resource, ResourceCraftable } from "./types/index.js";
 import type { ResourceManager, UnsafeResource } from "./types/resources.js";
 import type { Village } from "./types/village.js";

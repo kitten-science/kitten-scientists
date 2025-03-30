@@ -18,7 +18,7 @@ import type { Math as KGMath } from "./math.js";
 import type { PrestigeManager } from "./prestige.js";
 import type { ReligionManager, ReligionTab } from "./religion.js";
 import type { ResourceManager } from "./resources.js";
-import type { Library, ScienceManager, UnsafeTech } from "./science.js";
+import type { Library, ScienceManager } from "./science.js";
 import type { SpaceManager, SpaceTab } from "./space.js";
 import type { StatsManager, StatsTab } from "./stats.js";
 import type { QueueTab, TimeManager, TimeTab } from "./time.js";

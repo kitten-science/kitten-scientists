@@ -1,9 +1,8 @@
-import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import type { TabManager } from "./TabManager.js";
 import type { Policy, Technology, Upgrade } from "./types/index.js";
-import type { Library, PolicyBtnController, TechButtonController } from "./types/science.js";
-import type { UpgradeButtonController, Workshop } from "./types/workshop.js";
+import type { PolicyBtnController, TechButtonController } from "./types/science.js";
+import type { UpgradeButtonController } from "./types/workshop.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: KittenScientists;

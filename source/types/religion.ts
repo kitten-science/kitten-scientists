@@ -9,17 +9,13 @@ import type {
   Panel,
   Tab,
   TabManager,
-  UnsafeBuildingBtnModel,
   UnsafeBuildingStackableBtnModel,
   UnsafeBuildingStackableBtnModelDefaults,
-  UnsafeButtonModel,
   UnsafeButtonModernModel,
   UnsafeButtonModernModelDefaults,
-  UnsafeButtonOptions,
 } from "./core.js";
 import type { GamePage } from "./game.js";
 import type {
-  Building,
   BuildingEffect,
   BuyItemResultReason,
   Link,
@@ -30,7 +26,6 @@ import type {
   TranscendenceUpgrade,
   Unlocks,
   UnsafeBuyItemResult,
-  Upgrade,
   ZigguratUpgrade,
 } from "./index.js";
 

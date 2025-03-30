@@ -6,7 +6,7 @@ import { UpgradeManager } from "./UpgradeManager.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
-import { cerror, cl } from "./tools/Log.js";
+import { cl } from "./tools/Log.js";
 import type { Library, UnsafePolicy, UnsafeTech } from "./types/science.js";
 
 export class ScienceManager extends UpgradeManager {

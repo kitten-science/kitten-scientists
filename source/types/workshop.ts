@@ -6,7 +6,6 @@ import type {
   ButtonModernController,
   Tab,
   TabManager,
-  UnsafeBuildingBtnModel,
   UnsafeBuildingBtnModernModel,
   UnsafeButtonModernModel,
   UnsafeButtonModernModelDefaults,
@@ -21,7 +20,7 @@ import type {
   UnsafeBuyItemResult,
   Upgrade,
 } from "./index.js";
-import type { Village, VillageManager } from "./village.js";
+import type { VillageManager } from "./village.js";
 
 export type WorkshopManager = TabManager & {
   game: GamePage;
