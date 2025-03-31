@@ -11,7 +11,7 @@ import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -23,7 +23,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     host: KittenScientists,
     settings: ResourcesSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("ui.resources");
     super(

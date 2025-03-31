@@ -11,7 +11,7 @@ import { ResetUpgradesSettingsUi } from "./ResetUpgradesSettingsUi.js";
 import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
@@ -27,7 +27,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
     host: KittenScientists,
     settings: ResetSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("option.time.reset");
     super(
@@ -37,9 +37,13 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+          options?.onUnCheck?.();
         },
       }),
       options,

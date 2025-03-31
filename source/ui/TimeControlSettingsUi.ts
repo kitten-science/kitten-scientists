@@ -6,10 +6,11 @@ import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import { ResetSettingsUi } from "./ResetSettingsUi.js";
 import { TimeSkipSettingsUi } from "./TimeSkipSettingsUi.js";
 import stylesButton from "./components/Button.module.css";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -25,6 +26,7 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
     host: KittenScientists,
     settings: TimeControlSettings,
     locale: SettingOptions<SupportedLocale>,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("ui.timeCtrl");
     super(
@@ -35,10 +37,12 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
+          options?.onUnCheck?.();
         },
       }),
     );

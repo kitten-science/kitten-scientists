@@ -7,10 +7,11 @@ import type { SettingOptions } from "../settings/Settings.js";
 import type { Building, StagedBuilding } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -20,6 +21,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
     host: KittenScientists,
     settings: BonfireSettings,
     locale: SettingOptions<SupportedLocale>,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("ui.build");
     super(
@@ -29,10 +31,12 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
+          options?.onUnCheck?.();
         },
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive =

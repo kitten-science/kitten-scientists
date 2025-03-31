@@ -5,12 +5,13 @@ import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingMax, SettingOptions } from "../settings/Settings.js";
 import type { VillageSettings } from "../settings/VillageSettings.js";
 import stylesButton from "./components/Button.module.css";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { OptionsListItem } from "./components/OptionsListItem.js";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -27,6 +28,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     host: KittenScientists,
     settings: VillageSettings,
     locale: SettingOptions<SupportedLocale>,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("ui.distribute");
     super(
@@ -36,9 +38,13 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+          options?.onUnCheck?.();
         },
       }),
     );

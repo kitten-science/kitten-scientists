@@ -8,10 +8,11 @@ import { ReligionOptions, UnicornItems, type ZigguratUpgrade } from "../types/in
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import stylesTimeSkipHeatSettings from "./TimeSkipHeatSettingsUi.module.css";
 import stylesButton from "./components/Button.module.css";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import type { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -28,6 +29,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
     host: KittenScientists,
     settings: ReligionSettings,
     locale: SettingOptions<SupportedLocale>,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("ui.faith");
     super(
@@ -36,9 +38,13 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
       new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+          options?.onUnCheck?.();
         },
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive =

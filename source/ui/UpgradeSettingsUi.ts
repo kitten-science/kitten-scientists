@@ -9,6 +9,7 @@ import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import stylesDelimiter from "./components/Delimiter.module.css";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
+import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -18,7 +19,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
     host: KittenScientists,
     settings: UpgradeSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("ui.upgrade.upgrades");
     super(
@@ -27,9 +28,13 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
       new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+          options?.onUnCheck?.();
         },
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive =

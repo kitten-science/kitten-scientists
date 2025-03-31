@@ -15,7 +15,7 @@ import { Dialog } from "./components/Dialog.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SeasonsList } from "./components/SeasonsList.js";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -31,7 +31,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     settings: TimeSkipSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeControlSettings,
-    options?: PanelOptions,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("option.time.skip");
     super(
@@ -41,10 +41,12 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
+          options?.onUnCheck?.();
         },
         onRefresh: item => {
           const element = item as SettingMaxTriggerListItem;

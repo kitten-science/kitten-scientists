@@ -9,6 +9,7 @@ import styles from "./TimeSkipHeatSettingsUi.module.css";
 import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { Dialog } from "./components/Dialog.js";
+import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
@@ -21,7 +22,7 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeSkipSettings,
     sectionParentSetting: TimeControlSettings,
-    options?: PanelOptions,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("option.time.activeHeatTransfer");
     super(
@@ -30,10 +31,14 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
       new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
           settings.activeHeatTransferStatus.enabled = false;
+          this.refreshUi();
+          options?.onUnCheck?.();
         },
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive = !settings.enabled;

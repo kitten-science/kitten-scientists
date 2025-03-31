@@ -5,9 +5,10 @@ import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeItem, TimeSettings } from "../settings/TimeSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
+import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
-import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -17,6 +18,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
     host: KittenScientists,
     settings: TimeSettings,
     locale: SettingOptions<SupportedLocale>,
+    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
     const label = host.engine.i18n("ui.time");
     super(
@@ -25,9 +27,13 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
       new SettingTriggerListItem(host, settings, locale, label, {
         onCheck: () => {
           host.engine.imessage("status.auto.enable", [label]);
+          this.refreshUi();
+          options?.onCheck?.();
         },
         onUnCheck: () => {
           host.engine.imessage("status.auto.disable", [label]);
+          this.refreshUi();
+          options?.onUnCheck?.();
         },
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive =
