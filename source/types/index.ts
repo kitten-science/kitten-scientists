@@ -1492,7 +1492,6 @@ declare global {
   }
 }
 
-/*
 export * from "./_releases.js";
 export * from "./_save.js";
 export * from "./achievements.js";
@@ -1509,6 +1508,8 @@ export * from "./resources.js";
 export * from "./science.js";
 export * from "./space.js";
 export * from "./time.js";
+export * from "./toolbar.js";
+export * from "./ui.js";
 export * from "./village.js";
+export * from "./void.js";
 export * from "./workshop.js";
-*/
