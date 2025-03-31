@@ -12,7 +12,7 @@ import type {
   UnsafeLinkResult,
 } from "./core.js";
 import type { GamePage } from "./game.js";
-import type { Building, BuildingEffect, Price, UnsafeBuyItemResult } from "./index.js";
+import type { Building, BuildingEffect, Price, UnsafeBuyItemResult, UnsafeMeta } from "./index.js";
 
 export type Metadata<TMeta extends Record<string, unknown> | unknown = unknown> = {
   meta: TMeta;
@@ -33,7 +33,7 @@ export type BuildingMeta<
   set<TAttr extends keyof TMetaCache>(attr: TAttr, val: TMetaCache[TAttr]): void;
 };
 
-export type BuildingsManager = TabManager & {
+export type BuildingsManager = TabManager<UnsafeMeta<UnsafeBuilding>> & {
   buildingGroups: Array<{
     name: string;
     title: string;
@@ -96,7 +96,6 @@ export type BuildingsManager = TabManager & {
   isUnlockable: (building: Building) => boolean;
   isUnlocked: (building: Building) => boolean;
   load: (saveData: unknown) => void;
-  meta: [{ meta: Array<UnsafeBuilding> }];
   metaCache: Record<Building, BuildingMeta<UnsafeBuilding>>;
   new (game: GamePage): BuildingsManager;
   pollutionEffects: Record<

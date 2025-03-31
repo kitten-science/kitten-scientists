@@ -1045,6 +1045,15 @@ export const Upgrades = [
 ] as const;
 export type Upgrade = (typeof Upgrades)[number];
 
+export const ZebraUpgrades = [
+  "bloodstoneInstitute",
+  "darkBrew",
+  "darkRevolution",
+  "minerologyDepartment",
+  "whispers",
+];
+export type ZebraUpgrade = (typeof ZebraUpgrades)[number];
+
 export enum TimeItemVariant {
   Chronoforge = "chrono",
   VoidSpace = "void",

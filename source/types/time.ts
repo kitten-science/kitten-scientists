@@ -21,10 +21,13 @@ import type {
   Price,
   Unlocks,
   UnsafeBuyItemResult,
+  UnsafeMeta,
   VoidSpaceUpgrade,
 } from "./index.js";
 
-export type TimeManager = TabManager & {
+export type TimeManager = TabManager<
+  UnsafeMeta<UnsafeChronoForgeUpgrade> | UnsafeMeta<UnsafeVoidSpaceUpgrade>
+> & {
   game: GamePage;
   /**
    * 0 is current function call, 1 is shatterInGroupCycles, 2 is shatterInCycles (deprecated)

@@ -81,9 +81,9 @@ export type Control = {
   /* intentionally left blank. exists for clarity */
 };
 
-export type TabManager<TMeta extends Record<string, unknown> | unknown = unknown> = Control & {
+export type TabManager<TMeta extends UnsafeMeta<unknown> | unknown = unknown> = Control & {
   effectsCachedExisting: Record<string, unknown>;
-  meta: Array<UnsafeMeta<TMeta>>;
+  meta: Array<TMeta>;
   panelData: Record<string, { collapsed: boolean }>;
   new (): TabManager<TMeta>;
   registerPanel: (id: string, panel: Panel) => void;
@@ -480,8 +480,8 @@ export type Tab<TChildren = unknown, TButtons = TChildren> = ContentRowRenderer 
     addButton: (button: unknown) => void;
   };
 
-export type UnsafeMeta<TMeta extends Record<string, unknown> | unknown = unknown> = {
-  meta: TMeta;
+export type UnsafeMeta<TMeta = unknown> = {
+  meta: Array<TMeta>;
   provider: {
     getEffect: (metaElem: unknown, effectName: unknown) => number;
   };

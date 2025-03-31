@@ -26,10 +26,16 @@ import type {
   TranscendenceUpgrade,
   Unlocks,
   UnsafeBuyItemResult,
+  UnsafeMeta,
   ZigguratUpgrade,
 } from "./index.js";
 
-export type ReligionManager = TabManager & {
+export type ReligionManager = TabManager<
+  | UnsafeMeta<UnsafeReligionUpgrade>
+  | UnsafeMeta<UnsafeTranscendenceUpgrade>
+  | UnsafeMeta<UnsafeZigguratUpgrade>
+  | UnsafeMeta<UnsafePact>
+> & {
   game: GamePage;
   pactsManager: PactsManager;
   /**

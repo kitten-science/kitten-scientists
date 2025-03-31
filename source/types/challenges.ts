@@ -14,12 +14,13 @@ import type {
   Price,
   Resource,
   UnsafeBuyItemResult,
+  UnsafeMeta,
   ZigguratUpgrade,
 } from "./index.js";
 import type { UnsafeChronoForgeUpgrade } from "./time.js";
 import type { UnsafeUpgrade } from "./workshop.js";
 
-export type ChallengesManager = TabManager & {
+export type ChallengesManager = TabManager<UnsafeMeta<UnsafeChallenge>> & {
   game: GamePage;
   new (game: GamePage): ChallengesManager;
   currentChallenge: null;

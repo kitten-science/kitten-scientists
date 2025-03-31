@@ -14,6 +14,7 @@ import type {
   UnsafePlanet,
   UnsafePlanetBuildingButtonOptions,
   UnsafeSpaceBuilding,
+  UnsafeSpaceProgram,
   UnsafeSpaceProgramButtonOptions,
 } from "./types/space.js";
 
@@ -93,7 +94,7 @@ export class SpaceManager implements Automation {
       return;
     }
 
-    const missions = this._host.game.space.meta[0].meta as Array<Required<UnsafePlanet>>;
+    const missions = this._host.game.space.meta[0].meta as Array<Required<UnsafeSpaceProgram>>;
     missionLoop: for (let i = 0; i < missions.length; i++) {
       // If the mission is already purchased or not available yet, continue with the next one.
       if (

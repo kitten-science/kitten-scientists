@@ -18,10 +18,11 @@ import type {
   Unlocks,
   UnsafeBuyItemResult,
   UnsafeBuyItemResultDeferred,
+  UnsafeMeta,
 } from "./index.js";
 import type { PrestigePanel } from "./prestige.js";
 
-export type ScienceManager = TabManager & {
+export type ScienceManager = TabManager<UnsafeMeta<UnsafeTech> | UnsafeMeta<UnsafePolicy>> & {
   game: GamePage;
   hideResearched: boolean;
   policyToggleBlocked: boolean;

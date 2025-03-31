@@ -17,10 +17,13 @@ import type {
   Technology,
   Unlocks,
   UnsafeBuyItemResult,
+  UnsafeMeta,
 } from "./index.js";
 import type { RorshachWgt } from "./void.js";
 
-export type SpaceManager = TabManager<Array<UnsafePlanet> | Array<UnsafeSpaceBuilding>> & {
+export type SpaceManager = TabManager<
+  UnsafeMeta<UnsafeSpaceProgram> | UnsafeMeta<UnsafeSpaceBuilding>
+> & {
   game: GamePage;
   hideResearched: boolean;
   spaceBuildingsMap: Array<unknown>;

@@ -18,11 +18,15 @@ import type {
   ResourceCraftable,
   Unlocks,
   UnsafeBuyItemResult,
+  UnsafeMeta,
   Upgrade,
+  ZebraUpgrade,
 } from "./index.js";
 import type { VillageManager } from "./village.js";
 
-export type WorkshopManager = TabManager & {
+export type WorkshopManager = TabManager<
+  UnsafeMeta<UnsafeUpgrade> | UnsafeMeta<UnsafeZebraUpgrade>
+> & {
   game: GamePage;
   hideResearched: boolean;
   upgrades: Array<UnsafeUpgrade>;
@@ -131,6 +135,20 @@ export type UnsafeUpgrade = {
   effects?: Partial<Record<BuildingEffect, number>>;
   prices: Array<Price>;
   unlocks?: Partial<Unlocks>;
+  upgrades?: Partial<Unlocks>;
+
+  researched?: boolean;
+  unlocked?: boolean;
+};
+
+export type UnsafeZebraUpgrade = {
+  name: ZebraUpgrade;
+  label: string;
+  description: string;
+  effects?: Partial<Record<BuildingEffect, number>>;
+  prices: Array<Price>;
+  unlocks?: Partial<Unlocks>;
+  upgrades?: Partial<Unlocks>;
 
   researched?: boolean;
   unlocked?: boolean;

@@ -8,9 +8,9 @@ import type {
   UnsafeButtonModel,
 } from "./core.js";
 import type { GamePage } from "./game.js";
-import type { Perk, Price, Unlocks, UnsafeBuyItemResult } from "./index.js";
+import type { Perk, Price, Unlocks, UnsafeBuyItemResult, UnsafeMeta } from "./index.js";
 
-export type PrestigeManager = TabManager<Array<UnsafePerk>> & {
+export type PrestigeManager = TabManager<UnsafeMeta<UnsafePerk>> & {
   perks: Array<UnsafePerk>;
   game: GamePage;
   new (game: GamePage): PrestigeManager;
