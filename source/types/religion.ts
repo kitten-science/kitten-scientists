@@ -315,9 +315,6 @@ export type UnsafeReligionUpgrade = {
 
   val?: number;
   on?: number;
-  isAutomationEnabled?: boolean | null;
-  lackResConvert?: boolean;
-  toggleable?: boolean;
 };
 
 export type UnsafeZigguratUpgrade = {
@@ -344,10 +341,6 @@ export type UnsafeZigguratUpgrade = {
 
   val?: number;
   on?: number;
-  noStackable?: boolean;
-  isAutomationEnabled?: boolean | null;
-  lackResConvert?: boolean;
-  toggleable?: boolean;
 };
 
 export type UnsafeTranscendenceUpgrade = {
@@ -375,10 +368,6 @@ export type UnsafeTranscendenceUpgrade = {
 
   val?: number;
   on?: number;
-  noStackable?: boolean;
-  isAutomationEnabled?: boolean | null;
-  lackResConvert?: boolean;
-  toggleable?: boolean;
 };
 
 export type UnsafePact = {
@@ -391,6 +380,9 @@ export type UnsafePact = {
   effects?: Partial<Record<BuildingEffect, number>>;
   unlocked: boolean;
   calculateEffects: (self: UnsafePact, game: GamePage) => void;
+
+  val?: number;
+  on?: number;
 };
 
 export type UnsafeReligionUndo = {
