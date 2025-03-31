@@ -70,13 +70,14 @@ export type UnsafeResource = {
   type: "common" | "uncommon" | "rare" | "exotic";
   craftable?: boolean;
   visible: boolean;
-  calculatePerTick: boolean;
   aiCanDestroy: boolean;
   color?: string;
   tag?: "baseMetal" | "metallurgist" | "chemist";
   isNotRefundable?: boolean;
   transient?: boolean;
   calculateOnYear?: boolean;
+  calculatePerDay?: boolean;
+  calculatePerTick?: boolean;
   calculatePerTickAndDay?: boolean;
   isRefundable?: (game: GamePage) => boolean;
   persists?: boolean;
