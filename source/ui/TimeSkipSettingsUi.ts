@@ -38,15 +38,15 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       host,
       settings,
       new SettingMaxTriggerListItem(host, settings, locale, label, {
-        onCheck: () => {
+        onCheck: (isBatchProcess?: boolean) => {
           host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
-          options?.onCheck?.();
+          options?.onCheck?.(isBatchProcess);
         },
-        onUnCheck: () => {
+        onUnCheck: (isBatchProcess?: boolean) => {
           host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
-          options?.onUnCheck?.();
+          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: item => {
           const element = item as SettingMaxTriggerListItem;

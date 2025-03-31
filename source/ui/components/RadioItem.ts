@@ -10,7 +10,7 @@ export type RadioItemOptions = UiComponentOptions & {
   /**
    * Will be invoked when the user selects this radio item.
    */
-  onCheck: () => void;
+  onCheck: (isBatchProcess?: boolean) => void;
 
   /**
    * Should there be additional padding below this element?

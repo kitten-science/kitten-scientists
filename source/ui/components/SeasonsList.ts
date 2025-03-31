@@ -13,7 +13,7 @@ export type SeasonsListOptions = SettingsListOptions<SettingListItem> & {
    * @param label The label on the season element.
    * @param setting The setting associated with the season.
    */
-  readonly onCheck: (label: string, setting: Setting) => void;
+  readonly onCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
 
   /**
    * Called when a season is unchecked.
@@ -21,7 +21,7 @@ export type SeasonsListOptions = SettingsListOptions<SettingListItem> & {
    * @param label The label on the season element.
    * @param setting The setting associated with the season.
    */
-  readonly onUnCheck: (label: string, setting: Setting) => void;
+  readonly onUnCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
 };
 
 /**
@@ -51,17 +51,17 @@ export class SeasonsList extends SettingsList {
     this.setting = setting;
 
     this.addEventListener("enableAll", () => {
-      this.autumn.check();
-      this.spring.check();
-      this.summer.check();
-      this.winter.check();
+      this.autumn.check(true);
+      this.spring.check(true);
+      this.summer.check(true);
+      this.winter.check(true);
       this.refreshUi();
     });
     this.addEventListener("disableAll", () => {
-      this.autumn.uncheck();
-      this.spring.uncheck();
-      this.summer.uncheck();
-      this.winter.uncheck();
+      this.autumn.uncheck(true);
+      this.spring.uncheck(true);
+      this.summer.uncheck(true);
+      this.winter.uncheck(true);
       this.refreshUi();
     });
 
@@ -93,13 +93,13 @@ export class SeasonsList extends SettingsList {
     label: string,
     setting: Setting,
     handler?: Partial<{
-      onCheck: (label: string, setting: Setting) => void;
-      onUnCheck: (label: string, setting: Setting) => void;
+      onCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
+      onUnCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
     }>,
   ) {
     return new SettingListItem(this._host, setting, label, {
-      onCheck: () => handler?.onCheck?.(label, setting),
-      onUnCheck: () => handler?.onUnCheck?.(label, setting),
+      onCheck: (isBatchProcess?: boolean) => handler?.onCheck?.(label, setting, isBatchProcess),
+      onUnCheck: (isBatchProcess?: boolean) => handler?.onUnCheck?.(label, setting, isBatchProcess),
     });
   }
 }

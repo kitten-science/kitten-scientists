@@ -13,7 +13,7 @@ export type SeasonsListOptions = SettingsListOptions<SettingListItem> & {
    * @param label The label on the cycle element.
    * @param setting The setting associated with the cycle.
    */
-  readonly onCheck: (label: string, setting: Setting) => void;
+  readonly onCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
 
   /**
    * Called when a cycle is unchecked.
@@ -21,7 +21,7 @@ export type SeasonsListOptions = SettingsListOptions<SettingListItem> & {
    * @param label The label on the cycle element.
    * @param setting The setting associated with the cycle.
    */
-  readonly onUnCheck: (label: string, setting: Setting) => void;
+  readonly onUnCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
 };
 
 /**
@@ -48,13 +48,13 @@ export class CyclesList extends SettingsList<SeasonsListOptions> {
 
     this.addEventListener("enableAll", () => {
       for (const child of this.children) {
-        child.check();
+        child.check(true);
       }
       this.refreshUi();
     });
     this.addEventListener("disableAll", () => {
       for (const child of this.children) {
-        child.uncheck();
+        child.uncheck(true);
       }
       this.refreshUi();
     });
@@ -77,14 +77,14 @@ export class CyclesList extends SettingsList<SeasonsListOptions> {
     cycle: Cycle,
     setting: Setting,
     handler?: Partial<{
-      onCheck: (label: string, setting: Setting) => void;
-      onUnCheck: (label: string, setting: Setting) => void;
+      onCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
+      onUnCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
     }>,
   ) {
     const label = this._host.engine.labelForCycle(cycle);
     return new SettingListItem(this._host, setting, label, {
-      onCheck: () => handler?.onCheck?.(label, setting),
-      onUnCheck: () => handler?.onUnCheck?.(label, setting),
+      onCheck: (isBatchProcess?: boolean) => handler?.onCheck?.(label, setting, isBatchProcess),
+      onUnCheck: (isBatchProcess?: boolean) => handler?.onUnCheck?.(label, setting, isBatchProcess),
     });
   }
 }

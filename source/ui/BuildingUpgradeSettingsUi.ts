@@ -24,15 +24,15 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
       settings,
       new SettingListItem(host, settings, label, {
         childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
-        onCheck: () => {
+        onCheck: (isBatchProcess?: boolean) => {
           host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
-          options?.onCheck?.();
+          options?.onCheck?.(isBatchProcess);
         },
-        onUnCheck: () => {
+        onUnCheck: (isBatchProcess?: boolean) => {
           host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
-          options?.onUnCheck?.();
+          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: _item => {
           this.expando.ineffective =

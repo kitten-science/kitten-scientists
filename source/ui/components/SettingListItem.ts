@@ -10,12 +10,12 @@ export type SettingListItemOptions<TChild extends UiComponentInterface = UiCompo
     /**
      * Will be invoked when the user checks the checkbox.
      */
-    readonly onCheck: () => void;
+    readonly onCheck: (isBatchProcess?: boolean) => void;
 
     /**
      * Will be invoked when the user unchecks the checkbox.
      */
-    readonly onUnCheck: () => void;
+    readonly onUnCheck: (isBatchProcess?: boolean) => void;
 
     /**
      * Should the user be prevented from changing the value of the input?
@@ -83,15 +83,15 @@ export class SettingListItem<
     this.addChildren(options.children);
   }
 
-  check() {
+  check(isBatchProcess = false) {
     this.setting.enabled = true;
-    this._options.onCheck?.();
+    this._options.onCheck?.(isBatchProcess);
     this.refreshUi();
   }
 
-  uncheck() {
+  uncheck(isBatchProcess = false) {
     this.setting.enabled = false;
-    this._options.onUnCheck?.();
+    this._options.onUnCheck?.(isBatchProcess);
     this.refreshUi();
   }
 

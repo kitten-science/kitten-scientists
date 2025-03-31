@@ -75,7 +75,7 @@ export class SettingsList<
 
               for (const child of this.children) {
                 if (is(child, SettingListItem)) {
-                  (child as SettingListItem).check();
+                  (child as SettingListItem).check(true);
                 }
               }
 

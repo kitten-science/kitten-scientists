@@ -27,15 +27,15 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
       host,
       settings,
       new SettingTriggerListItem(host, settings, locale, label, {
-        onCheck: () => {
+        onCheck: (isBatchProcess?: boolean) => {
           host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
-          options?.onCheck?.();
+          options?.onCheck?.(isBatchProcess);
         },
-        onUnCheck: () => {
+        onUnCheck: (isBatchProcess?: boolean) => {
           host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
-          options?.onUnCheck?.();
+          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: item => {
           (item as SettingTriggerListItem).triggerButton.inactive =
@@ -126,9 +126,9 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
     };
 
     const element = new SettingMaxListItem(host, option, label, {
-      onCheck: () => {
+      onCheck: (isBatchProcess?: boolean) => {
         host.engine.imessage("status.sub.enable", [label]);
-        if (option.max === 0) {
+        if (option.max === 0 && !isBatchProcess) {
           onSetMax();
         }
       },

@@ -5,7 +5,7 @@ import { RadioItem } from "./RadioItem.js";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type OptionsListItemOptions = UiComponentOptions & {
-  readonly onCheck: () => void;
+  readonly onCheck: (isBatchProcess?: boolean) => void;
   readonly readOnly: boolean;
 };
 

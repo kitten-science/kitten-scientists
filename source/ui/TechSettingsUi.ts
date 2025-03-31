@@ -27,15 +27,15 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
       host,
       settings,
       new SettingTriggerListItem(host, settings, locale, label, {
-        onCheck: () => {
+        onCheck: (isBatchProcess?: boolean) => {
           host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
-          options?.onCheck?.();
+          options?.onCheck?.(isBatchProcess);
         },
-        onUnCheck: () => {
+        onUnCheck: (isBatchProcess?: boolean) => {
           host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
-          options?.onUnCheck?.();
+          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: item => {
           const element = item as SettingTriggerListItem;
