@@ -96,7 +96,7 @@ export type BuildingsManager = TabManager & {
   isUnlockable: (building: Building) => boolean;
   isUnlocked: (building: Building) => boolean;
   load: (saveData: unknown) => void;
-  meta: [{ meta: Array<BuildingMeta> }];
+  meta: [{ meta: Array<UnsafeBuilding> }];
   metaCache: Record<Building, BuildingMeta<UnsafeBuilding>>;
   new (game: GamePage): BuildingsManager;
   pollutionEffects: Record<
