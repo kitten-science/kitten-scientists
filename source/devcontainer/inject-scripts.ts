@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const fs = require("node:fs");
+import { readFileSync, writeFileSync } from "node:fs";
 
-const indexHtml = fs.readFileSync("index.html", "utf8");
+const indexHtml = readFileSync("index.html", "utf8");
 let injectedHtml = indexHtml.replace(
   "</body>",
   `<script>
@@ -19,4 +19,4 @@ injectedHtml = injectedHtml.replace(
   /<title>.+<\/title>/,
   "<title>☣ Kitten Scientists Development Environment</title>",
 );
-fs.writeFileSync("index.html", injectedHtml);
+writeFileSync("index.html", injectedHtml);

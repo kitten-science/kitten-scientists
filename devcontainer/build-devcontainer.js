@@ -5,14 +5,13 @@ esbuild
   .build({
     bundle: true,
     entryPoints: [
-      "./source/devcontainer/inject-scripts.cjs",
-      "./source/devcontainer/rewrite-index.mjs",
+      "./source/devcontainer/inject-scripts.ts",
+      "./source/devcontainer/rewrite-index.ts",
     ],
-    external: ["os"],
     format: "esm",
-    inject: ["source/devcontainer/cjs-shim.ts"],
     outdir: "output/devcontainer",
     outExtension: { ".js": ".mjs" },
+    packages: "external",
     platform: "node",
     target: "node22",
   })

@@ -8,7 +8,7 @@ EXPOSE 8086
 
 RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
   && cd kittensgame \
-  && yarn add -D watch-http-server
+  && yarn add -D @oliversalzburg/js-utils cheerio watch-http-server
 
 WORKDIR /kittensgame
 COPY "devcontainer/overlay/*" "./overlay/"
