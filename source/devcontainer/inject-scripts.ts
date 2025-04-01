@@ -3,11 +3,11 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
 const indexHtml = readFileSync("index.html", "utf8");
+const injectables = process.argv.slice(2);
 let injectedHtml = indexHtml.replace(
   "</body>",
   `<script>
-    const scripts = [ "overlay/kitten-scientists.inject.js" ];
-
+    const scripts = ${JSON.stringify(injectables)};
     for (const subject of scripts) {
       const script = document.createElement("script");
       script.src = subject + "?_=" + new Date().getTime();
