@@ -57,7 +57,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 
       const upgrade = upgrades.find(subject => subject.name === setting.upgrade);
       if (isNil(upgrade)) {
-        console.error(cl(`Upgrade '${setting.upgrade}' not found in game!`));
+        console.error(...cl(`Upgrade '${setting.upgrade}' not found in game!`));
         continue;
       }
 

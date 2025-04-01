@@ -169,14 +169,14 @@ export class Engine {
     const previousLocale = this.settings.locale.selected;
     if (!this.isLanguageSupported(language)) {
       console.warn(
-        cl(
+        ...cl(
           `Requested language '${language}' is not available. Falling back to '${FallbackLocale}'.`,
         ),
       );
       this.settings.locale.selected = FallbackLocale;
     } else {
       const locale = mustExist(this.localeForLanguage(language));
-      console.info(cl(`Selecting language '${locale}'.`));
+      console.info(...cl(`Selecting language '${locale}'.`));
       this.settings.locale.selected = locale;
     }
 
@@ -189,11 +189,13 @@ export class Engine {
     const previousLocale = this.settings.locale.selected;
     if (!this.isLocaleSupported(locale)) {
       console.warn(
-        cl(`Requested language '${locale}' is not available. Falling back to '${FallbackLocale}'.`),
+        ...cl(
+          `Requested language '${locale}' is not available. Falling back to '${FallbackLocale}'.`,
+        ),
       );
       this.settings.locale.selected = FallbackLocale;
     } else {
-      console.info(cl(`Selecting language '${locale}'.`));
+      console.info(...cl(`Selecting language '${locale}'.`));
       this.settings.locale.selected = locale;
     }
 
@@ -222,7 +224,7 @@ export class Engine {
     const version = ksVersion();
     if (settings.v !== version) {
       console.warn(
-        cl(
+        ...cl(
           `Attempting to load engine state with version tag '${settings.v}' when engine is at version '${version}'!`,
         ),
       );
@@ -235,7 +237,7 @@ export class Engine {
       try {
         loader();
       } catch (error) {
-        console.error(cl(`Failed load of ${errorMessage} settings.`, error));
+        console.error(...cl(`Failed load of ${errorMessage} settings.`, error));
       }
     };
 
@@ -360,7 +362,7 @@ export class Engine {
           );
         })
         .catch((error: unknown) => {
-          console.warn(cl(unknownToError(error)));
+          console.warn(...cl(unknownToError(error)));
         });
     };
     this._timeoutMainLoop = window.setTimeout(loop, this._host.engine.settings.interval);
@@ -508,10 +510,10 @@ export class Engine {
     if (isNil(check)) {
       value = i18nData[FallbackLocale][key as keyof (typeof i18nData)[SupportedLocale]];
       if (!value) {
-        console.warn(cl(`i18n key '${key}' not found in default language.`));
+        console.warn(...cl(`i18n key '${key}' not found in default language.`));
         return `$${key}`;
       }
-      console.warn(cl(`i18n key '${key}' not found in selected language.`));
+      console.warn(...cl(`i18n key '${key}' not found in selected language.`));
     }
     for (let argIndex = 0; argIndex < args.length; ++argIndex) {
       value = value.replace(`{${argIndex}}`, `${args[argIndex]}`);
@@ -579,7 +581,7 @@ export class Engine {
     const msg = this._host.game.msg(message, cssClasses);
     $(msg.span).css("color", color);
 
-    console.debug(cl(message));
+    console.debug(...cl(message));
   }
 
   static evaluateSubSectionTrigger(sectionTrigger: number, subSectionTrigger: number): number {

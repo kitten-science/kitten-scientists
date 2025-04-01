@@ -60,7 +60,7 @@ export class ScienceManager extends UpgradeManager {
 
       const tech = techs.find(subject => subject.name === setting.tech);
       if (isNil(tech)) {
-        console.error(cl(`Tech '${setting.tech}' not found in game!`));
+        console.error(...cl(`Tech '${setting.tech}' not found in game!`));
         continue;
       }
 
@@ -101,7 +101,7 @@ export class ScienceManager extends UpgradeManager {
 
       const targetPolicy = policies.find(subject => subject.name === setting.policy);
       if (isNil(targetPolicy)) {
-        console.error(cl(`Policy '${setting.policy}' not found in game!`));
+        console.error(...cl(`Policy '${setting.policy}' not found in game!`));
         continue;
       }
 

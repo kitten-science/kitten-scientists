@@ -137,7 +137,7 @@ export class TimeManager {
 
     if (amountCalculated !== amountTemp) {
       console.warn(
-        cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+        ...cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
       );
       // Bail out to not flood the log with garbage.
       if (amountCalculated === 0) {

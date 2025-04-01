@@ -59,7 +59,7 @@ export abstract class UiComponent<TOptions extends UiComponentOptions = UiCompon
       try {
         child.refreshUi();
       } catch (error) {
-        console.error(cl("Error while refreshing child component!", error));
+        console.error(...cl("Error while refreshing child component!", error));
       }
     }
   }

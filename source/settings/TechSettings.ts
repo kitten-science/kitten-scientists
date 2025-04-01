@@ -56,17 +56,19 @@ export class TechSettings extends SettingTrigger {
         continue;
       }
 
-      console.warn(cl(`The technology '${tech}' is not tracked in Kitten Scientists!`));
+      console.warn(...cl(`The technology '${tech}' is not tracked in Kitten Scientists!`));
     }
     for (const tech of redundantInSettings) {
       if (TechnologiesIgnored.includes(tech as TechnologyIgnored)) {
         console.info(
-          cl(`The technology '${tech}' is a technology in Kittens Game, but it's no longer used.`),
+          ...cl(
+            `The technology '${tech}' is a technology in Kittens Game, but it's no longer used.`,
+          ),
         );
         continue;
       }
 
-      console.warn(cl(`The technology '${tech}' is not a technology in Kittens Game!`));
+      console.warn(...cl(`The technology '${tech}' is not a technology in Kittens Game!`));
     }
   }
 

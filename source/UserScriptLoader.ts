@@ -29,19 +29,19 @@ export class UserScriptLoader {
   static tryEngineStateFromSaveData(saveDataKey: string, saveData: unknown): unknown {
     const saveDataProxy = saveData as Record<string, unknown>;
     if (!(saveDataKey in saveDataProxy)) {
-      console.debug(cl(`Failed: \`${saveDataKey}\` not found in save data.`));
+      console.debug(...cl(`Failed: \`${saveDataKey}\` not found in save data.`));
       return undefined;
     }
 
     const ksData = saveDataProxy.ks as { state?: Array<EngineState> };
     if (!("state" in ksData)) {
-      console.debug(cl(`Failed: \`${saveDataKey}.state\` not found in save data.`));
+      console.debug(...cl(`Failed: \`${saveDataKey}.state\` not found in save data.`));
       return undefined;
     }
 
     const state = ksData.state;
     if (!Array.isArray(state)) {
-      console.debug(cl(`Failed: \`${saveDataKey}.state\` not \`Array\`.`));
+      console.debug(...cl(`Failed: \`${saveDataKey}.state\` not \`Array\`.`));
       return undefined;
     }
 
@@ -72,7 +72,7 @@ export class UserScriptLoader {
 
       const subGameStart = UserScriptLoader.window.dojo.subscribe("game/start", () => {
         console.debug(
-          cl(`'game/start' signal caught. Fast-tracking script load for '${saveDataKey}'...`),
+          ...cl(`'game/start' signal caught. Fast-tracking script load for '${saveDataKey}'...`),
         );
         mustExist(this._gameStartSignalResolver)(true);
         UserScriptLoader.window.dojo.unsubscribe(subGameStart);
@@ -83,7 +83,7 @@ export class UserScriptLoader {
           "server/load",
           (saveData: unknown) => {
             console.info(
-              cl(
+              ...cl(
                 `'server/load' signal caught. Looking for script state with key '${saveDataKey}' in save data...`,
               ),
             );
@@ -92,7 +92,7 @@ export class UserScriptLoader {
 
             if (!state) {
               console.info(
-                cl(
+                ...cl(
                   `The Kittens Game save data did not contain a script state for '${saveDataKey}'.`,
                 ),
               );
@@ -100,7 +100,7 @@ export class UserScriptLoader {
             }
 
             console.info(
-              cl(
+              ...cl(
                 `Found key '${saveDataKey}'! Provided save data will be used as seed for next script instance.`,
               ),
             );
@@ -121,7 +121,7 @@ export class UserScriptLoader {
       );
     }
 
-    console.debug(cl(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`));
+    console.debug(...cl(`Waiting for game... (timeout: ${Math.round(timeout / 1000)}s)`));
 
     await Promise.race(signals);
     return this.waitForGame(UserScript, saveDataKey, timeout - 2000);

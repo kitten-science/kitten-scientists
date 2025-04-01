@@ -364,7 +364,9 @@ export class TradeManager implements Automation {
       }
       cultureVal = this._workshopManager.getValueAvailable("culture");
       if (cultureVal < emBulk.priceSum) {
-        console.warn(cl("Something has gone horribly wrong.", emBulk.priceSum, cultureVal));
+        console.warn(
+          ...cl<string | number>("Something has gone horribly wrong.", emBulk.priceSum, cultureVal),
+        );
       }
       // We don't want to invoke the embassy build action multiple times, as
       // that would cause lots of log messages.
@@ -563,7 +565,7 @@ export class TradeManager implements Automation {
 
     if (!button?.model?.enabled || !this.settings.races[name].enabled) {
       console.warn(
-        cl(
+        ...cl(
           "KS trade checks are not functioning properly, please create an issue on the github page.",
         ),
       );

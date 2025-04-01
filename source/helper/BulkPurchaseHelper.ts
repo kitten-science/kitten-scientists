@@ -328,7 +328,7 @@ export class BulkPurchaseHelper {
       }
     }
 
-    console.debug(cl(`Took '${iterations}' iterations to evaluate bulk build request.`));
+    console.debug(...cl(`Took '${iterations}' iterations to evaluate bulk build request.`));
 
     for (const potentialBuild of potentialBuilds) {
       const performedBuild = mustExist(

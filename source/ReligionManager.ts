@@ -429,7 +429,7 @@ export class ReligionManager implements Automation {
 
     if (amountCalculated !== amountTemp) {
       console.warn(
-        cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+        ...cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
       );
       // Bail out to not flood the log with garbage.
       if (amountCalculated === 0) {
@@ -547,7 +547,7 @@ export class ReligionManager implements Automation {
     const button = buttons.find(button => button.id === name) ?? null;
 
     if (button === null) {
-      console.debug(cl(`Couldn't find button for ${name}! This will likely create problems.`));
+      console.debug(...cl(`Couldn't find button for ${name}! This will likely create problems.`));
     }
 
     return button;

@@ -49,13 +49,13 @@ export class KittenScientists {
     engineState?: EngineState,
   ) {
     console.info(
-      cl(`Kitten Scientists ${ksVersion("v")} constructed. Checking for previous instances...`),
+      ...cl(`Kitten Scientists ${ksVersion("v")} constructed. Checking for previous instances...`),
     );
     if ("kittenScientists" in UserScriptLoader.window) {
-      console.warn(cl("Detected existing KS instance. Trying to unload it..."));
+      console.warn(...cl("Detected existing KS instance. Trying to unload it..."));
       UserScriptLoader.window.kittenScientists?.unload();
     }
-    console.info(cl(`You are on the '${String(RELEASE_CHANNEL)}' release channel.`));
+    console.info(...cl(`You are on the '${String(RELEASE_CHANNEL)}' release channel.`));
 
     this.game = game;
     this.i18nEngine = i18nEngine;
@@ -63,7 +63,7 @@ export class KittenScientists {
       this.engine = new Engine(this, gameLanguage);
       this._userInterface = this._constructUi();
     } catch (error: unknown) {
-      console.error(cl("Failed to construct core components.", error));
+      console.error(...cl("Failed to construct core components.", error));
       throw error;
     }
 
@@ -99,7 +99,7 @@ export class KittenScientists {
    * Removes Kitten Scientists from the browser.
    */
   unload(): void {
-    console.warn(cl("Unloading Kitten Scientists..."));
+    console.warn(...cl("Unloading Kitten Scientists..."));
     this.engine.stop();
     this._userInterface.destroy();
     $("#ks-styles").remove();
@@ -116,7 +116,7 @@ export class KittenScientists {
       this.game.managers.splice(managerIndex, 1);
     }
     window.kittenScientists = undefined;
-    console.warn(cl("Kitten Scientists have been unloaded!"));
+    console.warn(...cl("Kitten Scientists have been unloaded!"));
   }
 
   /**
@@ -144,7 +144,7 @@ export class KittenScientists {
     this._gameBeforeSaveHandle = UserScriptLoader.window.dojo.subscribe(
       "game/beforesave",
       (saveData: Record<string, unknown>) => {
-        console.info(cl("Injecting Kitten Scientists engine state into save data..."));
+        console.info(...cl("Injecting Kitten Scientists engine state into save data..."));
         const state = this.getSettings();
         saveData.ks = { state: [state] };
         this._userInterface.stateManagementUi.storeAutoSave(state);
@@ -167,14 +167,14 @@ export class KittenScientists {
 
         if (!state) {
           console.info(
-            cl(
+            ...cl(
               "The Kittens Game save data did not contain a script state. Trying to load Auto-Save settings...",
             ),
           );
           return;
         }
 
-        console.info(cl("Found! Loading settings..."));
+        console.info(...cl("Found! Loading settings..."));
         this.engine.stateLoad(state);
       },
     );
@@ -185,14 +185,14 @@ export class KittenScientists {
    */
   async runUpdateCheck() {
     if (RELEASE_CHANNEL === "fixed") {
-      console.debug(cl("No update check on 'fixed' release channel."));
+      console.debug(...cl("No update check on 'fixed' release channel."));
       return;
     }
 
     try {
       const response = await fetch("https://kitten-science.com/release-info.json");
       const releaseInfo = (await response.json()) as ReleaseInfoSchema;
-      console.debug(cl(releaseInfo));
+      console.debug(...cl(releaseInfo));
 
       if (!isNil(RELEASE_VERSION) && gt(releaseInfo[RELEASE_CHANNEL].version, RELEASE_VERSION)) {
         this.engine.imessage("status.ks.upgrade", [
@@ -202,8 +202,8 @@ export class KittenScientists {
         ]);
       }
     } catch (error) {
-      console.warn(cl("Update check failed."));
-      console.warn(cl(error));
+      console.warn(...cl("Update check failed."));
+      console.warn(...cl(error));
     }
   }
 
@@ -355,7 +355,7 @@ export class KittenScientists {
    * @param settings The engine state to apply.
    */
   setSettings(settings: EngineState) {
-    console.info(cl("Loading engine state..."));
+    console.info(...cl("Loading engine state..."));
     this.engine.stateLoad(settings);
     if (settings.engine.ksColumn.enabled) {
       this.rebuildUi();
@@ -407,24 +407,24 @@ export class KittenScientists {
 
   //#region SaveManager
   installSaveManager() {
-    console.info(cl("Installing save game manager..."));
+    console.info(...cl("Installing save game manager..."));
     this.game.managers.push(this._saveManager);
   }
 
   private _saveManager = {
     load: (saveData: Record<string, unknown>) => {
-      console.info(cl("Looking for Kitten Scientists engine state in save data..."));
+      console.info(...cl("Looking for Kitten Scientists engine state in save data..."));
 
       const state = UserScriptLoader.tryEngineStateFromSaveData("ks", saveData) as
         | EngineState
         | undefined;
 
       if (!state) {
-        console.info(cl("The Kittens Game save data did not contain a script state."));
+        console.info(...cl("The Kittens Game save data did not contain a script state."));
         return;
       }
 
-      console.info(cl("Found Kitten Scientists engine state in save data."));
+      console.info(...cl("Found Kitten Scientists engine state in save data."));
       this.engine.stateLoad(state);
       this.refreshUi();
     },

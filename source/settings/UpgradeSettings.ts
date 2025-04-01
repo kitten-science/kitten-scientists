@@ -45,10 +45,10 @@ export class UpgradeSettings extends SettingTrigger {
     const redundantInSettings = difference(inSettings, inGame);
 
     for (const upgrade of missingInSettings) {
-      console.warn(cl(`The workshop upgrade '${upgrade}' is not tracked in Kitten Scientists!`));
+      console.warn(...cl(`The workshop upgrade '${upgrade}' is not tracked in Kitten Scientists!`));
     }
     for (const upgrade of redundantInSettings) {
-      console.warn(cl(`The workshop upgrade '${upgrade}' is not an upgrade in Kittens Game!`));
+      console.warn(...cl(`The workshop upgrade '${upgrade}' is not an upgrade in Kittens Game!`));
     }
   }
 

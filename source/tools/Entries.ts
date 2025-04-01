@@ -76,13 +76,13 @@ export function consumeEntriesPedantic<TKeys extends string, TValues>(
   consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown,
 ): Partial<Record<TKeys, TValues>> {
   if (isNil(source)) {
-    console.warn(cl("No source data was provided."));
+    console.warn(...cl("No source data was provided."));
     return subject;
   }
 
   for (const [key, value] of objectEntries(subject)) {
     if (!(key in source)) {
-      console.info(cl(`Entry '${key}' is missing in source. Using default value.`));
+      console.info(...cl(`Entry '${key}' is missing in source. Using default value.`));
     }
     consumer(value, source[key]);
   }
@@ -90,7 +90,7 @@ export function consumeEntriesPedantic<TKeys extends string, TValues>(
   for (const [key] of objectEntries(source)) {
     if (!(key in subject)) {
       console.warn(
-        cl(
+        ...cl(
           `Entry '${key}' was found in source, but it is not expected by the subject schema. This entry will be ignored.`,
         ),
       );
