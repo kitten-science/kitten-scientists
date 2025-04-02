@@ -98,7 +98,11 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
                   this.setting,
                   building.label,
                   label,
-                  indexPlanet < arrayPlant.length - 1 && indexBuilding === arrayBuilding.length - 1,
+                  {
+                    delimiter:
+                      indexPlanet < arrayPlant.length - 1 &&
+                      indexBuilding === arrayBuilding.length - 1,
+                  },
                 ),
               ),
           ]),

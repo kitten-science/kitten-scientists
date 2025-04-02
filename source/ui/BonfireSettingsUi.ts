@@ -39,8 +39,24 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger < 0;
+          const element = item as SettingTriggerListItem;
+
+          element.triggerButton.inactive = !settings.enabled || settings.trigger < 0;
+          element.triggerButton.ineffective =
+            settings.enabled &&
+            settings.trigger < 0 &&
+            !Object.values(settings.buildings).some(_ => _.enabled && 0 < _.max && 0 <= _.trigger);
+
+          this.expando.ineffective =
+            settings.enabled &&
+            !Object.values(settings.buildings).some(
+              _ => _.enabled && 0 < _.max && (0 <= _.trigger || 0 <= settings.trigger),
+            ) &&
+            !settings.gatherCatnip.enabled &&
+            !settings.turnOnMagnetos.enabled &&
+            !settings.turnOnReactors.enabled &&
+            !settings.turnOnSteamworks.enabled &&
+            !settings.upgradeBuildings.enabled;
         },
         onRefreshTrigger: item => {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
@@ -174,6 +190,14 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           settings,
           meta.stages[0].label,
           sectionLabel,
+          {
+            onCheck: () => {
+              this.refreshUi();
+            },
+            onUnCheck: () => {
+              this.refreshUi();
+            },
+          },
         ),
         BuildSectionTools.getBuildOption(
           host,
@@ -182,8 +206,15 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           settings,
           meta.stages[1].label,
           sectionLabel,
-          false,
-          true,
+          {
+            upgradeIndicator: true,
+            onCheck: () => {
+              this.refreshUi();
+            },
+            onUnCheck: () => {
+              this.refreshUi();
+            },
+          },
         ),
       ];
     }
@@ -196,6 +227,14 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           settings,
           meta.label,
           sectionLabel,
+          {
+            onCheck: () => {
+              this.refreshUi();
+            },
+            onUnCheck: () => {
+              this.refreshUi();
+            },
+          },
         ),
       ];
     }

@@ -93,7 +93,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
                 this.setting,
                 building.label,
                 label,
-                building.name === host.game.time.chronoforgeUpgrades.at(-1)?.name,
+                { delimiter: building.name === host.game.time.chronoforgeUpgrades.at(-1)?.name },
               ),
             ),
 

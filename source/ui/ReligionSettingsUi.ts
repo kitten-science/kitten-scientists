@@ -186,7 +186,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
                 this.setting,
                 upgrade.label,
                 label,
-                upgrade.name === host.game.religion.religionUpgrades.at(-1)?.name,
+                { delimiter: upgrade.name === host.game.religion.religionUpgrades.at(-1)?.name },
               ),
             ),
 

@@ -3,18 +3,27 @@ import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions, SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
 import { Dialog } from "./components/Dialog.js";
+import type { SettingListItemOptions } from "./components/SettingListItem.js";
+import type { SettingListItemOptionsMax } from "./components/SettingMaxListItem.js";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
+import type { SettingListItemOptionsTrigger } from "./components/SettingTriggerListItem.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export const BuildSectionTools = {
-  getBuildOption: (
+  getBuildOption: <
+    TOptions extends SettingListItemOptions<UiComponent> &
+      SettingListItemOptionsMax &
+      SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
+      SettingListItemOptionsMax &
+      SettingListItemOptionsTrigger,
+  >(
     host: KittenScientists,
     option: SettingTriggerMax,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: SettingTrigger,
     label: string,
     sectionLabel: string,
-    delimiter = false,
-    upgradeIndicator = false,
+    options?: Partial<TOptions>,
   ) => {
     const onSetMax = () => {
       Dialog.prompt(
@@ -50,15 +59,17 @@ export const BuildSectionTools = {
     };
 
     const element = new SettingMaxTriggerListItem(host, option, locale, label, {
-      delimiter,
+      delimiter: options?.delimiter,
       onCheck: (isBatchProcess?: boolean) => {
         host.engine.imessage("status.sub.enable", [label]);
         if (option.max === 0 && !isBatchProcess) {
           onSetMax();
         }
+        options?.onCheck?.(isBatchProcess);
       },
-      onUnCheck: () => {
+      onUnCheck: (isBatchProcess?: boolean) => {
         host.engine.imessage("status.sub.disable", [label]);
+        options?.onUnCheck?.(isBatchProcess);
       },
       onRefresh: () => {
         element.maxButton.inactive = !option.enabled || option.max === -1;
@@ -120,7 +131,7 @@ export const BuildSectionTools = {
           })
           .catch(redirectErrorsToConsole(console));
       },
-      upgradeIndicator,
+      upgradeIndicator: options?.upgradeIndicator,
     });
     return element;
   },
