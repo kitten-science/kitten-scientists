@@ -48,7 +48,7 @@
     "@biomejs/biome": "1.9.4",
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.32",
-    "@types/node": "22.13.17",
+    "@types/node": "22.14.0",
     "@types/semver": "7.7.0",
     "@types/web": "0.0.216",
     "cheerio": "1.0.0",
