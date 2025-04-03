@@ -7,15 +7,14 @@ import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.
 import type { UiComponent } from "./UiComponent.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
-export type SettingListItemOptionsTrigger = {
+export type SettingTriggerListItemOptions = SettingListItemOptions<UiComponent> & {
   readonly onRefreshTrigger: (subject: SettingTriggerListItem) => void;
   readonly onSetTrigger: (subject: SettingTriggerListItem) => void;
 };
 
 export class SettingTriggerListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsTrigger,
+  TOptions extends SettingTriggerListItemOptions &
+    SettingTriggerListItemOptions = SettingTriggerListItemOptions,
 > extends SettingListItem {
   readonly triggerButton: TriggerButton;
 

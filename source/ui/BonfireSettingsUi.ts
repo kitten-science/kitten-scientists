@@ -16,7 +16,7 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
+export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTriggerListItem> {
   constructor(
     host: KittenScientists,
     settings: BonfireSettings,
@@ -39,8 +39,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
           options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: item => {
-          const element = item as SettingTriggerListItem;
-
+          const element = this.settingItem;
           element.triggerButton.inactive = !settings.enabled || settings.trigger < 0;
           element.triggerButton.ineffective =
             settings.enabled &&
@@ -59,7 +58,8 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings> {
             !settings.upgradeBuildings.enabled;
         },
         onRefreshTrigger: item => {
-          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
+          const element = this.settingItem;
+          element.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
               : host.renderPercentage(settings.trigger, locale.selected, true),

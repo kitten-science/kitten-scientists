@@ -6,7 +6,7 @@ import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.
 import type { UiComponent } from "./UiComponent.js";
 import { LimitedButton } from "./buttons/LimitedButton.js";
 
-export type SettingListItemOptionsLimited = {
+export type SettingLimitedListItemOptions = SettingListItemOptions<UiComponent> & {
   /**
    * Is called when the "Limited" checkbox is checked.
    */
@@ -19,9 +19,7 @@ export type SettingListItemOptionsLimited = {
 };
 
 export class SettingLimitedListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited = SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited,
+  TOptions extends SettingLimitedListItemOptions = SettingLimitedListItemOptions,
 > extends SettingListItem {
   readonly limitedButton: LimitedButton;
 

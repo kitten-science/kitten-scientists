@@ -10,7 +10,6 @@ import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { Dialog } from "./components/Dialog.js";
 import type { SettingListItemOptions } from "./components/SettingListItem.js";
-import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -90,7 +89,6 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
 
     this.addChild(
       new SettingsList(host, {
-        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         children: [
           new CyclesList(host, this.setting.cycles, {
             onCheck: (label: string) => {

@@ -3,19 +3,19 @@ import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingLimitedTrigger, SettingOptions } from "../../settings/Settings.js";
 import {
   SettingLimitedListItem,
-  type SettingListItemOptionsLimited,
+  type SettingLimitedListItemOptions,
 } from "./SettingLimitedListItem.js";
 import type { SettingListItemOptions } from "./SettingListItem.js";
-import type { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
+import type { SettingTriggerListItemOptions } from "./SettingTriggerListItem.js";
 import type { UiComponent } from "./UiComponent.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
+export type SettingLimitedTriggerListItemOptions = SettingListItemOptions<UiComponent> &
+  SettingLimitedListItemOptions &
+  SettingTriggerListItemOptions;
+
 export class SettingLimitedTriggerListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited &
-    SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited &
-    SettingListItemOptionsTrigger,
+  TOptions extends SettingLimitedTriggerListItemOptions = SettingLimitedTriggerListItemOptions,
 > extends SettingLimitedListItem {
   readonly triggerButton: TriggerButton;
 

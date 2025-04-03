@@ -5,18 +5,18 @@ import stylesButton from "./Button.module.css";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
-import type { SettingListItemOptionsMax } from "./SettingMaxListItem.js";
-import type { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
+import type { SettingMaxListItemOptions } from "./SettingMaxListItem.js";
+import type { SettingTriggerListItemOptions } from "./SettingTriggerListItem.js";
 import type { UiComponent } from "./UiComponent.js";
 import { MaxButton } from "./buttons/MaxButton.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
+export type SettingMaxTriggerListItemOptions = SettingListItemOptions<UiComponent> &
+  SettingMaxListItemOptions &
+  SettingTriggerListItemOptions;
+
 export class SettingMaxTriggerListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsMax &
-    SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsMax &
-    SettingListItemOptionsTrigger,
+  TOptions extends SettingMaxTriggerListItemOptions = SettingMaxTriggerListItemOptions,
 > extends SettingListItem<SettingTriggerMax, TOptions> {
   readonly maxButton: MaxButton;
   readonly triggerButton: TriggerButton;

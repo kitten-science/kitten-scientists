@@ -1,11 +1,10 @@
 import type { KittenScientists } from "../../../KittenScientists.js";
 import { Icons } from "../../../images/Icons.js";
 import type { SettingLimited } from "../../../settings/Settings.js";
-import { Button } from "../Button.js";
+import { Button, type ButtonOptions } from "../Button.js";
 import stylesButton from "../Button.module.css";
-import type { UiComponentOptions } from "../UiComponent.js";
 
-export type LimitedButtonOptions = UiComponentOptions & {
+export type LimitedButtonOptions = ButtonOptions & {
   readonly onLimitedCheck: () => void;
   readonly onLimitedUnCheck: () => void;
 };

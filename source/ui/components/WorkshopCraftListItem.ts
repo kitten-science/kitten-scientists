@@ -6,23 +6,22 @@ import stylesButton from "./Button.module.css";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import stylesListItem from "./ListItem.module.css";
-import type { SettingListItemOptionsLimited } from "./SettingLimitedListItem.js";
+import type { SettingLimitedListItemOptions } from "./SettingLimitedListItem.js";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
-import type { SettingListItemOptionsMax } from "./SettingMaxListItem.js";
-import type { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
+import type { SettingMaxListItemOptions } from "./SettingMaxListItem.js";
+import type { SettingTriggerListItemOptions } from "./SettingTriggerListItem.js";
 import type { UiComponent } from "./UiComponent.js";
 import { LimitedButton } from "./buttons/LimitedButton.js";
 import { MaxButton } from "./buttons/MaxButton.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
+export type WorkshopCraftListItemOptions = SettingListItemOptions<UiComponent> &
+  SettingLimitedListItemOptions &
+  SettingMaxListItemOptions &
+  SettingTriggerListItemOptions;
+
 export class WorkshopCraftListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited &
-    SettingListItemOptionsMax &
-    SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited &
-    SettingListItemOptionsMax &
-    SettingListItemOptionsTrigger,
+  TOptions extends WorkshopCraftListItemOptions = WorkshopCraftListItemOptions,
 > extends SettingListItem<CraftSettingsItem> {
   readonly limitedButton: LimitedButton;
   readonly maxButton: MaxButton;

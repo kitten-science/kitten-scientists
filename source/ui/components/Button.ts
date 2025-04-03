@@ -7,6 +7,7 @@ export type ButtonOptions = IconButtonOptions & {
   readonly border: boolean;
   readonly alignment: "left" | "right";
   readonly title: string;
+  readonly classes: Array<string>;
 };
 
 /**
@@ -35,7 +36,7 @@ export class Button extends UiComponent {
     pathData: string | null = null,
     options?: Partial<ButtonOptions>,
   ) {
-    super(host, { ...options, children: [], classes: [] });
+    super(host, { ...options, children: [] });
 
     this.element = $("<div/>", { title: options?.title }).addClass(styles.button).text(label);
 
