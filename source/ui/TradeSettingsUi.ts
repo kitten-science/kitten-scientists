@@ -22,12 +22,12 @@ import { SettingsPanel } from "./components/SettingsPanel.js";
 import { BuyButton } from "./components/buttons-text/BuyButton.js";
 import { SellButton } from "./components/buttons-text/SellButton.js";
 
-export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
+export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTriggerListItem> {
   constructor(
     host: KittenScientists,
     settings: TradeSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: PanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.trade");
     super(
@@ -44,9 +44,8 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger === -1;
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
@@ -133,8 +132,8 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
             onUnCheck: () => {
               host.engine.imessage("status.sub.disable", [host.engine.i18n("option.crypto")]);
             },
-            onRefresh: item => {
-              (item as SettingTriggerListItem).triggerButton.inactive =
+            onRefresh: () => {
+              this.settingItem.triggerButton.inactive =
                 !this.setting.tradeBlackcoin.enabled || this.setting.tradeBlackcoin.trigger === -1;
             },
             onSetTrigger: () => {
@@ -280,11 +279,11 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings> {
     const panel = new SettingsPanel(host, option, element);
 
     const seasons = new SeasonsList(host, option.seasons, {
-      onCheck: (label: string) => {
+      onCheckSeason: (label: string) => {
         host.engine.imessage("trade.season.enable", [ucfirst(label), label]);
         element.refreshUi();
       },
-      onUnCheck: (label: string) => {
+      onUnCheckSeason: (label: string) => {
         host.engine.imessage("trade.season.disable", [ucfirst(label), label]);
         element.refreshUi();
       },

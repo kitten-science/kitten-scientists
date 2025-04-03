@@ -7,16 +7,14 @@ import {
 } from "./SettingLimitedListItem.js";
 import type { SettingListItemOptions } from "./SettingListItem.js";
 import type { SettingTriggerListItemOptions } from "./SettingTriggerListItem.js";
-import type { UiComponent } from "./UiComponent.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
-export type SettingLimitedTriggerListItemOptions = SettingListItemOptions<UiComponent> &
+export type SettingLimitedTriggerListItemOptions = SettingListItemOptions &
   SettingLimitedListItemOptions &
   SettingTriggerListItemOptions;
 
-export class SettingLimitedTriggerListItem<
-  TOptions extends SettingLimitedTriggerListItemOptions = SettingLimitedTriggerListItemOptions,
-> extends SettingLimitedListItem {
+export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
+  declare readonly _options: SettingLimitedTriggerListItemOptions;
   readonly triggerButton: TriggerButton;
 
   constructor(
@@ -24,18 +22,23 @@ export class SettingLimitedTriggerListItem<
     setting: SettingLimitedTrigger,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: Partial<TOptions>,
+    options?: SettingLimitedTriggerListItemOptions,
   ) {
     super(host, setting, label, options);
 
     this.triggerButton = new TriggerButton(host, setting, locale, {
       border: false,
-      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,
+      onClick: (event?: MouseEvent) => this._onClickTrigger(event),
       onRefreshTitle: options?.onRefreshTrigger
         ? () => options.onRefreshTrigger?.(this)
         : undefined,
     });
     this.head.addChild(this.triggerButton);
+  }
+
+  private _onClickTrigger(event?: MouseEvent): void {
+    this._options.onSetTrigger(this);
+    this.refreshUi();
   }
 
   refreshUi() {

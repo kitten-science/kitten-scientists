@@ -3,24 +3,22 @@ import type { SettingLimited } from "../../settings/Settings.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
-import type { UiComponent } from "./UiComponent.js";
 import { LimitedButton } from "./buttons/LimitedButton.js";
 
-export type SettingLimitedListItemOptions = SettingListItemOptions<UiComponent> & {
+export type SettingLimitedListItemOptions = SettingListItemOptions & {
   /**
    * Is called when the "Limited" checkbox is checked.
    */
-  readonly onLimitedCheck: () => void;
+  readonly onLimitedCheck?: () => void;
 
   /**
    * Is called when the "Limited" checkbox is unchecked.
    */
-  readonly onLimitedUnCheck: () => void;
+  readonly onLimitedUnCheck?: () => void;
 };
 
-export class SettingLimitedListItem<
-  TOptions extends SettingLimitedListItemOptions = SettingLimitedListItemOptions,
-> extends SettingListItem {
+export class SettingLimitedListItem extends SettingListItem {
+  declare readonly _options: SettingLimitedListItemOptions;
   readonly limitedButton: LimitedButton;
 
   /**
@@ -36,7 +34,7 @@ export class SettingLimitedListItem<
     host: KittenScientists,
     setting: SettingLimited,
     label: string,
-    options?: Partial<TOptions>,
+    options?: SettingLimitedListItemOptions,
   ) {
     super(host, setting, label, options);
 

@@ -15,8 +15,8 @@ export class ExpandoButton extends UiComponent {
    * @param host A reference to the host.
    * @param options Options for this expando.
    */
-  constructor(host: KittenScientists, options?: Partial<UiComponentOptions>) {
-    super(host, options);
+  constructor(host: KittenScientists, options?: UiComponentOptions) {
+    super(host, { ...options });
 
     const element = $("<div/>", {
       html: `

@@ -26,7 +26,7 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Colla
     host: KittenScientists,
     label: string,
     setting: TSetting,
-    options?: Partial<IconSettingsPanelOptions>,
+    options?: IconSettingsPanelOptions,
   ) {
     super(
       host,

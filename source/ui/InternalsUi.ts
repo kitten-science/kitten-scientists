@@ -16,7 +16,6 @@ import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { TextButton } from "./components/TextButton.js";
-import type { UiComponent } from "./components/UiComponent.js";
 
 export class InternalsUi extends SettingsPanel<EngineSettings> {
   constructor(
@@ -68,8 +67,8 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                         })
                         .catch(redirectErrorsToConsole(console));
                     },
-                    onRefresh: (subject: UiComponent) => {
-                      (subject as TextButton).element.text(
+                    onRefresh() {
+                      this.element.text(
                         host.engine.i18n("ui.internals.interval", [settings.interval]),
                       );
                     },

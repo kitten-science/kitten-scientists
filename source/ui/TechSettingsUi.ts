@@ -14,13 +14,13 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class TechSettingsUi extends SettingsPanel<TechSettings> {
+export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerListItem> {
   constructor(
     host: KittenScientists,
     settings: TechSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: ScienceSettings,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: PanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade.techs");
     super(
@@ -37,11 +37,9 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          const element = item as SettingTriggerListItem;
-
-          element.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-          element.triggerButton.ineffective =
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          this.settingItem.triggerButton.ineffective =
             sectionSetting.enabled &&
             settings.enabled &&
             settings.trigger === -1 &&

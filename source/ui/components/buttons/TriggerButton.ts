@@ -13,10 +13,11 @@ import { Button, type ButtonOptions } from "../Button.js";
 export type TriggerButtonBehavior = "integer" | "percentage";
 
 export type TriggerButtonOptions = ButtonOptions & {
-  readonly onRefreshTitle: (subject: TriggerButton) => void;
+  readonly onRefreshTitle?: (subject: TriggerButton) => void;
 };
 
 export class TriggerButton extends Button {
+  declare readonly _options: TriggerButtonOptions;
   readonly behavior: TriggerButtonBehavior;
   readonly setting: SettingTrigger | SettingThreshold;
   protected readonly _onRefreshTitle?: (subject: TriggerButton) => void;
@@ -25,7 +26,7 @@ export class TriggerButton extends Button {
     host: KittenScientists,
     setting: SettingTrigger | SettingThreshold,
     _locale: SettingOptions<SupportedLocale>,
-    options?: Partial<TriggerButtonOptions>,
+    options?: TriggerButtonOptions,
   ) {
     super(host, "", Icons.Trigger, options);
 

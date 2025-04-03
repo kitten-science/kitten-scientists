@@ -41,7 +41,7 @@ export class UserInterface extends UiComponent {
   stateManagementUi: StateManagementUi;
 
   constructor(host: KittenScientists) {
-    super(host);
+    super(host, {});
 
     const engine = host.engine;
     this._engineUi = new EngineSettingsUi(host, engine.settings);

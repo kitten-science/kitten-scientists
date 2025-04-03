@@ -14,7 +14,7 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
+export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTriggerListItem> {
   private readonly _missionsUi: MissionSettingsUi;
 
   constructor(
@@ -38,9 +38,8 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger === -1;
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [

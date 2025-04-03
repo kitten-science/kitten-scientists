@@ -14,14 +14,17 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> {
+export class TimeSkipHeatSettingsUi extends SettingsPanel<
+  TimeSkipHeatSettings,
+  SettingTriggerListItem
+> {
   constructor(
     host: KittenScientists,
     settings: TimeSkipHeatSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeSkipSettings,
     sectionParentSetting: TimeControlSettings,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: PanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("option.time.activeHeatTransfer");
     super(
@@ -39,9 +42,9 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive = !settings.enabled;
-          (item as SettingTriggerListItem).triggerButton.ineffective =
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled;
+          this.settingItem.triggerButton.ineffective =
             sectionParentSetting.enabled &&
             sectionSetting.enabled &&
             settings.enabled &&
@@ -91,11 +94,11 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
       new SettingsList(host, {
         children: [
           new CyclesList(host, this.setting.cycles, {
-            onCheck: (label: string) => {
+            onCheckCycle: (label: string) => {
               host.engine.imessage("time.heatTransfer.cycle.enable", [label]);
               this.refreshUi();
             },
-            onUnCheck: (label: string) => {
+            onUnCheckCycle: (label: string) => {
               host.engine.imessage("time.heatTransfer.cycle.disable", [label]);
               this.refreshUi();
             },

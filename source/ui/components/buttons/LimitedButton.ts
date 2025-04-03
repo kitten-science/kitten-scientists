@@ -5,18 +5,14 @@ import { Button, type ButtonOptions } from "../Button.js";
 import stylesButton from "../Button.module.css";
 
 export type LimitedButtonOptions = ButtonOptions & {
-  readonly onLimitedCheck: () => void;
-  readonly onLimitedUnCheck: () => void;
+  readonly onLimitedCheck?: () => void;
+  readonly onLimitedUnCheck?: () => void;
 };
 
 export class LimitedButton extends Button {
   readonly setting: SettingLimited;
 
-  constructor(
-    host: KittenScientists,
-    setting: SettingLimited,
-    options?: Partial<LimitedButtonOptions>,
-  ) {
+  constructor(host: KittenScientists, setting: SettingLimited, options?: LimitedButtonOptions) {
     super(host, "", Icons.Eco, { ...options, border: false, classes: [] });
 
     this.setting = setting;

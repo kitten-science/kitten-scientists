@@ -10,26 +10,27 @@ export type RadioItemOptions = UiComponentOptions & {
   /**
    * Will be invoked when the user selects this radio item.
    */
-  onCheck: (isBatchProcess?: boolean) => void;
+  onCheck?: (isBatchProcess?: boolean) => void;
 
   /**
    * Should there be additional padding below this element?
    */
-  delimiter: boolean;
+  delimiter?: boolean;
 
   /**
    * Should an indicator be rendered in front of the element,
    * to indicate that this is an upgrade of a prior setting?
    */
-  upgradeIndicator: boolean;
+  upgradeIndicator?: boolean;
 
   /**
    * Should the user be prevented from changing the value of the input?
    */
-  readOnly: boolean;
+  readOnly?: boolean;
 };
 
 export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
+  declare readonly _options: RadioItemOptions;
   readonly setting: TSetting;
   readonly option: TSetting["options"][0];
   readonly element: JQuery;
@@ -52,9 +53,9 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     setting: TSetting,
     option: TSetting["options"][0],
     groupKey: string,
-    options?: Partial<RadioItemOptions>,
+    options?: RadioItemOptions,
   ) {
-    super(host, options);
+    super(host, { ...options });
 
     const element = $("<div/>");
     element.addClass(stylesSettingListItem.setting);

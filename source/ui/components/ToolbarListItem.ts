@@ -3,17 +3,15 @@ import type { Button } from "./Button.js";
 import type { IconButton } from "./IconButton.js";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
 import styles from "./ToolbarListItem.module.css";
-import type { UiComponent } from "./UiComponent.js";
 
-export class ToolbarListItem<
-  TOptions extends ListItemOptions<UiComponent> = ListItemOptions<UiComponent>,
-> extends ListItem {
+export class ToolbarListItem extends ListItem {
+  declare readonly _options: ListItemOptions;
   readonly buttons: Array<Button | IconButton>;
 
   constructor(
     host: KittenScientists,
     buttons: Array<Button | IconButton>,
-    options?: Partial<TOptions>,
+    options?: ListItemOptions,
   ) {
     super(host, options);
 

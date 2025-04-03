@@ -9,6 +9,7 @@ import stylesButton from "../Button.module.css";
 import { Dialog } from "../Dialog.js";
 
 export class ConsumeButton extends Button {
+  declare readonly _options: ButtonOptions;
   readonly setting: ResourcesSettingsItem;
   readonly resourceName: string;
 
@@ -17,7 +18,7 @@ export class ConsumeButton extends Button {
     setting: ResourcesSettingsItem,
     locale: SettingOptions<SupportedLocale>,
     resourceName: string,
-    options?: Partial<ButtonOptions>,
+    options?: ButtonOptions,
   ) {
     super(host, "", Icons.DataUsage, {
       ...options,
@@ -45,10 +46,7 @@ export class ConsumeButton extends Button {
           })
           .then(() => {
             this.refreshUi();
-
-            if (options?.onClick) {
-              options.onClick(this);
-            }
+            options?.onClick?.();
           })
           .catch(redirectErrorsToConsole(console));
       },

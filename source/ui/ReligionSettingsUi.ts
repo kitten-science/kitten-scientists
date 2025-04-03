@@ -18,7 +18,7 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
+export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingTriggerListItem> {
   private readonly _unicornBuildings: Map<
     ZigguratUpgrade | "unicornPasture",
     SettingMaxTriggerListItem
@@ -29,7 +29,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
     host: KittenScientists,
     settings: ReligionSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: PanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.faith");
     super(
@@ -46,9 +46,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger === -1;
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
@@ -244,8 +243,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings> {
               onUnCheck: () => {
                 host.engine.imessage("status.sub.disable", [label]);
               },
-              onRefresh: element => {
-                (element as SettingTriggerListItem).triggerButton.inactive =
+              onRefresh: () => {
+                this.settingItem.triggerButton.inactive =
                   !this.setting[item].enabled || this.setting[item].trigger === -1;
               },
               onSetTrigger: () => {

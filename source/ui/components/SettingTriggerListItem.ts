@@ -4,18 +4,15 @@ import type { SettingOptions, SettingThreshold, SettingTrigger } from "../../set
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
-import type { UiComponent } from "./UiComponent.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
-export type SettingTriggerListItemOptions = SettingListItemOptions<UiComponent> & {
-  readonly onRefreshTrigger: (subject: SettingTriggerListItem) => void;
-  readonly onSetTrigger: (subject: SettingTriggerListItem) => void;
+export type SettingTriggerListItemOptions = SettingListItemOptions & {
+  readonly onRefreshTrigger?: (subject: SettingTriggerListItem) => void;
+  readonly onSetTrigger: (subject: SettingTriggerListItem) => unknown | Promise<unknown>;
 };
 
-export class SettingTriggerListItem<
-  TOptions extends SettingTriggerListItemOptions &
-    SettingTriggerListItemOptions = SettingTriggerListItemOptions,
-> extends SettingListItem {
+export class SettingTriggerListItem extends SettingListItem {
+  declare readonly _options: SettingTriggerListItemOptions;
   readonly triggerButton: TriggerButton;
 
   constructor(
@@ -23,14 +20,17 @@ export class SettingTriggerListItem<
     setting: SettingThreshold | SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: Partial<TOptions>,
+    options: SettingTriggerListItemOptions,
   ) {
     super(host, setting, label, options);
 
     this.triggerButton = new TriggerButton(host, setting, locale, {
       alignment: "right",
       border: false,
-      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,
+      onClick: (event?: MouseEvent) => {
+        this._options.onSetTrigger(this);
+        this.refreshUi();
+      },
       onRefreshTitle: options?.onRefreshTrigger
         ? () => options.onRefreshTrigger?.(this)
         : undefined,

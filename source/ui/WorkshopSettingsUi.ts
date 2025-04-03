@@ -15,14 +15,14 @@ import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { WorkshopCraftListItem } from "./components/WorkshopCraftListItem.js";
 
-export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
+export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingTriggerListItem> {
   private readonly _crafts: Array<SettingListItem>;
 
   constructor(
     host: KittenScientists,
     settings: WorkshopSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: PanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.craft");
     super(
@@ -39,9 +39,8 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger === -1;
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
