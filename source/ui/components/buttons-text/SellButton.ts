@@ -3,7 +3,7 @@ import type { SupportedLocale } from "../../../Engine.js";
 import type { KittenScientists } from "../../../KittenScientists.js";
 import type { SettingOptions, SettingSell } from "../../../settings/Settings.js";
 import { Dialog } from "../Dialog.js";
-import { TextButton } from "../TextButton.js";
+import { TextButton, type TextButtonOptions } from "../TextButton.js";
 import styles from "./SellButton.module.css";
 
 export class SellButton extends TextButton {
@@ -13,7 +13,7 @@ export class SellButton extends TextButton {
     host: KittenScientists,
     setting: SettingSell,
     locale: SettingOptions<SupportedLocale>,
-    handler: { onClick?: () => void } = {},
+    options?: TextButtonOptions,
   ) {
     super(host, undefined, {
       onClick: () => {
@@ -40,10 +40,7 @@ export class SellButton extends TextButton {
           })
           .then(() => {
             this.refreshUi();
-
-            if (handler.onClick) {
-              handler.onClick();
-            }
+            options?.onClick?.();
           })
           .catch(redirectErrorsToConsole(console));
       },

@@ -49,10 +49,7 @@ export class StockButton extends Button {
           })
           .then(() => {
             this.refreshUi();
-
-            if (options?.onClick) {
-              options.onClick(this);
-            }
+            options?.onClick?.();
           })
           .catch(redirectErrorsToConsole(console));
       },

@@ -2,14 +2,12 @@ import type { KittenScientists } from "../../KittenScientists.js";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
 import type { TextButton } from "./TextButton.js";
-import type { UiComponent } from "./UiComponent.js";
 
-export class ButtonListItem<
-  TOptions extends ListItemOptions<UiComponent> = ListItemOptions<UiComponent>,
-> extends ListItem<TOptions> {
+export class ButtonListItem extends ListItem {
+  declare readonly _options: ListItemOptions;
   readonly button: TextButton;
 
-  constructor(host: KittenScientists, button: TextButton, options: Partial<TOptions> = {}) {
+  constructor(host: KittenScientists, button: TextButton, options?: ListItemOptions) {
     super(host, { ...options, children: [] });
 
     this.button = button;
@@ -17,7 +15,7 @@ export class ButtonListItem<
     this.element.addClass(stylesListItem.head);
     this.element.append(button.element);
 
-    this.addChildren(options.children);
+    this.addChildren(options?.children);
   }
 
   refreshUi(): void {

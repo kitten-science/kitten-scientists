@@ -38,7 +38,7 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: _item => {
+        onRefresh: () => {
           this.expando.ineffective =
             settings.enabled &&
             !settings.policies.enabled &&

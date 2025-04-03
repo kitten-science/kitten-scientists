@@ -37,7 +37,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: _item => {
+        onRefresh: () => {
           this.expando.ineffective =
             sectionSetting.enabled &&
             settings.enabled &&

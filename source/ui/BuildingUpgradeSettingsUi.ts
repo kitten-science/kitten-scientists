@@ -34,7 +34,7 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: _item => {
+        onRefresh: () => {
           this.expando.ineffective =
             sectionSetting.enabled &&
             settings.enabled &&

@@ -3,30 +3,26 @@ import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
 import { default as styles, default as stylesSettingListItem } from "./SettingListItem.module.css";
-import type { UiComponent, UiComponentInterface } from "./UiComponent.js";
 
-export type SettingListItemOptions<TChild extends UiComponentInterface = UiComponentInterface> =
-  LabelListItemOptions<TChild> & {
-    /**
-     * Will be invoked when the user checks the checkbox.
-     */
-    readonly onCheck: (isBatchProcess?: boolean) => void;
+export type SettingListItemOptions = LabelListItemOptions & {
+  /**
+   * Will be invoked when the user checks the checkbox.
+   */
+  readonly onCheck?: (isBatchProcess?: boolean) => void;
 
-    /**
-     * Will be invoked when the user unchecks the checkbox.
-     */
-    readonly onUnCheck: (isBatchProcess?: boolean) => void;
+  /**
+   * Will be invoked when the user unchecks the checkbox.
+   */
+  readonly onUnCheck?: (isBatchProcess?: boolean) => void;
 
-    /**
-     * Should the user be prevented from changing the value of the input?
-     */
-    readonly readOnly: boolean;
-  };
+  /**
+   * Should the user be prevented from changing the value of the input?
+   */
+  readonly readOnly?: boolean;
+};
 
-export class SettingListItem<
-  TSetting extends Setting = Setting,
-  TOptions extends SettingListItemOptions<UiComponent> = SettingListItemOptions<UiComponent>,
-> extends LabelListItem<TOptions> {
+export class SettingListItem<TSetting extends Setting = Setting> extends LabelListItem {
+  declare readonly _options: SettingListItemOptions;
   readonly setting: TSetting;
   readonly checkbox?: JQuery;
 
@@ -47,7 +43,7 @@ export class SettingListItem<
     host: KittenScientists,
     setting: TSetting,
     label: string,
-    options: Partial<TOptions> = {},
+    options?: SettingListItemOptions,
   ) {
     super(host, label, { ...options, children: [] });
 
@@ -59,17 +55,17 @@ export class SettingListItem<
       type: "checkbox",
     }).addClass(styles.checkbox);
 
-    this.readOnly = options.readOnly ?? false;
+    this.readOnly = options?.readOnly ?? false;
     checkbox.prop("disabled", this.readOnly);
 
     checkbox.on("change", () => {
       if (checkbox.is(":checked") && !setting.enabled) {
         setting.enabled = true;
-        options.onCheck?.();
+        options?.onCheck?.();
         this.refreshUi();
       } else if (!checkbox.is(":checked") && setting.enabled) {
         setting.enabled = false;
-        options.onUnCheck?.();
+        options?.onUnCheck?.();
         this.refreshUi();
       }
     });
@@ -80,12 +76,12 @@ export class SettingListItem<
     this.checkbox = checkbox;
     this.setting = setting;
 
-    this.addChildren(options.children);
+    this.addChildren(options?.children);
   }
 
   check(isBatchProcess = false) {
     this.setting.enabled = true;
-    this._options.onCheck?.(isBatchProcess);
+    this._options?.onCheck?.(isBatchProcess);
     this.refreshUi();
   }
 

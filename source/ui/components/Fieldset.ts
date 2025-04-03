@@ -5,7 +5,7 @@ import stylesLabel from "./LabelListItem.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type FieldsetOptions = UiComponentOptions & {
-  readonly delimiter: boolean;
+  readonly delimiter?: boolean;
 };
 
 export class Fieldset extends UiComponent {
@@ -18,8 +18,8 @@ export class Fieldset extends UiComponent {
    * @param label The label on the fieldset.
    * @param options Options for the fieldset.
    */
-  constructor(host: KittenScientists, label: string, options?: Partial<FieldsetOptions>) {
-    super(host, options);
+  constructor(host: KittenScientists, label: string, options?: FieldsetOptions) {
+    super(host, { ...options });
 
     const element = $("<fieldset/>").addClass(styles.fieldset);
     if (options?.delimiter) {

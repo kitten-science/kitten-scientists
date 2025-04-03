@@ -5,16 +5,19 @@ import styles from "./TextButton.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type TextButtonOptions = UiComponentOptions & {
-  readonly title: string;
-  readonly onClick: () => void;
+  readonly title?: string;
 };
 
 export class TextButton extends UiComponent {
   readonly element: JQuery;
   readOnly: boolean;
 
-  constructor(host: KittenScientists, label?: string, options?: Partial<TextButtonOptions>) {
-    super(host, options);
+  constructor(
+    host: KittenScientists,
+    label?: string,
+    options?: TextButtonOptions & ThisType<TextButton>,
+  ) {
+    super(host, { ...options });
 
     const element = $("<div/>").addClass(styles.textButton);
     if (label !== undefined) {

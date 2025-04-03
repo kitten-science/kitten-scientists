@@ -13,12 +13,12 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
+export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerListItem> {
   constructor(
     host: KittenScientists,
     settings: TimeSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: PanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.time");
     super(
@@ -35,9 +35,8 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger === -1;
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [

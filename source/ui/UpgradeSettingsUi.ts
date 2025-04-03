@@ -14,7 +14,7 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
+export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTriggerListItem> {
   constructor(
     host: KittenScientists,
     settings: UpgradeSettings,
@@ -36,9 +36,8 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger === -1;
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger: item => {
           item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [

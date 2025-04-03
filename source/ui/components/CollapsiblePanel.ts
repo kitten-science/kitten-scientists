@@ -3,14 +3,14 @@ import type { KittenScientists } from "../../KittenScientists.js";
 import { Container } from "./Container.js";
 import type { LabelListItem } from "./LabelListItem.js";
 import stylesSettingListItem from "./SettingListItem.module.css";
-import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
 import { ExpandoButton } from "./buttons/ExpandoButton.js";
 
-export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponentOptions<TChild> & {
+export type PanelOptions = UiComponentOptions & {
   /**
    * Should the main child be expanded right away?
    */
-  readonly initiallyExpanded: boolean;
+  readonly initiallyExpanded?: boolean;
 };
 
 /**
@@ -19,10 +19,8 @@ export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponent
  * The panel also has a head element, which is extended to create the panel
  * behavior.
  */
-export class CollapsiblePanel<
-  TOptions extends PanelOptions = PanelOptions,
-  THead extends LabelListItem = LabelListItem,
-> extends UiComponent<TOptions> {
+export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> extends UiComponent {
+  declare readonly _options: PanelOptions;
   protected readonly container: UiComponent;
   readonly element: JQuery;
   protected readonly _expando: ExpandoButton;
@@ -45,8 +43,8 @@ export class CollapsiblePanel<
    * @param head Another component to host in the head of the panel.
    * @param options Options for this panel.
    */
-  constructor(host: KittenScientists, head: THead, options?: Partial<TOptions>) {
-    super(host, options);
+  constructor(host: KittenScientists, head: THead, options?: PanelOptions) {
+    super(host, {});
 
     this.container = new Container(host);
     this.container.element.addClass(stylesSettingListItem.panelContent);
@@ -112,12 +110,12 @@ export class CollapsiblePanel<
     }
 
     if (toggleNested) {
-      const toggleChildren = (children: Set<TOptions["children"][0]>) => {
+      const toggleChildren = (children: Iterable<UiComponentInterface>) => {
         for (const child of children) {
-          if (is(child, CollapsiblePanel)) {
-            (child as CollapsiblePanel).toggle(expand, toggleNested);
+          if (is<CollapsiblePanel>(child, CollapsiblePanel)) {
+            child.toggle(expand, toggleNested);
           } else {
-            toggleChildren((child as UiComponent<TOptions>).children);
+            toggleChildren(child.children);
           }
         }
       };

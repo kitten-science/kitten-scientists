@@ -32,7 +32,7 @@ export class Dialog extends UiComponent {
    * @param host - A reference to the host.
    * @param options - Options for the dialog.
    */
-  constructor(host: KittenScientists, options?: Partial<DialogOptions>) {
+  constructor(host: KittenScientists, options?: DialogOptions) {
     super(host, { ...options, children: [] });
 
     this.element = $<HTMLDialogElement>("<dialog/>")

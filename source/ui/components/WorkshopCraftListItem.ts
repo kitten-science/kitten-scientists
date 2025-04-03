@@ -10,19 +10,17 @@ import type { SettingLimitedListItemOptions } from "./SettingLimitedListItem.js"
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
 import type { SettingMaxListItemOptions } from "./SettingMaxListItem.js";
 import type { SettingTriggerListItemOptions } from "./SettingTriggerListItem.js";
-import type { UiComponent } from "./UiComponent.js";
 import { LimitedButton } from "./buttons/LimitedButton.js";
 import { MaxButton } from "./buttons/MaxButton.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
-export type WorkshopCraftListItemOptions = SettingListItemOptions<UiComponent> &
+export type WorkshopCraftListItemOptions = SettingListItemOptions &
   SettingLimitedListItemOptions &
   SettingMaxListItemOptions &
   SettingTriggerListItemOptions;
 
-export class WorkshopCraftListItem<
-  TOptions extends WorkshopCraftListItemOptions = WorkshopCraftListItemOptions,
-> extends SettingListItem<CraftSettingsItem> {
+export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
+  declare readonly _options: WorkshopCraftListItemOptions;
   readonly limitedButton: LimitedButton;
   readonly maxButton: MaxButton;
   readonly triggerButton: TriggerButton;
@@ -32,7 +30,7 @@ export class WorkshopCraftListItem<
     setting: CraftSettingsItem,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: Partial<TOptions>,
+    options?: WorkshopCraftListItemOptions,
   ) {
     super(host, setting, label, options);
 

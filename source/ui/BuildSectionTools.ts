@@ -9,16 +9,14 @@ import {
 } from "./components/SettingMaxTriggerListItem.js";
 
 export const BuildSectionTools = {
-  getBuildOption: <
-    TOptions extends SettingMaxTriggerListItemOptions = SettingMaxTriggerListItemOptions,
-  >(
+  getBuildOption: (
     host: KittenScientists,
     option: SettingTriggerMax,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: SettingTrigger,
     label: string,
     sectionLabel: string,
-    options?: Partial<TOptions>,
+    options?: Partial<SettingMaxTriggerListItemOptions>,
   ) => {
     const onSetMax = () => {
       Dialog.prompt(

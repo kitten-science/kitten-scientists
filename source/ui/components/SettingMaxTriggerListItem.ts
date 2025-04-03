@@ -7,17 +7,15 @@ import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
 import type { SettingMaxListItemOptions } from "./SettingMaxListItem.js";
 import type { SettingTriggerListItemOptions } from "./SettingTriggerListItem.js";
-import type { UiComponent } from "./UiComponent.js";
 import { MaxButton } from "./buttons/MaxButton.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
-export type SettingMaxTriggerListItemOptions = SettingListItemOptions<UiComponent> &
+export type SettingMaxTriggerListItemOptions = SettingListItemOptions &
   SettingMaxListItemOptions &
   SettingTriggerListItemOptions;
 
-export class SettingMaxTriggerListItem<
-  TOptions extends SettingMaxTriggerListItemOptions = SettingMaxTriggerListItemOptions,
-> extends SettingListItem<SettingTriggerMax, TOptions> {
+export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax> {
+  declare readonly _options: SettingMaxTriggerListItemOptions;
   readonly maxButton: MaxButton;
   readonly triggerButton: TriggerButton;
 
@@ -26,7 +24,7 @@ export class SettingMaxTriggerListItem<
     setting: SettingTriggerMax,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: Partial<TOptions>,
+    options?: SettingMaxTriggerListItemOptions,
   ) {
     super(host, setting, label, options);
 

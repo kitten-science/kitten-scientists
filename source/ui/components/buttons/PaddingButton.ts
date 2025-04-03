@@ -11,8 +11,8 @@ export class PaddingButton extends UiComponent {
    * @param host - A reference to the host.
    * @param options - Options for this button.
    */
-  constructor(host: KittenScientists, options?: Partial<UiComponentOptions>) {
-    super(host, options);
+  constructor(host: KittenScientists, options?: UiComponentOptions) {
+    super(host, { ...options });
 
     const element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;"></svg>`,

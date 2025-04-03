@@ -4,17 +4,17 @@ import type { IconButtonOptions } from "./IconButton.js";
 import { UiComponent } from "./UiComponent.js";
 
 export type ButtonOptions = IconButtonOptions & {
-  readonly border: boolean;
-  readonly alignment: "left" | "right";
-  readonly title: string;
-  readonly classes: Array<string>;
+  readonly border?: boolean;
+  readonly alignment?: "left" | "right";
+  readonly title?: string;
+  readonly classes?: Array<string>;
 };
 
 /**
  * A button that has a label and can optionally have an SVG icon.
  */
 export class Button extends UiComponent {
-  declare readonly _options: Partial<ButtonOptions>;
+  declare readonly _options: ButtonOptions;
 
   protected readonly _iconElement: JQuery | undefined;
   readonly element: JQuery;
@@ -34,7 +34,7 @@ export class Button extends UiComponent {
     host: KittenScientists,
     label: string,
     pathData: string | null = null,
-    options?: Partial<ButtonOptions>,
+    options?: ButtonOptions,
   ) {
     super(host, { ...options, children: [] });
 

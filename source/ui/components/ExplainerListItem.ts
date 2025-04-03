@@ -19,7 +19,7 @@ export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends 
     key: TranslatedString<TKittenGameLiteral>,
     options?: Partial<UiComponentOptions>,
   ) {
-    super(host);
+    super(host, { ...options });
 
     const element = $("<li/>", { text: host.engine.i18n(key) }).addClass(styles.explainer);
 

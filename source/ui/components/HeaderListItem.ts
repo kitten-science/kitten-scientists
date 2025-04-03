@@ -3,12 +3,8 @@ import styles from "./HeaderListItem.module.css";
 import type { ListItem, ListItemOptions } from "./ListItem.js";
 import { UiComponent } from "./UiComponent.js";
 
-export class HeaderListItem<
-    TOptions extends ListItemOptions<UiComponent> = ListItemOptions<UiComponent>,
-  >
-  extends UiComponent<TOptions>
-  implements ListItem<TOptions>
-{
+export class HeaderListItem extends UiComponent implements ListItem {
+  declare readonly _options: ListItemOptions;
   readonly element: JQuery;
   get elementLabel() {
     return this.element;
@@ -22,8 +18,8 @@ export class HeaderListItem<
    * @param text The text to appear on the header element.
    * @param options Options for the header.
    */
-  constructor(host: KittenScientists, text: string, options?: Partial<TOptions>) {
-    super(host, options);
+  constructor(host: KittenScientists, text: string, options?: ListItemOptions) {
+    super(host, { ...options });
 
     const element = $("<li/>", { text }).addClass(styles.header);
 

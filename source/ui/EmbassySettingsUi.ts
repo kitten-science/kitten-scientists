@@ -14,7 +14,7 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
-export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
+export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTriggerListItem> {
   constructor(
     host: KittenScientists,
     settings: EmbassySettings,
@@ -37,9 +37,8 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings> {
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive =
-            !settings.enabled || settings.trigger === -1;
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
 
           this.expando.ineffective =
             sectionSetting.enabled &&

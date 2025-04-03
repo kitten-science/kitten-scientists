@@ -22,8 +22,8 @@ import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingMaxTriggerListItem> {
-  private readonly _cycles: CollapsiblePanel<PanelOptions<CyclesList>>;
-  private readonly _seasons: CollapsiblePanel<PanelOptions<SeasonsList>>;
+  private readonly _cycles: CollapsiblePanel;
+  private readonly _seasons: CollapsiblePanel;
   private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
 
   constructor(
@@ -48,13 +48,11 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          const element = item as SettingMaxTriggerListItem;
+        onRefresh: () => {
+          this.settingItem.maxButton.inactive = !settings.enabled || settings.max === -1;
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
 
-          element.maxButton.inactive = !settings.enabled || settings.max === -1;
-          element.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-
-          element.maxButton.ineffective =
+          this.settingItem.maxButton.ineffective =
             sectionSetting.enabled && settings.enabled && settings.max === 0;
 
           this._cycles.expando.ineffective =
@@ -143,7 +141,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     );
     this.settingItem.triggerButton.element.removeClass(stylesButton.lastHeadAction);
 
-    this._cycles = new CollapsiblePanel<PanelOptions<CyclesList>>(
+    this._cycles = new CollapsiblePanel(
       host,
       new LabelListItem(host, ucfirst(host.engine.i18n("ui.cycles")), {
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
@@ -153,11 +151,11 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       {
         children: [
           new CyclesList(host, this.setting.cycles, {
-            onCheck: (label: string) => {
+            onCheckCycle: (label: string) => {
               host.engine.imessage("time.skip.cycle.enable", [label]);
               this.refreshUi();
             },
-            onUnCheck: (label: string) => {
+            onUnCheckCycle: (label: string) => {
               host.engine.imessage("time.skip.cycle.disable", [label]);
               this.refreshUi();
             },
@@ -165,7 +163,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
         ],
       },
     );
-    this._seasons = new CollapsiblePanel<PanelOptions<SeasonsList>>(
+    this._seasons = new CollapsiblePanel(
       host,
       new LabelListItem(host, ucfirst(host.engine.i18n("trade.seasons")), {
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
@@ -175,11 +173,11 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       {
         children: [
           new SeasonsList(host, this.setting.seasons, {
-            onCheck: (label: string) => {
+            onCheckSeason: (label: string) => {
               host.engine.imessage("time.skip.season.enable", [label]);
               this.refreshUi();
             },
-            onUnCheck: (label: string) => {
+            onUnCheckSeason: (label: string) => {
               host.engine.imessage("time.skip.season.disable", [label]);
               this.refreshUi();
             },

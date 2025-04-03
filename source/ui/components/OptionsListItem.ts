@@ -5,11 +5,12 @@ import { RadioItem } from "./RadioItem.js";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type OptionsListItemOptions = UiComponentOptions & {
-  readonly onCheck: (isBatchProcess?: boolean) => void;
-  readonly readOnly: boolean;
+  readonly onCheck?: (isBatchProcess?: boolean) => void;
+  readonly readOnly?: boolean;
 };
 
 export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
+  declare readonly _options: OptionsListItemOptions;
   readonly fieldset: Fieldset;
   readonly setting: TSetting;
   readonly element: JQuery;
@@ -28,9 +29,9 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
     host: KittenScientists,
     label: string,
     setting: TSetting,
-    options?: Partial<Omit<OptionsListItemOptions, "children">>,
+    options?: OptionsListItemOptions,
   ) {
-    super(host, options);
+    super(host, { ...options });
 
     this.element = $("<li/>");
 

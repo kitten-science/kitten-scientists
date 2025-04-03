@@ -6,13 +6,13 @@ import { Button, type ButtonOptions } from "../Button.js";
 import styles from "./MaxButton.module.css";
 
 export type MaxButtonOptions = ButtonOptions & {
-  readonly onRefresh: (subject: MaxButton) => void;
+  readonly onRefresh?: (subject: MaxButton) => void;
 };
 
 export class MaxButton extends Button {
   readonly setting: SettingMax;
 
-  constructor(host: KittenScientists, setting: SettingMax, options?: Partial<MaxButtonOptions>) {
+  constructor(host: KittenScientists, setting: SettingMax, options?: MaxButtonOptions) {
     super(host, "", null, {
       ...options,
       classes: [styles.maxButton, ...(options?.classes ?? [])],

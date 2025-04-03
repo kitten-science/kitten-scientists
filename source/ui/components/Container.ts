@@ -2,10 +2,10 @@ import type { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type ContainerOptions = UiComponentOptions & {
-  readonly classes: Array<string>;
+  readonly classes?: Array<string>;
 };
 
-export class Container<TOptions extends ContainerOptions = ContainerOptions> extends UiComponent {
+export class Container extends UiComponent {
   readonly element: JQuery;
 
   /**
@@ -14,7 +14,7 @@ export class Container<TOptions extends ContainerOptions = ContainerOptions> ext
    * @param host A reference to the host.
    * @param options Options for the container.
    */
-  constructor(host: KittenScientists, options?: Partial<TOptions>) {
+  constructor(host: KittenScientists, options?: ContainerOptions) {
     super(host, { ...options, children: [] });
 
     this.element = $("<div/>");

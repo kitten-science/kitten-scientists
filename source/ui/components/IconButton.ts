@@ -3,14 +3,15 @@ import stylesButton from "./Button.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type IconButtonOptions = UiComponentOptions & {
-  readonly readOnly: boolean;
-  readonly inactive: boolean;
+  readonly readOnly?: boolean;
+  readonly inactive?: boolean;
 };
 
 /**
  * A button that is visually represented through an SVG element.
  */
 export class IconButton extends UiComponent {
+  declare readonly _options: IconButtonOptions;
   readonly element: JQuery;
   readOnly: boolean;
   inactive: boolean;
@@ -27,9 +28,9 @@ export class IconButton extends UiComponent {
     host: KittenScientists,
     pathData: string,
     title: string,
-    options?: Partial<IconButtonOptions>,
+    options?: IconButtonOptions,
   ) {
-    super(host, options);
+    super(host, { ...options });
 
     const element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
