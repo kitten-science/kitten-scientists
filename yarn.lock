@@ -299,7 +299,7 @@ __metadata:
   resolution: "@kitten-science/kitten-scientists@workspace:."
   dependencies:
     "@biomejs/biome": "npm:1.9.4"
-    "@oliversalzburg/js-utils": "npm:0.2.13"
+    "@oliversalzburg/js-utils": "npm:0.3.0"
     "@types/dojo": "npm:1.9.48"
     "@types/jquery": "npm:3.5.32"
     "@types/node": "npm:22.14.0"
@@ -340,10 +340,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oliversalzburg/js-utils@npm:0.2.13":
-  version: 0.2.13
-  resolution: "@oliversalzburg/js-utils@npm:0.2.13"
-  checksum: 10c0/367096367701fc0f5e15ce0dc4a020cdf64339da8eae5c43ebb4b683a6e255ea15c4fab6e703f931b5be3f55be69864dbe12be09f4ebc963f6b8f7d85affc36d
+"@oliversalzburg/js-utils@npm:0.3.0":
+  version: 0.3.0
+  resolution: "@oliversalzburg/js-utils@npm:0.3.0"
+  checksum: 10c0/f15341f43af573e605c0e213fdc12ed10513657e19f469d6c106d02733eea8e89b3d177b1e4cf0b291175cc2072179b7e6e29d23168601a559eed18030ce68a3
   languageName: node
   linkType: hard
 
