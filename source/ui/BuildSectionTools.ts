@@ -3,19 +3,14 @@ import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions, SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
 import { Dialog } from "./components/Dialog.js";
-import type { SettingListItemOptions } from "./components/SettingListItem.js";
-import type { SettingListItemOptionsMax } from "./components/SettingMaxListItem.js";
-import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
-import type { SettingListItemOptionsTrigger } from "./components/SettingTriggerListItem.js";
-import type { UiComponent } from "./components/UiComponent.js";
+import {
+  SettingMaxTriggerListItem,
+  type SettingMaxTriggerListItemOptions,
+} from "./components/SettingMaxTriggerListItem.js";
 
 export const BuildSectionTools = {
   getBuildOption: <
-    TOptions extends SettingListItemOptions<UiComponent> &
-      SettingListItemOptionsMax &
-      SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
-      SettingListItemOptionsMax &
-      SettingListItemOptionsTrigger,
+    TOptions extends SettingMaxTriggerListItemOptions = SettingMaxTriggerListItemOptions,
   >(
     host: KittenScientists,
     option: SettingTriggerMax,

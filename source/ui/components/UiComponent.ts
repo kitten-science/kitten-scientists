@@ -8,7 +8,6 @@ export type UiComponentInterface = EventTarget & {
 
 export type UiComponentOptions<TChild extends UiComponentInterface = UiComponentInterface> = {
   readonly children: Array<TChild>;
-  readonly classes: Array<string>;
   readonly onClick: (subject: UiComponent) => void;
   readonly onRefresh: (subject: UiComponent) => void;
 };

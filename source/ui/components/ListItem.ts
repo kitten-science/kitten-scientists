@@ -8,6 +8,7 @@ export type ListItemOptions<TChild extends UiComponentInterface = UiComponentInt
      * Should there be additional padding below this element?
      */
     readonly delimiter: boolean;
+    readonly classes: Array<string>;
   };
 
 export class ListItem<

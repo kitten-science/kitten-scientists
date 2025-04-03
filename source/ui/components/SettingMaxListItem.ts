@@ -6,14 +6,13 @@ import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.
 import type { UiComponent } from "./UiComponent.js";
 import { MaxButton } from "./buttons/MaxButton.js";
 
-export type SettingListItemOptionsMax = {
+export type SettingMaxListItemOptions = SettingListItemOptions<UiComponent> & {
   readonly onRefreshMax: (subject: SettingMaxListItem) => void;
   readonly onSetMax: (subject: SettingMaxListItem) => void;
 };
 
 export class SettingMaxListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsMax = SettingListItemOptions<UiComponent> & SettingListItemOptionsMax,
+  TOptions extends SettingMaxListItemOptions = SettingMaxListItemOptions,
 > extends SettingListItem<SettingMax> {
   readonly maxButton: MaxButton;
 
