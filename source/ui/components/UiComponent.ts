@@ -10,7 +10,7 @@ export type UiComponentInterface = EventTarget & {
 export type UiComponentOptions = {
   readonly children?: Array<UiComponentInterface>;
   readonly onClick?: (event?: MouseEvent) => void | Promise<void>;
-  readonly onRefresh?: () => void | Promise<void>;
+  readonly onRefresh?: () => void;
 };
 
 export abstract class UiComponent extends EventTarget implements UiComponentInterface {
@@ -48,7 +48,7 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
   }
 
   click() {
-    this._options?.onClick?.call(this);
+    return this._options?.onClick?.call(this);
   }
 
   refreshUi() {

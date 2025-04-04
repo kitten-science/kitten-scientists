@@ -28,8 +28,8 @@ export class SettingTriggerListItem extends SettingListItem {
     this.triggerButton = new TriggerButton(host, setting, locale, {
       alignment: "right",
       border: false,
-      onClick: (event?: MouseEvent) => {
-        this._options.onSetTrigger.call(this);
+      onClick: async (event?: MouseEvent) => {
+        await this._options.onSetTrigger.call(this);
         this.refreshUi();
       },
       onRefreshTitle: options?.onRefreshTrigger

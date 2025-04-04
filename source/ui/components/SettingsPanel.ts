@@ -40,12 +40,12 @@ export class SettingsPanel<
     /* noop */
   }
 
-  check() {
+  async check() {
     this.setting.enabled = true;
     this.refreshUi();
   }
 
-  uncheck() {
+  async uncheck() {
     this.setting.enabled = false;
     this.refreshUi();
   }
