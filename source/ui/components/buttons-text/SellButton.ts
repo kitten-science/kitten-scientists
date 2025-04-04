@@ -6,7 +6,7 @@ import { Dialog } from "../Dialog.js";
 import { TextButton, type TextButtonOptions } from "../TextButton.js";
 import styles from "./SellButton.module.css";
 
-export type SellButtonOptions = TextButtonOptions & ThisType<SellButton>;
+export type SellButtonOptions = ThisType<SellButton> & TextButtonOptions;
 
 export class SellButton extends TextButton {
   declare readonly _options: SellButtonOptions;

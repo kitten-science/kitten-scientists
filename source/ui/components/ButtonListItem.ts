@@ -3,7 +3,7 @@ import { ListItem, type ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
 import type { TextButton } from "./TextButton.js";
 
-export type ButtonListItemOptions = ListItemOptions & ThisType<ButtonListItem>;
+export type ButtonListItemOptions = ThisType<ButtonListItem> & ListItemOptions;
 
 export class ButtonListItem extends ListItem {
   declare readonly _options: ButtonListItemOptions;

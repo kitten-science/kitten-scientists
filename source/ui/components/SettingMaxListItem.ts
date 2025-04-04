@@ -5,10 +5,11 @@ import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
 import { MaxButton } from "./buttons/MaxButton.js";
 
-export type SettingMaxListItemOptions = SettingListItemOptions & {
-  readonly onRefreshMax?: (subject: SettingMaxListItem) => void;
-  readonly onSetMax?: (subject: SettingMaxListItem) => void;
-} & ThisType<SettingMaxListItem>;
+export type SettingMaxListItemOptions = ThisType<SettingMaxListItem> &
+  SettingListItemOptions & {
+    readonly onRefreshMax?: () => void;
+    readonly onSetMax?: () => void;
+  };
 
 export class SettingMaxListItem extends SettingListItem<SettingMax> {
   declare readonly _options: SettingMaxListItemOptions;
@@ -34,8 +35,8 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
 
     this.maxButton = new MaxButton(host, setting, {
       border: false,
-      onClick: options?.onSetMax ? () => options.onSetMax?.(this) : undefined,
-      onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.(this) : undefined,
+      onClick: options?.onSetMax ? () => options.onSetMax?.call(this) : undefined,
+      onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
     this.head.addChildren([
       new Container(host, { classes: [stylesLabelListItem.fillSpace] }),

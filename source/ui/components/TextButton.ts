@@ -4,9 +4,10 @@ import stylesButton from "./Button.module.css";
 import styles from "./TextButton.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type TextButtonOptions = UiComponentOptions & {
-  readonly title?: string;
-} & ThisType<TextButton>;
+export type TextButtonOptions = ThisType<TextButton> &
+  UiComponentOptions & {
+    readonly title?: string;
+  };
 
 export class TextButton extends UiComponent {
   declare readonly _options: TextButtonOptions;

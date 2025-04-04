@@ -6,23 +6,24 @@ import { SettingsList, type SettingsListOptions } from "./SettingsList.js";
 
 export type SettingWithCycles = Record<Cycle, Setting>;
 
-export type CyclesListOptions = SettingsListOptions & {
-  /**
-   * Called when a cycle is checked.
-   *
-   * @param label The label on the cycle element.
-   * @param setting The setting associated with the cycle.
-   */
-  readonly onCheckCycle?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
+export type CyclesListOptions = ThisType<CyclesList> &
+  SettingsListOptions & {
+    /**
+     * Called when a cycle is checked.
+     *
+     * @param label The label on the cycle element.
+     * @param setting The setting associated with the cycle.
+     */
+    readonly onCheckCycle?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
 
-  /**
-   * Called when a cycle is unchecked.
-   *
-   * @param label The label on the cycle element.
-   * @param setting The setting associated with the cycle.
-   */
-  readonly onUnCheckCycle?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
-} & ThisType<CyclesList>;
+    /**
+     * Called when a cycle is unchecked.
+     *
+     * @param label The label on the cycle element.
+     * @param setting The setting associated with the cycle.
+     */
+    readonly onUnCheckCycle?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
+  };
 
 /**
  * A list of settings correlating to the planetary cycles in the game.

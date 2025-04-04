@@ -3,7 +3,7 @@ import styles from "./HeaderListItem.module.css";
 import type { ListItem, ListItemOptions } from "./ListItem.js";
 import { UiComponent } from "./UiComponent.js";
 
-export type HeaderListItemOptions = ListItemOptions & ThisType<HeaderListItem>;
+export type HeaderListItemOptions = ThisType<HeaderListItem> & ListItemOptions;
 
 export class HeaderListItem extends UiComponent implements ListItem {
   declare readonly _options: ListItemOptions;

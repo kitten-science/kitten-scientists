@@ -6,10 +6,11 @@ import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
-export type SettingTriggerListItemOptions = SettingListItemOptions & {
-  readonly onRefreshTrigger?: (subject: SettingTriggerListItem) => void;
-  readonly onSetTrigger: (subject: SettingTriggerListItem) => unknown | Promise<unknown>;
-} & ThisType<SettingTriggerListItem>;
+export type SettingTriggerListItemOptions = ThisType<SettingTriggerListItem> &
+  SettingListItemOptions & {
+    readonly onRefreshTrigger?: () => void;
+    readonly onSetTrigger: () => unknown | Promise<unknown>;
+  };
 
 export class SettingTriggerListItem extends SettingListItem {
   declare readonly _options: SettingTriggerListItemOptions;
@@ -28,11 +29,11 @@ export class SettingTriggerListItem extends SettingListItem {
       alignment: "right",
       border: false,
       onClick: (event?: MouseEvent) => {
-        this._options.onSetTrigger(this);
+        this._options.onSetTrigger.call(this);
         this.refreshUi();
       },
       onRefreshTitle: options?.onRefreshTrigger
-        ? () => options.onRefreshTrigger?.(this)
+        ? () => options.onRefreshTrigger?.call(this)
         : undefined,
     });
     this.head.addChild(new Container(host, { classes: [stylesLabelListItem.fillSpace] }));

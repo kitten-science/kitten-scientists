@@ -5,9 +5,7 @@ import type { SettingMax } from "../../../settings/Settings.js";
 import { Button, type ButtonOptions } from "../Button.js";
 import styles from "./MaxButton.module.css";
 
-export type MaxButtonOptions = ButtonOptions & {
-  readonly onRefresh?: (subject: MaxButton) => void;
-} & ThisType<MaxButton>;
+export type MaxButtonOptions = ThisType<MaxButton> & ButtonOptions;
 
 export class MaxButton extends Button {
   declare readonly _options: MaxButtonOptions;

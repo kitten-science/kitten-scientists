@@ -4,22 +4,23 @@ import type { Setting } from "../../settings/Settings.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
 import { default as styles, default as stylesSettingListItem } from "./SettingListItem.module.css";
 
-export type SettingListItemOptions = LabelListItemOptions & {
-  /**
-   * Will be invoked when the user checks the checkbox.
-   */
-  readonly onCheck?: (isBatchProcess?: boolean) => void;
+export type SettingListItemOptions = ThisType<SettingListItem> &
+  LabelListItemOptions & {
+    /**
+     * Will be invoked when the user checks the checkbox.
+     */
+    readonly onCheck?: (isBatchProcess?: boolean) => void;
 
-  /**
-   * Will be invoked when the user unchecks the checkbox.
-   */
-  readonly onUnCheck?: (isBatchProcess?: boolean) => void;
+    /**
+     * Will be invoked when the user unchecks the checkbox.
+     */
+    readonly onUnCheck?: (isBatchProcess?: boolean) => void;
 
-  /**
-   * Should the user be prevented from changing the value of the input?
-   */
-  readonly readOnly?: boolean;
-} & ThisType<SettingListItem>;
+    /**
+     * Should the user be prevented from changing the value of the input?
+     */
+    readonly readOnly?: boolean;
+  };
 
 export class SettingListItem<TSetting extends Setting = Setting> extends LabelListItem {
   declare readonly _options: SettingListItemOptions;

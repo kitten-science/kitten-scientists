@@ -4,10 +4,11 @@ import { Fieldset } from "./Fieldset.js";
 import { RadioItem } from "./RadioItem.js";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type OptionsListItemOptions = UiComponentOptions & {
-  readonly onCheck?: (isBatchProcess?: boolean) => void;
-  readonly readOnly?: boolean;
-} & ThisType<OptionsListItem>;
+export type OptionsListItemOptions = ThisType<OptionsListItem> &
+  UiComponentOptions & {
+    readonly onCheck?: (isBatchProcess?: boolean) => void;
+    readonly readOnly?: boolean;
+  };
 
 export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
   declare readonly _options: OptionsListItemOptions;

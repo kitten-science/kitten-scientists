@@ -2,13 +2,14 @@ import type { KittenScientists } from "../../KittenScientists.js";
 import stylesDelimiter from "./Delimiter.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type ListItemOptions = UiComponentOptions & {
-  /**
-   * Should there be additional padding below this element?
-   */
-  readonly delimiter?: boolean;
-  readonly classes?: Array<string>;
-} & ThisType<ListItem>;
+export type ListItemOptions = ThisType<ListItem> &
+  UiComponentOptions & {
+    /**
+     * Should there be additional padding below this element?
+     */
+    readonly delimiter?: boolean;
+    readonly classes?: Array<string>;
+  };
 
 export class ListItem extends UiComponent {
   declare readonly _options: ListItemOptions;

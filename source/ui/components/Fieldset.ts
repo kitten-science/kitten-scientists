@@ -4,9 +4,10 @@ import styles from "./Fieldset.module.css";
 import stylesLabel from "./LabelListItem.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type FieldsetOptions = UiComponentOptions & {
-  readonly delimiter?: boolean;
-} & ThisType<Fieldset>;
+export type FieldsetOptions = ThisType<Fieldset> &
+  UiComponentOptions & {
+    readonly delimiter?: boolean;
+  };
 
 export class Fieldset extends UiComponent {
   declare readonly _options: FieldsetOptions;

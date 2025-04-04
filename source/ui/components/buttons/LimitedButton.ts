@@ -4,10 +4,11 @@ import type { SettingLimited } from "../../../settings/Settings.js";
 import { Button, type ButtonOptions } from "../Button.js";
 import stylesButton from "../Button.module.css";
 
-export type LimitedButtonOptions = ButtonOptions & {
-  readonly onLimitedCheck?: () => void;
-  readonly onLimitedUnCheck?: () => void;
-} & ThisType<LimitedButton>;
+export type LimitedButtonOptions = ThisType<LimitedButton> &
+  ButtonOptions & {
+    readonly onLimitedCheck?: () => void;
+    readonly onLimitedUnCheck?: () => void;
+  };
 
 export class LimitedButton extends Button {
   declare readonly _options: LimitedButtonOptions;

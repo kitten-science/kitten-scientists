@@ -6,12 +6,13 @@ import stylesSettingListItem from "./SettingListItem.module.css";
 import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
 import { ExpandoButton } from "./buttons/ExpandoButton.js";
 
-export type CollapsiblePanelOptions = UiComponentOptions & {
-  /**
-   * Should the main child be expanded right away?
-   */
-  readonly initiallyExpanded?: boolean;
-} & ThisType<CollapsiblePanel>;
+export type CollapsiblePanelOptions = ThisType<CollapsiblePanel> &
+  UiComponentOptions & {
+    /**
+     * Should the main child be expanded right away?
+     */
+    readonly initiallyExpanded?: boolean;
+  };
 
 /**
  * A `Panel` is a section of the UI that can be expanded and collapsed

@@ -5,9 +5,10 @@ import type { LabelListItem } from "./LabelListItem.js";
 import type { SettingListItem } from "./SettingListItem.js";
 
 export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem> =
-  CollapsiblePanelOptions & {
-    readonly settingItem?: TListItem;
-  } & ThisType<SettingsPanel>;
+  ThisType<SettingsPanel> &
+    CollapsiblePanelOptions & {
+      readonly settingItem?: TListItem;
+    };
 
 export class SettingsPanel<
     TSetting extends Setting = Setting,

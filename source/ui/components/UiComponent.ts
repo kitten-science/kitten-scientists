@@ -41,7 +41,7 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
    * @param host A reference to the host.
    * @param options The options for this component.
    */
-  constructor(host: KittenScientists, options?: UiComponentOptions & ThisType<UiComponent>) {
+  constructor(host: KittenScientists, options?: UiComponentOptions) {
     super();
     this._host = host;
     this._options = options;

@@ -6,23 +6,24 @@ import { SettingsList, type SettingsListOptions } from "./SettingsList.js";
 
 export type SettingWithSeasons = Record<Season, Setting>;
 
-export type SeasonsListOptions = SettingsListOptions & {
-  /**
-   * Called when a season is checked.
-   *
-   * @param label The label on the season element.
-   * @param setting The setting associated with the season.
-   */
-  readonly onCheckSeason?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
+export type SeasonsListOptions = ThisType<SeasonsList> &
+  SettingsListOptions & {
+    /**
+     * Called when a season is checked.
+     *
+     * @param label The label on the season element.
+     * @param setting The setting associated with the season.
+     */
+    readonly onCheckSeason?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
 
-  /**
-   * Called when a season is unchecked.
-   *
-   * @param label The label on the season element.
-   * @param setting The setting associated with the season.
-   */
-  readonly onUnCheckSeason?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
-} & ThisType<SeasonsList>;
+    /**
+     * Called when a season is unchecked.
+     *
+     * @param label The label on the season element.
+     * @param setting The setting associated with the season.
+     */
+    readonly onUnCheckSeason?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
+  };
 
 /**
  * A list of 4 settings correlating to the 4 seasons.

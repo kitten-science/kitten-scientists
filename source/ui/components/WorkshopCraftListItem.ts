@@ -44,16 +44,16 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
       alignment: "right",
       border: false,
       classes: [stylesButton.headAction],
-      onClick: options?.onSetMax ? () => options.onSetMax?.(this) : undefined,
-      onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.(this) : undefined,
+      onClick: options?.onSetMax ? () => options.onSetMax?.call(this) : undefined,
+      onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
 
     this.triggerButton = new TriggerButton(host, setting, locale, {
       border: false,
       classes: [stylesButton.lastHeadAction],
-      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,
+      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.call(this) : undefined,
       onRefreshTitle: options?.onRefreshTrigger
-        ? () => options.onRefreshTrigger?.(this)
+        ? () => options.onRefreshTrigger?.call(this)
         : undefined,
     });
     this.head.addChildren([
