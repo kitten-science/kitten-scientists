@@ -9,8 +9,8 @@ export type UiComponentInterface = EventTarget & {
 
 export type UiComponentOptions = {
   readonly children?: Array<UiComponentInterface>;
-  readonly onClick?: (event?: MouseEvent) => void;
-  readonly onRefresh?: () => void;
+  readonly onClick?: (event?: MouseEvent) => void | Promise<void>;
+  readonly onRefresh?: () => void | Promise<void>;
 };
 
 export abstract class UiComponent extends EventTarget implements UiComponentInterface {

@@ -9,12 +9,12 @@ export type SettingListItemOptions = ThisType<SettingListItem> &
     /**
      * Will be invoked when the user checks the checkbox.
      */
-    readonly onCheck?: (isBatchProcess?: boolean) => void;
+    readonly onCheck?: (isBatchProcess?: boolean) => void | Promise<void>;
 
     /**
      * Will be invoked when the user unchecks the checkbox.
      */
-    readonly onUnCheck?: (isBatchProcess?: boolean) => void;
+    readonly onUnCheck?: (isBatchProcess?: boolean) => void | Promise<void>;
 
     /**
      * Should the user be prevented from changing the value of the input?
