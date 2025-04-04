@@ -5,7 +5,6 @@ import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingMax, SettingOptions } from "../settings/Settings.js";
 import type { VillageSettings } from "../settings/VillageSettings.js";
 import stylesButton from "./components/Button.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
@@ -15,7 +14,7 @@ import { SettingListItem, type SettingListItemOptions } from "./components/Setti
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
   private readonly _hunt: SettingTriggerListItem;
@@ -28,7 +27,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     host: KittenScientists,
     settings: VillageSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.distribute");
     super(

@@ -4,12 +4,11 @@ import type { KittenScientists } from "../KittenScientists.js";
 import type { MissionSettings } from "../settings/MissionSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { SpaceSettings } from "../settings/SpaceSettings.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
   private readonly _missions: Array<SettingListItem>;
@@ -19,7 +18,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
     settings: MissionSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: SpaceSettings,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade.missions");
     super(

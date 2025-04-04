@@ -6,7 +6,7 @@ import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type FieldsetOptions = UiComponentOptions & {
   readonly delimiter?: boolean;
-};
+} & ThisType<Fieldset>;
 
 export class Fieldset extends UiComponent {
   declare readonly _options: FieldsetOptions;

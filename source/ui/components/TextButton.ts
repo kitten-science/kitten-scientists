@@ -6,18 +6,14 @@ import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type TextButtonOptions = UiComponentOptions & {
   readonly title?: string;
-};
+} & ThisType<TextButton>;
 
 export class TextButton extends UiComponent {
   declare readonly _options: TextButtonOptions;
   readonly element: JQuery;
   readOnly: boolean;
 
-  constructor(
-    host: KittenScientists,
-    label?: string,
-    options?: TextButtonOptions & ThisType<TextButton>,
-  ) {
+  constructor(host: KittenScientists, label?: string, options?: TextButtonOptions) {
     super(host, { ...options });
 
     const element = $("<div/>").addClass(styles.textButton);

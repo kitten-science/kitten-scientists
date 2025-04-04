@@ -22,7 +22,7 @@ export type SeasonsListOptions = SettingsListOptions & {
    * @param setting The setting associated with the season.
    */
   readonly onUnCheckSeason?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
-};
+} & ThisType<SeasonsList>;
 
 /**
  * A list of 4 settings correlating to the 4 seasons.

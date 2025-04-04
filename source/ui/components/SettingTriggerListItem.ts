@@ -9,7 +9,7 @@ import { TriggerButton } from "./buttons/TriggerButton.js";
 export type SettingTriggerListItemOptions = SettingListItemOptions & {
   readonly onRefreshTrigger?: (subject: SettingTriggerListItem) => void;
   readonly onSetTrigger: (subject: SettingTriggerListItem) => unknown | Promise<unknown>;
-};
+} & ThisType<SettingTriggerListItem>;
 
 export class SettingTriggerListItem extends SettingListItem {
   declare readonly _options: SettingTriggerListItemOptions;

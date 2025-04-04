@@ -3,7 +3,7 @@ import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type ParagraphOptions = UiComponentOptions & {
   readonly classes?: Array<string>;
-};
+} & ThisType<Paragraph>;
 
 export class Paragraph extends UiComponent {
   declare readonly _options: ParagraphOptions;

@@ -1,12 +1,13 @@
 import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
-import { CollapsiblePanel, type PanelOptions } from "./CollapsiblePanel.js";
+import { CollapsiblePanel, type CollapsiblePanelOptions } from "./CollapsiblePanel.js";
 import type { LabelListItem } from "./LabelListItem.js";
 import type { SettingListItem } from "./SettingListItem.js";
 
-export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem> = PanelOptions & {
-  readonly settingItem: TListItem;
-};
+export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem> =
+  CollapsiblePanelOptions & {
+    readonly settingItem?: TListItem;
+  } & ThisType<SettingsPanel>;
 
 export class SettingsPanel<
     TSetting extends Setting = Setting,

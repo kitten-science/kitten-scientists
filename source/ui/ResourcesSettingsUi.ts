@@ -7,14 +7,13 @@ import type { SettingOptions } from "../settings/Settings.js";
 import { ucfirst } from "../tools/Format.js";
 import type { Resource } from "../types/index.js";
 import stylesButton from "./components/Button.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 import { ConsumeButton } from "./components/buttons/ConsumeButton.js";
 import { StockButton } from "./components/buttons/StockButton.js";
 
@@ -23,7 +22,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     host: KittenScientists,
     settings: ResourcesSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<LabelListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.resources");
     super(

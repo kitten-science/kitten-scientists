@@ -5,7 +5,7 @@ import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 export type IconButtonOptions = UiComponentOptions & {
   readonly readOnly?: boolean;
   readonly inactive?: boolean;
-};
+} & ThisType<IconButton>;
 
 /**
  * A button that is visually represented through an SVG element.

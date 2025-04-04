@@ -1,18 +1,17 @@
 import type { KittenScientists } from "../KittenScientists.js";
 import { FilterItems, type LogFilterSettings } from "../settings/LogFilterSettings.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { ExplainerListItem } from "./components/ExplainerListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
   constructor(
     host: KittenScientists,
     settings: LogFilterSettings,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.filter");
     super(

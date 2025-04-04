@@ -18,7 +18,7 @@ export type LabelListItemOptions = ListItemOptions & {
    * to indicate that this is an upgrade of a prior setting?
    */
   readonly upgradeIndicator?: boolean;
-};
+} & ThisType<LabelListItem>;
 
 export class LabelListItem extends ListItem {
   declare readonly _options: LabelListItemOptions;

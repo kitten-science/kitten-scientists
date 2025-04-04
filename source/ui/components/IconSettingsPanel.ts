@@ -1,15 +1,15 @@
 import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
-import { CollapsiblePanel, type PanelOptions } from "./CollapsiblePanel.js";
+import { CollapsiblePanel, type CollapsiblePanelOptions } from "./CollapsiblePanel.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
 
 export type IconSettingsPanelOptions = LabelListItemOptions &
-  PanelOptions & {
+  CollapsiblePanelOptions & {
     /**
      * When set to an SVG path, will be used as an icon on the panel.
      */
     readonly icon: string;
-  };
+  } & ThisType<IconSettingsPanel>;
 
 export class IconSettingsPanel<TSetting extends Setting = Setting> extends CollapsiblePanel {
   declare readonly _options: IconSettingsPanelOptions;

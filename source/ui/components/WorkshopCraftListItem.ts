@@ -17,7 +17,8 @@ import { TriggerButton } from "./buttons/TriggerButton.js";
 export type WorkshopCraftListItemOptions = SettingListItemOptions &
   SettingLimitedListItemOptions &
   SettingMaxListItemOptions &
-  SettingTriggerListItemOptions;
+  SettingTriggerListItemOptions &
+  ThisType<WorkshopCraftListItem>;
 
 export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
   declare readonly _options: WorkshopCraftListItemOptions;

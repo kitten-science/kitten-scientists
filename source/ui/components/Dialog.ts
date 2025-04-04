@@ -20,7 +20,7 @@ export type DialogOptions = UiComponentOptions & {
   readonly prompt?: boolean;
   readonly promptValue?: string;
   readonly childrenAfterPrompt?: Array<UiComponent>;
-};
+} & ThisType<Dialog>;
 
 export class Dialog extends UiComponent {
   declare readonly _options: DialogOptions;

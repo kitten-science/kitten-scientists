@@ -48,7 +48,7 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
   }
 
   click() {
-    this._options?.onClick?.();
+    this._options?.onClick?.call(this);
   }
 
   refreshUi() {

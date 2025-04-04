@@ -6,21 +6,20 @@ import type { SettingOptions } from "../settings/Settings.js";
 import type { Building, StagedBuilding } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTriggerListItem> {
   constructor(
     host: KittenScientists,
     settings: BonfireSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.build");
     super(

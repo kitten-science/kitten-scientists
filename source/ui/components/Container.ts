@@ -3,7 +3,7 @@ import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type ContainerOptions = UiComponentOptions & {
   readonly classes?: Array<string>;
-};
+} & ThisType<Container>;
 
 export class Container extends UiComponent {
   declare readonly _options: ContainerOptions;

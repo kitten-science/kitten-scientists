@@ -6,12 +6,12 @@ import stylesSettingListItem from "./SettingListItem.module.css";
 import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
 import { ExpandoButton } from "./buttons/ExpandoButton.js";
 
-export type PanelOptions = UiComponentOptions & {
+export type CollapsiblePanelOptions = UiComponentOptions & {
   /**
    * Should the main child be expanded right away?
    */
   readonly initiallyExpanded?: boolean;
-};
+} & ThisType<CollapsiblePanel>;
 
 /**
  * A `Panel` is a section of the UI that can be expanded and collapsed
@@ -20,7 +20,7 @@ export type PanelOptions = UiComponentOptions & {
  * behavior.
  */
 export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> extends UiComponent {
-  declare readonly _options: PanelOptions;
+  declare readonly _options: CollapsiblePanelOptions;
   protected readonly container: UiComponent;
   readonly element: JQuery;
   protected readonly _expando: ExpandoButton;
@@ -43,7 +43,7 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
    * @param head Another component to host in the head of the panel.
    * @param options Options for this panel.
    */
-  constructor(host: KittenScientists, head: THead, options?: PanelOptions) {
+  constructor(host: KittenScientists, head: THead, options?: CollapsiblePanelOptions) {
     super(host, {});
 
     this.container = new Container(host);

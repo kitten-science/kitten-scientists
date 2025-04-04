@@ -6,7 +6,7 @@ import { SettingsList, type SettingsListOptions } from "./SettingsList.js";
 
 export type SettingWithCycles = Record<Cycle, Setting>;
 
-export type SeasonsListOptions = SettingsListOptions & {
+export type CyclesListOptions = SettingsListOptions & {
   /**
    * Called when a cycle is checked.
    *
@@ -22,13 +22,13 @@ export type SeasonsListOptions = SettingsListOptions & {
    * @param setting The setting associated with the cycle.
    */
   readonly onUnCheckCycle?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
-};
+} & ThisType<CyclesList>;
 
 /**
  * A list of settings correlating to the planetary cycles in the game.
  */
 export class CyclesList extends SettingsList {
-  declare readonly _options: SeasonsListOptions;
+  declare readonly _options: CyclesListOptions;
   readonly setting: SettingWithCycles;
 
   /**
@@ -39,7 +39,7 @@ export class CyclesList extends SettingsList {
    * @param behavior Control cycle check box log output
    * @param options Options for this list.
    */
-  constructor(host: KittenScientists, setting: SettingWithCycles, options?: SeasonsListOptions) {
+  constructor(host: KittenScientists, setting: SettingWithCycles, options?: CyclesListOptions) {
     super(host, options);
     this.setting = setting;
 

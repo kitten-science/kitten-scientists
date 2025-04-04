@@ -10,7 +10,7 @@ import type {
 import type { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { CollapsiblePanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SeasonsList } from "./components/SeasonsList.js";
@@ -27,7 +27,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
     host: KittenScientists,
     settings: TradeSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions & SettingListItemOptions,
+    options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.trade");
     super(

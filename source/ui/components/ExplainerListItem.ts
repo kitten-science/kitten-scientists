@@ -3,7 +3,11 @@ import type { KittenScientists } from "../../KittenScientists.js";
 import styles from "./ExplainerLiteItem.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
+export type ExplainerListItemOptions<TKittenGameLiteral extends `$${string}`> = UiComponentOptions &
+  ThisType<ExplainerListItem<TKittenGameLiteral>>;
+
 export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends UiComponent {
+  declare readonly _options: ExplainerListItemOptions<TKittenGameLiteral>;
   readonly element: JQuery;
 
   /**
@@ -17,7 +21,7 @@ export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends 
   constructor(
     host: KittenScientists,
     key: TranslatedString<TKittenGameLiteral>,
-    options?: UiComponentOptions,
+    options?: ExplainerListItemOptions<TKittenGameLiteral>,
   ) {
     super(host, { ...options });
 

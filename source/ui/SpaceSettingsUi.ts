@@ -6,13 +6,12 @@ import type { SettingOptions } from "../settings/Settings.js";
 import { SpaceSettings } from "../settings/SpaceSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { MissionSettingsUi } from "./MissionSettingsUi.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTriggerListItem> {
   private readonly _missionsUi: MissionSettingsUi;
@@ -21,7 +20,7 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
     host: KittenScientists,
     settings: SpaceSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.space");
     super(

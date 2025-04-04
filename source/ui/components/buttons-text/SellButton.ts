@@ -6,15 +6,17 @@ import { Dialog } from "../Dialog.js";
 import { TextButton, type TextButtonOptions } from "../TextButton.js";
 import styles from "./SellButton.module.css";
 
+export type SellButtonOptions = TextButtonOptions & ThisType<SellButton>;
+
 export class SellButton extends TextButton {
-  declare readonly _options: TextButtonOptions;
+  declare readonly _options: SellButtonOptions;
   readonly setting: SettingSell;
 
   constructor(
     host: KittenScientists,
     setting: SettingSell,
     locale: SettingOptions<SupportedLocale>,
-    options?: TextButtonOptions,
+    options?: SellButtonOptions,
   ) {
     super(host, undefined, {
       onClick: () => {

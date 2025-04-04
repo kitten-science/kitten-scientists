@@ -12,7 +12,8 @@ import { TriggerButton } from "./buttons/TriggerButton.js";
 
 export type SettingMaxTriggerListItemOptions = SettingListItemOptions &
   SettingMaxListItemOptions &
-  SettingTriggerListItemOptions;
+  SettingTriggerListItemOptions &
+  ThisType<SettingMaxTriggerListItem>;
 
 export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax> {
   declare readonly _options: SettingMaxTriggerListItemOptions;

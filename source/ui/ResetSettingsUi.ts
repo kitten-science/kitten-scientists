@@ -8,12 +8,11 @@ import { ResetResourcesSettingsUi } from "./ResetResourcesSettingsUi.js";
 import { ResetSpaceSettingsUi } from "./ResetSpaceSettingsUi.js";
 import { ResetTimeSettingsUi } from "./ResetTimeSettingsUi.js";
 import { ResetUpgradesSettingsUi } from "./ResetUpgradesSettingsUi.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   private readonly _bonfireUi: ResetBonfireSettingsUi;
@@ -27,7 +26,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
     host: KittenScientists,
     settings: ResetSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("option.time.reset");
     super(

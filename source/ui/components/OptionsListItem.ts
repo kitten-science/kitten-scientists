@@ -7,7 +7,7 @@ import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 export type OptionsListItemOptions = UiComponentOptions & {
   readonly onCheck?: (isBatchProcess?: boolean) => void;
   readonly readOnly?: boolean;
-};
+} & ThisType<OptionsListItem>;
 
 export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
   declare readonly _options: OptionsListItemOptions;

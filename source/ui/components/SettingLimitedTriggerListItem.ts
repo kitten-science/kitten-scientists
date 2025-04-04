@@ -11,7 +11,8 @@ import { TriggerButton } from "./buttons/TriggerButton.js";
 
 export type SettingLimitedTriggerListItemOptions = SettingListItemOptions &
   SettingLimitedListItemOptions &
-  SettingTriggerListItemOptions;
+  SettingTriggerListItemOptions &
+  ThisType<SettingLimitedTriggerListItem>;
 
 export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
   declare readonly _options: SettingLimitedTriggerListItemOptions;

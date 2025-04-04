@@ -12,7 +12,7 @@ export type SettingsListOptions = UiComponentOptions & {
   readonly onEnableAll?: () => void;
   readonly onDisableAll?: () => void;
   readonly onReset?: () => void;
-};
+} & ThisType<SettingsList>;
 
 /**
  * The `SettingsList` is a `<ul>` designed to host `SettingListItem` instances.

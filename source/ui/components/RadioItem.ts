@@ -27,7 +27,7 @@ export type RadioItemOptions = UiComponentOptions & {
    * Should the user be prevented from changing the value of the input?
    */
   readOnly?: boolean;
-};
+} & ThisType<RadioItem>;
 
 export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
   declare readonly _options: RadioItemOptions;
