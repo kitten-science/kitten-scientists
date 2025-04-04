@@ -9,6 +9,7 @@ export type FieldsetOptions = UiComponentOptions & {
 };
 
 export class Fieldset extends UiComponent {
+  declare readonly _options: FieldsetOptions;
   readonly element: JQuery;
 
   /**

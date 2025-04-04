@@ -15,6 +15,7 @@ export class SettingsPanel<
   extends CollapsiblePanel
   implements SettingListItem
 {
+  declare readonly _options: SettingsPanelOptions<TListItem>;
   readonly setting: TSetting;
   readonly settingItem: TListItem;
 
@@ -59,7 +60,7 @@ export class SettingsPanel<
     host: KittenScientists,
     setting: TSetting,
     settingItem: TListItem,
-    options?: Partial<SettingsPanelOptions<TListItem>>,
+    options?: SettingsPanelOptions<TListItem>,
   ) {
     super(host, settingItem, options);
 

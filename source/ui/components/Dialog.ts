@@ -23,6 +23,7 @@ export type DialogOptions = UiComponentOptions & {
 };
 
 export class Dialog extends UiComponent {
+  declare readonly _options: DialogOptions;
   readonly element: JQuery<HTMLDialogElement>;
   returnValue: string;
 

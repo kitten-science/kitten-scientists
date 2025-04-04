@@ -10,6 +10,7 @@ export type MaxButtonOptions = ButtonOptions & {
 };
 
 export class MaxButton extends Button {
+  declare readonly _options: MaxButtonOptions;
   readonly setting: SettingMax;
 
   constructor(host: KittenScientists, setting: SettingMax, options?: MaxButtonOptions) {

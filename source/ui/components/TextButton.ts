@@ -9,6 +9,7 @@ export type TextButtonOptions = UiComponentOptions & {
 };
 
 export class TextButton extends UiComponent {
+  declare readonly _options: TextButtonOptions;
   readonly element: JQuery;
   readOnly: boolean;
 

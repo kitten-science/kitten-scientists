@@ -28,6 +28,7 @@ export type SeasonsListOptions = SettingsListOptions & {
  * A list of settings correlating to the planetary cycles in the game.
  */
 export class CyclesList extends SettingsList {
+  declare readonly _options: SeasonsListOptions;
   readonly setting: SettingWithCycles;
 
   /**

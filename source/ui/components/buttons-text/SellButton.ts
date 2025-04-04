@@ -7,6 +7,7 @@ import { TextButton, type TextButtonOptions } from "../TextButton.js";
 import styles from "./SellButton.module.css";
 
 export class SellButton extends TextButton {
+  declare readonly _options: TextButtonOptions;
   readonly setting: SettingSell;
 
   constructor(

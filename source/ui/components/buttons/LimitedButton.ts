@@ -10,6 +10,7 @@ export type LimitedButtonOptions = ButtonOptions & {
 };
 
 export class LimitedButton extends Button {
+  declare readonly _options: LimitedButtonOptions;
   readonly setting: SettingLimited;
 
   constructor(host: KittenScientists, setting: SettingLimited, options?: LimitedButtonOptions) {

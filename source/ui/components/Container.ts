@@ -6,6 +6,7 @@ export type ContainerOptions = UiComponentOptions & {
 };
 
 export class Container extends UiComponent {
+  declare readonly _options: ContainerOptions;
   readonly element: JQuery;
 
   /**

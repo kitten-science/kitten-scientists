@@ -28,6 +28,7 @@ export type SeasonsListOptions = SettingsListOptions & {
  * A list of 4 settings correlating to the 4 seasons.
  */
 export class SeasonsList extends SettingsList {
+  declare readonly _options: SeasonsListOptions;
   readonly setting: SettingWithSeasons;
 
   readonly spring: SettingListItem;
