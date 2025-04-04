@@ -4,14 +4,16 @@ import type { IconButton } from "./IconButton.js";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
 import styles from "./ToolbarListItem.module.css";
 
+export type ToolbarListItemOptions = ListItemOptions & ThisType<ToolbarListItem>;
+
 export class ToolbarListItem extends ListItem {
-  declare readonly _options: ListItemOptions;
+  declare readonly _options: ToolbarListItemOptions;
   readonly buttons: Array<Button | IconButton>;
 
   constructor(
     host: KittenScientists,
     buttons: Array<Button | IconButton>,
-    options?: ListItemOptions,
+    options?: ToolbarListItemOptions,
   ) {
     super(host, options);
 

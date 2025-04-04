@@ -6,13 +6,12 @@ import type { EmbassySettings } from "../settings/EmbassySettings.js";
 import type { SettingMax, SettingOptions } from "../settings/Settings.js";
 import type { TradeSettings } from "../settings/TradeSettings.js";
 import stylesButton from "./components/Button.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTriggerListItem> {
   constructor(
@@ -20,7 +19,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
     settings: EmbassySettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TradeSettings,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("option.embassies");
     super(

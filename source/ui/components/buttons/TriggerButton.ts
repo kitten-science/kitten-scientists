@@ -14,7 +14,7 @@ export type TriggerButtonBehavior = "integer" | "percentage";
 
 export type TriggerButtonOptions = ButtonOptions & {
   readonly onRefreshTitle?: (subject: TriggerButton) => void;
-};
+} & ThisType<TriggerButton>;
 
 export class TriggerButton extends Button {
   declare readonly _options: TriggerButtonOptions;

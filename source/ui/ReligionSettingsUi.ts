@@ -8,7 +8,7 @@ import { ReligionOptions, UnicornItems, type ZigguratUpgrade } from "../types/in
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import stylesTimeSkipHeatSettings from "./TimeSkipHeatSettingsUi.module.css";
 import stylesButton from "./components/Button.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { CollapsiblePanelOptions } from "./components/CollapsiblePanel.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
@@ -29,7 +29,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
     host: KittenScientists,
     settings: ReligionSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions & SettingListItemOptions,
+    options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.faith");
     super(

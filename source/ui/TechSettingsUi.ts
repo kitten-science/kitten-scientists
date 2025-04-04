@@ -6,13 +6,12 @@ import type { ScienceSettings } from "../settings/ScienceSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TechSettings } from "../settings/TechSettings.js";
 import stylesButton from "./components/Button.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerListItem> {
   constructor(
@@ -20,7 +19,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
     settings: TechSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: ScienceSettings,
-    options?: PanelOptions & SettingListItemOptions,
+    options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade.techs");
     super(

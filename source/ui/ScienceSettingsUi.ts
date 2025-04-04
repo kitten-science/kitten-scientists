@@ -4,12 +4,11 @@ import type { ScienceSettings } from "../settings/ScienceSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { PolicySettingsUi } from "./PolicySettingsUi.js";
 import { TechSettingsUi } from "./TechSettingsUi.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
   private readonly _policiesUi: PolicySettingsUi;
@@ -20,7 +19,7 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
     host: KittenScientists,
     settings: ScienceSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade");
     super(

@@ -7,7 +7,7 @@ import { type CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSe
 import { ucfirst } from "../tools/Format.js";
 import type { ResourceCraftable } from "../types/index.js";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { CollapsiblePanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
@@ -22,7 +22,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
     host: KittenScientists,
     settings: WorkshopSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions & SettingListItemOptions,
+    options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.craft");
     super(

@@ -8,7 +8,7 @@ export type InputOptions = UiComponentOptions & {
   readonly selected?: boolean;
   readonly value?: string;
   readonly classes?: Array<string>;
-};
+} & ThisType<Input>;
 
 export class Input extends UiComponent {
   declare readonly _options: InputOptions;

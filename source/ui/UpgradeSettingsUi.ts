@@ -5,21 +5,20 @@ import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { UpgradeSettings } from "../settings/UpgradeSettings.js";
 import stylesButton from "./components/Button.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import stylesDelimiter from "./components/Delimiter.module.css";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTriggerListItem> {
   constructor(
     host: KittenScientists,
     settings: UpgradeSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.upgrade.upgrades");
     super(

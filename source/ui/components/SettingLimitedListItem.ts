@@ -15,7 +15,7 @@ export type SettingLimitedListItemOptions = SettingListItemOptions & {
    * Is called when the "Limited" checkbox is unchecked.
    */
   readonly onLimitedUnCheck?: () => void;
-};
+} & ThisType<SettingLimitedListItem>;
 
 export class SettingLimitedListItem extends SettingListItem {
   declare readonly _options: SettingLimitedListItemOptions;

@@ -4,7 +4,10 @@ import stylesButton from "../Button.module.css";
 import { UiComponent, type UiComponentOptions } from "../UiComponent.js";
 import styles from "./ExpandoButton.module.css";
 
+export type ExpandoButtonOptions = UiComponentOptions & ThisType<ExpandoButton>;
+
 export class ExpandoButton extends UiComponent {
+  declare readonly _options: ExpandoButtonOptions;
   readonly element: JQuery;
   ineffective: boolean;
 
@@ -15,7 +18,7 @@ export class ExpandoButton extends UiComponent {
    * @param host A reference to the host.
    * @param options Options for this expando.
    */
-  constructor(host: KittenScientists, options?: UiComponentOptions) {
+  constructor(host: KittenScientists, options?: ExpandoButtonOptions) {
     super(host, { ...options });
 
     const element = $("<div/>", {

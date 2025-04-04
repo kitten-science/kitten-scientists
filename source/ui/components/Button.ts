@@ -8,7 +8,7 @@ export type ButtonOptions = IconButtonOptions & {
   readonly alignment?: "left" | "right";
   readonly title?: string;
   readonly classes?: Array<string>;
-};
+} & ThisType<Button>;
 
 /**
  * A button that has a label and can optionally have an SVG icon.

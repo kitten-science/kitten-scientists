@@ -8,7 +8,7 @@ import { MaxButton } from "./buttons/MaxButton.js";
 export type SettingMaxListItemOptions = SettingListItemOptions & {
   readonly onRefreshMax?: (subject: SettingMaxListItem) => void;
   readonly onSetMax?: (subject: SettingMaxListItem) => void;
-};
+} & ThisType<SettingMaxListItem>;
 
 export class SettingMaxListItem extends SettingListItem<SettingMax> {
   declare readonly _options: SettingMaxListItemOptions;

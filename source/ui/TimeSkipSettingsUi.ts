@@ -8,7 +8,7 @@ import type { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
 import stylesButton from "./components/Button.module.css";
-import { CollapsiblePanel, type PanelOptions } from "./components/CollapsiblePanel.js";
+import { CollapsiblePanel } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { Dialog } from "./components/Dialog.js";
@@ -19,7 +19,7 @@ import { SettingListItem, type SettingListItemOptions } from "./components/Setti
 import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingMaxTriggerListItem> {
   private readonly _cycles: CollapsiblePanel;
@@ -31,7 +31,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     settings: TimeSkipSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeControlSettings,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
+    options?: SettingsPanelOptions<SettingMaxTriggerListItem> & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("option.time.skip");
     super(

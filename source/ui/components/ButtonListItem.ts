@@ -3,11 +3,13 @@ import { ListItem, type ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
 import type { TextButton } from "./TextButton.js";
 
+export type ButtonListItemOptions = ListItemOptions & ThisType<ButtonListItem>;
+
 export class ButtonListItem extends ListItem {
-  declare readonly _options: ListItemOptions;
+  declare readonly _options: ButtonListItemOptions;
   readonly button: TextButton;
 
-  constructor(host: KittenScientists, button: TextButton, options?: ListItemOptions) {
+  constructor(host: KittenScientists, button: TextButton, options?: ButtonListItemOptions) {
     super(host, { ...options, children: [] });
 
     this.button = button;

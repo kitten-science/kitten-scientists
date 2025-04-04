@@ -8,7 +8,7 @@ export type ListItemOptions = UiComponentOptions & {
    */
   readonly delimiter?: boolean;
   readonly classes?: Array<string>;
-};
+} & ThisType<ListItem>;
 
 export class ListItem extends UiComponent {
   declare readonly _options: ListItemOptions;

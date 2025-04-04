@@ -6,7 +6,7 @@ import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import type { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import type { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import styles from "./TimeSkipHeatSettingsUi.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { CollapsiblePanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { Dialog } from "./components/Dialog.js";
 import type { SettingListItemOptions } from "./components/SettingListItem.js";
@@ -24,7 +24,7 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeSkipSettings,
     sectionParentSetting: TimeControlSettings,
-    options?: PanelOptions & SettingListItemOptions,
+    options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("option.time.activeHeatTransfer");
     super(

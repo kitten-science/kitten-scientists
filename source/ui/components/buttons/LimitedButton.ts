@@ -7,7 +7,7 @@ import stylesButton from "../Button.module.css";
 export type LimitedButtonOptions = ButtonOptions & {
   readonly onLimitedCheck?: () => void;
   readonly onLimitedUnCheck?: () => void;
-};
+} & ThisType<LimitedButton>;
 
 export class LimitedButton extends Button {
   declare readonly _options: LimitedButtonOptions;

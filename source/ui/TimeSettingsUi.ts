@@ -5,7 +5,7 @@ import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeItem, TimeSettings } from "../settings/TimeSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
+import type { CollapsiblePanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
@@ -18,7 +18,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
     host: KittenScientists,
     settings: TimeSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: PanelOptions & SettingListItemOptions,
+    options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
     const label = host.engine.i18n("ui.time");
     super(

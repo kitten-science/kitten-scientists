@@ -19,7 +19,7 @@ export type SettingListItemOptions = LabelListItemOptions & {
    * Should the user be prevented from changing the value of the input?
    */
   readonly readOnly?: boolean;
-};
+} & ThisType<SettingListItem>;
 
 export class SettingListItem<TSetting extends Setting = Setting> extends LabelListItem {
   declare readonly _options: SettingListItemOptions;
