@@ -47,8 +47,8 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
-        onRefreshTrigger: item => {
-          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
+        onRefreshTrigger() {
+          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
               : host.renderPercentage(settings.trigger, locale.selected, true),

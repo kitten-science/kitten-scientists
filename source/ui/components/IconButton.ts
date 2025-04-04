@@ -2,10 +2,11 @@ import type { KittenScientists } from "../../KittenScientists.js";
 import stylesButton from "./Button.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type IconButtonOptions = UiComponentOptions & {
-  readonly readOnly?: boolean;
-  readonly inactive?: boolean;
-} & ThisType<IconButton>;
+export type IconButtonOptions = ThisType<IconButton> &
+  UiComponentOptions & {
+    readonly readOnly?: boolean;
+    readonly inactive?: boolean;
+  };
 
 /**
  * A button that is visually represented through an SVG element.

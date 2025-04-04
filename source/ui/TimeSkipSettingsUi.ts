@@ -64,9 +64,9 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
             settings.enabled &&
             !Object.values(settings.seasons).some(season => season.enabled);
         },
-        onRefreshMax: item => {
-          item.maxButton.updateLabel(host.renderAbsolute(settings.max));
-          item.maxButton.element[0].title =
+        onRefreshMax() {
+          this.maxButton.updateLabel(host.renderAbsolute(settings.max));
+          this.maxButton.element[0].title =
             settings.max < 0
               ? host.engine.i18n("ui.max.timeSkip.titleInfinite", [label])
               : settings.max === 0
@@ -76,8 +76,8 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
                     label,
                   ]);
         },
-        onRefreshTrigger: item => {
-          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+        onRefreshTrigger() {
+          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
             settings.trigger < 0
               ? host.engine.i18n("ui.trigger.section.inactive")
               : `${host.renderFloat(settings.trigger, locale.selected)} TC`,

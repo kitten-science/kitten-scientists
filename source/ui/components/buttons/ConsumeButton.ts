@@ -8,7 +8,7 @@ import { Button, type ButtonOptions } from "../Button.js";
 import stylesButton from "../Button.module.css";
 import { Dialog } from "../Dialog.js";
 
-export type ConsumeButtonOptions = ButtonOptions & ThisType<ConsumeButton>;
+export type ConsumeButtonOptions = ThisType<ConsumeButton> & ButtonOptions;
 
 export class ConsumeButton extends Button {
   declare readonly _options: ConsumeButtonOptions;

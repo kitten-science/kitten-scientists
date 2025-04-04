@@ -2,7 +2,7 @@ import type { KittenScientists } from "../../../KittenScientists.js";
 import stylesButton from "../Button.module.css";
 import { UiComponent, type UiComponentOptions } from "../UiComponent.js";
 
-export type PaddingButtonOptions = UiComponentOptions & ThisType<PaddingButton>;
+export type PaddingButtonOptions = ThisType<PaddingButton> & UiComponentOptions;
 
 export class PaddingButton extends UiComponent {
   declare readonly _options: PaddingButtonOptions;

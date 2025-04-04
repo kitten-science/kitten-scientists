@@ -1,9 +1,10 @@
 import type { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type ParagraphOptions = UiComponentOptions & {
-  readonly classes?: Array<string>;
-} & ThisType<Paragraph>;
+export type ParagraphOptions = ThisType<Paragraph> &
+  UiComponentOptions & {
+    readonly classes?: Array<string>;
+  };
 
 export class Paragraph extends UiComponent {
   declare readonly _options: ParagraphOptions;

@@ -7,7 +7,7 @@ import { Button, type ButtonOptions } from "../Button.js";
 import stylesButton from "../Button.module.css";
 import { Dialog } from "../Dialog.js";
 
-export type StockButtonOptions = ButtonOptions & ThisType<StockButton>;
+export type StockButtonOptions = ThisType<StockButton> & ButtonOptions;
 
 export class StockButton extends Button {
   declare readonly _options: StockButtonOptions;

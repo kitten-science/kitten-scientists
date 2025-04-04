@@ -5,17 +5,18 @@ import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
 import { LimitedButton } from "./buttons/LimitedButton.js";
 
-export type SettingLimitedListItemOptions = SettingListItemOptions & {
-  /**
-   * Is called when the "Limited" checkbox is checked.
-   */
-  readonly onLimitedCheck?: () => void;
+export type SettingLimitedListItemOptions = ThisType<SettingLimitedListItem> &
+  SettingListItemOptions & {
+    /**
+     * Is called when the "Limited" checkbox is checked.
+     */
+    readonly onLimitedCheck?: () => void;
 
-  /**
-   * Is called when the "Limited" checkbox is unchecked.
-   */
-  readonly onLimitedUnCheck?: () => void;
-} & ThisType<SettingLimitedListItem>;
+    /**
+     * Is called when the "Limited" checkbox is unchecked.
+     */
+    readonly onLimitedUnCheck?: () => void;
+  };
 
 export class SettingLimitedListItem extends SettingListItem {
   declare readonly _options: SettingLimitedListItemOptions;

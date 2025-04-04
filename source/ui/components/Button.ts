@@ -3,12 +3,13 @@ import styles from "./Button.module.css";
 import type { IconButtonOptions } from "./IconButton.js";
 import { UiComponent } from "./UiComponent.js";
 
-export type ButtonOptions = IconButtonOptions & {
-  readonly border?: boolean;
-  readonly alignment?: "left" | "right";
-  readonly title?: string;
-  readonly classes?: Array<string>;
-} & ThisType<Button>;
+export type ButtonOptions = ThisType<Button> &
+  IconButtonOptions & {
+    readonly border?: boolean;
+    readonly alignment?: "left" | "right";
+    readonly title?: string;
+    readonly classes?: Array<string>;
+  };
 
 /**
  * A button that has a label and can optionally have an SVG icon.

@@ -12,15 +12,15 @@ import { Button, type ButtonOptions } from "../Button.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 
-export type TriggerButtonOptions = ButtonOptions & {
-  readonly onRefreshTitle?: (subject: TriggerButton) => void;
-} & ThisType<TriggerButton>;
+export type TriggerButtonOptions = ThisType<TriggerButton> &
+  ButtonOptions & {
+    readonly onRefreshTitle?: () => void;
+  };
 
 export class TriggerButton extends Button {
   declare readonly _options: TriggerButtonOptions;
   readonly behavior: TriggerButtonBehavior;
   readonly setting: SettingTrigger | SettingThreshold;
-  protected readonly _onRefreshTitle?: (subject: TriggerButton) => void;
 
   constructor(
     host: KittenScientists,
@@ -29,8 +29,6 @@ export class TriggerButton extends Button {
     options?: TriggerButtonOptions,
   ) {
     super(host, "", Icons.Trigger, options);
-
-    this._onRefreshTitle = options?.onRefreshTitle;
 
     this.behavior = setting instanceof SettingTrigger ? "percentage" : "integer";
 
@@ -44,8 +42,8 @@ export class TriggerButton extends Button {
   refreshUi() {
     super.refreshUi();
 
-    if (this._onRefreshTitle) {
-      this._onRefreshTitle(this);
+    if (this._options?.onRefreshTitle) {
+      this._options?.onRefreshTitle?.call(this);
       return;
     }
 

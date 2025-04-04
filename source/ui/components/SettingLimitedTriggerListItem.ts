@@ -31,14 +31,14 @@ export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
       border: false,
       onClick: (event?: MouseEvent) => this._onClickTrigger(event),
       onRefreshTitle: options?.onRefreshTrigger
-        ? () => options.onRefreshTrigger?.(this)
+        ? () => options.onRefreshTrigger?.call(this)
         : undefined,
     });
     this.head.addChild(this.triggerButton);
   }
 
   private _onClickTrigger(event?: MouseEvent): void {
-    this._options.onSetTrigger(this);
+    this._options.onSetTrigger.call(this);
     this.refreshUi();
   }
 

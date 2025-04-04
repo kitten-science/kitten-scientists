@@ -4,7 +4,7 @@ import stylesButton from "../Button.module.css";
 import { UiComponent, type UiComponentOptions } from "../UiComponent.js";
 import styles from "./ExpandoButton.module.css";
 
-export type ExpandoButtonOptions = UiComponentOptions & ThisType<ExpandoButton>;
+export type ExpandoButtonOptions = ThisType<ExpandoButton> & UiComponentOptions;
 
 export class ExpandoButton extends UiComponent {
   declare readonly _options: ExpandoButtonOptions;

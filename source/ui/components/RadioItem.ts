@@ -6,28 +6,29 @@ import stylesLabel from "./LabelListItem.module.css";
 import stylesSettingListItem from "./SettingListItem.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type RadioItemOptions = UiComponentOptions & {
-  /**
-   * Will be invoked when the user selects this radio item.
-   */
-  onCheck?: (isBatchProcess?: boolean) => void;
+export type RadioItemOptions = ThisType<RadioItem> &
+  UiComponentOptions & {
+    /**
+     * Will be invoked when the user selects this radio item.
+     */
+    onCheck?: (isBatchProcess?: boolean) => void;
 
-  /**
-   * Should there be additional padding below this element?
-   */
-  delimiter?: boolean;
+    /**
+     * Should there be additional padding below this element?
+     */
+    delimiter?: boolean;
 
-  /**
-   * Should an indicator be rendered in front of the element,
-   * to indicate that this is an upgrade of a prior setting?
-   */
-  upgradeIndicator?: boolean;
+    /**
+     * Should an indicator be rendered in front of the element,
+     * to indicate that this is an upgrade of a prior setting?
+     */
+    upgradeIndicator?: boolean;
 
-  /**
-   * Should the user be prevented from changing the value of the input?
-   */
-  readOnly?: boolean;
-} & ThisType<RadioItem>;
+    /**
+     * Should the user be prevented from changing the value of the input?
+     */
+    readOnly?: boolean;
+  };
 
 export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
   declare readonly _options: RadioItemOptions;

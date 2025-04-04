@@ -4,7 +4,7 @@ import type { IconButton } from "./IconButton.js";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
 import styles from "./ToolbarListItem.module.css";
 
-export type ToolbarListItemOptions = ListItemOptions & ThisType<ToolbarListItem>;
+export type ToolbarListItemOptions = ThisType<ToolbarListItem> & ListItemOptions;
 
 export class ToolbarListItem extends ListItem {
   declare readonly _options: ToolbarListItemOptions;

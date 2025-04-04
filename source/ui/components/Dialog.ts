@@ -12,15 +12,16 @@ import { Paragraph } from "./Paragraph.js";
 import stylesToolbarListItem from "./ToolbarListItem.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type DialogOptions = UiComponentOptions & {
-  readonly hasCancel?: boolean;
-  readonly hasClose?: boolean;
-  readonly onCancel?: () => void;
-  readonly onConfirm?: (result: string) => void;
-  readonly prompt?: boolean;
-  readonly promptValue?: string;
-  readonly childrenAfterPrompt?: Array<UiComponent>;
-} & ThisType<Dialog>;
+export type DialogOptions = ThisType<Dialog> &
+  UiComponentOptions & {
+    readonly hasCancel?: boolean;
+    readonly hasClose?: boolean;
+    readonly onCancel?: () => void;
+    readonly onConfirm?: (result: string) => void;
+    readonly prompt?: boolean;
+    readonly promptValue?: string;
+    readonly childrenAfterPrompt?: Array<UiComponent>;
+  };
 
 export class Dialog extends UiComponent {
   declare readonly _options: DialogOptions;

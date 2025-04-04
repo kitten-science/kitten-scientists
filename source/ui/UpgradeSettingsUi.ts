@@ -38,8 +38,8 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
-        onRefreshTrigger: item => {
-          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+        onRefreshTrigger() {
+          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
             settings.trigger === -1
               ? host.engine.i18n("ui.trigger.section.inactive")
               : host.renderPercentage(settings.trigger, locale.selected, true),

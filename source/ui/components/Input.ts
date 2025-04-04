@@ -1,14 +1,15 @@
 import type { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type InputOptions = UiComponentOptions & {
-  readonly onChange?: (value: string) => void;
-  readonly onEnter?: (currentValue: string) => void;
-  readonly onEscape?: (currentValue: string) => void;
-  readonly selected?: boolean;
-  readonly value?: string;
-  readonly classes?: Array<string>;
-} & ThisType<Input>;
+export type InputOptions = ThisType<Input> &
+  UiComponentOptions & {
+    readonly onChange?: (value: string) => void;
+    readonly onEnter?: (currentValue: string) => void;
+    readonly onEscape?: (currentValue: string) => void;
+    readonly selected?: boolean;
+    readonly value?: string;
+    readonly classes?: Array<string>;
+  };
 
 export class Input extends UiComponent {
   declare readonly _options: InputOptions;
