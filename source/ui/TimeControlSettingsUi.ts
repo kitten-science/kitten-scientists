@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
@@ -70,8 +69,8 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
             this.setting.accelerateTime.enabled &&
             this.setting.accelerateTime.trigger === -1;
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.accelerateTime.prompt"),
             host.engine.i18n("ui.trigger.accelerateTime.promptTitle", [
@@ -79,18 +78,15 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
             ]),
             host.renderPercentage(this.setting.accelerateTime.trigger),
             host.engine.i18n("ui.trigger.accelerateTime.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined || value === "" || value.startsWith("-")) {
-                return;
-              }
+          );
 
-              this.setting.accelerateTime.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === undefined || value === "" || value.startsWith("-")) {
+            return;
+          }
+
+          this.setting.accelerateTime.trigger = host.parsePercentage(value);
+
+          this.refreshUi();
         },
       },
     );

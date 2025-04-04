@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../../../Engine.js";
 import type { KittenScientists } from "../../../KittenScientists.js";
 import type { ResourcesSettingsItem } from "../../../settings/ResourcesSettings.js";
@@ -23,8 +22,8 @@ export class StockButton extends Button {
   ) {
     super(host, "", null, {
       ...options,
-      onClick: () => {
-        Dialog.prompt(
+      onClick: async () => {
+        const value = await Dialog.prompt(
           host,
           host.engine.i18n("resources.stock.prompt"),
           host.engine.i18n("resources.stock.promptTitle", [
@@ -33,28 +32,24 @@ export class StockButton extends Button {
           ]),
           host.renderAbsolute(setting.stock),
           host.engine.i18n("resources.stock.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
+        );
+        if (value === undefined) {
+          return;
+        }
 
-            if (value === "" || value.startsWith("-")) {
-              setting.stock = -1;
-              return;
-            }
+        if (value === "" || value.startsWith("-")) {
+          setting.stock = -1;
+          return;
+        }
 
-            if (value === "0") {
-              setting.enabled = false;
-            }
+        if (value === "0") {
+          setting.enabled = false;
+        }
 
-            setting.stock = host.parseAbsolute(value) ?? setting.stock;
-          })
-          .then(() => {
-            this.refreshUi();
-            options?.onClick?.();
-          })
-          .catch(redirectErrorsToConsole(console));
+        setting.stock = host.parseAbsolute(value) ?? setting.stock;
+
+        this.refreshUi();
+        options?.onClick?.();
       },
     });
 

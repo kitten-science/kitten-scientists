@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
@@ -46,8 +45,8 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
           element.triggerButton.ineffective =
             settings.enabled && option.enabled && option.trigger === -1;
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.prompt.float"),
             host.engine.i18n("ui.trigger.build.prompt", [
@@ -58,24 +57,21 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
             ]),
             option.trigger !== -1 ? host.renderAbsolute(option.trigger) : "",
             host.engine.i18n("ui.trigger.reset.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined) {
-                return;
-              }
+          );
 
-              if (value === "" || value.startsWith("-")) {
-                option.trigger = -1;
-                option.enabled = false;
-                return;
-              }
+          if (value === undefined) {
+            return;
+          }
 
-              option.trigger = Number(value);
-            })
-            .then(() => {
-              element.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === "" || value.startsWith("-")) {
+            option.trigger = -1;
+            option.enabled = false;
+            return;
+          }
+
+          option.trigger = Number(value);
+
+          element.refreshUi();
         },
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);

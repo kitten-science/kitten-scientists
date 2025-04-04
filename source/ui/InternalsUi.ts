@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import { type KittenScientists, ksVersion } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
@@ -41,8 +40,8 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                   host,
                   host.engine.i18n("ui.internals.interval", [settings.interval]),
                   {
-                    onClick: () => {
-                      Dialog.prompt(
+                    onClick: async () => {
+                      const value = await Dialog.prompt(
                         host,
                         host.engine.i18n("ui.internals.interval.prompt"),
                         host.engine.i18n("ui.internals.interval.promptTitle", [
@@ -50,22 +49,19 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                         ]),
                         host.renderAbsolute(settings.interval),
                         host.engine.i18n("ui.internals.interval.promptExplainer"),
-                      )
-                        .then(value => {
-                          if (value === undefined || value === "" || value.startsWith("-")) {
-                            return;
-                          }
+                      );
 
-                          if (value === "0") {
-                            settings.enabled = false;
-                          }
+                      if (value === undefined || value === "" || value.startsWith("-")) {
+                        return;
+                      }
 
-                          settings.interval = host.parseAbsolute(value) ?? settings.interval;
-                        })
-                        .then(() => {
-                          this.refreshUi();
-                        })
-                        .catch(redirectErrorsToConsole(console));
+                      if (value === "0") {
+                        settings.enabled = false;
+                      }
+
+                      settings.interval = host.parseAbsolute(value) ?? settings.interval;
+
+                      this.refreshUi();
                     },
                     onRefresh() {
                       this.element.text(

@@ -1,5 +1,4 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { EmbassySettings } from "../settings/EmbassySettings.js";
@@ -44,8 +43,8 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
             settings.enabled &&
             !Object.values(settings.races).some(race => race.enabled);
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.embassies.prompt"),
             host.engine.i18n("ui.trigger.embassies.promptTitle", [
@@ -53,18 +52,15 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
             ]),
             host.renderPercentage(settings.trigger),
             host.engine.i18n("ui.trigger.embassies.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined || value === "" || value.startsWith("-")) {
-                return;
-              }
+          );
 
-              settings.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === undefined || value === "" || value.startsWith("-")) {
+            return;
+          }
+
+          settings.trigger = host.parsePercentage(value);
+
+          this.refreshUi();
         },
       }),
       options,
@@ -93,34 +89,30 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
     sectionSetting: EmbassySettings,
     label: string,
   ) {
-    const onSetMax = () => {
-      Dialog.prompt(
+    const onSetMax = async () => {
+      const value = await Dialog.prompt(
         host,
         host.engine.i18n("ui.max.prompt.absolute"),
         host.engine.i18n("ui.max.build.prompt", [label, host.renderAbsolute(option.max, locale)]),
         host.renderAbsolute(option.max),
         host.engine.i18n("ui.max.build.promptExplainer"),
-      )
-        .then(value => {
-          if (value === undefined) {
-            return;
-          }
+      );
+      if (value === undefined) {
+        return;
+      }
 
-          if (value === "" || value.startsWith("-")) {
-            option.max = -1;
-            return;
-          }
+      if (value === "" || value.startsWith("-")) {
+        option.max = -1;
+        return;
+      }
 
-          if (value === "0") {
-            option.enabled = false;
-          }
+      if (value === "0") {
+        option.enabled = false;
+      }
 
-          option.max = host.parseAbsolute(value) ?? option.max;
-        })
-        .then(() => {
-          this.refreshUi();
-        })
-        .catch(redirectErrorsToConsole(console));
+      option.max = host.parseAbsolute(value) ?? option.max;
+
+      this.refreshUi();
     };
 
     const element = new SettingMaxListItem(host, option, label, {
