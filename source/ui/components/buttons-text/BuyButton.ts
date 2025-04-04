@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../../../Engine.js";
 import type { KittenScientists } from "../../../KittenScientists.js";
 import type { SettingBuy, SettingOptions } from "../../../settings/Settings.js";
@@ -19,8 +18,8 @@ export class BuyButton extends TextButton {
     options?: BuyButtonOptions,
   ) {
     super(host, undefined, {
-      onClick: () => {
-        Dialog.prompt(
+      onClick: async () => {
+        const value = await Dialog.prompt(
           host,
           host.engine.i18n("blackcoin.buy.prompt"),
           host.engine.i18n("blackcoin.buy.promptTitle", [
@@ -28,24 +27,21 @@ export class BuyButton extends TextButton {
           ]),
           host.renderAbsolute(setting.buy),
           host.engine.i18n("blackcoin.buy.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
+        );
 
-            if (value === "" || value.startsWith("-")) {
-              setting.buy = -1;
-              return;
-            }
+        if (value === undefined) {
+          return;
+        }
 
-            setting.buy = host.parseAbsolute(value) ?? setting.buy;
-          })
-          .then(() => {
-            this.refreshUi();
-            options?.onClick?.();
-          })
-          .catch(redirectErrorsToConsole(console));
+        if (value === "" || value.startsWith("-")) {
+          setting.buy = -1;
+          return;
+        }
+
+        setting.buy = host.parseAbsolute(value) ?? setting.buy;
+
+        this.refreshUi();
+        options?.onClick?.();
       },
     });
 

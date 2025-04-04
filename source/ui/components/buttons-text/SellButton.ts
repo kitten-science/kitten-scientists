@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../../../Engine.js";
 import type { KittenScientists } from "../../../KittenScientists.js";
 import type { SettingOptions, SettingSell } from "../../../settings/Settings.js";
@@ -19,8 +18,8 @@ export class SellButton extends TextButton {
     options?: SellButtonOptions,
   ) {
     super(host, undefined, {
-      onClick: () => {
-        Dialog.prompt(
+      onClick: async () => {
+        const value = await Dialog.prompt(
           host,
           host.engine.i18n("blackcoin.sell.prompt"),
           host.engine.i18n("blackcoin.sell.promptTitle", [
@@ -28,24 +27,21 @@ export class SellButton extends TextButton {
           ]),
           host.renderAbsolute(setting.sell),
           host.engine.i18n("blackcoin.sell.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
+        );
 
-            if (value === "" || value.startsWith("-")) {
-              setting.sell = -1;
-              return;
-            }
+        if (value === undefined) {
+          return;
+        }
 
-            setting.sell = host.parseAbsolute(value) ?? setting.sell;
-          })
-          .then(() => {
-            this.refreshUi();
-            options?.onClick?.();
-          })
-          .catch(redirectErrorsToConsole(console));
+        if (value === "" || value.startsWith("-")) {
+          setting.sell = -1;
+          return;
+        }
+
+        setting.sell = host.parseAbsolute(value) ?? setting.sell;
+
+        this.refreshUi();
+        options?.onClick?.();
       },
     });
 

@@ -1,5 +1,4 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
@@ -127,8 +126,8 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
         element.triggerButton.ineffective =
           sectionSetting.enabled && option.enabled && option.trigger === -1;
       },
-      onSetTrigger: () => {
-        Dialog.prompt(
+      onSetTrigger: async () => {
+        const value = await Dialog.prompt(
           host,
           host.engine.i18n("ui.trigger.prompt.absolute"),
           host.engine.i18n("ui.trigger.build.prompt", [
@@ -139,24 +138,20 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
           ]),
           option.trigger !== -1 ? host.renderAbsolute(option.trigger) : "",
           host.engine.i18n("ui.trigger.reset.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
+        );
+        if (value === undefined) {
+          return;
+        }
 
-            if (value === "" || value.startsWith("-")) {
-              option.trigger = -1;
-              option.enabled = false;
-              return;
-            }
+        if (value === "" || value.startsWith("-")) {
+          option.trigger = -1;
+          option.enabled = false;
+          return;
+        }
 
-            option.trigger = Number(value);
-          })
-          .then(() => {
-            element.refreshUi();
-          })
-          .catch(redirectErrorsToConsole(console));
+        option.trigger = Number(value);
+
+        element.refreshUi();
       },
       upgradeIndicator,
     });

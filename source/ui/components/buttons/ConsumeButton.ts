@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../../../Engine.js";
 import type { KittenScientists } from "../../../KittenScientists.js";
 import { Icons } from "../../../images/Icons.js";
@@ -24,8 +23,8 @@ export class ConsumeButton extends Button {
   ) {
     super(host, "", Icons.DataUsage, {
       ...options,
-      onClick: () => {
-        Dialog.prompt(
+      onClick: async () => {
+        const value = await Dialog.prompt(
           host,
           host.engine.i18n("resources.consume.prompt"),
           host.engine.i18n("resources.consume.promptTitle", [
@@ -34,23 +33,20 @@ export class ConsumeButton extends Button {
           ]),
           host.renderPercentage(setting.consume),
           host.engine.i18n("resources.consume.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
+        );
 
-            if (value === "" || value.startsWith("-")) {
-              return;
-            }
+        if (value === undefined) {
+          return;
+        }
 
-            setting.consume = host.parsePercentage(value);
-          })
-          .then(() => {
-            this.refreshUi();
-            options?.onClick?.();
-          })
-          .catch(redirectErrorsToConsole(console));
+        if (value === "" || value.startsWith("-")) {
+          return;
+        }
+
+        setting.consume = host.parsePercentage(value);
+
+        this.refreshUi();
+        options?.onClick?.();
       },
     });
 

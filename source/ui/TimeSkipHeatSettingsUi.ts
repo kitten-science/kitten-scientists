@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
@@ -64,8 +63,8 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
             this.head.elementLabel.removeClass(styles.active);
           }
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.activeHeatTransfer.prompt"),
             host.engine.i18n("ui.trigger.activeHeatTransfer.promptTitle", [
@@ -73,18 +72,15 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
             ]),
             host.renderPercentage(settings.trigger),
             host.engine.i18n("ui.trigger.activeHeatTransfer.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined || value === "" || value.startsWith("-")) {
-                return;
-              }
+          );
 
-              settings.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === undefined || value === "" || value.startsWith("-")) {
+            return;
+          }
+
+          settings.trigger = host.parsePercentage(value);
+
+          this.refreshUi();
         },
       }),
       options,
