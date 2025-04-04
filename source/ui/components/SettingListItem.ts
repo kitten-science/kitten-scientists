@@ -80,15 +80,15 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     this.addChildren(options?.children);
   }
 
-  check(isBatchProcess = false) {
+  async check(isBatchProcess = false) {
     this.setting.enabled = true;
-    this._options?.onCheck?.call(isBatchProcess);
+    await this._options?.onCheck?.call(isBatchProcess);
     this.refreshUi();
   }
 
-  uncheck(isBatchProcess = false) {
+  async uncheck(isBatchProcess = false) {
     this.setting.enabled = false;
-    this._options.onUnCheck?.call(isBatchProcess);
+    await this._options.onUnCheck?.call(isBatchProcess);
     this.refreshUi();
   }
 

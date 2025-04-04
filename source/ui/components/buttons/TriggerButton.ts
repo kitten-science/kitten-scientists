@@ -43,8 +43,7 @@ export class TriggerButton extends Button {
     super.refreshUi();
 
     if (this._options?.onRefreshTitle) {
-      this._options?.onRefreshTitle?.call(this);
-      return;
+      return this._options?.onRefreshTitle?.call(this);
     }
 
     const triggerValue =
