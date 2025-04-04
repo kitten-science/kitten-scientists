@@ -21,6 +21,7 @@ export type LabelListItemOptions = ListItemOptions & {
 };
 
 export class LabelListItem extends ListItem {
+  declare readonly _options: LabelListItemOptions;
   readonly head: Container;
   readonly elementLabel: JQuery;
 

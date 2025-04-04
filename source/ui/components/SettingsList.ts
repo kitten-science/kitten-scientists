@@ -23,6 +23,7 @@ export type SettingsListOptions = UiComponentOptions & {
  * This construct is also sometimes referred to as an "items list" for historic reasons.
  */
 export class SettingsList extends UiComponent {
+  declare readonly _options: SettingsListOptions;
   readonly element: JQuery;
   readonly list: JQuery;
 

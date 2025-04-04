@@ -15,7 +15,6 @@ export type ButtonOptions = IconButtonOptions & {
  */
 export class Button extends UiComponent {
   declare readonly _options: ButtonOptions;
-
   protected readonly _iconElement: JQuery | undefined;
   readonly element: JQuery;
   readOnly: boolean;

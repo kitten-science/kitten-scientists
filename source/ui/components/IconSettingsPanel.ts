@@ -12,6 +12,7 @@ export type IconSettingsPanelOptions = LabelListItemOptions &
   };
 
 export class IconSettingsPanel<TSetting extends Setting = Setting> extends CollapsiblePanel {
+  declare readonly _options: IconSettingsPanelOptions;
   readonly setting: TSetting;
 
   /**

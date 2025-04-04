@@ -11,6 +11,7 @@ export type InputOptions = UiComponentOptions & {
 };
 
 export class Input extends UiComponent {
+  declare readonly _options: InputOptions;
   readonly element: JQuery<HTMLInputElement>;
 
   /**

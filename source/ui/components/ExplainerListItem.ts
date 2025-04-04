@@ -17,7 +17,7 @@ export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends 
   constructor(
     host: KittenScientists,
     key: TranslatedString<TKittenGameLiteral>,
-    options?: Partial<UiComponentOptions>,
+    options?: UiComponentOptions,
   ) {
     super(host, { ...options });
 

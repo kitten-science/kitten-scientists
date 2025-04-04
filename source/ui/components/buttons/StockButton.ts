@@ -8,6 +8,7 @@ import stylesButton from "../Button.module.css";
 import { Dialog } from "../Dialog.js";
 
 export class StockButton extends Button {
+  declare readonly _options: ButtonOptions;
   readonly setting: ResourcesSettingsItem;
   readonly resourceName: string;
 
@@ -16,7 +17,7 @@ export class StockButton extends Button {
     setting: ResourcesSettingsItem,
     locale: SettingOptions<SupportedLocale>,
     resourceName: string,
-    options?: Partial<ButtonOptions>,
+    options?: ButtonOptions,
   ) {
     super(host, "", null, {
       ...options,
