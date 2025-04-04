@@ -81,19 +81,4 @@ export class CyclesList extends SettingsList {
       this.refreshUi();
     });
   }
-
-  private _makeCycle(
-    cycle: Cycle,
-    setting: Setting,
-    handler?: Partial<{
-      onCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
-      onUnCheck: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
-    }>,
-  ) {
-    const label = this._host.engine.labelForCycle(cycle);
-    return new SettingListItem(this._host, setting, label, {
-      onCheck: (isBatchProcess?: boolean) => handler?.onCheck?.(label, setting, isBatchProcess),
-      onUnCheck: (isBatchProcess?: boolean) => handler?.onUnCheck?.(label, setting, isBatchProcess),
-    });
-  }
 }
