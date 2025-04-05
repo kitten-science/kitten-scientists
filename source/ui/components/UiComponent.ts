@@ -5,21 +5,24 @@ export type UiComponentInterface = EventTarget & {
   readonly children: Iterable<UiComponentInterface>;
   get element(): JQuery;
   refreshUi(): void;
+  requestRefresh(withChildren?: boolean): void;
   refresh(force?: boolean): void;
 };
 
 export type UiComponentOptions = {
-  readonly children?: Array<UiComponentInterface>;
-  readonly onClick?: (event?: MouseEvent) => void | Promise<void>;
+  length?: never;
   readonly onRefresh?: () => void;
 };
 
 export abstract class UiComponent extends EventTarget implements UiComponentInterface {
+  private static nextComponentId = 0;
+  readonly componentId: number;
+
   /**
    * A reference to the host itself.
    */
   readonly host: KittenScientists;
-  readonly parent: UiComponent | null;
+  parent: UiComponent | null;
 
   readonly options: UiComponentOptions | undefined;
 
@@ -45,49 +48,56 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
    */
   constructor(parent: UiComponent | { host: KittenScientists }, options?: UiComponentOptions) {
     super();
+    this.componentId = UiComponent.nextComponentId++;
+
     this.host = parent.host;
-    this.parent = parent instanceof UiComponent ? parent : null;
     this.options = options;
+    this.parent = parent instanceof UiComponent ? parent : null;
+    this._needsRefresh = false;
   }
 
-  click() {
-    return this.options?.onClick?.call(this);
-  }
+  abstract toString(): string;
 
-  private _needsRefresh = false;
+  protected _needsRefresh;
+  requestRefresh(withChildren = false) {
+    if (this._needsRefresh) {
+      return;
+    }
+    console.debug(...cl(this.toString(), "requestRefresh"));
+    this._needsRefresh = true;
+    this.parent?.requestRefresh();
+    if (withChildren) {
+      for (const child of this.children) {
+        child.requestRefresh(withChildren);
+      }
+    }
+  }
   refresh(force = false) {
-    if (force && !this._needsRefresh) {
+    if (!force && !this._needsRefresh) {
       return;
     }
 
     this.options?.onRefresh?.call(this);
-
+    this.refreshUi();
     for (const child of this.children) {
       child.refresh(force);
     }
 
-    this._needsRefresh = !force;
+    this._needsRefresh = false;
   }
 
-  refreshUi() {
-    this.options?.onRefresh?.call(this);
-    for (const child of this.children) {
-      try {
-        child.refreshUi();
-      } catch (error) {
-        console.error(...cl("Error while refreshing child component!", error));
-      }
-    }
-  }
+  abstract refreshUi(): void;
 
-  addChild(child: UiComponentInterface) {
+  addChild(child: UiComponentInterface): this {
     this.children.add(child);
     this.element.append(child.element);
+    return this;
   }
-  addChildren(children?: Iterable<UiComponentInterface>) {
+  addChildren(children?: Iterable<UiComponentInterface>): this {
     for (const child of children ?? []) {
       this.addChild(child);
     }
+    return this;
   }
 
   removeChild(child: UiComponentInterface) {

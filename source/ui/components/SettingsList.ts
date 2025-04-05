@@ -38,7 +38,7 @@ export class SettingsList extends UiComponent {
    * @param options Which tools should be available on the list?
    */
   constructor(parent: UiComponent, options?: SettingsListOptions) {
-    super(parent, { ...options, children: [] });
+    super(parent, { ...options });
 
     const toolOptions = {
       hasDisableAll: true,
@@ -80,8 +80,6 @@ export class SettingsList extends UiComponent {
               if (!isNil(onEnableAll)) {
                 onEnableAll();
               }
-
-              this.refreshUi();
             },
           },
         );
@@ -110,8 +108,6 @@ export class SettingsList extends UiComponent {
           if (!isNil(onDisableAll)) {
             onDisableAll();
           }
-
-          this.refreshUi();
         });
         tools.append(this.disableAllButton.element);
       }
@@ -135,11 +131,17 @@ export class SettingsList extends UiComponent {
     }
 
     this.element = container;
-    this.addChildren(options?.children);
   }
 
-  override addChild(child: UiComponent) {
+  toString(): string {
+    return `[${SettingsList.name}#${this.componentId}]`;
+  }
+
+  override addChild(child: UiComponent): this {
     this.children.add(child);
     this.list.append(child.element);
+    return this;
   }
+
+  refreshUi() {}
 }

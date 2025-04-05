@@ -17,14 +17,18 @@ export class Paragraph extends UiComponent {
    * @param options - Options for the UI element.
    */
   constructor(parent: UiComponent, text: string, options?: ParagraphOptions) {
-    super(parent, { ...options, children: [] });
+    super(parent, { ...options });
 
     this.element = $<HTMLParagraphElement>("<p/>").text(text);
 
     for (const className of options?.classes ?? []) {
       this.element.addClass(className);
     }
-
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${Paragraph.name}#${this.componentId}]`;
+  }
+
+  refreshUi() {}
 }

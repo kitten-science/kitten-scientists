@@ -22,7 +22,7 @@ export class Input extends UiComponent {
    * @param options - Options for the UI element.
    */
   constructor(parent: UiComponent, options?: InputOptions) {
-    super(parent, { ...options, children: [] });
+    super(parent, { ...options });
 
     this.element = $<HTMLInputElement>('<input type="text"/>').addClass("ks-input");
 
@@ -53,7 +53,11 @@ export class Input extends UiComponent {
           break;
       }
     });
-
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${Input.name}#${this.componentId}]`;
+  }
+
+  refreshUi() {}
 }

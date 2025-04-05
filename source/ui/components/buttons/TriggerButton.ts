@@ -12,10 +12,7 @@ import type { UiComponent } from "../UiComponent.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 
-export type TriggerButtonOptions = ThisType<TriggerButton> &
-  ButtonOptions & {
-    readonly onRefreshTitle?: () => void | Promise<void>;
-  };
+export type TriggerButtonOptions = ThisType<TriggerButton> & ButtonOptions;
 
 export class TriggerButton extends Button {
   declare readonly options: TriggerButtonOptions;
@@ -39,11 +36,15 @@ export class TriggerButton extends Button {
     this.setting = setting;
   }
 
+  toString(): string {
+    return `[${TriggerButton.name}#${this.componentId}]`;
+  }
+
   refreshUi() {
     super.refreshUi();
 
-    if (this.options?.onRefreshTitle) {
-      return this.options?.onRefreshTitle?.call(this);
+    if (this.options?.onRefresh) {
+      return;
     }
 
     const triggerValue =

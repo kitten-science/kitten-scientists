@@ -4,10 +4,8 @@ import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import type { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import type { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import styles from "./TimeSkipHeatSettingsUi.module.css";
-import type { CollapsiblePanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { Dialog } from "./components/Dialog.js";
-import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -23,7 +21,6 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeSkipSettings,
     sectionParentSetting: TimeControlSettings,
-    options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("option.time.activeHeatTransfer");
     super(
@@ -32,14 +29,10 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
           settings.activeHeatTransferStatus.enabled = false;
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled;
@@ -81,26 +74,24 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
           settings.trigger = parent.host.parsePercentage(value);
         },
       }),
-      options,
     );
 
     this.addChild(
-      new SettingsList(parent, {
-        children: [
-          new CyclesList(parent, this.setting.cycles, {
-            onCheckCycle: (label: string) => {
-              parent.host.engine.imessage("time.heatTransfer.cycle.enable", [label]);
-              this.refreshUi();
-            },
-            onUnCheckCycle: (label: string) => {
-              parent.host.engine.imessage("time.heatTransfer.cycle.disable", [label]);
-              this.refreshUi();
-            },
-          }),
-        ],
+      new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
-      }),
+      }).addChildren([
+        new CyclesList(this, this.setting.cycles, {
+          onCheckCycle: (label: string) => {
+            this.host.engine.imessage("time.heatTransfer.cycle.enable", [label]);
+            this.refreshUi();
+          },
+          onUnCheckCycle: (label: string) => {
+            this.host.engine.imessage("time.heatTransfer.cycle.disable", [label]);
+            this.refreshUi();
+          },
+        }),
+      ]),
     );
   }
 }

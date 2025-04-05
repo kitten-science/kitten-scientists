@@ -23,4 +23,8 @@ export class MaxButton extends Button {
 
     this.setting = setting;
   }
+
+  toString(): string {
+    return `[${MaxButton.name}#${this.componentId}]`;
+  }
 }

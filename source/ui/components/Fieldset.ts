@@ -30,6 +30,11 @@ export class Fieldset extends UiComponent {
     element.append(legend);
 
     this.element = element;
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${Fieldset.name}#${this.componentId}]`;
+  }
+
+  refreshUi() {}
 }

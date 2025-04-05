@@ -21,21 +21,22 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
   ) {
     const label = parent.host.engine.i18n("ui.space");
     super(parent, label, settings, {
-      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Space,
     });
 
+    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
+
     this.addChild(
-      new SettingsList(parent, {
-        children: parent.host.game.space.planets
+      new SettingsList(this).addChildren(
+        this.host.game.space.planets
           .filter(plant => 0 < plant.buildings.length)
           .flatMap((planet, indexPlanet, arrayPlant) => [
-            new HeaderListItem(parent, parent.host.engine.labelForPlanet(planet.name)),
+            new HeaderListItem(this, this.host.engine.labelForPlanet(planet.name)),
             ...planet.buildings
               .filter(item => !isNil(this.setting.buildings[item.name]))
               .map((building, indexBuilding, arrayBuilding) =>
                 this._getResetOption(
-                  parent,
+                  this,
                   this.setting.buildings[building.name],
                   locale,
                   settings,
@@ -44,7 +45,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
                 ),
               ),
           ]),
-      }),
+      ),
     );
   }
 

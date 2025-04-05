@@ -8,6 +8,7 @@ export type ButtonOptions = ThisType<Button> &
     readonly alignment?: "left" | "right";
     readonly title?: string;
     readonly classes?: Array<string>;
+    readonly onClick?: (event?: MouseEvent) => void | Promise<void>;
   };
 
 /**
@@ -35,7 +36,7 @@ export class Button extends UiComponent {
     pathData: string | null = null,
     options?: ButtonOptions,
   ) {
-    super(parent, { ...options, children: [] });
+    super(parent, { ...options });
 
     this.element = $("<div/>", { title: options?.title }).addClass(styles.button).text(label);
 
@@ -70,10 +71,13 @@ export class Button extends UiComponent {
       this.click();
     });
 
-    this.addChildren(options?.children);
     this.readOnly = options?.readOnly ?? false;
     this.inactive = options?.inactive ?? false;
     this.ineffective = false;
+  }
+
+  toString(): string {
+    return `[${Button.name}#${this.componentId}]`;
   }
 
   updateLabel(label: string) {
@@ -90,17 +94,17 @@ export class Button extends UiComponent {
     this.element.prop("title", title);
   }
 
-  override click() {
+  click() {
     if (this.readOnly) {
       return;
     }
 
-    super.click();
+    this.requestRefresh();
+
+    return this.options?.onClick?.call(this);
   }
 
-  override refreshUi(): void {
-    super.refreshUi();
-
+  refreshUi(): void {
     if (this.readOnly) {
       this.element.addClass(styles.readonly);
     } else {

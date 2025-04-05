@@ -6,6 +6,7 @@ import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 export type TextButtonOptions = ThisType<TextButton> &
   UiComponentOptions & {
     readonly title?: string;
+    readonly onClick?: (event?: MouseEvent) => void | Promise<void>;
   };
 
 export class TextButton extends UiComponent {
@@ -27,7 +28,6 @@ export class TextButton extends UiComponent {
     }
 
     this.element = element;
-    this.addChildren(options?.children);
     this.readOnly = false;
 
     this.element.on("click", () => {
@@ -35,17 +35,21 @@ export class TextButton extends UiComponent {
     });
   }
 
-  override click() {
+  toString(): string {
+    return `[${TextButton.name}#${this.componentId}]`;
+  }
+
+  click() {
     if (this.readOnly) {
       return;
     }
 
-    super.click();
+    this.requestRefresh();
+
+    return this.options?.onClick?.call(this);
   }
 
-  override refreshUi(): void {
-    super.refreshUi();
-
+  refreshUi(): void {
     if (this.readOnly) {
       this.element.addClass(stylesButton.readonly);
     } else {

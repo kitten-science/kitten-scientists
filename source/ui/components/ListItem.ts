@@ -21,7 +21,7 @@ export class ListItem extends UiComponent {
    * @param options Options for the list item.
    */
   constructor(parent: UiComponent, options?: ListItemOptions) {
-    super(parent, { children: (options as UiComponentOptions)?.children });
+    super(parent, { ...options });
 
     this.element = $("<li/>");
 
@@ -32,7 +32,11 @@ export class ListItem extends UiComponent {
     if (options?.delimiter === true) {
       this.element.addClass(stylesDelimiter.delimiter);
     }
-
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${ListItem.name}#${this.componentId}]`;
+  }
+
+  refreshUi() {}
 }

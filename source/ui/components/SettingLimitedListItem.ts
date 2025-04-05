@@ -42,15 +42,13 @@ export class SettingLimitedListItem extends SettingListItem {
     this.limitedButton = new LimitedButton(parent, setting, {
       ...options,
     });
-    this.head.addChildren([
+    this.addChildrenHead([
       new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
       this.limitedButton,
     ]);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
-    this.limitedButton.refreshUi();
+  toString(): string {
+    return `[${SettingLimitedListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 }

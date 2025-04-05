@@ -3,7 +3,8 @@ import stylesButton from "../Button.module.css";
 import { UiComponent, type UiComponentOptions } from "../UiComponent.js";
 import styles from "./ExpandoButton.module.css";
 
-export type ExpandoButtonOptions = ThisType<ExpandoButton> & UiComponentOptions;
+export type ExpandoButtonOptions = ThisType<ExpandoButton> &
+  UiComponentOptions & { readonly onClick?: (event?: MouseEvent) => void | Promise<void> };
 
 export class ExpandoButton extends UiComponent {
   declare readonly options: ExpandoButtonOptions;
@@ -20,7 +21,7 @@ export class ExpandoButton extends UiComponent {
   constructor(parent: UiComponent, options?: ExpandoButtonOptions) {
     super(parent, { ...options });
 
-    const element = $("<div/>", {
+    this.element = $("<div/>", {
       html: `
       <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="${styles.down}"><path d="${Icons.ExpandCircleDown}"/></svg>
       <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="${styles.up}"><path d="${Icons.ExpandCircleUp}"/></svg>
@@ -30,9 +31,13 @@ export class ExpandoButton extends UiComponent {
       .addClass(stylesButton.iconButton)
       .addClass(styles.expandoButton);
 
-    this.element = element;
-    this.addChildren(options?.children);
+    this.element.on("click", () => options?.onClick?.call(this));
+
     this.ineffective = false;
+  }
+
+  toString(): string {
+    return `[${ExpandoButton.name}#${this.componentId}]`;
   }
 
   setCollapsed() {
@@ -44,9 +49,7 @@ export class ExpandoButton extends UiComponent {
     this.element.prop("title", this.host.engine.i18n("ui.itemsHide"));
   }
 
-  override refreshUi(): void {
-    super.refreshUi();
-
+  refreshUi(): void {
     if (this.ineffective) {
       this.element.addClass(stylesButton.ineffective);
     } else {

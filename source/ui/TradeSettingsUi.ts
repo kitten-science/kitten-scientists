@@ -8,12 +8,11 @@ import type {
 import type { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
-import type { CollapsiblePanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SeasonsList } from "./components/SeasonsList.js";
 import { SettingLimitedTriggerListItem } from "./components/SettingLimitedTriggerListItem.js";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -26,7 +25,6 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
     parent: UiComponent,
     settings: TradeSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("ui.trade");
     super(
@@ -35,13 +33,9 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -81,38 +75,39 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
       }),
     );
 
-    const listRaces = new SettingsList(parent, {
-      children: parent.host.game.diplomacy.races
+    const listRaces = new SettingsList(this, {
+      hasDisableAll: false,
+      hasEnableAll: false,
+    }).addChildren(
+      this.host.game.diplomacy.races
         .filter(item => !isNil(this.setting.races[item.name]))
         .map(races =>
           this._getTradeOption(
-            parent,
+            this,
             this.setting.races[races.name],
             locale,
             settings,
             races.title,
             label,
-            races.name === parent.host.game.diplomacy.races.at(-2)?.name,
+            races.name === this.host.game.diplomacy.races.at(-2)?.name,
           ),
         ),
-      hasDisableAll: false,
-      hasEnableAll: false,
-    });
+    );
 
     listRaces.addChild(
       new SettingListItem(
-        parent,
+        this,
         this.setting.feedLeviathans,
-        parent.host.engine.i18n("option.autofeed"),
+        this.host.engine.i18n("option.autofeed"),
         {
           onCheck: () => {
-            parent.host.engine.imessage("status.sub.enable", [
-              parent.host.engine.i18n("option.autofeed"),
+            this.host.engine.imessage("status.sub.enable", [
+              this.host.engine.i18n("option.autofeed"),
             ]);
           },
           onUnCheck: () => {
-            parent.host.engine.imessage("status.sub.disable", [
-              parent.host.engine.i18n("option.autofeed"),
+            this.host.engine.imessage("status.sub.disable", [
+              this.host.engine.i18n("option.autofeed"),
             ]);
           },
         },
@@ -121,22 +116,22 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
 
     listRaces.addChild(
       new SettingsPanel<SettingBuySellThreshold>(
-        parent,
+        this,
         this.setting.tradeBlackcoin,
         new SettingTriggerListItem(
-          parent,
+          this,
           this.setting.tradeBlackcoin,
           locale,
-          parent.host.engine.i18n("option.crypto"),
+          this.host.engine.i18n("option.crypto"),
           {
             onCheck: () => {
-              parent.host.engine.imessage("status.sub.enable", [
-                parent.host.engine.i18n("option.crypto"),
+              this.host.engine.imessage("status.sub.enable", [
+                this.host.engine.i18n("option.crypto"),
               ]);
             },
             onUnCheck: () => {
-              parent.host.engine.imessage("status.sub.disable", [
-                parent.host.engine.i18n("option.crypto"),
+              this.host.engine.imessage("status.sub.disable", [
+                this.host.engine.i18n("option.crypto"),
               ]);
             },
             onRefresh: () => {
@@ -145,13 +140,13 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
             },
             onSetTrigger: async () => {
               const value = await Dialog.prompt(
-                parent,
-                parent.host.engine.i18n("ui.trigger.crypto.promptTitle"),
-                parent.host.engine.i18n("ui.trigger.crypto.prompt", [
-                  parent.host.renderAbsolute(this.setting.tradeBlackcoin.trigger, locale.selected),
+                this,
+                this.host.engine.i18n("ui.trigger.crypto.promptTitle"),
+                this.host.engine.i18n("ui.trigger.crypto.prompt", [
+                  this.host.renderAbsolute(this.setting.tradeBlackcoin.trigger, locale.selected),
                 ]),
-                parent.host.renderAbsolute(this.setting.tradeBlackcoin.trigger),
-                parent.host.engine.i18n("ui.trigger.crypto.promptExplainer"),
+                this.host.renderAbsolute(this.setting.tradeBlackcoin.trigger),
+                this.host.engine.i18n("ui.trigger.crypto.promptExplainer"),
               );
 
               if (value === undefined || value === "" || value.startsWith("-")) {
@@ -159,44 +154,41 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
               }
 
               this.setting.tradeBlackcoin.trigger =
-                parent.host.parseAbsolute(value) ?? this.setting.tradeBlackcoin.trigger;
+                this.host.parseAbsolute(value) ?? this.setting.tradeBlackcoin.trigger;
             },
           },
         ),
-        {
-          children: [
-            new BuyButton(parent, this.setting.tradeBlackcoin, locale),
-            new SellButton(parent, this.setting.tradeBlackcoin, locale),
-          ],
-        },
-      ),
+      ).addChildren([
+        new BuyButton(this, this.setting.tradeBlackcoin, locale),
+        new SellButton(this, this.setting.tradeBlackcoin, locale),
+      ]),
     );
     this.addChild(listRaces);
 
-    const listAddition = new SettingsList(parent, {
+    const listAddition = new SettingsList(this, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(parent, parent.host.engine.i18n("ui.additional")));
+    listAddition.addChild(new HeaderListItem(this, this.host.engine.i18n("ui.additional")));
 
     listAddition.addChild(
-      new EmbassySettingsUi(parent, this.setting.buildEmbassies, locale, settings),
+      new EmbassySettingsUi(this, this.setting.buildEmbassies, locale, settings),
     );
 
     listAddition.addChild(
       new SettingListItem(
-        parent,
+        this,
         this.setting.unlockRaces,
-        parent.host.engine.i18n("ui.upgrade.races"),
+        this.host.engine.i18n("ui.upgrade.races"),
         {
           onCheck: () => {
-            parent.host.engine.imessage("status.sub.enable", [
-              parent.host.engine.i18n("ui.upgrade.races"),
+            this.host.engine.imessage("status.sub.enable", [
+              this.host.engine.i18n("ui.upgrade.races"),
             ]);
           },
           onUnCheck: () => {
-            parent.host.engine.imessage("status.sub.disable", [
-              parent.host.engine.i18n("ui.upgrade.races"),
+            this.host.engine.imessage("status.sub.disable", [
+              this.host.engine.i18n("ui.upgrade.races"),
             ]);
           },
         },

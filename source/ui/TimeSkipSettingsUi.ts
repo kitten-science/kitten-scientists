@@ -13,11 +13,11 @@ import { Dialog } from "./components/Dialog.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SeasonsList } from "./components/SeasonsList.js";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingMaxTriggerListItem> {
@@ -30,7 +30,6 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     settings: TimeSkipSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeControlSettings,
-    options?: SettingsPanelOptions<SettingMaxTriggerListItem> & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("option.time.skip");
     super(
@@ -39,13 +38,9 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       new SettingMaxTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: () => {
           this.settingItem.maxButton.inactive = !settings.enabled || settings.max === -1;
@@ -126,56 +121,47 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
           settings.trigger = parent.host.parseAbsolute(value) ?? settings.trigger;
         },
       }),
-      options,
     );
     this.settingItem.triggerButton.element.removeClass(stylesButton.lastHeadAction);
 
     this._cycles = new CollapsiblePanel(
-      parent,
-      new LabelListItem(parent, ucfirst(parent.host.engine.i18n("ui.cycles")), {
+      this,
+      new LabelListItem(this, ucfirst(this.host.engine.i18n("ui.cycles")), {
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
-        childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
         icon: Icons.Cycles,
+      }).addChildrenHead([new Container(this, { classes: [stylesLabelListItem.fillSpace] })]),
+    ).addChildren([
+      new CyclesList(this, this.setting.cycles, {
+        onCheckCycle: (label: string) => {
+          this.host.engine.imessage("time.skip.cycle.enable", [label]);
+          this.refreshUi();
+        },
+        onUnCheckCycle: (label: string) => {
+          this.host.engine.imessage("time.skip.cycle.disable", [label]);
+          this.refreshUi();
+        },
       }),
-      {
-        children: [
-          new CyclesList(parent, this.setting.cycles, {
-            onCheckCycle: (label: string) => {
-              parent.host.engine.imessage("time.skip.cycle.enable", [label]);
-              this.refreshUi();
-            },
-            onUnCheckCycle: (label: string) => {
-              parent.host.engine.imessage("time.skip.cycle.disable", [label]);
-              this.refreshUi();
-            },
-          }),
-        ],
-      },
-    );
+    ]);
     this._seasons = new CollapsiblePanel(
-      parent,
-      new LabelListItem(parent, ucfirst(parent.host.engine.i18n("trade.seasons")), {
+      this,
+      new LabelListItem(this, ucfirst(this.host.engine.i18n("trade.seasons")), {
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
-        childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
         icon: Icons.Seasons,
+      }).addChildrenHead([new Container(this, { classes: [stylesLabelListItem.fillSpace] })]),
+    ).addChildren([
+      new SeasonsList(this, this.setting.seasons, {
+        onCheckSeason: (label: string) => {
+          this.host.engine.imessage("time.skip.season.enable", [label]);
+          this.refreshUi();
+        },
+        onUnCheckSeason: (label: string) => {
+          this.host.engine.imessage("time.skip.season.disable", [label]);
+          this.refreshUi();
+        },
       }),
-      {
-        children: [
-          new SeasonsList(parent, this.setting.seasons, {
-            onCheckSeason: (label: string) => {
-              parent.host.engine.imessage("time.skip.season.enable", [label]);
-              this.refreshUi();
-            },
-            onUnCheckSeason: (label: string) => {
-              parent.host.engine.imessage("time.skip.season.disable", [label]);
-              this.refreshUi();
-            },
-          }),
-        ],
-      },
-    );
+    ]);
     this._activeHeatTransferUI = new TimeSkipHeatSettingsUi(
-      parent,
+      this,
       this.setting.activeHeatTransfer,
       locale,
       settings,
@@ -183,20 +169,19 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     );
 
     this.addChild(
-      new SettingsList(parent, {
-        children: [
-          this._cycles,
-          this._seasons,
-          new SettingListItem(
-            parent,
-            this.setting.ignoreOverheat,
-            parent.host.engine.i18n("option.time.skip.ignoreOverheat"),
-          ),
-          this._activeHeatTransferUI,
-        ],
+      new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
-      }),
+      }).addChildren([
+        this._cycles,
+        this._seasons,
+        new SettingListItem(
+          this,
+          this.setting.ignoreOverheat,
+          this.host.engine.i18n("option.time.skip.ignoreOverheat"),
+        ),
+        this._activeHeatTransferUI,
+      ]),
     );
   }
 }

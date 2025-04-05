@@ -19,11 +19,12 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
   ) {
     const label = parent.host.engine.i18n("ui.upgrades");
     super(parent, label, settings, {
-      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Workshop,
     });
 
-    const upgrades = parent.host.game.workshop.upgrades.filter(
+    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
+
+    const upgrades = this.host.game.workshop.upgrades.filter(
       upgrade => !isNil(this.setting.upgrades[upgrade.name]),
     );
 
@@ -35,9 +36,9 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
     )) {
       const option = this.setting.upgrades[upgrade.name];
 
-      const element = this._getResetOption(parent, option, upgrade.label);
+      const element = this._getResetOption(this, option, upgrade.label);
 
-      if (parent.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+      if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== upgrade.label[0]) {
           if (!isNil(lastElement)) {
             lastElement.element.addClass(stylesDelimiter.delimiter);
@@ -52,7 +53,7 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
       lastLabel = upgrade.label;
     }
 
-    this.addChild(new SettingsList(parent, { children: items }));
+    this.addChild(new SettingsList(this).addChildren(items));
   }
 
   private _getResetOption(

@@ -27,6 +27,11 @@ export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends 
     const element = $("<li/>", { text: parent.host.engine.i18n(key) }).addClass(styles.explainer);
 
     this.element = element;
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${ExplainerListItem.name}#${this.componentId}]`;
+  }
+
+  refreshUi() {}
 }

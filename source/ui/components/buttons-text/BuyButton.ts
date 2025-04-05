@@ -47,6 +47,10 @@ export class BuyButton extends TextButton {
     this.setting = setting;
   }
 
+  toString(): string {
+    return `[${BuyButton.name}#${this.componentId}]`;
+  }
+
   refreshUi() {
     super.refreshUi();
 

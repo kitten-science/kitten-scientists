@@ -27,10 +27,7 @@ export class SettingsPanel<
 
   // SettingListItem interface
   get elementLabel() {
-    return this._head.element;
-  }
-  get head() {
-    return this._head;
+    return this.head.element;
   }
 
   get readOnly() {
@@ -68,5 +65,9 @@ export class SettingsPanel<
 
     this.settingItem = settingItem;
     this.setting = setting;
+  }
+
+  toString(): string {
+    return `[${SettingsPanel.name}#${this.componentId}]: ${this.settingItem.elementLabel.text()}`;
   }
 }

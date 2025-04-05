@@ -23,13 +23,9 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
   declare readonly options: CollapsiblePanelOptions;
   protected readonly container: UiComponent;
   readonly element: JQuery;
-  protected readonly _expando: ExpandoButton;
-  protected readonly _head: THead;
+  readonly expando: ExpandoButton;
+  readonly head: THead;
   protected _mainChildVisible: boolean;
-
-  get expando() {
-    return this._expando;
-  }
 
   get isExpanded() {
     return this._mainChildVisible;
@@ -45,17 +41,17 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
   constructor(parent: UiComponent, head: THead, options?: CollapsiblePanelOptions) {
     super(parent, {});
 
-    this.container = new Container(parent);
+    this.container = new Container(this);
     this.container.element.addClass(stylesSettingListItem.panelContent);
     this.children.add(this.container);
 
-    this._head = head;
+    this.head = head;
     this.children.add(head);
+    head.parent = this;
 
     // The expando button for this panel.
-    const expando = new ExpandoButton(parent);
-    expando.element.on("click", () => {
-      this.toggle();
+    const expando = new ExpandoButton(parent, {
+      onClick: () => this.toggle(),
     });
     head.head.addChild(expando);
 
@@ -70,13 +66,28 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
 
     this._mainChildVisible = options?.initiallyExpanded ?? false;
     this.element = head.element;
-    this.addChildren(options?.children);
-    this._expando = expando;
+    this.expando = expando;
   }
 
-  override addChild(child: UiComponent) {
+  toString(): string {
+    return `[${CollapsiblePanel.name}#${this.componentId}]`;
+  }
+
+  override addChild(child: UiComponent): this {
     this.children.add(child);
     this.container.element.append(child.element);
+    return this;
+  }
+
+  addChildHead(child: UiComponentInterface): this {
+    this.head.addChild(child);
+    return this;
+  }
+  addChildrenHead(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.head.addChild(child);
+    }
+    return this;
   }
 
   /**
@@ -95,15 +106,15 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
         // Show the DOM element.
         this.container.element.removeClass(stylesSettingListItem.hidden);
         // Reflect expanded state on expando.
-        this._expando.setExpanded();
+        this.expando.setExpanded();
         // Reflect expanded state for CSS.
-        this._head.element.addClass(stylesSettingListItem.expanded);
+        this.head.element.addClass(stylesSettingListItem.expanded);
         // This is NOT a DOM event! It can only be caught by listening on this panel directly.
         this.dispatchEvent(new CustomEvent("panelShown"));
       } else {
         this.container.element.addClass(stylesSettingListItem.hidden);
-        this._expando.setCollapsed();
-        this._head.element.removeClass(stylesSettingListItem.expanded);
+        this.expando.setCollapsed();
+        this.head.element.removeClass(stylesSettingListItem.expanded);
         this.dispatchEvent(new CustomEvent("panelHidden"));
       }
     }
@@ -122,4 +133,6 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
       toggleChildren(this.children);
     }
   }
+
+  refreshUi() {}
 }

@@ -65,8 +65,9 @@ export class UserInterface extends UiComponent {
       this.stateManagementUi,
       new InternalsUi(this, engine.settings, engine.settings.locale),
     ];
-
-    //this._installCss();
+    for (const section of this._sections) {
+      this.children.add(section);
+    }
 
     const ks = $("<div/>").addClass(styles.ui);
 
@@ -141,11 +142,29 @@ export class UserInterface extends UiComponent {
       right.prepend(ks);
     }
     this.element = ks;
+
+    this.refresh(true);
+  }
+
+  toString(): string {
+    return `[${UserInterface.name}#${this.componentId}]`;
   }
 
   destroy() {
     this.showActivity.remove();
     this.element.remove();
+  }
+
+  override requestRefresh() {
+    if (this._needsRefresh) {
+      return;
+    }
+
+    this._needsRefresh = true;
+    setTimeout(() => {
+      console.warn(...cl("Refreshing UI...."));
+      this.refresh();
+    }, 0);
   }
 
   refreshUi(): void {

@@ -53,6 +53,10 @@ export class ConsumeButton extends Button {
     this.setting = setting;
   }
 
+  toString(): string {
+    return `[${ConsumeButton.name}#${this.componentId}]`;
+  }
+
   refreshUi() {
     super.refreshUi();
 

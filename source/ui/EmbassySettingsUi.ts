@@ -5,11 +5,10 @@ import type { SettingMax, SettingOptions } from "../settings/Settings.js";
 import type { TradeSettings } from "../settings/TradeSettings.js";
 import stylesButton from "./components/Button.module.css";
 import { Dialog } from "./components/Dialog.js";
-import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTriggerListItem> {
@@ -18,7 +17,6 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
     settings: EmbassySettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TradeSettings,
-    options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("option.embassies");
     super(
@@ -27,13 +25,9 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -61,22 +55,21 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
           settings.trigger = parent.host.parsePercentage(value);
         },
       }),
-      options,
     );
 
-    const listRaces = new SettingsList(parent, {
-      children: parent.host.game.diplomacy.races
+    const listRaces = new SettingsList(this).addChildren(
+      this.host.game.diplomacy.races
         .filter(item => item.name !== "leviathans" && !isNil(this.setting.races[item.name]))
         .map(race =>
           this._makeEmbassySetting(
-            parent,
+            this,
             this.setting.races[race.name],
             locale.selected,
             settings,
             race.title,
           ),
         ),
-    });
+    );
     this.addChild(listRaces);
   }
 

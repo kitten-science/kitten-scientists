@@ -12,7 +12,6 @@ export class EngineSettingsUi extends SettingListItem {
   constructor(parent: UiComponent, settings: EngineSettings) {
     const label = ucfirst(parent.host.engine.i18n("ui.engine"));
     super(parent, settings, label, {
-      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       onCheck: () => {
         parent.host.engine.start(true);
       },
@@ -21,7 +20,10 @@ export class EngineSettingsUi extends SettingListItem {
       },
     });
 
-    this.expando = new ExpandoButton(parent);
-    this.head.addChild(this.expando);
+    this.expando = new ExpandoButton(this);
+    this.addChildrenHead([
+      new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+      this.expando,
+    ]);
   }
 }

@@ -79,4 +79,8 @@ export class SeasonsList extends SettingsList {
 
     this.addChildren([this.spring, this.summer, this.autumn, this.winter]);
   }
+
+  toString(): string {
+    return `[${SeasonsList.name}#${this.componentId}]`;
+  }
 }

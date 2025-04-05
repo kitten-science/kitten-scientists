@@ -17,4 +17,10 @@ export class Delimiter extends UiComponent {
     const element = $("<div/>").addClass(styles.delimiter);
     this.element = element;
   }
+
+  toString(): string {
+    return `[${Delimiter.name}#${this.componentId}]`;
+  }
+
+  refreshUi() {}
 }

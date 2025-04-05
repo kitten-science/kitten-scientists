@@ -8,27 +8,20 @@ export type ToolbarListItemOptions = ThisType<ToolbarListItem> & ListItemOptions
 
 export class ToolbarListItem extends ListItem {
   declare readonly options: ToolbarListItemOptions;
-  readonly buttons: Array<Button | IconButton>;
 
-  constructor(
-    parent: UiComponent,
-    buttons: Array<Button | IconButton>,
-    options?: ToolbarListItemOptions,
-  ) {
+  constructor(parent: UiComponent, options?: ToolbarListItemOptions) {
     super(parent, options);
 
     this.element.addClass(styles.toolbar);
-    this.buttons = buttons;
-    for (const button of buttons) {
-      this.element.append(button.element);
-    }
   }
 
-  refreshUi(): void {
-    super.refreshUi();
+  toString(): string {
+    return `[${ToolbarListItem.name}#${this.componentId}]`;
+  }
 
-    for (const button of this.buttons) {
-      button.refreshUi();
-    }
+  override addChild(child: Button | IconButton): this {
+    this.children.add(child);
+    this.element.append(child.element);
+    return this;
   }
 }

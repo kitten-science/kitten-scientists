@@ -10,19 +10,11 @@ export class ButtonListItem extends ListItem {
   readonly button: TextButton;
 
   constructor(parent: UiComponent, button: TextButton, options?: ButtonListItemOptions) {
-    super(parent, { ...options, children: [] });
+    super(parent, { ...options });
 
     this.button = button;
 
     this.element.addClass(stylesListItem.head);
     this.element.append(button.element);
-
-    this.addChildren(options?.children);
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    this.button.refreshUi();
   }
 }
