@@ -1,10 +1,11 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
-import { CollapsiblePanel, type PanelOptions } from "./CollapsiblePanel.js";
+import { CollapsiblePanel, type CollapsiblePanelOptions } from "./CollapsiblePanel.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
+import type { UiComponent } from "./UiComponent.js";
 
-export type IconSettingsPanelOptions = LabelListItemOptions &
-  PanelOptions & {
+export type IconSettingsPanelOptions = ThisType<IconSettingsPanel> &
+  LabelListItemOptions &
+  CollapsiblePanelOptions & {
     /**
      * When set to an SVG path, will be used as an icon on the panel.
      */
@@ -12,6 +13,7 @@ export type IconSettingsPanelOptions = LabelListItemOptions &
   };
 
 export class IconSettingsPanel<TSetting extends Setting = Setting> extends CollapsiblePanel {
+  declare readonly options: IconSettingsPanelOptions;
   readonly setting: TSetting;
 
   /**
@@ -23,14 +25,16 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Colla
    * @param options Options for the panel.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     label: string,
     setting: TSetting,
-    options?: Partial<IconSettingsPanelOptions>,
+    options?: IconSettingsPanelOptions,
   ) {
     super(
-      host,
-      new LabelListItem(host, label, { childrenHead: options?.childrenHead, icon: options?.icon }),
+      parent,
+      new LabelListItem(parent, label, {
+        icon: options?.icon,
+      }),
       {
         initiallyExpanded: options?.initiallyExpanded,
       },

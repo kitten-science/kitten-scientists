@@ -1,19 +1,17 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import { ResetSettingsUi } from "./ResetSettingsUi.js";
 import { TimeSkipSettingsUi } from "./TimeSkipSettingsUi.js";
 import stylesButton from "./components/Button.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
   protected readonly _items: Array<SettingListItem>;
@@ -23,46 +21,40 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
   private readonly _resetUi: ResetSettingsUi;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: TimeControlSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
-    const label = host.engine.i18n("ui.timeCtrl");
+    const label = parent.host.engine.i18n("ui.timeCtrl");
     super(
-      host,
+      parent,
       settings,
-      new SettingListItem(host, settings, label, {
-        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+      new SettingListItem(parent, settings, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
+          parent.host.engine.imessage("status.auto.enable", [label]);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
-      }),
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
 
-    const list = new SettingsList(host, {
+    const list = new SettingsList(this, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    const accelerateLabel = host.engine.i18n("option.accelerate");
+    const accelerateLabel = this.host.engine.i18n("option.accelerate");
     this._accelerateTime = new SettingTriggerListItem(
-      host,
+      this,
       this.setting.accelerateTime,
       locale,
       accelerateLabel,
       {
         onCheck: () => {
-          host.engine.imessage("status.sub.enable", [accelerateLabel]);
+          this.host.engine.imessage("status.sub.enable", [accelerateLabel]);
         },
         onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [accelerateLabel]);
+          this.host.engine.imessage("status.sub.disable", [accelerateLabel]);
         },
         onRefresh: () => {
           this._accelerateTime.triggerButton.inactive = !this.setting.accelerateTime.enabled;
@@ -71,37 +63,36 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
             this.setting.accelerateTime.enabled &&
             this.setting.accelerateTime.trigger === -1;
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.accelerateTime.prompt"),
-            host.engine.i18n("ui.trigger.accelerateTime.promptTitle", [
-              host.renderPercentage(this.setting.accelerateTime.trigger, locale.selected, true),
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
+            this,
+            this.host.engine.i18n("ui.trigger.accelerateTime.prompt"),
+            this.host.engine.i18n("ui.trigger.accelerateTime.promptTitle", [
+              this.host.renderPercentage(
+                this.setting.accelerateTime.trigger,
+                locale.selected,
+                true,
+              ),
             ]),
-            host.renderPercentage(this.setting.accelerateTime.trigger),
-            host.engine.i18n("ui.trigger.accelerateTime.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined || value === "" || value.startsWith("-")) {
-                return;
-              }
+            this.host.renderPercentage(this.setting.accelerateTime.trigger),
+            this.host.engine.i18n("ui.trigger.accelerateTime.promptExplainer"),
+          );
 
-              this.setting.accelerateTime.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === undefined || value === "" || value.startsWith("-")) {
+            return;
+          }
+
+          this.setting.accelerateTime.trigger = this.host.parsePercentage(value);
         },
       },
     );
     this._accelerateTime.triggerButton.element.addClass(stylesButton.lastHeadAction);
-    this._timeSkipUi = new TimeSkipSettingsUi(host, this.setting.timeSkip, locale, settings);
-    this._resetUi = new ResetSettingsUi(host, this.setting.reset, locale);
+    this._timeSkipUi = new TimeSkipSettingsUi(this, this.setting.timeSkip, locale, settings);
+    this._resetUi = new ResetSettingsUi(this, this.setting.reset, locale);
 
     this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];
 
     list.addChildren(this._items);
-    this.addChild(list);
+    this.addChildContent(list);
   }
 }

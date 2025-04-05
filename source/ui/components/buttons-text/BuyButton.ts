@@ -1,51 +1,44 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../../../Engine.js";
-import type { KittenScientists } from "../../../KittenScientists.js";
 import type { SettingBuy, SettingOptions } from "../../../settings/Settings.js";
 import { Dialog } from "../Dialog.js";
-import { TextButton } from "../TextButton.js";
+import { TextButton, type TextButtonOptions } from "../TextButton.js";
+import type { UiComponent } from "../UiComponent.js";
 import styles from "./BuyButton.module.css";
 
+export type BuyButtonOptions = ThisType<BuyButton> & TextButtonOptions;
+
 export class BuyButton extends TextButton {
+  declare readonly options: BuyButtonOptions;
   readonly setting: SettingBuy;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingBuy,
     locale: SettingOptions<SupportedLocale>,
-    handler: { onClick?: () => void } = {},
+    options?: BuyButtonOptions,
   ) {
-    super(host, undefined, {
-      onClick: () => {
-        Dialog.prompt(
-          host,
-          host.engine.i18n("blackcoin.buy.prompt"),
-          host.engine.i18n("blackcoin.buy.promptTitle", [
-            host.renderAbsolute(setting.buy, locale.selected),
+    super(parent, undefined, {
+      onClick: async () => {
+        const value = await Dialog.prompt(
+          parent,
+          parent.host.engine.i18n("blackcoin.buy.prompt"),
+          parent.host.engine.i18n("blackcoin.buy.promptTitle", [
+            parent.host.renderAbsolute(setting.buy, locale.selected),
           ]),
-          host.renderAbsolute(setting.buy),
-          host.engine.i18n("blackcoin.buy.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
+          parent.host.renderAbsolute(setting.buy),
+          parent.host.engine.i18n("blackcoin.buy.promptExplainer"),
+        );
 
-            if (value === "" || value.startsWith("-")) {
-              setting.buy = -1;
-              return;
-            }
+        if (value === undefined) {
+          return;
+        }
 
-            setting.buy = host.parseAbsolute(value) ?? setting.buy;
-          })
-          .then(() => {
-            this.refreshUi();
+        if (value === "" || value.startsWith("-")) {
+          setting.buy = -1;
+          return;
+        }
 
-            if (handler.onClick) {
-              handler.onClick();
-            }
-          })
-          .catch(redirectErrorsToConsole(console));
+        setting.buy = parent.host.parseAbsolute(value) ?? setting.buy;
       },
     });
 
@@ -54,15 +47,19 @@ export class BuyButton extends TextButton {
     this.setting = setting;
   }
 
-  refreshUi() {
+  toString(): string {
+    return `[${BuyButton.name}#${this.componentId}]`;
+  }
+
+  refreshUi(): void {
     super.refreshUi();
 
     this.element.prop(
       "title",
-      this._host.engine.i18n("blackcoin.buy.title", [this._host.renderAbsolute(this.setting.buy)]),
+      this.host.engine.i18n("blackcoin.buy.title", [this.host.renderAbsolute(this.setting.buy)]),
     );
     this.element.text(
-      this._host.engine.i18n("blackcoin.buy", [this._host.renderAbsolute(this.setting.buy)]),
+      this.host.engine.i18n("blackcoin.buy", [this.host.renderAbsolute(this.setting.buy)]),
     );
   }
 }

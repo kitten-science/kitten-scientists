@@ -1,29 +1,25 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import { Container } from "./Container.js";
 import styles from "./LabelListItem.module.css";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
 import type { UiComponent, UiComponentInterface } from "./UiComponent.js";
 
-export type LabelListItemOptions<TChild extends UiComponentInterface = UiComponentInterface> =
-  ListItemOptions<TChild> & {
-    readonly childrenHead: Array<UiComponent>;
-
+export type LabelListItemOptions = ThisType<LabelListItem> &
+  ListItemOptions & {
     /**
      * When set to an SVG path, will be used as an icon on the label.
      */
-    readonly icon: string;
+    readonly icon?: string;
 
     /**
      * Should an indicator be rendered in front of the element,
      * to indicate that this is an upgrade of a prior setting?
      */
-    readonly upgradeIndicator: boolean;
+    readonly upgradeIndicator?: boolean;
   };
 
-export class LabelListItem<
-  TOptions extends LabelListItemOptions<UiComponent> = LabelListItemOptions<UiComponent>,
-> extends ListItem<TOptions> {
+export class LabelListItem extends ListItem {
+  declare readonly options: LabelListItemOptions;
   readonly head: Container;
   readonly elementLabel: JQuery;
 
@@ -34,10 +30,10 @@ export class LabelListItem<
    * @param label The label on the setting element.
    * @param options Options for the list item.
    */
-  constructor(host: KittenScientists, label: string, options?: Partial<TOptions>) {
-    super(host, options);
+  constructor(parent: UiComponent, label: string, options?: LabelListItemOptions) {
+    super(parent, options);
 
-    this.head = new Container(host);
+    this.head = new Container(parent);
     this.head.element.addClass(stylesListItem.head);
     this.addChild(this.head);
 
@@ -45,15 +41,8 @@ export class LabelListItem<
       text: `${options?.upgradeIndicator === true ? "⮤ " : ""}${label}`,
     })
       .addClass(styles.label)
-      .addClass(stylesListItem.label)
-      .on("click", () => {
-        this.click();
-      });
+      .addClass(stylesListItem.label);
     this.head.element.append(this.elementLabel);
-
-    for (const child of options?.childrenHead ?? []) {
-      this.head.addChild(child);
-    }
 
     if (options?.icon) {
       const iconElement = $("<div/>", {
@@ -61,5 +50,20 @@ export class LabelListItem<
       }).addClass(styles.iconLabel);
       this.elementLabel.prepend(iconElement);
     }
+  }
+
+  toString(): string {
+    return `[${LabelListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+  }
+
+  addChildHead(child: UiComponentInterface): this {
+    this.head.addChild(child);
+    return this;
+  }
+  addChildrenHead(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.head.addChild(child);
+    }
+    return this;
   }
 }

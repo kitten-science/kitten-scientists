@@ -1,14 +1,15 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import stylesDelimiter from "./Delimiter.module.css";
 import styles from "./Fieldset.module.css";
 import stylesLabel from "./LabelListItem.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type FieldsetOptions = UiComponentOptions & {
-  readonly delimiter: boolean;
-};
+export type FieldsetOptions = ThisType<Fieldset> &
+  UiComponentOptions & {
+    readonly delimiter?: boolean;
+  };
 
 export class Fieldset extends UiComponent {
+  declare readonly options: FieldsetOptions;
   readonly element: JQuery;
 
   /**
@@ -18,8 +19,8 @@ export class Fieldset extends UiComponent {
    * @param label The label on the fieldset.
    * @param options Options for the fieldset.
    */
-  constructor(host: KittenScientists, label: string, options?: Partial<FieldsetOptions>) {
-    super(host, options);
+  constructor(parent: UiComponent, label: string, options?: FieldsetOptions) {
+    super(parent, { ...options });
 
     const element = $("<fieldset/>").addClass(styles.fieldset);
     if (options?.delimiter) {
@@ -29,6 +30,11 @@ export class Fieldset extends UiComponent {
     element.append(legend);
 
     this.element = element;
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${Fieldset.name}#${this.componentId}]`;
+  }
+
+  refreshUi(): void {}
 }

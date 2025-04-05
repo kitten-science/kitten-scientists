@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingMax } from "../../settings/Settings.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
@@ -6,15 +5,14 @@ import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.
 import type { UiComponent } from "./UiComponent.js";
 import { MaxButton } from "./buttons/MaxButton.js";
 
-export type SettingListItemOptionsMax = {
-  readonly onRefreshMax: (subject: SettingMaxListItem) => void;
-  readonly onSetMax: (subject: SettingMaxListItem) => void;
-};
+export type SettingMaxListItemOptions = ThisType<SettingMaxListItem> &
+  SettingListItemOptions & {
+    readonly onRefreshMax?: () => void;
+    readonly onSetMax: () => void;
+  };
 
-export class SettingMaxListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsMax = SettingListItemOptions<UiComponent> & SettingListItemOptionsMax,
-> extends SettingListItem<SettingMax> {
+export class SettingMaxListItem extends SettingListItem<SettingMax> {
+  declare readonly options: SettingMaxListItemOptions;
   readonly maxButton: MaxButton;
 
   /**
@@ -28,27 +26,28 @@ export class SettingMaxListItem<
    * @param options Options for the list item.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingMax,
     label: string,
-    options?: Partial<TOptions>,
+    options: SettingMaxListItemOptions,
   ) {
-    super(host, setting, label, options);
+    super(parent, setting, label, options);
 
-    this.maxButton = new MaxButton(host, setting, {
+    this.maxButton = new MaxButton(parent, setting, {
       border: false,
-      onClick: options?.onSetMax ? () => options.onSetMax?.(this) : undefined,
-      onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.(this) : undefined,
+      onClick: () => {
+        options.onSetMax.call(this);
+        this.requestRefresh();
+      },
+      onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
-    this.head.addChildren([
-      new Container(host, { classes: [stylesLabelListItem.fillSpace] }),
+    this.addChildrenHead([
+      new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
       this.maxButton,
     ]);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
-    this.maxButton.refreshUi();
+  toString(): string {
+    return `[${SettingMaxListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 }

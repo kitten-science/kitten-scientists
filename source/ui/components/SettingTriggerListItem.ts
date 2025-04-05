@@ -1,5 +1,4 @@
 import type { SupportedLocale } from "../../Engine.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingOptions, SettingThreshold, SettingTrigger } from "../../settings/Settings.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
@@ -7,42 +6,38 @@ import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.
 import type { UiComponent } from "./UiComponent.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
-export type SettingListItemOptionsTrigger = {
-  readonly onRefreshTrigger: (subject: SettingTriggerListItem) => void;
-  readonly onSetTrigger: (subject: SettingTriggerListItem) => void;
-};
+export type SettingTriggerListItemOptions = ThisType<SettingTriggerListItem> &
+  SettingListItemOptions & {
+    readonly onRefreshTrigger?: () => void | Promise<void>;
+    readonly onSetTrigger: () => void | Promise<void>;
+  };
 
-export class SettingTriggerListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsTrigger,
-> extends SettingListItem {
+export class SettingTriggerListItem extends SettingListItem {
+  declare readonly options: SettingTriggerListItemOptions;
   readonly triggerButton: TriggerButton;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingThreshold | SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: Partial<TOptions>,
+    options: SettingTriggerListItemOptions,
   ) {
-    super(host, setting, label, options);
+    super(parent, setting, label, options);
 
-    this.triggerButton = new TriggerButton(host, setting, locale, {
+    this.triggerButton = new TriggerButton(parent, setting, locale, {
       alignment: "right",
       border: false,
-      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,
-      onRefreshTitle: options?.onRefreshTrigger
-        ? () => options.onRefreshTrigger?.(this)
-        : undefined,
+      onClick: () => options.onSetTrigger.call(this),
+      onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
-    this.head.addChild(new Container(host, { classes: [stylesLabelListItem.fillSpace] }));
-    this.head.addChild(this.triggerButton);
+    this.addChildrenHead([
+      new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+      this.triggerButton,
+    ]);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
-    this.triggerButton.refreshUi();
+  toString(): string {
+    return `[${SettingTriggerListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 }

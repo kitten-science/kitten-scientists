@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingLimited } from "../../settings/Settings.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
@@ -6,23 +5,21 @@ import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.
 import type { UiComponent } from "./UiComponent.js";
 import { LimitedButton } from "./buttons/LimitedButton.js";
 
-export type SettingListItemOptionsLimited = {
-  /**
-   * Is called when the "Limited" checkbox is checked.
-   */
-  readonly onLimitedCheck: () => void;
+export type SettingLimitedListItemOptions = ThisType<SettingLimitedListItem> &
+  SettingListItemOptions & {
+    /**
+     * Is called when the "Limited" checkbox is checked.
+     */
+    readonly onLimitedCheck?: () => void;
 
-  /**
-   * Is called when the "Limited" checkbox is unchecked.
-   */
-  readonly onLimitedUnCheck: () => void;
-};
+    /**
+     * Is called when the "Limited" checkbox is unchecked.
+     */
+    readonly onLimitedUnCheck?: () => void;
+  };
 
-export class SettingLimitedListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited = SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited,
-> extends SettingListItem {
+export class SettingLimitedListItem extends SettingListItem {
+  declare readonly options: SettingLimitedListItemOptions;
   readonly limitedButton: LimitedButton;
 
   /**
@@ -35,25 +32,23 @@ export class SettingLimitedListItem<
    * @param options Options for the list item.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingLimited,
     label: string,
-    options?: Partial<TOptions>,
+    options: SettingLimitedListItemOptions,
   ) {
-    super(host, setting, label, options);
+    super(parent, setting, label, options);
 
-    this.limitedButton = new LimitedButton(host, setting, {
+    this.limitedButton = new LimitedButton(parent, setting, {
       ...options,
     });
-    this.head.addChildren([
-      new Container(host, { classes: [stylesLabelListItem.fillSpace] }),
+    this.addChildrenHead([
+      new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
       this.limitedButton,
     ]);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
-    this.limitedButton.refreshUi();
+  toString(): string {
+    return `[${SettingLimitedListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 }

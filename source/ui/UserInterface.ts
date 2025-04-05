@@ -41,32 +41,33 @@ export class UserInterface extends UiComponent {
   stateManagementUi: StateManagementUi;
 
   constructor(host: KittenScientists) {
-    super(host);
+    super({ host }, {});
 
     const engine = host.engine;
-    this._engineUi = new EngineSettingsUi(host, engine.settings);
+    this._engineUi = new EngineSettingsUi(this, engine.settings);
     this.stateManagementUi = new StateManagementUi(
-      host,
+      this,
       engine.settings.states,
       engine.settings.locale,
     );
     this._sections = [
-      new BonfireSettingsUi(host, engine.bonfireManager.settings, engine.settings.locale),
-      new VillageSettingsUi(host, engine.villageManager.settings, engine.settings.locale),
-      new ScienceSettingsUi(host, engine.scienceManager.settings, engine.settings.locale),
-      new WorkshopSettingsUi(host, engine.workshopManager.settings, engine.settings.locale),
-      new ResourcesSettingsUi(host, engine.settings.resources, engine.settings.locale),
-      new TradeSettingsUi(host, engine.tradeManager.settings, engine.settings.locale),
-      new ReligionSettingsUi(host, engine.religionManager.settings, engine.settings.locale),
-      new SpaceSettingsUi(host, engine.spaceManager.settings, engine.settings.locale),
-      new TimeSettingsUi(host, engine.timeManager.settings, engine.settings.locale),
-      new TimeControlSettingsUi(host, engine.timeControlManager.settings, engine.settings.locale),
-      new LogFiltersSettingsUi(host, engine.settings.filters),
+      new BonfireSettingsUi(this, engine.bonfireManager.settings, engine.settings.locale),
+      new VillageSettingsUi(this, engine.villageManager.settings, engine.settings.locale),
+      new ScienceSettingsUi(this, engine.scienceManager.settings, engine.settings.locale),
+      new WorkshopSettingsUi(this, engine.workshopManager.settings, engine.settings.locale),
+      new ResourcesSettingsUi(this, engine.settings.resources, engine.settings.locale),
+      new TradeSettingsUi(this, engine.tradeManager.settings, engine.settings.locale),
+      new ReligionSettingsUi(this, engine.religionManager.settings, engine.settings.locale),
+      new SpaceSettingsUi(this, engine.spaceManager.settings, engine.settings.locale),
+      new TimeSettingsUi(this, engine.timeManager.settings, engine.settings.locale),
+      new TimeControlSettingsUi(this, engine.timeControlManager.settings, engine.settings.locale),
+      new LogFiltersSettingsUi(this, engine.settings.filters),
       this.stateManagementUi,
-      new InternalsUi(host, engine.settings, engine.settings.locale),
+      new InternalsUi(this, engine.settings, engine.settings.locale),
     ];
-
-    //this._installCss();
+    for (const section of this._sections) {
+      this.children.add(section);
+    }
 
     const ks = $("<div/>").addClass(styles.ui);
 
@@ -141,6 +142,12 @@ export class UserInterface extends UiComponent {
       right.prepend(ks);
     }
     this.element = ks;
+
+    this.refresh(true);
+  }
+
+  toString(): string {
+    return `[${UserInterface.name}#${this.componentId}]`;
   }
 
   destroy() {
@@ -148,10 +155,19 @@ export class UserInterface extends UiComponent {
     this.element.remove();
   }
 
+  override requestRefresh() {
+    if (this._needsRefresh) {
+      return;
+    }
+
+    this._needsRefresh = true;
+    setTimeout(() => {
+      console.warn(...cl("Refreshing UI...."));
+      this.refresh();
+    }, 0);
+  }
+
   refreshUi(): void {
     this._engineUi.refreshUi();
-    for (const section of this._sections) {
-      section.refreshUi();
-    }
   }
 }

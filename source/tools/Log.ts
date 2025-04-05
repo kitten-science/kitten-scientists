@@ -1,1 +1,4 @@
-export const cl = <T>(...args: Array<T>): Array<string | T> => ["👩‍🔬", ...args];
+export const cl = <T extends Array<unknown>>(...args: T): Array<string | T[number]> => [
+  "👩‍🔬",
+  ...args,
+];

@@ -1,15 +1,17 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type InputOptions = UiComponentOptions & {
-  readonly onChange?: (value: string) => void;
-  readonly onEnter?: (currentValue: string) => void;
-  readonly onEscape?: (currentValue: string) => void;
-  readonly selected?: boolean;
-  readonly value?: string;
-};
+export type InputOptions = ThisType<Input> &
+  UiComponentOptions & {
+    readonly onChange?: (value: string) => void;
+    readonly onEnter?: (currentValue: string) => void;
+    readonly onEscape?: (currentValue: string) => void;
+    readonly selected?: boolean;
+    readonly value?: string;
+    readonly classes?: Array<string>;
+  };
 
 export class Input extends UiComponent {
+  declare readonly options: InputOptions;
   readonly element: JQuery<HTMLInputElement>;
 
   /**
@@ -19,8 +21,8 @@ export class Input extends UiComponent {
    * @param label - The label on the input element.
    * @param options - Options for the UI element.
    */
-  constructor(host: KittenScientists, options?: Partial<InputOptions>) {
-    super(host, { ...options, children: [], classes: [] });
+  constructor(parent: UiComponent, options?: InputOptions) {
+    super(parent, { ...options });
 
     this.element = $<HTMLInputElement>('<input type="text"/>').addClass("ks-input");
 
@@ -51,7 +53,11 @@ export class Input extends UiComponent {
           break;
       }
     });
-
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${Input.name}#${this.componentId}]`;
+  }
+
+  refreshUi(): void {}
 }

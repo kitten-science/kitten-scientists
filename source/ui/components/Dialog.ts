@@ -1,5 +1,4 @@
 import { coalesceArray } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import { Button } from "./Button.js";
 import stylesButton from "./Button.module.css";
 import { Container } from "./Container.js";
@@ -10,20 +9,23 @@ import { HeaderListItem } from "./HeaderListItem.js";
 import { Input } from "./Input.js";
 import { Paragraph } from "./Paragraph.js";
 import stylesToolbarListItem from "./ToolbarListItem.module.css";
-import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
 
-export type DialogOptions = UiComponentOptions & {
-  readonly hasCancel?: boolean;
-  readonly hasClose?: boolean;
-  readonly onCancel?: () => void;
-  readonly onConfirm?: (result: string) => void;
-  readonly prompt?: boolean;
-  readonly promptValue?: string;
-  readonly childrenAfterPrompt?: Array<UiComponent>;
-};
+export type DialogOptions = ThisType<Dialog> &
+  UiComponentOptions & {
+    readonly hasCancel?: boolean;
+    readonly hasClose?: boolean;
+    readonly onCancel?: () => void;
+    readonly onConfirm?: (result: string) => void;
+    readonly prompt?: boolean;
+    readonly promptValue?: string;
+  };
 
 export class Dialog extends UiComponent {
+  declare readonly options: DialogOptions;
+  readonly container: Container;
   readonly element: JQuery<HTMLDialogElement>;
+  readonly head: Container;
   returnValue: string;
 
   /**
@@ -32,18 +34,17 @@ export class Dialog extends UiComponent {
    * @param host - A reference to the host.
    * @param options - Options for the dialog.
    */
-  constructor(host: KittenScientists, options?: Partial<DialogOptions>) {
-    super(host, { ...options, children: [] });
+  constructor(parent: UiComponent, options?: DialogOptions) {
+    super(parent, { ...options });
 
     this.element = $<HTMLDialogElement>("<dialog/>")
       .addClass("dialog")
       .addClass("help")
       .addClass(styles.dialog);
-    //.addClass(stylesUserInterface.ui);
 
     if (options?.hasClose !== false) {
       this.addChild(
-        new Button(host, "close", null, {
+        new Button(parent, "close", null, {
           classes: [styles.close],
           onClick: () => {
             this.close();
@@ -53,14 +54,16 @@ export class Dialog extends UiComponent {
       );
     }
 
-    this.addChildren(options?.children);
-
     this.returnValue = options?.promptValue ?? "";
+
+    this.head = new Container(parent);
+    this.container = new Container(parent);
 
     this.addChildren(
       coalesceArray([
+        this.head,
         options?.prompt
-          ? new Input(host, {
+          ? new Input(parent, {
               onChange: (value: string) => {
                 this.returnValue = value;
               },
@@ -77,11 +80,13 @@ export class Dialog extends UiComponent {
               value: options.promptValue,
             })
           : undefined,
-        ...(options?.childrenAfterPrompt ?? []),
-        new Delimiter(host),
-        new Container(host, {
-          children: coalesceArray([
-            new Button(host, "OK", null, {
+        this.container,
+        new Delimiter(parent),
+        new Container(parent, {
+          classes: [stylesToolbarListItem.toolbar],
+        }).addChildren(
+          coalesceArray([
+            new Button(parent, "OK", null, {
               classes: [stylesButton.large],
               onClick: () => {
                 this.close();
@@ -89,7 +94,7 @@ export class Dialog extends UiComponent {
               },
             }),
             options?.hasCancel
-              ? new Button(host, "Cancel", null, {
+              ? new Button(parent, "Cancel", null, {
                   classes: [stylesButton.large],
                   onClick: () => {
                     this.close();
@@ -98,10 +103,35 @@ export class Dialog extends UiComponent {
                 })
               : undefined,
           ]),
-          classes: [stylesToolbarListItem.toolbar],
-        }),
+        ),
       ]),
     );
+  }
+
+  toString(): string {
+    return `[${Dialog.name}#${this.componentId}]`;
+  }
+
+  addChildHead(child: UiComponentInterface): this {
+    this.head.addChild(child);
+    return this;
+  }
+  addChildrenHead(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.head.addChild(child);
+    }
+    return this;
+  }
+
+  addChildContent(child: UiComponent): this {
+    this.container.addChild(child);
+    return this;
+  }
+  addChildrenContent(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.container.addChild(child);
+    }
+    return this;
   }
 
   show() {
@@ -117,27 +147,17 @@ export class Dialog extends UiComponent {
     this.element.remove();
   }
 
+  refreshUi(): void {}
+
   static async prompt(
-    host: KittenScientists,
+    parent: UiComponent,
     text: string,
     title?: string,
     initialValue?: string,
     explainer?: string,
   ): Promise<string | undefined> {
     return new Promise(resolve => {
-      new Dialog(host, {
-        children: coalesceArray([
-          title ? new HeaderListItem(host, title) : undefined,
-          new Paragraph(host, text),
-        ]),
-        childrenAfterPrompt: explainer
-          ? [
-              new Container(host, {
-                children: [new Paragraph(host, explainer)],
-                classes: [stylesExplainer.explainer],
-              }),
-            ]
-          : [],
+      new Dialog(parent, {
         hasCancel: true,
         hasClose: false,
         onCancel: () => {
@@ -148,7 +168,23 @@ export class Dialog extends UiComponent {
         },
         prompt: true,
         promptValue: initialValue,
-      }).showModal();
+      })
+        .addChildrenHead(
+          coalesceArray([
+            title ? new HeaderListItem(parent, title) : undefined,
+            new Paragraph(parent, text),
+          ]),
+        )
+        .addChildrenContent(
+          explainer
+            ? [
+                new Container(parent, {
+                  classes: [stylesExplainer.explainer],
+                }).addChildren([new Paragraph(parent, explainer)]),
+              ]
+            : [],
+        )
+        .showModal();
     });
   }
 }

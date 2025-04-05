@@ -1,17 +1,17 @@
 import { is } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import { Container } from "./Container.js";
 import type { LabelListItem } from "./LabelListItem.js";
 import stylesSettingListItem from "./SettingListItem.module.css";
-import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
 import { ExpandoButton } from "./buttons/ExpandoButton.js";
 
-export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponentOptions<TChild> & {
-  /**
-   * Should the main child be expanded right away?
-   */
-  readonly initiallyExpanded: boolean;
-};
+export type CollapsiblePanelOptions = ThisType<CollapsiblePanel> &
+  UiComponentOptions & {
+    /**
+     * Should the main child be expanded right away?
+     */
+    readonly initiallyExpanded?: boolean;
+  };
 
 /**
  * A `Panel` is a section of the UI that can be expanded and collapsed
@@ -19,20 +19,13 @@ export type PanelOptions<TChild extends UiComponent = UiComponent> = UiComponent
  * The panel also has a head element, which is extended to create the panel
  * behavior.
  */
-export class CollapsiblePanel<
-  TOptions extends PanelOptions = PanelOptions,
-  THead extends LabelListItem = LabelListItem,
-> extends UiComponent<TOptions> {
+export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> extends UiComponent {
+  declare readonly options: CollapsiblePanelOptions;
   protected readonly container: UiComponent;
   readonly element: JQuery;
-  protected readonly _expando: ExpandoButton;
-  protected readonly _head: THead;
+  readonly expando: ExpandoButton;
+  readonly head: THead;
   protected _mainChildVisible: boolean;
-  protected readonly parent: CollapsiblePanel | undefined;
-
-  get expando() {
-    return this._expando;
-  }
 
   get isExpanded() {
     return this._mainChildVisible;
@@ -45,20 +38,16 @@ export class CollapsiblePanel<
    * @param head Another component to host in the head of the panel.
    * @param options Options for this panel.
    */
-  constructor(host: KittenScientists, head: THead, options?: Partial<TOptions>) {
-    super(host, options);
+  constructor(parent: UiComponent, head: THead, options?: CollapsiblePanelOptions) {
+    super(parent, {});
 
-    this.container = new Container(host);
+    this.head = head;
+    this.container = new Container(this);
     this.container.element.addClass(stylesSettingListItem.panelContent);
-    this.children.add(this.container);
-
-    this._head = head;
-    this.children.add(head);
 
     // The expando button for this panel.
-    const expando = new ExpandoButton(host);
-    expando.element.on("click", () => {
-      this.toggle();
+    const expando = new ExpandoButton(parent, {
+      onClick: () => this.toggle(),
     });
     head.head.addChild(expando);
 
@@ -73,13 +62,35 @@ export class CollapsiblePanel<
 
     this._mainChildVisible = options?.initiallyExpanded ?? false;
     this.element = head.element;
-    this.addChildren(options?.children);
-    this._expando = expando;
+    this.expando = expando;
+
+    this.addChildren([this.head, this.container]);
   }
 
-  override addChild(child: UiComponent) {
-    this.children.add(child);
-    this.container.element.append(child.element);
+  toString(): string {
+    return `[${CollapsiblePanel.name}#${this.componentId}]`;
+  }
+
+  addChildHead(child: UiComponentInterface): this {
+    this.head.addChild(child);
+    return this;
+  }
+  addChildrenHead(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.head.addChild(child);
+    }
+    return this;
+  }
+
+  addChildContent(child: UiComponent): this {
+    this.container.addChild(child);
+    return this;
+  }
+  addChildrenContent(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.container.addChild(child);
+    }
+    return this;
   }
 
   /**
@@ -94,30 +105,30 @@ export class CollapsiblePanel<
       this._mainChildVisible = visible;
       if (this._mainChildVisible) {
         // Refresh panel UI on expand.
-        this.container.refreshUi();
+        this.container.requestRefresh();
         // Show the DOM element.
         this.container.element.removeClass(stylesSettingListItem.hidden);
         // Reflect expanded state on expando.
-        this._expando.setExpanded();
+        this.expando.setExpanded();
         // Reflect expanded state for CSS.
-        this._head.element.addClass(stylesSettingListItem.expanded);
+        this.head.element.addClass(stylesSettingListItem.expanded);
         // This is NOT a DOM event! It can only be caught by listening on this panel directly.
         this.dispatchEvent(new CustomEvent("panelShown"));
       } else {
         this.container.element.addClass(stylesSettingListItem.hidden);
-        this._expando.setCollapsed();
-        this._head.element.removeClass(stylesSettingListItem.expanded);
+        this.expando.setCollapsed();
+        this.head.element.removeClass(stylesSettingListItem.expanded);
         this.dispatchEvent(new CustomEvent("panelHidden"));
       }
     }
 
     if (toggleNested) {
-      const toggleChildren = (children: Set<TOptions["children"][0]>) => {
+      const toggleChildren = (children: Iterable<UiComponentInterface>) => {
         for (const child of children) {
-          if (is(child, CollapsiblePanel)) {
-            (child as CollapsiblePanel).toggle(expand, toggleNested);
+          if (is<CollapsiblePanel>(child, CollapsiblePanel)) {
+            child.toggle(expand, toggleNested);
           } else {
-            toggleChildren((child as UiComponent<TOptions>).children);
+            toggleChildren(child.children);
           }
         }
       };
@@ -125,4 +136,6 @@ export class CollapsiblePanel<
       toggleChildren(this.children);
     }
   }
+
+  refreshUi(): void {}
 }

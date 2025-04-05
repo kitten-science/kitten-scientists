@@ -1,15 +1,14 @@
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { ScienceSettings } from "../settings/ScienceSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { PolicySettingsUi } from "./PolicySettingsUi.js";
 import { TechSettingsUi } from "./TechSettingsUi.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
   private readonly _policiesUi: PolicySettingsUi;
@@ -17,79 +16,59 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
   private readonly _observeStars: SettingListItem;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: ScienceSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
-    const label = host.engine.i18n("ui.upgrade");
+    const label = parent.host.engine.i18n("ui.upgrade");
     super(
-      host,
+      parent,
       settings,
-      new SettingListItem(host, settings, label, {
-        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+      new SettingListItem(parent, settings, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
+          parent.host.engine.imessage("status.auto.enable", [label]);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
-        onRefresh: _item => {
+        onRefresh: () => {
           this.expando.ineffective =
             settings.enabled &&
             !settings.policies.enabled &&
             !settings.techs.enabled &&
             !settings.observe.enabled;
         },
-      }),
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
 
-    this._policiesUi = new PolicySettingsUi(host, settings.policies, locale, settings, {
-      onCheck: () => {
-        this.refreshUi();
-      },
-      onUnCheck: () => {
-        this.refreshUi();
-      },
-    });
-    this._techsUi = new TechSettingsUi(host, settings.techs, locale, settings, {
-      onCheck: () => {
-        this.refreshUi();
-      },
-      onUnCheck: () => {
-        this.refreshUi();
-      },
-    });
+    this._policiesUi = new PolicySettingsUi(this, settings.policies, locale, settings);
+    this._techsUi = new TechSettingsUi(this, settings.techs, locale, settings);
 
     this._observeStars = new SettingListItem(
-      host,
+      this,
       this.setting.observe,
-      host.engine.i18n("option.observe"),
+      this.host.engine.i18n("option.observe"),
       {
         onCheck: () => {
-          host.engine.imessage("status.sub.enable", [host.engine.i18n("option.observe")]);
-          this.refreshUi();
+          this.host.engine.imessage("status.sub.enable", [this.host.engine.i18n("option.observe")]);
         },
         onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [host.engine.i18n("option.observe")]);
-          this.refreshUi();
+          this.host.engine.imessage("status.sub.disable", [
+            this.host.engine.i18n("option.observe"),
+          ]);
         },
       },
     );
 
-    const itemsList = new SettingsList(host, {
+    const itemsList = new SettingsList(this, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
     itemsList.addChildren([this._techsUi, this._policiesUi, this._observeStars]);
-    this.addChild(itemsList);
+    this.addChildContent(itemsList);
   }
 
-  override refreshUi(): void {
+  refreshUi(): void {
     super.refreshUi();
 
     if (this.setting.observe.enabled) {

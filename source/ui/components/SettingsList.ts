@@ -1,18 +1,17 @@
 import { is, isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import { Icons } from "../../images/Icons.js";
 import { IconButton } from "./IconButton.js";
 import { SettingListItem } from "./SettingListItem.js";
 import styles from "./SettingsList.module.css";
-import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type SettingsListOptions<TChild extends UiComponentInterface = UiComponentInterface> =
-  UiComponentOptions<TChild> & {
-    readonly hasEnableAll: boolean;
-    readonly hasDisableAll: boolean;
-    readonly onEnableAll: () => void;
-    readonly onDisableAll: () => void;
-    readonly onReset: () => void;
+export type SettingsListOptions = ThisType<SettingsList> &
+  UiComponentOptions & {
+    readonly hasEnableAll?: boolean;
+    readonly hasDisableAll?: boolean;
+    readonly onEnableAll?: () => void;
+    readonly onDisableAll?: () => void;
+    readonly onReset?: () => void;
   };
 
 /**
@@ -23,9 +22,8 @@ export type SettingsListOptions<TChild extends UiComponentInterface = UiComponen
  *
  * This construct is also sometimes referred to as an "items list" for historic reasons.
  */
-export class SettingsList<
-  TOptions extends SettingsListOptions<UiComponent> = SettingsListOptions<UiComponent>,
-> extends UiComponent<TOptions> {
+export class SettingsList extends UiComponent {
+  declare readonly options: SettingsListOptions;
   readonly element: JQuery;
   readonly list: JQuery;
 
@@ -39,8 +37,8 @@ export class SettingsList<
    * @param host A reference to the host.
    * @param options Which tools should be available on the list?
    */
-  constructor(host: KittenScientists, options: Partial<TOptions> = {}) {
-    super(host, { ...options, children: [] });
+  constructor(parent: UiComponent, options?: SettingsListOptions) {
+    super(parent, { ...options });
 
     const toolOptions = {
       hasDisableAll: true,
@@ -60,11 +58,10 @@ export class SettingsList<
       const tools = $("<div/>").addClass(styles.listTools);
 
       if (toolOptions.hasEnableAll) {
-        const onEnableAll = options.onEnableAll;
         this.enableAllButton = new IconButton(
-          this._host,
+          parent,
           Icons.CheckboxCheck,
-          host.engine.i18n("ui.enable.all"),
+          parent.host.engine.i18n("ui.enable.all"),
           {
             onClick: () => {
               const event = new Event("enableAll", { cancelable: true });
@@ -79,11 +76,8 @@ export class SettingsList<
                 }
               }
 
-              if (!isNil(onEnableAll)) {
-                onEnableAll();
-              }
-
-              this.refreshUi();
+              options?.onEnableAll?.call(this);
+              this.requestRefresh();
             },
           },
         );
@@ -91,11 +85,10 @@ export class SettingsList<
       }
 
       if (toolOptions.hasDisableAll) {
-        const onDisableAll = options.onDisableAll;
         this.disableAllButton = new IconButton(
-          this._host,
+          parent,
           Icons.CheckboxUnCheck,
-          host.engine.i18n("ui.disable.all"),
+          parent.host.engine.i18n("ui.disable.all"),
         );
         this.disableAllButton.element.on("click", () => {
           const event = new Event("disableAll", { cancelable: true });
@@ -109,22 +102,25 @@ export class SettingsList<
               (child as SettingListItem).uncheck();
             }
           }
-          if (!isNil(onDisableAll)) {
-            onDisableAll();
-          }
 
-          this.refreshUi();
+          options?.onDisableAll?.call(this);
+          this.requestRefresh();
         });
         tools.append(this.disableAllButton.element);
       }
 
       const onReset = toolOptions.onReset;
       if (!isNil(onReset)) {
-        this.resetButton = new IconButton(this._host, Icons.Reset, host.engine.i18n("ui.reset"), {
-          onClick: () => {
-            onReset();
+        this.resetButton = new IconButton(
+          parent,
+          Icons.Reset,
+          parent.host.engine.i18n("ui.reset"),
+          {
+            onClick: () => {
+              onReset();
+            },
           },
-        });
+        );
         tools.append(this.resetButton.element);
       }
 
@@ -132,11 +128,18 @@ export class SettingsList<
     }
 
     this.element = container;
-    this.addChildren(options.children);
   }
 
-  override addChild(child: UiComponent) {
+  toString(): string {
+    return `[${SettingsList.name}#${this.componentId}]`;
+  }
+
+  override addChild(child: UiComponent): this {
+    child.parent = this;
     this.children.add(child);
     this.list.append(child.element);
+    return this;
   }
+
+  refreshUi(): void {}
 }

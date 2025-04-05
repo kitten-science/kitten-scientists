@@ -1,20 +1,20 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import styles from "./Button.module.css";
 import type { IconButtonOptions } from "./IconButton.js";
 import { UiComponent } from "./UiComponent.js";
 
-export type ButtonOptions = IconButtonOptions & {
-  readonly border: boolean;
-  readonly alignment: "left" | "right";
-  readonly title: string;
-};
+export type ButtonOptions = ThisType<Button> &
+  IconButtonOptions & {
+    readonly border?: boolean;
+    readonly alignment?: "left" | "right";
+    readonly title?: string;
+    readonly classes?: Array<string>;
+  };
 
 /**
  * A button that has a label and can optionally have an SVG icon.
  */
 export class Button extends UiComponent {
-  declare readonly _options: Partial<ButtonOptions>;
-
+  declare readonly options: ButtonOptions;
   protected readonly _iconElement: JQuery | undefined;
   readonly element: JQuery;
   readOnly: boolean;
@@ -30,12 +30,12 @@ export class Button extends UiComponent {
    * @param options - Options for the icon button.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     label: string,
     pathData: string | null = null,
-    options?: Partial<ButtonOptions>,
+    options?: ButtonOptions,
   ) {
-    super(host, { ...options, children: [], classes: [] });
+    super(parent, { ...options });
 
     this.element = $("<div/>", { title: options?.title }).addClass(styles.button).text(label);
 
@@ -70,16 +70,19 @@ export class Button extends UiComponent {
       this.click();
     });
 
-    this.addChildren(options?.children);
     this.readOnly = options?.readOnly ?? false;
     this.inactive = options?.inactive ?? false;
     this.ineffective = false;
   }
 
+  toString(): string {
+    return `[${Button.name}#${this.componentId}]`;
+  }
+
   updateLabel(label: string) {
     this.element.text(label);
     if (this._iconElement !== undefined) {
-      if (this._options.alignment === "right") {
+      if (this.options.alignment === "right") {
         this.element.append(this._iconElement);
       } else {
         this.element.prepend(this._iconElement);
@@ -90,17 +93,17 @@ export class Button extends UiComponent {
     this.element.prop("title", title);
   }
 
-  override click() {
+  click() {
     if (this.readOnly) {
       return;
     }
 
-    super.click();
+    this.requestRefresh();
+
+    return this.options?.onClick?.call(this);
   }
 
-  override refreshUi(): void {
-    super.refreshUi();
-
+  refreshUi(): void {
     if (this.readOnly) {
       this.element.addClass(styles.readonly);
     } else {

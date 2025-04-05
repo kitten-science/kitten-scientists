@@ -1,67 +1,56 @@
-import type { KittenScientists } from "../KittenScientists.js";
 import { FilterItems, type LogFilterSettings } from "../settings/LogFilterSettings.js";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { ExplainerListItem } from "./components/ExplainerListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
-  constructor(
-    host: KittenScientists,
-    settings: LogFilterSettings,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
-  ) {
-    const label = host.engine.i18n("ui.filter");
+  constructor(parent: UiComponent, settings: LogFilterSettings) {
+    const label = parent.host.engine.i18n("ui.filter");
     super(
-      host,
+      parent,
       settings,
-      new SettingListItem(host, settings, label, {
-        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+      new SettingListItem(parent, settings, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
+          parent.host.engine.imessage("status.auto.enable", [label]);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
-      }),
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
 
-    this.addChild(
-      new SettingsList(host, {
-        children: [
-          new SettingListItem(host, settings.disableKGLog, host.engine.i18n("filter.allKG")),
-        ],
+    this.addChildContent(
+      new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
-      }),
+      }).addChildren([
+        new SettingListItem(this, settings.disableKGLog, this.host.engine.i18n("filter.allKG")),
+      ]),
     );
 
-    const listFilters = new SettingsList(host, {
-      children: FilterItems.map(item => {
-        return { name: item, label: host.engine.i18n(`filter.${item}`) };
+    const listFilters = new SettingsList(this).addChildren(
+      FilterItems.map(item => {
+        return { name: item, label: this.host.engine.i18n(`filter.${item}`) };
       })
         .sort((a, b) => a.label.localeCompare(b.label))
         .map(
           item =>
-            new SettingListItem(host, this.setting.filters[item.name], item.label, {
+            new SettingListItem(this, this.setting.filters[item.name], item.label, {
               onCheck: () => {
-                host.engine.imessage("filter.enable", [item.label]);
+                this.host.engine.imessage("filter.enable", [item.label]);
               },
               onUnCheck: () => {
-                host.engine.imessage("filter.disable", [item.label]);
+                this.host.engine.imessage("filter.disable", [item.label]);
               },
             }),
         ),
-    });
-    this.addChild(listFilters);
+    );
+    this.addChildContent(listFilters);
 
-    this.addChild(new ExplainerListItem(host, "filter.explainer"));
+    this.addChildContent(new ExplainerListItem(this, "filter.explainer"));
   }
 }

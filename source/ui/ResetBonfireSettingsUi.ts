@@ -1,7 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import type { ResetBonfireSettings } from "../settings/ResetBonfireSettings.js";
 import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
@@ -15,44 +13,46 @@ import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettings> {
   private readonly _buildings: Array<HeaderListItem | SettingTriggerListItem>;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: ResetBonfireSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
-    const label = host.engine.i18n("ui.build");
-    super(host, label, settings, {
-      childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+    const label = parent.host.engine.i18n("ui.build");
+    super(parent, label, settings, {
       icon: Icons.Bonfire,
     });
 
+    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
+
     this._buildings = [];
-    for (const buildingGroup of host.game.bld.buildingGroups) {
-      this._buildings.push(new HeaderListItem(host, buildingGroup.title));
+    for (const buildingGroup of this.host.game.bld.buildingGroups) {
+      this._buildings.push(new HeaderListItem(this, buildingGroup.title));
       for (const building of buildingGroup.buildings) {
         if (building === "unicornPasture" || isNil(this.setting.buildings[building])) {
           continue;
         }
 
-        const meta = host.game.bld.getBuildingExt(building).meta;
+        const meta = this.host.game.bld.getBuildingExt(building).meta;
         if (!isNil(meta.stages)) {
           const name = Object.values(this.setting.buildings).find(
             item => item.baseBuilding === building,
           )?.building as StagedBuilding;
           this._buildings.push(
             this._getResetOption(
-              host,
+              this,
               this.setting.buildings[building],
               locale,
               settings,
               meta.stages[0].label,
             ),
             this._getResetOption(
-              host,
+              this,
               this.setting.buildings[name],
               locale,
               settings,
@@ -64,7 +64,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
         } else if (!isNil(meta.label)) {
           this._buildings.push(
             this._getResetOption(
-              host,
+              this,
               this.setting.buildings[building],
               locale,
               settings,
@@ -75,18 +75,21 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
       }
 
       // Add padding after each group. Except for the last group, which ends the list.
-      if (buildingGroup !== host.game.bld.buildingGroups[host.game.bld.buildingGroups.length - 1]) {
+      if (
+        buildingGroup !==
+        this.host.game.bld.buildingGroups[this.host.game.bld.buildingGroups.length - 1]
+      ) {
         this._buildings.at(-1)?.element.addClass(stylesDelimiter.delimiter);
       }
     }
 
-    const listBuildings = new SettingsList(host);
+    const listBuildings = new SettingsList(this);
     listBuildings.addChildren(this._buildings);
     this.addChild(listBuildings);
   }
 
   private _getResetOption(
-    host: KittenScientists,
+    parent: UiComponent,
     option: SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: ResetBonfireSettings,
@@ -94,49 +97,44 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingTriggerListItem(host, option, locale, label, {
+    const element = new SettingTriggerListItem(parent, option, locale, label, {
       delimiter,
       onCheck: () => {
-        host.engine.imessage("status.reset.check.enable", [label]);
+        parent.host.engine.imessage("status.reset.check.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.reset.check.disable", [label]);
+        parent.host.engine.imessage("status.reset.check.disable", [label]);
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
         element.triggerButton.ineffective =
           sectionSetting.enabled && option.enabled && option.trigger === -1;
       },
-      onSetTrigger: () => {
-        Dialog.prompt(
-          host,
-          host.engine.i18n("ui.trigger.prompt.absolute"),
-          host.engine.i18n("ui.trigger.build.prompt", [
+      onSetTrigger: async () => {
+        const value = await Dialog.prompt(
+          parent,
+          parent.host.engine.i18n("ui.trigger.prompt.absolute"),
+          parent.host.engine.i18n("ui.trigger.build.prompt", [
             label,
             option.trigger !== -1
-              ? host.renderAbsolute(option.trigger, locale.selected)
-              : host.engine.i18n("ui.trigger.inactive"),
+              ? parent.host.renderAbsolute(option.trigger, locale.selected)
+              : parent.host.engine.i18n("ui.trigger.inactive"),
           ]),
-          option.trigger !== -1 ? host.renderAbsolute(option.trigger) : "",
-          host.engine.i18n("ui.trigger.reset.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
+          option.trigger !== -1 ? parent.host.renderAbsolute(option.trigger) : "",
+          parent.host.engine.i18n("ui.trigger.reset.promptExplainer"),
+        );
 
-            if (value === "" || value.startsWith("-")) {
-              option.trigger = -1;
-              option.enabled = false;
-              return;
-            }
+        if (value === undefined) {
+          return;
+        }
 
-            option.trigger = Number(value);
-          })
-          .then(() => {
-            element.refreshUi();
-          })
-          .catch(redirectErrorsToConsole(console));
+        if (value === "" || value.startsWith("-")) {
+          option.trigger = -1;
+          option.enabled = false;
+          return;
+        }
+
+        option.trigger = Number(value);
       },
       upgradeIndicator,
     });

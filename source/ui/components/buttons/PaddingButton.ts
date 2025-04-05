@@ -1,8 +1,10 @@
-import type { KittenScientists } from "../../../KittenScientists.js";
 import stylesButton from "../Button.module.css";
 import { UiComponent, type UiComponentOptions } from "../UiComponent.js";
 
+export type PaddingButtonOptions = ThisType<PaddingButton> & UiComponentOptions;
+
 export class PaddingButton extends UiComponent {
+  declare readonly options: PaddingButtonOptions;
   readonly element: JQuery;
 
   /**
@@ -11,14 +13,19 @@ export class PaddingButton extends UiComponent {
    * @param host - A reference to the host.
    * @param options - Options for this button.
    */
-  constructor(host: KittenScientists, options?: Partial<UiComponentOptions>) {
-    super(host, options);
+  constructor(parent: UiComponent, options?: PaddingButtonOptions) {
+    super(parent, { ...options });
 
     const element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;"></svg>`,
     }).addClass(stylesButton.iconButton);
 
     this.element = element;
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${PaddingButton.name}#${this.componentId}]`;
+  }
+
+  refreshUi(): void {}
 }

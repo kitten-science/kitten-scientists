@@ -1,46 +1,44 @@
 import type { SupportedLocale } from "../../Engine.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingLimitedTrigger, SettingOptions } from "../../settings/Settings.js";
 import {
   SettingLimitedListItem,
-  type SettingListItemOptionsLimited,
+  type SettingLimitedListItemOptions,
 } from "./SettingLimitedListItem.js";
 import type { SettingListItemOptions } from "./SettingListItem.js";
-import type { SettingListItemOptionsTrigger } from "./SettingTriggerListItem.js";
+import type { SettingTriggerListItemOptions } from "./SettingTriggerListItem.js";
 import type { UiComponent } from "./UiComponent.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
-export class SettingLimitedTriggerListItem<
-  TOptions extends SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited &
-    SettingListItemOptionsTrigger = SettingListItemOptions<UiComponent> &
-    SettingListItemOptionsLimited &
-    SettingListItemOptionsTrigger,
-> extends SettingLimitedListItem {
+export type SettingLimitedTriggerListItemOptions = SettingListItemOptions &
+  SettingLimitedListItemOptions &
+  SettingTriggerListItemOptions &
+  ThisType<SettingLimitedTriggerListItem>;
+
+export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
+  declare readonly options: SettingLimitedTriggerListItemOptions;
   readonly triggerButton: TriggerButton;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingLimitedTrigger,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: Partial<TOptions>,
+    options: SettingLimitedTriggerListItemOptions,
   ) {
-    super(host, setting, label, options);
+    super(parent, setting, label, options);
 
-    this.triggerButton = new TriggerButton(host, setting, locale, {
+    this.triggerButton = new TriggerButton(parent, setting, locale, {
       border: false,
-      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.(this) : undefined,
-      onRefreshTitle: options?.onRefreshTrigger
-        ? () => options.onRefreshTrigger?.(this)
-        : undefined,
+      onClick: () => {
+        options.onSetTrigger.call(this);
+        this.requestRefresh();
+      },
+      onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
-    this.head.addChild(this.triggerButton);
+    this.addChildHead(this.triggerButton);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
-    this.triggerButton.refreshUi();
+  toString(): string {
+    return `[${SettingLimitedTriggerListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 }

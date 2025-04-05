@@ -1,48 +1,42 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import type { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import type { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import styles from "./TimeSkipHeatSettingsUi.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { CyclesList } from "./components/CyclesList.js";
 import { Dialog } from "./components/Dialog.js";
-import type { SettingListItemOptions } from "./components/SettingListItem.js";
-import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
-export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> {
+export class TimeSkipHeatSettingsUi extends SettingsPanel<
+  TimeSkipHeatSettings,
+  SettingTriggerListItem
+> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: TimeSkipHeatSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeSkipSettings,
     sectionParentSetting: TimeControlSettings,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
-    const label = host.engine.i18n("option.time.activeHeatTransfer");
+    const label = parent.host.engine.i18n("option.time.activeHeatTransfer");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
+          parent.host.engine.imessage("status.auto.enable", [label]);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           settings.activeHeatTransferStatus.enabled = false;
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
-        onRefresh: item => {
-          (item as SettingTriggerListItem).triggerButton.inactive = !settings.enabled;
-          (item as SettingTriggerListItem).triggerButton.ineffective =
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled;
+          this.settingItem.triggerButton.ineffective =
             sectionParentSetting.enabled &&
             sectionSetting.enabled &&
             settings.enabled &&
@@ -62,50 +56,40 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<TimeSkipHeatSettings> 
             this.head.elementLabel.removeClass(styles.active);
           }
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.activeHeatTransfer.prompt"),
-            host.engine.i18n("ui.trigger.activeHeatTransfer.promptTitle", [
-              host.renderPercentage(settings.trigger, locale.selected, true),
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
+            parent,
+            parent.host.engine.i18n("ui.trigger.activeHeatTransfer.prompt"),
+            parent.host.engine.i18n("ui.trigger.activeHeatTransfer.promptTitle", [
+              parent.host.renderPercentage(settings.trigger, locale.selected, true),
             ]),
-            host.renderPercentage(settings.trigger),
-            host.engine.i18n("ui.trigger.activeHeatTransfer.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined || value === "" || value.startsWith("-")) {
-                return;
-              }
+            parent.host.renderPercentage(settings.trigger),
+            parent.host.engine.i18n("ui.trigger.activeHeatTransfer.promptExplainer"),
+          );
 
-              settings.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === undefined || value === "" || value.startsWith("-")) {
+            return;
+          }
+
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
-      options,
     );
 
-    this.addChild(
-      new SettingsList(host, {
-        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
-        children: [
-          new CyclesList(host, this.setting.cycles, {
-            onCheck: (label: string) => {
-              host.engine.imessage("time.heatTransfer.cycle.enable", [label]);
-              this.refreshUi();
-            },
-            onUnCheck: (label: string) => {
-              host.engine.imessage("time.heatTransfer.cycle.disable", [label]);
-              this.refreshUi();
-            },
-          }),
-        ],
+    this.addChildContent(
+      new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
-      }),
+      }).addChildren([
+        new CyclesList(this, this.setting.cycles, {
+          onCheckCycle: (label: string) => {
+            this.host.engine.imessage("time.heatTransfer.cycle.enable", [label]);
+          },
+          onUnCheckCycle: (label: string) => {
+            this.host.engine.imessage("time.heatTransfer.cycle.disable", [label]);
+          },
+        }),
+      ]),
     );
   }
 }

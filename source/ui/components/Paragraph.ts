@@ -1,7 +1,12 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
+export type ParagraphOptions = ThisType<Paragraph> &
+  UiComponentOptions & {
+    readonly classes?: Array<string>;
+  };
+
 export class Paragraph extends UiComponent {
+  declare readonly options: ParagraphOptions;
   readonly element: JQuery<HTMLParagraphElement>;
 
   /**
@@ -11,15 +16,19 @@ export class Paragraph extends UiComponent {
    * @param text - The text inside the paragraph.
    * @param options - Options for the UI element.
    */
-  constructor(host: KittenScientists, text: string, options?: Partial<UiComponentOptions>) {
-    super(host, { ...options, children: [], classes: [] });
+  constructor(parent: UiComponent, text: string, options?: ParagraphOptions) {
+    super(parent, { ...options });
 
     this.element = $<HTMLParagraphElement>("<p/>").text(text);
 
     for (const className of options?.classes ?? []) {
       this.element.addClass(className);
     }
-
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${Paragraph.name}#${this.componentId}]`;
+  }
+
+  refreshUi(): void {}
 }

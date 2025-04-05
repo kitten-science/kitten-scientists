@@ -1,51 +1,44 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../../../Engine.js";
-import type { KittenScientists } from "../../../KittenScientists.js";
 import type { SettingOptions, SettingSell } from "../../../settings/Settings.js";
 import { Dialog } from "../Dialog.js";
-import { TextButton } from "../TextButton.js";
+import { TextButton, type TextButtonOptions } from "../TextButton.js";
+import type { UiComponent } from "../UiComponent.js";
 import styles from "./SellButton.module.css";
 
+export type SellButtonOptions = ThisType<SellButton> & TextButtonOptions;
+
 export class SellButton extends TextButton {
+  declare readonly options: SellButtonOptions;
   readonly setting: SettingSell;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingSell,
     locale: SettingOptions<SupportedLocale>,
-    handler: { onClick?: () => void } = {},
+    options?: SellButtonOptions,
   ) {
-    super(host, undefined, {
-      onClick: () => {
-        Dialog.prompt(
-          host,
-          host.engine.i18n("blackcoin.sell.prompt"),
-          host.engine.i18n("blackcoin.sell.promptTitle", [
-            host.renderAbsolute(setting.sell, locale.selected),
+    super(parent, undefined, {
+      onClick: async () => {
+        const value = await Dialog.prompt(
+          parent,
+          parent.host.engine.i18n("blackcoin.sell.prompt"),
+          parent.host.engine.i18n("blackcoin.sell.promptTitle", [
+            parent.host.renderAbsolute(setting.sell, locale.selected),
           ]),
-          host.renderAbsolute(setting.sell),
-          host.engine.i18n("blackcoin.sell.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
+          parent.host.renderAbsolute(setting.sell),
+          parent.host.engine.i18n("blackcoin.sell.promptExplainer"),
+        );
 
-            if (value === "" || value.startsWith("-")) {
-              setting.sell = -1;
-              return;
-            }
+        if (value === undefined) {
+          return;
+        }
 
-            setting.sell = host.parseAbsolute(value) ?? setting.sell;
-          })
-          .then(() => {
-            this.refreshUi();
+        if (value === "" || value.startsWith("-")) {
+          setting.sell = -1;
+          return;
+        }
 
-            if (handler.onClick) {
-              handler.onClick();
-            }
-          })
-          .catch(redirectErrorsToConsole(console));
+        setting.sell = parent.host.parseAbsolute(value) ?? setting.sell;
       },
     });
 
@@ -54,17 +47,19 @@ export class SellButton extends TextButton {
     this.setting = setting;
   }
 
-  refreshUi() {
+  toString(): string {
+    return `[${SellButton.name}#${this.componentId}]`;
+  }
+
+  refreshUi(): void {
     super.refreshUi();
 
     this.element.prop(
       "title",
-      this._host.engine.i18n("blackcoin.sell.title", [
-        this._host.renderAbsolute(this.setting.sell),
-      ]),
+      this.host.engine.i18n("blackcoin.sell.title", [this.host.renderAbsolute(this.setting.sell)]),
     );
     this.element.text(
-      this._host.engine.i18n("blackcoin.sell", [this._host.renderAbsolute(this.setting.sell)]),
+      this.host.engine.i18n("blackcoin.sell", [this.host.renderAbsolute(this.setting.sell)]),
     );
   }
 }

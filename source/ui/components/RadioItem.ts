@@ -1,38 +1,40 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingOptions } from "../../settings/Settings.js";
 import stylesDelimiter from "./Delimiter.module.css";
 import stylesLabel from "./LabelListItem.module.css";
 import stylesSettingListItem from "./SettingListItem.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
-export type RadioItemOptions = UiComponentOptions & {
-  /**
-   * Will be invoked when the user selects this radio item.
-   */
-  onCheck: (isBatchProcess?: boolean) => void;
+export type RadioItemOptions = ThisType<RadioItem> &
+  UiComponentOptions & {
+    /**
+     * Will be invoked when the user selects this radio item.
+     */
+    onCheck?: (isBatchProcess?: boolean) => void;
 
-  /**
-   * Should there be additional padding below this element?
-   */
-  delimiter: boolean;
+    /**
+     * Should there be additional padding below this element?
+     */
+    delimiter?: boolean;
 
-  /**
-   * Should an indicator be rendered in front of the element,
-   * to indicate that this is an upgrade of a prior setting?
-   */
-  upgradeIndicator: boolean;
+    /**
+     * Should an indicator be rendered in front of the element,
+     * to indicate that this is an upgrade of a prior setting?
+     */
+    upgradeIndicator?: boolean;
 
-  /**
-   * Should the user be prevented from changing the value of the input?
-   */
-  readOnly: boolean;
-};
+    /**
+     * Should the user be prevented from changing the value of the input?
+     */
+    readOnly?: boolean;
+  };
 
 export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
+  declare readonly options: RadioItemOptions;
   readonly setting: TSetting;
   readonly option: TSetting["options"][0];
   readonly element: JQuery;
+  readonly elementLabel: JQuery<HTMLLabelElement>;
   readonly input: JQuery;
 
   readOnly: boolean;
@@ -48,13 +50,13 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
    * @param options Options for this radio item.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: TSetting,
     option: TSetting["options"][0],
     groupKey: string,
-    options?: Partial<RadioItemOptions>,
+    options?: RadioItemOptions,
   ) {
-    super(host, options);
+    super(parent, { ...options });
 
     const element = $("<div/>");
     element.addClass(stylesSettingListItem.setting);
@@ -63,7 +65,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
       element.addClass(stylesDelimiter.delimiter);
     }
 
-    const elementLabel = $("<label/>", {
+    this.elementLabel = $<HTMLLabelElement>("<label/>", {
       text: `${options?.upgradeIndicator ? "⮤ " : ""}${option.label}`,
     }).addClass(stylesLabel.label);
 
@@ -81,19 +83,20 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
       }
     });
 
-    elementLabel.prepend(input);
-    element.append(elementLabel);
+    this.elementLabel.prepend(input);
+    element.append(this.elementLabel);
 
     this.input = input;
     this.element = element;
-    this.addChildren(options?.children);
     this.setting = setting;
     this.option = option;
   }
 
-  refreshUi() {
-    super.refreshUi();
+  toString(): string {
+    return `[${RadioItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+  }
 
+  refreshUi(): void {
     this.input.prop("disabled", this.readOnly);
   }
 }

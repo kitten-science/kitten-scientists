@@ -1,38 +1,33 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
 import { default as styles, default as stylesSettingListItem } from "./SettingListItem.module.css";
-import type { UiComponent, UiComponentInterface } from "./UiComponent.js";
+import type { UiComponent } from "./UiComponent.js";
 
-export type SettingListItemOptions<TChild extends UiComponentInterface = UiComponentInterface> =
-  LabelListItemOptions<TChild> & {
+export type SettingListItemOptions = ThisType<SettingListItem> &
+  LabelListItemOptions & {
     /**
      * Will be invoked when the user checks the checkbox.
      */
-    readonly onCheck: (isBatchProcess?: boolean) => void;
+    readonly onCheck?: (isBatchProcess?: boolean) => void | Promise<void>;
 
     /**
      * Will be invoked when the user unchecks the checkbox.
      */
-    readonly onUnCheck: (isBatchProcess?: boolean) => void;
+    readonly onUnCheck?: (isBatchProcess?: boolean) => void | Promise<void>;
 
     /**
      * Should the user be prevented from changing the value of the input?
      */
-    readonly readOnly: boolean;
+    readonly readOnly?: boolean;
   };
 
-export class SettingListItem<
-  TSetting extends Setting = Setting,
-  TOptions extends SettingListItemOptions<UiComponent> = SettingListItemOptions<UiComponent>,
-> extends LabelListItem<TOptions> {
+export class SettingListItem<TSetting extends Setting = Setting> extends LabelListItem {
+  declare readonly options: SettingListItemOptions;
   readonly setting: TSetting;
   readonly checkbox?: JQuery;
 
   readOnly: boolean;
-
-  static #nextId = 0;
 
   /**
    * Construct a new setting element.
@@ -44,33 +39,29 @@ export class SettingListItem<
    * @param options Options for this list item.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: TSetting,
     label: string,
-    options: Partial<TOptions> = {},
+    options?: SettingListItemOptions,
   ) {
-    super(host, label, { ...options, children: [] });
+    super(parent, label, { ...options });
 
     this.element.addClass(styles.setting);
 
-    const id = `ks-setting${SettingListItem.#nextId++}`;
+    const id = `ks-setting${this.componentId}`;
     const checkbox = $("<input/>", {
       id,
       type: "checkbox",
     }).addClass(styles.checkbox);
 
-    this.readOnly = options.readOnly ?? false;
+    this.readOnly = options?.readOnly ?? false;
     checkbox.prop("disabled", this.readOnly);
 
-    checkbox.on("change", () => {
+    checkbox.on("change", (event: JQuery.ChangeEvent) => {
       if (checkbox.is(":checked") && !setting.enabled) {
-        setting.enabled = true;
-        options.onCheck?.();
-        this.refreshUi();
+        this.check();
       } else if (!checkbox.is(":checked") && setting.enabled) {
-        setting.enabled = false;
-        options.onUnCheck?.();
-        this.refreshUi();
+        this.uncheck();
       }
     });
 
@@ -79,25 +70,25 @@ export class SettingListItem<
 
     this.checkbox = checkbox;
     this.setting = setting;
-
-    this.addChildren(options.children);
   }
 
-  check(isBatchProcess = false) {
+  toString(): string {
+    return `[${SettingListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+  }
+
+  async check(isBatchProcess = false) {
     this.setting.enabled = true;
-    this._options.onCheck?.(isBatchProcess);
-    this.refreshUi();
+    await this.options?.onCheck?.call(isBatchProcess);
+    this.requestRefresh(true);
   }
 
-  uncheck(isBatchProcess = false) {
+  async uncheck(isBatchProcess = false) {
     this.setting.enabled = false;
-    this._options.onUnCheck?.(isBatchProcess);
-    this.refreshUi();
+    await this.options.onUnCheck?.call(isBatchProcess);
+    this.requestRefresh(true);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
+  refreshUi(): void {
     if (this.setting.enabled) {
       this.element.addClass(styles.checked);
     } else {

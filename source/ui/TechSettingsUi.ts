@@ -1,47 +1,37 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { ScienceSettings } from "../settings/ScienceSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TechSettings } from "../settings/TechSettings.js";
 import stylesButton from "./components/Button.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
-export class TechSettingsUi extends SettingsPanel<TechSettings> {
+export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerListItem> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: TechSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: ScienceSettings,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
-    const label = host.engine.i18n("ui.upgrade.techs");
+    const label = parent.host.engine.i18n("ui.upgrade.techs");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
+          parent.host.engine.imessage("status.auto.enable", [label]);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
-        onRefresh: item => {
-          const element = item as SettingTriggerListItem;
-
-          element.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-          element.triggerButton.ineffective =
+        onRefresh: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          this.settingItem.triggerButton.ineffective =
             sectionSetting.enabled &&
             settings.enabled &&
             settings.trigger === -1 &&
@@ -52,62 +42,56 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
             settings.enabled &&
             !Object.values(settings.techs).some(tech => tech.enabled);
         },
-        onRefreshTrigger: item => {
-          item.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+        onRefreshTrigger() {
+          this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
             settings.trigger < 0
-              ? host.engine.i18n("ui.trigger.section.inactive")
-              : host.renderPercentage(settings.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.section.inactive")
+              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? host.renderPercentage(settings.trigger, locale.selected, true)
-                : host.engine.i18n("ui.infinity"),
+                ? parent.host.renderPercentage(settings.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined) {
-                return;
-              }
+            settings.trigger !== -1 ? parent.host.renderPercentage(settings.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
+          );
 
-              if (value === "" || value.startsWith("-")) {
-                settings.trigger = -1;
-                return;
-              }
+          if (value === undefined) {
+            return;
+          }
 
-              settings.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === "" || value.startsWith("-")) {
+            settings.trigger = -1;
+            return;
+          }
+
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
-      options,
     );
 
-    const techs = host.game.science.techs.filter(tech => !isNil(this.setting.techs[tech.name]));
+    const techs = this.host.game.science.techs.filter(
+      tech => !isNil(this.setting.techs[tech.name]),
+    );
 
     const items = [];
     let lastLabel = techs[0].label;
     for (const tech of techs.sort((a, b) => a.label.localeCompare(b.label, locale.selected))) {
       const option = this.setting.techs[tech.name];
 
-      const element = new SettingTriggerListItem(host, option, locale, tech.label, {
+      const element = new SettingTriggerListItem(this, option, locale, tech.label, {
         onCheck: () => {
-          host.engine.imessage("status.sub.enable", [tech.label]);
-          this.refreshUi();
+          this.host.engine.imessage("status.sub.enable", [tech.label]);
         },
         onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [tech.label]);
-          this.refreshUi();
+          this.host.engine.imessage("status.sub.disable", [tech.label]);
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -119,48 +103,43 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
             option.trigger === -1;
         },
         onRefreshTrigger: () => {
-          element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+          element.triggerButton.element[0].title = this.host.engine.i18n("ui.trigger", [
             option.trigger < 0
               ? settings.trigger < 0
-                ? host.engine.i18n("ui.trigger.section.blocked", [label])
-                : `${host.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.section.inherited")})`
-              : host.renderPercentage(option.trigger, locale.selected, true),
+                ? this.host.engine.i18n("ui.trigger.section.blocked", [label])
+                : `${this.host.renderPercentage(settings.trigger, locale.selected, true)} (${this.host.engine.i18n("ui.trigger.section.inherited")})`
+              : this.host.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
+            this,
+            this.host.engine.i18n("ui.trigger.prompt.percentage"),
+            this.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               option.trigger !== -1
-                ? host.renderPercentage(option.trigger, locale.selected, true)
-                : host.engine.i18n("ui.trigger.section.inherited"),
+                ? this.host.renderPercentage(option.trigger, locale.selected, true)
+                : this.host.engine.i18n("ui.trigger.section.inherited"),
             ]),
-            option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined) {
-                return;
-              }
+            option.trigger !== -1 ? this.host.renderPercentage(option.trigger) : "",
+            this.host.engine.i18n("ui.trigger.section.promptExplainer"),
+          );
 
-              if (value === "" || value.startsWith("-")) {
-                option.trigger = -1;
-                return;
-              }
+          if (value === undefined) {
+            return;
+          }
 
-              option.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === "" || value.startsWith("-")) {
+            option.trigger = -1;
+            return;
+          }
+
+          option.trigger = this.host.parsePercentage(value);
         },
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
-      if (host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+      if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== tech.label[0]) {
           element.element.addClass(stylesLabelListItem.splitter);
         }
@@ -171,6 +150,6 @@ export class TechSettingsUi extends SettingsPanel<TechSettings> {
       lastLabel = tech.label;
     }
 
-    this.addChild(new SettingsList(host, { children: items }));
+    this.addChildContent(new SettingsList(this).addChildren(items));
   }
 }

@@ -1,7 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
 import type { SupportedLocale } from "../../../Engine.js";
-import type { KittenScientists } from "../../../KittenScientists.js";
 import { Icons } from "../../../images/Icons.js";
 import {
   type SettingOptions,
@@ -9,27 +8,24 @@ import {
   SettingTrigger,
 } from "../../../settings/Settings.js";
 import { Button, type ButtonOptions } from "../Button.js";
+import type { UiComponent } from "../UiComponent.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 
-export type TriggerButtonOptions = ButtonOptions & {
-  readonly onRefreshTitle: (subject: TriggerButton) => void;
-};
+export type TriggerButtonOptions = ThisType<TriggerButton> & ButtonOptions;
 
 export class TriggerButton extends Button {
+  declare readonly options: TriggerButtonOptions;
   readonly behavior: TriggerButtonBehavior;
   readonly setting: SettingTrigger | SettingThreshold;
-  protected readonly _onRefreshTitle?: (subject: TriggerButton) => void;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingTrigger | SettingThreshold,
     _locale: SettingOptions<SupportedLocale>,
-    options?: Partial<TriggerButtonOptions>,
+    options?: TriggerButtonOptions,
   ) {
-    super(host, "", Icons.Trigger, options);
-
-    this._onRefreshTitle = options?.onRefreshTitle;
+    super(parent, "", Icons.Trigger, options);
 
     this.behavior = setting instanceof SettingTrigger ? "percentage" : "integer";
 
@@ -40,20 +36,19 @@ export class TriggerButton extends Button {
     this.setting = setting;
   }
 
-  refreshUi() {
-    super.refreshUi();
+  toString(): string {
+    return `[${TriggerButton.name}#${this.componentId}]`;
+  }
 
-    if (this._onRefreshTitle) {
-      this._onRefreshTitle(this);
-      return;
-    }
+  refreshUi(): void {
+    super.refreshUi();
 
     const triggerValue =
       this.behavior === "integer"
-        ? this._host.renderAbsolute(this.setting.trigger, "invariant")
-        : this._host.renderPercentage(this.setting.trigger, "invariant", true);
+        ? this.host.renderAbsolute(this.setting.trigger, "invariant")
+        : this.host.renderPercentage(this.setting.trigger, "invariant", true);
 
-    this.updateTitle(this._host.engine.i18n("ui.trigger", [triggerValue]));
+    this.updateTitle(this.host.engine.i18n("ui.trigger", [triggerValue]));
     this.updateLabel(triggerValue);
   }
 }

@@ -1,40 +1,36 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import type { ResourcesSettings, ResourcesSettingsItem } from "../settings/ResourcesSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { ucfirst } from "../tools/Format.js";
 import type { Resource } from "../types/index.js";
 import stylesButton from "./components/Button.module.css";
-import type { PanelOptions } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 import { ConsumeButton } from "./components/buttons/ConsumeButton.js";
 import { StockButton } from "./components/buttons/StockButton.js";
 
 export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: ResourcesSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: Partial<PanelOptions & SettingListItemOptions>,
   ) {
-    const label = host.engine.i18n("ui.resources");
+    const label = parent.host.engine.i18n("ui.resources");
     super(
-      host,
+      parent,
       settings,
-      new LabelListItem(host, label, {
-        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+      new LabelListItem(parent, label, {
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         icon: Icons.Resources,
-      }),
-      options,
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
 
     const ignoredResources: Array<Resource> = [
@@ -50,9 +46,9 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
       "zebras",
     ];
 
-    this.addChild(
-      new SettingsList(host, {
-        children: host.game.resPool.resources
+    this.addChildContent(
+      new SettingsList(this).addChildren(
+        this.host.game.resPool.resources
           .filter(
             item =>
               !ignoredResources.includes(item.name) && !isNil(this.setting.resources[item.name]),
@@ -61,8 +57,8 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
           .map(
             resource => [this.setting.resources[resource.name], ucfirst(resource.title)] as const,
           )
-          .map(([setting, title]) => this._makeResourceSetting(host, setting, locale, title)),
-      }),
+          .map(([setting, title]) => this._makeResourceSetting(this, setting, locale, title)),
+      ),
     );
   }
 
@@ -75,23 +71,22 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
    * @returns A new option with stock and consume values.
    */
   private _makeResourceSetting(
-    host: KittenScientists,
+    parent: UiComponent,
     option: ResourcesSettingsItem,
     locale: SettingOptions<SupportedLocale>,
     label: string,
   ) {
-    const element = new SettingListItem(host, option, label, {
-      childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+    const element = new SettingListItem(parent, option, label, {
       onCheck: () => {
-        host.engine.imessage("status.resource.enable", [label]);
+        parent.host.engine.imessage("status.resource.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.resource.disable", [label]);
+        parent.host.engine.imessage("status.resource.disable", [label]);
       },
-    });
+    }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
 
     // How many items to stock.
-    const stockElement = new StockButton(host, option, locale, label, {
+    const stockElement = new StockButton(parent, option, locale, label, {
       alignment: "right",
       border: false,
       classes: [stylesButton.headAction],
@@ -102,7 +97,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     element.head.addChild(stockElement);
 
     // The consume rate for the resource.
-    const consumeElement = new ConsumeButton(host, option, locale, label, {
+    const consumeElement = new ConsumeButton(parent, option, locale, label, {
       border: false,
       classes: [stylesButton.lastHeadAction],
       onRefresh: () => {

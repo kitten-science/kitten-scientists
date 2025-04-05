@@ -2,37 +2,43 @@ import type { KittenScientists } from "../../KittenScientists.js";
 import { cl } from "../../tools/Log.js";
 
 export type UiComponentInterface = EventTarget & {
+  readonly children: Iterable<UiComponentInterface>;
+  parent: UiComponentInterface | null;
   get element(): JQuery;
   refreshUi(): void;
+  requestRefresh(withChildren?: boolean, depth?: number): void;
+  refresh(force?: boolean): void;
 };
 
-export type UiComponentOptions<TChild extends UiComponentInterface = UiComponentInterface> = {
-  readonly children: Array<TChild>;
-  readonly classes: Array<string>;
-  readonly onClick: (subject: UiComponent) => void;
-  readonly onRefresh: (subject: UiComponent) => void;
+export type UiComponentOptions = {
+  length?: never;
+  readonly onRefresh?: () => void;
 };
 
-export abstract class UiComponent<TOptions extends UiComponentOptions = UiComponentOptions>
-  extends EventTarget
-  implements UiComponentInterface
-{
+export abstract class UiComponent extends EventTarget implements UiComponentInterface {
+  private static nextComponentId = 0;
+  readonly componentId: number;
+
   /**
    * A reference to the host itself.
    */
-  protected readonly _host: KittenScientists;
+  readonly host: KittenScientists;
+  parent: UiComponent | null;
 
-  protected readonly _options: Partial<TOptions>;
+  readonly options: UiComponentOptions | undefined;
 
   /**
    * The main DOM element for this component, in a JQuery wrapper.
    */
   abstract readonly element: JQuery;
 
-  readonly children = new Set<TOptions["children"][0]>();
-
-  protected readonly _onClick: TOptions["onClick"] | undefined;
-  protected readonly _onRefresh: TOptions["onRefresh"] | undefined;
+  /**
+   * NOTE: It is intentional that all children are of the most fundamental base type.
+   * If a more specifically typed reference for a child is required, it should be stored
+   * on construction.
+   * The 'children' set is intended only for inter-component orchestration.
+   */
+  readonly children = new Set<UiComponentInterface>();
 
   /**
    * Constructs the base `UiComponent`.
@@ -41,40 +47,65 @@ export abstract class UiComponent<TOptions extends UiComponentOptions = UiCompon
    * @param host A reference to the host.
    * @param options The options for this component.
    */
-  constructor(host: KittenScientists, options?: Partial<TOptions>) {
+  constructor(parent: UiComponent | { host: KittenScientists }, options?: UiComponentOptions) {
     super();
-    this._host = host;
-    this._options = options ?? {};
-    this._onClick = options?.onClick;
-    this._onRefresh = options?.onRefresh;
+    this.componentId = UiComponent.nextComponentId++;
+
+    this.host = parent.host;
+    this.options = options;
+    this.parent = parent instanceof UiComponent ? parent : null;
+    this._needsRefresh = false;
   }
 
-  click() {
-    this._onClick?.(this);
-  }
+  abstract toString(): string;
 
-  refreshUi() {
-    this._onRefresh?.(this);
-    for (const child of this.children) {
-      try {
-        child.refreshUi();
-      } catch (error) {
-        console.error(...cl("Error while refreshing child component!", error));
+  protected _needsRefresh;
+  requestRefresh(withChildren = false, depth = 0) {
+    if (this._needsRefresh) {
+      return;
+    }
+    console.debug(...cl("  ".repeat(depth), this.toString(), "requestRefresh"));
+    this._needsRefresh = true;
+    this.parent?.requestRefresh(false);
+    if (withChildren) {
+      for (const child of this.children) {
+        child.requestRefresh(withChildren, depth + 1);
       }
     }
   }
+  refresh(force = false) {
+    if (!force && !this._needsRefresh) {
+      return;
+    }
 
-  addChild(child: TOptions["children"][0]) {
+    if (!force) {
+      console.debug(...cl(this.toString(), "refresh", typeof this.options?.onRefresh));
+    }
+    this.options?.onRefresh?.call(this);
+    this.refreshUi();
+    for (const child of this.children) {
+      child.refresh(force);
+    }
+
+    this._needsRefresh = false;
+  }
+
+  abstract refreshUi(): void;
+
+  addChild(child: UiComponentInterface): this {
+    child.parent = this;
     this.children.add(child);
     this.element.append(child.element);
+    return this;
   }
-  addChildren(children?: Iterable<TOptions["children"][0]>) {
+  addChildren(children?: Iterable<UiComponentInterface>): this {
     for (const child of children ?? []) {
       this.addChild(child);
     }
+    return this;
   }
 
-  removeChild(child: TOptions["children"][0]) {
+  removeChild(child: UiComponentInterface) {
     if (!this.children.has(child)) {
       return;
     }
@@ -82,7 +113,7 @@ export abstract class UiComponent<TOptions extends UiComponentOptions = UiCompon
     child.element.remove();
     this.children.delete(child);
   }
-  removeChildren(children: Iterable<TOptions["children"][0]>) {
+  removeChildren(children: Iterable<UiComponentInterface>) {
     for (const child of children) {
       this.removeChild(child);
     }
