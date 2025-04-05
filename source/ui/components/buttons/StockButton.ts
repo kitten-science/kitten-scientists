@@ -18,7 +18,7 @@ export class StockButton extends Button {
     setting: ResourcesSettingsItem,
     locale: SettingOptions<SupportedLocale>,
     resourceName: string,
-    options?: StockButtonOptions,
+    options: Omit<StockButtonOptions, "onClick">,
   ) {
     super(parent, "", null, {
       ...options,

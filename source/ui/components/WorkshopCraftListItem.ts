@@ -31,7 +31,7 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
     setting: CraftSettingsItem,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: WorkshopCraftListItemOptions,
+    options: WorkshopCraftListItemOptions,
   ) {
     super(parent, setting, label, options);
 
@@ -44,14 +44,14 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
       alignment: "right",
       border: false,
       classes: [stylesButton.headAction],
-      onClick: options?.onSetMax ? () => options.onSetMax?.call(this) : undefined,
+      onClick: () => options.onSetMax.call(this),
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
 
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       border: false,
       classes: [stylesButton.lastHeadAction],
-      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.call(this) : undefined,
+      onClick: () => options.onSetTrigger?.call(this),
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
     this.addChildrenHead([

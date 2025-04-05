@@ -11,7 +11,7 @@ export class MaxButton extends Button {
   declare readonly options: MaxButtonOptions;
   readonly setting: SettingMax;
 
-  constructor(parent: UiComponent, setting: SettingMax, options?: MaxButtonOptions) {
+  constructor(parent: UiComponent, setting: SettingMax, options: MaxButtonOptions) {
     super(parent, "", null, {
       ...options,
       classes: [styles.maxButton, ...(options?.classes ?? [])],

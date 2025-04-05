@@ -23,13 +23,13 @@ export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
     setting: SettingLimitedTrigger,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: SettingLimitedTriggerListItemOptions,
+    options: SettingLimitedTriggerListItemOptions,
   ) {
     super(parent, setting, label, options);
 
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       border: false,
-      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.call(this) : undefined,
+      onClick: () => options.onSetTrigger.call(this),
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
     this.addChildHead(this.triggerButton);

@@ -5,7 +5,7 @@ export type IconButtonOptions = ThisType<IconButton> &
   UiComponentOptions & {
     readonly readOnly?: boolean;
     readonly inactive?: boolean;
-    readonly onClick?: (event?: MouseEvent) => void | Promise<void>;
+    readonly onClick: (event?: MouseEvent) => void | Promise<void>;
   };
 
 /**

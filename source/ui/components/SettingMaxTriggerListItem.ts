@@ -25,7 +25,7 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
     setting: SettingTriggerMax,
     locale: SettingOptions<SupportedLocale>,
     label: string,
-    options?: SettingMaxTriggerListItemOptions,
+    options: SettingMaxTriggerListItemOptions,
   ) {
     super(parent, setting, label, options);
 
@@ -33,13 +33,13 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
       alignment: "right",
       border: false,
       classes: [stylesButton.headAction],
-      onClick: options?.onSetMax ? () => options.onSetMax?.call(this) : undefined,
+      onClick: () => options.onSetMax.call(this),
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       border: false,
       classes: [stylesButton.lastHeadAction],
-      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.call(this) : undefined,
+      onClick: () => options.onSetTrigger.call(this),
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
 
