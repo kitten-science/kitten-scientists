@@ -14,21 +14,29 @@ export class LimitedButton extends Button {
   declare readonly options: LimitedButtonOptions;
   readonly setting: SettingLimited;
 
-  constructor(parent: UiComponent, setting: SettingLimited, options?: LimitedButtonOptions) {
-    super(parent, "", Icons.Eco, { ...options, border: false, classes: [] });
+  constructor(
+    parent: UiComponent,
+    setting: SettingLimited,
+    options: Omit<LimitedButtonOptions, "onClick">,
+  ) {
+    super(parent, "", Icons.Eco, {
+      ...options,
+      border: false,
+      classes: [],
+      onClick: () => {
+        this.setting.limited = !this.setting.limited;
+
+        if (this.setting.limited) {
+          options?.onLimitedCheck?.call(this);
+        } else {
+          options?.onLimitedUnCheck?.call(this);
+        }
+
+        this.refreshUi();
+      },
+    });
 
     this.setting = setting;
-    this.element.on("click", () => {
-      this.setting.limited = !this.setting.limited;
-
-      if (this.setting.limited) {
-        options?.onLimitedCheck?.call(this);
-      } else {
-        options?.onLimitedUnCheck?.call(this);
-      }
-
-      this.refreshUi();
-    });
 
     for (const className of options?.classes ?? []) {
       this.element.addClass(className);

@@ -8,7 +8,6 @@ export type ButtonOptions = ThisType<Button> &
     readonly alignment?: "left" | "right";
     readonly title?: string;
     readonly classes?: Array<string>;
-    readonly onClick?: (event?: MouseEvent) => void | Promise<void>;
   };
 
 /**

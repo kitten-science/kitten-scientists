@@ -19,7 +19,7 @@ export class ConsumeButton extends Button {
     setting: ResourcesSettingsItem,
     locale: SettingOptions<SupportedLocale>,
     resourceName: string,
-    options?: ConsumeButtonOptions,
+    options: Omit<ConsumeButtonOptions, "onClick">,
   ) {
     super(parent, "", Icons.DataUsage, {
       ...options,

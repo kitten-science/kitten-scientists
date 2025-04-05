@@ -28,7 +28,7 @@ export class SettingTriggerListItem extends SettingListItem {
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       alignment: "right",
       border: false,
-      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.call(this) : undefined,
+      onClick: () => options.onSetTrigger.call(this),
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
     this.addChildrenHead([

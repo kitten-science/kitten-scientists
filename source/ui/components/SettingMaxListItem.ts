@@ -8,7 +8,7 @@ import { MaxButton } from "./buttons/MaxButton.js";
 export type SettingMaxListItemOptions = ThisType<SettingMaxListItem> &
   SettingListItemOptions & {
     readonly onRefreshMax?: () => void;
-    readonly onSetMax?: () => void;
+    readonly onSetMax: () => void;
   };
 
 export class SettingMaxListItem extends SettingListItem<SettingMax> {
@@ -29,13 +29,13 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
     parent: UiComponent,
     setting: SettingMax,
     label: string,
-    options?: SettingMaxListItemOptions,
+    options: SettingMaxListItemOptions,
   ) {
     super(parent, setting, label, options);
 
     this.maxButton = new MaxButton(parent, setting, {
       border: false,
-      onClick: options?.onSetMax ? () => options.onSetMax?.call(this) : undefined,
+      onClick: () => options.onSetMax.call(this),
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
     this.addChildrenHead([

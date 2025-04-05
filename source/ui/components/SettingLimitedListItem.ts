@@ -35,7 +35,7 @@ export class SettingLimitedListItem extends SettingListItem {
     parent: UiComponent,
     setting: SettingLimited,
     label: string,
-    options?: SettingLimitedListItemOptions,
+    options: SettingLimitedListItemOptions,
   ) {
     super(parent, setting, label, options);
 
