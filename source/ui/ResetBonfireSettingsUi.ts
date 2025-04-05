@@ -131,8 +131,6 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
         }
 
         option.trigger = Number(value);
-
-        element.refreshUi();
       },
       upgradeIndicator,
     });

@@ -39,9 +39,6 @@ export class BuyButton extends TextButton {
         }
 
         setting.buy = host.parseAbsolute(value) ?? setting.buy;
-
-        this.refreshUi();
-        options?.onClick?.();
       },
     });
 

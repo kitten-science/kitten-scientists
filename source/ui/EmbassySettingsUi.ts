@@ -59,8 +59,6 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
           }
 
           settings.trigger = host.parsePercentage(value);
-
-          this.refreshUi();
         },
       }),
       options,
@@ -97,6 +95,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
         host.renderAbsolute(option.max),
         host.engine.i18n("ui.max.build.promptExplainer"),
       );
+
       if (value === undefined) {
         return;
       }
@@ -111,8 +110,6 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
       }
 
       option.max = host.parseAbsolute(value) ?? option.max;
-
-      this.refreshUi();
     };
 
     const element = new SettingMaxListItem(host, option, label, {

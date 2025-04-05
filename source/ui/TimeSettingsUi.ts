@@ -68,8 +68,6 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
           }
 
           settings.trigger = host.parsePercentage(value);
-
-          this.refreshUi();
         },
       }),
     );

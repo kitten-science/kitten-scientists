@@ -107,8 +107,6 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
         }
 
         option.trigger = Number(value);
-
-        element.refreshUi();
       },
       upgradeIndicator,
     });

@@ -70,8 +70,6 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
           }
 
           option.trigger = Number(value);
-
-          element.refreshUi();
         },
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);

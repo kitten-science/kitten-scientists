@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions, SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
@@ -18,8 +17,8 @@ export const BuildSectionTools = {
     sectionLabel: string,
     options?: Partial<SettingMaxTriggerListItemOptions>,
   ) => {
-    const onSetMax = () => {
-      Dialog.prompt(
+    const onSetMax = async () => {
+      const value = await Dialog.prompt(
         host,
         host.engine.i18n("ui.max.prompt.absolute"),
         host.engine.i18n("ui.max.build.prompt", [
@@ -28,27 +27,22 @@ export const BuildSectionTools = {
         ]),
         host.renderAbsolute(option.max),
         host.engine.i18n("ui.max.build.promptExplainer"),
-      )
-        .then(value => {
-          if (value === undefined) {
-            return;
-          }
+      );
 
-          if (value === "" || value.startsWith("-")) {
-            option.max = -1;
-            return;
-          }
+      if (value === undefined) {
+        return;
+      }
 
-          if (value === "0") {
-            option.enabled = false;
-          }
+      if (value === "" || value.startsWith("-")) {
+        option.max = -1;
+        return;
+      }
 
-          option.max = host.parseAbsolute(value) ?? option.max;
-        })
-        .then(() => {
-          element.refreshUi();
-        })
-        .catch(redirectErrorsToConsole(console));
+      if (value === "0") {
+        option.enabled = false;
+      }
+
+      option.max = host.parseAbsolute(value) ?? option.max;
     };
 
     const element = new SettingMaxTriggerListItem(host, option, locale, label, {
@@ -94,8 +88,8 @@ export const BuildSectionTools = {
         ]);
       },
       onSetMax,
-      onSetTrigger: () => {
-        Dialog.prompt(
+      onSetTrigger: async () => {
+        const value = await Dialog.prompt(
           host,
           host.engine.i18n("ui.trigger.prompt.percentage"),
           host.engine.i18n("ui.trigger.build.prompt", [
@@ -106,23 +100,18 @@ export const BuildSectionTools = {
           ]),
           option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
           host.engine.i18n("ui.trigger.build.promptExplainer"),
-        )
-          .then(value => {
-            if (value === undefined) {
-              return;
-            }
+        );
 
-            if (value === "" || value.startsWith("-")) {
-              option.trigger = -1;
-              return;
-            }
+        if (value === undefined) {
+          return;
+        }
 
-            option.trigger = host.parsePercentage(value);
-          })
-          .then(() => {
-            element.refreshUi();
-          })
-          .catch(redirectErrorsToConsole(console));
+        if (value === "" || value.startsWith("-")) {
+          option.trigger = -1;
+          return;
+        }
+
+        option.trigger = host.parsePercentage(value);
       },
       upgradeIndicator: options?.upgradeIndicator,
     });

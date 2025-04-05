@@ -1,5 +1,4 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
@@ -45,8 +44,8 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
               : host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.prompt.percentage"),
             host.engine.i18n("ui.trigger.section.prompt", [
@@ -57,23 +56,18 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
             ]),
             settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined) {
-                return;
-              }
+          );
 
-              if (value === "" || value.startsWith("-")) {
-                settings.trigger = -1;
-                return;
-              }
+          if (value === undefined) {
+            return;
+          }
 
-              settings.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === "" || value.startsWith("-")) {
+            settings.trigger = -1;
+            return;
+          }
+
+          settings.trigger = host.parsePercentage(value);
         },
       }),
       options,
@@ -112,8 +106,8 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
               : host.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.prompt.percentage"),
             host.engine.i18n("ui.trigger.section.prompt", [
@@ -124,23 +118,18 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
             ]),
             option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined) {
-                return;
-              }
+          );
 
-              if (value === "" || value.startsWith("-")) {
-                option.trigger = -1;
-                return;
-              }
+          if (value === undefined) {
+            return;
+          }
 
-              option.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              element.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === "" || value.startsWith("-")) {
+            option.trigger = -1;
+            return;
+          }
+
+          option.trigger = host.parsePercentage(value);
         },
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);

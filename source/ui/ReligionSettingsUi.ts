@@ -1,5 +1,4 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import { ReligionSettings } from "../settings/ReligionSettings.js";
@@ -56,8 +55,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
               : host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.prompt.percentage"),
             host.engine.i18n("ui.trigger.section.prompt", [
@@ -68,23 +67,18 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
             ]),
             settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
             host.engine.i18n("ui.trigger.section.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined) {
-                return;
-              }
+          );
 
-              if (value === "" || value.startsWith("-")) {
-                settings.trigger = -1;
-                return;
-              }
+          if (value === undefined) {
+            return;
+          }
 
-              settings.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === "" || value.startsWith("-")) {
+            settings.trigger = -1;
+            return;
+          }
+
+          settings.trigger = host.parsePercentage(value);
         },
       }),
     );
@@ -247,8 +241,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
                 this.settingItem.triggerButton.inactive =
                   !this.setting[item].enabled || this.setting[item].trigger === -1;
               },
-              onSetTrigger: () => {
-                Dialog.prompt(
+              onSetTrigger: async () => {
+                const value = await Dialog.prompt(
                   host,
                   host.engine.i18n(
                     element.triggerButton.behavior === "integer"
@@ -270,21 +264,16 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
                       ? "ui.trigger.setinteger.promptExplainer"
                       : "ui.trigger.setpercentage.promptExplainer",
                   ),
-                )
-                  .then(value => {
-                    if (value === undefined || value === "" || value.startsWith("-")) {
-                      return;
-                    }
+                );
 
-                    this.setting[item].trigger =
-                      (element.triggerButton.behavior === "integer"
-                        ? host.parseAbsolute(value)
-                        : host.parsePercentage(value)) ?? this.setting[item].trigger;
-                  })
-                  .then(() => {
-                    this.refreshUi();
-                  })
-                  .catch(redirectErrorsToConsole(console));
+                if (value === undefined || value === "" || value.startsWith("-")) {
+                  return;
+                }
+
+                this.setting[item].trigger =
+                  (element.triggerButton.behavior === "integer"
+                    ? host.parseAbsolute(value)
+                    : host.parsePercentage(value)) ?? this.setting[item].trigger;
               },
             });
             element.triggerButton.element.addClass(stylesButton.lastHeadAction);

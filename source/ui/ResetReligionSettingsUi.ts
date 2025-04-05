@@ -139,6 +139,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
           option.trigger !== -1 ? host.renderAbsolute(option.trigger) : "",
           host.engine.i18n("ui.trigger.reset.promptExplainer"),
         );
+
         if (value === undefined) {
           return;
         }
@@ -150,8 +151,6 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
         }
 
         option.trigger = Number(value);
-
-        element.refreshUi();
       },
       upgradeIndicator,
     });
