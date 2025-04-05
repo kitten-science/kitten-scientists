@@ -39,9 +39,6 @@ export class SellButton extends TextButton {
         }
 
         setting.sell = host.parseAbsolute(value) ?? setting.sell;
-
-        this.refreshUi();
-        options?.onClick?.();
       },
     });
 

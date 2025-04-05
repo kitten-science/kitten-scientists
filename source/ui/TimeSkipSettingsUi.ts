@@ -1,4 +1,3 @@
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
@@ -83,8 +82,8 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
               : `${host.renderFloat(settings.trigger, locale.selected)} TC`,
           ]);
         },
-        onSetMax: () => {
-          Dialog.prompt(
+        onSetMax: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.max.timeSkip.prompt"),
             host.engine.i18n("ui.max.timeSkip.promptTitle", [
@@ -92,30 +91,25 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
             ]),
             host.renderAbsolute(settings.max),
             host.engine.i18n("ui.max.timeSkip.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined) {
-                return;
-              }
+          );
 
-              if (value === "" || value.startsWith("-")) {
-                settings.max = -1;
-                return;
-              }
+          if (value === undefined) {
+            return;
+          }
 
-              if (value === "0") {
-                settings.enabled = false;
-              }
+          if (value === "" || value.startsWith("-")) {
+            settings.max = -1;
+            return;
+          }
 
-              settings.max = host.parseAbsolute(value) ?? settings.max;
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === "0") {
+            settings.enabled = false;
+          }
+
+          settings.max = host.parseAbsolute(value) ?? settings.max;
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.timeSkip.prompt"),
             host.engine.i18n("ui.trigger.timeSkip.promptTitle", [
@@ -123,18 +117,13 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
             ]),
             host.renderAbsolute(settings.trigger),
             host.engine.i18n("ui.trigger.timeSkip.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined || value === "" || value.startsWith("-")) {
-                return;
-              }
+          );
 
-              settings.trigger = host.parseAbsolute(value) ?? settings.trigger;
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === undefined || value === "" || value.startsWith("-")) {
+            return;
+          }
+
+          settings.trigger = host.parseAbsolute(value) ?? settings.trigger;
         },
       }),
       options,

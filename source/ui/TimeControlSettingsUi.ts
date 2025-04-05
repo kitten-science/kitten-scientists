@@ -85,8 +85,6 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
           }
 
           this.setting.accelerateTime.trigger = host.parsePercentage(value);
-
-          this.refreshUi();
         },
       },
     );

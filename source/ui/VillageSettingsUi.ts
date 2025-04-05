@@ -1,5 +1,4 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingMax, SettingOptions } from "../settings/Settings.js";
@@ -87,8 +86,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
           this._hunt.triggerButton.ineffective =
             this.setting.enabled && this.setting.hunt.enabled && this.setting.hunt.trigger === -1;
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.prompt.percentage"),
             host.engine.i18n("ui.trigger.hunt.prompt", [
@@ -96,18 +95,13 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
             ]),
             host.renderPercentage(this.setting.hunt.trigger),
             host.engine.i18n("ui.trigger.hunt.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined || value === "" || value.startsWith("-")) {
-                return;
-              }
+          );
 
-              this.setting.hunt.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this._hunt.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === undefined || value === "" || value.startsWith("-")) {
+            return;
+          }
+
+          this.setting.hunt.trigger = host.parsePercentage(value);
         },
       },
     );
@@ -148,8 +142,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
             this.setting.promoteKittens.enabled &&
             this.setting.promoteKittens.trigger === -1;
         },
-        onSetTrigger: () => {
-          Dialog.prompt(
+        onSetTrigger: async () => {
+          const value = await Dialog.prompt(
             host,
             host.engine.i18n("ui.trigger.promoteKittens.promptTitle"),
             host.engine.i18n("ui.trigger.promoteKittens.prompt", [
@@ -157,18 +151,13 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
             ]),
             host.renderPercentage(this.setting.promoteKittens.trigger),
             host.engine.i18n("ui.trigger.promoteKittens.promptExplainer"),
-          )
-            .then(value => {
-              if (value === undefined || value === "" || value.startsWith("-")) {
-                return;
-              }
+          );
 
-              this.setting.promoteKittens.trigger = host.parsePercentage(value);
-            })
-            .then(() => {
-              this.refreshUi();
-            })
-            .catch(redirectErrorsToConsole(console));
+          if (value === undefined || value === "" || value.startsWith("-")) {
+            return;
+          }
+
+          this.setting.promoteKittens.trigger = host.parsePercentage(value);
         },
       },
     );
@@ -240,8 +229,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     label: string,
     delimiter = false,
   ) {
-    const onSetMax = () => {
-      Dialog.prompt(
+    const onSetMax = async () => {
+      const value = await Dialog.prompt(
         host,
         host.engine.i18n("ui.max.distribute.prompt", [label]),
         host.engine.i18n("ui.max.distribute.promptTitle", [
@@ -250,27 +239,22 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
         ]),
         host.renderAbsolute(option.max),
         host.engine.i18n("ui.max.distribute.promptExplainer"),
-      )
-        .then(value => {
-          if (value === undefined) {
-            return;
-          }
+      );
 
-          if (value === "" || value.startsWith("-")) {
-            option.max = -1;
-            return;
-          }
+      if (value === undefined) {
+        return;
+      }
 
-          if (value === "0") {
-            option.enabled = false;
-          }
+      if (value === "" || value.startsWith("-")) {
+        option.max = -1;
+        return;
+      }
 
-          option.max = host.parseAbsolute(value) ?? option.max;
-        })
-        .then(() => {
-          this.refreshUi();
-        })
-        .catch(redirectErrorsToConsole(console));
+      if (value === "0") {
+        option.enabled = false;
+      }
+
+      option.max = host.parseAbsolute(value) ?? option.max;
     };
 
     const element = new SettingMaxListItem(host, option, label, {

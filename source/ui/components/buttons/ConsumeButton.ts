@@ -44,9 +44,6 @@ export class ConsumeButton extends Button {
         }
 
         setting.consume = host.parsePercentage(value);
-
-        this.refreshUi();
-        options?.onClick?.();
       },
     });
 

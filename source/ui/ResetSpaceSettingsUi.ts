@@ -95,8 +95,6 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
         }
 
         option.trigger = Number(value);
-
-        element.refreshUi();
       },
       upgradeIndicator,
     });

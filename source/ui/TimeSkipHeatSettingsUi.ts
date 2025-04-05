@@ -79,8 +79,6 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
           }
 
           settings.trigger = host.parsePercentage(value);
-
-          this.refreshUi();
         },
       }),
       options,

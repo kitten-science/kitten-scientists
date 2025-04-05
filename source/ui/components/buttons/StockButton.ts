@@ -47,9 +47,6 @@ export class StockButton extends Button {
         }
 
         setting.stock = host.parseAbsolute(value) ?? setting.stock;
-
-        this.refreshUi();
-        options?.onClick?.();
       },
     });
 

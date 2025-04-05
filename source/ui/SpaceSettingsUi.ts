@@ -70,8 +70,6 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
           }
 
           settings.trigger = host.parsePercentage(value);
-
-          this.refreshUi();
         },
       }),
     );

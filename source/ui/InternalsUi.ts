@@ -60,8 +60,6 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
                       }
 
                       settings.interval = host.parseAbsolute(value) ?? settings.interval;
-
-                      this.refreshUi();
                     },
                     onRefresh() {
                       this.element.text(
