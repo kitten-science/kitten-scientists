@@ -35,7 +35,10 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
 
     this.maxButton = new MaxButton(parent, setting, {
       border: false,
-      onClick: () => options.onSetMax.call(this),
+      onClick: () => {
+        options.onSetMax.call(this);
+        this.requestRefresh();
+      },
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
     this.addChildrenHead([

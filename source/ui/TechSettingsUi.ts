@@ -150,6 +150,6 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
       lastLabel = tech.label;
     }
 
-    this.addChild(new SettingsList(this).addChildren(items));
+    this.addChildContent(new SettingsList(this).addChildren(items));
   }
 }

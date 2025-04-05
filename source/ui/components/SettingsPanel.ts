@@ -39,12 +39,12 @@ export class SettingsPanel<
 
   async check() {
     this.setting.enabled = true;
-    this.refreshUi();
+    this.requestRefresh();
   }
 
   async uncheck() {
     this.setting.enabled = false;
-    this.refreshUi();
+    this.requestRefresh();
   }
 
   /**

@@ -163,7 +163,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
         new SellButton(this, this.setting.tradeBlackcoin, locale),
       ]),
     );
-    this.addChild(listRaces);
+    this.addChildContent(listRaces);
 
     const listAddition = new SettingsList(this, {
       hasDisableAll: false,
@@ -194,7 +194,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
         },
       ),
     );
-    this.addChild(listAddition);
+    this.addChildContent(listAddition);
   }
 
   private _getTradeOption(

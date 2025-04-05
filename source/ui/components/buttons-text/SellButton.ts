@@ -51,7 +51,7 @@ export class SellButton extends TextButton {
     return `[${SellButton.name}#${this.componentId}]`;
   }
 
-  refreshUi() {
+  refreshUi(): void {
     super.refreshUi();
 
     this.element.prop(

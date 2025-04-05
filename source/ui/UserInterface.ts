@@ -169,8 +169,5 @@ export class UserInterface extends UiComponent {
 
   refreshUi(): void {
     this._engineUi.refreshUi();
-    for (const section of this._sections) {
-      section.refreshUi();
-    }
   }
 }

@@ -70,7 +70,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
           ),
         ),
     );
-    this.addChild(listRaces);
+    this.addChildContent(listRaces);
   }
 
   private _makeEmbassySetting(

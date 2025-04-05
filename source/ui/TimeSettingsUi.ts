@@ -66,7 +66,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
       }),
     );
 
-    this.addChildren([
+    this.addChildrenContent([
       new SettingsList(this).addChildren([
         new HeaderListItem(this, this.host.engine.i18n("$workshop.chronoforge.label")),
         ...this.host.game.time.chronoforgeUpgrades

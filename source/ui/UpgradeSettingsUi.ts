@@ -142,6 +142,6 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
       lastLabel = upgrade.label;
     }
 
-    this.addChild(new SettingsList(this).addChildren(items));
+    this.addChildContent(new SettingsList(this).addChildren(items));
   }
 }

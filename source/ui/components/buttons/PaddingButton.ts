@@ -27,5 +27,5 @@ export class PaddingButton extends UiComponent {
     return `[${PaddingButton.name}#${this.componentId}]`;
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

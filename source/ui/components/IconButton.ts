@@ -54,7 +54,7 @@ export class IconButton extends UiComponent {
     return this.options?.onClick?.call(this);
   }
 
-  override refreshUi(): void {
+  refreshUi(): void {
     if (this.readOnly) {
       this.element.addClass(stylesButton.readonly);
     } else {

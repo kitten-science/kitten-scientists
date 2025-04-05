@@ -75,7 +75,6 @@ export class KittenScientists {
   private _constructUi() {
     const ui = new UserInterface(this);
     ui.stateManagementUi.loadAutoSave();
-    ui.refreshUi();
     return ui;
   }
 
@@ -210,8 +209,8 @@ export class KittenScientists {
   /**
    * Requests the user interface to refresh.
    */
-  refreshUi() {
-    this._userInterface.refreshUi();
+  refreshUi(): void {
+    this._userInterface.requestRefresh();
   }
 
   /**
@@ -360,7 +359,7 @@ export class KittenScientists {
     if (settings.engine.ksColumn.enabled) {
       this.rebuildUi();
     } else {
-      this._userInterface.refreshUi();
+      this._userInterface.refresh(true);
     }
   }
 

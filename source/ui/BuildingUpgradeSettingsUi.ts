@@ -56,6 +56,6 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
     for (const button of items) {
       itemsList.addChild(button.button);
     }
-    this.addChild(itemsList);
+    this.addChildContent(itemsList);
   }
 }

@@ -53,7 +53,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
           ),
         ),
     );
-    this.addChild(listJobs);
+    this.addChildContent(listJobs);
 
     const listAddition = new SettingsList(this, {
       hasDisableAll: false,
@@ -224,7 +224,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     ]);
     listAddition.addChild(this._electLeader);
 
-    this.addChild(listAddition);
+    this.addChildContent(listAddition);
   }
 
   private _getDistributeOption(

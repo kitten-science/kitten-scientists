@@ -68,11 +68,11 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
       }),
     );
 
-    this.addChild(
+    this.addChildContent(
       new SettingsList(this, {
         onReset: () => {
           this.setting.load({ buildings: new SpaceSettings().buildings });
-          this.refreshUi();
+          this.requestRefresh();
         },
       }).addChildren(
         this.host.game.space.planets
@@ -113,6 +113,6 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
       this.setting,
     );
     listAddition.addChild(this._missionsUi);
-    this.addChild(listAddition);
+    this.addChildContent(listAddition);
   }
 }

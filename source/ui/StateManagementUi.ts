@@ -90,7 +90,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             ? de
             : enUS;
 
-    this.addChild(
+    this.addChildContent(
       new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
@@ -225,6 +225,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   refreshUi(): void {
+    super.refreshUi();
+
     this._refreshGameList();
     this._refreshStateList();
   }
@@ -424,7 +426,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     );
 
     this._storeGames();
-    this.refreshUi();
+    this.requestRefresh();
 
     return gameLabel;
   }
@@ -456,7 +458,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     );
 
     this._storeStates();
-    this.refreshUi();
+    this.requestRefresh();
 
     return stateLabel;
   }
@@ -476,7 +478,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       });
 
       this._storeStates();
-      this.refreshUi();
+      this.requestRefresh();
 
       return;
     }
@@ -547,7 +549,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       timestamp: new Date().toISOString(),
     });
     this._storeGames();
-    this.refreshUi();
+    this.requestRefresh();
   }
 
   updateState(state: Unique<StoredState>, newState: EngineState) {
@@ -562,7 +564,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       timestamp: new Date().toISOString(),
     });
     this._storeStates();
-    this.refreshUi();
+    this.requestRefresh();
   }
 
   deleteGame(game: Unique<StoredGame>, force = false) {
@@ -577,7 +579,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     this.games.splice(index, 1);
     this._storeGames();
-    this.refreshUi();
+    this.requestRefresh();
   }
 
   deleteState(state: Unique<StoredState>, force = false) {
@@ -592,7 +594,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     this.states.splice(index, 1);
     this._storeStates();
-    this.refreshUi();
+    this.requestRefresh();
   }
 
   private _destructiveActionPrevented(): boolean {

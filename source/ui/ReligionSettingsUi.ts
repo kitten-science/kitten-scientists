@@ -135,21 +135,15 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
       },
     );
 
-    this.addChildren([
+    this.addChildrenContent([
       new SettingsList(this, {
-        onEnableAll: () => {
-          this.refreshUi();
-        },
-        onDisableAll: () => {
-          this.refreshUi();
-        },
         onReset: () => {
           const defaults = new ReligionSettings();
           this.setting.load({
             buildings: defaults.buildings,
             bestUnicornBuilding: defaults.bestUnicornBuilding,
           });
-          this.refreshUi();
+          this.requestRefresh();
         },
       }).addChildren([
         new HeaderListItem(this, this.host.engine.i18n("$religion.panel.ziggurat.label")),
@@ -277,7 +271,9 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
     ]);
   }
 
-  refreshUi() {
+  refreshUi(): void {
+    super.refreshUi();
+
     for (const [buildingName, building] of this._unicornBuildings.entries()) {
       building.readOnly = this._bestUnicornBuilding.setting.enabled;
       building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;

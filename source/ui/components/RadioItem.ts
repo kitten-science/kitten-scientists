@@ -96,7 +96,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     return `[${RadioItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 
-  refreshUi() {
+  refreshUi(): void {
     this.input.prop("disabled", this.readOnly);
   }
 }

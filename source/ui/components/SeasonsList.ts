@@ -53,22 +53,24 @@ export class SeasonsList extends SettingsList {
       this.spring.check(true);
       this.summer.check(true);
       this.winter.check(true);
-      this.refreshUi();
     });
     this.addEventListener("disableAll", () => {
       this.autumn.uncheck(true);
       this.spring.uncheck(true);
       this.summer.uncheck(true);
       this.winter.uncheck(true);
-      this.refreshUi();
     });
 
     const makeSeason = (label: string, setting: Setting) => {
       return new SettingListItem(parent, setting, label, {
-        onCheck: (isBatchProcess?: boolean) =>
-          options?.onCheckSeason?.(label, setting, isBatchProcess),
-        onUnCheck: (isBatchProcess?: boolean) =>
-          options?.onUnCheckSeason?.(label, setting, isBatchProcess),
+        onCheck: (isBatchProcess?: boolean) => {
+          options?.onCheckSeason?.(label, setting, isBatchProcess);
+          this.requestRefresh();
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          options?.onUnCheckSeason?.(label, setting, isBatchProcess);
+          this.requestRefresh();
+        },
       });
     };
 

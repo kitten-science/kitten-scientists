@@ -23,7 +23,7 @@ export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
 
-    this.addChild(
+    this.addChildContent(
       new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
@@ -49,8 +49,8 @@ export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
             }),
         ),
     );
-    this.addChild(listFilters);
+    this.addChildContent(listFilters);
 
-    this.addChild(new ExplainerListItem(this, "filter.explainer"));
+    this.addChildContent(new ExplainerListItem(this, "filter.explainer"));
   }
 }

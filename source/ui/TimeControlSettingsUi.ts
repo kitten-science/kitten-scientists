@@ -93,6 +93,6 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
     this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];
 
     list.addChildren(this._items);
-    this.addChild(list);
+    this.addChildContent(list);
   }
 }

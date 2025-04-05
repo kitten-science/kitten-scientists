@@ -29,7 +29,10 @@ export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
 
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       border: false,
-      onClick: () => options.onSetTrigger.call(this),
+      onClick: () => {
+        options.onSetTrigger.call(this);
+        this.requestRefresh();
+      },
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
     this.addChildHead(this.triggerButton);
