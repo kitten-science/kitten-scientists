@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { MissionSettings } from "../settings/MissionSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { SpaceSettings } from "../settings/SpaceSettings.js";
@@ -9,30 +8,31 @@ import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
   private readonly _missions: Array<SettingListItem>;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: MissionSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: SpaceSettings,
     options?: SettingsPanelOptions<SettingListItem> & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("ui.upgrade.missions");
+    const label = parent.host.engine.i18n("ui.upgrade.missions");
     super(
-      host,
+      parent,
       settings,
-      new SettingListItem(host, settings, label, {
-        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+      new SettingListItem(parent, settings, label, {
+        childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -47,21 +47,21 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
     );
 
     // Missions should be sorted by KG. For example, when going to the sun just choose the top five Checkbox instead of looking through the list
-    this._missions = host.game.space.programs
+    this._missions = parent.host.game.space.programs
       .filter(item => !isNil(this.setting.missions[item.name]))
       .map(
         mission =>
-          new SettingListItem(host, this.setting.missions[mission.name], mission.label, {
+          new SettingListItem(parent, this.setting.missions[mission.name], mission.label, {
             onCheck: () => {
-              host.engine.imessage("status.sub.enable", [mission.label]);
+              parent.host.engine.imessage("status.sub.enable", [mission.label]);
             },
             onUnCheck: () => {
-              host.engine.imessage("status.sub.disable", [mission.label]);
+              parent.host.engine.imessage("status.sub.disable", [mission.label]);
             },
           }),
       );
 
-    const itemsList = new SettingsList(host, { children: this._missions });
+    const itemsList = new SettingsList(parent, { children: this._missions });
     this.addChild(itemsList);
   }
 }

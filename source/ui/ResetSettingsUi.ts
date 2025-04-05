@@ -1,5 +1,4 @@
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { ResetSettings } from "../settings/ResetSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi.js";
@@ -13,6 +12,7 @@ import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   private readonly _bonfireUi: ResetBonfireSettingsUi;
@@ -23,24 +23,24 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   private readonly _upgradesUi: ResetUpgradesSettingsUi;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: ResetSettings,
     locale: SettingOptions<SupportedLocale>,
     options?: SettingsPanelOptions<SettingListItem> & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("option.time.reset");
+    const label = parent.host.engine.i18n("option.time.reset");
     super(
-      host,
+      parent,
       settings,
-      new SettingListItem(host, settings, label, {
-        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+      new SettingListItem(parent, settings, label, {
+        childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -48,16 +48,16 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
       options,
     );
 
-    const list = new SettingsList(host, {
+    const list = new SettingsList(parent, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    this._bonfireUi = new ResetBonfireSettingsUi(host, this.setting.bonfire, locale);
-    this._religionUi = new ResetReligionSettingsUi(host, this.setting.religion, locale);
-    this._resourcesUi = new ResetResourcesSettingsUi(host, this.setting.resources, locale);
-    this._spaceUi = new ResetSpaceSettingsUi(host, this.setting.space, locale);
-    this._timeUi = new ResetTimeSettingsUi(host, this.setting.time, locale);
-    this._upgradesUi = new ResetUpgradesSettingsUi(host, this.setting.upgrades, locale);
+    this._bonfireUi = new ResetBonfireSettingsUi(parent, this.setting.bonfire, locale);
+    this._religionUi = new ResetReligionSettingsUi(parent, this.setting.religion, locale);
+    this._resourcesUi = new ResetResourcesSettingsUi(parent, this.setting.resources, locale);
+    this._spaceUi = new ResetSpaceSettingsUi(parent, this.setting.space, locale);
+    this._timeUi = new ResetTimeSettingsUi(parent, this.setting.time, locale);
+    this._upgradesUi = new ResetUpgradesSettingsUi(parent, this.setting.upgrades, locale);
 
     list.addChildren([
       this._bonfireUi,

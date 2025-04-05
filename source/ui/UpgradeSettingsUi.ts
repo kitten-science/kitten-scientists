@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { UpgradeSettings } from "../settings/UpgradeSettings.js";
 import stylesButton from "./components/Button.module.css";
@@ -11,26 +10,27 @@ import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTriggerListItem> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: UpgradeSettings,
     locale: SettingOptions<SupportedLocale>,
     options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("ui.upgrade.upgrades");
+    const label = parent.host.engine.i18n("ui.upgrade.upgrades");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -38,24 +38,24 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger() {
-          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+          this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
             settings.trigger === -1
-              ? host.engine.i18n("ui.trigger.section.inactive")
-              : host.renderPercentage(settings.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.section.inactive")
+              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? host.renderPercentage(settings.trigger, locale.selected, true)
-                : host.engine.i18n("ui.infinity"),
+                ? parent.host.renderPercentage(settings.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
+            settings.trigger !== -1 ? parent.host.renderPercentage(settings.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -67,13 +67,13 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
             return;
           }
 
-          settings.trigger = host.parsePercentage(value);
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
       options,
     );
 
-    const upgrades = host.game.workshop.upgrades.filter(
+    const upgrades = parent.host.game.workshop.upgrades.filter(
       upgrade => !isNil(this.setting.upgrades[upgrade.name]),
     );
 
@@ -85,12 +85,12 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
     )) {
       const option = this.setting.upgrades[upgrade.name];
 
-      const element = new SettingTriggerListItem(host, option, locale, upgrade.label, {
+      const element = new SettingTriggerListItem(parent, option, locale, upgrade.label, {
         onCheck: () => {
-          host.engine.imessage("status.sub.enable", [upgrade.label]);
+          parent.host.engine.imessage("status.sub.enable", [upgrade.label]);
         },
         onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [upgrade.label]);
+          parent.host.engine.imessage("status.sub.disable", [upgrade.label]);
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -98,26 +98,26 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
             settings.enabled && option.enabled && settings.trigger === -1 && option.trigger === -1;
         },
         onRefreshTrigger: () => {
-          element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+          element.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
             option.trigger < 0
               ? settings.trigger < 0
-                ? host.engine.i18n("ui.trigger.build.blocked", [label])
-                : `${host.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.section.inherited")})`
-              : host.renderPercentage(option.trigger, locale.selected, true),
+                ? parent.host.engine.i18n("ui.trigger.build.blocked", [label])
+                : `${parent.host.renderPercentage(settings.trigger, locale.selected, true)} (${parent.host.engine.i18n("ui.trigger.section.inherited")})`
+              : parent.host.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               option.trigger !== -1
-                ? host.renderPercentage(option.trigger, locale.selected, true)
-                : host.engine.i18n("ui.trigger.section.inherited"),
+                ? parent.host.renderPercentage(option.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.trigger.section.inherited"),
             ]),
-            option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
+            option.trigger !== -1 ? parent.host.renderPercentage(option.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -129,12 +129,12 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
             return;
           }
 
-          option.trigger = host.parsePercentage(value);
+          option.trigger = parent.host.parsePercentage(value);
         },
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
-      if (host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+      if (parent.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== upgrade.label[0]) {
           if (!isNil(lastElement)) {
             lastElement.element.addClass(stylesDelimiter.delimiter);
@@ -149,6 +149,6 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
       lastLabel = upgrade.label;
     }
 
-    this.addChild(new SettingsList(host, { children: items }));
+    this.addChild(new SettingsList(parent, { children: items }));
   }
 }

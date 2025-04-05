@@ -1,16 +1,16 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
 import type { TextButton } from "./TextButton.js";
+import type { UiComponent } from "./UiComponent.js";
 
 export type ButtonListItemOptions = ThisType<ButtonListItem> & ListItemOptions;
 
 export class ButtonListItem extends ListItem {
-  declare readonly _options: ButtonListItemOptions;
+  declare readonly options: ButtonListItemOptions;
   readonly button: TextButton;
 
-  constructor(host: KittenScientists, button: TextButton, options?: ButtonListItemOptions) {
-    super(host, { ...options, children: [] });
+  constructor(parent: UiComponent, button: TextButton, options?: ButtonListItemOptions) {
+    super(parent, { ...options, children: [] });
 
     this.button = button;
 

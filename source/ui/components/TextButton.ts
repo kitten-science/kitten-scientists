@@ -1,5 +1,4 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import stylesButton from "./Button.module.css";
 import styles from "./TextButton.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
@@ -10,12 +9,12 @@ export type TextButtonOptions = ThisType<TextButton> &
   };
 
 export class TextButton extends UiComponent {
-  declare readonly _options: TextButtonOptions;
+  declare readonly options: TextButtonOptions;
   readonly element: JQuery;
   readOnly: boolean;
 
-  constructor(host: KittenScientists, label?: string, options?: TextButtonOptions) {
-    super(host, { ...options });
+  constructor(parent: UiComponent, label?: string, options?: TextButtonOptions) {
+    super(parent, { ...options });
 
     const element = $("<div/>").addClass(styles.textButton);
     if (label !== undefined) {

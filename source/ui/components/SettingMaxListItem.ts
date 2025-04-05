@@ -1,8 +1,8 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingMax } from "../../settings/Settings.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
+import type { UiComponent } from "./UiComponent.js";
 import { MaxButton } from "./buttons/MaxButton.js";
 
 export type SettingMaxListItemOptions = ThisType<SettingMaxListItem> &
@@ -12,7 +12,7 @@ export type SettingMaxListItemOptions = ThisType<SettingMaxListItem> &
   };
 
 export class SettingMaxListItem extends SettingListItem<SettingMax> {
-  declare readonly _options: SettingMaxListItemOptions;
+  declare readonly options: SettingMaxListItemOptions;
   readonly maxButton: MaxButton;
 
   /**
@@ -26,20 +26,20 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
    * @param options Options for the list item.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingMax,
     label: string,
     options?: SettingMaxListItemOptions,
   ) {
-    super(host, setting, label, options);
+    super(parent, setting, label, options);
 
-    this.maxButton = new MaxButton(host, setting, {
+    this.maxButton = new MaxButton(parent, setting, {
       border: false,
       onClick: options?.onSetMax ? () => options.onSetMax?.call(this) : undefined,
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
     this.head.addChildren([
-      new Container(host, { classes: [stylesLabelListItem.fillSpace] }),
+      new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
       this.maxButton,
     ]);
   }

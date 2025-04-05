@@ -1,8 +1,8 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
 import { default as styles, default as stylesSettingListItem } from "./SettingListItem.module.css";
+import type { UiComponent } from "./UiComponent.js";
 
 export type SettingListItemOptions = ThisType<SettingListItem> &
   LabelListItemOptions & {
@@ -23,7 +23,7 @@ export type SettingListItemOptions = ThisType<SettingListItem> &
   };
 
 export class SettingListItem<TSetting extends Setting = Setting> extends LabelListItem {
-  declare readonly _options: SettingListItemOptions;
+  declare readonly options: SettingListItemOptions;
   readonly setting: TSetting;
   readonly checkbox?: JQuery;
 
@@ -41,12 +41,12 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
    * @param options Options for this list item.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: TSetting,
     label: string,
     options?: SettingListItemOptions,
   ) {
-    super(host, label, { ...options, children: [] });
+    super(parent, label, { ...options, children: [] });
 
     this.element.addClass(styles.setting);
 
@@ -82,13 +82,13 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
 
   async check(isBatchProcess = false) {
     this.setting.enabled = true;
-    await this._options?.onCheck?.call(isBatchProcess);
+    await this.options?.onCheck?.call(isBatchProcess);
     this.refreshUi();
   }
 
   async uncheck(isBatchProcess = false) {
     this.setting.enabled = false;
-    await this._options.onUnCheck?.call(isBatchProcess);
+    await this.options.onUnCheck?.call(isBatchProcess);
     this.refreshUi();
   }
 

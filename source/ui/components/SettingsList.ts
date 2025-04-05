@@ -1,5 +1,4 @@
 import { is, isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import { Icons } from "../../images/Icons.js";
 import { IconButton } from "./IconButton.js";
 import { SettingListItem } from "./SettingListItem.js";
@@ -24,7 +23,7 @@ export type SettingsListOptions = ThisType<SettingsList> &
  * This construct is also sometimes referred to as an "items list" for historic reasons.
  */
 export class SettingsList extends UiComponent {
-  declare readonly _options: SettingsListOptions;
+  declare readonly options: SettingsListOptions;
   readonly element: JQuery;
   readonly list: JQuery;
 
@@ -38,8 +37,8 @@ export class SettingsList extends UiComponent {
    * @param host A reference to the host.
    * @param options Which tools should be available on the list?
    */
-  constructor(host: KittenScientists, options?: SettingsListOptions) {
-    super(host, { ...options, children: [] });
+  constructor(parent: UiComponent, options?: SettingsListOptions) {
+    super(parent, { ...options, children: [] });
 
     const toolOptions = {
       hasDisableAll: true,
@@ -61,9 +60,9 @@ export class SettingsList extends UiComponent {
       if (toolOptions.hasEnableAll) {
         const onEnableAll = options?.onEnableAll;
         this.enableAllButton = new IconButton(
-          this._host,
+          parent,
           Icons.CheckboxCheck,
-          host.engine.i18n("ui.enable.all"),
+          parent.host.engine.i18n("ui.enable.all"),
           {
             onClick: () => {
               const event = new Event("enableAll", { cancelable: true });
@@ -92,9 +91,9 @@ export class SettingsList extends UiComponent {
       if (toolOptions.hasDisableAll) {
         const onDisableAll = options?.onDisableAll;
         this.disableAllButton = new IconButton(
-          this._host,
+          parent,
           Icons.CheckboxUnCheck,
-          host.engine.i18n("ui.disable.all"),
+          parent.host.engine.i18n("ui.disable.all"),
         );
         this.disableAllButton.element.on("click", () => {
           const event = new Event("disableAll", { cancelable: true });
@@ -119,11 +118,16 @@ export class SettingsList extends UiComponent {
 
       const onReset = toolOptions.onReset;
       if (!isNil(onReset)) {
-        this.resetButton = new IconButton(this._host, Icons.Reset, host.engine.i18n("ui.reset"), {
-          onClick: () => {
-            onReset();
+        this.resetButton = new IconButton(
+          parent,
+          Icons.Reset,
+          parent.host.engine.i18n("ui.reset"),
+          {
+            onClick: () => {
+              onReset();
+            },
           },
-        });
+        );
         tools.append(this.resetButton.element);
       }
 

@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import stylesButton from "./Button.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
@@ -12,7 +11,7 @@ export type IconButtonOptions = ThisType<IconButton> &
  * A button that is visually represented through an SVG element.
  */
 export class IconButton extends UiComponent {
-  declare readonly _options: IconButtonOptions;
+  declare readonly options: IconButtonOptions;
   readonly element: JQuery;
   readOnly: boolean;
   inactive: boolean;
@@ -25,13 +24,8 @@ export class IconButton extends UiComponent {
    * @param title The `title` of the element.
    * @param options Options for the icon button.
    */
-  constructor(
-    host: KittenScientists,
-    pathData: string,
-    title: string,
-    options?: IconButtonOptions,
-  ) {
-    super(host, { ...options });
+  constructor(parent: UiComponent, pathData: string, title: string, options?: IconButtonOptions) {
+    super(parent, { ...options });
 
     const element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,

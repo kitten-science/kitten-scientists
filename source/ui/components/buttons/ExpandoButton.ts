@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../../KittenScientists.js";
 import { Icons } from "../../../images/Icons.js";
 import stylesButton from "../Button.module.css";
 import { UiComponent, type UiComponentOptions } from "../UiComponent.js";
@@ -7,7 +6,7 @@ import styles from "./ExpandoButton.module.css";
 export type ExpandoButtonOptions = ThisType<ExpandoButton> & UiComponentOptions;
 
 export class ExpandoButton extends UiComponent {
-  declare readonly _options: ExpandoButtonOptions;
+  declare readonly options: ExpandoButtonOptions;
   readonly element: JQuery;
   ineffective: boolean;
 
@@ -18,15 +17,15 @@ export class ExpandoButton extends UiComponent {
    * @param host A reference to the host.
    * @param options Options for this expando.
    */
-  constructor(host: KittenScientists, options?: ExpandoButtonOptions) {
-    super(host, { ...options });
+  constructor(parent: UiComponent, options?: ExpandoButtonOptions) {
+    super(parent, { ...options });
 
     const element = $("<div/>", {
       html: `
       <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="${styles.down}"><path d="${Icons.ExpandCircleDown}"/></svg>
       <svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor" class="${styles.up}"><path d="${Icons.ExpandCircleUp}"/></svg>
       `,
-      title: host.engine.i18n("ui.itemsShow"),
+      title: parent.host.engine.i18n("ui.itemsShow"),
     })
       .addClass(stylesButton.iconButton)
       .addClass(styles.expandoButton);
@@ -38,11 +37,11 @@ export class ExpandoButton extends UiComponent {
 
   setCollapsed() {
     this.element.removeClass(styles.expanded);
-    this.element.prop("title", this._host.engine.i18n("ui.itemsShow"));
+    this.element.prop("title", this.host.engine.i18n("ui.itemsShow"));
   }
   setExpanded() {
     this.element.addClass(styles.expanded);
-    this.element.prop("title", this._host.engine.i18n("ui.itemsHide"));
+    this.element.prop("title", this.host.engine.i18n("ui.itemsHide"));
   }
 
   override refreshUi(): void {

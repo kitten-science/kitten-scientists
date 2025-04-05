@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingOptions } from "../../settings/Settings.js";
 import { Fieldset } from "./Fieldset.js";
 import { RadioItem } from "./RadioItem.js";
@@ -11,7 +10,7 @@ export type OptionsListItemOptions = ThisType<OptionsListItem> &
   };
 
 export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
-  declare readonly _options: OptionsListItemOptions;
+  declare readonly options: OptionsListItemOptions;
   readonly fieldset: Fieldset;
   readonly setting: TSetting;
   readonly element: JQuery;
@@ -27,22 +26,22 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
    * @param options Options for the list item.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     label: string,
     setting: TSetting,
     options?: OptionsListItemOptions,
   ) {
-    super(host, { ...options });
+    super(parent, { ...options });
 
     this.element = $("<li/>");
 
-    this.fieldset = new Fieldset(host, label);
+    this.fieldset = new Fieldset(parent, label);
     this.addChild(this.fieldset);
 
     this._items = new Array<RadioItem>();
     for (const option of setting.options) {
       this._items.push(
-        new RadioItem(host, setting, option, label, {
+        new RadioItem(parent, setting, option, label, {
           onCheck: options?.onCheck,
           readOnly: options?.readOnly,
         }),

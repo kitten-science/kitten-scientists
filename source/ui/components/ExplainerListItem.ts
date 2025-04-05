@@ -1,5 +1,4 @@
 import type { TranslatedString } from "../../Engine.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import styles from "./ExplainerLiteItem.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
@@ -7,7 +6,7 @@ export type ExplainerListItemOptions<TKittenGameLiteral extends `$${string}`> = 
   ThisType<ExplainerListItem<TKittenGameLiteral>>;
 
 export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends UiComponent {
-  declare readonly _options: ExplainerListItemOptions<TKittenGameLiteral>;
+  declare readonly options: ExplainerListItemOptions<TKittenGameLiteral>;
   readonly element: JQuery;
 
   /**
@@ -19,13 +18,13 @@ export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends 
    * @param options - Options for this explainer.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     key: TranslatedString<TKittenGameLiteral>,
     options?: ExplainerListItemOptions<TKittenGameLiteral>,
   ) {
-    super(host, { ...options });
+    super(parent, { ...options });
 
-    const element = $("<li/>", { text: host.engine.i18n(key) }).addClass(styles.explainer);
+    const element = $("<li/>", { text: parent.host.engine.i18n(key) }).addClass(styles.explainer);
 
     this.element = element;
     this.addChildren(options?.children);

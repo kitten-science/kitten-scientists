@@ -1,8 +1,8 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
 import type { Season } from "../../types/index.js";
 import { SettingListItem } from "./SettingListItem.js";
 import { SettingsList, type SettingsListOptions } from "./SettingsList.js";
+import type { UiComponent } from "./UiComponent.js";
 
 export type SettingWithSeasons = Record<Season, Setting>;
 
@@ -29,7 +29,7 @@ export type SeasonsListOptions = ThisType<SeasonsList> &
  * A list of 4 settings correlating to the 4 seasons.
  */
 export class SeasonsList extends SettingsList {
-  declare readonly _options: SeasonsListOptions;
+  declare readonly options: SeasonsListOptions;
   readonly setting: SettingWithSeasons;
 
   readonly spring: SettingListItem;
@@ -44,8 +44,8 @@ export class SeasonsList extends SettingsList {
    * @param setting The settings that correlate to this list.
    * @param options Options for this list
    */
-  constructor(host: KittenScientists, setting: SettingWithSeasons, options?: SeasonsListOptions) {
-    super(host, options);
+  constructor(parent: UiComponent, setting: SettingWithSeasons, options?: SeasonsListOptions) {
+    super(parent, options);
     this.setting = setting;
 
     this.addEventListener("enableAll", () => {
@@ -64,7 +64,7 @@ export class SeasonsList extends SettingsList {
     });
 
     const makeSeason = (label: string, setting: Setting) => {
-      return new SettingListItem(host, setting, label, {
+      return new SettingListItem(parent, setting, label, {
         onCheck: (isBatchProcess?: boolean) =>
           options?.onCheckSeason?.(label, setting, isBatchProcess),
         onUnCheck: (isBatchProcess?: boolean) =>
@@ -72,22 +72,10 @@ export class SeasonsList extends SettingsList {
       });
     };
 
-    this.spring = makeSeason(
-      this._host.engine.i18n("$calendar.season.spring"),
-      this.setting.spring,
-    );
-    this.summer = makeSeason(
-      this._host.engine.i18n("$calendar.season.summer"),
-      this.setting.summer,
-    );
-    this.autumn = makeSeason(
-      this._host.engine.i18n("$calendar.season.autumn"),
-      this.setting.autumn,
-    );
-    this.winter = makeSeason(
-      this._host.engine.i18n("$calendar.season.winter"),
-      this.setting.winter,
-    );
+    this.spring = makeSeason(this.host.engine.i18n("$calendar.season.spring"), this.setting.spring);
+    this.summer = makeSeason(this.host.engine.i18n("$calendar.season.summer"), this.setting.summer);
+    this.autumn = makeSeason(this.host.engine.i18n("$calendar.season.autumn"), this.setting.autumn);
+    this.winter = makeSeason(this.host.engine.i18n("$calendar.season.winter"), this.setting.winter);
 
     this.addChildren([this.spring, this.summer, this.autumn, this.winter]);
   }

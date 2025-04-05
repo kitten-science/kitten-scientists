@@ -1,37 +1,37 @@
 import type { SupportedLocale } from "../../../Engine.js";
-import type { KittenScientists } from "../../../KittenScientists.js";
 import type { ResourcesSettingsItem } from "../../../settings/ResourcesSettings.js";
 import type { SettingOptions } from "../../../settings/Settings.js";
 import { Button, type ButtonOptions } from "../Button.js";
 import stylesButton from "../Button.module.css";
 import { Dialog } from "../Dialog.js";
+import type { UiComponent } from "../UiComponent.js";
 
 export type StockButtonOptions = ThisType<StockButton> & ButtonOptions;
 
 export class StockButton extends Button {
-  declare readonly _options: StockButtonOptions;
+  declare readonly options: StockButtonOptions;
   readonly setting: ResourcesSettingsItem;
   readonly resourceName: string;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: ResourcesSettingsItem,
     locale: SettingOptions<SupportedLocale>,
     resourceName: string,
     options?: StockButtonOptions,
   ) {
-    super(host, "", null, {
+    super(parent, "", null, {
       ...options,
       onClick: async () => {
         const value = await Dialog.prompt(
-          host,
-          host.engine.i18n("resources.stock.prompt"),
-          host.engine.i18n("resources.stock.promptTitle", [
+          parent,
+          parent.host.engine.i18n("resources.stock.prompt"),
+          parent.host.engine.i18n("resources.stock.promptTitle", [
             resourceName,
-            host.renderAbsolute(setting.stock, locale.selected),
+            parent.host.renderAbsolute(setting.stock, locale.selected),
           ]),
-          host.renderAbsolute(setting.stock),
-          host.engine.i18n("resources.stock.promptExplainer"),
+          parent.host.renderAbsolute(setting.stock),
+          parent.host.engine.i18n("resources.stock.promptExplainer"),
         );
         if (value === undefined) {
           return;
@@ -46,7 +46,7 @@ export class StockButton extends Button {
           setting.enabled = false;
         }
 
-        setting.stock = host.parseAbsolute(value) ?? setting.stock;
+        setting.stock = parent.host.parseAbsolute(value) ?? setting.stock;
       },
     });
 
@@ -59,14 +59,14 @@ export class StockButton extends Button {
   refreshUi() {
     super.refreshUi();
 
-    const stockValue = this._host.renderAbsolute(this.setting.stock);
+    const stockValue = this.host.renderAbsolute(this.setting.stock);
     const title =
       this.setting.stock < 0
-        ? this._host.engine.i18n("resources.stock.titleInfinite", [this.resourceName])
+        ? this.host.engine.i18n("resources.stock.titleInfinite", [this.resourceName])
         : this.setting.stock === 0
-          ? this._host.engine.i18n("resources.stock.titleZero", [this.resourceName])
-          : this._host.engine.i18n("resources.stock.title", [
-              this._host.renderAbsolute(this.setting.stock),
+          ? this.host.engine.i18n("resources.stock.titleZero", [this.resourceName])
+          : this.host.engine.i18n("resources.stock.title", [
+              this.host.renderAbsolute(this.setting.stock),
               this.resourceName,
             ]);
     this.updateTitle(title);

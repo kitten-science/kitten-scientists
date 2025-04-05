@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import { Container } from "./Container.js";
 import styles from "./LabelListItem.module.css";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
@@ -22,7 +21,7 @@ export type LabelListItemOptions = ThisType<LabelListItem> &
   };
 
 export class LabelListItem extends ListItem {
-  declare readonly _options: LabelListItemOptions;
+  declare readonly options: LabelListItemOptions;
   readonly head: Container;
   readonly elementLabel: JQuery;
 
@@ -33,10 +32,10 @@ export class LabelListItem extends ListItem {
    * @param label The label on the setting element.
    * @param options Options for the list item.
    */
-  constructor(host: KittenScientists, label: string, options?: LabelListItemOptions) {
-    super(host, options);
+  constructor(parent: UiComponent, label: string, options?: LabelListItemOptions) {
+    super(parent, options);
 
-    this.head = new Container(host);
+    this.head = new Container(parent);
     this.head.element.addClass(stylesListItem.head);
     this.addChild(this.head);
 

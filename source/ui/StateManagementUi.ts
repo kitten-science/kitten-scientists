@@ -1,4 +1,4 @@
-import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { type Locale, de, enUS, he, zhCN } from "date-fns/locale";
@@ -26,6 +26,7 @@ import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { TextButton } from "./components/TextButton.js";
 import { ToolbarListItem } from "./components/ToolbarListItem.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export type StoredGame = {
   label: string;
@@ -53,17 +54,17 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   readonly locale: Locale;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: StateSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
-    const label = host.engine.i18n("state.title");
+    const label = parent.host.engine.i18n("state.title");
     super(
-      host,
+      parent,
       settings,
-      new LabelListItem(host, label, {
+      new LabelListItem(parent, label, {
         childrenHead: [
-          new Container(host, {
+          new Container(parent, {
             classes: [stylesLabelListItem.fillSpace],
           }),
         ],
@@ -72,11 +73,11 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       }),
     );
 
-    this.gameList = new SettingsList(host, {
+    this.gameList = new SettingsList(parent, {
       hasEnableAll: false,
       hasDisableAll: false,
     });
-    this.stateList = new SettingsList(host, {
+    this.stateList = new SettingsList(parent, {
       hasEnableAll: false,
       hasDisableAll: false,
     });
@@ -91,73 +92,81 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             : enUS;
 
     this.addChild(
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: [
-          new SettingListItem(host, this.setting.noConfirm, host.engine.i18n("state.noConfirm")),
-          new ListItem(host, { children: [new Delimiter(host)] }),
+          new SettingListItem(
+            parent,
+            this.setting.noConfirm,
+            parent.host.engine.i18n("state.noConfirm"),
+          ),
+          new ListItem(parent, { children: [new Delimiter(parent)] }),
 
-          new HeaderListItem(host, host.engine.i18n("state.local")),
-          new ToolbarListItem(host, [
-            new Button(host, host.engine.i18n("state.import"), Icons.Import, {
+          new HeaderListItem(parent, parent.host.engine.i18n("state.local")),
+          new ToolbarListItem(parent, [
+            new Button(parent, parent.host.engine.i18n("state.import"), Icons.Import, {
               onClick: () => {
                 this.import();
               },
-              title: host.engine.i18n("state.importTitle"),
+              title: parent.host.engine.i18n("state.importTitle"),
             }),
           ]),
-          new ListItem(host, { children: [new Delimiter(host)] }),
+          new ListItem(parent, { children: [new Delimiter(parent)] }),
 
-          new HeaderListItem(host, host.engine.i18n("state.localStates")),
-          new ToolbarListItem(host, [
-            new Button(host, host.engine.i18n("state.store"), Icons.SaveAs, {
+          new HeaderListItem(parent, parent.host.engine.i18n("state.localStates")),
+          new ToolbarListItem(parent, [
+            new Button(parent, parent.host.engine.i18n("state.store"), Icons.SaveAs, {
               onClick: () => {
                 this.storeState();
               },
-              title: host.engine.i18n("state.storeState"),
+              title: parent.host.engine.i18n("state.storeState"),
             }),
-            new Button(host, host.engine.i18n("copy"), Icons.Copy, {
+            new Button(parent, parent.host.engine.i18n("copy"), Icons.Copy, {
               onClick: () => {
                 this.copyState().catch(redirectErrorsToConsole(console));
-                host.engine.imessage("state.copied.stateCurrent");
+                parent.host.engine.imessage("state.copied.stateCurrent");
               },
-              title: host.engine.i18n("state.copy.stateCurrent"),
+              title: parent.host.engine.i18n("state.copy.stateCurrent"),
             }),
-            new Button(host, host.engine.i18n("state.new"), Icons.Draft, {
+            new Button(parent, parent.host.engine.i18n("state.new"), Icons.Draft, {
               onClick: () => {
                 this.storeStateFactoryDefaults();
-                host.engine.imessage("state.stored.state");
+                parent.host.engine.imessage("state.stored.state");
               },
-              title: host.engine.i18n("state.storeFactory"),
+              title: parent.host.engine.i18n("state.storeFactory"),
             }),
-            new Button(host, host.engine.i18n("state.exportAll"), Icons.Sync, {
+            new Button(parent, parent.host.engine.i18n("state.exportAll"), Icons.Sync, {
               onClick: () => {
                 this.exportStateAll();
               },
-              title: host.engine.i18n("state.exportAllTitle"),
+              title: parent.host.engine.i18n("state.exportAllTitle"),
             }),
           ]),
-          new ListItem(host, { children: [this.stateList] }),
-          new ListItem(host, { children: [new Delimiter(host)] }),
+          new ListItem(parent, { children: [this.stateList] }),
+          new ListItem(parent, { children: [new Delimiter(parent)] }),
 
-          new HeaderListItem(host, host.engine.i18n("state.localGames")),
-          new ToolbarListItem(host, [
-            new Button(host, host.engine.i18n("state.store"), Icons.SaveAs, {
+          new HeaderListItem(parent, parent.host.engine.i18n("state.localGames")),
+          new ToolbarListItem(parent, [
+            new Button(parent, parent.host.engine.i18n("state.store"), Icons.SaveAs, {
               onClick: () => {
                 this.storeGame();
-                host.engine.imessage("state.stored.game");
+                parent.host.engine.imessage("state.stored.game");
               },
-              title: host.engine.i18n("state.storeGame"),
+              title: parent.host.engine.i18n("state.storeGame"),
             }),
-            new Button(host, host.engine.i18n("copy"), Icons.Copy, {
+            new Button(parent, parent.host.engine.i18n("copy"), Icons.Copy, {
               onClick: () => {
                 this.copyGame().catch(redirectErrorsToConsole(console));
-                host.engine.imessage("state.copied.gameCurrent");
+                parent.host.engine.imessage("state.copied.gameCurrent");
               },
-              title: host.engine.i18n("state.copy.gameCurrent"),
+              title: parent.host.engine.i18n("state.copy.gameCurrent"),
             }),
           ]),
-          new ListItem(host, { children: [this.gameList] }),
-          new SettingListItem(host, this.setting.compress, host.engine.i18n("state.compress")),
+          new ListItem(parent, { children: [this.gameList] }),
+          new SettingListItem(
+            parent,
+            this.setting.compress,
+            parent.host.engine.i18n("state.compress"),
+          ),
         ],
         hasDisableAll: false,
         hasEnableAll: false,
@@ -232,6 +241,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   private _refreshGameList() {
+    const parent = mustExist(this.parent);
     this.gameList.removeChildren(this.gameList.children);
     this.gameList.addChildren(
       this.games
@@ -243,9 +253,9 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
         .map(
           ([game, gameSlot]) =>
             new ButtonListItem(
-              this._host,
+              parent,
               new TextButton(
-                this._host,
+                parent,
                 `${game.label} (${formatDistanceToNow(new Date(game.timestamp), {
                   addSuffix: true,
                   locale: this.locale,
@@ -253,59 +263,39 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
                 {
                   onClick: () => {
                     this.loadGame(game.game).catch(redirectErrorsToConsole(console));
-                    this._host.engine.imessage("state.loaded.game", [game.label]);
+                    this.host.engine.imessage("state.loaded.game", [game.label]);
                   },
                   title: new Date(game.timestamp).toLocaleString(),
                 },
               ),
               {
                 children: [
-                  new Container(this._host, { classes: [stylesLabelListItem.fillSpace] }),
-                  new IconButton(
-                    this._host,
-                    Icons.Save,
-                    this._host.engine.i18n("state.update.game"),
-                    {
-                      onClick: () => {
-                        this.updateGame(gameSlot, this._host.game.save());
-                        this._host.engine.imessage("state.updated.game", [game.label]);
-                      },
+                  new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+                  new IconButton(parent, Icons.Save, this.host.engine.i18n("state.update.game"), {
+                    onClick: () => {
+                      this.updateGame(gameSlot, this.host.game.save());
+                      this.host.engine.imessage("state.updated.game", [game.label]);
                     },
-                  ),
-                  new IconButton(
-                    this._host,
-                    Icons.Edit,
-                    this._host.engine.i18n("state.edit.game"),
-                    {
-                      onClick: () => {
-                        this.storeGame(game.game);
-                        this.deleteGame(gameSlot, true);
-                        this._host.engine.imessage("state.updated.game", [game.label]);
-                      },
+                  }),
+                  new IconButton(parent, Icons.Edit, this.host.engine.i18n("state.edit.game"), {
+                    onClick: () => {
+                      this.storeGame(game.game);
+                      this.deleteGame(gameSlot, true);
+                      this.host.engine.imessage("state.updated.game", [game.label]);
                     },
-                  ),
-                  new IconButton(
-                    this._host,
-                    Icons.Copy,
-                    this._host.engine.i18n("state.copy.game"),
-                    {
-                      onClick: () => {
-                        this.copyGame(game.game).catch(redirectErrorsToConsole(console));
-                        this._host.engine.imessage("state.copied.game", [game.label]);
-                      },
+                  }),
+                  new IconButton(parent, Icons.Copy, this.host.engine.i18n("state.copy.game"), {
+                    onClick: () => {
+                      this.copyGame(game.game).catch(redirectErrorsToConsole(console));
+                      this.host.engine.imessage("state.copied.game", [game.label]);
                     },
-                  ),
-                  new IconButton(
-                    this._host,
-                    Icons.Delete,
-                    this._host.engine.i18n("state.delete.game"),
-                    {
-                      onClick: () => {
-                        this.deleteGame(gameSlot);
-                        this._host.engine.imessage("state.deleted.game", [game.label]);
-                      },
+                  }),
+                  new IconButton(parent, Icons.Delete, this.host.engine.i18n("state.delete.game"), {
+                    onClick: () => {
+                      this.deleteGame(gameSlot);
+                      this.host.engine.imessage("state.deleted.game", [game.label]);
                     },
-                  ),
+                  }),
                 ],
               },
             ),
@@ -313,6 +303,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     );
   }
   private _refreshStateList() {
+    const parent = mustExist(this.parent);
     this.stateList.removeChildren(this.stateList.children);
     this.stateList.addChildren(
       this.states
@@ -324,9 +315,9 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
         .map(
           ([state, stateSlot]) =>
             new ButtonListItem(
-              this._host,
+              parent,
               new TextButton(
-                this._host,
+                parent,
                 `${state.label} (${formatDistanceToNow(new Date(state.timestamp), {
                   addSuffix: true,
                   locale: this.locale,
@@ -334,56 +325,41 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
                 {
                   onClick: () => {
                     this.loadState(state.state);
-                    this._host.engine.imessage("state.loaded.state", [state.label]);
+                    this.host.engine.imessage("state.loaded.state", [state.label]);
                   },
                   title: new Date(state.timestamp).toLocaleString(),
                 },
               ),
               {
                 children: [
-                  new Container(this._host, { classes: [stylesLabelListItem.fillSpace] }),
-                  new IconButton(
-                    this._host,
-                    Icons.Save,
-                    this._host.engine.i18n("state.update.state"),
-                    {
-                      onClick: () => {
-                        this.updateState(stateSlot, this._host.engine.stateSerialize());
-                        this._host.engine.imessage("state.updated.state", [state.label]);
-                      },
+                  new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+                  new IconButton(parent, Icons.Save, this.host.engine.i18n("state.update.state"), {
+                    onClick: () => {
+                      this.updateState(stateSlot, this.host.engine.stateSerialize());
+                      this.host.engine.imessage("state.updated.state", [state.label]);
                     },
-                  ),
-                  new IconButton(
-                    this._host,
-                    Icons.Edit,
-                    this._host.engine.i18n("state.edit.state"),
-                    {
-                      onClick: () => {
-                        this.storeState(state.state);
-                        this.deleteState(stateSlot, true);
-                        this._host.engine.imessage("state.updated.state", [state.label]);
-                      },
+                  }),
+                  new IconButton(parent, Icons.Edit, this.host.engine.i18n("state.edit.state"), {
+                    onClick: () => {
+                      this.storeState(state.state);
+                      this.deleteState(stateSlot, true);
+                      this.host.engine.imessage("state.updated.state", [state.label]);
                     },
-                  ),
-                  new IconButton(
-                    this._host,
-                    Icons.Copy,
-                    this._host.engine.i18n("state.copy.state"),
-                    {
-                      onClick: () => {
-                        this.copyState(state.state).catch(redirectErrorsToConsole(console));
-                        this._host.engine.imessage("state.copied.state", [state.label]);
-                      },
+                  }),
+                  new IconButton(parent, Icons.Copy, this.host.engine.i18n("state.copy.state"), {
+                    onClick: () => {
+                      this.copyState(state.state).catch(redirectErrorsToConsole(console));
+                      this.host.engine.imessage("state.copied.state", [state.label]);
                     },
-                  ),
+                  }),
                   new IconButton(
-                    this._host,
+                    parent,
                     Icons.Delete,
-                    this._host.engine.i18n("state.delete.state"),
+                    this.host.engine.i18n("state.delete.state"),
                     {
                       onClick: () => {
                         this.deleteState(stateSlot);
-                        this._host.engine.imessage("state.deleted.state", [state.label]);
+                        this.host.engine.imessage("state.deleted.state", [state.label]);
                       },
                     },
                   ),
@@ -395,21 +371,21 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   async copyState(state?: EngineState) {
-    await this._host.copySettings(state, false);
+    await this.host.copySettings(state, false);
   }
 
   async copyGame(game?: KGSaveData) {
-    const saveData = game ?? this._host.game.save();
+    const saveData = game ?? this.host.game.save();
     const saveDataString = JSON.stringify(saveData);
     const encodedData = this.setting.compress.enabled
-      ? this._host.game.compressLZData(saveDataString)
+      ? this.host.game.compressLZData(saveDataString)
       : saveDataString;
 
     await window.navigator.clipboard.writeText(encodedData);
   }
 
   import() {
-    const input = window.prompt(this._host.engine.i18n("state.loadPrompt"));
+    const input = window.prompt(this.host.engine.i18n("state.loadPrompt"));
     if (isNil(input)) {
       return;
     }
@@ -418,7 +394,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       // decodeSettings throws if the input is not a valid engine state.
       const state = KittenScientists.decodeSettings(input);
       this.storeState(state);
-      this._host.engine.imessage("state.imported.state");
+      this.host.engine.imessage("state.imported.state");
       return;
     } catch (_error) {
       // Not a valid Kitten Scientists state.
@@ -430,7 +406,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       subjectData = JSON.parse(input) as KGSaveData;
     } catch (_error) {
       /* expected, as we assume compressed input */
-      const uncompressed = this._host.game.decompressLZData(input);
+      const uncompressed = this.host.game.decompressLZData(input);
       subjectData = JSON.parse(uncompressed) as KGSaveData;
     }
 
@@ -439,19 +415,19 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     if ("ks" in subjectData && !isNil(subjectData.ks)) {
       const state = subjectData.ks.state[0];
       stateLabel = this.storeState(state) ?? undefined;
-      this._host.engine.imessage("state.imported.state");
+      this.host.engine.imessage("state.imported.state");
       subjectData.ks = undefined;
     }
 
     this.storeGame(subjectData, stateLabel);
-    this._host.engine.imessage("state.imported.game");
+    this.host.engine.imessage("state.imported.game");
   }
 
   storeGame(game?: KGSaveData, label?: string): string | null {
     let gameLabel = label;
 
     if (isNil(gameLabel)) {
-      gameLabel = window.prompt(this._host.engine.i18n("state.storeGame.prompt")) ?? undefined;
+      gameLabel = window.prompt(this.host.engine.i18n("state.storeGame.prompt")) ?? undefined;
     }
 
     if (isNil(gameLabel)) {
@@ -460,7 +436,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     // Normalize empty string to "no label".
     gameLabel =
-      (gameLabel === "" ? undefined : gameLabel) ?? this._host.engine.i18n("state.unlabeledGame");
+      (gameLabel === "" ? undefined : gameLabel) ?? this.host.engine.i18n("state.unlabeledGame");
 
     // Ensure labels aren't excessively long.
     gameLabel = gameLabel.substring(0, 127);
@@ -468,7 +444,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.games.push(
       new Unique({
         label: gameLabel,
-        game: game ?? this._host.game.save(),
+        game: game ?? this.host.game.save(),
         timestamp: new Date().toISOString(),
       }),
     );
@@ -483,7 +459,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     let stateLabel = label;
 
     if (isNil(stateLabel)) {
-      stateLabel = window.prompt(this._host.engine.i18n("state.storeState.prompt")) ?? undefined;
+      stateLabel = window.prompt(this.host.engine.i18n("state.storeState.prompt")) ?? undefined;
     }
 
     if (isNil(stateLabel)) {
@@ -492,8 +468,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     // Normalize empty string to "no label".
     stateLabel =
-      (stateLabel === "" ? undefined : stateLabel) ??
-      this._host.engine.i18n("state.unlabeledState");
+      (stateLabel === "" ? undefined : stateLabel) ?? this.host.engine.i18n("state.unlabeledState");
 
     // Ensure labels aren't excessively long.
     stateLabel = stateLabel.substring(0, 127);
@@ -501,7 +476,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     this.states.push(
       new Unique({
         label: stateLabel,
-        state: state ?? this._host.engine.stateSerialize(),
+        state: state ?? this.host.engine.stateSerialize(),
         timestamp: new Date().toISOString(),
       }),
     );
@@ -558,7 +533,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       return;
     }
 
-    await new SavegameLoader(this._host.game).loadRaw(game);
+    await new SavegameLoader(this.host.game).loadRaw(game);
   }
 
   loadState(state: EngineState) {
@@ -566,12 +541,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       return;
     }
 
-    this._host.engine.stateLoad(state, true);
-    this._host.refreshUi();
+    this.host.engine.stateLoad(state, true);
+    this.host.refreshUi();
   }
 
   loadAutoSave() {
-    if (this._host.engine.isLoaded) {
+    if (this.host.engine.isLoaded) {
       console.info(...cl("Not attempting to load Auto-Save, because a state is already loaded."));
       return;
     }
@@ -583,7 +558,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     }
 
     console.info(...cl("Loading Auto-Save..."));
-    this._host.engine.stateLoad(existing.unwrap().state, false);
+    this.host.engine.stateLoad(existing.unwrap().state, false);
   }
 
   updateGame(game: Unique<StoredGame>, newGame: KGSaveData) {
@@ -649,7 +624,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   private _destructiveActionPrevented(): boolean {
     if (
       !this.setting.noConfirm.enabled &&
-      !window.confirm(this._host.engine.i18n("state.confirmDestruction"))
+      !window.confirm(this.host.engine.i18n("state.confirmDestruction"))
     ) {
       return true;
     }

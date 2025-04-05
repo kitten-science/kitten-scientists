@@ -1,5 +1,4 @@
 import { coalesceArray } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import { Button } from "./Button.js";
 import stylesButton from "./Button.module.css";
 import { Container } from "./Container.js";
@@ -24,7 +23,7 @@ export type DialogOptions = ThisType<Dialog> &
   };
 
 export class Dialog extends UiComponent {
-  declare readonly _options: DialogOptions;
+  declare readonly options: DialogOptions;
   readonly element: JQuery<HTMLDialogElement>;
   returnValue: string;
 
@@ -34,8 +33,8 @@ export class Dialog extends UiComponent {
    * @param host - A reference to the host.
    * @param options - Options for the dialog.
    */
-  constructor(host: KittenScientists, options?: DialogOptions) {
-    super(host, { ...options, children: [] });
+  constructor(parent: UiComponent, options?: DialogOptions) {
+    super(parent, { ...options, children: [] });
 
     this.element = $<HTMLDialogElement>("<dialog/>")
       .addClass("dialog")
@@ -45,7 +44,7 @@ export class Dialog extends UiComponent {
 
     if (options?.hasClose !== false) {
       this.addChild(
-        new Button(host, "close", null, {
+        new Button(parent, "close", null, {
           classes: [styles.close],
           onClick: () => {
             this.close();
@@ -62,7 +61,7 @@ export class Dialog extends UiComponent {
     this.addChildren(
       coalesceArray([
         options?.prompt
-          ? new Input(host, {
+          ? new Input(parent, {
               onChange: (value: string) => {
                 this.returnValue = value;
               },
@@ -80,10 +79,10 @@ export class Dialog extends UiComponent {
             })
           : undefined,
         ...(options?.childrenAfterPrompt ?? []),
-        new Delimiter(host),
-        new Container(host, {
+        new Delimiter(parent),
+        new Container(parent, {
           children: coalesceArray([
-            new Button(host, "OK", null, {
+            new Button(parent, "OK", null, {
               classes: [stylesButton.large],
               onClick: () => {
                 this.close();
@@ -91,7 +90,7 @@ export class Dialog extends UiComponent {
               },
             }),
             options?.hasCancel
-              ? new Button(host, "Cancel", null, {
+              ? new Button(parent, "Cancel", null, {
                   classes: [stylesButton.large],
                   onClick: () => {
                     this.close();
@@ -120,22 +119,22 @@ export class Dialog extends UiComponent {
   }
 
   static async prompt(
-    host: KittenScientists,
+    parent: UiComponent,
     text: string,
     title?: string,
     initialValue?: string,
     explainer?: string,
   ): Promise<string | undefined> {
     return new Promise(resolve => {
-      new Dialog(host, {
+      new Dialog(parent, {
         children: coalesceArray([
-          title ? new HeaderListItem(host, title) : undefined,
-          new Paragraph(host, text),
+          title ? new HeaderListItem(parent, title) : undefined,
+          new Paragraph(parent, text),
         ]),
         childrenAfterPrompt: explainer
           ? [
-              new Container(host, {
-                children: [new Paragraph(host, explainer)],
+              new Container(parent, {
+                children: [new Paragraph(parent, explainer)],
                 classes: [stylesExplainer.explainer],
               }),
             ]

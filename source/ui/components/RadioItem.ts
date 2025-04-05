@@ -1,5 +1,4 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingOptions } from "../../settings/Settings.js";
 import stylesDelimiter from "./Delimiter.module.css";
 import stylesLabel from "./LabelListItem.module.css";
@@ -31,7 +30,7 @@ export type RadioItemOptions = ThisType<RadioItem> &
   };
 
 export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends UiComponent {
-  declare readonly _options: RadioItemOptions;
+  declare readonly options: RadioItemOptions;
   readonly setting: TSetting;
   readonly option: TSetting["options"][0];
   readonly element: JQuery;
@@ -50,13 +49,13 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
    * @param options Options for this radio item.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: TSetting,
     option: TSetting["options"][0],
     groupKey: string,
     options?: RadioItemOptions,
   ) {
-    super(host, { ...options });
+    super(parent, { ...options });
 
     const element = $("<div/>");
     element.addClass(stylesSettingListItem.setting);

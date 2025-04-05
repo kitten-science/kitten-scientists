@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeItem, TimeSettings } from "../settings/TimeSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
@@ -11,26 +10,27 @@ import { SettingListItem, type SettingListItemOptions } from "./components/Setti
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerListItem> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: TimeSettings,
     locale: SettingOptions<SupportedLocale>,
     options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("ui.time");
+    const label = parent.host.engine.i18n("ui.time");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -38,24 +38,24 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger() {
-          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
+          this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
-              ? host.engine.i18n("ui.trigger.section.inactive")
-              : host.renderPercentage(settings.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.section.inactive")
+              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? host.renderPercentage(settings.trigger, locale.selected, true)
-                : host.engine.i18n("ui.infinity"),
+                ? parent.host.renderPercentage(settings.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
+            settings.trigger !== -1 ? parent.host.renderPercentage(settings.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -67,35 +67,38 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
             return;
           }
 
-          settings.trigger = host.parsePercentage(value);
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
     );
 
     this.addChildren([
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: [
-          new HeaderListItem(host, host.engine.i18n("$workshop.chronoforge.label")),
-          ...host.game.time.chronoforgeUpgrades
+          new HeaderListItem(parent, parent.host.engine.i18n("$workshop.chronoforge.label")),
+          ...parent.host.game.time.chronoforgeUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(building =>
               BuildSectionTools.getBuildOption(
-                host,
+                parent,
                 this.setting.buildings[building.name],
                 locale,
                 this.setting,
                 building.label,
                 label,
-                { delimiter: building.name === host.game.time.chronoforgeUpgrades.at(-1)?.name },
+                {
+                  delimiter:
+                    building.name === parent.host.game.time.chronoforgeUpgrades.at(-1)?.name,
+                },
               ),
             ),
 
-          new HeaderListItem(host, host.engine.i18n("$science.voidSpace.label")),
-          ...host.game.time.voidspaceUpgrades
+          new HeaderListItem(parent, parent.host.engine.i18n("$science.voidSpace.label")),
+          ...parent.host.game.time.voidspaceUpgrades
             .filter(item => item.name in this.setting.buildings)
             .map(building =>
               BuildSectionTools.getBuildOption(
-                host,
+                parent,
                 this.setting.buildings[building.name as TimeItem],
                 locale,
                 this.setting,
@@ -106,19 +109,23 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
         ],
       }),
 
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: [
-          new HeaderListItem(host, host.engine.i18n("ui.additional")),
+          new HeaderListItem(parent, parent.host.engine.i18n("ui.additional")),
           new SettingListItem(
-            host,
+            parent,
             this.setting.fixCryochambers,
-            host.engine.i18n("option.fix.cry"),
+            parent.host.engine.i18n("option.fix.cry"),
             {
               onCheck: () => {
-                host.engine.imessage("status.sub.enable", [host.engine.i18n("option.fix.cry")]);
+                parent.host.engine.imessage("status.sub.enable", [
+                  parent.host.engine.i18n("option.fix.cry"),
+                ]);
               },
               onUnCheck: () => {
-                host.engine.imessage("status.sub.disable", [host.engine.i18n("option.fix.cry")]);
+                parent.host.engine.imessage("status.sub.disable", [
+                  parent.host.engine.i18n("option.fix.cry"),
+                ]);
               },
             },
           ),

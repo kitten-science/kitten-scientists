@@ -1,32 +1,32 @@
 import type { SupportedLocale } from "../../../Engine.js";
-import type { KittenScientists } from "../../../KittenScientists.js";
 import type { SettingBuy, SettingOptions } from "../../../settings/Settings.js";
 import { Dialog } from "../Dialog.js";
 import { TextButton, type TextButtonOptions } from "../TextButton.js";
+import type { UiComponent } from "../UiComponent.js";
 import styles from "./BuyButton.module.css";
 
 export type BuyButtonOptions = ThisType<BuyButton> & TextButtonOptions;
 
 export class BuyButton extends TextButton {
-  declare readonly _options: BuyButtonOptions;
+  declare readonly options: BuyButtonOptions;
   readonly setting: SettingBuy;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingBuy,
     locale: SettingOptions<SupportedLocale>,
     options?: BuyButtonOptions,
   ) {
-    super(host, undefined, {
+    super(parent, undefined, {
       onClick: async () => {
         const value = await Dialog.prompt(
-          host,
-          host.engine.i18n("blackcoin.buy.prompt"),
-          host.engine.i18n("blackcoin.buy.promptTitle", [
-            host.renderAbsolute(setting.buy, locale.selected),
+          parent,
+          parent.host.engine.i18n("blackcoin.buy.prompt"),
+          parent.host.engine.i18n("blackcoin.buy.promptTitle", [
+            parent.host.renderAbsolute(setting.buy, locale.selected),
           ]),
-          host.renderAbsolute(setting.buy),
-          host.engine.i18n("blackcoin.buy.promptExplainer"),
+          parent.host.renderAbsolute(setting.buy),
+          parent.host.engine.i18n("blackcoin.buy.promptExplainer"),
         );
 
         if (value === undefined) {
@@ -38,7 +38,7 @@ export class BuyButton extends TextButton {
           return;
         }
 
-        setting.buy = host.parseAbsolute(value) ?? setting.buy;
+        setting.buy = parent.host.parseAbsolute(value) ?? setting.buy;
       },
     });
 
@@ -52,10 +52,10 @@ export class BuyButton extends TextButton {
 
     this.element.prop(
       "title",
-      this._host.engine.i18n("blackcoin.buy.title", [this._host.renderAbsolute(this.setting.buy)]),
+      this.host.engine.i18n("blackcoin.buy.title", [this.host.renderAbsolute(this.setting.buy)]),
     );
     this.element.text(
-      this._host.engine.i18n("blackcoin.buy", [this._host.renderAbsolute(this.setting.buy)]),
+      this.host.engine.i18n("blackcoin.buy", [this.host.renderAbsolute(this.setting.buy)]),
     );
   }
 }

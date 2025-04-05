@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import stylesDelimiter from "./Delimiter.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
@@ -12,7 +11,7 @@ export type ListItemOptions = ThisType<ListItem> &
   };
 
 export class ListItem extends UiComponent {
-  declare readonly _options: ListItemOptions;
+  declare readonly options: ListItemOptions;
   readonly element: JQuery;
 
   /**
@@ -21,8 +20,8 @@ export class ListItem extends UiComponent {
    * @param host The userscript instance.
    * @param options Options for the list item.
    */
-  constructor(host: KittenScientists, options?: ListItemOptions) {
-    super(host, { children: (options as UiComponentOptions)?.children });
+  constructor(parent: UiComponent, options?: ListItemOptions) {
+    super(parent, { children: (options as UiComponentOptions)?.children });
 
     this.element = $("<li/>");
 

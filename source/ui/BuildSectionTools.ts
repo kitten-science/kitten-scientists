@@ -1,15 +1,15 @@
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions, SettingTrigger, SettingTriggerMax } from "../settings/Settings.js";
 import { Dialog } from "./components/Dialog.js";
 import {
   SettingMaxTriggerListItem,
   type SettingMaxTriggerListItemOptions,
 } from "./components/SettingMaxTriggerListItem.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export const BuildSectionTools = {
   getBuildOption: (
-    host: KittenScientists,
+    parent: UiComponent,
     option: SettingTriggerMax,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: SettingTrigger,
@@ -19,14 +19,14 @@ export const BuildSectionTools = {
   ) => {
     const onSetMax = async () => {
       const value = await Dialog.prompt(
-        host,
-        host.engine.i18n("ui.max.prompt.absolute"),
-        host.engine.i18n("ui.max.build.prompt", [
+        parent,
+        parent.host.engine.i18n("ui.max.prompt.absolute"),
+        parent.host.engine.i18n("ui.max.build.prompt", [
           label,
-          host.renderAbsolute(option.max, locale.selected),
+          parent.host.renderAbsolute(option.max, locale.selected),
         ]),
-        host.renderAbsolute(option.max),
-        host.engine.i18n("ui.max.build.promptExplainer"),
+        parent.host.renderAbsolute(option.max),
+        parent.host.engine.i18n("ui.max.build.promptExplainer"),
       );
 
       if (value === undefined) {
@@ -42,20 +42,20 @@ export const BuildSectionTools = {
         option.enabled = false;
       }
 
-      option.max = host.parseAbsolute(value) ?? option.max;
+      option.max = parent.host.parseAbsolute(value) ?? option.max;
     };
 
-    const element = new SettingMaxTriggerListItem(host, option, locale, label, {
+    const element = new SettingMaxTriggerListItem(parent, option, locale, label, {
       delimiter: options?.delimiter,
       onCheck: (isBatchProcess?: boolean) => {
-        host.engine.imessage("status.sub.enable", [label]);
+        parent.host.engine.imessage("status.sub.enable", [label]);
         if (option.max === 0 && !isBatchProcess) {
           onSetMax();
         }
         options?.onCheck?.(isBatchProcess);
       },
       onUnCheck: (isBatchProcess?: boolean) => {
-        host.engine.imessage("status.sub.disable", [label]);
+        parent.host.engine.imessage("status.sub.disable", [label]);
         options?.onUnCheck?.(isBatchProcess);
       },
       onRefresh: () => {
@@ -70,36 +70,39 @@ export const BuildSectionTools = {
           option.trigger === -1;
       },
       onRefreshMax: () => {
-        element.maxButton.updateLabel(host.renderAbsolute(option.max));
+        element.maxButton.updateLabel(parent.host.renderAbsolute(option.max));
         element.maxButton.element[0].title =
           option.max < 0
-            ? host.engine.i18n("ui.max.build.titleInfinite", [label])
+            ? parent.host.engine.i18n("ui.max.build.titleInfinite", [label])
             : option.max === 0
-              ? host.engine.i18n("ui.max.build.titleZero", [label])
-              : host.engine.i18n("ui.max.build.title", [host.renderAbsolute(option.max), label]);
+              ? parent.host.engine.i18n("ui.max.build.titleZero", [label])
+              : parent.host.engine.i18n("ui.max.build.title", [
+                  parent.host.renderAbsolute(option.max),
+                  label,
+                ]);
       },
       onRefreshTrigger: () => {
-        element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+        element.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
           option.trigger < 0
             ? sectionSetting.trigger < 0
-              ? host.engine.i18n("ui.trigger.build.blocked", [sectionLabel])
-              : `${host.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
-            : host.renderPercentage(option.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.build.blocked", [sectionLabel])
+              : `${parent.host.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${parent.host.engine.i18n("ui.trigger.build.inherited")})`
+            : parent.host.renderPercentage(option.trigger, locale.selected, true),
         ]);
       },
       onSetMax,
       onSetTrigger: async () => {
         const value = await Dialog.prompt(
-          host,
-          host.engine.i18n("ui.trigger.prompt.percentage"),
-          host.engine.i18n("ui.trigger.build.prompt", [
+          parent,
+          parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+          parent.host.engine.i18n("ui.trigger.build.prompt", [
             label,
             option.trigger !== -1
-              ? host.renderPercentage(option.trigger, locale.selected, true)
-              : host.engine.i18n("ui.trigger.build.inherited"),
+              ? parent.host.renderPercentage(option.trigger, locale.selected, true)
+              : parent.host.engine.i18n("ui.trigger.build.inherited"),
           ]),
-          option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
-          host.engine.i18n("ui.trigger.build.promptExplainer"),
+          option.trigger !== -1 ? parent.host.renderPercentage(option.trigger) : "",
+          parent.host.engine.i18n("ui.trigger.build.promptExplainer"),
         );
 
         if (value === undefined) {
@@ -111,7 +114,7 @@ export const BuildSectionTools = {
           return;
         }
 
-        option.trigger = host.parsePercentage(value);
+        option.trigger = parent.host.parsePercentage(value);
       },
       upgradeIndicator: options?.upgradeIndicator,
     });

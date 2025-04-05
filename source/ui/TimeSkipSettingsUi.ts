@@ -1,5 +1,4 @@
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
@@ -19,6 +18,7 @@ import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingMaxTriggerListItem> {
   private readonly _cycles: CollapsiblePanel;
@@ -26,24 +26,24 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
   private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: TimeSkipSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeControlSettings,
     options?: SettingsPanelOptions<SettingMaxTriggerListItem> & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("option.time.skip");
+    const label = parent.host.engine.i18n("option.time.skip");
     super(
-      host,
+      parent,
       settings,
-      new SettingMaxTriggerListItem(host, settings, locale, label, {
+      new SettingMaxTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -64,33 +64,33 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
             !Object.values(settings.seasons).some(season => season.enabled);
         },
         onRefreshMax() {
-          this.maxButton.updateLabel(host.renderAbsolute(settings.max));
+          this.maxButton.updateLabel(parent.host.renderAbsolute(settings.max));
           this.maxButton.element[0].title =
             settings.max < 0
-              ? host.engine.i18n("ui.max.timeSkip.titleInfinite", [label])
+              ? parent.host.engine.i18n("ui.max.timeSkip.titleInfinite", [label])
               : settings.max === 0
-                ? host.engine.i18n("ui.max.timeSkip.titleZero", [label])
-                : host.engine.i18n("ui.max.timeSkip.title", [
-                    host.renderAbsolute(settings.max),
+                ? parent.host.engine.i18n("ui.max.timeSkip.titleZero", [label])
+                : parent.host.engine.i18n("ui.max.timeSkip.title", [
+                    parent.host.renderAbsolute(settings.max),
                     label,
                   ]);
         },
         onRefreshTrigger() {
-          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+          this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
             settings.trigger < 0
-              ? host.engine.i18n("ui.trigger.section.inactive")
-              : `${host.renderFloat(settings.trigger, locale.selected)} TC`,
+              ? parent.host.engine.i18n("ui.trigger.section.inactive")
+              : `${parent.host.renderFloat(settings.trigger, locale.selected)} TC`,
           ]);
         },
         onSetMax: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.max.timeSkip.prompt"),
-            host.engine.i18n("ui.max.timeSkip.promptTitle", [
-              host.renderAbsolute(settings.max, locale.selected),
+            parent,
+            parent.host.engine.i18n("ui.max.timeSkip.prompt"),
+            parent.host.engine.i18n("ui.max.timeSkip.promptTitle", [
+              parent.host.renderAbsolute(settings.max, locale.selected),
             ]),
-            host.renderAbsolute(settings.max),
-            host.engine.i18n("ui.max.timeSkip.promptExplainer"),
+            parent.host.renderAbsolute(settings.max),
+            parent.host.engine.i18n("ui.max.timeSkip.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -106,24 +106,24 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
             settings.enabled = false;
           }
 
-          settings.max = host.parseAbsolute(value) ?? settings.max;
+          settings.max = parent.host.parseAbsolute(value) ?? settings.max;
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.timeSkip.prompt"),
-            host.engine.i18n("ui.trigger.timeSkip.promptTitle", [
-              host.renderAbsolute(settings.trigger, locale.selected),
+            parent,
+            parent.host.engine.i18n("ui.trigger.timeSkip.prompt"),
+            parent.host.engine.i18n("ui.trigger.timeSkip.promptTitle", [
+              parent.host.renderAbsolute(settings.trigger, locale.selected),
             ]),
-            host.renderAbsolute(settings.trigger),
-            host.engine.i18n("ui.trigger.timeSkip.promptExplainer"),
+            parent.host.renderAbsolute(settings.trigger),
+            parent.host.engine.i18n("ui.trigger.timeSkip.promptExplainer"),
           );
 
           if (value === undefined || value === "" || value.startsWith("-")) {
             return;
           }
 
-          settings.trigger = host.parseAbsolute(value) ?? settings.trigger;
+          settings.trigger = parent.host.parseAbsolute(value) ?? settings.trigger;
         },
       }),
       options,
@@ -131,21 +131,21 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     this.settingItem.triggerButton.element.removeClass(stylesButton.lastHeadAction);
 
     this._cycles = new CollapsiblePanel(
-      host,
-      new LabelListItem(host, ucfirst(host.engine.i18n("ui.cycles")), {
+      parent,
+      new LabelListItem(parent, ucfirst(parent.host.engine.i18n("ui.cycles")), {
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
-        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+        childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
         icon: Icons.Cycles,
       }),
       {
         children: [
-          new CyclesList(host, this.setting.cycles, {
+          new CyclesList(parent, this.setting.cycles, {
             onCheckCycle: (label: string) => {
-              host.engine.imessage("time.skip.cycle.enable", [label]);
+              parent.host.engine.imessage("time.skip.cycle.enable", [label]);
               this.refreshUi();
             },
             onUnCheckCycle: (label: string) => {
-              host.engine.imessage("time.skip.cycle.disable", [label]);
+              parent.host.engine.imessage("time.skip.cycle.disable", [label]);
               this.refreshUi();
             },
           }),
@@ -153,21 +153,21 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       },
     );
     this._seasons = new CollapsiblePanel(
-      host,
-      new LabelListItem(host, ucfirst(host.engine.i18n("trade.seasons")), {
+      parent,
+      new LabelListItem(parent, ucfirst(parent.host.engine.i18n("trade.seasons")), {
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
-        childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+        childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
         icon: Icons.Seasons,
       }),
       {
         children: [
-          new SeasonsList(host, this.setting.seasons, {
+          new SeasonsList(parent, this.setting.seasons, {
             onCheckSeason: (label: string) => {
-              host.engine.imessage("time.skip.season.enable", [label]);
+              parent.host.engine.imessage("time.skip.season.enable", [label]);
               this.refreshUi();
             },
             onUnCheckSeason: (label: string) => {
-              host.engine.imessage("time.skip.season.disable", [label]);
+              parent.host.engine.imessage("time.skip.season.disable", [label]);
               this.refreshUi();
             },
           }),
@@ -175,7 +175,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       },
     );
     this._activeHeatTransferUI = new TimeSkipHeatSettingsUi(
-      host,
+      parent,
       this.setting.activeHeatTransfer,
       locale,
       settings,
@@ -183,14 +183,14 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
     );
 
     this.addChild(
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: [
           this._cycles,
           this._seasons,
           new SettingListItem(
-            host,
+            parent,
             this.setting.ignoreOverheat,
-            host.engine.i18n("option.time.skip.ignoreOverheat"),
+            parent.host.engine.i18n("option.time.skip.ignoreOverheat"),
           ),
           this._activeHeatTransferUI,
         ],

@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import { ReligionSettings } from "../settings/ReligionSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { ReligionOptions, UnicornItems, type ZigguratUpgrade } from "../types/index.js";
@@ -16,6 +15,7 @@ import type { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerLi
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingTriggerListItem> {
   private readonly _unicornBuildings: Map<
@@ -25,23 +25,23 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
   private readonly _bestUnicornBuilding: SettingListItem;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: ReligionSettings,
     locale: SettingOptions<SupportedLocale>,
     options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("ui.faith");
+    const label = parent.host.engine.i18n("ui.faith");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -49,24 +49,24 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger() {
-          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
+          this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
-              ? host.engine.i18n("ui.trigger.section.inactive")
-              : host.renderPercentage(settings.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.section.inactive")
+              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? host.renderPercentage(settings.trigger, locale.selected, true)
-                : host.engine.i18n("ui.infinity"),
+                ? parent.host.renderPercentage(settings.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
+            settings.trigger !== -1 ? parent.host.renderPercentage(settings.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -78,7 +78,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
             return;
           }
 
-          settings.trigger = host.parsePercentage(value);
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
     );
@@ -89,15 +89,15 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
       [
         "unicornPasture",
         BuildSectionTools.getBuildOption(
-          host,
+          parent,
           this.setting.buildings.unicornPasture,
           locale,
           this.setting,
-          host.engine.i18n("$buildings.unicornPasture.label"),
+          parent.host.engine.i18n("$buildings.unicornPasture.label"),
           label,
         ),
       ],
-      ...host.game.religion.zigguratUpgrades
+      ...parent.host.game.religion.zigguratUpgrades
         .filter(
           item => unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
         )
@@ -106,7 +106,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
             [
               zigguratUpgrade.name,
               BuildSectionTools.getBuildOption(
-                host,
+                parent,
                 this.setting.buildings[zigguratUpgrade.name],
                 locale,
                 this.setting,
@@ -118,13 +118,13 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
     ]);
 
     this._bestUnicornBuilding = new SettingListItem(
-      host,
+      parent,
       this.setting.bestUnicornBuilding,
-      host.engine.i18n("option.faith.best.unicorn"),
+      parent.host.engine.i18n("option.faith.best.unicorn"),
       {
         onCheck: () => {
-          host.engine.imessage("status.sub.enable", [
-            host.engine.i18n("option.faith.best.unicorn"),
+          parent.host.engine.imessage("status.sub.enable", [
+            parent.host.engine.i18n("option.faith.best.unicorn"),
           ]);
           for (const building of this._unicornBuildings.values()) {
             building.setting.enabled = true;
@@ -134,8 +134,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
           this.refreshUi();
         },
         onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [
-            host.engine.i18n("option.faith.best.unicorn"),
+          parent.host.engine.imessage("status.sub.disable", [
+            parent.host.engine.i18n("option.faith.best.unicorn"),
           ]);
           this.refreshUi();
         },
@@ -144,21 +144,21 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
     );
 
     this.addChildren([
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: [
-          new HeaderListItem(host, host.engine.i18n("$religion.panel.ziggurat.label")),
+          new HeaderListItem(parent, parent.host.engine.i18n("$religion.panel.ziggurat.label")),
           ...this._unicornBuildings.values(),
           this._bestUnicornBuilding,
-          new Delimiter(host),
+          new Delimiter(parent),
 
-          ...host.game.religion.zigguratUpgrades
+          ...parent.host.game.religion.zigguratUpgrades
             .filter(
               item =>
                 !unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
             )
             .map(upgrade =>
               BuildSectionTools.getBuildOption(
-                host,
+                parent,
                 this.setting.buildings[upgrade.name],
                 locale,
                 this.setting,
@@ -166,29 +166,38 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
                 label,
               ),
             ),
-          new Delimiter(host),
+          new Delimiter(parent),
 
-          new HeaderListItem(host, host.engine.i18n("$religion.panel.orderOfTheSun.label")),
-          ...host.game.religion.religionUpgrades
+          new HeaderListItem(
+            parent,
+            parent.host.engine.i18n("$religion.panel.orderOfTheSun.label"),
+          ),
+          ...parent.host.game.religion.religionUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(upgrade =>
               BuildSectionTools.getBuildOption(
-                host,
+                parent,
                 this.setting.buildings[upgrade.name],
                 locale,
                 this.setting,
                 upgrade.label,
                 label,
-                { delimiter: upgrade.name === host.game.religion.religionUpgrades.at(-1)?.name },
+                {
+                  delimiter:
+                    upgrade.name === parent.host.game.religion.religionUpgrades.at(-1)?.name,
+                },
               ),
             ),
 
-          new HeaderListItem(host, host.engine.i18n("$religion.panel.cryptotheology.label")),
-          ...host.game.religion.transcendenceUpgrades
+          new HeaderListItem(
+            parent,
+            parent.host.engine.i18n("$religion.panel.cryptotheology.label"),
+          ),
+          ...parent.host.game.religion.transcendenceUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(upgrade =>
               BuildSectionTools.getBuildOption(
-                host,
+                parent,
                 this.setting.buildings[upgrade.name],
                 locale,
                 this.setting,
@@ -213,29 +222,29 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
         },
       }),
 
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: [
-          new HeaderListItem(host, host.engine.i18n("ui.additional")),
+          new HeaderListItem(parent, parent.host.engine.i18n("ui.additional")),
           ...ReligionOptions.map(item => {
-            const label = host.engine.i18n(`option.faith.${item}`);
+            const label = parent.host.engine.i18n(`option.faith.${item}`);
             if (item === "transcend") {
-              return new SettingListItem(host, this.setting[item], label, {
+              return new SettingListItem(parent, this.setting[item], label, {
                 onCheck: () => {
-                  host.engine.imessage("status.sub.enable", [label]);
+                  parent.host.engine.imessage("status.sub.enable", [label]);
                 },
                 onUnCheck: () => {
-                  host.engine.imessage("status.sub.disable", [label]);
+                  parent.host.engine.imessage("status.sub.disable", [label]);
                 },
               });
             }
 
-            const element = new SettingTriggerListItem(host, this.setting[item], locale, label, {
+            const element = new SettingTriggerListItem(parent, this.setting[item], locale, label, {
               classes: [stylesButton.lastHeadAction],
               onCheck: () => {
-                host.engine.imessage("status.sub.enable", [label]);
+                parent.host.engine.imessage("status.sub.enable", [label]);
               },
               onUnCheck: () => {
-                host.engine.imessage("status.sub.disable", [label]);
+                parent.host.engine.imessage("status.sub.disable", [label]);
               },
               onRefresh: () => {
                 this.settingItem.triggerButton.inactive =
@@ -243,23 +252,27 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
               },
               onSetTrigger: async () => {
                 const value = await Dialog.prompt(
-                  host,
-                  host.engine.i18n(
+                  parent,
+                  parent.host.engine.i18n(
                     element.triggerButton.behavior === "integer"
                       ? "ui.trigger.setinteger"
                       : "ui.trigger.setpercentage",
                     [label],
                   ),
-                  host.engine.i18n("ui.trigger.build.prompt", [
+                  parent.host.engine.i18n("ui.trigger.build.prompt", [
                     label,
                     element.triggerButton.behavior === "integer"
-                      ? host.renderAbsolute(this.setting[item].trigger, locale.selected)
-                      : host.renderPercentage(this.setting[item].trigger, locale.selected, true),
+                      ? parent.host.renderAbsolute(this.setting[item].trigger, locale.selected)
+                      : parent.host.renderPercentage(
+                          this.setting[item].trigger,
+                          locale.selected,
+                          true,
+                        ),
                   ]),
                   element.triggerButton.behavior === "integer"
-                    ? host.renderAbsolute(this.setting[item].trigger)
-                    : host.renderPercentage(this.setting[item].trigger),
-                  host.engine.i18n(
+                    ? parent.host.renderAbsolute(this.setting[item].trigger)
+                    : parent.host.renderPercentage(this.setting[item].trigger),
+                  parent.host.engine.i18n(
                     element.triggerButton.behavior === "integer"
                       ? "ui.trigger.setinteger.promptExplainer"
                       : "ui.trigger.setpercentage.promptExplainer",
@@ -272,8 +285,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
 
                 this.setting[item].trigger =
                   (element.triggerButton.behavior === "integer"
-                    ? host.parseAbsolute(value)
-                    : host.parsePercentage(value)) ?? this.setting[item].trigger;
+                    ? parent.host.parseAbsolute(value)
+                    : parent.host.parsePercentage(value)) ?? this.setting[item].trigger;
               },
             });
             element.triggerButton.element.addClass(stylesButton.lastHeadAction);

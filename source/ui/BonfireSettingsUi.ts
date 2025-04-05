@@ -1,6 +1,5 @@
 import { coalesceArray, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import { BonfireSettings } from "../settings/BonfireSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { Building, StagedBuilding } from "../types/index.js";
@@ -13,26 +12,27 @@ import { SettingListItem, type SettingListItemOptions } from "./components/Setti
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTriggerListItem> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: BonfireSettings,
     locale: SettingOptions<SupportedLocale>,
     options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("ui.build");
+    const label = parent.host.engine.i18n("ui.build");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -57,24 +57,24 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
         },
         onRefreshTrigger: () => {
           const element = this.settingItem;
-          element.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
+          element.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
-              ? host.engine.i18n("ui.trigger.section.inactive")
-              : host.renderPercentage(settings.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.section.inactive")
+              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? host.renderPercentage(settings.trigger, locale.selected, true)
-                : host.engine.i18n("ui.infinity"),
+                ? parent.host.renderPercentage(settings.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
+            settings.trigger !== -1 ? parent.host.renderPercentage(settings.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -86,7 +86,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
             return;
           }
 
-          settings.trigger = host.parsePercentage(value);
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
     );
@@ -95,15 +95,16 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
     // We want the ability to use `this` in our callbacks, to construct more complex
     // usage scenarios where we need access to the entire UI section.
     this.addChildren([
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: coalesceArray(
-          host.game.bld.buildingGroups.flatMap(buildingGroup => [
-            new HeaderListItem(host, buildingGroup.title),
+          parent.host.game.bld.buildingGroups.flatMap(buildingGroup => [
+            new HeaderListItem(parent, buildingGroup.title),
             ...buildingGroup.buildings.flatMap(building =>
-              this._getBuildOptions(host, settings, locale, label, building),
+              this._getBuildOptions(parent, settings, locale, label, building),
             ),
-            buildingGroup !== host.game.bld.buildingGroups[host.game.bld.buildingGroups.length - 1]
-              ? new Delimiter(host)
+            buildingGroup !==
+            parent.host.game.bld.buildingGroups[parent.host.game.bld.buildingGroups.length - 1]
+              ? new Delimiter(parent)
               : undefined,
           ]),
         ),
@@ -112,47 +113,78 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           this.refreshUi();
         },
       }),
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: [
-          new HeaderListItem(host, host.engine.i18n("ui.additional")),
-          new SettingListItem(host, settings.gatherCatnip, host.engine.i18n("option.catnip"), {
-            onCheck: () => {
-              host.engine.imessage("status.sub.enable", [host.engine.i18n("option.catnip")]);
-            },
-            onUnCheck: () => {
-              host.engine.imessage("status.sub.disable", [host.engine.i18n("option.catnip")]);
-            },
-          }),
+          new HeaderListItem(parent, parent.host.engine.i18n("ui.additional")),
           new SettingListItem(
-            host,
-            settings.turnOnSteamworks,
-            host.engine.i18n("option.steamworks"),
+            parent,
+            settings.gatherCatnip,
+            parent.host.engine.i18n("option.catnip"),
             {
               onCheck: () => {
-                host.engine.imessage("status.sub.enable", [host.engine.i18n("option.steamworks")]);
+                parent.host.engine.imessage("status.sub.enable", [
+                  parent.host.engine.i18n("option.catnip"),
+                ]);
               },
               onUnCheck: () => {
-                host.engine.imessage("status.sub.disable", [host.engine.i18n("option.steamworks")]);
+                parent.host.engine.imessage("status.sub.disable", [
+                  parent.host.engine.i18n("option.catnip"),
+                ]);
               },
             },
           ),
-          new SettingListItem(host, settings.turnOnMagnetos, host.engine.i18n("option.magnetos"), {
-            onCheck: () => {
-              host.engine.imessage("status.sub.enable", [host.engine.i18n("option.magnetos")]);
+          new SettingListItem(
+            parent,
+            settings.turnOnSteamworks,
+            parent.host.engine.i18n("option.steamworks"),
+            {
+              onCheck: () => {
+                parent.host.engine.imessage("status.sub.enable", [
+                  parent.host.engine.i18n("option.steamworks"),
+                ]);
+              },
+              onUnCheck: () => {
+                parent.host.engine.imessage("status.sub.disable", [
+                  parent.host.engine.i18n("option.steamworks"),
+                ]);
+              },
             },
-            onUnCheck: () => {
-              host.engine.imessage("status.sub.disable", [host.engine.i18n("option.magnetos")]);
+          ),
+          new SettingListItem(
+            parent,
+            settings.turnOnMagnetos,
+            parent.host.engine.i18n("option.magnetos"),
+            {
+              onCheck: () => {
+                parent.host.engine.imessage("status.sub.enable", [
+                  parent.host.engine.i18n("option.magnetos"),
+                ]);
+              },
+              onUnCheck: () => {
+                parent.host.engine.imessage("status.sub.disable", [
+                  parent.host.engine.i18n("option.magnetos"),
+                ]);
+              },
             },
-          }),
-          new SettingListItem(host, settings.turnOnReactors, host.engine.i18n("option.reactors"), {
-            onCheck: () => {
-              host.engine.imessage("status.sub.enable", [host.engine.i18n("option.reactors")]);
+          ),
+          new SettingListItem(
+            parent,
+            settings.turnOnReactors,
+            parent.host.engine.i18n("option.reactors"),
+            {
+              onCheck: () => {
+                parent.host.engine.imessage("status.sub.enable", [
+                  parent.host.engine.i18n("option.reactors"),
+                ]);
+              },
+              onUnCheck: () => {
+                parent.host.engine.imessage("status.sub.disable", [
+                  parent.host.engine.i18n("option.reactors"),
+                ]);
+              },
             },
-            onUnCheck: () => {
-              host.engine.imessage("status.sub.disable", [host.engine.i18n("option.reactors")]);
-            },
-          }),
-          new BuildingUpgradeSettingsUi(host, settings.upgradeBuildings, locale, settings),
+          ),
+          new BuildingUpgradeSettingsUi(parent, settings.upgradeBuildings, locale, settings),
         ],
         hasDisableAll: false,
         hasEnableAll: false,
@@ -161,7 +193,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
   }
 
   private _getBuildOptions(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: BonfireSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionLabel: string,
@@ -171,13 +203,13 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
       return [];
     }
 
-    const meta = host.game.bld.getBuildingExt(building).meta;
+    const meta = parent.host.game.bld.getBuildingExt(building).meta;
     if (!isNil(meta.stages)) {
       const name = Object.values(settings.buildings).find(item => item.baseBuilding === building)
         ?.building as StagedBuilding;
       return [
         BuildSectionTools.getBuildOption(
-          host,
+          parent,
           settings.buildings[building],
           locale,
           settings,
@@ -193,7 +225,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           },
         ),
         BuildSectionTools.getBuildOption(
-          host,
+          parent,
           settings.buildings[name],
           locale,
           settings,
@@ -214,7 +246,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
     if (!isNil(meta.label)) {
       return [
         BuildSectionTools.getBuildOption(
-          host,
+          parent,
           settings.buildings[building],
           locale,
           settings,
