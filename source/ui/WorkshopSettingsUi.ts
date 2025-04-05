@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { type CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
 import { ucfirst } from "../tools/Format.js";
@@ -12,29 +11,30 @@ import { SettingListItem, type SettingListItemOptions } from "./components/Setti
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 import { WorkshopCraftListItem } from "./components/WorkshopCraftListItem.js";
 
 export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingTriggerListItem> {
   private readonly _crafts: Array<SettingListItem>;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: WorkshopSettings,
     locale: SettingOptions<SupportedLocale>,
     options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("ui.craft");
+    const label = parent.host.engine.i18n("ui.craft");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -42,24 +42,24 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger() {
-          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
+          this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
-              ? host.engine.i18n("ui.trigger.section.inactive")
-              : host.renderPercentage(settings.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.section.inactive")
+              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? host.renderPercentage(settings.trigger, locale.selected, true)
-                : host.engine.i18n("ui.infinity"),
+                ? parent.host.renderPercentage(settings.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
+            settings.trigger !== -1 ? parent.host.renderPercentage(settings.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -71,7 +71,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
             return;
           }
 
-          settings.trigger = host.parsePercentage(value);
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
     );
@@ -83,7 +83,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
       excludeCraftsArray = ["bloodstone", "tMythril"];
     }
 
-    const preparedCrafts: Array<[CraftSettingsItem, string]> = host.game.workshop.crafts
+    const preparedCrafts: Array<[CraftSettingsItem, string]> = parent.host.game.workshop.crafts
       .filter(
         item =>
           !excludeCraftsArray.includes(item.name) && !isNil(this.setting.resources[item.name]),
@@ -94,14 +94,14 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
     for (const [option, label] of preparedCrafts) {
       const onSetMax = async () => {
         const value = await Dialog.prompt(
-          host,
-          host.engine.i18n("ui.max.craft.prompt", [label]),
-          host.engine.i18n("ui.max.craft.promptTitle", [
+          parent,
+          parent.host.engine.i18n("ui.max.craft.prompt", [label]),
+          parent.host.engine.i18n("ui.max.craft.promptTitle", [
             label,
-            host.renderAbsolute(option.max, locale.selected),
+            parent.host.renderAbsolute(option.max, locale.selected),
           ]),
-          host.renderAbsolute(option.max),
-          host.engine.i18n("ui.max.craft.promptExplainer"),
+          parent.host.renderAbsolute(option.max),
+          parent.host.engine.i18n("ui.max.craft.promptExplainer"),
         );
 
         if (value === undefined) {
@@ -117,25 +117,25 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
           option.enabled = false;
         }
 
-        option.max = host.parseAbsolute(value) ?? option.max;
+        option.max = parent.host.parseAbsolute(value) ?? option.max;
       };
 
-      const element = new WorkshopCraftListItem(host, option, locale, label, {
+      const element = new WorkshopCraftListItem(parent, option, locale, label, {
         delimiter: option.resource === "kerosene" || option.resource === "blueprint",
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.sub.enable", [label]);
+          parent.host.engine.imessage("status.sub.enable", [label]);
           if (option.max === 0 && !isBatchProcess) {
             onSetMax();
           }
         },
         onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [label]);
+          parent.host.engine.imessage("status.sub.disable", [label]);
         },
         onLimitedCheck: () => {
-          host.engine.imessage("craft.limited", [label]);
+          parent.host.engine.imessage("craft.limited", [label]);
         },
         onLimitedUnCheck: () => {
-          host.engine.imessage("craft.unlimited", [label]);
+          parent.host.engine.imessage("craft.unlimited", [label]);
         },
         onRefresh: () => {
           element.limitedButton.inactive = !option.enabled || !option.limited;
@@ -146,36 +146,39 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
             settings.enabled && option.enabled && settings.trigger === -1 && option.trigger === -1;
         },
         onRefreshMax: () => {
-          element.maxButton.updateLabel(host.renderAbsolute(option.max));
+          element.maxButton.updateLabel(parent.host.renderAbsolute(option.max));
           element.maxButton.element[0].title =
             option.max < 0
-              ? host.engine.i18n("ui.max.craft.titleInfinite", [label])
+              ? parent.host.engine.i18n("ui.max.craft.titleInfinite", [label])
               : option.max === 0
-                ? host.engine.i18n("ui.max.craft.titleZero", [label])
-                : host.engine.i18n("ui.max.craft.title", [host.renderAbsolute(option.max), label]);
+                ? parent.host.engine.i18n("ui.max.craft.titleZero", [label])
+                : parent.host.engine.i18n("ui.max.craft.title", [
+                    parent.host.renderAbsolute(option.max),
+                    label,
+                  ]);
         },
         onRefreshTrigger: () => {
-          element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+          element.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
             option.trigger < 0
               ? settings.trigger < 0
-                ? host.engine.i18n("ui.trigger.build.blocked", [label])
-                : `${host.renderPercentage(settings.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.build.inherited")})`
-              : host.renderPercentage(option.trigger, locale.selected, true),
+                ? parent.host.engine.i18n("ui.trigger.build.blocked", [label])
+                : `${parent.host.renderPercentage(settings.trigger, locale.selected, true)} (${parent.host.engine.i18n("ui.trigger.build.inherited")})`
+              : parent.host.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
         onSetMax,
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               option.trigger !== -1
-                ? host.renderPercentage(option.trigger, locale.selected, true)
-                : host.engine.i18n("ui.trigger.build.inherited"),
+                ? parent.host.renderPercentage(option.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.trigger.build.inherited"),
             ]),
-            option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
-            host.engine.i18n("ui.trigger.build.promptExplainer"),
+            option.trigger !== -1 ? parent.host.renderPercentage(option.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.build.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -187,7 +190,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
             return;
           }
 
-          option.trigger = host.parsePercentage(value);
+          option.trigger = parent.host.parsePercentage(value);
         },
       });
       this._crafts.push(element);
@@ -195,18 +198,18 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
       if (option.resource === "ship") {
         this._crafts.push(
           new SettingListItem(
-            host,
+            parent,
             this.setting.shipOverride,
-            host.engine.i18n("option.shipOverride"),
+            parent.host.engine.i18n("option.shipOverride"),
             {
               onCheck: () => {
-                host.engine.imessage("status.sub.enable", [
-                  host.engine.i18n("option.shipOverride"),
+                parent.host.engine.imessage("status.sub.enable", [
+                  parent.host.engine.i18n("option.shipOverride"),
                 ]);
               },
               onUnCheck: () => {
-                host.engine.imessage("status.sub.disable", [
-                  host.engine.i18n("option.shipOverride"),
+                parent.host.engine.imessage("status.sub.disable", [
+                  parent.host.engine.i18n("option.shipOverride"),
                 ]);
               },
               upgradeIndicator: true,
@@ -216,7 +219,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
       }
     }
 
-    const listCrafts = new SettingsList(host, {
+    const listCrafts = new SettingsList(parent, {
       children: this._crafts,
       onReset: () => {
         this.setting.load({ resources: new WorkshopSettings().resources });
@@ -226,8 +229,8 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
     this.addChild(listCrafts);
 
     this.addChild(
-      new SettingsList(host, {
-        children: [new UpgradeSettingsUi(host, this.setting.unlockUpgrades, locale)],
+      new SettingsList(parent, {
+        children: [new UpgradeSettingsUi(parent, this.setting.unlockUpgrades, locale)],
         hasDisableAll: false,
         hasEnableAll: false,
       }),

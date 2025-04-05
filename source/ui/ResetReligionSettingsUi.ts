@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import type { ResetReligionSettings } from "../settings/ResetReligionSettings.js";
 import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
@@ -14,85 +13,92 @@ import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSettings> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: ResetReligionSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
-    const label = host.engine.i18n("ui.faith");
-    super(host, label, settings, {
-      childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+    const label = parent.host.engine.i18n("ui.faith");
+    super(parent, label, settings, {
+      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Religion,
     });
 
     const unicornsArray: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems];
 
     this.addChild(
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: [
-          new HeaderListItem(host, host.engine.i18n("$religion.panel.ziggurat.label")),
+          new HeaderListItem(parent, parent.host.engine.i18n("$religion.panel.ziggurat.label")),
           this._getResetOption(
-            host,
+            parent,
             this.setting.buildings.unicornPasture,
             locale,
             settings,
-            host.engine.i18n("$buildings.unicornPasture.label"),
+            parent.host.engine.i18n("$buildings.unicornPasture.label"),
           ),
 
-          ...host.game.religion.zigguratUpgrades
+          ...parent.host.game.religion.zigguratUpgrades
             .filter(
               item =>
                 unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
             )
             .map(zigguratUpgrade =>
               this._getResetOption(
-                host,
+                parent,
                 this.setting.buildings[zigguratUpgrade.name],
                 locale,
                 settings,
                 zigguratUpgrade.label,
               ),
             ),
-          new Delimiter(host),
+          new Delimiter(parent),
 
-          ...host.game.religion.zigguratUpgrades
+          ...parent.host.game.religion.zigguratUpgrades
             .filter(
               item =>
                 !unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
             )
             .map(upgrade =>
               this._getResetOption(
-                host,
+                parent,
                 this.setting.buildings[upgrade.name],
                 locale,
                 settings,
                 upgrade.label,
               ),
             ),
-          new Delimiter(host),
+          new Delimiter(parent),
 
-          new HeaderListItem(host, host.engine.i18n("$religion.panel.orderOfTheSun.label")),
-          ...host.game.religion.religionUpgrades
+          new HeaderListItem(
+            parent,
+            parent.host.engine.i18n("$religion.panel.orderOfTheSun.label"),
+          ),
+          ...parent.host.game.religion.religionUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(upgrade =>
               this._getResetOption(
-                host,
+                parent,
                 this.setting.buildings[upgrade.name],
                 locale,
                 settings,
                 upgrade.label,
-                upgrade.name === host.game.religion.religionUpgrades.at(-1)?.name,
+                upgrade.name === parent.host.game.religion.religionUpgrades.at(-1)?.name,
               ),
             ),
 
-          new HeaderListItem(host, host.engine.i18n("$religion.panel.cryptotheology.label")),
-          ...host.game.religion.transcendenceUpgrades
+          new HeaderListItem(
+            parent,
+            parent.host.engine.i18n("$religion.panel.cryptotheology.label"),
+          ),
+          ...parent.host.game.religion.transcendenceUpgrades
             .filter(item => !isNil(this.setting.buildings[item.name]))
             .map(upgrade =>
               this._getResetOption(
-                host,
+                parent,
                 this.setting.buildings[upgrade.name],
                 locale,
                 settings,
@@ -105,7 +111,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
   }
 
   private _getResetOption(
-    host: KittenScientists,
+    parent: UiComponent,
     option: SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: ResetReligionSettings,
@@ -113,13 +119,13 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingTriggerListItem(host, option, locale, label, {
+    const element = new SettingTriggerListItem(parent, option, locale, label, {
       delimiter,
       onCheck: () => {
-        host.engine.imessage("status.reset.check.enable", [label]);
+        parent.host.engine.imessage("status.reset.check.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.reset.check.disable", [label]);
+        parent.host.engine.imessage("status.reset.check.disable", [label]);
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -128,16 +134,16 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
       },
       onSetTrigger: async () => {
         const value = await Dialog.prompt(
-          host,
-          host.engine.i18n("ui.trigger.prompt.absolute"),
-          host.engine.i18n("ui.trigger.build.prompt", [
+          parent,
+          parent.host.engine.i18n("ui.trigger.prompt.absolute"),
+          parent.host.engine.i18n("ui.trigger.build.prompt", [
             label,
             option.trigger !== -1
-              ? host.renderAbsolute(option.trigger, locale.selected)
-              : host.engine.i18n("ui.trigger.inactive"),
+              ? parent.host.renderAbsolute(option.trigger, locale.selected)
+              : parent.host.engine.i18n("ui.trigger.inactive"),
           ]),
-          option.trigger !== -1 ? host.renderAbsolute(option.trigger) : "",
-          host.engine.i18n("ui.trigger.reset.promptExplainer"),
+          option.trigger !== -1 ? parent.host.renderAbsolute(option.trigger) : "",
+          parent.host.engine.i18n("ui.trigger.reset.promptExplainer"),
         );
 
         if (value === undefined) {

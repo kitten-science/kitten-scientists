@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type {
   SettingBuySellThreshold,
   SettingOptions,
@@ -18,28 +17,29 @@ import { SettingListItem, type SettingListItemOptions } from "./components/Setti
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 import { BuyButton } from "./components/buttons-text/BuyButton.js";
 import { SellButton } from "./components/buttons-text/SellButton.js";
 
 export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTriggerListItem> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: TradeSettings,
     locale: SettingOptions<SupportedLocale>,
     options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("ui.trade");
+    const label = parent.host.engine.i18n("ui.trade");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -47,24 +47,24 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger() {
-          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
+          this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
-              ? host.engine.i18n("ui.trigger.section.inactive")
-              : host.renderPercentage(settings.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.section.inactive")
+              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? host.renderPercentage(settings.trigger, locale.selected, true)
-                : host.engine.i18n("ui.infinity"),
+                ? parent.host.renderPercentage(settings.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
+            settings.trigger !== -1 ? parent.host.renderPercentage(settings.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -76,23 +76,23 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
             return;
           }
 
-          settings.trigger = host.parsePercentage(value);
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
     );
 
-    const listRaces = new SettingsList(host, {
-      children: host.game.diplomacy.races
+    const listRaces = new SettingsList(parent, {
+      children: parent.host.game.diplomacy.races
         .filter(item => !isNil(this.setting.races[item.name]))
         .map(races =>
           this._getTradeOption(
-            host,
+            parent,
             this.setting.races[races.name],
             locale,
             settings,
             races.title,
             label,
-            races.name === host.game.diplomacy.races.at(-2)?.name,
+            races.name === parent.host.game.diplomacy.races.at(-2)?.name,
           ),
         ),
       hasDisableAll: false,
@@ -100,31 +100,44 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
     });
 
     listRaces.addChild(
-      new SettingListItem(host, this.setting.feedLeviathans, host.engine.i18n("option.autofeed"), {
-        onCheck: () => {
-          host.engine.imessage("status.sub.enable", [host.engine.i18n("option.autofeed")]);
+      new SettingListItem(
+        parent,
+        this.setting.feedLeviathans,
+        parent.host.engine.i18n("option.autofeed"),
+        {
+          onCheck: () => {
+            parent.host.engine.imessage("status.sub.enable", [
+              parent.host.engine.i18n("option.autofeed"),
+            ]);
+          },
+          onUnCheck: () => {
+            parent.host.engine.imessage("status.sub.disable", [
+              parent.host.engine.i18n("option.autofeed"),
+            ]);
+          },
         },
-        onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [host.engine.i18n("option.autofeed")]);
-        },
-      }),
+      ),
     );
 
     listRaces.addChild(
       new SettingsPanel<SettingBuySellThreshold>(
-        host,
+        parent,
         this.setting.tradeBlackcoin,
         new SettingTriggerListItem(
-          host,
+          parent,
           this.setting.tradeBlackcoin,
           locale,
-          host.engine.i18n("option.crypto"),
+          parent.host.engine.i18n("option.crypto"),
           {
             onCheck: () => {
-              host.engine.imessage("status.sub.enable", [host.engine.i18n("option.crypto")]);
+              parent.host.engine.imessage("status.sub.enable", [
+                parent.host.engine.i18n("option.crypto"),
+              ]);
             },
             onUnCheck: () => {
-              host.engine.imessage("status.sub.disable", [host.engine.i18n("option.crypto")]);
+              parent.host.engine.imessage("status.sub.disable", [
+                parent.host.engine.i18n("option.crypto"),
+              ]);
             },
             onRefresh: () => {
               this.settingItem.triggerButton.inactive =
@@ -132,13 +145,13 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
             },
             onSetTrigger: async () => {
               const value = await Dialog.prompt(
-                host,
-                host.engine.i18n("ui.trigger.crypto.promptTitle"),
-                host.engine.i18n("ui.trigger.crypto.prompt", [
-                  host.renderAbsolute(this.setting.tradeBlackcoin.trigger, locale.selected),
+                parent,
+                parent.host.engine.i18n("ui.trigger.crypto.promptTitle"),
+                parent.host.engine.i18n("ui.trigger.crypto.prompt", [
+                  parent.host.renderAbsolute(this.setting.tradeBlackcoin.trigger, locale.selected),
                 ]),
-                host.renderAbsolute(this.setting.tradeBlackcoin.trigger),
-                host.engine.i18n("ui.trigger.crypto.promptExplainer"),
+                parent.host.renderAbsolute(this.setting.tradeBlackcoin.trigger),
+                parent.host.engine.i18n("ui.trigger.crypto.promptExplainer"),
               );
 
               if (value === undefined || value === "" || value.startsWith("-")) {
@@ -146,45 +159,54 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
               }
 
               this.setting.tradeBlackcoin.trigger =
-                host.parseAbsolute(value) ?? this.setting.tradeBlackcoin.trigger;
+                parent.host.parseAbsolute(value) ?? this.setting.tradeBlackcoin.trigger;
             },
           },
         ),
         {
           children: [
-            new BuyButton(host, this.setting.tradeBlackcoin, locale),
-            new SellButton(host, this.setting.tradeBlackcoin, locale),
+            new BuyButton(parent, this.setting.tradeBlackcoin, locale),
+            new SellButton(parent, this.setting.tradeBlackcoin, locale),
           ],
         },
       ),
     );
     this.addChild(listRaces);
 
-    const listAddition = new SettingsList(host, {
+    const listAddition = new SettingsList(parent, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(host, host.engine.i18n("ui.additional")));
+    listAddition.addChild(new HeaderListItem(parent, parent.host.engine.i18n("ui.additional")));
 
     listAddition.addChild(
-      new EmbassySettingsUi(host, this.setting.buildEmbassies, locale, settings),
+      new EmbassySettingsUi(parent, this.setting.buildEmbassies, locale, settings),
     );
 
     listAddition.addChild(
-      new SettingListItem(host, this.setting.unlockRaces, host.engine.i18n("ui.upgrade.races"), {
-        onCheck: () => {
-          host.engine.imessage("status.sub.enable", [host.engine.i18n("ui.upgrade.races")]);
+      new SettingListItem(
+        parent,
+        this.setting.unlockRaces,
+        parent.host.engine.i18n("ui.upgrade.races"),
+        {
+          onCheck: () => {
+            parent.host.engine.imessage("status.sub.enable", [
+              parent.host.engine.i18n("ui.upgrade.races"),
+            ]);
+          },
+          onUnCheck: () => {
+            parent.host.engine.imessage("status.sub.disable", [
+              parent.host.engine.i18n("ui.upgrade.races"),
+            ]);
+          },
         },
-        onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [host.engine.i18n("ui.upgrade.races")]);
-        },
-      }),
+      ),
     );
     this.addChild(listAddition);
   }
 
   private _getTradeOption(
-    host: KittenScientists,
+    parent: UiComponent,
     option: TradeSettingsItem,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: SettingTrigger,
@@ -193,18 +215,18 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingLimitedTriggerListItem(host, option, locale, label, {
+    const element = new SettingLimitedTriggerListItem(parent, option, locale, label, {
       onCheck: () => {
-        host.engine.imessage("status.sub.enable", [label]);
+        parent.host.engine.imessage("status.sub.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.sub.disable", [label]);
+        parent.host.engine.imessage("status.sub.disable", [label]);
       },
       onLimitedCheck: () => {
-        host.engine.imessage("trade.limited", [label]);
+        parent.host.engine.imessage("trade.limited", [label]);
       },
       onLimitedUnCheck: () => {
-        host.engine.imessage("trade.unlimited", [label]);
+        parent.host.engine.imessage("trade.unlimited", [label]);
       },
       onRefresh: () => {
         element.limitedButton.inactive = !option.enabled || !option.limited;
@@ -224,26 +246,26 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
           !option.seasons.winter.enabled;
       },
       onRefreshTrigger: () => {
-        element.triggerButton.element[0].title = host.engine.i18n("ui.trigger", [
+        element.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
           option.trigger < 0
             ? sectionSetting.trigger < 0
-              ? host.engine.i18n("ui.trigger.section.blocked", [sectionLabel])
-              : `${host.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${host.engine.i18n("ui.trigger.section.inherited")})`
-            : host.renderPercentage(option.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.section.blocked", [sectionLabel])
+              : `${parent.host.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${parent.host.engine.i18n("ui.trigger.section.inherited")})`
+            : parent.host.renderPercentage(option.trigger, locale.selected, true),
         ]);
       },
       onSetTrigger: async () => {
         const value = await Dialog.prompt(
-          host,
-          host.engine.i18n("ui.trigger.prompt.percentage"),
-          host.engine.i18n("ui.trigger.section.prompt", [
+          parent,
+          parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+          parent.host.engine.i18n("ui.trigger.section.prompt", [
             label,
             option.trigger !== -1
-              ? host.renderPercentage(option.trigger, locale.selected, true)
-              : host.engine.i18n("ui.trigger.section.inherited"),
+              ? parent.host.renderPercentage(option.trigger, locale.selected, true)
+              : parent.host.engine.i18n("ui.trigger.section.inherited"),
           ]),
-          option.trigger !== -1 ? host.renderPercentage(option.trigger) : "",
-          host.engine.i18n("ui.trigger.section.promptExplainer"),
+          option.trigger !== -1 ? parent.host.renderPercentage(option.trigger) : "",
+          parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
         );
 
         if (value === undefined) {
@@ -255,20 +277,20 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
           return;
         }
 
-        option.trigger = host.parsePercentage(value);
+        option.trigger = parent.host.parsePercentage(value);
       },
       delimiter,
       upgradeIndicator,
     });
-    const panel = new SettingsPanel(host, option, element);
+    const panel = new SettingsPanel(parent, option, element);
 
-    const seasons = new SeasonsList(host, option.seasons, {
+    const seasons = new SeasonsList(parent, option.seasons, {
       onCheckSeason: (label: string) => {
-        host.engine.imessage("trade.season.enable", [ucfirst(label), label]);
+        parent.host.engine.imessage("trade.season.enable", [ucfirst(label), label]);
         element.refreshUi();
       },
       onUnCheckSeason: (label: string) => {
-        host.engine.imessage("trade.season.disable", [ucfirst(label), label]);
+        parent.host.engine.imessage("trade.season.disable", [ucfirst(label), label]);
         element.refreshUi();
       },
     });

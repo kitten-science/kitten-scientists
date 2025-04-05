@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import stylesDelimiter from "./Delimiter.module.css";
 import styles from "./Fieldset.module.css";
 import stylesLabel from "./LabelListItem.module.css";
@@ -10,7 +9,7 @@ export type FieldsetOptions = ThisType<Fieldset> &
   };
 
 export class Fieldset extends UiComponent {
-  declare readonly _options: FieldsetOptions;
+  declare readonly options: FieldsetOptions;
   readonly element: JQuery;
 
   /**
@@ -20,8 +19,8 @@ export class Fieldset extends UiComponent {
    * @param label The label on the fieldset.
    * @param options Options for the fieldset.
    */
-  constructor(host: KittenScientists, label: string, options?: FieldsetOptions) {
-    super(host, { ...options });
+  constructor(parent: UiComponent, label: string, options?: FieldsetOptions) {
+    super(parent, { ...options });
 
     const element = $("<fieldset/>").addClass(styles.fieldset);
     if (options?.delimiter) {

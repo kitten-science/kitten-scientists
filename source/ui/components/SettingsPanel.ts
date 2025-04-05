@@ -1,8 +1,8 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
 import { CollapsiblePanel, type CollapsiblePanelOptions } from "./CollapsiblePanel.js";
 import type { LabelListItem } from "./LabelListItem.js";
 import type { SettingListItem } from "./SettingListItem.js";
+import type { UiComponent } from "./UiComponent.js";
 
 export type SettingsPanelOptions<TListItem extends LabelListItem = LabelListItem> =
   ThisType<SettingsPanel> &
@@ -17,7 +17,7 @@ export class SettingsPanel<
   extends CollapsiblePanel
   implements SettingListItem
 {
-  declare readonly _options: SettingsPanelOptions<TListItem>;
+  declare readonly options: SettingsPanelOptions<TListItem>;
   readonly setting: TSetting;
   readonly settingItem: TListItem;
 
@@ -59,12 +59,12 @@ export class SettingsPanel<
    * @param options - Options for this panel.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: TSetting,
     settingItem: TListItem,
     options?: SettingsPanelOptions<TListItem>,
   ) {
-    super(host, settingItem, options);
+    super(parent, settingItem, options);
 
     this.settingItem = settingItem;
     this.setting = setting;

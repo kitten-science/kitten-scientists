@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { EmbassySettings } from "../settings/EmbassySettings.js";
 import type { SettingMax, SettingOptions } from "../settings/Settings.js";
 import type { TradeSettings } from "../settings/TradeSettings.js";
@@ -11,27 +10,28 @@ import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTriggerListItem> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: EmbassySettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TradeSettings,
     options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("option.embassies");
+    const label = parent.host.engine.i18n("option.embassies");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -45,31 +45,31 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.embassies.prompt"),
-            host.engine.i18n("ui.trigger.embassies.promptTitle", [
-              host.renderPercentage(settings.trigger, locale.selected, true),
+            parent,
+            parent.host.engine.i18n("ui.trigger.embassies.prompt"),
+            parent.host.engine.i18n("ui.trigger.embassies.promptTitle", [
+              parent.host.renderPercentage(settings.trigger, locale.selected, true),
             ]),
-            host.renderPercentage(settings.trigger),
-            host.engine.i18n("ui.trigger.embassies.promptExplainer"),
+            parent.host.renderPercentage(settings.trigger),
+            parent.host.engine.i18n("ui.trigger.embassies.promptExplainer"),
           );
 
           if (value === undefined || value === "" || value.startsWith("-")) {
             return;
           }
 
-          settings.trigger = host.parsePercentage(value);
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
       options,
     );
 
-    const listRaces = new SettingsList(host, {
-      children: host.game.diplomacy.races
+    const listRaces = new SettingsList(parent, {
+      children: parent.host.game.diplomacy.races
         .filter(item => item.name !== "leviathans" && !isNil(this.setting.races[item.name]))
         .map(race =>
           this._makeEmbassySetting(
-            host,
+            parent,
             this.setting.races[race.name],
             locale.selected,
             settings,
@@ -81,7 +81,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
   }
 
   private _makeEmbassySetting(
-    host: KittenScientists,
+    parent: UiComponent,
     option: SettingMax,
     locale: SupportedLocale,
     sectionSetting: EmbassySettings,
@@ -89,11 +89,14 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
   ) {
     const onSetMax = async () => {
       const value = await Dialog.prompt(
-        host,
-        host.engine.i18n("ui.max.prompt.absolute"),
-        host.engine.i18n("ui.max.build.prompt", [label, host.renderAbsolute(option.max, locale)]),
-        host.renderAbsolute(option.max),
-        host.engine.i18n("ui.max.build.promptExplainer"),
+        parent,
+        parent.host.engine.i18n("ui.max.prompt.absolute"),
+        parent.host.engine.i18n("ui.max.build.prompt", [
+          label,
+          parent.host.renderAbsolute(option.max, locale),
+        ]),
+        parent.host.renderAbsolute(option.max),
+        parent.host.engine.i18n("ui.max.build.promptExplainer"),
       );
 
       if (value === undefined) {
@@ -109,18 +112,18 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
         option.enabled = false;
       }
 
-      option.max = host.parseAbsolute(value) ?? option.max;
+      option.max = parent.host.parseAbsolute(value) ?? option.max;
     };
 
-    const element = new SettingMaxListItem(host, option, label, {
+    const element = new SettingMaxListItem(parent, option, label, {
       onCheck: (isBatchProcess?: boolean) => {
-        host.engine.imessage("status.sub.enable", [label]);
+        parent.host.engine.imessage("status.sub.enable", [label]);
         if (option.max === 0 && !isBatchProcess) {
           onSetMax();
         }
       },
       onUnCheck: () => {
-        host.engine.imessage("status.sub.disable", [label]);
+        parent.host.engine.imessage("status.sub.disable", [label]);
       },
       onRefresh: () => {
         element.maxButton.inactive = !option.enabled || option.max === -1;
@@ -128,13 +131,16 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
           sectionSetting.enabled && option.enabled && option.max === 0;
       },
       onRefreshMax: () => {
-        element.maxButton.updateLabel(host.renderAbsolute(option.max));
+        element.maxButton.updateLabel(parent.host.renderAbsolute(option.max));
         element.maxButton.element[0].title =
           option.max < 0
-            ? host.engine.i18n("ui.max.embassy.titleInfinite", [label])
+            ? parent.host.engine.i18n("ui.max.embassy.titleInfinite", [label])
             : option.max === 0
-              ? host.engine.i18n("ui.max.embassy.titleZero", [label])
-              : host.engine.i18n("ui.max.embassy.title", [host.renderAbsolute(option.max), label]);
+              ? parent.host.engine.i18n("ui.max.embassy.titleZero", [label])
+              : parent.host.engine.i18n("ui.max.embassy.title", [
+                  parent.host.renderAbsolute(option.max),
+                  label,
+                ]);
       },
       onSetMax,
     });

@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import type { ResetSpaceSettings } from "../settings/ResetSpaceSettings.js";
 import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
@@ -12,30 +11,31 @@ import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: ResetSpaceSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
-    const label = host.engine.i18n("ui.space");
-    super(host, label, settings, {
-      childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+    const label = parent.host.engine.i18n("ui.space");
+    super(parent, label, settings, {
+      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Space,
     });
 
     this.addChild(
-      new SettingsList(host, {
-        children: host.game.space.planets
+      new SettingsList(parent, {
+        children: parent.host.game.space.planets
           .filter(plant => 0 < plant.buildings.length)
           .flatMap((planet, indexPlanet, arrayPlant) => [
-            new HeaderListItem(host, host.engine.labelForPlanet(planet.name)),
+            new HeaderListItem(parent, parent.host.engine.labelForPlanet(planet.name)),
             ...planet.buildings
               .filter(item => !isNil(this.setting.buildings[item.name]))
               .map((building, indexBuilding, arrayBuilding) =>
                 this._getResetOption(
-                  host,
+                  parent,
                   this.setting.buildings[building.name],
                   locale,
                   settings,
@@ -49,7 +49,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
   }
 
   private _getResetOption(
-    host: KittenScientists,
+    parent: UiComponent,
     option: SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: ResetSpaceSettings,
@@ -57,13 +57,13 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    const element = new SettingTriggerListItem(host, option, locale, label, {
+    const element = new SettingTriggerListItem(parent, option, locale, label, {
       delimiter,
       onCheck: () => {
-        host.engine.imessage("status.reset.check.enable", [label]);
+        parent.host.engine.imessage("status.reset.check.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.reset.check.disable", [label]);
+        parent.host.engine.imessage("status.reset.check.disable", [label]);
       },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -72,16 +72,16 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
       },
       onSetTrigger: async () => {
         const value = await Dialog.prompt(
-          host,
-          host.engine.i18n("ui.trigger.prompt.absolute"),
-          host.engine.i18n("ui.trigger.build.prompt", [
+          parent,
+          parent.host.engine.i18n("ui.trigger.prompt.absolute"),
+          parent.host.engine.i18n("ui.trigger.build.prompt", [
             label,
             option.trigger !== -1
-              ? host.renderAbsolute(option.trigger, locale.selected)
-              : host.engine.i18n("ui.trigger.inactive"),
+              ? parent.host.renderAbsolute(option.trigger, locale.selected)
+              : parent.host.engine.i18n("ui.trigger.inactive"),
           ]),
-          option.trigger !== -1 ? host.renderAbsolute(option.trigger) : "",
-          host.engine.i18n("ui.trigger.reset.promptExplainer"),
+          option.trigger !== -1 ? parent.host.renderAbsolute(option.trigger) : "",
+          parent.host.engine.i18n("ui.trigger.reset.promptExplainer"),
         );
 
         if (value === undefined) {

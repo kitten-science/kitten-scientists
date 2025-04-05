@@ -1,5 +1,4 @@
 import { is } from "@oliversalzburg/js-utils/data/nil.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import { Container } from "./Container.js";
 import type { LabelListItem } from "./LabelListItem.js";
 import stylesSettingListItem from "./SettingListItem.module.css";
@@ -21,13 +20,12 @@ export type CollapsiblePanelOptions = ThisType<CollapsiblePanel> &
  * behavior.
  */
 export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> extends UiComponent {
-  declare readonly _options: CollapsiblePanelOptions;
+  declare readonly options: CollapsiblePanelOptions;
   protected readonly container: UiComponent;
   readonly element: JQuery;
   protected readonly _expando: ExpandoButton;
   protected readonly _head: THead;
   protected _mainChildVisible: boolean;
-  protected readonly parent: CollapsiblePanel | undefined;
 
   get expando() {
     return this._expando;
@@ -44,10 +42,10 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
    * @param head Another component to host in the head of the panel.
    * @param options Options for this panel.
    */
-  constructor(host: KittenScientists, head: THead, options?: CollapsiblePanelOptions) {
-    super(host, {});
+  constructor(parent: UiComponent, head: THead, options?: CollapsiblePanelOptions) {
+    super(parent, {});
 
-    this.container = new Container(host);
+    this.container = new Container(parent);
     this.container.element.addClass(stylesSettingListItem.panelContent);
     this.children.add(this.container);
 
@@ -55,7 +53,7 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
     this.children.add(head);
 
     // The expando button for this panel.
-    const expando = new ExpandoButton(host);
+    const expando = new ExpandoButton(parent);
     expando.element.on("click", () => {
       this.toggle();
     });

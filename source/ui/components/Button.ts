@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import styles from "./Button.module.css";
 import type { IconButtonOptions } from "./IconButton.js";
 import { UiComponent } from "./UiComponent.js";
@@ -15,7 +14,7 @@ export type ButtonOptions = ThisType<Button> &
  * A button that has a label and can optionally have an SVG icon.
  */
 export class Button extends UiComponent {
-  declare readonly _options: ButtonOptions;
+  declare readonly options: ButtonOptions;
   protected readonly _iconElement: JQuery | undefined;
   readonly element: JQuery;
   readOnly: boolean;
@@ -31,12 +30,12 @@ export class Button extends UiComponent {
    * @param options - Options for the icon button.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     label: string,
     pathData: string | null = null,
     options?: ButtonOptions,
   ) {
-    super(host, { ...options, children: [] });
+    super(parent, { ...options, children: [] });
 
     this.element = $("<div/>", { title: options?.title }).addClass(styles.button).text(label);
 
@@ -80,7 +79,7 @@ export class Button extends UiComponent {
   updateLabel(label: string) {
     this.element.text(label);
     if (this._iconElement !== undefined) {
-      if (this._options.alignment === "right") {
+      if (this.options.alignment === "right") {
         this.element.append(this._iconElement);
       } else {
         this.element.prepend(this._iconElement);

@@ -1,5 +1,4 @@
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import type { ResetResourcesSettings } from "../settings/ResetResourcesSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
@@ -11,20 +10,21 @@ import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: ResetResourcesSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
-    const label = host.engine.i18n("ui.resources");
-    super(host, label, settings, {
-      childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+    const label = parent.host.engine.i18n("ui.resources");
+    super(parent, label, settings, {
+      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Resources,
     });
 
-    const resources = host.game.resPool.resources;
+    const resources = parent.host.game.resPool.resources;
 
     const items = [];
     let lastLabel = resources[0].title;
@@ -33,12 +33,12 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     )) {
       const option = this.setting.resources[resource.name];
 
-      const element = new SettingTriggerListItem(host, option, locale, ucfirst(resource.title), {
+      const element = new SettingTriggerListItem(parent, option, locale, ucfirst(resource.title), {
         onCheck: () => {
-          host.engine.imessage("status.sub.enable", [resource.title]);
+          parent.host.engine.imessage("status.sub.enable", [resource.title]);
         },
         onUnCheck: () => {
-          host.engine.imessage("status.sub.disable", [resource.title]);
+          parent.host.engine.imessage("status.sub.disable", [resource.title]);
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -47,16 +47,16 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.float"),
-            host.engine.i18n("ui.trigger.build.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.float"),
+            parent.host.engine.i18n("ui.trigger.build.prompt", [
               resource.title,
               option.trigger !== -1
-                ? host.renderAbsolute(option.trigger, locale.selected)
-                : host.engine.i18n("ui.trigger.inactive"),
+                ? parent.host.renderAbsolute(option.trigger, locale.selected)
+                : parent.host.engine.i18n("ui.trigger.inactive"),
             ]),
-            option.trigger !== -1 ? host.renderAbsolute(option.trigger) : "",
-            host.engine.i18n("ui.trigger.reset.promptExplainer"),
+            option.trigger !== -1 ? parent.host.renderAbsolute(option.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.reset.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -74,7 +74,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
-      if (host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+      if (parent.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== resource.title[0]) {
           element.element.addClass(stylesLabelListItem.splitter);
         }
@@ -85,6 +85,6 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
       lastLabel = resource.title;
     }
 
-    this.addChild(new SettingsList(host, { children: items }));
+    this.addChild(new SettingsList(parent, { children: items }));
   }
 }

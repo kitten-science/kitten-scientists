@@ -1,18 +1,18 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
-import type { KittenScientists } from "../../../KittenScientists.js";
 import type { SettingMax } from "../../../settings/Settings.js";
 import { Button, type ButtonOptions } from "../Button.js";
+import type { UiComponent } from "../UiComponent.js";
 import styles from "./MaxButton.module.css";
 
 export type MaxButtonOptions = ThisType<MaxButton> & ButtonOptions;
 
 export class MaxButton extends Button {
-  declare readonly _options: MaxButtonOptions;
+  declare readonly options: MaxButtonOptions;
   readonly setting: SettingMax;
 
-  constructor(host: KittenScientists, setting: SettingMax, options?: MaxButtonOptions) {
-    super(host, "", null, {
+  constructor(parent: UiComponent, setting: SettingMax, options?: MaxButtonOptions) {
+    super(parent, "", null, {
       ...options,
       classes: [styles.maxButton, ...(options?.classes ?? [])],
     });

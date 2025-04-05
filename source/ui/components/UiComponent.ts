@@ -5,6 +5,7 @@ export type UiComponentInterface = EventTarget & {
   readonly children: Iterable<UiComponentInterface>;
   get element(): JQuery;
   refreshUi(): void;
+  refresh(force?: boolean): void;
 };
 
 export type UiComponentOptions = {
@@ -17,9 +18,10 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
   /**
    * A reference to the host itself.
    */
-  protected readonly _host: KittenScientists;
+  readonly host: KittenScientists;
+  readonly parent: UiComponent | null;
 
-  protected readonly _options: UiComponentOptions | undefined;
+  readonly options: UiComponentOptions | undefined;
 
   /**
    * The main DOM element for this component, in a JQuery wrapper.
@@ -41,18 +43,34 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
    * @param host A reference to the host.
    * @param options The options for this component.
    */
-  constructor(host: KittenScientists, options?: UiComponentOptions) {
+  constructor(parent: UiComponent | { host: KittenScientists }, options?: UiComponentOptions) {
     super();
-    this._host = host;
-    this._options = options;
+    this.host = parent.host;
+    this.parent = parent instanceof UiComponent ? parent : null;
+    this.options = options;
   }
 
   click() {
-    return this._options?.onClick?.call(this);
+    return this.options?.onClick?.call(this);
+  }
+
+  private _needsRefresh = false;
+  refresh(force = false) {
+    if (force && !this._needsRefresh) {
+      return;
+    }
+
+    this.options?.onRefresh?.call(this);
+
+    for (const child of this.children) {
+      child.refresh(force);
+    }
+
+    this._needsRefresh = !force;
   }
 
   refreshUi() {
-    this._options?.onRefresh?.call(this);
+    this.options?.onRefresh?.call(this);
     for (const child of this.children) {
       try {
         child.refreshUi();

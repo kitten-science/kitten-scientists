@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
 import type { ResetUpgradeSettings } from "../settings/ResetUpgradeSettings.js";
 import type { Setting, SettingOptions } from "../settings/Settings.js";
@@ -10,20 +9,21 @@ import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSettings> {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: ResetUpgradeSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
-    const label = host.engine.i18n("ui.upgrades");
-    super(host, label, settings, {
-      childrenHead: [new Container(host, { classes: [stylesLabelListItem.fillSpace] })],
+    const label = parent.host.engine.i18n("ui.upgrades");
+    super(parent, label, settings, {
+      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Workshop,
     });
 
-    const upgrades = host.game.workshop.upgrades.filter(
+    const upgrades = parent.host.game.workshop.upgrades.filter(
       upgrade => !isNil(this.setting.upgrades[upgrade.name]),
     );
 
@@ -35,9 +35,9 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
     )) {
       const option = this.setting.upgrades[upgrade.name];
 
-      const element = this._getResetOption(host, option, upgrade.label);
+      const element = this._getResetOption(parent, option, upgrade.label);
 
-      if (host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+      if (parent.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== upgrade.label[0]) {
           if (!isNil(lastElement)) {
             lastElement.element.addClass(stylesDelimiter.delimiter);
@@ -52,23 +52,23 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
       lastLabel = upgrade.label;
     }
 
-    this.addChild(new SettingsList(host, { children: items }));
+    this.addChild(new SettingsList(parent, { children: items }));
   }
 
   private _getResetOption(
-    host: KittenScientists,
+    parent: UiComponent,
     option: Setting,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
   ) {
-    return new SettingListItem(host, option, label, {
+    return new SettingListItem(parent, option, label, {
       delimiter,
       onCheck: () => {
-        host.engine.imessage("status.reset.check.enable", [label]);
+        parent.host.engine.imessage("status.reset.check.enable", [label]);
       },
       onUnCheck: () => {
-        host.engine.imessage("status.reset.check.disable", [label]);
+        parent.host.engine.imessage("status.reset.check.disable", [label]);
       },
       upgradeIndicator,
     });

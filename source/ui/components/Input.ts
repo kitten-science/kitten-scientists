@@ -1,4 +1,3 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
 export type InputOptions = ThisType<Input> &
@@ -12,7 +11,7 @@ export type InputOptions = ThisType<Input> &
   };
 
 export class Input extends UiComponent {
-  declare readonly _options: InputOptions;
+  declare readonly options: InputOptions;
   readonly element: JQuery<HTMLInputElement>;
 
   /**
@@ -22,8 +21,8 @@ export class Input extends UiComponent {
    * @param label - The label on the input element.
    * @param options - Options for the UI element.
    */
-  constructor(host: KittenScientists, options?: InputOptions) {
-    super(host, { ...options, children: [] });
+  constructor(parent: UiComponent, options?: InputOptions) {
+    super(parent, { ...options, children: [] });
 
     this.element = $<HTMLInputElement>('<input type="text"/>').addClass("ks-input");
 

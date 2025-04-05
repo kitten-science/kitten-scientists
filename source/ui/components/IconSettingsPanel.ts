@@ -1,7 +1,7 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
 import { CollapsiblePanel, type CollapsiblePanelOptions } from "./CollapsiblePanel.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
+import type { UiComponent } from "./UiComponent.js";
 
 export type IconSettingsPanelOptions = ThisType<IconSettingsPanel> &
   LabelListItemOptions &
@@ -13,7 +13,7 @@ export type IconSettingsPanelOptions = ThisType<IconSettingsPanel> &
   };
 
 export class IconSettingsPanel<TSetting extends Setting = Setting> extends CollapsiblePanel {
-  declare readonly _options: IconSettingsPanelOptions;
+  declare readonly options: IconSettingsPanelOptions;
   readonly setting: TSetting;
 
   /**
@@ -25,14 +25,17 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Colla
    * @param options Options for the panel.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     label: string,
     setting: TSetting,
     options?: IconSettingsPanelOptions,
   ) {
     super(
-      host,
-      new LabelListItem(host, label, { childrenHead: options?.childrenHead, icon: options?.icon }),
+      parent,
+      new LabelListItem(parent, label, {
+        childrenHead: options?.childrenHead,
+        icon: options?.icon,
+      }),
       {
         initiallyExpanded: options?.initiallyExpanded,
       },

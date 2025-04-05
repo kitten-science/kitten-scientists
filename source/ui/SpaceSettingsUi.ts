@@ -1,6 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { SpaceSettings } from "../settings/SpaceSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
@@ -11,28 +10,29 @@ import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTriggerListItem> {
   private readonly _missionsUi: MissionSettingsUi;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: SpaceSettings,
     locale: SettingOptions<SupportedLocale>,
     options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("ui.space");
+    const label = parent.host.engine.i18n("ui.space");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
         },
@@ -40,24 +40,24 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
         },
         onRefreshTrigger() {
-          this.triggerButton.element[0].title = host.engine.i18n("ui.trigger.section", [
+          this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
-              ? host.engine.i18n("ui.trigger.section.inactive")
-              : host.renderPercentage(settings.trigger, locale.selected, true),
+              ? parent.host.engine.i18n("ui.trigger.section.inactive")
+              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.prompt.percentage"),
-            host.engine.i18n("ui.trigger.section.prompt", [
+            parent,
+            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+            parent.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               settings.trigger !== -1
-                ? host.renderPercentage(settings.trigger, locale.selected, true)
-                : host.engine.i18n("ui.infinity"),
+                ? parent.host.renderPercentage(settings.trigger, locale.selected, true)
+                : parent.host.engine.i18n("ui.infinity"),
             ]),
-            settings.trigger !== -1 ? host.renderPercentage(settings.trigger) : "",
-            host.engine.i18n("ui.trigger.section.promptExplainer"),
+            settings.trigger !== -1 ? parent.host.renderPercentage(settings.trigger) : "",
+            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -69,22 +69,22 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
             return;
           }
 
-          settings.trigger = host.parsePercentage(value);
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
     );
 
     this.addChild(
-      new SettingsList(host, {
-        children: host.game.space.planets
+      new SettingsList(parent, {
+        children: parent.host.game.space.planets
           .filter(planet => 0 < planet.buildings.length)
           .flatMap((planet, indexPlanet, arrayPlant) => [
-            new HeaderListItem(host, host.engine.labelForPlanet(planet.name)),
+            new HeaderListItem(parent, parent.host.engine.labelForPlanet(planet.name)),
             ...planet.buildings
               .filter(item => !isNil(this.setting.buildings[item.name]))
               .map((building, indexBuilding, arrayBuilding) =>
                 BuildSectionTools.getBuildOption(
-                  host,
+                  parent,
                   this.setting.buildings[building.name],
                   locale,
                   this.setting,
@@ -105,14 +105,14 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
       }),
     );
 
-    const listAddition = new SettingsList(host, {
+    const listAddition = new SettingsList(parent, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(host, host.engine.i18n("ui.additional")));
+    listAddition.addChild(new HeaderListItem(parent, parent.host.engine.i18n("ui.additional")));
 
     this._missionsUi = new MissionSettingsUi(
-      host,
+      parent,
       this.setting.unlockMissions,
       locale,
       this.setting,

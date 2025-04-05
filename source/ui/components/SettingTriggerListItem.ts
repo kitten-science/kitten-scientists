@@ -1,9 +1,9 @@
 import type { SupportedLocale } from "../../Engine.js";
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingOptions, SettingThreshold, SettingTrigger } from "../../settings/Settings.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
+import type { UiComponent } from "./UiComponent.js";
 import { TriggerButton } from "./buttons/TriggerButton.js";
 
 export type SettingTriggerListItemOptions = ThisType<SettingTriggerListItem> &
@@ -13,30 +13,30 @@ export type SettingTriggerListItemOptions = ThisType<SettingTriggerListItem> &
   };
 
 export class SettingTriggerListItem extends SettingListItem {
-  declare readonly _options: SettingTriggerListItemOptions;
+  declare readonly options: SettingTriggerListItemOptions;
   readonly triggerButton: TriggerButton;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingThreshold | SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
     label: string,
     options: SettingTriggerListItemOptions,
   ) {
-    super(host, setting, label, options);
+    super(parent, setting, label, options);
 
-    this.triggerButton = new TriggerButton(host, setting, locale, {
+    this.triggerButton = new TriggerButton(parent, setting, locale, {
       alignment: "right",
       border: false,
       onClick: async (event?: MouseEvent) => {
-        await this._options.onSetTrigger.call(this);
+        await this.options.onSetTrigger.call(this);
         this.refreshUi();
       },
       onRefreshTitle: options?.onRefreshTrigger
         ? () => options.onRefreshTrigger?.call(this)
         : undefined,
     });
-    this.head.addChild(new Container(host, { classes: [stylesLabelListItem.fillSpace] }));
+    this.head.addChild(new Container(parent, { classes: [stylesLabelListItem.fillSpace] }));
     this.head.addChild(this.triggerButton);
   }
 

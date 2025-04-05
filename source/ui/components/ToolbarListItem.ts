@@ -1,21 +1,21 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { Button } from "./Button.js";
 import type { IconButton } from "./IconButton.js";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
 import styles from "./ToolbarListItem.module.css";
+import type { UiComponent } from "./UiComponent.js";
 
 export type ToolbarListItemOptions = ThisType<ToolbarListItem> & ListItemOptions;
 
 export class ToolbarListItem extends ListItem {
-  declare readonly _options: ToolbarListItemOptions;
+  declare readonly options: ToolbarListItemOptions;
   readonly buttons: Array<Button | IconButton>;
 
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     buttons: Array<Button | IconButton>,
     options?: ToolbarListItemOptions,
   ) {
-    super(host, options);
+    super(parent, options);
 
     this.element.addClass(styles.toolbar);
     this.buttons = buttons;

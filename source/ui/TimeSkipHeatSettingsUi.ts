@@ -1,5 +1,4 @@
 import type { SupportedLocale } from "../Engine.js";
-import type { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import type { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
@@ -12,31 +11,32 @@ import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import type { UiComponent } from "./components/UiComponent.js";
 
 export class TimeSkipHeatSettingsUi extends SettingsPanel<
   TimeSkipHeatSettings,
   SettingTriggerListItem
 > {
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     settings: TimeSkipHeatSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: TimeSkipSettings,
     sectionParentSetting: TimeControlSettings,
     options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
-    const label = host.engine.i18n("option.time.activeHeatTransfer");
+    const label = parent.host.engine.i18n("option.time.activeHeatTransfer");
     super(
-      host,
+      parent,
       settings,
-      new SettingTriggerListItem(host, settings, locale, label, {
+      new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.enable", [label]);
+          parent.host.engine.imessage("status.auto.enable", [label]);
           this.refreshUi();
           options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
-          host.engine.imessage("status.auto.disable", [label]);
+          parent.host.engine.imessage("status.auto.disable", [label]);
           settings.activeHeatTransferStatus.enabled = false;
           this.refreshUi();
           options?.onUnCheck?.(isBatchProcess);
@@ -65,35 +65,35 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            host,
-            host.engine.i18n("ui.trigger.activeHeatTransfer.prompt"),
-            host.engine.i18n("ui.trigger.activeHeatTransfer.promptTitle", [
-              host.renderPercentage(settings.trigger, locale.selected, true),
+            parent,
+            parent.host.engine.i18n("ui.trigger.activeHeatTransfer.prompt"),
+            parent.host.engine.i18n("ui.trigger.activeHeatTransfer.promptTitle", [
+              parent.host.renderPercentage(settings.trigger, locale.selected, true),
             ]),
-            host.renderPercentage(settings.trigger),
-            host.engine.i18n("ui.trigger.activeHeatTransfer.promptExplainer"),
+            parent.host.renderPercentage(settings.trigger),
+            parent.host.engine.i18n("ui.trigger.activeHeatTransfer.promptExplainer"),
           );
 
           if (value === undefined || value === "" || value.startsWith("-")) {
             return;
           }
 
-          settings.trigger = host.parsePercentage(value);
+          settings.trigger = parent.host.parsePercentage(value);
         },
       }),
       options,
     );
 
     this.addChild(
-      new SettingsList(host, {
+      new SettingsList(parent, {
         children: [
-          new CyclesList(host, this.setting.cycles, {
+          new CyclesList(parent, this.setting.cycles, {
             onCheckCycle: (label: string) => {
-              host.engine.imessage("time.heatTransfer.cycle.enable", [label]);
+              parent.host.engine.imessage("time.heatTransfer.cycle.enable", [label]);
               this.refreshUi();
             },
             onUnCheckCycle: (label: string) => {
-              host.engine.imessage("time.heatTransfer.cycle.disable", [label]);
+              parent.host.engine.imessage("time.heatTransfer.cycle.disable", [label]);
               this.refreshUi();
             },
           }),

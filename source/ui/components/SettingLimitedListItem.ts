@@ -1,8 +1,8 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { SettingLimited } from "../../settings/Settings.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
+import type { UiComponent } from "./UiComponent.js";
 import { LimitedButton } from "./buttons/LimitedButton.js";
 
 export type SettingLimitedListItemOptions = ThisType<SettingLimitedListItem> &
@@ -19,7 +19,7 @@ export type SettingLimitedListItemOptions = ThisType<SettingLimitedListItem> &
   };
 
 export class SettingLimitedListItem extends SettingListItem {
-  declare readonly _options: SettingLimitedListItemOptions;
+  declare readonly options: SettingLimitedListItemOptions;
   readonly limitedButton: LimitedButton;
 
   /**
@@ -32,18 +32,18 @@ export class SettingLimitedListItem extends SettingListItem {
    * @param options Options for the list item.
    */
   constructor(
-    host: KittenScientists,
+    parent: UiComponent,
     setting: SettingLimited,
     label: string,
     options?: SettingLimitedListItemOptions,
   ) {
-    super(host, setting, label, options);
+    super(parent, setting, label, options);
 
-    this.limitedButton = new LimitedButton(host, setting, {
+    this.limitedButton = new LimitedButton(parent, setting, {
       ...options,
     });
     this.head.addChildren([
-      new Container(host, { classes: [stylesLabelListItem.fillSpace] }),
+      new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
       this.limitedButton,
     ]);
   }

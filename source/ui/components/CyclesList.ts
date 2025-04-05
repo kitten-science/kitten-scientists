@@ -1,8 +1,8 @@
-import type { KittenScientists } from "../../KittenScientists.js";
 import type { Setting } from "../../settings/Settings.js";
 import type { Cycle } from "../../types/index.js";
 import { SettingListItem } from "./SettingListItem.js";
 import { SettingsList, type SettingsListOptions } from "./SettingsList.js";
+import type { UiComponent } from "./UiComponent.js";
 
 export type SettingWithCycles = Record<Cycle, Setting>;
 
@@ -29,7 +29,7 @@ export type CyclesListOptions = ThisType<CyclesList> &
  * A list of settings correlating to the planetary cycles in the game.
  */
 export class CyclesList extends SettingsList {
-  declare readonly _options: CyclesListOptions;
+  declare readonly options: CyclesListOptions;
   readonly setting: SettingWithCycles;
 
   /**
@@ -40,13 +40,13 @@ export class CyclesList extends SettingsList {
    * @param behavior Control cycle check box log output
    * @param options Options for this list.
    */
-  constructor(host: KittenScientists, setting: SettingWithCycles, options?: CyclesListOptions) {
-    super(host, options);
+  constructor(parent: UiComponent, setting: SettingWithCycles, options?: CyclesListOptions) {
+    super(parent, options);
     this.setting = setting;
 
     const makeCycle = (cycle: Cycle, setting: Setting) => {
-      const label = host.engine.labelForCycle(cycle);
-      return new SettingListItem(host, setting, label, {
+      const label = parent.host.engine.labelForCycle(cycle);
+      return new SettingListItem(parent, setting, label, {
         onCheck: (isBatchProcess?: boolean) =>
           options?.onCheckCycle?.(label, setting, isBatchProcess),
         onUnCheck: (isBatchProcess?: boolean) =>
