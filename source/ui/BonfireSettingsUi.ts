@@ -90,11 +90,11 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
     // Post-super() child insertion, so we can use this._getBuildOptions().
     // We want the ability to use `this` in our callbacks, to construct more complex
     // usage scenarios where we need access to the entire UI section.
-    this.addChildren([
+    this.addChildrenContent([
       new SettingsList(this, {
         onReset: () => {
           this.setting.load({ buildings: new BonfireSettings().buildings });
-          this.refreshUi();
+          this.requestRefresh();
         },
       }).addChildren(
         coalesceArray(

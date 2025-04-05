@@ -57,7 +57,7 @@ export class ConsumeButton extends Button {
     return `[${ConsumeButton.name}#${this.componentId}]`;
   }
 
-  refreshUi() {
+  refreshUi(): void {
     super.refreshUi();
 
     const consumeValue = this.host.renderPercentage(

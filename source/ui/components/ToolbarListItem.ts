@@ -20,8 +20,6 @@ export class ToolbarListItem extends ListItem {
   }
 
   override addChild(child: Button | IconButton): this {
-    this.children.add(child);
-    this.element.append(child.element);
-    return this;
+    return super.addChild(child);
   }
 }

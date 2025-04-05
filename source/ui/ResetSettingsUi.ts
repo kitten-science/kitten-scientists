@@ -60,6 +60,6 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
       this._timeUi,
       this._upgradesUi,
     ]);
-    this.addChild(list);
+    this.addChildContent(list);
   }
 }

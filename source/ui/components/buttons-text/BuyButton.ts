@@ -51,7 +51,7 @@ export class BuyButton extends TextButton {
     return `[${BuyButton.name}#${this.componentId}]`;
   }
 
-  refreshUi() {
+  refreshUi(): void {
     super.refreshUi();
 
     this.element.prop(

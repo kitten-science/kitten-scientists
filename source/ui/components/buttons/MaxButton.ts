@@ -1,5 +1,3 @@
-import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
 import type { SettingMax } from "../../../settings/Settings.js";
 import { Button, type ButtonOptions } from "../Button.js";
 import type { UiComponent } from "../UiComponent.js";
@@ -16,10 +14,6 @@ export class MaxButton extends Button {
       ...options,
       classes: [styles.maxButton, ...(options?.classes ?? [])],
     });
-
-    if (isNil(options?.onClick)) {
-      throw new InvalidOperationError("Missing click handler on MaxButton.");
-    }
 
     this.setting = setting;
   }

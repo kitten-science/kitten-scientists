@@ -88,7 +88,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     this.requestRefresh(true);
   }
 
-  refreshUi() {
+  refreshUi(): void {
     if (this.setting.enabled) {
       this.element.addClass(styles.checked);
     } else {

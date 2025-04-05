@@ -30,5 +30,5 @@ export class Paragraph extends UiComponent {
     return `[${Paragraph.name}#${this.componentId}]`;
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

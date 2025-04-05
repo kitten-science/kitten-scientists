@@ -65,10 +65,12 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
       hasEnableAll: false,
     });
     itemsList.addChildren([this._techsUi, this._policiesUi, this._observeStars]);
-    this.addChild(itemsList);
+    this.addChildContent(itemsList);
   }
 
-  override refreshUi(): void {
+  refreshUi(): void {
+    super.refreshUi();
+
     if (this.setting.observe.enabled) {
       $("#observeButton").hide();
     } else {

@@ -41,13 +41,9 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
   constructor(parent: UiComponent, head: THead, options?: CollapsiblePanelOptions) {
     super(parent, {});
 
+    this.head = head;
     this.container = new Container(this);
     this.container.element.addClass(stylesSettingListItem.panelContent);
-    this.children.add(this.container);
-
-    this.head = head;
-    this.children.add(head);
-    head.parent = this;
 
     // The expando button for this panel.
     const expando = new ExpandoButton(parent, {
@@ -67,16 +63,12 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
     this._mainChildVisible = options?.initiallyExpanded ?? false;
     this.element = head.element;
     this.expando = expando;
+
+    this.addChildren([this.head, this.container]);
   }
 
   toString(): string {
     return `[${CollapsiblePanel.name}#${this.componentId}]`;
-  }
-
-  override addChild(child: UiComponent): this {
-    this.children.add(child);
-    this.container.element.append(child.element);
-    return this;
   }
 
   addChildHead(child: UiComponentInterface): this {
@@ -86,6 +78,17 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
   addChildrenHead(children?: Iterable<UiComponentInterface>): this {
     for (const child of children ?? []) {
       this.head.addChild(child);
+    }
+    return this;
+  }
+
+  addChildContent(child: UiComponent): this {
+    this.container.addChild(child);
+    return this;
+  }
+  addChildrenContent(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.container.addChild(child);
     }
     return this;
   }
@@ -102,7 +105,7 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
       this._mainChildVisible = visible;
       if (this._mainChildVisible) {
         // Refresh panel UI on expand.
-        this.container.refreshUi();
+        this.container.requestRefresh();
         // Show the DOM element.
         this.container.element.removeClass(stylesSettingListItem.hidden);
         // Reflect expanded state on expando.
@@ -134,5 +137,5 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
     }
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

@@ -46,7 +46,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
       "zebras",
     ];
 
-    this.addChild(
+    this.addChildContent(
       new SettingsList(this).addChildren(
         this.host.game.resPool.resources
           .filter(

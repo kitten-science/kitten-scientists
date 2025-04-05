@@ -3,6 +3,7 @@ import { cl } from "../../tools/Log.js";
 
 export type UiComponentInterface = EventTarget & {
   readonly children: Iterable<UiComponentInterface>;
+  parent: UiComponentInterface | null;
   get element(): JQuery;
   refreshUi(): void;
   requestRefresh(withChildren?: boolean): void;
@@ -77,6 +78,9 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
       return;
     }
 
+    if (!force) {
+      console.debug(...cl(this.toString(), "refresh", typeof this.options?.onRefresh));
+    }
     this.options?.onRefresh?.call(this);
     this.refreshUi();
     for (const child of this.children) {
@@ -89,6 +93,7 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
   abstract refreshUi(): void;
 
   addChild(child: UiComponentInterface): this {
+    child.parent = this;
     this.children.add(child);
     this.element.append(child.element);
     return this;

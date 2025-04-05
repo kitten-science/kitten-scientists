@@ -33,5 +33,5 @@ export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends 
     return `[${ExplainerListItem.name}#${this.componentId}]`;
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

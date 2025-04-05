@@ -58,7 +58,6 @@ export class SettingsList extends UiComponent {
       const tools = $("<div/>").addClass(styles.listTools);
 
       if (toolOptions.hasEnableAll) {
-        const onEnableAll = options?.onEnableAll;
         this.enableAllButton = new IconButton(
           parent,
           Icons.CheckboxCheck,
@@ -77,9 +76,8 @@ export class SettingsList extends UiComponent {
                 }
               }
 
-              if (!isNil(onEnableAll)) {
-                onEnableAll();
-              }
+              options?.onEnableAll?.call(this);
+              this.requestRefresh();
             },
           },
         );
@@ -87,7 +85,6 @@ export class SettingsList extends UiComponent {
       }
 
       if (toolOptions.hasDisableAll) {
-        const onDisableAll = options?.onDisableAll;
         this.disableAllButton = new IconButton(
           parent,
           Icons.CheckboxUnCheck,
@@ -105,9 +102,9 @@ export class SettingsList extends UiComponent {
               (child as SettingListItem).uncheck();
             }
           }
-          if (!isNil(onDisableAll)) {
-            onDisableAll();
-          }
+
+          options?.onDisableAll?.call(this);
+          this.requestRefresh();
         });
         tools.append(this.disableAllButton.element);
       }
@@ -138,10 +135,11 @@ export class SettingsList extends UiComponent {
   }
 
   override addChild(child: UiComponent): this {
+    child.parent = this;
     this.children.add(child);
     this.list.append(child.element);
     return this;
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

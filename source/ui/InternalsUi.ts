@@ -32,7 +32,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
 
-    this.addChildren([
+    this.addChildrenContent([
       new SettingsList(parent, {
         hasDisableAll: false,
         hasEnableAll: false,

@@ -36,5 +36,5 @@ export class Fieldset extends UiComponent {
     return `[${Fieldset.name}#${this.componentId}]`;
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

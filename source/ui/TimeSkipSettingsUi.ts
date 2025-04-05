@@ -130,15 +130,13 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         icon: Icons.Cycles,
       }).addChildrenHead([new Container(this, { classes: [stylesLabelListItem.fillSpace] })]),
-    ).addChildren([
+    ).addChildrenContent([
       new CyclesList(this, this.setting.cycles, {
         onCheckCycle: (label: string) => {
           this.host.engine.imessage("time.skip.cycle.enable", [label]);
-          this.refreshUi();
         },
         onUnCheckCycle: (label: string) => {
           this.host.engine.imessage("time.skip.cycle.disable", [label]);
-          this.refreshUi();
         },
       }),
     ]);
@@ -148,15 +146,13 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         icon: Icons.Seasons,
       }).addChildrenHead([new Container(this, { classes: [stylesLabelListItem.fillSpace] })]),
-    ).addChildren([
+    ).addChildrenContent([
       new SeasonsList(this, this.setting.seasons, {
         onCheckSeason: (label: string) => {
           this.host.engine.imessage("time.skip.season.enable", [label]);
-          this.refreshUi();
         },
         onUnCheckSeason: (label: string) => {
           this.host.engine.imessage("time.skip.season.disable", [label]);
-          this.refreshUi();
         },
       }),
     ]);
@@ -168,7 +164,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       sectionSetting,
     );
 
-    this.addChild(
+    this.addChildContent(
       new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,

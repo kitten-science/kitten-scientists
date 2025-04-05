@@ -29,5 +29,5 @@ export class Container extends UiComponent {
     return `[${Container.name}#${this.componentId}]`;
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

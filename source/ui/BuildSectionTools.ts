@@ -47,10 +47,10 @@ export const BuildSectionTools = {
 
     const element = new SettingMaxTriggerListItem(parent, option, locale, label, {
       delimiter: options?.delimiter,
-      onCheck: (isBatchProcess?: boolean) => {
+      onCheck: async (isBatchProcess?: boolean) => {
         parent.host.engine.imessage("status.sub.enable", [label]);
         if (option.max === 0 && !isBatchProcess) {
-          onSetMax();
+          await onSetMax();
         }
         options?.onCheck?.(isBatchProcess);
       },

@@ -66,6 +66,6 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
       lastLabel = policy.label;
     }
 
-    this.addChild(new SettingsList(this).addChildren(items));
+    this.addChildContent(new SettingsList(this).addChildren(items));
   }
 }

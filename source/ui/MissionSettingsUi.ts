@@ -55,6 +55,6 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
       );
 
     const itemsList = new SettingsList(this).addChildren(this._missions);
-    this.addChild(itemsList);
+    this.addChildContent(itemsList);
   }
 }

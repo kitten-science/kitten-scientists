@@ -31,5 +31,5 @@ export class HeaderListItem extends UiComponent implements ListItem {
     return `[${HeaderListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

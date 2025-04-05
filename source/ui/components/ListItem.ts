@@ -38,5 +38,5 @@ export class ListItem extends UiComponent {
     return `[${ListItem.name}#${this.componentId}]`;
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

@@ -40,12 +40,8 @@ export class TriggerButton extends Button {
     return `[${TriggerButton.name}#${this.componentId}]`;
   }
 
-  refreshUi() {
+  refreshUi(): void {
     super.refreshUi();
-
-    if (this.options?.onRefresh) {
-      return;
-    }
 
     const triggerValue =
       this.behavior === "integer"

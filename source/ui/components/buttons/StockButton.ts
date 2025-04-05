@@ -60,7 +60,7 @@ export class StockButton extends Button {
     return `[${StockButton.name}#${this.componentId}]`;
   }
 
-  refreshUi() {
+  refreshUi(): void {
     super.refreshUi();
 
     const stockValue = this.host.renderAbsolute(this.setting.stock);

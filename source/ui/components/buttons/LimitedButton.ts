@@ -32,7 +32,7 @@ export class LimitedButton extends Button {
           options?.onLimitedUnCheck?.call(this);
         }
 
-        this.refreshUi();
+        this.requestRefresh();
       },
     });
 
@@ -47,7 +47,7 @@ export class LimitedButton extends Button {
     return `[${LimitedButton.name}#${this.componentId}]`;
   }
 
-  refreshUi() {
+  refreshUi(): void {
     super.refreshUi();
 
     this.updateTitle(

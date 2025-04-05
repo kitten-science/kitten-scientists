@@ -59,5 +59,5 @@ export class Input extends UiComponent {
     return `[${Input.name}#${this.componentId}]`;
   }
 
-  refreshUi() {}
+  refreshUi(): void {}
 }

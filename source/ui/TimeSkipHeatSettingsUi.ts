@@ -76,7 +76,7 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
       }),
     );
 
-    this.addChild(
+    this.addChildContent(
       new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
@@ -84,11 +84,9 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
         new CyclesList(this, this.setting.cycles, {
           onCheckCycle: (label: string) => {
             this.host.engine.imessage("time.heatTransfer.cycle.enable", [label]);
-            this.refreshUi();
           },
           onUnCheckCycle: (label: string) => {
             this.host.engine.imessage("time.heatTransfer.cycle.disable", [label]);
-            this.refreshUi();
           },
         }),
       ]),
