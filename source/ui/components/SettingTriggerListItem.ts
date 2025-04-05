@@ -28,21 +28,16 @@ export class SettingTriggerListItem extends SettingListItem {
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       alignment: "right",
       border: false,
-      onClick: async (event?: MouseEvent) => {
-        await this.options.onSetTrigger.call(this);
-        this.refreshUi();
-      },
-      onRefreshTitle: options?.onRefreshTrigger
-        ? () => options.onRefreshTrigger?.call(this)
-        : undefined,
+      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.call(this) : undefined,
+      onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
-    this.head.addChild(new Container(parent, { classes: [stylesLabelListItem.fillSpace] }));
-    this.head.addChild(this.triggerButton);
+    this.addChildrenHead([
+      new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+      this.triggerButton,
+    ]);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
-    this.triggerButton.refreshUi();
+  toString(): string {
+    return `[${SettingTriggerListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 }

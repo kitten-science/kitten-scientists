@@ -9,9 +9,9 @@ import { ResetTimeSettingsUi } from "./ResetTimeSettingsUi.js";
 import { ResetUpgradesSettingsUi } from "./ResetUpgradesSettingsUi.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
@@ -26,38 +26,31 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
     parent: UiComponent,
     settings: ResetSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: SettingsPanelOptions<SettingListItem> & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("option.time.reset");
     super(
       parent,
       settings,
       new SettingListItem(parent, settings, label, {
-        childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
-      }),
-      options,
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
 
-    const list = new SettingsList(parent, {
+    const list = new SettingsList(this, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    this._bonfireUi = new ResetBonfireSettingsUi(parent, this.setting.bonfire, locale);
-    this._religionUi = new ResetReligionSettingsUi(parent, this.setting.religion, locale);
-    this._resourcesUi = new ResetResourcesSettingsUi(parent, this.setting.resources, locale);
-    this._spaceUi = new ResetSpaceSettingsUi(parent, this.setting.space, locale);
-    this._timeUi = new ResetTimeSettingsUi(parent, this.setting.time, locale);
-    this._upgradesUi = new ResetUpgradesSettingsUi(parent, this.setting.upgrades, locale);
+    this._bonfireUi = new ResetBonfireSettingsUi(this, this.setting.bonfire, locale);
+    this._religionUi = new ResetReligionSettingsUi(this, this.setting.religion, locale);
+    this._resourcesUi = new ResetResourcesSettingsUi(this, this.setting.resources, locale);
+    this._spaceUi = new ResetSpaceSettingsUi(this, this.setting.space, locale);
+    this._timeUi = new ResetTimeSettingsUi(this, this.setting.time, locale);
+    this._upgradesUi = new ResetUpgradesSettingsUi(this, this.setting.upgrades, locale);
 
     list.addChildren([
       this._bonfireUi,

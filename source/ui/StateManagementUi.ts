@@ -1,4 +1,4 @@
-import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { type Locale, de, enUS, he, zhCN } from "date-fns/locale";
@@ -63,21 +63,20 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       parent,
       settings,
       new LabelListItem(parent, label, {
-        childrenHead: [
-          new Container(parent, {
-            classes: [stylesLabelListItem.fillSpace],
-          }),
-        ],
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         icon: Icons.State,
-      }),
+      }).addChildrenHead([
+        new Container(parent, {
+          classes: [stylesLabelListItem.fillSpace],
+        }),
+      ]),
     );
 
-    this.gameList = new SettingsList(parent, {
+    this.gameList = new SettingsList(this, {
       hasEnableAll: false,
       hasDisableAll: false,
     });
-    this.stateList = new SettingsList(parent, {
+    this.stateList = new SettingsList(this, {
       hasEnableAll: false,
       hasDisableAll: false,
     });
@@ -92,85 +91,76 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             : enUS;
 
     this.addChild(
-      new SettingsList(parent, {
-        children: [
-          new SettingListItem(
-            parent,
-            this.setting.noConfirm,
-            parent.host.engine.i18n("state.noConfirm"),
-          ),
-          new ListItem(parent, { children: [new Delimiter(parent)] }),
-
-          new HeaderListItem(parent, parent.host.engine.i18n("state.local")),
-          new ToolbarListItem(parent, [
-            new Button(parent, parent.host.engine.i18n("state.import"), Icons.Import, {
-              onClick: () => {
-                this.import();
-              },
-              title: parent.host.engine.i18n("state.importTitle"),
-            }),
-          ]),
-          new ListItem(parent, { children: [new Delimiter(parent)] }),
-
-          new HeaderListItem(parent, parent.host.engine.i18n("state.localStates")),
-          new ToolbarListItem(parent, [
-            new Button(parent, parent.host.engine.i18n("state.store"), Icons.SaveAs, {
-              onClick: () => {
-                this.storeState();
-              },
-              title: parent.host.engine.i18n("state.storeState"),
-            }),
-            new Button(parent, parent.host.engine.i18n("copy"), Icons.Copy, {
-              onClick: () => {
-                this.copyState().catch(redirectErrorsToConsole(console));
-                parent.host.engine.imessage("state.copied.stateCurrent");
-              },
-              title: parent.host.engine.i18n("state.copy.stateCurrent"),
-            }),
-            new Button(parent, parent.host.engine.i18n("state.new"), Icons.Draft, {
-              onClick: () => {
-                this.storeStateFactoryDefaults();
-                parent.host.engine.imessage("state.stored.state");
-              },
-              title: parent.host.engine.i18n("state.storeFactory"),
-            }),
-            new Button(parent, parent.host.engine.i18n("state.exportAll"), Icons.Sync, {
-              onClick: () => {
-                this.exportStateAll();
-              },
-              title: parent.host.engine.i18n("state.exportAllTitle"),
-            }),
-          ]),
-          new ListItem(parent, { children: [this.stateList] }),
-          new ListItem(parent, { children: [new Delimiter(parent)] }),
-
-          new HeaderListItem(parent, parent.host.engine.i18n("state.localGames")),
-          new ToolbarListItem(parent, [
-            new Button(parent, parent.host.engine.i18n("state.store"), Icons.SaveAs, {
-              onClick: () => {
-                this.storeGame();
-                parent.host.engine.imessage("state.stored.game");
-              },
-              title: parent.host.engine.i18n("state.storeGame"),
-            }),
-            new Button(parent, parent.host.engine.i18n("copy"), Icons.Copy, {
-              onClick: () => {
-                this.copyGame().catch(redirectErrorsToConsole(console));
-                parent.host.engine.imessage("state.copied.gameCurrent");
-              },
-              title: parent.host.engine.i18n("state.copy.gameCurrent"),
-            }),
-          ]),
-          new ListItem(parent, { children: [this.gameList] }),
-          new SettingListItem(
-            parent,
-            this.setting.compress,
-            parent.host.engine.i18n("state.compress"),
-          ),
-        ],
+      new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
-      }),
+      }).addChildren([
+        new SettingListItem(this, this.setting.noConfirm, this.host.engine.i18n("state.noConfirm")),
+        new ListItem(this).addChild(new Delimiter(this)),
+
+        new HeaderListItem(this, this.host.engine.i18n("state.local")),
+        new ToolbarListItem(this).addChildren([
+          new Button(this, this.host.engine.i18n("state.import"), Icons.Import, {
+            onClick: () => {
+              this.import();
+            },
+            title: this.host.engine.i18n("state.importTitle"),
+          }),
+        ]),
+        new ListItem(this).addChild(new Delimiter(this)),
+
+        new HeaderListItem(this, this.host.engine.i18n("state.localStates")),
+        new ToolbarListItem(this).addChildren([
+          new Button(this, this.host.engine.i18n("state.store"), Icons.SaveAs, {
+            onClick: () => {
+              this.storeState();
+            },
+            title: this.host.engine.i18n("state.storeState"),
+          }),
+          new Button(this, this.host.engine.i18n("copy"), Icons.Copy, {
+            onClick: () => {
+              this.copyState().catch(redirectErrorsToConsole(console));
+              this.host.engine.imessage("state.copied.stateCurrent");
+            },
+            title: this.host.engine.i18n("state.copy.stateCurrent"),
+          }),
+          new Button(this, this.host.engine.i18n("state.new"), Icons.Draft, {
+            onClick: () => {
+              this.storeStateFactoryDefaults();
+              this.host.engine.imessage("state.stored.state");
+            },
+            title: this.host.engine.i18n("state.storeFactory"),
+          }),
+          new Button(this, this.host.engine.i18n("state.exportAll"), Icons.Sync, {
+            onClick: () => {
+              this.exportStateAll();
+            },
+            title: this.host.engine.i18n("state.exportAllTitle"),
+          }),
+        ]),
+        new ListItem(this).addChild(this.stateList),
+        new ListItem(this).addChild(new Delimiter(this)),
+
+        new HeaderListItem(this, this.host.engine.i18n("state.localGames")),
+        new ToolbarListItem(this).addChildren([
+          new Button(this, this.host.engine.i18n("state.store"), Icons.SaveAs, {
+            onClick: () => {
+              this.storeGame();
+              this.host.engine.imessage("state.stored.game");
+            },
+            title: this.host.engine.i18n("state.storeGame"),
+          }),
+          new Button(this, this.host.engine.i18n("copy"), Icons.Copy, {
+            onClick: () => {
+              this.copyGame().catch(redirectErrorsToConsole(console));
+              this.host.engine.imessage("state.copied.gameCurrent");
+            },
+            title: this.host.engine.i18n("state.copy.gameCurrent"),
+          }),
+        ]),
+        new ListItem(this).addChild(this.gameList),
+        new SettingListItem(this, this.setting.compress, this.host.engine.i18n("state.compress")),
+      ]),
     );
 
     this._loadGames();
@@ -235,13 +225,11 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   }
 
   refreshUi(): void {
-    super.refreshUi();
     this._refreshGameList();
     this._refreshStateList();
   }
 
   private _refreshGameList() {
-    const parent = mustExist(this.parent);
     this.gameList.removeChildren(this.gameList.children);
     this.gameList.addChildren(
       this.games
@@ -250,60 +238,55 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             new Date(a.unwrap().timestamp).getTime() - new Date(b.unwrap().timestamp).getTime(),
         )
         .map(game => [game.unwrap(), game] as const)
-        .map(
-          ([game, gameSlot]) =>
-            new ButtonListItem(
-              parent,
-              new TextButton(
-                parent,
-                `${game.label} (${formatDistanceToNow(new Date(game.timestamp), {
-                  addSuffix: true,
-                  locale: this.locale,
-                })})`,
-                {
-                  onClick: () => {
-                    this.loadGame(game.game).catch(redirectErrorsToConsole(console));
-                    this.host.engine.imessage("state.loaded.game", [game.label]);
-                  },
-                  title: new Date(game.timestamp).toLocaleString(),
-                },
-              ),
+        .map(([game, gameSlot]) =>
+          new ButtonListItem(
+            this,
+            new TextButton(
+              this,
+              `${game.label} (${formatDistanceToNow(new Date(game.timestamp), {
+                addSuffix: true,
+                locale: this.locale,
+              })})`,
               {
-                children: [
-                  new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
-                  new IconButton(parent, Icons.Save, this.host.engine.i18n("state.update.game"), {
-                    onClick: () => {
-                      this.updateGame(gameSlot, this.host.game.save());
-                      this.host.engine.imessage("state.updated.game", [game.label]);
-                    },
-                  }),
-                  new IconButton(parent, Icons.Edit, this.host.engine.i18n("state.edit.game"), {
-                    onClick: () => {
-                      this.storeGame(game.game);
-                      this.deleteGame(gameSlot, true);
-                      this.host.engine.imessage("state.updated.game", [game.label]);
-                    },
-                  }),
-                  new IconButton(parent, Icons.Copy, this.host.engine.i18n("state.copy.game"), {
-                    onClick: () => {
-                      this.copyGame(game.game).catch(redirectErrorsToConsole(console));
-                      this.host.engine.imessage("state.copied.game", [game.label]);
-                    },
-                  }),
-                  new IconButton(parent, Icons.Delete, this.host.engine.i18n("state.delete.game"), {
-                    onClick: () => {
-                      this.deleteGame(gameSlot);
-                      this.host.engine.imessage("state.deleted.game", [game.label]);
-                    },
-                  }),
-                ],
+                onClick: () => {
+                  this.loadGame(game.game).catch(redirectErrorsToConsole(console));
+                  this.host.engine.imessage("state.loaded.game", [game.label]);
+                },
+                title: new Date(game.timestamp).toLocaleString(),
               },
             ),
+          ).addChildren([
+            new Container(this, { classes: [stylesLabelListItem.fillSpace] }),
+            new IconButton(this, Icons.Save, this.host.engine.i18n("state.update.game"), {
+              onClick: () => {
+                this.updateGame(gameSlot, this.host.game.save());
+                this.host.engine.imessage("state.updated.game", [game.label]);
+              },
+            }),
+            new IconButton(this, Icons.Edit, this.host.engine.i18n("state.edit.game"), {
+              onClick: () => {
+                this.storeGame(game.game);
+                this.deleteGame(gameSlot, true);
+                this.host.engine.imessage("state.updated.game", [game.label]);
+              },
+            }),
+            new IconButton(this, Icons.Copy, this.host.engine.i18n("state.copy.game"), {
+              onClick: () => {
+                this.copyGame(game.game).catch(redirectErrorsToConsole(console));
+                this.host.engine.imessage("state.copied.game", [game.label]);
+              },
+            }),
+            new IconButton(this, Icons.Delete, this.host.engine.i18n("state.delete.game"), {
+              onClick: () => {
+                this.deleteGame(gameSlot);
+                this.host.engine.imessage("state.deleted.game", [game.label]);
+              },
+            }),
+          ]),
         ),
     );
   }
   private _refreshStateList() {
-    const parent = mustExist(this.parent);
     this.stateList.removeChildren(this.stateList.children);
     this.stateList.addChildren(
       this.states
@@ -312,60 +295,51 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
             new Date(a.unwrap().timestamp).getTime() - new Date(b.unwrap().timestamp).getTime(),
         )
         .map(stateSlot => [stateSlot.unwrap(), stateSlot] as const)
-        .map(
-          ([state, stateSlot]) =>
-            new ButtonListItem(
-              parent,
-              new TextButton(
-                parent,
-                `${state.label} (${formatDistanceToNow(new Date(state.timestamp), {
-                  addSuffix: true,
-                  locale: this.locale,
-                })})`,
-                {
-                  onClick: () => {
-                    this.loadState(state.state);
-                    this.host.engine.imessage("state.loaded.state", [state.label]);
-                  },
-                  title: new Date(state.timestamp).toLocaleString(),
-                },
-              ),
+        .map(([state, stateSlot]) =>
+          new ButtonListItem(
+            this,
+            new TextButton(
+              this,
+              `${state.label} (${formatDistanceToNow(new Date(state.timestamp), {
+                addSuffix: true,
+                locale: this.locale,
+              })})`,
               {
-                children: [
-                  new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
-                  new IconButton(parent, Icons.Save, this.host.engine.i18n("state.update.state"), {
-                    onClick: () => {
-                      this.updateState(stateSlot, this.host.engine.stateSerialize());
-                      this.host.engine.imessage("state.updated.state", [state.label]);
-                    },
-                  }),
-                  new IconButton(parent, Icons.Edit, this.host.engine.i18n("state.edit.state"), {
-                    onClick: () => {
-                      this.storeState(state.state);
-                      this.deleteState(stateSlot, true);
-                      this.host.engine.imessage("state.updated.state", [state.label]);
-                    },
-                  }),
-                  new IconButton(parent, Icons.Copy, this.host.engine.i18n("state.copy.state"), {
-                    onClick: () => {
-                      this.copyState(state.state).catch(redirectErrorsToConsole(console));
-                      this.host.engine.imessage("state.copied.state", [state.label]);
-                    },
-                  }),
-                  new IconButton(
-                    parent,
-                    Icons.Delete,
-                    this.host.engine.i18n("state.delete.state"),
-                    {
-                      onClick: () => {
-                        this.deleteState(stateSlot);
-                        this.host.engine.imessage("state.deleted.state", [state.label]);
-                      },
-                    },
-                  ),
-                ],
+                onClick: () => {
+                  this.loadState(state.state);
+                  this.host.engine.imessage("state.loaded.state", [state.label]);
+                },
+                title: new Date(state.timestamp).toLocaleString(),
               },
             ),
+          ).addChildren([
+            new Container(this, { classes: [stylesLabelListItem.fillSpace] }),
+            new IconButton(this, Icons.Save, this.host.engine.i18n("state.update.state"), {
+              onClick: () => {
+                this.updateState(stateSlot, this.host.engine.stateSerialize());
+                this.host.engine.imessage("state.updated.state", [state.label]);
+              },
+            }),
+            new IconButton(this, Icons.Edit, this.host.engine.i18n("state.edit.state"), {
+              onClick: () => {
+                this.storeState(state.state);
+                this.deleteState(stateSlot, true);
+                this.host.engine.imessage("state.updated.state", [state.label]);
+              },
+            }),
+            new IconButton(this, Icons.Copy, this.host.engine.i18n("state.copy.state"), {
+              onClick: () => {
+                this.copyState(state.state).catch(redirectErrorsToConsole(console));
+                this.host.engine.imessage("state.copied.state", [state.label]);
+              },
+            }),
+            new IconButton(this, Icons.Delete, this.host.engine.i18n("state.delete.state"), {
+              onClick: () => {
+                this.deleteState(stateSlot);
+                this.host.engine.imessage("state.deleted.state", [state.label]);
+              },
+            }),
+          ]),
         ),
     );
   }

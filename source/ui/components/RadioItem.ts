@@ -34,6 +34,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
   readonly setting: TSetting;
   readonly option: TSetting["options"][0];
   readonly element: JQuery;
+  readonly elementLabel: JQuery<HTMLLabelElement>;
   readonly input: JQuery;
 
   readOnly: boolean;
@@ -64,7 +65,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
       element.addClass(stylesDelimiter.delimiter);
     }
 
-    const elementLabel = $("<label/>", {
+    this.elementLabel = $<HTMLLabelElement>("<label/>", {
       text: `${options?.upgradeIndicator ? "⮤ " : ""}${option.label}`,
     }).addClass(stylesLabel.label);
 
@@ -82,19 +83,20 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
       }
     });
 
-    elementLabel.prepend(input);
-    element.append(elementLabel);
+    this.elementLabel.prepend(input);
+    element.append(this.elementLabel);
 
     this.input = input;
     this.element = element;
-    this.addChildren(options?.children);
     this.setting = setting;
     this.option = option;
   }
 
-  refreshUi() {
-    super.refreshUi();
+  toString(): string {
+    return `[${RadioItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+  }
 
+  refreshUi() {
     this.input.prop("disabled", this.readOnly);
   }
 }

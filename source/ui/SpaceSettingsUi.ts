@@ -6,10 +6,9 @@ import { BuildSectionTools } from "./BuildSectionTools.js";
 import { MissionSettingsUi } from "./MissionSettingsUi.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
-import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTriggerListItem> {
@@ -19,7 +18,6 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
     parent: UiComponent,
     settings: SpaceSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("ui.space");
     super(
@@ -28,13 +26,9 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -75,16 +69,21 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
     );
 
     this.addChild(
-      new SettingsList(parent, {
-        children: parent.host.game.space.planets
+      new SettingsList(this, {
+        onReset: () => {
+          this.setting.load({ buildings: new SpaceSettings().buildings });
+          this.refreshUi();
+        },
+      }).addChildren(
+        this.host.game.space.planets
           .filter(planet => 0 < planet.buildings.length)
           .flatMap((planet, indexPlanet, arrayPlant) => [
-            new HeaderListItem(parent, parent.host.engine.labelForPlanet(planet.name)),
+            new HeaderListItem(this, this.host.engine.labelForPlanet(planet.name)),
             ...planet.buildings
               .filter(item => !isNil(this.setting.buildings[item.name]))
               .map((building, indexBuilding, arrayBuilding) =>
                 BuildSectionTools.getBuildOption(
-                  parent,
+                  this,
                   this.setting.buildings[building.name],
                   locale,
                   this.setting,
@@ -98,21 +97,17 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
                 ),
               ),
           ]),
-        onReset: () => {
-          this.setting.load({ buildings: new SpaceSettings().buildings });
-          this.refreshUi();
-        },
-      }),
+      ),
     );
 
-    const listAddition = new SettingsList(parent, {
+    const listAddition = new SettingsList(this, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    listAddition.addChild(new HeaderListItem(parent, parent.host.engine.i18n("ui.additional")));
+    listAddition.addChild(new HeaderListItem(this, this.host.engine.i18n("ui.additional")));
 
     this._missionsUi = new MissionSettingsUi(
-      parent,
+      this,
       this.setting.unlockMissions,
       locale,
       this.setting,

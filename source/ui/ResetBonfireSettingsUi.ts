@@ -25,33 +25,34 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
   ) {
     const label = parent.host.engine.i18n("ui.build");
     super(parent, label, settings, {
-      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Bonfire,
     });
 
+    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
+
     this._buildings = [];
-    for (const buildingGroup of parent.host.game.bld.buildingGroups) {
-      this._buildings.push(new HeaderListItem(parent, buildingGroup.title));
+    for (const buildingGroup of this.host.game.bld.buildingGroups) {
+      this._buildings.push(new HeaderListItem(this, buildingGroup.title));
       for (const building of buildingGroup.buildings) {
         if (building === "unicornPasture" || isNil(this.setting.buildings[building])) {
           continue;
         }
 
-        const meta = parent.host.game.bld.getBuildingExt(building).meta;
+        const meta = this.host.game.bld.getBuildingExt(building).meta;
         if (!isNil(meta.stages)) {
           const name = Object.values(this.setting.buildings).find(
             item => item.baseBuilding === building,
           )?.building as StagedBuilding;
           this._buildings.push(
             this._getResetOption(
-              parent,
+              this,
               this.setting.buildings[building],
               locale,
               settings,
               meta.stages[0].label,
             ),
             this._getResetOption(
-              parent,
+              this,
               this.setting.buildings[name],
               locale,
               settings,
@@ -63,7 +64,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
         } else if (!isNil(meta.label)) {
           this._buildings.push(
             this._getResetOption(
-              parent,
+              this,
               this.setting.buildings[building],
               locale,
               settings,
@@ -76,13 +77,13 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
       // Add padding after each group. Except for the last group, which ends the list.
       if (
         buildingGroup !==
-        parent.host.game.bld.buildingGroups[parent.host.game.bld.buildingGroups.length - 1]
+        this.host.game.bld.buildingGroups[this.host.game.bld.buildingGroups.length - 1]
       ) {
         this._buildings.at(-1)?.element.addClass(stylesDelimiter.delimiter);
       }
     }
 
-    const listBuildings = new SettingsList(parent);
+    const listBuildings = new SettingsList(this);
     listBuildings.addChildren(this._buildings);
     this.addChild(listBuildings);
   }

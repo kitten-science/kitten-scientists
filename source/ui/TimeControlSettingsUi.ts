@@ -7,10 +7,10 @@ import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
@@ -24,43 +24,37 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
     parent: UiComponent,
     settings: TimeControlSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: SettingsPanelOptions<SettingListItem> & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("ui.timeCtrl");
     super(
       parent,
       settings,
       new SettingListItem(parent, settings, label, {
-        childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
-      }),
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
 
-    const list = new SettingsList(parent, {
+    const list = new SettingsList(this, {
       hasDisableAll: false,
       hasEnableAll: false,
     });
-    const accelerateLabel = parent.host.engine.i18n("option.accelerate");
+    const accelerateLabel = this.host.engine.i18n("option.accelerate");
     this._accelerateTime = new SettingTriggerListItem(
-      parent,
+      this,
       this.setting.accelerateTime,
       locale,
       accelerateLabel,
       {
         onCheck: () => {
-          parent.host.engine.imessage("status.sub.enable", [accelerateLabel]);
+          this.host.engine.imessage("status.sub.enable", [accelerateLabel]);
         },
         onUnCheck: () => {
-          parent.host.engine.imessage("status.sub.disable", [accelerateLabel]);
+          this.host.engine.imessage("status.sub.disable", [accelerateLabel]);
         },
         onRefresh: () => {
           this._accelerateTime.triggerButton.inactive = !this.setting.accelerateTime.enabled;
@@ -71,30 +65,30 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            parent,
-            parent.host.engine.i18n("ui.trigger.accelerateTime.prompt"),
-            parent.host.engine.i18n("ui.trigger.accelerateTime.promptTitle", [
-              parent.host.renderPercentage(
+            this,
+            this.host.engine.i18n("ui.trigger.accelerateTime.prompt"),
+            this.host.engine.i18n("ui.trigger.accelerateTime.promptTitle", [
+              this.host.renderPercentage(
                 this.setting.accelerateTime.trigger,
                 locale.selected,
                 true,
               ),
             ]),
-            parent.host.renderPercentage(this.setting.accelerateTime.trigger),
-            parent.host.engine.i18n("ui.trigger.accelerateTime.promptExplainer"),
+            this.host.renderPercentage(this.setting.accelerateTime.trigger),
+            this.host.engine.i18n("ui.trigger.accelerateTime.promptExplainer"),
           );
 
           if (value === undefined || value === "" || value.startsWith("-")) {
             return;
           }
 
-          this.setting.accelerateTime.trigger = parent.host.parsePercentage(value);
+          this.setting.accelerateTime.trigger = this.host.parsePercentage(value);
         },
       },
     );
     this._accelerateTime.triggerButton.element.addClass(stylesButton.lastHeadAction);
-    this._timeSkipUi = new TimeSkipSettingsUi(parent, this.setting.timeSkip, locale, settings);
-    this._resetUi = new ResetSettingsUi(parent, this.setting.reset, locale);
+    this._timeSkipUi = new TimeSkipSettingsUi(this, this.setting.timeSkip, locale, settings);
+    this._resetUi = new ResetSettingsUi(this, this.setting.reset, locale);
 
     this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];
 

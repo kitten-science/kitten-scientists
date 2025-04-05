@@ -16,14 +16,18 @@ export class Container extends UiComponent {
    * @param options Options for the container.
    */
   constructor(parent: UiComponent, options?: ContainerOptions) {
-    super(parent, { ...options, children: [] });
+    super(parent, { ...options });
 
     this.element = $("<div/>");
 
     for (const className of options?.classes ?? []) {
       this.element.addClass(className);
     }
-
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${Container.name}#${this.componentId}]`;
+  }
+
+  refreshUi() {}
 }

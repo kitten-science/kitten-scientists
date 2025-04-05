@@ -5,6 +5,7 @@ export type IconButtonOptions = ThisType<IconButton> &
   UiComponentOptions & {
     readonly readOnly?: boolean;
     readonly inactive?: boolean;
+    readonly onClick?: (event?: MouseEvent) => void | Promise<void>;
   };
 
 /**
@@ -33,7 +34,6 @@ export class IconButton extends UiComponent {
     }).addClass(stylesButton.iconButton);
 
     this.element = element;
-    this.addChildren(options?.children);
     this.readOnly = options?.readOnly ?? false;
     this.inactive = options?.inactive ?? false;
 
@@ -42,17 +42,19 @@ export class IconButton extends UiComponent {
     });
   }
 
-  override click() {
+  toString(): string {
+    return `[${IconButton.name}#${this.componentId}]`;
+  }
+
+  click() {
     if (this.readOnly) {
       return;
     }
 
-    super.click();
+    return this.options?.onClick?.call(this);
   }
 
   override refreshUi(): void {
-    super.refreshUi();
-
     if (this.readOnly) {
       this.element.addClass(stylesButton.readonly);
     } else {

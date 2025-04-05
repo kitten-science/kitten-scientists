@@ -9,10 +9,10 @@ import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
 import { ConsumeButton } from "./components/buttons/ConsumeButton.js";
 import { StockButton } from "./components/buttons/StockButton.js";
@@ -22,18 +22,15 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     parent: UiComponent,
     settings: ResourcesSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: SettingsPanelOptions<LabelListItem> & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("ui.resources");
     super(
       parent,
       settings,
       new LabelListItem(parent, label, {
-        childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         icon: Icons.Resources,
-      }),
-      options,
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
 
     const ignoredResources: Array<Resource> = [
@@ -50,8 +47,8 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     ];
 
     this.addChild(
-      new SettingsList(parent, {
-        children: parent.host.game.resPool.resources
+      new SettingsList(this).addChildren(
+        this.host.game.resPool.resources
           .filter(
             item =>
               !ignoredResources.includes(item.name) && !isNil(this.setting.resources[item.name]),
@@ -60,8 +57,8 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
           .map(
             resource => [this.setting.resources[resource.name], ucfirst(resource.title)] as const,
           )
-          .map(([setting, title]) => this._makeResourceSetting(parent, setting, locale, title)),
-      }),
+          .map(([setting, title]) => this._makeResourceSetting(this, setting, locale, title)),
+      ),
     );
   }
 
@@ -80,14 +77,13 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     label: string,
   ) {
     const element = new SettingListItem(parent, option, label, {
-      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       onCheck: () => {
         parent.host.engine.imessage("status.resource.enable", [label]);
       },
       onUnCheck: () => {
         parent.host.engine.imessage("status.resource.disable", [label]);
       },
-    });
+    }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
 
     // How many items to stock.
     const stockElement = new StockButton(parent, option, locale, label, {

@@ -33,7 +33,6 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Colla
     super(
       parent,
       new LabelListItem(parent, label, {
-        childrenHead: options?.childrenHead,
         icon: options?.icon,
       }),
       {

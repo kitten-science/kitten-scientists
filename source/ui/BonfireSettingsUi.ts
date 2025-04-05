@@ -8,10 +8,10 @@ import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTriggerListItem> {
@@ -19,7 +19,6 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
     parent: UiComponent,
     settings: BonfireSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("ui.build");
     super(
@@ -28,18 +27,13 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: () => {
-          const element = this.settingItem;
-          element.triggerButton.inactive = !settings.enabled || settings.trigger < 0;
-          element.triggerButton.ineffective =
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger < 0;
+          this.settingItem.triggerButton.ineffective =
             settings.enabled &&
             settings.trigger < 0 &&
             !Object.values(settings.buildings).some(_ => _.enabled && 0 < _.max && 0 <= _.trigger);
@@ -56,12 +50,14 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
             !settings.upgradeBuildings.enabled;
         },
         onRefreshTrigger: () => {
-          const element = this.settingItem;
-          element.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
-            settings.trigger < 0
-              ? parent.host.engine.i18n("ui.trigger.section.inactive")
-              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
-          ]);
+          this.settingItem.triggerButton.element[0].title = parent.host.engine.i18n(
+            "ui.trigger.section",
+            [
+              settings.trigger < 0
+                ? parent.host.engine.i18n("ui.trigger.section.inactive")
+                : parent.host.renderPercentage(settings.trigger, locale.selected, true),
+            ],
+          );
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
@@ -95,100 +91,95 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
     // We want the ability to use `this` in our callbacks, to construct more complex
     // usage scenarios where we need access to the entire UI section.
     this.addChildren([
-      new SettingsList(parent, {
-        children: coalesceArray(
-          parent.host.game.bld.buildingGroups.flatMap(buildingGroup => [
-            new HeaderListItem(parent, buildingGroup.title),
-            ...buildingGroup.buildings.flatMap(building =>
-              this._getBuildOptions(parent, settings, locale, label, building),
-            ),
-            buildingGroup !==
-            parent.host.game.bld.buildingGroups[parent.host.game.bld.buildingGroups.length - 1]
-              ? new Delimiter(parent)
-              : undefined,
-          ]),
-        ),
+      new SettingsList(this, {
         onReset: () => {
           this.setting.load({ buildings: new BonfireSettings().buildings });
           this.refreshUi();
         },
-      }),
-      new SettingsList(parent, {
-        children: [
-          new HeaderListItem(parent, parent.host.engine.i18n("ui.additional")),
-          new SettingListItem(
-            parent,
-            settings.gatherCatnip,
-            parent.host.engine.i18n("option.catnip"),
-            {
-              onCheck: () => {
-                parent.host.engine.imessage("status.sub.enable", [
-                  parent.host.engine.i18n("option.catnip"),
-                ]);
-              },
-              onUnCheck: () => {
-                parent.host.engine.imessage("status.sub.disable", [
-                  parent.host.engine.i18n("option.catnip"),
-                ]);
-              },
-            },
-          ),
-          new SettingListItem(
-            parent,
-            settings.turnOnSteamworks,
-            parent.host.engine.i18n("option.steamworks"),
-            {
-              onCheck: () => {
-                parent.host.engine.imessage("status.sub.enable", [
-                  parent.host.engine.i18n("option.steamworks"),
-                ]);
-              },
-              onUnCheck: () => {
-                parent.host.engine.imessage("status.sub.disable", [
-                  parent.host.engine.i18n("option.steamworks"),
-                ]);
-              },
-            },
-          ),
-          new SettingListItem(
-            parent,
-            settings.turnOnMagnetos,
-            parent.host.engine.i18n("option.magnetos"),
-            {
-              onCheck: () => {
-                parent.host.engine.imessage("status.sub.enable", [
-                  parent.host.engine.i18n("option.magnetos"),
-                ]);
-              },
-              onUnCheck: () => {
-                parent.host.engine.imessage("status.sub.disable", [
-                  parent.host.engine.i18n("option.magnetos"),
-                ]);
-              },
-            },
-          ),
-          new SettingListItem(
-            parent,
-            settings.turnOnReactors,
-            parent.host.engine.i18n("option.reactors"),
-            {
-              onCheck: () => {
-                parent.host.engine.imessage("status.sub.enable", [
-                  parent.host.engine.i18n("option.reactors"),
-                ]);
-              },
-              onUnCheck: () => {
-                parent.host.engine.imessage("status.sub.disable", [
-                  parent.host.engine.i18n("option.reactors"),
-                ]);
-              },
-            },
-          ),
-          new BuildingUpgradeSettingsUi(parent, settings.upgradeBuildings, locale, settings),
-        ],
+      }).addChildren(
+        coalesceArray(
+          this.host.game.bld.buildingGroups.flatMap(buildingGroup => [
+            new HeaderListItem(this, buildingGroup.title),
+            ...buildingGroup.buildings.flatMap(building =>
+              this._getBuildOptions(this, settings, locale, label, building),
+            ),
+            buildingGroup !==
+            this.host.game.bld.buildingGroups[this.host.game.bld.buildingGroups.length - 1]
+              ? new Delimiter(this)
+              : undefined,
+          ]),
+        ),
+      ),
+      new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
-      }),
+      }).addChildren([
+        new HeaderListItem(this, this.host.engine.i18n("ui.additional")),
+        new SettingListItem(this, settings.gatherCatnip, this.host.engine.i18n("option.catnip"), {
+          onCheck: () => {
+            this.host.engine.imessage("status.sub.enable", [
+              this.host.engine.i18n("option.catnip"),
+            ]);
+          },
+          onUnCheck: () => {
+            this.host.engine.imessage("status.sub.disable", [
+              this.host.engine.i18n("option.catnip"),
+            ]);
+          },
+        }),
+        new SettingListItem(
+          this,
+          settings.turnOnSteamworks,
+          this.host.engine.i18n("option.steamworks"),
+          {
+            onCheck: () => {
+              this.host.engine.imessage("status.sub.enable", [
+                this.host.engine.i18n("option.steamworks"),
+              ]);
+            },
+            onUnCheck: () => {
+              this.host.engine.imessage("status.sub.disable", [
+                this.host.engine.i18n("option.steamworks"),
+              ]);
+            },
+          },
+        ),
+        new SettingListItem(
+          this,
+          settings.turnOnMagnetos,
+          this.host.engine.i18n("option.magnetos"),
+          {
+            onCheck: () => {
+              this.host.engine.imessage("status.sub.enable", [
+                this.host.engine.i18n("option.magnetos"),
+              ]);
+            },
+            onUnCheck: () => {
+              this.host.engine.imessage("status.sub.disable", [
+                this.host.engine.i18n("option.magnetos"),
+              ]);
+            },
+          },
+        ),
+        new SettingListItem(
+          this,
+          settings.turnOnReactors,
+          this.host.engine.i18n("option.reactors"),
+          {
+            onCheck: () => {
+              this.host.engine.imessage("status.sub.enable", [
+                this.host.engine.i18n("option.reactors"),
+              ]);
+            },
+            onUnCheck: () => {
+              this.host.engine.imessage("status.sub.disable", [
+                this.host.engine.i18n("option.reactors"),
+              ]);
+            },
+          },
+        ),
+        new BuildingUpgradeSettingsUi(this, settings.upgradeBuildings, locale, settings),
+      ]),
     ]);
   }
 
@@ -215,14 +206,6 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           settings,
           meta.stages[0].label,
           sectionLabel,
-          {
-            onCheck: () => {
-              this.refreshUi();
-            },
-            onUnCheck: () => {
-              this.refreshUi();
-            },
-          },
         ),
         BuildSectionTools.getBuildOption(
           parent,
@@ -233,12 +216,6 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           sectionLabel,
           {
             upgradeIndicator: true,
-            onCheck: () => {
-              this.refreshUi();
-            },
-            onUnCheck: () => {
-              this.refreshUi();
-            },
           },
         ),
       ];
@@ -252,14 +229,6 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           settings,
           meta.label,
           sectionLabel,
-          {
-            onCheck: () => {
-              this.refreshUi();
-            },
-            onUnCheck: () => {
-              this.refreshUi();
-            },
-          },
         ),
       ];
     }

@@ -23,90 +23,81 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
   ) {
     const label = parent.host.engine.i18n("ui.faith");
     super(parent, label, settings, {
-      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Religion,
     });
+
+    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
 
     const unicornsArray: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems];
 
     this.addChild(
-      new SettingsList(parent, {
-        children: [
-          new HeaderListItem(parent, parent.host.engine.i18n("$religion.panel.ziggurat.label")),
-          this._getResetOption(
-            parent,
-            this.setting.buildings.unicornPasture,
-            locale,
-            settings,
-            parent.host.engine.i18n("$buildings.unicornPasture.label"),
+      new SettingsList(this).addChildren([
+        new HeaderListItem(this, this.host.engine.i18n("$religion.panel.ziggurat.label")),
+        this._getResetOption(
+          this,
+          this.setting.buildings.unicornPasture,
+          locale,
+          settings,
+          this.host.engine.i18n("$buildings.unicornPasture.label"),
+        ),
+
+        ...this.host.game.religion.zigguratUpgrades
+          .filter(
+            item => unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
+          )
+          .map(zigguratUpgrade =>
+            this._getResetOption(
+              this,
+              this.setting.buildings[zigguratUpgrade.name],
+              locale,
+              settings,
+              zigguratUpgrade.label,
+            ),
+          ),
+        new Delimiter(this),
+
+        ...this.host.game.religion.zigguratUpgrades
+          .filter(
+            item => !unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
+          )
+          .map(upgrade =>
+            this._getResetOption(
+              this,
+              this.setting.buildings[upgrade.name],
+              locale,
+              settings,
+              upgrade.label,
+            ),
+          ),
+        new Delimiter(this),
+
+        new HeaderListItem(this, this.host.engine.i18n("$religion.panel.orderOfTheSun.label")),
+        ...this.host.game.religion.religionUpgrades
+          .filter(item => !isNil(this.setting.buildings[item.name]))
+          .map(upgrade =>
+            this._getResetOption(
+              this,
+              this.setting.buildings[upgrade.name],
+              locale,
+              settings,
+              upgrade.label,
+              upgrade.name === this.host.game.religion.religionUpgrades.at(-1)?.name,
+            ),
           ),
 
-          ...parent.host.game.religion.zigguratUpgrades
-            .filter(
-              item =>
-                unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
-            )
-            .map(zigguratUpgrade =>
-              this._getResetOption(
-                parent,
-                this.setting.buildings[zigguratUpgrade.name],
-                locale,
-                settings,
-                zigguratUpgrade.label,
-              ),
+        new HeaderListItem(this, this.host.engine.i18n("$religion.panel.cryptotheology.label")),
+        ...this.host.game.religion.transcendenceUpgrades
+          .filter(item => !isNil(this.setting.buildings[item.name]))
+          .map(upgrade =>
+            this._getResetOption(
+              this,
+              this.setting.buildings[upgrade.name],
+              locale,
+              settings,
+              upgrade.label,
             ),
-          new Delimiter(parent),
-
-          ...parent.host.game.religion.zigguratUpgrades
-            .filter(
-              item =>
-                !unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
-            )
-            .map(upgrade =>
-              this._getResetOption(
-                parent,
-                this.setting.buildings[upgrade.name],
-                locale,
-                settings,
-                upgrade.label,
-              ),
-            ),
-          new Delimiter(parent),
-
-          new HeaderListItem(
-            parent,
-            parent.host.engine.i18n("$religion.panel.orderOfTheSun.label"),
           ),
-          ...parent.host.game.religion.religionUpgrades
-            .filter(item => !isNil(this.setting.buildings[item.name]))
-            .map(upgrade =>
-              this._getResetOption(
-                parent,
-                this.setting.buildings[upgrade.name],
-                locale,
-                settings,
-                upgrade.label,
-                upgrade.name === parent.host.game.religion.religionUpgrades.at(-1)?.name,
-              ),
-            ),
-
-          new HeaderListItem(
-            parent,
-            parent.host.engine.i18n("$religion.panel.cryptotheology.label"),
-          ),
-          ...parent.host.game.religion.transcendenceUpgrades
-            .filter(item => !isNil(this.setting.buildings[item.name]))
-            .map(upgrade =>
-              this._getResetOption(
-                parent,
-                this.setting.buildings[upgrade.name],
-                locale,
-                settings,
-                upgrade.label,
-              ),
-            ),
-        ],
-      }),
+      ]),
     );
   }
 

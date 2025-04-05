@@ -47,6 +47,10 @@ export class SellButton extends TextButton {
     this.setting = setting;
   }
 
+  toString(): string {
+    return `[${SellButton.name}#${this.componentId}]`;
+  }
+
   refreshUi() {
     super.refreshUi();
 

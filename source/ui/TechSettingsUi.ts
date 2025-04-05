@@ -6,10 +6,9 @@ import type { TechSettings } from "../settings/TechSettings.js";
 import stylesButton from "./components/Button.module.css";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import type { SettingListItemOptions } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
-import { SettingsPanel, type SettingsPanelOptions } from "./components/SettingsPanel.js";
+import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerListItem> {
@@ -18,7 +17,6 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
     settings: TechSettings,
     locale: SettingOptions<SupportedLocale>,
     sectionSetting: ScienceSettings,
-    options?: SettingsPanelOptions<SettingTriggerListItem> & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("ui.upgrade.techs");
     super(
@@ -27,13 +25,9 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -81,10 +75,9 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
           settings.trigger = parent.host.parsePercentage(value);
         },
       }),
-      options,
     );
 
-    const techs = parent.host.game.science.techs.filter(
+    const techs = this.host.game.science.techs.filter(
       tech => !isNil(this.setting.techs[tech.name]),
     );
 
@@ -93,14 +86,12 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
     for (const tech of techs.sort((a, b) => a.label.localeCompare(b.label, locale.selected))) {
       const option = this.setting.techs[tech.name];
 
-      const element = new SettingTriggerListItem(parent, option, locale, tech.label, {
+      const element = new SettingTriggerListItem(this, option, locale, tech.label, {
         onCheck: () => {
-          parent.host.engine.imessage("status.sub.enable", [tech.label]);
-          this.refreshUi();
+          this.host.engine.imessage("status.sub.enable", [tech.label]);
         },
         onUnCheck: () => {
-          parent.host.engine.imessage("status.sub.disable", [tech.label]);
-          this.refreshUi();
+          this.host.engine.imessage("status.sub.disable", [tech.label]);
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -112,26 +103,26 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
             option.trigger === -1;
         },
         onRefreshTrigger: () => {
-          element.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
+          element.triggerButton.element[0].title = this.host.engine.i18n("ui.trigger", [
             option.trigger < 0
               ? settings.trigger < 0
-                ? parent.host.engine.i18n("ui.trigger.section.blocked", [label])
-                : `${parent.host.renderPercentage(settings.trigger, locale.selected, true)} (${parent.host.engine.i18n("ui.trigger.section.inherited")})`
-              : parent.host.renderPercentage(option.trigger, locale.selected, true),
+                ? this.host.engine.i18n("ui.trigger.section.blocked", [label])
+                : `${this.host.renderPercentage(settings.trigger, locale.selected, true)} (${this.host.engine.i18n("ui.trigger.section.inherited")})`
+              : this.host.renderPercentage(option.trigger, locale.selected, true),
           ]);
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            parent,
-            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
-            parent.host.engine.i18n("ui.trigger.section.prompt", [
+            this,
+            this.host.engine.i18n("ui.trigger.prompt.percentage"),
+            this.host.engine.i18n("ui.trigger.section.prompt", [
               label,
               option.trigger !== -1
-                ? parent.host.renderPercentage(option.trigger, locale.selected, true)
-                : parent.host.engine.i18n("ui.trigger.section.inherited"),
+                ? this.host.renderPercentage(option.trigger, locale.selected, true)
+                : this.host.engine.i18n("ui.trigger.section.inherited"),
             ]),
-            option.trigger !== -1 ? parent.host.renderPercentage(option.trigger) : "",
-            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
+            option.trigger !== -1 ? this.host.renderPercentage(option.trigger) : "",
+            this.host.engine.i18n("ui.trigger.section.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -143,12 +134,12 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
             return;
           }
 
-          option.trigger = parent.host.parsePercentage(value);
+          option.trigger = this.host.parsePercentage(value);
         },
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
-      if (parent.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+      if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== tech.label[0]) {
           element.element.addClass(stylesLabelListItem.splitter);
         }
@@ -159,6 +150,6 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
       lastLabel = tech.label;
     }
 
-    this.addChild(new SettingsList(parent, { children: items }));
+    this.addChild(new SettingsList(this).addChildren(items));
   }
 }

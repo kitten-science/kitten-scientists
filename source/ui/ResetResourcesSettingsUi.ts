@@ -20,11 +20,12 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
   ) {
     const label = parent.host.engine.i18n("ui.resources");
     super(parent, label, settings, {
-      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Resources,
     });
 
-    const resources = parent.host.game.resPool.resources;
+    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
+
+    const resources = this.host.game.resPool.resources;
 
     const items = [];
     let lastLabel = resources[0].title;
@@ -33,12 +34,12 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     )) {
       const option = this.setting.resources[resource.name];
 
-      const element = new SettingTriggerListItem(parent, option, locale, ucfirst(resource.title), {
+      const element = new SettingTriggerListItem(this, option, locale, ucfirst(resource.title), {
         onCheck: () => {
-          parent.host.engine.imessage("status.sub.enable", [resource.title]);
+          this.host.engine.imessage("status.sub.enable", [resource.title]);
         },
         onUnCheck: () => {
-          parent.host.engine.imessage("status.sub.disable", [resource.title]);
+          this.host.engine.imessage("status.sub.disable", [resource.title]);
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -47,16 +48,16 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
-            parent,
-            parent.host.engine.i18n("ui.trigger.prompt.float"),
-            parent.host.engine.i18n("ui.trigger.build.prompt", [
+            this,
+            this.host.engine.i18n("ui.trigger.prompt.float"),
+            this.host.engine.i18n("ui.trigger.build.prompt", [
               resource.title,
               option.trigger !== -1
-                ? parent.host.renderAbsolute(option.trigger, locale.selected)
-                : parent.host.engine.i18n("ui.trigger.inactive"),
+                ? this.host.renderAbsolute(option.trigger, locale.selected)
+                : this.host.engine.i18n("ui.trigger.inactive"),
             ]),
-            option.trigger !== -1 ? parent.host.renderAbsolute(option.trigger) : "",
-            parent.host.engine.i18n("ui.trigger.reset.promptExplainer"),
+            option.trigger !== -1 ? this.host.renderAbsolute(option.trigger) : "",
+            this.host.engine.i18n("ui.trigger.reset.promptExplainer"),
           );
 
           if (value === undefined) {
@@ -74,7 +75,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
-      if (parent.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+      if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
         if (lastLabel[0] !== resource.title[0]) {
           element.element.addClass(stylesLabelListItem.splitter);
         }
@@ -85,6 +86,6 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
       lastLabel = resource.title;
     }
 
-    this.addChild(new SettingsList(parent, { children: items }));
+    this.addChild(new SettingsList(this).addChildren(items));
   }
 }

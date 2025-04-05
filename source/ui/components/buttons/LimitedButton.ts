@@ -22,9 +22,9 @@ export class LimitedButton extends Button {
       this.setting.limited = !this.setting.limited;
 
       if (this.setting.limited) {
-        options?.onLimitedCheck?.();
+        options?.onLimitedCheck?.call(this);
       } else {
-        options?.onLimitedUnCheck?.();
+        options?.onLimitedUnCheck?.call(this);
       }
 
       this.refreshUi();
@@ -33,6 +33,10 @@ export class LimitedButton extends Button {
     for (const className of options?.classes ?? []) {
       this.element.addClass(className);
     }
+  }
+
+  toString(): string {
+    return `[${LimitedButton.name}#${this.componentId}]`;
   }
 
   refreshUi() {

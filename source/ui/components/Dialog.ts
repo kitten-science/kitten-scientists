@@ -9,7 +9,7 @@ import { HeaderListItem } from "./HeaderListItem.js";
 import { Input } from "./Input.js";
 import { Paragraph } from "./Paragraph.js";
 import stylesToolbarListItem from "./ToolbarListItem.module.css";
-import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
+import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
 
 export type DialogOptions = ThisType<Dialog> &
   UiComponentOptions & {
@@ -19,12 +19,13 @@ export type DialogOptions = ThisType<Dialog> &
     readonly onConfirm?: (result: string) => void;
     readonly prompt?: boolean;
     readonly promptValue?: string;
-    readonly childrenAfterPrompt?: Array<UiComponent>;
   };
 
 export class Dialog extends UiComponent {
   declare readonly options: DialogOptions;
+  readonly container: Container;
   readonly element: JQuery<HTMLDialogElement>;
+  readonly head: Container;
   returnValue: string;
 
   /**
@@ -34,13 +35,12 @@ export class Dialog extends UiComponent {
    * @param options - Options for the dialog.
    */
   constructor(parent: UiComponent, options?: DialogOptions) {
-    super(parent, { ...options, children: [] });
+    super(parent, { ...options });
 
     this.element = $<HTMLDialogElement>("<dialog/>")
       .addClass("dialog")
       .addClass("help")
       .addClass(styles.dialog);
-    //.addClass(stylesUserInterface.ui);
 
     if (options?.hasClose !== false) {
       this.addChild(
@@ -54,12 +54,14 @@ export class Dialog extends UiComponent {
       );
     }
 
-    this.addChildren(options?.children);
-
     this.returnValue = options?.promptValue ?? "";
+
+    this.head = new Container(parent);
+    this.container = new Container(parent);
 
     this.addChildren(
       coalesceArray([
+        this.head,
         options?.prompt
           ? new Input(parent, {
               onChange: (value: string) => {
@@ -78,10 +80,12 @@ export class Dialog extends UiComponent {
               value: options.promptValue,
             })
           : undefined,
-        ...(options?.childrenAfterPrompt ?? []),
+        this.container,
         new Delimiter(parent),
         new Container(parent, {
-          children: coalesceArray([
+          classes: [stylesToolbarListItem.toolbar],
+        }).addChildren(
+          coalesceArray([
             new Button(parent, "OK", null, {
               classes: [stylesButton.large],
               onClick: () => {
@@ -99,10 +103,35 @@ export class Dialog extends UiComponent {
                 })
               : undefined,
           ]),
-          classes: [stylesToolbarListItem.toolbar],
-        }),
+        ),
       ]),
     );
+  }
+
+  toString(): string {
+    return `[${Dialog.name}#${this.componentId}]`;
+  }
+
+  addChildHead(child: UiComponentInterface): this {
+    this.head.addChild(child);
+    return this;
+  }
+  addChildrenHead(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.head.addChild(child);
+    }
+    return this;
+  }
+
+  addChildContent(child: UiComponent): this {
+    this.container.addChild(child);
+    return this;
+  }
+  addChildrenContent(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.container.addChild(child);
+    }
+    return this;
   }
 
   show() {
@@ -118,6 +147,8 @@ export class Dialog extends UiComponent {
     this.element.remove();
   }
 
+  refreshUi() {}
+
   static async prompt(
     parent: UiComponent,
     text: string,
@@ -127,18 +158,6 @@ export class Dialog extends UiComponent {
   ): Promise<string | undefined> {
     return new Promise(resolve => {
       new Dialog(parent, {
-        children: coalesceArray([
-          title ? new HeaderListItem(parent, title) : undefined,
-          new Paragraph(parent, text),
-        ]),
-        childrenAfterPrompt: explainer
-          ? [
-              new Container(parent, {
-                children: [new Paragraph(parent, explainer)],
-                classes: [stylesExplainer.explainer],
-              }),
-            ]
-          : [],
         hasCancel: true,
         hasClose: false,
         onCancel: () => {
@@ -149,7 +168,23 @@ export class Dialog extends UiComponent {
         },
         prompt: true,
         promptValue: initialValue,
-      }).showModal();
+      })
+        .addChildrenHead(
+          coalesceArray([
+            title ? new HeaderListItem(parent, title) : undefined,
+            new Paragraph(parent, text),
+          ]),
+        )
+        .addChildrenContent(
+          explainer
+            ? [
+                new Container(parent, {
+                  classes: [stylesExplainer.explainer],
+                }).addChildren([new Paragraph(parent, explainer)]),
+              ]
+            : [],
+        )
+        .showModal();
     });
   }
 }

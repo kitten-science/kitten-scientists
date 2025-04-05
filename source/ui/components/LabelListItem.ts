@@ -2,12 +2,10 @@ import { Container } from "./Container.js";
 import styles from "./LabelListItem.module.css";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
-import type { UiComponent } from "./UiComponent.js";
+import type { UiComponent, UiComponentInterface } from "./UiComponent.js";
 
 export type LabelListItemOptions = ThisType<LabelListItem> &
   ListItemOptions & {
-    readonly childrenHead?: Array<UiComponent>;
-
     /**
      * When set to an SVG path, will be used as an icon on the label.
      */
@@ -43,15 +41,8 @@ export class LabelListItem extends ListItem {
       text: `${options?.upgradeIndicator === true ? "⮤ " : ""}${label}`,
     })
       .addClass(styles.label)
-      .addClass(stylesListItem.label)
-      .on("click", () => {
-        this.click();
-      });
+      .addClass(stylesListItem.label);
     this.head.element.append(this.elementLabel);
-
-    for (const child of options?.childrenHead ?? []) {
-      this.head.addChild(child);
-    }
 
     if (options?.icon) {
       const iconElement = $("<div/>", {
@@ -59,5 +50,20 @@ export class LabelListItem extends ListItem {
       }).addClass(styles.iconLabel);
       this.elementLabel.prepend(iconElement);
     }
+  }
+
+  toString(): string {
+    return `[${LabelListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+  }
+
+  addChildHead(child: UiComponentInterface): this {
+    this.head.addChild(child);
+    return this;
+  }
+  addChildrenHead(children?: Iterable<UiComponentInterface>): this {
+    for (const child of children ?? []) {
+      this.head.addChild(child);
+    }
+    return this;
   }
 }

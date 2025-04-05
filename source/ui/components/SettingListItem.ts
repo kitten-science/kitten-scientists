@@ -29,8 +29,6 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
 
   readOnly: boolean;
 
-  static #nextId = 0;
-
   /**
    * Construct a new setting element.
    * This is a simple checkbox with a label.
@@ -46,11 +44,11 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     label: string,
     options?: SettingListItemOptions,
   ) {
-    super(parent, label, { ...options, children: [] });
+    super(parent, label, { ...options });
 
     this.element.addClass(styles.setting);
 
-    const id = `ks-setting${SettingListItem.#nextId++}`;
+    const id = `ks-setting${this.componentId}`;
     const checkbox = $("<input/>", {
       id,
       type: "checkbox",
@@ -59,15 +57,11 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     this.readOnly = options?.readOnly ?? false;
     checkbox.prop("disabled", this.readOnly);
 
-    checkbox.on("change", () => {
+    checkbox.on("change", (event: JQuery.ChangeEvent) => {
       if (checkbox.is(":checked") && !setting.enabled) {
-        setting.enabled = true;
-        options?.onCheck?.();
-        this.refreshUi();
+        this.check();
       } else if (!checkbox.is(":checked") && setting.enabled) {
-        setting.enabled = false;
-        options?.onUnCheck?.();
-        this.refreshUi();
+        this.uncheck();
       }
     });
 
@@ -76,25 +70,25 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
 
     this.checkbox = checkbox;
     this.setting = setting;
+  }
 
-    this.addChildren(options?.children);
+  toString(): string {
+    return `[${SettingListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 
   async check(isBatchProcess = false) {
     this.setting.enabled = true;
     await this.options?.onCheck?.call(isBatchProcess);
-    this.refreshUi();
+    this.requestRefresh(true);
   }
 
   async uncheck(isBatchProcess = false) {
     this.setting.enabled = false;
     await this.options.onUnCheck?.call(isBatchProcess);
-    this.refreshUi();
+    this.requestRefresh(true);
   }
 
   refreshUi() {
-    super.refreshUi();
-
     if (this.setting.enabled) {
       this.element.addClass(styles.checked);
     } else {

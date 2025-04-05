@@ -52,9 +52,11 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
     this.setting = setting;
   }
 
-  refreshUi() {
-    super.refreshUi();
+  toString(): string {
+    return `[${OptionsListItem.name}#${this.componentId}]`;
+  }
 
+  refreshUi() {
     for (const option of this._items) {
       if (option.option.value === this.setting.selected) {
         option.input.prop("checked", true);

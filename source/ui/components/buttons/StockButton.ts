@@ -56,6 +56,10 @@ export class StockButton extends Button {
     this.setting = setting;
   }
 
+  toString(): string {
+    return `[${StockButton.name}#${this.componentId}]`;
+  }
+
   refreshUi() {
     super.refreshUi();
 

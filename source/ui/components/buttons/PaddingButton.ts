@@ -21,6 +21,11 @@ export class PaddingButton extends UiComponent {
     }).addClass(stylesButton.iconButton);
 
     this.element = element;
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${PaddingButton.name}#${this.componentId}]`;
+  }
+
+  refreshUi() {}
 }

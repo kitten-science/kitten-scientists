@@ -38,15 +38,13 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
       onClick: options?.onSetMax ? () => options.onSetMax?.call(this) : undefined,
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
-    this.head.addChildren([
+    this.addChildrenHead([
       new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
       this.maxButton,
     ]);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
-    this.maxButton.refreshUi();
+  toString(): string {
+    return `[${SettingMaxListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 }

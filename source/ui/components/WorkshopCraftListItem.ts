@@ -52,11 +52,9 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
       border: false,
       classes: [stylesButton.lastHeadAction],
       onClick: options?.onSetTrigger ? () => options.onSetTrigger?.call(this) : undefined,
-      onRefreshTitle: options?.onRefreshTrigger
-        ? () => options.onRefreshTrigger?.call(this)
-        : undefined,
+      onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
-    this.head.addChildren([
+    this.addChildrenHead([
       new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
       this.limitedButton,
       this.maxButton,
@@ -64,11 +62,7 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
     ]);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
-    this.limitedButton.refreshUi();
-    this.maxButton.refreshUi();
-    this.triggerButton.refreshUi();
+  toString(): string {
+    return `[${WorkshopCraftListItem.name}#${this.componentId}]`;
   }
 }

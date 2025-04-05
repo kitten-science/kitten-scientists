@@ -25,6 +25,11 @@ export class HeaderListItem extends UiComponent implements ListItem {
     const element = $("<li/>", { text }).addClass(styles.header);
 
     this.element = element;
-    this.addChildren(options?.children);
   }
+
+  toString(): string {
+    return `[${HeaderListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+  }
+
+  refreshUi() {}
 }

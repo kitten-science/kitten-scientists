@@ -40,19 +40,17 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
       border: false,
       classes: [stylesButton.lastHeadAction],
       onClick: options?.onSetTrigger ? () => options.onSetTrigger?.call(this) : undefined,
-      onRefreshTitle: options?.onRefreshTrigger
-        ? () => options.onRefreshTrigger?.call(this)
-        : undefined,
+      onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
 
-    this.head.addChildren([
+    this.addChildrenHead([
       new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
       this.maxButton,
       this.triggerButton,
     ]);
   }
 
-  override refreshUi(): void {
-    super.refreshUi();
+  toString(): string {
+    return `[${SettingMaxTriggerListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 }

@@ -29,20 +29,13 @@ export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
 
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       border: false,
-      onClick: async (event?: MouseEvent) => {
-        await this.options.onSetTrigger.call(this);
-        this.refreshUi();
-      },
-      onRefreshTitle: options?.onRefreshTrigger
-        ? () => options.onRefreshTrigger?.call(this)
-        : undefined,
+      onClick: options?.onSetTrigger ? () => options.onSetTrigger?.call(this) : undefined,
+      onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
     });
-    this.head.addChild(this.triggerButton);
+    this.addChildHead(this.triggerButton);
   }
 
-  refreshUi() {
-    super.refreshUi();
-
-    this.triggerButton.refreshUi();
+  toString(): string {
+    return `[${SettingLimitedTriggerListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
   }
 }

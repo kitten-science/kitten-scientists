@@ -3,10 +3,9 @@ import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeItem, TimeSettings } from "../settings/TimeSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
-import type { CollapsiblePanelOptions } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
-import { SettingListItem, type SettingListItemOptions } from "./components/SettingListItem.js";
+import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
@@ -17,7 +16,6 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
     parent: UiComponent,
     settings: TimeSettings,
     locale: SettingOptions<SupportedLocale>,
-    options?: CollapsiblePanelOptions & SettingListItemOptions,
   ) {
     const label = parent.host.engine.i18n("ui.time");
     super(
@@ -26,13 +24,9 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-          this.refreshUi();
-          options?.onCheck?.(isBatchProcess);
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
-          this.refreshUi();
-          options?.onUnCheck?.(isBatchProcess);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -73,66 +67,62 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
     );
 
     this.addChildren([
-      new SettingsList(parent, {
-        children: [
-          new HeaderListItem(parent, parent.host.engine.i18n("$workshop.chronoforge.label")),
-          ...parent.host.game.time.chronoforgeUpgrades
-            .filter(item => !isNil(this.setting.buildings[item.name]))
-            .map(building =>
-              BuildSectionTools.getBuildOption(
-                parent,
-                this.setting.buildings[building.name],
-                locale,
-                this.setting,
-                building.label,
-                label,
-                {
-                  delimiter:
-                    building.name === parent.host.game.time.chronoforgeUpgrades.at(-1)?.name,
-                },
-              ),
-            ),
-
-          new HeaderListItem(parent, parent.host.engine.i18n("$science.voidSpace.label")),
-          ...parent.host.game.time.voidspaceUpgrades
-            .filter(item => item.name in this.setting.buildings)
-            .map(building =>
-              BuildSectionTools.getBuildOption(
-                parent,
-                this.setting.buildings[building.name as TimeItem],
-                locale,
-                this.setting,
-                building.label,
-                label,
-              ),
-            ),
-        ],
-      }),
-
-      new SettingsList(parent, {
-        children: [
-          new HeaderListItem(parent, parent.host.engine.i18n("ui.additional")),
-          new SettingListItem(
-            parent,
-            this.setting.fixCryochambers,
-            parent.host.engine.i18n("option.fix.cry"),
-            {
-              onCheck: () => {
-                parent.host.engine.imessage("status.sub.enable", [
-                  parent.host.engine.i18n("option.fix.cry"),
-                ]);
+      new SettingsList(this).addChildren([
+        new HeaderListItem(this, this.host.engine.i18n("$workshop.chronoforge.label")),
+        ...this.host.game.time.chronoforgeUpgrades
+          .filter(item => !isNil(this.setting.buildings[item.name]))
+          .map(building =>
+            BuildSectionTools.getBuildOption(
+              this,
+              this.setting.buildings[building.name],
+              locale,
+              this.setting,
+              building.label,
+              label,
+              {
+                delimiter: building.name === this.host.game.time.chronoforgeUpgrades.at(-1)?.name,
               },
-              onUnCheck: () => {
-                parent.host.engine.imessage("status.sub.disable", [
-                  parent.host.engine.i18n("option.fix.cry"),
-                ]);
-              },
-            },
+            ),
           ),
-        ],
+
+        new HeaderListItem(this, this.host.engine.i18n("$science.voidSpace.label")),
+        ...this.host.game.time.voidspaceUpgrades
+          .filter(item => item.name in this.setting.buildings)
+          .map(building =>
+            BuildSectionTools.getBuildOption(
+              this,
+              this.setting.buildings[building.name as TimeItem],
+              locale,
+              this.setting,
+              building.label,
+              label,
+            ),
+          ),
+      ]),
+
+      new SettingsList(this, {
         hasDisableAll: false,
         hasEnableAll: false,
-      }),
+      }).addChildren([
+        new HeaderListItem(this, this.host.engine.i18n("ui.additional")),
+        new SettingListItem(
+          this,
+          this.setting.fixCryochambers,
+          this.host.engine.i18n("option.fix.cry"),
+          {
+            onCheck: () => {
+              this.host.engine.imessage("status.sub.enable", [
+                this.host.engine.i18n("option.fix.cry"),
+              ]);
+            },
+            onUnCheck: () => {
+              this.host.engine.imessage("status.sub.disable", [
+                this.host.engine.i18n("option.fix.cry"),
+              ]);
+            },
+          },
+        ),
+      ]),
     ]);
   }
 }

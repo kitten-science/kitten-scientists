@@ -22,41 +22,40 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
   ) {
     const label = parent.host.engine.i18n("ui.time");
     super(parent, label, settings, {
-      childrenHead: [new Container(parent, { classes: [stylesLabelListItem.fillSpace] })],
       icon: Icons.Time,
     });
 
-    this.addChild(
-      new SettingsList(parent, {
-        children: [
-          new HeaderListItem(parent, parent.host.engine.i18n("$workshop.chronoforge.label")),
-          ...parent.host.game.time.chronoforgeUpgrades
-            .filter(item => !isNil(this.setting.buildings[item.name]))
-            .map(building =>
-              this._getResetOption(
-                parent,
-                this.setting.buildings[building.name],
-                locale,
-                settings,
-                building.label,
-                building.name === parent.host.game.time.chronoforgeUpgrades.at(-1)?.name,
-              ),
-            ),
+    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
 
-          new HeaderListItem(parent, parent.host.engine.i18n("$science.voidSpace.label")),
-          ...parent.host.game.time.voidspaceUpgrades
-            .filter(item => item.name in this.setting.buildings)
-            .map(building =>
-              this._getResetOption(
-                parent,
-                this.setting.buildings[building.name as TimeItem],
-                locale,
-                settings,
-                building.label,
-              ),
+    this.addChild(
+      new SettingsList(this).addChildren([
+        new HeaderListItem(this, this.host.engine.i18n("$workshop.chronoforge.label")),
+        ...this.host.game.time.chronoforgeUpgrades
+          .filter(item => !isNil(this.setting.buildings[item.name]))
+          .map(building =>
+            this._getResetOption(
+              this,
+              this.setting.buildings[building.name],
+              locale,
+              settings,
+              building.label,
+              building.name === this.host.game.time.chronoforgeUpgrades.at(-1)?.name,
             ),
-        ],
-      }),
+          ),
+
+        new HeaderListItem(this, this.host.engine.i18n("$science.voidSpace.label")),
+        ...this.host.game.time.voidspaceUpgrades
+          .filter(item => item.name in this.setting.buildings)
+          .map(building =>
+            this._getResetOption(
+              this,
+              this.setting.buildings[building.name as TimeItem],
+              locale,
+              settings,
+              building.label,
+            ),
+          ),
+      ]),
     );
   }
 
