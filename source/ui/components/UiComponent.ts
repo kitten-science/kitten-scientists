@@ -6,7 +6,7 @@ export type UiComponentInterface = EventTarget & {
   parent: UiComponentInterface | null;
   get element(): JQuery;
   refreshUi(): void;
-  requestRefresh(withChildren?: boolean): void;
+  requestRefresh(withChildren?: boolean, depth?: number): void;
   refresh(force?: boolean): void;
 };
 
@@ -60,16 +60,16 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
   abstract toString(): string;
 
   protected _needsRefresh;
-  requestRefresh(withChildren = false) {
+  requestRefresh(withChildren = false, depth = 0) {
     if (this._needsRefresh) {
       return;
     }
-    console.debug(...cl(this.toString(), "requestRefresh"));
+    console.debug(...cl("  ".repeat(depth), this.toString(), "requestRefresh"));
     this._needsRefresh = true;
-    this.parent?.requestRefresh();
+    this.parent?.requestRefresh(false);
     if (withChildren) {
       for (const child of this.children) {
-        child.requestRefresh(withChildren);
+        child.requestRefresh(withChildren, depth + 1);
       }
     }
   }
