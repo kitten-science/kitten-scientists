@@ -489,11 +489,13 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   exportStateAll() {
     const statesJson = this.states
       .map(state => state.unwrap())
-      .map(state => ({
-        label: state.label,
-        state: KittenScientists.encodeSettings(state.state, false),
-        timestamp: state.timestamp,
-      }))
+      .map(state =>
+        JSON.stringify({
+          label: state.label,
+          state: KittenScientists.encodeSettings(state.state, false),
+          timestamp: state.timestamp,
+        }),
+      )
       .join("\n");
     const a = document.createElement("a");
     const blob = new Blob([statesJson], { type: "application/x-ndjson" });
