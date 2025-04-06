@@ -73,7 +73,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
   }
 
   toString(): string {
-    return `[${SettingListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+    return `[${SettingListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
   }
 
   async check(isBatchProcess = false) {

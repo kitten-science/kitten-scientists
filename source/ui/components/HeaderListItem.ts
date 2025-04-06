@@ -28,7 +28,7 @@ export class HeaderListItem extends UiComponent implements ListItem {
   }
 
   toString(): string {
-    return `[${HeaderListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+    return `[${HeaderListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
   }
 
   refreshUi(): void {}

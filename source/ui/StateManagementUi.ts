@@ -518,7 +518,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     }
 
     this.host.engine.stateLoad(state, true);
-    this.host.refreshUi();
+    this.host.refreshEntireUserInterface();
   }
 
   loadAutoSave() {

@@ -74,6 +74,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       }),
     );
 
@@ -136,6 +137,7 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
 
           option.trigger = this.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 

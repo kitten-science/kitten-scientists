@@ -63,6 +63,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       }),
     );
 
@@ -124,6 +125,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
 
           option.trigger = this.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 

@@ -48,6 +48,6 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
   }
 
   toString(): string {
-    return `[${SettingMaxListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+    return `[${SettingMaxListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
   }
 }

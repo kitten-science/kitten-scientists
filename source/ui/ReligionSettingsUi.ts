@@ -74,6 +74,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       }),
     );
 
@@ -89,6 +90,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
           this.setting,
           this.host.engine.i18n("$buildings.unicornPasture.label"),
           label,
+          { renderLabelTrigger: false },
         ),
       ],
       ...this.host.game.religion.zigguratUpgrades
@@ -106,6 +108,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
                 this.setting,
                 zigguratUpgrade.label,
                 label,
+                { renderLabelTrigger: false },
               ),
             ] as [ZigguratUpgrade | "unicornPasture", SettingMaxTriggerListItem],
         ),
@@ -163,6 +166,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
               this.setting,
               upgrade.label,
               label,
+              { renderLabelTrigger: false },
             ),
           ),
         new Delimiter(this),
@@ -180,6 +184,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
               label,
               {
                 delimiter: upgrade.name === this.host.game.religion.religionUpgrades.at(-1)?.name,
+                renderLabelTrigger: false,
               },
             ),
           ),
@@ -195,6 +200,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
               this.setting,
               upgrade.label,
               label,
+              { renderLabelTrigger: false },
             ),
           ),
       ]),

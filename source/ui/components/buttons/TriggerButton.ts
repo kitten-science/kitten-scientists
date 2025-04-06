@@ -12,7 +12,10 @@ import type { UiComponent } from "../UiComponent.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
 
-export type TriggerButtonOptions = ThisType<TriggerButton> & ButtonOptions;
+export type TriggerButtonOptions = ThisType<TriggerButton> &
+  ButtonOptions & {
+    readonly renderLabel?: boolean;
+  };
 
 export class TriggerButton extends Button {
   declare readonly options: TriggerButtonOptions;
@@ -49,6 +52,8 @@ export class TriggerButton extends Button {
         : this.host.renderPercentage(this.setting.trigger, "invariant", true);
 
     this.updateTitle(this.host.engine.i18n("ui.trigger", [triggerValue]));
-    this.updateLabel(triggerValue);
+    if (this.options?.renderLabel ?? true) {
+      this.updateLabel(triggerValue);
+    }
   }
 }

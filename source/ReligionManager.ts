@@ -122,7 +122,7 @@ export class ReligionManager implements Automation {
     const bestUnicornBuilding = this.getBestUnicornBuilding();
     if (this.settings.bestUnicornBuildingCurrent !== bestUnicornBuilding) {
       this.settings.bestUnicornBuildingCurrent = bestUnicornBuilding;
-      this._host.refreshUi();
+      this._host.refreshEntireUserInterface();
     }
 
     if (this.settings.bestUnicornBuildingCurrent === null) {
