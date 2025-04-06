@@ -35,7 +35,30 @@ export class Button extends UiComponent {
     pathData: string | null = null,
     options?: ButtonOptions,
   ) {
-    super(parent, { ...options });
+    super(parent, {
+      ...options,
+      onRefresh: () => {
+        if (this.readOnly) {
+          this.element.addClass(styles.readonly);
+        } else {
+          this.element.removeClass(styles.readonly);
+        }
+
+        if (this.inactive) {
+          this.element.addClass(styles.inactive);
+        } else {
+          this.element.removeClass(styles.inactive);
+        }
+
+        if (this.ineffective) {
+          this.element.addClass(styles.ineffective);
+        } else {
+          this.element.removeClass(styles.ineffective);
+        }
+
+        options?.onRefresh?.();
+      },
+    });
 
     this.element = $("<div/>", { title: options?.title }).addClass(styles.button).text(label);
 
@@ -101,25 +124,5 @@ export class Button extends UiComponent {
     this.requestRefresh();
 
     return this.options?.onClick?.call(this);
-  }
-
-  refreshUi(): void {
-    if (this.readOnly) {
-      this.element.addClass(styles.readonly);
-    } else {
-      this.element.removeClass(styles.readonly);
-    }
-
-    if (this.inactive) {
-      this.element.addClass(styles.inactive);
-    } else {
-      this.element.removeClass(styles.inactive);
-    }
-
-    if (this.ineffective) {
-      this.element.addClass(styles.ineffective);
-    } else {
-      this.element.removeClass(styles.ineffective);
-    }
   }
 }

@@ -147,8 +147,6 @@ export class Dialog extends UiComponent {
     this.element.remove();
   }
 
-  refreshUi(): void {}
-
   static async prompt(
     parent: UiComponent,
     text: string,

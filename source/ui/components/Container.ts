@@ -28,6 +28,4 @@ export class Container extends UiComponent {
   toString(): string {
     return `[${Container.name}#${this.componentId}]`;
   }
-
-  refreshUi(): void {}
 }

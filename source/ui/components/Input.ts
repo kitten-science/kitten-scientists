@@ -58,6 +58,4 @@ export class Input extends UiComponent {
   toString(): string {
     return `[${Input.name}#${this.componentId}]`;
   }
-
-  refreshUi(): void {}
 }

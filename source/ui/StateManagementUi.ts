@@ -70,6 +70,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
           classes: [stylesLabelListItem.fillSpace],
         }),
       ]),
+      {
+        onRefresh: () => {
+          this._refreshGameList();
+          this._refreshStateList();
+        },
+      },
     );
 
     this.gameList = new SettingsList(this, {
@@ -222,13 +228,6 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     for (const state of this.states) {
       localStorage.setItem(`ks.state.${stateIndex++}`, JSON.stringify(state));
     }
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    this._refreshGameList();
-    this._refreshStateList();
   }
 
   private _refreshGameList() {

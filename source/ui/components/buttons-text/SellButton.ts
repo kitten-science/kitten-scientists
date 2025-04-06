@@ -40,6 +40,18 @@ export class SellButton extends TextButton {
 
         setting.sell = parent.host.parseAbsolute(value) ?? setting.sell;
       },
+      onRefresh: () => {
+        this.element.prop(
+          "title",
+          this.host.engine.i18n("blackcoin.sell.title", [
+            this.host.renderAbsolute(this.setting.sell),
+          ]),
+        );
+        this.element.text(
+          this.host.engine.i18n("blackcoin.sell", [this.host.renderAbsolute(this.setting.sell)]),
+        );
+        options?.onRefresh?.();
+      },
     });
 
     this.element.addClass(styles.sellButton);
@@ -49,17 +61,5 @@ export class SellButton extends TextButton {
 
   toString(): string {
     return `[${SellButton.name}#${this.componentId}]`;
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    this.element.prop(
-      "title",
-      this.host.engine.i18n("blackcoin.sell.title", [this.host.renderAbsolute(this.setting.sell)]),
-    );
-    this.element.text(
-      this.host.engine.i18n("blackcoin.sell", [this.host.renderAbsolute(this.setting.sell)]),
-    );
   }
 }

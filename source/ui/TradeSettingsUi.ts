@@ -281,11 +281,9 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
     const seasons = new SeasonsList(parent, option.seasons, {
       onCheckSeason: (label: string) => {
         parent.host.engine.imessage("trade.season.enable", [ucfirst(label), label]);
-        element.refreshUi();
       },
       onUnCheckSeason: (label: string) => {
         parent.host.engine.imessage("trade.season.disable", [ucfirst(label), label]);
-        element.refreshUi();
       },
     });
     panel.addChild(seasons);

@@ -45,6 +45,20 @@ export class ConsumeButton extends Button {
 
         setting.consume = parent.host.parsePercentage(value);
       },
+      onRefresh: () => {
+        const consumeValue = this.host.renderPercentage(
+          this.setting.consume,
+          this.host.engine.settings.locale.selected,
+          true,
+        );
+        const title =
+          this.setting.consume === 0
+            ? this.host.engine.i18n("resources.consume.titleZero", [this.resourceName])
+            : this.host.engine.i18n("resources.consume.title", [consumeValue, this.resourceName]);
+        this.updateTitle(title);
+
+        options?.onRefresh?.();
+      },
     });
 
     this.element.addClass(stylesButton.consumeButton);
@@ -55,20 +69,5 @@ export class ConsumeButton extends Button {
 
   toString(): string {
     return `[${ConsumeButton.name}#${this.componentId}]`;
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    const consumeValue = this.host.renderPercentage(
-      this.setting.consume,
-      this.host.engine.settings.locale.selected,
-      true,
-    );
-    const title =
-      this.setting.consume === 0
-        ? this.host.engine.i18n("resources.consume.titleZero", [this.resourceName])
-        : this.host.engine.i18n("resources.consume.title", [consumeValue, this.resourceName]);
-    this.updateTitle(title);
   }
 }

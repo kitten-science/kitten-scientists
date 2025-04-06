@@ -15,7 +15,16 @@ export class TextButton extends UiComponent {
   readOnly: boolean;
 
   constructor(parent: UiComponent, label?: string, options?: TextButtonOptions) {
-    super(parent, { ...options });
+    super(parent, {
+      ...options,
+      onRefresh: () => {
+        if (this.readOnly) {
+          this.element.addClass(stylesButton.readonly);
+        } else {
+          this.element.removeClass(stylesButton.readonly);
+        }
+      },
+    });
 
     const element = $("<div/>").addClass(styles.textButton);
     if (label !== undefined) {
@@ -47,13 +56,5 @@ export class TextButton extends UiComponent {
     this.requestRefresh();
 
     return this.options?.onClick?.call(this);
-  }
-
-  refreshUi(): void {
-    if (this.readOnly) {
-      this.element.addClass(stylesButton.readonly);
-    } else {
-      this.element.removeClass(stylesButton.readonly);
-    }
   }
 }

@@ -44,7 +44,29 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     label: string,
     options?: SettingListItemOptions,
   ) {
-    super(parent, label, { ...options });
+    super(parent, label, {
+      ...options,
+      onRefresh: () => {
+        if (this.setting.enabled) {
+          this.element.addClass(styles.checked);
+        } else {
+          this.element.removeClass(styles.checked);
+        }
+
+        if (this.readOnly) {
+          this.element.addClass(stylesSettingListItem.readonly);
+        } else {
+          this.element.removeClass(stylesSettingListItem.readonly);
+        }
+
+        if (!isNil(this.checkbox)) {
+          this.checkbox.prop("checked", this.setting.enabled);
+          this.checkbox.prop("disabled", this.readOnly);
+        }
+
+        options?.onRefresh?.();
+      },
+    });
 
     this.element.addClass(styles.setting);
 
@@ -86,24 +108,5 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     this.setting.enabled = false;
     await this.options.onUnCheck?.call(isBatchProcess);
     this.requestRefresh(true);
-  }
-
-  refreshUi(): void {
-    if (this.setting.enabled) {
-      this.element.addClass(styles.checked);
-    } else {
-      this.element.removeClass(styles.checked);
-    }
-
-    if (this.readOnly) {
-      this.element.addClass(stylesSettingListItem.readonly);
-    } else {
-      this.element.removeClass(stylesSettingListItem.readonly);
-    }
-
-    if (!isNil(this.checkbox)) {
-      this.checkbox.prop("checked", this.setting.enabled);
-      this.checkbox.prop("disabled", this.readOnly);
-    }
   }
 }

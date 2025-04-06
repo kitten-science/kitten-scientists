@@ -1,5 +1,3 @@
-import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
 import type { SupportedLocale } from "../../../Engine.js";
 import { Icons } from "../../../images/Icons.js";
 import {
@@ -26,34 +24,30 @@ export class TriggerButton extends Button {
     parent: UiComponent,
     setting: SettingTrigger | SettingThreshold,
     _locale: SettingOptions<SupportedLocale>,
-    options?: TriggerButtonOptions,
+    options: TriggerButtonOptions,
   ) {
-    super(parent, "", Icons.Trigger, options);
+    super(parent, "", Icons.Trigger, {
+      ...options,
+      onRefresh: () => {
+        const triggerValue =
+          this.behavior === "integer"
+            ? this.host.renderAbsolute(this.setting.trigger, "invariant")
+            : this.host.renderPercentage(this.setting.trigger, "invariant", true);
+
+        this.updateTitle(this.host.engine.i18n("ui.trigger", [triggerValue]));
+        if (this.options?.renderLabel ?? true) {
+          this.updateLabel(triggerValue);
+        }
+        options?.onRefresh?.();
+      },
+    });
 
     this.behavior = setting instanceof SettingTrigger ? "percentage" : "integer";
-
-    if (isNil(options?.onClick)) {
-      throw new InvalidOperationError("Missing click handler on TriggerButton.");
-    }
 
     this.setting = setting;
   }
 
   toString(): string {
     return `[${TriggerButton.name}#${this.componentId}]`;
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    const triggerValue =
-      this.behavior === "integer"
-        ? this.host.renderAbsolute(this.setting.trigger, "invariant")
-        : this.host.renderPercentage(this.setting.trigger, "invariant", true);
-
-    this.updateTitle(this.host.engine.i18n("ui.trigger", [triggerValue]));
-    if (this.options?.renderLabel ?? true) {
-      this.updateLabel(triggerValue);
-    }
   }
 }

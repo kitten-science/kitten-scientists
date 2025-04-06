@@ -34,6 +34,16 @@ export class LimitedButton extends Button {
 
         this.requestRefresh();
       },
+      onRefresh: () => {
+        this.updateTitle(
+          this.host.engine.i18n(this.setting.limited ? "ui.limited.on" : "ui.limited.off"),
+        );
+        if (this.setting.limited && !this.inactive) {
+          this.element.removeClass(stylesButton.inactive);
+        } else {
+          this.element.addClass(stylesButton.inactive);
+        }
+      },
     });
 
     this.setting = setting;
@@ -45,18 +55,5 @@ export class LimitedButton extends Button {
 
   toString(): string {
     return `[${LimitedButton.name}#${this.componentId}]`;
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    this.updateTitle(
-      this.host.engine.i18n(this.setting.limited ? "ui.limited.on" : "ui.limited.off"),
-    );
-    if (this.setting.limited && !this.inactive) {
-      this.element.removeClass(stylesButton.inactive);
-    } else {
-      this.element.addClass(stylesButton.inactive);
-    }
   }
 }

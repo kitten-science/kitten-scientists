@@ -40,6 +40,18 @@ export class BuyButton extends TextButton {
 
         setting.buy = parent.host.parseAbsolute(value) ?? setting.buy;
       },
+      onRefresh: () => {
+        this.element.prop(
+          "title",
+          this.host.engine.i18n("blackcoin.buy.title", [
+            this.host.renderAbsolute(this.setting.buy),
+          ]),
+        );
+        this.element.text(
+          this.host.engine.i18n("blackcoin.buy", [this.host.renderAbsolute(this.setting.buy)]),
+        );
+        options?.onRefresh?.();
+      },
     });
 
     this.element.addClass(styles.buyButton);
@@ -49,17 +61,5 @@ export class BuyButton extends TextButton {
 
   toString(): string {
     return `[${BuyButton.name}#${this.componentId}]`;
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    this.element.prop(
-      "title",
-      this.host.engine.i18n("blackcoin.buy.title", [this.host.renderAbsolute(this.setting.buy)]),
-    );
-    this.element.text(
-      this.host.engine.i18n("blackcoin.buy", [this.host.renderAbsolute(this.setting.buy)]),
-    );
   }
 }

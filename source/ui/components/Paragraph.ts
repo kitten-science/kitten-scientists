@@ -29,6 +29,4 @@ export class Paragraph extends UiComponent {
   toString(): string {
     return `[${Paragraph.name}#${this.componentId}]`;
   }
-
-  refreshUi(): void {}
 }

@@ -65,7 +65,7 @@ export class UserInterface extends UiComponent {
       this.stateManagementUi,
       new InternalsUi(this, engine.settings, engine.settings.locale),
     ];
-    for (const section of this._sections) {
+    for (const section of [this._engineUi, ...this._sections]) {
       this.children.add(section);
     }
 
@@ -162,18 +162,16 @@ export class UserInterface extends UiComponent {
 
     this._needsRefresh = true;
     setTimeout(() => {
-      console.warn(...cl("Refreshing UI...."));
+      console.info(...cl("Refreshing UI..."));
       this.refresh();
+      console.info(...cl("Refreshing UI complete."));
     }, 0);
   }
 
-  refreshUi(): void {
-    this._engineUi.refreshUi();
-  }
-
   forceFullRefresh(): void {
-    console.warn(...cl("Forcing full user interface refresh!"));
+    console.warn(...cl("Forcing refresh on all user interface components..."));
     super.requestRefresh(true);
     this.requestRefresh();
+    console.warn(...cl("Refresh on all user interface components enforced."));
   }
 }

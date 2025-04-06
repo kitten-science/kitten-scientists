@@ -48,6 +48,20 @@ export class StockButton extends Button {
 
         setting.stock = parent.host.parseAbsolute(value) ?? setting.stock;
       },
+      onRefresh: () => {
+        const stockValue = this.host.renderAbsolute(this.setting.stock);
+        const title =
+          this.setting.stock < 0
+            ? this.host.engine.i18n("resources.stock.titleInfinite", [this.resourceName])
+            : this.setting.stock === 0
+              ? this.host.engine.i18n("resources.stock.titleZero", [this.resourceName])
+              : this.host.engine.i18n("resources.stock.title", [
+                  this.host.renderAbsolute(this.setting.stock),
+                  this.resourceName,
+                ]);
+        this.updateTitle(title);
+        this.updateLabel(stockValue);
+      },
     });
 
     this.element.addClass(stylesButton.stockButton);
@@ -58,22 +72,5 @@ export class StockButton extends Button {
 
   toString(): string {
     return `[${StockButton.name}#${this.componentId}]`;
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    const stockValue = this.host.renderAbsolute(this.setting.stock);
-    const title =
-      this.setting.stock < 0
-        ? this.host.engine.i18n("resources.stock.titleInfinite", [this.resourceName])
-        : this.setting.stock === 0
-          ? this.host.engine.i18n("resources.stock.titleZero", [this.resourceName])
-          : this.host.engine.i18n("resources.stock.title", [
-              this.host.renderAbsolute(this.setting.stock),
-              this.resourceName,
-            ]);
-    this.updateTitle(title);
-    this.updateLabel(stockValue);
   }
 }

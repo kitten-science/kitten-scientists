@@ -39,7 +39,7 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
    * @param options Options for this panel.
    */
   constructor(parent: UiComponent, head: THead, options?: CollapsiblePanelOptions) {
-    super(parent, {});
+    super(parent, options);
 
     this.head = head;
     this.container = new Container(this);
@@ -141,6 +141,4 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
     super.requestRefresh(withChildren, depth);
     this.head.requestRefresh(true, depth + 1);
   }
-
-  refreshUi(): void {}
 }

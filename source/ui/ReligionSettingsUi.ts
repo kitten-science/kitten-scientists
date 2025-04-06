@@ -76,6 +76,27 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefresh: () => {
+          for (const [buildingName, building] of this._unicornBuildings.entries()) {
+            building.readOnly = this._bestUnicornBuilding.setting.enabled;
+            building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;
+            building.triggerButton.readOnly = this._bestUnicornBuilding.setting.enabled;
+
+            building.elementLabel.attr("data-ks-active-from", "❊");
+            building.elementLabel.attr("data-ks-active-to", "✮");
+
+            if (
+              this.setting.bestUnicornBuilding.enabled &&
+              this.setting.bestUnicornBuildingCurrent === buildingName
+            ) {
+              building.elementLabel.addClass(stylesTimeSkipHeatSettings.active);
+            } else {
+              building.elementLabel.removeClass(stylesTimeSkipHeatSettings.active);
+            }
+          }
+        },
+      },
     );
 
     const unicornsArray: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems];
@@ -275,27 +296,5 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
         }),
       ]),
     ]);
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    for (const [buildingName, building] of this._unicornBuildings.entries()) {
-      building.readOnly = this._bestUnicornBuilding.setting.enabled;
-      building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;
-      building.triggerButton.readOnly = this._bestUnicornBuilding.setting.enabled;
-
-      building.elementLabel.attr("data-ks-active-from", "❊");
-      building.elementLabel.attr("data-ks-active-to", "✮");
-
-      if (
-        this.setting.bestUnicornBuilding.enabled &&
-        this.setting.bestUnicornBuildingCurrent === buildingName
-      ) {
-        building.elementLabel.addClass(stylesTimeSkipHeatSettings.active);
-      } else {
-        building.elementLabel.removeClass(stylesTimeSkipHeatSettings.active);
-      }
-    }
   }
 }

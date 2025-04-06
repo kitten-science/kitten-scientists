@@ -26,7 +26,24 @@ export class IconButton extends UiComponent {
    * @param options Options for the icon button.
    */
   constructor(parent: UiComponent, pathData: string, title: string, options?: IconButtonOptions) {
-    super(parent, { ...options });
+    super(parent, {
+      ...options,
+      onRefresh: () => {
+        if (this.readOnly) {
+          this.element.addClass(stylesButton.readonly);
+        } else {
+          this.element.removeClass(stylesButton.readonly);
+        }
+
+        if (this.inactive) {
+          this.element.addClass(stylesButton.inactive);
+        } else {
+          this.element.removeClass(stylesButton.inactive);
+        }
+
+        options?.onRefresh?.();
+      },
+    });
 
     const element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
@@ -52,19 +69,5 @@ export class IconButton extends UiComponent {
     }
 
     return this.options?.onClick?.call(this);
-  }
-
-  refreshUi(): void {
-    if (this.readOnly) {
-      this.element.addClass(stylesButton.readonly);
-    } else {
-      this.element.removeClass(stylesButton.readonly);
-    }
-
-    if (this.inactive) {
-      this.element.addClass(stylesButton.inactive);
-    } else {
-      this.element.removeClass(stylesButton.inactive);
-    }
   }
 }

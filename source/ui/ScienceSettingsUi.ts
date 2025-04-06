@@ -39,6 +39,15 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
             !settings.observe.enabled;
         },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
+      {
+        onRefresh: () => {
+          if (this.setting.observe.enabled) {
+            $("#observeButton").hide();
+          } else {
+            $("#observeButton").show();
+          }
+        },
+      },
     );
 
     this._policiesUi = new PolicySettingsUi(this, settings.policies, locale, settings);
@@ -66,15 +75,5 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
     });
     itemsList.addChildren([this._techsUi, this._policiesUi, this._observeStars]);
     this.addChildContent(itemsList);
-  }
-
-  refreshUi(): void {
-    super.refreshUi();
-
-    if (this.setting.observe.enabled) {
-      $("#observeButton").hide();
-    } else {
-      $("#observeButton").show();
-    }
   }
 }

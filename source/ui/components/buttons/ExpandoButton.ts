@@ -19,7 +19,16 @@ export class ExpandoButton extends UiComponent {
    * @param options Options for this expando.
    */
   constructor(parent: UiComponent, options?: ExpandoButtonOptions) {
-    super(parent, { ...options });
+    super(parent, {
+      ...options,
+      onRefresh: () => {
+        if (this.ineffective) {
+          this.element.addClass(stylesButton.ineffective);
+        } else {
+          this.element.removeClass(stylesButton.ineffective);
+        }
+      },
+    });
 
     this.element = $("<div/>", {
       html: `
@@ -47,13 +56,5 @@ export class ExpandoButton extends UiComponent {
   setExpanded() {
     this.element.addClass(styles.expanded);
     this.element.prop("title", this.host.engine.i18n("ui.itemsHide"));
-  }
-
-  refreshUi(): void {
-    if (this.ineffective) {
-      this.element.addClass(stylesButton.ineffective);
-    } else {
-      this.element.removeClass(stylesButton.ineffective);
-    }
   }
 }

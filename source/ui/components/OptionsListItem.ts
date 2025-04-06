@@ -31,7 +31,18 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
     setting: TSetting,
     options?: OptionsListItemOptions,
   ) {
-    super(parent, { ...options });
+    super(parent, {
+      ...options,
+      onRefresh: () => {
+        for (const option of this._items) {
+          if (option.option.value === this.setting.selected) {
+            option.input.prop("checked", true);
+            break;
+          }
+        }
+        options?.onRefresh?.();
+      },
+    });
 
     this.element = $("<li/>");
 
@@ -54,14 +65,5 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
 
   toString(): string {
     return `[${OptionsListItem.name}#${this.componentId}]`;
-  }
-
-  refreshUi(): void {
-    for (const option of this._items) {
-      if (option.option.value === this.setting.selected) {
-        option.input.prop("checked", true);
-        break;
-      }
-    }
   }
 }

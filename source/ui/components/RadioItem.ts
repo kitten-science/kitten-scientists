@@ -56,7 +56,12 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     groupKey: string,
     options?: RadioItemOptions,
   ) {
-    super(parent, { ...options });
+    super(parent, {
+      ...options,
+      onRefresh: () => {
+        this.input.prop("disabled", this.readOnly);
+      },
+    });
 
     const element = $("<div/>");
     element.addClass(stylesSettingListItem.setting);
@@ -94,9 +99,5 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
 
   toString(): string {
     return `[${RadioItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
-  }
-
-  refreshUi(): void {
-    this.input.prop("disabled", this.readOnly);
   }
 }

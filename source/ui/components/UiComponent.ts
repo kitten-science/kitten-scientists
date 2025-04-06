@@ -5,7 +5,6 @@ export type UiComponentInterface = EventTarget & {
   readonly children: Iterable<UiComponentInterface>;
   parent: UiComponentInterface | null;
   get element(): JQuery;
-  refreshUi(): void;
   requestRefresh(withChildren?: boolean, depth?: number): void;
   refresh(force?: boolean, depth?: number): void;
 };
@@ -61,6 +60,15 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
 
   protected _needsRefresh;
   requestRefresh(withChildren = false, depth = 0) {
+    if (depth === 0) {
+      console.info(...cl(this.toString(), "requestRefresh() received."));
+    }
+
+    // WARNING: Enable this section only during refresh logic debugging!
+    //          When this was implemented, a full refresh logged 16K messages.
+    //          Even when these are filtered from the JS console, there are
+    //          noticeable performance issues. DO NOT ENABLE THIS UNLESS YOU NEED TO.
+    /*
     console.debug(
       ...cl(
         depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
@@ -69,6 +77,7 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
         withChildren ? "with children" : "on self",
       ),
     );
+    */
 
     if (withChildren) {
       for (const child of this.children) {
@@ -84,14 +93,27 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
     this.parent?.requestRefresh(false, depth - 1);
 
     if (depth === 0) {
-      console.info(...cl("requestRefresh() complete."));
+      console.info(...cl(this.toString(), "requestRefresh() complete."));
     }
   }
+
   refresh(force = false, depth = 0) {
     if (!force && !this._needsRefresh) {
+      if (depth === 0) {
+        console.info(...cl(this.toString(), "refresh() received and ignored."));
+      }
       return;
     }
 
+    if (depth === 0) {
+      console.info(...cl(this.toString(), "refresh() received."));
+    }
+
+    // WARNING: Enable this section only during refresh logic debugging!
+    //          When this was implemented, a full refresh logged 16K messages.
+    //          Even when these are filtered from the JS console, there are
+    //          noticeable performance issues. DO NOT ENABLE THIS UNLESS YOU NEED TO.
+    /*
     if (!force) {
       console.debug(
         ...cl(
@@ -102,19 +124,19 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
         ),
       );
     }
+    */
+
     this.options?.onRefresh?.call(this);
-    this.refreshUi();
     for (const child of this.children) {
       child.refresh(force, depth + 1);
     }
 
     this._needsRefresh = false;
+
     if (depth === 0) {
-      console.info(...cl("refresh() complete."));
+      console.info(...cl(this.toString(), "refresh() complete."));
     }
   }
-
-  abstract refreshUi(): void;
 
   addChild(child: UiComponentInterface): this {
     child.parent = this;

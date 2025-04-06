@@ -21,6 +21,4 @@ export class Delimiter extends UiComponent {
   toString(): string {
     return `[${Delimiter.name}#${this.componentId}]`;
   }
-
-  refreshUi(): void {}
 }

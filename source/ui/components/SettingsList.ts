@@ -140,6 +140,4 @@ export class SettingsList extends UiComponent {
     this.list.append(child.element);
     return this;
   }
-
-  refreshUi(): void {}
 }
