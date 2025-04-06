@@ -93,7 +93,7 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
   }
 
   toString(): string {
-    return `[${RadioItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+    return `[${RadioItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
   }
 
   refreshUi(): void {

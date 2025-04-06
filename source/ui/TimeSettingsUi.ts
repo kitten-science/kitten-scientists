@@ -63,6 +63,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       }),
     );
 
@@ -81,6 +82,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
               label,
               {
                 delimiter: building.name === this.host.game.time.chronoforgeUpgrades.at(-1)?.name,
+                renderLabelTrigger: false,
               },
             ),
           ),
@@ -96,6 +98,7 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
               this.setting,
               building.label,
               label,
+              { renderLabelTrigger: false },
             ),
           ),
       ]),

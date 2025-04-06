@@ -67,6 +67,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       }),
     );
 
@@ -186,6 +187,7 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
 
           option.trigger = this.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       });
       this._crafts.push(element);
 

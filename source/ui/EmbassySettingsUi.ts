@@ -54,6 +54,7 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       }),
     );
 

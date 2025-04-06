@@ -53,7 +53,7 @@ export class LabelListItem extends ListItem {
   }
 
   toString(): string {
-    return `[${LabelListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+    return `[${LabelListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
   }
 
   addChildHead(child: UiComponentInterface): this {

@@ -65,6 +65,7 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       }),
     );
 
@@ -93,6 +94,7 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
                     delimiter:
                       indexPlanet < arrayPlant.length - 1 &&
                       indexBuilding === arrayBuilding.length - 1,
+                    renderLabelTrigger: false,
                   },
                 ),
               ),

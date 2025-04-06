@@ -437,7 +437,7 @@ export class TimeControlManager {
         // Heat Transfer to specified value
         if (heatNow <= heatMax * this.settings.timeSkip.activeHeatTransfer.trigger) {
           this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled = false;
-          this._host.refreshUi();
+          this._host.refreshEntireUserInterface();
           this._host.engine.iactivity("act.time.activeHeatTransferEnd", [], "ks-timeSkip");
         }
         // Get temporalFlux
@@ -476,7 +476,7 @@ export class TimeControlManager {
         }
       } else if (heatNow >= heatMax - heatPerTick * ticksPerSecond * 10) {
         this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled = true;
-        this._host.refreshUi();
+        this._host.refreshEntireUserInterface();
         this._host.engine.iactivity("act.time.activeHeatTransferStart", [], "ks-timeSkip");
         this._host.engine.storeForSummary("time.activeHeatTransferStart", 1);
       }

@@ -170,4 +170,10 @@ export class UserInterface extends UiComponent {
   refreshUi(): void {
     this._engineUi.refreshUi();
   }
+
+  forceFullRefresh(): void {
+    console.warn(...cl("Forcing full user interface refresh!"));
+    super.requestRefresh(true);
+    this.requestRefresh();
+  }
 }

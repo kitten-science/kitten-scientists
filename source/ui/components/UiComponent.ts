@@ -61,9 +61,6 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
 
   protected _needsRefresh;
   requestRefresh(withChildren = false, depth = 0) {
-    if (this._needsRefresh) {
-      return;
-    }
     console.debug(
       ...cl(
         depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
@@ -72,12 +69,22 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
         withChildren ? "with children" : "on self",
       ),
     );
-    this._needsRefresh = true;
-    this.parent?.requestRefresh(false, depth - 1);
+
     if (withChildren) {
       for (const child of this.children) {
         child.requestRefresh(withChildren, depth + 1);
       }
+    }
+
+    if (this._needsRefresh) {
+      return;
+    }
+
+    this._needsRefresh = true;
+    this.parent?.requestRefresh(false, depth - 1);
+
+    if (depth === 0) {
+      console.info(...cl("requestRefresh() complete."));
     }
   }
   refresh(force = false, depth = 0) {
@@ -102,6 +109,9 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
     }
 
     this._needsRefresh = false;
+    if (depth === 0) {
+      console.info(...cl("refresh() complete."));
+    }
   }
 
   abstract refreshUi(): void;

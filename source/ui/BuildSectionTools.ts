@@ -116,6 +116,7 @@ export const BuildSectionTools = {
 
         option.trigger = parent.host.parsePercentage(value);
       },
+      renderLabelTrigger: options?.renderLabelTrigger,
       upgradeIndicator: options?.upgradeIndicator,
     });
     return element;

@@ -126,7 +126,7 @@ export class KittenScientists {
     // TODO: This should be configurable.
     this.game.console.maxMessages = 1000;
 
-    this.refreshUi();
+    this.refreshEntireUserInterface();
 
     if (this.engine.settings.enabled) {
       this.engine.start(true);
@@ -209,8 +209,9 @@ export class KittenScientists {
   /**
    * Requests the user interface to refresh.
    */
-  refreshUi(): void {
-    this._userInterface.requestRefresh();
+  refreshEntireUserInterface(): void {
+    console.info(...cl("Requesting entire user interface to be refreshed."));
+    this._userInterface.forceFullRefresh();
   }
 
   /**
@@ -425,7 +426,7 @@ export class KittenScientists {
 
       console.info(...cl("Found Kitten Scientists engine state in save data."));
       this.engine.stateLoad(state);
-      this.refreshUi();
+      this.refreshEntireUserInterface();
     },
     resetState: () => null,
     save: (_saveData: Record<string, unknown>) => {

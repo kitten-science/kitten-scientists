@@ -10,6 +10,7 @@ export type SettingTriggerListItemOptions = ThisType<SettingTriggerListItem> &
   SettingListItemOptions & {
     readonly onRefreshTrigger?: () => void | Promise<void>;
     readonly onSetTrigger: () => void | Promise<void>;
+    readonly renderLabelTrigger?: boolean;
   };
 
 export class SettingTriggerListItem extends SettingListItem {
@@ -28,8 +29,12 @@ export class SettingTriggerListItem extends SettingListItem {
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       alignment: "right",
       border: false,
-      onClick: () => options.onSetTrigger.call(this),
+      onClick: async () => {
+        await options.onSetTrigger.call(this);
+        this.requestRefresh();
+      },
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
+      renderLabel: options?.renderLabelTrigger ?? true,
     });
     this.addChildrenHead([
       new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
@@ -38,6 +43,6 @@ export class SettingTriggerListItem extends SettingListItem {
   }
 
   toString(): string {
-    return `[${SettingTriggerListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+    return `[${SettingTriggerListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
   }
 }

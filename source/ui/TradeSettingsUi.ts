@@ -72,6 +72,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       }),
     );
 
@@ -273,6 +274,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
       },
       delimiter,
       upgradeIndicator,
+      renderLabelTrigger: false,
     });
     const panel = new SettingsPanel(parent, option, element);
 

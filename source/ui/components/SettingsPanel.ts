@@ -68,6 +68,6 @@ export class SettingsPanel<
   }
 
   toString(): string {
-    return `[${SettingsPanel.name}#${this.componentId}]: ${this.settingItem.elementLabel.text()}`;
+    return `[${SettingsPanel.name}#${this.componentId}]: '${this.settingItem.elementLabel.text()}'`;
   }
 }

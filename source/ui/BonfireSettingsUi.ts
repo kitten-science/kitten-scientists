@@ -84,6 +84,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        renderLabelTrigger: false,
       }),
     );
 
@@ -206,6 +207,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           settings,
           meta.stages[0].label,
           sectionLabel,
+          { renderLabelTrigger: false },
         ),
         BuildSectionTools.getBuildOption(
           parent,
@@ -215,6 +217,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           meta.stages[1].label,
           sectionLabel,
           {
+            renderLabelTrigger: false,
             upgradeIndicator: true,
           },
         ),
@@ -229,6 +232,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           settings,
           meta.label,
           sectionLabel,
+          { renderLabelTrigger: false },
         ),
       ];
     }

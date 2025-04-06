@@ -51,8 +51,12 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       border: false,
       classes: [stylesButton.lastHeadAction],
-      onClick: () => options.onSetTrigger?.call(this),
+      onClick: async () => {
+        await options.onSetTrigger.call(this);
+        this.requestRefresh();
+      },
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
+      renderLabel: options?.renderLabelTrigger ?? true,
     });
     this.addChildrenHead([
       new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),

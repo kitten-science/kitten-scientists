@@ -49,6 +49,6 @@ export class SettingLimitedListItem extends SettingListItem {
   }
 
   toString(): string {
-    return `[${SettingLimitedListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+    return `[${SettingLimitedListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
   }
 }

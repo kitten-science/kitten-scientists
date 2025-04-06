@@ -291,7 +291,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
                 ]);
       },
       onSetMax,
-    }).addChildrenHead([new Container(this, { classes: [stylesLabelListItem.fillSpace] })]);
+    }); //.addChildrenHead([new Container(this, { classes: [stylesLabelListItem.fillSpace] })]);
     element.maxButton.element.addClass(stylesButton.lastHeadAction);
     return element;
   }

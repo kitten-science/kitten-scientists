@@ -120,6 +120,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
 
           settings.trigger = parent.host.parseAbsolute(value) ?? settings.trigger;
         },
+        renderLabelTrigger: false,
       }),
     );
     this.settingItem.triggerButton.element.removeClass(stylesButton.lastHeadAction);

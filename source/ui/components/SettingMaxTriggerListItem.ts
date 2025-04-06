@@ -13,7 +13,9 @@ import { TriggerButton } from "./buttons/TriggerButton.js";
 export type SettingMaxTriggerListItemOptions = ThisType<SettingMaxTriggerListItem> &
   SettingListItemOptions &
   SettingMaxListItemOptions &
-  SettingTriggerListItemOptions;
+  SettingTriggerListItemOptions & {
+    readonly renderLabelTrigger?: boolean;
+  };
 
 export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax> {
   declare readonly options: SettingMaxTriggerListItemOptions;
@@ -42,11 +44,12 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
     this.triggerButton = new TriggerButton(parent, setting, locale, {
       border: false,
       classes: [stylesButton.lastHeadAction],
-      onClick: () => {
-        options.onSetTrigger.call(this);
+      onClick: async () => {
+        await options.onSetTrigger.call(this);
         this.requestRefresh();
       },
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
+      renderLabel: options?.renderLabelTrigger ?? true,
     });
 
     this.addChildrenHead([
@@ -57,6 +60,6 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
   }
 
   toString(): string {
-    return `[${SettingMaxTriggerListItem.name}#${this.componentId}]: ${this.elementLabel.text()}`;
+    return `[${SettingMaxTriggerListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
   }
 }
