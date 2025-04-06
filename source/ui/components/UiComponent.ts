@@ -7,7 +7,7 @@ export type UiComponentInterface = EventTarget & {
   get element(): JQuery;
   refreshUi(): void;
   requestRefresh(withChildren?: boolean, depth?: number): void;
-  refresh(force?: boolean): void;
+  refresh(force?: boolean, depth?: number): void;
 };
 
 export type UiComponentOptions = {
@@ -64,27 +64,41 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
     if (this._needsRefresh) {
       return;
     }
-    console.debug(...cl("  ".repeat(depth), this.toString(), "requestRefresh"));
+    console.debug(
+      ...cl(
+        depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
+        this.toString(),
+        "requestRefresh",
+        withChildren ? "with children" : "on self",
+      ),
+    );
     this._needsRefresh = true;
-    this.parent?.requestRefresh(false);
+    this.parent?.requestRefresh(false, depth - 1);
     if (withChildren) {
       for (const child of this.children) {
         child.requestRefresh(withChildren, depth + 1);
       }
     }
   }
-  refresh(force = false) {
+  refresh(force = false, depth = 0) {
     if (!force && !this._needsRefresh) {
       return;
     }
 
     if (!force) {
-      console.debug(...cl(this.toString(), "refresh", typeof this.options?.onRefresh));
+      console.debug(
+        ...cl(
+          depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
+          this.toString(),
+          "refresh",
+          typeof this.options?.onRefresh !== "undefined" ? "with onRefresh()" : "",
+        ),
+      );
     }
     this.options?.onRefresh?.call(this);
     this.refreshUi();
     for (const child of this.children) {
-      child.refresh(force);
+      child.refresh(force, depth + 1);
     }
 
     this._needsRefresh = false;

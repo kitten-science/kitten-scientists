@@ -137,5 +137,10 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
     }
   }
 
+  requestRefresh(withChildren = false, depth = 0) {
+    super.requestRefresh(withChildren, depth);
+    this.head.requestRefresh(true, depth + 1);
+  }
+
   refreshUi(): void {}
 }
