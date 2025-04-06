@@ -307,7 +307,7 @@ __metadata:
     "@types/web": "npm:0.0.216"
     cheerio: "npm:1.0.0"
     date-fns: "npm:4.1.0"
-    dojo: "npm:1"
+    dojo: "npm:1.17.3"
     esbuild: "npm:0.25.2"
     rollup: "npm:4.39.0"
     rollup-plugin-cleanup: "npm:3.2.1"
@@ -749,7 +749,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dojo@npm:1":
+"dojo@npm:1.17.3":
   version: 1.17.3
   resolution: "dojo@npm:1.17.3"
   checksum: 10c0/00f13a2cf3d3a4cc0b3236feb63fa385e22f3b3f023abf3658b8c11628db6de979575fd3d016fa87ee644fe2607740cdbecc5be4ab71f59c26460eac9ad397a6
