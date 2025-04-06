@@ -2,7 +2,6 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import gt from "semver/functions/gt.js";
 import { Engine, type EngineState, type GameLanguage, type SupportedLocale } from "./Engine.js";
-import { UserScriptLoader } from "./UserScriptLoader.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
@@ -10,6 +9,7 @@ import { cl } from "./tools/Log.js";
 import type { ReleaseChannel, ReleaseInfoSchema } from "./types/_releases.js";
 import type { GamePage } from "./types/game.js";
 import type { I18nEngine } from "./types/index.js";
+import { UserScriptLoader } from "./UserScriptLoader.js";
 import { UserInterface } from "./ui/UserInterface.js";
 
 declare global {
@@ -268,7 +268,7 @@ export class KittenScientists {
     }
 
     return locale !== "invariant" && Math.floor(Math.log10(value)) < 9
-      ? new Intl.NumberFormat(locale, { style: "decimal", maximumFractionDigits: 0 }).format(value)
+      ? new Intl.NumberFormat(locale, { maximumFractionDigits: 0, style: "decimal" }).format(value)
       : this.game.getDisplayValueExt(value, false, false);
   }
 

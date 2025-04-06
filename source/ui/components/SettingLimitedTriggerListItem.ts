@@ -1,5 +1,6 @@
 import type { SupportedLocale } from "../../Engine.js";
 import type { SettingLimitedTrigger, SettingOptions } from "../../settings/Settings.js";
+import { TriggerButton } from "./buttons/TriggerButton.js";
 import {
   SettingLimitedListItem,
   type SettingLimitedListItemOptions,
@@ -7,7 +8,6 @@ import {
 import type { SettingListItemOptions } from "./SettingListItem.js";
 import type { SettingTriggerListItemOptions } from "./SettingTriggerListItem.js";
 import type { UiComponent } from "./UiComponent.js";
-import { TriggerButton } from "./buttons/TriggerButton.js";
 
 export type SettingLimitedTriggerListItemOptions = SettingListItemOptions &
   SettingLimitedListItemOptions &

@@ -3,13 +3,13 @@ import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { SpaceSettings } from "../settings/SpaceSettings.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
-import { MissionSettingsUi } from "./MissionSettingsUi.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
+import { MissionSettingsUi } from "./MissionSettingsUi.js";
 
 export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTriggerListItem> {
   private readonly _missionsUi: MissionSettingsUi;
@@ -26,9 +26,6 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -64,6 +61,9 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
           }
 
           settings.trigger = parent.host.parsePercentage(value);
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         renderLabelTrigger: false,
       }),

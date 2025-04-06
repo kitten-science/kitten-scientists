@@ -2,7 +2,6 @@ import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Engine } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
-import type { WorkshopManager } from "../WorkshopManager.js";
 import type { BonfireItem } from "../settings/BonfireSettings.js";
 import type { AllItems } from "../settings/Settings.js";
 import { objectEntries } from "../tools/Entries.js";
@@ -50,6 +49,7 @@ import type {
   UnsafeVoidSpaceUpgrade,
   UnsafeVoidSpaceUpgradeButtonOptions,
 } from "../types/time.js";
+import type { WorkshopManager } from "../WorkshopManager.js";
 
 export type BulkBuildListItem = {
   count: number;
@@ -229,8 +229,8 @@ export class BulkPurchaseHelper {
           );
           const resPriceModifier = 1 - resPriceDiscount;
           itemPrices.push({
-            val: price.val * priceModifier * resPriceModifier,
             name: price.name,
+            val: price.val * priceModifier * resPriceModifier,
           });
         }
 
@@ -246,14 +246,14 @@ export class BulkPurchaseHelper {
 
         // Create an entry in the cache list for the bulk processing.
         potentialBuilds.push({
-          id: name,
-          name: (build.baseBuilding ?? build.building) as Building,
           count: 0,
-          spot: counter,
-          prices: itemPrices,
-          priceRatio: priceRatio,
-          source: sourceTab,
+          id: name,
           limit: build.max || 0,
+          name: (build.baseBuilding ?? build.building) as Building,
+          priceRatio: priceRatio,
+          prices: itemPrices,
+          source: sourceTab,
+          spot: counter,
           val: buildMetaData.val,
         });
 

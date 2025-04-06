@@ -20,21 +20,21 @@ export abstract class UpgradeManager {
     if (variant === "policy") {
       const itemMetaRaw = game.getUnlockByName(upgrade.name, "policies");
       const controller = new classes.ui.PolicyBtnController(this._host.game) as PolicyBtnController;
-      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
+      const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     } else if (variant === "science") {
       const itemMetaRaw = game.getUnlockByName(upgrade.name, "tech");
       const controller = new com.nuclearunicorn.game.ui.TechButtonController(
         this._host.game,
       ) as TechButtonController;
-      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
+      const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     } else {
       const itemMetaRaw = game.getUnlockByName(upgrade.name, "upgrades");
       const controller = new com.nuclearunicorn.game.ui.UpgradeButtonController(
         this._host.game,
       ) as UpgradeButtonController;
-      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
+      const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
       success = UpgradeManager.skipConfirm(() => controller.buyItem(model)).itemBought;
     }
 

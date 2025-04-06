@@ -6,6 +6,8 @@ import type { SettingOptions } from "../settings/Settings.js";
 import { ucfirst } from "../tools/Format.js";
 import type { Resource } from "../types/index.js";
 import stylesButton from "./components/Button.module.css";
+import { ConsumeButton } from "./components/buttons/ConsumeButton.js";
+import { StockButton } from "./components/buttons/StockButton.js";
 import { Container } from "./components/Container.js";
 import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
@@ -14,8 +16,6 @@ import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
-import { ConsumeButton } from "./components/buttons/ConsumeButton.js";
-import { StockButton } from "./components/buttons/StockButton.js";
 
 export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
   constructor(

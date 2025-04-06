@@ -1,4 +1,4 @@
-import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { type Job, Jobs, type Trait, Traits } from "../types/index.js";
 import { Setting, SettingOptions } from "./Settings.js";
 

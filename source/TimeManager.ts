@@ -1,10 +1,9 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { FrameContext } from "./Engine.js";
-import type { KittenScientists } from "./KittenScientists.js";
-import { TabManager } from "./TabManager.js";
-import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { type TimeItem, TimeSettings, type TimeSettingsItem } from "./settings/TimeSettings.js";
+import { TabManager } from "./TabManager.js";
 import { cl } from "./tools/Log.js";
 import type { BuildingStackableBtn, ButtonModern } from "./types/core.js";
 import { type ChronoForgeUpgrade, TimeItemVariant, type VoidSpaceUpgrade } from "./types/index.js";
@@ -18,6 +17,7 @@ import type {
   UnsafeVoidSpaceUpgradeButtonOptions,
   VoidSpaceBtnController,
 } from "./types/time.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class TimeManager {
   private readonly _host: KittenScientists;
@@ -122,7 +122,7 @@ export class TimeManager {
       const controller = new classes.ui.time.ChronoforgeBtnController(
         this._host.game,
       ) as ChronoforgeBtnController;
-      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
+      const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
       label = itemMetaRaw.label;
     } else {
@@ -130,7 +130,7 @@ export class TimeManager {
       const controller = new classes.ui.time.VoidSpaceBtnController(
         this._host.game,
       ) as VoidSpaceBtnController;
-      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
+      const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
       label = itemMetaRaw.label;
     }

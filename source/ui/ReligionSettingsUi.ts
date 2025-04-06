@@ -4,17 +4,17 @@ import { ReligionSettings } from "../settings/ReligionSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { ReligionOptions, UnicornItems, type ZigguratUpgrade } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
-import stylesTimeSkipHeatSettings from "./TimeSkipHeatSettingsUi.module.css";
 import stylesButton from "./components/Button.module.css";
 import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import type { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
+import stylesTimeSkipHeatSettings from "./TimeSkipHeatSettingsUi.module.css";
 
 export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingTriggerListItem> {
   private readonly _unicornBuildings: Map<
@@ -35,9 +35,6 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -73,6 +70,9 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
           }
 
           settings.trigger = parent.host.parsePercentage(value);
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         renderLabelTrigger: false,
       }),
@@ -164,8 +164,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
         onReset: () => {
           const defaults = new ReligionSettings();
           this.setting.load({
-            buildings: defaults.buildings,
             bestUnicornBuilding: defaults.bestUnicornBuilding,
+            buildings: defaults.buildings,
           });
           this.requestRefresh();
         },
@@ -249,9 +249,6 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
             onCheck: () => {
               this.host.engine.imessage("status.sub.enable", [label]);
             },
-            onUnCheck: () => {
-              this.host.engine.imessage("status.sub.disable", [label]);
-            },
             onRefresh: () => {
               this.settingItem.triggerButton.inactive =
                 !this.setting[item].enabled || this.setting[item].trigger === -1;
@@ -289,6 +286,9 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
                 (element.triggerButton.behavior === "integer"
                   ? this.host.parseAbsolute(value)
                   : this.host.parsePercentage(value)) ?? this.setting[item].trigger;
+            },
+            onUnCheck: () => {
+              this.host.engine.imessage("status.sub.disable", [label]);
             },
           });
           element.triggerButton.element.addClass(stylesButton.lastHeadAction);

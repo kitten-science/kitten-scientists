@@ -1,4 +1,4 @@
-import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { type StagedBuilding, StagedBuildings } from "../types/index.js";
 import { Setting } from "./Settings.js";

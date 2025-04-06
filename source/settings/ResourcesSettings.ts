@@ -1,7 +1,7 @@
-import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { WorkshopManager } from "../WorkshopManager.js";
+import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { type Resource, Resources } from "../types/index.js";
+import { WorkshopManager } from "../WorkshopManager.js";
 import { Setting } from "./Settings.js";
 
 export class ResourcesSettingsItem extends Setting {

@@ -34,7 +34,7 @@ export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
 
     const listFilters = new SettingsList(this).addChildren(
       FilterItems.map(item => {
-        return { name: item, label: this.host.engine.i18n(`filter.${item}`) };
+        return { label: this.host.engine.i18n(`filter.${item}`), name: item };
       })
         .sort((a, b) => a.label.localeCompare(b.label))
         .map(

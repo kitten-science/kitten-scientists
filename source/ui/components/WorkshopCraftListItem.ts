@@ -2,6 +2,9 @@ import type { SupportedLocale } from "../../Engine.js";
 import type { SettingOptions } from "../../settings/Settings.js";
 import type { CraftSettingsItem } from "../../settings/WorkshopSettings.js";
 import stylesButton from "./Button.module.css";
+import { LimitedButton } from "./buttons/LimitedButton.js";
+import { MaxButton } from "./buttons/MaxButton.js";
+import { TriggerButton } from "./buttons/TriggerButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import stylesListItem from "./ListItem.module.css";
@@ -10,9 +13,6 @@ import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.
 import type { SettingMaxListItemOptions } from "./SettingMaxListItem.js";
 import type { SettingTriggerListItemOptions } from "./SettingTriggerListItem.js";
 import type { UiComponent } from "./UiComponent.js";
-import { LimitedButton } from "./buttons/LimitedButton.js";
-import { MaxButton } from "./buttons/MaxButton.js";
-import { TriggerButton } from "./buttons/TriggerButton.js";
 
 export type WorkshopCraftListItemOptions = SettingListItemOptions &
   SettingLimitedListItemOptions &

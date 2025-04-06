@@ -1,16 +1,16 @@
-import { type Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, type Maybe, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { type Automation, Engine, type FrameContext } from "./Engine.js";
-import type { KittenScientists } from "./KittenScientists.js";
-import { TabManager } from "./TabManager.js";
-import type { WorkshopManager } from "./WorkshopManager.js";
 import type { MaterialsCache } from "./helper/MaterialsCache.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { TradeSettings, type TradeSettingsItem } from "./settings/TradeSettings.js";
+import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import type { Diplomacy, UnsafeRace, UnsafeTradeSellOffer } from "./types/diplomacy.js";
 import type { Race, Resource } from "./types/index.js";
 import type { UnsafeResource } from "./types/resources.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class TradeManager implements Automation {
   private readonly _host: KittenScientists;
@@ -320,12 +320,12 @@ export class TradeManager implements Automation {
       }
 
       embassyBulk[name] = {
-        val: 0,
-        max,
         basePrice: mustExist(race.embassyPrices?.[0]).val,
         currentEm: race.embassyLevel,
+        max,
         priceSum: 0,
         race: race,
+        val: 0,
       };
       bulkTracker.push(name);
     }
@@ -830,8 +830,8 @@ export class TradeManager implements Automation {
    */
   getMaterials(race: Maybe<Race> = null): Partial<Record<Resource, number>> {
     const materials: Partial<Record<Resource, number>> = {
-      manpower: 50 - this._host.game.getEffect("tradeCatpowerDiscount"),
       gold: 15 - this._host.game.getEffect("tradeGoldDiscount"),
+      manpower: 50 - this._host.game.getEffect("tradeCatpowerDiscount"),
     };
 
     if (isNil(race)) {

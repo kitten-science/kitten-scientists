@@ -1,6 +1,6 @@
 import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import type { KGSaveData } from "./_save.js";
-import type { AchTab, Achievements } from "./achievements.js";
+import type { Achievements, AchTab } from "./achievements.js";
 import type { BuildingsManager, BuildingsModern } from "./buildings.js";
 import type { Calendar } from "./calendar.js";
 import type { ChallengesManager, ChallengesTab } from "./challenges.js";
@@ -11,8 +11,8 @@ import type {
   ResourceCraftable,
   TabId,
   Unlock,
-  UnlockTypeMap,
   Unlocks,
+  UnlockTypeMap,
 } from "./index.js";
 import type { Math as KGMath } from "./math.js";
 import type { PrestigeManager } from "./prestige.js";

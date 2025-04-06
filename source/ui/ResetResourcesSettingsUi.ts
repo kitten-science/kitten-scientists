@@ -8,8 +8,8 @@ import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
@@ -37,9 +37,6 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
       const element = new SettingTriggerListItem(this, option, locale, ucfirst(resource.title), {
         onCheck: () => {
           this.host.engine.imessage("status.sub.enable", [resource.title]);
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [resource.title]);
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -71,6 +68,9 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
           }
 
           option.trigger = Number(value);
+        },
+        onUnCheck: () => {
+          this.host.engine.imessage("status.sub.disable", [resource.title]);
         },
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);

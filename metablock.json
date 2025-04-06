@@ -1,12 +1,12 @@
 {
-  "name": "Kitten Scientists",
-  "namespace": "https://kitten-science.com/",
+  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "description": "Add-on for the wonderful incremental browser game: https://kittensgame.com/web/",
   "icon": "https://kitten-science.com/assets/images/organization-logo64.png",
-  "author": "Oliver Salzburg <oliver.salzburg@gmail.com>",
   "match": [
     "https://kittensgame.com/web/",
     "https://kittensgame.com/beta/",
     "https://kittensgame.com/alpha/"
-  ]
+  ],
+  "name": "Kitten Scientists",
+  "namespace": "https://kitten-science.com/"
 }

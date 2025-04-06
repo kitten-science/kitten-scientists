@@ -1,13 +1,13 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { Engine, type FrameContext } from "./Engine.js";
 import type { KittenScientists } from "./KittenScientists.js";
+import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { TabManager } from "./TabManager.js";
+import { cl } from "./tools/Log.js";
+import type { Library, UnsafePolicy, UnsafeTech } from "./types/science.js";
 import { UpgradeManager } from "./UpgradeManager.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
-import { ScienceSettings } from "./settings/ScienceSettings.js";
-import { cl } from "./tools/Log.js";
-import type { Library, UnsafePolicy, UnsafeTech } from "./types/science.js";
 
 export class ScienceManager extends UpgradeManager {
   readonly manager: TabManager<Library>;

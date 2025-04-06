@@ -11,8 +11,8 @@ import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSettings> {
@@ -115,9 +115,6 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
       onCheck: () => {
         parent.host.engine.imessage("status.reset.check.enable", [label]);
       },
-      onUnCheck: () => {
-        parent.host.engine.imessage("status.reset.check.disable", [label]);
-      },
       onRefresh: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
         element.triggerButton.ineffective =
@@ -148,6 +145,9 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
         }
 
         option.trigger = Number(value);
+      },
+      onUnCheck: () => {
+        parent.host.engine.imessage("status.reset.check.disable", [label]);
       },
       upgradeIndicator,
     });

@@ -1,9 +1,9 @@
 import type { SettingLimited } from "../../settings/Settings.js";
+import { LimitedButton } from "./buttons/LimitedButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
 import type { UiComponent } from "./UiComponent.js";
-import { LimitedButton } from "./buttons/LimitedButton.js";
 
 export type SettingLimitedListItemOptions = ThisType<SettingLimitedListItem> &
   SettingListItemOptions & {

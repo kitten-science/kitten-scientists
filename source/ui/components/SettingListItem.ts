@@ -1,4 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { Setting } from "../../settings/Settings.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
 import { default as styles, default as stylesSettingListItem } from "./SettingListItem.module.css";
@@ -81,9 +82,9 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
 
     checkbox.on("change", (event: JQuery.ChangeEvent) => {
       if (checkbox.is(":checked") && !setting.enabled) {
-        this.check();
+        this.check().catch(redirectErrorsToConsole(console));
       } else if (!checkbox.is(":checked") && setting.enabled) {
-        this.uncheck();
+        this.uncheck().catch(redirectErrorsToConsole(console));
       }
     });
 

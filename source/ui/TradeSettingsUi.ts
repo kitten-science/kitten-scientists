@@ -7,18 +7,18 @@ import type {
 } from "../settings/Settings.js";
 import type { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
 import { ucfirst } from "../tools/Format.js";
-import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
+import { BuyButton } from "./components/buttons-text/BuyButton.js";
+import { SellButton } from "./components/buttons-text/SellButton.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { SeasonsList } from "./components/SeasonsList.js";
 import { SettingLimitedTriggerListItem } from "./components/SettingLimitedTriggerListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
-import { BuyButton } from "./components/buttons-text/BuyButton.js";
-import { SellButton } from "./components/buttons-text/SellButton.js";
+import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
 
 export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTriggerListItem> {
   constructor(
@@ -33,9 +33,6 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -71,6 +68,9 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
           }
 
           settings.trigger = parent.host.parsePercentage(value);
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         renderLabelTrigger: false,
       }),
@@ -130,11 +130,6 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
                 this.host.engine.i18n("option.crypto"),
               ]);
             },
-            onUnCheck: () => {
-              this.host.engine.imessage("status.sub.disable", [
-                this.host.engine.i18n("option.crypto"),
-              ]);
-            },
             onRefresh: () => {
               this.settingItem.triggerButton.inactive =
                 !this.setting.tradeBlackcoin.enabled || this.setting.tradeBlackcoin.trigger === -1;
@@ -156,6 +151,11 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
 
               this.setting.tradeBlackcoin.trigger =
                 this.host.parseAbsolute(value) ?? this.setting.tradeBlackcoin.trigger;
+            },
+            onUnCheck: () => {
+              this.host.engine.imessage("status.sub.disable", [
+                this.host.engine.i18n("option.crypto"),
+              ]);
             },
           },
         ),
@@ -209,11 +209,9 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
     upgradeIndicator = false,
   ) {
     const element = new SettingLimitedTriggerListItem(parent, option, locale, label, {
+      delimiter,
       onCheck: () => {
         parent.host.engine.imessage("status.sub.enable", [label]);
-      },
-      onUnCheck: () => {
-        parent.host.engine.imessage("status.sub.disable", [label]);
       },
       onLimitedCheck: () => {
         parent.host.engine.imessage("trade.limited", [label]);
@@ -272,9 +270,11 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
 
         option.trigger = parent.host.parsePercentage(value);
       },
-      delimiter,
-      upgradeIndicator,
+      onUnCheck: () => {
+        parent.host.engine.imessage("status.sub.disable", [label]);
+      },
       renderLabelTrigger: false,
+      upgradeIndicator,
     });
     const panel = new SettingsPanel(parent, option, element);
 

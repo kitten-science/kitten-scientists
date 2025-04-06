@@ -210,11 +210,7 @@ export type Map = {
     energy: number;
     explorersLevel: number;
   };
-  load: (data: {
-    hqLevel: number;
-    energy: number;
-    explorersLevel: number;
-  }) => void;
+  load: (data: { hqLevel: number; energy: number; explorersLevel: number }) => void;
 };
 
 export type BiomeBtnController = ButtonModernController<UnsafeBiomeBtnModel> & {

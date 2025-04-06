@@ -1,59 +1,132 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
+  "$schema": "https://biomejs.dev/schemas/2.0.0-beta.1/schema.json",
+  "assist": {
+    "actions": {
+      "recommended": true,
+      "source": {
+        "organizeImports": "on",
+        "recommended": true,
+        "useSortedKeys": "on"
+      }
+    },
+    "enabled": true
+  },
+  "css": {
+    "assist": {
+      "enabled": true
+    },
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "cssModules": true
+    }
+  },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["**/.yarn/", "devcontainer/overlay/", "docs/", "lib/", "output/", "package.json"]
+    "includes": [
+      "@types/**",
+      "contrib/**",
+      "devcontainer/*.js",
+      "source/**",
+      "*.*",
+      "!package.json"
+    ]
   },
   "formatter": {
+    "attributePosition": "auto",
+    "bracketSpacing": true,
     "enabled": true,
-    "useEditorconfig": true,
     "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
     "lineWidth": 100,
-    "attributePosition": "auto",
-    "bracketSpacing": true
+    "useEditorconfig": true
   },
-  "organizeImports": { "enabled": true },
+  "html": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "javascript": {
+    "assist": {
+      "enabled": true
+    },
+    "formatter": {
+      "arrowParentheses": "asNeeded",
+      "attributePosition": "auto",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
+      "enabled": true,
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    },
+
+    "globals": ["exports"],
+    "linter": {
+      "enabled": true
+    }
+  },
+  "json": {
+    "assist": {
+      "enabled": true
+    },
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "allowComments": false,
+      "allowTrailingCommas": false
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
       "correctness": {
-        "noUnusedImports": "error"
+        "noUndeclaredDependencies": "error",
+        "noUnusedImports": "error",
+        "useImportExtensions": "error"
+      },
+      "nursery": {
+        "noFloatingPromises": "error"
+      },
+      "recommended": true,
+      "style": {
+        "noArguments": "error",
+        "noCommaOperator": "error",
+        "noInferrableTypes": "error",
+        "noNonNullAssertion": "error",
+        "noParameterAssign": "error",
+        "noUnusedTemplateLiteral": "error",
+        "noUselessElse": "error",
+        "useAsConstAssertion": "error",
+        "useConst": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useExponentiationOperator": "error",
+        "useExportType": "error",
+        "useImportType": "error",
+        "useLiteralEnumMembers": "error",
+        "useNodejsImportProtocol": "error",
+        "useNumberNamespace": "error",
+        "useNumericLiterals": "error",
+        "useSelfClosingElements": "error",
+        "useShorthandFunctionType": "error",
+        "useSingleVarDeclarator": "error",
+        "useTemplate": "error"
       }
-    },
-    "ignore": [
-      "_site/",
-      ".git/",
-      ".github/",
-      ".yarn/",
-      "docs/",
-      "lib/",
-      "node_modules/",
-      "*.config.*"
-    ]
-  },
-  "javascript": {
-    "formatter": {
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
-      "semicolons": "always",
-      "arrowParentheses": "asNeeded",
-      "bracketSameLine": false,
-      "quoteStyle": "double",
-      "attributePosition": "auto",
-      "bracketSpacing": true
-    },
-    "globals": ["exports"]
-  },
-  "css": {
-    "parser": {
-      "cssModules": true
     }
   },
-  "overrides": [{ "include": ["*.md"], "formatter": { "indentWidth": 4 } }]
+  "overrides": [{ "formatter": { "indentWidth": 4 }, "includes": ["**/*.md"] }],
+  "vcs": { "clientKind": "git", "enabled": true, "useIgnoreFile": true }
 }

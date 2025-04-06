@@ -6,9 +6,9 @@ import stylesButton from "./components/Button.module.css";
 import stylesDelimiter from "./components/Delimiter.module.css";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTriggerListItem> {
@@ -24,9 +24,6 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -63,6 +60,9 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
 
           settings.trigger = parent.host.parsePercentage(value);
         },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
+        },
         renderLabelTrigger: false,
       }),
     );
@@ -82,9 +82,6 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
       const element = new SettingTriggerListItem(this, option, locale, upgrade.label, {
         onCheck: () => {
           this.host.engine.imessage("status.sub.enable", [upgrade.label]);
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [upgrade.label]);
         },
         onRefresh: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
@@ -124,6 +121,9 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
           }
 
           option.trigger = this.host.parsePercentage(value);
+        },
+        onUnCheck: () => {
+          this.host.engine.imessage("status.sub.disable", [upgrade.label]);
         },
         renderLabelTrigger: false,
       });

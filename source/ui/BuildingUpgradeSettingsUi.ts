@@ -24,14 +24,14 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
-        },
         onRefresh: () => {
           this.expando.ineffective =
             sectionSetting.enabled &&
             settings.enabled &&
             !Object.values(settings.buildings).some(building => building.enabled);
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );
@@ -48,7 +48,7 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
         },
       });
 
-      items.push({ label: label, button: button });
+      items.push({ button: button, label: label });
     }
     // Ensure buttons are added into UI with their labels alphabetized.
     items.sort((a, b) => a.label.localeCompare(b.label));

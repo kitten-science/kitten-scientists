@@ -4,14 +4,14 @@ import type { SettingOptions } from "../settings/Settings.js";
 import { type CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
 import { ucfirst } from "../tools/Format.js";
 import type { ResourceCraftable } from "../types/index.js";
-import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
 import { Dialog } from "./components/Dialog.js";
 import { SettingListItem } from "./components/SettingListItem.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 import { WorkshopCraftListItem } from "./components/WorkshopCraftListItem.js";
+import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
 
 export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingTriggerListItem> {
   private readonly _crafts: Array<SettingListItem>;
@@ -28,9 +28,6 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
@@ -66,6 +63,9 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
           }
 
           settings.trigger = parent.host.parsePercentage(value);
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         renderLabelTrigger: false,
       }),
@@ -120,11 +120,8 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
         onCheck: (isBatchProcess?: boolean) => {
           this.host.engine.imessage("status.sub.enable", [label]);
           if (option.max === 0 && !isBatchProcess) {
-            onSetMax();
+            return onSetMax();
           }
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [label]);
         },
         onLimitedCheck: () => {
           this.host.engine.imessage("craft.limited", [label]);
@@ -186,6 +183,9 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
           }
 
           option.trigger = this.host.parsePercentage(value);
+        },
+        onUnCheck: () => {
+          this.host.engine.imessage("status.sub.disable", [label]);
         },
         renderLabelTrigger: false,
       });

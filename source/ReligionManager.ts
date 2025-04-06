@@ -2,12 +2,11 @@ import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
 import type { BonfireManager } from "./BonfireManager.js";
 import type { Automation, FrameContext } from "./Engine.js";
-import type { KittenScientists } from "./KittenScientists.js";
-import { TabManager } from "./TabManager.js";
-import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import { ReligionSettings, type ReligionSettingsItem } from "./settings/ReligionSettings.js";
+import { TabManager } from "./TabManager.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import {
@@ -16,8 +15,8 @@ import {
   type ReligionUpgrade,
   type TranscendenceUpgrade,
   type UnicornItem,
-  UnicornItemVariant,
   UnicornItems,
+  UnicornItemVariant,
   type ZigguratUpgrade,
 } from "./types/index.js";
 import type {
@@ -35,6 +34,7 @@ import type {
   UnsafeZigguratUpgrade,
   ZigguratBtnController,
 } from "./types/religion.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class ReligionManager implements Automation {
   private readonly _host: KittenScientists;
@@ -404,7 +404,7 @@ export class ReligionManager implements Automation {
       ) as TranscendenceBtnController<
         UnsafeTranscendenceBtnModel<UnsafeTranscendenceButtonOptions>
       >;
-      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
+      const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
       label = itemMetaRaw.label;
     } else if (variant === UnicornItemVariant.OrderOfTheSun) {
@@ -412,7 +412,7 @@ export class ReligionManager implements Automation {
       const controller = new com.nuclearunicorn.game.ui.ReligionBtnController(
         this._host.game,
       ) as ReligionBtnController;
-      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
+      const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
       label = itemMetaRaw.label;
     } else if (variant === UnicornItemVariant.Ziggurat) {
@@ -420,7 +420,7 @@ export class ReligionManager implements Automation {
       const controller = new com.nuclearunicorn.game.ui.ZigguratBtnController(
         this._host.game,
       ) as ZigguratBtnController;
-      const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
+      const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
       label = itemMetaRaw.label;
     } else {

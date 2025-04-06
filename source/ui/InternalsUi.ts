@@ -1,6 +1,6 @@
 import type { SupportedLocale } from "../Engine.js";
-import { ksVersion } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
+import { ksVersion } from "../KittenScientists.js";
 import type { EngineSettings } from "../settings/EngineSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";

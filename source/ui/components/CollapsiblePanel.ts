@@ -1,9 +1,9 @@
 import { is } from "@oliversalzburg/js-utils/data/nil.js";
+import { ExpandoButton } from "./buttons/ExpandoButton.js";
 import { Container } from "./Container.js";
 import type { LabelListItem } from "./LabelListItem.js";
 import stylesSettingListItem from "./SettingListItem.module.css";
 import { UiComponent, type UiComponentInterface, type UiComponentOptions } from "./UiComponent.js";
-import { ExpandoButton } from "./buttons/ExpandoButton.js";
 
 export type CollapsiblePanelOptions = ThisType<CollapsiblePanel> &
   UiComponentOptions & {

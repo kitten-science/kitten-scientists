@@ -1,7 +1,8 @@
-import type { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
+import type { KittenScientists } from "../KittenScientists.js";
 import { cl } from "../tools/Log.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
+import { UiComponent } from "./components/UiComponent.js";
 import { EngineSettingsUi } from "./EngineSettingsUi.js";
 import { InternalsUi } from "./InternalsUi.js";
 import { LogFiltersSettingsUi } from "./LogFilterSettingsUi.js";
@@ -16,7 +17,6 @@ import { TradeSettingsUi } from "./TradeSettingsUi.js";
 import styles from "./UserInterface.module.css";
 import { VillageSettingsUi } from "./VillageSettingsUi.js";
 import { WorkshopSettingsUi } from "./WorkshopSettingsUi.js";
-import { UiComponent } from "./components/UiComponent.js";
 
 export class UserInterface extends UiComponent {
   readonly element: JQuery;

@@ -1,14 +1,14 @@
 import type { SupportedLocale } from "../Engine.js";
 import type { ScienceSettings } from "../settings/ScienceSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
-import { PolicySettingsUi } from "./PolicySettingsUi.js";
-import { TechSettingsUi } from "./TechSettingsUi.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
+import { PolicySettingsUi } from "./PolicySettingsUi.js";
+import { TechSettingsUi } from "./TechSettingsUi.js";
 
 export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
   private readonly _policiesUi: PolicySettingsUi;
@@ -28,15 +28,15 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
-        },
         onRefresh: () => {
           this.expando.ineffective =
             settings.enabled &&
             !settings.policies.enabled &&
             !settings.techs.enabled &&
             !settings.observe.enabled;
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
       {

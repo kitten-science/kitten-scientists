@@ -1,17 +1,7 @@
-import { type Maybe, isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, type Maybe, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { unknownToError } from "@oliversalzburg/js-utils/errors/error-serializer.js";
 import { measure, measureAsync } from "@oliversalzburg/js-utils/measurement/performance.js";
 import { BonfireManager } from "./BonfireManager.js";
-import { type KittenScientists, ksVersion } from "./KittenScientists.js";
-import { ReligionManager } from "./ReligionManager.js";
-import { ScienceManager } from "./ScienceManager.js";
-import { SpaceManager } from "./SpaceManager.js";
-import { TimeControlManager } from "./TimeControlManager.js";
-import { TimeManager } from "./TimeManager.js";
-import { TradeManager } from "./TradeManager.js";
-import { FallbackLocale } from "./UserScriptLoader.js";
-import { VillageManager } from "./VillageManager.js";
-import { WorkshopManager } from "./WorkshopManager.js";
 import {
   type ActivityClass,
   ActivitySummary,
@@ -22,6 +12,10 @@ import enUS from "./i18n/en-US.json" with { type: "json" };
 import deDE from "./i18n/translations/de-DE.json" with { type: "json" };
 import heIL from "./i18n/translations/he-IL.json" with { type: "json" };
 import zhCN from "./i18n/translations/zh-CN.json" with { type: "json" };
+import { type KittenScientists, ksVersion } from "./KittenScientists.js";
+import { ReligionManager } from "./ReligionManager.js";
+import { ScienceManager } from "./ScienceManager.js";
+import { SpaceManager } from "./SpaceManager.js";
 import { BonfireSettings } from "./settings/BonfireSettings.js";
 import { EngineSettings } from "./settings/EngineSettings.js";
 import { ReligionSettings } from "./settings/ReligionSettings.js";
@@ -32,8 +26,14 @@ import { TimeSettings } from "./settings/TimeSettings.js";
 import { TradeSettings } from "./settings/TradeSettings.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
+import { TimeControlManager } from "./TimeControlManager.js";
+import { TimeManager } from "./TimeManager.js";
+import { TradeManager } from "./TradeManager.js";
 import { cl } from "./tools/Log.js";
 import { type Cycle, Cycles, type Planet } from "./types/index.js";
+import { FallbackLocale } from "./UserScriptLoader.js";
+import { VillageManager } from "./VillageManager.js";
+import { WorkshopManager } from "./WorkshopManager.js";
 
 const i18nData = { "de-DE": deDE, "en-US": enUS, "he-IL": heIL, "zh-CN": zhCN };
 
@@ -284,15 +284,15 @@ export class Engine {
 
   static get DEFAULT_STATE() {
     return {
-      v: ksVersion(),
-      engine: new EngineSettings(),
       bonfire: new BonfireSettings(),
+      engine: new EngineSettings(),
       religion: new ReligionSettings(),
       science: new ScienceSettings(),
       space: new SpaceSettings(),
-      timeControl: new TimeControlSettings(),
       time: new TimeSettings(),
+      timeControl: new TimeControlSettings(),
       trade: new TradeSettings(),
+      v: ksVersion(),
       village: new VillageSettings(),
       workshop: new WorkshopSettings(),
     };
@@ -309,15 +309,15 @@ export class Engine {
    */
   stateSerialize(): EngineState {
     return {
-      v: ksVersion(),
-      engine: this.settings,
       bonfire: this.bonfireManager.settings,
+      engine: this.settings,
       religion: this.religionManager.settings,
       science: this.scienceManager.settings,
       space: this.spaceManager.settings,
-      timeControl: this.timeControlManager.settings,
       time: this.timeManager.settings,
+      timeControl: this.timeControlManager.settings,
       trade: this.tradeManager.settings,
+      v: ksVersion(),
       village: this.villageManager.settings,
       workshop: this.workshopManager.settings,
     };
@@ -335,10 +335,10 @@ export class Engine {
 
     const loop = () => {
       const context: FrameContext = {
-        requestGameUiRefresh: false,
         entry: new Date().getTime(),
         exit: 0,
         measurements: {},
+        requestGameUiRefresh: false,
       };
 
       this._iterate(context)

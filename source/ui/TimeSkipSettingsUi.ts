@@ -4,7 +4,6 @@ import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import type { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
-import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
 import stylesButton from "./components/Button.module.css";
 import { CollapsiblePanel } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
@@ -19,6 +18,7 @@ import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListIte
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
+import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingMaxTriggerListItem> {
   private readonly _cycles: CollapsiblePanel;
@@ -38,9 +38,6 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       new SettingMaxTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         onRefresh: () => {
           this.settingItem.maxButton.inactive = !settings.enabled || settings.max === -1;
@@ -119,6 +116,9 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
           }
 
           settings.trigger = parent.host.parseAbsolute(value) ?? settings.trigger;
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
         renderLabelTrigger: false,
       }),

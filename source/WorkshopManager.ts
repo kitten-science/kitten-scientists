@@ -1,11 +1,9 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { type Automation, Engine, type FrameContext } from "./Engine.js";
-import type { KittenScientists } from "./KittenScientists.js";
-import { TabManager } from "./TabManager.js";
-import { UpgradeManager } from "./UpgradeManager.js";
-import { UserScriptLoader } from "./UserScriptLoader.js";
 import type { MaterialsCache } from "./helper/MaterialsCache.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { type CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
+import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
@@ -13,6 +11,8 @@ import type { Resource, ResourceCraftable } from "./types/index.js";
 import type { ResourceManager, UnsafeResource } from "./types/resources.js";
 import type { Village } from "./types/village.js";
 import type { UnsafeCraft, UnsafeUpgrade } from "./types/workshop.js";
+import { UpgradeManager } from "./UpgradeManager.js";
+import { UserScriptLoader } from "./UserScriptLoader.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
   readonly settings: WorkshopSettings;
@@ -147,8 +147,8 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       craftRequests.set(craft, {
         countRequested: 1,
         materials: materials.map(material => ({
-          resource: material,
           consume: 0,
+          resource: material,
         })),
       });
     }

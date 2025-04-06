@@ -27,14 +27,14 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
-        },
         onRefresh: () => {
           this.expando.ineffective =
             sectionSetting.enabled &&
             settings.enabled &&
             !Object.values(settings.missions).some(mission => mission.enabled);
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
         },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
     );

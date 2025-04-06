@@ -1,17 +1,17 @@
 import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
-import { ResetSettingsUi } from "./ResetSettingsUi.js";
-import { TimeSkipSettingsUi } from "./TimeSkipSettingsUi.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
+import { ResetSettingsUi } from "./ResetSettingsUi.js";
+import { TimeSkipSettingsUi } from "./TimeSkipSettingsUi.js";
 
 export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
   protected readonly _items: Array<SettingListItem>;
@@ -53,9 +53,6 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
         onCheck: () => {
           this.host.engine.imessage("status.sub.enable", [accelerateLabel]);
         },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [accelerateLabel]);
-        },
         onRefresh: () => {
           this._accelerateTime.triggerButton.inactive = !this.setting.accelerateTime.enabled;
           this._accelerateTime.triggerButton.ineffective =
@@ -83,6 +80,9 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
           }
 
           this.setting.accelerateTime.trigger = this.host.parsePercentage(value);
+        },
+        onUnCheck: () => {
+          this.host.engine.imessage("status.sub.disable", [accelerateLabel]);
         },
       },
     );

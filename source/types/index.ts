@@ -2,7 +2,7 @@ import type { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type JQuery from "jquery";
 import "dojo";
 import type { KittenScientists } from "../KittenScientists.js";
-import type { AchTab, Achievements, AchievementsPanel, BadgesPanel } from "./achievements.js";
+import type { Achievements, AchievementsPanel, AchTab, BadgesPanel } from "./achievements.js";
 import type {
   BuildingBtnModernController,
   BuildingMeta,

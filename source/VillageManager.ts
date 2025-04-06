@@ -1,14 +1,14 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { Automation, FrameContext } from "./Engine.js";
-import type { KittenScientists } from "./KittenScientists.js";
-import { TabManager } from "./TabManager.js";
-import type { WorkshopManager } from "./WorkshopManager.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
+import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import type { Resource } from "./types/index.js";
 import type { UnsafeJob, Village } from "./types/village.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class VillageManager implements Automation {
   private readonly _host: KittenScientists;
@@ -78,7 +78,7 @@ export class VillageManager implements Automation {
         const maxKittensToAssign = negativeOneToInfinity(this.settings.jobs[job.name].max);
         const kittensInJob = job.value;
         if (kittensInJob < maxKittensInJob && kittensInJob < maxKittensToAssign) {
-          jobsNotCapped.push({ job, count: kittensInJob, toCap: maxKittensInJob - kittensInJob });
+          jobsNotCapped.push({ count: kittensInJob, job, toCap: maxKittensInJob - kittensInJob });
         }
       }
 

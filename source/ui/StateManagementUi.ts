@@ -1,10 +1,10 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
-import { type Locale, de, enUS, he, zhCN } from "date-fns/locale";
+import { de, enUS, he, type Locale, zhCN } from "date-fns/locale";
 import { Engine, type EngineState, type SupportedLocale } from "../Engine.js";
-import { KittenScientists } from "../KittenScientists.js";
 import { Icons } from "../images/Icons.js";
+import { KittenScientists } from "../KittenScientists.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { StateSettings } from "../settings/StateSettings.js";
 import { Unique } from "../tools/Entries.js";
@@ -79,12 +79,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     );
 
     this.gameList = new SettingsList(this, {
-      hasEnableAll: false,
       hasDisableAll: false,
+      hasEnableAll: false,
     });
     this.stateList = new SettingsList(this, {
-      hasEnableAll: false,
       hasDisableAll: false,
+      hasEnableAll: false,
     });
 
     this.locale =
@@ -418,8 +418,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     this.games.push(
       new Unique({
-        label: gameLabel,
         game: game ?? this.host.game.save(),
+        label: gameLabel,
         timestamp: new Date().toISOString(),
       }),
     );
@@ -545,8 +545,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
     const label = game.unwrap().label;
     game.replace({
-      label,
       game: newGame,
+      label,
       timestamp: new Date().toISOString(),
     });
     this._storeGames();

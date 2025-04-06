@@ -1,10 +1,9 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { Automation, FrameContext } from "./Engine.js";
-import type { KittenScientists } from "./KittenScientists.js";
-import { TabManager } from "./TabManager.js";
-import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
+import { TabManager } from "./TabManager.js";
 import { cl } from "./tools/Log.js";
 import type { BuildingStackableBtn, UnsafeBuildingStackableBtnModel } from "./types/core.js";
 import type { Mission, SpaceBuilding } from "./types/index.js";
@@ -17,6 +16,7 @@ import type {
   UnsafeSpaceProgram,
   UnsafeSpaceProgramButtonOptions,
 } from "./types/space.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class SpaceManager implements Automation {
   private readonly _host: KittenScientists;
@@ -140,7 +140,7 @@ export class SpaceManager implements Automation {
     ) as PlanetBuildingBtnController<
       UnsafeBuildingStackableBtnModel<UnsafePlanetBuildingButtonOptions>
     >;
-    const model = controller.fetchModel({ id: itemMetaRaw.name, controller });
+    const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
     amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
     label = itemMetaRaw.label;
 

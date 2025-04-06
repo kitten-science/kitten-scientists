@@ -1,18 +1,18 @@
 import type { SupportedLocale } from "../Engine.js";
 import type { ResetSettings } from "../settings/ResetSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
-import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi.js";
-import { ResetReligionSettingsUi } from "./ResetReligionSettingsUi.js";
-import { ResetResourcesSettingsUi } from "./ResetResourcesSettingsUi.js";
-import { ResetSpaceSettingsUi } from "./ResetSpaceSettingsUi.js";
-import { ResetTimeSettingsUi } from "./ResetTimeSettingsUi.js";
-import { ResetUpgradesSettingsUi } from "./ResetUpgradesSettingsUi.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
+import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi.js";
+import { ResetReligionSettingsUi } from "./ResetReligionSettingsUi.js";
+import { ResetResourcesSettingsUi } from "./ResetResourcesSettingsUi.js";
+import { ResetSpaceSettingsUi } from "./ResetSpaceSettingsUi.js";
+import { ResetTimeSettingsUi } from "./ResetTimeSettingsUi.js";
+import { ResetUpgradesSettingsUi } from "./ResetUpgradesSettingsUi.js";
 
 export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
   private readonly _bonfireUi: ResetBonfireSettingsUi;

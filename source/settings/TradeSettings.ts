@@ -1,4 +1,4 @@
-import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { type Race, Races, type Season } from "../types/index.js";
 import { EmbassySettings } from "./EmbassySettings.js";
@@ -39,10 +39,10 @@ export class TradeSettingsItem extends SettingLimitedTrigger {
     super(enabled, limited);
     this.#race = race;
     this.seasons = {
-      summer: new Setting(summer),
       autumn: new Setting(autumn),
-      winter: new Setting(winter),
       spring: new Setting(spring),
+      summer: new Setting(summer),
+      winter: new Setting(winter),
     };
     this.#require = require;
   }

@@ -1,10 +1,10 @@
 import type { SupportedLocale } from "../../Engine.js";
 import type { SettingOptions, SettingThreshold, SettingTrigger } from "../../settings/Settings.js";
+import { TriggerButton } from "./buttons/TriggerButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
 import type { UiComponent } from "./UiComponent.js";
-import { TriggerButton } from "./buttons/TriggerButton.js";
 
 export type SettingTriggerListItemOptions = ThisType<SettingTriggerListItem> &
   SettingListItemOptions & {

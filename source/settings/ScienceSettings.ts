@@ -1,4 +1,4 @@
-import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type { GamePage } from "../types/game.js";
 import { PolicySettings } from "./PolicySettings.js";
 import { Setting } from "./Settings.js";

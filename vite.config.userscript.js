@@ -28,9 +28,9 @@ export default defineConfig({
     rollupOptions: {
       external: ["dojo", "jquery"],
       output: {
+        entryFileNames: filename,
         extend: true,
         format: "umd",
-        entryFileNames: filename,
       },
       plugins: [cleanup({ comments: "none", extensions: ["js", "ts"] })],
     },
@@ -44,11 +44,11 @@ export default defineConfig({
     {
       ...metablock({
         override: {
-          version: versionString,
           description: manifest.description,
           homepage: manifest.homepage,
           supportURL: manifest.bugs.url,
           updateURL,
+          version: versionString,
         },
       }),
       enforce: "post",

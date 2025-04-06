@@ -3,13 +3,13 @@ import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import type { TimeSkipHeatSettings } from "../settings/TimeSkipHeatSettings.js";
 import type { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
-import styles from "./TimeSkipHeatSettingsUi.module.css";
 import { CyclesList } from "./components/CyclesList.js";
 import { Dialog } from "./components/Dialog.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
+import styles from "./TimeSkipHeatSettingsUi.module.css";
 
 export class TimeSkipHeatSettingsUi extends SettingsPanel<
   TimeSkipHeatSettings,
@@ -29,10 +29,6 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
       new SettingTriggerListItem(parent, settings, locale, label, {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
-          settings.activeHeatTransferStatus.enabled = false;
         },
         onRefresh: () => {
           this.settingItem.triggerButton.inactive = !settings.enabled;
@@ -72,6 +68,10 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
           }
 
           settings.trigger = parent.host.parsePercentage(value);
+        },
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
+          settings.activeHeatTransferStatus.enabled = false;
         },
       }),
     );

@@ -1,4 +1,4 @@
-import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import { FallbackLocale } from "../UserScriptLoader.js";
 import { LogFilterSettings } from "./LogFilterSettings.js";

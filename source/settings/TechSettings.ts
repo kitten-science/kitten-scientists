@@ -1,5 +1,5 @@
 import { difference } from "@oliversalzburg/js-utils/data/array.js";
-import { type Maybe, isNil } from "@oliversalzburg/js-utils/data/nil.js";
+import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cl } from "../tools/Log.js";
 import type { GamePage } from "../types/game.js";

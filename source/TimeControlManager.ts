@@ -4,9 +4,8 @@ import type { Engine, FrameContext } from "./Engine.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import type { ReligionManager } from "./ReligionManager.js";
 import type { SpaceManager } from "./SpaceManager.js";
-import { TabManager } from "./TabManager.js";
-import type { WorkshopManager } from "./WorkshopManager.js";
 import { type CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
+import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import type {
@@ -23,6 +22,7 @@ import {
   type VoidSpaceUpgrade,
 } from "./types/index.js";
 import type { ShatterTCBtn, ShatterTCBtnController, TimeTab } from "./types/time.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class TimeControlManager {
   private readonly _host: KittenScientists;

@@ -1,14 +1,13 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { Automation, FrameContext } from "./Engine.js";
-import type { KittenScientists } from "./KittenScientists.js";
-import { TabManager } from "./TabManager.js";
-import type { WorkshopManager } from "./WorkshopManager.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import type { KittenScientists } from "./KittenScientists.js";
 import {
   type BonfireBuildingSetting,
   type BonfireItem,
   BonfireSettings,
 } from "./settings/BonfireSettings.js";
+import { TabManager } from "./TabManager.js";
 import { cl } from "./tools/Log.js";
 import type {
   BuildingBtnModernController,
@@ -22,6 +21,7 @@ import type {
 } from "./types/buildings.js";
 import type { UnsafeBuildingBtnModernModel } from "./types/core.js";
 import type { Building } from "./types/index.js";
+import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class BonfireManager implements Automation {
   private readonly _host: KittenScientists;
@@ -349,11 +349,11 @@ export class BonfireManager implements Automation {
         this._host.game,
       ) as StagingBldBtnController<UnsafeBuildingBtnModernModel<UnsafeStagingBldButtonOptions>>;
       const model = controller.fetchModel({
-        name: mustExist(meta.label),
-        description: mustExist(meta.description),
         building: name,
-        twoRow: false,
         controller,
+        description: mustExist(meta.description),
+        name: mustExist(meta.label),
+        twoRow: false,
       });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
       label = meta.label ?? "";
@@ -364,11 +364,11 @@ export class BonfireManager implements Automation {
         UnsafeBuildingBtnModernModel<UnsafeUnstagedBuildingButtonOptions>
       >;
       const model = controller.fetchModel({
-        name: mustExist(meta.label),
-        description: mustExist(meta.description),
         building: name,
-        twoRow: false,
         controller,
+        description: mustExist(meta.description),
+        name: mustExist(meta.label),
+        twoRow: false,
       });
       amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
       label = meta.label ?? "";
@@ -419,11 +419,11 @@ export class BonfireManager implements Automation {
             this._host.game,
           ) as BuildingBtnModernController<UnsafeBuildingBtnModernModel>);
     const model = controller.fetchModel({
+      building: name,
+      description: meta.description,
       key: name,
       name: meta.label,
-      description: meta.description,
-      building: name,
     });
-    return { model, controller };
+    return { controller, model };
   }
 }

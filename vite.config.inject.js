@@ -19,9 +19,9 @@ export default defineConfig({
     rollupOptions: {
       external: ["dojo", "jquery"],
       output: {
+        entryFileNames: filename,
         extend: true,
         format: "umd",
-        entryFileNames: filename,
       },
     },
     sourcemap: "inline",

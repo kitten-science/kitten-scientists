@@ -54,10 +54,6 @@ export const BuildSectionTools = {
         }
         options?.onCheck?.(isBatchProcess);
       },
-      onUnCheck: (isBatchProcess?: boolean) => {
-        parent.host.engine.imessage("status.sub.disable", [label]);
-        options?.onUnCheck?.(isBatchProcess);
-      },
       onRefresh: () => {
         element.maxButton.inactive = !option.enabled || option.max === -1;
         element.maxButton.ineffective =
@@ -115,6 +111,10 @@ export const BuildSectionTools = {
         }
 
         option.trigger = parent.host.parsePercentage(value);
+      },
+      onUnCheck: (isBatchProcess?: boolean) => {
+        parent.host.engine.imessage("status.sub.disable", [label]);
+        options?.onUnCheck?.(isBatchProcess);
       },
       renderLabelTrigger: options?.renderLabelTrigger,
       upgradeIndicator: options?.upgradeIndicator,

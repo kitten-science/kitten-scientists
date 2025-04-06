@@ -10,9 +10,9 @@ import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { OptionsListItem } from "./components/OptionsListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingMaxListItem } from "./components/SettingMaxListItem.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
@@ -71,9 +71,6 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
         onCheck: () => {
           this.host.engine.imessage("status.sub.enable", [this.host.engine.i18n("option.hunt")]);
         },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [this.host.engine.i18n("option.hunt")]);
-        },
         onRefresh: () => {
           this._hunt.triggerButton.inactive = !this.setting.hunt.enabled;
           this._hunt.triggerButton.ineffective =
@@ -95,6 +92,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
           }
 
           this.setting.hunt.trigger = this.host.parsePercentage(value);
+        },
+        onUnCheck: () => {
+          this.host.engine.imessage("status.sub.disable", [this.host.engine.i18n("option.hunt")]);
         },
       },
     );
@@ -131,11 +131,6 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
             this.host.engine.i18n("option.promotekittens"),
           ]);
         },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [
-            this.host.engine.i18n("option.promotekittens"),
-          ]);
-        },
         onRefresh: () => {
           this._promoteKittens.triggerButton.inactive = !this.setting.promoteKittens.enabled;
           this._promoteKittens.triggerButton.ineffective =
@@ -163,6 +158,11 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
           }
 
           this.setting.promoteKittens.trigger = this.host.parsePercentage(value);
+        },
+        onUnCheck: () => {
+          this.host.engine.imessage("status.sub.disable", [
+            this.host.engine.i18n("option.promotekittens"),
+          ]);
         },
       },
     );
@@ -267,11 +267,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
       onCheck: (isBatchProcess?: boolean) => {
         this.host.engine.imessage("status.sub.enable", [label]);
         if (option.max === 0 && !isBatchProcess) {
-          onSetMax();
+          return onSetMax();
         }
-      },
-      onUnCheck: () => {
-        this.host.engine.imessage("status.sub.disable", [label]);
       },
       onRefresh: () => {
         element.maxButton.inactive = !option.enabled || option.max === -1;
@@ -291,6 +288,9 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
                 ]);
       },
       onSetMax,
+      onUnCheck: () => {
+        this.host.engine.imessage("status.sub.disable", [label]);
+      },
     });
     element.maxButton.element.addClass(stylesButton.lastHeadAction);
     return element;

@@ -1,9 +1,9 @@
 import type { SettingMax } from "../../settings/Settings.js";
+import { MaxButton } from "./buttons/MaxButton.js";
 import { Container } from "./Container.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
 import { SettingListItem, type SettingListItemOptions } from "./SettingListItem.js";
 import type { UiComponent } from "./UiComponent.js";
-import { MaxButton } from "./buttons/MaxButton.js";
 
 export type SettingMaxListItemOptions = ThisType<SettingMaxListItem> &
   SettingListItemOptions & {
