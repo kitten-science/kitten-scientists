@@ -38,6 +38,9 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Colla
       new LabelListItem(parent, label, {
         classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         icon: options?.icon,
+        onRefresh: () => {
+          return options?.onRefresh?.call(this);
+        },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
       {
         initiallyExpanded: options?.initiallyExpanded,

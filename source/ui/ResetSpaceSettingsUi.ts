@@ -22,6 +22,11 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
     const label = parent.host.engine.i18n("ui.space");
     super(parent, label, settings, {
       icon: Icons.Space,
+      onRefresh: () => {
+        this.expando.ineffective =
+          settings.enabled &&
+          Object.values(settings.buildings).some(_ => _.enabled && _.trigger <= 0);
+      },
     });
 
     this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);

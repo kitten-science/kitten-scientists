@@ -21,6 +21,11 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     const label = parent.host.engine.i18n("ui.resources");
     super(parent, label, settings, {
       icon: Icons.Resources,
+      onRefresh: () => {
+        this.expando.ineffective =
+          settings.enabled &&
+          !Object.values(settings.resources).some(_ => _.enabled && 0 <= _.trigger);
+      },
     });
 
     this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
