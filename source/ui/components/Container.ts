@@ -7,7 +7,6 @@ export type ContainerOptions = ThisType<Container> &
 
 export class Container extends UiComponent {
   declare readonly options: ContainerOptions;
-  readonly element: JQuery;
 
   /**
    * Constructs a simple container element without any special properties.

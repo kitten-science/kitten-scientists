@@ -24,7 +24,6 @@ export type SettingsListOptions = ThisType<SettingsList> &
  */
 export class SettingsList extends UiComponent {
   declare readonly options: SettingsListOptions;
-  readonly element: JQuery;
   readonly list: JQuery;
 
   readonly disableAllButton: IconButton | undefined;
@@ -48,11 +47,11 @@ export class SettingsList extends UiComponent {
     const hasTools =
       toolOptions.hasDisableAll || toolOptions.hasEnableAll || !isNil(toolOptions.onReset);
 
-    const container = $("<div/>").addClass(styles.listContainer);
+    this.element = $("<div/>").addClass(styles.listContainer);
 
     this.list = $("<ul/>").addClass(styles.list).addClass(styles.itemsList);
 
-    container.append(this.list);
+    this.element.append(this.list);
 
     if (hasTools) {
       const tools = $("<div/>").addClass(styles.listTools);
@@ -65,7 +64,7 @@ export class SettingsList extends UiComponent {
           {
             onClick: () => {
               const event = new Event("enableAll", { cancelable: true });
-              this.dispatchEvent(event);
+              this.element[0].dispatchEvent(event);
               if (event.defaultPrevented) {
                 return;
               }
@@ -92,7 +91,7 @@ export class SettingsList extends UiComponent {
         );
         this.disableAllButton.element.on("click", () => {
           const event = new Event("disableAll", { cancelable: true });
-          this.dispatchEvent(event);
+          this.element[0].dispatchEvent(event);
           if (event.defaultPrevented) {
             return;
           }
@@ -124,10 +123,8 @@ export class SettingsList extends UiComponent {
         tools.append(this.resetButton.element);
       }
 
-      container.append(tools);
+      this.element.append(tools);
     }
-
-    this.element = container;
   }
 
   toString(): string {

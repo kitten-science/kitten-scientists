@@ -2,8 +2,6 @@ import styles from "./Delimiter.module.css";
 import { UiComponent } from "./UiComponent.js";
 
 export class Delimiter extends UiComponent {
-  readonly element: JQuery;
-
   /**
    * Constructs a `Delimiter`.
    *
@@ -13,9 +11,7 @@ export class Delimiter extends UiComponent {
    */
   constructor(parent: UiComponent) {
     super(parent, {});
-
-    const element = $("<div/>").addClass(styles.delimiter);
-    this.element = element;
+    this.element = $("<div/>").addClass(styles.delimiter);
   }
 
   toString(): string {

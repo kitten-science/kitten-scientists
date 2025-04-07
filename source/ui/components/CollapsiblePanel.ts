@@ -22,7 +22,6 @@ export type CollapsiblePanelOptions = ThisType<CollapsiblePanel> &
 export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> extends UiComponent {
   declare readonly options: CollapsiblePanelOptions;
   protected readonly container: UiComponent;
-  readonly element: JQuery;
   readonly expando: ExpandoButton;
   readonly head: THead;
   protected _mainChildVisible: boolean;
@@ -113,12 +112,12 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
         // Reflect expanded state for CSS.
         this.head.element.addClass(stylesSettingListItem.expanded);
         // This is NOT a DOM event! It can only be caught by listening on this panel directly.
-        this.dispatchEvent(new CustomEvent("panelShown"));
+        this.element[0].dispatchEvent(new CustomEvent("panelShown"));
       } else {
         this.container.element.addClass(stylesSettingListItem.hidden);
         this.expando.setCollapsed();
         this.head.element.removeClass(stylesSettingListItem.expanded);
-        this.dispatchEvent(new CustomEvent("panelHidden"));
+        this.element[0].dispatchEvent(new CustomEvent("panelHidden"));
       }
     }
 

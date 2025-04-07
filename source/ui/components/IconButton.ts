@@ -13,7 +13,6 @@ export type IconButtonOptions = ThisType<IconButton> &
  */
 export class IconButton extends UiComponent {
   declare readonly options: IconButtonOptions;
-  readonly element: JQuery;
   readOnly: boolean;
   inactive: boolean;
 
@@ -45,12 +44,11 @@ export class IconButton extends UiComponent {
       },
     });
 
-    const element = $("<div/>", {
+    this.element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${pathData}"/></svg>`,
       title,
     }).addClass(stylesButton.iconButton);
 
-    this.element = element;
     this.readOnly = options?.readOnly ?? false;
     this.inactive = options?.inactive ?? false;
 

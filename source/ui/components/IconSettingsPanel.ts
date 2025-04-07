@@ -3,6 +3,7 @@ import { CollapsiblePanel, type CollapsiblePanelOptions } from "./CollapsiblePan
 import { Container } from "./Container.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
 import stylesLabelListItem from "./LabelListItem.module.css";
+import stylesSettingListItem from "./SettingListItem.module.css";
 import type { UiComponent } from "./UiComponent.js";
 
 export type IconSettingsPanelOptions = ThisType<IconSettingsPanel> &
@@ -35,6 +36,7 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Colla
     super(
       parent,
       new LabelListItem(parent, label, {
+        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
         icon: options?.icon,
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
       {

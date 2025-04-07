@@ -10,7 +10,6 @@ export type FieldsetOptions = ThisType<Fieldset> &
 
 export class Fieldset extends UiComponent {
   declare readonly options: FieldsetOptions;
-  readonly element: JQuery;
 
   /**
    * Constructs a `Fieldset`.
@@ -22,14 +21,12 @@ export class Fieldset extends UiComponent {
   constructor(parent: UiComponent, label: string, options?: FieldsetOptions) {
     super(parent, { ...options });
 
-    const element = $("<fieldset/>").addClass(styles.fieldset);
+    this.element = $("<fieldset/>").addClass(styles.fieldset);
     if (options?.delimiter) {
-      element.addClass(stylesDelimiter.delimiter);
+      this.element.addClass(stylesDelimiter.delimiter);
     }
     const legend = $("<legend/>").text(label).addClass(stylesLabel.label);
-    element.append(legend);
-
-    this.element = element;
+    this.element.append(legend);
   }
 
   toString(): string {

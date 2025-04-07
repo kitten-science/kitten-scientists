@@ -8,7 +8,6 @@ export type ExpandoButtonOptions = ThisType<ExpandoButton> &
 
 export class ExpandoButton extends UiComponent {
   declare readonly options: ExpandoButtonOptions;
-  readonly element: JQuery;
   ineffective: boolean;
 
   /**

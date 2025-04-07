@@ -48,13 +48,13 @@ export class SeasonsList extends SettingsList {
     super(parent, options);
     this.setting = setting;
 
-    this.addEventListener("enableAll", () => {
+    this.element[0].addEventListener("enableAll", () => {
       this.autumn.check(true);
       this.spring.check(true);
       this.summer.check(true);
       this.winter.check(true);
     });
-    this.addEventListener("disableAll", () => {
+    this.element[0].addEventListener("disableAll", () => {
       this.autumn.uncheck(true);
       this.spring.uncheck(true);
       this.summer.uncheck(true);

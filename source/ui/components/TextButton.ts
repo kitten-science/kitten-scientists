@@ -11,7 +11,6 @@ export type TextButtonOptions = ThisType<TextButton> &
 
 export class TextButton extends UiComponent {
   declare readonly options: TextButtonOptions;
-  readonly element: JQuery;
   readOnly: boolean;
 
   constructor(parent: UiComponent, label?: string, options?: TextButtonOptions) {
@@ -26,17 +25,16 @@ export class TextButton extends UiComponent {
       },
     });
 
-    const element = $("<div/>").addClass(styles.textButton);
+    this.element = $("<div/>").addClass(styles.textButton);
     if (label !== undefined) {
-      element.text(label);
+      this.element.text(label);
     }
 
     const title = options?.title;
     if (!isNil(title)) {
-      element.prop("title", title);
+      this.element.prop("title", title);
     }
 
-    this.element = element;
     this.readOnly = false;
 
     this.element.on("click", () => {

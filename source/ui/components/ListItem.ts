@@ -12,7 +12,6 @@ export type ListItemOptions = ThisType<ListItem> &
 
 export class ListItem extends UiComponent {
   declare readonly options: ListItemOptions;
-  readonly element: JQuery;
 
   /**
    * Construct a new simple list item with only a container element.

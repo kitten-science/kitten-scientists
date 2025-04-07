@@ -6,7 +6,7 @@ export type HeaderListItemOptions = ThisType<HeaderListItem> & ListItemOptions;
 
 export class HeaderListItem extends UiComponent implements ListItem {
   declare readonly options: ListItemOptions;
-  readonly element: JQuery;
+
   get elementLabel() {
     return this.element;
   }
@@ -22,9 +22,7 @@ export class HeaderListItem extends UiComponent implements ListItem {
   constructor(parent: UiComponent, text: string, options?: ListItemOptions) {
     super(parent, { ...options });
 
-    const element = $("<li/>", { text }).addClass(styles.header);
-
-    this.element = element;
+    this.element = $("<li/>", { text }).addClass(styles.header);
   }
 
   toString(): string {

@@ -21,10 +21,9 @@ export type DialogOptions = ThisType<Dialog> &
     readonly promptValue?: string;
   };
 
-export class Dialog extends UiComponent {
+export class Dialog extends UiComponent<HTMLDialogElement> {
   declare readonly options: DialogOptions;
   readonly container: Container;
-  readonly element: JQuery<HTMLDialogElement>;
   readonly head: Container;
   returnValue: string;
 

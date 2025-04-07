@@ -13,7 +13,6 @@ export class OptionsListItem<TSetting extends SettingOptions = SettingOptions> e
   declare readonly options: OptionsListItemOptions;
   readonly fieldset: Fieldset;
   readonly setting: TSetting;
-  readonly element: JQuery;
   readonly _items: Array<RadioItem>;
 
   /**

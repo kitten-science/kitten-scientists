@@ -7,7 +7,6 @@ export type ParagraphOptions = ThisType<Paragraph> &
 
 export class Paragraph extends UiComponent {
   declare readonly options: ParagraphOptions;
-  readonly element: JQuery<HTMLParagraphElement>;
 
   /**
    * Constructs a paragraph.

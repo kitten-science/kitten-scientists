@@ -72,13 +72,13 @@ export class CyclesList extends SettingsList {
     ];
     this.addChildren(cycles);
 
-    this.addEventListener("enableAll", () => {
+    this.element[0].addEventListener("enableAll", () => {
       for (const cycle of cycles) {
         cycle.check(true);
       }
       this.requestRefresh();
     });
-    this.addEventListener("disableAll", () => {
+    this.element[0].addEventListener("disableAll", () => {
       for (const cycle of cycles) {
         cycle.uncheck(true);
       }

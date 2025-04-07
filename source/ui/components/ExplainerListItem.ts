@@ -7,7 +7,6 @@ export type ExplainerListItemOptions<TKittenGameLiteral extends `$${string}`> = 
 
 export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends UiComponent {
   declare readonly options: ExplainerListItemOptions<TKittenGameLiteral>;
-  readonly element: JQuery;
 
   /**
    * Construct an element to explain an area of the UI.
@@ -24,9 +23,7 @@ export class ExplainerListItem<TKittenGameLiteral extends `$${string}`> extends 
   ) {
     super(parent, { ...options });
 
-    const element = $("<li/>", { text: parent.host.engine.i18n(key) }).addClass(styles.explainer);
-
-    this.element = element;
+    this.element = $("<li/>", { text: parent.host.engine.i18n(key) }).addClass(styles.explainer);
   }
 
   toString(): string {

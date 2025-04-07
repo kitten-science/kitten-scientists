@@ -1,10 +1,11 @@
+import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { KittenScientists } from "../../KittenScientists.js";
 import { cl } from "../../tools/Log.js";
 
-export type UiComponentInterface = EventTarget & {
+export type UiComponentInterface = {
   readonly children: Iterable<UiComponentInterface>;
   parent: UiComponentInterface | null;
-  get element(): JQuery;
+  get element(): JQuery<HTMLElement>;
   requestRefresh(withChildren?: boolean, depth?: number): void;
   refresh(force?: boolean, depth?: number): void;
 };
@@ -14,7 +15,9 @@ export type UiComponentOptions = {
   readonly onRefresh?: () => void;
 };
 
-export abstract class UiComponent extends EventTarget implements UiComponentInterface {
+export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
+  implements UiComponentInterface
+{
   private static nextComponentId = 0;
   readonly componentId: number;
 
@@ -22,14 +25,22 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
    * A reference to the host itself.
    */
   readonly host: KittenScientists;
-  parent: UiComponent | null;
+  parent: UiComponentInterface | null;
 
   readonly options: UiComponentOptions | undefined;
 
   /**
    * The main DOM element for this component, in a JQuery wrapper.
    */
-  abstract readonly element: JQuery;
+  protected _element: JQuery<TElement> | undefined;
+
+  protected set element(value: JQuery<TElement>) {
+    this._element = value;
+    this._element[0].id = `KS${Object.getPrototypeOf(this).constructor.name}#${this.componentId}`;
+  }
+  get element(): JQuery<TElement> {
+    return mustExist(this._element);
+  }
 
   /**
    * NOTE: It is intentional that all children are of the most fundamental base type.
@@ -47,7 +58,6 @@ export abstract class UiComponent extends EventTarget implements UiComponentInte
    * @param options The options for this component.
    */
   constructor(parent: UiComponent | { host: KittenScientists }, options?: UiComponentOptions) {
-    super();
     this.componentId = UiComponent.nextComponentId++;
 
     this.host = parent.host;

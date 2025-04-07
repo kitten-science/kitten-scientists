@@ -33,7 +33,6 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
   declare readonly options: RadioItemOptions;
   readonly setting: TSetting;
   readonly option: TSetting["options"][0];
-  readonly element: JQuery;
   readonly elementLabel: JQuery<HTMLLabelElement>;
   readonly input: JQuery;
 
@@ -63,11 +62,11 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
       },
     });
 
-    const element = $("<div/>");
-    element.addClass(stylesSettingListItem.setting);
+    this.element = $("<div/>");
+    this.element.addClass(stylesSettingListItem.setting);
 
     if (options?.delimiter === true) {
-      element.addClass(stylesDelimiter.delimiter);
+      this.element.addClass(stylesDelimiter.delimiter);
     }
 
     this.elementLabel = $<HTMLLabelElement>("<label/>", {
@@ -89,10 +88,9 @@ export class RadioItem<TSetting extends SettingOptions = SettingOptions> extends
     });
 
     this.elementLabel.prepend(input);
-    element.append(this.elementLabel);
+    this.element.append(this.elementLabel);
 
     this.input = input;
-    this.element = element;
     this.setting = setting;
     this.option = option;
   }

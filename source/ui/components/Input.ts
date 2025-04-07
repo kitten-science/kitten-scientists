@@ -10,9 +10,8 @@ export type InputOptions = ThisType<Input> &
     readonly classes?: Array<string>;
   };
 
-export class Input extends UiComponent {
+export class Input extends UiComponent<HTMLInputElement> {
   declare readonly options: InputOptions;
-  readonly element: JQuery<HTMLInputElement>;
 
   /**
    * Constructs an input field.

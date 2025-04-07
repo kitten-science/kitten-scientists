@@ -5,7 +5,6 @@ export type PaddingButtonOptions = ThisType<PaddingButton> & UiComponentOptions;
 
 export class PaddingButton extends UiComponent {
   declare readonly options: PaddingButtonOptions;
-  readonly element: JQuery;
 
   /**
    * Constructs an empty element that provides padding identical to an icon button.
@@ -16,11 +15,9 @@ export class PaddingButton extends UiComponent {
   constructor(parent: UiComponent, options?: PaddingButtonOptions) {
     super(parent, { ...options });
 
-    const element = $("<div/>", {
+    this.element = $("<div/>", {
       html: `<svg style="width: 18px; height: 18px;"></svg>`,
     }).addClass(stylesButton.iconButton);
-
-    this.element = element;
   }
 
   toString(): string {

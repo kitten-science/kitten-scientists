@@ -19,7 +19,6 @@ import { VillageSettingsUi } from "./VillageSettingsUi.js";
 import { WorkshopSettingsUi } from "./WorkshopSettingsUi.js";
 
 export class UserInterface extends UiComponent {
-  readonly element: JQuery;
   readonly showActivity: JQuery;
 
   private _engineUi: EngineSettingsUi;
@@ -69,14 +68,14 @@ export class UserInterface extends UiComponent {
       this.children.add(section);
     }
 
-    const ks = $("<div/>").addClass(styles.ui);
+    this.element = $("<div/>").addClass(styles.ui);
 
     const optionsListElement = $("<ul/>");
     optionsListElement.append(this._engineUi.element);
     for (const section of this._sections) {
       optionsListElement.append(section.element);
     }
-    ks.append(optionsListElement);
+    this.element.append(optionsListElement);
 
     // Make _engineUI's expando button hide/show the other option groups
     const expando = this._engineUi.expando;
@@ -92,7 +91,7 @@ export class UserInterface extends UiComponent {
     // expando accordingly.
     let panelsOpen = 0;
     for (const section of this._sections) {
-      section.addEventListener("panelHidden", () => {
+      section.element[0].addEventListener("panelHidden", () => {
         --panelsOpen;
         if (panelsOpen === 0) {
           sectionsVisible = false;
@@ -101,7 +100,7 @@ export class UserInterface extends UiComponent {
           expando.setCollapsed();
         }
       });
-      section.addEventListener("panelShown", () => {
+      section.element[0].addEventListener("panelShown", () => {
         ++panelsOpen;
         sectionsVisible = true;
         expando.setExpanded();
@@ -135,13 +134,13 @@ export class UserInterface extends UiComponent {
       if (optionsPageContent.length === 0) {
         console.warn(...cl("Unable to find right column to inject UI into. Running headless."));
       } else {
-        optionsPageContent.append(ks);
-        ks.attr("style", "border-top:1px solid grey; padding:15px");
+        optionsPageContent.append(this.element);
+        this.element.attr("style", "border-top:1px solid grey; padding:15px");
       }
     } else {
-      right.prepend(ks);
+      right.prepend(this.element);
     }
-    this.element = ks;
+    this.element = this.element;
 
     this.refresh(true);
   }
