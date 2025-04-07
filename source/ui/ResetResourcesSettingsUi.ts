@@ -86,6 +86,6 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
       lastLabel = resource.title;
     }
 
-    this.addChild(new SettingsList(this).addChildren(items));
+    this.addChildContent(new SettingsList(this).addChildren(items));
   }
 }

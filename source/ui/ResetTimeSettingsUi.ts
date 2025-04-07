@@ -27,7 +27,7 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
 
     this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
 
-    this.addChild(
+    this.addChildContent(
       new SettingsList(this).addChildren([
         new HeaderListItem(this, this.host.engine.i18n("$workshop.chronoforge.label")),
         ...this.host.game.time.chronoforgeUpgrades

@@ -30,7 +30,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 
     const unicornsArray: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems];
 
-    this.addChild(
+    this.addChildContent(
       new SettingsList(this).addChildren([
         new HeaderListItem(this, this.host.engine.i18n("$religion.panel.ziggurat.label")),
         this._getResetOption(

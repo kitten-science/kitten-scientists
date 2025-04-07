@@ -5,12 +5,10 @@ import type { ResetBonfireSettings } from "../settings/ResetBonfireSettings.js";
 import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import type { StagedBuilding } from "../types/index.js";
 import stylesButton from "./components/Button.module.css";
-import { Container } from "./components/Container.js";
 import stylesDelimiter from "./components/Delimiter.module.css";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { IconSettingsPanel } from "./components/IconSettingsPanel.js";
-import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
@@ -27,8 +25,6 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
     super(parent, label, settings, {
       icon: Icons.Bonfire,
     });
-
-    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
 
     this._buildings = [];
     for (const buildingGroup of this.host.game.bld.buildingGroups) {
@@ -85,7 +81,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
 
     const listBuildings = new SettingsList(this);
     listBuildings.addChildren(this._buildings);
-    this.addChild(listBuildings);
+    this.addChildContent(listBuildings);
   }
 
   private _getResetOption(

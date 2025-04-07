@@ -53,7 +53,7 @@ export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSetti
       lastLabel = upgrade.label;
     }
 
-    this.addChild(new SettingsList(this).addChildren(items));
+    this.addChildContent(new SettingsList(this).addChildren(items));
   }
 
   private _getResetOption(

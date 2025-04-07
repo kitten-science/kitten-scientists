@@ -26,7 +26,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
 
     this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
 
-    this.addChild(
+    this.addChildContent(
       new SettingsList(this).addChildren(
         this.host.game.space.planets
           .filter(plant => 0 < plant.buildings.length)

@@ -1,6 +1,8 @@
 import type { Setting } from "../../settings/Settings.js";
 import { CollapsiblePanel, type CollapsiblePanelOptions } from "./CollapsiblePanel.js";
+import { Container } from "./Container.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
+import stylesLabelListItem from "./LabelListItem.module.css";
 import type { UiComponent } from "./UiComponent.js";
 
 export type IconSettingsPanelOptions = ThisType<IconSettingsPanel> &
@@ -34,7 +36,7 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Colla
       parent,
       new LabelListItem(parent, label, {
         icon: options?.icon,
-      }),
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
       {
         initiallyExpanded: options?.initiallyExpanded,
       },
