@@ -110,40 +110,53 @@ export class TimeControlManager {
     };
 
     // check building
-    for (const [name, entry] of objectEntries(this.settings.reset.bonfire.buildings))
-      if (entry.enabled) {
-        // TODO: Obvious error here. For upgraded buildings, it needs special handling.
-        let bld: BuildingMeta<UnsafeBuilding> | null;
-        try {
-          // @ts-expect-error Obvious error here. For upgraded buildings, it needs special handling.
-          bld = this._host.game.bld.getBuildingExt(name);
-        } catch (_error) {
-          bld = null;
-        }
-        if (isNil(bld)) {
-          continue;
-        }
-
-        checkedList.push({
-          name: bld.meta.label ?? mustExist(bld.meta.stages)[mustExist(bld.meta.stage)].label,
-          trigger: entry.trigger,
-          val: bld.meta.val,
-        });
-        if (0 < entry.trigger) {
-          // If the required amount of buildings hasn't been built yet, bail out.
-          if (bld.meta.val < entry.trigger) {
-            return;
-          }
-        } else {
-          checkList.push(name);
-        }
+    for (const [name, entry] of objectEntries(this.settings.reset.bonfire.buildings)) {
+      if (!entry.enabled) {
+        continue;
       }
+
+      // If the trigger for an item is set to infinity, it basically disables the entire feature.
+      if (entry.trigger < 0) {
+        return;
+      }
+
+      // TODO: Obvious error here. For upgraded buildings, it needs special handling.
+      let bld: BuildingMeta<UnsafeBuilding> | null;
+      try {
+        // @ts-expect-error Obvious error here. For upgraded buildings, it needs special handling.
+        bld = this._host.game.bld.getBuildingExt(name);
+      } catch (_error) {
+        bld = null;
+      }
+      if (isNil(bld)) {
+        continue;
+      }
+
+      checkedList.push({
+        name: bld.meta.label ?? mustExist(bld.meta.stages)[mustExist(bld.meta.stage)].label,
+        trigger: entry.trigger,
+        val: bld.meta.val,
+      });
+      if (0 < entry.trigger) {
+        // If the required amount of buildings hasn't been built yet, bail out.
+        if (bld.meta.val < entry.trigger) {
+          return;
+        }
+      } else {
+        checkList.push(name);
+      }
+    }
 
     // unicornPasture
     // Special handling for unicorn pasture. As it's listed under religion, but is
     // actually a bonfire item.
     const unicornPasture = this.settings.reset.religion.buildings.unicornPasture;
     if (unicornPasture.enabled) {
+      // If the trigger for an item is set to infinity, it basically disables the entire feature.
+      if (unicornPasture.trigger < 0) {
+        return;
+      }
+
       const bld = this._host.game.bld.getBuildingExt("unicornPasture");
       checkedList.push({
         name: mustExist(bld.meta.label),
@@ -166,16 +179,23 @@ export class TimeControlManager {
     // check space
     // This is identical to regular buildings.
     for (const [name, entry] of objectEntries(this.settings.reset.space.buildings)) {
-      if (entry.enabled) {
-        const bld = this._host.game.space.getBuilding(name);
-        checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
-        if (0 < entry.trigger) {
-          if (bld.val < entry.trigger) {
-            return;
-          }
-        } else {
-          checkList.push(name);
+      if (!entry.enabled) {
+        continue;
+      }
+
+      // If the trigger for an item is set to infinity, it basically disables the entire feature.
+      if (entry.trigger < 0) {
+        return;
+      }
+
+      const bld = this._host.game.space.getBuilding(name);
+      checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
+      if (0 < entry.trigger) {
+        if (bld.val < entry.trigger) {
+          return;
         }
+      } else {
+        checkList.push(name);
       }
     }
 
@@ -204,6 +224,12 @@ export class TimeControlManager {
       if (!entry.enabled) {
         continue;
       }
+
+      // If the trigger for an item is set to infinity, it basically disables the entire feature.
+      if (entry.trigger < 0) {
+        return;
+      }
+
       const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
       checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
       if (0 < entry.trigger) {
@@ -229,16 +255,23 @@ export class TimeControlManager {
 
     // check time
     for (const [name, entry] of objectEntries(this.settings.reset.time.buildings)) {
-      if (entry.enabled) {
-        const bld = mustExist(this.getBuild(name, entry.variant));
-        checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
-        if (0 < entry.trigger) {
-          if (bld.val < entry.trigger) {
-            return;
-          }
-        } else {
-          checkList.push(name);
+      if (!entry.enabled) {
+        continue;
+      }
+
+      // If the trigger for an item is set to infinity, it basically disables the entire feature.
+      if (entry.trigger < 0) {
+        return;
+      }
+
+      const bld = mustExist(this.getBuild(name, entry.variant));
+      checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
+      if (0 < entry.trigger) {
+        if (bld.val < entry.trigger) {
+          return;
         }
+      } else {
+        checkList.push(name);
       }
     }
 
@@ -254,16 +287,23 @@ export class TimeControlManager {
 
     // check resources
     for (const [name, entry] of objectEntries(this.settings.reset.resources.resources)) {
-      if (entry.enabled) {
-        const res = mustExist(this._host.game.resPool.get(name));
-        checkedList.push({
-          name: this._host.engine.i18n(`$resources.${entry.resource}.title`),
-          trigger: entry.trigger,
-          val: res.value,
-        });
-        if (res.value < entry.trigger) {
-          return;
-        }
+      if (!entry.enabled) {
+        continue;
+      }
+
+      // If the trigger for an item is set to infinity, it basically disables the entire feature.
+      if (entry.trigger < 0) {
+        return;
+      }
+
+      const res = mustExist(this._host.game.resPool.get(name));
+      checkedList.push({
+        name: this._host.engine.i18n(`$resources.${entry.resource}.title`),
+        trigger: entry.trigger,
+        val: res.value,
+      });
+      if (res.value < entry.trigger) {
+        return;
       }
     }
 
