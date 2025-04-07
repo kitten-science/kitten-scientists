@@ -71,7 +71,7 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
   protected _needsRefresh;
   requestRefresh(withChildren = false, depth = 0) {
     if (depth === 0) {
-      console.info(...cl(this.toString(), "requestRefresh() received."));
+      console.debug(...cl(this.toString(), "requestRefresh() received."));
     }
 
     // WARNING: Enable this section only during refresh logic debugging!
@@ -103,20 +103,20 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
     this.parent?.requestRefresh(false, depth - 1);
 
     if (depth === 0) {
-      console.info(...cl(this.toString(), "requestRefresh() complete."));
+      console.debug(...cl(this.toString(), "requestRefresh() complete."));
     }
   }
 
   refresh(force = false, depth = 0) {
     if (!force && !this._needsRefresh) {
       if (depth === 0) {
-        console.info(...cl(this.toString(), "refresh() received and ignored."));
+        console.debug(...cl(this.toString(), "refresh() received and ignored."));
       }
       return;
     }
 
     if (depth === 0) {
-      console.info(...cl(this.toString(), "refresh() received."));
+      console.debug(...cl(this.toString(), "refresh() received."));
     }
 
     // WARNING: Enable this section only during refresh logic debugging!
@@ -144,7 +144,7 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
     this._needsRefresh = false;
 
     if (depth === 0) {
-      console.info(...cl(this.toString(), "refresh() complete."));
+      console.debug(...cl(this.toString(), "refresh() complete."));
     }
   }
 
