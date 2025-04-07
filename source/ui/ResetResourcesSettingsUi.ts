@@ -72,7 +72,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
             return;
           }
 
-          option.trigger = Number(value);
+          option.trigger = parent.host.parseAbsolute(value) ?? option.trigger;
         },
         onUnCheck: () => {
           this.host.engine.imessage("status.sub.disable", [resource.title]);
