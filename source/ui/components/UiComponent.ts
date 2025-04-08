@@ -13,6 +13,7 @@ export type UiComponentInterface = {
 export type UiComponentOptions = {
   length?: never;
   readonly onRefresh?: () => void;
+  readonly onRefreshRequest?: () => void;
 };
 
 export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
@@ -100,6 +101,7 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
     }
 
     this._needsRefresh = true;
+    this.options?.onRefreshRequest?.call(this);
     this.parent?.requestRefresh(false, depth - 1);
 
     if (depth === 0) {

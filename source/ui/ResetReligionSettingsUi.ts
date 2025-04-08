@@ -24,10 +24,11 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
     const label = parent.host.engine.i18n("ui.faith");
     super(parent, label, settings, {
       icon: Icons.Religion,
-      onRefresh: () => {
+      onRefreshRequest: () => {
         this.expando.ineffective =
           settings.enabled &&
           Object.values(settings.buildings).some(_ => _.enabled && _.trigger <= 0);
+        this.expando.requestRefresh();
       },
     });
 

@@ -23,10 +23,11 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
     const label = parent.host.engine.i18n("ui.time");
     super(parent, label, settings, {
       icon: Icons.Time,
-      onRefresh: () => {
+      onRefreshRequest: () => {
         this.expando.ineffective =
           settings.enabled &&
           Object.values(settings.buildings).some(_ => _.enabled && _.trigger <= 0);
+        this.expando.requestRefresh();
       },
     });
 

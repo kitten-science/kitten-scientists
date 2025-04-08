@@ -41,6 +41,9 @@ export class IconSettingsPanel<TSetting extends Setting = Setting> extends Colla
         onRefresh: () => {
           return options?.onRefresh?.call(this);
         },
+        onRefreshRequest: () => {
+          return options?.onRefreshRequest?.call(this);
+        },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
       {
         initiallyExpanded: options?.initiallyExpanded,

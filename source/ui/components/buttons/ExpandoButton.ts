@@ -26,6 +26,7 @@ export class ExpandoButton extends UiComponent {
         } else {
           this.element.removeClass(stylesButton.ineffective);
         }
+        options?.onRefresh?.();
       },
     });
 
