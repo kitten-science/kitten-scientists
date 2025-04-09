@@ -90,19 +90,21 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
     );
     */
 
-    if (withChildren) {
-      for (const child of this.children) {
-        child.requestRefresh(withChildren, depth + 1);
-      }
-    }
+    this.parent?.requestRefresh(false, depth - 1);
 
     if (this._needsRefresh) {
       return;
     }
 
     this._needsRefresh = true;
+
+    if (withChildren) {
+      for (const child of this.children) {
+        child.requestRefresh(true, depth + 1);
+      }
+    }
+
     this.options?.onRefreshRequest?.call(this);
-    this.parent?.requestRefresh(false, depth - 1);
 
     if (depth === 0) {
       console.debug(...cl(this.toString(), "requestRefresh() complete."));

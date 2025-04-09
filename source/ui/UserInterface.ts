@@ -39,6 +39,8 @@ export class UserInterface extends UiComponent {
   >;
   stateManagementUi: StateManagementUi;
 
+  private _refreshTimeout: number | undefined;
+
   constructor(host: KittenScientists) {
     super({ host }, {});
 
@@ -142,7 +144,7 @@ export class UserInterface extends UiComponent {
     }
     this.element = this.element;
 
-    this.refresh(true);
+    this._needsRefresh = false;
   }
 
   toString(): string {
@@ -154,22 +156,25 @@ export class UserInterface extends UiComponent {
     this.element.remove();
   }
 
-  override requestRefresh() {
+  requestRefresh() {
     if (this._needsRefresh) {
+      if (this._refreshTimeout === undefined) {
+        console.error(...cl("User interface claims to have a refresh pending, but there isn't."));
+      }
       return;
     }
 
-    this._needsRefresh = true;
-    setTimeout(() => {
+    this._refreshTimeout = window.setTimeout(() => {
       console.info(...cl("Refreshing UI..."));
       this.refresh();
       console.info(...cl("Refreshing UI complete."));
+      this._refreshTimeout = undefined;
     }, 0);
+    super.requestRefresh(true);
   }
 
   forceFullRefresh(): void {
     console.warn(...cl("Forcing refresh on all user interface components..."));
-    super.requestRefresh(true);
     this.requestRefresh();
     console.warn(...cl("Refresh on all user interface components enforced."));
   }

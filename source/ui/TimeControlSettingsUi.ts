@@ -37,6 +37,13 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
           parent.host.engine.imessage("status.auto.disable", [label]);
         },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
+      {
+        onRefreshRequest: () => {
+          this.expando.ineffective =
+            settings.enabled && [this._timeSkipUi, this._resetUi].some(_ => _.expando.ineffective);
+          this.expando.requestRefresh();
+        },
+      },
     );
 
     const list = new SettingsList(this, {

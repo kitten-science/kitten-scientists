@@ -39,6 +39,21 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
           parent.host.engine.imessage("status.auto.disable", [label]);
         },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
+      {
+        onRefreshRequest: () => {
+          this.expando.ineffective =
+            settings.enabled &&
+            [
+              this._bonfireUi,
+              this._religionUi,
+              this._resourcesUi,
+              this._spaceUi,
+              this._timeUi,
+              this._upgradesUi,
+            ].some(_ => _.expando.ineffective);
+          this.expando.requestRefresh();
+        },
+      },
     );
 
     const list = new SettingsList(this, {
