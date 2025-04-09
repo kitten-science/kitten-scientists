@@ -52,7 +52,7 @@ export const BuildSectionTools = {
         if (option.max === 0 && !isBatchProcess) {
           await onSetMax();
         }
-        options?.onCheck?.(isBatchProcess);
+        await options?.onCheck?.(isBatchProcess);
       },
       onRefreshMax: () => {
         element.maxButton.updateLabel(parent.host.renderAbsolute(option.max));
@@ -112,6 +112,7 @@ export const BuildSectionTools = {
         }
 
         option.trigger = parent.host.parsePercentage(value);
+        await options?.onSetTrigger?.call(this);
       },
       onUnCheck: (isBatchProcess?: boolean) => {
         parent.host.engine.imessage("status.sub.disable", [label]);
