@@ -29,9 +29,6 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-        },
         onRefreshTrigger() {
           this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
@@ -69,6 +66,15 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          this.settingItem.triggerButton.ineffective =
+            settings.enabled &&
+            settings.trigger < 0 &&
+            Object.values(settings.resources).some(_ => _.enabled && 0 !== _.max && _.trigger < 0);
+        },
+      },
     );
 
     let excludeCraftsArray: Array<ResourceCraftable> = [];

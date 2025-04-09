@@ -26,19 +26,6 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-          this.settingItem.triggerButton.ineffective =
-            sectionSetting.enabled &&
-            settings.enabled &&
-            settings.trigger === -1 &&
-            !Object.values(settings.techs).some(tech => tech.enabled && 0 <= tech.trigger);
-
-          this.expando.ineffective =
-            sectionSetting.enabled &&
-            settings.enabled &&
-            !Object.values(settings.techs).some(tech => tech.enabled);
-        },
         onRefreshTrigger() {
           this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
             settings.trigger < 0
@@ -76,6 +63,21 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          this.settingItem.triggerButton.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            settings.trigger === -1 &&
+            !Object.values(settings.techs).some(tech => tech.enabled && 0 <= tech.trigger);
+
+          this.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.techs).some(tech => tech.enabled);
+        },
+      },
     );
 
     const techs = this.host.game.science.techs.filter(

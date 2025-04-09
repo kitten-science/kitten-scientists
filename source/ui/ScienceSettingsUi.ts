@@ -28,13 +28,7 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.expando.ineffective =
-            settings.enabled &&
-            !settings.policies.enabled &&
-            !settings.techs.enabled &&
-            !settings.observe.enabled;
-        },
+
         onUnCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
         },
@@ -46,6 +40,14 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
           } else {
             $("#observeButton").show();
           }
+        },
+        onRefreshRequest: () => {
+          this.expando.ineffective =
+            settings.enabled &&
+            ((this.setting.policies.enabled && this._policiesUi.expando.ineffective) ||
+              (this.setting.techs.enabled &&
+                (this._techsUi.expando.ineffective ||
+                  this._techsUi.settingItem.triggerButton.ineffective)));
         },
       },
     );

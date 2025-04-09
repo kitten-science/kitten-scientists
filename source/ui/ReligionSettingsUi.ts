@@ -36,9 +36,6 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-        },
         onRefreshTrigger() {
           this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
@@ -77,7 +74,13 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
         renderLabelTrigger: false,
       }),
       {
-        onRefresh: () => {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          this.settingItem.triggerButton.ineffective =
+            settings.enabled &&
+            settings.trigger < 0 &&
+            Object.values(settings.buildings).some(_ => _.enabled && 0 < _.max && _.trigger < 0);
+
           for (const [buildingName, building] of this._unicornBuildings.entries()) {
             building.readOnly = this._bestUnicornBuilding.setting.enabled;
             building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;

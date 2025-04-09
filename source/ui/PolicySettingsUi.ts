@@ -25,16 +25,18 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
+        },
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
+      {
+        onRefreshRequest: () => {
           this.expando.ineffective =
             sectionSetting.enabled &&
             settings.enabled &&
             !Object.values(settings.policies).some(policy => policy.enabled);
         },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
-        },
-      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
+      },
     );
 
     const policies = this.host.game.science.policies.filter(

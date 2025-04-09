@@ -39,6 +39,12 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
           parent.host.engine.imessage("status.auto.disable", [label]);
         },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
+      {
+        onRefreshRequest: () => {
+          this.expando.ineffective =
+            settings.enabled && Object.values(settings.jobs).some(_ => _.enabled && 0 === _.max);
+        },
+      },
     );
 
     const listJobs = new SettingsList(this).addChildren(

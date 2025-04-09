@@ -54,17 +54,6 @@ export const BuildSectionTools = {
         }
         options?.onCheck?.(isBatchProcess);
       },
-      onRefresh: () => {
-        element.maxButton.inactive = !option.enabled || option.max === -1;
-        element.maxButton.ineffective =
-          sectionSetting.enabled && option.enabled && option.max === 0;
-        element.triggerButton.inactive = !option.enabled || option.trigger === -1;
-        element.triggerButton.ineffective =
-          sectionSetting.enabled &&
-          option.enabled &&
-          sectionSetting.trigger === -1 &&
-          option.trigger === -1;
-      },
       onRefreshMax: () => {
         element.maxButton.updateLabel(parent.host.renderAbsolute(option.max));
         element.maxButton.element[0].title =
@@ -76,6 +65,18 @@ export const BuildSectionTools = {
                   parent.host.renderAbsolute(option.max),
                   label,
                 ]);
+      },
+      onRefreshRequest: () => {
+        element.maxButton.inactive = !option.enabled || option.max === -1;
+        element.maxButton.ineffective =
+          sectionSetting.enabled && option.enabled && option.max === 0;
+
+        element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+        element.triggerButton.ineffective =
+          sectionSetting.enabled &&
+          option.enabled &&
+          sectionSetting.trigger === -1 &&
+          option.trigger === -1;
       },
       onRefreshTrigger: () => {
         element.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [

@@ -78,14 +78,9 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
 
           this.expando.ineffective =
             settings.enabled &&
-            !Object.values(settings.buildings).some(
-              _ => _.enabled && 0 < _.max && (0 <= _.trigger || 0 <= settings.trigger),
-            ) &&
-            !settings.gatherCatnip.enabled &&
-            !settings.turnOnMagnetos.enabled &&
-            !settings.turnOnReactors.enabled &&
-            !settings.turnOnSteamworks.enabled &&
-            !settings.upgradeBuildings.enabled;
+            Object.values(settings.buildings).some(
+              _ => (_.enabled && 0 === _.max) || (0 < _.trigger && 0 < settings.trigger),
+            );
         },
       },
     );
