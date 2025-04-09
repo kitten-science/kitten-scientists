@@ -8,7 +8,7 @@ import type { UiComponent } from "./UiComponent.js";
 export type SettingMaxListItemOptions = ThisType<SettingMaxListItem> &
   SettingListItemOptions & {
     readonly onRefreshMax?: () => void;
-    readonly onSetMax: () => void;
+    readonly onSetMax: () => void | Promise<void>;
   };
 
 export class SettingMaxListItem extends SettingListItem<SettingMax> {
@@ -35,8 +35,8 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
 
     this.maxButton = new MaxButton(parent, setting, {
       border: false,
-      onClick: () => {
-        options.onSetMax.call(this);
+      onClick: async () => {
+        await options.onSetMax.call(this);
         this.requestRefresh();
       },
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,

@@ -35,8 +35,8 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
       alignment: "right",
       border: false,
       classes: [stylesButton.headAction],
-      onClick: () => {
-        options.onSetMax.call(this);
+      onClick: async () => {
+        await options.onSetMax.call(this);
         this.requestRefresh();
       },
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
