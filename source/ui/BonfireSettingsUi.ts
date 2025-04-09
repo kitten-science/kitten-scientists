@@ -28,24 +28,6 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger < 0;
-          this.settingItem.triggerButton.ineffective =
-            settings.enabled &&
-            settings.trigger < 0 &&
-            !Object.values(settings.buildings).some(_ => _.enabled && 0 < _.max && 0 <= _.trigger);
-
-          this.expando.ineffective =
-            settings.enabled &&
-            !Object.values(settings.buildings).some(
-              _ => _.enabled && 0 < _.max && (0 <= _.trigger || 0 <= settings.trigger),
-            ) &&
-            !settings.gatherCatnip.enabled &&
-            !settings.turnOnMagnetos.enabled &&
-            !settings.turnOnReactors.enabled &&
-            !settings.turnOnSteamworks.enabled &&
-            !settings.upgradeBuildings.enabled;
-        },
         onRefreshTrigger: () => {
           this.settingItem.triggerButton.element[0].title = parent.host.engine.i18n(
             "ui.trigger.section",
@@ -86,6 +68,26 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger < 0;
+          this.settingItem.triggerButton.ineffective =
+            settings.enabled &&
+            settings.trigger < 0 &&
+            Object.values(settings.buildings).some(_ => _.enabled && 0 < _.max && _.trigger < 0);
+
+          this.expando.ineffective =
+            settings.enabled &&
+            !Object.values(settings.buildings).some(
+              _ => _.enabled && 0 < _.max && (0 <= _.trigger || 0 <= settings.trigger),
+            ) &&
+            !settings.gatherCatnip.enabled &&
+            !settings.turnOnMagnetos.enabled &&
+            !settings.turnOnReactors.enabled &&
+            !settings.turnOnSteamworks.enabled &&
+            !settings.upgradeBuildings.enabled;
+        },
+      },
     );
 
     // Post-super() child insertion, so we can use this._getBuildOptions().
