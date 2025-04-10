@@ -34,9 +34,6 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-        },
         onRefreshTrigger() {
           this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
@@ -74,6 +71,18 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          this.settingItem.triggerButton.ineffective =
+            settings.enabled &&
+            settings.trigger < 0 &&
+            Object.values(settings.races).some(_ => _.enabled && _.trigger < 0);
+
+          this.expando.ineffective =
+            settings.enabled && !Object.values(settings.races).some(_ => _.enabled);
+        },
+      },
     );
 
     const listRaces = new SettingsList(this, {
@@ -219,7 +228,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
       onLimitedUnCheck: () => {
         parent.host.engine.imessage("trade.unlimited", [label]);
       },
-      onRefresh: () => {
+      onRefreshRequest: () => {
         element.limitedButton.inactive = !option.enabled || !option.limited;
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
         element.triggerButton.ineffective =
@@ -276,17 +285,17 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
       renderLabelTrigger: false,
       upgradeIndicator,
     });
-    const panel = new SettingsPanel(parent, option, element);
 
-    const seasons = new SeasonsList(parent, option.seasons, {
-      onCheckSeason: (label: string) => {
-        parent.host.engine.imessage("trade.season.enable", [ucfirst(label), label]);
-      },
-      onUnCheckSeason: (label: string) => {
-        parent.host.engine.imessage("trade.season.disable", [ucfirst(label), label]);
-      },
-    });
-    panel.addChild(seasons);
+    const panel = new SettingsPanel(parent, option, element).addChildContent(
+      new SeasonsList(parent, option.seasons, {
+        onCheckSeason: (label: string) => {
+          parent.host.engine.imessage("trade.season.enable", [ucfirst(label), label]);
+        },
+        onUnCheckSeason: (label: string) => {
+          parent.host.engine.imessage("trade.season.disable", [ucfirst(label), label]);
+        },
+      }),
+    );
 
     return panel;
   }
