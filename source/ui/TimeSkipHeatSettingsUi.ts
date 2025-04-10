@@ -30,28 +30,6 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled;
-          this.settingItem.triggerButton.ineffective =
-            sectionParentSetting.enabled &&
-            sectionSetting.enabled &&
-            settings.enabled &&
-            settings.trigger === -1;
-
-          this.expando.ineffective =
-            sectionParentSetting.enabled &&
-            sectionSetting.enabled &&
-            settings.enabled &&
-            !Object.values(settings.cycles).some(cycle => cycle.enabled);
-
-          if (settings.activeHeatTransferStatus.enabled) {
-            this.head.elementLabel.attr("data-ks-active-from", "◎");
-            this.head.elementLabel.attr("data-ks-active-to", "◎");
-            this.head.elementLabel.addClass(styles.active);
-          } else {
-            this.head.elementLabel.removeClass(styles.active);
-          }
-        },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
             parent,
@@ -74,6 +52,30 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
           settings.activeHeatTransferStatus.enabled = false;
         },
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled;
+          this.settingItem.triggerButton.ineffective =
+            sectionParentSetting.enabled &&
+            sectionSetting.enabled &&
+            settings.enabled &&
+            settings.trigger === -1;
+
+          this.expando.ineffective =
+            sectionParentSetting.enabled &&
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.cycles).some(cycle => cycle.enabled);
+
+          if (settings.activeHeatTransferStatus.enabled) {
+            this.head.elementLabel.attr("data-ks-active-from", "◎");
+            this.head.elementLabel.attr("data-ks-active-to", "◎");
+            this.head.elementLabel.addClass(styles.active);
+          } else {
+            this.head.elementLabel.removeClass(styles.active);
+          }
+        },
+      },
     );
 
     this.addChildContent(

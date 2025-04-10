@@ -24,16 +24,19 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
+
+        onUnCheck: (isBatchProcess?: boolean) => {
+          parent.host.engine.imessage("status.auto.disable", [label]);
+        },
+      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
+      {
+        onRefreshRequest: () => {
           this.expando.ineffective =
             sectionSetting.enabled &&
             settings.enabled &&
             !Object.values(settings.buildings).some(building => building.enabled);
         },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
-        },
-      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
+      },
     );
 
     const items = [];

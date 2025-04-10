@@ -39,22 +39,6 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.maxButton.inactive = !settings.enabled || settings.max === -1;
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-
-          this.settingItem.maxButton.ineffective =
-            sectionSetting.enabled && settings.enabled && settings.max === 0;
-
-          this._cycles.expando.ineffective =
-            sectionSetting.enabled &&
-            settings.enabled &&
-            !Object.values(settings.cycles).some(cycle => cycle.enabled);
-          this._seasons.expando.ineffective =
-            sectionSetting.enabled &&
-            settings.enabled &&
-            !Object.values(settings.seasons).some(season => season.enabled);
-        },
         onRefreshMax() {
           this.maxButton.updateLabel(parent.host.renderAbsolute(settings.max));
           this.maxButton.element[0].title =
@@ -122,6 +106,24 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.maxButton.inactive = !settings.enabled || settings.max === -1;
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+
+          this.settingItem.maxButton.ineffective =
+            sectionSetting.enabled && settings.enabled && settings.max === 0;
+
+          this._cycles.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.cycles).some(cycle => cycle.enabled);
+          this._seasons.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.seasons).some(season => season.enabled);
+        },
+      },
     );
     this.settingItem.triggerButton.element.removeClass(stylesButton.lastHeadAction);
 

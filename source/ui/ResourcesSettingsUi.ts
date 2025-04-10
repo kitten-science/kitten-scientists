@@ -90,7 +90,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
       alignment: "right",
       border: false,
       classes: [stylesButton.headAction],
-      onRefresh: () => {
+      onRefreshRequest: () => {
         stockElement.inactive = !option.enabled || option.stock === 0;
       },
     });
@@ -100,7 +100,7 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     const consumeElement = new ConsumeButton(parent, option, locale, label, {
       border: false,
       classes: [stylesButton.lastHeadAction],
-      onRefresh: () => {
+      onRefreshRequest: () => {
         consumeElement.inactive = !option.enabled || option.consume !== 100;
         consumeElement.ineffective = option.enabled && option.consume === 0;
       },

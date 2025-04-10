@@ -27,9 +27,6 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-        },
         onRefreshTrigger() {
           this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
             settings.trigger < 0
@@ -67,6 +64,11 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+        },
+      },
     );
 
     this.addChildContent(

@@ -69,7 +69,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
       onCheck: () => {
         parent.host.engine.imessage("status.reset.check.enable", [label]);
       },
-      onRefresh: () => {
+      onRefreshRequest: () => {
         element.triggerButton.inactive = !option.enabled || option.trigger === -1;
         element.triggerButton.ineffective =
           sectionSetting.enabled && option.enabled && option.trigger === -1;

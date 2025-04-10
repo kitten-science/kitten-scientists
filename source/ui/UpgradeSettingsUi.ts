@@ -25,9 +25,6 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-        },
         onRefreshTrigger() {
           this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
             settings.trigger === -1
@@ -65,6 +62,18 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          this.settingItem.triggerButton.ineffective =
+            settings.enabled &&
+            settings.trigger < 0 &&
+            Object.values(settings.upgrades).some(_ => _.enabled && _.trigger < 0);
+
+          this.expando.ineffective =
+            settings.enabled && !Object.values(settings.upgrades).some(_ => _.enabled);
+        },
+      },
     );
 
     const upgrades = this.host.game.workshop.upgrades.filter(
@@ -83,7 +92,7 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
         onCheck: () => {
           this.host.engine.imessage("status.sub.enable", [upgrade.label]);
         },
-        onRefresh: () => {
+        onRefreshRequest: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
           element.triggerButton.ineffective =
             settings.enabled && option.enabled && settings.trigger === -1 && option.trigger === -1;

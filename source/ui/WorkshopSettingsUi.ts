@@ -135,14 +135,6 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
         onLimitedUnCheck: () => {
           this.host.engine.imessage("craft.unlimited", [label]);
         },
-        onRefresh: () => {
-          element.limitedButton.inactive = !option.enabled || !option.limited;
-          element.maxButton.inactive = !option.enabled || option.max === -1;
-          element.maxButton.ineffective = settings.enabled && option.enabled && option.max === 0;
-          element.triggerButton.inactive = !option.enabled || option.trigger === -1;
-          element.triggerButton.ineffective =
-            settings.enabled && option.enabled && settings.trigger === -1 && option.trigger === -1;
-        },
         onRefreshMax: () => {
           element.maxButton.updateLabel(this.host.renderAbsolute(option.max));
           element.maxButton.element[0].title =
@@ -154,6 +146,14 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
                     this.host.renderAbsolute(option.max),
                     label,
                   ]);
+        },
+        onRefreshRequest: () => {
+          element.limitedButton.inactive = !option.enabled || !option.limited;
+          element.maxButton.inactive = !option.enabled || option.max === -1;
+          element.maxButton.ineffective = settings.enabled && option.enabled && option.max === 0;
+          element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+          element.triggerButton.ineffective =
+            settings.enabled && option.enabled && settings.trigger === -1 && option.trigger === -1;
         },
         onRefreshTrigger: () => {
           element.triggerButton.element[0].title = this.host.engine.i18n("ui.trigger", [

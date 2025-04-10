@@ -44,7 +44,7 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
         onCheck: () => {
           this.host.engine.imessage("status.sub.enable", [resource.title]);
         },
-        onRefresh: () => {
+        onRefreshRequest: () => {
           element.triggerButton.inactive = !option.enabled || option.trigger === -1;
           element.triggerButton.ineffective =
             settings.enabled && option.enabled && option.trigger === -1;
