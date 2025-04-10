@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import type {
   SettingBuySellThreshold,
+  SettingLimitedTrigger,
   SettingOptions,
   SettingTrigger,
 } from "../settings/Settings.js";
@@ -21,6 +22,8 @@ import type { UiComponent } from "./components/UiComponent.js";
 import { EmbassySettingsUi } from "./EmbassySettingsUi.js";
 
 export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTriggerListItem> {
+  private _racePanels: Array<SettingsPanel<SettingLimitedTrigger, SettingLimitedTriggerListItem>>;
+
   constructor(
     parent: UiComponent,
     settings: TradeSettings,
@@ -80,29 +83,31 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
             Object.values(settings.races).some(_ => _.enabled && _.trigger < 0);
 
           this.expando.ineffective =
-            settings.enabled && !Object.values(settings.races).some(_ => _.enabled);
+            settings.enabled &&
+            Object.values(this._racePanels).some(
+              _ => _.expando.ineffective || _.settingItem.triggerButton.ineffective,
+            );
         },
       },
     );
 
+    this._racePanels = this.host.game.diplomacy.races
+      .filter(item => !isNil(this.setting.races[item.name]))
+      .map(race =>
+        this._getTradeOption(
+          this,
+          this.setting.races[race.name],
+          locale,
+          settings,
+          race.title,
+          label,
+          race.name === this.host.game.diplomacy.races.at(-2)?.name,
+        ),
+      );
     const listRaces = new SettingsList(this, {
       hasDisableAll: false,
       hasEnableAll: false,
-    }).addChildren(
-      this.host.game.diplomacy.races
-        .filter(item => !isNil(this.setting.races[item.name]))
-        .map(races =>
-          this._getTradeOption(
-            this,
-            this.setting.races[races.name],
-            locale,
-            settings,
-            races.title,
-            label,
-            races.name === this.host.game.diplomacy.races.at(-2)?.name,
-          ),
-        ),
-    );
+    }).addChildren(this._racePanels);
 
     listRaces.addChild(
       new SettingListItem(
@@ -139,7 +144,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
                 this.host.engine.i18n("option.crypto"),
               ]);
             },
-            onRefresh: () => {
+            onRefreshRequest: () => {
               this.settingItem.triggerButton.inactive =
                 !this.setting.tradeBlackcoin.enabled || this.setting.tradeBlackcoin.trigger === -1;
             },
@@ -228,23 +233,6 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
       onLimitedUnCheck: () => {
         parent.host.engine.imessage("trade.unlimited", [label]);
       },
-      onRefreshRequest: () => {
-        element.limitedButton.inactive = !option.enabled || !option.limited;
-        element.triggerButton.inactive = !option.enabled || option.trigger === -1;
-        element.triggerButton.ineffective =
-          sectionSetting.enabled &&
-          option.enabled &&
-          sectionSetting.trigger === -1 &&
-          option.trigger === -1;
-
-        panel.expando.ineffective =
-          sectionSetting.enabled &&
-          option.enabled &&
-          !option.seasons.autumn.enabled &&
-          !option.seasons.spring.enabled &&
-          !option.seasons.summer.enabled &&
-          !option.seasons.winter.enabled;
-      },
       onRefreshTrigger: () => {
         element.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger", [
           option.trigger < 0
@@ -286,7 +274,26 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
       upgradeIndicator,
     });
 
-    const panel = new SettingsPanel(parent, option, element).addChildContent(
+    const panel = new SettingsPanel(parent, option, element, {
+      onRefreshRequest: () => {
+        element.limitedButton.inactive = !option.enabled || !option.limited;
+
+        element.triggerButton.inactive = !option.enabled || option.trigger === -1;
+        element.triggerButton.ineffective =
+          sectionSetting.enabled &&
+          option.enabled &&
+          sectionSetting.trigger === -1 &&
+          option.trigger === -1;
+
+        panel.expando.ineffective =
+          sectionSetting.enabled &&
+          option.enabled &&
+          !option.seasons.autumn.enabled &&
+          !option.seasons.spring.enabled &&
+          !option.seasons.summer.enabled &&
+          !option.seasons.winter.enabled;
+      },
+    }).addChildContent(
       new SeasonsList(parent, option.seasons, {
         onCheckSeason: (label: string) => {
           parent.host.engine.imessage("trade.season.enable", [ucfirst(label), label]);

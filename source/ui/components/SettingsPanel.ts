@@ -63,6 +63,7 @@ export class SettingsPanel<
   ) {
     super(parent, settingItem, options);
 
+    this.element = settingItem.element;
     this.settingItem = settingItem;
     this.setting = setting;
   }

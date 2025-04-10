@@ -26,14 +26,6 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
         onCheck: (isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
-        onRefresh: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-
-          this.expando.ineffective =
-            sectionSetting.enabled &&
-            settings.enabled &&
-            !Object.values(settings.races).some(race => race.enabled);
-        },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
             parent,
@@ -56,6 +48,16 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+
+          this.expando.ineffective =
+            sectionSetting.enabled &&
+            settings.enabled &&
+            !Object.values(settings.races).some(race => race.enabled);
+        },
+      },
     );
 
     const listRaces = new SettingsList(this).addChildren(

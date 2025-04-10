@@ -6,7 +6,7 @@ export type UiComponentInterface = {
   readonly children: Iterable<UiComponentInterface>;
   parent: UiComponentInterface | null;
   get element(): JQuery<HTMLElement>;
-  requestRefresh(withChildren?: boolean, depth?: number): void;
+  requestRefresh(withChildren?: boolean, depth?: number, trace?: boolean): void;
   refresh(force?: boolean, depth?: number): void;
 };
 
@@ -70,11 +70,7 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
   abstract toString(): string;
 
   protected _needsRefresh;
-  requestRefresh(withChildren = false, depth = 0) {
-    if (depth === 0) {
-      console.debug(...cl(this.toString(), "requestRefresh() received."));
-    }
-
+  requestRefresh(withChildren = false, depth = 0, trace = false) {
     // WARNING: Enable this section only during refresh logic debugging!
     //          When this was implemented, a full refresh logged 16K messages.
     //          Even when these are filtered from the JS console, there are
@@ -90,25 +86,53 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
     );
     */
 
-    this.parent?.requestRefresh(false, depth - 1);
+    if (this.parent !== this) {
+      this.parent?.requestRefresh(false, depth - 1, trace);
+    }
 
     if (this._needsRefresh) {
+      if (trace) {
+        console.debug(
+          ...cl(
+            depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
+            this.toString(),
+            "requestRefresh() <already pending>",
+          ),
+        );
+      }
       return;
     }
 
     this._needsRefresh = true;
 
     if (withChildren) {
+      if (trace) {
+        console.debug(
+          ...cl(
+            depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
+            this.toString(),
+            "requestRefresh()",
+            `+ ${this.children.size} children`,
+          ),
+        );
+      }
       for (const child of this.children) {
-        child.requestRefresh(true, depth + 1);
+        child.requestRefresh(true, depth + 1, trace);
+      }
+    } else {
+      if (trace) {
+        console.debug(
+          ...cl(
+            depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
+            this.toString(),
+            "requestRefresh()",
+            "solo",
+          ),
+        );
       }
     }
 
     this.options?.onRefreshRequest?.call(this);
-
-    if (depth === 0) {
-      console.debug(...cl(this.toString(), "requestRefresh() complete."));
-    }
   }
 
   refresh(force = false, depth = 0) {

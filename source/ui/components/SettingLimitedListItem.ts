@@ -40,7 +40,13 @@ export class SettingLimitedListItem extends SettingListItem {
     super(parent, setting, label, options);
 
     this.limitedButton = new LimitedButton(parent, setting, {
-      ...options,
+      border: false,
+      onLimitedCheck: options?.onLimitedCheck
+        ? () => options.onLimitedCheck?.call(this)
+        : undefined,
+      onLimitedUnCheck: options?.onLimitedUnCheck
+        ? () => options.onLimitedUnCheck?.call(this)
+        : undefined,
     });
     this.addChildrenHead([
       new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),

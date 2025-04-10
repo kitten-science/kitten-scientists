@@ -1,3 +1,4 @@
+import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import stylesButton from "./Button.module.css";
 import { UiComponent, type UiComponentOptions } from "./UiComponent.js";
 
@@ -53,7 +54,11 @@ export class IconButton extends UiComponent {
     this.inactive = options?.inactive ?? false;
 
     this.element.on("click", () => {
-      this.click();
+      if (this.readOnly) {
+        return;
+      }
+
+      this.click().catch(redirectErrorsToConsole(console));
     });
   }
 
@@ -61,11 +66,13 @@ export class IconButton extends UiComponent {
     return `[${IconButton.name}#${this.componentId}]`;
   }
 
-  click() {
+  async click() {
     if (this.readOnly) {
       return;
     }
 
-    return this.options?.onClick?.call(this);
+    await this.options?.onClick?.call(this);
+
+    this.requestRefresh(true, 0, true);
   }
 }

@@ -66,11 +66,12 @@ export class UserInterface extends UiComponent {
       this.stateManagementUi,
       new InternalsUi(this, engine.settings, engine.settings.locale),
     ];
-    for (const section of [this._engineUi, ...this._sections]) {
-      this.children.add(section);
-    }
 
+    this.parent = this;
     this.element = $("<div/>").addClass(styles.ui);
+    for (const section of [this._engineUi, ...this._sections]) {
+      this.addChild(section);
+    }
 
     const optionsListElement = $("<ul/>");
     optionsListElement.append(this._engineUi.element);
@@ -156,7 +157,7 @@ export class UserInterface extends UiComponent {
     this.element.remove();
   }
 
-  requestRefresh() {
+  requestRefresh(withChildren = true, depth = 0, trace = false) {
     if (this._needsRefresh) {
       if (this._refreshTimeout === undefined) {
         console.error(...cl("User interface claims to have a refresh pending, but there isn't."));
@@ -170,7 +171,7 @@ export class UserInterface extends UiComponent {
       console.info(...cl("Refreshing UI complete."));
       this._refreshTimeout = undefined;
     }, 0);
-    super.requestRefresh(true);
+    super.requestRefresh(withChildren, depth, trace);
   }
 
   forceFullRefresh(): void {

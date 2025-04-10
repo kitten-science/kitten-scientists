@@ -77,7 +77,7 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
         onCheck: () => {
           this.host.engine.imessage("status.sub.enable", [this.host.engine.i18n("option.hunt")]);
         },
-        onRefresh: () => {
+        onRefreshRequest: () => {
           this._hunt.triggerButton.inactive = !this.setting.hunt.enabled;
           this._hunt.triggerButton.ineffective =
             this.setting.enabled && this.setting.hunt.enabled && this.setting.hunt.trigger === -1;

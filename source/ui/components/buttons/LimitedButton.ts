@@ -31,8 +31,6 @@ export class LimitedButton extends Button {
         } else {
           options?.onLimitedUnCheck?.call(this);
         }
-
-        this.requestRefresh();
       },
       onRefresh: () => {
         this.updateTitle(
