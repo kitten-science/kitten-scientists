@@ -253,7 +253,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
               this.host.engine.imessage("status.sub.enable", [label]);
             },
             onRefresh: () => {
-              this.settingItem.triggerButton.inactive =
+              element.triggerButton.inactive =
                 !this.setting[item].enabled || this.setting[item].trigger === -1;
             },
             onSetTrigger: async () => {
