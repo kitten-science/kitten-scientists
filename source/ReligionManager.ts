@@ -577,10 +577,11 @@ export class ReligionManager implements Automation {
   private async _autoSacrificeUnicorns() {
     const unicorns = this._workshopManager.getResource("unicorns");
     const available = this._workshopManager.getValueAvailable("unicorns");
+
     if (
       !isNil(this._host.game.religionTab.sacrificeBtn) &&
-      this.settings.sacrificeUnicorns.trigger <= available &&
-      this.settings.sacrificeUnicorns.trigger <= unicorns.value
+      negativeOneToInfinity(this.settings.sacrificeUnicorns.trigger) <= available &&
+      negativeOneToInfinity(this.settings.sacrificeUnicorns.trigger) <= unicorns.value
     ) {
       const controller = this._host.game.religionTab.sacrificeBtn.controller;
       const model = this._host.game.religionTab.sacrificeBtn.model;
@@ -612,8 +613,8 @@ export class ReligionManager implements Automation {
     const available = this._workshopManager.getValueAvailable("alicorn");
     if (
       !isNil(this._host.game.religionTab.sacrificeAlicornsBtn) &&
-      this.settings.sacrificeAlicorns.trigger <= available &&
-      this.settings.sacrificeAlicorns.trigger <= alicorns.value
+      negativeOneToInfinity(this.settings.sacrificeAlicorns.trigger) <= available &&
+      negativeOneToInfinity(this.settings.sacrificeAlicorns.trigger) <= alicorns.value
     ) {
       this._host.game.religionTab.sacrificeAlicornsBtn.render();
       const controller = this._host.game.religionTab.sacrificeAlicornsBtn.controller;
@@ -648,8 +649,8 @@ export class ReligionManager implements Automation {
     const sorrow = this._workshopManager.getResource("sorrow");
     if (
       !isNil(this._host.game.religionTab.refineBtn) &&
-      this.settings.refineTears.trigger <= available &&
-      this.settings.refineTears.trigger <= tears.value &&
+      negativeOneToInfinity(this.settings.refineTears.trigger) <= available &&
+      negativeOneToInfinity(this.settings.refineTears.trigger) <= tears.value &&
       sorrow.value < sorrow.maxValue
     ) {
       const availableForConversion = available - this.settings.refineTears.trigger;
@@ -689,8 +690,8 @@ export class ReligionManager implements Automation {
     const available = this._workshopManager.getValueAvailable("timeCrystal");
     if (
       !isNil(this._host.game.religionTab.refineTCBtn) &&
-      this.settings.refineTimeCrystals.trigger <= available &&
-      this.settings.refineTimeCrystals.trigger <= timeCrystals.value
+      negativeOneToInfinity(this.settings.refineTimeCrystals.trigger) <= available &&
+      negativeOneToInfinity(this.settings.refineTimeCrystals.trigger) <= timeCrystals.value
     ) {
       const controller = this._host.game.religionTab.refineTCBtn.controller;
       const model = this._host.game.religionTab.refineTCBtn.model;
