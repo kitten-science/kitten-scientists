@@ -50,7 +50,8 @@ export class EmbassySettingsUi extends SettingsPanel<EmbassySettings, SettingTri
       }),
       {
         onRefreshRequest: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          this.settingItem.triggerButton.inactive = !settings.enabled;
+          this.settingItem.triggerButton.ineffective = settings.enabled && settings.trigger === -1;
 
           this.expando.ineffective =
             sectionSetting.enabled &&
