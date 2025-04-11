@@ -130,7 +130,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
     );
 
     listRaces.addChild(
-      new SettingsPanel<SettingBuySellThreshold>(
+      new SettingsPanel<SettingBuySellThreshold, SettingTriggerListItem>(
         this,
         this.setting.tradeBlackcoin,
         new SettingTriggerListItem(
@@ -144,9 +144,8 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
                 this.host.engine.i18n("option.crypto"),
               ]);
             },
-            onRefreshRequest: () => {
-              this.settingItem.triggerButton.inactive =
-                !this.setting.tradeBlackcoin.enabled || this.setting.tradeBlackcoin.trigger === -1;
+            onRefreshRequest() {
+              this.triggerButton.inactive = !this.setting.enabled || this.setting.trigger === -1;
             },
             onSetTrigger: async () => {
               const value = await Dialog.prompt(
@@ -295,11 +294,11 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
       },
     }).addChildContent(
       new SeasonsList(parent, option.seasons, {
-        onCheckSeason: (label: string) => {
-          parent.host.engine.imessage("trade.season.enable", [ucfirst(label), label]);
+        onCheckSeason: (labelSeason: string) => {
+          parent.host.engine.imessage("trade.season.enable", [ucfirst(label), labelSeason]);
         },
-        onUnCheckSeason: (label: string) => {
-          parent.host.engine.imessage("trade.season.disable", [ucfirst(label), label]);
+        onUnCheckSeason: (labelSeason: string) => {
+          parent.host.engine.imessage("trade.season.disable", [ucfirst(label), labelSeason]);
         },
       }),
     );

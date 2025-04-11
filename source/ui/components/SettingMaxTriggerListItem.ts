@@ -37,7 +37,7 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
       classes: [stylesButton.headAction],
       onClick: async () => {
         await options.onSetMax.call(this);
-        this.requestRefresh();
+        this.requestRefresh(false, 0, true);
       },
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });
@@ -46,7 +46,7 @@ export class SettingMaxTriggerListItem extends SettingListItem<SettingTriggerMax
       classes: [stylesButton.lastHeadAction],
       onClick: async () => {
         await options.onSetTrigger.call(this);
-        this.requestRefresh(true);
+        this.requestRefresh(false, 0, true);
       },
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
       renderLabel: options?.renderLabelTrigger ?? true,

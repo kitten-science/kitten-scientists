@@ -20,7 +20,6 @@ export class LimitedButton extends Button {
     options: Omit<LimitedButtonOptions, "onClick">,
   ) {
     super(parent, "", Icons.Eco, {
-      ...options,
       border: false,
       classes: [],
       onClick: () => {
@@ -36,11 +35,14 @@ export class LimitedButton extends Button {
         this.updateTitle(
           this.host.engine.i18n(this.setting.limited ? "ui.limited.on" : "ui.limited.off"),
         );
+
         if (this.setting.limited && !this.inactive) {
           this.element.removeClass(stylesButton.inactive);
         } else {
           this.element.addClass(stylesButton.inactive);
         }
+
+        options?.onRefresh?.call(this);
       },
     });
 

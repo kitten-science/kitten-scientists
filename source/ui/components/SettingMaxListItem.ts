@@ -37,7 +37,7 @@ export class SettingMaxListItem extends SettingListItem<SettingMax> {
       border: false,
       onClick: async () => {
         await options.onSetMax.call(this);
-        this.requestRefresh();
+        this.requestRefresh(false, 0, true);
       },
       onRefresh: options?.onRefreshMax ? () => options.onRefreshMax?.call(this) : undefined,
     });

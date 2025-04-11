@@ -49,11 +49,9 @@ export class CyclesList extends SettingsList {
       return new SettingListItem(parent, setting, label, {
         onCheck: (isBatchProcess?: boolean) => {
           options?.onCheckCycle?.(label, setting, isBatchProcess);
-          this.requestRefresh();
         },
         onUnCheck: (isBatchProcess?: boolean) => {
           options?.onUnCheckCycle?.(label, setting, isBatchProcess);
-          this.requestRefresh();
         },
       });
     };
@@ -76,13 +74,11 @@ export class CyclesList extends SettingsList {
       for (const cycle of cycles) {
         cycle.check(true);
       }
-      this.requestRefresh();
     });
     this.element[0].addEventListener("disableAll", () => {
       for (const cycle of cycles) {
         cycle.uncheck(true);
       }
-      this.requestRefresh();
     });
   }
 }

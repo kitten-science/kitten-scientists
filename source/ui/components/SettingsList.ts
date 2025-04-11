@@ -1,5 +1,6 @@
 import { is, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { Icons } from "../../images/Icons.js";
+import { Container } from "./Container.js";
 import { IconButton } from "./IconButton.js";
 import { SettingListItem } from "./SettingListItem.js";
 import styles from "./SettingsList.module.css";
@@ -54,7 +55,7 @@ export class SettingsList extends UiComponent {
     this.element.append(this.list);
 
     if (hasTools) {
-      const tools = $("<div/>").addClass(styles.listTools);
+      const tools = new Container(this, { classes: [styles.listTools] });
 
       if (toolOptions.hasEnableAll) {
         this.enableAllButton = new IconButton(
@@ -62,7 +63,7 @@ export class SettingsList extends UiComponent {
           Icons.CheckboxCheck,
           parent.host.engine.i18n("ui.enable.all"),
           {
-            onClick: () => {
+            onClick: async () => {
               const event = new Event("enableAll", { cancelable: true });
               this.element[0].dispatchEvent(event);
               if (event.defaultPrevented) {
@@ -71,16 +72,16 @@ export class SettingsList extends UiComponent {
 
               for (const child of this.children) {
                 if (is(child, SettingListItem)) {
-                  (child as SettingListItem).check(true);
+                  await child.check(true);
                 }
               }
 
               options?.onEnableAll?.call(this);
-              this.requestRefresh();
+              this.requestRefresh(false, 0, true);
             },
           },
         );
-        tools.append(this.enableAllButton.element);
+        tools.addChild(this.enableAllButton);
       }
 
       if (toolOptions.hasDisableAll) {
@@ -88,24 +89,26 @@ export class SettingsList extends UiComponent {
           parent,
           Icons.CheckboxUnCheck,
           parent.host.engine.i18n("ui.disable.all"),
+          {
+            onClick: async () => {
+              const event = new Event("disableAll", { cancelable: true });
+              this.element[0].dispatchEvent(event);
+              if (event.defaultPrevented) {
+                return;
+              }
+
+              for (const child of this.children) {
+                if (is(child, SettingListItem)) {
+                  await child.uncheck(true);
+                }
+              }
+
+              options?.onDisableAll?.call(this);
+              this.requestRefresh();
+            },
+          },
         );
-        this.disableAllButton.element.on("click", () => {
-          const event = new Event("disableAll", { cancelable: true });
-          this.element[0].dispatchEvent(event);
-          if (event.defaultPrevented) {
-            return;
-          }
-
-          for (const child of this.children) {
-            if (is(child, SettingListItem)) {
-              (child as SettingListItem).uncheck();
-            }
-          }
-
-          options?.onDisableAll?.call(this);
-          this.requestRefresh();
-        });
-        tools.append(this.disableAllButton.element);
+        tools.addChild(this.disableAllButton);
       }
 
       const onReset = toolOptions.onReset;
@@ -120,10 +123,10 @@ export class SettingsList extends UiComponent {
             },
           },
         );
-        tools.append(this.resetButton.element);
+        tools.addChild(this.resetButton);
       }
 
-      this.element.append(tools);
+      super.addChild(tools);
     }
   }
 

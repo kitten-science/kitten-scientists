@@ -104,7 +104,7 @@ export class CollapsiblePanel<THead extends LabelListItem = LabelListItem> exten
       this._mainChildVisible = visible;
       if (this._mainChildVisible) {
         // Refresh panel UI on expand.
-        this.container.requestRefresh();
+        this.container.requestRefresh(true);
         // Show the DOM element.
         this.container.element.removeClass(stylesSettingListItem.hidden);
         // Reflect expanded state on expando.

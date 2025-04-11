@@ -27,7 +27,6 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
         this.expando.ineffective =
           settings.enabled &&
           Object.values(settings.buildings).some(_ => _.enabled && _.trigger <= 0);
-        this.expando.requestRefresh();
       },
     });
 

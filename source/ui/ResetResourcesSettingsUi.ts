@@ -25,7 +25,6 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
         this.expando.ineffective =
           settings.enabled &&
           Object.values(settings.resources).some(_ => _.enabled && _.trigger < 0);
-        this.expando.requestRefresh();
       },
     });
 

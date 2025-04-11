@@ -41,7 +41,6 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
         onRefreshRequest: () => {
           this.expando.ineffective =
             settings.enabled && [this._timeSkipUi, this._resetUi].some(_ => _.expando.ineffective);
-          this.expando.requestRefresh();
         },
       },
     );

@@ -171,7 +171,8 @@ export class UserInterface extends UiComponent {
       console.info(...cl("Refreshing UI complete."));
       this._refreshTimeout = undefined;
     }, 0);
-    super.requestRefresh(withChildren, depth, trace);
+
+    super.requestRefresh(true, depth, false);
   }
 
   forceFullRefresh(): void {

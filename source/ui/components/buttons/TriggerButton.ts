@@ -6,6 +6,7 @@ import {
   SettingTrigger,
 } from "../../../settings/Settings.js";
 import { Button, type ButtonOptions } from "../Button.js";
+import stylesButton from "../Button.module.css";
 import type { UiComponent } from "../UiComponent.js";
 
 export type TriggerButtonBehavior = "integer" | "percentage";
@@ -38,7 +39,14 @@ export class TriggerButton extends Button {
         if (this.options?.renderLabel ?? true) {
           this.updateLabel(triggerValue);
         }
-        options?.onRefresh?.();
+
+        if (!this.inactive) {
+          this.element.removeClass(stylesButton.inactive);
+        } else {
+          this.element.addClass(stylesButton.inactive);
+        }
+
+        options?.onRefresh?.call(this);
       },
     });
 

@@ -51,7 +51,6 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
               this._timeUi,
               this._upgradesUi,
             ].some(_ => _.expando.ineffective);
-          this.expando.requestRefresh();
         },
       },
     );

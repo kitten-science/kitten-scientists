@@ -13,13 +13,15 @@ export type SettingTriggerListItemOptions = ThisType<SettingTriggerListItem> &
     readonly renderLabelTrigger?: boolean;
   };
 
-export class SettingTriggerListItem extends SettingListItem {
+export class SettingTriggerListItem<
+  TSetting extends SettingTrigger | SettingThreshold = SettingTrigger | SettingThreshold,
+> extends SettingListItem<TSetting> {
   declare readonly options: SettingTriggerListItemOptions;
   readonly triggerButton: TriggerButton;
 
   constructor(
     parent: UiComponent,
-    setting: SettingThreshold | SettingTrigger,
+    setting: TSetting,
     locale: SettingOptions<SupportedLocale>,
     label: string,
     options: SettingTriggerListItemOptions,

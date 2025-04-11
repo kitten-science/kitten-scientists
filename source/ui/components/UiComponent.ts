@@ -71,22 +71,19 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
 
   protected _needsRefresh;
   requestRefresh(withChildren = false, depth = 0, trace = false) {
-    // WARNING: Enable this section only during refresh logic debugging!
-    //          When this was implemented, a full refresh logged 16K messages.
-    //          Even when these are filtered from the JS console, there are
-    //          noticeable performance issues. DO NOT ENABLE THIS UNLESS YOU NEED TO.
-    /*
-    console.debug(
-      ...cl(
-        depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
-        this.toString(),
-        "requestRefresh",
-        withChildren ? "with children" : "on self",
-      ),
-    );
-    */
+    if (trace) {
+      console.debug(
+        ...cl(
+          depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
+          this.toString(),
+          "requestRefresh()",
+        ),
+      );
+    }
 
-    if (this.parent !== this) {
+    this.options?.onRefreshRequest?.call(this);
+
+    if (this.parent !== this && !withChildren) {
       this.parent?.requestRefresh(false, depth - 1, trace);
     }
 
@@ -100,7 +97,6 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
           ),
         );
       }
-      return;
     }
 
     this._needsRefresh = true;
@@ -126,13 +122,11 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
             depth < 0 ? "⤒".repeat(depth * -1) : " ".repeat(depth),
             this.toString(),
             "requestRefresh()",
-            "solo",
+            "<queued>",
           ),
         );
       }
     }
-
-    this.options?.onRefreshRequest?.call(this);
   }
 
   refresh(force = false, depth = 0) {

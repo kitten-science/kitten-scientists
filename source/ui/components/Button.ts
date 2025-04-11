@@ -123,6 +123,6 @@ export class Button extends UiComponent {
 
     await this.options?.onClick?.call(this);
 
-    this.requestRefresh(true, 0, true);
+    this.requestRefresh(false, 0, true);
   }
 }
