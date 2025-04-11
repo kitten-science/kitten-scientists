@@ -92,7 +92,6 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
       new SettingsList(this, {
         onReset: () => {
           this.setting.load({ buildings: new BonfireSettings().buildings });
-          this.requestRefresh();
         },
       }).addChildren(
         coalesceArray(

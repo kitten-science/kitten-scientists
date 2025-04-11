@@ -77,7 +77,6 @@ export class SettingsList extends UiComponent {
               }
 
               options?.onEnableAll?.call(this);
-              this.requestRefresh(false, 0, true);
             },
           },
         );
@@ -104,7 +103,6 @@ export class SettingsList extends UiComponent {
               }
 
               options?.onDisableAll?.call(this);
-              this.requestRefresh();
             },
           },
         );

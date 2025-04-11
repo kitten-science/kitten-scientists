@@ -1,3 +1,5 @@
+import { formatMilliseconds } from "@oliversalzburg/js-utils/format/milliseconds.js";
+import { measure } from "@oliversalzburg/js-utils/measurement/performance.js";
 import { Icons } from "../images/Icons.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import { cl } from "../tools/Log.js";
@@ -166,9 +168,8 @@ export class UserInterface extends UiComponent {
     }
 
     this._refreshTimeout = window.setTimeout(() => {
-      console.info(...cl("Refreshing UI..."));
-      this.refresh();
-      console.info(...cl("Refreshing UI complete."));
+      const [_, duration] = measure(() => this.refresh());
+      console.info(...cl(`UI refresh took ${formatMilliseconds(duration)}.`));
       this._refreshTimeout = undefined;
     }, 0);
 

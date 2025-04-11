@@ -31,7 +31,6 @@ export class SettingLimitedTriggerListItem extends SettingLimitedListItem {
       border: false,
       onClick: async () => {
         await options.onSetTrigger.call(this);
-        this.requestRefresh(false, 0, true);
       },
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
       renderLabel: options?.renderLabelTrigger ?? true,

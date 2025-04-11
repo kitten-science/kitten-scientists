@@ -102,12 +102,12 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
   async check(isBatchProcess = false) {
     this.setting.enabled = true;
     await this.options?.onCheck?.call(isBatchProcess);
-    this.requestRefresh(false, 0, true);
+    this.requestRefresh();
   }
 
   async uncheck(isBatchProcess = false) {
     this.setting.enabled = false;
     await this.options.onUnCheck?.call(isBatchProcess);
-    this.requestRefresh(false, 0, true);
+    this.requestRefresh();
   }
 }

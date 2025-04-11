@@ -33,7 +33,6 @@ export class SettingTriggerListItem<
       border: false,
       onClick: async () => {
         await options.onSetTrigger.call(this);
-        this.requestRefresh(true);
       },
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
       renderLabel: options?.renderLabelTrigger ?? true,

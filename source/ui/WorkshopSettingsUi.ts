@@ -224,7 +224,6 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
     const listCrafts = new SettingsList(this, {
       onReset: () => {
         this.setting.load({ resources: new WorkshopSettings().resources });
-        this.requestRefresh();
       },
     }).addChildren(this._crafts);
     this.addChildContent(listCrafts);

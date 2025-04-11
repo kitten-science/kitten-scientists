@@ -58,6 +58,6 @@ export class TextButton extends UiComponent {
 
     await this.options?.onClick?.call(this);
 
-    this.requestRefresh(true, 0, true);
+    this.requestRefresh();
   }
 }

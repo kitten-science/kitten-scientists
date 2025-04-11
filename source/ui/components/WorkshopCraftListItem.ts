@@ -53,7 +53,6 @@ export class WorkshopCraftListItem extends SettingListItem<CraftSettingsItem> {
       classes: [stylesButton.lastHeadAction],
       onClick: async () => {
         await options.onSetTrigger.call(this);
-        this.requestRefresh();
       },
       onRefresh: options?.onRefreshTrigger ? () => options.onRefreshTrigger?.call(this) : undefined,
       renderLabel: options?.renderLabelTrigger ?? true,

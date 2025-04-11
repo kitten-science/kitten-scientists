@@ -137,10 +137,6 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
       return;
     }
 
-    if (depth === 0) {
-      console.debug(...cl(this.toString(), "refresh() received."));
-    }
-
     // WARNING: Enable this section only during refresh logic debugging!
     //          When this was implemented, a full refresh logged 16K messages.
     //          Even when these are filtered from the JS console, there are
@@ -164,10 +160,6 @@ export abstract class UiComponent<TElement extends HTMLElement = HTMLElement>
     }
 
     this._needsRefresh = false;
-
-    if (depth === 0) {
-      console.debug(...cl(this.toString(), "refresh() complete."));
-    }
   }
 
   addChild(child: UiComponentInterface): this {

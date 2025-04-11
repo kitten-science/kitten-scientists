@@ -75,7 +75,6 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
       new SettingsList(this, {
         onReset: () => {
           this.setting.load({ buildings: new SpaceSettings().buildings });
-          this.requestRefresh();
         },
       }).addChildren(
         this.host.game.space.planets

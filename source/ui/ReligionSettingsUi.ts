@@ -170,7 +170,6 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
             bestUnicornBuilding: defaults.bestUnicornBuilding,
             buildings: defaults.buildings,
           });
-          this.requestRefresh();
         },
       }).addChildren([
         new HeaderListItem(this, this.host.engine.i18n("$religion.panel.ziggurat.label")),
