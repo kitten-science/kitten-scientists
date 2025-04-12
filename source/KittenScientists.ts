@@ -64,6 +64,10 @@ export class KittenScientists {
       this._userInterface = this._constructUi();
     } catch (error: unknown) {
       console.error(...cl("Failed to construct core components.", error));
+      // @ts-expect-error Go fuck yourself, really.
+      if (typeof GM !== "undefined") {
+        console.warn(...cl("Detected running in Greasemonkey."));
+      }
       throw error;
     }
 
@@ -114,7 +118,7 @@ export class KittenScientists {
     if (-1 < managerIndex) {
       this.game.managers.splice(managerIndex, 1);
     }
-    window.kittenScientists = undefined;
+    UserScriptLoader.window.kittenScientists = undefined;
     console.warn(...cl("Kitten Scientists have been unloaded!"));
   }
 
@@ -313,7 +317,9 @@ export class KittenScientists {
    */
   static encodeSettings(settings: EngineState, compress = true): string {
     const settingsString = JSON.stringify(settings);
-    return compress ? window.LZString.compressToBase64(settingsString) : settingsString;
+    return compress
+      ? UserScriptLoader.window.LZString.compressToBase64(settingsString)
+      : settingsString;
   }
 
   /**
@@ -331,7 +337,8 @@ export class KittenScientists {
       /* expected, as we assume the input to be compressed. */
     }
 
-    const settingsString = window.LZString.decompressFromBase64(compressedSettings);
+    const settingsString =
+      UserScriptLoader.window.LZString.decompressFromBase64(compressedSettings);
     const parsed = JSON.parse(settingsString) as Record<string, unknown>;
     return KittenScientists.unknownAsEngineStateOrThrow(parsed);
   }
@@ -383,7 +390,7 @@ export class KittenScientists {
    */
   async copySettings(settings = this.getSettings(), compress = true) {
     const encodedSettings = KittenScientists.encodeSettings(settings, compress);
-    await window.navigator.clipboard.writeText(encodedSettings);
+    await UserScriptLoader.window.navigator.clipboard.writeText(encodedSettings);
   }
 
   /**

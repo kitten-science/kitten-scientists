@@ -3,6 +3,7 @@ import { measure } from "@oliversalzburg/js-utils/measurement/performance.js";
 import { Icons } from "../images/Icons.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import { cl } from "../tools/Log.js";
+import { UserScriptLoader } from "../UserScriptLoader.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
 import { UiComponent } from "./components/UiComponent.js";
 import { EngineSettingsUi } from "./EngineSettingsUi.js";
@@ -155,6 +156,10 @@ export class UserInterface extends UiComponent {
   }
 
   destroy() {
+    if (this._refreshTimeout !== undefined) {
+      UserScriptLoader.window.clearTimeout(this._refreshTimeout);
+      this._refreshTimeout = undefined;
+    }
     this.showActivity.remove();
     this.element.remove();
   }
@@ -167,7 +172,7 @@ export class UserInterface extends UiComponent {
       return;
     }
 
-    this._refreshTimeout = window.setTimeout(() => {
+    this._refreshTimeout = UserScriptLoader.window.setTimeout(() => {
       const [_, duration] = measure(() => this.refresh());
       console.info(...cl(`UI refresh took ${formatMilliseconds(duration)}.`));
       this._refreshTimeout = undefined;
