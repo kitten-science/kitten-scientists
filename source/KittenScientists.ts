@@ -1,14 +1,14 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import gt from "semver/functions/gt.js";
-import { Engine, type EngineState, type GameLanguage, type SupportedLocale } from "./Engine.js";
+import { Engine, type EngineState, type SupportedLocale } from "./Engine.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { cl } from "./tools/Log.js";
 import type { ReleaseChannel, ReleaseInfoSchema } from "./types/_releases.js";
 import type { GamePage } from "./types/game.js";
-import type { I18nEngine } from "./types/index.js";
+import type { I18nEngine, Locale } from "./types/index.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 import { UserInterface } from "./ui/UserInterface.js";
 
@@ -45,7 +45,7 @@ export class KittenScientists {
   constructor(
     game: GamePage,
     i18nEngine: I18nEngine,
-    gameLanguage: GameLanguage = "en",
+    gameLanguage: Locale = "en",
     engineState?: EngineState,
   ) {
     console.info(
@@ -61,7 +61,7 @@ export class KittenScientists {
     this.i18nEngine = i18nEngine;
     try {
       this.engine = new Engine(this, gameLanguage);
-      this._userInterface = this._constructUi();
+      this._userInterface = new UserInterface(this);
     } catch (error: unknown) {
       console.error(...cl("Failed to construct core components.", error));
       // @ts-expect-error Go fuck yourself, really.
@@ -73,18 +73,15 @@ export class KittenScientists {
 
     if (!isNil(engineState)) {
       this.setSettings(engineState);
+    } else {
+      this._userInterface.stateManagementUi.loadAutoSave();
     }
-  }
-
-  private _constructUi() {
-    const ui = new UserInterface(this);
-    ui.stateManagementUi.loadAutoSave();
-    return ui;
   }
 
   rebuildUi() {
     this._userInterface.destroy();
-    this._userInterface = this._constructUi();
+    this._userInterface = new UserInterface(this);
+    this._userInterface.forceFullRefresh();
   }
 
   /**
@@ -363,12 +360,15 @@ export class KittenScientists {
    */
   setSettings(settings: EngineState) {
     console.info(...cl("Loading engine state..."));
+    const requiresUiRebuild =
+      this.engine.settings.ksColumn.enabled !== settings.engine.ksColumn.enabled;
     this.engine.stateLoad(settings);
-    if (settings.engine.ksColumn.enabled) {
+
+    if (requiresUiRebuild) {
       this.rebuildUi();
-    } else {
-      this._userInterface.refresh(true);
     }
+
+    this._userInterface.refresh(true);
   }
 
   /**
