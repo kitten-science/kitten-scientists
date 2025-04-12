@@ -412,7 +412,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
           timestamp: string;
         };
         const state = KittenScientists.decodeSettings(subjectData.state);
-        this.storeState(state, makeImportLabel());
+        this.storeState(state, subjectData.label);
         this.host.engine.imessage("state.imported.state");
         return;
       } catch (_error) {
