@@ -31,7 +31,7 @@ import { TimeManager } from "./TimeManager.js";
 import { TradeManager } from "./TradeManager.js";
 import { cl } from "./tools/Log.js";
 import { type Cycle, Cycles, type Planet } from "./types/index.js";
-import { FallbackLocale } from "./UserScriptLoader.js";
+import { FallbackLocale, UserScriptLoader } from "./UserScriptLoader.js";
 import { VillageManager } from "./VillageManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
 
@@ -356,7 +356,7 @@ export class Engine {
             return;
           }
 
-          this._timeoutMainLoop = window.setTimeout(
+          this._timeoutMainLoop = UserScriptLoader.window.setTimeout(
             loop,
             Math.max(10, this._host.engine.settings.interval - timeTaken),
           );
@@ -365,7 +365,10 @@ export class Engine {
           console.warn(...cl(unknownToError(error)));
         });
     };
-    this._timeoutMainLoop = window.setTimeout(loop, this._host.engine.settings.interval);
+    this._timeoutMainLoop = UserScriptLoader.window.setTimeout(
+      loop,
+      this._host.engine.settings.interval,
+    );
 
     if (msg) {
       this._host.engine.imessage("status.ks.enable");
@@ -454,7 +457,7 @@ export class Engine {
       filter.enabled = false;
     }
 
-    const filterCheckboxes = window.document.querySelectorAll("[id^=filter-]");
+    const filterCheckboxes = UserScriptLoader.window.document.querySelectorAll("[id^=filter-]");
     for (const checkbox of filterCheckboxes) {
       (checkbox as HTMLInputElement).checked = false;
     }

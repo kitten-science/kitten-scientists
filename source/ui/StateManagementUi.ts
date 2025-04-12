@@ -11,6 +11,7 @@ import { Unique } from "../tools/Entries.js";
 import { cl } from "../tools/Log.js";
 import { SavegameLoader } from "../tools/SavegameLoader.js";
 import type { KGSaveData } from "../types/_save.js";
+import { UserScriptLoader } from "../UserScriptLoader.js";
 import { Button } from "./components/Button.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Container } from "./components/Container.js";
@@ -356,11 +357,11 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
       ? this.host.game.compressLZData(saveDataString)
       : saveDataString;
 
-    await window.navigator.clipboard.writeText(encodedData);
+    await UserScriptLoader.window.navigator.clipboard.writeText(encodedData);
   }
 
   import() {
-    const input = window.prompt(this.host.engine.i18n("state.loadPrompt"));
+    const input = UserScriptLoader.window.prompt(this.host.engine.i18n("state.loadPrompt"));
     if (isNil(input)) {
       return;
     }
@@ -402,7 +403,9 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     let gameLabel = label;
 
     if (isNil(gameLabel)) {
-      gameLabel = window.prompt(this.host.engine.i18n("state.storeGame.prompt")) ?? undefined;
+      gameLabel =
+        UserScriptLoader.window.prompt(this.host.engine.i18n("state.storeGame.prompt")) ??
+        undefined;
     }
 
     if (isNil(gameLabel)) {
@@ -434,7 +437,9 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     let stateLabel = label;
 
     if (isNil(stateLabel)) {
-      stateLabel = window.prompt(this.host.engine.i18n("state.storeState.prompt")) ?? undefined;
+      stateLabel =
+        UserScriptLoader.window.prompt(this.host.engine.i18n("state.storeState.prompt")) ??
+        undefined;
     }
 
     if (isNil(stateLabel)) {
@@ -601,7 +606,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
   private _destructiveActionPrevented(): boolean {
     if (
       !this.setting.noConfirm.enabled &&
-      !window.confirm(this.host.engine.i18n("state.confirmDestruction"))
+      !UserScriptLoader.window.confirm(this.host.engine.i18n("state.confirmDestruction"))
     ) {
       return true;
     }
