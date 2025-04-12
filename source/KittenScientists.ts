@@ -1,5 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
 import gt from "semver/functions/gt.js";
 import { Engine, type EngineState, type SupportedLocale } from "./Engine.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
@@ -332,6 +333,10 @@ export class KittenScientists {
       return KittenScientists.unknownAsEngineStateOrThrow(naiveParse);
     } catch (_error) {
       /* expected, as we assume the input to be compressed. */
+    }
+
+    if (compressedSettings.match(/\r?\n/)) {
+      throw new InvalidOperationError("Multi-line non-JSON input can't be decoded.");
     }
 
     const settingsString =

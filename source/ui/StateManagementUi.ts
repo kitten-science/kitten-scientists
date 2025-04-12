@@ -1,5 +1,6 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { InvalidArgumentError } from "@oliversalzburg/js-utils/errors/InvalidArgumentError.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { de, enUS, he, type Locale, zhCN } from "date-fns/locale";
 import { Engine, type EngineState, type SupportedLocale } from "../Engine.js";
@@ -360,43 +361,99 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     await UserScriptLoader.window.navigator.clipboard.writeText(encodedData);
   }
 
+  /**
+   * Request text input from the user, and try to import it.
+   *
+   * Things users might paste, in no specific order:
+   * 1. Kittens Game Save, uncompressed line-agnostic JSON
+   * 2. Kittens Game Save, lz-string compressed single-line UTF-8 string
+   * 3. Kittens Game Save, lz-string compressed single-line UTF-16 string
+   * 4. Kitten Scientists Settings, uncompressed line-agnostic JSON
+   * 5. Kitten Scientists Settings, lz-string compressed single-line Base64 string
+   * 6. Kitten Scientists Settings Export, multi-line string where all lines are either:
+   *    - #4, but must be single-line
+   *    - #5
+   * 7. Kitten Scientists Settings Export, multi-line string where each line is
+   *    an uncompressed JSON string serialization of:
+   *    {
+   *      label: "The label the user previously assigned to these settings.",
+   *      state: "The same options as #6",
+   *      timestamp: "Last time the settings were modified. As new Date().toISOString().",
+   *    }
+   */
   import() {
-    const input = UserScriptLoader.window.prompt(this.host.engine.i18n("state.loadPrompt"));
-    if (isNil(input)) {
+    const userInput = UserScriptLoader.window.prompt(this.host.engine.i18n("state.loadPrompt"));
+    if (isNil(userInput)) {
       return;
     }
 
-    try {
-      // decodeSettings throws if the input is not a valid engine state.
-      const state = KittenScientists.decodeSettings(input);
-      this.storeState(state);
-      this.host.engine.imessage("state.imported.state");
-      return;
-    } catch (_error) {
-      // Not a valid Kitten Scientists state.
-    }
+    const importId = new Date().toDateString();
+    let importSequence = 1;
+    const makeImportLabel = () =>
+      this.host.engine.i18n("state.importedState", [`${importId} #${importSequence++}`]);
 
-    // Attempt to parse as KG save.
-    let subjectData: KGSaveData;
-    try {
-      subjectData = JSON.parse(input) as KGSaveData;
-    } catch (_error) {
-      /* expected, as we assume compressed input */
-      const uncompressed = this.host.game.decompressLZData(input);
-      subjectData = JSON.parse(uncompressed) as KGSaveData;
-    }
+    const internalImport = (input: string) => {
+      // Handles #4 and #5
+      try {
+        // decodeSettings throws if the input is not a valid engine state.
+        const state = KittenScientists.decodeSettings(input);
+        this.storeState(state, makeImportLabel());
+        this.host.engine.imessage("state.imported.state");
+        return;
+      } catch (_error) {
+        // Not a valid Kitten Scientists state.
+      }
 
-    // If game contains KS settings, import those separately.
-    let stateLabel: string | undefined;
-    if ("ks" in subjectData && !isNil(subjectData.ks)) {
-      const state = subjectData.ks.state[0];
-      stateLabel = this.storeState(state) ?? undefined;
-      this.host.engine.imessage("state.imported.state");
-      subjectData.ks = undefined;
-    }
+      // Handles #7
+      try {
+        const subjectData = JSON.parse(input) as {
+          label: string;
+          state: string;
+          timestamp: string;
+        };
+        const state = KittenScientists.decodeSettings(subjectData.state);
+        this.storeState(state, makeImportLabel());
+        this.host.engine.imessage("state.imported.state");
+        return;
+      } catch (_error) {
+        // Not a valid Kitten Scientists state.
+      }
 
-    this.storeGame(subjectData, stateLabel);
-    this.host.engine.imessage("state.imported.game");
+      // Attempt to parse as KG save.
+      let subjectData: KGSaveData;
+      try {
+        subjectData = JSON.parse(input) as KGSaveData;
+      } catch (_error) {
+        // Expected, as we assume compressed input.
+        const uncompressed = this.host.game.decompressLZData(input);
+        try {
+          subjectData = JSON.parse(uncompressed) as KGSaveData;
+        } catch (_error) {
+          // Continued failure to parse as JSON might indicate newline-delimited JSON.
+          if (input.match(/\r?\n/)) {
+            return input.split(/\r?\n/).map(line => void internalImport(line));
+          }
+
+          throw new InvalidArgumentError(
+            "The provided input can not be parsed as anything we understand.",
+          );
+        }
+      }
+
+      // If game contains KS settings, import those separately.
+      let stateLabel: string | undefined;
+      if ("ks" in subjectData && !isNil(subjectData.ks)) {
+        const state = subjectData.ks.state[0];
+        stateLabel = this.storeState(state, makeImportLabel()) ?? undefined;
+        this.host.engine.imessage("state.imported.state");
+        subjectData.ks = undefined;
+      }
+
+      this.storeGame(subjectData, stateLabel);
+      this.host.engine.imessage("state.imported.game");
+    };
+
+    internalImport(userInput);
   }
 
   storeGame(game?: KGSaveData, label?: string): string | null {
