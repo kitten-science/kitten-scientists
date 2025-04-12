@@ -30,7 +30,7 @@ import { TimeControlManager } from "./TimeControlManager.js";
 import { TimeManager } from "./TimeManager.js";
 import { TradeManager } from "./TradeManager.js";
 import { cl } from "./tools/Log.js";
-import { type Cycle, Cycles, type Planet } from "./types/index.js";
+import { type Cycle, Cycles, type Locale, type Planet } from "./types/index.js";
 import { FallbackLocale, UserScriptLoader } from "./UserScriptLoader.js";
 import { VillageManager } from "./VillageManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
@@ -60,26 +60,7 @@ export type EngineState = {
   village: VillageSettings;
   workshop: WorkshopSettings;
 };
-export type GameLanguage =
-  | "en"
-  | "br"
-  | "cz"
-  | "de"
-  | "es"
-  | "fr"
-  | "fro"
-  | "it"
-  | "ja"
-  | "ko"
-  | "nl"
-  | "no"
-  | "pl"
-  | "ro"
-  | "ru"
-  | "tr"
-  | "uk"
-  | "zh"
-  | "zht";
+
 export type SupportedLocale = "de-DE" | "en-US" | "he-IL" | "zh-CN";
 
 export type TranslatedString<TKittenGameLiteral extends `$${string}`> =
@@ -116,7 +97,7 @@ export class Engine {
   private _activitySummary: ActivitySummary;
   private _timeoutMainLoop: number | undefined = undefined;
 
-  constructor(host: KittenScientists, gameLanguage: GameLanguage) {
+  constructor(host: KittenScientists, gameLanguage: Locale) {
     this.settings = new EngineSettings();
 
     this._i18nData = i18nData;
@@ -165,7 +146,7 @@ export class Engine {
     );
   }
 
-  setLanguage(language: GameLanguage, rebuildUI = true) {
+  setLanguage(language: Locale, rebuildUI = true) {
     const previousLocale = this.settings.locale.selected;
     if (!this.isLanguageSupported(language)) {
       console.warn(

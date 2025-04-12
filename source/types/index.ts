@@ -27,6 +27,7 @@ import type {
   ReservesPanel,
   UnsafeChallenge,
 } from "./challenges.js";
+import type { KGConfig } from "./config.js";
 import type {
   AllBuildingBtnOptions,
   AllBuildingResearchBtnOptions,
@@ -1157,6 +1158,61 @@ export const Perks = [
 ];
 export type Perk = (typeof Perks)[number];
 
+export const ColorSchemes = [
+  "anthracite",
+  "arctic",
+  "black",
+  "bluish",
+  "catnip",
+  "chocolate",
+  "computer",
+  "cyber",
+  "dark",
+  "default",
+  "dune",
+  "factory",
+  "fluid",
+  "gold",
+  "grassy",
+  "grayish",
+  "greenish",
+  "minimalist",
+  "oil",
+  "school",
+  "sleek",
+  "space",
+  "spooky",
+  "tombstone",
+  "unicorn",
+  "vessel",
+  "vintage",
+  "wood",
+] as const;
+export type ColorScheme = (typeof ColorSchemes)[number];
+
+export const Locales = [
+  "be",
+  "br",
+  "cz",
+  "de",
+  "en",
+  "es",
+  "esl",
+  "fr",
+  "it",
+  "ja",
+  "ko",
+  "pl",
+  "ru",
+  "uk",
+  "zh",
+  "zht",
+] as const;
+export type Locale = (typeof Locales)[number];
+
+export const Notations = ["si", "e", "sie"] as const;
+export type Notation = (typeof Notations)[number];
+
 export type CycleEffects = {
   "cryostation-coalMax": number;
   "cryostation-ironMax": number;
@@ -1274,6 +1330,7 @@ export type ClassList = {
     };
     UndoChange: UndoChange;
   };
+  KGConfig: KGConfig;
   managers: {
     Achievements: Achievements;
     BuildingsManager: BuildingsManager;

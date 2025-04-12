@@ -1,8 +1,9 @@
 import { sleep } from "@oliversalzburg/js-utils/async/async.js";
 import type { ConstructorOf } from "@oliversalzburg/js-utils/core.js";
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
-import type { EngineState, GameLanguage, SupportedLocale } from "./Engine.js";
+import type { EngineState, SupportedLocale } from "./Engine.js";
 import { cl } from "./tools/Log.js";
+import type { Locale } from "./types/index.js";
 
 export const FallbackLocale: SupportedLocale = "en-US";
 
@@ -57,7 +58,7 @@ export class UserScriptLoader {
       const game = mustExist(UserScriptLoader.window.game);
       const i18nEngine = mustExist(UserScriptLoader.window.$I);
       const gameLanguage = localStorage["com.nuclearunicorn.kittengame.language"] as
-        | GameLanguage
+        | Locale
         | undefined;
 
       return new UserScript(game, i18nEngine, gameLanguage, this._possibleEngineState);

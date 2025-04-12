@@ -17,6 +17,9 @@ export class EngineSettings extends Setting {
    */
   locale: SettingOptions<SupportedLocale>;
 
+  /**
+   * Use a dedicated column in the UI for KS.
+   */
   ksColumn: Setting;
 
   filters: LogFilterSettings;

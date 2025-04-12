@@ -7,6 +7,7 @@ import type { ChallengesManager, ChallengesTab } from "./challenges.js";
 import type { Console, Tab } from "./core.js";
 import type { Diplomacy, DiplomacyManager } from "./diplomacy.js";
 import type {
+  ColorScheme,
   Resource,
   ResourceCraftable,
   TabId,
@@ -157,7 +158,7 @@ export type GamePage = {
   clearSelectedObject: () => void;
   forceShowLimits: boolean;
   useWorkers: boolean;
-  colorScheme: string;
+  colorScheme: ColorScheme;
   unlockedSchemes: null;
   timer: Timer;
   /**

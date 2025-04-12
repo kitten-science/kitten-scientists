@@ -1,6 +1,7 @@
 // KGNet Savegame Storage
 
 import type { EngineState } from "../Engine.js";
+import type { ColorScheme } from "./index.js";
 
 export interface KGSaveData {
   ach: unknown;
@@ -26,8 +27,8 @@ export interface KGSaveData {
     forceShowLimits: unknown;
     isCMBREnabled: unknown;
     useWorkers: unknown;
-    colorScheme: unknown;
-    unlockedSchemes: unknown;
+    colorScheme: ColorScheme;
+    unlockedSchemes: Array<ColorScheme>;
     karmaKittens: unknown;
     karmaZebras: unknown;
     ironWill: unknown;
