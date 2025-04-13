@@ -207,7 +207,7 @@ export const BuyItemResultReasons = [
   "paid-for",
   "player-denied",
   "require-confirmation",
-];
+] as const;
 export type BuyItemResultReason = (typeof BuyItemResultReasons)[number];
 
 export type UnsafeBuyItemResult = {
@@ -468,7 +468,7 @@ export const BuildingEffects = [
   "temporalFluxMax",
   "unobtainiumPerTickSpace",
   "uraniumPerTickCon",
-];
+] as const;
 export type BuildingEffect = (typeof BuildingEffects)[number];
 
 export const Seasons = ["autumn", "spring", "summer", "winter"] as const;
@@ -648,7 +648,7 @@ export const Pacts = [
   "pactOfExtermination",
   "pactOfPurity",
   "payDebt",
-];
+] as const;
 export type Pact = (typeof Pacts)[number];
 
 export type AllBuildings =
@@ -881,7 +881,7 @@ export const Stats = [
   "totalYears",
   "transcendenceTier",
   "unicornsSacrificed",
-];
+] as const;
 export type Stat = (typeof Stats)[number];
 
 export const ChronoForgeUpgrades = [
@@ -1052,7 +1052,7 @@ export const ZebraUpgrades = [
   "darkRevolution",
   "minerologyDepartment",
   "whispers",
-];
+] as const;
 export type ZebraUpgrade = (typeof ZebraUpgrades)[number];
 
 export enum TimeItemVariant {
@@ -1099,7 +1099,7 @@ export const Biomes = [
   "swamp",
   "village",
   "volcano",
-];
+] as const;
 export type Biome = (typeof Biomes)[number];
 
 export type Unlocks = {
@@ -1155,7 +1155,7 @@ export const Perks = [
   "yesod",
   "zebraCovenant",
   "zebraDiplomacy",
-];
+] as const;
 export type Perk = (typeof Perks)[number];
 
 export const ColorSchemes = [
@@ -1296,7 +1296,7 @@ export const Challenges = [
   "pacifism",
   "postApocalypse",
   "winterIsComing",
-];
+] as const;
 export type Challenge = (typeof Challenges)[number];
 
 export type Link = {
