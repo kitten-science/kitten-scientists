@@ -3,7 +3,6 @@ import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Engine } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import type { BonfireItem } from "../settings/BonfireSettings.js";
-import type { AllItems } from "../settings/Settings.js";
 import { objectEntries } from "../tools/Entries.js";
 import { negativeOneToInfinity } from "../tools/Format.js";
 import { cl } from "../tools/Log.js";
@@ -53,7 +52,7 @@ import type { WorkshopManager } from "../WorkshopManager.js";
 
 export type BulkBuildListItem = {
   count: number;
-  id: AllItems;
+  id: AllBuildings;
   label?: string;
   name?: AllBuildings;
   stage?: number;
@@ -61,7 +60,7 @@ export type BulkBuildListItem = {
 };
 
 type BuildRequest = {
-  id: AllItems;
+  id: AllBuildings;
   prices: Array<Price>;
   priceRatio: number;
   source: TabId;
@@ -70,8 +69,9 @@ type BuildRequest = {
 };
 
 type PotentialBuild = {
-  id: AllItems;
-  name: string;
+  id: AllBuildings;
+  label?: string;
+  name?: AllBuildings;
   spot: number;
   count: number;
   prices: Array<Price>;
@@ -79,6 +79,7 @@ type PotentialBuild = {
   source: TabId;
   limit: number;
   val: number;
+  variant?: TimeItemVariant | UnicornItemVariant;
 };
 
 export class BulkPurchaseHelper {
@@ -102,7 +103,7 @@ export class BulkPurchaseHelper {
   bulk(
     builds: Partial<
       Record<
-        AllItems,
+        AllBuildings,
         {
           enabled: boolean;
           label?: string;
@@ -117,7 +118,7 @@ export class BulkPurchaseHelper {
     >,
     metaData: Partial<
       Record<
-        AllItems,
+        AllBuildings,
         Required<
           | UnsafeBuilding
           | UnsafeChronoForgeUpgrade
@@ -132,7 +133,6 @@ export class BulkPurchaseHelper {
     sectionTrigger: number,
     sourceTab: TabId,
   ): Array<BulkBuildListItem> {
-    const buildsPerformed: Array<BulkBuildListItem> = [];
     const potentialBuilds: Array<PotentialBuild> = [];
 
     // How many builds are on the list.
@@ -234,20 +234,11 @@ export class BulkPurchaseHelper {
           });
         }
 
-        // Create an entry in the build list for this building.
-        buildsPerformed.push({
-          count: 0,
-          id: name,
-          label: build.label,
-          name: (build.baseBuilding ?? build.building) as Building,
-          stage: build.stage,
-          variant: build.variant,
-        });
-
         // Create an entry in the cache list for the bulk processing.
         potentialBuilds.push({
           count: 0,
           id: name,
+          label: build.label,
           limit: build.max || 0,
           name: (build.baseBuilding ?? build.building) as Building,
           priceRatio: priceRatio,
@@ -255,6 +246,7 @@ export class BulkPurchaseHelper {
           source: sourceTab,
           spot: counter,
           val: buildMetaData.val,
+          variant: build.variant,
         });
 
         counter++;
@@ -330,14 +322,7 @@ export class BulkPurchaseHelper {
 
     console.debug(...cl(`Took '${iterations}' iterations to evaluate bulk build request.`));
 
-    for (const potentialBuild of potentialBuilds) {
-      const performedBuild = mustExist(
-        buildsPerformed.find(build => build.id === potentialBuild.id),
-      );
-      performedBuild.count = potentialBuild.count;
-    }
-
-    return buildsPerformed;
+    return buildsCommitted;
   }
 
   /**
@@ -362,7 +347,7 @@ export class BulkPurchaseHelper {
     buildCacheItem: BuildRequest,
     metaData: Partial<
       Record<
-        AllItems,
+        AllBuildings,
         Required<
           | UnsafeBuilding
           | UnsafeChronoForgeUpgrade
