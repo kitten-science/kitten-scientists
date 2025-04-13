@@ -110,6 +110,11 @@ export class VillageManager implements Automation {
   }
 
   autoElect(): void {
+    // We can't assign a leader in the Anarchy challenge.
+    if (this._host.game.challenges.isActive("anarchy")) {
+      return;
+    }
+
     const kittens = this._host.game.village.sim.kittens;
     const leader = this._host.game.village.leader;
     const job = this.settings.electLeader.job.selected;
