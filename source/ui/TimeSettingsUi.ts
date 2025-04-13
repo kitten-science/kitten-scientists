@@ -65,6 +65,21 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
         },
         renderLabelTrigger: false,
       }),
+      {
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger < 0;
+          this.settingItem.triggerButton.ineffective =
+            settings.enabled &&
+            settings.trigger < 0 &&
+            Object.values(settings.buildings).some(_ => _.enabled && 0 < _.max && _.trigger < 0);
+
+          this.expando.ineffective =
+            settings.enabled &&
+            Object.values(settings.buildings).some(
+              _ => _.enabled && (0 === _.max || (0 < _.trigger && 0 < settings.trigger)),
+            );
+        },
+      },
     );
 
     this.addChildrenContent([

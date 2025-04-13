@@ -74,18 +74,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
         renderLabelTrigger: false,
       }),
       {
-        onRefreshRequest: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-          this.settingItem.triggerButton.ineffective =
-            settings.enabled &&
-            settings.trigger < 0 &&
-            Object.values(settings.buildings).some(_ => _.enabled && 0 < _.max && _.trigger < 0);
-
+        onRefresh: () => {
           for (const [buildingName, building] of this._unicornBuildings.entries()) {
-            building.readOnly = this._bestUnicornBuilding.setting.enabled;
-            building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;
-            building.triggerButton.readOnly = this._bestUnicornBuilding.setting.enabled;
-
             building.elementLabel.attr("data-ks-active-from", "❊");
             building.elementLabel.attr("data-ks-active-to", "✮");
 
@@ -97,6 +87,25 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
             } else {
               building.elementLabel.removeClass(stylesTimeSkipHeatSettings.active);
             }
+          }
+        },
+        onRefreshRequest: () => {
+          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
+          this.settingItem.triggerButton.ineffective =
+            settings.enabled &&
+            settings.trigger < 0 &&
+            Object.values(settings.buildings).some(_ => _.enabled && 0 < _.max && _.trigger < 0);
+
+          this.expando.ineffective =
+            settings.enabled &&
+            Object.values(settings.buildings).some(
+              _ => _.enabled && (0 === _.max || (0 < _.trigger && 0 < settings.trigger)),
+            );
+
+          for (const [_, building] of this._unicornBuildings.entries()) {
+            building.readOnly = this._bestUnicornBuilding.setting.enabled;
+            building.maxButton.readOnly = this._bestUnicornBuilding.setting.enabled;
+            building.triggerButton.readOnly = this._bestUnicornBuilding.setting.enabled;
           }
         },
       },
