@@ -50,6 +50,7 @@ export class SellButton extends TextButton {
         this.element.text(
           this.host.engine.i18n("blackcoin.sell", [this.host.renderAbsolute(this.setting.sell)]),
         );
+
         options?.onRefresh?.();
       },
     });

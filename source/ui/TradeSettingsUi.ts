@@ -172,7 +172,7 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
             },
           },
         ),
-      ).addChildren([
+      ).addChildrenContent([
         new BuyButton(this, this.setting.tradeBlackcoin, locale),
         new SellButton(this, this.setting.tradeBlackcoin, locale),
       ]),

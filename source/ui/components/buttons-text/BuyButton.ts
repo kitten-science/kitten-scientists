@@ -50,7 +50,8 @@ export class BuyButton extends TextButton {
         this.element.text(
           this.host.engine.i18n("blackcoin.buy", [this.host.renderAbsolute(this.setting.buy)]),
         );
-        options?.onRefresh?.();
+
+        options?.onRefresh?.call(this);
       },
     });
 

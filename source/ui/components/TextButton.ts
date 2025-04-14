@@ -23,6 +23,8 @@ export class TextButton extends UiComponent {
         } else {
           this.element.removeClass(stylesButton.readonly);
         }
+
+        options?.onRefresh?.call(this);
       },
     });
 
