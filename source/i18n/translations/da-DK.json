@@ -152,6 +152,7 @@
   "state.import": "Import from clipboard",
   "state.imported.game": "Save imported.",
   "state.imported.state": "State imported.",
+  "state.importedState": "Imported state {0}",
   "state.importTitle": "Paste a save or settings from your clipboard.\nContents will be automatically detected and handled accordingly.",
   "state.loaded.game": "Save '{0}' loaded.",
   "state.loaded.state": "State '{0}' loaded.",

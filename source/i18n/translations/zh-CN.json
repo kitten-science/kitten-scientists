@@ -152,6 +152,7 @@
   "state.import": "从剪贴板导入",
   "state.imported.game": "保存导入。",
   "state.imported.state": "状态导入。",
+  "state.importedState": "Imported state {0}",
   "state.importTitle": "从剪贴板粘贴保存或设置。\n内容将被自动检测并进行相应处理。",
   "state.loaded.game": "已加载保存“{0}”。",
   "state.loaded.state": "已加载状态“{0}”。",
