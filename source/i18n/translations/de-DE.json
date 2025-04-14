@@ -152,6 +152,7 @@
   "state.import": "Einstellungen/Spielstände importieren",
   "state.imported.game": "Spielstand importiert.",
   "state.imported.state": "Zustand importiert.",
+  "state.importedState": "Imported state {0}",
   "state.importTitle": "Füge ein Spielstand oder Einstellungen aus deiner Zwischenablage ein.\nInhalte werden automatisch erkannt und entsprechend behandelt.",
   "state.loaded.game": "Spielstand '{0}' geladen.",
   "state.loaded.state": "Zustand '{0}' geladen.",
