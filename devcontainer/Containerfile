@@ -12,6 +12,7 @@ RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
 
 WORKDIR /kittensgame
 COPY "devcontainer/overlay/*" "./overlay/"
+COPY "devcontainer/res/*" "./res/"
 COPY "output/devcontainer/*" "./mod/"
 RUN [ "node", "mod/rewrite-index.mjs" ]
 RUN [ "node", "mod/inject-scripts.mjs", "overlay/kitten-scientists.inject.js" ]

@@ -30,7 +30,9 @@
     "includes": [
       "@types/**",
       "contrib/**",
-      "devcontainer/*.js",
+      "devcontainer/**/*.css",
+      "devcontainer/**/*.js",
+      "!devcontainer/overlay/*.inject*",
       "source/**",
       "*.*",
       "!package.json"

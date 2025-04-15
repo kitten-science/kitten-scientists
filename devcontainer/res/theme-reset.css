@@ -1,0 +1,1461 @@
+html,
+body {
+  height: initial;
+  overflow-y: initial;
+}
+
+body {
+  margin: initial;
+  padding: initial;
+  background-color: initial;
+  height: initial;
+}
+
+img.loader {
+  width: initial;
+  height: initial;
+}
+
+#gamePageContainer {
+  border: initial;
+  font: initial;
+  margin: initial;
+  padding: initial;
+  vertical-align: initial;
+
+  overflow: initial;
+  width: initial;
+}
+
+#topBar {
+  position: initial;
+  top: initial;
+  left: initial;
+  height: initial;
+  width: initial;
+  border-bottom: initial;
+
+  box-shadow: initial;
+  min-width: initial;
+
+  display: initial;
+  justify-content: initial;
+  white-space: initial;
+}
+
+#game,
+#loadingContainer {
+  position: initial;
+  bottom: initial;
+  top: initial;
+
+  width: initial;
+  min-width: initial;
+
+  margin: initial;
+  height: initial;
+
+  white-space: initial;
+}
+
+#loadingContainer .content {
+  display: initial;
+  flex-direction: initial;
+  justify-content: initial;
+  align-items: initial;
+  text-align: initial;
+  min-height: initial;
+
+  margin-left: initial;
+  margin-right: initial;
+}
+
+#game * {
+  white-space: initial;
+}
+
+#game.centered {
+  display: initial;
+  justify-content: initial;
+}
+
+.column {
+  min-height: initial;
+  height: initial;
+
+  display: initial;
+  margin-top: initial;
+}
+
+#leftColumn {
+  width: initial;
+  max-width: initial;
+  min-width: initial;
+  padding-left: initial;
+  padding-right: initial;
+
+  overflow-y: initial;
+  overflow-x: initial;
+}
+
+#midColumn {
+  width: initial;
+  overflow-y: initial;
+  overflow-x: initial;
+  margin-top: initial;
+}
+
+#rightColumn {
+  min-width: initial;
+  max-width: initial;
+  vertical-align: initial;
+  padding-left: initial;
+  top: initial;
+  position: initial;
+}
+
+.tabsContainer {
+  padding-bottom: initial;
+  padding-top: initial;
+  position: initial;
+  top: initial;
+}
+
+div#gameLog {
+  overflow-y: initial;
+}
+
+#footerLinks {
+  position: initial;
+  bottom: initial;
+  right: initial;
+}
+
+.tab {
+  text-decoration: initial;
+}
+
+.bldTopContainer {
+  padding-bottom: initial;
+  margin-bottom: initial;
+  height: initial;
+}
+
+.bldTopContainer > a,
+.bldTopContainer > span {
+  color: initial;
+  text-decoration: initial;
+}
+
+.activeTab {
+  color: initial;
+}
+
+.bldTopContainer > a.activeTab {
+  color: initial;
+}
+
+.resourceRow {
+  white-space: initial;
+}
+
+.resourceRow .resource-name,
+.resourceRow > td:first-child {
+  cursor: initial;
+}
+
+.clear {
+  clear: both;
+  float: none;
+}
+
+.dialog input[type="button"] {
+  background-color: initial;
+  cursor: initial;
+  box-shadow: initial;
+  border: initial;
+  border-radius: initial;
+  outline: initial;
+  color: initial;
+  padding: initial;
+}
+
+select {
+  background-color: initial;
+  color: initial;
+  padding-left: initial;
+}
+
+select > option {
+  background-color: initial;
+  color: initial;
+  padding: initial;
+}
+
+.nosel {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn {
+  border: initial;
+  padding: initial;
+  cursor: initial;
+  width: initial;
+  text-align: initial;
+  margin-bottom: initial;
+}
+
+.btn:hover {
+  cursor: initial;
+}
+
+.btn.disabled:hover {
+  cursor: initial;
+}
+
+.btn.disabled div.btnContent {
+  cursor: initial;
+}
+
+.btn.bldEnabled div.btnContent {
+  padding: initial;
+  border: initial;
+}
+
+.btn.bldlackResConvert div.btnContent {
+  padding: initial;
+  border: initial;
+}
+
+.btn .btnContent a {
+  max-width: initial;
+  overflow-x: initial;
+  text-overflow: initial;
+  display: initial;
+}
+
+.btn .btnContent a.small {
+  font-size: initial;
+  line-height: initial;
+}
+
+.btn .btnContent .btnTitle {
+  display: initial;
+  gap: initial;
+}
+
+.btn.small-text span {
+  font-size: initial;
+}
+
+.btn a:hover {
+  color: initial;
+  text-shadow: initial;
+}
+
+.btn .noRes {
+  color: initial;
+}
+
+.rawRes {
+  color: initial;
+}
+
+.dropdown-link {
+  cursor: initial;
+}
+
+.spacer {
+  border-bottom: initial;
+  margin-bottom: initial;
+}
+
+.highlited {
+  background-color: initial;
+}
+
+.dialog {
+  position: initial;
+  border: initial;
+
+  left: initial;
+  top: initial;
+
+  background-color: initial;
+  padding: initial;
+  box-shadow: initial;
+}
+
+.help {
+  width: initial;
+
+  margin-top: initial;
+  margin-left: initial;
+}
+
+.credits {
+  width: initial;
+  height: initial;
+
+  overflow-y: initial;
+
+  margin-top: initial;
+  margin-left: initial;
+}
+
+.credits li {
+  text-decoration: initial;
+  text-decoration-color: initial;
+  cursor: initial;
+}
+
+.disabled {
+  color: initial;
+}
+
+.tipr_content {
+  border: initial;
+  background-color: initial;
+  padding: initial;
+  margin: initial;
+}
+
+.panelContainer {
+  border: initial;
+  min-height: initial;
+  margin-top: initial;
+}
+
+.panelContainer .title {
+  padding: initial;
+  padding-left: initial;
+}
+
+.panelContainer .toggle {
+  border: initial;
+  margin: initial;
+  padding-left: initial;
+  padding-right: initial;
+  cursor: initial;
+}
+
+.panelContainer .container {
+  padding: initial;
+}
+
+.maxRes,
+select > option:disabled {
+  color: initial;
+}
+
+select > option:disabled {
+  font-style: initial;
+}
+
+.achievement {
+  display: initial;
+  margin-bottom: initial;
+  padding: initial;
+  padding-left: initial;
+  border: initial;
+}
+
+.achievement.badge {
+  display: initial;
+  width: initial;
+}
+
+.badges-container {
+  display: initial;
+  grid-template-columns: initial;
+}
+
+.badges-container .achievement-header {
+  grid-column: initial;
+}
+
+.achievement.unethical {
+  border-color: initial;
+}
+
+@media screen {
+  .achievement[title]::after {
+    content: initial;
+    transition: initial;
+    opacity: initial;
+    text-overflow: initial;
+    overflow: initial;
+  }
+  .achievement[title]:hover::after {
+    opacity: initial;
+  }
+}
+
+td.resLimitNotice,
+.res-cell.resLimitNotice {
+  color: initial;
+}
+
+td.resLimitWarn,
+.res-cell.resLimitWarn {
+  color: initial;
+  opacity: initial;
+}
+
+#tooltip {
+  position: initial;
+  border: initial;
+  padding: initial;
+  pointer-events: initial;
+}
+
+#tooltip.tooltip-in-right-column {
+  min-height: initial;
+  max-height: initial;
+  height: initial;
+  min-width: initial;
+  max-width: initial;
+  width: initial;
+  top: initial;
+  right: initial;
+  bottom: initial;
+  left: initial;
+}
+
+.tooltip-divider {
+  text-align: initial;
+  width: initial;
+  border-bottom: initial;
+  padding-bottom: initial;
+}
+
+.msg {
+  display: initial;
+}
+
+.msg.type_notice {
+  color: initial;
+}
+
+.msg.type_important {
+  color: initial;
+}
+
+.msg.type_alert {
+  color: initial;
+}
+
+.msg.type_urgent {
+  color: initial;
+}
+
+.msg.type_date {
+  color: initial;
+  margin-top: initial;
+  text-transform: initial;
+  font-size: initial;
+  border-bottom: initial;
+}
+
+.msg.type_date:first-child {
+  margin-top: initial;
+}
+
+#gameContainerId {
+  border: initial;
+  padding: initial;
+}
+
+.bldGroupContainer {
+  padding-top: initial;
+  border-top: initial;
+  margin-top: initial;
+  height: initial;
+}
+
+.btn.modern {
+  font-family: initial;
+  font-size: initial;
+  border-radius: initial;
+  border: initial;
+  padding: initial;
+  width: initial;
+}
+
+.btn.modern:hover {
+  border-color: initial;
+  background: initial;
+}
+
+.btn.modern.disabled {
+  border-color: initial;
+}
+
+.btn.modern.disabled:hover {
+  border-color: initial;
+  background: initial;
+}
+
+.modern .btnContent {
+  padding: initial;
+}
+
+.btn.modern a {
+  color: initial;
+  background-color: initial;
+  border-left: initial;
+  padding: initial;
+  margin: initial;
+  min-width: initial;
+  text-decoration: initial;
+}
+
+.btn.modern a.enabled {
+  color: initial;
+  font-weight: initial;
+}
+
+.btn.bldEnabled.modern div.btnContent,
+.btn.bldlackResConvert.modern div.btnContent {
+  border-width: initial;
+  padding: initial;
+}
+
+.button_tooltip .noRes,
+.limited {
+  color: initial;
+}
+
+.tabInner {
+  margin-bottom: initial;
+  padding: initial;
+  border: initial;
+  min-height: initial;
+}
+
+#toggleCenter {
+  opacity: initial;
+  cursor: initial;
+}
+
+#toggleCenter:hover {
+  opacity: initial;
+  text-decoration: initial;
+}
+
+table.craftTable tr:hover td {
+  background-color: initial;
+}
+
+.craftTable {
+  padding-bottom: initial;
+}
+
+#devPanel div {
+  display: initial;
+}
+
+.icons-container > div {
+  display: initial;
+}
+
+.toolbarIcon {
+  padding-right: initial;
+  font-size: initial;
+  cursor: initial;
+}
+
+.toolbarIcon.happiness div {
+  color: initial;
+}
+
+.toolbarIcon.energy div,
+.button_tooltip .energyProduction {
+  color: initial;
+}
+
+.toolbarIcon.energy.warningWinter div {
+  color: initial;
+}
+
+.toolbarIcon.pollutionIcon div {
+  color: initial;
+}
+
+.toolbarIcon .status-indicator-online {
+  color: initial;
+}
+
+.toolbarIcon .status-indicator-offline {
+  color: initial;
+}
+
+.toolbarIcon .pollutionText {
+  padding-left: initial;
+}
+
+.toolbarIcon .happinessText {
+  padding-left: initial;
+}
+
+.toolbarIcon .energyText {
+  padding-left: initial;
+}
+
+.toolbarIcon.pollutionIcon {
+  background: initial;
+}
+
+.toolbarIcon.happiness {
+  background: initial;
+}
+
+.toolbarIcon.energy {
+  background: initial;
+}
+
+.toolbarIcon.energy.warning {
+  background: initial;
+}
+
+.toolbarIcon.energy.warningWinter {
+  background: initial;
+}
+
+.kgnet-login-link {
+  cursor: initial;
+}
+
+.kgnet-login-link:hover {
+  cursor: initial;
+  text-decoration: initial;
+}
+
+/* kgnet login form */
+.login-popup {
+  position: initial;
+  top: initial;
+  padding: initial;
+  background: initial;
+  z-index: initial;
+
+  margin-left: initial;
+  font-size: initial;
+}
+
+.login-popup .last-backup {
+  margin-bottom: initial;
+  border-bottom: initial;
+}
+
+.login-popup .error {
+  max-width: initial;
+  display: initial;
+  white-space: initial;
+  color: initial;
+}
+
+.hazard {
+  background-image: initial;
+  background-size: initial;
+  display: initial;
+  height: initial;
+  width: initial;
+}
+
+.login-popup a.link {
+  text-decoration: initial;
+}
+
+.login-popup .row {
+  display: initial;
+}
+
+.login-popup .row a,
+input {
+  margin-right: initial;
+}
+
+.login-popup .userProfile {
+  line-height: initial;
+}
+
+.login-popup .userProfile a {
+  vertical-align: initial;
+}
+.login-popup .userProfile img {
+  border-radius: initial;
+  margin-right: initial;
+}
+
+.tooltip-block {
+  cursor: initial;
+  padding-left: initial;
+  display: initial;
+}
+
+.tooltip-block > div {
+  z-index: initial;
+  padding: initial;
+}
+
+.tooltip-block > div {
+  border: initial;
+}
+
+.save-record-container {
+  display: initial;
+}
+
+.save-record {
+  display: initial;
+}
+
+.save-record.header {
+  display: initial;
+  font-style: initial;
+  opacity: initial;
+  border-bottom: initial;
+}
+
+.save-record-cell {
+  display: initial;
+  padding-right: initial;
+}
+
+.save-record input {
+  width: initial;
+}
+
+.userProfile .save-record {
+  display: initial;
+  padding-top: initial;
+}
+
+.save-record span,
+a {
+  display: initial;
+  padding-right: initial;
+}
+
+span.genericWarning,
+.toolbarIcon.energy.warning div,
+.button_tooltip .energyConsumption,
+.button_tooltip .energyPenalty {
+  color: initial;
+}
+
+.attitude {
+  color: initial;
+  font-size: initial;
+}
+
+.attitude:before {
+  content: initial;
+}
+
+.attitude:after {
+  content: initial;
+}
+
+.trade-race > .left {
+  width: initial;
+  float: initial;
+}
+
+.trade-race > .right {
+  width: initial;
+  float: initial;
+}
+
+.trade-race .buys {
+  color: initial;
+  min-width: initial;
+  display: initial;
+}
+
+.trade-race .sells {
+  color: initial;
+  min-width: initial;
+  display: initial;
+}
+
+.trade-race .tradeAmount {
+  color: initial;
+}
+
+.trade-race .tradeAmount:before {
+  content: initial;
+}
+
+.trade-race .tradeAmount:after {
+  content: initial;
+}
+
+.btn.explore {
+  float: initial;
+  margin-right: initial;
+}
+
+label {
+  cursor: initial;
+}
+
+label i {
+  font-size: initial;
+  color: initial;
+}
+
+label:hover {
+  opacity: initial;
+}
+
+.save-record.archived .save-record-cell,
+.save-record.archived .save-record-cell * {
+  text-decoration: initial;
+  color: initial;
+}
+
+/* -----------------------------------
+          Options
+-----------------------------------*/
+
+#optionsDiv {
+  overflow-y: initial;
+  height: initial;
+  margin-top: initial;
+}
+
+#optionsDiv input[type="checkbox"] {
+  display: initial;
+}
+
+#optionsDiv input[type="checkbox"] + label:before {
+  content: initial;
+  display: initial;
+  font: initial;
+  margin: initial;
+}
+
+#optionsDiv input[type="checkbox"]:checked + label:before {
+  content: initial;
+  font: initial;
+}
+
+.achievement {
+  cursor: initial;
+}
+
+.achievement-header .star {
+  padding-left: initial;
+  margin-top: initial;
+  font-size: initial;
+  color: initial;
+}
+
+.achievement .star {
+  float: initial;
+  padding-right: initial;
+  margin-top: initial;
+  font-size: initial;
+  color: initial;
+}
+
+.achievement.starUnlocked .star {
+  text-shadow: initial;
+}
+
+.statTable tr td:nth-child(2) {
+  padding-left: initial;
+}
+
+h1 {
+  font-size: initial;
+  color: initial;
+  text-transform: initial;
+  margin-top: initial;
+  font-weight: initial;
+}
+
+.expandAllBar {
+  float: initial;
+}
+
+#gameLog span.msg:not(.type_date) {
+  display: initial;
+  margin-left: initial;
+  list-style-type: initial;
+}
+
+#gameLog span.noBullet {
+  list-style-type: initial;
+}
+
+#calendarDiv {
+  white-space: initial;
+}
+
+.right-tab-header {
+  margin-top: initial;
+}
+
+.right-tab-header a {
+  padding: initial;
+  padding-left: initial;
+  padding-right: initial;
+}
+
+.right-tab-header a.active {
+  text-decoration: initial;
+  border-top: initial;
+}
+.right-tab-header a:not(.active) {
+  text-decoration: initial;
+}
+
+#observeButton {
+  text-align: initial;
+  margin-top: initial;
+  height: initial;
+}
+
+.right-tab {
+  height: initial;
+  overflow-y: initial;
+}
+
+.toolbarIcon.sorrow div {
+  color: initial;
+}
+
+.toolbarIcon.sorrow.max div {
+  color: initial;
+}
+
+#adsColumn {
+  float: initial;
+  padding-right: initial;
+}
+
+.adblock-container {
+  padding: initial;
+}
+
+.adblock-header a {
+  font-size: initial;
+}
+
+.adblock {
+  padding-top: initial;
+}
+
+a {
+  color: initial;
+}
+
+a:hover {
+  opacity: initial;
+}
+
+.freshMessage {
+  animation: pulse 5s infinite;
+  -webkit-animation: pulse 5s infinite;
+  -moz-animation: pulse 5s infinite;
+  -o-animation: pulse 5s infinite;
+}
+
+.flavor {
+  float: initial;
+  display: initial;
+}
+
+.effectName {
+  float: initial;
+  clear: initial;
+  font-size: initial;
+  color: initial;
+}
+
+/*------------------------------*/
+.tooltip-inner {
+  width: initial;
+}
+
+.tooltip-inner .desc {
+  max-width: initial;
+  text-align: initial;
+  width: initial;
+  padding-top: initial;
+  font-size: initial;
+  color: initial;
+}
+
+.tooltip-inner .desc.small {
+  font-size: initial;
+  opacity: initial;
+}
+
+.links-block a {
+  text-decoration: initial;
+  padding-left: initial;
+  padding-right: initial;
+}
+
+#topBar .links-block a {
+  padding-left: initial;
+  padding-right: initial;
+}
+
+.links-block a:hover {
+  text-decoration: initial;
+}
+
+.crypto-trade .btn {
+  display: initial;
+  margin-right: initial;
+  width: initial;
+}
+
+progress[value] {
+  -webkit-appearance: initial;
+  appearance: initial;
+  height: initial;
+  display: initial;
+  width: initial;
+  margin-bottom: initial;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: initial;
+}
+
+progress[value]::-webkit-progress-value {
+  background-color: initial;
+}
+
+#loadingProgressInfo {
+  padding-top: initial;
+}
+
+/*======================================================================*/
+
+::-webkit-scrollbar {
+  width: initial;
+  height: initial;
+}
+
+::-webkit-scrollbar {
+  width: initial;
+  height: initial;
+}
+
+::-webkit-scrollbar-button {
+  width: initial;
+  height: initial;
+}
+
+::-webkit-scrollbar-thumb {
+  background: initial;
+  border-radius: initial;
+}
+
+::-webkit-scrollbar-track {
+  background: initial;
+  border-radius: initial;
+}
+
+::-webkit-scrollbar-corner {
+  background: initial;
+}
+
+/*======================================================================*/
+
+.button_tooltip {
+  background: initial;
+  backdrop-filter: initial;
+
+  color: initial;
+  z-index: initial;
+}
+
+.tooltip-content {
+  background-color: initial;
+  border: initial;
+  position: initial;
+  margin-top: initial;
+  margin-left: initial;
+  padding-right: initial;
+}
+
+.copyright {
+  text-decoration: initial;
+}
+
+.copyright:hover {
+  text-decoration: initial;
+}
+
+.link {
+  cursor: initial;
+  padding-right: initial;
+}
+
+a.link.collapse {
+  opacity: initial;
+}
+
+a.link.collapse:hover {
+  opacity: initial;
+}
+
+.res-toolbar {
+  display: initial;
+  user-select: initial;
+}
+
+.res-toolbar.right {
+  text-align: initial;
+  margin-right: initial;
+  float: initial;
+}
+
+.res-toolbar .link.toggled {
+  color: initial;
+}
+
+.res-table {
+  max-width: initial;
+  width: initial;
+  display: initial;
+  border-collapse: initial;
+  border-spacing: initial;
+}
+
+.res-toggle-hidden {
+  margin-top: initial;
+}
+
+.res-row {
+  padding-bottom: initial;
+  display: initial;
+}
+
+.res-row.craft:hover {
+  background-color: initial;
+}
+
+.res-cell {
+  padding-left: initial;
+  padding-right: initial;
+  display: initial;
+  white-space: initial;
+
+  overflow-x: initial;
+  text-overflow: initial;
+}
+
+.res-cell.resource-name {
+  width: initial;
+  max-width: initial;
+}
+
+.res-row.hidden .res-cell.resource-name {
+  text-decoration: initial;
+  text-decoration-style: initial;
+}
+
+.res-cell.resource-value {
+  width: initial;
+  max-width: initial;
+}
+
+.res-cell.resPerTick {
+  cursor: initial;
+}
+
+.res-cell.positive-weather {
+  color: initial;
+}
+
+.res-cell.negative-weather {
+  color: initial;
+}
+
+.res-cell.craft-link {
+  cursor: initial;
+  width: initial;
+  max-width: initial;
+}
+
+.res-cell.craft-link .plusPrefix {
+  font-size: initial;
+}
+
+.res-cell.craft-link.all {
+  font-size: initial;
+  opacity: initial;
+}
+
+.res-cell.craft-link:hover {
+  text-decoration: initial;
+  text-shadow: initial;
+}
+
+.res-cell.craft-link:active {
+  animation: pulseShort 0.5s;
+  -webkit-animation: pulseShort 0.5s;
+  -moz-animation: pulseShort 0.5s;
+  -o-animation: pulseShort 0.5s;
+  user-select: none;
+}
+
+.map-viewport {
+  border: initial;
+  height: initial;
+  padding: initial;
+}
+
+/*--------------------------------------
+              Village
+---------------------------------------*/
+.currentGovernment a {
+  width: initial;
+}
+.currentLeader .name {
+  background: initial;
+  padding-left: initial;
+  font-weight: initial;
+}
+.census-block {
+  border: initial;
+  margin-bottom: initial;
+  padding: initial;
+  min-height: initial;
+}
+
+.census-block .info {
+  padding-bottom: initial;
+}
+
+.census-block .skill {
+  font-size: initial;
+}
+
+.census-block .links-container {
+  float: initial;
+  display: initial;
+  grid-template-columns: initial;
+  gap: initial;
+}
+
+.census-block .links-container span {
+  width: initial;
+}
+
+.census-block .links-container span:hover {
+  background-color: initial;
+}
+
+.census-block .links-container span:active {
+  text-shadow: initial;
+}
+
+.census-block .links-container a {
+  grid-column: initial;
+}
+
+.name.color-brown {
+  color: saddlebrown;
+}
+.name.color-cream {
+  color: tan;
+}
+.name.color-black {
+  color: dimgray;
+}
+.name.color-fawn {
+  color: sandybrown;
+}
+.name.color-white {
+  color: silver;
+}
+
+/*credits go to Volk*/
+.name.variety-none {
+  border: 1px solid transparent;
+}
+.name.variety-dual {
+  /* bicolore */
+  border: 1px solid grey;
+}
+.name.variety-tabby {
+  /* tigré  ou rayé */
+  border: 1px dashed grey;
+}
+.name.variety-torbie {
+  /* marbré strié */
+  border: 1px dashed grey;
+  border-left: dotted;
+  border-right: dotted;
+}
+.name.variety-calico {
+  /* tricolore */
+  border: 1px solid grey;
+  border-top-color: saddlebrown;
+  border-bottom-color: peru;
+}
+.name.variety-spots {
+  /* tacheté */
+  border: 1px dotted grey;
+}
+
+/*--------------------------------------
+              Map
+--------------------------------------*/
+
+.map-container {
+  overflow: initial;
+}
+
+.map-viewport {
+  max-width: initial;
+  overflow: initial;
+}
+
+.map-row {
+  white-space: initial;
+}
+
+.map-cell {
+  border: initial;
+  width: initial;
+  height: initial;
+  display: initial;
+  margin: initial;
+  cursor: initial;
+
+  fill: initial;
+  user-select: initial;
+}
+
+.map-cell.focused {
+  border: initial;
+}
+
+.map-cell.selected {
+  border: initial;
+}
+
+.map-cell.active {
+  animation: border-pulse 4s infinite;
+  -webkit-animation: border-pulse 4s infinite;
+  -moz-animation: border-pulse 4s infinite;
+  -o-animation: border-pulse 4s infinite;
+}
+
+.map-cell.locked {
+  visibility: initial;
+}
+
+.map-cell .coord {
+  font-size: initial;
+  color: initial;
+}
+.map-cell .label {
+  position: initial;
+  float: initial;
+}
+
+.map-cell progress {
+  height: initial;
+  display: initial;
+  width: initial;
+  margin-bottom: -initial;
+  -webkit-appearance: initial;
+  appearance: initial;
+}
+
+.map-cell .tooltip-content {
+  margin-left: initial;
+  position: initial;
+  float: initial;
+  z-index: initial;
+}
+
+.map-cell .tooltip-content div {
+  white-space: initial;
+}
+
+.map-viewport,
+.map-dashboard {
+  display: initial;
+  vertical-align: initial;
+  border: initial;
+  height: initial;
+  margin-right: initial;
+}
+
+.map-dashboard {
+  width: initial;
+  padding: initial;
+}
+
+.map-dashboard .btn {
+  width: initial;
+}
+
+div.blaze {
+  animation: blaze-rainbow 3s linear infinite;
+  -webkit-animation: blaze-rainbow 3s linear infinite;
+  -moz-animation: blaze-rainbow 3s linear infinite;
+  -o-animation: blaze-rainbow 3s linear infinite;
+}
+
+div.hail {
+  animation: hail-rainbow 1.5s linear infinite;
+  -webkit-animation: hail-rainbow 1.5s linear infinite;
+  -moz-animation: hail-rainbow 1.5s linear infinite;
+  -o-animation: hail-rainbow 1.5s linear infinite;
+}
+
+div.pray {
+  animation: pray-rainbow 1.5s linear infinite;
+  -webkit-animation: pray-rainbow 1.5s linear infinite;
+  -moz-animation: pray-rainbow 1.5s linear infinite;
+  -o-animation: pray-rainbow 1.5s linear infinite;
+}
+
+div.leet {
+  font-family: initial;
+  text-align: initial;
+  color: initial;
+  background-color: initial;
+}
+
+.pin-link {
+  padding-left: initial;
+}
+
+#crowdjet-expand-container {
+  bottom: initial;
+  right: initial;
+  width: initial;
+  height: initial;
+  cursor: initial;
+}
+
+#crowdjet-expand-container iframe {
+  display: initial;
+}
+
+.queue-container .queue-label {
+  cursor: initial;
+}
+
+.queue-container .queue-label:hover {
+  text-decoration: initial;
+}
