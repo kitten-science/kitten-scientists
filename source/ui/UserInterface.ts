@@ -71,7 +71,7 @@ export class UserInterface extends UiComponent {
     ];
 
     this.parent = this;
-    this.element = $("<div/>").addClass(styles.ui);
+    this.element = $("<div/>").addClass("kitten-scientists").addClass(styles.ui);
     for (const section of [this._engineUi, ...this._sections]) {
       this.addChild(section);
     }
