@@ -280,7 +280,7 @@ export class TradeManager implements Automation {
     const culture = this._workshopManager.getResource("culture");
     let cultureVal = 0;
     const trigger = this.settings.buildEmbassies.trigger;
-    if (culture.value / culture.maxValue < trigger) {
+    if (culture.value / culture.maxValue < negativeOneToInfinity(trigger)) {
       return;
     }
 
