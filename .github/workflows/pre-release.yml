@@ -238,7 +238,9 @@ jobs:
             ${{ needs.publish-devcontainer.outputs.publish-url && format('- Devcontainer published at <{0}>', needs.publish-devcontainer.outputs.publish-url) }}
             ${{ needs.publish-npm.outputs.publish-url && format('- npm package published at <{0}>', needs.publish-npm.outputs.publish-url) }}
           changelog-artifact: changelog.json
-          draft: true
+          # If we only _draft_ the release, the release-info action (which runs later)
+          # will not find any artifacts to put in the update metadata, because the release is still a draft.
+          draft: false
           dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
           files: output/*
           merge-similar: true
