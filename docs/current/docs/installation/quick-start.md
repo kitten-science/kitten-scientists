@@ -6,7 +6,7 @@ The file you need to put into your userscript manager is available from the [Rel
 
 1. The **latest stable** release.
 
-    <https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.9>
+    <https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.10>
 
     This is a release with a familiar version number, that has been designated as a reasonably stable version to use.
     

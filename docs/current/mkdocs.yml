@@ -90,5 +90,5 @@ nav:
       - Kitten DnA: advanced/dna.md
   - Development:
       - Getting Started: development/development.md
-      - Kitten Engineers: development/engineers.md
+      - Development Container: development/devcontainer.md
   - Hall of Honor: hall-of-honor.md

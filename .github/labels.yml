@@ -48,9 +48,6 @@ labels:
   status:duplicate:
     color: "c7def8"
     description: This problem has already been reported
-  status:engineers-candidate:
-    color: "c7def8"
-    description: See https://kitten-science.com/engineers/
   status:fixed:
     color: "c7def8"
     description: This problem has been solved

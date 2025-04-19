@@ -155,43 +155,43 @@ yarn kitten-scientists:release
 
 ### Releasing a New Version
 
-1. Have your release notes ready. You can draft them in the `CHANGELOG.md` and copy the auto-generated changes for the release from the GitHub release later.
+1.  Have your release notes ready. You can draft them in the `CHANGELOG.md` and copy the auto-generated changes for the release from the GitHub release later.
 
-1. Build a preview of the script:
+1.  Build a preview of the script:
 
     ```bash
     yarn kitten-scientists:preview
     ```
 
-1. Load the built preview into a userscript manager in Chrome and perform a quick, manual test.
+1.  Load the built preview into a userscript manager in Chrome and perform a quick, manual test.
 
     1. Does the script load at all?
     1. Are settings restored to expectation?
     1. Are settings saved when they are changed?
 
-1. Create a tag for this version:
+1.  Create a tag for this version:
 
     ```bash
-    git tag v2.0.0-beta.10
+    git tag -s v2.0.0-beta.11 -m "2.0.0-beta.11"
     ```
 
-1. Push the tag:
+1.  Push the tag:
 
     ```bash
     git push --tags
     ```
 
-1. Edit the drafted release on GitHub. Leave it drafted. Publish it when all release tasks have been completed.
+1.  Edit the drafted release on GitHub. Leave it drafted. Publish it when all release tasks have been completed.
 
-1. Raise the version number in `packages/kitten-scientists/package.json` to a **higher version that will be in development next**!
+1.  Raise the version number in [`package.json`](/package.json) to a **higher version that will be in development next**!
 
-1. Update the `README.md` to point the bookmarklet to the new script.
+1.  Update the [`README.md`](/README.md) to point the latest stable release.
 
-1. Update the `packages/documentation/installation.md` to point to the latest version number.
+1.  Update the [`docs/current/docs/installation/quick-start.md`](/docs/current/docs/installation/quick-start.md) to point to the latest version number.
 
-1. Update the `.github/bug_report.yml` to mention the latest version number.
+1.  Update the [`.github/ISSUE_TEMPLATE/bug_report.yml`](/.github/ISSUE_TEMPLATE/bug_report.yml) to mention the latest version number.
 
-1. Ultimately, search the entire project code base for the previous version string, like `2.0.0-beta.9`. Make sure to also search for `beta.9`, `beta9`, and references to _future_ releases that need to point to the _new future_ release!
+1.  Ultimately, search the entire project code base for the previous version string, like `2.0.0-beta.10`. Make sure to also search for `beta.10`, `beta10`, and references to _future_ releases that need to point to the _new future_ release!
 
 !!! note
 
