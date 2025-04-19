@@ -155,6 +155,8 @@ yarn kitten-scientists:release
 
 ### Releasing a New Version
 
+1. Have your release notes ready. You can draft them in the `CHANGELOG.md` and copy the auto-generated changes for the release from the GitHub release later.
+
 1. Build a preview of the script:
 
     ```bash
@@ -178,6 +180,8 @@ yarn kitten-scientists:release
     ```bash
     git push --tags
     ```
+
+1. Edit the drafted release on GitHub. Leave it drafted. Publish it when all release tasks have been completed.
 
 1. Raise the version number in `packages/kitten-scientists/package.json` to a **higher version that will be in development next**!
 
