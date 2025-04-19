@@ -75,7 +75,11 @@ export class WorkshopManager extends UpgradeManager implements Automation {
           this.settings.unlockUpgrades.trigger,
           setting.trigger,
         );
-        if (trigger < 0 || available < resource.maxValue * trigger || available < price.val) {
+        if (
+          trigger < 0 ||
+          (0 < trigger && available < resource.maxValue * trigger) ||
+          available < price.val
+        ) {
           continue workLoop;
         }
       }
