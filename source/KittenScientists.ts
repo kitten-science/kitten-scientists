@@ -195,6 +195,16 @@ export class KittenScientists {
       const releaseInfo = (await response.json()) as ReleaseInfoSchema;
       console.debug(...cl(releaseInfo));
 
+      if (
+        isNil(releaseInfo[RELEASE_CHANNEL].version) ||
+        releaseInfo[RELEASE_CHANNEL].version === ""
+      ) {
+        console.debug(
+          "Could not read current version for our release channel from provided metadata!",
+        );
+        return;
+      }
+
       if (!isNil(RELEASE_VERSION) && gt(releaseInfo[RELEASE_CHANNEL].version, RELEASE_VERSION)) {
         this.engine.imessage("status.ks.upgrade", [
           releaseInfo[RELEASE_CHANNEL].version,
