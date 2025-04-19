@@ -1,6 +1,100 @@
 # v2.0.0-beta.10
 
-_in progress_
+The 10th beta has arrived. Additionally, the project has had it's 10 year anniversary. Congratulations to us!
+
+Sadly, we've had a bit of a rough ride since the beta 9 release. Not only did it introduce a lot of new problems, the game itself was updated soon after, breaking almost everything.
+
+We've invested a lot of time to address issues at their core, instead of adding more hacks. The code base has received [~80K changes since beta 9](https://github.com/kitten-science/kitten-scientists/compare/v2.0.0-beta.9...v2.0.0-beta.10). Read on to learn why.
+
+## Notable Changes
+
+1.  Full Game API Support
+
+    When the original Kitten Scientists 1.5 was ported from raw JavaScript to TypeScript, we only described those parts of the game that we actively used already. While that still required thousands of lines of code, it was only a fraction of the functionality that the game actually exposes.
+
+    This has been a pain for a while, because it makes innovation harder, if you never see the full capabilities during development. It was also clear for a long time already that certain code in the script is problematic. We don't need to go into details, because it was exactly some of that code which caused the script to break during the recent game update.
+
+    Thus, we described the _entire_ game API in TypeScript now. In itself, this wouldn't be very exciting to users, but it enabled several of the further changes below.
+
+1.  Reduced DOM Searches
+
+    Some parts of Kitten Scientists really just search the actual game user interface for a button in the HTML structure of the current page, and then try to click on that button.
+
+    Not only that, the button is looked for during every iteration to look into the "data model" associated with it, to read metadata of the game state through it.
+
+    That's a complicated way of saying: We take a lot of steps to do something that could be done in one.
+
+    Remember that Kitten Scientists is more than 10 years old today. These things were not possible back then, the game was very different, and this approach worked well enough for all that time.
+
+1.  All Policies are supported
+
+    Noteworthy, but the title pretty much says it all already. I'm sure there will be more policies in the future, and we will need to add those as well, but we're good again for the time being.
+
+1.  Improved Challenges Support
+
+    The unique effects of some challenges are not always properly considered by the script. We've found several of those cases, and were able to support them from now on.
+
+    We are aware of more issues with challenges, which we will try to address for the next release.
+
+1.  UI Regression Recovery & _Ineffective_ States
+
+    Users were rightfully frustrated with the state of the user interface they were left with in the beta 9 release. Combined with the new default settings, users had a hard time seeing any of this as an improvement.
+
+    It's very hard to recover a failed user interface change, after it left a bad impression. For the time being, we'll try to at least get the concepts consistent, so that they _can_ make sense.
+
+    Sadly, it became clear, that the underlying UI framework of Kitten Scientists would not scale to allow for our new ideas to really apply consistently everywhere. This required so much new code to resolve, that the UI could now have new problems. That being said, we addressed several issues.
+
+    1.  Panel Legibility
+
+        We introduced the _inactive_ state to try to draw focus to those UI elements that currently have an impact on game play, and give visual feedback when you toggle sections on and off.
+
+        Thanks to users who actively provided feedback early on after the release, we were able to refine the behavior. Let us know if it's still not right.
+
+    1.  Auto-Prompt for Required Values
+
+        As the new default settings are empty, there is a lot of potential to miss entering a required value.
+
+        Now, when you enable an option, you will often be instantly prompted to enter the required value. Additionally, if the configuration is still incomplete, we now actively signal this through the UI.
+
+    1.  _Ineffective_ States
+
+        There was already a minimal approach of this in beta 9, but it required a lot of additional effort to make it properly useful. Allowing any setting in the UI to signal up to the root element, that it is currently ineffective, was a nice idea, but our code base didn't really allow for things like that.
+
+        With all the new UI framework code, hopefully, we got the concept more consistent now. We know that it will require more work, because it's really not obvious how to implement this for _all_ settings. Stay tuned.
+
+    1.  Highlight next best Unicorn Building
+
+        When you use the **Automate Build Order** automation in the Religion section, you might have wondered for a long time: _"Which one does it actually want to build right now?"_
+
+        You should now see a small animated indicator in the Kitten Scientists UI next to the option that is up next.
+
+1.  More Import Options in State Management
+
+    The import process in the **State Management** section can now detect even more inputs than before. You can paste an entire backup in there, and _all_ presets from the backup are important.
+
+    The backup functionality was initially only intended to provide _some_ way to extract all your settings out of the browser. We've now extended the backups to include the labels and times of your stored settings entries, so that you can have those restored as well.
+
+    The previous backups should import just fine, but they will get an auto-generated label, so that you don't get prompted for every single entry.
+
+1.  Removed Experimental Extensions from Repository
+
+    Experiments like Kitten Analysts, and Kitten Engineers are fun, but they produce a lot of noise in the repository and regularly cause problems that have an impact on Kitten Scientists development.
+
+    All of these projects have been removed from the repository. Now it's all about Kitten Scientists again.
+
+    The other projects still live on, in the Kitten Science GitHub organization.
+
+1.  Improved Developer Logs
+
+    When you open the developer tools in your browser, you can read the JavaScript console. Kitten Scientists also write messages to this console. This can be very helpful to locate the source of issues.
+
+    However, the way it was previously implemented, all log messages would point to a single source code location as their origin, because all log messages were written by a helper construct.
+
+    This was resolved by rewriting every single location that logs a message. Totally worth it though.
+
+_Enjoy the anniversary beta release!_
+
+**`auto-generated changelog goes here`**
 
 # v2.0.0-beta.9
 
@@ -12,9 +106,9 @@ We also imagined that we would make big strides with "Kitten Engineers", which w
 
 However, KS has improved core behaviors, and gives users a lot more control. We also changed the default settings of KS to incentivize exploration and experimentation, instead of giving the impressions that the default settings are a good default - they never were.
 
-## Noteable Changes
+## Notable Changes
 
-1. New UI
+1.  New UI
 
     The user interface of KS has gone through several iterations in this release cycle. We know that UI changes are never something users really look forward to, unless the UI was horrible to begin with.
 
@@ -24,27 +118,27 @@ However, KS has improved core behaviors, and gives users a lot more control. We 
 
     Sometimes you have a limit value right next to a trigger, which is entirely different from a trigger that also displays its value. There are very subtle visual hints to help you distinguish the individual cases, but this is non-obvious to long-term users especially.
 
-1. Many sections now allow their individual items to be triggered by their own individual trigger, instead of just having a single trigger for the entire section.
+1.  Many sections now allow their individual items to be triggered by their own individual trigger, instead of just having a single trigger for the entire section.
 
     The triggers on the section itself still exist, but they are now the _default_ trigger for builds, unless the builds have their own trigger set. This is more confusing to explain than to experience. Just try out clicking on the new buttons, and let yourself be guided.
 
-1. The default settings are now complete garbage.
+1.  The default settings are now complete garbage.
 
     While this sounds like a step backwards, we hope to encourage users to find the settings that are correct _for them_, instead of blindly enabling options with default settings, because they might _feel_ like a good idea. Make educated decisions. KS will perform your tasks, but it does not play the game for you.
 
-1. Experimental purchasing mechanics.
+1.  Experimental purchasing mechanics.
 
     While we are aware that this new approach has bugs, we still hope that it is an improvement over the previous purchasing algorithm. Ultimately, a lot of purchasing decisions in KS are deferred to a single component. This component makes decisions on purchasing that often felt not ideal. We tuned this behavior to allow more constructions, with more even distribution of spending the available budget.
 
     There are still a lot of known issues with this approach, but it seems to provide better results as-is in real gameplay. That's why this half-cooked change is now in the mainline stable build. We hope that most users will feel the benefits, and don't notice the edge case bugs.
 
-1. Eco Mode
+1.  Eco Mode
 
     The "Limited" option in KS has always been confusing. We now renamed it to "Eco Mode" to make it more abstract, and prevent people from forming an idea of what the feature _should_ be. Forget everything you know about "Limited Mode". The new thinking is: Either you want to craft the thing as much and as fast as possible, or you want to take a more conservative approach, whatever that means.
 
     Until we solidify what Eco Mode actually is, we hope that users will feel more comfortable with the less descriptive option, that just provides an acceptable feeling of aggressive vs conservative investment.
 
-1. Kitten Analysts
+1.  Kitten Analysts
 
     During this development cycle, an excessive amount of energy has been poured into Kitten Analysts, which contribute exactly zero to your KG gameplay as a regular user. So what is Kitten Analysts, if we invested so much time into something so useless?
 
@@ -550,7 +644,7 @@ However, KS has improved core behaviors, and gives users a lot more control. We 
 
 # v2.0.0-beta.8
 
-## Noteable Changes
+## Notable Changes
 
 -   Kitten Scientists now has a new home at <https://kitten-science.com>.
 -   You should now see upgrade notifications in the game log, when new KS versions are available.
