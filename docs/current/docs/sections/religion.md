@@ -58,10 +58,8 @@ Converts your worship into epiphany, whenever you will regain `Trigger` percent 
 
 Converts your faith to worship, when you have filled your capacity to `Trigger` percent.
 
-<!-- prettier-ignore-start -->
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[BLS]: Black Liquid Sorrow
 *[TC]: Time Crystal
 *[TCs]: Time Crystals
-<!-- prettier-ignore-end -->

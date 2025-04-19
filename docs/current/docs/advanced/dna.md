@@ -31,8 +31,6 @@ Navigate to <http://localhost:9080/> to start playing with Kitten Science DnA.
 
 You need to be familiar with Prometheus and Grafana and have both already running. If you have that, you only need to scrape port `9091` on the machine that is running Kitten Science DnA.
 
-<!-- prettier-ignore-start -->
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[UI]: User interface
-<!-- prettier-ignore-end -->

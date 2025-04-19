@@ -39,8 +39,6 @@ javascript:(function(){var d=document,s=d.createElement('script');s.src='https:/
 
 This bookmarklet uses <https://kitten-science.com/stable.min.js>, the stable release. You can also replace that URL with the [nightly](https://kitten-science.com/nightly.min.js) build.
 
-<!-- prettier-ignore-start -->
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[UI]: User interface
-<!-- prettier-ignore-end -->

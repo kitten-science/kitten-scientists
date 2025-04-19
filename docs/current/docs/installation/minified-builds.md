@@ -9,9 +9,7 @@ Usually, you want to use the `.user.js` version, unless you are very concerned a
 
 The bookmarklets advertised in the documentation also point to the minified builds, because it is assumed that bookmarklet users are not concerned with the readability of KS. If you want to get into the inner workings of KS, you're encouraged to install a userscript manager.
 
-<!-- prettier-ignore-start -->
 *[JS]: JavaScript
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[UI]: User interface
-<!-- prettier-ignore-end -->

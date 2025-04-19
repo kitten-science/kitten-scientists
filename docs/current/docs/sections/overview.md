@@ -72,8 +72,6 @@ Sometimes icons in the UI pulse in red to signal an _ineffective state_. This is
     - A building is enabled, but all triggers are set to _infinity_.
     - A trade is enabled, but no seasons are selected.
 
-<!-- prettier-ignore-start -->
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[UI]: User interface
-<!-- prettier-ignore-end -->

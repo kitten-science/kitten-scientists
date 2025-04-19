@@ -85,8 +85,6 @@ Every enabled building has to be built **Trigger** times.
 
 Every enabled upgrade has to have been researched.
 
-<!-- prettier-ignore-start -->
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[TCs]: Time crystals
-<!-- prettier-ignore-end -->

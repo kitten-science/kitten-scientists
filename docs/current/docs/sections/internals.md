@@ -30,9 +30,7 @@ Some users may experience slow loads of KG itself, causing KS to fail to load in
 
 In case you are impacted by this, set `localStorage["ks.timeout"]` to the amount of milliseconds KS should wait for KG to load. The default value is `120000`, which correlates to the amount of milliseconds in 2 minutes.
 
-<!-- prettier-ignore-start -->
 *[JS]: JavaScript
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[UI]: User interface
-<!-- prettier-ignore-end -->

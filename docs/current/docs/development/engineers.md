@@ -53,9 +53,7 @@ KE will be done, when it's done. There is no date or timeline for its developmen
 -   v2.0.0-beta.? - KE pre-alpha development starts
 -   v2.0.0-rc - Settings profiles feature complete. First KE alpha release
 
-<!-- prettier-ignore-start -->
 *[API]: Application Programming Interface
 *[KE]: Kitten Engineers
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
-<!-- prettier-ignore-end -->

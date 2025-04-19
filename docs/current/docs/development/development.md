@@ -197,9 +197,7 @@ yarn kitten-scientists:release
 
     Don't forget to publish the drafted release on GitHub!
 
-<!-- prettier-ignore-start -->
 *[JS]: JavaScript
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[UI]: User interface
-<!-- prettier-ignore-end -->

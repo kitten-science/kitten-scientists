@@ -6,8 +6,6 @@ You load the script into your game through a [userscript manager or a bookmarkle
 
 [Install Now](./installation/quick-start.md){ .md-button .md-button--primary }
 
-<!-- prettier-ignore-start -->
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[UI]: User interface
-<!-- prettier-ignore-end -->

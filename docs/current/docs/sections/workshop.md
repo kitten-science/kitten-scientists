@@ -46,8 +46,6 @@ When enabled, **Trade Ships** will be handled as _unlimited_, regardless of the 
 
 Selected upgrades will automatically be researched as soon as possible.
 
-<!-- prettier-ignore-start -->
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
 *[UI]: User interface
-<!-- prettier-ignore-end -->
