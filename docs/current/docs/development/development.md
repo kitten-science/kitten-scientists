@@ -193,6 +193,8 @@ yarn kitten-scientists:release
 
 1.  Ultimately, search the entire project code base for the previous version string, like `2.0.0-beta.10`. Make sure to also search for `beta.10`, `beta10`, and references to _future_ releases that need to point to the _new future_ release!
 
+1.  There are other hardcoded version references in `infrastructure` and `action-release-info`. Those must be updated as well, and the entire changeset needs to be cycled through the deployment chain!
+
 !!! note
 
     Don't forget to publish the drafted release on GitHub!
