@@ -5,7 +5,7 @@ default: build
 build: devcontainer lib
 
 clean:
-	rm --force --recursive .venv devcontainer/overlay docs/current/public lib node_modules output tsconfig.tsbuildinfo
+	rm --force --recursive _site .venv devcontainer/overlay docs/current/public lib node_modules output tsconfig.tsbuildinfo
 
 docs: docs/current/public
 
@@ -65,3 +65,11 @@ docs/current/public: .venv
 .PHONY: docs-serve
 docs-serve: .venv
 	. .venv/bin/activate; cd docs/current/; mkdocs serve --config-file mkdocs.yml
+
+.PHONY: full-docs
+full-docs: docs
+	mkdir -p _site
+	cp -r docs/v2.0.0-beta.8 _site/
+	cp -r docs/v2.0.0-beta.9 _site/
+	cp -r docs/current _site/v2.0.0-beta.10
+	cp -r docs/current _site/main

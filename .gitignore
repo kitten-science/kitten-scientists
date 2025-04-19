@@ -8,6 +8,7 @@
 
 devcontainer/overlay/
 
+_site/
 lib/
 node_modules/
 output/

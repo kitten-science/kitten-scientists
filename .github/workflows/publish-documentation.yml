@@ -63,7 +63,7 @@ jobs:
 
       - name: Build documentation
         run: |
-          make docs
+          make full-docs
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
@@ -73,9 +73,8 @@ jobs:
           role-session-name: GitHubActions
 
       - name: Deploy to S3
-        if: false
         run: |
-          aws s3 sync ./docs/ s3://kitten-science-us0/ \
+          aws s3 sync ./_site/ s3://kitten-science-us0/ \
             --cache-control "public, s-maxage=3600, maxage=3600"
 
       - id: details
