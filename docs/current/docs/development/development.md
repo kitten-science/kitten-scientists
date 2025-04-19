@@ -181,13 +181,13 @@ yarn kitten-scientists:release
 
 1. Raise the version number in `packages/kitten-scientists/package.json` to a **higher version that will be in development next**!
 
-1. Make sure to also update the `README.md` to point the bookmarklet to the new script.
+1. Update the `README.md` to point the bookmarklet to the new script.
 
-1. Make sure to also update the `packages/documentation/installation.md` to point to the latest version number.
+1. Update the `packages/documentation/installation.md` to point to the latest version number.
 
-1. Make sure to also update the `.github/bug_report.yml` to mention the latest version number.
+1. Update the `.github/bug_report.yml` to mention the latest version number.
 
-1. Ultimately, search the entire project code base for the previous version string, like `2.0.0-beta.9`. Make sure to also search for `beta.9`, `beta9`, and references to _future_ releases that need to point to the new future release!
+1. Ultimately, search the entire project code base for the previous version string, like `2.0.0-beta.9`. Make sure to also search for `beta.9`, `beta9`, and references to _future_ releases that need to point to the _new future_ release!
 
 !!! note
 
