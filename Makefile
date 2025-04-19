@@ -71,5 +71,5 @@ full-docs: docs
 	mkdir -p _site
 	cp -r docs/v2.0.0-beta.8 _site/
 	cp -r docs/v2.0.0-beta.9 _site/
-	cp -r docs/current _site/v2.0.0-beta.10
-	cp -r docs/current _site/main
+	cp -r docs/current/public _site/v2.0.0-beta.10
+	cp -r docs/current/public _site/main
