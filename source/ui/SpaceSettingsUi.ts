@@ -75,7 +75,7 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
           this.expando.ineffective =
             settings.enabled &&
             (Object.values(settings.buildings).some(
-              _ => _.enabled && (0 === _.max || (0 < _.trigger && 0 < settings.trigger)),
+              _ => _.enabled && (0 === _.max || (_.trigger < 0 && settings.trigger < 0)),
             ) ||
               (!Object.values(settings.buildings).some(_ => _.enabled) &&
                 !settings.unlockMissions.enabled) ||
