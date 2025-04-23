@@ -43,7 +43,7 @@ concurrency:
 
 env:
   # renovate: datasource=node-version depName=node versioning=node
-  NODE_VERSION: "22.14.0"
+  NODE_VERSION: "22.15.0"
 
 jobs:
   params:
