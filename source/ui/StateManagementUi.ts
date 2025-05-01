@@ -442,7 +442,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 
       // If game contains KS settings, import those separately.
       let stateLabel: string | undefined;
-      if ("ks" in subjectData && !isNil(subjectData.ks)) {
+      if (!isNil(subjectData) && "ks" in subjectData && !isNil(subjectData.ks)) {
         const state = subjectData.ks.state[0];
         stateLabel = this.storeState(state, makeImportLabel()) ?? undefined;
         this.host.engine.imessage("state.imported.state");
