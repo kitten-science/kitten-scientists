@@ -57,11 +57,6 @@ export class TradeManager implements Automation {
     const gold = this._workshopManager.getResource("gold");
     const sectionTrigger = this.settings.trigger;
 
-    // If we can't make any trades, bail out.
-    if (!this.singleTradePossible(sectionTrigger, catpower, gold)) {
-      return;
-    }
-
     // The races we might want to trade with during this frame.
     const trades: Array<Race> = [];
 
