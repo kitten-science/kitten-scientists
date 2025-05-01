@@ -566,7 +566,7 @@ export class BulkPurchaseHelper {
   }
 
   private _isStagedBuild(
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: This is currently too hard to work around.
     data: any,
   ): data is {
     stage: number;
