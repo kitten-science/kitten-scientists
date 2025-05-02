@@ -11,10 +11,11 @@ const filename = ["kitten-scientists", `-${versionString}`, minify ? ".min" : ""
   "",
 );
 
-const RELEASE_CHANNEL = JSON.stringify(process.env.RELEASE_CHANNEL ?? "fixed");
-const RELEASE_VERSION = JSON.stringify(versionString);
+const RELEASE_CHANNEL = process.env.RELEASE_CHANNEL ?? "fixed";
+const RELEASE_VERSION = versionString;
 
-const updateURL = `https://kitten-science.com/${RELEASE_CHANNEL}.js`;
+const downloadURL = `https://kitten-science.com/${RELEASE_CHANNEL}.js`;
+const updateURL = `https://kitten-science.com/${RELEASE_CHANNEL}.min.js`;
 
 export default defineConfig({
   build: {
@@ -36,8 +37,8 @@ export default defineConfig({
     },
   },
   define: {
-    RELEASE_CHANNEL,
-    RELEASE_VERSION,
+    RELEASE_CHANNEL: JSON.stringify(RELEASE_CHANNEL),
+    RELEASE_VERSION: JSON.stringify(RELEASE_VERSION),
   },
   plugins: [
     cssInjectedByJsPlugin({ styleId: "ks-styles", topExecutionPriority: false }),
@@ -45,6 +46,7 @@ export default defineConfig({
       ...metablock({
         override: {
           description: manifest.description,
+          downloadURL,
           homepage: manifest.homepage,
           supportURL: manifest.bugs.url,
           updateURL,
