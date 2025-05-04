@@ -1,0 +1,57 @@
+name: Groom
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  issues:
+    permissions:
+      contents: none
+      issues: write
+      pull-requests: write
+      repository-projects: write
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            for await ( const response of github.paginate.iterator(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              }
+            ) ) {
+              const issue = response.data[0];
+              core.summary.addCodeBlock( JSON.stringify( issue, undefined, 2 ), "json" );
+
+              core.info( `Processing issue #${issue.number} (${issue.state})...` );
+              core.info( `Created at: ${issue.created_at}` );
+              core.info( `Updated at: ${issue.updated_at}` );
+              core.info( `Closed  at: ${issue.closed_at}` );
+              
+              const assignee = issue.assignee;
+              if( !assignee ) {
+                core.warning( `Missing assignee!` );
+              }
+
+              const milestone = issue.milestone;
+              if( !milestone ) {
+                core.warning( `Missing milestone!` );
+              }
+
+              const labels = issue.labels;
+              if( !Array.isArray( labels ) || labels.length < 1 ) {
+                core.warning( `Missing labels!` );
+              }
+
+              core.error( `Bailing out during exploration phase!` );
+              break;
+            }
