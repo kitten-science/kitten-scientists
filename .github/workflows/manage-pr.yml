@@ -2,6 +2,8 @@ name: PR
 
 on:
   pull_request:
+    types:
+      - opened
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,9 +12,7 @@ concurrency:
 jobs:
   manage:
     permissions:
-      repository-projects: write
-      issues: read
-      pull-requests: read
+      contents: none
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/add-to-project@v1.0.2
