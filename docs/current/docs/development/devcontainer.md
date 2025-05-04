@@ -8,6 +8,7 @@ docker run \
     --name devcontainer \
     --publish 8086:8086 \
     --publish 9080:8080 \
+    --replace \
     ghcr.io/kitten-science/devcontainer:nightly
 ```
 
@@ -18,6 +19,7 @@ docker run \
     --name devcontainer \
     --publish 8086:8086 \
     --publish 9080:8080 \
+    --replace \
     ghcr.io/kitten-science/devcontainer:nightly
 ```
 
@@ -31,7 +33,20 @@ podman run \
     --name devcontainer \
     --publish 8086:8086 \
     --publish 9080:8080 \
+    --replace \
     localhost/devcontainer:latest
+```
+
+```shell
+make devcontainer-oci
+podman run \
+    --detach \
+    --mount type=bind,source="devcontainer/overlay",target=/kittensgame/overlay \
+    --name kadevcontainer \
+    --publish 8186:8186 \
+    --publish 8180:8180 \
+    --replace \
+    localhost/kadevcontainer:latest
 ```
 
 ## clean up

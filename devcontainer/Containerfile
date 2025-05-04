@@ -1,5 +1,7 @@
 FROM docker.io/library/node:22.15.0-bookworm@sha256:a1f1274dadd49738bcd4cf552af43354bb781a7e9e3bc984cfeedc55aba2ddd8
 
+LABEL "org.opencontainers.image.description"="Kitten Scientists Development Container"
+
 ARG REPO=https://github.com/nuclear-unicorn/kittensgame.git
 ARG BRANCH=master
 
@@ -17,4 +19,4 @@ RUN [ "node", "mod/rewrite-index.mjs" ]
 RUN [ "node", "mod/inject-scripts.mjs", "overlay/kitten-scientists.inject.js" ]
 
 # Start the development server that serves the Kittens Game.
-CMD [ "/bin/bash", "-c", "yarn run watch-http-server" ]
+CMD [ "/bin/bash", "-c", "yarn run watch-http-server -p 8080" ]
