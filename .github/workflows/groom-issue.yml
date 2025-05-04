@@ -22,36 +22,64 @@ jobs:
       - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
           script: |
+            const CHECK_LIMIT = 10;
+
+            const validateIssue = issue => {
+              const assignee = issue.assignee;
+              if( !assignee ) {
+                core.summary.addRaw( `- :warning: Missing assignee!\n` );
+              } else {
+                core.summary.addRaw( `- :white_check_mark: Assignee: ${assignee.login}\n` );
+              }
+
+              const milestone = issue.milestone;
+              if( !milestone ) {
+                core.summary.addRaw( `- :warning: Missing milestone!\n` );
+              } else {
+                core.summary.addRaw( `- :white_check_mark: Milestone: ${milestone.title} due ${new Date( milestone.due_on )}\n` );
+              }
+
+              const labels = issue.labels;
+              if( !Array.isArray( labels ) || labels.length < 1 ) {
+                core.summary.addRaw( `- :warning: Missing labels!\n` );
+              } else {
+                core.summary.addRaw( `- :white_check_mark: Labels: ${labels.map( _ => _.name ).join( ", " )}\n` );
+              }
+            };
+
+            core.summary.addHeading( "Issue Auto-Grooming Report", "1" );
+            let issuesChecked = 0;
             for await ( const response of github.paginate.iterator(
               github.rest.issues.listForRepo,
               {
                 owner: context.repo.owner,
                 repo: context.repo.repo,
+                state: "all",
               }
             ) ) {
-              const issue = response.data[0];
-              core.summary.addCodeBlock( JSON.stringify( issue, undefined, 2 ), "json" );
+              for( const issue of response.data ) {
+                core.debug( JSON.stringify( issue, undefined, 2 ) );
 
-              core.info( `Processing issue #${issue.number} (${issue.state})...` );
-              core.info( `Created at: ${issue.created_at}` );
-              core.info( `Updated at: ${issue.updated_at}` );
-              core.info( `Closed  at: ${issue.closed_at}` );
-              
-              const assignee = issue.assignee;
-              if( !assignee ) {
-                core.warning( `Missing assignee!` );
+                console.info( `Processing issue #${issue.number} (${issue.state})...` );
+                core.summary.addHeading( `#${issue.number} ${issue.title}`, "2" );
+
+                core.summary.addList([
+                  `Created at: ${new Date( issue.created_at )}`,
+                  `Updated at: ${issue.updated_at ? new Date( issue.updated_at ) : "never"}`,
+                  `Closed  at: ${issue.closed_at ? new Date( issue.closed_at ) : "never"}`
+                ]);
+                core.summary.addRaw("\n\n");
+                validateIssue(issue);
+
+                if( CHECK_LIMIT < ++issuesChecked ) {
+                  core.error( `Bailing out during exploration phase!` );
+                  break;
+                }
               }
 
-              const milestone = issue.milestone;
-              if( !milestone ) {
-                core.warning( `Missing milestone!` );
+              if( CHECK_LIMIT < issuesChecked ) {
+                break;
               }
-
-              const labels = issue.labels;
-              if( !Array.isArray( labels ) || labels.length < 1 ) {
-                core.warning( `Missing labels!` );
-              }
-
-              core.error( `Bailing out during exploration phase!` );
-              break;
             }
+
+            core.summary.write()
