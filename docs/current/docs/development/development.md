@@ -23,10 +23,10 @@ Additionally, you will need to have [Docker](https://www.docker.com/) available,
 Whenever you want to see the result of your changes, use:
 
 ```shell
-yarn kitten-scientists:build
+make build
 ```
 
-This will [build a fresh version of the userscript](../reference/Repository%20Scripts/index.md#ksbuild). _If_ you are running a development container, this build output will also be used the next time you refresh the page.
+This will build a fresh version of the userscript. _If_ you are running a development container, this build output will also be used the next time you refresh the page.
 
 ## Development with Kittens Game Container
 
@@ -58,18 +58,10 @@ When the container is built, it downloads the latest version of the game from <h
 
         Sadly, this behavior is known to produce broken output files. Use at your own risk and switch to manual builds as necessary.
 
-If you ever want to [rebuild the container from scratch](../reference/Repository%20Scripts/index.md#devcontainerrebuild), for example, to pull in the _latest_ source code of KG again, run:
+If you ever want to rebuild the container from scratch, for example, to pull in the _latest_ source code of KG again, run:
 
 ```shell
-yarn devcontainer:rebuild
-```
-
-### Kittens Game Branch
-
-You can run the development container on another branch of Kittens Game by providing the branch name to the `devcontainer` commands, like so:
-
-```shell
-yarn devcontainer:run dev/alpha
+make devcontainer-oci
 ```
 
 ## Development without Container
@@ -86,7 +78,7 @@ To develop without containers, you can build a development version of the usersc
 
 ## Type-Checking
 
-To fill the **Problems** panel in VS Code with all current, type-related errors, run the [`typecheck:all`](../reference/Repository%20Scripts/index.md#typecheckall) npm task in VS Code.
+Run `make lint` on the command line.
 
 ## Commit Standards
 
