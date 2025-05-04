@@ -1,0 +1,31 @@
+name: Issue
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - labeled
+  issues:
+    types:
+      - opened
+      - reopened
+      - transferred
+      - labeled
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  manage:
+    permissions:
+      repository-projects: write
+      issues: read
+      pull-requests: read
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/orgs/kitten-science/projects/1
+          github-token: ${{ secrets.PROJECT_MANAGEMENT_PAT }}
