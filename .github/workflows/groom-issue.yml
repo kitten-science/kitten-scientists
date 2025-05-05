@@ -35,7 +35,7 @@ jobs:
             } ) ).data;
             const currentMilestone = milestones[ milestones.length - 2 ];
             const findMilestone = date => {
-              const index = milestones.findLastIndex( _ => new Date( _.due_on ) < date ) + 1;
+              const index = milestones.findLastIndex( _ => ( new Date( _.due_on ).valueOf() + 4.68e+7 ) < date.valueOf() ) + 1;
               return milestones[ index ];
             }
             core.debug( milestones );
@@ -73,7 +73,12 @@ jobs:
 
               console.info( "Adding labels..." );
               const labels = [ "needs:triage", "policy-0" ];
-              if( issue.title.startsWith( "chore(deps)" ) ) {
+              if( issue.title.startsWith( "chore(deps)" ) || issue.title.startsWith( "fix(deps)" ) ) {
+                labels.push( "dependencies", "type:housekeeping" );
+                if( issue.closed_at ) {
+                  labels.push( "status:complete" );
+                }
+              } else if( issue.title.contains( "Crowdin" ) ) {
                 labels.push( "type:housekeeping" );
                 if( issue.closed_at ) {
                   labels.push( "status:complete" );
