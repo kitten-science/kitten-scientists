@@ -78,7 +78,7 @@ jobs:
                 if( issue.closed_at ) {
                   labels.push( "status:complete" );
                 }
-              } else if( issue.title.contains( "Crowdin" ) ) {
+              } else if( issue.title.includes( "Crowdin" ) ) {
                 labels.push( "type:housekeeping" );
                 if( issue.closed_at ) {
                   labels.push( "status:complete" );

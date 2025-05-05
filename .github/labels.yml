@@ -60,6 +60,9 @@ labels:
   status:wontfix:
     color: "c7def8"
     description: Sorry
+  status:pending:
+    color: "c7def8"
+    description: Your call is important to us. Please wait.
 
   type:beta-feature:
     color: "cc317c"
