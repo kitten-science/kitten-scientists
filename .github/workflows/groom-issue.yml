@@ -22,33 +22,136 @@ jobs:
       - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
           script: |
-            const CHECK_LIMIT = 10;
+            const LIMIT_CHECK = 20;
+            const LIMIT_FAIL = 10;
+            const LIMIT_FIX = 5;
+
+            const milestones = ( await github.rest.issues.listMilestones( {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sort: "due_on",
+              state: "all",
+              direction: "asc",
+            } ) ).data;
+            const currentMilestone = milestones[ milestones.length - 2 ];
+            const findMilestone = date => {
+              const index = milestones.findLastIndex( _ => new Date( _.due_on ) < date ) + 1;
+              return milestones[ index ];
+            }
+            core.debug( milestones );
+
+            const reportIssueInvalid = ( issue, warnings ) => {
+              core.summary.addList( warnings.map( _ => `:warning: ${_}` ) );
+              core.summary.addList([
+                `Created at: ${ new Date( issue.created_at ).toISOString() }`,
+                `Updated at: ${ issue.updated_at ? new Date( issue.updated_at ).toISOString() : "never" }`,
+                `Closed  at: ${ issue.closed_at ? new Date( issue.closed_at ).toISOString() : "never" }`
+              ]);
+            };
+
+            const reportIssueValid = issue => {
+              core.summary.addList([
+                `:white_check_mark: Assignee: ${ issue.assignee.login }`,
+                `:white_check_mark: Milestone: ${ issue.milestone.title } due ${ new Date( issue.milestone.due_on ).toISOString() }`,
+                `:white_check_mark: Labels: ${ issue.labels.map( _ => _.name ).join( ", " ) }`,
+              ]);
+              core.summary.addList([
+                `Created at: ${ new Date( issue.created_at ).toISOString() }`,
+                `Updated at: ${ issue.updated_at ? new Date( issue.updated_at ).toISOString() : "never" }`,
+                `Closed  at: ${ issue.closed_at ? new Date( issue.closed_at ).toISOString() : "never" }`
+              ]);
+            };
+
+            const alignIssue = async issue => {
+              console.info( "Setting assignee..." );
+              await github.rest.issues.addAssignees({
+                issue_number: issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                assignees: [ "oliversalzburg" ],
+              });
+
+              console.info( "Adding labels..." );
+              const labels = [ "needs:triage", "policy-0" ];
+              if( issue.title.startsWith( "chore(deps)" ) ) {
+                labels.push( "type:housekeeping" );
+                if( issue.closed_at ) {
+                  labels.push( "status:complete" );
+                }
+              }
+              await github.rest.issues.addLabels({
+                issue_number: issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels,
+              });
+
+              const milestone = issue.closed_at ? findMilestone( new Date( issue.closed_at ) ) : currentMilestone;
+              console.info( "Adding milestone..." );
+              await github.rest.issues.update({
+                issue_number: issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                milestone: milestone.number,
+              });
+            }
 
             const validateIssue = issue => {
-              const assignee = issue.assignee;
-              if( !assignee ) {
-                core.summary.addRaw( `- :warning: Missing assignee!\n` );
-              } else {
-                core.summary.addRaw( `- :white_check_mark: Assignee: ${assignee.login}\n` );
+              let failed = false;
+              const warnings = [];
+              if( !issue.assignee ) {
+                warnings.push( "Missing assignee!" );
+                failed = true;
               }
 
-              const milestone = issue.milestone;
-              if( !milestone ) {
-                core.summary.addRaw( `- :warning: Missing milestone!\n` );
+              const closed_at = new Date( issue.closed_at );
+              if( !issue.milestone ) {
+                if( issue.closed_at ) {
+                  const milestone = findMilestone( closed_at );
+                  warnings.push( `Missing milestone! Expected: ${ milestone.title }` );
+                } else {
+                  warnings.push( `Missing milestone! Expected: ${ currentMilestone.title }` );
+                }
+                failed = true;
               } else {
-                core.summary.addRaw( `- :white_check_mark: Milestone: ${milestone.title} due ${new Date( milestone.due_on )}\n` );
+                const due_on = new Date( issue.milestone.due_on );
+                if( due_on < closed_at ) {
+                  warnings.push( `Closed after milestone due date! ${ due_on.toISOString() } < ${ closed_at.toISOString() }` )
+                  failed = true;
+                }
               }
 
               const labels = issue.labels;
               if( !Array.isArray( labels ) || labels.length < 1 ) {
-                core.summary.addRaw( `- :warning: Missing labels!\n` );
+                warnings.push( "Missing all labels!" );
+                failed = true;
               } else {
-                core.summary.addRaw( `- :white_check_mark: Labels: ${labels.map( _ => _.name ).join( ", " )}\n` );
+                if( !labels.some( _ => _.name.startsWith( "status:" ) ) ) {
+                  warnings.push( "Missing 'status' label!" );
+                  failed = true;
+                }
+                if( 1 < labels.filter( _ => _.name.startsWith( "status:" ) ).length ) {
+                  warnings.push( `Multiple 'status' labels! ${ labels.map( _ => _.name ).concat( ", " ) }` );
+                  failed = true;
+                }
+                if( !labels.some( _ => _.name.startsWith( "type:" ) ) ) {
+                  warnings.push( "Missing 'type' label!" );
+                  failed = true;
+                }
+                if( !labels.some( _ => _.name.startsWith( "policy-" ) ) ) {
+                  warnings.push( "Missing 'policy' label!" );
+                  failed = true;
+                }
               }
+
+              return failed ? warnings : false;
             };
 
-            core.summary.addHeading( "Issue Auto-Grooming Report", "1" );
+            core.summary.addHeading( "Issue Auto-Grooming Report", "2" );
             let issuesChecked = 0;
+            let issuesFailed = 0;
+            let issuesFixed = 0;
+            let stopProcessing = false;
             for await ( const response of github.paginate.iterator(
               github.rest.issues.listForRepo,
               {
@@ -60,24 +163,36 @@ jobs:
               for( const issue of response.data ) {
                 core.debug( JSON.stringify( issue, undefined, 2 ) );
 
-                console.info( `Processing issue #${issue.number} (${issue.state})...` );
-                core.summary.addHeading( `#${issue.number} ${issue.title}`, "2" );
+                console.info( `Processing issue #${ issue.number } (${ issue.state })...` );
+                if( issue.labels.some( _ => _.name === "policy-0" ) ) {
+                  console.info( "Already labeled 'policy-0'. No further processing." );
+                  continue;
+                }
 
-                core.summary.addList([
-                  `Created at: ${new Date( issue.created_at )}`,
-                  `Updated at: ${issue.updated_at ? new Date( issue.updated_at ) : "never"}`,
-                  `Closed  at: ${issue.closed_at ? new Date( issue.closed_at ) : "never"}`
-                ]);
-                core.summary.addRaw("\n\n");
-                validateIssue(issue);
+                const failed = validateIssue( issue );
+                if( failed ) {
+                  ++issuesFailed;
+                  console.warn( "Issue is non-compliant." );
+                  core.summary.addHeading( `<a href="${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/issues/${ issue.number }">#${ issue.number }</a> ${ issue.title }`, "3" );
 
-                if( CHECK_LIMIT < ++issuesChecked ) {
+                  reportIssueInvalid( issue, failed );
+
+                  await alignIssue( issue );
+                  ++issuesFixed;
+
+                } else {
+                  core.summary.addHeading( `<a href="${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/issues/${ issue.number }">#${ issue.number }</a> ${ issue.title }`, "3" );
+                  reportIssueValid( issue );
+                }
+
+                if( LIMIT_CHECK < ++issuesChecked || LIMIT_FAIL <= issuesFailed || LIMIT_FIX <= issuesFixed ) {
                   core.error( `Bailing out during exploration phase!` );
+                  stopProcessing = true;
                   break;
                 }
               }
 
-              if( CHECK_LIMIT < issuesChecked ) {
+              if( stopProcessing ) {
                 break;
               }
             }
