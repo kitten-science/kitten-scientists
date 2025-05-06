@@ -53,7 +53,7 @@
     "@types/web": "0.0.231",
     "cheerio": "1.0.0",
     "dojo": "1.17.3",
-    "esbuild": "0.25.3",
+    "esbuild": "0.25.4",
     "rollup": "4.40.1",
     "rollup-plugin-cleanup": "3.2.1",
     "typescript": "5.8.3",
