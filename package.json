@@ -54,7 +54,7 @@
     "cheerio": "1.0.0",
     "dojo": "1.17.3",
     "esbuild": "0.25.4",
-    "rollup": "4.40.1",
+    "rollup": "4.40.2",
     "rollup-plugin-cleanup": "3.2.1",
     "typescript": "5.8.3",
     "vite": "6.3.5",
