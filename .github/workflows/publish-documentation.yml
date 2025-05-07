@@ -66,7 +66,7 @@ jobs:
           make full-docs
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
+        uses: aws-actions/configure-aws-credentials@f24d7193d98baebaeacc7e2227925dd47cc267f5 # v4.2.0
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::022327457572:role/kitten-science-us0-maintainer
