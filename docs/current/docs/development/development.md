@@ -6,17 +6,15 @@
 
 ## Introduction
 
-The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in the [userscript source code](https://github.com/kitten-science/kitten-scientists/tree/main/packages/kitten-scientists/source) and then be compiled into the actual userscript.
-
-The project is set up to be used with [Visual Studio Code](https://code.visualstudio.com/). While other editors will work fine, some integrations have been prepared to make the development process easier.
+The script is written in [TypeScript](https://www.typescriptlang.org/). The JS userscript itself is not intended to be edited. Changes need to be made in the [userscript source code](https://github.com/kitten-science/kitten-scientists/tree/main/source) and then be compiled into the actual userscript.
 
 ## Prerequisites
 
 The development environment is expected to be a POSIX-compliant system. On Windows, WSL will do fine.
 
-You will need [NodeJS](https://nodejs.org/) to be able to work with the project. The project uses [yarn](https://yarnpkg.com/) as a package and project manager, which is usually integrated with recent NodeJS versions.
+You will need [NodeJS](https://nodejs.org/) to be able to work with the project. The project uses [yarn](https://yarnpkg.com/) as a package manager, which is usually integrated with recent NodeJS versions.
 
-Additionally, you will need to have [Docker](https://www.docker.com/) available, to use the container-based Kittens Game development server.
+Additionally, you will need to have [Docker](https://www.docker.com/) available, to use the container-based Kittens Game development server. Other container runtimes work just as well.
 
 ## General Development
 
@@ -32,37 +30,7 @@ This will build a fresh version of the userscript. _If_ you are running a develo
 
 The development container provides a version of Kittens Game that already a Kitten Scientists version injected into it, based on your local development state.
 
-When the container is built, it downloads the latest version of the game from <https://github.com/nuclear-unicorn/kittensgame>.
-
-1.  Manual Refresh (recommended)
-
-    Build the development container and start it.
-
-    ```shell
-    yarn devcontainer:run
-    ```
-
-    The script prints the URL where you can now play the game with KS installed.
-
-    You will need to manually reload the page after each build to get the latest changes in the browser.
-
-1.  Watcher (experimental)
-
-    Start a watcher to continuously rebuild KS when you make code changes.
-
-    ```shell
-    yarn kitten-scientists:watch
-    ```
-
-    !!! danger
-
-        Sadly, this behavior is known to produce broken output files. Use at your own risk and switch to manual builds as necessary.
-
-If you ever want to rebuild the container from scratch, for example, to pull in the _latest_ source code of KG again, run:
-
-```shell
-make devcontainer-oci
-```
+See the [dedicated documentation](./devcontainer.md) for more information.
 
 ## Development without Container
 
@@ -71,10 +39,10 @@ To develop without containers, you can build a development version of the usersc
 1. Run the build script.
 
     ```shell
-    yarn kitten-scientists:preview
+    make build
     ```
 
-    The userscript is placed in the `packages/kitten-scientists/output` directory.
+    The userscript is placed in the `output` directory.
 
 ## Type-Checking
 

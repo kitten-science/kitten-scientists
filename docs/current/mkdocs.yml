@@ -37,9 +37,10 @@ theme:
   favicon: assets/images/favicon.ico
   features:
     - announce.dismiss
-    - content.code.copy
     - content.action.edit
     - content.action.view
+    - content.code.copy
+    - content.tabs.link
     - navigation.instant
     - navigation.instant.progress
     - navigation.sections
