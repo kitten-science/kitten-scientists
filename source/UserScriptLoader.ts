@@ -131,7 +131,7 @@ export class UserScriptLoader {
   private static _isGameLoaded(): boolean {
     return (
       !isNil(UserScriptLoader.window.game) &&
-      !Object.prototype.toString.apply(UserScriptLoader.window.game).includes("HTMLDivElement")
+      !isNil(UserScriptLoader.window.document.getElementById("game"))
     );
   }
 
