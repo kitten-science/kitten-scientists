@@ -23,8 +23,8 @@ jobs:
         with:
           script: |
             const LIMIT_CHECK = 20;
-            const LIMIT_FAIL = 10;
-            const LIMIT_FIX = 5;
+            const LIMIT_FAIL = 15;
+            const LIMIT_FIX = 10;
             let COUNT_SEEN = 0;
 
             const milestones = ( await github.rest.issues.listMilestones( {
