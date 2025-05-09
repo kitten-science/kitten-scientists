@@ -119,6 +119,6 @@ The container itself is not very complicated, and rarely needs to be built local
 === "Podman"
 
     ```shell
-    podman stop devcontainer;
+    podman stop devcontainer
     podman rm devcontainer
     ```
