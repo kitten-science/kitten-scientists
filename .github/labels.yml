@@ -10,6 +10,10 @@ labels:
     color: "008672"
     description: We can't figure this out, please help
 
+  "policy-0":
+    color: "ffffff"
+    description: Applied Issue Policy Version
+
   needs:confirmation:
     color: "eb6420"
     description: A developer should confirm this issue happening
