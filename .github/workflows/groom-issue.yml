@@ -82,7 +82,7 @@ jobs:
             };
 
             const alignIssue = async issue => {
-              console.info( "Setting assignee..." );
+              console.info( `#${ issue.number }: Setting assignee...` );
               await github.rest.issues.addAssignees({
                 issue_number: issue.number,
                 owner: context.repo.owner,
@@ -90,7 +90,7 @@ jobs:
                 assignees: [ "oliversalzburg" ],
               });
 
-              console.info( "Adding labels..." );
+              console.info( `#${ issue.number }: Adding labels...` );
               const labels = [ "needs:triage", "policy-0" ];
               if( issue.title.startsWith( "chore(deps)" ) || issue.title.startsWith( "fix(deps)" ) || issue.title.startsWith( "chore(deps-dev)" ) ) {
                 labels.push( "dependencies", "type:housekeeping" );
@@ -111,7 +111,7 @@ jobs:
               });
 
               const milestone = issue.closed_at ? findMilestone( new Date( issue.closed_at ) ) : currentMilestone;
-              console.info( "Adding milestone..." );
+              console.info( `#${ issue.number }: Adding milestone...` );
               await github.rest.issues.update({
                 issue_number: issue.number,
                 owner: context.repo.owner,
@@ -187,32 +187,38 @@ jobs:
               for( const issue of response.data ) {
                 core.debug( JSON.stringify( issue, undefined, 2 ) );
 
-                console.info( `Processing issue #${ issue.number } (${ issue.state })...` );
+                console.info( `#${ issue.number }: Processing ${ issue.state } issue...` );
                 ++COUNT_SEEN;
                 if( issue.labels.some( _ => _.name === "policy-0" ) ) {
-                  console.info( "Already labeled 'policy-0'. No further processing." );
+                  console.info( `#${ issue.number }: Already labeled 'policy-0'. No further processing.` );
                   continue;
+                }
+
+                if( issue.state === "closed" ) {
+                  core.summary.addHeading( `<a href="${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/issues/${ issue.number }"><s>#${ issue.number }</s></a> ${ issue.title }`, "3" );
+                } else {
+                  core.summary.addHeading( `<a href="${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/issues/${ issue.number }">#${ issue.number }</a> ${ issue.title }`, "3" );
                 }
 
                 const failed = validateIssue( issue );
                 ++issuesChecked;
                 if( failed ) {
                   ++issuesFailed;
-                  console.warn( "Issue is non-compliant." );
-                  core.summary.addHeading( `<a href="${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/issues/${ issue.number }">#${ issue.number }</a> ${ issue.title }`, "3" );
+                  console.warn( `#${ issue.number }: Issue is non-compliant.` );
 
                   reportIssueInvalid( issue, failed );
 
-                  await alignIssue( issue );
-                  ++issuesFixed;
+                  if( issuesFixed < LIMIT_FIX ) {
+                    await alignIssue( issue );
+                    ++issuesFixed;
+                  }
 
                 } else {
-                  core.summary.addHeading( `<a href="${ context.serverUrl }/${ context.repo.owner }/${ context.repo.repo }/issues/${ issue.number }">#${ issue.number }</a> ${ issue.title }`, "3" );
                   reportIssueValid( issue );
                 }
 
-                if( LIMIT_CHECK <= COUNT_SEEN || LIMIT_FAIL <= issuesFailed || LIMIT_FIX <= issuesFixed ) {
-                  core.error( `Bailing out during exploration phase! Seen ${ COUNT_SEEN } issues, checked ${ issuesChecked }.` );
+                if( LIMIT_CHECK <= COUNT_SEEN || LIMIT_FAIL <= issuesFailed ) {
+                  core.error( `Bailing out during exploration phase! Seen ${ COUNT_SEEN } issues, checked ${ issuesChecked }, fixed ${ issuesFixed }.` );
                   stopProcessing = true;
                   break;
                 }
