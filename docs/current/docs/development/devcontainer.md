@@ -1,6 +1,10 @@
 # Development Container
 
+The development container is an OCI that you can run with Docker or other container runtimes. It provides a copy of the game, with the script already loaded into it. This allows you to make changes to the script, and quickly evaluate these changes, without having to build a userscript and load that into your userscript manager.
+
 ## Quick Start
+
+The easiest way to get started is to just run the published OCI as-is.
 
 === "Docker"
 
@@ -17,6 +21,8 @@
     ```
 
 ## Full Background Example
+
+More commonly, you will spawn the development container as a background task (`--detach`), and mount your local `overlay` output directory into the container.
 
 === "Docker"
 

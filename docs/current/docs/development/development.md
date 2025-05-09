@@ -36,13 +36,11 @@ See the [dedicated documentation](./devcontainer.md) for more information.
 
 To develop without containers, you can build a development version of the userscript with full debugging information.
 
-1. Run the build script.
+```shell
+make build
+```
 
-    ```shell
-    make build
-    ```
-
-    The userscript is placed in the `output` directory.
+The userscript is placed in the `output` directory.
 
 ## Type-Checking
 
@@ -103,17 +101,7 @@ Internals related:
 
 When you open a pull request, make sure that you squash your commits into a single one, _unless_ individual commits are substantial enough that they should be preserved as-is. Just make sure that all commits follow the [commit standards](#commit-standards) mentioned above.
 
-## Releases
-
-### Building a Release Version of the Userscript
-
-Run the script to build the release:
-
-```shell
-yarn kitten-scientists:release
-```
-
-### Releasing a New Version
+## Releasing a New Version
 
 1.  Have your release notes ready. You can draft them in the `CHANGELOG.md` and copy the auto-generated changes for the release from the GitHub release later.
 
