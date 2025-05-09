@@ -82,7 +82,7 @@ jobs:
             };
 
             const alignIssue = async issue => {
-              console.info( `#${ issue.number }: Setting assignee...` );
+              core.info( `#${ issue.number }: Setting assignee...` );
               await github.rest.issues.addAssignees({
                 issue_number: issue.number,
                 owner: context.repo.owner,
@@ -90,7 +90,7 @@ jobs:
                 assignees: [ "oliversalzburg" ],
               });
 
-              console.info( `#${ issue.number }: Adding labels...` );
+              core.info( `#${ issue.number }: Adding labels...` );
               const labels = [ "needs:triage", "policy-0" ];
               if( issue.title.startsWith( "chore(deps)" ) || issue.title.startsWith( "fix(deps)" ) || issue.title.startsWith( "chore(deps-dev)" ) ) {
                 labels.push( "dependencies", "type:housekeeping" );
@@ -111,7 +111,7 @@ jobs:
               });
 
               const milestone = issue.closed_at ? findMilestone( new Date( issue.closed_at ) ) : currentMilestone;
-              console.info( `#${ issue.number }: Adding milestone...` );
+              core.info( `#${ issue.number }: Adding milestone...` );
               await github.rest.issues.update({
                 issue_number: issue.number,
                 owner: context.repo.owner,
@@ -187,10 +187,10 @@ jobs:
               for( const issue of response.data ) {
                 core.debug( JSON.stringify( issue, undefined, 2 ) );
 
-                console.debug( `#${ issue.number }: Processing ${ issue.state } issue...` );
+                core.debug( `#${ issue.number }: Processing ${ issue.state } issue...` );
                 ++COUNT_SEEN;
                 if( issue.labels.some( _ => _.name === "policy-0" ) ) {
-                  console.debug( `#${ issue.number }: Already labeled 'policy-0'. No further processing.` );
+                  core.debug( `#${ issue.number }: Already labeled 'policy-0'. No further processing.` );
                   continue;
                 }
 
@@ -204,7 +204,7 @@ jobs:
                 ++issuesChecked;
                 if( failed ) {
                   ++issuesFailed;
-                  console.warn( `#${ issue.number }: Issue is non-compliant.` );
+                  core.warning( `#${ issue.number }: Issue is non-compliant.` );
 
                   reportIssueInvalid( issue, failed );
 
