@@ -187,10 +187,10 @@ jobs:
               for( const issue of response.data ) {
                 core.debug( JSON.stringify( issue, undefined, 2 ) );
 
-                console.info( `#${ issue.number }: Processing ${ issue.state } issue...` );
+                console.debug( `#${ issue.number }: Processing ${ issue.state } issue...` );
                 ++COUNT_SEEN;
                 if( issue.labels.some( _ => _.name === "policy-0" ) ) {
-                  console.info( `#${ issue.number }: Already labeled 'policy-0'. No further processing.` );
+                  console.debug( `#${ issue.number }: Already labeled 'policy-0'. No further processing.` );
                   continue;
                 }
 
