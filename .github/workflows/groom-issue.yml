@@ -2,6 +2,19 @@ name: Groom
 
 on:
   workflow_dispatch:
+    inputs:
+      LIMIT_CHECK:
+        default: 500
+        type: number
+        description: How many issues to check.
+      LIMIT_FAIL:
+        default: 20
+        type: number
+        description: Stop after how many failures?
+      LIMIT_FIX:
+        default: 20
+        type: number
+        description: How many issues to auto-fix.
   push:
     branches:
       - main
@@ -19,12 +32,17 @@ jobs:
       repository-projects: write
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+      - env:
+          LIMIT_CHECK: ${{ inputs.LIMIT_CHECK || '500' }}
+          LIMIT_FAIL: ${{ inputs.LIMIT_FAIL || '20' }}
+          LIMIT_FIX: ${{ inputs.LIMIT_FIX || '20' }}
+        name: Run Script
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
           script: |
-            const LIMIT_CHECK = 20;
-            const LIMIT_FAIL = 15;
-            const LIMIT_FIX = 10;
+            const LIMIT_CHECK = process.env.LIMIT_CHECK ? Number( process.env.LIMIT_CHECK ) : 500;
+            const LIMIT_FAIL = process.env.LIMIT_FAIL ? Number( process.env.LIMIT_FAIL ) : 20;
+            const LIMIT_FIX = process.env.LIMIT_FIX ? Number( process.env.LIMIT_FIX ) : 20;
             let COUNT_SEEN = 0;
 
             const milestones = ( await github.rest.issues.listMilestones( {
@@ -177,6 +195,7 @@ jobs:
                 }
 
                 const failed = validateIssue( issue );
+                ++issuesChecked;
                 if( failed ) {
                   ++issuesFailed;
                   console.warn( "Issue is non-compliant." );
@@ -192,8 +211,8 @@ jobs:
                   reportIssueValid( issue );
                 }
 
-                if( LIMIT_CHECK < ++issuesChecked || LIMIT_FAIL <= issuesFailed || LIMIT_FIX <= issuesFixed ) {
-                  core.error( `Bailing out during exploration phase! Seen ${COUNT_SEEN} issues.` );
+                if( LIMIT_CHECK <= COUNT_SEEN || LIMIT_FAIL <= issuesFailed || LIMIT_FIX <= issuesFixed ) {
+                  core.error( `Bailing out during exploration phase! Seen ${ COUNT_SEEN } issues, checked ${ issuesChecked }.` );
                   stopProcessing = true;
                   break;
                 }
