@@ -4,15 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       LIMIT_CHECK:
-        default: 500
+        default: 1000
         type: number
         description: How many issues to check.
       LIMIT_FAIL:
-        default: 20
+        default: 25
         type: number
         description: Stop after how many failures?
       LIMIT_FIX:
-        default: 20
+        default: 25
         type: number
         description: How many issues to auto-fix.
   push:
@@ -33,16 +33,16 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - env:
-          LIMIT_CHECK: ${{ inputs.LIMIT_CHECK || '500' }}
-          LIMIT_FAIL: ${{ inputs.LIMIT_FAIL || '20' }}
-          LIMIT_FIX: ${{ inputs.LIMIT_FIX || '20' }}
+          LIMIT_CHECK: ${{ inputs.LIMIT_CHECK || '1000' }}
+          LIMIT_FAIL: ${{ inputs.LIMIT_FAIL || '25' }}
+          LIMIT_FIX: ${{ inputs.LIMIT_FIX || '25' }}
         name: Run Script
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
           script: |
-            const LIMIT_CHECK = process.env.LIMIT_CHECK ? Number( process.env.LIMIT_CHECK ) : 500;
-            const LIMIT_FAIL = process.env.LIMIT_FAIL ? Number( process.env.LIMIT_FAIL ) : 20;
-            const LIMIT_FIX = process.env.LIMIT_FIX ? Number( process.env.LIMIT_FIX ) : 20;
+            const LIMIT_CHECK = process.env.LIMIT_CHECK ? Number( process.env.LIMIT_CHECK ) : 1000;
+            const LIMIT_FAIL = process.env.LIMIT_FAIL ? Number( process.env.LIMIT_FAIL ) : 25;
+            const LIMIT_FIX = process.env.LIMIT_FIX ? Number( process.env.LIMIT_FIX ) : 25;
             let COUNT_SEEN = 0;
 
             const milestones = ( await github.rest.issues.listMilestones( {
