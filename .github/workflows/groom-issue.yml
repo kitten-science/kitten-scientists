@@ -25,6 +25,7 @@ jobs:
             const LIMIT_CHECK = 20;
             const LIMIT_FAIL = 10;
             const LIMIT_FIX = 5;
+            let COUNT_SEEN = 0;
 
             const milestones = ( await github.rest.issues.listMilestones( {
               owner: context.repo.owner,
@@ -169,6 +170,7 @@ jobs:
                 core.debug( JSON.stringify( issue, undefined, 2 ) );
 
                 console.info( `Processing issue #${ issue.number } (${ issue.state })...` );
+                ++COUNT_SEEN;
                 if( issue.labels.some( _ => _.name === "policy-0" ) ) {
                   console.info( "Already labeled 'policy-0'. No further processing." );
                   continue;
@@ -191,7 +193,7 @@ jobs:
                 }
 
                 if( LIMIT_CHECK < ++issuesChecked || LIMIT_FAIL <= issuesFailed || LIMIT_FIX <= issuesFixed ) {
-                  core.error( `Bailing out during exploration phase!` );
+                  core.error( `Bailing out during exploration phase! Seen ${COUNT_SEEN} issues.` );
                   stopProcessing = true;
                   break;
                 }
