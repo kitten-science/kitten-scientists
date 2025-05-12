@@ -316,7 +316,7 @@ export class Engine {
 
     const loop = () => {
       const context: FrameContext = {
-        entry: new Date().getTime(),
+        entry: Date.now(),
         exit: 0,
         measurements: {},
         requestGameUiRefresh: false,
@@ -324,7 +324,7 @@ export class Engine {
 
       this._iterate(context)
         .then(() => {
-          context.exit = new Date().getTime();
+          context.exit = Date.now();
           const timeTaken = context.exit - context.entry;
 
           document.dispatchEvent(

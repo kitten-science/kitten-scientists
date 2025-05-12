@@ -16,7 +16,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
   constructor(
     parent: UiComponent,
     settings: MissionSettings,
-    locale: SettingOptions<SupportedLocale>,
+    _locale: SettingOptions<SupportedLocale>,
     sectionSetting: SpaceSettings,
   ) {
     const label = parent.host.engine.i18n("ui.upgrade.missions");
@@ -24,7 +24,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
       parent,
       settings,
       new SettingListItem(parent, settings, label, {
-        onCheck: (isBatchProcess?: boolean) => {
+        onCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
         onRefresh: () => {
@@ -33,7 +33,7 @@ export class MissionSettingsUi extends SettingsPanel<MissionSettings> {
             settings.enabled &&
             !Object.values(settings.missions).some(mission => mission.enabled);
         },
-        onUnCheck: (isBatchProcess?: boolean) => {
+        onUnCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
         },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),

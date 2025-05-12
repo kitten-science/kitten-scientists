@@ -13,7 +13,7 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
   constructor(
     parent: UiComponent,
     settings: BuildingUpgradeSettings,
-    locale: SettingOptions<SupportedLocale>,
+    _locale: SettingOptions<SupportedLocale>,
     sectionSetting: BonfireSettings,
   ) {
     const label = parent.host.engine.i18n("ui.upgrade.buildings");
@@ -21,11 +21,11 @@ export class BuildingUpgradeSettingsUi extends SettingsPanel<BuildingUpgradeSett
       parent,
       settings,
       new SettingListItem(parent, settings, label, {
-        onCheck: (isBatchProcess?: boolean) => {
+        onCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
 
-        onUnCheck: (isBatchProcess?: boolean) => {
+        onUnCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
         },
       }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),

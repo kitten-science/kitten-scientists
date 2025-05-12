@@ -80,7 +80,7 @@ export class SettingListItem<TSetting extends Setting = Setting> extends LabelLi
     this.readOnly = options?.readOnly ?? false;
     checkbox.prop("disabled", this.readOnly);
 
-    checkbox.on("change", (event: JQuery.ChangeEvent) => {
+    checkbox.on("change", (_event: JQuery.ChangeEvent) => {
       if (checkbox.is(":checked") && !setting.enabled) {
         this.check().catch(redirectErrorsToConsole(console));
       } else if (!checkbox.is(":checked") && setting.enabled) {

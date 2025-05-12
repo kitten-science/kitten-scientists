@@ -36,7 +36,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
       parent,
       settings,
       new SettingMaxTriggerListItem(parent, settings, locale, label, {
-        onCheck: (isBatchProcess?: boolean) => {
+        onCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
         onRefreshMax() {
@@ -101,7 +101,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<TimeSkipSettings, SettingM
 
           settings.trigger = parent.host.parseAbsolute(value) ?? settings.trigger;
         },
-        onUnCheck: (isBatchProcess?: boolean) => {
+        onUnCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
         },
         renderLabelTrigger: false,

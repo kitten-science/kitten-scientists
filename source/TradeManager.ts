@@ -729,10 +729,10 @@ export class TradeManager implements Automation {
    * @returns The lowest number of trades possible with this race.
    */
   getLowestTradeAmount(name: Race | null, _limited: boolean, _trigConditions: unknown): number {
-    let amount: number | undefined = undefined;
+    let amount: number | undefined;
     const materials = this.getMaterials(name);
 
-    let total: number | undefined = undefined;
+    let total: number | undefined;
     for (const [resource, required] of objectEntries(materials)) {
       if (resource === "manpower") {
         let manpowerCost = required;

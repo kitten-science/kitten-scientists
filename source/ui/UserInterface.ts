@@ -167,7 +167,7 @@ export class UserInterface extends UiComponent {
     this.element.remove();
   }
 
-  requestRefresh(withChildren = true, depth = 0, trace = false) {
+  requestRefresh(_withChildren = true, depth = 0, _trace = false) {
     if (this._needsRefresh) {
       if (this._refreshTimeout === undefined) {
         console.error(...cl("User interface claims to have a refresh pending, but there isn't."));

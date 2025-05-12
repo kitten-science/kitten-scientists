@@ -94,7 +94,9 @@
     "rules": {
       "correctness": {
         "noUndeclaredDependencies": "error",
+        "noUnknownPseudoClass": "off",
         "noUnusedImports": "error",
+        "useArrayLiterals": "off",
         "useImportExtensions": "error"
       },
       "nursery": {

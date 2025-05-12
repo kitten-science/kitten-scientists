@@ -91,11 +91,3 @@
 :global #game .res-row .res-cell.ks-stock-below {
   color: red;
 }
-
-/* Opinionated change to hide building group selection. */
-:global .bldTopContainer > a {
-  display: none !important;
-}
-:global .bldTopContainer > span {
-  display: none !important;
-}

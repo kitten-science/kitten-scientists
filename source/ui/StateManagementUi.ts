@@ -563,7 +563,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     const blob = new Blob([statesJson], { type: "application/x-ndjson" });
     const url = URL.createObjectURL(blob);
     a.setAttribute("href", url);
-    a.setAttribute("download", `ks-local-states-${new Date().getTime()}.ndjson`);
+    a.setAttribute("download", `ks-local-states-${Date.now()}.ndjson`);
     a.click();
   }
 
