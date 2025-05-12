@@ -47,8 +47,7 @@ export default defineConfig({
         override: {
           description: manifest.description,
           downloadURL,
-          homepage: manifest.homepage,
-          supportURL: manifest.bugs.url,
+          homepageURL: manifest.homepage,
           updateURL,
           version: versionString,
         },
