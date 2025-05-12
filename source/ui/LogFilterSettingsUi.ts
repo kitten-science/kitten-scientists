@@ -1,4 +1,5 @@
 import { FilterItems, type LogFilterSettings } from "../settings/LogFilterSettings.js";
+import { cl } from "../tools/Log.js";
 import { Container } from "./components/Container.js";
 import { ExplainerListItem } from "./components/ExplainerListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
@@ -9,6 +10,8 @@ import type { UiComponent } from "./components/UiComponent.js";
 
 export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
   constructor(parent: UiComponent, settings: LogFilterSettings) {
+    console.debug(...cl(`Constructing ${LogFiltersSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.filter");
     super(
       parent,

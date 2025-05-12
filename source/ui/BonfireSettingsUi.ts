@@ -2,6 +2,7 @@ import { coalesceArray, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import { BonfireSettings } from "../settings/BonfireSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
+import { cl } from "../tools/Log.js";
 import type { Building, StagedBuilding } from "../types/index.js";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
@@ -20,6 +21,8 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
     settings: BonfireSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${BonfireSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.build");
     super(
       parent,

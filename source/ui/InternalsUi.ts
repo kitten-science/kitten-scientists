@@ -3,6 +3,7 @@ import { Icons } from "../images/Icons.js";
 import { ksVersion } from "../KittenScientists.js";
 import type { EngineSettings } from "../settings/EngineSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
+import { cl } from "../tools/Log.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";
@@ -23,6 +24,8 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
     settings: EngineSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${InternalsUi.name}`));
+
     super(
       parent,
       settings,

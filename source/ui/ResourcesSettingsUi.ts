@@ -4,6 +4,7 @@ import { Icons } from "../images/Icons.js";
 import type { ResourcesSettings, ResourcesSettingsItem } from "../settings/ResourcesSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { ucfirst } from "../tools/Format.js";
+import { cl } from "../tools/Log.js";
 import type { Resource } from "../types/index.js";
 import stylesButton from "./components/Button.module.css";
 import { ConsumeButton } from "./components/buttons/ConsumeButton.js";
@@ -23,6 +24,8 @@ export class ResourcesSettingsUi extends SettingsPanel<ResourcesSettings> {
     settings: ResourcesSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${ResourcesSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.resources");
     super(
       parent,

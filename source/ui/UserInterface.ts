@@ -45,6 +45,8 @@ export class UserInterface extends UiComponent {
   private _refreshTimeout: number | undefined;
 
   constructor(host: KittenScientists) {
+    console.debug(...cl(`Constructing ${UserInterface.name}`));
+
     super({ host }, {});
 
     const engine = host.engine;

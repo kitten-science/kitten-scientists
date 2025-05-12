@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import { ReligionSettings } from "../settings/ReligionSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
+import { cl } from "../tools/Log.js";
 import { ReligionOptions, UnicornItems, type ZigguratUpgrade } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import stylesButton from "./components/Button.module.css";
@@ -28,6 +29,8 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
     settings: ReligionSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${ReligionSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.faith");
     super(
       parent,

@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { SettingMax, SettingOptions } from "../settings/Settings.js";
 import type { VillageSettings } from "../settings/VillageSettings.js";
+import { cl } from "../tools/Log.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
@@ -27,6 +28,8 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
     settings: VillageSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${VillageSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.distribute");
     super(
       parent,

@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeItem, TimeSettings } from "../settings/TimeSettings.js";
+import { cl } from "../tools/Log.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
@@ -17,6 +18,8 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
     settings: TimeSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${TimeSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.time");
     super(
       parent,

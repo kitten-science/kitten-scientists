@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { SpaceSettings } from "../settings/SpaceSettings.js";
+import { cl } from "../tools/Log.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
@@ -19,6 +20,8 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
     settings: SpaceSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${SpaceSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.space");
     super(
       parent,

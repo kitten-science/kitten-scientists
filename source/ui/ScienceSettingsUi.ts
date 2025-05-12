@@ -1,6 +1,7 @@
 import type { SupportedLocale } from "../Engine.js";
 import type { ScienceSettings } from "../settings/ScienceSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
+import { cl } from "../tools/Log.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -20,6 +21,8 @@ export class ScienceSettingsUi extends SettingsPanel<ScienceSettings> {
     settings: ScienceSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${ScienceSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.upgrade");
     super(
       parent,

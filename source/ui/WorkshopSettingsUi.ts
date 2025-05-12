@@ -3,6 +3,7 @@ import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { type CraftSettingsItem, WorkshopSettings } from "../settings/WorkshopSettings.js";
 import { ucfirst } from "../tools/Format.js";
+import { cl } from "../tools/Log.js";
 import type { ResourceCraftable } from "../types/index.js";
 import { Dialog } from "./components/Dialog.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -21,6 +22,8 @@ export class WorkshopSettingsUi extends SettingsPanel<WorkshopSettings, SettingT
     settings: WorkshopSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${WorkshopSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.craft");
     super(
       parent,

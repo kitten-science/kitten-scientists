@@ -1,6 +1,7 @@
 import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
+import { cl } from "../tools/Log.js";
 import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
@@ -25,6 +26,8 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
     settings: TimeControlSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${TimeControlSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.timeCtrl");
     super(
       parent,

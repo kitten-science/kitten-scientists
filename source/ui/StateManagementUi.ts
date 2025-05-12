@@ -60,6 +60,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
     settings: StateSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${StateManagementUi.name}`));
+
     const label = parent.host.engine.i18n("state.title");
     super(
       parent,

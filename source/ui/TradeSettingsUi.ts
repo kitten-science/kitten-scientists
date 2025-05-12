@@ -8,6 +8,7 @@ import type {
 } from "../settings/Settings.js";
 import type { TradeSettings, TradeSettingsItem } from "../settings/TradeSettings.js";
 import { ucfirst } from "../tools/Format.js";
+import { cl } from "../tools/Log.js";
 import { BuyButton } from "./components/buttons-text/BuyButton.js";
 import { SellButton } from "./components/buttons-text/SellButton.js";
 import { Dialog } from "./components/Dialog.js";
@@ -29,6 +30,8 @@ export class TradeSettingsUi extends SettingsPanel<TradeSettings, SettingTrigger
     settings: TradeSettings,
     locale: SettingOptions<SupportedLocale>,
   ) {
+    console.debug(...cl(`Constructing ${TradeSettingsUi.name}`));
+
     const label = parent.host.engine.i18n("ui.trade");
     super(
       parent,
