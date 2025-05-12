@@ -25,7 +25,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
       parent,
       settings,
       new SettingTriggerListItem(parent, settings, locale, label, {
-        onCheck: (isBatchProcess?: boolean) => {
+        onCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
         onRefreshTrigger: () => {
@@ -63,7 +63,7 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
 
           settings.trigger = parent.host.parsePercentage(value);
         },
-        onUnCheck: (isBatchProcess?: boolean) => {
+        onUnCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
         },
         renderLabelTrigger: false,

@@ -27,7 +27,7 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
       parent,
       settings,
       new SettingTriggerListItem(parent, settings, locale, label, {
-        onCheck: (isBatchProcess?: boolean) => {
+        onCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.enable", [label]);
         },
         onSetTrigger: async () => {
@@ -47,7 +47,7 @@ export class TimeSkipHeatSettingsUi extends SettingsPanel<
 
           settings.trigger = parent.host.parsePercentage(value);
         },
-        onUnCheck: (isBatchProcess?: boolean) => {
+        onUnCheck: (_isBatchProcess?: boolean) => {
           parent.host.engine.imessage("status.auto.disable", [label]);
           settings.activeHeatTransferStatus.enabled = false;
         },
