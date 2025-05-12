@@ -45,7 +45,7 @@
     "tslib": "2.8.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.0-beta.2",
+    "@biomejs/biome": "2.0.0-beta.3",
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.32",
     "@types/node": "22.15.17",
