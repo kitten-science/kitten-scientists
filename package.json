@@ -50,7 +50,7 @@
     "@types/jquery": "3.5.32",
     "@types/node": "22.15.18",
     "@types/semver": "7.7.0",
-    "@types/web": "0.0.233",
+    "@types/web": "0.0.234",
     "cheerio": "1.0.0",
     "dojo": "1.17.3",
     "esbuild": "0.25.4",
