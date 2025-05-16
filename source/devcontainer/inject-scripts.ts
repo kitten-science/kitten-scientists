@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const indexHtml = readFileSync("index.html", "utf8");
-const injectables = process.argv.slice(2);
-let injectedHtml = indexHtml.replace(
+const injectables = readdirSync("overlay").map(_ => _.endsWith(".inject.js"));
+const injectedHtml = indexHtml.replace(
   "</body>",
   `<script>
     const scripts = ${JSON.stringify(injectables)};
@@ -14,9 +14,5 @@ let injectedHtml = indexHtml.replace(
       document.body.appendChild(script);
     }
   </script></body>`,
-);
-injectedHtml = injectedHtml.replace(
-  /<title>.+<\/title>/,
-  "<title>☣ Kitten Scientists Development Environment</title>",
 );
 writeFileSync("index.html", injectedHtml);

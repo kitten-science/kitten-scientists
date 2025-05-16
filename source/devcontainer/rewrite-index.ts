@@ -13,7 +13,7 @@ const main = async () => {
   $("script[src='https://www.googletagmanager.com/gtag/js?id=G-0QBDX221PR'] + script").remove();
   $("script[src='https://www.googletagmanager.com/gtag/js?id=G-0QBDX221PR']").remove();
 
-  // Remove Crowdjet
+  // Remove Crowdjet (removed upstream. retained here for legacy support.)
   $("script[src='https://crowdin.com/js/crowdjet/crowdjet.js']").remove();
   $("#crowdjet-container").remove();
   $("#crowdjet-expand-container").remove();
@@ -21,8 +21,11 @@ const main = async () => {
   // Move all JS to external file.
   const indexJs = $("script:not([src])")
     .text()
-    .replaceAll(/Date.now\(\)/g, "1494");
+    // 1494 is the base version of the game. fb07a6718893e6e1039c9ee77ecb388b1da3600a is a commit hash from this tree.
+    .replaceAll(/Date.now\(\)/g, "1494-fb07a6718893e6e1039c9ee77ecb388b1da3600a");
+
   await writeFile("index.js", indexJs);
+
   $("script:not([src])").remove();
   $("html").append('<script type="text/javascript" src="index.js"></script>');
 

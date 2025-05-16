@@ -2,6 +2,9 @@
 
 The development container is an OCI that you can run with Docker or other container runtimes. It provides a copy of the game, with the script already loaded into it. This allows you to make changes to the script, and quickly evaluate these changes, without having to build a userscript and load that into your userscript manager.
 
+> [!IMPORTANT]
+> The Kitten Science Development Containers are not to be confused with [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/create-dev-container). Kitten Science tries to be agnostic about development environments, and does not directly support features exclusive to VS Code.
+
 ## Quick Start
 
 The easiest way to get started is to just run the published OCI as-is.
@@ -19,6 +22,8 @@ The easiest way to get started is to just run the published OCI as-is.
     podman run \
         ghcr.io/kitten-science/devcontainer:nightly
     ```
+
+Of course, this won't help you much with development, as the source code in the container is static. Read the further examples to see how to add more functionality.
 
 ## Full Background Example
 
@@ -128,3 +133,11 @@ The container itself is not very complicated, and rarely needs to be built local
     podman stop devcontainer
     podman rm devcontainer
     ```
+
+## Using the Kitten Analysts Development Container
+
+_todo_
+
+## Running the Kitten Analysts Backend
+
+_todo_
