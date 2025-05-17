@@ -204,6 +204,7 @@ jobs:
       - name: Enable Corepack
         run: |
           npm install --global corepack
+          corepack enable
           yarn config set enableGlobalCache false
 
       - name: Load cached dependencies
