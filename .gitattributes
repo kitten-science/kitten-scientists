@@ -1,6 +1,3 @@
-.yarn/cache/*.zip binary
-.yarn linguist-vendored
-
 docs/** linguist-documentation
 
 # In general, use LF for text

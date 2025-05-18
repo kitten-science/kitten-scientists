@@ -48,17 +48,12 @@ jobs:
           cache-dependency-path: requirements.txt
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Configure CorePack/Package Manager
-        run: |
-          yarn config set enableGlobalCache false
-
       - name: Load cached dependencies
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node${{ env.NODE_VERSION }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node{{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node${{ env.NODE_VERSION }}
 
       - name: Build documentation
         run: |

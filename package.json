@@ -28,34 +28,25 @@
     "output"
   ],
   "scripts": {
-    "build": "yarn run build:all",
-    "ks:build": "vite --config vite.config.inject.js build",
-    "ks:preview": "DEV_BUILD=true vite --config vite.config.userscript.js build",
-    "ks:release": "MINIFY=true vite --config vite.config.userscript.js build; vite --config vite.config.userscript.js build",
-    "ks:version": "node version.cjs",
-    "ks:watch": "vite --config vite.config.inject.js build --watch",
-    "lint": "yarn run lint:all",
-    "test": "echo This project has no tests.",
-    "whoami": "echo kitten-scientists"
-  },
-  "dependencies": {
-    "@oliversalzburg/js-utils": "0.3.0",
-    "date-fns": "4.1.0",
-    "semver": "7.7.2",
-    "tslib": "2.8.1"
+    "preversion": "make lint test",
+    "postversion": "git push"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0-beta.4",
+    "@oliversalzburg/js-utils": "0.3.0",
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.32",
     "@types/node": "22.15.18",
     "@types/semver": "7.7.0",
     "@types/web": "0.0.235",
     "cheerio": "1.0.0",
+    "date-fns": "4.1.0",
     "dojo": "1.17.3",
     "esbuild": "0.25.4",
     "rollup": "4.41.0",
     "rollup-plugin-cleanup": "3.2.1",
+    "semver": "7.7.2",
+    "tslib": "2.8.1",
     "typescript": "5.8.3",
     "vite": "6.3.5",
     "vite-plugin-css-injected-by-js": "3.5.2",
@@ -69,6 +60,5 @@
   ],
   "engines": {
     "node": ">= 20"
-  },
-  "packageManager": "yarn@4.9.1"
+  }
 }

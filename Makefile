@@ -13,12 +13,12 @@ git-hook:
 	echo "make pretty" > .git/hooks/pre-commit
 
 pretty: node_modules
-	yarn biome check --no-errors-on-unmatched --fix --unsafe
+	npm exec -- biome check --no-errors-on-unmatched --fix --unsafe
 	npm pkg fix
 
 lint: node_modules
-	yarn biome check .
-	yarn tsc --noEmit
+	npm exec -- biome check .
+	npm exec -- tsc --noEmit
 
 test:
 	@echo "Kitten Scientists test in production."
@@ -38,20 +38,20 @@ devcontainer-oci: devcontainer
 
 
 node_modules:
-	yarn install
+	npm install
 
 lib: node_modules
-	yarn tsc --build
+	npm exec -- tsc --build
 
 .PHONY: injectable userscript loader
 injectable: node_modules
-	yarn vite --config vite.config.inject.js build
-	MINIFY=true yarn vite --config vite.config.inject.js build
+	npm exec -- vite --config vite.config.inject.js build
+	MINIFY=true npm exec -- vite --config vite.config.inject.js build
 	mkdir -p devcontainer/overlay/ && cp output/kitten-scientists.inject.js devcontainer/overlay/kitten-scientists.inject.js
 
 userscript: node_modules
-	yarn vite --config vite.config.userscript.js build
-	MINIFY=true yarn vite --config vite.config.userscript.js build
+	npm exec -- vite --config vite.config.userscript.js build
+	MINIFY=true npm exec -- vite --config vite.config.userscript.js build
 
 loader: node_modules injectable
 	yarn vite --config vite.config.loader.js build

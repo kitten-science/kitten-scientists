@@ -21,7 +21,7 @@ export default defineConfig({
   build: {
     emptyOutDir: false,
     lib: {
-      entry: "source/entrypoint-userscript.ts",
+      entry: "source/entrypoint-loader.ts",
       name: "kitten-scientists",
     },
     minify: minify ? "esbuild" : false,
