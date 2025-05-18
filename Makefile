@@ -2,7 +2,7 @@
 
 default: build
 
-build: devcontainer lib
+build: devcontainer injectable userscript loader lib
 
 clean:
 	rm --force --recursive _site .venv devcontainer/overlay docs/current/public lib node_modules output tsconfig.tsbuildinfo
@@ -36,24 +36,27 @@ devcontainer-oci: devcontainer
 		--tag localhost/devcontainer:latest \
 		.
 
+
 node_modules:
 	yarn install
 
 lib: node_modules
 	yarn tsc --build
 
-output: node_modules
-	yarn vite --config vite.config.userscript.js build
-
-.PHONY: injectable
+.PHONY: injectable userscript loader
 injectable: node_modules
 	yarn vite --config vite.config.inject.js build
+	MINIFY=true yarn vite --config vite.config.inject.js build
 	mkdir -p devcontainer/overlay/ && cp output/kitten-scientists.inject.js devcontainer/overlay/kitten-scientists.inject.js
 
-.PHONY: userscript
 userscript: node_modules
 	yarn vite --config vite.config.userscript.js build
 	MINIFY=true yarn vite --config vite.config.userscript.js build
+
+loader: node_modules injectable
+	yarn vite --config vite.config.loader.js build
+	MINIFY=true yarn vite --config vite.config.loader.js build
+
 
 .venv:
 	python3 -m venv .venv
