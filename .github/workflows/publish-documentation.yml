@@ -48,10 +48,8 @@ jobs:
           cache-dependency-path: requirements.txt
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Enable Corepack
+      - name: Configure CorePack/Package Manager
         run: |
-          npm install --global corepack
-          corepack enable
           yarn config set enableGlobalCache false
 
       - name: Load cached dependencies

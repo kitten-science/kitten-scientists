@@ -202,10 +202,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: https://registry.npmjs.org
 
-      - name: Enable Corepack
+      - name: Configure CorePack/Package Manager
         run: |
-          npm install --global corepack
-          corepack enable
           yarn config set enableGlobalCache false
 
       - name: Load cached dependencies
