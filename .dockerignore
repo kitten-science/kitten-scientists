@@ -1,7 +1,6 @@
 _site/
 .github/
 .vscode/
-.yarn/
 @types/
 contrib/
 docs/
@@ -11,7 +10,6 @@ source/
 .editorconfig
 .gitattributes
 .gitignore
-.yarnrc.yml
 biome.json
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
@@ -19,8 +17,6 @@ crowdin.yml
 DEVELOPMENT.md
 Makefile
 metablock.json
-package.json-scripts.json
 renovate.json
 tsconfig.*
 vite.*
-yarn.lock
