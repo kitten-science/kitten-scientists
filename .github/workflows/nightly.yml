@@ -228,7 +228,7 @@ jobs:
         env:
           RELEASE_CHANNEL: ${{ needs.params.outputs.release-channel }}
           RELEASE_VERSION: ${{ needs.changelog.outputs.version }}
-        run: make devcontainer injectable userscript
+        run: make
 
       - name: Download changelog
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4

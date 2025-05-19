@@ -10,7 +10,7 @@ clean:
 docs: docs/current/public
 
 git-hook:
-	echo "make pretty" > .git/hooks/pre-commit
+	echo "make pretty" > .git/hooks/pre-commit; chmod +x .git/hooks/pre-commit
 
 pretty: node_modules
 	npm exec -- biome check --no-errors-on-unmatched --fix --unsafe
