@@ -91,12 +91,15 @@
   },
   "linter": {
     "enabled": true,
+    "includes": ["package.json"],
     "rules": {
+      "complexity": {
+        "useNumericLiterals": "error"
+      },
       "correctness": {
         "noUndeclaredDependencies": "error",
         "noUnknownPseudoClass": "off",
         "noUnusedImports": "error",
-        "useArrayLiterals": "off",
         "useImportExtensions": "error"
       },
       "nursery": {
@@ -111,6 +114,7 @@
         "noParameterAssign": "error",
         "noUnusedTemplateLiteral": "error",
         "noUselessElse": "error",
+        "useArrayLiterals": "off",
         "useAsConstAssertion": "error",
         "useConst": "error",
         "useDefaultParameterLast": "error",
@@ -121,7 +125,6 @@
         "useLiteralEnumMembers": "error",
         "useNodejsImportProtocol": "error",
         "useNumberNamespace": "error",
-        "useNumericLiterals": "error",
         "useSelfClosingElements": "error",
         "useShorthandFunctionType": "error",
         "useSingleVarDeclarator": "error",
