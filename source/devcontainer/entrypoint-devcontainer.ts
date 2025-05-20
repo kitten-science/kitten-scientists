@@ -52,11 +52,11 @@ const main = async () => {
 
   const httpServer = spawn("yarn", ["run", "watch-http-server", "-p", "8080"], { shell: true });
   httpServer.stdout.on("data", data => {
-    process.stderr.write(`stdout: ${data}\n`);
+    process.stderr.write(`stdout: ${data}`);
   });
 
   httpServer.stderr.on("data", data => {
-    process.stderr.write(`stderr: ${data}\n`);
+    process.stderr.write(`stderr: ${data}`);
   });
 
   httpServer.on("close", code => {
