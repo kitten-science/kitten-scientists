@@ -3,7 +3,8 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const indexHtml = readFileSync("index.html", "utf8");
-const injectables = readdirSync("overlay").map(_ => _.endsWith(".inject.js"));
+const injectables = readdirSync("overlay").filter(_ => _.endsWith(".inject.js"));
+process.stderr.write(`Injecting ${injectables.join(",")}...\n`);
 const injectedHtml = indexHtml.replace(
   "</body>",
   `<script>
