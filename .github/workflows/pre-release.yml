@@ -237,7 +237,7 @@ jobs:
           # will not find any artifacts to put in the update metadata, because the release is still a draft.
           draft: false
           dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
-          files: output/*
+          files: output/*.js
           merge-similar: true
           prerelease: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}
