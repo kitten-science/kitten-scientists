@@ -63,6 +63,13 @@ const main = async () => {
     process.stderr.write(`Child process exited with code ${code}. Exiting.\n`);
     process.exit(code);
   });
+
+  for (const signal of ["SIGINT", "SIGTERM", "SIGQUIT"] as const) {
+    process.on(signal, () => {
+      httpServer.kill(signal);
+      process.exit();
+    });
+  }
 };
 
 main().catch(redirectErrorsToStream(process.stderr));
