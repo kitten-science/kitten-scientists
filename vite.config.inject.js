@@ -26,7 +26,7 @@ export default defineConfig({
         format: "umd",
       },
     },
-    sourcemap: "inline",
+    sourcemap: "hidden",
   },
   define: {
     RELEASE_CHANNEL,

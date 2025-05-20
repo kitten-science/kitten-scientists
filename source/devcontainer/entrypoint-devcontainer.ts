@@ -43,6 +43,7 @@ const main = async () => {
       for (const subject of scripts) {
         const script = document.createElement("script");
         script.src = subject + "?_=" + new Date().getTime();
+        script.type = "text/javascript";
         document.body.appendChild(script);
       }
       </script>`);
