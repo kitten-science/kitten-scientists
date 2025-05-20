@@ -35,6 +35,7 @@ export default defineConfig({
       },
       plugins: [cleanup({ comments: "none", extensions: ["js", "ts"] })],
     },
+    sourcemap: "hidden",
   },
   define: {
     RELEASE_CHANNEL: JSON.stringify(RELEASE_CHANNEL),

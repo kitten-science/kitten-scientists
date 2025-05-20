@@ -22,7 +22,7 @@ const PAYLOAD = JSON.stringify(
   readFileSync(
     minify ? "./output/kitten-scientists.min.inject.js" : "./output/kitten-scientists.inject.js",
     "utf-8",
-  ).replace(/\/\/# sourceMappingURL=.+/, ""),
+  ),
 );
 
 export default defineConfig({
@@ -41,6 +41,7 @@ export default defineConfig({
         format: "umd",
       },
     },
+    sourcemap: "hidden",
   },
   define: {
     PAYLOAD,
