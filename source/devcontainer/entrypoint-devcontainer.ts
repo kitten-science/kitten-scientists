@@ -52,15 +52,15 @@ const main = async () => {
 
   const httpServer = spawn("yarn", ["run", "watch-http-server", "-p", "8080"], { shell: true });
   httpServer.stdout.on("data", data => {
-    console.log(`stdout: ${data}`);
+    process.stderr.write(`stdout: ${data}\n`);
   });
 
   httpServer.stderr.on("data", data => {
-    console.error(`stderr: ${data}`);
+    process.stderr.write(`stderr: ${data}\n`);
   });
 
   httpServer.on("close", code => {
-    console.log(`Child process exited with code ${code}. Exiting.`);
+    process.stderr.write(`Child process exited with code ${code}. Exiting.\n`);
     process.exit(code);
   });
 };
