@@ -15,8 +15,5 @@ RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
 WORKDIR /kittensgame
 COPY "devcontainer/overlay/*" "./overlay/"
 COPY "output/devcontainer/*" "./mod/"
-RUN [ "node", "mod/rewrite-index.mjs" ]
-RUN [ "node", "mod/inject-scripts.mjs" ]
 
-# Start the development server that serves the Kittens Game.
-CMD [ "/bin/bash", "-c", "yarn run watch-http-server -p 8080" ]
+CMD [ "/bin/bash", "-c", "mod/entrypoint-devcontainer.mjs" ]

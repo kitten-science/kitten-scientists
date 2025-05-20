@@ -4,10 +4,7 @@ import esbuild from "esbuild";
 esbuild
   .build({
     bundle: true,
-    entryPoints: [
-      "./source/devcontainer/inject-scripts.ts",
-      "./source/devcontainer/rewrite-index.ts",
-    ],
+    entryPoints: ["./source/devcontainer/entrypoint-devcontainer.ts"],
     format: "esm",
     outdir: "output/devcontainer",
     outExtension: { ".js": ".mjs" },

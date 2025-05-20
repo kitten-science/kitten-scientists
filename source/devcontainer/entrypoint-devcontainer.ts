@@ -1,9 +1,17 @@
+#!/usr/bin/env node
+
+import { spawn } from "node:child_process";
+import { readdirSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
+import { join } from "node:path";
+import { redirectErrorsToStream } from "@oliversalzburg/js-utils/errors/stream.js";
 import * as cheerio from "cheerio";
 
 const main = async () => {
   const indexHtml = await readFile("index.html", { encoding: "utf8" });
+  const injectables = readdirSync("overlay")
+    .filter(_ => _.endsWith(".inject.js"))
+    .map(_ => join("overlay", _));
   const $ = cheerio.load(indexHtml);
 
   // First script block is NewRelic
@@ -29,8 +37,32 @@ const main = async () => {
   $("script:not([src])").remove();
   $("html").append('<script type="text/javascript" src="index.js"></script>');
 
+  process.stderr.write(`Injecting ${injectables.join(",")}...\n`);
+  $("html").append(`<script type="text/javascript">
+      const scripts = ${JSON.stringify(injectables)};
+      for (const subject of scripts) {
+        const script = document.createElement("script");
+        script.src = subject + "?_=" + new Date().getTime();
+        document.body.appendChild(script);
+      }
+      </script>`);
+
   // Write result back to file.
   await writeFile("index.html", $.html());
+
+  const httpServer = spawn("yarn", ["run", "watch-http-server", "-p", "8080"], { shell: true });
+  httpServer.stdout.on("data", data => {
+    console.log(`stdout: ${data}`);
+  });
+
+  httpServer.stderr.on("data", data => {
+    console.error(`stderr: ${data}`);
+  });
+
+  httpServer.on("close", code => {
+    console.log(`Child process exited with code ${code}. Exiting.`);
+    process.exit(code);
+  });
 };
 
-main().catch(redirectErrorsToConsole(console));
+main().catch(redirectErrorsToStream(process.stderr));
