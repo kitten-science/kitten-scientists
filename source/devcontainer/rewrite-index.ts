@@ -22,7 +22,7 @@ const main = async () => {
   const indexJs = $("script:not([src])")
     .text()
     // 1494 is the base version of the game. fb07a6718893e6e1039c9ee77ecb388b1da3600a is a commit hash from this tree.
-    .replaceAll(/Date.now\(\)/g, "1494-fb07a6718893e6e1039c9ee77ecb388b1da3600a");
+    .replaceAll(/Date.now\(\)/g, '"1494-fb07a6718893e6e1039c9ee77ecb388b1da3600a"');
 
   await writeFile("index.js", indexJs);
 
