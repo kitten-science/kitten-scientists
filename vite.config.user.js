@@ -46,9 +46,11 @@ export default defineConfig({
     {
       ...metablock({
         override: {
+          author: manifest.author,
           description: manifest.description,
           downloadURL,
           homepageURL: manifest.homepage,
+          supportURL: manifest.bugs.url,
           updateURL,
           version: versionString,
         },
