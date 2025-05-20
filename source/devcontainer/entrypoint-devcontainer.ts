@@ -27,10 +27,11 @@ const main = async () => {
   $("#crowdjet-expand-container").remove();
 
   // Move all JS to external file.
+  const cacheBreaker = "1494-8094d2a0f18a0987ea7f08a0cc0d0f50a755d15f";
   const indexJs = $("script:not([src])")
     .text()
-    // 1494 is the base version of the game. fb07a6718893e6e1039c9ee77ecb388b1da3600a is a commit hash from this tree.
-    .replaceAll(/Date.now\(\)/g, '"1494-fb07a6718893e6e1039c9ee77ecb388b1da3600a"');
+    // 1494 is the base version of the game. 8094d2a0f18a0987ea7f08a0cc0d0f50a755d15f is a commit hash from this tree.
+    .replaceAll(/Date.now\(\)/g, `"${cacheBreaker}"`);
 
   await writeFile("index.js", indexJs);
 
@@ -42,7 +43,7 @@ const main = async () => {
       const scripts = ${JSON.stringify(injectables)};
       for (const subject of scripts) {
         const script = document.createElement("script");
-        script.src = subject + "?_=" + new Date().getTime();
+        script.src = subject + "?_=${cacheBreaker}";
         script.type = "text/javascript";
         document.body.appendChild(script);
       }
