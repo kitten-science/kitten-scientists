@@ -15,5 +15,6 @@ RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
 WORKDIR /kittensgame
 COPY "devcontainer/overlay/*" "./overlay/"
 COPY "output/devcontainer/*" "./mod/"
+RUN [ "chmod", "+x", "mod/entrypoint-devcontainer.mjs" ]
 
 CMD [ "/bin/bash", "-c", "mod/entrypoint-devcontainer.mjs" ]
