@@ -14,7 +14,13 @@ import { UserScriptLoader } from "./UserScriptLoader.js";
 import { UserInterface } from "./ui/UserInterface.js";
 
 declare global {
-  const GM: unknown;
+  const GM:
+    | {
+        info?: {
+          scriptHandler?: string;
+        };
+      }
+    | undefined;
   const RELEASE_CHANNEL: ReleaseChannel;
   const RELEASE_VERSION: string | undefined;
 }
@@ -66,9 +72,6 @@ export class KittenScientists {
       this._userInterface = new UserInterface(this);
     } catch (error: unknown) {
       console.error(...cl("Failed to construct core components.", error));
-      if (typeof GM !== "undefined") {
-        console.warn(...cl("Detected running in Greasemonkey."));
-      }
       throw error;
     }
 

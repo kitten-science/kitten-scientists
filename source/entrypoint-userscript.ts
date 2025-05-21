@@ -13,6 +13,6 @@ export const main = async () => {
 
 // We auto-ignite the loader, unless we're running in GreaseMonkey (content script).
 // The content script loader will handle the orchestration of that scenario.
-if (typeof GM === "undefined") {
+if (typeof GM === "undefined" || GM?.info?.scriptHandler === "Tampermonkey") {
   main().catch(redirectErrorsToConsole(console));
 }
