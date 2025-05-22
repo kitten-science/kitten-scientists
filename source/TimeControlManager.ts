@@ -200,7 +200,7 @@ export class TimeControlManager {
     }
 
     if (checkList.length === 0) {
-      const panels = mustExist(this._spaceManager.manager.tab.planetPanels);
+      const panels = mustExist(this._host.game.spaceTab.planetPanels);
       for (const panel of panels) {
         for (const panelButton of panel.children) {
           const model = mustExist(panelButton.model);

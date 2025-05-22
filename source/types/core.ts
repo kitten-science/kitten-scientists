@@ -192,12 +192,12 @@ export type ButtonController<
   clickHandler: (model: TModel, event: Event) => void;
   buyItem: (
     model: {
-      prices?: Maybe<Array<Price>>;
+      prices?: Array<Price> | null;
       enabled?: boolean;
-      handler: AnyFunction;
-      priceRatio?: number;
+      handler?: AnyFunction | null;
+      priceRatio?: number | null;
     },
-    event?: Maybe<Event>,
+    event?: Event | null,
   ) => UnsafeBuyItemResult;
   refund: (model: TModel) => void;
 };

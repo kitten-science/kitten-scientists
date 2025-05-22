@@ -54,6 +54,8 @@ import type {
   Tab,
   TabManager,
   UnsafeBuildingBtnModel,
+  UnsafeBuildingBtnModernModel,
+  UnsafeBuildingStackableBtnModel,
 } from "./core.js";
 import type {
   AutoPinnedButton,
@@ -108,8 +110,11 @@ import type {
   TranscendenceBtnController,
   TransformBtnController,
   UnsafePact,
+  UnsafeReligionBtnModel,
   UnsafeReligionUpgrade,
+  UnsafeTranscendenceBtnModel,
   UnsafeTranscendenceUpgrade,
+  UnsafeZigguratBtnModel,
   UnsafeZigguratUpgrade,
   ZigguratBtnController,
 } from "./religion.js";
@@ -149,6 +154,7 @@ import type {
   TimeManager,
   TimeTab,
   UnsafeChronoForgeUpgrade,
+  UnsafeChronoforgeUpgradeButtonOptions,
   UnsafeVoidSpaceUpgrade,
   VoidSpaceBtnController,
   VoidSpaceWgt,
@@ -607,6 +613,33 @@ export const QueueElementTypes = [
   "zebraUpgrades",
   "zigguratUpgrades",
 ] as const;
+export type QueueElementTypeMap = {
+  buildings: {
+    controller: StagingBldBtnController | BuildingBtnModernController;
+    model: UnsafeBuildingBtnModernModel<AllBuildingStackableBtnOptions>;
+  };
+  chronoforge: {
+    controller: ChronoforgeBtnController;
+    model: UnsafeBuildingStackableBtnModel<UnsafeChronoforgeUpgradeButtonOptions>;
+  };
+  pacts: { controller: null; model: null };
+  policies: { controller: null; model: null };
+  religion: { controller: ReligionBtnController; model: UnsafeReligionBtnModel };
+  spaceBuilding: { controller: null; model: null };
+  spaceMission: {
+    controller: SpaceProgramBtnController<UnsafeBuildingStackableBtnModel>;
+    model: UnsafeBuildingStackableBtnModel;
+  };
+  tech: { controller: null; model: null };
+  transcendenceUpgrades: {
+    controller: TranscendenceBtnController;
+    model: UnsafeTranscendenceBtnModel;
+  };
+  upgrades: { controller: null; model: null };
+  voidSpace: { controller: null; model: null };
+  zebraUpgrades: { controller: null; model: null };
+  zigguratUpgrades: { controller: ZigguratBtnController; model: UnsafeZigguratBtnModel };
+};
 export type QueueElementType = (typeof QueueElementTypes)[number];
 
 export enum UnicornItemVariant {
