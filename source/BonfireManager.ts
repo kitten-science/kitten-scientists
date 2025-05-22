@@ -26,7 +26,6 @@ import type { WorkshopManager } from "./WorkshopManager.js";
 export class BonfireManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: BonfireSettings;
-  readonly manager: TabManager<BuildingsModern>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
@@ -37,7 +36,6 @@ export class BonfireManager implements Automation {
   ) {
     this._host = host;
     this.settings = settings;
-    this.manager = new TabManager<BuildingsModern>(this._host, "Bonfire");
 
     this._workshopManager = workshopManager;
     this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
@@ -47,10 +45,6 @@ export class BonfireManager implements Automation {
     if (!this.settings.enabled) {
       return;
     }
-
-    // We must call `.render()` here, because evaluation of availability of our options
-    // is only performed when the game renders the contents of that tab.
-    this.manager.render();
 
     this.autoBuild(context);
     this.autoMisc(context);
@@ -72,9 +66,9 @@ export class BonfireManager implements Automation {
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<BonfireItem, Required<UnsafeBuilding>>> = {};
     for (const build of Object.values(builds)) {
-      metaData[build.building] = this.getBuild(
+      metaData[build.building] = this._host.game.bld.getBuildingExt(
         (build.baseBuilding ?? build.building) as Building,
-      ).meta;
+      ).meta as Required<UnsafeBuilding>;
     }
     const sectionTrigger = this.settings.trigger;
 
@@ -112,7 +106,7 @@ export class BonfireManager implements Automation {
       if (this._workshopManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
         const prices = mustExist(pastureMeta.stages)[1].prices;
         if (this._bulkManager.singleBuildPossible(pastureMeta, prices, 1)) {
-          const button = this.getBuildButton("pasture", 0);
+          const button = this.getBuild("pasture", 0);
           if (!isNil(button?.model)) {
             // We need to perform the process like this to avoid UI confirmations
             // for selling items.
@@ -146,7 +140,7 @@ export class BonfireManager implements Automation {
       if (this._workshopManager.getPotentialCatnip(true, pastures, 0) > 0) {
         const prices = mustExist(aqueductMeta.stages)[1].prices;
         if (this._bulkManager.singleBuildPossible(aqueductMeta, prices, 1)) {
-          const button = this.getBuildButton("aqueduct", 0);
+          const button = this.getBuild("aqueduct", 0);
           if (!isNil(button?.model)) {
             button.controller.sellInternal(button.model, 0, false);
             aqueductMeta.on = 0;
@@ -203,7 +197,7 @@ export class BonfireManager implements Automation {
       ) {
         const prices = mustExist(libraryMeta.stages)[1].prices;
         if (this._bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
-          const button = mustExist(this.getBuildButton("library", 0));
+          const button = mustExist(this.getBuild("library", 0));
           if (isNil(button.model)) {
             return;
           }
@@ -231,7 +225,7 @@ export class BonfireManager implements Automation {
     ) {
       const prices = mustExist(warehouseMeta.stages)[1].prices;
       if (this._bulkManager.singleBuildPossible(warehouseMeta, prices, 1)) {
-        const button = this.getBuildButton("warehouse", 0);
+        const button = this.getBuild("warehouse", 0);
         if (!isNil(button?.model)) {
           button.controller.sellInternal(button.model, 0, false);
           warehouseMeta.on = 0;
@@ -262,7 +256,7 @@ export class BonfireManager implements Automation {
       //       if you don't have enough resources to build several more.
       const prices = mustExist(amphitheatreMeta.stages)[1].prices;
       if (this._bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
-        const button = this.getBuildButton("amphitheatre", 0);
+        const button = this.getBuild("amphitheatre", 0);
         if (!isNil(button?.model)) {
           button.controller.sellInternal(button.model, 0, false);
           amphitheatreMeta.on = 0;
@@ -284,11 +278,7 @@ export class BonfireManager implements Automation {
     if (this.settings.turnOnSteamworks.enabled) {
       const steamworks = this._host.game.bld.getBuildingExt("steamworks");
       if (steamworks.meta.val && steamworks.meta.on === 0) {
-        const button = mustExist(this.getBuildButton("steamworks"));
-        if (isNil(button.model)) {
-          return;
-        }
-
+        const button = this.getBuild("steamworks");
         button.controller.onAll(button.model);
       }
     }
@@ -297,11 +287,7 @@ export class BonfireManager implements Automation {
     if (this.settings.turnOnMagnetos.enabled) {
       const magnetos = this._host.game.bld.getBuildingExt("magneto");
       if (magnetos.meta.val && magnetos.meta.on < magnetos.meta.val) {
-        const button = mustExist(this.getBuildButton("magneto"));
-        if (isNil(button.model)) {
-          return;
-        }
-
+        const button = this.getBuild("magneto");
         button.controller.onAll(button.model);
       }
     }
@@ -310,11 +296,7 @@ export class BonfireManager implements Automation {
     if (this.settings.turnOnReactors.enabled) {
       const reactors = this._host.game.bld.getBuildingExt("reactor");
       if (reactors.meta.val && reactors.meta.on < reactors.meta.val) {
-        const button = mustExist(this.getBuildButton("reactor"));
-        if (isNil(button.model)) {
-          return;
-        }
-
+        const button = this.getBuild("reactor");
         button.controller.onAll(button.model);
       }
     }
@@ -396,15 +378,7 @@ export class BonfireManager implements Automation {
     }
   }
 
-  private _getBuildLabel(meta: UnsafeBuilding, stage?: number): string {
-    return meta.stages && !isNil(stage) ? meta.stages[stage].label : mustExist(meta.label);
-  }
-
-  getBuild(name: Building): BuildingMeta<Required<UnsafeBuilding>> {
-    return this._host.game.bld.getBuildingExt(name) as BuildingMeta<Required<UnsafeBuilding>>;
-  }
-
-  getBuildButton(name: Building, stage = 0) {
+  getBuild(name: Building, stage = 0) {
     const metaRaw = game.bld.get(name);
     const buildingMeta = (
       new classes.BuildingMeta(metaRaw) as BuildingMeta<UnsafeBuilding>
