@@ -230,7 +230,7 @@ export class TimeControlManager {
         return;
       }
 
-      const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
+      const bld = mustExist(this._religionManager.getUpgradeMeta(name, entry.variant));
       checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
       if (0 < entry.trigger) {
         if (bld.val < entry.trigger) {
