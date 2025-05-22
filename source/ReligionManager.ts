@@ -10,6 +10,7 @@ import { TabManager } from "./TabManager.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import {
+  type BuildingStackableBtn,
   type FaithItem,
   type ReligionItem,
   type ReligionUpgrade,
@@ -26,11 +27,13 @@ import type {
   ReligionTab,
   TranscendenceBtnController,
   TransformBtnController,
+  UnsafeReligionButtonOptions,
   UnsafeReligionUpgrade,
   UnsafeTranscendenceBtnModel,
   UnsafeTranscendenceButtonOptions,
   UnsafeTranscendenceUpgrade,
   UnsafeTransformBtnModel,
+  UnsafeZigguratButtonOptions,
   UnsafeZigguratUpgrade,
   ZigguratBtnController,
 } from "./types/religion.js";
@@ -39,7 +42,6 @@ import type { WorkshopManager } from "./WorkshopManager.js";
 export class ReligionManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: ReligionSettings;
-  readonly manager: TabManager<ReligionTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _bonfireManager: BonfireManager;
   private readonly _workshopManager: WorkshopManager;
@@ -52,7 +54,6 @@ export class ReligionManager implements Automation {
   ) {
     this._host = host;
     this.settings = settings;
-    this.manager = new TabManager(this._host, "Religion");
     this._workshopManager = workshopManager;
     this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
     this._bonfireManager = bonfireManager;
@@ -62,10 +63,6 @@ export class ReligionManager implements Automation {
     if (!this.settings.enabled) {
       return;
     }
-
-    // We must call `.render()` here, because evaluation of availability of our options
-    // is only performed when the game renders the contents of that tab.
-    this.manager.render();
 
     this._autoBuild(context);
 
@@ -135,7 +132,7 @@ export class ReligionManager implements Automation {
     if (this.settings.bestUnicornBuildingCurrent === "unicornPasture") {
       this._bonfireManager.build(this.settings.bestUnicornBuildingCurrent, 0, 1);
     } else {
-      const buildingButton = this._getBuildButton(
+      const buildingButton = this._getBuild(
         this.settings.bestUnicornBuildingCurrent,
         UnicornItemVariant.Ziggurat,
       );
@@ -220,9 +217,6 @@ export class ReligionManager implements Automation {
     context: FrameContext,
     builds: Partial<Record<FaithItem, ReligionSettingsItem>>,
   ): void {
-    // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
-    this.manager.render();
-
     const metaData: Partial<
       Record<
         FaithItem,
@@ -255,12 +249,12 @@ export class ReligionManager implements Automation {
    * @returns The best unicorn building.
    */
   getBestUnicornBuilding(): ZigguratUpgrade | "unicornPasture" | null {
-    const pastureButton = this._bonfireManager.getBuildButton("unicornPasture");
+    const pastureButton = this._bonfireManager.getBuild("unicornPasture");
     if (pastureButton === null) {
       return null;
     }
 
-    const validBuildings: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems].filter(
+    const validBuildings: Array<ZigguratUpgrade> = [...UnicornItems].filter(
       item => item !== "unicornPasture",
     );
 
@@ -338,59 +332,58 @@ export class ReligionManager implements Automation {
       bestBuilding = "unicornPasture";
     }
 
-    // For all ziggurat upgrade buttons...
-    for (const button of this.manager.tab.zgUpgradeButtons) {
-      // ...that are in the "valid" buildings (are unicorn-related) and visible (unlocked)...
-      if (validBuildings.includes(button.id) && button.model.visible) {
-        // Determine a price value for this building.
-        let unicornPrice = 0;
-        for (const price of mustExist(button.model.prices)) {
-          // Add the amount of unicorns the building costs (if any).
-          if (price.name === "unicorns") {
-            unicornPrice += price.val;
-          }
-          // Tears result from unicorn sacrifices, so factor that into the price proportionally.
-          if (price.name === "tears") {
-            unicornPrice += (price.val * 2500) / zigguratRatio;
-          }
+    for (const building of validBuildings) {
+      const button = this._getBuild(building, UnicornItemVariant.Ziggurat);
+
+      // Determine a price value for this building.
+      let unicornPrice = 0;
+      for (const price of mustExist(button.model.prices)) {
+        // Add the amount of unicorns the building costs (if any).
+        if (price.name === "unicorns") {
+          unicornPrice += price.val;
         }
-
-        // Determine the effect the building will have on unicorn production and unicorn rifts.
-        const buildingInfo = mustExist(this._host.game.religion.getZU(button.id));
-        let religionBonus = religionRatio;
-        let riftChance = this._host.game.getEffect("riftChance");
-        for (const effect in buildingInfo.effects) {
-          if (effect === "unicornsRatioReligion") {
-            religionBonus += mustExist(buildingInfo.effects.unicornsRatioReligion);
-          }
-          if (effect === "riftChance") {
-            riftChance += mustExist(buildingInfo.effects.riftChance);
-          }
+        // Tears result from unicorn sacrifices, so factor that into the price proportionally.
+        if (price.name === "tears") {
+          unicornPrice += (price.val * 2500) / zigguratRatio;
         }
+      }
 
-        // The rest should be straight forward.
-        const unicornsPerRift = 500 * ((religionBonus - 1) * 0.1 + 1);
-        let riftBonus = ((riftChance * riftChanceRatio) / (10000 * 2)) * unicornsPerRift;
-        riftBonus -= unicornRiftChange;
-        let buildingProduction =
-          unicornsPerSecondBase *
-          globalRatio *
-          religionBonus *
-          paragonRatio *
-          faithBonus *
-          cycleBonus;
-        buildingProduction -= unicornsPerSecond;
-        buildingProduction += riftBonus;
-        const amortization = unicornPrice / buildingProduction;
+      // Determine the effect the building will have on unicorn production and unicorn rifts.
+      const buildingInfo = mustExist(this._host.game.religion.getZU(building));
+      let religionBonus = religionRatio;
+      let riftChance = this._host.game.getEffect("riftChance");
+      for (const effect in buildingInfo.effects) {
+        if (effect === "unicornsRatioReligion") {
+          religionBonus += mustExist(buildingInfo.effects.unicornsRatioReligion);
+        }
+        if (effect === "riftChance") {
+          riftChance += mustExist(buildingInfo.effects.riftChance);
+        }
+      }
 
-        if (amortization < bestAmortization) {
-          if (0 < riftBonus || (religionRatio < religionBonus && 0 < unicornPrice)) {
-            bestAmortization = amortization;
-            bestBuilding = button.id;
-          }
+      // The rest should be straight forward.
+      const unicornsPerRift = 500 * ((religionBonus - 1) * 0.1 + 1);
+      let riftBonus = ((riftChance * riftChanceRatio) / (10000 * 2)) * unicornsPerRift;
+      riftBonus -= unicornRiftChange;
+      let buildingProduction =
+        unicornsPerSecondBase *
+        globalRatio *
+        religionBonus *
+        paragonRatio *
+        faithBonus *
+        cycleBonus;
+      buildingProduction -= unicornsPerSecond;
+      buildingProduction += riftBonus;
+      const amortization = unicornPrice / buildingProduction;
+
+      if (amortization < bestAmortization) {
+        if (0 < riftBonus || (religionRatio < religionBonus && 0 < unicornPrice)) {
+          bestAmortization = amortization;
+          bestBuilding = building;
         }
       }
     }
+
     return bestBuilding;
   }
 
@@ -471,7 +464,7 @@ export class ReligionManager implements Automation {
       >
     > = {};
     for (const build of Object.values(builds)) {
-      const buildInfo = this.getBuild(build.building, build.variant);
+      const buildInfo = this.getUpgradeMeta(build.building, build.variant);
       if (buildInfo === null) {
         continue;
       }
@@ -480,10 +473,10 @@ export class ReligionManager implements Automation {
 
       // If an item is marked as `rHidden`, it wouldn't be build.
       // TODO: Why not remove it from the `builds` then?
-      if (!this._getBuildButton(build.building, build.variant)) {
+      if (!this._getBuild(build.building, build.variant)) {
         buildMetaData.rHidden = true;
       } else {
-        const model = mustExist(this._getBuildButton(build.building, build.variant)).model;
+        const model = mustExist(this._getBuild(build.building, build.variant)).model;
         const panel =
           build.variant === UnicornItemVariant.Cryptotheology
             ? this._host.game.science.get("cryptotheology").researched
@@ -502,7 +495,7 @@ export class ReligionManager implements Automation {
    * @param variant The variant of the upgrade.
    * @returns The build information for the upgrade.
    */
-  getBuild(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant) {
+  getUpgradeMeta(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant) {
     switch (variant) {
       case UnicornItemVariant.Ziggurat:
         return this._host.game.religion.getZU(name as ZigguratUpgrade) ?? null;
@@ -521,37 +514,29 @@ export class ReligionManager implements Automation {
    * @param variant The variant of the upgrade.
    * @returns The button to buy the upgrade, or `null`.
    */
-  private _getBuildButton(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant) {
-    let buttons:
-      | typeof this.manager.tab.zgUpgradeButtons
-      | typeof this.manager.tab.rUpgradeButtons
-      | CryptotheologyWGT["children"];
+  private _getBuild(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant) {
     switch (variant) {
-      case UnicornItemVariant.Ziggurat:
-        buttons = this.manager.tab.zgUpgradeButtons;
-        break;
-      case UnicornItemVariant.OrderOfTheSun:
-        buttons = this.manager.tab.rUpgradeButtons;
-        break;
-      case UnicornItemVariant.Cryptotheology:
-        buttons = (this.manager.tab.children[0] as CryptotheologyPanel).children[0].children;
-        break;
+      case UnicornItemVariant.Ziggurat: {
+        return this._host.game.time.queue.getQueueElementControllerAndModel({
+          name,
+          type: "zigguratUpgrades",
+        });
+      }
+      case UnicornItemVariant.OrderOfTheSun: {
+        return this._host.game.time.queue.getQueueElementControllerAndModel({
+          name,
+          type: "religion",
+        });
+      }
+      case UnicornItemVariant.Cryptotheology: {
+        return this._host.game.time.queue.getQueueElementControllerAndModel({
+          name,
+          type: "transcendenceUpgrades",
+        });
+      }
       default:
         throw new Error(`Invalid variant '${variant}'`);
     }
-
-    if (buttons.length === 0) {
-      // Series of upgrades is not unlocked yet.
-      return null;
-    }
-
-    const button = buttons.find(button => button.id === name) ?? null;
-
-    if (button === null) {
-      console.debug(...cl(`Couldn't find button for ${name}! This will likely create problems.`));
-    }
-
-    return button;
   }
 
   private _transformBtnSacrificeHelper<TModel extends UnsafeTransformBtnModel>(
