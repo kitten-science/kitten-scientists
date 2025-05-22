@@ -7,12 +7,10 @@ import {
   type BonfireItem,
   BonfireSettings,
 } from "./settings/BonfireSettings.js";
-import { TabManager } from "./TabManager.js";
 import { cl } from "./tools/Log.js";
 import type {
   BuildingBtnModernController,
   BuildingMeta,
-  BuildingsModern,
   GatherCatnipButtonController,
   StagingBldBtnController,
   UnsafeBuilding,

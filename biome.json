@@ -9,7 +9,8 @@
         "useSortedKeys": "on"
       }
     },
-    "enabled": true
+    "enabled": true,
+    "includes": ["!package.json"]
   },
   "css": {
     "assist": {
@@ -27,20 +28,14 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": [
-      "@types/**",
-      "contrib/**",
-      "devcontainer/*.js",
-      "source/**",
-      "*.*",
-      "!package.json"
-    ]
+    "includes": ["@types/**", "contrib/**", "devcontainer/*.js", "source/**", "*.*"]
   },
   "formatter": {
     "attributePosition": "auto",
     "bracketSpacing": true,
     "enabled": true,
     "formatWithErrors": false,
+    "includes": ["!package.json"],
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
@@ -91,7 +86,7 @@
   },
   "linter": {
     "enabled": true,
-    "includes": ["package.json"],
+    "includes": ["!package.json"],
     "rules": {
       "complexity": {
         "useNumericLiterals": "error"

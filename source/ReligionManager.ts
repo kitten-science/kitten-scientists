@@ -6,11 +6,9 @@ import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import { ReligionSettings, type ReligionSettingsItem } from "./settings/ReligionSettings.js";
-import { TabManager } from "./TabManager.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import {
-  type BuildingStackableBtn,
   type FaithItem,
   type ReligionItem,
   type ReligionUpgrade,
@@ -21,19 +19,14 @@ import {
   type ZigguratUpgrade,
 } from "./types/index.js";
 import type {
-  CryptotheologyPanel,
-  CryptotheologyWGT,
   ReligionBtnController,
-  ReligionTab,
   TranscendenceBtnController,
   TransformBtnController,
-  UnsafeReligionButtonOptions,
   UnsafeReligionUpgrade,
   UnsafeTranscendenceBtnModel,
   UnsafeTranscendenceButtonOptions,
   UnsafeTranscendenceUpgrade,
   UnsafeTransformBtnModel,
-  UnsafeZigguratButtonOptions,
   UnsafeZigguratUpgrade,
   ZigguratBtnController,
 } from "./types/religion.js";
