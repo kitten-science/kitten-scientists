@@ -1,21 +1,16 @@
-import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { Automation, FrameContext } from "./Engine.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
-import { TabManager } from "./TabManager.js";
 import { cl } from "./tools/Log.js";
-import type { BuildingStackableBtn, UnsafeBuildingStackableBtnModel } from "./types/core.js";
+import type { UnsafeBuildingStackableBtnModel } from "./types/core.js";
 import type { Mission, SpaceBuilding } from "./types/index.js";
 import type {
   PlanetBuildingBtnController,
-  SpaceProgramBtnController,
-  SpaceTab,
-  UnsafePlanet,
   UnsafePlanetBuildingButtonOptions,
   UnsafeSpaceBuilding,
   UnsafeSpaceProgram,
-  UnsafeSpaceProgramButtonOptions,
 } from "./types/space.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
@@ -84,7 +79,7 @@ export class SpaceManager implements Automation {
     }
   }
 
-  autoUnlock(context: FrameContext) {
+  autoUnlock(_context: FrameContext) {
     if (!this._host.game.tabs[6].visible) {
       return;
     }
