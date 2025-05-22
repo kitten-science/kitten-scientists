@@ -320,6 +320,7 @@ export class Engine {
         entry: Date.now(),
         exit: 0,
         measurements: {},
+        purchaseOrders: [],
         requestGameUiRefresh: false,
       };
 
