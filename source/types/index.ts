@@ -592,6 +592,23 @@ export const Traits = [
 ] as const;
 export type Trait = (typeof Traits)[number];
 
+export const QueueElementTypes = [
+  "buildings",
+  "chronoforge",
+  "pacts",
+  "policies",
+  "religion",
+  "spaceBuilding",
+  "spaceMission",
+  "tech",
+  "transcendenceUpgrades",
+  "upgrades",
+  "voidSpace",
+  "zebraUpgrades",
+  "zigguratUpgrades",
+] as const;
+export type QueueElementType = (typeof QueueElementTypes)[number];
+
 export enum UnicornItemVariant {
   Cryptotheology = "c",
   OrderOfTheSun = "s",

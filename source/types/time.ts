@@ -19,6 +19,7 @@ import type {
   ChronoForgeUpgrade,
   Link,
   Price,
+  QueueElementType,
   Unlocks,
   UnsafeBuyItemResult,
   UnsafeMeta,
@@ -237,7 +238,10 @@ export type Manager = {
   dropLastItem: () => void;
   listDrop: (event: unknown) => void;
   getQueueElementModel: (el: unknown) => unknown;
-  getQueueElementControllerAndModel: (el: unknown) => unknown;
+  getQueueElementControllerAndModel: (el: { name: unknown; type: QueueElementType }) => {
+    controller: ButtonModernController;
+    model: UnsafeButtonModernModel;
+  };
   update: () => void;
   _isReasonToSkipItem: (reason: BuyItemResultReason) => boolean;
   onDeltagrade: (itemName: string) => void;

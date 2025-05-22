@@ -38,6 +38,7 @@ import { WorkshopManager } from "./WorkshopManager.js";
 const i18nData = { "de-DE": deDE, "en-US": enUS, "he-IL": heIL, "zh-CN": zhCN };
 
 export type FrameContext = {
+  purchaseOrders:Array<{id:string,amount:number}>;
   requestGameUiRefresh: boolean;
 
   entry: number;
