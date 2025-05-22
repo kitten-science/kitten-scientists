@@ -1,4 +1,4 @@
-FROM docker.io/library/node:22.15.1-bookworm@sha256:e558507eb799e3a76fcdaaee5e48dce1a00aebc85892128a9fca59f63bd49511
+FROM docker.io/library/node:22.16.0-bookworm@sha256:6e62aab5da3680c65b90b213bb5c9768fd745fafecf8687e87a4728c99e5c1d2
 
 LABEL "org.opencontainers.image.description"="Kitten Scientists Development Container"
 
