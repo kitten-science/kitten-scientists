@@ -1,4 +1,4 @@
-:global #gamePageContainer .dialog.help :local(.dialog) {
+:global #gamePageContainer .dialog.help:local(.dialog) {
   display: flex;
   flex-direction: column;
   height: fit-content !important;
