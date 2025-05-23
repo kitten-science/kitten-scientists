@@ -3,11 +3,10 @@ import { type Automation, Engine, type FrameContext } from "./Engine.js";
 import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { TradeSettings, type TradeSettingsItem } from "./settings/TradeSettings.js";
-import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
-import type { Diplomacy, UnsafeRace, UnsafeTradeSellOffer } from "./types/diplomacy.js";
+import type { UnsafeRace, UnsafeTradeSellOffer } from "./types/diplomacy.js";
 import type { Race, Resource } from "./types/index.js";
 import type { UnsafeResource } from "./types/resources.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
@@ -15,7 +14,6 @@ import type { WorkshopManager } from "./WorkshopManager.js";
 export class TradeManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: TradeSettings;
-  readonly manager: TabManager<Diplomacy>;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
@@ -25,7 +23,6 @@ export class TradeManager implements Automation {
   ) {
     this._host = host;
     this.settings = settings;
-    this.manager = new TabManager(this._host, "Trade");
     this._workshopManager = workshopManager;
   }
 
@@ -33,8 +30,6 @@ export class TradeManager implements Automation {
     if (!this.settings.enabled) {
       return;
     }
-
-    this.manager.render();
 
     this.autoTrade();
 
@@ -75,13 +70,6 @@ export class TradeManager implements Automation {
         !race.unlocked ||
         !this.singleTradePossible(sectionTrigger, catpower, gold, trade)
       ) {
-        continue;
-      }
-
-      // Additionally, we now check if the trade button is enabled, which kinda makes all previous
-      // checks moot, but whatever :D
-      const button = this.getTradeButton(race.name);
-      if (!button?.model?.enabled) {
         continue;
       }
 
@@ -554,15 +542,6 @@ export class TradeManager implements Automation {
    */
   trade(name: Race, amount: number): void {
     const race = this.getRace(name);
-    const button = this.getTradeButton(race.name);
-
-    if (!button?.model?.enabled || !this.settings.races[name].enabled) {
-      console.warn(
-        ...cl(
-          "KS trade checks are not functioning properly, please create an issue on the github page.",
-        ),
-      );
-    }
 
     this._host.game.diplomacy.tradeMultiple(race, amount);
     this._host.engine.storeForSummary(race.title, amount, "trade");
@@ -854,17 +833,6 @@ export class TradeManager implements Automation {
       throw new Error(`Unable to retrieve race '${name}'`);
     }
     return raceInfo;
-  }
-
-  /**
-   * Retrieve a reference to the trade button for the given race from the game.
-   *
-   * @param race The race to get the button reference for.
-   * @returns The reference to the trade button.
-   */
-  getTradeButton(race: string) {
-    const panel = this.manager.tab.racePanels.find(subject => subject.race.name === race);
-    return panel?.tradeBtn ?? null;
   }
 
   /**

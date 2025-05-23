@@ -3,27 +3,23 @@ import { type Automation, Engine, type FrameContext } from "./Engine.js";
 import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { type CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
-import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import type { Resource, ResourceCraftable } from "./types/index.js";
 import type { ResourceManager, UnsafeResource } from "./types/resources.js";
-import type { Village } from "./types/village.js";
 import type { UnsafeCraft, UnsafeUpgrade } from "./types/workshop.js";
 import { UpgradeManager } from "./UpgradeManager.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
   readonly settings: WorkshopSettings;
-  readonly manager: TabManager<Village>;
 
   static readonly DEFAULT_CONSUME_RATE = 1;
 
   constructor(host: KittenScientists, settings = new WorkshopSettings()) {
     super(host);
     this.settings = settings;
-    this.manager = new TabManager(this._host, "Workshop");
   }
 
   tick(_context: FrameContext) {
@@ -35,7 +31,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this.refreshStock();
 
     if (this.settings.unlockUpgrades.enabled) {
-      this.manager.render();
       return this.autoUnlock();
     }
 

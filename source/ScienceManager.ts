@@ -2,15 +2,13 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { Engine, type FrameContext } from "./Engine.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
-import { TabManager } from "./TabManager.js";
 import { cl } from "./tools/Log.js";
-import type { Library, UnsafePolicy, UnsafeTech } from "./types/science.js";
+import type { UnsafePolicy, UnsafeTech } from "./types/science.js";
 import { UpgradeManager } from "./UpgradeManager.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class ScienceManager extends UpgradeManager {
-  readonly manager: TabManager<Library>;
   readonly settings: ScienceSettings;
   private readonly _workshopManager: WorkshopManager;
 
@@ -21,7 +19,6 @@ export class ScienceManager extends UpgradeManager {
   ) {
     super(host);
     this.settings = settings;
-    this.manager = new TabManager(this._host, "Science");
     this._workshopManager = workshopManager;
   }
 
@@ -30,16 +27,12 @@ export class ScienceManager extends UpgradeManager {
       return;
     }
 
-    // We must call `.render()` here, because evaluation of availability of our options
-    // is only performed when the game renders the contents of that tab.
-    this.manager.render();
-
     // If techs (science items) are enabled...
-    if (this.settings.techs.enabled && this._host.game.tabs[2].visible) {
+    if (this.settings.techs.enabled && this._host.game.libraryTab.visible) {
       await this.autoUnlock();
     }
 
-    if (this.settings.policies.enabled && this._host.game.tabs[2].visible) {
+    if (this.settings.policies.enabled && this._host.game.libraryTab.visible) {
       await this.autoPolicy();
     }
 

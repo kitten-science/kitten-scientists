@@ -3,17 +3,15 @@ import type { Automation, FrameContext } from "./Engine.js";
 import { MaterialsCache } from "./helper/MaterialsCache.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
-import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import type { Resource } from "./types/index.js";
-import type { UnsafeJob, Village } from "./types/village.js";
+import type { UnsafeJob } from "./types/village.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class VillageManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: VillageSettings;
-  readonly manager: TabManager<Village>;
   private readonly _cacheManager: MaterialsCache;
   private readonly _workshopManager: WorkshopManager;
 
@@ -24,17 +22,16 @@ export class VillageManager implements Automation {
   ) {
     this._host = host;
     this.settings = settings;
-    this.manager = new TabManager(this._host, "Village");
     this._cacheManager = new MaterialsCache(this._host);
     this._workshopManager = workshopManager;
   }
 
-  tick(_context: FrameContext) {
+  tick(context: FrameContext) {
     if (!this.settings.enabled) {
       return;
     }
 
-    this.autoDistributeKittens();
+    this.autoDistributeKittens(context);
 
     if (this.settings.hunt.enabled) {
       this.autoHunt(this._cacheManager);
@@ -57,7 +54,7 @@ export class VillageManager implements Automation {
     }
   }
 
-  autoDistributeKittens() {
+  autoDistributeKittens(context: FrameContext) {
     const freeKittens = this._host.game.village.getFreeKittens();
     if (!freeKittens) {
       return;
@@ -99,7 +96,7 @@ export class VillageManager implements Automation {
       const jobName = noFarmersAssigned ? "farmer" : jobsNotCapped[0].job.name;
 
       this._host.game.village.assignJob(this._host.game.village.getJob(jobName), 1);
-      this.manager.render();
+      context.requestGameUiRefresh = true;
       this._host.engine.iactivity(
         "act.distribute",
         [this._host.engine.i18n(`$village.job.${jobName}` as const)],
@@ -305,19 +302,15 @@ export class VillageManager implements Automation {
       return;
     }
 
-    // Render the tab to make sure that the buttons actually exist in the DOM. Otherwise we can't click them.
-    this.manager.render();
-
-    // Now we hold the festival.
-    if (this._host.game.villageTab.festivalBtn.model.enabled) {
-      const beforeDays = this._host.game.calendar.festivalDays;
-      this._host.game.villageTab.festivalBtn.onClick();
-      this._host.engine.storeForSummary("festival");
-      if (beforeDays > 0) {
-        this._host.engine.iactivity("festival.extend", [], "ks-festival");
-      } else {
-        this._host.engine.iactivity("festival.hold", [], "ks-festival");
-      }
+    const beforeDays = this._host.game.calendar.festivalDays;
+    const controller = new classes.village.ui.FestivalButtonController(this._host.game);
+    const model = controller.fetchModel({});
+    controller.buyItem(model);
+    this._host.engine.storeForSummary("festival");
+    if (beforeDays > 0) {
+      this._host.engine.iactivity("festival.extend", [], "ks-festival");
+    } else {
+      this._host.engine.iactivity("festival.hold", [], "ks-festival");
     }
   }
 }
