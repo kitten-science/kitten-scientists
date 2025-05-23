@@ -10,7 +10,14 @@
       }
     },
     "enabled": true,
-    "includes": ["!package.json"]
+    "includes": [
+      "@types/**",
+      "contrib/**",
+      "devcontainer/*.js",
+      "source/**",
+      "*.*",
+      "!package.json"
+    ]
   },
   "css": {
     "assist": {
@@ -35,7 +42,14 @@
     "bracketSpacing": true,
     "enabled": true,
     "formatWithErrors": false,
-    "includes": ["!package.json"],
+    "includes": [
+      "@types/**",
+      "contrib/**",
+      "devcontainer/*.js",
+      "source/**",
+      "*.*",
+      "!package.json"
+    ],
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
@@ -86,7 +100,14 @@
   },
   "linter": {
     "enabled": true,
-    "includes": ["!package.json"],
+    "includes": [
+      "@types/**",
+      "contrib/**",
+      "devcontainer/*.js",
+      "source/**",
+      "*.*",
+      "!package.json"
+    ],
     "rules": {
       "complexity": {
         "useNumericLiterals": "error"
