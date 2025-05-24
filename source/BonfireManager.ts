@@ -11,7 +11,6 @@ import { cl } from "./tools/Log.js";
 import type {
   BuildingBtnModernController,
   BuildingMeta,
-  GatherCatnipButtonController,
   StagingBldBtnController,
   UnsafeBuilding,
   UnsafeStagingBldButtonOptions,
@@ -310,11 +309,8 @@ export class BonfireManager implements Automation {
   }
 
   autoGather(): void {
-    const controller = new classes.game.ui.GatherCatnipButtonController(
-      this._host.game,
-    ) as GatherCatnipButtonController;
     for (let clicks = 0; clicks < Math.floor(this._host.engine.settings.interval / 20); ++clicks) {
-      controller.buyItem(undefined, null);
+      this._host.game.bld.gatherCatnip();
     }
   }
 
