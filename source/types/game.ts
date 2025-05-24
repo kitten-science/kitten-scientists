@@ -280,17 +280,65 @@ export type GamePage = {
   challenges: ChallengesManager;
   stats: StatsManager;
   void: VoidManager;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   bldTab: BuildingsModern;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   villageTab: Village;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   libraryTab: Library;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   workshopTab: Workshop;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   diplomacyTab: Diplomacy;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   religionTab: ReligionTab;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   spaceTab: SpaceTab;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   timeTab: TimeTab;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   challengesTab: ChallengesTab;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   achievementTab: AchTab;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   statsTab: StatsTab;
+  /**
+   * @deprecated Accessing the game's tabs should be avoided.
+   * Try to use the game's managers directly, or create your own controller instances instead.
+   */
   queueTab: QueueTab;
   undoChange: UndoChange | null;
   /**
