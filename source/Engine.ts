@@ -425,7 +425,7 @@ export class Engine {
     context.measurements.timeControlManager = duration;
 
     [, duration] = measure(() => {
-      if (context.requestGameUiRefresh) {
+      if (context.requestGameUiRefresh && !document.hidden) {
         this._host.game.ui.render();
       }
     });
