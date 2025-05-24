@@ -3,27 +3,23 @@ import { type Automation, Engine, type FrameContext } from "./Engine.js";
 import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { type CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
-import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import type { Resource, ResourceCraftable } from "./types/index.js";
 import type { ResourceManager, UnsafeResource } from "./types/resources.js";
-import type { Village } from "./types/village.js";
 import type { UnsafeCraft, UnsafeUpgrade } from "./types/workshop.js";
 import { UpgradeManager } from "./UpgradeManager.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
   readonly settings: WorkshopSettings;
-  readonly manager: TabManager<Village>;
 
   static readonly DEFAULT_CONSUME_RATE = 1;
 
   constructor(host: KittenScientists, settings = new WorkshopSettings()) {
     super(host);
     this.settings = settings;
-    this.manager = new TabManager(this._host, "Workshop");
   }
 
   tick(_context: FrameContext) {
@@ -35,7 +31,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this.refreshStock();
 
     if (this.settings.unlockUpgrades.enabled) {
-      this.manager.render();
       return this.autoUnlock();
     }
 
@@ -684,27 +679,44 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * The user can configure this in the Workshop automation section.
    */
   refreshStock() {
+    const resourceCells = [
+      ...document.querySelectorAll(
+        "#game .res-row .res-cell.resAmount, #game .res-row .res-cell.resource-value",
+      ),
+    ];
+    const cellMap = new Map(
+      resourceCells.map(_ => [
+        mustExist(
+          [...(_.parentNode as HTMLElement).classList.entries()].find(([_i, __]) =>
+            __.startsWith("resource_"),
+          ),
+        )[1].substring(9) as Resource,
+        _,
+      ]),
+    );
+
     for (const [name, resource] of objectEntries(this._host.engine.settings.resources.resources)) {
-      const resourceCells = [
-        // Resource table on the top.
-        ...$(`#game .res-row.resource_${name} .res-cell.resAmount`),
-        // Craft table on the bottom.
-        ...$(`#game .res-row.resource_${name} .res-cell.resource-value`),
-      ];
+      const cell = cellMap.get(name);
+
+      // For some configured resources, there might be no UI cell.
+      if (!cell) {
+        continue;
+      }
 
       if (!resource.enabled || resource.stock === 0) {
-        for (const resourceCell of resourceCells) {
-          resourceCell.classList.remove("ks-stock-above", "ks-stock-below");
+        if (
+          cell.classList.contains("ks-stock-above") ||
+          cell.classList.contains("ks-stock-below")
+        ) {
+          cell.classList.remove("ks-stock-above", "ks-stock-below");
         }
         continue;
       }
 
       const isBelow = this._host.game.resPool.get(name).value < resource.stock;
 
-      for (const resourceCell of resourceCells) {
-        resourceCell.classList.add(isBelow ? "ks-stock-below" : "ks-stock-above");
-        resourceCell.classList.remove(isBelow ? "ks-stock-above" : "ks-stock-below");
-      }
+      cell.classList.add(isBelow ? "ks-stock-below" : "ks-stock-above");
+      cell.classList.remove(isBelow ? "ks-stock-above" : "ks-stock-below");
     }
   }
 }

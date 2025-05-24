@@ -1,27 +1,22 @@
-import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
+import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { Automation, FrameContext } from "./Engine.js";
 import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
-import { TabManager } from "./TabManager.js";
 import { cl } from "./tools/Log.js";
-import type { BuildingStackableBtn, UnsafeBuildingStackableBtnModel } from "./types/core.js";
+import type { UnsafeBuildingStackableBtnModel } from "./types/core.js";
 import type { Mission, SpaceBuilding } from "./types/index.js";
 import type {
   PlanetBuildingBtnController,
-  SpaceTab,
-  UnsafePlanet,
   UnsafePlanetBuildingButtonOptions,
   UnsafeSpaceBuilding,
   UnsafeSpaceProgram,
-  UnsafeSpaceProgramButtonOptions,
 } from "./types/space.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class SpaceManager implements Automation {
   private readonly _host: KittenScientists;
   readonly settings: SpaceSettings;
-  readonly manager: TabManager<SpaceTab>;
   private readonly _bulkManager: BulkPurchaseHelper;
   private readonly _workshopManager: WorkshopManager;
 
@@ -32,7 +27,6 @@ export class SpaceManager implements Automation {
   ) {
     this._host = host;
     this.settings = settings;
-    this.manager = new TabManager(this._host, "Space");
 
     this._workshopManager = workshopManager;
     this._bulkManager = new BulkPurchaseHelper(this._host, this._workshopManager);
@@ -42,10 +36,6 @@ export class SpaceManager implements Automation {
     if (!this.settings.enabled) {
       return;
     }
-
-    // We must call `.render()` here, because evaluation of availability of our options
-    // is only performed when the game renders the contents of that tab.
-    this.manager.render();
 
     this.autoBuild(context);
 
@@ -89,7 +79,7 @@ export class SpaceManager implements Automation {
     }
   }
 
-  autoUnlock(context: FrameContext) {
+  autoUnlock(_context: FrameContext) {
     if (!this._host.game.tabs[6].visible) {
       return;
     }
@@ -105,12 +95,12 @@ export class SpaceManager implements Automation {
         continue;
       }
 
-      const model = this.manager.tab.GCPanel?.children[i];
-      if (isNil(model)) {
-        return;
-      }
+      const button = this._host.game.time.queue.getQueueElementControllerAndModel({
+        name: missions[i].name,
+        type: "spaceMission",
+      });
 
-      const prices = mustExist(model.model?.prices);
+      const prices = mustExist(button.model.prices);
       for (const resource of prices) {
         // If we can't afford this resource price, continue with the next mission.
         if (this._workshopManager.getValueAvailable(resource.name) < resource.val) {
@@ -118,10 +108,9 @@ export class SpaceManager implements Automation {
         }
       }
 
-      // Start the mission by clicking the button.
-      // TODO: Move this into the SpaceManager?
-      model.domNode.click();
-      context.requestGameUiRefresh = true;
+      // Start mission.
+      button.controller.buyItem(button.model);
+
       if (i === 7 || i === 12) {
         this._host.engine.iactivity("upgrade.space.mission", [missions[i].label], "ks-upgrade");
       } else {
@@ -170,32 +159,5 @@ export class SpaceManager implements Automation {
 
   getBuild(name: SpaceBuilding): Required<UnsafeSpaceBuilding> {
     return this._host.game.space.getBuilding(name);
-  }
-
-  private _getBuildButton(id: string) {
-    const panels = this.manager.tab.planetPanels;
-
-    if (isNil(panels)) {
-      return null;
-    }
-
-    let button: BuildingStackableBtn<{
-      id: SpaceBuilding;
-      planet: UnsafePlanet;
-      controller: PlanetBuildingBtnController<
-        UnsafeBuildingStackableBtnModel<UnsafeSpaceProgramButtonOptions>
-      >;
-    }> | null = null;
-    for (const panel of panels) {
-      button = panel.children.find(child => child.id === id) ?? null;
-
-      if (!isNil(button)) {
-        return button;
-      }
-    }
-
-    if (button === null) {
-      throw new Error(`Couldn't find button for ${id}!`);
-    }
   }
 }

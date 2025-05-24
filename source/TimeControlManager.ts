@@ -5,7 +5,6 @@ import type { KittenScientists } from "./KittenScientists.js";
 import type { ReligionManager } from "./ReligionManager.js";
 import type { SpaceManager } from "./SpaceManager.js";
 import { type CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
-import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import type {
@@ -21,13 +20,12 @@ import {
   TimeItemVariant,
   type VoidSpaceUpgrade,
 } from "./types/index.js";
-import type { ShatterTCBtn, ShatterTCBtnController, TimeTab } from "./types/time.js";
+import type { ShatterTCBtn, ShatterTCBtnController } from "./types/time.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class TimeControlManager {
   private readonly _host: KittenScientists;
   readonly settings: TimeControlSettings;
-  readonly manager: TabManager<TimeTab>;
   private readonly _bonfireManager: BonfireManager;
   private readonly _religionManager: ReligionManager;
   private readonly _spaceManager: SpaceManager;
@@ -43,7 +41,6 @@ export class TimeControlManager {
   ) {
     this._host = host;
     this.settings = settings;
-    this.manager = new TabManager(this._host, "Time");
 
     this._bonfireManager = bonfireManager;
     this._religionManager = religionManager;
@@ -200,7 +197,7 @@ export class TimeControlManager {
     }
 
     if (checkList.length === 0) {
-      const panels = mustExist(this._spaceManager.manager.tab.planetPanels);
+      const panels = mustExist(this._host.game.spaceTab.planetPanels);
       for (const panel of panels) {
         for (const panelButton of panel.children) {
           const model = mustExist(panelButton.model);
@@ -230,7 +227,7 @@ export class TimeControlManager {
         return;
       }
 
-      const bld = mustExist(this._religionManager.getBuild(name, entry.variant));
+      const bld = mustExist(this._religionManager.getUpgradeMeta(name, entry.variant));
       checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
       if (0 < entry.trigger) {
         if (bld.val < entry.trigger) {

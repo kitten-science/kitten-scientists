@@ -1,12 +1,10 @@
 import type { KittenScientists } from "./KittenScientists.js";
-import type { TabManager } from "./TabManager.js";
 import type { Policy, Technology, Upgrade } from "./types/index.js";
 import type { PolicyBtnController, TechButtonController } from "./types/science.js";
 import type { UpgradeButtonController } from "./types/workshop.js";
 
 export abstract class UpgradeManager {
   protected readonly _host: KittenScientists;
-  abstract manager: TabManager;
 
   constructor(host: KittenScientists) {
     this._host = host;

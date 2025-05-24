@@ -38,6 +38,7 @@ import { WorkshopManager } from "./WorkshopManager.js";
 const i18nData = { "de-DE": deDE, "en-US": enUS, "he-IL": heIL, "zh-CN": zhCN };
 
 export type FrameContext = {
+  purchaseOrders: Array<{ id: string; amount: number }>;
   requestGameUiRefresh: boolean;
 
   entry: number;
@@ -319,6 +320,7 @@ export class Engine {
         entry: Date.now(),
         exit: 0,
         measurements: {},
+        purchaseOrders: [],
         requestGameUiRefresh: false,
       };
 
@@ -423,7 +425,7 @@ export class Engine {
     context.measurements.timeControlManager = duration;
 
     [, duration] = measure(() => {
-      if (context.requestGameUiRefresh) {
+      if (context.requestGameUiRefresh && !document.hidden) {
         this._host.game.ui.render();
       }
     });
