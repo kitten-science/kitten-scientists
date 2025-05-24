@@ -162,14 +162,28 @@ export class ReligionManager implements Automation {
         );
 
         // Sacrifice some unicorns to get the tears to buy the building.
-        if (
-          needSacrifice < maxSacrifice &&
-          !isNil(this._host.game.religionTab.sacrificeBtn.model)
-        ) {
-          this._host.game.religionTab.sacrificeBtn?.controller?._transform(
-            this._host.game.religionTab.sacrificeBtn.model,
-            needSacrifice,
-          );
+        const zigguratCount = this._host.game.bld.get("ziggurat").on;
+        if (needSacrifice < maxSacrifice && 0 < zigguratCount) {
+          const controller = new classes.ui.religion.TransformBtnController(this._host.game, {
+            applyAtGain: (priceCount: number) => {
+              this._host.game.stats.getStat("unicornsSacrificed").val += priceCount;
+            },
+            gainedResource: "tears",
+            gainMultiplier: () => {
+              return this._host.game.bld.get("ziggurat").on;
+            },
+            logfilterID: "unicornSacrifice",
+            logTextID: "religion.sacrificeBtn.sacrifice.msg",
+            overcapMsgID: "religion.sacrificeBtn.sacrifice.msg.overcap",
+          }) as TransformBtnController;
+          const model = controller.fetchModel({
+            controller,
+            description: "",
+            name: "",
+            prices: [{ name: "unicorns", val: 2500 }],
+          });
+          controller._transform(model, needSacrifice);
+
           // iactivity?
           // TODO: ☝ Yeah, seems like a good idea.
         } else {
