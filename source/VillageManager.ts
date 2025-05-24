@@ -304,7 +304,19 @@ export class VillageManager implements Automation {
 
     const beforeDays = this._host.game.calendar.festivalDays;
     const controller = new classes.village.ui.FestivalButtonController(this._host.game);
-    const model = controller.fetchModel({});
+    const model = controller.fetchModel({
+      controller,
+      description: "",
+      handler: () => {
+        this._host.game.village.holdFestival(1);
+      },
+      name: "",
+      prices: [
+        { name: "manpower" as const, val: 1500 },
+        { name: "culture" as const, val: 5000 },
+        { name: "parchment" as const, val: 2500 },
+      ],
+    });
     controller.buyItem(model);
     this._host.engine.storeForSummary("festival");
     if (beforeDays > 0) {
