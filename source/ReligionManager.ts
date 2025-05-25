@@ -27,6 +27,8 @@ import type {
   UnsafeTranscendenceButtonOptions,
   UnsafeTranscendenceUpgrade,
   UnsafeTransformBtnModel,
+  UnsafeZigguratBtnModel,
+  UnsafeZigguratButtonOptions,
   UnsafeZigguratUpgrade,
   ZigguratBtnController,
 } from "./types/religion.js";
@@ -125,16 +127,13 @@ export class ReligionManager implements Automation {
     if (this.settings.bestUnicornBuildingCurrent === "unicornPasture") {
       this._bonfireManager.build(this.settings.bestUnicornBuildingCurrent, 0, 1);
     } else {
-      const buildingButton = this._getBuild(
+      const buildImpl = this._getBuild(
         this.settings.bestUnicornBuildingCurrent,
         UnicornItemVariant.Ziggurat,
       );
-      if (isNil(buildingButton?.model)) {
-        return;
-      }
 
       let tearsNeeded = 0;
-      const priceTears = mustExist(buildingButton.model.prices).find(
+      const priceTears = mustExist(buildImpl.model.prices).find(
         subject => subject.name === "tears",
       );
       if (!isNil(priceTears)) {
@@ -144,10 +143,7 @@ export class ReligionManager implements Automation {
       const tearsAvailableForUse =
         this._workshopManager.getValue("tears") - this._workshopManager.getStock("tears");
 
-      if (!isNil(this._host.game.religionTab.sacrificeBtn) && tearsAvailableForUse < tearsNeeded) {
-        // if no ziggurat, getBestUnicornBuilding will return unicornPasture
-        // TODO: ☝ Yeah. So?
-
+      if (tearsAvailableForUse < tearsNeeded) {
         // How many times can we sacrifice unicorns to make tears?
         const maxSacrifice = Math.floor(
           (this._workshopManager.getValue("unicorns") -
@@ -256,10 +252,7 @@ export class ReligionManager implements Automation {
    * @returns The best unicorn building.
    */
   getBestUnicornBuilding(): ZigguratUpgrade | "unicornPasture" | null {
-    const pastureButton = this._bonfireManager.getBuild("unicornPasture");
-    if (pastureButton === null) {
-      return null;
-    }
+    const unicornPastureImpl = this._bonfireManager.getBuild("unicornPasture");
 
     const validBuildings: Array<ZigguratUpgrade> = [...UnicornItems].filter(
       item => item !== "unicornPasture",
@@ -333,18 +326,25 @@ export class ReligionManager implements Automation {
     // If the unicorn pasture amortizes itself in less than infinity ticks,
     // set it as the default. This is likely to protect against cases where
     // production of unicorns is 0.
-    const pastureAmortization = mustExist(pastureButton.model?.prices)[0].val / pastureProduction;
+    const pastureAmortization =
+      mustExist(unicornPastureImpl.model?.prices)[0].val / pastureProduction;
     if (pastureAmortization < bestAmortization) {
       bestAmortization = pastureAmortization;
       bestBuilding = "unicornPasture";
     }
 
     for (const building of validBuildings) {
-      const button = this._getBuild(building, UnicornItemVariant.Ziggurat);
+      const buildingImpl = this._getBuild(building, UnicornItemVariant.Ziggurat) as {
+        controller: ZigguratBtnController;
+        model: UnsafeZigguratBtnModel<UnsafeZigguratButtonOptions>;
+      };
+      if (!buildingImpl.model.metadata.unlocked) {
+        continue;
+      }
 
       // Determine a price value for this building.
       let unicornPrice = 0;
-      for (const price of mustExist(button.model.prices)) {
+      for (const price of mustExist(buildingImpl.model.prices)) {
         // Add the amount of unicorns the building costs (if any).
         if (price.name === "unicorns") {
           unicornPrice += price.val;
