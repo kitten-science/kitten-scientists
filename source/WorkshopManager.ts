@@ -258,46 +258,42 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       );
     }
 
+    const orders = new Array<{ name: ResourceCraftable; amount: number }>();
     for (const [craft, request] of craftRequests) {
       if (request.countRequested < 1) {
         continue;
       }
-      this.craft(craft.resource, request.countRequested);
+      orders.push({ amount: request.countRequested, name: craft.resource });
+    }
+    if (0 < orders.length) {
+      this.craftMultiple(orders);
     }
   }
 
-  /**
-   * Craft a certain amount of items.
-   *
-   * @param name The resource to craft.
-   * @param amount How many items of the resource to craft.
-   */
-  craft(name: ResourceCraftable, amount: number): void {
-    let amountCalculated = Math.floor(amount);
+  craftMultiple(orders: Array<{ name: ResourceCraftable; amount: number }>): void {
+    const messages = new Array<string>();
+    for (const order of orders) {
+      const craft = this.getCraft(order.name);
+      const ratio = this._host.game.getResCraftRatio(craft.name);
 
-    if (amountCalculated < 1) {
-      return;
+      this._host.game.workshop.craft(craft.name, order.amount, true, false, false);
+
+      const resourceName = mustExist(this._host.game.resPool.get(order.name)).title;
+
+      // Determine actual amount after crafting upgrades
+      const craftedAmount = Number.parseFloat((order.amount * (1 + ratio)).toFixed(2));
+
+      this._host.engine.storeForSummary(resourceName, craftedAmount, "craft");
+      messages.push(
+        this._host.engine.i18n("act.craft", [
+          this._host.game.getDisplayValueExt(craftedAmount),
+          resourceName,
+        ]),
+      );
     }
-    if (!this._canCraft(name, amountCalculated)) {
-      return;
-    }
 
-    const craft = this.getCraft(name);
-    const ratio = this._host.game.getResCraftRatio(craft.name);
-
-    this._host.game.craft(craft.name, amountCalculated);
-
-    const resourceName = mustExist(this._host.game.resPool.get(name)).title;
-
-    // Determine actual amount after crafting upgrades
-    amountCalculated = Number.parseFloat((amountCalculated * (1 + ratio)).toFixed(2));
-
-    this._host.engine.storeForSummary(resourceName, amountCalculated, "craft");
-    this._host.engine.iactivity(
-      "act.craft",
-      [this._host.game.getDisplayValueExt(amountCalculated), resourceName],
-      "ks-craft",
-    );
+    // TODO: This does not work correctly, as line breaks are not preserved!
+    this._host.engine.printOutput("ks-activity type_ks-craft", "#e65C00", messages.join("\n\n"));
   }
 
   private _canCraft(name: ResourceCraftable, amount: number): boolean {

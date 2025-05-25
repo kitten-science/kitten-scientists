@@ -127,10 +127,6 @@ export class KittenScientists {
    * Start the user script after loading and configuring it.
    */
   run(): void {
-    // Increase messages displayed in log
-    // TODO: This should be configurable.
-    this.game.console.maxMessages = 1000;
-
     this.refreshEntireUserInterface();
 
     if (this.engine.settings.enabled) {
