@@ -563,11 +563,9 @@ export class Engine {
       }
     }
 
-    // update the color of the message immediately after adding
+    // Update the color of the message immediately after adding
     const msg = this._host.game.msg(message, cssClasses);
     $(msg.span).css("color", color);
-
-    console.debug(...cl(message));
   }
 
   static evaluateSubSectionTrigger(sectionTrigger: number, subSectionTrigger: number): number {
