@@ -38,6 +38,7 @@ import { WorkshopManager } from "./WorkshopManager.js";
 const i18nData = { "de-DE": deDE, "en-US": enUS, "he-IL": heIL, "zh-CN": zhCN };
 
 export type FrameContext = {
+  purchaseOrders: Array<{ id: string; amount: number }>;
   requestGameUiRefresh: boolean;
 
   entry: number;
@@ -319,6 +320,7 @@ export class Engine {
         entry: Date.now(),
         exit: 0,
         measurements: {},
+        purchaseOrders: [],
         requestGameUiRefresh: false,
       };
 
@@ -423,7 +425,7 @@ export class Engine {
     context.measurements.timeControlManager = duration;
 
     [, duration] = measure(() => {
-      if (context.requestGameUiRefresh) {
+      if (context.requestGameUiRefresh && !document.hidden) {
         this._host.game.ui.render();
       }
     });
@@ -513,9 +515,9 @@ export class Engine {
     const text = this.i18n(i18nLiteral, i18nArgs);
     if (logStyle) {
       const activityClass: ActivityTypeClass = `type_${logStyle}` as const;
-      this._printOutput(`ks-activity ${activityClass}` as const, "#e65C00", text);
+      this.printOutput(`ks-activity ${activityClass}` as const, "#e65C00", text);
     } else {
-      this._printOutput("ks-activity", "#e65C00", text);
+      this.printOutput("ks-activity", "#e65C00", text);
     }
   }
 
@@ -523,7 +525,7 @@ export class Engine {
     i18nLiteral: keyof (typeof i18nData)["en-US"],
     i18nArgs: Array<number | string> = [],
   ): void {
-    this._printOutput("ks-default", "#aa50fe", this.i18n(i18nLiteral, i18nArgs));
+    this.printOutput("ks-default", "#aa50fe", this.i18n(i18nLiteral, i18nArgs));
   }
 
   storeForSummary(name: string, amount = 1, section: ActivitySummarySection = "other"): void {
@@ -537,7 +539,7 @@ export class Engine {
   displayActivitySummary(): void {
     const summary = this.getSummary();
     for (const summaryLine of summary) {
-      this._printOutput("ks-summary", "#009933", summaryLine);
+      this.printOutput("ks-summary", "#009933", summaryLine);
     }
 
     // Clear out the old activity
@@ -548,7 +550,7 @@ export class Engine {
     this._activitySummary.resetActivity();
   }
 
-  private _printOutput(
+  printOutput(
     cssClasses: "ks-activity" | `ks-activity ${ActivityTypeClass}` | "ks-default" | "ks-summary",
     color: string,
     message: string,
@@ -561,11 +563,9 @@ export class Engine {
       }
     }
 
-    // update the color of the message immediately after adding
+    // Update the color of the message immediately after adding
     const msg = this._host.game.msg(message, cssClasses);
     $(msg.span).css("color", color);
-
-    console.debug(...cl(message));
   }
 
   static evaluateSubSectionTrigger(sectionTrigger: number, subSectionTrigger: number): number {

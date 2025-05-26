@@ -3,27 +3,23 @@ import { type Automation, Engine, type FrameContext } from "./Engine.js";
 import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { type CraftSettingsItem, WorkshopSettings } from "./settings/WorkshopSettings.js";
-import { TabManager } from "./TabManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import type { Resource, ResourceCraftable } from "./types/index.js";
 import type { ResourceManager, UnsafeResource } from "./types/resources.js";
-import type { Village } from "./types/village.js";
 import type { UnsafeCraft, UnsafeUpgrade } from "./types/workshop.js";
 import { UpgradeManager } from "./UpgradeManager.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
   readonly settings: WorkshopSettings;
-  readonly manager: TabManager<Village>;
 
   static readonly DEFAULT_CONSUME_RATE = 1;
 
   constructor(host: KittenScientists, settings = new WorkshopSettings()) {
     super(host);
     this.settings = settings;
-    this.manager = new TabManager(this._host, "Workshop");
   }
 
   tick(_context: FrameContext) {
@@ -35,7 +31,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this.refreshStock();
 
     if (this.settings.unlockUpgrades.enabled) {
-      this.manager.render();
       return this.autoUnlock();
     }
 
@@ -263,46 +258,42 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       );
     }
 
+    const orders = new Array<{ name: ResourceCraftable; amount: number }>();
     for (const [craft, request] of craftRequests) {
       if (request.countRequested < 1) {
         continue;
       }
-      this.craft(craft.resource, request.countRequested);
+      orders.push({ amount: request.countRequested, name: craft.resource });
+    }
+    if (0 < orders.length) {
+      this.craftMultiple(orders);
     }
   }
 
-  /**
-   * Craft a certain amount of items.
-   *
-   * @param name The resource to craft.
-   * @param amount How many items of the resource to craft.
-   */
-  craft(name: ResourceCraftable, amount: number): void {
-    let amountCalculated = Math.floor(amount);
+  craftMultiple(orders: Array<{ name: ResourceCraftable; amount: number }>): void {
+    const messages = new Array<string>();
+    for (const order of orders) {
+      const craft = this.getCraft(order.name);
+      const ratio = this._host.game.getResCraftRatio(craft.name);
 
-    if (amountCalculated < 1) {
-      return;
+      this._host.game.workshop.craft(craft.name, order.amount, true, false, false);
+
+      const resourceName = mustExist(this._host.game.resPool.get(order.name)).title;
+
+      // Determine actual amount after crafting upgrades
+      const craftedAmount = Number.parseFloat((order.amount * (1 + ratio)).toFixed(2));
+
+      this._host.engine.storeForSummary(resourceName, craftedAmount, "craft");
+      messages.push(
+        this._host.engine.i18n("act.craft", [
+          this._host.game.getDisplayValueExt(craftedAmount),
+          resourceName,
+        ]),
+      );
     }
-    if (!this._canCraft(name, amountCalculated)) {
-      return;
-    }
 
-    const craft = this.getCraft(name);
-    const ratio = this._host.game.getResCraftRatio(craft.name);
-
-    this._host.game.craft(craft.name, amountCalculated);
-
-    const resourceName = mustExist(this._host.game.resPool.get(name)).title;
-
-    // Determine actual amount after crafting upgrades
-    amountCalculated = Number.parseFloat((amountCalculated * (1 + ratio)).toFixed(2));
-
-    this._host.engine.storeForSummary(resourceName, amountCalculated, "craft");
-    this._host.engine.iactivity(
-      "act.craft",
-      [this._host.game.getDisplayValueExt(amountCalculated), resourceName],
-      "ks-craft",
-    );
+    // TODO: This does not work correctly, as line breaks are not preserved!
+    this._host.engine.printOutput("ks-activity type_ks-craft", "#e65C00", messages.join("\n\n"));
   }
 
   private _canCraft(name: ResourceCraftable, amount: number): boolean {
@@ -684,27 +675,44 @@ export class WorkshopManager extends UpgradeManager implements Automation {
    * The user can configure this in the Workshop automation section.
    */
   refreshStock() {
+    const resourceCells = [
+      ...document.querySelectorAll(
+        "#game .res-row .res-cell.resAmount, #game .res-row .res-cell.resource-value",
+      ),
+    ];
+    const cellMap = new Map(
+      resourceCells.map(_ => [
+        mustExist(
+          [...(_.parentNode as HTMLElement).classList.entries()].find(([_i, __]) =>
+            __.startsWith("resource_"),
+          ),
+        )[1].substring(9) as Resource,
+        _,
+      ]),
+    );
+
     for (const [name, resource] of objectEntries(this._host.engine.settings.resources.resources)) {
-      const resourceCells = [
-        // Resource table on the top.
-        ...$(`#game .res-row.resource_${name} .res-cell.resAmount`),
-        // Craft table on the bottom.
-        ...$(`#game .res-row.resource_${name} .res-cell.resource-value`),
-      ];
+      const cell = cellMap.get(name);
+
+      // For some configured resources, there might be no UI cell.
+      if (!cell) {
+        continue;
+      }
 
       if (!resource.enabled || resource.stock === 0) {
-        for (const resourceCell of resourceCells) {
-          resourceCell.classList.remove("ks-stock-above", "ks-stock-below");
+        if (
+          cell.classList.contains("ks-stock-above") ||
+          cell.classList.contains("ks-stock-below")
+        ) {
+          cell.classList.remove("ks-stock-above", "ks-stock-below");
         }
         continue;
       }
 
       const isBelow = this._host.game.resPool.get(name).value < resource.stock;
 
-      for (const resourceCell of resourceCells) {
-        resourceCell.classList.add(isBelow ? "ks-stock-below" : "ks-stock-above");
-        resourceCell.classList.remove(isBelow ? "ks-stock-above" : "ks-stock-below");
-      }
+      cell.classList.add(isBelow ? "ks-stock-below" : "ks-stock-above");
+      cell.classList.remove(isBelow ? "ks-stock-above" : "ks-stock-below");
     }
   }
 }
