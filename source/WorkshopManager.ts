@@ -263,7 +263,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       if (request.countRequested < 1) {
         continue;
       }
-      orders.push({ amount: request.countRequested, name: craft.resource });
+      orders.push({ amount: Math.floor(request.countRequested), name: craft.resource });
     }
     if (0 < orders.length) {
       this.craftMultiple(orders);
@@ -276,7 +276,21 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       const craft = this.getCraft(order.name);
       const ratio = this._host.game.getResCraftRatio(craft.name);
 
-      this._host.game.workshop.craft(craft.name, order.amount, true, false, false);
+      const craftSucceeded = this._host.game.workshop.craft(
+        craft.name,
+        order.amount,
+        true,
+        false,
+        false,
+      );
+      if (!craftSucceeded) {
+        console.error(
+          ...cl(
+            `Failed trying to craft ${order.amount}x ${order.name}! This is a problem and should be reported.`,
+          ),
+        );
+        continue;
+      }
 
       const resourceName = mustExist(this._host.game.resPool.get(order.name)).title;
 
@@ -292,8 +306,11 @@ export class WorkshopManager extends UpgradeManager implements Automation {
       );
     }
 
-    // TODO: This does not work correctly, as line breaks are not preserved!
-    this._host.engine.printOutput("ks-activity type_ks-craft", "#e65C00", messages.join("\n\n"));
+    this._host.game.updateResources();
+
+    for (const message of messages) {
+      this._host.engine.printOutput("ks-activity type_ks-craft", "#e65C00", message);
+    }
   }
 
   private _canCraft(name: ResourceCraftable, amount: number): boolean {
