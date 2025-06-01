@@ -28,7 +28,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     }
 
     this.autoCraft();
-    this.refreshStock();
+
+    if (this._host.engine.settings.highlighStock.enabled) {
+      this.refreshStock();
+    }
 
     if (this.settings.unlockUpgrades.enabled) {
       return this.autoUnlock();
@@ -50,10 +53,15 @@ export class WorkshopManager extends UpgradeManager implements Automation {
         continue;
       }
 
-      const upgrade = upgrades.find(subject => subject.name === setting.upgrade);
+      const upgrade =
+        setting.$upgrade ?? upgrades.find(subject => subject.name === setting.upgrade);
       if (isNil(upgrade)) {
         console.error(...cl(`Upgrade '${setting.upgrade}' not found in game!`));
         continue;
+      }
+
+      if (setting.$upgrade === undefined) {
+        setting.$upgrade = upgrade;
       }
 
       if (upgrade.researched || !upgrade.unlocked) {

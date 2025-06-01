@@ -3,11 +3,12 @@ import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cl } from "../tools/Log.js";
 import type { GamePage } from "../types/game.js";
-import { type Upgrade, Upgrades } from "../types/index.js";
+import { type UnsafeUpgrade, type Upgrade, Upgrades } from "../types/index.js";
 import { SettingTrigger } from "./Settings.js";
 
 export class UpgradeSettingsItem extends SettingTrigger {
   readonly #upgrade: Upgrade;
+  $upgrade: UnsafeUpgrade | undefined;
 
   get upgrade() {
     return this.#upgrade;
