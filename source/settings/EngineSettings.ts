@@ -22,6 +22,12 @@ export class EngineSettings extends Setting {
    */
   ksColumn: Setting;
 
+  /**
+   * Color resources in the game depending on if they are above or below configured stock.
+   * Users might want to disable this option, because it costs a lot of performance.
+   */
+  highlighStock: Setting;
+
   filters: LogFilterSettings;
   resources: ResourcesSettings;
   readonly states: StateSettings;
@@ -33,6 +39,7 @@ export class EngineSettings extends Setting {
     states = new StateSettings(),
     language = FallbackLocale,
     ksColumn = new Setting(),
+    highlightStock = new Setting(),
   ) {
     super(enabled);
     this.filters = filters;
@@ -45,6 +52,7 @@ export class EngineSettings extends Setting {
       { label: "中文", value: "zh-CN" },
     ]);
     this.ksColumn = ksColumn;
+    this.highlighStock = highlightStock;
   }
 
   load(settings: Maybe<Partial<EngineSettings>>, retainMetaBehavior = false) {
@@ -59,6 +67,7 @@ export class EngineSettings extends Setting {
       this.states.load(settings.states);
       this.locale.load(settings.locale);
       this.ksColumn.load(settings.ksColumn);
+      this.highlighStock.load(settings.highlighStock);
     }
 
     this.filters.load(settings.filters);

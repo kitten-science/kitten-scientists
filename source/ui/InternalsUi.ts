@@ -85,6 +85,11 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
             parent.host.rebuildUi();
           },
         }),
+        new SettingListItem(
+          parent,
+          settings.highlighStock,
+          parent.host.engine.i18n("ui.highlightStock"),
+        ),
         new Delimiter(parent),
 
         new OptionsListItem(parent, parent.host.engine.i18n("ui.language"), settings.locale, {

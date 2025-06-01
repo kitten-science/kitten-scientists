@@ -23,10 +23,11 @@ export default defineConfig({
       output: {
         entryFileNames: filename,
         extend: true,
-        format: "umd",
+        format: "esm",
       },
     },
     sourcemap: "hidden",
+    target: "esnext",
   },
   define: {
     RELEASE_CHANNEL,
