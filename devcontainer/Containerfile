@@ -4,12 +4,14 @@ LABEL "org.opencontainers.image.description"="Kitten Scientists Development Cont
 
 ARG REPO=https://github.com/nuclear-unicorn/kittensgame.git
 ARG BRANCH=master
+ARG COMMIT=76d681f1257fc7a7cf70b4212674b6bab269bc79
 
 EXPOSE 8080
 EXPOSE 8086
 
 RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
   && cd kittensgame \
+  && git checkout "$COMMIT" \
   && yarn add -D @oliversalzburg/js-utils cheerio watch-http-server
 
 WORKDIR /kittensgame
