@@ -32,7 +32,7 @@
     "postversion": "git push"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.0-beta.5",
+    "@biomejs/biome": "2.0.0-beta.6",
     "@oliversalzburg/js-utils": "0.3.0",
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.32",
