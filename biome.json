@@ -110,6 +110,8 @@
     ],
     "rules": {
       "complexity": {
+        "noArguments": "error",
+        "noCommaOperator": "error",
         "useNumericLiterals": "error"
       },
       "correctness": {
@@ -123,8 +125,6 @@
       },
       "recommended": true,
       "style": {
-        "noArguments": "error",
-        "noCommaOperator": "error",
         "noInferrableTypes": "error",
         "noNonNullAssertion": "error",
         "noParameterAssign": "error",
