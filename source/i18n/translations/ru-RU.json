@@ -243,6 +243,7 @@
   "ui.engine": "Enable Kitten Scientists",
   "ui.faith": "Религия",
   "ui.filter": "Log Filters",
+  "ui.highlightStock": "Highlight resource stock",
   "ui.infinity": "∞",
   "ui.internals": "Internals",
   "ui.internals.interval": "Interval: {0}",
