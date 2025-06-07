@@ -8,10 +8,16 @@ import { SettingTrigger } from "./Settings.js";
 
 export class UpgradeSettingsItem extends SettingTrigger {
   readonly #upgrade: Upgrade;
-  $upgrade: UnsafeUpgrade | undefined;
+  #$upgrade: UnsafeUpgrade | undefined;
 
   get upgrade() {
     return this.#upgrade;
+  }
+  get $upgrade() {
+    return this.#$upgrade;
+  }
+  set $upgrade(value: UnsafeUpgrade | undefined) {
+    this.#$upgrade = value;
   }
 
   constructor(upgrade: Upgrade, enabled = false) {

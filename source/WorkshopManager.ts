@@ -321,32 +321,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     }
   }
 
-  private _canCraft(name: ResourceCraftable, amount: number): boolean {
-    // Can't craft anything but wood until workshop is unlocked.
-    if (!this._host.game.workshopTab.visible && name !== "wood") {
-      return false;
-    }
-
-    const craft = this.getCraft(name);
-    const enabled = mustExist(this.settings.resources[name]).enabled;
-    let result = false;
-
-    if (craft.unlocked && enabled) {
-      result = true;
-
-      const prices = this._host.game.workshop.getCraftPrice(craft);
-      for (const price of prices) {
-        const value = this.getValueAvailable(price.name);
-
-        if (value < price.val * amount) {
-          result = false;
-        }
-      }
-    }
-
-    return result;
-  }
-
   /**
    * Retrieve the resource information object from the game.
    *
