@@ -5,7 +5,7 @@ default: build
 build: devcontainer injectable userscript loader lib
 
 clean:
-	rm --force --recursive _site .venv devcontainer/overlay docs/current/public lib node_modules output tsconfig.tsbuildinfo
+	rm --force --recursive _site .venv devcontainer/overlay docs/current/.venv docs/current/public lib node_modules output tsconfig.tsbuildinfo
 
 docs: docs/current/public
 
