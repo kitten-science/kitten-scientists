@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.5",
-    "@oliversalzburg/js-utils": "0.3.0",
+    "@oliversalzburg/js-utils": "0.4.3",
     "@types/dojo": "1.9.48",
     "@types/jquery": "3.5.32",
     "@types/node": "22.15.32",
