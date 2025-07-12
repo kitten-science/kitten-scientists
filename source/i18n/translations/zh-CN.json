@@ -243,6 +243,7 @@
   "ui.engine": "启用小猫珂学家",
   "ui.faith": "宗教",
   "ui.filter": "日志过滤",
+  "ui.highlightStock": "Highlight resource stock",
   "ui.infinity": "∞",
   "ui.internals": "小喵设置",
   "ui.internals.interval": "运行间隔(ms): {0}",
