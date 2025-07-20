@@ -27,7 +27,7 @@ jobs:
           persist-credentials: false
 
       - name: Validate commit messages
-        uses: oliversalzburg/action-commit-validator@9e8790c9ddf43af8762a8f802ca677c057ddf3f5 # v2.0.0
+        uses: oliversalzburg/action-commit-validator@bff490c925ac3e00e77c915891c07d0f78bf658b # v2.0.1
         if: github.event_name == 'pull_request'
         with:
           accept-breaking-changes: false
