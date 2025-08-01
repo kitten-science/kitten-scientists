@@ -23,7 +23,7 @@ jobs:
           token: ${{ secrets.CROWDIN_GH_TOKEN }}
 
       - name: crowdin action
-        uses: crowdin/github-action@9fd07c1c5b36b15f082d1d860dc399f16f849bd7 # v2
+        uses: crowdin/github-action@590c05e09a29f392b203faf4d6aa8e0cd32c7835 # v2
         with:
           upload_sources: true
           upload_translations: false
