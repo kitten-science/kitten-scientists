@@ -100,13 +100,13 @@ export class ActivitySummary {
     // Uncategorized items.
     if (this._sections.has("other")) {
       const section = mustExist(this._sections.get("other")) as Map<ActivitySectionOther, number>;
-      section.forEach((amount, name) =>
+      for (const [name, amount] of section) {
         summary.push(
           this._host.engine.i18n(`summary.${name}` as const, [
             this._host.game.getDisplayValueExt(amount),
           ]),
-        ),
-      );
+        );
+      }
     }
 
     // Technologies.
