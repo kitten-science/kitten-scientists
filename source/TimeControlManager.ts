@@ -3,7 +3,6 @@ import type { BonfireManager } from "./BonfireManager.js";
 import type { Engine, FrameContext } from "./Engine.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import type { ReligionManager } from "./ReligionManager.js";
-import type { SpaceManager } from "./SpaceManager.js";
 import { type CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
@@ -28,14 +27,12 @@ export class TimeControlManager {
   readonly settings: TimeControlSettings;
   private readonly _bonfireManager: BonfireManager;
   private readonly _religionManager: ReligionManager;
-  private readonly _spaceManager: SpaceManager;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
     host: KittenScientists,
     bonfireManager: BonfireManager,
     religionManager: ReligionManager,
-    spaceManager: SpaceManager,
     workshopManager: WorkshopManager,
     settings = new TimeControlSettings(),
   ) {
@@ -44,7 +41,6 @@ export class TimeControlManager {
 
     this._bonfireManager = bonfireManager;
     this._religionManager = religionManager;
-    this._spaceManager = spaceManager;
     this._workshopManager = workshopManager;
   }
 

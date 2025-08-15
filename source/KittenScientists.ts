@@ -239,7 +239,9 @@ export class KittenScientists {
     const baseValue = value.substring(0, value.length - (hasSuffix ? 1 : 0));
 
     let numericValue =
-      value.includes("e") || hasSuffix ? Number.parseFloat(baseValue) : Number.parseInt(baseValue);
+      value.includes("e") || hasSuffix
+        ? Number.parseFloat(baseValue)
+        : Number.parseInt(baseValue, 10);
     if (hasSuffix) {
       const suffix = value.substring(value.length - 1).toUpperCase();
       numericValue = numericValue * 1000 ** ["", "K", "M", "G", "T", "P"].indexOf(suffix);

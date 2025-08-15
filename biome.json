@@ -112,6 +112,7 @@
       "complexity": {
         "noArguments": "error",
         "noCommaOperator": "error",
+        "noImportantStyles": "off",
         "useNumericLiterals": "error"
       },
       "correctness": {
