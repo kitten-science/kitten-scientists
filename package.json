@@ -35,7 +35,7 @@
     "@biomejs/biome": "2.2.0",
     "@oliversalzburg/js-utils": "0.5.0",
     "@types/dojo": "1.9.48",
-    "@types/jquery": "3.5.32",
+    "@types/jquery": "3.5.33",
     "@types/node": "22.17.2",
     "@types/semver": "7.7.0",
     "@types/web": "0.0.262",
