@@ -43,7 +43,7 @@
     "date-fns": "4.1.0",
     "dojo": "1.17.3",
     "esbuild": "0.25.9",
-    "rollup": "4.47.1",
+    "rollup": "4.48.0",
     "rollup-plugin-cleanup": "3.2.1",
     "semver": "7.7.2",
     "tslib": "2.8.1",
