@@ -48,7 +48,7 @@
     "semver": "7.7.2",
     "tslib": "2.8.1",
     "typescript": "5.9.2",
-    "vite": "7.1.6",
+    "vite": "7.1.7",
     "vite-plugin-css-injected-by-js": "3.5.2",
     "vite-plugin-userscript": "0.1.3"
   },
