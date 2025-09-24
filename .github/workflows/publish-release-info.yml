@@ -8,7 +8,7 @@ concurrency: release-info
 
 env:
   # renovate: datasource=node-version depName=node versioning=node
-  NODE_VERSION: "22.19.0"
+  NODE_VERSION: "22.20.0"
 
 jobs:
   release-info:
