@@ -243,6 +243,7 @@
   "ui.engine": "Kitten Scientists aktivieren",
   "ui.faith": "Religion",
   "ui.filter": "Protokollfilter",
+  "ui.highlightStock": "Highlight resource stock",
   "ui.infinity": "∞",
   "ui.internals": "Intern",
   "ui.internals.interval": "Intervall: {0}",
