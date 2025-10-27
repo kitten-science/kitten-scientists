@@ -243,6 +243,7 @@
   "ui.engine": "Enable Kitten Scientists",
   "ui.faith": "종교",
   "ui.filter": "로그 필터",
+  "ui.highlightStock": "Highlight resource stock",
   "ui.infinity": "∞",
   "ui.internals": "Internals",
   "ui.internals.interval": "Interval: {0}",
