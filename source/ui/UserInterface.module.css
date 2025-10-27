@@ -8,6 +8,17 @@
   overflow-y: auto;
 }
 
+:global #crowdjet-expand-container {
+  position: fixed !important;
+  bottom: 10px !important;
+  right: -10px !important;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 :global #footerLinks {
   display: flex;
   flex-direction: column;
@@ -28,16 +39,6 @@
     &:hover {
       opacity: 1;
     }
-  }
-}
-:global #crowdjet-expand-container {
-  position: fixed !important;
-  bottom: 10px !important;
-  right: -10px !important;
-  opacity: 0.5;
-
-  &:hover {
-    opacity: 1;
   }
 }
 
