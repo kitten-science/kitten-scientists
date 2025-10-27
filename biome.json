@@ -77,7 +77,6 @@
       "semicolons": "always",
       "trailingCommas": "all"
     },
-
     "globals": ["exports"],
     "linter": {
       "enabled": true
@@ -119,7 +118,7 @@
         "noUndeclaredDependencies": "error",
         "noUnknownPseudoClass": "off",
         "noUnusedImports": "error",
-        "useImportExtensions": "error"
+        "useImportExtensions": "off"
       },
       "nursery": {
         "noFloatingPromises": "error"
@@ -149,6 +148,17 @@
       }
     }
   },
-  "overrides": [{ "formatter": { "indentWidth": 4 }, "includes": ["**/*.md"] }],
-  "vcs": { "clientKind": "git", "enabled": true, "useIgnoreFile": true }
+  "overrides": [
+    {
+      "formatter": {
+        "indentWidth": 4
+      },
+      "includes": ["**/*.md"]
+    }
+  ],
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
+  }
 }

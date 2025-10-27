@@ -433,7 +433,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
         } catch (_error) {
           // Continued failure to parse as JSON might indicate newline-delimited JSON.
           if (input.match(/\r?\n/)) {
-            return input.split(/\r?\n/).map(line => void internalImport(line));
+            return input.split(/\r?\n/).forEach(line => void internalImport(line));
           }
 
           throw new InvalidArgumentError(
