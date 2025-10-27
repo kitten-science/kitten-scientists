@@ -4,7 +4,7 @@ LABEL "org.opencontainers.image.description"="Kitten Scientists Development Cont
 
 ARG REPO=https://github.com/nuclear-unicorn/kittensgame.git
 ARG BRANCH=master
-ARG COMMIT=76d681f1257fc7a7cf70b4212674b6bab269bc79
+ARG COMMIT=5e0794bca2a4408cd8f79317a5f8a457c4b7dd66
 
 EXPOSE 8080
 EXPOSE 8086
