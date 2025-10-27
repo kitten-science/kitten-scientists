@@ -13,7 +13,7 @@ export default defineConfig({
   build: {
     emptyOutDir: false,
     lib: {
-      entry: "source/entrypoint-userscript.ts",
+      entry: "source/entrypoint-inject.ts",
       name: "kitten-scientists",
     },
     minify: MINIFY ? "esbuild" : false,

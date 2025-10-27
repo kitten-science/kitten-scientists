@@ -6,21 +6,21 @@ import manifest from "./package.json" with { type: "json" };
 const minify = Boolean(process.env.MINIFY) ?? !isDevBuild;
 const versionString = process.env.RELEASE_VERSION ?? "0.0.0-ci";
 
-const filename = [
-  "kitten-scientists-loader",
-  `-${versionString}`,
-  minify ? ".min" : "",
-  ".user.js",
-].join("");
+const filename = ["kitten-scientists", `-${versionString}`, minify ? ".min" : "", ".user.js"].join(
+  "",
+);
 
 const RELEASE_CHANNEL = process.env.RELEASE_CHANNEL ?? "fixed";
+const USE_DEV_PAYLOAD = false;
 
 const downloadURL = `https://kitten-science.com/${RELEASE_CHANNEL}.js`;
 const updateURL = `https://kitten-science.com/${RELEASE_CHANNEL}.min.js`;
 
 const PAYLOAD = JSON.stringify(
   readFileSync(
-    minify ? "./output/kitten-scientists.min.inject.js" : "./output/kitten-scientists.inject.js",
+    USE_DEV_PAYLOAD
+      ? "./output/kitten-scientists.inject.js"
+      : "./output/kitten-scientists.min.inject.js",
     "utf-8",
   ),
 );

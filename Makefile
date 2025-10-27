@@ -49,10 +49,7 @@ injectable: node_modules
 	MINIFY=true npm exec -- vite --config vite.config.inject.js build
 	mkdir -p devcontainer/overlay/ && cp output/kitten-scientists.inject.js devcontainer/overlay/kitten-scientists.inject.js
 
-userscript: node_modules
-	npm exec -- vite --config vite.config.user.js build
-	MINIFY=true npm exec -- vite --config vite.config.user.js build
-
+userscript: loader
 loader: node_modules injectable
 	npm exec -- vite --config vite.config.loader.js build
 	MINIFY=true npm exec -- vite --config vite.config.loader.js build
