@@ -2,8 +2,8 @@
 
 The development container is an OCI that you can run with Docker or other container runtimes. It provides a copy of the game, with the script already loaded into it. This allows you to make changes to the script, and quickly evaluate these changes, without having to build a userscript and load that into your userscript manager.
 
-> [!IMPORTANT]
-> The Kitten Science Development Containers are not to be confused with [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/create-dev-container). Kitten Science tries to be agnostic about development environments, and does not directly support features exclusive to VS Code.
+!!! info
+    The Kitten Science Development Containers are not to be confused with [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/create-dev-container). Kitten Science tries to be agnostic about development environments, and does not directly support features exclusive to VS Code.
 
 ## Quick Start
 
@@ -59,15 +59,15 @@ More commonly, you will spawn the development container as a background task (`-
 
 The container exposes these ports:
 
-1. `8080` - HTTP Browser interface
-1. `8086` - WebSocket Browser interface
+1. `8080` - HTTP Browser interface. You might want to use a different port, if `8080` is already in use by another process.
+1. `8086` - WebSocket Browser connection for auto-reload. Exposing this on a different port, will prevent the auto-reload from working correctly.
 
 === "Docker"
 
     ```shell
     sudo docker run \
         --publish 9080:8080 \
-        --publish 9086:8086 \
+        --publish 8086 \
         ghcr.io/kitten-science/devcontainer:nightly
     ```
 
