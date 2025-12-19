@@ -78,10 +78,25 @@
   :global #rightTabLog {
     overflow-y: visible;
 
+    :global #logFiltersBlock {
+      /* We have the log filters in the settings UI now. No need for the additional button. */
+      display: none !important;
+    }
+
     :global #gameLog {
       height: auto;
       min-height: auto;
       overflow-y: visible;
+
+      :global .type_ks-default {
+        color: #aa50fe;
+      }
+      :global .type_ks-activity {
+        color: #e65c00;
+      }
+      :global .type_ks-summary {
+        color: #009933;
+      }
     }
   }
 }
