@@ -29,6 +29,7 @@ import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { TimeControlManager } from "./TimeControlManager.js";
 import { TimeManager } from "./TimeManager.js";
 import { TradeManager } from "./TradeManager.js";
+import { objectEntries } from "./tools/Entries.js";
 import { cl } from "./tools/Log.js";
 import { type Cycle, Cycles, type Locale, type Planet } from "./types/index.js";
 import { FallbackLocale, UserScriptLoader } from "./UserScriptLoader.js";
@@ -379,8 +380,7 @@ export class Engine {
    * The main loop of the automation script.
    */
   private async _iterate(context: FrameContext): Promise<void> {
-    // The logic here is inverted, because _disabled_ items are hidden from the log.
-    if (!this.settings.filters.disableKGLog.enabled) {
+    if (this.settings.filters.enabled) {
       this._maintainKGLogFilters();
     }
 
@@ -432,16 +432,18 @@ export class Engine {
   }
 
   /**
-   * Ensures all log filters in KG are unchecked. This means the events will not be logged.
+   * Set the log filters in the game to the selected configuration.
    */
   private _maintainKGLogFilters(): void {
-    for (const filter of Object.values(this._host.game.console.filters)) {
-      filter.enabled = false;
-    }
-
-    const filterCheckboxes = UserScriptLoader.window.document.querySelectorAll("[id^=filter-]");
-    for (const checkbox of filterCheckboxes) {
-      (checkbox as HTMLInputElement).checked = false;
+    for (const [id, filter] of objectEntries(this.settings.filters.filtersGame)) {
+      if (this._host.game.console.filters[id].enabled !== filter.enabled) {
+        this._host.game.console.filters[id].enabled = filter.enabled;
+        const filterCheckbox = UserScriptLoader.window.document.querySelector(`#filter-${id}`);
+        if (filterCheckbox === null) {
+          continue;
+        }
+        (filterCheckbox as HTMLInputElement).checked = filter.enabled;
+      }
     }
   }
 
@@ -514,9 +516,9 @@ export class Engine {
     const text = this.i18n(i18nLiteral, i18nArgs);
     if (logStyle) {
       const activityClass: ActivityTypeClass = `type_${logStyle}` as const;
-      this.printOutput(`ks-activity ${activityClass}` as const, "#e65C00", text);
+      this.printOutput(`ks-activity ${activityClass}` as const, text);
     } else {
-      this.printOutput("ks-activity", "#e65C00", text);
+      this.printOutput("ks-activity", text);
     }
   }
 
@@ -524,7 +526,7 @@ export class Engine {
     i18nLiteral: keyof (typeof i18nData)["en-US"],
     i18nArgs: Array<number | string> = [],
   ): void {
-    this.printOutput("ks-default", "#aa50fe", this.i18n(i18nLiteral, i18nArgs));
+    this.printOutput("ks-default", this.i18n(i18nLiteral, i18nArgs));
   }
 
   storeForSummary(name: string, amount = 1, section: ActivitySummarySection = "other"): void {
@@ -538,7 +540,7 @@ export class Engine {
   displayActivitySummary(): void {
     const summary = this.getSummary();
     for (const summaryLine of summary) {
-      this.printOutput("ks-summary", "#009933", summaryLine);
+      this.printOutput("ks-summary", summaryLine);
     }
 
     // Clear out the old activity
@@ -551,7 +553,6 @@ export class Engine {
 
   printOutput(
     cssClasses: "ks-activity" | `ks-activity ${ActivityTypeClass}` | "ks-default" | "ks-summary",
-    color: string,
     message: string,
   ): void {
     if (this.settings.filters.enabled) {
@@ -562,9 +563,7 @@ export class Engine {
       }
     }
 
-    // Update the color of the message immediately after adding
-    const msg = this._host.game.msg(message, cssClasses);
-    $(msg.span).css("color", color);
+    this._host.game.msg(message, cssClasses);
   }
 
   static evaluateSubSectionTrigger(sectionTrigger: number, subSectionTrigger: number): number {

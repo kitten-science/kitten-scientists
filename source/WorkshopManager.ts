@@ -317,7 +317,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
     this._host.game.updateResources();
 
     for (const message of messages) {
-      this._host.engine.printOutput("ks-activity type_ks-craft", "#e65C00", message);
+      this._host.engine.printOutput("ks-activity type_ks-craft", message);
     }
   }
 
