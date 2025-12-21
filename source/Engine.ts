@@ -437,6 +437,7 @@ export class Engine {
   private _maintainKGLogFilters(): void {
     for (const [id, filter] of objectEntries(this.settings.filters.filtersGame)) {
       if (this._host.game.console.filters[id].enabled !== filter.enabled) {
+        this._host.game.console.filters[id].unlocked = true;
         this._host.game.console.filters[id].enabled = filter.enabled;
         const filterCheckbox = UserScriptLoader.window.document.querySelector(`#filter-${id}`);
         if (filterCheckbox === null) {
