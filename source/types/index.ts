@@ -1074,6 +1074,7 @@ export const Upgrades = [
   "storageBunkers",
   "strenghtenBuild",
   "tachyonAccelerators",
+  "tachyonModerator",
   "thinFilm",
   "thoriumEngine",
   "thoriumReactors",
