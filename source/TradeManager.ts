@@ -267,7 +267,6 @@ export class TradeManager implements Automation {
       return;
     }
 
-    const racePanels = this._host.game.diplomacyTab.racePanels;
     cultureVal = this._workshopManager.getValueAvailable("culture");
 
     const embassyBulk: Partial<
@@ -285,15 +284,13 @@ export class TradeManager implements Automation {
     > = {};
     const bulkTracker: Array<Race> = [];
 
-    for (let panelIndex = 0; panelIndex < racePanels.length; panelIndex++) {
-      if (!racePanels[panelIndex].embassyButton) {
+    for (const race of this._host.game.diplomacy.races) {
+      const name = race.name;
+      if (name in this.settings.buildEmbassies.races === false) {
         continue;
       }
 
-      const name = racePanels[panelIndex].race.name;
-      const race = this._host.game.diplomacy.get(name);
       const max = negativeOneToInfinity(this.settings.buildEmbassies.races[name].max);
-
       if (
         !this.settings.buildEmbassies.races[name].enabled ||
         max <= race.embassyLevel ||
