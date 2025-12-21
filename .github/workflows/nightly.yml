@@ -179,6 +179,7 @@ jobs:
     uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
     with:
       dist-tag: ${{ needs.params.outputs.release-tag }}
+      registry-url: 'https://npm.pkg.github.com'
       version: ${{ needs.changelog.outputs.version }}
 
   nightly:
