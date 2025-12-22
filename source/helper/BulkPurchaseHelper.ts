@@ -1,4 +1,3 @@
-import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { Engine } from "../Engine.js";
 import type { KittenScientists } from "../KittenScientists.js";
@@ -16,15 +15,30 @@ import type {
   UnsafeBuildingBtnModernModel,
   UnsafeBuildingStackableBtnModel,
 } from "../types/core.js";
-import type {
-  AllBuildings,
-  Building,
-  Price,
-  Resource,
-  TabId,
-  TimeItemVariant,
-  UnicornItemVariant,
-  Unlocks,
+import {
+  type AllBuildings,
+  type Building,
+  Buildings,
+  type ChronoForgeUpgrade,
+  ChronoForgeUpgrades,
+  type Price,
+  type ReligionUpgrade,
+  ReligionUpgrades,
+  type Resource,
+  type SpaceBuilding,
+  SpaceBuildings,
+  type StagedBuilding,
+  StagedBuildings,
+  type TabId,
+  type TimeItemVariant,
+  type TranscendenceUpgrade,
+  TranscendenceUpgrades,
+  type UnicornItemVariant,
+  type Unlocks,
+  type VoidSpaceUpgrade,
+  VoidSpaceUpgrades,
+  type ZigguratUpgrade,
+  ZigguratUpgrades,
 } from "../types/index.js";
 import type {
   UnsafeReligionBtnModel,
@@ -61,25 +75,23 @@ export type BulkBuildListItem = {
 
 type BuildRequest = {
   id: AllBuildings;
-  prices: Array<Price>;
-  priceRatio: number;
-  source: TabId;
   limit: number;
   val: number;
+  // For staged buildings.
+  name: AllBuildings | null;
+  stage: number | null;
+  variant: TimeItemVariant | UnicornItemVariant | null;
 };
 
-type PotentialBuild = {
+type ConcreteBuild = {
   id: AllBuildings;
-  label?: string;
-  name?: AllBuildings;
-  spot: number;
-  count: number;
-  prices: Array<Price>;
-  priceRatio: number;
-  source: TabId;
   limit: number;
   val: number;
-  variant?: TimeItemVariant | UnicornItemVariant;
+  count: number;
+  // For staged buildings.
+  name: AllBuildings | null;
+  stage: number | null;
+  variant: TimeItemVariant | UnicornItemVariant | null;
 };
 
 export class BulkPurchaseHelper {
@@ -89,6 +101,112 @@ export class BulkPurchaseHelper {
   constructor(host: KittenScientists, workshopManager: WorkshopManager) {
     this._host = host;
     this._workshopManager = workshopManager;
+  }
+
+  _priceForBuild(build: AllBuildings, atValue = 0): Array<Price> {
+    if (StagedBuildings.includes(build as StagedBuilding)) {
+      const baseStage: Partial<Record<StagedBuilding, Building>> = {
+        broadcasttower: "amphitheatre",
+        dataCenter: "library",
+        hydroplant: "aqueduct",
+        solarfarm: "pasture",
+        spaceport: "warehouse",
+      };
+      return this._priceForBuild(mustExist(baseStage[build as StagedBuilding]), atValue);
+    }
+
+    if (Buildings.includes(build as Building)) {
+      // We can't use the same approach as for the other cases below, because the passed metadata is
+      // ignored, and a cached copy is used instead. This prevents us from asking the price of a specific
+      // count of builds. Instead, we abuse the additionalBought parameter of the getPrices method.
+      const buildingMeta = this._host.game.bld.getBuildingExt(build as Building);
+
+      const prices = this._host.game.bld.getPrices(
+        build as Building,
+        atValue !== 0 ? atValue - buildingMeta.meta.val : 0,
+      );
+      return prices;
+    }
+
+    if (ChronoForgeUpgrades.includes(build as ChronoForgeUpgrade)) {
+      const button = this._host.game.time.queue.getQueueElementControllerAndModel({
+        name: build,
+        type: "chronoforge",
+      });
+
+      const prices = button.controller.getPrices({
+        ...button.model,
+        metadata: { ...button.model.metadata, val: atValue },
+      });
+      return prices;
+    }
+
+    if (ReligionUpgrades.includes(build as ReligionUpgrade)) {
+      const button = this._host.game.time.queue.getQueueElementControllerAndModel({
+        name: build,
+        type: "religion",
+      });
+
+      const prices = button.controller.getPrices({
+        ...button.model,
+        metadata: { ...button.model.metadata, val: atValue },
+      });
+      return prices;
+    }
+
+    if (SpaceBuildings.includes(build as SpaceBuilding)) {
+      const button = this._host.game.time.queue.getQueueElementControllerAndModel({
+        name: build,
+        type: "spaceBuilding",
+      });
+
+      const prices = button.controller.getPrices({
+        ...button.model,
+        metadata: { ...button.model.metadata, val: atValue },
+      });
+      return prices;
+    }
+
+    if (TranscendenceUpgrades.includes(build as TranscendenceUpgrade)) {
+      const button = this._host.game.time.queue.getQueueElementControllerAndModel({
+        name: build,
+        type: "transcendenceUpgrades",
+      });
+
+      const prices = button.controller.getPrices({
+        ...button.model,
+        metadata: { ...button.model.metadata, val: atValue },
+      });
+      return prices;
+    }
+
+    if (VoidSpaceUpgrades.includes(build as VoidSpaceUpgrade)) {
+      const button = this._host.game.time.queue.getQueueElementControllerAndModel({
+        name: build,
+        type: "voidSpace",
+      });
+
+      const prices = button.controller.getPrices({
+        ...button.model,
+        metadata: { ...button.model.metadata, val: atValue },
+      });
+      return prices;
+    }
+
+    if (ZigguratUpgrades.includes(build as ZigguratUpgrade)) {
+      const button = this._host.game.time.queue.getQueueElementControllerAndModel({
+        name: build,
+        type: "zigguratUpgrades",
+      });
+
+      const prices = button.controller.getPrices({
+        ...button.model,
+        metadata: { ...button.model.metadata, val: atValue },
+      });
+      return prices;
+    }
+
+    throw Error(`unable to get meta for '${build}'`);
   }
 
   /**
@@ -107,7 +225,7 @@ export class BulkPurchaseHelper {
         {
           enabled: boolean;
           label?: string;
-          max?: number;
+          max: number;
           baseBuilding?: Building;
           building?: AllBuildings | BonfireItem;
           stage?: number;
@@ -131,13 +249,8 @@ export class BulkPurchaseHelper {
       >
     >,
     sectionTrigger: number,
-    sourceTab: TabId,
-  ): Array<BulkBuildListItem> {
-    const potentialBuilds: Array<PotentialBuild> = [];
-
-    // How many builds are on the list.
-    let counter = 0;
-
+  ): Array<ConcreteBuild> {
+    const buildDrafts: Array<ConcreteBuild> = [];
     for (const [name, build] of objectEntries(builds)) {
       const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, build.trigger);
       const buildMetaData = mustExist(metaData[name]);
@@ -180,22 +293,20 @@ export class BulkPurchaseHelper {
         continue;
       }
 
-      // Get the prices and the price ratio of this build.
-      const prices = mustExist(
-        this._isStagedBuild(buildMetaData)
-          ? buildMetaData.stages[buildMetaData.stage].prices
-          : buildMetaData.prices,
-      );
-      const priceRatio = this.getPriceRatio(buildMetaData, sourceTab);
-
-      // Check if we can build this item.
-      if (!this.singleBuildPossible(buildMetaData, prices, priceRatio, sourceTab)) {
+      // If the build is for a stage that the building isn't currently at, skip it.
+      if (
+        this._isStagedBuild(buildMetaData) &&
+        typeof build.stage !== "undefined" &&
+        build.stage !== buildMetaData.stage
+      ) {
         continue;
       }
 
+      const itemPrices = this._priceForBuild(name);
+
       // Check the requirements for this build.
       // We want a list of all resources that are required for this build, which have a capacity.
-      const requiredMaterials = prices
+      const requiredMaterials = itemPrices
         .map(price => this._workshopManager.getResource(price.name))
         .filter(material => 0 < material.maxValue);
       const allMaterialsAboveTrigger =
@@ -203,145 +314,121 @@ export class BulkPurchaseHelper {
           .length === 0;
 
       if (allMaterialsAboveTrigger) {
-        // If the build is for a stage that the building isn't currently at, skip it.
-        if (
-          this._isStagedBuild(buildMetaData) &&
-          typeof build.stage !== "undefined" &&
-          build.stage !== buildMetaData.stage
-        ) {
-          continue;
-        }
-
-        const itemPrices = [];
-
-        // Get cost reduction modifier.
-        const pricesDiscount = this._host.game.getLimitedDR(
-          this._host.game.getEffect(`${name}CostReduction` as const),
-          1,
-        );
-        const priceModifier = 1 - pricesDiscount;
-
-        // Determine the actual prices for this building.
-        for (const price of prices) {
-          const resPriceDiscount = this._host.game.getLimitedDR(
-            this._host.game.getEffect(`${price.name}CostReduction` as const),
-            1,
-          );
-          const resPriceModifier = 1 - resPriceDiscount;
-          itemPrices.push({
-            name: price.name,
-            val: price.val * priceModifier * resPriceModifier,
-          });
-        }
-
         // Create an entry in the cache list for the bulk processing.
-        potentialBuilds.push({
-          count: 0,
+        buildDrafts.push({
+          count: 1,
           id: name,
-          label: build.label,
-          limit: build.max || 0,
+          limit: build.max,
           name: (build.baseBuilding ?? build.building) as Building,
-          priceRatio: priceRatio,
-          prices: itemPrices,
-          source: sourceTab,
-          spot: counter,
+          stage: build.stage ?? null,
           val: buildMetaData.val,
-          variant: build.variant,
+          variant: build.variant ?? null,
         });
-
-        counter++;
       }
     }
 
-    if (potentialBuilds.length === 0) {
+    if (buildDrafts.length === 0) {
       return [];
     }
 
     // Create a copy of the currently available resources.
-    // We need a copy, because `_getPossibleBuildCount` modifies this data.
+    // We need a copy, because `_precalculateBuilds` modifies this data.
     const currentResourcePool: Record<Resource, number> = {} as Record<Resource, number>;
     for (const res of this._host.game.resPool.resources) {
       currentResourcePool[res.name] = this._workshopManager.getValueAvailable(res.name);
     }
 
     let iterations = 0;
-    const buildsCommitted = new Array<PotentialBuild>();
-    while (iterations < 1e5) {
-      const candidatesThisIteration = difference(potentialBuilds, buildsCommitted);
-
-      let buildThisIteration = 0;
-      const committedThisIteration = [];
+    const buildsCommitted = new Array<Array<ConcreteBuild>>();
+    while (iterations < 1e5 && 0 < buildDrafts.length) {
+      let increasedThisIteration = 0;
+      const canBeBuilt = [];
       let tempPool = { ...currentResourcePool };
-      // Pay already committed builds from the temp pool.
-      for (const committedBuild of buildsCommitted) {
-        const possibleInstances = this._precalculateBuilds(
-          {
-            ...committedBuild,
-            limit: committedBuild.val + committedBuild.count,
-          },
-          metaData,
-          tempPool,
-        );
-        tempPool = possibleInstances.remainingResources;
-      }
 
-      // Now see what we can do with the rest of the pool.
-      for (const potentialBuild of candidatesThisIteration) {
-        const targetInstanceCount = potentialBuild.count + 1;
+      for (const buildDraft of buildDrafts) {
         const possibleInstances = this._precalculateBuilds(
           {
-            ...potentialBuild,
+            ...buildDraft,
             limit: Math.min(
-              negativeOneToInfinity(potentialBuild.limit),
-              potentialBuild.val + targetInstanceCount,
+              negativeOneToInfinity(buildDraft.limit),
+              buildDraft.val + buildDraft.count,
             ),
           },
           metaData,
           tempPool,
         );
 
-        if (possibleInstances.count < targetInstanceCount) {
-          committedThisIteration.push(potentialBuild);
+        if (possibleInstances.count === 0) {
           continue;
         }
 
-        potentialBuild.count = targetInstanceCount;
-        tempPool = possibleInstances.remainingResources;
+        if (possibleInstances.count !== buildDraft.count) {
+          tempPool = possibleInstances.remainingResources;
+          canBeBuilt.push({ ...buildDraft, count: possibleInstances.count });
+          continue;
+        }
 
-        buildThisIteration++;
+        tempPool = possibleInstances.remainingResources;
+        canBeBuilt.push({ ...buildDraft });
+        ++buildDraft.count;
+        ++increasedThisIteration;
       }
 
-      buildsCommitted.push(...committedThisIteration);
+      if (increasedThisIteration === 0) {
+        // Return last full, or partial result.
+        break;
+      }
 
-      iterations++;
+      buildsCommitted.push(canBeBuilt);
+      ++iterations;
+    }
 
-      if (buildThisIteration === 0) {
+    if (buildsCommitted.length === 0) {
+      return [];
+    }
+
+    let validBuild: Array<ConcreteBuild> | undefined;
+    for (const builds of buildsCommitted) {
+      const tempPool = { ...currentResourcePool };
+      let buildIsValid = true;
+      for (const build of builds) {
+        const possibleInstances = this._precalculateBuilds(
+          {
+            ...build,
+            limit: Math.min(negativeOneToInfinity(build.limit), build.val + build.count),
+          },
+          metaData,
+          tempPool,
+        );
+        if (possibleInstances.count < build.count) {
+          buildIsValid = false;
+          break;
+        }
+      }
+      if (buildIsValid) {
+        validBuild = builds;
+      } else {
         break;
       }
     }
 
-    console.debug(...cl(`Took '${iterations}' iterations to evaluate bulk build request.`));
+    if (validBuild !== undefined) {
+      return validBuild;
+    }
 
-    return buildsCommitted;
+    console.warn(
+      ...cl(`Took '${iterations}' iterations to evaluate bulk build request without result.`),
+    );
+    return [];
   }
 
   /**
    * Calculate how many of a given build item build be built with the given resources.
    *
    * @param buildCacheItem The item to build.
-   * @param buildCacheItem.id ?
-   * @param buildCacheItem.name ?
-   * @param buildCacheItem.count ?
-   * @param buildCacheItem.spot ?
-   * @param buildCacheItem.prices ?
-   * @param buildCacheItem.priceRatio ?
-   * @param buildCacheItem.source ?
-   * @param buildCacheItem.limit ?
-   * @param buildCacheItem.val ?
    * @param metaData The metadata for the potential builds.
    * @param resources The currently available resources.
-   * @returns The number of items that could be built. If this is non-zero, the `resources` will have been adjusted
-   * to reflect the number of builds made.
+   * @returns The number of items that could be built, and the amount of resources that would be left, after buying them.
    */
   private _precalculateBuilds(
     buildCacheItem: BuildRequest,
@@ -359,143 +446,40 @@ export class BulkPurchaseHelper {
         >
       >
     >,
-    resources: Record<Resource, number> = {} as Record<Resource, number>,
+    resources: Readonly<Record<Resource, number>> = {} as Readonly<Record<Resource, number>>,
   ): {
     count: number;
     remainingResources: Record<Resource, number>;
   } {
     let buildsPossible = 0;
 
-    const tempPool = Object.assign({}, resources);
+    const tempPool = { ...resources };
 
     // The KG metadata associated with the build.
     const buildMetaData = mustExist(metaData[buildCacheItem.id]);
-    const prices = buildCacheItem.prices;
-    const priceRatio = buildCacheItem.priceRatio;
-    const source = buildCacheItem.source;
     let maxItemsBuilt = false;
-
-    if (prices.length === 0) {
-      return { count: 0, remainingResources: tempPool };
-    }
 
     // There is actually no strong guarantee that `maxItemsBuilt` changes in the loops below.
     // This could end up being an infinite loop under unexpected conditions.
-    while (!maxItemsBuilt) {
-      // Go through the prices for this build.
-      for (let priceIndex = 0; priceIndex < prices.length; priceIndex++) {
-        // Is this an oil cost for a build on the space tab?
-        let spaceOil = false;
-        // Is this a karma cost for building cryochambers?
-        let cryoKarma = false;
-        // The actual, discounted oil price for the build.
-        let oilPrice = Number.POSITIVE_INFINITY;
-        // The actual, discounted karma price for the build.
-        let karmaPrice = Number.POSITIVE_INFINITY;
-
-        // Determine the new state of the flags above.
-        if (source === "Space" && prices[priceIndex].name === "oil") {
-          spaceOil = true;
-
-          const oilReductionRatio = this._host.game.getEffect("oilReductionRatio");
-          oilPrice =
-            prices[priceIndex].val * (1 - this._host.game.getLimitedDR(oilReductionRatio, 0.75));
-        } else if (buildCacheItem.id === "cryochambers" && prices[priceIndex].name === "karma") {
-          cryoKarma = true;
-
-          const burnedParagonRatio = this._host.game.prestige.getBurnedParagonRatio();
-          karmaPrice =
-            prices[priceIndex].val *
-            (1 - this._host.game.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
-        }
-
-        if (spaceOil) {
-          maxItemsBuilt = tempPool.oil < oilPrice * 1.05 ** (buildsPossible + buildMetaData.val);
-        } else if (cryoKarma) {
-          maxItemsBuilt =
-            tempPool.karma < karmaPrice * priceRatio ** (buildsPossible + buildMetaData.val);
-        } else {
-          maxItemsBuilt =
-            tempPool[prices[priceIndex].name] <
-            prices[priceIndex].val * priceRatio ** (buildsPossible + buildMetaData.val);
-        }
-
-        // Check if any special builds have reached their reasonable limit of units to build.
-        // In which case we update our temporary resources cache. Not sure why.
-        if (
-          maxItemsBuilt ||
-          // Is this a non-stackable build?
-          // Space missions and religion upgrades (before transcendence is unlocked)
-          // are example of non-stackable builds.
-          ("noStackable" in buildMetaData &&
-            buildMetaData.noStackable &&
-            buildsPossible + buildMetaData.val >= 1) ||
-          // Is this the resource retrieval build? This one is limited to 100 units.
-          (buildCacheItem.id === "ressourceRetrieval" &&
-            buildsPossible + buildMetaData.val >= 100) ||
-          (buildCacheItem.id === "cryochambers" &&
-            this._host.game.bld.getBuildingExt("chronosphere").meta.val <=
-              buildsPossible + buildMetaData.val)
-        ) {
-          // Go through all prices that we have already checked.
-          for (let priceIndex2 = 0; priceIndex2 < priceIndex; priceIndex2++) {
-            // TODO: This seems to just be `spaceOil`.
-            // TODO: A lot of this code seems to be a duplication from a few lines above.
-            if (source === "Space" && prices[priceIndex2].name === "oil") {
-              const oilReductionRatio = this._host.game.getEffect("oilReductionRatio");
-              const oilPriceRefund =
-                prices[priceIndex2].val *
-                (1 - this._host.game.getLimitedDR(oilReductionRatio, 0.75));
-
-              tempPool.oil += oilPriceRefund * 1.05 ** (buildsPossible + buildMetaData.val);
-
-              // TODO: This seems to just be `cryoKarma`.
-            } else if (
-              buildCacheItem.id === "cryochambers" &&
-              prices[priceIndex2].name === "karma"
-            ) {
-              const burnedParagonRatio = this._host.game.prestige.getBurnedParagonRatio();
-              const karmaPriceRefund =
-                prices[priceIndex2].val *
-                (1 - this._host.game.getLimitedDR(0.01 * burnedParagonRatio, 1.0));
-
-              tempPool.karma +=
-                karmaPriceRefund * priceRatio ** (buildsPossible + buildMetaData.val);
-            } else {
-              const refundVal =
-                prices[priceIndex2].val * priceRatio ** (buildsPossible + buildMetaData.val);
-              tempPool[prices[priceIndex2].name] +=
-                prices[priceIndex2].name === "void" ? Math.ceil(refundVal) : refundVal;
-            }
-          }
-
-          // Is this a limited build? If so, don't build more than the limit.
-          if (buildCacheItem.limit && buildCacheItem.limit !== -1) {
-            buildsPossible = Math.max(
-              0,
-              Math.min(buildsPossible, buildCacheItem.limit - buildCacheItem.val),
-            );
-          }
-
-          return { count: buildsPossible, remainingResources: tempPool };
-        }
-
-        // Deduct the cost of this price from the temporary resource cache.
-        if (spaceOil) {
-          tempPool.oil -= oilPrice * 1.05 ** (buildsPossible + buildMetaData.val);
-        } else if (cryoKarma) {
-          tempPool.karma -= karmaPrice * priceRatio ** (buildsPossible + buildMetaData.val);
-        } else {
-          const newPriceValue =
-            prices[priceIndex].val * priceRatio ** (buildsPossible + buildMetaData.val);
-          tempPool[prices[priceIndex].name] -=
-            prices[priceIndex].name === "void" ? Math.ceil(newPriceValue) : newPriceValue;
-        }
-
-        // Check the next price...
+    while (!maxItemsBuilt && buildsPossible < 1e5) {
+      if (buildCacheItem.limit <= buildMetaData.val + buildsPossible) {
+        break;
       }
 
-      ++buildsPossible;
+      const prices = this._priceForBuild(buildCacheItem.id, buildMetaData.val + buildsPossible);
+
+      for (let priceIndex = 0; priceIndex < prices.length; priceIndex++) {
+        if (tempPool[prices[priceIndex].name] < prices[priceIndex].val) {
+          maxItemsBuilt = true;
+          break;
+        }
+      }
+      if (!maxItemsBuilt) {
+        ++buildsPossible;
+        for (let priceIndex = 0; priceIndex < prices.length; priceIndex++) {
+          tempPool[prices[priceIndex].name] -= prices[priceIndex].val;
+        }
+      }
     }
 
     return { count: buildsPossible, remainingResources: tempPool };

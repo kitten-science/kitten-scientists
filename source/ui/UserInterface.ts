@@ -187,8 +187,8 @@ export class UserInterface extends UiComponent {
   }
 
   forceFullRefresh(): void {
-    console.warn(...cl("Forcing refresh on all user interface components..."));
+    console.debug(...cl("Forcing refresh on all user interface components..."));
     this.requestRefresh();
-    console.warn(...cl("Refresh on all user interface components enforced."));
+    console.debug(...cl("Refresh on all user interface components enforced."));
   }
 }

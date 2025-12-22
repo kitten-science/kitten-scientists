@@ -9,6 +9,7 @@ import { ReligionSettings, type ReligionSettingsItem } from "./settings/Religion
 import { negativeOneToInfinity } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import {
+  type Building,
   type FaithItem,
   type ReligionItem,
   type ReligionUpgrade,
@@ -16,6 +17,7 @@ import {
   type UnicornItem,
   UnicornItems,
   UnicornItemVariant,
+  type UnsafeBuilding,
   type ZigguratUpgrade,
 } from "./types/index.js";
 import type {
@@ -125,87 +127,97 @@ export class ReligionManager implements Automation {
     const sectionTrigger = this.settings.trigger;
 
     if (this.settings.bestUnicornBuildingCurrent === "unicornPasture") {
-      this._bonfireManager.build(this.settings.bestUnicornBuildingCurrent, 0, 1);
-    } else {
-      const buildImpl = this._getBuild(
-        this.settings.bestUnicornBuildingCurrent,
-        UnicornItemVariant.Ziggurat,
-      );
-
-      let tearsNeeded = 0;
-      const priceTears = mustExist(buildImpl.model.prices).find(
-        subject => subject.name === "tears",
-      );
-      if (!isNil(priceTears)) {
-        tearsNeeded = priceTears.val;
-      }
-
-      const tearsAvailableForUse =
-        this._workshopManager.getValue("tears") - this._workshopManager.getStock("tears");
-
-      if (tearsAvailableForUse < tearsNeeded) {
-        // How many times can we sacrifice unicorns to make tears?
-        const maxSacrifice = Math.floor(
-          (this._workshopManager.getValue("unicorns") -
-            this._workshopManager.getStock("unicorns")) /
-            2500,
-        );
-
-        // How many sacrifices would we need, so we'd end up with enough tears.
-        const needSacrifice = Math.ceil(
-          (tearsNeeded - tearsAvailableForUse) /
-            this._host.game.bld.getBuildingExt("ziggurat").meta.on,
-        );
-
-        // Sacrifice some unicorns to get the tears to buy the building.
-        const zigguratCount = this._host.game.bld.get("ziggurat").on;
-        if (needSacrifice < maxSacrifice && 0 < zigguratCount) {
-          const controller = new classes.ui.religion.TransformBtnController(this._host.game, {
-            applyAtGain: (priceCount: number) => {
-              this._host.game.stats.getStat("unicornsSacrificed").val += priceCount;
-            },
-            gainedResource: "tears",
-            gainMultiplier: () => {
-              return this._host.game.bld.get("ziggurat").on;
-            },
-            logfilterID: "unicornSacrifice",
-            logTextID: "religion.sacrificeBtn.sacrifice.msg",
-            overcapMsgID: "religion.sacrificeBtn.sacrifice.msg.overcap",
-          }) as TransformBtnController;
-          const model = controller.fetchModel({
-            controller,
-            description: "",
-            name: "",
-            prices: [{ name: "unicorns", val: 2500 }],
-          });
-          controller._transform(model, needSacrifice);
-
-          // iactivity?
-          // TODO: ☝ Yeah, seems like a good idea.
-        } else {
-          // Not enough unicorns to sacrifice to make enough tears.
-          return;
-        }
-      }
-
-      // Let the BulkManager figure out if the build can be made.
       const buildRequest = {
         [this.settings.bestUnicornBuildingCurrent]:
           this.settings.buildings[this.settings.bestUnicornBuildingCurrent],
       };
-      const build = this._bulkManager.bulk(
-        buildRequest,
-        this.getBuildMetaData(buildRequest),
-        sectionTrigger,
-        "Religion",
-      );
+      const meta = {
+        [this.settings.bestUnicornBuildingCurrent]: this._host.game.bld.getBuildingExt(
+          "unicornPasture" as Building,
+        ).meta as Required<UnsafeBuilding>,
+      };
+      const build = this._bulkManager.bulk(buildRequest, meta, sectionTrigger);
       if (0 < build.length && 0 < build[0].count) {
-        // We force only building 1 of the best unicorn building, because
-        // afterwards the best unicorn building is likely going to change.
-        this.build(this.settings.bestUnicornBuildingCurrent, UnicornItemVariant.Ziggurat, 1);
+        this._bonfireManager.build(this.settings.bestUnicornBuildingCurrent, 0, 1);
+      }
+      return;
+    }
+
+    const buildImpl = this._getBuild(
+      this.settings.bestUnicornBuildingCurrent,
+      UnicornItemVariant.Ziggurat,
+    );
+
+    let tearsNeeded = 0;
+    const priceTears = mustExist(buildImpl.model.prices).find(subject => subject.name === "tears");
+    if (!isNil(priceTears)) {
+      tearsNeeded = priceTears.val;
+    }
+
+    const tearsAvailableForUse =
+      this._workshopManager.getValue("tears") - this._workshopManager.getStock("tears");
+
+    if (tearsAvailableForUse < tearsNeeded) {
+      // How many times can we sacrifice unicorns to make tears?
+      const maxSacrifice = Math.floor(
+        (this._workshopManager.getValue("unicorns") - this._workshopManager.getStock("unicorns")) /
+          2500,
+      );
+
+      // How many sacrifices would we need, so we'd end up with enough tears.
+      const needSacrifice = Math.ceil(
+        (tearsNeeded - tearsAvailableForUse) /
+          this._host.game.bld.getBuildingExt("ziggurat").meta.on,
+      );
+
+      // Sacrifice some unicorns to get the tears to buy the building.
+      const zigguratCount = this._host.game.bld.get("ziggurat").on;
+      if (needSacrifice < maxSacrifice && 0 < zigguratCount) {
+        const controller = new classes.ui.religion.TransformBtnController(this._host.game, {
+          applyAtGain: (priceCount: number) => {
+            this._host.game.stats.getStat("unicornsSacrificed").val += priceCount;
+          },
+          gainedResource: "tears",
+          gainMultiplier: () => {
+            return this._host.game.bld.get("ziggurat").on;
+          },
+          logfilterID: "unicornSacrifice",
+          logTextID: "religion.sacrificeBtn.sacrifice.msg",
+          overcapMsgID: "religion.sacrificeBtn.sacrifice.msg.overcap",
+        }) as TransformBtnController;
+        const model = controller.fetchModel({
+          controller,
+          description: "",
+          name: "",
+          prices: [{ name: "unicorns", val: 2500 }],
+        });
+        controller._transform(model, needSacrifice);
+
+        // iactivity?
+        // TODO: ☝ Yeah, seems like a good idea.
+      } else {
+        // Not enough unicorns to sacrifice to make enough tears.
+        return;
       }
     }
+
+    // Let the BulkManager figure out if the build can be made.
+    const buildRequest = {
+      [this.settings.bestUnicornBuildingCurrent]:
+        this.settings.buildings[this.settings.bestUnicornBuildingCurrent],
+    };
+    const build = this._bulkManager.bulk(
+      buildRequest,
+      this.getBuildMetaData(buildRequest),
+      sectionTrigger,
+    );
+    if (0 < build.length && 0 < build[0].count) {
+      // We force only building 1 of the best unicorn building, because
+      // afterwards the best unicorn building is likely going to change.
+      this.build(this.settings.bestUnicornBuildingCurrent, UnicornItemVariant.Ziggurat, 1);
+    }
   }
+
   private _buildNonUnicornBuildings(context: FrameContext) {
     const alreadyHandled: Array<FaithItem | UnicornItem> = [...UnicornItems];
     const builds = Object.fromEntries(
@@ -229,7 +241,7 @@ export class ReligionManager implements Automation {
     const sectionTrigger = this.settings.trigger;
 
     // Let the bulk manager figure out which of the builds to actually build.
-    const buildList = this._bulkManager.bulk(builds, metaData, sectionTrigger, "Religion");
+    const buildList = this._bulkManager.bulk(builds, metaData, sectionTrigger);
 
     for (const build of buildList) {
       if (0 < build.count) {
@@ -395,8 +407,7 @@ export class ReligionManager implements Automation {
   }
 
   build(name: ReligionItem | "unicornPasture", variant: UnicornItemVariant, amount: number): void {
-    let amountCalculated = amount;
-    const amountTemp = amountCalculated;
+    let amountConstructed = 0;
     let label: string;
     if (variant === UnicornItemVariant.Cryptotheology) {
       const itemMetaRaw = game.getUnlockByName(name, "transcendenceUpgrades");
@@ -406,7 +417,7 @@ export class ReligionManager implements Automation {
         UnsafeTranscendenceBtnModel<UnsafeTranscendenceButtonOptions>
       >;
       const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
-      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      amountConstructed = this._bulkManager.construct(model, controller, amount);
       label = itemMetaRaw.label;
     } else if (variant === UnicornItemVariant.OrderOfTheSun) {
       const itemMetaRaw = game.getUnlockByName(name, "religion");
@@ -414,7 +425,7 @@ export class ReligionManager implements Automation {
         this._host.game,
       ) as ReligionBtnController;
       const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
-      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      amountConstructed = this._bulkManager.construct(model, controller, amount);
       label = itemMetaRaw.label;
     } else if (variant === UnicornItemVariant.Ziggurat) {
       const itemMetaRaw = game.getUnlockByName(name, "zigguratUpgrades");
@@ -422,41 +433,41 @@ export class ReligionManager implements Automation {
         this._host.game,
       ) as ZigguratBtnController;
       const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
-      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      amountConstructed = this._bulkManager.construct(model, controller, amount);
       label = itemMetaRaw.label;
     } else {
       throw new InvalidOperationError("unsupported");
     }
 
-    if (amountCalculated !== amountTemp) {
+    if (amount !== amountConstructed) {
       console.warn(
-        ...cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+        ...cl(`${label} Amount ordered: ${amount} Amount Constructed: ${amountConstructed}`),
       );
       // Bail out to not flood the log with garbage.
-      if (amountCalculated === 0) {
+      if (amountConstructed === 0) {
         return;
       }
     }
 
     if (variant === UnicornItemVariant.OrderOfTheSun) {
-      this._host.engine.storeForSummary(label, amountCalculated, "faith");
-      if (amountCalculated === 1) {
+      this._host.engine.storeForSummary(label, amountConstructed, "faith");
+      if (amountConstructed === 1) {
         this._host.engine.iactivity("act.sun.discover", [label], "ks-faith");
       } else {
         this._host.engine.iactivity(
           "act.sun.discovers",
-          [label, this._host.renderAbsolute(amountCalculated)],
+          [label, this._host.renderAbsolute(amountConstructed)],
           "ks-faith",
         );
       }
     } else {
-      this._host.engine.storeForSummary(label, amountCalculated, "build");
-      if (amountCalculated === 1) {
+      this._host.engine.storeForSummary(label, amountConstructed, "build");
+      if (amountConstructed === 1) {
         this._host.engine.iactivity("act.build", [label], "ks-build");
       } else {
         this._host.engine.iactivity(
           "act.builds",
-          [label, this._host.renderAbsolute(amountCalculated)],
+          [label, this._host.renderAbsolute(amountConstructed)],
           "ks-build",
         );
       }

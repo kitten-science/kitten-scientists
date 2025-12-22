@@ -86,10 +86,13 @@ export type BuildingsManager = TabManager<UnsafeMeta<UnsafeBuilding>> & {
   getPollutionLevel: () => number;
   getPollutionLevelBase: () => number;
   getPollutionRatio: () => number;
-  getPriceRatio: (bld: Building) => number;
-  getPriceRatioWithAccessor: (bld: Building) => number;
-  getPrices: (bldName: Building, additionalBought: number) => Array<Price>;
-  getPricesWithAccessor: (bldName: Building, additionalBought: number) => Array<Price>;
+  getPriceRatio: (bldName: Building) => number;
+  getPriceRatioWithAccessor: (bld: BuildingMeta<UnsafeBuilding>) => number;
+  getPrices: (bldName: Building, additionalBought?: number) => Array<Price>;
+  getPricesWithAccessor: (
+    bld: BuildingMeta<UnsafeBuilding>,
+    additionalBought?: number,
+  ) => Array<Price>;
   getUndissipatedPollutionPerTick: () => number;
   gflopsFastForward: (ticks: number) => void;
   groupBuildings: boolean;

@@ -54,7 +54,6 @@ import type {
   Tab,
   TabManager,
   UnsafeBuildingBtnModel,
-  UnsafeBuildingBtnModernModel,
   UnsafeBuildingStackableBtnModel,
 } from "./core.js";
 import type {
@@ -111,10 +110,13 @@ import type {
   TransformBtnController,
   UnsafePact,
   UnsafeReligionBtnModel,
+  UnsafeReligionButtonOptions,
   UnsafeReligionUpgrade,
   UnsafeTranscendenceBtnModel,
+  UnsafeTranscendenceButtonOptions,
   UnsafeTranscendenceUpgrade,
   UnsafeZigguratBtnModel,
+  UnsafeZigguratButtonOptions,
   UnsafeZigguratUpgrade,
   ZigguratBtnController,
 } from "./religion.js";
@@ -136,6 +138,7 @@ import type {
   SpaceProgramBtnController,
   SpaceTab,
   UnsafePlanet,
+  UnsafePlanetBuildingButtonOptions,
   UnsafeSpaceBuilding,
 } from "./space.js";
 import type { StatsManager, StatsTab } from "./stats.js";
@@ -156,6 +159,7 @@ import type {
   UnsafeChronoForgeUpgrade,
   UnsafeChronoforgeUpgradeButtonOptions,
   UnsafeVoidSpaceUpgrade,
+  UnsafeVoidSpaceUpgradeButtonOptions,
   VoidSpaceBtnController,
   VoidSpaceWgt,
 } from "./time.js";
@@ -278,6 +282,14 @@ export const StagedBuildings = [
   "spaceport",
 ] as const;
 export type StagedBuilding = (typeof StagedBuildings)[number];
+export const StagedBaseBuildings = [
+  "amphitheatre",
+  "library",
+  "aqueduct",
+  "pasture",
+  "warehouse",
+] as const;
+export type StagedBaseBuilding = (typeof StagedBaseBuildings)[number];
 
 export const BuildingEffects = [
   // from game.bld
@@ -616,7 +628,7 @@ export const QueueElementTypes = [
 export type QueueElementTypeMap = {
   buildings: {
     controller: StagingBldBtnController | BuildingBtnModernController;
-    model: UnsafeBuildingBtnModernModel<AllBuildingStackableBtnOptions>;
+    model: UnsafeBuildingStackableBtnModel<AllBuildingStackableBtnOptions>;
   };
   chronoforge: {
     controller: ChronoforgeBtnController;
@@ -624,8 +636,16 @@ export type QueueElementTypeMap = {
   };
   pacts: { controller: null; model: null };
   policies: { controller: null; model: null };
-  religion: { controller: ReligionBtnController; model: UnsafeReligionBtnModel };
-  spaceBuilding: { controller: null; model: null };
+  religion: {
+    controller: ReligionBtnController;
+    model: UnsafeReligionBtnModel<UnsafeReligionButtonOptions>;
+  };
+  spaceBuilding: {
+    controller: PlanetBuildingBtnController<
+      UnsafeBuildingStackableBtnModel<UnsafePlanetBuildingButtonOptions>
+    >;
+    model: UnsafeBuildingStackableBtnModel<UnsafePlanetBuildingButtonOptions>;
+  };
   spaceMission: {
     controller: SpaceProgramBtnController<UnsafeBuildingStackableBtnModel>;
     model: UnsafeBuildingStackableBtnModel;
@@ -633,12 +653,18 @@ export type QueueElementTypeMap = {
   tech: { controller: null; model: null };
   transcendenceUpgrades: {
     controller: TranscendenceBtnController;
-    model: UnsafeTranscendenceBtnModel;
+    model: UnsafeTranscendenceBtnModel<UnsafeTranscendenceButtonOptions>;
   };
   upgrades: { controller: null; model: null };
-  voidSpace: { controller: null; model: null };
+  voidSpace: {
+    controller: VoidSpaceBtnController;
+    model: UnsafeBuildingStackableBtnModel<UnsafeVoidSpaceUpgradeButtonOptions>;
+  };
   zebraUpgrades: { controller: null; model: null };
-  zigguratUpgrades: { controller: ZigguratBtnController; model: UnsafeZigguratBtnModel };
+  zigguratUpgrades: {
+    controller: ZigguratBtnController;
+    model: UnsafeZigguratBtnModel<UnsafeZigguratButtonOptions>;
+  };
 };
 export type QueueElementType = (typeof QueueElementTypes)[number];
 

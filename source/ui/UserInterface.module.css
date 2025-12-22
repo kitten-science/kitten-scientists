@@ -89,10 +89,10 @@
       overflow-y: visible;
 
       :global .type_ks-default {
-        color: #aa50fe;
+        color: rgb(151, 72, 224);
       }
       :global .type_ks-activity {
-        color: #e65c00;
+        color: rgba(255, 172, 116, 0.75);
       }
       :global .type_ks-summary {
         color: #009933;

@@ -70,11 +70,11 @@ export class BonfireManager implements Automation {
     const sectionTrigger = this.settings.trigger;
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger, "Bonfire");
+    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger);
 
     // Build all entries in the build list, where we can build any items.
     for (const build of buildList.filter(item => 0 < item.count)) {
-      this.build((build.name || build.id) as Building, build.stage, build.count);
+      this.build((build.name || build.id) as Building, build.stage ?? undefined, build.count);
       context.requestGameUiRefresh = true;
     }
   }
@@ -315,8 +315,7 @@ export class BonfireManager implements Automation {
   }
 
   build(name: Building, _stage: number | undefined, amount: number): void {
-    let amountCalculated = amount;
-    const amountTemp = amountCalculated;
+    let amountConstructed = 0;
     let label: string;
     const itemMetaRaw = game.getUnlockByName(name, "buildings");
     const meta = new classes.BuildingMeta(itemMetaRaw).getMeta();
@@ -331,7 +330,7 @@ export class BonfireManager implements Automation {
         name: mustExist(meta.label),
         twoRow: false,
       });
-      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      amountConstructed = this._bulkManager.construct(model, controller, amount);
       label = meta.label ?? "";
     } else {
       const controller = new classes.ui.btn.BuildingBtnModernController(
@@ -346,27 +345,27 @@ export class BonfireManager implements Automation {
         name: mustExist(meta.label),
         twoRow: false,
       });
-      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      amountConstructed = this._bulkManager.construct(model, controller, amount);
       label = meta.label ?? "";
     }
 
-    if (amountCalculated !== amountTemp) {
+    if (amount !== amountConstructed) {
       console.warn(
-        ...cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+        ...cl(`${label} Amount ordered: ${amount} Amount Constructed: ${amountConstructed}`),
       );
       // Bail out to not flood the log with garbage.
-      if (amountCalculated === 0) {
+      if (amountConstructed === 0) {
         return;
       }
     }
-    this._host.engine.storeForSummary(label, amountCalculated, "build");
+    this._host.engine.storeForSummary(label, amountConstructed, "build");
 
-    if (amountCalculated === 1) {
+    if (amountConstructed === 1) {
       this._host.engine.iactivity("act.build", [label], "ks-build");
     } else {
       this._host.engine.iactivity(
         "act.builds",
-        [label, this._host.renderAbsolute(amountCalculated)],
+        [label, this._host.renderAbsolute(amountConstructed)],
         "ks-build",
       );
     }

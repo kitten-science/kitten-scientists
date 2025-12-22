@@ -60,7 +60,7 @@ export type SpaceProgramBtnController<TModel extends UnsafeBuildingBtnModel> =
 export type PlanetBuildingBtnController<
   TModel extends UnsafeBuildingStackableBtnModel | unknown = unknown,
 > = BuildingStackableBtnController<TModel> & {
-  getMetadata: (model: TModel) => UnsafePlanet;
+  getMetadata: (model: TModel) => UnsafeSpaceBuilding;
   hasSellLink: (model: unknown) => boolean;
   getPrices: (model: TModel) => Array<Price>;
 };

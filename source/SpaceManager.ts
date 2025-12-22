@@ -4,14 +4,8 @@ import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
 import { cl } from "./tools/Log.js";
-import type { UnsafeBuildingStackableBtnModel } from "./types/core.js";
 import type { Mission, SpaceBuilding } from "./types/index.js";
-import type {
-  PlanetBuildingBtnController,
-  UnsafePlanetBuildingButtonOptions,
-  UnsafeSpaceBuilding,
-  UnsafeSpaceProgram,
-} from "./types/space.js";
+import type { UnsafeSpaceBuilding, UnsafeSpaceProgram } from "./types/space.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class SpaceManager implements Automation {
@@ -61,11 +55,11 @@ export class SpaceManager implements Automation {
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<SpaceBuilding, Required<UnsafeSpaceBuilding>>> = {};
     for (const build of Object.values(builds)) {
-      metaData[build.building] = this.getBuild(build.building);
+      metaData[build.building] = this._host.game.space.getBuilding(build.building);
     }
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger, "Space");
+    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger);
 
     // Build all entries in the build list, where we can build any items.
     for (const build of buildList) {
@@ -120,44 +114,41 @@ export class SpaceManager implements Automation {
   }
 
   build(name: SpaceBuilding, amount: number): number {
-    let amountCalculated = amount;
-    const amountTemp = amountCalculated;
+    let amountConstructed = 0;
     let label: string;
+    const button = this._host.game.time.queue.getQueueElementControllerAndModel({
+      name,
+      type: "spaceBuilding",
+    });
+
     const itemMetaRaw = game.getUnlockByName(name, "spaceBuilding");
-    const controller = new classes.ui.space.PlanetBuildingBtnController(
-      this._host.game,
-    ) as PlanetBuildingBtnController<
-      UnsafeBuildingStackableBtnModel<UnsafePlanetBuildingButtonOptions>
-    >;
-    const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
-    amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
     label = itemMetaRaw.label;
 
-    if (amountCalculated !== amountTemp) {
+    const controller = button.controller;
+    const model = button.model;
+    amountConstructed = this._bulkManager.construct(model, controller, amount);
+
+    if (amount !== amountConstructed) {
       console.warn(
-        ...cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+        ...cl(`${label} Amount ordered: ${amount} Amount Constructed: ${amountConstructed}`),
       );
       // Bail out to not flood the log with garbage.
-      if (amountCalculated === 0) {
+      if (amountConstructed === 0) {
         return 0;
       }
     }
-    this._host.engine.storeForSummary(label, amountCalculated, "build");
+    this._host.engine.storeForSummary(label, amountConstructed, "build");
 
-    if (amountCalculated === 1) {
+    if (amountConstructed === 1) {
       this._host.engine.iactivity("act.build", [label], "ks-build");
     } else {
       this._host.engine.iactivity(
         "act.builds",
-        [label, this._host.renderAbsolute(amountCalculated)],
+        [label, this._host.renderAbsolute(amountConstructed)],
         "ks-build",
       );
     }
 
-    return amountCalculated;
-  }
-
-  getBuild(name: SpaceBuilding): Required<UnsafeSpaceBuilding> {
-    return this._host.game.space.getBuilding(name);
+    return amountConstructed;
   }
 }

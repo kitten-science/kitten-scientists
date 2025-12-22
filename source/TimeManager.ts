@@ -61,7 +61,10 @@ export class TimeManager {
       Record<TimeItem, Required<UnsafeChronoForgeUpgrade | UnsafeVoidSpaceUpgrade>>
     > = {};
     for (const build of Object.values(builds)) {
-      const buildMeta = this.getBuild(build.building, build.variant);
+      const buildMeta =
+        build.variant === TimeItemVariant.Chronoforge
+          ? this._host.game.time.getCFU(build.building as ChronoForgeUpgrade)
+          : this._host.game.time.getVSU(build.building as VoidSpaceUpgrade);
       metaData[build.building] = mustExist(buildMeta);
 
       const buildButton =
@@ -86,7 +89,7 @@ export class TimeManager {
     }
 
     // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger, "Time");
+    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger);
 
     for (const build of buildList) {
       if (build.count > 0) {
@@ -105,16 +108,15 @@ export class TimeManager {
     variant: TimeItemVariant,
     amount: number,
   ): void {
-    let amountCalculated = amount;
+    let amountConstructed = 0;
     let label: string;
-    const amountTemp = amountCalculated;
     if (variant === TimeItemVariant.Chronoforge) {
       const itemMetaRaw = game.getUnlockByName(name, "chronoforge");
       const controller = new classes.ui.time.ChronoforgeBtnController(
         this._host.game,
       ) as ChronoforgeBtnController;
       const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
-      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      amountConstructed = this._bulkManager.construct(model, controller, amount);
       label = itemMetaRaw.label;
     } else {
       const itemMetaRaw = game.getUnlockByName(name, "voidSpace");
@@ -122,27 +124,27 @@ export class TimeManager {
         this._host.game,
       ) as VoidSpaceBtnController;
       const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
-      amountCalculated = this._bulkManager.construct(model, controller, amountCalculated);
+      amountConstructed = this._bulkManager.construct(model, controller, amount);
       label = itemMetaRaw.label;
     }
 
-    if (amountCalculated !== amountTemp) {
+    if (amount !== amountConstructed) {
       console.warn(
-        ...cl(`${label} Amount ordered: ${amountTemp} Amount Constructed: ${amountCalculated}`),
+        ...cl(`${label} Amount ordered: ${amount} Amount Constructed: ${amountConstructed}`),
       );
       // Bail out to not flood the log with garbage.
-      if (amountCalculated === 0) {
+      if (amountConstructed === 0) {
         return;
       }
     }
-    this._host.engine.storeForSummary(label, amountCalculated, "build");
+    this._host.engine.storeForSummary(label, amountConstructed, "build");
 
-    if (amountCalculated === 1) {
+    if (amountConstructed === 1) {
       this._host.engine.iactivity("act.build", [label], "ks-build");
     } else {
       this._host.engine.iactivity(
         "act.builds",
-        [label, this._host.renderAbsolute(amountCalculated)],
+        [label, this._host.renderAbsolute(amountConstructed)],
         "ks-build",
       );
     }
