@@ -116,15 +116,17 @@ export class BulkPurchaseHelper {
     }
 
     if (Buildings.includes(build as Building)) {
-      // We can't use the same approach as for the other cases below, because the passed metadata is
-      // ignored, and a cached copy is used instead. This prevents us from asking the price of a specific
-      // count of builds. Instead, we abuse the additionalBought parameter of the getPrices method.
       const buildingMeta = this._host.game.bld.getBuildingExt(build as Building);
+      const buildingMetaGet = buildingMeta.get;
+      buildingMeta.get = ((attr: Parameters<typeof buildingMetaGet>[0]) => {
+        if (attr === "val") {
+          return atValue;
+        }
+        return buildingMetaGet.apply(buildingMeta, [attr]);
+      }) as typeof buildingMetaGet;
 
-      const prices = this._host.game.bld.getPrices(
-        build as Building,
-        atValue !== 0 ? atValue - buildingMeta.meta.val : 0,
-      );
+      const prices = this._host.game.bld.getPricesWithAccessor(buildingMeta);
+      buildingMeta.get = buildingMetaGet;
       return prices;
     }
 
@@ -340,7 +342,7 @@ export class BulkPurchaseHelper {
 
     let iterations = 0;
     const buildsCommitted = new Array<Array<ConcreteBuild>>();
-    while (iterations < 1e5 && 0 < buildDrafts.length) {
+    while (iterations < 1e6 && 0 < buildDrafts.length) {
       let increasedThisIteration = 0;
       const canBeBuilt = [];
       let tempPool = { ...currentResourcePool };
