@@ -8,6 +8,7 @@ import {
   type ActivitySummarySection,
   type ActivityTypeClass,
 } from "./helper/ActivitySummary.js";
+import { BulkPurchaseHelper, type ConcreteBuild } from "./helper/BulkPurchaseHelper.js";
 import enUS from "./i18n/en-US.json" with { type: "json" };
 import deDE from "./i18n/translations/de-DE.json" with { type: "json" };
 import heIL from "./i18n/translations/he-IL.json" with { type: "json" };
@@ -16,7 +17,7 @@ import { type KittenScientists, ksVersion } from "./KittenScientists.js";
 import { ReligionManager } from "./ReligionManager.js";
 import { ScienceManager } from "./ScienceManager.js";
 import { SpaceManager } from "./SpaceManager.js";
-import { BonfireSettings } from "./settings/BonfireSettings.js";
+import { type BonfireItem, BonfireSettings } from "./settings/BonfireSettings.js";
 import { EngineSettings } from "./settings/EngineSettings.js";
 import { ReligionSettings } from "./settings/ReligionSettings.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
@@ -31,7 +32,23 @@ import { TimeManager } from "./TimeManager.js";
 import { TradeManager } from "./TradeManager.js";
 import { objectEntries } from "./tools/Entries.js";
 import { cl } from "./tools/Log.js";
-import { type Cycle, Cycles, type Locale, type Planet } from "./types/index.js";
+import {
+  type AllBuildings,
+  type Building,
+  type Cycle,
+  Cycles,
+  type Locale,
+  type Planet,
+  type TimeItemVariant,
+  type UnicornItemVariant,
+  type UnsafeBuilding,
+  type UnsafeChronoForgeUpgrade,
+  type UnsafeReligionUpgrade,
+  type UnsafeSpaceBuilding,
+  type UnsafeTranscendenceUpgrade,
+  type UnsafeVoidSpaceUpgrade,
+  type UnsafeZigguratUpgrade,
+} from "./types/index.js";
 import { FallbackLocale, UserScriptLoader } from "./UserScriptLoader.js";
 import { VillageManager } from "./VillageManager.js";
 import { WorkshopManager } from "./WorkshopManager.js";
@@ -39,7 +56,41 @@ import { WorkshopManager } from "./WorkshopManager.js";
 const i18nData = { "de-DE": deDE, "en-US": enUS, "he-IL": heIL, "zh-CN": zhCN };
 
 export type FrameContext = {
-  purchaseOrders: Array<{ id: string; amount: number }>;
+  purchaseOrders: Array<{
+    builds: Partial<
+      Record<
+        AllBuildings,
+        {
+          baseBuilding?: Building;
+          builder?: (build: ConcreteBuild) => void;
+          building?: AllBuildings | BonfireItem;
+          enabled: boolean;
+          label?: string;
+          max: number;
+          sectionTrigger?: number;
+          stage?: number;
+          trigger: number;
+          variant?: TimeItemVariant | UnicornItemVariant;
+        }
+      >
+    >;
+    metaData: Partial<
+      Record<
+        AllBuildings,
+        Required<
+          | UnsafeBuilding
+          | UnsafeChronoForgeUpgrade
+          | UnsafeReligionUpgrade
+          | UnsafeSpaceBuilding
+          | UnsafeTranscendenceUpgrade
+          | UnsafeVoidSpaceUpgrade
+          | UnsafeZigguratUpgrade
+        >
+      >
+    >;
+    sectionTrigger: number;
+    builder: (build: ConcreteBuild) => void;
+  }>;
   requestGameUiRefresh: boolean;
 
   entry: number;
@@ -96,7 +147,8 @@ export class Engine {
   readonly villageManager: VillageManager;
   readonly workshopManager: WorkshopManager;
 
-  private _activitySummary: ActivitySummary;
+  private readonly _activitySummary: ActivitySummary;
+  private readonly _bulkManager: BulkPurchaseHelper;
   private _timeoutMainLoop: number | undefined = undefined;
 
   constructor(host: KittenScientists, gameLanguage: Locale) {
@@ -109,6 +161,7 @@ export class Engine {
     this._activitySummary = new ActivitySummary(this._host);
 
     this.workshopManager = new WorkshopManager(this._host);
+    this._bulkManager = new BulkPurchaseHelper(this._host, this.workshopManager);
 
     this.bonfireManager = new BonfireManager(this._host, this.workshopManager);
     this.religionManager = new ReligionManager(
@@ -422,6 +475,53 @@ export class Engine {
 
     [, duration] = await measureAsync(() => this.timeControlManager.tick(context));
     context.measurements.timeControlManager = duration;
+
+    [, duration] = measure(() => {
+      if (0 < context.purchaseOrders.length) {
+        const builds = { ...context.purchaseOrders[0].builds };
+        let metaData = { ...context.purchaseOrders[0].metaData };
+        for (const order of context.purchaseOrders) {
+          for (const [name, entry] of objectEntries(order.builds)) {
+            builds[name] = {
+              ...entry,
+              baseBuilding: entry.baseBuilding,
+              builder: order.builder,
+              building: entry.building,
+              sectionTrigger: order.sectionTrigger,
+              stage: entry.stage,
+              variant: entry.variant,
+            };
+          }
+          metaData = { ...metaData, ...order.metaData };
+        }
+
+        const buildList = this._bulkManager.bulk(
+          builds as Partial<
+            Record<
+              AllBuildings,
+              {
+                baseBuilding?: Building;
+                builder: (build: ConcreteBuild) => void;
+                building?: AllBuildings | BonfireItem;
+                enabled: boolean;
+                label?: string;
+                max: number;
+                sectionTrigger: number;
+                stage?: number;
+                trigger: number;
+                variant?: TimeItemVariant | UnicornItemVariant;
+              }
+            >
+          >,
+          metaData,
+        );
+        for (const build of buildList.filter(item => 0 < item.count)) {
+          build.builder(build);
+          context.requestGameUiRefresh = true;
+        }
+      }
+    });
+    context.measurements.bulkPurchaseHelper = duration;
 
     [, duration] = measure(() => {
       if (context.requestGameUiRefresh && !document.hidden) {

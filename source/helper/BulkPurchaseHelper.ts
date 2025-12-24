@@ -73,7 +73,7 @@ export type BulkBuildListItem = {
   variant?: TimeItemVariant | UnicornItemVariant;
 };
 
-type BuildRequest = {
+export type BuildRequest = {
   id: AllBuildings;
   limit: number;
   val: number;
@@ -83,11 +83,12 @@ type BuildRequest = {
   variant: TimeItemVariant | UnicornItemVariant | null;
 };
 
-type ConcreteBuild = {
+export type ConcreteBuild = {
   id: AllBuildings;
   limit: number;
   val: number;
   count: number;
+  builder: (build: ConcreteBuild) => void;
   // For staged buildings.
   name: AllBuildings | null;
   stage: number | null;
@@ -232,7 +233,9 @@ export class BulkPurchaseHelper {
           building?: AllBuildings | BonfireItem;
           stage?: number;
           trigger: number;
+          sectionTrigger: number;
           variant?: TimeItemVariant | UnicornItemVariant;
+          builder: (build: ConcreteBuild) => void;
         }
       >
     >,
@@ -250,11 +253,18 @@ export class BulkPurchaseHelper {
         >
       >
     >,
-    sectionTrigger: number,
   ): Array<ConcreteBuild> {
     const buildDrafts: Array<ConcreteBuild> = [];
-    for (const [name, build] of objectEntries(builds)) {
-      const trigger = Engine.evaluateSubSectionTrigger(sectionTrigger, build.trigger);
+    const buildsSorted = objectEntries(builds).sort((a, b) => {
+      const aMeta = mustExist(metaData[a[0]]);
+      const bMeta = mustExist(metaData[b[0]]);
+      if (aMeta.val !== bMeta.val) {
+        return aMeta.val - bMeta.val;
+      }
+      return a[0].localeCompare(b[0], "en");
+    });
+    for (const [name, build] of buildsSorted) {
+      const trigger = Engine.evaluateSubSectionTrigger(build.sectionTrigger, build.trigger);
       const buildMetaData = mustExist(metaData[name]);
 
       // If the build is disabled, skip it.
@@ -318,6 +328,7 @@ export class BulkPurchaseHelper {
       if (allMaterialsAboveTrigger) {
         // Create an entry in the cache list for the bulk processing.
         buildDrafts.push({
+          builder: build.builder,
           count: 1,
           id: name,
           limit: build.max,

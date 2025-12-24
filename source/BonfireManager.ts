@@ -1,6 +1,6 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { Automation, FrameContext } from "./Engine.js";
-import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import { BulkPurchaseHelper, type ConcreteBuild } from "./helper/BulkPurchaseHelper.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import {
   type BonfireBuildingSetting,
@@ -58,8 +58,6 @@ export class BonfireManager implements Automation {
     context: FrameContext,
     builds: Partial<Record<BonfireItem, BonfireBuildingSetting>> = this.settings.buildings,
   ) {
-    const bulkManager = this._bulkManager;
-
     // Get the current metadata for all the referenced buildings.
     const metaData: Partial<Record<BonfireItem, Required<UnsafeBuilding>>> = {};
     for (const build of Object.values(builds)) {
@@ -69,14 +67,10 @@ export class BonfireManager implements Automation {
     }
     const sectionTrigger = this.settings.trigger;
 
-    // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger);
-
-    // Build all entries in the build list, where we can build any items.
-    for (const build of buildList.filter(item => 0 < item.count)) {
+    const builder = (build: ConcreteBuild) => {
       this.build((build.name || build.id) as Building, build.stage ?? undefined, build.count);
-      context.requestGameUiRefresh = true;
-    }
+    };
+    context.purchaseOrders.push({ builder, builds, metaData, sectionTrigger });
   }
 
   autoUpgrade(context: FrameContext) {

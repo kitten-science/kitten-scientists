@@ -1,6 +1,6 @@
 import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { Automation, FrameContext } from "./Engine.js";
-import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import { BulkPurchaseHelper, type ConcreteBuild } from "./helper/BulkPurchaseHelper.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { type SpaceBuildingSetting, SpaceSettings } from "./settings/SpaceSettings.js";
 import { cl } from "./tools/Log.js";
@@ -49,7 +49,6 @@ export class SpaceManager implements Automation {
     context: FrameContext,
     builds: Partial<Record<SpaceBuilding, SpaceBuildingSetting>> = this.settings.buildings,
   ) {
-    const bulkManager = this._bulkManager;
     const sectionTrigger = this.settings.trigger;
 
     // Get the current metadata for all the referenced buildings.
@@ -58,19 +57,10 @@ export class SpaceManager implements Automation {
       metaData[build.building] = this._host.game.space.getBuilding(build.building);
     }
 
-    // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger);
-
-    // Build all entries in the build list, where we can build any items.
-    for (const build of buildList) {
-      if (build.count <= 0) {
-        continue;
-      }
-      if (0 === this.build(build.id as SpaceBuilding, build.count)) {
-        continue;
-      }
-      context.requestGameUiRefresh = true;
-    }
+    const builder = (build: ConcreteBuild) => {
+      this.build(build.id as SpaceBuilding, build.count);
+    };
+    context.purchaseOrders.push({ builder, builds, metaData, sectionTrigger });
   }
 
   autoUnlock(_context: FrameContext) {

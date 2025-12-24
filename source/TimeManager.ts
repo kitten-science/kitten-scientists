@@ -1,6 +1,6 @@
 import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { FrameContext } from "./Engine.js";
-import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import { BulkPurchaseHelper, type ConcreteBuild } from "./helper/BulkPurchaseHelper.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { type TimeItem, TimeSettings, type TimeSettingsItem } from "./settings/TimeSettings.js";
 import { cl } from "./tools/Log.js";
@@ -53,7 +53,6 @@ export class TimeManager {
     context: FrameContext,
     builds: Partial<Record<TimeItem, TimeSettingsItem>> = this.settings.buildings,
   ) {
-    const bulkManager = this._bulkManager;
     const sectionTrigger = this.settings.trigger;
 
     // Get the current metadata for all the referenced buildings.
@@ -88,19 +87,14 @@ export class TimeManager {
       buildingMetaData.tHidden = !model?.visible || !model.enabled || !panel.visible;
     }
 
-    // Let the bulkmanager determine the builds we can make.
-    const buildList = bulkManager.bulk(builds, metaData, sectionTrigger);
-
-    for (const build of buildList) {
-      if (build.count > 0) {
-        this.build(
-          build.id as ChronoForgeUpgrade | VoidSpaceUpgrade,
-          build.variant as TimeItemVariant,
-          build.count,
-        );
-        context.requestGameUiRefresh = true;
-      }
-    }
+    const builder = (build: ConcreteBuild) => {
+      this.build(
+        build.id as ChronoForgeUpgrade | VoidSpaceUpgrade,
+        build.variant as TimeItemVariant,
+        build.count,
+      );
+    };
+    context.purchaseOrders.push({ builder, builds, metaData, sectionTrigger });
   }
 
   build(

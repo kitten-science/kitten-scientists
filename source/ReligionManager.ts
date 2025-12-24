@@ -2,7 +2,7 @@ import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
 import type { BonfireManager } from "./BonfireManager.js";
 import type { Automation, FrameContext } from "./Engine.js";
-import { BulkPurchaseHelper } from "./helper/BulkPurchaseHelper.js";
+import { BulkPurchaseHelper, type ConcreteBuild } from "./helper/BulkPurchaseHelper.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { BonfireBuildingSetting } from "./settings/BonfireSettings.js";
 import { ReligionSettings, type ReligionSettingsItem } from "./settings/ReligionSettings.js";
@@ -84,7 +84,7 @@ export class ReligionManager implements Automation {
 
   private _autoBuild(context: FrameContext) {
     if (this.settings.bestUnicornBuilding.enabled) {
-      this._buildBestUnicornBuilding();
+      this._buildBestUnicornBuilding(context);
       this._buildNonUnicornBuildings(context);
     } else {
       // Create the list of builds, excluding the unicorn pasture.
@@ -113,7 +113,7 @@ export class ReligionManager implements Automation {
     }
   }
 
-  private _buildBestUnicornBuilding() {
+  private _buildBestUnicornBuilding(context: FrameContext) {
     const bestUnicornBuilding = this.getBestUnicornBuilding();
     if (this.settings.bestUnicornBuildingCurrent !== bestUnicornBuilding) {
       this.settings.bestUnicornBuildingCurrent = bestUnicornBuilding;
@@ -136,10 +136,15 @@ export class ReligionManager implements Automation {
           "unicornPasture" as Building,
         ).meta as Required<UnsafeBuilding>,
       };
-      const build = this._bulkManager.bulk(buildRequest, meta, sectionTrigger);
-      if (0 < build.length && 0 < build[0].count) {
-        this._bonfireManager.build(this.settings.bestUnicornBuildingCurrent, 0, 1);
-      }
+      const builder = (_build: ConcreteBuild) => {
+        this._bonfireManager.build("unicornPasture", 0, 1);
+      };
+      context.purchaseOrders.push({
+        builder,
+        builds: buildRequest,
+        metaData: meta,
+        sectionTrigger,
+      });
       return;
     }
 
@@ -206,16 +211,17 @@ export class ReligionManager implements Automation {
       [this.settings.bestUnicornBuildingCurrent]:
         this.settings.buildings[this.settings.bestUnicornBuildingCurrent],
     };
-    const build = this._bulkManager.bulk(
-      buildRequest,
-      this.getBuildMetaData(buildRequest),
-      sectionTrigger,
-    );
-    if (0 < build.length && 0 < build[0].count) {
+    const builder = (build: ConcreteBuild) => {
       // We force only building 1 of the best unicorn building, because
       // afterwards the best unicorn building is likely going to change.
-      this.build(this.settings.bestUnicornBuildingCurrent, UnicornItemVariant.Ziggurat, 1);
-    }
+      this.build(build.id as ReligionItem, UnicornItemVariant.Ziggurat, 1);
+    };
+    context.purchaseOrders.push({
+      builder,
+      builds: buildRequest,
+      metaData: this.getBuildMetaData(buildRequest),
+      sectionTrigger,
+    });
   }
 
   private _buildNonUnicornBuildings(context: FrameContext) {
@@ -240,19 +246,14 @@ export class ReligionManager implements Automation {
     > = this.getBuildMetaData(builds);
     const sectionTrigger = this.settings.trigger;
 
-    // Let the bulk manager figure out which of the builds to actually build.
-    const buildList = this._bulkManager.bulk(builds, metaData, sectionTrigger);
-
-    for (const build of buildList) {
-      if (0 < build.count) {
-        this.build(
-          build.id as ReligionItem | "unicornPasture",
-          mustExist(build.variant) as UnicornItemVariant,
-          build.count,
-        );
-        context.requestGameUiRefresh = true;
-      }
-    }
+    const builder = (build: ConcreteBuild) => {
+      this.build(
+        build.id as ReligionItem | "unicornPasture",
+        mustExist(build.variant) as UnicornItemVariant,
+        build.count,
+      );
+    };
+    context.purchaseOrders.push({ builder, builds, metaData, sectionTrigger });
   }
 
   /**
