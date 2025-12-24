@@ -77,14 +77,15 @@ export class TimeManager {
               type: "voidSpace",
             });
 
-      const model = buildButton.model;
-      const panel =
+      const panelVisible =
         build.variant === TimeItemVariant.Chronoforge
-          ? this._host.game.timeTab.cfPanel
-          : this._host.game.timeTab.vsPanel;
+          ? this._host.game.workshop.get("chronoforge").researched
+          : this._host.game.science.get("voidSpace").researched ||
+            this._host.game.time.getVSU("usedCryochambers").val > 0;
 
+      const model = buildButton.model;
       const buildingMetaData = mustExist(metaData[build.building]);
-      buildingMetaData.tHidden = !model?.visible || !model.enabled || !panel.visible;
+      buildingMetaData.tHidden = !model.metadata.unlocked || !panelVisible;
     }
 
     const builder = (build: ConcreteBuild) => {
