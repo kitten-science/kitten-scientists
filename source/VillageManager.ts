@@ -205,42 +205,44 @@ export class VillageManager implements Automation {
     const manpower = this._workshopManager.getResource("manpower");
     const trigger = this.settings.hunt.trigger;
 
-    if (manpower.value < 100 || this._host.game.challenges.isActive("pacifism")) {
+    if (
+      manpower.value < 100 ||
+      trigger > manpower.value / manpower.maxValue ||
+      this._host.game.challenges.isActive("pacifism")
+    ) {
       return;
     }
 
-    if (trigger <= manpower.value / manpower.maxValue && 100 <= manpower.value) {
-      // Determine how many hunts are being performed.
-      const huntCount = Math.floor(manpower.value / 100);
-      this._host.engine.storeForSummary("hunt", huntCount);
-      this._host.engine.iactivity("act.hunt", [this._host.renderAbsolute(huntCount)], "ks-hunt");
+    // Determine how many hunts are being performed.
+    const huntCount = Math.floor(manpower.value / 100);
+    this._host.engine.storeForSummary("hunt", huntCount);
 
-      const averageOutput = this._workshopManager.getAverageHunt();
-      const trueOutput: Partial<Record<Resource, number>> = {};
+    const averageOutput = this._workshopManager.getAverageHunt();
+    const trueOutput: Partial<Record<Resource, number>> = {};
 
-      for (const [out, outValue] of objectEntries(averageOutput)) {
-        const res = this._workshopManager.getResource(out);
-        trueOutput[out] =
-          // If this is a capped resource...
-          0 < res.maxValue
-            ? // multiply the amount of times we hunted with the result of an average hunt.
-              // Capping at the max value and 0 bounds.
-              Math.min(outValue * huntCount, Math.max(res.maxValue - res.value, 0))
-            : // Otherwise, just multiply unbounded
-              outValue * huntCount;
-      }
-
-      // Store the hunted resources in the cache. Why? No idea.
-      if (!isNil(cacheManager)) {
-        cacheManager.pushToCache({
-          materials: trueOutput,
-          timeStamp: this._host.game.timer.ticksTotal,
-        });
-      }
-
-      // Now actually perform the hunts.
-      this._host.game.village.huntAll();
+    for (const [out, outValue] of objectEntries(averageOutput)) {
+      const res = this._workshopManager.getResource(out);
+      trueOutput[out] =
+        // If this is a capped resource...
+        0 < res.maxValue
+          ? // multiply the amount of times we hunted with the result of an average hunt.
+            // Capping at the max value and 0 bounds.
+            Math.min(outValue * huntCount, Math.max(res.maxValue - res.value, 0))
+          : // Otherwise, just multiply unbounded
+            outValue * huntCount;
     }
+
+    // Store the hunted resources in the cache. Why? No idea.
+    if (!isNil(cacheManager)) {
+      cacheManager.pushToCache({
+        materials: trueOutput,
+        timeStamp: this._host.game.timer.ticksTotal,
+      });
+    }
+
+    // Now actually perform the hunts.
+    this._host.game.village.huntAll();
+    this._host.engine.iactivity("act.hunt", [this._host.renderAbsolute(huntCount)], "ks-hunt");
   }
 
   autoFestival(cacheManager?: MaterialsCache) {
