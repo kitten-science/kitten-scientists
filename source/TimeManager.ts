@@ -35,6 +35,7 @@ export class TimeManager {
       return;
     }
 
+    this._bulkManager.resetPriceCache();
     this.autoBuild(context);
 
     if (this.settings.fixCryochambers.enabled) {

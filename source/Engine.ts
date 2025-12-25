@@ -495,6 +495,7 @@ export class Engine {
           metaData = { ...metaData, ...order.metaData };
         }
 
+        this._bulkManager.resetPriceCache();
         const buildList = this._bulkManager.bulk(
           builds as Partial<
             Record<

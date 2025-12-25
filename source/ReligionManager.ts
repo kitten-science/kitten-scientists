@@ -61,6 +61,7 @@ export class ReligionManager implements Automation {
       return;
     }
 
+    this._bulkManager.resetPriceCache();
     this._autoBuild(context);
 
     if (this.settings.sacrificeUnicorns.enabled) {

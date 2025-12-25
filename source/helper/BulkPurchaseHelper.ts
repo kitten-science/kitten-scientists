@@ -98,13 +98,25 @@ export type ConcreteBuild = {
 export class BulkPurchaseHelper {
   private readonly _host: KittenScientists;
   private readonly _workshopManager: WorkshopManager;
+  private _priceCache: Map<AllBuildings, Array<Array<Price>>>;
 
   constructor(host: KittenScientists, workshopManager: WorkshopManager) {
     this._host = host;
     this._workshopManager = workshopManager;
+    this._priceCache = new Map<AllBuildings, Array<Array<Price>>>();
   }
 
-  _priceForBuild(build: AllBuildings, atValue = 0): Array<Price> {
+  resetPriceCache(): void {
+    this._priceCache = new Map<AllBuildings, Array<Array<Price>>>();
+  }
+
+  _getPriceForBuild(build: AllBuildings, atValue = 0): Array<Price> {
+    const cachedPrices = this._priceCache.get(build) ?? [];
+    const cachedPrice = cachedPrices[atValue];
+    if (cachedPrice !== undefined) {
+      return cachedPrice;
+    }
+
     if (StagedBuildings.includes(build as StagedBuilding)) {
       const baseStage: Partial<Record<StagedBuilding, Building>> = {
         broadcasttower: "amphitheatre",
@@ -113,7 +125,7 @@ export class BulkPurchaseHelper {
         solarfarm: "pasture",
         spaceport: "warehouse",
       };
-      return this._priceForBuild(mustExist(baseStage[build as StagedBuilding]), atValue);
+      return this._getPriceForBuild(mustExist(baseStage[build as StagedBuilding]), atValue);
     }
 
     if (Buildings.includes(build as Building)) {
@@ -128,6 +140,8 @@ export class BulkPurchaseHelper {
 
       const prices = this._host.game.bld.getPricesWithAccessor(buildingMeta);
       buildingMeta.get = buildingMetaGet;
+      cachedPrices[atValue] = prices;
+      this._priceCache.set(build, cachedPrices);
       return prices;
     }
 
@@ -141,6 +155,8 @@ export class BulkPurchaseHelper {
         ...button.model,
         metadata: { ...button.model.metadata, val: atValue },
       });
+      cachedPrices[atValue] = prices;
+      this._priceCache.set(build, cachedPrices);
       return prices;
     }
 
@@ -154,6 +170,8 @@ export class BulkPurchaseHelper {
         ...button.model,
         metadata: { ...button.model.metadata, val: atValue },
       });
+      cachedPrices[atValue] = prices;
+      this._priceCache.set(build, cachedPrices);
       return prices;
     }
 
@@ -167,6 +185,8 @@ export class BulkPurchaseHelper {
         ...button.model,
         metadata: { ...button.model.metadata, val: atValue },
       });
+      cachedPrices[atValue] = prices;
+      this._priceCache.set(build, cachedPrices);
       return prices;
     }
 
@@ -180,6 +200,8 @@ export class BulkPurchaseHelper {
         ...button.model,
         metadata: { ...button.model.metadata, val: atValue },
       });
+      cachedPrices[atValue] = prices;
+      this._priceCache.set(build, cachedPrices);
       return prices;
     }
 
@@ -193,6 +215,8 @@ export class BulkPurchaseHelper {
         ...button.model,
         metadata: { ...button.model.metadata, val: atValue },
       });
+      cachedPrices[atValue] = prices;
+      this._priceCache.set(build, cachedPrices);
       return prices;
     }
 
@@ -206,6 +230,8 @@ export class BulkPurchaseHelper {
         ...button.model,
         metadata: { ...button.model.metadata, val: atValue },
       });
+      cachedPrices[atValue] = prices;
+      this._priceCache.set(build, cachedPrices);
       return prices;
     }
 
@@ -263,6 +289,7 @@ export class BulkPurchaseHelper {
       }
       return a[0].localeCompare(b[0], "en");
     });
+
     for (const [name, build] of buildsSorted) {
       const trigger = Engine.evaluateSubSectionTrigger(build.sectionTrigger, build.trigger);
       const buildMetaData = mustExist(metaData[name]);
@@ -314,7 +341,7 @@ export class BulkPurchaseHelper {
         continue;
       }
 
-      const itemPrices = this._priceForBuild(name);
+      const itemPrices = this._getPriceForBuild(name);
 
       // Check the requirements for this build.
       // We want a list of all resources that are required for this build, which have a capacity.
@@ -479,7 +506,7 @@ export class BulkPurchaseHelper {
         break;
       }
 
-      const prices = this._priceForBuild(buildCacheItem.id, buildMetaData.val + buildsPossible);
+      const prices = this._getPriceForBuild(buildCacheItem.id, buildMetaData.val + buildsPossible);
 
       for (let priceIndex = 0; priceIndex < prices.length; priceIndex++) {
         if (tempPool[prices[priceIndex].name] < prices[priceIndex].val) {
@@ -618,70 +645,17 @@ export class BulkPurchaseHelper {
    * Check if a given build could be performed.
    *
    * @param build The build that should be checked.
-   * @param build.name The name of the build.
-   * @param build.val Probably how many items should be built in total.
-   * TODO: Why is this relevant if we only care about a single build being possible?
-   * @param prices The current prices for the build.
-   * @param priceRatio The global price ratio modifier.
-   * @param source What tab did the build originate from?
    * @returns `true` if the build is possible; `false` otherwise.
    */
-  singleBuildPossible(
-    build: { name: AllBuildings; val: number },
-    prices: Array<Price>,
-    priceRatio: number,
-    source?: TabId,
-  ): boolean {
-    // Determine price reduction on this build.
-    const pricesDiscount = this._host.game.getLimitedDR(
-      this._host.game.getEffect(`${build.name}CostReduction` as const),
-      1,
-    );
-    const priceModifier = 1 - pricesDiscount;
+  singleBuildPossible(build: AllBuildings): boolean {
+    const prices = this._getPriceForBuild(build);
 
     // Check if we can't afford any of the prices for this build.
     // Return `false` if we can't afford something, otherwise `true` is
     // returned by default.
     for (const price of prices) {
-      const resourcePriceDiscount = this._host.game.getLimitedDR(
-        this._host.game.getEffect(`${price.name}CostReduction` as const),
-        1,
-      );
-      const resourcePriceModifier = 1 - resourcePriceDiscount;
-      const finalResourcePrice = price.val * priceModifier * resourcePriceModifier;
-
-      // For space builds that consume oil, take the oil price reduction into account.
-      // This is caused by space elevators.
-      if (source && source === "Space" && price.name === "oil") {
-        const oilModifier = this._host.game.getLimitedDR(
-          this._host.game.getEffect("oilReductionRatio"),
-          0.75,
-        );
-        const oilPrice = finalResourcePrice * (1 - oilModifier);
-        if (this._workshopManager.getValueAvailable("oil") < oilPrice * 1.05 ** build.val) {
-          return false;
-        }
-
-        // For cryochambers, take burned paragon into account for the karma cost.
-      } else if (build.name === "cryochambers" && price.name === "karma") {
-        const karmaModifier = this._host.game.getLimitedDR(
-          0.01 * this._host.game.prestige.getBurnedParagonRatio(),
-          1.0,
-        );
-        const karmaPrice = finalResourcePrice * (1 - karmaModifier);
-        if (
-          this._workshopManager.getValueAvailable("karma") <
-          karmaPrice * priceRatio ** build.val
-        ) {
-          return false;
-        }
-      } else {
-        if (
-          this._workshopManager.getValueAvailable(price.name) <
-          finalResourcePrice * priceRatio ** build.val
-        ) {
-          return false;
-        }
+      if (this._workshopManager.getValueAvailable(price.name) < price.val) {
+        return false;
       }
     }
 

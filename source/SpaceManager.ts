@@ -31,6 +31,7 @@ export class SpaceManager implements Automation {
       return;
     }
 
+    this._bulkManager.resetPriceCache();
     this.autoBuild(context);
 
     if (this.settings.unlockMissions.enabled) {

@@ -43,6 +43,7 @@ export class BonfireManager implements Automation {
       return;
     }
 
+    this._bulkManager.resetPriceCache();
     this.autoBuild(context);
     this.autoMisc(context);
   }
@@ -95,8 +96,7 @@ export class BonfireManager implements Automation {
     ) {
       // If we would reduce our pastures to 0, by upgrading them, would we lose any catnip?
       if (this._workshopManager.getPotentialCatnip(true, 0, aqueducts) > 0) {
-        const prices = mustExist(pastureMeta.stages)[1].prices;
-        if (this._bulkManager.singleBuildPossible(pastureMeta, prices, 1)) {
+        if (this._bulkManager.singleBuildPossible("pasture")) {
           const button = this.getBuild("pasture", 0);
           if (!isNil(button?.model)) {
             // We need to perform the process like this to avoid UI confirmations
@@ -129,8 +129,7 @@ export class BonfireManager implements Automation {
     ) {
       // If we would reduce our aqueducts to 0, by upgrading them, would we lose any catnip?
       if (this._workshopManager.getPotentialCatnip(true, pastures, 0) > 0) {
-        const prices = mustExist(aqueductMeta.stages)[1].prices;
-        if (this._bulkManager.singleBuildPossible(aqueductMeta, prices, 1)) {
+        if (this._bulkManager.singleBuildPossible("aqueduct")) {
           const button = this.getBuild("aqueduct", 0);
           if (!isNil(button?.model)) {
             button.controller.sellInternal(button.model, 0, false);
@@ -186,8 +185,7 @@ export class BonfireManager implements Automation {
         this._host.game.resPool.energyProd >=
         this._host.game.resPool.energyCons + (energyConsumptionRate * libraryMeta.val) / libToDat
       ) {
-        const prices = mustExist(libraryMeta.stages)[1].prices;
-        if (this._bulkManager.singleBuildPossible(libraryMeta, prices, 1)) {
+        if (this._bulkManager.singleBuildPossible("library")) {
           const button = mustExist(this.getBuild("library", 0));
           if (isNil(button.model)) {
             return;
@@ -214,8 +212,7 @@ export class BonfireManager implements Automation {
       warehouseMeta.stage === 0 &&
       mustExist(warehouseMeta.stages)[1].stageUnlocked
     ) {
-      const prices = mustExist(warehouseMeta.stages)[1].prices;
-      if (this._bulkManager.singleBuildPossible(warehouseMeta, prices, 1)) {
+      if (this._bulkManager.singleBuildPossible("warehouse")) {
         const button = this.getBuild("warehouse", 0);
         if (!isNil(button?.model)) {
           button.controller.sellInternal(button.model, 0, false);
@@ -245,8 +242,7 @@ export class BonfireManager implements Automation {
     ) {
       // TODO: This is problematic. Upgrading from 50 amphitheatres to 1 broadcast tower sucks
       //       if you don't have enough resources to build several more.
-      const prices = mustExist(amphitheatreMeta.stages)[1].prices;
-      if (this._bulkManager.singleBuildPossible(amphitheatreMeta, prices, 1)) {
+      if (this._bulkManager.singleBuildPossible("amphitheatre")) {
         const button = this.getBuild("amphitheatre", 0);
         if (!isNil(button?.model)) {
           button.controller.sellInternal(button.model, 0, false);
