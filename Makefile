@@ -52,7 +52,6 @@ injectable: node_modules
 userscript: loader
 loader: node_modules injectable
 	npm exec -- vite --config vite.config.loader.js build
-	MINIFY=true npm exec -- vite --config vite.config.loader.js build
 
 
 .venv:
@@ -72,4 +71,5 @@ full-docs: docs
 	cp -r docs/v2.0.0-beta.8 _site/
 	cp -r docs/v2.0.0-beta.9 _site/
 	cp -r docs/v2.0.0-beta.10 _site/
+	cp -r docs/v2.0.0-beta.11 _site/
 	cp -r docs/current/public _site/main

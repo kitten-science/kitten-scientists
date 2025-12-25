@@ -126,26 +126,28 @@ When you open a pull request, make sure that you squash your commits into a sing
 1.  Create a tag for this version:
 
     ```bash
-    git tag -s v2.0.0-beta.11 -m "2.0.0-beta.11"
+    git tag -s v2.0.0-beta.12 -m "2.0.0-beta.12"
     ```
 
 1.  Push the tag:
 
     ```bash
-    git push --tags
+    git push origin v2.0.0-beta.12
     ```
 
-1.  Edit the drafted release on GitHub. Leave it drafted. Publish it when all release tasks have been completed.
+1.  Edit the drafted release on GitHub. Leave it drafted. Publish it when all release tasks listed here have been completed.
 
 1.  Raise the version number in [`package.json`](/package.json) to a **higher version that will be in development next**!
 
 1.  Update the [`README.md`](/README.md) to point the latest stable release.
 
-1.  Update the [`docs/current/docs/installation/quick-start.md`](/docs/current/docs/installation/quick-start.md) to point to the latest version number.
+1.  Update the [`docs/current/docs/installation/index.md`](/docs/current/docs/installation/index.md) to point to the latest version number.
 
 1.  Update the [`.github/ISSUE_TEMPLATE/bug_report.yml`](/.github/ISSUE_TEMPLATE/bug_report.yml) to mention the latest version number.
 
-1.  Ultimately, search the entire project code base for the previous version string, like `2.0.0-beta.10`. Make sure to also search for `beta.10`, `beta10`, and references to _future_ releases that need to point to the _new future_ release!
+1.  Ultimately, search the entire project code base for the previous version string, like `2.0.0-beta.11`. Make sure to also search for `beta.11`, `beta11`, and references to _future_ releases that need to point to the _new future_ release!
+
+1.  Run `make docs`, and create a new version with the final docs in `docs/v2.0.0-beta.12`.
 
 1.  There are other hardcoded version references in `infrastructure` and `action-release-info`. Those must be updated as well, and the entire changeset needs to be cycled through the deployment chain!
 

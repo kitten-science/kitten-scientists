@@ -10,7 +10,7 @@ For a full explanation of how everything in Kitten Scientists works, please visi
 
 ### Option 1: Userscript Manager (recommended)
 
-Grab the [latest stable build](https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.10), or any other release from the [Releases page](https://github.com/kitten-science/kitten-scientists/releases) and install it.
+Grab the [latest stable build](https://github.com/kitten-science/kitten-scientists/releases/tag/v2.0.0-beta.11), or any other release from the [Releases page](https://github.com/kitten-science/kitten-scientists/releases) and install it.
 
 > [!TIP]
 > If you don't have a userscript manager yet, [Tampermonkey](https://www.tampermonkey.net/) is a good solution for the most popular browsers.
