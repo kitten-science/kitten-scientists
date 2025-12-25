@@ -108,7 +108,7 @@ When you open a pull request, make sure that you squash your commits into a sing
 1.  Build a preview of the script:
 
     ```bash
-    yarn kitten-scientists:preview
+    make build
     ```
 
 1.  Load the built preview into a userscript manager in Chrome and perform a quick, manual test.
@@ -116,6 +116,12 @@ When you open a pull request, make sure that you squash your commits into a sing
     1. Does the script load at all?
     1. Are settings restored to expectation?
     1. Are settings saved when they are changed?
+
+1.  Last checks!
+
+    1. Does anything need to be committed?
+    1. Are all remote changes merged?
+    1. Did `make pretty` run one last time?
 
 1.  Create a tag for this version:
 

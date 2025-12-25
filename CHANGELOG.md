@@ -1,3 +1,29 @@
+# v2.0.0-beta.11
+
+No new features have been added since last year. All available time was invested in reliability of core functionality.
+
+## Notables Changes
+
+1.  Refined Purchasing
+
+    The new bulk purchasing strategy from beta 10 has been further stabilized. The behavior for large purchasing batches should be noticeably improved.
+
+    All purchases of all buildings are now evaluated only once each iteration, instead of interleaved. This allows all technology and upgrade purchases to complete, before any build is processed. This should also provide a radically different experience.
+
+1.  Performance Improvements
+
+    Anything that slowed down the game has been analyzed, and dramatic performance improvements could be achieved in many areas. Some of those improvements have been consumed by new purchasing strategy code.
+
+1.  Tight Game API Integration
+
+    Prices of all items need to be calculated hundreds of times each iteration. This was previously enabled by custom price calculation code in Kitten Scientists. While the performance, and flexibility of that solution were great, it often resulted in wrong price information being used internally. For example, when a new challenge is added to the game, and there is a new pricing nuance we can't handle.
+
+1.  One Universal Build
+
+    Releases should now only contain a single `.user.js` file, as the variety of options just caused needless confusion. The new build is not as readable as the previous one, but it should have better compatibility with many userscript managers.
+
+    Generally, the userscript now behaves very much like the bookmarklet loader.
+
 # v2.0.0-beta.10
 
 The 10th beta has arrived. Additionally, the project has had it's 10 year anniversary. Congratulations to us!
