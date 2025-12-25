@@ -205,6 +205,10 @@ export class TimeControlManager {
       }
     }
 
+    if (checkedList.length === 0) {
+      return;
+    }
+
     // We have now determined that we either have all items or could buy all items.
 
     // stop!

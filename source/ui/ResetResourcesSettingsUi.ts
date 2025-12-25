@@ -22,9 +22,9 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
     super(parent, label, settings, {
       icon: Icons.Resources,
       onRefreshRequest: () => {
-        this.expando.ineffective =
-          settings.enabled &&
-          Object.values(settings.resources).some(_ => _.enabled && _.trigger < 0);
+        this.expando.ineffective = Object.values(settings.resources).some(
+          _ => _.enabled && _.trigger === -1,
+        );
       },
     });
 
@@ -44,9 +44,8 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
           this.host.engine.imessage("status.sub.enable", [resource.title]);
         },
         onRefreshRequest: () => {
-          element.triggerButton.inactive = !option.enabled || option.trigger === -1;
-          element.triggerButton.ineffective =
-            settings.enabled && option.enabled && option.trigger === -1;
+          element.triggerButton.inactive = !option.enabled || option.trigger === 0;
+          element.triggerButton.ineffective = option.enabled && option.trigger === -1;
         },
         onSetTrigger: async () => {
           const value = await Dialog.prompt(
@@ -70,6 +69,10 @@ export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSe
             option.trigger = -1;
             option.enabled = false;
             return;
+          }
+
+          if (value === "0") {
+            option.enabled = false;
           }
 
           option.trigger = parent.host.parseAbsolute(value) ?? option.trigger;

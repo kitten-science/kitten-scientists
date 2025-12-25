@@ -21,7 +21,7 @@ export type ResetResourcesResourceSettings = Record<Resource, ResetResourcesSett
 export class ResetResourcesSettings extends Setting {
   resources: ResetResourcesResourceSettings;
 
-  constructor(enabled = false) {
+  constructor(enabled = true) {
     super(enabled);
     this.resources = this.initResources();
   }

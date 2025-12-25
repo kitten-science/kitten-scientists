@@ -21,7 +21,7 @@ export type ResetSpaceBuildingSettings = Record<SpaceBuilding, SettingThreshold>
 export class ResetSpaceSettings extends Setting {
   readonly buildings: ResetSpaceBuildingSettings;
 
-  constructor(enabled = false) {
+  constructor(enabled = true) {
     super(enabled);
     this.buildings = this.initBuildings();
   }

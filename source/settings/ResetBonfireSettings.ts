@@ -54,7 +54,7 @@ export type ResetBonfireBuildingSettings = Record<
 export class ResetBonfireSettings extends Setting {
   readonly buildings: ResetBonfireBuildingSettings;
 
-  constructor(enabled = false) {
+  constructor(enabled = true) {
     super(enabled);
     this.buildings = this.initBuildings();
   }

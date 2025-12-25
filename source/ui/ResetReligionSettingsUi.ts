@@ -25,9 +25,9 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
     super(parent, label, settings, {
       icon: Icons.Religion,
       onRefreshRequest: () => {
-        this.expando.ineffective =
-          settings.enabled &&
-          Object.values(settings.buildings).some(_ => _.enabled && _.trigger <= 0);
+        this.expando.ineffective = Object.values(settings.buildings).some(
+          _ => _.enabled && _.trigger === -1,
+        );
       },
     });
 
@@ -110,7 +110,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
     parent: UiComponent,
     option: SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
-    sectionSetting: ResetReligionSettings,
+    _sectionSetting: ResetReligionSettings,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -121,9 +121,8 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
         parent.host.engine.imessage("status.reset.check.enable", [label]);
       },
       onRefreshRequest: () => {
-        element.triggerButton.inactive = !option.enabled || option.trigger === -1;
-        element.triggerButton.ineffective =
-          sectionSetting.enabled && option.enabled && option.trigger === -1;
+        element.triggerButton.inactive = !option.enabled || option.trigger === 0;
+        element.triggerButton.ineffective = option.enabled && option.trigger === -1;
       },
       onSetTrigger: async () => {
         const value = await Dialog.prompt(
@@ -147,6 +146,10 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
           option.trigger = -1;
           option.enabled = false;
           return;
+        }
+
+        if (value === "0") {
+          option.enabled = false;
         }
 
         option.trigger = Number(value);

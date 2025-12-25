@@ -43,14 +43,20 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
         onRefreshRequest: () => {
           this.expando.ineffective =
             settings.enabled &&
-            [
+            ([
               this._bonfireUi,
               this._religionUi,
               this._resourcesUi,
               this._spaceUi,
               this._timeUi,
               this._upgradesUi,
-            ].some(_ => _.expando.ineffective);
+            ].some(_ => _.expando.ineffective) ||
+              (!Object.values(this.setting.bonfire.buildings).some(_ => _.enabled) &&
+                !Object.values(this.setting.religion.buildings).some(_ => _.enabled) &&
+                !Object.values(this.setting.resources.resources).some(_ => _.enabled) &&
+                !Object.values(this.setting.space.buildings).some(_ => _.enabled) &&
+                !Object.values(this.setting.time.buildings).some(_ => _.enabled) &&
+                !Object.values(this.setting.upgrades.upgrades).some(_ => _.enabled)));
         },
       },
     );

@@ -16,7 +16,7 @@ export class ResetSettings extends Setting {
   upgrades: ResetUpgradeSettings;
 
   constructor(
-    enabled = false,
+    enabled = true,
     bonfire = new ResetBonfireSettings(),
     religion = new ResetReligionSettings(),
     resources = new ResetResourcesSettings(),

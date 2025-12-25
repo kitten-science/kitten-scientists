@@ -27,7 +27,7 @@ export type ResetTimeBuildingSettings = Record<TimeItem, ResetTimeBuildingSettin
 export class ResetTimeSettings extends Setting {
   readonly buildings: ResetTimeBuildingSettings;
 
-  constructor(enabled = false) {
+  constructor(enabled = true) {
     super(enabled);
     this.buildings = this.initBuildings();
   }

@@ -41,7 +41,7 @@ export type ResetReligionBuildingSettings = Record<
 export class ResetReligionSettings extends Setting {
   readonly buildings: ResetReligionBuildingSettings;
 
-  constructor(enabled = false) {
+  constructor(enabled = true) {
     super(enabled);
     this.buildings = this.initBuildings();
   }

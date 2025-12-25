@@ -25,9 +25,9 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
     super(parent, label, settings, {
       icon: Icons.Bonfire,
       onRefreshRequest: () => {
-        this.expando.ineffective =
-          settings.enabled &&
-          Object.values(settings.buildings).some(_ => _.enabled && _.trigger <= 0);
+        this.expando.ineffective = Object.values(settings.buildings).some(
+          _ => _.enabled && _.trigger === -1,
+        );
       },
     });
 
@@ -93,7 +93,7 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
     parent: UiComponent,
     option: SettingTrigger,
     locale: SettingOptions<SupportedLocale>,
-    sectionSetting: ResetBonfireSettings,
+    _sectionSetting: ResetBonfireSettings,
     label: string,
     delimiter = false,
     upgradeIndicator = false,
@@ -104,9 +104,8 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
         parent.host.engine.imessage("status.reset.check.enable", [label]);
       },
       onRefreshRequest: () => {
-        element.triggerButton.inactive = !option.enabled || option.trigger === -1;
-        element.triggerButton.ineffective =
-          sectionSetting.enabled && option.enabled && option.trigger === -1;
+        element.triggerButton.inactive = !option.enabled || option.trigger === 0;
+        element.triggerButton.ineffective = option.enabled && option.trigger === -1;
       },
       onSetTrigger: async () => {
         const value = await Dialog.prompt(
@@ -130,6 +129,10 @@ export class ResetBonfireSettingsUi extends IconSettingsPanel<ResetBonfireSettin
           option.trigger = -1;
           option.enabled = false;
           return;
+        }
+
+        if (value === "0") {
+          option.enabled = false;
         }
 
         option.trigger = Number(value);

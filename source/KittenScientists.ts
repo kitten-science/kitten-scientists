@@ -176,6 +176,7 @@ export class KittenScientists {
 
         console.info(...cl("Found! Loading settings..."));
         this.engine.stateLoad(state);
+        this._userInterface.forceFullRefresh();
       },
     );
   }
