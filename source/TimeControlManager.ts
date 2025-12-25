@@ -6,16 +6,10 @@ import type { ReligionManager } from "./ReligionManager.js";
 import { type CycleIndices, TimeControlSettings } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
-import type {
-  BuildingMeta,
-  UnsafeBuilding,
-  UnsafeUnstagedBuildingButtonOptions,
-} from "./types/buildings.js";
-import type { BuildingBtn, UnsafeBuildingBtnModel } from "./types/core.js";
+import type { BuildingMeta, UnsafeBuilding } from "./types/buildings.js";
 import {
   type ChronoForgeUpgrade,
   Cycles,
-  type Price,
   TimeItemVariant,
   type VoidSpaceUpgrade,
 } from "./types/index.js";
@@ -25,13 +19,12 @@ import type { WorkshopManager } from "./WorkshopManager.js";
 export class TimeControlManager {
   private readonly _host: KittenScientists;
   readonly settings: TimeControlSettings;
-  private readonly _bonfireManager: BonfireManager;
   private readonly _religionManager: ReligionManager;
   private readonly _workshopManager: WorkshopManager;
 
   constructor(
     host: KittenScientists,
-    bonfireManager: BonfireManager,
+    _bonfireManager: BonfireManager,
     religionManager: ReligionManager,
     workshopManager: WorkshopManager,
     settings = new TimeControlSettings(),
@@ -39,7 +32,6 @@ export class TimeControlManager {
     this._host = host;
     this.settings = settings;
 
-    this._bonfireManager = bonfireManager;
     this._religionManager = religionManager;
     this._workshopManager = workshopManager;
   }
@@ -67,40 +59,6 @@ export class TimeControlManager {
     }
 
     const checkedList: Array<{ name: string; trigger: number; val: number }> = [];
-    const checkList: Array<string> = [];
-
-    // This function allows us to quickly check a list of items for our
-    // ability to buy them.
-    // The idea is that, if we don't have a given building yet, we put
-    // it on the `checkList`. This function will then check the provided
-    // buttons and see if the item appears on the checklist.
-    // If we don't have a given item, but we *could* buy it, then we act
-    // as if we already had it.
-    const check = <
-      T extends BuildingBtn<UnsafeBuildingBtnModel<UnsafeUnstagedBuildingButtonOptions>>,
-    >(
-      buttons: Array<T>,
-    ) => {
-      if (checkList.length !== 0) {
-        for (const button of buttons) {
-          if (isNil(button.model)) {
-            continue;
-          }
-
-          const model = button.model as { metadata: { name: string }; prices: Array<Price> };
-
-          const name = model.metadata.name;
-          const index = checkList.indexOf(name);
-          if (index !== -1) {
-            checkList.splice(index, 1);
-            if (this._host.game.resPool.hasRes(mustExist(model.prices))) {
-              return true;
-            }
-          }
-        }
-      }
-      return false;
-    };
 
     // check building
     for (const [name, entry] of objectEntries(this.settings.reset.bonfire.buildings)) {
@@ -130,13 +88,9 @@ export class TimeControlManager {
         trigger: entry.trigger,
         val: bld.meta.val,
       });
-      if (0 < entry.trigger) {
-        // If the required amount of buildings hasn't been built yet, bail out.
-        if (bld.meta.val < entry.trigger) {
-          return;
-        }
-      } else {
-        checkList.push(name);
+      // If the required amount of buildings hasn't been built yet, bail out.
+      if (bld.meta.val < entry.trigger) {
+        return;
       }
     }
 
@@ -156,17 +110,9 @@ export class TimeControlManager {
         trigger: unicornPasture.trigger,
         val: bld.meta.val,
       });
-      if (0 < unicornPasture.trigger) {
-        if (bld.meta.val < unicornPasture.trigger) {
-          return;
-        }
-      } else {
-        checkList.push("unicornPasture");
+      if (bld.meta.val < unicornPasture.trigger) {
+        return;
       }
-    }
-    // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
-    if (check(this._bonfireManager.manager.tab.children) || checkList.length) {
-      return;
     }
 
     // check space
@@ -183,33 +129,9 @@ export class TimeControlManager {
 
       const bld = this._host.game.space.getBuilding(name);
       checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
-      if (0 < entry.trigger) {
-        if (bld.val < entry.trigger) {
-          return;
-        }
-      } else {
-        checkList.push(name);
+      if (bld.val < entry.trigger) {
+        return;
       }
-    }
-
-    if (checkList.length === 0) {
-      const panels = mustExist(this._host.game.spaceTab.planetPanels);
-      for (const panel of panels) {
-        for (const panelButton of panel.children) {
-          const model = mustExist(panelButton.model);
-          const name = model.metadata.name;
-          const index = checkList.indexOf(name);
-          if (index !== -1) {
-            checkList.splice(index, 1);
-            if (this._host.game.resPool.hasRes(mustExist(model.prices))) {
-              break;
-            }
-          }
-        }
-      }
-    }
-    if (checkList.length) {
-      return;
     }
 
     // check religion
@@ -225,25 +147,9 @@ export class TimeControlManager {
 
       const bld = mustExist(this._religionManager.getUpgradeMeta(name, entry.variant));
       checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
-      if (0 < entry.trigger) {
-        if (bld.val < entry.trigger) {
-          return;
-        }
-      } else {
-        checkList.push(name);
+      if (bld.val < entry.trigger) {
+        return;
       }
-    }
-
-    if (
-      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
-      check(this._religionManager.manager.tab.zgUpgradeButtons) ||
-      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
-      check(this._religionManager.manager.tab.rUpgradeButtons) ||
-      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
-      check(this._religionManager.manager.tab.ctPanel.children[0].children) ||
-      checkList.length
-    ) {
-      return;
     }
 
     // check time
@@ -259,23 +165,9 @@ export class TimeControlManager {
 
       const bld = mustExist(this.getBuild(name, entry.variant));
       checkedList.push({ name: bld.label, trigger: entry.trigger, val: bld.val });
-      if (0 < entry.trigger) {
-        if (bld.val < entry.trigger) {
-          return;
-        }
-      } else {
-        checkList.push(name);
+      if (bld.val < entry.trigger) {
+        return;
       }
-    }
-
-    if (
-      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
-      check(this.manager.tab.cfPanel.children[0].children) ||
-      // @ts-expect-error The `check()` calls are unsafe and need to be rewritten.
-      check(this.manager.tab.vsPanel.children[0].children) ||
-      checkList.length
-    ) {
-      return;
     }
 
     // check resources

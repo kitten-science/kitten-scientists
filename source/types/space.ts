@@ -24,6 +24,21 @@ import type { RorshachWgt } from "./void.js";
 export type SpaceManager = TabManager<
   UnsafeMeta<UnsafeSpaceProgram> | UnsafeMeta<UnsafeSpaceBuilding>
 > & {
+  meta: [
+    UnsafeMeta<UnsafeSpaceProgram>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+    UnsafeMeta<UnsafeSpaceBuilding>,
+  ];
   game: GamePage;
   hideResearched: boolean;
   spaceBuildingsMap: Array<unknown>;

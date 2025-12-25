@@ -36,6 +36,12 @@ export type ReligionManager = TabManager<
   | UnsafeMeta<UnsafeZigguratUpgrade>
   | UnsafeMeta<UnsafePact>
 > & {
+  meta: [
+    UnsafeMeta<UnsafeReligionUpgrade>,
+    UnsafeMeta<UnsafeTranscendenceUpgrade>,
+    UnsafeMeta<UnsafeZigguratUpgrade>,
+    UnsafeMeta<UnsafePact>,
+  ];
   game: GamePage;
   pactsManager: PactsManager;
   /**

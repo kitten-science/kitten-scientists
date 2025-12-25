@@ -30,6 +30,7 @@ import type {
 export type TimeManager = TabManager<
   UnsafeMeta<UnsafeChronoForgeUpgrade> | UnsafeMeta<UnsafeVoidSpaceUpgrade>
 > & {
+  meta: [UnsafeMeta<UnsafeChronoForgeUpgrade>, UnsafeMeta<UnsafeVoidSpaceUpgrade>];
   game: GamePage;
   /**
    * 0 is current function call, 1 is shatterInGroupCycles, 2 is shatterInCycles (deprecated)
