@@ -96,6 +96,8 @@ export type FrameContext = {
   entry: number;
   exit: number;
   measurements: Record<string, number | undefined>;
+  priceCacheHits: number | undefined;
+  priceCacheMisses: number | undefined;
 };
 export type Automation = {
   tick(context: FrameContext): void | Promise<void>;
@@ -373,6 +375,8 @@ export class Engine {
         entry: Date.now(),
         exit: 0,
         measurements: {},
+        priceCacheHits: 0,
+        priceCacheMisses: 0,
         purchaseOrders: [],
         requestGameUiRefresh: false,
       };
@@ -478,51 +482,66 @@ export class Engine {
 
     [, duration] = measure(() => {
       if (0 < context.purchaseOrders.length) {
-        const builds = { ...context.purchaseOrders[0].builds };
-        let metaData = { ...context.purchaseOrders[0].metaData };
-        for (const order of context.purchaseOrders) {
-          for (const [name, entry] of objectEntries(order.builds)) {
-            builds[name] = {
-              ...entry,
-              baseBuilding: entry.baseBuilding,
-              builder: order.builder,
-              building: entry.building,
-              sectionTrigger: order.sectionTrigger,
-              stage: entry.stage,
-              variant: entry.variant,
-            };
+        const [{ builds, metaData }, durationInitialize] = measure(() => {
+          const builds = { ...context.purchaseOrders[0].builds };
+          let metaData = { ...context.purchaseOrders[0].metaData };
+          for (const order of context.purchaseOrders) {
+            for (const [name, entry] of objectEntries(order.builds)) {
+              builds[name] = {
+                ...entry,
+                baseBuilding: entry.baseBuilding,
+                builder: order.builder,
+                building: entry.building,
+                sectionTrigger: order.sectionTrigger,
+                stage: entry.stage,
+                variant: entry.variant,
+              };
+            }
+            metaData = { ...metaData, ...order.metaData };
           }
-          metaData = { ...metaData, ...order.metaData };
-        }
 
-        this._bulkManager.resetPriceCache();
-        const buildList = this._bulkManager.bulk(
-          builds as Partial<
-            Record<
-              AllBuildings,
-              {
-                baseBuilding?: Building;
-                builder: (build: ConcreteBuild) => void;
-                building?: AllBuildings | BonfireItem;
-                enabled: boolean;
-                label?: string;
-                max: number;
-                sectionTrigger: number;
-                stage?: number;
-                trigger: number;
-                variant?: TimeItemVariant | UnicornItemVariant;
-              }
-            >
-          >,
-          metaData,
-        );
-        for (const build of buildList.filter(item => 0 < item.count)) {
-          build.builder(build);
-          context.requestGameUiRefresh = true;
-        }
+          this._bulkManager.resetPriceCache();
+          return { builds, metaData };
+        });
+
+        const [buildList, durationCalculate] = measure(() => {
+          const buildList = this._bulkManager.bulk(
+            builds as Partial<
+              Record<
+                AllBuildings,
+                {
+                  baseBuilding?: Building;
+                  builder: (build: ConcreteBuild) => void;
+                  building?: AllBuildings | BonfireItem;
+                  enabled: boolean;
+                  label?: string;
+                  max: number;
+                  sectionTrigger: number;
+                  stage?: number;
+                  trigger: number;
+                  variant?: TimeItemVariant | UnicornItemVariant;
+                }
+              >
+            >,
+            metaData,
+          );
+          return buildList;
+        });
+
+        const [, durationExecute] = measure(() => {
+          for (const build of buildList.filter(item => 0 < item.count)) {
+            build.builder(build);
+            context.requestGameUiRefresh = true;
+          }
+        });
+        context.priceCacheHits = this._bulkManager.cacheHits;
+        context.priceCacheMisses = this._bulkManager.cacheMisses;
+        context.measurements.bulkPurchaseInit = durationInitialize;
+        context.measurements.bulkPurchaseCalc = durationCalculate;
+        context.measurements.bulkPurchaseExec = durationExecute;
       }
     });
-    context.measurements.bulkPurchaseHelper = duration;
+    context.measurements.bulkPurchaseTotal = duration;
 
     [, duration] = measure(() => {
       if (context.requestGameUiRefresh && !document.hidden) {

@@ -99,6 +99,8 @@ export class BulkPurchaseHelper {
   private readonly _host: KittenScientists;
   private readonly _workshopManager: WorkshopManager;
   private _priceCache: Map<AllBuildings, Array<Array<Price>>>;
+  cacheHits = 0;
+  cacheMisses = 0;
 
   constructor(host: KittenScientists, workshopManager: WorkshopManager) {
     this._host = host;
@@ -108,14 +110,19 @@ export class BulkPurchaseHelper {
 
   resetPriceCache(): void {
     this._priceCache = new Map<AllBuildings, Array<Array<Price>>>();
+    this.cacheHits = 0;
+    this.cacheMisses = 0;
   }
 
   _getPriceForBuild(build: AllBuildings, atValue = 0): Array<Price> {
     const cachedPrices = this._priceCache.get(build) ?? [];
     const cachedPrice = cachedPrices[atValue];
     if (cachedPrice !== undefined) {
+      ++this.cacheHits;
       return cachedPrice;
     }
+
+    ++this.cacheMisses;
 
     if (StagedBuildings.includes(build as StagedBuilding)) {
       const baseStage: Partial<Record<StagedBuilding, Building>> = {
@@ -125,7 +132,10 @@ export class BulkPurchaseHelper {
         solarfarm: "pasture",
         spaceport: "warehouse",
       };
-      return this._getPriceForBuild(mustExist(baseStage[build as StagedBuilding]), atValue);
+      const prices = this._getPriceForBuild(mustExist(baseStage[build as StagedBuilding]), atValue);
+      cachedPrices[atValue] = prices;
+      this._priceCache.set(build, cachedPrices);
+      return prices;
     }
 
     if (Buildings.includes(build as Building)) {
