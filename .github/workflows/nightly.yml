@@ -251,7 +251,7 @@ jobs:
           changelog-artifact: changelog.json
           draft: false
           dry-run: ${{ needs.params.outputs.move-tags == 'false' }}
-          files: output/*.js
+          files: output/*.user.js
           merge-similar: true
           prerelease: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}
