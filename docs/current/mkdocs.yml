@@ -70,7 +70,6 @@ nav:
   - Home: index.md
   - Installation:
       - Quick Start: installation/index.md
-      - Containers: installation/containers.md
   - User Interface:
       - Overview: sections/overview.md
       - Bonfire: sections/bonfire.md
