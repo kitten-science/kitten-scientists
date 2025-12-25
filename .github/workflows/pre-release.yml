@@ -161,7 +161,7 @@ jobs:
       pages: write
       pull-requests: read
     secrets:
-      NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     uses: oliversalzburg/workflows/.github/workflows/frag-publish-npm.yml@main
     with:
       dist-tag: ${{ needs.params.outputs.release-tag }}
