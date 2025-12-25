@@ -254,7 +254,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../installation/quick-start.md" class="md-tabs__link">
+        <a href="../../installation/" class="md-tabs__link">
           
   
   
@@ -483,7 +483,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../installation/quick-start.md" class="md-nav__link">
+      <a href="../../installation/" class="md-nav__link">
         
   
   
@@ -491,34 +491,6 @@
     
   
     Quick Start
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../installation/minified-builds.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Minified Builds
   
 
     
@@ -1661,12 +1633,12 @@
 </li>
 <li>
 <p>Create a tag for this version:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>tag<span class="w"> </span>-s<span class="w"> </span>v2.0.0-beta.11<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;2.0.0-beta.11&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>tag<span class="w"> </span>-s<span class="w"> </span>v2.0.0-beta.12<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;2.0.0-beta.12&quot;</span>
 </code></pre></div>
 </li>
 <li>
 <p>Push the tag:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v2.0.0-beta.11
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v2.0.0-beta.12
 </code></pre></div>
 </li>
 <li>
@@ -1685,7 +1657,10 @@
 <p>Update the <a href="/.github/ISSUE_TEMPLATE/bug_report.yml"><code>.github/ISSUE_TEMPLATE/bug_report.yml</code></a> to mention the latest version number.</p>
 </li>
 <li>
-<p>Ultimately, search the entire project code base for the previous version string, like <code>2.0.0-beta.10</code>. Make sure to also search for <code>beta.10</code>, <code>beta10</code>, and references to <em>future</em> releases that need to point to the <em>new future</em> release!</p>
+<p>Ultimately, search the entire project code base for the previous version string, like <code>2.0.0-beta.11</code>. Make sure to also search for <code>beta.11</code>, <code>beta11</code>, and references to <em>future</em> releases that need to point to the <em>new future</em> release!</p>
+</li>
+<li>
+<p>Run <code>make docs</code>, and create a new version with the final docs in <code>docs/v2.0.0-beta.12</code>.</p>
 </li>
 <li>
 <p>There are other hardcoded version references in <code>infrastructure</code> and <code>action-release-info</code>. Those must be updated as well, and the entire changeset needs to be cycled through the deployment chain!</p>

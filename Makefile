@@ -7,7 +7,7 @@ build: devcontainer injectable userscript loader lib
 clean:
 	rm --force --recursive _site .venv devcontainer/overlay docs/current/.venv docs/current/public lib node_modules output tsconfig.tsbuildinfo
 
-docs: docs/current/public
+docs: docs/current/public/index.html
 
 git-hook:
 	echo "make pretty" > .git/hooks/pre-commit; chmod +x .git/hooks/pre-commit
@@ -58,7 +58,7 @@ loader: node_modules injectable
 	python3 -m venv .venv
 	. .venv/bin/activate; pip install -r requirements.txt
 
-docs/current/public: .venv
+docs/current/public/index.html: .venv docs/current/mkdocs.yml
 	. .venv/bin/activate; cd docs/current/; mkdocs build --config-file mkdocs.yml --site-dir public
 
 .PHONY: docs-serve
