@@ -54,9 +54,6 @@ jobs:
           curl --location --silent "${{ steps.release-info.outputs.dev-url-default }}" --output dev.js || true
           curl --location --silent "${{ steps.release-info.outputs.nightly-url-default }}" --output nightly.js || true
           curl --location --silent "${{ steps.release-info.outputs.stable-url-default }}" --output stable.js || true
-          curl --location --silent "${{ steps.release-info.outputs.dev-url-minified }}" --output dev.min.js || true
-          curl --location --silent "${{ steps.release-info.outputs.nightly-url-minified }}" --output nightly.min.js || true
-          curl --location --silent "${{ steps.release-info.outputs.stable-url-minified }}" --output stable.min.js || true
 
       - name: Deploy to S3
         run: |
@@ -83,7 +80,7 @@ jobs:
               --key $PREFIX/dev.min.js \
               --cache-control "public, s-maxage=600" \
               --content-type "text/javascript" \
-              --body dev.min.js || true
+              --body dev.js || true
 
             # Put the nightly scripts on the channel.
             aws s3api put-object \
@@ -97,7 +94,7 @@ jobs:
               --key $PREFIX/nightly.min.js \
               --cache-control "public, s-maxage=3600" \
               --content-type "text/javascript" \
-              --body nightly.min.js || true
+              --body nightly.js || true
 
             # Put the stable scripts on the channel.
             aws s3api put-object \
@@ -111,5 +108,5 @@ jobs:
               --key $PREFIX/stable.min.js \
               --cache-control "public, s-maxage=86400" \
               --content-type "text/javascript" \
-              --body stable.min.js || true
+              --body stable.js || true
           done
