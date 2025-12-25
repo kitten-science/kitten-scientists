@@ -19,7 +19,7 @@ import {
   TimeItemVariant,
   type VoidSpaceUpgrade,
 } from "./types/index.js";
-import type { ShatterTCBtn, ShatterTCBtnController } from "./types/time.js";
+import type { ShatterTCBtnController } from "./types/time.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class TimeControlManager {
@@ -567,12 +567,12 @@ export class TimeControlManager {
     }
     // If we found we can skip any years, do so now.
     if (0 < willSkip) {
-      const shatter = this._host.game.timeTab.cfPanel.children[0].children[0] as ShatterTCBtn; // check?
-      if (isNil(shatter.model)) {
-        return;
-      }
+      const controller = new classes.ui.time.ShatterTCBtnController(
+        this._host.game,
+      ) as ShatterTCBtnController;
+      const model = controller.fetchModel({});
+      controller.doShatterAmt(model, willSkip);
       this._host.engine.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
-      (shatter.controller as ShatterTCBtnController).doShatterAmt(shatter.model, willSkip);
       this._host.engine.storeForSummary("time.skip", willSkip);
     }
   }
