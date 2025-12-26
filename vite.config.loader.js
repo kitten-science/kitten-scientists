@@ -14,7 +14,6 @@ const RELEASE_CHANNEL = process.env.RELEASE_CHANNEL ?? "fixed";
 const USE_DEV_PAYLOAD = false;
 
 const downloadURL = `https://kitten-science.com/${RELEASE_CHANNEL}.js`;
-const updateURL = `https://kitten-science.com/${RELEASE_CHANNEL}.min.js`;
 
 const PAYLOAD = JSON.stringify(
   readFileSync(
@@ -53,7 +52,6 @@ export default defineConfig({
           description: manifest.description,
           downloadURL,
           homepageURL: manifest.homepage,
-          updateURL,
           version: versionString,
         },
       }),
