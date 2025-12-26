@@ -3,6 +3,7 @@ import type { SupportedLocale } from "../Engine.js";
 import type { PolicySettings } from "../settings/PolicySettings.js";
 import type { ScienceSettings } from "../settings/ScienceSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
+import { objectEntries } from "../tools/Entries.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -55,6 +56,11 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
         onUnCheck: () => {
           this.host.engine.imessage("status.sub.disable", [policy.label]);
         },
+        title: [
+          policy.description,
+          ...policy.prices.map(price => `- ${price.name}: ${price.val}`),
+          ...objectEntries(policy.effects ?? {}).map(([effect, value]) => `+ ${effect}: ${value}`),
+        ].join("\n"),
       });
 
       if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {

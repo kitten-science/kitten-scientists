@@ -140,6 +140,11 @@ export class TechSettingsUi extends SettingsPanel<TechSettings, SettingTriggerLi
           this.host.engine.imessage("status.sub.disable", [tech.label]);
         },
         renderLabelTrigger: false,
+        title: [
+          tech.description,
+          ...tech.prices.map(price => `- ${price.name}: ${price.val}`),
+          tech.effectDesc,
+        ].join("\n"),
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 

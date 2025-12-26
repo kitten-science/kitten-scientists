@@ -7,7 +7,16 @@ export type ListItemOptions = ThisType<ListItem> &
      * Should there be additional padding below this element?
      */
     readonly delimiter?: boolean;
+
+    /**
+     * The `class` attribute value for the UI component.
+     */
     readonly classes?: Array<string>;
+
+    /***
+     * The `title` attribute value for the UI component.
+     */
+    readonly title?: string;
   };
 
 export class ListItem extends UiComponent {
@@ -30,6 +39,10 @@ export class ListItem extends UiComponent {
 
     if (options?.delimiter === true) {
       this.element.addClass(stylesDelimiter.delimiter);
+    }
+
+    if (typeof options?.title === "string") {
+      this.element.attr("title", options.title);
     }
   }
 

@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { UpgradeSettings } from "../settings/UpgradeSettings.js";
+import { objectEntries } from "../tools/Entries.js";
 import stylesButton from "./components/Button.module.css";
 import stylesDelimiter from "./components/Delimiter.module.css";
 import { Dialog } from "./components/Dialog.js";
@@ -135,6 +136,11 @@ export class UpgradeSettingsUi extends SettingsPanel<UpgradeSettings, SettingTri
           this.host.engine.imessage("status.sub.disable", [upgrade.label]);
         },
         renderLabelTrigger: false,
+        title: [
+          upgrade.description,
+          ...upgrade.prices.map(price => `- ${price.name}: ${price.val}`),
+          ...objectEntries(upgrade.effects ?? {}).map(([effect, value]) => `+ ${effect}: ${value}`),
+        ].join("\n"),
       });
       element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
