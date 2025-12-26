@@ -354,9 +354,13 @@ export class TradeManager implements Automation {
 
       this._host.engine.storeForSummary("embassy", emBulk.val);
       if (emBulk.val !== 1) {
-        this._host.engine.iactivity("build.embassies", [emBulk.val, emBulk.race.title], "ks-build");
+        this._host.engine.iactivity(
+          "act.build.embassies",
+          [emBulk.race.title, emBulk.val],
+          "ks-build",
+        );
       } else {
-        this._host.engine.iactivity("build.embassy", [emBulk.val, emBulk.race.title], "ks-build");
+        this._host.engine.iactivity("act.build.embassy", [emBulk.race.title], "ks-build");
       }
     }
   }
