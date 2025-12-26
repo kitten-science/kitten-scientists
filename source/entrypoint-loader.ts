@@ -14,11 +14,9 @@ declare global {
     );
   }
 
-  if (typeof GM !== "undefined") {
-    const nodeScript = document.createElement("script");
-    nodeScript.id = "ks-loader-singleton";
-    nodeScript.textContent = PAYLOAD;
-    nodeScript.type = "application/javascript";
-    document.body.appendChild(nodeScript);
-  }
+  const nodeScript = document.createElement("script");
+  nodeScript.id = "ks-loader-singleton";
+  nodeScript.textContent = PAYLOAD;
+  nodeScript.type = "application/javascript";
+  document.body.appendChild(nodeScript);
 })().catch(redirectErrorsToConsole(console));
