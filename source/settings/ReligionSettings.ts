@@ -1,7 +1,10 @@
+import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
+import { cl } from "../tools/Log.js";
 import {
   type FaithItem,
+  type GamePage,
   ReligionUpgrades,
   TranscendenceUpgrades,
   type UnicornItem,
@@ -117,6 +120,21 @@ export class ReligionSettings extends SettingTrigger {
       UnicornItemVariant.UnicornPasture,
     );
     return items;
+  }
+
+  static validateGame(game: GamePage, settings: ReligionSettings) {
+    const inSettings = Object.keys(settings.buildings);
+    const inGame = game.bld.buildingsData.map(_ => _.name);
+
+    const missingInSettings = difference(inGame, inSettings);
+    const redundantInSettings = difference(inSettings, inGame);
+
+    for (const _ of missingInSettings) {
+      console.warn(...cl(`The religion building '${_}' is not tracked in Kitten Scientists!`));
+    }
+    for (const _ of redundantInSettings) {
+      console.warn(...cl(`The religion building '${_}' is not a building in Kittens Game!`));
+    }
   }
 
   load(settings: Maybe<Partial<ReligionSettings>>) {

@@ -1,6 +1,14 @@
+import { difference } from "@oliversalzburg/js-utils/data/array.js";
 import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
-import { type Building, Buildings, type StagedBuilding, StagedBuildings } from "../types/index.js";
+import { cl } from "../tools/Log.js";
+import {
+  type Building,
+  Buildings,
+  type GamePage,
+  type StagedBuilding,
+  StagedBuildings,
+} from "../types/index.js";
 import { BuildingUpgradeSettings } from "./BuildingUpgradeSettings.js";
 import { Setting, SettingTrigger, SettingTriggerMax } from "./Settings.js";
 
@@ -105,6 +113,21 @@ export class BonfireSettings extends SettingTrigger {
     }
 
     return items;
+  }
+
+  static validateGame(game: GamePage, settings: BonfireSettings) {
+    const inSettings = Object.keys(settings.buildings);
+    const inGame = game.bld.buildingsData.map(_ => _.name);
+
+    const missingInSettings = difference(inGame, inSettings);
+    const redundantInSettings = difference(inSettings, inGame);
+
+    for (const _ of missingInSettings) {
+      console.warn(...cl(`The building '${_}' is not tracked in Kitten Scientists!`));
+    }
+    for (const _ of redundantInSettings) {
+      console.warn(...cl(`The building '${_}' is not a building in Kittens Game!`));
+    }
   }
 
   load(settings: Maybe<Partial<BonfireSettings>>) {

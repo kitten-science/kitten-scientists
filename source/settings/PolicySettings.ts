@@ -44,11 +44,11 @@ export class PolicySettings extends Setting {
     const missingInSettings = difference(inGame, inSettings);
     const redundantInSettings = difference(inSettings, inGame);
 
-    for (const policy of missingInSettings) {
-      console.warn(...cl(`The policy '${policy}' is not tracked in Kitten Scientists!`));
+    for (const _ of missingInSettings) {
+      console.warn(...cl(`The policy '${_}' is not tracked in Kitten Scientists!`));
     }
-    for (const policy of redundantInSettings) {
-      console.warn(...cl(`The policy '${policy}' is not a policy in Kittens Game!`));
+    for (const _ of redundantInSettings) {
+      console.warn(...cl(`The policy '${_}' is not a policy in Kittens Game!`));
     }
   }
 

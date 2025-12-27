@@ -3,6 +3,8 @@ import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
 import gt from "semver/functions/gt.js";
 import { Engine, type EngineState, type SupportedLocale } from "./Engine.js";
+import { BonfireSettings } from "./settings/BonfireSettings.js";
+import { ReligionSettings } from "./settings/ReligionSettings.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
@@ -94,6 +96,8 @@ export class KittenScientists {
    * Issues should be logged to the console.
    */
   validateGame() {
+    BonfireSettings.validateGame(this.game, this.engine.bonfireManager.settings);
+    ReligionSettings.validateGame(this.game, this.engine.religionManager.settings);
     ScienceSettings.validateGame(this.game, this.engine.scienceManager.settings);
     SpaceSettings.validateGame(this.game, this.engine.spaceManager.settings);
     WorkshopSettings.validateGame(this.game, this.engine.workshopManager.settings);

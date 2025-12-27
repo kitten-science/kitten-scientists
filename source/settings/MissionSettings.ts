@@ -44,11 +44,11 @@ export class MissionSettings extends Setting {
     const missingInSettings = difference(inGame, inSettings);
     const redundantInSettings = difference(inSettings, inGame);
 
-    for (const mission of missingInSettings) {
-      console.warn(...cl(`The space mission '${mission}' is not tracked in Kitten Scientists!`));
+    for (const _ of missingInSettings) {
+      console.warn(...cl(`The space mission '${_}' is not tracked in Kitten Scientists!`));
     }
-    for (const mission of redundantInSettings) {
-      console.warn(...cl(`The space mission '${mission}' is not a space mission in Kittens Game!`));
+    for (const _ of redundantInSettings) {
+      console.warn(...cl(`The space mission '${_}' is not a space mission in Kittens Game!`));
     }
   }
 

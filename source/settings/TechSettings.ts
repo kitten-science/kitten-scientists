@@ -51,24 +51,22 @@ export class TechSettings extends SettingTrigger {
     const missingInSettings = difference(inGame, inSettings) as Array<AnyTechnology>;
     const redundantInSettings = difference(inSettings, inGame) as Array<AnyTechnology>;
 
-    for (const tech of missingInSettings) {
-      if (TechnologiesIgnored.includes(tech as TechnologyIgnored)) {
+    for (const _ of missingInSettings) {
+      if (TechnologiesIgnored.includes(_ as TechnologyIgnored)) {
         continue;
       }
 
-      console.warn(...cl(`The technology '${tech}' is not tracked in Kitten Scientists!`));
+      console.warn(...cl(`The technology '${_}' is not tracked in Kitten Scientists!`));
     }
-    for (const tech of redundantInSettings) {
-      if (TechnologiesIgnored.includes(tech as TechnologyIgnored)) {
+    for (const _ of redundantInSettings) {
+      if (TechnologiesIgnored.includes(_ as TechnologyIgnored)) {
         console.info(
-          ...cl(
-            `The technology '${tech}' is a technology in Kittens Game, but it's no longer used.`,
-          ),
+          ...cl(`The technology '${_}' is a technology in Kittens Game, but it's no longer used.`),
         );
         continue;
       }
 
-      console.warn(...cl(`The technology '${tech}' is not a technology in Kittens Game!`));
+      console.warn(...cl(`The technology '${_}' is not a technology in Kittens Game!`));
     }
   }
 
