@@ -499,7 +499,11 @@ export class Engine {
       context.measurements.villageManager = duration;
 
       [, duration] = await measureAsync(() => this.timeControlManager.tick(context));
-      context.measurements.timeControlManager = duration;
+      // If we were put into standby, because of a reset, this duration is no good, because it includes
+      // the entire countdown to the reset.
+      if (!this._isInStandBy) {
+        context.measurements.timeControlManager = duration;
+      }
 
       [, duration] = measure(() => {
         if (0 < context.purchaseOrders.length) {
