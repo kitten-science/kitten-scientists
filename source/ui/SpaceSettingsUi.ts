@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { SpaceSettings } from "../settings/SpaceSettings.js";
+import { objectEntries } from "../tools/Entries.js";
 import { cl } from "../tools/Log.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { Dialog } from "./components/Dialog.js";
@@ -112,6 +113,14 @@ export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTrigger
                       indexPlanet < arrayPlant.length - 1 &&
                       indexBuilding === arrayBuilding.length - 1,
                     renderLabelTrigger: false,
+                    title: [
+                      building.description,
+                      ...(building.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+                      ...objectEntries(building.effects ?? {}).map(
+                        ([effect, value]) => `+ ${effect}: ${value}`,
+                      ),
+                      building.unlocked ? "is unlocked" : "still locked",
+                    ].join("\n"),
                   },
                 ),
               ),

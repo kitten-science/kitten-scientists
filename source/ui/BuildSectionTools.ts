@@ -119,6 +119,7 @@ export const BuildSectionTools = {
         options?.onUnCheck?.(isBatchProcess);
       },
       renderLabelTrigger: options?.renderLabelTrigger,
+      title: options?.title,
       upgradeIndicator: options?.upgradeIndicator,
     });
     return element;

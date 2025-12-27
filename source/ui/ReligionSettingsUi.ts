@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import { ReligionSettings } from "../settings/ReligionSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
+import { objectEntries } from "../tools/Entries.js";
 import { cl } from "../tools/Log.js";
 import { ReligionOptions, UnicornItems, type ZigguratUpgrade } from "../types/index.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
@@ -116,6 +117,7 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
 
     const unicornsArray: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems];
 
+    const unicornPastureMeta = game.bld.getBuildingExt("unicornPasture").meta;
     this._unicornBuildings = new Map([
       [
         "unicornPasture",
@@ -126,7 +128,17 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
           this.setting,
           this.host.engine.i18n("$buildings.unicornPasture.label"),
           label,
-          { renderLabelTrigger: false },
+          {
+            renderLabelTrigger: false,
+            title: [
+              unicornPastureMeta.description,
+              ...(unicornPastureMeta.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+              ...objectEntries(unicornPastureMeta.effects ?? {}).map(
+                ([effect, value]) => `+ ${effect}: ${value}`,
+              ),
+              unicornPastureMeta.unlocked ? "is unlocked" : "still locked",
+            ].join("\n"),
+          },
         ),
       ],
       ...this.host.game.religion.zigguratUpgrades
@@ -144,7 +156,17 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
                 this.setting,
                 zigguratUpgrade.label,
                 label,
-                { renderLabelTrigger: false },
+                {
+                  renderLabelTrigger: false,
+                  title: [
+                    zigguratUpgrade.description,
+                    ...(zigguratUpgrade.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+                    ...objectEntries(zigguratUpgrade.effects ?? {}).map(
+                      ([effect, value]) => `+ ${effect}: ${value}`,
+                    ),
+                    zigguratUpgrade.unlocked ? "is unlocked" : "still locked",
+                  ].join("\n"),
+                },
               ),
             ] as [ZigguratUpgrade | "unicornPasture", SettingMaxTriggerListItem],
         ),
@@ -201,7 +223,17 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
               this.setting,
               upgrade.label,
               label,
-              { renderLabelTrigger: false },
+              {
+                renderLabelTrigger: false,
+                title: [
+                  upgrade.description,
+                  ...(upgrade.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+                  ...objectEntries(upgrade.effects ?? {}).map(
+                    ([effect, value]) => `+ ${effect}: ${value}`,
+                  ),
+                  upgrade.unlocked ? "is unlocked" : "still locked",
+                ].join("\n"),
+              },
             ),
           ),
         new Delimiter(this),
@@ -220,6 +252,14 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
               {
                 delimiter: upgrade.name === this.host.game.religion.religionUpgrades.at(-1)?.name,
                 renderLabelTrigger: false,
+                title: [
+                  upgrade.description,
+                  ...(upgrade.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+                  ...objectEntries(upgrade.effects ?? {}).map(
+                    ([effect, value]) => `+ ${effect}: ${value}`,
+                  ),
+                  upgrade.unlocked ? "is unlocked" : "still locked",
+                ].join("\n"),
               },
             ),
           ),
@@ -235,7 +275,17 @@ export class ReligionSettingsUi extends SettingsPanel<ReligionSettings, SettingT
               this.setting,
               upgrade.label,
               label,
-              { renderLabelTrigger: false },
+              {
+                renderLabelTrigger: false,
+                title: [
+                  upgrade.description,
+                  ...(upgrade.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+                  ...objectEntries(upgrade.effects ?? {}).map(
+                    ([effect, value]) => `+ ${effect}: ${value}`,
+                  ),
+                  upgrade.unlocked ? "is unlocked" : "still locked",
+                ].join("\n"),
+              },
             ),
           ),
       ]),

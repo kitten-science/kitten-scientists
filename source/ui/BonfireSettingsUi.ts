@@ -2,6 +2,7 @@ import { coalesceArray, isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import { BonfireSettings } from "../settings/BonfireSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
+import { objectEntries } from "../tools/Entries.js";
 import { cl } from "../tools/Log.js";
 import type { Building, StagedBuilding } from "../types/index.js";
 import { BuildingUpgradeSettingsUi } from "./BuildingUpgradeSettingsUi.js";
@@ -206,7 +207,17 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           settings,
           meta.stages[0].label,
           sectionLabel,
-          { renderLabelTrigger: false },
+          {
+            renderLabelTrigger: false,
+            title: [
+              meta.stages[0].description,
+              ...(meta.stages[0].prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+              ...objectEntries(meta.stages[0].effects ?? {}).map(
+                ([effect, value]) => `+ ${effect}: ${value}`,
+              ),
+              meta.stages[0].stageUnlocked ? "is unlocked" : "still locked",
+            ].join("\n"),
+          },
         ),
         BuildSectionTools.getBuildOption(
           parent,
@@ -217,6 +228,14 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           sectionLabel,
           {
             renderLabelTrigger: false,
+            title: [
+              meta.stages[1].description,
+              ...(meta.stages[1].prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+              ...objectEntries(meta.stages[1].effects ?? {}).map(
+                ([effect, value]) => `+ ${effect}: ${value}`,
+              ),
+              meta.stages[1].stageUnlocked ? "is unlocked" : "still locked",
+            ].join("\n"),
             upgradeIndicator: true,
           },
         ),
@@ -231,7 +250,17 @@ export class BonfireSettingsUi extends SettingsPanel<BonfireSettings, SettingTri
           settings,
           meta.label,
           sectionLabel,
-          { renderLabelTrigger: false },
+          {
+            renderLabelTrigger: false,
+            title: [
+              meta.description,
+              ...(meta.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+              ...objectEntries(meta.effects ?? {}).map(
+                ([effect, value]) => `+ ${effect}: ${value}`,
+              ),
+              meta.unlocked ? "is unlocked" : "still locked",
+            ].join("\n"),
+          },
         ),
       ];
     }

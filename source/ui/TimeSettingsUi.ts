@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeItem, TimeSettings } from "../settings/TimeSettings.js";
+import { objectEntries } from "../tools/Entries.js";
 import { cl } from "../tools/Log.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { Dialog } from "./components/Dialog.js";
@@ -101,6 +102,14 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
               {
                 delimiter: building.name === this.host.game.time.chronoforgeUpgrades.at(-1)?.name,
                 renderLabelTrigger: false,
+                title: [
+                  building.description,
+                  ...(building.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+                  ...objectEntries(building.effects ?? {}).map(
+                    ([effect, value]) => `+ ${effect}: ${value}`,
+                  ),
+                  building.unlocked ? "is unlocked" : "still locked",
+                ].join("\n"),
               },
             ),
           ),
@@ -116,7 +125,17 @@ export class TimeSettingsUi extends SettingsPanel<TimeSettings, SettingTriggerLi
               this.setting,
               building.label,
               label,
-              { renderLabelTrigger: false },
+              {
+                renderLabelTrigger: false,
+                title: [
+                  building.description,
+                  ...(building.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
+                  ...objectEntries(building.effects ?? {}).map(
+                    ([effect, value]) => `+ ${effect}: ${value}`,
+                  ),
+                  building.unlocked ? "is unlocked" : "still locked",
+                ].join("\n"),
+              },
             ),
           ),
       ]),
