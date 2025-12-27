@@ -123,9 +123,17 @@ export class BonfireSettings extends SettingTrigger {
     const redundantInSettings = difference(inSettings, inGame);
 
     for (const _ of missingInSettings) {
+      if (_ === "unicornPasture") {
+        continue;
+      }
+
       console.warn(...cl(`The building '${_}' is not tracked in Kitten Scientists!`));
     }
     for (const _ of redundantInSettings) {
+      if (StagedBuildings.includes(_ as StagedBuilding)) {
+        continue;
+      }
+
       console.warn(...cl(`The building '${_}' is not a building in Kittens Game!`));
     }
   }

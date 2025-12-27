@@ -212,7 +212,7 @@ export class TimeControlManager {
     // We have now determined that we either have all items or could buy all items.
 
     // stop!
-    engine.stop(false);
+    engine.standBy();
 
     const sleep = async (time = 1500) => {
       return new Promise((resolve, reject) => {

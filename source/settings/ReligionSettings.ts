@@ -124,7 +124,11 @@ export class ReligionSettings extends SettingTrigger {
 
   static validateGame(game: GamePage, settings: ReligionSettings) {
     const inSettings = Object.keys(settings.buildings);
-    const inGame = game.bld.buildingsData.map(_ => _.name);
+    const inGame = [
+      ...game.religion.religionUpgrades.map(_ => _.name),
+      ...game.religion.zigguratUpgrades.map(_ => _.name),
+      ...game.religion.transcendenceUpgrades.map(_ => _.name),
+    ];
 
     const missingInSettings = difference(inGame, inSettings);
     const redundantInSettings = difference(inSettings, inGame);
@@ -133,6 +137,10 @@ export class ReligionSettings extends SettingTrigger {
       console.warn(...cl(`The religion building '${_}' is not tracked in Kitten Scientists!`));
     }
     for (const _ of redundantInSettings) {
+      if (_ === "unicornPasture") {
+        continue;
+      }
+
       console.warn(...cl(`The religion building '${_}' is not a building in Kittens Game!`));
     }
   }

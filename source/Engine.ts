@@ -151,6 +151,13 @@ export class Engine {
 
   private readonly _activitySummary: ActivitySummary;
   private readonly _bulkManager: BulkPurchaseHelper;
+  /**
+   * Are we standing by for a game reset?
+   * When the TimeControlManager wants to initiate a reset, it will put the engine into stand-by.
+   * This will prevent all other automations from consuming any more resources, while we're counting
+   * down to the reset.
+   */
+  private _isInStandBy = false;
   private _timeoutMainLoop: number | undefined = undefined;
 
   constructor(host: KittenScientists, gameLanguage: Locale) {
@@ -370,6 +377,8 @@ export class Engine {
       return;
     }
 
+    this._isInStandBy = false;
+
     const loop = () => {
       const context: FrameContext = {
         entry: Date.now(),
@@ -425,11 +434,21 @@ export class Engine {
       return;
     }
 
+    this._isInStandBy = false;
+
     clearTimeout(this._timeoutMainLoop);
     this._timeoutMainLoop = undefined;
 
     if (msg) {
       this._host.engine.imessage("status.ks.disable");
+    }
+  }
+
+  standBy(msg = true): void {
+    this._isInStandBy = true;
+
+    if (msg) {
+      this._host.engine.iactivity("status.ks.standby");
     }
   }
 
@@ -443,105 +462,108 @@ export class Engine {
 
     // The order in which these actions are performed is probably
     // semi-intentional and should be preserved or improved.
-    let [, duration] = await measureAsync(() => this.scienceManager.tick(context));
-    context.measurements.scienceManager = duration;
+    let duration: number;
+    if (!this._isInStandBy) {
+      [, duration] = await measureAsync(() => this.scienceManager.tick(context));
+      context.measurements.scienceManager = duration;
 
-    [, duration] = measure(() => {
-      this.bonfireManager.tick(context);
-    });
-    context.measurements.bonfireManager = duration;
+      [, duration] = measure(() => {
+        this.bonfireManager.tick(context);
+      });
+      context.measurements.bonfireManager = duration;
 
-    [, duration] = measure(() => {
-      this.spaceManager.tick(context);
-    });
-    context.measurements.spaceManager = duration;
+      [, duration] = measure(() => {
+        this.spaceManager.tick(context);
+      });
+      context.measurements.spaceManager = duration;
 
-    [, duration] = await measureAsync(() => this.workshopManager.tick(context));
-    context.measurements.workshopManager = duration;
+      [, duration] = await measureAsync(() => this.workshopManager.tick(context));
+      context.measurements.workshopManager = duration;
 
-    [, duration] = measure(() => {
-      this.tradeManager.tick(context);
-    });
-    context.measurements.tradeManager = duration;
+      [, duration] = measure(() => {
+        this.tradeManager.tick(context);
+      });
+      context.measurements.tradeManager = duration;
 
-    [, duration] = await measureAsync(() => this.religionManager.tick(context));
-    context.measurements.religionManager = duration;
+      [, duration] = await measureAsync(() => this.religionManager.tick(context));
+      context.measurements.religionManager = duration;
 
-    [, duration] = measure(() => {
-      this.timeManager.tick(context);
-    });
-    context.measurements.timeManager = duration;
+      [, duration] = measure(() => {
+        this.timeManager.tick(context);
+      });
+      context.measurements.timeManager = duration;
 
-    [, duration] = measure(() => {
-      this.villageManager.tick(context);
-    });
-    context.measurements.villageManager = duration;
+      [, duration] = measure(() => {
+        this.villageManager.tick(context);
+      });
+      context.measurements.villageManager = duration;
 
-    [, duration] = await measureAsync(() => this.timeControlManager.tick(context));
-    context.measurements.timeControlManager = duration;
+      [, duration] = await measureAsync(() => this.timeControlManager.tick(context));
+      context.measurements.timeControlManager = duration;
 
-    [, duration] = measure(() => {
-      if (0 < context.purchaseOrders.length) {
-        const [{ builds, metaData }, durationInitialize] = measure(() => {
-          const builds = { ...context.purchaseOrders[0].builds };
-          let metaData = { ...context.purchaseOrders[0].metaData };
-          for (const order of context.purchaseOrders) {
-            for (const [name, entry] of objectEntries(order.builds)) {
-              builds[name] = {
-                ...entry,
-                baseBuilding: entry.baseBuilding,
-                builder: order.builder,
-                building: entry.building,
-                sectionTrigger: order.sectionTrigger,
-                stage: entry.stage,
-                variant: entry.variant,
-              };
+      [, duration] = measure(() => {
+        if (0 < context.purchaseOrders.length) {
+          const [{ builds, metaData }, durationInitialize] = measure(() => {
+            const builds = { ...context.purchaseOrders[0].builds };
+            let metaData = { ...context.purchaseOrders[0].metaData };
+            for (const order of context.purchaseOrders) {
+              for (const [name, entry] of objectEntries(order.builds)) {
+                builds[name] = {
+                  ...entry,
+                  baseBuilding: entry.baseBuilding,
+                  builder: order.builder,
+                  building: entry.building,
+                  sectionTrigger: order.sectionTrigger,
+                  stage: entry.stage,
+                  variant: entry.variant,
+                };
+              }
+              metaData = { ...metaData, ...order.metaData };
             }
-            metaData = { ...metaData, ...order.metaData };
-          }
 
-          this._bulkManager.resetPriceCache();
-          return { builds, metaData };
-        });
+            this._bulkManager.resetPriceCache();
+            return { builds, metaData };
+          });
 
-        const [buildList, durationCalculate] = measure(() => {
-          const buildList = this._bulkManager.bulk(
-            builds as Partial<
-              Record<
-                AllBuildings,
-                {
-                  baseBuilding?: Building;
-                  builder: (build: ConcreteBuild) => void;
-                  building?: AllBuildings | BonfireItem;
-                  enabled: boolean;
-                  label?: string;
-                  max: number;
-                  sectionTrigger: number;
-                  stage?: number;
-                  trigger: number;
-                  variant?: TimeItemVariant | UnicornItemVariant;
-                }
-              >
-            >,
-            metaData,
-          );
-          return buildList;
-        });
+          const [buildList, durationCalculate] = measure(() => {
+            const buildList = this._bulkManager.bulk(
+              builds as Partial<
+                Record<
+                  AllBuildings,
+                  {
+                    baseBuilding?: Building;
+                    builder: (build: ConcreteBuild) => void;
+                    building?: AllBuildings | BonfireItem;
+                    enabled: boolean;
+                    label?: string;
+                    max: number;
+                    sectionTrigger: number;
+                    stage?: number;
+                    trigger: number;
+                    variant?: TimeItemVariant | UnicornItemVariant;
+                  }
+                >
+              >,
+              metaData,
+            );
+            return buildList;
+          });
 
-        const [, durationExecute] = measure(() => {
-          for (const build of buildList.filter(item => 0 < item.count)) {
-            build.builder(build);
-            context.requestGameUiRefresh = true;
-          }
-        });
-        context.priceCacheHits = this._bulkManager.cacheHits;
-        context.priceCacheMisses = this._bulkManager.cacheMisses;
-        context.measurements.bulkPurchaseInit = durationInitialize;
-        context.measurements.bulkPurchaseCalc = durationCalculate;
-        context.measurements.bulkPurchaseExec = durationExecute;
-      }
-    });
-    context.measurements.bulkPurchaseTotal = duration;
+          const [, durationExecute] = measure(() => {
+            for (const build of buildList.filter(item => 0 < item.count)) {
+              build.builder(build);
+              context.requestGameUiRefresh = true;
+            }
+          });
+          context.priceCacheHits = this._bulkManager.cacheHits;
+          context.priceCacheMisses = this._bulkManager.cacheMisses;
+          context.measurements.bulkPurchaseInit = durationInitialize;
+          context.measurements.bulkPurchaseCalc = durationCalculate;
+          context.measurements.bulkPurchaseExec = durationExecute;
+        }
+      });
+      context.measurements.bulkPurchaseTotal = duration;
+    }
 
     [, duration] = measure(() => {
       if (context.requestGameUiRefresh && !document.hidden) {
