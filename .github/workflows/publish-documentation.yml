@@ -16,7 +16,7 @@ concurrency: documentation
 
 env:
   # renovate: datasource=node-version depName=node versioning=node
-  NODE_VERSION: "24.12.0"
+  NODE_VERSION: "24.13.0"
   # renovate: datasource=python-version depName=python versioning=python
   PYTHON_VERSION: "3.14.2"
 
