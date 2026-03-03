@@ -36,7 +36,7 @@
     "@oliversalzburg/js-utils": "0.5.0",
     "@types/dojo": "1.9.48",
     "@types/jquery": "4.0.0",
-    "@types/node": "24.10.15",
+    "@types/node": "24.11.0",
     "@types/semver": "7.7.1",
     "@types/web": "0.0.338",
     "cheerio": "1.2.0",
