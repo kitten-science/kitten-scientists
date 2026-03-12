@@ -37,7 +37,7 @@ jobs:
 
       - name: Generate release information
         id: release-info
-        uses: kitten-science/action-release-info@e04d6b0d853a1fba0c5ef027dc58c4cb3c385813 # v1.2.0
+        uses: kitten-science/action-release-info@241edab1494ef757a36e6f41b344275f61ba7bbe # v1.3.0
         with:
           filename: release-info.json
           repo-token: ${{ secrets.GITHUB_TOKEN }}
