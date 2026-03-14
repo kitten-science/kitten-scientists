@@ -1,38 +1,38 @@
 .setting {
-  border-bottom: 1px solid transparent;
+	border-bottom: 1px solid transparent;
 
-  transition: border-bottom 0.3s;
+	transition: border-bottom 0.3s;
 
-  .checkbox {
-    margin: 1px 5px 2px 2px;
-  }
+	.checkbox {
+		margin: 1px 5px 2px 2px;
+	}
 
-  .panelContent {
-    border-left: 1px dashed grey;
-    padding-left: 16px;
-    margin-left: 8px;
-    margin-top: 1px;
-    opacity: 0.5;
+	.panelContent {
+		border-left: 1px dashed grey;
+		padding-left: 16px;
+		margin-left: 8px;
+		margin-top: 1px;
+		opacity: 0.5;
 
-    &.hidden {
-      display: none;
-    }
-  }
+		&.hidden {
+			display: none;
+		}
+	}
 
-  &.checked > .panelContent {
-    opacity: 1;
-  }
+	&.checked > .panelContent {
+		opacity: 1;
+	}
 
-  &.expanded {
-    margin-bottom: 10px;
-  }
+	&.expanded {
+		margin-bottom: 10px;
+	}
 
-  &:not(.expanded):hover {
-    border-bottom: 1px dashed rgba(160, 160, 160, 0.2);
-  }
+	&:not(.expanded):hover {
+		border-bottom: 1px dashed rgba(160, 160, 160, 0.2);
+	}
 
-  &.readonly {
-    cursor: default;
-    pointer-events: none;
-  }
+	&.readonly {
+		cursor: default;
+		pointer-events: none;
+	}
 }

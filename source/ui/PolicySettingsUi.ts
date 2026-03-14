@@ -12,68 +12,74 @@ import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
-  constructor(
-    parent: UiComponent,
-    settings: PolicySettings,
-    locale: SettingOptions<SupportedLocale>,
-    sectionSetting: ScienceSettings,
-  ) {
-    const label = parent.host.engine.i18n("ui.upgrade.policies");
-    super(
-      parent,
-      settings,
-      new SettingListItem(parent, settings, label, {
-        onCheck: (_isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: (_isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
-        },
-      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
-      {
-        onRefreshRequest: () => {
-          this.expando.ineffective =
-            sectionSetting.enabled &&
-            settings.enabled &&
-            !Object.values(settings.policies).some(policy => policy.enabled);
-        },
-      },
-    );
+	constructor(
+		parent: UiComponent,
+		settings: PolicySettings,
+		locale: SettingOptions<SupportedLocale>,
+		sectionSetting: ScienceSettings,
+	) {
+		const label = parent.host.engine.i18n("ui.upgrade.policies");
+		super(
+			parent,
+			settings,
+			new SettingListItem(parent, settings, label, {
+				onCheck: (_isBatchProcess?: boolean) => {
+					parent.host.engine.imessage("status.auto.enable", [label]);
+				},
+				onUnCheck: (_isBatchProcess?: boolean) => {
+					parent.host.engine.imessage("status.auto.disable", [label]);
+				},
+			}).addChildrenHead([
+				new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+			]),
+			{
+				onRefreshRequest: () => {
+					this.expando.ineffective =
+						sectionSetting.enabled &&
+						settings.enabled &&
+						!Object.values(settings.policies).some((policy) => policy.enabled);
+				},
+			},
+		);
 
-    const policies = this.host.game.science.policies.filter(
-      policy => !isNil(this.setting.policies[policy.name]),
-    );
+		const policies = this.host.game.science.policies.filter(
+			(policy) => !isNil(this.setting.policies[policy.name]),
+		);
 
-    const items = [];
-    let lastLabel = policies[0].label;
-    for (const policy of policies.sort((a, b) => a.label.localeCompare(b.label, locale.selected))) {
-      const option = this.setting.policies[policy.name];
+		const items = [];
+		let lastLabel = policies[0].label;
+		for (const policy of policies.sort((a, b) =>
+			a.label.localeCompare(b.label, locale.selected),
+		)) {
+			const option = this.setting.policies[policy.name];
 
-      const element = new SettingListItem(this, option, policy.label, {
-        onCheck: () => {
-          this.host.engine.imessage("status.sub.enable", [policy.label]);
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [policy.label]);
-        },
-        title: [
-          policy.description,
-          ...policy.prices.map(price => `- ${price.name}: ${price.val}`),
-          ...objectEntries(policy.effects ?? {}).map(([effect, value]) => `+ ${effect}: ${value}`),
-        ].join("\n"),
-      });
+			const element = new SettingListItem(this, option, policy.label, {
+				onCheck: () => {
+					this.host.engine.imessage("status.sub.enable", [policy.label]);
+				},
+				onUnCheck: () => {
+					this.host.engine.imessage("status.sub.disable", [policy.label]);
+				},
+				title: [
+					policy.description,
+					...policy.prices.map((price) => `- ${price.name}: ${price.val}`),
+					...objectEntries(policy.effects ?? {}).map(
+						([effect, value]) => `+ ${effect}: ${value}`,
+					),
+				].join("\n"),
+			});
 
-      if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
-        if (lastLabel[0] !== policy.label[0]) {
-          element.element.addClass(stylesLabelListItem.splitter);
-        }
-      }
+			if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+				if (lastLabel[0] !== policy.label[0]) {
+					element.element.addClass(stylesLabelListItem.splitter);
+				}
+			}
 
-      items.push(element);
+			items.push(element);
 
-      lastLabel = policy.label;
-    }
+			lastLabel = policy.label;
+		}
 
-    this.addChildContent(new SettingsList(this).addChildren(items));
-  }
+		this.addChildContent(new SettingsList(this).addChildren(items));
+	}
 }

@@ -7,60 +7,62 @@ import { Policies, type Policy } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class PolicySetting extends Setting {
-  readonly #policy: Policy;
+	readonly #policy: Policy;
 
-  get policy() {
-    return this.#policy;
-  }
+	get policy() {
+		return this.#policy;
+	}
 
-  constructor(policy: Policy, enabled = false) {
-    super(enabled);
-    this.#policy = policy;
-  }
+	constructor(policy: Policy, enabled = false) {
+		super(enabled);
+		this.#policy = policy;
+	}
 }
 
 export type PolicyPolicySettings = Record<Policy, PolicySetting>;
 
 export class PolicySettings extends Setting {
-  policies: PolicyPolicySettings;
+	policies: PolicyPolicySettings;
 
-  constructor(enabled = false) {
-    super(enabled);
-    this.policies = this.initPolicies();
-  }
+	constructor(enabled = false) {
+		super(enabled);
+		this.policies = this.initPolicies();
+	}
 
-  private initPolicies(): PolicyPolicySettings {
-    const items = {} as PolicyPolicySettings;
-    for (const item of Policies) {
-      items[item] = new PolicySetting(item);
-    }
-    return items;
-  }
+	private initPolicies(): PolicyPolicySettings {
+		const items = {} as PolicyPolicySettings;
+		for (const item of Policies) {
+			items[item] = new PolicySetting(item);
+		}
+		return items;
+	}
 
-  static validateGame(game: GamePage, settings: PolicySettings) {
-    const inSettings = Object.keys(settings.policies);
-    const inGame = game.science.policies.map(policy => policy.name);
+	static validateGame(game: GamePage, settings: PolicySettings) {
+		const inSettings = Object.keys(settings.policies);
+		const inGame = game.science.policies.map((policy) => policy.name);
 
-    const missingInSettings = difference(inGame, inSettings);
-    const redundantInSettings = difference(inSettings, inGame);
+		const missingInSettings = difference(inGame, inSettings);
+		const redundantInSettings = difference(inSettings, inGame);
 
-    for (const _ of missingInSettings) {
-      console.warn(...cl(`The policy '${_}' is not tracked in Kitten Scientists!`));
-    }
-    for (const _ of redundantInSettings) {
-      console.warn(...cl(`The policy '${_}' is not a policy in Kittens Game!`));
-    }
-  }
+		for (const _ of missingInSettings) {
+			console.warn(
+				...cl(`The policy '${_}' is not tracked in Kitten Scientists!`),
+			);
+		}
+		for (const _ of redundantInSettings) {
+			console.warn(...cl(`The policy '${_}' is not a policy in Kittens Game!`));
+		}
+	}
 
-  load(settings: Maybe<Partial<PolicySettings>>) {
-    if (isNil(settings)) {
-      return;
-    }
+	load(settings: Maybe<Partial<PolicySettings>>) {
+		if (isNil(settings)) {
+			return;
+		}
 
-    super.load(settings);
+		super.load(settings);
 
-    consumeEntriesPedantic(this.policies, settings.policies, (policy, item) => {
-      policy.enabled = item?.enabled ?? policy.enabled;
-    });
-  }
+		consumeEntriesPedantic(this.policies, settings.policies, (policy, item) => {
+			policy.enabled = item?.enabled ?? policy.enabled;
+		});
+	}
 }

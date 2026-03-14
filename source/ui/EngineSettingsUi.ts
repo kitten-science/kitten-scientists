@@ -7,23 +7,23 @@ import { SettingListItem } from "./components/SettingListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class EngineSettingsUi extends SettingListItem {
-  readonly expando: ExpandoButton;
+	readonly expando: ExpandoButton;
 
-  constructor(parent: UiComponent, settings: EngineSettings) {
-    const label = ucfirst(parent.host.engine.i18n("ui.engine"));
-    super(parent, settings, label, {
-      onCheck: () => {
-        parent.host.engine.start(true);
-      },
-      onUnCheck: () => {
-        parent.host.engine.stop(true);
-      },
-    });
+	constructor(parent: UiComponent, settings: EngineSettings) {
+		const label = ucfirst(parent.host.engine.i18n("ui.engine"));
+		super(parent, settings, label, {
+			onCheck: () => {
+				parent.host.engine.start(true);
+			},
+			onUnCheck: () => {
+				parent.host.engine.stop(true);
+			},
+		});
 
-    this.expando = new ExpandoButton(this);
-    this.addChildrenHead([
-      new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
-      this.expando,
-    ]);
-  }
+		this.expando = new ExpandoButton(this);
+		this.addChildrenHead([
+			new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+			this.expando,
+		]);
+	}
 }

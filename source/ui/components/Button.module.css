@@ -1,123 +1,124 @@
 @keyframes hail-rainbow {
-  0%,
-  100% {
-    color: red;
-    text-shadow: 0 0 10px red;
-  }
-  33% {
-    color: #888;
-    text-shadow: 0 0 10px yellow;
-  }
-  66% {
-    color: white;
-    text-shadow: 0 0 10px black;
-  }
+	0%,
+	100% {
+		color: red;
+		text-shadow: 0 0 10px red;
+	}
+	33% {
+		color: #888;
+		text-shadow: 0 0 10px yellow;
+	}
+	66% {
+		color: white;
+		text-shadow: 0 0 10px black;
+	}
 }
 
 .iconButton {
-  cursor: pointer;
-  display: block;
-  padding-right: 3px;
-  line-height: 0;
-  opacity: 0.8;
-  transition: 0.3s;
+	cursor: pointer;
+	display: block;
+	padding-right: 3px;
+	line-height: 0;
+	opacity: 0.8;
+	transition: 0.3s;
 
-  &:hover {
-    opacity: 1;
-  }
+	&:hover {
+		opacity: 1;
+	}
 
-  &.inactive {
-    opacity: 0.4;
+	&.inactive {
+		opacity: 0.4;
 
-    &:hover {
-      opacity: 0.6;
-    }
-  }
+		&:hover {
+			opacity: 0.6;
+		}
+	}
 
-  &.ineffective {
-    color: red;
-    animation: hail-rainbow 5s linear infinite;
-  }
+	&.ineffective {
+		color: red;
+		animation: hail-rainbow 5s linear infinite;
+	}
 }
 
 .button {
-  align-items: end;
-  cursor: pointer;
-  display: flex;
-  opacity: 0.8;
-  transition: 0.3s;
+	align-items: end;
+	cursor: pointer;
+	display: flex;
+	opacity: 0.8;
+	transition: 0.3s;
 
-  &:hover {
-    opacity: 1;
-  }
+	&:hover {
+		opacity: 1;
+	}
 
-  &.inactive {
-    opacity: 0.4;
+	&.inactive {
+		opacity: 0.4;
 
-    &:hover {
-      opacity: 0.6;
-    }
-  }
+		&:hover {
+			opacity: 0.6;
+		}
+	}
 
-  &.ineffective {
-    color: red;
-    animation: hail-rainbow 5s linear infinite;
-  }
+	&.ineffective {
+		color: red;
+		animation: hail-rainbow 5s linear infinite;
+	}
 
-  &.readonly {
-    cursor: default;
-    pointer-events: none;
-  }
+	&.readonly {
+		cursor: default;
+		pointer-events: none;
+	}
 
-  .buttonIcon {
-    margin: 0 2px 0 0;
-    vertical-align: sub;
-  }
+	.buttonIcon {
+		margin: 0 2px 0 0;
+		vertical-align: sub;
+	}
 
-  &.alignRight {
-    justify-content: end;
-  }
+	&.alignRight {
+		justify-content: end;
+	}
 
-  &.large {
-    padding: 5px 10px;
-  }
+	&.large {
+		padding: 5px 10px;
+	}
 
-  &.bordered {
-    border: 1px solid rgba(180, 180, 180, 0.2);
+	&.bordered {
+		border: 1px solid rgba(180, 180, 180, 0.2);
 
-    &:not(.large) {
-      padding: 0 2px;
-    }
+		&:not(.large) {
+			padding: 0 2px;
+		}
 
-    &:hover {
-      border: 1px solid rgba(180, 180, 180, 1);
-    }
-  }
+		&:hover {
+			border: 1px solid rgba(180, 180, 180, 1);
+		}
+	}
 
-  &.headAction {
-    min-width: 50px;
-  }
-  &.lastHeadAction {
-    padding-right: 20px;
-  }
+	&.headAction {
+		min-width: 50px;
+	}
+	&.lastHeadAction {
+		padding-right: 20px;
+	}
 
-  &.consumeButton {
-    border: 1px solid transparent;
-  }
-  &.stockButton {
-    border: 1px solid transparent;
-  }
+	&.consumeButton {
+		border: 1px solid transparent;
+	}
+	&.stockButton {
+		border: 1px solid transparent;
+	}
 }
 
 .button:not(.bordered) + .button:not(.bordered):before {
-  content: "";
-  display: inline-block;
-  height: 1em;
-  border-left: 1px solid transparent;
+	content: "";
+	display: inline-block;
+	height: 1em;
+	border-left: 1px solid transparent;
 }
-.button:not(.bordered):not(.inactive).alignRight + .button:not(.bordered):not(.inactive):before {
-  content: "";
-  display: inline-block;
-  height: 1em;
-  border-left: 1px solid rgba(180, 180, 180, 0.4);
+.button:not(.bordered):not(.inactive).alignRight
+	+ .button:not(.bordered):not(.inactive):before {
+	content: "";
+	display: inline-block;
+	height: 1em;
+	border-left: 1px solid rgba(180, 180, 180, 0.4);
 }

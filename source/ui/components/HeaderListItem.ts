@@ -5,27 +5,27 @@ import { UiComponent } from "./UiComponent.js";
 export type HeaderListItemOptions = ThisType<HeaderListItem> & ListItemOptions;
 
 export class HeaderListItem extends UiComponent implements ListItem {
-  declare readonly options: ListItemOptions;
+	declare readonly options: ListItemOptions;
 
-  get elementLabel() {
-    return this.element;
-  }
+	get elementLabel() {
+		return this.element;
+	}
 
-  /**
-   * Construct an informational text item.
-   * This is purely for cosmetic/informational value in the UI.
-   *
-   * @param host A reference to the host.
-   * @param text The text to appear on the header element.
-   * @param options Options for the header.
-   */
-  constructor(parent: UiComponent, text: string, options?: ListItemOptions) {
-    super(parent, { ...options });
+	/**
+	 * Construct an informational text item.
+	 * This is purely for cosmetic/informational value in the UI.
+	 *
+	 * @param host A reference to the host.
+	 * @param text The text to appear on the header element.
+	 * @param options Options for the header.
+	 */
+	constructor(parent: UiComponent, text: string, options?: ListItemOptions) {
+		super(parent, { ...options });
 
-    this.element = $("<li/>", { text }).addClass(styles.header);
-  }
+		this.element = $("<li/>", { text }).addClass(styles.header);
+	}
 
-  toString(): string {
-    return `[${HeaderListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
-  }
+	toString(): string {
+		return `[${HeaderListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
+	}
 }

@@ -12,66 +12,68 @@ import { SettingsList } from "./components/SettingsList.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetUpgradesSettingsUi extends IconSettingsPanel<ResetUpgradeSettings> {
-  constructor(
-    parent: UiComponent,
-    settings: ResetUpgradeSettings,
-    locale: SettingOptions<SupportedLocale>,
-  ) {
-    const label = parent.host.engine.i18n("ui.upgrades");
-    super(parent, label, settings, {
-      icon: Icons.Workshop,
-    });
+	constructor(
+		parent: UiComponent,
+		settings: ResetUpgradeSettings,
+		locale: SettingOptions<SupportedLocale>,
+	) {
+		const label = parent.host.engine.i18n("ui.upgrades");
+		super(parent, label, settings, {
+			icon: Icons.Workshop,
+		});
 
-    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
+		this.addChildrenHead([
+			new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+		]);
 
-    const upgrades = this.host.game.workshop.upgrades.filter(
-      upgrade => !isNil(this.setting.upgrades[upgrade.name]),
-    );
+		const upgrades = this.host.game.workshop.upgrades.filter(
+			(upgrade) => !isNil(this.setting.upgrades[upgrade.name]),
+		);
 
-    const items = [];
-    let lastLabel = upgrades[0].label;
-    let lastElement: SettingListItem | undefined;
-    for (const upgrade of upgrades.sort((a, b) =>
-      a.label.localeCompare(b.label, locale.selected),
-    )) {
-      const option = this.setting.upgrades[upgrade.name];
+		const items = [];
+		let lastLabel = upgrades[0].label;
+		let lastElement: SettingListItem | undefined;
+		for (const upgrade of upgrades.sort((a, b) =>
+			a.label.localeCompare(b.label, locale.selected),
+		)) {
+			const option = this.setting.upgrades[upgrade.name];
 
-      const element = this._getResetOption(this, option, upgrade.label);
+			const element = this._getResetOption(this, option, upgrade.label);
 
-      if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
-        if (lastLabel[0] !== upgrade.label[0]) {
-          if (!isNil(lastElement)) {
-            lastElement.element.addClass(stylesDelimiter.delimiter);
-          }
-          element.element.addClass(stylesLabelListItem.splitter);
-        }
-      }
+			if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+				if (lastLabel[0] !== upgrade.label[0]) {
+					if (!isNil(lastElement)) {
+						lastElement.element.addClass(stylesDelimiter.delimiter);
+					}
+					element.element.addClass(stylesLabelListItem.splitter);
+				}
+			}
 
-      lastElement = element;
-      items.push(element);
+			lastElement = element;
+			items.push(element);
 
-      lastLabel = upgrade.label;
-    }
+			lastLabel = upgrade.label;
+		}
 
-    this.addChildContent(new SettingsList(this).addChildren(items));
-  }
+		this.addChildContent(new SettingsList(this).addChildren(items));
+	}
 
-  private _getResetOption(
-    parent: UiComponent,
-    option: Setting,
-    label: string,
-    delimiter = false,
-    upgradeIndicator = false,
-  ) {
-    return new SettingListItem(parent, option, label, {
-      delimiter,
-      onCheck: () => {
-        parent.host.engine.imessage("status.reset.check.enable", [label]);
-      },
-      onUnCheck: () => {
-        parent.host.engine.imessage("status.reset.check.disable", [label]);
-      },
-      upgradeIndicator,
-    });
-  }
+	private _getResetOption(
+		parent: UiComponent,
+		option: Setting,
+		label: string,
+		delimiter = false,
+		upgradeIndicator = false,
+	) {
+		return new SettingListItem(parent, option, label, {
+			delimiter,
+			onCheck: () => {
+				parent.host.engine.imessage("status.reset.check.enable", [label]);
+			},
+			onUnCheck: () => {
+				parent.host.engine.imessage("status.reset.check.disable", [label]);
+			},
+			upgradeIndicator,
+		});
+	}
 }

@@ -19,88 +19,114 @@ import { TextButton } from "./components/TextButton.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class InternalsUi extends SettingsPanel<EngineSettings> {
-  constructor(
-    parent: UiComponent,
-    settings: EngineSettings,
-    locale: SettingOptions<SupportedLocale>,
-  ) {
-    console.debug(...cl(`Constructing ${InternalsUi.name}`));
+	constructor(
+		parent: UiComponent,
+		settings: EngineSettings,
+		locale: SettingOptions<SupportedLocale>,
+	) {
+		console.debug(...cl(`Constructing ${InternalsUi.name}`));
 
-    super(
-      parent,
-      settings,
-      new LabelListItem(parent, parent.host.engine.i18n("ui.internals"), {
-        classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
-        icon: Icons.Settings,
-      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
-    );
+		super(
+			parent,
+			settings,
+			new LabelListItem(parent, parent.host.engine.i18n("ui.internals"), {
+				classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
+				icon: Icons.Settings,
+			}).addChildrenHead([
+				new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+			]),
+		);
 
-    this.addChildrenContent([
-      new SettingsList(parent, {
-        hasDisableAll: false,
-        hasEnableAll: false,
-      }).addChildren([
-        new ButtonListItem(
-          parent,
-          new TextButton(
-            parent,
-            parent.host.engine.i18n("ui.internals.interval", [settings.interval]),
-            {
-              onClick: async () => {
-                const value = await Dialog.prompt(
-                  parent,
-                  parent.host.engine.i18n("ui.internals.interval.prompt"),
-                  parent.host.engine.i18n("ui.internals.interval.promptTitle", [
-                    parent.host.renderAbsolute(settings.interval, locale.selected),
-                  ]),
-                  parent.host.renderAbsolute(settings.interval),
-                  parent.host.engine.i18n("ui.internals.interval.promptExplainer"),
-                );
+		this.addChildrenContent([
+			new SettingsList(parent, {
+				hasDisableAll: false,
+				hasEnableAll: false,
+			}).addChildren([
+				new ButtonListItem(
+					parent,
+					new TextButton(
+						parent,
+						parent.host.engine.i18n("ui.internals.interval", [
+							settings.interval,
+						]),
+						{
+							onClick: async () => {
+								const value = await Dialog.prompt(
+									parent,
+									parent.host.engine.i18n("ui.internals.interval.prompt"),
+									parent.host.engine.i18n("ui.internals.interval.promptTitle", [
+										parent.host.renderAbsolute(
+											settings.interval,
+											locale.selected,
+										),
+									]),
+									parent.host.renderAbsolute(settings.interval),
+									parent.host.engine.i18n(
+										"ui.internals.interval.promptExplainer",
+									),
+								);
 
-                if (value === undefined || value === "" || value.startsWith("-")) {
-                  return;
-                }
+								if (
+									value === undefined ||
+									value === "" ||
+									value.startsWith("-")
+								) {
+									return;
+								}
 
-                if (value === "0") {
-                  settings.enabled = false;
-                }
+								if (value === "0") {
+									settings.enabled = false;
+								}
 
-                settings.interval = parent.host.parseAbsolute(value) ?? settings.interval;
-              },
-              onRefresh() {
-                this.element.text(
-                  parent.host.engine.i18n("ui.internals.interval", [settings.interval]),
-                );
-              },
-            },
-          ),
-        ),
-        new Delimiter(parent),
+								settings.interval =
+									parent.host.parseAbsolute(value) ?? settings.interval;
+							},
+							onRefresh() {
+								this.element.text(
+									parent.host.engine.i18n("ui.internals.interval", [
+										settings.interval,
+									]),
+								);
+							},
+						},
+					),
+				),
+				new Delimiter(parent),
 
-        new SettingListItem(parent, settings.ksColumn, parent.host.engine.i18n("ui.ksColumn"), {
-          onCheck: () => {
-            parent.host.rebuildUi();
-          },
-          onUnCheck: () => {
-            parent.host.rebuildUi();
-          },
-        }),
-        new SettingListItem(
-          parent,
-          settings.highlighStock,
-          parent.host.engine.i18n("ui.highlightStock"),
-        ),
-        new Delimiter(parent),
+				new SettingListItem(
+					parent,
+					settings.ksColumn,
+					parent.host.engine.i18n("ui.ksColumn"),
+					{
+						onCheck: () => {
+							parent.host.rebuildUi();
+						},
+						onUnCheck: () => {
+							parent.host.rebuildUi();
+						},
+					},
+				),
+				new SettingListItem(
+					parent,
+					settings.highlighStock,
+					parent.host.engine.i18n("ui.highlightStock"),
+				),
+				new Delimiter(parent),
 
-        new OptionsListItem(parent, parent.host.engine.i18n("ui.language"), settings.locale, {
-          onCheck: () => {
-            parent.host.rebuildUi();
-          },
-        }),
-        new Delimiter(parent),
+				new OptionsListItem(
+					parent,
+					parent.host.engine.i18n("ui.language"),
+					settings.locale,
+					{
+						onCheck: () => {
+							parent.host.rebuildUi();
+						},
+					},
+				),
+				new Delimiter(parent),
 
-        new LabelListItem(parent, `Kitten Scientists ${ksVersion("v")}`),
-      ]),
-    ]);
-  }
+				new LabelListItem(parent, `Kitten Scientists ${ksVersion("v")}`),
+			]),
+		]);
+	}
 }

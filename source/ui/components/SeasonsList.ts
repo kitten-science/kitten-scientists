@@ -7,67 +7,91 @@ import type { UiComponent } from "./UiComponent.js";
 export type SettingWithSeasons = Record<Season, Setting>;
 
 export type SeasonsListOptions = ThisType<SeasonsList> &
-  SettingsListOptions & {
-    /**
-     * Called when a season is checked.
-     *
-     * @param label The label on the season element.
-     * @param setting The setting associated with the season.
-     */
-    readonly onCheckSeason?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
+	SettingsListOptions & {
+		/**
+		 * Called when a season is checked.
+		 *
+		 * @param label The label on the season element.
+		 * @param setting The setting associated with the season.
+		 */
+		readonly onCheckSeason?: (
+			label: string,
+			setting: Setting,
+			isBatchProcess?: boolean,
+		) => void;
 
-    /**
-     * Called when a season is unchecked.
-     *
-     * @param label The label on the season element.
-     * @param setting The setting associated with the season.
-     */
-    readonly onUnCheckSeason?: (label: string, setting: Setting, isBatchProcess?: boolean) => void;
-  };
+		/**
+		 * Called when a season is unchecked.
+		 *
+		 * @param label The label on the season element.
+		 * @param setting The setting associated with the season.
+		 */
+		readonly onUnCheckSeason?: (
+			label: string,
+			setting: Setting,
+			isBatchProcess?: boolean,
+		) => void;
+	};
 
 /**
  * A list of 4 settings correlating to the 4 seasons.
  */
 export class SeasonsList extends SettingsList {
-  declare readonly options: SeasonsListOptions;
-  readonly setting: SettingWithSeasons;
+	declare readonly options: SeasonsListOptions;
+	readonly setting: SettingWithSeasons;
 
-  readonly spring: SettingListItem;
-  readonly summer: SettingListItem;
-  readonly autumn: SettingListItem;
-  readonly winter: SettingListItem;
+	readonly spring: SettingListItem;
+	readonly summer: SettingListItem;
+	readonly autumn: SettingListItem;
+	readonly winter: SettingListItem;
 
-  /**
-   * Constructs a `SeasonsList`.
-   *
-   * @param host A reference to the host.
-   * @param setting The settings that correlate to this list.
-   * @param options Options for this list
-   */
-  constructor(parent: UiComponent, setting: SettingWithSeasons, options?: SeasonsListOptions) {
-    super(parent, options);
-    this.setting = setting;
+	/**
+	 * Constructs a `SeasonsList`.
+	 *
+	 * @param host A reference to the host.
+	 * @param setting The settings that correlate to this list.
+	 * @param options Options for this list
+	 */
+	constructor(
+		parent: UiComponent,
+		setting: SettingWithSeasons,
+		options?: SeasonsListOptions,
+	) {
+		super(parent, options);
+		this.setting = setting;
 
-    const makeSeason = (label: string, setting: Setting) => {
-      return new SettingListItem(this, setting, label, {
-        onCheck: (isBatchProcess?: boolean) => {
-          options?.onCheckSeason?.(label, setting, isBatchProcess);
-        },
-        onUnCheck: (isBatchProcess?: boolean) => {
-          options?.onUnCheckSeason?.(label, setting, isBatchProcess);
-        },
-      });
-    };
+		const makeSeason = (label: string, setting: Setting) => {
+			return new SettingListItem(this, setting, label, {
+				onCheck: (isBatchProcess?: boolean) => {
+					options?.onCheckSeason?.(label, setting, isBatchProcess);
+				},
+				onUnCheck: (isBatchProcess?: boolean) => {
+					options?.onUnCheckSeason?.(label, setting, isBatchProcess);
+				},
+			});
+		};
 
-    this.spring = makeSeason(this.host.engine.i18n("$calendar.season.spring"), this.setting.spring);
-    this.summer = makeSeason(this.host.engine.i18n("$calendar.season.summer"), this.setting.summer);
-    this.autumn = makeSeason(this.host.engine.i18n("$calendar.season.autumn"), this.setting.autumn);
-    this.winter = makeSeason(this.host.engine.i18n("$calendar.season.winter"), this.setting.winter);
+		this.spring = makeSeason(
+			this.host.engine.i18n("$calendar.season.spring"),
+			this.setting.spring,
+		);
+		this.summer = makeSeason(
+			this.host.engine.i18n("$calendar.season.summer"),
+			this.setting.summer,
+		);
+		this.autumn = makeSeason(
+			this.host.engine.i18n("$calendar.season.autumn"),
+			this.setting.autumn,
+		);
+		this.winter = makeSeason(
+			this.host.engine.i18n("$calendar.season.winter"),
+			this.setting.winter,
+		);
 
-    this.addChildren([this.spring, this.summer, this.autumn, this.winter]);
-  }
+		this.addChildren([this.spring, this.summer, this.autumn, this.winter]);
+	}
 
-  toString(): string {
-    return `[${SeasonsList.name}#${this.componentId}]`;
-  }
+	toString(): string {
+		return `[${SeasonsList.name}#${this.componentId}]`;
+	}
 }

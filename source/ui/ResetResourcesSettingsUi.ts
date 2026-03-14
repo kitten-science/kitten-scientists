@@ -13,87 +13,99 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetResourcesSettingsUi extends IconSettingsPanel<ResetResourcesSettings> {
-  constructor(
-    parent: UiComponent,
-    settings: ResetResourcesSettings,
-    locale: SettingOptions<SupportedLocale>,
-  ) {
-    const label = parent.host.engine.i18n("ui.resources");
-    super(parent, label, settings, {
-      icon: Icons.Resources,
-      onRefreshRequest: () => {
-        this.expando.ineffective = Object.values(settings.resources).some(
-          _ => _.enabled && _.trigger === -1,
-        );
-      },
-    });
+	constructor(
+		parent: UiComponent,
+		settings: ResetResourcesSettings,
+		locale: SettingOptions<SupportedLocale>,
+	) {
+		const label = parent.host.engine.i18n("ui.resources");
+		super(parent, label, settings, {
+			icon: Icons.Resources,
+			onRefreshRequest: () => {
+				this.expando.ineffective = Object.values(settings.resources).some(
+					(_) => _.enabled && _.trigger === -1,
+				);
+			},
+		});
 
-    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
+		this.addChildrenHead([
+			new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+		]);
 
-    const resources = this.host.game.resPool.resources;
+		const resources = this.host.game.resPool.resources;
 
-    const items = [];
-    let lastLabel = resources[0].title;
-    for (const resource of [...resources].sort((a, b) =>
-      a.title.localeCompare(b.title, locale.selected),
-    )) {
-      const option = this.setting.resources[resource.name];
+		const items = [];
+		let lastLabel = resources[0].title;
+		for (const resource of [...resources].sort((a, b) =>
+			a.title.localeCompare(b.title, locale.selected),
+		)) {
+			const option = this.setting.resources[resource.name];
 
-      const element = new SettingTriggerListItem(this, option, locale, ucfirst(resource.title), {
-        onCheck: () => {
-          this.host.engine.imessage("status.sub.enable", [resource.title]);
-        },
-        onRefreshRequest: () => {
-          element.triggerButton.inactive = !option.enabled || option.trigger === 0;
-          element.triggerButton.ineffective = option.enabled && option.trigger === -1;
-        },
-        onSetTrigger: async () => {
-          const value = await Dialog.prompt(
-            this,
-            this.host.engine.i18n("ui.trigger.prompt.float"),
-            this.host.engine.i18n("ui.trigger.build.prompt", [
-              resource.title,
-              option.trigger !== -1
-                ? this.host.renderAbsolute(option.trigger, locale.selected)
-                : this.host.engine.i18n("ui.trigger.inactive"),
-            ]),
-            option.trigger !== -1 ? this.host.renderAbsolute(option.trigger) : "",
-            this.host.engine.i18n("ui.trigger.reset.promptExplainer"),
-          );
+			const element = new SettingTriggerListItem(
+				this,
+				option,
+				locale,
+				ucfirst(resource.title),
+				{
+					onCheck: () => {
+						this.host.engine.imessage("status.sub.enable", [resource.title]);
+					},
+					onRefreshRequest: () => {
+						element.triggerButton.inactive =
+							!option.enabled || option.trigger === 0;
+						element.triggerButton.ineffective =
+							option.enabled && option.trigger === -1;
+					},
+					onSetTrigger: async () => {
+						const value = await Dialog.prompt(
+							this,
+							this.host.engine.i18n("ui.trigger.prompt.float"),
+							this.host.engine.i18n("ui.trigger.build.prompt", [
+								resource.title,
+								option.trigger !== -1
+									? this.host.renderAbsolute(option.trigger, locale.selected)
+									: this.host.engine.i18n("ui.trigger.inactive"),
+							]),
+							option.trigger !== -1
+								? this.host.renderAbsolute(option.trigger)
+								: "",
+							this.host.engine.i18n("ui.trigger.reset.promptExplainer"),
+						);
 
-          if (value === undefined) {
-            return;
-          }
+						if (value === undefined) {
+							return;
+						}
 
-          if (value === "" || value.startsWith("-")) {
-            option.trigger = -1;
-            option.enabled = false;
-            return;
-          }
+						if (value === "" || value.startsWith("-")) {
+							option.trigger = -1;
+							option.enabled = false;
+							return;
+						}
 
-          if (value === "0") {
-            option.enabled = false;
-          }
+						if (value === "0") {
+							option.enabled = false;
+						}
 
-          option.trigger = parent.host.parseAbsolute(value) ?? option.trigger;
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [resource.title]);
-        },
-      });
-      element.triggerButton.element.addClass(stylesButton.lastHeadAction);
+						option.trigger = parent.host.parseAbsolute(value) ?? option.trigger;
+					},
+					onUnCheck: () => {
+						this.host.engine.imessage("status.sub.disable", [resource.title]);
+					},
+				},
+			);
+			element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
-      if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
-        if (lastLabel[0] !== resource.title[0]) {
-          element.element.addClass(stylesLabelListItem.splitter);
-        }
-      }
+			if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
+				if (lastLabel[0] !== resource.title[0]) {
+					element.element.addClass(stylesLabelListItem.splitter);
+				}
+			}
 
-      items.push(element);
+			items.push(element);
 
-      lastLabel = resource.title;
-    }
+			lastLabel = resource.title;
+		}
 
-    this.addChildContent(new SettingsList(this).addChildren(items));
-  }
+		this.addChildContent(new SettingsList(this).addChildren(items));
+	}
 }

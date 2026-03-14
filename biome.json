@@ -1,164 +1,52 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.6/schema.json",
-  "assist": {
-    "actions": {
-      "recommended": true,
-      "source": {
-        "organizeImports": "on",
-        "recommended": true,
-        "useSortedKeys": "on"
-      }
-    },
-    "enabled": true,
-    "includes": [
-      "@types/**",
-      "contrib/**",
-      "devcontainer/*.js",
-      "source/**",
-      "*.*",
-      "!package.json"
-    ]
-  },
-  "css": {
-    "assist": {
-      "enabled": true
-    },
-    "formatter": {
-      "enabled": true
-    },
-    "linter": {
-      "enabled": true
-    },
-    "parser": {
-      "cssModules": true
-    }
-  },
-  "files": {
-    "ignoreUnknown": false,
-    "includes": ["@types/**", "contrib/**", "devcontainer/*.js", "source/**", "*.*"]
-  },
-  "formatter": {
-    "attributePosition": "auto",
-    "bracketSpacing": true,
-    "enabled": true,
-    "formatWithErrors": false,
-    "includes": [
-      "@types/**",
-      "contrib/**",
-      "devcontainer/*.js",
-      "source/**",
-      "*.*",
-      "!package.json"
-    ],
-    "indentStyle": "space",
-    "indentWidth": 2,
-    "lineEnding": "lf",
-    "lineWidth": 100,
-    "useEditorconfig": true
-  },
-  "html": {
-    "formatter": {
-      "enabled": true
-    }
-  },
-  "javascript": {
-    "assist": {
-      "enabled": true
-    },
-    "formatter": {
-      "arrowParentheses": "asNeeded",
-      "attributePosition": "auto",
-      "bracketSameLine": false,
-      "bracketSpacing": true,
-      "enabled": true,
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "quoteStyle": "double",
-      "semicolons": "always",
-      "trailingCommas": "all"
-    },
-    "globals": ["exports"],
-    "linter": {
-      "enabled": true
-    }
-  },
-  "json": {
-    "assist": {
-      "enabled": true
-    },
-    "formatter": {
-      "enabled": true
-    },
-    "linter": {
-      "enabled": true
-    },
-    "parser": {
-      "allowComments": false,
-      "allowTrailingCommas": false
-    }
-  },
-  "linter": {
-    "enabled": true,
-    "includes": [
-      "@types/**",
-      "contrib/**",
-      "devcontainer/*.js",
-      "source/**",
-      "*.*",
-      "!package.json"
-    ],
-    "rules": {
-      "complexity": {
-        "noArguments": "error",
-        "noCommaOperator": "error",
-        "noImportantStyles": "off",
-        "useNumericLiterals": "error"
-      },
-      "correctness": {
-        "noUndeclaredDependencies": "error",
-        "noUnknownPseudoClass": "off",
-        "noUnusedImports": "error",
-        "useImportExtensions": "off"
-      },
-      "nursery": {
-        "noFloatingPromises": "error"
-      },
-      "recommended": true,
-      "style": {
-        "noInferrableTypes": "error",
-        "noNonNullAssertion": "error",
-        "noParameterAssign": "error",
-        "noUnusedTemplateLiteral": "error",
-        "noUselessElse": "error",
-        "useArrayLiterals": "off",
-        "useAsConstAssertion": "error",
-        "useConst": "error",
-        "useDefaultParameterLast": "error",
-        "useEnumInitializers": "error",
-        "useExponentiationOperator": "error",
-        "useExportType": "error",
-        "useImportType": "error",
-        "useLiteralEnumMembers": "error",
-        "useNodejsImportProtocol": "error",
-        "useNumberNamespace": "error",
-        "useSelfClosingElements": "error",
-        "useShorthandFunctionType": "error",
-        "useSingleVarDeclarator": "error",
-        "useTemplate": "error"
-      }
-    }
-  },
-  "overrides": [
-    {
-      "formatter": {
-        "indentWidth": 4
-      },
-      "includes": ["**/*.md"]
-    }
-  ],
-  "vcs": {
-    "clientKind": "git",
-    "enabled": true,
-    "useIgnoreFile": true
-  }
+	"$schema": "https://biomejs.dev/schemas/2.4.6/schema.json",
+	"assist": {
+		"actions": {
+			"recommended": true,
+			"source": {
+				"organizeImports": "on",
+				"recommended": true,
+				"useSortedKeys": "off"
+			}
+		},
+		"enabled": true
+	},
+	"css": {
+		"assist": {
+			"enabled": true
+		},
+		"formatter": {
+			"enabled": true
+		},
+		"linter": {
+			"enabled": true
+		},
+		"parser": {
+			"cssModules": true
+		}
+	},
+	"files": {
+		"ignoreUnknown": true,
+		"includes": ["**", "!.venv", "!docs", "!lib", "!node_modules", "!output"]
+	},
+	"json": {
+		"formatter": {
+			"enabled": true
+		}
+	},
+	"html": {
+		"formatter": {
+			"enabled": true
+		},
+		"linter": {
+			"enabled": false
+		}
+	},
+	"linter": {
+		"rules": {
+			"style": {
+				"useArrayLiterals": "off"
+			}
+		}
+	}
 }

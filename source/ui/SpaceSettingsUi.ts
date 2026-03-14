@@ -13,134 +13,162 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 import { MissionSettingsUi } from "./MissionSettingsUi.js";
 
-export class SpaceSettingsUi extends SettingsPanel<SpaceSettings, SettingTriggerListItem> {
-  private readonly _missionsUi: MissionSettingsUi;
+export class SpaceSettingsUi extends SettingsPanel<
+	SpaceSettings,
+	SettingTriggerListItem
+> {
+	private readonly _missionsUi: MissionSettingsUi;
 
-  constructor(
-    parent: UiComponent,
-    settings: SpaceSettings,
-    locale: SettingOptions<SupportedLocale>,
-  ) {
-    console.debug(...cl(`Constructing ${SpaceSettingsUi.name}`));
+	constructor(
+		parent: UiComponent,
+		settings: SpaceSettings,
+		locale: SettingOptions<SupportedLocale>,
+	) {
+		console.debug(...cl(`Constructing ${SpaceSettingsUi.name}`));
 
-    const label = parent.host.engine.i18n("ui.space");
-    super(
-      parent,
-      settings,
-      new SettingTriggerListItem(parent, settings, locale, label, {
-        onCheck: (_isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onRefreshTrigger() {
-          this.triggerButton.element[0].title = parent.host.engine.i18n("ui.trigger.section", [
-            settings.trigger < 0
-              ? parent.host.engine.i18n("ui.trigger.section.inactive")
-              : parent.host.renderPercentage(settings.trigger, locale.selected, true),
-          ]);
-        },
-        onSetTrigger: async () => {
-          const value = await Dialog.prompt(
-            parent,
-            parent.host.engine.i18n("ui.trigger.prompt.percentage"),
-            parent.host.engine.i18n("ui.trigger.section.prompt", [
-              label,
-              settings.trigger !== -1
-                ? parent.host.renderPercentage(settings.trigger, locale.selected, true)
-                : parent.host.engine.i18n("ui.infinity"),
-            ]),
-            settings.trigger !== -1 ? parent.host.renderPercentage(settings.trigger) : "",
-            parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
-          );
+		const label = parent.host.engine.i18n("ui.space");
+		super(
+			parent,
+			settings,
+			new SettingTriggerListItem(parent, settings, locale, label, {
+				onCheck: (_isBatchProcess?: boolean) => {
+					parent.host.engine.imessage("status.auto.enable", [label]);
+				},
+				onRefreshTrigger() {
+					this.triggerButton.element[0].title = parent.host.engine.i18n(
+						"ui.trigger.section",
+						[
+							settings.trigger < 0
+								? parent.host.engine.i18n("ui.trigger.section.inactive")
+								: parent.host.renderPercentage(
+										settings.trigger,
+										locale.selected,
+										true,
+									),
+						],
+					);
+				},
+				onSetTrigger: async () => {
+					const value = await Dialog.prompt(
+						parent,
+						parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+						parent.host.engine.i18n("ui.trigger.section.prompt", [
+							label,
+							settings.trigger !== -1
+								? parent.host.renderPercentage(
+										settings.trigger,
+										locale.selected,
+										true,
+									)
+								: parent.host.engine.i18n("ui.infinity"),
+						]),
+						settings.trigger !== -1
+							? parent.host.renderPercentage(settings.trigger)
+							: "",
+						parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
+					);
 
-          if (value === undefined) {
-            return;
-          }
+					if (value === undefined) {
+						return;
+					}
 
-          if (value === "" || value.startsWith("-")) {
-            settings.trigger = -1;
-            return;
-          }
+					if (value === "" || value.startsWith("-")) {
+						settings.trigger = -1;
+						return;
+					}
 
-          settings.trigger = parent.host.parsePercentage(value);
-        },
-        onUnCheck: (_isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
-        },
-        renderLabelTrigger: false,
-      }),
-      {
-        onRefreshRequest: () => {
-          this.settingItem.triggerButton.inactive = !settings.enabled || settings.trigger === -1;
-          this.settingItem.triggerButton.ineffective =
-            settings.enabled &&
-            settings.trigger < 0 &&
-            Object.values(settings.buildings).some(_ => _.enabled && 0 < _.max && _.trigger < 0);
+					settings.trigger = parent.host.parsePercentage(value);
+				},
+				onUnCheck: (_isBatchProcess?: boolean) => {
+					parent.host.engine.imessage("status.auto.disable", [label]);
+				},
+				renderLabelTrigger: false,
+			}),
+			{
+				onRefreshRequest: () => {
+					this.settingItem.triggerButton.inactive =
+						!settings.enabled || settings.trigger === -1;
+					this.settingItem.triggerButton.ineffective =
+						settings.enabled &&
+						settings.trigger < 0 &&
+						Object.values(settings.buildings).some(
+							(_) => _.enabled && 0 < _.max && _.trigger < 0,
+						);
 
-          this.expando.ineffective =
-            settings.enabled &&
-            (Object.values(settings.buildings).some(
-              _ => _.enabled && (0 === _.max || (_.trigger < 0 && settings.trigger < 0)),
-            ) ||
-              (!Object.values(settings.buildings).some(_ => _.enabled) &&
-                !settings.unlockMissions.enabled) ||
-              this._missionsUi.expando.ineffective);
-        },
-      },
-    );
+					this.expando.ineffective =
+						settings.enabled &&
+						(Object.values(settings.buildings).some(
+							(_) =>
+								_.enabled &&
+								(0 === _.max || (_.trigger < 0 && settings.trigger < 0)),
+						) ||
+							(!Object.values(settings.buildings).some((_) => _.enabled) &&
+								!settings.unlockMissions.enabled) ||
+							this._missionsUi.expando.ineffective);
+				},
+			},
+		);
 
-    this.addChildContent(
-      new SettingsList(this, {
-        onReset: () => {
-          this.setting.load({ buildings: new SpaceSettings().buildings });
-        },
-      }).addChildren(
-        this.host.game.space.planets
-          .filter(planet => 0 < planet.buildings.length)
-          .flatMap((planet, indexPlanet, arrayPlant) => [
-            new HeaderListItem(this, this.host.engine.labelForPlanet(planet.name)),
-            ...planet.buildings
-              .filter(item => !isNil(this.setting.buildings[item.name]))
-              .map((building, indexBuilding, arrayBuilding) =>
-                BuildSectionTools.getBuildOption(
-                  this,
-                  this.setting.buildings[building.name],
-                  locale,
-                  this.setting,
-                  building.label,
-                  label,
-                  {
-                    delimiter:
-                      indexPlanet < arrayPlant.length - 1 &&
-                      indexBuilding === arrayBuilding.length - 1,
-                    renderLabelTrigger: false,
-                    title: [
-                      building.description,
-                      ...(building.prices ?? []).map(price => `- ${price.name}: ${price.val}`),
-                      ...objectEntries(building.effects ?? {}).map(
-                        ([effect, value]) => `+ ${effect}: ${value}`,
-                      ),
-                      building.unlocked ? "is unlocked" : "still locked",
-                    ].join("\n"),
-                  },
-                ),
-              ),
-          ]),
-      ),
-    );
+		this.addChildContent(
+			new SettingsList(this, {
+				onReset: () => {
+					this.setting.load({ buildings: new SpaceSettings().buildings });
+				},
+			}).addChildren(
+				this.host.game.space.planets
+					.filter((planet) => 0 < planet.buildings.length)
+					.flatMap((planet, indexPlanet, arrayPlant) => [
+						new HeaderListItem(
+							this,
+							this.host.engine.labelForPlanet(planet.name),
+						),
+						...planet.buildings
+							.filter((item) => !isNil(this.setting.buildings[item.name]))
+							.map((building, indexBuilding, arrayBuilding) =>
+								BuildSectionTools.getBuildOption(
+									this,
+									this.setting.buildings[building.name],
+									locale,
+									this.setting,
+									building.label,
+									label,
+									{
+										delimiter:
+											indexPlanet < arrayPlant.length - 1 &&
+											indexBuilding === arrayBuilding.length - 1,
+										renderLabelTrigger: false,
+										title: [
+											building.description,
+											...(building.prices ?? []).map(
+												(price) => `- ${price.name}: ${price.val}`,
+											),
+											...objectEntries(building.effects ?? {}).map(
+												([effect, value]) => `+ ${effect}: ${value}`,
+											),
+											building.unlocked ? "is unlocked" : "still locked",
+										].join("\n"),
+									},
+								),
+							),
+					]),
+			),
+		);
 
-    const listAddition = new SettingsList(this, {
-      hasDisableAll: false,
-      hasEnableAll: false,
-    });
-    listAddition.addChild(new HeaderListItem(this, this.host.engine.i18n("ui.additional")));
+		const listAddition = new SettingsList(this, {
+			hasDisableAll: false,
+			hasEnableAll: false,
+		});
+		listAddition.addChild(
+			new HeaderListItem(this, this.host.engine.i18n("ui.additional")),
+		);
 
-    this._missionsUi = new MissionSettingsUi(
-      this,
-      this.setting.unlockMissions,
-      locale,
-      this.setting,
-    );
-    listAddition.addChild(this._missionsUi);
-    this.addChildContent(listAddition);
-  }
+		this._missionsUi = new MissionSettingsUi(
+			this,
+			this.setting.unlockMissions,
+			locale,
+			this.setting,
+		);
+		listAddition.addChild(this._missionsUi);
+		this.addChildContent(listAddition);
+	}
 }

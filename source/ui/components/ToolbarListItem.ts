@@ -4,22 +4,23 @@ import { ListItem, type ListItemOptions } from "./ListItem.js";
 import styles from "./ToolbarListItem.module.css";
 import type { UiComponent } from "./UiComponent.js";
 
-export type ToolbarListItemOptions = ThisType<ToolbarListItem> & ListItemOptions;
+export type ToolbarListItemOptions = ThisType<ToolbarListItem> &
+	ListItemOptions;
 
 export class ToolbarListItem extends ListItem {
-  declare readonly options: ToolbarListItemOptions;
+	declare readonly options: ToolbarListItemOptions;
 
-  constructor(parent: UiComponent, options?: ToolbarListItemOptions) {
-    super(parent, options);
+	constructor(parent: UiComponent, options?: ToolbarListItemOptions) {
+		super(parent, options);
 
-    this.element.addClass(styles.toolbar);
-  }
+		this.element.addClass(styles.toolbar);
+	}
 
-  toString(): string {
-    return `[${ToolbarListItem.name}#${this.componentId}]`;
-  }
+	toString(): string {
+		return `[${ToolbarListItem.name}#${this.componentId}]`;
+	}
 
-  override addChild(child: Button | IconButton): this {
-    return super.addChild(child);
-  }
+	override addChild(child: Button | IconButton): this {
+		return super.addChild(child);
+	}
 }

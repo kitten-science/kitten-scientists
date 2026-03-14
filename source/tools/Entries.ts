@@ -2,22 +2,22 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { cl } from "./Log.js";
 
 export const deepMergeLeft = (
-  a: Record<string, unknown>,
-  b: Record<string, unknown>,
+	a: Record<string, unknown>,
+	b: Record<string, unknown>,
 ): Record<string, unknown> => {
-  const subject: Record<string, unknown> = { ...a };
-  for (const [key, value] of Object.entries(b)) {
-    if (typeof value === "object") {
-      subject[key] = deepMergeLeft(
-        // @ts-expect-error This is just naughty business.
-        key in a ? a[key] : {},
-        b[key],
-      );
-      continue;
-    }
-    subject[key] = b[key] ?? a[key];
-  }
-  return subject;
+	const subject: Record<string, unknown> = { ...a };
+	for (const [key, value] of Object.entries(b)) {
+		if (typeof value === "object") {
+			subject[key] = deepMergeLeft(
+				// @ts-expect-error This is just naughty business.
+				key in a ? a[key] : {},
+				b[key],
+			);
+			continue;
+		}
+		subject[key] = b[key] ?? a[key];
+	}
+	return subject;
 };
 
 /**
@@ -28,9 +28,9 @@ export const deepMergeLeft = (
  * @returns An array of key-value tuples.
  */
 export function objectEntries<TKeys extends string, TValues>(
-  subject: Partial<Record<TKeys, TValues>>,
+	subject: Partial<Record<TKeys, TValues>>,
 ): Array<[TKeys, TValues]> {
-  return Object.entries(subject) as Array<[TKeys, TValues]>;
+	return Object.entries(subject) as Array<[TKeys, TValues]>;
 }
 
 /**
@@ -43,18 +43,18 @@ export function objectEntries<TKeys extends string, TValues>(
  * @returns The `subject` after processing.
  */
 export function consumeEntries<TKeys extends string, TValues>(
-  subject: Partial<Record<TKeys, TValues>>,
-  source: Partial<Record<TKeys, TValues>> | undefined,
-  consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown,
+	subject: Partial<Record<TKeys, TValues>>,
+	source: Partial<Record<TKeys, TValues>> | undefined,
+	consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown,
 ): Partial<Record<TKeys, TValues>> {
-  if (isNil(source)) {
-    return subject;
-  }
+	if (isNil(source)) {
+		return subject;
+	}
 
-  for (const [key, value] of objectEntries(subject)) {
-    consumer(value, source[key]);
-  }
-  return subject;
+	for (const [key, value] of objectEntries(subject)) {
+		consumer(value, source[key]);
+	}
+	return subject;
 }
 
 /**
@@ -71,32 +71,34 @@ export function consumeEntries<TKeys extends string, TValues>(
  * @returns The `subject` after processing.
  */
 export function consumeEntriesPedantic<TKeys extends string, TValues>(
-  subject: Partial<Record<TKeys, TValues>>,
-  source: Partial<Record<TKeys, TValues>> | undefined,
-  consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown,
+	subject: Partial<Record<TKeys, TValues>>,
+	source: Partial<Record<TKeys, TValues>> | undefined,
+	consumer: (subjectKey: TValues, sourceKey: TValues | undefined) => unknown,
 ): Partial<Record<TKeys, TValues>> {
-  if (isNil(source)) {
-    console.warn(...cl("No source data was provided."));
-    return subject;
-  }
+	if (isNil(source)) {
+		console.warn(...cl("No source data was provided."));
+		return subject;
+	}
 
-  for (const [key, value] of objectEntries(subject)) {
-    if (!(key in source)) {
-      console.info(...cl(`Entry '${key}' is missing in source. Using default value.`));
-    }
-    consumer(value, source[key]);
-  }
+	for (const [key, value] of objectEntries(subject)) {
+		if (!(key in source)) {
+			console.info(
+				...cl(`Entry '${key}' is missing in source. Using default value.`),
+			);
+		}
+		consumer(value, source[key]);
+	}
 
-  for (const [key] of objectEntries(source)) {
-    if (!(key in subject)) {
-      console.warn(
-        ...cl(
-          `Entry '${key}' was found in source, but it is not expected by the subject schema. This entry will be ignored.`,
-        ),
-      );
-    }
-  }
-  return subject;
+	for (const [key] of objectEntries(source)) {
+		if (!(key in subject)) {
+			console.warn(
+				...cl(
+					`Entry '${key}' was found in source, but it is not expected by the subject schema. This entry will be ignored.`,
+				),
+			);
+		}
+	}
+	return subject;
 }
 
 /**
@@ -104,21 +106,21 @@ export function consumeEntriesPedantic<TKeys extends string, TValues>(
  * returning cloned versions instead.
  */
 export class Unique<T> {
-  private _elem: T;
+	private _elem: T;
 
-  constructor(elem: T) {
-    this._elem = structuredClone(elem);
-  }
+	constructor(elem: T) {
+		this._elem = structuredClone(elem);
+	}
 
-  unwrap() {
-    return structuredClone(this._elem);
-  }
+	unwrap() {
+		return structuredClone(this._elem);
+	}
 
-  replace(elem: T) {
-    this._elem = structuredClone(elem);
-  }
+	replace(elem: T) {
+		this._elem = structuredClone(elem);
+	}
 
-  toJSON() {
-    return this.unwrap();
-  }
+	toJSON() {
+		return this.unwrap();
+	}
 }

@@ -1,109 +1,109 @@
 :global #ksColumn {
-  min-width: 250px;
-  max-width: 440px;
-  vertical-align: top;
-  padding-left: 8px;
-  top: 20px;
-  position: relative;
-  overflow-y: auto;
+	min-width: 250px;
+	max-width: 440px;
+	vertical-align: top;
+	padding-left: 8px;
+	top: 20px;
+	position: relative;
+	overflow-y: auto;
 }
 
 :global #crowdjet-expand-container {
-  position: fixed !important;
-  bottom: 10px !important;
-  right: -10px !important;
-  opacity: 0.5;
+	position: fixed;
+	bottom: 10px;
+	right: -10px;
+	opacity: 0.5;
 
-  &:hover {
-    opacity: 1;
-  }
+	&:hover {
+		opacity: 1;
+	}
 }
 
 :global #footerLinks {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  text-align: right;
-  line-height: 0;
-  right: -5px !important;
-  margin-bottom: 1em;
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	text-align: right;
+	line-height: 0;
+	right: -5px;
+	margin-bottom: 1em;
 
-  a {
-    line-height: 1;
-    padding-right: 10px;
-    opacity: 0.5;
-    transition: 0.3s;
-    text-decoration: none;
-    text-transform: lowercase;
+	a {
+		line-height: 1;
+		padding-right: 10px;
+		opacity: 0.5;
+		transition: 0.3s;
+		text-decoration: none;
+		text-transform: lowercase;
 
-    &:hover {
-      opacity: 1;
-    }
-  }
+		&:hover {
+			opacity: 1;
+		}
+	}
 }
 
 .spacer {
-  display: block;
-  margin-bottom: 100px;
+	display: block;
+	margin-bottom: 100px;
 }
 
 .ui {
-  margin: 5px 0 10px 0;
-  padding-right: 10px;
+	margin: 5px 0 10px 0;
+	padding-right: 10px;
 
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
 
-  /* Rules needed to enable stock warning. */
-  #toggle-list-resources .stockWarn *,
-  #toggle-reset-list-resources .stockWarn * {
-    color: #dd1e00;
-  }
+	/* Rules needed to enable stock warning. */
+	#toggle-list-resources .stockWarn *,
+	#toggle-reset-list-resources .stockWarn * {
+		color: #dd1e00;
+	}
 }
 
 .showActivity {
-  cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
+	cursor: pointer;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 /* Ensure the right column gets a scrollbar, when our content extends it too far down. */
 :global #game #rightColumn {
-  overflow-y: auto;
+	overflow-y: auto;
 
-  /* Fix some double-scrollbar issues in the right column, when KS is loaded. */
-  :global #rightTabLog {
-    overflow-y: visible;
+	/* Fix some double-scrollbar issues in the right column, when KS is loaded. */
+	:global #rightTabLog {
+		overflow-y: visible;
 
-    :global #logFiltersBlock {
-      /* We have the log filters in the settings UI now. No need for the additional button. */
-      display: none !important;
-    }
+		:global #logFiltersBlock {
+			/* We have the log filters in the settings UI now. No need for the additional button. */
+			display: none;
+		}
 
-    :global #gameLog {
-      height: auto;
-      min-height: auto;
-      overflow-y: visible;
+		:global #gameLog {
+			height: auto;
+			min-height: auto;
+			overflow-y: visible;
 
-      :global .type_ks-default {
-        color: rgb(151, 72, 224);
-      }
-      :global .type_ks-activity {
-        color: rgba(255, 172, 116, 0.75);
-      }
-      :global .type_ks-summary {
-        color: #009933;
-      }
-    }
-  }
+			:global .type_ks-default {
+				color: rgb(151, 72, 224);
+			}
+			:global .type_ks-activity {
+				color: rgba(255, 172, 116, 0.75);
+			}
+			:global .type_ks-summary {
+				color: #009933;
+			}
+		}
+	}
 }
 
 :global #game .res-row .res-cell.ks-stock-above {
-  color: green;
+	color: green;
 }
 :global #game .res-row .res-cell.ks-stock-below {
-  color: red;
+	color: red;
 }

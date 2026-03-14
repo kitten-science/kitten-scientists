@@ -6,15 +6,19 @@ import type { UiComponent } from "./UiComponent.js";
 export type ButtonListItemOptions = ThisType<ButtonListItem> & ListItemOptions;
 
 export class ButtonListItem extends ListItem {
-  declare readonly options: ButtonListItemOptions;
-  readonly button: TextButton;
+	declare readonly options: ButtonListItemOptions;
+	readonly button: TextButton;
 
-  constructor(parent: UiComponent, button: TextButton, options?: ButtonListItemOptions) {
-    super(parent, { ...options });
+	constructor(
+		parent: UiComponent,
+		button: TextButton,
+		options?: ButtonListItemOptions,
+	) {
+		super(parent, { ...options });
 
-    this.button = button;
+		this.button = button;
 
-    this.element.addClass(stylesListItem.head);
-    this.element.append(button.element);
-  }
+		this.element.addClass(stylesListItem.head);
+		this.element.append(button.element);
+	}
 }

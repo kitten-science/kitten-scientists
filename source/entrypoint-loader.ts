@@ -3,20 +3,20 @@ import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
 
 declare global {
-  const PAYLOAD: string;
+	const PAYLOAD: string;
 }
 
 (async () => {
-  const existingLoader = document.querySelector("#ks-loader-singleton");
-  if (!isNil(existingLoader)) {
-    throw new InvalidOperationError(
-      "The Kitten Science script loader was already created. This is unexpected.",
-    );
-  }
+	const existingLoader = document.querySelector("#ks-loader-singleton");
+	if (!isNil(existingLoader)) {
+		throw new InvalidOperationError(
+			"The Kitten Science script loader was already created. This is unexpected.",
+		);
+	}
 
-  const nodeScript = document.createElement("script");
-  nodeScript.id = "ks-loader-singleton";
-  nodeScript.textContent = PAYLOAD;
-  nodeScript.type = "application/javascript";
-  document.body.appendChild(nodeScript);
+	const nodeScript = document.createElement("script");
+	nodeScript.id = "ks-loader-singleton";
+	nodeScript.textContent = PAYLOAD;
+	nodeScript.type = "application/javascript";
+	document.body.appendChild(nodeScript);
 })().catch(redirectErrorsToConsole(console));

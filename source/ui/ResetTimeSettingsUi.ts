@@ -15,109 +15,122 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
-  constructor(
-    parent: UiComponent,
-    settings: ResetTimeSettings,
-    locale: SettingOptions<SupportedLocale>,
-  ) {
-    const label = parent.host.engine.i18n("ui.time");
-    super(parent, label, settings, {
-      icon: Icons.Time,
-      onRefreshRequest: () => {
-        this.expando.ineffective = Object.values(settings.buildings).some(
-          _ => _.enabled && _.trigger === -1,
-        );
-      },
-    });
+	constructor(
+		parent: UiComponent,
+		settings: ResetTimeSettings,
+		locale: SettingOptions<SupportedLocale>,
+	) {
+		const label = parent.host.engine.i18n("ui.time");
+		super(parent, label, settings, {
+			icon: Icons.Time,
+			onRefreshRequest: () => {
+				this.expando.ineffective = Object.values(settings.buildings).some(
+					(_) => _.enabled && _.trigger === -1,
+				);
+			},
+		});
 
-    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
+		this.addChildrenHead([
+			new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+		]);
 
-    this.addChildContent(
-      new SettingsList(this).addChildren([
-        new HeaderListItem(this, this.host.engine.i18n("$workshop.chronoforge.label")),
-        ...this.host.game.time.chronoforgeUpgrades
-          .filter(item => !isNil(this.setting.buildings[item.name]))
-          .map(building =>
-            this._getResetOption(
-              this,
-              this.setting.buildings[building.name],
-              locale,
-              settings,
-              building.label,
-              building.name === this.host.game.time.chronoforgeUpgrades.at(-1)?.name,
-            ),
-          ),
+		this.addChildContent(
+			new SettingsList(this).addChildren([
+				new HeaderListItem(
+					this,
+					this.host.engine.i18n("$workshop.chronoforge.label"),
+				),
+				...this.host.game.time.chronoforgeUpgrades
+					.filter((item) => !isNil(this.setting.buildings[item.name]))
+					.map((building) =>
+						this._getResetOption(
+							this,
+							this.setting.buildings[building.name],
+							locale,
+							settings,
+							building.label,
+							building.name ===
+								this.host.game.time.chronoforgeUpgrades.at(-1)?.name,
+						),
+					),
 
-        new HeaderListItem(this, this.host.engine.i18n("$science.voidSpace.label")),
-        ...this.host.game.time.voidspaceUpgrades
-          .filter(item => item.name in this.setting.buildings)
-          .map(building =>
-            this._getResetOption(
-              this,
-              this.setting.buildings[building.name as TimeItem],
-              locale,
-              settings,
-              building.label,
-            ),
-          ),
-      ]),
-    );
-  }
+				new HeaderListItem(
+					this,
+					this.host.engine.i18n("$science.voidSpace.label"),
+				),
+				...this.host.game.time.voidspaceUpgrades
+					.filter((item) => item.name in this.setting.buildings)
+					.map((building) =>
+						this._getResetOption(
+							this,
+							this.setting.buildings[building.name as TimeItem],
+							locale,
+							settings,
+							building.label,
+						),
+					),
+			]),
+		);
+	}
 
-  private _getResetOption(
-    parent: UiComponent,
-    option: SettingTrigger,
-    locale: SettingOptions<SupportedLocale>,
-    _sectionSetting: ResetTimeSettings,
-    label: string,
-    delimiter = false,
-    upgradeIndicator = false,
-  ) {
-    const element = new SettingTriggerListItem(parent, option, locale, label, {
-      delimiter,
-      onCheck: () => {
-        parent.host.engine.imessage("status.reset.check.enable", [label]);
-      },
-      onRefreshRequest: () => {
-        element.triggerButton.inactive = !option.enabled || option.trigger === 0;
-        element.triggerButton.ineffective = option.enabled && option.trigger === -1;
-      },
-      onSetTrigger: async () => {
-        const value = await Dialog.prompt(
-          parent,
-          parent.host.engine.i18n("ui.trigger.prompt.absolute"),
-          parent.host.engine.i18n("ui.trigger.build.prompt", [
-            label,
-            option.trigger !== -1
-              ? parent.host.renderAbsolute(option.trigger, locale.selected)
-              : parent.host.engine.i18n("ui.trigger.inactive"),
-          ]),
-          option.trigger !== -1 ? parent.host.renderAbsolute(option.trigger) : "",
-          parent.host.engine.i18n("ui.trigger.reset.promptExplainer"),
-        );
+	private _getResetOption(
+		parent: UiComponent,
+		option: SettingTrigger,
+		locale: SettingOptions<SupportedLocale>,
+		_sectionSetting: ResetTimeSettings,
+		label: string,
+		delimiter = false,
+		upgradeIndicator = false,
+	) {
+		const element = new SettingTriggerListItem(parent, option, locale, label, {
+			delimiter,
+			onCheck: () => {
+				parent.host.engine.imessage("status.reset.check.enable", [label]);
+			},
+			onRefreshRequest: () => {
+				element.triggerButton.inactive =
+					!option.enabled || option.trigger === 0;
+				element.triggerButton.ineffective =
+					option.enabled && option.trigger === -1;
+			},
+			onSetTrigger: async () => {
+				const value = await Dialog.prompt(
+					parent,
+					parent.host.engine.i18n("ui.trigger.prompt.absolute"),
+					parent.host.engine.i18n("ui.trigger.build.prompt", [
+						label,
+						option.trigger !== -1
+							? parent.host.renderAbsolute(option.trigger, locale.selected)
+							: parent.host.engine.i18n("ui.trigger.inactive"),
+					]),
+					option.trigger !== -1
+						? parent.host.renderAbsolute(option.trigger)
+						: "",
+					parent.host.engine.i18n("ui.trigger.reset.promptExplainer"),
+				);
 
-        if (value === undefined) {
-          return;
-        }
+				if (value === undefined) {
+					return;
+				}
 
-        if (value === "" || value.startsWith("-")) {
-          option.trigger = -1;
-          option.enabled = false;
-          return;
-        }
+				if (value === "" || value.startsWith("-")) {
+					option.trigger = -1;
+					option.enabled = false;
+					return;
+				}
 
-        if (value === "0") {
-          option.enabled = false;
-        }
+				if (value === "0") {
+					option.enabled = false;
+				}
 
-        option.trigger = Number(value);
-      },
-      onUnCheck: () => {
-        parent.host.engine.imessage("status.reset.check.disable", [label]);
-      },
-      upgradeIndicator,
-    });
-    element.triggerButton.element.addClass(stylesButton.lastHeadAction);
-    return element;
-  }
+				option.trigger = Number(value);
+			},
+			onUnCheck: () => {
+				parent.host.engine.imessage("status.reset.check.disable", [label]);
+			},
+			upgradeIndicator,
+		});
+		element.triggerButton.element.addClass(stylesButton.lastHeadAction);
+		return element;
+	}
 }

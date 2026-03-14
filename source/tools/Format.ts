@@ -4,7 +4,7 @@
  * @param input The string to convert.
  */
 export function ucfirst(input: string): string {
-  return input.charAt(0).toUpperCase() + input.slice(1);
+	return input.charAt(0).toUpperCase() + input.slice(1);
 }
 
 /**
@@ -13,9 +13,9 @@ export function ucfirst(input: string): string {
  * @param input The number to round.
  */
 export function roundToTwo(input: number): number {
-  return Math.round(input * 100) / 100;
+	return Math.round(input * 100) / 100;
 }
 
 export function negativeOneToInfinity(value: number): number {
-  return value === -1 ? Number.POSITIVE_INFINITY : value;
+	return value === -1 ? Number.POSITIVE_INFINITY : value;
 }

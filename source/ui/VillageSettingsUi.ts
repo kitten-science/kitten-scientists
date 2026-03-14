@@ -17,291 +17,316 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
-  private readonly _hunt: SettingTriggerListItem;
-  private readonly _festivals: SettingListItem;
-  private readonly _promoteKittens: SettingTriggerListItem;
-  private readonly _promoteLeader: SettingListItem;
-  private readonly _electLeader: SettingListItem;
+	private readonly _hunt: SettingTriggerListItem;
+	private readonly _festivals: SettingListItem;
+	private readonly _promoteKittens: SettingTriggerListItem;
+	private readonly _promoteLeader: SettingListItem;
+	private readonly _electLeader: SettingListItem;
 
-  constructor(
-    parent: UiComponent,
-    settings: VillageSettings,
-    locale: SettingOptions<SupportedLocale>,
-  ) {
-    console.debug(...cl(`Constructing ${VillageSettingsUi.name}`));
+	constructor(
+		parent: UiComponent,
+		settings: VillageSettings,
+		locale: SettingOptions<SupportedLocale>,
+	) {
+		console.debug(...cl(`Constructing ${VillageSettingsUi.name}`));
 
-    const label = parent.host.engine.i18n("ui.distribute");
-    super(
-      parent,
-      settings,
-      new SettingListItem(parent, settings, label, {
-        onCheck: (_isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.enable", [label]);
-        },
-        onUnCheck: (_isBatchProcess?: boolean) => {
-          parent.host.engine.imessage("status.auto.disable", [label]);
-        },
-      }).addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]),
-      {
-        onRefreshRequest: () => {
-          this.expando.ineffective =
-            settings.enabled && Object.values(settings.jobs).some(_ => _.enabled && 0 === _.max);
-        },
-      },
-    );
+		const label = parent.host.engine.i18n("ui.distribute");
+		super(
+			parent,
+			settings,
+			new SettingListItem(parent, settings, label, {
+				onCheck: (_isBatchProcess?: boolean) => {
+					parent.host.engine.imessage("status.auto.enable", [label]);
+				},
+				onUnCheck: (_isBatchProcess?: boolean) => {
+					parent.host.engine.imessage("status.auto.disable", [label]);
+				},
+			}).addChildrenHead([
+				new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+			]),
+			{
+				onRefreshRequest: () => {
+					this.expando.ineffective =
+						settings.enabled &&
+						Object.values(settings.jobs).some((_) => _.enabled && 0 === _.max);
+				},
+			},
+		);
 
-    const listJobs = new SettingsList(this).addChildren(
-      this.host.game.village.jobs
-        .filter(item => !isNil(this.setting.jobs[item.name]))
-        .map(job =>
-          this._getDistributeOption(
-            this.setting.jobs[job.name],
-            locale.selected,
-            settings,
-            job.title,
-          ),
-        ),
-    );
-    this.addChildContent(listJobs);
+		const listJobs = new SettingsList(this).addChildren(
+			this.host.game.village.jobs
+				.filter((item) => !isNil(this.setting.jobs[item.name]))
+				.map((job) =>
+					this._getDistributeOption(
+						this.setting.jobs[job.name],
+						locale.selected,
+						settings,
+						job.title,
+					),
+				),
+		);
+		this.addChildContent(listJobs);
 
-    const listAddition = new SettingsList(this, {
-      hasDisableAll: false,
-      hasEnableAll: false,
-    });
+		const listAddition = new SettingsList(this, {
+			hasDisableAll: false,
+			hasEnableAll: false,
+		});
 
-    listAddition.addChild(new HeaderListItem(this, this.host.engine.i18n("ui.additional")));
+		listAddition.addChild(
+			new HeaderListItem(this, this.host.engine.i18n("ui.additional")),
+		);
 
-    this._hunt = new SettingTriggerListItem(
-      this,
-      this.setting.hunt,
-      locale,
-      this.host.engine.i18n("option.hunt"),
-      {
-        onCheck: () => {
-          this.host.engine.imessage("status.sub.enable", [this.host.engine.i18n("option.hunt")]);
-        },
-        onRefreshRequest: () => {
-          this._hunt.triggerButton.inactive = !this.setting.hunt.enabled;
-          this._hunt.triggerButton.ineffective =
-            this.setting.enabled && this.setting.hunt.enabled && this.setting.hunt.trigger === -1;
-        },
-        onSetTrigger: async () => {
-          const value = await Dialog.prompt(
-            this,
-            this.host.engine.i18n("ui.trigger.prompt.percentage"),
-            this.host.engine.i18n("ui.trigger.hunt.prompt", [
-              this.host.renderPercentage(this.setting.hunt.trigger, locale.selected, true),
-            ]),
-            this.host.renderPercentage(this.setting.hunt.trigger),
-            this.host.engine.i18n("ui.trigger.hunt.promptExplainer"),
-          );
+		this._hunt = new SettingTriggerListItem(
+			this,
+			this.setting.hunt,
+			locale,
+			this.host.engine.i18n("option.hunt"),
+			{
+				onCheck: () => {
+					this.host.engine.imessage("status.sub.enable", [
+						this.host.engine.i18n("option.hunt"),
+					]);
+				},
+				onRefreshRequest: () => {
+					this._hunt.triggerButton.inactive = !this.setting.hunt.enabled;
+					this._hunt.triggerButton.ineffective =
+						this.setting.enabled &&
+						this.setting.hunt.enabled &&
+						this.setting.hunt.trigger === -1;
+				},
+				onSetTrigger: async () => {
+					const value = await Dialog.prompt(
+						this,
+						this.host.engine.i18n("ui.trigger.prompt.percentage"),
+						this.host.engine.i18n("ui.trigger.hunt.prompt", [
+							this.host.renderPercentage(
+								this.setting.hunt.trigger,
+								locale.selected,
+								true,
+							),
+						]),
+						this.host.renderPercentage(this.setting.hunt.trigger),
+						this.host.engine.i18n("ui.trigger.hunt.promptExplainer"),
+					);
 
-          if (value === undefined || value === "" || value.startsWith("-")) {
-            return;
-          }
+					if (value === undefined || value === "" || value.startsWith("-")) {
+						return;
+					}
 
-          this.setting.hunt.trigger = this.host.parsePercentage(value);
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [this.host.engine.i18n("option.hunt")]);
-        },
-      },
-    );
-    this._hunt.triggerButton.element.addClass(stylesButton.lastHeadAction);
-    listAddition.addChild(this._hunt);
+					this.setting.hunt.trigger = this.host.parsePercentage(value);
+				},
+				onUnCheck: () => {
+					this.host.engine.imessage("status.sub.disable", [
+						this.host.engine.i18n("option.hunt"),
+					]);
+				},
+			},
+		);
+		this._hunt.triggerButton.element.addClass(stylesButton.lastHeadAction);
+		listAddition.addChild(this._hunt);
 
-    this._festivals = new SettingListItem(
-      this,
-      this.setting.holdFestivals,
-      this.host.engine.i18n("option.festival"),
-      {
-        onCheck: () => {
-          this.host.engine.imessage("status.sub.enable", [
-            this.host.engine.i18n("option.festival"),
-          ]);
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [
-            this.host.engine.i18n("option.festival"),
-          ]);
-        },
-      },
-    );
-    listAddition.addChild(this._festivals);
+		this._festivals = new SettingListItem(
+			this,
+			this.setting.holdFestivals,
+			this.host.engine.i18n("option.festival"),
+			{
+				onCheck: () => {
+					this.host.engine.imessage("status.sub.enable", [
+						this.host.engine.i18n("option.festival"),
+					]);
+				},
+				onUnCheck: () => {
+					this.host.engine.imessage("status.sub.disable", [
+						this.host.engine.i18n("option.festival"),
+					]);
+				},
+			},
+		);
+		listAddition.addChild(this._festivals);
 
-    this._promoteKittens = new SettingTriggerListItem(
-      this,
-      this.setting.promoteKittens,
-      locale,
-      this.host.engine.i18n("option.promotekittens"),
-      {
-        onCheck: () => {
-          this.host.engine.imessage("status.sub.enable", [
-            this.host.engine.i18n("option.promotekittens"),
-          ]);
-        },
-        onRefresh: () => {
-          this._promoteKittens.triggerButton.inactive = !this.setting.promoteKittens.enabled;
-          this._promoteKittens.triggerButton.ineffective =
-            this.setting.enabled &&
-            this.setting.promoteKittens.enabled &&
-            this.setting.promoteKittens.trigger === -1;
-        },
-        onSetTrigger: async () => {
-          const value = await Dialog.prompt(
-            this,
-            this.host.engine.i18n("ui.trigger.promoteKittens.promptTitle"),
-            this.host.engine.i18n("ui.trigger.promoteKittens.prompt", [
-              this.host.renderPercentage(
-                this.setting.promoteKittens.trigger,
-                locale.selected,
-                true,
-              ),
-            ]),
-            this.host.renderPercentage(this.setting.promoteKittens.trigger),
-            this.host.engine.i18n("ui.trigger.promoteKittens.promptExplainer"),
-          );
+		this._promoteKittens = new SettingTriggerListItem(
+			this,
+			this.setting.promoteKittens,
+			locale,
+			this.host.engine.i18n("option.promotekittens"),
+			{
+				onCheck: () => {
+					this.host.engine.imessage("status.sub.enable", [
+						this.host.engine.i18n("option.promotekittens"),
+					]);
+				},
+				onRefresh: () => {
+					this._promoteKittens.triggerButton.inactive =
+						!this.setting.promoteKittens.enabled;
+					this._promoteKittens.triggerButton.ineffective =
+						this.setting.enabled &&
+						this.setting.promoteKittens.enabled &&
+						this.setting.promoteKittens.trigger === -1;
+				},
+				onSetTrigger: async () => {
+					const value = await Dialog.prompt(
+						this,
+						this.host.engine.i18n("ui.trigger.promoteKittens.promptTitle"),
+						this.host.engine.i18n("ui.trigger.promoteKittens.prompt", [
+							this.host.renderPercentage(
+								this.setting.promoteKittens.trigger,
+								locale.selected,
+								true,
+							),
+						]),
+						this.host.renderPercentage(this.setting.promoteKittens.trigger),
+						this.host.engine.i18n("ui.trigger.promoteKittens.promptExplainer"),
+					);
 
-          if (value === undefined || value === "" || value.startsWith("-")) {
-            return;
-          }
+					if (value === undefined || value === "" || value.startsWith("-")) {
+						return;
+					}
 
-          this.setting.promoteKittens.trigger = this.host.parsePercentage(value);
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [
-            this.host.engine.i18n("option.promotekittens"),
-          ]);
-        },
-      },
-    );
-    this._promoteKittens.triggerButton.element.addClass(stylesButton.lastHeadAction);
-    listAddition.addChild(this._promoteKittens);
+					this.setting.promoteKittens.trigger =
+						this.host.parsePercentage(value);
+				},
+				onUnCheck: () => {
+					this.host.engine.imessage("status.sub.disable", [
+						this.host.engine.i18n("option.promotekittens"),
+					]);
+				},
+			},
+		);
+		this._promoteKittens.triggerButton.element.addClass(
+			stylesButton.lastHeadAction,
+		);
+		listAddition.addChild(this._promoteKittens);
 
-    this._promoteLeader = new SettingListItem(
-      this,
-      this.setting.promoteLeader,
-      this.host.engine.i18n("option.promote"),
-      {
-        onCheck: () => {
-          this.host.engine.imessage("status.sub.enable", [this.host.engine.i18n("option.promote")]);
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [
-            this.host.engine.i18n("option.promote"),
-          ]);
-        },
-      },
-    );
-    listAddition.addChild(this._promoteLeader);
+		this._promoteLeader = new SettingListItem(
+			this,
+			this.setting.promoteLeader,
+			this.host.engine.i18n("option.promote"),
+			{
+				onCheck: () => {
+					this.host.engine.imessage("status.sub.enable", [
+						this.host.engine.i18n("option.promote"),
+					]);
+				},
+				onUnCheck: () => {
+					this.host.engine.imessage("status.sub.disable", [
+						this.host.engine.i18n("option.promote"),
+					]);
+				},
+			},
+		);
+		listAddition.addChild(this._promoteLeader);
 
-    for (const option of this.setting.electLeader.job.options) {
-      if (option.value === "any") {
-        option.label = this.host.engine.i18n("option.elect.job.any");
-      } else {
-        option.label = this.host.engine.i18n(`$village.job.${option.value}`);
-      }
-    }
+		for (const option of this.setting.electLeader.job.options) {
+			if (option.value === "any") {
+				option.label = this.host.engine.i18n("option.elect.job.any");
+			} else {
+				option.label = this.host.engine.i18n(`$village.job.${option.value}`);
+			}
+		}
 
-    for (const option of this.setting.electLeader.trait.options) {
-      option.label = this.host.engine.i18n(`$village.trait.${option.value}`);
-    }
+		for (const option of this.setting.electLeader.trait.options) {
+			option.label = this.host.engine.i18n(`$village.trait.${option.value}`);
+		}
 
-    this._electLeader = new SettingListItem(
-      this,
-      this.setting.electLeader,
-      this.host.engine.i18n("option.elect"),
-      {
-        onCheck: () => {
-          this.host.engine.imessage("status.sub.enable", [this.host.engine.i18n("option.elect")]);
-        },
-        onUnCheck: () => {
-          this.host.engine.imessage("status.sub.disable", [this.host.engine.i18n("option.elect")]);
-        },
-      },
-    ).addChildren([
-      new OptionsListItem(
-        this,
-        this.host.engine.i18n("option.elect.job"),
-        this.setting.electLeader.job,
-      ),
-      new OptionsListItem(
-        this,
-        this.host.engine.i18n("option.elect.trait"),
-        this.setting.electLeader.trait,
-      ),
-    ]);
-    listAddition.addChild(this._electLeader);
+		this._electLeader = new SettingListItem(
+			this,
+			this.setting.electLeader,
+			this.host.engine.i18n("option.elect"),
+			{
+				onCheck: () => {
+					this.host.engine.imessage("status.sub.enable", [
+						this.host.engine.i18n("option.elect"),
+					]);
+				},
+				onUnCheck: () => {
+					this.host.engine.imessage("status.sub.disable", [
+						this.host.engine.i18n("option.elect"),
+					]);
+				},
+			},
+		).addChildren([
+			new OptionsListItem(
+				this,
+				this.host.engine.i18n("option.elect.job"),
+				this.setting.electLeader.job,
+			),
+			new OptionsListItem(
+				this,
+				this.host.engine.i18n("option.elect.trait"),
+				this.setting.electLeader.trait,
+			),
+		]);
+		listAddition.addChild(this._electLeader);
 
-    this.addChildContent(listAddition);
-  }
+		this.addChildContent(listAddition);
+	}
 
-  private _getDistributeOption(
-    option: SettingMax,
-    locale: SupportedLocale,
-    sectionSetting: VillageSettings,
-    label: string,
-    delimiter = false,
-  ) {
-    const onSetMax = async () => {
-      const value = await Dialog.prompt(
-        this,
-        this.host.engine.i18n("ui.max.distribute.prompt", [label]),
-        this.host.engine.i18n("ui.max.distribute.promptTitle", [
-          label,
-          this.host.renderAbsolute(option.max, locale),
-        ]),
-        this.host.renderAbsolute(option.max),
-        this.host.engine.i18n("ui.max.distribute.promptExplainer"),
-      );
+	private _getDistributeOption(
+		option: SettingMax,
+		locale: SupportedLocale,
+		sectionSetting: VillageSettings,
+		label: string,
+		delimiter = false,
+	) {
+		const onSetMax = async () => {
+			const value = await Dialog.prompt(
+				this,
+				this.host.engine.i18n("ui.max.distribute.prompt", [label]),
+				this.host.engine.i18n("ui.max.distribute.promptTitle", [
+					label,
+					this.host.renderAbsolute(option.max, locale),
+				]),
+				this.host.renderAbsolute(option.max),
+				this.host.engine.i18n("ui.max.distribute.promptExplainer"),
+			);
 
-      if (value === undefined) {
-        return;
-      }
+			if (value === undefined) {
+				return;
+			}
 
-      if (value === "" || value.startsWith("-")) {
-        option.max = -1;
-        return;
-      }
+			if (value === "" || value.startsWith("-")) {
+				option.max = -1;
+				return;
+			}
 
-      if (value === "0") {
-        option.enabled = false;
-      }
+			if (value === "0") {
+				option.enabled = false;
+			}
 
-      option.max = this.host.parseAbsolute(value) ?? option.max;
-    };
+			option.max = this.host.parseAbsolute(value) ?? option.max;
+		};
 
-    const element = new SettingMaxListItem(this, option, label, {
-      delimiter,
-      onCheck: (isBatchProcess?: boolean) => {
-        this.host.engine.imessage("status.sub.enable", [label]);
-        if (option.max === 0 && !isBatchProcess) {
-          return onSetMax();
-        }
-      },
-      onRefresh: () => {
-        element.maxButton.inactive = !option.enabled || option.max === -1;
-        element.maxButton.ineffective =
-          sectionSetting.enabled && option.enabled && option.max === 0;
-      },
-      onRefreshMax: () => {
-        element.maxButton.updateLabel(this.host.renderAbsolute(option.max));
-        element.maxButton.element[0].title =
-          option.max < 0
-            ? this.host.engine.i18n("ui.max.distribute.titleInfinite", [label])
-            : option.max === 0
-              ? this.host.engine.i18n("ui.max.distribute.titleZero", [label])
-              : this.host.engine.i18n("ui.max.distribute.title", [
-                  this.host.renderAbsolute(option.max),
-                  label,
-                ]);
-      },
-      onSetMax,
-      onUnCheck: () => {
-        this.host.engine.imessage("status.sub.disable", [label]);
-      },
-    });
-    element.maxButton.element.addClass(stylesButton.lastHeadAction);
-    return element;
-  }
+		const element = new SettingMaxListItem(this, option, label, {
+			delimiter,
+			onCheck: (isBatchProcess?: boolean) => {
+				this.host.engine.imessage("status.sub.enable", [label]);
+				if (option.max === 0 && !isBatchProcess) {
+					return onSetMax();
+				}
+			},
+			onRefresh: () => {
+				element.maxButton.inactive = !option.enabled || option.max === -1;
+				element.maxButton.ineffective =
+					sectionSetting.enabled && option.enabled && option.max === 0;
+			},
+			onRefreshMax: () => {
+				element.maxButton.updateLabel(this.host.renderAbsolute(option.max));
+				element.maxButton.element[0].title =
+					option.max < 0
+						? this.host.engine.i18n("ui.max.distribute.titleInfinite", [label])
+						: option.max === 0
+							? this.host.engine.i18n("ui.max.distribute.titleZero", [label])
+							: this.host.engine.i18n("ui.max.distribute.title", [
+									this.host.renderAbsolute(option.max),
+									label,
+								]);
+			},
+			onSetMax,
+			onUnCheck: () => {
+				this.host.engine.imessage("status.sub.disable", [label]);
+			},
+		});
+		element.maxButton.element.addClass(stylesButton.lastHeadAction);
+		return element;
+	}
 }

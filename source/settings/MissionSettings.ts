@@ -7,60 +7,70 @@ import { type Mission, Missions } from "../types/index.js";
 import { Setting } from "./Settings.js";
 
 export class MissionSetting extends Setting {
-  readonly #mission: Mission;
+	readonly #mission: Mission;
 
-  get mission() {
-    return this.#mission;
-  }
+	get mission() {
+		return this.#mission;
+	}
 
-  constructor(mission: Mission, enabled = false) {
-    super(enabled);
-    this.#mission = mission;
-  }
+	constructor(mission: Mission, enabled = false) {
+		super(enabled);
+		this.#mission = mission;
+	}
 }
 
 export type MissionMissionSettings = Record<Mission, MissionSetting>;
 
 export class MissionSettings extends Setting {
-  missions: MissionMissionSettings;
+	missions: MissionMissionSettings;
 
-  constructor(enabled = false) {
-    super(enabled);
-    this.missions = this.initMissions();
-  }
+	constructor(enabled = false) {
+		super(enabled);
+		this.missions = this.initMissions();
+	}
 
-  private initMissions(): MissionMissionSettings {
-    const items = {} as MissionMissionSettings;
-    for (const item of Missions) {
-      items[item] = new MissionSetting(item);
-    }
-    return items;
-  }
+	private initMissions(): MissionMissionSettings {
+		const items = {} as MissionMissionSettings;
+		for (const item of Missions) {
+			items[item] = new MissionSetting(item);
+		}
+		return items;
+	}
 
-  static validateGame(game: GamePage, settings: MissionSettings) {
-    const inSettings = Object.keys(settings.missions);
-    const inGame = game.space.programs.map(program => program.name);
+	static validateGame(game: GamePage, settings: MissionSettings) {
+		const inSettings = Object.keys(settings.missions);
+		const inGame = game.space.programs.map((program) => program.name);
 
-    const missingInSettings = difference(inGame, inSettings);
-    const redundantInSettings = difference(inSettings, inGame);
+		const missingInSettings = difference(inGame, inSettings);
+		const redundantInSettings = difference(inSettings, inGame);
 
-    for (const _ of missingInSettings) {
-      console.warn(...cl(`The space mission '${_}' is not tracked in Kitten Scientists!`));
-    }
-    for (const _ of redundantInSettings) {
-      console.warn(...cl(`The space mission '${_}' is not a space mission in Kittens Game!`));
-    }
-  }
+		for (const _ of missingInSettings) {
+			console.warn(
+				...cl(`The space mission '${_}' is not tracked in Kitten Scientists!`),
+			);
+		}
+		for (const _ of redundantInSettings) {
+			console.warn(
+				...cl(
+					`The space mission '${_}' is not a space mission in Kittens Game!`,
+				),
+			);
+		}
+	}
 
-  load(settings: Maybe<Partial<MissionSettings>>) {
-    if (isNil(settings)) {
-      return;
-    }
+	load(settings: Maybe<Partial<MissionSettings>>) {
+		if (isNil(settings)) {
+			return;
+		}
 
-    super.load(settings);
+		super.load(settings);
 
-    consumeEntriesPedantic(this.missions, settings.missions, (mission, item) => {
-      mission.enabled = item?.enabled ?? mission.enabled;
-    });
-  }
+		consumeEntriesPedantic(
+			this.missions,
+			settings.missions,
+			(mission, item) => {
+				mission.enabled = item?.enabled ?? mission.enabled;
+			},
+		);
+	}
 }

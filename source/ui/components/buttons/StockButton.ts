@@ -9,68 +9,72 @@ import type { UiComponent } from "../UiComponent.js";
 export type StockButtonOptions = ThisType<StockButton> & ButtonOptions;
 
 export class StockButton extends Button {
-  declare readonly options: StockButtonOptions;
-  readonly setting: ResourcesSettingsItem;
-  readonly resourceName: string;
+	declare readonly options: StockButtonOptions;
+	readonly setting: ResourcesSettingsItem;
+	readonly resourceName: string;
 
-  constructor(
-    parent: UiComponent,
-    setting: ResourcesSettingsItem,
-    locale: SettingOptions<SupportedLocale>,
-    resourceName: string,
-    options: Omit<StockButtonOptions, "onClick">,
-  ) {
-    super(parent, "", null, {
-      ...options,
-      onClick: async () => {
-        const value = await Dialog.prompt(
-          parent,
-          parent.host.engine.i18n("resources.stock.prompt"),
-          parent.host.engine.i18n("resources.stock.promptTitle", [
-            resourceName,
-            parent.host.renderAbsolute(setting.stock, locale.selected),
-          ]),
-          parent.host.renderAbsolute(setting.stock),
-          parent.host.engine.i18n("resources.stock.promptExplainer"),
-        );
-        if (value === undefined) {
-          return;
-        }
+	constructor(
+		parent: UiComponent,
+		setting: ResourcesSettingsItem,
+		locale: SettingOptions<SupportedLocale>,
+		resourceName: string,
+		options: Omit<StockButtonOptions, "onClick">,
+	) {
+		super(parent, "", null, {
+			...options,
+			onClick: async () => {
+				const value = await Dialog.prompt(
+					parent,
+					parent.host.engine.i18n("resources.stock.prompt"),
+					parent.host.engine.i18n("resources.stock.promptTitle", [
+						resourceName,
+						parent.host.renderAbsolute(setting.stock, locale.selected),
+					]),
+					parent.host.renderAbsolute(setting.stock),
+					parent.host.engine.i18n("resources.stock.promptExplainer"),
+				);
+				if (value === undefined) {
+					return;
+				}
 
-        if (value === "" || value.startsWith("-")) {
-          setting.stock = -1;
-          return;
-        }
+				if (value === "" || value.startsWith("-")) {
+					setting.stock = -1;
+					return;
+				}
 
-        if (value === "0") {
-          setting.enabled = false;
-        }
+				if (value === "0") {
+					setting.enabled = false;
+				}
 
-        setting.stock = parent.host.parseAbsolute(value) ?? setting.stock;
-      },
-      onRefresh: () => {
-        const stockValue = this.host.renderAbsolute(this.setting.stock);
-        const title =
-          this.setting.stock < 0
-            ? this.host.engine.i18n("resources.stock.titleInfinite", [this.resourceName])
-            : this.setting.stock === 0
-              ? this.host.engine.i18n("resources.stock.titleZero", [this.resourceName])
-              : this.host.engine.i18n("resources.stock.title", [
-                  this.host.renderAbsolute(this.setting.stock),
-                  this.resourceName,
-                ]);
-        this.updateTitle(title);
-        this.updateLabel(stockValue);
-      },
-    });
+				setting.stock = parent.host.parseAbsolute(value) ?? setting.stock;
+			},
+			onRefresh: () => {
+				const stockValue = this.host.renderAbsolute(this.setting.stock);
+				const title =
+					this.setting.stock < 0
+						? this.host.engine.i18n("resources.stock.titleInfinite", [
+								this.resourceName,
+							])
+						: this.setting.stock === 0
+							? this.host.engine.i18n("resources.stock.titleZero", [
+									this.resourceName,
+								])
+							: this.host.engine.i18n("resources.stock.title", [
+									this.host.renderAbsolute(this.setting.stock),
+									this.resourceName,
+								]);
+				this.updateTitle(title);
+				this.updateLabel(stockValue);
+			},
+		});
 
-    this.element.addClass(stylesButton.stockButton);
+		this.element.addClass(stylesButton.stockButton);
 
-    this.resourceName = resourceName;
-    this.setting = setting;
-  }
+		this.resourceName = resourceName;
+		this.setting = setting;
+	}
 
-  toString(): string {
-    return `[${StockButton.name}#${this.componentId}]`;
-  }
+	toString(): string {
+		return `[${StockButton.name}#${this.componentId}]`;
+	}
 }

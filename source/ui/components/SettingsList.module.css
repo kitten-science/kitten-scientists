@@ -1,16 +1,16 @@
 .listContainer {
-  margin-bottom: 4px;
+	margin-bottom: 4px;
 }
 
 .itemsList {
-  user-select: none;
+	user-select: none;
 }
 
 .list ~ .listTools {
-  border-top: 1px dotted rgba(128, 128, 128, 0.3);
-  margin-left: 0px;
-  padding-top: 2px;
+	border-top: 1px dotted rgba(128, 128, 128, 0.3);
+	margin-left: 0px;
+	padding-top: 2px;
 }
 .list ~ .listTools * {
-  display: inline-block;
+	display: inline-block;
 }

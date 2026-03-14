@@ -16,150 +16,172 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSettings> {
-  constructor(
-    parent: UiComponent,
-    settings: ResetReligionSettings,
-    locale: SettingOptions<SupportedLocale>,
-  ) {
-    const label = parent.host.engine.i18n("ui.faith");
-    super(parent, label, settings, {
-      icon: Icons.Religion,
-      onRefreshRequest: () => {
-        this.expando.ineffective = Object.values(settings.buildings).some(
-          _ => _.enabled && _.trigger === -1,
-        );
-      },
-    });
+	constructor(
+		parent: UiComponent,
+		settings: ResetReligionSettings,
+		locale: SettingOptions<SupportedLocale>,
+	) {
+		const label = parent.host.engine.i18n("ui.faith");
+		super(parent, label, settings, {
+			icon: Icons.Religion,
+			onRefreshRequest: () => {
+				this.expando.ineffective = Object.values(settings.buildings).some(
+					(_) => _.enabled && _.trigger === -1,
+				);
+			},
+		});
 
-    this.addChildrenHead([new Container(parent, { classes: [stylesLabelListItem.fillSpace] })]);
+		this.addChildrenHead([
+			new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
+		]);
 
-    const unicornsArray: Array<ZigguratUpgrade | "unicornPasture"> = [...UnicornItems];
+		const unicornsArray: Array<ZigguratUpgrade | "unicornPasture"> = [
+			...UnicornItems,
+		];
 
-    this.addChildContent(
-      new SettingsList(this).addChildren([
-        new HeaderListItem(this, this.host.engine.i18n("$religion.panel.ziggurat.label")),
-        this._getResetOption(
-          this,
-          this.setting.buildings.unicornPasture,
-          locale,
-          settings,
-          this.host.engine.i18n("$buildings.unicornPasture.label"),
-        ),
+		this.addChildContent(
+			new SettingsList(this).addChildren([
+				new HeaderListItem(
+					this,
+					this.host.engine.i18n("$religion.panel.ziggurat.label"),
+				),
+				this._getResetOption(
+					this,
+					this.setting.buildings.unicornPasture,
+					locale,
+					settings,
+					this.host.engine.i18n("$buildings.unicornPasture.label"),
+				),
 
-        ...this.host.game.religion.zigguratUpgrades
-          .filter(
-            item => unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
-          )
-          .map(zigguratUpgrade =>
-            this._getResetOption(
-              this,
-              this.setting.buildings[zigguratUpgrade.name],
-              locale,
-              settings,
-              zigguratUpgrade.label,
-            ),
-          ),
-        new Delimiter(this),
+				...this.host.game.religion.zigguratUpgrades
+					.filter(
+						(item) =>
+							unicornsArray.includes(item.name) &&
+							!isNil(this.setting.buildings[item.name]),
+					)
+					.map((zigguratUpgrade) =>
+						this._getResetOption(
+							this,
+							this.setting.buildings[zigguratUpgrade.name],
+							locale,
+							settings,
+							zigguratUpgrade.label,
+						),
+					),
+				new Delimiter(this),
 
-        ...this.host.game.religion.zigguratUpgrades
-          .filter(
-            item => !unicornsArray.includes(item.name) && !isNil(this.setting.buildings[item.name]),
-          )
-          .map(upgrade =>
-            this._getResetOption(
-              this,
-              this.setting.buildings[upgrade.name],
-              locale,
-              settings,
-              upgrade.label,
-            ),
-          ),
-        new Delimiter(this),
+				...this.host.game.religion.zigguratUpgrades
+					.filter(
+						(item) =>
+							!unicornsArray.includes(item.name) &&
+							!isNil(this.setting.buildings[item.name]),
+					)
+					.map((upgrade) =>
+						this._getResetOption(
+							this,
+							this.setting.buildings[upgrade.name],
+							locale,
+							settings,
+							upgrade.label,
+						),
+					),
+				new Delimiter(this),
 
-        new HeaderListItem(this, this.host.engine.i18n("$religion.panel.orderOfTheSun.label")),
-        ...this.host.game.religion.religionUpgrades
-          .filter(item => !isNil(this.setting.buildings[item.name]))
-          .map(upgrade =>
-            this._getResetOption(
-              this,
-              this.setting.buildings[upgrade.name],
-              locale,
-              settings,
-              upgrade.label,
-              upgrade.name === this.host.game.religion.religionUpgrades.at(-1)?.name,
-            ),
-          ),
+				new HeaderListItem(
+					this,
+					this.host.engine.i18n("$religion.panel.orderOfTheSun.label"),
+				),
+				...this.host.game.religion.religionUpgrades
+					.filter((item) => !isNil(this.setting.buildings[item.name]))
+					.map((upgrade) =>
+						this._getResetOption(
+							this,
+							this.setting.buildings[upgrade.name],
+							locale,
+							settings,
+							upgrade.label,
+							upgrade.name ===
+								this.host.game.religion.religionUpgrades.at(-1)?.name,
+						),
+					),
 
-        new HeaderListItem(this, this.host.engine.i18n("$religion.panel.cryptotheology.label")),
-        ...this.host.game.religion.transcendenceUpgrades
-          .filter(item => !isNil(this.setting.buildings[item.name]))
-          .map(upgrade =>
-            this._getResetOption(
-              this,
-              this.setting.buildings[upgrade.name],
-              locale,
-              settings,
-              upgrade.label,
-            ),
-          ),
-      ]),
-    );
-  }
+				new HeaderListItem(
+					this,
+					this.host.engine.i18n("$religion.panel.cryptotheology.label"),
+				),
+				...this.host.game.religion.transcendenceUpgrades
+					.filter((item) => !isNil(this.setting.buildings[item.name]))
+					.map((upgrade) =>
+						this._getResetOption(
+							this,
+							this.setting.buildings[upgrade.name],
+							locale,
+							settings,
+							upgrade.label,
+						),
+					),
+			]),
+		);
+	}
 
-  private _getResetOption(
-    parent: UiComponent,
-    option: SettingTrigger,
-    locale: SettingOptions<SupportedLocale>,
-    _sectionSetting: ResetReligionSettings,
-    label: string,
-    delimiter = false,
-    upgradeIndicator = false,
-  ) {
-    const element = new SettingTriggerListItem(parent, option, locale, label, {
-      delimiter,
-      onCheck: () => {
-        parent.host.engine.imessage("status.reset.check.enable", [label]);
-      },
-      onRefreshRequest: () => {
-        element.triggerButton.inactive = !option.enabled || option.trigger === 0;
-        element.triggerButton.ineffective = option.enabled && option.trigger === -1;
-      },
-      onSetTrigger: async () => {
-        const value = await Dialog.prompt(
-          parent,
-          parent.host.engine.i18n("ui.trigger.prompt.absolute"),
-          parent.host.engine.i18n("ui.trigger.build.prompt", [
-            label,
-            option.trigger !== -1
-              ? parent.host.renderAbsolute(option.trigger, locale.selected)
-              : parent.host.engine.i18n("ui.trigger.inactive"),
-          ]),
-          option.trigger !== -1 ? parent.host.renderAbsolute(option.trigger) : "",
-          parent.host.engine.i18n("ui.trigger.reset.promptExplainer"),
-        );
+	private _getResetOption(
+		parent: UiComponent,
+		option: SettingTrigger,
+		locale: SettingOptions<SupportedLocale>,
+		_sectionSetting: ResetReligionSettings,
+		label: string,
+		delimiter = false,
+		upgradeIndicator = false,
+	) {
+		const element = new SettingTriggerListItem(parent, option, locale, label, {
+			delimiter,
+			onCheck: () => {
+				parent.host.engine.imessage("status.reset.check.enable", [label]);
+			},
+			onRefreshRequest: () => {
+				element.triggerButton.inactive =
+					!option.enabled || option.trigger === 0;
+				element.triggerButton.ineffective =
+					option.enabled && option.trigger === -1;
+			},
+			onSetTrigger: async () => {
+				const value = await Dialog.prompt(
+					parent,
+					parent.host.engine.i18n("ui.trigger.prompt.absolute"),
+					parent.host.engine.i18n("ui.trigger.build.prompt", [
+						label,
+						option.trigger !== -1
+							? parent.host.renderAbsolute(option.trigger, locale.selected)
+							: parent.host.engine.i18n("ui.trigger.inactive"),
+					]),
+					option.trigger !== -1
+						? parent.host.renderAbsolute(option.trigger)
+						: "",
+					parent.host.engine.i18n("ui.trigger.reset.promptExplainer"),
+				);
 
-        if (value === undefined) {
-          return;
-        }
+				if (value === undefined) {
+					return;
+				}
 
-        if (value === "" || value.startsWith("-")) {
-          option.trigger = -1;
-          option.enabled = false;
-          return;
-        }
+				if (value === "" || value.startsWith("-")) {
+					option.trigger = -1;
+					option.enabled = false;
+					return;
+				}
 
-        if (value === "0") {
-          option.enabled = false;
-        }
+				if (value === "0") {
+					option.enabled = false;
+				}
 
-        option.trigger = Number(value);
-      },
-      onUnCheck: () => {
-        parent.host.engine.imessage("status.reset.check.disable", [label]);
-      },
-      upgradeIndicator,
-    });
-    element.triggerButton.element.addClass(stylesButton.lastHeadAction);
-    return element;
-  }
+				option.trigger = Number(value);
+			},
+			onUnCheck: () => {
+				parent.host.engine.imessage("status.reset.check.disable", [label]);
+			},
+			upgradeIndicator,
+		});
+		element.triggerButton.element.addClass(stylesButton.lastHeadAction);
+		return element;
+	}
 }
