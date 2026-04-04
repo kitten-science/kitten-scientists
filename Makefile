@@ -12,11 +12,11 @@ docs: docs/current/public/index.html
 git-hook:
 	echo "make pretty" > .git/hooks/pre-commit; chmod +x .git/hooks/pre-commit
 
-pretty: node_modules
+pretty: node_modules/.package-lock.json
 	npm exec -- biome check --no-errors-on-unmatched --fix --unsafe
 	npm pkg fix
 
-lint: node_modules
+lint: node_modules/.package-lock.json
 	npm exec -- biome check .
 	npm exec -- tsc --noEmit
 
@@ -37,20 +37,22 @@ devcontainer-oci: devcontainer
 		.
 
 
-node_modules:
-	npm install
+package-lock.json: package.json
+	npm install --package-lock-only
+node_modules/.package-lock.json: package-lock.json
+	npm ci
 
-lib: node_modules
+lib: node_modules/.package-lock.json
 	npm exec -- tsc --build
 
 .PHONY: injectable userscript loader
-injectable: node_modules
+injectable: node_modules/.package-lock.json
 	npm exec -- vite --config vite.config.inject.js build
 	MINIFY=true npm exec -- vite --config vite.config.inject.js build
 	mkdir -p devcontainer/overlay/ && cp output/kitten-scientists.inject.js devcontainer/overlay/kitten-scientists.inject.js
 
 userscript: loader
-loader: node_modules injectable
+loader: node_modules/.package-lock.json injectable
 	npm exec -- vite --config vite.config.loader.js build
 
 
