@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import { metablock } from "vite-plugin-userscript";
 import manifest from "./package.json" with { type: "json" };
 
-const minify = Boolean(process.env.MINIFY) ?? !isDevBuild;
+const minify = Boolean(process.env.MINIFY);
 const versionString = process.env.RELEASE_VERSION ?? "0.0.0-ci";
 
 const filename = [
