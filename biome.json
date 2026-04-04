@@ -27,7 +27,15 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["**", "!.venv", "!docs", "!lib", "!node_modules", "!output"]
+		"includes": [
+			"**",
+			"!.venv",
+			"!devcontainer/overlay",
+			"!docs",
+			"!lib",
+			"!node_modules",
+			"!output"
+		]
 	},
 	"json": {
 		"formatter": {

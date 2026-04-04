@@ -36,7 +36,7 @@ export default defineConfig({
 		},
 		minify: minify ? "esbuild" : false,
 		outDir: "output",
-		rollupOptions: {
+		rolldownOptions: {
 			output: {
 				entryFileNames: filename,
 				extend: true,

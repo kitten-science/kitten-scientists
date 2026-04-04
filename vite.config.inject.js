@@ -22,12 +22,13 @@ export default defineConfig({
 		},
 		minify: MINIFY ? "esbuild" : false,
 		outDir: "output",
-		rollupOptions: {
+		rolldownOptions: {
 			external: ["dojo", "jquery"],
 			output: {
 				entryFileNames: filename,
 				extend: true,
 				format: "esm",
+				globals: { dojo: "dojo", jquery: "jquery" },
 			},
 		},
 		sourcemap: "hidden",
