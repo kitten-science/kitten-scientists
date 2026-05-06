@@ -1,6 +1,6 @@
 # Trade
 
-When you enable a given tribe, KS will automatically trade with them, if both **Catpower** and **Gold** are filled to **Trigger** of their capacity.
+When you enable a given tribe, KS will automatically trade with them, if both **Catpower** and **Gold** are filled to **Trigger** of their capacity and it is currently an enabled **Season** for that tribe.
 
 ## Limited Trading
 
