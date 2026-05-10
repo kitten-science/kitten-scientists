@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/complexity/noImportantStyles: Fuck you, Biome! We're explicitly overriding styles here! */
 :global #ksColumn {
 	min-width: 250px;
 	max-width: 440px;
@@ -9,9 +10,9 @@
 }
 
 :global #crowdjet-expand-container {
-	position: fixed;
-	bottom: 10px;
-	right: -10px;
+	position: fixed !important;
+	bottom: 10px !important;
+	right: -10px !important;
 	opacity: 0.5;
 
 	&:hover {
@@ -23,7 +24,7 @@
 	display: flex;
 	flex-direction: column;
 	position: fixed;
-	text-align: right;
+	text-align: right !important;
 	line-height: 0;
 	right: -5px;
 	margin-bottom: 1em;
@@ -80,7 +81,7 @@
 
 		:global #logFiltersBlock {
 			/* We have the log filters in the settings UI now. No need for the additional button. */
-			display: none;
+			display: none !important;
 		}
 
 		:global #gameLog {

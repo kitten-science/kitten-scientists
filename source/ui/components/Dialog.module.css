@@ -1,8 +1,9 @@
+/** biome-ignore-all lint/complexity/noImportantStyles: Fuck you, Biome! We're explicitly overriding styles here! */
 :global #gamePageContainer .dialog.help:local(.dialog) {
 	display: flex;
 	flex-direction: column;
-	height: fit-content;
-	box-shadow: none;
+	height: fit-content !important;
+	box-shadow: none !important;
 
 	.close {
 		position: absolute;
