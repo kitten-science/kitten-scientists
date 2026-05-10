@@ -118,6 +118,12 @@ export class UpgradeSettingsUi extends SettingsPanel<
 					onCheck: () => {
 						this.host.engine.imessage("status.sub.enable", [upgrade.label]);
 					},
+					onRefresh: () => {
+						element.element.toggleClass(
+							stylesLabelListItem.researched,
+							upgrade.researched === true,
+						);
+					},
 					onRefreshRequest: () => {
 						element.triggerButton.inactive =
 							!option.enabled || option.trigger === -1;

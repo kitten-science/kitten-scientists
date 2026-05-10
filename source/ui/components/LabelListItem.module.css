@@ -17,6 +17,11 @@
 	font-weight: bold;
 }
 
+.researched .label {
+	text-decoration: line-through;
+	opacity: 0.5;
+}
+
 .iconLabel {
 	display: inline-block;
 	margin-right: 4px;
