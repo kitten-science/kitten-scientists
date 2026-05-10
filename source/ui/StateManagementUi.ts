@@ -703,7 +703,13 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		}
 
 		console.info(...cl("Loading Auto-Save..."));
-		this.host.engine.stateLoad(existing.unwrap().state, false);
+		const state = existing.unwrap().state;
+		const requiresUiRebuild =
+			this.host.engine.settings.ksColumn.enabled !== state.engine.ksColumn.enabled;
+		this.host.engine.stateLoad(state, false);
+		if (requiresUiRebuild) {
+			this.host.rebuildUi();
+		}
 	}
 
 	updateGame(game: Unique<StoredGame>, newGame: KGSaveData) {
