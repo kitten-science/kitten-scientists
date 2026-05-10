@@ -57,6 +57,12 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
 				onCheck: () => {
 					this.host.engine.imessage("status.sub.enable", [policy.label]);
 				},
+				onRefresh: () => {
+					element.element.toggleClass(
+						stylesLabelListItem.researched,
+						policy.researched,
+					);
+				},
 				onUnCheck: () => {
 					this.host.engine.imessage("status.sub.disable", [policy.label]);
 				},

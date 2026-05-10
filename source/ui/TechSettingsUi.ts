@@ -128,6 +128,10 @@ export class TechSettingsUi extends SettingsPanel<
 							option.enabled &&
 							settings.trigger === -1 &&
 							option.trigger === -1;
+						element.element.toggleClass(
+							stylesLabelListItem.researched,
+							tech.researched,
+						);
 					},
 					onRefreshTrigger: () => {
 						element.triggerButton.element[0].title = this.host.engine.i18n(
