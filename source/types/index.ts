@@ -683,6 +683,7 @@ export enum UnicornItemVariant {
 export const ReligionUpgrades = [
 	"apocripha",
 	"basilica",
+	"frescoes",
 	"goldenSpire",
 	"scholasticism",
 	"solarRevolution",
