@@ -796,7 +796,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 			(await Dialog.confirm(
 				parent,
 				this.host.engine.i18n("state.confirmDestruction"),
-			)) === "OK"
+			)) === "CANCEL"
 		) {
 			return true;
 		}
