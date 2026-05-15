@@ -5,7 +5,6 @@ import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { cl } from "./tools/Log.js";
 import type { UnsafePolicy, UnsafeTech } from "./types/science.js";
 import { UpgradeManager } from "./UpgradeManager.js";
-import { UserScriptLoader } from "./UserScriptLoader.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
 export class ScienceManager extends UpgradeManager {
@@ -61,7 +60,7 @@ export class ScienceManager extends UpgradeManager {
 				continue;
 			}
 
-			let prices = UserScriptLoader.window.dojo.clone(tech.prices);
+			let prices = structuredClone(tech.prices);
 			prices = this._host.game.village.getEffectLeader("scientist", prices);
 			for (const price of prices) {
 				const available = this._workshopManager.getValueAvailable(price.name);

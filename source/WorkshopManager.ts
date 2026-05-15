@@ -13,7 +13,6 @@ import type { Resource, ResourceCraftable } from "./types/index.js";
 import type { ResourceManager, UnsafeResource } from "./types/resources.js";
 import type { UnsafeCraft, UnsafeUpgrade } from "./types/workshop.js";
 import { UpgradeManager } from "./UpgradeManager.js";
-import { UserScriptLoader } from "./UserScriptLoader.js";
 
 export class WorkshopManager extends UpgradeManager implements Automation {
 	readonly settings: WorkshopSettings;
@@ -75,7 +74,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 			}
 
 			// Create a copy of the prices for this upgrade, so that we can apply effects to it.
-			let prices = UserScriptLoader.window.dojo.clone(upgrade.prices);
+			let prices = structuredClone(upgrade.prices);
 			prices = this._host.game.village.getEffectLeader("scientist", prices);
 			for (const price of prices) {
 				const available = this.getValueAvailable(price.name);
