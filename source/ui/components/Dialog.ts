@@ -188,4 +188,41 @@ export class Dialog extends UiComponent<HTMLDialogElement> {
 				.showModal();
 		});
 	}
+
+	static async confirm(
+		parent: UiComponent,
+		text: string,
+		title?: string,
+		explainer?: string,
+	): Promise<"OK" | "CANCEL"> {
+		return new Promise((resolve) => {
+			new Dialog(parent, {
+				hasCancel: true,
+				hasClose: true,
+				onCancel: () => {
+					resolve("CANCEL");
+				},
+				onConfirm: () => {
+					resolve("OK");
+				},
+				prompt: false,
+			})
+				.addChildrenHead(
+					coalesceArray([
+						title ? new HeaderListItem(parent, title) : undefined,
+						new Paragraph(parent, text),
+					]),
+				)
+				.addChildrenContent(
+					explainer
+						? [
+								new Container(parent, {
+									classes: [stylesExplainer.explainer],
+								}).addChildren([new Paragraph(parent, explainer)]),
+							]
+						: [],
+				)
+				.showModal();
+		});
+	}
 }

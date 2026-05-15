@@ -1,5 +1,4 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { InvalidArgumentError } from "@oliversalzburg/js-utils/errors/InvalidArgumentError.js";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { de, enUS, he, type Locale, zhCN } from "date-fns/locale";
@@ -134,8 +133,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 						title: this.host.engine.i18n("state.storeState"),
 					}),
 					new Button(this, this.host.engine.i18n("copy"), Icons.Copy, {
-						onClick: () => {
-							this.copyState().catch(redirectErrorsToConsole(console));
+						onClick: async () => {
+							await this.copyState();
 							this.host.engine.imessage("state.copied.stateCurrent");
 						},
 						title: this.host.engine.i18n("state.copy.stateCurrent"),
@@ -172,8 +171,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 						title: this.host.engine.i18n("state.storeGame"),
 					}),
 					new Button(this, this.host.engine.i18n("copy"), Icons.Copy, {
-						onClick: () => {
-							this.copyGame().catch(redirectErrorsToConsole(console));
+						onClick: async () => {
+							await this.copyGame();
 							this.host.engine.imessage("state.copied.gameCurrent");
 						},
 						title: this.host.engine.i18n("state.copy.gameCurrent"),
@@ -269,10 +268,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 								locale: this.locale,
 							})})`,
 							{
-								onClick: () => {
-									this.loadGame(game.game).catch(
-										redirectErrorsToConsole(console),
-									);
+								onClick: async () => {
+									await this.loadGame(parent, game.game);
 									this.host.engine.imessage("state.loaded.game", [game.label]);
 								},
 								title: new Date(game.timestamp).toLocaleString(),
@@ -285,8 +282,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							Icons.Save,
 							this.host.engine.i18n("state.update.game"),
 							{
-								onClick: () => {
-									this.updateGame(gameSlot, this.host.game.save());
+								onClick: async () => {
+									await this.updateGame(
+										parent,
+										gameSlot,
+										this.host.game.save(),
+									);
 									this.host.engine.imessage("state.updated.game", [game.label]);
 								},
 							},
@@ -298,7 +299,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							{
 								onClick: async () => {
 									await this.storeGame(parent, game.game);
-									this.deleteGame(gameSlot, true);
+									await this.deleteGame(parent, gameSlot, true);
 									this.host.engine.imessage("state.updated.game", [game.label]);
 								},
 							},
@@ -308,10 +309,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							Icons.Copy,
 							this.host.engine.i18n("state.copy.game"),
 							{
-								onClick: () => {
-									this.copyGame(game.game).catch(
-										redirectErrorsToConsole(console),
-									);
+								onClick: async () => {
+									await this.copyGame(game.game);
 									this.host.engine.imessage("state.copied.game", [game.label]);
 								},
 							},
@@ -321,8 +320,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							Icons.Delete,
 							this.host.engine.i18n("state.delete.game"),
 							{
-								onClick: () => {
-									this.deleteGame(gameSlot);
+								onClick: async () => {
+									await this.deleteGame(parent, gameSlot);
 									this.host.engine.imessage("state.deleted.game", [game.label]);
 								},
 							},
@@ -354,8 +353,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 								},
 							)})`,
 							{
-								onClick: () => {
-									this.loadState(state.state);
+								onClick: async () => {
+									await this.loadState(parent, state.state);
 									this.host.engine.imessage("state.loaded.state", [
 										state.label,
 									]);
@@ -370,8 +369,9 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							Icons.Save,
 							this.host.engine.i18n("state.update.state"),
 							{
-								onClick: () => {
-									this.updateState(
+								onClick: async () => {
+									await this.updateState(
+										parent,
 										stateSlot,
 										this.host.engine.stateSerialize(),
 									);
@@ -388,7 +388,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							{
 								onClick: async () => {
 									await this.storeState(parent, state.state);
-									this.deleteState(stateSlot, true);
+									await this.deleteState(parent, stateSlot, true);
 									this.host.engine.imessage("state.updated.state", [
 										state.label,
 									]);
@@ -400,10 +400,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							Icons.Copy,
 							this.host.engine.i18n("state.copy.state"),
 							{
-								onClick: () => {
-									this.copyState(state.state).catch(
-										redirectErrorsToConsole(console),
-									);
+								onClick: async () => {
+									await this.copyState(state.state);
 									this.host.engine.imessage("state.copied.state", [
 										state.label,
 									]);
@@ -415,8 +413,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							Icons.Delete,
 							this.host.engine.i18n("state.delete.state"),
 							{
-								onClick: () => {
-									this.deleteState(stateSlot);
+								onClick: async () => {
+									await this.deleteState(parent, stateSlot);
 									this.host.engine.imessage("state.deleted.state", [
 										state.label,
 									]);
@@ -675,16 +673,16 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		a.click();
 	}
 
-	async loadGame(game: KGSaveData) {
-		if (this._destructiveActionPrevented()) {
+	async loadGame(parent: UiComponent, game: KGSaveData) {
+		if (await this._destructiveActionPrevented(parent)) {
 			return;
 		}
 
 		await new SavegameLoader(this.host.game).loadRaw(game);
 	}
 
-	loadState(state: EngineState) {
-		if (this._destructiveActionPrevented()) {
+	async loadState(parent: UiComponent, state: EngineState) {
+		if (await this._destructiveActionPrevented(parent)) {
 			return;
 		}
 
@@ -714,8 +712,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		this.host.engine.stateLoad(existing.unwrap().state, false);
 	}
 
-	updateGame(game: Unique<StoredGame>, newGame: KGSaveData) {
-		if (this._destructiveActionPrevented()) {
+	async updateGame(
+		parent: UiComponent,
+		game: Unique<StoredGame>,
+		newGame: KGSaveData,
+	) {
+		if (await this._destructiveActionPrevented(parent)) {
 			return;
 		}
 
@@ -729,8 +731,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		this.requestRefresh();
 	}
 
-	updateState(state: Unique<StoredState>, newState: EngineState) {
-		if (this._destructiveActionPrevented()) {
+	async updateState(
+		parent: UiComponent,
+		state: Unique<StoredState>,
+		newState: EngineState,
+	) {
+		if (await this._destructiveActionPrevented(parent)) {
 			return;
 		}
 
@@ -744,8 +750,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		this.requestRefresh();
 	}
 
-	deleteGame(game: Unique<StoredGame>, force = false) {
-		if (!force && this._destructiveActionPrevented()) {
+	async deleteGame(
+		parent: UiComponent,
+		game: Unique<StoredGame>,
+		force = false,
+	): Promise<void> {
+		if (!force && (await this._destructiveActionPrevented(parent))) {
 			return;
 		}
 
@@ -759,8 +769,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		this.requestRefresh();
 	}
 
-	deleteState(state: Unique<StoredState>, force = false) {
-		if (!force && this._destructiveActionPrevented()) {
+	async deleteState(
+		parent: UiComponent,
+		state: Unique<StoredState>,
+		force = false,
+	): Promise<void> {
+		if (!force && (await this._destructiveActionPrevented(parent))) {
 			return;
 		}
 
@@ -774,12 +788,15 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		this.requestRefresh();
 	}
 
-	private _destructiveActionPrevented(): boolean {
+	private async _destructiveActionPrevented(
+		parent: UiComponent,
+	): Promise<boolean> {
 		if (
 			!this.setting.noConfirm.enabled &&
-			!UserScriptLoader.window.confirm(
+			(await Dialog.confirm(
+				parent,
 				this.host.engine.i18n("state.confirmDestruction"),
-			)
+			)) === "OK"
 		) {
 			return true;
 		}
