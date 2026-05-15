@@ -9,40 +9,6 @@
 	overflow-y: auto;
 }
 
-:global #crowdjet-expand-container {
-	position: fixed !important;
-	bottom: 10px !important;
-	right: -10px !important;
-	opacity: 0.5;
-
-	&:hover {
-		opacity: 1;
-	}
-}
-
-:global #footerLinks {
-	display: flex;
-	flex-direction: column;
-	position: fixed;
-	text-align: right !important;
-	line-height: 0;
-	right: -5px;
-	margin-bottom: 1em;
-
-	a {
-		line-height: 1;
-		padding-right: 10px;
-		opacity: 0.5;
-		transition: 0.3s;
-		text-decoration: none;
-		text-transform: lowercase;
-
-		&:hover {
-			opacity: 1;
-		}
-	}
-}
-
 .spacer {
 	display: block;
 	margin-bottom: 100px;
