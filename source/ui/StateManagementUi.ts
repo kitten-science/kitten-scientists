@@ -17,6 +17,7 @@ import { Button } from "./components/Button.js";
 import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";
+import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { IconButton } from "./components/IconButton.js";
 import { LabelListItem } from "./components/LabelListItem.js";
@@ -76,8 +77,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 			]),
 			{
 				onRefresh: () => {
-					this._refreshGameList();
-					this._refreshStateList();
+					this._refreshGameList(parent);
+					this._refreshStateList(parent);
 				},
 			},
 		);
@@ -119,9 +120,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 						this.host.engine.i18n("state.import"),
 						Icons.Import,
 						{
-							onClick: () => {
-								this.import();
-							},
+							onClick: () => this.import(parent),
 							title: this.host.engine.i18n("state.importTitle"),
 						},
 					),
@@ -131,9 +130,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				new HeaderListItem(this, this.host.engine.i18n("state.localStates")),
 				new ToolbarListItem(this).addChildren([
 					new Button(this, this.host.engine.i18n("state.store"), Icons.SaveAs, {
-						onClick: () => {
-							this.storeState();
-						},
+						onClick: () => void this.storeState(parent),
 						title: this.host.engine.i18n("state.storeState"),
 					}),
 					new Button(this, this.host.engine.i18n("copy"), Icons.Copy, {
@@ -144,8 +141,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 						title: this.host.engine.i18n("state.copy.stateCurrent"),
 					}),
 					new Button(this, this.host.engine.i18n("state.new"), Icons.Draft, {
-						onClick: () => {
-							this.storeStateFactoryDefaults();
+						onClick: async () => {
+							await this.storeStateFactoryDefaults(parent);
 							this.host.engine.imessage("state.stored.state");
 						},
 						title: this.host.engine.i18n("state.storeFactory"),
@@ -168,8 +165,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				new HeaderListItem(this, this.host.engine.i18n("state.localGames")),
 				new ToolbarListItem(this).addChildren([
 					new Button(this, this.host.engine.i18n("state.store"), Icons.SaveAs, {
-						onClick: () => {
-							this.storeGame();
+						onClick: async () => {
+							await this.storeGame(parent);
 							this.host.engine.imessage("state.stored.game");
 						},
 						title: this.host.engine.i18n("state.storeGame"),
@@ -252,7 +249,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		}
 	}
 
-	private _refreshGameList() {
+	private _refreshGameList(parent: UiComponent) {
 		this.gameList.removeChildren(this.gameList.children);
 		this.gameList.addChildren(
 			this.games
@@ -299,8 +296,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							Icons.Edit,
 							this.host.engine.i18n("state.edit.game"),
 							{
-								onClick: () => {
-									this.storeGame(game.game);
+								onClick: async () => {
+									await this.storeGame(parent, game.game);
 									this.deleteGame(gameSlot, true);
 									this.host.engine.imessage("state.updated.game", [game.label]);
 								},
@@ -334,7 +331,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				),
 		);
 	}
-	private _refreshStateList() {
+	private _refreshStateList(parent: UiComponent) {
 		this.stateList.removeChildren(this.stateList.children);
 		this.stateList.addChildren(
 			this.states
@@ -389,8 +386,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							Icons.Edit,
 							this.host.engine.i18n("state.edit.state"),
 							{
-								onClick: () => {
-									this.storeState(state.state);
+								onClick: async () => {
+									await this.storeState(parent, state.state);
 									this.deleteState(stateSlot, true);
 									this.host.engine.imessage("state.updated.state", [
 										state.label,
@@ -465,8 +462,9 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 	 *      timestamp: "Last time the settings were modified. As new Date().toISOString().",
 	 *    }
 	 */
-	import() {
-		const userInput = UserScriptLoader.window.prompt(
+	async import(parent: UiComponent) {
+		const userInput = await Dialog.prompt(
+			parent,
 			this.host.engine.i18n("state.loadPrompt"),
 		);
 		if (isNil(userInput)) {
@@ -480,12 +478,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				`${importId} #${importSequence++}`,
 			]);
 
-		const internalImport = (input: string) => {
+		const internalImport = async (input: string) => {
 			// Handles #4 and #5
 			try {
 				// decodeSettings throws if the input is not a valid engine state.
 				const state = KittenScientists.decodeSettings(input);
-				this.storeState(state, makeImportLabel());
+				await this.storeState(parent, state, makeImportLabel());
 				this.host.engine.imessage("state.imported.state");
 				return;
 			} catch (_error) {
@@ -500,7 +498,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 					timestamp: string;
 				};
 				const state = KittenScientists.decodeSettings(subjectData.state);
-				this.storeState(state, subjectData.label);
+				await this.storeState(parent, state, subjectData.label);
 				this.host.engine.imessage("state.imported.state");
 				return;
 			} catch (_error) {
@@ -538,26 +536,32 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				!isNil(subjectData.ks)
 			) {
 				const state = subjectData.ks.state[0];
-				stateLabel = this.storeState(state, makeImportLabel()) ?? undefined;
+				stateLabel =
+					(await this.storeState(parent, state, makeImportLabel())) ??
+					undefined;
 				this.host.engine.imessage("state.imported.state");
 				subjectData.ks = undefined;
 			}
 
-			this.storeGame(subjectData, stateLabel);
+			this.storeGame(parent, subjectData, stateLabel);
 			this.host.engine.imessage("state.imported.game");
 		};
 
 		internalImport(userInput);
 	}
 
-	storeGame(game?: KGSaveData, label?: string): string | null {
+	async storeGame(
+		parent: UiComponent,
+		game?: KGSaveData,
+		label?: string,
+	): Promise<string | null> {
 		let gameLabel = label;
 
 		if (isNil(gameLabel)) {
-			gameLabel =
-				UserScriptLoader.window.prompt(
-					this.host.engine.i18n("state.storeGame.prompt"),
-				) ?? undefined;
+			gameLabel = await Dialog.prompt(
+				parent,
+				this.host.engine.i18n("state.storeGame.prompt"),
+			);
 		}
 
 		if (isNil(gameLabel)) {
@@ -586,14 +590,18 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		return gameLabel;
 	}
 
-	storeState(state?: EngineState, label?: string): string | null {
+	async storeState(
+		parent: UiComponent,
+		state?: EngineState,
+		label?: string,
+	): Promise<string | null> {
 		let stateLabel = label;
 
 		if (isNil(stateLabel)) {
-			stateLabel =
-				UserScriptLoader.window.prompt(
-					this.host.engine.i18n("state.storeState.prompt"),
-				) ?? undefined;
+			stateLabel = stateLabel = await Dialog.prompt(
+				parent,
+				this.host.engine.i18n("state.storeState.prompt"),
+			);
 		}
 
 		if (isNil(stateLabel)) {
@@ -622,11 +630,11 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		return stateLabel;
 	}
 
-	storeStateFactoryDefaults() {
-		this.storeState(Engine.DEFAULT_STATE);
+	async storeStateFactoryDefaults(parent: UiComponent) {
+		return this.storeState(parent, Engine.DEFAULT_STATE);
 	}
 
-	storeAutoSave(state: EngineState) {
+	async storeAutoSave(parent: UiComponent, state: EngineState) {
 		const existing = this.states.find(
 			(state) => state.unwrap().label === "Auto-Save",
 		);
@@ -645,7 +653,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		}
 
 		console.info(...cl("Storing new Auto-Save..."));
-		this.storeState(state, "Auto-Save");
+		return this.storeState(parent, state, "Auto-Save");
 	}
 
 	exportStateAll() {
