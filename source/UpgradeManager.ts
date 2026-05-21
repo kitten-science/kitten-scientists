@@ -1,3 +1,4 @@
+import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import type { Policy, Technology, Upgrade } from "./types/index.js";
 import type {
@@ -76,7 +77,13 @@ export abstract class UpgradeManager {
 	static async skipConfirmAsync<T>(action: () => Promise<T>): Promise<T> {
 		const originalConfirm = game.ui.confirm;
 		try {
-			game.ui.confirm = () => true;
+			game.ui.confirm = (
+				_title: string,
+				_msg: string,
+				callback: AnyFunction,
+			) => {
+				callback();
+			};
 			return await action();
 		} finally {
 			game.ui.confirm = originalConfirm;
@@ -85,7 +92,13 @@ export abstract class UpgradeManager {
 	static skipConfirm<T>(action: () => T): T {
 		const originalConfirm = game.ui.confirm;
 		try {
-			game.ui.confirm = () => true;
+			game.ui.confirm = (
+				_title: string,
+				_msg: string,
+				callback: AnyFunction,
+			) => {
+				callback();
+			};
 			return action();
 		} finally {
 			game.ui.confirm = originalConfirm;

@@ -22,10 +22,10 @@ export type UISystem = {
 	relockSchemes: () => void;
 	notifyLogEvent: (logmsg: unknown) => void;
 	confirm: (
-		title: unknown,
-		msg: unknown,
-		callbackOk: unknown,
-		callbackCancel: unknown,
+		title: string,
+		msg: string,
+		callbackOk: AnyFunction,
+		callbackCancel: AnyFunction,
 	) => void;
 	openPopupPage: (pageName: unknown) => void;
 	pulse: (node: unknown) => void;
