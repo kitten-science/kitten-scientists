@@ -994,6 +994,7 @@ export const Upgrades = [
 	"advancedRefinement",
 	"aiBases",
 	"aiEngineers",
+	"alicornStable",
 	"alloyArmor",
 	"alloyAxe",
 	"alloyBarns",
