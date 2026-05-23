@@ -867,14 +867,14 @@ export class TradeManager implements Automation {
 		const tradeOutput = this.getAverageTrade(race);
 		for (const item of race.sells) {
 			const resource = this._workshopManager.getResource(item.name);
-			let max = 0;
 
 			// No need to process resources that don't cap
 			if (!resource.maxValue) {
-				continue;
+				highestCapacity = Number.POSITIVE_INFINITY;
+				break;
 			}
 
-			max = mustExist(tradeOutput[item.name]);
+			const max = mustExist(tradeOutput[item.name]);
 
 			const capacity = Math.max((resource.maxValue - resource.value) / max, 0);
 
