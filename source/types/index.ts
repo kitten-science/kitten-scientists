@@ -775,6 +775,7 @@ export const Policies = [
 	"expansionism",
 	"extravagance",
 	"fascism",
+	"feedingFrenzy",
 	"frugality",
 	"fullIndustrialization",
 	"griffinRelationsMachinists",
@@ -817,6 +818,7 @@ export const Policies = [
 	"theocracy",
 	"tradition",
 	"transkittenism",
+	"upfrontPayment",
 	"zebraRelationsAppeasement",
 	"zebraRelationsBellicosity",
 ] as const;
