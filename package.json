@@ -40,7 +40,7 @@
 		"@types/semver": "7.7.1",
 		"@types/web": "0.0.349",
 		"cheerio": "1.2.0",
-		"date-fns": "4.3.0",
+		"date-fns": "4.4.0",
 		"dojo": "1.17.3",
 		"esbuild": "0.28.0",
 		"rollup": "4.60.4",
