@@ -119,6 +119,10 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
 					settings.locale,
 					{
 						onCheck: () => {
+							// Persist the choice right away, so it survives a reload even
+							// before the game's next auto-save. Our `game/beforesave`
+							// handler injects the KS engine state into the save data.
+							parent.host.game.save();
 							parent.host.rebuildUi();
 						},
 					},
