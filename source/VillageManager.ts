@@ -242,8 +242,19 @@ export class VillageManager implements Automation {
 			return;
 		}
 
-		// Determine how many hunts are being performed.
-		const huntCount = Math.floor(manpower.value / 100);
+		// The manpower cost of a single hunt, accounting for any catpower discount.
+		const manpowerCost =
+			100 - this._host.game.getEffect("huntCatpowerDiscount");
+
+		// Determine how many hunts are being performed, while respecting the
+		// configured manpower reserve. `getValueAvailable` subtracts the reserve
+		// (resource stock), so we never spend manpower below it.
+		const manpowerAvailable =
+			this._workshopManager.getValueAvailable("manpower");
+		const huntCount = Math.floor(manpowerAvailable / manpowerCost);
+		if (huntCount < 1) {
+			return;
+		}
 		this._host.engine.storeForSummary("hunt", huntCount);
 
 		const averageOutput = this._workshopManager.getAverageHunt();
@@ -272,8 +283,12 @@ export class VillageManager implements Automation {
 			});
 		}
 
-		// Now actually perform the hunts.
-		this._host.game.village.huntAll();
+		// Now actually perform the hunts. We can't use `village.huntAll`, as that
+		// always spends *all* available manpower and ignores our reserve. Instead
+		// we replicate its behavior (see the game's `huntFraction`) for a bounded
+		// number of squads, leaving the configured reserve untouched.
+		this._host.game.resPool.addResEvent("manpower", -huntCount * manpowerCost);
+		this._host.game.village.gainHuntRes(huntCount);
 		this._host.engine.iactivity(
 			"act.hunt",
 			[this._host.renderAbsolute(huntCount)],
