@@ -68,6 +68,14 @@ import { WorkshopManager } from "./WorkshopManager.js";
 
 const i18nData = { "de-DE": deDE, "en-US": enUS, "he-IL": heIL, "zh-CN": zhCN };
 
+/**
+ * Web storage key under which the user's explicitly selected language is
+ * persisted. This is stored independently from the engine state, so the
+ * language choice survives a page reload even before the game has written
+ * the engine state into its save data.
+ */
+const LOCALE_STORAGE_KEY = "ks.locale";
+
 export type FrameContext = {
 	purchaseOrders: Array<{
 		builds: Partial<
@@ -177,7 +185,14 @@ export class Engine {
 		this.settings = new EngineSettings();
 
 		this._i18nData = i18nData;
-		this.setLanguage(gameLanguage, false);
+		// Prefer the language the user explicitly selected in a previous session
+		// over the game's current language.
+		const persistedLocale = this._loadPersistedLocale();
+		if (!isNil(persistedLocale)) {
+			this.setLocale(persistedLocale, false);
+		} else {
+			this.setLanguage(gameLanguage, false);
+		}
 
 		this._host = host;
 		this._activitySummary = new ActivitySummary(this._host);
@@ -269,6 +284,43 @@ export class Engine {
 	}
 
 	/**
+	 * Persists the currently selected language to web storage, so it can be
+	 * restored on the next page load, regardless of whether the game has saved
+	 * the engine state yet.
+	 *
+	 * @param locale The locale to persist. Defaults to the currently selected one.
+	 */
+	persistLocale(locale = this.settings.locale.selected): void {
+		try {
+			UserScriptLoader.window.localStorage[LOCALE_STORAGE_KEY] = locale;
+		} catch (error) {
+			console.warn(...cl("Failed to persist the selected language.", error));
+		}
+	}
+
+	/**
+	 * Reads the user's explicitly selected language from web storage, if any.
+	 *
+	 * @returns The persisted locale, or `undefined` if none was persisted or it
+	 * is no longer supported.
+	 */
+	private _loadPersistedLocale(): SupportedLocale | undefined {
+		let stored: string | undefined;
+		try {
+			stored = UserScriptLoader.window.localStorage[LOCALE_STORAGE_KEY] as
+				| string
+				| undefined;
+		} catch (error) {
+			console.warn(...cl("Failed to read the persisted language.", error));
+			return undefined;
+		}
+
+		return !isNil(stored) && this.isLocaleSupported(stored)
+			? (stored as SupportedLocale)
+			: undefined;
+	}
+
+	/**
 	 * Loads a new state into the engine.
 	 *
 	 * @param settings The engine state to load.
@@ -336,7 +388,10 @@ export class Engine {
 			this.workshopManager.settings.load(settings.workshop);
 		}, "workshop");
 
-		this.setLocale(this.settings.locale.selected);
+		// The user's explicitly selected language takes precedence over whatever
+		// locale was stored in the (potentially stale) engine state.
+		const persistedLocale = this._loadPersistedLocale();
+		this.setLocale(persistedLocale ?? this.settings.locale.selected);
 
 		// Ensure the main engine setting is respected.
 		if (this.settings.enabled) {

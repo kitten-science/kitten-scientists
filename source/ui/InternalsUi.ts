@@ -119,6 +119,9 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
 					settings.locale,
 					{
 						onCheck: () => {
+							// Persist the choice immediately, so it survives a page
+							// reload even before the game saves the engine state.
+							parent.host.engine.persistLocale();
 							parent.host.rebuildUi();
 						},
 					},
