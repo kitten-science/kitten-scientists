@@ -123,6 +123,15 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							title: this.host.engine.i18n("state.importTitle"),
 						},
 					),
+					new Button(
+						this,
+						this.host.engine.i18n("state.importFile"),
+						Icons.NoteAdd,
+						{
+							onClick: () => this.importFromFile(parent),
+							title: this.host.engine.i18n("state.importFileTitle"),
+						},
+					),
 				]),
 				new ListItem(this).addChild(new Delimiter(this)),
 
@@ -469,6 +478,30 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 			return;
 		}
 
+		await this._importText(parent, userInput);
+	}
+
+	async importFromFile(parent: UiComponent) {
+		const input = document.createElement("input");
+		input.setAttribute("type", "file");
+		input.setAttribute("accept", ".ndjson,.json,.txt");
+
+		const file = await new Promise<File | null>((resolve) => {
+			input.onchange = () => {
+				resolve(input.files?.item(0) ?? null);
+			};
+			input.click();
+		});
+
+		if (isNil(file)) {
+			return;
+		}
+
+		const text = await file.text();
+		await this._importText(parent, text);
+	}
+
+	private async _importText(parent: UiComponent, userInput: string) {
 		const importId = new Date().toDateString();
 		let importSequence = 1;
 		const makeImportLabel = () =>
@@ -545,7 +578,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 			this.host.engine.imessage("state.imported.game");
 		};
 
-		internalImport(userInput);
+		await internalImport(userInput);
 	}
 
 	async storeGame(
