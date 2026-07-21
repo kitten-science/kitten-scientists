@@ -67,6 +67,10 @@ export class SpaceManager implements Automation {
 			Record<SpaceBuilding, Required<UnsafeSpaceBuilding>>
 		> = {};
 		for (const build of Object.values(builds)) {
+			if (build.enabled === false) {
+				continue;
+			}
+			
 			metaData[build.building] = this._host.game.space.getBuilding(
 				build.building,
 			);

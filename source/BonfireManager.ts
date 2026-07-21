@@ -69,6 +69,10 @@ export class BonfireManager implements Automation {
 		// Get the current metadata for all the referenced buildings.
 		const metaData: Partial<Record<BonfireItem, Required<UnsafeBuilding>>> = {};
 		for (const build of Object.values(builds)) {
+			if (build.enabled === false) {
+				continue;
+			}
+			
 			metaData[build.building] = this._host.game.bld.getBuildingExt(
 				(build.baseBuilding ?? build.building) as Building,
 			).meta as Required<UnsafeBuilding>;

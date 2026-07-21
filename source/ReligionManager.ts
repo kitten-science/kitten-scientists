@@ -555,6 +555,10 @@ export class ReligionManager implements Automation {
 			>
 		> = {};
 		for (const build of Object.values(builds)) {
+			if (build.enabled === false) {
+				continue;
+			}
+			
 			const buildInfo = this.getUpgradeMeta(build.building, build.variant);
 			if (buildInfo === null) {
 				continue;
