@@ -491,14 +491,14 @@ export class Engine {
 			);
 			context.measurements.scienceManager = duration;
 
-			[, duration] = measure(() => {
-				this.bonfireManager.tick(context);
-			});
+			[, duration] = measure(() => 
+				this.bonfireManager.tick(context)
+			);
 			context.measurements.bonfireManager = duration;
 
-			[, duration] = measure(() => {
-				this.spaceManager.tick(context);
-			});
+			[, duration] = measure(() => 
+				this.spaceManager.tick(context)
+			);
 			context.measurements.spaceManager = duration;
 
 			[, duration] = await measureAsync(() =>
@@ -506,9 +506,9 @@ export class Engine {
 			);
 			context.measurements.workshopManager = duration;
 
-			[, duration] = measure(() => {
-				this.tradeManager.tick(context);
-			});
+			[, duration] = measure(() => 
+				this.tradeManager.tick(context)
+			);
 			context.measurements.tradeManager = duration;
 
 			[, duration] = await measureAsync(() =>
@@ -516,14 +516,14 @@ export class Engine {
 			);
 			context.measurements.religionManager = duration;
 
-			[, duration] = measure(() => {
-				this.timeManager.tick(context);
-			});
+			[, duration] = measure(() => 
+				this.timeManager.tick(context)
+			);
 			context.measurements.timeManager = duration;
 
-			[, duration] = measure(() => {
-				this.villageManager.tick(context);
-			});
+			[, duration] = measure(() => 
+				this.villageManager.tick(context)
+			);
 			context.measurements.villageManager = duration;
 
 			[, duration] = await measureAsync(() =>

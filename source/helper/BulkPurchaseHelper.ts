@@ -303,8 +303,8 @@ export class BulkPurchaseHelper {
 	): Array<ConcreteBuild> {
 		const buildDrafts: Array<ConcreteBuild> = [];
 		const buildsSorted = objectEntries(builds).sort((a, b) => {
-			const aMeta = mustExist(metaData[a[0]]);
-			const bMeta = mustExist(metaData[b[0]]);
+			const aMeta = metaData[a[0]]??{val:0};
+			const bMeta = metaData[b[0]]??{val:0};
 			if (aMeta.val !== bMeta.val) {
 				return aMeta.val - bMeta.val;
 			}
@@ -312,16 +312,23 @@ export class BulkPurchaseHelper {
 		});
 
 		for (const [name, build] of buildsSorted) {
+			// If the build is disabled, skip it.
+			if (!build.enabled) {
+				continue;
+			}
+
 			const trigger = Engine.evaluateSubSectionTrigger(
 				build.sectionTrigger,
 				build.trigger,
 			);
-			const buildMetaData = mustExist(metaData[name]);
 
-			// If the build is disabled, skip it.
-			if (!build.enabled || trigger < 0) {
+			// If the trigger is set to infinite (-1) skip this build.
+			if (trigger < 0) {
 				continue;
 			}
+
+			const buildMetaData = mustExist(metaData[name]);
+
 
 			// tHidden is a flag that is manually set to exclude time buildings from the process.
 			if ("tHidden" in buildMetaData && buildMetaData.tHidden === true) {
