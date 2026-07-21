@@ -40,7 +40,9 @@ export default defineConfig({
 	},
 	plugins: [
 		cssInjectedByJsPlugin({
-			styleId: "ks-styles",
+			attributes:{
+				id: "ks-styles",
+			},
 			topExecutionPriority: false,
 		}),
 	],
