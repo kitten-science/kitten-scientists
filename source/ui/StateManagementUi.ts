@@ -578,7 +578,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 			this.host.engine.imessage("state.imported.game");
 		};
 
-		await internalImport(userInput);
+		return internalImport(userInput);
 	}
 
 	async storeGame(
