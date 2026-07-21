@@ -14,9 +14,6 @@ const main = async () => {
 		.map((_) => join("overlay", _));
 	const $ = cheerio.load(indexHtml);
 
-	// First script block is NewRelic
-	$("script").first().remove();
-
 	// Google stuff
 	$(
 		"script[src='https://www.googletagmanager.com/gtag/js?id=G-0QBDX221PR'] + script",
@@ -24,11 +21,6 @@ const main = async () => {
 	$(
 		"script[src='https://www.googletagmanager.com/gtag/js?id=G-0QBDX221PR']",
 	).remove();
-
-	// Remove Crowdjet (removed upstream. retained here for legacy support.)
-	$("script[src='https://crowdin.com/js/crowdjet/crowdjet.js']").remove();
-	$("#crowdjet-container").remove();
-	$("#crowdjet-expand-container").remove();
 
 	// Move all JS to external file.
 	const cacheBreaker = "1494-8094d2a0f18a0987ea7f08a0cc0d0f50a755d15f";
