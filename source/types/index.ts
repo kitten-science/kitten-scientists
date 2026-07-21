@@ -525,8 +525,10 @@ export const ResourcesCraftable = [
 	"kerosene",
 	"manuscript",
 	"megalith",
+	"microchip",
 	"parchment",
 	"plate",
+	"plastic",
 	"scaffold",
 	"ship",
 	"slab",
@@ -594,6 +596,7 @@ export type TabId = (typeof TabIds)[number];
 
 export const Jobs = [
 	"any",
+	"ambassador",
 	"engineer",
 	"farmer",
 	"geologist",
