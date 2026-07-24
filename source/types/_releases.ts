@@ -16,11 +16,6 @@ export type ReleaseMeta = {
 		default: string;
 
 		/**
-		 * The same userscript, but minified.
-		 */
-		minified: string;
-
-		/**
 		 * Points to the GitHub release for this version.
 		 */
 		release: string;
