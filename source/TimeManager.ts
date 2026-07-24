@@ -79,7 +79,7 @@ export class TimeManager {
 			if (build.enabled === false) {
 				continue;
 			}
-			
+
 			const buildMeta =
 				build.variant === TimeItemVariant.Chronoforge
 					? this._host.game.time.getCFU(build.building as ChronoForgeUpgrade)

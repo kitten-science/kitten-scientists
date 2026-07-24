@@ -72,7 +72,7 @@ export class BonfireManager implements Automation {
 			if (build.enabled === false) {
 				continue;
 			}
-			
+
 			metaData[build.building] = this._host.game.bld.getBuildingExt(
 				(build.baseBuilding ?? build.building) as Building,
 			).meta as Required<UnsafeBuilding>;

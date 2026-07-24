@@ -70,7 +70,7 @@ export class SpaceManager implements Automation {
 			if (build.enabled === false) {
 				continue;
 			}
-			
+
 			metaData[build.building] = this._host.game.space.getBuilding(
 				build.building,
 			);

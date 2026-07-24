@@ -2,11 +2,7 @@ import { defineConfig } from "vite";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import manifest from "./package.json" with { type: "json" };
 
-const MINIFY = Boolean(process.env.MINIFY);
-
-const filename = ["kitten-scientists", MINIFY ? ".min" : "", ".inject.js"].join(
-	"",
-);
+const filename = "kitten-scientists.inject.js";
 
 const RELEASE_CHANNEL = JSON.stringify(process.env.RELEASE_CHANNEL ?? "fixed");
 const RELEASE_VERSION = JSON.stringify(
@@ -20,7 +16,7 @@ export default defineConfig({
 			entry: "source/entrypoint-inject.ts",
 			name: "kitten-scientists",
 		},
-		minify: MINIFY ? "esbuild" : false,
+		minify: false,
 		outDir: "output",
 		rolldownOptions: {
 			external: ["dojo", "jquery"],
@@ -40,7 +36,7 @@ export default defineConfig({
 	},
 	plugins: [
 		cssInjectedByJsPlugin({
-			attributes:{
+			attributes: {
 				id: "ks-styles",
 			},
 			topExecutionPriority: false,
