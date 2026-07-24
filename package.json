@@ -38,7 +38,7 @@
 		"@types/jquery": "4.0.1",
 		"@types/node": "26.1.1",
 		"@types/semver": "7.7.1",
-		"@types/web": "0.0.352",
+		"@types/web": "0.0.353",
 		"cheerio": "1.2.0",
 		"date-fns": "4.4.0",
 		"dojo": "1.17.3",
