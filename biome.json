@@ -51,7 +51,7 @@
 		}
 	},
 	"formatter": {
-		"includes": ["*/*.css", "*/*.js", "*/*.ts"]
+		"includes": ["**/*.css", "**/*.js", "**/*.ts"]
 	},
 	"linter": {
 		"rules": {

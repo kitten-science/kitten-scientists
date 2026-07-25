@@ -13,7 +13,7 @@ import {
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
-import type { UnsafeRace, UnsafeTradeSellOffer } from "./types/diplomacy.js";
+import type { UnsafeRace } from "./types/diplomacy.js";
 import type { Race, Resource } from "./types/index.js";
 import type { UnsafeResource } from "./types/resources.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
@@ -706,98 +706,79 @@ export class TradeManager implements Automation {
 	}
 
 	/**
-	 * Determine which resources and how much of them a trade with the given race results in.
+	 * Determine which resources, and how much of them, a trade with the given race results in at average.
+	 * This information is basically what you see in the UI on the individual races sections.
+	 * Where it shows which resources that race will provide, and how much of it min-max.
+	 * We want exactly this information - averaged.
 	 *
 	 * @param race The race to check.
 	 * @returns The resources returned from an average trade and their amount.
 	 */
 	getAverageTrade(race: UnsafeRace): Partial<Record<Resource, number>> {
-		// TODO: This is a lot of magic. It's possible some of it was copied directly from the game.
-		const standingRatio =
-			this._host.game.getEffect("standingRatio") +
-			this._host.game.diplomacy.calculateStandingFromPolicies(
-				race.name,
-				this._host.game,
-			);
-
-		const raceRatio = 1 + race.energy * 0.02;
+		// If you need to update this logic, copy from the game's source code from 'diplomacy.js',
+		// from the 'render' function of 'com.nuclearunicorn.game.ui.tab.Diplomacy'.
+		// Note that the race sections do not include Spice and Blueprints. The logic for these
+		// resources has to be copied from the 'tradeImpl' of 'classes.managers.DiplomacyManager'.
+		const baseTradeRatio = 1 + this._host.game.diplomacy.getTradeRatio();
+		const tradeVolume = this._host.game.diplomacy.getTradeVolume();
+		const currentSeason = this._host.game.calendar.getCurSeason().name;
 
 		const tradeRatio =
-			1 +
-			this._host.game.diplomacy.getTradeRatio() +
+			baseTradeRatio +
 			this._host.game.diplomacy.calculateTradeBonusFromPolicies(
 				race.name,
 				this._host.game,
-			);
+			) +
+			this._host.game.challenges
+				.getChallenge("pacifism")
+				.getTradeBonusEffect(this._host.game);
 
-		const failedRatio = race.standing < 0 ? race.standing + standingRatio : 0;
-		const successRatio = 0 < failedRatio ? 1 + failedRatio : 1;
-		const bonusRatio =
-			0 < race.standing ? Math.min(race.standing + standingRatio / 2, 1) : 0;
+		// Calculate for 100 trades, to easily derive a percentage.
+		const tradeResults =
+			this._host.game.diplomacy.calculateFailedNormalBonusTrades(
+				this._host.game.diplomacy.getFinalStanding(race),
+				100,
+				0,
+			);
+		const spiceChance = this._host.game.diplomacy.getSpiceTradeChance(race);
+		const blueprintTradeChance =
+			this._host.game.diplomacy.getBlueprintTradeChance(race);
+
+		const successRatio = (tradeResults.normal + tradeResults.bonus) / 100;
 
 		const output: Partial<Record<Resource, number>> = {};
 		for (const item of race.sells) {
-			if (!this._isValidTrade(item, race)) {
+			if (!this._host.game.diplomacy.isValidTrade(item, race)) {
 				// Still put invalid trades into the result to not cause missing keys.
 				output[item.name] = 0;
 				continue;
 			}
 
-			let mean = 0;
-			const tradeChance = race.embassyPrices
-				? item.chance *
-					(1 + this._host.game.getLimitedDR(0.01 * race.embassyLevel, 0.75))
-				: item.chance;
-			if (race.name === "zebras" && item.name === "titanium") {
-				const shipCount = this._host.game.resPool.get("ship").value;
-				const titaniumProbability = Math.min(0.15 + shipCount * 0.0035, 1);
-				const titaniumRatio = 1 + shipCount / 50;
-				mean = 1.5 * titaniumRatio * (successRatio * titaniumProbability);
-			} else {
-				const seasionRatio = !item.seasons
-					? 1
-					: 1 + item.seasons[this._host.game.calendar.getCurSeason().name];
-				const normBought =
-					(successRatio - bonusRatio) * Math.min(tradeChance / 100, 1);
-				const normBonus = bonusRatio * Math.min(tradeChance / 100, 1);
-				mean =
-					(normBought + 1.25 * normBonus) *
-					item.value *
-					raceRatio *
-					seasionRatio *
-					tradeRatio;
-			}
-			output[item.name] = mean;
+			const average =
+				item.value *
+				tradeRatio *
+				tradeVolume *
+				(1 + race.energy * 0.02) *
+				(1 + (item.seasons ? item.seasons[currentSeason] : 0));
+			output[item.name] = average;
 		}
 
-		const spiceChance = race.embassyPrices
-			? 0.35 * (1 + 0.01 * race.embassyLevel)
-			: 0.35;
+		if (race.name === "zebras") {
+			const zebraRelationModifierTitanium =
+				this._host.game.getEffect("zebraRelationModifier") *
+				(this._host.game.bld.getBuildingExt("tradepost").meta.effects
+					?.tradeRatio ?? 1);
+			output.titanium =
+				(1.5 + this._host.game.resPool.get("ship").value * 0.03) *
+				(1 + zebraRelationModifierTitanium) *
+				tradeVolume;
+		}
+
 		const spiceTradeAmount = successRatio * Math.min(spiceChance, 1);
-		output.spice =
-			25 * spiceTradeAmount + (50 * spiceTradeAmount * tradeRatio) / 2;
-		output.blueprint = 0.1 * successRatio;
+		output.spice = 25 * spiceTradeAmount + 50 * tradeRatio * spiceTradeAmount;
+		output.blueprint = successRatio * blueprintTradeChance;
 
 		return output;
-	}
-
-	/**
-	 * Determine if this trade is valid.
-	 *
-	 * @param item The tradeable item.
-	 * @param race The race to trade with.
-	 * @returns `true` if the trade is valid; `false` otherwise.
-	 */
-	private _isValidTrade(item: UnsafeTradeSellOffer, race: UnsafeRace): boolean {
-		return (
-			// Do we have enough embassies to receive the item?
-			!(item.minLevel && race.embassyLevel < item.minLevel) &&
-			// TODO: These seem a bit too magical.
-			(this._host.game.resPool.get(item.name).unlocked ||
-				item.name === "titanium" ||
-				item.name === "uranium" ||
-				race.name === "leviathans")
-		);
 	}
 
 	/**

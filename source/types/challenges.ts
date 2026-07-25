@@ -143,6 +143,7 @@ export type UnsafeChallenge = {
 	checkCompletionConditionOnReset?: (game: GamePage) => boolean;
 	actionOnCompletion?: (game: GamePage) => void;
 	reserveDelay?: boolean;
+	getTradeBonusEffect: (game: GamePage) => number;
 	unlocks?: {
 		chronoforge?: Array<UnsafeChronoForgeUpgrade>;
 	};

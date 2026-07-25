@@ -32,10 +32,24 @@ export type DiplomacyManager = {
 	onLeavingIW: () => void;
 	unlockElders: () => void;
 	onNewDay: () => void;
+	undo: (data: unknown) => void;
+	triggerOnEmbassyCountChanged: () => void;
+	calculateFailedNormalBonusTrades: (
+		standing: number,
+		numTrades: number,
+		nonRandom: number,
+	) => { failed: number; normal: number; bonus: number };
 	tradeImpl: (race: UnsafeRace, totalTradeAmount: number) => void;
 	_fuzzGainedAmount: (amount: number, width: number) => number;
 	getManpowerCost: () => number;
 	getGoldCost: () => number;
+	/**
+	 * Trade volume is a multiplier to the race.buys & race.sells arrays.
+	 * It also affects titanium gained from trading with Zebras.
+	 * Does not affect special rare resources gained (blueprint, spice).
+	 * Note that this function returns 1 by default (with no modifiers active), unlike other ratio calculations that return 0 by default.
+	 */
+	getTradeVolume: () => number;
 	trade: (race: UnsafeRace) => void;
 	tradeMultiple: (race: UnsafeRace, amt: number) => void;
 	hasMultipleResources: (race: UnsafeRace, amt: number) => void;
@@ -43,6 +57,7 @@ export type DiplomacyManager = {
 	gainTradeRes: (yieldResTotal: boolean, amtTrade: number) => void;
 	getMaxTradeAmt: (race: UnsafeRace) => number | undefined;
 	getFinalStanding: (race: UnsafeRace) => number;
+	getBlueprintTradeChance: (race: UnsafeRace) => number;
 	getSpiceTradeChance: (race: UnsafeRace) => number;
 	getResourceTradeChance: (race: UnsafeRace) => number;
 	getMarkerCap: () => number;

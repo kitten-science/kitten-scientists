@@ -5,11 +5,9 @@ import manifest from "./package.json" with { type: "json" };
 
 const versionString = process.env.RELEASE_VERSION ?? "0.0.0-ci";
 
-const filename = [
-	"kitten-scientists",
-	`-${versionString}`,
-	".user.js",
-].join("");
+const filename = ["kitten-scientists", `-${versionString}`, ".user.js"].join(
+	"",
+);
 
 const RELEASE_CHANNEL = process.env.RELEASE_CHANNEL ?? "fixed";
 

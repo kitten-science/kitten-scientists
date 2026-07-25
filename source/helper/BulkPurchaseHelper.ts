@@ -303,8 +303,8 @@ export class BulkPurchaseHelper {
 	): Array<ConcreteBuild> {
 		const buildDrafts: Array<ConcreteBuild> = [];
 		const buildsSorted = objectEntries(builds).sort((a, b) => {
-			const aMeta = metaData[a[0]]??{val:0};
-			const bMeta = metaData[b[0]]??{val:0};
+			const aMeta = metaData[a[0]] ?? { val: 0 };
+			const bMeta = metaData[b[0]] ?? { val: 0 };
 			if (aMeta.val !== bMeta.val) {
 				return aMeta.val - bMeta.val;
 			}
@@ -328,7 +328,6 @@ export class BulkPurchaseHelper {
 			}
 
 			const buildMetaData = mustExist(metaData[name]);
-
 
 			// tHidden is a flag that is manually set to exclude time buildings from the process.
 			if ("tHidden" in buildMetaData && buildMetaData.tHidden === true) {
