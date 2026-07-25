@@ -68,41 +68,43 @@ jobs:
               --content-type "application/json" \
               --body release-info.json
 
-            # Put the dev scripts on the channel.
+            # Dev
             aws s3api put-object \
               --bucket kitten-science-us0 \
               --key $PREFIX/dev.js \
               --cache-control "public, s-maxage=600" \
               --content-type "text/javascript" \
               --body dev.js || true
-            aws s3api put-object \
-              --bucket kitten-science-us0 \
-              --key $PREFIX/dev.min.js \
-              --cache-control "public, s-maxage=600" \
-              --content-type "text/javascript" \
-              --body dev.js || true
-
-            # Put the nightly scripts on the channel.
+            # Nightly
             aws s3api put-object \
               --bucket kitten-science-us0 \
               --key $PREFIX/nightly.js \
               --cache-control "public, s-maxage=3600" \
               --content-type "text/javascript" \
               --body nightly.js || true
-            aws s3api put-object \
-              --bucket kitten-science-us0 \
-              --key $PREFIX/nightly.min.js \
-              --cache-control "public, s-maxage=3600" \
-              --content-type "text/javascript" \
-              --body nightly.js || true
-
-            # Put the stable scripts on the channel.
+            # Stable
             aws s3api put-object \
               --bucket kitten-science-us0 \
               --key $PREFIX/stable.js \
               --cache-control "public, s-maxage=86400" \
               --content-type "text/javascript" \
               --body stable.js || true
+
+            # Also upload the same scripts under the ".min." key.
+            # They are not minified, but will work just as well for users with
+            # that URL.
+            aws s3api put-object \
+              --bucket kitten-science-us0 \
+              --key $PREFIX/dev.min.js \
+              --cache-control "public, s-maxage=600" \
+              --content-type "text/javascript" \
+              --body dev.js || true
+            aws s3api put-object \
+              --bucket kitten-science-us0 \
+              --key $PREFIX/nightly.min.js \
+              --cache-control "public, s-maxage=3600" \
+              --content-type "text/javascript" \
+              --body nightly.js || true
             aws s3api put-object \
               --bucket kitten-science-us0 \
               --key $PREFIX/stable.min.js \
