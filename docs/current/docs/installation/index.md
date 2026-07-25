@@ -35,9 +35,13 @@ javascript:(function(){var d=document,s=d.createElement('script');s.src='https:/
 
 !!! note
 
-    This bookmarklet points to the **latest stable** release of KS.
+    This bookmarklet always points to the **latest stable** release of KS.
 
-This bookmarklet uses <https://kitten-science.com/stable.js>, the stable release. You can also replace that URL with the [nightly](https://kitten-science.com/nightly.js) build.
+    If you need to switch to the _nightly_ release (because the stable version is no longer working right), use this bookmarklet instead:
+
+    ```
+    javascript:(function(){var d=document,s=d.createElement('script');s.src='https://kitten-science.com/nightly.js';d.body.appendChild(s);})();
+    ```
 
 *[KG]: Kittens Game
 *[KS]: Kitten Scientists
