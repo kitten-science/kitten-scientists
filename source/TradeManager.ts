@@ -110,7 +110,7 @@ export class TradeManager implements Automation {
 		}
 
 		// Figure out how much we can currently trade
-		let maxTrades = this.getLowestTradeAmount(null, true, false);
+		let maxTrades = this.getLowestTradeAmount(null);
 
 		// If no trades are possible, bail out.
 		if (maxTrades < 1) {
@@ -121,49 +121,9 @@ export class TradeManager implements Automation {
 
 		// This array should hold the amount of trades possible with each race.
 		// The indices between this array and `trades` align.
-		const maxByRace: Array<number> = [];
-		// For all races we consider trading with, perform a more thorough check
-		// if we actually can trade with them and how many times we could trade
-		// with them.
-		for (let tradeIndex = 0; tradeIndex < trades.length; tradeIndex++) {
-			const race = trades[tradeIndex];
-			const tradeSettings = this.settings.races[race];
-
-			// Does this trade require a certain resource?
-			const require = !tradeSettings.require
-				? false
-				: this._workshopManager.getResource(tradeSettings.require);
-
-			// Have the trigger conditions for this trade been met?
-			const trigger = Engine.evaluateSubSectionTrigger(
-				sectionTrigger,
-				tradeSettings.trigger,
-			);
-			const trigConditions =
-				(!require || trigger <= require.value / require.maxValue) &&
-				trigger <= gold.value / gold.maxValue;
-
-			// How many trades could we do?
-			const tradePos = this.getLowestTradeAmount(
-				race,
-				tradeSettings.limited,
-				trigConditions,
-			);
-
-			// If no trades are possible, remove the race.
-			if (tradePos < 1) {
-				trades.splice(tradeIndex, 1);
-				tradeIndex--;
-				continue;
-			}
-
-			maxByRace.push(tradePos);
-		}
-
-		// If no trades are left over after this check, bail out.
-		if (trades.length === 0) {
-			return;
-		}
+		const tradeCountsPossible = trades
+			.map((_) => ({ race: _, count: this.getLowestTradeAmount(_) }))
+			.filter((_) => 0 < _.count);
 
 		// Now let's do some trades.
 
@@ -171,23 +131,22 @@ export class TradeManager implements Automation {
 		const tradesDone: Partial<Record<Race, number>> = {};
 		// While we have races left to trade with, and enough resources to trade (this
 		// is indicated by `maxTrades`)...
-		while (0 < trades.length && 1 <= maxTrades) {
-			// If we can make fewer trades than we have resources available for...
-			if (maxTrades < trades.length) {
-				// ...find a random race to trade with
-				const randomRaceIndex = Math.floor(Math.random() * trades.length);
-				const tradeIndex = trades[randomRaceIndex];
-				// Init the counter if necessary.
-				if (isNil(tradesDone[tradeIndex])) {
-					tradesDone[tradeIndex] = 0;
+		while (0 < tradeCountsPossible.length && 1 <= maxTrades) {
+			// If we can make fewer trades than we have races to trade with, pick a random one.
+			if (maxTrades < tradeCountsPossible.length) {
+				const randomRaceIndex = Math.floor(
+					Math.random() * tradeCountsPossible.length,
+				);
+				const race = tradeCountsPossible[randomRaceIndex].race;
+				if (isNil(tradesDone[race])) {
+					tradesDone[race] = 0;
 				}
-				tradesDone[tradeIndex] += 1;
+				tradesDone[race] += 1;
 				maxTrades -= 1;
 
 				// As we are constrained on resources, don't trade with this race again.
 				// We want to distribute the few resources we have between races.
-				trades.splice(randomRaceIndex, 1);
-				maxByRace.splice(randomRaceIndex, 1);
+				tradeCountsPossible.splice(randomRaceIndex, 1);
 				continue;
 			}
 
@@ -198,24 +157,27 @@ export class TradeManager implements Automation {
 			// least amount of trades with, then continue to make trades with the
 			// races we can make more trades with (although that amount could be reduced
 			// by the time we get to them).
-			let minTrades = Math.floor(maxTrades / trades.length);
+			let minTrades = Math.floor(maxTrades / tradeCountsPossible.length);
 			let minTradeIndex = 0;
-			const tradeIndex = trades[minTradeIndex];
-			for (let tradeIndex = 0; tradeIndex < trades.length; ++tradeIndex) {
-				if (maxByRace[tradeIndex] < minTrades) {
-					minTrades = maxByRace[tradeIndex];
+			const race = tradeCountsPossible[minTradeIndex].race;
+			for (
+				let tradeIndex = 0;
+				tradeIndex < tradeCountsPossible.length;
+				++tradeIndex
+			) {
+				if (tradeCountsPossible[tradeIndex].count < minTrades) {
+					minTrades = tradeCountsPossible[tradeIndex].count;
 					minTradeIndex = tradeIndex;
 				}
 			}
 
 			// Store this trade in the trades we've "done".
-			if (isNil(tradesDone[tradeIndex])) {
-				tradesDone[tradeIndex] = 0;
+			if (isNil(tradesDone[race])) {
+				tradesDone[race] = 0;
 			}
-			tradesDone[tradeIndex] += minTrades;
+			tradesDone[race] += minTrades;
 			maxTrades -= minTrades;
-			trades.splice(minTradeIndex, 1);
-			maxByRace.splice(minTradeIndex, 1);
+			tradeCountsPossible.splice(minTradeIndex, 1);
 		}
 
 		// If we found no trades to do, bail out.
@@ -263,11 +225,7 @@ export class TradeManager implements Automation {
 
 		// Now actually perform the calculated trades.
 		for (const [name, count] of objectEntries(tradesDone)) {
-			// TODO: This check should be redundant. If no trades were possible,
-			//       the entry shouldn't even exist.
-			if (0 < count) {
-				this.trade(name, count);
-			}
+			this.trade(name, count);
 		}
 	}
 
@@ -785,15 +743,9 @@ export class TradeManager implements Automation {
 	 * Determine how many trades are at least possible.
 	 *
 	 * @param name The race to trade with.
-	 * @param _limited Is the race set to be limited.
-	 * @param _trigConditions Ignored
 	 * @returns The lowest number of trades possible with this race.
 	 */
-	getLowestTradeAmount(
-		name: Race | null,
-		_limited: boolean,
-		_trigConditions: unknown,
-	): number {
+	getLowestTradeAmount(name: Race | null): number {
 		let amount: number | undefined;
 		const materials = this.getMaterials(name);
 
@@ -904,7 +856,8 @@ export class TradeManager implements Automation {
 		const prices = this.getRace(race).buys;
 
 		for (const price of prices) {
-			materials[price.name] = price.val;
+			materials[price.name] =
+				price.val * this._host.game.diplomacy.getTradeVolume();
 		}
 
 		return materials;
