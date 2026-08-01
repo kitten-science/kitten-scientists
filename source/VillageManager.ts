@@ -1,6 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { Automation, FrameContext } from "./Engine.js";
-import { MaterialsCache } from "./helper/MaterialsCache.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import { VillageSettings } from "./settings/VillageSettings.js";
 import { objectEntries } from "./tools/Entries.js";
@@ -12,7 +11,6 @@ import type { WorkshopManager } from "./WorkshopManager.js";
 export class VillageManager implements Automation {
 	private readonly _host: KittenScientists;
 	readonly settings: VillageSettings;
-	private readonly _cacheManager: MaterialsCache;
 	private readonly _workshopManager: WorkshopManager;
 
 	constructor(
@@ -22,7 +20,6 @@ export class VillageManager implements Automation {
 	) {
 		this._host = host;
 		this.settings = settings;
-		this._cacheManager = new MaterialsCache(this._host);
 		this._workshopManager = workshopManager;
 	}
 
@@ -34,11 +31,11 @@ export class VillageManager implements Automation {
 		this.autoDistributeKittens(context);
 
 		if (this.settings.hunt.enabled) {
-			this.autoHunt(this._cacheManager);
+			this.autoHunt();
 		}
 
 		if (this.settings.holdFestivals.enabled) {
-			this.autoFestival(this._cacheManager);
+			this.autoFestival();
 		}
 
 		if (this.settings.electLeader.enabled) {
@@ -230,7 +227,7 @@ export class VillageManager implements Automation {
 		}
 	}
 
-	autoHunt(cacheManager?: MaterialsCache) {
+	autoHunt() {
 		const manpower = this._workshopManager.getResource("manpower");
 		const trigger = this.settings.hunt.trigger;
 
@@ -275,14 +272,6 @@ export class VillageManager implements Automation {
 						outValue * huntCount;
 		}
 
-		// Store the hunted resources in the cache. Why? No idea.
-		if (!isNil(cacheManager)) {
-			cacheManager.pushToCache({
-				materials: trueOutput,
-				timeStamp: this._host.game.timer.ticksTotal,
-			});
-		}
-
 		// Now actually perform the hunts. We can't use `village.huntAll`, as that
 		// always spends *all* available manpower and ignores our reserve. Instead
 		// we replicate its behavior (see the game's `huntFraction`) for a bounded
@@ -296,7 +285,7 @@ export class VillageManager implements Automation {
 		);
 	}
 
-	autoFestival(cacheManager?: MaterialsCache) {
+	autoFestival() {
 		// If we haven't researched festivals yet, or still have more than 400 days left on one,
 		// don't hold (another) one.
 		if (
@@ -330,24 +319,18 @@ export class VillageManager implements Automation {
 			4000 *
 				(craftManager.getTickVal(
 					craftManager.getResource("manpower"),
-					cacheManager,
-					true,
 				) as number) >
 			1500;
 		const cultureProfitable =
 			4000 *
 				(craftManager.getTickVal(
 					craftManager.getResource("culture"),
-					cacheManager,
-					true,
 				) as number) >
 			5000;
 		const parchProfitable =
 			4000 *
 				(craftManager.getTickVal(
 					craftManager.getResource("parchment"),
-					cacheManager,
-					true,
 				) as number) >
 			2500;
 

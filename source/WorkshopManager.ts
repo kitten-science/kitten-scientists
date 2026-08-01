@@ -1,6 +1,5 @@
 import { isNil, mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import { type Automation, Engine, type FrameContext } from "./Engine.js";
-import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import {
 	type CraftSettingsItem,
@@ -412,15 +411,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 	 * this also includes how many of them we *could* craft this tick.
 	 *
 	 * @param resource The resource to retrieve the production for.
-	 * @param cacheManager A `CacheManager` to use in the process.
-	 * @param preTrade ?
 	 * @returns The amount of resources produced per tick, adjusted arbitrarily.
 	 */
-	getTickVal(
-		resource: UnsafeResource,
-		cacheManager?: MaterialsCache,
-		preTrade: boolean | undefined = undefined,
-	): number | "ignore" {
+	getTickVal(resource: UnsafeResource): number | "ignore" {
 		let production = this._host.game.getResourcePerTick(resource.name, true);
 
 		// For craftable resources, we also want to take into account how much of them
@@ -456,13 +449,6 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 			return "ignore";
 		}
 
-		// If "preTrade" was set, increase the production. The "resValue" stored in the cache
-		// makes no sense.
-		// TODO: The only time this is used is for holding festivals.
-		//       It's unclear why this would be necessary.
-		if (!preTrade && !isNil(cacheManager)) {
-			production += cacheManager.getResValue(resource.name);
-		}
 		return production;
 	}
 

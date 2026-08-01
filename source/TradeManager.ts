@@ -1,10 +1,10 @@
+import { shuffleArray } from "@oliversalzburg/js-utils/data/array.js";
 import {
 	isNil,
 	type Maybe,
 	mustExist,
 } from "@oliversalzburg/js-utils/data/nil.js";
 import { type Automation, Engine, type FrameContext } from "./Engine.js";
-import type { MaterialsCache } from "./helper/MaterialsCache.js";
 import type { KittenScientists } from "./KittenScientists.js";
 import {
 	TradeSettings,
@@ -54,7 +54,7 @@ export class TradeManager implements Automation {
 		}
 	}
 
-	autoTrade(cacheManager?: MaterialsCache) {
+	autoTrade() {
 		const catpower = this._workshopManager.getResource("manpower");
 		const gold = this._workshopManager.getResource("gold");
 		const sectionTrigger = this.settings.trigger;
@@ -104,127 +104,57 @@ export class TradeManager implements Automation {
 			}
 		}
 
-		// If no possible trades were found, bail out.
+		// If no trade options were triggered, bail out.
 		if (trades.length === 0) {
 			return;
 		}
 
-		// Figure out how much we can currently trade
-		let maxTrades = this.getLowestTradeAmount(null);
-
-		// If no trades are possible, bail out.
-		if (maxTrades < 1) {
-			return;
-		}
-
-		// Distribute max trades without starving any race.
-
-		// This array should hold the amount of trades possible with each race.
-		// The indices between this array and `trades` align.
-		const tradeCountsPossible = trades
-			.map((_) => ({ race: _, count: this.getLowestTradeAmount(_) }))
-			.filter((_) => 0 < _.count);
+		// How many times we could trade total.
+		const maxTrades = this.getLowestTradeAmount(null);
+		// How many times we could trade with each race.
+		const tradeCountsPossible = new Map<Race, number>(
+			trades.map((_) => [_, this.getLowestTradeAmount(_)]),
+		);
 
 		// Now let's do some trades.
+		// The current implementation aims for correctness. It is SLOW.
+		// If we can do thousands of trades, we will iterate through this code
+		// thousands of times.
+		// TODO: Optimize this for performance.
 
-		// This keeps track of how many trades we've done with each race.
-		const tradesDone: Partial<Record<Race, number>> = {};
-		// While we have races left to trade with, and enough resources to trade (this
-		// is indicated by `maxTrades`)...
-		while (0 < tradeCountsPossible.length && 1 <= maxTrades) {
-			// If we can make fewer trades than we have races to trade with, pick a random one.
-			if (maxTrades < tradeCountsPossible.length) {
-				const randomRaceIndex = Math.floor(
-					Math.random() * tradeCountsPossible.length,
-				);
-				const race = tradeCountsPossible[randomRaceIndex].race;
-				if (isNil(tradesDone[race])) {
-					tradesDone[race] = 0;
-				}
-				tradesDone[race] += 1;
-				maxTrades -= 1;
-
-				// As we are constrained on resources, don't trade with this race again.
-				// We want to distribute the few resources we have between races.
-				tradeCountsPossible.splice(randomRaceIndex, 1);
-				continue;
+		const racesLeft = shuffleArray(
+			tradeCountsPossible
+				.entries()
+				.map(([race, count]) => (0 < count ? (race as Race) : null))
+				.filter((_) => _ !== null)
+				.toArray(),
+		);
+		let tradesOrderedTotal = 0;
+		const tradeCountsOrdered = new Map<Race, number>(
+			racesLeft.map((_) => [_, 0]),
+		);
+		let raceIndex = 0;
+		while (0 < racesLeft.length && tradesOrderedTotal < maxTrades) {
+			const race = racesLeft[raceIndex];
+			tradeCountsOrdered.set(race, mustExist(tradeCountsOrdered.get(race)) + 1);
+			++tradesOrderedTotal;
+			tradeCountsPossible.set(
+				race,
+				mustExist(tradeCountsPossible.get(race)) - 1,
+			);
+			if (tradeCountsPossible.get(race) === 0) {
+				racesLeft.splice(raceIndex, 1);
 			}
-
-			// We now want to determine which race we can trade with the least amount
-			// of times.
-			// This likely to determine the "best" trades to perform.
-			// The result is that we trade first with the races that we can make the
-			// least amount of trades with, then continue to make trades with the
-			// races we can make more trades with (although that amount could be reduced
-			// by the time we get to them).
-			let minTrades = Math.floor(maxTrades / tradeCountsPossible.length);
-			let minTradeIndex = 0;
-			const race = tradeCountsPossible[minTradeIndex].race;
-			for (
-				let tradeIndex = 0;
-				tradeIndex < tradeCountsPossible.length;
-				++tradeIndex
-			) {
-				if (tradeCountsPossible[tradeIndex].count < minTrades) {
-					minTrades = tradeCountsPossible[tradeIndex].count;
-					minTradeIndex = tradeIndex;
-				}
-			}
-
-			// Store this trade in the trades we've "done".
-			if (isNil(tradesDone[race])) {
-				tradesDone[race] = 0;
-			}
-			tradesDone[race] += minTrades;
-			maxTrades -= minTrades;
-			tradeCountsPossible.splice(minTradeIndex, 1);
+			raceIndex = racesLeft.length <= raceIndex + 1 ? 0 : raceIndex + 1;
 		}
 
 		// If we found no trades to do, bail out.
-		if (Object.values(tradesDone).length === 0) {
+		if (tradesOrderedTotal === 0) {
 			return;
 		}
 
-		// Calculate how much we will spend and earn from trades.
-		// This is straight forward.
-		const tradeNet: Partial<Record<Resource, number>> = {};
-		for (const [name, amount] of objectEntries(tradesDone)) {
-			const race = this.getRace(name);
-
-			const materials = this.getMaterials(name);
-			for (const [mat, matAmount] of objectEntries(materials)) {
-				if (!tradeNet[mat]) {
-					tradeNet[mat] = 0;
-				}
-				tradeNet[mat] -= matAmount * amount;
-			}
-
-			const meanOutput = this.getAverageTrade(race);
-			for (const [out, outValue] of objectEntries(meanOutput)) {
-				const res = this._workshopManager.getResource(out);
-				if (!tradeNet[out]) {
-					tradeNet[out] = 0;
-				}
-				tradeNet[out] +=
-					res.maxValue > 0
-						? Math.min(
-								mustExist(meanOutput[out]) * mustExist(tradesDone[name]),
-								Math.max(res.maxValue - res.value, 0),
-							)
-						: outValue * mustExist(tradesDone[name]);
-			}
-		}
-
-		// Update the cache with the changes produced from the trades.
-		if (!isNil(cacheManager)) {
-			cacheManager.pushToCache({
-				materials: tradeNet,
-				timeStamp: this._host.game.timer.ticksTotal,
-			});
-		}
-
 		// Now actually perform the calculated trades.
-		for (const [name, count] of objectEntries(tradesDone)) {
+		for (const [name, count] of tradeCountsOrdered.entries()) {
 			this.trade(name, count);
 		}
 	}
@@ -781,11 +711,8 @@ export class TradeManager implements Automation {
 			return 0;
 		}
 
-		// If no race was specified, or this is trading with leviathans, return the
-		// currently known, lowest amount.
-		// The special case for leviathans indicates that the following code is buggy or
-		// problematic, as leviathans are the last race.
-		if (name === null || name === "leviathans") {
+		// If no race was specified, return the currently known lowest amount.
+		if (name === null) {
 			return amount;
 		}
 
