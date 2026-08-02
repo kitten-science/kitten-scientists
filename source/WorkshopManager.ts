@@ -728,14 +728,17 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 			),
 		];
 		const cellMap = new Map(
-			resourceCells.map((_) => [
-				mustExist(
-					[...(_.parentNode as HTMLElement).classList.entries()].find(
-						([_i, __]) => __.startsWith("resource_"),
-					),
-				)[1].substring(9) as Resource,
-				_,
-			]),
+			resourceCells.map(
+				(_) =>
+					[
+						mustExist(
+							[...(_.parentNode as HTMLElement).classList.entries()].find(
+								([_i, __]) => __.startsWith("resource_"),
+							),
+						)[1].substring(9) as Resource,
+						_,
+					] as const,
+			),
 		);
 
 		for (const [name, resource] of objectEntries(
