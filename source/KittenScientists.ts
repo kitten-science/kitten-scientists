@@ -14,6 +14,7 @@ import type { GamePage } from "./types/game.js";
 import type { I18nEngine, Locale } from "./types/index.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 import { UserInterface } from "./ui/UserInterface.js";
+import "iterator-helpers-polyfill";
 
 declare global {
 	const GM:

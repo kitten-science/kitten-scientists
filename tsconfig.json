@@ -8,7 +8,9 @@
 		"importHelpers": true,
 		"incremental": true,
 		"isolatedModules": true,
-		"lib": ["ESNext"],
+		"lib": [
+			"ESNext"
+		],
 		"module": "nodenext",
 		"moduleResolution": "nodenext",
 		"outDir": "lib",
@@ -17,10 +19,15 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"target": "esnext",
-		"types": ["node", "web"],
+		"types": [
+			"node",
+			"web"
+		],
 		"useDefineForClassFields": true
 	},
-	"exclude": ["./devcontainer/overlay"],
+	"exclude": [
+		"./devcontainer/overlay"
+	],
 	"include": [
 		"./@types",
 		"./devcontainer",
