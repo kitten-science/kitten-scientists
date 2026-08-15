@@ -42,7 +42,7 @@
 		"cheerio": "1.2.0",
 		"date-fns": "4.4.0",
 		"dojo": "1.17.3",
-		"esbuild": "0.28.1",
+		"esbuild": "0.28.2",
 		"iterator-helpers-polyfill": "3.0.1",
 		"rollup": "4.62.4",
 		"rollup-plugin-cleanup": "3.2.1",
