@@ -66,10 +66,14 @@ export class ActivitySummary {
 	 */
 	private _lastyear: number | undefined;
 
+	private _sections = new Map<ActivitySummarySection, Map<string, number>>();
+
 	/**
 	 * The individual sections/categories of the activity summary.
 	 */
-	private _sections = new Map<ActivitySummarySection, Map<string, number>>();
+	get sections() {
+		return this._sections;
+	}
 
 	constructor(host: KittenScientists) {
 		this._host = host;
@@ -96,6 +100,39 @@ export class ActivitySummary {
 			summarySection.set(name, 0);
 		}
 		summarySection.set(name, mustExist(summarySection.get(name)) + amount);
+	}
+
+	getDuration() {
+		if (this._lastyear === undefined || this._lastday === undefined) {
+			return "";
+		}
+
+		let years = this._host.game.calendar.year - this._lastyear;
+		let days = this._host.game.calendar.day - this._lastday;
+
+		if (days < 0) {
+			years -= 1;
+			days += 400;
+		}
+
+		let duration = "";
+		if (years > 0) {
+			duration += `${years} `;
+			duration +=
+				years === 1
+					? this._host.engine.i18n("summary.year")
+					: this._host.engine.i18n("summary.years");
+		}
+
+		if (days >= 0) {
+			if (years > 0) duration += this._host.engine.i18n("summary.separator");
+			duration += `${roundToTwo(days)} `;
+			duration +=
+				days === 1
+					? this._host.engine.i18n("summary.day")
+					: this._host.engine.i18n("summary.days");
+		}
+		return duration;
 	}
 
 	renderSummary(): Array<string> {
@@ -199,33 +236,9 @@ export class ActivitySummary {
 		}
 
 		if (this._lastday && this._lastyear) {
-			let years = this._host.game.calendar.year - this._lastyear;
-			let days = this._host.game.calendar.day - this._lastday;
-
-			if (days < 0) {
-				years -= 1;
-				days += 400;
-			}
-
-			let duration = "";
-			if (years > 0) {
-				duration += `${years} `;
-				duration +=
-					years === 1
-						? this._host.engine.i18n("summary.year")
-						: this._host.engine.i18n("summary.years");
-			}
-
-			if (days >= 0) {
-				if (years > 0) duration += this._host.engine.i18n("summary.separator");
-				duration += `${roundToTwo(days)} `;
-				duration +=
-					days === 1
-						? this._host.engine.i18n("summary.day")
-						: this._host.engine.i18n("summary.days");
-			}
-
-			summary.push(this._host.engine.i18n("summary.head", [duration]));
+			summary.push(
+				this._host.engine.i18n("summary.head", [this.getDuration()]),
+			);
 		}
 
 		return summary;

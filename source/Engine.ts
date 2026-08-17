@@ -162,7 +162,7 @@ export class Engine {
 	readonly villageManager: VillageManager;
 	readonly workshopManager: WorkshopManager;
 
-	private readonly _activitySummary: ActivitySummary;
+	readonly activitySummary: ActivitySummary;
 	private readonly _bulkManager: BulkPurchaseHelper;
 	/**
 	 * Are we standing by for a game reset?
@@ -180,7 +180,7 @@ export class Engine {
 		this.setLanguage(gameLanguage, false);
 
 		this._host = host;
-		this._activitySummary = new ActivitySummary(this._host);
+		this.activitySummary = new ActivitySummary(this._host);
 
 		this.workshopManager = new WorkshopManager(this._host);
 		this._bulkManager = new BulkPurchaseHelper(
@@ -714,25 +714,7 @@ export class Engine {
 		amount = 1,
 		section: ActivitySummarySection = "other",
 	): void {
-		this._activitySummary.storeActivity(name, amount, section);
-	}
-
-	getSummary() {
-		return this._activitySummary.renderSummary();
-	}
-
-	displayActivitySummary(): void {
-		const summary = this.getSummary();
-		for (const summaryLine of summary) {
-			this.printOutput("ks-summary", summaryLine);
-		}
-
-		// Clear out the old activity
-		this.resetActivitySummary();
-	}
-
-	resetActivitySummary(): void {
-		this._activitySummary.resetActivity();
+		this.activitySummary.storeActivity(name, amount, section);
 	}
 
 	printOutput(

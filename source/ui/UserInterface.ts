@@ -1,9 +1,9 @@
 import { formatMilliseconds } from "@oliversalzburg/js-utils/format/milliseconds.js";
 import { measure } from "@oliversalzburg/js-utils/measurement/performance.js";
-import { Icons } from "../images/Icons.js";
 import type { KittenScientists } from "../KittenScientists.js";
 import { cl } from "../tools/Log.js";
 import { UserScriptLoader } from "../UserScriptLoader.js";
+import { ActivityUi } from "./ActivityUi.js";
 import { BonfireSettingsUi } from "./BonfireSettingsUi.js";
 import { UiComponent } from "./components/UiComponent.js";
 import { EngineSettingsUi } from "./EngineSettingsUi.js";
@@ -22,8 +22,6 @@ import { VillageSettingsUi } from "./VillageSettingsUi.js";
 import { WorkshopSettingsUi } from "./WorkshopSettingsUi.js";
 
 export class UserInterface extends UiComponent {
-	readonly showActivity: JQuery;
-
 	private _engineUi: EngineSettingsUi;
 	private _sections: Array<
 		| BonfireSettingsUi
@@ -39,6 +37,7 @@ export class UserInterface extends UiComponent {
 		| LogFiltersSettingsUi
 		| StateManagementUi
 		| InternalsUi
+		| ActivityUi
 	>;
 	stateManagementUi: StateManagementUi;
 
@@ -110,6 +109,7 @@ export class UserInterface extends UiComponent {
 			new LogFiltersSettingsUi(this, engine.settings.filters),
 			this.stateManagementUi,
 			new InternalsUi(this, engine.settings, engine.settings.locale),
+			new ActivityUi(this, engine.settings, engine.settings.locale),
 		];
 
 		this.parent = this;
@@ -157,18 +157,6 @@ export class UserInterface extends UiComponent {
 			});
 		}
 
-		// Set up the "show activity summary" area.
-		this.showActivity = $("<span/>", {
-			html: `<svg style="width: 18px; height: 18px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${Icons.Summary}"/></svg>`,
-			title: host.engine.i18n("summary.show"),
-		}).addClass(styles.showActivity);
-
-		this.showActivity.on("click", () => {
-			host.engine.displayActivitySummary();
-		});
-
-		$("#clearLog").prepend(this.showActivity);
-
 		// Add Kitten Scientists above the game log.
 
 		const usingKSColumn =
@@ -214,7 +202,6 @@ export class UserInterface extends UiComponent {
 			UserScriptLoader.window.clearTimeout(this._refreshTimeout);
 			this._refreshTimeout = undefined;
 		}
-		this.showActivity.remove();
 		this.element.remove();
 	}
 
