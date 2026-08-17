@@ -66,6 +66,10 @@ export class TradeManager implements Automation {
 
 		// Determine how many races we will trade with this cycle.
 		for (const trade of Object.values(this.settings.races)) {
+			if (!trade.enabled || !trade.seasons[season].enabled) {
+				continue;
+			}
+
 			const race = this.getRace(trade.race);
 			const trigger = Engine.evaluateSubSectionTrigger(
 				sectionTrigger,
@@ -75,8 +79,6 @@ export class TradeManager implements Automation {
 			// Check if the race is enabled, in season, unlocked, and we can actually afford it.
 			if (
 				trigger < 0 ||
-				!trade.enabled ||
-				!trade.seasons[season].enabled ||
 				!race.unlocked ||
 				!this.singleTradePossible(sectionTrigger, catpower, gold, trade)
 			) {
@@ -223,6 +225,10 @@ export class TradeManager implements Automation {
 			return;
 		}
 
+		const priceCoefficient =
+			1 - this._host.game.getEffect("embassyCostReduction");
+		const embassyFakeBought = this._host.game.getEffect("embassyFakeBought");
+
 		while (bulkTracker.length > 0) {
 			for (let raceIndex = 0; raceIndex < bulkTracker.length; raceIndex++) {
 				const name = bulkTracker[raceIndex];
@@ -235,7 +241,10 @@ export class TradeManager implements Automation {
 				}
 
 				const nextPrice =
-					emBulk.basePrice * 1.15 ** (emBulk.currentEm + emBulk.val);
+					emBulk.basePrice *
+					priceCoefficient *
+					1.15 ** (emBulk.currentEm + embassyFakeBought + emBulk.val);
+
 				if (nextPrice <= cultureVal) {
 					cultureVal -= nextPrice;
 					emBulk.priceSum += nextPrice;
