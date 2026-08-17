@@ -41,7 +41,7 @@
 }
 
 .button {
-	align-items: end;
+	align-items: center;
 	cursor: pointer;
 	display: flex;
 	opacity: 0.8;
@@ -71,7 +71,6 @@
 
 	.buttonIcon {
 		margin: 0 2px 0 0;
-		vertical-align: sub;
 	}
 
 	&.alignRight {
