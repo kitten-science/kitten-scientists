@@ -2,22 +2,19 @@
 	"$schema": "https://json.schemastore.org/tsconfig.json",
 	"compilerOptions": {
 		"checkJs": true,
-		"declaration": true,
-		"declarationMap": true,
 		"forceConsistentCasingInFileNames": true,
-		"importHelpers": true,
 		"incremental": true,
 		"isolatedModules": true,
 		"lib": [
 			"ESNext"
 		],
-		"module": "nodenext",
-		"moduleResolution": "nodenext",
-		"outDir": "lib",
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"outDir": "output",
 		"resolveJsonModule": true,
 		"rootDir": ".",
 		"skipLibCheck": true,
-		"sourceMap": true,
 		"target": "esnext",
 		"types": [
 			"node",
