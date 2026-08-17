@@ -1,6 +1,7 @@
 import type { SupportedLocale } from "../Engine.js";
 import type { ResetSettings } from "../settings/ResetSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
+import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
 import { Container } from "./components/Container.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -26,6 +27,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
 		parent: UiComponent,
 		settings: ResetSettings,
 		locale: SettingOptions<SupportedLocale>,
+		sectionSetting: TimeControlSettings,
 	) {
 		const label = parent.host.engine.i18n("option.time.reset");
 		super(
@@ -44,6 +46,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
 			{
 				onRefreshRequest: () => {
 					this.expando.ineffective =
+						sectionSetting.enabled &&
 						settings.enabled &&
 						([
 							this._bonfireUi,

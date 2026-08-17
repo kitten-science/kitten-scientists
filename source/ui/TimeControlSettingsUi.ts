@@ -111,7 +111,12 @@ export class TimeControlSettingsUi extends SettingsPanel<TimeControlSettings> {
 			locale,
 			settings,
 		);
-		this._resetUi = new ResetSettingsUi(this, this.setting.reset, locale);
+		this._resetUi = new ResetSettingsUi(
+			this,
+			this.setting.reset,
+			locale,
+			this.setting,
+		);
 
 		this._items = [this._accelerateTime, this._timeSkipUi, this._resetUi];
 
