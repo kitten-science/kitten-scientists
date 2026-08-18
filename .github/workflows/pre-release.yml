@@ -108,24 +108,70 @@ jobs:
       - params
       - qa
     permissions:
-      attestations: write
       contents: read
       id-token: write
       packages: write
-      pages: write
-      pull-requests: read
-      security-events: write
-    uses: oliversalzburg/workflows/.github/workflows/publish-oci.yml@main
-    with:
-      containerfile: devcontainer/Containerfile
-      dist-tag: ${{ needs.params.outputs.release-tag }}
-      image-description: Kitten Science Development Container
-      image-name: kitten-science/devcontainer
-      image-tag: v${{ needs.changelog.outputs.version }}
-      image-title: devcontainer
-      push: ${{ needs.params.outputs.move-tags == 'true' }}
-      with-sarif: false
-      with-sbom: false
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Build
+        run: |
+          make devcontainer
+
+      - id: meta
+        name: Extract metadata
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ghcr.io/kitten-science/devcontainer
+          labels: |
+            org.opencontainers.image.description=Kitten Science Development Container
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=${{ github.server_url }}/kitten-science/kitten-scientists
+            org.opencontainers.image.title=devcontainer
+            org.opencontainers.image.version=v${{ needs.changelog.outputs.version }}
+          tags: |
+            type=raw,value=v${{ needs.changelog.outputs.version }}
+            type=raw,value=${{ needs.params.outputs.release-tag }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4
+
+      - name: Log in to the registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - env:
+          DOCKER_BUILD_RECORD_UPLOAD: false
+          DOCKER_BUILD_SUMMARY: false
+          SOURCE_DATE_EPOCH: 0
+        id: build
+        name: Build ${{ needs.params.outputs.move-tags == 'true' && '+ Push' || '' }}
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
+        with:
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/cache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}/cache,mode=max
+          context: .
+          file: devcontainer/Containerfile
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64
+          push: ${{ needs.params.outputs.move-tags == 'true' }}
+          tags: ${{ steps.meta.outputs.tags }}
+
+      - id: details
+        name: Result
+        run: |
+          DIST_URL="https://ghcr.io/kitten-science/devcontainer:${{ needs.params.outputs.release-tag }}"
+          PUBLISH_URL="https://ghcr.io/kitten-science/devcontainer:v${{ needs.changelog.outputs.version }}"
+          echo "publish-url=$PUBLISH_URL" >> "$GITHUB_OUTPUT"
+          echo "Published OCI to <$PUBLISH_URL>" >> $GITHUB_STEP_SUMMARY
+          echo "Tagged OCI as <$DIST_URL>" >> $GITHUB_STEP_SUMMARY
 
   publish-documentation:
     if: success() && needs.params.outputs.publish-documentation == 'true'
