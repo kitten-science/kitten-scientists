@@ -57,6 +57,13 @@ jobs:
       - name: Deploy to S3
         run: |
           # These files are intended for auto-update mechanisms.
+          # Put the release-info.json
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key release-info.json \
+            --cache-control "public, s-maxage=3600" \
+            --content-type "application/json" \
+            --body release-info.json
           # Dev
           aws s3api put-object \
             --bucket kitten-science-us0 \
