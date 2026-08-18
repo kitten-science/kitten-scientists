@@ -29,6 +29,7 @@
 		"ignoreUnknown": true,
 		"includes": [
 			"**",
+			"!_site",
 			"!.venv",
 			"!devcontainer/overlay",
 			"!docs",

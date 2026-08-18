@@ -1,33 +1,68 @@
-.PHONY: default build clean docs git-hook pretty lint test run
+OBJECTS := $(shell find source -regextype posix-extended -regex '.*\.(css|json|svg|ts)')
+OBJECTS_DEVCONTAINER := $(shell find devcontainer -maxdepth 0 -regextype posix-extended -regex '.*\.(js|ts)')
+DOCS := $(shell find docs/current)
 
-default: build
+.PHONY: default
+default: output/kitten-scientists.user.js
 
-build: devcontainer injectable userscript loader lib
+.PHONY: all
+all: devcontainer docs userscript
 
+.PHONY: clean
 clean:
-	rm --force --recursive _site .venv devcontainer/overlay docs/current/.venv docs/current/public lib node_modules output tsconfig.tsbuildinfo
+	rm --force --recursive \
+		_site \
+		.venv \
+		devcontainer/overlay \
+		docs/current/.venv \
+		docs/current/public \
+		node_modules \
+		output
 
-docs: docs/current/public/index.html
-
+.PHONY: git-hook
 git-hook:
 	echo "make pretty" > .git/hooks/pre-commit; chmod +x .git/hooks/pre-commit
 
+.PHONY: pretty
 pretty: node_modules/.package-lock.json
 	npm exec -- biome check --no-errors-on-unmatched --fix --unsafe
 	npm pkg fix
 
+.PHONY: lint
 lint: node_modules/.package-lock.json
 	npm exec -- biome check .
-	npm exec -- tsc --noEmit
+	npm exec -- tsc
 
-test:
-	@echo "Kitten Scientists test in production."
+# Tools
+package-lock.json: package.json
+	npm install --package-lock-only
+node_modules/.package-lock.json: package-lock.json
+	npm ci
 
+.venv/pyvenv.cfg : requirements.txt
+	python3 -m venv .venv
+	. .venv/bin/activate; pip install -r requirements.txt
+	touch .venv/pyvenv.cfg
 
-.PHONY: devcontainer devcontainer-oci
-devcontainer: injectable
+# Kitten Scientists
+output/kitten-scientists.inject.js : node_modules/.package-lock.json $(OBJECTS)
+	npm exec -- vite --config vite.config.inject.js build
+output/kitten-scientists.user.js : node_modules/.package-lock.json output/kitten-scientists.inject.js
+	npm exec -- vite --config vite.config.loader.js build
+devcontainer/overlay/kitten-scientists.inject.js : output/kitten-scientists.inject.js
+	@mkdir -p devcontainer/overlay/ || true
+	cp $^ $@
+
+.PHONY: userscript
+userscript : output/kitten-scientists.user.js
+
+# DevContainer
+output/entrypoint-devcontainer.mjs : node_modules/.package-lock.json $(OBJECTS_DEVCONTAINER)
 	node devcontainer/build-devcontainer.js
-devcontainer-oci: devcontainer
+output/devcontainer.tar : \
+	output/entrypoint-devcontainer.mjs \
+	devcontainer/Containerfile \
+	devcontainer/overlay/kitten-scientists.inject.js
 	docker build \
 		--build-arg BRANCH="master" \
 		--build-arg REPO="https://github.com/nuclear-unicorn/kittensgame.git" \
@@ -35,43 +70,21 @@ devcontainer-oci: devcontainer
 		--no-cache \
 		--tag localhost/devcontainer:latest \
 		.
+	docker save localhost/devcontainer:latest --format=oci-archive --output "$@"
 
+.PHONY: devcontainer
+devcontainer: output/devcontainer.tar
 
-package-lock.json: package.json
-	npm install --package-lock-only
-node_modules/.package-lock.json: package-lock.json
-	npm ci
-
-lib: node_modules/.package-lock.json
-	npm exec -- tsc --build
-
-.PHONY: injectable userscript loader
-injectable: node_modules/.package-lock.json
-	npm exec -- vite --config vite.config.inject.js build
-	MINIFY=true npm exec -- vite --config vite.config.inject.js build
-	mkdir -p devcontainer/overlay/ && cp output/kitten-scientists.inject.js devcontainer/overlay/kitten-scientists.inject.js
-
-userscript: loader
-loader: node_modules/.package-lock.json injectable
-	npm exec -- vite --config vite.config.loader.js build
-
-
-.venv:
-	python3 -m venv .venv
-	. .venv/bin/activate; pip install -r requirements.txt
-
-docs/current/public/index.html: .venv docs/current/mkdocs.yml
+# Docs
+docs/current/public/index.html : .venv/pyvenv.cfg $(DOCS)
 	. .venv/bin/activate; cd docs/current/; mkdocs build --config-file mkdocs.yml --site-dir public
+_site/index.html : docs/current/public/index.html $(DOCS)
+	mkdir -p _site || true
+	cp -r docs/current/public _site
+
+.PHONY: docs
+docs: _site/index.html
 
 .PHONY: docs-serve
-docs-serve: .venv
+docs-serve: .venv/pyvenv.cfg
 	. .venv/bin/activate; cd docs/current/; mkdocs serve --config-file mkdocs.yml
-
-.PHONY: full-docs
-full-docs: docs
-	mkdir -p _site
-	cp -r docs/v2.0.0-beta.8 _site/
-	cp -r docs/v2.0.0-beta.9 _site/
-	cp -r docs/v2.0.0-beta.10 _site/
-	cp -r docs/v2.0.0-beta.11 _site/
-	cp -r docs/current/public _site/main

@@ -27,7 +27,7 @@ export default defineConfig({
 				globals: { dojo: "dojo", jquery: "jquery" },
 			},
 		},
-		sourcemap: "hidden",
+		sourcemap: false,
 		target: "esnext",
 	},
 	define: {

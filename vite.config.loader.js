@@ -33,7 +33,7 @@ export default defineConfig({
 				format: "umd",
 			},
 		},
-		sourcemap: "hidden",
+		sourcemap: false,
 	},
 	define: {
 		PAYLOAD,
