@@ -147,7 +147,7 @@ export type Console = {
 	new (game: GamePage): Console;
 	msg: (
 		message: string,
-		type: string,
+		type?: string,
 		tag?: FilterItemGame,
 		noBullet?: boolean,
 	) => {
