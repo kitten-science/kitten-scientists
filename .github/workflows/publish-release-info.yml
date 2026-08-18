@@ -1,4 +1,4 @@
-name: Publish
+name: Publish Release Info
 
 on:
   workflow_call:
