@@ -1,6 +1,6 @@
 OBJECTS := $(shell find source -regextype posix-extended -regex '.*\.(css|json|svg|ts)')
 OBJECTS_DEVCONTAINER := $(shell find devcontainer -maxdepth 0 -regextype posix-extended -regex '.*\.(js|ts)')
-DOCS := $(shell find docs) mkdocs.yml
+DOCS := $(shell find docs/*) mkdocs.yml
 
 .PHONY: default
 default: output/kitten-scientists.user.js
