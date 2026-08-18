@@ -1,6 +1,6 @@
 OBJECTS := $(shell find source -regextype posix-extended -regex '.*\.(css|json|svg|ts)')
 OBJECTS_DEVCONTAINER := $(shell find devcontainer -maxdepth 0 -regextype posix-extended -regex '.*\.(js|ts)')
-DOCS := $(shell find docs/current)
+DOCS := $(shell find docs) mkdocs.yml
 
 .PHONY: default
 default: output/kitten-scientists.user.js
@@ -14,8 +14,6 @@ clean:
 		_site \
 		.venv \
 		devcontainer/overlay \
-		docs/current/.venv \
-		docs/current/public \
 		node_modules \
 		output
 
@@ -76,15 +74,12 @@ output/devcontainer.tar : \
 devcontainer: output/devcontainer.tar
 
 # Docs
-docs/current/public/index.html : .venv/pyvenv.cfg $(DOCS)
-	. .venv/bin/activate; cd docs/current/; mkdocs build --config-file mkdocs.yml --site-dir public
-_site/index.html : docs/current/public/index.html $(DOCS)
-	mkdir -p _site || true
-	cp -r docs/current/public/* _site/
+_site/index.html : .venv/pyvenv.cfg $(DOCS)
+	. .venv/bin/activate; mkdocs build --config-file mkdocs.yml --site-dir _site
 
 .PHONY: docs
 docs: _site/index.html
 
 .PHONY: docs-serve
 docs-serve: .venv/pyvenv.cfg
-	. .venv/bin/activate; cd docs/current/; mkdocs serve --config-file mkdocs.yml
+	. .venv/bin/activate; mkdocs serve --config-file mkdocs.yml

@@ -1,9 +1,8 @@
-devcontainer/overlay/
-
+.venv/
 _site/
-lib/
+devcontainer/overlay/
+docs/public/
 node_modules/
 output/
-.npmrc
-tsconfig.tsbuildinfo
 .DS_Store
+.npmrc

@@ -1,7 +1,7 @@
 copyright: Oliver Salzburg and Kitten Science Contributors
 dev_addr: 0.0.0.0:8000
 docs_dir: docs
-edit_uri: edit/main/docs/current/
+edit_uri: edit/main/docs/
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -33,7 +33,6 @@ repo_url: https://github.com/kitten-science/kitten-scientists
 site_name: Kitten Science
 site_url: https://kitten-science.com/
 theme:
-  custom_dir: overrides
   favicon: assets/images/favicon.ico
   features:
     - announce.dismiss
