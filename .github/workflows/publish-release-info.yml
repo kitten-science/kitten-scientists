@@ -58,6 +58,28 @@ jobs:
       - name: Deploy to S3
         run: |
           # These files are intended for auto-update mechanisms.
+          # Dev
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key dev.js \
+            --cache-control "public, s-maxage=600" \
+            --content-type "text/javascript" \
+            --body dev.js || true
+          # Nightly
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key nightly.js \
+            --cache-control "public, s-maxage=3600" \
+            --content-type "text/javascript" \
+            --body nightly.js || true
+          # Stable
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key stable.js \
+            --cache-control "public, s-maxage=86400" \
+            --content-type "text/javascript" \
+            --body stable.js || true
+
           # We don't need to care to put the "correct" versions into their correlating prefixes.
           for PREFIX in "v2.0.0-beta.8" "v2.0.0-beta.9" "v2.0.0-beta.10" "v2.0.0-beta.11" "v2.0.0-beta.12" "main"; do
             # Put the release-info.json
