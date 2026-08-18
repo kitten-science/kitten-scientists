@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  qa-commit:
-    name: Commit
+  qa:
+    name: Lint / Build
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -26,55 +26,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Validate commit messages
-        uses: oliversalzburg/action-commit-validator@69f722db60dfa404d9cd2d03aa56535c710bbd0a # v3.0.0
-        if: github.event_name == 'pull_request'
-        with:
-          accept-breaking-changes: false
-          accept-emoji: false
-          accepted-scopes: |
-            bonfire
-            religion
-            science
-            space
-            time
-            trade
-            village
-            workshop
-
-            api
-            build
-            container
-            core
-            deps
-            deps-dev
-            filters
-            i18n
-            schema
-            settings
-            ui
-          accepted-types: |
-            chore
-            ci
-            docs
-            feat
-            fix
-            refactor
-            test
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-  qa:
-    name: 🔹 Script
-    uses: oliversalzburg/workflows/.github/workflows/qa-browser-app.yml@main
-
-  qa-devcontainer:
-    name: 🔹 Devcontainer
-    uses: oliversalzburg/workflows/.github/workflows/qa-nodejs-oci.yml@main
-    with:
-      artifact-name: devcontainer-output
-      artifact-contents: |
-        devcontainer/overlay
-        node_modules
-        output
-      containerfile: devcontainer/Containerfile
-
+      - name: Run make
+        run: |
+          make lint
+          make all

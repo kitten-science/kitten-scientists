@@ -70,7 +70,7 @@ output/devcontainer.tar : \
 		--no-cache \
 		--tag localhost/devcontainer:latest \
 		.
-	docker save localhost/devcontainer:latest --format=oci-archive --output "$@"
+	docker save localhost/devcontainer:latest --output "$@"
 
 .PHONY: devcontainer
 devcontainer: output/devcontainer.tar
