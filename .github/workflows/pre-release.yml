@@ -188,7 +188,7 @@ jobs:
       id-token: write
     uses: ./.github/workflows/publish-documentation.yml
     with:
-      publish-url: https://next.kitten-science.com
+      publish-url: https://kitten-science.com
 
   pre-release:
     if: |
