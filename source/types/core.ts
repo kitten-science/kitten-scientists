@@ -3,6 +3,7 @@ import type {
 	AnyFunctionReturning,
 } from "@oliversalzburg/js-utils/core.js";
 import type { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
+import type { FilterItemGame } from "../settings/LogFilterSettings.js";
 import type {
 	BuildingMeta,
 	BuildingsManager,
@@ -133,7 +134,7 @@ export type TabManager<TMeta extends UnsafeMeta<unknown> | unknown = unknown> =
 export type Console = {
 	static: {
 		filters: Record<
-			string,
+			FilterItemGame,
 			{ title: string; enabled: boolean; unlocked: boolean }
 		>;
 	};
@@ -144,7 +145,22 @@ export type Console = {
 	ui: UISystem | null;
 	game: GamePage;
 	new (game: GamePage): Console;
-	msg: (message: string, type: string, tag: string, noBullet: boolean) => void;
+	msg: (
+		message: string,
+		type: string,
+		tag?: FilterItemGame,
+		noBullet?: boolean,
+	) => {
+		text: string;
+		type: string;
+		tag: FilterItemGame;
+		noBullet: boolean;
+		id: string;
+		hasCalendarTech: boolean;
+		year: string | null;
+		seasonTitle: string | null;
+		seasonTitleShorten: string | null;
+	};
 	clear: () => void;
 	lockFilter: (filterName: string) => void;
 	resetState: () => void;

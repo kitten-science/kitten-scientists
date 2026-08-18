@@ -387,15 +387,10 @@ export type GamePage = {
 	 */
 	getLimitedDR: (effect: number, limit: number) => number;
 	/**
-	 * Display a message in the console. Returns a <span> node of a text container.
+	 * Display a message in the console.
 	 * Has significant performance impact, as it causes DOM operations.
 	 */
-	msg: (
-		message: string,
-		type?: unknown,
-		tag?: unknown,
-		noBullet?: boolean,
-	) => { span: HTMLElement };
+	msg: Console["msg"];
 	clearLog: () => void;
 	saveUI: () => void;
 	resetState: () => void;
