@@ -107,9 +107,9 @@ export class UserInterface extends UiComponent {
 				engine.settings.locale,
 			),
 			new LogFiltersSettingsUi(this, engine.settings.filters),
+			new ActivityUi(this, engine.settings, engine.settings.locale),
 			this.stateManagementUi,
 			new InternalsUi(this, engine.settings, engine.settings.locale),
-			new ActivityUi(this, engine.settings, engine.settings.locale),
 		];
 
 		this.parent = this;

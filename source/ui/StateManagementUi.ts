@@ -19,7 +19,6 @@ import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
 import { IconButton } from "./components/IconButton.js";
-import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { ListItem } from "./components/ListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -27,6 +26,7 @@ import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { TextButton } from "./components/TextButton.js";
+import { TextListItem } from "./components/TextListItem.js";
 import { ToolbarListItem } from "./components/ToolbarListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
@@ -66,7 +66,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		super(
 			parent,
 			settings,
-			new LabelListItem(parent, label, {
+			new TextListItem(parent, label, {
 				classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
 				icon: Icons.State,
 			}).addChildrenHead([

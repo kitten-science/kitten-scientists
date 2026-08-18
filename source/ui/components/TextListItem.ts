@@ -1,39 +1,34 @@
 import { Container } from "./Container.js";
-import styles from "./LabelListItem.module.css";
+import stylesLabelListItem from "./LabelListItem.module.css";
 import { ListItem, type ListItemOptions } from "./ListItem.js";
 import stylesListItem from "./ListItem.module.css";
+import styles from "./TextListItem.module.css";
 import type { UiComponent, UiComponentInterface } from "./UiComponent.js";
 
-export type LabelListItemOptions = ThisType<LabelListItem> &
+export type TextListItemOptions = ThisType<TextListItem> &
 	ListItemOptions & {
 		/**
 		 * When set to an SVG path, will be used as an icon on the label.
 		 */
 		readonly icon?: string;
-
-		/**
-		 * Should an indicator be rendered in front of the element,
-		 * to indicate that this is an upgrade of a prior setting?
-		 */
-		readonly upgradeIndicator?: boolean;
 	};
 
-export class LabelListItem extends ListItem {
-	declare readonly options: LabelListItemOptions;
+export class TextListItem extends ListItem {
+	declare readonly options: TextListItemOptions;
 	readonly head: Container;
 	readonly elementLabel: JQuery;
 
 	/**
-	 * Construct a new label list item.
+	 * Construct a new text list item.
 	 *
 	 * @param host The userscript instance.
-	 * @param label The label on the setting element.
+	 * @param label The label on the text element.
 	 * @param options Options for the list item.
 	 */
 	constructor(
 		parent: UiComponent,
 		label: string,
-		options?: LabelListItemOptions,
+		options?: TextListItemOptions,
 	) {
 		super(parent, options);
 
@@ -41,21 +36,21 @@ export class LabelListItem extends ListItem {
 		this.head.element.addClass(stylesListItem.head);
 		this.addChild(this.head);
 
-		this.elementLabel = $("<label/>", {
-			text: `${options?.upgradeIndicator === true ? "⮤ " : ""}${label}`,
-		}).addClass(styles.label);
+		this.elementLabel = $("<span/>", {
+			text: label,
+		}).addClass(styles.span);
 		this.head.element.append(this.elementLabel);
 
 		if (options?.icon) {
 			const iconElement = $("<div/>", {
 				html: `<svg style="width: 15px; height: 15px;" viewBox="0 -960 960 960" fill="currentColor"><path d="${options.icon}"/></svg>`,
-			}).addClass(styles.iconLabel);
+			}).addClass(stylesLabelListItem.iconLabel);
 			this.elementLabel.prepend(iconElement);
 		}
 	}
 
 	toString(): string {
-		return `[${LabelListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
+		return `[${TextListItem.name}#${this.componentId}]: '${this.elementLabel.text()}'`;
 	}
 
 	addChildHead(child: UiComponentInterface): this {

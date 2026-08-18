@@ -10,11 +10,11 @@ import { Button } from "./components/Button.js";
 import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { HeaderListItem } from "./components/HeaderListItem.js";
-import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { TextListItem } from "./components/TextListItem.js";
 import { ToolbarListItem } from "./components/ToolbarListItem.js";
 import type {
 	UiComponent,
@@ -34,7 +34,7 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 		super(
 			parent,
 			settings,
-			new LabelListItem(parent, parent.host.engine.i18n("ui.activity"), {
+			new TextListItem(parent, parent.host.engine.i18n("ui.activity"), {
 				classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
 				icon: Icons.Summary,
 			}).addChildrenHead([
@@ -73,7 +73,6 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 					),
 				]),
 			]),
-			new Delimiter(this),
 			this._activityList,
 		]);
 	}
@@ -83,35 +82,28 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 
 		const uiElements = new Array<UiComponentInterface>();
 
-		// Uncategorized items.
-		if (this.host.engine.activitySummary.sections.has("other")) {
-			uiElements.push(new HeaderListItem(this, "Other"));
-
-			const section = mustExist(
-				this.host.engine.activitySummary.sections.get("other"),
-			) as Map<ActivitySectionOther, number>;
-			for (const [name, amount] of section) {
-				uiElements.push(
-					new LabelListItem(
-						this,
-						this.host.engine.i18n(`summary.${name}` as const, [
-							this.host.game.getDisplayValueExt(amount),
-						]),
-					),
-				);
-			}
-		}
+		uiElements.push(
+			new TextListItem(
+				this,
+				this.host.engine.i18n("summary.head", [
+					this.host.engine.activitySummary.getDuration(),
+				]),
+			),
+		);
 
 		// Technologies.
 		if (this.host.engine.activitySummary.sections.has("research")) {
-			uiElements.push(new HeaderListItem(this, "Research"));
+			uiElements.push(
+				new Delimiter(this),
+				new HeaderListItem(this, "Research"),
+			);
 
 			const section = mustExist(
 				this.host.engine.activitySummary.sections.get("research"),
 			);
 			section.forEach((_amount, name) => {
 				uiElements.push(
-					new LabelListItem(
+					new TextListItem(
 						this,
 						this.host.engine.i18n("summary.tech", [ucfirst(name)]),
 					),
@@ -121,14 +113,17 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 
 		// Upgrades.
 		if (this.host.engine.activitySummary.sections.has("upgrade")) {
-			uiElements.push(new HeaderListItem(this, "Upgrades"));
+			uiElements.push(
+				new Delimiter(this),
+				new HeaderListItem(this, "Upgrades"),
+			);
 
 			const section = mustExist(
 				this.host.engine.activitySummary.sections.get("upgrade"),
 			);
 			section.forEach((_amount, name) => {
 				uiElements.push(
-					new LabelListItem(
+					new TextListItem(
 						this,
 						this.host.engine.i18n("summary.upgrade", [ucfirst(name)]),
 					),
@@ -136,16 +131,16 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 			});
 		}
 
-		// Upgrades.
+		// Buildings.
 		if (this.host.engine.activitySummary.sections.has("build")) {
-			uiElements.push(new HeaderListItem(this, "Build"));
+			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Build"));
 
 			const section = mustExist(
 				this.host.engine.activitySummary.sections.get("build"),
 			);
 			section.forEach((amount, name) => {
 				uiElements.push(
-					new LabelListItem(
+					new TextListItem(
 						this,
 						this.host.engine.i18n("summary.building", [
 							this.host.game.getDisplayValueExt(amount),
@@ -158,14 +153,14 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 
 		// Ziggurats
 		if (this.host.engine.activitySummary.sections.has("refine")) {
-			uiElements.push(new HeaderListItem(this, "Refine"));
+			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Refine"));
 
 			const section = mustExist(
 				this.host.engine.activitySummary.sections.get("refine"),
 			);
 			section.forEach((amount, name) => {
 				uiElements.push(
-					new LabelListItem(
+					new TextListItem(
 						this,
 						this.host.engine.i18n("summary.refine", [
 							this.host.game.getDisplayValueExt(amount),
@@ -177,14 +172,14 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 		}
 		// Order of the sun.
 		if (this.host.engine.activitySummary.sections.has("faith")) {
-			uiElements.push(new HeaderListItem(this, "Faith"));
+			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Faith"));
 
 			const section = mustExist(
 				this.host.engine.activitySummary.sections.get("faith"),
 			);
 			section.forEach((amount, name) => {
 				uiElements.push(
-					new LabelListItem(
+					new TextListItem(
 						this,
 						this.host.engine.i18n("summary.sun", [
 							this.host.game.getDisplayValueExt(amount),
@@ -197,14 +192,14 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 
 		// Crafts.
 		if (this.host.engine.activitySummary.sections.has("craft")) {
-			uiElements.push(new HeaderListItem(this, "Craft"));
+			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Craft"));
 
 			const section = mustExist(
 				this.host.engine.activitySummary.sections.get("craft"),
 			);
 			section.forEach((amount, name) => {
 				uiElements.push(
-					new LabelListItem(
+					new TextListItem(
 						this,
 						this.host.engine.i18n("summary.craft", [
 							this.host.game.getDisplayValueExt(amount),
@@ -217,14 +212,14 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 
 		// Trades.
 		if (this.host.engine.activitySummary.sections.has("trade")) {
-			uiElements.push(new HeaderListItem(this, "Trade"));
+			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Trade"));
 
 			const section = mustExist(
 				this.host.engine.activitySummary.sections.get("trade"),
 			);
 			section.forEach((amount, name) => {
 				uiElements.push(
-					new LabelListItem(
+					new TextListItem(
 						this,
 						this.host.engine.i18n("summary.trade", [
 							this.host.game.getDisplayValueExt(amount),
@@ -235,14 +230,24 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 			});
 		}
 
-		uiElements.push(
-			new LabelListItem(
-				this,
-				this.host.engine.i18n("summary.head", [
-					this.host.engine.activitySummary.getDuration(),
-				]),
-			),
-		);
+		// Uncategorized items.
+		if (this.host.engine.activitySummary.sections.has("other")) {
+			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Other"));
+
+			const section = mustExist(
+				this.host.engine.activitySummary.sections.get("other"),
+			) as Map<ActivitySectionOther, number>;
+			for (const [name, amount] of section) {
+				uiElements.push(
+					new TextListItem(
+						this,
+						this.host.engine.i18n(`summary.${name}` as const, [
+							this.host.game.getDisplayValueExt(amount),
+						]),
+					),
+				);
+			}
+		}
 
 		this._activityList.removeChildren(this._activityList.children);
 		this._activityList.addChildren(uiElements);

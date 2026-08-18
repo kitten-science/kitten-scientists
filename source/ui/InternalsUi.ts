@@ -8,7 +8,6 @@ import { ButtonListItem } from "./components/ButtonListItem.js";
 import { Container } from "./components/Container.js";
 import { Delimiter } from "./components/Delimiter.js";
 import { Dialog } from "./components/Dialog.js";
-import { LabelListItem } from "./components/LabelListItem.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { OptionsListItem } from "./components/OptionsListItem.js";
 import { SettingListItem } from "./components/SettingListItem.js";
@@ -16,6 +15,7 @@ import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import { TextButton } from "./components/TextButton.js";
+import { TextListItem } from "./components/TextListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export class InternalsUi extends SettingsPanel<EngineSettings> {
@@ -29,7 +29,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
 		super(
 			parent,
 			settings,
-			new LabelListItem(parent, parent.host.engine.i18n("ui.internals"), {
+			new TextListItem(parent, parent.host.engine.i18n("ui.internals"), {
 				classes: [stylesSettingListItem.checked, stylesSettingListItem.setting],
 				icon: Icons.Settings,
 			}).addChildrenHead([
@@ -129,7 +129,7 @@ export class InternalsUi extends SettingsPanel<EngineSettings> {
 				),
 				new Delimiter(parent),
 
-				new LabelListItem(parent, `Kitten Scientists ${ksVersion("v")}`),
+				new TextListItem(parent, `Kitten Scientists ${ksVersion("v")}`),
 			]),
 		]);
 	}

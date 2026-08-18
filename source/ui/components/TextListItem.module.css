@@ -1,0 +1,14 @@
+.span {
+	display: inline-block;
+	flex: 0 1 fit-content;
+	opacity: 0.8;
+
+	cursor: default;
+	white-space: nowrap;
+
+	transition: 0.3s;
+
+	&:hover {
+		opacity: 1;
+	}
+}
