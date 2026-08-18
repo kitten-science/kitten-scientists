@@ -80,7 +80,7 @@ docs/current/public/index.html : .venv/pyvenv.cfg $(DOCS)
 	. .venv/bin/activate; cd docs/current/; mkdocs build --config-file mkdocs.yml --site-dir public
 _site/index.html : docs/current/public/index.html $(DOCS)
 	mkdir -p _site || true
-	cp -r docs/current/public _site
+	cp -r docs/current/public/* _site/
 
 .PHONY: docs
 docs: _site/index.html
