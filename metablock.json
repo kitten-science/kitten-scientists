@@ -1,5 +1,7 @@
 {
+	"author": "Oliver Salzburg and Kitten Scientists contributors",
 	"icon": "https://kitten-science.com/assets/images/organization-logo64.png",
+	"license": "MIT",
 	"match": [
 		"https://kittensgame.com/web/",
 		"https://kittensgame.com/beta/",
