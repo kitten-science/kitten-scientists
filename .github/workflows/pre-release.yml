@@ -277,7 +277,7 @@ jobs:
           aws s3api put-object \
             --bucket kitten-science-us0 \
             --key latest.user.js \
-            --cache-control "public, s-maxage=86400" \
+            --cache-control "public, s-maxage=3600" \
             --content-type "text/javascript" \
             --body output/kitten-scientists.user.js || true
 
