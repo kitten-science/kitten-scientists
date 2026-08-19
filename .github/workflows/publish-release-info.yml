@@ -64,6 +64,7 @@ jobs:
             --cache-control "public, s-maxage=3600" \
             --content-type "application/json" \
             --body release-info.json
+
           # Dev
           aws s3api put-object \
             --bucket kitten-science-us0 \
@@ -88,7 +89,7 @@ jobs:
           # Latest (same as Nightly)
           aws s3api put-object \
             --bucket kitten-science-us0 \
-            --key latest.js \
+            --key latest.user.js \
             --cache-control "public, s-maxage=86400" \
             --content-type "text/javascript" \
             --body nightly.js || true
