@@ -22,6 +22,6 @@ export type ReleaseMeta = {
 	};
 };
 
-export type TravelingReleaseChannel = "dev" | "nightly" | "stable";
+export type TravelingReleaseChannel = "dev" | "nightly" | "stable" | "latest";
 export type ReleaseChannel = "fixed" | TravelingReleaseChannel;
 export type ReleaseInfoSchema = Record<TravelingReleaseChannel, ReleaseMeta>;

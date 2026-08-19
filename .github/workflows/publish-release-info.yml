@@ -85,6 +85,13 @@ jobs:
             --cache-control "public, s-maxage=86400" \
             --content-type "text/javascript" \
             --body stable.js || true
+          # Latest (same as Nightly)
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key latest.js \
+            --cache-control "public, s-maxage=86400" \
+            --content-type "text/javascript" \
+            --body nightly.js || true
 
           # We don't need to care to put the "correct" versions into their correlating prefixes.
           for PREFIX in "v2.0.0-beta.8" "v2.0.0-beta.9" "v2.0.0-beta.10" "v2.0.0-beta.11" "v2.0.0-beta.12" "main"; do
