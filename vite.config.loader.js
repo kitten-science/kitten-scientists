@@ -3,11 +3,11 @@ import { defineConfig } from "vite";
 import { metablock } from "vite-plugin-userscript";
 import manifest from "./package.json" with { type: "json" };
 
-const versionString = process.env.RELEASE_VERSION ?? "0.0.0-ci";
+const versionString = process.env.RELEASE_VERSION_FILENAME
+	? `-${process.env.RELEASE_VERSION_FILENAME}`
+	: "";
 
-const filename = ["kitten-scientists", `-${versionString}`, ".user.js"].join(
-	"",
-);
+const filename = ["kitten-scientists", versionString, ".user.js"].join("");
 
 const RELEASE_CHANNEL = process.env.RELEASE_CHANNEL ?? "fixed";
 
@@ -45,7 +45,7 @@ export default defineConfig({
 					description: manifest.description,
 					downloadURL,
 					homepageURL: manifest.homepage,
-					version: versionString,
+					version: versionString !== "" ? versionString : manifest.version,
 				},
 			}),
 		},

@@ -43,9 +43,9 @@ node_modules/.package-lock.json: package-lock.json
 	touch .venv/pyvenv.cfg
 
 # Kitten Scientists
-output/kitten-scientists.inject.js : node_modules/.package-lock.json $(OBJECTS)
+output/kitten-scientists.inject.js : node_modules/.package-lock.json vite.config.inject.js $(OBJECTS)
 	npm exec -- vite --config vite.config.inject.js build
-output/kitten-scientists.user.js : node_modules/.package-lock.json output/kitten-scientists.inject.js
+output/kitten-scientists.user.js : node_modules/.package-lock.json vite.config.loader.js output/kitten-scientists.inject.js
 	npm exec -- vite --config vite.config.loader.js build
 devcontainer/overlay/kitten-scientists.inject.js : output/kitten-scientists.inject.js
 	@mkdir -p devcontainer/overlay/ || true
@@ -53,6 +53,12 @@ devcontainer/overlay/kitten-scientists.inject.js : output/kitten-scientists.inje
 
 .PHONY: userscript
 userscript : output/kitten-scientists.user.js
+
+.PHONY: preview
+preview :
+	RELEASE_CHANNEL=latest \
+	RELEASE_VERSION=$(shell ./source/tools/make-preview-version.js) \
+		${MAKE} userscript
 
 # DevContainer
 output/entrypoint-devcontainer.mjs : node_modules/.package-lock.json $(OBJECTS_DEVCONTAINER)

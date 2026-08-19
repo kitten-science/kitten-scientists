@@ -265,6 +265,22 @@ jobs:
           title: Development Build v${{ needs.changelog.outputs.version }}
           with-authors: false
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
+        with:
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::022327457572:role/kitten-science-us0-maintainer
+          role-session-name: GitHubActions
+
+      - name: Deploy to S3
+        run: |
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key latest.user.js \
+            --cache-control "public, s-maxage=86400" \
+            --content-type "text/javascript" \
+            --body output/kitten-scientists.user.js || true
+
   update-release-info:
     # The Release Info action uses GitHub releases as source of truth.
     # If we didn't publish a release, there is no need to update the information.

@@ -6,7 +6,7 @@ const filename = "kitten-scientists.inject.js";
 
 const RELEASE_CHANNEL = JSON.stringify(process.env.RELEASE_CHANNEL ?? "fixed");
 const RELEASE_VERSION = JSON.stringify(
-	process.env.RELEASE_VERSION ?? `${manifest.version}-live`,
+	process.env.RELEASE_VERSION ?? `${manifest.version}-unstable`,
 );
 
 export default defineConfig({
