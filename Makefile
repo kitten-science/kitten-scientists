@@ -3,7 +3,9 @@ OBJECTS_DEVCONTAINER := $(shell find devcontainer -maxdepth 0 -regextype posix-e
 DOCS := $(shell find docs/*) mkdocs.yml
 
 .PHONY: default
-default: output/kitten-scientists.user.js
+default: \
+	output/kitten-scientists.user.js \
+	devcontainer/overlay/kitten-scientists.inject.js
 
 .PHONY: all
 all: devcontainer docs userscript

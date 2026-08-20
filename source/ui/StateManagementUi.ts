@@ -279,20 +279,19 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				.map(([game, gameSlot]) =>
 					new ButtonListItem(
 						this,
-						new TextButton(
-							this,
-							`${game.label} (${formatDistanceToNow(new Date(game.timestamp), {
-								addSuffix: true,
-								locale: this.locale,
-							})})`,
-							{
-								onClick: async () => {
-									await this.loadGame(parent, game.game);
-									this.host.engine.imessage("state.loaded.game", [game.label]);
-								},
-								title: new Date(game.timestamp).toLocaleString(),
+						new TextButton(this, game.label, {
+							onClick: async () => {
+								await this.loadGame(parent, game.game);
+								this.host.engine.imessage("state.loaded.game", [game.label]);
 							},
-						),
+							title: `${new Date(game.timestamp).toLocaleString()} (${formatDistanceToNow(
+								new Date(game.timestamp),
+								{
+									addSuffix: true,
+									locale: this.locale,
+								},
+							)})`,
+						}),
 					).addChildren([
 						new Container(this, { classes: [stylesLabelListItem.fillSpace] }),
 						new IconButton(
@@ -370,25 +369,19 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				.map(([state, stateSlot]) =>
 					new ButtonListItem(
 						this,
-						new TextButton(
-							this,
-							`${state.label} (${formatDistanceToNow(
+						new TextButton(this, state.label, {
+							onClick: async () => {
+								await this.loadState(parent, state.state);
+								this.host.engine.imessage("state.loaded.state", [state.label]);
+							},
+							title: `${new Date(state.timestamp).toLocaleString()} (${formatDistanceToNow(
 								new Date(state.timestamp),
 								{
 									addSuffix: true,
 									locale: this.locale,
 								},
 							)})`,
-							{
-								onClick: async () => {
-									await this.loadState(parent, state.state);
-									this.host.engine.imessage("state.loaded.state", [
-										state.label,
-									]);
-								},
-								title: new Date(state.timestamp).toLocaleString(),
-							},
-						),
+						}),
 					).addChildren([
 						new Container(this, { classes: [stylesLabelListItem.fillSpace] }),
 						new IconButton(
