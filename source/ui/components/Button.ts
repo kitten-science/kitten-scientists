@@ -5,10 +5,11 @@ import { UiComponent } from "./UiComponent.js";
 
 export type ButtonOptions = ThisType<Button> &
 	IconButtonOptions & {
-		readonly border?: boolean;
 		readonly alignment?: "left" | "right";
-		readonly title?: string;
 		readonly classes?: Array<string>;
+		readonly border?: boolean;
+		readonly focusable?: boolean;
+		readonly title?: string;
 	};
 
 /**
@@ -64,12 +65,16 @@ export class Button extends UiComponent {
 			.addClass(styles.button)
 			.text(label);
 
+		if (options?.alignment === "right") {
+			this.element.addClass(styles.alignRight);
+		}
+
 		if (options?.border !== false) {
 			this.element.addClass(styles.bordered);
 		}
 
-		if (options?.alignment === "right") {
-			this.element.addClass(styles.alignRight);
+		if (options?.focusable === true) {
+			this.element.attr("tabindex", 0);
 		}
 
 		if (pathData !== null) {
@@ -93,6 +98,16 @@ export class Button extends UiComponent {
 			}
 
 			this.click().catch(redirectErrorsToConsole(console));
+		});
+
+		this.element.on("keyup", (event) => {
+			if (this.readOnly) {
+				return;
+			}
+
+			if (event.key === "Enter") {
+				this.click().catch(redirectErrorsToConsole(console));
+			}
 		});
 
 		this.readOnly = options?.readOnly ?? false;

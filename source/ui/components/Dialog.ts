@@ -62,6 +62,12 @@ export class Dialog extends UiComponent<HTMLDialogElement> {
 		this.head = new Container(parent);
 		this.container = new Container(parent);
 
+		this.element.on("keyup", (event) => {
+			if (event.key === "Escape") {
+				this.close();
+			}
+		});
+
 		this.addChildren(
 			coalesceArray([
 				this.head,
@@ -91,6 +97,7 @@ export class Dialog extends UiComponent<HTMLDialogElement> {
 					coalesceArray([
 						new Button(parent, "OK", null, {
 							classes: [stylesButton.large],
+							focusable: true,
 							onClick: () => {
 								this.close();
 								options?.onConfirm?.(this.returnValue);
@@ -99,6 +106,7 @@ export class Dialog extends UiComponent<HTMLDialogElement> {
 						options?.hasCancel
 							? new Button(parent, "Cancel", null, {
 									classes: [stylesButton.large],
+									focusable: true,
 									onClick: () => {
 										this.close();
 										options.onCancel?.();
