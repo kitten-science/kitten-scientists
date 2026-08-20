@@ -125,7 +125,7 @@ export class SpaceSettingsUi extends SettingsPanel<
 						...planet.buildings
 							.filter((item) => !isNil(this.setting.buildings[item.name]))
 							.map((building, indexBuilding, arrayBuilding) =>
-								BuildSectionTools.getBuildOption(
+								BuildSectionTools.getBuildOptionWithMax(
 									this,
 									this.setting.buildings[building.name],
 									locale,

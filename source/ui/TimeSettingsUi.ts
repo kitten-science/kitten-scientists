@@ -117,7 +117,7 @@ export class TimeSettingsUi extends SettingsPanel<
 				...this.host.game.time.chronoforgeUpgrades
 					.filter((item) => !isNil(this.setting.buildings[item.name]))
 					.map((building) =>
-						BuildSectionTools.getBuildOption(
+						BuildSectionTools.getBuildOptionWithMax(
 							this,
 							this.setting.buildings[building.name],
 							locale,
@@ -150,7 +150,7 @@ export class TimeSettingsUi extends SettingsPanel<
 				...this.host.game.time.voidspaceUpgrades
 					.filter((item) => item.name in this.setting.buildings)
 					.map((building) =>
-						BuildSectionTools.getBuildOption(
+						BuildSectionTools.getBuildOptionWithMax(
 							this,
 							this.setting.buildings[building.name as TimeItem],
 							locale,

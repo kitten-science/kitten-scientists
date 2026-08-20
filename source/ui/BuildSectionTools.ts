@@ -9,10 +9,14 @@ import {
 	SettingMaxTriggerListItem,
 	type SettingMaxTriggerListItemOptions,
 } from "./components/SettingMaxTriggerListItem.js";
+import {
+	SettingTriggerListItem,
+	type SettingTriggerListItemOptions,
+} from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
 export const BuildSectionTools = {
-	getBuildOption: (
+	getBuildOptionWithMax: (
 		parent: UiComponent,
 		option: SettingTriggerMax,
 		locale: SettingOptions<SupportedLocale>,
@@ -148,6 +152,90 @@ export const BuildSectionTools = {
 				upgradeIndicator: options?.upgradeIndicator,
 			},
 		);
+		return element;
+	},
+	getBuildOption: (
+		parent: UiComponent,
+		option: SettingTriggerMax,
+		locale: SettingOptions<SupportedLocale>,
+		sectionSetting: SettingTrigger,
+		label: string,
+		sectionLabel: string,
+		options?: Partial<SettingTriggerListItemOptions>,
+	) => {
+		const element = new SettingTriggerListItem(parent, option, locale, label, {
+			delimiter: options?.delimiter,
+			onCheck: async (isBatchProcess?: boolean) => {
+				parent.host.engine.imessage("status.sub.enable", [label]);
+				await options?.onCheck?.(isBatchProcess);
+			},
+			onRefreshRequest: () => {
+				element.triggerButton.inactive =
+					!option.enabled || option.trigger === -1;
+				element.triggerButton.ineffective =
+					sectionSetting.enabled &&
+					option.enabled &&
+					sectionSetting.trigger === -1 &&
+					option.trigger === -1;
+			},
+			onRefreshTrigger: () => {
+				element.triggerButton.element[0].title = parent.host.engine.i18n(
+					"ui.trigger",
+					[
+						option.trigger < 0
+							? sectionSetting.trigger < 0
+								? parent.host.engine.i18n("ui.trigger.build.blocked", [
+										sectionLabel,
+									])
+								: `${parent.host.renderPercentage(sectionSetting.trigger, locale.selected, true)} (${parent.host.engine.i18n("ui.trigger.build.inherited")})`
+							: parent.host.renderPercentage(
+									option.trigger,
+									locale.selected,
+									true,
+								),
+					],
+				);
+			},
+			onSetTrigger: async () => {
+				const value = await Dialog.prompt(
+					parent,
+					parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+					parent.host.engine.i18n("ui.trigger.build.prompt", [
+						label,
+						option.trigger !== -1
+							? parent.host.renderPercentage(
+									option.trigger,
+									locale.selected,
+									true,
+								)
+							: parent.host.engine.i18n("ui.trigger.build.inherited"),
+					]),
+					option.trigger !== -1
+						? parent.host.renderPercentage(option.trigger)
+						: "",
+					parent.host.engine.i18n("ui.trigger.build.promptExplainer"),
+				);
+
+				if (value === undefined) {
+					return;
+				}
+
+				if (value === "" || value.startsWith("-")) {
+					option.trigger = -1;
+					return;
+				}
+
+				option.trigger = parent.host.parsePercentage(value);
+				await options?.onSetTrigger?.call(this);
+			},
+			onUnCheck: (isBatchProcess?: boolean) => {
+				parent.host.engine.imessage("status.sub.disable", [label]);
+				options?.onUnCheck?.(isBatchProcess);
+			},
+			renderLabelTrigger: options?.renderLabelTrigger,
+			title: options?.title,
+			upgradeIndicator: options?.upgradeIndicator,
+		});
 		return element;
 	},
 };

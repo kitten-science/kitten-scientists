@@ -155,7 +155,7 @@ export class ReligionSettingsUi extends SettingsPanel<
 		this._unicornBuildings = new Map([
 			[
 				"unicornPasture",
-				BuildSectionTools.getBuildOption(
+				BuildSectionTools.getBuildOptionWithMax(
 					this,
 					this.setting.buildings.unicornPasture,
 					locale,
@@ -187,7 +187,7 @@ export class ReligionSettingsUi extends SettingsPanel<
 					(zigguratUpgrade) =>
 						[
 							zigguratUpgrade.name,
-							BuildSectionTools.getBuildOption(
+							BuildSectionTools.getBuildOptionWithMax(
 								this,
 								this.setting.buildings[zigguratUpgrade.name],
 								locale,
@@ -264,7 +264,7 @@ export class ReligionSettingsUi extends SettingsPanel<
 							!isNil(this.setting.buildings[item.name]),
 					)
 					.map((upgrade) =>
-						BuildSectionTools.getBuildOption(
+						BuildSectionTools.getBuildOptionWithMax(
 							this,
 							this.setting.buildings[upgrade.name],
 							locale,
@@ -294,8 +294,14 @@ export class ReligionSettingsUi extends SettingsPanel<
 				),
 				...this.host.game.religion.religionUpgrades
 					.filter((item) => !isNil(this.setting.buildings[item.name]))
-					.map((upgrade) =>
-						BuildSectionTools.getBuildOption(
+					.map((upgrade) => {
+						const element = (
+							["apocripha", "solarRevolution", "transcendence"].includes(
+								upgrade.name,
+							)
+								? BuildSectionTools.getBuildOption
+								: BuildSectionTools.getBuildOptionWithMax
+						)(
 							this,
 							this.setting.buildings[upgrade.name],
 							locale,
@@ -303,6 +309,7 @@ export class ReligionSettingsUi extends SettingsPanel<
 							upgrade.label,
 							label,
 							{
+								classes: [],
 								delimiter:
 									upgrade.name ===
 									this.host.game.religion.religionUpgrades.at(-1)?.name,
@@ -318,8 +325,20 @@ export class ReligionSettingsUi extends SettingsPanel<
 									upgrade.unlocked ? "is unlocked" : "still locked",
 								].join("\n"),
 							},
-						),
-					),
+						);
+						// For those items that don't have a max button, ensure their trigger
+						// buttons are in alignment.
+						if (
+							["apocripha", "solarRevolution", "transcendence"].includes(
+								upgrade.name,
+							)
+						) {
+							element.triggerButton.element.addClass(
+								stylesButton.lastHeadAction,
+							);
+						}
+						return element;
+					}),
 
 				new HeaderListItem(
 					this,
@@ -328,7 +347,7 @@ export class ReligionSettingsUi extends SettingsPanel<
 				...this.host.game.religion.transcendenceUpgrades
 					.filter((item) => !isNil(this.setting.buildings[item.name]))
 					.map((upgrade) =>
-						BuildSectionTools.getBuildOption(
+						BuildSectionTools.getBuildOptionWithMax(
 							this,
 							this.setting.buildings[upgrade.name],
 							locale,

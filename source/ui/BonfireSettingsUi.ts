@@ -229,7 +229,7 @@ export class BonfireSettingsUi extends SettingsPanel<
 				(item) => item.baseBuilding === building,
 			)?.building as StagedBuilding;
 			return [
-				BuildSectionTools.getBuildOption(
+				BuildSectionTools.getBuildOptionWithMax(
 					parent,
 					settings.buildings[building],
 					locale,
@@ -250,7 +250,7 @@ export class BonfireSettingsUi extends SettingsPanel<
 						].join("\n"),
 					},
 				),
-				BuildSectionTools.getBuildOption(
+				BuildSectionTools.getBuildOptionWithMax(
 					parent,
 					settings.buildings[name],
 					locale,
@@ -276,7 +276,7 @@ export class BonfireSettingsUi extends SettingsPanel<
 		}
 		if (!isNil(meta.label)) {
 			return [
-				BuildSectionTools.getBuildOption(
+				BuildSectionTools.getBuildOptionWithMax(
 					parent,
 					settings.buildings[building],
 					locale,
