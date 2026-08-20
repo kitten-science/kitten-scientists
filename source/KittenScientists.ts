@@ -172,16 +172,12 @@ export class KittenScientists {
 				);
 				const state = this.getSettings();
 				saveData.ks = { state: [state] };
-				this._userInterface.stateManagementUi
-					.storeAutoSave(this._userInterface, state)
-					.then(() =>
-						document.dispatchEvent(
-							new CustomEvent<typeof saveData>("ks.reportSavegame", {
-								detail: saveData,
-							}),
-						),
-					)
-					.catch(redirectErrorsToConsole(console));
+				this._userInterface.stateManagementUi.storeAutoSave(state);
+				document.dispatchEvent(
+					new CustomEvent<typeof saveData>("ks.reportSavegame", {
+						detail: saveData,
+					}),
+				);
 			},
 		);
 

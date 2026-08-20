@@ -128,7 +128,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 						this.host.engine.i18n("state.importFile"),
 						Icons.NoteAdd,
 						{
-							onClick: () => this.importFromFile(parent),
+							onClick: () => this.importFromFile(),
 							title: this.host.engine.i18n("state.importFileTitle"),
 						},
 					),
@@ -138,7 +138,11 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				new HeaderListItem(this, this.host.engine.i18n("state.localStates")),
 				new ToolbarListItem(this).addChildren([
 					new Button(this, this.host.engine.i18n("state.store"), Icons.SaveAs, {
-						onClick: () => void this.storeState(parent),
+						onClick: () =>
+							this.storeState(
+								this.host.engine.stateSerialize(),
+								this.host.engine.i18n("state.unlabeledState"),
+							),
 						title: this.host.engine.i18n("state.storeState"),
 					}),
 					new Button(this, this.host.engine.i18n("copy"), Icons.Copy, {
@@ -149,8 +153,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 						title: this.host.engine.i18n("state.copy.stateCurrent"),
 					}),
 					new Button(this, this.host.engine.i18n("state.new"), Icons.Draft, {
-						onClick: async () => {
-							await this.storeStateFactoryDefaults(parent);
+						onClick: () => {
+							this.storeStateFactoryDefaults();
 							this.host.engine.imessage("state.stored.state");
 						},
 						title: this.host.engine.i18n("state.storeFactory"),
@@ -174,7 +178,12 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				new ToolbarListItem(this).addChildren([
 					new Button(this, this.host.engine.i18n("state.store"), Icons.SaveAs, {
 						onClick: async () => {
-							await this.storeGame(parent);
+							const label =
+								(await Dialog.prompt(
+									parent,
+									this.host.engine.i18n("state.storeGame.prompt"),
+								)) ?? this.host.engine.i18n("state.unlabeledGame");
+							await this.storeGame(this.host.game.save(), label);
 							this.host.engine.imessage("state.stored.game");
 						},
 						title: this.host.engine.i18n("state.storeGame"),
@@ -307,7 +316,16 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							this.host.engine.i18n("state.edit.game"),
 							{
 								onClick: async () => {
-									await this.storeGame(parent, game.game);
+									const label = await Dialog.prompt(
+										parent,
+										this.host.engine.i18n("state.storeGame.prompt"),
+										undefined,
+										game.label,
+									);
+									if (label === undefined || label === "") {
+										return;
+									}
+									this.storeGame(game.game, label);
 									await this.deleteGame(parent, gameSlot, true);
 									this.host.engine.imessage("state.updated.game", [game.label]);
 								},
@@ -396,7 +414,16 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 							this.host.engine.i18n("state.edit.state"),
 							{
 								onClick: async () => {
-									await this.storeState(parent, state.state);
+									const label = await Dialog.prompt(
+										parent,
+										this.host.engine.i18n("state.storeState.prompt"),
+										undefined,
+										state.label,
+									);
+									if (label === undefined || label === "") {
+										return;
+									}
+									this.storeState(state.state, label);
 									await this.deleteState(parent, stateSlot, true);
 									this.host.engine.imessage("state.updated.state", [
 										state.label,
@@ -478,10 +505,10 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 			return;
 		}
 
-		await this._importText(parent, userInput);
+		await this._importText(userInput);
 	}
 
-	async importFromFile(parent: UiComponent) {
+	async importFromFile() {
 		const input = document.createElement("input");
 		input.setAttribute("type", "file");
 		input.setAttribute("accept", ".ndjson,.json,.txt");
@@ -498,10 +525,10 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		}
 
 		const text = await file.text();
-		await this._importText(parent, text);
+		await this._importText(text);
 	}
 
-	private async _importText(parent: UiComponent, userInput: string) {
+	private async _importText(userInput: string) {
 		const importId = new Date().toDateString();
 		let importSequence = 1;
 		const makeImportLabel = () =>
@@ -514,7 +541,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 			try {
 				// decodeSettings throws if the input is not a valid engine state.
 				const state = KittenScientists.decodeSettings(input);
-				await this.storeState(parent, state, makeImportLabel());
+				this.storeState(state, makeImportLabel());
 				this.host.engine.imessage("state.imported.state");
 				return;
 			} catch (_error) {
@@ -529,7 +556,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 					timestamp: string;
 				};
 				const state = KittenScientists.decodeSettings(subjectData.state);
-				await this.storeState(parent, state, subjectData.label);
+				this.storeState(state, subjectData.label);
 				this.host.engine.imessage("state.imported.state");
 				return;
 			} catch (_error) {
@@ -566,108 +593,58 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				"ks" in subjectData &&
 				!isNil(subjectData.ks)
 			) {
-				const state = subjectData.ks.state[0];
-				stateLabel =
-					(await this.storeState(parent, state, makeImportLabel())) ??
-					undefined;
+				this.storeState(subjectData.ks.state[0], makeImportLabel());
 				this.host.engine.imessage("state.imported.state");
 				subjectData.ks = undefined;
 			}
 
-			this.storeGame(parent, subjectData, stateLabel);
+			this.storeGame(
+				subjectData,
+				stateLabel ?? this.host.engine.i18n("state.unlabeledGame"),
+			);
 			this.host.engine.imessage("state.imported.game");
 		};
 
 		return internalImport(userInput);
 	}
 
-	async storeGame(
-		parent: UiComponent,
-		game?: KGSaveData,
-		label?: string,
-	): Promise<string | null> {
-		let gameLabel = label;
-
-		if (isNil(gameLabel)) {
-			gameLabel = await Dialog.prompt(
-				parent,
-				this.host.engine.i18n("state.storeGame.prompt"),
-			);
-		}
-
-		if (isNil(gameLabel)) {
-			return null;
-		}
-
-		// Normalize empty string to "no label".
-		gameLabel =
-			(gameLabel === "" ? undefined : gameLabel) ??
-			this.host.engine.i18n("state.unlabeledGame");
-
-		// Ensure labels aren't excessively long.
-		gameLabel = gameLabel.substring(0, 127);
-
+	storeGame(game: KGSaveData, label: string): void {
 		this.games.push(
 			new Unique({
-				game: game ?? this.host.game.save(),
-				label: gameLabel,
+				game: game,
+				label,
 				timestamp: new Date().toISOString(),
 			}),
 		);
 
 		this._storeGames();
 		this.requestRefresh();
-
-		return gameLabel;
 	}
 
-	async storeState(
-		parent: UiComponent,
-		state?: EngineState,
-		label?: string,
-	): Promise<string | null> {
-		let stateLabel = label;
-
-		if (isNil(stateLabel)) {
-			stateLabel = stateLabel = await Dialog.prompt(
-				parent,
-				this.host.engine.i18n("state.storeState.prompt"),
-			);
-		}
-
-		if (isNil(stateLabel)) {
-			return null;
-		}
-
-		// Normalize empty string to "no label".
-		stateLabel =
-			(stateLabel === "" ? undefined : stateLabel) ??
-			this.host.engine.i18n("state.unlabeledState");
-
-		// Ensure labels aren't excessively long.
-		stateLabel = stateLabel.substring(0, 127);
-
+	storeState(state: EngineState, label: string): void {
 		this.states.push(
 			new Unique({
-				label: stateLabel,
-				state: state ?? this.host.engine.stateSerialize(),
+				label,
+				state,
 				timestamp: new Date().toISOString(),
 			}),
 		);
 
 		this._storeStates();
 		this.requestRefresh();
-
-		return stateLabel;
 	}
 
-	async storeStateFactoryDefaults(parent: UiComponent) {
-		return this.storeState(parent, Engine.DEFAULT_STATE);
+	storeStateFactoryDefaults() {
+		this.storeState(
+			Engine.DEFAULT_STATE,
+			this.host.engine.i18n("state.unlabeledState"),
+		);
 	}
 
-	async storeAutoSave(parent: UiComponent, state: EngineState) {
+	storeAutoSave(state: EngineState) {
 		const existing = this.states.find(
-			(state) => state.unwrap().label === "Auto-Save",
+			(state) =>
+				state.unwrap().label === this.host.engine.i18n("state.autoSave"),
 		);
 		if (!isNil(existing)) {
 			console.info(...cl("Updating existing Auto-Save..."));
@@ -684,7 +661,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		}
 
 		console.info(...cl("Storing new Auto-Save..."));
-		return this.storeState(parent, state, "Auto-Save");
+		return this.storeState(state, this.host.engine.i18n("state.autoSave"));
 	}
 
 	exportStateAll() {
@@ -734,7 +711,8 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 		}
 
 		const existing = this.states.find(
-			(state) => state.unwrap().label === "Auto-Save",
+			(state) =>
+				state.unwrap().label === this.host.engine.i18n("state.autoSave"),
 		);
 		if (isNil(existing)) {
 			console.info(...cl("No Auto-Save settings found."));

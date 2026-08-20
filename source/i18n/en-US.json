@@ -131,6 +131,7 @@
 	"resources.stock.title": "Keeping {0} {1} in stock",
 	"resources.stock.titleInfinite": "Keeping all {0} in stock",
 	"resources.stock.titleZero": "Not keeping any {0} in stock",
+	"state.autoSave": "Auto-Save",
 	"state.compress": "Compress copied Kittens Game saves",
 	"state.confirmDestruction": "Are you sure?",
 	"state.copied.game": "Save '{0}' copied to clipboard.",
