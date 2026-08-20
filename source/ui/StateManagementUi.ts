@@ -162,7 +162,7 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 					new Button(
 						this,
 						this.host.engine.i18n("state.exportAll"),
-						Icons.Sync,
+						Icons.Download,
 						{
 							onClick: () => {
 								this.exportStateAll();
