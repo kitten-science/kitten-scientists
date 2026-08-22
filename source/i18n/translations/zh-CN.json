@@ -131,6 +131,7 @@
 	"resources.stock.title": "保持 {0} {1} 库存",
 	"resources.stock.titleInfinite": "保持所有 {0} 库存",
 	"resources.stock.titleZero": "不保留任何 {0} 库存",
+	"state.autoSave": "Auto-Save",
 	"state.compress": "压缩数据",
 	"state.confirmDestruction": "你确定吗？",
 	"state.copied.game": "保存“{0}”复制到剪贴板。",
