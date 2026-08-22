@@ -131,6 +131,7 @@
 	"resources.stock.title": "{0} {1} werden auf Lager gehalten",
 	"resources.stock.titleInfinite": "Alle {0} werden auf Lager gehalten",
 	"resources.stock.titleZero": "{0} werden nicht auf Lager gehalten",
+	"state.autoSave": "Auto-Save",
 	"state.compress": "Kopierte Kittens Game Spielstände komprimieren",
 	"state.confirmDestruction": "Bist du sicher?",
 	"state.copied.game": "Spielstand '{0}' in die Zwischenablage kopiert.",
