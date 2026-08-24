@@ -538,7 +538,11 @@ export class ReligionManager implements Automation {
 				);
 			}
 		} else {
-			this._host.engine.storeForSummary("build.religion", amountConstructed);
+			this._host.engine.storeForSummary(
+				"build.religion",
+				amountConstructed,
+				label,
+			);
 			if (amountConstructed === 1) {
 				this._host.engine.iactivity("build.religion", "act.build", [label]);
 			} else {

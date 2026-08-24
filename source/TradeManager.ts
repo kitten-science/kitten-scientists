@@ -277,7 +277,11 @@ export class TradeManager implements Automation {
 			this._workshopManager.getResource("culture").value -= emBulk.priceSum;
 			emBulk.race.embassyLevel += emBulk.val;
 
-			this._host.engine.storeForSummary("build.embassy", emBulk.val);
+			this._host.engine.storeForSummary(
+				"build.embassy",
+				emBulk.val,
+				emBulk.race.title,
+			);
 			if (emBulk.val !== 1) {
 				this._host.engine.iactivity("build.embassy", "act.build.embassies", [
 					emBulk.race.title,
