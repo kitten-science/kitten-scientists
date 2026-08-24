@@ -10,9 +10,9 @@ import {
 } from "@oliversalzburg/js-utils/measurement/performance.js";
 import { BonfireManager } from "./BonfireManager.js";
 import {
+	type Activity,
 	type ActivityClass,
 	ActivitySummary,
-	type ActivitySummarySection,
 	type ActivityTypeClass,
 } from "./helper/ActivitySummary.js";
 import {
@@ -470,7 +470,7 @@ export class Engine {
 		this._isInStandBy = true;
 
 		if (msg) {
-			this._host.engine.iactivity("status.ks.standby");
+			this._host.engine.imessage("status.ks.standby");
 		}
 	}
 
@@ -688,51 +688,60 @@ export class Engine {
 		return value;
 	}
 
+	activity(activity: Activity, text: string): void {
+		if (this.settings.filters.enabled) {
+			for (const filterItem of Object.values(this.settings.filters.filters)) {
+				if (filterItem.activity === activity && !filterItem.enabled) {
+					return;
+				}
+			}
+		}
+
+		const activityClass: ActivityClass = `ks-${activity}`;
+		const activityTypeClass: ActivityTypeClass =
+			`type_${activityClass}` as const;
+		this.printOutput(text, `ks-activity ${activityTypeClass}` as const);
+	}
+
 	iactivity(
+		activity: Activity,
 		i18nLiteral: keyof (typeof i18nData)["en-US"],
 		i18nArgs: Array<number | string> = [],
-		logStyle?: ActivityClass,
 	): void {
-		const text = this.i18n(i18nLiteral, i18nArgs);
-		if (logStyle) {
-			const activityClass: ActivityTypeClass = `type_${logStyle}` as const;
-			this.printOutput(`ks-activity ${activityClass}` as const, text);
-		} else {
-			this.printOutput("ks-activity", text);
+		if (this.settings.filters.enabled) {
+			for (const filterItem of Object.values(this.settings.filters.filters)) {
+				if (filterItem.activity === activity && !filterItem.enabled) {
+					return;
+				}
+			}
 		}
+
+		const text = this.i18n(i18nLiteral, i18nArgs);
+		const activityClass: ActivityClass = `ks-${activity}`;
+		const activityTypeClass: ActivityTypeClass =
+			`type_${activityClass}` as const;
+		this.printOutput(text, `ks-activity ${activityTypeClass}` as const);
 	}
 
 	imessage(
 		i18nLiteral: keyof (typeof i18nData)["en-US"],
 		i18nArgs: Array<number | string> = [],
 	): void {
-		this.printOutput("ks-default", this.i18n(i18nLiteral, i18nArgs));
+		this.printOutput(this.i18n(i18nLiteral, i18nArgs), "ks-default");
 	}
 
-	storeForSummary(
-		name: string,
-		amount = 1,
-		section: ActivitySummarySection = "other",
-	): void {
-		this.activitySummary.storeActivity(name, amount, section);
+	storeForSummary(type: Activity, amount = 1, name?: string): void {
+		this.activitySummary.storeActivity(type, amount, name);
 	}
 
 	printOutput(
+		message: string,
 		cssClasses:
 			| "ks-activity"
 			| `ks-activity ${ActivityTypeClass}`
 			| "ks-default"
-			| "ks-summary",
-		message: string,
+			| "ks-summary" = "ks-default",
 	): void {
-		if (this.settings.filters.enabled) {
-			for (const filterItem of Object.values(this.settings.filters.filters)) {
-				if (filterItem.variant === cssClasses && !filterItem.enabled) {
-					return;
-				}
-			}
-		}
-
 		this._host.game.msg(message, cssClasses);
 	}
 

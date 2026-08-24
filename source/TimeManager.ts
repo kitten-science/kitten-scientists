@@ -162,16 +162,15 @@ export class TimeManager {
 				return;
 			}
 		}
-		this._host.engine.storeForSummary(label, amountConstructed, "build");
+		this._host.engine.storeForSummary("build.time", amountConstructed, label);
 
 		if (amountConstructed === 1) {
-			this._host.engine.iactivity("act.build", [label], "ks-build");
+			this._host.engine.iactivity("build.time", "act.build", [label]);
 		} else {
-			this._host.engine.iactivity(
-				"act.builds",
-				[label, this._host.renderAbsolute(amountConstructed)],
-				"ks-build",
-			);
+			this._host.engine.iactivity("build.time", "act.builds", [
+				label,
+				this._host.renderAbsolute(amountConstructed),
+			]);
 		}
 	}
 
@@ -216,11 +215,11 @@ export class TimeManager {
 
 		if (0 < fixed) {
 			this._host.engine.iactivity(
-				"act.fix.cry",
+				"time.fixCryochamber",
+				"act.time.fixCryochamber",
 				[this._host.renderAbsolute(fixed)],
-				"ks-fixCry",
 			);
-			this._host.engine.storeForSummary("fix.cry", fixed);
+			this._host.engine.storeForSummary("time.fixCryochamber", fixed);
 		}
 	}
 }

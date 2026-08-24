@@ -122,16 +122,14 @@ export class SpaceManager implements Automation {
 
 			if (i === 7 || i === 12) {
 				this._host.engine.iactivity(
-					"upgrade.space.mission",
+					"spaceMission",
+					"act.spaceMission.mission",
 					[missions[i].label],
-					"ks-upgrade",
 				);
 			} else {
-				this._host.engine.iactivity(
-					"upgrade.space",
-					[missions[i].label],
-					"ks-upgrade",
-				);
+				this._host.engine.iactivity("spaceMission", "act.spaceMission", [
+					missions[i].label,
+				]);
 			}
 		}
 	}
@@ -164,16 +162,15 @@ export class SpaceManager implements Automation {
 				return 0;
 			}
 		}
-		this._host.engine.storeForSummary(label, amountConstructed, "build");
+		this._host.engine.storeForSummary("build.space", amountConstructed, label);
 
 		if (amountConstructed === 1) {
-			this._host.engine.iactivity("act.build", [label], "ks-build");
+			this._host.engine.iactivity("build.space", "act.build", [label]);
 		} else {
-			this._host.engine.iactivity(
-				"act.builds",
-				[label, this._host.renderAbsolute(amountConstructed)],
-				"ks-build",
-			);
+			this._host.engine.iactivity("build.space", "act.builds", [
+				label,
+				this._host.renderAbsolute(amountConstructed),
+			]);
 		}
 
 		return amountConstructed;

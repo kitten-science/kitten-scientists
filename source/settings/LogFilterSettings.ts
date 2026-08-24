@@ -1,47 +1,7 @@
 import { isNil, type Maybe } from "@oliversalzburg/js-utils/data/nil.js";
+import { Activities, type Activity } from "../helper/ActivitySummary.js";
 import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { Setting } from "./Settings.js";
-
-export enum LogFilterItemVariant {
-	accelerate = "ks-activity type_ks-accelerate",
-	adore = "ks-activity type_ks-adore",
-	build = "ks-activity type_ks-build",
-	craft = "ks-activity type_ks-craft",
-	distribute = "ks-activity type_ks-distribute",
-	faith = "ks-activity type_ks-faith",
-	festival = "ks-activity type_ks-festival",
-	hunt = "ks-activity type_ks-hunt",
-	misc = "ks-activity",
-	praise = "ks-activity type_ks-praise",
-	promote = "ks-activity type_ks-promote",
-	research = "ks-activity type_ks-research",
-	star = "ks-activity type_ks-star",
-	timeSkip = "ks-activity type_ks-timeSkip",
-	trade = "ks-activity type_ks-trade",
-	transcend = "ks-activity type_ks-transcend",
-	upgrade = "ks-activity type_ks-upgrade",
-}
-
-export const FilterItems = [
-	"accelerate",
-	"adore",
-	"build",
-	"craft",
-	"distribute",
-	"faith",
-	"festival",
-	"hunt",
-	"misc",
-	"praise",
-	"promote",
-	"research",
-	"star",
-	"timeSkip",
-	"trade",
-	"transcend",
-	"upgrade",
-] as const;
-export type FilterItem = (typeof FilterItems)[number];
 
 export const FilterItemsGame = [
 	"alicornCorruption",
@@ -69,19 +29,19 @@ export const FilterItemsGame = [
 export type FilterItemGame = (typeof FilterItemsGame)[number];
 
 export class LogFilterSettingsItem extends Setting {
-	readonly #variant: LogFilterItemVariant | null;
+	readonly #activity: Activity | null;
 
-	get variant() {
-		return this.#variant;
+	get activity() {
+		return this.#activity;
 	}
 
-	constructor(variant: LogFilterItemVariant | null) {
+	constructor(variant: Activity | null) {
 		super(true);
-		this.#variant = variant;
+		this.#activity = variant;
 	}
 }
 
-export type LogFilterSettingsItems = Record<FilterItem, LogFilterSettingsItem>;
+export type LogFilterSettingsItems = Record<Activity, LogFilterSettingsItem>;
 export type LogFilterSettingsItemsGame = Record<
 	FilterItemGame,
 	LogFilterSettingsItem
@@ -95,10 +55,8 @@ export class LogFilterSettings extends Setting {
 		super(enabled);
 
 		this.filters = {} as LogFilterSettingsItems;
-		for (const item of FilterItems) {
-			this.filters[item] = new LogFilterSettingsItem(
-				LogFilterItemVariant[item],
-			);
+		for (const item of Activities) {
+			this.filters[item] = new LogFilterSettingsItem(item);
 		}
 		this.filtersGame = {} as LogFilterSettingsItemsGame;
 		for (const item of FilterItemsGame) {

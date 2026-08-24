@@ -277,19 +277,16 @@ export class TradeManager implements Automation {
 			this._workshopManager.getResource("culture").value -= emBulk.priceSum;
 			emBulk.race.embassyLevel += emBulk.val;
 
-			this._host.engine.storeForSummary("embassy", emBulk.val);
+			this._host.engine.storeForSummary("build.embassy", emBulk.val);
 			if (emBulk.val !== 1) {
-				this._host.engine.iactivity(
-					"act.build.embassies",
-					[emBulk.race.title, emBulk.val],
-					"ks-build",
-				);
+				this._host.engine.iactivity("build.embassy", "act.build.embassies", [
+					emBulk.race.title,
+					emBulk.val,
+				]);
 			} else {
-				this._host.engine.iactivity(
-					"act.build.embassy",
-					[emBulk.race.title],
-					"ks-build",
-				);
+				this._host.engine.iactivity("build.embassy", "act.build.embassy", [
+					emBulk.race.title,
+				]);
 			}
 		}
 	}
@@ -306,18 +303,18 @@ export class TradeManager implements Automation {
 			// If feeding the elders would increase their energy level towards the
 			// cap, do it.
 			if (leviathanInfo.energy < this._host.game.diplomacy.getMarkerCap()) {
+				this._host.engine.storeForSummary("feedElders", 1);
 				this._host.game.diplomacy.feedElders();
-				this._host.engine.iactivity("act.feed");
-				this._host.engine.storeForSummary("feed", 1);
+				this._host.engine.iactivity("feedElders", "act.feedElders");
 			}
 		} else {
 			// We can reach this branch if we have partial necrocorns from resets.
-			// The partial necrocorns will then be feed to the elders to bring us back
+			// The partial necrocorns will then be fed to the elders to bring us back
 			// to even zero.
 			if (0.25 * (1 + this._host.game.getEffect("corruptionBoostRatio")) < 1) {
-				this._host.engine.storeForSummary("feed", necrocorns.value);
+				this._host.engine.storeForSummary("feedElders", necrocorns.value);
 				this._host.game.diplomacy.feedElders();
-				this._host.engine.iactivity("dispose.necrocorn");
+				this._host.engine.iactivity("feedElders", "dispose.necrocorn");
 			}
 		}
 	}
@@ -346,11 +343,9 @@ export class TradeManager implements Automation {
 					const unlockedRace = mustExist(
 						this._host.game.diplomacy.unlockRandomRace(),
 					);
-					this._host.engine.iactivity(
-						"upgrade.race",
-						[unlockedRace.title],
-						"ks-upgrade",
-					);
+					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
+						unlockedRace.title,
+					]);
 					manpower -= 1000;
 					context.requestGameUiRefresh = true;
 				}
@@ -363,11 +358,9 @@ export class TradeManager implements Automation {
 					const unlockedRace = mustExist(
 						this._host.game.diplomacy.unlockRandomRace(),
 					);
-					this._host.engine.iactivity(
-						"upgrade.race",
-						[unlockedRace.title],
-						"ks-upgrade",
-					);
+					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
+						unlockedRace.title,
+					]);
 					manpower -= 1000;
 					context.requestGameUiRefresh = true;
 				}
@@ -380,11 +373,9 @@ export class TradeManager implements Automation {
 					const unlockedRace = mustExist(
 						this._host.game.diplomacy.unlockRandomRace(),
 					);
-					this._host.engine.iactivity(
-						"upgrade.race",
-						[unlockedRace.title],
-						"ks-upgrade",
-					);
+					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
+						unlockedRace.title,
+					]);
 					manpower -= 1000;
 					context.requestGameUiRefresh = true;
 				}
@@ -400,11 +391,9 @@ export class TradeManager implements Automation {
 					const unlockedRace = mustExist(
 						this._host.game.diplomacy.unlockRandomRace(),
 					);
-					this._host.engine.iactivity(
-						"upgrade.race",
-						[unlockedRace.title],
-						"ks-upgrade",
-					);
+					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
+						unlockedRace.title,
+					]);
 					manpower -= 1000;
 					context.requestGameUiRefresh = true;
 				}
@@ -420,11 +409,9 @@ export class TradeManager implements Automation {
 					const unlockedRace = mustExist(
 						this._host.game.diplomacy.unlockRandomRace(),
 					);
-					this._host.engine.iactivity(
-						"upgrade.race",
-						[unlockedRace.title],
-						"ks-upgrade",
-					);
+					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
+						unlockedRace.title,
+					]);
 					manpower -= 1000;
 					context.requestGameUiRefresh = true;
 				}
@@ -441,11 +428,9 @@ export class TradeManager implements Automation {
 					const unlockedRace = mustExist(
 						this._host.game.diplomacy.unlockRandomRace(),
 					);
-					this._host.engine.iactivity(
-						"upgrade.race",
-						[unlockedRace.title],
-						"ks-upgrade",
-					);
+					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
+						unlockedRace.title,
+					]);
 					manpower -= 1000;
 					context.requestGameUiRefresh = true;
 				}
@@ -461,11 +446,9 @@ export class TradeManager implements Automation {
 					const unlockedRace = mustExist(
 						this._host.game.diplomacy.unlockRandomRace(),
 					);
-					this._host.engine.iactivity(
-						"upgrade.race",
-						[unlockedRace.title],
-						"ks-upgrade",
-					);
+					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
+						unlockedRace.title,
+					]);
 					manpower -= 1000;
 					context.requestGameUiRefresh = true;
 				}
@@ -492,7 +475,7 @@ export class TradeManager implements Automation {
 
 			const currentCoin = this._host.game.resPool.get("blackcoin").value;
 			coinsExchanged = Math.round(currentCoin - coinsInitial);
-			this._host.engine.iactivity("act.blackcoin.buy", [
+			this._host.engine.iactivity("blackcoin.buy", "act.blackcoin.buy", [
 				this._host.renderAbsolute(coinsExchanged),
 			]);
 		} else if (
@@ -506,7 +489,7 @@ export class TradeManager implements Automation {
 			).value;
 			relicsExchanged = Math.round(relicsCurrent - relicsInitial);
 
-			this._host.engine.iactivity("act.blackcoin.sell", [
+			this._host.engine.iactivity("blackcoin.sell", "act.blackcoin.sell", [
 				this._host.renderAbsolute(relicsExchanged),
 			]);
 		}
@@ -522,12 +505,11 @@ export class TradeManager implements Automation {
 		const race = this.getRace(name);
 
 		this._host.game.diplomacy.tradeMultiple(race, amount);
-		this._host.engine.storeForSummary(race.title, amount, "trade");
-		this._host.engine.iactivity(
-			"act.trade",
-			[this._host.renderAbsolute(amount), ucfirst(race.title)],
-			"ks-trade",
-		);
+		this._host.engine.storeForSummary("trade", amount, race.title);
+		this._host.engine.iactivity("trade", "act.trade", [
+			this._host.renderAbsolute(amount),
+			ucfirst(race.title),
+		]);
 	}
 
 	/**

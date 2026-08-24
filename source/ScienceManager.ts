@@ -120,7 +120,7 @@ export class ScienceManager extends UpgradeManager {
 		}
 
 		for (const item of toUnlock) {
-			await this.upgrade(item, "policy");
+			this.upgrade(item, "policy");
 		}
 	}
 
@@ -130,8 +130,8 @@ export class ScienceManager extends UpgradeManager {
 	observeStars(): void {
 		if (this._host.game.calendar.observeBtn !== null) {
 			this._host.game.calendar.observeHandler();
-			this._host.engine.iactivity("act.observe", [], "ks-star");
-			this._host.engine.storeForSummary("stars", 1);
+			this._host.engine.iactivity("observeStar", "act.observeStar", []);
+			this._host.engine.storeForSummary("observeStar", 1);
 		}
 	}
 }

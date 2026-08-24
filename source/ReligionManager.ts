@@ -519,26 +519,33 @@ export class ReligionManager implements Automation {
 		}
 
 		if (variant === UnicornItemVariant.OrderOfTheSun) {
-			this._host.engine.storeForSummary(label, amountConstructed, "faith");
+			this._host.engine.storeForSummary(
+				"research.orderOfTheSun",
+				amountConstructed,
+				label,
+			);
 			if (amountConstructed === 1) {
-				this._host.engine.iactivity("act.sun.discover", [label], "ks-faith");
+				this._host.engine.iactivity(
+					"research.orderOfTheSun",
+					"act.research.orderOfTheSun",
+					[label],
+				);
 			} else {
 				this._host.engine.iactivity(
-					"act.sun.discovers",
+					"research.orderOfTheSun",
+					"act.research.orderOfTheSuns",
 					[label, this._host.renderAbsolute(amountConstructed)],
-					"ks-faith",
 				);
 			}
 		} else {
-			this._host.engine.storeForSummary(label, amountConstructed, "build");
+			this._host.engine.storeForSummary("build.religion", amountConstructed);
 			if (amountConstructed === 1) {
-				this._host.engine.iactivity("act.build", [label], "ks-build");
+				this._host.engine.iactivity("build.religion", "act.build", [label]);
 			} else {
-				this._host.engine.iactivity(
-					"act.builds",
-					[label, this._host.renderAbsolute(amountConstructed)],
-					"ks-build",
-				);
+				this._host.engine.iactivity("build.religion", "act.builds", [
+					label,
+					this._host.renderAbsolute(amountConstructed),
+				]);
 			}
 		}
 	}
@@ -692,15 +699,13 @@ export class ReligionManager implements Automation {
 			const availableNow = this._workshopManager.getValueAvailable("unicorns");
 			const cost = available - availableNow;
 
-			this._host.engine.iactivity(
-				"act.sacrificeUnicorns",
-				[this._host.game.getDisplayValueExt(cost)],
-				"ks-faith",
-			);
+			this._host.engine.iactivity("sacrifice", "act.sacrifice.unicorns", [
+				this._host.game.getDisplayValueExt(cost),
+			]);
 			this._host.engine.storeForSummary(
-				this._host.engine.i18n("$resources.unicorns.title"),
+				"sacrifice",
 				cost,
-				"refine",
+				this._host.engine.i18n("$resources.unicorns.title"),
 			);
 		}
 	}
@@ -735,15 +740,13 @@ export class ReligionManager implements Automation {
 			const availableNow = this._workshopManager.getValueAvailable("alicorn");
 			const cost = available - availableNow;
 
-			this._host.engine.iactivity(
-				"act.sacrificeAlicorns",
-				[this._host.game.getDisplayValueExt(cost)],
-				"ks-faith",
-			);
+			this._host.engine.iactivity("sacrifice", "act.sacrifice.alicorns", [
+				this._host.game.getDisplayValueExt(cost),
+			]);
 			this._host.engine.storeForSummary(
-				this._host.engine.i18n("$resources.alicorn.title"),
+				"sacrifice",
 				cost,
-				"refine",
+				this._host.engine.i18n("$resources.alicorn.title"),
 			);
 		}
 	}
@@ -778,15 +781,13 @@ export class ReligionManager implements Automation {
 			const availableNow = this._workshopManager.getValueAvailable("tears");
 			const cost = available - availableNow;
 
-			this._host.engine.iactivity(
-				"act.refineTears",
-				[this._host.game.getDisplayValueExt(cost)],
-				"ks-faith",
-			);
+			this._host.engine.iactivity("refine.tears", "act.refineTears", [
+				this._host.game.getDisplayValueExt(cost),
+			]);
 			this._host.engine.storeForSummary(
-				this._host.engine.i18n("$resources.tears.title"),
+				"refine.tears",
 				cost,
-				"refine",
+				this._host.engine.i18n("$resources.tears.title"),
 			);
 		}
 	}
@@ -820,15 +821,13 @@ export class ReligionManager implements Automation {
 				this._workshopManager.getValueAvailable("timeCrystal");
 			const cost = available - availableNow;
 
-			this._host.engine.iactivity(
-				"act.refineTCs",
-				[this._host.game.getDisplayValueExt(cost)],
-				"ks-faith",
-			);
+			this._host.engine.iactivity("refine.timeCrystals", "act.refineTCs", [
+				this._host.game.getDisplayValueExt(cost),
+			]);
 			this._host.engine.storeForSummary(
-				this._host.engine.i18n("$resources.timeCrystal.title"),
+				"refine.timeCrystals",
 				cost,
-				"refine",
+				this._host.engine.i18n("$resources.timeCrystal.title"),
 			);
 		}
 	}
@@ -902,15 +901,11 @@ export class ReligionManager implements Automation {
 			this._host.game.religion._resetFaithInternal(1.01);
 
 			// Log the action.
-			this._host.engine.iactivity(
-				"act.adore",
-				[
-					this._host.game.getDisplayValueExt(worship),
-					this._host.game.getDisplayValueExt(epiphanyIncrease),
-				],
-				"ks-adore",
-			);
-			this._host.engine.storeForSummary("adore", epiphanyIncrease);
+			this._host.engine.iactivity("adoreTheGalaxy", "act.adoreTheGalaxy", [
+				this._host.game.getDisplayValueExt(worship),
+				this._host.game.getDisplayValueExt(epiphanyIncrease),
+			]);
+			this._host.engine.storeForSummary("adoreTheGalaxy", epiphanyIncrease);
 		}
 	}
 
@@ -978,14 +973,10 @@ export class ReligionManager implements Automation {
 
 				epiphany = this._host.game.religion.faithRatio;
 				transcendenceTierCurrent = this._host.game.religion.transcendenceTier;
-				this._host.engine.iactivity(
-					"act.transcend",
-					[
-						this._host.game.getDisplayValueExt(needNextLevel),
-						transcendenceTierCurrent,
-					],
-					"ks-transcend",
-				);
+				this._host.engine.iactivity("transcend", "act.transcend", [
+					this._host.game.getDisplayValueExt(needNextLevel),
+					transcendenceTierCurrent,
+				]);
 				this._host.engine.storeForSummary("transcend", 1);
 			}
 		}
@@ -997,15 +988,11 @@ export class ReligionManager implements Automation {
 
 		// Determine how much worship we'll gain and log it.
 		const worshipIncrease = faith.value * (1 + apocryphaBonus);
-		this._host.engine.storeForSummary("praise", worshipIncrease);
-		this._host.engine.iactivity(
-			"act.praise",
-			[
-				this._host.game.getDisplayValueExt(faith.value),
-				this._host.game.getDisplayValueExt(worshipIncrease),
-			],
-			"ks-praise",
-		);
+		this._host.engine.storeForSummary("praiseTheSun", worshipIncrease);
+		this._host.engine.iactivity("praiseTheSun", "act.praiseTheSun", [
+			this._host.game.getDisplayValueExt(faith.value),
+			this._host.game.getDisplayValueExt(worshipIncrease),
+		]);
 
 		// Now finally praise the sun.
 		this._host.game.religion.praise();

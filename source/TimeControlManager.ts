@@ -276,7 +276,7 @@ export class TimeControlManager {
 			await sleep(0);
 			this._host.engine.imessage("reset.checked");
 			await sleep();
-			this._host.engine.iactivity("reset.tip");
+			this._host.engine.imessage("reset.tip");
 			await sleep();
 			this._host.engine.imessage("reset.countdown.10");
 			await sleep(2000);
@@ -300,11 +300,11 @@ export class TimeControlManager {
 			await sleep();
 			this._host.engine.imessage("reset.countdown.0");
 			await sleep();
-			this._host.engine.iactivity("reset.last.message");
+			this._host.engine.imessage("reset.last.message");
 			await sleep();
 		} catch (_error) {
 			this._host.engine.imessage("reset.cancel.message");
-			this._host.engine.iactivity("reset.cancel.activity");
+			this._host.engine.imessage("reset.cancel.activity");
 			return;
 		}
 
@@ -344,8 +344,8 @@ export class TimeControlManager {
 			temporalFlux.value
 		) {
 			this._host.game.time.isAccelerated = true;
-			this._host.engine.iactivity("act.accelerate", [], "ks-accelerate");
-			this._host.engine.storeForSummary("accelerate", 1);
+			this._host.engine.iactivity("time.accelerate", "act.time.accelerate", []);
+			this._host.engine.storeForSummary("time.accelerate", 1);
 		}
 	}
 
@@ -427,9 +427,8 @@ export class TimeControlManager {
 					this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled = false;
 					this._host.refreshEntireUserInterface();
 					this._host.engine.iactivity(
+						"time.activeHeatTransferStart",
 						"act.time.activeHeatTransferEnd",
-						[],
-						"ks-timeSkip",
 					);
 				}
 				// Get temporalFlux
@@ -462,9 +461,9 @@ export class TimeControlManager {
 							temporalFluxProduction,
 					);
 					this._host.engine.iactivity(
+						"time.getTemporalFlux",
 						"act.time.getTemporalFlux",
 						[],
-						"ks-timeSkip",
 					);
 					this._host.engine.storeForSummary("time.getTemporalFlux", 1);
 				} else if (
@@ -482,9 +481,9 @@ export class TimeControlManager {
 				this.settings.timeSkip.activeHeatTransfer.activeHeatTransferStatus.enabled = true;
 				this._host.refreshEntireUserInterface();
 				this._host.engine.iactivity(
+					"time.activeHeatTransferStart",
 					"act.time.activeHeatTransferStart",
 					[],
-					"ks-timeSkip",
 				);
 				this._host.engine.storeForSummary("time.activeHeatTransferStart", 1);
 			}
@@ -550,7 +549,7 @@ export class TimeControlManager {
 			) as ShatterTCBtnController;
 			const model = controller.fetchModel({});
 			controller.doShatterAmt(model, willSkip);
-			this._host.engine.iactivity("act.time.skip", [willSkip], "ks-timeSkip");
+			this._host.engine.iactivity("time.skip", "act.time.skip", [willSkip]);
 			this._host.engine.storeForSummary("time.skip", willSkip);
 		}
 	}

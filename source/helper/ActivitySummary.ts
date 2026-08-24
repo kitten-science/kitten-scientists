@@ -1,55 +1,85 @@
 import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { KittenScientists } from "../KittenScientists.js";
-import { roundToTwo, ucfirst } from "../tools/Format.js";
+import { roundToTwo } from "../tools/Format.js";
+import type { TabId } from "../types/index.js";
 
-/**
- * The different sections of the summary.
- */
-export type ActivitySummarySection =
-	| "build"
-	| "craft"
-	| "faith"
-	| "other"
-	| "refine"
-	| "research"
-	| "trade"
-	| "upgrade";
+export const Activities = [
+	"adoreTheGalaxy",
+	"blackcoin.buy",
+	"blackcoin.sell",
+	"build.bonfire",
+	"build.embassy",
+	"build.religion",
+	"build.space",
+	"build.time",
+	"build.upgrade",
+	"craft",
+	"feedElders",
+	"festival",
+	"hunt",
+	"kittens.distribute",
+	"kittens.promote",
+	"leader.elect",
+	"leader.promote",
+	"observeStar",
+	"praiseTheSun",
+	"refine.tears",
+	"refine.timeCrystals",
+	"research.orderOfTheSun",
+	"research.policy",
+	"research.tech",
+	"research.upgrade",
+	"sacrifice",
+	"spaceMission",
+	"time.accelerate",
+	"time.activeHeatTransferStart",
+	"time.fixCryochamber",
+	"time.getTemporalFlux",
+	"time.skip",
+	"trade",
+	"trade.explore",
+	"transcend",
+] as const;
+export type Activity = (typeof Activities)[number];
 
-/**
- * Activities that are logged in the "other" section.
- */
-export type ActivitySectionOther =
-	| "accelerate"
-	| "adore"
-	| "distribute"
-	| "embassy"
-	| "feed"
-	| "festival"
-	| "fix.cry"
-	| "hunt"
-	| "praise"
-	| "promote"
-	| "stars"
-	| "transcend";
+export const ActivitySections: Record<Activity, TabId> = {
+	adoreTheGalaxy: "Religion",
+	"blackcoin.buy": "Trade",
+	"blackcoin.sell": "Trade",
+	"build.bonfire": "Bonfire",
+	"build.embassy": "Trade",
+	"build.religion": "Religion",
+	"build.space": "Space",
+	"build.time": "Time",
+	"build.upgrade": "Bonfire",
+	craft: "Workshop",
+	feedElders: "Trade",
+	festival: "Village",
+	hunt: "Village",
+	"kittens.distribute": "Village",
+	"kittens.promote": "Village",
+	"leader.elect": "Village",
+	"leader.promote": "Village",
+	observeStar: "Science",
+	praiseTheSun: "Religion",
+	"refine.tears": "Religion",
+	"refine.timeCrystals": "Religion",
+	"research.orderOfTheSun": "Religion",
+	"research.policy": "Science",
+	"research.tech": "Science",
+	"research.upgrade": "Workshop",
+	sacrifice: "Religion",
+	spaceMission: "Space",
+	"time.accelerate": "Time",
+	"time.activeHeatTransferStart": "Time",
+	"time.fixCryochamber": "Time",
+	"time.getTemporalFlux": "Time",
+	"time.skip": "Time",
+	trade: "Trade",
+	"trade.explore": "Trade",
+	transcend: "Religion",
+};
 
-export type Activity =
-	| "accelerate"
-	| "adore"
-	| "build"
-	| "craft"
-	| "distribute"
-	| "faith"
-	| "festival"
-	| "fixCry"
-	| "hunt"
-	| "praise"
-	| "promote"
-	| "research"
-	| "star"
-	| "timeSkip"
-	| "trade"
-	| "transcend"
-	| "upgrade";
 export type ActivityClass = `ks-${Activity}`;
 export type ActivityTypeClass = `type_${ActivityClass}`;
 
@@ -66,13 +96,13 @@ export class ActivitySummary {
 	 */
 	private _lastyear: number | undefined;
 
-	private _sections = new Map<ActivitySummarySection, Map<string, number>>();
+	private _activities = new Map<Activity, Map<string, number>>();
 
 	/**
-	 * The individual sections/categories of the activity summary.
+	 * The stored activities.
 	 */
-	get sections() {
-		return this._sections;
+	get activities() {
+		return this._activities;
 	}
 
 	constructor(host: KittenScientists) {
@@ -81,20 +111,16 @@ export class ActivitySummary {
 	}
 
 	resetActivity(): void {
-		this._sections = new Map<ActivitySummarySection, Map<string, number>>();
+		this._activities = new Map<Activity, Map<string, number>>();
 		this._lastday = this._host.game.calendar.day;
 		this._lastyear = this._host.game.calendar.year;
 	}
 
-	storeActivity(
-		name: string,
-		amount = 1,
-		section: ActivitySummarySection = "other",
-	): void {
-		if (!this._sections.has(section)) {
-			this._sections.set(section, new Map<ActivitySectionOther, number>());
+	storeActivity(type: Activity, amount = 1, name: string = type): void {
+		if (!this._activities.has(type)) {
+			this._activities.set(type, new Map<string, number>());
 		}
-		const summarySection = mustExist(this._sections.get(section));
+		const summarySection = mustExist(this._activities.get(type));
 
 		if (!summarySection.has(name)) {
 			summarySection.set(name, 0);
@@ -133,114 +159,5 @@ export class ActivitySummary {
 					: this._host.engine.i18n("summary.days");
 		}
 		return duration;
-	}
-
-	renderSummary(): Array<string> {
-		const summary = new Array<string>();
-
-		// Uncategorized items.
-		if (this._sections.has("other")) {
-			const section = mustExist(this._sections.get("other")) as Map<
-				ActivitySectionOther,
-				number
-			>;
-			for (const [name, amount] of section) {
-				summary.push(
-					this._host.engine.i18n(`summary.${name}` as const, [
-						this._host.game.getDisplayValueExt(amount),
-					]),
-				);
-			}
-		}
-
-		// Technologies.
-		if (this._sections.has("research")) {
-			const section = mustExist(this._sections.get("research"));
-			section.forEach((_amount, name) => {
-				summary.push(this._host.engine.i18n("summary.tech", [ucfirst(name)]));
-			});
-		}
-
-		// Upgrades.
-		if (this._sections.has("upgrade")) {
-			const section = mustExist(this._sections.get("upgrade"));
-			section.forEach((_amount, name) => {
-				summary.push(
-					this._host.engine.i18n("summary.upgrade", [ucfirst(name)]),
-				);
-			});
-		}
-
-		// Upgrades.
-		if (this._sections.has("build")) {
-			const section = mustExist(this._sections.get("build"));
-			section.forEach((amount, name) => {
-				summary.push(
-					this._host.engine.i18n("summary.building", [
-						this._host.game.getDisplayValueExt(amount),
-						ucfirst(name),
-					]),
-				);
-			});
-		}
-
-		// Ziggurats
-		if (this._sections.has("refine")) {
-			const section = mustExist(this._sections.get("refine"));
-			section.forEach((amount, name) => {
-				summary.push(
-					this._host.engine.i18n("summary.refine", [
-						this._host.game.getDisplayValueExt(amount),
-						ucfirst(name),
-					]),
-				);
-			});
-		}
-		// Order of the sun.
-		if (this._sections.has("faith")) {
-			const section = mustExist(this._sections.get("faith"));
-			section.forEach((amount, name) => {
-				summary.push(
-					this._host.engine.i18n("summary.sun", [
-						this._host.game.getDisplayValueExt(amount),
-						ucfirst(name),
-					]),
-				);
-			});
-		}
-
-		// Crafts.
-		if (this._sections.has("craft")) {
-			const section = mustExist(this._sections.get("craft"));
-			section.forEach((amount, name) => {
-				summary.push(
-					this._host.engine.i18n("summary.craft", [
-						this._host.game.getDisplayValueExt(amount),
-						ucfirst(name),
-					]),
-				);
-			});
-		}
-
-		// Trades.
-		if (this._sections.has("trade")) {
-			const section = mustExist(this._sections.get("trade"));
-			section.forEach((amount, name) => {
-				summary.push(
-					this._host.engine.i18n("summary.trade", [
-						this._host.game.getDisplayValueExt(amount),
-						ucfirst(name),
-					]),
-				);
-			});
-		}
-
-		if (this._lastday && this._lastyear) {
-			summary.push(
-				this._host.engine.i18n("summary.head", [this.getDuration()]),
-			);
-		}
-
-		return summary;
 	}
 }

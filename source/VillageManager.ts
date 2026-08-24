@@ -117,12 +117,12 @@ export class VillageManager implements Automation {
 			);
 			context.requestGameUiRefresh = true;
 			this._host.engine.iactivity(
-				"act.distribute",
+				"kittens.distribute",
+				"act.kittens.distribute",
 				[this._host.engine.i18n(`$village.job.${jobName}` as const)],
-				"ks-distribute",
 			);
 		}
-		this._host.engine.storeForSummary("distribute", freeKittens);
+		this._host.engine.storeForSummary("kittens.distribute", freeKittens);
 	}
 
 	autoElect(): void {
@@ -158,7 +158,7 @@ export class VillageManager implements Automation {
 		}
 
 		this._host.game.village.makeLeader(bestLeader);
-		this._host.engine.iactivity("act.elect");
+		this._host.engine.iactivity("leader.elect", "act.leader.elect");
 	}
 
 	autoPromoteKittens(): void {
@@ -192,6 +192,9 @@ export class VillageManager implements Automation {
 			// We have found an engineer that isn't at their ideal rank.
 			// No need to look further.
 			this._host.game.village.promoteKittens();
+
+			this._host.engine.iactivity("kittens.promote", "act.kittens.promote");
+			this._host.engine.storeForSummary("kittens.promote", 1);
 			return;
 		}
 	}
@@ -217,12 +220,14 @@ export class VillageManager implements Automation {
 				)[0] &&
 				this._host.game.village.sim.promote(leader, rank + 1) === 1
 			) {
-				this._host.engine.iactivity("act.promote", [rank + 1], "ks-promote");
+				this._host.engine.iactivity("leader.promote", "act.leader.promote", [
+					rank + 1,
+				]);
 				this._host.game.villageTab.censusPanel?.census.renderGovernment(
 					this._host.game.villageTab.censusPanel.census.container,
 				);
 				this._host.game.villageTab.censusPanel?.census.update();
-				this._host.engine.storeForSummary("promote", 1);
+				this._host.engine.storeForSummary("leader.promote", 1);
 			}
 		}
 	}
@@ -278,11 +283,9 @@ export class VillageManager implements Automation {
 		// number of squads, leaving the configured reserve untouched.
 		this._host.game.resPool.addResEvent("manpower", -huntCount * manpowerCost);
 		this._host.game.village.gainHuntRes(huntCount);
-		this._host.engine.iactivity(
-			"act.hunt",
-			[this._host.renderAbsolute(huntCount)],
-			"ks-hunt",
-		);
+		this._host.engine.iactivity("hunt", "act.hunt", [
+			this._host.renderAbsolute(huntCount),
+		]);
 	}
 
 	autoFestival() {
@@ -358,9 +361,9 @@ export class VillageManager implements Automation {
 		controller.buyItem(model);
 		this._host.engine.storeForSummary("festival");
 		if (beforeDays > 0) {
-			this._host.engine.iactivity("festival.extend", [], "ks-festival");
+			this._host.engine.iactivity("festival", "festival.extend", []);
 		} else {
-			this._host.engine.iactivity("festival.hold", [], "ks-festival");
+			this._host.engine.iactivity("festival", "festival.hold", []);
 		}
 	}
 }

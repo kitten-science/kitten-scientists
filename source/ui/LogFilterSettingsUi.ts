@@ -1,5 +1,5 @@
+import { Activities } from "../helper/ActivitySummary.js";
 import {
-	FilterItems,
 	FilterItemsGame,
 	type LogFilterSettings,
 } from "../settings/LogFilterSettings.js";
@@ -40,7 +40,7 @@ export class LogFiltersSettingsUi extends SettingsPanel<LogFilterSettings> {
 			}).addChildren([
 				new HeaderListItem(this, "Kitten Scientists"),
 				new SettingsList(this).addChildren(
-					FilterItems.map((item) => {
+					Activities.map((item) => {
 						return {
 							label: this.host.engine.i18n(`filter.${item}`),
 							name: item,

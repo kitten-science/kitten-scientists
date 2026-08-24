@@ -124,9 +124,8 @@ export class BonfireManager implements Automation {
 						pastureMeta.stage = 1;
 
 						this._host.engine.iactivity(
-							"upgrade.building.pasture",
-							[],
-							"ks-upgrade",
+							"build.upgrade",
+							"act.build.upgrade.pasture",
 						);
 
 						// Upgrade the pasture.
@@ -160,9 +159,8 @@ export class BonfireManager implements Automation {
 						aqueductMeta.calculateEffects?.(aqueductMeta, this._host.game);
 
 						this._host.engine.iactivity(
-							"upgrade.building.aqueduct",
-							[],
-							"ks-upgrade",
+							"build.upgrade",
+							"act.build.upgrade.aqueduct",
 						);
 
 						this._host.game.ui?.render();
@@ -224,9 +222,8 @@ export class BonfireManager implements Automation {
 					libraryMeta.stage = 1;
 					libraryMeta.calculateEffects?.(libraryMeta, this._host.game);
 					this._host.engine.iactivity(
-						"upgrade.building.library",
-						[],
-						"ks-upgrade",
+						"build.upgrade",
+						"act.build.upgrade.library",
 					);
 					this._host.game.ui?.render();
 					this.build("library", 1, 1);
@@ -252,9 +249,8 @@ export class BonfireManager implements Automation {
 					warehouseMeta.stage = 1;
 
 					this._host.engine.iactivity(
-						"upgrade.building.warehouse",
-						[],
-						"ks-upgrade",
+						"build.upgrade",
+						"act.build.upgrade.warehouse",
 					);
 
 					this._host.game.ui?.render();
@@ -287,9 +283,8 @@ export class BonfireManager implements Automation {
 					amphitheatreMeta.stage = 1;
 
 					this._host.engine.iactivity(
-						"upgrade.building.amphitheatre",
-						[],
-						"ks-upgrade",
+						"build.upgrade",
+						"act.build.upgrade.amphitheatre",
 					);
 
 					this._host.game.ui?.render();
@@ -404,16 +399,19 @@ export class BonfireManager implements Automation {
 				return;
 			}
 		}
-		this._host.engine.storeForSummary(label, amountConstructed, "build");
+		this._host.engine.storeForSummary(
+			"build.bonfire",
+			amountConstructed,
+			label,
+		);
 
 		if (amountConstructed === 1) {
-			this._host.engine.iactivity("act.build", [label], "ks-build");
+			this._host.engine.iactivity("build.bonfire", "act.build", [label]);
 		} else {
-			this._host.engine.iactivity(
-				"act.builds",
-				[label, this._host.renderAbsolute(amountConstructed)],
-				"ks-build",
-			);
+			this._host.engine.iactivity("build.bonfire", "act.builds", [
+				label,
+				this._host.renderAbsolute(amountConstructed),
+			]);
 		}
 	}
 

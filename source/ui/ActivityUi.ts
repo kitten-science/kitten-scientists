@@ -1,6 +1,6 @@
 import { mustExist } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
-import type { ActivitySectionOther } from "../helper/ActivitySummary.js";
+import { ActivitySections } from "../helper/ActivitySummary.js";
 import { Icons } from "../images/Icons.js";
 import type { EngineSettings } from "../settings/EngineSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
@@ -82,6 +82,12 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 
 		const uiElements = new Array<UiComponentInterface>();
 
+		const sections = new Set(
+			this.host.engine.activitySummary.activities
+				.keys()
+				.map((activity) => ActivitySections[activity]),
+		);
+
 		uiElements.push(
 			new TextListItem(
 				this,
@@ -91,161 +97,211 @@ export class ActivityUi extends SettingsPanel<EngineSettings> {
 			),
 		);
 
-		// Technologies.
-		if (this.host.engine.activitySummary.sections.has("research")) {
+		if (sections.has("Bonfire")) {
 			uiElements.push(
 				new Delimiter(this),
-				new HeaderListItem(this, "Research"),
+				new HeaderListItem(this, this.host.engine.i18n("ui.build")),
 			);
 
 			const section = mustExist(
-				this.host.engine.activitySummary.sections.get("research"),
+				this.host.engine.activitySummary.activities
+					.entries()
+					.filter(([activity]) => ActivitySections[activity] === "Bonfire"),
 			);
-			section.forEach((_amount, name) => {
-				uiElements.push(
-					new TextListItem(
-						this,
-						this.host.engine.i18n("summary.tech", [ucfirst(name)]),
-					),
-				);
-			});
+			for (const [activity, entries] of section) {
+				for (const [label, count] of entries) {
+					uiElements.push(
+						new TextListItem(
+							this,
+							this.host.engine.i18n(`summary.${activity}`, [
+								this.host.game.getDisplayValueExt(count),
+								ucfirst(label),
+							]),
+						),
+					);
+				}
+			}
 		}
 
-		// Upgrades.
-		if (this.host.engine.activitySummary.sections.has("upgrade")) {
+		if (sections.has("Village")) {
 			uiElements.push(
 				new Delimiter(this),
-				new HeaderListItem(this, "Upgrades"),
+				new HeaderListItem(this, this.host.engine.i18n("ui.distribute")),
 			);
 
 			const section = mustExist(
-				this.host.engine.activitySummary.sections.get("upgrade"),
+				this.host.engine.activitySummary.activities
+					.entries()
+					.filter(([activity]) => ActivitySections[activity] === "Village"),
 			);
-			section.forEach((_amount, name) => {
-				uiElements.push(
-					new TextListItem(
-						this,
-						this.host.engine.i18n("summary.upgrade", [ucfirst(name)]),
-					),
-				);
-			});
+			for (const [activity, entries] of section) {
+				for (const [label, count] of entries) {
+					uiElements.push(
+						new TextListItem(
+							this,
+							this.host.engine.i18n(`summary.${activity}`, [
+								this.host.game.getDisplayValueExt(count),
+								ucfirst(label),
+							]),
+						),
+					);
+				}
+			}
 		}
 
-		// Buildings.
-		if (this.host.engine.activitySummary.sections.has("build")) {
-			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Build"));
+		if (sections.has("Science")) {
+			uiElements.push(
+				new Delimiter(this),
+				new HeaderListItem(this, this.host.engine.i18n("ui.upgrade")),
+			);
 
 			const section = mustExist(
-				this.host.engine.activitySummary.sections.get("build"),
+				this.host.engine.activitySummary.activities
+					.entries()
+					.filter(([activity]) => ActivitySections[activity] === "Science"),
 			);
-			section.forEach((amount, name) => {
-				uiElements.push(
-					new TextListItem(
-						this,
-						this.host.engine.i18n("summary.building", [
-							this.host.game.getDisplayValueExt(amount),
-							ucfirst(name),
-						]),
-					),
-				);
-			});
+			for (const [activity, entries] of section) {
+				for (const [label, count] of entries) {
+					uiElements.push(
+						new TextListItem(
+							this,
+							this.host.engine.i18n(`summary.${activity}`, [
+								this.host.game.getDisplayValueExt(count),
+								ucfirst(label),
+							]),
+						),
+					);
+				}
+			}
 		}
 
-		// Ziggurats
-		if (this.host.engine.activitySummary.sections.has("refine")) {
-			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Refine"));
+		if (sections.has("Workshop")) {
+			uiElements.push(
+				new Delimiter(this),
+				new HeaderListItem(this, this.host.engine.i18n("ui.craft")),
+			);
 
 			const section = mustExist(
-				this.host.engine.activitySummary.sections.get("refine"),
+				this.host.engine.activitySummary.activities
+					.entries()
+					.filter(([activity]) => ActivitySections[activity] === "Workshop"),
 			);
-			section.forEach((amount, name) => {
-				uiElements.push(
-					new TextListItem(
-						this,
-						this.host.engine.i18n("summary.refine", [
-							this.host.game.getDisplayValueExt(amount),
-							ucfirst(name),
-						]),
-					),
-				);
-			});
-		}
-		// Order of the sun.
-		if (this.host.engine.activitySummary.sections.has("faith")) {
-			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Faith"));
-
-			const section = mustExist(
-				this.host.engine.activitySummary.sections.get("faith"),
-			);
-			section.forEach((amount, name) => {
-				uiElements.push(
-					new TextListItem(
-						this,
-						this.host.engine.i18n("summary.sun", [
-							this.host.game.getDisplayValueExt(amount),
-							ucfirst(name),
-						]),
-					),
-				);
-			});
+			for (const [activity, entries] of section) {
+				for (const [label, count] of entries) {
+					uiElements.push(
+						new TextListItem(
+							this,
+							this.host.engine.i18n(`summary.${activity}`, [
+								this.host.game.getDisplayValueExt(count),
+								ucfirst(label),
+							]),
+						),
+					);
+				}
+			}
 		}
 
-		// Crafts.
-		if (this.host.engine.activitySummary.sections.has("craft")) {
-			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Craft"));
+		if (sections.has("Trade")) {
+			uiElements.push(
+				new Delimiter(this),
+				new HeaderListItem(this, this.host.engine.i18n("ui.trade")),
+			);
 
 			const section = mustExist(
-				this.host.engine.activitySummary.sections.get("craft"),
+				this.host.engine.activitySummary.activities
+					.entries()
+					.filter(([activity]) => ActivitySections[activity] === "Trade"),
 			);
-			section.forEach((amount, name) => {
-				uiElements.push(
-					new TextListItem(
-						this,
-						this.host.engine.i18n("summary.craft", [
-							this.host.game.getDisplayValueExt(amount),
-							ucfirst(name),
-						]),
-					),
-				);
-			});
+			for (const [activity, entries] of section) {
+				for (const [label, count] of entries) {
+					uiElements.push(
+						new TextListItem(
+							this,
+							this.host.engine.i18n(`summary.${activity}`, [
+								this.host.game.getDisplayValueExt(count),
+								ucfirst(label),
+							]),
+						),
+					);
+				}
+			}
 		}
 
-		// Trades.
-		if (this.host.engine.activitySummary.sections.has("trade")) {
-			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Trade"));
+		if (sections.has("Religion")) {
+			uiElements.push(
+				new Delimiter(this),
+				new HeaderListItem(this, this.host.engine.i18n("ui.faith")),
+			);
 
 			const section = mustExist(
-				this.host.engine.activitySummary.sections.get("trade"),
+				this.host.engine.activitySummary.activities
+					.entries()
+					.filter(([activity]) => ActivitySections[activity] === "Religion"),
 			);
-			section.forEach((amount, name) => {
-				uiElements.push(
-					new TextListItem(
-						this,
-						this.host.engine.i18n("summary.trade", [
-							this.host.game.getDisplayValueExt(amount),
-							ucfirst(name),
-						]),
-					),
-				);
-			});
+			for (const [activity, entries] of section) {
+				for (const [label, count] of entries) {
+					uiElements.push(
+						new TextListItem(
+							this,
+							this.host.engine.i18n(`summary.${activity}`, [
+								this.host.game.getDisplayValueExt(count),
+								ucfirst(label),
+							]),
+						),
+					);
+				}
+			}
 		}
 
-		// Uncategorized items.
-		if (this.host.engine.activitySummary.sections.has("other")) {
-			uiElements.push(new Delimiter(this), new HeaderListItem(this, "Other"));
+		if (sections.has("Space")) {
+			uiElements.push(
+				new Delimiter(this),
+				new HeaderListItem(this, this.host.engine.i18n("ui.space")),
+			);
 
 			const section = mustExist(
-				this.host.engine.activitySummary.sections.get("other"),
-			) as Map<ActivitySectionOther, number>;
-			for (const [name, amount] of section) {
-				uiElements.push(
-					new TextListItem(
-						this,
-						this.host.engine.i18n(`summary.${name}` as const, [
-							this.host.game.getDisplayValueExt(amount),
-						]),
-					),
-				);
+				this.host.engine.activitySummary.activities
+					.entries()
+					.filter(([activity]) => ActivitySections[activity] === "Space"),
+			);
+			for (const [activity, entries] of section) {
+				for (const [label, count] of entries) {
+					uiElements.push(
+						new TextListItem(
+							this,
+							this.host.engine.i18n(`summary.${activity}`, [
+								this.host.game.getDisplayValueExt(count),
+								ucfirst(label),
+							]),
+						),
+					);
+				}
+			}
+		}
+
+		if (sections.has("Time")) {
+			uiElements.push(
+				new Delimiter(this),
+				new HeaderListItem(this, this.host.engine.i18n("ui.time")),
+			);
+
+			const section = mustExist(
+				this.host.engine.activitySummary.activities
+					.entries()
+					.filter(([activity]) => ActivitySections[activity] === "Time"),
+			);
+			for (const [activity, entries] of section) {
+				for (const [label, count] of entries) {
+					uiElements.push(
+						new TextListItem(
+							this,
+							this.host.engine.i18n(`summary.${activity}`, [
+								this.host.game.getDisplayValueExt(count),
+								ucfirst(label),
+							]),
+						),
+					);
+				}
 			}
 		}
 

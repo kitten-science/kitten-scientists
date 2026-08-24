@@ -335,7 +335,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 				(order.amount * (1 + ratio)).toFixed(2),
 			);
 
-			this._host.engine.storeForSummary(resourceName, craftedAmount, "craft");
+			this._host.engine.storeForSummary("craft", craftedAmount, resourceName);
 			messages.push(
 				this._host.engine.i18n("act.craft", [
 					this._host.game.getDisplayValueExt(craftedAmount),
@@ -347,7 +347,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 		this._host.game.updateResources();
 
 		for (const message of messages) {
-			this._host.engine.printOutput("ks-activity type_ks-craft", message);
+			this._host.engine.activity("craft", message);
 		}
 	}
 
