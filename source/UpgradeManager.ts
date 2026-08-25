@@ -14,10 +14,10 @@ export abstract class UpgradeManager {
 		this._host = host;
 	}
 
-	upgrade(
+	async upgrade(
 		upgrade: { label: string; name: Policy | Upgrade | Technology },
 		variant: "policy" | "science" | "workshop",
-	): boolean {
+	): Promise<boolean> {
 		let success = false;
 		if (variant === "policy") {
 			const itemMetaRaw = game.getUnlockByName(upgrade.name, "policies");
@@ -25,18 +25,22 @@ export abstract class UpgradeManager {
 				this._host.game,
 			) as PolicyBtnController;
 			const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
-			success = UpgradeManager.skipConfirm(() =>
+			const result = UpgradeManager.skipConfirm(() =>
 				controller.buyItem(model),
-			).itemBought;
+			);
+			const realResult = await result.def;
+			success = result.itemBought || realResult.itemBought;
 		} else if (variant === "science") {
 			const itemMetaRaw = game.getUnlockByName(upgrade.name, "tech");
 			const controller = new com.nuclearunicorn.game.ui.TechButtonController(
 				this._host.game,
 			) as TechButtonController;
 			const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
-			success = UpgradeManager.skipConfirm(() =>
+			const result = UpgradeManager.skipConfirm(() =>
 				controller.buyItem(model),
-			).itemBought;
+			);
+			const realResult = await result.def;
+			success = result.itemBought || realResult.itemBought;
 		} else {
 			const itemMetaRaw = game.getUnlockByName(upgrade.name, "upgrades");
 			const controller = new com.nuclearunicorn.game.ui.UpgradeButtonController(

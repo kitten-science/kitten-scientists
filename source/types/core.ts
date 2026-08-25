@@ -252,7 +252,7 @@ export type ButtonController<
 			priceRatio?: number | null;
 		},
 		event?: Event | null,
-	) => UnsafeBuyItemResult;
+	) => UnsafeBuyItemResultDeferred;
 	refund: (model: TModel) => void;
 };
 

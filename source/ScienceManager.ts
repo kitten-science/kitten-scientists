@@ -90,7 +90,9 @@ export class ScienceManager extends UpgradeManager {
 		const policies = this._host.game.science.policies;
 		const toUnlock = new Array<UnsafePolicy>();
 
-		for (const setting of Object.values(this.settings.policies.policies)) {
+		workLoop: for (const setting of Object.values(
+			this.settings.policies.policies,
+		)) {
 			if (!setting.enabled) {
 				continue;
 			}
@@ -104,18 +106,36 @@ export class ScienceManager extends UpgradeManager {
 			}
 
 			if (
-				!targetPolicy.researched &&
-				!targetPolicy.blocked &&
-				targetPolicy.unlocked
+				targetPolicy.researched ||
+				targetPolicy.blocked ||
+				!targetPolicy.unlocked
 			) {
+				continue;
+			}
+
+			const prices = structuredClone(targetPolicy.prices);
+			for (const price of prices) {
+				const available = this._workshopManager.getValueAvailable(price.name);
+				const resource = this._workshopManager.getResource(price.name);
+				const trigger = Engine.evaluateSubSectionTrigger(
+					this.settings.policies.trigger,
+					setting.trigger,
+				);
 				if (
-					targetPolicy.requiredLeaderJob === undefined ||
-					(this._host.game.village.leader !== null &&
-						this._host.game.village.leader.job ===
-							targetPolicy.requiredLeaderJob)
+					trigger < 0 ||
+					available < resource.maxValue * trigger ||
+					available < price.val
 				) {
-					toUnlock.push(targetPolicy);
+					continue workLoop;
 				}
+			}
+
+			if (
+				targetPolicy.requiredLeaderJob === undefined ||
+				(this._host.game.village.leader !== null &&
+					this._host.game.village.leader.job === targetPolicy.requiredLeaderJob)
+			) {
+				toUnlock.push(targetPolicy);
 			}
 		}
 

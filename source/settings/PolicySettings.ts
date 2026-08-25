@@ -4,9 +4,9 @@ import { consumeEntriesPedantic } from "../tools/Entries.js";
 import { cl } from "../tools/Log.js";
 import type { GamePage } from "../types/game.js";
 import { Policies, type Policy } from "../types/index.js";
-import { Setting } from "./Settings.js";
+import { SettingTrigger } from "./Settings.js";
 
-export class PolicySetting extends Setting {
+export class PolicySetting extends SettingTrigger {
 	readonly #policy: Policy;
 
 	get policy() {
@@ -14,18 +14,18 @@ export class PolicySetting extends Setting {
 	}
 
 	constructor(policy: Policy, enabled = false) {
-		super(enabled);
+		super(enabled, -1);
 		this.#policy = policy;
 	}
 }
 
 export type PolicyPolicySettings = Record<Policy, PolicySetting>;
 
-export class PolicySettings extends Setting {
+export class PolicySettings extends SettingTrigger {
 	policies: PolicyPolicySettings;
 
 	constructor(enabled = false) {
-		super(enabled);
+		super(enabled, -1);
 		this.policies = this.initPolicies();
 	}
 
@@ -63,6 +63,7 @@ export class PolicySettings extends Setting {
 
 		consumeEntriesPedantic(this.policies, settings.policies, (policy, item) => {
 			policy.enabled = item?.enabled ?? policy.enabled;
+			policy.trigger = item?.trigger ?? policy.trigger;
 		});
 	}
 }

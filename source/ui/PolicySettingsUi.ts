@@ -4,14 +4,18 @@ import type { PolicySettings } from "../settings/PolicySettings.js";
 import type { ScienceSettings } from "../settings/ScienceSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import { objectEntries } from "../tools/Entries.js";
-import { Container } from "./components/Container.js";
+import stylesButton from "./components/Button.module.css";
+import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
-import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 
-export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
+export class PolicySettingsUi extends SettingsPanel<
+	PolicySettings,
+	SettingTriggerListItem
+> {
 	constructor(
 		parent: UiComponent,
 		settings: PolicySettings,
@@ -22,18 +26,72 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
 		super(
 			parent,
 			settings,
-			new SettingListItem(parent, settings, label, {
+			new SettingTriggerListItem(parent, settings, locale, label, {
 				onCheck: (_isBatchProcess?: boolean) => {
 					parent.host.engine.imessage("status.auto.enable", [label]);
+				},
+				onRefreshTrigger() {
+					this.triggerButton.element[0].title = parent.host.engine.i18n(
+						"ui.trigger",
+						[
+							settings.trigger < 0
+								? parent.host.engine.i18n("ui.trigger.section.inactive")
+								: parent.host.renderPercentage(
+										settings.trigger,
+										locale.selected,
+										true,
+									),
+						],
+					);
+				},
+				onSetTrigger: async () => {
+					const value = await Dialog.prompt(
+						parent,
+						parent.host.engine.i18n("ui.trigger.prompt.percentage"),
+						parent.host.engine.i18n("ui.trigger.section.prompt", [
+							label,
+							settings.trigger !== -1
+								? parent.host.renderPercentage(
+										settings.trigger,
+										locale.selected,
+										true,
+									)
+								: parent.host.engine.i18n("ui.infinity"),
+						]),
+						settings.trigger !== -1
+							? parent.host.renderPercentage(settings.trigger)
+							: "",
+						parent.host.engine.i18n("ui.trigger.section.promptExplainer"),
+					);
+
+					if (value === undefined) {
+						return;
+					}
+
+					if (value === "" || value.startsWith("-")) {
+						settings.trigger = -1;
+						return;
+					}
+
+					settings.trigger = parent.host.parsePercentage(value);
 				},
 				onUnCheck: (_isBatchProcess?: boolean) => {
 					parent.host.engine.imessage("status.auto.disable", [label]);
 				},
-			}).addChildrenHead([
-				new Container(parent, { classes: [stylesLabelListItem.fillSpace] }),
-			]),
+				renderLabelTrigger: false,
+			}),
 			{
 				onRefreshRequest: () => {
+					this.settingItem.triggerButton.inactive =
+						!settings.enabled || settings.trigger === -1;
+					this.settingItem.triggerButton.ineffective =
+						sectionSetting.enabled &&
+						settings.enabled &&
+						settings.trigger === -1 &&
+						!Object.values(settings.policies).some(
+							(policy) => policy.enabled && 0 <= policy.trigger,
+						);
+
 					this.expando.ineffective =
 						sectionSetting.enabled &&
 						settings.enabled &&
@@ -53,27 +111,92 @@ export class PolicySettingsUi extends SettingsPanel<PolicySettings> {
 		)) {
 			const option = this.setting.policies[policy.name];
 
-			const element = new SettingListItem(this, option, policy.label, {
-				onCheck: () => {
-					this.host.engine.imessage("status.sub.enable", [policy.label]);
+			const element = new SettingTriggerListItem(
+				this,
+				option,
+				locale,
+				policy.label,
+				{
+					onCheck: () => {
+						this.host.engine.imessage("status.sub.enable", [policy.label]);
+					},
+					onRefresh: () => {
+						element.triggerButton.inactive =
+							!option.enabled || option.trigger === -1;
+						element.triggerButton.ineffective =
+							sectionSetting.enabled &&
+							settings.enabled &&
+							option.enabled &&
+							settings.trigger === -1 &&
+							option.trigger === -1;
+						element.element.toggleClass(
+							stylesLabelListItem.researched,
+							policy.researched,
+						);
+					},
+					onRefreshTrigger: () => {
+						element.triggerButton.element[0].title = this.host.engine.i18n(
+							"ui.trigger",
+							[
+								option.trigger < 0
+									? settings.trigger < 0
+										? this.host.engine.i18n("ui.trigger.section.blocked", [
+												label,
+											])
+										: `${this.host.renderPercentage(settings.trigger, locale.selected, true)} (${this.host.engine.i18n("ui.trigger.section.inherited")})`
+									: this.host.renderPercentage(
+											option.trigger,
+											locale.selected,
+											true,
+										),
+							],
+						);
+					},
+					onSetTrigger: async () => {
+						const value = await Dialog.prompt(
+							this,
+							this.host.engine.i18n("ui.trigger.prompt.percentage"),
+							this.host.engine.i18n("ui.trigger.section.prompt", [
+								label,
+								option.trigger !== -1
+									? this.host.renderPercentage(
+											option.trigger,
+											locale.selected,
+											true,
+										)
+									: this.host.engine.i18n("ui.trigger.section.inherited"),
+							]),
+							option.trigger !== -1
+								? this.host.renderPercentage(option.trigger)
+								: "",
+							this.host.engine.i18n("ui.trigger.section.promptExplainer"),
+						);
+
+						if (value === undefined) {
+							return;
+						}
+
+						if (value === "" || value.startsWith("-")) {
+							option.trigger = -1;
+							return;
+						}
+
+						option.trigger = this.host.parsePercentage(value);
+					},
+					onUnCheck: () => {
+						this.host.engine.imessage("status.sub.disable", [policy.label]);
+					},
+					renderLabelTrigger: false,
+					title: [
+						policy.description,
+						...policy.prices.map((price) => `- ${price.name}: ${price.val}`),
+						...objectEntries(policy.effects ?? {}).map(
+							([effect, value]) => `+ ${effect}: ${value}`,
+						),
+					].join("\n"),
 				},
-				onRefresh: () => {
-					element.element.toggleClass(
-						stylesLabelListItem.researched,
-						policy.researched,
-					);
-				},
-				onUnCheck: () => {
-					this.host.engine.imessage("status.sub.disable", [policy.label]);
-				},
-				title: [
-					policy.description,
-					...policy.prices.map((price) => `- ${price.name}: ${price.val}`),
-					...objectEntries(policy.effects ?? {}).map(
-						([effect, value]) => `+ ${effect}: ${value}`,
-					),
-				].join("\n"),
-			});
+			);
+			element.triggerButton.element.addClass(stylesButton.lastHeadAction);
 
 			if (this.host.engine.localeSupportsFirstLetterSplits(locale.selected)) {
 				if (lastLabel[0] !== policy.label[0]) {
