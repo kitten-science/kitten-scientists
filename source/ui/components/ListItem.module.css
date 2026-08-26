@@ -1,6 +1,6 @@
 .head {
 	display: flex;
-	align-items: stretch;
+	align-items: center;
 	flex-direction: row;
 	justify-content: flex-start;
 	width: 100%;

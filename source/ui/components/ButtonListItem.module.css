@@ -1,0 +1,9 @@
+.listItem {
+	border-bottom: 1px solid transparent;
+
+	transition: border-bottom 0.3s;
+
+	&:hover {
+		border-bottom: 1px dashed rgba(160, 160, 160, 0.2);
+	}
+}

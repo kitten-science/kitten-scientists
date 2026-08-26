@@ -60,7 +60,7 @@ userscript : output/kitten-scientists.user.js
 preview :
 	RELEASE_CHANNEL=latest \
 	RELEASE_VERSION=$(shell ./source/tools/make-preview-version.js) \
-		${MAKE} userscript
+		${MAKE} default
 
 # DevContainer
 output/entrypoint-devcontainer.mjs : node_modules/.package-lock.json $(OBJECTS_DEVCONTAINER)

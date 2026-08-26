@@ -2,10 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import type { Setting } from "../../settings/Settings.js";
 import { LabelListItem, type LabelListItemOptions } from "./LabelListItem.js";
-import {
-	default as styles,
-	default as stylesSettingListItem,
-} from "./SettingListItem.module.css";
+import { default as styles } from "./SettingListItem.module.css";
 import type { UiComponent } from "./UiComponent.js";
 
 export type SettingListItemOptions = ThisType<SettingListItem> &
@@ -26,6 +23,10 @@ export type SettingListItemOptions = ThisType<SettingListItem> &
 		readonly readOnly?: boolean;
 	};
 
+/**
+ * A list item to contain any setting.
+ * Consists of a label and a checkbox to toggle the setting.
+ */
 export class SettingListItem<
 	TSetting extends Setting = Setting,
 > extends LabelListItem {
@@ -60,9 +61,9 @@ export class SettingListItem<
 				}
 
 				if (this.readOnly) {
-					this.element.addClass(stylesSettingListItem.readonly);
+					this.element.addClass(styles.readonly);
 				} else {
-					this.element.removeClass(stylesSettingListItem.readonly);
+					this.element.removeClass(styles.readonly);
 				}
 
 				if (!isNil(this.checkbox)) {

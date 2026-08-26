@@ -16,7 +16,7 @@
 	"act.hunt": "Sent kittens on {0} hunts",
 	"act.kittens.distribute": "Assigned a kitten to {0}",
 	"act.kittens.promote": "Kittens have been promoted",
-	"act.leader.elect": "Kittens have elected a new leader.",
+	"act.leader.elect": "Kittens have elected a new leader",
 	"act.leader.promote": "Kittens' leader has been promoted to rank {0}",
 	"act.observeStar": "Kitten Scientists have observed a star",
 	"act.praiseTheSun": "Praised the sun! Accumulated {0} faith to {1} worship",
