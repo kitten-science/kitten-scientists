@@ -275,7 +275,7 @@ jobs:
         run: |
           aws s3api put-object \
             --bucket kitten-science-us0 \
-            --key latest.js \
+            --key kitten-scientists.inject.js \
             --cache-control "public, s-maxage=300" \
             --content-type "text/javascript" \
             --body output/kitten-scientists.inject.js || true

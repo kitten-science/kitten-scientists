@@ -8,7 +8,7 @@
 
 ### Userscript Manager (recommended)
 
-[Install Userscript](https://kitten-science.com/latest.user.js){ .md-button .md-button--primary }
+[Install Userscript](https://kitten-science.com/kitten-scientists.user.js){ .md-button .md-button--primary }
 
 !!! hint
 
@@ -21,7 +21,7 @@ You can also load KS through a bookmarklet.
 To use bookmarklets, just create a new bookmark in your browser and enter the text below as the URL. When you're on the KG game website, open this bookmark, and it should load KS for you.
 
 ```
-javascript:(function(){var d=document,s=d.createElement('script');s.src='https://kitten-science.com/latest.js';d.body.appendChild(s);})();
+javascript:(function(){var d=document,s=d.createElement('script');s.src='https://kitten-science.com/kitten-scientists.inject.js';d.body.appendChild(s);})();
 ```
 
 *[KG]: Kittens Game
