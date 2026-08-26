@@ -209,7 +209,6 @@ jobs:
       always()
       && contains(needs.*.result, 'success')
       && !contains(needs.*.result, 'failure')
-      && needs.params.outputs.publish-github-release == 'true'
       && needs.changelog.outputs.has-changed == 'true'
     name: Nightly
     needs:
