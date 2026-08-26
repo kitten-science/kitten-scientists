@@ -86,19 +86,31 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
 			this,
 			this.setting.bonfire,
 			locale,
+			this.setting,
 		);
 		this._religionUi = new ResetReligionSettingsUi(
 			this,
 			this.setting.religion,
 			locale,
+			this.setting,
 		);
 		this._resourcesUi = new ResetResourcesSettingsUi(
 			this,
 			this.setting.resources,
 			locale,
 		);
-		this._spaceUi = new ResetSpaceSettingsUi(this, this.setting.space, locale);
-		this._timeUi = new ResetTimeSettingsUi(this, this.setting.time, locale);
+		this._spaceUi = new ResetSpaceSettingsUi(
+			this,
+			this.setting.space,
+			locale,
+			this.setting,
+		);
+		this._timeUi = new ResetTimeSettingsUi(
+			this,
+			this.setting.time,
+			locale,
+			this.setting,
+		);
 		this._upgradesUi = new ResetUpgradesSettingsUi(
 			this,
 			this.setting.upgrades,

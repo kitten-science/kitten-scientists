@@ -1,6 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import { Icons } from "../images/Icons.js";
+import type { ResetSettings } from "../settings/ResetSettings.js";
 import type { ResetSpaceSettings } from "../settings/ResetSpaceSettings.js";
 import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import stylesButton from "./components/Button.module.css";
@@ -18,14 +19,18 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
 		parent: UiComponent,
 		settings: ResetSpaceSettings,
 		locale: SettingOptions<SupportedLocale>,
+		sectionSetting: ResetSettings,
 	) {
 		const label = parent.host.engine.i18n("ui.space");
 		super(parent, label, settings, {
 			icon: Icons.Space,
 			onRefreshRequest: () => {
-				this.expando.ineffective = Object.values(settings.buildings).some(
-					(_) => _.enabled && _.trigger === -1,
-				);
+				this.expando.ineffective =
+					sectionSetting.enabled &&
+					settings.enabled &&
+					Object.values(settings.buildings).some(
+						(_) => _.enabled && _.trigger === -1,
+					);
 			},
 		});
 
@@ -50,6 +55,7 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
 									this.setting.buildings[building.name],
 									locale,
 									settings,
+									sectionSetting,
 									building.label,
 									indexPlanet < arrayPlant.length - 1 &&
 										indexBuilding === arrayBuilding.length - 1,
@@ -64,7 +70,8 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
 		parent: UiComponent,
 		option: SettingTrigger,
 		locale: SettingOptions<SupportedLocale>,
-		_sectionSetting: ResetSpaceSettings,
+		settings: ResetSpaceSettings,
+		sectionSetting: ResetSettings,
 		label: string,
 		delimiter = false,
 		upgradeIndicator = false,
@@ -78,7 +85,10 @@ export class ResetSpaceSettingsUi extends IconSettingsPanel<ResetSpaceSettings> 
 				element.triggerButton.inactive =
 					!option.enabled || option.trigger === 0;
 				element.triggerButton.ineffective =
-					option.enabled && option.trigger === -1;
+					sectionSetting.enabled &&
+					settings.enabled &&
+					option.enabled &&
+					option.trigger === -1;
 			},
 			onSetTrigger: async () => {
 				const value = await Dialog.prompt(

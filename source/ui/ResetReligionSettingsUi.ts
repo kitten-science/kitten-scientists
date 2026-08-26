@@ -2,6 +2,7 @@ import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import { Icons } from "../images/Icons.js";
 import type { ResetReligionSettings } from "../settings/ResetReligionSettings.js";
+import type { ResetSettings } from "../settings/ResetSettings.js";
 import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import { UnicornItems, type ZigguratUpgrade } from "../types/index.js";
 import stylesButton from "./components/Button.module.css";
@@ -20,14 +21,18 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 		parent: UiComponent,
 		settings: ResetReligionSettings,
 		locale: SettingOptions<SupportedLocale>,
+		sectionSetting: ResetSettings,
 	) {
 		const label = parent.host.engine.i18n("ui.faith");
 		super(parent, label, settings, {
 			icon: Icons.Religion,
 			onRefreshRequest: () => {
-				this.expando.ineffective = Object.values(settings.buildings).some(
-					(_) => _.enabled && _.trigger === -1,
-				);
+				this.expando.ineffective =
+					sectionSetting.enabled &&
+					settings.enabled &&
+					Object.values(settings.buildings).some(
+						(_) => _.enabled && _.trigger === -1,
+					);
 			},
 		});
 
@@ -50,6 +55,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 					this.setting.buildings.unicornPasture,
 					locale,
 					settings,
+					sectionSetting,
 					this.host.engine.i18n("$buildings.unicornPasture.label"),
 				),
 
@@ -65,6 +71,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 							this.setting.buildings[zigguratUpgrade.name],
 							locale,
 							settings,
+							sectionSetting,
 							zigguratUpgrade.label,
 						),
 					),
@@ -82,6 +89,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 							this.setting.buildings[upgrade.name],
 							locale,
 							settings,
+							sectionSetting,
 							upgrade.label,
 						),
 					),
@@ -99,6 +107,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 							this.setting.buildings[upgrade.name],
 							locale,
 							settings,
+							sectionSetting,
 							upgrade.label,
 							upgrade.name ===
 								this.host.game.religion.religionUpgrades.at(-1)?.name,
@@ -117,6 +126,7 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 							this.setting.buildings[upgrade.name],
 							locale,
 							settings,
+							sectionSetting,
 							upgrade.label,
 						),
 					),
@@ -128,7 +138,8 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 		parent: UiComponent,
 		option: SettingTrigger,
 		locale: SettingOptions<SupportedLocale>,
-		_sectionSetting: ResetReligionSettings,
+		settings: ResetReligionSettings,
+		sectionSetting: ResetSettings,
 		label: string,
 		delimiter = false,
 		upgradeIndicator = false,
@@ -142,7 +153,10 @@ export class ResetReligionSettingsUi extends IconSettingsPanel<ResetReligionSett
 				element.triggerButton.inactive =
 					!option.enabled || option.trigger === 0;
 				element.triggerButton.ineffective =
-					option.enabled && option.trigger === -1;
+					sectionSetting.enabled &&
+					settings.enabled &&
+					option.enabled &&
+					option.trigger === -1;
 			},
 			onSetTrigger: async () => {
 				const value = await Dialog.prompt(

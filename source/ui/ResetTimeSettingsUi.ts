@@ -1,6 +1,7 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import { Icons } from "../images/Icons.js";
+import type { ResetSettings } from "../settings/ResetSettings.js";
 import type { ResetTimeSettings } from "../settings/ResetTimeSettings.js";
 import type { SettingOptions, SettingTrigger } from "../settings/Settings.js";
 import type { TimeItem } from "../settings/TimeSettings.js";
@@ -19,14 +20,18 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
 		parent: UiComponent,
 		settings: ResetTimeSettings,
 		locale: SettingOptions<SupportedLocale>,
+		sectionSetting: ResetSettings,
 	) {
 		const label = parent.host.engine.i18n("ui.time");
 		super(parent, label, settings, {
 			icon: Icons.Time,
 			onRefreshRequest: () => {
-				this.expando.ineffective = Object.values(settings.buildings).some(
-					(_) => _.enabled && _.trigger === -1,
-				);
+				this.expando.ineffective =
+					sectionSetting.enabled &&
+					settings.enabled &&
+					Object.values(settings.buildings).some(
+						(_) => _.enabled && _.trigger === -1,
+					);
 			},
 		});
 
@@ -48,6 +53,7 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
 							this.setting.buildings[building.name],
 							locale,
 							settings,
+							sectionSetting,
 							building.label,
 							building.name ===
 								this.host.game.time.chronoforgeUpgrades.at(-1)?.name,
@@ -66,6 +72,7 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
 							this.setting.buildings[building.name as TimeItem],
 							locale,
 							settings,
+							sectionSetting,
 							building.label,
 						),
 					),
@@ -77,7 +84,8 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
 		parent: UiComponent,
 		option: SettingTrigger,
 		locale: SettingOptions<SupportedLocale>,
-		_sectionSetting: ResetTimeSettings,
+		settings: ResetTimeSettings,
+		sectionSetting: ResetSettings,
 		label: string,
 		delimiter = false,
 		upgradeIndicator = false,
@@ -91,7 +99,10 @@ export class ResetTimeSettingsUi extends IconSettingsPanel<ResetTimeSettings> {
 				element.triggerButton.inactive =
 					!option.enabled || option.trigger === 0;
 				element.triggerButton.ineffective =
-					option.enabled && option.trigger === -1;
+					sectionSetting.enabled &&
+					settings.enabled &&
+					option.enabled &&
+					option.trigger === -1;
 			},
 			onSetTrigger: async () => {
 				const value = await Dialog.prompt(

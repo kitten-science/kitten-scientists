@@ -89,7 +89,7 @@ export class PolicySettingsUi extends SettingsPanel<
 						settings.enabled &&
 						settings.trigger === -1 &&
 						!Object.values(settings.policies).some(
-							(policy) => policy.enabled && 0 <= policy.trigger,
+							(_) => _.enabled && 0 <= _.trigger,
 						);
 
 					this.expando.ineffective =
