@@ -1661,7 +1661,6 @@ declare global {
 	}
 }
 
-export * from "./_releases.js";
 export * from "./_save.js";
 export * from "./achievements.js";
 export * from "./buildings.js";

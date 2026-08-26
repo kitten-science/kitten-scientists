@@ -1,7 +1,5 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
-import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console.js";
 import { InvalidOperationError } from "@oliversalzburg/js-utils/errors/InvalidOperationError.js";
-import gt from "semver/functions/gt.js";
 import { Engine, type EngineState, type SupportedLocale } from "./Engine.js";
 import { BonfireSettings } from "./settings/BonfireSettings.js";
 import { ReligionSettings } from "./settings/ReligionSettings.js";
@@ -9,7 +7,6 @@ import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { cl } from "./tools/Log.js";
-import type { ReleaseChannel, ReleaseInfoSchema } from "./types/_releases.js";
 import type { GamePage } from "./types/game.js";
 import type { I18nEngine, Locale } from "./types/index.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
@@ -24,7 +21,6 @@ declare global {
 				};
 		  }
 		| undefined;
-	const RELEASE_CHANNEL: ReleaseChannel;
 	const RELEASE_VERSION: string | undefined;
 }
 
@@ -70,9 +66,6 @@ export class KittenScientists {
 			);
 			UserScriptLoader.window.kittenScientists?.unload();
 		}
-		console.info(
-			...cl(`You are on the '${String(RELEASE_CHANNEL)}' release channel.`),
-		);
 
 		this.game = game;
 		this.i18nEngine = i18nEngine;
@@ -158,8 +151,6 @@ export class KittenScientists {
 
 		this.engine.imessage("status.ks.init");
 
-		this.runUpdateCheck().catch(redirectErrorsToConsole(console));
-
 		if (this._gameBeforeSaveHandle !== undefined) {
 			UserScriptLoader.window.dojo.unsubscribe(this._gameBeforeSaveHandle);
 			this._gameBeforeSaveHandle = undefined;
@@ -207,48 +198,6 @@ export class KittenScientists {
 				this._userInterface.forceFullRefresh();
 			},
 		);
-	}
-
-	/**
-	 * Check which versions of KS are currently published.
-	 */
-	async runUpdateCheck() {
-		if (RELEASE_CHANNEL === "fixed") {
-			console.debug(...cl("No update check on 'fixed' release channel."));
-			return;
-		}
-
-		try {
-			const response = await fetch(
-				"https://kitten-science.com/release-info.json",
-			);
-			const releaseInfo = (await response.json()) as ReleaseInfoSchema;
-			console.debug(...cl(releaseInfo));
-
-			if (
-				isNil(releaseInfo[RELEASE_CHANNEL].version) ||
-				releaseInfo[RELEASE_CHANNEL].version === ""
-			) {
-				console.debug(
-					"Could not read current version for our release channel from provided metadata!",
-				);
-				return;
-			}
-
-			if (
-				!isNil(RELEASE_VERSION) &&
-				gt(releaseInfo[RELEASE_CHANNEL].version, RELEASE_VERSION)
-			) {
-				this.engine.imessage("status.ks.upgrade", [
-					releaseInfo[RELEASE_CHANNEL].version,
-					RELEASE_VERSION,
-					releaseInfo[RELEASE_CHANNEL].url.release,
-				]);
-			}
-		} catch (error) {
-			console.warn(...cl("Update check failed."));
-			console.warn(...cl(error));
-		}
 	}
 
 	/**
