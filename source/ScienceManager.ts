@@ -140,7 +140,7 @@ export class ScienceManager extends UpgradeManager {
 		}
 
 		for (const item of toUnlock) {
-			this.upgrade(item, "policy");
+			await this.upgrade(item, "policy");
 		}
 	}
 

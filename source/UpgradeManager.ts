@@ -28,7 +28,8 @@ export abstract class UpgradeManager {
 			const result = UpgradeManager.skipConfirm(() =>
 				controller.buyItem(model),
 			);
-			const realResult = await result.def;
+			const realResult =
+				result.def !== undefined ? await result.def : { ...result };
 			success = result.itemBought || realResult.itemBought;
 		} else if (variant === "science") {
 			const itemMetaRaw = game.getUnlockByName(upgrade.name, "tech");
@@ -39,7 +40,8 @@ export abstract class UpgradeManager {
 			const result = UpgradeManager.skipConfirm(() =>
 				controller.buyItem(model),
 			);
-			const realResult = await result.def;
+			const realResult =
+				result.def !== undefined ? await result.def : { ...result };
 			success = result.itemBought || realResult.itemBought;
 		} else {
 			const itemMetaRaw = game.getUnlockByName(upgrade.name, "upgrades");
