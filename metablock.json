@@ -13,5 +13,6 @@
 		"http://localhost/"
 	],
 	"name": "Kitten Scientists",
-	"namespace": "https://kitten-science.com/"
+	"namespace": "https://kitten-science.com/",
+	"supportURL": "https://github.com/kitten-science/kitten-scientists/issues"
 }
