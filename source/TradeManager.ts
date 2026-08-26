@@ -505,15 +505,105 @@ export class TradeManager implements Automation {
 	 * @param name The race to trade with.
 	 * @param amount How often to trade with the race.
 	 */
-	trade(name: Race, amount: number): void {
+	trade(
+		name: Race,
+		amount: number,
+	): { cost: Map<Resource, number>; received: Map<Resource, number> } {
 		const race = this.getRace(name);
 
+		const purchaseResources = [
+			...race.buys.map((_) => _.name),
+			"manpower" as Resource,
+			"gold" as Resource,
+		];
+		const salesResources = [
+			...race.sells.map((_) => _.name),
+			"blueprint" as Resource,
+			"spice" as Resource,
+		];
+
+		const stockPurchasesBefore = new Map(
+			purchaseResources.map(
+				(_) => [_, this._workshopManager.getResource(_).value] as const,
+			),
+		);
+		const stockSalesBefore = new Map(
+			salesResources.map(
+				(_) => [_, this._workshopManager.getResource(_).value] as const,
+			),
+		);
+
 		this._host.game.diplomacy.tradeMultiple(race, amount);
+
+		const stockPurchasesAfter = new Map(
+			purchaseResources.map(
+				(_) => [_, this._workshopManager.getResource(_).value] as const,
+			),
+		);
+		const stockSalesAfter = new Map(
+			salesResources.map(
+				(_) => [_, this._workshopManager.getResource(_).value] as const,
+			),
+		);
+
+		const costs = new Map(
+			purchaseResources.map(
+				(_) =>
+					[
+						_,
+						mustExist(stockPurchasesBefore.get(_)) -
+							mustExist(stockPurchasesAfter.get(_)),
+					] as const,
+			),
+		);
+		const gains = new Map(
+			salesResources.map(
+				(_) =>
+					[
+						_,
+						mustExist(stockSalesAfter.get(_)) -
+							mustExist(stockSalesBefore.get(_)),
+					] as const,
+			),
+		);
+
+		for (const [resource, amount] of gains) {
+			if (amount === 0) {
+				continue;
+			}
+			const resourceName = this._workshopManager.getResource(resource).title;
+			this._host.engine.storeForSummary("trade.gained", amount, resourceName);
+			this._host.engine.iactivity(
+				"trade.gained",
+				"act.trade.gained",
+				[this._host.renderAbsolute(amount), ucfirst(resourceName)],
+				true,
+			);
+		}
+		for (const [resource, amount] of costs) {
+			if (amount === 0) {
+				continue;
+			}
+			const resourceName = this._workshopManager.getResource(resource).title;
+			this._host.engine.storeForSummary("trade.spent", amount, resourceName);
+			this._host.engine.iactivity(
+				"trade.spent",
+				"act.trade.spent",
+				[this._host.renderAbsolute(amount), ucfirst(resourceName)],
+				true,
+			);
+		}
+
 		this._host.engine.storeForSummary("trade", amount, race.title);
 		this._host.engine.iactivity("trade", "act.trade", [
 			this._host.renderAbsolute(amount),
 			ucfirst(race.title),
 		]);
+
+		return {
+			cost: costs,
+			received: gains,
+		};
 	}
 
 	/**

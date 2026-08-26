@@ -32,6 +32,7 @@ import {
 	BonfireSettings,
 } from "./settings/BonfireSettings.js";
 import { EngineSettings } from "./settings/EngineSettings.js";
+import type { FilterItemGame } from "./settings/LogFilterSettings.js";
 import { ReligionSettings } from "./settings/ReligionSettings.js";
 import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
@@ -707,6 +708,7 @@ export class Engine {
 		activity: Activity,
 		i18nLiteral: keyof (typeof i18nData)["en-US"],
 		i18nArgs: Array<number | string> = [],
+		noBullet = false,
 	): void {
 		if (this.settings.filters.enabled) {
 			for (const filterItem of Object.values(this.settings.filters.filters)) {
@@ -720,14 +722,25 @@ export class Engine {
 		const activityClass: ActivityClass = `ks-${activity}`;
 		const activityTypeClass: ActivityTypeClass =
 			`type_${activityClass}` as const;
-		this.printOutput(text, `ks-activity ${activityTypeClass}` as const);
+		this.printOutput(
+			text,
+			`ks-activity ${activityTypeClass}` as const,
+			undefined,
+			noBullet,
+		);
 	}
 
 	imessage(
 		i18nLiteral: keyof (typeof i18nData)["en-US"],
 		i18nArgs: Array<number | string> = [],
+		noBullet = false,
 	): void {
-		this.printOutput(this.i18n(i18nLiteral, i18nArgs), "ks-default");
+		this.printOutput(
+			this.i18n(i18nLiteral, i18nArgs),
+			"ks-default",
+			undefined,
+			noBullet,
+		);
 	}
 
 	storeForSummary(type: Activity, amount = 1, name?: string): void {
@@ -741,8 +754,10 @@ export class Engine {
 			| `ks-activity ${ActivityTypeClass}`
 			| "ks-default"
 			| "ks-summary" = "ks-default",
+		tag?: FilterItemGame,
+		noBullet = false,
 	): void {
-		this._host.game.msg(message, cssClasses);
+		this._host.game.msg(message, cssClasses, tag, noBullet);
 	}
 
 	static evaluateSubSectionTrigger(

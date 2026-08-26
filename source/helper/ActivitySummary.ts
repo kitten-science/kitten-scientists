@@ -38,6 +38,8 @@ export const Activities = [
 	"time.skip",
 	"trade",
 	"trade.explore",
+	"trade.gained",
+	"trade.spent",
 	"transcend",
 ] as const;
 export type Activity = (typeof Activities)[number];
@@ -77,6 +79,8 @@ export const ActivitySections: Record<Activity, TabId> = {
 	"time.skip": "Time",
 	trade: "Trade",
 	"trade.explore": "Trade",
+	"trade.gained": "Trade",
+	"trade.spent": "Trade",
 	transcend: "Religion",
 };
 
