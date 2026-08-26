@@ -125,7 +125,7 @@ export class EmbassySettingsUi extends SettingsPanel<
 
 		const element = new SettingMaxListItem(parent, option, label, {
 			onCheck: (isBatchProcess?: boolean) => {
-				parent.host.engine.imessage("status.sub.enable", [label]);
+				parent.host.engine.imessage("status.embassy.enable", [label]);
 				if (option.max === 0 && !isBatchProcess) {
 					return onSetMax();
 				}
@@ -149,7 +149,7 @@ export class EmbassySettingsUi extends SettingsPanel<
 			},
 			onSetMax,
 			onUnCheck: () => {
-				parent.host.engine.imessage("status.sub.disable", [label]);
+				parent.host.engine.imessage("status.embassy.disable", [label]);
 			},
 		});
 		element.maxButton.element.addClass(stylesButton.lastHeadAction);

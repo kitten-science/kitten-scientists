@@ -216,6 +216,8 @@
 	"state.updated.state": "State '{0}' updated",
 	"status.auto.disable": "Disabled Auto {0}",
 	"status.auto.enable": "Enabled Auto {0}",
+	"status.embassy.disable": "Disabled building embassies for {0}",
+	"status.embassy.enable": "Enabled building embassies for {0}",
 	"status.ks.disable": "Disabling the Kitten Scientists!",
 	"status.ks.enable": "Enabling the Kitten Scientists!",
 	"status.ks.init": "Kitten Scientists initialized",

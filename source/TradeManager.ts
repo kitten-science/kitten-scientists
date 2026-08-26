@@ -14,7 +14,7 @@ import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import type { UnsafeRace } from "./types/diplomacy.js";
-import type { Race, Resource } from "./types/index.js";
+import type { EmbassyButtonController, Race, Resource } from "./types/index.js";
 import type { UnsafeResource } from "./types/resources.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
@@ -271,11 +271,16 @@ export class TradeManager implements Automation {
 					),
 				);
 			}
-			// We don't want to invoke the embassy build action multiple times, as
-			// that would cause lots of log messages.
-			// Instead, we replicate the behavior of the game here and purchase in bulk.
-			this._workshopManager.getResource("culture").value -= emBulk.priceSum;
-			emBulk.race.embassyLevel += emBulk.val;
+
+			const controller = new classes.diplomacy.ui.EmbassyButtonController(
+				this._host.game,
+			) as EmbassyButtonController;
+			const model = controller.fetchModel({
+				controller,
+				prices: [...mustExist(emBulk.race.embassyPrices)],
+				race: emBulk.race,
+			});
+			controller.build(model, emBulk.val);
 
 			this._host.engine.storeForSummary(
 				"build.embassy",

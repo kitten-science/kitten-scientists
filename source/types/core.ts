@@ -458,7 +458,7 @@ export type BuildingStackableBtnController<
 		event: Event,
 		buyType: unknown,
 	) => UnsafeBuyItemResult | UnsafeBuyItemResultDeferred;
-	build: (model: TModel, maxBld: number) => void;
+	build: (model: TModel, maxBld: number) => number;
 	incrementValue: (model: TModel) => void;
 };
 

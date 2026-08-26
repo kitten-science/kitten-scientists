@@ -113,6 +113,7 @@ export type TradeButton = ButtonModern<UnsafeTradeButtonOptions> & {
 
 export type EmbassyButtonController =
 	BuildingStackableBtnController<UnsafeEmbassyButtonModel> & {
+		new (game: GamePage): EmbassyButtonController;
 		defaults: () => UnsafeEmbassyButtonModel;
 		getEffects: (
 			model: UnsafeEmbassyButtonModel,
@@ -120,13 +121,14 @@ export type EmbassyButtonController =
 		getTotalEffects: (model: unknown) => undefined;
 		getMetadata: (model: UnsafeEmbassyButtonModel) => UnsafeRace;
 		getPrices: (model: UnsafeEmbassyButtonModel) => Array<Price>;
-		buyItem: (model: unknown, event: unknown) => void;
 		incrementValue: (model: {
 			metadata: Metadata<UnsafeEmbassyButtonModel>;
 			options: { race: UnsafeRace };
 		}) => void;
 		hasSellLink: (model: unknown) => false;
 		updateVisible: (model: UnsafeEmbassyButtonModel) => void;
+		buyItem: (model: UnsafeEmbassyButtonModel, event: unknown) => void;
+		build: (model: UnsafeEmbassyButtonModel, opts: unknown) => void;
 	};
 
 export type EmbassyButton = ButtonModern<UnsafeEmbassyButtonOptions> & {
@@ -273,4 +275,5 @@ export type UnsafeEmbassyButtonModel<
 	TModelOptions extends Record<string, unknown> | undefined = undefined,
 > = {
 	simplePrices: boolean;
+	tooltipName?: boolean;
 } & UnsafeBuildingBtnModernModel<TModelOptions>;
