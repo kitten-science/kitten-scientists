@@ -295,20 +295,13 @@ jobs:
             --body output/kitten-scientists.inject.js || true
           aws s3api put-object \
             --bucket kitten-science-us0 \
-            --key latest.user.js \
+            --key kitten-scientists.user.js \
             --cache-control "public, s-maxage=300" \
             --content-type "text/javascript" \
             --body output/kitten-scientists.user.js || true
-
-  update-release-info:
-    # The Release Info action uses GitHub releases as source of truth.
-    # If we didn't publish a release, there is no need to update the information.
-    if: success() && needs.params.outputs.publish-github-release == 'true' && needs.changelog.outputs.has-changed == 'true'
-    name: 🔹 Publish
-    needs:
-      - params
-      - nightly
-    permissions:
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/publish-release-info.yml
+          aws s3api put-object \
+            --bucket kitten-science-us0 \
+            --key kitten-scientists.meta.js \
+            --cache-control "public, s-maxage=300" \
+            --content-type "text/javascript" \
+            --body output/kitten-scientists.meta.js || true
