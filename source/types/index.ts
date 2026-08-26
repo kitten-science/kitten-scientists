@@ -1,6 +1,5 @@
 import type { Maybe } from "@oliversalzburg/js-utils/data/nil.js";
 import type JQuery from "jquery";
-import "dojo";
 import type { KittenScientists } from "../KittenScientists.js";
 import type {
 	Achievements,

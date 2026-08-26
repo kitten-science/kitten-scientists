@@ -17,6 +17,7 @@
 		"skipLibCheck": true,
 		"target": "esnext",
 		"types": [
+			"dojo",
 			"node",
 			"web"
 		],

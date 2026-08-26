@@ -40,7 +40,7 @@ const main = async () => {
       for (const subject of scripts) {
         const script = document.createElement("script");
         script.src = subject + "?_=${cacheBreaker}";
-        script.type = "text/javascript";
+        script.type = "module";
         document.body.appendChild(script);
       }
       </script>`);

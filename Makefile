@@ -47,8 +47,9 @@ node_modules/.package-lock.json: package-lock.json
 # Kitten Scientists
 output/kitten-scientists.inject.js : node_modules/.package-lock.json vite.config.inject.js $(OBJECTS)
 	npm exec -- vite --config vite.config.inject.js build
-output/kitten-scientists.user.js : node_modules/.package-lock.json vite.config.loader.js output/kitten-scientists.inject.js
-	npm exec -- vite --config vite.config.loader.js build
+output/kitten-scientists.user.js : node_modules/.package-lock.json vite.config.user.js vite.config.meta.js output/kitten-scientists.inject.js
+	npm exec -- vite --config vite.config.user.js build
+	npm exec -- vite --config vite.config.meta.js build
 devcontainer/overlay/kitten-scientists.inject.js : output/kitten-scientists.inject.js
 	@mkdir -p devcontainer/overlay/ || true
 	cp $^ $@
@@ -69,6 +70,7 @@ output/devcontainer.tar : \
 	output/entrypoint-devcontainer.mjs \
 	devcontainer/Containerfile \
 	devcontainer/overlay/kitten-scientists.inject.js
+	rm --force "$@"
 	docker build \
 		--build-arg BRANCH="master" \
 		--build-arg REPO="https://github.com/nuclear-unicorn/kittensgame.git" \

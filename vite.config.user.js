@@ -1,0 +1,53 @@
+import { readFileSync } from "node:fs";
+import { defineConfig } from "vite";
+import { metablock } from "vite-plugin-userscript";
+import manifest from "./package.json" with { type: "json" };
+
+const filenameUserscript = "kitten-scientists.user.js";
+const filenameMeta = "kitten-scientists.meta.js";
+
+const downloadURL = `https://kitten-science.com/${filenameUserscript}`;
+const metaURL = `https://kitten-science.com/${filenameMeta}`;
+
+const PAYLOAD = JSON.stringify(
+	readFileSync("./output/kitten-scientists.inject.js", "utf-8"),
+);
+
+export default defineConfig({
+	build: {
+		emptyOutDir: false,
+		lib: {
+			entry: "source/entrypoint-loader.ts",
+			formats: ["es"],
+		},
+		outDir: "output",
+		reportCompressedSize: false,
+		rolldownOptions: {
+			experimental: {
+				attachDebugInfo: "none",
+			},
+			output: {
+				comments: false,
+				entryFileNames: filenameUserscript,
+				extend: true,
+				format: "es",
+			},
+		},
+	},
+	define: {
+		PAYLOAD,
+	},
+	plugins: [
+		metablock({
+			override: {
+				description: manifest.description,
+				downloadURL,
+				homepageURL: manifest.homepage,
+				updateURL: metaURL,
+				version: process.env.RELEASE_VERSION
+					? process.env.RELEASE_VERSION
+					: manifest.version,
+			},
+		}),
+	],
+});

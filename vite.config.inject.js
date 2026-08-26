@@ -14,21 +14,24 @@ export default defineConfig({
 		emptyOutDir: false,
 		lib: {
 			entry: "source/entrypoint-inject.ts",
-			name: "kitten-scientists",
+			formats: ["es"],
 		},
 		minify: false,
 		outDir: "output",
+		reportCompressedSize: false,
 		rolldownOptions: {
+			experimental: {
+				attachDebugInfo: "none",
+			},
 			external: ["dojo", "jquery"],
 			output: {
+				comments: false,
 				entryFileNames: filename,
 				extend: true,
-				format: "esm",
+				format: "es",
 				globals: { dojo: "dojo", jquery: "jquery" },
 			},
 		},
-		sourcemap: false,
-		target: "esnext",
 	},
 	define: {
 		RELEASE_CHANNEL,

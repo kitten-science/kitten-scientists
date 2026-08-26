@@ -2,7 +2,7 @@ import { redirectErrorsToConsole } from "@oliversalzburg/js-utils/errors/console
 import { KittenScientists } from "./KittenScientists.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
 
-export const main = async () => {
+const main = async () => {
 	const userScript = await new UserScriptLoader().waitForGame(
 		KittenScientists,
 		"ks",
