@@ -138,11 +138,16 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				new HeaderListItem(this, this.host.engine.i18n("state.localStates")),
 				new ToolbarListItem(this).addChildren([
 					new Button(this, this.host.engine.i18n("state.store"), Icons.SaveAs, {
-						onClick: () =>
-							this.storeState(
-								this.host.engine.stateSerialize(),
-								this.host.engine.i18n("state.unlabeledState"),
-							),
+						onClick: async () => {
+							const label = await Dialog.prompt(
+								parent,
+								this.host.engine.i18n("state.storeGame.prompt"),
+							);
+							if (label === undefined || label === "") {
+								return;
+							}
+							this.storeState(this.host.engine.stateSerialize(), label);
+						},
 						title: this.host.engine.i18n("state.storeState"),
 					}),
 					new Button(this, this.host.engine.i18n("copy"), Icons.Copy, {
@@ -178,12 +183,14 @@ export class StateManagementUi extends SettingsPanel<StateSettings> {
 				new ToolbarListItem(this).addChildren([
 					new Button(this, this.host.engine.i18n("state.store"), Icons.SaveAs, {
 						onClick: async () => {
-							const label =
-								(await Dialog.prompt(
-									parent,
-									this.host.engine.i18n("state.storeGame.prompt"),
-								)) ?? this.host.engine.i18n("state.unlabeledGame");
-							await this.storeGame(this.host.game.save(), label);
+							const label = await Dialog.prompt(
+								parent,
+								this.host.engine.i18n("state.storeGame.prompt"),
+							);
+							if (label === undefined || label === "") {
+								return;
+							}
+							this.storeGame(this.host.game.save(), label);
 							this.host.engine.imessage("state.stored.game");
 						},
 						title: this.host.engine.i18n("state.storeGame"),
