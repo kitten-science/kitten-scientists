@@ -31,7 +31,6 @@
 		"dojo": "1.17.3",
 		"esbuild": "0.28.2",
 		"iterator-helpers-polyfill": "3.0.1",
-		"rollup": "4.62.4",
 		"semver": "7.8.5",
 		"tslib": "2.8.1",
 		"typescript": "7.0.2",
