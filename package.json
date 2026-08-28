@@ -19,7 +19,7 @@
 		"postversion": "git push"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.5.8",
+		"@biomejs/biome": "2.5.10",
 		"@oliversalzburg/js-utils": "0.6.0",
 		"@types/dojo": "1.9.49",
 		"@types/jquery": "4.0.1",
