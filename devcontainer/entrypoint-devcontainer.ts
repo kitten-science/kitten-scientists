@@ -48,7 +48,7 @@ const main = async () => {
 	// Write result back to file.
 	await writeFile("index.html", $.html());
 
-	const httpServer = spawn("yarn", ["run", "watch-http-server", "-p", "8080"], {
+	const httpServer = spawn("npm", ["exec", "watch-http-server", "-p", "8080"], {
 		shell: true,
 	});
 	httpServer.stdout.on("data", (data) => {
