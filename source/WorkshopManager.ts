@@ -6,7 +6,7 @@ import {
 	WorkshopSettings,
 } from "./settings/WorkshopSettings.js";
 import { objectEntries } from "./tools/Entries.js";
-import { negativeOneToInfinity } from "./tools/Format.js";
+import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
 import type { Resource, ResourceCraftable } from "./types/index.js";
 import type { ResourceManager, UnsafeResource } from "./types/resources.js";
@@ -342,7 +342,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 			messages.push(
 				this._host.engine.i18n("act.craft", [
 					this._host.game.getDisplayValueExt(craftedAmount),
-					resourceName,
+					ucfirst(resourceName),
 				]),
 			);
 		}
