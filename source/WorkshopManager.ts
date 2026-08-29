@@ -257,7 +257,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 							// If the source material is one that has a storage capacity, and the storage is full,
 							// then we want to allow all possible crafts to be crafted. So we subtract 0.
 							(0 < materialResource.maxValue &&
-							materialResource.maxValue <= materialResource.value
+							// Sometimes resources don't actually fully cap, but only get very close to the cap.
+							Math.abs(materialResource.maxValue - materialResource.value) /
+								materialResource.maxValue <
+								0.001
 								? 0
 								: // If the resource is not capped, we subtract the crafts we have already done.
 									craftsDone),
