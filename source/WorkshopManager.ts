@@ -281,12 +281,16 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 			const craftsMaxLimit =
 				Number.MAX_VALUE / recipeProduces - availableTarget / recipeProduces;
 			amount = Math.min(amount, craftsMaxLimit);
+			const missingToMax = (craft.max - availableTarget) / recipeProduces;
 
 			request.countRequested = Math.max(
 				0,
 				craft.max === -1
 					? amount
-					: Math.min(amount, (craft.max - availableTarget) / recipeProduces),
+					: Math.min(
+							amount,
+							0 < missingToMax && missingToMax < 1 ? 1 : missingToMax,
+						),
 			);
 		}
 
