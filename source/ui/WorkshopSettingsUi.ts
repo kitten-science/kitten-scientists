@@ -16,6 +16,7 @@ import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 import { WorkshopCraftListItem } from "./components/WorkshopCraftListItem.js";
 import { UpgradeSettingsUi } from "./UpgradeSettingsUi.js";
+import { ZebraUpgradeSettingsUi } from "./ZebraUpgradeSettingsUi.js";
 
 export class WorkshopSettingsUi extends SettingsPanel<
 	WorkshopSettings,
@@ -283,6 +284,11 @@ export class WorkshopSettingsUi extends SettingsPanel<
 				hasEnableAll: false,
 			}).addChildren([
 				new UpgradeSettingsUi(this, this.setting.unlockUpgrades, locale),
+				new ZebraUpgradeSettingsUi(
+					this,
+					this.setting.unlockZebraUpgrades,
+					locale,
+				),
 			]),
 		);
 	}

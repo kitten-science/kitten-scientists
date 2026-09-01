@@ -31,7 +31,7 @@ export type WorkshopManager = TabManager<
 	hideResearched: boolean;
 	upgrades: Array<UnsafeUpgrade>;
 	crafts: Array<UnsafeCraft>;
-	zebraUpgrades: Array<UnsafeUpgrade>;
+	zebraUpgrades: Array<UnsafeZebraUpgrade>;
 	effectsBase: {
 		oilMax: number;
 		scienceMax: number;

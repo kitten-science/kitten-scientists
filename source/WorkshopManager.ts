@@ -8,7 +8,11 @@ import {
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity, ucfirst } from "./tools/Format.js";
 import { cl } from "./tools/Log.js";
-import type { Resource, ResourceCraftable } from "./types/index.js";
+import type {
+	Resource,
+	ResourceCraftable,
+	UnsafeZebraUpgrade,
+} from "./types/index.js";
 import type { ResourceManager, UnsafeResource } from "./types/resources.js";
 import type { UnsafeCraft, UnsafeUpgrade } from "./types/workshop.js";
 import { UpgradeManager } from "./UpgradeManager.js";
@@ -47,11 +51,12 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 		}
 
 		const upgrades = this._host.game.workshop.upgrades;
-		const toUnlock = new Array<UnsafeUpgrade>();
+		const toUnlock = new Array<UnsafeUpgrade | UnsafeZebraUpgrade>();
 
-		workLoop: for (const setting of Object.values(
-			this.settings.unlockUpgrades.upgrades,
-		)) {
+		workLoop: for (const setting of [
+			...Object.values(this.settings.unlockUpgrades.upgrades),
+			...Object.values(this.settings.unlockZebraUpgrades.upgrades),
+		]) {
 			if (!setting.enabled) {
 				continue;
 			}

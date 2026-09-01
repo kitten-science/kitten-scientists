@@ -1,6 +1,11 @@
 import type { AnyFunction } from "@oliversalzburg/js-utils/core.js";
 import type { KittenScientists } from "./KittenScientists.js";
-import type { Policy, Technology, Upgrade } from "./types/index.js";
+import type {
+	Policy,
+	Technology,
+	Upgrade,
+	ZebraUpgrade,
+} from "./types/index.js";
 import type {
 	PolicyBtnController,
 	TechButtonController,
@@ -15,7 +20,10 @@ export abstract class UpgradeManager {
 	}
 
 	async upgrade(
-		upgrade: { label: string; name: Policy | Upgrade | Technology },
+		upgrade: {
+			label: string;
+			name: Policy | Upgrade | Technology | ZebraUpgrade;
+		},
 		variant: "policy" | "science" | "workshop",
 	): Promise<boolean> {
 		let success = false;

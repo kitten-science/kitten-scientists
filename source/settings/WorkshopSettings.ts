@@ -9,7 +9,7 @@ import {
 	SettingLimitedMaxTrigger,
 	SettingTrigger,
 } from "./Settings.js";
-import { UpgradeSettings } from "./UpgradeSettings.js";
+import { UpgradeSettings, ZebraUpgradeSettings } from "./UpgradeSettings.js";
 
 export class CraftSettingsItem extends SettingLimitedMaxTrigger {
 	readonly #resource: ResourceCraftable;
@@ -34,17 +34,20 @@ export class WorkshopSettings extends SettingTrigger {
 
 	shipOverride: Setting;
 	unlockUpgrades: UpgradeSettings;
+	unlockZebraUpgrades: ZebraUpgradeSettings;
 
 	constructor(
 		enabled = false,
 		trigger = -1,
 		unlockUpgrades = new UpgradeSettings(),
+		unlockZebraUpgrades = new ZebraUpgradeSettings(),
 		shipOverride = new Setting(),
 	) {
 		super(enabled, trigger);
 		this.resources = this.initResources();
 		this.shipOverride = shipOverride;
 		this.unlockUpgrades = unlockUpgrades;
+		this.unlockZebraUpgrades = unlockZebraUpgrades;
 	}
 
 	private initResources(): WorkshopResourceSettings {

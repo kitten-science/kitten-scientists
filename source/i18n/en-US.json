@@ -402,6 +402,7 @@
 	"ui.upgrade.races": "Explore new races",
 	"ui.upgrade.techs": "Research technologies",
 	"ui.upgrade.upgrades": "Research upgrades",
+	"ui.upgrade.upgradesZebra": "Research Zebra upgrades",
 	"ui.upgrades": "Upgrades",
 	"update": "Update"
 }
