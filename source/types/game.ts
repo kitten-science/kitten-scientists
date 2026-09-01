@@ -7,6 +7,7 @@ import type { ChallengesManager, ChallengesTab } from "./challenges.js";
 import type { Console, Tab } from "./core.js";
 import type { Diplomacy, DiplomacyManager } from "./diplomacy.js";
 import type {
+	BuildingEffect,
 	ColorScheme,
 	Resource,
 	ResourceCraftable,
@@ -379,8 +380,12 @@ export type GamePage = {
 	updateWinterCatnip: () => void;
 	setDropboxClient: (dropBoxClient: unknown) => void;
 	heartbeat: () => void;
-	getEffectMeta: (effectName: unknown) => unknown;
-	getEffect: (effectName: unknown) => number;
+	getEffectMeta: (effectName: BuildingEffect | string) => {
+		resName: Resource;
+		title: string;
+		type: "perTick";
+	};
+	getEffect: (effectName: BuildingEffect | string) => number;
 	updateCaches: () => void;
 	/**
 	 * Calculate limited diminishing returns.

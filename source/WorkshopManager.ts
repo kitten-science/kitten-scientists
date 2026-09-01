@@ -257,10 +257,7 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 							// If the source material is one that has a storage capacity, and the storage is full,
 							// then we want to allow all possible crafts to be crafted. So we subtract 0.
 							(0 < materialResource.maxValue &&
-							// Sometimes resources don't actually fully cap, but only get very close to the cap.
-							Math.abs(materialResource.maxValue - materialResource.value) /
-								materialResource.maxValue <
-								0.001
+							this.isResourceCapped(materialResource.name)
 								? 0
 								: // If the resource is not capped, we subtract the crafts we have already done.
 									craftsDone),
@@ -773,5 +770,37 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 			cell.classList.add(isBelow ? "ks-stock-below" : "ks-stock-above");
 			cell.classList.remove(isBelow ? "ks-stock-above" : "ks-stock-below");
 		}
+	}
+
+	isResourceCapped(resource: Resource): boolean {
+		const resourceMeta = this.getResource(resource);
+
+		if (resourceMeta.maxValue === 0) {
+			// Resource has no capacity. It can never be capped.
+			return false;
+		}
+
+		if (resourceMeta.maxValue <= resourceMeta.value) {
+			return true;
+		}
+
+		// Some resources should be considered as capped, even if they are below the maxValue.
+		// This is because some of the produced material is converted to other materials
+		// during the same tick, preventing them from ever reaching maxValue under normal conditions.
+
+		const conversionEffect = this._host.game.getEffect(`${resource}PerTickCon`);
+		if (conversionEffect === 0) {
+			return false;
+		}
+
+		// The 0.1 is chosen arbitrarily, and might need to be fine-tuned.
+		if (
+			Math.abs(resourceMeta.maxValue + conversionEffect - resourceMeta.value) <
+			0.1
+		) {
+			return true;
+		}
+
+		return false;
 	}
 }
