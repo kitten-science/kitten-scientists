@@ -151,6 +151,10 @@ export type UnsafeSpaceBuilding = {
 	 */
 	label: string;
 	description: string;
+	/**
+	 * Is this building unlocked?
+	 * Seems to be ignored for many space buildings.
+	 */
 	unlocked: boolean;
 	priceRatio: number;
 	prices: Array<Price>;

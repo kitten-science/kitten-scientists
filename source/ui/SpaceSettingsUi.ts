@@ -145,7 +145,6 @@ export class SpaceSettingsUi extends SettingsPanel<
 											...objectEntries(building.effects ?? {}).map(
 												([effect, value]) => `+ ${effect}: ${value}`,
 											),
-											building.unlocked ? "is unlocked" : "still locked",
 										].join("\n"),
 									},
 								),
