@@ -9,7 +9,8 @@ ARG COMMIT=master
 EXPOSE 8080
 EXPOSE 8086
 
-RUN git clone --branch "$BRANCH" --single-branch "$REPO" \
+RUN git config --global http.version HTTP/1.1 \
+  && git clone --branch "$BRANCH" --single-branch "$REPO" \
   && cd kittensgame \
   && git checkout "$COMMIT" \
   && npm add --save-dev @oliversalzburg/js-utils cheerio watch-http-server

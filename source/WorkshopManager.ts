@@ -197,6 +197,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 		}
 
 		// Determine how much of each resource we want to spend on each craft.
+		// TODO: This is not ideal, because it leads to a situation where we
+		//       split the available resource into so many parts that none of
+		//       the requests can ultimately be satisfied.
 		for (const [, request] of craftRequests) {
 			for (const material of request.materials) {
 				const available = this.getValueAvailable(material.resource);
