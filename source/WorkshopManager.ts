@@ -50,12 +50,20 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 			return;
 		}
 
-		const upgrades = this._host.game.workshop.upgrades;
-		const toUnlock = new Array<UnsafeUpgrade | UnsafeZebraUpgrade>();
+		const upgrades = [
+			...this._host.game.workshop.upgrades,
+			...this._host.game.workshop.zebraUpgrades,
+		];
+		const toUnlock = new Array<UnsafeUpgrade>();
+		const toUnlockZebra = new Array<UnsafeZebraUpgrade>();
 
-		workLoop: for (const setting of [
-			...Object.values(this.settings.unlockUpgrades.upgrades),
-			...Object.values(this.settings.unlockZebraUpgrades.upgrades),
+		workLoop: for (const [type, setting] of [
+			...Object.values(this.settings.unlockUpgrades.upgrades).map(
+				(_) => ["workshop", _] as const,
+			),
+			...Object.values(this.settings.unlockZebraUpgrades.upgrades).map(
+				(_) => ["zebraWorkshop", _] as const,
+			),
 		]) {
 			if (!setting.enabled) {
 				continue;
@@ -84,7 +92,9 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 				const available = this.getValueAvailable(price.name);
 				const resource = this.getResource(price.name);
 				const trigger = Engine.evaluateSubSectionTrigger(
-					this.settings.unlockUpgrades.trigger,
+					type === "workshop"
+						? this.settings.unlockUpgrades.trigger
+						: this.settings.unlockZebraUpgrades.trigger,
 					setting.trigger,
 				);
 				if (
@@ -96,11 +106,19 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 				}
 			}
 
-			toUnlock.push(upgrade);
+			if (type === "workshop") {
+				toUnlock.push(upgrade as UnsafeUpgrade);
+			}
+			if (type === "zebraWorkshop") {
+				toUnlockZebra.push(upgrade as UnsafeZebraUpgrade);
+			}
 		}
 
 		for (const item of toUnlock) {
 			await this.upgrade(item, "workshop");
+		}
+		for (const item of toUnlockZebra) {
+			await this.upgrade(item, "zebraWorkshop");
 		}
 	}
 

@@ -5,6 +5,7 @@ import type {
 	Technology,
 	Upgrade,
 	ZebraUpgrade,
+	ZebraUpgradeButtonController,
 } from "./types/index.js";
 import type {
 	PolicyBtnController,
@@ -24,7 +25,7 @@ export abstract class UpgradeManager {
 			label: string;
 			name: Policy | Upgrade | Technology | ZebraUpgrade;
 		},
-		variant: "policy" | "science" | "workshop",
+		variant: "policy" | "science" | "workshop" | "zebraWorkshop",
 	): Promise<boolean> {
 		let success = false;
 		if (variant === "policy") {
@@ -51,11 +52,21 @@ export abstract class UpgradeManager {
 			const realResult =
 				result.def !== undefined ? await result.def : { ...result };
 			success = result.itemBought || realResult.itemBought;
-		} else {
+		} else if (variant === "workshop") {
 			const itemMetaRaw = game.getUnlockByName(upgrade.name, "upgrades");
 			const controller = new com.nuclearunicorn.game.ui.UpgradeButtonController(
 				this._host.game,
 			) as UpgradeButtonController;
+			const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
+			success = UpgradeManager.skipConfirm(() =>
+				controller.buyItem(model),
+			).itemBought;
+		} else {
+			const itemMetaRaw = game.getUnlockByName(upgrade.name, "zebraUpgrades");
+			const controller =
+				new com.nuclearunicorn.game.ui.ZebraUpgradeButtonController(
+					this._host.game,
+				) as ZebraUpgradeButtonController;
 			const model = controller.fetchModel({ controller, id: itemMetaRaw.name });
 			success = UpgradeManager.skipConfirm(() =>
 				controller.buyItem(model),
@@ -68,7 +79,7 @@ export abstract class UpgradeManager {
 
 		const label = upgrade.label;
 
-		if (variant === "workshop") {
+		if (variant === "workshop" || variant === "zebraWorkshop") {
 			this._host.engine.storeForSummary("research.upgrade", 1, label);
 			this._host.engine.iactivity("research.upgrade", "act.research.upgrade", [
 				label,
