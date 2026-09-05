@@ -157,7 +157,12 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 				continue;
 			}
 
-			const current = !craft.max ? false : this.getResource(craft.resource);
+			const resource = this.getResource(craft.resource);
+			if (!resource.craftable) {
+				continue;
+			}
+
+			const current = !craft.max ? false : resource;
 			const max = negativeOneToInfinity(craft.max);
 			if (current && max < current.value) {
 				continue;
